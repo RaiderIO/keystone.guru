@@ -95,8 +95,18 @@ browser stays warm for the next run.
 
 ## Gotchas
 
-- **Auth**: guest pages only, unless you inject a session cookie via a bespoke script
-  (`page.setCookie(...)` with a value taken from a logged-in browser).
+- **Auth**: guest pages only, unless you log in first with a bespoke script that submits the
+  `/login` form (`input[name="email"]` / `input[name="password"]`) — the session cookie then
+  persists in the warm service browser for later browse.js runs on that origin. Log in separately
+  per origin (`http://nginx` and the master baseline are different origins). Use a throwaway user
+  (create via tinker, `addRole` for admin, set `legal_agreed` to skip the legal modal; delete when
+  done).
+- **Site assets**: pages reference images/tiles at `ASSETS_BASE_URL` (`http://localhost:8009`, a
+  host-published port that does not exist inside containers). The `chrome` service entrypoint in
+  `docker-compose.worktree.yml` forwards `127.0.0.1:8009` to the shared `app-assets` container, so
+  these load in screenshots — for the master baseline too, which emits the same URLs. If site
+  images render as broken glyphs, the chrome service was probably started from a checkout that
+  predates that forward.
 - **Cleanup**: `rm -rf .chrome-tmp` before finishing a task; it must never be committed
   (untracked, but `git add -A` would grab it). Files written by the container are root-owned, so
   remove them from inside the container first
