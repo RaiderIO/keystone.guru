@@ -12,9 +12,9 @@ use Illuminate\Support\Collection;
 
 $showHeader ??= true;
 ?>
-<div class="form-group">
+<div class="mb-3">
     @if($showHeader)
-        <div class="row no-gutters">
+        <div class="row g-0">
             <div class="col">
                 <h4>
                     <a class="text-body" href="{{ route('release.view', ['release' => $release]) }}">

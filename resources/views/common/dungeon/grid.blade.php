@@ -25,7 +25,7 @@ $subtextFn       ??= null;
 
 // @formatter:off
 for( $i = 0; $i < $rowCount; ++$i ) { ?>
-<div class="row no-gutters">
+<div class="row g-0">
     <?php
     for( $j = 0; $j < $colCount; ++$j ) {
         $index = $i * $colCount + $j;

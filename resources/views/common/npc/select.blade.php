@@ -29,7 +29,7 @@ if (!isset($npcsByGroup)) {
     $npcsByGroup = collect(['' => $npcs ?? collect()]);
 }
 ?>
-<div class="form-group">
+<div class="mb-3">
     @if($label !== false)
         {{ html()->label($label . ($required ? '<span class="form-required">*</span>' : ''), $id) }}
     @endif

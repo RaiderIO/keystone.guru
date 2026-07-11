@@ -15,7 +15,7 @@ $iconType = $isSelectedGameVersion ? 'black' : 'white';
     <a class="{{ $isSelectedGameVersion ? 'active' : '' }}"
        href="{{ route('gameversion.update', ['gameVersion' => $gameVersion]) }}">
 
-        <div class="row no-gutters">
+        <div class="row g-0">
             <div class="col-auto">
                 <span class="align-middle">
                     <img src="{{ ksgAssetImage(sprintf('gameversions/logo_%s_small.webp', $iconType)) }}"
@@ -25,8 +25,8 @@ $iconType = $isSelectedGameVersion ? 'black' : 'white';
                          style="top: -2px; position: relative;"/>
                 </span>
             </div>
-            <div class="col-auto font-weight-bold pl-1">
-                <span class="font-weight-bold small align-middle">
+            <div class="col-auto fw-bold ps-1">
+                <span class="fw-bold small align-middle">
                     {{ strtoupper(__($gameVersion->name)) }}
                 </span>
             </div>

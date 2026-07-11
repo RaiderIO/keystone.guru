@@ -109,7 +109,7 @@ $isActiveRoute = function (string $route, bool $strict = false) {
             </div>
         </div>
         @if($showDungeonContext)
-            <div class="row no-gutters dungeon_context_header {{ $forceShrink ? 'navbar-shrink' : '' }}"
+            <div class="row g-0 dungeon_context_header {{ $forceShrink ? 'navbar-shrink' : '' }}"
                  data-toggle="navbar-shrink" style="height: 99px;">
                 <div class="col">
                     @include('common.dungeon.list', [
@@ -144,18 +144,18 @@ $isActiveRoute = function (string $route, bool $strict = false) {
             <img src="{{ ksgAssetImage('logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"
                  height="44px;" width="200px;">
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse"
-                data-target="#mainNavbar"
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#mainNavbar"
                 aria-controls="mainNavbar" aria-expanded="false"
                 aria-label="{{ __('view_common.layout.header.toggle_navigation_title') }}">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse text-center text-lg-left" id="mainNavbar">
-            <ul class="navbar-nav mr-auto">
+        <div class="collapse navbar-collapse text-center text-lg-start" id="mainNavbar">
+            <ul class="navbar-nav me-auto">
                 <li class="nav-item px-3">
                     <a class="btn btn-accent" href="#"
-                       data-toggle="modal" data-target="#create_route_modal">
+                       data-bs-toggle="modal" data-bs-target="#create_route_modal">
                         <i class="fas fa-plus"></i> {{__('view_common.layout.header.create_route')}}
                     </a>
                 </li>
@@ -164,7 +164,7 @@ $isActiveRoute = function (string $route, bool $strict = false) {
                         <li class="nav-item nav-item-divider"></li>
                     @else
                         <li class="nav-item">
-                            <a class="nav-link pr-3 {{ $isActiveRoute($route) }}"
+                            <a class="nav-link pe-3 {{ $isActiveRoute($route) }}"
                                href="{{ $route }}">
                                 @isset($opts['fa'])
                                     <i class="{{ $opts['fa'] }}"></i>
@@ -197,11 +197,11 @@ $isActiveRoute = function (string $route, bool $strict = false) {
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle {{ $hasCompendiumSubActive }}" href="#"
                            id="{{ $compendiumDropdownId }}" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-book-open"></i>
                             {{ $compendiumHeaderText }}
                         </a>
-                        <div class="dropdown-menu text-center text-xl-left"
+                        <div class="dropdown-menu text-center text-xl-start"
                              aria-labelledby="{{ $compendiumDropdownId }}">
                             @foreach($compendiumRoutes as $itemKey => $item)
                                 <a class="dropdown-item {{ $isActiveRoute($itemKey, true) }}"
@@ -225,11 +225,11 @@ $isActiveRoute = function (string $route, bool $strict = false) {
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {{ $hasSubItemActive }}" href="#" id="{{ $dropdownId }}"
                        role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-stream"></i>
                         {{ $headerText }}
                     </a>
-                    <div class="dropdown-menu text-center text-xl-left" aria-labelledby="{{ $dropdownId }}">
+                    <div class="dropdown-menu text-center text-xl-start" aria-labelledby="{{ $dropdownId }}">
                         @foreach($expansionRoutes as $itemKey => $item)
                             <a class="dropdown-item {{ $isActiveRoute($itemKey) }}"
                                href="{{ $itemKey }}">{!! $item !!}</a>
@@ -238,7 +238,7 @@ $isActiveRoute = function (string $route, bool $strict = false) {
                 </li>
                 @php($route = route('dungeon.explore.gameversion', ['gameVersion' => $currentUserGameVersion]))
                 <li class="nav-item">
-                    <a class="nav-link pr-3 {{ $isActiveRoute($route) }}"
+                    <a class="nav-link pe-3 {{ $isActiveRoute($route) }}"
                        href="{{ $route }}">
                         <i class="fas fa-compass"></i> {{ __('view_common.layout.header.explore') }}
                     </a>
@@ -246,12 +246,12 @@ $isActiveRoute = function (string $route, bool $strict = false) {
                 <li class="nav-item nav-item-divider"></li>
                 <li class="nav-item">
                     @if(Feature::active(SearchPageRework::class))
-                        <a class="nav-link pr-3 {{ str_starts_with(Request::url(), route('dungeon.dungeonroute.search')) ? 'active' : '' }}"
+                        <a class="nav-link pe-3 {{ str_starts_with(Request::url(), route('dungeon.dungeonroute.search')) ? 'active' : '' }}"
                            href="{{ route('dungeon.dungeonroute.search') }}">
                             <i class="fas fa-search"></i>
                         </a>
                     @else
-                        <a class="nav-link pr-3 {{ str_starts_with(Request::url(), route('dungeonroutes.search')) ? 'active' : '' }}"
+                        <a class="nav-link pe-3 {{ str_starts_with(Request::url(), route('dungeonroutes.search')) ? 'active' : '' }}"
                            href="{{ route('dungeonroutes.search') }}">
                             <i class="fas fa-search"></i>
                         </a>

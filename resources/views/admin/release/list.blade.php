@@ -5,8 +5,8 @@
         <div class="col-lg">
             <h4>{{ __('view_admin.release.list.view_releases') }}</h4>
         </div>
-        <div class="ml-auto">
-            <a href="{{ route('admin.release.new') }}" class="btn btn-success text-white pull-right ml-auto"
+        <div class="ms-auto">
+            <a href="{{ route('admin.release.new') }}" class="btn btn-success text-white float-end ms-auto"
                role="button">
                 <i class="fas fa-plus"></i> {{ __('view_admin.release.list.create_release') }}
             </a>

@@ -13,8 +13,8 @@ $floorCouplings ??= collect();
 $connectedFloorCandidates = $dungeon->floors;
 ?>
 @if($connectedFloorCandidates->isNotEmpty())
-    {{ html()->label(__('view_admin.floor.edit.connected_floors'), 'connectedfloors[]')->class('font-weight-bold') }}
-    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+    {{ html()->label(__('view_admin.floor.edit.connected_floors'), 'connectedfloors[]')->class('fw-bold') }}
+    <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{
                 __('view_admin.floor.edit.connected_floors_title')
                  }}"></i>
 
@@ -30,7 +30,7 @@ $connectedFloorCandidates = $dungeon->floors;
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="mb-3">
             <?php
         foreach ($connectedFloorCandidates as $connectedFloorCandidate){
             /** @var FloorCoupling $floorCoupling */

@@ -51,7 +51,7 @@ $characterClassSpecializationsSelectOptions = $characterClassSpecializations->gr
 @endsection
 
 @section('content')
-    <div class="form-group row">
+    <div class="mb-3 row">
         <div class="col">
 {{--            @include('common.forms.select.imageselectcategories', [--}}
 {{--                'id' => 'filter_specializations',--}}

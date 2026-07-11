@@ -44,9 +44,7 @@ $linkOptions      ??= [];
             </h2>
             @if($affixgroup !== null)
                 <div class="row mb-2">
-                    <div class="offset-2">
-                    </div>
-                    <div class="col-8">
+                    <div class="col-8 offset-2">
                         @include('common.affixgroup.affixgroup', [
                             'affixgroup' => $affixgroup,
                             'cols' => 1,

@@ -344,7 +344,9 @@ class MapObject extends Signalable {
             let category = $collapse.data('category');
 
             // When this popup opens, restore the shown/hidden state of the category
-            $collapse.collapse(Cookies.get(`map_object_category_visibility_${category}`) === '1' ? 'show' : 'hide');
+            bootstrap.Collapse.getOrCreateInstance(element, {toggle: false})[
+                Cookies.get(`map_object_category_visibility_${category}`) === '1' ? 'show' : 'hide'
+            ]();
         });
     }
 
@@ -1033,7 +1035,7 @@ class MapObject extends Signalable {
                     mapContext instanceof MapContextDungeonRoute &&
                     xhr.responseJSON.message === `No query results for model [${mapContext.getDungeonRouteClass()}] ${mapContext.getPublicKey()}`) {
                     // Route has been removed! Show a modal to the user
-                    $('#dungeonroute_removed_modal').modal('show');
+                    bootstrap.Modal.getOrCreateInstance(document.getElementById('dungeonroute_removed_modal')).show();
                 } else {
                     defaultAjaxErrorFn(xhr, textStatus, errorThrown);
                 }

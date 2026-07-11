@@ -20,7 +20,7 @@
                 <th>{{ __('view_admin.tools.combatlog.parsefailures.column_class') }}</th>
                 <th>{{ __('view_admin.tools.combatlog.parsefailures.column_created') }}</th>
                 <th>{{ __('view_admin.tools.combatlog.parsefailures.column_status') }}</th>
-                <th class="text-right">{{ __('view_admin.tools.combatlog.parsefailures.column_actions') }}</th>
+                <th class="text-end">{{ __('view_admin.tools.combatlog.parsefailures.column_actions') }}</th>
             </tr>
             </thead>
             <tbody>
@@ -39,16 +39,16 @@
                     <td>{{ $failure->created_at }}</td>
                     <td>
                         @if($failure->resolved_at !== null)
-                            <span class="badge badge-success badge-pill">
+                            <span class="badge text-bg-success rounded-pill">
                                 {{ __('view_admin.tools.combatlog.parsefailures.status_resolved') }}
                             </span>
                         @else
-                            <span class="badge badge-warning badge-pill">
+                            <span class="badge text-bg-warning rounded-pill">
                                 {{ __('view_admin.tools.combatlog.parsefailures.status_open') }}
                             </span>
                         @endif
                     </td>
-                    <td class="text-right" style="white-space: nowrap;">
+                    <td class="text-end" style="white-space: nowrap;">
                         <button type="button"
                                 class="btn btn-sm btn-info view-log-btn"
                                 data-segments-url="{{ route('admin.tools.combatlog.parsefailures.segments', ['parseFailure' => $failure->id]) }}"
@@ -80,7 +80,7 @@
                         {{ __('view_admin.tools.combatlog.parsefailures.segments_modal_title') }}
                         <span id="parsefailures_segments_run_id"></span>
                     </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="dismiss-close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -109,7 +109,7 @@
 
                 $runId.text($(this).data('run-id'));
                 $body.html('<i class="fas fa-spinner fa-spin"></i>');
-                $modal.modal('show');
+                bootstrap.Modal.getOrCreateInstance($modal[0]).show();
 
                 $.getJSON(url)
                     .done(function (response) {

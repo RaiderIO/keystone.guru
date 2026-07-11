@@ -89,7 +89,7 @@ class TeamEdit extends InlineCode {
 
         // Fix members data table being in a separate tab ignoring width
         // https://datatables.net/examples/api/tabs_and_scrolling.html
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
             if ($(e.target).attr('href') === '#routes') {
                 // Refresh the table to trigger the preview being generated properly
                 $(self.options.dungeonrouteFilterSelector).trigger('click');

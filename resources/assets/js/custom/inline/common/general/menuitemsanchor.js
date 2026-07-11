@@ -4,7 +4,10 @@ class CommonGeneralMenuitemsanchor extends InlineCode {
 
         const anchor = window.location.hash;
         if (typeof anchor !== 'undefined') {
-            $(`a[href="${anchor}"]`).tab('show')
+            let tabTrigger = document.querySelector(`a[href="${anchor}"]`);
+            if (tabTrigger !== null) {
+                bootstrap.Tab.getOrCreateInstance(tabTrigger).show();
+            }
         }
 
         // When you click a nav, update the hash

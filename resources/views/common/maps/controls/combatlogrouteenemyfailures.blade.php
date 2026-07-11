@@ -28,7 +28,7 @@ $npcs = Npc::query()->whereIn('id', $npcIds)->orderBy('name')->get();
     'dependencies'            => ['common/maps/map'],
 ]])
 
-<nav id="combatlogroute_enemy_failures_sidebar" class="route_sidebar top right row no-gutters map_fade_out active">
+<nav id="combatlogroute_enemy_failures_sidebar" class="route_sidebar top right row g-0 map_fade_out active">
     <div class="bg-header p-2">
         <h5 class="mb-3">{{ __($dungeon->name) }}</h5>
 
@@ -43,7 +43,7 @@ $npcs = Npc::query()->whereIn('id', $npcIds)->orderBy('name')->get();
 
         <button id="combatlogroute_enemy_failures_clear"
                 class="btn btn-danger w-100 mt-2"
-                data-toggle="tooltip"
+                data-bs-toggle="tooltip"
                 title="{{ __('view_common.maps.controls.combatlogrouteenemyfailures.clear_failures_title') }}">
             <i class="fas fa-trash"></i>
             {{ __('view_common.maps.controls.combatlogrouteenemyfailures.clear_failures') }}

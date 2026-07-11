@@ -9,11 +9,11 @@
 
 @section('content')
     {{ html()->form('POST', route('admin.tools.messagebanner.set.submit'))->open() }}
-    <div class="form-group">
+    <div class="mb-3">
         {{ html()->label(__('view_admin.tools.messagebanner.set.message'), 'message') }}
         {{ html()->textarea('message', $messageBanner ?? '')->class('form-control') }}
     </div>
-    <div class="form-group">
+    <div class="mb-3">
         {{ html()->input('submit')->value(__('view_admin.tools.messagebanner.set.submit'))->class('btn btn-primary col-md-auto') }}
         <div class="col-md">
 

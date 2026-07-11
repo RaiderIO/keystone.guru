@@ -48,7 +48,7 @@ use App\Models\DungeonRoute\DungeonRoute;
                             <small class="text-muted d-block">{{ __('view_admin.tools.dungeonroute.viewcontents.action_mdt_import_string_description') }}</small>
                         </div>
                         <button type="button"
-                                class="btn btn-sm btn-secondary ml-3 admin-dungeonroute-copy-mdt"
+                                class="btn btn-sm btn-secondary ms-3 admin-dungeonroute-copy-mdt"
                                 data-mdt-string="{{ $dungeonroute->mdtImport->first()->import_string }}">
                             <i class="fas fa-copy"></i> {{ __('view_admin.tools.dungeonroute.viewcontents.action_copy') }}
                         </button>
@@ -67,7 +67,7 @@ use App\Models\DungeonRoute\DungeonRoute;
         <div class="card">
             <div class="card-header" id="headingDungeonroute">
                 <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseDungeonroute"
+                    <button class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseDungeonroute"
                             aria-expanded="false"
                             aria-controls="collapseDungeonroute">
                         "{{ $dungeonroute->title }}"
@@ -76,7 +76,7 @@ use App\Models\DungeonRoute\DungeonRoute;
             </div>
 
             <div id="collapseDungeonroute" class="collapse" aria-labelledby="headingDungeonroute"
-                 data-parent="#dungeonrouteAccordion">
+                 data-bs-parent="#dungeonrouteAccordion">
                 <div class="card-body">
                     @dump($dungeonroute->withoutRelations())
                 </div>
@@ -87,7 +87,7 @@ use App\Models\DungeonRoute\DungeonRoute;
             <div class="card">
                 <div class="card-header" id="heading{{ $name }}">
                     <h5 class="mb-0">
-                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse{{ $name }}"
+                        <button class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapse{{ $name }}"
                                 aria-expanded="false"
                                 aria-controls="collapse{{ $name }}">
                             {{ ucfirst($name) }}
@@ -96,7 +96,7 @@ use App\Models\DungeonRoute\DungeonRoute;
                 </div>
 
                 <div id="collapse{{ $name }}" class="collapse" aria-labelledby="heading{{ $name }}"
-                     data-parent="#dungeonrouteAccordion">
+                     data-bs-parent="#dungeonrouteAccordion">
                     <div class="card-body">
                         @dump($value)
                     </div>
