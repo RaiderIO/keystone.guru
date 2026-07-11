@@ -105,4 +105,11 @@
             font-size: calc(1.07rem + (1.2 - 1.07) * ((100vw - 20rem) / (48 - 20)));
         }
     }
+
+    // Only rendered on a git-worktree dev stack (config('keystoneguru.worktree')) - loud on purpose,
+    // so it's obvious at a glance which checkout a browser tab is pointed at.
+    &__worktree {
+        color: #ffc107;
+        font-weight: 700;
+    }
 }

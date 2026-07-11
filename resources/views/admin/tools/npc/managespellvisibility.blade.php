@@ -57,7 +57,7 @@ use Illuminate\Support\Collection;
         'selected' => isset($dungeon) ? $dungeon?->id : null,
     ])
 
-    <div class="form-group">
+    <div class="mb-3">
         <button type="submit" class="btn btn-success">
             {{ __('view_admin.tools.npc.managespellvisibility.submit') }}
         </button>
@@ -68,7 +68,7 @@ use Illuminate\Support\Collection;
     {{ $npcs->links() }}
 
     @foreach($npcs as $npc)
-        <div class="form-group">
+        <div class="mb-3">
             <h4>
                 {{ __($npc->name) }} ({{ __($npc->id) }})
             </h4>

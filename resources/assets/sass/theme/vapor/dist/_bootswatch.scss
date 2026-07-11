@@ -278,7 +278,7 @@ legend {
 .tooltip {
 
   &-inner,
-  .arrow {
+  .tooltip-arrow {
     @include box-shadow-lg($primary);
   }
 }

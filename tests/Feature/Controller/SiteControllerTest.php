@@ -66,4 +66,32 @@ final class SiteControllerTest extends PublicTestCase
             config('keystoneguru.github_repository'),
         ));
     }
+
+    #[Test]
+    public function index_givenWorktreeConfigured_rendersWorktreeNameInFooter(): void
+    {
+        // Arrange
+        config(['keystoneguru.worktree' => '1234-some-worktree']);
+
+        // Act
+        $response = $this->get(route('home'));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee('1234-some-worktree');
+    }
+
+    #[Test]
+    public function index_givenNoWorktreeConfigured_doesNotRenderWorktreeFooterElement(): void
+    {
+        // Arrange
+        config(['keystoneguru.worktree' => null]);
+
+        // Act
+        $response = $this->get(route('home'));
+
+        // Assert
+        $response->assertOk();
+        $response->assertDontSee('site-footer__worktree');
+    }
 }

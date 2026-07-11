@@ -49,7 +49,7 @@ class CommonDungeonrouteReport extends InlineCode {
                 $root.find('.dungeonroute_report_saving').show();
             },
             success: function (json) {
-                $('#userreport_dungeonroute_modal').modal('hide');
+                bootstrap.Modal.getOrCreateInstance(document.getElementById('userreport_dungeonroute_modal')).hide();
                 showSuccessNotification(lang.get('js.dungeonroute_report_enemy_success'));
             },
             complete: function () {

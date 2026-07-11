@@ -1,6 +1,10 @@
 <?php
 
 use App\Models\Laratrust\Role;
+
+/**
+ * @var string|null $worktree
+ */
 ?>
 <footer class="site-footer">
     <section class="site-footer__section">
@@ -128,6 +132,9 @@ use App\Models\Laratrust\Role;
                 <div class="col-12 mt-4">
                     <p class="site-footer__copyright mb-0">
                         {{ $nameAndVersion }}
+                        @isset($worktree)
+                            <span class="site-footer__worktree">{{ __('view_common.layout.footer.worktree', ['worktree' => $worktree]) }}</span>
+                        @endisset
                     </p>
                 </div>
             </div>

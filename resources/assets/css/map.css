@@ -1250,3 +1250,11 @@ html, body, #map, #app, .wrapper {
 #heatmap_search_sidebar.embed #heatmap_search_options_current_filters {
     height: 106px;
 }
+
+/* Map settings range sliders: full width with a themed filled track.
+   Bootstrap 5's .form-range sets appearance:none, which removes the native
+   left-fill; native rendering + accent-color restores it (adapts per theme). */
+.map_settings_range {
+    width: 100%;
+    accent-color: var(--bs-primary);
+}

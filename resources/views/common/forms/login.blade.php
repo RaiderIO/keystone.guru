@@ -17,7 +17,7 @@ $errors   ??= collect();
                 {{ __('view_common.forms.login.login') }}
             </h3>
 
-            <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+            <div class="mb-3{{ $errors->has('email') ? ' has-error' : '' }}">
                 <label for="{{ $modalClass }}login_email" class="control-label">
                     {{ __('view_common.forms.login.email_address') }}
                 </label>
@@ -28,7 +28,7 @@ $errors   ??= collect();
                 </div>
             </div>
 
-            <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+            <div class="mb-3{{ $errors->has('password') ? ' has-error' : '' }}">
                 <label for="{{ $modalClass }}login_password" class="control-label">
                     {{ __('view_common.forms.login.password') }}
                 </label>
@@ -39,17 +39,17 @@ $errors   ??= collect();
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="mb-3">
                 <label for="{{ $modalClass }}login_remember">
                     {{ __('view_common.forms.login.remember_me') }}
                 </label>
-                <div class="col col-xl-{{ $width }} {{ $modal ? 'col-md-offset-4' : '' }}">
+                <div class="col col-xl-{{ $width }}">
                     <input id="{{ $modalClass }}login_remember" type="checkbox"
                            name="remember" class="form-control left_checkbox" {{ old('remember') ? 'checked' : '' }}>
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="mb-3">
                 <div class="col-xl-12">
                     <button type="submit" class="btn btn-primary">
                         {{ __('view_common.forms.login.login') }}
@@ -62,7 +62,7 @@ $errors   ??= collect();
             </div>
         </form>
     </div>
-    <div class="col border-left border-white">
+    <div class="col border-start border-white">
         <h3>
             {{ __('view_common.forms.login.login_through_oauth2') }}
         </h3>

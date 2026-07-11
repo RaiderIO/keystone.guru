@@ -138,6 +138,9 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
         }
     }
 }
+
+// Drop empty optgroups (e.g. expansions without raids) so they do not render as blank groups in the dropdown
+$dungeonsSelect = array_filter($dungeonsSelect, static fn($groupOptions) => count($groupOptions) > 0);
 ?>
 
 @if($showSiegeWarning && $siegeOfBoralus)
@@ -160,7 +163,7 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
     @endsection
 @endif
 
-<div class="form-group">
+<div class="mb-3">
     @if($label !== false)
         {{ html()->label($label . ($required ? '<span class="form-required">*</span>' : ''), $id) }}
     @endif

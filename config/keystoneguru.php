@@ -6,6 +6,12 @@ return [
         'Admin',
     ],
 
+    // sh/worktree.sh sets COMPOSE_PROJECT_NAME to "ksg-<branch>" for a worktree stack; unset on the
+    // main stack and in production, so this is null there.
+    'worktree' => ($composeProjectName = env('COMPOSE_PROJECT_NAME')) !== null && str_starts_with($composeProjectName, 'ksg-')
+        ? substr($composeProjectName, strlen('ksg-'))
+        : null,
+
     'db_backup_dir'            => env('DB_BACKUP_DIR'),
     'mapping_backup_dir'       => env('MAPPING_BACKUP_DIR'),
     'assets_base_url'          => env('ASSETS_BASE_URL', '/'),

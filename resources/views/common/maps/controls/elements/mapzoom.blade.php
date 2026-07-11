@@ -3,7 +3,7 @@
 ?>
 @if(!$isMobile)
     <!-- Map object group visibility -->
-    <div class="row no-gutters">
+    <div class="row g-0">
         <div class="col">
             <button type="button" id="map_map_zoom_out_btn" class="btn btn-accent px-1 text-center">
                 <i class="fa fa-search-minus w-100"></i>

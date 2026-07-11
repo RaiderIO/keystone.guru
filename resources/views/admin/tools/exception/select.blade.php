@@ -9,11 +9,11 @@
 
 @section('content')
     {{ html()->form('POST', route('admin.tools.exception.select.submit'))->open() }}
-    <div class="form-group">
+    <div class="mb-3">
         {{ html()->label(__('view_admin.tools.exception.select.select_exception_to_throw'), 'exception') }}
         {{ html()->select('exception', $exceptions)->class('form-control selectpicker') }}
     </div>
-    <div class="form-group">
+    <div class="mb-3">
         {{ html()->input('submit')->value(__('view_admin.tools.exception.select.submit'))->class('btn btn-primary col-md-auto') }}
         <div class="col-md">
 

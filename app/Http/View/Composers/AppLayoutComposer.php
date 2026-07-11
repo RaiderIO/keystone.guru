@@ -24,5 +24,6 @@ readonly class AppLayoutComposer implements ViewComposerInterface
         $view->with('nameAndVersion', $appVersionInfo['nameAndVersion']);
         $view->with('messageBanner', $this->messageBannerService->getMessage());
         $view->with('readOnlyEnabled', $this->readOnlyModeService->isReadOnly());
+        $view->with('worktree', config('keystoneguru.worktree'));
     }
 }
