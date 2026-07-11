@@ -10,9 +10,15 @@ class CommonGeneralMenuitemsanchor extends InlineCode {
             }
         }
 
-        // When you click a nav, update the hash
+        // When you click a nav, update the hash without scrolling the page to the anchor
         $('ul.nav li a').unbind('click').bind('click', function () {
-            window.location.hash = $(this).attr('href').replace('#', '');
+            history.replaceState(undefined, undefined, $(this).attr('href'));
         });
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {CommonGeneralMenuitemsanchor};
 }
