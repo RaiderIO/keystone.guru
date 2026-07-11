@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
  * @var GameVersion                   $gameVersion
  * @var string                        $title
  * @var string|null                   $link
- * @var array|null                    $linkOptions
+ * @var array<string, string>|null    $linkOptions
  * @var int                           $cols
  * @var Collection<int, DungeonRoute> $dungeonroutes
  * @var AffixGroup                    $currentAffixGroup
