@@ -31,7 +31,7 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
         </div>
         <div class="row">
             <div class="col">
-                <input id="map_settings_zoom_speed" class="form-control-range" type="range" min="0"
+                <input id="map_settings_zoom_speed" class="map_settings_range" type="range" min="0"
                        max="100" value="{{ $mapZoomSpeed }}">
             </div>
             <div class="col-auto value">
@@ -101,7 +101,7 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
         </div>
         <div class="row">
             <div class="col">
-                <input id="map_settings_unkilled_enemy_opacity" class="form-control-range" type="range" min="0"
+                <input id="map_settings_unkilled_enemy_opacity" class="map_settings_range" type="range" min="0"
                        max="100" value="{{ $mapUnkilledEnemyOpacity }}">
             </div>
             <div class="col-auto value">
@@ -123,7 +123,7 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
         </div>
         <div class="row">
             <div class="col">
-                <input id="map_settings_unkilled_important_enemy_opacity" class="form-control-range" type="range"
+                <input id="map_settings_unkilled_important_enemy_opacity" class="map_settings_range" type="range"
                        min="0" max="100" value="{{ $mapUnkilledImportantEnemyOpacity }}">
             </div>
             <div class="col-auto value">
@@ -187,7 +187,7 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
         </div>
         <div class="row">
             <div class="col">
-                <input id="map_settings_kill_zone_path_weight" class="form-control-range" type="range" min="1"
+                <input id="map_settings_kill_zone_path_weight" class="map_settings_range" type="range" min="1"
                        max="5" value="{{ $killzonePathWeight }}">
             </div>
             <div class="col-auto value">
