@@ -1,9 +1,9 @@
 name: JavaScript Tests
 
+# No base-branch filter: stacked MRs (one stage targeting another stage's branch) must run the
+# same tests and build as MRs against master
 on:
   pull_request:
-    branches:
-      - master
 
 permissions:
   contents: read
