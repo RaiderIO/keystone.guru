@@ -10,8 +10,9 @@
 
   @import "~bootswatch/dist/vapor/variables";
   @import "~bootstrap/scss/bootstrap";
+  // Vendored + hand-modified bootswatch: strips vapor's neon glow for the Midnight theme and can
+  // NOT be swapped for the upstream `~bootswatch/dist/vapor/bootswatch`. See that file's header.
   @import "dist/_bootswatch";
-  //@import "~bootswatch/dist/vapor/bootswatch";
 
   body, .btn {
     color: #fff;
