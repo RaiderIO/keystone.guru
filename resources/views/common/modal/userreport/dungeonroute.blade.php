@@ -41,7 +41,7 @@ $publicKey    = $dungeonroute !== null ? $dungeonroute->public_key : 'auto';
             @else
                 {{ html()->label(__('view_common.modal.userreport.dungeonroute.contact_by_email'), 'dungeonroute_report_contact_ok') }}
             @endguest
-            {{ html()->checkbox('dungeonroute_report_contact_ok', false, 1)->class('form-control left_checkbox dungeonroute_report_contact_ok') }}
+            {{ html()->checkbox('dungeonroute_report_contact_ok', false, 1)->class('form-check-input dungeonroute_report_contact_ok') }}
         </div>
 
         <button class="btn btn-info dungeonroute_report_submit">

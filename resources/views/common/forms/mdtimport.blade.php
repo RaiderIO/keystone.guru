@@ -41,7 +41,7 @@
                 )
                  }}"></i>
         </label>
-        {{ html()->checkbox('mdt_import_sandbox', false, 1)->id('mdt_import_sandbox')->class('form-control left_checkbox') }}
+        {{ html()->checkbox('mdt_import_sandbox', false, 1)->id('mdt_import_sandbox')->class('form-check-input') }}
     </div>
     @include('common.team.select', ['id' => 'mdt_import_team_id_select',  'required' => false])
 @endguest
@@ -77,7 +77,7 @@
                 <label for="assign_notes_to_pulls">
                     {{ __('view_common.forms.mdtimport.assign_notes_to_pulls') }}
                 </label>
-                {{ html()->checkbox('assign_notes_to_pulls', true, 1)->id('assign_notes_to_pulls')->class('form-control left_checkbox') }}
+                {{ html()->checkbox('assign_notes_to_pulls', true, 1)->id('assign_notes_to_pulls')->class('form-check-input') }}
             </div>
         </div>
         <div class="col">
@@ -85,7 +85,7 @@
                 <label for="import_as_this_week">
                     {{ __('view_common.forms.mdtimport.import_as_this_week') }}
                 </label>
-                {{ html()->checkbox('import_as_this_week', false, 1)->id('import_as_this_week')->class('form-control left_checkbox') }}
+                {{ html()->checkbox('import_as_this_week', false, 1)->id('import_as_this_week')->class('form-check-input') }}
             </div>
         </div>
     </div>
