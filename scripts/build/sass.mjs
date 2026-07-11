@@ -17,6 +17,8 @@ import {transformSync} from 'esbuild';
  *   loaded scss first; the extensionless url then goes through the importer, which resolves the
  *   `.css` file and inlines it.
  * - urls are never rewritten, matching `processCssUrls: false`.
+ * - Theme `:root` blocks are re-scoped (`.darkly :root` -> `:root.darkly`), replicating the
+ *   `scopedThemeRootFix` postcss plugin the old webpack pipeline ran — see scopeThemeRootSelectors.
  * - Dev builds get linked .map files; production is minified (esbuild) and ships no maps.
  */
 const sassEntries = [
@@ -60,7 +62,7 @@ export function buildSassBundles(rootDir, version, production) {
         });
 
         const outFile = path.join(outDir, `${outName}-${version}.css`);
-        let css = hoistPlainCssImports(result.css);
+        let css = scopeThemeRootSelectors(hoistPlainCssImports(result.css));
 
         if (production) {
             css = transformSync(css, {loader: 'css', minify: true}).code;
@@ -120,6 +122,33 @@ export function hoistPlainCssImports(css) {
     const prefix  = charset === null ? '' : charset[0];
 
     return prefix + imports.join('\n') + '\n' + body.slice(prefix.length);
+}
+
+/**
+ * Re-scopes Bootstrap 5's `:root` design-token blocks so they resolve inside our theme classes,
+ * replicating the `scopedThemeRootFix` postcss plugin the old webpack pipeline ran.
+ *
+ * Each theme wraps all of Bootstrap in a class (`.darkly { @import bootstrap }`, in app.scss), so
+ * Bootstrap's `:root { --bs-* }` and bootswatch's `:root { color-scheme }` blocks compile to the
+ * descendant selector `.darkly :root` — which can never match, since `:root` IS the <html> element
+ * that carries the theme class. Rewrite `.<theme> :root` to `:root.<theme>` so the variables (and
+ * everything BS5 derives from them: component colors, per-theme backgrounds, ...) resolve again.
+ *
+ * Deliberately narrow, matching the old plugin: it only rewrites a selector that is *exactly*
+ * `.<class> :root` (anywhere in a comma-separated list), never a longer/nested shape. That is
+ * enough for what Bootstrap + bootswatch emit today; any future `:root` nested in a different shape
+ * would silently stay broken (undefined `--bs-*` in one theme). The real fix is to stop compiling
+ * Bootstrap three times into scoped classes and move to BS5's `data-bs-theme` / CSS-variable
+ * overrides — a much bigger refactor tracked as shim 9 of #3462 (the BS4-compat inventory).
+ *
+ * @param {string} css
+ * @returns {string}
+ */
+export function scopeThemeRootSelectors(css) {
+    // Boundary before the selector: start of file, end of the previous rule (`}`), or the previous
+    // selector in a group (`,`). Lookahead after `:root` requires the token to end there (`,` next
+    // selector, or `{` the rule body), so nothing longer than `.<class> :root` ever matches.
+    return css.replace(/(^|[},])(\s*)\.([\w-]+) :root(\s*)(?=[,{])/g, '$1$2:root.$3$4');
 }
 
 /**

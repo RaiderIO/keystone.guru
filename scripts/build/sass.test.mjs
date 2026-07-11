@@ -2,7 +2,7 @@
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {describe, expect, it} from 'vitest';
-import {createSassImporter, hoistPlainCssImports, rewritePlainCssImports} from './sass.mjs';
+import {createSassImporter, hoistPlainCssImports, rewritePlainCssImports, scopeThemeRootSelectors} from './sass.mjs';
 
 const rootDir = path.resolve(import.meta.dirname, '..', '..');
 
@@ -50,6 +50,30 @@ describe('hoistPlainCssImports', () => {
         const css = '.a { color: red; }';
 
         expect(hoistPlainCssImports(css)).toBe(css);
+    });
+});
+
+describe('scopeThemeRootSelectors', () => {
+    it('scopeThemeRootSelectors_givenThemeScopedRoot_rewritesItToRootDotTheme', () => {
+        const css = '.darkly :root {\n  --bs-blue: #375a7f;\n}';
+
+        expect(scopeThemeRootSelectors(css)).toBe(':root.darkly {\n  --bs-blue: #375a7f;\n}');
+    });
+
+    it('scopeThemeRootSelectors_givenRootInAnyGroupPosition_rewritesOnlyThatSelector', () => {
+        const first  = '.vapor :root, .vapor [data-bs-theme=light] {\n  color-scheme: dark;\n}';
+        const second = '[data-bs-theme=light], .lux :root {\n  color: red;\n}';
+
+        expect(scopeThemeRootSelectors(first)).toBe(':root.vapor, .vapor [data-bs-theme=light] {\n  color-scheme: dark;\n}');
+        expect(scopeThemeRootSelectors(second)).toBe('[data-bs-theme=light], :root.lux {\n  color: red;\n}');
+    });
+
+    it('scopeThemeRootSelectors_givenPlainRootOrLongerSelector_leavesItAlone', () => {
+        const plainRoot = ':root {\n  --bs-blue: #375a7f;\n}';
+        const nested    = '.darkly .card :root {\n  color: red;\n}';
+
+        expect(scopeThemeRootSelectors(plainRoot)).toBe(plainRoot);
+        expect(scopeThemeRootSelectors(nested)).toBe(nested);
     });
 });
 
