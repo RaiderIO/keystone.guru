@@ -7,3 +7,11 @@
 // Typography
 $font-family-sans-serif: Salesforce Sans, Arial, sans-serif;
 $line-height-base: 1.6;
+
+// Links
+// Bootstrap 4 did not underline links (hover only); Bootstrap 5 underlines them by default. Set
+// once here (before the theme imports in app.scss) instead of repeating it in every theme scss.
+// Safe to set globally: no bootswatch theme overrides these vars, and the value is identical across
+// all themes.
+$link-decoration: none;
+$link-hover-decoration: underline;
