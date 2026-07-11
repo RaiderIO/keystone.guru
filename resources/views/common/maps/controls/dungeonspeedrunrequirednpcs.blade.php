@@ -13,8 +13,8 @@
         </div>
     </div>
     <div class="px-2">
-        <button class="btn btn-primary w-100" type="button" data-toggle="collapse"
-                data-target="#edit_route_dungeon_speedrun_required_npcs_collapse"
+        <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse"
+                data-bs-target="#edit_route_dungeon_speedrun_required_npcs_collapse"
                 aria-expanded="false" aria-controls="collapseExample">
             {{ __('view_common.maps.controls.pulls.toggle_all_required_enemies') }}
 

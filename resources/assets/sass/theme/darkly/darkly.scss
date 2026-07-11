@@ -1,5 +1,21 @@
 // Bootstrap theme (bootstrap should be between these)
 .darkly {
+  // Bootstrap 4 did not underline links (hover only); Bootstrap 5 underlines them by default
+  $link-decoration: none;
+  $link-hover-decoration: underline;
+
+  // Bootstrap 4 compiled every theme with the global $body-bg: #2B3E50 from sass/_variables.scss
+  // (removed in this migration). The color is nearly invisible in darkly — the page background is
+  // forced to var(--theme-darker) elsewhere — but bootswatch derives a few component colors from
+  // $body-bg (e.g. the active nav-tab background in the map settings modal), so keep the same
+  // value to stay pixel-identical with the Bootstrap 4 output.
+  $body-bg: #2B3E50;
+
+  // Bootstrap 5 dropped the default navbar x-padding ($navbar-padding-x is now null); restore the
+  // Bootstrap 4 default so the navbar keeps its edge inset on mobile (lux/vapor override .navbar
+  // padding directly and are unaffected)
+  $navbar-padding-x: 1rem;
+
   @import "~bootswatch/dist/darkly/variables";
   @import "~bootstrap/scss/bootstrap";
   @import "~bootswatch/dist/darkly/bootswatch";

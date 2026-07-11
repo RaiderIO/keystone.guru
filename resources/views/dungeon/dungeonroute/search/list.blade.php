@@ -24,7 +24,7 @@ use Illuminate\Support\Collection;
 
 @section('content')
 
-    <div class="row form-group">
+    <div class="row mb-3">
         <div class="col">
             <p>
                 {{ __('view_dungeon.dungeonroute.search.list.description') }}

@@ -1,5 +1,5 @@
-<div class="col-auto text-right pr-1">
-    <div class="row no-gutters align-items-center" style="height: 36px;">
+<div class="col-auto text-end pe-1">
+    <div class="row g-0 align-items-center" style="height: 36px;">
         <div class="col">
             <!-- Logo + text: md and up -->
             <a href="{{ route('home') }}" target="_blank" class="d-none d-md-inline-block">

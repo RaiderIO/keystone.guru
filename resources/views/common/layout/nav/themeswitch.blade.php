@@ -6,21 +6,21 @@ use App\Models\User;
 
 ?>
 <li>
-    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-        <label class="btn btn-dark {{ $theme === User::THEME_LUX ? 'active' : '' }}">
-            <input type="radio" class="theme_switch_btn" name="theme" autocomplete="off"
-                   data-theme="{{ User::THEME_LUX }}" {{ $theme === User::THEME_LUX ? 'checked' : '' }}>
+    <div class="btn-group" role="group">
+        <input type="radio" class="btn-check theme_switch_btn" name="theme" id="theme_switch_{{ User::THEME_LUX }}"
+               autocomplete="off" data-theme="{{ User::THEME_LUX }}" {{ $theme === User::THEME_LUX ? 'checked' : '' }}>
+        <label class="btn btn-dark" for="theme_switch_{{ User::THEME_LUX }}">
             <i class="fas fa-sun"></i>
         </label>
-        <label class="btn btn-dark {{ $theme === User::THEME_DARKLY ? 'active' : '' }}">
-            <input type="radio" class="theme_switch_btn" name="theme" autocomplete="off"
-                   data-theme="{{ User::THEME_DARKLY }}" {{ $theme === User::THEME_DARKLY ? 'checked' : '' }}>
+        <input type="radio" class="btn-check theme_switch_btn" name="theme" id="theme_switch_{{ User::THEME_DARKLY }}"
+               autocomplete="off" data-theme="{{ User::THEME_DARKLY }}" {{ $theme === User::THEME_DARKLY ? 'checked' : '' }}>
+        <label class="btn btn-dark" for="theme_switch_{{ User::THEME_DARKLY }}">
             <i class="fas fa-moon"></i>
         </label>
         @if(Feature::active(XalatathTheme::class))
-            <label class="btn btn-dark {{ $theme === User::THEME_XALATATH ? 'active' : '' }}" style="color: #6a2dbd;">
-                <input type="radio" class="theme_switch_btn" name="theme" autocomplete="off"
-                       data-theme="{{ User::THEME_XALATATH }}" {{ $theme === User::THEME_XALATATH ? 'checked' : '' }}>
+            <input type="radio" class="btn-check theme_switch_btn" name="theme" id="theme_switch_{{ User::THEME_XALATATH }}"
+                   autocomplete="off" data-theme="{{ User::THEME_XALATATH }}" {{ $theme === User::THEME_XALATATH ? 'checked' : '' }}>
+            <label class="btn btn-dark" for="theme_switch_{{ User::THEME_XALATATH }}" style="color: #6a2dbd;">
                 <i class="fas fa-moon"></i>
             </label>
         @endif

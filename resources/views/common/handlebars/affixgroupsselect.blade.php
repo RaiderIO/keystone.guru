@@ -63,26 +63,11 @@ $id ??= 'Affixes';
             }
         }
 
-        refreshSelectPickers();
-
         let $affixSelect = $(affixSelectSelector);
-        $affixSelect.on('shown.bs.select', function () {
-            // Fix the select, it wraps the entire thing in a SPAN which completely destroys ability to do any form of layout on it
-            // So remove the span
-            $('.affixselect.bootstrap-select .text').each(function (index, el) {
-                let $el = $(el);
-                let $ours = $el.children();
-                $el.parent().append($ours);
-                $el.remove();
-            });
-            // Fix the layout so there's no longer a huge gap at the bottom
-            $('.affixselect.bootstrap-select .dropdown-menu.show').css('min-height', 'unset');
-            $('.affixselect.bootstrap-select .inner.show').css('min-height', 'unset');
+        if (typeof $affixSelect.attr('readonly') !== 'undefined') {
+            $affixSelect.find('option').attr('disabled', true);
+        }
 
-            if (typeof $affixSelect.attr('readonly') !== 'undefined') {
-                $affixSelect.find('option').attr('disabled', true);
-            }
-        });
-
+        refreshSelectPickers();
     }
 </script>

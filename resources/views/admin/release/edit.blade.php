@@ -34,17 +34,17 @@ $changelog = isset($release) ? $release->changelog : new ReleaseChangelog();
         {{ html()->form('POST', route('admin.release.savenew'))->acceptsFiles()->open() }}
     @endisset
 
-    <div class="form-group{{ $errors->has('version') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('version') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.release.edit.version'), 'version') }}
         {{ html()->text('version')->class('form-control') }}
     </div>
 
-    <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('title') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.release.edit.title'), 'title') }}
         {{ html()->text('title')->class('form-control') }}
     </div>
 
-    <div class="row form-group">
+    <div class="row mb-3">
         <div class="col {{ $errors->has('backup_db') ? 'has-error' : '' }}">
             {{ html()->label(__('view_admin.release.edit.backup_db'), 'backup_db') }}
             {{ html()->checkbox('backup_db', isset($release) ? $release->backup_db : 1, 1)->class('form-control left_checkbox') }}
@@ -68,12 +68,12 @@ $changelog = isset($release) ? $release->changelog : new ReleaseChangelog();
 
     <h4>{{ __('view_admin.release.edit.changelog') }}</h4>
 
-    <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('description') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.release.edit.description'), 'changelog_description') }}
         {{ html()->text('changelog_description', $changelog->description)->class('form-control') }}
     </div>
 
-    <div id="changes_container" class="form-group mb-4">
+    <div id="changes_container" class="mb-3 mb-4">
         <div class="row">
             <div class="col-2">
                 {{ __('view_admin.release.edit.ticket_nr') }}
@@ -84,13 +84,13 @@ $changelog = isset($release) ? $release->changelog : new ReleaseChangelog();
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="mb-3">
         <button id="add_change_button" class="btn btn-success" type="button">
             <i class="fas fa-plus"></i> {{ __('view_admin.release.edit.add_change') }}
         </button>
     </div>
 
-    <div class="form-group">
+    <div class="mb-3">
         {{ html()->input('submit')->value(isset($release) ? __('view_admin.release.edit.edit') : __('view_admin.release.edit.submit'))->class('btn btn-info') }}
     </div>
 
@@ -98,7 +98,7 @@ $changelog = isset($release) ? $release->changelog : new ReleaseChangelog();
 
 
     @isset($release)
-        <div class="form-group">
+        <div class="mb-3">
                 <?php
                 $releaseArr = $release->toArray();
                 ?>

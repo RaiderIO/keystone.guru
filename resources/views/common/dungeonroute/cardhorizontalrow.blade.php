@@ -58,7 +58,7 @@ use (
     ob_start();
     ?>
 <div id="dungeonroute_card_horizontal_row_{{ $uniqueString }}"
-     class="row no-gutters align-items-center m-0 card_dungeonroute horizontal border-1 border-dark {{ $showDungeonImage ? 'dungeon_image' : '' }}"
+     class="row g-0 align-items-center m-0 card_dungeonroute horizontal border-1 border-dark {{ $showDungeonImage ? 'dungeon_image' : '' }}"
      data-publickey="{{ $dungeonroute->public_key }}"
 >
     <div class="col-auto cursor-pointer p-1 apply_route_radio">
@@ -83,13 +83,13 @@ use (
     {{--            </ul>--}}
     {{--        </div>--}}
     {{--    </div>--}}
-    <div class="col border-left border-dark ">
+    <div class="col border-start border-dark ">
         <div class="d-flex flex-column h-100 bg-card"
              @if($showDungeonImage)
                  style="background-image: url('{{ $dungeonroute->dungeon->getImageTransparentUrl() }}'); background-size: cover; background-position-y: center;"
             @endif
         >
-            <div class="row no-gutters p-2 header">
+            <div class="row g-0 p-2 header">
                 <div class="col">
                     <h4 class="apply_route mb-0">
                         <a href="#">
@@ -107,18 +107,18 @@ use (
                     <div class="col-auto">
                         <i class="fas fa-exclamation-triangle text-warning"
                            title="{{ __('view_common.dungeonroute.card.outdated_mapping_version') }}"
-                           data-toggle="tooltip"></i>
+                           data-bs-toggle="tooltip"></i>
                     </div>
                 @endif
             </div>
             @if(!empty($dungeonroute->description))
-                <div class="row no-gutters px-2 pb-2 pt-1 px-md-3 flex-fill d-flex description_row">
+                <div class="row g-0 px-2 pb-2 pt-1 px-md-3 flex-fill d-flex description_row">
                     <div class="col d-flex d-xl-none">
                         {!! (new HtmlSanitizer())->sanitize($dungeonroute->description, false) !!}
                     </div>
                 </div>
             @endif
-            <div class="row no-gutters p-2 enemy_forces">
+            <div class="row g-0 p-2 enemy_forces">
                 <div class="col-auto">
                     @if( $enemyForcesWarning )
                         <span class="text-warning"> <i class="fas fa-exclamation-triangle"></i> </span>
@@ -142,7 +142,7 @@ use (
                     @endif
                 </div>
             </div>
-            <div class="row no-gutters footer">
+            <div class="row g-0 footer">
                 <div class="col bg-card-footer px-2 py-1">
                     <div class="row">
                         <div class="col">
@@ -154,7 +154,7 @@ use (
                                 {{--                            @include('common.dungeonroute.rating', ['count' => $dungeonroute->ratings->count(), 'rating' => (int) $dungeonroute->rating])--}}
                                 {{--                        @endif--}}
                                 -
-                                <span data-toggle="tooltip"
+                                <span data-bs-toggle="tooltip"
                                       title="{{ $dungeonroute->updated_at->toDateTimeString('minute') }}">
                                     {{ sprintf(__('view_common.dungeonroute.card.updated_at'), $dungeonroute->updated_at->diffForHumans() ) }}
                                 </span>
@@ -162,13 +162,13 @@ use (
                         </div>
 
                         @if( $showAffixes )
-                            <div class="col-auto pl-1 pr-0">
+                            <div class="col-auto ps-1 pe-0">
                                 @if($seasonalAffix !== null)
-                                    <div class="row no-gutters affix_toggle" data-container="body" data-toggle="popover"
-                                         data-placement="bottom"
-                                         data-html="true"
-                                         data-content="&nbsp;" style="cursor: pointer;">
-                                        <div class="col ml-1">
+                                    <div class="row g-0 affix_toggle" data-bs-container="body" data-bs-toggle="popover"
+                                         data-bs-placement="bottom"
+                                         data-bs-html="true"
+                                         data-bs-content="&nbsp;" style="cursor: pointer;">
+                                        <div class="col ms-1">
                                             <img class="select_icon"
                                                  src="{{ url($seasonalAffix->image_url) }}"
                                                  alt="{{ __($seasonalAffix->name) }}"/>
@@ -178,7 +178,7 @@ use (
                             </div>
                             <div class="col-auto px-1">
                                 @if($tierAffixGroup !== null)
-                                    <h4 class="font-weight-bold px-1 m-0">
+                                    <h4 class="fw-bold px-1 m-0">
                                         @include('common.dungeonroute.tier', ['dungeon' => $dungeonroute->dungeon, 'affixgroup' => $tierAffixGroup])
                                     </h4>
                                 @endif
@@ -189,12 +189,12 @@ use (
                 <div class="col-auto bg-card-footer px-2">
                     <button id="route_menu_button_{{ $dungeonroute->public_key }}"
                             class="btn btn-sm menu_actions_btn py-1"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-ellipsis-v text-muted"></i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="route_menu_button_{{ $dungeonroute->public_key }}">
-                        <a class="dropdown-item" href="#" data-toggle="modal"
-                           data-target="#userreport_dungeonroute_modal"
+                        <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                           data-bs-target="#userreport_dungeonroute_modal"
                            data-publickey="{{ $dungeonroute->public_key }}">
                             <i class="fas fa-flag"></i> {{ __('view_common.dungeonroute.card.report') }}
                         </a>
@@ -232,7 +232,9 @@ if ($cache) {
 <script type="application/javascript">
     $(function () {
         // Set content right before it opens
-        $('#dungeonroute_card_horizontal_row_{{ $uniqueString }} .affix_toggle').popover().on('show.bs.popover', function () {
+        document.querySelectorAll('#dungeonroute_card_horizontal_row_{{ $uniqueString }} .affix_toggle')
+            .forEach((el) => bootstrap.Popover.getOrCreateInstance(el));
+        $('#dungeonroute_card_horizontal_row_{{ $uniqueString }} .affix_toggle').on('show.bs.popover', function () {
             // Wrap the rendered HTML in a container div and assign to data-content
             const html = '<div>' + handlebarsAffixGroupsParse({!!
                 $dungeonroute->affixes->each(function(AffixGroup $affixGroup) {

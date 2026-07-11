@@ -10,13 +10,13 @@ use App\Models\DungeonRoute\DungeonRoute;
 <ul class="nav nav-tabs" role="tablist">
     <li class="nav-item">
         <a class="nav-link active"
-           id="map_settings_tab" data-toggle="tab" href="#map-settings" role="tab"
+           id="map_settings_tab" data-bs-toggle="tab" href="#map-settings" role="tab"
            aria-controls="map_settings" aria-selected="false">
             {{ __('view_common.modal.mapsettings.map_settings') }}
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="pull_settings_tab" data-toggle="tab" href="#pull-settings"
+        <a class="nav-link" id="pull_settings_tab" data-bs-toggle="tab" href="#pull-settings"
            role="tab"
            aria-controls="pull_settings" aria-selected="false">
             {{ __('view_common.modal.mapsettings.pull_settings') }}

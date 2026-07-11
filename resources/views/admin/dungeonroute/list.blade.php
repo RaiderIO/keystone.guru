@@ -67,7 +67,7 @@ use Illuminate\Support\Collection;
                 ])
             </div>
 
-            <div class="col-md-3 form-group">
+            <div class="col-md-3 mb-3">
                 <label for="published_state_id">{{ __('view_admin.dungeonroute.list.filter_published_state') }}</label>
                 <select name="published_state_id" id="published_state_id" class="form-control">
                     <option value="">{{ __('view_admin.dungeonroute.list.filter_all') }}</option>
@@ -77,21 +77,21 @@ use Illuminate\Support\Collection;
                 </select>
             </div>
 
-            <div class="col-md-2 form-group">
+            <div class="col-md-2 mb-3">
                 <label for="author">{{ __('view_admin.dungeonroute.list.filter_author') }}</label>
                 <input type="text" name="author" id="author" class="form-control"
                        value="{{ $filters['author'] }}"
                        placeholder="{{ __('view_admin.dungeonroute.list.filter_author_placeholder') }}">
             </div>
 
-            <div class="col-md-2 form-group">
+            <div class="col-md-2 mb-3">
                 <label for="public_key">{{ __('view_admin.dungeonroute.list.filter_public_key') }}</label>
                 <input type="text" name="public_key" id="public_key" class="form-control"
                        value="{{ $filters['public_key'] }}"
                        placeholder="{{ __('view_admin.dungeonroute.list.filter_public_key_placeholder') }}">
             </div>
 
-            <div class="col-md-2 form-group d-flex align-items-end">
+            <div class="col-md-2 mb-3 d-flex align-items-end">
                 <button type="submit" class="btn btn-primary w-100">
                     <i class="fas fa-filter"></i> {{ __('view_admin.dungeonroute.list.filter_apply') }}
                 </button>
@@ -150,7 +150,7 @@ use Illuminate\Support\Collection;
                     @if($publishedStateIcon)
                         <i class="fas {{ $publishedStateIcon }}"
                            title="{{ $publishedStateTitle }}"
-                           data-toggle="tooltip"></i>
+                           data-bs-toggle="tooltip"></i>
                     @else
                         -
                     @endif
@@ -177,20 +177,20 @@ use Illuminate\Support\Collection;
                        href="{{ route('dungeonroute.view', ['dungeon' => $dungeonRoute->dungeon, 'dungeonroute' => $dungeonRoute, 'title' => $dungeonRoute->getTitleSlug()]) }}"
                        target="_blank"
                        title="{{ __('view_admin.dungeonroute.list.action_view') }}"
-                       data-toggle="tooltip">
+                       data-bs-toggle="tooltip">
                         <i class="fas fa-external-link-alt"></i>
                     </a>
                     <a class="btn btn-sm btn-primary"
                        href="{{ route('admin.dungeonroute.edit', ['dungeonRoute' => $dungeonRoute->id]) }}"
                        title="{{ __('view_admin.dungeonroute.list.action_edit') }}"
-                       data-toggle="tooltip">
+                       data-bs-toggle="tooltip">
                         <i class="fas fa-edit"></i>
                     </a>
                     <a class="btn btn-sm btn-info"
                        href="{{ route('admin.tools.dungeonroute.view.get', ['dungeonRoute' => $dungeonRoute->id]) }}"
                        target="_blank"
                        title="{{ __('view_admin.dungeonroute.list.action_admin_tools') }}"
-                       data-toggle="tooltip">
+                       data-bs-toggle="tooltip">
                         <i class="fas fa-hammer"></i>
                     </a>
                     @if($dungeonRoute->mdtImport->isNotEmpty())
@@ -198,7 +198,7 @@ use Illuminate\Support\Collection;
                                 class="btn btn-sm btn-secondary admin-dungeonroute-copy-mdt"
                                 data-mdt-string="{{ $dungeonRoute->mdtImport->first()->import_string }}"
                                 title="{{ __('view_admin.dungeonroute.list.action_copy_mdt') }}"
-                                data-toggle="tooltip">
+                                data-bs-toggle="tooltip">
                             <i class="fas fa-copy"></i>
                         </button>
                     @endif
@@ -210,7 +210,7 @@ use Illuminate\Support\Collection;
                         <button type="submit"
                                 class="btn btn-sm btn-danger admin-dungeonroute-delete"
                                 title="{{ __('view_admin.dungeonroute.list.action_delete') }}"
-                                data-toggle="tooltip">
+                                data-bs-toggle="tooltip">
                             <i class="fas fa-trash"></i>
                         </button>
                     </form>

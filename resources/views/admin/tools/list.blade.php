@@ -260,13 +260,13 @@
                     <i class="fas fa-exclamation-triangle"></i> {{ __('view_admin.tools.list.subheader_actions') }}
                 </div>
                 <div class="card-body">
-                    <a class="btn btn-danger mr-2 mb-2"
+                    <a class="btn btn-danger me-2 mb-2"
                        href="{{ route('admin.tools.cache.drop') }}">{{ __('view_admin.tools.list.drop_caches') }}</a>
-                    <a class="btn btn-primary mr-2 mb-2"
+                    <a class="btn btn-primary me-2 mb-2"
                        href="{{ route('admin.tools.datadump.exportdungeondata') }}">{{ __('view_admin.tools.list.export_dungeon_data') }}</a>
-                    <a class="btn btn-primary mr-2 mb-2"
+                    <a class="btn btn-primary me-2 mb-2"
                        href="{{ route('admin.tools.datadump.exportreleases') }}">{{ __('view_admin.tools.list.export_releases') }}</a>
-                    <a class="btn btn-danger mr-2 mb-2"
+                    <a class="btn btn-danger me-2 mb-2"
                        href="{{ route('admin.tools.readonly.toggle') }}">{{ __('view_admin.tools.list.toggle_readonly_mode') }}</a>
                 </div>
             </div>

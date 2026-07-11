@@ -1,5 +1,5 @@
 <div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="userActionsButton" data-toggle="dropdown"
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="userActionsButton" data-bs-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
         {{actions_label}}
     </button>
@@ -24,7 +24,7 @@
         </a>
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="#"
-           data-toggle="modal" data-target="#user_ip_addresses_modal"
+           data-bs-toggle="modal" data-bs-target="#user_ip_addresses_modal"
            data-ip-addresses="{{user.ip_addresses_string}}"
         >
             {{view_ip_addresses_label}}

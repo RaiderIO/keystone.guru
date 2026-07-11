@@ -7,10 +7,11 @@ window._ = require('lodash');
  */
 
 window.$ = window.jQuery = require('jquery');
-window.Popper = require('popper.js').default;
 window.offsetPolygon = require('offset-polygon').default;
 
-require('bootstrap');
+// Bootstrap 5 no longer registers jQuery plugins; expose the API globally because the
+// concatenated scripts in custom-*.js rely on globals (window.bootstrap.Modal etc.).
+window.bootstrap = require('bootstrap');
 
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces
@@ -85,7 +86,11 @@ window.edgeBuffer = require('leaflet-edgebuffer');
 window.GestureHandling = require('leaflet-gesture-handling');
 // window.interpolate = require('color-interpolate');
 window.gju = require('geojson-utils');
-window.bootstrapselect = require('bootstrap-select');
+window.TomSelect = require('tom-select').default;
+
+// Tom Select drives the project's `.selectpicker` selects (#3420); inline scripts call this global
+window.refreshSelectPickers = require('./selectpicker').refreshSelectPickers;
+
 window.Handlebars = require('handlebars');
 window.barrating = require('jquery-bar-rating');
 window.polylinedecorator = require('leaflet-polylinedecorator');
@@ -107,8 +112,7 @@ window.Grapick = require('grapick');
 window.jqueryVisible = require('jquery-visible');
 window.simplebar = require('simplebar');
 window.Draggable = require('@shopify/draggable');
-window.autocomplete = require('bootstrap-4-autocomplete');
-window.toggle = require('bootstrap4-toggle');
+require('bootstrap5-toggle/js/bootstrap5-toggle.jquery.min.js');
 window.swipe = require('jquery-touchswipe');
 window.lazysizes = require('lazysizes');
 window.ionRangeSlider = require('ion-rangeslider');

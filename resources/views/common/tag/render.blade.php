@@ -11,7 +11,7 @@ $edit ??= false;
 ?>
 @foreach($tags as $tag)
     <span
-        class="tag badge badge-pill {{ is_null($tag->color) ? 'badge-primary' : '' }} {{ $edit ? 'edit' : '' }}"
+        class="tag badge rounded-pill {{ is_null($tag->color) ? 'text-bg-primary' : '' }} {{ $edit ? 'edit' : '' }}"
         data-id="{{ $tag->id }}"
         style="{{ is_null($tagModel->color) ? '' : 'background-color: ' . $tagModel->color }}"
     >
