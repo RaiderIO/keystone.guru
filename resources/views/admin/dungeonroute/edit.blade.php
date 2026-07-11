@@ -76,7 +76,7 @@ use Illuminate\Support\Collection;
 
                 <div class="mb-3{{ $errors->has('published_state_id') ? ' has-error' : '' }}">
                     {{ html()->label(__('view_admin.dungeonroute.edit.label_published_state'), 'published_state_id') }}
-                    {{ html()->select('published_state_id', $publishedStates, $dungeonRoute->published_state_id)->class('form-control') }}
+                    {{ html()->select('published_state_id', $publishedStates, $dungeonRoute->published_state_id)->class('form-select') }}
                     @include('common.forms.form-error', ['key' => 'published_state_id'])
                 </div>
 

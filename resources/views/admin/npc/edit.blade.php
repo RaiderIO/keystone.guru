@@ -151,7 +151,7 @@ use App\Models\Spell\Spell;
         @php($selectedSpells = isset($npc) ? $npc->spells(false)->get()->pluck(['id'])->toArray() : [])
         <!--suppress HtmlFormInputWithoutLabel -->
         <!--selectpicker-->
-        <select class="form-control" name="spells[]" multiple="multiple"
+        <select class="form-select" name="spells[]" multiple="multiple"
                 data-live-search="true" data-selected-text-format="count > 1"
                 data-count-selected-text="{{ __('view_admin.npc.edit.spells_count') }}">
             @foreach($spells as $spell)
