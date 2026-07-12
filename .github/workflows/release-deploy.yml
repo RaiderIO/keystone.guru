@@ -181,16 +181,26 @@ jobs:
 
       # Built on every leg (not just the app leg): the worker/cron base Dockerfiles
       # both FROM keystone.guru-app (see their Dockerfiles), so it has to exist
-      # locally on those runners too. Scoped "app-base" on all three legs so they
-      # share one GHA cache entry instead of each rebuilding it cold.
+      # locally on those runners too, all reading the one "app-base" GHA cache scope.
+      #
+      # This must be build-push-action rather than a raw `docker buildx build` run
+      # step: the type=gha cache backend needs the Actions runtime token/URL, which
+      # GitHub only injects into actions — a shell step never sees them, so the
+      # cache export would fail on the first real tag push.
+      #
+      # Only the app leg exports the cache (cache-to); worker/cron only read it.
+      # mode=max blobs are hundreds of MB, and three identical uploads per release
+      # would burn time and the repo's 10GB cache budget for nothing. An empty
+      # cache-to input is treated as "not set" by build-push-action.
       - name: Build app base image
-        run: |
-          docker buildx build \
-            --cache-from type=gha,scope=app-base \
-            --cache-to type=gha,mode=max,scope=app-base \
-            --load \
-            -t keystone.guru-app \
-            docker-compose/app
+        uses: docker/build-push-action@v6
+        with:
+          context: docker-compose/app
+          tags: keystone.guru-app
+          load: true
+          push: false
+          cache-from: type=gha,scope=app-base
+          cache-to: ${{ matrix.image == 'app' && 'type=gha,mode=max,scope=app-base' || '' }}
 
       - name: Build base ${{ matrix.image }} image
         if: matrix.needs_own_base_build
