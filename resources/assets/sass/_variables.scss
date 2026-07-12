@@ -1,8 +1,11 @@
 // Body
 // NOTE: $body-bg must NOT be pre-set globally here. Bootstrap 5 derives --bs-body-bg from it and
 // feeds that variable into cards, modals, dropdowns and list-groups, so a global value would leak
-// the same background into every theme (light themes included). Each theme sets its own $body-bg
-// in its theme scss (darkly) or falls back to its bootswatch default (lux, vapor).
+// the same background into every theme (light themes included) — which is exactly what the old
+// global $body-bg: #2B3E50 navy did under Bootstrap 4. Each theme now owns its background:
+//   - darkly keeps that navy #2B3E50 as a deliberate permanent choice (see darkly.scss);
+//   - vapor sets its native bootswatch purple #1a0933 explicitly (see vapor.scss);
+//   - lux sets nothing here and inherits its bootswatch (light) default.
 
 // Typography
 $font-family-sans-serif: Salesforce Sans, Arial, sans-serif;
