@@ -16,6 +16,14 @@
   @include spread-map($theme-map-vapor);
 }
 
+/* Bootstrap 5's .btn-close is a dark SVG intended for light backgrounds (lux). On our dark themes
+   the modal/alert backgrounds are dark, so invert it to white - the same filter BS5 itself applies
+   under [data-bs-theme="dark"], keyed here to our root theme classes instead. */
+:root.darkly .btn-close,
+:root.vapor .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
 body {
   font-family: Salesforce Sans, Arial, sans-serif;
   background-color: var($--theme-darker) !important;
@@ -25,25 +33,6 @@ body {
 .theme {
   .nav-item-divider {
     margin: 0 0.75em;
-  }
-
-  /* Project-owned close button for modals/alerts (Bootstrap 5 removed .close; we keep the FontAwesome icon design) */
-  .dismiss-close {
-    float: right;
-    padding: 0;
-    background-color: transparent;
-    border: 0;
-    font-size: 1.5rem;
-    font-weight: 700;
-    line-height: 1;
-    color: var($--theme-text-contrast);
-    opacity: .5;
-
-    &:hover, &:focus {
-      color: var($--theme-text-contrast);
-      text-decoration: none;
-      opacity: .75;
-    }
   }
 
   /** Tom Select (the .selectpicker selects) **/

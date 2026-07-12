@@ -18,9 +18,7 @@ $showClose ??= true;
     <div class="{{ $class }} modal-dialog modal-{{$size}} vertical-align-center">
         <div class="modal-content">
             @if($showClose)
-                <button type="button" class="dismiss-close" data-bs-dismiss="modal" aria-hidden="true">
-                    <i class="fas fa-times"></i>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             @endif
             <div class="probootstrap-modal-flex">
                 <div class="probootstrap-modal-content">
