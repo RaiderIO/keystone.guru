@@ -119,13 +119,14 @@ cmd_create() {
     fi
 
     # 2c. Seed git-ignored build artifacts from the main checkout when missing. vendor/ is required
-    #     to boot artisan; the public/* assets let the browser render (blade mix() needs the
-    #     manifest). Each is an independent copy the worktree can rebuild if its deps/assets change.
+    #     to boot artisan; the public/* assets let the browser render (blades reference compiled
+    #     files by the version in the repo-root `version` file). Each is an independent copy the
+    #     worktree can rebuild if its deps/assets change.
     echo "==> seeding build artifacts from main repo (vendor + compiled assets)"
     [ -f "$REPO_ROOT/vendor/autoload.php" ] || die "main repo has no vendor/ — run composer install there first"
     local rel
     for rel in vendor version \
-        public/mix-manifest.json public/css public/js public/main.js public/resources \
+        public/css public/js public/resources \
         public/vendor public/webfonts public/images \
         public/VERSION public/COMMITHASH public/LASTCOMMITDATETIME; do
         if [ -e "$REPO_ROOT/$rel" ] && [ ! -e "$wt_path/$rel" ]; then
