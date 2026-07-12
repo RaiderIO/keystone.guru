@@ -34,7 +34,7 @@ $floor ??= null;
     <div class="row mb-3">
         <div class="col {{ $errors->has('active') ? ' has-error' : '' }}">
             {{ html()->label(__('view_admin.floor.edit.active'), 'active')->class('fw-bold') }}
-            {{ html()->checkbox('active', $floor?->active, 1)->class('form-control left_checkbox') }}
+            {{ html()->checkbox('active', $floor?->active, 1)->class('form-check-input') }}
             @include('common.forms.form-error', ['key' => 'active'])
         </div>
 
@@ -43,7 +43,7 @@ $floor ??= null;
             <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{
                 __('view_admin.floor.edit.default_title')
                  }}"></i>
-            {{ html()->checkbox('default', $floor?->default ?? (int) ($dungeon->floors()->count() === 0), 1)->class('form-control left_checkbox') }}
+            {{ html()->checkbox('default', $floor?->default ?? (int) ($dungeon->floors()->count() === 0), 1)->class('form-check-input') }}
             @include('common.forms.form-error', ['key' => 'default'])
         </div>
 
@@ -52,7 +52,7 @@ $floor ??= null;
             <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{
                 __('view_admin.floor.edit.facade_title')
                  }}"></i>
-            {{ html()->checkbox('facade', $floor?->facade, 1)->class('form-control left_checkbox') }}
+            {{ html()->checkbox('facade', $floor?->facade, 1)->class('form-check-input') }}
             @include('common.forms.form-error', ['key' => 'facade'])
         </div>
     </div>

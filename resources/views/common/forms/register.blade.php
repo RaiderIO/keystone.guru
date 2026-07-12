@@ -109,7 +109,7 @@ $errors   ??= collect();
                      '<a href="' . route('legal.cookies') . '">' . __('view_common.forms.register.cookie_policy') . '</a>')
                      !!}
                 </label>
-                {{ html()->checkbox('legal_agreed', null, 1)->id($modalClass . 'legal_agreed')->class('form-control left_checkbox') }}
+                {{ html()->checkbox('legal_agreed', null, 1)->id($modalClass . 'legal_agreed')->class('form-check-input') }}
                 {{ html()->hidden('legal_agreed_ms', -1)->id($modalClass . 'legal_agreed_ms') }}
             </div>
 

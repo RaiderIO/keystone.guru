@@ -99,42 +99,42 @@ use App\Models\Spell\Spell;
             <div class="col">
                 <div class="{{ $errors->has('dangerous') ? ' has-error' : '' }}">
                     {{ html()->label(__('view_admin.npc.edit.dangerous'), 'dangerous') }}
-                    {{ html()->checkbox('dangerous', isset($npc) ? $npc->dangerous : 0, 1)->class('form-control left_checkbox') }}
+                    {{ html()->checkbox('dangerous', isset($npc) ? $npc->dangerous : 0, 1)->class('form-check-input') }}
                     @include('common.forms.form-error', ['key' => 'dangerous'])
                 </div>
             </div>
             <div class="col">
                 <div class="{{ $errors->has('truesight') ? ' has-error' : '' }}">
                     {{ html()->label(__('view_admin.npc.edit.truesight'), 'truesight') }}
-                    {{ html()->checkbox('truesight', isset($npc) ? $npc->truesight : 0, 1)->class('form-control left_checkbox') }}
+                    {{ html()->checkbox('truesight', isset($npc) ? $npc->truesight : 0, 1)->class('form-check-input') }}
                     @include('common.forms.form-error', ['key' => 'truesight'])
                 </div>
             </div>
             <div class="col">
                 <div class="{{ $errors->has('bursting') ? ' has-error' : '' }}">
                     {{ html()->label(__('view_admin.npc.edit.bursting'), 'bursting') }}
-                    {{ html()->checkbox('bursting', isset($npc) ? $npc->bursting : 1, 1)->class('form-control left_checkbox') }}
+                    {{ html()->checkbox('bursting', isset($npc) ? $npc->bursting : 1, 1)->class('form-check-input') }}
                     @include('common.forms.form-error', ['key' => 'bursting'])
                 </div>
             </div>
             <div class="col">
                 <div class="{{ $errors->has('bolstering') ? ' has-error' : '' }}">
                     {{ html()->label(__('view_admin.npc.edit.bolstering'), 'bolstering') }}
-                    {{ html()->checkbox('bolstering', isset($npc) ? $npc->bolstering : 1, 1)->class('form-control left_checkbox') }}
+                    {{ html()->checkbox('bolstering', isset($npc) ? $npc->bolstering : 1, 1)->class('form-check-input') }}
                     @include('common.forms.form-error', ['key' => 'bolstering'])
                 </div>
             </div>
             <div class="col">
                 <div class="{{ $errors->has('sanguine') ? ' has-error' : '' }}">
                     {{ html()->label(__('view_admin.npc.edit.sanguine'), 'sanguine') }}
-                    {{ html()->checkbox('sanguine', isset($npc) ? $npc->sanguine : 1, 1)->class('form-control left_checkbox') }}
+                    {{ html()->checkbox('sanguine', isset($npc) ? $npc->sanguine : 1, 1)->class('form-check-input') }}
                     @include('common.forms.form-error', ['key' => 'sanguine'])
                 </div>
             </div>
             <div class="col">
                 <div class="{{ $errors->has('runs_away_in_fear') ? ' has-error' : '' }}">
                     {{ html()->label(__('view_admin.npc.edit.runs_away_in_fear'), 'runs_away_in_fear') }}
-                    {{ html()->checkbox('runs_away_in_fear', isset($npc) ? $npc->runs_away_in_fear : 0, 1)->class('form-control left_checkbox') }}
+                    {{ html()->checkbox('runs_away_in_fear', isset($npc) ? $npc->runs_away_in_fear : 0, 1)->class('form-check-input') }}
                     @include('common.forms.form-error', ['key' => 'runs_away_in_fear'])
                 </div>
             </div>

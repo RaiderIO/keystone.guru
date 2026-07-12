@@ -47,22 +47,22 @@ $changelog = isset($release) ? $release->changelog : new ReleaseChangelog();
     <div class="row mb-3">
         <div class="col {{ $errors->has('backup_db') ? 'has-error' : '' }}">
             {{ html()->label(__('view_admin.release.edit.backup_db'), 'backup_db') }}
-            {{ html()->checkbox('backup_db', isset($release) ? $release->backup_db : 1, 1)->class('form-control left_checkbox') }}
+            {{ html()->checkbox('backup_db', isset($release) ? $release->backup_db : 1, 1)->class('form-check-input') }}
         </div>
 
         <div class="col {{ $errors->has('silent') ? 'has-error' : '' }}">
             {{ html()->label(__('view_admin.release.edit.silent'), 'silent') }}
-            {{ html()->checkbox('silent', isset($release) ? $release->silent : 0, 1)->class('form-control left_checkbox') }}
+            {{ html()->checkbox('silent', isset($release) ? $release->silent : 0, 1)->class('form-check-input') }}
         </div>
 
         <div class="col {{ $errors->has('spotlight') ? 'has-error' : '' }}">
             {{ html()->label(__('view_admin.release.edit.spotlight'), 'spotlight') }}
-            {{ html()->checkbox('spotlight', isset($release) ? $release->spotlight : 0, 1)->class('form-control left_checkbox') }}
+            {{ html()->checkbox('spotlight', isset($release) ? $release->spotlight : 0, 1)->class('form-check-input') }}
         </div>
 
         <div class="col {{ $errors->has('released') ? 'has-error' : '' }}">
             {{ html()->label(__('view_admin.release.edit.released'), 'released') }}
-            {{ html()->checkbox('released', isset($release) ? $release->released : 0, 1)->class('form-control left_checkbox')->disabled() }}
+            {{ html()->checkbox('released', isset($release) ? $release->released : 0, 1)->class('form-check-input')->disabled() }}
         </div>
     </div>
 

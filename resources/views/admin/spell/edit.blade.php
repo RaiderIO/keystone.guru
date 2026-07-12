@@ -108,13 +108,13 @@ $characteristicOptions = ['' => ['icon_url' => null, 'name' => __('view_admin.sp
 
     <div class="mb-3{{ $errors->has('aura') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.spell.edit.aura'), 'aura') }}
-        {{ html()->checkbox('aura', isset($spell) ? $spell->aura : 1, 1)->class('form-control left_checkbox') }}
+        {{ html()->checkbox('aura', isset($spell) ? $spell->aura : 1, 1)->class('form-check-input') }}
         @include('common.forms.form-error', ['key' => 'aura'])
     </div>
 
     <div class="mb-3{{ $errors->has('selectable') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.spell.edit.selectable'), 'selectable') }}
-        {{ html()->checkbox('selectable', isset($spell) ? $spell->selectable : 1, 1)->class('form-control left_checkbox') }}
+        {{ html()->checkbox('selectable', isset($spell) ? $spell->selectable : 1, 1)->class('form-check-input') }}
         @include('common.forms.form-error', ['key' => 'selectable'])
     </div>
 

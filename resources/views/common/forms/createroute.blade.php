@@ -160,7 +160,7 @@ $dungeonSelectId = 'dungeon_id_select';
                             </h3>
                             <div class="mb-3">
                                 {{ html()->label(__('view_common.forms.createroute.demo_route'), 'demo') }}
-                                {{ html()->checkbox('demo', null, 1)->class('form-control left_checkbox') }}
+                                {{ html()->checkbox('demo', null, 1)->class('form-check-input') }}
                             </div>
                         @endif
                     </div>
