@@ -1,15 +1,28 @@
 /** BOOTSTRAP 5 COMPAT */
 /*
- * Bootstrap 4 gave every column `position: relative` and its gutter padding; Bootstrap 5 removed the
- * former entirely and only pads columns that are direct children of a .row (via `.row > *`). That
- * breaks absolutely positioned overlays anchoring to their column (e.g. the dungeon card titles over
- * their images) and makes rows spill out of standalone columns (e.g. the affix list). Restore the
- * Bootstrap 4 behavior; inside a .row this padding computes to the same value `.row > *` already sets.
+ * Bootstrap 4 gave every column `position: relative` and its gutter padding; Bootstrap 5 dropped the
+ * former entirely and only pads columns that are direct children of a .row (via `.row > *`). We used
+ * to restore the Bootstrap 4 behavior globally, but that global `[class^="col-"]` selector fought the
+ * framework and leaked onto any (future / third-party) `col-*` markup. The handful of elements that
+ * actually relied on it are now handled explicitly:
+ *  - absolutely positioned overlays anchoring to their column -> `position: relative` on that
+ *    specific column below (and the `position-relative` utility on the search results column in
+ *    dungeonroute/discover/search.blade.php);
+ *  - standalone columns used as padded containers (not a direct child of a .row, so `.row > *` never
+ *    pads them) -> gutter padding restored below. Inside a .row this computes to the same value
+ *    `.row > *` already sets, so it stays correct there too.
  */
-.col,
-[class^="col-"],
-[class*=" col-"] {
+
+/* Dungeon grid card (.grid_dungeon) and header dungeon selector card (.list_dungeon): the
+   dungeon-name overlay (.card-img-caption .card-text, position: absolute) anchors to this column as
+   its offset parent (see the .discover .card-img-caption .card-text rules) */
+.grid_dungeon,
+.list_dungeon {
     position: relative;
+}
+
+/* Standalone column: the affix picker list sits in a plain .mb-3, not a .row */
+.affix_list {
     padding-right: calc(var(--bs-gutter-x, 1.5rem) * .5);
     padding-left: calc(var(--bs-gutter-x, 1.5rem) * .5);
 }

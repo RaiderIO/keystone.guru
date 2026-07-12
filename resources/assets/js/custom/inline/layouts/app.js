@@ -29,7 +29,7 @@ class LayoutsApp extends InlineCode {
             this._newPassword('#modal-register_password');
         }
 
-        $('.dismiss-close,.close_alternative').unbind('click').bind('click', function () {
+        $('[data-alert-dismiss-id]').unbind('click').bind('click', function () {
             let dismissId = $(this).data('alert-dismiss-id');
             // Cookie is now set to dismiss this alert permanently
             Cookies.set(`alert-dismiss-${dismissId}`, true, $.extend({expires: 30}, cookieDefaultAttributes));

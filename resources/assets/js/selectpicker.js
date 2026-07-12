@@ -25,9 +25,17 @@ const FIELD_SEPARATOR = '\u001f';
 const OPTION_SEPARATOR = '\u001e';
 
 /**
- * Order-insensitive fingerprint of the select's options, mirroring Tom
- * Select's own DOM import rules (empty-value options are skipped unless
+ * Order- and group-insensitive fingerprint of the select's options, mirroring
+ * Tom Select's own DOM import rules (empty-value options are skipped unless
  * allowEmptyOption).
+ *
+ * It intentionally excludes the option's optgroup. Tom Select's
+ * updateOriginalInput moves each selected <option> out of its <optgroup> to the
+ * top level of the <select> on every selection - so, exactly like option order
+ * (hence parts.sort()), group membership is something Tom Select mutates on its
+ * own. Fingerprinting it would flip the fingerprint on every selection and
+ * trigger a spurious rebuild that re-imports the mangled DOM, permanently
+ * stripping options of their grouping.
  *
  * @param {HTMLSelectElement} select
  * @param {boolean} allowEmptyOption
@@ -41,8 +49,7 @@ function getOptionSetFingerprint(select, allowEmptyOption) {
             continue;
         }
 
-        const group = option.parentElement instanceof HTMLOptGroupElement ? option.parentElement.label : '';
-        parts.push([option.value, option.text, option.dataset.content ?? '', option.disabled ? '1' : '0', group]
+        parts.push([option.value, option.text, option.dataset.content ?? '', option.disabled ? '1' : '0']
             .join(FIELD_SEPARATOR));
     }
 

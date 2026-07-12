@@ -57,7 +57,7 @@ $hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(\App\M
                         </label>
                         <div class="row">
                             <div class="col">
-                                {{ html()->checkbox('simulate_use_mounts', true, 1)->id('simulate_use_mounts')->class('form-control left_checkbox') }}
+                                {{ html()->checkbox('simulate_use_mounts', true, 1)->id('simulate_use_mounts')->class('form-check-input') }}
                             </div>
                         </div>
                     </div>

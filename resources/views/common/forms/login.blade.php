@@ -45,7 +45,7 @@ $errors   ??= collect();
                 </label>
                 <div class="col col-xl-{{ $width }}">
                     <input id="{{ $modalClass }}login_remember" type="checkbox"
-                           name="remember" class="form-control left_checkbox" {{ old('remember') ? 'checked' : '' }}>
+                           name="remember" class="form-check-input" {{ old('remember') ? 'checked' : '' }}>
                 </div>
             </div>
 

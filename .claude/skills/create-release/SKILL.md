@@ -163,3 +163,7 @@ issue URL, the draft Release URL, and any commits without an issue number or any
 category you introduced. Remind them that the tag push deploys to staging and that the
 draft Release gets published (and announced via `release:report`) when production rolls
 out — see the deployment-pipeline roadmap (issues #3327–#3329).
+
+Suggest running `sh/release-watch.sh <version>` next — it tracks the build jobs, both
+staging/production infra deploys, and verification from one terminal (see the `release-watch`
+skill).

@@ -374,8 +374,9 @@ let scripts = [
     'resources/assets/js/custom/inline/inlinecode.js',
     'resources/assets/js/custom/inline/inlinecodeajaxbatchprocessor.js',
 
-    // All inline code last
-    'resources/assets/js/custom/inline/*/**/*.js',
+    // All inline code last (exclude colocated *.test.js vitest files, which would
+    // otherwise be concatenated into the production bundle and clash on redeclaration)
+    'resources/assets/js/custom/inline/*/**/!(*.test).js',
 ];
 
 // Output of files

@@ -21,16 +21,6 @@
     height: 46px;
 }
 
-/* Bootstrap 5 sets appearance:none on .form-control, which strips the native dropdown arrow from
-   the many selects that still use the Bootstrap 4 select.form-control idiom (BS5 expects
-   .form-select); restore the native arrow. !important because the compiled theme rule
-   (.darkly .form-control etc.) out-specifies any single-class selector here */
-select.form-control {
-    -webkit-appearance: auto !important;
-    -moz-appearance: auto !important;
-    appearance: auto !important;
-}
-
 /* Bootstrap 5 styles .btn-check state through sibling selectors written as `.btn-check:checked + &`
    inside .btn. Because this project compiles bootstrap inside a theme wrapper (.darkly { ... }),
    that `&` expands to `.darkly .btn` and the compiled selector becomes
@@ -96,18 +86,18 @@ select.form-control {
     }
 }
 
-.modal .modal-content .dismiss-close {
+/* The generic modal component places .btn-close as a direct child of .modal-content (no .modal-header),
+   so position it in the top-right corner. Scoped to the direct child so modals that do use a
+   .modal-header keep Bootstrap's native placement. */
+.modal .modal-content > .btn-close {
     position: absolute;
     top: 10px;
     right: 10px;
     z-index: 100;
-    font-size: 26px;
-    /* Theme-dependent: white on the dark themes, near-black on lux (white was invisible on lux modals) */
-    color: var(--theme-text-contrast);
 }
 
 @media screen and (max-width: 480px) {
-    .modal .modal-content .dismiss-close {
+    .modal .modal-content > .btn-close {
         top: 20px;
         right: 20px;
     }

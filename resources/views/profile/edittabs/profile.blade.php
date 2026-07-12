@@ -58,7 +58,7 @@ use Illuminate\Support\Collection;
         {{ html()->label(__('view_profile.edit.region'), 'game_server_region_id') }}
         {{ html()->select('game_server_region_id', array_merge(['0' => __('view_profile.edit.select_region')], $allRegions->mapWithKeys(function (GameServerRegion $region) {
     return [$region->id => __($region->name)];
-})->toArray()))->class('form-control') }}
+})->toArray()))->class('form-select') }}
         @include('common.forms.form-error', ['key' => 'game_server_region_id'])
     </div>
 
@@ -72,7 +72,7 @@ use Illuminate\Support\Collection;
             <i class="fas fa-info-circle" data-bs-toggle="tooltip"
                title="{{ __('view_profile.edit.show_as_anonymous_title') }}"></i>
         </label>
-        {{ html()->checkbox('echo_anonymous', $user->echo_anonymous, 1)->class('form-control left_checkbox') }}
+        {{ html()->checkbox('echo_anonymous', $user->echo_anonymous, 1)->class('form-check-input') }}
     </div>
 
     <div class="mb-3{{ $errors->has('echo_color') ? ' has-error' : '' }}">
