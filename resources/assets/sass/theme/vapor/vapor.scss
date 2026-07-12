@@ -1,8 +1,9 @@
 // Bootstrap theme (bootstrap should be between these)
 .vapor {
-  // Bootstrap 4 did not underline links (hover only); Bootstrap 5 underlines them by default
-  $link-decoration: none;
-  $link-hover-decoration: underline;
+  // Match darkly's navbar height: Bootstrap 5 defaults navbar padding to (null x, 0.5rem y); set
+  // the 1rem inset via SCSS vars instead of a separate .navbar { padding } CSS override
+  $navbar-padding-x: 1rem;
+  $navbar-padding-y: 1rem;
 
   // Keep the pre-BS5 look: this theme always rendered with the navy body background (via the old
   // global $body-bg), giving slate inputs/modals instead of bootswatch vapor's purple
@@ -40,10 +41,6 @@
 
   .dropdown-menu {
     background-color: var(--theme-darker);
-  }
-
-  .navbar {
-    padding: 1rem 1rem !important;
   }
 
   .nav-tabs .nav-link.active {
