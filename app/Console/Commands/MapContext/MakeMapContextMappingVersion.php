@@ -2,16 +2,19 @@
 
 namespace App\Console\Commands\MapContext;
 
+use App\Console\Commands\MapContext\Traits\ResolvesMapContextScope;
 use App\Console\Commands\MapContext\Traits\SavesToFile;
 use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
 use App\Service\MapContext\MapContextServiceInterface;
+use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 
 class MakeMapContextMappingVersion extends Command
 {
+    use ResolvesMapContextScope;
     use SavesToFile;
 
     /**
@@ -19,7 +22,9 @@ class MakeMapContextMappingVersion extends Command
      *
      * @var string
      */
-    protected $signature = 'make:mapcontextmappingversion {--output= : The output folder to place the generated map context in}';
+    protected $signature = 'make:mapcontextmappingversion
+        {--output= : The output folder to place the generated map context in}
+        {--scope=all : Which mapping versions to generate map context for, scoped by their dungeon (current-season, rest, all)}';
 
     /**
      * The console command description.
@@ -33,13 +38,19 @@ class MakeMapContextMappingVersion extends Command
      */
     public function handle(
         MapContextServiceInterface $mapContextService,
+        SeasonServiceInterface     $seasonService,
     ): int {
         $output = $this->option('output') ?? storage_path('mapcontext');
 
+        $dungeonIds = $this->resolveDungeonIdsForScope((string)$this->option('scope'), $seasonService);
+        if ($dungeonIds === null) {
+            return self::FAILURE;
+        }
+
         /** @var Collection<int, Dungeon> $dungeonsById */
-        $dungeonsById = Dungeon::all()->keyBy('id');
+        $dungeonsById = Dungeon::whereIn('id', $dungeonIds)->get()->keyBy('id');
         /** @var Collection<int, MappingVersion> $mappingVersions */
-        $mappingVersions = MappingVersion::all();
+        $mappingVersions = MappingVersion::whereIn('dungeon_id', $dungeonIds)->get();
         $mapFacadeStyles = User::MAP_FACADE_STYLE_ALL;
 
         $bar = $this->output->createProgressBar($mappingVersions->count() * count($mapFacadeStyles));
