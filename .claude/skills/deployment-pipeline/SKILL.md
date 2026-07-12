@@ -79,6 +79,11 @@ There is **no** push-to-branch deploy. Deploys only happen on a tag (and the inf
 
 ## Verify a release end-to-end
 
+Preferred: `sh/release-watch.sh <tag>` (or no argument for the newest release-deploy run) —
+it does all of the below itself in a re-entrant polling loop, correlates the infra runs, and
+can drive the production gate. See the `release-watch` skill. The manual steps below are
+useful for spot-checks or when reasoning about a single piece.
+
 ```bash
 # Assets (the thing that used to 404) — expect 200:
 curl -sI https://assets.keystone.guru/compiled/<tag>/js/app-<tag>.js

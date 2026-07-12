@@ -232,3 +232,7 @@ issue URL, and any commits without an issue number or any new category you added
 that the tag push triggers the `release-deploy` pipeline (staging first), and that the GitHub
 *Release* itself is cut separately from the infra project once it's going to production — see
 the deployment-pipeline roadmap (issues #3327–#3329).
+
+Suggest running `sh/release-watch.sh <version>` next — it tracks the build jobs, both
+staging/production infra deploys, and verification from one terminal (see the `release-watch`
+skill).
