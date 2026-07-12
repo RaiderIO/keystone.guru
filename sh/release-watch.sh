@@ -243,6 +243,15 @@ print_job_line() {
 # Finds the keystoneguru-infra Deploy run for $stage (deploy-staging|deploy-production)
 # and $version, created at/after $since_epoch (minus a clock-skew buffer). Prefers the
 # LATEST matching run (a stage can be re-dispatched after an earlier infra failure).
+#
+# The infra workflow's displayTitle comes in two forms: the bare event type
+# ("deploy-staging", current behaviour) or "Deploy deploy-staging (vX.Y.Z)" once the
+# infra run-name PR lands — the stage filter accepts both (note "deploy-staging" and
+# "deploy-production" can never falsely substring-match each other). The version is
+# confirmed via the displayTitle when it already carries a "(vX.Y.Z)" suffix (no per-run
+# job fetch needed), otherwise via the job name "Deploy <stage> (vX.Y.Z)"; a same-stage
+# run for a DIFFERENT version never matches.
+#
 # Echoes the run id on success; returns 1 and echoes nothing if none is found yet.
 find_infra_run() {
     local stage="$1" version="$2" since_epoch="$3"
@@ -255,9 +264,10 @@ find_infra_run() {
 
     local threshold=$((since_epoch - INFRA_CORRELATION_BUFFER_SECONDS))
     local ids
-    ids=$(jq -r --arg stage "$stage" '[.[] | select(.displayTitle == $stage)] | .[].databaseId' <<<"$list")
+    ids=$(jq -r --arg stage "$stage" \
+        '[.[] | select(.displayTitle == $stage or (.displayTitle | contains($stage)))] | .[].databaseId' <<<"$list")
 
-    local id created created_e job_name
+    local id created created_e title job_name
     for id in $ids; do
         created=$(jq -r --argjson id "$id" '.[] | select(.databaseId == $id) | .createdAt' <<<"$list")
         created_e=$(epoch_of "$created") || continue
@@ -265,6 +275,17 @@ find_infra_run() {
             # `list` is newest-first; everything after this is older still, stop scanning.
             break
         fi
+        title=$(jq -r --argjson id "$id" '.[] | select(.databaseId == $id) | .displayTitle' <<<"$list")
+        if [[ "$title" == *"($version)"* ]]; then
+            # run-name form already confirms the version; skip the per-run job fetch.
+            echo "$id"
+            return 0
+        fi
+        if [[ "$title" != "$stage" ]]; then
+            # run-name form carrying a different version — not our run.
+            continue
+        fi
+        # Bare-displayTitle form: confirm the version via the job name.
         job_name=$(gh run view "$id" --repo "$REPO_INFRA" --json jobs --jq '.jobs[0].name // empty' 2>/dev/null) || continue
         if [[ "$job_name" == *"($version)"* ]]; then
             echo "$id"
@@ -349,7 +370,7 @@ verify_stage() {
     fi
 
     VERIFY_ALL_PASS=true
-    local name url result
+    local name_url name url result
 
     for name_url in "assets js|$js_url" "assets css|$css_url" "mapcontext static|$mapctx_url"; do
         name="${name_url%%|*}"
@@ -474,7 +495,7 @@ run_cycle() {
     # --- staging ---
     echo
     echo "STAGING"
-    local staging_job staging_status staging_conclusion staging_started staging_completed
+    local staging_job staging_status staging_conclusion staging_completed
     staging_job=$(jq -c --arg n "$DEPLOY_STAGING_JOB" 'map(select(.name == $n))[0] // empty' <<<"$RELEASE_JOBS_JSON")
     local staging_verified=false
 
@@ -485,7 +506,6 @@ run_cycle() {
         print_job_line "$staging_job"
         staging_status=$(job_field "$staging_job" status)
         staging_conclusion=$(job_field "$staging_job" conclusion)
-        staging_started=$(job_field "$staging_job" startedAt)
         staging_completed=$(job_field "$staging_job" completedAt)
 
         [[ "$staging_status" == "completed" ]] || all_terminal=false
@@ -522,7 +542,7 @@ run_cycle() {
     # --- production ---
     echo
     echo "PRODUCTION"
-    local production_job production_status production_conclusion production_started production_completed production_url
+    local production_job production_status production_conclusion production_completed production_url
     production_job=$(jq -c --arg n "$DEPLOY_PRODUCTION_JOB" 'map(select(.name == $n))[0] // empty' <<<"$RELEASE_JOBS_JSON")
 
     if [[ -z "$production_job" ]]; then
@@ -531,7 +551,6 @@ run_cycle() {
     else
         production_status=$(job_field "$production_job" status)
         production_conclusion=$(job_field "$production_job" conclusion)
-        production_started=$(job_field "$production_job" startedAt)
         production_completed=$(job_field "$production_job" completedAt)
         production_url=$(job_field "$production_job" url)
 
