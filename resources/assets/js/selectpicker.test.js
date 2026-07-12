@@ -6,7 +6,7 @@
 // the option list on repopulation without duplicating or reordering options).
 // ---------------------------------------------------------------------------
 
-const {getSelectPickerSettings, refreshSelectPickers} = require('./selectpicker');
+const {getOptionSetFingerprint, getSelectPickerSettings, refreshSelectPickers} = require('./selectpicker');
 
 /**
  * @param {string} attributes
@@ -106,6 +106,37 @@ describe('refreshSelectPickers', () => {
         refreshSelectPickers();
 
         expect(select.tomselect.options['1'].content).toBe(`<img src='icon.png'/> One`);
+    });
+
+    test('refreshSelectPickers_givenGroupedSingleSelectAfterSelection_keepsOptionsGrouped', () => {
+        // The dungeon picker is a single select whose options are grouped into optgroups. Tom Select's
+        // updateOriginalInput moves each selected <option> out of its <optgroup> to the top level of the
+        // <select>; a fingerprint-triggered rebuild used to re-import that mangled DOM and permanently
+        // strip the options of their grouping. A group-insensitive fingerprint keeps the groups intact.
+        const select = createSelect('', `
+            <optgroup label="Season 1"><option value="1">One</option><option value="2">Two</option></optgroup>
+            <optgroup label="Season 2"><option value="3">Three</option></optgroup>`);
+        refreshSelectPickers();
+        const instance = select.tomselect;
+
+        // Mimic the real flow: user picks a dungeon, then the difficulty/start/affixes cascade fires
+        // refreshSelectPickers(). Repeat across several dungeons.
+        instance.addItem('1');
+        refreshSelectPickers();
+        instance.addItem('3');
+        refreshSelectPickers();
+        instance.addItem('2');
+        refreshSelectPickers();
+
+        // Every option must still render under its optgroup header - none relocated to the top level.
+        instance.open();
+        instance.refreshOptions(true);
+        const topLevelOptions = Array.from(instance.dropdown_content.children)
+            .filter((child) => child.matches('[data-selectable]'));
+        expect(topLevelOptions).toEqual([]);
+        // Options 1 and 2 stay under the first optgroup, option 3 under the second.
+        expect(instance.options['1'].optgroup).toBe(instance.options['2'].optgroup);
+        expect(instance.options['3'].optgroup).not.toBe(instance.options['1'].optgroup);
     });
 });
 
@@ -292,5 +323,34 @@ describe('getSelectPickerSettings', () => {
             <option value="1">One</option>`);
 
         expect(getSelectPickerSettings(select).allowEmptyOption).toBe(true);
+    });
+});
+
+describe('getOptionSetFingerprint', () => {
+    test('getOptionSetFingerprint_givenOptionMovedBetweenOptgroups_returnsSameFingerprint', () => {
+        // Tom Select relocates a selected <option> out of its <optgroup> to the top level of the
+        // <select>; the fingerprint must ignore that so it does not trigger a destructive rebuild.
+        const select = createSelect('', `
+            <optgroup label="Season 1"><option value="1">One</option><option value="2">Two</option></optgroup>
+            <optgroup label="Season 2"><option value="3">Three</option></optgroup>`);
+        const before = getOptionSetFingerprint(select, false);
+
+        // Move option "1" out of its optgroup to the top level of the select (what Tom Select does).
+        select.appendChild(select.querySelector('option[value="1"]'));
+
+        expect(getOptionSetFingerprint(select, false)).toBe(before);
+    });
+
+    test('getOptionSetFingerprint_givenChangedOptionValues_returnsDifferentFingerprint', () => {
+        // Guardrail: a genuine repopulation (the difficulty/start child selects) still changes the
+        // fingerprint so the rebuild path keeps working.
+        const select = createSelect();
+        const before = getOptionSetFingerprint(select, false);
+
+        select.innerHTML = `
+            <option value="4">Four</option>
+            <option value="5" selected>Five</option>`;
+
+        expect(getOptionSetFingerprint(select, false)).not.toBe(before);
     });
 });
