@@ -13,9 +13,11 @@
  *    `.row > *` already sets, so it stays correct there too.
  */
 
-/* Dungeon grid card: the dungeon-name overlay (.card-img-caption .card-text, position: absolute)
-   anchors to this column as its offset parent (see the .discover .card-img-caption .card-text rules) */
-.grid_dungeon {
+/* Dungeon grid card (.grid_dungeon) and header dungeon selector card (.list_dungeon): the
+   dungeon-name overlay (.card-img-caption .card-text, position: absolute) anchors to this column as
+   its offset parent (see the .discover .card-img-caption .card-text rules) */
+.grid_dungeon,
+.list_dungeon {
     position: relative;
 }
 
