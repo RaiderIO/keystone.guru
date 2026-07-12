@@ -1,8 +1,9 @@
 // Bootstrap theme (bootstrap should be between these)
 .lux {
-  // Bootstrap 4 did not underline links (hover only); Bootstrap 5 underlines them by default
-  $link-decoration: none;
-  $link-hover-decoration: underline;
+  // Match darkly's navbar height: Bootstrap 5 defaults navbar padding to (null x, 0.5rem y); set
+  // the 1rem inset via SCSS vars instead of a separate .navbar { padding } CSS override
+  $navbar-padding-x: 1rem;
+  $navbar-padding-y: 1rem;
 
   @import "~bootswatch/dist/lux/variables";
   @import "~bootstrap/scss/bootstrap";
@@ -10,11 +11,6 @@
 
   body {
     font-size: 0.9375rem;
-  }
-
-  /** Lux special - make sure the top header has the same height as the one in Darkly */
-  .navbar {
-    padding: 1rem 1rem;
   }
 
   .form-control {

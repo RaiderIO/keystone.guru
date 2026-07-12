@@ -95,7 +95,7 @@ use Illuminate\Support\Collection;
                     @else
                         <div class="col-auto">
                             <input type="checkbox"
-                                   class="form-control left_checkbox spell spell-{{ $npcSpell->spell_id }}"
+                                   class="form-check-input spell spell-{{ $npcSpell->spell_id }}"
                                    name="spell-{{ $npcSpell->spell_id }}"
                                    data-id="{{ $npcSpell->spell_id }}"
                                    value="{{ $npcSpell->spell_id }}" {{ $spell->hidden_on_map ? '' : 'checked' }}>

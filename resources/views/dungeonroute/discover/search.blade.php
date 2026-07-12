@@ -137,7 +137,7 @@ use Illuminate\Support\Collection;
                 {{ html()->text('user', request('user'))->id('user')->class('form-control')->placeholder(__('view_dungeonroute.discover.search.user_placeholder'))->attribute('autocomplete', 'off') }}
             @endcomponent
         </div>
-        <div class="col-xl-9">
+        <div class="col-xl-9 position-relative">
             <div id="route_list">
 
             </div>

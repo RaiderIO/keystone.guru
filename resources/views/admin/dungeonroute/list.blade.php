@@ -69,7 +69,7 @@ use Illuminate\Support\Collection;
 
             <div class="col-md-3 mb-3">
                 <label for="published_state_id">{{ __('view_admin.dungeonroute.list.filter_published_state') }}</label>
-                <select name="published_state_id" id="published_state_id" class="form-control">
+                <select name="published_state_id" id="published_state_id" class="form-select">
                     <option value="">{{ __('view_admin.dungeonroute.list.filter_all') }}</option>
                     @foreach($publishedStates as $id => $name)
                         <option value="{{ $id }}" @selected($filters['published_state_id'] == $id)>{{ $name }}</option>

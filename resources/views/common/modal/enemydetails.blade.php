@@ -46,7 +46,7 @@
                         @else
                             {{ html()->label(__('view_common.modal.userreport.enemy.contact_by_email'), 'enemy_report_contact_ok') }}
                         @endguest
-                        {{ html()->checkbox('enemy_report_contact_ok', false, 1)->class('form-control left_checkbox') }}
+                        {{ html()->checkbox('enemy_report_contact_ok', false, 1)->class('form-check-input') }}
                     </div>
 
                     <button id="userreport_enemy_modal_submit" class="btn btn-info w-100">
