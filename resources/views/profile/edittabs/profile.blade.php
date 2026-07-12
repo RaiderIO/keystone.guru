@@ -58,7 +58,7 @@ use Illuminate\Support\Collection;
         {{ html()->label(__('view_profile.edit.region'), 'game_server_region_id') }}
         {{ html()->select('game_server_region_id', array_merge(['0' => __('view_profile.edit.select_region')], $allRegions->mapWithKeys(function (GameServerRegion $region) {
     return [$region->id => __($region->name)];
-})->toArray()))->class('form-control') }}
+})->toArray()))->class('form-select') }}
         @include('common.forms.form-error', ['key' => 'game_server_region_id'])
     </div>
 

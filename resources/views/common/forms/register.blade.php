@@ -74,7 +74,7 @@ $errors   ??= collect();
                 <div class="col-md-{{ $width }}">
                     {{ html()->select('region', array_merge(['-1' => __('view_common.forms.register.select_region')], $allRegions->mapWithKeys(function (GameServerRegion $region) {
     return [$region->id => __($region->name)];
-})->toArray()))->class('form-control') }}
+})->toArray()))->class('form-select') }}
                 </div>
             </div>
 
