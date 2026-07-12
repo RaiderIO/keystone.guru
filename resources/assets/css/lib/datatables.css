@@ -499,4 +499,45 @@ table.dataTable td {
     overflow-wrap: break-word; /* Ensures long words break */
 }
 
+div.dt-container .dt-paging .dt-paging-button.disabled, div.dt-container .dt-paging .dt-paging-button.disabled:hover, div.dt-container .dt-paging .dt-paging-button.disabled:active {
+    cursor: default;
+    color: rgba(255, 255, 255, 0.4) !important;
+    border: 1px solid transparent;
+    background: transparent;
+    box-shadow: none;
+}
+
+.row_selected {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    cursor: pointer;
+}
+
+.routes_table .limit_width {
+    max-width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+    .routes_table .limit_width {
+        max-width: 200px;
+    }
+}
+
+.routes_table .not_clickable {
+    cursor: default !important;
+}
+
+.routes_table .light-slider-container {
+    width: 192px;
+    height: 128px;
+}
+
+@media ( max-width: 600px) {
+    .routes_table .light-slider-container {
+        width: 96px;
+        height: 64px;
+    }
+}
 
