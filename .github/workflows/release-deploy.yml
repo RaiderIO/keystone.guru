@@ -117,8 +117,45 @@ jobs:
             --cache-control "public,max-age=31536000,immutable" \
             --no-progress
 
+  # Builds app / worker / cron in parallel matrix legs (each a fresh runner).
+  #
+  # Only the app base image (docker-compose/app) gets buildx + GHA layer caching:
+  # it's the expensive, self-contained build (rust/PHP-extension toolchain, ~5.4min)
+  # and every FROM in it resolves to a public registry image, which the buildx
+  # docker-container driver (required for --cache-to type=gha) can reach.
+  #
+  # The worker/cron base images (docker-compose/app-worker, docker-compose/cron) and
+  # all three production images instead FROM a *locally* tagged image (keystone.guru-app,
+  # or that leg's own base) — the docker-container builder cannot see the host docker
+  # daemon's local image store, so those stay on the plain `docker build` (default
+  # driver, shares the daemon). They're cheap layers (apt-get + one binary / a git
+  # clone), so there's little to gain from caching them anyway.
   build-push-images:
-    name: Build & Push Release Images
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image: app
+            base_tag: keystone.guru-app
+            needs_own_base_build: false
+            prod_context: docker-compose/app-aws
+            ecr_repos: "ksg-php-fpm ksg-reverb ksg-swoole"
+          # Puppeteer/Chrome live only in this image (docker-compose/app-worker), so the
+          # thumbnail-generation queue workers get a browser; the app image above doesn't.
+          - image: worker
+            base_tag: keystone.guru-worker
+            needs_own_base_build: true
+            base_context: docker-compose/app-worker
+            prod_context: docker-compose/app-worker-aws
+            ecr_repos: "ksg-queue-worker"
+          - image: cron
+            base_tag: keystone.guru-cron
+            needs_own_base_build: true
+            base_context: docker-compose/cron
+            prod_context: docker-compose/cron-aws
+            ecr_repos: "ksg-cron"
+
+    name: Build & Push Release Images (${{ matrix.image }})
     runs-on: ubuntu-latest
 
     steps:
@@ -134,66 +171,50 @@ jobs:
       - name: Log in to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       # The base image build substitutes GIT_TOKEN into the composer auth.json.
       # All composer repositories are public, so the built-in token is sufficient.
       - name: Prepare base image build context
         run: echo "GIT_TOKEN=${{ secrets.GITHUB_TOKEN }}" > docker-compose/app/.env
 
-      - name: Build base app image
-        run: docker build -t keystone.guru-app docker-compose/app
+      # Built on every leg (not just the app leg): the worker/cron base Dockerfiles
+      # both FROM keystone.guru-app (see their Dockerfiles), so it has to exist
+      # locally on those runners too. Scoped "app-base" on all three legs so they
+      # share one GHA cache entry instead of each rebuilding it cold.
+      - name: Build app base image
+        run: |
+          docker buildx build \
+            --cache-from type=gha,scope=app-base \
+            --cache-to type=gha,mode=max,scope=app-base \
+            --load \
+            -t keystone.guru-app \
+            docker-compose/app
+
+      - name: Build base ${{ matrix.image }} image
+        if: matrix.needs_own_base_build
+        run: docker build -t ${{ matrix.base_tag }} ${{ matrix.base_context }}
 
       # GIT_REF pins the in-image checkout to the released tag for reproducibility.
-      - name: Build production app image
+      # No --no-cache here: on a fresh runner there's nothing to invalidate, and the
+      # Dockerfile's `git clone --depth 1 --branch <GIT_REF>` self-invalidates every
+      # release regardless.
+      - name: Build production ${{ matrix.image }} image
         run: |
-          docker build --no-cache \
+          docker build \
             --build-arg STAGE=production \
             --build-arg GIT_REF=${{ github.ref_name }} \
-            -t keystone.guru-app:${{ github.ref_name }} \
-            docker-compose/app-aws/
+            -t ${{ matrix.base_tag }}:${{ github.ref_name }} \
+            ${{ matrix.prod_context }}
 
-      - name: Tag & push app image to ECR
+      - name: Tag & push ${{ matrix.image }} image(s) to ECR
         run: |
-          for repo in ksg-php-fpm ksg-reverb ksg-swoole; do
-            docker tag keystone.guru-app:${{ github.ref_name }} \
+          for repo in ${{ matrix.ecr_repos }}; do
+            docker tag ${{ matrix.base_tag }}:${{ github.ref_name }} \
               "${ECR_REGISTRY}/${repo}:${{ github.ref_name }}"
             docker push "${ECR_REGISTRY}/${repo}:${{ github.ref_name }}"
           done
-
-      # Puppeteer/Chrome live only in this image (docker-compose/app-worker), so the
-      # thumbnail-generation queue workers get a browser; the web-facing images above don't.
-      - name: Build base worker image
-        run: docker build -t keystone.guru-worker docker-compose/app-worker
-
-      - name: Build production worker image
-        run: |
-          docker build --no-cache \
-            --build-arg STAGE=production \
-            --build-arg GIT_REF=${{ github.ref_name }} \
-            -t keystone.guru-worker:${{ github.ref_name }} \
-            docker-compose/app-worker-aws/
-
-      - name: Tag & push worker image to ECR
-        run: |
-          docker tag keystone.guru-worker:${{ github.ref_name }} \
-            "${ECR_REGISTRY}/ksg-queue-worker:${{ github.ref_name }}"
-          docker push "${ECR_REGISTRY}/ksg-queue-worker:${{ github.ref_name }}"
-
-      - name: Build base cron image
-        run: docker build -t keystone.guru-cron docker-compose/cron
-
-      - name: Build production cron image
-        run: |
-          docker build --no-cache \
-            --build-arg STAGE=production \
-            --build-arg GIT_REF=${{ github.ref_name }} \
-            -t keystone.guru-cron:${{ github.ref_name }} \
-            docker-compose/cron-aws/
-
-      - name: Tag & push cron image to ECR
-        run: |
-          docker tag keystone.guru-cron:${{ github.ref_name }} \
-            "${ECR_REGISTRY}/ksg-cron:${{ github.ref_name }}"
-          docker push "${ECR_REGISTRY}/ksg-cron:${{ github.ref_name }}"
 
   # Staging deploys automatically once the release images, frontend assets and
   # map context all exist for the tag (gated via `needs` below). The
