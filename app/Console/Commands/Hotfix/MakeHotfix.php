@@ -13,7 +13,7 @@ class MakeHotfix extends Command
      *
      * @var string
      */
-    protected $signature = 'make:hotfix {version? : The version to create a hotfix for}
+    protected $signature = 'make:hotfix {version=latest : The version to create a hotfix for}
                                         {--file= : Optionally create a hotfix for a single file instead of all changed files}';
 
     /**
@@ -28,8 +28,12 @@ class MakeHotfix extends Command
      */
     public function handle(): int
     {
+        $version = $this->argument('version');
+
         // Without an explicit version, fall back to the deployed release tag baked into the version file (#3320)
-        $version = $this->argument('version') ?? trim(file_get_contents(base_path('version')));
+        if ($version === 'latest') {
+            $version = trim(file_get_contents(base_path('version')));
+        }
 
         if (!str_starts_with($version, 'v')) {
             $this->error(sprintf('Invalid release version %s - expected a release tag such as v1.2.3!', $version));

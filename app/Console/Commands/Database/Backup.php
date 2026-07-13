@@ -18,7 +18,8 @@ class Backup extends Command
 
     /**
      * The --release flag is kept for backwards compatibility with existing deploy scripts; the per-release
-     * backup_db opt-out was retired along with the release tables (#3480), so a backup is always made.
+     * backup_db opt-out was retired along with the release tables (#3480). Whether a backup actually
+     * happens still depends on `db_backup_dir` being configured, which it currently is not in production.
      *
      * @var string
      */
