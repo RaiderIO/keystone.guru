@@ -1,0 +1,102 @@
+.popupCustom .leaflet-popup-content-wrapper {
+    border-radius: 0;
+}
+
+.popupCustom .pickr .pcr-button {
+    width: 100%;
+}
+
+#map.leaflet-container {
+    font: unset;
+    font-size: 12px;
+}
+
+.pull_workbench .pickr .pcr-button {
+    width: 39px;
+    height: 39px;
+}
+
+.pcr-app {
+    z-index: 100100;
+}
+
+#snackbar_container .leaflet-draw-actions {
+    position: unset;
+}
+
+#snackbar_container .leaflet-draw-actions {
+    margin-bottom: 0;
+}
+
+#snackbar_container .leaflet-draw-actions li.btn {
+    border-radius: 0;
+}
+
+#snackbar_container .leaflet-draw-actions a {
+    color: white;
+    border: unset;
+    font: inherit;
+}
+
+#snackbar_container .leaflet-draw-actions a:hover {
+    background-color: unset;
+    text-decoration: none;
+}
+
+.leaflet-draw-toolbar {
+    margin-top: 0;
+}
+
+/** Fix a boatload of 404s being thrown because of missing images/spritesheet.svg */
+.leaflet-draw-toolbar a {
+    background-image: none !important;
+}
+
+#edit_route_draw_actions_container .leaflet-draw-actions {
+    -webkit-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    transition: all 0.2s;
+
+    top: unset !important;
+    position: unset !important;
+    left: unset !important;
+    margin: 0 !important;
+}
+
+#edit_route_draw_actions_container .leaflet-draw-actions li {
+    line-height: 35px;
+}
+
+#edit_route_draw_actions_container .leaflet-draw-actions a {
+    font-size: 14px;
+}
+
+/** Fix display type/beguiling enemy preset not filling full width of sidebar */
+#map_enemy_visuals_container .leaflet-draw-section.leaflet-control {
+    width: 100%;
+}
+
+/* Remove square background and border around enemies, but leave editing drag squares alone */
+.leaflet-marker-icon.leaflet-div-icon:not(.leaflet-editing-icon):not(.leaflet-edit-marker-selected) {
+    border: none;
+    background-color: unset;
+    outline: none !important;
+}
+
+.leaflet-div-icon.leaflet-edit-marker-selected {
+    border: unset;
+}
+
+.leaflet-edit-marker-selected {
+    border-color: yellow !important;
+    border-radius: 4px !important; /* Fixes weird border */
+}
+
+.leaflet-edit-marker-selected.delete {
+    border-color: red !important;
+}
+
+/* Make the selection fill the width of the parent */
+.default_color_selection .pickr .pcr-button {
+    width: 100%;
+}

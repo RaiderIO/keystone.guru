@@ -21,83 +21,6 @@
     position: relative;
 }
 
-/* Standalone column: the affix picker list sits in a plain .mb-3, not a .row */
-.affix_list {
-    padding-right: calc(var(--bs-gutter-x, 1.5rem) * .5);
-    padding-left: calc(var(--bs-gutter-x, 1.5rem) * .5);
-}
-
-/** GENERAL ICONS */
-.username_menu {
-    width: 105px;
-}
-
-.select_icon {
-    width: 24px !important;
-    border-radius: 12px !important;
-    height: 24px !important;
-}
-
-.display_icon {
-    width: 32px;
-    border-radius: 16px;
-    height: 32px;
-}
-
-.default_table {
-    width: 100%;
-}
-
-/** DATATABLES */
-div.dt-container .dt-paging .dt-paging-button.disabled, div.dt-container .dt-paging .dt-paging-button.disabled:hover, div.dt-container .dt-paging .dt-paging-button.disabled:active {
-    cursor: default;
-    color: rgba(255, 255, 255, 0.4) !important;
-    border: 1px solid transparent;
-    background: transparent;
-    box-shadow: none;
-}
-
-.row_selected {
-    background-color: rgba(255, 255, 255, 0.15) !important;
-    cursor: pointer;
-}
-
-.routes_table .limit_width {
-    max-width: 400px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-@media (max-width: 600px) {
-    .routes_table .limit_width {
-        max-width: 200px;
-    }
-}
-
-.routes_table .not_clickable {
-    cursor: default !important;
-}
-
-ul.light-slider {
-    list-style: none outside none;
-    padding-left: 0;
-    margin-bottom: 0;
-}
-
-.light-slider li {
-    display: block;
-    float: left;
-    margin-right: 6px;
-    cursor: pointer;
-}
-
-.light-slider img {
-    display: block;
-    height: auto;
-    max-width: 100%;
-}
-
 .dungeon_card_dungeon_name {
     text-shadow: 2px 2px 2px rgba(0,0,0,0.6);
 }
@@ -152,11 +75,6 @@ ul.light-slider {
     }
 }
 
-/*.discover img.dungeon {*/
-/*    max-width: 192px;*/
-/*    max-height: 128px;*/
-/*}*/
-
 .list_dungeon.selectable.selected {
     border: 0.125rem solid forestgreen;
     border-radius: 5px;
@@ -173,7 +91,6 @@ ul.light-slider {
     cursor: pointer;
 }
 
-.data_container .select_icon.class_icon.selectable.selected,
 .discover .select_icon.class_icon.selectable.selected,
 .discover .grid_dungeon.selectable.selected {
     border: 0.125rem solid red;
@@ -269,124 +186,9 @@ ul.light-slider {
     left: 0;
 }
 
-.affix_group_row.current {
-    border: red 2px solid;
-    border-radius: 3px;
-}
-
-.routes_table .light-slider-container {
-    width: 192px;
-    height: 128px;
-}
-
-@media ( max-width: 600px) {
-    .routes_table .light-slider-container {
-        width: 96px;
-        height: 64px;
-    }
-}
-
-/** INTRO.JS */
-.introjs-tooltip {
-    width: 400px !important;
-}
-
-/** MISC STYLES */
-.view_dungeonroute_details_row .affix_row_container {
-    margin-left: 0;
-    margin-right: 0;
-}
-
-#view_dungeonroute_group_setup {
-    display: flex;
-    align-items: center;
-}
-
-.affix_list {
-    border: 1px solid #ccd0d2;
-    border-radius: 4px;
-}
-
-.affix_list .affix_row {
-    padding-right: 10px;
-}
-
-.affix_list .affix_list_row {
-    padding-top: 5px;
-    padding-bottom: 5px;
-}
-
-.affix_list .affix_list_row_disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
-.affix_list .affix_list_row:hover {
-    cursor: pointer;
-}
-
-.affix_list .affixselect {
-    height: 100px;
-}
-
-
-.affixes_overview_table tr.timewalking.legion {
-    background-position-x: center;
-    background-position-y: -437px;
-}
-
-.affixes_overview_table td {
-    padding: 0;
-}
-
-.affixes_overview_table .table_row.even.unconfirmed {
-    background-color: rgba(255, 165, 0, 0.7);
-}
-
-.affixes_overview_table .table_row.odd.unconfirmed {
-    background-color: rgba(255, 165, 0, 0.6);
-}
-
-.affixes_overview_table .affix_row {
-    padding: 6px;
-}
-
-.affixes_overview_table .last_column:not(.current_week) {
-    padding-left: 8px;
-}
-
-.affixes_overview_table .last_column.first_row {
-    border-top-right-radius: 5px;
-}
-
-.affixes_overview_table .last_column.first_row:not(.current_week) {
-    border-top-left-radius: 5px;
-}
-
-/** When the top row is the current week, don't show the rounded border in the top left corner; looks strange */
-.affixes_overview_table .current_week.first_column:not(.current_week) {
-    border-top-left-radius: 5px;
-}
-
-.affixes_overview_table .last_column.last_row {
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-}
-
-.affixes_overview_table .current_week.first_column {
-    border-bottom-left-radius: 5px;
-    border-top-left-radius: 5px;
-}
-
-.affixes_overview_table .current_week.last_column {
-    border-left: none; /* Disable overlapping borders when both rows overlap */
-    padding-left: 8px; /* Compensation for the missing border */
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
-
-.tag.edit {
-    cursor: pointer;
+.discover_panel {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
 }
 
 .dungeon_wallpaper {
@@ -400,27 +202,4 @@ ul.light-slider {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 50% 0;
-}
-
-.discover_panel {
-    padding-top: 4rem;
-    padding-bottom: 4rem;
-}
-
-#dungeonroute_coverage_affixgroup_table .covered {
-    background-color: #7efc7e11;
-}
-
-#dungeonroute_coverage_affixgroup_table .covered_warning {
-    background-color: #fcc57e11;
-}
-
-.user_icon {
-    max-width: 26px;
-    max-height: 26px;
-    border-radius: 30px;
-}
-
-.raider_io_staff_text {
-    color: #ffbd0a !important;
 }
