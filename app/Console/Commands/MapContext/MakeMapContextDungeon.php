@@ -22,7 +22,7 @@ class MakeMapContextDungeon extends Command
      */
     protected $signature = 'make:mapcontextdungeon
         {--output= : The output folder to place the generated map context in}
-        {--scope=all : Which dungeons to generate map context for (current-season, rest, all)}';
+        {--scope=all : Which dungeons to generate map context for (priority, rest, all)}';
 
     /**
      * The console command description.

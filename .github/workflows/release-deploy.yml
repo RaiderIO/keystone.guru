@@ -72,11 +72,12 @@ jobs:
   # Map context JS is generated from the DB/seeders and is also keyed by the
   # `version` file. We override that file with the release tag so the output
   # lands at compiled/<tag>/mapcontext/... matching the image. Runs in parallel.
-  # Split into a priority job (current-season dungeons, the ~99% of traffic) that
+  # Split into a priority job (current + next season dungeons, the ~99% of traffic - the
+  # next season is included because it starts receiving traffic before it's active) that
   # deploy-staging waits on, and a rest job (remaining dungeons) that streams into
   # S3 while the infra deploy runs — see #3517.
   build-map-context-priority:
-    name: Map Context (current season)
+    name: Map Context (priority)
     runs-on: ubuntu-latest
 
     steps:
@@ -98,8 +99,8 @@ jobs:
         run: |
           mkdir -p storage/mapcontext
           php artisan make:mapcontextstatic --output=storage/mapcontext
-          php artisan make:mapcontextdungeon --output=storage/mapcontext --scope=current-season
-          php artisan make:mapcontextmappingversion --output=storage/mapcontext --scope=current-season
+          php artisan make:mapcontextdungeon --output=storage/mapcontext --scope=priority
+          php artisan make:mapcontextmappingversion --output=storage/mapcontext --scope=priority
           ls -la storage/mapcontext
 
       - name: Configure AWS (OIDC)
@@ -120,9 +121,9 @@ jobs:
             --cache-control "public,max-age=31536000,immutable" \
             --no-progress
 
-  # Remaining (non-current-season) dungeons. Intentionally NOT in deploy-staging's
-  # or deploy-production's `needs` — it finishes uploading while the infra deploy
-  # (8-15 min) runs, so a non-current-season route's map context can briefly 404
+  # Remaining (non-priority) dungeons. Intentionally NOT in deploy-staging's or
+  # deploy-production's `needs` — it finishes uploading while the infra deploy
+  # (8-15 min) runs, so a non-priority route's map context can briefly 404
   # right after the staging flip until this job lands.
   build-map-context-rest:
     name: Map Context (remaining dungeons)

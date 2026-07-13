@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\MapContext\Traits;
 
+use App\Console\Commands\MapContext\Enums\MapContextScope;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Service\Season\SeasonServiceInterface;
@@ -13,19 +14,6 @@ use Illuminate\Support\Collection;
  */
 trait ResolvesMapContextScope
 {
-    private const string SCOPE_CURRENT_SEASON = 'current-season';
-
-    private const string SCOPE_REST = 'rest';
-
-    private const string SCOPE_ALL = 'all';
-
-    /** @var array<int, string> */
-    private const array VALID_SCOPES = [
-        self::SCOPE_CURRENT_SEASON,
-        self::SCOPE_REST,
-        self::SCOPE_ALL,
-    ];
-
     /**
      * Resolves the given `--scope` option value to the set of dungeon IDs it covers.
      *
@@ -35,11 +23,13 @@ trait ResolvesMapContextScope
      */
     protected function resolveDungeonIdsForScope(string $scope, SeasonServiceInterface $seasonService): ?Collection
     {
-        if (!in_array($scope, self::VALID_SCOPES, true)) {
+        $scopeEnum = MapContextScope::tryFrom($scope);
+
+        if ($scopeEnum === null) {
             $this->error(sprintf(
                 'Invalid --scope value "%s", expected one of: %s',
                 $scope,
-                implode(', ', self::VALID_SCOPES),
+                implode(', ', array_column(MapContextScope::cases(), 'value')),
             ));
 
             return null;
@@ -47,22 +37,24 @@ trait ResolvesMapContextScope
 
         $allDungeonIds = Dungeon::query()->pluck('id');
 
-        return match ($scope) {
-            self::SCOPE_ALL  => $allDungeonIds,
-            self::SCOPE_REST => $allDungeonIds
-                ->diff($this->currentSeasonDungeonIds($seasonService))
+        return match ($scopeEnum) {
+            MapContextScope::All  => $allDungeonIds,
+            MapContextScope::Rest => $allDungeonIds
+                ->diff($this->priorityDungeonIds($seasonService))
                 ->values(),
-            default => $this->currentSeasonDungeonIds($seasonService),
+            MapContextScope::Priority => $this->priorityDungeonIds($seasonService),
         };
     }
 
     /**
-     * Dungeon IDs belonging to the current season of every expansion that currently has an active
-     * season - this includes non-retail game versions (e.g. Classic-era) whenever they have one.
+     * Dungeon IDs belonging to the current and next season of every expansion that currently has
+     * an active season line - this includes non-retail game versions (e.g. Classic-era) whenever
+     * they have one. The next season is included alongside the current one because it starts
+     * receiving traffic before it goes live (e.g. previews, early route creation).
      *
      * @return Collection<int, int>
      */
-    private function currentSeasonDungeonIds(SeasonServiceInterface $seasonService): Collection
+    private function priorityDungeonIds(SeasonServiceInterface $seasonService): Collection
     {
         $dungeonIds = collect();
 
@@ -72,12 +64,14 @@ trait ResolvesMapContextScope
             }
 
             $currentSeason = $seasonService->getCurrentSeason($gameVersion->expansion);
-
-            if ($currentSeason === null) {
-                continue;
+            if ($currentSeason !== null) {
+                $dungeonIds = $dungeonIds->merge($currentSeason->dungeons()->pluck('dungeons.id'));
             }
 
-            $dungeonIds = $dungeonIds->merge($currentSeason->dungeons()->pluck('dungeons.id'));
+            $nextSeason = $seasonService->getNextSeasonOfExpansion($gameVersion->expansion);
+            if ($nextSeason !== null) {
+                $dungeonIds = $dungeonIds->merge($nextSeason->dungeons()->pluck('dungeons.id'));
+            }
         }
 
         return $dungeonIds->unique()->values();

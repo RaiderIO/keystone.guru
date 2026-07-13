@@ -24,7 +24,7 @@ class MakeMapContextMappingVersion extends Command
      */
     protected $signature = 'make:mapcontextmappingversion
         {--output= : The output folder to place the generated map context in}
-        {--scope=all : Which mapping versions to generate map context for, scoped by their dungeon (current-season, rest, all)}';
+        {--scope=all : Which mapping versions to generate map context for, scoped by their dungeon (priority, rest, all)}';
 
     /**
      * The console command description.
