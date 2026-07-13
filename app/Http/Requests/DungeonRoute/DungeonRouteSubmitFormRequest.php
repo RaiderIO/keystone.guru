@@ -91,7 +91,8 @@ class DungeonRouteSubmitFormRequest extends FormRequest
 
             'unlisted' => 'nullable|int',
 
-            'dungeon_difficulty' => Rule::in(array_values(Dungeon::DIFFICULTY_ALL)),
+            // Nullable: the difficulty select is empty for non-speedrun dungeons, and Tom Select submits an empty value for it
+            'dungeon_difficulty' => ['nullable', Rule::in(array_values(Dungeon::DIFFICULTY_ALL))],
 
             // Verified against the dungeon's mapping version in DungeonRouteSaveService
             'dungeon_start_map_icon_id' => 'nullable|integer',

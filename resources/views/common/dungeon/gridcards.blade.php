@@ -31,7 +31,7 @@ $sideOffset = $colCount === 3 ? 1 : 0;
 
 // @formatter:off
 for ($i = 0; $i < $rowCount; ++$i) { ?>
-<div class="row no-gutters">
+<div class="row g-0">
 <?php
     for ($j = 0; $j < $colCount; ++$j) {
         $index = $i * $colCount + $j;
@@ -41,7 +41,7 @@ for ($i = 0; $i < $rowCount; ++$i) { ?>
             /** @var Collection<int, array{href: string, text: string}> $linksForDungeon */
             $linksForDungeon = $links->get($dungeon->key);
             ?>
-        <div class="p-2 col-xl col-3 {{ $sideOffset && ($j === 0) ? 'ml-lg-auto' : (($j === $colCount - 1) ? 'mr-lg-auto' : '') }}">
+        <div class="p-2 col-xl col-3 {{ $sideOffset && ($j === 0) ? 'ms-lg-auto' : (($j === $colCount - 1) ? 'me-lg-auto' : '') }}">
             <div class="card">
                 <div class="card-img-caption">
                     <a href="{{ $imageLinks[$dungeon->key] ?? $linksForDungeon->first()['href'] }}">

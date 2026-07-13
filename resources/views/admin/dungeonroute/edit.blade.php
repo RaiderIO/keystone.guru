@@ -46,7 +46,7 @@ use Illuminate\Support\Collection;
                     <dd class="col-sm-9">
                         <code>{{ $dungeonRoute->public_key }}</code>
                         <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonRoute->dungeon, 'dungeonroute' => $dungeonRoute, 'title' => $dungeonRoute->getTitleSlug()]) }}"
-                           target="_blank" class="ml-2">
+                           target="_blank" class="ms-2">
                             <i class="fas fa-external-link-alt"></i>
                         </a>
                     </dd>
@@ -74,9 +74,9 @@ use Illuminate\Support\Collection;
             <div class="card-body">
                 {{ html()->modelForm($dungeonRoute, 'PATCH', route('admin.dungeonroute.update', ['dungeonRoute' => $dungeonRoute->id]))->open() }}
 
-                <div class="form-group{{ $errors->has('published_state_id') ? ' has-error' : '' }}">
+                <div class="mb-3{{ $errors->has('published_state_id') ? ' has-error' : '' }}">
                     {{ html()->label(__('view_admin.dungeonroute.edit.label_published_state'), 'published_state_id') }}
-                    {{ html()->select('published_state_id', $publishedStates, $dungeonRoute->published_state_id)->class('form-control') }}
+                    {{ html()->select('published_state_id', $publishedStates, $dungeonRoute->published_state_id)->class('form-select') }}
                     @include('common.forms.form-error', ['key' => 'published_state_id'])
                 </div>
 

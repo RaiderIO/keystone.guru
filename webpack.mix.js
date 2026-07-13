@@ -11,9 +11,27 @@ if (typeof version === 'undefined' || version === '') {
     throw new Error('KSG_BUILD_VERSION is not set - run the build via npm run dev / npm run production');
 }
 
+/**
+ * Bootstrap 5 emits its design tokens as CSS variables on :root. Our themes wrap all of Bootstrap in a
+ * theme class (e.g. `.darkly { @import bootstrap }`), which compiles those variable blocks to
+ * `.darkly :root` — a selector that can never match, since :root is the <html> element that carries the
+ * theme class itself. Rewrite them to `:root.darkly` so the variables resolve again.
+ */
+const scopedThemeRootFix = {
+    postcssPlugin: 'scoped-theme-root-fix',
+    Rule(rule) {
+        if (rule.selector.includes(':root')) {
+            rule.selectors = rule.selectors.map(
+                selector => selector.replace(/^(\.[\w-]+) :root$/, ':root$1')
+            );
+        }
+    },
+};
+
 mix.options({
     // This dramatically speeds up the build process -  adding new .scss for the redesign greatly increased build times without this
-    processCssUrls: false
+    processCssUrls: false,
+    postCss: [scopedThemeRootFix],
 }).webpackConfig({
     output: {
         publicPath: '/',

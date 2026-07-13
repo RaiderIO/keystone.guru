@@ -5,7 +5,7 @@
 @endsection
 {{--Disabled since dungeons should only be created through seeders--}}
 @section('header-addition')
-    <a href="{{ route('admin.dungeon.new') }}" class="btn btn-success text-white float-right" role="button">
+    <a href="{{ route('admin.dungeon.new') }}" class="btn btn-success text-white float-end" role="button">
         <i class="fas fa-plus"></i> {{ __('Create dungeon') }}
     </a>
 @endsection
@@ -74,7 +74,7 @@ use Illuminate\Support\Collection;
                     <img src="{{ $dungeon->expansion->getIconUrl() }}"
                          alt="{{ __($dungeon->expansion->name) }}"
                          title="{{ __($dungeon->expansion->name) }}"
-                         data-toggle="tooltip"
+                         data-bs-toggle="tooltip"
                          style="width: 50px;"/>
                 </td>
                 <td>{{ __($dungeon->name) }}</td>

@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
  */
 ?>
 <nav
-    class="route_sidebar route_manipulation_tools left row no-gutters map_fade_out {{ $isMobile ? 'mobile' : '' }}">
+    class="route_sidebar route_manipulation_tools left row g-0 map_fade_out {{ $isMobile ? 'mobile' : '' }}">
     <div class="bg-header" style="background-color: unset !important;">
         <!-- Draw controls are injected here through drawcontrols.js -->
         <div id="edit_route_draw_container" class="mb-2">
@@ -21,7 +21,7 @@ use Illuminate\Support\Collection;
 
         @isset($dungeonroute)
             <div id="edit_route_actions_container" class="mb-2">
-                <div class="row no-gutters">
+                <div class="row g-0">
                     <div class="col">
                         <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
                            class="btn btn-info">

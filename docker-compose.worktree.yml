@@ -36,3 +36,22 @@ services:
       - ./docker-compose/nginx:/etc/nginx/conf.d
     ports:
       - "${WORKTREE_HTTP_PORT}:80"
+
+  # Headless Chrome for in-browser verification (layout/JS bugs, screenshots). Behind a profile so
+  # the normal stack is unaffected; start on demand with: docker compose --profile chrome up -d chrome
+  # Reach it from the app container via CDP on chrome:9222; pages see the site as http://nginx.
+  # No published ports, so multiple worktree stacks can run it simultaneously.
+  chrome:
+    image: chromedp/headless-shell:latest
+    restart: "no"
+    profiles: ["chrome"]
+    # Chrome exhausts the compose default 64MB /dev/shm (ERR_INSUFFICIENT_RESOURCES on image-heavy pages)
+    shm_size: 1gb
+    # Pages reference assets (images/tiles) at ASSETS_BASE_URL = http://localhost:8009, a
+    # host-published port that does not exist inside this container, so screenshots render broken
+    # images. Forward that loopback port to the shared app-assets container (attached to this
+    # network by sh/worktree.sh), then chain to the image's stock entrypoint. This also fixes
+    # master-baseline pages (served via the Docker gateway), which emit the same asset URLs.
+    # Note: the stock run.sh expands `$@` unquoted, so flags containing spaces (e.g.
+    # --host-resolver-rules=MAP ...) cannot be passed via `command:` — hence this wrapper.
+    entrypoint: ["/bin/bash", "-c", "socat TCP4-LISTEN:8009,bind=127.0.0.1,fork,reuseaddr TCP4:app-assets:80 & exec /headless-shell/run.sh"]

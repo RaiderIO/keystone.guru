@@ -91,7 +91,6 @@ class ViewService implements ViewServiceInterface
         return $this->cachedGlobal('demo_routes', static fn() => DungeonRoute::where('demo', true)
             ->join('mapping_versions', 'mapping_versions.id', '=', 'dungeon_routes.mapping_version_id')
             ->where('mapping_versions.game_version_id', GameVersion::getDefaultGameVersion()->id)
-            ->without(['thumbnails'])
             ->where('published_state_id', PublishedState::ALL[PublishedState::WORLD_WITH_LINK])
             ->orderBy('dungeon_routes.dungeon_id')
             ->get());

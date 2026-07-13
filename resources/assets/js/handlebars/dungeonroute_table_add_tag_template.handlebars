@@ -1,12 +1,12 @@
 <h3>{{add_remove_tag_label}}</h3>
-<div id="no_tags" class="form-group" style="display: none">
+<div id="no_tags" class="mb-3" style="display: none">
     <div class="row">
         <div class="col">
             {{ no_tags_assigned_label }}
         </div>
     </div>
 </div>
-<div id="tags_container_display" class="form-group" style="display: none">
+<div id="tags_container_display" class="mb-3" style="display: none">
     <div class="row">
         <div class="col">
             <label for="new_tag_input">
@@ -20,10 +20,11 @@
         </div>
     </div>
 </div>
-<div class="row no-gutters mt-1">
-    <div class="col">
+<div class="row g-0 mt-1">
+    <div class="col position-relative">
         <input id="new_tag_input" type="text" class="form-control"
                                                   placeholder="{{ placeholder_new_tag_label }}"/>
+        <ul id="new_tag_autocomplete" class="dropdown-menu w-100"></ul>
     </div>
     <div class="col-auto">
         <button id="new_tag_submit" class="btn btn-success">

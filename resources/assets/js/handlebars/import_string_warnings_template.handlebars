@@ -2,21 +2,21 @@
     <i class="fa fa-info-circle"></i> {{import_notes_label}}
 </div>
 
-<div class="row no-gutters">
-    <div class="col-4 font-weight-bold">
+<div class="row g-0">
+    <div class="col-4 fw-bold">
         {{category_label}}
     </div>
-    <div class="col-8 font-weight-bold">
+    <div class="col-8 fw-bold">
         {{message_label}}
     </div>
 </div>
 
 {{#notices}}
-    <div class="row no-gutters">
+    <div class="row g-0">
         <div class="col-4">
             {{category}}:
         </div>
-        <div class="col-8" title="{{details}}" data-toggle="tooltip">
+        <div class="col-8" title="{{details}}" data-bs-toggle="tooltip">
             {{message}}
         </div>
     </div>

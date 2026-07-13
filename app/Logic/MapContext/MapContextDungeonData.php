@@ -45,6 +45,11 @@ class MapContextDungeonData implements Arrayable
                         ->on('translations.locale', '=', DB::raw(sprintf('"%s"', $this->locale)));
                 })
                 ->with([
+                    // The front-end reads these relations off the npc objects in this payload (enemy visuals + tooltips)
+                    'type',
+                    'class',
+                    'npcbolsteringwhitelists',
+                    'npcHealths',
                     // Return only spell IDs for each NPC
                     'spells:id',
                 ])
@@ -63,7 +68,6 @@ class MapContextDungeonData implements Arrayable
                     'level',
                     'mdt_scale',
                     'pivot',
-                    'characteristics',
                 ])
                 ->values(),
             config('keystoneguru.cache.dungeonData.ttl'),

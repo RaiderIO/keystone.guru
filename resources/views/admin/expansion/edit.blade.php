@@ -12,32 +12,32 @@
         {{ html()->form('POST', route('admin.expansion.savenew'))->open() }}
     @endisset
 
-    <div class="form-group{{ $errors->has('active') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('active') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.expansion.edit.active'), 'active') }}
-        {{ html()->checkbox('active', isset($expansion) ? $expansion->active : 1, 1)->class('form-control left_checkbox') }}
+        {{ html()->checkbox('active', isset($expansion) ? $expansion->active : 1, 1)->class('form-check-input') }}
         @include('common.forms.form-error', ['key' => 'active'])
     </div>
 
-    <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('name') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.expansion.edit.name'), 'name') }}
         {{ html()->text('name')->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'name'])
     </div>
 
-    <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('name') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.expansion.edit.shortname'), 'shortname') }}
         {{ html()->text('shortname')->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'shortname'])
     </div>
 
     @isset($expansion)
-        <div class="form-group">
+        <div class="mb-3">
             {{ __('view_admin.expansion.edit.current_image') }}: <img src="{{ $expansion->getIconUrl() }}"
                                                                       style="width: 32px; height: 32px;"/>
         </div>
     @endisset
 
-    <div class="form-group{{ $errors->has('color') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('color') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.expansion.edit.color'), 'color') }}
         {{ html()->input('color', 'color')->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'color'])

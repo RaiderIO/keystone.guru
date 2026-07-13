@@ -43,7 +43,7 @@ $showAds                ??= true;
 ]])
 
 <nav id="pulls_sidebar"
-     class="route_sidebar top right row no-gutters map_fade_out
+     class="route_sidebar top right row g-0 map_fade_out
              {{ $embed ? 'embed' : '' }}
              {{ $embedStyle }}
      {{ $isMobile ? 'mobile' : '' }}
@@ -51,7 +51,7 @@ $showAds                ??= true;
      {{ $showAds ? 'ad_loaded' : '' }}
          ">
     <div class="{{ $edit ? 'edit' : '' }} bg-header">
-        <div id="pulls_sidebar_trigger" class="handle" data-toggle="tooltip">
+        <div id="pulls_sidebar_trigger" class="handle" data-bs-toggle="tooltip">
             <i class="fas {{ $shouldShowPullsSidebar ? 'fa-arrow-right' : 'fa-arrow-left' }}"></i>
         </div>
 
@@ -66,19 +66,19 @@ $showAds                ??= true;
         @if(!$embed || $dungeon->speedrun_enabled)
             @if($edit)
                 <div class="p-1">
-                    <div class="row pr-2 mb-2 no-gutters">
-                        <div class="col-auto" data-toggle="tooltip"
+                    <div class="row pe-2 mb-2 g-0">
+                        <div class="col-auto" data-bs-toggle="tooltip"
                              title="{{ __('view_common.maps.controls.pulls.settings_title') }}">
-                            <button class="btn btn-info w-100" data-toggle="modal" data-target="#map_settings_modal">
+                            <button class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#map_settings_modal">
                                 <i class='fas fa-cog'></i>
                             </button>
                         </div>
-                        <div class="col pl-2 pr-2">
+                        <div class="col ps-2 pe-2">
                             <div id="killzones_new_pull" class="btn btn-success w-100">
                                 <i class="fas fa-plus"></i> {{__('view_common.maps.controls.pulls.new_pull')}}
                             </div>
                         </div>
-                        <div class="col-auto" data-toggle="tooltip"
+                        <div class="col-auto" data-bs-toggle="tooltip"
                              title="{{ __('view_common.maps.controls.pulls.delete_all_pulls_title') }}">
                             <button id="killzones_pulls_settings_delete_all" class="btn btn-danger w-100">
                                 <i class="fas fa-trash"></i>
@@ -93,10 +93,10 @@ $showAds                ??= true;
                     <div id="edit_route_enemy_forces_container"></div>
                 @endif
             @else
-                <div class="row p-1 pr-2 mb-2 no-gutters">
-                    <div class="col-auto" data-toggle="tooltip"
+                <div class="row p-1 pe-2 mb-2 g-0">
+                    <div class="col-auto" data-bs-toggle="tooltip"
                          title="{{ __('view_common.maps.controls.pulls.settings_title') }}">
-                        <button class="btn btn-info w-100" data-toggle="modal" data-target="#map_settings_modal">
+                        <button class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#map_settings_modal">
                             <i class='fas fa-cog'></i>
                         </button>
                     </div>
@@ -113,19 +113,19 @@ $showAds                ??= true;
 
         <div class="data_container {{ $dungeon->speedrun_enabled ? 'has_speedrun' : '' }}" data-simplebar>
 
-            <div id="killzones_loading" class="row no-gutters">
+            <div id="killzones_loading" class="row g-0">
                 <div class="col text-center">
                     <h5>{{ __('view_common.maps.controls.pulls.loading') }}</h5>
                 </div>
             </div>
-            <div id="killzones_description_container" class="row no-gutters pb-2" style="display: none;">
+            <div id="killzones_description_container" class="row g-0 pb-2" style="display: none;">
                 <div class="col px-2">
                     <span id="killzones_description">
 
                     </span>
                 </div>
             </div>
-            <div id="killzones_no_pulls" class="row no-gutters" style="display: none;">
+            <div id="killzones_no_pulls" class="row g-0" style="display: none;">
                 <div class="col text-center">
                     <h5>
                         @if($edit)

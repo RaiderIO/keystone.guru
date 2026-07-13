@@ -4,11 +4,11 @@
 
 @section('content')
     {{ html()->form('POST', route('admin.tools.dungeonroute.view.submit'))->open() }}
-    <div class="form-group">
+    <div class="mb-3">
         {{ html()->label(__('view_admin.tools.dungeonroute.view.public_key'), 'public_key') }}
         {{ html()->text('public_key', '')->class('form-control')->data('simplebar', '') }}
     </div>
-    <div class="form-group">
+    <div class="mb-3">
         {{ html()->input('submit')->value(__('view_admin.tools.dungeonroute.view.submit'))->class('btn btn-primary col-md-auto') }}
         <div class="col-md">
 
