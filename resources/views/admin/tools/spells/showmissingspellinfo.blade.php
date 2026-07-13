@@ -36,7 +36,7 @@ use Illuminate\Support\Collection;
         </a>
     </div>
 
-    <div class="form-group">
+    <div class="mb-3">
         <table id="spells_table" class="tablesorter default_table table-striped">
             <thead>
             <tr>

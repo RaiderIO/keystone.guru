@@ -1,5 +1,5 @@
 let LeafletIconFloorUnion = L.divIcon({
-    html: '<i class="fas fa-vector-square"></i>',
+    html: '<i class="fas fa-object-group"></i>',
     iconSize: [32, 32],
     className: 'map_icon marker_div_icon_font_awesome map_icon_div_icon_unknown'
 });

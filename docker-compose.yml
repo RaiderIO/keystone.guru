@@ -3,6 +3,9 @@ services:
     build:
       context: docker-compose/app
       dockerfile: Dockerfile
+      args:
+        PUID: ${PUID:-1000}
+        PGID: ${PGID:-1000}
     image: keystone.guru
     container_name: keystone.guru-app
     depends_on:
@@ -11,10 +14,16 @@ services:
       - redis
     restart: no
     working_dir: /var/www/
+    # Run as the host user (the `ksg` passwd entry baked into the image) so files written into
+    # the bind mount are host-owned instead of root-owned (#3414). php-fpm's master then runs
+    # unprivileged and ignores the pool user directive — workers inherit this UID too.
+    user: "${PUID:-1000}:${PGID:-1000}"
     volumes:
       - ./:/var/www
       - ../keystone.guru.assets:/var/keystone.guru.assets
-      - ~/.ssh:/root/.ssh
+      - ~/.ssh:/home/ksg/.ssh
+      # Bind-mounted so the web memory cap applies without an image rebuild (also baked in via Dockerfile COPY)
+      - ./docker-compose/app/usr/local/etc/php-fpm.d/zz.memory.conf:/usr/local/etc/php-fpm.d/zz.memory.conf:ro
     networks:
       - keystone.guru
 
@@ -34,6 +43,9 @@ services:
     build:
       context: docker-compose/app
       dockerfile: Dockerfile
+      args:
+        PUID: ${PUID:-1000}
+        PGID: ${PGID:-1000}
     image: keystone.guru-swoole
     container_name: keystone.guru-app-swoole
     depends_on:
@@ -43,10 +55,11 @@ services:
       - redis
     restart: no
     working_dir: /var/www/
+    user: "${PUID:-1000}:${PGID:-1000}"
     command: php /var/www/artisan octane:start --host=0.0.0.0 --port=9501 --workers=1 --task-workers=1
     volumes:
       - ./:/var/www
-      - ~/.ssh:/root/.ssh
+      - ~/.ssh:/home/ksg/.ssh
     networks:
       - keystone.guru
     ports:
@@ -56,6 +69,14 @@ services:
     build:
       context: docker-compose/cron
       dockerfile: Dockerfile
+      args:
+        BASE_IMAGE: keystone.guru
+      # The cron Dockerfile builds FROM the app image. `depends_on` does not order *builds*,
+      # so on a cold machine a parallel `docker compose build` would fail before the app image
+      # exists. This named context makes compose build the app service first and resolves
+      # `FROM keystone.guru` to its result (mirrors the horizon/worker service above).
+      additional_contexts:
+        keystone.guru: service:app
     image: keystone.guru-cron
     container_name: keystone.guru-cron
     depends_on:
@@ -64,9 +85,11 @@ services:
       - redis
     restart: no
     working_dir: /var/www/
+    # No `user:` here — the cron daemon needs root. The scheduler entry in
+    # docker-compose/cron/etc/cron.d/scheduler drops to the ksg user per job instead.
     volumes:
       - ./:/var/www
-      - ~/.ssh:/root/.ssh
+      - ~/.ssh:/home/ksg/.ssh
     networks:
       - keystone.guru
 
@@ -92,6 +115,7 @@ services:
       - redis
     restart: no
     working_dir: /var/www/
+    user: "${PUID:-1000}:${PGID:-1000}"
     entrypoint: /usr/local/bin/php artisan horizon
     volumes:
       - ./:/var/www
@@ -104,12 +128,16 @@ services:
     build:
       context: docker-compose/app
       dockerfile: Dockerfile
+      args:
+        PUID: ${PUID:-1000}
+        PGID: ${PGID:-1000}
     image: keystone.guru
     container_name: keystone.guru-reverb
     depends_on:
       - redis
     restart: no
     working_dir: /var/www/
+    user: "${PUID:-1000}:${PGID:-1000}"
     command: php /var/www/artisan reverb:start #--debug
     ports:
       - "6001:6001"
@@ -118,49 +146,10 @@ services:
     networks:
       - keystone.guru
 
-#  db:
-#    image: mysql:5.7
-#    container_name: keystone.guru-db
-#    restart: unless-stopped
-#    environment:
-#      MYSQL_DATABASE: ${DB_DATABASE}
-#      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-#      MYSQL_PASSWORD: ${DB_PASSWORD}
-#      MYSQL_USER: ${DB_USERNAME}
-#      SERVICE_TAGS: dev
-#      SERVICE_NAME: mysql
-#    ports:
-#      - "34006:3306"
-#    command:
-#      - '--default-authentication-plugin=mysql_native_password'
-#    volumes:
-#      - ./docker-compose/mysql:/var/lib/mysql
-#      - ./docker-compose/data:/tmp/data
-#    networks:
-#      - keystone.guru
-#
-#  db-combatlog:
-#    image: mysql:5.7
-#    container_name: keystone.guru-db-combatlog
-#    restart: unless-stopped
-#    environment:
-#      MYSQL_DATABASE: ${DB_COMBATLOG_DATABASE}
-#      MYSQL_ROOT_PASSWORD: ${DB_COMBATLOG_PASSWORD}
-#      MYSQL_PASSWORD: ${DB_COMBATLOG_PASSWORD}
-#      MYSQL_USER: ${DB_COMBATLOG_USERNAME}
-#      SERVICE_TAGS: dev
-#      SERVICE_NAME: mysql
-#    ports:
-#      - "34007:3306"
-#    command:
-#      - '--default-authentication-plugin=mysql_native_password'
-#    volumes:
-#      - ./docker-compose/mysql-combatlog:/var/lib/mysql
-#      - ./docker-compose/data:/tmp/data
-#    networks:
-#      - keystone.guru
-
-# PROD DATABASE
+  # Data variant toggle: mounts the local data dirs (mysql / mysql-combatlog) by default.
+  # Set DB_DATA_VARIANT=-prod in .env to mount the prod data copies instead
+  # (mysql-prod / mysql-prod-combatlog), then recreate with `docker compose up -d db db-combatlog`.
+  # Container names stay -prod either way so worktree.sh auto-attach keeps working.
   db:
     image: mysql:5.7
     container_name: keystone.guru-db-prod
@@ -177,7 +166,14 @@ services:
     command:
       - '--default-authentication-plugin=mysql_native_password'
     volumes:
-      - ./docker-compose/mysql-prod:/var/lib/mysql
+      # create_host_path: false makes compose fail loudly when the data dir is missing
+      # (e.g. bad DB_DATA_VARIANT) instead of silently mounting a fresh empty dir that
+      # MySQL would initialize as a blank database
+      - type: bind
+        source: ./docker-compose/mysql${DB_DATA_VARIANT:-}
+        target: /var/lib/mysql
+        bind:
+          create_host_path: false
       - ./docker-compose/data:/tmp/data
     networks:
       - keystone.guru
@@ -198,7 +194,11 @@ services:
     command:
       - '--default-authentication-plugin=mysql_native_password'
     volumes:
-      - ./docker-compose/mysql-prod-combatlog:/var/lib/mysql
+      - type: bind
+        source: ./docker-compose/mysql${DB_DATA_VARIANT:-}-combatlog
+        target: /var/lib/mysql
+        bind:
+          create_host_path: false
       - ./docker-compose/data:/tmp/data
     networks:
       - keystone.guru
@@ -247,7 +247,7 @@ services:
       - keystone.guru
 
   redis:
-    image: redis:alpine
+    image: valkey/valkey:8-alpine
     container_name: keystone.guru-redis
     command: --port 6380
     ports:
@@ -272,7 +272,10 @@ services:
       - keystone.guru
 
   # https://opensearch.org/docs/latest/install-and-configure/install-opensearch/docker/#sample-docker-composeyml
+  # The opensearch profile is opt-in: start it with `docker compose --profile opensearch up -d`
   opensearch-node1:
+    profiles:
+      - opensearch
     image: opensearchproject/opensearch:2.13.0
     container_name: keystone.guru-opensearch-node1
     environment:
@@ -301,6 +304,8 @@ services:
       - keystone.guru
 
   opensearch-node2:
+    profiles:
+      - opensearch
     image: opensearchproject/opensearch:2.13.0
     container_name: keystone.guru-opensearch-node2
     environment:
@@ -326,6 +331,8 @@ services:
       - keystone.guru
 
   opensearch-dashboards:
+    profiles:
+      - opensearch
     build:
       context: docker-compose/opensearch-dashboards
       dockerfile: Dockerfile

@@ -237,16 +237,10 @@ class MDTDungeon
                         $enemy->enemy_id      = -1;
 
                         $enemy->setRelation('floor', $floors->get($floorId));
+                        // We don't care for the npc's relationships here - just want to know if the NPC exists or not
                         $enemy->setRelation(
                             'npc',
-                            $this->dungeon->npcs->firstWhere('id', $enemy->npc_id)?->makeHidden([
-                                // We don't care for the relationships here - just want to know if the NPC exists or not
-                                'type',
-                                'class',
-                                'npcbolsteringwhitelists',
-                                'characteristics',
-                                'spells',
-                            ]) ??
+                            $this->dungeon->npcs->firstWhere('id', $enemy->npc_id) ??
                             new Npc([
                                 'name' => 'UNABLE TO FIND NPC!',
                                 'id'   => $npcId,

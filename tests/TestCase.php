@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\Logging\StructuredLogging;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use PHPUnit\Event;
 use Tests\Attributes\Repeat;
@@ -51,6 +52,10 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         $this->testStartTime = microtime(true);
+
+        // StructuredLogging caches config values in statics that survive across tests - a config() change made by a
+        // previous test must not leak into this one
+        StructuredLogging::flushConfigCache();
 
         // Use a hacky global so that we really only execute this once
         global $initialized;

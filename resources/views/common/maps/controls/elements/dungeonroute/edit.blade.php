@@ -5,7 +5,7 @@ use App\Models\DungeonRoute\DungeonRoute;
  * @var DungeonRoute $dungeonroute
  */
 ?>
-<div class="row no-gutters">
+<div class="row g-0">
     <div class="col">
         <a href="{{ route('dungeonroute.edit', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
            class="btn btn-info">

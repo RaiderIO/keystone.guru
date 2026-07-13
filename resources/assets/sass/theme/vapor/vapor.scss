@@ -1,9 +1,22 @@
 // Bootstrap theme (bootstrap should be between these)
 .vapor {
+  // Match darkly's navbar height: Bootstrap 5 defaults navbar padding to (null x, 0.5rem y); set
+  // the 1rem inset via SCSS vars instead of a separate .navbar { padding } CSS override
+  $navbar-padding-x: 1rem;
+  $navbar-padding-y: 1rem;
+
+  // Use bootswatch vapor's native deep-purple body background (#1a0933). Under Bootstrap 4 this
+  // theme rendered with the global $body-bg: #2B3E50 (a navy pollution artifact that leaked into
+  // every theme), which gave slate inputs/modals instead of vapor's intended purple. That global
+  // is gone; falling back to the bootswatch default restores the theme's real palette, from which
+  // Bootstrap 5 also derives --bs-body-bg for cards, modals, dropdowns and list-groups.
+  $body-bg: #1a0933;
+
   @import "~bootswatch/dist/vapor/variables";
   @import "~bootstrap/scss/bootstrap";
+  // Vendored + hand-modified bootswatch: strips vapor's neon glow for the Midnight theme and can
+  // NOT be swapped for the upstream `~bootswatch/dist/vapor/bootswatch`. See that file's header.
   @import "dist/_bootswatch";
-  //@import "~bootswatch/dist/vapor/bootswatch";
 
   body, .btn {
     color: #fff;
@@ -32,10 +45,6 @@
 
   .dropdown-menu {
     background-color: var(--theme-darker);
-  }
-
-  .navbar {
-    padding: 1rem 1rem !important;
   }
 
   .nav-tabs .nav-link.active {

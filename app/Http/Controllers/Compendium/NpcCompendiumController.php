@@ -36,7 +36,7 @@ class NpcCompendiumController extends Controller
             return redirect(route('npc.compendium.show', $npc), 301);
         }
 
-        $npc->load(['classification', 'dungeons.expansion', 'npcSpells']);
+        $npc->load(['classification', 'type', 'dungeons.expansion', 'npcSpells', 'npcHealths', 'characteristics', 'spells']);
 
         $currentGameVersion = GameVersion::getUserOrDefaultGameVersion();
 
@@ -116,6 +116,8 @@ class NpcCompendiumController extends Controller
         $mappingVersion = $request->dungeon()->getCurrentMappingVersion();
 
         $npcs = Npc::query()
+            // The datatable renders the spells column off the serialized spells relation
+            ->with(['spells'])
             ->selectRaw('npcs.*, npc_name_translations.translation as name, GROUP_CONCAT(DISTINCT dungeon_translations.translation SEPARATOR ", ") AS dungeon_names')
             ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
             ->join('mapping_versions', 'enemies.mapping_version_id', '=', 'mapping_versions.id')

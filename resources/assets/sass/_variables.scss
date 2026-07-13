@@ -1,36 +1,20 @@
 // Body
-$body-bg: #2B3E50; // Changed from default of #f5f8fa
-
-// Borders
-$laravel-border-color: darken($body-bg, 10%);
-$list-group-border: $laravel-border-color;
-$navbar-default-border: $laravel-border-color;
-$panel-default-border: $laravel-border-color;
-$panel-inner-border: $laravel-border-color;
-
-// Brands
-$brand-primary: #3097D1;
-$brand-info: #8eb4cb;
-$brand-success: #2ab27b;
-$brand-warning: #cbb956;
-$brand-danger: #bf5329;
+// NOTE: $body-bg must NOT be pre-set globally here. Bootstrap 5 derives --bs-body-bg from it and
+// feeds that variable into cards, modals, dropdowns and list-groups, so a global value would leak
+// the same background into every theme (light themes included) — which is exactly what the old
+// global $body-bg: #2B3E50 navy did under Bootstrap 4. Each theme now owns its background:
+//   - darkly keeps that navy #2B3E50 as a deliberate permanent choice (see darkly.scss);
+//   - vapor sets its native bootswatch purple #1a0933 explicitly (see vapor.scss);
+//   - lux sets nothing here and inherits its bootswatch (light) default.
 
 // Typography
 $font-family-sans-serif: Salesforce Sans, Arial, sans-serif;
-// $font-size-base: 14px; // Fix for bootstrap 4
 $line-height-base: 1.6;
-$text-color: #636b6f;
 
-// Navbar
-$navbar-default-bg: #fff;
-
-// Buttons
-$btn-default-color: $text-color;
-
-// Inputs
-$input-border: lighten($text-color, 40%);
-$input-border-focus: lighten($brand-primary, 25%);
-$input-color-placeholder: lighten($text-color, 30%);
-
-// Panels
-$panel-default-heading-bg: #fff;
+// Links
+// Bootstrap 4 did not underline links (hover only); Bootstrap 5 underlines them by default. Set
+// once here (before the theme imports in app.scss) instead of repeating it in every theme scss.
+// Safe to set globally: no bootswatch theme overrides these vars, and the value is identical across
+// all themes.
+$link-decoration: none;
+$link-hover-decoration: underline;

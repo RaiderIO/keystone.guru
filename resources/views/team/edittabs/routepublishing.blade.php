@@ -11,7 +11,7 @@ use App\Models\Team;
     <h4>
         {{ __('view_team.edittabs.routepublishing.title') }}
     </h4>
-    <div class="form-group">
+    <div class="mb-3">
         {{ __('view_team.edittabs.routepublishing.description') }}
     </div>
     @component('common.general.alert', ['type' => 'info', 'name' => 'team-route-publishing-timezone-warning'])
@@ -19,7 +19,7 @@ use App\Models\Team;
             'link' => sprintf('<a href="%s" target="_blank">%s</a>', route('profile.edit'), __('view_team.edittabs.routepublishing.profile_link'))
         ]) !!}
     @endcomponent
-    <div class="form-group">
+    <div class="mb-3">
         @include('common.dungeonroute.table', [
             'inlineId' => $inlineId,
             'view' => 'team_route_publishing',

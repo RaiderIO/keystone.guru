@@ -286,38 +286,6 @@ return [
             'submit'              => 'Submit',
         ],
     ],
-    'release' => [
-        'edit' => [
-            'title_new'    => 'New release',
-            'header_new'   => 'New release',
-            'title_edit'   => 'Edit release',
-            'header_edit'  => 'Edit release',
-            'version'      => 'Version',
-            'title'        => 'Title',
-            'backup_db'    => 'Backup DB',
-            'silent'       => 'Silent',
-            'spotlight'    => 'Spotlight',
-            'released'     => 'Released',
-            'changelog'    => 'Changelog',
-            'description'  => 'Description',
-            'ticket_nr'    => 'Ticket nr.',
-            'change'       => 'Change',
-            'add_change'   => 'Add change',
-            'edit'         => 'Edit',
-            'submit'       => 'Submit',
-            'release_json' => 'Release json',
-        ],
-        'list' => [
-            'title'                => 'Release listing',
-            'view_releases'        => 'View releases',
-            'create_release'       => 'Create release',
-            'table_header_id'      => 'Id',
-            'table_header_version' => 'Version',
-            'table_header_title'   => 'Title',
-            'table_header_actions' => 'Actions',
-            'edit'                 => 'Edit',
-        ],
-    ],
     'spell' => [
         'edit' => [
             'title_new'         => 'New spell',
@@ -353,11 +321,6 @@ return [
     'tools' => [
         'datadump' => [
             'viewexporteddungeondata' => [
-                'title'   => 'Exported!',
-                'header'  => 'Dumped dungeon data',
-                'content' => 'Exported!',
-            ],
-            'viewexportedrelease' => [
                 'title'   => 'Exported!',
                 'header'  => 'Dumped dungeon data',
                 'content' => 'Exported!',
@@ -617,8 +580,6 @@ return [
             'drop_caches_description'                                 => 'Clear all application caches immediately.',
             'export_dungeon_data'                                     => 'Export dungeon data',
             'export_dungeon_data_description'                         => 'Download a full data dump of all dungeons and their assets.',
-            'export_releases'                                         => 'Export releases',
-            'export_releases_description'                             => 'Download a data dump of all changelog entries.',
             'toggle_readonly_mode'                                    => 'Toggle read-only mode',
             'toggle_readonly_mode_description'                        => 'Put the site into read-only mode, blocking all write operations.',
         ],

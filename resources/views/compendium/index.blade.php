@@ -66,7 +66,7 @@ $howItWorks = [
                         <div class="mb-3">
                             <i class="fas {{ $card['icon'] }} fa-3x"></i>
                         </div>
-                        <h5 class="card-title font-weight-bold">{{ $card['title'] }}</h5>
+                        <h5 class="card-title fw-bold">{{ $card['title'] }}</h5>
                         <div class="text-muted small mb-2">{{ $card['subtitle'] }}</div>
                         <p class="card-text flex-grow-1">{{ $card['text'] }}</p>
                         <a href="{{ $card['route'] }}" class="btn btn-primary mt-2">
@@ -84,7 +84,7 @@ $howItWorks = [
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-12 col-md">
-                            <h5 class="font-weight-bold mb-2">
+                            <h5 class="fw-bold mb-2">
                                 <i class="fas fa-bolt"></i> {{ __('view_compendium.index.data_source.title') }}
                             </h5>
                             <p class="mb-3 mb-md-0">{{ __('view_compendium.index.data_source.description') }}</p>
@@ -103,14 +103,14 @@ $howItWorks = [
 
     <div class="row justify-content-center mt-5">
         <div class="col-12 col-lg-10 text-center">
-            <h4 class="font-weight-bold mb-4">{{ __('view_compendium.index.how_it_works.title') }}</h4>
+            <h4 class="fw-bold mb-4">{{ __('view_compendium.index.how_it_works.title') }}</h4>
             <div class="row">
                 @foreach($howItWorks as $step)
                     <div class="col-12 col-md-4 mb-4 mb-md-0">
                         <div class="mb-2">
                             <i class="fas {{ $step['icon'] }} fa-2x"></i>
                         </div>
-                        <h6 class="font-weight-bold">
+                        <h6 class="fw-bold">
                             {{ __(sprintf('view_compendium.index.how_it_works.%s.title', $step['key'])) }}
                         </h6>
                         <p class="text-muted">

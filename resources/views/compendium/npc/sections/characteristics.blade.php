@@ -13,12 +13,12 @@ use Illuminate\Support\Collection;
 <?php $npcCharacteristicIds = $npc->characteristics->pluck('id')->flip(); ?>
 <div class="row mb-4">
     <div class="col">
-        <div class="row no-gutters">
+        <div class="row g-0">
             <div class="col-auto">
                 <h4>{{ __('view_compendium.npc.sections.characteristics.title') }}</h4>
             </div>
-            <div class="col ml-1">
-                <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top"
+            <div class="col ms-1">
+                <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top"
                    title="{{ __('view_compendium.npc.sections.characteristics.tooltip') }}"></i>
             </div>
         </div>
@@ -26,8 +26,8 @@ use Illuminate\Support\Collection;
             @foreach($allCharacteristics as $characteristic)
                 <?php /** @var Characteristic $characteristic */ ?>
                 <?php $hasCharacteristic = $npcCharacteristicIds->has($characteristic->id); ?>
-                <div class="mr-2 mb-2 text-center" style="width: 48px;"
-                     data-toggle="tooltip" data-placement="top" title="{{ __($characteristic->name) }}">
+                <div class="me-2 mb-2 text-center" style="width: 48px;"
+                     data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __($characteristic->name) }}">
                     <img src="{{ ksgAssetImage(sprintf('spells/%s.jpg', $characteristic->icon_name)) }}"
                          width="36" height="36"
                          loading="lazy"

@@ -54,7 +54,7 @@ $showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $
                        role="tab"
                        aria-controls="season-{{ $nextSeason->id }}-grid-content"
                        aria-selected="{{ $selectedSeasonId === $nextSeason->id ? 'true' : 'false' }}"
-                       data-toggle="tab"
+                       data-bs-toggle="tab"
                        data-season="{{ $nextSeason->id }}"
                     >{{ $showFullExpansionName ? $nextSeason->name_long : $nextSeason->name }}</a>
                 </li>
@@ -67,7 +67,7 @@ $showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $
                        role="tab"
                        aria-controls="season-{{ $currentSeason->id }}-grid-content"
                        aria-selected="{{ $selectedSeasonId === $currentSeason->id ? 'true' : 'false' }}"
-                       data-toggle="tab"
+                       data-bs-toggle="tab"
                        data-season="{{ $currentSeason->id }}"
                     >{{ $currentSeason->name }}</a>
                 </li>
@@ -86,7 +86,7 @@ $showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $
                        role="tab"
                        aria-controls="{{ $expansion->shortname }}-grid-content"
                        aria-selected="{{ $active ? 'true' : 'false' }}"
-                       data-toggle="tab"
+                       data-bs-toggle="tab"
                        data-expansion="{{ $expansion->shortname }}"
                     >{{ __($expansion->name) }}</a>
                 </li>
@@ -101,7 +101,7 @@ $showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $
                        role="tab"
                        aria-controls="{{ $expansion->shortname }}-raid-grid-content"
                        aria-selected="{{ $active ? 'true' : 'false' }}"
-                       data-toggle="tab"
+                       data-bs-toggle="tab"
                        data-expansion="{{ $expansion->shortname }}-raid"
                     >{{ __($expansion->name) }} ({{ __('view_common.dungeon.gridtabs.raid') }}) </a>
                 </li>

@@ -235,7 +235,6 @@ return [
             'api_documentation_internal_team' => 'API documentation (internal team)',
             'keystone_guru'                   => 'Keystone.guru',
             'changelog'                       => 'Changelog',
-            'changelog_new'                   => 'NEW',
             'credits'                         => 'Credits',
             'about'                           => 'About',
             'legacy'                          => 'Legacy',
@@ -251,6 +250,7 @@ return [
             'trademark'                       => 'Trademark',
             'trademark_footer'                => 'World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other countries. This website is not affiliated with Blizzard Entertainment.',
             'social'                          => 'Social',
+            'worktree'                        => '(worktree: :worktree)',
         ],
         'header' => [
             'toggle_navigation_title' => 'Toggle navigation',
@@ -275,7 +275,6 @@ return [
                 'register'                       => 'Register',
                 'telescope'                      => 'Telescope',
                 'tools'                          => 'Tools',
-                'view_releases'                  => 'View releases',
                 'view_expansions'                => 'View expansions',
                 'view_dungeons'                  => 'View dungeons',
                 'view_npcs'                      => 'View NPCs',
@@ -654,11 +653,6 @@ return [
         ],
         'select' => [
             'npc' => 'NPC',
-        ],
-    ],
-    'release' => [
-        'release' => [
-            'new' => 'NEW',
         ],
     ],
     'tag' => [

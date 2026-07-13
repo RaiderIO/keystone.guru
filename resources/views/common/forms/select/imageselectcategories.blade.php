@@ -7,8 +7,8 @@
  * @var boolean|null                                                        $liveSearch
  */
 
-$multiple = $multiple ?? false;
-$liveSearch = $liveSearch ?? false;
+$multiple ??= false;
+$liveSearch ??= false;
 ?>
 <select id="{{ $id }}"
         @isset($name)

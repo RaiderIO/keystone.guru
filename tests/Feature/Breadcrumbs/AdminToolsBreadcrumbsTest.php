@@ -17,7 +17,6 @@ final class AdminToolsBreadcrumbsTest extends TestCase
         return [
             'tools list'                                   => ['admin.tools.list'],
             'datadump view exported dungeondata'           => ['admin.tools.datadump.viewexporteddungeondata'],
-            'datadump view exported release'               => ['admin.tools.datadump.viewexportedrelease'],
             'exception select'                             => ['admin.tools.exception.select'],
             'mdt diff'                                     => ['admin.tools.mdt.diff'],
             'mdt string'                                   => ['admin.tools.mdt.string'],

@@ -6,6 +6,12 @@ return [
         'Admin',
     ],
 
+    // sh/worktree.sh sets COMPOSE_PROJECT_NAME to "ksg-<branch>" for a worktree stack; unset on the
+    // main stack and in production, so this is null there.
+    'worktree' => ($composeProjectName = env('COMPOSE_PROJECT_NAME')) !== null && str_starts_with($composeProjectName, 'ksg-')
+        ? substr($composeProjectName, strlen('ksg-'))
+        : null,
+
     'db_backup_dir'            => env('DB_BACKUP_DIR'),
     'mapping_backup_dir'       => env('MAPPING_BACKUP_DIR'),
     'assets_base_url'          => env('ASSETS_BASE_URL', '/'),
@@ -17,8 +23,6 @@ return [
     'github_username'         => 'Wotuu',
     'github_repository_owner' => 'RaiderIO',
     'github_repository'       => 'Keystone.guru',
-
-    'reddit_subreddit' => 'KeystoneGuru',
 
     'sanitize_text' => [
         'allowed_tags'    => ['a', 'h4', 'h5', 'h6', 'b', 'i', 'br'],
@@ -345,10 +349,6 @@ return [
         'expires_hours' => 1,
     ],
 
-    'releases' => [
-        'spotlight_show_days' => 7,
-    ],
-
     'influxdb' => [
         'default_tags' => [
             'environment' => env('APP_ENV'),
@@ -387,17 +387,6 @@ return [
         'campaign_id' => env('PATREON_CAMPAIGN_ID'),
         // The amount of ad-free giveaways that one may have in total
         'ad_free_giveaways' => 4,
-    ],
-
-    'reddit' => [
-        'oauth' => [
-            'client_id' => env('REDDIT_CLIENT_ID'),
-            'secret'    => env('REDDIT_SECRET_KEY'),
-        ],
-        // Used for creating release posts under the Keystoneguru user
-        'api' => [
-            'refresh_token' => env('REDDIT_REFRESH_TOKEN'),
-        ],
     ],
 
     'nitro_pay' => [

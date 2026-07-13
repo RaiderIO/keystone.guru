@@ -24,10 +24,6 @@ return [
         'popular_routes_by_current_affixes' => 'Popular routes by current affixes',
         'popular_routes_by_next_affixes'    => 'Popular routes by next affixes',
     ],
-    'changelog' => [
-        'title'  => 'Changelog',
-        'header' => 'Changelog',
-    ],
     'credits' => [
         'title'            => 'Credits',
         'header'           => 'Credits',

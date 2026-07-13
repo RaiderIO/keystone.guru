@@ -119,13 +119,14 @@ cmd_create() {
     fi
 
     # 2c. Seed git-ignored build artifacts from the main checkout when missing. vendor/ is required
-    #     to boot artisan; the public/* assets let the browser render (blade mix() needs the
-    #     manifest). Each is an independent copy the worktree can rebuild if its deps/assets change.
+    #     to boot artisan; the public/* assets let the browser render (blades reference compiled
+    #     files by the version in the repo-root `version` file). Each is an independent copy the
+    #     worktree can rebuild if its deps/assets change.
     echo "==> seeding build artifacts from main repo (vendor + compiled assets)"
     [ -f "$REPO_ROOT/vendor/autoload.php" ] || die "main repo has no vendor/ — run composer install there first"
     local rel
     for rel in vendor version \
-        public/mix-manifest.json public/css public/js public/main.js public/resources \
+        public/css public/js public/resources \
         public/vendor public/webfonts public/images \
         public/VERSION public/COMMITHASH public/LASTCOMMITDATETIME; do
         if [ -e "$REPO_ROOT/$rel" ] && [ ! -e "$wt_path/$rel" ]; then
@@ -181,13 +182,11 @@ EOF
 
     # 7. First-boot init inside the worktree app (shared DB is already migrated/seeded — no seed).
     echo "==> initialising worktree app"
+    # The app container runs as the host UID (#3414), so the host-owned checkout is directly
+    # writable by php-fpm/artisan — no chown needed (and none possible: the exec is unprivileged).
     ( cd "$wt_path" && docker compose exec -T app sh -lc '
         mkdir -p storage/app/public/imagecache storage/app/public/expansions storage/debugbar \
                  storage/framework/cache storage/framework/sessions storage/framework/views storage/logs
-        # php-fpm serves as www-data, but storage/ and bootstrap/cache come from the checkout owned by
-        # the host user, so the web process cannot write logs/compiled-views/cache. Make them writable
-        # (mirrors docker_init.sh) — without this, web requests hang while failing to log warnings.
-        chown -R www-data:www-data storage bootstrap/cache
         php artisan storage:link >/dev/null 2>&1 || true
         php artisan config:clear >/dev/null 2>&1 || true
     ' ) || echo "  ! init step reported an issue — check the app container"
@@ -257,9 +256,10 @@ cmd_remove() {
     fi
     cmd_down "$branch"
 
-    # Containers ran as root/www-data and wrote files (storage, bootstrap/cache, .phpunit.cache, ...)
-    # the host user can't delete. Restore host ownership of the whole worktree via a root container
-    # (reusing the always-present keystone.guru image) so git worktree remove can delete it.
+    # Containers now run as the host UID (#3414) so this is normally a no-op, but worktrees started
+    # on an older image may still hold root/www-data-owned files (storage, bootstrap/cache,
+    # .phpunit.cache, ...) the host user can't delete. Restore host ownership via a root container
+    # (`docker run` ignores the compose user: override) so git worktree remove can delete it.
     docker run --rm -v "$WORKTREES_DIR:/wt" keystone.guru \
         chown -R "$(id -u):$(id -g)" "/wt/$branch" >/dev/null 2>&1 || true
 

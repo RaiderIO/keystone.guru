@@ -49,6 +49,9 @@ $showRoutesByAffixes = $gameVersion->has_seasons && $gameVersion->key !== GameVe
         @include('dungeonroute.discover.panel', [
             'gameVersion' => $gameVersion,
             'link' => config('keystoneguru.raider_io.weekly_route.url'),
+            'linkOptions' => [
+                'target' => '_blank',
+            ],
             'title' => __('view_dungeonroute.discover.dungeon.overview.weekly_route'),
             'dungeonroutes' => $dungeonroutes['weekly_route'],
             'showMore' => false,

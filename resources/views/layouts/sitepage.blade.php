@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
  * @var string      $theme
  * @var Model       $menuModelEdit
  * @var string|null $messageBanner
+ * @var string|null $worktree
  */
 
 $user = Auth::user();
@@ -89,14 +90,16 @@ $breadcrumbsParams ??= [];
                 @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams])
 
                 <div class="row">
-                    <div class="col-xl-2 bg-secondary p-3 rounded-left">
+                    <div class="col-xl-2 bg-secondary p-3 rounded-start">
                         <h4>{{ $menuTitle }}</h4>
                         <hr>
                         @isset($menuModels)
                             <select id="selected_model_id" class="form-control selectpicker">
                                 @foreach($menuModels as $menuModel)
                                     @php($hasIcon = isset($menuModel->iconfile))
+                                    {{-- The explicit value matters: options without a value resolve to their (possibly empty) text, and empty-value options are treated as placeholders --}}
                                     <option
+                                        value="{{ $menuModel->getKey() }}"
                                         data-url="{{ route($menuModelsRoute, [$menuModelsRouteParameterName => $menuModel->getRouteKey()]) }}"
                                         @if($hasIcon)
                                             data-content="<img src='{{ $menuModel->iconfile->getURL() }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
@@ -111,7 +114,7 @@ $breadcrumbsParams ??= [];
                             @foreach($menuItems as $index => $menuItem)
                                 <li class="nav-item">
                                     <a class="nav-link {{ $index === 0 ? 'active' : '' }}"
-                                       data-toggle="tab" href="{{ $menuItem['target'] }}" role="tab"
+                                       data-bs-toggle="tab" href="{{ $menuItem['target'] }}" role="tab"
                                        aria-controls="routes" aria-selected="{{ $index === 0 ? 'true' : 'false' }}">
                                         <i class="fas {{ $menuItem['icon'] }}"></i> {{ $menuItem['text'] }}
                                     </a>
@@ -119,7 +122,7 @@ $breadcrumbsParams ??= [];
                             @endforeach
                         </ul>
                     </div>
-                    <div class="col-xl-10 bg-secondary ml-0 mt-xl-0 mt-3 p-3 rounded-right">
+                    <div class="col-xl-10 bg-secondary ms-0 mt-xl-0 mt-3 p-3 rounded-end">
                         @yield('content')
                     </div>
                 </div>
@@ -127,7 +130,7 @@ $breadcrumbsParams ??= [];
 
         @else
             <div
-                class="container-fluid mb-4 {{$rootClass}} {{ $wide ? "flex-fill pl-lg-3 pr-lg-3" : ($disableDefaultRootClasses ? "" :  "col-md-8 offset-md-2") }}">
+                class="container-fluid mb-4 {{$rootClass}} {{ $wide ? "flex-fill ps-lg-3 pe-lg-3" : ($disableDefaultRootClasses ? "" :  "col-md-8 offset-md-2") }}">
 
                 @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams, 'classes' => 'mx-2'])
 
@@ -137,7 +140,7 @@ $breadcrumbsParams ??= [];
                             <div class="col text-center">
                                 <h4>@yield('header-title')</h4>
                             </div>
-                            <div class="ml-auto">
+                            <div class="ms-auto">
                                 @yield('header-addition')
                             </div>
                         @else

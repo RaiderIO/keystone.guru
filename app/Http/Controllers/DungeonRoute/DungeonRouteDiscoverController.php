@@ -434,13 +434,11 @@ class DungeonRouteDiscoverController extends Controller
             'currentAffixGroup' => $currentAffixGroup,
             'nextAffixGroup'    => $nextAffixGroup,
             'dungeonroutes'     => [
-                'weekly_route' => ($weeklyRoutes[$dungeon->key] ?? collect())->map(function (WeeklyRoute $weeklyRoute) {
-                    return $weeklyRoute->dungeonRoute;
-                }),
-                'thisweek' => $currentAffixGroup === null ? collect() : $discoverService->popularByDungeonAndAffixGroup($dungeon, $currentAffixGroup),
-                'nextweek' => $nextAffixGroup === null ? collect() : $discoverService->popularByDungeonAndAffixGroup($dungeon, $nextAffixGroup),
-                'new'      => $discoverService->newByDungeon($dungeon),
-                'popular'  => $discoverService->popularByDungeon($dungeon),
+                'weekly_route' => ($weeklyRoutes[$dungeon->key] ?? collect())->map(fn(WeeklyRoute $weeklyRoute) => $weeklyRoute->dungeonRoute),
+                'thisweek'     => $currentAffixGroup === null ? collect() : $discoverService->popularByDungeonAndAffixGroup($dungeon, $currentAffixGroup),
+                'nextweek'     => $nextAffixGroup === null ? collect() : $discoverService->popularByDungeonAndAffixGroup($dungeon, $nextAffixGroup),
+                'new'          => $discoverService->newByDungeon($dungeon),
+                'popular'      => $discoverService->popularByDungeon($dungeon),
             ],
             'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($gameVersion),
         ]);
