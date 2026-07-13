@@ -193,7 +193,7 @@ jobs:
       # would burn time and the repo's 10GB cache budget for nothing. An empty
       # cache-to input is treated as "not set" by build-push-action.
       - name: Build app base image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: docker-compose/app
           tags: keystone.guru-app
