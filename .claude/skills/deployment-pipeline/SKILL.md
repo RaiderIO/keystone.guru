@@ -69,10 +69,11 @@ There is **no** push-to-branch deploy. Deploys only happen on a tag (and the inf
 
 ## Full happy path
 
-1. Ensure the release-notes changelog is committed on `master` (see `create-release` for authoring
-   it). Feature work is already on `master` — there is no release MR to merge under the trunk model.
-2. `make:githubrelease v<X.Y.Z>` cuts the tag **on master** (the tag runs `release-deploy.yml`
-   *as it exists at the tagged commit*).
+1. Author the release notes and create the draft GitHub Release + release issue (see
+   `create-release`). Release notes live on the GitHub Release, not committed to `master`.
+   Feature work is already on `master` — there is no release MR to merge under the trunk model.
+2. `git tag -a v<X.Y.Z> <sha> && git push origin v<X.Y.Z>` cuts the tag **on master** (the tag
+   runs `release-deploy.yml` *as it exists at the tagged commit*).
 3. Tag push → 3 build jobs in parallel → `deploy-staging` auto → staging ECS rolls (~5-6 min).
 4. Approve the `production` environment gate when staging looks good → production deploys the
    same image + assets.

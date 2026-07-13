@@ -91,15 +91,6 @@ class AdminToolsController extends Controller
         return redirect()->route('admin.tools');
     }
 
-    public function exportreleases(Request $request): View
-    {
-        Artisan::call('release:save');
-
-        Session::flash('status', __('controller.admintools.flash.releases_exported'));
-
-        return view('admin.tools.list');
-    }
-
     public function toggleReadOnlyMode(
         Request                      $request,
         ReadOnlyModeServiceInterface $readOnlyModeService,

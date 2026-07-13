@@ -78,11 +78,7 @@ use App\Repositories\Interfaces\Patreon\PatreonUserLinkRepositoryInterface;
 use App\Repositories\Interfaces\PolylineRepositoryInterface;
 use App\Repositories\Interfaces\PublishedStateRepositoryInterface;
 use App\Repositories\Interfaces\RaidMarkerRepositoryInterface;
-use App\Repositories\Interfaces\ReleaseChangelogCategoryRepositoryInterface;
-use App\Repositories\Interfaces\ReleaseChangelogChangeRepositoryInterface;
-use App\Repositories\Interfaces\ReleaseChangelogRepositoryInterface;
 use App\Repositories\Interfaces\ReleaseReportLogRepositoryInterface;
-use App\Repositories\Interfaces\ReleaseRepositoryInterface;
 use App\Repositories\Interfaces\RouteAttributeRepositoryInterface;
 use App\Repositories\Interfaces\SeasonDungeonRepositoryInterface;
 use App\Repositories\Interfaces\SeasonRepositoryInterface;
@@ -1450,75 +1446,11 @@ class RepositoryFixtures
     /**
      * @param array<int, string> $methodsToMock
      */
-    public static function getReleaseChangelogCategoryRepositoryMock(
-        PublicTestCase $testCase,
-        array          $methodsToMock = [],
-    ): MockObject|ReleaseChangelogCategoryRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilderPublic(ReleaseChangelogCategoryRepositoryInterface::class);
-
-        if (!empty($methodsToMock)) {
-            $mockBuilder->onlyMethods($methodsToMock);
-        }
-
-        return $mockBuilder->getMock();
-    }
-
-    /**
-     * @param array<int, string> $methodsToMock
-     */
-    public static function getReleaseChangelogChangeRepositoryMock(
-        PublicTestCase $testCase,
-        array          $methodsToMock = [],
-    ): MockObject|ReleaseChangelogChangeRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilderPublic(ReleaseChangelogChangeRepositoryInterface::class);
-
-        if (!empty($methodsToMock)) {
-            $mockBuilder->onlyMethods($methodsToMock);
-        }
-
-        return $mockBuilder->getMock();
-    }
-
-    /**
-     * @param array<int, string> $methodsToMock
-     */
-    public static function getReleaseChangelogRepositoryMock(
-        PublicTestCase $testCase,
-        array          $methodsToMock = [],
-    ): MockObject|ReleaseChangelogRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilderPublic(ReleaseChangelogRepositoryInterface::class);
-
-        if (!empty($methodsToMock)) {
-            $mockBuilder->onlyMethods($methodsToMock);
-        }
-
-        return $mockBuilder->getMock();
-    }
-
-    /**
-     * @param array<int, string> $methodsToMock
-     */
     public static function getReleaseReportLogRepositoryMock(
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|ReleaseReportLogRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilderPublic(ReleaseReportLogRepositoryInterface::class);
-
-        if (!empty($methodsToMock)) {
-            $mockBuilder->onlyMethods($methodsToMock);
-        }
-
-        return $mockBuilder->getMock();
-    }
-
-    /**
-     * @param array<int, string> $methodsToMock
-     */
-    public static function getReleaseRepositoryMock(
-        PublicTestCase $testCase,
-        array          $methodsToMock = [],
-    ): MockObject|ReleaseRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilderPublic(ReleaseRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);

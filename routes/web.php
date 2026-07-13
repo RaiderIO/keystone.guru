@@ -89,7 +89,6 @@ use App\Http\Controllers\NpcEnemyForcesController;
 use App\Http\Controllers\NpcHealthController;
 use App\Http\Controllers\PatreonController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ReleaseController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\Speedrun\DungeonSpeedrunRequiredNpcsController;
 use App\Http\Controllers\SpellController;
@@ -136,8 +135,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Route::get('terms', new SiteController()->terms(...))->name('legal.terms');
     Route::get('cookies', new SiteController()->cookies(...))->name('legal.cookies');
     Route::get('/', new SiteController()->index(...))->name('home');
+    // Release notes now live on GitHub Releases; redirect old links there
     Route::get('changelog', new SiteController()->changelog(...))->name('misc.changelog');
-    Route::get('release/{release}', new ReleaseController()->view(...))->name('release.view');
+    Route::get('release/{version}', new SiteController()->release(...))->name('release.view');
     Route::get('health', new SiteController()->health(...))->name('misc.health');
     Route::get('mapping', new SiteController()->mapping(...))->name('misc.mapping');
     Route::get('affixes', new SiteController()->affixes(...))->name('misc.affixes');
@@ -393,14 +393,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::patch('{expansion}', new ExpansionController()->update(...))->name('admin.expansion.update');
             });
             Route::get('expansions', new ExpansionController()->get(...))->name('admin.expansions');
-            // Releases
-            Route::prefix('release')->group(static function () {
-                Route::get('new', new ReleaseController()->create(...))->name('admin.release.new');
-                Route::get('{release}', new ReleaseController()->edit(...))->name('admin.release.edit');
-                Route::post('new', new ReleaseController()->savenew(...))->name('admin.release.savenew');
-                Route::patch('{release}', new ReleaseController()->update(...))->name('admin.release.update');
-                Route::get('/', new ReleaseController()->get(...))->name('admin.releases');
-            });
             // NPCs
             Route::prefix('npc')->group(static function () {
                 Route::get('new', new NpcController()->create(...))->name('admin.npc.new');
@@ -550,7 +542,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('mdt/diff', new AdminToolsMdtController()->mdtdiff(...))->name('admin.tools.mdt.diff');
                 Route::get('cache/drop', new AdminToolsController()->dropcache(...))->name('admin.tools.cache.drop');
                 Route::get('datadump/exportdungeondata', new AdminToolsDataDumpController()->exportdungeondata(...))->name('admin.tools.datadump.exportdungeondata');
-                Route::get('datadump/exportreleases', new AdminToolsController()->exportreleases(...))->name('admin.tools.datadump.exportreleases');
                 Route::get('readonly/toggle', new AdminToolsController()->toggleReadOnlyMode(...))->name('admin.tools.readonly.toggle');
             });
         });

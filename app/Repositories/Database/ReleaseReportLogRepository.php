@@ -11,4 +11,11 @@ class ReleaseReportLogRepository extends DatabaseRepository implements ReleaseRe
     {
         parent::__construct(ReleaseReportLog::class);
     }
+
+    public function hasReportedVersionOnPlatform(string $version, string $platform): bool
+    {
+        return ReleaseReportLog::where('version', $version)
+            ->where('platform', $platform)
+            ->exists();
+    }
 }

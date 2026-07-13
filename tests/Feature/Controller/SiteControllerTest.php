@@ -40,6 +40,34 @@ final class SiteControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function changelog_givenGuest_redirectsToGithubReleases(): void
+    {
+        // Act
+        $response = $this->get(route('misc.changelog'));
+
+        // Assert
+        $response->assertRedirect(sprintf(
+            'https://github.com/%s/%s/releases',
+            config('keystoneguru.github_repository_owner'),
+            config('keystoneguru.github_repository'),
+        ));
+    }
+
+    #[Test]
+    public function release_givenVersion_redirectsToGithubReleaseTag(): void
+    {
+        // Act
+        $response = $this->get(route('release.view', ['version' => 'v15.3.3']));
+
+        // Assert
+        $response->assertRedirect(sprintf(
+            'https://github.com/%s/%s/releases/tag/v15.3.3',
+            config('keystoneguru.github_repository_owner'),
+            config('keystoneguru.github_repository'),
+        ));
+    }
+
+    #[Test]
     public function index_givenWorktreeConfigured_rendersWorktreeNameInFooter(): void
     {
         // Arrange

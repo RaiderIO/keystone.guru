@@ -3,7 +3,6 @@
 use App\Models\Laratrust\Role;
 
 /**
- * @var boolean     $hasNewChangelog
  * @var string|null $worktree
  */
 ?>
@@ -36,11 +35,9 @@ use App\Models\Laratrust\Role;
                     </h5>
                     <ul class="site-footer__list mb-0">
                         <li class="site-footer__item">
-                            <a href="{{ route('misc.changelog') }}">
+                            <a href="{{ sprintf('https://github.com/%s/%s/releases', config('keystoneguru.github_repository_owner'), config('keystoneguru.github_repository')) }}"
+                               target="_blank" rel="noopener noreferrer">
                                 {{ __('view_common.layout.footer.changelog') }}
-                                @if($hasNewChangelog)
-                                    <sup class="text-success">{{ __('view_common.layout.footer.changelog_new') }}</sup>
-                                @endif
                             </a>
                         </li>
                         <li class="site-footer__item">

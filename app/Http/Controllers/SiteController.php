@@ -8,7 +8,6 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
-use App\Models\Release;
 use App\Models\Team;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
@@ -20,7 +19,6 @@ use App\Service\Season\SeasonServiceInterface;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -142,17 +140,28 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Application|Factory|View|RedirectResponse
+     * Release notes moved to GitHub Releases (#3480) - redirect old changelog links there.
      */
-    public function changelog(Request $request)
+    public function changelog(Request $request): RedirectResponse
     {
-        $releases = Release::where('released', 1)
-            ->orderBy('created_at', 'DESC')->paginate(5);
-        if ($releases->isEmpty()) {
-            return redirect()->route('misc.changelog');
-        } else {
-            return view('misc.changelog', ['releases' => $releases]);
-        }
+        return redirect()->away(sprintf(
+            'https://github.com/%s/%s/releases',
+            config('keystoneguru.github_repository_owner'),
+            config('keystoneguru.github_repository'),
+        ));
+    }
+
+    /**
+     * Release notes moved to GitHub Releases (#3480) - redirect old single-release links there.
+     */
+    public function release(Request $request, string $version): RedirectResponse
+    {
+        return redirect()->away(sprintf(
+            'https://github.com/%s/%s/releases/tag/%s',
+            config('keystoneguru.github_repository_owner'),
+            config('keystoneguru.github_repository'),
+            rawurlencode($version),
+        ));
     }
 
     /**
