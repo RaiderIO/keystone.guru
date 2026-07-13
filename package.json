@@ -11,7 +11,7 @@
         "test:watch": "vitest"
     },
     "devDependencies": {
-        "axios": "^1.18.0",
+        "axios": "^1.18.1",
         "chokidar": "^3.5.3",
         "concurrently": "^10.0.3",
         "cross-env": "^7.0.3",
