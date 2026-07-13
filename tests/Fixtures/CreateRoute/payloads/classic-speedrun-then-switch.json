@@ -1,0 +1,28 @@
+{
+    "description": "STALE-DIFFICULTY BUG PIN, see GitHub issue #3535. User first selects a speedrun dungeon (Serpentshrine Cavern-like), which auto-selects 10-man difficulty (value \"1\"); the user then switches the dungeon select to a non-speedrun dungeon. dungeondifficultyselect.js only hides the difficulty container on switch-away, it never clears the select's options/selection, so the hidden <select> still submits the stale dungeon_difficulty=\"1\" from the previously-selected speedrun dungeon. This is current (buggy) behaviour, pinned as-is - not a fix. dungeon_start_map_icon_id is entirely absent - see classic-speedrun-ssc-10man.json for why.",
+    "endpoint": "dungeonroute.savenew",
+    "gameVersion": "classic",
+    "auth": true,
+    "fields": [
+        {"name": "dungeon_id", "value": "{{dungeon_id}}"},
+        {"name": "team_id", "value": "-1"},
+        {"name": "dungeon_difficulty", "value": "1"},
+        {"name": "dungeon_route_title", "value": "My Test Route"},
+        {"name": "faction_id", "value": "1"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"}
+    ]
+}
