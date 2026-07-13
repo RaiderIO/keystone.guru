@@ -7,15 +7,15 @@ use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Support\Collection;
 
 /**
- * @method UserReport             create(array $attributes)
- * @method UserReport|null        find(int $id, array|string $columns = ['*'])
- * @method UserReport             findOrFail(int $id, array|string $columns = ['*'])
- * @method UserReport             findOrNew(int $id, array|string $columns = ['*'])
- * @method bool                   save(UserReport $model)
- * @method bool                   update(UserReport $model, array $attributes = [], array $options = [])
- * @method bool                   delete(UserReport $model)
- * @method Collection<UserReport> all()
- * @method bool                   exists(array $columns)
+ * @method UserReport                  create(array<string, mixed> $attributes)
+ * @method UserReport|null             find(int $id, array<int, string>|string $columns = ['*'])
+ * @method UserReport                  findOrFail(int $id, array<int, string>|string $columns = ['*'])
+ * @method UserReport                  findOrNew(int $id, array<int, string>|string $columns = ['*'])
+ * @method bool                        save(UserReport $model)
+ * @method bool                        update(UserReport $model, array<string, mixed> $attributes = [], array<string, mixed> $options = [])
+ * @method bool                        delete(UserReport $model)
+ * @method Collection<int, UserReport> all()
+ * @method bool                        exists(array<int, string> $columns)
  */
 interface UserReportRepositoryInterface extends BaseRepositoryInterface
 {

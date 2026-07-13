@@ -29,7 +29,7 @@ class AssignMDTIDs extends Command
      */
     public function handle(): int
     {
-        /** @var Collection<MappingVersion> $mappingVersions */
+        /** @var Collection<int, MappingVersion> $mappingVersions */
         $mappingVersions = MappingVersion::with([
             'enemies',
             'dungeon',
@@ -62,7 +62,7 @@ class AssignMDTIDs extends Command
                 }
 
                 foreach ($enemies->groupBy('npc_id') as $npcId => $enemiesByNpcId) {
-                    /** @var Collection<Enemy> $enemiesByNpcId */
+                    /** @var Collection<int, Enemy> $enemiesByNpcId */
                     $enemiesByNpcId = $enemiesByNpcId->sortBy('id');
                     $maxId          = 0;
                     // Determine the max ID first, then assign the max ID to any NPCs that don't have an ID yet

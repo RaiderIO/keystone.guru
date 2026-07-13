@@ -69,7 +69,7 @@ class AdminToolsMdtController extends Controller
     public function mdtviewasdungeonroutesubmit(
         Request                         $request,
         MDTImportStringServiceInterface $mdtImportStringService,
-    ) {
+    ): void {
         try {
             $dungeonRoute = $mdtImportStringService
                 ->setEncodedString($request->get('import_string'))
@@ -114,7 +114,7 @@ class AdminToolsMdtController extends Controller
         Request                         $request,
         MDTImportStringServiceInterface $mdtImportStringService,
         MDTExportStringServiceInterface $mdtExportStringService,
-    ) {
+    ): void {
         $publicKey = $request->get('public_key');
 
         $dungeonRoute = DungeonRoute::when(is_numeric($publicKey), function (Builder $builder) use ($publicKey) {
@@ -167,7 +167,7 @@ class AdminToolsMdtController extends Controller
     ): void {
         $dungeon = Dungeon::findOrFail($request->get('dungeon_id'));
 
-        dd($mdtMappingService->getMDTMappingHash($dungeon->key));
+        dd($mdtMappingService->getMDTMappingHash($dungeon));
     }
 
     public function dungeonmappingversiontomdtmapping(): View
@@ -207,7 +207,7 @@ class AdminToolsMdtController extends Controller
         Request                           $request,
         MDTMappingVersionServiceInterface $mappingVersionService,
     ): View {
-        /** @var Collection<Dungeon> $allDungeons */
+        /** @var Collection<int, Dungeon> $allDungeons */
         $allDungeons = Dungeon::with(['mappingVersions', 'mappingVersions.dungeon'])->get();
 
         $dungeonAccuracyByFloor = collect();
@@ -371,6 +371,9 @@ class AdminToolsMdtController extends Controller
         return view('admin.tools.mdt.diff', ['warnings' => $warnings]);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function applyChange(Request $request): array
     {
         $category  = $request->get('category');

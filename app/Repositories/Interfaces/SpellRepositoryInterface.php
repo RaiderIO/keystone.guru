@@ -7,15 +7,15 @@ use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Support\Collection;
 
 /**
- * @method Spell             create(array $attributes)
- * @method Spell|null        find(int $id, array|string $columns = ['*'])
- * @method Spell             findOrFail(int $id, array|string $columns = ['*'])
- * @method Spell             findOrNew(int $id, array|string $columns = ['*'])
- * @method bool              save(Spell $model)
- * @method bool              update(Spell $model, array $attributes = [], array $options = [])
- * @method bool              delete(Spell $model)
- * @method Collection<Spell> all()
- * @method bool              exists(array $columns)
+ * @method Spell                  create(array<string, mixed> $attributes)
+ * @method Spell|null             find(int $id, array<int, string>|string $columns = ['*'])
+ * @method Spell                  findOrFail(int $id, array<int, string>|string $columns = ['*'])
+ * @method Spell                  findOrNew(int $id, array<int, string>|string $columns = ['*'])
+ * @method bool                   save(Spell $model)
+ * @method bool                   update(Spell $model, array<string, mixed> $attributes = [], array<string, mixed> $options = [])
+ * @method bool                   delete(Spell $model)
+ * @method Collection<int, Spell> all()
+ * @method bool                   exists(array<string, mixed> $columns)
  */
 interface SpellRepositoryInterface extends BaseRepositoryInterface
 {
@@ -25,8 +25,8 @@ interface SpellRepositoryInterface extends BaseRepositoryInterface
     public function getMissingSpellIds(): array;
 
     /**
-     * @param  Collection<int>   $spellIds
-     * @return Collection<Spell>
+     * @param  Collection<int, int>   $spellIds
+     * @return Collection<int, Spell>
      */
     public function findAllById(Collection $spellIds): Collection;
 

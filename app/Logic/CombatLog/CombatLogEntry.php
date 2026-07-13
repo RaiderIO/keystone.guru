@@ -69,7 +69,7 @@ class CombatLogEntry
     }
 
     /**
-     * @param array $eventWhiteList Empty to return all events
+     * @param array<int, string> $eventWhiteList Empty to return all events
      *
      * @throws Exception
      */

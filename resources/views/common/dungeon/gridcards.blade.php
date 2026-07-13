@@ -9,15 +9,15 @@ use App\Models\Season;
 use Illuminate\Support\Collection;
 
 /**
- * @var GameVersion                                                       $gameVersion
- * @var Season|null                                                       $season
- * @var Collection<Dungeon>                                               $dungeons
- * @var AffixGroup|null                                                   $currentAffixGroup
- * @var AffixGroup|null                                                   $nextAffixGroup
- * @var Collection<string, Collection<array{href: string, text: string}>> $links
- * @var boolean                                                           $useAbbreviation
- * @var string|null                                                       $cardBodyClass
- * @var array|null                                                        $imageLinks
+ * @var GameVersion                                                            $gameVersion
+ * @var Season|null                                                            $season
+ * @var Collection<int, Dungeon>                                               $dungeons
+ * @var AffixGroup|null                                                        $currentAffixGroup
+ * @var AffixGroup|null                                                        $nextAffixGroup
+ * @var Collection<string, Collection<int, array{href: string, text: string}>> $links
+ * @var boolean                                                                $useAbbreviation
+ * @var string|null                                                            $cardBodyClass
+ * @var array<string, string>|null                                             $imageLinks
  */
 
 $colCount ??= 4;
@@ -31,17 +31,17 @@ $sideOffset = $colCount === 3 ? 1 : 0;
 
 // @formatter:off
 for ($i = 0; $i < $rowCount; ++$i) { ?>
-<div class="row no-gutters">
+<div class="row g-0">
 <?php
     for ($j = 0; $j < $colCount; ++$j) {
         $index = $i * $colCount + $j;
         if ($dungeons->has($index)){
             /** @var Dungeon $dungeon */
             $dungeon = $dungeons->get($index);
-            /** @var Collection<array{href: string, text: string}> $linksForDungeon */
+            /** @var Collection<int, array{href: string, text: string}> $linksForDungeon */
             $linksForDungeon = $links->get($dungeon->key);
             ?>
-        <div class="p-2 col-xl col-3 {{ $sideOffset && ($j === 0) ? 'ml-lg-auto' : (($j === $colCount - 1) ? 'mr-lg-auto' : '') }}">
+        <div class="p-2 col-xl col-3 {{ $sideOffset && ($j === 0) ? 'ms-lg-auto' : (($j === $colCount - 1) ? 'me-lg-auto' : '') }}">
             <div class="card">
                 <div class="card-img-caption">
                     <a href="{{ $imageLinks[$dungeon->key] ?? $linksForDungeon->first()['href'] }}">

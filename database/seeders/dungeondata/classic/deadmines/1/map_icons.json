@@ -33,7 +33,7 @@
         "map_icon_type_id": 3,
         "lat": -205.5217,
         "lng": 168.1498,
-        "comment": "Heavy Door",
+        "comment": "mapping.map_icons.classic.deadmines.heavy_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 42,
         "lat": -144.0878,
         "lng": 130.5411,
-        "comment": "This patrol spawns after defeating Rhahk'Zor, beware!",
+        "comment": "mapping.map_icons.classic.deadmines.patrol_after_rhahkzor",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 42,
         "lat": -210.9688,
         "lng": 162.9869,
-        "comment": "This patrol spawns after defeating Sneed's Shredder. Beware!",
+        "comment": "mapping.map_icons.classic.deadmines.patrol_after_sneeds_shredder",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

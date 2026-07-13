@@ -7,8 +7,8 @@ use InvalidArgumentException;
 class CombatLogStringParser
 {
     /**
-     * @param  string $line
-     * @return array
+     * @param  string             $line
+     * @return array<int, string>
      */
     public static function parseCombatLogLine(string $line): array
     {
@@ -82,6 +82,9 @@ class CombatLogStringParser
         return $result;
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function parseBracketedString(string $input): array
     {
         // Remove any outer brackets and trim spaces
@@ -105,6 +108,9 @@ class CombatLogStringParser
         return !$hadBrackets && is_array($parsed[0]) ? $parsed[0] : $parsed;
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     private static function parseContent(string $content): array
     {
         $result = [];

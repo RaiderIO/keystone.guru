@@ -13,8 +13,8 @@ $floorCouplings ??= collect();
 $connectedFloorCandidates = $dungeon->floors;
 ?>
 @if($connectedFloorCandidates->isNotEmpty())
-    {{ html()->label(__('view_admin.floor.edit.connected_floors'), 'connectedfloors[]')->class('font-weight-bold') }}
-    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+    {{ html()->label(__('view_admin.floor.edit.connected_floors'), 'connectedfloors[]')->class('fw-bold') }}
+    <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{
                 __('view_admin.floor.edit.connected_floors_title')
                  }}"></i>
 
@@ -30,7 +30,7 @@ $connectedFloorCandidates = $dungeon->floors;
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="mb-3">
             <?php
         foreach ($connectedFloorCandidates as $connectedFloorCandidate){
             /** @var FloorCoupling $floorCoupling */
@@ -42,7 +42,7 @@ $connectedFloorCandidates = $dungeon->floors;
             ?>
         <div class="row mb-3">
             <div class="col-2">
-                {{ html()->checkbox(sprintf('floor_%s_connected', $connectedFloorCandidate->id), isset($floorCoupling) ? 1 : 0, $connectedFloorCandidate->id)->attributes(array_merge(['class' => 'form-control left_checkbox'], $disabled)) }}
+                {{ html()->checkbox(sprintf('floor_%s_connected', $connectedFloorCandidate->id), isset($floorCoupling) ? 1 : 0, $connectedFloorCandidate->id)->attributes(array_merge(['class' => 'form-check-input'], $disabled)) }}
             </div>
             <div class="col-8">
                 <a href="{{ route('admin.floor.edit', ['dungeon' => $dungeon, 'floor' => $connectedFloorCandidate]) }}">{{ __($connectedFloorCandidate->name) }}</a>

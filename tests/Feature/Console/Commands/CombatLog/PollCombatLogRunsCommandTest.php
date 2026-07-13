@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Console\Commands\CombatLog;
 
-use App\Jobs\CombatLog\FetchCombatLogRunFanout;
+use App\Jobs\CombatLog\ProcessCombatLogSegments;
 use App\Models\CharacterClassSpecialization;
 use App\Models\CombatLog\ParsedCombatLog;
 use App\Models\Dungeon;
@@ -85,7 +85,7 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
             $this->artisan('combatlog:pollruns')->assertSuccessful();
 
             // Assert
-            Bus::assertDispatched(FetchCombatLogRunFanout::class);
+            Bus::assertDispatched(ProcessCombatLogSegments::class);
         } finally {
             ParsedCombatLog::query()->where('run_id', $run->id)->delete();
         }
@@ -134,7 +134,7 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
             $this->artisan('combatlog:pollruns')->assertSuccessful();
 
             // Assert
-            Bus::assertNotDispatched(FetchCombatLogRunFanout::class);
+            Bus::assertNotDispatched(ProcessCombatLogSegments::class);
         } finally {
             ParsedCombatLog::query()->where('run_id', $runId)->delete();
         }
@@ -180,7 +180,7 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
             $this->artisan('combatlog:pollruns')->assertSuccessful();
 
             // Assert
-            Bus::assertDispatched(FetchCombatLogRunFanout::class);
+            Bus::assertDispatched(ProcessCombatLogSegments::class);
         } finally {
             ParsedCombatLog::query()->where('run_id', $run->id)->delete();
         }
@@ -210,7 +210,7 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
         $this->artisan('combatlog:pollruns')->assertSuccessful();
 
         // Assert
-        Bus::assertNotDispatched(FetchCombatLogRunFanout::class);
+        Bus::assertNotDispatched(ProcessCombatLogSegments::class);
     }
 
     /**
@@ -255,7 +255,7 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
             $this->artisan('combatlog:pollruns')->assertSuccessful();
 
             // Assert — only run1 dispatched; run2 skipped because criterion reached threshold
-            Bus::assertDispatchedTimes(FetchCombatLogRunFanout::class, 1);
+            Bus::assertDispatchedTimes(ProcessCombatLogSegments::class, 1);
         } finally {
             ParsedCombatLog::query()->whereIn('run_id', [$run1->id, $run2->id])->delete();
         }
@@ -298,9 +298,12 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
         $this->artisan('combatlog:pollruns')->assertSuccessful();
 
         // Assert
-        Bus::assertNotDispatched(FetchCombatLogRunFanout::class);
+        Bus::assertNotDispatched(ProcessCombatLogSegments::class);
     }
 
+    /**
+     * @param array<int, int> $memberSpecIds
+     */
     private function makeRun(int $id, int $challengeModeId, array $memberSpecIds = [66, 70, 105, 250, 269]): SearchAdvancedRun
     {
         return new SearchAdvancedRun(

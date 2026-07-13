@@ -7,13 +7,18 @@ use App\Models\Laratrust\Role;
 use App\Models\User;
 use App\Overrides\CustomRateLimiter;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\LazyLoadingViolationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use Override;
 use SocialiteProviders\Manager\SocialiteWasCalled;
 
@@ -27,8 +32,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Model::automaticallyEagerLoadRelationships();
-        Model::preventLazyLoading(!app()->isProduction());
+        // Lazy loading is never allowed silently: in dev/test a missing eager-load throws so it is caught
+        // immediately, while in production it is logged (and the relation still lazy-loads) so users are
+        // never served an error but we get told exactly which relation to eager-load.
+        Model::preventLazyLoading();
+        Model::handleLazyLoadingViolationUsing(static function (Model $model, string $relation): void {
+            if (!app()->isProduction()) {
+                throw new LazyLoadingViolationException($model, $relation);
+            }
+
+            Log::warning(sprintf('Lazy loading violation: %s lazy-loaded relation [%s]', $model::class, $relation));
+        });
 
         // Force HTTPS in production - these environments are running in AWS which terminates https at the load balancer
         // instead of at nginx, so the site will think it's serving http if it's not forced to https
@@ -38,6 +52,13 @@ class AppServiceProvider extends ServiceProvider
 
         Event::listen(SocialiteWasCalled::class, 'SocialiteProviders\\Battlenet\\BattlenetExtendSocialite@handle');
         Event::listen(SocialiteWasCalled::class, 'SocialiteProviders\\Discord\\DiscordExtendSocialite@handle');
+
+        // Requests get a trace_id from the AddsTraceIdToContext middleware - console commands get theirs here, so
+        // long-running commands (and the jobs they dispatch, Context is dehydrated into the job payload) are
+        // traceable the same way
+        Event::listen(CommandStarting::class, static function (): void {
+            Context::addIf('trace_id', (string)Str::uuid());
+        });
 
         $this->app->bind(ExceptionHandler::class, Handler::class);
 

@@ -135,7 +135,7 @@ class NpcController extends Controller
                 // But we can keep them if the dungeon is now the generic dungeon, then all mapping versions are valid
                 $removedDungeonIds = array_diff($oldDungeonIds, $npc->dungeons->pluck('id')->toArray());
                 if (!empty($removedDungeonIds)) {
-                    /** @var Collection<Dungeon> $removedDungeons */
+                    /** @var Collection<int, Dungeon> $removedDungeons */
                     $removedDungeons = Dungeon::whereIn('id', $removedDungeonIds)->get();
                     // For each removed dungeon, delete the enemy forces for all mapping versions
                     // Any new dungeons assigned will have to have their enemy forces created again
@@ -147,6 +147,18 @@ class NpcController extends Controller
                 }
             }
 
+            // Re-load the relations so we're echoing/broadcasting back a fully updated npc - the front-end
+            // re-assigns enemy npcs from these payloads and reads these relations in the visuals/tooltips
+            $npcRelationsToEcho = [
+                'type',
+                'class',
+                'npcbolsteringwhitelists',
+                'npcHealths',
+                'spells',
+            ];
+            $npc->load($npcRelationsToEcho);
+            $npcBefore->load($npcRelationsToEcho);
+
             /** @var User $user */
             $user = Auth::user();
             foreach ($npc->dungeons as $dungeon) {
@@ -156,12 +168,6 @@ class NpcController extends Controller
             foreach ($npcBefore->dungeons as $dungeon) {
                 broadcast(new NpcChangedEvent($dungeon, $user, $npcBefore));
             }
-
-            // Re-load the relations so we're echoing back a fully updated npc
-            $npc->load([
-                'npcbolsteringwhitelists',
-                'spells',
-            ]);
 
             // Trigger mapping changed event so the mapping gets saved across all environments
             $this->mappingChanged($npcBefore, $npc);

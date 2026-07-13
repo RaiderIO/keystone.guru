@@ -14,9 +14,9 @@ use Override;
  * @OA\Property(property="spells",type="array",items={"$ref":"#/components/schemas/CombatLogRouteSpellCorrection"}, nullable=true)
  * @OA\Property(property="playerDeaths",type="array",items={"$ref":"#/components/schemas/CombatLogRoutePlayerDeathCorrection"}, nullable=true)
  *
- * @property Collection<CombatLogRouteNpcCorrectionRequestModel>         $npcs
- * @property Collection<CombatLogRouteSpellCorrectionRequestModel>       $spells
- * @property Collection<CombatLogRoutePlayerDeathCorrectionRequestModel> $playerDeaths
+ * @property Collection<int, CombatLogRouteNpcCorrectionRequestModel>         $npcs
+ * @property Collection<int, CombatLogRouteSpellCorrectionRequestModel>       $spells
+ * @property Collection<int, CombatLogRoutePlayerDeathCorrectionRequestModel> $playerDeaths
  */
 class CombatLogRouteCorrectionRequestModel extends CombatLogRouteRequestModel
 {

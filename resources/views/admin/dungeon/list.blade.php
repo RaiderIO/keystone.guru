@@ -5,7 +5,7 @@
 @endsection
 {{--Disabled since dungeons should only be created through seeders--}}
 @section('header-addition')
-    <a href="{{ route('admin.dungeon.new') }}" class="btn btn-success text-white float-right" role="button">
+    <a href="{{ route('admin.dungeon.new') }}" class="btn btn-success text-white float-end" role="button">
         <i class="fas fa-plus"></i> {{ __('Create dungeon') }}
     </a>
 @endsection
@@ -17,8 +17,8 @@ use App\Models\Mapping\MappingVersion;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<Dungeon> $models
- * @var Floor               $floor
+ * @var Collection<int, Dungeon> $models
+ * @var Floor                    $floor
  */
 ?>
 
@@ -71,10 +71,10 @@ use Illuminate\Support\Collection;
                     </td>
                 @endif
                 <td data-order="{{ $dungeon->expansion_id }}">
-                    <img src="{{ ksgAssetImage(sprintf('expansions/%s.png', $dungeon->expansion->shortname)) }}"
+                    <img src="{{ $dungeon->expansion->getIconUrl() }}"
                          alt="{{ __($dungeon->expansion->name) }}"
                          title="{{ __($dungeon->expansion->name) }}"
-                         data-toggle="tooltip"
+                         data-bs-toggle="tooltip"
                          style="width: 50px;"/>
                 </td>
                 <td>{{ __($dungeon->name) }}</td>

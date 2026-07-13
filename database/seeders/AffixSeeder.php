@@ -87,7 +87,7 @@ class AffixSeeder extends Seeder implements TableSeederInterface
             $affix->setTable(DatabaseSeeder::getTempTableName(Affix::class))->save();
         }
 
-        /** @var Collection<Expansion> $expansions */
+        /** @var Collection<string, int|string> $expansions */
         $expansions = Expansion::all()->mapWithKeys(function (Expansion $expansion) {
             return [$expansion->shortname => $expansion->id];
         });
@@ -313,6 +313,7 @@ class AffixSeeder extends Seeder implements TableSeederInterface
         $affixGroupAttributes          = [];
         $affixGroupCouplingsAttributes = [];
         $affixGroupId                  = 1;
+        /** @var array{season_id: int, expansion_id: int|string|null, seasonal_index?: int, confirmed?: bool, affixes: array<int, string>, key_levels: array<int, int>} $groupArr */
         foreach ($groups as $groupArr) {
             $keyLevels = $groupArr['key_levels'];
             unset($groupArr['key_levels']);
@@ -352,6 +353,9 @@ class AffixSeeder extends Seeder implements TableSeederInterface
         ];
     }
 
+    /**
+     * @return array<int, string>|null
+     */
     public static function getAffectedEnvironments(): ?array
     {
         // All environments

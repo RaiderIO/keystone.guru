@@ -12,7 +12,8 @@ return [
         'message' => 'Hodor',
     ],
     'json_string_count_rule' => [
-        'message' => 'Hodor',
+        'message_min' => 'Hodor',
+        'message_max' => 'Hodor',
     ],
     'map_icon_type_role_check_rule' => [
         'message' => 'Hodor',

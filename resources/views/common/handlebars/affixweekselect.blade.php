@@ -11,9 +11,9 @@ use Illuminate\Support\Collection;
 /**
  * This is the template for the week selection, featuring the affix of that week, when using it in a dropdown
  *
- * @var SeasonServiceInterface       $seasonService
- * @var DungeonRoute                 $model
- * @var Collection<WeeklyAffixGroup> $seasonWeeklyAffixGroups
+ * @var SeasonServiceInterface            $seasonService
+ * @var DungeonRoute                      $model
+ * @var Collection<int, WeeklyAffixGroup> $seasonWeeklyAffixGroups
  */
 
 $id ??= 'affixes';
@@ -71,23 +71,11 @@ $id ??= 'affixes';
             }
         }
 
-        refreshSelectPickers();
-
         let $affixSelect = $(affixWeekSelectSelector);
-        $affixSelect.on('shown.bs.select', function () {
-            // Fix the select, it wraps the entire thing in a SPAN which completely destroys ability to do any form of layout on it
-            // So remove the span
-            $('.affixselect.bootstrap-select .text').each(function (index, el) {
-                let $el = $(el);
-                let $ours = $el.children();
-                $el.parent().append($ours);
-                $el.remove();
-            });
+        if (typeof $affixSelect.attr('readonly') !== 'undefined') {
+            $affixSelect.find('option').attr('disabled', true);
+        }
 
-            if (typeof $affixSelect.attr('readonly') !== 'undefined') {
-                $affixSelect.find('option').attr('disabled', true);
-            }
-        });
-
+        refreshSelectPickers();
     }
 </script>

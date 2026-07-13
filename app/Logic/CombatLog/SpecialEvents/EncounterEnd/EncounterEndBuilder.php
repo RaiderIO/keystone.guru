@@ -12,6 +12,7 @@ use Illuminate\Support\Carbon;
 class EncounterEndBuilder implements SpecialEventBuilderInterface
 {
     /**
+     * @param  array<int, mixed>                  $parameters
      * @return SpecialEvent&EncounterEndInterface
      */
     public static function create(
@@ -23,7 +24,7 @@ class EncounterEndBuilder implements SpecialEventBuilderInterface
     ): SpecialEvent {
         return match ($combatLogVersion) {
             CombatLogVersion::CLASSIC, CombatLogVersion::CLASSIC_SOD_1_15_5, CombatLogVersion::CLASSIC_SOD_1_15_6, CombatLogVersion::CLASSIC_SOD_1_15_7, CombatLogVersion::CLASSIC_TBC_2_5_5 => new EncounterEndV9($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
-            default => new EncounterEndV20($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
+            default                                                                                                                                                                          => new EncounterEndV20($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
         };
     }
 }

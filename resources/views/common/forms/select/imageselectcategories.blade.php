@@ -1,14 +1,14 @@
 <?php
 /**
- * @var string       $id
- * @var string|null  $name
- * @var array        $valuesByCategory
- * @var boolean|null $multiple
- * @var boolean|null $liveSearch
+ * @var string                                                              $id
+ * @var string|null                                                         $name
+ * @var array<string, array<string, array{icon_url: string, name: string}>> $valuesByCategory
+ * @var boolean|null                                                        $multiple
+ * @var boolean|null                                                        $liveSearch
  */
 
-$multiple = $multiple ?? false;
-$liveSearch = $liveSearch ?? false;
+$multiple ??= false;
+$liveSearch ??= false;
 ?>
 <select id="{{ $id }}"
         @isset($name)

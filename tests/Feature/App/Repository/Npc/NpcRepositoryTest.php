@@ -78,8 +78,8 @@ final class NpcRepositoryTest extends PublicTestCase
         // Assert
         $this->assertInstanceOf(Collection::class, $result);
         $this->assertNotEmpty($result);
-        $result->each(function ($id) {
-            $this->assertIsInt($id);
+        $result->each(function (int $id): void {
+            $this->assertGreaterThan(0, $id);
         });
     }
 

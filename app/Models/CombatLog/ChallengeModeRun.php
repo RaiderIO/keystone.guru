@@ -7,9 +7,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use Carbon\CarbonInterval;
 use Eloquent;
 use Exception;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use Override;
@@ -25,10 +23,9 @@ use Override;
  *
  * @property Carbon $created_at
  *
- * @property Dungeon                                $dungeon
- * @property DungeonRoute                           $dungeonRoute
- * @property ChallengeModeRunData                   $challengeModeRunData
- * @property EloquentCollection<int, EnemyPosition> $enemyPositions
+ * @property Dungeon              $dungeon
+ * @property DungeonRoute         $dungeonRoute
+ * @property ChallengeModeRunData $challengeModeRunData
  *
  * @author Wouter
  *
@@ -56,21 +53,19 @@ class ChallengeModeRun extends Model
         'challengeModeRunData',
     ];
 
+    /** @return HasOne<Dungeon, $this> */
     public function dungeon(): HasOne
     {
         return $this->hasOne(Dungeon::class);
     }
 
+    /** @return HasOne<DungeonRoute, $this> */
     public function dungeonRoute(): HasOne
     {
         return $this->hasOne(DungeonRoute::class);
     }
 
-    public function enemyPositions(): HasMany
-    {
-        return $this->hasMany(EnemyPosition::class);
-    }
-
+    /** @return HasOne<ChallengeModeRunData, $this> */
     public function challengeModeRunData(): HasOne
     {
         return $this->hasOne(ChallengeModeRunData::class);
@@ -96,10 +91,10 @@ class ChallengeModeRun extends Model
             0,
             0,
             0,
-            $hours,
-            $minutes,
-            $seconds,
-            $milliseconds,
+            (int)$hours,
+            (int)$minutes,
+            (int)$seconds,
+            (int)$milliseconds,
         );
 
         if ($hours > 0) {
@@ -115,7 +110,6 @@ class ChallengeModeRun extends Model
         parent::boot();
 
         static::deleting(function (ChallengeModeRun $challengeModeRun) {
-            $challengeModeRun->enemyPositions()->delete();
             $challengeModeRun->challengeModeRunData()->delete();
         });
     }

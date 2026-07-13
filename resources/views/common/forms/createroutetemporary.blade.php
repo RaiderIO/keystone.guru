@@ -32,17 +32,17 @@ $dungeonSelectId = 'dungeon_id_select_temporary';
     @endif
 
     @if($currentUserGameVersion->has_seasons)
-        <div class="form-group">
+        <div class="mb-3">
             <label for="dungeon_route_level">
                 {{ __('view_common.forms.createroutetemporary.key_levels') }}
-                <i class="fas fa-info-circle" data-toggle="tooltip"
+                <i class="fas fa-info-circle" data-bs-toggle="tooltip"
                    title="{{ __('view_common.forms.createroutetemporary.key_levels_title') }}"></i>
             </label>
             {{ html()->text('dungeon_route_level', sprintf('%d;%d', $routeKeyLevelFrom, $routeKeyLevelTo))->id('temporary_dungeon_route_level')->class('form-control')->style('display: none;') }}
         </div>
     @endif
 
-    <div class="form-group">
+    <div class="mb-3">
         <div class="text-info">
             @guest
                 <i class="fas fa-info-circle"></i> {{ sprintf(
@@ -66,8 +66,13 @@ $dungeonSelectId = 'dungeon_id_select_temporary';
         'dungeonSelectId' => $dungeonSelectId
     ])
 
+    @include('common.dungeonroute.create.dungeonstartselect', [
+        'id' => 'dungeon_start_map_icon_id_temporary',
+        'dungeonSelectId' => $dungeonSelectId
+    ])
+
     <div class="col-lg-12">
-        <div class="form-group">
+        <div class="mb-3">
             {{ html()->input('submit')->value(__('view_common.forms.createroutetemporary.create_route'))->class('btn btn-info col-md-auto') }}
         </div>
     </div>

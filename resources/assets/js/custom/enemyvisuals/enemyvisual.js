@@ -231,7 +231,8 @@ class EnemyVisual extends Signalable {
             !(this.enemy instanceof AdminEnemy)) {
 
             if (this._circleMenu === null) {
-                this._initCircleMenu();
+                // #1431 Assigning raid markers is disabled atm
+                // this._initCircleMenu();
             }
         }
     }

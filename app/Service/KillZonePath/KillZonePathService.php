@@ -7,8 +7,6 @@ use App\Logic\Structs\PathEdge;
 use App\Logic\Structs\PathNode;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\MapIcon;
-use App\Models\MapIconType;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\PathFinding\PathFindingServiceInterface;
 use Illuminate\Support\Collection;
@@ -79,7 +77,7 @@ class KillZonePathService implements KillZonePathServiceInterface
     {
         $dungeonRoute->loadMissing(['dungeon', 'mappingVersion']);
 
-        /** @var Collection<DungeonFloorSwitchMarker> $allMarkers */
+        /** @var Collection<int, DungeonFloorSwitchMarker> $allMarkers */
         $allMarkers = DungeonFloorSwitchMarker::where('mapping_version_id', $dungeonRoute->mapping_version_id)
             ->with('floor')
             ->get();
@@ -89,10 +87,7 @@ class KillZonePathService implements KillZonePathServiceInterface
             ->orderBy('index')
             ->get();
 
-        $dungeonStart = MapIcon::where('mapping_version_id', $dungeonRoute->mapping_version_id)
-            ->where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START])
-            ->with('floor')
-            ->first();
+        $dungeonStart = $dungeonRoute->getDungeonStartMapIcon();
 
         /** @var array<string, PathNode> $nodes */
         $nodes = [];

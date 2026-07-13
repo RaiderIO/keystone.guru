@@ -24,6 +24,9 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
         // on facade floor-switch markers when calculateForRoute is called.
         $this->dungeonRoute->delete();
         $this->dungeonRoute = $this->createNonFacadeDungeonRouteWithEnemies();
+        // MySQL can recycle IDs after a restart, leaving orphaned kill_zones rows from a previous
+        // test run attached to this newly created route ID. Delete them to start from a clean state.
+        $this->dungeonRoute->killZones()->delete();
     }
 
     #[Test]

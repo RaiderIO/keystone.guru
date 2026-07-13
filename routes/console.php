@@ -32,16 +32,8 @@ $commands[] = Schedule::command('dungeonroute:deleteexpired')->hourly();
 $commands[] = Schedule::command('dungeonroute:publishscheduled')->everyFiveMinutes();
 $commands[] = Schedule::command('dungeonroute:touch', ['teamId' => config('keystoneguru.raider_io.team_id')])->weeklyOn(3, '0');
 
-if (in_array($appType, [
-    'mapping',
-    'local',
-])) {
-    $commands[] = Schedule::command('mapping:sync')->everyFiveMinutes();
-
-    // Ensure display IDs are set
-    $commands[] = Schedule::command('wowhead:refreshdisplayids')->hourly();
-} else {
-    // If thumbnails are needed locally, move this command
+// If thumbnails are needed locally, move this command
+if (!app()->environment('local')) {
     $commands[] = Schedule::command('dungeonroute:refreshoutdatedthumbnails')->everyFifteenMinutes();
 }
 
@@ -58,6 +50,8 @@ if ($appType === 'production') {
 
 // https://laravel.com/docs/8.x/telescope#data-pruning
 $commands[] = Schedule::command('telescope:prune --hours=48')->daily();
+
+$commands[] = Schedule::command('page-views:prune')->daily();
 
 // Refresh any membership status - if they're unsubbed, revoke their access. If they're subbed, add access
 $commands[] = Schedule::command('patreon:refreshmembers')->hourly();
@@ -79,7 +73,12 @@ $commands[] = Schedule::command('metric:savepending')->everyMinute();
 // Cleanup the generated custom thumbnails
 $commands[] = Schedule::command('thumbnail:deleteexpiredjobs')->everyFifteenMinutes();
 
+// PID 1's stdout is used to ensure that the output is always logged, even when running in a Docker
+// container. When the scheduler runs as a non-root user (local dev cron runs it as ksg, #3414) it
+// cannot open /proc/1/fd/1 (owned by root), so fall back to the process's own stdout — the local
+// cron.d entry already appends that to /var/log/cron.log, which PID 1 tails to Docker's stdout.
+$schedulerOutputPath = is_writable('/proc/1/fd/1') ? '/proc/1/fd/1' : '/dev/stdout';
+
 foreach ($commands as $command) {
-    // php://stdout is used to ensure that the output is always logged, even when running in a Docker container
-    $command->appendOutputTo('/proc/1/fd/1');
+    $command->appendOutputTo($schedulerOutputPath);
 }

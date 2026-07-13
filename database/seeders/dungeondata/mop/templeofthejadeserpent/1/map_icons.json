@@ -46,7 +46,7 @@
         "map_icon_type_id": 6,
         "lat": -122.2646,
         "lng": 144.6642,
-        "comment": "Unlocks after killing Lui Flameheart",
+        "comment": "mapping.map_icons.mop.temple_of_the_jade_serpent.unlocks_after_lui_flameheart",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 6,
         "lat": -122.2646,
         "lng": 144.6642,
-        "comment": "Unlocks after killing Lui Flameheart",
+        "comment": "mapping.map_icons.mop.temple_of_the_jade_serpent.unlocks_after_lui_flameheart",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 6,
         "lat": -122.2646,
         "lng": 144.6642,
-        "comment": "Unlocks after killing Lui Flameheart",
+        "comment": "mapping.map_icons.mop.temple_of_the_jade_serpent.unlocks_after_lui_flameheart",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

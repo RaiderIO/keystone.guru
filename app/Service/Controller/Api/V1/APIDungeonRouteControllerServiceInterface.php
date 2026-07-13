@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 interface APIDungeonRouteControllerServiceInterface
 {
     /**
-     * @return Collection<DungeonRouteThumbnailJob>
+     * @return Collection<int, DungeonRouteThumbnailJob>
      */
     public function createThumbnails(
         DungeonRoute $dungeonRoute,
@@ -17,7 +17,7 @@ interface APIDungeonRouteControllerServiceInterface
         ?int         $viewportHeight = null,
         ?int         $imageWidth = null,
         ?int         $imageHeight = null,
-        ?int         $zoomLevel = null,
+        ?float       $zoomLevel = null,
         ?int         $quality = null,
     ): Collection;
 }

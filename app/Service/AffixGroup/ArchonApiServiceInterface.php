@@ -8,6 +8,7 @@ interface ArchonApiServiceInterface
 {
     /**
      * @throws InvalidResponseException
+     * @return array<string, mixed>
      */
     public function getDungeonEaseTierListOverall(): array;
 }

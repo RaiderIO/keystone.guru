@@ -7,13 +7,14 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Season;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Collection;
 
 class DevDiscoverService extends BaseDiscoverService
 {
     /**
      * Gets a builder that provides a template for popular routes.
+     *
+     * @return Builder<DungeonRoute>
      */
     private function popularBuilder(): Builder
     {
@@ -23,22 +24,14 @@ class DevDiscoverService extends BaseDiscoverService
             ->when($this->closure !== null, $this->closure)
             ->select('dungeon_routes.*')
             ->with([
-                'author',
+                // The route cards render the author's avatar - User no longer eager loads iconfile globally
+                'author.iconfile',
                 'affixes',
                 'ratings',
                 'mappingVersion',
                 'thumbnails',
-                'dungeon' => fn(BelongsTo $query) => $query->without(['gameVersion']),
-                'season'  => fn(BelongsTo $query) => $query->without([
-                    'affixGroups',
-                    'dungeons',
-                ]),
-            ])
-            ->without([
-                'faction',
-                'specializations',
-                'classes',
-                'races',
+                'dungeon',
+                'season.expansion',
             ])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
@@ -56,6 +49,8 @@ class DevDiscoverService extends BaseDiscoverService
 
     /**
      * Gets a builder that provides a template for popular routes.
+     *
+     * @return Builder<DungeonRoute>
      */
     private function newBuilder(): Builder
     {
@@ -65,22 +60,14 @@ class DevDiscoverService extends BaseDiscoverService
             ->when($this->closure !== null, $this->closure)
             ->select('dungeon_routes.*')
             ->with([
-                'author',
+                // The route cards render the author's avatar - User no longer eager loads iconfile globally
+                'author.iconfile',
                 'affixes',
                 'ratings',
                 'mappingVersion',
                 'thumbnails',
-                'dungeon' => fn(BelongsTo $query) => $query->without(['gameVersion']),
-                'season'  => fn(BelongsTo $query) => $query->without([
-                    'affixGroups',
-                    'dungeons',
-                ]),
-            ])
-            ->without([
-                'faction',
-                'specializations',
-                'classes',
-                'races',
+                'dungeon',
+                'season.expansion',
             ])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
@@ -131,9 +118,11 @@ class DevDiscoverService extends BaseDiscoverService
 
     /**
      * {@inheritDoc}
+     * @return Collection<string, mixed>
      */
     public function popularGroupedByDungeonByAffixGroup(AffixGroupBase $affixGroup): Collection
     {
+        /** @var Collection<string, mixed> */
         return $this->popularBuilder()->get();
     }
 

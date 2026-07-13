@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Expansion;
-use App\Models\File;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 
@@ -98,18 +97,6 @@ class ExpansionsSeeder extends Seeder implements TableSeederInterface
         foreach ($expansions as $name => $expansion) {
             /** @var Expansion $expansion */
             $expansion->name = $name;
-            // Temp file
-            $expansion->icon_file_id = -1;
-            $expansion->setTable(DatabaseSeeder::getTempTableName(Expansion::class))->save();
-
-            $icon              = new File();
-            $icon->model_id    = $expansion->id;
-            $icon->model_class = get_class($expansion);
-            $icon->disk        = 'public';
-            $icon->path        = sprintf('images/expansions/%s.png', $expansion->shortname);
-            $icon->save();
-
-            $expansion->icon_file_id = $icon->id;
             $expansion->setTable(DatabaseSeeder::getTempTableName(Expansion::class))->save();
         }
     }
@@ -119,6 +106,9 @@ class ExpansionsSeeder extends Seeder implements TableSeederInterface
         return [Expansion::class];
     }
 
+    /**
+     * @return array<int, string>|null
+     */
     public static function getAffectedEnvironments(): ?array
     {
         // All environments

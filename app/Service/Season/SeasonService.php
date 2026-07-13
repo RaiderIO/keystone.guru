@@ -23,7 +23,9 @@ class SeasonService implements SeasonServiceInterface
 {
     use UserCurrentTime;
 
-    /** @var Collection<Season> */
+    /**
+     * @var Collection<int, Season>
+     */
     private Collection $seasonCache;
 
     private ?Season $firstSeasonCache = null;
@@ -37,7 +39,7 @@ class SeasonService implements SeasonServiceInterface
     }
 
     /**
-     * @return Collection<Season>
+     * @return Collection<int, Season>
      */
     public function getSeasons(?Expansion $expansion = null, ?GameServerRegion $region = null): Collection
     {
@@ -45,15 +47,17 @@ class SeasonService implements SeasonServiceInterface
             $region ?? GameServerRegion::getUserOrDefaultRegion(),
         );
 
-        if ($this->seasonCache->empty()) { // @phpstan-ignore if.alwaysTrue
-            $this->seasonCache = Season::selectRaw('seasons.*')
-                ->leftJoin('timewalking_events', 'timewalking_events.expansion_id', 'seasons.expansion_id')
-                ->whereNull('timewalking_events.id')
-                ->orderBy('seasons.start')
-                ->get();
-        }
+        return $this->getAllSeasons()->where('expansion_id', $expansion->id);
+    }
 
-        return $this->seasonCache->where('expansion_id', $expansion->id);
+    /**
+     * @return Collection<int, Season>
+     */
+    public function getAllSeasons(): Collection
+    {
+        $this->ensureSeasonCacheLoaded();
+
+        return $this->seasonCache;
     }
 
     public function getFirstSeason(): Season
@@ -81,6 +85,30 @@ class SeasonService implements SeasonServiceInterface
         }
 
         return null;
+    }
+
+    /**
+     * Find the season active at a given date across all expansions, skipping seasons with no affix groups defined.
+     * Unlike getSeasonAt(), this is not scoped to a single expansion and filters out placeholder seasons that have
+     * not yet had their affix groups assigned, so an upcoming season never blanks the rotation display.
+     */
+    public function findSeasonWithAffixGroupsAt(Carbon $date, GameServerRegion $region): ?Season
+    {
+        $result = null;
+
+        foreach ($this->getAllSeasons() as $season) {
+            if ($season->start($region)->gt($date)) {
+                break;
+            }
+
+            if ($season->affix_group_count <= 0 || $season->affixGroups->isEmpty()) {
+                continue;
+            }
+
+            $result = $season;
+        }
+
+        return $result;
     }
 
     /**
@@ -146,6 +174,22 @@ class SeasonService implements SeasonServiceInterface
         return $this->seasonRepository->getUpcomingSeasonForDungeon($dungeon);
     }
 
+    public function getCurrentSeasonForDungeon(Dungeon $dungeon): ?Season
+    {
+        if (!$dungeon->hasMappingVersionWithSeasons()) {
+            return null;
+        }
+
+        $currentSeason = $this->getCurrentSeason();
+        if ($currentSeason === null) {
+            return null;
+        }
+
+        return $currentSeason->dungeons()->where('dungeons.id', $dungeon->id)->exists()
+            ? $currentSeason
+            : null;
+    }
+
     public function getSeasonFromShortString(?string $season): ?Season
     {
         if ($season === null) {
@@ -168,5 +212,17 @@ class SeasonService implements SeasonServiceInterface
         }
 
         return $result;
+    }
+
+    private function ensureSeasonCacheLoaded(): void
+    {
+        if ($this->seasonCache->empty()) { // @phpstan-ignore if.alwaysTrue
+            $this->seasonCache = Season::selectRaw('seasons.*')
+                ->with(['expansion', 'expansion.timewalkingEvent', 'affixGroups'])
+                ->leftJoin('timewalking_events', 'timewalking_events.expansion_id', 'seasons.expansion_id')
+                ->whereNull('timewalking_events.id')
+                ->orderBy('seasons.start')
+                ->get();
+        }
     }
 }

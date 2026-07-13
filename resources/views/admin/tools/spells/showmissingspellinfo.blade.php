@@ -7,7 +7,7 @@ use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<Spell> $spells
+ * @var Collection<int, Spell> $spells
  */
 ?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.tools.spells.showmissingspellinfo.title')])
@@ -36,7 +36,7 @@ use Illuminate\Support\Collection;
         </a>
     </div>
 
-    <div class="form-group">
+    <div class="mb-3">
         <table id="spells_table" class="tablesorter default_table table-striped">
             <thead>
             <tr>

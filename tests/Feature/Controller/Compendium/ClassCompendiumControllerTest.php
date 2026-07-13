@@ -21,6 +21,7 @@ use Tests\TestCases\PublicTestCase;
 #[Group('Compendium')]
 final class ClassCompendiumControllerTest extends PublicTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -111,8 +112,9 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_MAGE)->firstOrFail();
 
         // Find a dungeon whose current mapping version has enemies for the Retail game version
-        $dungeon        = DungeonFixtures::getDungeonWithCurrentMappingVersionWithEnemies();
-        $mappingVersion = $dungeon->getCurrentMappingVersionForGameVersion(GameVersion::getDefaultGameVersion());
+        $defaultGameVersion = GameVersion::getDefaultGameVersion();
+        $dungeon            = DungeonFixtures::getDungeonWithCurrentMappingVersionWithEnemies($defaultGameVersion->id);
+        $mappingVersion     = $dungeon->getCurrentMappingVersionForGameVersion($defaultGameVersion);
         $this->assertNotNull($mappingVersion);
 
         $spell = Spell::where('category', sprintf('spellcategory.%s', $characterClass->key))

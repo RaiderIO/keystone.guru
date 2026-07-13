@@ -24,7 +24,5 @@ $header = sprintf(__('view_profile.view.header'), $user->name);
 @endsection
 
 @section('content')
-    @include('common.general.messages')
-
     @include('common.dungeonroute.table', ['view' => 'userprofile'])
 @endsection

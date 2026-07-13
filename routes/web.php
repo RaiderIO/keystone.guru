@@ -12,8 +12,12 @@
 */
 
 use App\Features\NpcCompendium;
+use App\Http\Controllers\Admin\AdminDungeonRouteController;
+use App\Http\Controllers\AdminTools\AdminToolsArtisanCommandsController;
 use App\Http\Controllers\AdminTools\AdminToolsCombatLogController;
 use App\Http\Controllers\AdminTools\AdminToolsCombatLogCriteriaController;
+use App\Http\Controllers\AdminTools\AdminToolsCombatLogParseFailureController;
+use App\Http\Controllers\AdminTools\AdminToolsCombatLogRunDataController;
 use App\Http\Controllers\AdminTools\AdminToolsDataDumpController;
 use App\Http\Controllers\AdminTools\AdminToolsDungeonRouteController;
 use App\Http\Controllers\AdminTools\AdminToolsEnemyForcesController;
@@ -26,6 +30,8 @@ use App\Http\Controllers\AdminTools\AdminToolsSpellsController;
 use App\Http\Controllers\AdminTools\AdminToolsThumbnailsController;
 use App\Http\Controllers\AdminTools\AdminToolsWagoGgController;
 use App\Http\Controllers\AdminToolsController;
+use App\Http\Controllers\Ajax\AjaxAdminCombatLogRouteController;
+use App\Http\Controllers\Ajax\AjaxArrowController;
 use App\Http\Controllers\Ajax\AjaxBrushlineController;
 use App\Http\Controllers\Ajax\AjaxDungeonFloorSwitchMarkerController;
 use App\Http\Controllers\Ajax\AjaxDungeonRouteController;
@@ -59,6 +65,7 @@ use App\Http\Controllers\Auth\BattleNetLoginController;
 use App\Http\Controllers\Auth\DiscordLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\Compendium\ClassCompendiumController;
+use App\Http\Controllers\Compendium\CompendiumController;
 use App\Http\Controllers\Compendium\NpcCompendiumController;
 use App\Http\Controllers\Compendium\SpellCompendiumController;
 use App\Http\Controllers\Dungeon\DungeonController;
@@ -82,7 +89,6 @@ use App\Http\Controllers\NpcEnemyForcesController;
 use App\Http\Controllers\NpcHealthController;
 use App\Http\Controllers\PatreonController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ReleaseController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\Speedrun\DungeonSpeedrunRequiredNpcsController;
 use App\Http\Controllers\SpellController;
@@ -92,6 +98,10 @@ use App\Http\Controllers\UserReportController;
 use App\Http\Controllers\Webhook\GithubWebhookController;
 use App\Http\Controllers\Webhook\WowheadWebhookController;
 use App\Http\Middleware\WowheadCors;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Route as RoutingRoute;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 // Webhooks
 Route::prefix('webhook')->group(static function () {
@@ -125,8 +135,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Route::get('terms', new SiteController()->terms(...))->name('legal.terms');
     Route::get('cookies', new SiteController()->cookies(...))->name('legal.cookies');
     Route::get('/', new SiteController()->index(...))->name('home');
+    // Release notes now live on GitHub Releases; redirect old links there
     Route::get('changelog', new SiteController()->changelog(...))->name('misc.changelog');
-    Route::get('release/{release}', new ReleaseController()->view(...))->name('release.view');
+    Route::get('release/{version}', new SiteController()->release(...))->name('release.view');
     Route::get('health', new SiteController()->health(...))->name('misc.health');
     Route::get('mapping', new SiteController()->mapping(...))->name('misc.mapping');
     Route::get('affixes', new SiteController()->affixes(...))->name('misc.affixes');
@@ -152,7 +163,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     });
 
     Route::get('patreon-link', new PatreonController()->link(...))->name('patreon.link');
-    Route::get('patreon-oauth', new PatreonController()->oauth_redirect(...))->name('patreon.oauth.redirect');
+    Route::get('patreon-oauth', new PatreonController()->oauthRedirect(...))->name('patreon.oauth.redirect');
     Route::get('dungeonroutes', new SiteController()->dungeonroutes(...));
     Route::middleware('throttle:search-dungeonroute')->group(static function () {
         Route::get('search', new DungeonRouteDiscoverController()->search(...))->name('dungeonroutes.search');
@@ -161,6 +172,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     // Compendium
     Route::middleware(sprintf('feature_active:%s', NpcCompendium::class))
         ->prefix('compendium')->group(static function () {
+            Route::get('/', new CompendiumController()->index(...))->name('compendium.index');
             Route::prefix('npc')->group(static function () {
                 Route::get('/', new NpcCompendiumController()->index(...))->name('npc.compendium.index');
                 Route::get('/{npc}', new NpcCompendiumController()->show(...))->name('npc.compendium.show');
@@ -353,7 +365,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 // Mapping versions
                 Route::prefix('{dungeon}/mappingversion')->group(static function () {
                     Route::get('new', new MappingVersionController()->saveNew(...))->name('admin.mappingversion.new');
-                    Route::get('{mappingVersion}/delete', new MappingVersionController()->delete(...))->name('admin.mappingversion.delete');
+                    Route::delete('{mappingVersion}/delete', new MappingVersionController()->delete(...))->name('admin.mappingversion.delete');
                 });
                 // Floors
                 Route::prefix('{dungeon}/floor')->group(static function () {
@@ -367,7 +379,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                         Route::prefix('speedrunrequirednpcs')->group(static function () {
                             Route::get('{difficulty}/new', new DungeonSpeedrunRequiredNpcsController()->create(...))->name('admin.dungeonspeedrunrequirednpc.new');
                             Route::post('{difficulty}/new', new DungeonSpeedrunRequiredNpcsController()->createSave(...))->name('admin.dungeonspeedrunrequirednpc.savenew');
-                            Route::get('{difficulty}/{dungeonspeedrunrequirednpc}', new DungeonSpeedrunRequiredNpcsController()->delete(...))->name('admin.dungeonspeedrunrequirednpc.delete');
+                            Route::delete('{difficulty}/{dungeonspeedrunrequirednpc}', new DungeonSpeedrunRequiredNpcsController()->delete(...))->name('admin.dungeonspeedrunrequirednpc.delete');
                         });
                     });
                 });
@@ -381,14 +393,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::patch('{expansion}', new ExpansionController()->update(...))->name('admin.expansion.update');
             });
             Route::get('expansions', new ExpansionController()->get(...))->name('admin.expansions');
-            // Releases
-            Route::prefix('release')->group(static function () {
-                Route::get('new', new ReleaseController()->create(...))->name('admin.release.new');
-                Route::get('{release}', new ReleaseController()->edit(...))->name('admin.release.edit');
-                Route::post('new', new ReleaseController()->savenew(...))->name('admin.release.savenew');
-                Route::patch('{release}', new ReleaseController()->update(...))->name('admin.release.update');
-                Route::get('/', new ReleaseController()->get(...))->name('admin.releases');
-            });
             // NPCs
             Route::prefix('npc')->group(static function () {
                 Route::get('new', new NpcController()->create(...))->name('admin.npc.new');
@@ -435,6 +439,14 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             });
             Route::get('users', new UserController()->get(...))->name('admin.users');
             Route::get('userreports', new UserReportController()->get(...))->name('admin.userreports');
+            // DungeonRoutes management
+            Route::get('dungeonroutes', new AdminDungeonRouteController()->index(...))->name('admin.dungeonroutes');
+            Route::prefix('dungeonroute')->group(static function () {
+                Route::get('{dungeonRoute:id}', new AdminDungeonRouteController()->edit(...))->name('admin.dungeonroute.edit');
+                Route::patch('{dungeonRoute:id}', new AdminDungeonRouteController()->update(...))->name('admin.dungeonroute.update');
+                Route::delete('{dungeonRoute:id}', new AdminDungeonRouteController()->destroy(...))->name('admin.dungeonroute.delete');
+                Route::post('{dungeonRoute:id}/claim', new AdminDungeonRouteController()->claim(...))->name('admin.dungeonroute.claim');
+            });
             Route::prefix('tools')->group(static function () {
                 Route::get('/', new AdminToolsController()->index(...))->name('admin.tools');
                 Route::get('/combatlog', new AdminToolsController()->combatlog(...))->name('admin.combatlog');
@@ -451,6 +463,8 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('/dungeonroute', new AdminToolsDungeonRouteController()->dungeonroute(...))->name('admin.tools.dungeonroute.view');
                 Route::post('/dungeonroute', new AdminToolsDungeonRouteController()->dungeonroutesubmit(...))->name('admin.tools.dungeonroute.view.submit');
                 Route::get('/dungeonroute/mappingversions', new AdminToolsDungeonRouteController()->dungeonrouteMappingVersions(...))->name('admin.tools.dungeonroute.mappingversionusage');
+                Route::post('/dungeonroute/mappingversions/{mappingVersion}/upgrade', new AdminToolsDungeonRouteController()->dungeonrouteMappingVersionsUpgrade(...))->name('admin.tools.dungeonroute.mappingversionusage.upgrade');
+                Route::get('/dungeonroute/{dungeonRoute:id}', new AdminToolsDungeonRouteController()->dungeonrouteView(...))->name('admin.tools.dungeonroute.view.get');
 
                 // Import enemy forces
                 Route::get('enemyforces/import', new AdminToolsEnemyForcesController()->enemyforcesimport(...))->name('admin.tools.enemyforces.import.view');
@@ -465,9 +479,15 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 // Combat log
                 Route::get('combatlog/regenerate', new AdminToolsCombatLogController()->combatlogregenerate(...))->name('admin.tools.combatlog.regenerate.view');
                 Route::post('combatlog/regenerate', new AdminToolsCombatLogController()->combatlogregeneratesubmit(...))->name('admin.tools.combatlog.regenerate.submit');
+                Route::get('combatlog/route/enemy-failures', new AdminToolsCombatLogController()->combatLogRouteEnemyFailures(...))->name('admin.tools.combatlog.route.enemy_failures.view');
                 Route::get('combatlog/criteria', new AdminToolsCombatLogCriteriaController()->criteria(...))->name('admin.tools.combatlog.criteria.view');
                 Route::post('combatlog/criteria/reset', new AdminToolsCombatLogCriteriaController()->criteriaReset(...))->name('admin.tools.combatlog.criteria.reset');
                 Route::post('combatlog/criteria/thresholds', new AdminToolsCombatLogCriteriaController()->updateThresholds(...))->name('admin.tools.combatlog.criteria.thresholds');
+                Route::get('combatlog/rundata', new AdminToolsCombatLogRunDataController()->index(...))->name('admin.tools.combatlog.rundata');
+                Route::post('combatlog/rundata/prune-batch', new AdminToolsCombatLogRunDataController()->pruneBatch(...))->name('admin.tools.combatlog.rundata.prune_batch');
+                Route::get('combatlog/parse-failures', new AdminToolsCombatLogParseFailureController()->index(...))->name('admin.tools.combatlog.parsefailures.view');
+                Route::get('combatlog/parse-failures/{parseFailure}/segments', new AdminToolsCombatLogParseFailureController()->segments(...))->name('admin.tools.combatlog.parsefailures.segments');
+                Route::post('combatlog/parse-failures/{parseFailure}/resolve', new AdminToolsCombatLogParseFailureController()->resolve(...))->name('admin.tools.combatlog.parsefailures.resolve');
                 Route::prefix('mdt')->group(static function () {
                     // View string contents
                     Route::get('string', new AdminToolsMdtController()->mdtview(...))->name('admin.tools.mdt.string.view');
@@ -501,6 +521,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
                 // NPCs
                 Route::get('npcs/missingdisplayid', new AdminToolsNpcController()->npcsShowMissingDisplayId(...))->name('admin.tools.npcs.showmissingdisplayid');
+                Route::get('npcs/savetoseeder', new AdminToolsNpcController()->npcsSaveToSeeder(...))->name('admin.tools.npcs.savetoseeder');
 
                 // Wago.gg
                 Route::get('wagogg/importingamecoordinates', new AdminToolsWagoGgController()->wagoggImportIngameCoordinates(...))->name('admin.tools.wagogg.import_ingame_coordinates');
@@ -511,14 +532,16 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::post('features/toggle', new AdminToolsFeaturesController()->toggleFeature(...))->name('admin.tools.features.toggle');
                 Route::post('features/forget', new AdminToolsFeaturesController()->forgetFeature(...))->name('admin.tools.features.forget');
 
+                // Artisan commands
+                Route::get('artisan-commands/backfill-kill-zone-enemy-id', new AdminToolsArtisanCommandsController()->backfillKillZoneEnemyId(...))->name('admin.tools.artisancommands.backfillkillzoneenemyid.view');
+                Route::post('artisan-commands/run', new AdminToolsArtisanCommandsController()->run(...))->name('admin.tools.artisancommands.run');
+
                 // Exception thrower
                 Route::get('exception', new AdminToolsExceptionController()->exceptionselect(...))->name('admin.tools.exception.select');
                 Route::post('exception', new AdminToolsExceptionController()->exceptionselectsubmit(...))->name('admin.tools.exception.select.submit');
                 Route::get('mdt/diff', new AdminToolsMdtController()->mdtdiff(...))->name('admin.tools.mdt.diff');
                 Route::get('cache/drop', new AdminToolsController()->dropcache(...))->name('admin.tools.cache.drop');
-                Route::get('mapping/forcesync', new AdminToolsController()->mappingForceSync(...))->name('admin.tools.mapping.forcesync');
                 Route::get('datadump/exportdungeondata', new AdminToolsDataDumpController()->exportdungeondata(...))->name('admin.tools.datadump.exportdungeondata');
-                Route::get('datadump/exportreleases', new AdminToolsController()->exportreleases(...))->name('admin.tools.datadump.exportreleases');
                 Route::get('readonly/toggle', new AdminToolsController()->toggleReadOnlyMode(...))->name('admin.tools.readonly.toggle');
             });
         });
@@ -541,8 +564,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::prefix('heatmap')->group(static function () {
             Route::post('/data', new AjaxHeatmapController()->getData(...))->name('ajax.heatmap.data');
         });
-
-        Route::get('/{publickey}/data', new AjaxDungeonRouteController()->data(...));
 
         Route::middleware('throttle:create-reports')->group(static function () {
             Route::post('userreport/dungeonroute/{dungeonroute}', new AjaxUserReportController()->dungeonrouteStore(...))->name('ajax.userreport.dungeonroute');
@@ -627,6 +648,13 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                     Route::put('/floorunionarea/{floorUnionArea}', new AjaxFloorUnionAreaController()->store(...));
                     Route::delete('/floorunionarea/{floorUnionArea}', new AjaxFloorUnionAreaController()->delete(...));
                 });
+
+                Route::prefix('combatlogroute')->group(static function () {
+                    Route::get('/enemy-failures', new AjaxAdminCombatLogRouteController()->getEnemyFailures(...))
+                        ->name('ajax.admin.combatlogroute.enemy_failures');
+                    Route::delete('/enemy-failures', new AjaxAdminCombatLogRouteController()->deleteEnemyFailures(...))
+                        ->name('ajax.admin.combatlogroute.enemy_failures.delete');
+                });
             });
             Route::put('/userreport/{userreport}/status', new AjaxUserReportController()->status(...));
             Route::post('/tools/mdt/diff/apply', new AdminToolsMdtController()->applyChange(...));
@@ -656,6 +684,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::post('/path', new AjaxPathController()->store(...))->name('ajax.dungeonroute.path.create');
             Route::put('/path/{path}', new AjaxPathController()->store(...))->name('ajax.dungeonroute.path.update');
             Route::delete('/path/{path}', new AjaxPathController()->delete(...))->name('ajax.dungeonroute.path.delete');
+
+            Route::post('/arrow', new AjaxArrowController()->store(...))->name('ajax.dungeonroute.arrow.create');
+            Route::put('/arrow/{arrow}', new AjaxArrowController()->store(...))->name('ajax.dungeonroute.arrow.update');
+            Route::delete('/arrow/{arrow}', new AjaxArrowController()->delete(...))->name('ajax.dungeonroute.arrow.delete');
 
             Route::post('/raidmarker/{enemy}', new AjaxEnemyController()->setRaidMarker(...));
 
@@ -703,13 +735,13 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             });
             // Teams
             Route::prefix('team/{team}')->group(static function () {
-                Route::put('/changedefaultrole', (new AjaxTeamController())->changeDefaultRole(...));
-                Route::put('/routepublishing', (new AjaxTeamController())->changeRoutePublishing(...));
-                Route::put('/changerole', (new AjaxTeamController())->changeRole(...));
-                Route::post('/route/{dungeonroute}', (new AjaxTeamController())->addRoute(...));
-                Route::delete('/member/{user}', (new AjaxTeamController())->removeMember(...));
-                Route::delete('/route/{dungeonroute}', (new AjaxTeamController())->removeRoute(...));
-                Route::get('/refreshlink', (new AjaxTeamController())->refreshInviteLink(...));
+                Route::put('/changedefaultrole', new AjaxTeamController()->changeDefaultRole(...));
+                Route::put('/routepublishing', new AjaxTeamController()->changeRoutePublishing(...));
+                Route::put('/changerole', new AjaxTeamController()->changeRole(...));
+                Route::post('/route/{dungeonroute}', new AjaxTeamController()->addRoute(...));
+                Route::delete('/member/{user}', new AjaxTeamController()->removeMember(...));
+                Route::delete('/route/{dungeonroute}', new AjaxTeamController()->removeRoute(...));
+                Route::get('/refreshlink', new AjaxTeamController()->refreshInviteLink(...));
                 // Ad-free giveaway
                 Route::post('/member/{user}/adfree', new AjaxTeamController()->addAdFreeGiveaway(...));
                 Route::delete('/member/{user}/adfree', new AjaxTeamController()->removeAdFreeGiveaway(...));
@@ -774,6 +806,23 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 });
 
 Route::fallback(
-    // Render your 404 page, but now with web middleware (sessions) active
-    fn() => response()->view('errors.404', [], 500),
+    // Reaching the fallback means no route matched this request. The fallback itself is a GET/HEAD
+    // route, so it only ever fires for GET/HEAD requests; if the URI is served under other verbs the
+    // request is a 405 (advertising the allowed verbs), otherwise it is a genuine 404. Aborting - as
+    // opposed to rendering a view inline - keeps the response mapping in App\Exceptions\Handler, while
+    // the 'web' middleware keeps the session active so the rendered error page shows a logged-in nav.
+    static function (Request $request): void {
+        $otherVerbs = collect(Route::getRoutes()->getRoutes())
+            ->filter(static fn(RoutingRoute $route): bool => !$route->isFallback && $route->matches($request, false))
+            ->flatMap(static fn(RoutingRoute $route): array => $route->methods())
+            ->unique()
+            ->reject(static fn(string $method): bool => in_array($method, [Request::METHOD_GET, Request::METHOD_HEAD], true))
+            ->values();
+
+        if ($otherVerbs->isNotEmpty()) {
+            throw new MethodNotAllowedHttpException($otherVerbs->all());
+        }
+
+        abort(Response::HTTP_NOT_FOUND);
+    },
 )->middleware('web');

@@ -7,26 +7,28 @@ use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
 
 /**
- * @var Spell                        $spell
- * @var Floor                        $floor
- * @var array<string>                $categories
- * @var array<string>                $dispelTypes
- * @var array<string>                $cooldownGroups
- * @var Collection<GameVersion>      $allGameVersions
- * @var Collection<Characteristic>   $allCharacteristics
+ * @var Spell                           $spell
+ * @var Floor                           $floor
+ * @var array<string>                   $categories
+ * @var array<string>                   $dispelTypes
+ * @var array<string>                   $cooldownGroups
+ * @var Collection<int, GameVersion>    $allGameVersions
+ * @var Collection<int, Characteristic> $allCharacteristics
  */
 
 $gameVersionsSelect = $allGameVersions
     ->mapWithKeys(static fn(GameVersion $gameVersion) => [$gameVersion->id => __($gameVersion->name)]);
 
-$characteristicOptions = collect(['' => ['icon_url' => null, 'name' => __('view_admin.spell.edit.no_characteristic')]])
-    ->merge($allCharacteristics->mapWithKeys(static fn(Characteristic $c) => [
+// Plain array union (+) instead of Collection::merge - merge() runs the items through
+// array_merge, which renumbers the integer characteristic ID keys from 0 and would make
+// the select submit positional indexes instead of the actual characteristic IDs.
+$characteristicOptions = ['' => ['icon_url' => null, 'name' => __('view_admin.spell.edit.no_characteristic')]]
+    + $allCharacteristics->mapWithKeys(static fn(Characteristic $c) => [
         $c->id => [
             'icon_url' => ksgAssetImage(sprintf('spells/%s.jpg', $c->icon_name)),
             'name'     => __($c->name),
         ],
-    ]))
-    ->toArray();
+    ])->toArray();
 ?>
 @extends('layouts.sitepage', [
     'breadcrumbsParams' => [$spell ?? null],
@@ -43,20 +45,20 @@ $characteristicOptions = collect(['' => ['icon_url' => null, 'name' => __('view_
     @else
         {{ html()->form('POST', route('admin.spell.savenew'))->attribute('autocomplete', 'off')->acceptsFiles()->open() }}
     @endisset
-    <div class="form-group{{ $errors->has('id') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('id') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.spell.edit.game_id') . '<span class="form-required">*</span>', 'id') }}
         {{ html()->text('id')->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'id'])
     </div>
 
-    <div class="form-group{{ $errors->has('game_version_id') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('game_version_id') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.spell.edit.game_version_id'), 'game_version_id') }}
         <span class="form-required">*</span>
         {{ html()->select('game_version_id', $gameVersionsSelect)->class('form-control selectpicker') }}
         @include('common.forms.form-error', ['key' => 'game_version_id'])
     </div>
 
-    <div class="form-group{{ $errors->has('characteristic_id') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('characteristic_id') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.spell.edit.characteristic'), 'characteristic_id') }}
         @include('common.forms.select.imageselect', [
             'id'         => 'characteristic_id',
@@ -68,58 +70,58 @@ $characteristicOptions = collect(['' => ['icon_url' => null, 'name' => __('view_
         @include('common.forms.form-error', ['key' => 'characteristic_id'])
     </div>
 
-    <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('name') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.spell.edit.name') . '<span class="form-required">*</span>', 'name') }}
         {{ html()->text('name')->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'name'])
     </div>
 
-    <div class="form-group{{ $errors->has('icon_name') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('icon_name') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.spell.edit.icon_name') . '<span class="form-required">*</span>', 'icon_name') }}
         {{ html()->text('icon_name')->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'icon_name'])
     </div>
 
-    <div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('category') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.spell.edit.category') . '<span class="form-required">*</span>', 'category') }}
         {{ html()->select('category', $categories)->class('form-control selectpicker') }}
         @include('common.forms.form-error', ['key' => 'category'])
     </div>
 
-    <div class="form-group{{ $errors->has('dispel_type') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('dispel_type') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.spell.edit.dispel_type') . '<span class="form-required">*</span>', 'dispel_type') }}
         {{ html()->select('dispel_type', $dispelTypes)->class('form-control selectpicker') }}
         @include('common.forms.form-error', ['key' => 'dispel_type'])
     </div>
 
-    <div class="form-group{{ $errors->has('cooldown_group') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('cooldown_group') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.spell.edit.cooldown_group') . '<span class="form-required">*</span>', 'cooldown_group') }}
         {{ html()->select('cooldown_group', $cooldownGroups)->class('form-control selectpicker') }}
         @include('common.forms.form-error', ['key' => 'cooldown_group'])
     </div>
 
-    <div class="form-group{{ $errors->has('schools') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('schools') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.spell.edit.schools'), 'schools[]') }}
         {{ html()->multiselect('schools[]', array_flip($schools), isset($spell) ? $spell->getSchoolsAsArray() : null)->class('form-control selectpicker')->attribute('size', count($schools)) }}
         @include('common.forms.form-error', ['key' => 'schools'])
     </div>
 
-    <div class="form-group{{ $errors->has('aura') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('aura') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.spell.edit.aura'), 'aura') }}
-        {{ html()->checkbox('aura', isset($spell) ? $spell->aura : 1, 1)->class('form-control left_checkbox') }}
+        {{ html()->checkbox('aura', isset($spell) ? $spell->aura : 1, 1)->class('form-check-input') }}
         @include('common.forms.form-error', ['key' => 'aura'])
     </div>
 
-    <div class="form-group{{ $errors->has('selectable') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('selectable') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.spell.edit.selectable'), 'selectable') }}
-        {{ html()->checkbox('selectable', isset($spell) ? $spell->selectable : 1, 1)->class('form-control left_checkbox') }}
+        {{ html()->checkbox('selectable', isset($spell) ? $spell->selectable : 1, 1)->class('form-check-input') }}
         @include('common.forms.form-error', ['key' => 'selectable'])
     </div>
 
     <div>
         {{ html()->input('submit')->value(__('view_admin.spell.edit.submit'))->class('btn btn-info')->name('submit') }}
         @isset($spell)
-            <div class="float-right">
+            <div class="float-end">
                 {{ html()->input('submit')->value(__('view_admin.spell.edit.save_as_new_spell'))->class('btn btn-info')->name('submit') }}
             </div>
         @endisset

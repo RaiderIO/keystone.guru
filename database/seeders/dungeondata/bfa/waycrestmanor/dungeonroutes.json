@@ -9,6 +9,7 @@
         "faction_id": 1,
         "team_id": null,
         "published_state_id": 1,
+        "dungeon_start_map_icon_id": null,
         "title": "4.12 WCM by Dratnos",
         "description": "",
         "level_min": 2,
@@ -59,6 +60,7 @@
                 "lat": null,
                 "lng": null,
                 "index": 1,
+                "spells": [],
                 "enemies": [
                     426,
                     427,
@@ -67,8 +69,7 @@
                     433,
                     434,
                     435
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -77,10 +78,10 @@
                 "lat": null,
                 "lng": null,
                 "index": 2,
+                "spells": [],
                 "enemies": [
                     4239
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -89,14 +90,14 @@
                 "lat": null,
                 "lng": null,
                 "index": 4,
+                "spells": [],
                 "enemies": [
                     454,
                     455,
                     456,
                     457,
                     458
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -105,12 +106,12 @@
                 "lat": null,
                 "lng": null,
                 "index": 5,
+                "spells": [],
                 "enemies": [
                     143,
                     3420,
                     3421
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -119,12 +120,12 @@
                 "lat": null,
                 "lng": null,
                 "index": 6,
+                "spells": [],
                 "enemies": [
                     465,
                     466,
                     3419
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -133,14 +134,14 @@
                 "lat": null,
                 "lng": null,
                 "index": 7,
+                "spells": [],
                 "enemies": [
                     467,
                     468,
                     471,
                     2076,
                     2077
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -149,6 +150,7 @@
                 "lat": null,
                 "lng": null,
                 "index": 8,
+                "spells": [],
                 "enemies": [
                     485,
                     488,
@@ -162,8 +164,7 @@
                     1413,
                     1415,
                     2865
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -172,13 +173,13 @@
                 "lat": null,
                 "lng": null,
                 "index": 9,
+                "spells": [],
                 "enemies": [
                     477,
                     478,
                     479,
                     480
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -187,13 +188,13 @@
                 "lat": null,
                 "lng": null,
                 "index": 10,
+                "spells": [],
                 "enemies": [
                     481,
                     482,
                     483,
                     484
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -202,10 +203,10 @@
                 "lat": null,
                 "lng": null,
                 "index": 11,
+                "spells": [],
                 "enemies": [
                     4196
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -214,10 +215,10 @@
                 "lat": null,
                 "lng": null,
                 "index": 12,
+                "spells": [],
                 "enemies": [
                     147
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -226,6 +227,7 @@
                 "lat": null,
                 "lng": null,
                 "index": 13,
+                "spells": [],
                 "enemies": [
                     2071,
                     2072,
@@ -237,8 +239,7 @@
                     3484,
                     4241,
                     4242
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -247,14 +248,14 @@
                 "lat": null,
                 "lng": null,
                 "index": 14,
+                "spells": [],
                 "enemies": [
                     505,
                     506,
                     508,
                     509,
                     510
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -263,14 +264,14 @@
                 "lat": null,
                 "lng": null,
                 "index": 15,
+                "spells": [],
                 "enemies": [
                     507,
                     511,
                     512,
                     513,
                     514
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -279,14 +280,14 @@
                 "lat": null,
                 "lng": null,
                 "index": 16,
+                "spells": [],
                 "enemies": [
                     500,
                     501,
                     502,
                     503,
                     504
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -295,10 +296,10 @@
                 "lat": null,
                 "lng": null,
                 "index": 17,
+                "spells": [],
                 "enemies": [
                     146
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -307,6 +308,7 @@
                 "lat": null,
                 "lng": null,
                 "index": 18,
+                "spells": [],
                 "enemies": [
                     2078,
                     2079,
@@ -318,8 +320,7 @@
                     2085,
                     2086,
                     2920
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -328,10 +329,10 @@
                 "lat": null,
                 "lng": null,
                 "index": 19,
+                "spells": [],
                 "enemies": [
                     4240
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -340,12 +341,12 @@
                 "lat": null,
                 "lng": null,
                 "index": 20,
+                "spells": [],
                 "enemies": [
                     549,
                     551,
                     553
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -354,12 +355,12 @@
                 "lat": null,
                 "lng": null,
                 "index": 21,
+                "spells": [],
                 "enemies": [
                     546,
                     547,
                     548
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -368,10 +369,10 @@
                 "lat": null,
                 "lng": null,
                 "index": 22,
+                "spells": [],
                 "enemies": [
                     4198
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -380,13 +381,13 @@
                 "lat": null,
                 "lng": null,
                 "index": 23,
+                "spells": [],
                 "enemies": [
                     557,
                     558,
                     559,
                     560
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -395,12 +396,12 @@
                 "lat": null,
                 "lng": null,
                 "index": 24,
+                "spells": [],
                 "enemies": [
                     554,
                     555,
                     556
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -409,11 +410,11 @@
                 "lat": null,
                 "lng": null,
                 "index": 25,
+                "spells": [],
                 "enemies": [
                     145,
                     2965
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -422,12 +423,12 @@
                 "lat": null,
                 "lng": null,
                 "index": 26,
+                "spells": [],
                 "enemies": [
                     562,
                     563,
                     564
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -436,13 +437,13 @@
                 "lat": null,
                 "lng": null,
                 "index": 27,
+                "spells": [],
                 "enemies": [
                     565,
                     566,
                     568,
                     570
-                ],
-                "spells": []
+                ]
             },
             {
                 "floor_id": null,
@@ -451,10 +452,10 @@
                 "lat": null,
                 "lng": null,
                 "index": 28,
+                "spells": [],
                 "enemies": [
                     144
-                ],
-                "spells": []
+                ]
             }
         ],
         "enemy_raid_markers": [],

@@ -12,14 +12,20 @@ use App\Logic\Datatables\ColumnHandler\DatatablesColumnHandler;
 use App\Logic\Datatables\ColumnHandler\SimpleColumnHandler;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 abstract class DatatablesHandler
 {
+    /**
+     * @var Builder<Model>
+     */
     protected Builder $builder;
 
-    /** @var DatatablesColumnHandler[] */
+    /**
+     * @var array<string, DatatablesColumnHandler>
+     */
     protected array $columnHandlers;
 
     public function __construct(protected Request $request)
@@ -32,26 +38,32 @@ abstract class DatatablesHandler
         return $this->request;
     }
 
+    /**
+     * @return Builder<Model>
+     */
     public function getBuilder(): Builder
     {
         return $this->builder;
     }
 
     /**
+     * @template TModel of Model
+     * @param  Builder<TModel> $builder
      * @return $this
      */
     public function setBuilder(Builder $builder): DatatablesHandler
     {
+        /** @var Builder<Model> $builder */
         $this->builder = $builder;
 
         return $this;
     }
 
     /**
-     * @param  DatatablesColumnHandler|array $dtColumnHandlers
+     * @param  DatatablesColumnHandler|array<int, DatatablesColumnHandler> $dtColumnHandlers
      * @return $this
      */
-    public function addColumnHandler($dtColumnHandlers = []): DatatablesHandler
+    public function addColumnHandler(DatatablesColumnHandler|array $dtColumnHandlers = []): DatatablesHandler
     {
         if (!is_array($dtColumnHandlers)) {
             $dtColumnHandlers = [$dtColumnHandlers];
@@ -100,6 +112,9 @@ abstract class DatatablesHandler
         return $this;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getResult(): array
     {
         $isDev = config('app.env') !== 'production';

@@ -22,6 +22,7 @@ final class RaiderIOKeystoneGuruApiServiceTest extends PublicTestCase
 {
     private RaiderIOKeystoneGuruApiService $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -116,7 +117,7 @@ final class RaiderIOKeystoneGuruApiServiceTest extends PublicTestCase
         Storage::disk('s3_combat_logs')->put('run2.zip', 'content');
 
         // Act
-        $result = $this->service->getCombatLogSegmentsForRun(1);
+        $result = $this->service->getCombatLogSegmentsForRun(new \App\Models\Season(), 1);
 
         // Assert
         $this->assertInstanceOf(CombatLogSegmentsResponse::class, $result);
@@ -132,7 +133,7 @@ final class RaiderIOKeystoneGuruApiServiceTest extends PublicTestCase
         Storage::fake('s3_combat_logs');
 
         // Act
-        $result = $this->service->getCombatLogSegmentsForRun(1);
+        $result = $this->service->getCombatLogSegmentsForRun(new \App\Models\Season(), 1);
 
         // Assert
         $this->assertNull($result);

@@ -1,0 +1,57 @@
+# Minimal per-worktree stack (app + nginx) for running an isolated checkout alongside the main
+# stack. Managed by sh/worktree.sh — see the `worktree-docker` skill for the full workflow.
+#
+# Design notes:
+# - No `container_name` here on purpose: Compose auto-names containers `<project>-<service>-1`,
+#   so each worktree (unique COMPOSE_PROJECT_NAME) gets its own non-colliding names.
+# - Reuses the prebuilt `keystone.guru` image (no `build:`), so starting a worktree never rebuilds.
+# - Runs on its OWN private default network. The worktree app is deliberately NOT placed on the
+#   main shared network — sh/worktree.sh instead attaches the shared service containers (db, redis,
+#   reverb, ...) INTO this private network with their DNS aliases. That keeps `nginx -> app`
+#   resolving to the worktree's own app and leaves the main stack completely untouched.
+# - nginx resolves every upstream in docker-compose/nginx/keystone.guru.conf at startup (app,
+#   reverb, app-swoole), so sh/worktree.sh attaches all of them. Note: the couple of octane-only
+#   endpoints proxied to `app-swoole` hit the MAIN stack's octane (main code), not the worktree —
+#   fine for browsing, but test swoole-endpoint changes by running your own octane if needed.
+services:
+  app:
+    image: keystone.guru
+    restart: "no"
+    working_dir: /var/www/
+    # Same host-UID setup as the main stack (#3414): the checkout is host-owned and the container
+    # writes as the same UID, so no chown juggling is needed in either direction.
+    user: "${PUID:-1000}:${PGID:-1000}"
+    volumes:
+      - ./:/var/www
+      - ~/.ssh:/home/ksg/.ssh
+
+  nginx:
+    image: nginx:alpine
+    restart: "no"
+    working_dir: /var/www/
+    depends_on:
+      - app
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d
+    ports:
+      - "${WORKTREE_HTTP_PORT}:80"
+
+  # Headless Chrome for in-browser verification (layout/JS bugs, screenshots). Behind a profile so
+  # the normal stack is unaffected; start on demand with: docker compose --profile chrome up -d chrome
+  # Reach it from the app container via CDP on chrome:9222; pages see the site as http://nginx.
+  # No published ports, so multiple worktree stacks can run it simultaneously.
+  chrome:
+    image: chromedp/headless-shell:latest
+    restart: "no"
+    profiles: ["chrome"]
+    # Chrome exhausts the compose default 64MB /dev/shm (ERR_INSUFFICIENT_RESOURCES on image-heavy pages)
+    shm_size: 1gb
+    # Pages reference assets (images/tiles) at ASSETS_BASE_URL = http://localhost:8009, a
+    # host-published port that does not exist inside this container, so screenshots render broken
+    # images. Forward that loopback port to the shared app-assets container (attached to this
+    # network by sh/worktree.sh), then chain to the image's stock entrypoint. This also fixes
+    # master-baseline pages (served via the Docker gateway), which emit the same asset URLs.
+    # Note: the stock run.sh expands `$@` unquoted, so flags containing spaces (e.g.
+    # --host-resolver-rules=MAP ...) cannot be passed via `command:` — hence this wrapper.
+    entrypoint: ["/bin/bash", "-c", "socat TCP4-LISTEN:8009,bind=127.0.0.1,fork,reuseaddr TCP4:app-assets:80 & exec /headless-shell/run.sh"]

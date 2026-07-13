@@ -105,7 +105,7 @@ class LiveSessionController extends Controller
             $dungeonroute,
             $title,
             $liveSession,
-            $defaultFloor->index,
+            (string)$defaultFloor->index,
         );
     }
 
@@ -148,7 +148,7 @@ class LiveSessionController extends Controller
 
         /** @var Floor|null $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            ->indexOrFacade($dungeonroute->mappingVersion, $floorIndex)
+            ->indexOrFacade($dungeonroute->mappingVersion, (int)$floorIndex)
             ->first();
 
         if ($floor === null) {
@@ -163,7 +163,7 @@ class LiveSessionController extends Controller
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
-                'livesession'  => $liveSession,
+                'liveSession'  => $liveSession,
                 'floor'        => $floor,
                 'mapContext'   => $mapContextService->createMapContextLiveSession($liveSession, User::getCurrentUserMapFacadeStyle()),
             ]);

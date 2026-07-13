@@ -13,6 +13,9 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
 use Psr\SimpleCache\InvalidArgumentException;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 class MapContextDungeonData implements Arrayable
 {
     use RemembersToFile;
@@ -27,6 +30,7 @@ class MapContextDungeonData implements Arrayable
 
     /**
      * @throws InvalidArgumentException
+     * @return array<string, mixed>
      */
     public function toArray(): array
     {
@@ -37,10 +41,15 @@ class MapContextDungeonData implements Arrayable
             fn() => $this->dungeon->npcs()
                 ->selectRaw('npcs.*, translations.translation as name')
                 ->leftJoin('translations', function (JoinClause $clause) {
-                    $clause->on('translations.key', 'npcs.name')
-                        ->on('translations.locale', DB::raw(sprintf('"%s"', $this->locale)));
+                    $clause->on('translations.key', '=', 'npcs.name')
+                        ->on('translations.locale', '=', DB::raw(sprintf('"%s"', $this->locale)));
                 })
                 ->with([
+                    // The front-end reads these relations off the npc objects in this payload (enemy visuals + tooltips)
+                    'type',
+                    'class',
+                    'npcbolsteringwhitelists',
+                    'npcHealths',
                     // Return only spell IDs for each NPC
                     'spells:id',
                 ])
@@ -59,7 +68,6 @@ class MapContextDungeonData implements Arrayable
                     'level',
                     'mdt_scale',
                     'pivot',
-                    'characteristics',
                 ])
                 ->values(),
             config('keystoneguru.cache.dungeonData.ttl'),
@@ -86,8 +94,8 @@ class MapContextDungeonData implements Arrayable
                 return Spell::query()
                     ->selectRaw('spells.*, translations.translation as name')
                     ->leftJoin('translations', function (JoinClause $clause) {
-                        $clause->on('translations.key', 'spells.name')
-                            ->on('translations.locale', DB::raw(sprintf('"%s"', $this->locale)));
+                        $clause->on('translations.key', '=', 'spells.name')
+                            ->on('translations.locale', '=', DB::raw(sprintf('"%s"', $this->locale)));
                     })
                     ->whereIn('spells.id', $spellIds)
                     ->get()

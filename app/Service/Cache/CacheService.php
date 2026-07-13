@@ -134,8 +134,6 @@ class CacheService implements CacheServiceInterface
     }
 
     /**
-     * @param string|null $ttl
-     *
      * @return bool
      * @throws InvalidArgumentException
      */
@@ -177,20 +175,26 @@ class CacheService implements CacheServiceInterface
             sprintf('/%sdungeonroute_card:(?>vertical|horizontal):[a-zA-Z_]+:[01]_[01]_[01]_\d+/', $prefix),
             // Dungeon data used in MapContext
             sprintf('/%sdungeon_\d+_\d+_[a-z_]+/', $prefix),
-            sprintf('/%sview_variables:game_server_region:[a-z]+/', $prefix),
+            // Per-region view variables, keyed by release: view_variables:{release}:game_server_region:{short}
+            sprintf('/%sview_variables:[a-z0-9.]+:game_server_region:[a-z]+/', $prefix),
+            // Granular global view data, keyed by release: view_data:{release}:{name}
+            sprintf('/%sview_data:[a-z0-9.]+:[a-z_]+/', $prefix),
         ]);
-        $this->unset('view_variables:global');
     }
 
     public function clearIdleKeys(?int $seconds = null): int
     {
-        // Only keys starting with this prefix may be cleaned up by this task, ex.
+        // Only Laravel Model Cache keys may be cleaned up by this task. These are sha1 hashes (lowercase hex),
+        // optionally chained with a colon, ex.
+        // keystoneguru-live-cache:d8123999fdd7267f49290a1f2bb13d3b154b452a
         // keystoneguru-live-cache:d8123999fdd7267f49290a1f2bb13d3b154b452a:f723072f44f1e4727b7ae26316f3d61dd3fe3d33
-        // keystoneguru-live-cache:p79vfrAn4QazxHVtLb5s4LssQ5bi6ZaWGNTMOblt
+        // The first segment is restricted to [a-f0-9] (hex) on purpose: Laravel session ids are 40-char
+        // alphanumeric strings ([A-Za-z0-9]) stored with the same prefix, and a broader class would match
+        // and delete active sessions, logging idle users out. See SESSION_CONNECTION for the second safeguard.
         $prefix = config('database.redis.options.prefix') . config('cache.prefix');
 
         return $this->deleteKeysByPattern([
-            sprintf('/%s[a-zA-Z0-9]{40}(?::[a-z0-9]{40})*/', $prefix),
+            sprintf('/%s[a-f0-9]{40}(?::[a-z0-9]{40})*/', $prefix),
         ], $seconds) +
             $this->deleteKeysByPattern([
                 // publicKeys are 7 characters long
@@ -205,20 +209,24 @@ class CacheService implements CacheServiceInterface
         return Cache::lock($key, 10, 'default')->block($waitFor, $callable);
     }
 
+    /**
+     * @param array<int, string> $regexes
+     */
     private function deleteKeysByPattern(array $regexes, ?int $idleTimeSeconds = null): int
     {
         if (empty($regexes)) {
             return 0;
         }
 
-        // List of Redis connection names to operate on.
+        // List of Redis connection names to operate on. The 'session' connection is deliberately excluded so
+        // this task can never delete active sessions and log idle users out.
         $connections = [
-            'default',
             // App logic
-            'model_cache',
+            'default',
             // Model cache
-            'cache',
+            'model_cache',
             // Used by Laravel cache
+            'cache',
         ];
 
         // Get the key prefix (if any)
@@ -236,6 +244,9 @@ class CacheService implements CacheServiceInterface
         return $totalDeletedCount;
     }
 
+    /**
+     * @param array<int, string> $regexes
+     */
     private function deleteKeysByPatternOnConnection(
         Connection $redis,
         array      $regexes,

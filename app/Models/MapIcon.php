@@ -12,6 +12,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\HasLatLng;
 use App\Models\Traits\HasLinkedAwakenedObelisk;
 use Eloquent;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -42,6 +43,7 @@ class MapIcon extends Model implements HasLatLngInterface, MappingModelCloneable
     use CloneForNewMappingVersionNoRelations;
     use HasLatLng;
     use HasLinkedAwakenedObelisk;
+    /** @use HasFactory<Factory> */
     use HasFactory;
 
     protected $visible = [
@@ -104,26 +106,41 @@ class MapIcon extends Model implements HasLatLngInterface, MappingModelCloneable
         return $this->mapping_version_id !== null;
     }
 
+    /**
+     * @return BelongsTo<Floor, $this>
+     */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
     }
 
+    /**
+     * @return BelongsTo<DungeonRoute, $this>
+     */
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
 
+    /**
+     * @return BelongsTo<MapIconType, $this>
+     */
     public function mapIconType(): BelongsTo
     {
         return $this->belongsTo(MapIconType::class);
     }
 
+    /**
+     * @return BelongsTo<MappingVersion, $this>
+     */
     public function mappingVersion(): BelongsTo
     {
         return $this->belongsTo(MappingVersion::class);
     }
 
+    /**
+     * @return BelongsTo<Team, $this>
+     */
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);

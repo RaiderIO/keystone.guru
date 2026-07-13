@@ -16,7 +16,7 @@ use App\Models\TeamUser;
     <h4>
         {{ __('view_team.edittabs.members.title') }}
     </h4>
-    <div class="form-group">
+    <div class="mb-3">
         @component('common.general.alert', ['type' => 'info', 'name' => 'team-invite-info'])
             {{ __('view_team.edittabs.members.invite_code_share_warning') }}
         @endcomponent
@@ -24,22 +24,20 @@ use App\Models\TeamUser;
         <div class="row">
             <div class="col-xl-6">
                 {{ html()->label(__('view_team.edittabs.members.invite_new_members'), 'team_members_invite_link') }}
-                <div class="input-group-append">
+                <div class="input-group">
                     {{ html()->text('team_members_invite_link', route('team.invite', ['invitecode' => $team->invite_code]))->id('team_members_invite_link')->class('form-control')->isReadonly() }}
-                    <div class="input-group-append">
-                        <button id="team_invite_link_copy_to_clipboard" class="btn btn-info"
-                                data-toggle="tooltip"
-                                title="{{ __('view_team.edittabs.members.copy_to_clipboard_title') }}">
-                            <i class="far fa-copy"></i>
+                    <button id="team_invite_link_copy_to_clipboard" class="btn btn-info"
+                            data-bs-toggle="tooltip"
+                            title="{{ __('view_team.edittabs.members.copy_to_clipboard_title') }}">
+                        <i class="far fa-copy"></i>
+                    </button>
+                    @if($userIsModerator)
+                        <button id="team_invite_link_refresh" class="btn btn-info"
+                                data-bs-toggle="tooltip"
+                                title="{{ __('view_team.edittabs.members.refresh_invite_link_title') }}">
+                            <i class="fa fa-sync"></i>
                         </button>
-                        @if($userIsModerator)
-                            <button id="team_invite_link_refresh" class="btn btn-info"
-                                    data-toggle="tooltip"
-                                    title="{{ __('view_team.edittabs.members.refresh_invite_link_title') }}">
-                                <i class="fa fa-sync"></i>
-                            </button>
-                        @endif
-                    </div>
+                    @endif
                 </div>
             </div>
             @if($userIsModerator)
@@ -54,7 +52,7 @@ use App\Models\TeamUser;
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="mb-3">
                 <span class="">
                     @php(ob_start())
                     @include('common.thirdparty.patreon.fancylink')
@@ -74,7 +72,7 @@ use App\Models\TeamUser;
                 </span>
     </div>
 
-    <div class="form-group">
+    <div class="mb-3">
         <table id="team_members_table" class="tablesorter default_table table-striped w-100">
             <thead>
 

@@ -32,7 +32,7 @@ class DungeonrouteDiscoverSearch extends SearchInlineBase {
         let self = this;
 
         // Whenever the tab is changed, apply the new filter
-        let $tabs = $('#search_dungeon_select_tabs a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+        let $tabs = $('#search_dungeon_select_tabs a[data-bs-toggle="tab"]').on('show.bs.tab', function (e) {
             let expansion = $(e.target).data('expansion');
 
             if (typeof expansion !== 'undefined') {
@@ -54,7 +54,10 @@ class DungeonrouteDiscoverSearch extends SearchInlineBase {
                 ? this.filters.season.getValue()
                 : this.options.nextSeason ?? this.options.currentSeason;
 
-            $(`#season-${selectedSeason}-grid-tab`).tab('show');
+            let seasonTabTrigger = document.getElementById(`season-${selectedSeason}-grid-tab`);
+            if (seasonTabTrigger !== null) {
+                bootstrap.Tab.getOrCreateInstance(seasonTabTrigger).show();
+            }
             this._selectSeason(selectedSeason);
             this._selectExpansion(null);
         } else {
@@ -63,7 +66,10 @@ class DungeonrouteDiscoverSearch extends SearchInlineBase {
                 this.filters.expansion.getValue() :
                 $($tabs[0]).data('expansion');
 
-            $(`#${selectedExpansion}-grid-tab`).tab('show');
+            let expansionTabTrigger = document.getElementById(`${selectedExpansion}-grid-tab`);
+            if (expansionTabTrigger !== null) {
+                bootstrap.Tab.getOrCreateInstance(expansionTabTrigger).show();
+            }
             this._selectSeason(null);
             this._selectExpansion(selectedExpansion);
         }

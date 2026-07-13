@@ -9,7 +9,7 @@
 use App\Models\UserReport;
 use Illuminate\Support\Collection;
 
-/** @var Collection $models */
+/** @var Collection<int, UserReport> $models */
 // eager load the classification
 //dd($models);
 ?>
@@ -71,7 +71,7 @@ use Illuminate\Support\Collection;
                 <td>{{ $report->id }}</td>
                 <td>{{ $report->user->name }}</td>
                 <td>
-                    <span data-toggle="tooltip" data-placement="right"
+                    <span data-bs-toggle="tooltip" data-bs-placement="right"
                           title="{{ isset($report->model) ? json_encode($report->model->toArray(), JSON_PRETTY_PRINT) : '' }}">{{ $report->category }}
                     </span>
                 </td>

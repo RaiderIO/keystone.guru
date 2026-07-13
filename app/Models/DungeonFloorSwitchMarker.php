@@ -118,26 +118,41 @@ class DungeonFloorSwitchMarker extends CacheModel implements HasLatLngInterface,
     //        return $this->ingameY;
     //    }
 
+    /**
+     * @return BelongsTo<MappingVersion, $this>
+     */
     public function mappingVersion(): BelongsTo
     {
         return $this->belongsTo(MappingVersion::class);
     }
 
+    /**
+     * @return BelongsTo<Floor, $this>
+     */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
     }
 
+    /**
+     * @return BelongsTo<Floor, $this>
+     */
     public function sourceFloor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
     }
 
+    /**
+     * @return BelongsTo<Floor, $this>
+     */
     public function targetFloor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
     }
 
+    /**
+     * @return HasOne<DungeonFloorSwitchMarker, $this>
+     */
     public function linkedDungeonFloorSwitchMarker(): HasOne
     {
         return $this->hasOne(DungeonFloorSwitchMarker::class);

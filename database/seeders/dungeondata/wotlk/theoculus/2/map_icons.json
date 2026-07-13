@@ -46,7 +46,7 @@
         "map_icon_type_id": 24,
         "lat": -207.0848,
         "lng": 177.5283,
-        "comment": "Damage Drake",
+        "comment": "mapping.map_icons.wotlk.the_oculus.damage_drake",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 27,
         "lat": -207.2742,
         "lng": 200.643,
-        "comment": "Heal  Drake",
+        "comment": "mapping.map_icons.wotlk.the_oculus.heal_drake",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 25,
         "lat": -211.0635,
         "lng": 189.0856,
-        "comment": "Tank Drake",
+        "comment": "mapping.map_icons.wotlk.the_oculus.tank_drake",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 2,
         "lat": -217.75,
         "lng": 197.5,
-        "comment": "After the boss fight, 3 friendly NPCs will spawn. Talk to them to get a dragon item. Use the item to call down a dragon. Fly up to next part of the dungeon.",
+        "comment": "mapping.map_icons.wotlk.the_oculus.dragon_item_note",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

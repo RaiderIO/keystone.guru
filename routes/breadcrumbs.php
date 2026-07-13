@@ -12,7 +12,6 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcHealth;
-use App\Models\Release;
 use App\Models\Season;
 use App\Models\Spell\Spell;
 use App\Models\Team;
@@ -65,18 +64,6 @@ Breadcrumbs::for('legal.privacy', static function (Generator $trail) {
 Breadcrumbs::for('legal.terms', static function (Generator $trail) {
     $trail->parent('home');
     $trail->push(__('breadcrumbs.home.legal.terms'), route('legal.terms'));
-});
-
-/**
- * Releases
- */
-Breadcrumbs::for('misc.changelog', static function (Generator $trail) {
-    $trail->parent('home');
-    $trail->push(__('breadcrumbs.home.changelog.list'), route('misc.changelog'));
-});
-Breadcrumbs::for('release.view', static function (Generator $trail, Release $release) {
-    $trail->parent('misc.changelog');
-    $trail->push(__('breadcrumbs.home.changelog.release.view', ['version' => $release->version]), route('release.view', ['release' => $release]));
 });
 
 /**
@@ -287,10 +274,6 @@ Breadcrumbs::for('admin.tools.datadump.viewexporteddungeondata', static function
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.view_exported_dungeondata'), route('admin.tools.datadump.exportdungeondata'));
 });
-Breadcrumbs::for('admin.tools.datadump.viewexportedrelease', static function (Generator $trail) {
-    $trail->parent('admin.tools.list');
-    $trail->push(__('breadcrumbs.home.admin.tools.view_exported_releases'), route('admin.tools.datadump.exportreleases'));
-});
 Breadcrumbs::for('admin.tools.exception.select', static function (Generator $trail) {
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.select_exception'), route('admin.tools.exception.select'));
@@ -326,6 +309,10 @@ Breadcrumbs::for('admin.tools.combatlog.regenerate', static function (Generator 
 Breadcrumbs::for('admin.tools.combatlog.criteria', static function (Generator $trail) {
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.combat_log_criteria'), route('admin.tools.combatlog.criteria.view'));
+});
+Breadcrumbs::for('admin.tools.combatlog.rundata', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.combat_log_run_data'), route('admin.tools.combatlog.rundata'));
 });
 Breadcrumbs::for('admin.tools.dungeonroute.view', static function (Generator $trail) {
     $trail->parent('admin.tools.list');
@@ -383,19 +370,9 @@ Breadcrumbs::for('admin.tools.wagogg.importingamecoordinates', static function (
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.wagogg_import_ingame_coordinates'), route('admin.tools.wagogg.import_ingame_coordinates'));
 });
-
-// Releases
-Breadcrumbs::for('admin.release.list', static function (Generator $trail) {
-    $trail->parent('admin');
-    $trail->push(__('breadcrumbs.home.admin.releases'), route('admin.releases'));
-});
-Breadcrumbs::for('admin.release.edit', static function (Generator $trail, ?Release $release) {
-    $trail->parent('admin.release.list');
-    if ($release === null) {
-        $trail->push(__('breadcrumbs.home.admin.new_release'), route('admin.release.new'));
-    } else {
-        $trail->push(__('breadcrumbs.home.admin.edit_release'), route('admin.release.edit', $release));
-    }
+Breadcrumbs::for('admin.tools.artisancommands.backfillkillzoneenemyid', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.artisancommands_backfill_kill_zone_enemy_id'), route('admin.tools.artisancommands.backfillkillzoneenemyid.view'));
 });
 
 // Expansions
@@ -436,9 +413,9 @@ Breadcrumbs::for('admin.floor.edit', static function (Generator $trail, Dungeon 
 Breadcrumbs::for('admin.dungeonspeedrunrequirednpc.new', static function (Generator $trail, Dungeon $dungeon, Floor $floor, int $difficulty) {
     $trail->parent('admin.floor.edit', $dungeon, $floor);
     $trail->push(
-        $difficulty === Dungeon::DIFFICULTY_10_MAN ?
-            __('breadcrumbs.home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc10man') :
-            __('breadcrumbs.home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc25man'),
+        __('breadcrumbs.home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc', [
+            'difficulty' => Dungeon::getDifficultyName($difficulty),
+        ]),
         route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon, 'floor' => $floor, 'difficulty' => $difficulty]),
     );
 });

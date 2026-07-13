@@ -4,7 +4,7 @@ use App\Models\Npc\Npc;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<Npc> $npcs
+ * @var Collection<int, Npc> $npcs
  */
 ?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.tools.npcs.showmissingdisplayid.title')])
@@ -27,7 +27,7 @@ use Illuminate\Support\Collection;
 
 
 @section('content')
-    <div class="form-group">
+    <div class="mb-3">
         <table id="npcs_table" class="tablesorter default_table table-striped">
             <thead>
             <tr>

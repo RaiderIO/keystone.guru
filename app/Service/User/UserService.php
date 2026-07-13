@@ -27,7 +27,7 @@ class UserService implements UserServiceInterface
             return false;
         }
 
-        $authentication = $request->header('Authorization');
+        $authentication = (string)$request->header('Authorization');
         if (!Str::startsWith($authentication, 'Basic')) {
             return false;
         }

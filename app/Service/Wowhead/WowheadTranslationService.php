@@ -201,9 +201,9 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
                     } else {
                         $this->log->getDungeonNamesInvalidJson();
                     }
-                } catch (CircularException|ContentLengthException|LogicalException|StrictException $e) {
+                } catch (CircularException|ContentLengthException|LogicalException|StrictException) {
                     $this->log->getDungeonNamesMalformedHtml();
-                } catch (ChildNotFoundException|NotLoadedException $e) {
+                } catch (ChildNotFoundException|NotLoadedException) {
                     $this->log->getDungeonNamesElementNotFound();
                 } finally {
                     $this->log->getDungeonNamesLocaleEnd();

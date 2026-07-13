@@ -8,13 +8,17 @@ use App\Models\Dungeon;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 class ImportStringDetails implements Arrayable
 {
     private ?string $faction = null;
 
     /**
-     * @param Collection<ImportWarning> $warnings
-     * @param Collection<string>        $affixes
+     * @param Collection<int, ImportWarning> $warnings
+     * @param Collection<int, ImportError>   $errors
+     * @param Collection<int, string>        $affixes
      */
     public function __construct(
         private readonly Collection $warnings,
@@ -25,6 +29,7 @@ class ImportStringDetails implements Arrayable
         private readonly int        $pulls,
         private readonly int        $paths,
         private readonly int        $lines,
+        private readonly int        $arrows,
         private readonly int        $notes,
         private readonly int        $enemyForces,
         private readonly int        $enemyForcesMax,
@@ -32,7 +37,7 @@ class ImportStringDetails implements Arrayable
     }
 
     /**
-     * @return Collection<ImportWarning>
+     * @return Collection<int, ImportWarning>
      */
     public function getWarnings(): Collection
     {
@@ -40,7 +45,7 @@ class ImportStringDetails implements Arrayable
     }
 
     /**
-     * @return Collection<ImportError>
+     * @return Collection<int, ImportError>
      */
     public function getErrors(): Collection
     {
@@ -70,6 +75,11 @@ class ImportStringDetails implements Arrayable
     public function getLines(): int
     {
         return $this->lines;
+    }
+
+    public function getArrows(): int
+    {
+        return $this->arrows;
     }
 
     public function getNotes(): int
@@ -108,6 +118,7 @@ class ImportStringDetails implements Arrayable
             'pulls'                      => $this->pulls,
             'paths'                      => $this->paths,
             'lines'                      => $this->lines,
+            'arrows'                     => $this->arrows,
             'notes'                      => $this->notes,
             'enemy_forces'               => $this->enemyForces,
             'enemy_forces_max'           => $this->enemyForcesMax,

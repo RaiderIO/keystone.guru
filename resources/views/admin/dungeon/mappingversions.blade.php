@@ -5,9 +5,8 @@ use App\Models\GameVersion\GameVersion;
 use Illuminate\Support\Collection;
 
 /**
- * @var Dungeon                 $dungeon
- * @var bool                    $hasUnmergedMappingVersion
- * @var Collection<GameVersion> $allGameVersions
+ * @var Dungeon                      $dungeon
+ * @var Collection<int, GameVersion> $allGameVersions
  */
 $gameVersionsSelect = $allGameVersions
     ->mapWithKeys(static fn(GameVersion $gameVersion) => [$gameVersion->id => __($gameVersion->name)]);
@@ -37,11 +36,11 @@ $gameVersionsSelect = $allGameVersions
     <div class="col-auto">
         <form method="GET"
               action="{{ route('admin.mappingversion.new', ['dungeon' => $dungeon->slug]) }}">
-            <div class="row no-gutters">
-                <div class="col pr-1">
+            <div class="row g-0">
+                <div class="col pe-1">
                     {{ html()->select('game_version', $gameVersionsSelect)->class('form-control selectpicker') }}
                 </div>
-                <div class="col-auto pr-1">
+                <div class="col-auto pe-1">
                     {{ html()->input('submit')->value(__('view_admin.dungeon.edit.mapping_versions.add_mapping_version'))->class('form-control')->name('action') }}
                 </div>
                 <div class="col-auto">
@@ -52,13 +51,13 @@ $gameVersionsSelect = $allGameVersions
     </div>
 {{--    <div class="col-auto">--}}
 {{--        <a href="{{ route('admin.mappingversion.new', ['dungeon' => $dungeon->slug]) }}"--}}
-{{--           class="btn btn-success text-white pull-right" role="button">--}}
+{{--           class="btn btn-success text-white float-end" role="button">--}}
 {{--            <i class="fas fa-plus"></i> {{ __('view_admin.dungeon.edit.mapping_versions.add_mapping_version') }}--}}
 {{--        </a>--}}
 {{--    </div>--}}
 {{--    <div class="col-auto">--}}
 {{--        <a href="{{ route('admin.mappingversion.newbare', ['dungeon' => $dungeon->slug]) }}"--}}
-{{--           class="btn btn-success text-white pull-right" role="button">--}}
+{{--           class="btn btn-success text-white float-end" role="button">--}}
 {{--            <i class="fas fa-plus"></i> {{ __('view_admin.dungeon.edit.mapping_versions.add_bare_mapping_version') }}--}}
 {{--        </a>--}}
 {{--    </div>--}}
@@ -81,7 +80,7 @@ $gameVersionsSelect = $allGameVersions
     @foreach ($dungeon->loadMappingVersions()->mappingVersions as $mappingVersion)
         <tr>
             <td>
-                <i class="fas {{ $mappingVersion->merged ? 'fa-check-circle text-success' : 'fa-times-circle text-danger' }}"></i>
+                <i class="fas {{ $mappingVersion->isLatestForDungeon() ? 'fa-check-circle text-success' : 'fa-times-circle text-danger' }}"></i>
             </td>
             <td>
                 <i class="fas {{ $mappingVersion->facade_enabled ? 'fa-check-circle text-success' : 'fa-times-circle text-danger' }}"></i>
@@ -91,16 +90,21 @@ $gameVersionsSelect = $allGameVersions
                 <img src="{{ ksgAssetImage(sprintf('gameversions/%s.png', $mappingVersion->gameVersion->key)) }}"
                      alt="{{ __($mappingVersion->gameVersion->name) }}"
                      title="{{ __($mappingVersion->gameVersion->name) }}"
-                     data-toggle="tooltip"
+                     data-bs-toggle="tooltip"
                      style="width: 50px;"/>
             </td>
             <td>{{ $mappingVersion->version }}</td>
             <td>{{ $mappingVersion->created_at->toDateTimeString() }}</td>
             <td>
-                <a class="btn btn-danger"
-                   href="{{ route('admin.mappingversion.delete', ['dungeon' => $dungeon->slug, 'mappingVersion' => $mappingVersion]) }}">
-                    <i class="fas fa-trash"></i>&nbsp;{{ __('view_admin.dungeon.edit.mapping_versions.delete') }}
-                </a>
+                <form method="POST"
+                      action="{{ route('admin.mappingversion.delete', ['dungeon' => $dungeon->slug, 'mappingVersion' => $mappingVersion]) }}"
+                      class="d-inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i>&nbsp;{{ __('view_admin.dungeon.edit.mapping_versions.delete') }}
+                    </button>
+                </form>
             </td>
         </tr>
     @endforeach

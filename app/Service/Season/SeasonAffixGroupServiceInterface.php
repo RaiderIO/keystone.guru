@@ -58,21 +58,18 @@ interface SeasonAffixGroupServiceInterface
     public function getPresetAtDate(Season $season, Carbon $date): int;
 
     /**
-     * @return Collection<Affix>
+     * @return Collection<int, Affix>
      */
     public function getFeaturedAffixes(Season $season): Collection;
 
     /**
-     * @return Collection<array{ date_start: Carbon, affix_group: AffixGroup}>
-     *
+     * @return Collection<int, array{date_start: Carbon, affix_group: AffixGroup}>
      * @throws Exception
      */
     public function getDisplayedAffixGroups(int $iterationOffset): Collection;
 
     /**
-     * @return Collection<WeeklyAffixGroup>
-     *
-     * @throws Exception
+     * @return Collection<int, WeeklyAffixGroup>
      */
     public function getWeeklyAffixGroupsSinceStart(Season $season, GameServerRegion $region): Collection;
 }

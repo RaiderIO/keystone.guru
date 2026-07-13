@@ -5,7 +5,7 @@ use App\Models\CombatLog\CombatLogSpellEvent;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<CombatLogNpcEvent|CombatLogSpellEvent> $eventFeed
+ * @var Collection<int, CombatLogNpcEvent|CombatLogSpellEvent> $eventFeed
  */
 ?>
 <div class="row mb-4">

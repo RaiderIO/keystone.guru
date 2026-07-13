@@ -8,11 +8,11 @@ use App\Models\Faction;
 use Illuminate\Support\Collection;
 
 /**
- * @var DungeonRoute                             $model
- * @var Collection<CharacterClass>               $classes
- * @var Collection<CharacterClassSpecialization> $specializations
- * @var Collection<CharacterRace>                $racesClasses
- * @var Collection<Faction>                      $allFactions
+ * @var DungeonRoute                                  $model
+ * @var Collection<int, CharacterClass>               $classes
+ * @var Collection<int, CharacterClassSpecialization> $specializations
+ * @var Collection<int, CharacterRace>                $racesClasses
+ * @var Collection<int, Faction>                      $allFactions
  */
 
 $factions ??= $allFactions;
@@ -119,7 +119,7 @@ $factions ??= $allFactions;
 
 <div class="row">
     <div class="col-md-4 offset-md-4">
-        <div class="form-group">
+        <div class="mb-3">
             {{ html()->label(__('view_common.group.composition.faction'), 'faction_id') }}
             {{--array_combine because we want keys to be equal to values https://stackoverflow.com/questions/6175548/array-copy-values-to-keys-in-php--}}
             {{ html()->select('faction_id', $factions->pluck('name', 'id')->mapWithKeys(static fn(
@@ -130,7 +130,7 @@ $factions ??= $allFactions;
     </div>
     @isset($dungeonroute)
         <div class="col-md-1">
-            <div class="form-group">
+            <div class="mb-3">
                 <button id="reload_button" class="btn btn-warning">
                     <i class="fas fa-undo"></i> {{ __('view_common.group.composition.undo') }}
                 </button>
@@ -142,23 +142,23 @@ $factions ??= $allFactions;
     <?php for ($i = 1;
                $i <= config('keystoneguru.party_size');
                ++$i){ ?>
-    <div class="col-md pl-1 pr-1">
+    <div class="col-md ps-1 pe-1">
 
-        <div class="form-group">
+        <div class="mb-3">
             {{ html()->label(sprintf(__('view_common.group.composition.party_member_nr'), $i), 'class[]') }}
             <select name="class[]" class="form-control selectpicker classselect" data-id="{{$i}}">
 
             </select>
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
             <select data-live-search="true" name="specialization[]"
                     class="form-control selectpicker specializationselect" data-id="{{$i}}">
 
             </select>
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
             <select name="race[]" id="race_{{ $i }}" class="form-control selectpicker raceselect" data-id="{{$i}}">
 
             </select>

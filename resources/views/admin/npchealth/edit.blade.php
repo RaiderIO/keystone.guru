@@ -6,11 +6,11 @@ use App\Models\Npc\NpcHealth;
 use Illuminate\Support\Collection;
 
 /**
- * @var GameVersion             $currentUserGameVersion
- * @var Npc                     $npc
- * @var NpcHealth|null          $npcHealth
- * @var Collection<GameVersion> $allGameVersions
- * @var Collection<Npc>         $npcHealthsAutoComplete
+ * @var GameVersion                  $currentUserGameVersion
+ * @var Npc                          $npc
+ * @var NpcHealth|null               $npcHealth
+ * @var Collection<int, GameVersion> $allGameVersions
+ * @var Collection<int, Npc>         $npcHealthsAutoComplete
  */
 
 $npcHealth            ??= null;
@@ -77,7 +77,7 @@ $gameVersionsSelect   = $allGameVersions
         {{ html()->modelForm($npc, 'POST', route('admin.npc.npchealth.savenew', $npc))->attribute('autocomplete', 'off')->open() }}
     @endisset
 
-    <div class="form-group{{ $errors->has('game_version_id') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('game_version_id') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.npchealth.edit.game_version'), 'game_version_id') }}
         <span class="form-required">*</span>
         {{ html()->select('game_version_id', $gameVersionsSelect, $npcHealth?->game_version_id ?? $currentUserGameVersion->id)->class('form-control selectpicker') }}
@@ -85,7 +85,7 @@ $gameVersionsSelect   = $allGameVersions
     </div>
 
 
-    <div class="form-group{{ $errors->has('health') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('health') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.npchealth.edit.health'), 'health') }}
         <span class="form-required">*</span>
         <div class="row">
@@ -117,20 +117,20 @@ $gameVersionsSelect   = $allGameVersions
         </div>
     </div>
 
-    <div class="form-group{{ $errors->has('percentage') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('percentage') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.npchealth.edit.percentage'), 'percentage') }}
         {{ html()->number('percentage', $npcHealth?->percentage ?? 100)->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'percentage'])
     </div>
 
-    <div class="form-group">
+    <div class="mb-3">
         {{ html()->input('submit')->value(__('view_admin.npchealth.edit.submit'))->class('btn btn-info')->name('submit') }}
     </div>
 
     {{ html()->closeModelForm() }}
 
     @if($npcHealth !== null)
-        <div class="form-group">
+        <div class="mb-3">
             {{ html()->label(__('view_admin.npchealth.edit.auto_complete_npc_healths'), 'admin_npc_npc_health_table') }}
 
             <table id="admin_npc_npc_health_table" class="tablesorter default_table table-striped">
@@ -155,7 +155,7 @@ $gameVersionsSelect   = $allGameVersions
                             <td>{{ number_format($autoCompleteNpcHealth->health) }}</td>
                             <td>{{ $autoCompleteNpcHealth->percentage }}</td>
                             <td>
-                                <div class="row no-gutters">
+                                <div class="row g-0">
                                     <div class="col">
                                         <a class="btn btn-success apply-health"
                                            data-health="{{ $autoCompleteNpcHealth->health }}">

@@ -12,6 +12,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse as SymfonyRedirectResponse
 
 class BattleNetLoginController extends OAuthLoginController
 {
+    /**
+     * @param object $oauthUser
+     * @param mixed  $oAuthId
+     */
     protected function getUser($oauthUser, $oAuthId)
     {
         return new User([
@@ -33,6 +37,7 @@ class BattleNetLoginController extends OAuthLoginController
         return 'battlenet';
     }
 
+    #[\Override]
     public function redirectToProvider(
         Request                      $request,
         ReadOnlyModeServiceInterface $readOnlyModeService,

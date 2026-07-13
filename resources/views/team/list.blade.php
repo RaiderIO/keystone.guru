@@ -5,7 +5,7 @@ use App\Service\Cookies\CookieServiceInterface;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<Team> $models
+ * @var Collection<int, Team> $models
  */
 
 $cookieService = resolve(CookieServiceInterface::class);
@@ -15,7 +15,7 @@ $cookieService->setCookie('viewed_teams', true)
 
 @section('header-title', __('view_team.list.header'))
 @section('header-addition')
-    <a href="{{ route('team.new') }}" class="btn btn-success text-white float-right" role="button">
+    <a href="{{ route('team.new') }}" class="btn btn-success text-white float-end" role="button">
         <i class="fas fa-plus"></i> {{ __('view_team.list.create_team') }}
     </a>
 @endsection
@@ -35,10 +35,10 @@ $cookieService->setCookie('viewed_teams', true)
 
         <tbody>
         @foreach ($models as $team)
-            <tr data-teamid="{{ $team->public_key }}">
+            <tr data-teamid="{{ $team->getRouteKey() }}">
                 <td class="clickable">
                     @isset($team->iconfile)
-                        <img alt="Icon" class="mr-1" src="{{ $team->iconfile->getURL() }}"
+                        <img alt="Icon" class="me-1" src="{{ $team->iconfile->getURL() }}"
                              style="max-width: 48px"/>
                     @endisset
                     {{ $team->name }}

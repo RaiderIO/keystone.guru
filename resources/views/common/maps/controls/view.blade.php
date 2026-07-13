@@ -5,15 +5,15 @@ use App\Models\Floor\Floor;
 use Illuminate\Support\Collection;
 
 /**
- * @var boolean           $isAdmin
- * @var Collection<Floor> $floors
- * @var DungeonRoute|null $dungeonroute
- * @var bool              $isMobile
- * @var bool              $facadeEnabled
+ * @var boolean                $isAdmin
+ * @var Collection<int, Floor> $floors
+ * @var DungeonRoute|null      $dungeonroute
+ * @var bool                   $isMobile
+ * @var bool                   $facadeEnabled
  */
 ?>
 <nav
-    class="route_sidebar route_manipulation_tools left row no-gutters map_fade_out {{ $isMobile ? 'mobile' : '' }}">
+    class="route_sidebar route_manipulation_tools left row g-0 map_fade_out {{ $isMobile ? 'mobile' : '' }}">
     <div class="bg-header">
         @isset($dungeonroute)
             <div id="view_route_actions_container" class="mb-2">

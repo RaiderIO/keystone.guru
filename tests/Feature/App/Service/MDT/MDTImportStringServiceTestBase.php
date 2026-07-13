@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\App\Service\MDT;
 
+use App\Logic\MDT\Exception\ImportWarning;
+use App\Models\Arrow;
 use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Polyline;
@@ -14,11 +16,17 @@ abstract class MDTImportStringServiceTestBase extends MDTExportStringServiceTest
 {
     use GeneratesDungeonRoutes;
 
+    /**
+     * @param Collection<int, ImportWarning>|null $warnings
+     */
     protected function exportDungeonRouteToString(DungeonRoute $dungeonRoute, ?Collection $warnings = null): string
     {
+        /** @var Collection<int, ImportWarning> $warningsCollection */
+        $warningsCollection = $warnings ?? new Collection();
+
         return app()->make(MDTExportStringServiceInterface::class)
             ->setDungeonRoute($dungeonRoute)
-            ->getEncodedString($warnings ?? new Collection());
+            ->getEncodedString($warningsCollection);
     }
 
     protected function importStringToDungeonRoute(string $encodedString, bool $assignNotesToPulls = false): DungeonRoute
@@ -58,5 +66,31 @@ abstract class MDTImportStringServiceTestBase extends MDTExportStringServiceTest
         $brushline->update(['polyline_id' => $polyline->id]);
 
         return $brushline;
+    }
+
+    protected function createArrowForRoute(DungeonRoute $dungeonRoute): Arrow
+    {
+        $floor = $dungeonRoute->dungeon->floors()->first();
+
+        $arrow = Arrow::create([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'floor_id'         => $floor->id,
+            'polyline_id'      => -1,
+        ]);
+
+        $polyline = Polyline::create([
+            'model_id'      => $arrow->id,
+            'model_class'   => Arrow::class,
+            'color'         => '#FF0032',
+            'weight'        => 2,
+            'vertices_json' => json_encode([
+                ['lat' => -100.0, 'lng' => 200.0],
+                ['lat' => -150.0, 'lng' => 250.0],
+            ]),
+        ]);
+
+        $arrow->update(['polyline_id' => $polyline->id]);
+
+        return $arrow;
     }
 }

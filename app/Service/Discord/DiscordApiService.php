@@ -8,6 +8,9 @@ class DiscordApiService implements DiscordApiServiceInterface
 {
     use Curl;
 
+    /**
+     * @param array<int, array<string, mixed>> $embeds
+     */
     public function sendMessage(string $webhookUrl, string $message, ?string $username = null, array $embeds = []): bool
     {
         $result = $this->curlPost($webhookUrl, [
@@ -18,6 +21,9 @@ class DiscordApiService implements DiscordApiServiceInterface
         return true;
     }
 
+    /**
+     * @param array<int, array<string, mixed>> $embeds
+     */
     public function sendEmbeds(string $webhookUrl, array $embeds): bool
     {
         $result = $this->curlPost($webhookUrl, ['embeds' => $embeds]);

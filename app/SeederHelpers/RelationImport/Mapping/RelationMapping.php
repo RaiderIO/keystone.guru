@@ -16,16 +16,16 @@ use Illuminate\Support\Collection;
  */
 abstract class RelationMapping
 {
-    /** @var Collection<ConditionalInterface> */
+    /** @var Collection<int, ConditionalInterface> */
     private Collection $conditionals;
 
-    /** @var Collection<AttributeParserInterface> */
+    /** @var Collection<int, AttributeParserInterface> */
     private Collection $attributeParsers;
 
-    /** @var Collection<RelationParserInterface> */
+    /** @var Collection<int, RelationParserInterface> */
     private Collection $preSaveRelationParsers;
 
-    /** @var Collection<RelationParserInterface> */
+    /** @var Collection<int, RelationParserInterface> */
     private Collection $postSaveRelationParsers;
 
     /**
@@ -43,7 +43,7 @@ abstract class RelationMapping
     }
 
     /**
-     * @return Collection<ConditionalInterface>
+     * @return Collection<int, ConditionalInterface>
      */
     public function getConditionals(): Collection
     {
@@ -51,32 +51,40 @@ abstract class RelationMapping
     }
 
     /**
+     * @template TConditional of ConditionalInterface
+     * @param  Collection<int, TConditional> $conditionals
      * @return $this
      */
     protected function setConditionals(Collection $conditionals): self
     {
+        /** @var Collection<int, ConditionalInterface> $conditionals */
         $this->conditionals = $conditionals;
 
         return $this;
     }
 
     /**
-     * @return Collection<AttributeParserInterface>
+     * @return Collection<int, AttributeParserInterface>
      */
     public function getAttributeParsers(): Collection
     {
         return $this->attributeParsers;
     }
 
+    /**
+     * @template TAttributeParser of AttributeParserInterface
+     * @param Collection<int, TAttributeParser> $attributeParsers
+     */
     public function setAttributeParsers(Collection $attributeParsers): RelationMapping
     {
+        /** @var Collection<int, AttributeParserInterface> $attributeParsers */
         $this->attributeParsers = $attributeParsers;
 
         return $this;
     }
 
     /**
-     * @return Collection<RelationParserInterface>
+     * @return Collection<int, RelationParserInterface>
      */
     public function getPreSaveRelationParsers(): Collection
     {
@@ -84,18 +92,20 @@ abstract class RelationMapping
     }
 
     /**
-     * @param  Collection<RelationParserInterface> $preSaveRelationParsers
+     * @template TRelationParser of RelationParserInterface
+     * @param  Collection<int, TRelationParser> $preSaveRelationParsers
      * @return $this
      */
     protected function setPreSaveRelationParsers(Collection $preSaveRelationParsers): self
     {
+        /** @var Collection<int, RelationParserInterface> $preSaveRelationParsers */
         $this->preSaveRelationParsers = $preSaveRelationParsers;
 
         return $this;
     }
 
     /**
-     * @return Collection<RelationParserInterface>
+     * @return Collection<int, RelationParserInterface>
      */
     public function getPostSaveRelationParsers(): Collection
     {
@@ -103,11 +113,13 @@ abstract class RelationMapping
     }
 
     /**
-     * @param  Collection<RelationParserInterface> $postSaveRelationParsers
+     * @template TRelationParser of RelationParserInterface
+     * @param  Collection<int, TRelationParser> $postSaveRelationParsers
      * @return $this
      */
     protected function setPostSaveRelationParsers(Collection $postSaveRelationParsers): self
     {
+        /** @var Collection<int, RelationParserInterface> $postSaveRelationParsers */
         $this->postSaveRelationParsers = $postSaveRelationParsers;
 
         return $this;

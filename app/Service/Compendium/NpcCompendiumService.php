@@ -60,6 +60,9 @@ class NpcCompendiumService implements NpcCompendiumServiceInterface
             ->values();
     }
 
+    /**
+     * @return LengthAwarePaginator<int, string>
+     */
     public function getActivityDates(int $perPage = 10, ?Dungeon $dungeon = null): LengthAwarePaginator
     {
         $npcDates = CombatLogNpcEvent::query()
@@ -127,6 +130,9 @@ class NpcCompendiumService implements NpcCompendiumServiceInterface
             ->values();
     }
 
+    /**
+     * @return Collection<int, int>
+     */
     private function getNpcIdsForDungeon(Dungeon $dungeon): Collection
     {
         return $this->dungeonIdCache[$dungeon->id]['npcIds'] ??= DB::table('npc_dungeons')
@@ -134,6 +140,9 @@ class NpcCompendiumService implements NpcCompendiumServiceInterface
             ->pluck('npc_id');
     }
 
+    /**
+     * @return Collection<int, int>
+     */
     private function getDungeonSpellIds(Dungeon $dungeon): Collection
     {
         return $this->dungeonIdCache[$dungeon->id]['spellIds'] ??= NpcSpell::whereIn('npc_id', $this->getNpcIdsForDungeon($dungeon))

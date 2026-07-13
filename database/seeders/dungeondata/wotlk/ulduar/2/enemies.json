@@ -20,8 +20,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -171.515,
-        "lng": 139.6745,
+        "lat": -171.51,
+        "lng": 139.67,
         "kill_priority": null
     },
     {
@@ -45,8 +45,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -171.6073,
-        "lng": 144.8378,
+        "lat": -171.61,
+        "lng": 144.84,
         "kill_priority": null
     },
     {
@@ -70,8 +70,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -166.8484,
-        "lng": 137.7002,
+        "lat": -166.85,
+        "lng": 137.7,
         "kill_priority": null
     },
     {
@@ -95,8 +95,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -168.5715,
-        "lng": 134.5413,
+        "lat": -168.57,
+        "lng": 134.54,
         "kill_priority": null
     },
     {
@@ -120,8 +120,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -167.0638,
-        "lng": 146.2437,
+        "lat": -167.06,
+        "lng": 146.24,
         "kill_priority": null
     },
     {
@@ -145,8 +145,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -168.751,
-        "lng": 149.4744,
+        "lat": -168.75,
+        "lng": 149.47,
         "kill_priority": null
     },
     {
@@ -170,8 +170,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -134.1192,
-        "lng": 137.3838,
+        "lat": -134.12,
+        "lng": 137.38,
         "kill_priority": null
     },
     {
@@ -195,8 +195,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -134.1736,
-        "lng": 147.5039,
+        "lat": -134.17,
+        "lng": 147.5,
         "kill_priority": null
     },
     {
@@ -220,8 +220,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -90.8637,
-        "lng": 142.2806,
+        "lat": -90.86,
+        "lng": 142.28,
         "kill_priority": null
     },
     {
@@ -245,8 +245,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -89.3403,
-        "lng": 145.0011,
+        "lat": -89.34,
+        "lng": 145,
         "kill_priority": null
     },
     {
@@ -270,8 +270,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -89.0138,
-        "lng": 139.669,
+        "lat": -89.01,
+        "lng": 139.67,
         "kill_priority": null
     },
     {
@@ -295,8 +295,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -89.7755,
-        "lng": 134.3912,
+        "lat": -89.78,
+        "lng": 134.39,
         "kill_priority": null
     },
     {
@@ -320,8 +320,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -91.6799,
-        "lng": 149.8979,
+        "lat": -91.68,
+        "lng": 149.9,
         "kill_priority": null
     },
     {
@@ -345,8 +345,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -88.6329,
-        "lng": 150.442,
+        "lat": -88.63,
+        "lng": 150.44,
         "kill_priority": null
     },
     {
@@ -370,8 +370,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -77.3702,
-        "lng": 116.1097,
+        "lat": -77.37,
+        "lng": 116.11,
         "kill_priority": null
     },
     {
@@ -395,8 +395,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -77.5878,
-        "lng": 171.8793,
+        "lat": -77.59,
+        "lng": 171.88,
         "kill_priority": null
     },
     {
@@ -421,7 +421,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -74.5,
-        "lng": 77.875,
+        "lng": 77.88,
         "kill_priority": null
     },
     {
@@ -445,8 +445,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -80.4375,
-        "lng": 77.625,
+        "lat": -80.44,
+        "lng": 77.62,
         "kill_priority": null
     },
     {
@@ -471,7 +471,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -145.25,
-        "lng": 67.8125,
+        "lng": 67.81,
         "kill_priority": null
     },
     {
@@ -495,7 +495,7 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -145.375,
+        "lat": -145.38,
         "lng": 60.75,
         "kill_priority": null
     },
@@ -520,7 +520,7 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -145.4375,
+        "lat": -145.44,
         "lng": 52,
         "kill_priority": null
     },
@@ -545,8 +545,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -32.9721,
-        "lng": 143.2056,
+        "lat": -32.97,
+        "lng": 143.21,
         "kill_priority": null
     },
     {
@@ -570,8 +570,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": 2,
-        "lat": -171.515,
-        "lng": 139.6745,
+        "lat": -171.51,
+        "lng": 139.67,
         "kill_priority": null
     },
     {
@@ -595,8 +595,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -171.6073,
-        "lng": 144.8378,
+        "lat": -171.61,
+        "lng": 144.84,
         "kill_priority": null
     },
     {
@@ -620,8 +620,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": 2,
-        "lat": -166.8484,
-        "lng": 137.7002,
+        "lat": -166.85,
+        "lng": 137.7,
         "kill_priority": null
     },
     {
@@ -645,8 +645,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": 2,
-        "lat": -168.5715,
-        "lng": 134.5413,
+        "lat": -168.57,
+        "lng": 134.54,
         "kill_priority": null
     },
     {
@@ -670,8 +670,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -167.0638,
-        "lng": 146.2437,
+        "lat": -167.06,
+        "lng": 146.24,
         "kill_priority": null
     },
     {
@@ -695,8 +695,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -168.751,
-        "lng": 149.4744,
+        "lat": -168.75,
+        "lng": 149.47,
         "kill_priority": null
     },
     {
@@ -720,8 +720,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -134.1192,
-        "lng": 137.3838,
+        "lat": -134.12,
+        "lng": 137.38,
         "kill_priority": null
     },
     {
@@ -745,8 +745,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -134.1736,
-        "lng": 147.5039,
+        "lat": -134.17,
+        "lng": 147.5,
         "kill_priority": null
     },
     {
@@ -770,8 +770,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": 2,
-        "lat": -90.8637,
-        "lng": 142.2806,
+        "lat": -90.86,
+        "lng": 142.28,
         "kill_priority": null
     },
     {
@@ -795,8 +795,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -89.3403,
-        "lng": 145.0011,
+        "lat": -89.34,
+        "lng": 145,
         "kill_priority": null
     },
     {
@@ -820,8 +820,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": 2,
-        "lat": -89.0138,
-        "lng": 139.669,
+        "lat": -89.01,
+        "lng": 139.67,
         "kill_priority": null
     },
     {
@@ -845,8 +845,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": 2,
-        "lat": -89.7755,
-        "lng": 134.3912,
+        "lat": -89.78,
+        "lng": 134.39,
         "kill_priority": null
     },
     {
@@ -870,8 +870,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -91.6799,
-        "lng": 149.8979,
+        "lat": -91.68,
+        "lng": 149.9,
         "kill_priority": null
     },
     {
@@ -895,8 +895,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -88.6329,
-        "lng": 150.442,
+        "lat": -88.63,
+        "lng": 150.44,
         "kill_priority": null
     },
     {
@@ -920,8 +920,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -77.3702,
-        "lng": 116.1097,
+        "lat": -77.37,
+        "lng": 116.11,
         "kill_priority": null
     },
     {
@@ -945,8 +945,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -77.5878,
-        "lng": 171.8793,
+        "lat": -77.59,
+        "lng": 171.88,
         "kill_priority": null
     },
     {
@@ -971,7 +971,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -74.5,
-        "lng": 77.875,
+        "lng": 77.88,
         "kill_priority": null
     },
     {
@@ -995,8 +995,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -80.4375,
-        "lng": 77.625,
+        "lat": -80.44,
+        "lng": 77.62,
         "kill_priority": null
     },
     {
@@ -1021,7 +1021,7 @@
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -145.25,
-        "lng": 67.8125,
+        "lng": 67.81,
         "kill_priority": null
     },
     {
@@ -1045,7 +1045,7 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -145.375,
+        "lat": -145.38,
         "lng": 60.75,
         "kill_priority": null
     },
@@ -1070,7 +1070,7 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -145.4375,
+        "lat": -145.44,
         "lng": 52,
         "kill_priority": null
     },
@@ -1095,8 +1095,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -32.9721,
-        "lng": 143.2056,
+        "lat": -32.97,
+        "lng": 143.21,
         "kill_priority": null
     }
 ]

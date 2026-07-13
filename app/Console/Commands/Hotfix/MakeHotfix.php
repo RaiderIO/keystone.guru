@@ -1,8 +1,6 @@
 <?php
 
 namespace App\Console\Commands\Hotfix;
-use App\Models\Release;
-use App\Repositories\Interfaces\ReleaseRepositoryInterface;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Process;
@@ -15,7 +13,8 @@ class MakeHotfix extends Command
      *
      * @var string
      */
-    protected $signature = 'make:hotfix {version? : The version to create a hotfix for}';
+    protected $signature = 'make:hotfix {version=latest : The version to create a hotfix for}
+                                        {--file= : Optionally create a hotfix for a single file instead of all changed files}';
 
     /**
      * The console command description.
@@ -27,25 +26,32 @@ class MakeHotfix extends Command
     /**
      * Execute the console command.
      */
-    public function handle(
-        ReleaseRepositoryInterface $releaseRepository,
-    ): int {
+    public function handle(): int
+    {
         $version = $this->argument('version');
 
-        /** @var Release|null $release */
-        $release = $releaseRepository->findReleaseByVersion($version);
+        // Without an explicit version, fall back to the deployed release tag baked into the version file (#3320)
+        if ($version === 'latest') {
+            $version = trim(file_get_contents(base_path('version')));
+        }
 
-        if ($release === null) {
-            $this->error('Release not found!');
+        if (!str_starts_with($version, 'v')) {
+            $this->error(sprintf('Invalid release version %s - expected a release tag such as v1.2.3!', $version));
 
             return self::FAILURE;
         }
 
-        $this->info("Creating hotfix for release: {$release->version}");
+        $this->info("Creating hotfix for release: {$version}");
 
         try {
-            // Get changed files from Git
-            $changedFiles = $this->getChangedFiles();
+            $file = $this->option('file');
+
+            if ($file !== null) {
+                $changedFiles = $this->getSingleFile($file);
+            } else {
+                // Get changed files from Git
+                $changedFiles = $this->getChangedFiles();
+            }
 
             if (empty($changedFiles)) {
                 $this->warn('No changed files found!');
@@ -59,9 +65,9 @@ class MakeHotfix extends Command
             }
 
             // Upload files to S3
-            $this->uploadFilesToS3($changedFiles, $release->version);
+            $this->uploadFilesToS3($changedFiles, $version);
 
-            $this->info("Hotfix created successfully for version {$release->version}!");
+            $this->info("Hotfix created successfully for version {$version}!");
 
             return self::SUCCESS;
         } catch (Exception $e) {
@@ -72,9 +78,24 @@ class MakeHotfix extends Command
     }
 
     /**
+     * Get a single file to create a hotfix for, validating that it exists.
+     *
+     * @return array<int, string>
+     * @throws Exception
+     */
+    private function getSingleFile(string $file): array
+    {
+        if (!file_exists(base_path($file))) {
+            throw new Exception("File not found: {$file}");
+        }
+
+        return [$file];
+    }
+
+    /**
      * Get the list of changed files from Git
      *
-     * @return array
+     * @return array<int, string>
      * @throws Exception
      */
     private function getChangedFiles(): array
@@ -95,9 +116,7 @@ class MakeHotfix extends Command
     /**
      * Upload files to S3
      *
-     * @param  array     $files
-     * @param  string    $version
-     * @return void
+     * @param  array<int, string> $files
      * @throws Exception
      */
     private function uploadFilesToS3(array $files, string $version): void

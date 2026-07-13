@@ -6,6 +6,12 @@ return [
         'Admin',
     ],
 
+    // sh/worktree.sh sets COMPOSE_PROJECT_NAME to "ksg-<branch>" for a worktree stack; unset on the
+    // main stack and in production, so this is null there.
+    'worktree' => ($composeProjectName = env('COMPOSE_PROJECT_NAME')) !== null && str_starts_with($composeProjectName, 'ksg-')
+        ? substr($composeProjectName, strlen('ksg-'))
+        : null,
+
     'db_backup_dir'            => env('DB_BACKUP_DIR'),
     'mapping_backup_dir'       => env('MAPPING_BACKUP_DIR'),
     'assets_base_url'          => env('ASSETS_BASE_URL', '/'),
@@ -17,8 +23,6 @@ return [
     'github_username'         => 'Wotuu',
     'github_repository_owner' => 'RaiderIO',
     'github_repository'       => 'Keystone.guru',
-
-    'reddit_subreddit' => 'KeystoneGuru',
 
     'sanitize_text' => [
         'allowed_tags'    => ['a', 'h4', 'h5', 'h6', 'b', 'i', 'br'],
@@ -168,12 +172,6 @@ return [
     'zoom_max_default' => 5,
 
     /**
-     * The amount of hours it takes after changes have occurred, before they're automatically synced with the server.
-     * This prevents active mapping efforts from getting commits every 2 minutes or something
-     */
-    'mapping_commit_after_change_hours' => 1,
-
-    /**
      * Size of a party for a M+ dungeon. Used for a bunch of stuff, changing this value does not mean it's 100% fine though,
      * some layout will need to be re-made for a smaller or higher value.
      */
@@ -186,6 +184,7 @@ return [
         'kill_zones' => 50,
         'brushlines' => 150,
         'paths'      => 150,
+        'arrows'     => 50,
         'map_icons'  => 150,
     ],
 
@@ -200,6 +199,11 @@ return [
      * the view is counted for a second time.
      */
     'view_time_threshold_mins' => 30,
+
+    'page_views' => [
+        /** The number of days page view records are kept before being pruned. Only the last X days are needed for popularity calculations. */
+        'retention_days' => 30,
+    ],
 
     'thumbnail' => [
         /**
@@ -344,10 +348,6 @@ return [
         'expires_hours' => 1,
     ],
 
-    'releases' => [
-        'spotlight_show_days' => 7,
-    ],
-
     'influxdb' => [
         'default_tags' => [
             'environment' => env('APP_ENV'),
@@ -372,6 +372,10 @@ return [
         ],
     ],
 
+    'raiderio' => [
+        'api_key' => env('RAIDERIO_API_KEY'),
+    ],
+
     'patreon' => [
         'oauth' => [
             'client_id' => env('PATREON_CLIENT_ID'),
@@ -382,17 +386,6 @@ return [
         'campaign_id' => env('PATREON_CAMPAIGN_ID'),
         // The amount of ad-free giveaways that one may have in total
         'ad_free_giveaways' => 4,
-    ],
-
-    'reddit' => [
-        'oauth' => [
-            'client_id' => env('REDDIT_CLIENT_ID'),
-            'secret'    => env('REDDIT_SECRET_KEY'),
-        ],
-        // Used for creating release posts under the Keystoneguru user
-        'api' => [
-            'refresh_token' => env('REDDIT_REFRESH_TOKEN'),
-        ],
     ],
 
     'nitro_pay' => [
@@ -487,7 +480,7 @@ return [
     ],
 
     'mdt' => [
-        'version' => 'v6.1.4',
+        'version' => 'v6.1.20',
     ],
 
     'combat_log_route_regeneration' => [

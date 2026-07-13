@@ -18,6 +18,9 @@ interface ResultEventDungeonRouteBuilderLoggingInterface extends DungeonRouteBui
 
     public function buildSpellCast(string $guid, int $spellId): void;
 
+    /**
+     * @param array<int, string> $guids
+     */
     public function buildCreateNewFinalPull(array $guids): void;
 
     public function buildEnd(): void;

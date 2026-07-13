@@ -21,10 +21,11 @@ use App\Repositories\Database\CombatLog\CombatLogAnalyzeRepository;
 use App\Repositories\Database\CombatLog\CombatLogEventRepository;
 use App\Repositories\Database\CombatLog\CombatLogNpcCharacteristicObservationRepository;
 use App\Repositories\Database\CombatLog\CombatLogNpcEventRepository;
+use App\Repositories\Database\CombatLog\CombatLogParseFailureRepository;
 use App\Repositories\Database\CombatLog\CombatLogParsingCriterionRepository;
+use App\Repositories\Database\CombatLog\CombatLogRouteEnemyFailureRepository;
 use App\Repositories\Database\CombatLog\CombatLogSpellEventRepository;
 use App\Repositories\Database\CombatLog\CombatLogSpellPropertyObservationRepository;
-use App\Repositories\Database\CombatLog\EnemyPositionRepository;
 use App\Repositories\Database\CombatLog\ParsedCombatLogRepository;
 use App\Repositories\Database\DungeonFloorSwitchMarkerRepository;
 use App\Repositories\Database\DungeonRepository;
@@ -94,15 +95,13 @@ use App\Repositories\Database\Patreon\PatreonUserLinkRepository;
 use App\Repositories\Database\PolylineRepository;
 use App\Repositories\Database\PublishedStateRepository;
 use App\Repositories\Database\RaidMarkerRepository;
-use App\Repositories\Database\ReleaseChangelogCategoryRepository;
-use App\Repositories\Database\ReleaseChangelogChangeRepository;
-use App\Repositories\Database\ReleaseChangelogRepository;
 use App\Repositories\Database\ReleaseReportLogRepository;
-use App\Repositories\Database\ReleaseRepository;
 use App\Repositories\Database\RouteAttributeRepository;
 use App\Repositories\Database\SeasonDungeonRepository;
 use App\Repositories\Database\SeasonRepository;
 use App\Repositories\Database\SimulationCraft\SimulationCraftRaidEventsOptionsRepository;
+use App\Repositories\Database\Speedrun\DungeonSpeedrunDifficultyRepository;
+use App\Repositories\Database\Speedrun\DungeonSpeedrunRequiredNpcNpcRepository;
 use App\Repositories\Database\Speedrun\DungeonSpeedrunRequiredNpcRepository;
 use App\Repositories\Database\Spell\SpellDungeonRepository;
 use App\Repositories\Database\SpellRepository;
@@ -134,10 +133,11 @@ use App\Repositories\Interfaces\CombatLog\CombatLogAnalyzeRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\CombatLogEventRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\CombatLogNpcCharacteristicObservationRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\CombatLogNpcEventRepositoryInterface;
+use App\Repositories\Interfaces\CombatLog\CombatLogParseFailureRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\CombatLogParsingCriterionRepositoryInterface;
+use App\Repositories\Interfaces\CombatLog\CombatLogRouteEnemyFailureRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\CombatLogSpellEventRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\CombatLogSpellPropertyObservationRepositoryInterface;
-use App\Repositories\Interfaces\CombatLog\EnemyPositionRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\ParsedCombatLogRepositoryInterface;
 use App\Repositories\Interfaces\DungeonFloorSwitchMarkerRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
@@ -207,15 +207,13 @@ use App\Repositories\Interfaces\Patreon\PatreonUserLinkRepositoryInterface;
 use App\Repositories\Interfaces\PolylineRepositoryInterface;
 use App\Repositories\Interfaces\PublishedStateRepositoryInterface;
 use App\Repositories\Interfaces\RaidMarkerRepositoryInterface;
-use App\Repositories\Interfaces\ReleaseChangelogCategoryRepositoryInterface;
-use App\Repositories\Interfaces\ReleaseChangelogChangeRepositoryInterface;
-use App\Repositories\Interfaces\ReleaseChangelogRepositoryInterface;
 use App\Repositories\Interfaces\ReleaseReportLogRepositoryInterface;
-use App\Repositories\Interfaces\ReleaseRepositoryInterface;
 use App\Repositories\Interfaces\RouteAttributeRepositoryInterface;
 use App\Repositories\Interfaces\SeasonDungeonRepositoryInterface;
 use App\Repositories\Interfaces\SeasonRepositoryInterface;
 use App\Repositories\Interfaces\SimulationCraft\SimulationCraftRaidEventsOptionsRepositoryInterface;
+use App\Repositories\Interfaces\Speedrun\DungeonSpeedrunDifficultyRepositoryInterface;
+use App\Repositories\Interfaces\Speedrun\DungeonSpeedrunRequiredNpcNpcRepositoryInterface;
 use App\Repositories\Interfaces\Speedrun\DungeonSpeedrunRequiredNpcRepositoryInterface;
 use App\Repositories\Interfaces\Spell\SpellDungeonRepositoryInterface;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
@@ -252,10 +250,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(CombatLogEventRepositoryInterface::class, CombatLogEventRepository::class);
         $this->app->bind(CombatLogNpcCharacteristicObservationRepositoryInterface::class, CombatLogNpcCharacteristicObservationRepository::class);
         $this->app->bind(CombatLogNpcEventRepositoryInterface::class, CombatLogNpcEventRepository::class);
+        $this->app->bind(CombatLogParseFailureRepositoryInterface::class, CombatLogParseFailureRepository::class);
         $this->app->bind(CombatLogParsingCriterionRepositoryInterface::class, CombatLogParsingCriterionRepository::class);
+        $this->app->bind(CombatLogRouteEnemyFailureRepositoryInterface::class, CombatLogRouteEnemyFailureRepository::class);
         $this->app->bind(CombatLogSpellEventRepositoryInterface::class, CombatLogSpellEventRepository::class);
         $this->app->bind(CombatLogSpellPropertyObservationRepositoryInterface::class, CombatLogSpellPropertyObservationRepository::class);
-        $this->app->bind(EnemyPositionRepositoryInterface::class, EnemyPositionRepository::class);
         $this->app->bind(ParsedCombatLogRepositoryInterface::class, ParsedCombatLogRepository::class);
 
         // DungeonRoute
@@ -323,6 +322,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(SimulationCraftRaidEventsOptionsRepositoryInterface::class, SimulationCraftRaidEventsOptionsRepository::class);
 
         // Speedrun
+        $this->app->bind(DungeonSpeedrunDifficultyRepositoryInterface::class, DungeonSpeedrunDifficultyRepository::class);
+        $this->app->bind(DungeonSpeedrunRequiredNpcNpcRepositoryInterface::class, DungeonSpeedrunRequiredNpcNpcRepository::class);
         $this->app->bind(DungeonSpeedrunRequiredNpcRepositoryInterface::class, DungeonSpeedrunRequiredNpcRepository::class);
 
         // Spell
@@ -378,11 +379,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(PolylineRepositoryInterface::class, PolylineRepository::class);
         $this->app->bind(PublishedStateRepositoryInterface::class, PublishedStateRepository::class);
         $this->app->bind(RaidMarkerRepositoryInterface::class, RaidMarkerRepository::class);
-        $this->app->bind(ReleaseChangelogCategoryRepositoryInterface::class, ReleaseChangelogCategoryRepository::class);
-        $this->app->bind(ReleaseChangelogChangeRepositoryInterface::class, ReleaseChangelogChangeRepository::class);
-        $this->app->bind(ReleaseChangelogRepositoryInterface::class, ReleaseChangelogRepository::class);
         $this->app->bind(ReleaseReportLogRepositoryInterface::class, ReleaseReportLogRepository::class);
-        $this->app->bind(ReleaseRepositoryInterface::class, ReleaseRepository::class);
         $this->app->bind(RouteAttributeRepositoryInterface::class, RouteAttributeRepository::class);
         $this->app->bind(SeasonDungeonRepositoryInterface::class, SeasonDungeonRepository::class);
         $this->app->bind(SeasonRepositoryInterface::class, SeasonRepository::class);

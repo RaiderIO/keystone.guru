@@ -19,17 +19,21 @@ return [
             'mdt_invalid_category'                => 'Неправильна категорія',
         ],
         'flash' => [
-            'message_banner_set_successfully'   => 'Банер повідомлення успішно встановлено',
-            'thumbnail_regenerate_result'       => 'Надіслано :success завдань для :total маршруту(-ів). Невдалих — :failed.',
-            'combatlog_route_regenerate_result' => 'Надіслано :count завдань',
-            'caches_dropped_successfully'       => 'Кеш успішно очищено',
-            'releases_exported'                 => 'Версії експортовано',
-            'exception'                         => ' У панелі адміністратора сталася халепа',
-            'feature_toggle_activated'          => 'Функція :feature тепер увімкнена',
-            'feature_toggle_deactivated'        => 'Функція :feature тепер вимкнена',
-            'feature_forgotten'                 => 'Функція :feature успішно забута',
-            'read_only_mode_disabled'           => 'Режим для читання вимкнено',
-            'read_only_mode_enabled'            => 'Режим для читання ввімкнено',
+            'message_banner_set_successfully'        => 'Банер повідомлення успішно встановлено',
+            'thumbnail_regenerate_result'            => 'Надіслано :success завдань для :total маршруту(-ів). Невдалих — :failed.',
+            'combatlog_route_regenerate_result'      => 'Надіслано :count завдань',
+            'combatlog_criteria_reset'               => '',
+            'combatlog_criteria_thresholds_updated'  => '',
+            'caches_dropped_successfully'            => 'Кеш успішно очищено',
+            'releases_exported'                      => 'Версії експортовано',
+            'exception'                              => ' У панелі адміністратора сталася халепа',
+            'feature_toggle_activated'               => 'Функція :feature тепер увімкнена',
+            'feature_toggle_deactivated'             => 'Функція :feature тепер вимкнена',
+            'feature_forgotten'                      => 'Функція :feature успішно забута',
+            'mapping_version_upgrade_queued'         => '',
+            'mapping_version_upgrade_already_latest' => '',
+            'read_only_mode_disabled'                => 'Режим для читання вимкнено',
+            'read_only_mode_enabled'                 => 'Режим для читання ввімкнено',
         ],
     ],
     'apidungeonroute' => [
@@ -46,6 +50,12 @@ return [
         'error' => [
             'unable_to_save_brushline'   => 'Не вдалося зберегти лінію',
             'unable_to_delete_brushline' => 'Не вдалося видалити лінію',
+        ],
+    ],
+    'arrow' => [
+        'error' => [
+            'unable_to_save_arrow'   => '',
+            'unable_to_delete_arrow' => '',
         ],
     ],
     'dungeon' => [
@@ -176,6 +186,13 @@ return [
             'account_deleted_successfully'     => 'Обліковий запис успішно видалено.',
             'error_deleting_account'           => 'Виникла помилка. Спробуйте знову.',
         ],
+        'error' => [
+            'add_ad_free_giveaway_limit_reached'        => '',
+            'add_ad_free_giveaway_already_ad_free'      => '',
+            'add_ad_free_giveaway_already_has_giveaway' => '',
+            'remove_ad_free_giveaway_not_found'         => '',
+            'remove_ad_free_giveaway_not_yours'         => '',
+        ],
     ],
     'spell' => [
         'error' => [
@@ -207,6 +224,16 @@ return [
             'user_is_not_a_patron'              => 'Цей користувач не має підписки на Patreon.',
             'all_benefits_granted_successfully' => 'Успішно надано всі бонуси.',
             'error_granting_all_benefits'       => 'Під час надавання всіх бонусів виникла помилка.',
+        ],
+    ],
+
+    'admin' => [
+        'dungeonroute' => [
+            'flash' => [
+                'updated' => '',
+                'deleted' => '',
+                'claimed' => '',
+            ],
         ],
     ],
 

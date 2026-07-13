@@ -81,6 +81,12 @@ return [
                     'end'   => 'Continue clicking/dragging, when done, press the \'Finish\' button on the toolbar to complete your line.',
                 ],
             ],
+            'arrow' => [
+                'tooltip' => [
+                    'start' => 'Click to place the start of the arrow.',
+                    'cont'  => 'Click to place the tip of the arrow.',
+                ],
+            ],
         ],
     ],
     'edit' => [

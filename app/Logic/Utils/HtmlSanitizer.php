@@ -57,10 +57,9 @@ class HtmlSanitizer
     }
 
     /**
-     * @param  DOMNode $element
-     * @param  array   $allowedTags
-     * @param  array   $allowedDomains
-     * @return void
+     * @param DOMNode            $element
+     * @param array<int, string> $allowedTags
+     * @param array<int, string> $allowedDomains
      */
     private function sanitizeNode(DOMNode $element, array $allowedTags, array $allowedDomains): void
     {
@@ -88,7 +87,7 @@ class HtmlSanitizer
                                     $element->replaceChild($textNode, $child);
                                     continue;
                                 }
-                            } catch (Exception $e) {
+                            } catch (Exception) {
                                 // Invalid URL, replace with text
                                 $textNode = $element->ownerDocument->createTextNode($child->textContent);
                                 $element->replaceChild($textNode, $child);

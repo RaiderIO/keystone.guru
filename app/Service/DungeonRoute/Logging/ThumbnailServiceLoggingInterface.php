@@ -19,7 +19,7 @@ interface ThumbnailServiceLoggingInterface
         ?int   $viewportHeight,
         ?int   $imageWidth,
         ?int   $imageHeight,
-        ?int   $zoomLevel,
+        ?float $zoomLevel,
         ?int   $quality,
     ): void;
 
@@ -33,11 +33,13 @@ interface ThumbnailServiceLoggingInterface
         ?int   $viewportHeight,
         ?int   $imageWidth,
         ?int   $imageHeight,
-        ?int   $zoomLevel,
+        ?float $zoomLevel,
         ?int   $quality,
     ): void;
 
     public function doCreateThumbnailMaintenanceMode(): void;
+
+    public function doCreateThumbnailSkippedLocalEnvironment(): void;
 
     public function doCreateThumbnailProcessStart(string $commandLine): void;
 

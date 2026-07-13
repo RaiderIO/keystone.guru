@@ -13,6 +13,7 @@ use App\Models\Tags\Tag;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\Traits\HasIconFile;
 use App\Models\Traits\HasTags;
+use BackedEnum;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -74,9 +75,13 @@ class User extends Authenticatable implements LaratrustUser
 {
     use GeneratesPublicKey;
     use HasIconFile;
-    use HasRolesAndPermissions;
+    use HasRolesAndPermissions {
+        hasRole as private traitHasRole;
+        hasPermission as private traitHasPermission;
+    }
     use Notifiable;
     use HasTags;
+    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
 
     public const string MAP_FACADE_STYLE_SPLIT_FLOORS = 'split_floors';
@@ -151,14 +156,6 @@ class User extends Authenticatable implements LaratrustUser
         'initials',
     ];
 
-    protected $with = [
-        'iconfile',
-        'patreonUserLink',
-        'dungeon',
-        'gameVersion',
-        'roles',
-    ];
-
     public function getInitialsAttribute(): string
     {
         return initials($this->name);
@@ -175,41 +172,49 @@ class User extends Authenticatable implements LaratrustUser
         return $this->hasMany(DungeonRoute::class, 'author_id');
     }
 
+    /** @return HasMany<UserReport, $this> */
     public function reports(): HasMany
     {
         return $this->hasMany(UserReport::class);
     }
 
+    /** @return HasOne<PatreonUserLink, $this> */
     public function patreonUserLink(): HasOne
     {
         return $this->hasOne(PatreonUserLink::class);
     }
 
+    /** @return BelongsTo<GameServerRegion, $this> */
     public function gameServerRegion(): BelongsTo
     {
         return $this->belongsTo(GameServerRegion::class);
     }
 
+    /** @return BelongsTo<Dungeon, $this> */
     public function dungeon(): BelongsTo
     {
         return $this->belongsTo(Dungeon::class);
     }
 
+    /** @return BelongsTo<GameVersion, $this> */
     public function gameVersion(): BelongsTo
     {
         return $this->belongsTo(GameVersion::class);
     }
 
+    /** @return BelongsToMany<Team, $this> */
     public function teams(): BelongsToMany
     {
         return $this->belongsToMany(Team::class, 'team_users');
     }
 
+    /** @return HasOne<PatreonAdFreeGiveaway, $this> */
     public function patreonAdFreeGiveaway(): HasOne
     {
         return $this->hasOne(PatreonAdFreeGiveaway::class, 'receiver_user_id');
     }
 
+    /** @return HasMany<UserIpAddress, $this> */
     public function ipAddresses(): HasMany
     {
         return $this->hasMany(UserIpAddress::class);
@@ -224,10 +229,35 @@ class User extends Authenticatable implements LaratrustUser
     }
 
     /**
+     * @param string|array<int, string|BackedEnum> $name
+     */
+    public function hasRole(string|array|BackedEnum $name, mixed $team = null, bool $requireAll = false): bool
+    {
+        // Explicitly load the relation so this also works on users hydrated in a collection (preventLazyLoading)
+        $this->loadMissing('roles');
+
+        return $this->traitHasRole($name, $team, $requireAll);
+    }
+
+    /**
+     * @param string|array<int, string|BackedEnum> $permission
+     */
+    public function hasPermission(string|array|BackedEnum $permission, mixed $team = null, bool $requireAll = false): bool
+    {
+        // Explicitly load the relation so this also works on users hydrated in a collection (preventLazyLoading)
+        $this->loadMissing('roles');
+
+        return $this->traitHasPermission($permission, $team, $requireAll);
+    }
+
+    /**
      * Checks if this user has paid for a certain tier one way or the other.
      */
     public function hasPatreonBenefit(string $key): bool
     {
+        // Explicitly load the relation so this also works on users hydrated in a collection (preventLazyLoading)
+        $this->loadMissing('patreonUserLink');
+
         // True for all admins
         $result = $this->hasRole(Role::ROLE_ADMIN);
 
@@ -241,9 +271,14 @@ class User extends Authenticatable implements LaratrustUser
 
     /**
      * Get a list of tiers that this User has access to.
+     *
+     * @return Collection<int, string>
      */
     public function getPatreonBenefits(): Collection
     {
+        // Explicitly load the relation so this also works on users hydrated in a collection (preventLazyLoading)
+        $this->loadMissing('patreonUserLink');
+
         // Admins have all patreon benefits
         if ($this->hasRole(Role::ROLE_ADMIN)) {
             $result = collect(array_keys(PatreonBenefit::ALL));
@@ -301,6 +336,8 @@ class User extends Authenticatable implements LaratrustUser
 
     /**
      * Gets a list of consequences that will happen when this user tries to delete their account.
+     *
+     * @return array<string, array<int|string, mixed>>
      */
     public function getDeleteConsequences(): array
     {
@@ -345,7 +382,7 @@ class User extends Authenticatable implements LaratrustUser
         return Auth::user()?->kill_zone_path_weight ?? (int)($_COOKIE['kill_zone_path_weight'] ?? self::DEFAULT_KILL_ZONE_PATH_WEIGHT); // @phpstan-ignore nullsafe.neverNull
     }
 
-    public static function forceMapFacadeStyle(string $mapFacadeStyle): void
+    public static function forceMapFacadeStyle(?string $mapFacadeStyle): void
     {
         self::$OVERRIDE_MAP_FACADE_STYLE = $mapFacadeStyle;
     }

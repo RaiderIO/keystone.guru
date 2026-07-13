@@ -1,7 +1,7 @@
 <div id="map_killzonessidebar_floor_switch_{{id}}" class="map_killzonessidebar_floor_switch py-1"
      data-id="{{target_floor_id}}">
-    <div class="row no-gutters">
-        <div class="{{#if edit}}edit{{/if}}">
+    <div class="row g-0">
+        <div class="col-auto {{#if edit}}edit{{/if}}">
             <img class="mx-auto d-block"
                 {{#if start}}
                  src="{{dungeon_start_image_url}}"
@@ -10,6 +10,6 @@
                 {{/if}}
             />
         </div>
-        <h6 class="pl-2 m-0">{{name}}</h6>
+        <h6 class="col ps-2 m-0">{{name}}</h6>
     </div>
 </div>

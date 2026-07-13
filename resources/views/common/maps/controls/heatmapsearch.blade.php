@@ -16,33 +16,33 @@ use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Illuminate\Support\Collection;
 
 /**
- * @var bool                                     $showAds
- * @var bool                                     $showSidebar
- * @var bool|null                                $showDataSourceSnackbar
- * @var Dungeon                                  $dungeon
- * @var MappingVersion                           $mappingVersion
- * @var Season                                   $season
- * @var bool                                     $embed
- * @var string                                   $embedStyle
- * @var bool                                     $isMobile
- * @var integer|null                             $defaultState
- * @var bool                                     $hideOnMove
- * @var bool                                     $showAllEnabled
- * @var Collection<AffixGroup>                   $allAffixGroupsByActiveExpansion
- * @var Collection<Affix>                        $featuredAffixesByActiveExpansion
- * @var Collection                               $selectableSpellsByCategory
- * @var int                                      $keyLevelMin
- * @var int                                      $keyLevelMax
- * @var int                                      $itemLevelMin
- * @var int                                      $itemLevelMax
- * @var int                                      $playerDeathsMin
- * @var int                                      $playerDeathsMax
- * @var int                                      $minSamplesRequiredMin
- * @var int                                      $minSamplesRequiredMax
- * @var Collection<WeeklyAffixGroup>             $seasonWeeklyAffixGroups
- * @var Collection<CharacterClassSpecialization> $characterClassSpecializations
- * @var Collection<CharacterClass>               $characterClasses
- * @var Collection<GameServerRegion>             $allRegions
+ * @var bool                                            $showAds
+ * @var bool                                            $showSidebar
+ * @var bool|null                                       $showDataSourceSnackbar
+ * @var Dungeon                                         $dungeon
+ * @var MappingVersion                                  $mappingVersion
+ * @var Season                                          $season
+ * @var bool                                            $embed
+ * @var string                                          $embedStyle
+ * @var bool                                            $isMobile
+ * @var integer|null                                    $defaultState
+ * @var bool                                            $hideOnMove
+ * @var bool                                            $showAllEnabled
+ * @var Collection<string, Collection<int, AffixGroup>> $allAffixGroupsByActiveExpansion
+ * @var Collection<string, Collection<int, Affix>>      $featuredAffixesByActiveExpansion
+ * @var Collection<string, Collection<int, Spell>>      $selectableSpellsByCategory
+ * @var int                                             $keyLevelMin
+ * @var int                                             $keyLevelMax
+ * @var int                                             $itemLevelMin
+ * @var int                                             $itemLevelMax
+ * @var int                                             $playerDeathsMin
+ * @var int                                             $playerDeathsMax
+ * @var int                                             $minSamplesRequiredMin
+ * @var int                                             $minSamplesRequiredMax
+ * @var Collection<int, WeeklyAffixGroup>               $seasonWeeklyAffixGroups
+ * @var Collection<int, CharacterClassSpecialization>   $characterClassSpecializations
+ * @var Collection<int, CharacterClass>                 $characterClasses
+ * @var Collection<int, GameServerRegion>               $allRegions
  */
 
 // By default, show it if we're not mobile, but allow overrides
@@ -55,9 +55,9 @@ $filterExpandedCookiePrefix = 'heatmap_search_expanded';
 $isHeatmapSearchSidebarDefaultVisible = $defaultState === 1;
 $hideOnMove                           ??= $isMobile;
 $showAds                              ??= true;
-/** @var Collection<AffixGroup> $affixGroups */
+/** @var Collection<int, AffixGroup> $affixGroups */
 $affixGroups = $allAffixGroupsByActiveExpansion->get($season->expansion->shortname);
-/** @var Collection<Affix> $featuredAffixes */
+/** @var Collection<int, Affix> $featuredAffixes */
 $featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->shortname);
 
 $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion $b) {
@@ -69,29 +69,21 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
     return $a->id <=> $b->id;
 });
 
-$characterClassSpecializationsSelectOptions = $characterClassSpecializations->groupBy(function (CharacterClassSpecialization $characterClassSpecialization) {
-    return __($characterClassSpecialization->class->name);
-})->mapWithKeys(function (Collection $specializations, string $className) {
-    return [
-        $className => $specializations->mapWithKeys(function (CharacterClassSpecialization $characterClassSpecialization) {
-            return [
-                $characterClassSpecialization->specialization_id => [
-                    'icon_url' => $characterClassSpecialization->icon_url,
-                    'name' => __($characterClassSpecialization->name),
-                ]
-            ];
-        })
-    ];
-})->toArray();
-
-$characterClassSelectOptions = $characterClasses->mapWithKeys(function (CharacterClass $characterClass) {
-    return [
-        $characterClass->class_id => [
-            'icon_url' => $characterClass->icon_url,
-            'name' => __($characterClass->name),
+$characterClassSpecializationsSelectOptions = $characterClassSpecializations->groupBy(fn(CharacterClassSpecialization $characterClassSpecialization): string => (string) __($characterClassSpecialization->class->name))->mapWithKeys(fn(Collection $specializations, string $className) => [
+    $className => $specializations->mapWithKeys(fn(CharacterClassSpecialization $characterClassSpecialization) => [
+        $characterClassSpecialization->specialization_id => [
+            'icon_url' => $characterClassSpecialization->icon_url,
+            'name' => __($characterClassSpecialization->name),
         ]
-    ];
-})->toArray();
+    ])
+])->toArray();
+
+$characterClassSelectOptions = $characterClasses->mapWithKeys(fn(CharacterClass $characterClass) => [
+    $characterClass->class_id => [
+        'icon_url' => $characterClass->icon_url,
+        'name' => __($characterClass->name),
+    ]
+])->toArray();
 
 $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn(Collection $spells, string $categoryName) => [
     __($categoryName) => $spells->mapWithKeys(
@@ -183,7 +175,7 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
 
 <!--suppress HtmlFormInputWithoutLabel -->
 <nav id="heatmap_search_sidebar"
-     class="route_sidebar top right row no-gutters map_fade_out
+     class="route_sidebar top right row g-0 map_fade_out
      {{ $embed ? 'embed' : '' }}
      {{ $embedStyle }}
      {{ $isMobile ? 'mobile' : '' }}
@@ -192,16 +184,16 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
          ">
     <div class="bg-header">
         @if($showSidebar)
-            <div id="heatmap_search_sidebar_trigger" class="handle" data-toggle="tooltip">
+            <div id="heatmap_search_sidebar_trigger" class="handle" data-bs-toggle="tooltip">
                 <i class="fas {{ $isHeatmapSearchSidebarDefaultVisible ? 'fa-arrow-right' : 'fa-arrow-left' }}"></i>
             </div>
         @endif
 
         <div class="p-1">
-            <div class="row pr-2 mb-2 no-gutters">
-                <div class="col-auto" data-toggle="tooltip"
+            <div class="row pe-2 mb-2 g-0">
+                <div class="col-auto" data-bs-toggle="tooltip"
                      title="{{ __('view_common.maps.controls.heatmapsearch.settings_title') }}">
-                    <button class="btn btn-info w-100" data-toggle="modal" data-target="#map_settings_modal">
+                    <button class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#map_settings_modal">
                         <i class='fas fa-cog'></i>
                     </button>
                 </div>
@@ -239,32 +231,31 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
         <div class="data_container explore p-2" data-simplebar>
             <div id="heatmap_search_options_container" class="px-1">
 
-                <div class="form-group">
-                    <div id="filter_event_type_container" class="btn-group btn-group-toggle w-100"
-                         data-toggle="buttons">
-                        <label class="btn btn-secondary active">
-                            <input type="radio" name="event_type"
-                                   class="{{ CombatLogEventEventType::NpcDeath->value }}"
-                                   value="{{ CombatLogEventEventType::NpcDeath->value }}"
-                                   checked>
+                <div class="mb-3">
+                    <div id="filter_event_type_container" class="btn-group w-100" role="group">
+                        <input type="radio" name="event_type" id="filter_event_type_{{ CombatLogEventEventType::NpcDeath->value }}"
+                               class="btn-check {{ CombatLogEventEventType::NpcDeath->value }}"
+                               value="{{ CombatLogEventEventType::NpcDeath->value }}"
+                               checked>
+                        <label class="btn btn-secondary" for="filter_event_type_{{ CombatLogEventEventType::NpcDeath->value }}">
                             <img src="{{ ksgAssetImage('spells/achievement_bg_killxenemies_generalsroom.jpg') }}"
                                  alt="{{ __('view_common.maps.controls.heatmapsearch.npc_death_alt') }}"
                                  class="filter_event_type_icon">
                             {{ __('combatlogeventtypes.npc_death') }}
                         </label>
-                        <label class="btn btn-secondary">
-                            <input type="radio" name="event_type"
-                                   class="{{ CombatLogEventEventType::PlayerDeath->value }}"
-                                   value="{{ CombatLogEventEventType::PlayerDeath->value }}">
+                        <input type="radio" name="event_type" id="filter_event_type_{{ CombatLogEventEventType::PlayerDeath->value }}"
+                               class="btn-check {{ CombatLogEventEventType::PlayerDeath->value }}"
+                               value="{{ CombatLogEventEventType::PlayerDeath->value }}">
+                        <label class="btn btn-secondary" for="filter_event_type_{{ CombatLogEventEventType::PlayerDeath->value }}">
                             <img src="{{ ksgAssetImage('spells/ability_rogue_feigndeath.jpg') }}"
                                  alt="{{ __('view_common.maps.controls.heatmapsearch.player_death_alt') }}"
                                  class="filter_event_type_icon">
                             {{ __('combatlogeventtypes.player_death') }}
                         </label>
-                        <label class="btn btn-secondary">
-                            <input type="radio" name="event_type"
-                                   class="{{ CombatLogEventEventType::PlayerSpell->value }}"
-                                   value="{{ CombatLogEventEventType::PlayerSpell->value }}">
+                        <input type="radio" name="event_type" id="filter_event_type_{{ CombatLogEventEventType::PlayerSpell->value }}"
+                               class="btn-check {{ CombatLogEventEventType::PlayerSpell->value }}"
+                               value="{{ CombatLogEventEventType::PlayerSpell->value }}">
+                        <label class="btn btn-secondary" for="filter_event_type_{{ CombatLogEventEventType::PlayerSpell->value }}">
                             <img src="{{ ksgAssetImage('spells/spell_nature_lightning.jpg') }}"
                                  alt="{{ __('view_common.maps.controls.heatmapsearch.spell_casts_alt') }}"
                                  class="filter_event_type_icon">
@@ -280,19 +271,18 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                     'title' => __('view_common.maps.controls.heatmapsearch.data_type_title'),
                     'hidden' => true,
                 ])
-                    <div class="btn-group btn-group-toggle w-100 mb-1"
-                         data-toggle="buttons">
-                        <label class="btn btn-secondary active">
-                            <input type="radio" name="data_type"
-                                   class="{{ CombatLogEventDataType::PlayerPosition->value }}"
-                                   value="{{ CombatLogEventDataType::PlayerPosition->value }}"
-                                   checked>
+                    <div class="btn-group w-100 mb-1" role="group">
+                        <input type="radio" name="data_type" id="filter_data_type_{{ CombatLogEventDataType::PlayerPosition->value }}"
+                               class="btn-check {{ CombatLogEventDataType::PlayerPosition->value }}"
+                               value="{{ CombatLogEventDataType::PlayerPosition->value }}"
+                               checked>
+                        <label class="btn btn-secondary" for="filter_data_type_{{ CombatLogEventDataType::PlayerPosition->value }}">
                             <i class="fas fa-map"></i> {{ __('combatlogdatatypes.player_position') }}
                         </label>
-                        <label class="btn btn-secondary">
-                            <input type="radio" name="data_type"
-                                   class="{{ CombatLogEventDataType::EnemyPosition->value }}"
-                                   value="{{ CombatLogEventDataType::EnemyPosition->value }}">
+                        <input type="radio" name="data_type" id="filter_data_type_{{ CombatLogEventDataType::EnemyPosition->value }}"
+                               class="btn-check {{ CombatLogEventDataType::EnemyPosition->value }}"
+                               value="{{ CombatLogEventDataType::EnemyPosition->value }}">
+                        <label class="btn btn-secondary" for="filter_data_type_{{ CombatLogEventDataType::EnemyPosition->value }}">
                             <i class="fas fa-map-marked-alt"></i> {{ __('combatlogdatatypes.enemy_position') }}
                         </label>
                     </div>
@@ -314,19 +304,18 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                 @endcomponent
 
 
-                <div class="form-group">
-                    <div id="filter_region_container" class="btn-group btn-group-toggle w-100"
-                         data-toggle="buttons">
+                <div class="mb-3">
+                    <div id="filter_region_container" class="btn-group w-100" role="group">
                         <?php
                         $defaultRegion = GameServerRegion::WORLD;
                         ?>
                         @foreach($allRegions as $region)
-                            <label class="btn btn-secondary {{ $region->short === $defaultRegion ? 'active' : '' }}">
-                                <input type="radio" name="region"
-                                       class="{{ $region->short }}"
-                                       value="{{ $region->short }}"
-                                    {{ $region->short === $defaultRegion ? 'checked' : '' }}
-                                >
+                            <input type="radio" name="region" id="filter_region_{{ $region->short }}"
+                                   class="btn-check {{ $region->short }}"
+                                   value="{{ $region->short }}"
+                                {{ $region->short === $defaultRegion ? 'checked' : '' }}
+                            >
+                            <label class="btn btn-secondary" for="filter_region_{{ $region->short }}">
                                 <img src="{{ ksgAssetImage(sprintf('flags/%s.png', $region->short)) }}"
                                      alt="{{ __($region->name) }}"
                                      class="filter_region_icon">
@@ -412,13 +401,13 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                                 $chunkedFeaturedAffixes = $featuredAffixes->chunk($featuredAffixes->count() < 9 ? 4 : (int)($featuredAffixes->count() / 2));
                                 ?>
                             @foreach($chunkedFeaturedAffixes as $affixRow)
-                                <div class="row mt-2 pl-2 featured_affixes">
+                                <div class="row mt-2 ps-2 featured_affixes">
                                     @foreach($affixRow as $affix)
                                             <?php /** @var Affix $affix */ ?>
                                         <div class="col">
                                             <div
                                                 class="select_icon class_icon affix_icon_{{ $affix->image_name }} selectable m-auto"
-                                                data-toggle="tooltip" data-id="{{ $affix->affix_id }}"
+                                                data-bs-toggle="tooltip" data-id="{{ $affix->affix_id }}"
                                                 title="{{ __($affix->description) }}"
                                                 style="height: 24px;">
                                             </div>

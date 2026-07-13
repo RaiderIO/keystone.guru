@@ -7,7 +7,7 @@
         "map_icon_type_id": 44,
         "lat": -91.1325,
         "lng": 192.8276,
-        "comment": "Altar of Hakkar",
+        "comment": "mapping.map_icons.classic.the_temple_of_atal_hakkar.altar_of_hakkar",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -20,7 +20,7 @@
         "map_icon_type_id": 2,
         "lat": -81.2877,
         "lng": 181.6186,
-        "comment": "Many enemies here can be be one of Deep Lurker, Saturated Ooze or Murk Worm.",
+        "comment": "mapping.map_icons.classic.the_temple_of_atal_hakkar.deep_lurker_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

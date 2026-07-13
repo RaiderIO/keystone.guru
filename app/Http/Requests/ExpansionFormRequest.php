@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Expansion;
 use App\Models\Laratrust\Role;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
@@ -16,16 +15,12 @@ class ExpansionFormRequest extends FormRequest
     public function authorize(): bool
     {
         return Auth::user()->hasRole(Role::ROLE_ADMIN);
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
+    }    /**
+     * @return array<string, array<int, string|Rule>|string|Rule>
      */
     public function rules(): array
     {
-        /** @var Expansion|null $expansion */
-        $expansion = $this->route()->parameter('expansion');
-        $rules     = [
+        return [
             'name' => [
                 'required',
                 Rule::unique('expansions')->ignore($this->route()->parameter('expansion')),
@@ -36,11 +31,5 @@ class ExpansionFormRequest extends FormRequest
             ],
             'color' => 'required',
         ];
-        // Icon is required when making a new expansion, when editing it's optional
-        if ($expansion === null) {
-            $rules['icon'] = 'required|image|mimes:png|max:128';
-        }
-
-        return $rules;
     }
 }

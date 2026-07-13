@@ -7,7 +7,7 @@
         "map_icon_type_id": 2,
         "lat": -177.2585,
         "lng": 94.4804,
-        "comment": "After defeating Festergut 12 more Vengeful Fleshreapers spawn and start patrolling the area.",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.after_festergut_fleshreapers",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -20,7 +20,7 @@
         "map_icon_type_id": 2,
         "lat": -95.9163,
         "lng": 95.1984,
-        "comment": "After defeating Rotface 12 more Vengeful Fleshreapers spawn and start patrolling the area.",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.after_rotface_fleshreapers",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 46,
         "lat": -162.828,
         "lng": 92.3984,
-        "comment": "Gas Release Valve",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.gas_release_valve",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 45,
         "lat": -113.3622,
         "lng": 92.3984,
-        "comment": "Ooze Release Valve",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.ooze_release_valve",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 6,
         "lat": -137.4848,
         "lng": 99.7932,
-        "comment": "Can be opened by defeating Rotface and Festergut, and activating their respective Release Valves.",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.release_valve_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 2,
         "lat": -137.2695,
         "lng": 84.3575,
-        "comment": "Flesh Eating Insects keep spawning once you enter.",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.flesh_eating_insects",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 6,
         "lat": -218.3579,
         "lng": 294.5227,
-        "comment": "Unlocked after defeating Valithria Dreamwalker.",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.unlocked_after_valithria",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 6,
         "lat": -137.6284,
         "lng": 306.9896,
-        "comment": "Unlocks after defeating Sindragosa.",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.unlocks_after_sindragosa",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -111,7 +111,7 @@
         "map_icon_type_id": 49,
         "lat": -80.8755,
         "lng": 199.0838,
-        "comment": "Empowering Blood Orb",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.empowering_blood_orb",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -124,7 +124,7 @@
         "map_icon_type_id": 2,
         "lat": -177.2585,
         "lng": 94.4804,
-        "comment": "After defeating Festergut 12 more Vengeful Fleshreapers spawn and start patrolling the area.",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.after_festergut_fleshreapers",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -137,7 +137,7 @@
         "map_icon_type_id": 2,
         "lat": -95.9163,
         "lng": 95.1984,
-        "comment": "After defeating Rotface 12 more Vengeful Fleshreapers spawn and start patrolling the area.",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.after_rotface_fleshreapers",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -150,7 +150,7 @@
         "map_icon_type_id": 46,
         "lat": -162.828,
         "lng": 92.3984,
-        "comment": "Gas Release Valve",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.gas_release_valve",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -163,7 +163,7 @@
         "map_icon_type_id": 45,
         "lat": -113.3622,
         "lng": 92.3984,
-        "comment": "Ooze Release Valve",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.ooze_release_valve",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -176,7 +176,7 @@
         "map_icon_type_id": 6,
         "lat": -137.4848,
         "lng": 99.7932,
-        "comment": "Can be opened by defeating Rotface and Festergut, and activating their respective Release Valves.",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.release_valve_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -189,7 +189,7 @@
         "map_icon_type_id": 2,
         "lat": -137.2695,
         "lng": 84.3575,
-        "comment": "Flesh Eating Insects keep spawning once you enter.",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.flesh_eating_insects",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -202,7 +202,7 @@
         "map_icon_type_id": 6,
         "lat": -218.3579,
         "lng": 294.5227,
-        "comment": "Unlocked after defeating Valithria Dreamwalker.",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.unlocked_after_valithria",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -215,7 +215,7 @@
         "map_icon_type_id": 6,
         "lat": -137.6284,
         "lng": 306.9896,
-        "comment": "Unlocks after defeating Sindragosa.",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.unlocks_after_sindragosa",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -228,7 +228,7 @@
         "map_icon_type_id": 49,
         "lat": -80.8755,
         "lng": 199.0838,
-        "comment": "Empowering Blood Orb",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.empowering_blood_orb",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

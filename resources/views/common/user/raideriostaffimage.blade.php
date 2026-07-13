@@ -3,7 +3,7 @@
  * @var User $user
  */
 ?>
-<span data-toggle="tooltip"
+<span data-bs-toggle="tooltip"
       title="{{ $user->name }}">
 
     <img class="user_icon raider_io_staff_text"

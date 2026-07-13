@@ -15,6 +15,7 @@ class AdvancedCombatLogEvent extends CombatLogEvent
     private ?AdvancedDataInterface $advancedData = null;
 
     /**
+     * @param  array<int, mixed> $parameters
      * @throws Exception
      */
     #[Override]

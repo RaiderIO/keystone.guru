@@ -72,7 +72,7 @@ class DungeonRouteFactory extends Factory
             'rating_count'               => 0,
             'created_at'                 => Carbon::now(),
             'published_at'               => Carbon::now(),
-            'expires_at'                 => null,
+            'expires_at'                 => Carbon::now()->addHours(2),
         ];
     }
 }

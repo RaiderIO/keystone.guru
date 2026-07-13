@@ -8,9 +8,9 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * @var Dungeon                                                          $contextDungeon
- * @var LengthAwarePaginator<string>                                     $dates
- * @var array<string, Collection<CombatLogNpcEvent|CombatLogSpellEvent>> $eventsByDay
+ * @var Dungeon                                                               $contextDungeon
+ * @var LengthAwarePaginator<int, string>                                     $dates
+ * @var array<string, Collection<int, CombatLogNpcEvent|CombatLogSpellEvent>> $eventsByDay
  */
 ?>
 @extends('layouts.sitepage', [

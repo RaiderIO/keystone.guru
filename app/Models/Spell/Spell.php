@@ -49,7 +49,7 @@ use Str;
  * @property EloquentCollection<int, Npc>          $npcs
  * @property Characteristic|null                   $characteristic
  *
- * @method static Builder visible()
+ * @method static Builder<self> visible()
  *
  * @mixin Eloquent
  */
@@ -115,7 +115,7 @@ class Spell extends CacheModel implements MappingModelInterface
         return self::getWowheadLink($this->game_version_id, $this->id, $this->name);
     }
 
-    public function setFetchedDataAtAttribute($value): void
+    public function setFetchedDataAtAttribute(mixed $value): void
     {
         if (is_string($value)) {
             try {
@@ -128,6 +128,7 @@ class Spell extends CacheModel implements MappingModelInterface
         }
     }
 
+    /** @return array<int, int> */
     public function getSchoolsAsArray(): array
     {
         $result = [];
@@ -139,6 +140,7 @@ class Spell extends CacheModel implements MappingModelInterface
         return $result;
     }
 
+    #[\Override]
     public function resolveRouteBinding($value, $field = null): ?static
     {
         $id = (int)explode('-', (string)$value, 2)[0];
@@ -147,37 +149,44 @@ class Spell extends CacheModel implements MappingModelInterface
         return $this->where('id', $id)->first();
     }
 
+    #[\Override]
     public function getRouteKey(): string
     {
         return sprintf('%d-%s', $this->id, Str::slug(__($this->name)));
     }
 
+    /** @return Builder<self> */
     #[Scope]
     protected function visible(): Builder
     {
         return $this->where('hidden_on_map', false);
     }
 
+    /** @return BelongsTo<Characteristic, $this> */
     public function characteristic(): BelongsTo
     {
         return $this->belongsTo(Characteristic::class);
     }
 
+    /** @return BelongsTo<GameVersion, $this> */
     public function gameVersion(): BelongsTo
     {
         return $this->belongsTo(GameVersion::class);
     }
 
+    /** @return BelongsToMany<Npc, $this> */
     public function npcs(): BelongsToMany
     {
         return $this->belongsToMany(Npc::class, 'npc_spells', 'spell_id', 'npc_id');
     }
 
+    /** @return BelongsToMany<Dungeon, $this> */
     public function dungeons(): BelongsToMany
     {
         return $this->belongsToMany(Dungeon::class, 'spell_dungeons', 'spell_id', 'dungeon_id');
     }
 
+    /** @return HasMany<SpellDungeon, $this> */
     public function spellDungeons(): HasMany
     {
         return $this->hasMany(SpellDungeon::class);
@@ -236,6 +245,7 @@ class Spell extends CacheModel implements MappingModelInterface
         return $result;
     }
 
+    /** @param array<int|string, int|string> $mapping */
     public static function maskToReadableString(array $mapping, int $mask, ?string $translationPrefix = null): string
     {
         $result = [];
@@ -252,7 +262,7 @@ class Spell extends CacheModel implements MappingModelInterface
             }
 
             if (($mask & $bitmask) !== 0) {
-                $result[] = $translationPrefix === null ? $name : __($translationPrefix . '.' . $name);
+                $result[] = $translationPrefix === null ? (string)$name : __($translationPrefix . '.' . $name);
             }
         }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * @var DungeonRoute               $dungeonroute
- * @var Collection<RouteAttribute> $allRouteAttributes
+ * @var DungeonRoute                    $dungeonroute
+ * @var Collection<int, RouteAttribute> $allRouteAttributes
  */
 
 use App\Models\DungeonRoute\DungeonRoute;
@@ -11,21 +11,21 @@ use Illuminate\Support\Collection;
 $showNoAttributes ??= false;
 $id               ??= 'attributes';
 ?>
-<div class="form-group">
+<div class="mb-3">
     @if($showNoAttributes)
-        <label for="attributes" data-toggle="tooltip"
+        <label for="attributes" data-bs-toggle="tooltip"
                title="{{ __('view_common.dungeonroute.attributes.no_attributes_title') }}">
             {{ __('view_common.dungeonroute.attributes.attributes') }}
         </label>
     @else
         <label for="attributes">{{ __('view_common.dungeonroute.attributes.attributes') }}</label>
-        <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+        <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{
         __('view_common.dungeonroute.attributes.select_attributes_title')
          }}"></i>
     @endif
     <?php
     $allRouteAttributeCount = $allRouteAttributes->count();
-    /** @var Collection<RouteAttribute> $routeAttributes */
+    /** @var Collection<string, Collection<int, RouteAttribute>> $routeAttributes */
     $routeAttributes = $allRouteAttributes->groupBy('category');
 
     if ($showNoAttributes) {
@@ -39,7 +39,7 @@ $id               ??= 'attributes';
         ]);
     }
 
-    /** @var Collection $routeAttributes */
+    /** @var Collection<string, Collection<int, RouteAttribute>> $routeAttributes */
     $selectedIds ??= !isset($dungeonroute) ? [] : $dungeonroute->routeattributes->pluck('id')->toArray();
     ?>
     <select multiple name="{{ sprintf('%s[]', $id) }}"

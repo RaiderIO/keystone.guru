@@ -43,6 +43,7 @@ final class SpellDataExtractorTest extends PublicTestCase
 
     private DataExtractionCurrentDungeon $currentDungeon;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -57,6 +58,7 @@ final class SpellDataExtractorTest extends PublicTestCase
         $this->currentDungeon = new DataExtractionCurrentDungeon($dungeon);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         try {

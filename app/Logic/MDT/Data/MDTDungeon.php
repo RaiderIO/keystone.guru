@@ -24,6 +24,7 @@ use App\Models\Npc\Npc;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Lua;
 
@@ -55,7 +56,8 @@ class MDTDungeon
      */
     public function getDungeonTotalCount(): array
     {
-        $lua               = $this->getLua();
+        $lua = $this->getLua();
+        /** @phpstan-ignore argument.type (Lua C extension uses string-based function name calling) */
         $dungeonTotalCount = $lua->call('GetDungeonTotalCount');
 
         return [
@@ -72,13 +74,14 @@ class MDTDungeon
     {
         $lua = $this->getLua();
 
+        /** @phpstan-ignore argument.type (Lua C extension uses string-based function name calling) */
         return $lua->call('GetDungeonIndex');
     }
 
     /**
      * Get a list of NPCs
      *
-     * @return Collection<MDTNpc>
+     * @return Collection<int, MDTNpc>
      *
      * @throws Exception
      */
@@ -87,7 +90,8 @@ class MDTDungeon
         return $this->cacheService->remember(sprintf('mdt_npcs_%s', $this->dungeon->key), function () {
             $mdtNpcs = new Collection();
 
-            $lua           = $this->getLua();
+            $lua = $this->getLua();
+            /** @phpstan-ignore argument.type (Lua C extension uses string-based function name calling) */
             $rawMdtEnemies = $lua->call('GetDungeonEnemies');
 
             foreach ($rawMdtEnemies as $mdtNpcIndex => $mdtNpc) {
@@ -99,13 +103,14 @@ class MDTDungeon
     }
 
     /**
-     * @return Collection<MDTMapPOI>
+     * @return Collection<int, MDTMapPOI>
      *
      * @throws Exception
      */
     public function getMDTMapPOIs(): Collection
     {
-        $lua           = $this->getLua();
+        $lua = $this->getLua();
+        /** @phpstan-ignore argument.type (Lua C extension uses string-based function name calling) */
         $rawMdtMapPOIs = $lua->call('GetMapPOIs');
         $result        = new Collection();
 
@@ -122,10 +127,9 @@ class MDTDungeon
     /**
      * Get all clones of this dungeon in the format of enemies (Keystone.guru style).
      *
-     * @param  Collection<Floor> $floors The floors that you want to get the clones for.
-     * @return Collection<Enemy>
+     * @param  EloquentCollection<int, Floor> $floors The floors that you want to get the clones for.
+     * @return Collection<int, Enemy>
      */
-    /** @param \Illuminate\Database\Eloquent\Collection<int, Floor> $floors */
     public function getClonesAsEnemies(MappingVersion $mappingVersion, Collection $floors): Collection
     {
         return $this->cacheService->remember(sprintf('mdt_enemies_%s', $this->dungeon->key), function () use (
@@ -157,7 +161,7 @@ class MDTDungeon
             }
 
             $floors->load(['dungeon']);
-            /** @var Collection<Floor> $floors */
+            /** @var Collection<int, Floor> $floors */
             $floors = $floors->keyBy('id');
 
             // NPC_ID => list of clones
@@ -233,16 +237,10 @@ class MDTDungeon
                         $enemy->enemy_id      = -1;
 
                         $enemy->setRelation('floor', $floors->get($floorId));
+                        // We don't care for the npc's relationships here - just want to know if the NPC exists or not
                         $enemy->setRelation(
                             'npc',
-                            $this->dungeon->npcs->firstWhere('id', $enemy->npc_id)?->makeHidden([
-                                // We don't care for the relationships here - just want to know if the NPC exists or not
-                                'type',
-                                'class',
-                                'npcbolsteringwhitelists',
-                                'characteristics',
-                                'spells',
-                            ]) ??
+                            $this->dungeon->npcs->firstWhere('id', $enemy->npc_id) ??
                             new Npc([
                                 'name' => 'UNABLE TO FIND NPC!',
                                 'id'   => $npcId,
@@ -358,7 +356,6 @@ class MDTDungeon
                 $eval = str_replace($search, $replace, $eval);
             }
 
-            /** @phpstan-ignore-next-line */
             $lua = new Lua();
             $lua->eval($eval);
         }

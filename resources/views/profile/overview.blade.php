@@ -7,16 +7,14 @@ use App\Models\GameVersion\GameVersion;
 use Illuminate\Support\Collection;
 
 /**
- * @var string                   $newRouteStyle
- * @var GameVersion              $currentUserGameVersion
- * @var Collection<DungeonRoute> $dungeonRoutes
+ * @var string                        $newRouteStyle
+ * @var GameVersion                   $currentUserGameVersion
+ * @var Collection<int, DungeonRoute> $dungeonRoutes
  */
 ?>
 
 @section('content')
     <div class="px-4">
-        @include('common.general.messages')
-
         @if( $currentUserGameVersion->has_seasons )
             <div class="row">
                 <div class="col">
@@ -25,23 +23,23 @@ use Illuminate\Support\Collection;
                     </h3>
                 </div>
                 <div class="col-auto">
-                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-dark {{ $newRouteStyle === 'create' ? 'active' : '' }}">
-                            <input type="radio" id="new_route_style_create" class="new_route_style_switch_btn"
-                                   autocomplete="off"
-                                   data-new-route-style="create" {{ $newRouteStyle === 'create' ? 'checked' : '' }}>
+                    <div class="btn-group" role="group">
+                        <input type="radio" id="new_route_style_create" class="btn-check new_route_style_switch_btn"
+                               name="new_route_style" autocomplete="off"
+                               data-new-route-style="create" {{ $newRouteStyle === 'create' ? 'checked' : '' }}>
+                        <label class="btn btn-dark" for="new_route_style_create">
                             <i class="fas fa-plus"></i>
                         </label>
-                        <label class="btn btn-dark {{ $newRouteStyle === 'create' ? '' : 'active' }}">
-                            <input type="radio" id="new_route_style_search" class="new_route_style_switch_btn"
-                                   autocomplete="off"
-                                   data-new-route-style="search" {{ $newRouteStyle === 'create' ? '' : 'checked' }}>
+                        <input type="radio" id="new_route_style_search" class="btn-check new_route_style_switch_btn"
+                               name="new_route_style" autocomplete="off"
+                               data-new-route-style="search" {{ $newRouteStyle === 'create' ? '' : 'checked' }}>
+                        <label class="btn btn-dark" for="new_route_style_search">
                             <i class="fas fa-search"></i>
                         </label>
                     </div>
                 </div>
             </div>
-            <div class="row form-group mb-4">
+            <div class="row mb-3 mb-4">
                 <div class="col">
                     @include('common.dungeonroute.coverage.affixgroup')
                 </div>

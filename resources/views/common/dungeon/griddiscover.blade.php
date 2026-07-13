@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 /**
  * @var GameVersion                $gameVersion
  * @var Season|null                $season
- * @var Collection<Dungeon>        $dungeons
+ * @var Collection<int, Dungeon>   $dungeons
  * @var AffixGroup|null            $currentAffixGroup
  * @var AffixGroup|null            $nextAffixGroup
  * @var Collection<string, string> $links
@@ -27,7 +27,7 @@ $links ??= collect();
 $sideOffset = $colCount === 3 ? 1 : 0;
 
 for ($i = 0; $i < $rowCount; ++$i) { ?>
-<div class="row no-gutters">
+<div class="row g-0">
         <?php
     for ($j = 0; $j < $colCount; ++$j) {
         $index = $i * $colCount + $j;
@@ -37,7 +37,7 @@ for ($i = 0; $i < $rowCount; ++$i) { ?>
         $link    = $links->get($dungeon->key);
         ?>
     <div
-        class="p-2 col-lg-3 {{ $sideOffset && ($j === 0) ? 'ml-lg-auto' : (($j === $colCount - 1) ? 'mr-lg-auto' : '') }}">
+        class="p-2 col-lg-3 {{ $sideOffset && ($j === 0) ? 'ms-lg-auto' : (($j === $colCount - 1) ? 'me-lg-auto' : '') }}">
         <div class="card">
             <div class="card-img-caption">
                 <a href="{{ $link }}">
@@ -121,7 +121,7 @@ for ($i = 0; $i < $rowCount; ++$i) { ?>
                     </div>
 
                     <!-- Mobile view -->
-                    <div class="row no-gutters card-text text-center d-lg-none">
+                    <div class="row g-0 card-text text-center d-lg-none">
                         <div class="col">
                             <h4>
                                 <a href="{{ route('dungeonroutes.discoverdungeon.popular', ['gameVersion' => $gameVersion, 'dungeon' => $dungeon->slug]) }}">
@@ -146,7 +146,7 @@ for ($i = 0; $i < $rowCount; ++$i) { ?>
                             </div>
                         @endif
                     </div>
-                    <div class="row no-gutters card-text text-center d-lg-none">
+                    <div class="row g-0 card-text text-center d-lg-none">
                         <div class="col">
                             <h4>
                                 <a href="{{ route('dungeonroutes.discoverdungeon.new', ['gameVersion' => $gameVersion, 'dungeon' => $dungeon->slug]) }}">

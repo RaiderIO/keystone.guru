@@ -7,16 +7,16 @@ use Illuminate\Support\Carbon;
 
 /**
  * @var TimewalkingEvent|null $timewalkingEvent
- * @var Season           $season
- * @var AffixGroup       $affixGroup
- * @var Carbon|null      $startDate
- * @var boolean          $showStartDate
- * @var boolean          $isCurrentWeek
- * @var boolean          $isFirst
- * @var boolean          $isLast
- * @var boolean          $showTopBorder
- * @var boolean          $showBottomBorder
- * @var boolean          $isOdd
+ * @var Season                $season
+ * @var AffixGroup            $affixGroup
+ * @var Carbon|null           $startDate
+ * @var boolean               $showStartDate
+ * @var boolean               $isCurrentWeek
+ * @var boolean               $isFirst
+ * @var boolean               $isLast
+ * @var boolean               $showTopBorder
+ * @var boolean               $showBottomBorder
+ * @var boolean               $isOdd
  */
 
 $startDate        ??= null;
@@ -40,7 +40,6 @@ $timewalkingClasses = $timewalkingEvent !== null ? 'text-white timewalking ' . $
     <td class="first_column {{ $currentWeekClass . $topBorderClass . $bottomBorderClass }}">
         <div class="affix_row">
             @if($timewalkingEvent !== null)
-                {{--                <img src="{{ $timewalkingEvent->expansion->iconfile->getURL() }}" style="width: 32px; height: 32px;"/>--}}
                 {{ sprintf(__('view_misc.table.affixrowtable.expansion_timewalking'), __($timewalkingEvent->expansion->name)) }}
             @else
                 <span>
@@ -65,14 +64,14 @@ $timewalkingClasses = $timewalkingEvent !== null ? 'text-white timewalking ' . $
     <td class="{{ $class }}">
         @if($affix !== null)
             <div class="affix_row">
-                <div class="row no-gutters">
+                <div class="row g-0">
                     <div
                         class="col-auto select_icon class_icon affix_icon_{{ $affix->image_name }}"
-                        data-toggle="tooltip"
+                        data-bs-toggle="tooltip"
                         title="{{ __($affix->description) }}"
                         style="height: 24px;">
                     </div>
-                    <div class="col d-lg-block d-none pl-1">
+                    <div class="col d-lg-block d-none ps-1">
                         @if($isSeasonalAffix && $affixGroup->seasonal_index !== null)
                             {{ sprintf(__('affixes.seasonal_index_preset'), __($affix->name), $affixGroup->seasonal_index + 1) }}
                         @else

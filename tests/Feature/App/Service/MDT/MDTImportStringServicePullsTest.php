@@ -39,13 +39,6 @@ class MDTImportStringServicePullsTest extends MDTImportStringServiceTestBase
             // Assert
             $this->assertCount(3, $importedRoute->killZones);
         } catch (\Exception $e) {
-            dump(
-                $dungeonRoute->dungeon->key,
-                $dungeonRoute->mappingVersion->id,
-                $randomEnemies->pluck('id'),
-                $warnings,
-            );
-
             throw $e;
         } finally {
             $importedRoute?->delete();

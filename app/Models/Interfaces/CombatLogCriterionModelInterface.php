@@ -3,7 +3,7 @@
 namespace App\Models\Interfaces;
 
 /**
- * @method mixed getKey()
+ * @method int getKey()
  */
 interface CombatLogCriterionModelInterface
 {

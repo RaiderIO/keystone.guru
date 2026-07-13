@@ -2,7 +2,6 @@
 
 namespace App\Logic\MapContext\Map;
 
-use App\Http\Controllers\Traits\ListsEnemies;
 use App\Logic\MDT\Exception\InvalidMDTDungeonException;
 use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;
@@ -19,8 +18,6 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
  */
 class MapContextMappingVersionEdit extends MapContextMappingVersion
 {
-    use ListsEnemies;
-
     public function __construct(
         CacheServiceInterface       $cacheService,
         CoordinatesServiceInterface $coordinatesService,
@@ -40,6 +37,9 @@ class MapContextMappingVersionEdit extends MapContextMappingVersion
         return sprintf('%s-mapping-version-edit.%s', config('app.type'), $this->dungeon->getRouteKey());
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getEnemies(): ?array
     {
         try {
@@ -49,6 +49,9 @@ class MapContextMappingVersionEdit extends MapContextMappingVersion
         }
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getVisibleFloors(): array
     {
         return $this->dungeon->floors->toArray();

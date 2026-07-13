@@ -12,6 +12,7 @@ use Illuminate\Support\Carbon;
  * @OA\Property(property="playerUid",type="string")
  * @OA\Property(property="castAt",type="string",format="date-time")
  * @OA\Property(property="coord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
+ * @implements Arrayable<string, mixed>
  */
 class CombatLogRouteSpellRequestModel extends RequestModel implements Arrayable
 {

@@ -35,7 +35,7 @@ class DungeonRouteResource extends DungeonRouteSummaryResource
     /**
      * Transform the resource into an array.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     #[Override]
     public function toArray(Request $request): array

@@ -4,11 +4,11 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 
 /**
- * @var DungeonRoute $dungeonroute
- * @var Floor        $floor
- * @var int          $keyLevelMin
- * @var int          $keyLevelMax
- * @var array        $parameters
+ * @var DungeonRoute         $dungeonroute
+ * @var Floor                $floor
+ * @var int                  $keyLevelMin
+ * @var int                  $keyLevelMax
+ * @var array<string, mixed> $parameters
  */
 
 $dungeon = $dungeonroute->dungeon->load(['expansion', 'floors']);

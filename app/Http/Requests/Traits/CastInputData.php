@@ -11,9 +11,9 @@ trait CastInputData
     /**
      * Cast request input data based on the target model's casts property.
      *
-     * @param  Request $request
-     * @param  string  $model
-     * @return array
+     * @param  Request              $request
+     * @param  string               $model
+     * @return array<string, mixed>
      */
     protected function castInputData(Request $request, string $model, ?string $subModel = null): array
     {
@@ -52,11 +52,11 @@ trait CastInputData
     protected function castValue(mixed $value, string $type): mixed
     {
         return match ($type) {
-            'int', 'integer' => (int)$value,
+            'int', 'integer'          => (int)$value,
             'real', 'float', 'double' => (float)$value,
-            'bool', 'boolean' => (bool)$value,
-            'json'  => json_decode((string)$value, true),
-            default => $value,
+            'bool', 'boolean'         => (bool)$value,
+            'json'                    => json_decode((string)$value, true),
+            default                   => $value,
         };
     }
 }

@@ -7,7 +7,7 @@
         "map_icon_type_id": 101,
         "lat": -147.1558,
         "lng": 284.476,
-        "comment": "Spider Nest",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.spider_nest",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -20,7 +20,7 @@
         "map_icon_type_id": 101,
         "lat": -171.5653,
         "lng": 238.8193,
-        "comment": "Spider Nest",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.spider_nest",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 101,
         "lat": -171.2141,
         "lng": 328.5528,
-        "comment": "Spider Nest",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.spider_nest",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 101,
         "lat": -199.3119,
         "lng": 286.0561,
-        "comment": "Spider Nest",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.spider_nest",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 9,
         "lat": -172.032,
         "lng": 342.2033,
-        "comment": "Mysterious Relic",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.mysterious_relic",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

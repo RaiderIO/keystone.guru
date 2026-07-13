@@ -39,13 +39,13 @@ use Str;
 
 class MDTMappingImportService implements MDTMappingImportServiceInterface
 {
-    /** @var array Ignore these enemies when their NPC ID is in this list */
+    /** @var array<int, int> Ignore these enemies when their NPC ID is in this list */
     private const array IGNORE_ENEMY_NPC_IDS = [
         // Black Rook Hold, Troubled Soul
         98362,
     ];
 
-    /** @var array Do not import data from these NPC IDs */
+    /** @var array<int, int> Do not import data from these NPC IDs */
     private const array IGNORE_NPC_DATA_NPC_IDS = [
         // Priory of the Sacred Flame - 3 mini bosses where MDT has high health values - they mess up auto map sizing based on health
         211289,
@@ -415,10 +415,10 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     }
 
     /**
-     * @return Collection<Enemy>
+     * @return Collection<int, Enemy>
      */
     private function importEnemies(
-        Mappingversion $currentMappingVersion,
+        MappingVersion $currentMappingVersion,
         MappingVersion $newMappingVersion,
         MDTDungeon     $mdtDungeon,
         Dungeon        $dungeon,
@@ -532,6 +532,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     }
 
     /**
+     * @param  Collection<int, Enemy>   $savedEnemies
      * @throws InvalidArgumentException
      */
     private function importEnemyPacks(
@@ -620,6 +621,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     }
 
     /**
+     * @param  Collection<int, Enemy> $savedEnemies
      * @throws Exception
      */
     private function importEnemyPatrols(
@@ -638,7 +640,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             // Pretend the patrol is on the facade floor for correct translations, IF the facade floor is available
             $facadeFloor = $dungeon->getFacadeFloor();
 
-            /** @var Collection<EnemyPatrol> $existingEnemyPatrols */
+            /** @var Collection<int, EnemyPatrol> $existingEnemyPatrols */
             $existingEnemyPatrols = $currentMappingVersion
                 ->enemyPatrols()
                 ->with([
@@ -911,6 +913,9 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         }
     }
 
+    /**
+     * @param Collection<int, Enemy> $savedEnemies
+     */
     private function findSavedEnemyFromCloneEnemy(Collection $savedEnemies, int $npcId, int $mdtId): Enemy
     {
         return $savedEnemies->firstOrFail(static fn(
@@ -933,7 +938,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     /**
      * Get a bounding box which encompasses all passed enemies
      *
-     * @param Collection<Enemy> $enemies
+     * @param  Collection<int, Enemy>               $enemies
+     * @return array<int, array<string, int|float>>
      */
     private function getVerticesBoundingBoxFromEnemies(Collection $enemies): array
     {

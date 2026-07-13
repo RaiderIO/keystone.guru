@@ -1,6 +1,57 @@
 <?php
 
 return [
+    'index' => [
+        'title'       => 'Compendium',
+        'header'      => 'Compendium',
+        'intro'       => 'The Compendium is a community-powered encyclopedia of all dungeons in the current season of the game. Look up exactly what each NPC does, which spells they cast, how to counter them, and which crowd control works on them.',
+        'data_source' => [
+            'title'       => 'Always up-to-date',
+            'description' => 'The Compendium is kept real-time by combat logs that players upload automatically through the Raider.IO client. Every tracked run quietly improves the data for everyone.',
+            'cta'         => 'Install the Raider.IO client',
+        ],
+        'how_it_works' => [
+            'title'  => 'How it works',
+            'step_1' => [
+                'title'       => 'Pick a section',
+                'description' => 'Browse NPCs, Spells, recent Activity, or jump straight to crowd control by class.',
+            ],
+            'step_2' => [
+                'title'       => 'Search & filter',
+                'description' => 'Filter by dungeon to focus on exactly the pulls you are preparing for.',
+            ],
+            'step_3' => [
+                'title'       => 'Drill into details',
+                'description' => 'Open any NPC or spell to see schools, dispel types, mechanics, durations and more.',
+            ],
+        ],
+        'cards' => [
+            'npc' => [
+                'title'        => 'NPCs',
+                'description'  => 'Every NPC in the game with their abilities, health, classification and the dungeons they appear in.',
+                'cta'          => 'Browse NPCs',
+                'count_suffix' => 'NPCs catalogued',
+            ],
+            'spell' => [
+                'title'        => 'Spells',
+                'description'  => 'Look up any spell to see what it does, how to avoid it, and which NPCs cast it.',
+                'cta'          => 'Browse spells',
+                'count_suffix' => 'spells catalogued',
+            ],
+            'activity' => [
+                'title'       => 'Activity',
+                'description' => 'A live feed of the newest data flowing in from the community, organized by day.',
+                'cta'         => 'View activity',
+                'subtitle'    => 'Updated daily',
+            ],
+            'class' => [
+                'title'        => 'By Class',
+                'description'  => 'See which of your crowd control spells work on which NPCs, grouped by class.',
+                'cta'          => 'Browse by class',
+                'count_suffix' => 'classes covered',
+            ],
+        ],
+    ],
     'event' => [
         'characteristic_added'   => 'Affected by :name',
         'characteristic_removed' => 'Unaffected by :name',

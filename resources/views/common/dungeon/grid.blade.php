@@ -6,12 +6,12 @@ use App\Service\Expansion\ExpansionService;
 use Illuminate\Support\Collection;
 
 /**
- * @var ExpansionService    $expansionService
- * @var Expansion           $expansion
- * @var Collection<Dungeon> $dungeons
- * @var callable|null       $subtextFn
- * @var boolean             $useAbbreviation
- * @var int|null            $colCount
+ * @var ExpansionService         $expansionService
+ * @var Expansion                $expansion
+ * @var Collection<int, Dungeon> $dungeons
+ * @var callable|null            $subtextFn
+ * @var boolean                  $useAbbreviation
+ * @var int|null                 $colCount
  */
 
 $dungeons        ??= $expansion->dungeonsAndRaids()->active()->get();
@@ -25,7 +25,7 @@ $subtextFn       ??= null;
 
 // @formatter:off
 for( $i = 0; $i < $rowCount; ++$i ) { ?>
-<div class="row no-gutters">
+<div class="row g-0">
     <?php
     for( $j = 0; $j < $colCount; ++$j ) {
         $index = $i * $colCount + $j;

@@ -6,12 +6,13 @@ use App\Models\User;
 use Illuminate\Support\Collection;
 
 /**
- * @var User                         $user
- * @var Collection<CharacterClass>   $allClasses
- * @var Collection<GameServerRegion> $allRegions
+ * @var User                              $user
+ * @var Collection<int, CharacterClass>   $allClasses
+ * @var Collection<int, GameServerRegion> $allRegions
  */
 
 $user      = Auth::getUser();
+$user->load(['teams', 'teams.members', 'teams.members.patreonAdFreeGiveaway', 'patreonAdFreeGiveaway']);
 $isOAuth   = $user->password === '';
 $menuItems = [
     ['icon' => 'fa-user', 'text' => __('view_profile.edit.profile'), 'target' => '#profile'],

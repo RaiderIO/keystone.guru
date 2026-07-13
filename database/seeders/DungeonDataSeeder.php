@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Logic\Utils\Stopwatch;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
@@ -18,14 +17,13 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\MountableArea;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcBolsteringWhitelist;
-use App\Models\Npc\NpcCharacteristic;
 use App\Models\Npc\NpcDungeon;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcHealth;
-use App\Models\Npc\NpcSpell;
+use App\Models\Speedrun\DungeonSpeedrunDifficulty;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
+use App\Models\Speedrun\DungeonSpeedrunRequiredNpcNpc;
 use App\Models\Spell\Spell;
-use App\Models\Spell\SpellDungeon;
 use App\SeederHelpers\RelationImport\Mapping\DungeonFloorSwitchMarkerRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\DungeonRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\DungeonRouteRelationMapping;
@@ -55,16 +53,16 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
 {
     private const DUNGEON_DATA_DIR = 'seeders/dungeondata/';
 
-    /** @var Collection<array> */
-    private Collection $importedModels;
+    /** @var array<string, Collection<int, array<string, mixed>>> */
+    private array $importedModels;
 
-    /** @var Collection<RelationMapping> */
-    private Collection $relationMapping;
+    /** @var array<int, RelationMapping> */
+    private array $relationMapping;
 
     public function __construct()
     {
-        $this->importedModels  = collect();
-        $this->relationMapping = collect([
+        $this->importedModels  = [];
+        $this->relationMapping = [
             // Loose files
             new MappingVersionRelationMapping(),
             new MappingCommitLogRelationMapping(),
@@ -83,7 +81,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             new MountableAreaRelationMapping(),
             new FloorUnionRelationMapping(),
             new FloorUnionAreaRelationMapping(),
-        ]);
+        ];
 
         $this->resetImportedModels();
     }
@@ -103,8 +101,6 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
         $this->importDungeonRoutes();
         $this->flushModels();
         $this->preserveColumns();
-
-        Stopwatch::dumpAll();
     }
 
     /**
@@ -122,7 +118,10 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                 continue;
             }
 
-            $this->parseRawFile($rootDir, $rootDirChild, 1);
+            $result = $this->parseRawFile($rootDirChild);
+            if ($result !== null) {
+                $this->command->info(sprintf('- Imported %d %s', $result['count'], $this->humanizeFileName($result['fileName'])));
+            }
         }
 
         $rootDirIterator->rewind();
@@ -148,7 +147,8 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             // For each dungeon inside an expansion dir
             foreach ($expansionDirIterator as $dungeonKeyDir) {
                 /** @var SplFileInfo $dungeonKeyDir */
-                $this->command->info('- Importing dungeon ' . basename($dungeonKeyDir));
+                /** @var array<string, int> $counts */
+                $counts = [];
 
                 $floorDirIterator = new FilesystemIterator($dungeonKeyDir);
                 // For each floor inside a dungeon dir
@@ -157,13 +157,12 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                     if ($floorDirFile->getType() !== 'dir') {
                         continue;
                     }
-                    $this->command->info('-- Importing floor ' . basename($floorDirFile));
 
                     $importFileIterator = new FilesystemIterator($floorDirFile);
                     // For each file inside a floor
                     foreach ($importFileIterator as $importFile) {
                         // Floors first - parse dirs and only THEN files
-                        $this->parseRawFile($rootDir, $importFile, 3);
+                        $this->accumulateImportCount($counts, $this->parseRawFile($importFile));
                     }
                 }
 
@@ -180,8 +179,10 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                     }
 
                     // npcs, dungeon_routes
-                    $this->parseRawFile($rootDir, $floorDirFile, 2);
+                    $this->accumulateImportCount($counts, $this->parseRawFile($floorDirFile));
                 }
+
+                $this->command->info(sprintf('- %s: %s', basename($dungeonKeyDir), $this->buildImportSummary($counts)));
             }
         }
     }
@@ -204,7 +205,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
 
             // For each dungeon inside an expansion dir
             foreach ($expansionDirIterator as $dungeonKeyDir) {
-                $this->command->info('- Importing dungeon ' . basename($dungeonKeyDir));
+                $count = 0;
 
                 $floorDirIterator = new FilesystemIterator($dungeonKeyDir);
                 // For each floor inside a dungeon dir
@@ -219,7 +220,11 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                     }
 
                     // npcs, dungeon_routes
-                    $this->parseRawFile($rootDir, $floorDirFile, 2);
+                    $count += $this->parseRawFile($floorDirFile)['count'] ?? 0;
+                }
+
+                if ($count > 0) {
+                    $this->command->info(sprintf('- %s: %d dungeon routes', basename($dungeonKeyDir), $count));
                 }
             }
         }
@@ -229,7 +234,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
     {
         // Init the place where we store all models so we can insert them all at once
         foreach ($this->relationMapping as $relationMapping) {
-            $this->importedModels->put($relationMapping->getClass(), collect());
+            $this->importedModels[$relationMapping->getClass()] = collect();
         }
     }
 
@@ -247,13 +252,16 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                 continue;
             }
 
-            $instance   = new ($mapping->getClass())();
-            $liveTable  = $instance->getTable();
-            $tempTable  = DatabaseSeeder::getTempTableName($mapping->getClass());
-            $setClauses = collect($preservedColumns)
+            $instance  = new ($mapping->getClass())();
+            $liveTable = $instance->getTable();
+            $tempTable = DatabaseSeeder::getTempTableName($mapping->getClass());
+            /** @var Collection<int, string> $columns */
+            $columns    = collect($preservedColumns);
+            $setClauses = $columns
                 ->map(fn(string $col) => sprintf('t.%s = orig.%s', $col, $col))
                 ->implode(', ');
 
+            /** @noinspection SqlWithoutWhere */
             DB::statement(sprintf(
                 'UPDATE %s t INNER JOIN %s orig ON orig.id = t.id SET %s',
                 $tempTable,
@@ -267,7 +275,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
     {
         foreach ($this->importedModels as $class => $models) {
             /** @var class-string<Model> $class */
-            /** @var Collection $models */
+            /** @var Collection<int, array<string, mixed>> $models */
             if ($models->isEmpty()) {
                 continue;
             }
@@ -283,36 +291,63 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
     }
 
     /**
+     * @return array{fileName: string, count: int}|null Null when no mapping matched the file.
+     *
      * @throws Exception
      */
-    private function parseRawFile(string $rootDir, string $filePath, int $depth = 1): void
+    private function parseRawFile(string $filePath): ?array
     {
-        $prefix = str_repeat('-', $depth) . ' ';
-
         $fileName = basename($filePath);
 
-        // Import file
-        $this->command->info($prefix . 'Importing ' . $fileName);
-        $found = false;
         foreach ($this->relationMapping as $mapping) {
             if ($mapping->getFileName() === $fileName) {
-                $count = $this->loadModelsFromFile($filePath, $mapping);
-                $this->command->info(sprintf(
-                    $prefix . 'Imported %s (%s from %s)',
-                    str_replace($rootDir, '', $fileName),
-                    $count,
-                    $fileName,
-                ));
-
-                $found = true;
-                break;
+                return ['fileName' => $fileName, 'count' => $this->loadModelsFromFile($filePath, $mapping)];
             }
         }
 
-        // Let the user know if something wrong happened
-        if (!$found) {
-            $this->command->error($prefix . 'Unable to find table->model mapping for file ' . $filePath);
+        $this->command->error('Unable to find table->model mapping for file ' . $filePath);
+
+        return null;
+    }
+
+    /**
+     * Turns "enemy_packs.json" into "enemy packs" for human-readable output.
+     */
+    private function humanizeFileName(string $fileName): string
+    {
+        return str_replace('_', ' ', basename($fileName, '.json'));
+    }
+
+    /**
+     * Builds "4 map icons, 192 enemies, 51 packs" from a fileName => count map,
+     * omitting zero counts and ordering parts by the configured relation mapping order.
+     *
+     * @param array<string, int> $counts
+     */
+    private function buildImportSummary(array $counts): string
+    {
+        $parts = [];
+        foreach ($this->relationMapping as $mapping) {
+            $count = $counts[$mapping->getFileName()] ?? 0;
+            if ($count > 0) {
+                $parts[] = sprintf('%d %s', $count, $this->humanizeFileName($mapping->getFileName()));
+            }
         }
+
+        return empty($parts) ? 'nothing imported' : implode(', ', $parts);
+    }
+
+    /**
+     * @param array<string, int>                       $counts
+     * @param array{fileName: string, count: int}|null $result
+     */
+    private function accumulateImportCount(array &$counts, ?array $result): void
+    {
+        if ($result === null) {
+            return;
+        }
+
+        $counts[$result['fileName']] = ($counts[$result['fileName']] ?? 0) + $result['count'];
     }
 
     /**
@@ -401,7 +436,10 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             elseif ($mapping->getPostSaveRelationParsers()->isNotEmpty()) {
                 /** @var class-string<Model> $mappingClass */
                 $mappingClass = $mapping->getClass();
-                $createdModel = $mappingClass::from(DatabaseSeeder::getTempTableName($mappingClass))->create($modelData);
+                // forceCreate (not create) so non-$fillable columns exported by mapping:save are imported
+                // verbatim. DungeonRoute keeps demo, pull_gradient etc. out of $fillable to block user-facing
+                // mass assignment; dropping them here would silently reset demo routes to demo = false.
+                $createdModel = $mappingClass::from(DatabaseSeeder::getTempTableName($mappingClass))->forceCreate($modelData);
                 $updatedModels++;
             } // We don't need to do post-processing, add it to the list to be saved
             else {
@@ -438,12 +476,9 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
 
         // Bulk save the models that did not need any post-attribute parsing
         if ($modelsToSave->isNotEmpty()) {
-            /** @var Collection $importedModels */
-            $importedModels = $this->importedModels->get($mapping->getClass());
-            $this->importedModels->put(
-                $mapping->getClass(),
-                $importedModels->merge($modelsToSave),
-            );
+            /** @var Collection<int, array<string, mixed>> $importedModels */
+            $importedModels                             = $this->importedModels[$mapping->getClass()] ?? collect();
+            $this->importedModels[$mapping->getClass()] = $importedModels->merge($modelsToSave);
         }
 
         // $this->command->info('OK _loadModelsFromFile ' . $filePath . ' ' . $modelClassName);
@@ -455,7 +490,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
         $this->command->warn('Truncating all relevant data...');
 
         // Can DEFINITELY NOT truncate DungeonRoute table here. That'd wipe the entire instance, not good.
-        /** @var Collection<DungeonRoute> $demoRoutes */
+        /** @var Collection<int, DungeonRoute> $demoRoutes */
         $demoRoutes = DungeonRoute::with([
             'brushlines',
             'paths',
@@ -486,14 +521,14 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             MappingVersion::class,
             MappingCommitLog::class,
             Spell::class,
-            SpellDungeon::class,
+            // SpellDungeon, NpcCharacteristic and NpcSpell are combat-log-derived behavior and are
+            // intentionally omitted: they are not exported to the seeders, so their live tables must
+            // survive a re-seed untouched instead of being rebuilt (and wiped) from the JSON files.
             Npc::class,
             NpcBolsteringWhitelist::class,
             NpcEnemyForces::class,
             NpcDungeon::class,
-            NpcCharacteristic::class,
             NpcHealth::class,
-            NpcSpell::class,
             Enemy::class,
             EnemyPack::class,
             EnemyPatrol::class,
@@ -502,6 +537,8 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             FloorUnion::class,
             FloorUnionArea::class,
             DungeonSpeedrunRequiredNpc::class,
+            DungeonSpeedrunRequiredNpcNpc::class,
+            DungeonSpeedrunDifficulty::class,
             // Do not truncate dungeons - we want to keep the active state of dungeons unique for each environment, if we truncate it it'd be reset
             // Dungeon::class,
             Floor::class,

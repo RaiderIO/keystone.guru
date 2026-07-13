@@ -6,22 +6,22 @@ $user = Auth::user();
 ?>
 @guest
     <li class="nav-item px-2">
-        <a class="btn btn-info" href="#" data-toggle="modal" data-target="#login_modal">
+        <a class="btn btn-info" href="#" data-bs-toggle="modal" data-bs-target="#login_modal">
             <i class="fas fa-sign-in-alt"></i> {{__('view_common.layout.nav.user.login')}}
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link px-2" href="#" data-toggle="modal" data-target="#register_modal">
+        <a class="nav-link px-2" href="#" data-bs-toggle="modal" data-bs-target="#register_modal">
             {{__('view_common.layout.nav.user.register')}}
         </a>
     </li>
 @else
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             @include('common.user.name', ['user' => $user, 'showRaiderIOStaffImage' => false])
         </a>
-        <div class="dropdown-menu text-center text-xl-left" aria-labelledby="navbarDropdown">
+        <div class="dropdown-menu text-center text-xl-start" aria-labelledby="navbarDropdown">
             @if($user->hasRole(Role::ROLE_ADMIN))
                 @if( config('telescope.enabled') )
                     <a class="dropdown-item"
@@ -34,8 +34,6 @@ $user = Auth::user();
                     <i class="fa fa-hammer"></i> {{__('view_common.layout.nav.user.tools')}}
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item"
-                   href="{{ route('admin.releases') }}">{{__('view_common.layout.nav.user.view_releases')}}</a>
 {{--                @if( $user->isAbleTo('read-expansions') )--}}
                     <a class="dropdown-item"
                        href="{{ route('admin.expansions') }}">{{__('view_common.layout.nav.user.view_expansions')}}</a>
@@ -53,9 +51,17 @@ $user = Auth::user();
                 <a class="dropdown-item"
                    href="{{ route('admin.users') }}">{{__('view_common.layout.nav.user.view_users')}}</a>
                 <a class="dropdown-item"
+                   href="{{ route('admin.dungeonroutes') }}">{{__('view_common.layout.nav.user.view_dungeonroutes')}}</a>
+                <a class="dropdown-item"
                    href="{{ route('admin.userreports') }}">{{__('view_common.layout.nav.user.view_user_reports') }}
                     @if($numUserReports > 0)
-                        <span class="badge badge-warning badge-pill">{{ $numUserReports }}</span>
+                        <span class="badge text-bg-warning rounded-pill">{{ $numUserReports }}</span>
+                    @endif
+                </a>
+                <a class="dropdown-item"
+                   href="{{ route('admin.tools.combatlog.parsefailures.view') }}">{{__('view_common.layout.nav.user.view_combat_log_parse_failures') }}
+                    @if($numCombatLogParseFailures > 0)
+                        <span class="badge text-bg-warning rounded-pill">{{ $numCombatLogParseFailures }}</span>
                     @endif
                 </a>
                 <div class="dropdown-divider"></div>

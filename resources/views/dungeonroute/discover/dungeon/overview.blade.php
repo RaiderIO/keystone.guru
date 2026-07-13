@@ -2,17 +2,18 @@
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameVersion\GameVersion;
 use Illuminate\Support\Collection;
 
 /**
- * @var AffixGroup          $currentAffixGroup
- * @var boolean             $showAds
- * @var boolean             $isMobile
- * @var Dungeon             $dungeon
- * @var array               $dungeonroutes
- * @var GameVersion         $gameVersion
- * @var Collection<Dungeon> $gameVersionDungeons
+ * @var AffixGroup               $currentAffixGroup
+ * @var boolean                  $showAds
+ * @var boolean                  $isMobile
+ * @var Dungeon                  $dungeon
+ * @var array<int, DungeonRoute> $dungeonroutes
+ * @var GameVersion              $gameVersion
+ * @var Collection<int, Dungeon> $gameVersionDungeons
  */
 
 $showRoutesByAffixes = $gameVersion->has_seasons && $gameVersion->key !== GameVersion::GAME_VERSION_RETAIL;
@@ -48,6 +49,9 @@ $showRoutesByAffixes = $gameVersion->has_seasons && $gameVersion->key !== GameVe
         @include('dungeonroute.discover.panel', [
             'gameVersion' => $gameVersion,
             'link' => config('keystoneguru.raider_io.weekly_route.url'),
+            'linkOptions' => [
+                'target' => '_blank',
+            ],
             'title' => __('view_dungeonroute.discover.dungeon.overview.weekly_route'),
             'dungeonroutes' => $dungeonroutes['weekly_route'],
             'showMore' => false,

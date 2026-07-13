@@ -40,6 +40,9 @@ final class CoordinatesServiceTest extends PublicTestCase
         $this->assertEquals($expected->getY(), $result->getY());
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function checkCalculateIngameLocationForMapLocation_GivenLatLng_ShouldReturn_Provider(): array
     {
         return [
@@ -148,7 +151,7 @@ final class CoordinatesServiceTest extends PublicTestCase
                 $mappingVersion->dungeon,
             )->getMDTNPCs();
 
-            /** @var Collection<array{x: float, y: float}> $result */
+            /** @var Collection<string, array{x: float, y: float}> $result */
             $result = collect();
             foreach ($enemies as $enemy) {
                 $result->put(

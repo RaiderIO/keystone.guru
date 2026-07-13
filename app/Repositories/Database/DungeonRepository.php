@@ -13,7 +13,9 @@ class DungeonRepository extends DatabaseRepository implements DungeonRepositoryI
     {
         parent::__construct(Dungeon::class);
     }
-
+    /**
+     * @return Collection<int, mixed>
+     */
     public function getAllMapIds(): Collection
     {
         return Dungeon::get('map_id')->pluck('map_id')->unique();

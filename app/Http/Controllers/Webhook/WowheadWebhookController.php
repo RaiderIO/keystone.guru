@@ -30,7 +30,7 @@ class WowheadWebhookController extends Controller
 
         $validated = $request->validated();
 
-        preg_match('/spell=(\d+)/', $validated['url'], $matches);
+        preg_match('/spell=(\d+)/', (string)$validated['url'], $matches);
 
         $spellId = $matches[1] ?? null;
 
@@ -43,7 +43,7 @@ class WowheadWebhookController extends Controller
 
         $spellDataResult = $wowheadService->getSpellData(
             $gameVersion = $retail,
-            $spellId,
+            (int)$spellId,
             $validated['html'],
         );
 
@@ -71,7 +71,7 @@ class WowheadWebhookController extends Controller
 
         $validated = $request->validated();
 
-        preg_match('/npc=(\d+)/', $validated['url'], $matches);
+        preg_match('/npc=(\d+)/', (string)$validated['url'], $matches);
 
         $npcId = $matches[1] ?? null;
 

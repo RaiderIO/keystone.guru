@@ -3,6 +3,12 @@
 return [
 
     'dungeon' => [
+        'difficulty' => [
+            '10_man' => '10-man',
+            '25_man' => '25-man',
+            '20_man' => '20-man',
+            '40_man' => '40-man',
+        ],
         'griddiscover' => [
             'popular'   => 'Popular',
             'this_week' => 'This week',
@@ -79,6 +85,8 @@ return [
             'title_title'                                    => 'Choose a title that will uniquely identify the route for you over other similar routes you may create. The title will be visible to others once you choose to publish your route.',
             'dungeon_speedrun_required_npc_difficulty'       => 'Raid size',
             'dungeon_speedrun_required_npc_difficulty_title' => '10-man and 25-man raids can have different enemies to kill for completing a speedrun. Select your raid size to toggle between the enemy sets.',
+            'dungeon_start'                                  => 'Dungeon start',
+            'dungeon_start_title'                            => 'This dungeon has multiple entrances. Select which one your route starts from; this affects the calculated path from the start to your first pull.',
             'description'                                    => 'Description',
             'description_title'                              => 'An optional description of your route. The description will be visible to others once you choose to publish your route. You can always edit your description later.',
             'key_levels'                                     => 'Key levels',
@@ -227,7 +235,6 @@ return [
             'api_documentation_internal_team' => 'API documentation (internal team)',
             'keystone_guru'                   => 'Keystone.guru',
             'changelog'                       => 'Changelog',
-            'changelog_new'                   => 'NEW',
             'credits'                         => 'Credits',
             'about'                           => 'About',
             'legacy'                          => 'Legacy',
@@ -243,6 +250,7 @@ return [
             'trademark'                       => 'Trademark',
             'trademark_footer'                => 'World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other countries. This website is not affiliated with Blizzard Entertainment.',
             'social'                          => 'Social',
+            'worktree'                        => '(worktree: :worktree)',
         ],
         'header' => [
             'toggle_navigation_title' => 'Toggle navigation',
@@ -255,6 +263,7 @@ return [
             'explore'                 => 'Explore dungeons',
             'new'                     => 'NEW',
             'compendium'              => 'Compendium',
+            'compendium_overview'     => 'Overview',
             'npc_compendium'          => 'NPCs',
             'spell_compendium'        => 'Spells',
             'compendium_activity'     => 'Activity',
@@ -262,24 +271,25 @@ return [
         ],
         'nav' => [
             'user' => [
-                'login'             => 'Login',
-                'register'          => 'Register',
-                'telescope'         => 'Telescope',
-                'tools'             => 'Tools',
-                'view_releases'     => 'View releases',
-                'view_expansions'   => 'View expansions',
-                'view_dungeons'     => 'View dungeons',
-                'view_npcs'         => 'View NPCs',
-                'view_spells'       => 'View spells',
-                'view_users'        => 'View users',
-                'view_user_reports' => 'View user reports',
-                'my_routes'         => 'My routes',
-                'my_favorites'      => 'My favorites',
-                'my_tags'           => 'My tags',
-                'my_teams'          => 'My teams',
-                'my_profile'        => 'My public profile',
-                'account_settings'  => 'Account settings',
-                'logout'            => 'Logout',
+                'login'                          => 'Login',
+                'register'                       => 'Register',
+                'telescope'                      => 'Telescope',
+                'tools'                          => 'Tools',
+                'view_expansions'                => 'View expansions',
+                'view_dungeons'                  => 'View dungeons',
+                'view_npcs'                      => 'View NPCs',
+                'view_spells'                    => 'View spells',
+                'view_users'                     => 'View users',
+                'view_dungeonroutes'             => 'View dungeonroutes',
+                'view_user_reports'              => 'View user reports',
+                'view_combat_log_parse_failures' => 'Combat log parse failures',
+                'my_routes'                      => 'My routes',
+                'my_favorites'                   => 'My favorites',
+                'my_tags'                        => 'My tags',
+                'my_teams'                       => 'My teams',
+                'my_profile'                     => 'My public profile',
+                'account_settings'               => 'Account settings',
+                'logout'                         => 'Logout',
             ],
             'uploadlogs' => [
                 'upload_logs' => 'Upload logs to improve Keystone.guru',
@@ -395,6 +405,13 @@ return [
                     'pane'        => 'Pane',
                 ],
             ],
+            'combatlogrouteenemyfailures' => [
+                'npc_filter'           => 'NPC filter',
+                'clear_failures'       => 'Clear failures',
+                'clear_failures_title' => 'Delete all failure records for this dungeon',
+                'matching_routes'      => 'Matching routes',
+                'no_matching_routes'   => 'No matching routes found',
+            ],
             'header' => [
                 'toggle_navigation'              => 'Toggle navigation',
                 'stop'                           => 'Stop',
@@ -475,7 +492,7 @@ return [
     ],
     'mappingversion' => [
         'select' => [
-            'mapping_version_readonly' => ':gameVersion version :version (readonly)',
+            'mapping_version_previous' => ':gameVersion version :version (previous version)',
             'mapping_version'          => ':gameVersion version :version',
         ],
     ],
@@ -636,10 +653,8 @@ return [
         'link' => [
             'boss' => 'Boss',
         ],
-    ],
-    'release' => [
-        'release' => [
-            'new' => 'NEW',
+        'select' => [
+            'npc' => 'NPC',
         ],
     ],
     'tag' => [

@@ -31,9 +31,7 @@ class DungeonRouteSubmitFormRequest extends FormRequest
         }
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     */
+    /** @return array<string, mixed> */
     public function rules(): array
     {
         /** @var User|null $user */
@@ -69,6 +67,9 @@ class DungeonRouteSubmitFormRequest extends FormRequest
             'teeming'  => 'nullable|int',
             'template' => 'nullable|int',
 
+            'pull_gradient'              => 'nullable|string|max:2000',
+            'pull_gradient_apply_always' => 'nullable|boolean',
+
             // Array since there's potentially a seasonal index per expansion
             'seasonal_index'   => 'nullable|array',
             'seasonal_index.*' => 'nullable|numeric',
@@ -90,7 +91,11 @@ class DungeonRouteSubmitFormRequest extends FormRequest
 
             'unlisted' => 'nullable|int',
 
-            'dungeon_difficulty' => Rule::in(Dungeon::DIFFICULTY_ALL),
+            // Nullable: the difficulty select is empty for non-speedrun dungeons, and Tom Select submits an empty value for it
+            'dungeon_difficulty' => ['nullable', Rule::in(array_values(Dungeon::DIFFICULTY_ALL))],
+
+            // Verified against the dungeon's mapping version in DungeonRouteSaveService
+            'dungeon_start_map_icon_id' => 'nullable|integer',
         ];
 
         // Validate demo state, optional or numeric

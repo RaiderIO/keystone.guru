@@ -1,6 +1,6 @@
 ARG STAGE=staging
 
-FROM keystone.guru
+FROM keystone.guru-app
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -10,12 +10,16 @@ WORKDIR /var/www/html
 RUN apt-get update && apt-get install -y awscli
 
 ARG STAGE
+# GIT_REF optionally pins the checkout to a specific tag/commit (e.g. a release tag),
+# falling back to the branch matching STAGE when not provided.
+ARG GIT_REF
 # Checkout the correct version of the repo
 RUN git config --global --add safe.directory /var/www/html && \
     BRANCH=$([ "${STAGE}" = "production" ] && echo "master" || echo "development") && \
-    echo "Using branch: $BRANCH" && \
-    git clone --depth 1 --branch "$BRANCH" https://github.com/RaiderIO/keystone.guru.git . && \
-    git rev-list HEAD -1 > version && \
+    REF="${GIT_REF:-$BRANCH}" && \
+    echo "Using ref: $REF" && \
+    git clone --depth 1 --branch "$REF" https://github.com/RaiderIO/keystone.guru.git . && \
+    printf '%s' "${GIT_REF:-$(git rev-list HEAD -1)}" > version && \
     cat version; \
     rm -rf .git
 
@@ -23,9 +27,9 @@ RUN git config --global --add safe.directory /var/www/html && \
 RUN composer install --no-dev --optimize-autoloader && \
       php artisan vendor:publish --tag=laravel-assets --ansi --force
 
-# Install NPM packages
-RUN npm install && \
-    node node_modules/puppeteer/install.js
+# Install NPM packages. Chrome is not needed in the web image; skip its download.
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+RUN npm install
 
 # Generate Swagger related files
 RUN php artisan l5-swagger:generate --all && \

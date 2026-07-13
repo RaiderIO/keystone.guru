@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use Illuminate\Support\Collection;
@@ -19,24 +20,24 @@ $count = $affixgroup->affixes->count();
 $cols  ??= $count;
 
 $chunkCount = ceil($count / $cols);
-$chunks     = $affixgroup->affixes->chunk($chunkCount);
+$chunks     = $affixgroup->affixes->chunk((int)$chunkCount);
 ?>
 @foreach($chunks as $chunk)
-    <div class="row no-gutters px-1 affix_group_row {{ $isFirst ? '' : 'mt-2' }} {{ $class }}">
+    <div class="row g-0 px-1 affix_group_row {{ $isFirst ? '' : 'mt-2' }} {{ $class }}">
             <?php
-            /** @var Collection $chunk */
+            /** @var Collection<int, Affix> $chunk */
             $affixIndex = 0;
         foreach ($chunk as $affix) {
             ?>
         <div class="col">
-            <div class="row no-gutters m-auto affix_group_{{ $affixgroup->id }}">
+            <div class="row g-0 m-auto affix_group_{{ $affixgroup->id }}">
                 <div class="col-auto {{ $center ? 'm-auto' : '' }}">
                     @include('common.affixgroup.affix', ['showText' => $showText, 'media' => $media, 'affix' => $affix])
                 </div>
 
                 @if($affixIndex === $count - 1 && $dungeon instanceof Dungeon)
                     <div class="col-auto">
-                        <h5 class="font-weight-bold pl-2 mt-2">
+                        <h5 class="fw-bold ps-2 mt-2">
                             @include('common.dungeonroute.tier', ['affixgroup' => $affixgroup, 'dungeon' => $dungeon])
                         </h5>
                     </div>

@@ -6,7 +6,6 @@ use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\Structs\IngameXY;
 use App\Models\CombatLog\ChallengeModeRun;
-use App\Models\CombatLog\EnemyPosition;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
@@ -25,7 +24,6 @@ use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLoggingInterface;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
 use App\Service\CombatLog\ResultEvents\ChallengeModeEnd as ChallengeModeEndResultEvent;
 use App\Service\CombatLog\ResultEvents\ChallengeModeStart as ChallengeModeStartResultEvent;
-use App\Service\CombatLog\ResultEvents\EnemyEngaged as EnemyEngagedResultEvent;
 use App\Service\CombatLog\ResultEvents\MapChange as MapChangeResultEvent;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -51,7 +49,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
     }
 
     /**
-     * @return Collection<DungeonRoute>
+     * @return Collection<int, DungeonRoute>
      *
      * @throws InvalidArgumentException           If combat log does not exist
      * @throws AdvancedLogNotEnabledException
@@ -108,7 +106,6 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
             //            }));
             // </editor-fold>
 
-            // Store found enemy positions in the database for analyzing
             $this->saveChallengeModeRun($resultEvents, $dungeonRoute);
 
             $dungeonRoute = new ResultEventDungeonRouteBuilder(
@@ -140,93 +137,34 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
     }
 
     /**
-     * @param Collection<BaseResultEvent> $resultEvents
+     * @param Collection<int, BaseResultEvent> $resultEvents
      */
     private function saveChallengeModeRun(Collection $resultEvents, DungeonRoute $dungeonRoute): void
     {
-        try {
-            $this->log->saveEnemyPositionFromResultEventsStart();
-            // Save each enemy
-            $enemyPositionAttributes = [];
-            $currentFloor            = null;
+        $now                = Carbon::now()->toDateTimeString();
+        $challengeModeStart = null;
+        $challengeModeEnd   = null;
 
-            $now                = Carbon::now()->toDateTimeString();
-            $challengeModeStart = null;
-            $challengeModeEnd   = null;
-
-            foreach ($resultEvents as $resultEvent) {
-                // Track the starts and ends. Don't do anything just yet with this
-                if ($resultEvent instanceof ChallengeModeStartResultEvent) {
-                    $challengeModeStart = $resultEvent;
-
-                    continue;
-                }
-
-                if ($resultEvent instanceof ChallengeModeEndResultEvent) {
-                    $challengeModeEnd = $resultEvent;
-
-                    continue;
-                }
-
-                // Keep track of the current floor
-                if ($resultEvent instanceof MapChangeResultEvent) {
-                    $currentFloor = $resultEvent->getFloor();
-
-                    continue;
-                }
-
-                // Only looking for points of engagement
-                if (!($resultEvent instanceof EnemyEngagedResultEvent) || $currentFloor === null) {
-                    continue;
-                }
-
-                $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
-                    new IngameXY(
-                        $resultEvent->getEngagedEvent()->getAdvancedData()->getPositionX(),
-                        $resultEvent->getEngagedEvent()->getAdvancedData()->getPositionY(),
-                        $currentFloor,
-                    ),
-                );
-
-                $enemyPositionAttributes[] = array_merge([
-                    'challenge_mode_run_id' => null,
-                    'floor_id'              => $currentFloor->id,
-                    'npc_id'                => $resultEvent->getGuid()->getId(),
-                    'guid'                  => $resultEvent->getGuid()->getGuid(),
-                    'created_at'            => $now,
-                ], $latLng->toArray());
+        foreach ($resultEvents as $resultEvent) {
+            if ($resultEvent instanceof ChallengeModeStartResultEvent) {
+                $challengeModeStart = $resultEvent;
+            } elseif ($resultEvent instanceof ChallengeModeEndResultEvent) {
+                $challengeModeEnd = $resultEvent;
             }
-
-            // Insert a run
-            /** @var ChallengeModeRun $challengeModeRun */
-            $challengeModeRun = ChallengeModeRun::create([
-                'dungeon_id'       => $dungeonRoute->dungeon_id,
-                'dungeon_route_id' => $dungeonRoute->id,
-                'level'            => $challengeModeStart->getChallengeModeStartEvent()->getKeystoneLevel(),
-                'success'          => $challengeModeEnd->getChallengeModeEndEvent()->getSuccess(),
-                'total_time_ms'    => $challengeModeEnd->getChallengeModeEndEvent()->getTotalTimeMS(),
-                'created_at'       => $now,
-            ]);
-
-            // Couple the run to the attributes we generated before
-            foreach ($enemyPositionAttributes as &$enemyPositionAttribute) {
-                $enemyPositionAttribute['challenge_mode_run_id'] = $challengeModeRun->id;
-            }
-
-            // If we didn't insert anything there were issues with GUIDs colliding
-            if (EnemyPosition::insertOrIgnore($enemyPositionAttributes) === 0) {
-                // Mark it as a duplicate if we couldn't insert any new positions
-                $challengeModeRun->update([
-                    'duplicate' => 1,
-                ]);
-            }
-        } finally {
-            $this->log->saveEnemyPositionFromResultEventsEnd();
         }
+
+        ChallengeModeRun::create([
+            'dungeon_id'       => $dungeonRoute->dungeon_id,
+            'dungeon_route_id' => $dungeonRoute->id,
+            'level'            => $challengeModeStart->getChallengeModeStartEvent()->getKeystoneLevel(),
+            'success'          => $challengeModeEnd->getChallengeModeEndEvent()->getSuccess(),
+            'total_time_ms'    => $challengeModeEnd->getChallengeModeEndEvent()->getTotalTimeMS(),
+            'created_at'       => $now,
+        ]);
     }
 
     /**
-     * @param Collection<BaseResultEvent> $resultEvents
+     * @param Collection<int, BaseResultEvent> $resultEvents
      */
     private function generateMapIconsFromEvents(
         MappingVersion $mappingVersion,

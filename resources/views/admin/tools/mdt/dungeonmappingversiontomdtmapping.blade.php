@@ -1,6 +1,6 @@
 <?php
 /**
- * @var array $mappingVersionsSelect
+ * @var array<int, string> $mappingVersionsSelect
  */
 ?>
 
@@ -10,10 +10,10 @@
 
 @section('content')
     {{ html()->form('POST', route('admin.tools.mdt.dungeonmappingversiontomdtmapping.submit'))->open() }}
-    <div class="form-group">
+    <div class="mb-3">
         {{ html()->select('mapping_version_id', $mappingVersionsSelect, true)->class('form-control selectpicker')->data('live-search', 'true') }}
     </div>
-    <div class="form-group">
+    <div class="mb-3">
         {{ html()->input('submit')->value(__('view_admin.tools.mdt.dungeonmappingversiontomdtmapping.submit'))->class('btn btn-primary col-md-auto') }}
         <div class="col-md">
 

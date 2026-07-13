@@ -6,12 +6,13 @@ use App\Models\GameVersion\GameVersion;
 use Illuminate\Support\Collection;
 
 /**
- * @var GameVersion              $gameVersion
- * @var string                   $title
- * @var string|null              $link
- * @var int                      $cols
- * @var Collection<DungeonRoute> $dungeonroutes
- * @var AffixGroup               $currentAffixGroup
+ * @var GameVersion                   $gameVersion
+ * @var string                        $title
+ * @var string|null                   $link
+ * @var array<string, string>|null    $linkOptions
+ * @var int                           $cols
+ * @var Collection<int, DungeonRoute> $dungeonroutes
+ * @var AffixGroup                    $currentAffixGroup
  */
 
 $dungeon          ??= null;
@@ -22,13 +23,16 @@ $loadMoreOffset   ??= 0;
 $showDungeonImage ??= false;
 $affixgroup       ??= null;
 $cache            ??= true;
+$linkOptions      ??= [];
 ?>
 <div class="discover_panel px-xl-2">
     <div class="row mt-4">
         <div class="col-xl">
             <h2 class="text-center">
                 @isset($link)
-                    <a href="{{ $link }}">
+                    <a href="{{ $link }}" {!! implode(' ', array_map(function ($key, $value) {
+                        return sprintf('%s="%s"', $key, $value);
+                    }, array_keys($linkOptions), $linkOptions)) !!}>
                         {{ $title }}
                         @if((parse_url($link)['host'] ?? '') !== parse_url(config('app.url'))['host'])
                             <i class="fas fa-external-link-alt"></i>
@@ -40,9 +44,7 @@ $cache            ??= true;
             </h2>
             @if($affixgroup !== null)
                 <div class="row mb-2">
-                    <div class="offset-2">
-                    </div>
-                    <div class="col-8">
+                    <div class="col-8 offset-2">
                         @include('common.affixgroup.affixgroup', [
                             'affixgroup' => $affixgroup,
                             'cols' => 1,

@@ -1,16 +1,16 @@
 <?php
 /**
- * @var string       $id
- * @var string|null  $name
- * @var array        $values
- * @var boolean|null $multiple
- * @var boolean|null $liveSearch
- * @var mixed|null   $selected
+ * @var string                                               $id
+ * @var string|null                                          $name
+ * @var array<string, array{icon_url: string, name: string}> $values
+ * @var boolean|null                                         $multiple
+ * @var boolean|null                                         $liveSearch
+ * @var mixed|null                                           $selected
  */
 
-$multiple = $multiple ?? false;
-$liveSearch = $liveSearch ?? false;
-$selected = $selected ?? null;
+$multiple ??= false;
+$liveSearch ??= false;
+$selected ??= null;
 ?>
 <select id="{{ $id }}"
         @isset($name)

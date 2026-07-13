@@ -5,7 +5,7 @@ namespace App\Service\CombatLog\Dtos;
 use App\Models\Dungeon;
 use Illuminate\Support\Carbon;
 
-class ChallengeMode
+class ChallengeMode implements \Stringable
 {
     public function __construct(
         private readonly Carbon  $carbon,
@@ -27,5 +27,10 @@ class ChallengeMode
     public function getKeyLevel(): int
     {
         return $this->keyLevel;
+    }
+
+    public function __toString(): string
+    {
+        return sprintf('%s (key +%d)', $this->dungeon->name, $this->keyLevel);
     }
 }

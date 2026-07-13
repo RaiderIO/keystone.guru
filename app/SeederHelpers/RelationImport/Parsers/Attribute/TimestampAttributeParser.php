@@ -11,7 +11,11 @@ class TimestampAttributeParser implements AttributeParserInterface
         return true;
     }
 
-    public function parseAttribute(string $modelClassName, array $modelData, string $name, $value): array
+    /**
+     * @param  array<string, mixed> $modelData
+     * @return array<string, mixed>
+     */
+    public function parseAttribute(string $modelClassName, array $modelData, string $name, mixed $value): array
     {
         $fieldNames = [
             'fetched_data_at',

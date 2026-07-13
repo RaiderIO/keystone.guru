@@ -17,10 +17,16 @@ return [
             'ad_free_giveaway_description_available'     => 'Danke, dass Sie :patreon von Keystone.guru abonniert haben! Sie können :current weitere werbefreie Erlebnisse an Keystone.guru an jedes Teammitglied verschenken.',
         ],
         'overview' => [
-            'title' => 'Übersicht',
+            'title'   => 'Übersicht',
+            'routes'  => '',
+            'members' => '',
         ],
         'routepublishing' => [
-            'title' => 'Routenveröffentlichung',
+            'title'            => 'Routenveröffentlichung',
+            'description'      => '',
+            'enabled'          => '',
+            'timezone_warning' => '',
+            'profile_link'     => '',
         ],
         'routes' => [
             'title'                  => 'Routenliste',

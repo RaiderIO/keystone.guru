@@ -15,6 +15,7 @@ class SpellCompendiumRequest extends FormRequest
         return true;
     }
 
+    #[\Override]
     protected function failedValidation(Validator $validator): never
     {
         throw new HttpResponseException(response()->json(['errors' => $validator->errors()], 422));
@@ -26,6 +27,12 @@ class SpellCompendiumRequest extends FormRequest
             ? Dungeon::findOrFail($this->validated('dungeon_id'))
             : null);
     }
+
+    /**
+
+
+     * @return array<string, array<int, string|Rule>|string|Rule>
+     */
 
     public function rules(): array
     {

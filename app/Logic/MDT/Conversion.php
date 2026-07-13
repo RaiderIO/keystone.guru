@@ -14,12 +14,12 @@ use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\Floor\Floor;
 use App\Models\Season;
-use App\Service\Season\SeasonService;
+use App\Service\Season\SeasonServiceInterface;
 use Exception;
 
 class Conversion
 {
-    public const EXPANSION_NAME_MAPPING = [
+    public const array EXPANSION_NAME_MAPPING = [
         Expansion::EXPANSION_CLASSIC   => 'ClassicEra',
         Expansion::EXPANSION_TBC       => null,
         Expansion::EXPANSION_WOTLK     => 'WrathOfTheLichKing',
@@ -38,7 +38,7 @@ class Conversion
     ];
 
     // @formatter:off
-    public const DUNGEON_NAME_MAPPING = [
+    public const array DUNGEON_NAME_MAPPING = [
         //        Expansion::EXPANSION_CLASSIC => [
         //            Dungeon::DUNGEON_BLACKFATHOM_DEEPS           => 'BlackfathomDeeps',
         //            Dungeon::DUNGEON_BLACKROCK_DEPTHS            => 'BlackrockDepths',
@@ -256,7 +256,7 @@ class Conversion
     /**
      * Rounds a number to the nearest two decimals.
      */
-    private static function round($nr): float
+    private static function round(float|int $nr): float
     {
         return ((int)($nr * 100)) / 100;
     }
@@ -336,6 +336,8 @@ class Conversion
 
     /**
      * Converts an array with lat/lng keys set to an array with x/y set, converted to MDT coordinate system.
+     *
+     * @return array{x: string, y: string}
      */
     public static function convertLatLngToMDTCoordinateString(LatLng $latLng): array
     {
@@ -348,6 +350,8 @@ class Conversion
 
     /**
      * Converts an array with lat/lng keys set to an array with x/y set, converted to MDT coordinate system.
+     *
+     * @return array{x: float, y: float}
      */
     public static function convertLatLngToMDTCoordinate(LatLng $latLng): array
     {
@@ -364,15 +368,21 @@ class Conversion
      * @throws Exception
      */
     public static function convertWeekToAffixGroup(
-        SeasonService $seasonService,
-        Dungeon       $dungeon,
-        int           $mdtWeek,
+        SeasonServiceInterface $seasonService,
+        Dungeon                $dungeon,
+        int                    $mdtWeek,
     ): ?AffixGroup {
         if (!$dungeon->hasMappingVersionWithSeasons()) {
             return null;
         }
 
-        $season = $seasonService->getUpcomingSeasonForDungeon($dungeon) ??
+        // An MDT week indexes the current live retail affix rotation, so prefer interpreting it
+        // against the current active season when the dungeon is part of it. Only fall back to the
+        // dungeon's upcoming/most-recent season for dungeons that aren't in the current season
+        // (such as legacy dungeons), which keeps their imports deterministic instead of drifting
+        // to whichever season last contained the dungeon.
+        $season = $seasonService->getCurrentSeasonForDungeon($dungeon) ??
+            $seasonService->getUpcomingSeasonForDungeon($dungeon) ??
             $seasonService->getMostRecentSeasonForDungeon($dungeon);
 
         if ($season === null) {

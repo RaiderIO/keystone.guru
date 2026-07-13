@@ -18,7 +18,6 @@ use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellCorrectionRequest
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
 use App\Logic\Structs\IngameXY;
 use App\Models\Floor\Floor;
-use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
@@ -31,6 +30,7 @@ use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\CombatLog\Builders\Logging\CombatLogRouteCorrectionBuilderLoggingInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Collection;
 use Override;
@@ -49,10 +49,10 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
 
     public function __construct(
         SeasonServiceInterface                    $seasonService,
+        SeasonAffixGroupServiceInterface          $seasonAffixGroupService,
         CoordinatesServiceInterface               $coordinatesService,
         DungeonRouteRepositoryInterface           $dungeonRouteRepository,
         DungeonRouteAffixGroupRepositoryInterface $dungeonRouteAffixGroupRepository,
-        AffixGroupRepositoryInterface             $affixGroupRepository,
         KillZoneRepositoryInterface               $killZoneRepository,
         KillZoneEnemyRepositoryInterface          $killZoneEnemyRepository,
         KillZoneSpellRepositoryInterface          $killZoneSpellRepository,
@@ -69,10 +69,10 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
 
         parent::__construct(
             $seasonService,
+            $seasonAffixGroupService,
             $coordinatesService,
             $dungeonRouteRepository,
             $dungeonRouteAffixGroupRepository,
-            $affixGroupRepository,
             $killZoneRepository,
             $killZoneEnemyRepository,
             $killZoneSpellRepository,
@@ -94,11 +94,11 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
 
     public function getCombatLogRoute(): CombatLogRouteCorrectionRequestModel
     {
-        /** @var Collection<CombatLogRouteNpcRequestModel> $npcs */
+        /** @var Collection<int, CombatLogRouteNpcRequestModel> $npcs */
         $npcs = new Collection();
-        /** @var Collection<CombatLogRouteSpellRequestModel> $npcs */
+        /** @var Collection<int, CombatLogRouteSpellRequestModel> $spells */
         $spells = new Collection();
-        /** @var Collection<CombatLogRoutePlayerDeathRequestModel> $playerDeaths */
+        /** @var Collection<int, CombatLogRoutePlayerDeathRequestModel> $playerDeaths */
         $playerDeaths = new Collection();
 
         try {

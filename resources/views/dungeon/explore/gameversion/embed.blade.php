@@ -9,21 +9,21 @@ use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Illuminate\Support\Collection;
 
 /**
- * @var GameVersion                  $gameVersion
- * @var Dungeon                      $dungeon
- * @var Floor                        $floor
- * @var string                       $title
- * @var MapContextBase               $mapContext
- * @var int                          $keyLevelMin
- * @var int                          $keyLevelMax
- * @var int                          $itemLevelMin
- * @var int                          $itemLevelMax
- * @var int                          $playerDeathsMin
- * @var int                          $playerDeathsMax
- * @var Collection<WeeklyAffixGroup> $seasonWeeklyAffixGroups
- * @var array                        $embedOptions
- * @var array                        $parameters
- * @var float                        $defaultZoom
+ * @var GameVersion                       $gameVersion
+ * @var Dungeon                           $dungeon
+ * @var Floor                             $floor
+ * @var string                            $title
+ * @var MapContextBase                    $mapContext
+ * @var int                               $keyLevelMin
+ * @var int                               $keyLevelMax
+ * @var int                               $itemLevelMin
+ * @var int                               $itemLevelMax
+ * @var int                               $playerDeathsMin
+ * @var int                               $playerDeathsMax
+ * @var Collection<int, WeeklyAffixGroup> $seasonWeeklyAffixGroups
+ * @var array<string, mixed>              $embedOptions
+ * @var array<string, mixed>              $parameters
+ * @var float                             $defaultZoom
  */
 ?>
 @extends('layouts.map', [
@@ -73,6 +73,7 @@ use Illuminate\Support\Collection;
             'parameters' => $parameters,
             'mapContext' => $mapContext,
             'hiddenMapObjectGroups' => [
+                'arrow',
                 'brushline',
                 'floorunion',
                 'floorunionarea',

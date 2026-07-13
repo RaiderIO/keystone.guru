@@ -5,11 +5,11 @@ use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
 
 /**
- * @var GameVersion $gameVersion
- * @var Dungeon     $dungeon
- * @var Floor       $floor
- * @var array       $embedOptions
- * @var array       $parameters
+ * @var GameVersion          $gameVersion
+ * @var Dungeon              $dungeon
+ * @var Floor                $floor
+ * @var array<string, mixed> $embedOptions
+ * @var array<string, mixed> $parameters
  */
 
 $routeParams    = array_merge(['gameVersion' => $gameVersion, 'dungeon' => $dungeon, 'floorIndex' => $floor->index], $parameters);
@@ -23,12 +23,12 @@ $editHeatmapUrl = route('dungeon.heatmap.gameversion.view.floor', $routeParams);
             background-image: url({{ $dungeon->getImageUrl() }}); background-size: cover;
         @endif
         ">
-    <div class="row no-gutters py-2">
+    <div class="row g-0 py-2">
         @include('common.embed.header.compact.logo')
 
         @if($embedOptions['show']['title'])
             <div class="col d-none d-md-block">
-                <div class="row no-gutters align-items-center" style="height: 36px;">
+                <div class="row g-0 align-items-center" style="height: 36px;">
                     <div class="col">
                         <h4 class="mb-0">
                             <a class="text-white"
@@ -54,7 +54,7 @@ $editHeatmapUrl = route('dungeon.heatmap.gameversion.view.floor', $routeParams);
             @endif
         </div>
         <div class="col-auto px-1 d-none d-md-block">
-            <a class="btn btn btn-primary float-right"
+            <a class="btn btn btn-primary float-end"
                href="{{ $editHeatmapUrl }}"
                target="_blank">
                 <i class="fas fa-external-link-alt"></i> {{ __('view_dungeon.heatmap.gameversion.embed.view_heatmap_fullscreen') }}

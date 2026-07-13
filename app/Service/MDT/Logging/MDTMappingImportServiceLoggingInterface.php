@@ -84,6 +84,9 @@ interface MDTMappingImportServiceLoggingInterface
         float  $distance,
     ): void;
 
+    /**
+     * @param array<string, mixed> $updatedFields
+     */
     public function importEnemiesRecoverPropertiesFromExistingEnemy(string $uniqueKey, array $updatedFields): void;
 
     public function importEnemiesCannotRecoverPropertiesFromExistingEnemy(string $uniqueKey): void;
@@ -108,6 +111,9 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importEnemyPatrolsStart(): void;
 
+    /**
+     * @param array<int, mixed> $mdtNpcClone
+     */
     public function importEnemyPatrolsUnableToFindAttachedEnemy(
         int   $mdtCloneIndex,
         array $mdtNpcClone,
@@ -144,6 +150,9 @@ interface MDTMappingImportServiceLoggingInterface
     public function importMapPOIsMissingTranslation(string $translationKey): void;
     public function importMapPOIsCreatedNewMapIcon(int $mapIconId, int $floorId, int $mapIconTypeId): void;
 
+    /**
+     * @param array<string, mixed> $latLng
+     */
     public function importMapPOIsMapIconAlreadyExists(int $mapIconId, array $latLng, string $mdtMapPOIName): void;
 
     public function importMapPOIsNewDungeonFloorSwitchMarkerOK(

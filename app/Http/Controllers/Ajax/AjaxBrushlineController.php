@@ -122,7 +122,10 @@ class AjaxBrushlineController extends Controller
         try {
             if ($brushline->delete()) {
                 if (Auth::check()) {
-                    broadcast(new BrushlineDeletedEvent($dungeonRoute, Auth::getUser(), $brushline));
+                    /** @var \App\Models\User $user */
+                    $user = Auth::getUser();
+
+                    broadcast(new BrushlineDeletedEvent($dungeonRoute, $user, $brushline));
                 }
 
                 $this->dungeonRouteChanged($dungeonRoute, $brushline, null);

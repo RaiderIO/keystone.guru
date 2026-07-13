@@ -15,6 +15,9 @@ use Override;
  */
 class RaiderIOHeatmapGridResponse extends CombatLogEventGridAggregationResult
 {
+    /**
+     * @param array<int, array<int|string, int>> $results
+     */
     public function __construct(
         CoordinatesServiceInterface $coordinatesService,
         CombatLogEventFilter        $combatLogEventFilter,

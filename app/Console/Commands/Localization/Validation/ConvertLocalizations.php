@@ -32,6 +32,7 @@ class ConvertLocalizations extends Command
      */
     public function handle(): void
     {
+        /** @var array<string, string> $localeMapping */
         $localeMapping = [
             'de_DE' => 'de',
             'en_US' => 'en',
@@ -76,8 +77,8 @@ class ConvertLocalizations extends Command
     /**
      * Convert nested arrays to dot notation.
      *
-     * @param  array $array
-     * @return array
+     * @param  array<string, mixed> $array
+     * @return array<string, mixed>
      */
     protected function convertDotNotationToArray(array $array): array
     {

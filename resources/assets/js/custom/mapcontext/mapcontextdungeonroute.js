@@ -148,6 +148,13 @@ class MapContextDungeonRoute extends MapContext {
     /**
      * @returns {[]}
      */
+    getArrows() {
+        return this._options.arrows;
+    }
+
+    /**
+     * @returns {[]}
+     */
     getPridefulEnemies() {
         return this._options.pridefulEnemies;
     }

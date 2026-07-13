@@ -77,7 +77,7 @@ abstract class DungeonRouteBuilder
 
     private int $killZoneIndex = 1;
 
-    /** @var Collection<KillZone> */
+    /** @var Collection<int, KillZone> */
     protected Collection $killZones;
 
     public function __construct(
@@ -129,7 +129,7 @@ abstract class DungeonRouteBuilder
         try {
             $this->log->createPullStart($this->killZoneIndex);
 
-            /** @var Collection<ActivePullEnemy> $killedEnemies */
+            /** @var Collection<int, ActivePullEnemy> $killedEnemies */
             $killedEnemies = $activePull->getEnemiesKilled();
 
             $killZone = $this->killZoneRepository->create([
@@ -210,7 +210,7 @@ abstract class DungeonRouteBuilder
     }
 
     /**
-     * @param Collection $preferredGroups The groups that are pulled and should always be preferred when choosing enemies
+     * @param Collection<int, bool> $preferredGroups The groups that are pulled and should always be preferred when choosing enemies
      */
     protected function findUnkilledEnemyForNpcAtIngameLocation(
         ActivePullEnemy $activePullEnemy,
@@ -248,7 +248,7 @@ abstract class DungeonRouteBuilder
             // Find the closest Enemy with the same NPC ID that is not killed yet
             $closestEnemy = new ClosestEnemy();
 
-            /** @var Collection<Enemy> $filteredEnemies */
+            /** @var Collection<int, Enemy> $filteredEnemies */
             $filteredEnemies = $this->availableEnemies->filter(function (Enemy $availableEnemy) use ($npcId) {
                 if ($availableEnemy->npc_id !== $npcId) {
                     return false;
@@ -332,6 +332,8 @@ abstract class DungeonRouteBuilder
     /**
      * If we're looking for the closest enemy for an active pull, check if we can find a matching enemy in an already
      * engaged pack.
+     * @param Collection<int, bool>  $preferredGroups
+     * @param Collection<int, Enemy> $filteredEnemies
      */
     private function findClosestEnemyInPreferredGroups(
         Collection      $preferredGroups,
@@ -345,7 +347,7 @@ abstract class DungeonRouteBuilder
 
             // Build a list of potential enemies which will always take precedence since they're in a group that we have aggroed.
             // Therefore, these enemies should be in combat with us regardless
-            /** @var Collection<Enemy> $preferredEnemiesInEngagedGroups */
+            /** @var Collection<int, Enemy> $preferredEnemiesInEngagedGroups */
             $preferredEnemiesInEngagedGroups = $filteredEnemies->filter(static fn(Enemy $availableEnemy) => $availableEnemy->enemy_pack_id !== null && $preferredGroups->has($availableEnemy->enemyPack->group));
 
             if ($preferredEnemiesInEngagedGroups->isNotEmpty()) {
@@ -364,6 +366,7 @@ abstract class DungeonRouteBuilder
     /**
      * Check if we can find an enemy on our preferred floor first. If we cannot find it, only then consider enemies
      * on other floors.
+     * @param Collection<int, Enemy> $filteredEnemies
      */
     private function findClosestEnemyInPreferredFloor(
         Collection      $filteredEnemies,
@@ -374,7 +377,7 @@ abstract class DungeonRouteBuilder
         try {
             $this->log->findClosestEnemyInPreferredFloorStart($this->currentFloor->id);
 
-            /** @var Collection<Enemy> $preferredEnemiesOnCurrentFloor */
+            /** @var Collection<int, Enemy> $preferredEnemiesOnCurrentFloor */
             $preferredEnemiesOnCurrentFloor = $filteredEnemies->filter(
                 fn(Enemy $availableEnemy) => // Only if we have floor checks enabled for this dungeon
                     $availableEnemy->floor_id == $this->currentFloor->id,
@@ -395,8 +398,7 @@ abstract class DungeonRouteBuilder
 
     /**
      * If we cannot find an enemy with any other criteria, just consider them all instead.
-     *
-     * @return void
+     * @param Collection<int, Enemy> $filteredEnemies
      */
     private function findClosestEnemyInAllFilteredEnemies(
         Collection      $filteredEnemies,
@@ -451,6 +453,9 @@ abstract class DungeonRouteBuilder
         }
     }
 
+    /**
+     * @param Collection<int, Enemy> $enemies
+     */
     private function findClosestEnemyAndDistanceFromList(
         Collection      $enemies,
         ActivePullEnemy $enemy,

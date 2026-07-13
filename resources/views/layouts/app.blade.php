@@ -1,28 +1,20 @@
 <?php
 
-use App\Models\Release;
-use App\Service\Cookies\CookieServiceInterface;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * @var bool    $isLocal
- * @var bool    $isMapping
- * @var bool    $isProduction
- * @var string  $revision
- * @var string  $theme
- * @var bool    $hasNewChangelog
- * @var Release $latestRelease
- * @var Release|null $latestReleaseSpotlight
+ * @var bool         $isLocal
+ * @var bool         $isMapping
+ * @var bool         $isProduction
+ * @var string       $revision
+ * @var string       $theme
  */
-
-$cookieService = resolve(CookieServiceInterface::class);
 
 // Show ads or not
 $showAds ??= true;
 $user    = Auth::user();
 // Show the legal modal or not if people didn't agree to it yet
 $showLegalModal ??= true;
-$showSpotlight  ??= true;
 // Setup the title
 $title = isset($title) ? $title . ' - ' : '';
 // Any additional parameters to pass to the login/register blade
@@ -42,18 +34,6 @@ $analytics ??= $isProduction;
 
 $bodyClass ??= '';
 $rootClass ??= '';
-
-// Bit of a hack to do this here - but for now this works
-$showSpotlightRelease = false;
-if ($showSpotlight && $latestReleaseSpotlight instanceof Release) {
-    // Only if the user hasn't seen the latest spotlight release yet
-    $showSpotlightRelease = ($_COOKIE['changelog_release'] ?? 0) < $latestReleaseSpotlight->id;
-
-    // It's now at least the release of the latest spotlight release since that's what's pushed in your face atm
-    if ($showSpotlightRelease) {
-        $cookieService->setCookie('changelog_release', $latestReleaseSpotlight->id);
-    }
-}
 
 ?><!DOCTYPE html>
 <html lang="{{ \Illuminate\Support\Str::replace('_ai', '', app()->getLocale()) }}" class="theme {{$theme}}">
@@ -80,7 +60,6 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof Release) {
     <link href="{{ ksgCompiledAsset(sprintf('css/custom-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
     {{--    <link href="{{ asset(sprintf('css/lib-%s.css', $version)) . $devCacheBuster }}" rel="stylesheet">--}}
     <link href="{{ ksgCompiledAsset(sprintf('css/theme-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
-    <link href="{{ ksgCompiledAsset(sprintf('css/home-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
     <link href="{{ ksgCompiledAsset(sprintf('css/custom-compiled-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
     <link href="{{ ksgCompiledAsset(sprintf('css/assets-compiled-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
     <link rel="icon" href="{{ ksgAssetImage('icon/favicon.ico') }}">
@@ -134,12 +113,6 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof Release) {
     @endcomponent
     <!-- END modal register -->
 @endguest
-
-@if($showSpotlight && $showSpotlightRelease)
-    @component('common.general.modal', ['id' => 'new_release_modal', 'active' => true])
-        @include('common.release.release', ['release' => $latestReleaseSpotlight])
-    @endcomponent
-@endif
 
 <!-- Scripts -->
 <script src="{{ ksgCompiledAsset(sprintf('js/app-%s.js', $revision)) . $devCacheBuster }}"></script>

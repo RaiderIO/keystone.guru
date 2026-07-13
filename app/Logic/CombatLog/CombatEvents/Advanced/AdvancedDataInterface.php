@@ -23,12 +23,24 @@ interface AdvancedDataInterface extends HasParameters
 
     public function getAbsorb(): int;
 
+    /**
+     * @return array<int, mixed>
+     */
     public function getPowerType(): array;
 
+    /**
+     * @return array<int, mixed>
+     */
     public function getCurrentPower(): array;
 
+    /**
+     * @return array<int, mixed>
+     */
     public function getMaxPower(): array;
 
+    /**
+     * @return array<int, mixed>
+     */
     public function getPowerCost(): array;
 
     public function getPositionX(): float;

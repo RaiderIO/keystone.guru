@@ -5,24 +5,20 @@ namespace App\Models;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Timewalking\TimewalkingEvent;
-use App\Models\Traits\HasIconFile;
 use App\Models\Traits\SeederModel;
 use App\Traits\UserCurrentTime;
 use Eloquent;
-use Exception;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Override;
 
 /**
  * @property int    $id
- * @property int    $icon_file_id
  * @property bool   $active
  * @property bool   $has_wallpaper
  * @property string $name
@@ -40,19 +36,17 @@ use Override;
  *
  * @property TimewalkingEvent|null $timewalkingEvent
  *
- * @method static Builder active()
+ * @method static Builder<self> active()
  *
  * @mixin Eloquent
  */
 class Expansion extends CacheModel
 {
-    use HasIconFile;
     use SeederModel;
     use UserCurrentTime;
 
     public $fillable = [
         'active',
-        'icon_file_id',
         'name',
         'shortname',
         'color',
@@ -61,12 +55,11 @@ class Expansion extends CacheModel
 
     public $hidden = [
         'id',
-        'icon_file_id',
         'created_at',
         'updated_at',
     ];
 
-    public $with = ['timewalkingEvent'];
+    public $with = [];
 
 //    protected $casts = [
 //        'released_at' => 'datetime',
@@ -104,10 +97,10 @@ class Expansion extends CacheModel
         self::EXPANSION_TLT          => 13,
     ];
 
-    /** @var Collection<int, Season>|null  */
+    /** @var Collection<string, Season>|null  */
     private ?Collection $currentSeasonCache = null;
 
-    /** @var Collection<int, Season>|null  */
+    /** @var Collection<string, Season>|null  */
     private ?Collection $nextSeasonCache = null;
 
     /**
@@ -137,11 +130,13 @@ class Expansion extends CacheModel
         return $this->hasMany(Dungeon::class)->orderBy('name');
     }
 
+    /** @return HasMany<Season, $this> */
     public function seasons(): HasMany
     {
         return $this->hasMany(Season::class);
     }
 
+    /** @return HasOne<TimewalkingEvent, $this> */
     public function timewalkingEvent(): HasOne
     {
         return $this->hasOne(TimewalkingEvent::class);
@@ -212,6 +207,9 @@ class Expansion extends CacheModel
 
     /**
      * Scope a query to only include active dungeons.
+     *
+     * @param  Builder<self> $query
+     * @return Builder<self>
      */
     #[Scope]
     protected function active(Builder $query): Builder
@@ -221,6 +219,9 @@ class Expansion extends CacheModel
 
     /**
      * Scope a query to only include inactive dungeons.
+     *
+     * @param  Builder<self> $query
+     * @return Builder<self>
      */
     #[Scope]
     protected function inactive(Builder $query): Builder
@@ -237,8 +238,10 @@ class Expansion extends CacheModel
     {
         $result = false;
 
-        $this->raids->load([
-            'mappingVersions' => fn(HasMany $query) => $query->without('dungeon'),
+        $this->raids->load([ // @phpstan-ignore argument.type (Larastan passes concrete relation type; contravariant closure parameter is correct at runtime)
+            'mappingVersions' => function (HasMany $query): void {
+                $query->without('dungeon');
+            },
         ]);
 
         foreach ($this->raids->filter($filterFn) as $raid) {
@@ -258,8 +261,10 @@ class Expansion extends CacheModel
         $filterFn ??= fn(Dungeon $dungeon) => true;
         $result = false;
 
-        $this->dungeons->load([
-            'mappingVersions' => fn(HasMany $query) => $query->without('dungeon'),
+        $this->dungeons->load([ // @phpstan-ignore argument.type (Larastan passes concrete relation type; contravariant closure parameter is correct at runtime)
+            'mappingVersions' => function (HasMany $query): void {
+                $query->without('dungeon');
+            },
         ]);
 
         foreach ($this->dungeons->filter($filterFn) as $dungeon) {
@@ -280,49 +285,11 @@ class Expansion extends CacheModel
         return ksgAssetImage(sprintf('dungeons/%s/wallpaper.jpg', $this->shortname));
     }
 
-    /**
-     * Saves an expansion with the data from a Request.
-     *
-     *
-     * @throws Exception
-     */
-    public function saveFromRequest(Request $request, string $fileUploadDirectory = 'uploads'): bool
+    public function getIconUrl(): string
     {
-        $new = isset($this->id);
-
-        $file = $request->file('icon');
-
-        $this->icon_file_id = -1;
-        $this->active       = $request->get('active');
-        $this->name         = $request->get('name');
-        $this->shortname    = $request->get('shortname');
-        $this->color        = $request->get('color');
-
-        // Update or insert it
-        if ($this->save()) {
-            // Save was successful, now do any file handling that may be necessary
-            if ($file !== null) {
-                try {
-                    $icon = File::saveFileToDB($file, $this, $fileUploadDirectory, 'local_public');
-
-                    // Update the expansion to reflect the new file ID
-                    $this->icon_file_id = $icon->id;
-                    $this->save();
-                } catch (Exception $ex) {
-                    if ($new) {
-                        // Roll back the saving of the expansion since something went wrong with the file.
-                        $this->delete();
-                    }
-
-                    throw $ex;
-                }
-            }
-
-            return true;
-        }
-
-        return false;
+        return ksgAssetImage(sprintf('expansions/%s.png', $this->shortname));
     }
+
     protected function casts(): array
     {
         return [

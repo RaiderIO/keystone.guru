@@ -7,23 +7,24 @@ use App\Models\Season;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<Dungeon>      $dungeons
- * @var Collection<AffixGroup>   $affixGroups
- * @var Collection<DungeonRoute> $dungeonRoutes
- * @var AffixGroup|null          $currentAffixGroup
- * @var Season                   $currentSeason
- * @var Season|null              $nextSeason
- * @var Season|null              $selectedSeason
+ * @var Collection<int, Dungeon>      $dungeons
+ * @var Collection<int, AffixGroup>   $affixGroups
+ * @var Collection<int, DungeonRoute> $dungeonRoutes
+ * @var AffixGroup|null               $currentAffixGroup
+ * @var Season                        $currentSeason
+ * @var Season|null                   $nextSeason
+ * @var Season|null                   $selectedSeason
  */
 
 if (!function_exists('getDungeonRoutesByDungeonIdAndAffixGroupId')) {
     /**
-     * @return Collection<DungeonRoute>
+     * @param  Collection<int, DungeonRoute> $dungeonRoutes
+     * @return Collection<int, DungeonRoute>
      */
     function getDungeonRoutesByDungeonIdAndAffixGroupId(Collection $dungeonRoutes, Dungeon $dungeon, AffixGroup $affixGroup): Collection
     {
         if ($dungeonRoutes->has($dungeon->id)) {
-            /** @var Collection<DungeonRoute> $dungeonRoutesList */
+            /** @var Collection<int, DungeonRoute> $dungeonRoutesList */
             $dungeonRoutesList = $dungeonRoutes->get($dungeon->id);
             $result            = $dungeonRoutesList->filter(
                 static fn(DungeonRoute $dungeonRoute) => $dungeonRoute->affixes->filter(
@@ -123,8 +124,8 @@ $seasonSelect = collect($seasons)->pluck('name_long', 'id')->mapWithKeys(static 
                                 <button class="btn btn-sm w-100 new_route_style_create_create"
                                         data-dungeon-id="{{ $dungeon->id }}"
                                         data-affix-group-id="{{ $affixGroup->id }}"
-                                        data-toggle="modal"
-                                        data-target="#create_route_modal"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#create_route_modal"
                                         style="display: {{ $newRouteStyle === 'create' ? 'block' : 'none' }}"
                                 >
                                     <i class="fa fa-plus text-info">

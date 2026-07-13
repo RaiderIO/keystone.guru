@@ -21,7 +21,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
 
     private int $delay = 0;
 
-    /** @var Collection<RaidEventPullEnemy> */
+    /** @var Collection<int, RaidEventPullEnemy> */
     private Collection $raidEventPullEnemies;
 
     public function __construct(
@@ -45,7 +45,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
         $this->raidEventPullEnemies = collect();
 
         foreach ($killZone->getEnemies()->groupBy('npc_id') as $npcId => $enemies) {
-            /** @var Collection<Enemy> $enemies */
+            /** @var Collection<int, Enemy> $enemies */
             $enemyIndex = 1;
             foreach ($enemies as $enemy) {
                 $this->addEnemy($enemy, $enemyIndex++);
@@ -125,7 +125,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
         $totalMountedFactor = 0;
 
         foreach ($mountFactorsAndSpeeds as $mountFactorAndSpeed) {
-            /** @var $mountFactorAndSpeed array{factor: float, speed: int} */
+            /** @var array{factor: float, speed: int} $mountFactorAndSpeed */
             $totalMountedFactor += $mountFactorAndSpeed['factor'];
             $delayMounted += $this->calculateDelayForDistanceMounted(
                 $ingameDistanceToPointB,
@@ -189,9 +189,9 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
         $startMountableArea = null;
 
         // Construct a list of intersections from mountable areas.
-        /** @var Collection<MountableAreaIntersection> $allMountableAreaIntersections */
+        /** @var Collection<int, MountableAreaIntersection> $allMountableAreaIntersections */
         $allMountableAreaIntersections = collect();
-        foreach ($latLngA->getFloor()->mountableareas as $mountableArea) {
+        foreach ($latLngA->getFloor()->mountableAreas as $mountableArea) {
             // Determine from which mountable area the location started
             if ($startMountableArea === null && $mountableArea->contains($this->coordinatesService, $latLngA)) {
                 $startMountableArea = $mountableArea;
@@ -207,7 +207,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
                 continue;
             }
 
-            /** @var Collection<MountableAreaIntersection> $mountableAreaIntersections */
+            /** @var Collection<int, MountableAreaIntersection> $mountableAreaIntersections */
             $mountableAreaIntersections = collect();
             foreach ($intersections as $intersection) {
                 $mountableAreaIntersections->push(
@@ -243,7 +243,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
 
         // Now that we have a (randomly sorted) list of mountable areas and intersections, we need to sort the list and
         // then determine if an intersection causes a mount up, or a dismount
-        /** @var Collection<MountableAreaIntersection> $allMountableAreaIntersections */
+        /** @var Collection<int, MountableAreaIntersection> $allMountableAreaIntersections */
         $allMountableAreaIntersections = $allMountableAreaIntersections->sortBy(
             fn(MountableAreaIntersection $foundIntersection) => $this->coordinatesService->distanceBetweenPoints(
                 $latLngA->getLng(),

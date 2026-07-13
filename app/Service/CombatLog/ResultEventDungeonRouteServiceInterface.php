@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 interface ResultEventDungeonRouteServiceInterface
 {
     /**
-     * @return Collection<DungeonRoute>
+     * @return Collection<int, DungeonRoute>
      */
     public function convertCombatLogToDungeonRoutes(string $combatLogFilePath): Collection;
 }

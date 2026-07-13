@@ -13,6 +13,5 @@ enum SimulationCraftRaidBuffs: int
     case ChaosBrand         = 64;
     case Skyfury            = 128;
     case HuntersMark        = 256;
-    case PowerInfusion      = 512;
-    case Bleeding           = 1024;
+    case Bleeding           = 512;
 }

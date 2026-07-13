@@ -23,6 +23,9 @@ class Creature extends Guid
 
     private readonly string $spawnUID;
 
+    /**
+     * @param array<int, mixed> $parameters
+     */
     protected function __construct(string $guid, array $parameters)
     {
         parent::__construct($guid);

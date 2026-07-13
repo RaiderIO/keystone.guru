@@ -6,8 +6,8 @@ use App\Models\Patreon\PatreonBenefit;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<PatreonBenefit> $allPatreonBenefits
- * @var Collection<Role>           $allRoles
+ * @var Collection<int, PatreonBenefit> $allPatreonBenefits
+ * @var Collection<int, Role>           $allRoles
  */
 ?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.user.list.title')])

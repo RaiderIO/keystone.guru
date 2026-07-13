@@ -8,9 +8,9 @@ use stdClass;
 trait SavesArrayToJsonFile
 {
     /**
-     * @param  array|stdClass $dataArr
-     * @param  string         $dir
-     * @param  string         $filename
+     * @param  array<array-key, mixed>|stdClass $dataArr
+     * @param  string                           $dir
+     * @param  string                           $filename
      * @throws Exception
      */
     protected function saveDataToJsonFile(mixed $dataArr, string $dir, string $filename): void

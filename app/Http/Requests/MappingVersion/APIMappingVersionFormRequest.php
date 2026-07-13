@@ -34,8 +34,9 @@ class APIMappingVersionFormRequest extends FormRequest
             $this->merge([
                 'timer_max_seconds' => (int)$minutes * 60,
             ]);
-        } elseif ($minutes !== null && $seconds !== null) {
-            // Both provided: pick the one that changed compared to current model
+        } elseif ($minutes !== null) {
+            // Both provided ($seconds !== null is implied by the branch above): pick the one that
+            // changed compared to current model
             if ($currentSeconds !== null) {
                 $minutesAsSeconds = (int)$minutes * 60;
                 $pickSeconds      = (int)$seconds !== $currentSeconds;
@@ -62,10 +63,8 @@ class APIMappingVersionFormRequest extends FormRequest
         $this->replace(collect($this->validated())
             ->except('timer_max_minutes')
             ->toArray());
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
+    }    /**
+     * @return array<string, array<int, string|Rule>|string|Rule>
      */
     public function rules(): array
     {

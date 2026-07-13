@@ -4,7 +4,7 @@ use App\Models\MDTImport;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<MDTImport> $mdtImports
+ * @var Collection<int, MDTImport> $mdtImports
  */
 ?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.tools.mdt.list.title')])
@@ -43,7 +43,7 @@ use Illuminate\Support\Collection;
                 <td>{{ $mdtImport->created_at->toDateTimeString() }}</td>
                 <td>
                     <button type="button" class="btn btn-info"
-                            data-toggle="tooltip" title="{{ __('view_admin.tools.mdt.list.copy_mdt_string') }}"
+                            data-bs-toggle="tooltip" title="{{ __('view_admin.tools.mdt.list.copy_mdt_string') }}"
                             data-mdt-string="{!! $mdtImport->import_string !!}"
                             onclick="copyToClipboard($(this).data('mdt-string'))">
                         <i class="fas fa-copy"></i>

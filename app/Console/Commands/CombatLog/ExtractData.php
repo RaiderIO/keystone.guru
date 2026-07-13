@@ -20,6 +20,7 @@ class ExtractData extends BaseCombatLogCommand
      */
     protected $description = 'Extracts data such as floor bounding boxes, enemy health etc and applies it to the current mapping/static data.';
 
+    /** @var array<string, mixed> */
     private array $combinedDataResult = [];
 
     /**

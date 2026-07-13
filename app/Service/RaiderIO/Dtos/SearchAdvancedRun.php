@@ -27,9 +27,9 @@ class SearchAdvancedRun
             id:              (int)$data['id'],
             challengeModeId: (int)$data['challengeModeId'],
             dungeonZoneId:   (int)$data['dungeonZoneId'],
-            memberSpecIds:   array_map('intval', $data['memberSpecIds'] ?? []),
+            memberSpecIds:   array_map(intval(...), $data['memberSpecIds'] ?? []),
             mythicLevel:     (int)$data['mythicLevel'],
-            affixes:         array_map('intval', $data['affixes'] ?? []),
+            affixes:         array_map(intval(...), $data['affixes'] ?? []),
         );
     }
 }

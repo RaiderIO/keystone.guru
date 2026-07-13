@@ -1,15 +1,17 @@
 <?php
 
 /**
- * @var \Illuminate\Database\Eloquent\Model&\App\Models\Interfaces\HasTagsInterface $context
- * @var string  $category
- * @var string  $theme
+ * @var Model&HasTagsInterface $context
+ * @var string                 $category
+ * @var string                 $theme
  */
 
+use App\Models\Interfaces\HasTagsInterface;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 
 $tagCategoryNameMapping = [
     1 => __('view_common.tag.manager.route_personal'),
@@ -22,21 +24,21 @@ $isDarkTheme = User::isThemeDark($theme);
 @include('common.general.inline', ['path' => 'common/tag/tagmanager'])
 
 @foreach($tags as $categoryId => $categoryTags)
-    <div class="form-group">
+    <div class="mb-3">
         <h5>
             {{ $tagCategoryNameMapping[$categoryId] }}
         </h5>
         <div class="row">
-            <div class="col-6 col-lg-3 font-weight-bold">
+            <div class="col-6 col-lg-3 fw-bold">
                 {{ __('view_common.tag.manager.name') }}
             </div>
-            <div class="col-4 col-lg-3 font-weight-bold">
+            <div class="col-4 col-lg-3 fw-bold">
                 {{ __('view_common.tag.manager.color') }}
             </div>
-            <div class="col-lg-4 d-none d-lg-block font-weight-bold">
+            <div class="col-lg-4 d-none d-lg-block fw-bold">
                 {{ __('view_common.tag.manager.usage') }}
             </div>
-            <div class="col-2 col-lg-2 font-weight-bold">
+            <div class="col-2 col-lg-2 fw-bold">
                 {{ __('view_common.tag.manager.actions') }}
             </div>
         </div>
@@ -87,7 +89,7 @@ $isDarkTheme = User::isThemeDark($theme);
 @endif
 
 
-<div class="form-group{{ $errors->has('tag_name_new') ? ' has-error' : '' }}">
+<div class="mb-3{{ $errors->has('tag_name_new') ? ' has-error' : '' }}">
     {{ html()->label(__('view_common.tag.manager.create_tag'), 'tag_name_new') }}
     {{ html()->text('tag_name_new')->class('form-control') }}
     @include('common.forms.form-error', ['key' => 'tag_name_new'])

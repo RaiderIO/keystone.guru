@@ -39,6 +39,10 @@
                         <a href="{{ route('admin.tools.npcs.showmissingdisplayid') }}">{{ __('view_admin.tools.list.show_missing_npc_display_id') }}</a>
                         <small class="text-muted d-block">{{ __('view_admin.tools.list.show_missing_npc_display_id_description') }}</small>
                     </li>
+                    <li class="list-group-item">
+                        <a href="{{ route('admin.tools.npcs.savetoseeder') }}">{{ __('view_admin.tools.list.download_npcs_seeder') }}</a>
+                        <small class="text-muted d-block">{{ __('view_admin.tools.list.download_npcs_seeder_description') }}</small>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -154,6 +158,18 @@
                         <a href="{{ route('admin.tools.combatlog.criteria.view') }}">{{ __('view_admin.tools.list.combatlog_criteria') }}</a>
                         <small class="text-muted d-block">{{ __('view_admin.tools.list.combatlog_criteria_description') }}</small>
                     </li>
+                    <li class="list-group-item">
+                        <a href="{{ route('admin.tools.combatlog.rundata') }}">{{ __('view_admin.tools.list.combatlog_run_data') }}</a>
+                        <small class="text-muted d-block">{{ __('view_admin.tools.list.combatlog_run_data_description') }}</small>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{{ route('admin.tools.combatlog.route.enemy_failures.view') }}">{{ __('view_admin.tools.list.combatlog_route_enemy_failures') }}</a>
+                        <small class="text-muted d-block">{{ __('view_admin.tools.list.combatlog_route_enemy_failures_description') }}</small>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{{ route('admin.tools.combatlog.parsefailures.view') }}">{{ __('view_admin.tools.list.combatlog_parse_failures') }}</a>
+                        <small class="text-muted d-block">{{ __('view_admin.tools.list.combatlog_parse_failures_description') }}</small>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -188,23 +204,6 @@
             </div>
         </div>
 
-        {{-- Mapping (conditional) --}}
-        @if(config('app.type') === 'mapping')
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-header">
-                        <i class="fas fa-map"></i> {{ __('view_admin.tools.list.subheader_mapping') }}
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <a href="{{ route('admin.tools.mapping.forcesync') }}">{{ __('view_admin.tools.list.force_sync_mapping') }}</a>
-                            <small class="text-muted d-block">{{ __('view_admin.tools.list.force_sync_mapping_description') }}</small>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        @endif
-
         {{-- Misc --}}
         <div class="col-md-6 col-lg-4 mb-4">
             <div class="card h-100">
@@ -231,6 +230,25 @@
                         <a href="{{ route('admin.tools.spells.showmissingspellinfo') }}">{{ __('view_admin.tools.list.show_missing_spell_info') }}</a>
                         <small class="text-muted d-block">{{ __('view_admin.tools.list.show_missing_spell_info_description') }}</small>
                     </li>
+                    <li class="list-group-item">
+                        <a href="{{ route('admin.tools.spells.savetoseeder') }}">{{ __('view_admin.tools.list.download_spells_seeder') }}</a>
+                        <small class="text-muted d-block">{{ __('view_admin.tools.list.download_spells_seeder_description') }}</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        {{-- Artisan Commands --}}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <i class="fas fa-terminal"></i> {{ __('view_admin.tools.list.subheader_artisan_commands') }}
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a href="{{ route('admin.tools.artisancommands.backfillkillzoneenemyid.view') }}">{{ __('view_admin.tools.list.backfill_kill_zone_enemy_id') }}</a>
+                        <small class="text-muted d-block">{{ __('view_admin.tools.list.backfill_kill_zone_enemy_id_description') }}</small>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -242,13 +260,11 @@
                     <i class="fas fa-exclamation-triangle"></i> {{ __('view_admin.tools.list.subheader_actions') }}
                 </div>
                 <div class="card-body">
-                    <a class="btn btn-danger mr-2 mb-2"
+                    <a class="btn btn-danger me-2 mb-2"
                        href="{{ route('admin.tools.cache.drop') }}">{{ __('view_admin.tools.list.drop_caches') }}</a>
-                    <a class="btn btn-primary mr-2 mb-2"
+                    <a class="btn btn-primary me-2 mb-2"
                        href="{{ route('admin.tools.datadump.exportdungeondata') }}">{{ __('view_admin.tools.list.export_dungeon_data') }}</a>
-                    <a class="btn btn-primary mr-2 mb-2"
-                       href="{{ route('admin.tools.datadump.exportreleases') }}">{{ __('view_admin.tools.list.export_releases') }}</a>
-                    <a class="btn btn-danger mr-2 mb-2"
+                    <a class="btn btn-danger me-2 mb-2"
                        href="{{ route('admin.tools.readonly.toggle') }}">{{ __('view_admin.tools.list.toggle_readonly_mode') }}</a>
                 </div>
             </div>

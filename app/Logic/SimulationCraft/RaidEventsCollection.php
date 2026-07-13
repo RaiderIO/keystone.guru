@@ -2,6 +2,7 @@
 
 namespace App\Logic\SimulationCraft;
 
+use App\Models\MountableArea;
 use App\Models\SimulationCraft\SimulationCraftRaidBuffs;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -10,7 +11,7 @@ use Illuminate\Support\Collection;
 
 class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollectionInterface
 {
-    /** @var Collection<RaidEventPull> */
+    /** @var Collection<int, RaidEventPull> */
     private Collection $raidEventPulls;
 
     public function __construct(
@@ -28,6 +29,23 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
         $this->raidEventPulls = collect();
 
         $pathsToKillZones = $this->killZonePathService->findPathsToKillZones($this->options->dungeonRoute);
+
+        if ($this->options->use_mounts) {
+            // Load mountable areas for each floor, required later
+            /** @var Collection<int, Collection<int, MountableArea>> $mountableAreasCache */
+            $mountableAreasCache = collect();
+            foreach ($pathsToKillZones as $paths) {
+                foreach ($paths as $path) {
+                    $path->getFloor()->setRelation(
+                        'mountableAreas',
+                        $mountableAreasCache->get(
+                            $path->getFloor()->id,
+                            fn() => $path->getFloor()->mountableAreas($this->options->dungeonRoute->mappingVersion)->get(),
+                        ),
+                    );
+                }
+            }
+        }
 
         foreach ($this->options->dungeonRoute->killZones as $killZone) {
             // Skip empty pulls
@@ -61,7 +79,6 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
             override.chaos_brand=%d
             override.skyfury=%d
             override.hunters_mark=%d
-            override.power_infusion=%d
             override.bleeding=0
             single_actor_batch=1
             max_time=%s
@@ -80,7 +97,6 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
             $this->options->hasRaidBuff(SimulationCraftRaidBuffs::ChaosBrand) ? 1 : 0,
             $this->options->hasRaidBuff(SimulationCraftRaidBuffs::Skyfury) ? 1 : 0,
             $this->options->hasRaidBuff(SimulationCraftRaidBuffs::HuntersMark) ? 1 : 0,
-            $this->options->hasRaidBuff(SimulationCraftRaidBuffs::PowerInfusion) ? 1 : 0,
             $this->options->dungeonRoute->mappingVersion->timer_max_seconds,
             $this->options->dungeonRoute->title,
             $this->options->shrouded_bounty_type === SimulationCraftRaidEventsOptions::SHROUDED_BOUNTY_TYPE_NONE ?

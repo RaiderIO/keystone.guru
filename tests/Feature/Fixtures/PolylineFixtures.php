@@ -10,7 +10,7 @@ use Random\RandomException;
 class PolylineFixtures
 {
     /**
-     * @param  Collection<LatLng>|null                                                          $latLngs
+     * @param  Collection<int, LatLng>|null                                                     $latLngs
      * @return array{color: string, color_animated: string, weight: int, vertices_json: string}
      * @throws RandomException
      */

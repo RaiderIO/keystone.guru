@@ -11,20 +11,22 @@ use Illuminate\Support\Collection;
 use Override;
 
 /**
- * @method Enemy             create(array $attributes)
- * @method null              find(int $id, array|string $columns = ['*'])
- * @method Enemy             findOrFail(int $id, array|string $columns = ['*'])
- * @method Enemy             findOrNew(int $id, array|string $columns = ['*'])
- * @method bool              save(Enemy $model)
- * @method bool              update(Enemy $model, array $attributes = [], array $options = [])
- * @method bool              delete(Enemy $model)
- * @method Collection<Enemy> all()
+ * @method Enemy                  create(array<string, mixed> $attributes)
+ * @method Enemy|null             find(int $id, array<int, string>|string $columns = ['*'])
+ * @method Enemy                  findOrFail(int $id, array<int, string>|string $columns = ['*'])
+ * @method Enemy                  findOrNew(int $id, array<int, string>|string $columns = ['*'])
+ * @method bool                   save(Enemy $model)
+ * @method bool                   update(Enemy $model, array<string, mixed> $attributes = [], array<string, mixed> $options = [])
+ * @method bool                   delete(Enemy $model)
+ * @method Collection<int, Enemy> all()
  */
 class EnemyRepositorySwoole extends EnemyRepository implements EnemyRepositorySwooleInterface
 {
     use ClonesCollections;
 
-    /** @var Collection<int, Collection<int, Enemy>> */
+    /**
+     * @var Collection<int, Collection<int, Enemy>>
+     */
     private Collection $availableEnemiesByMappingVersion;
 
     public function __construct()
@@ -36,6 +38,7 @@ class EnemyRepositorySwoole extends EnemyRepository implements EnemyRepositorySw
 
     /**
      * @inheritDoc
+     * @return Collection<int, Enemy>
      */
     #[Override]
     public function getAvailableEnemiesForDungeonRouteBuilder(MappingVersion $mappingVersion): Collection

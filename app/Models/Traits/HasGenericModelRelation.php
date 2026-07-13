@@ -13,8 +13,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 trait HasGenericModelRelation
 {
+    /** @return HasOne<Model, $this> */
     public function model(): HasOne
     {
+        /** @phpstan-ignore argument.templateType */
         return $this->hasOne($this->model_class, 'id', 'model_id');
     }
 }

@@ -18,11 +18,13 @@ use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Service\CombatLog\Dtos\ChallengeMode;
 use App\Service\CombatLog\Exceptions\AdvancedLogNotEnabledException;
+use App\Service\CombatLog\Exceptions\CombatLogParseException;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Filters\DungeonRoute\CombatLogDungeonRouteFilter;
 use App\Service\CombatLog\Filters\DungeonRoute\DungeonRouteFilter;
 use App\Service\CombatLog\Filters\MappingVersion\CombatLogDungeonOrRaidFilter;
 use App\Service\CombatLog\Logging\CombatLogServiceLoggingInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use File;
@@ -32,18 +34,19 @@ use InvalidArgumentException;
 use Throwable;
 use ZipArchive;
 
-class CombatLogService implements CombatLogServiceInterface
+readonly class CombatLogService implements CombatLogServiceInterface
 {
     public function __construct(
-        private readonly SeasonServiceInterface           $seasonService,
-        private readonly NpcRepositoryInterface           $npcRepository,
-        private readonly DungeonRepositoryInterface       $dungeonRepository,
-        private readonly CombatLogServiceLoggingInterface $log,
+        private SeasonServiceInterface           $seasonService,
+        private SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+        private NpcRepositoryInterface           $npcRepository,
+        private DungeonRepositoryInterface       $dungeonRepository,
+        private CombatLogServiceLoggingInterface $log,
     ) {
     }
 
     /**
-     * @return Collection<BaseEvent>
+     * @return Collection<int, BaseEvent>
      *
      * @throws Exception
      */
@@ -94,7 +97,7 @@ class CombatLogService implements CombatLogServiceInterface
     }
 
     /**
-     * @return Collection<ChallengeMode>
+     * @return Collection<int, ChallengeMode>
      *
      * @throws Exception
      */
@@ -134,7 +137,7 @@ class CombatLogService implements CombatLogServiceInterface
     }
 
     /**
-     * @return Collection<ChallengeMode>
+     * @return Collection<int, string>
      *
      * @throws Exception
      */
@@ -216,7 +219,7 @@ class CombatLogService implements CombatLogServiceInterface
     ): Collection {
         try {
             $this->log->getResultEventsForChallengeModeStart($combatLogFilePath);
-            $dungeonRouteFilter          = (new DungeonRouteFilter($this->seasonService));
+            $dungeonRouteFilter          = (new DungeonRouteFilter($this->seasonService, $this->seasonAffixGroupService));
             $combatLogDungeonRouteFilter = new CombatLogDungeonRouteFilter();
 
             try {
@@ -264,7 +267,7 @@ class CombatLogService implements CombatLogServiceInterface
     ): Collection {
         try {
             $this->log->getResultEventsForDungeonOrRaidStart($combatLogFilePath);
-            $dungeonRouteFilter           = (new DungeonRouteFilter($this->seasonService));
+            $dungeonRouteFilter           = (new DungeonRouteFilter($this->seasonService, $this->seasonAffixGroupService));
             $combatLogDungeonOrRaidFilter = new CombatLogDungeonOrRaidFilter();
 
             $this->parseCombatLogStreaming(
@@ -306,6 +309,15 @@ class CombatLogService implements CombatLogServiceInterface
                 throw new InvalidArgumentException('File is not a valid .zip file');
             }
 
+            // Use the archive's own entry name rather than guessing it from the outer file name; the two no
+            // longer match once the download is saved under a generated temp name (e.g. run_0_segment_1.zip).
+            $entryName = $zip->getNameIndex(0);
+            if ($entryName === false) {
+                $this->log->extractCombatLogInvalidZipFile();
+
+                throw new InvalidArgumentException('Zip archive does not contain any entries');
+            }
+
             $storageDestinationPath = '/tmp';
             if (!File::exists($storageDestinationPath)) {
                 File::makeDirectory($storageDestinationPath, 0755, true);
@@ -313,7 +325,7 @@ class CombatLogService implements CombatLogServiceInterface
 
             $zip->extractTo($storageDestinationPath);
 
-            $extractedFilePath = sprintf('%s/%s.txt', $storageDestinationPath, basename($filePath, '.zip'));
+            $extractedFilePath = sprintf('%s/%s', $storageDestinationPath, $entryName);
             $this->log->extractCombatLogExtractedArchive($extractedFilePath);
         } finally {
             $zip->close();
@@ -390,7 +402,7 @@ class CombatLogService implements CombatLogServiceInterface
         } catch (Exception $exception) {
             $this->log->parseCombatLogParseEventsException(sprintf('%d: %s', $lineNr, $rawEvent), $exception);
 
-            throw $exception;
+            throw new CombatLogParseException($lineNr, trim($rawEvent), $exception->getMessage(), $exception);
         } finally {
             $this->log->parseCombatLogParseEventsEnd();
 
@@ -402,6 +414,9 @@ class CombatLogService implements CombatLogServiceInterface
         }
     }
 
+    /**
+     * @param Collection<int, string> $rawEvents
+     */
     public function saveCombatLogToFile(Collection $rawEvents, string $filePath): bool
     {
         $fileHandle = null;

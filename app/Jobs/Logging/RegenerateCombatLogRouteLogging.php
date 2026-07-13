@@ -21,7 +21,7 @@ class RegenerateCombatLogRouteLogging extends StructuredLogging implements Regen
         $this->error(__METHOD__);
     }
 
-    public function handleBody(string $body): void
+    public function handleSuccess(): void
     {
         $this->info(__METHOD__, get_defined_vars());
     }

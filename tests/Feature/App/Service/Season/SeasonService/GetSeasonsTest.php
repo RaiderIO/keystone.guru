@@ -21,11 +21,12 @@ final class GetSeasonsTest extends PublicTestCase
         $service = app(SeasonServiceInterface::class);
 
         // Act
-        /** @var Collection<Season> $result */
+        /** @var Collection<int, Season> $result */
         $result = $service->getSeasons();
 
         // Assert
         foreach ($result as $season) {
+            $season->loadMissing('expansion.timewalkingEvent');
             $this->assertNull($season->expansion->timewalkingEvent);
         }
     }

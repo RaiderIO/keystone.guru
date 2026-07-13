@@ -15,10 +15,8 @@ class AjaxDungeonRouteSimulateFormRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
+    }    /**
+     * @return array<string, array<int, string|Rule>|string|Rule>
      */
     public function rules(): array
     {
@@ -40,7 +38,7 @@ class AjaxDungeonRouteSimulateFormRequest extends FormRequest
             'thundering_clear_seconds' => 'required|int|max:15',
             'raid_buffs_mask'          => sprintf(
                 'required|int|max:%d',
-                2 ** (collect(SimulationCraftRaidBuffs::cases())->count() - 1),
+                2 ** (collect(SimulationCraftRaidBuffs::cases())->count()),
             ),
             'hp_percent'                     => 'required|int',
             'ranged_pull_compensation_yards' => 'required|int',

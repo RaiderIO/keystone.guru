@@ -6,13 +6,13 @@ use App\Models\Floor\Floor;
 use Illuminate\Support\Collection;
 
 /**
- * @var boolean           $isAdmin
- * @var Collection<Floor> $floors
- * @var DungeonRoute|null $dungeonroute
+ * @var boolean                $isAdmin
+ * @var Collection<int, Floor> $floors
+ * @var DungeonRoute|null      $dungeonroute
  */
 ?>
-<nav class="route_sidebar left row no-gutters map_fade_out top presenter {{ $isMobile ? 'mobile' : '' }}">
-    <div class="col pt-4 pl-4">
+<nav class="route_sidebar left row g-0 map_fade_out top presenter {{ $isMobile ? 'mobile' : '' }}">
+    <div class="col pt-4 ps-4">
         <h2>
             +{{ $dungeonroute->challengeModeRun->level }}
 
@@ -31,8 +31,8 @@ use Illuminate\Support\Collection;
     </div>
 </nav>
 
-<nav class="route_sidebar left row no-gutters map_fade_out top presenter" style="top: 90px">
-    <div class="col pl-3">
+<nav class="route_sidebar left row g-0 map_fade_out top presenter" style="top: 90px">
+    <div class="col ps-3">
         <h2>
             <i class="fas fa-stopwatch"></i>
             {{ $dungeonroute->challengeModeRun->getFormattedElapsedTime() }}
@@ -40,8 +40,8 @@ use Illuminate\Support\Collection;
     </div>
 </nav>
 
-{{--<nav class="route_sidebar left row no-gutters map_fade_out top presenter" style="top: 140px">--}}
-{{--    <div class="col pt-4 pl-4">--}}
+{{--<nav class="route_sidebar left row g-0 map_fade_out top presenter" style="top: 140px">--}}
+{{--    <div class="col pt-4 ps-4">--}}
 {{--        <div class="row mb-2">--}}
 {{--            <div class="col">--}}
 {{--                <h4>--}}
@@ -80,7 +80,7 @@ use Illuminate\Support\Collection;
 {{--    </div>--}}
 {{--</nav>--}}
 
-<nav class="route_sidebar route_manipulation_tools left row no-gutters map_fade_out top presenter" style="top: 370px">
+<nav class="route_sidebar route_manipulation_tools left row g-0 map_fade_out top presenter" style="top: 370px">
     <div class="col">
         <div id="present_route_actions_container" class="mb-2">
             @auth

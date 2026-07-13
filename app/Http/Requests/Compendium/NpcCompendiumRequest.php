@@ -15,6 +15,7 @@ class NpcCompendiumRequest extends FormRequest
         return true;
     }
 
+    #[\Override]
     protected function failedValidation(Validator $validator): never
     {
         throw new HttpResponseException(response()->json(['errors' => $validator->errors()], 422));
@@ -24,6 +25,12 @@ class NpcCompendiumRequest extends FormRequest
     {
         return once(fn() => Dungeon::findOrFail($this->validated('dungeon_id')));
     }
+
+    /**
+
+
+     * @return array<string, array<int, string|Rule>|string|Rule>
+     */
 
     public function rules(): array
     {

@@ -4,7 +4,7 @@ use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<Spell> $models
+ * @var Collection<int, Spell> $models
  */
 ?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.spell.list.title')])
@@ -14,7 +14,7 @@ use Illuminate\Support\Collection;
 @endsection
 @section('header-addition')
     <!--suppress HtmlDeprecatedAttribute -->
-    <a href="{{ route('admin.spell.new') }}" class="btn btn-success text-white float-right" role="button">
+    <a href="{{ route('admin.spell.new') }}" class="btn btn-success text-white float-end" role="button">
         <i class="fas fa-plus"></i> {{ __('view_admin.spell.list.create_spell') }}
     </a>
 @endsection

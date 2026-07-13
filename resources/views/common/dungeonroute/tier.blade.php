@@ -5,10 +5,10 @@ use App\Models\Dungeon;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<AffixGroupEaseTier> $affixGroupEaseTiersByAffixGroup
- * @var string                         $tier
- * @var Dungeon                        $dungeon
- * @var AffixGroup                     $affixgroup
+ * @var Collection<int, Collection<int, AffixGroupEaseTier>> $affixGroupEaseTiersByAffixGroup
+ * @var string                                               $tier
+ * @var Dungeon                                              $dungeon
+ * @var AffixGroup                                           $affixgroup
  */
 
 // Users may write their own tiers if they received it from a batch call for example
@@ -20,7 +20,7 @@ $url  ??= null;
     <a href="{{ $url ?? 'https://www.archon.gg/wow' }}" target="_blank" rel="noopener noreferrer">
     <span class="tier {{ strtolower($tier) }}"
           @if( $url === null )
-              data-toggle="tooltip"
+              data-bs-toggle="tooltip"
           title="{{ sprintf(
             __('view_common.dungeonroute.tier.data_by_archon_gg'),
                 $affixgroup->getTextAttribute()

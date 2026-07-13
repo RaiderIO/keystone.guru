@@ -6,12 +6,6 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesDungeonRoute;
-use App\Http\Controllers\Traits\ListsBrushlines;
-use App\Http\Controllers\Traits\ListsDungeonFloorSwitchMarkers;
-use App\Http\Controllers\Traits\ListsEnemyPacks;
-use App\Http\Controllers\Traits\ListsEnemyPatrols;
-use App\Http\Controllers\Traits\ListsMapIcons;
-use App\Http\Controllers\Traits\ListsPaths;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSearchFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSimulateFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSubmitFormRequest;
@@ -35,7 +29,6 @@ use App\Models\DungeonRoute\DungeonRouteScheduledPublish;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
-use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\PublishedState;
 use App\Models\Season;
@@ -44,11 +37,11 @@ use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Models\User;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
+use App\Service\DungeonRoute\DungeonRouteSaveServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\MDT\MDTExportStringServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
-use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\SimulationCraft\RaidEventsServiceInterface;
 use Exception;
@@ -67,12 +60,6 @@ use Throwable;
 
 class AjaxDungeonRouteController extends Controller
 {
-    use ListsBrushlines;
-    use ListsDungeonFloorSwitchMarkers;
-    use ListsEnemyPacks;
-    use ListsEnemyPatrols;
-    use ListsMapIcons;
-    use ListsPaths;
     use ChangesDungeonRoute;
 
     /**
@@ -98,6 +85,7 @@ class AjaxDungeonRouteController extends Controller
             'classes',
             'races',
             'dungeon',
+            'dungeon.floors',
             'affixes',
             'thumbnails',
             'author',
@@ -112,7 +100,6 @@ class AjaxDungeonRouteController extends Controller
         }
 
         $routes = DungeonRoute::with($withRelations)
-            ->without(['season'])
             // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
             // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
             ->selectRaw('dungeon_routes.*, mapping_versions.enemy_forces_required_teeming, mapping_versions.enemy_forces_required, MAX(mapping_versions.id) as dungeon_latest_mapping_version_id')
@@ -249,7 +236,9 @@ class AjaxDungeonRouteController extends Controller
 
         // Ensure that the resulting routes have their thumbnails refreshed if they are missing
         if (isset($result['data'])) {
-            $thumbnailService->queueThumbnailRefreshIfMissing(collect($result['data']));
+            /** @var array<int, mixed> $data */
+            $data = $result['data'];
+            $thumbnailService->queueThumbnailRefreshIfMissing(collect($data));
         }
 
         return $result;
@@ -279,12 +268,10 @@ class AjaxDungeonRouteController extends Controller
             $season = Season::find($request->get('season'));
         }
 
+        // Everything the rendered route cards read - DungeonRoute no longer eager loads relations globally
         $query = DungeonRoute::with([
-            'faction',
-            'specializations',
-            'classes',
-            'races',
-            'author',
+            // The route cards render the author's avatar - User no longer eager loads iconfile globally
+            'author.iconfile',
             'affixes',
             'thumbnails',
             'ratings',
@@ -292,6 +279,7 @@ class AjaxDungeonRouteController extends Controller
             'dungeon',
             'dungeon.activeFloors',
             'mappingVersion',
+            'season.expansion',
         ])
             ->join('dungeons', 'dungeon_routes.dungeon_id', 'dungeons.id')
             ->join('mapping_versions', 'mapping_versions.dungeon_id', 'dungeons.id')
@@ -528,9 +516,7 @@ class AjaxDungeonRouteController extends Controller
      */
     public function store(
         AjaxDungeonRouteSubmitFormRequest $request,
-        SeasonService                     $seasonService,
-        ExpansionServiceInterface         $expansionService,
-        ThumbnailServiceInterface         $thumbnailService,
+        DungeonRouteSaveServiceInterface  $saveService,
         ?DungeonRoute                     $dungeonRoute = null,
     ): DungeonRoute {
         Gate::authorize('edit', $dungeonRoute);
@@ -544,7 +530,7 @@ class AjaxDungeonRouteController extends Controller
         }
 
         // Update or insert it
-        if (!$dungeonRoute->saveFromRequest($request, $seasonService, $expansionService, $thumbnailService)) {
+        if (!$saveService->save($dungeonRoute, $request->validated())) {
             abort(500, 'Unable to save dungeonroute');
         }
 
@@ -668,10 +654,10 @@ class AjaxDungeonRouteController extends Controller
      * @throws AuthorizationException
      */
     public function cloneToTeam(
-        Request                   $request,
-        ThumbnailServiceInterface $thumbnailService,
-        DungeonRoute              $dungeonRoute,
-        Team                      $team,
+        Request                          $request,
+        DungeonRouteSaveServiceInterface $saveService,
+        DungeonRoute                     $dungeonRoute,
+        Team                             $team,
     ): Response {
         Gate::authorize('clone', $dungeonRoute);
 
@@ -679,7 +665,7 @@ class AjaxDungeonRouteController extends Controller
         $user = Auth::user();
 
         if ($user->canCreateDungeonRoute() && $team->canAddRemoveRoute($user)) {
-            $newRoute = $dungeonRoute->cloneRoute($thumbnailService, false);
+            $newRoute = $saveService->cloneRoute($dungeonRoute, false);
             $team->addRoute($newRoute);
 
             return response('', Http::NO_CONTENT);
@@ -711,7 +697,8 @@ class AjaxDungeonRouteController extends Controller
      *
      * @throws Exception
      */
-    public function rate(Request $request, DungeonRoute $dungeonRoute)
+    /** @return array<string, float|int> */
+    public function rate(Request $request, DungeonRoute $dungeonRoute): array
     {
         Gate::authorize('rate', $dungeonRoute);
 
@@ -734,11 +721,11 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @return array
+     * @return array<string, float|int>
      *
      * @throws Exception
      */
-    public function rateDelete(Request $request, DungeonRoute $dungeonRoute)
+    public function rateDelete(Request $request, DungeonRoute $dungeonRoute): array
     {
         Gate::authorize('rate', $dungeonRoute);
 
@@ -794,67 +781,7 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @return array
-     *
-     * @throws Exception
-     */
-    public function data(Request $request, string $publickey)
-    {
-        // Init the fields we should get for this request
-        $fields = $request->get('fields', 'enemy,enemypack,enemypatrol,mapicon,dungeonfloorswitchmarker');
-        $fields = explode(',', (string)$fields);
-
-        // Show enemies or raw data when fetching enemy packs
-        $enemyPackEnemies = (int)$request->get('enemyPackEnemies', true) === 1;
-        $teeming          = (int)$request->get('teeming', false) === 1;
-
-        // Start parsing
-        $result       = [];
-        $dungeonRoute = $publickey === 'admin' ? null : DungeonRoute::findOrFail($publickey);
-        if ($dungeonRoute !== null) {
-            // Fetch dungeon route specific properties
-            // Paths
-            if (in_array('path', $fields)) {
-                $result['path'] = $this->listPaths((int)$request->get('floor'), $dungeonRoute);
-            }
-
-            // Brushline
-            if (in_array('brushline', $fields)) {
-                $result['brushline'] = $this->listBrushlines((int)$request->get('floor'), $dungeonRoute);
-            }
-        }
-
-        // Enemy packs
-        if (in_array('enemypack', $fields)) {
-            // If logged in, and we're NOT an admin
-            if (Auth::check() && !Auth::user()->hasRole(Role::ROLE_ADMIN)) {
-                // Don't expose vertices
-                $enemyPackEnemies = true;
-            }
-
-            $result['enemypack'] = $this->listEnemyPacks((int)$request->get('floor'), $enemyPackEnemies, $teeming);
-        }
-
-        // Enemy patrols
-        if (in_array('enemypatrol', $fields)) {
-            $result['enemypatrol'] = $this->listEnemyPatrols((int)$request->get('floor'));
-        }
-
-        // Map icons
-        if (in_array('mapicon', $fields)) {
-            $result['mapicon'] = $this->listMapIcons((int)$request->get('floor'), $dungeonRoute);
-        }
-
-        // Dungeon floor switch markers
-        if (in_array('dungeonfloorswitchmarker', $fields)) {
-            $result['dungeonfloorswitchmarker'] = $this->listDungeonFloorSwitchMarkers((int)$request->get('floor'));
-        }
-
-        return $result;
-    }
-
-    /**
-     * @return array|void
+     * @return array<string, string|array<int, array<string, mixed>>>
      *
      * @throws AuthorizationException
      * @throws Throwable
@@ -863,7 +790,7 @@ class AjaxDungeonRouteController extends Controller
         Request                         $request,
         MDTExportStringServiceInterface $mdtExportStringService,
         DungeonRoute                    $dungeonRoute,
-    ) {
+    ): array {
         Gate::authorize('view', $dungeonRoute);
 
         $useCache = (int)$request->get('useCache', 1) === 1;
@@ -902,6 +829,8 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
+     * @return array<string, string>
+     *
      * @throws AuthorizationException
      * @throws RandomException
      */

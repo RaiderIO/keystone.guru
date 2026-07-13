@@ -2,7 +2,6 @@
 
 namespace App\Logic\MapContext\Map;
 
-use App\Http\Controllers\Traits\ListsEnemies;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
@@ -21,18 +20,19 @@ use Override;
  */
 class MapContextDungeonRoute extends MapContextBase
 {
-    use ListsEnemies;
-
     public function __construct(
         CacheServiceInterface                         $cacheService,
         CoordinatesServiceInterface                   $coordinatesService,
         private readonly KillZonePathServiceInterface $killZonePathService,
-        private DungeonRoute                          $dungeonRoute,
+        private readonly DungeonRoute                 $dungeonRoute,
         string                                        $mapFacadeStyle,
     ) {
         parent::__construct($cacheService, $coordinatesService, $dungeonRoute->dungeon, $dungeonRoute->mappingVersion, $mapFacadeStyle);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getVisibleFloors(): array
     {
         return $this->dungeonRoute->dungeon->floorsForMapFacade(
@@ -61,12 +61,18 @@ class MapContextDungeonRoute extends MapContextBase
         return sprintf('%s-route-edit.%s', config('app.type'), $this->dungeonRoute->getRouteKey());
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     protected function getEnemies(): ?array
     {
         // Do not override the enemies
         return null;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     #[Override]
     public function toArray(): array
     {
@@ -96,6 +102,7 @@ class MapContextDungeonRoute extends MapContextBase
             'mapIcons'         => $this->dungeonRoute->mapContextMapIcons($this->coordinatesService, $useFacade),
             'paths'            => $this->dungeonRoute->mapContextPaths($this->coordinatesService, $useFacade),
             'brushlines'       => $this->dungeonRoute->mapContextBrushlines($this->coordinatesService, $useFacade),
+            'arrows'           => $this->dungeonRoute->mapContextArrows($this->coordinatesService, $useFacade),
             'pridefulEnemies'  => $this->dungeonRoute->pridefulEnemies,
             'enemyRaidMarkers' => $this->dungeonRoute->enemyRaidMarkers->map(static fn(
                 DungeonRouteEnemyRaidMarker $drEnemyRaidMarker,

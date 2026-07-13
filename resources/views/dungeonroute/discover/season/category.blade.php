@@ -7,10 +7,10 @@ use App\Models\Season;
 use Illuminate\Support\Collection;
 
 /**
- * @var AffixGroup               $currentAffixGroup
- * @var GameVersion              $gameVersion
- * @var Season                   $season
- * @var Collection<DungeonRoute> $dungeonroutes
+ * @var AffixGroup                    $currentAffixGroup
+ * @var GameVersion                   $gameVersion
+ * @var Season                        $season
+ * @var Collection<int, DungeonRoute> $dungeonroutes
  */
 
 $title      ??= sprintf('%s routes', __($season->name));

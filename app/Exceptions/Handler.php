@@ -16,8 +16,10 @@ use Illuminate\Validation\ValidationException;
 use MarvinLabs\DiscordLogger\Discord\Exceptions\MessageCouldNotBeSent;
 use Override;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
@@ -102,6 +104,16 @@ class Handler extends ExceptionHandler
                 return response()->json(['message' => __('exceptions.handler.api_route_not_found')], StatusCode::NOT_FOUND);
             } elseif ($e instanceof ThrottleRequestsException) {
                 return response()->json(['message' => __('exceptions.handler.too_many_requests')], RFC6585::TOO_MANY_REQUESTS);
+            } elseif ($e instanceof HttpExceptionInterface) {
+                // Preserve the real HTTP status (e.g. 405 Method Not Allowed) and any headers (such as
+                // the Allow header on a 405) instead of collapsing every remaining HttpException to a 500.
+                $statusCode = $e->getStatusCode();
+
+                return response()->json(
+                    ['message' => SymfonyResponse::$statusTexts[$statusCode] ?? __('exceptions.handler.internal_server_error')],
+                    $statusCode,
+                    $e->getHeaders(),
+                );
             } elseif (!config('app.debug')) {
                 return response()->json(['message' => __('exceptions.handler.internal_server_error')], StatusCode::INTERNAL_SERVER_ERROR);
             } elseif (config('app.type') !== 'local') {
@@ -133,6 +145,10 @@ class Handler extends ExceptionHandler
         return str_starts_with($request->decodedPath(), 'api/');
     }
 
+    /**
+     * @param  array<string, mixed>|null $array
+     * @return array<string, mixed>|null
+     */
     private function maskSensitiveVariables(?array $array): ?array
     {
         if ($array === null) {

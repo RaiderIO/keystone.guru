@@ -4,7 +4,7 @@ use App\Models\CharacterClass;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<CharacterClass> $characterClasses
+ * @var Collection<int, CharacterClass> $characterClasses
  */
 ?>
 @extends('layouts.sitepage', ['title' => __('view_compendium.class.index.title')])
@@ -25,7 +25,7 @@ use Illuminate\Support\Collection;
                              alt="{{ __($characterClass->name) }}"
                              loading="lazy"
                              class="mx-auto mb-2 rounded"/>
-                        <div class="font-weight-bold small">{{ __($characterClass->name) }}</div>
+                        <div class="fw-bold small">{{ __($characterClass->name) }}</div>
                     </div>
                 </a>
             </div>

@@ -14,7 +14,7 @@ use Illuminate\Support\Collection;
 
 class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterface
 {
-    /** @var Collection<Dungeon> */
+    /** @var Collection<int, Dungeon> */
     private Collection $dungeonCache;
 
     public function __construct(
@@ -35,7 +35,7 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
             ChallengeModeRunData::when(!$force, function (Builder $builder) {
                 $builder->where('processed', false);
             })->chunk(100, function (Collection $rows) use (&$result, $onProcess) {
-                /** @var Collection<ChallengeModeRunData> $rows */
+                /** @var Collection<int, ChallengeModeRunData> $rows */
                 // Stop if there was an error
                 if (!$result) {
                     return false;
@@ -65,7 +65,7 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
         try {
             $this->log->convertChallengeModeRunDataStart($challengeModeRunData->id);
 
-            $decoded = json_decode($challengeModeRunData->post_body, true);
+            $decoded = json_decode((string)$challengeModeRunData->post_body, true);
 
             if (!isset($decoded['challengeMode']['challengeModeId'])) {
                 $decoded['challengeMode']['challengeModeId'] = $this->getDungeonFromMapId($decoded['challengeMode']['mapId'])?->challenge_mode_id;
@@ -100,13 +100,16 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
         $result = true;
 
         CombatLogEvent::chunk($count, function (Collection $combatLogEvents) use (&$result, $onProcess, $count) {
-            /** @var Collection<CombatLogEvent> $combatLogEvents */
+            /** @var Collection<int, CombatLogEvent> $combatLogEvents */
             $result = $this->insertToOpensearch($combatLogEvents, $count, $onProcess);
         });
 
         return $result;
     }
 
+    /**
+     * @param Collection<int, CombatLogEvent> $combatLogEvents
+     */
     public function insertToOpensearch(
         Collection $combatLogEvents,
         int        $count = 1000,

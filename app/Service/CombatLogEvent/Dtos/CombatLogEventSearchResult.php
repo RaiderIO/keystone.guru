@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 class CombatLogEventSearchResult
 {
     /**
-     * @param Collection<CombatLogEvent> $combatLogEvents
+     * @param Collection<int, CombatLogEvent> $combatLogEvents
      */
     public function __construct(
         private readonly CoordinatesServiceInterface $coordinatesService,
@@ -23,7 +23,7 @@ class CombatLogEventSearchResult
     }
 
     /**
-     * @return Collection<CombatLogEvent>
+     * @return Collection<int, CombatLogEvent>
      */
     public function getCombatLogEvents(): Collection
     {
@@ -35,10 +35,13 @@ class CombatLogEventSearchResult
         return $this->dungeonRouteCount;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         $dungeon = $this->combatLogEventFilter->getDungeon();
-        /** @var Collection<Floor> $floors */
+        /** @var Collection<int, Floor> $floors */
         $floors = $dungeon->floors->keyBy('ui_map_id');
 
         $useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;

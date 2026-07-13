@@ -6,7 +6,7 @@ use App\Models\Npc\Npc;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection $warnings
+ * @var Collection<int, ImportWarning> $warnings
  */
 ?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.tools.mdt.diff.title')])
@@ -53,7 +53,9 @@ use Illuminate\Support\Collection;
 
 @section('content')
     <?php
-    $warnings = $warnings->groupBy(static fn($item) => $item->getCategory());
+    /** @var Collection<int, ImportWarning> $typedWarnings */
+    $typedWarnings = $warnings;
+    $warnings      = $typedWarnings->groupBy(static fn(ImportWarning $item): string => $item->getCategory());
 
     $headers = [
         'mismatched_health'               => __('view_admin.tools.mdt.diff.headers.mismatched_health'),
@@ -66,7 +68,7 @@ use Illuminate\Support\Collection;
     ?>
 
     @foreach($warnings as $key => $category)
-        <div class="form-group">
+        <div class="mb-3">
             <h1>
                 {{ $headers[$key] }}
             </h1>

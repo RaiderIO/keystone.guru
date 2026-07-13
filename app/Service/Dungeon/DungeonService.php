@@ -7,6 +7,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\User;
 use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Dungeon\Logging\DungeonServiceLoggingInterface;
+use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Collection;
 
@@ -18,6 +19,7 @@ class DungeonService implements DungeonServiceInterface
         private readonly CookieServiceInterface         $cookieService,
         private readonly SeasonServiceInterface         $seasonService,
         private readonly DungeonServiceLoggingInterface $log,
+        private readonly GameVersionServiceInterface    $gameVersionService,
     ) {
     }
 
@@ -63,7 +65,7 @@ class DungeonService implements DungeonServiceInterface
                 if ($dungeon->instance_id === null && $dungeon->update([
                     'instance_id' => $instanceId,
                 ])) {
-                    $this->log->importInstanceIdsFromCsvUpdatedZoneId($dungeon->key, $instanceId);
+                    $this->log->importInstanceIdsFromCsvUpdatedZoneId($dungeon->key, (int)$instanceId);
                 }
             }
         } finally {
@@ -98,8 +100,8 @@ class DungeonService implements DungeonServiceInterface
         }
 
         if ($dungeon === null) {
-            // Resort to finding a default dungeon of sorts
-            $gameVersion   = GameVersion::getUserOrDefaultGameVersion();
+            // Resort to finding a default dungeon of sorts - use the service so the game_version cookie is respected for guests
+            $gameVersion   = $this->gameVersionService->getGameVersion($user);
             $currentSeason = $this->seasonService->getCurrentSeason($gameVersion->expansion);
 
             $dungeon = $currentSeason?->dungeons()->first() ?? Dungeon::active()->firstWhere('expansion_id', $gameVersion->expansion_id);
@@ -113,7 +115,7 @@ class DungeonService implements DungeonServiceInterface
     public function getDungeonsForGameVersion(?GameVersion $gameVersion = null): Collection
     {
         // Resort to finding a default dungeon of sorts
-        $gameVersion = $gameVersion ?? GameVersion::getUserOrDefaultGameVersion();
+        $gameVersion ??= GameVersion::getUserOrDefaultGameVersion();
 
         $currentSeason = $this->seasonService->getCurrentSeason($gameVersion->expansion);
         $nextSeason    = $currentSeason === null ? null : $this->seasonService->getNextSeason($currentSeason);

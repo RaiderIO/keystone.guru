@@ -21,23 +21,23 @@ use Illuminate\Support\Collection;
  * @var MapContextBase             $mapContext
  * @var Dungeon                    $dungeon
  * @var Floor                      $floor
- * @var Season|null                $season Used for heatmap
+ * @var Season|null                $season              Used for heatmap
  * @var MappingVersion             $mappingVersion
  * @var DungeonRoute|null          $dungeonroute
- * @var LiveSession|null           $livesession
+ * @var LiveSession|null           $liveSession
  * @var string|null                $headerTitle
  * @var bool|null                  $admin
  * @var bool|null                  $embed
  * @var string|null                $embedStyle
  * @var bool|null                  $edit
- * @var array                      $show
- * @var array|null                 $controlOptions
+ * @var array<string, mixed>       $show
+ * @var array<string, mixed>|null  $controlOptions
  * @var bool                       $adFree
  * @var string|null                $mapBackgroundColor
  * @var string|null                $mapFacadeStyle
  * @var string                     $assetsBaseUrl
  * @var string                     $tilesBaseUrl
- * @var array|null                 $parameters
+ * @var array<string, mixed>|null  $parameters
  * @var Collection<string, string> $dungeonContextLinks
  */
 
@@ -63,7 +63,9 @@ $embedStyle          ??= '';
 $edit                = isset($edit) && $edit;
 $mapClasses          ??= '';
 $dungeonroute        ??= null;
-$livesession         ??= null;
+// The inline map JS reads affixes (and the setup/has_thumbnail appends) off the serialized route
+$dungeonroute?->loadMissing(['affixes']);
+$liveSession         ??= null;
 $mapBackgroundColor  ??= null;
 $controlOptions      ??= [];
 $parameters          ??= [];
@@ -80,8 +82,9 @@ $show['controls']['heatmapSearchSidebar'] ??= true;
 $show['controls']['enemyForces']          = $show['controls']['pulls'] && ($show['controls']['enemyForces'] ?? true);
 $show['controls']['draw']                 ??= false;
 $show['controls']['view']                 ??= false;
-$show['controls']['present']              ??= false;
-$show['controls']['live']                 ??= false;
+$show['controls']['present']                       ??= false;
+$show['controls']['live']                          ??= false;
+$show['controls']['combatLogRouteEnemyFailures']   ??= false;
 
 // Set the key to 'sandbox' if sandbox mode is enabled
 $sandboxMode                      = isset($sandboxMode) && $sandboxMode;
@@ -258,7 +261,7 @@ if ($isAdmin) {
                             <i class="{{ $loop->index === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
                                style="width: 15px"></i>
                             <img src="{{ $faction->iconfile->icon_url }}" class="select_icon faction_icon"
-                                 data-toggle="tooltip" title="{{ __($faction->name) }}"
+                                 data-bs-toggle="tooltip" title="{{ __($faction->name) }}"
                                  alt="Faction"/>
                         </a>
 
@@ -289,7 +292,7 @@ if ($isAdmin) {
                 'floor' => $floor,
                 'headerTitle' => $headerTitle,
                 'dungeonroute' => $dungeonroute,
-                'livesession' => $livesession,
+                'liveSession' => $liveSession,
                 'mappingVersion' => $mappingVersion,
             ])
         </nav>
@@ -301,7 +304,7 @@ if ($isAdmin) {
         {{--            'floor' => $floor,--}}
         {{--            'headerTitle' => $headerTitle,--}}
         {{--            'dungeonroute' => $dungeonroute,--}}
-        {{--            'livesession' => $livesession,--}}
+        {{--            'liveSession' => $liveSession,--}}
         {{--            'mappingVersion' => $mappingVersion,--}}
         {{--        ])--}}
     @endif
@@ -372,6 +375,13 @@ if ($isAdmin) {
     @endif
 
 
+    @if(isset($show['controls']['combatLogRouteEnemyFailures']) && $show['controls']['combatLogRouteEnemyFailures'])
+        @include('common.maps.controls.combatlogrouteenemyfailures', [
+            'dungeon'        => $dungeon,
+            'mappingVersion' => $mappingVersion,
+        ])
+    @endif
+
     @if(isset($show['controls']['raiderioKsgAttribution']) && $show['controls']['raiderioKsgAttribution'])
         @include('common.maps.controls.attribution')
     @endif
@@ -409,7 +419,7 @@ if ($isAdmin) {
     {{--                @include('common.thirdparty.adunit', ['id' => 'map_sidebar_right', 'type' => 'sidebar_map_right', 'class' => 'map_ad_background', 'map' => true])--}}
     {{--            </footer>--}}
     {{--        @elseif(!$dungeon->speedrun_enabled)--}}
-    {{--            <footer class="fixed-bottom container p-0 m-0 mr-2 map_ad_unit_footer_right">--}}
+    {{--            <footer class="fixed-bottom container p-0 m-0 me-2 map_ad_unit_footer_right">--}}
     {{--                @include('common.thirdparty.adunit', ['id' => 'map_footer_right', 'type' => 'footer_map_right', 'class' => 'map_ad_background', 'map' => true])--}}
     {{--            </footer>--}}
     {{--        @endif--}}
@@ -439,7 +449,8 @@ if ($isAdmin) {
     @endif
 
     @if(isset($show['controls']['pulls']) && $show['controls']['pulls'] ||
-        isset($show['controls']['heatmapSearch']) && $show['controls']['heatmapSearch'])
+        isset($show['controls']['heatmapSearch']) && $show['controls']['heatmapSearch'] ||
+        isset($show['controls']['dungeonRouteSearch']) && $show['controls']['dungeonRouteSearch'])
         @component('common.general.modal', ['id' => 'map_settings_modal', 'size' => 'xl'])
             @include('common.modal.mapsettings', ['dungeonroute' => $dungeonroute, 'edit' => $edit])
         @endcomponent

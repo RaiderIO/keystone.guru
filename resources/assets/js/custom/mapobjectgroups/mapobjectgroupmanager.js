@@ -58,6 +58,8 @@ class MapObjectGroupManager extends Signalable {
             result = new KillZonePathMapObjectGroup(this, !getState().isMapAdmin());
         } else if (name === MAP_OBJECT_GROUP_BRUSHLINE) {
             result = new BrushlineMapObjectGroup(this, !getState().isMapAdmin());
+        } else if (name === MAP_OBJECT_GROUP_ARROW) {
+            result = new ArrowMapObjectGroup(this, !getState().isMapAdmin());
         } else if (name === MAP_OBJECT_GROUP_MAPICON) {
             result = new MapIconMapObjectGroup(this, true);
         } else if (name === MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER) {

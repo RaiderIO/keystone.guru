@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Cache;
 
 trait RemembersToFile
 {
+    /**
+     * @template T
+     * @param  Closure(): T $compute
+     * @return T
+     */
     private function rememberLocal(string $key, int $ttl, Closure $compute, bool $cacheEnabled = true): mixed
     {
         if (!$cacheEnabled || config('app.env') === 'local') {

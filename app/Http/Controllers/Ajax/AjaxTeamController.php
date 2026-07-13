@@ -23,6 +23,9 @@ use Teapot\StatusCode\Http;
 
 class AjaxTeamController extends Controller
 {
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection<int, Team>
+     */
     public function get(Request $request)
     {
         /** @var User $user */
@@ -56,7 +59,7 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * @return array|Application|ResponseFactory|Response
+     * @return array<string, mixed>|Application|ResponseFactory|Response
      *
      * @throws Exception
      */
@@ -82,7 +85,7 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * @return array|Application|ResponseFactory|Response
+     * @return array<string, mixed>|Application|ResponseFactory|Response
      *
      * @throws Exception
      */
@@ -104,7 +107,7 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * @return array|Application|ResponseFactory|Response
+     * @return array<string, mixed>|Application|ResponseFactory|Response
      *
      * @throws Exception
      */
@@ -126,7 +129,7 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * @return array|Application|ResponseFactory|Response
+     * @return array<string, mixed>|Application|ResponseFactory|Response
      *
      * @throws Exception
      */
@@ -164,7 +167,7 @@ class AjaxTeamController extends Controller
     /**
      * Invalidate the current invite link and generate a new one.
      *
-     * @return array
+     * @return array<string, mixed>
      *
      * @throws Exception
      */

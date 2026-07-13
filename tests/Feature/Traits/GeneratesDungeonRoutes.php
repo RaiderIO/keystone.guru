@@ -9,33 +9,38 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 trait GeneratesDungeonRoutes
 {
     protected function createNonFacadeDungeonRouteWithEnemies(): DungeonRoute
     {
-        $count = 0;
-        do {
-            if (++$count > 20) {
-                throw new \RuntimeException('Unable to find a non-facade dungeon');
-            }
-            /** @var Dungeon $dungeon */
-            $dungeon        = Dungeon::whereNotNull('challenge_mode_id')->inRandomOrder()->first();
-            $mappingVersion = $dungeon->getCurrentMappingVersion();
-        } while (
-            $mappingVersion === null ||
-            $mappingVersion->facade_enabled ||
-            $dungeon->floors->isEmpty() ||
-            $mappingVersion->enemies()->count() === 0
-        );
+        // Iterate over every challenge-mode dungeon (shuffled for randomness) instead of drawing a
+        // single random dungeon a limited number of times. The old approach re-sampled with
+        // Dungeon::inRandomOrder()->first() and gave up after 20 tries, so it could repeatedly draw
+        // unsuitable dungeons and throw even when a suitable one existed - an intermittent CI flake.
+        $dungeons = Dungeon::whereNotNull('challenge_mode_id')->with('floors')->get()->shuffle();
 
-        return DungeonRoute::factory()->create([
-            'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $mappingVersion->id,
-            'expires_at'         => Carbon::now()->addHours(2),
-        ]);
+        foreach ($dungeons as $dungeon) {
+            /** @var Dungeon $dungeon */
+            $mappingVersion = $dungeon->getCurrentMappingVersion();
+
+            if (
+                $mappingVersion === null ||
+                $mappingVersion->facade_enabled ||
+                $dungeon->floors->isEmpty() ||
+                $mappingVersion->enemies()->count() === 0
+            ) {
+                continue;
+            }
+
+            return DungeonRoute::factory()->create([
+                'dungeon_id'         => $dungeon->id,
+                'mapping_version_id' => $mappingVersion->id,
+            ]);
+        }
+
+        throw new \RuntimeException('Unable to find a non-facade dungeon with enemies');
     }
 
     /**
@@ -43,14 +48,14 @@ trait GeneratesDungeonRoutes
      * Facade dungeons convert random factory coordinates through a facade-to-floor
      * projection that can fail for arbitrary lat/lng values, causing intermittent
      * floor-matching failures during import.
+     *
+     * @param array<string, mixed> $attributes
      */
     protected function getMDTCompatibleNonFacadeDungeonRoute(array $attributes = []): DungeonRoute
     {
         do {
             /** @var DungeonRoute $dungeonRoute */
-            $dungeonRoute = DungeonRoute::factory()->make(array_merge([
-                'expires_at' => now()->addHour(),
-            ], $attributes));
+            $dungeonRoute = DungeonRoute::factory()->make($attributes);
 
             $dungeonRoute->load(['dungeon', 'mappingVersion']);
 
@@ -71,14 +76,14 @@ trait GeneratesDungeonRoutes
      * Returns an MDT-compatible route that has at least $enemyCount enemies guaranteed to
      * survive an import round-trip. Filters out teeming-only enemies, MDT placeholders,
      * and seasonally restricted enemies that the import service would skip.
+     *
+     * @param array<string, mixed> $attributes
      */
     protected function getMDTCompatibleDungeonRouteWithSafeEnemies(int $enemyCount = 1, array $attributes = []): DungeonRoute
     {
         do {
             /** @var DungeonRoute $dungeonRoute */
-            $dungeonRoute = DungeonRoute::factory()->make(array_merge([
-                'expires_at' => now()->addHour(),
-            ], $attributes));
+            $dungeonRoute = DungeonRoute::factory()->make($attributes);
 
             $dungeonRoute->load(['dungeon', 'mappingVersion']);
 

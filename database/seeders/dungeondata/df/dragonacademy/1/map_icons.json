@@ -59,7 +59,7 @@
         "map_icon_type_id": 46,
         "lat": -175.2483,
         "lng": 163.187,
-        "comment": "5% Haste",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.haste_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 43,
         "lat": -155.9374,
         "lng": 162.0312,
-        "comment": "+584 Mastery Rating",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.mastery_rating_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 45,
         "lat": -143.4232,
         "lng": 179.2246,
-        "comment": "+10% Healing Taken",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.healing_taken_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 49,
         "lat": -151.5846,
         "lng": 189.3447,
-        "comment": "+5% Versatility",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.versatility_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -111,7 +111,7 @@
         "map_icon_type_id": 53,
         "lat": -183.0738,
         "lng": 178.6226,
-        "comment": "5% Critical Strike",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.critical_strike_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -137,7 +137,7 @@
         "map_icon_type_id": 46,
         "lat": -175.2483,
         "lng": 163.187,
-        "comment": "5% Haste",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.haste_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -150,7 +150,7 @@
         "map_icon_type_id": 43,
         "lat": -155.9374,
         "lng": 162.0312,
-        "comment": "+584 Mastery Rating",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.mastery_rating_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -163,7 +163,7 @@
         "map_icon_type_id": 45,
         "lat": -143.4232,
         "lng": 179.2246,
-        "comment": "+10% Healing Taken",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.healing_taken_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -176,7 +176,7 @@
         "map_icon_type_id": 49,
         "lat": -151.5846,
         "lng": 189.3447,
-        "comment": "+5% Versatility",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.versatility_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -189,7 +189,7 @@
         "map_icon_type_id": 53,
         "lat": -183.0738,
         "lng": 178.6226,
-        "comment": "5% Critical Strike",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.critical_strike_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -215,7 +215,7 @@
         "map_icon_type_id": 46,
         "lat": -175.2483,
         "lng": 163.187,
-        "comment": "5% Haste",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.haste_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -228,7 +228,7 @@
         "map_icon_type_id": 43,
         "lat": -155.9374,
         "lng": 162.0312,
-        "comment": "+584 Mastery Rating",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.mastery_rating_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -241,7 +241,7 @@
         "map_icon_type_id": 45,
         "lat": -143.4232,
         "lng": 179.2246,
-        "comment": "+10% Healing Taken",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.healing_taken_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -254,7 +254,7 @@
         "map_icon_type_id": 49,
         "lat": -151.5846,
         "lng": 189.3447,
-        "comment": "+5% Versatility",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.versatility_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -267,7 +267,7 @@
         "map_icon_type_id": 53,
         "lat": -183.0738,
         "lng": 178.6226,
-        "comment": "5% Critical Strike",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.critical_strike_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -293,7 +293,7 @@
         "map_icon_type_id": 46,
         "lat": -175.2483,
         "lng": 163.187,
-        "comment": "5% Haste",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.haste_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -306,7 +306,7 @@
         "map_icon_type_id": 43,
         "lat": -155.9374,
         "lng": 162.0312,
-        "comment": "+584 Mastery Rating",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.mastery_rating_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -319,7 +319,7 @@
         "map_icon_type_id": 45,
         "lat": -143.4232,
         "lng": 179.2246,
-        "comment": "+10% Healing Taken",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.healing_taken_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -332,7 +332,7 @@
         "map_icon_type_id": 49,
         "lat": -151.5846,
         "lng": 189.3447,
-        "comment": "+5% Versatility",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.versatility_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -345,7 +345,7 @@
         "map_icon_type_id": 53,
         "lat": -183.0738,
         "lng": 178.6226,
-        "comment": "5% Critical Strike",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.critical_strike_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -371,7 +371,7 @@
         "map_icon_type_id": 46,
         "lat": -175.2483,
         "lng": 163.187,
-        "comment": "5% Haste",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.haste_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -384,7 +384,7 @@
         "map_icon_type_id": 43,
         "lat": -155.9374,
         "lng": 162.0312,
-        "comment": "+584 Mastery Rating",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.mastery_rating_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -397,7 +397,7 @@
         "map_icon_type_id": 45,
         "lat": -143.4232,
         "lng": 179.2246,
-        "comment": "+10% Healing Taken",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.healing_taken_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -410,7 +410,7 @@
         "map_icon_type_id": 49,
         "lat": -151.5846,
         "lng": 189.3447,
-        "comment": "+5% Versatility",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.versatility_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -423,7 +423,7 @@
         "map_icon_type_id": 53,
         "lat": -183.0738,
         "lng": 178.6226,
-        "comment": "5% Critical Strike",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.critical_strike_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -449,7 +449,7 @@
         "map_icon_type_id": 46,
         "lat": -175.2483,
         "lng": 163.187,
-        "comment": "5% Haste",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.haste_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -462,7 +462,7 @@
         "map_icon_type_id": 43,
         "lat": -155.9374,
         "lng": 162.0312,
-        "comment": "+584 Mastery Rating",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.mastery_rating_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -475,7 +475,7 @@
         "map_icon_type_id": 45,
         "lat": -143.4232,
         "lng": 179.2246,
-        "comment": "+10% Healing Taken",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.healing_taken_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -488,7 +488,7 @@
         "map_icon_type_id": 49,
         "lat": -151.5846,
         "lng": 189.3447,
-        "comment": "+5% Versatility",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.versatility_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -501,7 +501,7 @@
         "map_icon_type_id": 53,
         "lat": -183.0738,
         "lng": 178.6226,
-        "comment": "5% Critical Strike",
+        "comment": "mapping.map_icons.df.algeth_ar_academy.critical_strike_increased",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

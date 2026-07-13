@@ -164,3 +164,21 @@ function pickHexFromHandlers(handlers, weight) {
 
     return result.toLowerCase();
 }
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        randomColor,
+        isColorDark,
+        getLuminance,
+        hexToRgb,
+        rgbToHex,
+        parseRgba,
+        pickHexFromHandlers,
+        hsv2rgb,
+        rgb2hsv,
+        rgb2hex,
+        hex2name,
+    };
+}

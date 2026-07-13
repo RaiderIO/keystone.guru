@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 trait ChangesDungeonRoute
 {
-    private const IGNORE_KEYS = [
+    private const array IGNORE_KEYS = [
         'index',
         // KillZone index upon mass change.. I don't care about this
         'updated_at',
@@ -63,6 +63,12 @@ trait ChangesDungeonRoute
         }
     }
 
+    /**
+     * @param  array<string, mixed>                $before
+     * @param  array<string, mixed>                $after
+     * @param  array<int, string>                  $excludeKeysOnUpdate
+     * @return array<string, array<string, mixed>>
+     */
     private function getChangedData(array $before, array $after, array $excludeKeysOnUpdate = []): array
     {
         $alteredKeys = [];
