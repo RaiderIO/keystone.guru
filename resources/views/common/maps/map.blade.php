@@ -63,6 +63,8 @@ $embedStyle          ??= '';
 $edit                = isset($edit) && $edit;
 $mapClasses          ??= '';
 $dungeonroute        ??= null;
+// The inline map JS reads affixes (and the setup/has_thumbnail appends) off the serialized route
+$dungeonroute?->loadMissing(['affixes']);
 $liveSession         ??= null;
 $mapBackgroundColor  ??= null;
 $controlOptions      ??= [];
@@ -257,7 +259,7 @@ if ($isAdmin) {
                             <i class="{{ $loop->index === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
                                style="width: 15px"></i>
                             <img src="{{ $faction->iconfile->icon_url }}" class="select_icon faction_icon"
-                                 data-toggle="tooltip" title="{{ __($faction->name) }}"
+                                 data-bs-toggle="tooltip" title="{{ __($faction->name) }}"
                                  alt="Faction"/>
                         </a>
 
@@ -415,7 +417,7 @@ if ($isAdmin) {
     {{--                @include('common.thirdparty.adunit', ['id' => 'map_sidebar_right', 'type' => 'sidebar_map_right', 'class' => 'map_ad_background', 'map' => true])--}}
     {{--            </footer>--}}
     {{--        @elseif(!$dungeon->speedrun_enabled)--}}
-    {{--            <footer class="fixed-bottom container p-0 m-0 mr-2 map_ad_unit_footer_right">--}}
+    {{--            <footer class="fixed-bottom container p-0 m-0 me-2 map_ad_unit_footer_right">--}}
     {{--                @include('common.thirdparty.adunit', ['id' => 'map_footer_right', 'type' => 'footer_map_right', 'class' => 'map_ad_background', 'map' => true])--}}
     {{--            </footer>--}}
     {{--        @endif--}}
@@ -445,7 +447,8 @@ if ($isAdmin) {
     @endif
 
     @if(isset($show['controls']['pulls']) && $show['controls']['pulls'] ||
-        isset($show['controls']['heatmapSearch']) && $show['controls']['heatmapSearch'])
+        isset($show['controls']['heatmapSearch']) && $show['controls']['heatmapSearch'] ||
+        isset($show['controls']['dungeonRouteSearch']) && $show['controls']['dungeonRouteSearch'])
         @component('common.general.modal', ['id' => 'map_settings_modal', 'size' => 'xl'])
             @include('common.modal.mapsettings', ['dungeonroute' => $dungeonroute, 'edit' => $edit])
         @endcomponent

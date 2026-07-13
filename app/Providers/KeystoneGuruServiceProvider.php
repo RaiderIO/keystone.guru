@@ -8,7 +8,6 @@ use App\Http\View\Composers\AdminNpcHealthEditComposer;
 use App\Http\View\Composers\AdminSpellEditComposer;
 use App\Http\View\Composers\AffixesComposer;
 use App\Http\View\Composers\AppLayoutComposer;
-use App\Http\View\Composers\ChangelogFlagComposer;
 use App\Http\View\Composers\CompositionComposer;
 use App\Http\View\Composers\CreateRouteFormComposer;
 use App\Http\View\Composers\DiscoverAffixGroupComposer;
@@ -23,7 +22,6 @@ use App\Http\View\Composers\GameVersionsNavComposer;
 use App\Http\View\Composers\GlobalComposer;
 use App\Http\View\Composers\HeaderComposer;
 use App\Http\View\Composers\HeatmapSearchComposer;
-use App\Http\View\Composers\HomeComposer;
 use App\Http\View\Composers\MapComposer;
 use App\Http\View\Composers\MappingVersionComposer;
 use App\Http\View\Composers\OAuthRegisterFormComposer;
@@ -31,7 +29,6 @@ use App\Http\View\Composers\ProfileEditComposer;
 use App\Http\View\Composers\ProfileNewRouteStyleComposer;
 use App\Http\View\Composers\PullsComposer;
 use App\Http\View\Composers\PullsWorkbenchComposer;
-use App\Http\View\Composers\ReleaseComposer;
 use App\Http\View\Composers\RollbarComposer;
 use App\Http\View\Composers\RouteAttributesComposer;
 use App\Http\View\Composers\RouteCoverageAffixGroupComposer;
@@ -140,8 +137,6 @@ use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\RaiderIO\RaiderIOKeystoneGuruApiService;
 use App\Service\ReadOnlyMode\ReadOnlyModeService;
 use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
-use App\Service\Reddit\RedditApiService;
-use App\Service\Reddit\RedditApiServiceInterface;
 use App\Service\Reverb\ReverbHttpApiService;
 use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use App\Service\Season\SeasonAffixGroupService;
@@ -183,7 +178,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
     {
         // External communication - no dependencies
         $this->app->bind(DiscordApiServiceInterface::class, DiscordApiService::class);
-        $this->app->bind(RedditApiServiceInterface::class, RedditApiService::class);
         $this->app->bind(ArchonApiServiceInterface::class, ArchonApiService::class);
         $this->app->bind(PatreonApiServiceInterface::class, PatreonApiService::class);
         $this->app->bind(WowToolsServiceInterface::class, WowToolsService::class);
@@ -323,9 +317,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // lazily resolved from the granular cached getters instead of one eager multi-MB blob.
         view()->composer('*', GlobalComposer::class);
 
-        // Home page
-        view()->composer('home', HomeComposer::class);
-
         // Main view
         view()->composer([
             'layouts.app',
@@ -334,11 +325,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         ], AppLayoutComposer::class);
 
         view()->composer('common.maps.map', MapComposer::class);
-
-        view()->composer([
-            'layouts.app',
-            'common.layout.footer',
-        ], ChangelogFlagComposer::class);
 
         view()->composer('common.layout.nav.gameversions', GameVersionsNavComposer::class);
 
@@ -374,9 +360,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             'common.forms.createroute',
             'common.forms.createroutetemporary',
         ], CreateRouteFormComposer::class);
-
-        // Displaying a release
-        view()->composer('common.release.release', ReleaseComposer::class);
 
         // Displaying affixes
         view()->composer('common.group.affixes', AffixesComposer::class);

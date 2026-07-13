@@ -57,7 +57,7 @@ class RegenerateCombatLogRoute implements ShouldQueue
             $client = new Client();
 
             try {
-                $bodyArr = json_decode($challengeModeRun->challengeModeRunData->post_body, true);
+                $bodyArr = json_decode((string)$challengeModeRun->challengeModeRunData->post_body, true);
                 // Make sure we're regenerating this route!
                 $bodyArr['settings']['publicKey'] = $dungeonRoute->public_key;
 

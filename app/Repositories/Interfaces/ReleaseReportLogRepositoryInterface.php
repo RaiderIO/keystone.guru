@@ -19,4 +19,5 @@ use Illuminate\Support\Collection;
  */
 interface ReleaseReportLogRepositoryInterface extends BaseRepositoryInterface
 {
+    public function hasReportedVersionOnPlatform(string $version, string $platform): bool;
 }

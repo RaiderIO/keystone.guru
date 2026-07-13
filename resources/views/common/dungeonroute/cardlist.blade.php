@@ -30,7 +30,7 @@ $renderDungeonRouteCollection = static function (Collection $collection, ?string
     /** @var Collection<int, DungeonRoute> $collection */
     $count = $collection->count();
     if( $count > 0 && $header !== null ) { ?>
-    <div class="row no-gutters">
+    <div class="row g-0">
         <h4 class="col text-center">
             {{ $header }}
         </h4>
@@ -39,7 +39,7 @@ $renderDungeonRouteCollection = static function (Collection $collection, ?string
     }
 
     for ($i = 0; $i < (int)ceil($count / $cols); ++$i) { ?>
-    <div class="row no-gutters">
+    <div class="row g-0">
         <?php for ($j = 0; $j < $cols; ++$j) {
         $dungeonRouteIndex = ($i * $cols) + $j;
         /** @var DungeonRoute $dungeonroute */
@@ -96,7 +96,7 @@ $renderDungeonRouteCollection = static function (Collection $collection, ?string
 @endif
 
 @if($renderedDungeonRouteCount === 0)
-    <div class="row no-gutters">
+    <div class="row g-0">
         <div class="col-xl text-center">
             {{ __('view_common.dungeonroute.cardlist.no_dungeonroutes') }}
         </div>

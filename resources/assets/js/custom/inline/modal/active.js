@@ -11,8 +11,6 @@ class ModalActive extends InlineCode {
     activate() {
         super.activate();
 
-        $(this.options.id).modal({
-            show: true
-        });
+        bootstrap.Modal.getOrCreateInstance(document.querySelector(this.options.id)).show();
     }
 }

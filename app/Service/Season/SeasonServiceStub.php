@@ -63,6 +63,11 @@ class SeasonServiceStub implements SeasonServiceInterface
         return null;
     }
 
+    public function getCurrentSeasonForDungeon(Dungeon $dungeon): ?Season
+    {
+        return null;
+    }
+
     public function getSeasonFromShortString(string $season): ?Season
     {
         return null;

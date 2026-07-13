@@ -14,6 +14,6 @@ readonly class RollbarComposer implements ViewComposerInterface
 
     public function compose(View $view): void
     {
-        $view->with('latestRelease', $this->viewService->getLatestRelease());
+        $view->with('codeVersion', $this->viewService->getAppVersionInfo()['version']);
     }
 }

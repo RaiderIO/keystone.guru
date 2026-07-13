@@ -1,0 +1,7 @@
+/**
+ * Placeholder: no compendium-specific rules exist yet. The compendium views
+ * (resources/views/compendium/**) currently style entirely with stock Bootstrap classes
+ * (card/badge/col/btn), so there is nothing to move here from the old grab-bag files (verified by
+ * grepping compendium blade files against custom.css/general.css/header.css/map.css during the
+ * #3506 CSS reorg). This file is the designated home for compendium CSS going forward.
+ */

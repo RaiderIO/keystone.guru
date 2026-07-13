@@ -1,0 +1,25 @@
+.username_menu {
+    width: 105px;
+}
+
+.select_icon {
+    width: 24px !important;
+    border-radius: 12px !important;
+    height: 24px !important;
+}
+
+.display_icon {
+    width: 32px;
+    border-radius: 16px;
+    height: 32px;
+}
+
+.default_table {
+    width: 100%;
+}
+
+.user_icon {
+    max-width: 26px;
+    max-height: 26px;
+    border-radius: 30px;
+}

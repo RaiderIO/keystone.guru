@@ -236,18 +236,6 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'thumbnail_updated_at',
     ];
 
-    protected $with = [
-        'mappingVersion',
-        'dungeon',
-        'season',
-        'faction',
-        'specializations',
-        'classes',
-        'races',
-        'affixes',
-        'thumbnails',
-    ];
-
     protected function casts(): array
     {
         return [
@@ -279,8 +267,9 @@ class DungeonRoute extends Model implements TracksPageViewInterface
      */
     public function getSetupAttribute(): array
     {
-        // Telescope has an issue where somehow it doesn't have these relations loaded and causes crashes
-        $this->load([
+        // Telescope has an issue where somehow it doesn't have these relations loaded and causes crashes.
+        // loadMissing keeps that guarantee without re-querying when the relations were already eager loaded.
+        $this->loadMissing([
             'faction',
             'specializations',
             'classes',
@@ -749,6 +738,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
     public function getHasThumbnailAttribute(): bool
     {
+        // Explicitly load the relation so this appended attribute also works on routes hydrated
+        // in a collection (preventLazyLoading)
+        $this->loadMissing('thumbnails');
+
         return $this->thumbnails->isNotEmpty();
     }
 

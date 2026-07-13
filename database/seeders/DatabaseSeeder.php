@@ -30,8 +30,6 @@ class DatabaseSeeder extends Seeder
         NpcClassesSeeder::class,
         NpcTypesSeeder::class,
         RaidMarkersSeeder::class,
-        ReleaseChangelogCategorySeeder::class,
-        ReleasesSeeder::class,
         MapIconTypesSeeder::class,
         TagCategorySeeder::class,
         PublishedStatesSeeder::class,

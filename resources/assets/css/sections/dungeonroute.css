@@ -1,0 +1,11 @@
+.tag.edit {
+    cursor: pointer;
+}
+
+#dungeonroute_coverage_affixgroup_table .covered {
+    background-color: #7efc7e11;
+}
+
+#dungeonroute_coverage_affixgroup_table .covered_warning {
+    background-color: #fcc57e11;
+}

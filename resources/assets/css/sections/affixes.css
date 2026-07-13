@@ -1,0 +1,92 @@
+.affix_group_row.current {
+    border: red 2px solid;
+    border-radius: 3px;
+}
+
+/* Standalone column: the affix picker list sits in a plain .mb-3, not a .row */
+.affix_list {
+    padding-right: calc(var(--bs-gutter-x, 1.5rem) * .5);
+    padding-left: calc(var(--bs-gutter-x, 1.5rem) * .5);
+}
+
+.affix_list {
+    border: 1px solid #ccd0d2;
+    border-radius: 4px;
+}
+
+.affix_list .affix_row {
+    padding-right: 10px;
+}
+
+.affix_list .affix_list_row {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.affix_list .affix_list_row_disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.affix_list .affix_list_row:hover {
+    cursor: pointer;
+}
+
+.affix_list .affixselect {
+    height: 100px;
+}
+
+.affixes_overview_table tr.timewalking.legion {
+    background-position-x: center;
+    background-position-y: -437px;
+}
+
+.affixes_overview_table td {
+    padding: 0;
+}
+
+.affixes_overview_table .table_row.even.unconfirmed {
+    background-color: rgba(255, 165, 0, 0.7);
+}
+
+.affixes_overview_table .table_row.odd.unconfirmed {
+    background-color: rgba(255, 165, 0, 0.6);
+}
+
+.affixes_overview_table .affix_row {
+    padding: 6px;
+}
+
+.affixes_overview_table .last_column:not(.current_week) {
+    padding-left: 8px;
+}
+
+.affixes_overview_table .last_column.first_row {
+    border-top-right-radius: 5px;
+}
+
+.affixes_overview_table .last_column.first_row:not(.current_week) {
+    border-top-left-radius: 5px;
+}
+
+/** When the top row is the current week, don't show the rounded border in the top left corner; looks strange */
+.affixes_overview_table .current_week.first_column:not(.current_week) {
+    border-top-left-radius: 5px;
+}
+
+.affixes_overview_table .last_column.last_row {
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.affixes_overview_table .current_week.first_column {
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.affixes_overview_table .current_week.last_column {
+    border-left: none; /* Disable overlapping borders when both rows overlap */
+    padding-left: 8px; /* Compensation for the missing border */
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}

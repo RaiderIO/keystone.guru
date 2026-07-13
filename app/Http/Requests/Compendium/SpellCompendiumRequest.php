@@ -15,6 +15,7 @@ class SpellCompendiumRequest extends FormRequest
         return true;
     }
 
+    #[\Override]
     protected function failedValidation(Validator $validator): never
     {
         throw new HttpResponseException(response()->json(['errors' => $validator->errors()], 422));

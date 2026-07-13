@@ -44,7 +44,9 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
      */
     public function getDungeonRoutesWithExpiredThumbnails(?Collection $dungeonRoutes = null): Collection
     {
-        return DungeonRoute::where('author_id', '>', '0')
+        // ThumbnailService::queueThumbnailRefresh() reads dungeon and mappingVersion on every returned route
+        return DungeonRoute::with(['dungeon', 'mappingVersion'])
+            ->where('author_id', '>', '0')
             // Check if in queue, if so skip, unless the queue age is longer than keystoneguru.thumbnail.refresh_requeue_hours
             ->where(static function (EloquentBuilder $builder) {
                 $builder->whereColumn('thumbnail_refresh_queued_at', '<', 'thumbnail_updated_at')
@@ -80,7 +82,7 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
      */
     public function getWeeklyRoutes(?Dungeon $dungeon = null, ?Season $season = null): Collection
     {
-        $season = $season ?? $this->seasonService->getCurrentSeason();
+        $season ??= $this->seasonService->getCurrentSeason();
 
         $weeklyRouteTags = config('keystoneguru.raider_io.weekly_route.tags');
         $tagCategoryId   = TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM];
@@ -97,8 +99,14 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
 
         return DungeonRoute::where('team_id', config('keystoneguru.raider_io.team_id'))
             ->with([ // @phpstan-ignore argument.type (Larastan passes concrete relation type; contravariant closure parameter is correct at runtime)
-                'author',
+                // Everything the rendered route cards read - DungeonRoute no longer eager loads relations globally
+                'author.iconfile',
                 'dungeon',
+                'affixes',
+                'mappingVersion',
+                'season.expansion',
+                'thumbnails',
+                'ratings',
                 'tags' => $tagsFilterFn,
             ])
             ->when($dungeon, fn(EloquentBuilder $query) => $query->where('dungeon_id', $dungeon->id))
@@ -245,7 +253,16 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
         ?DungeonRoute            $excludeDungeonRoute = null,
     ): EloquentBuilder {
         $query = DungeonRoute::query()
-            ->with(['author'])
+            // Everything the rendered search result cards read - DungeonRoute no longer eager loads relations globally
+            ->with([
+                'author.iconfile',
+                'dungeon',
+                'affixes',
+                'mappingVersion',
+                'season.expansion',
+                'thumbnails',
+                'ratings',
+            ])
             ->when(
                 $filter->username !== null,
                 fn(EloquentBuilder $query) => $query->whereRelation('author', 'name', 'LIKE', '%' . $filter->username . '%'),

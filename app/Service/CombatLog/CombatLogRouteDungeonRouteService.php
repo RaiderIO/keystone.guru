@@ -222,7 +222,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     return null;
                 }
 
-                $seconds      = rand(1200, 2400);
+                $seconds      = random_int(1200, 2400);
                 $milliseconds = $seconds * 1000;
 
                 $challengeMode = new CombatLogRouteChallengeModeRequestModel(
@@ -234,7 +234,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     $dungeonRoute->mappingVersion->timer_max_seconds === 0 ?
                         1 : $milliseconds / ($dungeonRoute->mappingVersion->timer_max_seconds * 1000),
                     $dungeonRoute->dungeon->challenge_mode_id,
-                    rand(2, 20),
+                    random_int(2, 20),
                     0,
                     null,
                 );

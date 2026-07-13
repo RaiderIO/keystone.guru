@@ -13,6 +13,7 @@ use App\Models\Tags\Tag;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\Traits\HasIconFile;
 use App\Models\Traits\HasTags;
+use BackedEnum;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -74,7 +75,10 @@ class User extends Authenticatable implements LaratrustUser
 {
     use GeneratesPublicKey;
     use HasIconFile;
-    use HasRolesAndPermissions;
+    use HasRolesAndPermissions {
+        hasRole as private traitHasRole;
+        hasPermission as private traitHasPermission;
+    }
     use Notifiable;
     use HasTags;
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -152,14 +156,6 @@ class User extends Authenticatable implements LaratrustUser
         'initials',
     ];
 
-    protected $with = [
-        'iconfile',
-        'patreonUserLink',
-        'dungeon',
-        'gameVersion',
-        'roles',
-    ];
-
     public function getInitialsAttribute(): string
     {
         return initials($this->name);
@@ -233,10 +229,35 @@ class User extends Authenticatable implements LaratrustUser
     }
 
     /**
+     * @param string|array<int, string|BackedEnum> $name
+     */
+    public function hasRole(string|array|BackedEnum $name, mixed $team = null, bool $requireAll = false): bool
+    {
+        // Explicitly load the relation so this also works on users hydrated in a collection (preventLazyLoading)
+        $this->loadMissing('roles');
+
+        return $this->traitHasRole($name, $team, $requireAll);
+    }
+
+    /**
+     * @param string|array<int, string|BackedEnum> $permission
+     */
+    public function hasPermission(string|array|BackedEnum $permission, mixed $team = null, bool $requireAll = false): bool
+    {
+        // Explicitly load the relation so this also works on users hydrated in a collection (preventLazyLoading)
+        $this->loadMissing('roles');
+
+        return $this->traitHasPermission($permission, $team, $requireAll);
+    }
+
+    /**
      * Checks if this user has paid for a certain tier one way or the other.
      */
     public function hasPatreonBenefit(string $key): bool
     {
+        // Explicitly load the relation so this also works on users hydrated in a collection (preventLazyLoading)
+        $this->loadMissing('patreonUserLink');
+
         // True for all admins
         $result = $this->hasRole(Role::ROLE_ADMIN);
 
@@ -255,6 +276,9 @@ class User extends Authenticatable implements LaratrustUser
      */
     public function getPatreonBenefits(): Collection
     {
+        // Explicitly load the relation so this also works on users hydrated in a collection (preventLazyLoading)
+        $this->loadMissing('patreonUserLink');
+
         // Admins have all patreon benefits
         if ($this->hasRole(Role::ROLE_ADMIN)) {
             $result = collect(array_keys(PatreonBenefit::ALL));

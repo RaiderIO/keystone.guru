@@ -150,10 +150,11 @@ class CommonMapsMycontrol extends SearchInlineBase {
 }
 ```
 
-**Auto-bundling**: `webpack.mix.js` uses the glob `'resources/assets/js/custom/inline/*/**/*.js'`
-so any file placed under `resources/assets/js/custom/inline/` is automatically compiled.
-No manual registration is needed. After creating a new inline JS file, restart `npm run watch`
-(or run `npm run build`) for it to be picked up.
+**Auto-bundling**: `scripts/build/custom-scripts-order.mjs` ends with the glob
+`'resources/assets/js/custom/inline/*/**/*.js'` so any file placed under
+`resources/assets/js/custom/inline/` is automatically compiled. No manual registration is needed.
+After creating a new inline JS file, restart `npm run watch` (or run `npm run dev`) for it to be
+picked up.
 
 ## Map Context Classes
 

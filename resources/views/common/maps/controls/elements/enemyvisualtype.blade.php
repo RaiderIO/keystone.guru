@@ -9,9 +9,9 @@ $enemyVisualTypes = [
     'enemy_skippable' => __('view_common.maps.controls.elements.enemyvisualtype.enemy_skippable'),
 ];
 ?>
-<div class="row no-gutters">
-    <div class="col btn-group dropright">
-        <button type="button" class="btn btn-accent dropdown-toggle" data-toggle="dropdown"
+<div class="row g-0">
+    <div class="col btn-group dropend">
+        <button type="button" class="btn btn-accent dropdown-toggle" data-bs-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-users"></i>
             <span class="map_controls_element_label_toggle" style="display: none;">

@@ -14,8 +14,6 @@ use App\Models\Faction;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\PublishedState;
-use App\Models\Release;
-use App\Models\ReleaseChangelogCategory;
 use App\Models\RouteAttribute;
 use App\Models\Season;
 use App\Models\Spell\Spell;
@@ -45,10 +43,6 @@ interface ViewServiceInterface
      */
     public function getDemoRouteMapping(): Collection;
 
-    public function getLatestRelease(): Release;
-
-    public function getLatestReleaseSpotlight(): ?Release;
-
     /**
      * @return array{version: string, revision: string, nameAndVersion: string}
      */
@@ -65,11 +59,6 @@ interface ViewServiceInterface
      * @return Collection<int, Faction>
      */
     public function getAllFactions(): Collection;
-
-    /**
-     * @return Collection<int, ReleaseChangelogCategory>
-     */
-    public function getReleaseChangelogCategories(): Collection;
 
     /**
      * @return Collection<int, CharacterClassSpecialization>

@@ -1,5 +1,20 @@
 // Bootstrap theme (bootstrap should be between these)
 .darkly {
+  // Permanent design choice (not a temporary shim): keep the navy #2B3E50 body background.
+  // Bootstrap 4 compiled every theme with the global $body-bg: #2B3E50 from sass/_variables.scss
+  // (removed in this migration). This value is deliberately NOT bootswatch darkly's own default
+  // ($gray-900, a near-black): the navy is nearly invisible in darkly — the page background is
+  // forced to var(--theme-darker) elsewhere — but Bootstrap 5 derives component colors from
+  // $body-bg (e.g. the active nav-tab background in the map settings modal), so keeping it stays
+  // pixel-identical with the established Bootstrap 4 look. Unlike vapor (which adopted its native
+  // bootswatch bg), darkly is the flagship theme and this navy is part of its intended appearance.
+  $body-bg: #2B3E50;
+
+  // Bootstrap 5 dropped the default navbar x-padding ($navbar-padding-x is now null); restore the
+  // 1rem inset so the navbar keeps its edge padding on mobile (lux/vapor set the same var too;
+  // darkly's y-padding already comes out at 1rem via bootswatch's own $spacer)
+  $navbar-padding-x: 1rem;
+
   @import "~bootswatch/dist/darkly/variables";
   @import "~bootstrap/scss/bootstrap";
   @import "~bootswatch/dist/darkly/bootswatch";
