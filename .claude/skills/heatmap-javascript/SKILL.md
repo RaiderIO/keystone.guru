@@ -1,6 +1,6 @@
 ---
 name: heatmap-javascript
-description: Reference guide for the Heatmap feature's JavaScript implementation. Use when modifying heatmap filters, visualization settings, the HeatPlugin, SearchHandlerHeatmap, or the embed pass-through API.
+description: Reference guide for the EXISTING public heatmap feature's JavaScript implementation. Use when modifying heatmap filters, visualization settings, the HeatPlugin, SearchHandlerHeatmap, or the embed pass-through API. For the PHP backend see heatmap-php; for building a NEW custom heatmap-like overlay that reuses this infra, see heatmap-functionality.
 ---
 
 # Heatmap JavaScript

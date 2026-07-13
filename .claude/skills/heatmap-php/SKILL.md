@@ -1,6 +1,6 @@
 ---
 name: heatmap-php
-description: Reference guide for the Heatmap feature's PHP/Laravel backend. Use when modifying heatmap controllers, form requests, DTOs, the RaiderIO service layer, the Heatmap feature flag, or the CombatLogEvent grid aggregation.
+description: Reference guide for the EXISTING public heatmap feature's PHP/Laravel backend. Use when modifying heatmap controllers, form requests, DTOs, the RaiderIO service layer, the Heatmap feature flag, or the CombatLogEvent grid aggregation. For the client-side JS see heatmap-javascript; for building a NEW custom heatmap-like overlay that reuses this infra, see heatmap-functionality.
 ---
 
 # Heatmap PHP
