@@ -56,7 +56,7 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         $this->info(__METHOD__);
     }
 
-    public function doCreateThumbnailSkippedLocalEnvironment(): void
+    public function doCreateThumbnailSkippedRemoteDiskFromLocal(): void
     {
         $this->info(__METHOD__);
     }

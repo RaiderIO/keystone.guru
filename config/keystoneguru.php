@@ -212,6 +212,13 @@ return [
         'preview_secret' => env('THUMBNAIL_PREVIEW_SECRET'),
 
         /**
+         * When set, the base URL prefixed to the (relative) preview route for puppeteer to
+         * navigate to, instead of the app's absolute URL. Needed when the app's public URL isn't
+         * reachable from inside the app container itself (e.g. a separate nginx container in dev).
+         */
+        'preview_base_url' => env('THUMBNAIL_PREVIEW_BASE_URL'),
+
+        /**
          * The amount of time in minutes that must pass before a thumbnail is generated again from a changed dungeon route.
          */
         'refresh_min' => 30,
