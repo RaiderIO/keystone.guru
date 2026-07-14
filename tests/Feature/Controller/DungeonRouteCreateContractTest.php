@@ -467,7 +467,7 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
     }
 
     #[Test]
-    public function saveNew_givenClassicSpeedrunThenSwitchFixture_pinsStaleDifficultyBugIssue3535(): void
+    public function saveNew_givenClassicSpeedrunThenSwitchFixture_discardsStaleDifficultyIssue3535(): void
     {
         // Arrange
         Queue::fake();
@@ -492,10 +492,11 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
 
             $dungeonRoute = $this->findCreatedRoute($dungeon, $user);
             $this->assertNotNull($dungeonRoute);
-            // BUG #3535, pinned as-is (not a fix): dungeondifficultyselect.js only hides the difficulty container
-            // on switch-away, it never clears the select's stale value, so a non-speedrun dungeon can end up with
-            // a persisted dungeon_difficulty left over from a previously-selected speedrun dungeon.
-            $this->assertSame(1, $dungeonRoute->getRawOriginal('dungeon_difficulty'));
+            // Regression test for GitHub issue #3535: dungeondifficultyselect.js now clears the select's stale
+            // value on switch-away, and DungeonRouteSaveService::resolveDungeonDifficulty() discards any
+            // submitted difficulty for a non-speedrun dungeon as defense in depth, so no stale difficulty
+            // left over from a previously-selected speedrun dungeon survives onto this route.
+            $this->assertNull($dungeonRoute->getRawOriginal('dungeon_difficulty'));
         } finally {
             $dungeonRoute?->delete();
         }

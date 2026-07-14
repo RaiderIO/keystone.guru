@@ -436,21 +436,27 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
 
     /**
      * Resolves the dungeon difficulty for speedrun-enabled dungeons: keeps the chosen difficulty when it is one of the
-     * dungeon's enabled speedrun difficulties, otherwise falls back to the first enabled difficulty.
+     * dungeon's enabled speedrun difficulties, otherwise falls back to the first enabled difficulty. Non-speedrun
+     * dungeons never have a difficulty, so a submitted value is discarded (defense in depth: see GitHub issue #3535,
+     * where a stale value from a previously-selected speedrun dungeon could otherwise survive a dungeon switch).
      */
     private function resolveDungeonDifficulty(Dungeon $dungeon, ?int $difficulty): ?int
     {
-        if ($difficulty !== null && $dungeon->speedrun_enabled) {
-            $enabledDifficulties = $dungeon->getEnabledSpeedrunDifficulties();
-
-            if (in_array($difficulty, $enabledDifficulties, true)) {
-                return $difficulty;
-            }
-
-            return $enabledDifficulties[0] ?? $difficulty;
+        if (!$dungeon->speedrun_enabled) {
+            return null;
         }
 
-        return $difficulty;
+        if ($difficulty === null) {
+            return null;
+        }
+
+        $enabledDifficulties = $dungeon->getEnabledSpeedrunDifficulties();
+
+        if (in_array($difficulty, $enabledDifficulties, true)) {
+            return $difficulty;
+        }
+
+        return $enabledDifficulties[0] ?? $difficulty;
     }
 
     /**

@@ -130,10 +130,11 @@ describe('CommonDungeonrouteCreateDungeondifficultyselect.activate', () => {
         expect(document.getElementById('dungeon_difficulty_select_container').style.display).not.toBe('none');
     });
 
-    it('activate_givenDungeonChangedFromSpeedrunToNonSpeedrun_hidesContainerButLeavesStaleOptionsAndSelection', () => {
-        // See GitHub issue #3535: dungeonSelectionChanged() only ever *hides* the container on
-        // switch-away from a speedrun dungeon - it never clears the difficulty select's options or
-        // selection. This pins that current (buggy) behaviour; it is not asserting the desired fix.
+    it('activate_givenDungeonChangedFromSpeedrunToNonSpeedrun_hidesContainerAndClearsOptionsAndSelection', () => {
+        // See GitHub issue #3535: dungeonSelectionChanged() used to only *hide* the container on
+        // switch-away from a speedrun dungeon, leaving the difficulty select's stale options/selection
+        // in place (a hidden <select> is still a successful form control, so the stale value would be
+        // submitted). It now also clears the options so nothing stale can be submitted.
         // Arrange
         buildAndActivate(CLASSIC_DUNGEON_SSC_ID);
         const $difficultySelect = $('#dungeon_difficulty_select');
@@ -145,8 +146,6 @@ describe('CommonDungeonrouteCreateDungeondifficultyselect.activate', () => {
 
         // Assert
         expect(document.getElementById('dungeon_difficulty_select_container').style.display).toBe('none');
-        const staleOptions = Array.from(document.getElementById('dungeon_difficulty_select').options);
-        expect(staleOptions.map((option) => option.value)).toEqual([String(DIFFICULTY_10_MAN), String(DIFFICULTY_25_MAN)]);
-        expect($difficultySelect.val()).toBe(String(DIFFICULTY_10_MAN));
+        expect(document.getElementById('dungeon_difficulty_select').options.length).toBe(0);
     });
 });

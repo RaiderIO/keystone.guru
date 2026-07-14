@@ -311,11 +311,11 @@ describe('createroute.serialization', () => {
         }));
     });
 
-    it('serializeForm_givenSpeedrunDungeonSwitchedToNonSpeedrun_stillSubmitsStaleDifficulty', () => {
-        // Arrange: see GitHub issue #3535. dungeondifficultyselect.js only hides the container on
-        // switch-away from a speedrun dungeon; it never clears the select's options or selection, so
-        // the hidden <select> still submits the stale value from the previously-selected dungeon.
-        // This test pins that current (buggy) behaviour - it is not asserting the desired fix.
+    it('serializeForm_givenSpeedrunDungeonSwitchedToNonSpeedrun_clearsDifficultyInsteadOfSubmittingStaleValue', () => {
+        // Arrange: regression test for GitHub issue #3535. dungeondifficultyselect.js used to only hide
+        // the container on switch-away from a speedrun dungeon, leaving the select's stale options/
+        // selection in place, so the hidden <select> would still submit the stale value from the
+        // previously-selected dungeon. It now also clears the options.
         const form    = buildCreateRouteForm({
             gameVersion: 'classic',
             hasTeams: true,
