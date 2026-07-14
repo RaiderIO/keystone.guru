@@ -41,6 +41,14 @@ function delay(timeout) {
             domain: new URL(process.argv[2]).hostname
         });
 
+        // Force the default pull-connection weight; the page's own cookie-default bootstrap uses secure
+        // cookies which are rejected on plain-http (internal) URLs, and a NaN weight draws invisible lines
+        await page.setCookie({
+            name: 'kill_zone_path_weight',
+            value: '5',
+            domain: new URL(process.argv[2]).hostname
+        });
+
         await page.setViewport({width: Math.max(process.argv[4] ?? 0, 768), height: Math.max(process.argv[5] ?? 0, 512)});
 
         console.log(`Navigating to ${process.argv[2]}`);

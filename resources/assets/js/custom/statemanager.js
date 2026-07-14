@@ -567,7 +567,11 @@ class StateManager extends Signalable {
      * @returns {number}
      */
     getKillZonePathWeight() {
-        return parseInt(Cookies.get('kill_zone_path_weight'));
+        let weight = parseInt(Cookies.get('kill_zone_path_weight'));
+
+        // The cookie may be missing (e.g. cookie-less headless renders where secure cookies are rejected);
+        // fall back to the default weight rather than returning NaN, which would draw invisible lines
+        return isNaN(weight) ? c.map.polyline.killzonepath.weight : weight;
     }
 
     /**
