@@ -31,6 +31,7 @@ use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\MDTImport;
+use App\Models\Npc\NpcClassification;
 use App\Models\PageView;
 use App\Models\Path;
 use App\Models\PublishedState;
@@ -858,10 +859,11 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
     /**
      * Gets the summed enemy forces for each kill zone (pull) in this route, ordered by the kill zone's
-     * index. Used to render a compact "route fingerprint" bar graph. This is a single aggregate query
-     * that mirrors the enemy-forces accounting of getEnemyForces() but groups per pull instead of per route.
+     * index, along with whether that pull contains a boss. Used to render a compact "route fingerprint"
+     * bar graph. This is a single aggregate query that mirrors the enemy-forces accounting of
+     * getEnemyForces() but groups per pull instead of per route.
      *
-     * @return Collection<int, int>
+     * @return Collection<int, stdClass> Each row exposes an int `enemy_forces` and a bool `has_boss`.
      */
     public function getEnemyForcesPerKillZone(): Collection
     {
@@ -888,8 +890,15 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             left join `mapping_versions` on `mapping_versions`.`id` = `dungeon_routes`.`mapping_version_id`
         ' : '';
 
+        $bossClassificationIds = sprintf(
+            '%d, %d',
+            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
+            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
+        );
+
         $queryResult = DB::select("
             select `kill_zones`.`index` as `index`,
+               MAX(IF(`npcs`.`classification_id` IN ({$bossClassificationIds}), 1, 0)) as has_boss,
                CAST(IFNULL(
                        IF(dungeon_routes.teeming = 1,
                           SUM(
@@ -928,7 +937,13 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             order by `kill_zones`.`index`
             ", ['id' => $this->id]);
 
-        return collect($queryResult)->map(static fn(stdClass $row): int => (int)$row->enemy_forces);
+        return collect($queryResult)->map(static function (stdClass $row): stdClass {
+            $result               = new stdClass();
+            $result->enemy_forces = (int)$row->enemy_forces;
+            $result->has_boss     = (bool)$row->has_boss;
+
+            return $result;
+        });
     }
 
     public function getEnemyForcesPercentage(): int

@@ -8,8 +8,11 @@ use App\Models\Floor\Floor;
  * @var Floor                $floor
  * @var float                $defaultZoom
  * @var string               $mapFacadeStyle
+ * @var bool                 $thickLines
  * @var array<string, mixed> $parameters
  */
+
+$thickLines ??= true;
 ?>
 
 @extends('layouts.map', [
@@ -43,7 +46,7 @@ use App\Models\Floor\Floor;
         'edit' => false,
         'echo' => false,
         'noUI' => true,
-        'thumbnail' => true,
+        'thumbnail' => $thickLines,
         'defaultZoom' => $defaultZoom,
         'mapFacadeStyle' => $mapFacadeStyle,
         'floor' => $floor,

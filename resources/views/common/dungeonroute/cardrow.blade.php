@@ -65,21 +65,8 @@ use (
             @include('common.user.name', ['user' => $dungeonroute->author, 'link' => true, 'showAnonIcon' => false])
         </div>
     </div>
+    <?php // Stats are ordered rarest -> always-present so the ever-present pull graph and views anchor the right edge ?>
     <div class="leaderboard_stats d-flex align-items-center text-muted small ms-auto">
-        @include('common.dungeonroute.pullgraph', [
-            'pullForces'  => $pullForces,
-            'chartHeight' => 22,
-            'fill'        => 'rgba(255, 255, 255, 0.45)',
-            'graphClass'  => 'leaderboard_pull_graph me-3',
-            'tooltipKey'  => 'view_common.dungeonroute.cardrow.pulls',
-        ])
-        @if( $showLevel )
-            <span class="leaderboard_level_chip me-3">
-                {{ $dungeonroute->level_min === $dungeonroute->level_max
-                    ? sprintf('+%d', $dungeonroute->level_min)
-                    : sprintf('+%d – +%d', $dungeonroute->level_min, $dungeonroute->level_max) }}
-            </span>
-        @endif
         @if( $enemyForcesWarning )
             <span class="leaderboard_enemy_forces text-warning me-3">
                 <i class="fas fa-exclamation-triangle"></i> {{ sprintf('%s%%', $enemyForcesPercentage) }}
@@ -90,16 +77,31 @@ use (
                 @include('common.dungeonroute.rating', ['count' => $ratingCount, 'rating' => (int) round($dungeonroute->rating)])
             </span>
         @endif
-        <span class="leaderboard_views me-3" data-bs-toggle="tooltip"
-              title="{{ sprintf(__('view_common.dungeonroute.cardrow.views'), $dungeonroute->views) }}">
-            <i class="fas fa-eye"></i> {{ abbreviateNumber($dungeonroute->views) }}
-        </span>
         @if( $favoritesCount > 0 )
             <span class="leaderboard_favorites me-3" data-bs-toggle="tooltip"
                   title="{{ sprintf(__('view_common.dungeonroute.cardrow.favorites'), $favoritesCount) }}">
                 <i class="fas fa-heart"></i> {{ abbreviateNumber($favoritesCount) }}
             </span>
         @endif
+        @if( $showLevel )
+            <span class="leaderboard_level_chip me-3">
+                {{ $dungeonroute->level_min === $dungeonroute->level_max
+                    ? sprintf('+%d', $dungeonroute->level_min)
+                    : sprintf('+%d – +%d', $dungeonroute->level_min, $dungeonroute->level_max) }}
+            </span>
+        @endif
+        @include('common.dungeonroute.pullgraph', [
+            'pullForces'  => $pullForces,
+            'chartHeight' => 22,
+            'fill'        => 'rgba(255, 255, 255, 0.45)',
+            'bossFill'    => 'rgba(240, 180, 60, 0.9)',
+            'graphClass'  => 'leaderboard_pull_graph me-3',
+            'tooltipKey'  => 'view_common.dungeonroute.cardrow.pulls',
+        ])
+        <span class="leaderboard_views" data-bs-toggle="tooltip"
+              title="{{ sprintf(__('view_common.dungeonroute.cardrow.views'), $dungeonroute->views) }}">
+            <i class="fas fa-eye"></i> {{ abbreviateNumber($dungeonroute->views) }}
+        </span>
     </div>
     <div class="leaderboard_actions">
         <button id="route_menu_button_{{ $dungeonroute->public_key }}"

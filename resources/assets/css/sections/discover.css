@@ -250,6 +250,9 @@
 .card_dungeonroute.leaderboard_row .leaderboard_pull_graph {
     display: inline-flex;
     align-items: center;
+    justify-content: flex-end;
+    /* Fixed right-aligned slot (30 bars * 4px max) so the always-present graph + views columns line up across rows */
+    min-width: 7.5rem;
     vertical-align: middle;
 }
 

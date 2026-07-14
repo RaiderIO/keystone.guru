@@ -31,6 +31,13 @@ class DungeonRoutePreviewUrlFormRequest extends DungeonRouteBaseUrlFormRequest
                 'nullable',
                 'string',
             ],
+            // Whether the pull-connection lines should be thickened for a miniature render; the larger
+            // hero variant passes 0 so its lines keep the normal width.
+            'thicklines' => [
+                'sometimes',
+                'nullable',
+                'boolean',
+            ],
         ]);
     }
 }

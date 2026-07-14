@@ -171,6 +171,8 @@ class ThumbnailService implements ThumbnailServiceInterface
                     'floorIndex'   => $floorIndex,
                     'secret'       => config('keystoneguru.thumbnail.preview_secret'),
                     'z'            => $zoomLevel,
+                    // The large hero render keeps normal-width lines; the small standard render thickens them
+                    'thicklines' => $variant === DungeonRouteThumbnail::VARIANT_HERO ? 0 : 1,
                 ]),
                 // Second argument; where to save the resulting image
                 $tmpFile,
@@ -274,18 +276,17 @@ class ThumbnailService implements ThumbnailServiceInterface
         } else {
             /** @var Floor $floor */
             foreach ($dungeonRoute->dungeon->floorsForMapFacade($dungeonRoute->mappingVersion, true)->active()->get() as $floor) {
-                // Set it for processing in a queue - one job per variant, so a regular refresh produces
-                // both the standard thumbnail and the larger hero-band variant.
-                foreach ([DungeonRouteThumbnail::VARIANT_STANDARD, DungeonRouteThumbnail::VARIANT_HERO] as $variant) {
-                    ProcessRouteFloorThumbnail::dispatch($dungeonRoute, $floor->index, $force, 0, $variant);
-                    $result = true;
+                // A regular refresh only produces the standard thumbnail. The larger hero variant is expensive
+                // and only needed for the handful of routes shown in the discovery hero band, so it is generated
+                // separately by the hourly EnsureHeroThumbnails command (see queueHeroThumbnailRefresh).
+                ProcessRouteFloorThumbnail::dispatch($dungeonRoute, $floor->index, $force, 0, DungeonRouteThumbnail::VARIANT_STANDARD);
+                $result = true;
 
-                    $this->log->queueThumbnailRefreshDispatchedJob(
-                        $dungeonRoute->public_key,
-                        $floor->index,
-                        $force,
-                    );
-                }
+                $this->log->queueThumbnailRefreshDispatchedJob(
+                    $dungeonRoute->public_key,
+                    $floor->index,
+                    $force,
+                );
             }
         }
 
@@ -296,6 +297,33 @@ class ThumbnailService implements ThumbnailServiceInterface
         ]);
         // Re-enable them
         $dungeonRoute->timestamps = true;
+
+        return $result;
+    }
+
+    public function queueHeroThumbnailRefresh(DungeonRoute $dungeonRoute, bool $force = false): bool
+    {
+        if ($dungeonRoute->mappingVersion === null) { // @phpstan-ignore identical.alwaysFalse
+            return false;
+        }
+
+        // Skip routes whose hero variant already exists and is newer than the route's last content change
+        if (!$force && $this->hasFreshHeroThumbnail($dungeonRoute)) {
+            return false;
+        }
+
+        $result = false;
+        /** @var Floor $floor */
+        foreach ($dungeonRoute->dungeon->floorsForMapFacade($dungeonRoute->mappingVersion, true)->active()->get() as $floor) {
+            ProcessRouteFloorThumbnail::dispatch($dungeonRoute, $floor->index, true, 0, DungeonRouteThumbnail::VARIANT_HERO);
+            $result = true;
+
+            $this->log->queueThumbnailRefreshDispatchedJob(
+                $dungeonRoute->public_key,
+                $floor->index,
+                true,
+            );
+        }
 
         return $result;
     }
@@ -456,6 +484,22 @@ class ThumbnailService implements ThumbnailServiceInterface
     public function hasThumbnailsGenerated(DungeonRoute $dungeonRoute): bool
     {
         return $dungeonRoute->dungeonRouteThumbnails()->where('custom', false)->count() > 0;
+    }
+
+    /**
+     * A hero thumbnail is fresh when it exists and was rendered at or after the route's last content change.
+     * Thumbnail renders intentionally do not bump the route's updated_at, so an edited route reliably reads
+     * as stale until the hero variant is regenerated.
+     */
+    private function hasFreshHeroThumbnail(DungeonRoute $dungeonRoute): bool
+    {
+        $latestHeroRenderedAt = $dungeonRoute->dungeonRouteThumbnails()
+            ->where('custom', false)
+            ->where('variant', DungeonRouteThumbnail::VARIANT_HERO)
+            ->max('updated_at');
+
+        return $latestHeroRenderedAt !== null
+            && Carbon::parse($latestHeroRenderedAt)->greaterThanOrEqualTo($dungeonRoute->updated_at);
     }
 
     private function attachThumbnailToDungeonRoute(

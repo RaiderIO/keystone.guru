@@ -12,6 +12,11 @@ interface ThumbnailServiceInterface
     public function queueThumbnailRefresh(DungeonRoute $dungeonRoute, bool $force = false): bool;
 
     /**
+     * Queues the larger hero-band thumbnail variant for a route, skipping it when a fresh hero already exists.
+     */
+    public function queueHeroThumbnailRefresh(DungeonRoute $dungeonRoute, bool $force = false): bool;
+
+    /**
      * @param Collection<int, DungeonRoute> $dungeonRoutes
      */
     public function queueThumbnailRefreshIfMissing(Collection $dungeonRoutes, bool $force = false): bool;

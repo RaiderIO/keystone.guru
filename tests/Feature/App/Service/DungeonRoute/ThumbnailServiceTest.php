@@ -2,12 +2,14 @@
 
 namespace Tests\Feature\App\Service\DungeonRoute;
 
+use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnail;
 use App\Models\File;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\DungeonRoute\Logging\ThumbnailServiceLoggingInterface;
 use App\Service\DungeonRoute\ThumbnailService;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -190,6 +192,110 @@ final class ThumbnailServiceTest extends PublicTestCase
             );
         } finally {
             DungeonRouteThumbnail::where('dungeon_route_id', $dungeonRoute->id)->get()->each->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function queueHeroThumbnailRefresh_givenNoHeroThumbnail_queuesAHeroJob(): void
+    {
+        // Arrange
+        Queue::fake();
+        $dungeon        = $this->getDungeonWithNonFacadeFloor();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $dungeonRoute   = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        $service = $this->buildService($this->createMockPublic(ThumbnailServiceLoggingInterface::class));
+
+        try {
+            // Act
+            $result = $service->queueHeroThumbnailRefresh($dungeonRoute);
+
+            // Assert
+            $this->assertTrue($result);
+            Queue::assertPushed(ProcessRouteFloorThumbnail::class);
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function queueHeroThumbnailRefresh_givenFreshHeroThumbnail_doesNotQueue(): void
+    {
+        // Arrange
+        Queue::fake();
+        $dungeon        = $this->getDungeonWithNonFacadeFloor();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $floor          = $dungeon->floors()->where('facade', false)->first();
+        $dungeonRoute   = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        // A hero thumbnail rendered after the route's last content change is fresh. Timestamps are on, so
+        // pin updated_at via a query-builder update (the freshness check reads it straight from the DB).
+        $heroThumbnail = DungeonRouteThumbnail::create([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'floor_id'         => $floor->id,
+            'custom'           => false,
+            'variant'          => DungeonRouteThumbnail::VARIANT_HERO,
+        ]);
+        DungeonRouteThumbnail::where('id', $heroThumbnail->id)
+            ->update(['updated_at' => $dungeonRoute->updated_at->copy()->addMinute()]);
+
+        $service = $this->buildService($this->createMockPublic(ThumbnailServiceLoggingInterface::class));
+
+        try {
+            // Act
+            $result = $service->queueHeroThumbnailRefresh($dungeonRoute);
+
+            // Assert
+            $this->assertFalse($result);
+            Queue::assertNothingPushed();
+        } finally {
+            $heroThumbnail->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function queueHeroThumbnailRefresh_givenStaleHeroThumbnail_queuesAHeroJob(): void
+    {
+        // Arrange
+        Queue::fake();
+        $dungeon        = $this->getDungeonWithNonFacadeFloor();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $floor          = $dungeon->floors()->where('facade', false)->first();
+        $dungeonRoute   = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        // A hero rendered before the route's last content change is stale and must be regenerated. Pin the
+        // timestamp via a query-builder update since model timestamps would otherwise force it to now().
+        $heroThumbnail = DungeonRouteThumbnail::create([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'floor_id'         => $floor->id,
+            'custom'           => false,
+            'variant'          => DungeonRouteThumbnail::VARIANT_HERO,
+        ]);
+        DungeonRouteThumbnail::where('id', $heroThumbnail->id)
+            ->update(['updated_at' => $dungeonRoute->updated_at->copy()->subDay()]);
+
+        $service = $this->buildService($this->createMockPublic(ThumbnailServiceLoggingInterface::class));
+
+        try {
+            // Act
+            $result = $service->queueHeroThumbnailRefresh($dungeonRoute);
+
+            // Assert
+            $this->assertTrue($result);
+            Queue::assertPushed(ProcessRouteFloorThumbnail::class);
+        } finally {
+            $heroThumbnail->delete();
             $dungeonRoute->delete();
         }
     }

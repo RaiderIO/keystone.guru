@@ -310,7 +310,9 @@ class DungeonRouteController extends Controller
             'mapContext'     => $mapContextService->createMapContextDungeonRoute($dungeonroute, $mapFacadeStyle),
             'defaultZoom'    => $zoomLevel,
             'mapFacadeStyle' => $mapFacadeStyle,
-            'parameters'     => $request->validated(),
+            // Thicken pull lines for miniatures by default; the hero variant opts out via thicklines=0
+            'thickLines' => $request->boolean('thicklines', true),
+            'parameters' => $request->validated(),
         ]);
     }
 

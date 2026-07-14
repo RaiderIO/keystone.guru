@@ -150,9 +150,9 @@ final class CardHeroTest extends PublicTestCase
     }
 
     #[Test]
-    public function render_givenRouteWithKillZones_returnsPullGraphBarPerPull(): void
+    public function render_givenRouteWithForcelessKillZones_hidesPullGraph(): void
     {
-        // Arrange
+        // Arrange - kill zones without enemies grant no enemy forces and hold no boss, so they carry no information
         $dungeonroute = DungeonRoute::factory()->create();
         foreach ([1, 2, 3] as $index) {
             KillZone::factory()->create([
@@ -170,8 +170,7 @@ final class CardHeroTest extends PublicTestCase
             ])->render();
 
             // Assert
-            $this->assertStringContainsString('hero_pull_graph', $html);
-            $this->assertSame(3, substr_count($html, '<rect'));
+            $this->assertStringNotContainsString('hero_pull_graph', $html);
         } finally {
             $dungeonroute->killZones()->delete();
             $dungeonroute->delete();
