@@ -39,6 +39,14 @@ class CommonDungeonrouteCreateDungeondifficultyselect extends InlineCode {
                 refreshSelectPickers();
                 $dungeonDifficultySelectContainer.show();
             } else {
+                // Only touch the select when it actually still holds options from a previously-selected
+                // speedrun dungeon: refreshSelectPickers() is a page-wide sync, so calling it unconditionally
+                // here (even when there is nothing to clear) would prematurely initialize Tom Select on other
+                // not-yet-activated .selectpicker elements on the page (see GitHub issue #3535).
+                if ($dungeonDifficultySelect.find('option').length > 0) {
+                    $dungeonDifficultySelect.find('option').remove();
+                    refreshSelectPickers();
+                }
                 $dungeonDifficultySelectContainer.hide();
             }
         };
