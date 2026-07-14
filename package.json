@@ -19,7 +19,7 @@
         "fast-glob": "^3.2.12",
         "jquery": "^3.6.0",
         "jsdom": "^29.1.1",
-        "laravel-echo": "^2.2.6",
+        "laravel-echo": "^2.4.0",
         "lodash": "^4.18.1",
         "php-array-parser": "^1.0.1",
         "pusher-js": "^8.5.0",
