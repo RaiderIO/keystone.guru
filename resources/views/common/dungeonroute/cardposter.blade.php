@@ -45,24 +45,24 @@ use (
      class="card_dungeonroute poster m-xl-1 mx-0 my-3"
      style="background-image: url('{{ $backgroundUrl }}');">
     <div class="d-flex flex-column h-100 poster_scrim">
-        <div class="row no-gutters p-2 poster_top">
+        <div class="row g-0 p-2 poster_top">
             <div class="col">
                 @if( !$dungeonroute->mappingVersion->isLatestForDungeon() )
                     <i class="fas fa-exclamation-triangle text-warning"
                        title="{{ __('view_common.dungeonroute.card.outdated_mapping_version') }}"
-                       data-toggle="tooltip"></i>
+                       data-bs-toggle="tooltip"></i>
                 @endif
             </div>
             <div class="col-auto">
                 <button id="route_menu_button_{{ $dungeonroute->public_key }}"
                         class="btn btn-sm menu_actions_btn py-0"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-ellipsis-v"></i>
                 </button>
-                <div class="dropdown-menu dropdown-menu-right"
+                <div class="dropdown-menu dropdown-menu-end"
                      aria-labelledby="route_menu_button_{{ $dungeonroute->public_key }}">
-                    <a class="dropdown-item" href="#" data-toggle="modal"
-                       data-target="#userreport_dungeonroute_modal"
+                    <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                       data-bs-target="#userreport_dungeonroute_modal"
                        data-publickey="{{ $dungeonroute->public_key }}">
                         <i class="fas fa-flag"></i> {{ __('view_common.dungeonroute.card.report') }}
                     </a>
@@ -79,7 +79,7 @@ use (
 
         <div class="flex-fill"></div>
 
-        <div class="row no-gutters px-2 align-items-end poster_title_row">
+        <div class="row g-0 px-2 align-items-end poster_title_row">
             <div class="col">
                 <h4 class="mb-0 title">
                     <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}">
@@ -87,7 +87,7 @@ use (
                     </a>
                 </h4>
             </div>
-            <div class="col-auto pl-2 poster_enemy_forces">
+            <div class="col-auto ps-2 poster_enemy_forces">
                 @if( $enemyForcesWarning )
                     <span class="text-warning"><i class="fas fa-exclamation-triangle"></i></span>
                 @else
@@ -98,7 +98,7 @@ use (
         </div>
 
         @if( $dungeonroute->level_min !== $dungeonroute->season?->key_level_min || $dungeonroute->level_max !== $dungeonroute->season?->key_level_max)
-            <div class="row no-gutters px-2 pt-1 poster_level">
+            <div class="row g-0 px-2 pt-1 poster_level">
                 <div class="col">
                     @include('common.dungeonroute.level', [
                         'season' => $dungeonroute->season,
@@ -110,12 +110,12 @@ use (
             </div>
         @endif
 
-        <div class="row no-gutters bg-card-footer px-2 py-1 poster_footer">
+        <div class="row g-0 bg-card-footer px-2 py-1 poster_footer">
             <div class="col">
                 <div class="poster_author d-flex align-items-center">
                     @include('common.user.name', ['user' => $dungeonroute->author, 'link' => true, 'showAnonIcon' => false])
                     {{-- Reserved slot for the future Raider.IO author trust badge (see #3349) --}}
-                    <span class="poster_trust_badge ml-1"></span>
+                    <span class="poster_trust_badge ms-1"></span>
                 </div>
                 <div class="poster_social small text-muted">
                     @if( $ratingCount > 0 )
@@ -123,12 +123,12 @@ use (
                             @include('common.dungeonroute.rating', ['count' => $ratingCount, 'rating' => (int) round($dungeonroute->rating)])
                         </span>
                     @endif
-                    <span class="poster_views ml-1" data-toggle="tooltip"
+                    <span class="poster_views ms-1" data-bs-toggle="tooltip"
                           title="{{ sprintf(__('view_common.dungeonroute.poster.views'), $dungeonroute->views) }}">
                         <i class="fas fa-eye"></i> {{ $dungeonroute->views }}
                     </span>
                     @if( $favoritesCount !== null )
-                        <span class="poster_favorites ml-1" data-toggle="tooltip"
+                        <span class="poster_favorites ms-1" data-bs-toggle="tooltip"
                               title="{{ sprintf(__('view_common.dungeonroute.poster.favorites'), $favoritesCount) }}">
                             <i class="fas fa-heart"></i> {{ $favoritesCount }}
                         </span>
