@@ -6,10 +6,26 @@ return [
         'dungeon' => [
             'overview' => [
                 'weekly_route'               => 'Raider.IO Weekly Route',
+                'weekly_routes'              => 'Raider.IO weekly routes',
+                'community_routes'           => 'Community routes',
                 'popular'                    => 'Popular routes',
                 'popular_by_current_affixes' => 'Popular routes by current affixes',
                 'popular_by_next_affixes'    => 'Popular routes by next affixes',
                 'newly_published_routes'     => 'Newly published routes',
+                'archetypes'                 => [
+                    'pug_friendly' => [
+                        'label'       => 'PUG-friendly',
+                        'description' => 'Forgiving pulls for groups of strangers',
+                    ],
+                    'expert' => [
+                        'label'       => 'Expert',
+                        'description' => 'Optimized for coordinated groups',
+                    ],
+                    'title' => [
+                        'label'       => 'Title',
+                        'description' => 'The route the top 0.5% use to push rating',
+                    ],
+                ],
             ],
         ],
         'discover' => [

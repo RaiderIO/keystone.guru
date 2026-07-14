@@ -71,6 +71,183 @@
     display: none;
 }
 
+/** Hero card - the one cinematic element of the reworked discover page. Map demoted to a scrimmed
+    background, archetype/metadata in the foreground. */
+.card_dungeonroute.hero {
+    position: relative;
+    min-height: 15rem;
+    border-radius: 8px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card_dungeonroute.hero:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+}
+
+.card_dungeonroute.hero .hero_scrim {
+    min-height: 15rem;
+    background: linear-gradient(to bottom,
+        rgba(0, 0, 0, 0.55) 0%,
+        rgba(0, 0, 0, 0.15) 30%,
+        rgba(0, 0, 0, 0.55) 70%,
+        rgba(0, 0, 0, 0.9) 100%);
+}
+
+.card_dungeonroute.hero .hero_eyebrow {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+.card_dungeonroute.hero .hero_title a {
+    color: #fff;
+    font-weight: 700;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+.card_dungeonroute.hero .hero_title a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.card_dungeonroute.hero .hero_description {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.card_dungeonroute.hero .hero_author a {
+    color: rgba(255, 255, 255, 0.85);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.card_dungeonroute.hero .hero_stats {
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.card_dungeonroute.hero .hero_level_chip {
+    display: inline-block;
+    padding: 0.1rem 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+.card_dungeonroute.hero .menu_actions_btn i,
+.card_dungeonroute.hero .hero_top .text-warning {
+    color: rgba(255, 255, 255, 0.85);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+/** Community leaderboard - ranked list of routes, one route per row. */
+.dungeonroute_leaderboard {
+    display: flex;
+    flex-direction: column;
+}
+
+.card_dungeonroute.leaderboard_row {
+    padding: 0.5rem 0.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    transition: background-color 0.12s ease;
+}
+
+.card_dungeonroute.leaderboard_row:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+}
+
+.card_dungeonroute.leaderboard_row .leaderboard_rank {
+    flex: 0 0 2.75rem;
+    width: 2.75rem;
+    padding-right: 0.75rem;
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.card_dungeonroute.leaderboard_row .leaderboard_thumbnail {
+    flex: 0 0 72px;
+    width: 72px;
+    height: 44px;
+    margin-right: 0.75rem;
+    border-radius: 6px;
+    /* Subtle always-on backdrop so a transparent fallback image still reads as an intentional slot */
+    background-color: rgba(255, 255, 255, 0.05);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.card_dungeonroute.leaderboard_row .leaderboard_main {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.card_dungeonroute.leaderboard_row .leaderboard_title a {
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.card_dungeonroute.leaderboard_row .leaderboard_title a:hover {
+    text-decoration: underline;
+}
+
+.card_dungeonroute.leaderboard_row .leaderboard_author a {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Fixed-ish column widths so the stats scan as vertical columns across rows */
+.card_dungeonroute.leaderboard_row .leaderboard_level_chip {
+    display: inline-block;
+    min-width: 5rem;
+    padding: 0.1rem 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.6);
+    text-align: end;
+    white-space: nowrap;
+}
+
+.card_dungeonroute.leaderboard_row .leaderboard_rating {
+    display: inline-block;
+    min-width: 7rem;
+    text-align: end;
+}
+
+.card_dungeonroute.leaderboard_row .leaderboard_views {
+    display: inline-block;
+    min-width: 4.5rem;
+    text-align: end;
+}
+
+.card_dungeonroute.leaderboard_row .leaderboard_actions {
+    flex: 0 0 auto;
+    padding-left: 0.5rem;
+}
+
+.card_dungeonroute.leaderboard_row .menu_actions_btn i {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+@media (max-width: 767.98px) {
+    .card_dungeonroute.leaderboard_row .leaderboard_stats {
+        flex-basis: 100%;
+        margin-left: calc(2.75rem + 72px + 0.75rem) !important;
+        margin-top: 0.35rem;
+    }
+}
+
 /** Light Slider */
 @media (min-width: 1200px) {
     /* Container is required for the page load to have a proper width */

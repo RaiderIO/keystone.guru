@@ -381,7 +381,12 @@ class DungeonRouteDiscoverController extends Controller
             'dungeon'           => $dungeon,
             'currentAffixGroup' => $currentAffixGroup,
             'nextAffixGroup'    => $nextAffixGroup,
-            'dungeonroutes'     => [
+            // Weekly routes keep their WeeklyRoute DTOs so the reworked overview can read the archetype
+            // (WeeklyRoute->type); the flag-off panel consumes the plain route collection below.
+            'weeklyRoutes' => ($weeklyRoutes[$dungeon->key] ?? collect())
+                ->filter(fn(WeeklyRoute $weeklyRoute) => $weeklyRoute->dungeonRoute !== null)
+                ->values(),
+            'dungeonroutes' => [
                 'weekly_route' => ($weeklyRoutes[$dungeon->key] ?? collect())->map(fn(WeeklyRoute $weeklyRoute) => $weeklyRoute->dungeonRoute),
                 'thisweek'     => $currentAffixGroup === null ? collect() : $discoverService->popularByDungeonAndAffixGroup($dungeon, $currentAffixGroup),
                 'nextweek'     => $nextAffixGroup === null ? collect() : $discoverService->popularByDungeonAndAffixGroup($dungeon, $nextAffixGroup),

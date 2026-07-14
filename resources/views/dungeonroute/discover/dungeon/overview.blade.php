@@ -1,19 +1,23 @@
 <?php
 
+use App\Features\DungeonRouteListRework;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameVersion\GameVersion;
+use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use Illuminate\Support\Collection;
+use Laravel\Pennant\Feature;
 
 /**
- * @var AffixGroup               $currentAffixGroup
- * @var boolean                  $showAds
- * @var boolean                  $isMobile
- * @var Dungeon                  $dungeon
- * @var array<int, DungeonRoute> $dungeonroutes
- * @var GameVersion              $gameVersion
- * @var Collection<int, Dungeon> $gameVersionDungeons
+ * @var AffixGroup                  $currentAffixGroup
+ * @var boolean                     $showAds
+ * @var boolean                     $isMobile
+ * @var Dungeon                     $dungeon
+ * @var array<string, Collection<int, DungeonRoute>> $dungeonroutes
+ * @var Collection<int, WeeklyRoute> $weeklyRoutes
+ * @var GameVersion                 $gameVersion
+ * @var Collection<int, Dungeon>    $gameVersionDungeons
  */
 
 $showRoutesByAffixes = $gameVersion->has_seasons && $gameVersion->key !== GameVersion::GAME_VERSION_RETAIL;
@@ -45,6 +49,96 @@ $showRoutesByAffixes = $gameVersion->has_seasons && $gameVersion->key !== GameVe
 @section('content')
     @include('dungeonroute.discover.wallpaper', ['dungeon' => $dungeon])
 
+    @if(Feature::active(DungeonRouteListRework::class))
+        <?php
+        // The routes already promoted into the hero band are excluded from the leaderboard below
+        $heroRouteIds = collect();
+        $startRank    = 1;
+        ?>
+        @if($weeklyRoutes->isNotEmpty())
+            <div class="row mt-4 align-items-center discover_section_header">
+                <div class="col">
+                    <h5 class="mb-0">
+                        <a href="{{ config('keystoneguru.raider_io.weekly_route.url') }}" target="_blank">
+                            {{ __('view_dungeonroute.discover.dungeon.overview.weekly_routes') }}
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </h5>
+                </div>
+            </div>
+            <div class="row g-3 mt-0 discover_hero_band">
+                @foreach($weeklyRoutes as $weeklyRoute)
+                    @php($heroRouteIds->push($weeklyRoute->dungeonRoute->id))
+                    <div class="col">
+                        @include('common.dungeonroute.cardhero', [
+                            'dungeonroute' => $weeklyRoute->dungeonRoute,
+                            'archetype' => $weeklyRoute->type,
+                            'cache' => true,
+                        ])
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <?php $fallbackHero = $dungeonroutes['popular']->first(); ?>
+            @if($fallbackHero !== null)
+                <div class="row g-3 mt-4 discover_hero_band">
+                    <div class="col">
+                        @include('common.dungeonroute.cardhero', [
+                            'dungeonroute' => $fallbackHero,
+                            'archetype' => null,
+                            'cache' => true,
+                        ])
+                    </div>
+                </div>
+                @php($heroRouteIds->push($fallbackHero->id))
+                <?php $startRank = 2; ?>
+            @endif
+        @endif
+
+        <?php
+        /** @var Collection<int, DungeonRoute> $leaderboardRoutes */
+        $leaderboardRoutes = $dungeonroutes['popular']
+            ->reject(fn(DungeonRoute $route) => $heroRouteIds->contains($route->id))
+            ->values();
+        ?>
+        <div class="row mt-5 align-items-center discover_section_header">
+            <div class="col">
+                <h5 class="mb-0">
+                    {{ __('view_dungeonroute.discover.dungeon.overview.community_routes') }}
+                    <span class="text-muted">({{ $leaderboardRoutes->count() }})</span>
+                </h5>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col">
+                @include('common.dungeonroute.leaderboard', [
+                    'dungeonroutes' => $leaderboardRoutes,
+                    'startRank' => $startRank,
+                    'cache' => true,
+                ])
+            </div>
+        </div>
+
+        @if($dungeonroutes['popular']->count() >= config('keystoneguru.discover.limits.overview'))
+            <div class="row mt-4">
+                <div class="col-xl text-center">
+                    <a href="{{ route('dungeonroutes.discoverdungeon.popular', ['gameVersion' => $gameVersion, 'dungeon' => $dungeon]) }}">
+                        >> {{ __('view_dungeonroute.discover.panel.show_more') }}
+                    </a>
+                </div>
+            </div>
+        @endif
+
+        @if( !$adFree && !$isMobile)
+            <div align="center" class="mt-4">
+                @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header', 'reportAdPosition' => 'top-right'])
+            </div>
+        @endif
+
+        @component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
+            @include('common.modal.userreport.dungeonroute')
+        @endcomponent
+    @else
     @if($dungeonroutes['weekly_route']->isNotEmpty())
         @include('dungeonroute.discover.panel', [
             'gameVersion' => $gameVersion,
@@ -132,4 +226,5 @@ $showRoutesByAffixes = $gameVersion->has_seasons && $gameVersion->key !== GameVe
     @component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
         @include('common.modal.userreport.dungeonroute')
     @endcomponent
+    @endif
 @endsection

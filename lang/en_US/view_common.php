@@ -63,6 +63,14 @@ return [
             'views'     => '%s views',
             'favorites' => '%s favorites',
         ],
+        'cardhero' => [
+            'top_community_route' => 'Top community route',
+            'views'               => '%s views',
+        ],
+        'cardrow' => [
+            'new'   => 'New',
+            'views' => '%s views',
+        ],
         'table' => [
             'team'                  => 'Team',
             'affixes'               => 'Affixes',

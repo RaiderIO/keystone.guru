@@ -1372,6 +1372,12 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 'vertical',
                 'horizontal',
                 'horizontal_row',
+                'poster',
+                'hero_top',
+                'hero_pug_friendly',
+                'hero_expert',
+                'hero_title',
+                'row',
             ];
             $locales     = language()->allowed();
             $showAffixes = [

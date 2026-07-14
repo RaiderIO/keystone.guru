@@ -167,3 +167,19 @@ function array_insert_after(array $array, string $afterKey, array $insert): arra
 
     return array_merge($before, $insert, $after);
 }
+
+/**
+ * Formats a number in a compact human-readable form (6800 -> 6.8K) without requiring ext-intl.
+ */
+function abbreviateNumber(int $number): string
+{
+    if ($number >= 1000000) {
+        return sprintf('%sM', rtrim(rtrim(number_format($number / 1000000, 1), '0'), '.'));
+    }
+
+    if ($number >= 1000) {
+        return sprintf('%sK', rtrim(rtrim(number_format($number / 1000, 1), '0'), '.'));
+    }
+
+    return (string)$number;
+}
