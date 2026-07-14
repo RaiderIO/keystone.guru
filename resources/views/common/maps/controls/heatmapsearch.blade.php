@@ -49,7 +49,6 @@ use Illuminate\Support\Collection;
 $heatmapSearchSidebarState  = (int)($_COOKIE['heatmap_search_sidebar_state'] ?? 1);
 $defaultState               ??= $isMobile ? 0 : $heatmapSearchSidebarState;
 $heatmapSearchEnabled       = (bool)($_COOKIE['heatmap_search_enabled'] ?? 1);
-$heatmapShowOnTop           = (bool)($_COOKIE['map_heatmap_show_on_top'] ?? false);
 $filterExpandedCookiePrefix = 'heatmap_search_expanded';
 
 $isHeatmapSearchSidebarDefaultVisible = $defaultState === 1;
@@ -153,7 +152,6 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
     'leafletHeatOptionsBlurSelector' => '#heatmap_heat_option_blur',
     'leafletHeatOptionsGradientSelector' => '#heatmap_heat_option_gradient',
     'leafletHeatOptionsPaneSelector' => '#heatmap_heat_option_pane',
-    'showOnTopSelector' => '#heatmap_show_on_top',
 
     'dependencies' => ['common/maps/map'],
     // Mobile sidebar options
@@ -198,16 +196,6 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                     </button>
                 </div>
                 <div class="col">
-                </div>
-                <div class="col-auto">
-                    <div class="mr-1">
-                        <input id="heatmap_show_on_top" type="checkbox"
-                               {{ $heatmapShowOnTop ? 'checked' : '' }}
-                               data-toggle="toggle" data-width="100px" data-height="20px"
-                               data-onstyle="primary" data-offstyle="primary"
-                               data-on="{{ __('view_common.maps.controls.heatmapsearch.on_top_on') }}"
-                               data-off="{{ __('view_common.maps.controls.heatmapsearch.on_top_off') }}">
-                    </div>
                 </div>
                 <div class="col-auto">
                     <input id="heatmap_search_toggle" type="checkbox"

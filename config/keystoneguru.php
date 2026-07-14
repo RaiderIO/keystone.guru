@@ -374,6 +374,9 @@ return [
 
     'raiderio' => [
         'api_key' => env('RAIDERIO_API_KEY'),
+        // Local envs hit the real production RaiderIO API by default. Set this to true to use the
+        // local opensearch-backed mock service instead (requires a running local opensearch node).
+        'use_local_mock_service' => env('RAIDERIO_USE_LOCAL_MOCK_SERVICE', false),
     ],
 
     'patreon' => [

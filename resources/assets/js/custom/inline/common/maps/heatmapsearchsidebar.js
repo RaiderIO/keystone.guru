@@ -53,7 +53,6 @@
  * @property {String} leafletHeatOptionsBlurSelector
  * @property {String} leafletHeatOptionsGradientSelector
  * @property {String} leafletHeatOptionsPaneSelector
- * @property {String} showOnTopSelector
  *
  * @property {String} sidebarSelector
  * @property {String} sidebarToggleSelector
@@ -245,10 +244,6 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         });
 
         this._toggleHeatmap($enabledState.is(':checked'));
-
-        $(this.options.showOnTopSelector).on('change', function () {
-            getState().setHeatmapShowOnTop($(this).is(':checked'));
-        });
 
         this.sidebar.activate();
 

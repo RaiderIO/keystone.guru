@@ -63,6 +63,11 @@ class SettingsTabMap extends SettingsTab {
             getState().setHeatmapShowTooltips($(this).is(':checked'));
         });
 
+        // Heatmap render order
+        $('#map_settings_heatmap_show_on_top').bind('change', function () {
+            getState().setHeatmapShowOnTop($(this).is(':checked'));
+        });
+
         // Unkilled enemy opacity
         $('#map_settings_unkilled_enemy_opacity').bind('change', function () {
             getState().setUnkilledEnemyOpacity(parseInt($(this).val()));
