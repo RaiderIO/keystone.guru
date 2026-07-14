@@ -71,6 +71,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Override;
 use Psr\SimpleCache\InvalidArgumentException;
+use stdClass;
 
 /**
  * @property int                  $id
@@ -149,6 +150,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property EloquentCollection<int, DungeonRouteThumbnailJob>         $dungeonRouteThumbnailJobs
  * @property EloquentCollection<int, DungeonRouteThumbnail>            $dungeonRouteThumbnails
  * @property EloquentCollection<int, File>                             $thumbnails
+ * @property EloquentCollection<int, File>                             $heroThumbnails
  *
  * @method static Builder<self> visible()
  * @method static Builder<self> visibleWithUnlisted()
@@ -465,7 +467,16 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     public function thumbnails(): BelongsToMany
     {
         return $this->belongsToMany(File::class, 'dungeon_route_thumbnails')
-            ->where('dungeon_route_thumbnails.custom', false);
+            ->where('dungeon_route_thumbnails.custom', false)
+            ->where('dungeon_route_thumbnails.variant', DungeonRouteThumbnail::VARIANT_STANDARD);
+    }
+
+    /** @return BelongsToMany<File, $this> */
+    public function heroThumbnails(): BelongsToMany
+    {
+        return $this->belongsToMany(File::class, 'dungeon_route_thumbnails')
+            ->where('dungeon_route_thumbnails.custom', false)
+            ->where('dungeon_route_thumbnails.variant', DungeonRouteThumbnail::VARIANT_HERO);
     }
 
     /** @return HasMany<MapIcon, $this> */
@@ -746,6 +757,23 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     }
 
     /**
+     * Returns the URL of the larger hero-band thumbnail variant, falling back to the standard thumbnail
+     * URL when no hero variant has been generated yet (backwards compatible with pre-existing routes).
+     */
+    public function getHeroThumbnailUrl(): ?string
+    {
+        // Explicitly load the relations so this also works on routes hydrated in a collection (preventLazyLoading)
+        $this->loadMissing(['heroThumbnails', 'thumbnails']);
+
+        $heroThumbnail = $this->heroThumbnails->first();
+        if ($heroThumbnail !== null) {
+            return $heroThumbnail->getURL();
+        }
+
+        return $this->thumbnails->first()?->getURL();
+    }
+
+    /**
      * Gets the current amount of enemy forces that have been targeted for killing in this dungeon route.
      *
      * @noinspection UnknownColumnInspection
@@ -826,6 +854,81 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Gets the summed enemy forces for each kill zone (pull) in this route, ordered by the kill zone's
+     * index. Used to render a compact "route fingerprint" bar graph. This is a single aggregate query
+     * that mirrors the enemy-forces accounting of getEnemyForces() but groups per pull instead of per route.
+     *
+     * @return Collection<int, int>
+     */
+    public function getEnemyForcesPerKillZone(): Collection
+    {
+        if (!$this->exists) {
+            return collect();
+        }
+
+        $isShrouded = $this->getSeasonalAffix()?->key === Affix::AFFIX_SHROUDED;
+
+        // Ignore the shrouded query if we're not shrouded (make it fail)
+        $ifIsShroudedEnemyForcesQuery = $isShrouded ? '
+            IF(
+                enemies.seasonal_type = "shrouded",
+                mapping_versions.enemy_forces_shrouded,
+                IF(
+                    enemies.seasonal_type = "shrouded_zul_gamux",
+                    mapping_versions.enemy_forces_shrouded_zul_gamux,
+                    npc_enemy_forces.enemy_forces
+                )
+            )
+        ' : 'npc_enemy_forces.enemy_forces';
+
+        $ifIsShroudedJoins = $isShrouded ? '
+            left join `mapping_versions` on `mapping_versions`.`id` = `dungeon_routes`.`mapping_version_id`
+        ' : '';
+
+        $queryResult = DB::select("
+            select `kill_zones`.`index` as `index`,
+               CAST(IFNULL(
+                       IF(dungeon_routes.teeming = 1,
+                          SUM(
+                                  IF(
+                                          enemies.enemy_forces_override_teeming IS NOT NULL,
+                                          enemies.enemy_forces_override_teeming,
+                                          IF(
+                                              npc_enemy_forces.enemy_forces_teeming IS NOT NULL,
+                                              npc_enemy_forces.enemy_forces_teeming,
+                                              {$ifIsShroudedEnemyForcesQuery}
+                                          )
+                                      )
+                              ),
+                          SUM(
+                                  IF(
+                                          enemies.enemy_forces_override IS NOT NULL,
+                                          enemies.enemy_forces_override,
+                                          {$ifIsShroudedEnemyForcesQuery}
+                                      )
+                              )
+                           ), 0
+                   ) AS SIGNED) as enemy_forces
+            from `dungeon_routes`
+                     left join `dungeons` on `dungeons`.`id` = `dungeon_routes`.`dungeon_id`
+                     left join `kill_zones` on `kill_zones`.`dungeon_route_id` = `dungeon_routes`.`id`
+                     left join `kill_zone_enemies` on `kill_zone_enemies`.`kill_zone_id` = `kill_zones`.`id`
+                     left join `enemies` on coalesce(`enemies`.`mdt_npc_id`, `enemies`.`npc_id`) = `kill_zone_enemies`.`npc_id`
+                        AND `enemies`.`mdt_id` = `kill_zone_enemies`.`mdt_id`
+                        AND `enemies`.`mapping_version_id` = `dungeon_routes`.`mapping_version_id`
+                     left join `npcs` on `npcs`.`id` = `kill_zone_enemies`.`npc_id`
+                     left join `npc_enemy_forces` on `npcs`.`id` = `npc_enemy_forces`.`npc_id` AND `dungeon_routes`.`mapping_version_id` = `npc_enemy_forces`.`mapping_version_id`
+                     {$ifIsShroudedJoins}
+            where `dungeon_routes`.`id` = :id
+              and `kill_zones`.`id` is not null
+            group by `kill_zones`.`id`, `kill_zones`.`index`
+            order by `kill_zones`.`index`
+            ", ['id' => $this->id]);
+
+        return collect($queryResult)->map(static fn(stdClass $row): int => (int)$row->enemy_forces);
     }
 
     public function getEnemyForcesPercentage(): int

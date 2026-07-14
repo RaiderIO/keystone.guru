@@ -11,11 +11,12 @@ use Illuminate\Support\Carbon;
 use Override;
 
 /**
- * @property int  $id
- * @property int  $dungeon_route_id
- * @property int  $floor_id
- * @property int  $file_id
- * @property bool $custom           True if this thumbnail was requested through the API with custom parameters
+ * @property int    $id
+ * @property int    $dungeon_route_id
+ * @property int    $floor_id
+ * @property int    $file_id
+ * @property bool   $custom           True if this thumbnail was requested through the API with custom parameters
+ * @property string $variant          Which render variant this thumbnail is (standard|hero)
  *
  * @property DungeonRoute $dungeonRoute
  * @property Floor        $floor
@@ -28,11 +29,16 @@ use Override;
  */
 class DungeonRouteThumbnail extends Model
 {
+    public const string VARIANT_STANDARD = 'standard';
+
+    public const string VARIANT_HERO = 'hero';
+
     protected $fillable = [
         'dungeon_route_id',
         'floor_id',
         'file_id',
         'custom',
+        'variant',
         'created_at',
         'updated_at',
     ];

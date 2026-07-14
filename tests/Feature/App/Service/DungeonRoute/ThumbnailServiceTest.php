@@ -134,4 +134,63 @@ final class ThumbnailServiceTest extends PublicTestCase
             $dungeonRoute->delete();
         }
     }
+
+    #[Test]
+    public function attachThumbnailToDungeonRoute_givenExistingStandardThumbnail_keepsItWhenAttachingHeroVariant(): void
+    {
+        // Arrange
+        Storage::fake('s3_user_uploads');
+        Storage::fake(config('filesystems.default'));
+
+        $dungeon        = $this->getDungeonWithNonFacadeFloor();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $floor          = $dungeon->floors()->where('facade', false)->first();
+
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        $standardThumbnail = DungeonRouteThumbnail::create([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'floor_id'         => $floor->id,
+            'custom'           => false,
+            'variant'          => DungeonRouteThumbnail::VARIANT_STANDARD,
+        ]);
+        $standardFile = File::create([
+            'model_id'    => $standardThumbnail->id,
+            'model_class' => DungeonRouteThumbnail::class,
+            'disk'        => 's3_user_uploads',
+            'path'        => '/thumbnails/standard.jpg',
+        ]);
+        $standardThumbnail->update(['file_id' => $standardFile->id]);
+
+        $service = $this->buildService($this->createMockPublic(ThumbnailServiceLoggingInterface::class));
+        $method  = new ReflectionMethod($service, 'attachThumbnailToDungeonRoute');
+
+        try {
+            // Act - attach a hero variant; the standard thumbnail must be left untouched
+            $method->invoke($service, $dungeonRoute, $floor->index, '/thumbnails/hero.jpg', 'fake-image-bytes', false, DungeonRouteThumbnail::VARIANT_HERO);
+
+            // Assert - both variants now coexist
+            $this->assertDatabaseHas('dungeon_route_thumbnails', ['id' => $standardThumbnail->id]);
+            $this->assertSame(
+                1,
+                DungeonRouteThumbnail::query()
+                    ->where('dungeon_route_id', $dungeonRoute->id)
+                    ->where('variant', DungeonRouteThumbnail::VARIANT_STANDARD)
+                    ->count(),
+            );
+            $this->assertSame(
+                1,
+                DungeonRouteThumbnail::query()
+                    ->where('dungeon_route_id', $dungeonRoute->id)
+                    ->where('variant', DungeonRouteThumbnail::VARIANT_HERO)
+                    ->count(),
+            );
+        } finally {
+            DungeonRouteThumbnail::where('dungeon_route_id', $dungeonRoute->id)->get()->each->delete();
+            $dungeonRoute->delete();
+        }
+    }
 }

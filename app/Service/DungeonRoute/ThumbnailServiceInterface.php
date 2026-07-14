@@ -33,6 +33,7 @@ interface ThumbnailServiceInterface
         DungeonRoute $dungeonRoute,
         int          $floorIndex,
         int          $attempts,
+        string       $variant = DungeonRouteThumbnail::VARIANT_STANDARD,
     ): ?DungeonRouteThumbnail;
 
     public function createThumbnailCustom(

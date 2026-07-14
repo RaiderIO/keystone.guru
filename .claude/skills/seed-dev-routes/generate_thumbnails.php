@@ -19,6 +19,7 @@
 
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteThumbnail;
 use App\Models\Floor\Floor;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 
@@ -39,18 +40,23 @@ if (!empty($publicKeys)) {
 
 $thumbnailService = app(ThumbnailServiceInterface::class);
 
+$variants = [DungeonRouteThumbnail::VARIANT_STANDARD, DungeonRouteThumbnail::VARIANT_HERO];
+
 foreach ($query->get() as $route) {
     foreach ($route->dungeon->floorsForMapFacade($route->mappingVersion, true)->active()->get() as $floor) {
         /** @var Floor $floor */
-        $start  = microtime(true);
-        $result = $thumbnailService->createThumbnail($route, $floor->index);
-        echo sprintf(
-            '%s floor %d: %s (%.1fs)%s',
-            $route->public_key,
-            $floor->index,
-            $result !== null ? sprintf('OK -> %s', $result->file?->getURL()) : 'FAILED',
-            microtime(true) - $start,
-            PHP_EOL,
-        );
+        foreach ($variants as $variant) {
+            $start  = microtime(true);
+            $result = $thumbnailService->createThumbnail($route, $floor->index, 0, $variant);
+            echo sprintf(
+                '%s floor %d [%s]: %s (%.1fs)%s',
+                $route->public_key,
+                $floor->index,
+                $variant,
+                $result !== null ? sprintf('OK -> %s', $result->file?->getURL()) : 'FAILED',
+                microtime(true) - $start,
+                PHP_EOL,
+            );
+        }
     }
 }

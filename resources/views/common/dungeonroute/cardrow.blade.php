@@ -34,6 +34,10 @@ use (
         ? $dungeonroute->thumbnails->first()->getURL()
         : $dungeonroute->dungeon->getImageTransparentUrl();
     $ratingCount = $dungeonroute->rating_count;
+    // The favorites count is only present when the route was loaded with withCount('favorites'); never trigger a query
+    $favoritesCount = $dungeonroute->favorites_count ?? null;
+    // Enemy forces per pull, ordered by pull index - drives the "route fingerprint" bar graph
+    $pullForces = $dungeonroute->getEnemyForcesPerKillZone();
     // The key-level chip is only meaningful when the route deviates from the season's catch-all range
     $showLevel = $dungeonroute->level_min !== $dungeonroute->season?->key_level_min
         || $dungeonroute->level_max !== $dungeonroute->season?->key_level_max;
@@ -62,6 +66,13 @@ use (
         </div>
     </div>
     <div class="leaderboard_stats d-flex align-items-center text-muted small ms-auto">
+        @include('common.dungeonroute.pullgraph', [
+            'pullForces'  => $pullForces,
+            'chartHeight' => 22,
+            'fill'        => 'rgba(255, 255, 255, 0.45)',
+            'graphClass'  => 'leaderboard_pull_graph me-3',
+            'tooltipKey'  => 'view_common.dungeonroute.cardrow.pulls',
+        ])
         @if( $showLevel )
             <span class="leaderboard_level_chip me-3">
                 {{ $dungeonroute->level_min === $dungeonroute->level_max
@@ -83,6 +94,12 @@ use (
               title="{{ sprintf(__('view_common.dungeonroute.cardrow.views'), $dungeonroute->views) }}">
             <i class="fas fa-eye"></i> {{ abbreviateNumber($dungeonroute->views) }}
         </span>
+        @if( $favoritesCount > 0 )
+            <span class="leaderboard_favorites me-3" data-bs-toggle="tooltip"
+                  title="{{ sprintf(__('view_common.dungeonroute.cardrow.favorites'), $favoritesCount) }}">
+                <i class="fas fa-heart"></i> {{ abbreviateNumber($favoritesCount) }}
+            </span>
+        @endif
     </div>
     <div class="leaderboard_actions">
         <button id="route_menu_button_{{ $dungeonroute->public_key }}"

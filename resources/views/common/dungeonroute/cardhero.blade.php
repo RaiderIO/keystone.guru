@@ -33,11 +33,13 @@ use (
 {
     $enemyForcesPercentage = $dungeonroute->getEnemyForcesPercentage();
     $enemyForcesWarning    = $dungeonroute->enemy_forces < $dungeonroute->mappingVersion->enemy_forces_required || $enemyForcesPercentage >= 105;
-    // The map is demoted to a cinematic background: always a single image, never a carousel
-    $backgroundUrl = $dungeonroute->has_thumbnail
-        ? $dungeonroute->thumbnails->first()->getURL()
-        : $dungeonroute->dungeon->getImageTransparentUrl();
+    // The map is demoted to a cinematic background: prefer the dedicated hero-sized render
+    $backgroundUrl = $dungeonroute->getHeroThumbnailUrl() ?? $dungeonroute->dungeon->getImageTransparentUrl();
     $ratingCount = $dungeonroute->rating_count;
+    // The favorites count is only present when the route was loaded with withCount('favorites'); never trigger a query
+    $favoritesCount = $dungeonroute->favorites_count ?? null;
+    // Enemy forces per pull, ordered by pull index - drives the "route fingerprint" bar graph
+    $pullForces = $dungeonroute->getEnemyForcesPerKillZone();
     // The key-level chip is only meaningful when the route deviates from the season's catch-all range
     $showLevel = $dungeonroute->level_min !== $dungeonroute->season?->key_level_min
         || $dungeonroute->level_max !== $dungeonroute->season?->key_level_max;
@@ -117,6 +119,13 @@ use (
 
         <div class="row g-0 px-3 py-3 hero_stats">
             <div class="col d-flex align-items-center flex-wrap">
+                @include('common.dungeonroute.pullgraph', [
+                    'pullForces'  => $pullForces,
+                    'chartHeight' => 26,
+                    'fill'        => 'rgba(255, 255, 255, 0.6)',
+                    'graphClass'  => 'hero_pull_graph me-3',
+                    'tooltipKey'  => 'view_common.dungeonroute.cardhero.pulls',
+                ])
                 @if( $showLevel )
                     <span class="hero_level_chip me-3">
                         {{ $dungeonroute->level_min === $dungeonroute->level_max
@@ -134,10 +143,16 @@ use (
                         @include('common.dungeonroute.rating', ['count' => $ratingCount, 'rating' => (int) round($dungeonroute->rating)])
                     </span>
                 @endif
-                <span class="hero_views" data-bs-toggle="tooltip"
+                <span class="hero_views me-3" data-bs-toggle="tooltip"
                       title="{{ sprintf(__('view_common.dungeonroute.cardhero.views'), $dungeonroute->views) }}">
                     <i class="fas fa-eye"></i> {{ abbreviateNumber($dungeonroute->views) }}
                 </span>
+                @if( $favoritesCount > 0 )
+                    <span class="hero_favorites" data-bs-toggle="tooltip"
+                          title="{{ sprintf(__('view_common.dungeonroute.cardhero.favorites'), $favoritesCount) }}">
+                        <i class="fas fa-heart"></i> {{ abbreviateNumber($favoritesCount) }}
+                    </span>
+                @endif
             </div>
         </div>
     </div>

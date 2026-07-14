@@ -144,6 +144,16 @@
     white-space: nowrap;
 }
 
+.card_dungeonroute.hero .hero_pull_graph {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.card_dungeonroute.hero .hero_pull_graph svg {
+    display: block;
+}
+
 .card_dungeonroute.hero .menu_actions_btn i,
 .card_dungeonroute.hero .hero_top .text-warning {
     color: rgba(255, 255, 255, 0.85);
@@ -229,6 +239,22 @@
     display: inline-block;
     min-width: 4.5rem;
     text-align: end;
+}
+
+.card_dungeonroute.leaderboard_row .leaderboard_favorites {
+    display: inline-block;
+    min-width: 4.5rem;
+    text-align: end;
+}
+
+.card_dungeonroute.leaderboard_row .leaderboard_pull_graph {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.card_dungeonroute.leaderboard_row .leaderboard_pull_graph svg {
+    display: block;
 }
 
 .card_dungeonroute.leaderboard_row .leaderboard_actions {

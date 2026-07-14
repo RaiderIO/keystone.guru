@@ -66,10 +66,14 @@ return [
         'cardhero' => [
             'top_community_route' => 'Top community route',
             'views'               => '%s views',
+            'favorites'           => '%s favorites',
+            'pulls'               => '{1} :count pull|[2,*] :count pulls',
         ],
         'cardrow' => [
-            'new'   => 'New',
-            'views' => '%s views',
+            'new'       => 'New',
+            'views'     => '%s views',
+            'favorites' => '%s favorites',
+            'pulls'     => '{1} :count pull|[2,*] :count pulls',
         ],
         'table' => [
             'team'                  => 'Team',

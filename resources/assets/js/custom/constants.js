@@ -529,6 +529,9 @@ let c = {
                 color: '#F00',
                 colorAnimated: '#F00',
                 weight: 5,
+                // When rendering a thumbnail the pull-connection lines are multiplied by this so the
+                // miniature still reads as a route shape (they'd otherwise be too thin to see).
+                thumbnailWeightMultiplier: 3,
             },
         },
         brushline: {

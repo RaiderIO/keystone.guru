@@ -43,6 +43,7 @@ use App\Models\Floor\Floor;
         'edit' => false,
         'echo' => false,
         'noUI' => true,
+        'thumbnail' => true,
         'defaultZoom' => $defaultZoom,
         'mapFacadeStyle' => $mapFacadeStyle,
         'floor' => $floor,

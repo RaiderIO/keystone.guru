@@ -111,6 +111,9 @@ if ($embed || $dungeonroute?->demo === true) {
 
 // No UI on the map
 $noUI            = isset($noUI) && $noUI;
+// True when the map is being rendered for a thumbnail (see dungeonroute.preview); makes route/pull lines
+// noticeably thicker so the miniature still reads as a route shape. Never set on normal map viewing.
+$thumbnail       = isset($thumbnail) && $thumbnail;
 $gestureHandling = isset($gestureHandling) && $gestureHandling;
 // Default zoom for the map
 $defaultZoom    ??= 2;
@@ -169,6 +172,7 @@ if ($isAdmin) {
     'defaultEnemyAggressivenessBorder' => $defaultEnemyAggressivenessBorder,
     'mapFacadeStyle' => $mapFacadeStyle,
     'noUI' => $noUI,
+    'thumbnail' => $thumbnail,
     'showControls' => $show['controls'],
     'gestureHandling' => $gestureHandling,
     'zoomToContents' => $zoomToContents,

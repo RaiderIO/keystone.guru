@@ -454,6 +454,17 @@ return [
                 'default_image_height'    => 256,
                 'default_zoom_level'      => 1,
                 'default_quality'         => 90,
+                /**
+                 * Larger "hero" variant, rendered alongside the standard thumbnail. Used for the wide,
+                 * full-width hero band on the discovery page where the small 768x512 render looks stretched.
+                 * Rendered (and stored) at full size - no downscale - so the thicker thumbnail-mode lines survive.
+                 */
+                'hero_viewport_width'  => 1600,
+                'hero_viewport_height' => 640,
+                'hero_image_width'     => 1600,
+                'hero_image_height'    => 640,
+                'hero_zoom_level'      => 1,
+                'hero_quality'         => 90,
                 /** I observed it to be about 8 but with settings it may be longer, so 10 to be safe. */
                 'estimated_generation_time_seconds' => 10,
                 'expiration_time_seconds'           => 86400,

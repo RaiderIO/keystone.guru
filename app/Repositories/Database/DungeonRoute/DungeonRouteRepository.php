@@ -109,6 +109,7 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
                 'ratings',
                 'tags' => $tagsFilterFn,
             ])
+            ->withCount('favorites')
             ->when($dungeon, fn(EloquentBuilder $query) => $query->where('dungeon_id', $dungeon->id))
             ->whereRelation(
                 'dungeon.seasonDungeons',
