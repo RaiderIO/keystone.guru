@@ -55,7 +55,7 @@ class SettingsTabMap extends SettingsTab {
 
         // Zoom speed
         $('#map_settings_zoom_speed').bind('change', function () {
-            getState().setMapZoomSpeed(parseInt($(this).val()));
+            getState().setMapZoomSpeed(self._setSliderValueToDom(this));
         });
 
         // Heatmap show tooltips
@@ -65,12 +65,12 @@ class SettingsTabMap extends SettingsTab {
 
         // Unkilled enemy opacity
         $('#map_settings_unkilled_enemy_opacity').bind('change', function () {
-            getState().setUnkilledEnemyOpacity(parseInt($(this).val()));
+            getState().setUnkilledEnemyOpacity(self._setSliderValueToDom(this));
         });
 
         // Unkilled important enemy opacity
         $('#map_settings_unkilled_important_enemy_opacity').bind('change', function () {
-            getState().setUnkilledImportantEnemyOpacity(parseInt($(this).val()));
+            getState().setUnkilledImportantEnemyOpacity(self._setSliderValueToDom(this));
         });
 
         // Enemy aggressiveness border
@@ -85,7 +85,7 @@ class SettingsTabMap extends SettingsTab {
 
         // Killzone path stroke width
         $('#map_settings_kill_zone_path_weight').bind('change', function () {
-            let weight = parseInt($(this).val());
+            let weight = self._setSliderValueToDom(this);
             getState().setKillZonePathWeight(weight);
 
             let user = getState().getUser();
@@ -101,5 +101,12 @@ class SettingsTabMap extends SettingsTab {
                 });
             }
         });
+    }
+
+    _setSliderValueToDom(context) {
+        let $this = $(context);
+        let value = parseInt($this.val());
+        $this.closest('.row').find('.value').text(value);
+        return value;
     }
 }
