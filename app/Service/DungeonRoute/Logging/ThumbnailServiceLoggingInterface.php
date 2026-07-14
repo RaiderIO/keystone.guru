@@ -39,7 +39,7 @@ interface ThumbnailServiceLoggingInterface
 
     public function doCreateThumbnailMaintenanceMode(): void;
 
-    public function doCreateThumbnailSkippedLocalEnvironment(): void;
+    public function doCreateThumbnailSkippedRemoteDiskFromLocal(): void;
 
     public function doCreateThumbnailProcessStart(string $commandLine): void;
 

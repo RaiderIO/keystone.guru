@@ -24,6 +24,9 @@ services:
     volumes:
       - ./:/var/www
       - ~/.ssh:/home/ksg/.ssh
+      # Live-shares the main checkout's generated thumbnails (#3548) — worktrees don't run
+      # Horizon/puppeteer themselves, so this is the only way they see thumbnails at all.
+      - ${MAIN_THUMBNAILS_DIR}:/var/www/storage/app/public/thumbnails
 
   nginx:
     image: nginx:alpine
@@ -34,6 +37,7 @@ services:
     volumes:
       - ./:/var/www
       - ./docker-compose/nginx:/etc/nginx/conf.d
+      - ${MAIN_THUMBNAILS_DIR}:/var/www/storage/app/public/thumbnails
     ports:
       - "${WORKTREE_HTTP_PORT}:80"
 

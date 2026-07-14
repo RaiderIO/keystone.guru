@@ -25,9 +25,9 @@ use Throwable;
 
 class ThumbnailService implements ThumbnailServiceInterface
 {
-    public const string THUMBNAIL_FOLDER_PATH = '/thumbnails';
+    public const string THUMBNAIL_FOLDER_PATH = 'thumbnails';
 
-    public const string THUMBNAIL_CUSTOM_FOLDER_PATH = '/thumbnails_custom';
+    public const string THUMBNAIL_CUSTOM_FOLDER_PATH = 'thumbnails_custom';
 
     public function __construct(
         private readonly DungeonRouteRepositoryInterface  $dungeonRouteRepository,
@@ -120,11 +120,12 @@ class ThumbnailService implements ThumbnailServiceInterface
                 return null;
             }
 
-            // Local dev's FILESYSTEM_DISK points at the real S3 bucket (so existing thumbnails
-            // display correctly), so generating one here would create/delete real production
-            // files. Refuse instead of letting local runs mutate production storage.
-            if (app()->environment('local')) {
-                $this->log->doCreateThumbnailSkippedLocalEnvironment();
+            // Some local dev setups point FILESYSTEM_DISK at the real S3 bucket (so existing
+            // thumbnails display correctly), so generating one there would create/delete real
+            // production files. Refuse instead of letting local runs mutate remote storage.
+            $disk = config('filesystems.default', 'public');
+            if ($this->isRemoteDiskUnsafeForLocalGeneration($disk)) {
+                $this->log->doCreateThumbnailSkippedRemoteDiskFromLocal();
 
                 return null;
             }
@@ -150,14 +151,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                 // Script to execute
                 resource_path('assets/puppeteer/route_thumbnail.js'),
                 // First argument; where to navigate
-                route('dungeonroute.preview', [
-                    'dungeon'      => $dungeonRoute->dungeon,
-                    'dungeonroute' => $dungeonRoute->public_key,
-                    'title'        => $dungeonRoute->getTitleSlug(),
-                    'floorIndex'   => $floorIndex,
-                    'secret'       => config('keystoneguru.thumbnail.preview_secret'),
-                    'z'            => $zoomLevel,
-                ]),
+                $this->getPreviewUrl($dungeonRoute, $floorIndex, $zoomLevel),
                 // Second argument; where to save the resulting image
                 $tmpFile,
                 $viewportWidth,
@@ -178,11 +172,6 @@ class ThumbnailService implements ThumbnailServiceInterface
                         // Do not update the timestamps of the route! Otherwise, we'll just keep on updating the timestamp
                         $dungeonRoute->timestamps = false;
                         $dungeonRoute->save();
-
-                        // Ensure our write path exists
-                        if (!is_dir($targetFolder)) {
-                            mkdir($targetFolder, 0755, true);
-                        }
 
                         // Rescale it
                         $this->log->doCreateThumbnailRescale($tmpFile, $tmpFileAfterResize);
@@ -208,6 +197,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                             $floorIndex,
                             $target,
                             file_get_contents($tmpFileAfterResize),
+                            $disk,
                             $targetFolder === self::THUMBNAIL_CUSTOM_FOLDER_PATH,
                         );
                     } catch (Throwable $e) {
@@ -411,6 +401,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                     $thumbnail->floor->index,
                     self::getTargetFilePath($targetDungeonRoute, $thumbnail->floor->index, self::THUMBNAIL_FOLDER_PATH),
                     $thumbnailData,
+                    config('filesystems.default', 'public'),
                 );
 
                 if ($copiedThumbnail === null) { // @phpstan-ignore identical.alwaysFalse
@@ -443,6 +434,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         int          $floorIndex,
         string       $target,
         string       $thumbnailData,
+        string       $disk,
         bool         $isCustom = false,
     ): DungeonRouteThumbnail {
         return DB::transaction(function () use (
@@ -451,6 +443,7 @@ class ThumbnailService implements ThumbnailServiceInterface
             $isCustom,
             $target,
             $thumbnailData,
+            $disk,
         ) {
             /** @var Floor $floor */
             $floor = $dungeonRoute->dungeon->floors->where('index', $floorIndex)->firstOrFail();
@@ -465,7 +458,6 @@ class ThumbnailService implements ThumbnailServiceInterface
                 })
                 ->get();
 
-            $disk                  = config('filesystems.default', 'public');
             $dungeonRouteThumbnail = DungeonRouteThumbnail::create([
                 'dungeon_route_id' => $dungeonRoute->id,
                 'floor_id'         => $floor->id,
@@ -501,5 +493,41 @@ class ThumbnailService implements ThumbnailServiceInterface
 
             return $dungeonRouteThumbnail;
         });
+    }
+
+    /**
+     * Whether generating a thumbnail is unsafe: a local environment writing to a remote (S3) disk
+     * would create/delete real files on that remote disk.
+     */
+    private function isRemoteDiskUnsafeForLocalGeneration(string $disk): bool
+    {
+        $driver = config(sprintf('filesystems.disks.%s.driver', $disk));
+
+        return app()->environment('local') && $driver === 's3';
+    }
+
+    /**
+     * The URL puppeteer navigates to in order to render the thumbnail. When
+     * `keystoneguru.thumbnail.preview_base_url` is configured, the relative preview route is
+     * prefixed with it instead of the app's absolute URL, so puppeteer (running inside the app
+     * container) can reach a nginx/webserver hostname unreachable via the public APP_URL.
+     */
+    private function getPreviewUrl(DungeonRoute $dungeonRoute, int $floorIndex, ?float $zoomLevel): string
+    {
+        $params = [
+            'dungeon'      => $dungeonRoute->dungeon,
+            'dungeonroute' => $dungeonRoute->public_key,
+            'title'        => $dungeonRoute->getTitleSlug(),
+            'floorIndex'   => $floorIndex,
+            'secret'       => config('keystoneguru.thumbnail.preview_secret'),
+            'z'            => $zoomLevel,
+        ];
+
+        $previewBaseUrl = config('keystoneguru.thumbnail.preview_base_url');
+        if ($previewBaseUrl === null) {
+            return route('dungeonroute.preview', $params);
+        }
+
+        return sprintf('%s%s', $previewBaseUrl, route('dungeonroute.preview', $params, false));
     }
 }

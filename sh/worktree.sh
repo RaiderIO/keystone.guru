@@ -153,6 +153,11 @@ COMPOSE_FILE=docker-compose.worktree.yml
 WORKTREE_HTTP_PORT=${port}
 EOF
 
+    # 4b. Main's thumbnail directory is bind-mounted into the worktree (live-shares thumbnails
+    #     generated on the main stack — see #3548); the mount source must exist beforehand.
+    export MAIN_THUMBNAILS_DIR="$REPO_ROOT/storage/app/public/thumbnails"
+    mkdir -p "$MAIN_THUMBNAILS_DIR"
+
     # 5. Bring up the stack (reads COMPOSE_* + WORKTREE_HTTP_PORT from the worktree .env).
     echo "==> starting stack '$project' (nginx on :$port)"
     ( cd "$wt_path" && docker compose up -d )
@@ -216,6 +221,8 @@ cmd_down() {
     project="$(project_name "$branch")"
     wt_path="$WORKTREES_DIR/$branch"
     net="$(worktree_network "$project")"
+    # Only used for Compose variable interpolation while tearing down — value is irrelevant here.
+    export MAIN_THUMBNAILS_DIR="${MAIN_THUMBNAILS_DIR:-$REPO_ROOT/storage/app/public/thumbnails}"
 
     # Disconnect the attached shared containers first — otherwise Compose cannot remove the network
     # (it's still "in use") and it lingers.
