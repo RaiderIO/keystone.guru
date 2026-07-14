@@ -5,7 +5,11 @@ class HeatPlugin extends MapPlugin {
         let self = this;
 
         this.hidden = false;
-        this.showOnTop = false;
+        // The map applies its persisted settings (state.setDungeonMap) before the plugins are
+        // constructed, so the initial heatmapshowontop:changed signal fires before this plugin can
+        // listen for it. Seed the value directly from the map options so the very first addToMap()
+        // renders in the correct pane; runtime toggles are handled by the signal below.
+        this.showOnTop = map.options?.defaultHeatmapShowOnTop ?? false;
         this.heatLayer = null;
         this.draw = false;
         /** A grid of weights for each coordinate for each floor - used for the tooltips */
@@ -41,9 +45,7 @@ class HeatPlugin extends MapPlugin {
 
         state.register('heatmapshowontop:changed', this, function (event) {
             self.showOnTop = event.data.onTop;
-            if (self.heatLayer !== null) {
-                self.heatLayer.setOptions({pane: event.data.onTop ? 'tooltipPane' : 'overlayPane'});
-            }
+            self._applyShowOnTop();
         });
 
         if (!isMobile()) {
@@ -205,6 +207,30 @@ class HeatPlugin extends MapPlugin {
         //         }
         //     }
         // });
+    }
+
+    /**
+     * Moves the heat layer's canvas between the overlay pane (behind enemies) and the tooltip pane
+     * (on top of enemies) to reflect the current showOnTop setting.
+     *
+     * leaflet-heat only parents the canvas in its onAdd handler, and its setOptions() never
+     * re-parents an already-added canvas - it just updates radius/blur/gradient and redraws. So to
+     * flip the render order at runtime we update the layer option (so a later remove/re-add lands in
+     * the right pane) and move the existing canvas element into the target pane ourselves.
+     */
+    _applyShowOnTop() {
+        console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
+
+        if (this.heatLayer === null) {
+            return;
+        }
+
+        let pane = this.showOnTop ? 'tooltipPane' : 'overlayPane';
+        this.heatLayer.setOptions({pane: pane});
+
+        if (this.heatLayer._canvas !== undefined && this.heatLayer._canvas !== null) {
+            this.map.leafletMap.getPane(pane).appendChild(this.heatLayer._canvas);
+        }
     }
 
     setOptions(options) {
