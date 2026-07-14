@@ -24,7 +24,6 @@ $showDungeonImage ??= false;
 $affixgroup       ??= null;
 $cache            ??= true;
 $linkOptions      ??= [];
-$orientation      ??= 'vertical';
 ?>
 <div class="discover_panel px-xl-2">
     <div class="row mt-4">
@@ -63,7 +62,6 @@ $orientation      ??= 'vertical';
                     'dungeonroutes' => $dungeonroutes,
                     'showDungeonImage' => $showDungeonImage,
                     'cache' => $cache,
-                    'orientation' => $orientation,
                 ])
             </div>
         </div>

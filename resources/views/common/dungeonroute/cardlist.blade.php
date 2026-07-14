@@ -1,8 +1,10 @@
 <?php
 
+use App\Features\DungeonRouteListRework;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute\DungeonRoute;
 use Illuminate\Support\Collection;
+use Laravel\Pennant\Feature;
 
 /**
  * @var Collection<int, DungeonRoute>|Collection<string, Collection<int, DungeonRoute>> $dungeonroutes
@@ -21,6 +23,11 @@ $affixgroup       ??= null;
 $cache            ??= true;
 $orientation      ??= 'vertical';
 $cardHeaders      ??= collect();
+
+// The poster card is a drop-in replacement for the vertical card while the list rework rolls out
+if ($orientation === 'vertical' && Feature::active(DungeonRouteListRework::class)) {
+    $orientation = 'poster';
+}
 
 $renderedDungeonRouteCount = 0;
 $i                         = 0;
