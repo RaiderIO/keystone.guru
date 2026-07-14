@@ -16,7 +16,7 @@
         "concurrently": "^10.0.3",
         "cross-env": "^10.1.0",
         "esbuild": "^0.28.1",
-        "fast-glob": "^3.2.12",
+        "fast-glob": "^3.3.3",
         "jquery": "^3.6.0",
         "jsdom": "^29.1.1",
         "laravel-echo": "^2.2.6",
