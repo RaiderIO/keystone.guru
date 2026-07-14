@@ -6,7 +6,6 @@ use App\Features\DungeonOverview;
 use App\Http\Controllers\Controller;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Enemy;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
@@ -25,12 +24,10 @@ use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Laravel\Pennant\Feature;
@@ -421,8 +418,8 @@ class DungeonRouteDiscoverController extends Controller
                 'popularRoutes'     => $discoverService
                     ->withLimit(config('keystoneguru.discover.limits.dungeon_overview_popular'))
                     ->popularByDungeon($dungeon),
-                'userRoutes'          => $this->getUserRoutesForDungeon($dungeon),
-                'dungeonStats'        => $this->getDungeonStats($dungeon, $gameVersion),
+                'userRoutes'          => $this->getUserRoutesForDungeon($dungeon, $dungeonRouteRepository),
+                'dungeonStats'        => $dungeonService->getDungeonOverviewStats($dungeon, $gameVersion),
                 'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($gameVersion),
             ]);
         }
@@ -686,11 +683,11 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * The current user's own (non-demo, non-sandbox) routes for a dungeon, most recently edited first.
+     * The current user's own routes for a dungeon, or an empty collection for guests.
      *
      * @return Collection<int, DungeonRoute>
      */
-    private function getUserRoutesForDungeon(Dungeon $dungeon): Collection
+    private function getUserRoutesForDungeon(Dungeon $dungeon, DungeonRouteRepositoryInterface $dungeonRouteRepository): Collection
     {
         /** @var User|null $user */
         $user = Auth::user();
@@ -698,54 +695,10 @@ class DungeonRouteDiscoverController extends Controller
             return collect();
         }
 
-        return $user->dungeonRoutes()
-            ->where('dungeon_id', $dungeon->id)
-            ->whereNull('expires_at')
-            ->where('demo', false)
-            ->with(self::ROUTE_CARD_RELATIONS)
-            ->orderByDesc('updated_at')
-            ->limit(config('keystoneguru.discover.limits.per_dungeon'))
-            ->get();
-    }
-
-    /**
-     * Cached headline stats for the dungeon overview: compendium counts plus pull/enemy stats for the
-     * dungeon's current mapping version.
-     *
-     * @return array{npc: int, spell: int, pull_count: int, avg_enemies_per_pull: float}
-     */
-    private function getDungeonStats(Dungeon $dungeon, GameVersion $gameVersion): array
-    {
-        $mappingVersion = $dungeon->getCurrentMappingVersion($gameVersion);
-
-        return Cache::remember(
-            sprintf('dungeon.overview.stats.%d.%d', $dungeon->id, $gameVersion->id),
-            now()->addHour(),
-            static function () use ($dungeon, $mappingVersion): array {
-                $pullCount  = 0;
-                $enemyCount = 0;
-
-                if ($mappingVersion !== null) {
-                    $pullCount = $dungeon->enemyPacks()
-                        ->where('enemy_packs.mapping_version_id', $mappingVersion->id)
-                        ->count();
-
-                    $enemyCount = $dungeon->enemies()
-                        ->where('enemies.mapping_version_id', $mappingVersion->id)
-                        ->where(static function (Builder $query) {
-                            $query->whereNull('enemies.seasonal_type')
-                                ->orWhere('enemies.seasonal_type', '!=', Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER);
-                        })
-                        ->count();
-                }
-
-                return [
-                    'npc'                  => $dungeon->npcs()->count(),
-                    'spell'                => $dungeon->spells()->count(),
-                    'pull_count'           => $pullCount,
-                    'avg_enemies_per_pull' => $pullCount > 0 ? round($enemyCount / $pullCount, 1) : 0.0,
-                ];
-            },
+        return $dungeonRouteRepository->getRoutesForUserAndDungeon(
+            $user,
+            $dungeon,
+            config('keystoneguru.discover.limits.per_dungeon'),
         );
     }
 }

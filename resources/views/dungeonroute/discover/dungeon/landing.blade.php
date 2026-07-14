@@ -82,7 +82,7 @@ $compendiumCards = [
                 <img src="{{ ksgAssetImage(sprintf('expansions/%s.png', $dungeon->expansion->shortname)) }}"
                      alt="{{ __($dungeon->expansion->name) }}"
                      title="{{ __($dungeon->expansion->name) }}"
-                     class="mr-2" style="height: 14px; width: auto; vertical-align: middle;">
+                     class="me-2" style="height: 14px; width: auto; vertical-align: middle;">
                 {{ __($dungeon->name) }}
             </h1>
 
@@ -107,7 +107,7 @@ $compendiumCards = [
                 <h2 class="text-center">{{ __('view_dungeonroute.discover.dungeon.overview.featured_title') }}</h2>
             </div>
         </div>
-        <div class="row">
+        <div class="row justify-content-center">
             @foreach($weeklyRoutes as $weeklyRoute)
                 @continue($weeklyRoute->dungeonRoute === null)
                 <div class="col-12 col-xl-4">
@@ -140,7 +140,7 @@ $compendiumCards = [
                         <div class="mb-3">
                             <i class="fas {{ $card['icon'] }} fa-3x"></i>
                         </div>
-                        <h5 class="card-title font-weight-bold">{{ $card['title'] }}</h5>
+                        <h5 class="card-title fw-bold">{{ $card['title'] }}</h5>
                         <div class="text-muted small mb-2">{{ $card['subtitle'] }}</div>
                         <p class="card-text flex-grow-1">{{ $card['text'] }}</p>
                         <a href="{{ $card['route'] }}" class="btn btn-primary mt-2">

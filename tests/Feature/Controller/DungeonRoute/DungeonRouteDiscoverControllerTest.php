@@ -4,6 +4,7 @@ namespace Tests\Feature\Controller\DungeonRoute;
 
 use App\Features\DungeonOverview;
 use App\Features\NpcCompendium;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameVersion\GameVersion;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -47,6 +48,40 @@ final class DungeonRouteDiscoverControllerTest extends PublicTestCase
         $response->assertOk();
         $response->assertSee(__('view_dungeonroute.discover.dungeon.overview.compendium.title'));
         $response->assertSee(route('compendium.activity', ['dungeon' => $dungeon]));
+    }
+
+    #[Test]
+    public function discoverDungeon_givenUserHasRouteForDungeon_returnsYourRoutesSection(): void
+    {
+        // Arrange
+        Feature::define(DungeonOverview::class, true);
+        $gameVersion = GameVersion::getDefaultGameVersion();
+        $dungeon     = $this->getDungeonWithNonFacadeFloor(
+            fn(Builder $query) => $query->active()->forGameVersion($gameVersion),
+        );
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'author_id'          => 1,
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion($gameVersion)->id,
+            'demo'               => false,
+            'expires_at'         => null,
+            'title'              => 'Claude Verify User Route',
+        ]);
+
+        try {
+            // Act
+            $response = $this->get(route('dungeonroutes.discoverdungeon', [
+                'gameVersion' => $gameVersion,
+                'dungeon'     => $dungeon,
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee(__('view_dungeonroute.discover.dungeon.overview.your_routes'));
+            $response->assertSee($dungeonRoute->title);
+        } finally {
+            $dungeonRoute->delete();
+        }
     }
 
     #[Test]
