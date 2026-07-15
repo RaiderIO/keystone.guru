@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Set up Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -72,8 +72,12 @@ jobs:
   # Map context JS is generated from the DB/seeders and is also keyed by the
   # `version` file. We override that file with the release tag so the output
   # lands at compiled/<tag>/mapcontext/... matching the image. Runs in parallel.
-  build-map-context:
-    name: Generate & Upload Map Context
+  # Split into a priority job (current + next season dungeons, the ~99% of traffic - the
+  # next season is included because it starts receiving traffic before it's active) that
+  # deploy-staging waits on, and a rest job (remaining dungeons) that streams into
+  # S3 while the infra deploy runs — see #3517.
+  build-map-context-priority:
+    name: Map Context (priority)
     runs-on: ubuntu-latest
 
     steps:
@@ -95,8 +99,56 @@ jobs:
         run: |
           mkdir -p storage/mapcontext
           php artisan make:mapcontextstatic --output=storage/mapcontext
-          php artisan make:mapcontextdungeon --output=storage/mapcontext
-          php artisan make:mapcontextmappingversion --output=storage/mapcontext
+          php artisan make:mapcontextdungeon --output=storage/mapcontext --scope=priority
+          php artisan make:mapcontextmappingversion --output=storage/mapcontext --scope=priority
+          ls -la storage/mapcontext
+
+      - name: Configure AWS (OIDC)
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: arn:aws:iam::868970774940:role/ksg-github-actions
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install AWS CLI
+        uses: unfor19/install-aws-cli-action@v1
+
+      - name: Upload Map Context JS files
+        env:
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+        run: |
+          aws s3 cp storage/mapcontext "s3://${S3_BUCKET}/compiled" \
+            --recursive \
+            --cache-control "public,max-age=31536000,immutable" \
+            --no-progress
+
+  # Remaining (non-priority) dungeons. Intentionally NOT in deploy-staging's or
+  # deploy-production's `needs` — it finishes uploading while the infra deploy
+  # (8-15 min) runs, so a non-priority route's map context can briefly 404
+  # right after the staging flip until this job lands.
+  build-map-context-rest:
+    name: Map Context (remaining dungeons)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout for local actions
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Start services
+        run: docker compose -f docker-compose.ci.yml up -d --wait
+
+      - name: Common PHP/Laravel setup
+        uses: ./.github/actions/php-ci-setup
+
+      - name: Key map context by the release tag
+        run: printf '%s' "${{ github.ref_name }}" > version
+
+      - name: Generate Map Context JS
+        run: |
+          mkdir -p storage/mapcontext
+          php artisan make:mapcontextdungeon --output=storage/mapcontext --scope=rest
+          php artisan make:mapcontextmappingversion --output=storage/mapcontext --scope=rest
           ls -la storage/mapcontext
 
       - name: Configure AWS (OIDC)
@@ -235,7 +287,7 @@ jobs:
   # cross-repo).
   deploy-staging:
     name: Deploy to Staging
-    needs: [build-push-images, build-assets, build-map-context]
+    needs: [build-push-images, build-assets, build-map-context-priority]
     runs-on: ubuntu-latest
     steps:
       - name: Dispatch staging deploy to keystoneguru-infra

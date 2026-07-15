@@ -7,6 +7,7 @@ $killzonePathWeight               = User::getCurrentUserKillzonePathWeight();
 $mapZoomSpeed                     = $_COOKIE['map_zoom_speed'] ?? '50';
 $mapNumberStyleChecked            = ($_COOKIE['map_number_style'] ?? 'percentage') === 'percentage';
 $mapHeatmapShowTooltips           = $_COOKIE['map_heatmap_show_tooltips'] ?? 1;
+$mapHeatmapShowOnTop              = (bool)($_COOKIE['map_heatmap_show_on_top'] ?? false);
 $mapUnkilledEnemyOpacity          = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
 $mapUnkilledImportantEnemyOpacity = $_COOKIE['map_unkilled_important_enemy_opacity'] ?? '80';
 $mapEnemyAggressivenessBorder     = $_COOKIE['map_enemy_aggressiveness_border'] ?? 0;
@@ -57,6 +58,30 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
         <div class="row g-0">
             <div class="col pe-2">
                 {{ html()->checkbox('map_settings_heatmap_show_tooltips', $mapHeatmapShowTooltips, 1)->id('map_settings_heatmap_show_tooltips')->class('form-check-input') }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Heatmap render order -->
+    <div class="mb-3">
+        <div class="row">
+            <div class="col">
+                <label for="map_settings_heatmap_show_on_top">
+                    {{ __('view_common.forms.mapsettings.heatmap_render_order') }}
+                    <i class="fas fa-info-circle"
+                       data-bs-toggle="tooltip"
+                       title="{{ __('view_common.forms.mapsettings.heatmap_render_order_title') }}"></i>
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <input id="map_settings_heatmap_show_on_top" type="checkbox"
+                       {{ $mapHeatmapShowOnTop ? 'checked' : '' }}
+                       data-toggle="toggle" data-width="150px" data-height="20px"
+                       data-onstyle="primary" data-offstyle="primary"
+                       data-on="{{ __('view_common.forms.mapsettings.heatmap_render_order_on_top') }}"
+                       data-off="{{ __('view_common.forms.mapsettings.heatmap_render_order_behind') }}">
             </div>
         </div>
     </div>

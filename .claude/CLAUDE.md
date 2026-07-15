@@ -126,6 +126,8 @@ For example:
 
 ## Database (migrations)
 - Do not use foreign keys for migrations. This application does not use them, and they can cause issues with seeding and testing.
+- **Migrations must be backward-compatible with the currently-running code.** Deploys are not atomic: a cron runs `migrate` independently of the ECS web rollout, so during every deploy the old code and the new schema (and vice-versa) coexist for a window. Additive changes (new nullable/defaulted column, new table, backfill) are safe. **Destructive changes are not** — never drop a table/column, rename it, or narrow its type in the same release that removes the code using it, or the still-running old containers will 500 against the missing schema (this is what broke staging in #3497).
+- Split destructive schema changes across two releases (expand/contract): release N removes the last code consumer and does any additive/backfill work while leaving the old schema in place; release N+1 ships the `drop`/rename once nothing references it. Column rename = add new + backfill + dual-write in N, drop old in N+1.
 
 ## Localization
 - Use the `__()` helper function for localization and translation of strings. Use translation keys. For example: `__('view_common.my.folder.structure.welcome_to_the_website')`.

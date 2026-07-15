@@ -1,0 +1,28 @@
+{
+    "description": "Classic speedrun dungeon (Tempest Keep-like) with only 25-man enabled: untouched, the difficulty select's sole option (25-man, DungeonConstants::DIFFICULTY_ALL['25_man'] = 2) is auto-selected by the browser - the single-enabled-difficulty case of the 'first enabled difficulty is auto-selected' behaviour. dungeon_start_map_icon_id is entirely absent - see classic-speedrun-ssc-10man.json for why.",
+    "endpoint": "dungeonroute.savenew",
+    "gameVersion": "classic",
+    "auth": true,
+    "fields": [
+        {"name": "dungeon_id", "value": "{{dungeon_id}}"},
+        {"name": "team_id", "value": "-1"},
+        {"name": "dungeon_difficulty", "value": "2"},
+        {"name": "dungeon_route_title", "value": "My Test Route"},
+        {"name": "faction_id", "value": "1"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"}
+    ]
+}

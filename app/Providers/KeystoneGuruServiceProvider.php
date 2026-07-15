@@ -186,7 +186,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(WowheadTranslationServiceInterface::class, WowheadTranslationService::class);
         if (
             app()->runningUnitTests()
-            || app()->environment('local')
+            || (app()->environment('local') && config('keystoneguru.raiderio.use_local_mock_service'))
         ) {
             $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOKeystoneGuruApiService::class);
         } else {

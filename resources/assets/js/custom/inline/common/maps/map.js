@@ -6,6 +6,7 @@
  * @property {boolean} sandbox
  * @property {string} defaultEnemyVisualType
  * @property {boolean} defaultHeatmapShowTooltips
+ * @property {boolean} defaultHeatmapShowOnTop
  * @property {number} defaultUnkilledEnemyOpacity
  * @property {number} defaultUnkilledImportantEnemyOpacity
  * @property {boolean} defaultEnemyAggressivenessBorder

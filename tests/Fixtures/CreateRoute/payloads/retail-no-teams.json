@@ -1,0 +1,30 @@
+{
+    "description": "Retail: user has no teams. common/team/select.blade.php does not render the <select> at all when the teams collection is empty, so team_id is entirely absent from the submitted form (not defaulted to -1).",
+    "endpoint": "dungeonroute.savenew",
+    "gameVersion": "retail",
+    "auth": true,
+    "fields": [
+        {"name": "dungeon_id", "value": "{{dungeon_id}}"},
+        {"name": "dungeon_difficulty", "value": ""},
+        {"name": "dungeon_start_map_icon_id", "value": ""},
+        {"name": "dungeon_route_title", "value": "My Test Route"},
+        {"name": "dungeon_route_level", "value": "{{key_level_min}};{{key_level_max}}"},
+        {"name": "route_select_affixes[]", "value": "{{affix_group_id}}"},
+        {"name": "faction_id", "value": "1"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"}
+    ]
+}

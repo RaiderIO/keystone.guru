@@ -115,6 +115,16 @@ curl -s https://staging.keystone.guru/ | grep -oE "compiled/[^/\"']+/js/app-[^\"
   via `gh api --method PATCH repos/RaiderIO/keystone.guru/pulls/<n> -F body=@<file>`.
 - **Run status parks on `waiting`** while `deploy-production` sits on the gate — an
   `until [ status = completed ]` poll hangs forever. Poll **job** conclusions instead.
+- **Schema changes vs. the rolling deploy — migrations must be backward-compatible.** The
+  deploy is not atomic: migrations run from a **cron / `environment:update` task independently
+  of the ECS web rollout**, so old code and new schema (and vice-versa) coexist during every
+  deploy — and the migration can even land *before* any new container is up. Additive changes
+  are safe; a **destructive** change (drop/rename a table or column, narrow a type) in the same
+  release that removes its code consumers will 500 the still-running old containers against the
+  missing schema. This is exactly what broke staging in **#3497** (dropped the `release_*`
+  tables while old code still queried them). Split it expand/contract: release N removes the
+  code + does additive/backfill work, release N+1 does the `drop`. See CLAUDE.md → *Database
+  (migrations)*.
 
 ## Key files
 

@@ -22,24 +22,20 @@ return new class extends Migration {
             ->update(['release_report_logs.version' => DB::raw('releases.version')]);
 
         Schema::table('release_report_logs', static function (Blueprint $table): void {
-            $table->dropColumn('release_id');
             $table->index('version');
         });
 
-        Schema::dropIfExists('release_changelog_changes');
-        Schema::dropIfExists('release_changelogs');
-        Schema::dropIfExists('release_changelog_categories');
-        Schema::dropIfExists('releases');
+        // The destructive drops (release_id column + release_* tables) are deferred to the follow-up
+        // migration 2026_07_14_000000_drop_release_tables_followup so that old still-running containers
+        // keep working during the non-atomic deploy window (expand/contract, see #3553).
     }
 
     /**
-     * Reverse the migrations. The dropped tables (and their seeded contents) are not restored - release
-     * notes now live on GitHub Releases.
+     * Reverse the migrations.
      */
     public function down(): void
     {
         Schema::table('release_report_logs', static function (Blueprint $table): void {
-            $table->integer('release_id')->after('id')->default(0);
             $table->dropIndex(['version']);
             $table->dropColumn('version');
         });

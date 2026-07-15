@@ -32,34 +32,52 @@ const HeatPlugin = require('./heatplugin');
  * Builds a HeatPlugin backed by mock Leaflet/state objects. The map-level size gate lives in
  * DungeonMap now, so addToMap() here simply adds the layer.
  */
-function createHeatPlugin() {
+function createHeatPlugin(mapOptions = {}) {
     const heatLayer = {
         addTo: vi.fn(),
         setLatLngs: vi.fn(),
-        setOptions: vi.fn(),
+        setOptions: vi.fn(function (options) {
+            Object.assign(this.options, options);
+        }),
+        options: {},
+        // Stand-in for leaflet-heat's canvas element; the plugin re-parents this on a render-order
+        // change. Each fake pane records what was appended so tests can assert the move.
+        _canvas: {id: 'heat-canvas'},
     };
 
     global.L.heatLayer = vi.fn(() => heatLayer);
 
+    // Fake Leaflet panes that record the last appended child, keyed by pane name.
+    const panes = {
+        overlayPane: {appended: null, appendChild(node) { this.appended = node; }},
+        tooltipPane: {appended: null, appendChild(node) { this.appended = node; }},
+    };
+
     const leafletMap = {
         addLayer: vi.fn(),
         removeLayer: vi.fn(),
+        getPane: vi.fn((name) => panes[name]),
     };
 
     const map = {
         leafletMap,
+        options: mapOptions,
         register: vi.fn(),
     };
 
+    // Captures the state listeners the plugin registers so tests can fire signals at it.
+    const listeners = {};
     global.getState = () => ({
-        register: vi.fn(),
+        register: (event, context, callback) => {
+            listeners[event] = callback;
+        },
         getMapContext: () => new global.MapContextDungeonExplore(),
         getCurrentFloor: () => ({id: 1}),
     });
 
     const plugin = new HeatPlugin(map);
 
-    return {plugin, heatLayer, leafletMap};
+    return {plugin, heatLayer, leafletMap, panes, listeners};
 }
 
 beforeEach(() => {
@@ -87,6 +105,50 @@ describe('HeatPlugin.addToMap', () => {
         plugin.addToMap();
 
         expect(heatLayer.setLatLngs).toHaveBeenCalledWith([[1, 2, 3]]);
+    });
+});
+
+describe('HeatPlugin render order (show on top)', () => {
+    it('constructor_givenDefaultHeatmapShowOnTopOption_seedsShowOnTop', () => {
+        // The initial signal is missed (map applies settings before plugins register), so the
+        // persisted setting must come from the map options at construction time.
+        const {plugin} = createHeatPlugin({defaultHeatmapShowOnTop: true});
+
+        expect(plugin.showOnTop).toBe(true);
+
+        plugin.addToMap();
+        expect(global.L.heatLayer).toHaveBeenCalledWith([], expect.objectContaining({pane: 'tooltipPane'}));
+    });
+
+    it('applyShowOnTop_givenShowOnTopEnabled_movesCanvasToTooltipPane', () => {
+        const {plugin, heatLayer, panes, listeners} = createHeatPlugin();
+        plugin.addToMap();
+
+        listeners['heatmapshowontop:changed']({data: {onTop: true}});
+
+        expect(heatLayer.options.pane).toBe('tooltipPane');
+        expect(panes.tooltipPane.appended).toBe(heatLayer._canvas);
+        expect(panes.overlayPane.appended).toBeNull();
+    });
+
+    it('applyShowOnTop_givenShowOnTopDisabled_movesCanvasToOverlayPane', () => {
+        const {plugin, heatLayer, panes, listeners} = createHeatPlugin();
+        plugin.showOnTop = true;
+        plugin.addToMap();
+
+        listeners['heatmapshowontop:changed']({data: {onTop: false}});
+
+        expect(heatLayer.options.pane).toBe('overlayPane');
+        expect(panes.overlayPane.appended).toBe(heatLayer._canvas);
+    });
+
+    it('applyShowOnTop_givenNullHeatLayer_doesNotThrow', () => {
+        const {plugin, panes} = createHeatPlugin();
+
+        expect(plugin.heatLayer).toBeNull();
+        expect(() => plugin._applyShowOnTop()).not.toThrow();
+        expect(panes.tooltipPane.appended).toBeNull();
+        expect(panes.overlayPane.appended).toBeNull();
     });
 });
 

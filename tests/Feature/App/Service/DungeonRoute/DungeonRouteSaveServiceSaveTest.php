@@ -406,9 +406,11 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
     }
 
     #[Test]
-    public function save_givenNonSpeedrunDungeonWithDifficulty_keepsDifficulty(): void
+    public function save_givenNonSpeedrunDungeonWithDifficulty_discardsDifficulty(): void
     {
-        // Arrange — retail M+ dungeons are not speedrun-enabled
+        // Arrange — retail M+ dungeons are not speedrun-enabled. Regression test for GitHub issue #3535:
+        // a submitted difficulty is discarded for non-speedrun dungeons (defense in depth against a stale
+        // value carried over from a previously-selected speedrun dungeon).
         $dungeon = $this->getNonSpeedrunDungeon();
         $this->assertFalse((bool)$dungeon->speedrun_enabled, 'Expected a non-speedrun retail dungeon ' . $dungeon->key);
 
@@ -417,7 +419,7 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
         $validated = [
             'dungeon_id'          => $dungeon->id,
             'faction_id'          => 1,
-            'dungeon_route_title' => 'Difficulty Passthrough Test',
+            'dungeon_route_title' => 'Difficulty Discarded Test',
             'dungeon_difficulty'  => Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_25_MAN],
         ];
 
@@ -426,7 +428,7 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
             $service->save($route, $validated);
 
             // Assert
-            $this->assertEquals(Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_25_MAN], $route->dungeon_difficulty);
+            $this->assertNull($route->getRawOriginal('dungeon_difficulty'));
         } finally {
             if ($route->exists) {
                 $this->cleanupRoute($route);
