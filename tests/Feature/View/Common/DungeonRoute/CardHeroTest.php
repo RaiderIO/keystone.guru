@@ -84,6 +84,29 @@ final class CardHeroTest extends PublicTestCase
     }
 
     #[Test]
+    public function render_givenNullArchetypeAndHeroRank_returnsRankedCommunityRouteEyebrow(): void
+    {
+        // Arrange
+        $dungeonroute = DungeonRoute::factory()->create();
+
+        try {
+            // Act
+            $html = view('common.dungeonroute.cardhero', [
+                'dungeonroute' => $dungeonroute,
+                'archetype'    => null,
+                'heroRank'     => 2,
+                'cache'        => false,
+            ])->render();
+
+            // Assert
+            $this->assertStringContainsString(sprintf(__('view_common.dungeonroute.cardhero.ranked_community_route'), 2), $html);
+            $this->assertStringNotContainsString(__('view_common.dungeonroute.cardhero.top_community_route'), $html);
+        } finally {
+            $dungeonroute->delete();
+        }
+    }
+
+    #[Test]
     public function render_givenFavoritesCount_returnsFavoritesStat(): void
     {
         // Arrange

@@ -79,19 +79,23 @@ $showRoutesByAffixes = $gameVersion->has_seasons && $gameVersion->key !== GameVe
                 @endforeach
             </div>
         @else
-            <?php $fallbackHero = $dungeonroutes['popular']->first(); ?>
-            @if($fallbackHero !== null)
+            <?php // With no Raider.IO weekly routes, the top community routes fill the hero band instead ?>
+            <?php $fallbackHeroes = $dungeonroutes['popular']->take(3)->values(); ?>
+            @if($fallbackHeroes->isNotEmpty())
                 <div class="row g-3 mt-4 discover_hero_band">
-                    <div class="col">
-                        @include('common.dungeonroute.cardhero', [
-                            'dungeonroute' => $fallbackHero,
-                            'archetype' => null,
-                            'cache' => true,
-                        ])
-                    </div>
+                    @foreach($fallbackHeroes as $index => $fallbackHero)
+                        @php($heroRouteIds->push($fallbackHero->id))
+                        <div class="col">
+                            @include('common.dungeonroute.cardhero', [
+                                'dungeonroute' => $fallbackHero,
+                                'archetype' => null,
+                                'heroRank' => $index + 1,
+                                'cache' => true,
+                            ])
+                        </div>
+                    @endforeach
                 </div>
-                @php($heroRouteIds->push($fallbackHero->id))
-                <?php $startRank = 2; ?>
+                <?php $startRank = $heroRouteIds->count() + 1; ?>
             @endif
         @endif
 

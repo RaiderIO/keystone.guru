@@ -270,6 +270,19 @@
 }
 
 @media (max-width: 767.98px) {
+    /* Hero cards stack full-width on phones; two or three across squeezes the title/stats into an
+       unreadable sliver of a column. */
+    .discover_hero_band > .col {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    /* Rank sits in the top-left gutter on phones - vertically centering it against a two-line row
+       (title + stats) leaves it floating awkwardly beside the thumbnail. */
+    .card_dungeonroute.leaderboard_row {
+        align-items: flex-start;
+    }
+
     /* Line 1 stays [rank][thumbnail][title/author ......][⋮]; only the stats drop to line 2. The ⋮
        menu is ordered ahead of the stats so it pins to the top-right instead of wrapping below them. */
     .card_dungeonroute.leaderboard_row .leaderboard_actions {
@@ -286,22 +299,25 @@
     .card_dungeonroute.leaderboard_row .leaderboard_stats {
         order: 2;
         flex-basis: 100%;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        row-gap: 0.2rem;
-        /* Align the stats under the title. The rank sits in its own gutter outside this flex row, so
-           the indent only needs to clear the thumbnail (72px) + its gap, not the rank as well. */
-        margin-left: calc(72px + 0.75rem) !important;
+        /* One right-aligned row of stats under the title; the trimmed cluster (below) is narrow
+           enough to never need wrapping. */
+        flex-wrap: nowrap;
+        justify-content: flex-end;
         margin-top: 0.35rem;
+    }
+
+    /* Rating and favorites are the least essential stats and the widest; drop them on phones so the
+       remaining cluster (EF warning, key level, pull graph, views) always fits on one line. */
+    .card_dungeonroute.leaderboard_row .leaderboard_rating,
+    .card_dungeonroute.leaderboard_row .leaderboard_favorites {
+        display: none;
     }
 
     /* Desktop pins fixed stat column widths so they scan as columns down the list; at phone widths
        that fixed total overflows the viewport (and clips the views), so let each stat hug its
-       content and wrap within the remaining width instead. */
+       content instead. */
     .card_dungeonroute.leaderboard_row .leaderboard_level_chip,
-    .card_dungeonroute.leaderboard_row .leaderboard_rating,
     .card_dungeonroute.leaderboard_row .leaderboard_views,
-    .card_dungeonroute.leaderboard_row .leaderboard_favorites,
     .card_dungeonroute.leaderboard_row .leaderboard_pull_graph {
         min-width: 0;
     }

@@ -10,11 +10,15 @@ use App\Service\Cache\CacheServiceInterface;
  * @var CacheServiceInterface $cacheService
  * @var DungeonRoute          $dungeonroute
  * @var string|null           $archetype
+ * @var int|null              $heroRank
  * @var array<string, mixed>  $__env
  * @var boolean               $cache
  */
 
 $archetype ??= null;
+// When a route is promoted into the hero band without a Raider.IO archetype, its popularity rank
+// (1-based) labels the card instead ("#1 community route"); null falls back to the generic label.
+$heroRank ??= null;
 $isAdmin   = Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN);
 // Generate a unique string so each card on the page has a stable, unique id
 $uniqueString = uniqid();
@@ -26,6 +30,7 @@ use (
     $uniqueString,
     $dungeonroute,
     $archetype,
+    $heroRank,
     $isAdmin,
     $__env
 )
@@ -43,9 +48,12 @@ use (
     // The key-level chip is only meaningful when the route deviates from the season's catch-all range
     $showLevel = $dungeonroute->level_min !== $dungeonroute->season?->key_level_min
         || $dungeonroute->level_max !== $dungeonroute->season?->key_level_max;
-    // An archetype maps onto a Raider.IO weekly-route tag; a null archetype is the promoted community route
+    // An archetype maps onto a Raider.IO weekly-route tag; a null archetype is a promoted community
+    // route, labelled by its popularity rank ("#1 community route") when one is provided.
     $eyebrow = $archetype === null
-        ? __('view_common.dungeonroute.cardhero.top_community_route')
+        ? ($heroRank !== null
+            ? sprintf(__('view_common.dungeonroute.cardhero.ranked_community_route'), $heroRank)
+            : __('view_common.dungeonroute.cardhero.top_community_route'))
         : __(sprintf('view_dungeonroute.discover.dungeon.overview.archetypes.%s.label', $archetype));
     $description = $archetype === null
         ? null
@@ -168,9 +176,9 @@ if ($cache) {
     /** @var User|null $authUser */
     $authUser          = Auth::user();
     $currentUserLocale = Auth::check() ? $authUser->locale : 'en_US';
-// Echo the result of this function - the archetype is folded into the orientation so archetypes never share a cache entry
+// Echo the result of this function - the archetype (or hero rank) is folded into the orientation so no two hero variants share a cache entry
     echo $cacheService->remember(
-        DungeonRoute::getCardCacheKey($dungeonroute->id, sprintf('hero_%s', $archetype ?? 'top'), $currentUserLocale, 0, 0, (int)$isAdmin),
+        DungeonRoute::getCardCacheKey($dungeonroute->id, sprintf('hero_%s', $archetype ?? sprintf('top%s', $heroRank ?? '')), $currentUserLocale, 0, 0, (int)$isAdmin),
         $cacheFn,
         config('keystoneguru.view.common.dungeonroute.card.cache.ttl')
     );
