@@ -66,9 +66,9 @@ return [
         'cardhero' => [
             'top_community_route'    => 'Top community route',
             'ranked_community_route' => '#%d community route',
-            'views'               => '%s views',
-            'favorites'           => '%s favorites',
-            'pulls'               => '{1} :count pull|[2,*] :count pulls',
+            'views'                  => '%s views',
+            'favorites'              => '%s favorites',
+            'pulls'                  => '{1} :count pull|[2,*] :count pulls',
         ],
         'cardrow' => [
             'new'       => 'New',
