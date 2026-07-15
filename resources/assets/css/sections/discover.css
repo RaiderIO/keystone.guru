@@ -276,6 +276,13 @@
         order: 1;
     }
 
+    /* Zero the title column's flex-basis so line wrapping is decided from thumbnail + ⋮ alone; the
+       title then grows to fill and wraps *within* its column instead of pushing the ⋮ onto a new
+       line (a long title otherwise sizes the flex line past the row and bumps the menu down). */
+    .card_dungeonroute.leaderboard_row .leaderboard_main {
+        flex-basis: 0;
+    }
+
     .card_dungeonroute.leaderboard_row .leaderboard_stats {
         order: 2;
         flex-basis: 100%;
