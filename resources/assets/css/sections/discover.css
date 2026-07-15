@@ -165,8 +165,10 @@
     display: flex;
     flex-direction: column;
     /* Cap the row width on wide screens: right-aligned stat columns otherwise leave a large empty
-       gap between the title and the stats. The hero band above stays full-width for impact. */
-    max-width: 52rem;
+       gap between the title and the stats. Centered under the full-width hero band. */
+    max-width: 56rem;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .card_dungeonroute.leaderboard_row {
