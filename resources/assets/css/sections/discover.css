@@ -166,7 +166,7 @@
     flex-direction: column;
     /* Cap the row width on wide screens: right-aligned stat columns otherwise leave a large empty
        gap between the title and the stats. Centered under the full-width hero band. */
-    max-width: 56rem;
+    max-width: 70rem;
     margin-left: auto;
     margin-right: auto;
 }

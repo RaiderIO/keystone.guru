@@ -107,7 +107,7 @@ $showRoutesByAffixes = $gameVersion->has_seasons && $gameVersion->key !== GameVe
         ?>
         <div class="row mt-5 align-items-center discover_section_header">
             <div class="col">
-                <h5 class="mb-0">
+                <h5 class="mb-0 text-center">
                     {{ __('view_dungeonroute.discover.dungeon.overview.community_routes') }}
                 </h5>
             </div>
