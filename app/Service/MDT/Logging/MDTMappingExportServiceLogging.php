@@ -2,10 +2,13 @@
 
 namespace App\Service\MDT\Logging;
 
-use App\Logging\RollbarStructuredLogging;
+use App\Logging\Concerns\InteractsWithRollbar;
+use App\Logging\StructuredLogging;
 
-class MDTMappingExportServiceLogging extends RollbarStructuredLogging implements MDTMappingExportServiceLoggingInterface
+class MDTMappingExportServiceLogging extends StructuredLogging implements MDTMappingExportServiceLoggingInterface
 {
+    use InteractsWithRollbar;
+
     /**
      * @param array<int, int> $enemyIds
      */

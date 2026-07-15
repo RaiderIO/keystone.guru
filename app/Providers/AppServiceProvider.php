@@ -6,12 +6,14 @@ use App\Exceptions\Handler;
 use App\Models\Laratrust\Role;
 use App\Models\User;
 use App\Overrides\CustomRateLimiter;
+use App\Service\View\ViewServiceInterface;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\LazyLoadingViolationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
@@ -20,6 +22,8 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Override;
+use Rollbar\Payload\Level;
+use Rollbar\Rollbar;
 use SocialiteProviders\Manager\SocialiteWasCalled;
 
 class AppServiceProvider extends ServiceProvider
@@ -63,27 +67,26 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ExceptionHandler::class, Handler::class);
 
         $this->app->booted(function () {
-//            /** @var User|null $user */
-//            $user = Auth::user();
-//
-//            // https://docs.rollbar.com/docs/php-configuration-reference
-//            Rollbar::init([
-//                // I don't care about rollbar when developing locally
-//                'enabled'       => !app()->isLocal(),
-//                'access_token'  => config('keystoneguru.rollbar.server_access_token'),
-//                'environment'   => config('app.env'),
-//                'root'          => base_path(),
-//                // @TODO I don't like this query here
-//                'code_version'  => Release::latest()->first()->version,
-//                'minimum_level' => Level::WARNING,
-//                'person'        => [
-//                    'id'       => optional($user)->id ?? 0,
-//                    'username' => optional($user)->name,
-//                ],
-//                'custom'        => [
-//                    'correlationId' => correlationId(),
-//                ],
-//            ]);
+            /** @var User|null $user */
+            $user = Auth::user();
+
+            // https://docs.rollbar.com/docs/php-configuration-reference
+            Rollbar::init([
+                // I don't care about rollbar when developing locally, and CI/PHPUnit runs shouldn't send noise either
+                'enabled'       => !app()->isLocal() && !app()->runningUnitTests(),
+                'access_token'  => config('keystoneguru.rollbar.server_access_token'),
+                'environment'   => config('app.env'),
+                'root'          => base_path(),
+                'code_version'  => app()->make(ViewServiceInterface::class)->getAppVersionInfo()['version'],
+                'minimum_level' => Level::WARNING,
+                'person'        => [
+                    'id'       => $user?->id ?? 0, // @phpstan-ignore nullsafe.neverNull
+                    'username' => $user?->name,
+                ],
+                'custom' => [
+                    'correlationId' => correlationId(),
+                ],
+            ]);
         });
 
         $this->configureRateLimiting();

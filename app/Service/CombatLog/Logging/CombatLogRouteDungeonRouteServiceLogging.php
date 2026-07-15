@@ -2,10 +2,13 @@
 
 namespace App\Service\CombatLog\Logging;
 
-use App\Logging\RollbarStructuredLogging;
+use App\Logging\Concerns\InteractsWithRollbar;
+use App\Logging\StructuredLogging;
 
-class CombatLogRouteDungeonRouteServiceLogging extends RollbarStructuredLogging implements CombatLogRouteDungeonRouteServiceLoggingInterface
+class CombatLogRouteDungeonRouteServiceLogging extends StructuredLogging implements CombatLogRouteDungeonRouteServiceLoggingInterface
 {
+    use InteractsWithRollbar;
+
     public function getCombatLogRouteStart(string $combatLogFilePath): void
     {
         $this->start(__METHOD__, get_defined_vars());

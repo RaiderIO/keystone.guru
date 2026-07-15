@@ -11,13 +11,13 @@ return [
     'channels' => [
         'stack_docker' => [
             'driver'            => 'stack',
-            'channels'          => ['stderr', 'daily', /*'discord', 'rollbar'*/],
+            'channels'          => ['stderr', 'daily'],
             'ignore_exceptions' => false,
         ],
 
         'stack_docker_local' => [
             'driver'            => 'stack',
-            'channels'          => ['stderr', 'daily', /*'discord', 'rollbar'*/],
+            'channels'          => ['stderr', 'daily'],
             'ignore_exceptions' => false,
         ],
 

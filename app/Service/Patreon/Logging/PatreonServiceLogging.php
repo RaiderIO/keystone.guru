@@ -2,12 +2,15 @@
 
 namespace App\Service\Patreon\Logging;
 
-use App\Logging\RollbarStructuredLogging;
+use App\Logging\Concerns\InteractsWithRollbar;
+use App\Logging\StructuredLogging;
 use App\Service\Patreon\Dtos\LinkToUserIdResult;
 use Exception;
 
-class PatreonServiceLogging extends RollbarStructuredLogging implements PatreonServiceLoggingInterface
+class PatreonServiceLogging extends StructuredLogging implements PatreonServiceLoggingInterface
 {
+    use InteractsWithRollbar;
+
     public function loadCampaignBenefitsAdminUserNull(): void
     {
         $this->error(__METHOD__);

@@ -2,10 +2,13 @@
 
 namespace App\Service\CombatLog\DataExtractors\Logging;
 
-use App\Logging\RollbarStructuredLogging;
+use App\Logging\Concerns\InteractsWithRollbar;
+use App\Logging\StructuredLogging;
 
-class FloorDataExtractorLogging extends RollbarStructuredLogging implements FloorDataExtractorLoggingInterface
+class FloorDataExtractorLogging extends StructuredLogging implements FloorDataExtractorLoggingInterface
 {
+    use InteractsWithRollbar;
+
     public function extractDataUpdatedFloorCoordinates(
         int   $floorId,
         float $newIngameMinX,

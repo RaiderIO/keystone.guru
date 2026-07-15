@@ -2,10 +2,13 @@
 
 namespace App\Service\CombatLog\Logging;
 
-use App\Logging\RollbarStructuredLogging;
+use App\Logging\Concerns\InteractsWithRollbar;
+use App\Logging\StructuredLogging;
 
-class CombatLogSplitServiceLogging extends RollbarStructuredLogging implements CombatLogSplitServiceLoggingInterface
+class CombatLogSplitServiceLogging extends StructuredLogging implements CombatLogSplitServiceLoggingInterface
 {
+    use InteractsWithRollbar;
+
     public function splitCombatLogUsingSplitterStart(string $filePath, string $splitter): void
     {
         $this->start(__METHOD__, get_defined_vars());

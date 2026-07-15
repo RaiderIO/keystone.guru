@@ -2,10 +2,13 @@
 
 namespace App\Service\DungeonRoute\Logging;
 
-use App\Logging\RollbarStructuredLogging;
+use App\Logging\Concerns\InteractsWithRollbar;
+use App\Logging\StructuredLogging;
 
-class DungeonRouteSaveServiceLogging extends RollbarStructuredLogging implements DungeonRouteSaveServiceLoggingInterface
+class DungeonRouteSaveServiceLogging extends StructuredLogging implements DungeonRouteSaveServiceLoggingInterface
 {
+    use InteractsWithRollbar;
+
     public function saveStart(?int $dungeonRouteId, bool $isNew, int $dungeonId): void
     {
         $this->start(__METHOD__, get_defined_vars());
