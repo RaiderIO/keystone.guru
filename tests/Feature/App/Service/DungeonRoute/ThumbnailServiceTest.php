@@ -211,7 +211,7 @@ final class ThumbnailServiceTest extends PublicTestCase
                 'secret'       => config('keystoneguru.thumbnail.preview_secret'),
                 'z'            => 1.0,
                 // The default (standard) variant renders with thickened pull lines
-                'thicklines'   => 1,
+                'thicklines' => 1,
             ]), $url);
         } finally {
             config(['keystoneguru.thumbnail.preview_base_url' => $originalBaseUrl]);
@@ -249,7 +249,7 @@ final class ThumbnailServiceTest extends PublicTestCase
                 'secret'       => config('keystoneguru.thumbnail.preview_secret'),
                 'z'            => 1.0,
                 // The default (standard) variant renders with thickened pull lines
-                'thicklines'   => 1,
+                'thicklines' => 1,
             ], false);
             $this->assertSame(sprintf('http://nginx%s', $expectedRelativeUrl), $url);
         } finally {

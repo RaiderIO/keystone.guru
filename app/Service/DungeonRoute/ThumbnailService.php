@@ -593,7 +593,7 @@ class ThumbnailService implements ThumbnailServiceInterface
             'secret'       => config('keystoneguru.thumbnail.preview_secret'),
             'z'            => $zoomLevel,
             // The large hero render keeps normal-width lines; the small standard render thickens them
-            'thicklines'   => $variant === DungeonRouteThumbnail::VARIANT_HERO ? 0 : 1,
+            'thicklines' => $variant === DungeonRouteThumbnail::VARIANT_HERO ? 0 : 1,
         ];
 
         $previewBaseUrl = config('keystoneguru.thumbnail.preview_base_url');
