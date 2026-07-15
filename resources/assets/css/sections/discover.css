@@ -270,10 +270,32 @@
 }
 
 @media (max-width: 767.98px) {
+    /* Line 1 stays [rank][thumbnail][title/author ......][⋮]; only the stats drop to line 2. The ⋮
+       menu is ordered ahead of the stats so it pins to the top-right instead of wrapping below them. */
+    .card_dungeonroute.leaderboard_row .leaderboard_actions {
+        order: 1;
+    }
+
     .card_dungeonroute.leaderboard_row .leaderboard_stats {
+        order: 2;
         flex-basis: 100%;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        row-gap: 0.2rem;
+        /* Align the stats under the title (past the rank + thumbnail gutter) */
         margin-left: calc(2.75rem + 72px + 0.75rem) !important;
         margin-top: 0.35rem;
+    }
+
+    /* Desktop pins fixed stat column widths so they scan as columns down the list; at phone widths
+       that fixed total overflows the viewport (and clips the views), so let each stat hug its
+       content and wrap within the remaining width instead. */
+    .card_dungeonroute.leaderboard_row .leaderboard_level_chip,
+    .card_dungeonroute.leaderboard_row .leaderboard_rating,
+    .card_dungeonroute.leaderboard_row .leaderboard_views,
+    .card_dungeonroute.leaderboard_row .leaderboard_favorites,
+    .card_dungeonroute.leaderboard_row .leaderboard_pull_graph {
+        min-width: 0;
     }
 }
 
