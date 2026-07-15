@@ -2,11 +2,14 @@
 
 namespace App\Service\WowTools\Logging;
 
-use App\Logging\RollbarStructuredLogging;
+use App\Logging\Concerns\InteractsWithRollbar;
+use App\Logging\StructuredLogging;
 use Closure;
 
-class WowToolsServiceLogging extends RollbarStructuredLogging implements WowToolsServiceLoggingInterface
+class WowToolsServiceLogging extends StructuredLogging implements WowToolsServiceLoggingInterface
 {
+    use InteractsWithRollbar;
+
     /**
      * @template T
      *

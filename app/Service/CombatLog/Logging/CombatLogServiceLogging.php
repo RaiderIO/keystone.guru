@@ -2,12 +2,15 @@
 
 namespace App\Service\CombatLog\Logging;
 
-use App\Logging\RollbarStructuredLogging;
+use App\Logging\Concerns\InteractsWithRollbar;
+use App\Logging\StructuredLogging;
 use Exception;
 use Throwable;
 
-class CombatLogServiceLogging extends RollbarStructuredLogging implements CombatLogServiceLoggingInterface
+class CombatLogServiceLogging extends StructuredLogging implements CombatLogServiceLoggingInterface
 {
+    use InteractsWithRollbar;
+
     public function parseCombatLogToEventsUnableToParseRawEvent(string $rawEvent): void
     {
         $this->warning(__METHOD__, get_defined_vars());
