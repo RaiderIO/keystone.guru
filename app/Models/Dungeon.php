@@ -20,6 +20,7 @@ use App\Models\Spell\Spell;
 use App\Models\Traits\HasCombatLogCriterion;
 use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
+use App\Service\MDT\MDTAddonVersionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Auth;
 use Eloquent;
@@ -281,6 +282,78 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
     public function hasMappingVersionForGameVersion(GameVersion $gameVersion): bool
     {
         return $this->mappingVersions()->where('game_version_id', $gameVersion->id)->exists();
+    }
+
+    /**
+     * Resolves the mapping version that best matches an imported MDT string's `addonVersion`, so a
+     * route imported from an older MDT string is attached to the mapping version of that MDT era
+     * (and thus flagged as outdated, offering an upgrade). See #3380.
+     *
+     * The `addonVersion` integer is not orderable across MDT's historical version schemes, so it is
+     * resolved to its upstream release date and all comparisons happen on dates. A mapping version
+     * imported from MDT version X covers the half-open range (previous import, X]: the chosen version
+     * is the OLDEST one whose imported-from release date is at or after the string's release date. When
+     * multiple candidates share the same imported-from date (e.g. a manual/facade clone that inherited
+     * its parent's `mdt_addon_version`), the highest `version` among them wins.
+     *
+     * Falls back to the current mapping version when the string carries no `addonVersion` (Keystone's
+     * own exports, very old strings), when the version is unknown, or when the string is newer than
+     * anything imported (the user is genuinely ahead of the server).
+     */
+    public function getMappingVersionForMdtAddonVersion(?int $addonVersion, ?GameVersion $gameVersion = null): ?MappingVersion
+    {
+        $currentMappingVersion = $this->getCurrentMappingVersion($gameVersion);
+
+        if ($addonVersion === null || $addonVersion === 0 || $currentMappingVersion === null) {
+            return $currentMappingVersion;
+        }
+
+        $mdtAddonVersionService = app(MDTAddonVersionServiceInterface::class);
+        $stringDate             = $mdtAddonVersionService->getReleaseDate($addonVersion);
+
+        // Unknown addonVersion (newer than what has been synced, or a value with no release) → newest.
+        if ($stringDate === null) {
+            return $currentMappingVersion;
+        }
+
+        /** @var \Illuminate\Support\Collection<int, MappingVersion> $candidates */
+        $candidates = $this->mappingVersions()
+            ->where('game_version_id', $currentMappingVersion->game_version_id)
+            ->reorder('mapping_versions.version', 'asc')
+            ->without('dungeon')
+            ->get();
+
+        $match     = null;
+        $matchDate = null;
+        foreach ($candidates as $candidate) {
+            $candidateDate = ($candidate->mdt_addon_version !== null
+                ? $mdtAddonVersionService->getReleaseDate($candidate->mdt_addon_version)
+                : null) ?? $candidate->created_at;
+
+            if ($candidateDate->lessThan($stringDate)) {
+                continue;
+            }
+
+            if ($match === null) {
+                $match     = $candidate;
+                $matchDate = $candidateDate;
+            } elseif ($candidateDate->equalTo($matchDate)) {
+                // Same imported-from date, higher version (candidates are ordered version asc) wins.
+                $match = $candidate;
+            } else {
+                // The imported-from date has moved past the matched window; stop.
+                break;
+            }
+        }
+
+        // String is newer than every mapping version we imported → current (newest) is correct.
+        if ($match === null) {
+            return $currentMappingVersion;
+        }
+
+        // Re-fetch as a single model (mirroring getCurrentMappingVersion) so downstream lazy-loads such as
+        // ->enemies are permitted; models pulled from the candidate collection above would trip the guard.
+        return $this->mappingVersions()->without('dungeon')->find($match->id) ?? $currentMappingVersion;
     }
 
     /** @return HasMany<Floor, $this> */

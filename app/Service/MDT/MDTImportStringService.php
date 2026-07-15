@@ -118,6 +118,10 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             $errors   = collect();
 
             $dungeon = Conversion::convertMDTDungeonIDToDungeon($decoded['value']['currentDungeonIdx']);
+            // Preview against the same mapping version the actual import will use, so the stats match (#3380).
+            $mappingVersion = $dungeon->getMappingVersionForMdtAddonVersion(
+                isset($decoded['addonVersion']) ? (int)$decoded['addonVersion'] : null,
+            );
 
             /** @var AffixGroup|null $affixGroup */
             $affixGroup = $this->parseAffixes($warnings, $decoded, $dungeon);
@@ -126,7 +130,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 $warnings,
                 $errors,
                 $dungeon,
-                $dungeon->getCurrentMappingVersion(),
+                $mappingVersion,
                 $affixGroup?->hasAffix(Affix::AFFIX_TEEMING) ?? false,
                 null,
                 $decoded['value']['pulls'],
@@ -136,6 +140,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 $warnings,
                 $errors,
                 $dungeon,
+                $mappingVersion,
                 $importStringPulls->getKillZoneAttributes(),
                 $decoded['objects'],
             ), false);
@@ -217,8 +222,12 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 throw new InvalidMDTStringException($error);
             }
 
-            $dungeon               = Conversion::convertMDTDungeonIDToDungeon($decoded['value']['currentDungeonIdx']);
-            $currentMappingVersion = $dungeon->getCurrentMappingVersion();
+            $dungeon = Conversion::convertMDTDungeonIDToDungeon($decoded['value']['currentDungeonIdx']);
+            // Attach the route to the mapping version matching the MDT version the string was built with,
+            // so routes imported from older strings are flagged as outdated and offered an upgrade (#3380).
+            $currentMappingVersion = $dungeon->getMappingVersionForMdtAddonVersion(
+                isset($decoded['addonVersion']) ? (int)$decoded['addonVersion'] : null,
+            );
 
             // Create a dungeon route
             $titleSlug    = Str::slug($decoded['text']);
@@ -282,6 +291,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 $warnings,
                 $errors,
                 $dungeonRoute->dungeon,
+                $dungeonRoute->mappingVersion,
                 $importStringPulls->getKillZoneAttributes(),
                 $decoded['objects'],
             ), $assignNotesToPulls);

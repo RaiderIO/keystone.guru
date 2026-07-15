@@ -112,6 +112,8 @@ use App\Service\Mapping\MappingExportService;
 use App\Service\Mapping\MappingExportServiceInterface;
 use App\Service\Mapping\MappingService;
 use App\Service\Mapping\MappingServiceInterface;
+use App\Service\MDT\MDTAddonVersionService;
+use App\Service\MDT\MDTAddonVersionServiceInterface;
 use App\Service\MDT\MDTExportStringService;
 use App\Service\MDT\MDTExportStringServiceInterface;
 use App\Service\MDT\MDTImportStringService;
@@ -272,6 +274,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(TimewalkingEventServiceInterface::class, TimewalkingEventService::class);
         $this->app->bind(MDTImportStringServiceInterface::class, MDTImportStringService::class);
         $this->app->bind(MDTExportStringServiceInterface::class, MDTExportStringService::class);
+        $this->app->bind(MDTAddonVersionServiceInterface::class, MDTAddonVersionService::class);
 
         // Depends on CombatLogService, SeasonService, CoordinatesService
         $this->app->bind(CombatLogRouteDungeonRouteServiceInterface::class, CombatLogRouteDungeonRouteService::class);

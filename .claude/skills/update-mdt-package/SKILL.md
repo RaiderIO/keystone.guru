@@ -222,6 +222,16 @@ Repeat Steps 4–5 for every dungeon before moving on.
 Update `config/keystoneguru.php` → `keystoneguru.mdt.version` (near the bottom of the file) to
 the new version, matching the existing `v`-prefixed format (e.g. `v6.1.5`).
 
+Then refresh the MDT addonVersion → release-date map so imported MDT strings resolve to the correct
+mapping version (#3380):
+
+```
+docker compose exec -T app php artisan mdt:syncaddonversions --refresh
+```
+
+This rewrites `database/data/mdt/addon_versions.json` from the GitHub releases and backfills any
+mapping versions still missing `mdt_addon_version`. Leave the regenerated JSON staged for review.
+
 ## Step 7 — Re-export NPC translations and re-seed
 
 Importing MDT mappings resets NPC names to MDT's values, so re-extract the database names into

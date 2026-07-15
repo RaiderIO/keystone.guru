@@ -5,6 +5,7 @@ namespace App\Service\MDT\Models;
 use App\Logic\MDT\Exception\ImportError;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Models\Dungeon;
+use App\Models\Mapping\MappingVersion;
 use Illuminate\Support\Collection;
 
 class ImportStringObjects
@@ -36,11 +37,12 @@ class ImportStringObjects
      * @param array<int, mixed>              $mdtObjects
      */
     public function __construct(
-        private readonly Collection $warnings,
-        private readonly Collection $errors,
-        private readonly Dungeon    $dungeon,
-        private readonly Collection $killZoneAttributes,
-        private readonly array      $mdtObjects,
+        private readonly Collection     $warnings,
+        private readonly Collection     $errors,
+        private readonly Dungeon        $dungeon,
+        private readonly MappingVersion $mappingVersion,
+        private readonly Collection     $killZoneAttributes,
+        private readonly array          $mdtObjects,
     ) {
         $this->lines    = collect();
         $this->paths    = collect();
@@ -67,6 +69,11 @@ class ImportStringObjects
     public function getDungeon(): Dungeon
     {
         return $this->dungeon;
+    }
+
+    public function getMappingVersion(): MappingVersion
+    {
+        return $this->mappingVersion;
     }
 
     /**
