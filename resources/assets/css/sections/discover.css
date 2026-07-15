@@ -164,6 +164,9 @@
 .dungeonroute_leaderboard {
     display: flex;
     flex-direction: column;
+    /* Cap the row width on wide screens: right-aligned stat columns otherwise leave a large empty
+       gap between the title and the stats. The hero band above stays full-width for impact. */
+    max-width: 52rem;
 }
 
 .card_dungeonroute.leaderboard_row {
@@ -277,11 +280,21 @@
         max-width: 100%;
     }
 
-    /* Rank sits in the top-left gutter on phones - vertically centering it against a two-line row
-       (title + stats) leaves it floating awkwardly beside the thumbnail. !important overrides the
-       .align-items-center Bootstrap utility on the row element. */
-    .card_dungeonroute.leaderboard_row {
+    /* On phones the row content top-aligns so the thumbnail (and ⋮) hug the top instead of
+       floating in the vertical middle of a two-line-title row. !important overrides the
+       .align-items-center Bootstrap utility on the row + row-inner elements. */
+    .card_dungeonroute.leaderboard_row,
+    .card_dungeonroute.leaderboard_row .leaderboard_row_inner {
         align-items: flex-start !important;
+    }
+
+    /* The rank still reads as vertically centered - but against the thumbnail, not the full row:
+       give it the thumbnail's height and center the numeral within it. */
+    .card_dungeonroute.leaderboard_row .leaderboard_rank {
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-end;
+        height: 44px;
     }
 
     /* Line 1 stays [rank][thumbnail][title/author ......][⋮]; only the stats drop to line 2. The ⋮
