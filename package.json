@@ -30,7 +30,7 @@
         "@fortawesome/fontawesome-free": "^7.3.0",
         "@popperjs/core": "^2.11.8",
         "@shopify/draggable": "^1.2.1",
-        "@simonwep/pickr": "^1.8.2",
+        "@simonwep/pickr": "^1.9.1",
         "ajv": "^8.18.0",
         "bootstrap": "^5.3.8",
         "bootstrap5-toggle": "^5.4.1",
