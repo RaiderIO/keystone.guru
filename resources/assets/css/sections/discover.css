@@ -237,7 +237,7 @@
 
 .card_dungeonroute.leaderboard_row .leaderboard_views {
     display: inline-block;
-    min-width: 4.5rem;
+    min-width: 3.5rem;
     text-align: end;
 }
 
@@ -251,8 +251,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: flex-end;
-    /* Fixed right-aligned slot (30 bars * 4px max) so the always-present graph + views columns line up across rows */
-    min-width: 7.5rem;
+    /* Fixed right-aligned slot so the always-present graph + views columns line up across rows */
+    min-width: 6rem;
     vertical-align: middle;
 }
 
@@ -278,9 +278,10 @@
     }
 
     /* Rank sits in the top-left gutter on phones - vertically centering it against a two-line row
-       (title + stats) leaves it floating awkwardly beside the thumbnail. */
+       (title + stats) leaves it floating awkwardly beside the thumbnail. !important overrides the
+       .align-items-center Bootstrap utility on the row element. */
     .card_dungeonroute.leaderboard_row {
-        align-items: flex-start;
+        align-items: flex-start !important;
     }
 
     /* Line 1 stays [rank][thumbnail][title/author ......][⋮]; only the stats drop to line 2. The ⋮

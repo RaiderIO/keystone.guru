@@ -109,7 +109,6 @@ $showRoutesByAffixes = $gameVersion->has_seasons && $gameVersion->key !== GameVe
             <div class="col">
                 <h5 class="mb-0">
                     {{ __('view_dungeonroute.discover.dungeon.overview.community_routes') }}
-                    <span class="text-muted">({{ $leaderboardRoutes->count() }})</span>
                 </h5>
             </div>
         </div>
