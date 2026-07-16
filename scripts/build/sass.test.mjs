@@ -2,9 +2,27 @@
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {describe, expect, it} from 'vitest';
-import {createSassImporter, hoistPlainCssImports, rewritePlainCssImports, scopeThemeRootSelectors} from './sass.mjs';
+import {createSassImporter, hoistPlainCssImports, normalizeAssetBaseUrl, rewritePlainCssImports, scopeThemeRootSelectors} from './sass.mjs';
 
 const rootDir = path.resolve(import.meta.dirname, '..', '..');
+
+describe('normalizeAssetBaseUrl', () => {
+    it('normalizeAssetBaseUrl_givenTrailingSlash_stripsIt', () => {
+        expect(normalizeAssetBaseUrl('https://assets.keystone.guru/')).toBe('https://assets.keystone.guru');
+    });
+
+    it('normalizeAssetBaseUrl_givenMultipleTrailingSlashes_stripsThemAll', () => {
+        expect(normalizeAssetBaseUrl('https://assets.keystone.guru///')).toBe('https://assets.keystone.guru');
+    });
+
+    it('normalizeAssetBaseUrl_givenNoTrailingSlash_leavesItUnchanged', () => {
+        expect(normalizeAssetBaseUrl('https://assets.keystone.guru')).toBe('https://assets.keystone.guru');
+    });
+
+    it('normalizeAssetBaseUrl_givenUndefined_returnsEmptyString', () => {
+        expect(normalizeAssetBaseUrl(undefined)).toBe('');
+    });
+});
 
 describe('rewritePlainCssImports', () => {
     it('rewritePlainCssImports_givenCssExtensionImport_stripsTheExtension', () => {
