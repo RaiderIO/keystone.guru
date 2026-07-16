@@ -51,7 +51,7 @@ class ObjectImporter
             return $importStringObjects;
         }
 
-        $mappingVersion = $importStringObjects->getDungeon()->getCurrentMappingVersion();
+        $mappingVersion = $importStringObjects->getMappingVersion();
 
         $floors = $importStringObjects->getDungeon()->floorsForMapFacade(
             $mappingVersion,

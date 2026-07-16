@@ -71,6 +71,7 @@ use App\Repositories\Database\MapObjectToAwakenedObeliskLinkRepository;
 use App\Repositories\Database\Mapping\MappingChangeLogRepository;
 use App\Repositories\Database\Mapping\MappingCommitLogRepository;
 use App\Repositories\Database\Mapping\MappingVersionRepository;
+use App\Repositories\Database\MDTAddonVersionRepository;
 use App\Repositories\Database\MDTImportRepository;
 use App\Repositories\Database\Metrics\MetricAggregationRepository;
 use App\Repositories\Database\Metrics\MetricRepository;
@@ -183,6 +184,7 @@ use App\Repositories\Interfaces\MapObjectToAwakenedObeliskLinkRepositoryInterfac
 use App\Repositories\Interfaces\Mapping\MappingChangeLogRepositoryInterface;
 use App\Repositories\Interfaces\Mapping\MappingCommitLogRepositoryInterface;
 use App\Repositories\Interfaces\Mapping\MappingVersionRepositoryInterface;
+use App\Repositories\Interfaces\MDTAddonVersionRepositoryInterface;
 use App\Repositories\Interfaces\MDTImportRepositoryInterface;
 use App\Repositories\Interfaces\Metrics\MetricAggregationRepositoryInterface;
 use App\Repositories\Interfaces\Metrics\MetricRepositoryInterface;
@@ -366,6 +368,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(MapIconRepositoryInterface::class, MapIconRepository::class);
         $this->app->bind(MapIconTypeRepositoryInterface::class, MapIconTypeRepository::class);
         $this->app->bind(MapObjectToAwakenedObeliskLinkRepositoryInterface::class, MapObjectToAwakenedObeliskLinkRepository::class);
+        $this->app->bind(MDTAddonVersionRepositoryInterface::class, MDTAddonVersionRepository::class);
         $this->app->bind(MDTImportRepositoryInterface::class, MDTImportRepository::class);
         $this->app->bind(MountableAreaRepositoryInterface::class, MountableAreaRepository::class);
         $this->app->bind(NpcBolsteringWhitelistRepositoryInterface::class, NpcBolsteringWhitelistRepository::class);
