@@ -210,8 +210,8 @@ final class ThumbnailServiceTest extends PublicTestCase
                 'floorIndex'   => 0,
                 'secret'       => config('keystoneguru.thumbnail.preview_secret'),
                 'z'            => 1.0,
-                // The default (standard) variant renders with thickened pull lines
-                'thicklines' => 1,
+                // The default (standard) variant thickens the killzone-path lines by its config multiplier
+                'killzonepathweight' => 3,
             ]), $url);
         } finally {
             config(['keystoneguru.thumbnail.preview_base_url' => $originalBaseUrl]);
@@ -248,10 +248,39 @@ final class ThumbnailServiceTest extends PublicTestCase
                 'floorIndex'   => 0,
                 'secret'       => config('keystoneguru.thumbnail.preview_secret'),
                 'z'            => 1.0,
-                // The default (standard) variant renders with thickened pull lines
-                'thicklines' => 1,
+                // The default (standard) variant thickens the killzone-path lines by its config multiplier
+                'killzonepathweight' => 3,
             ], false);
             $this->assertSame(sprintf('http://nginx%s', $expectedRelativeUrl), $url);
+        } finally {
+            config(['keystoneguru.thumbnail.preview_base_url' => $originalBaseUrl]);
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function getPreviewUrl_givenHeroVariant_omitsKillZonePathWeightParam(): void
+    {
+        // Arrange - the hero variant keeps normal-width lines (config multiplier is null), so no param is added
+        $originalBaseUrl = config('keystoneguru.thumbnail.preview_base_url');
+        config(['keystoneguru.thumbnail.preview_base_url' => null]);
+
+        $dungeon        = $this->getDungeonWithNonFacadeFloor();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $dungeonRoute   = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        $service = $this->buildService($this->createMockPublic(ThumbnailServiceLoggingInterface::class));
+        $method  = new ReflectionMethod($service, 'getPreviewUrl');
+
+        try {
+            // Act
+            $url = $method->invoke($service, $dungeonRoute, 0, 1.0, DungeonRouteThumbnail::VARIANT_HERO);
+
+            // Assert - the hero render carries no killzonepathweight override
+            $this->assertStringNotContainsString('killzonepathweight', $url);
         } finally {
             config(['keystoneguru.thumbnail.preview_base_url' => $originalBaseUrl]);
             $dungeonRoute->delete();
@@ -356,7 +385,7 @@ final class ThumbnailServiceTest extends PublicTestCase
 
         try {
             // Act - attach a hero variant; the standard thumbnail must be left untouched
-            $method->invoke($service, $dungeonRoute, $floor->index, '/thumbnails/hero.jpg', 'fake-image-bytes', config('filesystems.default'), false, DungeonRouteThumbnail::VARIANT_HERO);
+            $method->invoke($service, $dungeonRoute, $floor->index, '/thumbnails/hero.jpg', 'fake-image-bytes', config('filesystems.default'), DungeonRouteThumbnail::VARIANT_HERO);
 
             // Assert - both variants now coexist
             $this->assertDatabaseHas('dungeon_route_thumbnails', ['id' => $standardThumbnail->id]);
@@ -381,7 +410,49 @@ final class ThumbnailServiceTest extends PublicTestCase
     }
 
     #[Test]
-    public function queueHeroThumbnailRefresh_givenNoHeroThumbnail_queuesAHeroJob(): void
+    public function attachThumbnailToDungeonRoute_givenCustomVariant_dualWritesCustomFlagAndKeepsOtherVariants(): void
+    {
+        // Arrange
+        Storage::fake('s3_user_uploads');
+        Storage::fake(config('filesystems.default'));
+
+        $dungeon        = $this->getDungeonWithNonFacadeFloor();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $floor          = $dungeon->floors()->where('facade', false)->first();
+
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        // A pre-existing standard thumbnail must survive a custom render (custom renders never delete others).
+        $standardThumbnail = DungeonRouteThumbnail::create([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'floor_id'         => $floor->id,
+            'custom'           => false,
+            'variant'          => DungeonRouteThumbnail::VARIANT_STANDARD,
+        ]);
+
+        $service = $this->buildService($this->createMockPublic(ThumbnailServiceLoggingInterface::class));
+        $method  = new ReflectionMethod($service, 'attachThumbnailToDungeonRoute');
+
+        try {
+            // Act - attach a custom variant
+            $customThumbnail = $method->invoke($service, $dungeonRoute, $floor->index, '/thumbnails_custom/custom.jpg', 'fake-image-bytes', config('filesystems.default'), DungeonRouteThumbnail::VARIANT_CUSTOM);
+
+            // Assert - variant is 'custom' and the legacy custom boolean is dual-written to true
+            $this->assertSame(DungeonRouteThumbnail::VARIANT_CUSTOM, $customThumbnail->variant);
+            $this->assertTrue((bool)$customThumbnail->custom);
+            // The pre-existing standard thumbnail is untouched
+            $this->assertDatabaseHas('dungeon_route_thumbnails', ['id' => $standardThumbnail->id]);
+        } finally {
+            DungeonRouteThumbnail::where('dungeon_route_id', $dungeonRoute->id)->get()->each->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function queueThumbnailRefresh_givenHeroVariantAndNoHeroThumbnail_queuesAHeroJob(): void
     {
         // Arrange
         Queue::fake();
@@ -396,7 +467,7 @@ final class ThumbnailServiceTest extends PublicTestCase
 
         try {
             // Act
-            $result = $service->queueHeroThumbnailRefresh($dungeonRoute);
+            $result = $service->queueThumbnailRefresh($dungeonRoute, false, DungeonRouteThumbnail::VARIANT_HERO);
 
             // Assert
             $this->assertTrue($result);
@@ -407,7 +478,7 @@ final class ThumbnailServiceTest extends PublicTestCase
     }
 
     #[Test]
-    public function queueHeroThumbnailRefresh_givenFreshHeroThumbnail_doesNotQueue(): void
+    public function queueThumbnailRefresh_givenHeroVariantAndFreshHeroThumbnail_doesNotQueue(): void
     {
         // Arrange
         Queue::fake();
@@ -434,7 +505,7 @@ final class ThumbnailServiceTest extends PublicTestCase
 
         try {
             // Act
-            $result = $service->queueHeroThumbnailRefresh($dungeonRoute);
+            $result = $service->queueThumbnailRefresh($dungeonRoute, false, DungeonRouteThumbnail::VARIANT_HERO);
 
             // Assert
             $this->assertFalse($result);
@@ -446,7 +517,7 @@ final class ThumbnailServiceTest extends PublicTestCase
     }
 
     #[Test]
-    public function queueHeroThumbnailRefresh_givenStaleHeroThumbnail_queuesAHeroJob(): void
+    public function queueThumbnailRefresh_givenHeroVariantAndStaleHeroThumbnail_queuesAHeroJob(): void
     {
         // Arrange
         Queue::fake();
@@ -473,7 +544,7 @@ final class ThumbnailServiceTest extends PublicTestCase
 
         try {
             // Act
-            $result = $service->queueHeroThumbnailRefresh($dungeonRoute);
+            $result = $service->queueThumbnailRefresh($dungeonRoute, false, DungeonRouteThumbnail::VARIANT_HERO);
 
             // Assert
             $this->assertTrue($result);

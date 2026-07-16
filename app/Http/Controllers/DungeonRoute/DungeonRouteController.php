@@ -310,9 +310,10 @@ class DungeonRouteController extends Controller
             'mapContext'     => $mapContextService->createMapContextDungeonRoute($dungeonroute, $mapFacadeStyle),
             'defaultZoom'    => $zoomLevel,
             'mapFacadeStyle' => $mapFacadeStyle,
-            // Thicken pull lines for miniatures by default; the hero variant opts out via thicklines=0
-            'thickLines' => $request->boolean('thicklines', true),
-            'parameters' => $request->validated(),
+            // The factor to multiply the killzone-path (pull-connection) line weight by so a small miniature
+            // still reads as a route shape. Null (the default) keeps the map's normal line width.
+            'killZonePathWeightMultiplier' => $request->has('killzonepathweight') ? (float)$request->input('killzonepathweight') : null,
+            'parameters'                   => $request->validated(),
         ]);
     }
 

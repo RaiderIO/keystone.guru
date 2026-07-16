@@ -31,12 +31,15 @@ class DungeonRoutePreviewUrlFormRequest extends DungeonRouteBaseUrlFormRequest
                 'nullable',
                 'string',
             ],
-            // Whether the pull-connection lines should be thickened for a miniature render; the larger
-            // hero variant passes 0 so its lines keep the normal width.
-            'thicklines' => [
+            // The factor the killzone-path (pull-connection) line weight is multiplied by for this render, so
+            // a small miniature still reads as a route shape. Absent/null keeps the map's normal line width
+            // (e.g. the large hero variant).
+            'killzonepathweight' => [
                 'sometimes',
                 'nullable',
-                'boolean',
+                'numeric',
+                'min:1',
+                'max:10',
             ],
         ]);
     }

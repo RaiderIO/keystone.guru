@@ -15,8 +15,8 @@ use Override;
  * @property int    $dungeon_route_id
  * @property int    $floor_id
  * @property int    $file_id
- * @property bool   $custom           True if this thumbnail was requested through the API with custom parameters
- * @property string $variant          Which render variant this thumbnail is (standard|hero)
+ * @property bool   $custom           Deprecated: superseded by the 'custom' variant. Kept and dual-written until the follow-up migration drops it.
+ * @property string $variant          Which render variant this thumbnail is (standard|hero|custom)
  *
  * @property DungeonRoute $dungeonRoute
  * @property Floor        $floor
@@ -32,6 +32,8 @@ class DungeonRouteThumbnail extends Model
     public const string VARIANT_STANDARD = 'standard';
 
     public const string VARIANT_HERO = 'hero';
+
+    public const string VARIANT_CUSTOM = 'custom';
 
     protected $fillable = [
         'dungeon_route_id',

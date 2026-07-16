@@ -9,12 +9,16 @@ use Illuminate\Support\Collection;
 
 interface ThumbnailServiceInterface
 {
-    public function queueThumbnailRefresh(DungeonRoute $dungeonRoute, bool $force = false): bool;
-
     /**
-     * Queues the larger hero-band thumbnail variant for a route, skipping it when a fresh hero already exists.
+     * Queues a thumbnail refresh for the given variant. The standard variant honours $force and records the
+     * queued-at timestamp; other variants (e.g. the expensive hero render) skip routes that are already fresh
+     * and always force the render.
      */
-    public function queueHeroThumbnailRefresh(DungeonRoute $dungeonRoute, bool $force = false): bool;
+    public function queueThumbnailRefresh(
+        DungeonRoute $dungeonRoute,
+        bool         $force = false,
+        string       $variant = DungeonRouteThumbnail::VARIANT_STANDARD,
+    ): bool;
 
     /**
      * @param Collection<int, DungeonRoute> $dungeonRoutes

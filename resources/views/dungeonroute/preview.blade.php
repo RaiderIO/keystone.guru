@@ -8,11 +8,11 @@ use App\Models\Floor\Floor;
  * @var Floor                $floor
  * @var float                $defaultZoom
  * @var string               $mapFacadeStyle
- * @var bool                 $thickLines
+ * @var float|null           $killZonePathWeightMultiplier
  * @var array<string, mixed> $parameters
  */
 
-$thickLines ??= true;
+$killZonePathWeightMultiplier ??= null;
 ?>
 
 @extends('layouts.map', [
@@ -46,7 +46,7 @@ $thickLines ??= true;
         'edit' => false,
         'echo' => false,
         'noUI' => true,
-        'thumbnail' => $thickLines,
+        'killZonePathWeightMultiplier' => $killZonePathWeightMultiplier,
         'defaultZoom' => $defaultZoom,
         'mapFacadeStyle' => $mapFacadeStyle,
         'floor' => $floor,
