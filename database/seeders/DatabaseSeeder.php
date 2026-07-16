@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
         PublishedStatesSeeder::class,
         CharacteristicsSeeder::class,
         TranslationsSeeder::class,
+        MDTAddonVersionSeeder::class,
 
         // Depends on ExpansionsSeeder, SeasonsSeeder
         AffixSeeder::class,

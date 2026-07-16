@@ -38,7 +38,7 @@ jobs:
       - name: Build assets
         # NOTE: pass flags *after* `--` so they reach your npm script
         env:
-          ASSETS_BASE_URL: https://assets.keystone.guru/
+          ASSETS_BASE_URL: https://assets.keystone.guru
         run: npm --output_version=${{ github.ref_name }} run production
 
       - name: Configure AWS (OIDC)

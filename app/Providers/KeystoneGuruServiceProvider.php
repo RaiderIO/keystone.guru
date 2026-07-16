@@ -45,6 +45,8 @@ use App\Service\AffixGroup\AffixGroupEaseTierService;
 use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
 use App\Service\AffixGroup\ArchonApiService;
 use App\Service\AffixGroup\ArchonApiServiceInterface;
+use App\Service\BannedIpAddress\BannedIpAddressService;
+use App\Service\BannedIpAddress\BannedIpAddressServiceInterface;
 use App\Service\Cache\CacheService;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\DevCacheService;
@@ -112,6 +114,8 @@ use App\Service\Mapping\MappingExportService;
 use App\Service\Mapping\MappingExportServiceInterface;
 use App\Service\Mapping\MappingService;
 use App\Service\Mapping\MappingServiceInterface;
+use App\Service\MDT\MDTAddonVersionService;
+use App\Service\MDT\MDTAddonVersionServiceInterface;
 use App\Service\MDT\MDTExportStringService;
 use App\Service\MDT\MDTExportStringServiceInterface;
 use App\Service\MDT\MDTImportStringService;
@@ -246,6 +250,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Depends on CacheService
         $this->app->bind(ReadOnlyModeServiceInterface::class, ReadOnlyModeService::class);
+        $this->app->bind(BannedIpAddressServiceInterface::class, BannedIpAddressService::class);
 
         // Depends on CacheService, CoordinatesService
         $this->app->bind(MDTMappingVersionServiceInterface::class, MDTMappingVersionService::class);
@@ -272,6 +277,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(TimewalkingEventServiceInterface::class, TimewalkingEventService::class);
         $this->app->bind(MDTImportStringServiceInterface::class, MDTImportStringService::class);
         $this->app->bind(MDTExportStringServiceInterface::class, MDTExportStringService::class);
+        $this->app->bind(MDTAddonVersionServiceInterface::class, MDTAddonVersionService::class);
 
         // Depends on CombatLogService, SeasonService, CoordinatesService
         $this->app->bind(CombatLogRouteDungeonRouteServiceInterface::class, CombatLogRouteDungeonRouteService::class);
