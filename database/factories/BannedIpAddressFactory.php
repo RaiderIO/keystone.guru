@@ -22,7 +22,7 @@ class BannedIpAddressFactory extends Factory
             'ip_address' => $this->faker->ipv4(),
             'reason'     => $this->faker->sentence(),
             'expires_at' => null,
-            'created_by' => null,
+            'created_by' => 1, // seeded admin user
         ];
     }
 

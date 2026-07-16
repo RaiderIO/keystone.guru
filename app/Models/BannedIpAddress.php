@@ -14,12 +14,12 @@ use Illuminate\Support\Carbon;
  * @property string      $ip_address
  * @property string|null $reason
  * @property Carbon|null $expires_at
- * @property int|null    $created_by
+ * @property int         $created_by
  *
  * @property Carbon $updated_at
  * @property Carbon $created_at
  *
- * @property User|null $createdBy
+ * @property User $createdBy
  *
  * @mixin Eloquent
  */

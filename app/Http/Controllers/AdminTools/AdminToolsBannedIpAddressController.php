@@ -32,7 +32,7 @@ class AdminToolsBannedIpAddressController extends Controller
             $request->string('ip_address')->toString(),
             $request->string('reason')->toString() === '' ? null : $request->string('reason')->toString(),
             $request->filled('expires_at') ? Carbon::parse($request->string('expires_at')->toString()) : null,
-            Auth::id(),
+            (int)Auth::id(),
         );
 
         Session::flash('status', __('controller.admintools.flash.banned_ip_address_added'));

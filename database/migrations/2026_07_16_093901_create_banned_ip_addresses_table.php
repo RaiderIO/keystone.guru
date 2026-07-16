@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('ip_address');
             $table->string('reason')->nullable();
             $table->dateTime('expires_at')->nullable();
-            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('created_by');
             $table->timestamps();
 
             $table->index(['ip_address']);

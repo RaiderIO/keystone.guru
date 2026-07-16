@@ -39,7 +39,7 @@ final class BannedIpAddressServiceTest extends PublicTestCase
     public function ban_GivenIpAddress_PersistsIt(): void
     {
         // Act
-        $bannedIpAddress    = $this->service->ban('203.0.113.10', 'testing', null, null);
+        $bannedIpAddress    = $this->service->ban('203.0.113.10', 'testing', null, 1);
         $this->createdIds[] = $bannedIpAddress->id;
 
         // Assert

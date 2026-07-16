@@ -10,8 +10,10 @@ interface BannedIpAddressServiceInterface
 {
     /**
      * Bans an IP address (or CIDR range) and refreshes the cached lookup used by the enforcement middleware.
+     * $createdBy must always identify the admin who requested the ban - CLI incident response is
+     * expected to pass the ID of the admin performing it, not a system/null actor.
      */
-    public function ban(string $ipAddress, ?string $reason, ?Carbon $expiresAt, ?int $createdBy): BannedIpAddress;
+    public function ban(string $ipAddress, ?string $reason, ?Carbon $expiresAt, int $createdBy): BannedIpAddress;
 
     /**
      * Removes a ban and refreshes the cached lookup used by the enforcement middleware.

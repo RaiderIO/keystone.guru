@@ -22,7 +22,7 @@ class BannedIpAddressService implements BannedIpAddressServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function ban(string $ipAddress, ?string $reason, ?Carbon $expiresAt, ?int $createdBy): BannedIpAddress
+    public function ban(string $ipAddress, ?string $reason, ?Carbon $expiresAt, int $createdBy): BannedIpAddress
     {
         $bannedIpAddress = $this->bannedIpAddressRepository->create([
             'ip_address' => $ipAddress,
