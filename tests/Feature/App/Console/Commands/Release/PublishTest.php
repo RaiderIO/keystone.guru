@@ -20,7 +20,7 @@ final class PublishTest extends PublicTestCase
 
         GitHub::shouldReceive('repo->releases->edit')
             ->once()
-            ->with('test', 'test', 101, ['draft' => false])
+            ->with('RaiderIO', 'Keystone.guru', 101, ['draft' => false])
             ->andReturn([]);
 
         // Act & Assert
