@@ -21,6 +21,13 @@ interface MappingServiceInterface
     public function createNewMappingVersionFromMDTMapping(Dungeon $dungeon, ?GameVersion $gameVersion, ?string $hash): MappingVersion;
 
     /**
+     * Resolves the mapping version that best matches an imported MDT string's `addonVersion`, so a route
+     * imported from an older MDT string is attached to the mapping version of that MDT era (#3380). Falls
+     * back to the dungeon's current mapping version when the string carries no/unknown/newer addonVersion.
+     */
+    public function getMappingVersionForMdtAddonVersion(Dungeon $dungeon, ?int $addonVersion, ?GameVersion $gameVersion = null): ?MappingVersion;
+
+    /**
      * Takes an existing mapping version and applies it to a dungeon (can be the same dungeon, or another one).
      */
     public function copyMappingVersionToDungeon(MappingVersion $sourceMappingVersion, Dungeon $dungeon): MappingVersion;

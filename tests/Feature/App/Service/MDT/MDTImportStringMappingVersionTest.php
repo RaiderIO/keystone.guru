@@ -4,6 +4,7 @@ namespace Tests\Feature\App\Service\MDT;
 
 use App\Logic\MDT\Conversion;
 use App\Models\Dungeon;
+use App\Service\Mapping\MappingServiceInterface;
 use App\Service\MDT\MDTAddonVersionServiceInterface;
 use App\Service\MDT\MDTImportStringServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
@@ -57,7 +58,8 @@ final class MDTImportStringMappingVersionTest extends PublicTestCase
         $dungeon = Conversion::convertMDTDungeonIDToDungeon($decoded['value']['currentDungeonIdx']);
 
         // Act - this is exactly the resolution the importer performs at assignment time.
-        $selected = $dungeon->getMappingVersionForMdtAddonVersion(
+        $selected = app()->make(MappingServiceInterface::class)->getMappingVersionForMdtAddonVersion(
+            $dungeon,
             isset($decoded['addonVersion']) ? (int)$decoded['addonVersion'] : null,
         );
 

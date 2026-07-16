@@ -3,9 +3,11 @@
 namespace App\Console\Commands\MDT;
 
 use App\Models\Mapping\MappingVersion;
+use App\Models\MDTAddonVersion;
 use App\Service\MDT\MDTAddonVersionService;
 use App\Service\MDT\MDTAddonVersionServiceInterface;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 
@@ -23,9 +25,6 @@ class SyncAddonVersions extends Command
     {
         if ($this->option('refresh')) {
             $this->refreshMap();
-
-            // The service caches the map on first read; resolve a fresh instance so the backfill sees the new file.
-            $mdtAddonVersionService = app(MDTAddonVersionServiceInterface::class);
         }
 
         $this->backfillMappingVersions($mdtAddonVersionService);
@@ -34,9 +33,10 @@ class SyncAddonVersions extends Command
     }
 
     /**
-     * Rebuild database/data/mdt/addon_versions.json from the upstream GitHub releases. The addonVersion
-     * integer is the release tag with every non-digit stripped (mirrors MDT's own encoding); when two
-     * tags collapse to the same integer (a release and its own alpha/beta), the earliest date wins.
+     * Rebuild database/data/mdt/addon_versions.json from the upstream GitHub releases and upsert it into
+     * the mdt_addon_versions table so a live app reflects the new map immediately. The addonVersion integer
+     * is the release tag with every non-digit stripped (mirrors MDT's own encoding); when two tags collapse
+     * to the same integer (a release and its own alpha/beta), the earliest date wins.
      */
     private function refreshMap(): void
     {
@@ -84,6 +84,19 @@ class SyncAddonVersions extends Command
         File::put($path, json_encode($releaseDates, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL);
 
         $this->info(sprintf('Wrote %d addon versions to %s', count($releaseDates), $path));
+
+        $rows = [];
+        foreach ($releaseDates as $addonVersion => $publishedAt) {
+            $rows[] = [
+                'addon_version' => $addonVersion,
+                'released_at'   => Carbon::parse($publishedAt)->toDateTimeString(),
+            ];
+        }
+
+        if ($rows !== []) {
+            MDTAddonVersion::upsert($rows, ['addon_version'], ['released_at']);
+            $this->info(sprintf('Upserted %d addon versions into the database.', count($rows)));
+        }
     }
 
     /**

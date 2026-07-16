@@ -16,6 +16,7 @@ use App\Models\DungeonRoute\DungeonRouteAffixGroup;
 use App\Models\Faction;
 use App\Models\MDTImport;
 use App\Models\PublishedState;
+use App\Service\Mapping\MappingServiceInterface;
 use App\Service\MDT\Import\ObjectImporter;
 use App\Service\MDT\Import\PullImporter;
 use App\Service\MDT\Import\RiftOffsetImporter;
@@ -52,6 +53,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         private readonly PullImporter                           $pullImporter,
         private readonly ObjectImporter                         $objectImporter,
         private readonly RiftOffsetImporter                     $riftOffsetImporter,
+        private readonly MappingServiceInterface                $mappingService,
     ) {
     }
 
@@ -119,7 +121,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
             $dungeon = Conversion::convertMDTDungeonIDToDungeon($decoded['value']['currentDungeonIdx']);
             // Preview against the same mapping version the actual import will use, so the stats match (#3380).
-            $mappingVersion = $dungeon->getMappingVersionForMdtAddonVersion(
+            $mappingVersion = $this->mappingService->getMappingVersionForMdtAddonVersion(
+                $dungeon,
                 isset($decoded['addonVersion']) ? (int)$decoded['addonVersion'] : null,
             );
 
@@ -225,7 +228,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             $dungeon = Conversion::convertMDTDungeonIDToDungeon($decoded['value']['currentDungeonIdx']);
             // Attach the route to the mapping version matching the MDT version the string was built with,
             // so routes imported from older strings are flagged as outdated and offered an upgrade (#3380).
-            $currentMappingVersion = $dungeon->getMappingVersionForMdtAddonVersion(
+            $currentMappingVersion = $this->mappingService->getMappingVersionForMdtAddonVersion(
+                $dungeon,
                 isset($decoded['addonVersion']) ? (int)$decoded['addonVersion'] : null,
             );
 

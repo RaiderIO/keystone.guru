@@ -2,62 +2,28 @@
 
 namespace App\Service\MDT;
 
-use Carbon\Carbon;
+use App\Repositories\Interfaces\MDTAddonVersionRepositoryInterface;
 use Carbon\CarbonInterface;
-use Illuminate\Support\Facades\File;
 
 class MDTAddonVersionService implements MDTAddonVersionServiceInterface
 {
-    private const RELATIVE_DATA_PATH = 'data/mdt/addon_versions.json';
-
-    /** @var array<int, CarbonInterface>|null Lazily-loaded map of addonVersion => release date. */
-    private ?array $releaseDates = null;
+    public function __construct(private readonly MDTAddonVersionRepositoryInterface $mdtAddonVersionRepository)
+    {
+    }
 
     public function getReleaseDate(int $addonVersion): ?CarbonInterface
     {
-        return $this->getReleaseDates()[$addonVersion] ?? null;
+        return $this->mdtAddonVersionRepository->findReleaseDate($addonVersion);
     }
 
     public function getAddonVersionForDate(CarbonInterface $date): ?int
     {
-        $bestAddonVersion = null;
-        $bestReleaseDate  = null;
-
-        foreach ($this->getReleaseDates() as $addonVersion => $releaseDate) {
-            if ($releaseDate->lessThanOrEqualTo($date) &&
-                ($bestReleaseDate === null || $releaseDate->greaterThan($bestReleaseDate))) {
-                $bestAddonVersion = $addonVersion;
-                $bestReleaseDate  = $releaseDate;
-            }
-        }
-
-        return $bestAddonVersion;
+        return $this->mdtAddonVersionRepository->findLatestAddonVersionAtDate($date);
     }
 
     public function getCurrentAddonVersion(): int
     {
         return self::versionStringToAddonVersion(config('keystoneguru.mdt.version'));
-    }
-
-    /**
-     * @return array<int, CarbonInterface>
-     */
-    private function getReleaseDates(): array
-    {
-        if ($this->releaseDates === null) {
-            $this->releaseDates = [];
-
-            $path = database_path(self::RELATIVE_DATA_PATH);
-            if (File::exists($path)) {
-                /** @var array<string, string> $decoded */
-                $decoded = json_decode(File::get($path), true) ?? [];
-                foreach ($decoded as $addonVersion => $publishedAt) {
-                    $this->releaseDates[(int)$addonVersion] = Carbon::parse($publishedAt);
-                }
-            }
-        }
-
-        return $this->releaseDates;
     }
 
     /**
