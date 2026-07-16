@@ -38,6 +38,11 @@ return [
         'panel' => [
             'show_more' => 'Show more',
         ],
+        'pagination' => [
+            'label'    => 'Pagination',
+            'previous' => 'Previous',
+            'next'     => 'Next',
+        ],
         'search' => [
             'page_title'              => 'Search routes',
             'header'                  => 'Search routes',

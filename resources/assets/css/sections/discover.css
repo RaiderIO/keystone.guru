@@ -171,6 +171,13 @@
     margin-right: auto;
 }
 
+/** Prev/Next pagination for the category leaderboard pages, aligned to the leaderboard width. */
+.discover_pagination {
+    max-width: 70rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .card_dungeonroute.leaderboard_row {
     padding: 0.5rem 0.25rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
