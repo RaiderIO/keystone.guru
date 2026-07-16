@@ -8,6 +8,7 @@ use App\Repositories\Database\AffixGroup\AffixGroupEaseTierPullRepository;
 use App\Repositories\Database\AffixGroup\AffixGroupEaseTierRepository;
 use App\Repositories\Database\AffixGroup\AffixGroupRepository;
 use App\Repositories\Database\AffixRepository;
+use App\Repositories\Database\BannedIpAddressRepository;
 use App\Repositories\Database\BrushlineRepository;
 use App\Repositories\Database\CacheModelRepository;
 use App\Repositories\Database\CharacterClassRepository;
@@ -120,6 +121,7 @@ use App\Repositories\Interfaces\AffixGroup\AffixGroupEaseTierPullRepositoryInter
 use App\Repositories\Interfaces\AffixGroup\AffixGroupEaseTierRepositoryInterface;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\AffixRepositoryInterface;
+use App\Repositories\Interfaces\BannedIpAddressRepositoryInterface;
 use App\Repositories\Interfaces\BrushlineRepositoryInterface;
 use App\Repositories\Interfaces\CacheModelRepositoryInterface;
 use App\Repositories\Interfaces\CharacterClassRepositoryInterface;
@@ -344,6 +346,7 @@ class RepositoryServiceProvider extends ServiceProvider
 
         // Root
         $this->app->bind(AffixRepositoryInterface::class, AffixRepository::class);
+        $this->app->bind(BannedIpAddressRepositoryInterface::class, BannedIpAddressRepository::class);
         $this->app->bind(BrushlineRepositoryInterface::class, BrushlineRepository::class);
         $this->app->bind(CacheModelRepositoryInterface::class, CacheModelRepository::class);
         $this->app->bind(CharacterClassRepositoryInterface::class, CharacterClassRepository::class);

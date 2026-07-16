@@ -21,6 +21,8 @@ return [
             'combatlog_parse_failure_no_segments' => 'No combat log segments are available for this run.',
         ],
         'flash' => [
+            'banned_ip_address_added'                => 'IP address banned successfully',
+            'banned_ip_address_removed'              => 'Ban removed successfully',
             'message_banner_set_successfully'        => 'Message banner set successfully',
             'thumbnail_regenerate_result'            => 'Dispatched :success jobs for :total routes. :failed failed.',
             'combatlog_route_regenerate_result'      => 'Dispatched :count jobs',

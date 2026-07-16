@@ -3,6 +3,7 @@
 use App\Http\Middleware\AddsTraceIdToContext;
 use App\Http\Middleware\Api\ApiAuthentication;
 use App\Http\Middleware\Api\ApiRole;
+use App\Http\Middleware\BlockBannedIpAddresses;
 use App\Http\Middleware\DebugBarMessageLogger;
 use App\Http\Middleware\DebugInfoContextLogger;
 use App\Http\Middleware\EnsureFeatureIsActive;
@@ -56,7 +57,10 @@ return Application::configure(basePath: dirname(__DIR__))
         // Prepend so every log line of the request - including those of other global middleware - carries the trace_id
         $middleware->prepend(AddsTraceIdToContext::class);
 
+        // Runs right after (the replaced) TrustProxies, so $request->ip() is already the real
+        // visitor IP resolved from CF-Connecting-IP - see BlockBannedIpAddresses for details.
         $middleware->append([
+            BlockBannedIpAddresses::class,
             ServerTimingMiddleware::class,
             CheckForMaintenanceMode::class,
             PoweredBySwoole::class,

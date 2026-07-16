@@ -2,6 +2,11 @@
 
 return [
 
+    'banned_ip_range_rule' => [
+        'invalid'         => 'This is not a valid IP address or CIDR range.',
+        'range_too_broad' => 'This range is too broad - the widest allowed range is /:min.',
+        'self_lockout'    => 'You cannot ban a range that includes your own IP address.',
+    ],
     'create_route_npc_chronological_rule' => [
         'message' => 'Npc(s) :npcs diedAt must be before engagedAt!',
     ],

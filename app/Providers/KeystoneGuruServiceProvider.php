@@ -45,6 +45,8 @@ use App\Service\AffixGroup\AffixGroupEaseTierService;
 use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
 use App\Service\AffixGroup\ArchonApiService;
 use App\Service\AffixGroup\ArchonApiServiceInterface;
+use App\Service\BannedIpAddress\BannedIpAddressService;
+use App\Service\BannedIpAddress\BannedIpAddressServiceInterface;
 use App\Service\Cache\CacheService;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\DevCacheService;
@@ -246,6 +248,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Depends on CacheService
         $this->app->bind(ReadOnlyModeServiceInterface::class, ReadOnlyModeService::class);
+        $this->app->bind(BannedIpAddressServiceInterface::class, BannedIpAddressService::class);
 
         // Depends on CacheService, CoordinatesService
         $this->app->bind(MDTMappingVersionServiceInterface::class, MDTMappingVersionService::class);

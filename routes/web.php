@@ -14,6 +14,7 @@
 use App\Features\NpcCompendium;
 use App\Http\Controllers\Admin\AdminDungeonRouteController;
 use App\Http\Controllers\AdminTools\AdminToolsArtisanCommandsController;
+use App\Http\Controllers\AdminTools\AdminToolsBannedIpAddressController;
 use App\Http\Controllers\AdminTools\AdminToolsCombatLogController;
 use App\Http\Controllers\AdminTools\AdminToolsCombatLogCriteriaController;
 use App\Http\Controllers\AdminTools\AdminToolsCombatLogParseFailureController;
@@ -543,6 +544,11 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('cache/drop', new AdminToolsController()->dropcache(...))->name('admin.tools.cache.drop');
                 Route::get('datadump/exportdungeondata', new AdminToolsDataDumpController()->exportdungeondata(...))->name('admin.tools.datadump.exportdungeondata');
                 Route::get('readonly/toggle', new AdminToolsController()->toggleReadOnlyMode(...))->name('admin.tools.readonly.toggle');
+
+                // Banned IP addresses
+                Route::get('bannedipaddresses', new AdminToolsBannedIpAddressController()->index(...))->name('admin.tools.bannedipaddresses.view');
+                Route::post('bannedipaddresses', new AdminToolsBannedIpAddressController()->store(...))->name('admin.tools.bannedipaddresses.store');
+                Route::delete('bannedipaddresses/{bannedIpAddress}', new AdminToolsBannedIpAddressController()->destroy(...))->name('admin.tools.bannedipaddresses.destroy');
             });
         });
     });
