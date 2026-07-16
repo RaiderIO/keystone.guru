@@ -319,6 +319,27 @@ return [
         ],
     ],
     'tools' => [
+        'bannedipaddresses' => [
+            'list' => [
+                'title'              => 'Banned IP addresses',
+                'header'             => 'Banned IP addresses',
+                'description'        => 'Block visitors by IP address or CIDR range at the application layer. Bans are checked on every request before routing.',
+                'form_header'        => 'Ban an IP address',
+                'column_ip_address'  => 'IP address',
+                'column_reason'      => 'Reason',
+                'column_expires_at'  => 'Expires',
+                'column_created_by'  => 'Banned by',
+                'column_created_at'  => 'Banned at',
+                'column_actions'     => 'Actions',
+                'submit'             => 'Ban',
+                'remove'             => 'Remove',
+                'confirm_remove'     => 'Are you sure you want to remove this ban?',
+                'empty'              => 'No IP addresses are currently banned.',
+                'expires_never'      => 'Never',
+                'status_expired'     => 'Expired',
+                'created_by_unknown' => 'Unknown',
+            ],
+        ],
         'datadump' => [
             'viewexporteddungeondata' => [
                 'title'   => 'Exported!',
@@ -575,6 +596,9 @@ return [
             'subheader_artisan_commands'                              => 'Artisan Commands',
             'backfill_kill_zone_enemy_id'                             => 'Backfill kill zone enemy IDs',
             'backfill_kill_zone_enemy_id_description'                 => 'One-time backfill of enemy_id on kill_zone_enemies for records where it is NULL.',
+            'subheader_security'                                      => 'Security',
+            'manage_banned_ip_addresses'                              => 'Manage banned IP addresses',
+            'manage_banned_ip_addresses_description'                  => 'Block or unblock visitors by IP address or CIDR range at the application layer.',
             'subheader_actions'                                       => 'Actions',
             'drop_caches'                                             => 'Drop caches',
             'drop_caches_description'                                 => 'Clear all application caches immediately.',
