@@ -68,13 +68,14 @@ differs from HEAD, staged or unstaged**. Consequences:
    command reads this checkout's git state). Write/adjust a test, run it, and prove it
    fails without the fix (`git stash push -- <files>` / run / `git stash pop`).
 3. Stage everything you created/changed; run `composer run fix` and `composer run analyse`.
-4. Upload, inside the app container (needs the release row in the local DB and AWS creds
-   in the container env - both are present in the dev stack):
+4. Upload, inside the app container (needs AWS creds in the container env - present in the dev
+   stack):
    ```sh
    docker compose exec -T app php artisan make:hotfix v15.4.1 --file=app/Http/Requests/Foo.php
    ```
-   Repeat per file. The version argument includes the `v` prefix and must exist in the
-   `releases` table ("Release not found!" otherwise).
+   Repeat per file. The version argument just has to start with `v`; `make:hotfix` uses it
+   verbatim as the S3 key prefix and does **not** validate it against the DB, so double-check
+   you typed the deployed tag exactly (a typo uploads to a dead prefix that no deploy reads).
 5. **Verify the upload**:
    ```sh
    docker compose exec -T app php artisan tinker --execute \
