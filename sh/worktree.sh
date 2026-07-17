@@ -181,12 +181,16 @@ cmd_create() {
         -e "s#^APP_URL=.*#APP_URL=http://localhost:${port}#" \
         -e "s#^URL_HOST=.*#URL_HOST=http://localhost:${port}#" \
         "$wt_path/.env"
+    # MAIN_THUMBNAILS_DIR is persisted into the worktree .env (not just exported) so that plain
+    # `docker compose ...` invocations resolve the bind-mount source too — e.g. the profiled
+    # `render` service used for Path A thumbnail rendering (see the generating-thumbnails skill).
     cat >> "$wt_path/.env" <<EOF
 
 # --- added by sh/worktree.sh (worktree: ${branch}) ---
 COMPOSE_PROJECT_NAME=${project}
 COMPOSE_FILE=docker-compose.worktree.yml
 WORKTREE_HTTP_PORT=${port}
+MAIN_THUMBNAILS_DIR=${REPO_ROOT}/storage/app/public/thumbnails
 EOF
 
     # 4b. Main's thumbnail directory is bind-mounted into the worktree (live-shares thumbnails

@@ -119,6 +119,14 @@ To re-provision the deploy key (e.g. on a new machine): generate a passphraseles
 as a write deploy key —
 `gh api -X POST repos/RaiderIO/keystone.guru/keys -f title=claude-worktree-push -f key="$(cat ~/.ssh/keystone_worktree_ed25519.pub)" -F read_only=false`.
 
+## Thumbnails
+
+A worktree does not run Horizon/puppeteer. To make a route thumbnail, use the two canonical paths in
+the **generating-thumbnails** skill: dispatch to shared Horizon (`dungeonroute:queuethumbnail`) for
+real thumbnails, or render this branch's code to the local disk for inspection
+(`docker compose --profile render run --rm render dungeonroute:renderthumbnail <key>`). Never call
+`ThumbnailService::createThumbnail()` synchronously in the `app` container — it has no Chrome.
+
 ## Tear down
 
 ```bash
