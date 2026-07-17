@@ -37,7 +37,6 @@
 
     &__list {
         list-style: none;
-        padding-left: 0;
         color: #bbbbbb;
         font-size: 1.1rem;
         line-height: 1.5;
@@ -112,4 +111,11 @@
         color: #ffc107;
         font-weight: 700;
     }
+}
+
+// Bootstrap 5's reboot rule (`ul, ol { padding-left: 2rem }`) is theme-scoped as `.darkly ul`
+// (specificity 0,1,1), which out-specifies the plain `.site-footer__list` class (0,1,0) above.
+// Match element + class here to win the cascade and actually zero out the indent.
+.site-footer ul.site-footer__list {
+    padding-left: 0;
 }
