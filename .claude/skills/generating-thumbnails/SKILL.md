@@ -52,6 +52,15 @@ docker compose --profile render run --rm render dungeonroute:renderthumbnail <pu
 - `--floor` is optional (defaults to the map-facade floor set). `--disk` defaults to `local`; keep
   it — writing to `public` from a worktree would land in the shared, bind-mounted dir.
 
+**Path A is inspection-only — it does NOT give the route a thumbnail.** The rollback undoes the whole
+attach (including its delete-of-existing pass), so the route is left exactly as it was: if it had a
+real (public) thumbnail it keeps it, if it had none it still falls back to the dungeon image. Path A
+only adds a standalone JPG on the local disk for you to Read. To actually give a route a working,
+site-rendered thumbnail, use **Path B** — you can't make the route card show your branch's render in
+the worktree UI, because the `public` file is the shared bind-mount (overwriting it, or re-pointing
+the shared DB row, would bleed into the main stack and every worktree). Your branch's rendering
+change reaches real thumbnails via Path B **after merge**, when Horizon runs your merged code.
+
 **Local renders show the DebugBar and black (missing) map tiles** — the local `app-assets` container
 has no tiles and dev has the DebugBar on. This is the same for Path A and Path B (same render
 script/pipeline), so it's fine for verifying layout/enemies/positioning. If you need a tile-accurate,
