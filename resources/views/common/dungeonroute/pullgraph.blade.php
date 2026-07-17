@@ -36,27 +36,31 @@ $pullCount = $pullForces->count();
     $chartWidth = ($bars->count() * ($barWidth + $barGap)) - $barGap;
     ?>
     @if( $bars->isNotEmpty() )
-        <span class="{{ $graphClass }}" data-bs-toggle="tooltip"
-              title="{{ trans_choice($tooltipKey, $pullCount, ['count' => $pullCount]) }}">
-            <svg width="{{ $chartWidth }}" height="{{ $chartHeight }}"
-                 viewBox="0 0 {{ $chartWidth }} {{ $chartHeight }}"
-                 role="img" aria-hidden="true" preserveAspectRatio="none">
-                @foreach( $bars as $index => $pull )
-                    <?php
-                    if ($pull->has_boss) {
-                        $barHeight = $chartHeight;
-                    } else {
-                        $barHeight = $maxForces > 0
-                            ? max($minBar, (int) round(($pull->enemy_forces / $maxForces) * $chartHeight))
-                            : $minBar;
-                    }
-                    $x = $index * ($barWidth + $barGap);
-                    $y = $chartHeight - $barHeight;
-                    ?>
-                    <rect x="{{ $x }}" y="{{ $y }}" width="{{ $barWidth }}" height="{{ $barHeight }}"
-                          fill="{{ $pull->has_boss ? $bossFill : $fill }}"></rect>
-                @endforeach
-            </svg>
+        <span class="{{ $graphClass }}">
+            {{-- The tooltip anchors to this SVG-width wrapper, not the reserved graph slot, so it
+                 centers on the actual bars rather than the empty right-aligned padding. --}}
+            <span class="d-inline-flex" data-bs-toggle="tooltip"
+                  title="{{ trans_choice($tooltipKey, $pullCount, ['count' => $pullCount]) }}">
+                <svg width="{{ $chartWidth }}" height="{{ $chartHeight }}"
+                     viewBox="0 0 {{ $chartWidth }} {{ $chartHeight }}"
+                     role="img" aria-hidden="true" preserveAspectRatio="none">
+                    @foreach( $bars as $index => $pull )
+                        <?php
+                        if ($pull->has_boss) {
+                            $barHeight = $chartHeight;
+                        } else {
+                            $barHeight = $maxForces > 0
+                                ? max($minBar, (int) round(($pull->enemy_forces / $maxForces) * $chartHeight))
+                                : $minBar;
+                        }
+                        $x = $index * ($barWidth + $barGap);
+                        $y = $chartHeight - $barHeight;
+                        ?>
+                        <rect x="{{ $x }}" y="{{ $y }}" width="{{ $barWidth }}" height="{{ $barHeight }}"
+                              fill="{{ $pull->has_boss ? $bossFill : $fill }}"></rect>
+                    @endforeach
+                </svg>
+            </span>
         </span>
     @endif
 @endif
