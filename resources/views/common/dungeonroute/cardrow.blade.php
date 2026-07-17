@@ -78,9 +78,12 @@ use (
             </span>
         @endif
         @if( $favoritesCount > 0 )
-            <span class="leaderboard_favorites me-3" data-bs-toggle="tooltip"
-                  title="{{ sprintf(__('view_common.dungeonroute.cardrow.favorites'), $favoritesCount) }}">
-                <i class="fas fa-heart"></i> {{ abbreviateNumber($favoritesCount) }}
+            <?php // Tooltip on the inner content span, not the fixed-width slot, so it centers on the value ?>
+            <span class="leaderboard_favorites me-3">
+                <span data-bs-toggle="tooltip"
+                      title="{{ sprintf(__('view_common.dungeonroute.cardrow.favorites'), $favoritesCount) }}">
+                    <i class="fas fa-heart"></i> {{ abbreviateNumber($favoritesCount) }}
+                </span>
             </span>
         @endif
         @if( $showLevel )
@@ -98,9 +101,11 @@ use (
             'graphClass'  => 'leaderboard_pull_graph me-3',
             'tooltipKey'  => 'view_common.dungeonroute.cardrow.pulls',
         ])
-        <span class="leaderboard_views" data-bs-toggle="tooltip"
-              title="{{ sprintf(__('view_common.dungeonroute.cardrow.views'), $dungeonroute->views) }}">
-            <i class="fas fa-eye"></i> {{ abbreviateNumber($dungeonroute->views) }}
+        <span class="leaderboard_views">
+            <span data-bs-toggle="tooltip"
+                  title="{{ sprintf(__('view_common.dungeonroute.cardrow.views'), $dungeonroute->views) }}">
+                <i class="fas fa-eye"></i> {{ abbreviateNumber($dungeonroute->views) }}
+            </span>
         </span>
     </div>
     <div class="leaderboard_actions">
