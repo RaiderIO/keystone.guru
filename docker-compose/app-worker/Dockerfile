@@ -16,8 +16,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Local dev relies on this baked cache: the repo (incl. node_modules) is bind-mounted
 # but this dir is not, so the image-baked binary is the only Chrome source locally.
 # a+rwX keeps it usable from any UID, root or not (it's a throwaway in-container cache).
-# KEEP THIS VERSION IN SYNC WITH `puppeteer` in package.json: puppeteer-core (bind-mounted from the
-# repo) launches the exact Chrome build its version pins, so a drift here bakes the wrong Chrome and
-# puppeteer.launch() fails with "Could not find Chrome (ver. X)".
 ENV PUPPETEER_CACHE_DIR=/opt/puppeteer-cache
-RUN npm i -g puppeteer@25.3.0 && chmod -R a+rwX /opt/puppeteer-cache
+
+# Install the exact `puppeteer` version pinned in package.json, so the Chrome build baked here can
+# never drift from what puppeteer-core (bind-mounted from the repo's node_modules) actually
+# launches — no separate version to keep in sync by hand. Requires the build context to be the
+# repo root (see docker-compose.yml / release-deploy.yml) so package.json is reachable here.
+COPY package.json /tmp/package.json
+RUN PUPPETEER_VERSION=$(node -p "require('/tmp/package.json').dependencies.puppeteer.match(/[0-9][0-9.]*/)[0]") \
+ && npm i -g puppeteer@"$PUPPETEER_VERSION" \
+ && rm /tmp/package.json \
+ && chmod -R a+rwX /opt/puppeteer-cache

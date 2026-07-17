@@ -1,0 +1,6 @@
+# Root build context is used only by docker-compose/app-worker/Dockerfile (see docker-compose.yml
+# and release-deploy.yml), which needs nothing from the repo besides package.json to derive its
+# Chrome/puppeteer version pin. Deny-all + allow-list keeps that build fast and means never having
+# to remember to add some new heavy directory (node_modules, vendor, storage, .git, ...) here.
+*
+!package.json
