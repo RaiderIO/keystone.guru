@@ -107,7 +107,6 @@ window.polylinedecorator = require('leaflet-polylinedecorator');
 window.lightCarousel = require('lightslider');
 window.introjs = require('intro.js');
 window.pwstrengthmeter = require('password-strength-meter');
-window.jqueryMousewheel = require('jquery-mousewheel');
 window.Cookies = require('js-cookie');
 window.hull = require('hull.js'); // Find the 'hull' of a random set of points
 const offsetPolygon = require("offset-polygon");
@@ -123,7 +122,6 @@ window.jqueryVisible = require('jquery-visible');
 window.simplebar = require('simplebar');
 window.Draggable = require('@shopify/draggable');
 require('bootstrap5-toggle/js/bootstrap5-toggle.jquery.min.js');
-window.swipe = require('jquery-touchswipe');
 window.lazysizes = require('lazysizes');
 window.ionRangeSlider = require('ion-rangeslider');
 
