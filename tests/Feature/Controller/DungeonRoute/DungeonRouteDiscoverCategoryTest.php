@@ -20,27 +20,24 @@ use Tests\TestCases\PublicTestCase;
 final class DungeonRouteDiscoverCategoryTest extends PublicTestCase
 {
     #[Test]
-    public function discoverDungeonPopular_givenReworkFlagActive_returnsRankedLeaderboard(): void
+    public function discoverDungeonPopular_givenReworkFlagActive_redirectsToBaseDungeonPage(): void
     {
-        // Arrange
+        // Arrange - popular is folded into the base dungeon page when the rework is active
         Feature::define(DungeonRouteListRework::class, true);
-        [$gameVersion, $dungeon, $routes] = $this->createQualifyingRoutes(1);
+        [$gameVersion, $dungeon] = $this->activeDungeon();
 
-        try {
-            // Act
-            $response = $this->get(route('dungeonroutes.discoverdungeon.popular', [
-                'gameVersion' => $gameVersion,
-                'dungeon'     => $dungeon,
-            ]));
+        // Act
+        $response = $this->get(route('dungeonroutes.discoverdungeon.popular', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+        ]));
 
-            // Assert - the reworked ranked leaderboard is rendered instead of the legacy panel
-            $response->assertOk();
-            $response->assertSee('card_dungeonroute leaderboard_row', false);
-            $response->assertSee('leaderboard_rank', false);
-            $response->assertDontSee('id="category_route_list"', false);
-        } finally {
-            $routes->each(fn(DungeonRoute $route) => $route->delete());
-        }
+        // Assert - a permanent redirect to the base dungeon page
+        $response->assertStatus(301);
+        $response->assertRedirect(route('dungeonroutes.discoverdungeon', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+        ]));
     }
 
     #[Test]
@@ -67,26 +64,24 @@ final class DungeonRouteDiscoverCategoryTest extends PublicTestCase
     }
 
     #[Test]
-    public function discoverDungeonNew_givenReworkFlagActive_returnsRankedLeaderboard(): void
+    public function discoverDungeonNew_givenReworkFlagActive_redirectsToBaseDungeonPage(): void
     {
-        // Arrange
+        // Arrange - the per-dungeon new category is retired into the base dungeon page when active
         Feature::define(DungeonRouteListRework::class, true);
-        [$gameVersion, $dungeon, $routes] = $this->createQualifyingRoutes(1);
+        [$gameVersion, $dungeon] = $this->activeDungeon();
 
-        try {
-            // Act
-            $response = $this->get(route('dungeonroutes.discoverdungeon.new', [
-                'gameVersion' => $gameVersion,
-                'dungeon'     => $dungeon,
-            ]));
+        // Act
+        $response = $this->get(route('dungeonroutes.discoverdungeon.new', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+        ]));
 
-            // Assert
-            $response->assertOk();
-            $response->assertSee('card_dungeonroute leaderboard_row', false);
-            $response->assertDontSee('id="category_route_list"', false);
-        } finally {
-            $routes->each(fn(DungeonRoute $route) => $route->delete());
-        }
+        // Assert
+        $response->assertStatus(301);
+        $response->assertRedirect(route('dungeonroutes.discoverdungeon', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+        ]));
     }
 
     #[Test]
@@ -113,36 +108,85 @@ final class DungeonRouteDiscoverCategoryTest extends PublicTestCase
     }
 
     #[Test]
-    public function discoverDungeonPopular_givenReworkFlagActiveAndSecondPage_continuesRankNumbering(): void
+    public function discoverDungeon_givenReworkFlagActive_returnsRankedLeaderboardWithHeroBand(): void
     {
-        // Arrange - shrink the page size so a second page exists with only a few routes
+        // Arrange - enough routes that some land in the leaderboard below the hero band
         Feature::define(DungeonRouteListRework::class, true);
-        config(['keystoneguru.discover.limits.category' => 2]);
-        [$gameVersion, $dungeon, $routes] = $this->createQualifyingRoutes(3);
+        [$gameVersion, $dungeon, $routes] = $this->createQualifyingRoutes(5);
 
         try {
-            // Act - the first page (rank 1..2, with a "next" link to page 2)
-            $firstPage = $this->get(route('dungeonroutes.discoverdungeon.popular', [
+            // Act
+            $response = $this->get(route('dungeonroutes.discoverdungeon', [
                 'gameVersion' => $gameVersion,
                 'dungeon'     => $dungeon,
             ]));
 
-            // Act - the second page (rank continues at 3, with a "previous" link back to page 1)
-            $secondPage = $this->get(route('dungeonroutes.discoverdungeon.popular', [
+            // Assert - the reworked hero band + ranked leaderboard render instead of the legacy panels
+            $response->assertOk();
+            $response->assertSee('discover_hero_band', false);
+            $response->assertSee('card_dungeonroute leaderboard_row', false);
+            $response->assertSee('leaderboard_rank', false);
+            $response->assertDontSee('id="category_route_list"', false);
+        } finally {
+            $routes->each(fn(DungeonRoute $route) => $route->delete());
+        }
+    }
+
+    #[Test]
+    public function discoverDungeon_givenReworkFlagInactive_returnsLegacyOverviewPanels(): void
+    {
+        // Arrange
+        Feature::define(DungeonRouteListRework::class, false);
+        [$gameVersion, $dungeon, $routes] = $this->createQualifyingRoutes(1);
+
+        try {
+            // Act
+            $response = $this->get(route('dungeonroutes.discoverdungeon', [
+                'gameVersion' => $gameVersion,
+                'dungeon'     => $dungeon,
+            ]));
+
+            // Assert - the unchanged legacy multi-panel overview (no hero band, no leaderboard)
+            $response->assertOk();
+            $response->assertSee('id="category_route_list"', false);
+            $response->assertDontSee('discover_hero_band', false);
+            $response->assertDontSee('card_dungeonroute leaderboard_row', false);
+        } finally {
+            $routes->each(fn(DungeonRoute $route) => $route->delete());
+        }
+    }
+
+    #[Test]
+    public function discoverDungeon_givenReworkFlagActiveAndSecondPage_continuesRankAndHidesHeroBand(): void
+    {
+        // Arrange - a small page size so a second page exists; 6 routes spill onto page 2
+        Feature::define(DungeonRouteListRework::class, true);
+        config(['keystoneguru.discover.limits.category' => 4]);
+        [$gameVersion, $dungeon, $routes] = $this->createQualifyingRoutes(6);
+
+        try {
+            // Act - page one, then page two (offset by perPage)
+            $firstPage = $this->get(route('dungeonroutes.discoverdungeon', [
+                'gameVersion' => $gameVersion,
+                'dungeon'     => $dungeon,
+            ]));
+            $secondPage = $this->get(route('dungeonroutes.discoverdungeon', [
                 'gameVersion' => $gameVersion,
                 'dungeon'     => $dungeon,
             ]) . '?page=2');
 
-            // Assert - page one starts at rank 1 and offers a next page
+            // Assert - page one shows the hero band and offers a next page, but no previous
             $firstPage->assertOk();
-            $firstPage->assertSee('leaderboard_rank text-secondary text-end">1</div>', false);
+            $firstPage->assertSee('discover_hero_band', false);
             $firstPage->assertSee('rel="next"', false);
             $firstPage->assertDontSee('rel="prev"', false);
 
-            // Assert - page two continues the ranking at perPage + 1 (= 3) and offers a previous page
+            // Assert - page two continues the ranking at perPage + 1 (= 5), drops the hero band,
+            // and offers a previous page
             $secondPage->assertOk();
-            $secondPage->assertSee('leaderboard_rank text-secondary text-end">3</div>', false);
+            $secondPage->assertSee('leaderboard_rank text-secondary text-end">5</div>', false);
             $secondPage->assertSee('rel="prev"', false);
+            $secondPage->assertDontSee('discover_hero_band', false);
         } finally {
             $routes->each(fn(DungeonRoute $route) => $route->delete());
         }
