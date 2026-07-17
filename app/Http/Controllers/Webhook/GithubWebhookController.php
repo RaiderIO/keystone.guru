@@ -43,8 +43,12 @@ class GithubWebhookController extends Controller
         $ref     = $request->get('ref');
         $branch  = str_replace('refs/heads/', '', (string)$ref);
 
-        // We don't need duplicate messages in Discord since mapping is automatically managed
-        if ($branch !== 'mapping') {
+        // Branches carrying automated, non-code pushes we never announce in Discord: 'mapping' is
+        // automatically managed (duplicate noise), and 'verification-screenshots' is the orphan
+        // branch the headless-browser-verify tooling pushes PR screenshots to.
+        $ignoredBranches = ['mapping', 'verification-screenshots'];
+
+        if (!in_array($branch, $ignoredBranches, true)) {
             $embeds = [];
 
             // https://discord.com/developers/docs/resources/channel#embed-object-embed-limits
