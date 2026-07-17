@@ -171,11 +171,39 @@
     margin-right: auto;
 }
 
-/** Prev/Next pagination for the category leaderboard pages, aligned to the leaderboard width. */
+/** Numbered pagination for the dungeon leaderboard page, aligned to the leaderboard width. */
 .discover_pagination {
     max-width: 70rem;
     margin-left: auto;
     margin-right: auto;
+}
+
+/* Darkly fills every page-link with the same success teal and marks the active page with a
+   box-shadow, but $enable-shadows is off so the current page is indistinguishable. Give the
+   pagination a conventional look instead: subdued links with an accent-filled current page. */
+.discover_pagination .page-link {
+    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.15);
+    color: var(--bs-body-color);
+}
+
+.discover_pagination .page-link:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: #fff;
+}
+
+.discover_pagination .page-item.active .page-link {
+    background-color: var(--bs-success);
+    border-color: var(--bs-success);
+    color: #fff;
+    font-weight: 700;
+}
+
+.discover_pagination .page-item.disabled .page-link {
+    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.35);
 }
 
 .card_dungeonroute.leaderboard_row {
