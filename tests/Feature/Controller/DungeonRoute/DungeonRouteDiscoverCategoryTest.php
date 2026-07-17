@@ -161,7 +161,7 @@ final class DungeonRouteDiscoverCategoryTest extends PublicTestCase
     {
         // Arrange - a small page size so a second page exists; 6 routes spill onto page 2
         Feature::define(DungeonRouteListRework::class, true);
-        config(['keystoneguru.discover.limits.category' => 4]);
+        config(['keystoneguru.discover.limits.leaderboard' => 4]);
         [$gameVersion, $dungeon, $routes] = $this->createQualifyingRoutes(6);
 
         try {

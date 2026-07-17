@@ -385,7 +385,7 @@ class DungeonRouteDiscoverController extends Controller
                     ->values(),
                 'paginator' => $discoverService->popularByDungeonPaginated(
                     $dungeon,
-                    (int)config('keystoneguru.discover.limits.category'),
+                    (int)config('keystoneguru.discover.limits.leaderboard'),
                 ),
                 'gameVersionDungeons' => $gameVersionDungeons,
             ]);
