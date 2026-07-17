@@ -185,6 +185,12 @@
     background-color: transparent;
     border-color: rgba(255, 255, 255, 0.15);
     color: var(--bs-body-color);
+    border-radius: var(--bs-border-radius);
+}
+
+/* Small gap so the rounded links read as separate pills instead of a connected bar. */
+.discover_pagination .page-item:not(:first-child) .page-link {
+    margin-left: 0.25rem;
 }
 
 .discover_pagination .page-link:hover {
