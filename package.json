@@ -27,7 +27,7 @@
         "vitest": "^4.1.10"
     },
     "dependencies": {
-        "@fortawesome/fontawesome-free": "^7.3.0",
+        "@fortawesome/fontawesome-free": "^7.3.1",
         "@popperjs/core": "^2.11.8",
         "@shopify/draggable": "^1.2.1",
         "@simonwep/pickr": "^1.9.1",
