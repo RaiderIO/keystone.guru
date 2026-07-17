@@ -12,6 +12,20 @@ interface CacheServiceInterface
 
     public function remember(string $key, mixed $value, mixed $ttl = null): mixed;
 
+    /**
+     * Remembers a value in a single Redis hash, keyed by field. All fields of a hash can then be dropped in one
+     * operation with {@see self::dropHashCache()}, regardless of how many fields exist.
+     *
+     * @param  \Closure|mixed      $value
+     * @return \Closure|mixed|null
+     */
+    public function rememberInHash(string $hashKey, string $field, mixed $value, mixed $ttl = null): mixed;
+
+    /**
+     * Drops an entire Redis hash (and all its fields) in a single operation.
+     */
+    public function dropHashCache(string $hashKey): void;
+
     public function get(string $key): mixed;
 
     public function set(string $key, mixed $object, mixed $ttl = null): bool;

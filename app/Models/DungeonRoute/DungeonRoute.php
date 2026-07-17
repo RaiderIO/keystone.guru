@@ -46,6 +46,7 @@ use App\Models\Traits\Reportable;
 use App\Models\Traits\SerializesDates;
 use App\Models\Traits\Taggable;
 use App\Models\User;
+use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
@@ -67,11 +68,9 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Override;
-use Psr\SimpleCache\InvalidArgumentException;
 use stdClass;
 
 /**
@@ -1481,53 +1480,27 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
     /**
      * Drops any caches associated with this dungeon route.
+     *
+     * All card variants of a route live as fields in a single Redis hash, so every variant is dropped in one
+     * bounded operation regardless of how many orientation/locale/flag combinations exist.
      */
     public static function dropCaches(int $dungeonRouteId): void
     {
-        try {
-            // This can be better - but it's fine if you're using it to drop caches for 1 route.
-            $orientations = [
-                'vertical',
-                'horizontal',
-                'horizontal_row',
-                'poster',
-                'hero_top',
-                'hero_pug_friendly',
-                'hero_expert',
-                'hero_title',
-                'row',
-            ];
-            $locales     = language()->allowed();
-            $showAffixes = [
-                0,
-                1,
-            ];
-            $showDungeon = [
-                0,
-                1,
-            ];
-            $isAdmin = [
-                0,
-                1,
-            ];
-
-            foreach ($orientations as $orientation) {
-                foreach ($locales as $code => $name) {
-                    foreach ($showAffixes as $showAffix) {
-                        foreach ($showDungeon as $showDungeonImage) {
-                            foreach ($isAdmin as $admin) {
-                                Cache::delete(self::getCardCacheKey($dungeonRouteId, $orientation, $code, $showAffix, $showDungeonImage, $admin));
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (InvalidArgumentException) {
-        }
+        resolve(CacheServiceInterface::class)->dropHashCache(self::getCardCacheKey($dungeonRouteId));
     }
 
-    public static function getCardCacheKey(
-        int    $dungeonRouteId,
+    /**
+     * The Redis hash key holding every cached card variant of a route.
+     */
+    public static function getCardCacheKey(int $dungeonRouteId): string
+    {
+        return sprintf('dungeonroute_card:%d', $dungeonRouteId);
+    }
+
+    /**
+     * The field within the card cache hash identifying a single card variant.
+     */
+    public static function getCardCacheField(
         string $orientation,
         string $locale,
         int    $showAffixes,
@@ -1535,13 +1508,12 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         int    $isAdmin,
     ): string {
         return sprintf(
-            'view:dungeonroute_card:%s:%s_%d_%d_%d_%d',
+            '%s:%s_%d_%d_%d',
             $orientation,
             $locale,
             $showAffixes,
             $showDungeonImage,
             $isAdmin,
-            $dungeonRouteId,
         );
     }
 

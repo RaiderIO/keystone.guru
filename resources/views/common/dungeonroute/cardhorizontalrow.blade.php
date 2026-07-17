@@ -219,8 +219,9 @@ use (
 
 if ($cache) {
     $currentUserLocale = app()->getLocale();
-    echo $cacheService->remember(
-        DungeonRoute::getCardCacheKey($dungeonroute->id, 'horizontal_row', $currentUserLocale, $showAffixes, $showDungeonImage, (int)$isAdmin),
+    echo $cacheService->rememberInHash(
+        DungeonRoute::getCardCacheKey($dungeonroute->id),
+        DungeonRoute::getCardCacheField('horizontal_row', $currentUserLocale, $showAffixes, $showDungeonImage, (int)$isAdmin),
         $cacheFn,
         config('keystoneguru.view.common.dungeonroute.card.cache.ttl')
     );

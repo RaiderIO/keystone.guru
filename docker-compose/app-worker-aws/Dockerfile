@@ -30,10 +30,10 @@ RUN composer install --no-dev --optimize-autoloader && \
       php artisan vendor:publish --tag=laravel-assets --ansi --force
 
 # Install NPM packages. The worker base image bakes Chrome into PUPPETEER_CACHE_DIR
-# (/opt/puppeteer-cache) via a global puppeteer@24 install; as long as the repo's puppeteer
-# resolves the same Chrome build, its postinstall detects the cached binary and skips the
-# download. When the versions drift it downloads that version's Chrome as well — still correct,
-# just image bloat.
+# (/opt/puppeteer-cache) via a global puppeteer install pinned to package.json's version; as long
+# as the repo's puppeteer resolves the same Chrome build, its postinstall detects the cached binary
+# and skips the download. When the versions drift it downloads that version's Chrome as well — still
+# correct, just image bloat.
 RUN npm install
 
 # Generate Swagger related files

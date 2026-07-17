@@ -253,6 +253,21 @@
             </div>
         </div>
 
+        {{-- Security --}}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <i class="fas fa-user-shield"></i> {{ __('view_admin.tools.list.subheader_security') }}
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a href="{{ route('admin.tools.bannedipaddresses.view') }}">{{ __('view_admin.tools.list.manage_banned_ip_addresses') }}</a>
+                        <small class="text-muted d-block">{{ __('view_admin.tools.list.manage_banned_ip_addresses_description') }}</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
         {{-- Actions (destructive) --}}
         <div class="col-12 mb-4">
             <div class="card border-danger">

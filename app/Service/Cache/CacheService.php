@@ -6,6 +6,7 @@ use App\Service\Cache\Logging\CacheServiceLoggingInterface;
 use App\Service\Cache\Redis\RedisServiceInterface;
 use Closure;
 use DateInterval;
+use DateTimeImmutable;
 use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Redis\Connections\Connection;
 use Illuminate\Support\Facades\Cache;
@@ -30,6 +31,33 @@ class CacheService implements CacheServiceInterface
         $cacheConfig = config('keystoneguru.cache');
 
         return isset($cacheConfig[$key]) ? DateInterval::createFromDateString($cacheConfig[$key]['ttl']) : null;
+    }
+
+    /**
+     * Converts a TTL - an int of seconds, a '1 hour'-style string, or a DateInterval - into a number of seconds
+     * suitable for a Redis EXPIRE. Returns null when no TTL is given (the key should not expire).
+     */
+    private function ttlToSeconds(mixed $ttl): ?int
+    {
+        if ($ttl === null) {
+            return null;
+        }
+
+        if (is_int($ttl)) {
+            return $ttl;
+        }
+
+        if (is_string($ttl)) {
+            $ttl = DateInterval::createFromDateString($ttl);
+        }
+
+        if ($ttl instanceof DateInterval) {
+            $reference = new DateTimeImmutable();
+
+            return $reference->add($ttl)->getTimestamp() - $reference->getTimestamp();
+        }
+
+        return null;
     }
 
     public function isCacheEnabled(): bool
@@ -128,6 +156,58 @@ class CacheService implements CacheServiceInterface
         });
     }
 
+    /**
+     * @param  Closure|mixed $value
+     * @return mixed
+     */
+    public function rememberInHash(string $hashKey, string $field, mixed $value, mixed $ttl = null): mixed
+    {
+        // Just like remember(), do not populate the model cache for the queries inside $value()
+        return app('model-cache')->runDisabled(function () use ($hashKey, $field, $value, $ttl) {
+            $prefixedKey = config('database.redis.options.prefix') . $hashKey;
+            $redis       = Redis::connection('default');
+
+            // Return the cached field when it exists and the cache is enabled. A missing field is false (phpredis)
+            // or null (predis); a genuinely stored null is distinguishable as the serialized string 'N;'.
+            if ($this->cacheEnabled) {
+                $cached = $this->redisService->rawCommand($redis, 'HGET', $prefixedKey, $field);
+                if ($cached !== false && $cached !== null) {
+                    return unserialize((string)$cached);
+                }
+            }
+
+            // Cache miss - resolve the value by calling the closure
+            if ($value instanceof Closure) {
+                $value = $value();
+            }
+
+            // Only write it to cache when we're not bypassing it
+            if (!$this->isBypassCache()) {
+                $this->redisService->rawCommand($redis, 'HSET', $prefixedKey, $field, serialize($value));
+
+                // Redis can only expire a hash as a whole, so refresh the TTL of the entire hash on every write.
+                // A frequently viewed route thus keeps all of its cached variants warm together.
+                $ttlSeconds = $this->ttlToSeconds($ttl);
+                if ($ttlSeconds !== null) {
+                    $this->redisService->rawCommand($redis, 'EXPIRE', $prefixedKey, (string)$ttlSeconds);
+                }
+            }
+
+            return $value;
+        });
+    }
+
+    /**
+     * Drops an entire hash - and every field within it - in a single Redis DEL, regardless of how many fields
+     * exist. This is what makes dropping a route's card caches a bounded operation.
+     */
+    public function dropHashCache(string $hashKey): void
+    {
+        $prefixedKey = config('database.redis.options.prefix') . $hashKey;
+
+        $this->redisService->rawCommand(Redis::connection('default'), 'DEL', $prefixedKey);
+    }
+
     public function get(string $key): mixed
     {
         return Cache::get($key);
@@ -171,8 +251,8 @@ class CacheService implements CacheServiceInterface
             // MDT
             sprintf('/%smdt_npcs_[a-z_]+/', $prefix),
             sprintf('/%smdt_enemies_[a-z_]+/', $prefix),
-            // Cards
-            sprintf('/%sdungeonroute_card:(?>vertical|horizontal):[a-zA-Z_]+:[01]_[01]_[01]_\d+/', $prefix),
+            // Cards - one hash per route, keyed dungeonroute_card:{id}
+            sprintf('/%sdungeonroute_card:\d+/', $prefix),
             // Dungeon data used in MapContext
             sprintf('/%sdungeon_\d+_\d+_[a-z_]+/', $prefix),
             // Per-region view variables, keyed by release: view_variables:{release}:game_server_region:{short}

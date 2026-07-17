@@ -142,8 +142,9 @@ use (
         /** @var User|null $authUser */
         $authUser          = Auth::user();
         $currentUserLocale = Auth::check() ? $authUser->locale : 'en_US';
-        echo $cacheService->remember(
-            DungeonRoute::getCardCacheKey($dungeonroute->id, 'row', $currentUserLocale, 0, 0, (int)$isAdmin),
+        echo $cacheService->rememberInHash(
+            DungeonRoute::getCardCacheKey($dungeonroute->id),
+            DungeonRoute::getCardCacheField('row', $currentUserLocale, 0, 0, (int)$isAdmin),
             $cacheFn,
             config('keystoneguru.view.common.dungeonroute.card.cache.ttl')
         );

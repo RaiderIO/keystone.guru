@@ -38,7 +38,7 @@ jobs:
       - name: Build assets
         # NOTE: pass flags *after* `--` so they reach your npm script
         env:
-          ASSETS_BASE_URL: https://assets.keystone.guru/
+          ASSETS_BASE_URL: https://assets.keystone.guru
         run: npm --output_version=${{ github.ref_name }} run production
 
       - name: Configure AWS (OIDC)
@@ -194,16 +194,21 @@ jobs:
             ecr_repos: "ksg-php-fpm ksg-reverb ksg-swoole"
           # Puppeteer/Chrome live only in this image (docker-compose/app-worker), so the
           # thumbnail-generation queue workers get a browser; the app image above doesn't.
+          # base_context is the repo root (not docker-compose/app-worker) so its Dockerfile can
+          # COPY package.json and derive the baked Chrome version from it instead of a hardcoded,
+          # driftable pin.
           - image: worker
             base_tag: keystone.guru-worker
             needs_own_base_build: true
-            base_context: docker-compose/app-worker
+            base_context: .
+            base_dockerfile: docker-compose/app-worker/Dockerfile
             prod_context: docker-compose/app-worker-aws
             ecr_repos: "ksg-queue-worker"
           - image: cron
             base_tag: keystone.guru-cron
             needs_own_base_build: true
             base_context: docker-compose/cron
+            base_dockerfile: docker-compose/cron/Dockerfile
             prod_context: docker-compose/cron-aws
             ecr_repos: "ksg-cron"
 
@@ -256,7 +261,7 @@ jobs:
 
       - name: Build base ${{ matrix.image }} image
         if: matrix.needs_own_base_build
-        run: docker build -t ${{ matrix.base_tag }} ${{ matrix.base_context }}
+        run: docker build -t ${{ matrix.base_tag }} -f ${{ matrix.base_dockerfile }} ${{ matrix.base_context }}
 
       # GIT_REF pins the in-image checkout to the released tag for reproducibility.
       # No --no-cache here: on a fresh runner there's nothing to invalidate, and the

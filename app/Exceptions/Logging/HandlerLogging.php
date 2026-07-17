@@ -2,11 +2,14 @@
 
 namespace App\Exceptions\Logging;
 
-use App\Logging\RollbarStructuredLogging;
+use App\Logging\Concerns\InteractsWithRollbar;
+use App\Logging\StructuredLogging;
 use Throwable;
 
-class HandlerLogging extends RollbarStructuredLogging implements HandlerLoggingInterface
+class HandlerLogging extends StructuredLogging implements HandlerLoggingInterface
 {
+    use InteractsWithRollbar;
+
     public function tooManyRequests(
         string    $ip,
         string    $url,
