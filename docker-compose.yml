@@ -96,8 +96,11 @@ services:
 
   horizon:
     build:
-      context: docker-compose/app-worker
-      dockerfile: Dockerfile
+      # Root context (not docker-compose/app-worker) so the Dockerfile can COPY package.json and
+      # derive its Chrome pin from the repo's actual puppeteer version. See the root .dockerignore
+      # for what's excluded from this build's context.
+      context: .
+      dockerfile: docker-compose/app-worker/Dockerfile
       args:
         BASE_IMAGE: keystone.guru
       # The worker Dockerfile builds FROM the app image. `depends_on` does not order *builds*,
