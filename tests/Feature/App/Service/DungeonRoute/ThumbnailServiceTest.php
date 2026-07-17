@@ -314,4 +314,80 @@ final class ThumbnailServiceTest extends PublicTestCase
             $dungeonRoute->delete();
         }
     }
+
+    #[Test]
+    public function attachThumbnailToDungeonRoute_givenFacadeFloorWithExistingThumbnailsOnMultipleFloors_yieldsSingleFileBackedFacadeThumbnail(): void
+    {
+        // Arrange
+        // Regression guard for #3580: a facade regeneration deletes every existing thumbnail of the
+        // route and must always leave behind exactly one thumbnail that is backed by a File row
+        // (a fileless thumbnail 403s because has_thumbnail stays true but nothing is on disk).
+        Storage::fake('s3_user_uploads');
+        Storage::fake(config('filesystems.default'));
+
+        $dungeon        = $this->getDungeonWithFacadeFloor();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $facadeFloor    = $dungeon->floors()->where('facade', true)->first();
+
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        // Seed pre-existing thumbnails on every active floor (this is the state a route ends up in
+        // when thumbnails were generated per-floor before a facade regeneration runs).
+        $existingThumbnails = collect();
+        foreach ($dungeon->floors()->active()->get() as $index => $floor) {
+            $thumbnail = DungeonRouteThumbnail::create([
+                'dungeon_route_id' => $dungeonRoute->id,
+                'floor_id'         => $floor->id,
+                'custom'           => false,
+            ]);
+            $file = File::create([
+                'model_id'    => $thumbnail->id,
+                'model_class' => DungeonRouteThumbnail::class,
+                'disk'        => 's3_user_uploads',
+                'path'        => sprintf('thumbnails/existing_%d.jpg', $index),
+            ]);
+            $thumbnail->update(['file_id' => $file->id]);
+            $existingThumbnails->push($thumbnail);
+        }
+
+        $service = $this->buildService($this->createMockPublic(ThumbnailServiceLoggingInterface::class));
+        $method  = new ReflectionMethod($service, 'attachThumbnailToDungeonRoute');
+
+        try {
+            // Act
+            $newThumbnail = $method->invoke(
+                $service,
+                $dungeonRoute,
+                $facadeFloor->index,
+                'thumbnails/facade_new.jpg',
+                'fake-image-bytes',
+                config('filesystems.default'),
+            );
+
+            // Assert - the new thumbnail is file-backed
+            $this->assertNotNull($newThumbnail->file_id);
+            $this->assertNotNull($newThumbnail->file);
+            Storage::disk(config('filesystems.default'))->assertExists('thumbnails/facade_new.jpg');
+
+            // Assert - every pre-existing thumbnail (and its File) was removed
+            foreach ($existingThumbnails as $existingThumbnail) {
+                $this->assertDatabaseMissing('dungeon_route_thumbnails', ['id' => $existingThumbnail->id]);
+                $this->assertDatabaseMissing('files', ['id' => $existingThumbnail->file_id]);
+            }
+
+            // Assert - the route is left with exactly one thumbnail, and it is file-backed
+            $remaining = DungeonRouteThumbnail::query()
+                ->where('dungeon_route_id', $dungeonRoute->id)
+                ->get();
+            $this->assertCount(1, $remaining);
+            $this->assertNotNull($remaining->first()->file);
+            $this->assertTrue($dungeonRoute->fresh()->has_thumbnail);
+        } finally {
+            DungeonRouteThumbnail::where('dungeon_route_id', $dungeonRoute->id)->get()->each->delete();
+            $dungeonRoute->delete();
+        }
+    }
 }
