@@ -8,6 +8,7 @@ use App\Models\DungeonRoute\DungeonRouteThumbnail;
 use App\Models\File;
 use App\Models\Floor\Floor;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
+use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -103,13 +104,17 @@ final class RenderThumbnailTest extends PublicTestCase
             'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
         ]);
 
-        // The fake render persists a thumbnail row (as the real attach would). The command must roll
-        // it back so the shared database is never mutated by a Path A render.
+        // The fake render mirrors the real pipeline: it persists a thumbnail row AND writes the
+        // rendered file to disk. The command's contract is that the DB write is rolled back while
+        // the on-disk file (a non-transactional Storage write) survives for the agent to read.
+        Storage::fake('local');
+
         $persistedThumbnailId = null;
+        $renderedPath         = 'thumbnails/x.jpg';
         $thumbnailService     = $this->createMockPublic(ThumbnailServiceInterface::class);
         $thumbnailService->expects($this->once())
             ->method('createThumbnail')
-            ->willReturnCallback(function () use ($dungeonRoute, $floor, &$persistedThumbnailId): DungeonRouteThumbnail {
+            ->willReturnCallback(function () use ($dungeonRoute, $floor, $renderedPath, &$persistedThumbnailId): DungeonRouteThumbnail {
                 $thumbnail = DungeonRouteThumbnail::create([
                     'dungeon_route_id' => $dungeonRoute->id,
                     'floor_id'         => $floor->id,
@@ -119,9 +124,11 @@ final class RenderThumbnailTest extends PublicTestCase
                     'model_id'    => $thumbnail->id,
                     'model_class' => DungeonRouteThumbnail::class,
                     'disk'        => 'local',
-                    'path'        => 'thumbnails/x.jpg',
+                    'path'        => $renderedPath,
                 ]);
                 $thumbnail->update(['file_id' => $file->id]);
+
+                Storage::disk('local')->put($renderedPath, 'fake-image-bytes');
 
                 $persistedThumbnailId = $thumbnail->id;
 
@@ -136,10 +143,12 @@ final class RenderThumbnailTest extends PublicTestCase
                 '--floor'   => $floor->index,
             ])->assertSuccessful();
 
-            // Assert - the persisted thumbnail (and its file) were rolled back
+            // Assert - the persisted thumbnail (and its file row) were rolled back...
             $this->assertNotNull($persistedThumbnailId);
             $this->assertDatabaseMissing('dungeon_route_thumbnails', ['id' => $persistedThumbnailId]);
             $this->assertSame(0, $dungeonRoute->dungeonRouteThumbnails()->count());
+            // ...but the rendered file survives the rollback so the agent can read it.
+            Storage::disk('local')->assertExists($renderedPath);
         } finally {
             DungeonRouteThumbnail::where('dungeon_route_id', $dungeonRoute->id)->get()->each->delete();
             $dungeonRoute->delete();

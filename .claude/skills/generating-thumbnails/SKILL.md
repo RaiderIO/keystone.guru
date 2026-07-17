@@ -53,9 +53,11 @@ docker compose --profile render run --rm render dungeonroute:renderthumbnail <pu
   it — writing to `public` from a worktree would land in the shared, bind-mounted dir.
 
 **Local renders show the DebugBar and black (missing) map tiles** — the local `app-assets` container
-has no tiles and dev has the DebugBar on. This is identical for Path A and Path B (same render), so
-it's fine for verifying layout/enemies/positioning. If you need a tile-accurate, DebugBar-free
-image, that's an env concern affecting both paths, not a Path A bug.
+has no tiles and dev has the DebugBar on. This is the same for Path A and Path B (same render
+script/pipeline), so it's fine for verifying layout/enemies/positioning. If you need a tile-accurate,
+DebugBar-free image, that's an env concern affecting both paths, not a Path A bug. (Path A renders
+via the worker image's global puppeteer and Path B via the repo's local puppeteer — the same
+`route_thumbnail.js`, but pin them if you ever chase a path-specific rendering difference.)
 
 ## Just want to eyeball the visual, not a real thumbnail file?
 
