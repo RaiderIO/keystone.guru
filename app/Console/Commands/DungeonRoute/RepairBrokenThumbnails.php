@@ -81,27 +81,56 @@ class RepairBrokenThumbnails extends Command
     /**
      * Detects thumbnails whose File row still exists but whose object is missing from disk (these
      * render a thumbnail URL that 403s), and re-queues each affected route for regeneration.
+     * Custom (API-requested) thumbnails are only reported: re-queueing regenerates the default
+     * per-floor thumbnails and cannot repair a custom one, so re-queueing those would flag them
+     * again on every run without ever fixing them.
      *
      * @note Regeneration is performed by the queued thumbnail jobs, so this only takes effect once
      *       thumbnail generation itself is operational.
      */
     private function requeueThumbnailsMissingFromDisk(ThumbnailServiceInterface $thumbnailService, bool $dryRun): void
     {
-        $affectedDungeonRouteIds = [];
+        $affectedDungeonRouteIds  = [];
+        $brokenCustomThumbnailIds = [];
 
-        DungeonRouteThumbnail::query()
+        // The model's default $with would also hydrate the unused floor relation for every row.
+        $query = DungeonRouteThumbnail::query()
             ->whereHas('file')
-            ->with('file')
-            ->chunkById(100, function ($thumbnails) use (&$affectedDungeonRouteIds): void {
-                foreach ($thumbnails as $thumbnail) {
-                    /** @var DungeonRouteThumbnail $thumbnail */
-                    $file = $thumbnail->file;
+            ->without('floor');
 
-                    if ($file !== null && !Storage::disk($file->disk)->exists($file->path)) {
+        $total = $query->clone()->count();
+
+        $this->info(sprintf('Scanning %d file-backed thumbnail row(s) for missing disk objects.', $total));
+
+        $progressBar = $this->output->createProgressBar($total);
+
+        $query->clone()->chunkById(100, function ($thumbnails) use (&$affectedDungeonRouteIds, &$brokenCustomThumbnailIds, $progressBar): void {
+            foreach ($thumbnails as $thumbnail) {
+                /** @var DungeonRouteThumbnail $thumbnail */
+                $file = $thumbnail->file;
+
+                if ($file !== null && !Storage::disk($file->disk)->exists($file->path)) {
+                    if ($thumbnail->custom) {
+                        $brokenCustomThumbnailIds[] = $thumbnail->id;
+                    } else {
                         $affectedDungeonRouteIds[$thumbnail->dungeon_route_id] = true;
                     }
                 }
-            });
+
+                $progressBar->advance();
+            }
+        });
+
+        $progressBar->finish();
+        $this->newLine();
+
+        if ($brokenCustomThumbnailIds !== []) {
+            $this->warn(sprintf(
+                'Found %d custom thumbnail(s) whose disk object is missing - these cannot be repaired by re-queueing (thumbnail ID(s): %s).',
+                count($brokenCustomThumbnailIds),
+                implode(', ', $brokenCustomThumbnailIds),
+            ));
+        }
 
         $this->info(sprintf('Found %d route(s) with a thumbnail File whose disk object is missing.', count($affectedDungeonRouteIds)));
 
