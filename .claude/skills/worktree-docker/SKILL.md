@@ -65,17 +65,19 @@ there is no `RefreshDatabase`). A migration in one worktree affects everyone, so
 
 ## Shared thumbnails (public disk only)
 
-Worktrees don't run Horizon/puppeteer, so they can't generate thumbnails themselves. Instead
-`docker-compose.worktree.yml` bind-mounts the **main checkout's** `storage/app/public/thumbnails`
-(`MAIN_THUMBNAILS_DIR`) into every worktree's `app` + `nginx`. So thumbnails the **main stack**
-generates (on the `public` disk, i.e. `FILESYSTEM_DISK=public`) appear live in all worktrees — regenerate
-via the main stack's Horizon and they show up everywhere.
+A worktree's `app`/`nginx` don't run Horizon/puppeteer, so `docker-compose.worktree.yml` bind-mounts
+the **main checkout's** `storage/app/public/thumbnails` (`MAIN_THUMBNAILS_DIR`) into every worktree's
+`app` + `nginx`. So thumbnails the **main stack** generates (on the `public` disk, i.e.
+`FILESYSTEM_DISK=public`) appear live in all worktrees — regenerate via the main stack's Horizon and
+they show up everywhere. (To generate a thumbnail *from* a worktree, see the **Thumbnails** section
+below.)
 
 Only the **public** dir is shared. `storage/app/private/thumbnails` (the `local` disk) is **not**
-mounted — it stays per-worktree. Reserve it for branch-local thumbnail testing: generate onto
-`disk=local` when you want a thumbnail isolated to your branch without touching the shared set. (A
-`disk=local` thumbnail is served through Laravel's local-serve route, not the `public/storage` symlink,
-so it's only visible on the stack that created it.)
+mounted — it stays per-worktree. That per-branch isolation is exactly what the `render` service's
+Path A (`dungeonroute:renderthumbnail`, see **Thumbnails**) relies on: it forces the `local` disk so a
+branch render never touches the shared public set. (A `disk=local` thumbnail is served through
+Laravel's local-serve route, not the `public/storage` symlink, so it's only visible on the stack that
+created it.)
 
 ## Horizon (opt-in — only when changing queue workers)
 
