@@ -123,7 +123,6 @@ window.jqueryVisible = require('jquery-visible');
 window.simplebar = require('simplebar');
 window.Draggable = require('@shopify/draggable');
 require('bootstrap5-toggle/js/bootstrap5-toggle.jquery.min.js');
-window.swipe = require('jquery-touchswipe');
 window.lazysizes = require('lazysizes');
 window.ionRangeSlider = require('ion-rangeslider');
 
