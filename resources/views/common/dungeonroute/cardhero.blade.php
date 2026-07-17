@@ -177,8 +177,9 @@ if ($cache) {
     $authUser          = Auth::user();
     $currentUserLocale = Auth::check() ? $authUser->locale : 'en_US';
 // Echo the result of this function - the archetype (or hero rank) is folded into the orientation so no two hero variants share a cache entry
-    echo $cacheService->remember(
-        DungeonRoute::getCardCacheKey($dungeonroute->id, sprintf('hero_%s', $archetype ?? sprintf('top%s', $heroRank ?? '')), $currentUserLocale, 0, 0, (int)$isAdmin),
+    echo $cacheService->rememberInHash(
+        DungeonRoute::getCardCacheKey($dungeonroute->id),
+        DungeonRoute::getCardCacheField(sprintf('hero_%s', $archetype ?? sprintf('top%s', $heroRank ?? '')), $currentUserLocale, 0, 0, (int)$isAdmin),
         $cacheFn,
         config('keystoneguru.view.common.dungeonroute.card.cache.ttl')
     );

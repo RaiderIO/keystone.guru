@@ -161,12 +161,14 @@ class CommonMapsMap extends InlineCode {
             });
 
             // Live sessions
-            $('#stop_live_session_modal select').barrating({
-                theme: 'fontawesome-stars',
-                onSelect: function (value) {
-                    self._rate(value);
-                }
-            });
+            if (getState().getMapContext() instanceof MapContextLiveSession) {
+                $('#stop_live_session_modal select').barrating({
+                    theme: 'fontawesome-stars',
+                    onSelect: function (value) {
+                        self._rate(value);
+                    }
+                });
+            }
         }
     }
 

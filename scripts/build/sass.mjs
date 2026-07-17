@@ -29,6 +29,20 @@ const sassEntries = [
 ];
 
 /**
+ * Strips any trailing slashes from a url. The stylesheets write `url('#{$asset-url}/images/...')`,
+ * supplying their own slash, so a base with a trailing slash (as the release workflow env once
+ * carried) produced `guru//images`. The old webpack production build hid this because cssnano's
+ * normalize-url collapsed the `//`; esbuild — the current minifier — does not, so the double slash
+ * reached shipped CSS (#3570).
+ *
+ * @param {string|undefined} url
+ * @returns {string}
+ */
+export function normalizeUrl(url) {
+    return (url ?? '').replace(/\/+$/, '');
+}
+
+/**
  * @param {string} rootDir
  * @param {string} version
  * @param {boolean} production
@@ -42,7 +56,7 @@ export function buildSassBundles(rootDir, version, production) {
     for (const [entry, outName] of sassEntries) {
         const entryPath = path.join(rootDir, entry);
         // Same injection sass-loader's additionalData used to do (CDN base for the sprite urls)
-        const source = `$asset-url: "${process.env.ASSETS_BASE_URL}";\n`
+        const source = `$asset-url: "${normalizeUrl(process.env.ASSETS_BASE_URL)}";\n`
             + rewritePlainCssImports(fs.readFileSync(entryPath, 'utf8'));
 
         const result = sass.compileString(source, {

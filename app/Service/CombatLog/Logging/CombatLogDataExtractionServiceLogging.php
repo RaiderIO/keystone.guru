@@ -2,11 +2,14 @@
 
 namespace App\Service\CombatLog\Logging;
 
-use App\Logging\RollbarStructuredLogging;
+use App\Logging\Concerns\InteractsWithRollbar;
+use App\Logging\StructuredLogging;
 use Exception;
 
-class CombatLogDataExtractionServiceLogging extends RollbarStructuredLogging implements CombatLogDataExtractionServiceLoggingInterface
+class CombatLogDataExtractionServiceLogging extends StructuredLogging implements CombatLogDataExtractionServiceLoggingInterface
 {
+    use InteractsWithRollbar;
+
     public function extractDataTimestampNotSet(): void
     {
         $this->warning(__METHOD__);

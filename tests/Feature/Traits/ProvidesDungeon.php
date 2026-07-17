@@ -38,4 +38,33 @@ trait ProvidesDungeon
 
         return $dungeon;
     }
+
+    /**
+     * Returns a random dungeon guaranteed to have a current mapping version and at least one
+     * facade floor. Use this when a test needs to exercise the facade-specific code paths.
+     *
+     * @param (Closure(Builder<Dungeon>): mixed)|null $constraint Optional extra constraint applied to the base query.
+     */
+    protected function getDungeonWithFacadeFloor(?Closure $constraint = null): Dungeon
+    {
+        $count = 0;
+        do {
+            if (++$count > 20) {
+                throw new \RuntimeException('Unable to find a dungeon with a facade floor and a mapping version');
+            }
+
+            $query = Dungeon::query();
+            if ($constraint !== null) {
+                $constraint($query);
+            }
+
+            /** @var Dungeon $dungeon */
+            $dungeon = $query->inRandomOrder()->first();
+        } while (
+            $dungeon->getCurrentMappingVersion() === null ||
+            $dungeon->floors()->where('facade', 1)->doesntExist()
+        );
+
+        return $dungeon;
+    }
 }
