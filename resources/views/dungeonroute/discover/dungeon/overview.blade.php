@@ -65,7 +65,7 @@ $showRoutesByAffixes = $gameVersion->has_seasons && $gameVersion->key !== GameVe
             @if($weeklyRoutes->isNotEmpty())
                 <div class="row mt-4 align-items-center discover_section_header">
                     <div class="col">
-                        <h5 class="mb-0">
+                        <h5 class="mb-0 text-center">
                             <a href="{{ config('keystoneguru.raider_io.weekly_route.url') }}" target="_blank">
                                 {{ __('view_dungeonroute.discover.dungeon.overview.weekly_routes') }}
                                 <i class="fas fa-external-link-alt"></i>
