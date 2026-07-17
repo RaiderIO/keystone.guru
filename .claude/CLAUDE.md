@@ -1,5 +1,11 @@
 # Working in the repository
 
+## Durable notes
+
+- Record durable knowledge in-repo — a relevant skill under `.claude/skills/`, or a `CLAUDE.md` —
+  rather than Claude's auto-memory system. Auto-memories don't transfer between machines; in-repo
+  notes do.
+
 ## Git
 
 Branch formats are as follows:
