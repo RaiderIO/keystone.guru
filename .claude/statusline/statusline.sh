@@ -64,14 +64,28 @@ print(name)
 
 # Worktree name + nginx port for the worktree this session owns.
 # Sessions run in the main repo, so the worktree can't be found from cwd; instead it's recorded in a
-# session-keyed marker (written by bind-worktree.sh when Claude creates a worktree). Marker holds the
-# worktree's absolute path. Markers live under $HOME (machine-local runtime state), not in the repo.
+# session-keyed marker (written automatically by sh/worktree.sh create, via bind-worktree.sh, using
+# $CLAUDE_CODE_SESSION_ID). Marker holds the worktree's absolute path. Markers live under $HOME
+# (machine-local runtime state), not in the repo.
 wt_part=""
 session_id=$(echo "$input" | python3 -c "
 import sys, json
 print(json.load(sys.stdin).get('session_id', ''))
 " 2>/dev/null)
-marker="$HOME/.claude/statusline/session-worktree/$session_id"
+
+# Self-heal: drop any marker whose worktree no longer exists — covers markers left behind by
+# sessions that have since ended (their own status line never renders again to clean up), so the
+# marker dir doesn't grow without bound.
+marker_dir="$HOME/.claude/statusline/session-worktree"
+if [ -d "$marker_dir" ]; then
+    for m in "$marker_dir"/*; do
+        [ -f "$m" ] || continue
+        mp=$(cat "$m" 2>/dev/null)
+        [ -n "$mp" ] && [ -d "$mp" ] || rm -f "$m" 2>/dev/null
+    done
+fi
+
+marker="$marker_dir/$session_id"
 if [ -n "$session_id" ] && [ -f "$marker" ]; then
     wt_path=$(cat "$marker" 2>/dev/null)
     if [ -n "$wt_path" ] && [ -d "$wt_path" ]; then
@@ -79,9 +93,6 @@ if [ -n "$session_id" ] && [ -f "$marker" ]; then
         wt_port=$(grep -m1 '^WORKTREE_HTTP_PORT=' "$wt_path/.env" 2>/dev/null | cut -d= -f2)
         wt_part=$(printf '\033[01;36m%s\033[00m' "$wt_name")
         [ -n "$wt_port" ] && wt_part=$(printf '%s:\033[01;32m%s\033[00m' "$wt_part" "$wt_port")
-    else
-        # Worktree gone — clean up the stale marker so it stops showing.
-        rm -f "$marker" 2>/dev/null
     fi
 fi
 

@@ -79,6 +79,42 @@ worktree_network() {
         --format '{{.Name}}' | head -n1
 }
 
+# The label that marks a GitHub issue as actively worked on in a live worktree.
+WIP_LABEL="in progress"
+
+# Best-effort: toggle the "in progress" label on the issue whose number prefixes the branch
+# (<issue>-<slug>). No-op when the branch has no leading issue number or gh is unavailable, and
+# never fatal — set -euo pipefail must not abort a worktree op over a labeling hiccup.
+set_wip_label() {
+    local action="$1" branch="$2" issue
+    issue="${branch%%-*}"
+    [[ "$issue" =~ ^[0-9]+$ ]] || return 0
+    command -v gh >/dev/null 2>&1 || return 0
+    gh issue edit "$issue" --repo RaiderIO/keystone.guru "--${action}-label" "$WIP_LABEL" \
+        >/dev/null 2>&1 \
+        && echo "==> issue #$issue: ${action} '$WIP_LABEL'" \
+        || echo "  ! issue #$issue: could not ${action} '$WIP_LABEL' (skipping)"
+    return 0
+}
+
+# Bind/unbind this Claude session's status-line marker to the worktree, so the status line shows
+# "<worktree>:<port>". Uses $CLAUDE_CODE_SESSION_ID (set by Claude Code inside every Bash call) so
+# it's automatic — no manual bind-worktree.sh step. No-op outside a Claude session; never fatal.
+BIND_WORKTREE="$REPO_ROOT/.claude/statusline/bind-worktree.sh"
+
+bind_session_worktree() {
+    [ -n "${CLAUDE_CODE_SESSION_ID:-}" ] && [ -x "$BIND_WORKTREE" ] || return 0
+    "$BIND_WORKTREE" bind "$CLAUDE_CODE_SESSION_ID" "$1" >/dev/null 2>&1 \
+        && echo "==> status line bound to worktree" || true
+    return 0
+}
+
+unbind_session_worktree() {
+    [ -n "${CLAUDE_CODE_SESSION_ID:-}" ] && [ -x "$BIND_WORKTREE" ] || return 0
+    "$BIND_WORKTREE" unbind "$CLAUDE_CODE_SESSION_ID" >/dev/null 2>&1 || true
+    return 0
+}
+
 cmd_create() {
     local branch="${1:-}"
     local base="${2:-origin/master}"
@@ -196,6 +232,12 @@ EOF
         php artisan config:clear >/dev/null 2>&1 || true
     ' ) || echo "  ! init step reported an issue — check the app container"
 
+    # 8. Mark the issue as actively worked on (best-effort; skipped if no leading issue number).
+    set_wip_label add "$branch"
+
+    # 9. Point this session's status line at the worktree (best-effort; needs the Claude session id).
+    bind_session_worktree "$wt_path"
+
     cat <<EOF
 
 ==> Worktree ready.
@@ -252,6 +294,8 @@ cmd_remove() {
 
     if [ ! -d "$wt_path" ]; then
         cmd_down "$branch"
+        set_wip_label remove "$branch"
+        unbind_session_worktree
         echo "==> no worktree checkout at $wt_path"
         return 0
     fi
@@ -271,6 +315,8 @@ cmd_remove() {
         chown -R "$(id -u):$(id -g)" "/wt/$branch" >/dev/null 2>&1 || true
 
     git -C "$REPO_ROOT" worktree remove --force "$wt_path"
+    set_wip_label remove "$branch"
+    unbind_session_worktree
     echo "==> worktree '$branch' removed"
 }
 
