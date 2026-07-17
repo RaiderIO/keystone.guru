@@ -107,7 +107,6 @@ window.polylinedecorator = require('leaflet-polylinedecorator');
 window.lightCarousel = require('lightslider');
 window.introjs = require('intro.js');
 window.pwstrengthmeter = require('password-strength-meter');
-window.jqueryMousewheel = require('jquery-mousewheel');
 window.Cookies = require('js-cookie');
 window.hull = require('hull.js'); // Find the 'hull' of a random set of points
 const offsetPolygon = require("offset-polygon");
