@@ -11,6 +11,7 @@
  */
 
 $id ??= null;
+$thisWeekTier ??= null;
 ?>
 <div
     class="list_dungeon col p-1 selectable {{ $isSelected ? 'selected border-accent' : '' }} {{$width ?? 'col'}}"
@@ -19,6 +20,15 @@ $id ??= null;
     @endisset
 >
     <div class="card-img-caption">
+        @if($thisWeekTier !== null)
+            {{-- This week's ease tier (archon.gg). Kept outside the card's <a> to avoid nesting anchors. --}}
+            <div class="dungeon_card_tiers">
+                <span class="dungeon_card_tier" data-bs-toggle="tooltip"
+                      title="{{ __('view_common.dungeon.list.card.this_week_tier') }}">
+                    <span class="tier {{ strtolower($thisWeekTier) }}">{{ $thisWeekTier }}</span>
+                </span>
+            </div>
+        @endif
         <a href="{{ $link }}">
             <h5 class="card-text text-white dungeon_card_dungeon_name">
                 {{ $title }}

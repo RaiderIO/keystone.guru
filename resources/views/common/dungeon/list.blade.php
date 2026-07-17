@@ -23,6 +23,9 @@ $subtextFn       ??= null;
 $width           ??= null;
 $showMore        ??= false;
 $maxColCount     ??= 8;
+// Ease tiers ("what's easy this week") - a Collection<affixGroupId, Collection<dungeonId, tier>>
+$easeTiers         ??= collect();
+$currentAffixGroup ??= null;
 
 // @formatter:off
 ?>
@@ -32,6 +35,7 @@ $maxColCount     ??= 8;
     foreach($dungeons->take($maxColCount) as $dungeon) {
         /** @var Dungeon $dungeon */
         $hasSelectedDungeon = $hasSelectedDungeon || $selected === $dungeon->key;
+        $thisWeekTier = $currentAffixGroup === null ? null : ($easeTiers[$currentAffixGroup->id][$dungeon->id] ?? null);
         ?>
         @include('common.dungeon.list.card', [
             'id' => $dungeon->id,
@@ -41,6 +45,7 @@ $maxColCount     ??= 8;
             'imageUrl' => $dungeon->getImageUrl(),
             'imageAlt' => __($dungeon->name),
             'width' => $width,
+            'thisWeekTier' => $thisWeekTier,
         ])
     <?php
     }
