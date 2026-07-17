@@ -15,6 +15,11 @@ return [
             'next_week' => 'Next week',
             'new'       => 'New',
         ],
+        'list' => [
+            'card' => [
+                'this_week_tier' => 'This week\'s difficulty tier (archon.gg)',
+            ],
+        ],
         'gridtabs' => [
             'raid' => 'Raid',
         ],

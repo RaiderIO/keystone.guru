@@ -6,6 +6,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameVersion\GameVersion;
 use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Laravel\Pennant\Feature;
 
@@ -14,7 +15,8 @@ use Laravel\Pennant\Feature;
  * @var boolean                     $showAds
  * @var boolean                     $isMobile
  * @var Dungeon                     $dungeon
- * @var array<string, Collection<int, DungeonRoute>> $dungeonroutes
+ * @var array<string, Collection<int, DungeonRoute>> $dungeonroutes  Flag off only.
+ * @var LengthAwarePaginator<int, DungeonRoute> $paginator           Flag on only: the paginated popular routes.
  * @var Collection<int, WeeklyRoute> $weeklyRoutes
  * @var GameVersion                 $gameVersion
  * @var Collection<int, Dungeon>    $gameVersionDungeons
@@ -51,57 +53,63 @@ $showRoutesByAffixes = $gameVersion->has_seasons && $gameVersion->key !== GameVe
 
     @if(Feature::active(DungeonRouteListRework::class))
         <?php
-        // The routes already promoted into the hero band are excluded from the leaderboard below
+        $page    = $paginator->currentPage();
+        $perPage = $paginator->perPage();
+        // The current page of popular routes; the hero band (page 1 only) is carved out of these.
+        $popularItems = collect($paginator->items());
+        // The routes already promoted into the hero band are excluded from the leaderboard below.
         $heroRouteIds = collect();
-        $startRank    = 1;
+        $startRank    = ($page - 1) * $perPage + 1;
         ?>
-        @if($weeklyRoutes->isNotEmpty())
-            <div class="row mt-4 align-items-center discover_section_header">
-                <div class="col">
-                    <h5 class="mb-0">
-                        <a href="{{ config('keystoneguru.raider_io.weekly_route.url') }}" target="_blank">
-                            {{ __('view_dungeonroute.discover.dungeon.overview.weekly_routes') }}
-                            <i class="fas fa-external-link-alt"></i>
-                        </a>
-                    </h5>
-                </div>
-            </div>
-            <div class="row g-3 mt-0 discover_hero_band">
-                @foreach($weeklyRoutes as $weeklyRoute)
-                    @php($heroRouteIds->push($weeklyRoute->dungeonRoute->id))
+        @if($page === 1)
+            @if($weeklyRoutes->isNotEmpty())
+                <div class="row mt-4 align-items-center discover_section_header">
                     <div class="col">
-                        @include('common.dungeonroute.cardhero', [
-                            'dungeonroute' => $weeklyRoute->dungeonRoute,
-                            'archetype' => $weeklyRoute->type,
-                            'cache' => true,
-                        ])
+                        <h5 class="mb-0 text-center">
+                            <a href="{{ config('keystoneguru.raider_io.weekly_route.url') }}" target="_blank">
+                                {{ __('view_dungeonroute.discover.dungeon.overview.weekly_routes') }}
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </h5>
                     </div>
-                @endforeach
-            </div>
-        @else
-            <?php // With no Raider.IO weekly routes, the top community routes fill the hero band instead ?>
-            <?php $fallbackHeroes = $dungeonroutes['popular']->take(3)->values(); ?>
-            @if($fallbackHeroes->isNotEmpty())
-                <div class="row g-3 mt-4 discover_hero_band">
-                    @foreach($fallbackHeroes as $index => $fallbackHero)
-                        @php($heroRouteIds->push($fallbackHero->id))
+                </div>
+                <div class="row g-3 mt-0 discover_hero_band">
+                    @foreach($weeklyRoutes as $weeklyRoute)
+                        @php($heroRouteIds->push($weeklyRoute->dungeonRoute->id))
                         <div class="col">
                             @include('common.dungeonroute.cardhero', [
-                                'dungeonroute' => $fallbackHero,
-                                'archetype' => null,
-                                'heroRank' => $index + 1,
+                                'dungeonroute' => $weeklyRoute->dungeonRoute,
+                                'archetype' => $weeklyRoute->type,
                                 'cache' => true,
                             ])
                         </div>
                     @endforeach
                 </div>
-                <?php $startRank = $heroRouteIds->count() + 1; ?>
+            @else
+                <?php // With no Raider.IO weekly routes, the top community routes fill the hero band instead ?>
+                <?php $fallbackHeroes = $popularItems->take(3)->values(); ?>
+                @if($fallbackHeroes->isNotEmpty())
+                    <div class="row g-3 mt-4 discover_hero_band">
+                        @foreach($fallbackHeroes as $index => $fallbackHero)
+                            @php($heroRouteIds->push($fallbackHero->id))
+                            <div class="col">
+                                @include('common.dungeonroute.cardhero', [
+                                    'dungeonroute' => $fallbackHero,
+                                    'archetype' => null,
+                                    'heroRank' => $index + 1,
+                                    'cache' => true,
+                                ])
+                            </div>
+                        @endforeach
+                    </div>
+                    <?php $startRank = $heroRouteIds->count() + 1; ?>
+                @endif
             @endif
         @endif
 
         <?php
         /** @var Collection<int, DungeonRoute> $leaderboardRoutes */
-        $leaderboardRoutes = $dungeonroutes['popular']
+        $leaderboardRoutes = $popularItems
             ->reject(fn(DungeonRoute $route) => $heroRouteIds->contains($route->id))
             ->values();
         ?>
@@ -122,12 +130,10 @@ $showRoutesByAffixes = $gameVersion->has_seasons && $gameVersion->key !== GameVe
             </div>
         </div>
 
-        @if($dungeonroutes['popular']->count() >= config('keystoneguru.discover.limits.overview'))
+        @if($paginator->hasPages())
             <div class="row mt-4">
-                <div class="col-xl text-center">
-                    <a href="{{ route('dungeonroutes.discoverdungeon.popular', ['gameVersion' => $gameVersion, 'dungeon' => $dungeon]) }}">
-                        >> {{ __('view_dungeonroute.discover.panel.show_more') }}
-                    </a>
+                <div class="col d-flex justify-content-center discover_pagination">
+                    {{ $paginator->links() }}
                 </div>
             </div>
         @endif

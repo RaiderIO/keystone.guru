@@ -9,6 +9,7 @@ use App\Models\PublishedState;
 use App\Models\Season;
 use App\Service\Cache\Traits\RemembersToFile;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class DiscoverService extends BaseDiscoverService
@@ -294,6 +295,19 @@ class DiscoverService extends BaseDiscoverService
                 ->get(),
             config('keystoneguru.discover.service.popular.ttl'),
         ), $this->cacheService->isCacheEnabled());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function popularByDungeonPaginated(Dungeon $dungeon, int $perPage): LengthAwarePaginator
+    {
+        // Deliberately uncached: pagination is offset-based while the discover cache key only encodes
+        // the limit, so paged fetches would collide. The grouped popularBuilder() is counted correctly
+        // by paginate()'s count subquery, and its forPage() overrides the builder's limit.
+        return $this->popularBuilder()
+            ->where('dungeon_routes.dungeon_id', $dungeon->id)
+            ->paginate($perPage);
     }
 
     /**

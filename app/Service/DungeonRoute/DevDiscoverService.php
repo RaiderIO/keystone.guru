@@ -7,6 +7,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Season;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class DevDiscoverService extends BaseDiscoverService
@@ -132,6 +133,14 @@ class DevDiscoverService extends BaseDiscoverService
     public function popularByDungeon(Dungeon $dungeon): Collection
     {
         return $this->popularBuilder()->get();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function popularByDungeonPaginated(Dungeon $dungeon, int $perPage): LengthAwarePaginator
+    {
+        return $this->popularBuilder()->paginate($perPage);
     }
 
     /**

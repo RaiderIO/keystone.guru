@@ -1,5 +1,8 @@
 <?php
 /**
+ * The legacy (flag-off) per-dungeon category page. Under the DungeonRouteListRework flag the popular
+ * and new category routes redirect to the base dungeon page, so this view only renders flag-off.
+ *
  * @var AffixGroup                    $currentAffixGroup
  * @var GameVersion                   $gameVersion
  * @var Dungeon                       $dungeon
