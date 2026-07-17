@@ -2,10 +2,13 @@
 
 namespace Tests\Feature\Console\Commands\DungeonRoute;
 
-use App\Console\Commands\DungeonRoute\DeleteFilelessThumbnails;
+use App\Console\Commands\DungeonRoute\RepairBrokenThumbnails;
+use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnail;
 use App\Models\File;
+use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -13,7 +16,7 @@ use Tests\TestCases\PublicTestCase;
 
 #[Group('Console')]
 #[Group('DungeonRoute')]
-final class DeleteFilelessThumbnailsTest extends PublicTestCase
+final class RepairBrokenThumbnailsTest extends PublicTestCase
 {
     use ProvidesDungeon;
 
@@ -28,7 +31,7 @@ final class DeleteFilelessThumbnailsTest extends PublicTestCase
         ]);
     }
 
-    private function createThumbnail(DungeonRoute $dungeonRoute, bool $withFile, bool $missingFile = false): DungeonRouteThumbnail
+    private function createThumbnail(DungeonRoute $dungeonRoute, bool $withFile, bool $missingFileRow = false): DungeonRouteThumbnail
     {
         $floor = $dungeonRoute->dungeon->floors()->where('facade', false)->first();
 
@@ -47,7 +50,7 @@ final class DeleteFilelessThumbnailsTest extends PublicTestCase
             ]);
             $thumbnail->update(['file_id' => $file->id]);
 
-            if ($missingFile) {
+            if ($missingFileRow) {
                 // Leave the dangling file_id but remove the File row it points at.
                 File::query()->whereKey($file->id)->delete();
             }
@@ -60,14 +63,18 @@ final class DeleteFilelessThumbnailsTest extends PublicTestCase
     public function handle_givenFilelessAndFileBackedThumbnails_deletesOnlyTheFilelessOnes(): void
     {
         // Arrange
+        Storage::fake(config('filesystems.default'));
+
         $dungeonRoute         = $this->createDungeonRoute();
         $nullFileThumbnail    = $this->createThumbnail($dungeonRoute, false);
         $missingFileThumbnail = $this->createThumbnail($dungeonRoute, true, true);
         $validThumbnail       = $this->createThumbnail($dungeonRoute, true);
+        // The valid thumbnail's disk object must exist so it is not treated as disk-missing.
+        Storage::disk(config('filesystems.default'))->put($validThumbnail->file->path, 'fake-image-bytes');
 
         try {
             // Act
-            $this->artisan(DeleteFilelessThumbnails::class)->assertSuccessful();
+            $this->artisan(RepairBrokenThumbnails::class)->assertSuccessful();
 
             // Assert
             $this->assertDatabaseMissing('dungeon_route_thumbnails', ['id' => $nullFileThumbnail->id]);
@@ -80,18 +87,47 @@ final class DeleteFilelessThumbnailsTest extends PublicTestCase
     }
 
     #[Test]
-    public function handle_givenDryRunOption_deletesNothing(): void
+    public function handle_givenThumbnailFileMissingFromDisk_requeuesTheRouteForRegeneration(): void
     {
         // Arrange
-        $dungeonRoute      = $this->createDungeonRoute();
-        $nullFileThumbnail = $this->createThumbnail($dungeonRoute, false);
+        Storage::fake(config('filesystems.default'));
+        Queue::fake();
+
+        $dungeonRoute = $this->createDungeonRoute();
+        // File row exists, but no object is put on the (faked) disk, so it is "missing from disk".
+        $this->createThumbnail($dungeonRoute, true);
 
         try {
             // Act
-            $this->artisan(DeleteFilelessThumbnails::class, ['--dry-run' => true])->assertSuccessful();
+            $this->artisan(RepairBrokenThumbnails::class)->assertSuccessful();
+
+            // Assert
+            Queue::assertPushed(ProcessRouteFloorThumbnail::class);
+        } finally {
+            DungeonRouteThumbnail::where('dungeon_route_id', $dungeonRoute->id)->get()->each->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function handle_givenDryRunOption_deletesNothingAndQueuesNothing(): void
+    {
+        // Arrange
+        Storage::fake(config('filesystems.default'));
+        Queue::fake();
+
+        $dungeonRoute         = $this->createDungeonRoute();
+        $nullFileThumbnail    = $this->createThumbnail($dungeonRoute, false);
+        $diskMissingThumbnail = $this->createThumbnail($dungeonRoute, true);
+
+        try {
+            // Act
+            $this->artisan(RepairBrokenThumbnails::class, ['--dry-run' => true])->assertSuccessful();
 
             // Assert
             $this->assertDatabaseHas('dungeon_route_thumbnails', ['id' => $nullFileThumbnail->id]);
+            $this->assertDatabaseHas('dungeon_route_thumbnails', ['id' => $diskMissingThumbnail->id]);
+            Queue::assertNothingPushed();
         } finally {
             DungeonRouteThumbnail::where('dungeon_route_id', $dungeonRoute->id)->get()->each->delete();
             $dungeonRoute->delete();
