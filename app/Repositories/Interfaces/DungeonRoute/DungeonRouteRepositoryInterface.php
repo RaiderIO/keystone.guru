@@ -5,6 +5,7 @@ namespace App\Repositories\Interfaces\DungeonRoute;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Season;
+use App\Models\User;
 use App\Repositories\BaseRepositoryInterface;
 use App\Repositories\Database\DungeonRoute\Dtos\SimilarDungeonRoute;
 use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
@@ -34,6 +35,14 @@ interface DungeonRouteRepositoryInterface extends BaseRepositoryInterface
 
     /** @return Collection<string, Collection<int, WeeklyRoute>> */
     public function getWeeklyRoutes(?Dungeon $dungeon = null, ?Season $season = null): Collection;
+
+    /**
+     * A user's own (non-demo, non-expired) routes for a dungeon, most recently edited first, with the
+     * relations a route card needs eager-loaded.
+     *
+     * @return Collection<int, DungeonRoute>
+     */
+    public function getRoutesForUserAndDungeon(User $user, Dungeon $dungeon, int $limit): Collection;
 
     /** @return Collection<int, SimilarDungeonRoute> */
     public function findSimilarRoutes(DungeonRoute $dungeonRoute, int $limit = 5): Collection;

@@ -22,4 +22,12 @@ interface DungeonServiceInterface
      * @return Collection<int, Dungeon>
      */
     public function getDungeonsForGameVersion(?GameVersion $gameVersion = null): Collection;
+
+    /**
+     * Cached headline stats for the dungeon overview: compendium counts plus pull/enemy stats for the
+     * dungeon's current mapping version.
+     *
+     * @return array{npc: int, spell: int, pull_count: int, avg_enemies_per_pull: float}
+     */
+    public function getDungeonOverviewStats(Dungeon $dungeon, GameVersion $gameVersion): array;
 }

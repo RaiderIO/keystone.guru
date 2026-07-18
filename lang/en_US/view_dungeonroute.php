@@ -10,6 +10,40 @@ return [
                 'popular_by_current_affixes' => 'Popular routes by current affixes',
                 'popular_by_next_affixes'    => 'Popular routes by next affixes',
                 'newly_published_routes'     => 'Newly published routes',
+                'featured_title'             => 'Featured routes',
+                'featured'                   => [
+                    'pug_friendly' => 'PUG Route',
+                    'expert'       => 'Expert Route',
+                    'title'        => 'Title Route',
+                ],
+                'stats' => [
+                    'groups'      => 'Groups',
+                    'avg_enemies' => 'Avg. enemies per group',
+                ],
+                'compendium' => [
+                    'title'    => 'Know the dungeon',
+                    'subtitle' => 'Powered by community combat logs and kept up to date automatically.',
+                    'npc'      => [
+                        'title'        => 'NPCs',
+                        'description'  => 'Browse every NPC in this dungeon, their abilities and characteristics.',
+                        'cta'          => 'View NPCs',
+                        'count_suffix' => 'NPCs',
+                    ],
+                    'spell' => [
+                        'title'        => 'Spells',
+                        'description'  => 'See the spells and abilities enemies cast in this dungeon.',
+                        'cta'          => 'View spells',
+                        'count_suffix' => 'Spells',
+                    ],
+                    'activity' => [
+                        'title'       => 'Recent activity',
+                        'description' => 'Follow the latest runs and activity recorded for this dungeon.',
+                        'cta'         => 'View activity',
+                        'subtitle'    => 'Updated daily',
+                    ],
+                ],
+                'your_routes' => 'Your routes',
+                'browse_all'  => 'Browse all routes',
             ],
         ],
         'discover' => [
