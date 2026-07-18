@@ -71,6 +71,18 @@ For example:
 - After completing your work, ensure you run `composer run fix` to run PhpCsFixer and `composer run analyse` to run PhpStan to verify your work.
 - `composer run fix` reformats any files with pre-existing style drift, not just the ones you changed. After running it, stage only the files you actually intended to touch (`git checkout -- <other files>` to discard the unrelated reformats) so your diff/PR stays focused.
 
+### Before declaring a MR ready for review
+A MR is only "ready" once all three of these hold — human review time is the scarcest resource, so
+review must start from a pre-reviewed, verified MR:
+1. **Self-review**: run the `code-review` skill on the diff and resolve every finding (or note in
+   the MR body why a finding is intentionally not addressed).
+2. **Visual verification**: for any UI-visible change, verify the affected page(s) in headless
+   Chrome (`headless-browser-verify` skill) and post before/after screenshots on the MR
+   (`post-screenshot.sh`).
+3. **Green CI**: wait for the MR's checks and fix any failure yourself — including flaky or
+   seemingly unrelated failures (root-cause them; don't re-run and hope, and don't defer to a
+   follow-up issue).
+
 # Project-specific conventions
 
 ## General
