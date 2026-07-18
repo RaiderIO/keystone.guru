@@ -79,9 +79,6 @@ interface DiscoverServiceInterface
     public function popularBySeason(Season $season): Collection;
 
     /** @return Collection<int, mixed> */
-    public function popularBySeasonAndAffixGroup(Season $season, AffixGroupBase $affixGroup): Collection;
-
-    /** @return Collection<int, mixed> */
     public function new(): Collection;
 
     /** @return Collection<int, mixed> */

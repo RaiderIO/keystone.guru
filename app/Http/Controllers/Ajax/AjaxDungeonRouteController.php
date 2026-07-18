@@ -454,33 +454,12 @@ class AjaxDungeonRouteController extends Controller
 
         $currentAffixGroup = $expansionService->getCurrentAffixGroup($expansion, $region);
 
-        $affixGroup = null;
         switch ($category) {
             case 'popular':
                 if ($dungeon instanceof Dungeon) {
                     $result = $discoverService->popularByDungeon($dungeon);
                 } else {
                     $result = $discoverService->popular();
-                }
-
-                break;
-            case 'thisweek':
-                if ($currentAffixGroup !== null) {
-                    if ($dungeon instanceof Dungeon) {
-                        $result = $discoverService->popularByDungeonAndAffixGroup($dungeon, $affixGroup = $currentAffixGroup);
-                    } else {
-                        $result = $discoverService->popularByAffixGroup($affixGroup = $currentAffixGroup);
-                    }
-                }
-
-                break;
-            case 'nextweek':
-                if ($currentAffixGroup !== null) {
-                    if ($dungeon instanceof Dungeon) {
-                        $result = $discoverService->popularByDungeonAndAffixGroup($dungeon, $affixGroup = $currentAffixGroup);
-                    } else {
-                        $result = $discoverService->popularByAffixGroup($affixGroup = $expansionService->getNextAffixGroup($expansion, $region));
-                    }
                 }
 
                 break;
@@ -502,7 +481,7 @@ class AjaxDungeonRouteController extends Controller
             return view('common.dungeonroute.cardlist', [
                 'currentAffixGroup' => $currentAffixGroup,
                 'dungeonroutes'     => $result,
-                'affixgroup'        => $affixGroup,
+                'affixgroup'        => null,
                 'showAffixes'       => true,
                 'showDungeonImage'  => $dungeon === null,
                 'cols'              => 4,
