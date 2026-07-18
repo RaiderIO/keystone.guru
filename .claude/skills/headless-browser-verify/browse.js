@@ -38,6 +38,16 @@ function args(name) {
 }
 
 /**
+ * Remove overlays that should never appear in a verification screenshot: the Laravel Debugbar and
+ * the cookie-consent window. Safe to call repeatedly (e.g. again after a --click navigation).
+ */
+async function stripOverlays(page) {
+    await page.evaluate(() => {
+        document.querySelectorAll('.phpdebugbar, [id^="phpdebugbar"], .cc-window').forEach(el => el.remove());
+    }).catch(() => {});
+}
+
+/**
  * Connect to the compose chrome service. Chrome's DevTools endpoint rejects Host headers that are
  * not an IP or localhost, so resolve the service name to an IP first and connect through that.
  */
@@ -97,9 +107,17 @@ async function connectToService(host, port) {
         if (msg.type() === 'error') consoleErrors.push(msg.text().substring(0, 300));
     });
 
+    // Suppress the cookie-consent banner: the server omits it entirely when this cookie is set to
+    // 'dismiss' (see resources/views/layouts/app.blade.php), so it never appears in screenshots.
+    await page.setCookie({name: 'cookieconsent_status', value: 'dismiss', url}).catch(() => {});
+
     const response = await page.goto(url, {waitUntil: 'networkidle2', timeout: 60000});
     const waitMs = parseInt(arg('wait', '1500'), 10);
     await new Promise(r => setTimeout(r, waitMs));
+
+    // Keep screenshots clean: strip the Laravel Debugbar, and any cookie-consent window that still
+    // slipped through (e.g. a baseline origin where the cookie above wasn't honoured).
+    await stripOverlays(page);
 
     for (const selector of args('click')) {
         const clicked = await page.evaluate(sel => {
@@ -123,6 +141,8 @@ async function connectToService(host, port) {
 
     const screenshot = arg('screenshot');
     if (screenshot) {
+        // Re-strip in case a --click navigated to a fresh page that re-injected the overlays.
+        await stripOverlays(page);
         await page.screenshot({path: screenshot, fullPage: !arg('viewport')});
     }
 

@@ -40,6 +40,10 @@ docker compose exec -T app sh -c 'cd /var/www && node .chrome-tmp/browse.js http
   for mobile UAs - and curl without a desktop UA is treated as mobile too (a trap when grepping for
   sidebar markup).
 - `puppeteer` resolves from `/var/www/node_modules` (run with cwd `/var/www`).
+- **Debugbar and cookie banner are auto-suppressed** so they never pollute screenshots: browse.js
+  sets the `cookieconsent_status=dismiss` cookie before navigating (the server then omits the
+  banner) and strips `.phpdebugbar` / `.cc-window` from the DOM before every screenshot. No flags
+  needed; this applies to the master baseline origin too.
 
 ## Baseline comparison — always A/B against master for visual changes
 
