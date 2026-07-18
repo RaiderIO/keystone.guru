@@ -1,10 +1,14 @@
+/* Star visuals for the self-owned $.fn.starRating widget (#3593), ported from the
+   former jquery-bar-rating fontawesome-stars theme. Each star is a Font Awesome 7
+   glyph rendered via :after; filled (selected/hover) stars are gold, the rest are a
+   grey outline. */
 
-.br-theme-fontawesome-stars .br-widget {
+.star-rating__widget {
     height: 28px;
     white-space: nowrap;
 }
 
-.br-theme-fontawesome-stars .br-widget a {
+.star-rating__star {
     font: normal normal normal 20px/1 'Font Awesome 7 Free';
     font-weight: 500;
     text-rendering: auto;
@@ -14,45 +18,31 @@
     margin-right: 2px;
 }
 
-.br-theme-fontawesome-stars .br-widget a:after {
+.star-rating__star:after {
     font-family: "Font Awesome 7 Free";
     font-weight: 500;
     content: '\f005';
     color: #d2d2d2;
 }
 
-.br-theme-fontawesome-stars .br-widget a.br-active:after {
+.star-rating__star--active:after,
+.star-rating__star--selected:after {
     font-family: 'Font Awesome 7 Free';
     font-weight: 900;
     content: '\f005';
     color: #edb867;
-}
-
-.br-theme-fontawesome-stars .br-widget a.br-selected:after {
-    font-family: 'Font Awesome 7 Free';
-    font-weight: 900;
-    content: '\f005';
-    color: #edb867;
-}
-
-.br-theme-fontawesome-stars .br-widget .br-current-rating {
-    display: none;
-}
-
-.br-theme-fontawesome-stars .br-readonly a {
-    cursor: default;
 }
 
 @media print {
-    .br-theme-fontawesome-stars .br-widget a:after {
+    .star-rating__star:after {
         font-family: 'Font Awesome 7 Free';
         font-weight: 500;
         content: '\f005';
         color: black;
     }
 
-    .br-theme-fontawesome-stars .br-widget a.br-active:after,
-    .br-theme-fontawesome-stars .br-widget a.br-selected:after {
+    .star-rating__star--active:after,
+    .star-rating__star--selected:after {
         font-family: 'Font Awesome 7 Free';
         font-weight: 900;
         content: '\f005';

@@ -2,9 +2,9 @@
 // Regression coverage for #3590, a follow-up audit to #3588/#3589. jQuery 4.0
 // (#3560 bumped jQuery 3.6.1 -> 4.0.0) removed several long-deprecated global
 // helpers, and one bundled plugin (`jquery-bar-rating`) still called one of
-// them (`$.isNumeric`), breaking pull lists in production. #3589 shimmed that
-// specific call and added a regression test for it
-// (jquery-isnumeric-shim.test.js).
+// them (`$.isNumeric`), breaking pull lists in production. That plugin has since
+// been replaced by a self-owned widget and its `$.isNumeric` shim removed
+// (#3593); this audit remains to guard the OTHER bundled plugins below.
 //
 // A static grep audit for #3590 found no other bundled plugin calling a
 // removed jQuery-4 API. To actually close the loop the way #3589's test did -
