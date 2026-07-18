@@ -13,7 +13,6 @@ use App\Http\View\Composers\CreateRouteFormComposer;
 use App\Http\View\Composers\DiscoverAffixGroupComposer;
 use App\Http\View\Composers\DiscoverSearchComposer;
 use App\Http\View\Composers\DungeonDifficultySelectComposer;
-use App\Http\View\Composers\DungeonGridDiscoverComposer;
 use App\Http\View\Composers\DungeonGridTabsComposer;
 use App\Http\View\Composers\DungeonSelectComposer;
 use App\Http\View\Composers\DungeonStartSelectComposer;
@@ -375,8 +374,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Dungeon grid display
         view()->composer('common.dungeon.gridtabs', DungeonGridTabsComposer::class);
-
-        view()->composer('common.dungeon.griddiscover', DungeonGridDiscoverComposer::class);
 
         // Dungeon selector
         view()->composer('common.dungeon.select', DungeonSelectComposer::class);

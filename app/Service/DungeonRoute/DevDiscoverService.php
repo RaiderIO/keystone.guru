@@ -147,11 +147,6 @@ class DevDiscoverService extends BaseDiscoverService
         return $this->popularBuilder()->get();
     }
 
-    public function popularBySeasonAndAffixGroup(Season $season, AffixGroupBase $affixGroup): Collection
-    {
-        return $this->popularBuilder()->get();
-    }
-
     /**
      * {@inheritDoc}
      */

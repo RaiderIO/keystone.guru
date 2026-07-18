@@ -124,11 +124,10 @@ try {
         @include('dungeonroute.discover.panel', [
             'gameVersion' => $gameVersion,
             'title' => __('view_misc.affixes.popular_routes_by_current_affixes'),
-            'link' => route('dungeonroutes.thisweek', ['gameVersion' => $gameVersion]),
             'currentAffixGroup' => $currentAffixGroup,
             'affixgroup' => $currentAffixGroup,
             'dungeonroutes' => $dungeonroutes['thisweek'],
-            'showMore' => $dungeonroutes['thisweek']->count() >= config('keystoneguru.discover.limits.affix_overview'),
+            'showMore' => false,
             'showDungeonImage' => true,
         ])
 
@@ -142,11 +141,10 @@ try {
         @include('dungeonroute.discover.panel', [
             'gameVersion' => $gameVersion,
             'title' => __('view_misc.affixes.popular_routes_by_next_affixes'),
-            'link' => route('dungeonroutes.nextweek', ['gameVersion' => $gameVersion]),
             'currentAffixGroup' => $nextAffixGroup,
             'affixgroup' => $nextAffixGroup,
             'dungeonroutes' => $dungeonroutes['nextweek'],
-            'showMore' => $dungeonroutes['nextweek']->count() >= config('keystoneguru.discover.limits.affix_overview'),
+            'showMore' => false,
             'showDungeonImage' => true,
         ])
 
