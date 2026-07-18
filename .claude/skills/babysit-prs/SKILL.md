@@ -113,3 +113,7 @@ action, say so in one line.
   exists on the main stack); CI excludes it — do not "fix" it in code.
 - Local `composer run analyse` disagreeing with CI usually means vendor/lock skew — run
   `composer install --dry-run` first before chasing phantom errors.
+- In cold-review agents, the code-review skill's MCP inline-comment tool is typically NOT
+  available — the `gh api -X POST repos/.../pulls/<n>/comments` fallback is the path that runs,
+  and it works (validated on #3604). Also: `gh pr diff` on large PRs overflows the inline Bash
+  output limit; read the persisted output file instead.
