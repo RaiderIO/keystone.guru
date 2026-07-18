@@ -127,6 +127,20 @@ real thumbnails, or render this branch's code to the local disk for inspection
 (`docker compose --profile render run --rm render dungeonroute:renderthumbnail <key>`). Never call
 `ThumbnailService::createThumbnail()` synchronously in the `app` container — it has no Chrome.
 
+## Broken worktree after a main-stack restart? Run `repair`
+
+Restarting the **main** stack detaches its shared containers from every worktree network — the
+worktree's nginx then 502s/fails on every request because its upstreams (`db`, `app-swoole`,
+`reverb`, ...) no longer resolve. Don't debug this by hand; run:
+
+```bash
+sh/worktree.sh repair                  # fix ALL running worktree stacks
+sh/worktree.sh repair <issue>-<slug>   # fix just one
+```
+
+It reattaches the shared-service aliases (idempotent) and restarts each worktree's nginx. Safe to
+run blindly whenever a worktree suddenly stops serving pages.
+
 ## Tear down
 
 ```bash

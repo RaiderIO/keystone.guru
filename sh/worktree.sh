@@ -9,6 +9,7 @@
 #   sh/worktree.sh create <issue>-<slug> [base-ref]   # default base-ref: origin/master
 #   sh/worktree.sh down   <issue>-<slug>              # stop the stack, keep the checkout
 #   sh/worktree.sh remove <issue>-<slug>              # stop the stack and remove the worktree
+#   sh/worktree.sh repair [<issue>-<slug>]            # reattach shared services (all stacks if omitted)
 #   sh/worktree.sh list                               # list worktrees and their stacks
 #
 set -euo pipefail
@@ -33,6 +34,10 @@ influxdb:keystone.guru-influxdb
 
 PORT_RANGE_START=8100
 PORT_RANGE_END=8199
+
+# Serializes the port-pick → compose-up window of concurrent `create`s: find_free_port only scans
+# current listeners, so without a lock two creates can pick the same port before either binds it.
+CREATE_LOCK="/tmp/ksg-worktree-create.lock"
 
 # Scoped, passphraseless deploy key (write access, RaiderIO/keystone.guru only) for non-interactive
 # pushes of worktree branches. `-F /dev/null` bypasses ~/.ssh/config, which maps github.com to a
@@ -77,6 +82,25 @@ worktree_network() {
     docker network ls \
         --filter "label=com.docker.compose.project=$1" \
         --format '{{.Name}}' | head -n1
+}
+
+# Attach every shared service container into the given worktree network with its DNS alias.
+# Idempotent: already-attached containers are reported and skipped. Used by create and repair.
+attach_shared_services() {
+    local net="$1" pair alias container
+    for pair in $SHARED_SERVICES; do
+        alias="${pair%%:*}"
+        container="${pair#*:}"
+        if ! docker inspect "$container" >/dev/null 2>&1; then
+            echo "  ! $container not found — skipping (alias $alias)"
+            continue
+        fi
+        if docker network connect --alias "$alias" "$net" "$container" 2>/dev/null; then
+            echo "  + $container (alias: $alias)"
+        else
+            echo "  = $container already attached (alias: $alias)"
+        fi
+    done
 }
 
 # The label that marks a GitHub issue as actively worked on in a live worktree.
@@ -156,12 +180,34 @@ cmd_create() {
 
     # 2c. Seed git-ignored build artifacts from the main checkout when missing. vendor/ is required
     #     to boot artisan; the public/* assets let the browser render (blades reference compiled
-    #     files by the version in the repo-root `version` file). Each is an independent copy the
-    #     worktree can rebuild if its deps/assets change.
+    #     files by the version in the repo-root `version` file).
+    #
+    #     vendor/ is HARDLINKED (cp -al: near-instant, no extra disk). That is safe for package
+    #     files — composer replaces a changed package by delete + re-extract, i.e. new inodes that
+    #     detach from the main checkout — but composer REWRITES the autoloader in place
+    #     (file_put_contents truncates the shared inode), so vendor/composer/ and
+    #     vendor/autoload.php get real copies. Editing any other vendor file in place (manual
+    #     patching) would still leak into the main checkout — delete + recreate it instead.
+    #
+    #     public/* stays a REAL copy: webpack writes compiled output by truncating in place, so a
+    #     hardlinked public/js would let a worktree build clobber the main checkout's assets.
     echo "==> seeding build artifacts from main repo (vendor + compiled assets)"
     [ -f "$REPO_ROOT/vendor/autoload.php" ] || die "main repo has no vendor/ — run composer install there first"
+    if [ ! -e "$wt_path/vendor" ]; then
+        if cp -al "$REPO_ROOT/vendor" "$wt_path/vendor" 2>/dev/null; then
+            rm -rf "$wt_path/vendor/composer" "$wt_path/vendor/autoload.php"
+            cp -a "$REPO_ROOT/vendor/composer" "$wt_path/vendor/composer"
+            cp -a "$REPO_ROOT/vendor/autoload.php" "$wt_path/vendor/autoload.php"
+            echo "  + vendor (hardlinked; autoloader real-copied)"
+        else
+            # Hardlinks need the same filesystem — fall back to a plain copy.
+            rm -rf "$wt_path/vendor"
+            cp -a "$REPO_ROOT/vendor" "$wt_path/vendor"
+            echo "  + vendor (full copy — hardlink unavailable)"
+        fi
+    fi
     local rel
-    for rel in vendor version \
+    for rel in version \
         public/css public/js public/resources \
         public/vendor public/webfonts public/images \
         public/VERSION public/COMMITHASH public/LASTCOMMITDATETIME; do
@@ -171,7 +217,12 @@ cmd_create() {
         fi
     done
 
-    # 3. Pick a free host port for this worktree's nginx.
+    # 3. Pick a free host port for this worktree's nginx. Steps 3-5 hold the create lock: the port
+    #    is only actually bound at `docker compose up -d`, so pick-and-bind must be atomic across
+    #    concurrent creates. Released right after step 5 (lock dies with the process on failure).
+    local lockfd
+    exec {lockfd}>"$CREATE_LOCK"
+    flock "$lockfd"
     port="$(find_free_port)"
 
     # 4. Point URL vars at the worktree port (sed-replace: phpdotenv keeps the FIRST occurrence,
@@ -201,25 +252,13 @@ EOF
     # 5. Bring up the stack (reads COMPOSE_* + WORKTREE_HTTP_PORT from the worktree .env).
     echo "==> starting stack '$project' (nginx on :$port)"
     ( cd "$wt_path" && docker compose up -d )
+    exec {lockfd}>&-
 
     # 6. Attach the shared service containers into this worktree's private network with aliases.
     net="$(worktree_network "$project")"
     [ -n "$net" ] || die "could not find worktree network for project '$project'"
     echo "==> attaching shared services to $net"
-    local pair alias container
-    for pair in $SHARED_SERVICES; do
-        alias="${pair%%:*}"
-        container="${pair#*:}"
-        if ! docker inspect "$container" >/dev/null 2>&1; then
-            echo "  ! $container not found — skipping (alias $alias)"
-            continue
-        fi
-        if docker network connect --alias "$alias" "$net" "$container" 2>/dev/null; then
-            echo "  + $container (alias: $alias)"
-        else
-            echo "  = $container already attached (alias: $alias)"
-        fi
-    done
+    attach_shared_services "$net"
 
     # nginx resolves ALL upstreams (app, app-swoole, reverb) at startup and refuses to boot if any
     # is missing, so it must be (re)started only after the shared services above are attached.
@@ -324,6 +363,38 @@ cmd_remove() {
     echo "==> worktree '$branch' removed"
 }
 
+# Re-wire worktree stacks after a main-stack restart: restarting the main stack detaches the shared
+# containers from every worktree network, leaving each worktree's nginx unable to resolve its
+# upstreams. Reattaches the aliases and restarts nginx. Idempotent and safe to run blindly.
+cmd_repair() {
+    local branch="${1:-}" net project
+    local nets=()
+    if [ -n "$branch" ]; then
+        project="$(project_name "$branch")"
+        net="$(worktree_network "$project")"
+        [ -n "$net" ] || die "no network found for worktree '$branch' — is its stack up? (worktree.sh list)"
+        nets=("$net")
+    else
+        mapfile -t nets < <(docker network ls --format '{{.Name}}' | grep '^ksg-' || true)
+        if [ "${#nets[@]}" -eq 0 ]; then
+            echo "==> no worktree stacks found — nothing to repair"
+            return 0
+        fi
+    fi
+
+    for net in "${nets[@]}"; do
+        project="${net%_default}"
+        echo "==> repairing $project"
+        attach_shared_services "$net"
+        # nginx resolves ALL upstreams at startup, so restart it now that the aliases are back.
+        if docker restart "${project}-nginx-1" >/dev/null 2>&1; then
+            echo "  ~ ${project}-nginx-1 restarted"
+        else
+            echo "  ! could not restart ${project}-nginx-1 — is the stack up? (worktree.sh list)"
+        fi
+    done
+}
+
 cmd_push() {
     [ -f "$DEPLOY_KEY" ] || die "deploy key not found at $DEPLOY_KEY — see the worktree-docker skill for setup"
     local branch
@@ -349,6 +420,7 @@ main() {
         create) cmd_create "$@" ;;
         down)   cmd_down "$@" ;;
         remove) cmd_remove "$@" ;;
+        repair) cmd_repair "$@" ;;
         push)   cmd_push "$@" ;;
         list)   cmd_list "$@" ;;
         *)
@@ -358,6 +430,7 @@ usage: worktree.sh <command> [args]
   create <issue>-<slug> [base-ref]   create a worktree + isolated Docker stack (base: origin/master)
   down   <issue>-<slug>              stop the stack, keep the checkout
   remove <issue>-<slug>              stop the stack and remove the worktree
+  repair [<issue>-<slug>]            reattach shared services + restart nginx (all stacks if omitted)
   push   [git-push-args...]          push the current branch via the scoped deploy key
   list                              list worktrees and running stacks
 EOF
