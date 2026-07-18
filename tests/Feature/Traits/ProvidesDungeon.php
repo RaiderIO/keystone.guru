@@ -9,9 +9,13 @@ use Illuminate\Database\Eloquent\Builder;
 trait ProvidesDungeon
 {
     /**
-     * Returns a random dungeon guaranteed to have a current mapping version and at least
-     * one non-facade floor. Use this instead of `Dungeon::inRandomOrder()->first()` to
-     * avoid intermittent test failures when the random pick lacks these prerequisites.
+     * Returns a random dungeon guaranteed to have a current mapping version with facade rendering
+     * disabled and at least one non-facade floor. Use this instead of `Dungeon::inRandomOrder()->first()`
+     * to avoid intermittent test failures when the random pick lacks these prerequisites.
+     *
+     * The facade_enabled guard matters because `Dungeon::floorsForMapFacade($mappingVersion, true)`
+     * returns only facade floors when the mapping version is facade_enabled - a dungeon in that state
+     * with no facade floor row yields an empty floor set, which silently breaks callers that iterate it.
      *
      * @param (Closure(Builder<Dungeon>): mixed)|null $constraint Optional extra constraint applied to the base query.
      */
@@ -31,7 +35,8 @@ trait ProvidesDungeon
             /** @var Dungeon $dungeon */
             $dungeon = $query->inRandomOrder()->first();
         } while (
-            $dungeon->getCurrentMappingVersion() === null ||
+            ($mappingVersion = $dungeon->getCurrentMappingVersion()) === null ||
+            $mappingVersion->facade_enabled ||
             $dungeon->floors()->where('facade', 0)->doesntExist() ||
             $dungeon->floors()->where('facade', 1)->exists()
         );
@@ -40,8 +45,13 @@ trait ProvidesDungeon
     }
 
     /**
-     * Returns a random dungeon guaranteed to have a current mapping version and at least one
-     * facade floor. Use this when a test needs to exercise the facade-specific code paths.
+     * Returns a random dungeon guaranteed to have a current mapping version with facade rendering
+     * enabled and at least one facade floor. Use this when a test needs to exercise the
+     * facade-specific code paths.
+     *
+     * The facade_enabled guard mirrors getDungeonWithNonFacadeFloor(): a facade floor row without a
+     * facade_enabled mapping version would make `Dungeon::floorsForMapFacade($mappingVersion, true)`
+     * return the non-facade floors instead, defeating the point of a facade fixture.
      *
      * @param (Closure(Builder<Dungeon>): mixed)|null $constraint Optional extra constraint applied to the base query.
      */
@@ -61,7 +71,8 @@ trait ProvidesDungeon
             /** @var Dungeon $dungeon */
             $dungeon = $query->inRandomOrder()->first();
         } while (
-            $dungeon->getCurrentMappingVersion() === null ||
+            ($mappingVersion = $dungeon->getCurrentMappingVersion()) === null ||
+            !$mappingVersion->facade_enabled ||
             $dungeon->floors()->where('facade', 1)->doesntExist()
         );
 
