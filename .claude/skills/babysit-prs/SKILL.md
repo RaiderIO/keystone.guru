@@ -69,17 +69,41 @@ benefit of the doubt.
    the thread with `:robot:` and what changed. Reply to a review comment with
    `gh api -X POST repos/RaiderIO/keystone.guru/pulls/<n>/comments/<comment-id>/replies -f body='...'`.
    Do **not** resolve threads yourself — leave that to Wotuu when re-reviewing.
-4. **All green, no comments**: leave it alone.
+4. **All green, no comments**: leave it alone (but see step 4 — it may be due a cold review).
 
-### 4. Clean up after merged/closed MRs
+### 4. Cold-review MRs that just became ready
+
+An MR that is CI-green, conflict-free, and not a draft gets **one** independent "cold" review from
+a stronger model before Wotuu looks at it. A fresh context reviewing only the diff catches what
+the implementing session's self-review cannot — the self-review inherited the implementer's
+context and therefore its blind spots.
+
+- **Skip** if the PR already has a `:robot: Cold review` summary comment — that comment is the
+  once-per-MR marker. Re-review only if the diff has changed substantially since that comment, or
+  Wotuu asks.
+- **Never run the review inside this session.** The babysitter usually runs on Sonnet and its
+  context is warm — both defeat the purpose. Spawn a fresh agent instead:
+
+  Agent tool, `subagent_type: "general-purpose"`, `model: "opus"` (`"fable"` for high-risk diffs:
+  migrations, auth, payment, data-destructive changes), with a prompt telling it to invoke the
+  `code-review` skill with args `<PR number> --comment` from the main checkout — verified findings
+  are then posted as inline PR comments.
+- **Afterwards**, post the marker comment on the PR:
+  `:robot: Cold review (opus): <N> findings posted.` (or `no findings`).
+- Posted findings are addressed like any other review comments on a **later** pass (step 3.3) —
+  don't review and fix in the same pass; the fixes deserve fresh triage and their own CI run.
+- The reviewer posts comments only — never a formal GitHub review (no approve / request-changes).
+
+### 5. Clean up after merged/closed MRs
 
 For PRs merged or closed since the last pass whose worktree still exists and has no uncommitted
 tracked changes: `sh/worktree.sh remove <branch>` (this also clears the `in progress` label).
 
-### 5. Report the pass
+### 6. Report the pass
 
-End every pass with a short status list: each open MR, its state (green/red/conflicted/awaiting
-review), and what you did (or why you skipped it). If nothing needed action, say so in one line.
+End every pass with a short status list: each open MR, its state (green/red/conflicted/
+cold-reviewed/awaiting review), and what you did (or why you skipped it). If nothing needed
+action, say so in one line.
 
 ## Gotchas
 
