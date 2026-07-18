@@ -22,10 +22,16 @@ jobs:
           php-version: '8.4'
           coverage: none
 
+      # Ask composer for its real cache dir: on a fresh runner it is ~/.cache/composer/files, not
+      # the legacy ~/.composer/cache/files, and caching the wrong path caches nothing.
+      - name: Determine composer cache dir
+        id: composer-cache
+        run: echo "dir=$(composer config --global cache-files-dir)" >> "$GITHUB_OUTPUT"
+
       - name: Cache composer
         uses: actions/cache@v5
         with:
-          path: ~/.composer/cache/files
+          path: ${{ steps.composer-cache.outputs.dir }}
           key: composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: composer-
 
