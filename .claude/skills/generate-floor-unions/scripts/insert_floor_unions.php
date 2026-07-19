@@ -27,6 +27,13 @@
  * purpose: MappingVersion::create() fires the created() boot hook which clones
  * the ENTIRE previous mapping (enemies, packs, unions, ...) into the new
  * version - the quiet insert produces a version with no relationships at all.
+ * (MappingService::createNewBareMappingVersion() uses create() and therefore
+ * clones once a previous version exists, so it is not usable here.)
+ *
+ * NOTE: the previous mapping itself is left untouched, but because the new
+ * version has the highest version number it BECOMES the dungeon's current
+ * mapping version - with no enemies attached. Intended for dev review only;
+ * delete the created version to revert.
  */
 
 use App\Models\Dungeon;
@@ -44,21 +51,43 @@ $import = json_decode(file_get_contents($importPath), true, 512, JSON_THROW_ON_E
 
 $dungeon = Dungeon::query()->where('key', $import['dungeon_key'])->firstOrFail();
 
-$facadeFloor = $dungeon->floors()
-    ->where('id', $import['facade_floor_id'])
-    ->where('facade', true)
-    ->firstOrFail();
+$dungeonFloors = $dungeon->floors;
 
-$latestMappingVersion = MappingVersion::query()
-    ->where('dungeon_id', $dungeon->id)
-    ->orderByDesc('version')
-    ->firstOrFail();
+$facadeFloor = $dungeonFloors->first(
+    fn($floor) => $floor->id === $import['facade_floor_id'] && $floor->facade
+);
+if ($facadeFloor === null) {
+    throw new RuntimeException(
+        sprintf('facade_floor_id %d is not a facade floor of dungeon %s', $import['facade_floor_id'], $dungeon->key)
+    );
+}
 
-$dungeonFloorIds = $dungeon->floors->pluck('id');
-foreach ($import['placements'] as $placement) {
+// Scoped by game version - a raw orderByDesc(version) could pick a version
+// belonging to a different game version of the same dungeon.
+$latestMappingVersion = $dungeon->getCurrentMappingVersion();
+if ($latestMappingVersion === null) {
+    throw new RuntimeException(sprintf('Dungeon %s has no mapping version yet', $dungeon->key));
+}
+
+$dungeonFloorIds = $dungeonFloors->pluck('id');
+foreach ($import['placements'] as $index => $placement) {
+    foreach (['target_floor_id', 'lat', 'lng', 'size', 'rotation', 'areas'] as $requiredKey) {
+        if (!isset($placement[$requiredKey])) {
+            throw new RuntimeException(
+                sprintf('placement %d is missing "%s" - check the jq floor mapping for unmapped floor_image#instance keys', $index, $requiredKey)
+            );
+        }
+    }
+
     if (!$dungeonFloorIds->contains($placement['target_floor_id'])) {
         throw new RuntimeException(
-            sprintf('target_floor_id %d does not belong to dungeon %s', $placement['target_floor_id'], $dungeon->key)
+            sprintf('placement %d: target_floor_id %d does not belong to dungeon %s', $index, $placement['target_floor_id'], $dungeon->key)
+        );
+    }
+
+    if (empty($placement['areas'])) {
+        throw new RuntimeException(
+            sprintf('placement %d (target floor %d) has no area polygons - a FloorUnion without areas can never match a facade point', $index, $placement['target_floor_id'])
         );
     }
 }

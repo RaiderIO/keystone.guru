@@ -48,7 +48,9 @@ run.sh <workdir> match --facade /work/combined.png --out-dir /work/out \
 ```
 
 Writes `out/placements.json` (one entry per placement: `lat`, `lng`, `size`, `rotation` in DB
-units, plus `inliers`, `edge_corr`, the affine matrix) and `out/overlay_placements.png`.
+units, plus `inliers`, `edge_corr`, the affine matrix) and `out/overlay_placements.png`. The JSON
+embeds container-absolute `/work/...` image paths, so later `areas`/overlay runs must use the
+same `<workdir>` mount.
 
 - A floor image may legitimately produce **multiple placements** (zoomed sub-regions with
   `size > 256`, or duplicated-art floors); iterative matching finds them all.
@@ -117,9 +119,11 @@ Side effects to tell the user about:
 ### 6. Verify
 
 1. **Round-trip** (when a reference mapping version with enemies exists, e.g. regenerating an
-   existing facade): for each enemy on a real floor, `convertMapLocationToFacadeMapLocation`
-   with the new version then `convertFacadeMapLocationToMapLocation` back must return the same
-   floor and coords (tolerance 1 map unit). A couple of edge-of-floor enemies landing across an
+   existing facade): the bare version itself has NO enemies - iterate the *reference* version's
+   enemies, but run the conversions with the *new* version:
+   `convertMapLocationToFacadeMapLocation($newMv, ...)` then
+   `convertFacadeMapLocationToMapLocation($newMv, ...)` must return the same floor and coords
+   (tolerance 1 map unit). A couple of edge-of-floor enemies landing across an
    area boundary is normal (2/277 on Magister's Terrace) - those boundaries get nudged in the map
    editor, don't chase them in code.
 2. **Map editor**: the user reviews/tweaks unions and areas on the facade floor in the admin

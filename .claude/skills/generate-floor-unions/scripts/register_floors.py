@@ -32,6 +32,7 @@ import json
 import math
 import os
 import sys
+import urllib.error
 import urllib.request
 
 import cv2
@@ -66,6 +67,15 @@ def load_images(path):
     return bgr, cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
 
 
+def draw_label(canvas, text, x, y, foreground, background):
+    """Outlined text label (thick background pass + thin foreground pass)."""
+    position = (int(x) + 12, int(y) - 8)
+    cv2.putText(canvas, text, position, cv2.FONT_HERSHEY_SIMPLEX, 0.7,
+                background, 3)
+    cv2.putText(canvas, text, position, cv2.FONT_HERSHEY_SIMPLEX, 0.7,
+                foreground, 1)
+
+
 def decompose_affine(m):
     """Return (scale, rotation_deg_ccw_in_image_coords) of a partial affine."""
     scale = math.hypot(m[0, 0], m[1, 0])
@@ -81,15 +91,24 @@ def normalize_deg(deg):
     return deg
 
 
-def edge_correlation(floor_gray, facade_gray, m_affine):
+def sobel_magnitude(img):
+    gx = cv2.Sobel(img, cv2.CV_32F, 1, 0, ksize=3)
+    gy = cv2.Sobel(img, cv2.CV_32F, 0, 1, ksize=3)
+    return cv2.magnitude(gx, gy)
+
+
+def edge_correlation(floor_gray, facade_edges, m_affine):
     """
     Zero-normalized cross-correlation of Sobel edge magnitudes between the
     warped floor and the facade, within the warped footprint. Parchment
     background texture correlates everywhere; actual map art only correlates
     when the placement is genuinely aligned, so this separates real placements
     from texture-level false positives far better than inlier counts.
+
+    facade_edges is the precomputed sobel_magnitude() of the facade (identical
+    for every candidate, so it is computed once by the caller).
     """
-    fh, fw = facade_gray.shape[:2]
+    fh, fw = facade_edges.shape[:2]
     warped = cv2.warpAffine(floor_gray, m_affine, (fw, fh))
     mask = cv2.warpAffine(np.full(floor_gray.shape[:2], 255, np.uint8),
                           m_affine, (fw, fh))
@@ -97,13 +116,8 @@ def edge_correlation(floor_gray, facade_gray, m_affine):
     if int(mask.sum()) == 0:
         return 0.0
 
-    def edges(img):
-        gx = cv2.Sobel(img, cv2.CV_32F, 1, 0, ksize=3)
-        gy = cv2.Sobel(img, cv2.CV_32F, 0, 1, ksize=3)
-        return cv2.magnitude(gx, gy)
-
-    a = edges(warped)[mask > 0]
-    b = edges(facade_gray)[mask > 0]
+    a = sobel_magnitude(warped)[mask > 0]
+    b = facade_edges[mask > 0]
     a = a - a.mean()
     b = b - b.mean()
     denominator = float(np.linalg.norm(a) * np.linalg.norm(b))
@@ -112,7 +126,7 @@ def edge_correlation(floor_gray, facade_gray, m_affine):
     return float(np.dot(a, b) / denominator)
 
 
-def find_placements(name, floor_gray, facade_gray, sift, facade_kp, facade_desc,
+def find_placements(name, floor_gray, facade_edges, sift, facade_kp, facade_desc,
                     min_inliers, max_instances, ransac_px, min_edge_corr):
     """
     Iterative multi-instance affine registration of one floor image.
@@ -136,8 +150,10 @@ def find_placements(name, floor_gray, facade_gray, sift, facade_kp, facade_desc,
     placements = []
     remaining = list(good)
     attempts = 0
+    # The attempt budget is shared with rejected phantom fits, so leave slack
+    # beyond max_instances for facades with a lot of shared banner/border art.
     while (len(remaining) >= min_inliers and len(placements) < max_instances
-           and attempts < max_instances * 4):
+           and attempts < max_instances * 4 + 8):
         attempts += 1
         src = np.float32([kp[m.queryIdx].pt for m in remaining]).reshape(-1, 1, 2)
         dst = np.float32([facade_kp[m.trainIdx].pt for m in remaining]).reshape(-1, 1, 2)
@@ -154,15 +170,19 @@ def find_placements(name, floor_gray, facade_gray, sift, facade_kp, facade_desc,
 
         scale, rotation = decompose_affine(m_affine)
         if not 0.02 < scale < 50.0:
+            print(f'{name}: rejected degenerate fit (scale={scale:.3f}, '
+                  f'inliers={inlier_count}), continuing search')
             continue
         duplicate = any(
             np.hypot(*(np.array(p['matrix'])[:, 2] - m_affine[:, 2])) < 10.0
             and abs(p['scale'] - scale) / p['scale'] < 0.05
             for p in placements)
         if duplicate:
+            print(f'{name}: rejected duplicate of an accepted placement '
+                  f'(inliers={inlier_count}), continuing search')
             continue
 
-        corr = edge_correlation(floor_gray, facade_gray, m_affine)
+        corr = edge_correlation(floor_gray, facade_edges, m_affine)
         if corr < min_edge_corr:
             print(f'{name}: rejected phantom fit (inliers={inlier_count}, '
                   f'edge_corr={corr:.3f} < {min_edge_corr}), continuing search')
@@ -181,8 +201,9 @@ def find_placements(name, floor_gray, facade_gray, sift, facade_kp, facade_desc,
 
 
 def cmd_match(args):
-    facade_bgr, facade_gray = load_images(args.facade)
+    _, facade_gray = load_images(args.facade)
     fh, fw = facade_gray.shape[:2]
+    facade_edges = sobel_magnitude(facade_gray)
 
     sift = cv2.SIFT_create()
     facade_kp, facade_desc = sift.detectAndCompute(facade_gray, None)
@@ -195,7 +216,7 @@ def cmd_match(args):
         h, w = floor_gray.shape[:2]
 
         placements, good_matches = find_placements(
-            name, floor_gray, facade_gray, sift, facade_kp, facade_desc,
+            name, floor_gray, facade_edges, sift, facade_kp, facade_desc,
             args.min_inliers, args.max_instances, args.ransac_px,
             args.min_edge_corr)
         if not placements:
@@ -217,7 +238,6 @@ def cmd_match(args):
                 'matrix': p['matrix'],
                 'scale': round(p['scale'], 4),
                 'inliers': p['inliers'],
-                'matches': p['matches'],
                 'edge_corr': round(corr, 3),
                 'lat': round(lat, 2),
                 'lng': round(lng, 2),
@@ -277,11 +297,8 @@ def render_placements_overlay(data, out_path):
         cx, cy = p['center_px']
         cv2.drawMarker(canvas, (int(cx), int(cy)), color,
                        cv2.MARKER_CROSS, 24, 2)
-        label = f"{p['floor_image']}#{p['instance']}"
-        cv2.putText(canvas, label, (int(cx) + 12, int(cy) - 8),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 3)
-        cv2.putText(canvas, label, (int(cx) + 12, int(cy) - 8),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, 1)
+        draw_label(canvas, f"{p['floor_image']}#{p['instance']}", cx, cy,
+                   color, (255, 255, 255))
 
     cv2.imwrite(out_path, canvas)
     print(f'wrote {out_path}')
@@ -338,7 +355,8 @@ def cmd_areas(args):
         region = (label_map == idx).astype(np.uint8) * 255
         # Slight dilation so neighboring polygons overlap: overlaps are handled
         # by first-match-wins in containsPoint, gaps break facade->floor lookup.
-        region = cv2.dilate(region, np.ones((5, 5), np.uint8))
+        region = cv2.dilate(
+            region, np.ones((args.dilate_px, args.dilate_px), np.uint8))
         contours, _ = cv2.findContours(region, cv2.RETR_EXTERNAL,
                                        cv2.CHAIN_APPROX_SIMPLE)
         polygons = []
@@ -353,8 +371,14 @@ def cmd_areas(args):
             if len(vertices) >= 3:
                 polygons.append(vertices)
         p['areas'] = polygons
-        print(f"{p['floor_image']}#{p['instance']}: {len(polygons)} polygon(s), "
-              f"{sum(len(v) for v in polygons)} vertices")
+        if not polygons:
+            print(f"WARNING: {p['floor_image']}#{p['instance']} has NO area "
+                  f"polygons (its region fell below --min-area-px/"
+                  f"--min-component-px) - a FloorUnion without areas can never "
+                  f"match a facade point. Lower those thresholds.")
+        else:
+            print(f"{p['floor_image']}#{p['instance']}: {len(polygons)} "
+                  f"polygon(s), {sum(len(v) for v in polygons)} vertices")
 
     os.makedirs(args.out_dir, exist_ok=True)
     out_path = os.path.join(args.out_dir, 'areas.json')
@@ -381,18 +405,21 @@ def render_areas_overlay(data, label_map, out_path):
             cv2.polylines(canvas, [points], True, (255, 255, 255), 2)
             cv2.polylines(canvas, [points], True, color, 1)
         cx, cy = p['center_px']
-        label = f"{p['floor_image']}#{p['instance']}"
-        cv2.putText(canvas, label, (int(cx) + 12, int(cy) - 8),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 3)
-        cv2.putText(canvas, label, (int(cx) + 12, int(cy) - 8),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 1)
+        draw_label(canvas, f"{p['floor_image']}#{p['instance']}", cx, cy,
+                   (255, 255, 255), (0, 0, 0))
 
     cv2.imwrite(out_path, canvas)
     print(f'wrote {out_path}')
 
 
 def cmd_stitch(args):
-    """Fallback source for floor images: stitch a floor's CDN tile pyramid."""
+    """
+    Fallback source for floor images: stitch a floor's CDN tile pyramid.
+
+    Only an HTTP 403/404 counts as "no more tiles" - any other failure
+    (timeout, 5xx, undecodable tile) raises, because silently truncating the
+    grid would feed a corrupt floor image into matching.
+    """
     tiles = {}
     max_x = max_y = -1
     y = 0
@@ -404,12 +431,17 @@ def cmd_stitch(args):
             try:
                 with urllib.request.urlopen(url, timeout=15) as response:
                     raw = np.frombuffer(response.read(), np.uint8)
-                tiles[(x, y)] = cv2.imdecode(raw, cv2.IMREAD_COLOR)
-                row_found = True
-                max_x, max_y = max(max_x, x), max(max_y, y)
-                x += 1
-            except Exception:
-                break
+            except urllib.error.HTTPError as error:
+                if error.code in (403, 404):
+                    break
+                raise
+            tile = cv2.imdecode(raw, cv2.IMREAD_COLOR)
+            if tile is None:
+                sys.exit(f'ERROR: tile {url} could not be decoded')
+            tiles[(x, y)] = tile
+            row_found = True
+            max_x, max_y = max(max_x, x), max(max_y, y)
+            x += 1
         if not row_found:
             break
         y += 1
@@ -452,6 +484,9 @@ def main():
     p_areas.add_argument('--min-component-px', type=int, default=8000,
                          help='enclaves smaller than this are merged into the '
                               'surrounding region')
+    p_areas.add_argument('--dilate-px', type=int, default=5,
+                         help='overlap margin between neighboring polygons; '
+                              'overlaps are safe, gaps break facade lookups')
     p_areas.set_defaults(func=cmd_areas)
 
     p_stitch = sub.add_parser('stitch', help='stitch CDN tiles into one image')
