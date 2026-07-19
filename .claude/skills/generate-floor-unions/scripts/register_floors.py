@@ -67,6 +67,70 @@ def load_images(path):
     return bgr, cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
 
 
+def solidify_blob(binary, close_px):
+    """
+    Edge/diff pixels -> one solid art blob: blank a border margin (decorative
+    frames otherwise form a huge ring component and break hole-filling, which
+    seeds from the corner), morphological close, keep the largest connected
+    component, fill its enclosed holes.
+    """
+    h, w = binary.shape
+    margin_y, margin_x = max(1, h // 25), max(1, w // 25)
+    binary[:margin_y, :] = 0
+    binary[-margin_y:, :] = 0
+    binary[:, :margin_x] = 0
+    binary[:, -margin_x:] = 0
+    kernel = np.ones((close_px, close_px), np.uint8)
+    blob = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel)
+
+    component_count, labels, stats, _ = cv2.connectedComponentsWithStats(blob)
+    if component_count <= 1:
+        return np.full(binary.shape, 255, np.uint8)
+    largest = 1 + int(np.argmax(stats[1:, cv2.CC_STAT_AREA]))
+    mask = np.where(labels == largest, np.uint8(255), np.uint8(0))
+
+    flooded = mask.copy()
+    cv2.floodFill(flooded, np.zeros((h + 2, w + 2), np.uint8), (0, 0), 255)
+    return cv2.bitwise_or(mask, cv2.bitwise_not(flooded))
+
+
+def content_masks(paths, close_px, diff_threshold):
+    """
+    Per floor image, the visible art footprint as a solid blob (no parchment
+    background, no shared fluff like the title banner), or None when it cannot
+    be computed reliably.
+
+    With >= 3 distinct images the per-pixel MEDIAN across them recovers the
+    shared backdrop (all cuts of a dungeon use the same parchment, banner and
+    frame), and each floor's content is simply where it differs from that
+    median - this keeps even art too faint for edge detection and drops even
+    strong parchment grain. With fewer images no reliable backdrop estimate
+    exists (the median degenerates and edge detection cannot separate faint
+    art from parchment grain - validated on Skyreach), so return None and let
+    the caller fall back to rectangle-interior scoring.
+    """
+    unique_paths = list(dict.fromkeys(paths))
+    if len(unique_paths) < 3:
+        print('NOTE: fewer than 3 distinct floor images - no reliable shared-'
+              'backdrop estimate, using rectangle-interior area boundaries '
+              '(review them in the map editor; art-hugging boundaries need '
+              '>= 3 images)')
+        return None
+
+    images = {path: load_images(path)[0] for path in unique_paths}
+    backdrop = np.median(
+        np.stack([images[path].astype(np.float32)
+                  for path in unique_paths]), axis=0)
+
+    masks = {}
+    for path in unique_paths:
+        diff = np.abs(images[path].astype(np.float32) - backdrop).max(axis=2)
+        binary = np.where(diff > diff_threshold, np.uint8(255), np.uint8(0))
+        masks[path] = solidify_blob(binary, close_px)
+
+    return masks
+
+
 def draw_label(canvas, text, x, y, foreground, background):
     """Outlined text label (thick background pass + thin foreground pass)."""
     position = (int(x) + 12, int(y) - 8)
@@ -313,25 +377,53 @@ def cmd_areas(args):
     if not placements:
         sys.exit('ERROR: no placements in input')
 
-    # Score per placement: interior distance when inside its warped rect,
-    # negative distance-to-rect when outside. argmax => every pixel owned by
-    # exactly one placement => full coverage, no gaps. (An art-proximity
-    # variant was tried and rejected: with duplicated-art floors the same art
-    # "agrees" at multiple placements and the boundaries fragment badly.)
+    # Score per placement from its ART CONTENT, not its image rectangle.
+    # FloorUnionAreas route ANY facade point to a floor - users park icons on
+    # empty parchment far outside the drawn dungeon - so regions must (1) never
+    # cut into their own floor's visible art and (2) split empty space by
+    # nearest art, like hand-drawn areas do. Inside the warped content blob the
+    # score is the (positive) interior depth, so own art always outranks every
+    # neighbour and overlapping-art conflicts go to the deeper blob; outside it
+    # is -distance_to_blob, so empty space goes to the nearest art. argmax =>
+    # every pixel owned => full coverage, no gaps.
+    #
+    # (A raw-edge nearest-art variant fragments badly - the filled largest-
+    # component blob is what keeps the distance field, and thus the
+    # boundaries, smooth.)
     scores = np.empty((len(placements), fh, fw), np.float32)
+    floor_content = content_masks(
+        [p['path'] for p in placements], args.content_close_px,
+        args.content_diff_threshold)
     for idx, p in enumerate(placements):
-        w, h = p['floor_px']
         m = np.float32(p['matrix'])
-        corners = np.float32([[0, 0], [w, 0], [w, h], [0, h]]).reshape(-1, 1, 2)
-        warped_corners = cv2.transform(corners, m).astype(np.int32)
-        mask = np.zeros((fh, fw), np.uint8)
-        cv2.fillPoly(mask, [warped_corners], 255)
-        inside = cv2.distanceTransform(mask, cv2.DIST_L2, 3)
-        outside = cv2.distanceTransform(cv2.bitwise_not(mask), cv2.DIST_L2, 3)
-        # Larger placements should not swallow smaller inset floors: normalize
-        # interior distance by the placement's own max so scores are comparable.
-        peak = inside.max() or 1.0
-        scores[idx] = inside / peak - outside
+        if floor_content is not None:
+            warped = cv2.warpAffine(floor_content[p['path']], m, (fw, fh),
+                                    flags=cv2.INTER_NEAREST)
+            if int(warped.max()) == 0:
+                # Degenerate (content fully outside the facade): rect center.
+                cx, cy = p['center_px']
+                cv2.circle(warped, (int(cx), int(cy)), 5, 255, -1)
+        else:
+            # Fallback: the placement's full image rectangle as the "content".
+            w, h = p['floor_px']
+            corners = np.float32(
+                [[0, 0], [w, 0], [w, h], [0, h]]).reshape(-1, 1, 2)
+            warped = np.zeros((fh, fw), np.uint8)
+            cv2.fillPoly(warped, [cv2.transform(corners, m).astype(np.int32)],
+                         255)
+        inside = cv2.distanceTransform(warped, cv2.DIST_L2, 3)
+        outside = cv2.distanceTransform(cv2.bitwise_not(warped), cv2.DIST_L2, 3)
+        if floor_content is None:
+            # Rects nest/overlap heavily (unlike art blobs): normalize interior
+            # depth per placement so big rects don't swallow small insets.
+            peak = inside.max() or 1.0
+            inside = inside / peak
+        # Light smoothing rounds off boundary wiggles that would otherwise
+        # trace every dent of the art outline (hand-drawn areas are simple
+        # polygons; the exact path through empty parchment is irrelevant, and
+        # a few px of shift at the art edge is within editor-tweak territory).
+        scores[idx] = cv2.GaussianBlur(
+            np.where(warped > 0, inside, -outside), (0, 0), sigmaX=6)
 
     label_map = np.argmax(scores, axis=0).astype(np.int32)
 
@@ -479,7 +571,7 @@ def main():
     p_areas.add_argument('--placements', required=True,
                          help='placements.json from the match step')
     p_areas.add_argument('--out-dir', required=True)
-    p_areas.add_argument('--epsilon-px', type=float, default=4.0)
+    p_areas.add_argument('--epsilon-px', type=float, default=8.0)
     p_areas.add_argument('--min-area-px', type=float, default=2500.0)
     p_areas.add_argument('--min-component-px', type=int, default=8000,
                          help='enclaves smaller than this are merged into the '
@@ -487,6 +579,13 @@ def main():
     p_areas.add_argument('--dilate-px', type=int, default=5,
                          help='overlap margin between neighboring polygons; '
                               'overlaps are safe, gaps break facade lookups')
+    p_areas.add_argument('--content-close-px', type=int, default=35,
+                         help='morphological closing kernel used to turn a '
+                              'floor image\'s edges into its solid art blob')
+    p_areas.add_argument('--content-diff-threshold', type=float, default=20.0,
+                         help='minimum per-pixel difference from the shared '
+                              'backdrop (median of all floor images) to count '
+                              'as art content')
     p_areas.set_defaults(func=cmd_areas)
 
     p_stitch = sub.add_parser('stitch', help='stitch CDN tiles into one image')

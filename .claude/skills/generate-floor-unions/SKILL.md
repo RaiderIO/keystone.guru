@@ -76,9 +76,18 @@ run.sh <workdir> areas --placements /work/out/placements.json --out-dir /work/ou
 
 Writes `out/areas.json` (placements + `areas` polygons in DB latlng) and `out/overlay_areas.png`
 (colored partition). Every facade pixel is owned by exactly one placement (no gaps - gaps break
-facade→floor lookups), polygons are slightly dilated so neighbours overlap (overlap is safe:
-first-match-wins), and each union normally gets one simple 8-16 vertex polygon. Review the
-overlay: each region should cover its own floor's art.
+facade→floor lookups) and polygons are slightly dilated so neighbours overlap (overlap is safe:
+first-match-wins).
+
+Areas route ANY facade point to a floor - users park icons on empty parchment far outside the
+drawn dungeon - so the partition is **art-based**, not rect-based: each floor's visible art blob
+always belongs to its own union, and empty space goes to the nearest art, like hand-drawn areas.
+The art blob comes from comparing each floor image against the per-pixel **median of all floor
+images** (the shared parchment/banner/frame backdrop), which needs **>= 3 distinct floor
+images**; with fewer the script says so and falls back to a geometric rectangle split - fine for
+a 2-floor dungeon, but check it in the editor. Review the overlay: every region must fully
+contain its own floor's art (a region cutting into its own art means the content mask failed -
+tune `--content-diff-threshold`/`--content-close-px`).
 
 ### 4. Build the import JSON (adds target floors)
 
@@ -140,6 +149,8 @@ Side effects to tell the user about:
   truth (60 / -120 / -62 / 149.5 all matched within 0.3°). Don't "fix" the sign.
 - **SIFT, not ORB**: scale differences up to ~2.3× between floor image and facade placement are
   routine; SIFT handled all of them with 96-715 inliers.
-- The area partition is a rect-interior Voronoi. An art-proximity variant was tried and
-  **rejected**: with duplicated-art floors the same art matches several placements and the
-  boundaries fragment badly. Keep boundaries simple; the editor is for fine-tuning.
+- The area partition's content masks MUST come from the median-backdrop diff. Two rejected
+  alternatives, don't retry them: raw Canny edges cannot separate faint art (Magister's Terrace
+  upper-tower disc) from strong parchment grain at any threshold, and edge-"agreement" with the
+  facade fragments badly on duplicated-art floors. Keep boundaries simple; the editor is for
+  fine-tuning.
