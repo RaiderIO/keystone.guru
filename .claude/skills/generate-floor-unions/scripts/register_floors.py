@@ -282,9 +282,23 @@ def find_placements(name, floor_gray, facade_edges, sift, facade_kp, facade_desc
     return placements, len(good)
 
 
+def assert_map_plane_aspect(name, width, height):
+    """
+    Image resolutions may vary freely (all math normalizes by width/height),
+    but every map-plane image MUST have the plane's 1.5 aspect ratio - any
+    other framing silently corrupts every emitted lat/lng/size value.
+    """
+    aspect = width / height
+    if abs(aspect - 1.5) > 0.01:
+        sys.exit(f'ERROR: {name} is {width}x{height} (aspect {aspect:.3f}); '
+                 f'map plane images must have aspect ratio 1.5 - re-frame it '
+                 f'to span the full 256x384 map plane')
+
+
 def cmd_match(args):
     _, facade_gray = load_images(args.facade)
     fh, fw = facade_gray.shape[:2]
+    assert_map_plane_aspect(args.facade, fw, fh)
     facade_edges = sobel_magnitude(facade_gray)
 
     sift = cv2.SIFT_create()
@@ -296,6 +310,7 @@ def cmd_match(args):
         name = os.path.splitext(os.path.basename(floor_path))[0]
         _, floor_gray = load_images(floor_path)
         h, w = floor_gray.shape[:2]
+        assert_map_plane_aspect(floor_path, w, h)
 
         placements, good_matches = find_placements(
             name, floor_gray, facade_edges, sift, facade_kp, facade_desc,

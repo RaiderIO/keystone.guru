@@ -20,8 +20,11 @@ hand-made ground truth within ±0.72 map units, size ±1%, rotation ±0.3°.
 
 1. The Dungeon, its Floors, and the facade floor (`facade = 1`) already exist (the user creates
    those; this skill does not).
-2. One image **per real floor** plus the combined facade image, all with aspect ratio 1.5 and
-   framed exactly like the floor's map plane (the same framing the tiles are generated from).
+2. One image **per real floor** plus the combined facade image, all framed exactly like the
+   floor's map plane (the same framing the tiles are generated from). Resolutions may vary
+   freely between images (all math normalizes by width/height), but the aspect ratio is ALWAYS
+   1.5 - `match` refuses any image where it isn't, since another framing silently corrupts
+   every emitted lat/lng/size.
    - **Every real floor needs its own image, including "void"/variant floors that share art.**
      Two floors can map onto the *same* facade art with different rotations/sizes because their
      own floor images differ - that union is only recoverable from that floor's own image
