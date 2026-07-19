@@ -80,14 +80,17 @@ facade→floor lookups) and polygons are slightly dilated so neighbours overlap 
 first-match-wins).
 
 Areas route ANY facade point to a floor - users park icons on empty parchment far outside the
-drawn dungeon - so the partition is **art-based**, not rect-based: each floor's visible art blob
-always belongs to its own union, and empty space goes to the nearest art, like hand-drawn areas.
-The art blob comes from comparing each floor image against the per-pixel **median of all floor
-images** (the shared parchment/banner/frame backdrop), which needs **>= 3 distinct floor
-images**; with fewer the script says so and falls back to a geometric rectangle split - fine for
-a 2-floor dungeon, but check it in the editor. Review the overlay: every region must fully
-contain its own floor's art (a region cutting into its own art means the content mask failed -
-tune `--content-diff-threshold`/`--content-close-px`).
+drawn dungeon - so the partition follows one hard rule: **art always stays with the floor it
+depicts; only empty parchment is negotiable** (it goes to the nearest art, like hand-drawn
+areas). Each floor's art blob comes from comparing its image against the per-pixel **median of
+all floor images** (>= 3 images; the median is the shared parchment/banner/frame backdrop) or,
+for exactly two images, the pairwise diff gated by each image's deviation from its own
+large-scale median. Boundary smoothing applies only over parchment, small-region cleanup never
+moves a fragment containing its own art, and the polygon overlap margin always exceeds the
+simplification epsilon - so simplification cannot cut art either. The console prints an
+**exclusive own-art coverage** figure per placement (own art claimed by no other placement that
+is inside its own polygons): anything under 100% deserves a look at the overlay before
+inserting; tune `--content-diff-threshold`/`--content-close-px` when a content mask misses art.
 
 ### 4. Build the import JSON (adds target floors)
 

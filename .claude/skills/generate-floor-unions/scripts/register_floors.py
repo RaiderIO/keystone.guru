@@ -110,23 +110,41 @@ def content_masks(paths, close_px, diff_threshold):
     the caller fall back to rectangle-interior scoring.
     """
     unique_paths = list(dict.fromkeys(paths))
-    if len(unique_paths) < 3:
-        print('NOTE: fewer than 3 distinct floor images - no reliable shared-'
-              'backdrop estimate, using rectangle-interior area boundaries '
-              '(review them in the map editor; art-hugging boundaries need '
-              '>= 3 images)')
+    if len(unique_paths) < 2:
+        print('NOTE: single floor image - no backdrop estimate possible, '
+              'using rectangle-interior area boundaries')
         return None
 
     images = {path: load_images(path)[0] for path in unique_paths}
-    backdrop = np.median(
-        np.stack([images[path].astype(np.float32)
-                  for path in unique_paths]), axis=0)
 
     masks = {}
-    for path in unique_paths:
-        diff = np.abs(images[path].astype(np.float32) - backdrop).max(axis=2)
-        binary = np.where(diff > diff_threshold, np.uint8(255), np.uint8(0))
-        masks[path] = solidify_blob(binary, close_px)
+    if len(unique_paths) >= 3:
+        backdrop = np.median(
+            np.stack([images[path].astype(np.float32)
+                      for path in unique_paths]), axis=0)
+        for path in unique_paths:
+            diff = np.abs(
+                images[path].astype(np.float32) - backdrop).max(axis=2)
+            binary = np.where(diff > diff_threshold,
+                              np.uint8(255), np.uint8(0))
+            masks[path] = solidify_blob(binary, close_px)
+    else:
+        # Two images: their pairwise diff marks BOTH floors' art (each art
+        # position differs from the other image's parchment there), so gate it
+        # with per-image "artness" - deviation from the image's own large-scale
+        # median, which estimates its parchment. Art belongs to the image that
+        # actually deviates from parchment at that pixel.
+        first, second = (images[path].astype(np.float32)
+                         for path in unique_paths)
+        pair_diff = np.abs(first - second).max(axis=2) > diff_threshold
+        for path in unique_paths:
+            image = images[path]
+            parchment = cv2.medianBlur(image, 101).astype(np.float32)
+            artness = np.abs(
+                image.astype(np.float32) - parchment).max(axis=2)
+            binary = np.where(pair_diff & (artness > diff_threshold),
+                              np.uint8(255), np.uint8(0))
+            masks[path] = solidify_blob(binary, close_px)
 
     return masks
 
@@ -391,6 +409,7 @@ def cmd_areas(args):
     # component blob is what keeps the distance field, and thus the
     # boundaries, smooth.)
     scores = np.empty((len(placements), fh, fw), np.float32)
+    warped_contents = [None] * len(placements)
     floor_content = content_masks(
         [p['path'] for p in placements], args.content_close_px,
         args.content_diff_threshold)
@@ -403,6 +422,7 @@ def cmd_areas(args):
                 # Degenerate (content fully outside the facade): rect center.
                 cx, cy = p['center_px']
                 cv2.circle(warped, (int(cx), int(cy)), 5, 255, -1)
+            warped_contents[idx] = warped
         else:
             # Fallback: the placement's full image rectangle as the "content".
             w, h = p['floor_px']
@@ -418,17 +438,30 @@ def cmd_areas(args):
             # depth per placement so big rects don't swallow small insets.
             peak = inside.max() or 1.0
             inside = inside / peak
-        # Light smoothing rounds off boundary wiggles that would otherwise
-        # trace every dent of the art outline (hand-drawn areas are simple
-        # polygons; the exact path through empty parchment is irrelevant, and
-        # a few px of shift at the art edge is within editor-tweak territory).
-        scores[idx] = cv2.GaussianBlur(
-            np.where(warped > 0, inside, -outside), (0, 0), sigmaX=6)
+        scores[idx] = np.where(warped > 0, inside, -outside)
+
+    # Light smoothing rounds off boundary wiggles that would otherwise trace
+    # every dent of the art outline - but ONLY over parchment: art pixels keep
+    # their raw scores so a neighbour's smoothed field can never push a
+    # boundary into somebody's art. (Hand-drawn areas are simple polygons; the
+    # exact path through EMPTY space is the only thing smoothing may move.)
+    if any(mask is not None for mask in warped_contents):
+        any_content = np.zeros((fh, fw), bool)
+        for mask in warped_contents:
+            if mask is not None:
+                any_content |= mask > 0
+        for idx in range(len(placements)):
+            blurred = cv2.GaussianBlur(scores[idx], (0, 0), sigmaX=6)
+            scores[idx] = np.where(any_content, scores[idx], blurred)
+    else:
+        for idx in range(len(placements)):
+            scores[idx] = cv2.GaussianBlur(scores[idx], (0, 0), sigmaX=6)
 
     label_map = np.argmax(scores, axis=0).astype(np.int32)
 
-    # Reassign small enclaves (stray agreement fragments inside another
-    # placement's territory) to the surrounding region.
+    # Reassign small enclaves (stray fragments inside another placement's
+    # territory) to the surrounding region - but never a fragment that holds
+    # its own floor's art: art must stay with the floor it depicts.
     for _ in range(3):
         changed = False
         for idx in range(len(placements)):
@@ -436,19 +469,26 @@ def cmd_areas(args):
             component_count, components = cv2.connectedComponents(region)
             for component in range(1, component_count):
                 component_mask = components == component
-                if int(component_mask.sum()) < args.min_component_px:
-                    scores[idx][component_mask] = -np.inf
-                    changed = True
+                if int(component_mask.sum()) >= args.min_component_px:
+                    continue
+                if (warped_contents[idx] is not None
+                        and bool((warped_contents[idx] > 0)[component_mask].any())):
+                    continue
+                scores[idx][component_mask] = -np.inf
+                changed = True
         if not changed:
             break
         label_map = np.argmax(scores, axis=0).astype(np.int32)
 
+    # Dilation must exceed the polygon-simplification epsilon: approxPolyDP may
+    # deviate up to ~epsilon inward, and the overlap margin guarantees that
+    # can never cut a region's own art out of its polygon.
+    dilate_px = max(args.dilate_px, int(args.epsilon_px) + 3)
     for idx, p in enumerate(placements):
         region = (label_map == idx).astype(np.uint8) * 255
-        # Slight dilation so neighboring polygons overlap: overlaps are handled
-        # by first-match-wins in containsPoint, gaps break facade->floor lookup.
-        region = cv2.dilate(
-            region, np.ones((args.dilate_px, args.dilate_px), np.uint8))
+        # Dilation so neighboring polygons overlap: overlaps are handled by
+        # first-match-wins in containsPoint, gaps break facade->floor lookup.
+        region = cv2.dilate(region, np.ones((dilate_px, dilate_px), np.uint8))
         contours, _ = cv2.findContours(region, cv2.RETR_EXTERNAL,
                                        cv2.CHAIN_APPROX_SIMPLE)
         polygons = []
@@ -471,6 +511,35 @@ def cmd_areas(args):
         else:
             print(f"{p['floor_image']}#{p['instance']}: {len(polygons)} "
                   f"polygon(s), {sum(len(v) for v in polygons)} vertices")
+
+    # Objective "art stays with its floor" check: fraction of each placement's
+    # own warped art covered by its own final polygons. Shortfalls mean art was
+    # assigned to another union - legitimate only where two arts genuinely
+    # overlap on the facade.
+    for idx, p in enumerate(placements):
+        own = warped_contents[idx]
+        if own is None or not p['areas']:
+            continue
+        poly_mask = np.zeros((fh, fw), np.uint8)
+        for vertices in p['areas']:
+            points = np.int32([
+                latlng_to_px(v['lat'], v['lng'], fw, fh) for v in vertices])
+            cv2.fillPoly(poly_mask, [points], 255)
+        # Where two placements' blobs overlap on the facade, a boundary through
+        # the overlap is unavoidable - only art claimed by NO other placement
+        # must be covered by its own polygons.
+        exclusive = own > 0
+        for other_idx, other in enumerate(warped_contents):
+            if other_idx != idx and other is not None:
+                exclusive &= ~(other > 0)
+        exclusive_px = int(exclusive.sum())
+        covered = int((exclusive & (poly_mask > 0)).sum())
+        coverage = covered / exclusive_px if exclusive_px else 1.0
+        warning = ('' if coverage >= 0.99 else
+                   ' <-- WARNING: art assigned to another union, inspect the '
+                   'overlay')
+        print(f"{p['floor_image']}#{p['instance']}: exclusive own-art "
+              f"coverage {coverage:.1%}{warning}")
 
     os.makedirs(args.out_dir, exist_ok=True)
     out_path = os.path.join(args.out_dir, 'areas.json')
