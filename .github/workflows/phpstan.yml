@@ -1,7 +1,13 @@
 name: PHPStan
 
+# The push trigger seeds branch-scoped caches from master (composer + Lua ext + cargo via
+# php-ci-setup — the same keys the php-tests shards restore); without it every new PR's first
+# run is fully cold (#3612).
 on:
   pull_request:
+    branches:
+      - master
+  push:
     branches:
       - master
 

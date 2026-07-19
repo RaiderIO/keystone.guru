@@ -1,9 +1,14 @@
 name: PHP CS Fixer
 
 # No base-branch filter: stacked MRs (one stage targeting another stage's branch) must pass the
-# same style gate as MRs against master
+# same style gate as MRs against master.
+# The push trigger exists to seed branch-scoped caches from master: PR branches can only inherit
+# caches created on master, so without it every new PR's first run is fully cold (#3612).
 on:
   pull_request:
+  push:
+    branches:
+      - master
 
 permissions:
   contents: read
