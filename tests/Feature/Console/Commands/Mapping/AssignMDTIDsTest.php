@@ -24,11 +24,11 @@ final class AssignMDTIDsTest extends PublicTestCase
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         $floorId        = $dungeon->floors()->where('facade', false)->value('id');
 
-        $npcId          = 999999001;
-        $existingEnemy  = $this->createEnemy($mappingVersion->id, $floorId, $npcId, 5);
-        $missingEnemyA  = $this->createEnemy($mappingVersion->id, $floorId, $npcId, null);
-        $missingEnemyB  = $this->createEnemy($mappingVersion->id, $floorId, $npcId, null);
-        $otherNpcEnemy  = $this->createEnemy($mappingVersion->id, $floorId, 999999002, null);
+        $npcId         = 999999001;
+        $existingEnemy = $this->createEnemy($mappingVersion->id, $floorId, $npcId, 5);
+        $missingEnemyA = $this->createEnemy($mappingVersion->id, $floorId, $npcId, null);
+        $missingEnemyB = $this->createEnemy($mappingVersion->id, $floorId, $npcId, null);
+        $otherNpcEnemy = $this->createEnemy($mappingVersion->id, $floorId, 999999002, null);
 
         try {
             // Act
@@ -50,7 +50,7 @@ final class AssignMDTIDsTest extends PublicTestCase
     public function handle_givenDungeonOption_onlyProcessesThatDungeon(): void
     {
         // Arrange
-        $dungeons = $this->getTwoDungeonsWithNonFacadeFloors();
+        $dungeons                       = $this->getTwoDungeonsWithNonFacadeFloors();
         [$targetDungeon, $otherDungeon] = $dungeons;
 
         $targetMappingVersion = $targetDungeon->getCurrentMappingVersion();
