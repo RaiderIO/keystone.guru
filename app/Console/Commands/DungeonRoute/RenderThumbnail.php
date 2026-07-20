@@ -45,6 +45,16 @@ class RenderThumbnail extends Command
         // Force the target disk so the render lands on the ISOLATED local disk (storage/app/private)
         // instead of the shared, bind-mounted public disk.
         $disk = (string)$this->option('disk');
+
+        // A remote (S3) disk defeats the whole point of this command - ThumbnailService silently
+        // redirects a real-S3 write to the public disk instead, which is exactly the shared disk
+        // this command exists to avoid touching.
+        if (config(sprintf('filesystems.disks.%s.driver', $disk)) === 's3') {
+            $this->error(sprintf('--disk=%s is a remote disk; this command only supports isolated local disks.', $disk));
+
+            return self::FAILURE;
+        }
+
         config(['filesystems.default' => $disk]);
 
         // The database is shared across the main stack and all worktrees, so persisting a thumbnail

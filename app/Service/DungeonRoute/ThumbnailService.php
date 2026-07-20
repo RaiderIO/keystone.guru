@@ -380,6 +380,13 @@ class ThumbnailService implements ThumbnailServiceInterface
 
         $result = collect();
 
+        // Same local+S3 write hazard as doCreateThumbnail() - resolve once and redirect to public
+        // instead of writing every copy onto a real remote disk from a local environment.
+        $disk = config('filesystems.default', 'public');
+        if ($this->isRemoteDiskUnsafeForLocalGeneration($disk)) {
+            $disk = 'public';
+        }
+
         // Copy over all thumbnails
         foreach ($sourceDungeonRoute->dungeonRouteThumbnails as $thumbnail) {
             /** @var DungeonRouteThumbnail $thumbnail */
@@ -395,13 +402,6 @@ class ThumbnailService implements ThumbnailServiceInterface
                 if ($thumbnailData === null) {
                     // File was linked but contained no data?
                     continue;
-                }
-
-                // Same local+S3 write hazard as doCreateThumbnail() - redirect to public instead
-                // of writing the copy onto a real remote disk from a local environment.
-                $disk = config('filesystems.default', 'public');
-                if ($this->isRemoteDiskUnsafeForLocalGeneration($disk)) {
-                    $disk = 'public';
                 }
 
                 $copiedThumbnail = $this->attachThumbnailToDungeonRoute(
@@ -509,9 +509,7 @@ class ThumbnailService implements ThumbnailServiceInterface
      */
     private function isRemoteDiskUnsafeForLocalGeneration(string $disk): bool
     {
-        $driver = config(sprintf('filesystems.disks.%s.driver', $disk));
-
-        return app()->environment('local') && $driver === 's3';
+        return File::isRemoteDiskProtectedFromLocalMutation($disk);
     }
 
     /**
