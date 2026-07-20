@@ -4,9 +4,11 @@
 // helpers, and one bundled plugin (`jquery-bar-rating`) still called one of
 // them (`$.isNumeric`), breaking pull lists in production. That plugin has since
 // been replaced by a self-owned widget and its `$.isNumeric` shim removed
-// (#3593); this audit remains to guard the OTHER bundled plugins below.
-// `password-strength-meter` was also replaced by a self-owned widget (#3597,
-// unmaintained upstream) and dropped from here since it's no longer bundled.
+// (#3593), and `jquery-visible` has since been replaced by a native
+// `getBoundingClientRect()` check and dropped entirely (#3594). `password-strength-meter`
+// was also replaced by a self-owned widget (#3597, unmaintained upstream) and dropped from
+// here since it's no longer bundled. This audit remains to guard the OTHER bundled plugins
+// below.
 //
 // A static grep audit for #3590 found no other bundled plugin calling a
 // removed jQuery-4 API. To actually close the loop the way #3589's test did -
@@ -23,23 +25,6 @@
 
 const $ = require('jquery');
 global.$ = global.jQuery = $;
-
-describe('jquery-visible (#3590)', () => {
-    afterEach(() => {
-        document.body.innerHTML = '';
-    });
-
-    test('visible_givenElementInDom_returnsBooleanWithoutThrowing', () => {
-        require('jquery-visible');
-        document.body.innerHTML = '<div id="killzone"></div>';
-
-        let result;
-        expect(() => {
-            result = $('#killzone').visible();
-        }).not.toThrow();
-        expect(typeof result).toBe('boolean');
-    });
-});
 
 describe('lightslider (#3590)', () => {
     afterEach(() => {

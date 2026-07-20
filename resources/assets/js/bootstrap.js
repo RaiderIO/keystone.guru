@@ -111,7 +111,6 @@ window.Noty = require('noty');
 window.Pickr = require('@simonwep/pickr');
 window.AntPath = require('leaflet-ant-path');
 window.Grapick = require('grapick');
-window.jqueryVisible = require('jquery-visible');
 window.simplebar = require('simplebar');
 window.Draggable = require('@shopify/draggable');
 require('bootstrap5-toggle/js/bootstrap5-toggle.jquery.min.js');
