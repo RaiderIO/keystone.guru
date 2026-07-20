@@ -40,7 +40,7 @@ class SearchFilterKeyLevel extends SearchFilterInput {
         if (this.passThrough) {
             super.setValue(value);
         } else {
-            $(this.selector).data('ionRangeSlider').update({
+            $(this.selector).data('rangeSlider').update({
                 from: value.split(';')[0],
                 to: value.split(';')[1],
             });

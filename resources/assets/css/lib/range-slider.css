@@ -1,0 +1,16 @@
+/* $.fn.rangeSlider (#3596): layout fixes for noUiSlider content that's positioned absolutely
+ * relative to the track and so, unlike ion-rangeslider's own wrapper (which sized itself to
+ * include its grid/value labels), doesn't contribute to .range-slider's own height. Left alone,
+ * normal-flow content right before/after the slider paints over that overflow.
+ */
+
+/* Every slider always has tooltips (see range-slider.js), positioned above the track - without
+ * this, the tooltip overlaps whatever precedes the slider (typically the filter's own label). */
+.range-slider {
+    margin-top: 46px;
+}
+
+/* Pip labels are positioned below the track; added whenever `grid: true` is passed. */
+.range-slider--has-pips {
+    margin-bottom: 46px;
+}

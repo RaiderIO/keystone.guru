@@ -714,33 +714,44 @@ body {
     opacity: 0.8;
   }
 
-  /** Disable fractional markers -> https://github.com/IonDen/ion.rangeSlider/issues/171 */
-  .irs--flat .irs-grid-pol.small {
-    height: 0;
+  /** noUiSlider (#3596), the .range-slider wrapper $.fn.rangeSlider mounts on. The `.inverse`
+      extra class (only the rating filter) doesn't need its own color override here: it's handled
+      by range-slider.js choosing `connect: 'upper'` instead of `'lower'`, which alone flips which
+      side of the track the (always primary-colored) .noUi-connect fills. */
+  .range-slider.noUi-target {
+    background-color: var($--theme-dark);
+    border-color: rgba(128, 128, 128, 0.5);
+    box-shadow: none;
   }
 
-  .irs--flat .irs-from:before,
-  .irs--flat .irs-to:before,
-  .irs--flat .irs-single:before, {
-    border-top-color: var($--theme-primary);
-  }
-
-  .irs--flat .irs-from,
-  .irs--flat .irs-to,
-  .irs--flat .irs-single,
-  .irs--flat .irs-handle > i:first-child,
-  .irs--flat .irs-bar {
+  .range-slider .noUi-connect {
     background-color: var($--theme-primary);
   }
 
-  .irs--flat.inverse {
-    .irs-line {
-      background-color: var($--theme-primary);
-    }
+  .range-slider .noUi-handle {
+    background-color: var($--theme-primary);
+    border-color: var($--theme-primary-hover);
+    box-shadow: none;
+  }
 
-    .irs-bar {
-      background-color: #e1e4e9;
-    }
+  .range-slider .noUi-handle:before,
+  .range-slider .noUi-handle:after {
+    background-color: var($--theme-text-contrast);
+    opacity: 0.5;
+  }
+
+  .range-slider .noUi-tooltip {
+    background-color: var($--theme-primary);
+    border-color: var($--theme-primary);
+    color: var($--theme-text-contrast);
+  }
+
+  .range-slider .noUi-pips {
+    color: var($--theme-text-contrast);
+  }
+
+  .range-slider .noUi-marker {
+    background-color: rgba(128, 128, 128, 0.5);
   }
 
   //.dungeon_wallpaper_gradient {

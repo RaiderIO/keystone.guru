@@ -7,14 +7,14 @@ class HeatOptionMaxZoomHandler {
     }
 
     apply(selector, options) {
-        this.rangeSlider = $(selector).ionRangeSlider($.extend({
+        this.rangeSlider = $(selector).rangeSlider($.extend({
             grid: true,
             grid_snap: true,
             type: 'single',
             min: this.min,
             max: this.max,
             step: 0.5,
-        }, options)).data('ionRangeSlider');
+        }, options)).data('rangeSlider');
     }
 
     update(min, max) {

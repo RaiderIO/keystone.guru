@@ -7,7 +7,7 @@ class PlayerDeathsHandler {
     }
 
     apply(selector, options) {
-        this.rangeSlider = $(selector).ionRangeSlider($.extend({
+        this.rangeSlider = $(selector).rangeSlider($.extend({
             grid: true,
             grid_snap: true,
             type: 'double',
@@ -15,7 +15,7 @@ class PlayerDeathsHandler {
             max: this.max,
             from: this.min,
             to: this.max,
-        }, options)).data('ionRangeSlider');
+        }, options)).data('rangeSlider');
     }
 
     update(min, max) {
