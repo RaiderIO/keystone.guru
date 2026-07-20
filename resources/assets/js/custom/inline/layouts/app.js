@@ -99,15 +99,11 @@ class LayoutsApp extends InlineCode {
     _newPassword(selector) {
         let $selector = $(selector);
         if ($selector.length > 0) {
-            $selector.password({
-                enterPass: '&nbsp;',
+            $selector.passwordStrength({
                 shortPass: lang.get('js.min_password_length'),
                 badPass: lang.get('js.weak'),
                 goodPass: lang.get('js.medium'),
                 strongPass: lang.get('js.strong'),
-                containsUsername: lang.get('js.contains_username'),
-                showText: true, // shows the text tips
-                animate: false, // whether or not to animate the progress bar on input blur/focus
                 minimumLength: 8
             });
         }
