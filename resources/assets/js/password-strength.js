@@ -64,8 +64,8 @@ function nonRepeatingLength(password, period) {
 
 /**
  * Scores a password from 0 (worthless) to 100 (excellent) based on length, character-class
- * variety, and short repeating patterns. Not dictionary-aware: "Tr0ub4dor" scores well despite
- * being a well-known example of a guessable password, same tradeoff the old plugin made.
+ * variety, and short repeating patterns. Not dictionary-aware: "P@ssw0rd" scores 86 (strong)
+ * despite being a well-known example of a guessable password - same tradeoff the old plugin made.
  *
  * @param {string} password
  * @returns {number}
