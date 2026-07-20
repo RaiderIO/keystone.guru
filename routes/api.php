@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\InternalTeam\Cache\APICacheController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogController;
+use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogParseFailureController;
 use App\Http\Controllers\Api\V1\Public\Dungeon\APIDungeonController;
 use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteController;
 use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteDiscoverController;
@@ -24,6 +25,11 @@ Route::prefix('v1')->group(static function () {
         });
         Route::middleware('throttle:api-combatlog-correct-event')->prefix('event')->group(static function () {
             Route::post('correct', new APICombatLogController()->correctEvents(...))->name('api.v1.combatlog.event.correct');
+        });
+
+        Route::middleware(['api_role:admin'])->prefix('parse-failures')->group(static function () {
+            Route::get('/', new APICombatLogParseFailureController()->index(...))->name('api.v1.combatlog.parsefailures.index');
+            Route::get('/{parseFailure}/segments', new APICombatLogParseFailureController()->segments(...))->name('api.v1.combatlog.parsefailures.segments');
         });
     });
 
