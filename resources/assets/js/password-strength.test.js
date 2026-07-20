@@ -2,7 +2,8 @@
 // Covers $.fn.passwordStrength (#3597), the self-owned replacement for the
 // removed `password-strength-meter` plugin. The widget renders a Bootstrap
 // progress bar + text tip below a password <input>, scoring the typed value
-// with zxcvbn-ts (debounced) on every 'input'/'change' event.
+// with a small dependency-free character-class/repetition heuristic on every
+// 'input'/'change' event.
 // ---------------------------------------------------------------------------
 
 const $ = require('jquery');
@@ -15,9 +16,6 @@ const OPTIONS = {
     strongPass: 'strong',
     minimumLength: 8,
 };
-
-// Comfortably past the widget's 200ms debounce on the actual zxcvbn scoring call.
-const DEBOUNCE_WAIT_MS = 300;
 
 /**
  * @returns {HTMLInputElement}
@@ -32,10 +30,9 @@ function createPasswordInput() {
  * @param {HTMLInputElement} input
  * @param {string} value
  */
-async function typePassword(input, value) {
+function typePassword(input, value) {
     input.value = value;
     $(input).trigger('input');
-    await new Promise((resolve) => setTimeout(resolve, DEBOUNCE_WAIT_MS));
 }
 
 describe('$.fn.passwordStrength (#3597)', () => {
@@ -55,46 +52,66 @@ describe('$.fn.passwordStrength (#3597)', () => {
         expect(document.querySelector('.password-strength__text').innerHTML).toBe('&nbsp;');
     });
 
-    test('passwordStrength_givenEmptyInput_showsBlankTextAndNoWidth', async () => {
+    test('passwordStrength_givenEmptyInput_showsBlankTextAndNoWidth', () => {
         const input = createPasswordInput();
         $(input).passwordStrength(OPTIONS);
 
-        await typePassword(input, 'something');
-        await typePassword(input, '');
+        typePassword(input, 'something');
+        typePassword(input, '');
 
         expect(document.querySelector('.password-strength__text').innerHTML).toBe('&nbsp;');
         expect(document.querySelector('.progress-bar').style.width).toBe('0%');
     });
 
-    test('passwordStrength_givenPasswordShorterThanMinimum_showsShortPassTipImmediately', async () => {
+    test('passwordStrength_givenPasswordShorterThanMinimum_showsShortPassTip', () => {
         const input = createPasswordInput();
         $(input).passwordStrength(OPTIONS);
 
-        // No debounce wait: the length check short-circuits before the debounced zxcvbn call.
-        input.value = 'abc123';
-        $(input).trigger('input');
+        typePassword(input, 'abc123');
 
         const $bar = $('.progress-bar');
         expect(document.querySelector('.password-strength__text').textContent).toBe(OPTIONS.shortPass);
         expect($bar.hasClass('bg-danger')).toBe(true);
     });
 
-    test('passwordStrength_givenCommonWord_showsWeakTip', async () => {
+    test('passwordStrength_givenCommonLowercaseWord_showsWeakTip', () => {
         const input = createPasswordInput();
         $(input).passwordStrength(OPTIONS);
 
-        await typePassword(input, 'password');
+        typePassword(input, 'password');
 
         const $bar = $('.progress-bar');
         expect(document.querySelector('.password-strength__text').textContent).toBe(OPTIONS.badPass);
         expect($bar.hasClass('bg-danger')).toBe(true);
     });
 
-    test('passwordStrength_givenLongRandomPassword_showsStrongTip', async () => {
+    test('passwordStrength_givenRepeatingPattern_showsWeakTipDespiteLength', () => {
         const input = createPasswordInput();
         $(input).passwordStrength(OPTIONS);
 
-        await typePassword(input, 'Tr7$kQm2!vLp9#Zx');
+        typePassword(input, 'abababababab');
+
+        const $bar = $('.progress-bar');
+        expect(document.querySelector('.password-strength__text').textContent).toBe(OPTIONS.badPass);
+        expect($bar.hasClass('bg-danger')).toBe(true);
+    });
+
+    test('passwordStrength_givenShortMixedCasePassword_showsMediumTip', () => {
+        const input = createPasswordInput();
+        $(input).passwordStrength(OPTIONS);
+
+        typePassword(input, 'Password1');
+
+        const $bar = $('.progress-bar');
+        expect(document.querySelector('.password-strength__text').textContent).toBe(OPTIONS.goodPass);
+        expect($bar.hasClass('bg-warning')).toBe(true);
+    });
+
+    test('passwordStrength_givenLongRandomPassword_showsStrongTip', () => {
+        const input = createPasswordInput();
+        $(input).passwordStrength(OPTIONS);
+
+        typePassword(input, 'Tr7$kQm2!vLp9#Zx');
 
         const $bar = $('.progress-bar');
         expect(document.querySelector('.password-strength__text').textContent).toBe(OPTIONS.strongPass);

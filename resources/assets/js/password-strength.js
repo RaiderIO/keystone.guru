@@ -3,14 +3,20 @@
 //
 // Self-owned replacement for the unmaintained `password-strength-meter` npm
 // plugin (last release 2020, last GitHub push 2022). Renders a Bootstrap
-// progress bar + text tip below a password <input> and scores the typed
-// value with zxcvbn-ts (the actively-maintained continuation of Dropbox's
-// zxcvbn), instead of the former plugin's ad-hoc character-class heuristic.
+// progress bar + text tip below a password <input>.
 //
 //     $('#register_password').passwordStrength({
 //         shortPass: '...', badPass: '...', goodPass: '...', strongPass: '...',
 //         minimumLength: 8,
 //     });
+//
+// Scoring is a small, dependency-free character-class/repetition heuristic -
+// the same kind of check the old plugin did - rather than a dictionary-backed
+// library (e.g. zxcvbn-ts): a real dictionary-aware scorer needs several MB of
+// wordlists, which would roughly double the size of the app's single global JS
+// bundle (every page loads it, not just this widget's 2-3 call sites) for a
+// login-form nicety. This trades dictionary awareness for a near-zero bundle
+// cost.
 //
 // The widget is appended to the input's closest wrapping <div> (mirrors the
 // former plugin's default `closestSelector: 'div'`) and updates on every
@@ -18,29 +24,90 @@
 // ---------------------------------------------------------------------------
 
 const $ = require('jquery');
-const {ZxcvbnFactory, debounce} = require('@zxcvbn-ts/core');
 
-// The language dictionaries are large (~1-2MB of ranked word lists each), so building the
-// factory is deferred until a page actually initialises a password field, rather than paying
-// that cost on every page load via bootstrap.js.
-let zxcvbnFactory = null;
+const SYMBOL_PATTERN = /[^a-zA-Z0-9]/;
 
-function getZxcvbnFactory() {
-    if (zxcvbnFactory === null) {
-        const zxcvbnCommonPackage = require('@zxcvbn-ts/language-common');
-        const zxcvbnEnPackage = require('@zxcvbn-ts/language-en');
+/**
+ * Counts the characters left after collapsing runs where the string repeats itself with the
+ * given period (period 1 catches "aaaa", period 2 catches "abab", period 3 "abcabc", ...): each
+ * repeated block is dropped entirely rather than counted once, so a repetitive password scores
+ * as if most of its length wasn't there.
+ *
+ * @param {string} password
+ * @param {number} period
+ * @returns {number}
+ */
+function nonRepeatingLength(password, period) {
+    let count = 0;
 
-        zxcvbnFactory = new ZxcvbnFactory({
-            dictionary: {
-                ...zxcvbnCommonPackage.dictionary,
-                ...zxcvbnEnPackage.dictionary,
-            },
-            graphs: zxcvbnCommonPackage.adjacencyGraphs,
-            translations: zxcvbnEnPackage.translations,
-        });
+    for (let i = 0; i < password.length; i++) {
+        let repeating = true;
+        let checked = 0;
+
+        for (; checked < period && i + checked + period < password.length; checked++) {
+            repeating = repeating && password[i + checked] === password[i + checked + period];
+        }
+
+        if (checked < period) {
+            repeating = false;
+        }
+
+        if (repeating) {
+            i += period - 1;
+        } else {
+            count++;
+        }
     }
 
-    return zxcvbnFactory;
+    return count;
+}
+
+/**
+ * Scores a password from 0 (worthless) to 100 (excellent) based on length, character-class
+ * variety, and short repeating patterns. Not dictionary-aware: "Tr0ub4dor" scores well despite
+ * being a well-known example of a guessable password, same tradeoff the old plugin made.
+ *
+ * @param {string} password
+ * @returns {number}
+ */
+function scorePassword(password) {
+    let score = 4 * password.length;
+
+    for (let period = 1; period <= 4; period++) {
+        score += nonRepeatingLength(password, period) - password.length;
+    }
+
+    const hasLower = /[a-z]/.test(password);
+    const hasUpper = /[A-Z]/.test(password);
+    const hasDigit = /[0-9]/.test(password);
+    const hasSymbol = SYMBOL_PATTERN.test(password);
+    const digitCount = (password.match(/[0-9]/g) || []).length;
+    const symbolCount = (password.match(/[^a-zA-Z0-9]/g) || []).length;
+
+    if (digitCount >= 3) {
+        score += 5;
+    }
+    if (symbolCount >= 2) {
+        score += 5;
+    }
+    if (hasLower && hasUpper) {
+        score += 10;
+    }
+    if ((hasLower || hasUpper) && hasDigit) {
+        score += 15;
+    }
+    if (hasSymbol && hasDigit) {
+        score += 15;
+    }
+    if (hasSymbol && (hasLower || hasUpper)) {
+        score += 15;
+    }
+    if (/^\w+$/.test(password)) {
+        // Only letters/digits/underscore and no symbol at all - the easiest class to brute-force.
+        score -= 10;
+    }
+
+    return Math.max(0, Math.min(100, score));
 }
 
 /**
@@ -57,18 +124,6 @@ $.fn.passwordStrength = function (options) {
         strongPass: 'Strong password',
         minimumLength: 8,
     }, options);
-
-    // zxcvbn's 0-4 score collapsed to the former plugin's 3-tier weak/medium/strong scale,
-    // rendered with Bootstrap's own contextual colors so the bar matches every other
-    // progress bar in the app (e.g. resources/views/misc/mapping.blade.php).
-    const scoreTiers = [
-        {className: 'bg-danger', text: settings.badPass},
-        {className: 'bg-danger', text: settings.badPass},
-        {className: 'bg-warning', text: settings.goodPass},
-        {className: 'bg-warning', text: settings.goodPass},
-        {className: 'bg-success', text: settings.strongPass},
-    ];
-    const tierClassNames = [...new Set(scoreTiers.map((tier) => tier.className))].join(' ');
 
     return this.each(function () {
         const input = this;
@@ -96,18 +151,8 @@ $.fn.passwordStrength = function (options) {
 
         function setBar(percent, className) {
             $bar.css('width', `${percent}%`).attr('aria-valuenow', percent)
-                .removeClass(tierClassNames).addClass(className || '');
+                .removeClass('bg-danger bg-warning bg-success').addClass(className || '');
         }
-
-        // zxcvbn's dictionary-backed scoring is materially heavier per keystroke than the
-        // former plugin's regex heuristic (measurably so on longer passwords), so debounce it
-        // with the library's own helper rather than scoring on every single keystroke.
-        const renderScore = debounce(function (password) {
-            const tier = scoreTiers[getZxcvbnFactory().check(password).score];
-
-            setBar(((scoreTiers.indexOf(tier) + 1) / scoreTiers.length) * 100, tier.className);
-            $text.text(tier.text);
-        }, 200);
 
         // 'input' (not just 'keyup') so paste and autofill also update the meter.
         $input.on('input change', function () {
@@ -125,7 +170,18 @@ $.fn.passwordStrength = function (options) {
                 return;
             }
 
-            renderScore(password);
+            const score = scorePassword(password);
+
+            if (score < 34) {
+                setBar(score, 'bg-danger');
+                $text.text(settings.badPass);
+            } else if (score < 68) {
+                setBar(score, 'bg-warning');
+                $text.text(settings.goodPass);
+            } else {
+                setBar(score, 'bg-success');
+                $text.text(settings.strongPass);
+            }
         });
     });
 };
