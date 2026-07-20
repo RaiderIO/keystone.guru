@@ -16,6 +16,7 @@ const {
     rotateLatLng,
     getCenteroid,
     getQueryParams,
+    isElementFullyVisible,
 } = require('./util');
 
 describe('convertToSlug', () => {
@@ -210,5 +211,34 @@ describe('getQueryParams', () => {
     it('returns an empty object when there is no query string', () => {
         window.history.replaceState({}, '', '/');
         expect(getQueryParams()).toEqual({});
+    });
+});
+
+describe('isElementFullyVisible', () => {
+    const makeElement = (rect) => ({getBoundingClientRect: () => rect});
+
+    it('returns true when the element is fully within the viewport', () => {
+        let element = makeElement({top: 10, left: 10, bottom: 100, right: 100});
+        expect(isElementFullyVisible(element)).toBe(true);
+    });
+
+    it('returns false when the element is above the viewport', () => {
+        let element = makeElement({top: -10, left: 10, bottom: 100, right: 100});
+        expect(isElementFullyVisible(element)).toBe(false);
+    });
+
+    it('returns false when the element is below the viewport', () => {
+        let element = makeElement({top: 10, left: 10, bottom: window.innerHeight + 10, right: 100});
+        expect(isElementFullyVisible(element)).toBe(false);
+    });
+
+    it('returns false when the element is left of the viewport', () => {
+        let element = makeElement({top: 10, left: -10, bottom: 100, right: 100});
+        expect(isElementFullyVisible(element)).toBe(false);
+    });
+
+    it('returns false when the element is right of the viewport', () => {
+        let element = makeElement({top: 10, left: 10, bottom: 100, right: window.innerWidth + 10});
+        expect(isElementFullyVisible(element)).toBe(false);
     });
 });
