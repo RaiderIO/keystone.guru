@@ -47,7 +47,7 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
         private readonly int                           $combatLogVersion,
         private readonly ?CombatLogRunContextInterface $runContext = null,
     ) {
-        $this->queue = sprintf('%s-%s-combat-log-process', config('app.type'), config('app.env'));
+        $this->queue = sprintf('%s-%s-cl-process', config('app.type'), config('app.env'));
     }
 
     public function handle(
