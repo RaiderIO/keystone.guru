@@ -98,7 +98,8 @@ require('./star-rating');
 window.polylinedecorator = require('leaflet-polylinedecorator');
 window.lightCarousel = require('lightslider');
 window.introjs = require('intro.js');
-window.pwstrengthmeter = require('password-strength-meter');
+// Self-owned password-strength widget (#3597); replaces the unmaintained password-strength-meter plugin
+require('./password-strength');
 window.Cookies = require('js-cookie');
 window.hull = require('hull.js'); // Find the 'hull' of a random set of points
 const offsetPolygon = require("offset-polygon");

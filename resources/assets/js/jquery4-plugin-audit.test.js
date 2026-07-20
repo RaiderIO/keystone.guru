@@ -5,8 +5,10 @@
 // them (`$.isNumeric`), breaking pull lists in production. That plugin has since
 // been replaced by a self-owned widget and its `$.isNumeric` shim removed
 // (#3593), and `jquery-visible` has since been replaced by a native
-// `getBoundingClientRect()` check and dropped entirely (#3594); this audit
-// remains to guard the OTHER bundled plugins below.
+// `getBoundingClientRect()` check and dropped entirely (#3594). `password-strength-meter`
+// was also replaced by a self-owned widget (#3597, unmaintained upstream) and dropped from
+// here since it's no longer bundled. This audit remains to guard the OTHER bundled plugins
+// below.
 //
 // A static grep audit for #3590 found no other bundled plugin calling a
 // removed jQuery-4 API. To actually close the loop the way #3589's test did -
@@ -82,19 +84,6 @@ describe('ion-rangeslider (#3590)', () => {
 
         expect(() => $('#rating-slider').ionRangeSlider({grid: true, min: 1, max: 10}))
             .not.toThrow();
-    });
-});
-
-describe('password-strength-meter (#3590)', () => {
-    afterEach(() => {
-        document.body.innerHTML = '';
-    });
-
-    test('password_givenPasswordInput_initialisesWithoutThrowing', () => {
-        require('password-strength-meter');
-        document.body.innerHTML = '<input type="password" id="register_password" />';
-
-        expect(() => $('#register_password').password({showText: true})).not.toThrow();
     });
 });
 

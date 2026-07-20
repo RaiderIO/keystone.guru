@@ -266,7 +266,6 @@ return [
     'weak'                                                                 => 'Weak',
     'medium'                                                               => 'Medium',
     'strong'                                                               => 'Strong',
-    'contains_username'                                                    => 'Password cannot contain your username',
     'mdt_faction'                                                          => 'Faction',
     'mdt_dungeon'                                                          => 'Dungeon',
     'mdt_affixes'                                                          => 'Affixes',
