@@ -1,16 +1,58 @@
-/* $.fn.rangeSlider (#3596): layout fixes for noUiSlider content that's positioned absolutely
- * relative to the track and so, unlike ion-rangeslider's own wrapper (which sized itself to
- * include its grid/value labels), doesn't contribute to .range-slider's own height. Left alone,
- * normal-flow content right before/after the slider paints over that overflow.
+/* $.fn.rangeSlider (#3596): sizing + layout for noUiSlider, whose vendor defaults (18px track,
+ * 34x28px handle, full-size tooltip/pip text) are considerably bulkier than ion-rangeslider's.
  */
 
-/* Every slider always has tooltips (see range-slider.js), positioned above the track - without
- * this, the tooltip overlaps whatever precedes the slider (typically the filter's own label). */
+/* Slim track + small round handle, replacing the vendor's 18px track / 34x28px handle. */
+.range-slider.noUi-horizontal {
+    height: 6px;
+}
+
+.range-slider.noUi-horizontal .noUi-handle {
+    width: 16px;
+    height: 16px;
+    top: -5px;
+    right: -8px;
+    border-radius: 50%;
+}
+
+/* The vendor's handle "grip" stripes are sized for the default 34x28px handle; drop them for a
+ * plain circular handle at this size. */
+.range-slider .noUi-handle:before,
+.range-slider .noUi-handle:after {
+    display: none;
+}
+
+.range-slider .noUi-tooltip {
+    padding: 1px 4px;
+    font-size: 10px;
+    line-height: 1.3;
+}
+
+.range-slider .noUi-pips {
+    font-size: 10px;
+}
+
+.range-slider .noUi-pips-horizontal {
+    padding: 2px 0;
+}
+
+.range-slider .noUi-marker-large {
+    height: 6px;
+}
+
+/* Layout: noUiSlider positions the tooltip/pips absolutely relative to the track, so unlike
+ * ion-rangeslider's own wrapper (which sized itself to include its grid/value labels), they
+ * don't contribute to .range-slider's own height. Left alone, normal-flow content right
+ * before/after the slider paints over that overflow. The margins below are sized to the
+ * compact tooltip/pips above - re-measure if either is resized again.
+ */
+
+/* Every slider always has tooltips (see range-slider.js), positioned above the track. */
 .range-slider {
-    margin-top: 46px;
+    margin-top: 24px;
 }
 
 /* Pip labels are positioned below the track; added whenever `grid: true` is passed. */
 .range-slider--has-pips {
-    margin-bottom: 46px;
+    margin-bottom: 26px;
 }
