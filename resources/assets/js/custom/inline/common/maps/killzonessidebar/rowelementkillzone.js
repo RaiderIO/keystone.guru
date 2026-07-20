@@ -364,7 +364,7 @@ class RowElementKillZone extends RowElement {
 
             // Make sure we can see the killzone in the sidebar
             let $killzone = $(`#map_killzonessidebar_killzone_${this.killZone.id}`);
-            if ($killzone.length > 0 && !$killzone.visible()) {
+            if ($killzone.length > 0 && !isElementFullyVisible($killzone[0])) {
                 $killzone[0].scrollIntoView({behavior: 'smooth'});
             }
 
