@@ -128,6 +128,8 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
                 DungeonRouteEnemyRaidMarker::create([
                     'dungeon_route_id' => $dungeonRoute->id,
                     'raid_marker_id'   => RaidMarker::ALL[$raidMarkerName],
+                    'npc_id'           => $enemy->mdt_npc_id ?? $enemy->npc_id,
+                    'mdt_id'           => $enemy->mdt_id,
                     'enemy_id'         => $enemy->id,
                 ]);
 

@@ -19,4 +19,9 @@ use Illuminate\Support\Collection;
  */
 interface DungeonRouteEnemyRaidMarkerRepositoryInterface extends BaseRepositoryInterface
 {
+    public function resetEnemyIdByDungeonRouteId(int $dungeonRouteId): void;
+
+    public function updateEnemyIdsByMappingVersion(int $dungeonRouteId, int $mappingVersionId): void;
+
+    public function deleteOrphanedByDungeonRouteId(int $dungeonRouteId): void;
 }
