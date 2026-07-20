@@ -15,75 +15,91 @@ class AssignMDTIDs extends Command
      *
      * @var string
      */
-    protected $signature = 'mapping:assignmdtids';
+    protected $signature = 'mapping:assignmdtids {--dungeon= : Only process this dungeon (by key); omit to process every dungeon}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = "Assigns MDT IDs to a mapping that doesn't have them yet.";
+    protected $description = "Assigns MDT IDs to enemies that don't have one yet, so they stay identifiable across a mapping version upgrade.";
 
     /**
      * Execute the console command.
      */
     public function handle(): int
     {
+        $dungeonKey = $this->option('dungeon');
+
+        $mappingVersionsQuery = MappingVersion::with(['enemies', 'dungeon']);
+        if ($dungeonKey !== null) {
+            $dungeon = Dungeon::where('key', $dungeonKey)->firstOrFail();
+            $mappingVersionsQuery->where('dungeon_id', $dungeon->id);
+        }
+
         /** @var Collection<int, MappingVersion> $mappingVersions */
-        $mappingVersions = MappingVersion::with([
-            'enemies',
-            'dungeon',
-        ])->get();
+        $mappingVersions = $mappingVersionsQuery->get();
 
-        $dungeonWhitelist = [
-            Dungeon::RAID_THE_EYE,
-            Dungeon::RAID_SERPENTSHRINE_CAVERN,
-            //            Dungeon::DUNGEON_MOGU_SHAN_PALACE,
-            //            Dungeon::DUNGEON_SCARLET_HALLS_MOP,
-            //            Dungeon::DUNGEON_SCARLET_MONASTERY_MOP,
-            //            Dungeon::DUNGEON_SCHOLOMANCE_MOP,
-            //            Dungeon::DUNGEON_SHADO_PAN_MONASTERY,
-            //            Dungeon::DUNGEON_SIEGE_OF_NIUZAO_TEMPLE,
-            //            Dungeon::DUNGEON_STORMSTOUT_BREWERY,
-            //            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT,
-        ];
+        $rows       = [];
+        $totalCount = 0;
 
-        $count = 0;
         foreach ($mappingVersions as $mappingVersion) {
-            if (empty($dungeonWhitelist) || in_array($mappingVersion->dungeon->key, $dungeonWhitelist)) { // @phpstan-ignore empty.variable
-                $enemies = $mappingVersion->enemies()
-                    ->orderBy('npc_id')
-                    ->orderBy('id')
-                    ->get();
+            if ($mappingVersion->dungeon === null) {
+                // Dangling mapping_version (no foreign keys in this app) - nothing sensible to report
+                continue;
+            }
 
-                if ($enemies->isEmpty()) {
-                    // We don't care for empty mapping versions
-                    continue;
+            $enemies = $mappingVersion->enemies()
+                ->orderBy('npc_id')
+                ->orderBy('id')
+                ->get();
+
+            $missingBefore = $enemies->whereNull('mdt_id')->count();
+            if ($missingBefore === 0) {
+                // Nothing to do for this mapping version
+                continue;
+            }
+
+            $assigned = 0;
+            foreach ($enemies->groupBy('npc_id') as $enemiesByNpcId) {
+                /** @var Collection<int, Enemy> $enemiesByNpcId */
+                $enemiesByNpcId = $enemiesByNpcId->sortBy('id');
+                $maxId          = 0;
+                // Determine the max ID first, then assign the max ID to any NPCs that don't have an ID yet
+                foreach ($enemiesByNpcId as $enemy) {
+                    if ($enemy->mdt_id > 0 && $maxId <= $enemy->mdt_id) {
+                        $maxId = $enemy->mdt_id;
+                    }
                 }
 
-                foreach ($enemies->groupBy('npc_id') as $npcId => $enemiesByNpcId) {
-                    /** @var Collection<int, Enemy> $enemiesByNpcId */
-                    $enemiesByNpcId = $enemiesByNpcId->sortBy('id');
-                    $maxId          = 0;
-                    // Determine the max ID first, then assign the max ID to any NPCs that don't have an ID yet
-                    foreach ($enemiesByNpcId as $enemy) {
-                        if ($enemy->mdt_id > 0 && $maxId <= $enemy->mdt_id) {
-                            $maxId = $enemy->mdt_id;
-                        }
-                    }
-
-                    foreach ($enemiesByNpcId as $enemy) {
-                        if (empty($enemy->mdt_id)) {
-                            // Increment first, then write
-                            $enemy->update(['mdt_id' => ++$maxId]);
-                            $count++;
-                        }
+                foreach ($enemiesByNpcId as $enemy) {
+                    if (empty($enemy->mdt_id)) {
+                        // Increment first, then write
+                        $enemy->update(['mdt_id' => ++$maxId]);
+                        $assigned++;
                     }
                 }
             }
+
+            $totalCount += $assigned;
+            $rows[] = [
+                __($mappingVersion->dungeon->name),
+                $mappingVersion->dungeon_id,
+                $mappingVersion->id,
+                $mappingVersion->version,
+                $missingBefore,
+                $missingBefore - $assigned,
+            ];
         }
 
-        $this->info(sprintf('Assigned MDT IDs to %d enemies', $count));
+        if (count($rows) > 0) {
+            $this->table(
+                ['Dungeon', 'Dungeon ID', 'Mapping Version ID', 'Version', 'Missing before', 'Missing after'],
+                $rows,
+            );
+        }
+
+        $this->info(sprintf('Assigned MDT IDs to %d enemies', $totalCount));
 
         return 0;
     }
