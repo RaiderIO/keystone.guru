@@ -25,13 +25,15 @@ return new class extends Migration {
 
         // Table is tiny (this feature has been broken/disabled since 2022) - safe to backfill
         // inline rather than via a chunked command, mirroring the original (pre-#3246-rework)
-        // kill_zone_enemies conversion migration.
+        // kill_zone_enemies conversion migration. Enemies placed outside of an MDT import
+        // legitimately have a null mdt_id (~2% of all enemies) - still backfill npc_id/mdt_id
+        // for those rows (mdt_id stays null) so a later mapping version upgrade can still match
+        // them; only rows whose enemy_id no longer resolves to any enemy are skipped.
         DB::update('
             UPDATE `dungeon_route_enemy_raid_markers`
-                LEFT JOIN `enemies` ON `enemies`.`id` = `dungeon_route_enemy_raid_markers`.`enemy_id`
+                JOIN `enemies` ON `enemies`.`id` = `dungeon_route_enemy_raid_markers`.`enemy_id`
             SET `dungeon_route_enemy_raid_markers`.`npc_id` = coalesce(`enemies`.`mdt_npc_id`, `enemies`.`npc_id`),
-                `dungeon_route_enemy_raid_markers`.`mdt_id` = `enemies`.`mdt_id`
-                WHERE `enemies`.`mdt_id` is not null;
+                `dungeon_route_enemy_raid_markers`.`mdt_id` = `enemies`.`mdt_id`;
         ');
     }
 

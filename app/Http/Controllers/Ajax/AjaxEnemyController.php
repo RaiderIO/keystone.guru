@@ -119,16 +119,22 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
 
         try {
             $raidMarkerName = $request->get('raid_marker_name', '');
+            $npcId          = $enemy->getMdtNpcId();
 
-            // Delete existing enemy raid marker
-            DungeonRouteEnemyRaidMarker::where('enemy_id', $enemy->id)->where('dungeon_route_id', $dungeonRoute->id)->delete();
+            // Delete existing enemy raid marker, matched by the durable npc_id/mdt_id identity
+            // rather than the mapping-version-scoped cached enemy_id, so a stale client reference
+            // (e.g. after a mapping version upgrade) can't leave a duplicate row behind
+            DungeonRouteEnemyRaidMarker::where('dungeon_route_id', $dungeonRoute->id)
+                ->where('npc_id', $npcId)
+                ->where('mdt_id', $enemy->mdt_id)
+                ->delete();
 
             // Create a new one, if the user didn't just want to clear it
             if (!empty($raidMarkerName)) {
                 DungeonRouteEnemyRaidMarker::create([
                     'dungeon_route_id' => $dungeonRoute->id,
                     'raid_marker_id'   => RaidMarker::ALL[$raidMarkerName],
-                    'npc_id'           => $enemy->mdt_npc_id ?? $enemy->npc_id,
+                    'npc_id'           => $npcId,
                     'mdt_id'           => $enemy->mdt_id,
                     'enemy_id'         => $enemy->id,
                 ]);

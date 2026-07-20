@@ -48,7 +48,7 @@ class DungeonRouteEnemyRaidMarkersRelationParser implements RelationParserInterf
             $enemyRaidMarkerData['dungeon_route_id'] = $modelData['id'];
             // Resolve npc_id/mdt_id from the freshly-seeded enemy rather than trusting the raw
             // enemy_id in the fixture, so a later mapping version upgrade can still find it (#1453)
-            $enemyRaidMarkerData['npc_id'] = $enemy->mdt_npc_id ?? $enemy->npc_id;
+            $enemyRaidMarkerData['npc_id'] = $enemy->getMdtNpcId();
             $enemyRaidMarkerData['mdt_id'] = $enemy->mdt_id;
 
             DungeonRouteEnemyRaidMarker::insert($enemyRaidMarkerData);

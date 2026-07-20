@@ -36,7 +36,7 @@ final class AjaxEnemyControllerTest extends DungeonRouteTestBase
 
             $this->assertNotNull($raidMarker);
             $this->assertEquals($enemy->id, $raidMarker->enemy_id);
-            $this->assertEquals($enemy->mdt_npc_id ?? $enemy->npc_id, $raidMarker->npc_id);
+            $this->assertEquals($enemy->getMdtNpcId(), $raidMarker->npc_id);
             $this->assertEquals($enemy->mdt_id, $raidMarker->mdt_id);
         } finally {
             DungeonRouteEnemyRaidMarker::where('dungeon_route_id', $this->dungeonRoute->id)->delete();
@@ -55,7 +55,7 @@ final class AjaxEnemyControllerTest extends DungeonRouteTestBase
         DungeonRouteEnemyRaidMarker::create([
             'dungeon_route_id' => $this->dungeonRoute->id,
             'raid_marker_id'   => RaidMarker::ALL['skull'],
-            'npc_id'           => $enemy->mdt_npc_id ?? $enemy->npc_id,
+            'npc_id'           => $enemy->getMdtNpcId(),
             'mdt_id'           => $enemy->mdt_id,
             'enemy_id'         => $enemy->id,
         ]);

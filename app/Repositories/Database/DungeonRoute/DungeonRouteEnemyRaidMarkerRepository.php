@@ -21,11 +21,13 @@ class DungeonRouteEnemyRaidMarkerRepository extends DatabaseRepository implement
 
     public function updateEnemyIdsByMappingVersion(int $dungeonRouteId, int $mappingVersionId): void
     {
+        // Null-safe equality (<=>) for mdt_id: enemies placed outside of an MDT import
+        // legitimately have a null mdt_id, and plain `=` never matches NULL against NULL.
         DB::statement('
             UPDATE dungeon_route_enemy_raid_markers drerm
             JOIN enemies e
                 ON drerm.npc_id = COALESCE(e.mdt_npc_id, e.npc_id)
-                AND drerm.mdt_id = e.mdt_id
+                AND drerm.mdt_id <=> e.mdt_id
                 AND e.mapping_version_id = ?
             SET drerm.enemy_id = e.id
             WHERE drerm.dungeon_route_id = ?
