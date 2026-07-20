@@ -73,17 +73,23 @@ describe('bootstrap5-toggle (#3590)', () => {
     });
 });
 
-describe('ion-rangeslider (#3590)', () => {
+describe('nouislider (#3596)', () => {
+    // ion-rangeslider (audited above under #3590) was replaced by nouislider + the
+    // self-owned resources/assets/js/range-slider.js adapter (see range-slider.test.js
+    // for adapter-level coverage). This block only exercises the raw vendor package,
+    // mirroring the other blocks in this file.
     afterEach(() => {
         document.body.innerHTML = '';
     });
 
-    test('ionRangeSlider_givenInput_initialisesWithoutThrowing', () => {
-        require('ion-rangeslider');
-        document.body.innerHTML = '<input id="rating-slider" />';
+    test('noUiSlider_givenDiv_initialisesWithoutThrowing', () => {
+        const noUiSlider = require('nouislider');
+        document.body.innerHTML = '<div id="rating-slider"></div>';
 
-        expect(() => $('#rating-slider').ionRangeSlider({grid: true, min: 1, max: 10}))
-            .not.toThrow();
+        expect(() => noUiSlider.create(document.getElementById('rating-slider'), {
+            start: [1],
+            range: {min: 1, max: 10},
+        })).not.toThrow();
     });
 });
 

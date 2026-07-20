@@ -9,8 +9,9 @@
 //   - real InlineCode + real refreshSelectPickers() on globalThis (see createRouteForm.js)
 //   - a Handlebars.templates.composition_icon_option_template stub (only used for `data-content`,
 //     never asserted on)
-//   - a KeyLevelHandler stub: ion-rangeslider is E2E territory, not something jsdom should load; the
-//     hidden dungeon_route_level input simply keeps its blade-prefilled "min;max" value untouched.
+//   - a KeyLevelHandler stub: the range-slider widget is E2E territory, not something this test needs
+//     to load; the hidden dungeon_route_level input simply keeps its blade-prefilled "min;max" value
+//     untouched.
 // ---------------------------------------------------------------------------
 
 globalThis.$ = globalThis.jQuery = require('jquery');

@@ -7,12 +7,12 @@ class HeatOptionMinOpacityHandler {
     }
 
     apply(selector, options) {
-        this.rangeSlider = $(selector).ionRangeSlider($.extend({
+        this.rangeSlider = $(selector).rangeSlider($.extend({
             type: 'single',
             min: this.min,
             max: this.max,
             step: 0.01,
-        }, options)).data('ionRangeSlider');
+        }, options)).data('rangeSlider');
     }
 
     update(min, max) {

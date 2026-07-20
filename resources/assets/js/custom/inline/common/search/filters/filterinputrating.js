@@ -5,7 +5,7 @@ class SearchFilterRating extends SearchFilterInput {
 
         let self = this;
 
-        $(this.selector).ionRangeSlider({
+        $(this.selector).rangeSlider({
             grid: true,
             grid_snap: true,
             min: 1,
@@ -26,7 +26,7 @@ class SearchFilterRating extends SearchFilterInput {
      * @param value
      */
     setValue(value) {
-        $(this.selector).data('ionRangeSlider').update({
+        $(this.selector).data('rangeSlider').update({
             from: value.split(';')[0],
             to: value.split(';')[1],
         });

@@ -115,7 +115,8 @@ window.simplebar = require('simplebar');
 window.Draggable = require('@shopify/draggable');
 require('bootstrap5-toggle/js/bootstrap5-toggle.jquery.min.js');
 window.lazysizes = require('lazysizes');
-window.ionRangeSlider = require('ion-rangeslider');
+// Self-owned noUiSlider-backed range slider (#3596); replaces the unmaintained ion-rangeslider plugin
+require('./range-slider');
 
 window.axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest'
