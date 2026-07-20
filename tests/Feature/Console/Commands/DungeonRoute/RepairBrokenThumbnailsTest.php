@@ -21,6 +21,20 @@ final class RepairBrokenThumbnailsTest extends PublicTestCase
 {
     use ProvidesDungeon;
 
+    #[\Override]
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // requeueThumbnailsMissingFromDisk() scans every file-backed dungeon_route_thumbnails row in
+        // the shared test DB, not just the ones this test creates - and most of those rows' File.disk
+        // is 's3_user_uploads', not config('filesystems.default'). Fake every configured disk (not just
+        // the default) so that scan never makes a real Storage::exists() call against S3.
+        foreach (array_keys(config('filesystems.disks')) as $disk) {
+            Storage::fake($disk);
+        }
+    }
+
     private function createDungeonRoute(): DungeonRoute
     {
         $dungeon        = $this->getDungeonWithNonFacadeFloor();
@@ -77,7 +91,6 @@ final class RepairBrokenThumbnailsTest extends PublicTestCase
     public function handle_givenFilelessAndFileBackedThumbnails_deletesOnlyTheFilelessOnes(): void
     {
         // Arrange
-        Storage::fake(config('filesystems.default'));
         Queue::fake();
 
         $dungeonRoute         = $this->createDungeonRoute();
@@ -107,7 +120,6 @@ final class RepairBrokenThumbnailsTest extends PublicTestCase
     public function handle_givenThumbnailFileMissingFromDisk_requeuesTheRouteForRegeneration(): void
     {
         // Arrange
-        Storage::fake(config('filesystems.default'));
         Queue::fake();
 
         $dungeonRoute = $this->createDungeonRoute();
@@ -130,7 +142,6 @@ final class RepairBrokenThumbnailsTest extends PublicTestCase
     public function handle_givenCustomThumbnailFileMissingFromDisk_reportsItWithoutRequeueingOrDeleting(): void
     {
         // Arrange
-        Storage::fake(config('filesystems.default'));
         Queue::fake();
 
         $dungeonRoute = $this->createDungeonRoute();
@@ -157,7 +168,6 @@ final class RepairBrokenThumbnailsTest extends PublicTestCase
     public function handle_givenDryRunOption_deletesNothingAndQueuesNothing(): void
     {
         // Arrange
-        Storage::fake(config('filesystems.default'));
         Queue::fake();
 
         $dungeonRoute         = $this->createDungeonRoute();

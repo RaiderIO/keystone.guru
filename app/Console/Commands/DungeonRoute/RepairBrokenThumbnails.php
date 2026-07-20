@@ -140,19 +140,24 @@ class RepairBrokenThumbnails extends Command
 
         $requeued = 0;
 
-        DungeonRoute::query()
-            ->whereIn('id', array_keys($affectedDungeonRouteIds))
-            ->with(['dungeon', 'mappingVersion'])
-            ->chunkById(100, function ($dungeonRoutes) use ($thumbnailService, &$requeued, $dryRun): void {
-                foreach ($dungeonRoutes as $dungeonRoute) {
-                    /** @var DungeonRoute $dungeonRoute */
-                    if (!$dryRun) {
-                        $thumbnailService->queueThumbnailRefresh($dungeonRoute, true);
-                    }
+        // Batch the id list itself (not just paginate with chunkById) - a single whereIn() with tens
+        // of thousands of ids can exceed MySQL's prepared-statement placeholder limit on a route with
+        // this many broken thumbnails.
+        foreach (array_chunk(array_keys($affectedDungeonRouteIds), 1000) as $dungeonRouteIdBatch) {
+            DungeonRoute::query()
+                ->whereIn('id', $dungeonRouteIdBatch)
+                ->with(['dungeon', 'mappingVersion'])
+                ->chunkById(100, function ($dungeonRoutes) use ($thumbnailService, &$requeued, $dryRun): void {
+                    foreach ($dungeonRoutes as $dungeonRoute) {
+                        /** @var DungeonRoute $dungeonRoute */
+                        if (!$dryRun) {
+                            $thumbnailService->queueThumbnailRefresh($dungeonRoute, true);
+                        }
 
-                    $requeued++;
-                }
-            });
+                        $requeued++;
+                    }
+                });
+        }
 
         $this->info(sprintf(
             '%s %d route(s) for thumbnail regeneration.',

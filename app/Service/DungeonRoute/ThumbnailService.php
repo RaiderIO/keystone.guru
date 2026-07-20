@@ -121,13 +121,14 @@ class ThumbnailService implements ThumbnailServiceInterface
             }
 
             // Some local dev setups point FILESYSTEM_DISK at the real S3 bucket (so existing
-            // thumbnails display correctly), so generating one there would create/delete real
-            // production files. Refuse instead of letting local runs mutate remote storage.
+            // thumbnails, restored from a production database backup, display correctly).
+            // Generating a new thumbnail there must never write to that remote disk, so redirect
+            // the write to the public disk instead of refusing outright - local development can
+            // still regenerate thumbnails freely.
             $disk = config('filesystems.default', 'public');
             if ($this->isRemoteDiskUnsafeForLocalGeneration($disk)) {
-                $this->log->doCreateThumbnailSkippedRemoteDiskFromLocal();
-
-                return null;
+                $this->log->doCreateThumbnailRedirectedRemoteDiskFromLocal($disk);
+                $disk = 'public';
             }
 
             $viewportWidth ??= config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_width');
@@ -396,12 +397,19 @@ class ThumbnailService implements ThumbnailServiceInterface
                     continue;
                 }
 
+                // Same local+S3 write hazard as doCreateThumbnail() - redirect to public instead
+                // of writing the copy onto a real remote disk from a local environment.
+                $disk = config('filesystems.default', 'public');
+                if ($this->isRemoteDiskUnsafeForLocalGeneration($disk)) {
+                    $disk = 'public';
+                }
+
                 $copiedThumbnail = $this->attachThumbnailToDungeonRoute(
                     $targetDungeonRoute,
                     $thumbnail->floor->index,
                     self::getTargetFilePath($targetDungeonRoute, $thumbnail->floor->index, self::THUMBNAIL_FOLDER_PATH),
                     $thumbnailData,
-                    config('filesystems.default', 'public'),
+                    $disk,
                 );
 
                 if ($copiedThumbnail === null) { // @phpstan-ignore identical.alwaysFalse

@@ -91,6 +91,14 @@ class File extends Model
      */
     public function deleteFromDisk(): bool
     {
+        // Local dev environments are commonly seeded from a restored production database backup,
+        // whose File rows can legitimately still point at a real S3 disk. Those objects must stay
+        // strictly read-only from a local environment - never deleted or overwritten - so skip the
+        // real disk mutation here and let the caller's (DB row) delete proceed as normal.
+        if ($this->isRemoteDiskProtectedFromLocalMutation()) {
+            return true;
+        }
+
         return Storage::disk($this->disk)->delete($this->path);
     }
 
@@ -118,6 +126,13 @@ class File extends Model
     public function getURL(): string
     {
         return Storage::disk($this->disk)->url($this->path);
+    }
+
+    private function isRemoteDiskProtectedFromLocalMutation(): bool
+    {
+        $driver = config(sprintf('filesystems.disks.%s.driver', $this->disk));
+
+        return app()->environment('local') && $driver === 's3';
     }
 
     /**
