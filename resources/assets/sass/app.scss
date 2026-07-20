@@ -23,8 +23,6 @@
 // Intro.js
 @import "~intro.js/minified/introjs.min.css";
 @import "~intro.js/themes/introjs-dark.css";
-// Password strength meter
-@import "~password-strength-meter/dist/password.min.css";
 // Noty
 @import "~noty/src/noty.scss";
 //@import "~noty/src/themes/bootstrap-v4.scss";
@@ -37,8 +35,8 @@
 @import "~simplebar/dist/simplebar.min.css";
 // Bootstrap5-toggle
 @import "~bootstrap5-toggle/css/bootstrap5-toggle.min.css";
-// Ion Range Slider
-@import "~ion-rangeslider/css/ion.rangeSlider.min.css";
+// noUiSlider
+@import "~nouislider/dist/nouislider.css";
 // Fonts
 @font-face {
     font-family: Salesforce Sans;

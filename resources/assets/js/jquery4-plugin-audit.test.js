@@ -5,8 +5,10 @@
 // them (`$.isNumeric`), breaking pull lists in production. That plugin has since
 // been replaced by a self-owned widget and its `$.isNumeric` shim removed
 // (#3593), and `jquery-visible` has since been replaced by a native
-// `getBoundingClientRect()` check and dropped entirely (#3594); this audit
-// remains to guard the OTHER bundled plugins below.
+// `getBoundingClientRect()` check and dropped entirely (#3594). `password-strength-meter`
+// was also replaced by a self-owned widget (#3597, unmaintained upstream) and dropped from
+// here since it's no longer bundled. This audit remains to guard the OTHER bundled plugins
+// below.
 //
 // A static grep audit for #3590 found no other bundled plugin calling a
 // removed jQuery-4 API. To actually close the loop the way #3589's test did -
@@ -71,30 +73,23 @@ describe('bootstrap5-toggle (#3590)', () => {
     });
 });
 
-describe('ion-rangeslider (#3590)', () => {
+describe('nouislider (#3596)', () => {
+    // ion-rangeslider (audited above under #3590) was replaced by nouislider + the
+    // self-owned resources/assets/js/range-slider.js adapter (see range-slider.test.js
+    // for adapter-level coverage). This block only exercises the raw vendor package,
+    // mirroring the other blocks in this file.
     afterEach(() => {
         document.body.innerHTML = '';
     });
 
-    test('ionRangeSlider_givenInput_initialisesWithoutThrowing', () => {
-        require('ion-rangeslider');
-        document.body.innerHTML = '<input id="rating-slider" />';
+    test('noUiSlider_givenDiv_initialisesWithoutThrowing', () => {
+        const noUiSlider = require('nouislider');
+        document.body.innerHTML = '<div id="rating-slider"></div>';
 
-        expect(() => $('#rating-slider').ionRangeSlider({grid: true, min: 1, max: 10}))
-            .not.toThrow();
-    });
-});
-
-describe('password-strength-meter (#3590)', () => {
-    afterEach(() => {
-        document.body.innerHTML = '';
-    });
-
-    test('password_givenPasswordInput_initialisesWithoutThrowing', () => {
-        require('password-strength-meter');
-        document.body.innerHTML = '<input type="password" id="register_password" />';
-
-        expect(() => $('#register_password').password({showText: true})).not.toThrow();
+        expect(() => noUiSlider.create(document.getElementById('rating-slider'), {
+            start: [1],
+            range: {min: 1, max: 10},
+        })).not.toThrow();
     });
 });
 

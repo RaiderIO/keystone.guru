@@ -19,7 +19,7 @@ class AdminNpchealthEdit extends InlineCode {
 
         let $scaledHealthLevelInput = $(this.options.scaledHealthLevelSelector)
             .val(Cookies.get('npc_edit_key_level', '15'))
-            .ionRangeSlider({
+            .rangeSlider({
                 grid: true,
                 grid_snap: true,
                 type: 'single',
@@ -31,7 +31,7 @@ class AdminNpchealthEdit extends InlineCode {
             });
 
         $(this.options.healthPercentageSelector)
-            .ionRangeSlider({
+            .rangeSlider({
                 grid: true,
                 grid_snap: true,
                 type: 'single',
