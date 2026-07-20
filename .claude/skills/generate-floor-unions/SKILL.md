@@ -14,7 +14,11 @@ the admin map editor.
 
 Validated against Skyreach (2 floors) and Magister's Terrace Midnight (7 images, 8 unions,
 rotations up to 149.5°, duplicated-art void floors): every recoverable union matched the
-hand-made ground truth within ±0.72 map units, size ±1%, rotation ±0.3°.
+hand-made ground truth within ±0.72 map units, size ±1%, rotation ±0.3°. Hardened for **blind
+first runs** on a further 7 Midnight/BfA dungeons (#3616): Ruby Life Pools, Kings' Rest, Temple of
+Sethraliss, Voidscar Arena, Murder Row, The Blinding Vale, Altar of Fangs - see the calibration
+facts below and the golden regression tests (`scripts/test.sh`, run after any change to
+`register_floors.py`).
 
 ## Prerequisites
 
@@ -57,11 +61,29 @@ same `<workdir>` mount.
 
 - A floor image may legitimately produce **multiple placements** (zoomed sub-regions with
   `size > 256`, or duplicated-art floors); iterative matching finds them all.
-- **Phantom fits are expected and auto-rejected**: floor images share art with the facade beyond
-  their own floor (the dungeon-name banner is the classic case) and such fits can carry *more*
-  RANSAC inliers than small genuine placements. The `edge_corr` filter (default `--min-edge-corr
-  0.2`) separates them: measured real placements score ≥ 0.25, phantoms ≤ 0.17. If a floor is
-  missing a placement or has a bogus one, tune that threshold before anything else.
+- **The title banner is the enemy.** Every cut carries the dungeon-name banner (and frame), and
+  the facade shows it too, so a floor image can match the facade banner with an edge_corr *higher*
+  than a small genuine placement (measured up to 0.61 on Midnight/BfA art) - the edge_corr filter
+  alone cannot reject it, and left unchecked it either adds a phantom or, when a floor's own art is
+  faint, outscores and masks the real placement. Three guards handle it, applied automatically:
+  1. **Own-art keypoint masking** (on with ≥2 floor images): each floor's SIFT keypoints are
+     restricted to its own art (the `content_masks` median-backdrop) so the shared banner/frame/
+     parchment is never matched. This both removes banner phantoms and frees the real placements
+     they were masking. Single-floor dungeons skip it (no competing banner) and match unmasked.
+  2. **Off-image guard**: a fit whose center lands >15% outside the facade is rejected (the banner
+     sits just off the top/bottom edge).
+  3. **Review band** (`--review-edge-corr`, default 0.08): a floor that gets *no* fit above
+     `--min-edge-corr` but has a geometrically sound, on-image, own-art fit above the review floor
+     is surfaced as `[NEEDS REVIEW]` (thick box + `?REVIEW` label in the overlay) instead of being
+     silently dropped. Only fires when the floor has zero accepted placements, so a placed floor's
+     own faint phantom stays suppressed.
+- **Threshold guidance**: keep `--min-edge-corr 0.2`. The old "genuine ≥0.25 / phantom ≤0.17"
+  margin does NOT hold on Midnight/BfA art - a genuinely faint floor (smooth low-contrast cave)
+  can score as low as ~0.11-0.19, so **do not lower the global threshold to force one in** (0.15
+  would readmit real phantoms). Instead confirm the `[NEEDS REVIEW]` candidate on the overlay and,
+  if genuine, keep it; if a floor is simply not drawn on the facade (an unused/absent floor, e.g.
+  Den of Nalorakk's first floor) it correctly gets no placement. Duplicated-art vs. banner is a
+  human call - the user flags genuine duplicated art (rare, ~twice in 150 dungeons).
 
 ### 2. Vision-review the stripe overlay
 
@@ -70,6 +92,15 @@ between facade and warped floor image: a correct placement shows map art flowing
 across band boundaries**; misalignment shows as broken/offset lines. Also sanity-check the
 console `rotation`/`size` values. Floor-image fluff (its own banner) appearing over empty
 parchment inside a placement is normal.
+
+- **Check the count**: one accepted placement per real floor (minus any floor genuinely not drawn
+  on the facade). Fewer means a floor failed to match; more (beyond known duplicated-art) means a
+  phantom slipped through.
+- **`[NEEDS REVIEW]` placements** (thick box, `?REVIEW` label) are faint low-contrast floors below
+  the auto-accept bar. Confirm on the overlay that the floor's art actually lands inside the box
+  (the `areas` overlay is often clearer - a faint floor whose art sits cleanly inside its own
+  colored region is genuine). Keep it only if it's real; otherwise drop that floor from the import
+  map. The console prints its edge_corr and inlier ratio to help judge.
 
 ### 3. Partition into FloorUnionAreas
 
@@ -131,18 +162,52 @@ Side effects to tell the user about:
 - To retry, delete the created version first (`MappingVersion::find(id)->delete()` cascades to
   its unions/areas) - each script run creates a NEW version.
 
-### 6. Verify
+### 6. Verify (close the loop after insert)
 
-1. **Round-trip** (when a reference mapping version with enemies exists, e.g. regenerating an
-   existing facade): the bare version itself has NO enemies - iterate the *reference* version's
-   enemies, but run the conversions with the *new* version:
-   `convertMapLocationToFacadeMapLocation($newMv, ...)` then
-   `convertFacadeMapLocationToMapLocation($newMv, ...)` must return the same floor and coords
-   (tolerance 1 map unit). A couple of edge-of-floor enemies landing across an
-   area boundary is normal (2/277 on Magister's Terrace) - those boundaries get nudged in the map
-   editor, don't chase them in code.
-2. **Map editor**: the user reviews/tweaks unions and areas on the facade floor in the admin
+1. **Round-trip self-consistency** - run this whenever the dungeon has *any* enemy-carrying
+   mapping version (it needs no MDT data; enemies are only sample points):
+
+   ```bash
+   docker compose exec -T -e KSG_FLOOR_UNION_VERIFY_MV=<new mapping version id> \
+       app php artisan tinker .claude/skills/generate-floor-unions/scripts/verify_floor_unions.php
+   ```
+
+   For every enemy on the reference version it projects the map location onto the facade through
+   the new unions and back, and prints a per-floor summary: enemies sampled, how many `projected`
+   (proves the union actually transformed the point, not a no-op), how many round-trip to the
+   `same-floor`, and the worst deviation. **Treat inserted unions as provisional until this has
+   run.** A whole floor failing same-floor = a swapped or absent union (fix the import map); a
+   couple of edge-of-floor enemies crossing an area boundary is normal (2/164 on Ruby Life Pools,
+   2/277 on Magister's Terrace) - nudge those boundaries in the editor, don't chase them in code.
+   Calibration runs: Kings' Rest 108/108, Temple of Sethraliss 123/123, Ruby Life Pools 162/164.
+2. **Brand-new dungeon with no enemies anywhere** (the common Midnight case): the round-trip has
+   nothing to sample and prints so - fall back to the overlay review (step 2) and the `areas`
+   overlay + 100% exclusive own-art coverage as the acceptance signal. The enemy round-trip becomes
+   available only *after* the MDT import populates enemies, which itself consumes these unions.
+3. **Map editor**: the user reviews/tweaks unions and areas on the facade floor in the admin
    editor - that is the intended final-tuning surface, not a failure of the generator.
+
+## Regression tests
+
+`register_floors.py` is bit-for-bit deterministic on the pinned Docker image, so its `match`
+output is guarded by golden files. **Run the suite after any change to `register_floors.py`:**
+
+```bash
+.claude/skills/generate-floor-unions/scripts/test.sh                     # default image root ~/maps
+KSG_FLOOR_UNION_FIXTURES=/path/to/maps .../test.sh                       # explicit root
+.../test.sh --regenerate                                                 # after an INTENTIONAL change
+```
+
+It re-runs `match` on both calibration dungeons (Skyreach, Magister's Terrace) and the 8 hardening
+dungeons and compares every placement (lat/lng/size/rotation/edge_corr/needs_review) against
+`scripts/test_expected/*.json` within tolerance, plus the coordinate math. The fixture **images are
+committed in-repo** under `scripts/test_fixtures/<name>/` as **256-colour indexed PNGs** (quantized
+like MDT's own tiles - ~40% smaller than source RGB, with no measurable effect on the match:
+verified placements move <0.02 map units / edge_corr and no placement is gained or lost).
+`KSG_FLOOR_UNION_FIXTURES` can point the suite at another image root; a fixture whose images are
+missing is skipped, not failed. Comparison is order-independent within a floor image, so a
+duplicated-art floor's instance relabel is not a spurious failure. If a change is a deliberate
+improvement, re-review the overlays, then `--regenerate` and commit the new goldens.
 
 ## Gotchas / calibration facts (don't re-derive)
 
@@ -160,3 +225,20 @@ Side effects to tell the user about:
   upper-tower disc) from strong parchment grain at any threshold, and edge-"agreement" with the
   facade fragments badly on duplicated-art floors. Keep boundaries simple; the editor is for
   fine-tuning.
+- **Banner phantoms are a keypoint problem, not a threshold problem** (#3616). The same
+  median-backdrop the `areas` step uses is reused at *match* time to restrict each floor's
+  keypoints to its own art; that is what stops banner matches. Don't try to fix banner phantoms by
+  raising `--min-edge-corr` (it can't separate a 0.61 banner fit) or by post-filtering placements
+  (that loses the real placements the banner was masking). The off-image guard and review band are
+  the safety nets, not the primary fix.
+- **Faint low-contrast floors** (smooth cave interiors: Altar of Fangs' Mutation Chambers 0.110,
+  Murder Row's Illicit Rain 0.194) land below `--min-edge-corr` even when perfectly placed - the
+  fit is the stable RANSAC solution (identical across keypoint densities), the edge magnitude is
+  just weak. These are exactly what the `[NEEDS REVIEW]` band surfaces; a bigger SIFT keypoint
+  budget does not raise their edge_corr (tried, no change). Confirm on the overlay and keep.
+- **Per-dungeon calibration (Midnight/BfA set, #3616), all at defaults** (`--min-edge-corr 0.2`,
+  masking on): Ruby Life Pools 2/2 (0.35-0.54), Kings' Rest 1/1 (0.87), The Blinding Vale 1/1
+  (0.80), Temple of Sethraliss 2/2 (banner phantoms killed by the off-image guard), Voidscar Arena
+  3/3 (a shared central-backdrop phantom on all 3 floors killed by masking), Murder Row 3/3
+  (Illicit Rain via review band), Altar of Fangs 3/3 (Mutation Chambers via review band). No
+  `--content-diff-threshold`/`--content-close-px` retuning was needed on this art.

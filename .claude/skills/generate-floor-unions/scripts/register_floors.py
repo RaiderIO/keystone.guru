@@ -209,7 +209,8 @@ def edge_correlation(floor_gray, facade_edges, m_affine):
 
 
 def find_placements(name, floor_gray, facade_edges, sift, facade_kp, facade_desc,
-                    min_inliers, max_instances, ransac_px, min_edge_corr):
+                    min_inliers, max_instances, ransac_px, min_edge_corr,
+                    floor_mask=None, review_edge_corr=0.0):
     """
     Iterative multi-instance affine registration of one floor image.
 
@@ -219,8 +220,18 @@ def find_placements(name, floor_gray, facade_edges, sift, facade_kp, facade_desc
     therefore verified with edge_correlation(); rejected candidates have their
     inlier matches removed and the search continues, so a phantom cannot mask a
     genuine placement hiding in the same facade region.
+
+    floor_mask (optional) restricts keypoint detection to the floor's OWN art,
+    excluding the shared title banner / frame / parchment that every cut of a
+    dungeon carries identically (and that the facade also shows). Without it,
+    those shared regions produce high-edge_corr banner phantoms that the
+    edge_correlation filter cannot reject (the banner genuinely aligns) - they
+    either add a bogus placement or, when a floor's real art is faint, outscore
+    and mask it. See the multi-floor Midnight/BfA calibration in SKILL.md.
     """
-    kp, desc = sift.detectAndCompute(floor_gray, None)
+    fh, fw = facade_edges.shape[:2]
+    h, w = floor_gray.shape[:2]
+    kp, desc = sift.detectAndCompute(floor_gray, floor_mask)
     if desc is None or len(kp) < 8:
         return [], 0
 
@@ -230,6 +241,7 @@ def find_placements(name, floor_gray, facade_edges, sift, facade_kp, facade_desc
             if m.distance < 0.75 * n.distance]
 
     placements = []
+    best_review = None
     remaining = list(good)
     attempts = 0
     # The attempt budget is shared with rejected phantom fits, so leave slack
@@ -255,6 +267,20 @@ def find_placements(name, floor_gray, facade_edges, sift, facade_kp, facade_desc
             print(f'{name}: rejected degenerate fit (scale={scale:.3f}, '
                   f'inliers={inlier_count}), continuing search')
             continue
+
+        # A genuine placement's center lands on the facade; a fit whose center
+        # sits well outside the image is a banner/border phantom matching the
+        # frame (the title banner sits just off the top or bottom edge). Allow a
+        # 15% margin for floors only partially drawn on the facade.
+        center = m_affine @ np.array([w / 2.0, h / 2.0, 1.0])
+        margin_x, margin_y = 0.15 * fw, 0.15 * fh
+        if not (-margin_x <= center[0] <= fw + margin_x
+                and -margin_y <= center[1] <= fh + margin_y):
+            print(f'{name}: rejected off-image fit (center='
+                  f'{center[0]:.0f},{center[1]:.0f} outside {fw}x{fh}), '
+                  f'continuing search')
+            continue
+
         duplicate = any(
             np.hypot(*(np.array(p['matrix'])[:, 2] - m_affine[:, 2])) < 10.0
             and abs(p['scale'] - scale) / p['scale'] < 0.05
@@ -265,21 +291,32 @@ def find_placements(name, floor_gray, facade_edges, sift, facade_kp, facade_desc
             continue
 
         corr = edge_correlation(floor_gray, facade_edges, m_affine)
-        if corr < min_edge_corr:
-            print(f'{name}: rejected phantom fit (inliers={inlier_count}, '
-                  f'edge_corr={corr:.3f} < {min_edge_corr}), continuing search')
-            continue
-
-        placements.append({
+        candidate = {
             'matrix': m_affine.tolist(),
             'scale': scale,
             'rotation_img_deg': rotation,
             'inliers': inlier_count,
             'matches': len(good),
             'edge_corr': corr,
-        })
+        }
+        if corr < min_edge_corr:
+            # Below the auto-accept bar, but this candidate has already cleared
+            # every geometric guard (on-image, non-degenerate, non-duplicate,
+            # own-art keypoints only), so it is not a banner/border phantom.
+            # A genuinely faint floor (smooth low-contrast cave interior) lands
+            # here - keep the strongest such fit so cmd_match can surface it for
+            # human review instead of silently dropping a real floor.
+            if corr >= review_edge_corr and (
+                    best_review is None
+                    or corr > best_review['edge_corr']):
+                best_review = candidate
+            print(f'{name}: rejected phantom fit (inliers={inlier_count}, '
+                  f'edge_corr={corr:.3f} < {min_edge_corr}), continuing search')
+            continue
 
-    return placements, len(good)
+        placements.append(candidate)
+
+    return placements, best_review, len(good)
 
 
 def assert_map_plane_aspect(name, width, height):
@@ -305,6 +342,18 @@ def cmd_match(args):
     facade_kp, facade_desc = sift.detectAndCompute(facade_gray, None)
     print(f'facade: {fw}x{fh}, {len(facade_kp)} keypoints')
 
+    # Restrict each floor's keypoints to its own art so the shared title banner
+    # / frame cannot be matched against the facade (see find_placements). Needs
+    # >= 2 floor images to estimate the shared backdrop; single-floor dungeons
+    # fall back to unmasked detection (they carry no competing floor's banner).
+    floor_masks = content_masks(
+        args.floors, args.content_close_px, args.content_diff_threshold)
+    if floor_masks is not None:
+        kernel = np.ones((args.mask_dilate_px, args.mask_dilate_px), np.uint8)
+        floor_masks = {path: cv2.dilate(mask, kernel)
+                       for path, mask in floor_masks.items()}
+        print('own-art keypoint masking: ON')
+
     results = []
     for floor_path in args.floors:
         name = os.path.splitext(os.path.basename(floor_path))[0]
@@ -312,11 +361,24 @@ def cmd_match(args):
         h, w = floor_gray.shape[:2]
         assert_map_plane_aspect(floor_path, w, h)
 
-        placements, good_matches = find_placements(
+        placements, best_review, good_matches = find_placements(
             name, floor_gray, facade_edges, sift, facade_kp, facade_desc,
             args.min_inliers, args.max_instances, args.ransac_px,
-            args.min_edge_corr)
-        if not placements:
+            args.min_edge_corr,
+            floor_mask=floor_masks.get(floor_path) if floor_masks else None,
+            review_edge_corr=args.review_edge_corr)
+        if not placements and best_review is not None:
+            # No fit cleared the auto-accept bar, but a geometrically sound faint
+            # candidate exists. Surface it (never guess silently): the reviewer
+            # confirms a genuine faint floor or discards a spurious one before it
+            # is inserted.
+            best_review['needs_review'] = True
+            placements = [best_review]
+            print(f'{name}: NO auto-accepted placement; surfacing best candidate '
+                  f'for REVIEW (edge_corr={best_review["edge_corr"]:.3f} < '
+                  f'{args.min_edge_corr}, inliers={best_review["inliers"]}) - '
+                  f'verify the overlay, this floor may be faint or absent')
+        elif not placements:
             print(f'{name}: NO PLACEMENT FOUND ({good_matches} ratio-test matches)')
 
         for i, p in enumerate(placements, start=1):
@@ -340,10 +402,12 @@ def cmd_match(args):
                 'lng': round(lng, 2),
                 'size': round(size, 1),
                 'rotation': round(rotation_db, 1),
+                'needs_review': bool(p.get('needs_review', False)),
             })
+            flag = ' [NEEDS REVIEW]' if p.get('needs_review') else ''
             print(f"{name}#{i}: lat={lat:.2f} lng={lng:.2f} size={size:.1f} "
                   f"rotation={rotation_db:.1f} inliers={p['inliers']}/{p['matches']} "
-                  f"edge_corr={corr:.3f}")
+                  f"edge_corr={corr:.3f}{flag}")
 
     out = {
         'facade': {'path': os.path.abspath(args.facade), 'width': fw, 'height': fh},
@@ -390,12 +454,15 @@ def render_placements_overlay(data, out_path):
         m = np.float32(p['matrix'])
         corners = np.float32([[0, 0], [w, 0], [w, h], [0, h]]).reshape(-1, 1, 2)
         warped_corners = cv2.transform(corners, m).astype(np.int32)
-        cv2.polylines(canvas, [warped_corners], True, color, 2)
+        review = p.get('needs_review')
+        cv2.polylines(canvas, [warped_corners], True, color, 4 if review else 2)
         cx, cy = p['center_px']
         cv2.drawMarker(canvas, (int(cx), int(cy)), color,
                        cv2.MARKER_CROSS, 24, 2)
-        draw_label(canvas, f"{p['floor_image']}#{p['instance']}", cx, cy,
-                   color, (255, 255, 255))
+        label = f"{p['floor_image']}#{p['instance']}"
+        if review:
+            label += ' ?REVIEW'
+        draw_label(canvas, label, cx, cy, color, (255, 255, 255))
 
     cv2.imwrite(out_path, canvas)
     print(f'wrote {out_path}')
@@ -635,7 +702,7 @@ def cmd_stitch(args):
           f'{len(tiles)} tiles)')
 
 
-def main():
+def build_parser():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest='command', required=True)
 
@@ -648,6 +715,20 @@ def main():
                               'the facade is below this (phantom-fit filter)')
     p_match.add_argument('--max-instances', type=int, default=4)
     p_match.add_argument('--ransac-px', type=float, default=4.0)
+    p_match.add_argument('--content-close-px', type=int, default=35,
+                         help='own-art keypoint mask: morphological close (px)')
+    p_match.add_argument('--content-diff-threshold', type=float, default=20.0,
+                         help='own-art keypoint mask: min deviation from the '
+                              'shared backdrop (median of all floor images) to '
+                              'count a pixel as this floor\'s art')
+    p_match.add_argument('--mask-dilate-px', type=int, default=15,
+                         help='grow the own-art keypoint mask so keypoints on '
+                              'art boundaries survive')
+    p_match.add_argument('--review-edge-corr', type=float, default=0.08,
+                         help='when a floor gets no fit above --min-edge-corr, '
+                              'surface its best geometrically-sound fit at or '
+                              'above this edge_corr as [NEEDS REVIEW] instead of '
+                              'dropping it (faint low-contrast floors land here)')
     p_match.add_argument('floors', nargs='+')
     p_match.set_defaults(func=cmd_match)
 
@@ -679,7 +760,11 @@ def main():
     p_stitch.add_argument('--output', required=True)
     p_stitch.set_defaults(func=cmd_stitch)
 
-    args = parser.parse_args()
+    return parser
+
+
+def main():
+    args = build_parser().parse_args()
     args.func(args)
 
 
