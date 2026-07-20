@@ -5,8 +5,10 @@ namespace Tests\Feature\App\Service\DungeonRoute;
 use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnail;
+use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Models\File;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailRepositoryInterface;
 use App\Service\DungeonRoute\Logging\ThumbnailServiceLoggingInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use Illuminate\Support\Facades\Queue;
@@ -27,6 +29,8 @@ final class ThumbnailServiceTest extends PublicTestCase
     {
         return new ThumbnailService(
             $this->createMockPublic(DungeonRouteRepositoryInterface::class),
+            // Real (not mocked) - the freshness tests exercise its actual DB query against seeded thumbnails
+            app()->make(DungeonRouteThumbnailRepositoryInterface::class),
             $log,
         );
     }
@@ -277,7 +281,7 @@ final class ThumbnailServiceTest extends PublicTestCase
 
         try {
             // Act
-            $url = $method->invoke($service, $dungeonRoute, 0, 1.0, DungeonRouteThumbnail::VARIANT_HERO);
+            $url = $method->invoke($service, $dungeonRoute, 0, 1.0, DungeonRouteThumbnailVariant::Hero);
 
             // Assert - the hero render carries no killzonepathweight override
             $this->assertStringNotContainsString('killzonepathweight', $url);
@@ -370,7 +374,7 @@ final class ThumbnailServiceTest extends PublicTestCase
             'dungeon_route_id' => $dungeonRoute->id,
             'floor_id'         => $floor->id,
             'custom'           => false,
-            'variant'          => DungeonRouteThumbnail::VARIANT_STANDARD,
+            'variant'          => DungeonRouteThumbnailVariant::Standard,
         ]);
         $standardFile = File::create([
             'model_id'    => $standardThumbnail->id,
@@ -385,7 +389,7 @@ final class ThumbnailServiceTest extends PublicTestCase
 
         try {
             // Act - attach a hero variant; the standard thumbnail must be left untouched
-            $method->invoke($service, $dungeonRoute, $floor->index, '/thumbnails/hero.jpg', 'fake-image-bytes', config('filesystems.default'), DungeonRouteThumbnail::VARIANT_HERO);
+            $method->invoke($service, $dungeonRoute, $floor->index, '/thumbnails/hero.jpg', 'fake-image-bytes', config('filesystems.default'), DungeonRouteThumbnailVariant::Hero);
 
             // Assert - both variants now coexist
             $this->assertDatabaseHas('dungeon_route_thumbnails', ['id' => $standardThumbnail->id]);
@@ -393,14 +397,14 @@ final class ThumbnailServiceTest extends PublicTestCase
                 1,
                 DungeonRouteThumbnail::query()
                     ->where('dungeon_route_id', $dungeonRoute->id)
-                    ->where('variant', DungeonRouteThumbnail::VARIANT_STANDARD)
+                    ->where('variant', DungeonRouteThumbnailVariant::Standard)
                     ->count(),
             );
             $this->assertSame(
                 1,
                 DungeonRouteThumbnail::query()
                     ->where('dungeon_route_id', $dungeonRoute->id)
-                    ->where('variant', DungeonRouteThumbnail::VARIANT_HERO)
+                    ->where('variant', DungeonRouteThumbnailVariant::Hero)
                     ->count(),
             );
         } finally {
@@ -430,7 +434,7 @@ final class ThumbnailServiceTest extends PublicTestCase
             'dungeon_route_id' => $dungeonRoute->id,
             'floor_id'         => $floor->id,
             'custom'           => false,
-            'variant'          => DungeonRouteThumbnail::VARIANT_STANDARD,
+            'variant'          => DungeonRouteThumbnailVariant::Standard,
         ]);
 
         $service = $this->buildService($this->createMockPublic(ThumbnailServiceLoggingInterface::class));
@@ -438,10 +442,10 @@ final class ThumbnailServiceTest extends PublicTestCase
 
         try {
             // Act - attach a custom variant
-            $customThumbnail = $method->invoke($service, $dungeonRoute, $floor->index, '/thumbnails_custom/custom.jpg', 'fake-image-bytes', config('filesystems.default'), DungeonRouteThumbnail::VARIANT_CUSTOM);
+            $customThumbnail = $method->invoke($service, $dungeonRoute, $floor->index, '/thumbnails_custom/custom.jpg', 'fake-image-bytes', config('filesystems.default'), DungeonRouteThumbnailVariant::Custom);
 
             // Assert - variant is 'custom' and the legacy custom boolean is dual-written to true
-            $this->assertSame(DungeonRouteThumbnail::VARIANT_CUSTOM, $customThumbnail->variant);
+            $this->assertSame(DungeonRouteThumbnailVariant::Custom, $customThumbnail->variant);
             $this->assertTrue((bool)$customThumbnail->custom);
             // The pre-existing standard thumbnail is untouched
             $this->assertDatabaseHas('dungeon_route_thumbnails', ['id' => $standardThumbnail->id]);
@@ -467,7 +471,7 @@ final class ThumbnailServiceTest extends PublicTestCase
 
         try {
             // Act
-            $result = $service->queueThumbnailRefresh($dungeonRoute, false, DungeonRouteThumbnail::VARIANT_HERO);
+            $result = $service->queueThumbnailRefresh($dungeonRoute, false, DungeonRouteThumbnailVariant::Hero);
 
             // Assert
             $this->assertTrue($result);
@@ -496,7 +500,7 @@ final class ThumbnailServiceTest extends PublicTestCase
             'dungeon_route_id' => $dungeonRoute->id,
             'floor_id'         => $floor->id,
             'custom'           => false,
-            'variant'          => DungeonRouteThumbnail::VARIANT_HERO,
+            'variant'          => DungeonRouteThumbnailVariant::Hero,
         ]);
         DungeonRouteThumbnail::where('id', $heroThumbnail->id)
             ->update(['updated_at' => $dungeonRoute->updated_at->copy()->addMinute()]);
@@ -505,7 +509,7 @@ final class ThumbnailServiceTest extends PublicTestCase
 
         try {
             // Act
-            $result = $service->queueThumbnailRefresh($dungeonRoute, false, DungeonRouteThumbnail::VARIANT_HERO);
+            $result = $service->queueThumbnailRefresh($dungeonRoute, false, DungeonRouteThumbnailVariant::Hero);
 
             // Assert
             $this->assertFalse($result);
@@ -535,7 +539,7 @@ final class ThumbnailServiceTest extends PublicTestCase
             'dungeon_route_id' => $dungeonRoute->id,
             'floor_id'         => $floor->id,
             'custom'           => false,
-            'variant'          => DungeonRouteThumbnail::VARIANT_HERO,
+            'variant'          => DungeonRouteThumbnailVariant::Hero,
         ]);
         DungeonRouteThumbnail::where('id', $heroThumbnail->id)
             ->update(['updated_at' => $dungeonRoute->updated_at->copy()->subDay()]);
@@ -544,7 +548,7 @@ final class ThumbnailServiceTest extends PublicTestCase
 
         try {
             // Act
-            $result = $service->queueThumbnailRefresh($dungeonRoute, false, DungeonRouteThumbnail::VARIANT_HERO);
+            $result = $service->queueThumbnailRefresh($dungeonRoute, false, DungeonRouteThumbnailVariant::Hero);
 
             // Assert
             $this->assertTrue($result);

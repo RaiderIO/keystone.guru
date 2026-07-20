@@ -5,6 +5,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
 use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
+use App\Service\DungeonRoute\DungeonRouteKillZoneServiceInterface;
 
 /**
  * @var CacheServiceInterface $cacheService
@@ -32,7 +33,7 @@ use (
     $archetype,
     $heroRank,
     $isAdmin,
-    $__env
+    $__env,
 )
 
 {
@@ -43,8 +44,9 @@ use (
     $ratingCount = $dungeonroute->rating_count;
     // The favorites count is only present when the route was loaded with withCount('favorites'); never trigger a query
     $favoritesCount = $dungeonroute->favorites_count ?? null;
-    // Enemy forces per pull, ordered by pull index - drives the "route fingerprint" bar graph
-    $pullForces = $dungeonroute->getEnemyForcesPerKillZone();
+    // Enemy forces per pull, ordered by pull index - drives the "route fingerprint" bar graph. Resolved
+    // lazily here (not via top-level @inject) so a cache hit never pays the container-resolution cost.
+    $pullForces = app(DungeonRouteKillZoneServiceInterface::class)->getEnemyForcesPerKillZone($dungeonroute);
     // The key-level chip is only meaningful when the route deviates from the season's catch-all range
     $showLevel = $dungeonroute->level_min !== $dungeonroute->season?->key_level_min
         || $dungeonroute->level_max !== $dungeonroute->season?->key_level_max;
@@ -153,9 +155,6 @@ use (
                 @endif
                 @include('common.dungeonroute.pullgraph', [
                     'pullForces'  => $pullForces,
-                    'chartHeight' => 26,
-                    'fill'        => 'rgba(255, 255, 255, 0.6)',
-                    'bossFill'    => 'rgba(240, 180, 60, 0.95)',
                     'graphClass'  => 'hero_pull_graph me-3',
                     'tooltipKey'  => 'view_common.dungeonroute.cardhero.pulls',
                 ])

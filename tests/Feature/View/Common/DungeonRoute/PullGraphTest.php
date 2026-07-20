@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\View\Common\DungeonRoute;
 
+use App\Repositories\Database\DungeonRoute\Dtos\KillZoneEnemyForces;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use stdClass;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('View')]
@@ -14,17 +14,14 @@ final class PullGraphTest extends PublicTestCase
 {
     /**
      * @param  array<int, array{enemy_forces: int, has_boss: bool}> $pulls
-     * @return Collection<int, stdClass>
+     * @return Collection<int, KillZoneEnemyForces>
      */
     private function pullForces(array $pulls): Collection
     {
-        return collect($pulls)->map(static function (array $pull): stdClass {
-            $row               = new stdClass();
-            $row->enemy_forces = $pull['enemy_forces'];
-            $row->has_boss     = $pull['has_boss'];
-
-            return $row;
-        });
+        return collect($pulls)->map(static fn(array $pull): KillZoneEnemyForces => new KillZoneEnemyForces(
+            $pull['enemy_forces'],
+            $pull['has_boss'],
+        ));
     }
 
     #[Test]
@@ -118,5 +115,27 @@ final class PullGraphTest extends PublicTestCase
 
         // Assert
         $this->assertStringNotContainsString('leaderboard_pull_graph', trim($html));
+    }
+
+    #[Test]
+    public function render_givenNoRenderTuningOptions_fallsBackToDefaults(): void
+    {
+        // Arrange - chartHeight/fill/bossFill omitted entirely
+        $pullForces = $this->pullForces([
+            ['enemy_forces' => 10, 'has_boss' => false],
+            ['enemy_forces' => 0, 'has_boss' => true],
+        ]);
+
+        // Act
+        $html = view('common.dungeonroute.pullgraph', [
+            'pullForces' => $pullForces,
+            'graphClass' => 'hero_pull_graph',
+            'tooltipKey' => 'view_common.dungeonroute.cardhero.pulls',
+        ])->render();
+
+        // Assert
+        $this->assertStringContainsString('height="26"', $html);
+        $this->assertStringContainsString('rgba(255, 255, 255, 0.6)', $html);
+        $this->assertStringContainsString('rgba(240, 180, 60, 0.95)', $html);
     }
 }

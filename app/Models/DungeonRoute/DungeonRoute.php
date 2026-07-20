@@ -31,7 +31,6 @@ use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\MDTImport;
-use App\Models\Npc\NpcClassification;
 use App\Models\PageView;
 use App\Models\Path;
 use App\Models\PublishedState;
@@ -71,7 +70,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Override;
-use stdClass;
 
 /**
  * @property int                  $id
@@ -468,7 +466,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     {
         return $this->belongsToMany(File::class, 'dungeon_route_thumbnails')
             ->where('dungeon_route_thumbnails.custom', false)
-            ->where('dungeon_route_thumbnails.variant', DungeonRouteThumbnail::VARIANT_STANDARD);
+            ->where('dungeon_route_thumbnails.variant', DungeonRouteThumbnailVariant::Standard);
     }
 
     /** @return BelongsToMany<File, $this> */
@@ -476,7 +474,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     {
         return $this->belongsToMany(File::class, 'dungeon_route_thumbnails')
             ->where('dungeon_route_thumbnails.custom', false)
-            ->where('dungeon_route_thumbnails.variant', DungeonRouteThumbnail::VARIANT_HERO);
+            ->where('dungeon_route_thumbnails.variant', DungeonRouteThumbnailVariant::Hero);
     }
 
     /** @return HasMany<MapIcon, $this> */
@@ -854,95 +852,6 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         }
 
         return $result;
-    }
-
-    /**
-     * Gets the summed enemy forces for each kill zone (pull) in this route, ordered by the kill zone's
-     * index, along with whether that pull contains a boss. Used to render a compact "route fingerprint"
-     * bar graph. This is a single aggregate query that mirrors the enemy-forces accounting of
-     * getEnemyForces() but groups per pull instead of per route.
-     *
-     * @return Collection<int, stdClass> Each row exposes an int `enemy_forces` and a bool `has_boss`.
-     */
-    public function getEnemyForcesPerKillZone(): Collection
-    {
-        if (!$this->exists) {
-            return collect();
-        }
-
-        $isShrouded = $this->getSeasonalAffix()?->key === Affix::AFFIX_SHROUDED;
-
-        // Ignore the shrouded query if we're not shrouded (make it fail)
-        $ifIsShroudedEnemyForcesQuery = $isShrouded ? '
-            IF(
-                enemies.seasonal_type = "shrouded",
-                mapping_versions.enemy_forces_shrouded,
-                IF(
-                    enemies.seasonal_type = "shrouded_zul_gamux",
-                    mapping_versions.enemy_forces_shrouded_zul_gamux,
-                    npc_enemy_forces.enemy_forces
-                )
-            )
-        ' : 'npc_enemy_forces.enemy_forces';
-
-        $ifIsShroudedJoins = $isShrouded ? '
-            left join `mapping_versions` on `mapping_versions`.`id` = `dungeon_routes`.`mapping_version_id`
-        ' : '';
-
-        $bossClassificationIds = sprintf(
-            '%d, %d',
-            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
-            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
-        );
-
-        $queryResult = DB::select("
-            select `kill_zones`.`index` as `index`,
-               MAX(IF(`npcs`.`classification_id` IN ({$bossClassificationIds}), 1, 0)) as has_boss,
-               CAST(IFNULL(
-                       IF(dungeon_routes.teeming = 1,
-                          SUM(
-                                  IF(
-                                          enemies.enemy_forces_override_teeming IS NOT NULL,
-                                          enemies.enemy_forces_override_teeming,
-                                          IF(
-                                              npc_enemy_forces.enemy_forces_teeming IS NOT NULL,
-                                              npc_enemy_forces.enemy_forces_teeming,
-                                              {$ifIsShroudedEnemyForcesQuery}
-                                          )
-                                      )
-                              ),
-                          SUM(
-                                  IF(
-                                          enemies.enemy_forces_override IS NOT NULL,
-                                          enemies.enemy_forces_override,
-                                          {$ifIsShroudedEnemyForcesQuery}
-                                      )
-                              )
-                           ), 0
-                   ) AS SIGNED) as enemy_forces
-            from `dungeon_routes`
-                     left join `dungeons` on `dungeons`.`id` = `dungeon_routes`.`dungeon_id`
-                     left join `kill_zones` on `kill_zones`.`dungeon_route_id` = `dungeon_routes`.`id`
-                     left join `kill_zone_enemies` on `kill_zone_enemies`.`kill_zone_id` = `kill_zones`.`id`
-                     left join `enemies` on coalesce(`enemies`.`mdt_npc_id`, `enemies`.`npc_id`) = `kill_zone_enemies`.`npc_id`
-                        AND `enemies`.`mdt_id` = `kill_zone_enemies`.`mdt_id`
-                        AND `enemies`.`mapping_version_id` = `dungeon_routes`.`mapping_version_id`
-                     left join `npcs` on `npcs`.`id` = `kill_zone_enemies`.`npc_id`
-                     left join `npc_enemy_forces` on `npcs`.`id` = `npc_enemy_forces`.`npc_id` AND `dungeon_routes`.`mapping_version_id` = `npc_enemy_forces`.`mapping_version_id`
-                     {$ifIsShroudedJoins}
-            where `dungeon_routes`.`id` = :id
-              and `kill_zones`.`id` is not null
-            group by `kill_zones`.`id`, `kill_zones`.`index`
-            order by `kill_zones`.`index`
-            ", ['id' => $this->id]);
-
-        return collect($queryResult)->map(static function (stdClass $row): stdClass {
-            $result               = new stdClass();
-            $result->enemy_forces = (int)$row->enemy_forces;
-            $result->has_boss     = (bool)$row->has_boss;
-
-            return $result;
-        });
     }
 
     public function getEnemyForcesPercentage(): int

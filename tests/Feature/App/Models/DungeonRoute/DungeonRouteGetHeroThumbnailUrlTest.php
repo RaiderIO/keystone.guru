@@ -4,6 +4,7 @@ namespace Tests\Feature\App\Models\DungeonRoute;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnail;
+use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Models\File;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\Group;
@@ -13,7 +14,7 @@ use Tests\TestCases\PublicTestCase;
 #[Group('DungeonRoute')]
 final class DungeonRouteGetHeroThumbnailUrlTest extends PublicTestCase
 {
-    private function createThumbnailFile(DungeonRoute $dungeonRoute, int $floorId, string $variant, string $path): File
+    private function createThumbnailFile(DungeonRoute $dungeonRoute, int $floorId, DungeonRouteThumbnailVariant $variant, string $path): File
     {
         $thumbnail = DungeonRouteThumbnail::create([
             'dungeon_route_id' => $dungeonRoute->id,
@@ -42,8 +43,8 @@ final class DungeonRouteGetHeroThumbnailUrlTest extends PublicTestCase
         $dungeonRoute = DungeonRoute::factory()->create();
         $floorId      = $dungeonRoute->dungeon->floors->first()->id;
 
-        $this->createThumbnailFile($dungeonRoute, $floorId, DungeonRouteThumbnail::VARIANT_STANDARD, '/thumbnails/standard.jpg');
-        $heroFile = $this->createThumbnailFile($dungeonRoute, $floorId, DungeonRouteThumbnail::VARIANT_HERO, '/thumbnails/hero.jpg');
+        $this->createThumbnailFile($dungeonRoute, $floorId, DungeonRouteThumbnailVariant::Standard, '/thumbnails/standard.jpg');
+        $heroFile = $this->createThumbnailFile($dungeonRoute, $floorId, DungeonRouteThumbnailVariant::Hero, '/thumbnails/hero.jpg');
 
         try {
             // Act
@@ -66,7 +67,7 @@ final class DungeonRouteGetHeroThumbnailUrlTest extends PublicTestCase
         $dungeonRoute = DungeonRoute::factory()->create();
         $floorId      = $dungeonRoute->dungeon->floors->first()->id;
 
-        $standardFile = $this->createThumbnailFile($dungeonRoute, $floorId, DungeonRouteThumbnail::VARIANT_STANDARD, '/thumbnails/standard.jpg');
+        $standardFile = $this->createThumbnailFile($dungeonRoute, $floorId, DungeonRouteThumbnailVariant::Standard, '/thumbnails/standard.jpg');
 
         try {
             // Act

@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use App\Jobs\Logging\ProcessRouteFloorThumbnailLoggingInterface;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\DungeonRoute\DungeonRouteThumbnail;
+use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -24,11 +24,11 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        protected DungeonRoute $dungeonRoute,
-        protected int          $floorIndex,
-        protected bool         $force = false,
-        protected int          $attempts = 0,
-        protected string       $variant = DungeonRouteThumbnail::VARIANT_STANDARD,
+        protected DungeonRoute                 $dungeonRoute,
+        protected int                          $floorIndex,
+        protected bool                         $force = false,
+        protected int                          $attempts = 0,
+        protected DungeonRouteThumbnailVariant $variant = DungeonRouteThumbnailVariant::Standard,
     ) {
         $this->queue = sprintf('%s-%s-thumbnail', config('app.type'), config('app.env'));
     }

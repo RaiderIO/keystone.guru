@@ -11,12 +11,12 @@ use Illuminate\Support\Carbon;
 use Override;
 
 /**
- * @property int    $id
- * @property int    $dungeon_route_id
- * @property int    $floor_id
- * @property int    $file_id
- * @property bool   $custom           Deprecated: superseded by the 'custom' variant. Kept and dual-written until the follow-up migration drops it.
- * @property string $variant          Which render variant this thumbnail is (standard|hero|custom)
+ * @property int                          $id
+ * @property int                          $dungeon_route_id
+ * @property int                          $floor_id
+ * @property int                          $file_id
+ * @property bool                         $custom           Deprecated: superseded by the 'custom' variant. Kept and dual-written until the follow-up migration drops it.
+ * @property DungeonRouteThumbnailVariant $variant          Which render variant this thumbnail is
  *
  * @property DungeonRoute $dungeonRoute
  * @property Floor        $floor
@@ -29,12 +29,6 @@ use Override;
  */
 class DungeonRouteThumbnail extends Model
 {
-    public const string VARIANT_STANDARD = 'standard';
-
-    public const string VARIANT_HERO = 'hero';
-
-    public const string VARIANT_CUSTOM = 'custom';
-
     protected $fillable = [
         'dungeon_route_id',
         'floor_id',
@@ -49,6 +43,14 @@ class DungeonRouteThumbnail extends Model
         'floor',
         'file',
     ];
+
+    /** @return array<string, string> */
+    protected function casts(): array
+    {
+        return [
+            'variant' => DungeonRouteThumbnailVariant::class,
+        ];
+    }
 
     /** @return BelongsTo<DungeonRoute, $this> */
     public function dungeonRoute(): BelongsTo

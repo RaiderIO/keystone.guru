@@ -5,6 +5,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
 use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
+use App\Service\DungeonRoute\DungeonRouteKillZoneServiceInterface;
 use Illuminate\Support\Carbon;
 
 /**
@@ -24,7 +25,7 @@ $cacheFn = static function ()
 use (
     $dungeonroute,
     $isAdmin,
-    $__env
+    $__env,
 )
 
 {
@@ -36,8 +37,9 @@ use (
     $ratingCount = $dungeonroute->rating_count;
     // The favorites count is only present when the route was loaded with withCount('favorites'); never trigger a query
     $favoritesCount = $dungeonroute->favorites_count ?? null;
-    // Enemy forces per pull, ordered by pull index - drives the "route fingerprint" bar graph
-    $pullForces = $dungeonroute->getEnemyForcesPerKillZone();
+    // Enemy forces per pull, ordered by pull index - drives the "route fingerprint" bar graph. Resolved
+    // lazily here (not via top-level @inject) so a cache hit never pays the container-resolution cost.
+    $pullForces = app(DungeonRouteKillZoneServiceInterface::class)->getEnemyForcesPerKillZone($dungeonroute);
     // The key-level chip is only meaningful when the route deviates from the season's catch-all range
     $showLevel = $dungeonroute->level_min !== $dungeonroute->season?->key_level_min
         || $dungeonroute->level_max !== $dungeonroute->season?->key_level_max;

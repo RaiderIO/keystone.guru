@@ -19,7 +19,7 @@
 
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\DungeonRoute\DungeonRouteThumbnail;
+use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Models\Floor\Floor;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 
@@ -40,7 +40,7 @@ if (!empty($publicKeys)) {
 
 $thumbnailService = app(ThumbnailServiceInterface::class);
 
-$variants = [DungeonRouteThumbnail::VARIANT_STANDARD, DungeonRouteThumbnail::VARIANT_HERO];
+$variants = [DungeonRouteThumbnailVariant::Standard, DungeonRouteThumbnailVariant::Hero];
 
 foreach ($query->get() as $route) {
     foreach ($route->dungeon->floorsForMapFacade($route->mappingVersion, true)->active()->get() as $floor) {
@@ -52,7 +52,7 @@ foreach ($query->get() as $route) {
                 '%s floor %d [%s]: %s (%.1fs)%s',
                 $route->public_key,
                 $floor->index,
-                $variant,
+                $variant->value,
                 $result !== null ? sprintf('OK -> %s', $result->file?->getURL()) : 'FAILED',
                 microtime(true) - $start,
                 PHP_EOL,

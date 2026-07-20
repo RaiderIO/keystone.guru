@@ -1,5 +1,6 @@
 <?php
 
+use App\Repositories\Database\DungeonRoute\Dtos\KillZoneEnemyForces;
 use Illuminate\Support\Collection;
 
 /**
@@ -8,13 +9,22 @@ use Illuminate\Support\Collection;
  * Boss pulls render as full-height accent bars, turning the graph into a timeline of trash profile
  * plus boss milestones. Pulls that grant no enemy forces and contain no boss are omitted entirely.
  *
- * @var Collection<int, stdClass> $pullForces  Enemy forces (int) + boss flag (bool) per kill zone, ordered by kill zone index.
- * @var int                                                        $chartHeight Height of the chart in pixels.
- * @var string                                                     $fill        SVG fill color for regular (trash) bars.
- * @var string                                                     $bossFill    SVG fill color for full-height boss bars.
+ * @var Collection<int, KillZoneEnemyForces> $pullForces  Enemy forces + boss flag per kill zone, ordered by kill zone index.
+ * @var int|null                                                    $chartHeight Height of the chart in pixels. Defaults to 26.
+ * @var string|null                                                 $fill        SVG fill color for regular (trash) bars. Defaults to a translucent white.
+ * @var string|null                                                 $bossFill    SVG fill color for full-height boss bars. Defaults to a translucent amber.
  * @var string                                                     $graphClass  CSS class applied to the wrapping span.
  * @var string                                                     $tooltipKey  Translation key for the "N pulls" tooltip (trans_choice).
  */
+
+// Sane defaults so most callers only need to pass pullForces/graphClass/tooltipKey; a caller with a
+// differently-sized or -colored graph (e.g. the denser leaderboard rows) overrides what it needs.
+$chartHeight ??= 26;
+$fill ??= 'rgba(255, 255, 255, 0.6)';
+$bossFill ??= 'rgba(240, 180, 60, 0.95)';
+
+// Routes rarely exceed this many pulls; cap the bar count to keep the graph tidy while the tooltip keeps the true total
+$maxBars = 30;
 
 // The tooltip always reflects the route's real pull count, regardless of how many bars survive filtering
 $pullCount = $pullForces->count();
@@ -25,14 +35,13 @@ $pullCount = $pullForces->count();
     $barGap   = 1;
     $minBar   = 2;
     // Zero-forces pulls without a boss carry no information - drop them before capping so they
-    // neither render as noise nor eat into the 30-bar budget
+    // neither render as noise nor eat into the bar budget
     $bars = $pullForces
-        ->filter(static fn(stdClass $pull) => $pull->enemy_forces > 0 || $pull->has_boss)
-        // Routes rarely exceed 30 pulls; cap the bar count to keep the graph tidy while the tooltip keeps the true total
-        ->take(30)
+        ->filter(static fn(KillZoneEnemyForces $pull) => $pull->enemyForces > 0 || $pull->hasBoss)
+        ->take($maxBars)
         ->values();
     // Trash bars normalize against the largest trash pull; boss bars are always full height
-    $maxForces  = (int) $bars->where('has_boss', false)->max('enemy_forces');
+    $maxForces  = (int) $bars->where('hasBoss', false)->max('enemyForces');
     $chartWidth = ($bars->count() * ($barWidth + $barGap)) - $barGap;
     ?>
     @if( $bars->isNotEmpty() )
@@ -46,18 +55,18 @@ $pullCount = $pullForces->count();
                      role="img" aria-hidden="true" preserveAspectRatio="none">
                     @foreach( $bars as $index => $pull )
                         <?php
-                        if ($pull->has_boss) {
+                        if ($pull->hasBoss) {
                             $barHeight = $chartHeight;
                         } else {
                             $barHeight = $maxForces > 0
-                                ? max($minBar, (int) round(($pull->enemy_forces / $maxForces) * $chartHeight))
+                                ? max($minBar, (int) round(($pull->enemyForces / $maxForces) * $chartHeight))
                                 : $minBar;
                         }
                         $x = $index * ($barWidth + $barGap);
                         $y = $chartHeight - $barHeight;
                         ?>
                         <rect x="{{ $x }}" y="{{ $y }}" width="{{ $barWidth }}" height="{{ $barHeight }}"
-                              fill="{{ $pull->has_boss ? $bossFill : $fill }}"></rect>
+                              fill="{{ $pull->hasBoss ? $bossFill : $fill }}"></rect>
                     @endforeach
                 </svg>
             </span>

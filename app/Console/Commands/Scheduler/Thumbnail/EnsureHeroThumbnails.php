@@ -3,7 +3,7 @@
 namespace App\Console\Commands\Scheduler\Thumbnail;
 
 use App\Console\Commands\Scheduler\SchedulerCommand;
-use App\Models\DungeonRoute\DungeonRouteThumbnail;
+use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -41,7 +41,7 @@ class EnsureHeroThumbnails extends SchedulerCommand
 
             $queued = 0;
             foreach ($heroRoutes as $dungeonRoute) {
-                if ($thumbnailService->queueThumbnailRefresh($dungeonRoute, false, DungeonRouteThumbnail::VARIANT_HERO)) {
+                if ($thumbnailService->queueThumbnailRefresh($dungeonRoute, false, DungeonRouteThumbnailVariant::Hero)) {
                     $queued++;
                 }
             }

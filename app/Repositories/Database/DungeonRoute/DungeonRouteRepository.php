@@ -2,13 +2,16 @@
 
 namespace App\Repositories\Database\DungeonRoute;
 
+use App\Models\Affix;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Npc\NpcClassification;
 use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\Tags\TagCategory;
 use App\Repositories\Database\DatabaseRepository;
+use App\Repositories\Database\DungeonRoute\Dtos\KillZoneEnemyForces;
 use App\Repositories\Database\DungeonRoute\Dtos\SimilarDungeonRoute;
 use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use App\Repositories\Interfaces\DungeonRoute\Dtos\DungeonRouteSearchFilter;
@@ -20,6 +23,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Random\RandomException;
+use stdClass;
 
 class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteRepositoryInterface
 {
@@ -210,6 +214,83 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
 
                 return new SimilarDungeonRoute($row->ratio, $dungeonRoute);
             });
+    }
+
+    public function getEnemyForcesPerKillZone(DungeonRoute $dungeonRoute): Collection
+    {
+        if (!$dungeonRoute->exists) {
+            return collect();
+        }
+
+        $isShrouded = $dungeonRoute->getSeasonalAffix()?->key === Affix::AFFIX_SHROUDED;
+
+        // Ignore the shrouded query if we're not shrouded (make it fail)
+        $ifIsShroudedEnemyForcesQuery = $isShrouded ? '
+            IF(
+                enemies.seasonal_type = "shrouded",
+                mapping_versions.enemy_forces_shrouded,
+                IF(
+                    enemies.seasonal_type = "shrouded_zul_gamux",
+                    mapping_versions.enemy_forces_shrouded_zul_gamux,
+                    npc_enemy_forces.enemy_forces
+                )
+            )
+        ' : 'npc_enemy_forces.enemy_forces';
+
+        $ifIsShroudedJoins = $isShrouded ? '
+            left join `mapping_versions` on `mapping_versions`.`id` = `dungeon_routes`.`mapping_version_id`
+        ' : '';
+
+        $bossClassificationIds = sprintf(
+            '%d, %d',
+            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
+            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
+        );
+
+        $queryResult = DB::select("
+            select `kill_zones`.`index` as `index`,
+               MAX(IF(`npcs`.`classification_id` IN ({$bossClassificationIds}), 1, 0)) as has_boss,
+               CAST(IFNULL(
+                       IF(dungeon_routes.teeming = 1,
+                          SUM(
+                                  IF(
+                                          enemies.enemy_forces_override_teeming IS NOT NULL,
+                                          enemies.enemy_forces_override_teeming,
+                                          IF(
+                                              npc_enemy_forces.enemy_forces_teeming IS NOT NULL,
+                                              npc_enemy_forces.enemy_forces_teeming,
+                                              {$ifIsShroudedEnemyForcesQuery}
+                                          )
+                                      )
+                              ),
+                          SUM(
+                                  IF(
+                                          enemies.enemy_forces_override IS NOT NULL,
+                                          enemies.enemy_forces_override,
+                                          {$ifIsShroudedEnemyForcesQuery}
+                                      )
+                              )
+                           ), 0
+                   ) AS SIGNED) as enemy_forces
+            from `dungeon_routes`
+                     left join `dungeons` on `dungeons`.`id` = `dungeon_routes`.`dungeon_id`
+                     left join `kill_zones` on `kill_zones`.`dungeon_route_id` = `dungeon_routes`.`id`
+                     left join `kill_zone_enemies` on `kill_zone_enemies`.`kill_zone_id` = `kill_zones`.`id`
+                     left join `enemies` on coalesce(`enemies`.`mdt_npc_id`, `enemies`.`npc_id`) = `kill_zone_enemies`.`npc_id`
+                        AND `enemies`.`mdt_id` = `kill_zone_enemies`.`mdt_id`
+                        AND `enemies`.`mapping_version_id` = `dungeon_routes`.`mapping_version_id`
+                     left join `npcs` on `npcs`.`id` = `kill_zone_enemies`.`npc_id`
+                     left join `npc_enemy_forces` on `npcs`.`id` = `npc_enemy_forces`.`npc_id` AND `dungeon_routes`.`mapping_version_id` = `npc_enemy_forces`.`mapping_version_id`
+                     {$ifIsShroudedJoins}
+            where `dungeon_routes`.`id` = :id
+              and `kill_zones`.`id` is not null
+            group by `kill_zones`.`id`, `kill_zones`.`index`
+            order by `kill_zones`.`index`
+            ", ['id' => $dungeonRoute->id]);
+
+        return collect($queryResult)->map(static function (stdClass $row): KillZoneEnemyForces {
+            return new KillZoneEnemyForces((int)$row->enemy_forces, (bool)$row->has_boss);
+        });
     }
 
     /**

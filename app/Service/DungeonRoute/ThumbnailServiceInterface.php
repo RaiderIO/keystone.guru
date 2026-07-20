@@ -5,6 +5,7 @@ namespace App\Service\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnail;
 use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
+use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use Illuminate\Support\Collection;
 
 interface ThumbnailServiceInterface
@@ -15,9 +16,9 @@ interface ThumbnailServiceInterface
      * and always force the render.
      */
     public function queueThumbnailRefresh(
-        DungeonRoute $dungeonRoute,
-        bool         $force = false,
-        string       $variant = DungeonRouteThumbnail::VARIANT_STANDARD,
+        DungeonRoute                 $dungeonRoute,
+        bool                         $force = false,
+        DungeonRouteThumbnailVariant $variant = DungeonRouteThumbnailVariant::Standard,
     ): bool;
 
     /**
@@ -39,10 +40,10 @@ interface ThumbnailServiceInterface
     ): Collection;
 
     public function createThumbnail(
-        DungeonRoute $dungeonRoute,
-        int          $floorIndex,
-        int          $attempts,
-        string       $variant = DungeonRouteThumbnail::VARIANT_STANDARD,
+        DungeonRoute                 $dungeonRoute,
+        int                          $floorIndex,
+        int                          $attempts,
+        DungeonRouteThumbnailVariant $variant = DungeonRouteThumbnailVariant::Standard,
     ): ?DungeonRouteThumbnail;
 
     public function createThumbnailCustom(

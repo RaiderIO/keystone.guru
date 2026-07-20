@@ -496,6 +496,15 @@ return [
                         'quality'                          => 90,
                         'kill_zone_path_weight_multiplier' => null,
                     ],
+                    /**
+                     * Custom API-requested renders (viewport/image dimensions come from the request instead
+                     * of this config), so only the values still shared with the standard variant live here.
+                     * Keep `kill_zone_path_weight_multiplier` in sync with the `standard` variant above -
+                     * it is a separate value, not a live reference, so it does not update automatically.
+                     */
+                    'custom' => [
+                        'kill_zone_path_weight_multiplier' => 3,
+                    ],
                 ],
                 /** I observed it to be about 8 but with settings it may be longer, so 10 to be safe. */
                 'estimated_generation_time_seconds' => 10,
