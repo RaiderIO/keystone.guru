@@ -345,24 +345,6 @@ class DiscoverService extends BaseDiscoverService
         ), $this->cacheService->isCacheEnabled());
     }
 
-    public function popularBySeasonAndAffixGroup(Season $season, AffixGroupBase $affixGroup): Collection
-    {
-        $this->withSeason($season);
-
-        $cacheKey = $this->getCacheKey(sprintf('affix_group_%s:popular', $affixGroup->id));
-
-        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), fn() => $this->cacheService->rememberWhen(
-            $this->closure === null,
-            $cacheKey,
-            fn() => $this->applyAffixGroupCountPenalty(
-                $this->popularBuilder()
-                    ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
-                    ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id),
-            )->get(),
-            config('keystoneguru.discover.service.popular.ttl'),
-        ), $this->cacheService->isCacheEnabled());
-    }
-
     /**
      * {@inheritDoc}
      */

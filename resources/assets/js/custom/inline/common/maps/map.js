@@ -162,8 +162,7 @@ class CommonMapsMap extends InlineCode {
 
             // Live sessions
             if (getState().getMapContext() instanceof MapContextLiveSession) {
-                $('#stop_live_session_modal select').barrating({
-                    theme: 'fontawesome-stars',
+                $('#rating_select').starRating({
                     onSelect: function (value) {
                         self._rate(value);
                     }
@@ -757,10 +756,6 @@ class CommonMapsMap extends InlineCode {
             dataType: 'json',
             data: {
                 rating: value
-            },
-            success: function (json) {
-                // Update the new average rating
-                $('#rating').barrating('set', Math.round(json.new_rating));
             }
         });
     }

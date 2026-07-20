@@ -5,9 +5,11 @@
 #   bind-worktree.sh unbind <session_id>
 #
 # The status line (statusline.sh) reads $HOME/.claude/statusline/session-worktree/<session_id> (an
-# abs worktree path) and renders "<name>:<port>" on the right. Call bind right after creating a
-# worktree for a session, and unbind when tearing it down. Stale markers (worktree gone) are
-# auto-cleaned by the status line. Markers live under $HOME (machine-local runtime state), not the repo.
+# abs worktree path) and renders "<name>:<port>" on the right. sh/worktree.sh create/remove call
+# this automatically (bind on create, unbind on remove) using $CLAUDE_CODE_SESSION_ID, so normally
+# you don't invoke it by hand — this is the fallback/manual entry point. Stale markers (worktree
+# gone) are auto-cleaned by the status line. Markers live under $HOME (machine-local runtime state),
+# not the repo.
 set -euo pipefail
 
 dir="$HOME/.claude/statusline/session-worktree"

@@ -23,6 +23,7 @@ the single most important trick; without it you'll fight escaping.
 
 ```bash
 gh issue create --repo RaiderIO/keystone.guru \
+  --type Task \
   --title "Short imperative title (follow-up to #NNNN)" \
   --body "$(cat <<'EOF'
 Body goes here. $with, `code`, and #3300 references are all safe inside <<'EOF'.
@@ -41,14 +42,39 @@ The command prints the new issue URL on success (e.g. `https://github.com/Raider
 - Do **not** try to cram a long body inline with `\n` or nested quotes — that's the path that
   wastes time. Use the heredoc.
 
-## Conventions for this project
+## Issue type (always set this)
+
+Always pass `--type` — the repo uses GitHub's native Issue Types. Pick one:
+
+- `--type Bug` — an unexpected problem or broken behaviour.
+- `--type Feature` — a request, idea, or new functionality.
+- `--type Task` — everything else: chores, tech-debt, refactors, follow-ups, ops. This is the
+  default when it's not clearly a bug or a feature.
+
+The native type **supersedes** the old `bug`/`enhancement` labels — set the type and do **not**
+also add those labels.
+
+## Labels
+
+Add labels with `--label "<name>"` (repeat the flag for several). Only use labels that already
+exist (`gh label list --repo RaiderIO/keystone.guru --limit 300`). Beyond the type above:
+
+- **`follow-up`** — add whenever the issue is a follow-up to another issue/PR (i.e. the title
+  carries `(follow-up to #NNNN)`).
+- **One topic label**, only when the subject is unambiguous — e.g. `maintenance`, `docs`, `mdt`,
+  `api`, `docker`, `map`, `site`, `security`, `localization`, `php`, `javascript`, `live sessions`,
+  `explore`, `discovery`, `compendium`, `route search`, `auto route creator`, `UX`. If it's not a
+  clear fit, add none rather than guessing.
+- **Do not** set the `in progress` label by hand — `sh/worktree.sh` adds it automatically when a
+  worktree for the issue is created and removes it on teardown (see the `worktree-docker` skill).
+
+## Other conventions for this project
 
 - **Reference related issues** with `#NNNN` in the body; GitHub auto-links them. If it's a
   follow-up, say so in the title: `(follow-up to #NNNN)`.
 - Commits/branches use the issue number prefixed with `#` (e.g. `#3300 Fix ...`, branch
   `3300-some-slug`). Mention the issue number when you later open a PR.
-- Optional flags when relevant: `--label "<label>"`, `--assignee "@me"`, `--milestone "<name>"`,
-  `--project "<name>"`. Only add labels that already exist (`gh label list --repo RaiderIO/keystone.guru`).
+- Other optional flags when relevant: `--assignee "@me"`, `--milestone "<name>"`, `--project "<name>"`.
 
 ## Recommended issue body structure
 
@@ -100,3 +126,6 @@ get wrong.
   only make sense on your own machine — the GitHub equivalent of telling someone "check out my
   site at http://localhost:80". A scratch-file path in a body is *never* correct; catch it before
   the user does.
+- **Confirm the type and labels landed**:
+  `gh issue view <n> --repo RaiderIO/keystone.guru --json title,labels,issueType` — check the
+  `issueType` is set and the intended labels are present.

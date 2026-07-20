@@ -72,6 +72,42 @@ never invoke or script around the approval path without a human typing the versi
 moment. If the API rejects the approval (e.g. self-review not allowed), the script prints
 the run URL for manual approval in the browser instead of retrying blindly.
 
+## Watching non-interactively (from an agent)
+
+The script writes two interleaved output streams:
+
+- A **re-rendered dashboard** each cycle (the `STAGING` / `PRODUCTION` blocks) whose per-job
+  lines carry mutating elapsed times — do **not** tail these raw, they repeat and change
+  every poll.
+- **Append-style event lines**: `log()` prints `[HH:MM:SS] <message>`, and
+  `log_event_once()` prints a given message exactly once per run. These are the milestones.
+
+Milestone messages worth surfacing:
+
+- `FAILED: …` — any failed job / infra run / verification, printed with its URL.
+- `<stage> html now references compiled/<version>/` — staging (then production) verification
+  passed. **This** (staging variant) is the real "ready to approve" signal.
+- `GATE: waiting for approval - <url>` — the `Deploy to Production` job parks on the
+  environment gate from the *start* of the run, so this line appears **early**, while the
+  build/staging deploy is still running and long before staging is verified. It is re-emitted
+  every cycle. Treat it as "a gate exists", **not** as "ready to approve" — the genuine cue is
+  this line together with the staging `now references compiled/<version>/` verification.
+- `SUMMARY: SUCCESS …` / `SUMMARY: FAILED …` — terminal.
+- `SUMMARY: in progress...` — a per-cycle heartbeat, **not** a milestone; ignore it.
+
+**`--watch-only` never exits.** It parks at the gate cycling `SUMMARY: in progress...`
+indefinitely (a human approves in the browser / interactive run), so a "run in background
+until it exits" approach won't notify you until production actually completes or fails.
+Instead redirect its output to a log and watch that log for the milestone lines above.
+A clean filter (strip the timestamp prefix, keep milestones, dedupe):
+
+```
+tail -n +1 -F release-watch.log \
+  | sed -E 's/^\[[0-9:]+\] //' \
+  | grep -E 'FAILED|SUMMARY: (SUCCESS|FAILED)|GATE:|references compiled/' \
+  | awk '!seen[$0]++'
+```
+
 ## Related
 
 - `create-release` cuts the tag that starts the pipeline this script watches — its final

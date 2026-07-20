@@ -125,6 +125,15 @@ curl -s https://staging.keystone.guru/ | grep -oE "compiled/[^/\"']+/js/app-[^\"
   tables while old code still queried them). Split it expand/contract: release N removes the
   code + does additive/backfill work, release N+1 does the `drop`. See CLAUDE.md → *Database
   (migrations)*.
+- **Cron/scheduler AWS calls need the task-role creds re-exported.** The ECS `cron` service runs
+  the system cron daemon, which executes `schedule:run` with a **scrubbed environment** — so the
+  ECS-injected `AWS_CONTAINER_CREDENTIALS_RELATIVE_URI` (the task-role endpoint pointer) is lost,
+  the AWS SDK falls back to the unreachable EC2 IMDS endpoint, and any SQS/S3 call from a scheduled
+  command dies with **cURL 7 to `169.254.169.254`**. Web/queue-worker/horizon are fine — they run
+  their process as the container command and inherit it. It fails **silently** for jobs whose work
+  is also triggered elsewhere (e.g. `refreshoutdatedthumbnails`, masked by web-driven dispatch).
+  Fix: capture `AWS_*` at container start and source it before `schedule:run` — see infra
+  `cdk/lib/constructs/services/cron/cron-staged-service.ts`.
 
 ## Key files
 

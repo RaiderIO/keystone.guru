@@ -1,0 +1,49 @@
+name: PHP CS Fixer
+
+# No base-branch filter: stacked MRs (one stage targeting another stage's branch) must pass the
+# same style gate as MRs against master.
+# The push trigger exists to seed branch-scoped caches from master: PR branches can only inherit
+# caches created on master, so without it every new PR's first run is fully cold (#3612).
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  php-cs-fixer:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      # Ask composer for its real cache dir: on a fresh runner it is ~/.cache/composer/files, not
+      # the legacy ~/.composer/cache/files, and caching the wrong path caches nothing.
+      - name: Determine composer cache dir
+        id: composer-cache
+        run: echo "dir=$(composer config --global cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache composer
+        uses: actions/cache@v5
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: composer-
+
+      - name: Install PHP dependencies
+        # Style checking never boots the app: skip the artisan scripts and the exotic platform
+        # extensions (lua, imagick, ...) the runtime needs but php-cs-fixer does not.
+        run: composer install --no-interaction --prefer-dist --no-scripts --ignore-platform-reqs
+
+      - name: Run PHP CS Fixer (dry run)
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff

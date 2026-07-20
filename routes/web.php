@@ -215,8 +215,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::prefix('season/{season}')->group(static function () {
                 Route::get('/', new DungeonRouteDiscoverExpansionSeasonController()->discoverSeason(...))->name('dungeonroutes.expansion.season');
                 Route::get('popular', new DungeonRouteDiscoverExpansionSeasonController()->discoverSeasonPopular(...))->name('dungeonroutes.expansion.season.popular');
-                Route::get('affixes/current', new DungeonRouteDiscoverExpansionSeasonController()->discoverSeasonThisWeek(...))->name('dungeonroutes.expansion.season.thisweek');
-                Route::get('affixes/next', new DungeonRouteDiscoverExpansionSeasonController()->discoverSeasonNextWeek(...))->name('dungeonroutes.expansion.season.nextweek');
                 Route::get('new', new DungeonRouteDiscoverExpansionSeasonController()->discoverSeasonNew(...))->name('dungeonroutes.expansion.season.new');
             });
         });
@@ -224,21 +222,15 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::prefix('{gameVersion}')->group(static function () {
             Route::get('/', new DungeonRouteDiscoverController()->discoverGameVersion(...))->name('dungeonroutes.gameVersion');
             Route::get('popular', new DungeonRouteDiscoverController()->discoverPopular(...))->name('dungeonroutes.popular');
-            Route::get('affixes/current', new DungeonRouteDiscoverController()->discoverThisWeek(...))->name('dungeonroutes.thisweek');
-            Route::get('affixes/next', new DungeonRouteDiscoverController()->discoverNextWeek(...))->name('dungeonroutes.nextweek');
             Route::get('new', new DungeonRouteDiscoverController()->discoverNew(...))->name('dungeonroutes.new');
             Route::prefix('season/{season}')->group(static function () {
                 Route::get('/', new DungeonRouteDiscoverController()->discoverSeason(...))->name('dungeonroutes.season');
                 Route::get('popular', new DungeonRouteDiscoverController()->discoverSeasonPopular(...))->name('dungeonroutes.season.popular');
-                Route::get('affixes/current', new DungeonRouteDiscoverController()->discoverSeasonThisWeek(...))->name('dungeonroutes.season.thisweek');
-                Route::get('affixes/next', new DungeonRouteDiscoverController()->discoverSeasonNextWeek(...))->name('dungeonroutes.season.nextweek');
                 Route::get('new', new DungeonRouteDiscoverController()->discoverSeasonNew(...))->name('dungeonroutes.season.new');
             });
             Route::prefix('{dungeon}')->group(static function () {
                 Route::get('/', new DungeonRouteDiscoverController()->discoverDungeon(...))->name('dungeonroutes.discoverdungeon');
                 Route::get('popular', new DungeonRouteDiscoverController()->discoverDungeonPopular(...))->name('dungeonroutes.discoverdungeon.popular');
-                Route::get('affixes/current', new DungeonRouteDiscoverController()->discoverDungeonThisWeek(...))->name('dungeonroutes.discoverdungeon.thisweek');
-                Route::get('affixes/next', new DungeonRouteDiscoverController()->discoverDungeonNextWeek(...))->name('dungeonroutes.discoverdungeon.nextweek');
                 Route::get('new', new DungeonRouteDiscoverController()->discoverDungeonNew(...))->name('dungeonroutes.discoverdungeon.new');
             });
         });

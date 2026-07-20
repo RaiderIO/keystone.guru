@@ -192,46 +192,6 @@ final class DungeonRouteDiscoverCategoryTest extends PublicTestCase
         }
     }
 
-    #[Test]
-    public function discoverDungeonThisWeek_givenAnyState_redirectsToPopular(): void
-    {
-        // Arrange
-        [$gameVersion, $dungeon] = $this->activeDungeon();
-
-        // Act
-        $response = $this->get(route('dungeonroutes.discoverdungeon.thisweek', [
-            'gameVersion' => $gameVersion,
-            'dungeon'     => $dungeon,
-        ]));
-
-        // Assert - the retired affix page permanently redirects to popular
-        $response->assertStatus(301);
-        $response->assertRedirect(route('dungeonroutes.discoverdungeon.popular', [
-            'gameVersion' => $gameVersion,
-            'dungeon'     => $dungeon,
-        ]));
-    }
-
-    #[Test]
-    public function discoverDungeonNextWeek_givenAnyState_redirectsToPopular(): void
-    {
-        // Arrange
-        [$gameVersion, $dungeon] = $this->activeDungeon();
-
-        // Act
-        $response = $this->get(route('dungeonroutes.discoverdungeon.nextweek', [
-            'gameVersion' => $gameVersion,
-            'dungeon'     => $dungeon,
-        ]));
-
-        // Assert
-        $response->assertStatus(301);
-        $response->assertRedirect(route('dungeonroutes.discoverdungeon.popular', [
-            'gameVersion' => $gameVersion,
-            'dungeon'     => $dungeon,
-        ]));
-    }
-
     /**
      * Resolves an active dungeon (with a current mapping version and floors) plus its game version.
      * @return array{0: GameVersion, 1: Dungeon}

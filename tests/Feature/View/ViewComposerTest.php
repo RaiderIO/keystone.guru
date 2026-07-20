@@ -13,7 +13,6 @@ use App\Http\View\Composers\CreateRouteFormComposer;
 use App\Http\View\Composers\DiscoverAffixGroupComposer;
 use App\Http\View\Composers\DiscoverSearchComposer;
 use App\Http\View\Composers\DungeonDifficultySelectComposer;
-use App\Http\View\Composers\DungeonGridDiscoverComposer;
 use App\Http\View\Composers\DungeonGridTabsComposer;
 use App\Http\View\Composers\DungeonSelectComposer;
 use App\Http\View\Composers\EmbedComposer;
@@ -36,7 +35,6 @@ use App\Http\View\Composers\RouteTierComposer;
 use App\Http\View\Composers\SimulateComposer;
 use App\Http\View\Composers\SimulateOptionsComposer;
 use App\Http\View\Composers\TeamSelectComposer;
-use App\Models\AffixGroup\AffixGroup;
 use App\Models\GameVersion\GameVersion;
 use Illuminate\Contracts\View\View as ViewContract;
 use PHPUnit\Framework\Attributes\Group;
@@ -328,23 +326,6 @@ final class ViewComposerTest extends PublicTestCase
 
         // Assert
         $this->assertViewHasKeys($view, ['currentAffixGroup', 'nextAffixGroup']);
-    }
-
-    #[Test]
-    public function dungeonGridDiscoverComposer_givenAffixGroupData_setsTiers(): void
-    {
-        // Arrange
-        $affixGroup = AffixGroup::firstOrFail();
-        $view       = view('common.dungeon.griddiscover', [
-            'currentAffixGroup' => $affixGroup,
-            'nextAffixGroup'    => null,
-        ]);
-
-        // Act
-        app(DungeonGridDiscoverComposer::class)->compose($view);
-
-        // Assert
-        $this->assertViewHasKeys($view, ['tiers']);
     }
 
     /**

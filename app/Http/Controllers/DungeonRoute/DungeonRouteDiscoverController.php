@@ -78,10 +78,9 @@ class DungeonRouteDiscoverController extends Controller
      * @throws Exception
      */
     public function discoverSeason(
-        GameVersion                      $gameVersion,
-        string                           $seasonIndex,
-        DiscoverServiceInterface         $discoverService,
-        SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+        GameVersion              $gameVersion,
+        string                   $seasonIndex,
+        DiscoverServiceInterface $discoverService,
     ) {
         // Redirect to the default game version (retail, which DOES have seasons and is active)
         if (!$gameVersion->has_seasons) {
@@ -97,11 +96,6 @@ class DungeonRouteDiscoverController extends Controller
             ->withGameVersion($gameVersion)
             ->withSeason($season);
 
-        $userRegion = GameServerRegion::getUserOrDefaultRegion();
-
-        $currentAffixGroup = $seasonAffixGroupService->getCurrentAffixGroupInRegion($season, $userRegion);
-        $nextAffixGroup    = $seasonAffixGroupService->getNextAffixGroupInRegion($season, $userRegion);
-
         return view('dungeonroute.discover.discover', [
             'breadcrumbs'       => 'dungeonroutes.season',
             'breadcrumbsParams' => [
@@ -112,10 +106,8 @@ class DungeonRouteDiscoverController extends Controller
             'gameVersion'   => $gameVersion,
             'season'        => $season,
             'dungeonroutes' => [
-                'thisweek' => $currentAffixGroup === null ? collect() : $discoverService->popularGroupedByDungeonByAffixGroup($currentAffixGroup),
-                'nextweek' => $nextAffixGroup === null ? collect() : $discoverService->popularGroupedByDungeonByAffixGroup($nextAffixGroup),
-                'new'      => $discoverService->new(),
-                'popular'  => $discoverService->popularGroupedByDungeon(),
+                'new'     => $discoverService->new(),
+                'popular' => $discoverService->popularGroupedByDungeon(),
             ],
         ]);
     }
@@ -154,89 +146,6 @@ class DungeonRouteDiscoverController extends Controller
                 ->withGameVersion($gameVersion)
                 ->withLimit(config('keystoneguru.discover.limits.category'))
                 ->popularBySeason($season),
-        ]);
-    }
-
-    /**
-     * @return Factory|View|RedirectResponse
-     *
-     * @throws AuthorizationException
-     */
-    public function discoverSeasonThisWeek(
-        GameVersion               $gameVersion,
-        string                    $seasonIndex,
-        DiscoverServiceInterface  $discoverService,
-        ExpansionServiceInterface $expansionService,
-        SeasonServiceInterface    $seasonService,
-    ) {
-        // Redirect to the default game version (retail, which DOES have seasons and is active)
-        if (!$gameVersion->has_seasons) {
-            return redirect()->route('dungeonroutes');
-        }
-
-        $season = Season::where('expansion_id', $gameVersion->expansion_id)->where('index', $seasonIndex)->first();
-
-        Gate::authorize('view', $gameVersion);
-        Gate::authorize('view', $season);
-
-        $affixGroup = $expansionService->getCurrentAffixGroup($gameVersion->expansion, GameServerRegion::getUserOrDefaultRegion());
-
-        return view('dungeonroute.discover.season.category', [
-            'breadcrumbs'       => 'dungeonroutes.season.thisweek',
-            'breadcrumbsParams' => [
-                $gameVersion,
-                $season,
-            ],
-            'gameVersion'   => $gameVersion,
-            'category'      => 'thisweek',
-            'title'         => sprintf(__('controller.dungeonroutediscover.season.this_week_affixes'), __($season->name)),
-            'season'        => $season,
-            'dungeonroutes' => $affixGroup === null ? collect() : $discoverService
-                ->withGameVersion($gameVersion)
-                ->withLimit(config('keystoneguru.discover.limits.category'))
-                ->popularBySeasonAndAffixGroup($season, $affixGroup),
-            'affixgroup' => $affixGroup,
-        ]);
-    }
-
-    /**
-     * @return Factory|View|RedirectResponse
-     *
-     * @throws AuthorizationException
-     */
-    public function discoverSeasonNextWeek(
-        GameVersion               $gameVersion,
-        string                    $seasonIndex,
-        DiscoverServiceInterface  $discoverService,
-        ExpansionServiceInterface $expansionService,
-    ) {
-        // Redirect to the default game version (retail, which DOES have seasons and is active)
-        if (!$gameVersion->has_seasons) {
-            return redirect()->route('dungeonroutes');
-        }
-
-        $season = Season::where('expansion_id', $gameVersion->expansion_id)->where('index', $seasonIndex)->first();
-
-        Gate::authorize('view', $gameVersion);
-        Gate::authorize('view', $season);
-
-        $affixGroup = $expansionService->getNextAffixGroup($gameVersion->expansion, GameServerRegion::getUserOrDefaultRegion());
-
-        return view('dungeonroute.discover.season.category', [
-            'breadcrumbs'       => 'dungeonroutes.season.nextweek',
-            'breadcrumbsParams' => [
-                $gameVersion,
-                $season,
-            ],
-            'gameVersion'   => $gameVersion,
-            'category'      => 'nextweek',
-            'title'         => sprintf(__('controller.dungeonroutediscover.season.next_week_affixes'), __($season->name)),
-            'season'        => $season,
-            'dungeonroutes' => $affixGroup === null ? collect() : $discoverService
-                ->withGameVersion($gameVersion)
-                ->withLimit(config('keystoneguru.discover.limits.category'))
-                ->popularBySeasonAndAffixGroup($season, $affixGroup),
-            'affixgroup' => $affixGroup,
         ]);
     }
 
@@ -300,10 +209,8 @@ class DungeonRouteDiscoverController extends Controller
             'gameVersion'       => $gameVersion,
             'expansion'         => $expansion,
             'dungeonroutes'     => [
-                'thisweek' => collect(),
-                'nextweek' => collect(),
-                'new'      => $discoverService->new(),
-                'popular'  => $discoverService->popularGroupedByDungeon(),
+                'new'     => $discoverService->new(),
+                'popular' => $discoverService->popularGroupedByDungeon(),
             ],
         ]);
     }
@@ -320,21 +227,6 @@ class DungeonRouteDiscoverController extends Controller
             'gameVersion' => $gameVersion,
             'dungeon'     => $contextDungeon,
         ]);
-
-//        $discoverService = $discoverService->withGameVersion($gameVersion);
-//
-//        return view('dungeonroute.discover.discover', [
-//            'breadcrumbs'       => 'dungeonroutes.gameVersion',
-//            'breadcrumbsParams' => [$gameVersion],
-//            'gridDungeons'      => $gameVersion->expansion->dungeonsAndRaids()->active()->get()->sortBy('id')->values(),
-//            'gameVersion'       => $gameVersion,
-//            'dungeonroutes'     => [
-//                'thisweek' => collect(),
-//                'nextweek' => collect(),
-//                'new'      => $discoverService->new(),
-//                'popular'  => $discoverService->popularGroupedByDungeon(),
-//            ],
-//        ]);
     }
 
     /**
@@ -398,10 +290,8 @@ class DungeonRouteDiscoverController extends Controller
 
         if ($dungeonInCurrentSeason) {
             $currentAffixGroup = $seasonAffixGroupService->getCurrentAffixGroupInRegion($currentSeason, $userRegion);
-            $nextAffixGroup    = $seasonAffixGroupService->getNextAffixGroupInRegion($currentSeason, $userRegion);
         } else {
             $currentAffixGroup = $expansionService->getCurrentAffixGroup($gameVersion->expansion, $userRegion);
-            $nextAffixGroup    = $expansionService->getNextAffixGroup($gameVersion->expansion, $userRegion);
         }
 
         return view('dungeonroute.discover.dungeon.overview', [
@@ -409,14 +299,11 @@ class DungeonRouteDiscoverController extends Controller
             'gameVersion'       => $gameVersion,
             'dungeon'           => $dungeon,
             'currentAffixGroup' => $currentAffixGroup,
-            'nextAffixGroup'    => $nextAffixGroup,
             'weeklyRoutes'      => $dungeonWeeklyRoutes
                 ->filter(fn(WeeklyRoute $weeklyRoute) => $weeklyRoute->dungeonRoute !== null)
                 ->values(),
             'dungeonroutes' => [
                 'weekly_route' => $dungeonWeeklyRoutes->map(fn(WeeklyRoute $weeklyRoute) => $weeklyRoute->dungeonRoute),
-                'thisweek'     => $currentAffixGroup === null ? collect() : $discoverService->popularByDungeonAndAffixGroup($dungeon, $currentAffixGroup),
-                'nextweek'     => $nextAffixGroup === null ? collect() : $discoverService->popularByDungeonAndAffixGroup($dungeon, $nextAffixGroup),
                 'new'          => $discoverService->newByDungeon($dungeon),
                 'popular'      => $discoverService->popularByDungeon($dungeon),
             ],
@@ -443,56 +330,6 @@ class DungeonRouteDiscoverController extends Controller
                 ->excludeTeam(Team::getRaiderIOTeam())
                 ->withLimit(config('keystoneguru.discover.limits.category'))
                 ->popular(),
-        ]);
-    }
-
-    /**
-     * @throws AuthorizationException
-     */
-    public function discoverThisWeek(
-        GameVersion               $gameVersion,
-        DiscoverServiceInterface  $discoverService,
-        ExpansionServiceInterface $expansionService,
-    ): View {
-        Gate::authorize('view', $gameVersion);
-
-        $affixGroup = $expansionService->getCurrentAffixGroup($gameVersion->expansion, GameServerRegion::getUserOrDefaultRegion());
-
-        return view('dungeonroute.discover.category', [
-            'breadcrumbs'   => 'dungeonroutes.thisweek',
-            'gameVersion'   => $gameVersion,
-            'category'      => 'thisweek',
-            'title'         => __('controller.dungeonroutediscover.this_week_affixes'),
-            'dungeonroutes' => $affixGroup === null ? collect() : $discoverService
-                ->withGameVersion($gameVersion)
-                ->withLimit(config('keystoneguru.discover.limits.category'))
-                ->popularByAffixGroup($affixGroup),
-            'affixgroup' => $affixGroup,
-        ]);
-    }
-
-    /**
-     * @throws AuthorizationException
-     */
-    public function discoverNextWeek(
-        GameVersion               $gameVersion,
-        DiscoverServiceInterface  $discoverService,
-        ExpansionServiceInterface $expansionService,
-    ): View {
-        Gate::authorize('view', $gameVersion);
-
-        $affixGroup = $expansionService->getNextAffixGroup($gameVersion->expansion, GameServerRegion::getUserOrDefaultRegion());
-
-        return view('dungeonroute.discover.category', [
-            'breadcrumbs'   => 'dungeonroutes.nextweek',
-            'gameVersion'   => $gameVersion,
-            'category'      => 'nextweek',
-            'title'         => __('controller.dungeonroutediscover.next_week_affixes'),
-            'dungeonroutes' => $affixGroup === null ? collect() : $discoverService
-                ->withGameVersion($gameVersion)
-                ->withLimit(config('keystoneguru.discover.limits.category'))
-                ->popularByAffixGroup($affixGroup),
-            'affixgroup' => $affixGroup,
         ]);
     }
 
@@ -549,32 +386,6 @@ class DungeonRouteDiscoverController extends Controller
                 ->popularByDungeon($dungeon),
             'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($gameVersion),
         ]);
-    }
-
-    /**
-     * Affix-based discovery is being retired; kept as a permanent redirect to popular for existing links.
-     */
-    public function discoverDungeonThisWeek(
-        GameVersion $gameVersion,
-        Dungeon     $dungeon,
-    ): RedirectResponse {
-        return redirect()->route('dungeonroutes.discoverdungeon.popular', [
-            'gameVersion' => $gameVersion,
-            'dungeon'     => $dungeon,
-        ], 301);
-    }
-
-    /**
-     * Affix-based discovery is being retired; kept as a permanent redirect to popular for existing links.
-     */
-    public function discoverDungeonNextWeek(
-        GameVersion $gameVersion,
-        Dungeon     $dungeon,
-    ): RedirectResponse {
-        return redirect()->route('dungeonroutes.discoverdungeon.popular', [
-            'gameVersion' => $gameVersion,
-            'dungeon'     => $dungeon,
-        ], 301);
     }
 
     /**

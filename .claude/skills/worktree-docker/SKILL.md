@@ -28,6 +28,16 @@ This creates the worktree at `../keystone.guru-worktrees/<issue>-<slug>`, copies
 appends `COMPOSE_PROJECT_NAME` / `COMPOSE_FILE` / `WORKTREE_HTTP_PORT` to that copy, starts the
 stack, wires up the shared services, and prints the URL (e.g. `http://localhost:8100`).
 
+It also marks issue `#<issue>` (the leading number of the branch) with the `in progress` label on
+GitHub, so you can see at a glance what's actively being worked on. `remove` clears it again (see
+below). This is best-effort: it's skipped silently when the branch has no leading issue number or
+`gh` isn't available, and never blocks the worktree operation.
+
+Finally it binds this Claude session's **status line** to the worktree (via
+`.claude/statusline/bind-worktree.sh` using `$CLAUDE_CODE_SESSION_ID`), so the status line shows
+`<worktree>:<port>` on the right. This is automatic — you do **not** need to call `bind-worktree.sh`
+by hand; `remove` unbinds it, and the status line self-cleans markers for removed worktrees.
+
 ## Run commands in the worktree
 
 From **inside the worktree dir**, the normal project command pattern just works — `COMPOSE_FILE`
@@ -133,6 +143,20 @@ real thumbnails, or render this branch's code to the local disk for inspection
 (`docker compose --profile render run --rm render dungeonroute:renderthumbnail <key>`). Never call
 `ThumbnailService::createThumbnail()` synchronously in the `app` container — it has no Chrome.
 
+## Broken worktree after a main-stack restart? Run `repair`
+
+Restarting the **main** stack detaches its shared containers from every worktree network — the
+worktree's nginx then 502s/fails on every request because its upstreams (`db`, `app-swoole`,
+`reverb`, ...) no longer resolve. Don't debug this by hand; run:
+
+```bash
+sh/worktree.sh repair                  # fix ALL running worktree stacks
+sh/worktree.sh repair <issue>-<slug>   # fix just one
+```
+
+It reattaches the shared-service aliases (idempotent) and restarts each worktree's nginx. Safe to
+run blindly whenever a worktree suddenly stops serving pages.
+
 ## Tear down
 
 ```bash
@@ -140,3 +164,7 @@ sh/worktree.sh down   <issue>-<slug>   # stop the stack, keep the checkout
 sh/worktree.sh remove <issue>-<slug>   # stop the stack and remove the worktree
 sh/worktree.sh list                    # list worktrees and running stacks
 ```
+
+`remove` also clears the `in progress` label from issue `#<issue>` (best-effort). `down` leaves it
+in place — a stopped-but-present worktree still counts as being worked on. Note a worktree torn down
+with a raw `git worktree remove` (bypassing the script) won't clear the label.

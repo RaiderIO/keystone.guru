@@ -10,10 +10,8 @@ return [
             '40_man' => '40-man',
         ],
         'griddiscover' => [
-            'popular'   => 'Popular',
-            'this_week' => 'This week',
-            'next_week' => 'Next week',
-            'new'       => 'New',
+            'popular' => 'Popular',
+            'new'     => 'New',
         ],
         'list' => [
             'card' => [

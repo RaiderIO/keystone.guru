@@ -8,15 +8,6 @@ window._ = require('lodash');
 
 window.$ = window.jQuery = require('jquery');
 
-// jQuery 4.0 removed $.isNumeric (#3560 bumped jQuery 3.6.1 -> 4.0.0), but the bundled
-// jquery-bar-rating plugin still calls it. Restore it before any jQuery plugin loads.
-if (typeof window.$.isNumeric !== 'function') {
-    window.$.isNumeric = function (obj) {
-        const type = typeof obj;
-        return (type === 'number' || type === 'string') && !isNaN(obj - parseFloat(obj));
-    };
-}
-
 window.offsetPolygon = require('offset-polygon').default;
 
 // Bootstrap 5 no longer registers jQuery plugins; expose the API globally because the
@@ -102,7 +93,8 @@ window.TomSelect = require('tom-select').default;
 window.refreshSelectPickers = require('./selectpicker').refreshSelectPickers;
 
 window.Handlebars = require('handlebars');
-window.barrating = require('jquery-bar-rating');
+// Self-owned star-rating widget (#3593); replaces the unmaintained jquery-bar-rating plugin
+require('./star-rating');
 window.polylinedecorator = require('leaflet-polylinedecorator');
 window.lightCarousel = require('lightslider');
 window.introjs = require('intro.js');
@@ -118,7 +110,6 @@ window.Noty = require('noty');
 window.Pickr = require('@simonwep/pickr');
 window.AntPath = require('leaflet-ant-path');
 window.Grapick = require('grapick');
-window.jqueryVisible = require('jquery-visible');
 window.simplebar = require('simplebar');
 window.Draggable = require('@shopify/draggable');
 require('bootstrap5-toggle/js/bootstrap5-toggle.jquery.min.js');
