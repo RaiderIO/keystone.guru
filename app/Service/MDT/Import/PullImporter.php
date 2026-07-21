@@ -5,7 +5,6 @@ namespace App\Service\MDT\Import;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportError;
 use App\Logic\MDT\Exception\ImportWarning;
-use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
@@ -14,12 +13,15 @@ use App\Models\KillZone\KillZoneSpell;
 use App\Models\Npc\NpcEnemyForces;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\MDT\Import\Traits\AppliesMdtCloneIndexHack;
 use App\Service\MDT\Models\ImportStringPulls;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
 
 class PullImporter
 {
+    use AppliesMdtCloneIndexHack;
+
     public function __construct(
         private readonly CacheServiceInterface       $cacheService,
         private readonly CoordinatesServiceInterface $coordinatesService,
@@ -176,20 +178,7 @@ class PullImporter
             // This comes in through as a double, cast to int
             $cloneIndex = (int)$cloneIndex;
 
-            // Hacky fix for a MDT bug where there's duplicate NPCs with the same npc_id etc.
-            if ($importStringPulls->getDungeon()->key === Dungeon::DUNGEON_SIEGE_OF_BORALUS) {
-                if ($npcIndex === 35) {
-                    $cloneIndex += 15;
-                }
-            } elseif ($importStringPulls->getDungeon()->key === Dungeon::DUNGEON_TOL_DAGOR) {
-                if ($npcIndex === 11) {
-                    $cloneIndex += 2;
-                }
-            } elseif ($importStringPulls->getDungeon()->key === Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE) {
-                if ($npcIndex === 23) {
-                    $cloneIndex += 5;
-                }
-            }
+            $cloneIndex = $this->applyDungeonCloneIndexHack($importStringPulls->getDungeon(), $npcIndex, $cloneIndex);
 
             // Find the matching enemy of the clones
             $mdtEnemy   = null;

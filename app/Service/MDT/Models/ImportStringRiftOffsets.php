@@ -28,7 +28,7 @@ class ImportStringRiftOffsets
         private readonly MappingVersion $mappingVersion,
         private readonly ?int           $seasonalIndex,
         private readonly array          $riftOffsets,
-        private readonly int            $week,
+        private readonly ?int           $week,
     ) {
         $this->mapIcons = collect();
         $this->paths    = collect();
@@ -65,7 +65,7 @@ class ImportStringRiftOffsets
         return $this->riftOffsets;
     }
 
-    public function getWeek(): int
+    public function getWeek(): ?int
     {
         return $this->week;
     }

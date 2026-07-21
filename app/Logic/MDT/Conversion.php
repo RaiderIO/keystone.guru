@@ -370,8 +370,14 @@ class Conversion
     public static function convertWeekToAffixGroup(
         SeasonServiceInterface $seasonService,
         Dungeon                $dungeon,
-        int                    $mdtWeek,
+        ?int                   $mdtWeek,
     ): ?AffixGroup {
+        // Some MDT strings don't carry a week at all (e.g. exported without an affix week
+        // selected) - callers already fall back to the current affix group when this returns null.
+        if ($mdtWeek === null) {
+            return null;
+        }
+
         if (!$dungeon->hasMappingVersionWithSeasons()) {
             return null;
         }
