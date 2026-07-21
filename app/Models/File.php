@@ -137,9 +137,15 @@ class File extends Model
      */
     public static function isRemoteDiskProtectedFromLocalMutation(string $disk): bool
     {
-        $driver = config(sprintf('filesystems.disks.%s.driver', $disk));
+        return app()->environment('local') && self::isRemoteDisk($disk);
+    }
 
-        return app()->environment('local') && $driver === 's3';
+    /**
+     * Whether the given disk is a real remote (S3) disk, regardless of environment.
+     */
+    public static function isRemoteDisk(string $disk): bool
+    {
+        return config(sprintf('filesystems.disks.%s.driver', $disk)) === 's3';
     }
 
     /**

@@ -54,7 +54,7 @@ final class ThumbnailServiceTest extends PublicTestCase
     }
 
     #[Test]
-    public function createThumbnail_givenLocalEnvironmentAndRemoteDisk_redirectsToPublicDiskInsteadOfSkipping(): void
+    public function createThumbnail_givenLocalEnvironmentAndRemoteDisk_logsRedirectToPublicDisk(): void
     {
         // Arrange
         $original = $this->setEnvAndDefaultDisk('local', 's3_user_uploads');
@@ -69,7 +69,9 @@ final class ThumbnailServiceTest extends PublicTestCase
             // Act
             // Falls through past the disk-safety guard onto the public disk instead of returning
             // null; fails further down since there's no real dungeon/floor/puppeteer setup here,
-            // which is fine - this test only asserts the redirect (and its log call) happened.
+            // which is fine - this test only asserts that the redirect decision was made and
+            // logged. The actual write landing on the public disk (not S3) is covered separately
+            // by attachThumbnailToDungeonRoute_givenLocalEnvironmentAndOldThumbnailOnRemoteDisk_leavesTheRemoteFileUntouched.
             $service->createThumbnail($dungeonRoute, 0);
         } catch (Throwable) {
             // Expected: the route has no dungeon/mapping relations to continue with.
