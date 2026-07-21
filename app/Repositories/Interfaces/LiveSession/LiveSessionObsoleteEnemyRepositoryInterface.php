@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @method LiveSessionObsoleteEnemy                  create(array<string, mixed> $attributes)
- * @method LiveSessionObsoleteEnemy|null              find(int $id, array<int, string>|string $columns = ['*'])
+ * @method LiveSessionObsoleteEnemy|null             find(int $id, array<int, string>|string $columns = ['*'])
  * @method LiveSessionObsoleteEnemy                  findOrFail(int $id, array<int, string>|string $columns = ['*'])
  * @method LiveSessionObsoleteEnemy                  findOrNew(int $id, array<int, string>|string $columns = ['*'])
  * @method bool                                      save(LiveSessionObsoleteEnemy $model)

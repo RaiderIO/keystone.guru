@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @method LiveSessionPlayerPosition                  create(array<string, mixed> $attributes)
- * @method LiveSessionPlayerPosition|null              find(int $id, array<int, string>|string $columns = ['*'])
+ * @method LiveSessionPlayerPosition|null             find(int $id, array<int, string>|string $columns = ['*'])
  * @method LiveSessionPlayerPosition                  findOrFail(int $id, array<int, string>|string $columns = ['*'])
  * @method LiveSessionPlayerPosition                  findOrNew(int $id, array<int, string>|string $columns = ['*'])
  * @method bool                                       save(LiveSessionPlayerPosition $model)

@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @method LiveSessionCombatLogBuffer                  create(array<string, mixed> $attributes)
- * @method LiveSessionCombatLogBuffer|null              find(int $id, array<int, string>|string $columns = ['*'])
+ * @method LiveSessionCombatLogBuffer|null             find(int $id, array<int, string>|string $columns = ['*'])
  * @method LiveSessionCombatLogBuffer                  findOrFail(int $id, array<int, string>|string $columns = ['*'])
  * @method LiveSessionCombatLogBuffer                  findOrNew(int $id, array<int, string>|string $columns = ['*'])
  * @method bool                                        save(LiveSessionCombatLogBuffer $model)
