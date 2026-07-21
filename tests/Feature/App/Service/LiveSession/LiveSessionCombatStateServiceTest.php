@@ -400,6 +400,31 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function setPlayerPosition_givenZeroCoordinates_persistsThemRatherThanDroppingThem(): void
+    {
+        // Arrange - a lat/lng of exactly 0.0 is falsy; a naive array_filter() would silently strip it
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+
+        try {
+            // Act
+            $this->service->setPlayerPosition($liveSession, 'Player-1234-ABCDEF01', 'Testchar', 0.0, 0.0, 1);
+
+            // Assert
+            $position = LiveSessionPlayerPosition::query()
+                ->where('live_session_id', $liveSession->id)
+                ->where('player_guid', 'Player-1234-ABCDEF01')
+                ->firstOrFail();
+            $this->assertSame(0.0, $position->lat);
+            $this->assertSame(0.0, $position->lng);
+        } finally {
+            LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
     public function setPlayerPosition_givenClassAndSpec_persistsThem(): void
     {
         // Arrange

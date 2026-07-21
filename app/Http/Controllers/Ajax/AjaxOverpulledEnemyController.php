@@ -12,6 +12,7 @@ use App\Models\Enemy;
 use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Models\User;
+use App\Service\LiveSession\DungeonRouteCorrection;
 use App\Service\LiveSession\LiveSessionCombatStateServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use Exception;
@@ -68,20 +69,7 @@ class AjaxOverpulledEnemyController extends Controller
             }
         }
 
-        $routeCorrection = $overpulledEnemyService->getRouteCorrection($liveSession);
-
-        if (Auth::check()) {
-            /** @var User $user */
-            $user     = Auth::getUser();
-            $enemyIds = $routeCorrection->getObsoleteEnemies()
-                ->merge($combatStateService->getObsoleteEnemyIds($liveSession))
-                ->unique()
-                ->values()
-                ->toArray();
-            broadcast(new RouteCorrectionEvent($liveSession, $user, $enemyIds));
-        }
-
-        return $routeCorrection->toArray();
+        return $this->broadcastRouteCorrection($overpulledEnemyService, $combatStateService, $liveSession)->toArray();
     }
 
     /**
@@ -119,28 +107,39 @@ class AjaxOverpulledEnemyController extends Controller
                     $user = Auth::getUser();
                     broadcast(new OverpulledEnemyDeletedEvent($liveSession, $user, $enemy));
                 }
+            }
 
-                // Optionally, don't calculate the return value
-                if ($validated['no_result'] !== true) {
-                    $routeCorrection = $overpulledEnemyService->getRouteCorrection($liveSession);
-                    $result          = $routeCorrection->toArray();
-
-                    if (Auth::check()) {
-                        /** @var User $user */
-                        $user     = Auth::getUser();
-                        $enemyIds = $routeCorrection->getObsoleteEnemies()
-                            ->merge($combatStateService->getObsoleteEnemyIds($liveSession))
-                            ->unique()
-                            ->values()
-                            ->toArray();
-                        broadcast(new RouteCorrectionEvent($liveSession, $user, $enemyIds));
-                    }
-                }
+            // Optionally, don't calculate the return value. Computed once after the loop, not per enemy -
+            // it already reflects every deletion above, so recomputing per iteration is redundant work
+            // and broadcasts the same not-yet-final state K times instead of once.
+            if ($validated['no_result'] !== true) {
+                $result = $this->broadcastRouteCorrection($overpulledEnemyService, $combatStateService, $liveSession)->toArray();
             }
         } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
         return $result;
+    }
+
+    private function broadcastRouteCorrection(
+        OverpulledEnemyServiceInterface        $overpulledEnemyService,
+        LiveSessionCombatStateServiceInterface $combatStateService,
+        LiveSession                            $liveSession,
+    ): DungeonRouteCorrection {
+        $routeCorrection = $overpulledEnemyService->getRouteCorrection($liveSession);
+
+        if (Auth::check()) {
+            /** @var User $user */
+            $user     = Auth::getUser();
+            $enemyIds = $routeCorrection->getObsoleteEnemies()
+                ->merge($combatStateService->getObsoleteEnemyIds($liveSession))
+                ->unique()
+                ->values()
+                ->toArray();
+            broadcast(new RouteCorrectionEvent($liveSession, $user, $enemyIds));
+        }
+
+        return $routeCorrection;
     }
 }

@@ -8,6 +8,7 @@ use App\Jobs\LiveSession\ProcessLiveSessionCombatLogBuffer;
 use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionCombatLogBuffer;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 class APILiveSessionCombatLogController extends Controller
 {
@@ -41,31 +42,44 @@ class APILiveSessionCombatLogController extends Controller
         $lines         = $validated['lines'];
         $batchSequence = $validated['batch_sequence'] ?? null;
 
-        /** @var LiveSessionCombatLogBuffer $buffer */
-        $buffer = LiveSessionCombatLogBuffer::query()
-            ->firstOrNew(['live_session_id' => $liveSession->id]);
+        // Two batches for the same live session can arrive close together; without a lock, both would
+        // read-decode-append-encode-save independently and the second save silently clobbers the first,
+        // permanently losing the first batch's lines. lockForUpdate() serializes the whole
+        // read-modify-write cycle for concurrent requests against the same (unique) live_session_id row.
+        $duplicateBatch = DB::transaction(function () use ($liveSession, $lines, $batchSequence): bool {
+            /** @var LiveSessionCombatLogBuffer $buffer */
+            $buffer = LiveSessionCombatLogBuffer::query()
+                ->where('live_session_id', $liveSession->id)
+                ->lockForUpdate()
+                ->first() ?? new LiveSessionCombatLogBuffer(['live_session_id' => $liveSession->id]);
 
-        if ($batchSequence !== null && $buffer->last_sequence !== null && $batchSequence <= $buffer->last_sequence) {
+            if ($batchSequence !== null && $buffer->last_sequence !== null && $batchSequence <= $buffer->last_sequence) {
+                return true;
+            }
+
+            $existingLines = [];
+            if ($buffer->buffer !== null) {
+                $decoded = gzdecode($buffer->buffer);
+                if ($decoded !== false && $decoded !== '') {
+                    $existingLines = explode("\n", $decoded);
+                }
+            }
+
+            $allLines   = array_merge($existingLines, $lines);
+            $compressed = gzencode(implode("\n", $allLines), 6);
+
+            $buffer->buffer = $compressed !== false ? $compressed : null;
+            if ($batchSequence !== null) {
+                $buffer->last_sequence = $batchSequence;
+            }
+            $buffer->save();
+
+            return false;
+        });
+
+        if ($duplicateBatch) {
             return response()->json(['message' => __('controller.api.live_session_combat_log.duplicate_batch')]);
         }
-
-        $existingLines = [];
-        if ($buffer->buffer !== null) {
-            $decoded = gzdecode($buffer->buffer);
-            if ($decoded !== false && $decoded !== '') {
-                $existingLines = explode("\n", $decoded);
-            }
-        }
-
-        $allLines   = array_merge($existingLines, $lines);
-        $compressed = gzencode(implode("\n", $allLines), 6);
-
-        $buffer->live_session_id = $liveSession->id;
-        $buffer->buffer          = $compressed !== false ? $compressed : null;
-        if ($batchSequence !== null) {
-            $buffer->last_sequence = $batchSequence;
-        }
-        $buffer->save();
 
         ProcessLiveSessionCombatLogBuffer::dispatch($liveSession->id);
 

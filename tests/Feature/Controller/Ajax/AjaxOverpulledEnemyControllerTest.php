@@ -123,4 +123,48 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
                 ->delete();
         }
     }
+
+    #[Test]
+    public function delete_givenMultipleEnemies_dispatchesRouteCorrectionEventOnlyOnce(): void
+    {
+        // Arrange - regression guard: the route correction used to be recomputed and broadcast once
+        // per enemy inside the delete loop instead of once after it
+        Event::fake([RouteCorrectionEvent::class]);
+
+        /** @var \Illuminate\Support\Collection<int, Enemy> $enemies */
+        $enemies = $this->dungeonRoute->mappingVersion->enemies()->limit(2)->get();
+
+        if ($enemies->count() < 2) {
+            $this->markTestSkipped('Fewer than 2 enemies found for dungeon route mapping version');
+        }
+
+        foreach ($enemies as $enemy) {
+            LiveSessionOverpulledEnemy::query()->create([
+                'live_session_id' => $this->liveSession->id,
+                'kill_zone_id'    => $this->killZone->id,
+                'npc_id'          => $enemy->npc_id,
+                'mdt_id'          => $enemy->mdt_id,
+            ]);
+        }
+
+        try {
+            // Act
+            $this->deleteJson(
+                sprintf('/ajax/%s/live/%s/overpulledenemy', $this->dungeonRoute->public_key, $this->liveSession->public_key),
+                [
+                    'enemy_ids'    => $enemies->pluck('id')->all(),
+                    'kill_zone_id' => $this->killZone->id,
+                    'no_result'    => false,
+                ],
+            )->assertOk();
+
+            // Assert
+            Event::assertDispatchedTimes(RouteCorrectionEvent::class, 1);
+        } finally {
+            LiveSessionOverpulledEnemy::query()
+                ->where('live_session_id', $this->liveSession->id)
+                ->whereIn('npc_id', $enemies->pluck('npc_id'))
+                ->delete();
+        }
+    }
 }

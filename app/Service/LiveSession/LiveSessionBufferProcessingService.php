@@ -76,8 +76,11 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
             }
 
             // Captured before processing so the post-reduction write can be skipped if a newer batch arrived
-            // in the meantime (it would have bumped last_sequence), preventing us from clobbering those lines.
+            // in the meantime, preventing us from clobbering those lines. last_sequence alone isn't enough:
+            // a concurrently-ingested batch with a null batch_sequence never changes last_sequence, so
+            // updated_at (bumped by every append, sequenced or not) is guarded too - see reduceBuffer().
             $lastSequenceAtRead = $buffer->last_sequence;
+            $updatedAtAtRead    = $buffer->updated_at;
 
             $tmpFile        = sprintf('/dev/shm/live_session_%d.txt', $liveSession->id);
             $fileSaveResult = file_put_contents($tmpFile, $decompressed);
@@ -186,7 +189,7 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                     $this->collectCombatantInfo($combatLogDungeonRouteFilter),
                 );
 
-                $this->reduceBuffer($liveSession, $tmpFile, $validNpcIds, $lastSequenceAtRead);
+                $this->reduceBuffer($liveSession, $tmpFile, $validNpcIds, $lastSequenceAtRead, $updatedAtAtRead);
             } finally {
                 @unlink($tmpFile);
             }
@@ -200,17 +203,21 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
      * creator, so it does not grow unbounded with every batch. Player positions are persisted separately
      * (see {@see processPlayerPositions()}), so player movement is intentionally not retained here.
      *
-     * The write is conditional on `last_sequence` being unchanged since we read the buffer: if a newer
-     * batch was appended while this job ran, we leave the buffer alone and let the next job reduce it,
-     * so freshly ingested lines are never overwritten. Re-processing is idempotent, so nothing is lost.
+     * The write is conditional on `last_sequence` AND `updated_at` being unchanged since we read the
+     * buffer: if a newer batch was appended while this job ran, we leave the buffer alone and let the
+     * next job reduce it, so freshly ingested lines are never overwritten. Re-processing is idempotent,
+     * so nothing is lost. `last_sequence` alone would miss a concurrently-ingested batch with a null
+     * `batch_sequence` (that append never changes `last_sequence`), so `updated_at` - bumped by every
+     * append regardless of sequencing - is guarded too.
      *
      * @param Collection<int, int> $validNpcIds
      */
     private function reduceBuffer(
-        LiveSession $liveSession,
-        string      $tmpFile,
-        Collection  $validNpcIds,
-        ?int        $lastSequenceAtRead,
+        LiveSession     $liveSession,
+        string          $tmpFile,
+        Collection      $validNpcIds,
+        ?int            $lastSequenceAtRead,
+        ?\Carbon\Carbon $updatedAtAtRead,
     ): void {
         $reducedLines = $this->liveSessionCombatLogService->reduceCombatLogForBuffer($tmpFile, $validNpcIds);
         $compressed   = gzencode(implode("\n", $reducedLines), 6);
@@ -226,6 +233,7 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
         } else {
             $query->where('last_sequence', $lastSequenceAtRead);
         }
+        $query->where('updated_at', $updatedAtAtRead);
 
         $query->update(['buffer' => $compressed]);
     }
@@ -470,6 +478,18 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
             ?? $mappingVersion->dungeon->floors->firstWhere('default', 1);
 
         if ($floor === null) {
+            return $candidates->first();
+        }
+
+        // Per-floor lat/lng share the same coordinate space, so a same-npc_id candidate on a different
+        // floor can be numerically closer than the real match - restrict to the resolved floor first.
+        /** @var Collection<int, Enemy> $candidatesOnFloor */
+        $candidatesOnFloor = $candidates->filter(static fn(Enemy $e) => $e->floor_id === $floor->id);
+        if ($candidatesOnFloor->isNotEmpty()) {
+            $candidates = $candidatesOnFloor;
+        }
+
+        if ($candidates->count() === 1) {
             return $candidates->first();
         }
 

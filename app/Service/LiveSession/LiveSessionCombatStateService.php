@@ -74,17 +74,19 @@ class LiveSessionCombatStateService implements LiveSessionCombatStateServiceInte
                 ->where('live_session_id', $liveSession->id)
                 ->delete();
 
-            foreach ($inCombatEnemies as $inCombatEnemy) {
-                LiveSessionInCombatEnemy::query()->upsert([
+            if ($inCombatEnemies->isEmpty()) {
+                return;
+            }
+
+            // A plain bulk insert, not upsert(): every row for this session was just deleted above, so
+            // there is nothing left to conflict with and upsert()'s conflict-key handling can never fire.
+            LiveSessionInCombatEnemy::query()->insert(
+                $inCombatEnemies->map(static fn($inCombatEnemy) => [
                     'live_session_id' => $liveSession->id,
                     'npc_id'          => $inCombatEnemy->npc_id,
                     'mdt_id'          => $inCombatEnemy->mdt_id,
-                ], [
-                    'live_session_id',
-                    'npc_id',
-                    'mdt_id',
-                ]);
-            }
+                ])->all(),
+            );
         });
     }
 
@@ -114,17 +116,21 @@ class LiveSessionCombatStateService implements LiveSessionCombatStateServiceInte
                 'live_session_id' => $liveSession->id,
                 'player_guid'     => $playerGuid,
             ],
-            // Only overwrite the class/spec when we actually resolved them from a COMBATANT_INFO,
-            // so a later position update without one never wipes a previously-known specialization.
-            array_filter([
-                'class_id'          => $classId,
-                'specialization_id' => $specializationId,
-                'character_name'    => $characterName,
-                'lat'               => $lat,
-                'lng'               => $lng,
-                'floor_id'          => $floorId,
-                'updated_at'        => now(),
-            ]),
+            [
+                'character_name' => $characterName,
+                'lat'            => $lat,
+                'lng'            => $lng,
+                'floor_id'       => $floorId,
+                'updated_at'     => now(),
+                // Only overwrite the class/spec when we actually resolved them from a COMBATANT_INFO, so
+                // a later position update without one never wipes a previously-known specialization. The
+                // explicit null check (not array_filter()'s falsy-stripping default) matters here too -
+                // class/spec ids of 0 must not be treated the same as "not resolved".
+                ...array_filter([
+                    'class_id'          => $classId,
+                    'specialization_id' => $specializationId,
+                ], static fn(?int $value): bool => $value !== null),
+            ],
         );
 
         $model->setRelation('liveSession', $liveSession);
