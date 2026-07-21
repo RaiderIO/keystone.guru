@@ -10,6 +10,7 @@ return [
     'base_health_label'                               => 'Base health',
     'no_npc_found_label'                              => 'No NPC found for this enemy',
     'right_click_to_open_details'                     => 'Right-click to open details',
+    'shift_right_click_to_assign_raid_marker'         => 'Shift + right-click to assign a raid marker',
     'teeming_label'                                   => 'Teeming',
     'npc_label'                                       => 'Npc',
     'connected_floor_label'                           => 'Connected floor',

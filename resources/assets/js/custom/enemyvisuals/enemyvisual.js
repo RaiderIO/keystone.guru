@@ -62,7 +62,7 @@ class EnemyVisual extends Signalable {
 
         // If it changed, refresh the entire visual
         this.enemy.register(['enemy:set_raid_marker'], this, function (raidMarkerChangedEvent) {
-            self.buildVisual.bind(self, false);
+            self.buildVisual(false);
         });
         this.enemy.register('killzone:attached', this, function (killZoneAttachedEvent) {
             // If the killzone we're attached to gets refreshed, register for its changes and rebuild our visual
@@ -220,16 +220,15 @@ class EnemyVisual extends Signalable {
     }
 
     /**
-     * Called whenever the root visual object was clicked
+     * Called whenever the root visual object was right-clicked
+     * @param contextMenuEvent {jQuery.Event}
      * @private
      */
-    _visualRightClicked() {
+    _visualRightClicked(contextMenuEvent) {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual!', this);
-        // Some exclusions as to when the menu should not pop up
-        if (this.map.options.edit &&
-            this.map.getMapState() === null &&
-            !(this.enemy instanceof AdminEnemy)) {
-
+        // Plain right-click opens the enemy details modal (see Enemy#onLayerInit); Shift+right-click
+        // is reserved for the raid marker circle menu so the two don't both fire at once.
+        if (contextMenuEvent.shiftKey && this.enemy.canOpenRaidMarkerMenu()) {
             if (this._circleMenu === null) {
                 this._initCircleMenu();
             }

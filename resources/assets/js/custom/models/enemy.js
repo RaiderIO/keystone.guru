@@ -803,7 +803,9 @@ class Enemy extends VersionableMapObject {
 
                 text = template($.extend({}, visualData, {
                     name: lang.get(this.npc.name),
-                    right_click_to_open_details: lang.get('js.right_click_to_open_details')
+                    right_click_to_open_details: lang.get('js.right_click_to_open_details'),
+                    show_raid_marker_shortcut: this.canOpenRaidMarkerMenu(),
+                    shift_right_click_to_assign_raid_marker: lang.get('js.shift_right_click_to_assign_raid_marker')
                 }));
             } else {
                 text = lang.get('js.no_npc_found_label');
@@ -1018,8 +1020,27 @@ class Enemy extends VersionableMapObject {
 
         this.layer.on('contextmenu', function (contextMenuEvent) {
             L.DomEvent.preventDefault(contextMenuEvent);
+
+            // Shift+right-click is reserved for the raid marker circle menu (see
+            // EnemyVisual#_visualRightClicked) - don't also open the details modal for it.
+            if (contextMenuEvent.originalEvent.shiftKey && self.canOpenRaidMarkerMenu()) {
+                return;
+            }
+
             self.signal('enemy:contextmenu', {contextMenuEvent: contextMenuEvent});
         });
+    }
+
+    /**
+     * Whether the raid marker circle menu may be opened for this enemy right now.
+     * @returns {boolean}
+     */
+    canOpenRaidMarkerMenu() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        return this.map.options.edit &&
+            this.map.getMapState() === null &&
+            !(this instanceof AdminEnemy);
     }
 
     isVisibleOnScreen() {

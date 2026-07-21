@@ -52,7 +52,11 @@
 .star_enemy_icon, .circle_enemy_icon, .diamond_enemy_icon, .triangle_enemy_icon,
 .moon_enemy_icon, .square_enemy_icon, .cross_enemy_icon, .skull_enemy_icon {
   display: inline-block;
-  background: url('#{$asset-url}/images/raidmarkers/raidmarkers_med.png') no-repeat;
+  /* Longhand on purpose: the `background` shorthand resets background-position to its default,
+     which would clobber the per-icon offsets set in raidmarkers.scss (compiled earlier via @use),
+     making every marker render as whichever icon sits at 0 0 in the sprite (the star). */
+  background-image: url('#{$asset-url}/images/raidmarkers/raidmarkers_med.png');
+  background-repeat: no-repeat;
   overflow: hidden;
   text-indent: -9999px;
   text-align: left;
