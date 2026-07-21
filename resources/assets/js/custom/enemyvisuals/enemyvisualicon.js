@@ -29,9 +29,8 @@ class EnemyVisualIcon extends Signalable {
      * @returns {boolean}
      */
     shouldAlwaysRebuild() {
-        // If the enemy we're displaying is marked as obsolete, we display text to indicate that it is so
-        // This text needs to scale with zoom level, thus if it's marked as obsolete we should always rebuild the visual
-        return this.enemyvisual.enemy.isObsolete() || this.enemyvisual.enemy.getOverpulledKillZoneId() !== null;
+        // State overlay icons display text that needs to scale with zoom level — always rebuild when active
+        return this.enemyvisual.enemy.getStateOverlay() !== null;
     }
 
     /**

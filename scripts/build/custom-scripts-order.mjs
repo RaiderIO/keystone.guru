@@ -40,6 +40,7 @@ export const customScripts = [
     'resources/assets/js/custom/mapobjectgroups/pathmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/mapiconmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/usermousepositionmapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/playerpositionmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/mountableareamapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/floorunionmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/floorunionareamapobjectgroup.js',
@@ -48,6 +49,7 @@ export const customScripts = [
     'resources/assets/js/custom/mapobjectgroups/mapobjectgroupmanager.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmanager.js',
     'resources/assets/js/custom/enemyforces/enemyforcesmanager.js',
+    'resources/assets/js/custom/enemyforces/livesessionenemyforcesmanager.js',
 
     // Map Context
     'resources/assets/js/custom/mapcontext/mapcontext.js',
@@ -68,7 +70,9 @@ export const customScripts = [
     // Echo messages
     'resources/assets/js/custom/echo/message/message.js',
     'resources/assets/js/custom/echo/message/modelmessage.js',
+    'resources/assets/js/custom/echo/message/listen/livesession/incombatchanged.js',
     'resources/assets/js/custom/echo/message/listen/livesession/invite.js',
+    'resources/assets/js/custom/echo/message/listen/livesession/routecorrection.js',
     'resources/assets/js/custom/echo/message/listen/livesession/stop.js',
     'resources/assets/js/custom/echo/message/listen/models/brushline/changed.js',
     'resources/assets/js/custom/echo/message/listen/models/brushline/deleted.js',
@@ -80,6 +84,8 @@ export const customScripts = [
     'resources/assets/js/custom/echo/message/listen/models/mapicon/deleted.js',
     'resources/assets/js/custom/echo/message/listen/models/npc/changed.js',
     'resources/assets/js/custom/echo/message/listen/models/npc/deleted.js',
+    'resources/assets/js/custom/echo/message/listen/models/livesession/enemykilled.js',
+    'resources/assets/js/custom/echo/message/listen/models/livesession/playermoved.js',
     'resources/assets/js/custom/echo/message/listen/models/overpulledenemy/changed.js',
     'resources/assets/js/custom/echo/message/listen/models/overpulledenemy/deleted.js',
     'resources/assets/js/custom/echo/message/listen/models/path/changed.js',
@@ -91,7 +97,9 @@ export const customScripts = [
 
     // Echo message handlers
     'resources/assets/js/custom/echo/messagehandler/messagehandler.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/livesession/incombatchanged.js',
     'resources/assets/js/custom/echo/messagehandler/listen/livesession/invite.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/livesession/routecorrection.js',
     'resources/assets/js/custom/echo/messagehandler/listen/livesession/stop.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/basemodelhandler.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/modelchangedhandler.js',
@@ -106,6 +114,8 @@ export const customScripts = [
     'resources/assets/js/custom/echo/messagehandler/listen/models/mapicon/deleted.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/npc/changed.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/npc/deleted.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/models/livesession/enemykilled.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/models/livesession/playermoved.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/overpulledenemy/changed.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/overpulledenemy/deleted.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/path/changed.js',
@@ -127,11 +137,14 @@ export const customScripts = [
     'resources/assets/js/custom/models/versionablemapobject.js',
     'resources/assets/js/custom/models/polyline.js',
     'resources/assets/js/custom/models/enemy.js',
+    'resources/assets/js/custom/models/livesessionenemy.js',
+    'resources/assets/js/custom/models/searchenemy.js',
     'resources/assets/js/custom/models/pridefulenemy.js',
     'resources/assets/js/custom/models/enemypatrol.js',
     'resources/assets/js/custom/models/enemypack.js',
     'resources/assets/js/custom/models/path.js',
     'resources/assets/js/custom/models/killzone.js',
+    'resources/assets/js/custom/models/livesessionkillzone.js',
     'resources/assets/js/custom/models/killzonepath.js',
     'resources/assets/js/custom/models/icon.js',
     'resources/assets/js/custom/models/mapicon.js',
@@ -140,9 +153,11 @@ export const customScripts = [
     'resources/assets/js/custom/models/brushline.js',
     'resources/assets/js/custom/models/arrow.js',
     'resources/assets/js/custom/models/usermouseposition.js',
+    'resources/assets/js/custom/models/playerposition.js',
     'resources/assets/js/custom/models/mountablearea.js',
 
     'resources/assets/js/custom/input/usermousepositionplayer.js',
+    'resources/assets/js/custom/input/playerpositionplayer.js',
 
     'resources/assets/js/custom/mapstate/mapstate.js',
     'resources/assets/js/custom/mapstate/editmapstate.js',
@@ -157,7 +172,6 @@ export const customScripts = [
     'resources/assets/js/custom/mapstate/enemyselection/editkillzoneenemyselection.js',
     'resources/assets/js/custom/mapstate/enemyselection/enemypatrolenemyselection.js',
     'resources/assets/js/custom/mapstate/enemyselection/mdtenemyselection.js',
-    'resources/assets/js/custom/mapstate/enemyselection/selectkillzoneenemyselectionoverpull.js',
     'resources/assets/js/custom/mapstate/enemyselection/viewkillzoneenemyselection.js',
 
     'resources/assets/js/custom/enemyvisuals/enemyvisual.js',

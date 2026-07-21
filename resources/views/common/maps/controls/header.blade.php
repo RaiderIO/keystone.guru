@@ -1,6 +1,5 @@
 <?php
 
-use App\Logic\MapContext\MapContextMappingVersionData;
 use App\Logic\MapContext\Map\MapContextBase;
 use App\Logic\MapContext\Map\MapContextDungeonExplore;
 use App\Logic\MapContext\Map\MapContextLiveSession;
@@ -8,7 +7,7 @@ use App\Logic\MapContext\Map\MapContextMappingVersionEdit;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Team;
 use App\Models\User;
@@ -103,7 +102,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
                                 {{ __('view_common.maps.map.new_mapping_version_header_title') }}
                             </span>
                             </div>
-                         </div>
+                        </div>
                     @endif
                 @endif
             </div>

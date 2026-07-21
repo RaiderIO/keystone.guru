@@ -50,22 +50,22 @@ class CharacterClass extends CacheModel
 
     protected $appends = ['icon_url'];
 
-    public const CHARACTER_CLASS_WARRIOR      = 'warrior';
-    public const CHARACTER_CLASS_HUNTER       = 'hunter';
-    public const CHARACTER_CLASS_DEATH_KNIGHT = 'death_knight';
-    public const CHARACTER_CLASS_MAGE         = 'mage';
-    public const CHARACTER_CLASS_PRIEST       = 'priest';
-    public const CHARACTER_CLASS_MONK         = 'monk';
-    public const CHARACTER_CLASS_ROGUE        = 'rogue';
-    public const CHARACTER_CLASS_WARLOCK      = 'warlock';
-    public const CHARACTER_CLASS_SHAMAN       = 'shaman';
-    public const CHARACTER_CLASS_PALADIN      = 'paladin';
-    public const CHARACTER_CLASS_DRUID        = 'druid';
-    public const CHARACTER_CLASS_DEMON_HUNTER = 'demon_hunter';
-    public const CHARACTER_CLASS_EVOKER       = 'evoker';
+    public const string CHARACTER_CLASS_WARRIOR      = 'warrior';
+    public const string CHARACTER_CLASS_HUNTER       = 'hunter';
+    public const string CHARACTER_CLASS_DEATH_KNIGHT = 'death_knight';
+    public const string CHARACTER_CLASS_MAGE         = 'mage';
+    public const string CHARACTER_CLASS_PRIEST       = 'priest';
+    public const string CHARACTER_CLASS_MONK         = 'monk';
+    public const string CHARACTER_CLASS_ROGUE        = 'rogue';
+    public const string CHARACTER_CLASS_WARLOCK      = 'warlock';
+    public const string CHARACTER_CLASS_SHAMAN       = 'shaman';
+    public const string CHARACTER_CLASS_PALADIN      = 'paladin';
+    public const string CHARACTER_CLASS_DRUID        = 'druid';
+    public const string CHARACTER_CLASS_DEMON_HUNTER = 'demon_hunter';
+    public const string CHARACTER_CLASS_EVOKER       = 'evoker';
 
     // Do NOT change the order of this array!
-    public const ALL = [
+    public const array ALL = [
         self::CHARACTER_CLASS_WARRIOR,
         self::CHARACTER_CLASS_HUNTER,
         self::CHARACTER_CLASS_DEATH_KNIGHT,

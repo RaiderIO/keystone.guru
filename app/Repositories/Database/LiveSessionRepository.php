@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Database;
 
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 use App\Repositories\Interfaces\LiveSessionRepositoryInterface;
 
 class LiveSessionRepository extends DatabaseRepository implements LiveSessionRepositoryInterface

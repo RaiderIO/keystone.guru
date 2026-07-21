@@ -54,6 +54,7 @@ use App\Models\Floor\Floor;
             'mountablearea',
             'floorunion',
             'floorunionarea',
+            'playerposition',
         ],
     ])
 @endsection

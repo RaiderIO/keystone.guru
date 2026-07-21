@@ -12,8 +12,10 @@ use App\Models\Npc\Npc;
 use App\Models\Traits\HasLatLng;
 use App\Models\Traits\Reportable;
 use App\Models\Traits\SeederModel;
+use Database\Factories\EnemyFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -59,6 +61,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Enemy extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface, HasLatLngInterface
 {
+    /** @use HasFactory<EnemyFactory> */
+    use HasFactory;
+
     use CloneForNewMappingVersionNoRelations;
     use HasLatLng;
     use Reportable;

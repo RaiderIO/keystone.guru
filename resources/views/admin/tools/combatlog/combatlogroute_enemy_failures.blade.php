@@ -39,6 +39,7 @@ use App\Models\Mapping\MappingVersion;
                 'killzonepath',
                 'floorunion',
                 'floorunionarea',
+                'playerposition',
             ],
             'show'                  => [
                 'header'   => true,

@@ -42,7 +42,7 @@ use App\Repositories\Database\DungeonRoute\DungeonRouteRatingRepository;
 use App\Repositories\Database\DungeonRoute\DungeonRouteRepository;
 use App\Repositories\Database\DungeonRoute\DungeonRouteThumbnailJobRepository;
 use App\Repositories\Database\DungeonRoute\DungeonRouteThumbnailRepository;
-use App\Repositories\Database\Enemies\OverpulledEnemyRepository;
+use App\Repositories\Database\Enemies\LiveSessionOverpulledEnemyRepository;
 use App\Repositories\Database\Enemies\PridefulEnemyRepository;
 use App\Repositories\Database\EnemyActiveAuraRepository;
 use App\Repositories\Database\EnemyPackRepository;
@@ -65,6 +65,11 @@ use App\Repositories\Database\KillZone\KillZoneSpellRepository;
 use App\Repositories\Database\Laratrust\PermissionRepository;
 use App\Repositories\Database\Laratrust\RoleRepository;
 use App\Repositories\Database\Laratrust\TeamRepository as LaratrustTeamRepository;
+use App\Repositories\Database\LiveSession\LiveSessionCombatLogBufferRepository;
+use App\Repositories\Database\LiveSession\LiveSessionInCombatEnemyRepository;
+use App\Repositories\Database\LiveSession\LiveSessionKilledEnemyRepository;
+use App\Repositories\Database\LiveSession\LiveSessionObsoleteEnemyRepository;
+use App\Repositories\Database\LiveSession\LiveSessionPlayerPositionRepository;
 use App\Repositories\Database\LiveSessionRepository;
 use App\Repositories\Database\MapIconRepository;
 use App\Repositories\Database\MapIconTypeRepository;
@@ -156,7 +161,7 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRatingRepositoryInterfa
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailJobRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailRepositoryInterface;
-use App\Repositories\Interfaces\Enemies\OverpulledEnemyRepositoryInterface;
+use App\Repositories\Interfaces\Enemies\LiveSessionOverpulledEnemyRepositoryInterface;
 use App\Repositories\Interfaces\Enemies\PridefulEnemyRepositoryInterface;
 use App\Repositories\Interfaces\EnemyActiveAuraRepositoryInterface;
 use App\Repositories\Interfaces\EnemyPackRepositoryInterface;
@@ -179,6 +184,11 @@ use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
 use App\Repositories\Interfaces\Laratrust\PermissionRepositoryInterface;
 use App\Repositories\Interfaces\Laratrust\RoleRepositoryInterface;
 use App\Repositories\Interfaces\Laratrust\TeamRepositoryInterface as LaratrustTeamRepositoryInterface;
+use App\Repositories\Interfaces\LiveSession\LiveSessionCombatLogBufferRepositoryInterface;
+use App\Repositories\Interfaces\LiveSession\LiveSessionInCombatEnemyRepositoryInterface;
+use App\Repositories\Interfaces\LiveSession\LiveSessionKilledEnemyRepositoryInterface;
+use App\Repositories\Interfaces\LiveSession\LiveSessionObsoleteEnemyRepositoryInterface;
+use App\Repositories\Interfaces\LiveSession\LiveSessionPlayerPositionRepositoryInterface;
 use App\Repositories\Interfaces\LiveSessionRepositoryInterface;
 use App\Repositories\Interfaces\MapIconRepositoryInterface;
 use App\Repositories\Interfaces\MapIconTypeRepositoryInterface;
@@ -276,7 +286,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(DungeonRouteThumbnailRepositoryInterface::class, DungeonRouteThumbnailRepository::class);
 
         // Enemies
-        $this->app->bind(OverpulledEnemyRepositoryInterface::class, OverpulledEnemyRepository::class);
+        $this->app->bind(LiveSessionOverpulledEnemyRepositoryInterface::class, LiveSessionOverpulledEnemyRepository::class);
         $this->app->bind(PridefulEnemyRepositoryInterface::class, PridefulEnemyRepository::class);
 
         // Floor
@@ -367,6 +377,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(FileRepositoryInterface::class, FileRepository::class);
         $this->app->bind(GameIconRepositoryInterface::class, GameIconRepository::class);
         $this->app->bind(GameServerRegionRepositoryInterface::class, GameServerRegionRepository::class);
+        $this->app->bind(LiveSessionCombatLogBufferRepositoryInterface::class, LiveSessionCombatLogBufferRepository::class);
+        $this->app->bind(LiveSessionInCombatEnemyRepositoryInterface::class, LiveSessionInCombatEnemyRepository::class);
+        $this->app->bind(LiveSessionKilledEnemyRepositoryInterface::class, LiveSessionKilledEnemyRepository::class);
+        $this->app->bind(LiveSessionObsoleteEnemyRepositoryInterface::class, LiveSessionObsoleteEnemyRepository::class);
+        $this->app->bind(LiveSessionPlayerPositionRepositoryInterface::class, LiveSessionPlayerPositionRepository::class);
         $this->app->bind(LiveSessionRepositoryInterface::class, LiveSessionRepository::class);
         $this->app->bind(MapIconRepositoryInterface::class, MapIconRepository::class);
         $this->app->bind(MapIconTypeRepositoryInterface::class, MapIconTypeRepository::class);

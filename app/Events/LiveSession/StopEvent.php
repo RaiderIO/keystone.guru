@@ -3,7 +3,7 @@
 namespace App\Events\LiveSession;
 
 use App\Events\ContextEvent;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\PresenceChannel;
 use Override;

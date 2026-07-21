@@ -99,7 +99,9 @@ class DungeonMap extends Signalable {
             self.signal('map:mapobjectgroupsloaded');
         });
         this.enemyVisualManager = new EnemyVisualManager(this);
-        this.enemyForcesManager = new EnemyForcesManager(this);
+        this.enemyForcesManager = getState().getMapContext() instanceof MapContextLiveSession
+            ? new LiveSessionEnemyForcesManager(this)
+            : new EnemyForcesManager(this);
 
         // Keep track of all objects that are added to the groups through whatever means; put them in the mapObjects array
         for (let i = 0; i < this.mapObjectGroupManager.mapObjectGroups.length; i++) {

@@ -4,15 +4,10 @@
         style="background-image: url('{{enemy_portrait_url}}');"
      {{/if}}
 >
-    {{#if obsolete}}
-        <div class="obsolete text-danger"
+    {{#if state_icon}}
+        <div class="enemy_state {{state_color}}"
               style="font-size: {{width}}px;">
-            <i class="fa fa-times-circle"></i>
-        </div>
-    {{else if overpulled}}
-        <div class="overpulled text-success"
-              style="font-size: {{width}}px;">
-            <i class="fa fa-plus-circle"></i>
+            <i class="fa {{state_icon}}"></i>
         </div>
     {{else}}
         &nbsp;

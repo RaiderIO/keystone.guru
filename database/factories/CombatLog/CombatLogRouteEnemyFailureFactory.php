@@ -17,14 +17,21 @@ class CombatLogRouteEnemyFailureFactory extends Factory
 
     public function definition(): array
     {
-        /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::inRandomOrder()->first();
+        $count = 0;
+        do {
+            if (++$count > 20) {
+                throw new \RuntimeException('Unable to find a dungeon with a non-facade floor and a current mapping version');
+            }
 
-        /** @var Floor $floor */
-        $floor = $dungeon->floors()->where('facade', 0)->first();
+            /** @var Dungeon $dungeon */
+            $dungeon = Dungeon::inRandomOrder()->first();
 
-        /** @var MappingVersion $mappingVersion */
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+            /** @var Floor|null $floor */
+            $floor = $dungeon->floors()->where('facade', 0)->first();
+
+            /** @var MappingVersion|null $mappingVersion */
+            $mappingVersion = $dungeon->getCurrentMappingVersion();
+        } while ($floor === null || $mappingVersion === null);
 
         return [
             'dungeon_id'         => $dungeon->id,
