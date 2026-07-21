@@ -175,4 +175,86 @@ final class APICombatLogParseFailureControllerTest extends PublicTestCase
             $failure->delete();
         }
     }
+
+    #[Test]
+    public function resolve_givenOpenFailure_marksItResolved(): void
+    {
+        // Arrange
+        $this->actingAsAdmin();
+
+        $failure = CombatLogParseFailure::factory()->create();
+
+        try {
+            // Act
+            $response = $this->postJson(route('api.v1.combatlog.parsefailures.resolve', ['parseFailure' => $failure->id]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertExactJson(['status' => 'ok']);
+            $this->assertNotNull($failure->fresh()->resolved_at);
+        } finally {
+            $failure->delete();
+        }
+    }
+
+    #[Test]
+    public function resolve_givenAlreadyResolvedFailure_remainsResolved(): void
+    {
+        // Arrange
+        $this->actingAsAdmin();
+
+        $failure = CombatLogParseFailure::factory()->resolved()->create();
+
+        try {
+            // Act
+            $response = $this->postJson(route('api.v1.combatlog.parsefailures.resolve', ['parseFailure' => $failure->id]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertNotNull($failure->fresh()->resolved_at);
+        } finally {
+            $failure->delete();
+        }
+    }
+
+    #[Test]
+    public function resolve_givenAuthenticatedNonAdmin_shouldReturnForbidden(): void
+    {
+        // Arrange
+        /** @var User $nonAdmin */
+        $nonAdmin = User::factory()->create();
+
+        $failure = CombatLogParseFailure::factory()->create();
+
+        try {
+            $this->actingAs($nonAdmin);
+
+            // Act
+            $response = $this->postJson(route('api.v1.combatlog.parsefailures.resolve', ['parseFailure' => $failure->id]));
+
+            // Assert
+            $response->assertStatus(StatusCode::FORBIDDEN);
+            $this->assertNull($failure->fresh()->resolved_at);
+        } finally {
+            $nonAdmin->delete();
+            $failure->delete();
+        }
+    }
+
+    #[Test]
+    public function resolve_givenUnauthenticated_shouldReturnForbidden(): void
+    {
+        // Arrange
+        $failure = CombatLogParseFailure::factory()->create();
+
+        try {
+            // Act
+            $response = $this->postJson(route('api.v1.combatlog.parsefailures.resolve', ['parseFailure' => $failure->id]));
+
+            // Assert
+            $response->assertStatus(StatusCode::FORBIDDEN);
+        } finally {
+            $failure->delete();
+        }
+    }
 }

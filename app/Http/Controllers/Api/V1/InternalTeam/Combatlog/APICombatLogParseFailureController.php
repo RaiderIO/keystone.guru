@@ -54,4 +54,27 @@ class APICombatLogParseFailureController extends Controller
     {
         return $this->resolveCombatLogParseFailureSegments($raiderIOApiService, $parseFailure);
     }
+
+    /**
+     * @OA\Post(
+     *     operationId="resolveCombatLogParseFailure",
+     *     path="/api/v1/combatlog/parse-failures/{parseFailure}/resolve",
+     *     summary="Mark a combat log parse failure as resolved",
+     *     tags={"CombatLog"},
+     *
+     *     @OA\Parameter(name="parseFailure", in="path", required=true, @OA\Schema(type="integer")),
+     *
+     *     @OA\Response(response=200, description="Successful operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="ok")
+     *         )
+     *     )
+     * )
+     */
+    public function resolve(CombatLogParseFailure $parseFailure): JsonResponse
+    {
+        $parseFailure->update(['resolved_at' => now()]);
+
+        return response()->json(['status' => 'ok']);
+    }
 }
