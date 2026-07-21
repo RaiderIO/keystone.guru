@@ -44,7 +44,7 @@ use (
     $showLevel = $dungeonroute->level_min !== $dungeonroute->season?->key_level_min
         || $dungeonroute->level_max !== $dungeonroute->season?->key_level_max;
     // A route counts as "new" while it is within its first two weeks of being published
-    $isNew = $dungeonroute->published_at->greaterThan(Carbon::now()->subDays(14));
+    $isNew = $dungeonroute->published_at?->greaterThan(Carbon::now()->subDays(14)) ?? false;
     ob_start();
     ?>
 <div class="d-flex align-items-center flex-fill flex-wrap leaderboard_row_inner">
