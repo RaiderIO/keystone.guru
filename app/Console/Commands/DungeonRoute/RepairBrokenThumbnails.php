@@ -90,8 +90,8 @@ class RepairBrokenThumbnails extends Command
      */
     private function requeueThumbnailsMissingFromDisk(ThumbnailServiceInterface $thumbnailService, bool $dryRun): void
     {
-        $affectedDungeonRouteIds  = [];
-        $brokenCustomThumbnailIds = [];
+        $affectedDungeonRouteIds  = collect();
+        $brokenCustomThumbnailIds = collect();
 
         // The model's default $with would also hydrate the unused floor relation for every row.
         $query = DungeonRouteThumbnail::query()
@@ -104,16 +104,16 @@ class RepairBrokenThumbnails extends Command
 
         $progressBar = $this->output->createProgressBar($total);
 
-        $query->clone()->chunkById(100, function ($thumbnails) use (&$affectedDungeonRouteIds, &$brokenCustomThumbnailIds, $progressBar): void {
+        $query->clone()->chunkById(100, function ($thumbnails) use ($affectedDungeonRouteIds, $brokenCustomThumbnailIds, $progressBar): void {
             foreach ($thumbnails as $thumbnail) {
                 /** @var DungeonRouteThumbnail $thumbnail */
                 $file = $thumbnail->file;
 
                 if ($file !== null && !Storage::disk($file->disk)->exists($file->path)) {
                     if ($thumbnail->custom) {
-                        $brokenCustomThumbnailIds[] = $thumbnail->id;
+                        $brokenCustomThumbnailIds->push($thumbnail->id);
                     } else {
-                        $affectedDungeonRouteIds[$thumbnail->dungeon_route_id] = true;
+                        $affectedDungeonRouteIds->push($thumbnail->dungeon_route_id);
                     }
                 }
 
@@ -124,35 +124,42 @@ class RepairBrokenThumbnails extends Command
         $progressBar->finish();
         $this->newLine();
 
-        if ($brokenCustomThumbnailIds !== []) {
+        $affectedDungeonRouteIds = $affectedDungeonRouteIds->unique();
+
+        if ($brokenCustomThumbnailIds->isNotEmpty()) {
             $this->warn(sprintf(
                 'Found %d custom thumbnail(s) whose disk object is missing - these cannot be repaired by re-queueing (thumbnail ID(s): %s).',
-                count($brokenCustomThumbnailIds),
-                implode(', ', $brokenCustomThumbnailIds),
+                $brokenCustomThumbnailIds->count(),
+                $brokenCustomThumbnailIds->implode(', '),
             ));
         }
 
-        $this->info(sprintf('Found %d route(s) with a thumbnail File whose disk object is missing.', count($affectedDungeonRouteIds)));
+        $this->info(sprintf('Found %d route(s) with a thumbnail File whose disk object is missing.', $affectedDungeonRouteIds->count()));
 
-        if ($affectedDungeonRouteIds === []) {
+        if ($affectedDungeonRouteIds->isEmpty()) {
             return;
         }
 
         $requeued = 0;
 
-        DungeonRoute::query()
-            ->whereIn('id', array_keys($affectedDungeonRouteIds))
-            ->with(['dungeon', 'mappingVersion'])
-            ->chunkById(100, function ($dungeonRoutes) use ($thumbnailService, &$requeued, $dryRun): void {
-                foreach ($dungeonRoutes as $dungeonRoute) {
-                    /** @var DungeonRoute $dungeonRoute */
-                    if (!$dryRun) {
-                        $thumbnailService->queueThumbnailRefresh($dungeonRoute, true);
-                    }
+        // Batch the id list itself (not just paginate with chunkById) - a single whereIn() with tens
+        // of thousands of ids can exceed MySQL's prepared-statement placeholder limit on a route with
+        // this many broken thumbnails.
+        foreach ($affectedDungeonRouteIds->chunk(1000) as $dungeonRouteIdBatch) {
+            DungeonRoute::query()
+                ->whereIn('id', $dungeonRouteIdBatch)
+                ->with(['dungeon', 'mappingVersion'])
+                ->chunkById(100, function ($dungeonRoutes) use ($thumbnailService, &$requeued, $dryRun): void {
+                    foreach ($dungeonRoutes as $dungeonRoute) {
+                        /** @var DungeonRoute $dungeonRoute */
+                        if (!$dryRun) {
+                            $thumbnailService->queueThumbnailRefresh($dungeonRoute, true);
+                        }
 
-                    $requeued++;
-                }
-            });
+                        $requeued++;
+                    }
+                });
+        }
 
         $this->info(sprintf(
             '%s %d route(s) for thumbnail regeneration.',

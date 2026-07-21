@@ -1421,7 +1421,9 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
             // Delete thumbnails
             foreach ($dungeonRoute->dungeonRouteThumbnails as $dungeonRouteThumbnail) {
-                // This deletes the file from the database, and then from S3 as well
+                // This deletes the file from the database, and then from disk as well - except a
+                // local environment never physically deletes off a real remote (S3) disk, see
+                // File::isRemoteDiskProtectedFromLocalMutation()
                 $dungeonRouteThumbnail->delete();
             }
 

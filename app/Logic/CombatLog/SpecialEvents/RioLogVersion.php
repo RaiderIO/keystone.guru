@@ -16,6 +16,10 @@ use Override;
  * RIO_LOG_VERSION,1,SEGMENT_TYPE,mplus_boss,...,DUNGEON_ID,558,ENCOUNTER_ID,3071,SEGMENT_ID,2,CORRELATION_ID,...,
  * CHALLENGE_MODE_STARTED_AT,1780258447159,ENCOUNTER_STARTED_AT,1780258632834,TYPE,boss,...,PROJECT_ID,1
  *
+ * CLIENT_SESSION_ID is absent on older addon builds (observed on APP_VERSION 4.10.1, 29 params for
+ * the trash variant) — added in a later addon release, so it's treated as optional rather than
+ * required. Unlike ENCOUNTER_ID/ENCOUNTER_STARTED_AT it isn't used anywhere downstream today.
+ *
  * @author Wouter
  *
  * @since 01/06/2026
@@ -50,7 +54,7 @@ class RioLogVersion extends SpecialEvent implements HasCombatLogVersionInterface
 
     private string $type;
 
-    private string $clientSessionID;
+    private ?string $clientSessionID = null;
 
     private int $embeddedCombatLogVersion;
 
@@ -131,7 +135,7 @@ class RioLogVersion extends SpecialEvent implements HasCombatLogVersionInterface
         return $this->type;
     }
 
-    public function getClientSessionID(): string
+    public function getClientSessionID(): ?string
     {
         return $this->clientSessionID;
     }
@@ -202,7 +206,7 @@ class RioLogVersion extends SpecialEvent implements HasCombatLogVersionInterface
         $this->challengeModeStartedAt   = (int)$keyValuePairs['CHALLENGE_MODE_STARTED_AT'];
         $this->encounterStartedAt       = isset($keyValuePairs['ENCOUNTER_STARTED_AT']) ? (int)$keyValuePairs['ENCOUNTER_STARTED_AT'] : null;
         $this->type                     = $keyValuePairs['TYPE'];
-        $this->clientSessionID          = $keyValuePairs['CLIENT_SESSION_ID'];
+        $this->clientSessionID          = $keyValuePairs['CLIENT_SESSION_ID'] ?? null;
         $this->embeddedCombatLogVersion = (int)$keyValuePairs['COMBAT_LOG_VERSION'];
         $this->advancedLogEnabled       = (bool)$keyValuePairs['ADVANCED_LOG_ENABLED'];
         $this->buildVersion             = $keyValuePairs['BUILD_VERSION'];
@@ -213,7 +217,9 @@ class RioLogVersion extends SpecialEvent implements HasCombatLogVersionInterface
 
     public function getOptionalParameterCount(): int
     {
-        return 4;
+        // 4 for ENCOUNTER_ID/ENCOUNTER_STARTED_AT (boss-only), 2 for CLIENT_SESSION_ID (absent on
+        // older addon builds).
+        return 6;
     }
 
     public function getParameterCount(): int

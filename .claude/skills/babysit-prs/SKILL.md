@@ -29,7 +29,7 @@ ideally on a loop:
 
 ```bash
 gh pr list --repo RaiderIO/keystone.guru --state open \
-  --json number,title,headRefName,isDraft,mergeable,reviewDecision,updatedAt,statusCheckRollup
+  --json number,title,headRefName,isDraft,mergeable,reviewDecision,updatedAt,statusCheckRollup,labels
 ```
 
 Work only on PRs whose head branch matches the agent worktree convention `<issue>-<slug>` (leading
@@ -69,6 +69,15 @@ benefit of the doubt.
    the thread with `:robot:` and what changed. Reply to a review comment with
    `gh api -X POST repos/RaiderIO/keystone.guru/pulls/<n>/comments/<comment-id>/replies -f body='...'`.
    Do **not** resolve threads yourself — leave that to Wotuu when re-reviewing.
+
+   If the PR carries the `needs changes` label and you addressed (committed + pushed) at least one
+   review comment this pass, swap the label: remove `needs changes`, add `changes applied` —
+   `gh pr edit <n> --remove-label "needs changes" --add-label "changes applied"` (plain `gh pr edit`
+   works for labels even though it's broken for body edits). This is Wotuu's own review-tracking
+   system: `needs changes` means "I reviewed this and left comments", `changes applied` means "my
+   comments were acted on, ready for me to look again" — don't apply `changes applied` unless you
+   actually pushed a fix/response this pass, and never touch either label on a PR that doesn't
+   already have `needs changes` set (that would be jumping ahead of a review that hasn't happened).
 4. **All green, no comments**: leave it alone (but see step 4 — it may be due a cold review).
 
 ### 4. Cold-review MRs that just became ready
@@ -117,3 +126,11 @@ action, say so in one line.
   available — the `gh api -X POST repos/.../pulls/<n>/comments` fallback is the path that runs,
   and it works (validated on #3604). Also: `gh pr diff` on large PRs overflows the inline Bash
   output limit; read the persisted output file instead.
+- **When posting a finding body from a scratch file, `gh api ... -f body=@file` sends the literal
+  string `@file` as the comment** — lowercase `-f` does not dereference `@file`, only capital `-F`
+  does (same footgun as the `gh pr edit` body gotcha above). A cold-review agent hit this on #3630:
+  all 5 findings posted as garbage `@/tmp/.../c1.md` comments. After any cold-review pass, spot-check
+  that posted comment bodies actually contain the finding text (`gh api repos/.../pulls/comments/<id>
+  --jq '.body'`) rather than trusting the agent's self-report — if broken, the fix is `gh api -X PATCH
+  repos/.../pulls/comments/<id> -F body=@file` (capital `-F`) against the still-live scratchpad file,
+  not deleting and re-running the whole review.
