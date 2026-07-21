@@ -105,12 +105,12 @@ class DatabaseSeeder extends Seeder
             $affectedModelClasses = [];
 
             try {
-                $prepareFailed = false;
-
                 $affectedModelClasses = $seederClass::getAffectedModelClasses();
-                foreach ($affectedModelClasses as $affectedModel) {
-                    $prepareFailed = !$prepareFailed && !$this->prepareTempTableForModel($affectedModel);
-                }
+
+                $prepareFailed = !self::allSucceeded(
+                    $affectedModelClasses,
+                    fn(string $affectedModel): bool => $this->prepareTempTableForModel($affectedModel),
+                );
 
                 if ($prepareFailed) {
                     $this->command->error(sprintf('Preparing temp table for %s failed!', $seederClass));
@@ -122,10 +122,10 @@ class DatabaseSeeder extends Seeder
                     $this->call($seederClass);
                 });
 
-                $applyFailed = false;
-                foreach ($affectedModelClasses as $affectedModelClass) {
-                    $applyFailed = !$applyFailed && !$this->applyTempTableForModel($affectedModelClass);
-                }
+                $applyFailed = !self::allSucceeded(
+                    $affectedModelClasses,
+                    fn(string $affectedModelClass): bool => $this->applyTempTableForModel($affectedModelClass),
+                );
 
                 if ($applyFailed) {
                     $this->command->error(sprintf('Applying temp table for %s failed!', $seederClass));
@@ -137,10 +137,10 @@ class DatabaseSeeder extends Seeder
 
                 throw $e;
             } finally {
-                $cleanupFailed = false;
-                foreach ($affectedModelClasses as $affectedModelClass) {
-                    $cleanupFailed = !$cleanupFailed && !$this->cleanupTempTableForModel($affectedModelClass);
-                }
+                $cleanupFailed = !self::allSucceeded(
+                    $affectedModelClasses,
+                    fn(string $affectedModelClass): bool => $this->cleanupTempTableForModel($affectedModelClass),
+                );
 
                 if ($cleanupFailed) {
                     $this->command->error(sprintf('Cleaning up temp table for %s failed!', $seederClass));
@@ -201,6 +201,18 @@ class DatabaseSeeder extends Seeder
         return DB::connection($instance->getConnectionName())->statement(
             sprintf('DROP TABLE %s;', $tableNameNew),
         );
+    }
+
+    /**
+     * Invokes $callback for every item and reports whether any call failed. Every item is always
+     * attempted, regardless of an earlier failure (see #3642).
+     *
+     * @param array<int, class-string>     $items
+     * @param callable(class-string): bool $callback
+     */
+    private static function allSucceeded(array $items, callable $callback): bool
+    {
+        return !in_array(false, array_map($callback, $items), true);
     }
 
     public static function getTempTableName(string $className): string
