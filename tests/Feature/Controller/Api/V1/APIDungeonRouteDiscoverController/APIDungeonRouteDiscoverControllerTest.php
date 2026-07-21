@@ -142,7 +142,7 @@ final class APIDungeonRouteDiscoverControllerTest extends PublicTestCase
      * @throws Exception
      */
     #[Test]
-    public function new_givenValidGameVersion_shouldReturnOk(): void
+    public function newest_givenValidGameVersion_shouldReturnOk(): void
     {
         // Arrange
         $gameVersion = GameVersion::firstOrFail();
@@ -160,7 +160,7 @@ final class APIDungeonRouteDiscoverControllerTest extends PublicTestCase
      * @throws Exception
      */
     #[Test]
-    public function new_givenCountAboveMax_shouldReturn422(): void
+    public function newest_givenCountAboveMax_shouldReturn422(): void
     {
         // Arrange
         $gameVersion = GameVersion::firstOrFail();
