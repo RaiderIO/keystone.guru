@@ -2,6 +2,7 @@
 
 namespace App\Logic\CombatLog\SpecialEvents;
 
+use App\Logic\CombatLog\CombatLogVersion as CombatLogVersionConstant;
 use App\Logic\CombatLog\SpecialEvents\Interfaces\HasCombatLogDungeonContextInterface;
 use App\Logic\CombatLog\SpecialEvents\Interfaces\HasCombatLogVersionInterface;
 use App\Logic\CombatLog\SpecialEvents\Traits\ComputesVersionLong;
@@ -19,6 +20,15 @@ use Override;
  * CLIENT_SESSION_ID is absent on older addon builds (observed on APP_VERSION 4.10.1, 29 params for
  * the trash variant) — added in a later addon release, so it's treated as optional rather than
  * required. Unlike ENCOUNTER_ID/ENCOUNTER_STARTED_AT it isn't used anywhere downstream today.
+ *
+ * The trailing COMBAT_LOG_VERSION/ADVANCED_LOG_ENABLED/BUILD_VERSION/PROJECT_ID quad is also
+ * sometimes entirely absent (observed on APP_VERSION 4.11.2, 23 params for the trash variant) —
+ * always dropped together, never partially. This is the segment's only version source, so losing
+ * it isn't safe to ignore: falling through to the parser's hardcoded starting default would route
+ * the rest of the segment through a stale version-specific handler (e.g. CombatantInfoV21 instead
+ * of the current V22) instead of just losing metadata. Every other same-day segment sampled across
+ * affected runs reported the same version (RETAIL_ALL's newest entry at the time), so falling back
+ * to that instead of the hardcoded default is evidence-backed rather than a blind guess. See #3633.
  *
  * @author Wouter
  *
@@ -193,24 +203,29 @@ class RioLogVersion extends SpecialEvent implements HasCombatLogVersionInterface
             $keyValuePairs[$parameters[$i]] = $parameters[$i + 1];
         }
 
-        $this->rioLogVersion            = (int)$parameters[0];
-        $this->segmentType              = $keyValuePairs['SEGMENT_TYPE'];
-        $this->appVersion               = $keyValuePairs['APP_VERSION'];
-        $this->processorVersion         = (int)$keyValuePairs['PROCESSOR_VERSION'];
-        $this->platform                 = $keyValuePairs['PLATFORM'];
-        $this->instanceID               = (int)$keyValuePairs['INSTANCE_ID'];
-        $this->dungeonID                = (int)$keyValuePairs['DUNGEON_ID'];
-        $this->encounterID              = isset($keyValuePairs['ENCOUNTER_ID']) ? (int)$keyValuePairs['ENCOUNTER_ID'] : null;
-        $this->segmentID                = (int)$keyValuePairs['SEGMENT_ID'];
-        $this->correlationID            = $keyValuePairs['CORRELATION_ID'];
-        $this->challengeModeStartedAt   = (int)$keyValuePairs['CHALLENGE_MODE_STARTED_AT'];
-        $this->encounterStartedAt       = isset($keyValuePairs['ENCOUNTER_STARTED_AT']) ? (int)$keyValuePairs['ENCOUNTER_STARTED_AT'] : null;
-        $this->type                     = $keyValuePairs['TYPE'];
-        $this->clientSessionID          = $keyValuePairs['CLIENT_SESSION_ID'] ?? null;
-        $this->embeddedCombatLogVersion = (int)$keyValuePairs['COMBAT_LOG_VERSION'];
-        $this->advancedLogEnabled       = (bool)$keyValuePairs['ADVANCED_LOG_ENABLED'];
-        $this->buildVersion             = $keyValuePairs['BUILD_VERSION'];
-        $this->projectID                = (int)$keyValuePairs['PROJECT_ID'];
+        $this->rioLogVersion          = (int)$parameters[0];
+        $this->segmentType            = $keyValuePairs['SEGMENT_TYPE'];
+        $this->appVersion             = $keyValuePairs['APP_VERSION'];
+        $this->processorVersion       = (int)$keyValuePairs['PROCESSOR_VERSION'];
+        $this->platform               = $keyValuePairs['PLATFORM'];
+        $this->instanceID             = (int)$keyValuePairs['INSTANCE_ID'];
+        $this->dungeonID              = (int)$keyValuePairs['DUNGEON_ID'];
+        $this->encounterID            = isset($keyValuePairs['ENCOUNTER_ID']) ? (int)$keyValuePairs['ENCOUNTER_ID'] : null;
+        $this->segmentID              = (int)$keyValuePairs['SEGMENT_ID'];
+        $this->correlationID          = $keyValuePairs['CORRELATION_ID'];
+        $this->challengeModeStartedAt = (int)$keyValuePairs['CHALLENGE_MODE_STARTED_AT'];
+        $this->encounterStartedAt     = isset($keyValuePairs['ENCOUNTER_STARTED_AT']) ? (int)$keyValuePairs['ENCOUNTER_STARTED_AT'] : null;
+        $this->type                   = $keyValuePairs['TYPE'];
+        $this->clientSessionID        = $keyValuePairs['CLIENT_SESSION_ID'] ?? null;
+        $this->advancedLogEnabled     = isset($keyValuePairs['ADVANCED_LOG_ENABLED']) ? (bool)$keyValuePairs['ADVANCED_LOG_ENABLED'] : true;
+        $this->projectID              = isset($keyValuePairs['PROJECT_ID']) ? (int)$keyValuePairs['PROJECT_ID'] : 1;
+
+        if (isset($keyValuePairs['COMBAT_LOG_VERSION'], $keyValuePairs['BUILD_VERSION'])) {
+            $this->embeddedCombatLogVersion = (int)$keyValuePairs['COMBAT_LOG_VERSION'];
+            $this->buildVersion             = $keyValuePairs['BUILD_VERSION'];
+        } else {
+            [$this->embeddedCombatLogVersion, $this->buildVersion] = self::newestKnownVersionParts();
+        }
 
         return $this;
     }
@@ -218,12 +233,34 @@ class RioLogVersion extends SpecialEvent implements HasCombatLogVersionInterface
     public function getOptionalParameterCount(): int
     {
         // 4 for ENCOUNTER_ID/ENCOUNTER_STARTED_AT (boss-only), 2 for CLIENT_SESSION_ID (absent on
-        // older addon builds).
-        return 6;
+        // older addon builds), 8 for the trailing COMBAT_LOG_VERSION/ADVANCED_LOG_ENABLED/
+        // BUILD_VERSION/PROJECT_ID quad (also sometimes entirely absent, see the class docblock).
+        return 14;
     }
 
     public function getParameterCount(): int
     {
         return 35;
+    }
+
+    /**
+     * Decomposes RETAIL_ALL's newest registered version back into the (combat log version,
+     * build version) pair it was originally composed from, for use as a fallback when both are
+     * missing from the raw line. See the class docblock for why this is safe.
+     *
+     * @return array{0: int, 1: string}
+     */
+    private static function newestKnownVersionParts(): array
+    {
+        $newestVersionLong = array_key_last(CombatLogVersionConstant::RETAIL_ALL);
+
+        $combatLogVersion = intdiv($newestVersionLong, 1_000_000_000);
+        $remainder        = $newestVersionLong % 1_000_000_000;
+        $major            = intdiv($remainder, 1_000_000);
+        $remainder %= 1_000_000;
+        $minor = intdiv($remainder, 1_000);
+        $patch = $remainder % 1_000;
+
+        return [$combatLogVersion, sprintf('%d.%d.%d', $major, $minor, $patch)];
     }
 }
