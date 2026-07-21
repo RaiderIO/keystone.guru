@@ -17088,7 +17088,7 @@
                 "ingame_max_y": -4406.25,
                 "percentage_display_zoom": null,
                 "zoom_max": null,
-                "active": 1,
+                "active": 0,
                 "floorcouplings": [
                     {
                         "id": 1222,
