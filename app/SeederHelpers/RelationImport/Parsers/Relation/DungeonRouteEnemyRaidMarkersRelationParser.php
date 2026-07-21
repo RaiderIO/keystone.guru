@@ -6,8 +6,8 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
 use Database\Seeders\DatabaseSeeder;
-use Exception;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class DungeonRouteEnemyRaidMarkersRelationParser implements RelationParserInterface
 {
@@ -28,8 +28,6 @@ class DungeonRouteEnemyRaidMarkersRelationParser implements RelationParserInterf
      * @param  array<string, mixed> $modelData
      * @param  array<string, mixed> $value
      * @return array<string, mixed>
-     *
-     * @throws Exception
      */
     public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
     {
@@ -41,7 +39,14 @@ class DungeonRouteEnemyRaidMarkersRelationParser implements RelationParserInterf
         foreach ($value as $enemyRaidMarkerData) {
             $enemy = $enemies->get($enemyRaidMarkerData['enemy_id']);
             if ($enemy === null) {
-                throw new Exception(sprintf('Unable to find enemy with id %s', $enemyRaidMarkerData['enemy_id']));
+                // A raid marker is a low-stakes cosmetic annotation, unlike a kill zone - skip and
+                // log the one unresolvable row rather than aborting the entire seeder run over it.
+                Log::warning(sprintf(
+                    'DungeonRouteEnemyRaidMarkersRelationParser: unable to find enemy with id %s, skipping raid marker',
+                    $enemyRaidMarkerData['enemy_id'],
+                ));
+
+                continue;
             }
 
             // We now know the dungeon route ID, set it back to the Route

@@ -19,6 +19,7 @@ use DB;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -121,12 +122,34 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
             $raidMarkerName = $request->get('raid_marker_name', '');
             $npcId          = $enemy->getMdtNpcId();
 
-            // Delete existing enemy raid marker, matched by the durable npc_id/mdt_id identity
-            // rather than the mapping-version-scoped cached enemy_id, so a stale client reference
-            // (e.g. after a mapping version upgrade) can't leave a duplicate row behind
+            // The npc_id/mdt_id identity is durable across a mapping version upgrade, but it is NOT
+            // guaranteed unique within one - a small number of NPCs are placed twice under the same
+            // MDT clone index. Only match/delete by identity when it currently resolves to exactly
+            // this one enemy in the route's mapping version; otherwise a sibling enemy's marker could
+            // be deleted. When ambiguous, fall back to matching this exact enemy_id only - the rare
+            // cost is a stale marker row surviving an upgrade for an already-rare duplicate identity,
+            // instead of ever risking another enemy's marker.
+            $identityIsUnique = Enemy::where('mapping_version_id', $dungeonRoute->mapping_version_id)
+                ->whereRaw('COALESCE(mdt_npc_id, npc_id) = ?', [$npcId])
+                ->where(function (Builder $query) use ($enemy): void {
+                    if ($enemy->mdt_id === null) {
+                        $query->whereNull('mdt_id');
+                    } else {
+                        $query->where('mdt_id', $enemy->mdt_id);
+                    }
+                })
+                ->count() === 1;
+
             DungeonRouteEnemyRaidMarker::where('dungeon_route_id', $dungeonRoute->id)
-                ->where('npc_id', $npcId)
-                ->where('mdt_id', $enemy->mdt_id)
+                ->where(function (Builder $query) use ($enemy, $npcId, $identityIsUnique): void {
+                    $query->where('enemy_id', $enemy->id);
+
+                    if ($identityIsUnique) {
+                        $query->orWhere(function (Builder $query) use ($npcId, $enemy): void {
+                            $query->where('npc_id', $npcId)->where('mdt_id', $enemy->mdt_id);
+                        });
+                    }
+                })
                 ->delete();
 
             // Create a new one, if the user didn't just want to clear it
