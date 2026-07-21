@@ -541,9 +541,10 @@ final class ThumbnailServiceTest extends PublicTestCase
     #[Test]
     public function queueThumbnailRefresh_givenHeroVariantAndFreshHeroThumbnail_doesNotQueue(): void
     {
-        // Arrange
+        // Arrange - a dungeon with exactly one non-facade floor, so the freshness check's expected-floor-
+        // count (one thumbnail == one floor) doesn't flake on dungeons with several floors.
         Queue::fake();
-        $dungeon        = $this->getDungeonWithNonFacadeFloor();
+        $dungeon        = $this->getDungeonWithExactlyOneNonFacadeFloor();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         $floor          = $dungeon->floors()->where('facade', false)->first();
         $dungeonRoute   = DungeonRoute::factory()->create([
@@ -582,7 +583,7 @@ final class ThumbnailServiceTest extends PublicTestCase
     {
         // Arrange
         Queue::fake();
-        $dungeon        = $this->getDungeonWithNonFacadeFloor();
+        $dungeon        = $this->getDungeonWithExactlyOneNonFacadeFloor();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         $floor          = $dungeon->floors()->where('facade', false)->first();
         $dungeonRoute   = DungeonRoute::factory()->create([
@@ -612,6 +613,49 @@ final class ThumbnailServiceTest extends PublicTestCase
             Queue::assertPushed(ProcessRouteFloorThumbnail::class);
         } finally {
             $heroThumbnail->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function queueThumbnailRefresh_givenHeroVariantAndOneOfMultipleFloorsMissingThumbnail_queuesAHeroJob(): void
+    {
+        // Arrange - a multi-floor route where every floor except one already has a fresh hero thumbnail.
+        // The wholly-missing floor has no row at all (not just a stale one), so it must still trigger a
+        // requeue rather than being masked by the other fresh floors.
+        Queue::fake();
+        $dungeon        = $this->getDungeonWithMultipleNonFacadeFloors();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $floors         = $dungeon->floors()->where('facade', false)->where('active', true)->get();
+        $dungeonRoute   = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        $heroThumbnails = $floors->slice(0, -1)->map(function ($floor) use ($dungeonRoute) {
+            $thumbnail = DungeonRouteThumbnail::create([
+                'dungeon_route_id' => $dungeonRoute->id,
+                'floor_id'         => $floor->id,
+                'custom'           => false,
+                'variant'          => DungeonRouteThumbnailVariant::Hero,
+            ]);
+            DungeonRouteThumbnail::where('id', $thumbnail->id)
+                ->update(['updated_at' => $dungeonRoute->updated_at->copy()->addMinute()]);
+
+            return $thumbnail;
+        });
+
+        $service = $this->buildService($this->createMockPublic(ThumbnailServiceLoggingInterface::class));
+
+        try {
+            // Act
+            $result = $service->queueThumbnailRefresh($dungeonRoute, false, DungeonRouteThumbnailVariant::Hero);
+
+            // Assert
+            $this->assertTrue($result);
+            Queue::assertPushed(ProcessRouteFloorThumbnail::class, $floors->count());
+        } finally {
+            $heroThumbnails->each->delete();
             $dungeonRoute->delete();
         }
     }
