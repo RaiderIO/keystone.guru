@@ -13,25 +13,21 @@ use Illuminate\Support\Carbon;
  * @var DungeonRoute          $dungeonroute
  * @var int                   $rank
  * @var array<string, mixed>  $__env
- * @var boolean               $cache
+ * @var bool                  $cache
  */
 
 $isAdmin = Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN);
 ?>
 <?php
 // The route-dependent HTML is cached per route; the rank is positional and therefore rendered outside the cache.
-$cacheFn = static function ()
-
-use (
+$cacheFn = static function () use (
     $dungeonroute,
     $isAdmin,
     $__env,
-)
-
-{
+) {
     $enemyForcesPercentage = $dungeonroute->getEnemyForcesPercentage();
     $enemyForcesWarning    = $dungeonroute->enemy_forces < $dungeonroute->mappingVersion->enemy_forces_required || $enemyForcesPercentage >= 105;
-    $backgroundUrl = $dungeonroute->has_thumbnail
+    $backgroundUrl         = $dungeonroute->has_thumbnail
         ? $dungeonroute->thumbnails->first()->getURL()
         : $dungeonroute->dungeon->getImageTransparentUrl();
     $ratingCount = $dungeonroute->rating_count;
@@ -44,7 +40,7 @@ use (
     $showLevel = $dungeonroute->level_min !== $dungeonroute->season?->key_level_min
         || $dungeonroute->level_max !== $dungeonroute->season?->key_level_max;
     // A route counts as "new" while it is within its first two weeks of being published
-    $isNew = $dungeonroute->published_at?->greaterThan(Carbon::now()->subDays(14)) ?? false;
+    $isNew = $dungeonroute->published_at->greaterThan(Carbon::now()->subDays(14));
     ob_start();
     ?>
 <div class="d-flex align-items-center flex-fill flex-wrap leaderboard_row_inner">
@@ -148,10 +144,10 @@ use (
             DungeonRoute::getCardCacheKey($dungeonroute->id),
             DungeonRoute::getCardCacheField('row', $currentUserLocale, 0, 0, (int)$isAdmin),
             $cacheFn,
-            config('keystoneguru.view.common.dungeonroute.card.cache.ttl')
+            config('keystoneguru.view.common.dungeonroute.card.cache.ttl'),
         );
     } else {
         echo $cacheFn();
     }
-    ?>
+?>
 </div>
