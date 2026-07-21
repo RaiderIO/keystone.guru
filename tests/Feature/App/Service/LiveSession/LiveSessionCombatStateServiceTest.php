@@ -248,6 +248,7 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
                 ->count());
         } finally {
             LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            Enemy::whereIn('id', $enemies->pluck('id'))->delete();
             $liveSession->delete();
             $liveSession->dungeonRoute?->delete();
         }
@@ -262,11 +263,10 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
 
         /** @var Collection<int, Enemy> $enemies */
         $enemies = Enemy::factory()->count(2)->create();
+        /** @var Enemy $oldEnemy */
+        $oldEnemy = Enemy::factory()->create();
 
         try {
-            /** @var Enemy $oldEnemy */
-            $oldEnemy = Enemy::factory()->create();
-
             $this->service->replaceInCombatEnemies($liveSession, collect([
                 $oldEnemy,
             ]));
@@ -284,6 +284,7 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
                 ->count());
         } finally {
             LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            Enemy::whereIn('id', $enemies->pluck('id')->push($oldEnemy->id))->delete();
             $liveSession->delete();
             $liveSession->dungeonRoute?->delete();
         }
@@ -296,9 +297,12 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
         /** @var LiveSession $liveSession */
         $liveSession = LiveSession::factory()->create();
 
+        /** @var Enemy $enemy */
+        $enemy = Enemy::factory()->create();
+
         try {
             $this->service->replaceInCombatEnemies($liveSession, collect([
-                Enemy::factory()->create(),
+                $enemy,
             ]));
 
             // Act
@@ -310,6 +314,7 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
                 ->count());
         } finally {
             LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            $enemy->delete();
             $liveSession->delete();
             $liveSession->dungeonRoute?->delete();
         }
@@ -504,9 +509,12 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
         /** @var LiveSession $liveSession */
         $liveSession = LiveSession::factory()->create();
 
+        /** @var Enemy $enemy */
+        $enemy = Enemy::factory()->create();
+
         $this->service->setKilledEnemy($liveSession, 12345, 1);
         $this->service->replaceObsoleteEnemies($liveSession, [['npc_id' => 99999, 'mdt_id' => 5]]);
-        $this->service->replaceInCombatEnemies($liveSession, collect([Enemy::factory()->create()]));
+        $this->service->replaceInCombatEnemies($liveSession, collect([$enemy]));
         $this->service->setPlayerPosition($liveSession, 'Player-1-AAAAAAAA', 'Alice', 0.0, 0.0, 1);
 
         $dungeonRoute = $liveSession->dungeonRoute;
@@ -525,6 +533,7 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
             LiveSessionObsoleteEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            $enemy->delete();
             $dungeonRoute?->delete();
         }
     }

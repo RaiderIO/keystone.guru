@@ -32,7 +32,10 @@ class EnemyFactory extends Factory
             'lat'                           => $this->faker->latitude(),
             'lng'                           => $this->faker->longitude(),
 
-            'mapping_version_id' => $this->faker->randomNumber(),
+            // Negative on purpose: this app has no foreign keys, and mapping_version_id is a signed
+            // int, so a negative value can never collide with a real (positive, auto-increment)
+            // MappingVersion id - even if a factory-created row leaks into the shared dev DB.
+            'mapping_version_id' => -$this->faker->randomNumber(),
             'enemy_pack_id'      => null,
             'enemy_patrol_id'    => null,
             'npc_id'             => $this->faker->numberBetween(1000000, 9999999),
