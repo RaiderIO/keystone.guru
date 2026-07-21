@@ -247,45 +247,61 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
             NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
         );
 
+        // Mirrors DungeonRoute::getEnemyForces()'s accounting, scoped per kill zone instead of summed for
+        // the whole route: the inner query groups by (kill zone, enemy identity) to cancel join fan-out
+        // per enemy (the `/ COUNT(...)` normalization - an enemy matching >1 npc_enemy_forces/enemies row
+        // must not be counted more than once), then the outer query sums those per-identity values back up
+        // per kill zone. The `enemies.mapping_version_id = dungeon_routes.mapping_version_id` WHERE filter
+        // (also mirrored from getEnemyForces()) turns the `enemies` LEFT JOIN into an effective INNER JOIN,
+        // dropping kill_zone_enemies rows with no matching enemies row for the route's mapping version.
         $queryResult = DB::select("
-            select `kill_zones`.`index` as `index`,
-               MAX(IF(`npcs`.`classification_id` IN ({$bossClassificationIds}), 1, 0)) as has_boss,
-               CAST(IFNULL(
-                       IF(dungeon_routes.teeming = 1,
-                          SUM(
-                                  IF(
-                                          enemies.enemy_forces_override_teeming IS NOT NULL,
-                                          enemies.enemy_forces_override_teeming,
+            select `per_identity`.`kill_zone_index` as `index`,
+                   MAX(`per_identity`.`has_boss`) as has_boss,
+                   SUM(`per_identity`.`enemy_forces`) as enemy_forces
+            from (
+                select `kill_zones`.`id` as `kill_zone_id`,
+                       `kill_zones`.`index` as `kill_zone_index`,
+                       MAX(IF(`npcs`.`classification_id` IN ({$bossClassificationIds}), 1, 0)) as has_boss,
+                       CAST(
+                       CAST(IFNULL(
+                               IF(dungeon_routes.teeming = 1,
+                                  SUM(
                                           IF(
-                                              npc_enemy_forces.enemy_forces_teeming IS NOT NULL,
-                                              npc_enemy_forces.enemy_forces_teeming,
-                                              {$ifIsShroudedEnemyForcesQuery}
-                                          )
+                                                  enemies.enemy_forces_override_teeming IS NOT NULL,
+                                                  enemies.enemy_forces_override_teeming,
+                                                  IF(
+                                                      npc_enemy_forces.enemy_forces_teeming IS NOT NULL,
+                                                      npc_enemy_forces.enemy_forces_teeming,
+                                                      {$ifIsShroudedEnemyForcesQuery}
+                                                  )
+                                              )
+                                      ),
+                                  SUM(
+                                          IF(
+                                                  enemies.enemy_forces_override IS NOT NULL,
+                                                  enemies.enemy_forces_override,
+                                                  {$ifIsShroudedEnemyForcesQuery}
+                                              )
                                       )
-                              ),
-                          SUM(
-                                  IF(
-                                          enemies.enemy_forces_override IS NOT NULL,
-                                          enemies.enemy_forces_override,
-                                          {$ifIsShroudedEnemyForcesQuery}
-                                      )
-                              )
-                           ), 0
-                   ) AS SIGNED) as enemy_forces
-            from `dungeon_routes`
-                     left join `dungeons` on `dungeons`.`id` = `dungeon_routes`.`dungeon_id`
-                     left join `kill_zones` on `kill_zones`.`dungeon_route_id` = `dungeon_routes`.`id`
-                     left join `kill_zone_enemies` on `kill_zone_enemies`.`kill_zone_id` = `kill_zones`.`id`
-                     left join `enemies` on coalesce(`enemies`.`mdt_npc_id`, `enemies`.`npc_id`) = `kill_zone_enemies`.`npc_id`
-                        AND `enemies`.`mdt_id` = `kill_zone_enemies`.`mdt_id`
-                        AND `enemies`.`mapping_version_id` = `dungeon_routes`.`mapping_version_id`
-                     left join `npcs` on `npcs`.`id` = `kill_zone_enemies`.`npc_id`
-                     left join `npc_enemy_forces` on `npcs`.`id` = `npc_enemy_forces`.`npc_id` AND `dungeon_routes`.`mapping_version_id` = `npc_enemy_forces`.`mapping_version_id`
-                     {$ifIsShroudedJoins}
-            where `dungeon_routes`.`id` = :id
-              and `kill_zones`.`id` is not null
-            group by `kill_zones`.`id`, `kill_zones`.`index`
-            order by `kill_zones`.`index`
+                                   ), 0
+                           ) AS SIGNED)  / COUNT(concat(`kill_zone_enemies`.`npc_id`, `kill_zone_enemies`.`mdt_id`)) AS SIGNED) as enemy_forces
+                from `dungeon_routes`
+                         left join `dungeons` on `dungeons`.`id` = `dungeon_routes`.`dungeon_id`
+                         left join `kill_zones` on `kill_zones`.`dungeon_route_id` = `dungeon_routes`.`id`
+                         left join `kill_zone_enemies` on `kill_zone_enemies`.`kill_zone_id` = `kill_zones`.`id`
+                         left join `enemies` on coalesce(`enemies`.`mdt_npc_id`, `enemies`.`npc_id`) = `kill_zone_enemies`.`npc_id`
+                            AND `enemies`.`mdt_id` = `kill_zone_enemies`.`mdt_id`
+                            AND `enemies`.`mapping_version_id` = `dungeon_routes`.`mapping_version_id`
+                         left join `npcs` on `npcs`.`id` = `kill_zone_enemies`.`npc_id`
+                         left join `npc_enemy_forces` on `npcs`.`id` = `npc_enemy_forces`.`npc_id` AND `dungeon_routes`.`mapping_version_id` = `npc_enemy_forces`.`mapping_version_id`
+                         {$ifIsShroudedJoins}
+                where `dungeon_routes`.`id` = :id
+                  and `kill_zones`.`id` is not null
+                  and `enemies`.`mapping_version_id` = `dungeon_routes`.`mapping_version_id`
+                group by `kill_zones`.`id`, `kill_zones`.`index`, concat(`kill_zone_enemies`.`npc_id`, `kill_zone_enemies`.`mdt_id`)
+            ) as `per_identity`
+            group by `per_identity`.`kill_zone_id`, `per_identity`.`kill_zone_index`
+            order by `per_identity`.`kill_zone_index`
             ", ['id' => $dungeonRoute->id]);
 
         return collect($queryResult)->map(static function (stdClass $row): KillZoneEnemyForces {

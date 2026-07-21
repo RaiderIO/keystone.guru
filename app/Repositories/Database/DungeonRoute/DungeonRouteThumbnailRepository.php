@@ -18,12 +18,16 @@ class DungeonRouteThumbnailRepository extends DatabaseRepository implements Dung
 
     public function hasFreshThumbnailForVariant(DungeonRoute $dungeonRoute, DungeonRouteThumbnailVariant $variant): bool
     {
-        $latestRenderedAt = $dungeonRoute->dungeonRouteThumbnails()
-            ->where('custom', false)
+        // Gate on the OLDEST render among this route's thumbnails for the variant, not the newest: for a
+        // multi-floor route, one freshly-rendered floor must not mask another floor whose thumbnail row
+        // still exists but is stale (e.g. a failed re-render left the old row in place). Note this still
+        // can't detect a floor whose thumbnail row doesn't exist at all (a wholly failed render) - that
+        // requires knowing the expected floor count, which is a larger follow-up.
+        $oldestRenderedAt = $dungeonRoute->dungeonRouteThumbnails()
             ->where('variant', $variant)
-            ->max('updated_at');
+            ->min('updated_at');
 
-        return $latestRenderedAt !== null
-            && Carbon::parse($latestRenderedAt)->greaterThanOrEqualTo($dungeonRoute->updated_at);
+        return $oldestRenderedAt !== null
+            && Carbon::parse($oldestRenderedAt)->greaterThanOrEqualTo($dungeonRoute->updated_at);
     }
 }

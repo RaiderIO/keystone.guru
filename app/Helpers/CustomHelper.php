@@ -174,11 +174,11 @@ function array_insert_after(array $array, string $afterKey, array $insert): arra
 function abbreviateNumber(int $number): string
 {
     if ($number >= 1000000) {
-        return sprintf('%sM', rtrim(rtrim(number_format($number / 1000000, 1), '0'), '.'));
+        return sprintf('%sM', rtrim(rtrim(number_format($number / 1000000, 1, '.', ''), '0'), '.'));
     }
 
     if ($number >= 1000) {
-        return sprintf('%sK', rtrim(rtrim(number_format($number / 1000, 1), '0'), '.'));
+        return sprintf('%sK', rtrim(rtrim(number_format($number / 1000, 1, '.', ''), '0'), '.'));
     }
 
     return (string)$number;

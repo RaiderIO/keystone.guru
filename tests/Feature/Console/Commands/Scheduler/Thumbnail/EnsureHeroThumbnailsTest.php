@@ -3,6 +3,8 @@
 namespace Tests\Feature\Console\Commands\Scheduler\Thumbnail;
 
 use App\Console\Commands\Scheduler\Thumbnail\EnsureHeroThumbnails;
+use App\Jobs\ProcessRouteFloorThumbnail;
+use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -19,7 +21,17 @@ final class EnsureHeroThumbnailsTest extends PublicTestCase
         // queue keeps the command from actually rendering thumbnails
         Queue::fake();
 
-        // Act & Assert - the command resolves its hero routes and completes without error
+        // Act
         $this->artisan(EnsureHeroThumbnails::class)->assertSuccessful();
+
+        // Assert - at least one hero job was queued, and every queued job is Hero-variant (never Standard)
+        Queue::assertPushed(ProcessRouteFloorThumbnail::class);
+        Queue::assertPushed(ProcessRouteFloorThumbnail::class, $this->isHeroVariantJob());
+        Queue::assertNotPushed(ProcessRouteFloorThumbnail::class, fn(ProcessRouteFloorThumbnail $job): bool => !$this->isHeroVariantJob()($job));
+    }
+
+    private function isHeroVariantJob(): callable
+    {
+        return fn(ProcessRouteFloorThumbnail $job): bool => (fn(): DungeonRouteThumbnailVariant => $this->variant)->call($job) === DungeonRouteThumbnailVariant::Hero;
     }
 }

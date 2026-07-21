@@ -125,12 +125,12 @@ use (
                     @endif
                     <span class="poster_views ms-1" data-bs-toggle="tooltip"
                           title="{{ sprintf(__('view_common.dungeonroute.poster.views'), $dungeonroute->views) }}">
-                        <i class="fas fa-eye"></i> {{ $dungeonroute->views }}
+                        <i class="fas fa-eye"></i> {{ abbreviateNumber($dungeonroute->views) }}
                     </span>
                     @if( $favoritesCount !== null )
                         <span class="poster_favorites ms-1" data-bs-toggle="tooltip"
                               title="{{ sprintf(__('view_common.dungeonroute.poster.favorites'), $favoritesCount) }}">
-                            <i class="fas fa-heart"></i> {{ $favoritesCount }}
+                            <i class="fas fa-heart"></i> {{ abbreviateNumber($favoritesCount) }}
                         </span>
                     @endif
                 </div>

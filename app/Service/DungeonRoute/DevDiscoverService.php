@@ -140,7 +140,9 @@ class DevDiscoverService extends BaseDiscoverService
      */
     public function popularByDungeonPaginated(Dungeon $dungeon, int $perPage): LengthAwarePaginator
     {
-        return $this->popularBuilder()->paginate($perPage);
+        return $this->popularBuilder()
+            ->where('dungeon_routes.dungeon_id', $dungeon->id)
+            ->paginate($perPage);
     }
 
     /**
