@@ -204,8 +204,10 @@ class DatabaseSeeder extends Seeder
     }
 
     /**
-     * Invokes $callback for every item and reports whether any call failed. Every item is always
-     * attempted, regardless of an earlier failure (see #3642).
+     * Invokes $callback for every item and reports whether every call succeeded. Every item is
+     * always attempted, regardless of an earlier item returning false (see #3642). This guarantee
+     * only holds for callbacks that signal failure by returning false - a callback that throws
+     * still aborts the remaining items, since the exception propagates out of array_map().
      *
      * @param array<int, class-string>     $items
      * @param callable(class-string): bool $callback
