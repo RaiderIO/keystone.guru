@@ -107,7 +107,7 @@ class DatabaseSeeder extends Seeder
             try {
                 $affectedModelClasses = $seederClass::getAffectedModelClasses();
 
-                $prepareFailed = !self::allSucceeded(
+                $prepareFailed = self::anyFailed(
                     $affectedModelClasses,
                     fn(string $affectedModel): bool => $this->prepareTempTableForModel($affectedModel),
                 );
@@ -122,7 +122,7 @@ class DatabaseSeeder extends Seeder
                     $this->call($seederClass);
                 });
 
-                $applyFailed = !self::allSucceeded(
+                $applyFailed = self::anyFailed(
                     $affectedModelClasses,
                     fn(string $affectedModelClass): bool => $this->applyTempTableForModel($affectedModelClass),
                 );
@@ -137,7 +137,7 @@ class DatabaseSeeder extends Seeder
 
                 throw $e;
             } finally {
-                $cleanupFailed = !self::allSucceeded(
+                $cleanupFailed = self::anyFailed(
                     $affectedModelClasses,
                     fn(string $affectedModelClass): bool => $this->cleanupTempTableForModel($affectedModelClass),
                 );
@@ -198,23 +198,26 @@ class DatabaseSeeder extends Seeder
 
         $tableNameNew = sprintf('%s%s', $instance->getTable(), self::TEMP_TABLE_SUFFIX);
 
+        // IF EXISTS: a model whose prepare/apply step already failed never had its temp table
+        // created, so cleanup must tolerate that instead of throwing and masking the real error
+        // that's still propagating out of the finally block (see #3642).
         return DB::connection($instance->getConnectionName())->statement(
-            sprintf('DROP TABLE %s;', $tableNameNew),
+            sprintf('DROP TABLE IF EXISTS %s;', $tableNameNew),
         );
     }
 
     /**
-     * Invokes $callback for every item and reports whether every call succeeded. Every item is
-     * always attempted, regardless of an earlier item returning false (see #3642). This guarantee
-     * only holds for callbacks that signal failure by returning false - a callback that throws
-     * still aborts the remaining items, since the exception propagates out of array_map().
+     * Invokes $callback for every item and reports whether any call failed. Every item is always
+     * attempted, regardless of an earlier item returning false (see #3642). This guarantee only
+     * holds for callbacks that signal failure by returning false - a callback that throws still
+     * aborts the remaining items, since the exception propagates out of array_map().
      *
      * @param array<int, class-string>     $items
      * @param callable(class-string): bool $callback
      */
-    private static function allSucceeded(array $items, callable $callback): bool
+    private static function anyFailed(array $items, callable $callback): bool
     {
-        return !in_array(false, array_map($callback, $items), true);
+        return in_array(false, array_map($callback, $items), true);
     }
 
     public static function getTempTableName(string $className): string
