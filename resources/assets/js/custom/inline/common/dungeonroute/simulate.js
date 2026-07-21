@@ -151,7 +151,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
         }
 
         $(this.options.keyLevelSelector)
-            .ionRangeSlider({
+            .rangeSlider({
                 grid: true,
                 grid_snap: true,
                 type: 'single',
@@ -161,7 +161,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
 
         if (this.options.isThundering) {
             $('#simulate_thundering_clear_seconds')
-                .ionRangeSlider({
+                .rangeSlider({
                     grid: true,
                     grid_snap: true,
                     type: 'single',
@@ -171,7 +171,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
         }
 
         $('#simulate_hp_percent')
-            .ionRangeSlider({
+            .rangeSlider({
                 grid: true,
                 grid_snap: true,
                 type: 'single',
@@ -180,7 +180,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
             });
 
         $('#simulate_ranged_pull_compensation_yards')
-            .ionRangeSlider({
+            .rangeSlider({
                 grid: true,
                 grid_snap: true,
                 type: 'single',

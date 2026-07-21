@@ -10,7 +10,7 @@ class ItemLevelHandler {
     }
 
     apply(selector, options) {
-        this.rangeSlider = $(selector).ionRangeSlider($.extend({
+        this.rangeSlider = $(selector).rangeSlider($.extend({
             grid: true,
             grid_snap: true,
             type: 'double',
@@ -18,7 +18,7 @@ class ItemLevelHandler {
             max: this.max,
             from: this.from,
             to: this.to,
-        }, options)).data('ionRangeSlider');
+        }, options)).data('rangeSlider');
     }
 
     update(min, max) {

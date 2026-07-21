@@ -87,10 +87,20 @@ class File extends Model
      *
      * @note This does NOT remove the file from the database!
      *
-     * @return bool True if the file was successfully deleted, false if it was not.
+     * @return bool True if the file was successfully deleted, or its deletion was intentionally
+     *              skipped as a local-safety no-op (see isRemoteDiskProtectedFromLocalMutation());
+     *              false if a real deletion was attempted and failed.
      */
     public function deleteFromDisk(): bool
     {
+        // Local dev environments are commonly seeded from a restored production database backup,
+        // whose File rows can legitimately still point at a real S3 disk. Those objects must stay
+        // strictly read-only from a local environment - never deleted or overwritten - so skip the
+        // real disk mutation here and let the caller's (DB row) delete proceed as normal.
+        if (self::isRemoteDiskProtectedFromLocalMutation($this->disk)) {
+            return true;
+        }
+
         return Storage::disk($this->disk)->delete($this->path);
     }
 
@@ -118,6 +128,24 @@ class File extends Model
     public function getURL(): string
     {
         return Storage::disk($this->disk)->url($this->path);
+    }
+
+    /**
+     * Whether a local environment must not physically mutate (delete/overwrite) the given disk:
+     * true for a real remote (S3) disk while running locally. Shared with ThumbnailService, which
+     * applies the same rule to writes (see ThumbnailService::isRemoteDiskUnsafeForLocalGeneration()).
+     */
+    public static function isRemoteDiskProtectedFromLocalMutation(string $disk): bool
+    {
+        return app()->environment('local') && self::isRemoteDisk($disk);
+    }
+
+    /**
+     * Whether the given disk is a real remote (S3) disk, regardless of environment.
+     */
+    public static function isRemoteDisk(string $disk): bool
+    {
+        return config(sprintf('filesystems.disks.%s.driver', $disk)) === 's3';
     }
 
     /**

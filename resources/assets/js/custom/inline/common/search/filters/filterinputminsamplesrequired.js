@@ -30,7 +30,7 @@ class SearchFilterMinSamplesRequired extends SearchFilterInput {
      * @param value
      */
     setValue(value) {
-        $(this.selector).data('ionRangeSlider').update({
+        $(this.selector).data('rangeSlider').update({
             from: value
         });
     }

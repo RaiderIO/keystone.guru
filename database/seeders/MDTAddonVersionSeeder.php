@@ -51,8 +51,6 @@ class MDTAddonVersionSeeder extends Seeder implements TableSeederInterface
         }
 
         MDTAddonVersion::upsert($rows, ['addon_version'], ['released_at']);
-
-        $this->command->info(sprintf('Seeded %d MDT addon versions.', count($rows)));
     }
 
     public static function getAffectedModelClasses(): array

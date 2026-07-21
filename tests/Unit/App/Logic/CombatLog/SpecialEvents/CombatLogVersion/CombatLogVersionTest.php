@@ -48,6 +48,10 @@ final class CombatLogVersionTest extends PublicTestCase
                 '5/31/2026 22:00:00.0000  COMBAT_LOG_VERSION,22,ADVANCED_LOG_ENABLED,1,BUILD_VERSION,12.0.5,PROJECT_ID,1',
                 CombatLogVersion::RETAIL_12_0_5,
             ],
+            'retail-12-0-7' => [
+                '7/19/2026 19:31:59.774-6  COMBAT_LOG_VERSION,22,ADVANCED_LOG_ENABLED,1,BUILD_VERSION,12.0.7,PROJECT_ID,1',
+                CombatLogVersion::RETAIL_12_0_7,
+            ],
         ];
     }
 }

@@ -60,24 +60,27 @@ final class ThumbnailServiceTest extends PublicTestCase
     }
 
     #[Test]
-    public function createThumbnail_givenLocalEnvironmentAndRemoteDisk_returnsNullWithoutGeneratingThumbnail(): void
+    public function createThumbnail_givenLocalEnvironmentAndRemoteDisk_logsRedirectToPublicDisk(): void
     {
         // Arrange
         $original = $this->setEnvAndDefaultDisk('local', 's3_user_uploads');
 
         $log = $this->createMockPublic(ThumbnailServiceLoggingInterface::class);
-        $log->expects($this->once())->method('doCreateThumbnailSkippedRemoteDiskFromLocal');
-        $log->expects($this->never())->method('doCreateThumbnailProcessStart');
+        $log->expects($this->once())->method('doCreateThumbnailRedirectedRemoteDiskFromLocal')->with('s3_user_uploads');
 
         $service      = $this->buildService($log);
         $dungeonRoute = new DungeonRoute(['public_key' => 'TEST1234']);
 
         try {
             // Act
-            $result = $service->createThumbnail($dungeonRoute, 0);
-
-            // Assert
-            $this->assertNull($result);
+            // Falls through past the disk-safety guard onto the public disk instead of returning
+            // null; fails further down since there's no real dungeon/floor/puppeteer setup here,
+            // which is fine - this test only asserts that the redirect decision was made and
+            // logged. The actual write landing on the public disk (not S3) is covered separately
+            // by attachThumbnailToDungeonRoute_givenLocalEnvironmentAndOldThumbnailOnRemoteDisk_leavesTheRemoteFileUntouched.
+            $service->createThumbnail($dungeonRoute, 0);
+        } catch (Throwable) {
+            // Expected: the route has no dungeon/mapping relations to continue with.
         } finally {
             $this->restoreEnvAndDefaultDisk($original);
         }
@@ -90,7 +93,7 @@ final class ThumbnailServiceTest extends PublicTestCase
         $original = $this->setEnvAndDefaultDisk('local', 'public');
 
         $log = $this->createMockPublic(ThumbnailServiceLoggingInterface::class);
-        $log->expects($this->never())->method('doCreateThumbnailSkippedRemoteDiskFromLocal');
+        $log->expects($this->never())->method('doCreateThumbnailRedirectedRemoteDiskFromLocal');
 
         $service      = $this->buildService($log);
         $dungeonRoute = new DungeonRoute(['public_key' => 'TEST1234']);
@@ -408,6 +411,60 @@ final class ThumbnailServiceTest extends PublicTestCase
                     ->count(),
             );
         } finally {
+            DungeonRouteThumbnail::where('dungeon_route_id', $dungeonRoute->id)->get()->each->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function attachThumbnailToDungeonRoute_givenLocalEnvironmentAndOldThumbnailOnRemoteDisk_leavesTheRemoteFileUntouched(): void
+    {
+        // Arrange - regression guard: a local environment restoring a production database backup
+        // can have thumbnail File rows that still point at the real s3_user_uploads disk.
+        // Attaching a new thumbnail DB-deletes the superseded old one, but must never physically
+        // delete that S3 object - it's a read-only backup, not something local writes may mutate.
+        $originalEnv      = $this->app['env'];
+        $this->app['env'] = 'local';
+        Storage::fake('s3_user_uploads');
+        Storage::fake('public');
+
+        $dungeon        = $this->getDungeonWithNonFacadeFloor();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $floor          = $dungeon->floors()->where('facade', false)->first();
+
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        $oldThumbnail = DungeonRouteThumbnail::create([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'floor_id'         => $floor->id,
+            'custom'           => false,
+        ]);
+        Storage::disk('s3_user_uploads')->put('thumbnails/old.jpg', 'prod-backup-bytes');
+        $oldFile = File::create([
+            'model_id'    => $oldThumbnail->id,
+            'model_class' => DungeonRouteThumbnail::class,
+            'disk'        => 's3_user_uploads',
+            'path'        => 'thumbnails/old.jpg',
+        ]);
+        $oldThumbnail->update(['file_id' => $oldFile->id]);
+
+        $service = $this->buildService($this->createMockPublic(ThumbnailServiceLoggingInterface::class));
+        $method  = new ReflectionMethod($service, 'attachThumbnailToDungeonRoute');
+
+        try {
+            // Act
+            $method->invoke($service, $dungeonRoute, $floor->index, 'thumbnails/new.jpg', 'fake-image-bytes', 'public');
+
+            // Assert - the old DB rows are gone...
+            $this->assertDatabaseMissing('dungeon_route_thumbnails', ['id' => $oldThumbnail->id]);
+            $this->assertDatabaseMissing('files', ['id' => $oldFile->id]);
+            // ...but the real S3 object it pointed at was never touched
+            Storage::disk('s3_user_uploads')->assertExists('thumbnails/old.jpg');
+        } finally {
+            $this->app['env'] = $originalEnv;
             DungeonRouteThumbnail::where('dungeon_route_id', $dungeonRoute->id)->get()->each->delete();
             $dungeonRoute->delete();
         }
