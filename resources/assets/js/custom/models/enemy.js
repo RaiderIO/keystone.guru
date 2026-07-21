@@ -801,11 +801,9 @@ class Enemy extends VersionableMapObject {
                 let visualData = this.getVisualData();
                 let template = Handlebars.templates['enemy_tooltip_template'];
 
-                text = template($.extend({}, visualData, {
+                text = template($.extend({}, getHandlebarsDefaultVariables(), visualData, {
                     name: lang.get(this.npc.name),
-                    right_click_to_open_details: lang.get('js.right_click_to_open_details'),
                     show_raid_marker_shortcut: this.canOpenRaidMarkerMenu(),
-                    shift_right_click_to_assign_raid_marker: lang.get('js.shift_right_click_to_assign_raid_marker')
                 }));
             } else {
                 text = lang.get('js.no_npc_found_label');

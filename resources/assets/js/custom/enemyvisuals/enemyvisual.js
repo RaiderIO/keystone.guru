@@ -343,7 +343,7 @@ class EnemyVisual extends Signalable {
             // callback queued by that in-flight show() later crashes reading Object.values(null) in
             // Tooltip#_isWithActiveTrigger. The circle menu's own DOM (and tooltip instances) is
             // destroyed a moment later anyway, in cleanupFn below.
-            $('.tooltip').remove();
+            removeStrayTooltips();
 
             // Delay it by 500 ms so the animations have a chance to complete
             let $radial = $(`#map_enemy_raid_marker_radial_${id}`);

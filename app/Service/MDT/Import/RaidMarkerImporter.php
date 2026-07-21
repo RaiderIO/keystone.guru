@@ -4,18 +4,20 @@ namespace App\Service\MDT\Import;
 
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
-use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
 use App\Models\RaidMarker;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\MDT\Import\Traits\AppliesMdtCloneIndexHack;
 use App\Service\MDT\Models\ImportStringRaidMarkers;
 use Illuminate\Support\Collection;
 
 class RaidMarkerImporter
 {
+    use AppliesMdtCloneIndexHack;
+
     public function __construct(
         private readonly CacheServiceInterface       $cacheService,
         private readonly CoordinatesServiceInterface $coordinatesService,
@@ -156,27 +158,5 @@ class RaidMarkerImporter
         DungeonRouteEnemyRaidMarker::insert($raidMarkerAttributes->map(
             static fn(array $attributes) => $attributes + ['dungeon_route_id' => $dungeonRoute->id],
         )->all());
-    }
-
-    /**
-     * Mirrors PullImporter::parseMdtNpcClonesInPull's dungeon-specific clone index hack: MDT lists
-     * these NPCs twice under different mdt npc indices, whose clone index ranges collide unless
-     * offset. Keep both in sync.
-     */
-    private function applyDungeonCloneIndexHack(Dungeon $dungeon, int $npcIndex, int $cloneIndex): int
-    {
-        if ($dungeon->key === Dungeon::DUNGEON_SIEGE_OF_BORALUS && $npcIndex === 35) {
-            return $cloneIndex + 15;
-        }
-
-        if ($dungeon->key === Dungeon::DUNGEON_TOL_DAGOR && $npcIndex === 11) {
-            return $cloneIndex + 2;
-        }
-
-        if ($dungeon->key === Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE && $npcIndex === 23) {
-            return $cloneIndex + 5;
-        }
-
-        return $cloneIndex;
     }
 }
