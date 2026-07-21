@@ -151,6 +151,30 @@ final class RioLogVersionTest extends PublicTestCase
                 '12.0.5',
                 1,
             ],
+            'mplus-boss-win32-missing-client-session-id' => [
+                // Same older-build shape as the trash case above, but for a boss segment (populated
+                // ENCOUNTER_ID/ENCOUNTER_STARTED_AT) to lock in that branch also parses correctly
+                // at the new, lower optional-parameter floor.
+                '7/16/2026 22:31:04.212-7  RIO_LOG_VERSION,1,SEGMENT_TYPE,mplus_boss,APP_VERSION,4.10.1,PROCESSOR_VERSION,1,PLATFORM,win32,INSTANCE_ID,1209,DUNGEON_ID,161,ENCOUNTER_ID,3071,SEGMENT_ID,2,CORRELATION_ID,1209-20-10-9-147-72964aca45c4e993224e17e79d5651347edabe58c01da724034db06d3f394097,CHALLENGE_MODE_STARTED_AT,1784266144964,ENCOUNTER_STARTED_AT,1784266330000,TYPE,boss,COMBAT_LOG_VERSION,22,ADVANCED_LOG_ENABLED,1,BUILD_VERSION,12.0.5,PROJECT_ID,1',
+                1,
+                'mplus_boss',
+                '4.10.1',
+                1,
+                'win32',
+                1209,
+                161,
+                3071,
+                2,
+                '1209-20-10-9-147-72964aca45c4e993224e17e79d5651347edabe58c01da724034db06d3f394097',
+                1784266144964,
+                1784266330000,
+                'boss',
+                null,
+                22,
+                true,
+                '12.0.5',
+                1,
+            ],
         ];
     }
 }
