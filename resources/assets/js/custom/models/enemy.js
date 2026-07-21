@@ -1021,9 +1021,12 @@ class Enemy extends VersionableMapObject {
         this.layer.on('contextmenu', function (contextMenuEvent) {
             L.DomEvent.preventDefault(contextMenuEvent);
 
-            // Shift+right-click is reserved for the raid marker circle menu (see
-            // EnemyVisual#_visualRightClicked) - don't also open the details modal for it.
+            // Shift+right-click is reserved for the raid marker circle menu (see EnemyVisual).
+            // Signalled from this layer-level Leaflet event - rather than a DOM binding on a
+            // specific visual sub-element - so it fires no matter which part of the enemy's icon
+            // (including an already-assigned marker overlay rendered on top of it) was clicked.
             if (contextMenuEvent.originalEvent.shiftKey && self.canOpenRaidMarkerMenu()) {
+                self.signal('enemy:raidmarker_contextmenu', {contextMenuEvent: contextMenuEvent});
                 return;
             }
 
