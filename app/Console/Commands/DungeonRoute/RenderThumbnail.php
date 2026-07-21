@@ -3,6 +3,7 @@
 namespace App\Console\Commands\DungeonRoute;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\File;
 use App\Models\Floor\Floor;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Illuminate\Console\Command;
@@ -45,6 +46,16 @@ class RenderThumbnail extends Command
         // Force the target disk so the render lands on the ISOLATED local disk (storage/app/private)
         // instead of the shared, bind-mounted public disk.
         $disk = (string)$this->option('disk');
+
+        // A remote (S3) disk defeats the whole point of this command - ThumbnailService silently
+        // redirects a real-S3 write to the public disk instead, which is exactly the shared disk
+        // this command exists to avoid touching.
+        if (File::isRemoteDisk($disk)) {
+            $this->error(sprintf('--disk=%s is a remote disk; this command only supports isolated local disks.', $disk));
+
+            return self::FAILURE;
+        }
+
         config(['filesystems.default' => $disk]);
 
         // The database is shared across the main stack and all worktrees, so persisting a thumbnail
