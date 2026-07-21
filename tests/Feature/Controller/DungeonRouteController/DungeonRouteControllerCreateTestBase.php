@@ -76,21 +76,27 @@ abstract class DungeonRouteControllerCreateTestBase extends PublicTestCase
      */
     protected function getDungeonWithStartIcon(): array
     {
-        $mapIcon = MapIcon::query()
+        // Some mapping versions are "bare" (e.g. created only to hold floor union data) and don't
+        // have a cloned dungeon start icon, so the newest icon overall isn't necessarily one that
+        // lives on its own dungeon's current mapping version - walk candidates until one does.
+        $mapIcons = MapIcon::query()
             ->where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START])
             ->whereNotNull('mapping_version_id')
             ->whereHas('mappingVersion.dungeon', static function ($query): void {
                 $query->where('active', true);
             })
+            ->with('mappingVersion.dungeon')
             ->orderByDesc('id')
-            ->first();
+            ->get();
 
-        $this->assertNotNull($mapIcon, 'Expected a seeded dungeon start map icon.');
+        foreach ($mapIcons as $mapIcon) {
+            $dungeon = $mapIcon->mappingVersion->dungeon;
 
-        $dungeon = $mapIcon->mappingVersion->dungeon;
-        // Only usable when the icon lives on the dungeon's current mapping version
-        $this->assertSame($dungeon->getCurrentMappingVersion()->id, $mapIcon->mapping_version_id);
+            if ($dungeon->getCurrentMappingVersion()?->id === $mapIcon->mapping_version_id) {
+                return [$dungeon, $mapIcon];
+            }
+        }
 
-        return [$dungeon, $mapIcon];
+        $this->fail('Expected a seeded dungeon start map icon on its dungeon\'s current mapping version.');
     }
 }

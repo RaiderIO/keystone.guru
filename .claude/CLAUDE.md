@@ -133,6 +133,9 @@ review must start from a pre-reviewed, verified MR:
     }
 ```
 
+### Routes & controller method naming
+- Routes are registered with first-class callable syntax, e.g. `Route::get('new', new FooController()->new(...))`. Never name a controller method that's registered this way after a PHP reserved word (`new`, `list`, `print`, `echo`, `class`, `function`, ...). It parses and passes tests fine, but `php artisan route:cache` serializes the closure via laravel-serializable-closure, and reconstituting it later `eval`s code like `function new(...)` — invalid syntax, since a function can't be named after a reserved word outside class context. The crash only appears in production, per-request, once the route cache is warm and that request hits the route (`ParseError: syntax error, unexpected token "new"`), not at cache-build time or in tests (routes aren't cached under `runningUnitTests()`). Fix: rename the controller method (e.g. `new` → `newest`); the route path/name (`'new'`, `api.v1.discover.new`) can stay unchanged since that's just a string, not a callable identifier. This has bitten `new` (APIDungeonRouteDiscoverController) and `list` before.
+
 ### Queues
 - Use queued jobs for time-consuming operations with the `ShouldQueue` interface.
 

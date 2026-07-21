@@ -52,7 +52,7 @@ Route::prefix('v1')->group(static function () {
 
     Route::prefix('routes/{gameVersion}')->group(static function () {
         Route::get('popular', new APIDungeonRouteDiscoverController()->popular(...))->name('api.v1.discover.popular');
-        Route::get('new', new APIDungeonRouteDiscoverController()->new(...))->name('api.v1.discover.new');
+        Route::get('new', new APIDungeonRouteDiscoverController()->newest(...))->name('api.v1.discover.new');
         Route::prefix('{dungeon}')->group(static function () {
             Route::get('popular', new APIDungeonRouteDiscoverController()->dungeonPopular(...))->name('api.v1.discover.dungeon.popular');
             Route::get('new', new APIDungeonRouteDiscoverController()->dungeonNew(...))->name('api.v1.discover.dungeon.new');
