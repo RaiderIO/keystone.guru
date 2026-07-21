@@ -1,11 +1,11 @@
 ---
-name: poll
-description: On-demand combat log parse-failure sweep — run manually via /poll whenever you're at your machine. Checks Staging (and, once configured, Production) for new or worsening CombatLogParseFailure clusters and files/updates GitHub issues describing them. Read-only against the app: never writes code, never opens MRs, never marks failures resolved. Mirrors the update-mdt-package skill's "human-run check" pattern rather than being a scheduled/autonomous job. Use when the user runs /poll, or asks to "check for new combat log failures" / "sweep Staging for parse failures".
+name: combatlog-parse-failure-poll
+description: On-demand combat log parse-failure sweep — run manually via /combatlog-parse-failure-poll whenever you're at your machine. Checks Staging (and, once configured, Production) for new or worsening CombatLogParseFailure clusters and files/updates GitHub issues describing them. Read-only against the app: never writes code, never opens MRs, never marks failures resolved. Mirrors the update-mdt-package skill's "human-run check" pattern rather than being a scheduled/autonomous job. Use when the user runs /combatlog-parse-failure-poll, or asks to "check for new combat log failures" / "sweep Staging for parse failures".
 ---
 
-# /poll — Combat Log Parse-Failure Sweep
+# /combatlog-parse-failure-poll — Combat Log Parse-Failure Sweep
 
-A lightweight, **human-initiated** check — you run it (`/poll`) when you're around, the same way
+A lightweight, **human-initiated** check — you run it (`/combatlog-parse-failure-poll`) when you're around, the same way
 someone would manually re-run `update-mdt-package`'s Step 1 to see if a new MDT release exists.
 There is no cron job, no cloud routine, no unattended execution. Its only output is GitHub issues
 (new ones, or a comment bumping an existing tracked one) — it never touches application code and
@@ -110,5 +110,5 @@ count), or unchanged. If nothing changed at all, say so briefly — don't pad th
 When the user wants an issue this skill filed actually fixed, that's ordinary work: open a worktree
 (`sh/worktree.sh create <issue>-<slug>`), follow `combatlog-parse-failure-triage` for the
 download/reproduce loop and `combatlog-parsing-internals` for the parser architecture, and open an
-MR the normal way — the same process used for #3632/#3633 this session. `/poll` only ever gets you
-to "here's a diagnosed issue," never further.
+MR the normal way — the same process used for #3632/#3633 this session. `/combatlog-parse-failure-poll`
+only ever gets you to "here's a diagnosed issue," never further.
