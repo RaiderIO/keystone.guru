@@ -62,7 +62,11 @@ class EnemyVisual extends Signalable {
 
         // If it changed, refresh the entire visual
         this.enemy.register(['enemy:set_raid_marker'], this, function (raidMarkerChangedEvent) {
-            self.buildVisual.bind(self, false);
+            self.buildVisual(false);
+        });
+        // Shift+right-click on the enemy (see Enemy#onLayerInit) opens the raid marker circle menu
+        this.enemy.register('enemy:raidmarker_contextmenu', this, function (raidMarkerContextMenuEvent) {
+            self._openRaidMarkerMenu();
         });
         this.enemy.register('killzone:attached', this, function (killZoneAttachedEvent) {
             // If the killzone we're attached to gets refreshed, register for its changes and rebuild our visual
@@ -220,20 +224,16 @@ class EnemyVisual extends Signalable {
     }
 
     /**
-     * Called whenever the root visual object was clicked
+     * Opens the raid marker circle menu in response to a shift+right-click on the enemy. Triggered
+     * via a signal from Enemy#onLayerInit (a layer-level Leaflet event) rather than a DOM binding on
+     * a specific visual sub-element, so it fires no matter which part of the enemy's icon - including
+     * an already-assigned marker overlay rendered on top of it - was actually clicked.
      * @private
      */
-    _visualRightClicked() {
+    _openRaidMarkerMenu() {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual!', this);
-        // Some exclusions as to when the menu should not pop up
-        if (this.map.options.edit &&
-            this.map.getMapState() === null &&
-            !(this.enemy instanceof AdminEnemy)) {
-
-            if (this._circleMenu === null) {
-                // #1431 Assigning raid markers is disabled atm
-                // this._initCircleMenu();
-            }
+        if (this._circleMenu === null) {
+            this._initCircleMenu();
         }
     }
 
@@ -331,23 +331,37 @@ class EnemyVisual extends Signalable {
 
         let self = this;
         let id = self.enemy.id;
-        let $enemyDiv = $(`#map_enemy_visual_${id}`).find('.enemy_icon');
 
         let shouldCleanUp = self._circleMenu !== null;
 
         if (shouldCleanUp) {
-            // Clear any stray tooltips
-            refreshTooltips();
+            // Remove any stray tooltip bubbles left over from hovering the circle menu items.
+            // Deliberately NOT going through refreshTooltips() here, which also disposes + recreates
+            // the underlying Bootstrap Tooltip instances: disposing one while its own mouseenter-
+            // triggered show transition is still in flight (e.g. right as the user clicks an item
+            // they were just hovering) nulls out all of its internal state, so the transition-end
+            // callback queued by that in-flight show() later crashes reading Object.values(null) in
+            // Tooltip#_isWithActiveTrigger. The circle menu's own DOM (and tooltip instances) is
+            // destroyed a moment later anyway, in cleanupFn below.
+            removeStrayTooltips();
 
             // Delay it by 500 ms so the animations have a chance to complete
             let $radial = $(`#map_enemy_raid_marker_radial_${id}`);
             let cleanupFn = function () {
+                // Dispose each item's Bootstrap Tooltip instance before removing its DOM. Safe to do
+                // here (unlike eagerly above): by now any in-flight show/hide transition has settled,
+                // either immediately (fadeOut = false) or after the 500ms delay below. Bootstrap keys
+                // instances by element in a plain Map (not a WeakMap), so skipping this would leak a
+                // Tooltip instance for every marker assigned/cleared this session.
+                $(this).find('[data-bs-toggle="tooltip"]').each(function () {
+                    let tooltip = bootstrap.Tooltip.getInstance(this);
+                    if (tooltip !== null) {
+                        tooltip.dispose();
+                    }
+                });
+
                 $(this).remove().dequeue();
                 self._circleMenu = null;
-
-                // Re-bind this function
-                $enemyDiv.unbind('contextmenu');
-                $enemyDiv.bind('contextmenu', self._visualRightClicked.bind(self));
 
                 // Only stop the map state at this point
                 self.map.setMapState(null);
@@ -472,10 +486,6 @@ class EnemyVisual extends Signalable {
 
             // $(`#map_enemy_visual_${data.id}`).mouseover(this._mouseOver.bind(this));
             // $(`#map_enemy_visual_${data.id}`).mouseout(this._mouseOut.bind(this));
-
-            // When the visual exists, bind a click method to it (to increase performance)
-            let $enemyIcon = $(`#map_enemy_visual_${this.enemy.id}`).find('.enemy_icon');
-            $enemyIcon.unbind('contextmenu').bind('contextmenu', this._visualRightClicked.bind(this));
 
             // Restore circle menu
             if (hadCircleMenu && reopenCircleMenu) {
