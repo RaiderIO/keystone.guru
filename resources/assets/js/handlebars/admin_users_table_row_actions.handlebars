@@ -8,7 +8,7 @@
             <a class="dropdown-item" href="#">
                 <form method="POST" action="/admin/user/{{../user.id}}/make/{{name}}" accept-charset="UTF-8"
                       autocomplete="off">
-                    <input name="_token" type="hidden" value="{{csrf_token}}">
+                    <input name="_token" type="hidden" value="{{../csrf_token}}">
                     <input class="btn btn-info w-100" name="submit" type="submit" value="{{../make_label}} {{display_name}}">
                 </form>
             </a>

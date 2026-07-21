@@ -1,0 +1,22 @@
+[
+  {
+    "floor_image": "cut_1",
+    "instance": 1,
+    "lat": -118.84,
+    "lng": 248.98,
+    "size": 269.8,
+    "rotation": -0.0,
+    "edge_corr": 0.477,
+    "needs_review": false
+  },
+  {
+    "floor_image": "cut_2",
+    "instance": 1,
+    "lat": -104.1,
+    "lng": 74.53,
+    "size": 177.3,
+    "rotation": 0.0,
+    "edge_corr": 0.442,
+    "needs_review": false
+  }
+]

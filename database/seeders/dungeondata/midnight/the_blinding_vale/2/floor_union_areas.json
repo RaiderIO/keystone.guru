@@ -1,0 +1,9 @@
+[
+    {
+        "id": 1015,
+        "mapping_version_id": 806,
+        "floor_id": 459,
+        "floor_union_id": 1031,
+        "vertices_json": "[{\"lat\":0,\"lng\":0},{\"lat\":-255.8,\"lng\":0},{\"lat\":-255.8,\"lng\":383.8},{\"lat\":0,\"lng\":383.8}]"
+    }
+]

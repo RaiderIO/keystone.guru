@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\InternalTeam\Cache\APICacheController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogController;
+use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogParseFailureController;
 use App\Http\Controllers\Api\V1\Public\Dungeon\APIDungeonController;
 use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteController;
 use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteDiscoverController;
@@ -25,6 +26,12 @@ Route::prefix('v1')->group(static function () {
         Route::middleware('throttle:api-combatlog-correct-event')->prefix('event')->group(static function () {
             Route::post('correct', new APICombatLogController()->correctEvents(...))->name('api.v1.combatlog.event.correct');
         });
+
+        Route::middleware(['api_role:admin'])->prefix('parse-failures')->group(static function () {
+            Route::get('/', new APICombatLogParseFailureController()->index(...))->name('api.v1.combatlog.parsefailures.index');
+            Route::get('/{parseFailure}/segments', new APICombatLogParseFailureController()->segments(...))->name('api.v1.combatlog.parsefailures.segments');
+            Route::post('/{parseFailure}/resolve', new APICombatLogParseFailureController()->resolve(...))->name('api.v1.combatlog.parsefailures.resolve');
+        });
     });
 
     Route::prefix('route')->group(static function () {
@@ -45,7 +52,7 @@ Route::prefix('v1')->group(static function () {
 
     Route::prefix('routes/{gameVersion}')->group(static function () {
         Route::get('popular', new APIDungeonRouteDiscoverController()->popular(...))->name('api.v1.discover.popular');
-        Route::get('new', new APIDungeonRouteDiscoverController()->new(...))->name('api.v1.discover.new');
+        Route::get('new', new APIDungeonRouteDiscoverController()->newest(...))->name('api.v1.discover.new');
         Route::prefix('{dungeon}')->group(static function () {
             Route::get('popular', new APIDungeonRouteDiscoverController()->dungeonPopular(...))->name('api.v1.discover.dungeon.popular');
             Route::get('new', new APIDungeonRouteDiscoverController()->dungeonNew(...))->name('api.v1.discover.dungeon.new');

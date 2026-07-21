@@ -236,6 +236,7 @@ trait DungeonConstants
     public const string DUNGEON_VOIDSCAR_ARENA             = 'voidscar_arena'; // ???
     public const string DUNGEON_WINDRUNNER_SPIRE           = 'windrunner_spire'; // windrunnerspire
     public const string DUNGEON_ALGETH_AR_ACADEMY_MIDNIGHT = 'algeth_ar_academy_midnight'; // dragonacademy
+    public const string DUNGEON_ALTAR_OF_FANGS             = 'altar_of_fangs'; // ulatek_dungeon
     // @formatter:on
 
     public const array ALL = [
@@ -414,6 +415,7 @@ trait DungeonConstants
             self::DUNGEON_VOIDSCAR_ARENA,
             self::DUNGEON_WINDRUNNER_SPIRE,
             self::DUNGEON_ALGETH_AR_ACADEMY_MIDNIGHT,
+            self::DUNGEON_ALTAR_OF_FANGS,
         ],
     ];
 

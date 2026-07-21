@@ -59,7 +59,7 @@ class APIDungeonRouteDiscoverController extends Controller
      *     )
      * )
      */
-    public function new(
+    public function newest(
         APIOffsetPaginatedRequest $request,
         GameVersion               $gameVersion,
         DiscoverServiceInterface  $discoverService,

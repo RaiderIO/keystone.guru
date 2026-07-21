@@ -1338,6 +1338,15 @@ return [
                 'the_headteachers_enclave' => 'The Headteacher\'s Enclave',
             ],
         ],
+        'altar_of_fangs' => [
+            'name'         => 'Altar of Fangs',
+            'abbreviation' => 'AOF',
+            'floors'       => [
+                'sacrificial_approach' => 'Sacrificial Approach',
+                'mutation_chambers'    => 'Mutation Chambers',
+                'altar_of_fangs'       => 'Altar of Fangs',
+            ],
+        ],
         'den_of_nalorakk' => [
             'name'         => 'Den of Nalorakk',
             'abbreviation' => 'DON',
@@ -1397,7 +1406,9 @@ return [
             'name'         => 'Voidscar Arena',
             'abbreviation' => 'VA',
             'floors'       => [
-                'voidscar_arena' => 'Voidscar Arena',
+                'halls_of_spite'   => 'Halls of Spite',
+                'voidscar_arena'   => 'Voidscar Arena',
+                'domanaars_ascent' => 'Domanaar\'s Ascent',
             ],
         ],
         'windrunner_spire' => [
