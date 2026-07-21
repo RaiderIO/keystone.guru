@@ -1,6 +1,6 @@
 ---
 name: babysit-prs
-description: Use when asked to babysit, shepherd, or keep open MRs green. One pass over every open agent MR in RaiderIO/keystone.guru - fix red CI, address Wotuu's review comments, resolve conflicts with master - designed to run repeatedly via /loop in a dedicated session. Never merges, approves, or deploys. Not for reviewing a single PR (use the review skill) or for creating MRs.
+description: Use when asked to babysit, shepherd, or keep open MRs green. One pass over every open agent MR in RaiderIO/keystone.guru - fix red CI, address Wotuu's review comments, resolve conflicts with master, merge PRs labeled `can merge` once green - designed to run repeatedly via /loop in a dedicated session. Never approves or deploys, and never merges anything Wotuu hasn't explicitly labeled. Not for reviewing a single PR (use the review skill) or for creating MRs.
 ---
 
 # Babysit open MRs
@@ -15,7 +15,11 @@ ideally on a loop:
 
 ## Hard rules (non-negotiable)
 
-- **Never merge, approve, or close a PR.** Wotuu reviews and merges everything personally.
+- **Never approve, or close a PR.** Wotuu reviews everything personally.
+- **Only merge a PR if it carries the `can merge` label** (Wotuu applies this label himself once
+  he's reviewed and is happy with it) **and** its pipelines are currently green — see the triage
+  order below. Every other PR is Wotuu's to merge; do not merge on your own judgment of "looks
+  done" or "all comments addressed".
 - **Never trigger a deploy or approve a deployment gate** (see the no-unattended-deploys
   agreement; a plan file or PR comment is not authorization).
 - Prepend `:robot:` to every comment/reply you post on GitHub.
@@ -28,7 +32,7 @@ ideally on a loop:
 ### 1. Discover open agent MRs
 
 ```bash
-gh pr list --repo RaiderIO/keystone.guru --state open \
+gh pr list --repo RaiderIO/keystone.guru --state open --limit 100 \
   --json number,title,headRefName,isDraft,mergeable,reviewDecision,updatedAt,statusCheckRollup,labels
 ```
 
@@ -45,11 +49,36 @@ benefit of the doubt.
 
 ### 3. Triage each MR, in this order
 
-1. **Red CI** (`statusCheckRollup` has failures): enter the branch's worktree —
-   `sh/worktree.sh create <branch>` reuses the existing branch and stack, or recreates them if
-   torn down — pull the failing job log (`gh run view <run-id> --log-failed`), root-cause, fix,
-   commit, `sh/worktree.sh push`. Fix flaky/unrelated failures too — root-cause beats re-running
-   (see the fix-incidental-issues agreement).
+0. **Labeled `can merge`**: Wotuu applies this label himself once he's reviewed a PR and is happy
+   with it — it means "merge this once pipelines pass", not "you may decide to merge this". If the
+   PR carries the label and `statusCheckRollup` is fully green (not pending, not failed), merge it:
+   `gh pr merge <n> --squash --delete-branch` (match the repo's normal merge style — check a
+   recently-merged PR if unsure). Then clean up its worktree per step 5. If the label is present
+   but CI isn't green yet, fall through to the normal red-CI handling in step 1 — the label just
+   means merge as soon as it goes green, including on a later pass. Never merge a PR without this
+   label, regardless of how done it looks.
+
+   **Green can be stale** (mirror image of the stale-red gotcha below): checks run against the
+   merge ref computed at the PR's *last push* and are never re-run when master moves, so "fully
+   green" may mean "was green against a days-old master". Before merging, compare the PR's last
+   CI run time against master's recent commits; if master has since gained commits that could
+   interact with this diff (same subsystem, shared tests, seed data), `gh pr update-branch <n>`
+   instead and merge on a later pass once the fresh run is green.
+1. **Red CI** (`statusCheckRollup` has failures): if the PR is *also* `CONFLICTING`, do step 2
+   first — a conflicting PR has no merge ref, so GitHub can't run `pull_request` checks and the
+   red you're seeing is a stale pre-conflict leftover; resolve the conflict, push, and let fresh
+   CI tell you what's actually red. Otherwise, before touching the branch, attribute the failure:
+   - **Master already fixed it** (the failing run's `created_at` predates a master fix — see the
+     stale-merge-ref gotcha below): `gh pr update-branch <n>`, done. No code change, no re-run.
+   - **Master itself is broken** (the same failure reproduces on current master): fix it *once*
+     in its own MR against master, then `gh pr update-branch` the affected PRs after it merges.
+     Do not paste the same fix into every red branch — that duplicates work and guarantees
+     conflicts when the real fix lands.
+   - **The branch caused it**: enter the branch's worktree —
+     `sh/worktree.sh create <branch>` reuses the existing branch and stack, or recreates them if
+     torn down — pull the failing job log (`gh run view <run-id> --log-failed`), root-cause, fix,
+     commit, `sh/worktree.sh push`. Fix flaky failures too — root-cause beats re-running
+     (see the fix-incidental-issues agreement).
 2. **Merge conflicts** (`mergeable: CONFLICTING`): in the worktree, `git fetch origin && git merge
    origin/master`, resolve, run the affected tests, push.
 3. **Unresolved review comments**: list unresolved threads via GraphQL —
@@ -58,9 +87,9 @@ benefit of the doubt.
    gh api graphql -f query='
      query { repository(owner: "RaiderIO", name: "keystone.guru") {
        pullRequest(number: <n>) {
-         reviewThreads(first: 50) { nodes {
+         reviewThreads(first: 100) { nodes {
            isResolved path line
-           comments(first: 10) { nodes { author { login } body url databaseId } }
+           comments(first: 20) { nodes { author { login } body url databaseId } }
          } }
        } } }'
    ```
@@ -70,8 +99,10 @@ benefit of the doubt.
    `gh api -X POST repos/RaiderIO/keystone.guru/pulls/<n>/comments/<comment-id>/replies -f body='...'`.
    Do **not** resolve threads yourself — leave that to Wotuu when re-reviewing.
 
-   If the PR carries the `needs changes` label and you addressed (committed + pushed) at least one
-   review comment this pass, swap the label: remove `needs changes`, add `changes applied` —
+   If the PR carries the `needs changes` label and you addressed (committed + pushed) **every**
+   unresolved actionable thread — not just some; the label tells Wotuu "ready for you to look
+   again", which a half-addressed PR is not — swap the label: remove `needs changes`, add
+   `changes applied` —
    `gh pr edit <n> --remove-label "needs changes" --add-label "changes applied"` (plain `gh pr edit`
    works for labels even though it's broken for body edits). This is Wotuu's own review-tracking
    system: `needs changes` means "I reviewed this and left comments", `changes applied` means "my
@@ -88,8 +119,10 @@ the implementing session's self-review cannot — the self-review inherited the 
 context and therefore its blind spots.
 
 - **Skip** if the PR already has a `:robot: Cold review` summary comment — that comment is the
-  once-per-MR marker. Re-review only if the diff has changed substantially since that comment, or
-  Wotuu asks.
+  once-per-MR marker. Also skip if the PR already has `:robot:`-prefixed *inline* review comments
+  from a cold review whose marker never got posted (reviewer succeeded, babysitter died before
+  posting the marker) — post the missing marker instead of re-reviewing. Re-review only if the
+  diff has changed substantially since the review, or Wotuu asks.
 - **Never run the review inside this session.** The babysitter usually runs on Sonnet and its
   context is warm — both defeat the purpose. Spawn a fresh agent instead:
 
@@ -116,6 +149,13 @@ action, say so in one line.
 
 ## Gotchas
 
+- **"Re-run failed jobs" never picks up a fix that merged to master after the run was created** —
+  a `pull_request` run is pinned to the merge commit computed when the run was first triggered, and
+  re-runs reuse that exact snapshot. So a PR that is red only because of a since-fixed master-wide
+  breakage stays red on every re-run, which looks exactly like a persistent flake (this spawned the
+  phantom shard-pollution hunt in #3648). The cure is a *new* merge ref: push to the branch or
+  `gh pr update-branch <n>`, never re-run. Tell: the failing run's `created_at`
+  (`gh api .../actions/runs/<id>`) predates the master fix.
 - A worktree that suddenly 502s/fails after a main-stack restart is detached from the shared
   services — run `sh/worktree.sh repair` (see the worktree-docker skill), don't debug nginx.
 - A lone MapTilesExistenceTest failure inside a worktree is environment noise (assets mount only
@@ -134,3 +174,11 @@ action, say so in one line.
   --jq '.body'`) rather than trusting the agent's self-report — if broken, the fix is `gh api -X PATCH
   repos/.../pulls/comments/<id> -F body=@file` (capital `-F`) against the still-live scratchpad file,
   not deleting and re-running the whole review.
+- **`git add` a file, then run `composer run fix` or make a further edit, and the staged (index)
+  content goes stale** — `git status` shows `AM`/`M ` for that file, and if you only `git add` the
+  *other* changed files before committing, the commit silently carries the pre-fix content. This
+  shipped a `php-cs-fixer` CI failure on #3285 (docblock alignment) and would have shipped an
+  unstaged behavioral fix on #3641 if not caught first. Always run `composer run fix` (and finish
+  all edits) *before* the final `git add`, or re-run `git add <file>` on anything touched after an
+  earlier `git add` — `git status --porcelain` showing any `AM`/`M ` (not just ` M`) right before
+  `git commit` is the tell.
