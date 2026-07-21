@@ -18,6 +18,7 @@ class CombatLogVersion
     public const int RETAIL_11_2_0      = 22_011_002_000;
     public const int RETAIL_12_0_1      = 22_012_000_001;
     public const int RETAIL_12_0_5      = 22_012_000_005;
+    public const int RETAIL_12_0_7      = 22_012_000_007;
 
     public const array RETAIL_ALL = [
         self::RETAIL_10_1_0 => 2,
@@ -29,6 +30,7 @@ class CombatLogVersion
         self::RETAIL_11_2_0 => 11,
         self::RETAIL_12_0_1 => 12,
         self::RETAIL_12_0_5 => 14,
+        self::RETAIL_12_0_7 => 15,
     ];
 
     public const array ALL = [
@@ -46,5 +48,6 @@ class CombatLogVersion
         self::RETAIL_12_0_1      => 12,
         self::CLASSIC_TBC_2_5_5  => 13,
         self::RETAIL_12_0_5      => 14,
+        self::RETAIL_12_0_7      => 15,
     ];
 }

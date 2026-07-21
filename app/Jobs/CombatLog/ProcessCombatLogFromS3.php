@@ -29,7 +29,7 @@ class ProcessCombatLogFromS3 implements ShouldQueue
         private readonly string                        $diskName = 's3_combat_logs',
         private readonly ?CombatLogRunContextInterface $runContext = null,
     ) {
-        $this->queue = sprintf('%s-%s-combat-log-process', config('app.type'), config('app.env'));
+        $this->queue = sprintf('%s-%s-cl-process', config('app.type'), config('app.env'));
     }
 
     public function handle(

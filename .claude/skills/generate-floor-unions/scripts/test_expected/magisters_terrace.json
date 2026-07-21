@@ -1,0 +1,82 @@
+[
+  {
+    "floor_image": "cut_1",
+    "instance": 1,
+    "lat": -73.96,
+    "lng": 203.98,
+    "size": 183.9,
+    "rotation": 60.1,
+    "edge_corr": 0.594,
+    "needs_review": false
+  },
+  {
+    "floor_image": "cut_1",
+    "instance": 2,
+    "lat": -186.79,
+    "lng": 285.81,
+    "size": 187.4,
+    "rotation": 60.1,
+    "edge_corr": 0.558,
+    "needs_review": false
+  },
+  {
+    "floor_image": "cut_2",
+    "instance": 1,
+    "lat": -82.72,
+    "lng": 65.77,
+    "size": 125.4,
+    "rotation": -119.8,
+    "edge_corr": 0.319,
+    "needs_review": false
+  },
+  {
+    "floor_image": "cut_3",
+    "instance": 1,
+    "lat": -87.89,
+    "lng": 347.18,
+    "size": 110.9,
+    "rotation": -62.3,
+    "edge_corr": 0.269,
+    "needs_review": false
+  },
+  {
+    "floor_image": "cut_4",
+    "instance": 1,
+    "lat": -229.96,
+    "lng": 129.59,
+    "size": 102.8,
+    "rotation": 149.4,
+    "edge_corr": 0.264,
+    "needs_review": false
+  },
+  {
+    "floor_image": "cut_5",
+    "instance": 1,
+    "lat": -166.47,
+    "lng": 133.13,
+    "size": 72.3,
+    "rotation": 0.0,
+    "edge_corr": 0.392,
+    "needs_review": false
+  },
+  {
+    "floor_image": "cut_6",
+    "instance": 1,
+    "lat": -151.42,
+    "lng": 64.7,
+    "size": 63.6,
+    "rotation": -0.0,
+    "edge_corr": 0.461,
+    "needs_review": false
+  },
+  {
+    "floor_image": "cut_7",
+    "instance": 1,
+    "lat": -211.59,
+    "lng": 32.36,
+    "size": 58.4,
+    "rotation": 0.0,
+    "edge_corr": 0.475,
+    "needs_review": false
+  }
+]

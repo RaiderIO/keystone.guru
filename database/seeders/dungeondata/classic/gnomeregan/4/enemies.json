@@ -2606,7 +2606,7 @@
         "enemy_patrol_id": 1825,
         "npc_id": 6228,
         "floor_id": 207,
-        "mdt_id": null,
+        "mdt_id": 1,
         "mdt_npc_id": null,
         "exclusive_enemy_id": null,
         "mdt_scale": null,

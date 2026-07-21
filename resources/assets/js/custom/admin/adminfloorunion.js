@@ -82,7 +82,12 @@ class FloorUnion extends Icon {
             lat: this.lat,
             lng: this.lng,
         };
-        // @TODO Figure out why I need to * -1 this, not time now
+        // The stored rotation is defined in the facade->floor direction
+        // (CoordinatesService::convertFacadeMapLocationToMapLocation applies
+        // rotate(+rotation)). This decorator draws the inverse direction -
+        // where the floor's image lands ON the facade - which uses the
+        // inverse angle, exactly like the backend's
+        // convertMapLocationToFacadeMapLocation (rotation * -1).
         let topLeft = rotateLatLng(centerLatLng, {
             lat: this.lat - radius,
             lng: this.lng - (radius * aspectRatio),

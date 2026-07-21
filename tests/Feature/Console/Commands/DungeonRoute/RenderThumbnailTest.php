@@ -93,6 +93,35 @@ final class RenderThumbnailTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenRemoteDiskOption_failsWithoutRendering(): void
+    {
+        // Arrange - a remote (S3) --disk defeats this command's isolation guarantee: without this
+        // guard, ThumbnailService would silently redirect the write onto the shared public disk
+        // instead of the requested one (see #3623).
+        $dungeon      = $this->getDungeonWithNonFacadeFloor();
+        $floor        = $dungeon->floors()->where('facade', false)->first();
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+        ]);
+
+        $thumbnailService = $this->createMockPublic(ThumbnailServiceInterface::class);
+        $thumbnailService->expects($this->never())->method('createThumbnail');
+        app()->instance(ThumbnailServiceInterface::class, $thumbnailService);
+
+        try {
+            // Act & Assert
+            $this->artisan(RenderThumbnail::class, [
+                'publicKey' => $dungeonRoute->public_key,
+                '--floor'   => $floor->index,
+                '--disk'    => 's3_user_uploads',
+            ])->assertFailed();
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
     public function handle_givenSuccessfulRender_doesNotPersistToTheSharedDatabase(): void
     {
         // Arrange

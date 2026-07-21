@@ -29,7 +29,7 @@ ideally on a loop:
 
 ```bash
 gh pr list --repo RaiderIO/keystone.guru --state open \
-  --json number,title,headRefName,isDraft,mergeable,reviewDecision,updatedAt,statusCheckRollup
+  --json number,title,headRefName,isDraft,mergeable,reviewDecision,updatedAt,statusCheckRollup,labels
 ```
 
 Work only on PRs whose head branch matches the agent worktree convention `<issue>-<slug>` (leading
@@ -69,17 +69,50 @@ benefit of the doubt.
    the thread with `:robot:` and what changed. Reply to a review comment with
    `gh api -X POST repos/RaiderIO/keystone.guru/pulls/<n>/comments/<comment-id>/replies -f body='...'`.
    Do **not** resolve threads yourself — leave that to Wotuu when re-reviewing.
-4. **All green, no comments**: leave it alone.
 
-### 4. Clean up after merged/closed MRs
+   If the PR carries the `needs changes` label and you addressed (committed + pushed) at least one
+   review comment this pass, swap the label: remove `needs changes`, add `changes applied` —
+   `gh pr edit <n> --remove-label "needs changes" --add-label "changes applied"` (plain `gh pr edit`
+   works for labels even though it's broken for body edits). This is Wotuu's own review-tracking
+   system: `needs changes` means "I reviewed this and left comments", `changes applied` means "my
+   comments were acted on, ready for me to look again" — don't apply `changes applied` unless you
+   actually pushed a fix/response this pass, and never touch either label on a PR that doesn't
+   already have `needs changes` set (that would be jumping ahead of a review that hasn't happened).
+4. **All green, no comments**: leave it alone (but see step 4 — it may be due a cold review).
+
+### 4. Cold-review MRs that just became ready
+
+An MR that is CI-green, conflict-free, and not a draft gets **one** independent "cold" review from
+a stronger model before Wotuu looks at it. A fresh context reviewing only the diff catches what
+the implementing session's self-review cannot — the self-review inherited the implementer's
+context and therefore its blind spots.
+
+- **Skip** if the PR already has a `:robot: Cold review` summary comment — that comment is the
+  once-per-MR marker. Re-review only if the diff has changed substantially since that comment, or
+  Wotuu asks.
+- **Never run the review inside this session.** The babysitter usually runs on Sonnet and its
+  context is warm — both defeat the purpose. Spawn a fresh agent instead:
+
+  Agent tool, `subagent_type: "general-purpose"`, `model: "opus"` (`"fable"` for high-risk diffs:
+  migrations, auth, payment, data-destructive changes), with a prompt telling it to invoke the
+  `code-review` skill with args `<PR number> --comment` from the main checkout — verified findings
+  are then posted as inline PR comments.
+- **Afterwards**, post the marker comment on the PR:
+  `:robot: Cold review (opus): <N> findings posted.` (or `no findings`).
+- Posted findings are addressed like any other review comments on a **later** pass (step 3.3) —
+  don't review and fix in the same pass; the fixes deserve fresh triage and their own CI run.
+- The reviewer posts comments only — never a formal GitHub review (no approve / request-changes).
+
+### 5. Clean up after merged/closed MRs
 
 For PRs merged or closed since the last pass whose worktree still exists and has no uncommitted
 tracked changes: `sh/worktree.sh remove <branch>` (this also clears the `in progress` label).
 
-### 5. Report the pass
+### 6. Report the pass
 
-End every pass with a short status list: each open MR, its state (green/red/conflicted/awaiting
-review), and what you did (or why you skipped it). If nothing needed action, say so in one line.
+End every pass with a short status list: each open MR, its state (green/red/conflicted/
+cold-reviewed/awaiting review), and what you did (or why you skipped it). If nothing needed
+action, say so in one line.
 
 ## Gotchas
 
@@ -89,3 +122,15 @@ review), and what you did (or why you skipped it). If nothing needed action, say
   exists on the main stack); CI excludes it — do not "fix" it in code.
 - Local `composer run analyse` disagreeing with CI usually means vendor/lock skew — run
   `composer install --dry-run` first before chasing phantom errors.
+- In cold-review agents, the code-review skill's MCP inline-comment tool is typically NOT
+  available — the `gh api -X POST repos/.../pulls/<n>/comments` fallback is the path that runs,
+  and it works (validated on #3604). Also: `gh pr diff` on large PRs overflows the inline Bash
+  output limit; read the persisted output file instead.
+- **When posting a finding body from a scratch file, `gh api ... -f body=@file` sends the literal
+  string `@file` as the comment** — lowercase `-f` does not dereference `@file`, only capital `-F`
+  does (same footgun as the `gh pr edit` body gotcha above). A cold-review agent hit this on #3630:
+  all 5 findings posted as garbage `@/tmp/.../c1.md` comments. After any cold-review pass, spot-check
+  that posted comment bodies actually contain the finding text (`gh api repos/.../pulls/comments/<id>
+  --jq '.body'`) rather than trusting the agent's self-report — if broken, the fix is `gh api -X PATCH
+  repos/.../pulls/comments/<id> -F body=@file` (capital `-F`) against the still-live scratchpad file,
+  not deleting and re-running the whole review.
