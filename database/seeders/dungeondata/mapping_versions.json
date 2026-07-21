@@ -8832,22 +8832,6 @@
         "updated_at": "2026-07-20T11:13:10.000000Z"
     },
     {
-        "id": 804,
-        "game_version_id": 1,
-        "dungeon_id": 72,
-        "version": 8,
-        "enemy_forces_required": 0,
-        "enemy_forces_required_teeming": null,
-        "enemy_forces_shrouded": null,
-        "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
-        "mdt_mapping_hash": null,
-        "mdt_addon_version": null,
-        "facade_enabled": 1,
-        "created_at": "2026-07-20T12:52:36.000000Z",
-        "updated_at": "2026-07-20T12:52:36.000000Z"
-    },
-    {
         "id": 806,
         "game_version_id": 1,
         "dungeon_id": 145,
@@ -8864,22 +8848,6 @@
         "updated_at": "2026-07-20T12:52:37.000000Z"
     },
     {
-        "id": 807,
-        "game_version_id": 1,
-        "dungeon_id": 19,
-        "version": 2,
-        "enemy_forces_required": 0,
-        "enemy_forces_required_teeming": null,
-        "enemy_forces_shrouded": null,
-        "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
-        "mdt_mapping_hash": null,
-        "mdt_addon_version": null,
-        "facade_enabled": 1,
-        "created_at": "2026-07-20T12:52:38.000000Z",
-        "updated_at": "2026-07-20T12:52:38.000000Z"
-    },
-    {
         "id": 808,
         "game_version_id": 1,
         "dungeon_id": 146,
@@ -8894,22 +8862,6 @@
         "facade_enabled": 1,
         "created_at": "2026-07-20T12:52:38.000000Z",
         "updated_at": "2026-07-20T12:52:38.000000Z"
-    },
-    {
-        "id": 809,
-        "game_version_id": 1,
-        "dungeon_id": 143,
-        "version": 2,
-        "enemy_forces_required": 0,
-        "enemy_forces_required_teeming": null,
-        "enemy_forces_shrouded": null,
-        "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
-        "mdt_mapping_hash": null,
-        "mdt_addon_version": null,
-        "facade_enabled": 1,
-        "created_at": "2026-07-20T12:52:39.000000Z",
-        "updated_at": "2026-07-20T12:52:39.000000Z"
     },
     {
         "id": 810,
