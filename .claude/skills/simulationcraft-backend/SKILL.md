@@ -1,4 +1,9 @@
-# Skill: SimulationCraft Backend Integration
+---
+name: simulationcraft-backend
+description: How the SimulationCraft export converts a DungeonRoute into a fight_style=DungeonRoute config string — raid buffs, enemy health scaling by key level/affixes, travel delay, and bloodlust assignment. Use when adding/removing raid buffs, changing enemy health calculation, extending the output format, adjusting travel delay logic, or debugging simulation output. Not for MDT strings (mdt-import/mdt-export).
+---
+
+# SimulationCraft Backend Integration
 
 Use this skill when working on the SimulationCraft export feature — adding/removing raid buffs, changing enemy health calculation, extending the output format, adjusting travel delay logic, or debugging simulation output.
 

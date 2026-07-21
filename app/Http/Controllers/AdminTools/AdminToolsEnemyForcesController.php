@@ -58,13 +58,7 @@ class AdminToolsEnemyForcesController extends Controller
     {
         $dungeonId = (int)$request->get('dungeon_id');
 
-        $builder = DungeonRoute::without([
-            'faction',
-            'specializations',
-            'classes',
-            'races',
-            'affixes',
-        ])
+        $builder = DungeonRoute::query()
             ->select('id')
             ->when($dungeonId !== -1, static fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId));
 

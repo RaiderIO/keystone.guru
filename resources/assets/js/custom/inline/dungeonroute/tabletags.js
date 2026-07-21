@@ -178,32 +178,35 @@ class DungeonRouteTableTagsHandler {
         });
 
         // New tags text field
-        let sourceTags = {};
-        for (let i = 0; i < this._dungeonrouteTable.options.autoCompleteTags.length; i++) {
-            let tagName = this._dungeonrouteTable.options.autoCompleteTags[i].name;
-            sourceTags[`${tagName}`] = i;
-        }
-
         $('#new_tag_input').unbind('keyup').bind('keyup', function (keyEvent) {
             let $this = $(this);
 
             // Enter
             if (keyEvent.keyCode === 13 && $this.val() !== null && $this.val().length > 0) {
-                self._createTag($this.val(), publicKey, function () {
-                    $this.val('');
-                });
+                let $activeSuggestion = $('#new_tag_autocomplete .dropdown-item.active');
+                if ($activeSuggestion.length > 0) {
+                    // Adopt the highlighted suggestion; the next enter press creates it
+                    // (mirrors bootstrap-4-autocomplete, which refocused the input on select)
+                    $this.val($activeSuggestion.text());
+                    self._hideTagAutocomplete();
+                } else {
+                    self._createTag($this.val(), publicKey, function () {
+                        $this.val('');
+                    });
+                    self._hideTagAutocomplete();
+                }
+            } else if (keyEvent.keyCode === 27) {
+                // Escape
+                self._hideTagAutocomplete();
+            } else if (keyEvent.keyCode === 38 || keyEvent.keyCode === 40) {
+                // Arrow up/down move the suggestion highlight, like bootstrap-4-autocomplete did
+                self._moveTagAutocompleteHighlight(keyEvent.keyCode === 40 ? 1 : -1);
+            } else {
+                self._refreshTagAutocomplete();
             }
-        }).autocomplete({
-            source: sourceTags,
-            highlightClass: 'text-danger',
-            // Typo intentional, it is part of the library
-            treshold: 1,
-            // In case they fix it
-            threshold: 1,
-            onSelectItem: function (item, element) {
-                // Refocus the input so people can quickly press enter
-                $('#new_tag_input').focus();
-            },
+        }).unbind('blur').bind('blur', function () {
+            // Delay hiding so a mousedown on a suggestion still registers
+            setTimeout(self._hideTagAutocomplete.bind(self), 200);
         });
 
         // Save button should work
@@ -217,5 +220,96 @@ class DungeonRouteTableTagsHandler {
                 });
             }
         });
+    }
+
+    /**
+     * Renders tag suggestions below the new tag input (replaces bootstrap-4-autocomplete).
+     *
+     * @private
+     */
+    _refreshTagAutocomplete() {
+        console.assert(this instanceof DungeonRouteTableTagsHandler, 'this is not a DungeonRouteTableTagsHandler', this);
+        let self = this;
+
+        let $menu = $('#new_tag_autocomplete');
+        let value = `${$('#new_tag_input').val() ?? ''}`.trim();
+
+        $menu.empty();
+
+        if (value.length === 0) {
+            this._hideTagAutocomplete();
+            return;
+        }
+
+        let matchedTagNames = [];
+        for (let i = 0; i < this._dungeonrouteTable.options.autoCompleteTags.length; i++) {
+            let tagName = `${this._dungeonrouteTable.options.autoCompleteTags[i].name}`;
+            if (tagName.toLowerCase().includes(value.toLowerCase())) {
+                matchedTagNames.push(tagName);
+            }
+        }
+
+        if (matchedTagNames.length === 0) {
+            this._hideTagAutocomplete();
+            return;
+        }
+
+        for (let i = 0; i < matchedTagNames.length; i++) {
+            let tagName = matchedTagNames[i];
+            let matchIndex = tagName.toLowerCase().indexOf(value.toLowerCase());
+
+            // Build the item using text nodes so tag names cannot inject HTML
+            let $item = $('<button/>', {type: 'button', 'class': 'dropdown-item'});
+            $item.append(document.createTextNode(tagName.substring(0, matchIndex)));
+            $item.append($('<span/>', {'class': 'text-danger', text: tagName.substring(matchIndex, matchIndex + value.length)}));
+            $item.append(document.createTextNode(tagName.substring(matchIndex + value.length)));
+
+            $item.bind('mousedown', function (mouseEvent) {
+                // Mousedown fires before the input's blur, so the suggestion is applied before the menu hides
+                mouseEvent.preventDefault();
+                $('#new_tag_input').val(tagName).focus();
+                self._hideTagAutocomplete();
+            });
+
+            $menu.append($('<li/>').append($item));
+        }
+
+        $menu.addClass('show');
+    }
+
+    /**
+     * Moves the keyboard highlight across the rendered suggestions (replaces the arrow-key
+     * support that bootstrap-4-autocomplete offered).
+     *
+     * @param direction {Number} 1 to move down, -1 to move up
+     * @private
+     */
+    _moveTagAutocompleteHighlight(direction) {
+        console.assert(this instanceof DungeonRouteTableTagsHandler, 'this is not a DungeonRouteTableTagsHandler', this);
+
+        let $items = $('#new_tag_autocomplete .dropdown-item');
+        if ($items.length === 0) {
+            return;
+        }
+
+        let currentIndex = $items.index($items.filter('.active'));
+        $items.removeClass('active');
+
+        let nextIndex;
+        if (currentIndex < 0) {
+            nextIndex = direction > 0 ? 0 : $items.length - 1;
+        } else {
+            // Wraps around on both ends
+            nextIndex = (currentIndex + direction + $items.length) % $items.length;
+        }
+
+        $items.eq(nextIndex).addClass('active');
+    }
+
+    /**
+     * @private
+     */
+    _hideTagAutocomplete() {
+        $('#new_tag_autocomplete').removeClass('show').empty();
     }
 }

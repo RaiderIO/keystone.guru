@@ -7,7 +7,7 @@
         "map_icon_type_id": 9,
         "lat": -177.5757,
         "lng": 209.0268,
-        "comment": "Abandoned Mole Machine: Into the Domicile.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.mole_machine_domicile",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -20,7 +20,7 @@
         "map_icon_type_id": 9,
         "lat": -146.3613,
         "lng": 219.2699,
-        "comment": "Abandoned Mole Machine: Just past the Grim Guzzler.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.mole_machine_grim_guzzler",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 49,
         "lat": -167.9253,
         "lng": 144.0181,
-        "comment": "Schematic: Field Repair Bot 74A",
+        "comment": "mapping.map_icons.classic.blackrock_depths.schematic_field_repair_bot",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 6,
         "lat": -47.8864,
         "lng": 233.4729,
-        "comment": "The Lyceum: Requires Shadowforge Key.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.the_lyceum",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 49,
         "lat": -42.1429,
         "lng": 274.2517,
-        "comment": "Shadowforge Brazier",
+        "comment": "mapping.map_icons.classic.blackrock_depths.shadowforge_brazier",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 49,
         "lat": -19.2407,
         "lng": 273.462,
-        "comment": "Shadowforge Brazier",
+        "comment": "mapping.map_icons.classic.blackrock_depths.shadowforge_brazier",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 2,
         "lat": -174.75,
         "lng": 147.9688,
-        "comment": "Golems may be one of Ragereaver Golem or Wrath Hammer Construct.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.golem_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 2,
         "lat": -186.8438,
         "lng": 151.5938,
-        "comment": "Enemies may be either Weapons Technician or Doomforge Arcanasmith.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.weapons_technician_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -111,7 +111,7 @@
         "map_icon_type_id": 42,
         "lat": -207.7188,
         "lng": 219.2188,
-        "comment": "WARNING: Entering this bridges causes 2 Anvilrage Guardsman to spawn, one from opposite ends. They will walk to the center of the bridge.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.bridge_guardsman_warning",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -124,7 +124,7 @@
         "map_icon_type_id": 2,
         "lat": -229.9375,
         "lng": 222.375,
-        "comment": "Enemies here can be one of Shadowforge Peasant, Anvilrage Medic, Doomforge Craftsman, Twilight Emissary.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.shadowforge_peasant_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -137,7 +137,7 @@
         "map_icon_type_id": 42,
         "lat": -160.0502,
         "lng": 218.2158,
-        "comment": "Some of the Fireguard Destroyers live in the lava below.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.fireguard_destroyers_lava",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -150,7 +150,7 @@
         "map_icon_type_id": 42,
         "lat": -148.8438,
         "lng": 183.25,
-        "comment": "Destroy the three Thunderbrow Lager Kegs to spawn Hurley Blackbreath.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.hurley_blackbreath_kegs",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -163,7 +163,7 @@
         "map_icon_type_id": 2,
         "lat": -145.1772,
         "lng": 203.7218,
-        "comment": "Enemies here may be one of Fireguard Destroyer, Shadowforge Citizen, Shadowforge Senator, Shadowforge Citizen, Weapon Technician or Doomforge Dragoon.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.fireguard_destroyer_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -176,7 +176,7 @@
         "map_icon_type_id": 6,
         "lat": -59.6875,
         "lng": 221.5625,
-        "comment": "Opens after defeating the Seven.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.opens_after_the_seven",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -189,7 +189,7 @@
         "map_icon_type_id": 4,
         "lat": -91.2497,
         "lng": 257.5238,
-        "comment": "The Molten Core entrance.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.molten_core_entrance",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

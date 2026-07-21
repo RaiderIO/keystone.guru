@@ -5,6 +5,11 @@ class HeatPlugin extends MapPlugin {
         let self = this;
 
         this.hidden = false;
+        // The map applies its persisted settings (state.setDungeonMap) before the plugins are
+        // constructed, so the initial heatmapshowontop:changed signal fires before this plugin can
+        // listen for it. Seed the value directly from the map options so the very first addToMap()
+        // renders in the correct pane; runtime toggles are handled by the signal below.
+        this.showOnTop = map.options?.defaultHeatmapShowOnTop ?? false;
         this.heatLayer = null;
         this.draw = false;
         /** A grid of weights for each coordinate for each floor - used for the tooltips */
@@ -36,6 +41,11 @@ class HeatPlugin extends MapPlugin {
         });
         state.register('heatmapshowtooltips:changed', this, function (heatmapShowTooltipsChangedEvent) {
             self.mouseTooltipEnabled = heatmapShowTooltipsChangedEvent.data.visible;
+        });
+
+        state.register('heatmapshowontop:changed', this, function (event) {
+            self.showOnTop = event.data.onTop;
+            self._applyShowOnTop();
         });
 
         if (!isMobile()) {
@@ -147,6 +157,13 @@ class HeatPlugin extends MapPlugin {
             return;
         }
 
+        // The heat layer may not exist yet when its addition was deferred until the map container
+        // gained a non-zero size. The data is retained in rawLatLngsByFloorId and re-applied once
+        // the layer is created (see _deferAddHeatLayer).
+        if (this.heatLayer === null) {
+            return;
+        }
+
         let result = [];
         if (this.rawLatLngsByFloorId.hasOwnProperty(floorId)) {
             result = this.rawLatLngsByFloorId[floorId];
@@ -167,9 +184,14 @@ class HeatPlugin extends MapPlugin {
             return;
         }
 
-        this.heatLayer = L.heatLayer([], $.extend({}, c.map.heatmapSettings));
+        this.heatLayer = L.heatLayer([], $.extend({}, c.map.heatmapSettings, {
+            pane: this.showOnTop ? 'tooltipPane' : 'overlayPane',
+        }));
 
         this.heatLayer.addTo(this.map.leafletMap);
+        // The map defers plugin loading until it has a non-zero size, so floor data may have already
+        // arrived (and been stored but not rendered while heatLayer was still null); (re)apply it now.
+        this._applyLatLngsForFloor(getState().getCurrentFloor().id);
         // let self = this;
         // Debug function that adds latLngs to your mouse location as you move around
         // this.map.leafletMap.on({
@@ -187,8 +209,36 @@ class HeatPlugin extends MapPlugin {
         // });
     }
 
+    /**
+     * Moves the heat layer's canvas between the overlay pane (behind enemies) and the tooltip pane
+     * (on top of enemies) to reflect the current showOnTop setting.
+     *
+     * leaflet-heat only parents the canvas in its onAdd handler, and its setOptions() never
+     * re-parents an already-added canvas - it just updates radius/blur/gradient and redraws. So to
+     * flip the render order at runtime we update the layer option (so a later remove/re-add lands in
+     * the right pane) and move the existing canvas element into the target pane ourselves.
+     */
+    _applyShowOnTop() {
+        console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
+
+        if (this.heatLayer === null) {
+            return;
+        }
+
+        let pane = this.showOnTop ? 'tooltipPane' : 'overlayPane';
+        this.heatLayer.setOptions({pane: pane});
+
+        if (this.heatLayer._canvas !== undefined && this.heatLayer._canvas !== null) {
+            this.map.leafletMap.getPane(pane).appendChild(this.heatLayer._canvas);
+        }
+    }
+
     setOptions(options) {
         console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
+
+        if (this.heatLayer === null) {
+            return;
+        }
 
         this.heatLayer.setOptions(options);
     }
@@ -277,4 +327,10 @@ class HeatPlugin extends MapPlugin {
 
         this.setLatLngs([]);
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = HeatPlugin;
 }

@@ -87,7 +87,7 @@ class HtmlSanitizer
                                     $element->replaceChild($textNode, $child);
                                     continue;
                                 }
-                            } catch (Exception $e) {
+                            } catch (Exception) {
                                 // Invalid URL, replace with text
                                 $textNode = $element->ownerDocument->createTextNode($child->textContent);
                                 $element->replaceChild($textNode, $child);

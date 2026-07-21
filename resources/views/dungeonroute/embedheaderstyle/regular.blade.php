@@ -22,9 +22,9 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
         @else
             background-image: url({{ $dungeon->getImageUrl() }}); background-size: cover;
         @endif">
-    <div class="row no-gutters pb-2">
-        <div class="col-auto text-right pr-1">
-            <div class="row no-gutters align-items-center" style="height: 44px;">
+    <div class="row g-0 pb-2">
+        <div class="col-auto text-end pe-1">
+            <div class="row g-0 align-items-center" style="height: 44px;">
                 <div class="col">
                     <a href="{{ route('home') }}" target="_blank">
                         <img src="{{ ksgAssetImage('logo/logo_and_text.png') }}" class="header_embed_regular_logo"
@@ -35,7 +35,7 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
         </div>
         @if($embedOptions['show']['title'])
             <div class="col">
-                <div class="row no-gutters align-items-center" style="height: 44px;">
+                <div class="row g-0 align-items-center" style="height: 44px;">
                     <div class="col">
                         <h4 class="mb-0">
                             <a class="text-white"
@@ -53,14 +53,14 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
             </div>
         @endif
     </div>
-    <div class="row no-gutters">
-        <div class="col-auto pr-1">
+    <div class="row g-0">
+        <div class="col-auto pe-1">
             <div class="embed-header-subtitle">
                 <?php
                 // This is normally in the pulls sidebar - but for embedding it's in the header - see pulls.blade.php
                 ?>
                 @if($embedOptions['show']['enemyForces'])
-                    <div class="row no-gutters align-items-center" style="height: 36px;">
+                    <div class="row g-0 align-items-center" style="height: 36px;">
                             <?php
                             // This is normally in the pulls sidebar - but for embedding it's in the header - see pulls.blade.php
                             ?>
@@ -70,22 +70,21 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
             </div>
         </div>
         @if($embedOptions['show']['affixes'])
-            <div class="row no-gutters align-items-center" style="height: 36px;">
-                <div class="col-md-auto px-1 d-md-flex d-none">
-                            <?php
-                            $mostRelevantAffixGroup = $dungeonRoute->getMostRelevantAffixGroup();
-                            ?>
-                        @if($mostRelevantAffixGroup !== null)
-                            @include('common.affixgroup.affixgroup', ['affixgroup' => $mostRelevantAffixGroup, 'showText' => false, 'class' => 'w-100', 'isFirst' => true])
-                        @endif
-                </div>
+            <?php // Not a nested .row: in BS5 a .row that is itself a row child gets width: 100% and wraps the header ?>
+            <div class="col-md-auto px-1 d-md-flex d-none align-items-center" style="height: 36px;">
+                    <?php
+                    $mostRelevantAffixGroup = $dungeonRoute->getMostRelevantAffixGroup();
+                    ?>
+                @if($mostRelevantAffixGroup !== null)
+                    @include('common.affixgroup.affixgroup', ['affixgroup' => $mostRelevantAffixGroup, 'showText' => false, 'class' => 'w-100', 'isFirst' => true])
+                @endif
             </div>
         @endif
         <div class="col">
         </div>
         @if($embedOptions['show']['presenterButton'])
             <div class="col-auto px-1">
-                <a class="btn btn btn-warning float-right h-100 text-white"
+                <a class="btn btn btn-warning float-end h-100 text-white"
                    href="{{ $presentRouteUrl }}"
                    target="_blank">
                     <i class="fas fa-video"></i> {{ __('view_dungeonroute.embed.present_route') }}
@@ -99,18 +98,18 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
             @endif
         </div>
         <div class="col-auto px-1">
-            <a class="btn btn btn-primary float-right h-100"
+            <a class="btn btn btn-primary float-end h-100"
                href="{{ $viewRouteUrl }}"
                target="_blank">
                 <i class="fas fa-external-link-alt"></i> {{ __('view_dungeonroute.embed.view_route') }}
             </a>
         </div>
         @if($dungeon->mdt_supported)
-            <div class="col-auto pl-1">
-                <div id="embed_copy_mdt_string" class="btn btn-primary float-right">
+            <div class="col-auto ps-1">
+                <div id="embed_copy_mdt_string" class="btn btn-primary float-end">
                     <i class="fas fa-file-export"></i> {{ __('view_dungeonroute.embed.copy_mdt_string') }}
                 </div>
-                <div id="embed_copy_mdt_string_loader" class="btn btn-primary float-right" disabled
+                <div id="embed_copy_mdt_string_loader" class="btn btn-primary float-end" disabled
                      style="display: none;">
                     <i class="fas fa-circle-notch fa-spin"></i> {{ __('view_dungeonroute.embed.copy_mdt_string') }}
                 </div>

@@ -33,7 +33,7 @@
         "map_icon_type_id": 2,
         "lat": -32.0669,
         "lng": 110.221,
-        "comment": "Chest",
+        "comment": "mapping.map_icons.classic.the_stockade.chest",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 2,
         "lat": -71.4347,
         "lng": 259.3187,
-        "comment": "Large Solid Chest",
+        "comment": "mapping.map_icons.classic.the_stockade.large_solid_chest",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 2,
         "lat": -117.5262,
         "lng": 115.3006,
-        "comment": "Large Solid Chest",
+        "comment": "mapping.map_icons.classic.the_stockade.large_solid_chest",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 42,
         "lat": -75.1938,
         "lng": 63.659,
-        "comment": "Dextren Ward is in one of the side rooms.",
+        "comment": "mapping.map_icons.classic.the_stockade.dextren_ward_location",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

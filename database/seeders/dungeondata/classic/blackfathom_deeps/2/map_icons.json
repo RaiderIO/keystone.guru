@@ -20,7 +20,7 @@
         "map_icon_type_id": 9,
         "lat": -205.6638,
         "lng": 199.6483,
-        "comment": "Fire of Aku'mai: activating spawns enemies.",
+        "comment": "mapping.map_icons.classic.blackfathom_deeps.fire_of_akumai",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 9,
         "lat": -205.6164,
         "lng": 206.8479,
-        "comment": "Fire of Aku'mai: activating spawns enemies.",
+        "comment": "mapping.map_icons.classic.blackfathom_deeps.fire_of_akumai",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 9,
         "lat": -212.5792,
         "lng": 206.8953,
-        "comment": "Fire of Aku'mai: activating spawns enemies.",
+        "comment": "mapping.map_icons.classic.blackfathom_deeps.fire_of_akumai",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 9,
         "lat": -212.6563,
         "lng": 199.8125,
-        "comment": "Fire of Aku'mai: activating spawns enemies.",
+        "comment": "mapping.map_icons.classic.blackfathom_deeps.fire_of_akumai",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 6,
         "lat": -208.5625,
         "lng": 217.625,
-        "comment": "Unlocks after activating all 4 Fire of Aku'mai.",
+        "comment": "mapping.map_icons.classic.blackfathom_deeps.unlocks_after_fires",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 44,
         "lat": -220.1193,
         "lng": 339.6557,
-        "comment": "Altar of the Deeps: Blessing of Blackfathom",
+        "comment": "mapping.map_icons.classic.blackfathom_deeps.altar_of_the_deeps",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 2,
         "lat": -193.1967,
         "lng": 136.6951,
-        "comment": "Many enemies change between Reaver, Acolyte, Loreseeker, and Aquamancer. Aquamancers will have Elemental pets.",
+        "comment": "mapping.map_icons.classic.blackfathom_deeps.reaver_acolyte_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -124,7 +124,7 @@
         "map_icon_type_id": 2,
         "lat": -191.4019,
         "lng": 173.8842,
-        "comment": "Enemies in the water may be Barbed Crustacean or Deep Pool Threshfin",
+        "comment": "mapping.map_icons.classic.blackfathom_deeps.water_enemies_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -137,7 +137,7 @@
         "map_icon_type_id": 41,
         "lat": -208.0795,
         "lng": 152.1874,
-        "comment": "Wall-jump here to get back up again.",
+        "comment": "mapping.map_icons.classic.blackfathom_deeps.wall_jump",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -150,7 +150,7 @@
         "map_icon_type_id": 2,
         "lat": -189.3198,
         "lng": 214.2322,
-        "comment": "Enemies may change between Shadowmage, Elementalist.",
+        "comment": "mapping.map_icons.classic.blackfathom_deeps.shadowmage_elementalist_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -163,7 +163,7 @@
         "map_icon_type_id": 40,
         "lat": -195.4327,
         "lng": 146.0298,
-        "comment": "Baron Aquanis can be spawned by Horde characters only through quest [Amongst The Ruins]",
+        "comment": "mapping.map_icons.classic.blackfathom_deeps.baron_aquanis_horde_only",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

@@ -8,6 +8,7 @@ use Laratrust\Middleware\Role;
 
 class ApiRole extends Role
 {
+    #[\Override]
     protected function unauthorized(): JsonResponse
     {
         $handler = Config::get('laratrust.middleware.handlers.abort');

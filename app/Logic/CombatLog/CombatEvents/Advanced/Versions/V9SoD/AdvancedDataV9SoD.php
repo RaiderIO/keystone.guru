@@ -173,10 +173,10 @@ class AdvancedDataV9SoD implements AdvancedDataInterface
         $this->unknown1     = $parameters[6];
         $this->unknown2     = $parameters[7];
         $this->absorb       = $parameters[8];
-        $this->powerType    = array_map('intval', explode('|', (string)$parameters[9]));
-        $this->currentPower = array_map('intval', explode('|', (string)$parameters[10]));
-        $this->maxPower     = array_map('intval', explode('|', (string)$parameters[11]));
-        $this->powerCost    = array_map('intval', explode('|', (string)$parameters[12]));
+        $this->powerType    = array_map(intval(...), explode('|', (string)$parameters[9]));
+        $this->currentPower = array_map(intval(...), explode('|', (string)$parameters[10]));
+        $this->maxPower     = array_map(intval(...), explode('|', (string)$parameters[11]));
+        $this->powerCost    = array_map(intval(...), explode('|', (string)$parameters[12]));
         // https://forums.combatlogforums.com/t/unit-positions-from-combat-log-solved/822
         // Be aware also that the coordinates are rotated 90 degrees for some crazy reason. This means that for the two numbers listed, pos1 and pos2, the following rules apply:
         //

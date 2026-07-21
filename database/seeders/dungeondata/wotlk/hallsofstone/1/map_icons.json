@@ -33,7 +33,7 @@
         "map_icon_type_id": 2,
         "lat": -125.7946,
         "lng": 273.6793,
-        "comment": "Talk to Brann to start gauntlet",
+        "comment": "mapping.map_icons.wotlk.halls_of_stone.brann_gauntlet",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 2,
         "lat": -182.598,
         "lng": 313.8335,
-        "comment": "Talk to Bran again to start boss encounter. It's is not a boss fight, but rather several groups of mobs that spawn after each other. Protect Bran for the duration of the fight.",
+        "comment": "mapping.map_icons.wotlk.halls_of_stone.brann_boss_encounter",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

@@ -53,6 +53,7 @@ class SettingsTabRoute extends SettingsTab {
                         return $(this).val();
                     }).get()
                 ,
+                dungeon_start_map_icon_id: $('#dungeon_start_map_icon_id').val(),
                 unlisted: $('#unlisted').is(':checked') ? 1 : 0,
                 demo: $('#demo').is(':checked') && isUserAdmin ? 1 : 0,
                 route_select_affixes: $('#route_select_affixes').val(),

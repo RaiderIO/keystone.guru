@@ -29,7 +29,7 @@ use App\Models\Npc\NpcEnemyForces;
     </div>
     <div class="col-auto">
         <a href="{{ route('admin.npc.npcenemyforces.new', ['npc' => $npc]) }}"
-           class="btn btn-success text-white pull-right" role="button">
+           class="btn btn-success text-white float-end" role="button">
             <i class="fas fa-plus"></i> {{ __('view_admin.npc.npcenemyforces.add_npc_enemy_forces') }}
         </a>
     </div>
@@ -52,10 +52,10 @@ use App\Models\Npc\NpcEnemyForces;
             <td>{{ $npcEnemyForces->mappingVersion->getPrettyName() }}</td>
             <td>{{ $npcEnemyForces->enemy_forces }}</td>
             <td>
-                @if($npcEnemyForces->mappingVersion->merged)
+                @if(!$npcEnemyForces->mappingVersion->isLatestForDungeon())
                     {{ __('view_admin.npc.npcenemyforces.mapping_version_read_only') }}
                 @else
-                    <div class="row no-gutters">
+                    <div class="row g-0">
                         <div class="col">
                             <a class="btn btn-info"
                                href="{{ route('admin.npc.npcenemyforces.edit', ['npc' => $npc, 'npcEnemyForces' => $npcEnemyForces]) }}">

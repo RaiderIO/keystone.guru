@@ -20,6 +20,7 @@ final class RaidEventPullTest extends TestCase
 
     private SimulationCraftRaidEventsOptions&MockObject $options;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

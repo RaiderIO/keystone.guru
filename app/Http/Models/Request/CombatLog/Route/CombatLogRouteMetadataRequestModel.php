@@ -15,8 +15,6 @@ use Illuminate\Contracts\Support\Arrayable;
  * @OA\Property(property="regionId",type="integer",description="The ID of the region that this run was recorded on")
  * @OA\Property(property="realmType",type="string",description="The type of realm, such as 'live', 'beta' or 'ptr' etc.")
  * @OA\Property(property="wowInstanceId",type="integer",nullable=true)
- */
-/**
  * @implements Arrayable<string, mixed>
  */
 class CombatLogRouteMetadataRequestModel extends RequestModel implements Arrayable

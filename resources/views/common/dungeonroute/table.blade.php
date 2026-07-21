@@ -110,14 +110,14 @@ if (Auth::check()) {
     @include('common.handlebars.thumbnailcarousel')
 @endsection
 
-<div class="row no-gutters {{$tableId}}_filter_container">
+<div class="row g-0 {{$tableId}}_filter_container">
     @if($team instanceof Team)
-        <div class="col-lg pl-1 pr-1">
+        <div class="col-lg ps-1 pe-1">
             {{ html()->label(__('view_common.dungeonroute.table.team'), 'team_name') }}
             {{ html()->text('team_name', $team->name)->class('form-control')->isReadonly() }}
         </div>
     @endisset
-    <div class="col-lg pl-1 pr-1">
+    <div class="col-lg ps-1 pe-1">
         @include('common.dungeon.select', [
             'id' => $dungeonSelectId,
             'allowSeasonSelection' => true,
@@ -127,7 +127,7 @@ if (Auth::check()) {
             'required' => false,
         ])
     </div>
-    <div class="col-lg pl-1 pr-1">
+    <div class="col-lg ps-1 pe-1">
         {{ html()->label(__('view_common.dungeonroute.table.affixes'), sprintf('%s[]', $affixSelectId)) }}
         {{
             html()
@@ -139,14 +139,14 @@ if (Auth::check()) {
                 ->data('count-selected-text', __('view_common.dungeonroute.table.affixes_selected'))
              }}
     </div>
-    <div class="col-lg pl-1 pr-1">
+    <div class="col-lg ps-1 pe-1">
         @include('common.dungeonroute.attributes', [
             'id' => $attributesSelectId,
             'selectedIds' => array_merge( [-1], $allRouteAttributes->pluck('id')->toArray() ),
             'showNoAttributes' => true,
         ])
     </div>
-    <div class="col-lg pl-1 pr-1">
+    <div class="col-lg ps-1 pe-1">
         <?php
         $requirements = ['enough_enemy_forces' => __('view_common.dungeonroute.table.enemy_enemy_forces')];
         if (Auth::check() && $view !== 'favorites') {
@@ -165,7 +165,7 @@ if (Auth::check()) {
         }}
     </div>
     @if(($view === 'profile' || $view === 'team'))
-        <div class="col-lg pl-1 pr-1">
+        <div class="col-lg ps-1 pe-1">
             {{ html()->label(__('view_common.dungeonroute.table.tags'), sprintf('%s[]', $tagsSelectId)) }}
             {{
                 html()
@@ -181,19 +181,18 @@ if (Auth::check()) {
              }}
         </div>
     @endif
-    <div class="col-lg pl-1 pr-1">
-        <div class="mb-2">
-            &nbsp;
-        </div>
+    <div class="col-lg ps-1 pe-1">
+        {{-- Block spacer matching the bare label height (24px) above the neighbouring select
+             columns, so the button lines up with the select boxes. The former mb-2 added an extra
+             8px that pushed the button below them. --}}
+        <div>&nbsp;</div>
         <button id="{{ $filterButtonId }}" class="btn btn-info col-lg">
             <i class="fas fa-filter"></i> {{ __('view_common.dungeonroute.table.filter') }}
         </button>
     </div>
-    <div class="col-lg pl-1 pr-1">
-        <div class="mb-2">
-            &nbsp;
-        </div>
-        <div class="mb-2 text-right">
+    <div class="col-lg ps-1 pe-1">
+        <label>&nbsp;</label>
+        <div class="mb-2 text-end">
             <button
                     class="btn {{ $cookieViewMode === 'biglist' ? 'btn-primary' : 'btn-default' }} biglist table_list_view_toggle"
                     data-viewmode="biglist">

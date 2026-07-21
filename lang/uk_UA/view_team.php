@@ -17,10 +17,16 @@ return [
             'ad_free_giveaway_description_available'     => 'Дякуємо за підписку на Patreon Keystone.guru! Ви можете надати ще стільки безрекламних доступів будь-кому з команди: :current.',
         ],
         'overview' => [
-            'title' => 'Огляд',
+            'title'   => 'Огляд',
+            'routes'  => '',
+            'members' => '',
         ],
         'routepublishing' => [
-            'title' => 'Опублікування маршруту',
+            'title'            => 'Опублікування маршруту',
+            'description'      => '',
+            'enabled'          => '',
+            'timezone_warning' => '',
+            'profile_link'     => '',
         ],
         'routes' => [
             'title'                  => 'Список маршрутів',

@@ -7,7 +7,7 @@
         "map_icon_type_id": 44,
         "lat": -195.5313,
         "lng": 142.4063,
-        "comment": "Teleporter: Antechamber of Ulduar",
+        "comment": "mapping.map_icons.wotlk.ulduar.teleporter_antechamber",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -20,7 +20,7 @@
         "map_icon_type_id": 44,
         "lat": -195.5313,
         "lng": 142.4063,
-        "comment": "Teleporter: Antechamber of Ulduar",
+        "comment": "mapping.map_icons.wotlk.ulduar.teleporter_antechamber",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

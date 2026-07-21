@@ -46,7 +46,7 @@
         "map_icon_type_id": 2,
         "lat": -191.3035,
         "lng": 204.5794,
-        "comment": "All Scarabs and Sul'lithuz Sandcrawlers respawn eventually when killed.",
+        "comment": "mapping.map_icons.classic.zul_farrak.scarab_respawn_note",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 50,
         "lat": -111.1725,
         "lng": 125.5671,
-        "comment": "Gong",
+        "comment": "mapping.map_icons.classic.zul_farrak.gong",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 2,
         "lat": -101.0625,
         "lng": 187.3438,
-        "comment": "If Sandarr does not spawn he is replaced by a regular elite.",
+        "comment": "mapping.map_icons.classic.zul_farrak.sandarr_spawn_note",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 42,
         "lat": -73.1807,
         "lng": 267.8082,
-        "comment": "Patrol spawns after defeating Antu'sul.",
+        "comment": "mapping.map_icons.classic.zul_farrak.patrol_after_antusul",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

@@ -20,7 +20,7 @@ $url  ??= null;
     <a href="{{ $url ?? 'https://www.archon.gg/wow' }}" target="_blank" rel="noopener noreferrer">
     <span class="tier {{ strtolower($tier) }}"
           @if( $url === null )
-              data-toggle="tooltip"
+              data-bs-toggle="tooltip"
           title="{{ sprintf(
             __('view_common.dungeonroute.tier.data_by_archon_gg'),
                 $affixgroup->getTextAttribute()

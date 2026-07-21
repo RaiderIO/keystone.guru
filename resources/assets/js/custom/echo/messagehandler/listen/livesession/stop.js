@@ -20,6 +20,6 @@ class StopHandler extends MessageHandler {
         code.startExpiresCountdown();
 
         // Pop up the modal so that everyone knows it's stopped
-        $('#stop_live_session_modal').modal('show');
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('stop_live_session_modal')).show();
     }
 }

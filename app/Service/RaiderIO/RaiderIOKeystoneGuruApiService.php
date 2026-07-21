@@ -2,6 +2,7 @@
 
 namespace App\Service\RaiderIO;
 
+use App\Models\Season;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\RaiderIO\Dtos\CombatLogSegment;
@@ -67,7 +68,7 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
                 challengeModeId: $challengeModeId,
                 dungeonZoneId:   $dungeonZoneId,
                 memberSpecIds:   $memberSpecIds,
-                mythicLevel:     0,
+                mythicLevel:     $filter->mythicLevelMin,
                 affixes:         [],
             );
         }
@@ -75,7 +76,7 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
         return new SearchAdvancedRunsResponse($runs, count($runs));
     }
 
-    public function getCombatLogSegmentsForRun(int $runId): ?CombatLogSegmentsResponse
+    public function getCombatLogSegmentsForRun(Season $season, int $runId): ?CombatLogSegmentsResponse
     {
         $zipFiles = $this->getS3ZipFiles();
 

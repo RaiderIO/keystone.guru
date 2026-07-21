@@ -98,7 +98,7 @@
         "map_icon_type_id": 44,
         "lat": -76.4963,
         "lng": 142.0984,
-        "comment": "Arcane Beacon",
+        "comment": "mapping.map_icons.legion.court_of_stars.arcane_beacon",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -202,7 +202,7 @@
         "map_icon_type_id": 44,
         "lat": -76.4963,
         "lng": 142.0984,
-        "comment": "Arcane Beacon",
+        "comment": "mapping.map_icons.legion.court_of_stars.arcane_beacon",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -306,7 +306,7 @@
         "map_icon_type_id": 44,
         "lat": -76.4963,
         "lng": 142.0984,
-        "comment": "Arcane Beacon",
+        "comment": "mapping.map_icons.legion.court_of_stars.arcane_beacon",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -410,7 +410,7 @@
         "map_icon_type_id": 44,
         "lat": -76.4963,
         "lng": 142.0984,
-        "comment": "Arcane Beacon",
+        "comment": "mapping.map_icons.legion.court_of_stars.arcane_beacon",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -514,7 +514,7 @@
         "map_icon_type_id": 44,
         "lat": -76.4963,
         "lng": 142.0984,
-        "comment": "Arcane Beacon",
+        "comment": "mapping.map_icons.legion.court_of_stars.arcane_beacon",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

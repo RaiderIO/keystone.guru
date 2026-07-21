@@ -111,7 +111,7 @@
         "map_icon_type_id": 22,
         "lat": -137.9776,
         "lng": 149.8665,
-        "comment": "Teleport",
+        "comment": "mapping.map_icons.sl.tazavesh_streets_of_wonder.teleport",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -124,7 +124,7 @@
         "map_icon_type_id": 22,
         "lat": -138.0249,
         "lng": 144.9878,
-        "comment": "Teleport",
+        "comment": "mapping.map_icons.sl.tazavesh_streets_of_wonder.teleport",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -293,7 +293,7 @@
         "map_icon_type_id": 22,
         "lat": -137.9776,
         "lng": 149.8665,
-        "comment": "Teleport",
+        "comment": "mapping.map_icons.sl.tazavesh_streets_of_wonder.teleport",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -306,7 +306,7 @@
         "map_icon_type_id": 22,
         "lat": -138.0249,
         "lng": 144.9878,
-        "comment": "Teleport",
+        "comment": "mapping.map_icons.sl.tazavesh_streets_of_wonder.teleport",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -462,7 +462,7 @@
         "map_icon_type_id": 22,
         "lat": -137.9776,
         "lng": 149.8665,
-        "comment": "Teleport",
+        "comment": "mapping.map_icons.sl.tazavesh_streets_of_wonder.teleport",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -475,7 +475,7 @@
         "map_icon_type_id": 22,
         "lat": -138.0249,
         "lng": 144.9878,
-        "comment": "Teleport",
+        "comment": "mapping.map_icons.sl.tazavesh_streets_of_wonder.teleport",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -683,7 +683,7 @@
         "map_icon_type_id": 22,
         "lat": -137.9776,
         "lng": 149.8665,
-        "comment": "Teleport",
+        "comment": "mapping.map_icons.sl.tazavesh_streets_of_wonder.teleport",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -696,7 +696,7 @@
         "map_icon_type_id": 22,
         "lat": -138.0249,
         "lng": 144.9878,
-        "comment": "Teleport",
+        "comment": "mapping.map_icons.sl.tazavesh_streets_of_wonder.teleport",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -904,7 +904,7 @@
         "map_icon_type_id": 22,
         "lat": -137.9776,
         "lng": 149.8665,
-        "comment": "Teleport",
+        "comment": "mapping.map_icons.sl.tazavesh_streets_of_wonder.teleport",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -917,7 +917,7 @@
         "map_icon_type_id": 22,
         "lat": -138.0249,
         "lng": 144.9878,
-        "comment": "Teleport",
+        "comment": "mapping.map_icons.sl.tazavesh_streets_of_wonder.teleport",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1125,7 +1125,7 @@
         "map_icon_type_id": 22,
         "lat": -137.9776,
         "lng": 149.8665,
-        "comment": "Teleport",
+        "comment": "mapping.map_icons.sl.tazavesh_streets_of_wonder.teleport",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1138,7 +1138,7 @@
         "map_icon_type_id": 22,
         "lat": -138.0249,
         "lng": 144.9878,
-        "comment": "Teleport",
+        "comment": "mapping.map_icons.sl.tazavesh_streets_of_wonder.teleport",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

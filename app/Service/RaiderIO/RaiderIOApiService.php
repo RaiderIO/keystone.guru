@@ -2,6 +2,7 @@
 
 namespace App\Service\RaiderIO;
 
+use App\Models\Season;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\RaiderIO\Dtos\CombatLogSegment;
@@ -25,7 +26,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
 
     private const string SEARCH_ADVANCED_URL = 'https://raider.io/api/search-advanced';
 
-    private const string SEGMENTS_URL = 'https://raider.io/api/v1/combatlog/download';
+    private const string SEGMENTS_URL = 'https://raider.io/api/v1/live-tracking/mythic-plus/combatlog-segments';
 
     private const array EXPANSION_SHORTNAME_OVERRIDE = [
         'midnight' => 'mn',
@@ -162,11 +163,15 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
         }
     }
 
-    public function getCombatLogSegmentsForRun(int $runId): ?CombatLogSegmentsResponse
+    public function getCombatLogSegmentsForRun(Season $season, int $runId): ?CombatLogSegmentsResponse
     {
         $this->log->getCombatLogSegmentsForRunStart($runId);
 
-        $url = sprintf('%s/%d', self::SEGMENTS_URL, $runId);
+        $url = sprintf('%s?%s', self::SEGMENTS_URL, http_build_query([
+            'season'          => $this->buildSeasonString($season->expansion->shortname, $season->index),
+            'keystone_run_id' => $runId,
+            'access_key'      => config('keystoneguru.raiderio.api_key'),
+        ]));
 
         try {
             $response = $this->curlGet($url);

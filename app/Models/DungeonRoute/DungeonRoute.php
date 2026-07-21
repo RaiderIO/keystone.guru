@@ -28,6 +28,7 @@ use App\Models\Laratrust\Role;
 use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Models\MapIcon;
+use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\MDTImport;
 use App\Models\PageView;
@@ -44,11 +45,13 @@ use App\Models\Traits\Reportable;
 use App\Models\Traits\SerializesDates;
 use App\Models\Traits\Taggable;
 use App\Models\User;
+use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
+use Database\Factories\DungeonRoute\DungeonRouteFactory;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -64,11 +67,9 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Override;
-use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * @property int                  $id
@@ -80,6 +81,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property int                  $faction_id
  * @property int|null             $team_id
  * @property int                  $published_state_id
+ * @property int|null             $dungeon_start_map_icon_id
  * @property string|null          $clone_of
  * @property string               $title
  * @property string               $description
@@ -155,7 +157,7 @@ use Psr\SimpleCache\InvalidArgumentException;
 class DungeonRoute extends Model implements TracksPageViewInterface
 {
     use GeneratesPublicKey;
-    /** @use HasFactory<\Database\Factories\DungeonRoute\DungeonRouteFactory> */
+    /** @use HasFactory<DungeonRouteFactory> */
     use HasFactory;
     use HasMetrics;
     use Taggable;
@@ -214,6 +216,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'faction_id',
         'team_id',
         'published_state_id',
+        'dungeon_start_map_icon_id',
         'teeming',
         'title',
         'description',
@@ -230,18 +233,6 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'rating_count',
         'thumbnail_refresh_queued_at',
         'thumbnail_updated_at',
-    ];
-
-    protected $with = [
-        'mappingVersion',
-        'dungeon',
-        'season',
-        'faction',
-        'specializations',
-        'classes',
-        'races',
-        'affixes',
-        'thumbnails',
     ];
 
     protected function casts(): array
@@ -275,8 +266,9 @@ class DungeonRoute extends Model implements TracksPageViewInterface
      */
     public function getSetupAttribute(): array
     {
-        // Telescope has an issue where somehow it doesn't have these relations loaded and causes crashes
-        $this->load([
+        // Telescope has an issue where somehow it doesn't have these relations loaded and causes crashes.
+        // loadMissing keeps that guarantee without re-querying when the relations were already eager loaded.
+        $this->loadMissing([
             'faction',
             'specializations',
             'classes',
@@ -488,6 +480,23 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             });
 
         return $query;
+    }
+
+    /**
+     * Resolves the dungeon start map icon for this route. When a specific start was chosen
+     * (dungeon_start_map_icon_id) it is returned directly; otherwise falls back to the first
+     * dungeon start of the route's mapping version.
+     */
+    public function getDungeonStartMapIcon(): ?MapIcon
+    {
+        if ($this->dungeon_start_map_icon_id !== null) {
+            return MapIcon::find($this->dungeon_start_map_icon_id);
+        }
+
+        return MapIcon::where('mapping_version_id', $this->mapping_version_id)
+            ->where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START])
+            ->with('floor')
+            ->first();
     }
 
     /** @return BelongsToMany<RouteAttribute, $this> */
@@ -728,6 +737,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
     public function getHasThumbnailAttribute(): bool
     {
+        // Explicitly load the relation so this appended attribute also works on routes hydrated
+        // in a collection (preventLazyLoading)
+        $this->loadMissing('thumbnails');
+
         return $this->thumbnails->isNotEmpty();
     }
 
@@ -835,10 +848,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     {
         $result = false;
         $result = match ($this->published_state_id) {
-            PublishedState::ALL[PublishedState::UNPUBLISHED] => $this->mayUserEdit($user),
-            PublishedState::ALL[PublishedState::TEAM]        => ($this->team !== null && $this->team->isUserMember($user)) || ($user !== null && $user->hasRole(Role::ROLE_ADMIN)),
+            PublishedState::ALL[PublishedState::UNPUBLISHED]                                                 => $this->mayUserEdit($user),
+            PublishedState::ALL[PublishedState::TEAM]                                                        => ($this->team !== null && $this->team->isUserMember($user)) || ($user !== null && $user->hasRole(Role::ROLE_ADMIN)),
             PublishedState::ALL[PublishedState::WORLD_WITH_LINK], PublishedState::ALL[PublishedState::WORLD] => true,
-            default => $result,
+            default                                                                                          => $result,
         };
 
         return $result;
@@ -1349,47 +1362,27 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
     /**
      * Drops any caches associated with this dungeon route.
+     *
+     * All card variants of a route live as fields in a single Redis hash, so every variant is dropped in one
+     * bounded operation regardless of how many orientation/locale/flag combinations exist.
      */
     public static function dropCaches(int $dungeonRouteId): void
     {
-        try {
-            // This can be better - but it's fine if you're using it to drop caches for 1 route.
-            $orientations = [
-                'vertical',
-                'horizontal',
-                'horizontal_row',
-            ];
-            $locales     = language()->allowed();
-            $showAffixes = [
-                0,
-                1,
-            ];
-            $showDungeon = [
-                0,
-                1,
-            ];
-            $isAdmin = [
-                0,
-                1,
-            ];
-
-            foreach ($orientations as $orientation) {
-                foreach ($locales as $code => $name) {
-                    foreach ($showAffixes as $showAffix) {
-                        foreach ($showDungeon as $showDungeonImage) {
-                            foreach ($isAdmin as $admin) {
-                                Cache::delete(self::getCardCacheKey($dungeonRouteId, $orientation, $code, $showAffix, $showDungeonImage, $admin));
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (InvalidArgumentException) {
-        }
+        resolve(CacheServiceInterface::class)->dropHashCache(self::getCardCacheKey($dungeonRouteId));
     }
 
-    public static function getCardCacheKey(
-        int    $dungeonRouteId,
+    /**
+     * The Redis hash key holding every cached card variant of a route.
+     */
+    public static function getCardCacheKey(int $dungeonRouteId): string
+    {
+        return sprintf('dungeonroute_card:%d', $dungeonRouteId);
+    }
+
+    /**
+     * The field within the card cache hash identifying a single card variant.
+     */
+    public static function getCardCacheField(
         string $orientation,
         string $locale,
         int    $showAffixes,
@@ -1397,13 +1390,12 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         int    $isAdmin,
     ): string {
         return sprintf(
-            'view:dungeonroute_card:%s:%s_%d_%d_%d_%d',
+            '%s:%s_%d_%d_%d',
             $orientation,
             $locale,
             $showAffixes,
             $showDungeonImage,
             $isAdmin,
-            $dungeonRouteId,
         );
     }
 

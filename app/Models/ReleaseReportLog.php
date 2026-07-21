@@ -3,11 +3,10 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int    $id
- * @property int    $release_id
+ * @property string $version
  * @property string $platform
  * @property string $updated_at
  * @property string $created_at
@@ -17,13 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ReleaseReportLog extends CacheModel
 {
     protected $fillable = [
-        'release_id',
+        'version',
         'platform',
     ];
-
-    /** @return BelongsTo<Release, $this> */
-    public function release(): BelongsTo
-    {
-        return $this->belongsTo(Release::class);
-    }
 }

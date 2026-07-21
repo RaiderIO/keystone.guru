@@ -36,9 +36,9 @@ $mappingVersionsSelect = $mappingVersions->groupBy('dungeon_id')
             __($dungeon->name) => $mappingVersions
                 ->sortByDesc('name')
                 ->mapWithKeys(static function (MappingVersion $mappingVersion) use ($dungeon) {
-                    if ($mappingVersion->merged) {
+                    if (!$mappingVersion->isLatestForDungeon()) {
                         return [
-                            $mappingVersion->id => __('view_common.mappingversion.select.mapping_version_readonly', [
+                            $mappingVersion->id => __('view_common.mappingversion.select.mapping_version_previous', [
                                 'gameVersion' => __($mappingVersion->gameVersion->name),
                                 'version'     => $mappingVersion->version
                             ])

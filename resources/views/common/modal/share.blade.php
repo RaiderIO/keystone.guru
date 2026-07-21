@@ -44,7 +44,7 @@ $shareLinkShort = route('dungeonroute.viewold', ['dungeonRoute' => $dungeonroute
 
 @if($showPublish)
     <!-- Published state -->
-    <div class="form-group">
+    <div class="mb-3">
         <label for="map_route_publish">
             {{ __('view_common.modal.share.publish') }}
         </label>
@@ -57,88 +57,82 @@ $shareLinkShort = route('dungeonroute.viewold', ['dungeonRoute' => $dungeonroute
         <div class="row">
             <div class="col">
                 {!! sprintf(__('view_common.modal.share.review_route_settings'),
-                    sprintf('<a href="#" data-toggle="modal" data-target="#edit_route_settings_modal">%s</a>', __('view_common.modal.share.route_settings'))
+                    sprintf('<a href="#" data-bs-toggle="modal" data-bs-target="#edit_route_settings_modal">%s</a>', __('view_common.modal.share.route_settings'))
                 ) !!}
             </div>
         </div>
     </div>
 @endif
 @if($showLink)
-    <div class="form-group">
+    <div class="mb-3">
         <label for="map_shareable_link">
             {{ __('view_common.modal.share.link') }}
         </label>
         <div class="row">
             <div class="col input-group">
                 {{ html()->text('map_shareable_link', $shareLink)->id('map_shareable_link')->class('form-control')->isReadonly() }}
-                <div class="input-group-append">
-                    <button id="map_shareable_link_copy_to_clipboard" class="btn btn-info"
-                            data-toggle="tooltip"
-                            title="{{ __('view_common.modal.share.copy_shareable_link_to_clipboard') }}">
-                        <i class="far fa-copy"></i>
-                    </button>
-                </div>
+                <button id="map_shareable_link_copy_to_clipboard" class="btn btn-info"
+                        data-bs-toggle="tooltip"
+                        title="{{ __('view_common.modal.share.copy_shareable_link_to_clipboard') }}">
+                    <i class="far fa-copy"></i>
+                </button>
             </div>
         </div>
     </div>
-    <div class="form-group">
+    <div class="mb-3">
         <label for="map_shareable_link">
             {{ __('view_common.modal.share.short_link') }}
         </label>
         <div class="row">
             <div class="col input-group">
                 {{ html()->text('map_shareable_short_link', $shareLinkShort)->id('map_shareable_short_link')->class('form-control')->isReadonly() }}
-                <div class="input-group-append">
-                    <button id="map_shareable_short_link_copy_to_clipboard" class="btn btn-info"
-                            data-toggle="tooltip"
-                            title="{{ __('view_common.modal.share.copy_shareable_link_to_clipboard') }}">
-                        <i class="far fa-copy"></i>
-                    </button>
-                </div>
+                <button id="map_shareable_short_link_copy_to_clipboard" class="btn btn-info"
+                        data-bs-toggle="tooltip"
+                        title="{{ __('view_common.modal.share.copy_shareable_link_to_clipboard') }}">
+                    <i class="far fa-copy"></i>
+                </button>
             </div>
         </div>
     </div>
-    <div class="form-group">
+    <div class="mb-3">
         <div class="row">
             <div class="col-auto">
                 {{ html()->checkbox('map_include_location', null, 1)->id('map_include_location_checkbox')->class('form-control')->style('width: 23px; height: 23px;') }}
             </div>
-            <div class="col pl-0">
+            <div class="col ps-0">
                 {{ html()->label(__('view_common.modal.share.include_location_in_link'), 'map_include_location') }}
             </div>
         </div>
     </div>
 @endif
 @if($showEmbed)
-    <div class="form-group">
+    <div class="mb-3">
         <label for="map_embeddable_link">
             {{ __('view_common.modal.share.embed') }}
         </label>
         <div class="row">
             <div class="col input-group">
                 {{ html()->text('map_embeddable_link', sprintf('<iframe src="%s" style="width: 800px; height: 600px; border: none;"></iframe>', route('dungeonroute.embed', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()])))->id('map_embeddable_link')->class('form-control')->isReadonly() }}
-                <div class="input-group-append">
-                    <button id="map_embeddable_link_copy_to_clipboard" class="btn btn-info"
-                            data-toggle="tooltip"
-                            title="{{ __('view_common.modal.share.copy_embed_code_to_clipboard') }}">
-                        <i class="far fa-copy"></i>
-                    </button>
-                </div>
+                <button id="map_embeddable_link_copy_to_clipboard" class="btn btn-info"
+                        data-bs-toggle="tooltip"
+                        title="{{ __('view_common.modal.share.copy_embed_code_to_clipboard') }}">
+                    <i class="far fa-copy"></i>
+                </button>
             </div>
         </div>
     </div>
 @endif
 @if($showMdtExport)
-    <div class="form-group">
+    <div class="mb-3">
         <label for="map_mdt_export">
             {{ __('view_common.modal.share.mdt_string') }}
         </label>
 
-        <div class="form-group">
+        <div class="mb-3">
             <div class="mdt_export_loader_container">
                 <div class="d-flex justify-content-center">
                     <div class="spinner-border" role="status">
-                        <span class="sr-only">{{ __('view_common.modal.share.loading') }}</span>
+                        <span class="visually-hidden">{{ __('view_common.modal.share.loading') }}</span>
                     </div>
                 </div>
             </div>
@@ -146,14 +140,14 @@ $shareLinkShort = route('dungeonroute.viewold', ['dungeonRoute' => $dungeonroute
                 <textarea id="mdt_export_result" class="w-100" style="height: 400px" readonly></textarea>
             </div>
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <div class="mdt_export_result_container" style="display: none;">
                 <div class="btn btn-info copy_mdt_string_to_clipboard w-100">
                     <i class="far fa-copy"></i> {{ __('view_common.modal.share.copy_to_clipboard') }}
                 </div>
             </div>
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <div id="mdt_export_result_warnings">
 
             </div>

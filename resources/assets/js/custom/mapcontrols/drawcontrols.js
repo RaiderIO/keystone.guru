@@ -406,8 +406,8 @@ class DrawControls extends MapControl {
             $.each($buttons, function (index, button) {
                 let $button = $(button);
                 let $row = $($button.children()[0]);
-                $row.attr('data-toggle', 'tooltip');
-                $row.attr('data-placement', 'right');
+                $row.attr('data-bs-toggle', 'tooltip');
+                $row.attr('data-bs-placement', 'right');
                 $row.attr('title', $button.attr('title'));
             });
 
@@ -423,7 +423,7 @@ class DrawControls extends MapControl {
 
             // Put the draw actions in a different div
             let $drawActions = $container.find('.leaflet-draw-actions');
-            $originalDrawActions.removeClass('row no-gutters').addClass('row no-gutters')
+            $originalDrawActions.removeClass('row g-0').addClass('row g-0')
                 .find('li').removeClass('col btn btn-info mx-2 p-0').addClass('col btn btn-info mx-2 p-0')
                 .find('a').removeClass('d-inline-block w-100 h-100').addClass('d-inline-block w-100 h-100');
 
@@ -505,14 +505,14 @@ class DrawControls extends MapControl {
 
             // Finished button container
             let $drawActions = $('<ul>', {
-                class: 'leaflet-draw-actions-pather leaflet-draw-actions leaflet-draw-actions-bottom row no-gutters',
+                class: 'leaflet-draw-actions-pather leaflet-draw-actions leaflet-draw-actions-bottom row g-0',
             });
             // Create the button
             let $button = $('<a>', {
                 href: '#',
                 class: 'd-inline-block w-100 h-100',
-                'data-toggle': 'tooltip',
-                'data-placement': 'right',
+                'data-bs-toggle': 'tooltip',
+                'data-bs-placement': 'right',
                 title: lang.get('js.finish_drawing'),
                 text: lang.get('js.finish')
             });

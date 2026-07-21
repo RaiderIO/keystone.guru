@@ -17,10 +17,16 @@ return [
             'ad_free_giveaway_description_available'     => 'Hodor',
         ],
         'overview' => [
-            'title' => 'Hodor',
+            'title'   => 'Hodor',
+            'routes'  => 'Hodor',
+            'members' => 'Hodor',
         ],
         'routepublishing' => [
-            'title' => 'Hodor',
+            'title'            => 'Hodor',
+            'description'      => 'Hodor',
+            'enabled'          => 'Hodor',
+            'timezone_warning' => 'Hodor',
+            'profile_link'     => 'Hodor',
         ],
         'routes' => [
             'title'                  => 'Hodor',

@@ -6,6 +6,7 @@
  * @property {boolean} sandbox
  * @property {string} defaultEnemyVisualType
  * @property {boolean} defaultHeatmapShowTooltips
+ * @property {boolean} defaultHeatmapShowOnTop
  * @property {number} defaultUnkilledEnemyOpacity
  * @property {number} defaultUnkilledImportantEnemyOpacity
  * @property {boolean} defaultEnemyAggressivenessBorder
@@ -122,8 +123,12 @@ class CommonMapsMap extends InlineCode {
 
             $('#map_enemy_visuals_mdt_auto_solve').unbind('click').bind('click', this._mdtAutoSolve.bind(this));
 
-            // Trigger info popover
-            $('#map_dungeon_route_info_popover').popover().on('inserted.bs.popover', function () {
+            // Trigger info popover (only rendered on maps with a dungeon route, not e.g. the admin mapping pages)
+            let dungeonRouteInfoPopover = document.getElementById('map_dungeon_route_info_popover');
+            if (dungeonRouteInfoPopover !== null) {
+                bootstrap.Popover.getOrCreateInstance(dungeonRouteInfoPopover);
+            }
+            $('#map_dungeon_route_info_popover').on('inserted.bs.popover', function () {
                 $('#view_dungeonroute_affixes').html(
                     handlebarsAffixGroupsParse(self.options.dungeonroute.affixes)
                 );
@@ -155,12 +160,13 @@ class CommonMapsMap extends InlineCode {
             });
 
             // Live sessions
-            $('#stop_live_session_modal select').barrating({
-                theme: 'fontawesome-stars',
-                onSelect: function (value) {
-                    self._rate(value);
-                }
-            });
+            if (getState().getMapContext() instanceof MapContextLiveSession) {
+                $('#rating_select').starRating({
+                    onSelect: function (value) {
+                        self._rate(value);
+                    }
+                });
+            }
         }
     }
 
@@ -570,7 +576,10 @@ class CommonMapsMap extends InlineCode {
         let enemy = enemyContextMenuEvent.context;
         let visualData = enemy.getVisualData();
 
-        if (visualData !== null) {
+        // The modal is only rendered on route/explore maps - on e.g. the admin mapping pages this is a no-op
+        let enemyDetailsModal = document.getElementById('enemy_details_modal');
+
+        if (visualData !== null && enemyDetailsModal !== null) {
             let $title = $('#enemy_details_modal_title_text').html(lang.get(enemy.npc.name));
             if (getState().isMapAdmin()) {
                 $title.empty().append(
@@ -581,16 +590,16 @@ class CommonMapsMap extends InlineCode {
             let template = Handlebars.templates['map_sidebar_enemy_info_template'];
             $('#enemy_details_modal_body').html(template(visualData));
 
-            refreshTooltips($('#enemy_details_modal_body [data-toggle="tooltip"]'));
+            refreshTooltips($('#enemy_details_modal_body [data-bs-toggle="tooltip"]'));
 
             // Reset report form
             $('#enemy_report_enemy_id').val(enemy.id);
             $('#enemy_report_username').val('');
             $('#enemy_report_message').val('');
             $('#enemy_report_contact_ok').prop('checked', false);
-            $('#enemy_report_collapse').collapse('hide');
+            bootstrap.Collapse.getOrCreateInstance(document.getElementById('enemy_report_collapse'), {toggle: false}).hide();
 
-            $('#enemy_details_modal').modal('show');
+            bootstrap.Modal.getOrCreateInstance(enemyDetailsModal).show();
         }
     }
 
@@ -616,7 +625,7 @@ class CommonMapsMap extends InlineCode {
                 $('#userreport_enemy_modal_saving').show();
             },
             success: function () {
-                $('#enemy_report_collapse').collapse('hide');
+                bootstrap.Collapse.getOrCreateInstance(document.getElementById('enemy_report_collapse'), {toggle: false}).hide();
                 showSuccessNotification(lang.get('js.user_report_enemy_success'));
             },
             complete: function () {
@@ -746,10 +755,6 @@ class CommonMapsMap extends InlineCode {
             dataType: 'json',
             data: {
                 rating: value
-            },
-            success: function (json) {
-                // Update the new average rating
-                $('#rating').barrating('set', Math.round(json.new_rating));
             }
         });
     }

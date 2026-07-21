@@ -151,7 +151,7 @@ class ProfileController extends Controller
                                     break;
                                 }
                             }
-                        } catch (Exception $exception) {
+                        } catch (Exception) {
                             Log::warning(sprintf('Unable to find users for channel %s', $name));
                         }
                     }

@@ -20,7 +20,7 @@
         "map_icon_type_id": 2,
         "lat": -111.3217,
         "lng": 208.1704,
-        "comment": "Keystone.guru: Jump down on the cogwheel. At own risk.",
+        "comment": "mapping.map_icons.classic.gnomeregan.cogwheel_jump_down",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 2,
         "lat": -177.3862,
         "lng": 305.2274,
-        "comment": "Many Caverndeep Ambushers will spawn upon activation of the event.",
+        "comment": "mapping.map_icons.classic.gnomeregan.caverndeep_ambushers_event",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 93,
         "lat": -141.8142,
         "lng": 193.017,
-        "comment": "Box of Assorted Parts",
+        "comment": "mapping.map_icons.classic.gnomeregan.box_of_assorted_parts",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 2,
         "lat": -69.7529,
         "lng": 256.9212,
-        "comment": "First punchcard is acquired from enemies outside of the instance. Then, a punch machine is available outside of the instance as well. The remaining punchcards are in the instance.",
+        "comment": "mapping.map_icons.classic.gnomeregan.punchcard_note",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 10,
         "lat": -71.5833,
         "lng": 247.2428,
-        "comment": null,
+        "comment": "mapping.map_icons.classic.gnomeregan.main_entrance",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 2,
         "lat": -111.3217,
         "lng": 208.1704,
-        "comment": "Keystone.guru: Jump down on the cogwheel. At own risk.",
+        "comment": "mapping.map_icons.classic.gnomeregan.cogwheel_jump_down",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -111,7 +111,7 @@
         "map_icon_type_id": 2,
         "lat": -177.3862,
         "lng": 305.2274,
-        "comment": "Many Caverndeep Ambushers will spawn upon activation of the event.",
+        "comment": "mapping.map_icons.classic.gnomeregan.caverndeep_ambushers_event",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -137,7 +137,7 @@
         "map_icon_type_id": 93,
         "lat": -141.8142,
         "lng": 193.017,
-        "comment": "Box of Assorted Parts",
+        "comment": "mapping.map_icons.classic.gnomeregan.box_of_assorted_parts",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -150,7 +150,7 @@
         "map_icon_type_id": 2,
         "lat": -69.7529,
         "lng": 256.9212,
-        "comment": "First punchcard is acquired from enemies outside of the instance. Then, a punch machine is available outside of the instance as well. The remaining punchcards are in the instance.",
+        "comment": "mapping.map_icons.classic.gnomeregan.punchcard_note",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

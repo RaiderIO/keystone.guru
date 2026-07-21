@@ -137,7 +137,7 @@
         "map_icon_type_id": 40,
         "lat": -169.5,
         "lng": 320.9375,
-        "comment": "Gong",
+        "comment": "mapping.map_icons.bfa.kings_rest.gong",
         "permanent_tooltip": 0,
         "seasonal_index": 0,
         "is_admin": true
@@ -150,7 +150,7 @@
         "map_icon_type_id": 6,
         "lat": -201.4375,
         "lng": 230.1875,
-        "comment": "Opens when gauntlet is complete.",
+        "comment": "mapping.map_icons.bfa.kings_rest.gauntlet_gate",
         "permanent_tooltip": 0,
         "seasonal_index": 0,
         "is_admin": true

@@ -44,7 +44,7 @@ use App\Models\User;
 
         <table class="default_table table-striped">
             <tr>
-                <th class="pl-1">
+                <th class="ps-1">
                     {{ __('view_profile.edit.patreon_benefit_table.header_active') }}
                 </th>
                 <th>
@@ -54,7 +54,7 @@ use App\Models\User;
             @foreach(PatreonBenefit::all() as $patreonBenefit)
                     <?php /** @var PatreonBenefit $patreonBenefit */ ?>
                 <tr>
-                    <td class="pl-1">
+                    <td class="ps-1">
                         <i class="fas fa-{{ $user->hasPatreonBenefit($patreonBenefit->key) ? 'check-circle text-success' : 'times-circle text-danger' }}"></i>
                     </td>
                     <td>
@@ -71,7 +71,7 @@ use App\Models\User;
                 {{ __('view_profile.edit.ad_free_giveaway.title') }}
             </h4>
 
-            <div class="form-group">
+            <div class="mb-3">
                 @php($maxAdFreeGiveaways = config('keystoneguru.patreon.ad_free_giveaways'))
                 @php($countLeft = PatreonAdFreeGiveaway::getCountLeft($user))
                 @if($countLeft > 0)

@@ -19,17 +19,21 @@ return [
             'mdt_invalid_category'                => 'Categoria inválida',
         ],
         'flash' => [
-            'message_banner_set_successfully'   => 'Banner de mensagem configurado com sucesso',
-            'thumbnail_regenerate_result'       => 'Despachou :success trabalhos para rotas :total. :failed falhou.',
-            'combatlog_route_regenerate_result' => '',
-            'caches_dropped_successfully'       => 'Caches descartados com sucesso',
-            'releases_exported'                 => 'Lançamentos exportados',
-            'exception'                         => 'Exceção lançada no painel de administração',
-            'feature_toggle_activated'          => 'Recurso :feature agora ativado',
-            'feature_toggle_deactivated'        => 'Recurso :feature agora desativado',
-            'feature_forgotten'                 => 'Recurso :feature esquecido com sucesso',
-            'read_only_mode_disabled'           => 'Modo somente leitura desativado',
-            'read_only_mode_enabled'            => 'Modo somente leitura ativado',
+            'message_banner_set_successfully'        => 'Banner de mensagem configurado com sucesso',
+            'thumbnail_regenerate_result'            => 'Despachou :success trabalhos para rotas :total. :failed falhou.',
+            'combatlog_route_regenerate_result'      => '',
+            'combatlog_criteria_reset'               => '',
+            'combatlog_criteria_thresholds_updated'  => '',
+            'caches_dropped_successfully'            => 'Caches descartados com sucesso',
+            'releases_exported'                      => 'Lançamentos exportados',
+            'exception'                              => 'Exceção lançada no painel de administração',
+            'feature_toggle_activated'               => 'Recurso :feature agora ativado',
+            'feature_toggle_deactivated'             => 'Recurso :feature agora desativado',
+            'feature_forgotten'                      => 'Recurso :feature esquecido com sucesso',
+            'mapping_version_upgrade_queued'         => '',
+            'mapping_version_upgrade_already_latest' => '',
+            'read_only_mode_disabled'                => 'Modo somente leitura desativado',
+            'read_only_mode_enabled'                 => 'Modo somente leitura ativado',
         ],
     ],
     'apidungeonroute' => [
@@ -46,6 +50,12 @@ return [
         'error' => [
             'unable_to_save_brushline'   => 'Não foi possível salvar a linha',
             'unable_to_delete_brushline' => 'Não foi possível excluir a linha',
+        ],
+    ],
+    'arrow' => [
+        'error' => [
+            'unable_to_save_arrow'   => '',
+            'unable_to_delete_arrow' => '',
         ],
     ],
     'dungeon' => [
@@ -176,6 +186,13 @@ return [
             'account_deleted_successfully'     => 'Conta excluída com sucesso.',
             'error_deleting_account'           => 'Ocorreu um erro. Por favor, tente novamente.',
         ],
+        'error' => [
+            'add_ad_free_giveaway_limit_reached'        => '',
+            'add_ad_free_giveaway_already_ad_free'      => '',
+            'add_ad_free_giveaway_already_has_giveaway' => '',
+            'remove_ad_free_giveaway_not_found'         => '',
+            'remove_ad_free_giveaway_not_yours'         => '',
+        ],
     ],
     'spell' => [
         'error' => [
@@ -207,6 +224,16 @@ return [
             'user_is_not_a_patron'              => 'Este usuário não é um Patron.',
             'all_benefits_granted_successfully' => 'Todos os benefícios concedidos com sucesso.',
             'error_granting_all_benefits'       => 'Ocorreu um erro ao tentar conceder todos os benefícios.',
+        ],
+    ],
+
+    'admin' => [
+        'dungeonroute' => [
+            'flash' => [
+                'updated' => '',
+                'deleted' => '',
+                'claimed' => '',
+            ],
         ],
     ],
 

@@ -101,7 +101,7 @@ class SearchInlineBase extends InlineCode {
         }
 
         $(this.options.currentFiltersSelector).html(
-            `<span class="mr-2">${lang.get('js.filters')}:</span>${html}`
+            `<span class="me-2">${lang.get('js.filters')}:</span>${html}`
         )
     }
 

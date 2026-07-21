@@ -122,15 +122,6 @@
         </tr>
         <tr>
             <td>
-                changelog_release
-            </td>
-            <td>
-                Keeps track of the latest release you've viewed so we can show the NEW keyword next to the changelog in
-                the header when there's a new release.
-            </td>
-        </tr>
-        <tr>
-            <td>
                 viewed_teams
             </td>
             <td>

@@ -7,7 +7,7 @@
         "map_icon_type_id": 42,
         "lat": -187.0502,
         "lng": 374.04,
-        "comment": "Can be one of a few \"shows\".",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.random_show",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -20,7 +20,7 @@
         "map_icon_type_id": 9,
         "lat": -163.2471,
         "lng": 335.6101,
-        "comment": "Mysterious Relic",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.mysterious_relic",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 9,
         "lat": -198.3292,
         "lng": 369.3227,
-        "comment": "Mysterious Relic",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.mysterious_relic",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 9,
         "lat": -88.4655,
         "lng": 232.7169,
-        "comment": "Mysterious Relic",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.mysterious_relic",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 9,
         "lat": -149.7922,
         "lng": 223.8494,
-        "comment": "Mysterious Relic",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.mysterious_relic",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 9,
         "lat": -192.0977,
         "lng": 369.2397,
-        "comment": "Mysterious Relic",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.mysterious_relic",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 9,
         "lat": -168.4225,
         "lng": 125.5346,
-        "comment": "Mysterious Relic",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.mysterious_relic",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 93,
         "lat": -201.2286,
         "lng": 306.9075,
-        "comment": "Treasure Chest",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.treasure_chest",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

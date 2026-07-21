@@ -33,7 +33,7 @@
         "map_icon_type_id": 6,
         "lat": -91.2272,
         "lng": 191.8329,
-        "comment": "Opens after defeating Warchief Rend Blackhand.",
+        "comment": "mapping.map_icons.classic.upper_blackrock_spire.opens_after_rend_blackhand",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 42,
         "lat": -47.8125,
         "lng": 186.8125,
-        "comment": "Waves of Chromatic Whelps, Blackhand Dragon Handlers and Chromatic Dragonspawns will attack you, until finally Warchief Rend Blackhand comes down to fight you himself.",
+        "comment": "mapping.map_icons.classic.upper_blackrock_spire.rend_blackhand_waves",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 42,
         "lat": -103.1875,
         "lng": 213.125,
-        "comment": "Green patrol is stealthed!",
+        "comment": "mapping.map_icons.classic.upper_blackrock_spire.green_patrol_stealthed",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 42,
         "lat": -109.2737,
         "lng": 237.3991,
-        "comment": "The Beast is VERY dangerous!",
+        "comment": "mapping.map_icons.classic.upper_blackrock_spire.the_beast_warning",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 2,
         "lat": -141.9375,
         "lng": 133.875,
-        "comment": "Enemies may be one of Blackhand Iron Guard, Blackhand Elite, Blackhand Assassin, Rage Talon Captain, Rage Talon Fire Tongue.",
+        "comment": "mapping.map_icons.classic.upper_blackrock_spire.blackhand_guard_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 42,
         "lat": -129.2768,
         "lng": 92.6048,
-        "comment": "This isn't actually available in Classic.",
+        "comment": "mapping.map_icons.classic.upper_blackrock_spire.not_available_in_classic",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -137,7 +137,7 @@
         "map_icon_type_id": 6,
         "lat": -91.2272,
         "lng": 191.8329,
-        "comment": "Opens after defeating Warchief Rend Blackhand.",
+        "comment": "mapping.map_icons.classic.upper_blackrock_spire.opens_after_rend_blackhand",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -150,7 +150,7 @@
         "map_icon_type_id": 42,
         "lat": -47.8125,
         "lng": 186.8125,
-        "comment": "Waves of Chromatic Whelps, Blackhand Dragon Handlers and Chromatic Dragonspawns will attack you, until finally Warchief Rend Blackhand comes down to fight you himself.",
+        "comment": "mapping.map_icons.classic.upper_blackrock_spire.rend_blackhand_waves",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -163,7 +163,7 @@
         "map_icon_type_id": 42,
         "lat": -103.1875,
         "lng": 213.125,
-        "comment": "Green patrol is stealthed!",
+        "comment": "mapping.map_icons.classic.upper_blackrock_spire.green_patrol_stealthed",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -176,7 +176,7 @@
         "map_icon_type_id": 42,
         "lat": -109.2737,
         "lng": 237.3991,
-        "comment": "The Beast is VERY dangerous!",
+        "comment": "mapping.map_icons.classic.upper_blackrock_spire.the_beast_warning",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -189,7 +189,7 @@
         "map_icon_type_id": 2,
         "lat": -141.9375,
         "lng": 133.875,
-        "comment": "Enemies may be one of Blackhand Iron Guard, Blackhand Elite, Blackhand Assassin, Rage Talon Captain, Rage Talon Fire Tongue.",
+        "comment": "mapping.map_icons.classic.upper_blackrock_spire.blackhand_guard_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -202,7 +202,7 @@
         "map_icon_type_id": 42,
         "lat": -129.2768,
         "lng": 92.6048,
-        "comment": "This isn't actually available in Classic.",
+        "comment": "mapping.map_icons.classic.upper_blackrock_spire.not_available_in_classic",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

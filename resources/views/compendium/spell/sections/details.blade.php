@@ -15,17 +15,17 @@ use App\Models\Spell\Spell;
                 <tr>
                     <th>
                         {{ __('view_compendium.spell.sections.details.header_schools') }}
-                        <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top"
+                        <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top"
                            title="{{ __('view_compendium.spell.sections.details.header_schools_tooltip') }}"></i>
                     </th>
                     <th>
                         {{ __('view_compendium.spell.sections.details.header_miss_types') }}
-                        <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top"
+                        <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top"
                            title="{{ __('view_compendium.spell.sections.details.header_miss_types_tooltip') }}"></i>
                     </th>
                     <th>
                         {{ __('view_compendium.spell.sections.details.header_dispel_type') }}
-                        <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top"
+                        <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top"
                            title="{{ __('view_compendium.spell.sections.details.header_dispel_type_tooltip') }}"></i>
                     </th>
                     <th>{{ __('view_compendium.spell.sections.details.header_mechanic') }}</th>

@@ -5,7 +5,7 @@
 @section('content')
     {{ html()->form('POST', route('admin.tools.mdt.dungeonmappinghash.submit'))->open() }}
     @include('common.dungeon.select', ['activeOnly' => false, 'showAll' => false])
-    <div class="form-group">
+    <div class="mb-3">
         {{ html()->input('submit')->value(__('view_admin.tools.mdt.dungeonmappinghash.submit'))->class('btn btn-primary col-md-auto') }}
         <div class="col-md">
 

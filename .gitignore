@@ -41,5 +41,16 @@ docker-compose/mysql
 docker-compose/mysql-combatlog
 !docker-compose/mysql-combatlog/.gitkeep
 docker-compose/redis-data
+# Local restores of production database dumps
+docker-compose/mysql-prod*/
 
 .ladebugermcp/
+
+# Local scratch data that must never be staged (git add * is allowlisted for agents)
+__pycache__/
+/tbc/
+/tbc_ssc/
+/tbc_the_eye/
+/tmp/
+/tmp_combatlogs/
+/storage/api-docs/

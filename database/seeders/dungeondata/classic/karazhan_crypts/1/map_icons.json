@@ -7,7 +7,7 @@
         "map_icon_type_id": 6,
         "lat": -143.0567,
         "lng": 104.5266,
-        "comment": "Requires Portcullis Key",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.requires_portcullis_key",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -20,7 +20,7 @@
         "map_icon_type_id": 6,
         "lat": -144.0486,
         "lng": 76.682,
-        "comment": "Requires Portcullis Key",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.requires_portcullis_key",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 93,
         "lat": -120.9645,
         "lng": 86.1011,
-        "comment": "Lost Cache",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.lost_cache",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 9,
         "lat": -87.9151,
         "lng": 174.7725,
-        "comment": "Mysterious Relic",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.mysterious_relic",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 93,
         "lat": -122.4854,
         "lng": 96.761,
-        "comment": "Lost Cache",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.lost_cache",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -111,7 +111,7 @@
         "map_icon_type_id": 9,
         "lat": -115.4269,
         "lng": 175.1758,
-        "comment": "Mysterious Scroll",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.mysterious_scroll",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -124,7 +124,7 @@
         "map_icon_type_id": 2,
         "lat": -170.8872,
         "lng": 97.51,
-        "comment": "The enemies in this room can have various enemy types - be it Ghouls or Risen skeletons.",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.room_enemy_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -137,7 +137,7 @@
         "map_icon_type_id": 9,
         "lat": -57.9387,
         "lng": 140.0695,
-        "comment": "Mysterious Relic",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.mysterious_relic",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -150,7 +150,7 @@
         "map_icon_type_id": 2,
         "lat": -95.4244,
         "lng": 129.5658,
-        "comment": "The Warden is a red mist with a floating skull that you can see in the dark.",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.the_warden_description",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -163,7 +163,7 @@
         "map_icon_type_id": 9,
         "lat": -58.3315,
         "lng": 114.5388,
-        "comment": "Mysterious Relic",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.mysterious_relic",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

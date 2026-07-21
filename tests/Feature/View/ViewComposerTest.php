@@ -2,20 +2,17 @@
 
 namespace Tests\Feature\View;
 
-use App\Http\View\Composers\AdminDungeonEditComposer;
 use App\Http\View\Composers\AdminDungeonMappingVersionsComposer;
 use App\Http\View\Composers\AdminMessageBannerComposer;
 use App\Http\View\Composers\AdminNpcHealthEditComposer;
 use App\Http\View\Composers\AdminSpellEditComposer;
 use App\Http\View\Composers\AffixesComposer;
 use App\Http\View\Composers\AppLayoutComposer;
-use App\Http\View\Composers\ChangelogFlagComposer;
 use App\Http\View\Composers\CompositionComposer;
 use App\Http\View\Composers\CreateRouteFormComposer;
 use App\Http\View\Composers\DiscoverAffixGroupComposer;
 use App\Http\View\Composers\DiscoverSearchComposer;
 use App\Http\View\Composers\DungeonDifficultySelectComposer;
-use App\Http\View\Composers\DungeonGridDiscoverComposer;
 use App\Http\View\Composers\DungeonGridTabsComposer;
 use App\Http\View\Composers\DungeonSelectComposer;
 use App\Http\View\Composers\EmbedComposer;
@@ -23,7 +20,6 @@ use App\Http\View\Composers\GameVersionsNavComposer;
 use App\Http\View\Composers\GlobalComposer;
 use App\Http\View\Composers\HeaderComposer;
 use App\Http\View\Composers\HeatmapSearchComposer;
-use App\Http\View\Composers\HomeComposer;
 use App\Http\View\Composers\MapComposer;
 use App\Http\View\Composers\MappingVersionComposer;
 use App\Http\View\Composers\OAuthRegisterFormComposer;
@@ -31,7 +27,6 @@ use App\Http\View\Composers\ProfileEditComposer;
 use App\Http\View\Composers\ProfileNewRouteStyleComposer;
 use App\Http\View\Composers\PullsComposer;
 use App\Http\View\Composers\PullsWorkbenchComposer;
-use App\Http\View\Composers\ReleaseComposer;
 use App\Http\View\Composers\RollbarComposer;
 use App\Http\View\Composers\RouteAttributesComposer;
 use App\Http\View\Composers\RouteCoverageAffixGroupComposer;
@@ -40,8 +35,6 @@ use App\Http\View\Composers\RouteTierComposer;
 use App\Http\View\Composers\SimulateComposer;
 use App\Http\View\Composers\SimulateOptionsComposer;
 use App\Http\View\Composers\TeamSelectComposer;
-use App\Models\AffixGroup\AffixGroup;
-use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use Illuminate\Contracts\View\View as ViewContract;
 use PHPUnit\Framework\Attributes\Group;
@@ -55,6 +48,7 @@ use Tests\TestCases\PublicTestCase;
 #[Group('ViewComposers')]
 final class ViewComposerTest extends PublicTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -65,17 +59,9 @@ final class ViewComposerTest extends PublicTestCase
     #[Test]
     public function globalComposer_givenView_setsRequestScopedKeys(): void
     {
-        $this->assertComposerSetsKeys(GlobalComposer::class, 'home', [
+        $this->assertComposerSetsKeys(GlobalComposer::class, 'home.layout', [
             'isMobile', 'isLocal', 'isMapping', 'isProduction', 'viewName',
             'theme', 'isUserAdmin', 'adFree', 'userOrDefaultRegion', 'currentUserGameVersion', 'numUserReports',
-        ]);
-    }
-
-    #[Test]
-    public function homeComposer_givenView_setsHomeKeys(): void
-    {
-        $this->assertComposerSetsKeys(HomeComposer::class, 'home', [
-            'userCount', 'demoRoutes', 'demoRouteDungeons', 'demoRouteMapping', 'currentSeason', 'defaultGameVersion',
         ]);
     }
 
@@ -83,7 +69,7 @@ final class ViewComposerTest extends PublicTestCase
     public function appLayoutComposer_givenView_setsLayoutKeys(): void
     {
         $this->assertComposerSetsKeys(AppLayoutComposer::class, 'layouts.app', [
-            'version', 'revision', 'nameAndVersion', 'latestRelease', 'latestReleaseSpotlight', 'messageBanner', 'readOnlyEnabled',
+            'version', 'revision', 'nameAndVersion', 'messageBanner', 'readOnlyEnabled',
         ]);
     }
 
@@ -92,14 +78,6 @@ final class ViewComposerTest extends PublicTestCase
     {
         $this->assertComposerSetsKeys(MapComposer::class, 'common.maps.map', [
             'assetsBaseUrl', 'tilesBaseUrl',
-        ]);
-    }
-
-    #[Test]
-    public function changelogFlagComposer_givenView_setsHasNewChangelog(): void
-    {
-        $this->assertComposerSetsKeys(ChangelogFlagComposer::class, 'common.layout.footer', [
-            'hasNewChangelog',
         ]);
     }
 
@@ -156,14 +134,6 @@ final class ViewComposerTest extends PublicTestCase
     {
         $this->assertComposerSetsKeys(CreateRouteFormComposer::class, 'common.forms.createroute', [
             'routeKeyLevelFrom', 'routeKeyLevelTo', 'currentSeason', 'nextSeason',
-        ]);
-    }
-
-    #[Test]
-    public function releaseComposer_givenView_setsCategories(): void
-    {
-        $this->assertComposerSetsKeys(ReleaseComposer::class, 'common.release.release', [
-            'categories',
         ]);
     }
 
@@ -321,10 +291,10 @@ final class ViewComposerTest extends PublicTestCase
     }
 
     #[Test]
-    public function rollbarComposer_givenView_setsLatestRelease(): void
+    public function rollbarComposer_givenView_setsCodeVersion(): void
     {
         $this->assertComposerSetsKeys(RollbarComposer::class, 'common.thirdparty.rollbar.rollbar', [
-            'latestRelease',
+            'codeVersion',
         ]);
     }
 
@@ -356,37 +326,6 @@ final class ViewComposerTest extends PublicTestCase
 
         // Assert
         $this->assertViewHasKeys($view, ['currentAffixGroup', 'nextAffixGroup']);
-    }
-
-    #[Test]
-    public function dungeonGridDiscoverComposer_givenAffixGroupData_setsTiers(): void
-    {
-        // Arrange
-        $affixGroup = AffixGroup::firstOrFail();
-        $view       = view('common.dungeon.griddiscover', [
-            'currentAffixGroup' => $affixGroup,
-            'nextAffixGroup'    => null,
-        ]);
-
-        // Act
-        app(DungeonGridDiscoverComposer::class)->compose($view);
-
-        // Assert
-        $this->assertViewHasKeys($view, ['tiers']);
-    }
-
-    #[Test]
-    public function adminDungeonEditComposer_givenDungeonData_setsHasUnmergedMappingVersion(): void
-    {
-        // Arrange
-        $dungeon = Dungeon::firstOrFail();
-        $view    = view('admin.dungeon.edit', ['dungeon' => $dungeon]);
-
-        // Act
-        app(AdminDungeonEditComposer::class)->compose($view);
-
-        // Assert
-        $this->assertViewHasKeys($view, ['hasUnmergedMappingVersion']);
     }
 
     /**

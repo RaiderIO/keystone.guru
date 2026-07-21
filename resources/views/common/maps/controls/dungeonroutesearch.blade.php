@@ -66,7 +66,7 @@ $showAds                                   ??= true;
 
 <!--suppress HtmlFormInputWithoutLabel -->
 <nav id="dungeonroute_search_sidebar"
-     class="route_sidebar top right row no-gutters map_fade_out
+     class="route_sidebar top right row g-0 map_fade_out
      {{ $embed ? 'embed' : '' }}
      {{ $embedStyle }}
      {{ $isMobile ? 'mobile' : '' }}
@@ -75,16 +75,16 @@ $showAds                                   ??= true;
          ">
     <div class="bg-header">
         @if($showSidebar)
-            <div id="dungeonroute_search_sidebar_trigger" class="handle" data-toggle="tooltip">
+            <div id="dungeonroute_search_sidebar_trigger" class="handle" data-bs-toggle="tooltip">
                 <i class="fas {{ $isDungeonRouteSearchSidebarDefaultVisible ? 'fa-arrow-right' : 'fa-arrow-left' }}"></i>
             </div>
         @endif
 
         <div class="p-1">
-            <div class="row pr-2 mb-2 no-gutters">
-                <div class="col-auto" data-toggle="tooltip"
+            <div class="row pe-2 mb-2 g-0">
+                <div class="col-auto" data-bs-toggle="tooltip"
                      title="{{ __('view_common.maps.controls.dungeonroutesearch.settings_title') }}">
-                    <button class="btn btn-info w-100" data-toggle="modal" data-target="#map_settings_modal">
+                    <button class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#map_settings_modal">
                         <i class='fas fa-cog'></i>
                     </button>
                 </div>
@@ -133,7 +133,7 @@ $showAds                                   ??= true;
                     <input id="filter_username" type="text" class="form-control" name="username" value="{{ old('username') }}"/>
                 @endcomponent
 
-                <div id="dungeonroute_search_routes_container" class="form-group">
+                <div id="dungeonroute_search_routes_container" class="mb-3">
 
                 </div>
             </div>

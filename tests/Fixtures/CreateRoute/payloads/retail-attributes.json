@@ -1,0 +1,33 @@
+{
+    "description": "Retail: user selects 2 route attributes via Tom Select on the multi-select #attributes.",
+    "endpoint": "dungeonroute.savenew",
+    "gameVersion": "retail",
+    "auth": true,
+    "fields": [
+        {"name": "dungeon_id", "value": "{{dungeon_id}}"},
+        {"name": "team_id", "value": "-1"},
+        {"name": "dungeon_difficulty", "value": ""},
+        {"name": "dungeon_start_map_icon_id", "value": ""},
+        {"name": "dungeon_route_title", "value": "My Test Route"},
+        {"name": "dungeon_route_level", "value": "{{key_level_min}};{{key_level_max}}"},
+        {"name": "route_select_affixes[]", "value": "{{affix_group_id}}"},
+        {"name": "attributes[]", "value": "{{attribute_id_1}}"},
+        {"name": "attributes[]", "value": "{{attribute_id_2}}"},
+        {"name": "faction_id", "value": "1"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"}
+    ]
+}

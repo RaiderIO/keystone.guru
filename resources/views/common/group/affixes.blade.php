@@ -60,7 +60,7 @@ $allAffixGroupsWithSeasons = $allAffixGroups
 ]])
 
 <?php // @formatter:off ?>
-<div class="form-group">
+<div class="mb-3">
     {{ html()->multiselect($id . '[]', $allAffixGroupsWithSeasons->pluck('id', 'id'))->id($id)->class('form-control affixselect d-none') }}
     <div id="{{ $id }}_list_custom" class="affix_list col-lg-12">
         @if($nextSeason !== null)

@@ -20,7 +20,7 @@
         "map_icon_type_id": 3,
         "lat": -139.941,
         "lng": 233.0899,
-        "comment": "Iron Gate",
+        "comment": "mapping.map_icons.classic.scholomance.iron_gate",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

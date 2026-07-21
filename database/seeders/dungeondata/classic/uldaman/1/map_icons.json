@@ -33,7 +33,7 @@
         "map_icon_type_id": 10,
         "lat": -177.9686,
         "lng": 109.849,
-        "comment": null,
+        "comment": "mapping.map_icons.classic.uldaman.echomok_cavern_entrance",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 10,
         "lat": -185.7188,
         "lng": 260.875,
-        "comment": null,
+        "comment": "mapping.map_icons.classic.uldaman.hall_of_the_keepers_entrance",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 3,
         "lat": -64.4375,
         "lng": 170.5625,
-        "comment": "Temple Door",
+        "comment": "mapping.map_icons.classic.uldaman.temple_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 44,
         "lat": -41.625,
         "lng": 160.125,
-        "comment": "Altar of The Keepers.",
+        "comment": "mapping.map_icons.classic.uldaman.altar_of_the_keepers",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -111,7 +111,7 @@
         "map_icon_type_id": 2,
         "lat": -160.2397,
         "lng": 134.0935,
-        "comment": "Animals here can be either Jadespine Basilisk or Venomlash Scorpid.",
+        "comment": "mapping.map_icons.classic.uldaman.animal_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -124,7 +124,7 @@
         "map_icon_type_id": 2,
         "lat": -227.0625,
         "lng": 221.25,
-        "comment": "Enemies can be either Stonevault Oracle or Stonevault Cave Lurker.",
+        "comment": "mapping.map_icons.classic.uldaman.stonevault_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -137,7 +137,7 @@
         "map_icon_type_id": 2,
         "lat": -191.6172,
         "lng": 189.6788,
-        "comment": "Enemies can be either Stonevault Oracle or Stonevault Cave Lurker.",
+        "comment": "mapping.map_icons.classic.uldaman.stonevault_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

@@ -4,7 +4,7 @@
  * @var int $count
  */
 ?>
-<span title="{{ sprintf(__('view_common.dungeonroute.rating.nr_of_votes'), $count) }}" data-toggle="tooltip">
+<span title="{{ sprintf(__('view_common.dungeonroute.rating.nr_of_votes'), $count) }}" data-bs-toggle="tooltip">
     <?php for ($i = 1;
                $i <= 5;
                ++$i) { ?>

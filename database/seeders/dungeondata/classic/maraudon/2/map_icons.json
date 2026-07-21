@@ -7,7 +7,7 @@
         "map_icon_type_id": 2,
         "lat": -103.0239,
         "lng": 40.707,
-        "comment": "There are either 5 or 6 Deep Borers per pack.",
+        "comment": "mapping.map_icons.classic.maraudon.deep_borers_pack_size",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

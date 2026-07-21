@@ -115,7 +115,7 @@ class DungeonService implements DungeonServiceInterface
     public function getDungeonsForGameVersion(?GameVersion $gameVersion = null): Collection
     {
         // Resort to finding a default dungeon of sorts
-        $gameVersion = $gameVersion ?? GameVersion::getUserOrDefaultGameVersion();
+        $gameVersion ??= GameVersion::getUserOrDefaultGameVersion();
 
         $currentSeason = $this->seasonService->getCurrentSeason($gameVersion->expansion);
         $nextSeason    = $currentSeason === null ? null : $this->seasonService->getNextSeason($currentSeason);

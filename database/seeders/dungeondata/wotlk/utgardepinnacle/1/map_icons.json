@@ -7,7 +7,7 @@
         "map_icon_type_id": 2,
         "lat": -210.0203,
         "lng": 182.1627,
-        "comment": "Pat from upstairs can come down.",
+        "comment": "mapping.map_icons.wotlk.utgarde_pinnacle.pat_from_upstairs",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

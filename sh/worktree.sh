@@ -1,0 +1,442 @@
+#!/usr/bin/env bash
+#
+# worktree.sh — manage isolated git worktrees, each with its own minimal Docker stack
+# (app + nginx) that shares the main stack's database/redis/etc.
+#
+# See the `worktree-docker` skill for the full workflow and rationale.
+#
+# Usage:
+#   sh/worktree.sh create <issue>-<slug> [base-ref]   # default base-ref: origin/master
+#   sh/worktree.sh down   <issue>-<slug>              # stop the stack, keep the checkout
+#   sh/worktree.sh remove <issue>-<slug>              # stop the stack and remove the worktree
+#   sh/worktree.sh repair [<issue>-<slug>]            # reattach shared services (all stacks if omitted)
+#   sh/worktree.sh list                               # list worktrees and their stacks
+#
+set -euo pipefail
+
+# The main stack's Compose project name and shared network (project name with dots stripped,
+# suffixed with the compose network key `keystone.guru`).
+MAIN_PROJECT="keystoneguru"
+SHARED_NET="${MAIN_PROJECT}_keystone.guru"
+
+# Shared service containers to attach into each worktree network, as "alias:container" pairs.
+# The alias matches the service DNS name the app expects (from .env), so no .env host rewrites.
+SHARED_SERVICES="
+db:keystone.guru-db-prod
+db-combatlog:keystone.guru-db-prod-combatlog
+redis:keystone.guru-redis
+reverb:keystone.guru-reverb
+app-swoole:keystone.guru-app-swoole
+app-assets:keystone.guru-app-assets
+opensearch-node1:keystone.guru-opensearch-node1
+influxdb:keystone.guru-influxdb
+"
+
+PORT_RANGE_START=8100
+PORT_RANGE_END=8199
+
+# Serializes the port-pick → compose-up window of concurrent `create`s: find_free_port only scans
+# current listeners, so without a lock two creates can pick the same port before either binds it.
+CREATE_LOCK="/tmp/ksg-worktree-create.lock"
+
+# Scoped, passphraseless deploy key (write access, RaiderIO/keystone.guru only) for non-interactive
+# pushes of worktree branches. `-F /dev/null` bypasses ~/.ssh/config, which maps github.com to a
+# passphrase-protected key that would otherwise hang on an askpass prompt.
+DEPLOY_KEY="${KSG_WORKTREE_DEPLOY_KEY:-$HOME/.ssh/keystone_worktree_ed25519}"
+WORKTREE_GIT_SSH="ssh -F /dev/null -i $DEPLOY_KEY -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new"
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(dirname "$SCRIPT_DIR")"
+WORKTREES_DIR="$(dirname "$REPO_ROOT")/keystone.guru-worktrees"
+
+die() {
+    echo "ERROR: $*" >&2
+    exit 1
+}
+
+sanitize() {
+    printf '%s' "$1" | tr '[:upper:]' '[:lower:]' | tr -c 'a-z0-9_-' '-' | sed 's/-*$//'
+}
+
+project_name() {
+    printf 'ksg-%s' "$(sanitize "$1")"
+}
+
+port_in_use() {
+    ss -ltnH 2>/dev/null | awk '{print $4}' | sed 's/.*://' | grep -qx "$1"
+}
+
+find_free_port() {
+    local port
+    for port in $(seq "$PORT_RANGE_START" "$PORT_RANGE_END"); do
+        if ! port_in_use "$port"; then
+            printf '%s' "$port"
+            return 0
+        fi
+    done
+    die "no free host port in ${PORT_RANGE_START}-${PORT_RANGE_END}"
+}
+
+# Locate the private network Compose created for a project (robust against name sanitisation).
+worktree_network() {
+    docker network ls \
+        --filter "label=com.docker.compose.project=$1" \
+        --format '{{.Name}}' | head -n1
+}
+
+# Attach every shared service container into the given worktree network with its DNS alias.
+# Idempotent: already-attached containers are reported and skipped. Used by create and repair.
+attach_shared_services() {
+    local net="$1" pair alias container
+    for pair in $SHARED_SERVICES; do
+        alias="${pair%%:*}"
+        container="${pair#*:}"
+        if ! docker inspect "$container" >/dev/null 2>&1; then
+            echo "  ! $container not found — skipping (alias $alias)"
+            continue
+        fi
+        if docker network connect --alias "$alias" "$net" "$container" 2>/dev/null; then
+            echo "  + $container (alias: $alias)"
+        else
+            echo "  = $container already attached (alias: $alias)"
+        fi
+    done
+}
+
+# The label that marks a GitHub issue as actively worked on in a live worktree.
+WIP_LABEL="in progress"
+
+# Best-effort: toggle the "in progress" label on the issue whose number prefixes the branch
+# (<issue>-<slug>). No-op when the branch has no leading issue number or gh is unavailable, and
+# never fatal — set -euo pipefail must not abort a worktree op over a labeling hiccup.
+set_wip_label() {
+    local action="$1" branch="$2" issue
+    issue="${branch%%-*}"
+    [[ "$issue" =~ ^[0-9]+$ ]] || return 0
+    command -v gh >/dev/null 2>&1 || return 0
+    gh issue edit "$issue" --repo RaiderIO/keystone.guru "--${action}-label" "$WIP_LABEL" \
+        >/dev/null 2>&1 \
+        && echo "==> issue #$issue: ${action} '$WIP_LABEL'" \
+        || echo "  ! issue #$issue: could not ${action} '$WIP_LABEL' (skipping)"
+    return 0
+}
+
+# Bind/unbind this Claude session's status-line marker to the worktree, so the status line shows
+# "<worktree>:<port>". Uses $CLAUDE_CODE_SESSION_ID (set by Claude Code inside every Bash call) so
+# it's automatic — no manual bind-worktree.sh step. No-op outside a Claude session; never fatal.
+BIND_WORKTREE="$REPO_ROOT/.claude/statusline/bind-worktree.sh"
+
+bind_session_worktree() {
+    [ -n "${CLAUDE_CODE_SESSION_ID:-}" ] && [ -x "$BIND_WORKTREE" ] || return 0
+    "$BIND_WORKTREE" bind "$CLAUDE_CODE_SESSION_ID" "$1" >/dev/null 2>&1 \
+        && echo "==> status line bound to worktree" || true
+    return 0
+}
+
+unbind_session_worktree() {
+    [ -n "${CLAUDE_CODE_SESSION_ID:-}" ] && [ -x "$BIND_WORKTREE" ] || return 0
+    "$BIND_WORKTREE" unbind "$CLAUDE_CODE_SESSION_ID" >/dev/null 2>&1 || true
+    return 0
+}
+
+cmd_create() {
+    local branch="${1:-}"
+    local base="${2:-origin/master}"
+    [ -n "$branch" ] || die "usage: worktree.sh create <issue>-<slug> [base-ref]"
+
+    local project wt_path net port
+    project="$(project_name "$branch")"
+    wt_path="$WORKTREES_DIR/$branch"
+
+    # Guard: the main stack must be running so the shared network + containers exist.
+    docker network inspect "$SHARED_NET" >/dev/null 2>&1 \
+        || die "main stack network '$SHARED_NET' not found — start the main stack first (docker compose up -d)"
+    [ -f "$REPO_ROOT/.env" ] || die "no .env in main repo ($REPO_ROOT) to copy"
+
+    # 1. Create the worktree (reuse existing branch if present, else branch off base).
+    if [ -d "$wt_path" ]; then
+        echo "==> worktree dir already exists: $wt_path"
+    else
+        mkdir -p "$WORKTREES_DIR"
+        git -C "$REPO_ROOT" fetch origin --quiet 2>/dev/null || true
+        if git -C "$REPO_ROOT" show-ref --verify --quiet "refs/heads/$branch"; then
+            echo "==> adding worktree for existing branch '$branch'"
+            git -C "$REPO_ROOT" worktree add "$wt_path" "$branch"
+        else
+            echo "==> adding worktree '$branch' off '$base'"
+            git -C "$REPO_ROOT" worktree add "$wt_path" -b "$branch" "$base"
+        fi
+    fi
+
+    # 2. Copy the main .env verbatim (shell copy — contents are never read).
+    cp "$REPO_ROOT/.env" "$wt_path/.env"
+
+    # 2b. Bootstrap: if the base branch predates this file, seed it from the main repo so the
+    #     worktree can start. Only when missing — a worktree that legitimately edits it is untouched.
+    if [ ! -f "$wt_path/docker-compose.worktree.yml" ]; then
+        echo "==> base branch lacks docker-compose.worktree.yml — copying from main repo"
+        cp "$REPO_ROOT/docker-compose.worktree.yml" "$wt_path/docker-compose.worktree.yml"
+    fi
+
+    # 2c. Seed git-ignored build artifacts from the main checkout when missing. vendor/ is required
+    #     to boot artisan; the public/* assets let the browser render (blades reference compiled
+    #     files by the version in the repo-root `version` file).
+    #
+    #     vendor/ is HARDLINKED (cp -al: near-instant, no extra disk). That is safe for package
+    #     files — composer replaces a changed package by delete + re-extract, i.e. new inodes that
+    #     detach from the main checkout — but composer REWRITES the autoloader in place
+    #     (file_put_contents truncates the shared inode), so vendor/composer/ and
+    #     vendor/autoload.php get real copies. Editing any other vendor file in place (manual
+    #     patching) would still leak into the main checkout — delete + recreate it instead.
+    #
+    #     public/* stays a REAL copy: webpack writes compiled output by truncating in place, so a
+    #     hardlinked public/js would let a worktree build clobber the main checkout's assets.
+    echo "==> seeding build artifacts from main repo (vendor + compiled assets)"
+    [ -f "$REPO_ROOT/vendor/autoload.php" ] || die "main repo has no vendor/ — run composer install there first"
+    if [ ! -e "$wt_path/vendor" ]; then
+        if cp -al "$REPO_ROOT/vendor" "$wt_path/vendor" 2>/dev/null; then
+            rm -rf "$wt_path/vendor/composer" "$wt_path/vendor/autoload.php"
+            cp -a "$REPO_ROOT/vendor/composer" "$wt_path/vendor/composer"
+            cp -a "$REPO_ROOT/vendor/autoload.php" "$wt_path/vendor/autoload.php"
+            echo "  + vendor (hardlinked; autoloader real-copied)"
+        else
+            # Hardlinks need the same filesystem — fall back to a plain copy.
+            rm -rf "$wt_path/vendor"
+            cp -a "$REPO_ROOT/vendor" "$wt_path/vendor"
+            echo "  + vendor (full copy — hardlink unavailable)"
+        fi
+    fi
+    local rel
+    for rel in version \
+        public/css public/js public/resources \
+        public/vendor public/webfonts public/images \
+        public/VERSION public/COMMITHASH public/LASTCOMMITDATETIME; do
+        if [ -e "$REPO_ROOT/$rel" ] && [ ! -e "$wt_path/$rel" ]; then
+            cp -a "$REPO_ROOT/$rel" "$wt_path/$rel"
+            echo "  + $rel"
+        fi
+    done
+
+    # 3. Pick a free host port for this worktree's nginx. Steps 3-5 hold the create lock: the port
+    #    is only actually bound at `docker compose up -d`, so pick-and-bind must be atomic across
+    #    concurrent creates. Released right after step 5 (lock dies with the process on failure).
+    local lockfd
+    exec {lockfd}>"$CREATE_LOCK"
+    flock "$lockfd"
+    port="$(find_free_port)"
+
+    # 4. Point URL vars at the worktree port (sed-replace: phpdotenv keeps the FIRST occurrence,
+    #    so appending would not override), then append the Compose wiring. Only the worktree's
+    #    own copy is touched.
+    sed -i -E \
+        -e "s#^APP_URL=.*#APP_URL=http://localhost:${port}#" \
+        -e "s#^URL_HOST=.*#URL_HOST=http://localhost:${port}#" \
+        "$wt_path/.env"
+    # MAIN_THUMBNAILS_DIR is persisted into the worktree .env (not just exported) so that plain
+    # `docker compose ...` invocations resolve the bind-mount source too — e.g. the profiled
+    # `render` service used for Path A thumbnail rendering (see the generating-thumbnails skill).
+    cat >> "$wt_path/.env" <<EOF
+
+# --- added by sh/worktree.sh (worktree: ${branch}) ---
+COMPOSE_PROJECT_NAME=${project}
+COMPOSE_FILE=docker-compose.worktree.yml
+WORKTREE_HTTP_PORT=${port}
+MAIN_THUMBNAILS_DIR=${REPO_ROOT}/storage/app/public/thumbnails
+EOF
+
+    # 4b. Main's thumbnail directory is bind-mounted into the worktree (live-shares thumbnails
+    #     generated on the main stack — see #3548); the mount source must exist beforehand.
+    export MAIN_THUMBNAILS_DIR="$REPO_ROOT/storage/app/public/thumbnails"
+    mkdir -p "$MAIN_THUMBNAILS_DIR"
+
+    # 5. Bring up the stack (reads COMPOSE_* + WORKTREE_HTTP_PORT from the worktree .env).
+    echo "==> starting stack '$project' (nginx on :$port)"
+    ( cd "$wt_path" && docker compose up -d )
+    exec {lockfd}>&-
+
+    # 6. Attach the shared service containers into this worktree's private network with aliases.
+    net="$(worktree_network "$project")"
+    [ -n "$net" ] || die "could not find worktree network for project '$project'"
+    echo "==> attaching shared services to $net"
+    attach_shared_services "$net"
+
+    # nginx resolves ALL upstreams (app, app-swoole, reverb) at startup and refuses to boot if any
+    # is missing, so it must be (re)started only after the shared services above are attached.
+    ( cd "$wt_path" && docker compose restart nginx >/dev/null 2>&1 ) || true
+
+    # 7. First-boot init inside the worktree app (shared DB is already migrated/seeded — no seed).
+    echo "==> initialising worktree app"
+    # The app container runs as the host UID (#3414), so the host-owned checkout is directly
+    # writable by php-fpm/artisan — no chown needed (and none possible: the exec is unprivileged).
+    ( cd "$wt_path" && docker compose exec -T app sh -lc '
+        mkdir -p storage/app/public/imagecache storage/app/public/expansions storage/debugbar \
+                 storage/framework/cache storage/framework/sessions storage/framework/views storage/logs
+        php artisan storage:link >/dev/null 2>&1 || true
+        php artisan config:clear >/dev/null 2>&1 || true
+    ' ) || echo "  ! init step reported an issue — check the app container"
+
+    # 8. Mark the issue as actively worked on (best-effort; skipped if no leading issue number).
+    set_wip_label add "$branch"
+
+    # 9. Point this session's status line at the worktree (best-effort; needs the Claude session id).
+    bind_session_worktree "$wt_path"
+
+    cat <<EOF
+
+==> Worktree ready.
+    Branch:   $branch
+    Path:     $wt_path
+    Project:  $project
+    URL:      http://localhost:$port
+
+    Work in it:
+      cd $wt_path
+      docker compose exec -T app php artisan <cmd>
+      docker compose exec -T app php artisan test --compact --filter=<name>
+
+    Tear down when done:
+      $SCRIPT_DIR/worktree.sh remove $branch
+EOF
+}
+
+cmd_down() {
+    local branch="${1:-}"
+    [ -n "$branch" ] || die "usage: worktree.sh down <issue>-<slug>"
+    local project net wt_path pair container
+    project="$(project_name "$branch")"
+    wt_path="$WORKTREES_DIR/$branch"
+    net="$(worktree_network "$project")"
+    # Only used for Compose variable interpolation while tearing down — value is irrelevant here.
+    export MAIN_THUMBNAILS_DIR="${MAIN_THUMBNAILS_DIR:-$REPO_ROOT/storage/app/public/thumbnails}"
+
+    # Disconnect the attached shared containers first — otherwise Compose cannot remove the network
+    # (it's still "in use") and it lingers.
+    if [ -n "$net" ]; then
+        for pair in $SHARED_SERVICES; do
+            container="${pair#*:}"
+            docker network disconnect -f "$net" "$container" 2>/dev/null || true
+        done
+    fi
+
+    if [ -d "$wt_path" ]; then
+        ( cd "$wt_path" && docker compose down )
+    else
+        # No checkout left; tear down by project name (dummy port satisfies interpolation).
+        WORKTREE_HTTP_PORT=0 docker compose -p "$project" \
+            -f "$REPO_ROOT/docker-compose.worktree.yml" down 2>/dev/null || true
+    fi
+    # Remove the network if Compose left it behind.
+    [ -n "$net" ] && docker network rm "$net" >/dev/null 2>&1 || true
+    echo "==> stack '$project' stopped"
+}
+
+cmd_remove() {
+    local branch="${1:-}"
+    [ -n "$branch" ] || die "usage: worktree.sh remove <issue>-<slug>"
+    local wt_path="$WORKTREES_DIR/$branch"
+
+    if [ ! -d "$wt_path" ]; then
+        cmd_down "$branch"
+        set_wip_label remove "$branch"
+        unbind_session_worktree
+        echo "==> no worktree checkout at $wt_path"
+        return 0
+    fi
+    # Seeded build artifacts (vendor/, public/*, version) are untracked and expected, so they must
+    # not block removal — but genuine uncommitted changes to TRACKED files should.
+    if [ -n "$(git -C "$wt_path" status --porcelain --untracked-files=no)" ]; then
+        die "worktree '$branch' has uncommitted changes to tracked files — commit/stash first, or force:
+       git -C $REPO_ROOT worktree remove --force $wt_path"
+    fi
+    cmd_down "$branch"
+
+    # Containers now run as the host UID (#3414) so this is normally a no-op, but worktrees started
+    # on an older image may still hold root/www-data-owned files (storage, bootstrap/cache,
+    # .phpunit.cache, ...) the host user can't delete. Restore host ownership via a root container
+    # (`docker run` ignores the compose user: override) so git worktree remove can delete it.
+    docker run --rm -v "$WORKTREES_DIR:/wt" keystone.guru \
+        chown -R "$(id -u):$(id -g)" "/wt/$branch" >/dev/null 2>&1 || true
+
+    git -C "$REPO_ROOT" worktree remove --force "$wt_path"
+    set_wip_label remove "$branch"
+    unbind_session_worktree
+    echo "==> worktree '$branch' removed"
+}
+
+# Re-wire worktree stacks after a main-stack restart: restarting the main stack detaches the shared
+# containers from every worktree network, leaving each worktree's nginx unable to resolve its
+# upstreams. Reattaches the aliases and restarts nginx. Idempotent and safe to run blindly.
+cmd_repair() {
+    local branch="${1:-}" net project
+    local nets=()
+    if [ -n "$branch" ]; then
+        project="$(project_name "$branch")"
+        net="$(worktree_network "$project")"
+        [ -n "$net" ] || die "no network found for worktree '$branch' — is its stack up? (worktree.sh list)"
+        nets=("$net")
+    else
+        mapfile -t nets < <(docker network ls --format '{{.Name}}' | grep '^ksg-' || true)
+        if [ "${#nets[@]}" -eq 0 ]; then
+            echo "==> no worktree stacks found — nothing to repair"
+            return 0
+        fi
+    fi
+
+    for net in "${nets[@]}"; do
+        project="${net%_default}"
+        echo "==> repairing $project"
+        attach_shared_services "$net"
+        # nginx resolves ALL upstreams at startup, so restart it now that the aliases are back.
+        if docker restart "${project}-nginx-1" >/dev/null 2>&1; then
+            echo "  ~ ${project}-nginx-1 restarted"
+        else
+            echo "  ! could not restart ${project}-nginx-1 — is the stack up? (worktree.sh list)"
+        fi
+    done
+}
+
+cmd_push() {
+    [ -f "$DEPLOY_KEY" ] || die "deploy key not found at $DEPLOY_KEY — see the worktree-docker skill for setup"
+    local branch
+    branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || true)"
+    [ -n "$branch" ] && [ "$branch" != "HEAD" ] || die "not on a branch (run from inside the worktree checkout)"
+    echo "==> pushing '$branch' with the scoped deploy key"
+    GIT_SSH_COMMAND="$WORKTREE_GIT_SSH" git push -u origin "$branch" "$@"
+}
+
+cmd_list() {
+    echo "== git worktrees =="
+    git -C "$REPO_ROOT" worktree list
+    echo
+    echo "== running worktree stacks =="
+    docker ps --filter "name=ksg-" \
+        --format 'table {{.Names}}\t{{.Ports}}\t{{.Status}}' || true
+}
+
+main() {
+    local cmd="${1:-}"
+    shift || true
+    case "$cmd" in
+        create) cmd_create "$@" ;;
+        down)   cmd_down "$@" ;;
+        remove) cmd_remove "$@" ;;
+        repair) cmd_repair "$@" ;;
+        push)   cmd_push "$@" ;;
+        list)   cmd_list "$@" ;;
+        *)
+            cat >&2 <<EOF
+usage: worktree.sh <command> [args]
+
+  create <issue>-<slug> [base-ref]   create a worktree + isolated Docker stack (base: origin/master)
+  down   <issue>-<slug>              stop the stack, keep the checkout
+  remove <issue>-<slug>              stop the stack and remove the worktree
+  repair [<issue>-<slug>]            reattach shared services + restart nginx (all stacks if omitted)
+  push   [git-push-args...]          push the current branch via the scoped deploy key
+  list                              list worktrees and running stacks
+EOF
+            exit 1
+            ;;
+    esac
+}
+
+main "$@"

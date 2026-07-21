@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Logic\Utils\Stopwatch;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
@@ -18,16 +17,13 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\MountableArea;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcBolsteringWhitelist;
-use App\Models\Npc\NpcCharacteristic;
 use App\Models\Npc\NpcDungeon;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcHealth;
-use App\Models\Npc\NpcSpell;
 use App\Models\Speedrun\DungeonSpeedrunDifficulty;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpcNpc;
 use App\Models\Spell\Spell;
-use App\Models\Spell\SpellDungeon;
 use App\SeederHelpers\RelationImport\Mapping\DungeonFloorSwitchMarkerRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\DungeonRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\DungeonRouteRelationMapping;
@@ -105,8 +101,6 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
         $this->importDungeonRoutes();
         $this->flushModels();
         $this->preserveColumns();
-
-        Stopwatch::dumpAll();
     }
 
     /**
@@ -442,7 +436,10 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             elseif ($mapping->getPostSaveRelationParsers()->isNotEmpty()) {
                 /** @var class-string<Model> $mappingClass */
                 $mappingClass = $mapping->getClass();
-                $createdModel = $mappingClass::from(DatabaseSeeder::getTempTableName($mappingClass))->create($modelData);
+                // forceCreate (not create) so non-$fillable columns exported by mapping:save are imported
+                // verbatim. DungeonRoute keeps demo, pull_gradient etc. out of $fillable to block user-facing
+                // mass assignment; dropping them here would silently reset demo routes to demo = false.
+                $createdModel = $mappingClass::from(DatabaseSeeder::getTempTableName($mappingClass))->forceCreate($modelData);
                 $updatedModels++;
             } // We don't need to do post-processing, add it to the list to be saved
             else {
@@ -524,14 +521,14 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             MappingVersion::class,
             MappingCommitLog::class,
             Spell::class,
-            SpellDungeon::class,
+            // SpellDungeon, NpcCharacteristic and NpcSpell are combat-log-derived behavior and are
+            // intentionally omitted: they are not exported to the seeders, so their live tables must
+            // survive a re-seed untouched instead of being rebuilt (and wiped) from the JSON files.
             Npc::class,
             NpcBolsteringWhitelist::class,
             NpcEnemyForces::class,
             NpcDungeon::class,
-            NpcCharacteristic::class,
             NpcHealth::class,
-            NpcSpell::class,
             Enemy::class,
             EnemyPack::class,
             EnemyPatrol::class,

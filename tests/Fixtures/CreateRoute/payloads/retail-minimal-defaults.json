@@ -1,0 +1,31 @@
+{
+    "description": "Retail, brand-new user: default dungeon, single pre-selected current-week affix, untouched (single-option) dungeon start and (non-speedrun) difficulty select. Pins the #3514 regression: Tom Select injects an empty option into the untouched optionless dungeon_difficulty select, so the browser submits dungeon_difficulty=\"\" even though nothing was ever offered a choice.",
+    "endpoint": "dungeonroute.savenew",
+    "gameVersion": "retail",
+    "auth": true,
+    "fields": [
+        {"name": "dungeon_id", "value": "{{dungeon_id}}"},
+        {"name": "team_id", "value": "-1"},
+        {"name": "dungeon_difficulty", "value": ""},
+        {"name": "dungeon_start_map_icon_id", "value": ""},
+        {"name": "dungeon_route_title", "value": "My Test Route"},
+        {"name": "dungeon_route_level", "value": "{{key_level_min}};{{key_level_max}}"},
+        {"name": "route_select_affixes[]", "value": "{{affix_group_id}}"},
+        {"name": "faction_id", "value": "1"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"}
+    ]
+}

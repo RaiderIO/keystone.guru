@@ -10,7 +10,7 @@
         <tr>
             <th>{{ __('view_admin.tools.combatlog.rundata.column_keep') }}</th>
             <th>{{ __('view_admin.tools.combatlog.rundata.column_season') }}</th>
-            <th class="text-right">{{ __('view_admin.tools.combatlog.rundata.column_total') }}</th>
+            <th class="text-end">{{ __('view_admin.tools.combatlog.rundata.column_total') }}</th>
         </tr>
         </thead>
         <tbody>
@@ -27,7 +27,7 @@
                         {{ $stat->season ?? __('view_admin.tools.combatlog.rundata.unknown_season') }}
                     </label>
                 </td>
-                <td class="text-right">{{ number_format($stat->total) }}</td>
+                <td class="text-end">{{ number_format($stat->total) }}</td>
             </tr>
         @endforeach
         </tbody>

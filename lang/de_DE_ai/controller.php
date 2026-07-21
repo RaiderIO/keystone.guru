@@ -19,17 +19,21 @@ return [
             'mdt_invalid_category'                => 'Ungültige Kategorie',
         ],
         'flash' => [
-            'message_banner_set_successfully'   => 'Nachrichtenbanner erfolgreich gesetzt',
-            'thumbnail_regenerate_result'       => ':success Jobs für :total Routen versendet. :failed fehlgeschlagen.',
-            'combatlog_route_regenerate_result' => '',
-            'caches_dropped_successfully'       => 'Caches erfolgreich gelöscht',
-            'releases_exported'                 => 'Releases exportiert',
-            'exception'                         => 'Ausnahme im Admin-Panel ausgelöst',
-            'feature_toggle_activated'          => 'Feature :feature ist jetzt aktiviert',
-            'feature_toggle_deactivated'        => 'Feature :feature ist jetzt deaktiviert',
-            'feature_forgotten'                 => 'Feature :feature erfolgreich vergessen',
-            'read_only_mode_disabled'           => 'Schreibgeschützter Modus deaktiviert',
-            'read_only_mode_enabled'            => 'Schreibgeschützter Modus aktiviert',
+            'message_banner_set_successfully'        => 'Nachrichtenbanner erfolgreich gesetzt',
+            'thumbnail_regenerate_result'            => ':success Jobs für :total Routen versendet. :failed fehlgeschlagen.',
+            'combatlog_route_regenerate_result'      => '',
+            'combatlog_criteria_reset'               => '',
+            'combatlog_criteria_thresholds_updated'  => '',
+            'caches_dropped_successfully'            => 'Caches erfolgreich gelöscht',
+            'releases_exported'                      => 'Releases exportiert',
+            'exception'                              => 'Ausnahme im Admin-Panel ausgelöst',
+            'feature_toggle_activated'               => 'Feature :feature ist jetzt aktiviert',
+            'feature_toggle_deactivated'             => 'Feature :feature ist jetzt deaktiviert',
+            'feature_forgotten'                      => 'Feature :feature erfolgreich vergessen',
+            'mapping_version_upgrade_queued'         => '',
+            'mapping_version_upgrade_already_latest' => '',
+            'read_only_mode_disabled'                => 'Schreibgeschützter Modus deaktiviert',
+            'read_only_mode_enabled'                 => 'Schreibgeschützter Modus aktiviert',
         ],
     ],
     'apidungeonroute' => [
@@ -46,6 +50,12 @@ return [
         'error' => [
             'unable_to_save_brushline'   => 'Linie konnte nicht gespeichert werden',
             'unable_to_delete_brushline' => 'Linie konnte nicht gelöscht werden',
+        ],
+    ],
+    'arrow' => [
+        'error' => [
+            'unable_to_save_arrow'   => '',
+            'unable_to_delete_arrow' => '',
         ],
     ],
     'dungeon' => [
@@ -176,6 +186,13 @@ return [
             'account_deleted_successfully'     => 'Konto erfolgreich gelöscht.',
             'error_deleting_account'           => 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.',
         ],
+        'error' => [
+            'add_ad_free_giveaway_limit_reached'        => '',
+            'add_ad_free_giveaway_already_ad_free'      => '',
+            'add_ad_free_giveaway_already_has_giveaway' => '',
+            'remove_ad_free_giveaway_not_found'         => '',
+            'remove_ad_free_giveaway_not_yours'         => '',
+        ],
     ],
     'spell' => [
         'error' => [
@@ -207,6 +224,16 @@ return [
             'user_is_not_a_patron'              => 'Dieser Benutzer ist kein Patron.',
             'all_benefits_granted_successfully' => 'Alle Vorteile erfolgreich gewährt.',
             'error_granting_all_benefits'       => 'Beim Versuch, alle Vorteile zu gewähren, ist ein Fehler aufgetreten.',
+        ],
+    ],
+
+    'admin' => [
+        'dungeonroute' => [
+            'flash' => [
+                'updated' => '',
+                'deleted' => '',
+                'claimed' => '',
+            ],
         ],
     ],
 

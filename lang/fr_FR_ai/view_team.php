@@ -17,10 +17,16 @@ return [
             'ad_free_giveaway_description_available'     => 'Merci de vous être abonné à Keystone.guru\'s :patreon ! Vous pouvez offrir :current expériences sans publicité à Keystone.guru à n\'importe quel membre de l\'équipe.',
         ],
         'overview' => [
-            'title' => 'Aperçu',
+            'title'   => 'Aperçu',
+            'routes'  => '',
+            'members' => '',
         ],
         'routepublishing' => [
-            'title' => 'Publication de routes',
+            'title'            => 'Publication de routes',
+            'description'      => '',
+            'enabled'          => '',
+            'timezone_warning' => '',
+            'profile_link'     => '',
         ],
         'routes' => [
             'title'                  => 'Liste des routes',

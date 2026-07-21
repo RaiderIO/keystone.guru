@@ -5,7 +5,7 @@ use App\Models\User;
 $isFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
 ?>
     <!-- Facade toggle -->
-<div class="row no-gutters">
+<div class="row g-0">
     <div id="map_controls_element_facade_toggle_btn"
          class="col btn btn-info"
          data-current="{{ $isFacade ? 'facade' : 'split_floors' }}">

@@ -12,7 +12,8 @@ return [
         'message' => '您需要為此地城選擇一個陣營。',
     ],
     'json_string_count_rule' => [
-        'message' => 'Json 字串必須至少有 :count 個元素。',
+        'message_min' => '',
+        'message_max' => '',
     ],
     'map_icon_type_role_check_rule' => [
         'message' => '該地圖圖示類型不適用於您的訪問級別。',

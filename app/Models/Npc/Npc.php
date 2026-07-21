@@ -83,15 +83,6 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public $timestamps = false;
 
-    protected $with = [
-        'type',
-        'class',
-        'npcbolsteringwhitelists',
-        'npcHealths',
-        'characteristics',
-        'spells',
-    ];
-
     protected $fillable = [
         'id',
         'dungeon_id',
@@ -129,6 +120,7 @@ class Npc extends CacheModel implements MappingModelInterface
         ];
     }
 
+    #[\Override]
     public function resolveRouteBinding($value, $field = null): ?static
     {
         $id = (int)explode('-', (string)$value, 2)[0];
@@ -137,6 +129,7 @@ class Npc extends CacheModel implements MappingModelInterface
         return $this->where('id', $id)->first();
     }
 
+    #[\Override]
     public function getRouteKey(): string
     {
         return sprintf('%d-%s', $this->id, Str::slug(__($this->name)));

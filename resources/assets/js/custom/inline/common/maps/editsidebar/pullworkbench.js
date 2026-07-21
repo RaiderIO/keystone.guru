@@ -74,7 +74,9 @@ class PullWorkBench extends Signalable {
         // Depress a toggle button
         let oldKillZoneId = null;
         if (this.killZone !== null) {
-            $(`#map_killzonessidebar_killzone_${this.killZone.id}_edit`).button('toggle');
+            $(`#map_killzonessidebar_killzone_${this.killZone.id}_edit`).each(function () {
+                bootstrap.Button.getOrCreateInstance(this).toggle();
+            });
             oldKillZoneId = this.killZone.id;
         }
 
@@ -88,7 +90,9 @@ class PullWorkBench extends Signalable {
             return;
         } else if (oldKillZoneId === this.killZone.id) {
             // Toggle it off again since our keypress turned it on just now
-            $(`#map_killzonessidebar_killzone_${this.killZone.id}_edit`).button('toggle');
+            $(`#map_killzonessidebar_killzone_${this.killZone.id}_edit`).each(function () {
+                bootstrap.Button.getOrCreateInstance(this).toggle();
+            });
             this.killZone = null;
             this.$workbench.hide();
             return;
@@ -215,7 +219,9 @@ class PullWorkBench extends Signalable {
         // If we have a killzone layer
         if (self.killZone.hasKillArea()) {
             // Was inactive (always starts inactive), is active now
-            $hasKillZone.button('toggle');
+            $hasKillZone.each(function () {
+                bootstrap.Button.getOrCreateInstance(this).toggle();
+            });
         }
     }
 

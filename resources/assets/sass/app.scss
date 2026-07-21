@@ -1,12 +1,11 @@
 // Variables
 @import "variables";
 @import "theme/darkly/darkly";
-@import "theme/superhero/superhero";
 @import "theme/lux/lux";
 @import "theme/vapor/vapor";
 
-// Bootstrap Select
-@import "~bootstrap-select/dist/css/bootstrap-select.min.css";
+// Tom Select (Bootstrap 5 theme), drives the .selectpicker selects
+@import "~tom-select/dist/css/tom-select.bootstrap5.min.css";
 // Datatables
 @import '~datatables.net-dt/css/dataTables.dataTables.min.css';
 // Font-Awesome
@@ -19,15 +18,11 @@
 @import "~leaflet-draw/dist/leaflet.draw.css";
 @import "~leaflet-contextmenu/dist/leaflet.contextmenu.css";
 @import "~leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
-// Bar rating
-//@import "~jquery-bar-rating/dist/themes/fontawesome-stars.css";
 // Light Slider
 @import "lightslider/dist/css/lightslider.min.css";
 // Intro.js
 @import "~intro.js/minified/introjs.min.css";
 @import "~intro.js/themes/introjs-dark.css";
-// Password strength meter
-@import "~password-strength-meter/dist/password.min.css";
 // Noty
 @import "~noty/src/noty.scss";
 //@import "~noty/src/themes/bootstrap-v4.scss";
@@ -38,10 +33,10 @@
 @import "~grapick/dist/grapick.min.css";
 // Simplebar
 @import "~simplebar/dist/simplebar.min.css";
-// Bootstrap4-toggle
-@import "~bootstrap4-toggle/css/bootstrap4-toggle.min.css";
-// Ion Range Slider
-@import "~ion-rangeslider/css/ion.rangeSlider.min.css";
+// Bootstrap5-toggle
+@import "~bootstrap5-toggle/css/bootstrap5-toggle.min.css";
+// noUiSlider
+@import "~nouislider/dist/nouislider.css";
 // Fonts
 @font-face {
     font-family: Salesforce Sans;

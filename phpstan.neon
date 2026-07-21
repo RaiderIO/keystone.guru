@@ -53,12 +53,6 @@ parameters:
           paths:
             - app/Console/Commands/Traits/SavesToInfluxDB.php
             - app/Console/Commands/Scheduler/Telemetry/Telemetry.php
-        # HasLatLng trait: @property annotations say nullable, but specific class contexts infer non-null.
-        # The null-guard is correct — the trait is used in both nullable and non-nullable contexts.
-        - identifier: booleanAnd.alwaysTrue
-          path: app/Models/Traits/HasLatLng.php
-        - identifier: notIdentical.alwaysTrue
-          path: app/Models/Traits/HasLatLng.php
         # These traits exist for potential future use / are referenced dynamically
         - identifier: trait.unused
           path: app/Http/Controllers/Traits/ChecksForDuplicates.php

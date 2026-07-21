@@ -29,7 +29,7 @@ use App\Models\Npc\NpcHealth;
     </div>
     <div class="col-auto">
         <a href="{{ route('admin.npc.npchealth.new', ['npc' => $npc]) }}"
-           class="btn btn-success text-white pull-right" role="button">
+           class="btn btn-success text-white float-end" role="button">
             <i class="fas fa-plus"></i> {{ __('view_admin.npc.npchealth.add_npc_health') }}
         </a>
     </div>
@@ -55,7 +55,7 @@ use App\Models\Npc\NpcHealth;
             <td>{{ number_format($npcHealth->health) }}</td>
             <td>{{ $npcHealth->percentage }}</td>
             <td>
-                <div class="row no-gutters">
+                <div class="row g-0">
                     <div class="col">
                         <a class="btn btn-info"
                            href="{{ route('admin.npc.npchealth.edit', ['npc' => $npc, 'npcHealth' => $npcHealth]) }}">

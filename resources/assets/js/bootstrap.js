@@ -7,10 +7,12 @@ window._ = require('lodash');
  */
 
 window.$ = window.jQuery = require('jquery');
-window.Popper = require('popper.js').default;
+
 window.offsetPolygon = require('offset-polygon').default;
 
-require('bootstrap');
+// Bootstrap 5 no longer registers jQuery plugins; expose the API globally because the
+// concatenated scripts in custom-*.js rely on globals (window.bootstrap.Modal etc.).
+window.bootstrap = require('bootstrap');
 
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces
@@ -85,14 +87,19 @@ window.edgeBuffer = require('leaflet-edgebuffer');
 window.GestureHandling = require('leaflet-gesture-handling');
 // window.interpolate = require('color-interpolate');
 window.gju = require('geojson-utils');
-window.bootstrapselect = require('bootstrap-select');
+window.TomSelect = require('tom-select').default;
+
+// Tom Select drives the project's `.selectpicker` selects (#3420); inline scripts call this global
+window.refreshSelectPickers = require('./selectpicker').refreshSelectPickers;
+
 window.Handlebars = require('handlebars');
-window.barrating = require('jquery-bar-rating');
+// Self-owned star-rating widget (#3593); replaces the unmaintained jquery-bar-rating plugin
+require('./star-rating');
 window.polylinedecorator = require('leaflet-polylinedecorator');
 window.lightCarousel = require('lightslider');
 window.introjs = require('intro.js');
-window.pwstrengthmeter = require('password-strength-meter');
-window.jqueryMousewheel = require('jquery-mousewheel');
+// Self-owned password-strength widget (#3597); replaces the unmaintained password-strength-meter plugin
+require('./password-strength');
 window.Cookies = require('js-cookie');
 window.hull = require('hull.js'); // Find the 'hull' of a random set of points
 const offsetPolygon = require("offset-polygon");
@@ -104,17 +111,12 @@ window.Noty = require('noty');
 window.Pickr = require('@simonwep/pickr');
 window.AntPath = require('leaflet-ant-path');
 window.Grapick = require('grapick');
-window.jqueryVisible = require('jquery-visible');
 window.simplebar = require('simplebar');
 window.Draggable = require('@shopify/draggable');
-window.autocomplete = require('bootstrap-4-autocomplete');
-window.toggle = require('bootstrap4-toggle');
-window.jarallax = require('jarallax/dist/jarallax.min');
-window.swipe = require('jquery-touchswipe');
+require('bootstrap5-toggle/js/bootstrap5-toggle.jquery.min.js');
 window.lazysizes = require('lazysizes');
-window.ionRangeSlider = require('ion-rangeslider');
-
-require('@fortawesome/fontawesome-free');
+// Self-owned noUiSlider-backed range slider (#3596); replaces the unmaintained ion-rangeslider plugin
+require('./range-slider');
 
 window.axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest'

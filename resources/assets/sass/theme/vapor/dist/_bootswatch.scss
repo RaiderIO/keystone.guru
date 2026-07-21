@@ -1,5 +1,22 @@
-// Vapor 5.2.2
-// Bootswatch
+// Vapor 5.2.2 — Bootswatch, VENDORED + HAND-MODIFIED. Do NOT replace with the upstream import.
+//
+// This is a deliberate, permanent fork of bootswatch's vapor `_bootswatch.scss` (imported by
+// ../vapor.scss), not a stale copy waiting to be updated. The Midnight / Xalatath theme
+// (User::THEME_XALATATH = 'vapor') intentionally strips vapor's signature neon-glow look: the four
+// glow mixins below (text-shadow, text-shadow-sm, box-shadow, box-shadow-lg) have their bodies
+// commented out, so every `@include` of them throughout this file emits nothing.
+//
+// That customization CANNOT be achieved by importing the node_modules copy: bootswatch defines AND
+// consumes these mixins within this same file, so there is no seam to inject empty overrides from
+// vapor.scss — importing the upstream file would re-enable glowing text and boxes site-wide on this
+// theme. Hence the vendored copy is load-bearing, and BS5 renames are patched here by hand as well
+// (e.g. `.arrow` -> `.tooltip-arrow` in the .tooltip block near the bottom). Note upstream
+// bootswatch (5.3.8 at time of writing) still ships `.arrow` there, so tracking node_modules would
+// not fix that rename anyway.
+//
+// To pull upstream fixes later: re-vendor from the target bootswatch version, re-comment the four
+// glow mixin bodies, re-apply the `.tooltip-arrow` rename, then re-run the vapor visual sweep.
+// Never point vapor.scss at `~bootswatch/dist/vapor/bootswatch`.
 
 
 // Variables
@@ -278,7 +295,7 @@ legend {
 .tooltip {
 
   &-inner,
-  .arrow {
+  .tooltip-arrow {
     @include box-shadow-lg($primary);
   }
 }

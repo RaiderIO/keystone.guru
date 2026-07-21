@@ -33,7 +33,7 @@
         "map_icon_type_id": 93,
         "lat": -201.5429,
         "lng": 250.709,
-        "comment": "Large Solid Chest",
+        "comment": "mapping.map_icons.classic.scarlet_monastery_armory.large_solid_chest",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 6,
         "lat": -47.312,
         "lng": 302.3948,
-        "comment": "Herod's Door. Requires The Scarlet Key.",
+        "comment": "mapping.map_icons.classic.scarlet_monastery_armory.herods_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -124,7 +124,7 @@
         "map_icon_type_id": 93,
         "lat": -201.5429,
         "lng": 250.709,
-        "comment": "Large Solid Chest",
+        "comment": "mapping.map_icons.classic.scarlet_monastery_armory.large_solid_chest",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -189,7 +189,7 @@
         "map_icon_type_id": 6,
         "lat": -47.312,
         "lng": 302.3948,
-        "comment": "Herod's Door. Requires The Scarlet Key.",
+        "comment": "mapping.map_icons.classic.scarlet_monastery_armory.herods_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

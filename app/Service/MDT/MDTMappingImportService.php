@@ -418,7 +418,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
      * @return Collection<int, Enemy>
      */
     private function importEnemies(
-        Mappingversion $currentMappingVersion,
+        MappingVersion $currentMappingVersion,
         MappingVersion $newMappingVersion,
         MDTDungeon     $mdtDungeon,
         Dungeon        $dungeon,

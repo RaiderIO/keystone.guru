@@ -33,7 +33,7 @@
         "map_icon_type_id": 9,
         "lat": -201.2309,
         "lng": 216.5829,
-        "comment": "Mysterious Relic",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.mysterious_relic",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 9,
         "lat": -131.0859,
         "lng": 204.2553,
-        "comment": "Mysterious Relic",
+        "comment": "mapping.map_icons.classic.karazhan_crypts.mysterious_relic",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

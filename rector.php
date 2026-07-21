@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
-use Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 
 return RectorConfig::configure()
@@ -11,8 +10,6 @@ return RectorConfig::configure()
         __DIR__ . '/app',
         __DIR__ . '/bootstrap',
         __DIR__ . '/config',
-        __DIR__ . '/node_modules',
-        __DIR__ . '/public',
         __DIR__ . '/resources',
         __DIR__ . '/routes',
         __DIR__ . '/tests',
@@ -20,5 +17,4 @@ return RectorConfig::configure()
     // uncomment to reach your current PHP version
     ->withPhpSets(php84: true)
     ->withSets([\RectorLaravel\Set\LaravelSetList::LARAVEL_120])
-    ->withRules([AddVoidReturnTypeWhereNoReturnRector::class])
-    ->withSkip([RemoveUselessParamTagRector::class]);
+    ->withRules([AddVoidReturnTypeWhereNoReturnRector::class]);

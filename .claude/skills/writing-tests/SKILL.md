@@ -1,130 +1,138 @@
 ---
 name: writing-tests
-description: How to write and run tests in this project — PHPUnit-class structure, naming, Arrange-Act-Assert, factories, database cleanup, test groups, data providers, running commands, and the Dungeon/MappingVersion/Floor random-data pitfall (with the traits that already solve it). Use whenever creating, editing, or running a test.
+description: Conventions for writing PHPUnit tests in keystone.guru — which base test case to extend, the persistent seeded test DB (no RefreshDatabase; clean up with try/finally), creating admin/non-admin users, factory gotchas, the Group/Test PHP attributes, naming, and running tests in Docker. Use when writing or editing any test (Feature or Unit). Not for generic PHPUnit questions unrelated to this project's setup.
 ---
 
 # Writing Tests
 
-> The rule that **every change must be programmatically tested** lives in `CLAUDE.md`. This skill is the *how*.
+This project uses **PHPUnit** (never Pest). All test commands run inside Docker.
 
-## Creating a test file
+```bash
+docker compose exec -T app php artisan test --compact --filter=SomeTest
+docker compose exec -T app php artisan test --compact tests/Feature/Policy/DungeonRoutePolicyTest.php
+```
 
-- **Create the file directly in the codebase — do NOT use `php artisan make:test`.** This project's host rule (see `CLAUDE.md` → *Host Machine*) requires files be created on the host so they have correct permissions and LF line endings. `make:*` generators are disabled here.
-- New files must have **LF line endings** and be staged with `git add` immediately.
-- Most tests are **feature** tests under `tests/Feature/...`. Use `tests/Unit/...` only for pure, dependency-free logic.
-- Mirror the namespace to the path under `tests/` (PSR-4 root `Tests\`). Place a test next to siblings testing the same area and copy their structure.
+Run the minimum needed while iterating (a `--filter` on the class you changed); the full suite is
+run at the end.
 
-## Base test cases
+## Directory layout
 
-Extend the right base — they handle bootstrapping, timing limits, and auth:
+- `tests/Feature/` — most tests live here. Mirrors `app/` (`Controller/`, `Controller/Ajax/`,
+  `Controller/Api/V1/`, `Policy/`, `View/`, `Console/Commands/`, …).
+- `tests/Unit/` — pure logic with no framework/DB (heavily used for `App/Logic/CombatLog/**`).
+- Default to a **Feature** test unless the subject is pure computation.
 
-| Base class | Use for |
-|---|---|
-| `Tests\TestCases\PublicTestCase` | Plain feature/unit tests. |
-| `Tests\TestCases\AjaxPublicTestCase` | Ajax endpoints — logs in as user 1 and sets the `X-Requested-With` header. |
-| `Tests\TestCases\APIPublicTestCase` | Public API v1 endpoints — adds API authentication. |
-| `Tests\Feature\Controller\DungeonRouteTestBase` | Controller tests needing a ready-made route — exposes `$this->dungeonRoute` built via the guarded `createNonFacadeDungeonRouteWithEnemies()` and tears it down. |
+## Pick the right base class
 
-## Anatomy of a test
+All extend `Tests\TestCase` (which adds timing checks + the `#[Repeat]`/`#[SlowTest]` attributes).
+Do **not** extend `TestCase` directly for feature tests — use one of the `Tests\TestCases\` bases:
+
+| Base class | Use for | What it adds |
+|---|---|---|
+| `PublicTestCase` | Web/feature tests | `createMockPublic()` / `createPartialMockPublic()` mock helpers |
+| `APIPublicTestCase` | `/api/v1` tests | Basic-auth via the `APIAuthentication` trait (`addAuthentication()` in setUp) |
+| `AjaxPublicTestCase` | Ajax controller tests | Acts as admin (`User::findOrFail(1)`) + sets the `X-Requested-With: XMLHttpRequest` header |
+
+## The test database — READ THIS
+
+The test DB is a **real MySQL connection** (`phpunit`), and it is **persistent and pre-seeded**.
+There is **no `RefreshDatabase` / no transactions** wrapping tests. Two consequences:
+
+1. **Seeded data already exists** and you should rely on it: dungeons + their mapping versions,
+   game versions, seasons, and **user id=1 is the admin** (has `Role::ROLE_ADMIN`, seeded by
+   `LaratrustSeeder`).
+2. **Every record you create must be cleaned up**, or it leaks into later tests. Use `try/finally`:
 
 ```php
-#[Group('CombatLog')]            // groups go on the CLASS docblock, not the method
-final class MyThingTest extends PublicTestCase
-{
-    #[Test]
-    public function process_givenValidData_persistsRecord(): void
-    {
-        // Arrange
-        $input = ...;
+$owner = User::factory()->create();
+$route = DungeonRoute::factory()->create(['author_id' => $owner->id]);
 
-        // Act
-        $result = $service->process($input);
-
-        // Assert
-        $this->assertSame(..., $result);
-    }
+try {
+    // Act + Assert
+} finally {
+    $route->delete();
+    $owner->delete();
 }
 ```
 
-- **PHPUnit only — never Pest.** Use the `#[Test]` attribute (or a `test`-prefixed name). If you encounter a test written in Pest, convert it to a PHPUnit class.
-- **Naming pattern:** `[functionName]_given[Condition]_returns[ExpectedResult]`, e.g. `myFunction_givenInvalidDate_throwsInvalidArgumentException`.
-- **Arrange-Act-Assert:** structure every test in these three labelled phases.
-- **Coverage:** test the happy path, the failure paths, and the weird/edge paths — not just the happy one.
-- **Groups:** put `#[Group('...')]` on the **class** docblock. Convention: a folder-wide group (e.g. `CombatLog` for everything under that folder) plus a file-specific group (e.g. `EncounterStart`).
-- **Never delete existing tests or test files** without approval — they are core to the app, not scratch files.
+`DungeonRoute` has no soft-deletes, so `delete()` truly removes the row.
 
-## Database & cleanup (important — no transactional rollback)
+## Creating users & roles (Laratrust)
 
-This suite runs against a **persistent, seeded database** and does **not** use `RefreshDatabase` or `DatabaseTransactions`. Nothing is rolled back automatically.
+- **Admin**: `User::findOrFail(1)` — the seeded admin. Assert it defensively:
+  ```php
+  $admin = User::findOrFail(1);
+  $this->assertTrue($admin->hasRole(Role::ROLE_ADMIN), 'User id=1 must be admin (seed the DB).');
+  ```
+  `$user->is_admin` is an accessor for `hasRole(Role::ROLE_ADMIN)`.
+- **Non-admin**: `User::factory()->create()` — a fresh user never has the admin role.
+- Roles/constants live on `App\Models\Laratrust\Role` (`Role::ROLE_ADMIN`, …).
 
-- **Clean up every record you create in a `try { ... } finally { ... }` block** so a failed assertion still removes the row.
-- `CombatLogRouteEnemyFailure` and friends live on the separate **`combatlog` connection**, which is also not rolled back — leftover rows there persist across tests. Account for pre-existing data rather than assuming an empty table.
-- Tests have a **10s hard limit** and a 1s soft warning (`tests/TestCase.php`). For a legitimately slow test, add `#[SlowTest]` (`Tests\Attributes\SlowTest`) on the class or method to exempt it from the timing check.
+## Factories — use them, but know the defaults
 
-## Factories & Faker
+Always use factories over hand-built models, and check for states first. Some factory defaults will
+silently break a test if you don't override them — the recurring one:
 
-- Build models with their **factories**, and check for a **custom state** before setting attributes by hand (e.g. `DungeonRoute::factory()->create([...])`).
-- Faker: follow the surrounding file's convention — either `$this->faker->word()` or `fake()->randomDigit()`.
+- **`DungeonRoute::factory()`** picks a *random seeded dungeon* (so the seeded DB is required) and
+  defaults to `author_id => 1`, `published_state_id => WORLD`, and **`expires_at => now()+2h`, which
+  means the route is a *sandbox* route by default** (`isSandbox()` returns true when `expires_at` is
+  set). Override `author_id` / `expires_at` / `published_state_id` explicitly whenever they matter:
+  ```php
+  DungeonRoute::factory()->create([
+      'author_id'          => $owner->id,
+      'expires_at'         => null, // non-sandbox
+      'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+  ]);
+  ```
+- `User::factory()` has an `unverified()` state. Faker: both `$this->faker->sentence()` and
+  `fake()->name()` are used in this codebase — match the surrounding file.
 
-## Data providers
+## Attributes, naming & structure
 
-- Provider is a `public static function` returning the cases.
-- Attach it with a **method-level** `#[DataProvider('...')]` attribute (the test method, not the class).
-- Place the provider **directly below the last test that uses it** — not at the top or bottom of the class.
-- See `tests/Feature/App/Service/Season/SeasonService/GetSeasonFromShortStringTest.php` for the canonical shape.
+- **Use PHP attributes, not doc-comment metadata** (doc-comment metadata is deprecated and warns):
+  - `#[Test]` (`PHPUnit\Framework\Attributes\Test`) to mark a test method.
+  - `#[Group('X')]` (`PHPUnit\Framework\Attributes\Group`) at the **class** level for groups —
+    e.g. `#[Group('Policy')]`. (This is the real convention across ~200 test files; ignore any
+    older guidance about `@group` docblocks.)
+  - `#[DataProvider('methodName')]` for data providers; place the provider method **right below the
+    last test that uses it**.
+- **Method names**: `[method]_given[Condition]_returns[ExpectedResult]`, e.g.
+  `edit_givenNonOwner_returnsDenied`.
+- **Structure every test Arrange → Act → Assert**, with those comments.
+- Keep tests fast: the base `TestCase` **warns at >1s and fails at >10s**. Mark genuinely slow tests
+  with `#[SlowTest]`; use `#[Repeat(n)]` to run a flaky-prone test multiple times.
 
-## Pitfall: random Dungeon / MappingVersion / Floor data — reuse the traits first
+## Testing policies / authorization
 
-A recurring source of CI flakiness: code that picks a random dungeon and then *assumes* it has what's needed.
+Call the policy directly for precise branch control, or go through the Gate to also prove wiring:
 
 ```php
-// ❌ DON'T — a random dungeon may have only facade floors, or no current mapping version
-$dungeon = Dungeon::inRandomOrder()->first();
-$floor   = $dungeon->floors()->where('facade', 0)->first(); // can be null → null-deref
-$mv      = $dungeon->getCurrentMappingVersion();             // can be null → null-deref
+$this->assertTrue((new DungeonRoutePolicy())->edit($owner, $route));   // direct
+$this->assertTrue($owner->can('edit', $route));                         // through the Gate
 ```
 
-**Before rolling your own random pick, use the existing helpers — they loop until the prerequisites hold:**
+Methods that read `Auth::user()` internally (e.g. `DungeonRoutePolicy::rate()`) need
+`$this->actingAs($user)` before the assertion — passing the user as an argument is not enough.
+See `tests/Feature/Policy/DungeonRoutePolicyTest.php` for a full worked example.
 
-- `Tests\Feature\Traits\ProvidesDungeon::getDungeonWithNonFacadeFloor(?Closure $constraint = null): Dungeon`
-  Returns a dungeon guaranteed to have a current mapping version and at least one non-facade floor. Pass a `Closure(Builder $q)` to add extra constraints (e.g. excluding dungeons that already have data) while keeping the guarantees.
-- `Tests\Feature\Traits\GeneratesDungeonRoutes` — for full routes:
-  - `createNonFacadeDungeonRouteWithEnemies(): DungeonRoute` — a route on a non-facade mapping version that has enemies.
-  - `getMDTCompatibleNonFacadeDungeonRoute(array $attributes = []): DungeonRoute` — an MDT-importable, non-facade route.
-  - `getMDTCompatibleDungeonRouteWithSafeEnemies(int $enemyCount = 1, array $attributes = []): DungeonRoute` — an MDT route with N enemies that survive an import round-trip.
+## Swapping services (mocks)
+
+Bind a mock into the container so the code-under-test resolves it:
 
 ```php
-// ✅ DO
-use Tests\Feature\Traits\ProvidesDungeon;
-// ...
-    use ProvidesDungeon;
-    // ...
-    $dungeon = $this->getDungeonWithNonFacadeFloor();
+$mock = $this->createMockPublic(CacheServiceInterface::class);
+app()->instance(CacheServiceInterface::class, $mock);
 ```
 
-If you genuinely need a fresh helper, **extend these traits rather than re-implementing the loop**, and add an inline `do/while` guard mirroring `database/factories/DungeonRoute/DungeonRouteFactory.php` when the code is a factory (factories can't use a `Tests\` trait).
+## Known gotchas
 
-**Pin to a known mapping version when you hardcode IDs.** Enemy IDs are unique per mapping version: the same `(npc_id, mdt_id)` resolves to a *different* `enemies.id` in each version. If a test hardcodes enemy IDs, set the route's `mapping_version_id` from those enemies (`Enemy::findOrFail($id)->mapping_version_id`) — not from `getCurrentMappingVersion()`, which can drift when another test leaks a bumped version (see the `inRandomOrder()` + `version + 1` pattern in `database/factories/MappingVersion/MappingVersionFactory.php`).
+- `tests/Unit/App/Logging/StructuredLoggingTest` has a **pre-existing, unrelated failure** — ignore
+  it when judging whether your change is green.
+- The `MapTiles` group is excluded in CI.
+- After writing a test, run it (`--filter`), then run `composer run fix` / `composer run analyse` —
+  note that `composer run fix` also reformats unrelated pre-existing files, so stage only your own.
 
-**Verifying you fixed flakiness.** Add `#[Repeat(1000)]` (`Tests\Attributes\Repeat`) to a method to run it 1000× in one go and surface a flaky *self-inflicted random pick*. Caveats:
-- `#[Repeat]` re-rolls only picks made in the **test body**; a pick in `setUp()` runs once per method, so Repeat won't fuzz it.
-- A green Repeat run *confirms* a structural fix; it does **not** prove the fix (and won't surface cross-test mapping-version pollution). Prefer fixes that make the bad state impossible *by construction*, and remove the temporary `#[Repeat]` before finishing.
+## Related
 
-## Running tests (always inside Docker)
-
-- All tests: `docker compose exec -T app php artisan test --compact`
-- One file: `docker compose exec -T app php artisan test --compact tests/Feature/ExampleTest.php`
-- By name: `docker compose exec -T app php artisan test --compact --filter=testName`
-- By group: `docker compose exec -T app php artisan test --compact --group=CombatLog`
-
-Run the **minimum** set needed (a filter or single file) while iterating. Run the test you changed every time you change it. When your feature's tests pass, ask the user whether to run the full suite.
-
-## Checklist
-
-1. Create the test file directly (no `make:test`), LF endings, correct base class.
-2. `#[Group]` on the class; `#[Test]` methods named `fn_givenCondition_returnsResult`; Arrange-Act-Assert.
-3. Cover happy, failure, and weird paths.
-4. Clean up created rows in `try/finally`; account for the non-rolled-back `combatlog` connection.
-5. Use factories/states; reuse `ProvidesDungeon` / `GeneratesDungeonRoutes` for dungeon/route data.
-6. `git add` the new file.
-7. Run the affected tests, then `composer run fix` and `composer run analyse`.
+- The PHPUnit rules in `.claude/CLAUDE.md` and the root `CLAUDE.md`.
+- **api-endpoint** skill for API-specific test setup, **repository-pattern** for repositories.

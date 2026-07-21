@@ -440,6 +440,19 @@ $.fn.isInViewport = function () {
 };
 
 /**
+ * Checks whether an element is entirely within the browser's visible viewport, both
+ * vertically and horizontally.
+ * @param element {Element}
+ * @returns {Boolean}
+ */
+function isElementFullyVisible(element) {
+    let rect = element.getBoundingClientRect();
+
+    return rect.top >= 0 && rect.left >= 0 &&
+        rect.bottom <= window.innerHeight && rect.right <= window.innerWidth;
+}
+
+/**
  * @see https://stackoverflow.com/a/1099670/771270
  * @returns {{}}
  */
@@ -481,5 +494,6 @@ if (typeof module !== 'undefined' && module.exports) {
         rotateLatLng,
         getCenteroid,
         getQueryParams,
+        isElementFullyVisible,
     };
 }

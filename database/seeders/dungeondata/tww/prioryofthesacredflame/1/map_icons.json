@@ -7,7 +7,7 @@
         "map_icon_type_id": 102,
         "lat": -131.6143,
         "lng": 214.9034,
-        "comment": "The warmth of the Eternal Flame empowers you causing your spells and abilities to inflect additional Holy damage.",
+        "comment": "mapping.map_icons.tww.priory_of_the_sacred_flame.eternal_flame_buff",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 102,
         "lat": -131.6143,
         "lng": 214.9034,
-        "comment": "The warmth of the Eternal Flame empowers you causing your spells and abilities to inflect additional Holy damage.",
+        "comment": "mapping.map_icons.tww.priory_of_the_sacred_flame.eternal_flame_buff",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 102,
         "lat": -131.6143,
         "lng": 214.9034,
-        "comment": "The warmth of the Eternal Flame empowers you causing your spells and abilities to inflect additional Holy damage.",
+        "comment": "mapping.map_icons.tww.priory_of_the_sacred_flame.eternal_flame_buff",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -124,7 +124,7 @@
         "map_icon_type_id": 102,
         "lat": -131.6143,
         "lng": 214.9034,
-        "comment": "The warmth of the Eternal Flame empowers you causing your spells and abilities to inflect additional Holy damage.",
+        "comment": "mapping.map_icons.tww.priory_of_the_sacred_flame.eternal_flame_buff",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -163,7 +163,7 @@
         "map_icon_type_id": 102,
         "lat": -131.6143,
         "lng": 214.9034,
-        "comment": "The warmth of the Eternal Flame empowers you causing your spells and abilities to inflect additional Holy damage.",
+        "comment": "mapping.map_icons.tww.priory_of_the_sacred_flame.eternal_flame_buff",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

@@ -7,7 +7,7 @@
         "map_icon_type_id": 2,
         "lat": -92.2006,
         "lng": 315.0325,
-        "comment": "Keystone.guru: Only if you jump down - you cannot actually go up here.",
+        "comment": "mapping.map_icons.classic.gnomeregan_sod.one_way_down",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -20,7 +20,7 @@
         "map_icon_type_id": 2,
         "lat": -174.3278,
         "lng": 119.8095,
-        "comment": "Keystone.guru: Only if you jump down.",
+        "comment": "mapping.map_icons.classic.gnomeregan_sod.jump_down_only",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 46,
         "lat": -148.1024,
         "lng": 252.7861,
-        "comment": "The Sparklematic 5200",
+        "comment": "mapping.map_icons.classic.gnomeregan_sod.the_sparklematic_5200",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 47,
         "lat": -172.5075,
         "lng": 280.3602,
-        "comment": "Matrix Punchograph 3005-B",
+        "comment": "mapping.map_icons.classic.gnomeregan_sod.matrix_punchograph_b",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 93,
         "lat": -135.3162,
         "lng": 91.6254,
-        "comment": "Box of Assorted Parts",
+        "comment": "mapping.map_icons.classic.gnomeregan_sod.box_of_assorted_parts",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 45,
         "lat": -177.2441,
         "lng": 104.016,
-        "comment": "Matrix Punchograph 3005-C",
+        "comment": "mapping.map_icons.classic.gnomeregan_sod.matrix_punchograph_c",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 93,
         "lat": -173.2654,
         "lng": 330.663,
-        "comment": "Box of Assorted Parts",
+        "comment": "mapping.map_icons.classic.gnomeregan_sod.box_of_assorted_parts",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -111,7 +111,7 @@
         "map_icon_type_id": 40,
         "lat": -205.048,
         "lng": 308.922,
-        "comment": "Kernobee may be here",
+        "comment": "mapping.map_icons.classic.gnomeregan_sod.kernobee_location",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -124,7 +124,7 @@
         "map_icon_type_id": 43,
         "lat": -207.4836,
         "lng": 297.3693,
-        "comment": "Matrix Punchograph 3005-E",
+        "comment": "mapping.map_icons.classic.gnomeregan_sod.matrix_punchograph_e",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -137,7 +137,7 @@
         "map_icon_type_id": 47,
         "lat": -180.25,
         "lng": 282.5313,
-        "comment": "Matrix Punchograph 3005-B",
+        "comment": "mapping.map_icons.classic.gnomeregan_sod.matrix_punchograph_b",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

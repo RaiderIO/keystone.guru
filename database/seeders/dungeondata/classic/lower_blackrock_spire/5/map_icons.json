@@ -20,7 +20,7 @@
         "map_icon_type_id": 42,
         "lat": -219.1875,
         "lng": 151.625,
-        "comment": "Gizrul the Slavener spawns the moment Halycon dies.",
+        "comment": "mapping.map_icons.classic.lower_blackrock_spire.gizrul_spawns_on_halycon_death",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 42,
         "lat": -219.1875,
         "lng": 151.625,
-        "comment": "Gizrul the Slavener spawns the moment Halycon dies.",
+        "comment": "mapping.map_icons.classic.lower_blackrock_spire.gizrul_spawns_on_halycon_death",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

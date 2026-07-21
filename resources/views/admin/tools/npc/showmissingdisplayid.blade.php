@@ -27,7 +27,7 @@ use Illuminate\Support\Collection;
 
 
 @section('content')
-    <div class="form-group">
+    <div class="mb-3">
         <table id="npcs_table" class="tablesorter default_table table-striped">
             <thead>
             <tr>

@@ -1,0 +1,205 @@
+/** BOOTSTRAP 5 COMPAT */
+/*
+ * Bootstrap 4 gave every column `position: relative` and its gutter padding; Bootstrap 5 dropped the
+ * former entirely and only pads columns that are direct children of a .row (via `.row > *`). We used
+ * to restore the Bootstrap 4 behavior globally, but that global `[class^="col-"]` selector fought the
+ * framework and leaked onto any (future / third-party) `col-*` markup. The handful of elements that
+ * actually relied on it are now handled explicitly:
+ *  - absolutely positioned overlays anchoring to their column -> `position: relative` on that
+ *    specific column below (and the `position-relative` utility on the search results column in
+ *    dungeonroute/discover/search.blade.php);
+ *  - standalone columns used as padded containers (not a direct child of a .row, so `.row > *` never
+ *    pads them) -> gutter padding restored below. Inside a .row this computes to the same value
+ *    `.row > *` already sets, so it stays correct there too.
+ */
+
+/* Dungeon grid card (.grid_dungeon) and header dungeon selector card (.list_dungeon): the
+   dungeon-name overlay (.card-img-caption .card-text, position: absolute) anchors to this column as
+   its offset parent (see the .discover .card-img-caption .card-text rules) */
+.grid_dungeon,
+.list_dungeon {
+    position: relative;
+}
+
+.dungeon_card_dungeon_name {
+    text-shadow: 2px 2px 2px rgba(0,0,0,0.6);
+}
+
+/** Light Slider */
+@media (min-width: 1200px) {
+    /* Container is required for the page load to have a proper width */
+    .card_dungeonroute.horizontal .single,
+    .card_dungeonroute.horizontal .light-slider-container,
+    .card_dungeonroute.horizontal .multiple,
+    .card_dungeonroute.horizontal img.thumbnail,
+    .card_dungeonroute.horizontal img.dungeon {
+        width: 288px;
+        height: 192px;
+    }
+
+
+    .card_dungeonroute.vertical img.thumbnail,
+    .card_dungeonroute.vertical img.dungeon {
+        width: 100%;
+    }
+
+    .card_dungeonroute.vertical .title {
+        height: 2rem;
+        overflow: hidden;
+    }
+
+    .description_row {
+        text-shadow: 2px 2px 2px #5E5E5E;
+    }
+
+    .card_dungeonroute.vertical .description_row {
+        height: 6rem;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    .card_dungeonroute.vertical .description_row::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .card_dungeonroute.vertical .description_row::-webkit-scrollbar-track {
+        border-radius: 8px;
+        background-color: #e7e7e7;
+        border: 1px solid #cacaca;
+        box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    }
+
+    .card_dungeonroute.vertical .description_row::-webkit-scrollbar-thumb {
+        border-radius: 8px;
+        background-color: #363636;
+    }
+}
+
+.list_dungeon.selectable.selected {
+    border: 0.125rem solid forestgreen;
+    border-radius: 5px;
+}
+
+/** Prevents the title from jumping when it gets selected */
+.list_dungeon.selectable.selected h5 {
+    width: calc(100% - 0.75rem); /* 0.375 x2 for the padding */
+    top: calc(15% - 0.125rem); /* 0.125 for the border, but just one side since it's the top */
+}
+
+.discover .select_icon.class_icon.selectable,
+.discover .grid_dungeon.selectable {
+    cursor: pointer;
+}
+
+.discover .select_icon.class_icon.selectable.selected,
+.discover .grid_dungeon.selectable.selected {
+    border: 0.125rem solid red;
+    border-radius: 5px;
+}
+
+.discover .grid_dungeon.selectable.selected {
+    padding: 0.375rem !important;
+}
+
+/** Prevents the title from jumping when it gets selected */
+.discover .grid_dungeon.selectable.selected h5 {
+    width: calc(100% - 0.75rem); /* 0.375 x2 for the padding */
+    top: calc(15% - 0.125rem); /* 0.125 for the red border, but just one side since it's the top */
+}
+
+
+.discover .card-img-caption {
+    border-top-left-radius: calc(.25rem - 1px);
+    border-top-right-radius: calc(.25rem - 1px);
+}
+
+.discover .card-img-caption .card-img-top {
+    z-index: 0;
+}
+
+.discover .card-img-caption .card-text {
+    text-align: center;
+    width: 100%;
+    top: 15%;
+    position: absolute;
+    z-index: 1;
+}
+
+.discover .tab-content .card-img-caption .card-text {
+    width: calc(100% - 1rem); /* Search page - overcome the padding - this makes it fit exactly */
+}
+
+.discover .card-img-caption .card-text.subtext {
+    top: unset;
+    bottom: 5%;
+    text-align: unset;
+}
+
+.discover .card_dungeonroute.horizontal .description {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.discover .card_dungeonroute.horizontal.dungeon_image .header,
+.discover .card_dungeonroute.horizontal.dungeon_image .description,
+.discover .card_dungeonroute.horizontal.dungeon_image .enemy_forces {
+    text-shadow: #000 1px 1px;
+}
+
+@media (min-width: 1200px) {
+    .discover .card_dungeonroute.horizontal,
+    .discover .card_dungeonroute.horizontal .col {
+        max-height: 192px;
+    }
+
+    .discover .card_dungeonroute.horizontal .header {
+        overflow: hidden;
+    }
+
+    .discover .card_dungeonroute.horizontal .description_row,
+    .discover .card_dungeonroute.horizontal .description_row .col {
+        max-height: 80px;
+        max-width: 532px;
+        overflow: hidden;
+    }
+}
+
+@media (min-width: 1800px) {
+    .discover .card_dungeonroute.horizontal .description_row .col {
+        display: flex !important;
+    }
+}
+
+/** Prevent descriptions from taking on a huge height if people enter only */
+@media (max-width: 1200px) {
+    .discover .card_dungeonroute.horizontal .description_row {
+        max-height: 250px;
+    }
+}
+
+.discover #route_list_overlay {
+    background: rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+.discover_panel {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+}
+
+.dungeon_wallpaper {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: -1;
+
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 0;
+}

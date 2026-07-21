@@ -68,7 +68,7 @@ use Illuminate\Support\Collection;
     ?>
 
     @foreach($warnings as $key => $category)
-        <div class="form-group">
+        <div class="mb-3">
             <h1>
                 {{ $headers[$key] }}
             </h1>

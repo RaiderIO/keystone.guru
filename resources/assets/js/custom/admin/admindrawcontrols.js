@@ -109,7 +109,7 @@ class AdminDrawControls extends DrawControls {
                 floorunion: {
                     repeatMode: false,
                     zIndexOffset: 1000,
-                    faClass: 'fa-vector-square',
+                    faClass: 'fa-object-group',
                     title: lang.get('js.floorunion_title', {hotkey: hotkeys.floorunion}),
                     hotkey: hotkeys.floorunion
                 },

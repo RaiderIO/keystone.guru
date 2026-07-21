@@ -13,9 +13,9 @@ use App\Models\Expansion;
 use App\Models\Faction;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
+use App\Models\MapIcon;
+use App\Models\MapIconType;
 use App\Models\PublishedState;
-use App\Models\Release;
-use App\Models\ReleaseChangelogCategory;
 use App\Models\RouteAttribute;
 use App\Models\Season;
 use App\Models\Spell\Spell;
@@ -28,7 +28,6 @@ use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Str;
 
@@ -89,7 +88,6 @@ class ViewService implements ViewServiceInterface
         return $this->cachedGlobal('demo_routes', static fn() => DungeonRoute::where('demo', true)
             ->join('mapping_versions', 'mapping_versions.id', '=', 'dungeon_routes.mapping_version_id')
             ->where('mapping_versions.game_version_id', GameVersion::getDefaultGameVersion()->id)
-            ->without(['thumbnails'])
             ->where('published_state_id', PublishedState::ALL[PublishedState::WORLD_WITH_LINK])
             ->orderBy('dungeon_routes.dungeon_id')
             ->get());
@@ -112,26 +110,6 @@ class ViewService implements ViewServiceInterface
             ->mapWithKeys(fn(Dungeon $dungeon) => [$dungeon->id => $this->getDemoRoutes()->where('dungeon_id', $dungeon->id)->first()->public_key]));
     }
 
-    public function getLatestRelease(): Release
-    {
-        return $this->cachedGlobal('latest_release', static function (): Release {
-            /** @var Release $latestRelease */
-            $latestRelease = Release::latest()->first();
-
-            return $latestRelease;
-        });
-    }
-
-    public function getLatestReleaseSpotlight(): ?Release
-    {
-        return $this->cachedGlobal('latest_release_spotlight', static fn() => Release::where('spotlight', true)
-            ->whereDate(
-                'created_at',
-                '>',
-                Carbon::now()->subDays(config('keystoneguru.releases.spotlight_show_days', 7))->toDateTimeString(),
-            )->first());
-    }
-
     /**
      * @return array{version: string, revision: string, nameAndVersion: string}
      */
@@ -139,22 +117,34 @@ class ViewService implements ViewServiceInterface
     {
         return $this->cachedGlobal('app_version_info', function (): array {
             $appRevision = trim(file_get_contents(base_path('version')));
-            $version     = $this->getLatestRelease()->version;
+            // Deployed images bake the release tag into the version file (#3320); dev/CI have a commit hash there
+            $version = str_starts_with($appRevision, 'v') ? $appRevision : substr($appRevision, 0, 6);
 
             return [
                 'version'        => $version,
                 'revision'       => $appRevision,
-                'nameAndVersion' => sprintf(
-                    '%s® © 2018-%d %s - %s (%s), MDT %s',
-                    config('app.name'),
-                    date('Y'),
-                    'RaiderIO, Inc.',
-                    $version,
-                    substr($appRevision, 0, 6),
-                    config('keystoneguru.mdt.version'),
-                ),
+                'nameAndVersion' => $this->formatAppNameAndVersion($version, $appRevision),
             ];
         });
+    }
+
+    /**
+     * The version file contains a release tag in deployed images (#3320) but a commit hash in dev/CI.
+     * Tags are shown in full (omitted entirely when they duplicate the release version); hashes are shortened.
+     */
+    public function formatAppNameAndVersion(string $version, string $appRevision): string
+    {
+        $revisionDisplay = str_starts_with($appRevision, 'v') ? $appRevision : substr($appRevision, 0, 6);
+
+        return sprintf(
+            '%s® © 2018-%d %s - %s%s, MDT %s',
+            config('app.name'),
+            date('Y'),
+            'RaiderIO, Inc.',
+            $version,
+            $revisionDisplay === $version ? '' : sprintf(' (%s)', $revisionDisplay),
+            config('keystoneguru.mdt.version'),
+        );
     }
 
     public function getUserCount(): int
@@ -176,14 +166,6 @@ class ViewService implements ViewServiceInterface
     public function getAllFactions(): Collection
     {
         return $this->cachedGlobal('all_factions', static fn() => Faction::all());
-    }
-
-    /**
-     * @return Collection<int, ReleaseChangelogCategory>
-     */
-    public function getReleaseChangelogCategories(): Collection
-    {
-        return $this->cachedGlobal('release_changelog_categories', static fn() => ReleaseChangelogCategory::all());
     }
 
     /**
@@ -363,6 +345,39 @@ class ViewService implements ViewServiceInterface
     }
 
     /**
+     * Dungeons that have more than one dungeon start in their current mapping version, so the
+     * route create/settings forms can offer a dropdown to choose which start the route uses.
+     *
+     * @return Collection<int, Collection<int, array{id: int, text: string}>>
+     */
+    public function getDungeonStartsByDungeonId(): Collection
+    {
+        return $this->cachedGlobal('dungeon_starts_by_dungeon_id', static function (): Collection {
+            $currentMappingVersionIdByDungeonId = Dungeon::all()
+                ->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->id => $dungeon->getCurrentMappingVersion()?->id])
+                ->filter();
+
+            $dungeonStartsByCurrentMappingVersionId = MapIcon::where(
+                'map_icon_type_id',
+                MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START],
+            )
+                ->whereIn('mapping_version_id', $currentMappingVersionIdByDungeonId->values())
+                ->get(['id', 'mapping_version_id', 'comment'])
+                ->groupBy('mapping_version_id');
+
+            return $currentMappingVersionIdByDungeonId
+                ->mapWithKeys(static fn(int $mappingVersionId, int $dungeonId) => [$dungeonId => $dungeonStartsByCurrentMappingVersionId->get($mappingVersionId) ?? collect()])
+                ->filter(static fn(Collection $mapIcons) => $mapIcons->count() > 1)
+                ->map(static fn(Collection $mapIcons) => $mapIcons->values()->map(static fn(MapIcon $mapIcon, int $index) => [
+                    'id'   => $mapIcon->id,
+                    'text' => ($mapIcon->comment ?? '') !== '' ?
+                        (string)__($mapIcon->comment) :
+                        sprintf('%s #%d', __('mapicontypes.dungeon_start'), $index + 1),
+                ]));
+        });
+    }
+
+    /**
      * Warms every cached global getter by recomputing and writing it to cache, bypassing any cached read.
      */
     public function warmGlobalCaches(): void
@@ -372,13 +387,10 @@ class ViewService implements ViewServiceInterface
         $this->getDemoRoutes();
         $this->getDemoRouteDungeons();
         $this->getDemoRouteMapping();
-        $this->getLatestRelease();
-        $this->getLatestReleaseSpotlight();
         $this->getAppVersionInfo();
         $this->getUserCount();
         $this->getAllRegions();
         $this->getAllFactions();
-        $this->getReleaseChangelogCategories();
         $this->getCharacterClassSpecializations();
         $this->getCharacterClasses();
         $this->getCharacterRacesClasses();
@@ -397,6 +409,7 @@ class ViewService implements ViewServiceInterface
         $this->getAffixGroupEaseTiersByAffixGroup();
         $this->getDungeonExpansions();
         $this->getAllSpeedrunDungeons();
+        $this->getDungeonStartsByDungeonId();
 
         $this->forceRefresh = false;
     }

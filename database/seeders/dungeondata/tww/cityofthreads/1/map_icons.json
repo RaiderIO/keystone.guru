@@ -46,7 +46,7 @@
         "map_icon_type_id": 47,
         "lat": -43.5895,
         "lng": 182.8056,
-        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "comment": "mapping.map_icons.tww.city_of_threads.queen_ansurek_shadecaster",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 47,
         "lat": -38.352,
         "lng": 235.0117,
-        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "comment": "mapping.map_icons.tww.city_of_threads.queen_ansurek_shadecaster",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 47,
         "lat": -78.8159,
         "lng": 213.8927,
-        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "comment": "mapping.map_icons.tww.city_of_threads.queen_ansurek_shadecaster",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 47,
         "lat": -55.5851,
         "lng": 212.2877,
-        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "comment": "mapping.map_icons.tww.city_of_threads.queen_ansurek_shadecaster",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -111,7 +111,7 @@
         "map_icon_type_id": 47,
         "lat": -43.5895,
         "lng": 182.8056,
-        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "comment": "mapping.map_icons.tww.city_of_threads.queen_ansurek_shadecaster",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -124,7 +124,7 @@
         "map_icon_type_id": 47,
         "lat": -38.352,
         "lng": 235.0117,
-        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "comment": "mapping.map_icons.tww.city_of_threads.queen_ansurek_shadecaster",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -137,7 +137,7 @@
         "map_icon_type_id": 47,
         "lat": -78.8159,
         "lng": 213.8927,
-        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "comment": "mapping.map_icons.tww.city_of_threads.queen_ansurek_shadecaster",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -150,7 +150,7 @@
         "map_icon_type_id": 47,
         "lat": -55.5851,
         "lng": 212.2877,
-        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "comment": "mapping.map_icons.tww.city_of_threads.queen_ansurek_shadecaster",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -176,7 +176,7 @@
         "map_icon_type_id": 97,
         "lat": -43.5895,
         "lng": 182.8056,
-        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "comment": "mapping.map_icons.tww.city_of_threads.queen_ansurek_shadecaster",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -189,7 +189,7 @@
         "map_icon_type_id": 97,
         "lat": -38.352,
         "lng": 235.0117,
-        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "comment": "mapping.map_icons.tww.city_of_threads.queen_ansurek_shadecaster",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -202,7 +202,7 @@
         "map_icon_type_id": 97,
         "lat": -78.8159,
         "lng": 213.8927,
-        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "comment": "mapping.map_icons.tww.city_of_threads.queen_ansurek_shadecaster",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -215,7 +215,7 @@
         "map_icon_type_id": 97,
         "lat": -55.5851,
         "lng": 212.2877,
-        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "comment": "mapping.map_icons.tww.city_of_threads.queen_ansurek_shadecaster",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -241,7 +241,7 @@
         "map_icon_type_id": 97,
         "lat": -43.5895,
         "lng": 182.8056,
-        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "comment": "mapping.map_icons.tww.city_of_threads.queen_ansurek_shadecaster",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -254,7 +254,7 @@
         "map_icon_type_id": 97,
         "lat": -38.352,
         "lng": 235.0117,
-        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "comment": "mapping.map_icons.tww.city_of_threads.queen_ansurek_shadecaster",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -267,7 +267,7 @@
         "map_icon_type_id": 97,
         "lat": -78.8159,
         "lng": 213.8927,
-        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "comment": "mapping.map_icons.tww.city_of_threads.queen_ansurek_shadecaster",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -280,7 +280,7 @@
         "map_icon_type_id": 97,
         "lat": -55.5851,
         "lng": 212.2877,
-        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "comment": "mapping.map_icons.tww.city_of_threads.queen_ansurek_shadecaster",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -306,7 +306,7 @@
         "map_icon_type_id": 97,
         "lat": -43.5895,
         "lng": 182.8056,
-        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "comment": "mapping.map_icons.tww.city_of_threads.queen_ansurek_shadecaster",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -319,7 +319,7 @@
         "map_icon_type_id": 97,
         "lat": -38.352,
         "lng": 235.0117,
-        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "comment": "mapping.map_icons.tww.city_of_threads.queen_ansurek_shadecaster",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -332,7 +332,7 @@
         "map_icon_type_id": 97,
         "lat": -78.8159,
         "lng": 213.8927,
-        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "comment": "mapping.map_icons.tww.city_of_threads.queen_ansurek_shadecaster",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -345,7 +345,7 @@
         "map_icon_type_id": 97,
         "lat": -55.5851,
         "lng": 212.2877,
-        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "comment": "mapping.map_icons.tww.city_of_threads.queen_ansurek_shadecaster",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

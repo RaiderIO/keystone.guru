@@ -21,15 +21,15 @@ class LayoutsApp extends InlineCode {
         // Enable tooltips for all elements
         refreshTooltips();
 
-        // Make sure selectpicker is enabled
-        $('.selectpicker').selectpicker();
+        // Make sure select pickers are initialized
+        refreshSelectPickers();
 
         if (this.options.guest) {
             this._newPassword('#register_password');
             this._newPassword('#modal-register_password');
         }
 
-        $('.close,.close_alternative').unbind('click').bind('click', function () {
+        $('[data-alert-dismiss-id]').unbind('click').bind('click', function () {
             let dismissId = $(this).data('alert-dismiss-id');
             // Cookie is now set to dismiss this alert permanently
             Cookies.set(`alert-dismiss-${dismissId}`, true, $.extend({expires: 30}, cookieDefaultAttributes));
@@ -61,8 +61,6 @@ class LayoutsApp extends InlineCode {
                 }
 
                 $('html').removeClass(`${THEME_LUX} ${THEME_DARKLY} ${THEME_XALATATH}`).addClass(theme);
-                // Regenerate parallax effects (switches images around)
-                $('.mbr-parallax-background').jarallax('destroy').jarallax({speed: .6}).css('position', 'relative')
 
                 Cookies.set('theme', theme, cookieDefaultAttributes);
 
@@ -101,15 +99,11 @@ class LayoutsApp extends InlineCode {
     _newPassword(selector) {
         let $selector = $(selector);
         if ($selector.length > 0) {
-            $selector.password({
-                enterPass: '&nbsp;',
+            $selector.passwordStrength({
                 shortPass: lang.get('js.min_password_length'),
                 badPass: lang.get('js.weak'),
                 goodPass: lang.get('js.medium'),
                 strongPass: lang.get('js.strong'),
-                containsUsername: lang.get('js.contains_username'),
-                showText: true, // shows the text tips
-                animate: false, // whether or not to animate the progress bar on input blur/focus
                 minimumLength: 8
             });
         }
@@ -160,7 +154,10 @@ function defaultAjaxErrorFn(xhr/*, textStatus, errorThrown*/) {
  * @private
  */
 function _hideTooltips() {
-    $(this).tooltip('hide');
+    let tooltip = bootstrap.Tooltip.getInstance(this);
+    if (tooltip !== null) {
+        tooltip.hide();
+    }
 }
 
 /**
@@ -170,14 +167,20 @@ function refreshTooltips($element = null) {
     // console.warn('refreshing tooltips', $element);
     if (!isMobile()) {
         if ($element === null) {
-            refreshTooltips($('[data-toggle="tooltip"]'));
+            refreshTooltips($('[data-bs-toggle="tooltip"]'));
             refreshTooltips($('[data-tooltip="tooltip"]'));
         } else {
             $('.tooltip').remove();
-            $element.unbind('click', _hideTooltips.bind(this))
-                .bind('click', _hideTooltips.bind(this))
-                .tooltip('_fixTitle')
-                .tooltip({trigger: 'manual'});
+            $element.each(function () {
+                // Dispose and recreate so a changed title attribute is re-read (BS4 _fixTitle equivalent)
+                let existingTooltip = bootstrap.Tooltip.getInstance(this);
+                if (existingTooltip !== null) {
+                    existingTooltip.dispose();
+                }
+                new bootstrap.Tooltip(this);
+            });
+            $element.unbind('click', _hideTooltips)
+                .bind('click', _hideTooltips);
         }
     }
     return $element;
@@ -197,12 +200,17 @@ $.fn.refreshTooltips = function () {
 function toggleTooltips(enabled = true, $element = null) {
     if (!isMobile()) {
         if ($element === null) {
-            disableTooltips($('[data-toggle="tooltip"]'));
+            disableTooltips($('[data-bs-toggle="tooltip"]'));
             disableTooltips($('[data-tooltip="tooltip"]'));
         } else {
             $('.tooltip').remove();
-            $element.unbind('click', _hideTooltips.bind(this))
-                .tooltip(enabled ? 'enable' : 'disable');
+            $element.unbind('click', _hideTooltips)
+                .each(function () {
+                    let tooltip = bootstrap.Tooltip.getInstance(this);
+                    if (tooltip !== null) {
+                        enabled ? tooltip.enable() : tooltip.disable();
+                    }
+                });
         }
     }
 }
@@ -228,14 +236,7 @@ $.fn.if = function (condition, closure) {
     return this;
 }
 
-/**
- * Refreshes all select pickers on-screen
- **/
-function refreshSelectPickers() {
-    let $selectpicker = $('.selectpicker');
-    $selectpicker.selectpicker('refresh');
-    $selectpicker.selectpicker('render');
-}
+// refreshSelectPickers() is provided globally by resources/assets/js/selectpicker.js (via bootstrap.js)
 
 function _showNotification(opts) {
     new Noty($.extend({
@@ -265,7 +266,7 @@ function showConfirmYesCancel(text, yesCallback, noCallback, opts = {}) {
             type: 'confirm',
             text: text,
             buttons: [
-                Noty.button(lang.get('js.yes_label'), 'btn btn-success mr-1', function (n) {
+                Noty.button(lang.get('js.yes_label'), 'btn btn-success me-1', function (n) {
                     if (typeof yesCallback === 'function') {
                         yesCallback();
                     }
@@ -294,7 +295,7 @@ function showConfirmFinished(text, doneCallback = null, opts = {}) {
             type: 'confirm',
             text: text,
             buttons: [
-                Noty.button(lang.get('js.finished_label'), 'btn btn-success mr-1', function (n) {
+                Noty.button(lang.get('js.finished_label'), 'btn btn-success me-1', function (n) {
                     if (typeof doneCallback === 'function') {
                         doneCallback();
                     }

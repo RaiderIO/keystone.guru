@@ -98,7 +98,7 @@
         "map_icon_type_id": 2,
         "lat": -167.3633,
         "lng": 209.8027,
-        "comment": "Many packs here can either be 3 Unferred Spirits, an Anguished Dead or an Haunting Phantasm.",
+        "comment": "mapping.map_icons.classic.scarlet_monastery_graveyard.unferried_spirits_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

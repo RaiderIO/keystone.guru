@@ -5,19 +5,15 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'               => 'Raider.IO Weekly Route',
-                'popular'                    => 'Popular routes',
-                'popular_by_current_affixes' => 'Popular routes by current affixes',
-                'popular_by_next_affixes'    => 'Popular routes by next affixes',
-                'newly_published_routes'     => 'Newly published routes',
+                'weekly_route'           => 'Raider.IO Weekly Route',
+                'popular'                => 'Popular routes',
+                'newly_published_routes' => 'Newly published routes',
             ],
         ],
         'discover' => [
-            'title'                      => 'Routes',
-            'popular'                    => 'Popular routes',
-            'popular_by_current_affixes' => 'Popular routes by current affixes',
-            'popular_by_next_affixes'    => 'Popular routes by next affixes',
-            'newly_published_routes'     => 'Newly published routes',
+            'title'                  => 'Routes',
+            'popular'                => 'Popular routes',
+            'newly_published_routes' => 'Newly published routes',
         ],
         'panel' => [
             'show_more' => 'Show more',

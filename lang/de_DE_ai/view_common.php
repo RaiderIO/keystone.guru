@@ -132,6 +132,9 @@ return [
             'show_aggressiveness_border_title'              => 'Wenn Sie diese Einstellung aktivieren, werden alle Feinde mit einem Rand dargestellt, der ihre Aggressivität anzeigt. Rot für aggressive Feinde, Gelb für neutrale Feinde, Grün für freundliche Feinde usw.',
             'highlight_dangerous_enemies'                   => 'Gefährliche Feinde hervorheben',
             'highlight_dangerous_enemies_title'             => 'Gefährliche Feinde sind mit einem gepunkteten orangefarbenen inneren Rand markiert. Diese Feinde werden von Keystone.guru handverlesen. Diese Feinde sind Mini-Bosse, solche mit hoher Gesundheit im Vergleich zu anderen, verwenden gefährliche Fähigkeiten oder erfordern anderweitig besondere Vorsicht.',
+            'kill_zone_path'                                => '',
+            'kill_zone_path_weight'                         => '',
+            'kill_zone_path_weight_title'                   => '',
             'drawing'                                       => 'Zeichnen',
             'default_line_weight'                           => 'Standardliniengewicht',
             'default_line_weight_title'                     => 'Dies steuert das Standardgewicht (Breite) aller Linien, die Sie auf der Karte erstellen, wie z. B. Pfade und frei gezeichnete Linien.',
@@ -251,27 +254,33 @@ return [
             'heatmaps'                => 'Heatmaps',
             'explore'                 => 'Dungeons erkunden',
             'new'                     => 'NEU',
+            'compendium'              => '',
+            'npc_compendium'          => '',
+            'spell_compendium'        => '',
+            'compendium_activity'     => '',
+            'class_compendium'        => '',
         ],
         'nav' => [
             'user' => [
-                'login'             => 'Anmelden',
-                'register'          => 'Registrieren',
-                'telescope'         => 'Teleskop',
-                'tools'             => 'Werkzeuge',
-                'view_releases'     => 'Veröffentlichungen anzeigen',
-                'view_expansions'   => 'Erweiterungen anzeigen',
-                'view_dungeons'     => 'Dungeons anzeigen',
-                'view_npcs'         => 'NSCs anzeigen',
-                'view_spells'       => 'Zauber anzeigen',
-                'view_users'        => 'Benutzer anzeigen',
-                'view_user_reports' => 'Benutzerberichte anzeigen',
-                'my_routes'         => 'Meine Routen',
-                'my_favorites'      => 'Meine Favoriten',
-                'my_tags'           => 'Meine Tags',
-                'my_teams'          => 'Meine Teams',
-                'my_profile'        => 'Mein öffentliches Profil',
-                'account_settings'  => 'Kontoeinstellungen',
-                'logout'            => 'Abmelden',
+                'login'              => 'Anmelden',
+                'register'           => 'Registrieren',
+                'telescope'          => 'Teleskop',
+                'tools'              => 'Werkzeuge',
+                'view_releases'      => 'Veröffentlichungen anzeigen',
+                'view_expansions'    => 'Erweiterungen anzeigen',
+                'view_dungeons'      => 'Dungeons anzeigen',
+                'view_npcs'          => 'NSCs anzeigen',
+                'view_spells'        => 'Zauber anzeigen',
+                'view_users'         => 'Benutzer anzeigen',
+                'view_dungeonroutes' => '',
+                'view_user_reports'  => 'Benutzerberichte anzeigen',
+                'my_routes'          => 'Meine Routen',
+                'my_favorites'       => 'Meine Favoriten',
+                'my_tags'            => 'Meine Tags',
+                'my_teams'           => 'Meine Teams',
+                'my_profile'         => 'Mein öffentliches Profil',
+                'account_settings'   => 'Kontoeinstellungen',
+                'logout'             => 'Abmelden',
             ],
             'uploadlogs' => [
                 'upload_logs' => 'Logs hochladen, um Keystone.guru zu verbessern',
@@ -321,6 +330,10 @@ return [
                 'labeltoggle' => [
                     'hide_labels' => 'Ausblenden',
                 ],
+                'facadetoggle' => [
+                    'facade'       => '',
+                    'split_floors' => '',
+                ],
                 'mdtclones' => [
                     'mdt'        => 'MDT anzeigen',
                     'auto_solve' => 'Automatisch lösen',
@@ -331,20 +344,17 @@ return [
                     'your_rating'              => 'Ihre Bewertung',
                 ],
             ],
-            'enemyinfo' => [
-                'enemy_info'      => 'Feindinformationen',
-                'report_an_issue' => 'Ein Problem melden',
-            ],
             'heatmapsearch' => [
                 'settings_title'         => 'Karteneinstellungen',
                 'enabled'                => 'Aktiviert',
                 'disabled'               => 'Deaktiviert',
                 'event_type'             => 'Ereignistyp',
                 'data_type'              => 'Datentyp',
+                'data_type_title'        => 'Die Feindposition verwendet die ursprüngliche Position des Feindes, der angegriffen wurde (unterstützt vom Auto-Route Creator), die Spielerposition verwendet die Position des Spielers, als ein Feind angegriffen wurde (Kampflog-Position).',
+                'player_spells'          => '',
                 'npc_death_alt'          => 'Feindlicher Tod',
                 'player_death_alt'       => 'Spielertod',
-                'bloodlust_alt'          => 'Kampfrausch',
-                'data_type_title'        => 'Die Feindposition verwendet die ursprüngliche Position des Feindes, der angegriffen wurde (unterstützt vom Auto-Route Creator), die Spielerposition verwendet die Position des Spielers, als ein Feind angegriffen wurde (Kampflog-Position).',
+                'spell_casts_alt'        => '',
                 'filter'                 => 'Filter',
                 'key_level'              => 'Schlüsselstufe',
                 'item_level'             => 'Gegenstandsstufe',
@@ -383,6 +393,13 @@ return [
                     'gradient'    => 'Gradient',
                     'pane'        => 'Bereich',
                 ],
+            ],
+            'combatlogrouteenemyfailures' => [
+                'npc_filter'           => '',
+                'clear_failures'       => '',
+                'clear_failures_title' => '',
+                'matching_routes'      => '',
+                'no_matching_routes'   => '',
             ],
             'header' => [
                 'toggle_navigation'              => 'Navigation umschalten',
@@ -469,12 +486,20 @@ return [
         ],
     ],
     'modal' => [
+        'createroute' => [
+            'create_route'           => 'Route erstellen',
+            'create_temporary_route' => 'Temporäre Route erstellen',
+            'import_from_mdt'        => 'Aus MDT importieren',
+        ],
         'dungeonroute' => [
             'removed' => [
                 'title'        => 'Route entfernt',
                 'description'  => 'Ihre Route wurde entfernt und kann nicht mehr angesehen/bearbeitet werden. Dies kann passieren, wenn Ihre Route eine temporäre Route war und automatisch bereinigt wurde oder Sie die Route in einem anderen Browser-Tab gelöscht haben.',
                 'back_to_home' => 'Zurück zur Startseite',
             ],
+        ],
+        'enemydetails' => [
+            'report_an_issue' => '',
         ],
         'userreport' => [
             'dungeonroute' => [
@@ -493,11 +518,6 @@ return [
                 'contact_by_email_guest' => 'Kontaktieren Sie mich per E-Mail, falls eine weitere Untersuchung erforderlich ist (fügen Sie Ihre E-Mail-Adresse im Berichtstext hinzu)',
                 'submit'                 => 'Einreichen',
             ],
-        ],
-        'createroute' => [
-            'create_route'           => 'Route erstellen',
-            'create_temporary_route' => 'Temporäre Route erstellen',
-            'import_from_mdt'        => 'Aus MDT importieren',
         ],
         'legal' => [
             'welcome_back_agree' => 'Willkommen zurück! Um fortzufahren, müssen Sie unseren %s, %s und %s zustimmen.',
@@ -618,6 +638,14 @@ return [
             'title' => 'Logs hochladen',
         ],
     ],
+    'npc' => [
+        'link' => [
+            'boss' => '',
+        ],
+        'select' => [
+            'npc' => '',
+        ],
+    ],
     'release' => [
         'release' => [
             'new' => 'NEU',
@@ -639,14 +667,15 @@ return [
     ],
     'team' => [
         'details' => [
-            'name'            => 'Name',
-            'description'     => 'Beschreibung',
-            'logo'            => 'Logo',
-            'current_logo'    => 'Aktuelles Logo',
-            'team_logo_title' => 'Teamlogo',
-            'save'            => 'Speichern',
-            'submit'          => 'Einreichen',
-            'disband_team'    => 'Team auflösen',
+            'name'                     => 'Name',
+            'description'              => 'Beschreibung',
+            'logo'                     => 'Logo',
+            'current_logo'             => 'Aktuelles Logo',
+            'team_logo_title'          => 'Teamlogo',
+            'save'                     => 'Speichern',
+            'submit'                   => 'Einreichen',
+            'disband_team'             => 'Team auflösen',
+            'route_publishing_enabled' => '',
         ],
         'select' => [
             'select_team' => 'Team auswählen...',

@@ -1,0 +1,18 @@
+ul.light-slider {
+    list-style: none outside none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.light-slider li {
+    display: block;
+    float: left;
+    margin-right: 6px;
+    cursor: pointer;
+}
+
+.light-slider img {
+    display: block;
+    height: auto;
+    max-width: 100%;
+}

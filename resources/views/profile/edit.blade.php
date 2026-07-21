@@ -12,6 +12,7 @@ use Illuminate\Support\Collection;
  */
 
 $user      = Auth::getUser();
+$user->load(['teams', 'teams.members', 'teams.members.patreonAdFreeGiveaway', 'patreonAdFreeGiveaway']);
 $isOAuth   = $user->password === '';
 $menuItems = [
     ['icon' => 'fa-user', 'text' => __('view_profile.edit.profile'), 'target' => '#profile'],

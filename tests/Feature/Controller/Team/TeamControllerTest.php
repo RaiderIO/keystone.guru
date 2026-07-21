@@ -69,7 +69,7 @@ final class TeamControllerTest extends PublicTestCase
     public function resolveRouteBinding_givenPublicKeySlugValue_resolvesTeam(): void
     {
         // Act
-        $resolved = (new Team())->resolveRouteBinding($this->team->getRouteKey());
+        $resolved = new Team()->resolveRouteBinding($this->team->getRouteKey());
 
         // Assert
         $this->assertNotNull($resolved);
@@ -80,7 +80,7 @@ final class TeamControllerTest extends PublicTestCase
     public function resolveRouteBinding_givenPublicKeyOnly_resolvesTeam(): void
     {
         // Act
-        $resolved = (new Team())->resolveRouteBinding($this->team->public_key);
+        $resolved = new Team()->resolveRouteBinding($this->team->public_key);
 
         // Assert
         $this->assertNotNull($resolved);

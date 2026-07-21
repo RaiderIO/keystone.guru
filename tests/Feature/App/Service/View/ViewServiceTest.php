@@ -107,4 +107,44 @@ final class ViewServiceTest extends PublicTestCase
         yield ['/api_keys/sendgrid_keys.json'];
         yield ['/'];
     }
+
+    /**
+     * @throws Exception
+     * @throws Throwable
+     */
+    #[Test]
+    #[DataProvider('formatAppNameAndVersion_givenRevision_returnsExpectedNameAndVersion_dataProvider')]
+    public function formatAppNameAndVersion_givenRevision_returnsExpectedNameAndVersion(
+        string $version,
+        string $appRevision,
+        string $expectedRevisionSuffix,
+    ): void {
+        // Arrange
+        $viewService = ServiceFixtures::getViewServiceMock(
+            testCase: $this,
+        );
+
+        // Act
+        $result = $viewService->formatAppNameAndVersion($version, $appRevision);
+
+        // Assert
+        $this->assertSame(sprintf(
+            '%s® © 2018-%d RaiderIO, Inc. - %s%s, MDT %s',
+            config('app.name'),
+            date('Y'),
+            $version,
+            $expectedRevisionSuffix,
+            config('keystoneguru.mdt.version'),
+        ), $result);
+    }
+
+    public static function formatAppNameAndVersion_givenRevision_returnsExpectedNameAndVersion_dataProvider(): \Generator
+    {
+        // Deployed image: version file contains the tag of the latest release - pure duplication, omitted
+        yield 'tag equal to release version' => ['v15.2.8', 'v15.2.8', ''];
+        // Mid-deploy or stale container: the deployed tag differs from the latest release row - show it in full
+        yield 'tag differing from release version' => ['v15.2.8', 'v15.2.7', ' (v15.2.7)'];
+        // Dev/CI: version file contains a commit hash - show the short hash
+        yield 'commit hash' => ['v15.2.8', 'a1b2c3d4e5f67890a1b2c3d4e5f67890a1b2c3d4', ' (a1b2c3)'];
+    }
 }

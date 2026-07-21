@@ -17,15 +17,18 @@ return [
             'mdt_mismatched_enemy_count'          => 'NPC %s has mismatched enemy count, MDT: %s, KG: %s',
             'mdt_mismatched_enemy_type'           => 'NPC %s has mismatched enemy type, MDT: %s, KG: %s',
             'mdt_invalid_category'                => 'Invalid category',
+            'combatlog_parse_failure_no_season'   => 'This failure has no associated season, so the download links cannot be re-fetched.',
+            'combatlog_parse_failure_no_segments' => 'No combat log segments are available for this run.',
         ],
         'flash' => [
+            'banned_ip_address_added'                => 'IP address banned successfully',
+            'banned_ip_address_removed'              => 'Ban removed successfully',
             'message_banner_set_successfully'        => 'Message banner set successfully',
             'thumbnail_regenerate_result'            => 'Dispatched :success jobs for :total routes. :failed failed.',
             'combatlog_route_regenerate_result'      => 'Dispatched :count jobs',
             'combatlog_criteria_reset'               => 'All parsing criteria counts for today have been reset.',
             'combatlog_criteria_thresholds_updated'  => 'Parsing criteria thresholds have been updated.',
             'caches_dropped_successfully'            => 'Caches dropped successfully',
-            'releases_exported'                      => 'Releases exported',
             'exception'                              => 'Exception thrown in admin panel',
             'feature_toggle_activated'               => 'Feature :feature is now activated',
             'feature_toggle_deactivated'             => 'Feature :feature is now deactivated',
@@ -34,6 +37,7 @@ return [
             'mapping_version_upgrade_already_latest' => 'This mapping version is already the latest for its dungeon — no routes were queued.',
             'read_only_mode_disabled'                => 'Read-only mode disabled',
             'read_only_mode_enabled'                 => 'Read-only mode enabled',
+            'combatlog_parse_failure_resolved'       => 'Parse failure marked as resolved.',
         ],
     ],
     'apidungeonroute' => [
@@ -73,21 +77,15 @@ return [
         ],
     ],
     'dungeonroutediscover' => [
-        'popular'           => 'Popular routes',
-        'this_week_affixes' => 'This week\'s affixes',
-        'next_week_affixes' => 'Next week\'s affixes',
-        'new'               => 'New',
-        'season'            => [
-            'popular'           => '%s popular routes',
-            'this_week_affixes' => '%s this week',
-            'next_week_affixes' => '%s next week',
-            'new'               => '%s new routes',
+        'popular' => 'Popular routes',
+        'new'     => 'New',
+        'season'  => [
+            'popular' => '%s popular routes',
+            'new'     => '%s new routes',
         ],
         'dungeon' => [
-            'popular'           => '%s popular routes',
-            'this_week_affixes' => '%s this week',
-            'next_week_affixes' => '%s next week',
-            'new'               => '%s new routes',
+            'popular' => '%s popular routes',
+            'new'     => '%s new routes',
         ],
     ],
     'dungeonspeedrunrequirednpcs' => [
@@ -125,16 +123,6 @@ return [
         ],
         'legal_agreed_required' => 'You have to agree to our legal terms to register.',
         'legal_agreed_accepted' => 'You have to agree to our legal terms to register.',
-    ],
-    'release' => [
-        'error' => [
-            'unable_to_save_release' => 'Unable to save release',
-        ],
-        'flash' => [
-            'release_updated'  => 'Release updated',
-            'release_created'  => 'Release created',
-            'github_exception' => 'An error occurred communicating with Github: :message',
-        ],
     ],
     'mappingversion' => [
         'created_successfully'      => 'Added new mapping version!',

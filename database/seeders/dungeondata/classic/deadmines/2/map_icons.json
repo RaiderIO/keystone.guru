@@ -20,7 +20,7 @@
         "map_icon_type_id": 93,
         "lat": -184.625,
         "lng": 51.625,
-        "comment": "Box of Assorted Parts",
+        "comment": "mapping.map_icons.classic.deadmines.box_of_assorted_parts",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 93,
         "lat": -108.1843,
         "lng": 205.1901,
-        "comment": "Large Battered Chest",
+        "comment": "mapping.map_icons.classic.deadmines.large_battered_chest",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 42,
         "lat": -196.6642,
         "lng": 25.8619,
-        "comment": "This patrol spawns after defeating Gilnid. Beware!",
+        "comment": "mapping.map_icons.classic.deadmines.patrol_after_gilnid",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

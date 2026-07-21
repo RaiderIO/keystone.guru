@@ -4,7 +4,7 @@
     </h4>
 </div>
 <div class="card-body">
-    <div class="form-group">
+    <div class="mb-3">
         {{ __('view_common.modal.dungeonroute.removed.description') }}
     </div>
 </div>

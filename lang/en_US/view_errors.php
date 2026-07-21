@@ -18,6 +18,10 @@ return [
         'title'   => '404 Not Found',
         'message' => 'Sorry, the page you are looking for could not be found.',
     ],
+    '405' => [
+        'title'   => '405 Method Not Allowed',
+        'message' => 'Sorry, this page does not support that request method.',
+    ],
     '410' => [
         'title'   => '410 Page Expired',
         'message' => 'Sorry, the page you are looking for has expired.',

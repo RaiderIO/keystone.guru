@@ -2,14 +2,18 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\CombatLog\ProcessCombatLogSegments;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Season;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
 use App\Service\CombatLog\CombatLogDataExtractionService;
+use App\Service\CombatLog\Dtos\CombatLogRunContext;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteServiceInterface;
 use App\Service\Image\ImageServiceInterface;
+use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\Wowhead\WowheadServiceInterface;
 use Illuminate\Console\Command;
@@ -43,7 +47,16 @@ class Random extends Command
         ImageServiceInterface                $imageService,
         WowheadServiceInterface              $wowheadService,
         DungeonRouteServiceInterface         $dungeonRouteService,
+        RaiderIOApiServiceInterface          $raiderIOApiService,
     ): int {
+        $season = Season::first();
+        $job    = new ProcessCombatLogSegments(
+            $season,
+            0,
+            0,
+            new CombatLogRunContext(0, []),
+        );
+        app()->call($job->handle(...));
 //        $json = json_decode(file_get_contents(base_path('tmp/tmp.json')), true);
 //
 //        $spells = Spell::all()->keyBy('id');
@@ -64,10 +77,10 @@ class Random extends Command
 
 //        $dungeonRouteService->refreshOutdatedThumbnails();
 
-        dd($wowheadService->getSpellData(
-            GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL),
-            1244985,
-        ));
+//        dd($wowheadService->getSpellData(
+//            GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL),
+//            1244985,
+//        ));
 
 //        $filePath = base_path('tmp/WoWCombatLog-100624_192349_6_ara-kara-city-of-echoes.zip');
 //
@@ -196,6 +209,6 @@ class Random extends Command
         //        dd($echoServerHttpApiService->getChannelUsers('presence-local-route-edit.E2mXPo3'));
         //        dd($echoServerHttpApiService->getChannels());
 
-        return 0; // @phpstan-ignore deadCode.unreachable
+        return 0;
     }
 }

@@ -24,7 +24,7 @@ class MapContextDungeonRoute extends MapContextBase
         CacheServiceInterface                         $cacheService,
         CoordinatesServiceInterface                   $coordinatesService,
         private readonly KillZonePathServiceInterface $killZonePathService,
-        private DungeonRoute                          $dungeonRoute,
+        private readonly DungeonRoute                 $dungeonRoute,
         string                                        $mapFacadeStyle,
     ) {
         parent::__construct($cacheService, $coordinatesService, $dungeonRoute->dungeon, $dungeonRoute->mappingVersion, $mapFacadeStyle);

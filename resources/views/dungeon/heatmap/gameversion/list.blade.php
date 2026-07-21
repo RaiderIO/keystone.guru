@@ -17,7 +17,7 @@ use App\Models\GameVersion\GameVersion;
 
 @section('content')
 
-    <div class="row form-group">
+    <div class="row mb-3">
         <div class="col">
             <p>
                 {!! __('view_dungeon.heatmap.gameversion.list.description', [
@@ -39,11 +39,11 @@ use App\Models\GameVersion\GameVersion;
             $result = '';
 
             if( $dungeon->heatmap_enabled ) {
-                echo '<div class="row no-gutters">
+                echo '<div class="row g-0">
                     <div class="col">
                     </div>
                     <div class="col-auto px-2">
-                        <i class="fas fa-fire text-danger" data-toggle="tooltip" title="'
+                        <i class="fas fa-fire text-danger" data-bs-toggle="tooltip" title="'
                         . __('view_dungeon.heatmap.gameversion.list.heatmap_available') .
                         '"></i>
                     </div>

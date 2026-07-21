@@ -1,0 +1,28 @@
+{
+    "description": "Classic speedrun dungeon (Serpentshrine Cavern-like) with both 10-man and 25-man difficulties enabled: untouched, the difficulty select's first appended option (10-man, DungeonConstants::DIFFICULTY_ALL['10_man'] = 1) is auto-selected by the browser. dungeon_start_map_icon_id is entirely absent: dungeondifficultyselect.js's global refreshSelectPickers() call (fired because this dungeon is a speedrun dungeon) initializes Tom Select on the still-empty start select as a side effect; dungeonstartselect.js then unconditionally removes its options before its own refresh, and the resulting resync does not re-add a value.",
+    "endpoint": "dungeonroute.savenew",
+    "gameVersion": "classic",
+    "auth": true,
+    "fields": [
+        {"name": "dungeon_id", "value": "{{dungeon_id}}"},
+        {"name": "team_id", "value": "-1"},
+        {"name": "dungeon_difficulty", "value": "1"},
+        {"name": "dungeon_route_title", "value": "My Test Route"},
+        {"name": "faction_id", "value": "1"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"}
+    ]
+}

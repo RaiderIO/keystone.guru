@@ -33,7 +33,7 @@
         "map_icon_type_id": 93,
         "lat": -108.911,
         "lng": 127.5055,
-        "comment": "Pitted Iron Chest [Quest: Knowledge in the Deeps]",
+        "comment": "mapping.map_icons.classic.blackfathom_deeps.pitted_iron_chest",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 2,
         "lat": -78.5672,
         "lng": 174.8718,
-        "comment": "Many enemies in The Drowned Sacellum change between Blindlight Murloc, Murkshallow Snapclaw or Skittering Crustacean.",
+        "comment": "mapping.map_icons.classic.blackfathom_deeps.drowned_sacellum_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 2,
         "lat": -223.8526,
         "lng": 170.9407,
-        "comment": "Many enemies change between Sea Witch, Myrmidon, Hellcaller or Shadowstalker.",
+        "comment": "mapping.map_icons.classic.blackfathom_deeps.sea_witch_myrmidon_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 2,
         "lat": -128.8415,
         "lng": 84.661,
-        "comment": "Many enemies in The Pool of Ask'ar change between Sea Caller, Myrmidon or Skittering Crustacean.",
+        "comment": "mapping.map_icons.classic.blackfathom_deeps.pool_of_askar_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 44,
         "lat": -137.3618,
         "lng": 200.4061,
-        "comment": "Shrine of Gelikast: Blessing of Blackfathom",
+        "comment": "mapping.map_icons.classic.blackfathom_deeps.shrine_of_gelikast",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -111,7 +111,7 @@
         "map_icon_type_id": 42,
         "lat": -163.2588,
         "lng": 247.4009,
-        "comment": "Lorgus Jett may be in the left cave or the right cave, watch out.",
+        "comment": "mapping.map_icons.classic.blackfathom_deeps.lorgus_jett_location",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

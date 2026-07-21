@@ -15,11 +15,11 @@ $deleteConsequences = $user->getDeleteConsequences();
 
     @include('common.general.messages')
 
-    <div class="form-group">
+    <div class="mb-3">
         {{ __('view_profile.edit.account_delete_consequences') }}:
     </div>
     @if( !empty($deleteConsequences['dungeonroutes']) && $deleteConsequences['dungeonroutes']['delete_count'] > 0 )
-        <div class="form-group">
+        <div class="mb-3">
             <h5>
                 {{ __('view_profile.edit.account_delete_consequence_routes') }}
             </h5>
@@ -31,7 +31,7 @@ $deleteConsequences = $user->getDeleteConsequences();
         </div>
     @endif
     @if( !empty($deleteConsequences['teams']) )
-        <div class="form-group">
+        <div class="mb-3">
             <h5>
                 {{ __('view_profile.edit.account_delete_consequence_teams') }}
             </h5>
@@ -59,7 +59,7 @@ $deleteConsequences = $user->getDeleteConsequences();
         </div>
     @endif
     @if( !empty($deleteConsequences['patreon']) && $deleteConsequences['patreon']['unlinked'] )
-        <div class="form-group">
+        <div class="mb-3">
             <h5>
                 {{ __('view_profile.edit.patreon') }}
             </h5>
@@ -71,7 +71,7 @@ $deleteConsequences = $user->getDeleteConsequences();
         </div>
     @endif
     @if( !empty($deleteConsequences['reports']))
-        <div class="form-group">
+        <div class="mb-3">
             <h5>
                 {{ __('view_profile.edit.reports') }}
             </h5>
@@ -82,7 +82,7 @@ $deleteConsequences = $user->getDeleteConsequences();
             </ul>
         </div>
     @endif
-    <div class="text-danger font-weight-bold">
+    <div class="text-danger fw-bold">
         {{ __('view_profile.edit.account_delete_warning') }}
     </div>
     {{ html()->form('POST', route('profile.delete'))->open() }}

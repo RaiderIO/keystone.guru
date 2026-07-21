@@ -15,7 +15,7 @@ use Session;
 
 class AdminDungeonRouteController extends Controller
 {
-    private const MAX_RESULTS = 500;
+    private const int MAX_RESULTS = 500;
 
     public function index(AdminDungeonRouteIndexRequest $request): View
     {

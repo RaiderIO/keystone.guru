@@ -10,6 +10,8 @@ return [
     'add_kill_zone_limit_reached'             => '단일 경로에 :limit개 이상의 풀을 추가할 수 없습니다.',
     'add_brushline_limit_reached'             => '단일 경로에 :limit개 이상의 자유형 선을 추가할 수 없습니다.',
     'add_path_limit_reached'                  => '단일 경로에 :limit개 이상의 경로를 추가할 수 없습니다.',
+    'add_arrow_limit_reached'                 => '',
     'add_map_icon_limit_reached'              => '단일 경로에 :limit개 이상의 지도 아이콘을 추가할 수 없습니다.',
+    'schedule_publish_route_not_in_team'      => '',
 
 ];

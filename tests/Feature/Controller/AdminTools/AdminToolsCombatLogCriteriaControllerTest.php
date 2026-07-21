@@ -12,6 +12,7 @@ use Tests\TestCases\PublicTestCase;
 #[Group('AdminTools')]
 final class AdminToolsCombatLogCriteriaControllerTest extends PublicTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -4,20 +4,20 @@ updates:
     directory: "/"
     schedule:
       interval: daily
-    target-branch: "development"
+    target-branch: "master"
     labels:
       - "security"
   - package-ecosystem: composer
     directory: "/"
     schedule:
       interval: daily
-    target-branch: "development"
+    target-branch: "master"
     labels:
       - "security"
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
       interval: daily
-    target-branch: "development"
+    target-branch: "master"
     labels:
       - "security"

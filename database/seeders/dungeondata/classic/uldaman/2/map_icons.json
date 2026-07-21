@@ -7,7 +7,7 @@
         "map_icon_type_id": 3,
         "lat": -155.1241,
         "lng": 224.7523,
-        "comment": "Temple Door",
+        "comment": "mapping.map_icons.classic.uldaman.temple_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -20,7 +20,7 @@
         "map_icon_type_id": 44,
         "lat": -138.0249,
         "lng": 217.9316,
-        "comment": "Altar of Archaedas",
+        "comment": "mapping.map_icons.classic.uldaman.altar_of_archaedas",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 40,
         "lat": -87.1575,
         "lng": 193.2685,
-        "comment": "The Discs of Norgannon",
+        "comment": "mapping.map_icons.classic.uldaman.discs_of_norgannon",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

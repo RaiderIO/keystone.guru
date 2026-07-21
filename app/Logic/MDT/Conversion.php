@@ -376,7 +376,13 @@ class Conversion
             return null;
         }
 
-        $season = $seasonService->getUpcomingSeasonForDungeon($dungeon) ??
+        // An MDT week indexes the current live retail affix rotation, so prefer interpreting it
+        // against the current active season when the dungeon is part of it. Only fall back to the
+        // dungeon's upcoming/most-recent season for dungeons that aren't in the current season
+        // (such as legacy dungeons), which keeps their imports deterministic instead of drifting
+        // to whichever season last contained the dungeon.
+        $season = $seasonService->getCurrentSeasonForDungeon($dungeon) ??
+            $seasonService->getUpcomingSeasonForDungeon($dungeon) ??
             $seasonService->getMostRecentSeasonForDungeon($dungeon);
 
         if ($season === null) {

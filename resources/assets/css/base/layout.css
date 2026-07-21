@@ -1,0 +1,10 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+html, body, #app {
+    height: 100%;
+    width: 100%;
+}

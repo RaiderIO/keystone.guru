@@ -6,65 +6,14 @@ use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\Floor\FloorUnion;
 use App\Models\GameVersion\GameVersion;
-use App\Models\Mapping\MappingChangeLog;
-use App\Models\Mapping\MappingCommitLog;
 use App\Models\Mapping\MappingVersion;
+use App\Service\MDT\MDTAddonVersionServiceInterface;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 
 class MappingService implements MappingServiceInterface
 {
-    public function shouldSynchronizeMapping(): bool
+    public function __construct(private readonly MDTAddonVersionServiceInterface $mdtAddonVersionService)
     {
-        /** @var MappingChangeLog|null $mostRecentMappingChangeLog */
-        $mostRecentMappingChangeLog = MappingChangeLog::latest()->first();
-
-        /** @var MappingCommitLog|null $mostRecentMappingCommitLog */
-        $mostRecentMappingCommitLog = MappingCommitLog::latest()->first();
-
-        // If not synced at all yet, or if we've synced, but it was before any changes were done
-        return $mostRecentMappingChangeLog !== null && ($mostRecentMappingCommitLog === null || $mostRecentMappingChangeLog->shouldSynchronize($mostRecentMappingCommitLog));
-    }
-
-    /**
-     * @return Collection<int, MappingChangeLog>
-     */
-    public function getUnmergedMappingChanges(): Collection
-    {
-        $mostRecentlyMergedMappingCommitLog = MappingCommitLog::where('merged', 1)->orderBy('id', 'desc')->first();
-
-        if ($mostRecentlyMergedMappingCommitLog !== null) {
-            // Get all changes that have been done right after the most recently merged commit
-            $result = MappingChangeLog::where('created_at', '>', $mostRecentlyMergedMappingCommitLog->created_at->toDateTimeString())->get();
-        } else {
-            $result = MappingChangeLog::all();
-        }
-
-        return $result;
-    }
-
-    /**
-     * @return Collection<int, Dungeon>
-     */
-    public function getDungeonsWithUnmergedMappingChanges(): Collection
-    {
-        $mostRecentlyMergedMappingCommitLog = MappingCommitLog::where('merged', 1)->orderBy('id', 'desc')->first();
-
-        if ($mostRecentlyMergedMappingCommitLog !== null) {
-            $dungeonQueryBuilder = Dungeon::select('dungeons.*')
-                ->join('mapping_change_logs', 'dungeons.id', 'mapping_change_logs.dungeon_id')
-                ->where('mapping_change_logs.created_at', '>', $mostRecentlyMergedMappingCommitLog->created_at->toDateTimeString())
-                ->groupBy('dungeon_id');
-        } else {
-            // Get all of them instead
-            $dungeonQueryBuilder = Dungeon::select('dungeons.*')
-                ->join('mapping_change_logs', 'dungeons.id', 'mapping_change_logs.dungeon_id');
-        }
-
-        return $dungeonQueryBuilder
-            ->whereNotNull('dungeon_id')
-            ->get()
-            ->keyBy(static fn(Dungeon $dungeon) => $dungeon->id);
     }
 
     public function createNewBareMappingVersion(Dungeon $dungeon, GameVersion $gameVersion): MappingVersion
@@ -76,13 +25,14 @@ class MappingService implements MappingServiceInterface
         $now = Carbon::now()->toDateTimeString();
 
         return MappingVersion::create([
-            'dungeon_id'       => $dungeon->id,
-            'game_version_id'  => $gameVersion->id,
-            'mdt_mapping_hash' => null,
-            'version'          => $newVersion,
-            'facade_enabled'   => false,
-            'created_at'       => $now,
-            'updated_at'       => $now,
+            'dungeon_id'        => $dungeon->id,
+            'game_version_id'   => $gameVersion->id,
+            'mdt_mapping_hash'  => null,
+            'mdt_addon_version' => null,
+            'version'           => $newVersion,
+            'facade_enabled'    => false,
+            'created_at'        => $now,
+            'updated_at'        => $now,
         ]);
     }
 
@@ -97,13 +47,14 @@ class MappingService implements MappingServiceInterface
         $now = Carbon::now()->toDateTimeString();
 
         return MappingVersion::create([
-            'dungeon_id'       => $dungeon->id,
-            'game_version_id'  => $gameVersion->id,
-            'mdt_mapping_hash' => $currentMappingVersion?->mdt_mapping_hash ?? null, // @phpstan-ignore nullsafe.neverNull
-            'version'          => $newVersion,
-            'facade_enabled'   => $currentMappingVersion?->facade_enabled ?? false, // @phpstan-ignore nullsafe.neverNull
-            'created_at'       => $now,
-            'updated_at'       => $now,
+            'dungeon_id'        => $dungeon->id,
+            'game_version_id'   => $gameVersion->id,
+            'mdt_mapping_hash'  => $currentMappingVersion?->mdt_mapping_hash ?? null, // @phpstan-ignore nullsafe.neverNull
+            'mdt_addon_version' => $currentMappingVersion?->mdt_addon_version ?? null, // @phpstan-ignore nullsafe.neverNull
+            'version'           => $newVersion,
+            'facade_enabled'    => $currentMappingVersion?->facade_enabled ?? false, // @phpstan-ignore nullsafe.neverNull
+            'created_at'        => $now,
+            'updated_at'        => $now,
         ]);
     }
 
@@ -114,18 +65,90 @@ class MappingService implements MappingServiceInterface
         $now                   = Carbon::now()->toDateTimeString();
         // This needs to happen quietly as to not trigger MappingVersion events defined in its class
         $id = MappingVersion::insertGetId([
-            'dungeon_id'       => $dungeon->id,
-            'game_version_id'  => $currentMappingVersion?->game_version_id ?? GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL], // @phpstan-ignore nullsafe.neverNull
-            'mdt_mapping_hash' => $hash,
-            'version'          => ($currentMappingVersion?->version ?? 0) + 1, // @phpstan-ignore nullsafe.neverNull
-            'facade_enabled'   => $currentMappingVersion?->facade_enabled ?? false, // @phpstan-ignore nullsafe.neverNull
-            'created_at'       => $now,
-            'updated_at'       => $now,
+            'dungeon_id'        => $dungeon->id,
+            'game_version_id'   => $currentMappingVersion?->game_version_id ?? GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL], // @phpstan-ignore nullsafe.neverNull
+            'mdt_mapping_hash'  => $hash,
+            'mdt_addon_version' => $this->mdtAddonVersionService->getCurrentAddonVersion(),
+            'version'           => ($currentMappingVersion?->version ?? 0) + 1, // @phpstan-ignore nullsafe.neverNull
+            'facade_enabled'    => $currentMappingVersion?->facade_enabled ?? false, // @phpstan-ignore nullsafe.neverNull
+            'created_at'        => $now,
+            'updated_at'        => $now,
         ]);
 
         $newMappingVersion = MappingVersion::find($id);
 
         return $this->copyMappingVersionContentsToDungeon($currentMappingVersion, $newMappingVersion);
+    }
+
+    /**
+     * Resolves the mapping version that best matches an imported MDT string's `addonVersion`, so a
+     * route imported from an older MDT string is attached to the mapping version of that MDT era
+     * (and thus flagged as outdated, offering an upgrade). See #3380.
+     *
+     * The `addonVersion` integer is not orderable across MDT's historical version schemes, so it is
+     * resolved to its upstream release date and all comparisons happen on dates. A mapping version
+     * imported from MDT version X covers the half-open range (previous import, X]: the chosen version
+     * is the OLDEST one whose imported-from release date is at or after the string's release date. When
+     * multiple candidates share the same imported-from date (e.g. a manual/facade clone that inherited
+     * its parent's `mdt_addon_version`), the highest `version` among them wins.
+     *
+     * Falls back to the current mapping version when the string carries no `addonVersion` (Keystone's
+     * own exports, very old strings), when the version is unknown, or when the string is newer than
+     * anything imported (the user is genuinely ahead of the server).
+     */
+    public function getMappingVersionForMdtAddonVersion(Dungeon $dungeon, ?int $addonVersion, ?GameVersion $gameVersion = null): ?MappingVersion
+    {
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion($gameVersion);
+
+        if ($addonVersion === null || $addonVersion === 0 || $currentMappingVersion === null) {
+            return $currentMappingVersion;
+        }
+
+        $stringDate = $this->mdtAddonVersionService->getReleaseDate($addonVersion);
+
+        // Unknown addonVersion (newer than what has been synced, or a value with no release) → newest.
+        if ($stringDate === null) {
+            return $currentMappingVersion;
+        }
+
+        /** @var \Illuminate\Support\Collection<int, MappingVersion> $candidates */
+        $candidates = $dungeon->mappingVersions()
+            ->where('game_version_id', $currentMappingVersion->game_version_id)
+            ->reorder('mapping_versions.version', 'asc')
+            ->without('dungeon')
+            ->get();
+
+        $match     = null;
+        $matchDate = null;
+        foreach ($candidates as $candidate) {
+            $candidateDate = ($candidate->mdt_addon_version !== null
+                ? $this->mdtAddonVersionService->getReleaseDate($candidate->mdt_addon_version)
+                : null) ?? $candidate->created_at;
+
+            if ($candidateDate->lessThan($stringDate)) {
+                continue;
+            }
+
+            if ($match === null) {
+                $match     = $candidate;
+                $matchDate = $candidateDate;
+            } elseif ($candidateDate->equalTo($matchDate)) {
+                // Same imported-from date, higher version (candidates are ordered version asc) wins.
+                $match = $candidate;
+            } else {
+                // The imported-from date has moved past the matched window; stop.
+                break;
+            }
+        }
+
+        // String is newer than every mapping version we imported → current (newest) is correct.
+        if ($match === null) {
+            return $currentMappingVersion;
+        }
+
+        // Re-fetch as a single model (mirroring getCurrentMappingVersion) so downstream lazy-loads such as
+        // ->enemies are permitted; models pulled from the candidate collection above would trip the guard.
+        return $dungeon->mappingVersions()->without('dungeon')->find($match->id) ?? $currentMappingVersion;
     }
 
     public function copyMappingVersionToDungeon(MappingVersion $sourceMappingVersion, Dungeon $dungeon): MappingVersion
@@ -135,13 +158,14 @@ class MappingService implements MappingServiceInterface
         $now                   = Carbon::now()->toDateTimeString();
         // This needs to happen quietly as to not trigger MappingVersion events defined in its class
         $id = MappingVersion::insertGetId([
-            'dungeon_id'       => $dungeon->id,
-            'game_version_id'  => $currentMappingVersion?->game_version_id ?? GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL], // @phpstan-ignore nullsafe.neverNull
-            'mdt_mapping_hash' => $sourceMappingVersion->mdt_mapping_hash,
-            'version'          => ($currentMappingVersion?->version ?? 0) + 1, // @phpstan-ignore nullsafe.neverNull
-            'facade_enabled'   => $currentMappingVersion?->facade_enabled ?? false, // @phpstan-ignore nullsafe.neverNull
-            'created_at'       => $now,
-            'updated_at'       => $now,
+            'dungeon_id'        => $dungeon->id,
+            'game_version_id'   => $currentMappingVersion?->game_version_id ?? GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL], // @phpstan-ignore nullsafe.neverNull
+            'mdt_mapping_hash'  => $sourceMappingVersion->mdt_mapping_hash,
+            'mdt_addon_version' => $sourceMappingVersion->mdt_addon_version,
+            'version'           => ($currentMappingVersion?->version ?? 0) + 1, // @phpstan-ignore nullsafe.neverNull
+            'facade_enabled'    => $currentMappingVersion?->facade_enabled ?? false, // @phpstan-ignore nullsafe.neverNull
+            'created_at'        => $now,
+            'updated_at'        => $now,
         ]);
 
         return MappingVersion::find($id);
@@ -215,26 +239,5 @@ class MappingService implements MappingServiceInterface
         ]);
 
         return $targetMappingVersion;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getMappingVersionOrNew(Dungeon $dungeon, GameVersion $gameVersion): MappingVersion
-    {
-        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
-
-        $wasRecentlyChanged = $this->getDungeonsWithUnmergedMappingChanges()->has($dungeon->id);
-
-        // If we were recently changed, it means a new mapping version was already created (by the request that triggered
-        // the creation of the mapping version). If we are the first mapping change for this dungeon since the last merge,
-        // we create a new mapping version and return that.
-        if ($wasRecentlyChanged) {
-            $result = $currentMappingVersion;
-        } else {
-            $result = $this->createNewMappingVersionFromPreviousMapping($dungeon, $gameVersion);
-        }
-
-        return $result;
     }
 }

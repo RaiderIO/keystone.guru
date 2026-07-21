@@ -7,7 +7,7 @@
         "map_icon_type_id": 2,
         "lat": -64.6384,
         "lng": 115.6744,
-        "comment": "Keystone.guru: Only if you jump down - you cannot actually go up here.",
+        "comment": "mapping.map_icons.classic.gnomeregan.one_way_down",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 3,
         "lat": -163.9049,
         "lng": 212.222,
-        "comment": "Workshop door",
+        "comment": "mapping.map_icons.classic.gnomeregan.workshop_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 2,
         "lat": -64.6384,
         "lng": 115.6744,
-        "comment": "Keystone.guru: Only if you jump down - you cannot actually go up here.",
+        "comment": "mapping.map_icons.classic.gnomeregan.one_way_down",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 3,
         "lat": -163.9049,
         "lng": 212.222,
-        "comment": "Workshop door",
+        "comment": "mapping.map_icons.classic.gnomeregan.workshop_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 10,
         "lat": -123.125,
         "lng": 333.6875,
-        "comment": null,
+        "comment": "mapping.map_icons.classic.gnomeregan.basement_entrance",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

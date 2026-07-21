@@ -38,7 +38,7 @@ class RioLogVersion extends SpecialEvent implements HasCombatLogVersionInterface
 
     private int $dungeonID;
 
-    private ?int $encounterID;
+    private ?int $encounterID = null;
 
     private int $segmentID;
 
@@ -46,7 +46,7 @@ class RioLogVersion extends SpecialEvent implements HasCombatLogVersionInterface
 
     private int $challengeModeStartedAt;
 
-    private ?int $encounterStartedAt;
+    private ?int $encounterStartedAt = null;
 
     private string $type;
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminTools;
 use App\Http\Controllers\Controller;
 use App\Models\Spell\Spell;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
+use App\Service\Mapping\MappingExportServiceInterface;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
@@ -22,14 +23,9 @@ class AdminToolsSpellsController extends Controller
         ]);
     }
 
-    public function spellsSaveToSeeder(): Response
+    public function spellsSaveToSeeder(MappingExportServiceInterface $mappingExportService): Response
     {
-        $spells = Spell::with('spellDungeons')->get();
-        foreach ($spells as $spell) {
-            $spell->makeHidden(['icon_url', 'wowhead_url'])->makeVisible(['spellDungeons']);
-        }
-
-        return response(json_encode($spells->toArray(), JSON_PRETTY_PRINT), 200, [
+        return response(json_encode($mappingExportService->serializeSpells(), JSON_PRETTY_PRINT), 200, [
             'Content-Type'        => 'application/json',
             'Content-Disposition' => 'attachment; filename="spells.json"',
         ]);

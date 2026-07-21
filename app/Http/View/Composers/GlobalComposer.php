@@ -2,6 +2,7 @@
 
 namespace App\Http\View\Composers;
 
+use App\Models\CombatLog\CombatLogParseFailure;
 use App\Models\User;
 use App\Models\UserReport;
 use App\Service\View\RequestViewContextInterface;
@@ -36,5 +37,6 @@ readonly class GlobalComposer implements ViewComposerInterface
         $view->with('userOrDefaultRegion', $this->requestViewContext->getUserOrDefaultRegion());
         $view->with('currentUserGameVersion', $this->requestViewContext->getCurrentUserGameVersion());
         $view->with('numUserReports', $this->requestViewContext->isUserAdmin() ? UserReport::where('status', 0)->count() : 2);
+        $view->with('numCombatLogParseFailures', $this->requestViewContext->isUserAdmin() ? CombatLogParseFailure::whereNull('resolved_at')->count() : 0);
     }
 }

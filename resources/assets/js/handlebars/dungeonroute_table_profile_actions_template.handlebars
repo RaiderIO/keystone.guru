@@ -1,8 +1,8 @@
-<div class="row no-gutters">
+<div class="row g-0">
     <div class="col-auto">
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                    data-toggle="dropdown"
+                    data-bs-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                 {{actions_label}}
             </button>
@@ -71,7 +71,7 @@
     </div>
     <div class="col">
         {{#if has_new_mapping_version}}
-            <i class="fas fa-exclamation-triangle text-warning pl-2 pt-2" title="{{new_mapping_version_label}}" data-toggle="tooltip"></i>
+            <i class="fas fa-exclamation-triangle text-warning ps-2 pt-2" title="{{new_mapping_version_label}}" data-bs-toggle="tooltip"></i>
         {{/if}}
     </div>
 </div>

@@ -125,7 +125,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
         $totalMountedFactor = 0;
 
         foreach ($mountFactorsAndSpeeds as $mountFactorAndSpeed) {
-            /** @var $mountFactorAndSpeed array{factor: float, speed: int} */
+            /** @var array{factor: float, speed: int} $mountFactorAndSpeed */
             $totalMountedFactor += $mountFactorAndSpeed['factor'];
             $delayMounted += $this->calculateDelayForDistanceMounted(
                 $ingameDistanceToPointB,

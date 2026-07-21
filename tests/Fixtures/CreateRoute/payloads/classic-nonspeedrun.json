@@ -1,0 +1,29 @@
+{
+    "description": "Classic, non-speedrun dungeon: has_seasons is false so there is no level input, no affix picker and no seasonal_index. The difficulty and dungeon-start selects still exist (they are not gated by has_seasons) but stay untouched/empty for a non-speedrun dungeon, so both submit \"\".",
+    "endpoint": "dungeonroute.savenew",
+    "gameVersion": "classic",
+    "auth": true,
+    "fields": [
+        {"name": "dungeon_id", "value": "{{dungeon_id}}"},
+        {"name": "team_id", "value": "-1"},
+        {"name": "dungeon_difficulty", "value": ""},
+        {"name": "dungeon_start_map_icon_id", "value": ""},
+        {"name": "dungeon_route_title", "value": "My Test Route"},
+        {"name": "faction_id", "value": "1"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"}
+    ]
+}

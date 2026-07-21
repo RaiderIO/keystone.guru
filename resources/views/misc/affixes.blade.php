@@ -13,6 +13,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\TimewalkingEvent\TimewalkingEventService;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
@@ -38,7 +39,7 @@ foreach ($seasonAffixGroupService->getDisplayedAffixGroups($offset) as $affixGro
         $affixGroupsBySeason->put($affixGroup->season_id, collect());
     }
 
-    /** @var Collection<int, AffixGroup> $currentSeasonAffixGroups */
+    /** @var Collection<int, array{date_start: Carbon, affix_group: AffixGroup}> $currentSeasonAffixGroups */
     $currentSeasonAffixGroups = $affixGroupsBySeason->get($affixGroup->season_id);
     $currentSeasonAffixGroups->push($affixGroupArr);
 }
@@ -123,11 +124,10 @@ try {
         @include('dungeonroute.discover.panel', [
             'gameVersion' => $gameVersion,
             'title' => __('view_misc.affixes.popular_routes_by_current_affixes'),
-            'link' => route('dungeonroutes.thisweek', ['gameVersion' => $gameVersion]),
             'currentAffixGroup' => $currentAffixGroup,
             'affixgroup' => $currentAffixGroup,
             'dungeonroutes' => $dungeonroutes['thisweek'],
-            'showMore' => $dungeonroutes['thisweek']->count() >= config('keystoneguru.discover.limits.affix_overview'),
+            'showMore' => false,
             'showDungeonImage' => true,
         ])
 
@@ -141,11 +141,10 @@ try {
         @include('dungeonroute.discover.panel', [
             'gameVersion' => $gameVersion,
             'title' => __('view_misc.affixes.popular_routes_by_next_affixes'),
-            'link' => route('dungeonroutes.nextweek', ['gameVersion' => $gameVersion]),
             'currentAffixGroup' => $nextAffixGroup,
             'affixgroup' => $nextAffixGroup,
             'dungeonroutes' => $dungeonroutes['nextweek'],
-            'showMore' => $dungeonroutes['nextweek']->count() >= config('keystoneguru.discover.limits.affix_overview'),
+            'showMore' => false,
             'showDungeonImage' => true,
         ])
 

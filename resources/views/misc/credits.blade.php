@@ -14,23 +14,23 @@
     <p>
     <ul>
         <li>
-            <span class="font-weight-bold">Daenarian</span> for helping map the first part of The Motherlode!!!
+            <span class="fw-bold">Daenarian</span> for helping map the first part of The Motherlode!!!
             meticulously.
         </li>
         <li>
-            <span class="font-weight-bold">Sonskyn</span> and <span class="font-weight-bold">Doug</span> for making good
+            <span class="fw-bold">Sonskyn</span> and <span class="fw-bold">Doug</span> for making good
             use of the site and providing me with valuable feedback across the board to greatly improve the website.
             From bug reports to feature requests to general feedback and dungeon mapping, I owe you big time!
         </li>
         <li>
             Various members of
-            <span class="font-weight-bold">{{ html()->a(url('https://www.darkwolves.eu/'), 'Dark Wolves') }}</span> and
-            <span class="font-weight-bold">Sark</span>
+            <span class="fw-bold">{{ html()->a(url('https://www.darkwolves.eu/'), 'Dark Wolves') }}</span> and
+            <span class="fw-bold">Sark</span>
             for helping me with mapping dungeons, from odd requests to "kill that mob" to "hold up for a second you
             guys are going too fast" :).
         </li>
         <li>
-            <span class="font-weight-bold">Neky</span> for being mostly useless and annoying. But he did help map that
+            <span class="fw-bold">Neky</span> for being mostly useless and annoying. But he did help map that
             one dungeon, or so he said.
         </li>
     </ul>

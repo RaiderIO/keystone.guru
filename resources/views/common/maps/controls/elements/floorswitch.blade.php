@@ -7,11 +7,11 @@ use Illuminate\Support\Collection;
  * @var Collection<int, Floor> $floors
  **/
 ?>
-<div class="row no-gutters">
-    <div class="col btn-group dropright">
+<div class="row g-0">
+    <div class="col btn-group dropend">
         <button type="button"
                 class="btn btn-accent dropdown-toggle {{ $floors->count() > 1 ? '' : 'disabled' }}"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-dungeon"></i>
             <span class="map_controls_element_label_toggle" style="display: none;">
                 {{ __('view_common.maps.controls.elements.floor_switch.switch_floors') }}

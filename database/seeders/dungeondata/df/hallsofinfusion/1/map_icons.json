@@ -20,7 +20,7 @@
         "map_icon_type_id": 6,
         "lat": -131.4531,
         "lng": 208.116,
-        "comment": "Unlocks after defeating Watcher Irideus",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_watcher_irideus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 6,
         "lat": -205.3125,
         "lng": 241.5938,
-        "comment": "Unlocks after killing mini bosses.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_mini_bosses",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 6,
         "lat": -131.4531,
         "lng": 208.116,
-        "comment": "Unlocks after defeating Watcher Irideus",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_watcher_irideus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 6,
         "lat": -205.3125,
         "lng": 241.5938,
-        "comment": "Unlocks after killing mini bosses.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_mini_bosses",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 6,
         "lat": -125.1416,
         "lng": 266.8237,
-        "comment": "Unlocks after defeating Watcher Irideus",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_watcher_irideus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 45,
         "lat": -143.8036,
         "lng": 315.0796,
-        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes)",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -111,7 +111,7 @@
         "map_icon_type_id": 45,
         "lat": -143.5668,
         "lng": 331.9419,
-        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes)",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -124,7 +124,7 @@
         "map_icon_type_id": 45,
         "lat": -155.2188,
         "lng": 319.011,
-        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes)",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -150,7 +150,7 @@
         "map_icon_type_id": 6,
         "lat": -131.4531,
         "lng": 208.116,
-        "comment": "Unlocks after defeating Watcher Irideus",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_watcher_irideus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -163,7 +163,7 @@
         "map_icon_type_id": 6,
         "lat": -205.3125,
         "lng": 241.5938,
-        "comment": "Unlocks after killing mini bosses.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_mini_bosses",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -176,7 +176,7 @@
         "map_icon_type_id": 6,
         "lat": -125.1416,
         "lng": 266.8237,
-        "comment": "Unlocks after defeating Watcher Irideus",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_watcher_irideus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -189,7 +189,7 @@
         "map_icon_type_id": 45,
         "lat": -143.8036,
         "lng": 315.0796,
-        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes)",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -202,7 +202,7 @@
         "map_icon_type_id": 45,
         "lat": -143.5668,
         "lng": 331.9419,
-        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes)",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -215,7 +215,7 @@
         "map_icon_type_id": 45,
         "lat": -155.2188,
         "lng": 319.011,
-        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes)",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -241,7 +241,7 @@
         "map_icon_type_id": 6,
         "lat": -131.4531,
         "lng": 208.116,
-        "comment": "Unlocks after defeating Watcher Irideus",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_watcher_irideus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -254,7 +254,7 @@
         "map_icon_type_id": 6,
         "lat": -205.3125,
         "lng": 241.5938,
-        "comment": "Unlocks after killing mini bosses.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_mini_bosses",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -267,7 +267,7 @@
         "map_icon_type_id": 6,
         "lat": -125.1416,
         "lng": 266.8237,
-        "comment": "Unlocks after defeating Watcher Irideus",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_watcher_irideus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -280,7 +280,7 @@
         "map_icon_type_id": 45,
         "lat": -143.8036,
         "lng": 315.0796,
-        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes, requires 25 Dragonflight Herbalism)",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -293,7 +293,7 @@
         "map_icon_type_id": 45,
         "lat": -143.5668,
         "lng": 331.9419,
-        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes, requires 25 Dragonflight Herbalism)",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -306,7 +306,7 @@
         "map_icon_type_id": 45,
         "lat": -155.2188,
         "lng": 319.011,
-        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes, requires 25 Dragonflight Herbalism)",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -319,7 +319,7 @@
         "map_icon_type_id": 6,
         "lat": -131.9567,
         "lng": 151.7,
-        "comment": "Unlocks after entering Infusion Chamber",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_infusion_chamber",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -332,7 +332,7 @@
         "map_icon_type_id": 6,
         "lat": -171.8249,
         "lng": 137.4382,
-        "comment": "Unlocks after defeating Khajin the Unyielding",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_khajin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -358,7 +358,7 @@
         "map_icon_type_id": 6,
         "lat": -131.4531,
         "lng": 208.116,
-        "comment": "Unlocks after defeating Watcher Irideus",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_watcher_irideus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -371,7 +371,7 @@
         "map_icon_type_id": 6,
         "lat": -205.3125,
         "lng": 241.5938,
-        "comment": "Unlocks after killing mini bosses.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_mini_bosses",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -384,7 +384,7 @@
         "map_icon_type_id": 6,
         "lat": -125.1416,
         "lng": 266.8237,
-        "comment": "Unlocks after defeating Watcher Irideus",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_watcher_irideus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -397,7 +397,7 @@
         "map_icon_type_id": 45,
         "lat": -143.8036,
         "lng": 315.0796,
-        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes, requires 25 Dragonflight Herbalism)",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -410,7 +410,7 @@
         "map_icon_type_id": 45,
         "lat": -143.5668,
         "lng": 331.9419,
-        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes, requires 25 Dragonflight Herbalism)",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -423,7 +423,7 @@
         "map_icon_type_id": 45,
         "lat": -155.2188,
         "lng": 319.011,
-        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes, requires 25 Dragonflight Herbalism)",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -436,7 +436,7 @@
         "map_icon_type_id": 6,
         "lat": -131.9567,
         "lng": 151.7,
-        "comment": "Unlocks after entering Infusion Chamber",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_infusion_chamber",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -449,7 +449,7 @@
         "map_icon_type_id": 6,
         "lat": -171.8249,
         "lng": 137.4382,
-        "comment": "Unlocks after defeating Khajin the Unyielding",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_khajin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -475,7 +475,7 @@
         "map_icon_type_id": 6,
         "lat": -131.4531,
         "lng": 208.116,
-        "comment": "Unlocks after defeating Watcher Irideus",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_watcher_irideus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -488,7 +488,7 @@
         "map_icon_type_id": 6,
         "lat": -205.3125,
         "lng": 241.5938,
-        "comment": "Unlocks after killing mini bosses.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_mini_bosses",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -501,7 +501,7 @@
         "map_icon_type_id": 6,
         "lat": -125.1416,
         "lng": 266.8237,
-        "comment": "Unlocks after defeating Watcher Irideus",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_watcher_irideus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -514,7 +514,7 @@
         "map_icon_type_id": 45,
         "lat": -143.8036,
         "lng": 315.0796,
-        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes, requires 25 Dragonflight Herbalism)",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -527,7 +527,7 @@
         "map_icon_type_id": 45,
         "lat": -143.5668,
         "lng": 331.9419,
-        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes, requires 25 Dragonflight Herbalism)",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -540,7 +540,7 @@
         "map_icon_type_id": 45,
         "lat": -155.2188,
         "lng": 319.011,
-        "comment": "Infused Mushroom (removes Poison\/Disease stack every 5 seconds for 30 minutes, requires 25 Dragonflight Herbalism)",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -553,7 +553,7 @@
         "map_icon_type_id": 6,
         "lat": -131.9567,
         "lng": 151.7,
-        "comment": "Unlocks after entering Infusion Chamber",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_infusion_chamber",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -566,7 +566,7 @@
         "map_icon_type_id": 6,
         "lat": -171.8249,
         "lng": 137.4382,
-        "comment": "Unlocks after defeating Khajin the Unyielding",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_khajin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -592,7 +592,7 @@
         "map_icon_type_id": 6,
         "lat": -131.4531,
         "lng": 208.116,
-        "comment": "Unlocks after defeating Watcher Irideus",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_watcher_irideus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -605,7 +605,7 @@
         "map_icon_type_id": 6,
         "lat": -205.3125,
         "lng": 241.5938,
-        "comment": "Unlocks after killing mini bosses.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_mini_bosses",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -618,7 +618,7 @@
         "map_icon_type_id": 6,
         "lat": -125.1416,
         "lng": 266.8237,
-        "comment": "Unlocks after defeating Watcher Irideus",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_watcher_irideus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -631,7 +631,7 @@
         "map_icon_type_id": 45,
         "lat": -143.8036,
         "lng": 315.0796,
-        "comment": "Infused Mushroom: removes Poison\/Disease stack every 5 seconds for 30 minutes. Requires 25 Dragonflight Herbalism.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism_alt",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -644,7 +644,7 @@
         "map_icon_type_id": 45,
         "lat": -143.5668,
         "lng": 331.9419,
-        "comment": "Infused Mushroom: removes Poison\/Disease stack every 5 seconds for 30 minutes. Requires 25 Dragonflight Herbalism.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism_alt",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -657,7 +657,7 @@
         "map_icon_type_id": 45,
         "lat": -155.2188,
         "lng": 319.011,
-        "comment": "Infused Mushroom: removes Poison\/Disease stack every 5 seconds for 30 minutes. Requires 25 Dragonflight Herbalism.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism_alt",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -670,7 +670,7 @@
         "map_icon_type_id": 6,
         "lat": -131.9567,
         "lng": 151.7,
-        "comment": "Unlocks after entering Infusion Chamber",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_infusion_chamber",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -683,7 +683,7 @@
         "map_icon_type_id": 6,
         "lat": -171.8249,
         "lng": 137.4382,
-        "comment": "Unlocks after defeating Khajin the Unyielding",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_khajin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -709,7 +709,7 @@
         "map_icon_type_id": 6,
         "lat": -131.4531,
         "lng": 208.116,
-        "comment": "Unlocks after defeating Watcher Irideus",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_watcher_irideus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -722,7 +722,7 @@
         "map_icon_type_id": 6,
         "lat": -205.3125,
         "lng": 241.5938,
-        "comment": "Unlocks after killing mini bosses.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_mini_bosses",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -735,7 +735,7 @@
         "map_icon_type_id": 6,
         "lat": -125.1416,
         "lng": 266.8237,
-        "comment": "Unlocks after defeating Watcher Irideus",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_watcher_irideus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -748,7 +748,7 @@
         "map_icon_type_id": 45,
         "lat": -143.8036,
         "lng": 315.0796,
-        "comment": "Infused Mushroom: removes Poison\/Disease stack every 5 seconds for 30 minutes. Requires 25 Dragonflight Herbalism.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism_alt",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -761,7 +761,7 @@
         "map_icon_type_id": 45,
         "lat": -143.5668,
         "lng": 331.9419,
-        "comment": "Infused Mushroom: removes Poison\/Disease stack every 5 seconds for 30 minutes. Requires 25 Dragonflight Herbalism.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism_alt",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -774,7 +774,7 @@
         "map_icon_type_id": 45,
         "lat": -155.2188,
         "lng": 319.011,
-        "comment": "Infused Mushroom: removes Poison\/Disease stack every 5 seconds for 30 minutes. Requires 25 Dragonflight Herbalism.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism_alt",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -787,7 +787,7 @@
         "map_icon_type_id": 6,
         "lat": -131.9567,
         "lng": 151.7,
-        "comment": "Unlocks after entering Infusion Chamber",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_infusion_chamber",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -800,7 +800,7 @@
         "map_icon_type_id": 6,
         "lat": -171.8249,
         "lng": 137.4382,
-        "comment": "Unlocks after defeating Khajin the Unyielding",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_khajin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -826,7 +826,7 @@
         "map_icon_type_id": 6,
         "lat": -131.4531,
         "lng": 208.116,
-        "comment": "Unlocks after defeating Watcher Irideus",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_watcher_irideus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -839,7 +839,7 @@
         "map_icon_type_id": 6,
         "lat": -205.3125,
         "lng": 241.5938,
-        "comment": "Unlocks after killing mini bosses.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_mini_bosses",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -852,7 +852,7 @@
         "map_icon_type_id": 6,
         "lat": -125.1416,
         "lng": 266.8237,
-        "comment": "Unlocks after defeating Watcher Irideus",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_watcher_irideus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -865,7 +865,7 @@
         "map_icon_type_id": 45,
         "lat": -143.8036,
         "lng": 315.0796,
-        "comment": "Infused Mushroom: removes Poison\/Disease stack every 5 seconds for 30 minutes. Requires 25 Dragonflight Herbalism.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism_alt",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -878,7 +878,7 @@
         "map_icon_type_id": 45,
         "lat": -143.5668,
         "lng": 331.9419,
-        "comment": "Infused Mushroom: removes Poison\/Disease stack every 5 seconds for 30 minutes. Requires 25 Dragonflight Herbalism.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism_alt",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -891,7 +891,7 @@
         "map_icon_type_id": 45,
         "lat": -155.2188,
         "lng": 319.011,
-        "comment": "Infused Mushroom: removes Poison\/Disease stack every 5 seconds for 30 minutes. Requires 25 Dragonflight Herbalism.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism_alt",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -904,7 +904,7 @@
         "map_icon_type_id": 6,
         "lat": -131.9567,
         "lng": 151.7,
-        "comment": "Unlocks after entering Infusion Chamber",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_infusion_chamber",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -917,7 +917,7 @@
         "map_icon_type_id": 6,
         "lat": -171.8249,
         "lng": 137.4382,
-        "comment": "Unlocks after defeating Khajin the Unyielding",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_khajin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -943,7 +943,7 @@
         "map_icon_type_id": 6,
         "lat": -131.4531,
         "lng": 208.116,
-        "comment": "Unlocks after defeating Watcher Irideus",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_watcher_irideus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -956,7 +956,7 @@
         "map_icon_type_id": 6,
         "lat": -205.3125,
         "lng": 241.5938,
-        "comment": "Unlocks after killing mini bosses.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_mini_bosses",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -969,7 +969,7 @@
         "map_icon_type_id": 6,
         "lat": -125.1416,
         "lng": 266.8237,
-        "comment": "Unlocks after defeating Watcher Irideus",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_watcher_irideus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -982,7 +982,7 @@
         "map_icon_type_id": 45,
         "lat": -143.8036,
         "lng": 315.0796,
-        "comment": "Infused Mushroom: removes Poison\/Disease stack every 5 seconds for 30 minutes. Requires 25 Dragonflight Herbalism.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism_alt",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -995,7 +995,7 @@
         "map_icon_type_id": 45,
         "lat": -143.5668,
         "lng": 331.9419,
-        "comment": "Infused Mushroom: removes Poison\/Disease stack every 5 seconds for 30 minutes. Requires 25 Dragonflight Herbalism.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism_alt",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1008,7 +1008,7 @@
         "map_icon_type_id": 45,
         "lat": -155.2188,
         "lng": 319.011,
-        "comment": "Infused Mushroom: removes Poison\/Disease stack every 5 seconds for 30 minutes. Requires 25 Dragonflight Herbalism.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism_alt",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1021,7 +1021,7 @@
         "map_icon_type_id": 6,
         "lat": -131.9567,
         "lng": 151.7,
-        "comment": "Unlocks after entering Infusion Chamber",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_infusion_chamber",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1034,7 +1034,7 @@
         "map_icon_type_id": 6,
         "lat": -171.8249,
         "lng": 137.4382,
-        "comment": "Unlocks after defeating Khajin the Unyielding",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_khajin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1060,7 +1060,7 @@
         "map_icon_type_id": 6,
         "lat": -131.4531,
         "lng": 208.116,
-        "comment": "Unlocks after defeating Watcher Irideus",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_watcher_irideus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1073,7 +1073,7 @@
         "map_icon_type_id": 6,
         "lat": -205.3125,
         "lng": 241.5938,
-        "comment": "Unlocks after killing mini bosses.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_mini_bosses",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1086,7 +1086,7 @@
         "map_icon_type_id": 6,
         "lat": -125.1416,
         "lng": 266.8237,
-        "comment": "Unlocks after defeating Watcher Irideus",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_watcher_irideus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1099,7 +1099,7 @@
         "map_icon_type_id": 45,
         "lat": -143.8036,
         "lng": 315.0796,
-        "comment": "Infused Mushroom: removes Poison\/Disease stack every 5 seconds for 30 minutes. Requires 25 Dragonflight Herbalism.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism_alt",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1112,7 +1112,7 @@
         "map_icon_type_id": 45,
         "lat": -143.5668,
         "lng": 331.9419,
-        "comment": "Infused Mushroom: removes Poison\/Disease stack every 5 seconds for 30 minutes. Requires 25 Dragonflight Herbalism.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism_alt",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1125,7 +1125,7 @@
         "map_icon_type_id": 45,
         "lat": -155.2188,
         "lng": 319.011,
-        "comment": "Infused Mushroom: removes Poison\/Disease stack every 5 seconds for 30 minutes. Requires 25 Dragonflight Herbalism.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism_alt",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1138,7 +1138,7 @@
         "map_icon_type_id": 6,
         "lat": -131.9567,
         "lng": 151.7,
-        "comment": "Unlocks after entering Infusion Chamber",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_infusion_chamber",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1151,7 +1151,7 @@
         "map_icon_type_id": 6,
         "lat": -171.8249,
         "lng": 137.4382,
-        "comment": "Unlocks after defeating Khajin the Unyielding",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_khajin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1177,7 +1177,7 @@
         "map_icon_type_id": 6,
         "lat": -131.4531,
         "lng": 208.116,
-        "comment": "Unlocks after defeating Watcher Irideus",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_watcher_irideus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1190,7 +1190,7 @@
         "map_icon_type_id": 6,
         "lat": -205.3125,
         "lng": 241.5938,
-        "comment": "Unlocks after killing mini bosses.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_mini_bosses",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1203,7 +1203,7 @@
         "map_icon_type_id": 6,
         "lat": -125.1416,
         "lng": 266.8237,
-        "comment": "Unlocks after defeating Watcher Irideus",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_watcher_irideus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1216,7 +1216,7 @@
         "map_icon_type_id": 45,
         "lat": -143.8036,
         "lng": 315.0796,
-        "comment": "Infused Mushroom: removes Poison\/Disease stack every 5 seconds for 30 minutes. Requires 25 Dragonflight Herbalism.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism_alt",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1229,7 +1229,7 @@
         "map_icon_type_id": 45,
         "lat": -143.5668,
         "lng": 331.9419,
-        "comment": "Infused Mushroom: removes Poison\/Disease stack every 5 seconds for 30 minutes. Requires 25 Dragonflight Herbalism.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism_alt",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1242,7 +1242,7 @@
         "map_icon_type_id": 45,
         "lat": -155.2188,
         "lng": 319.011,
-        "comment": "Infused Mushroom: removes Poison\/Disease stack every 5 seconds for 30 minutes. Requires 25 Dragonflight Herbalism.",
+        "comment": "mapping.map_icons.df.halls_of_infusion.infused_mushroom_herbalism_alt",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1255,7 +1255,7 @@
         "map_icon_type_id": 6,
         "lat": -131.9567,
         "lng": 151.7,
-        "comment": "Unlocks after entering Infusion Chamber",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_infusion_chamber",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1268,7 +1268,7 @@
         "map_icon_type_id": 6,
         "lat": -171.8249,
         "lng": 137.4382,
-        "comment": "Unlocks after defeating Khajin the Unyielding",
+        "comment": "mapping.map_icons.df.halls_of_infusion.unlocks_after_khajin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

@@ -20,7 +20,7 @@ $showLegalModal ??= true;
     @if($showLegalModal && !Auth::user()->legal_agreed)
 
     document.addEventListener('DOMContentLoaded', function () {
-        $('#legal_modal').modal('show');
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('legal_modal')).show();
         $('#legal_confirm_btn').unbind('click').bind('click', _agreeLegalBtnClicked);
     });
 
@@ -39,7 +39,7 @@ $showLegalModal ??= true;
                 $('#legal_confirm_btn').attr('disabled', 'disabled');
             },
             success: function () {
-                $('#legal_modal').modal('hide');
+                bootstrap.Modal.getOrCreateInstance(document.getElementById('legal_modal')).hide();
             },
             complete: function () {
                 $('#legal_confirm_btn').removeAttr('disabled');

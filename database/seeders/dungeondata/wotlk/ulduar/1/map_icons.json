@@ -20,7 +20,7 @@
         "map_icon_type_id": 44,
         "lat": -219.5894,
         "lng": 195.5748,
-        "comment": "Teleporter: Expedition Base Camp",
+        "comment": "mapping.map_icons.wotlk.ulduar.teleporter_expedition_base_camp",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 44,
         "lat": -120.1577,
         "lng": 189.2669,
-        "comment": "Teleporter: Formation Grounds",
+        "comment": "mapping.map_icons.wotlk.ulduar.teleporter_formation_grounds",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 44,
         "lat": -71.0938,
         "lng": 186.6563,
-        "comment": "Teleporter: Colossal Forge",
+        "comment": "mapping.map_icons.wotlk.ulduar.teleporter_colossal_forge",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 44,
         "lat": -28.3438,
         "lng": 186.6563,
-        "comment": "Teleporter: Scrapyard",
+        "comment": "mapping.map_icons.wotlk.ulduar.teleporter_scrapyard",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 44,
         "lat": -219.5894,
         "lng": 195.5748,
-        "comment": "Teleporter: Expedition Base Camp",
+        "comment": "mapping.map_icons.wotlk.ulduar.teleporter_expedition_base_camp",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 44,
         "lat": -120.1577,
         "lng": 189.2669,
-        "comment": "Teleporter: Formation Grounds",
+        "comment": "mapping.map_icons.wotlk.ulduar.teleporter_formation_grounds",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -111,7 +111,7 @@
         "map_icon_type_id": 44,
         "lat": -71.0938,
         "lng": 186.6563,
-        "comment": "Teleporter: Colossal Forge",
+        "comment": "mapping.map_icons.wotlk.ulduar.teleporter_colossal_forge",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -124,7 +124,7 @@
         "map_icon_type_id": 44,
         "lat": -28.3438,
         "lng": 186.6563,
-        "comment": "Teleporter: Scrapyard",
+        "comment": "mapping.map_icons.wotlk.ulduar.teleporter_scrapyard",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

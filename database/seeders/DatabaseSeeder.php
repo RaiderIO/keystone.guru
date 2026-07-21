@@ -19,9 +19,6 @@ class DatabaseSeeder extends Seeder
 
     /** @var array<int, class-string<TableSeederInterface>> */
     private const SEEDERS = [
-        // Combatlog
-        CombatLogSeeder::class,
-
         // Seeders that don't depend on anything else
         ExpansionsSeeder::class,
         GameServerRegionsSeeder::class,
@@ -33,13 +30,12 @@ class DatabaseSeeder extends Seeder
         NpcClassesSeeder::class,
         NpcTypesSeeder::class,
         RaidMarkersSeeder::class,
-        ReleaseChangelogCategorySeeder::class,
-        ReleasesSeeder::class,
         MapIconTypesSeeder::class,
         TagCategorySeeder::class,
         PublishedStatesSeeder::class,
         CharacteristicsSeeder::class,
         TranslationsSeeder::class,
+        MDTAddonVersionSeeder::class,
 
         // Depends on ExpansionsSeeder, SeasonsSeeder
         AffixSeeder::class,

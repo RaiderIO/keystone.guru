@@ -16,9 +16,9 @@ use App\Models\UserReport;
     @include('common.general.messages')
 
     {{ html()->modelForm($user, 'PATCH', route('profile.updateprivacy', $user->id))->open() }}
-    <div class="form-group{{ $errors->has('analytics_cookie_opt_out') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('analytics_cookie_opt_out') ? ' has-error' : '' }}">
         {{ html()->label(__('view_profile.edit.ga_cookies_opt_out'), 'analytics_cookie_opt_out') }}
-        {{ html()->checkbox('analytics_cookie_opt_out', $user->analytics_cookie_opt_out, 1)->class('form-control left_checkbox') }}
+        {{ html()->checkbox('analytics_cookie_opt_out', $user->analytics_cookie_opt_out, 1)->class('form-check-input') }}
     </div>
     {{ html()->input('submit')->value(__('view_profile.edit.submit'))->class('btn btn-info') }}
     {{ html()->closeModelForm() }}

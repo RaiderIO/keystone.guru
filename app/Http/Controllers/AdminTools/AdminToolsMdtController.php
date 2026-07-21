@@ -69,7 +69,7 @@ class AdminToolsMdtController extends Controller
     public function mdtviewasdungeonroutesubmit(
         Request                         $request,
         MDTImportStringServiceInterface $mdtImportStringService,
-    ) {
+    ): void {
         try {
             $dungeonRoute = $mdtImportStringService
                 ->setEncodedString($request->get('import_string'))
@@ -114,7 +114,7 @@ class AdminToolsMdtController extends Controller
         Request                         $request,
         MDTImportStringServiceInterface $mdtImportStringService,
         MDTExportStringServiceInterface $mdtExportStringService,
-    ) {
+    ): void {
         $publicKey = $request->get('public_key');
 
         $dungeonRoute = DungeonRoute::when(is_numeric($publicKey), function (Builder $builder) use ($publicKey) {

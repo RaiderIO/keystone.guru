@@ -7,7 +7,7 @@
         "map_icon_type_id": 42,
         "lat": -67.9886,
         "lng": 249.0522,
-        "comment": "WARNING: broken geometry can cause you to fall down and DIE.",
+        "comment": "mapping.map_icons.classic.the_temple_of_atal_hakkar.broken_geometry_warning",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -20,7 +20,7 @@
         "map_icon_type_id": 42,
         "lat": -62.7476,
         "lng": 249.7701,
-        "comment": "WARNING: broken geometry can cause you to fall down and DIE.",
+        "comment": "mapping.map_icons.classic.the_temple_of_atal_hakkar.broken_geometry_warning",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 42,
         "lat": -61.9579,
         "lng": 246.683,
-        "comment": "WARNING: broken geometry can cause you to fall down and DIE.",
+        "comment": "mapping.map_icons.classic.the_temple_of_atal_hakkar.broken_geometry_warning",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

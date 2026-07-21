@@ -81,6 +81,12 @@ return [
                     'end'   => 'Continuez à cliquer/glisser, une fois terminé, appuyez sur le bouton \'Terminer\' dans la barre d\'outils pour compléter votre ligne.',
                 ],
             ],
+            'arrow' => [
+                'tooltip' => [
+                    'start' => '',
+                    'cont'  => '',
+                ],
+            ],
         ],
     ],
     'edit' => [

@@ -58,7 +58,7 @@ use Illuminate\Support\Collection;
                                 <img src="{{ ksgAssetImage(sprintf('spells/%s.jpg', $spell->characteristic->icon_name)) }}"
                                      width="20" height="20"
                                      loading="lazy"
-                                     class="rounded mr-1"
+                                     class="rounded me-1"
                                      alt="{{ __($spell->characteristic->name) }}"/>{{ __($spell->characteristic->name) }}
                             @endif
                         </td>

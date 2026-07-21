@@ -72,6 +72,8 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             loaderSelector: options.loaderSelector,
         }, options)), id, bladePath, options);
 
+        let self = this;
+
         this.sidebar = new Sidebar(options);
         this.initializing = true;
 
@@ -123,9 +125,9 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
                 self._search();
             }),
             'includeClassIds': new SearchFilterClasses(this.options.filterClassesSelector, this._search.bind(this)),
-            'includeSpecIds': new SearchFilterSpecializations(this.options.filterSpecializationsSelector, self._search.bind(this)),
+            'includeSpecIds': new SearchFilterSpecializations(this.options.filterSpecializationsSelector, this._search.bind(this)),
             'includePlayerDeathClassIds': new SearchFilterClassesPlayerDeaths(this.options.filterClassesPlayerDeathsSelector, this._search.bind(this)),
-            'includePlayerDeathSpecIds': new SearchFilterSpecializationsPlayerDeaths(this.options.filterSpecializationsPlayerDeathsSelector, self._search.bind(this)),
+            'includePlayerDeathSpecIds': new SearchFilterSpecializationsPlayerDeaths(this.options.filterSpecializationsPlayerDeathsSelector, this._search.bind(this)),
             'duration': new SearchFilterDuration(this.options.filterDurationSelector, this._search.bind(this), this.options.durationMin, this.options.durationMax),
 
             'excludeSpecIds': new SearchFilterPassThrough(),

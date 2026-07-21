@@ -7,7 +7,7 @@
         "map_icon_type_id": 6,
         "lat": -105.125,
         "lng": 228.375,
-        "comment": "Sewer Gate (Rogues\/keys may unlock)",
+        "comment": "mapping.map_icons.bfa.tol_dagor.sewer_gate",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

@@ -20,7 +20,7 @@
         "map_icon_type_id": 23,
         "lat": -103.9112,
         "lng": 73.2327,
-        "comment": "Shortcut to beginning of dungeon after killing Loken",
+        "comment": "mapping.map_icons.wotlk.halls_of_lightning.shortcut_after_loken",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

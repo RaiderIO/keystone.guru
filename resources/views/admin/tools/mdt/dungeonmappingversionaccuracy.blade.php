@@ -49,7 +49,7 @@ $dungeonAccuracyByFloor = $dungeonAccuracyByFloor->sortBy(function (Collection $
                 <h2 class="mt-4 mb-3">{{ __($expansion->name) }}</h2>
             @endif
 
-            <div class="form-group">
+            <div class="mb-3">
                 <h3 class="mt-3">{{ __($dungeon->name) }}</h3>
                 @foreach($dungeon->floors as $floor)
                     @php
@@ -57,7 +57,7 @@ $dungeonAccuracyByFloor = $dungeonAccuracyByFloor->sortBy(function (Collection $
                     @endphp
                     @if($accuracy !== null)
                         <h4 class="h5 mt-2 mb-1 d-flex align-items-center">
-                            <span class="mr-2">{{ __($floor->name) }}</span>
+                            <span class="me-2">{{ __($floor->name) }}</span>
                             <small class="text-muted">({{ number_format($accuracy, 1) }}%)</small>
                         </h4>
                         <div class="progress mb-3">

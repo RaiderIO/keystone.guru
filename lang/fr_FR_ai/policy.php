@@ -10,6 +10,8 @@ return [
     'add_kill_zone_limit_reached'             => 'Impossible d\'ajouter plus de :limit zones de combat à un seul itinéraire.',
     'add_brushline_limit_reached'             => 'Impossible d\'ajouter plus de :limit lignes dessinées à main levée à un seul itinéraire.',
     'add_path_limit_reached'                  => 'Impossible d\'ajouter plus de :limit chemins à un seul itinéraire.',
+    'add_arrow_limit_reached'                 => '',
     'add_map_icon_limit_reached'              => 'Impossible d\'ajouter plus de :limit icônes de carte à un seul itinéraire.',
+    'schedule_publish_route_not_in_team'      => '',
 
 ];

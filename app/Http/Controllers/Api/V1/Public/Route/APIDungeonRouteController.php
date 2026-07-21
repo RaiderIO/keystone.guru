@@ -37,7 +37,8 @@ class APIDungeonRouteController extends Controller
         return new DungeonRouteSummaryEnvelopeResource(
             DungeonRoute::withOnly([
                 'dungeon',
-                'author',
+                // UserLinksResource serializes the author's avatar - User no longer eager loads iconfile globally
+                'author.iconfile',
                 'killZones',
                 'affixes',
                 'thumbnails',

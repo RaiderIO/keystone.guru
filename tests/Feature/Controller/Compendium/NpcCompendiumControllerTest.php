@@ -29,6 +29,7 @@ final class NpcCompendiumControllerTest extends PublicTestCase
         ],
     ];
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

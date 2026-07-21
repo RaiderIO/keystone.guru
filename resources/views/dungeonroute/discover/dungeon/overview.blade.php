@@ -15,8 +15,6 @@ use Illuminate\Support\Collection;
  * @var GameVersion              $gameVersion
  * @var Collection<int, Dungeon> $gameVersionDungeons
  */
-
-$showRoutesByAffixes = $gameVersion->has_seasons && $gameVersion->key !== GameVersion::GAME_VERSION_RETAIL;
 ?>
 @extends('layouts.sitepage', [
     'rootClass' => 'discover col-xl-8 offset-xl-2',
@@ -49,6 +47,9 @@ $showRoutesByAffixes = $gameVersion->has_seasons && $gameVersion->key !== GameVe
         @include('dungeonroute.discover.panel', [
             'gameVersion' => $gameVersion,
             'link' => config('keystoneguru.raider_io.weekly_route.url'),
+            'linkOptions' => [
+                'target' => '_blank',
+            ],
             'title' => __('view_dungeonroute.discover.dungeon.overview.weekly_route'),
             'dungeonroutes' => $dungeonroutes['weekly_route'],
             'showMore' => false,
@@ -65,44 +66,6 @@ $showRoutesByAffixes = $gameVersion->has_seasons && $gameVersion->key !== GameVe
         'showMore' => $dungeonroutes['popular']->count() >= config('keystoneguru.discover.limits.overview'),
         'showDungeonImage' => $gameVersion->showDiscoverRoutesCardDungeonImage(),
     ])
-
-    @if( !$adFree && !$isMobile)
-        <div align="center" class="mt-4">
-            @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header', 'reportAdPosition' => 'top-right'])
-        </div>
-    @endif
-
-    @if($showRoutesByAffixes)
-        @include('dungeonroute.discover.panel', [
-            'gameVersion' => $gameVersion,
-            'title' => __('view_dungeonroute.discover.dungeon.overview.popular_by_current_affixes'),
-            'link' => route('dungeonroutes.discoverdungeon.thisweek', ['gameVersion' => $gameVersion, 'dungeon' => $dungeon]),
-            'currentAffixGroup' => $currentAffixGroup,
-            'affixgroup' => $currentAffixGroup,
-            'dungeonroutes' => $dungeonroutes['thisweek'],
-            'showMore' => $dungeonroutes['thisweek']->count() >= config('keystoneguru.discover.limits.overview'),
-            'showDungeonImage' => $gameVersion->showDiscoverRoutesCardDungeonImage(),
-        ])
-    @endif
-
-    @if( !$adFree && !$isMobile)
-        <div align="center" class="mt-4">
-            @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header', 'reportAdPosition' => 'top-right'])
-        </div>
-    @endif
-
-    @if($showRoutesByAffixes)
-        @include('dungeonroute.discover.panel', [
-            'gameVersion' => $gameVersion,
-            'title' => __('view_dungeonroute.discover.dungeon.overview.popular_by_next_affixes'),
-            'link' => route('dungeonroutes.discoverdungeon.nextweek', ['gameVersion' => $gameVersion, 'dungeon' => $dungeon]),
-            'currentAffixGroup' => $currentAffixGroup,
-            'affixgroup' => $nextAffixGroup,
-            'dungeonroutes' => $dungeonroutes['nextweek'],
-            'showMore' => $dungeonroutes['nextweek']->count() >= config('keystoneguru.discover.limits.overview'),
-            'showDungeonImage' => $gameVersion->showDiscoverRoutesCardDungeonImage(),
-        ])
-    @endif
 
     @if(!$adFree && !$isMobile)
         <div align="center" class="mt-4">

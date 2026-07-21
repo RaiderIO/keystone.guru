@@ -10,6 +10,8 @@ return [
     'add_kill_zone_limit_reached'             => 'Impossibile aggiungere più di :limit gruppi a un singolo percorso.',
     'add_brushline_limit_reached'             => 'Impossibile aggiungere più di :limit linee disegnate a mano libera a un singolo percorso.',
     'add_path_limit_reached'                  => 'Impossibile aggiungere più di :limit percorsi a un singolo percorso.',
+    'add_arrow_limit_reached'                 => '',
     'add_map_icon_limit_reached'              => 'Impossibile aggiungere più di :limit icone sulla mappa a un singolo percorso.',
+    'schedule_publish_route_not_in_team'      => '',
 
 ];

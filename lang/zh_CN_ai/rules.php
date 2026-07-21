@@ -12,7 +12,8 @@ return [
         'message' => '您需要为此地下城选择一个阵营。',
     ],
     'json_string_count_rule' => [
-        'message' => 'Json 字符串必须至少包含 :count 个元素。',
+        'message_min' => '',
+        'message_max' => '',
     ],
     'map_icon_type_role_check_rule' => [
         'message' => '该地图图标类型不适用于您的访问级别。',

@@ -41,8 +41,8 @@ use Override;
  * @property int         $enemy_forces_shrouded_zul_gamux The amount of enemy forces the Zul'gamux Shrouded enemy gives in this dungeon.
  * @property int         $timer_max_seconds               The maximum timer (in seconds) that you have to complete the dungeon.
  * @property string|null $mdt_mapping_hash
+ * @property int|null    $mdt_addon_version               The MDT addon version this mapping version was imported from (e.g. 6120 for MDT v6.1.20).
  * @property bool        $facade_enabled                  True if this mapping version uses facades, false if it does not.
- * @property bool        $merged                          Not saved in the database
  *
  * @property Carbon $updated_at
  * @property Carbon $created_at
@@ -81,7 +81,7 @@ class MappingVersion extends Model
         'timer_max_seconds',
         'facade_enabled',
         'mdt_mapping_hash',
-        'merged',
+        'mdt_addon_version',
     ];
 
     protected $fillable = [
@@ -95,12 +95,9 @@ class MappingVersion extends Model
         'timer_max_seconds',
         'facade_enabled',
         'mdt_mapping_hash',
+        'mdt_addon_version',
         'updated_at',
         'created_at',
-    ];
-
-    protected $appends = [
-        'merged',
     ];
 
     protected $with = [
@@ -130,14 +127,8 @@ class MappingVersion extends Model
             'enemy_forces_shrouded_zul_gamux' => 'integer',
             'timer_max_seconds'               => 'integer',
             'facade_enabled'                  => 'integer',
+            'mdt_addon_version'               => 'integer',
         ];
-    }
-
-    public function getMergedAttribute(): bool
-    {
-        $mostRecentlyMergedMappingCommitLog = MappingCommitLog::where('merged', 1)->orderBy('id', 'desc')->first();
-
-        return $mostRecentlyMergedMappingCommitLog !== null && $mostRecentlyMergedMappingCommitLog->created_at->gte($this->created_at);
     }
 
     /** @return BelongsTo<GameVersion, $this> */
@@ -235,7 +226,7 @@ class MappingVersion extends Model
             __($this->gameVersion->name),
             __($this->dungeon->name),
             $this->version,
-            $this->merged ? 'readonly, ' : '',
+            !$this->isLatestForDungeon() ? 'previous version, ' : '',
             $this->id,
             $this->created_at,
         );
@@ -532,6 +523,7 @@ class MappingVersion extends Model
                 return;
             }
             // We must get the previous mapping version - that contains the mapping we want to clone
+            /** @var MappingVersion $previousMappingVersion */
             $previousMappingVersion = $existingMappingVersions[1];
             // Update the existing fields of the old mapping version to the new version
             $newMappingVersion->update([

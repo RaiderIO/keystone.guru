@@ -132,6 +132,9 @@ return [
             'show_aggressiveness_border_title'              => '이 설정을 활성화하면 모든 적이 공격성을 나타내는 테두리로 렌더링됩니다. 공격적인 적은 빨간색, 중립 적은 노란색, 우호적인 적은 녹색 등으로 표시됩니다.',
             'highlight_dangerous_enemies'                   => '위험한 적 강조',
             'highlight_dangerous_enemies_title'             => '위험한 적은 점선 주황색 내부 테두리로 표시됩니다. 이러한 적은 Keystone.guru에서 직접 선택됩니다. 이 적들은 미니 보스, 다른 적에 비해 높은 체력을 가진 적, 위험한 능력을 사용하는 적 또는 특별한 주의가 필요한 적입니다.',
+            'kill_zone_path'                                => '',
+            'kill_zone_path_weight'                         => '',
+            'kill_zone_path_weight_title'                   => '',
             'drawing'                                       => '그리기',
             'default_line_weight'                           => '기본 선 굵기',
             'default_line_weight_title'                     => '지도에서 생성한 모든 선의 기본 굵기(폭)를 제어합니다. 경로 및 자유 그리기 선을 포함합니다.',
@@ -251,27 +254,33 @@ return [
             'heatmaps'                => '히트맵',
             'explore'                 => '던전 탐색',
             'new'                     => '신규',
+            'compendium'              => '',
+            'npc_compendium'          => '',
+            'spell_compendium'        => '',
+            'compendium_activity'     => '',
+            'class_compendium'        => '',
         ],
         'nav' => [
             'user' => [
-                'login'             => '로그인',
-                'register'          => '등록',
-                'telescope'         => '망원경',
-                'tools'             => '도구',
-                'view_releases'     => '릴리스 보기',
-                'view_expansions'   => '확장 보기',
-                'view_dungeons'     => '던전 보기',
-                'view_npcs'         => 'NPC 보기',
-                'view_spells'       => '주문 보기',
-                'view_users'        => '사용자 보기',
-                'view_user_reports' => '사용자 보고서 보기',
-                'my_routes'         => '내 경로',
-                'my_favorites'      => '내 즐겨찾기',
-                'my_tags'           => '내 태그',
-                'my_teams'          => '내 팀',
-                'my_profile'        => '내 공개 프로필',
-                'account_settings'  => '계정 설정',
-                'logout'            => '로그아웃',
+                'login'              => '로그인',
+                'register'           => '등록',
+                'telescope'          => '망원경',
+                'tools'              => '도구',
+                'view_releases'      => '릴리스 보기',
+                'view_expansions'    => '확장 보기',
+                'view_dungeons'      => '던전 보기',
+                'view_npcs'          => 'NPC 보기',
+                'view_spells'        => '주문 보기',
+                'view_users'         => '사용자 보기',
+                'view_dungeonroutes' => '',
+                'view_user_reports'  => '사용자 보고서 보기',
+                'my_routes'          => '내 경로',
+                'my_favorites'       => '내 즐겨찾기',
+                'my_tags'            => '내 태그',
+                'my_teams'           => '내 팀',
+                'my_profile'         => '내 공개 프로필',
+                'account_settings'   => '계정 설정',
+                'logout'             => '로그아웃',
             ],
             'uploadlogs' => [
                 'upload_logs' => 'Keystone.guru 개선을 위해 로그 업로드',
@@ -321,6 +330,10 @@ return [
                 'labeltoggle' => [
                     'hide_labels' => '숨기기',
                 ],
+                'facadetoggle' => [
+                    'facade'       => '',
+                    'split_floors' => '',
+                ],
                 'mdtclones' => [
                     'mdt'        => 'MDT 보기',
                     'auto_solve' => '자동 해결',
@@ -331,20 +344,17 @@ return [
                     'your_rating'              => '내 평가',
                 ],
             ],
-            'enemyinfo' => [
-                'enemy_info'      => '적 정보',
-                'report_an_issue' => '문제 보고',
-            ],
             'heatmapsearch' => [
                 'settings_title'         => '지도 설정',
                 'enabled'                => '활성화됨',
                 'disabled'               => '비활성화됨',
                 'event_type'             => '이벤트 유형',
                 'data_type'              => '데이터 유형',
+                'data_type_title'        => '적 위치는 교전 시 적의 원래 위치를 사용하고, 플레이어 위치는 적과 교전 시 플레이어의 위치를 사용합니다 (전투 로그 위치).',
+                'player_spells'          => '',
                 'npc_death_alt'          => '적 사망',
                 'player_death_alt'       => '플레이어 사망',
-                'bloodlust_alt'          => '피의 갈망',
-                'data_type_title'        => '적 위치는 교전 시 적의 원래 위치를 사용하고, 플레이어 위치는 적과 교전 시 플레이어의 위치를 사용합니다 (전투 로그 위치).',
+                'spell_casts_alt'        => '',
                 'filter'                 => '필터',
                 'key_level'              => '키 레벨',
                 'item_level'             => '아이템 레벨',
@@ -383,6 +393,13 @@ return [
                     'gradient'    => '그라디언트',
                     'pane'        => '패널',
                 ],
+            ],
+            'combatlogrouteenemyfailures' => [
+                'npc_filter'           => '',
+                'clear_failures'       => '',
+                'clear_failures_title' => '',
+                'matching_routes'      => '',
+                'no_matching_routes'   => '',
             ],
             'header' => [
                 'toggle_navigation'              => '내비게이션 전환',
@@ -469,12 +486,20 @@ return [
         ],
     ],
     'modal' => [
+        'createroute' => [
+            'create_route'           => '경로 생성',
+            'create_temporary_route' => '임시 경로 생성',
+            'import_from_mdt'        => 'MDT에서 가져오기',
+        ],
         'dungeonroute' => [
             'removed' => [
                 'title'        => '경로 제거됨',
                 'description'  => '경로가 제거되어 더 이상 볼 수 없거나 편집할 수 없습니다. 이는 경로가 임시 경로였으며 자동으로 정리되었거나 다른 브라우저 탭에서 경로를 삭제한 경우 발생할 수 있습니다.',
                 'back_to_home' => '홈으로 돌아가기',
             ],
+        ],
+        'enemydetails' => [
+            'report_an_issue' => '',
         ],
         'userreport' => [
             'dungeonroute' => [
@@ -493,11 +518,6 @@ return [
                 'contact_by_email_guest' => '추가 조사가 필요할 경우 이메일로 연락해 주세요 (보고서 본문에 이메일 주소를 추가하세요)',
                 'submit'                 => '제출',
             ],
-        ],
-        'createroute' => [
-            'create_route'           => '경로 생성',
-            'create_temporary_route' => '임시 경로 생성',
-            'import_from_mdt'        => 'MDT에서 가져오기',
         ],
         'legal' => [
             'welcome_back_agree' => '다시 오신 것을 환영합니다! 계속하려면 %s, %s 및 %s에 동의해야 합니다.',
@@ -613,6 +633,14 @@ return [
             'title' => '로그 업로드',
         ],
     ],
+    'npc' => [
+        'link' => [
+            'boss' => '',
+        ],
+        'select' => [
+            'npc' => '',
+        ],
+    ],
     'release' => [
         'release' => [
             'new' => '새로운',
@@ -634,14 +662,15 @@ return [
     ],
     'team' => [
         'details' => [
-            'name'            => '이름',
-            'description'     => '설명',
-            'logo'            => '로고',
-            'current_logo'    => '현재 로고',
-            'team_logo_title' => '팀 로고',
-            'save'            => '저장',
-            'submit'          => '제출',
-            'disband_team'    => '팀 해산',
+            'name'                     => '이름',
+            'description'              => '설명',
+            'logo'                     => '로고',
+            'current_logo'             => '현재 로고',
+            'team_logo_title'          => '팀 로고',
+            'save'                     => '저장',
+            'submit'                   => '제출',
+            'disband_team'             => '팀 해산',
+            'route_publishing_enabled' => '',
         ],
         'select' => [
             'select_team' => '팀 선택...',

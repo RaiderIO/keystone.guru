@@ -13,10 +13,10 @@ use App\Models\Season;
 ?>
 
         <!-- General settings -->
-<div class="form-group">
+<div class="mb-3">
     <label for="simulate_key_level">
         {{ __('view_common.modal.simulateoptions.default.key_level') }}
-        <i class="fas fa-info-circle" data-toggle="tooltip"
+        <i class="fas fa-info-circle" data-bs-toggle="tooltip"
            title="{{ __('view_common.modal.simulateoptions.default.key_level_title') }}"></i>
     </label>
     <div class="row">
@@ -27,10 +27,10 @@ use App\Models\Season;
 </div>
 
 @if($isShrouded)
-    <div class="form-group">
+    <div class="mb-3">
         <label for="simulate_shrouded_bounty_type">
             {{ __('view_common.modal.simulateoptions.default.shrouded_bounty_type') }}
-            <i class="fas fa-info-circle" data-toggle="tooltip"
+            <i class="fas fa-info-circle" data-bs-toggle="tooltip"
                title="{{ __('view_common.modal.simulateoptions.default.shrouded_bounty_type_title') }}"></i>
         </label>
         <div class="row">
@@ -43,11 +43,11 @@ use App\Models\Season;
     {{ html()->hidden('simulate_shrouded_bounty_type', 'none')->id('simulate_shrouded_bounty_type') }}
 @endif
 
-<div class="form-group row">
+<div class="mb-3 row">
     <div class="col">
         <label for="simulate_affix">
             {{ __('view_common.modal.simulateoptions.default.affixes') }}
-            <i class="fas fa-info-circle" data-toggle="tooltip"
+            <i class="fas fa-info-circle" data-bs-toggle="tooltip"
                title="{{ __('view_common.modal.simulateoptions.default.affixes_title') }}"></i>
         </label>
         <div class="row">
@@ -60,7 +60,7 @@ use App\Models\Season;
         <div class="col">
             <label for="simulate_thundering">
                 {{ __('view_common.modal.simulateoptions.default.simulate_thundering_clear_seconds') }}
-                <i class="fas fa-info-circle" data-toggle="tooltip"
+                <i class="fas fa-info-circle" data-bs-toggle="tooltip"
                    title="{{ __('view_common.modal.simulateoptions.default.simulate_thundering_clear_seconds_title') }}"></i>
             </label>
             <div class="row">
@@ -74,11 +74,11 @@ use App\Models\Season;
     @endif
 </div>
 
-<div class="form-group row no-gutters">
+<div class="mb-3 row g-0">
     <div class="col">
         <label for="simulate_raid_buffs">
             {{ __('view_common.modal.simulateoptions.default.raid_buffs') }}
-            <i class="fas fa-info-circle" data-toggle="tooltip"
+            <i class="fas fa-info-circle" data-bs-toggle="tooltip"
                title="{{ __('view_common.modal.simulateoptions.default.raid_buffs_title') }}"></i>
         </label>
         <div class="row">
@@ -89,10 +89,10 @@ use App\Models\Season;
     </div>
 </div>
 
-<div class="form-group">
+<div class="mb-3">
     <label for="simulate_hp_percent">
         {{ __('view_common.modal.simulateoptions.default.hp_percent') }}
-        <i class="fas fa-info-circle" data-toggle="tooltip"
+        <i class="fas fa-info-circle" data-bs-toggle="tooltip"
            title="{{ __('view_common.modal.simulateoptions.default.hp_percent_title') }}"></i>
     </label>
     <div class="row">
@@ -102,10 +102,10 @@ use App\Models\Season;
     </div>
 </div>
 
-<div class="form-group">
+<div class="mb-3">
     <label for="simulate_bloodlust_per_pull">
         {{ __('view_common.modal.simulateoptions.default.bloodlust_per_pull') }}
-        <i class="fas fa-info-circle" data-toggle="tooltip"
+        <i class="fas fa-info-circle" data-bs-toggle="tooltip"
            title="{{ __('view_common.modal.simulateoptions.default.bloodlust_per_pull_title') }}"></i>
     </label>
     <div class="row">

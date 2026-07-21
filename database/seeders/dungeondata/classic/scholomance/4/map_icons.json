@@ -7,7 +7,7 @@
         "map_icon_type_id": 2,
         "lat": -83.7905,
         "lng": 237.3338,
-        "comment": "Darkmaster Gandling spawns when ALL enemies in all 6 rooms have been defeated.",
+        "comment": "mapping.map_icons.classic.scholomance.darkmaster_gandling_spawn",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

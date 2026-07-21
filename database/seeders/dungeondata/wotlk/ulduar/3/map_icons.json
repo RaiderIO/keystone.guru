@@ -20,7 +20,7 @@
         "map_icon_type_id": 44,
         "lat": -84.8328,
         "lng": 108.0422,
-        "comment": "Teleporter",
+        "comment": "mapping.map_icons.wotlk.ulduar.teleporter",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 44,
         "lat": -204.6837,
         "lng": 196.7146,
-        "comment": "Teleporter: The Inner Sanctum of Ulduar",
+        "comment": "mapping.map_icons.wotlk.ulduar.teleporter_inner_sanctum",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 44,
         "lat": -137.6563,
         "lng": 196.4375,
-        "comment": "Teleporter: Convervatory of Life",
+        "comment": "mapping.map_icons.wotlk.ulduar.teleporter_conservatory",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 44,
         "lat": -84.8328,
         "lng": 108.0422,
-        "comment": "Teleporter",
+        "comment": "mapping.map_icons.wotlk.ulduar.teleporter",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -111,7 +111,7 @@
         "map_icon_type_id": 44,
         "lat": -204.6837,
         "lng": 196.7146,
-        "comment": "Teleporter: The Inner Sanctum of Ulduar",
+        "comment": "mapping.map_icons.wotlk.ulduar.teleporter_inner_sanctum",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -124,7 +124,7 @@
         "map_icon_type_id": 44,
         "lat": -137.6563,
         "lng": 196.4375,
-        "comment": "Teleporter: Convervatory of Life",
+        "comment": "mapping.map_icons.wotlk.ulduar.teleporter_conservatory",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

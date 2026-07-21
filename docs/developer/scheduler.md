@@ -7,3 +7,5 @@ The Scheduler is triggered from Crontab
 
 # Thumbnails
 Run `node node_modules/puppeteer/install.js` to have puppeteer download Chrome. If you don't do this - it will not work.
+
+In Docker, Chrome is baked into the `keystone.guru-worker` (Horizon) image; only that container renders thumbnails. Agents: see the `generating-thumbnails` skill for the two supported ways to generate a thumbnail.

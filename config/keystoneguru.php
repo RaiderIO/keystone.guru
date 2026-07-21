@@ -6,6 +6,12 @@ return [
         'Admin',
     ],
 
+    // sh/worktree.sh sets COMPOSE_PROJECT_NAME to "ksg-<branch>" for a worktree stack; unset on the
+    // main stack and in production, so this is null there.
+    'worktree' => ($composeProjectName = env('COMPOSE_PROJECT_NAME')) !== null && str_starts_with($composeProjectName, 'ksg-')
+        ? substr($composeProjectName, strlen('ksg-'))
+        : null,
+
     'db_backup_dir'            => env('DB_BACKUP_DIR'),
     'mapping_backup_dir'       => env('MAPPING_BACKUP_DIR'),
     'assets_base_url'          => env('ASSETS_BASE_URL', '/'),
@@ -17,8 +23,6 @@ return [
     'github_username'         => 'Wotuu',
     'github_repository_owner' => 'RaiderIO',
     'github_repository'       => 'Keystone.guru',
-
-    'reddit_subreddit' => 'KeystoneGuru',
 
     'sanitize_text' => [
         'allowed_tags'    => ['a', 'h4', 'h5', 'h6', 'b', 'i', 'br'],
@@ -168,12 +172,6 @@ return [
     'zoom_max_default' => 5,
 
     /**
-     * The amount of hours it takes after changes have occurred, before they're automatically synced with the server.
-     * This prevents active mapping efforts from getting commits every 2 minutes or something
-     */
-    'mapping_commit_after_change_hours' => 1,
-
-    /**
      * Size of a party for a M+ dungeon. Used for a bunch of stuff, changing this value does not mean it's 100% fine though,
      * some layout will need to be re-made for a smaller or higher value.
      */
@@ -212,6 +210,13 @@ return [
          * A secret key that must be provided to get access to the preview routes (no other auth available)
          */
         'preview_secret' => env('THUMBNAIL_PREVIEW_SECRET'),
+
+        /**
+         * When set, the base URL prefixed to the (relative) preview route for puppeteer to
+         * navigate to, instead of the app's absolute URL. Needed when the app's public URL isn't
+         * reachable from inside the app container itself (e.g. a separate nginx container in dev).
+         */
+        'preview_base_url' => env('THUMBNAIL_PREVIEW_BASE_URL'),
 
         /**
          * The amount of time in minutes that must pass before a thumbnail is generated again from a changed dungeon route.
@@ -350,10 +355,6 @@ return [
         'expires_hours' => 1,
     ],
 
-    'releases' => [
-        'spotlight_show_days' => 7,
-    ],
-
     'influxdb' => [
         'default_tags' => [
             'environment' => env('APP_ENV'),
@@ -378,6 +379,13 @@ return [
         ],
     ],
 
+    'raiderio' => [
+        'api_key' => env('RAIDERIO_API_KEY'),
+        // Local envs hit the real production RaiderIO API by default. Set this to true to use the
+        // local opensearch-backed mock service instead (requires a running local opensearch node).
+        'use_local_mock_service' => env('RAIDERIO_USE_LOCAL_MOCK_SERVICE', false),
+    ],
+
     'patreon' => [
         'oauth' => [
             'client_id' => env('PATREON_CLIENT_ID'),
@@ -388,17 +396,6 @@ return [
         'campaign_id' => env('PATREON_CAMPAIGN_ID'),
         // The amount of ad-free giveaways that one may have in total
         'ad_free_giveaways' => 4,
-    ],
-
-    'reddit' => [
-        'oauth' => [
-            'client_id' => env('REDDIT_CLIENT_ID'),
-            'secret'    => env('REDDIT_SECRET_KEY'),
-        ],
-        // Used for creating release posts under the Keystoneguru user
-        'api' => [
-            'refresh_token' => env('REDDIT_REFRESH_TOKEN'),
-        ],
     ],
 
     'nitro_pay' => [
@@ -493,7 +490,7 @@ return [
     ],
 
     'mdt' => [
-        'version' => 'v6.1.18',
+        'version' => 'v6.1.20',
     ],
 
     'combat_log_route_regeneration' => [

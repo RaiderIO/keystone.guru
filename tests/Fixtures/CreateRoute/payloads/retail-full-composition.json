@@ -1,0 +1,31 @@
+{
+    "description": "Retail: user fills in party member #1's faction, class, specialization and race via Tom Select. Party members #2-5 stay at their default '0' (unset) value.",
+    "endpoint": "dungeonroute.savenew",
+    "gameVersion": "retail",
+    "auth": true,
+    "fields": [
+        {"name": "dungeon_id", "value": "{{dungeon_id}}"},
+        {"name": "team_id", "value": "-1"},
+        {"name": "dungeon_difficulty", "value": ""},
+        {"name": "dungeon_start_map_icon_id", "value": ""},
+        {"name": "dungeon_route_title", "value": "My Test Route"},
+        {"name": "dungeon_route_level", "value": "{{key_level_min}};{{key_level_max}}"},
+        {"name": "route_select_affixes[]", "value": "{{affix_group_id}}"},
+        {"name": "faction_id", "value": "{{faction_id}}"},
+        {"name": "class[]", "value": "{{class_id}}"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "class[]", "value": "0"},
+        {"name": "specialization[]", "value": "{{specialization_id}}"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "specialization[]", "value": "0"},
+        {"name": "race[]", "value": "{{race_id}}"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"},
+        {"name": "race[]", "value": "0"}
+    ]
+}

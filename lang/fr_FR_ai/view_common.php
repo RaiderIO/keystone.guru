@@ -132,6 +132,9 @@ return [
             'show_aggressiveness_border_title'              => 'Activer ce paramètre rendra tous les ennemis avec une bordure pour indiquer leur agressivité. Rouge pour les ennemis agressifs, jaune pour les ennemis neutres, vert pour les ennemis amicaux, etc.',
             'highlight_dangerous_enemies'                   => 'Mettre en évidence les ennemis dangereux',
             'highlight_dangerous_enemies_title'             => 'Les ennemis dangereux sont marqués avec une bordure intérieure orange en pointillés. Ces ennemis sont sélectionnés par Keystone.guru. Ils sont des mini-boss, ont une santé élevée par rapport aux autres, utilisent des capacités dangereuses ou nécessitent une attention particulière.',
+            'kill_zone_path'                                => '',
+            'kill_zone_path_weight'                         => '',
+            'kill_zone_path_weight_title'                   => '',
             'drawing'                                       => 'Dessin',
             'default_line_weight'                           => 'Épaisseur de ligne par défaut',
             'default_line_weight_title'                     => 'Cela contrôle l\'épaisseur par défaut (largeur) de toutes les lignes que vous créez sur la carte, telles que les chemins et les lignes tracées librement.',
@@ -251,27 +254,33 @@ return [
             'heatmaps'                => 'Cartes de chaleur',
             'explore'                 => 'Explorer les donjons',
             'new'                     => 'NOUVEAU',
+            'compendium'              => '',
+            'npc_compendium'          => '',
+            'spell_compendium'        => '',
+            'compendium_activity'     => '',
+            'class_compendium'        => '',
         ],
         'nav' => [
             'user' => [
-                'login'             => 'Connexion',
-                'register'          => 'Inscription',
-                'telescope'         => 'Télescope',
-                'tools'             => 'Outils',
-                'view_releases'     => 'Voir les versions',
-                'view_expansions'   => 'Voir les extensions',
-                'view_dungeons'     => 'Voir les donjons',
-                'view_npcs'         => 'Voir les PNJ',
-                'view_spells'       => 'Voir les sorts',
-                'view_users'        => 'Voir les utilisateurs',
-                'view_user_reports' => 'Voir les rapports des utilisateurs',
-                'my_routes'         => 'Mes itinéraires',
-                'my_favorites'      => 'Mes favoris',
-                'my_tags'           => 'Mes tags',
-                'my_teams'          => 'Mes équipes',
-                'my_profile'        => 'Mon profil public',
-                'account_settings'  => 'Paramètres du compte',
-                'logout'            => 'Déconnexion',
+                'login'              => 'Connexion',
+                'register'           => 'Inscription',
+                'telescope'          => 'Télescope',
+                'tools'              => 'Outils',
+                'view_releases'      => 'Voir les versions',
+                'view_expansions'    => 'Voir les extensions',
+                'view_dungeons'      => 'Voir les donjons',
+                'view_npcs'          => 'Voir les PNJ',
+                'view_spells'        => 'Voir les sorts',
+                'view_users'         => 'Voir les utilisateurs',
+                'view_dungeonroutes' => '',
+                'view_user_reports'  => 'Voir les rapports des utilisateurs',
+                'my_routes'          => 'Mes itinéraires',
+                'my_favorites'       => 'Mes favoris',
+                'my_tags'            => 'Mes tags',
+                'my_teams'           => 'Mes équipes',
+                'my_profile'         => 'Mon profil public',
+                'account_settings'   => 'Paramètres du compte',
+                'logout'             => 'Déconnexion',
             ],
             'uploadlogs' => [
                 'upload_logs' => 'Télécharger les journaux pour améliorer Keystone.guru',
@@ -321,6 +330,10 @@ return [
                 'labeltoggle' => [
                     'hide_labels' => 'Cacher',
                 ],
+                'facadetoggle' => [
+                    'facade'       => '',
+                    'split_floors' => '',
+                ],
                 'mdtclones' => [
                     'mdt'        => 'Afficher MDT',
                     'auto_solve' => 'Résolution automatique',
@@ -331,20 +344,17 @@ return [
                     'your_rating'              => 'Votre évaluation',
                 ],
             ],
-            'enemyinfo' => [
-                'enemy_info'      => 'Infos ennemies',
-                'report_an_issue' => 'Signaler un problème',
-            ],
             'heatmapsearch' => [
                 'settings_title'         => 'Paramètres de la carte',
                 'enabled'                => 'Activé',
                 'disabled'               => 'Désactivé',
                 'event_type'             => 'Type d\'événement',
                 'data_type'              => 'Type de données',
+                'data_type_title'        => 'La position de l\'ennemi utilise la position originale de l\'ennemi qui a été engagé (alimenté par le Créateur de Route Auto), la position du joueur utilise la position du joueur lorsque l\'ennemi a été engagé (position du journal de combat).',
+                'player_spells'          => '',
                 'npc_death_alt'          => 'Mort d\'ennemi',
                 'player_death_alt'       => 'Mort du joueur',
-                'bloodlust_alt'          => 'Furie sanguinaire',
-                'data_type_title'        => 'La position de l\'ennemi utilise la position originale de l\'ennemi qui a été engagé (alimenté par le Créateur de Route Auto), la position du joueur utilise la position du joueur lorsque l\'ennemi a été engagé (position du journal de combat).',
+                'spell_casts_alt'        => '',
                 'filter'                 => 'Filtre',
                 'key_level'              => 'Niveau de clé',
                 'item_level'             => 'Niveau d\'objet',
@@ -383,6 +393,13 @@ return [
                     'gradient'    => 'Gradient',
                     'pane'        => 'Volet',
                 ],
+            ],
+            'combatlogrouteenemyfailures' => [
+                'npc_filter'           => '',
+                'clear_failures'       => '',
+                'clear_failures_title' => '',
+                'matching_routes'      => '',
+                'no_matching_routes'   => '',
             ],
             'header' => [
                 'toggle_navigation'              => 'Basculer la navigation',
@@ -469,12 +486,20 @@ return [
         ],
     ],
     'modal' => [
+        'createroute' => [
+            'create_route'           => 'Créer un itinéraire',
+            'create_temporary_route' => 'Créer un itinéraire temporaire',
+            'import_from_mdt'        => 'Importer depuis MDT',
+        ],
         'dungeonroute' => [
             'removed' => [
                 'title'        => 'Itinéraire supprimé',
                 'description'  => 'Votre itinéraire a été supprimé et ne peut plus être consulté/modifié. Cela peut arriver si votre itinéraire était temporaire et a été automatiquement nettoyé ou si vous avez supprimé l\'itinéraire dans un autre onglet du navigateur.',
                 'back_to_home' => 'Retour à l\'accueil',
             ],
+        ],
+        'enemydetails' => [
+            'report_an_issue' => '',
         ],
         'userreport' => [
             'dungeonroute' => [
@@ -493,11 +518,6 @@ return [
                 'contact_by_email_guest' => 'Contactez-moi par e-mail si nécessaire pour une enquête plus approfondie (ajoutez votre adresse e-mail dans le corps du rapport)',
                 'submit'                 => 'Soumettre',
             ],
-        ],
-        'createroute' => [
-            'create_route'           => 'Créer un itinéraire',
-            'create_temporary_route' => 'Créer un itinéraire temporaire',
-            'import_from_mdt'        => 'Importer depuis MDT',
         ],
         'legal' => [
             'welcome_back_agree' => 'Bon retour ! Pour continuer, vous devez accepter notre %s, %s et %s.',
@@ -617,6 +637,14 @@ return [
             'title' => 'Télécharger les journaux',
         ],
     ],
+    'npc' => [
+        'link' => [
+            'boss' => '',
+        ],
+        'select' => [
+            'npc' => '',
+        ],
+    ],
     'release' => [
         'release' => [
             'new' => 'NOUVEAU',
@@ -638,14 +666,15 @@ return [
     ],
     'team' => [
         'details' => [
-            'name'            => 'Nom',
-            'description'     => 'Description',
-            'logo'            => 'Logo',
-            'current_logo'    => 'Logo actuel',
-            'team_logo_title' => 'Logo de l\'équipe',
-            'save'            => 'Enregistrer',
-            'submit'          => 'Soumettre',
-            'disband_team'    => 'Dissoudre l\'équipe',
+            'name'                     => 'Nom',
+            'description'              => 'Description',
+            'logo'                     => 'Logo',
+            'current_logo'             => 'Logo actuel',
+            'team_logo_title'          => 'Logo de l\'équipe',
+            'save'                     => 'Enregistrer',
+            'submit'                   => 'Soumettre',
+            'disband_team'             => 'Dissoudre l\'équipe',
+            'route_publishing_enabled' => '',
         ],
         'select' => [
             'select_team' => 'Sélectionner une équipe...',

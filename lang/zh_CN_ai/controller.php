@@ -19,17 +19,21 @@ return [
             'mdt_invalid_category'                => '无效的类别',
         ],
         'flash' => [
-            'message_banner_set_successfully'   => '消息横幅设置成功',
-            'thumbnail_regenerate_result'       => '为 :total 路线派发了 :success 个作业。:failed 失败。',
-            'combatlog_route_regenerate_result' => '',
-            'caches_dropped_successfully'       => '缓存成功清除',
-            'releases_exported'                 => '版本已导出',
-            'exception'                         => '管理员面板中抛出异常',
-            'feature_toggle_activated'          => '功能 :feature 已激活',
-            'feature_toggle_deactivated'        => '功能 :feature 已停用',
-            'feature_forgotten'                 => '功能 :feature 成功遗忘',
-            'read_only_mode_disabled'           => '只读模式已禁用',
-            'read_only_mode_enabled'            => '只读模式已启用',
+            'message_banner_set_successfully'        => '消息横幅设置成功',
+            'thumbnail_regenerate_result'            => '为 :total 路线派发了 :success 个作业。:failed 失败。',
+            'combatlog_route_regenerate_result'      => '',
+            'combatlog_criteria_reset'               => '',
+            'combatlog_criteria_thresholds_updated'  => '',
+            'caches_dropped_successfully'            => '缓存成功清除',
+            'releases_exported'                      => '版本已导出',
+            'exception'                              => '管理员面板中抛出异常',
+            'feature_toggle_activated'               => '功能 :feature 已激活',
+            'feature_toggle_deactivated'             => '功能 :feature 已停用',
+            'feature_forgotten'                      => '功能 :feature 成功遗忘',
+            'mapping_version_upgrade_queued'         => '',
+            'mapping_version_upgrade_already_latest' => '',
+            'read_only_mode_disabled'                => '只读模式已禁用',
+            'read_only_mode_enabled'                 => '只读模式已启用',
         ],
     ],
     'apidungeonroute' => [
@@ -46,6 +50,12 @@ return [
         'error' => [
             'unable_to_save_brushline'   => '无法保存线条',
             'unable_to_delete_brushline' => '无法删除线条',
+        ],
+    ],
+    'arrow' => [
+        'error' => [
+            'unable_to_save_arrow'   => '',
+            'unable_to_delete_arrow' => '',
         ],
     ],
     'dungeon' => [
@@ -176,6 +186,13 @@ return [
             'account_deleted_successfully'     => '账户删除成功。',
             'error_deleting_account'           => '发生错误。请再试一次。',
         ],
+        'error' => [
+            'add_ad_free_giveaway_limit_reached'        => '',
+            'add_ad_free_giveaway_already_ad_free'      => '',
+            'add_ad_free_giveaway_already_has_giveaway' => '',
+            'remove_ad_free_giveaway_not_found'         => '',
+            'remove_ad_free_giveaway_not_yours'         => '',
+        ],
     ],
     'spell' => [
         'error' => [
@@ -207,6 +224,16 @@ return [
             'user_is_not_a_patron'              => '该用户不是赞助者。',
             'all_benefits_granted_successfully' => '所有福利均已成功授予。',
             'error_granting_all_benefits'       => '尝试授予所有福利时发生错误。',
+        ],
+    ],
+
+    'admin' => [
+        'dungeonroute' => [
+            'flash' => [
+                'updated' => '',
+                'deleted' => '',
+                'claimed' => '',
+            ],
         ],
     ],
 

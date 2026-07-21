@@ -7,7 +7,7 @@
         "map_icon_type_id": 2,
         "lat": -30,
         "lng": 177,
-        "comment": "Kill all Centrifuge Constructs to remove boss shield. \r\nAfter killing the boss, use drake item to fly up further.",
+        "comment": "mapping.map_icons.wotlk.the_oculus.centrifuge_construct_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

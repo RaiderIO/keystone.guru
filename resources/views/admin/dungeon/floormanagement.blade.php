@@ -30,7 +30,7 @@ use Illuminate\Support\Collection;
     </div>
     <div class="col-auto">
         <a href="{{ route('admin.floor.new', ['dungeon' => $dungeon->slug]) }}"
-           class="btn btn-success text-white pull-right" role="button">
+           class="btn btn-success text-white float-end" role="button">
             <i class="fas fa-plus"></i> {{ __('view_admin.dungeon.edit.floor_management.add_floor') }}
         </a>
     </div>
@@ -70,10 +70,10 @@ use Illuminate\Support\Collection;
                                 <i class="fas fa-edit"></i>&nbsp;{{ __('view_admin.dungeon.edit.floor_management.floor_edit_edit') }}
                             </a>
                         </div>
-                        <div class="col pr-0">
+                        <div class="col pe-0">
                             @include('common.mappingversion.select', ['dungeon' => $dungeon])
                         </div>
-                        <div class="col-auto pl-1">
+                        <div class="col-auto ps-1">
                             {{ html()->input('submit')->value(__('view_admin.dungeon.edit.floor_management.floor_edit_edit_mapping'))->class('form-control') }}
                         </div>
                     </div>

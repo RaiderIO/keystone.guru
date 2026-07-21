@@ -5,8 +5,8 @@
         <div class="col-lg">
             <h4>{{ __('view_admin.expansion.list.header') }}</h4>
         </div>
-        <div class="ml-auto">
-            <a href="{{ route('admin.expansion.new') }}" class="btn btn-success text-white pull-right ml-auto"
+        <div class="ms-auto">
+            <a href="{{ route('admin.expansion.new') }}" class="btn btn-success text-white float-end ms-auto"
                role="button">
                 <i class="fas fa-plus"></i> {{ __('view_admin.expansion.list.create_expansion') }}
             </a>
@@ -53,7 +53,7 @@
                         <i class="fas fa-times-circle text-danger"></i>
                     </td>
                 @endif
-                <td><img src="{{ ksgAssetImage(sprintf('expansions/%s.png', $expansion->shortname)) }}"
+                <td><img src="{{ $expansion->getIconUrl() }}"
                          style="width: 50px;"/></td>
                 <td>{{ $expansion->id }}</td>
                 <td>{{ __($expansion->name) }}</td>

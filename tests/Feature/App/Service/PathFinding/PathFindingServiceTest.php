@@ -16,6 +16,7 @@ final class PathFindingServiceTest extends PublicTestCase
 {
     private PathFindingService $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

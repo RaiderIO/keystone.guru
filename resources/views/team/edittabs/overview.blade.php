@@ -7,7 +7,7 @@ use App\Models\Team;
  */
 ?>
 <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
-    <div class="form-group">
+    <div class="mb-3">
         <h4>
             {{ sprintf(__('view_team.edittabs.overview.title'), $team->name) }}
         </h4>
@@ -28,7 +28,7 @@ use App\Models\Team;
                                          alt="{{ __('view_team.edit.icon_image_alt') }}"
                                          style="max-width: 128px; max-height: 128px;">
                                 </div>
-                                <div class="col text-left pl-0">
+                                <div class="col text-start ps-0">
                                     {{ $team->description }}
                                 </div>
                                 <div class="col">

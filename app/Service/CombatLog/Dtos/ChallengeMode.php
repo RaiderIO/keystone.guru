@@ -5,7 +5,7 @@ namespace App\Service\CombatLog\Dtos;
 use App\Models\Dungeon;
 use Illuminate\Support\Carbon;
 
-class ChallengeMode
+class ChallengeMode implements \Stringable
 {
     public function __construct(
         private readonly Carbon  $carbon,

@@ -20,7 +20,7 @@
         "map_icon_type_id": 49,
         "lat": -82.8111,
         "lng": 171.6617,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 49,
         "lat": -93.3121,
         "lng": 146.0349,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 49,
         "lat": -121.8771,
         "lng": 152.5096,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 49,
         "lat": -115.2391,
         "lng": 165.8399,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 49,
         "lat": -139.1002,
         "lng": 149.9769,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 49,
         "lat": -154.2845,
         "lng": 146.9257,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 6,
         "lat": -177.0161,
         "lng": 157.0924,
-        "comment": "Unlocks after defeating Chargath.",
+        "comment": "mapping.map_icons.df.neltharus.unlocks_after_chargath",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -111,7 +111,7 @@
         "map_icon_type_id": 45,
         "lat": -184.7968,
         "lng": 125.4953,
-        "comment": "Qaleshi Goulash",
+        "comment": "mapping.map_icons.df.neltharus.qaleshi_goulash",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -124,7 +124,7 @@
         "map_icon_type_id": 49,
         "lat": -170.9407,
         "lng": 118.6031,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -137,7 +137,7 @@
         "map_icon_type_id": 6,
         "lat": -130.6832,
         "lng": 135.5619,
-        "comment": "Stairwell Door",
+        "comment": "mapping.map_icons.df.neltharus.stairwell_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -163,7 +163,7 @@
         "map_icon_type_id": 49,
         "lat": -82.8111,
         "lng": 171.6617,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -176,7 +176,7 @@
         "map_icon_type_id": 49,
         "lat": -93.3121,
         "lng": 146.0349,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -189,7 +189,7 @@
         "map_icon_type_id": 49,
         "lat": -121.8771,
         "lng": 152.5096,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -202,7 +202,7 @@
         "map_icon_type_id": 49,
         "lat": -115.2391,
         "lng": 165.8399,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -215,7 +215,7 @@
         "map_icon_type_id": 49,
         "lat": -139.1002,
         "lng": 149.9769,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -228,7 +228,7 @@
         "map_icon_type_id": 49,
         "lat": -154.2845,
         "lng": 146.9257,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -241,7 +241,7 @@
         "map_icon_type_id": 6,
         "lat": -177.0161,
         "lng": 157.0924,
-        "comment": "Unlocks after defeating Chargath.",
+        "comment": "mapping.map_icons.df.neltharus.unlocks_after_chargath",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -254,7 +254,7 @@
         "map_icon_type_id": 45,
         "lat": -184.7968,
         "lng": 125.4953,
-        "comment": "Qaleshi Goulash",
+        "comment": "mapping.map_icons.df.neltharus.qaleshi_goulash",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -267,7 +267,7 @@
         "map_icon_type_id": 49,
         "lat": -170.9407,
         "lng": 118.6031,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -280,7 +280,7 @@
         "map_icon_type_id": 6,
         "lat": -130.6832,
         "lng": 135.5619,
-        "comment": "Stairwell Door",
+        "comment": "mapping.map_icons.df.neltharus.stairwell_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -306,7 +306,7 @@
         "map_icon_type_id": 49,
         "lat": -82.8111,
         "lng": 171.6617,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -319,7 +319,7 @@
         "map_icon_type_id": 49,
         "lat": -93.3121,
         "lng": 146.0349,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -332,7 +332,7 @@
         "map_icon_type_id": 49,
         "lat": -121.8771,
         "lng": 152.5096,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -345,7 +345,7 @@
         "map_icon_type_id": 49,
         "lat": -115.2391,
         "lng": 165.8399,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -358,7 +358,7 @@
         "map_icon_type_id": 49,
         "lat": -139.1002,
         "lng": 149.9769,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -371,7 +371,7 @@
         "map_icon_type_id": 49,
         "lat": -154.2845,
         "lng": 146.9257,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -384,7 +384,7 @@
         "map_icon_type_id": 6,
         "lat": -177.0161,
         "lng": 157.0924,
-        "comment": "Unlocks after defeating Chargath.",
+        "comment": "mapping.map_icons.df.neltharus.unlocks_after_chargath",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -397,7 +397,7 @@
         "map_icon_type_id": 45,
         "lat": -184.7968,
         "lng": 125.4953,
-        "comment": "Qaleshi Goulash",
+        "comment": "mapping.map_icons.df.neltharus.qaleshi_goulash",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -410,7 +410,7 @@
         "map_icon_type_id": 49,
         "lat": -170.9407,
         "lng": 118.6031,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -423,7 +423,7 @@
         "map_icon_type_id": 6,
         "lat": -130.6832,
         "lng": 135.5619,
-        "comment": "Stairwell Door",
+        "comment": "mapping.map_icons.df.neltharus.stairwell_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -449,7 +449,7 @@
         "map_icon_type_id": 49,
         "lat": -82.8111,
         "lng": 171.6617,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -462,7 +462,7 @@
         "map_icon_type_id": 49,
         "lat": -93.3121,
         "lng": 146.0349,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -475,7 +475,7 @@
         "map_icon_type_id": 49,
         "lat": -121.8771,
         "lng": 152.5096,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -488,7 +488,7 @@
         "map_icon_type_id": 49,
         "lat": -115.2391,
         "lng": 165.8399,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -501,7 +501,7 @@
         "map_icon_type_id": 49,
         "lat": -139.1002,
         "lng": 149.9769,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -514,7 +514,7 @@
         "map_icon_type_id": 49,
         "lat": -154.2845,
         "lng": 146.9257,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -527,7 +527,7 @@
         "map_icon_type_id": 6,
         "lat": -177.0161,
         "lng": 157.0924,
-        "comment": "Unlocks after defeating Chargath.",
+        "comment": "mapping.map_icons.df.neltharus.unlocks_after_chargath",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -540,7 +540,7 @@
         "map_icon_type_id": 45,
         "lat": -184.7968,
         "lng": 125.4953,
-        "comment": "Qaleshi Goulash",
+        "comment": "mapping.map_icons.df.neltharus.qaleshi_goulash",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -553,7 +553,7 @@
         "map_icon_type_id": 49,
         "lat": -170.9407,
         "lng": 118.6031,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -566,7 +566,7 @@
         "map_icon_type_id": 6,
         "lat": -130.6832,
         "lng": 135.5619,
-        "comment": "Stairwell Door",
+        "comment": "mapping.map_icons.df.neltharus.stairwell_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -592,7 +592,7 @@
         "map_icon_type_id": 49,
         "lat": -82.8111,
         "lng": 171.6617,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -605,7 +605,7 @@
         "map_icon_type_id": 49,
         "lat": -93.3121,
         "lng": 146.0349,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -618,7 +618,7 @@
         "map_icon_type_id": 49,
         "lat": -121.8771,
         "lng": 152.5096,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -631,7 +631,7 @@
         "map_icon_type_id": 49,
         "lat": -115.2391,
         "lng": 165.8399,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -644,7 +644,7 @@
         "map_icon_type_id": 49,
         "lat": -139.1002,
         "lng": 149.9769,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -657,7 +657,7 @@
         "map_icon_type_id": 49,
         "lat": -154.2845,
         "lng": 146.9257,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -670,7 +670,7 @@
         "map_icon_type_id": 6,
         "lat": -177.0161,
         "lng": 157.0924,
-        "comment": "Unlocks after defeating Chargath.",
+        "comment": "mapping.map_icons.df.neltharus.unlocks_after_chargath",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -683,7 +683,7 @@
         "map_icon_type_id": 45,
         "lat": -184.7968,
         "lng": 125.4953,
-        "comment": "Qaleshi Goulash: each party member gains 3 charges of an extra action button. When pressed, gain 65% movement speed for 50 seconds. Cancelled upon combat. Requires 25 Dragonflight Cooking to use.",
+        "comment": "mapping.map_icons.df.neltharus.qaleshi_goulash_detail",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -696,7 +696,7 @@
         "map_icon_type_id": 49,
         "lat": -170.9407,
         "lng": 118.6031,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -709,7 +709,7 @@
         "map_icon_type_id": 6,
         "lat": -130.6832,
         "lng": 135.5619,
-        "comment": "Stairwell Door",
+        "comment": "mapping.map_icons.df.neltharus.stairwell_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -735,7 +735,7 @@
         "map_icon_type_id": 49,
         "lat": -82.8111,
         "lng": 171.6617,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -748,7 +748,7 @@
         "map_icon_type_id": 49,
         "lat": -93.3121,
         "lng": 146.0349,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -761,7 +761,7 @@
         "map_icon_type_id": 49,
         "lat": -121.8771,
         "lng": 152.5096,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -774,7 +774,7 @@
         "map_icon_type_id": 49,
         "lat": -115.2391,
         "lng": 165.8399,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -787,7 +787,7 @@
         "map_icon_type_id": 49,
         "lat": -139.1002,
         "lng": 149.9769,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -800,7 +800,7 @@
         "map_icon_type_id": 49,
         "lat": -154.2845,
         "lng": 146.9257,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -813,7 +813,7 @@
         "map_icon_type_id": 6,
         "lat": -177.0161,
         "lng": 157.0924,
-        "comment": "Unlocks after defeating Chargath.",
+        "comment": "mapping.map_icons.df.neltharus.unlocks_after_chargath",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -826,7 +826,7 @@
         "map_icon_type_id": 45,
         "lat": -184.7968,
         "lng": 125.4953,
-        "comment": "Qaleshi Goulash: each party member gains 3 charges of an extra action button. When pressed, gain 65% movement speed for 50 seconds. Cancelled upon combat. Requires 25 Dragonflight Cooking to use.",
+        "comment": "mapping.map_icons.df.neltharus.qaleshi_goulash_detail",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -839,7 +839,7 @@
         "map_icon_type_id": 49,
         "lat": -170.9407,
         "lng": 118.6031,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -852,7 +852,7 @@
         "map_icon_type_id": 6,
         "lat": -130.6832,
         "lng": 135.5619,
-        "comment": "Stairwell Door",
+        "comment": "mapping.map_icons.df.neltharus.stairwell_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -865,7 +865,7 @@
         "map_icon_type_id": 49,
         "lat": -195.3505,
         "lng": 138.9925,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -891,7 +891,7 @@
         "map_icon_type_id": 49,
         "lat": -82.8111,
         "lng": 171.6617,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -904,7 +904,7 @@
         "map_icon_type_id": 49,
         "lat": -93.3121,
         "lng": 146.0349,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -917,7 +917,7 @@
         "map_icon_type_id": 49,
         "lat": -121.8771,
         "lng": 152.5096,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -930,7 +930,7 @@
         "map_icon_type_id": 49,
         "lat": -115.2391,
         "lng": 165.8399,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -943,7 +943,7 @@
         "map_icon_type_id": 49,
         "lat": -139.1002,
         "lng": 149.9769,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -956,7 +956,7 @@
         "map_icon_type_id": 49,
         "lat": -154.2845,
         "lng": 146.9257,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -969,7 +969,7 @@
         "map_icon_type_id": 6,
         "lat": -177.0161,
         "lng": 157.0924,
-        "comment": "Unlocks after defeating Chargath.",
+        "comment": "mapping.map_icons.df.neltharus.unlocks_after_chargath",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -982,7 +982,7 @@
         "map_icon_type_id": 45,
         "lat": -184.7968,
         "lng": 125.4953,
-        "comment": "Qaleshi Goulash: each party member gains 3 charges of an extra action button. When pressed, gain 65% movement speed for 50 seconds. Cancelled upon combat. Requires 25 Dragonflight Cooking to use.",
+        "comment": "mapping.map_icons.df.neltharus.qaleshi_goulash_detail",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -995,7 +995,7 @@
         "map_icon_type_id": 49,
         "lat": -170.9407,
         "lng": 118.6031,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1008,7 +1008,7 @@
         "map_icon_type_id": 6,
         "lat": -130.6832,
         "lng": 135.5619,
-        "comment": "Stairwell Door",
+        "comment": "mapping.map_icons.df.neltharus.stairwell_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1021,7 +1021,7 @@
         "map_icon_type_id": 49,
         "lat": -195.3505,
         "lng": 138.9925,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1047,7 +1047,7 @@
         "map_icon_type_id": 49,
         "lat": -82.8111,
         "lng": 171.6617,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1060,7 +1060,7 @@
         "map_icon_type_id": 49,
         "lat": -93.3121,
         "lng": 146.0349,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1073,7 +1073,7 @@
         "map_icon_type_id": 49,
         "lat": -121.8771,
         "lng": 152.5096,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1086,7 +1086,7 @@
         "map_icon_type_id": 49,
         "lat": -115.2391,
         "lng": 165.8399,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1099,7 +1099,7 @@
         "map_icon_type_id": 49,
         "lat": -139.1002,
         "lng": 149.9769,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1112,7 +1112,7 @@
         "map_icon_type_id": 49,
         "lat": -154.2845,
         "lng": 146.9257,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1125,7 +1125,7 @@
         "map_icon_type_id": 6,
         "lat": -177.0161,
         "lng": 157.0924,
-        "comment": "Unlocks after defeating Chargath.",
+        "comment": "mapping.map_icons.df.neltharus.unlocks_after_chargath",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1138,7 +1138,7 @@
         "map_icon_type_id": 45,
         "lat": -184.7968,
         "lng": 125.4953,
-        "comment": "Qaleshi Goulash: each party member gains 3 charges of an extra action button. When pressed, gain 65% movement speed for 50 seconds. Cancelled upon combat. Requires 25 Dragonflight Cooking to use.",
+        "comment": "mapping.map_icons.df.neltharus.qaleshi_goulash_detail",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1151,7 +1151,7 @@
         "map_icon_type_id": 49,
         "lat": -170.9407,
         "lng": 118.6031,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1164,7 +1164,7 @@
         "map_icon_type_id": 6,
         "lat": -130.6832,
         "lng": 135.5619,
-        "comment": "Stairwell Door",
+        "comment": "mapping.map_icons.df.neltharus.stairwell_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1177,7 +1177,7 @@
         "map_icon_type_id": 49,
         "lat": -195.3505,
         "lng": 138.9925,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1203,7 +1203,7 @@
         "map_icon_type_id": 49,
         "lat": -82.8111,
         "lng": 171.6617,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1216,7 +1216,7 @@
         "map_icon_type_id": 49,
         "lat": -93.3121,
         "lng": 146.0349,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1229,7 +1229,7 @@
         "map_icon_type_id": 49,
         "lat": -121.8771,
         "lng": 152.5096,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1242,7 +1242,7 @@
         "map_icon_type_id": 49,
         "lat": -115.2391,
         "lng": 165.8399,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1255,7 +1255,7 @@
         "map_icon_type_id": 49,
         "lat": -139.1002,
         "lng": 149.9769,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1268,7 +1268,7 @@
         "map_icon_type_id": 49,
         "lat": -154.2845,
         "lng": 146.9257,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1281,7 +1281,7 @@
         "map_icon_type_id": 6,
         "lat": -177.0161,
         "lng": 157.0924,
-        "comment": "Unlocks after defeating Chargath.",
+        "comment": "mapping.map_icons.df.neltharus.unlocks_after_chargath",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1294,7 +1294,7 @@
         "map_icon_type_id": 45,
         "lat": -184.7968,
         "lng": 125.4953,
-        "comment": "Qaleshi Goulash: each party member gains 3 charges of an extra action button. When pressed, gain 65% movement speed for 50 seconds. Cancelled upon combat. Requires 25 Dragonflight Cooking to use.",
+        "comment": "mapping.map_icons.df.neltharus.qaleshi_goulash_detail",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1307,7 +1307,7 @@
         "map_icon_type_id": 49,
         "lat": -170.9407,
         "lng": 118.6031,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1320,7 +1320,7 @@
         "map_icon_type_id": 6,
         "lat": -130.6832,
         "lng": 135.5619,
-        "comment": "Stairwell Door",
+        "comment": "mapping.map_icons.df.neltharus.stairwell_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1333,7 +1333,7 @@
         "map_icon_type_id": 49,
         "lat": -195.3505,
         "lng": 138.9925,
-        "comment": "Burning Chain",
+        "comment": "mapping.map_icons.df.neltharus.burning_chain",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

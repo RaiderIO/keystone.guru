@@ -56,11 +56,11 @@ $member ??= false;
                                 <i class="fas fa-user-plus"></i> {{ __('view_team.invite.accept_invitation') }}
                             </a>
                         @else
-                            <button class="btn btn-primary col-lg-auto" data-toggle="modal" data-target="#login_modal">
+                            <button class="btn btn-primary col-lg-auto" data-bs-toggle="modal" data-bs-target="#login_modal">
                                 {{ __('view_team.invite.login') }}
                             </button>
-                            <button class="btn btn-primary col-lg-auto" data-toggle="modal"
-                                    data-target="#register_modal">
+                            <button class="btn btn-primary col-lg-auto" data-bs-toggle="modal"
+                                    data-bs-target="#register_modal">
                                 {{ __('view_team.invite.register') }}
                             </button>
                         @endauth

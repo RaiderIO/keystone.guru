@@ -46,7 +46,7 @@
         "map_icon_type_id": 6,
         "lat": -189.3447,
         "lng": 138.0911,
-        "comment": "Shadowforge Gate: Requires Shadowforge Key.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.shadowforge_gate",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 9,
         "lat": -204.1441,
         "lng": 136.8941,
-        "comment": "Abandoned Mole Machine: Entrance.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.mole_machine_entrance",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 6,
         "lat": -169.6485,
         "lng": 146.3613,
-        "comment": "Shadowforge Gate: Requires Shadowforge Key.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.shadowforge_gate",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 3,
         "lat": -213.2813,
         "lng": 159,
-        "comment": "Supply Room Door",
+        "comment": "mapping.map_icons.classic.blackrock_depths.supply_room_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -111,7 +111,7 @@
         "map_icon_type_id": 2,
         "lat": -184.375,
         "lng": 154.375,
-        "comment": "Enemies may be one of Anvilrage Overseer or Anvilrage Warden.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.anvilrage_overseer_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -124,7 +124,7 @@
         "map_icon_type_id": 2,
         "lat": -221.9063,
         "lng": 167.0625,
-        "comment": "Enemies may be one of Anvilrage Guardsman, Anvilrage Warden or Twilight's Hammer Torturer.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.anvilrage_guardsman_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -137,7 +137,7 @@
         "map_icon_type_id": 6,
         "lat": -246.6563,
         "lng": 165.8125,
-        "comment": "Cell Door: Requires Prison Cell Key.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.cell_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -150,7 +150,7 @@
         "map_icon_type_id": 6,
         "lat": -210.7813,
         "lng": 198.625,
-        "comment": "Cell Door: Requires Prison Cell Key.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.cell_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -163,7 +163,7 @@
         "map_icon_type_id": 6,
         "lat": -221.6875,
         "lng": 193.5,
-        "comment": "Cell Door: Requires Prison Cell Key.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.cell_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -176,7 +176,7 @@
         "map_icon_type_id": 6,
         "lat": -236.9063,
         "lng": 202.4375,
-        "comment": "Cell Door: Requires Prison Cell Key.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.cell_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -189,7 +189,7 @@
         "map_icon_type_id": 6,
         "lat": -171.9375,
         "lng": 208.3125,
-        "comment": "Cell Door: Requires Prison Cell Key.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.cell_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -202,7 +202,7 @@
         "map_icon_type_id": 6,
         "lat": -173.5313,
         "lng": 219.2813,
-        "comment": "Cell Door: Requires Prison Cell Key.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.cell_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -215,7 +215,7 @@
         "map_icon_type_id": 6,
         "lat": -152.0313,
         "lng": 186.375,
-        "comment": "Cell Door: Requires Prison Cell Key.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.cell_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -228,7 +228,7 @@
         "map_icon_type_id": 6,
         "lat": -163.3125,
         "lng": 181.4688,
-        "comment": "Cell Door: Requires Prison Cell Key.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.cell_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -241,7 +241,7 @@
         "map_icon_type_id": 2,
         "lat": -155.6563,
         "lng": 195.9063,
-        "comment": "The Ring of Law: three waves will spawn. Two waves of the same enemies. Then finally a boss.",
+        "comment": "mapping.map_icons.classic.blackrock_depths.ring_of_law",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -254,7 +254,7 @@
         "map_icon_type_id": 49,
         "lat": -79.3438,
         "lng": 217.3125,
-        "comment": "The Black Anvil",
+        "comment": "mapping.map_icons.classic.blackrock_depths.the_black_anvil",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

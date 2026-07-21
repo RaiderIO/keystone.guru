@@ -124,8 +124,8 @@ $seasonSelect = collect($seasons)->pluck('name_long', 'id')->mapWithKeys(static 
                                 <button class="btn btn-sm w-100 new_route_style_create_create"
                                         data-dungeon-id="{{ $dungeon->id }}"
                                         data-affix-group-id="{{ $affixGroup->id }}"
-                                        data-toggle="modal"
-                                        data-target="#create_route_modal"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#create_route_modal"
                                         style="display: {{ $newRouteStyle === 'create' ? 'block' : 'none' }}"
                                 >
                                     <i class="fa fa-plus text-info">

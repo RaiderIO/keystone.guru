@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
  */
 ?>
 <nav
-    class="route_sidebar route_manipulation_tools left row no-gutters map_fade_out {{ $isMobile ? 'mobile' : '' }}">
+    class="route_sidebar route_manipulation_tools left row g-0 map_fade_out {{ $isMobile ? 'mobile' : '' }}">
     <div class="bg-header">
         <div id="view_route_map_actions_container" class="mb-2">
             @include('common.maps.controls.elements.floorswitch', ['floors' => $floors])

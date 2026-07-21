@@ -8,9 +8,11 @@
         "claude_code",
         "phpstorm"
     ],
+    "guidelines": true,
     "skills": [
         "laravel-best-practices",
         "pennant-development",
+        "configuring-horizon",
         "phpstan-fixer"
     ]
 }

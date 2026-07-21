@@ -33,7 +33,7 @@
         "map_icon_type_id": 10,
         "lat": -168.5671,
         "lng": 295.2399,
-        "comment": null,
+        "comment": "mapping.map_icons.classic.maraudon.purple_entrance",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 10,
         "lat": -72.7379,
         "lng": 239.3257,
-        "comment": null,
+        "comment": "mapping.map_icons.classic.maraudon.orange_entrance",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 42,
         "lat": -113.3892,
         "lng": 205.8852,
-        "comment": "Spewed Larva will occasionally spawn here.",
+        "comment": "mapping.map_icons.classic.maraudon.spewed_larva_spawn",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

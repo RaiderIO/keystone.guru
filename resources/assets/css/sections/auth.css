@@ -1,0 +1,19 @@
+.btn-bnet {
+    background-color: #005c99;
+}
+
+.btn-bnet:hover {
+    background-color: #31b0d5;
+    border-color: #005c99;
+}
+
+.google_login_image {
+    width: 191px;
+    height: 46px;
+}
+
+@media (min-width: 900px) {
+    .register-modal-dialog .border-left.border-white {
+        border: hidden;
+    }
+}

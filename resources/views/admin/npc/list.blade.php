@@ -8,7 +8,7 @@
     {{ __('view_admin.npc.list.header') }}
 @endsection
 @section('header-addition')
-    <a href="{{ route('admin.npc.new') }}" class="btn btn-success text-white float-right" role="button">
+    <a href="{{ route('admin.npc.new') }}" class="btn btn-success text-white float-end" role="button">
         <i class="fas fa-plus"></i> {{ __('view_admin.npc.list.create_npc') }}
     </a>
 @endsection

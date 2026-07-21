@@ -23,6 +23,7 @@ the single most important trick; without it you'll fight escaping.
 
 ```bash
 gh issue create --repo RaiderIO/keystone.guru \
+  --type Task \
   --title "Short imperative title (follow-up to #NNNN)" \
   --body "$(cat <<'EOF'
 Body goes here. $with, `code`, and #3300 references are all safe inside <<'EOF'.
@@ -41,14 +42,39 @@ The command prints the new issue URL on success (e.g. `https://github.com/Raider
 - Do **not** try to cram a long body inline with `\n` or nested quotes — that's the path that
   wastes time. Use the heredoc.
 
-## Conventions for this project
+## Issue type (always set this)
+
+Always pass `--type` — the repo uses GitHub's native Issue Types. Pick one:
+
+- `--type Bug` — an unexpected problem or broken behaviour.
+- `--type Feature` — a request, idea, or new functionality.
+- `--type Task` — everything else: chores, tech-debt, refactors, follow-ups, ops. This is the
+  default when it's not clearly a bug or a feature.
+
+The native type **supersedes** the old `bug`/`enhancement` labels — set the type and do **not**
+also add those labels.
+
+## Labels
+
+Add labels with `--label "<name>"` (repeat the flag for several). Only use labels that already
+exist (`gh label list --repo RaiderIO/keystone.guru --limit 300`). Beyond the type above:
+
+- **`follow-up`** — add whenever the issue is a follow-up to another issue/PR (i.e. the title
+  carries `(follow-up to #NNNN)`).
+- **One topic label**, only when the subject is unambiguous — e.g. `maintenance`, `docs`, `mdt`,
+  `api`, `docker`, `map`, `site`, `security`, `localization`, `php`, `javascript`, `live sessions`,
+  `explore`, `discovery`, `compendium`, `route search`, `auto route creator`, `UX`. If it's not a
+  clear fit, add none rather than guessing.
+- **Do not** set the `in progress` label by hand — `sh/worktree.sh` adds it automatically when a
+  worktree for the issue is created and removes it on teardown (see the `worktree-docker` skill).
+
+## Other conventions for this project
 
 - **Reference related issues** with `#NNNN` in the body; GitHub auto-links them. If it's a
   follow-up, say so in the title: `(follow-up to #NNNN)`.
 - Commits/branches use the issue number prefixed with `#` (e.g. `#3300 Fix ...`, branch
   `3300-some-slug`). Mention the issue number when you later open a PR.
-- Optional flags when relevant: `--label "<label>"`, `--assignee "@me"`, `--milestone "<name>"`,
-  `--project "<name>"`. Only add labels that already exist (`gh label list --repo RaiderIO/keystone.guru`).
+- Other optional flags when relevant: `--assignee "@me"`, `--milestone "<name>"`, `--project "<name>"`.
 
 ## Recommended issue body structure
 
@@ -63,8 +89,43 @@ For a substantive task/follow-up, make it resumable cold. Include:
 7. **Definition of done** — tests green (call out any *known pre-existing* failures to ignore),
    `composer run analyse` + `composer run fix` clean, manual verification steps.
 
-## After creating
+## Editing an existing issue's body from a file
+
+If the body is long (e.g. a plan you already wrote to a scratch file), don't reach for
+`gh api ... -f body=@path`. Use:
+
+```bash
+gh issue edit 3374 --repo RaiderIO/keystone.guru --body-file /path/to/body.md
+```
+
+`gh issue edit`/`gh issue create --body-file` read the file's actual contents — no `@` prefix
+needed there.
+
+### Gotcha: `gh api -f` vs `-F` (this bit us — issues #3374, #2460, #1431, #1453, #128 all
+shipped with a body that was the *literal string* `@/tmp/.../file.md` instead of that file's
+contents)
+
+If you do use `gh api` directly to PATCH an issue body:
+
+- `-f body=@/path/to/file` — lowercase `-f` is a **string** field. The `@`-prefixed value is
+  sent verbatim as the literal text `@/path/to/file`, it does **not** read the file. This is the
+  mistake that happened.
+- `-F body=@/path/to/file` — capital `-F` is a **typed** field; only this form dereferences
+  `@file` into the file's contents.
+
+Prefer `gh issue edit --body-file` over `gh api` for this reason — it has no `-f`/`-F` trap to
+get wrong.
+
+## After creating (or editing)
 
 - Relay the URL to the user.
 - New files in this repo should be staged (`git add`) per project rules — but the issue itself
   lives on GitHub, so there's nothing to commit unless you also wrote local files.
+- **Verify the body actually landed**: `gh issue view <n> --repo RaiderIO/keystone.guru --json body -q '.body[0:80]'`
+  and confirm it's prose, not a bare local path (`/tmp/...`, `@/...`) or anything else that would
+  only make sense on your own machine — the GitHub equivalent of telling someone "check out my
+  site at http://localhost:80". A scratch-file path in a body is *never* correct; catch it before
+  the user does.
+- **Confirm the type and labels landed**:
+  `gh issue view <n> --repo RaiderIO/keystone.guru --json title,labels,issueType` — check the
+  `issueType` is set and the intended labels are present.

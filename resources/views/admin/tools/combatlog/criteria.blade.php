@@ -31,7 +31,7 @@
             @csrf
 
             @foreach($criteriaByVersion as $version => $versionCriteria)
-                <div class="form-group">
+                <div class="mb-3">
                     <h3 class="mt-4">{{ __('view_admin.tools.combatlog.criteria.version', ['version' => number_format(num: $version, thousands_separator: '.')]) }}</h3>
 
                     @foreach(array_keys(CombatLogParsingCriterion::VALID_CRITERIA) as $modelClass)
@@ -48,12 +48,12 @@
                                 @endphp
                                 <div class="d-flex align-items-center mb-2">
                                     @if($imageLink !== null)
-                                        <img src="{{ $imageLink }}" alt="{{ $label }}" style="height: 48px; width: auto; object-fit: cover;" class="mr-3 rounded flex-shrink-0">
+                                        <img src="{{ $imageLink }}" alt="{{ $label }}" style="height: 48px; width: auto; object-fit: cover;" class="me-3 rounded flex-shrink-0">
                                     @endif
                                     <div class="flex-grow-1">
                                         <div class="d-flex align-items-center justify-content-between mb-1">
                                             <span>{{ $label }}</span>
-                                            <div class="d-flex align-items-center ml-3" style="gap: 4px;">
+                                            <div class="d-flex align-items-center ms-3" style="gap: 4px;">
                                                 <small class="text-muted">{{ $criterion->count }} /</small>
                                                 <input
                                                     type="number"

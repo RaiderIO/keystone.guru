@@ -11,16 +11,16 @@ use App\Models\Floor\Floor;
 @section('content')
     <h2>{{ __('view_misc.mapping.enemy_forces_mapping_progress') }}</h2>
     <div class="row">
-        <div class="col-lg-2 font-weight-bold">
+        <div class="col-lg-2 fw-bold">
             {{ __('view_misc.mapping.dungeon') }}
         </div>
-        <div class="col-lg-4 font-weight-bold">
+        <div class="col-lg-4 fw-bold">
             {{ __('view_misc.mapping.enemy_forces_assigned') }}
         </div>
-        <div class="col-lg-4 font-weight-bold">
+        <div class="col-lg-4 fw-bold">
             {{ __('view_misc.mapping.npcs_assigned_to_enemies') }}
         </div>
-        <div class="col-lg-2 font-weight-bold">
+        <div class="col-lg-2 fw-bold">
             {{ __('view_misc.mapping.teeming') }}
         </div>
     </div>
@@ -38,7 +38,7 @@ use App\Models\Floor\Floor;
                     <div class="progress-bar" style="width: {{ $percent }}%;" role="progressbar"
                          aria-valuenow="{{ $percent }}" aria-valuemin="0"
                          aria-valuemax="100">
-                        <span class="text-left">
+                        <span class="text-start">
                         {{ __('view_misc.mapping.enemy_forces') . sprintf(' %s/%s %d%%', $curr, $total, $percent) }}
                         </span>
                     </div>
@@ -63,7 +63,7 @@ use App\Models\Floor\Floor;
                     <div class="progress-bar" style="width: {{ $percent }}%;" role="progressbar"
                          aria-valuenow="{{ $percent }}" aria-valuemin="0"
                          aria-valuemax="100">
-                        <span class="text-left">
+                        <span class="text-start">
                         {{ __('view_misc.mapping.npcs_assigned') . sprintf(' %s/%s %d%%', $curr, $total, $percent) }}
                         </span>
                     </div>

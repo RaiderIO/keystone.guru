@@ -12,7 +12,8 @@ return [
         'message' => '',
     ],
     'json_string_count_rule' => [
-        'message' => '',
+        'message_min' => '',
+        'message_max' => '',
     ],
     'map_icon_type_role_check_rule' => [
         'message' => '',

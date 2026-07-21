@@ -7,7 +7,7 @@
         "map_icon_type_id": 10,
         "lat": -82.75,
         "lng": 226.5,
-        "comment": null,
+        "comment": "mapping.map_icons.wotlk.gundrak.den_of_sseratus",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -20,7 +20,7 @@
         "map_icon_type_id": 2,
         "lat": -166.8353,
         "lng": 169.9691,
-        "comment": "Mobs go into boss once damaged",
+        "comment": "mapping.map_icons.wotlk.gundrak.mobs_merge_with_boss",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 10,
         "lat": -82.25,
         "lng": 132.75,
-        "comment": null,
+        "comment": "mapping.map_icons.wotlk.gundrak.cave_of_mamtoth_entrance",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

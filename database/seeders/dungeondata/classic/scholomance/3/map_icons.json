@@ -7,7 +7,7 @@
         "map_icon_type_id": 44,
         "lat": -37.4193,
         "lng": 215.7528,
-        "comment": "Tailoring pattern: Felcloth Bag.",
+        "comment": "mapping.map_icons.classic.scholomance.tailoring_felcloth_bag",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

@@ -1,8 +1,6 @@
 <?php
-use App\Models\Release;
-
 /**
- * @var Release $latestRelease
+ * @var string $codeVersion
  */
 ?>
     <!--suppress ALL -->
@@ -16,7 +14,7 @@ use App\Models\Release;
             // context: 'rollbar/test'
             client: {
                 javascript: {
-                    code_version: '{{ $latestRelease->version }}',
+                    code_version: '{{ $codeVersion }}',
                     // source_map_enabled: true,
                     // guess_uncaught_frames: true
                 }

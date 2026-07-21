@@ -81,6 +81,12 @@ return [
                     'end'   => 'Hodor',
                 ],
             ],
+            'arrow' => [
+                'tooltip' => [
+                    'start' => 'Hodor',
+                    'cont'  => 'Hodor',
+                ],
+            ],
         ],
     ],
     'edit' => [

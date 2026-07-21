@@ -19,17 +19,21 @@ return [
             'mdt_invalid_category'                => 'Hodor',
         ],
         'flash' => [
-            'message_banner_set_successfully'   => 'Hodor',
-            'thumbnail_regenerate_result'       => 'Hodor',
-            'combatlog_route_regenerate_result' => 'Hodor',
-            'caches_dropped_successfully'       => 'Hodor',
-            'releases_exported'                 => 'Hodor',
-            'exception'                         => 'Hodor',
-            'feature_toggle_activated'          => 'Hodor',
-            'feature_toggle_deactivated'        => 'Hodor',
-            'feature_forgotten'                 => 'Hodor',
-            'read_only_mode_disabled'           => 'Hodor',
-            'read_only_mode_enabled'            => 'Hodor',
+            'message_banner_set_successfully'        => 'Hodor',
+            'thumbnail_regenerate_result'            => 'Hodor',
+            'combatlog_route_regenerate_result'      => 'Hodor',
+            'combatlog_criteria_reset'               => 'Hodor',
+            'combatlog_criteria_thresholds_updated'  => 'Hodor',
+            'caches_dropped_successfully'            => 'Hodor',
+            'releases_exported'                      => 'Hodor',
+            'exception'                              => 'Hodor',
+            'feature_toggle_activated'               => 'Hodor',
+            'feature_toggle_deactivated'             => 'Hodor',
+            'feature_forgotten'                      => 'Hodor',
+            'mapping_version_upgrade_queued'         => 'Hodor',
+            'mapping_version_upgrade_already_latest' => 'Hodor',
+            'read_only_mode_disabled'                => 'Hodor',
+            'read_only_mode_enabled'                 => 'Hodor',
         ],
     ],
     'apidungeonroute' => [
@@ -46,6 +50,12 @@ return [
         'error' => [
             'unable_to_save_brushline'   => 'Hodor',
             'unable_to_delete_brushline' => 'Hodor',
+        ],
+    ],
+    'arrow' => [
+        'error' => [
+            'unable_to_save_arrow'   => 'Hodor',
+            'unable_to_delete_arrow' => 'Hodor',
         ],
     ],
     'dungeon' => [
@@ -176,6 +186,13 @@ return [
             'account_deleted_successfully'     => 'Hodor',
             'error_deleting_account'           => 'Hodor',
         ],
+        'error' => [
+            'add_ad_free_giveaway_limit_reached'        => 'Hodor',
+            'add_ad_free_giveaway_already_ad_free'      => 'Hodor',
+            'add_ad_free_giveaway_already_has_giveaway' => 'Hodor',
+            'remove_ad_free_giveaway_not_found'         => 'Hodor',
+            'remove_ad_free_giveaway_not_yours'         => 'Hodor',
+        ],
     ],
     'spell' => [
         'error' => [
@@ -207,6 +224,16 @@ return [
             'user_is_not_a_patron'              => 'Hodor',
             'all_benefits_granted_successfully' => 'Hodor',
             'error_granting_all_benefits'       => 'Hodor',
+        ],
+    ],
+
+    'admin' => [
+        'dungeonroute' => [
+            'flash' => [
+                'updated' => 'Hodor',
+                'deleted' => 'Hodor',
+                'claimed' => 'Hodor',
+            ],
         ],
     ],
 

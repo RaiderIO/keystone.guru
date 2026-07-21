@@ -19,17 +19,21 @@ return [
             'mdt_invalid_category'                => 'Неверная категория',
         ],
         'flash' => [
-            'message_banner_set_successfully'   => 'Сообщение-баннер успешно установлено',
-            'thumbnail_regenerate_result'       => 'Запущено :success задач для маршрутов :total. :failed не удалось.',
-            'combatlog_route_regenerate_result' => '',
-            'caches_dropped_successfully'       => 'Кеш сброшен успешно',
-            'releases_exported'                 => 'Релизы экспортированы',
-            'exception'                         => 'Исключение вызвано в панели администратора',
-            'feature_toggle_activated'          => 'Функция :feature теперь активирована',
-            'feature_toggle_deactivated'        => 'Функция :feature теперь деактивирована',
-            'feature_forgotten'                 => 'Функция :feature успешно забыта',
-            'read_only_mode_disabled'           => 'Режим только для чтения отключен',
-            'read_only_mode_enabled'            => 'Режим только для чтения включен',
+            'message_banner_set_successfully'        => 'Сообщение-баннер успешно установлено',
+            'thumbnail_regenerate_result'            => 'Запущено :success задач для маршрутов :total. :failed не удалось.',
+            'combatlog_route_regenerate_result'      => '',
+            'combatlog_criteria_reset'               => '',
+            'combatlog_criteria_thresholds_updated'  => '',
+            'caches_dropped_successfully'            => 'Кеш сброшен успешно',
+            'releases_exported'                      => 'Релизы экспортированы',
+            'exception'                              => 'Исключение вызвано в панели администратора',
+            'feature_toggle_activated'               => 'Функция :feature теперь активирована',
+            'feature_toggle_deactivated'             => 'Функция :feature теперь деактивирована',
+            'feature_forgotten'                      => 'Функция :feature успешно забыта',
+            'mapping_version_upgrade_queued'         => '',
+            'mapping_version_upgrade_already_latest' => '',
+            'read_only_mode_disabled'                => 'Режим только для чтения отключен',
+            'read_only_mode_enabled'                 => 'Режим только для чтения включен',
         ],
     ],
     'apidungeonroute' => [
@@ -46,6 +50,12 @@ return [
         'error' => [
             'unable_to_save_brushline'   => 'Невозможно сохранить линию',
             'unable_to_delete_brushline' => 'Невозможно удалить линию',
+        ],
+    ],
+    'arrow' => [
+        'error' => [
+            'unable_to_save_arrow'   => '',
+            'unable_to_delete_arrow' => '',
         ],
     ],
     'dungeon' => [
@@ -176,6 +186,13 @@ return [
             'account_deleted_successfully'     => 'Аккаунт успешно удален.',
             'error_deleting_account'           => 'Произошла ошибка. Пожалуйста, попробуйте еще раз.',
         ],
+        'error' => [
+            'add_ad_free_giveaway_limit_reached'        => '',
+            'add_ad_free_giveaway_already_ad_free'      => '',
+            'add_ad_free_giveaway_already_has_giveaway' => '',
+            'remove_ad_free_giveaway_not_found'         => '',
+            'remove_ad_free_giveaway_not_yours'         => '',
+        ],
     ],
     'spell' => [
         'error' => [
@@ -207,6 +224,16 @@ return [
             'user_is_not_a_patron'              => 'Этот пользователь не подписчик Patron',
             'all_benefits_granted_successfully' => 'Все преимущества успешно предоставлены.',
             'error_granting_all_benefits'       => 'Произошла ошибка при попытке предоставить все преимущества.',
+        ],
+    ],
+
+    'admin' => [
+        'dungeonroute' => [
+            'flash' => [
+                'updated' => '',
+                'deleted' => '',
+                'claimed' => '',
+            ],
         ],
     ],
 

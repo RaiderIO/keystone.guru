@@ -12,7 +12,8 @@ return [
         'message' => 'Devi selezionare una fazione per questo dungeon.',
     ],
     'json_string_count_rule' => [
-        'message' => 'La stringa JSON deve avere almeno :count elementi.',
+        'message_min' => '',
+        'message_max' => '',
     ],
     'map_icon_type_role_check_rule' => [
         'message' => 'Quel tipo di icona mappa non è disponibile per il tuo livello di accesso.',

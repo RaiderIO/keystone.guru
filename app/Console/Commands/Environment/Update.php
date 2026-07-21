@@ -80,15 +80,6 @@ class Update extends Command
             '--force'    => true,
         ]);
 
-        // After seed, create a release if necessary
-        if ($appType === 'production') {
-            $this->call('make:githubrelease');
-            // With the release created, pull the latest tag
-            $this->shell([
-                'git pull',
-            ]);
-        }
-
         // User permissions are funky for local environments - tell git to ignore them
         if ($appType === 'local') {
             $this->shell([

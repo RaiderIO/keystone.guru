@@ -81,6 +81,12 @@ return [
                     'end'   => 'Continue clicando/arrastando, quando terminar, pressione o botão \'Concluir\' na barra de ferramentas para completar sua linha.',
                 ],
             ],
+            'arrow' => [
+                'tooltip' => [
+                    'start' => '',
+                    'cont'  => '',
+                ],
+            ],
         ],
     ],
     'edit' => [

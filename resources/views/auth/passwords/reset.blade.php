@@ -7,7 +7,7 @@
 
         <input type="hidden" name="token" value="{{ $token }}">
 
-        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+        <div class="mb-3{{ $errors->has('email') ? ' has-error' : '' }}">
             <label for="email"
                    class="col-md-4 control-label">{{ __('view_auth.passwords.reset.email_address') }}</label>
 
@@ -23,7 +23,7 @@
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+        <div class="mb-3{{ $errors->has('password') ? ' has-error' : '' }}">
             <label for="password" class="col-md-4 control-label">{{ __('view_auth.passwords.reset.password') }}</label>
 
             <div class="col-md-6">
@@ -37,7 +37,7 @@
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
+        <div class="mb-3{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
             <label for="password-confirm"
                    class="col-md-4 control-label">{{ __('view_auth.passwords.reset.confirm_password') }}</label>
             <div class="col-md-6">
@@ -51,7 +51,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
             <div class="col-md-6 col-md-offset-4">
                 <button type="submit" class="btn btn-primary">
                     {{ __('view_auth.passwords.reset.reset_password') }}

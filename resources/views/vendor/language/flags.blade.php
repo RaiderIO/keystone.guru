@@ -13,10 +13,10 @@ $allLanguages       = collect($allLanguagesConfig)->keyBy('long');
 ?>
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button"
-       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         @include('vendor.language.flag', ['code' => $currentUserLocale, 'name' => $currentUserLocaleName])
     </a>
-    <div class="dropdown-menu text-center text-xl-left" aria-labelledby="languageDropdown">
+    <div class="dropdown-menu text-center text-xl-start" aria-labelledby="languageDropdown">
         @foreach (language()->allowed() as $code => $name)
             <a class="dropdown-item {{ $currentUserLocale === $code ? 'active' : '' }}"
                href="{{ language()->back($code) }}">

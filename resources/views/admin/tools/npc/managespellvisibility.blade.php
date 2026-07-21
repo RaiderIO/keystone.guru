@@ -57,7 +57,7 @@ use Illuminate\Support\Collection;
         'selected' => isset($dungeon) ? $dungeon?->id : null,
     ])
 
-    <div class="form-group">
+    <div class="mb-3">
         <button type="submit" class="btn btn-success">
             {{ __('view_admin.tools.npc.managespellvisibility.submit') }}
         </button>
@@ -68,7 +68,7 @@ use Illuminate\Support\Collection;
     {{ $npcs->links() }}
 
     @foreach($npcs as $npc)
-        <div class="form-group">
+        <div class="mb-3">
             <h4>
                 {{ __($npc->name) }} ({{ __($npc->id) }})
             </h4>
@@ -95,7 +95,7 @@ use Illuminate\Support\Collection;
                     @else
                         <div class="col-auto">
                             <input type="checkbox"
-                                   class="form-control left_checkbox spell spell-{{ $npcSpell->spell_id }}"
+                                   class="form-check-input spell spell-{{ $npcSpell->spell_id }}"
                                    name="spell-{{ $npcSpell->spell_id }}"
                                    data-id="{{ $npcSpell->spell_id }}"
                                    value="{{ $npcSpell->spell_id }}" {{ $spell->hidden_on_map ? '' : 'checked' }}>

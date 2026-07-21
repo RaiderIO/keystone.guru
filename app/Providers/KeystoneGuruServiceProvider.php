@@ -2,28 +2,25 @@
 
 namespace App\Providers;
 
-use App\Http\View\Composers\AdminDungeonEditComposer;
 use App\Http\View\Composers\AdminDungeonMappingVersionsComposer;
 use App\Http\View\Composers\AdminMessageBannerComposer;
 use App\Http\View\Composers\AdminNpcHealthEditComposer;
 use App\Http\View\Composers\AdminSpellEditComposer;
 use App\Http\View\Composers\AffixesComposer;
 use App\Http\View\Composers\AppLayoutComposer;
-use App\Http\View\Composers\ChangelogFlagComposer;
 use App\Http\View\Composers\CompositionComposer;
 use App\Http\View\Composers\CreateRouteFormComposer;
 use App\Http\View\Composers\DiscoverAffixGroupComposer;
 use App\Http\View\Composers\DiscoverSearchComposer;
 use App\Http\View\Composers\DungeonDifficultySelectComposer;
-use App\Http\View\Composers\DungeonGridDiscoverComposer;
 use App\Http\View\Composers\DungeonGridTabsComposer;
 use App\Http\View\Composers\DungeonSelectComposer;
+use App\Http\View\Composers\DungeonStartSelectComposer;
 use App\Http\View\Composers\EmbedComposer;
 use App\Http\View\Composers\GameVersionsNavComposer;
 use App\Http\View\Composers\GlobalComposer;
 use App\Http\View\Composers\HeaderComposer;
 use App\Http\View\Composers\HeatmapSearchComposer;
-use App\Http\View\Composers\HomeComposer;
 use App\Http\View\Composers\MapComposer;
 use App\Http\View\Composers\MappingVersionComposer;
 use App\Http\View\Composers\OAuthRegisterFormComposer;
@@ -31,7 +28,6 @@ use App\Http\View\Composers\ProfileEditComposer;
 use App\Http\View\Composers\ProfileNewRouteStyleComposer;
 use App\Http\View\Composers\PullsComposer;
 use App\Http\View\Composers\PullsWorkbenchComposer;
-use App\Http\View\Composers\ReleaseComposer;
 use App\Http\View\Composers\RollbarComposer;
 use App\Http\View\Composers\RouteAttributesComposer;
 use App\Http\View\Composers\RouteCoverageAffixGroupComposer;
@@ -48,6 +44,8 @@ use App\Service\AffixGroup\AffixGroupEaseTierService;
 use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
 use App\Service\AffixGroup\ArchonApiService;
 use App\Service\AffixGroup\ArchonApiServiceInterface;
+use App\Service\BannedIpAddress\BannedIpAddressService;
+use App\Service\BannedIpAddress\BannedIpAddressServiceInterface;
 use App\Service\Cache\CacheService;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\DevCacheService;
@@ -119,8 +117,12 @@ use App\Service\LiveSession\OverpulledEnemyService;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use App\Service\MapContext\MapContextService;
 use App\Service\MapContext\MapContextServiceInterface;
+use App\Service\Mapping\MappingExportService;
+use App\Service\Mapping\MappingExportServiceInterface;
 use App\Service\Mapping\MappingService;
 use App\Service\Mapping\MappingServiceInterface;
+use App\Service\MDT\MDTAddonVersionService;
+use App\Service\MDT\MDTAddonVersionServiceInterface;
 use App\Service\MDT\MDTExportStringService;
 use App\Service\MDT\MDTExportStringServiceInterface;
 use App\Service\MDT\MDTImportStringService;
@@ -146,8 +148,6 @@ use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\RaiderIO\RaiderIOKeystoneGuruApiService;
 use App\Service\ReadOnlyMode\ReadOnlyModeService;
 use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
-use App\Service\Reddit\RedditApiService;
-use App\Service\Reddit\RedditApiServiceInterface;
 use App\Service\Reverb\ReverbHttpApiService;
 use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use App\Service\Season\SeasonAffixGroupService;
@@ -189,7 +189,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
     {
         // External communication - no dependencies
         $this->app->bind(DiscordApiServiceInterface::class, DiscordApiService::class);
-        $this->app->bind(RedditApiServiceInterface::class, RedditApiService::class);
         $this->app->bind(ArchonApiServiceInterface::class, ArchonApiService::class);
         $this->app->bind(PatreonApiServiceInterface::class, PatreonApiService::class);
         $this->app->bind(WowToolsServiceInterface::class, WowToolsService::class);
@@ -198,7 +197,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(WowheadTranslationServiceInterface::class, WowheadTranslationService::class);
         if (
             app()->runningUnitTests()
-            || app()->environment('local')
+            || (app()->environment('local') && config('keystoneguru.raiderio.use_local_mock_service'))
         ) {
             $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOKeystoneGuruApiService::class);
         } else {
@@ -258,6 +257,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Depends on CacheService
         $this->app->bind(ReadOnlyModeServiceInterface::class, ReadOnlyModeService::class);
+        $this->app->bind(BannedIpAddressServiceInterface::class, BannedIpAddressService::class);
 
         // Depends on CacheService, CoordinatesService
         $this->app->bind(MDTMappingVersionServiceInterface::class, MDTMappingVersionService::class);
@@ -275,6 +275,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Depends on SeasonService, TimewalkingEventService
         $this->app->bind(SeasonAffixGroupServiceInterface::class, SeasonAffixGroupService::class);
         $this->app->bind(MappingServiceInterface::class, MappingService::class);
+        $this->app->bind(MappingExportServiceInterface::class, MappingExportService::class);
         $this->app->bind(CoverageServiceInterface::class, CoverageService::class);
 
         // Depends on SeasonService
@@ -287,6 +288,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(TimewalkingEventServiceInterface::class, TimewalkingEventService::class);
         $this->app->bind(MDTImportStringServiceInterface::class, MDTImportStringService::class);
         $this->app->bind(MDTExportStringServiceInterface::class, MDTExportStringService::class);
+        $this->app->bind(MDTAddonVersionServiceInterface::class, MDTAddonVersionService::class);
 
         // Depends on CombatLogService, SeasonService, CoordinatesService
         $this->app->bind(CombatLogRouteDungeonRouteServiceInterface::class, CombatLogRouteDungeonRouteService::class);
@@ -332,9 +334,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // lazily resolved from the granular cached getters instead of one eager multi-MB blob.
         view()->composer('*', GlobalComposer::class);
 
-        // Home page
-        view()->composer('home', HomeComposer::class);
-
         // Main view
         view()->composer([
             'layouts.app',
@@ -343,11 +342,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         ], AppLayoutComposer::class);
 
         view()->composer('common.maps.map', MapComposer::class);
-
-        view()->composer([
-            'layouts.app',
-            'common.layout.footer',
-        ], ChangelogFlagComposer::class);
 
         view()->composer('common.layout.nav.gameversions', GameVersionsNavComposer::class);
 
@@ -372,6 +366,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         view()->composer('common.dungeonroute.create.dungeondifficultyselect', DungeonDifficultySelectComposer::class);
 
+        view()->composer('common.dungeonroute.create.dungeonstartselect', DungeonStartSelectComposer::class);
+
         view()->composer([
             'common.forms.oauth',
             'common.forms.register',
@@ -382,9 +378,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             'common.forms.createroutetemporary',
         ], CreateRouteFormComposer::class);
 
-        // Displaying a release
-        view()->composer('common.release.release', ReleaseComposer::class);
-
         // Displaying affixes
         view()->composer('common.group.affixes', AffixesComposer::class);
 
@@ -393,8 +386,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Dungeon grid display
         view()->composer('common.dungeon.gridtabs', DungeonGridTabsComposer::class);
-
-        view()->composer('common.dungeon.griddiscover', DungeonGridDiscoverComposer::class);
 
         // Dungeon selector
         view()->composer('common.dungeon.select', DungeonSelectComposer::class);
@@ -419,8 +410,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer('common.maps.controls.pullsworkbench', PullsWorkbenchComposer::class);
 
         // Admin
-        view()->composer('admin.dungeon.edit', AdminDungeonEditComposer::class);
-
         view()->composer('admin.dungeon.mappingversions', AdminDungeonMappingVersionsComposer::class);
 
         view()->composer('admin.npchealth.edit', AdminNpcHealthEditComposer::class);

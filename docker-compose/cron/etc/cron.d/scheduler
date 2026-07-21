@@ -7,5 +7,7 @@
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
+# The scheduler runs as ksg (the host-UID user from the base image, #3414) so everything it
+# writes into the bind mount (storage/logs, cache) stays host-owned instead of root-owned.
 # m h dom mon dow  user  command
-  * * *   *   *    root  /usr/local/bin/php /var/www/artisan schedule:run >> /var/log/cron.log 2>&1
+  * * *   *   *    ksg   /usr/local/bin/php /var/www/artisan schedule:run >> /var/log/cron.log 2>&1

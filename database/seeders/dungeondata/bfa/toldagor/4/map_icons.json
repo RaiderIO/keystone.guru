@@ -7,7 +7,7 @@
         "map_icon_type_id": 2,
         "lat": -84.7578,
         "lng": 140,
-        "comment": "Keystone Guru: There's a third holding cell here, the map is incorrect.",
+        "comment": "mapping.map_icons.bfa.tol_dagor.map_third_holding_cell",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

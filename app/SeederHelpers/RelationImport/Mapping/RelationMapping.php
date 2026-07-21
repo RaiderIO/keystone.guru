@@ -57,6 +57,7 @@ abstract class RelationMapping
      */
     protected function setConditionals(Collection $conditionals): self
     {
+        /** @var Collection<int, ConditionalInterface> $conditionals */
         $this->conditionals = $conditionals;
 
         return $this;
@@ -76,6 +77,7 @@ abstract class RelationMapping
      */
     public function setAttributeParsers(Collection $attributeParsers): RelationMapping
     {
+        /** @var Collection<int, AttributeParserInterface> $attributeParsers */
         $this->attributeParsers = $attributeParsers;
 
         return $this;
@@ -96,6 +98,7 @@ abstract class RelationMapping
      */
     protected function setPreSaveRelationParsers(Collection $preSaveRelationParsers): self
     {
+        /** @var Collection<int, RelationParserInterface> $preSaveRelationParsers */
         $this->preSaveRelationParsers = $preSaveRelationParsers;
 
         return $this;
@@ -116,6 +119,7 @@ abstract class RelationMapping
      */
     protected function setPostSaveRelationParsers(Collection $postSaveRelationParsers): self
     {
+        /** @var Collection<int, RelationParserInterface> $postSaveRelationParsers */
         $this->postSaveRelationParsers = $postSaveRelationParsers;
 
         return $this;

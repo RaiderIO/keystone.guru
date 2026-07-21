@@ -27,29 +27,26 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
             background-image: url({{ $dungeon->getImageUrl() }}); background-size: cover;
         @endif
         ">
-    <div class="row no-gutters py-2 flex-nowrap overflow-hidden">
+    <div class="row g-0 py-2 flex-nowrap overflow-hidden">
         @include('common.embed.header.compact.logo')
 
+        <?php // Not nested .rows: in BS5 a .row that is itself a row child gets width: 100% and breaks the header ?>
         @if($embedOptions['show']['enemyForces'])
-            <div class="row no-gutters align-items-center" style="height: 36px;">
-                <div class="col-auto px-1">
-                        <?php
-                        // This is normally in the pulls sidebar - but for embedding it's in the header - see pulls.blade.php
-                        ?>
-                    <div id="edit_route_enemy_forces_container"></div>
-                </div>
+            <div class="col-auto px-1 d-flex align-items-center" style="height: 36px;">
+                    <?php
+                    // This is normally in the pulls sidebar - but for embedding it's in the header - see pulls.blade.php
+                    ?>
+                <div id="edit_route_enemy_forces_container"></div>
             </div>
         @endif
         @if($embedOptions['show']['affixes'])
-            <div class="row no-gutters align-items-center" style="height: 36px;">
-                <div class="col-md-auto px-1 d-md-flex d-none">
-                        <?php
-                        $mostRelevantAffixGroup = $dungeonRoute->getMostRelevantAffixGroup();
-                        ?>
-                    @if($mostRelevantAffixGroup !== null)
-                        @include('common.affixgroup.affixgroup', ['affixgroup' => $mostRelevantAffixGroup, 'showText' => false, 'class' => 'w-100', 'isFirst' => true])
-                    @endif
-                </div>
+            <div class="col-md-auto px-1 d-md-flex d-none align-items-center" style="height: 36px;">
+                    <?php
+                    $mostRelevantAffixGroup = $dungeonRoute->getMostRelevantAffixGroup();
+                    ?>
+                @if($mostRelevantAffixGroup !== null)
+                    @include('common.affixgroup.affixgroup', ['affixgroup' => $mostRelevantAffixGroup, 'showText' => false, 'class' => 'w-100', 'isFirst' => true])
+                @endif
             </div>
         @endif
         <?php // Fills up any remaining space space ?>
@@ -63,7 +60,7 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
             @endif
         </div>
 
-        <div class="col-auto px-1 ml-auto">
+        <div class="col-auto px-1 ms-auto">
             <a class="btn btn btn-primary h-100 text-nowrap"
                href="{{ $viewRouteUrl }}"
                target="_blank">
@@ -72,7 +69,7 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
         </div>
         @if($embedOptions['show']['presenterButton'])
             <div class="col-auto px-1">
-                <a class="btn btn btn-warning float-right h-100 text-white text-nowrap"
+                <a class="btn btn btn-warning float-end h-100 text-white text-nowrap"
                    href="{{ $presentRouteUrl }}"
                    target="_blank">
                     <i class="fas fa-video"></i> {{ __('view_dungeonroute.embed.present_route') }}
@@ -80,7 +77,7 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
             </div>
         @endif
         @if($dungeon->mdt_supported)
-            <div class="col-auto pl-1">
+            <div class="col-auto ps-1">
                 <div id="embed_copy_mdt_string" class="btn btn btn-primary h-100 text-nowrap">
                     <i class="fas fa-file-export"></i> {{ __('view_dungeonroute.embed.copy_mdt_string') }}
                 </div>

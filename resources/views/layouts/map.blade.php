@@ -16,7 +16,7 @@ $rootClass ??= '';
 $title         ??= null;
 $cookieConsent ??= true;
 ?>
-@extends('layouts.app', ['showSpotlight' => false, 'showAds' => $showAds, 'title' => $title, 'cookieConsent' => $cookieConsent])
+@extends('layouts.app', ['showAds' => $showAds, 'title' => $title, 'cookieConsent' => $cookieConsent])
 
 @section('app-content')
 

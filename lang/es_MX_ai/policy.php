@@ -10,6 +10,8 @@ return [
     'add_kill_zone_limit_reached'             => 'No se pueden agregar más de :limit pulls a una sola ruta.',
     'add_brushline_limit_reached'             => 'No se pueden agregar más de :limit líneas dibujadas a mano a una sola ruta.',
     'add_path_limit_reached'                  => 'No se pueden agregar más de :limit caminos a una sola ruta.',
+    'add_arrow_limit_reached'                 => '',
     'add_map_icon_limit_reached'              => 'No se pueden agregar más de :limit iconos de mapa a una sola ruta.',
+    'schedule_publish_route_not_in_team'      => '',
 
 ];

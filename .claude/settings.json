@@ -1,5 +1,9 @@
 {
   "enabledPlugins": {
     "sentry@claude-plugins-official": true
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "input=$(cat); dir=$(printf '%s' \"$input\" | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d.get(\"workspace\",{}).get(\"project_dir\") or d.get(\"cwd\",\"\"))'); printf '%s' \"$input\" | bash \"$dir/.claude/statusline/statusline.sh\""
   }
 }

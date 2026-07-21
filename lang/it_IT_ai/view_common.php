@@ -132,6 +132,9 @@ return [
             'show_aggressiveness_border_title'              => 'Abilitando questa impostazione verranno visualizzati tutti i nemici con un bordo per indicare la loro aggressività. Rosso per nemici aggressivi, giallo per nemici neutrali, verde per nemici amichevoli ecc.',
             'highlight_dangerous_enemies'                   => 'Evidenzia nemici pericolosi',
             'highlight_dangerous_enemies_title'             => 'I nemici pericolosi sono contrassegnati con un bordo interno arancione tratteggiato. Questi nemici sono scelti manualmente da Keystone.guru. Sono mini-boss, quelli con alta salute rispetto agli altri, usano abilità pericolose o richiedono particolare attenzione.',
+            'kill_zone_path'                                => '',
+            'kill_zone_path_weight'                         => '',
+            'kill_zone_path_weight_title'                   => '',
             'drawing'                                       => 'Disegno',
             'default_line_weight'                           => 'Peso linea predefinito',
             'default_line_weight_title'                     => 'Questo controlla il peso (larghezza) predefinito di qualsiasi linea creata sulla mappa, come percorsi e linee disegnate liberamente.',
@@ -251,27 +254,33 @@ return [
             'heatmaps'                => 'Mappe di calore',
             'explore'                 => 'Esplora spedizioni',
             'new'                     => 'NUOVO',
+            'compendium'              => '',
+            'npc_compendium'          => '',
+            'spell_compendium'        => '',
+            'compendium_activity'     => '',
+            'class_compendium'        => '',
         ],
         'nav' => [
             'user' => [
-                'login'             => 'Accedi',
-                'register'          => 'Registrati',
-                'telescope'         => 'Telescopio',
-                'tools'             => 'Strumenti',
-                'view_releases'     => 'Visualizza versioni',
-                'view_expansions'   => 'Visualizza espansioni',
-                'view_dungeons'     => 'Visualizza spedizioni',
-                'view_npcs'         => 'Visualizza PNG',
-                'view_spells'       => 'Visualizza incantesimi',
-                'view_users'        => 'Visualizza utenti',
-                'view_user_reports' => 'Visualizza segnalazioni utenti',
-                'my_routes'         => 'I miei percorsi',
-                'my_favorites'      => 'I miei preferiti',
-                'my_tags'           => 'I miei tag',
-                'my_teams'          => 'I miei team',
-                'my_profile'        => 'Il mio profilo pubblico',
-                'account_settings'  => 'Impostazioni account',
-                'logout'            => 'Esci',
+                'login'              => 'Accedi',
+                'register'           => 'Registrati',
+                'telescope'          => 'Telescopio',
+                'tools'              => 'Strumenti',
+                'view_releases'      => 'Visualizza versioni',
+                'view_expansions'    => 'Visualizza espansioni',
+                'view_dungeons'      => 'Visualizza spedizioni',
+                'view_npcs'          => 'Visualizza PNG',
+                'view_spells'        => 'Visualizza incantesimi',
+                'view_users'         => 'Visualizza utenti',
+                'view_dungeonroutes' => '',
+                'view_user_reports'  => 'Visualizza segnalazioni utenti',
+                'my_routes'          => 'I miei percorsi',
+                'my_favorites'       => 'I miei preferiti',
+                'my_tags'            => 'I miei tag',
+                'my_teams'           => 'I miei team',
+                'my_profile'         => 'Il mio profilo pubblico',
+                'account_settings'   => 'Impostazioni account',
+                'logout'             => 'Esci',
             ],
             'uploadlogs' => [
                 'upload_logs' => 'Carica registri per migliorare Keystone.guru',
@@ -321,6 +330,10 @@ return [
                 'labeltoggle' => [
                     'hide_labels' => 'Nascondi',
                 ],
+                'facadetoggle' => [
+                    'facade'       => '',
+                    'split_floors' => '',
+                ],
                 'mdtclones' => [
                     'mdt'        => 'Mostra MDT',
                     'auto_solve' => 'Risolvi automaticamente',
@@ -331,20 +344,17 @@ return [
                     'your_rating'              => 'La tua valutazione',
                 ],
             ],
-            'enemyinfo' => [
-                'enemy_info'      => 'Info nemico',
-                'report_an_issue' => 'Segnala un problema',
-            ],
             'heatmapsearch' => [
                 'settings_title'         => 'Impostazioni mappa',
                 'enabled'                => 'Abilitato',
                 'disabled'               => 'Disabilitato',
                 'event_type'             => 'Tipo di evento',
                 'data_type'              => 'Tipo di dati',
+                'data_type_title'        => 'La posizione dei nemici utilizza la posizione originale del nemico che è stato ingaggiato (supportato da Auto-Route Creator), la posizione del giocatore utilizza la posizione del giocatore quando un nemico è stato ingaggiato (posizione del log di combattimento).',
+                'player_spells'          => '',
                 'npc_death_alt'          => 'Morte nemico',
                 'player_death_alt'       => 'Morte giocatore',
-                'bloodlust_alt'          => 'Brama di sangue',
-                'data_type_title'        => 'La posizione dei nemici utilizza la posizione originale del nemico che è stato ingaggiato (supportato da Auto-Route Creator), la posizione del giocatore utilizza la posizione del giocatore quando un nemico è stato ingaggiato (posizione del log di combattimento).',
+                'spell_casts_alt'        => '',
                 'filter'                 => 'Filtro',
                 'key_level'              => 'Livello chiave',
                 'item_level'             => 'Livello oggetto',
@@ -383,6 +393,13 @@ return [
                     'gradient'    => 'Gradiente',
                     'pane'        => 'Riquadro',
                 ],
+            ],
+            'combatlogrouteenemyfailures' => [
+                'npc_filter'           => '',
+                'clear_failures'       => '',
+                'clear_failures_title' => '',
+                'matching_routes'      => '',
+                'no_matching_routes'   => '',
             ],
             'header' => [
                 'toggle_navigation'              => 'Attiva/disattiva navigazione',
@@ -469,12 +486,20 @@ return [
         ],
     ],
     'modal' => [
+        'createroute' => [
+            'create_route'           => 'Crea rotta',
+            'create_temporary_route' => 'Crea rotta temporanea',
+            'import_from_mdt'        => 'Importa da MDT',
+        ],
         'dungeonroute' => [
             'removed' => [
                 'title'        => 'Rotta rimossa',
                 'description'  => 'La tua rotta è stata rimossa e non può più essere visualizzata/modificata. Questo può accadere se la tua rotta era temporanea ed è stata automaticamente pulita o se hai eliminato la rotta in una scheda del browser diversa.',
                 'back_to_home' => 'Torna alla home',
             ],
+        ],
+        'enemydetails' => [
+            'report_an_issue' => '',
         ],
         'userreport' => [
             'dungeonroute' => [
@@ -493,11 +518,6 @@ return [
                 'contact_by_email_guest' => 'Contattami via e-mail se necessario per ulteriori indagini (aggiungi il tuo indirizzo e-mail nel corpo del report)',
                 'submit'                 => 'Invia',
             ],
-        ],
-        'createroute' => [
-            'create_route'           => 'Crea rotta',
-            'create_temporary_route' => 'Crea rotta temporanea',
-            'import_from_mdt'        => 'Importa da MDT',
         ],
         'legal' => [
             'welcome_back_agree' => 'Bentornato! Per procedere, devi accettare il nostro %s, %s e %s.',
@@ -618,6 +638,14 @@ return [
             'title' => 'Carica log',
         ],
     ],
+    'npc' => [
+        'link' => [
+            'boss' => '',
+        ],
+        'select' => [
+            'npc' => '',
+        ],
+    ],
     'release' => [
         'release' => [
             'new' => 'NUOVO',
@@ -639,14 +667,15 @@ return [
     ],
     'team' => [
         'details' => [
-            'name'            => 'Nome',
-            'description'     => 'Descrizione',
-            'logo'            => 'Logo',
-            'current_logo'    => 'Logo attuale',
-            'team_logo_title' => 'Logo della squadra',
-            'save'            => 'Salva',
-            'submit'          => 'Invia',
-            'disband_team'    => 'Sciogli squadra',
+            'name'                     => 'Nome',
+            'description'              => 'Descrizione',
+            'logo'                     => 'Logo',
+            'current_logo'             => 'Logo attuale',
+            'team_logo_title'          => 'Logo della squadra',
+            'save'                     => 'Salva',
+            'submit'                   => 'Invia',
+            'disband_team'             => 'Sciogli squadra',
+            'route_publishing_enabled' => '',
         ],
         'select' => [
             'select_team' => 'Seleziona squadra...',

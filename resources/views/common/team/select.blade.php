@@ -18,7 +18,7 @@ if (!$required) {
     $teamsSelect = [-1 => __('view_common.team.select.select_team')] + $teamsSelect;
 }
 ?>
-<div class="form-group">
+<div class="mb-3">
     @if($label !== false)
         {{ html()->label($label . ($required ? '<span class="form-required">*</span>' : ''), $name) }}
     @endif

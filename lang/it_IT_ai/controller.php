@@ -19,17 +19,21 @@ return [
             'mdt_invalid_category'                => 'Categoria non valida',
         ],
         'flash' => [
-            'message_banner_set_successfully'   => 'Banner del messaggio impostato con successo',
-            'thumbnail_regenerate_result'       => 'Inviati :success lavori per :total percorsi. :failed falliti.',
-            'combatlog_route_regenerate_result' => '',
-            'caches_dropped_successfully'       => 'Cache eliminate con successo',
-            'releases_exported'                 => 'Versioni esportate',
-            'exception'                         => 'Eccezione lanciata nel pannello di amministrazione',
-            'feature_toggle_activated'          => 'Funzione :feature ora attivata',
-            'feature_toggle_deactivated'        => 'Funzione :feature ora disattivata',
-            'feature_forgotten'                 => 'Funzione :feature dimenticata con successo',
-            'read_only_mode_disabled'           => 'Modalità sola lettura disattivata',
-            'read_only_mode_enabled'            => 'Modalità sola lettura attivata',
+            'message_banner_set_successfully'        => 'Banner del messaggio impostato con successo',
+            'thumbnail_regenerate_result'            => 'Inviati :success lavori per :total percorsi. :failed falliti.',
+            'combatlog_route_regenerate_result'      => '',
+            'combatlog_criteria_reset'               => '',
+            'combatlog_criteria_thresholds_updated'  => '',
+            'caches_dropped_successfully'            => 'Cache eliminate con successo',
+            'releases_exported'                      => 'Versioni esportate',
+            'exception'                              => 'Eccezione lanciata nel pannello di amministrazione',
+            'feature_toggle_activated'               => 'Funzione :feature ora attivata',
+            'feature_toggle_deactivated'             => 'Funzione :feature ora disattivata',
+            'feature_forgotten'                      => 'Funzione :feature dimenticata con successo',
+            'mapping_version_upgrade_queued'         => '',
+            'mapping_version_upgrade_already_latest' => '',
+            'read_only_mode_disabled'                => 'Modalità sola lettura disattivata',
+            'read_only_mode_enabled'                 => 'Modalità sola lettura attivata',
         ],
     ],
     'apidungeonroute' => [
@@ -46,6 +50,12 @@ return [
         'error' => [
             'unable_to_save_brushline'   => 'Impossibile salvare la linea',
             'unable_to_delete_brushline' => 'Impossibile eliminare la linea',
+        ],
+    ],
+    'arrow' => [
+        'error' => [
+            'unable_to_save_arrow'   => '',
+            'unable_to_delete_arrow' => '',
         ],
     ],
     'dungeon' => [
@@ -176,6 +186,13 @@ return [
             'account_deleted_successfully'     => 'Account eliminato con successo.',
             'error_deleting_account'           => 'Si è verificato un errore. Si prega di riprovare.',
         ],
+        'error' => [
+            'add_ad_free_giveaway_limit_reached'        => '',
+            'add_ad_free_giveaway_already_ad_free'      => '',
+            'add_ad_free_giveaway_already_has_giveaway' => '',
+            'remove_ad_free_giveaway_not_found'         => '',
+            'remove_ad_free_giveaway_not_yours'         => '',
+        ],
     ],
     'spell' => [
         'error' => [
@@ -207,6 +224,16 @@ return [
             'user_is_not_a_patron'              => 'Questo utente non è un Patron.',
             'all_benefits_granted_successfully' => 'Tutti i benefici concessi con successo.',
             'error_granting_all_benefits'       => 'Si è verificato un errore durante il tentativo di concedere tutti i benefici.',
+        ],
+    ],
+
+    'admin' => [
+        'dungeonroute' => [
+            'flash' => [
+                'updated' => '',
+                'deleted' => '',
+                'claimed' => '',
+            ],
         ],
     ],
 

@@ -1,4 +1,9 @@
-# Skill: MDT Import String Service
+---
+name: mdt-import
+description: How MDTImportStringService parses a compressed MDT string into a DungeonRoute — decoding, object conversion, warnings/errors, and import tests. Use when adding new importable object types, debugging import failures, or writing/modifying import tests. Not for the export direction (mdt-export) and not for bumping the MDT composer package (update-mdt-package).
+---
+
+# MDT Import String Service
 
 Use this skill when working on the MDT (MythicDungeonTools) import pipeline — adding new importable object types, debugging import failures, or writing/modifying import tests.
 

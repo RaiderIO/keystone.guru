@@ -19,7 +19,7 @@ class TagCategoryPolicy
     {
         $result = match ($tagCategory->name) {
             TagCategory::DUNGEON_ROUTE_PERSONAL, TagCategory::DUNGEON_ROUTE_TEAM => $model instanceof DungeonRoute && $model->mayUserEdit($user),
-            default => false,
+            default                                                              => false,
         };
 
         return $result;

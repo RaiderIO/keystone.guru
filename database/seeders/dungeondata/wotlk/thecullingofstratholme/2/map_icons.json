@@ -7,7 +7,7 @@
         "map_icon_type_id": 2,
         "lat": -199.5,
         "lng": 194,
-        "comment": "Talk to Arthas",
+        "comment": "mapping.map_icons.wotlk.the_culling_of_stratholme.talk_to_arthas",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -150,7 +150,7 @@
         "map_icon_type_id": 2,
         "lat": -94.827,
         "lng": 224.7997,
-        "comment": "Talk to Arthas after clearing last wave.",
+        "comment": "mapping.map_icons.wotlk.the_culling_of_stratholme.talk_to_arthas_after_last_wave",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -163,7 +163,7 @@
         "map_icon_type_id": 2,
         "lat": -76.449,
         "lng": 254.83,
-        "comment": "Talk to Arthas after defeating the boss",
+        "comment": "mapping.map_icons.wotlk.the_culling_of_stratholme.talk_to_arthas_after_boss",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -176,7 +176,7 @@
         "map_icon_type_id": 2,
         "lat": -95.5,
         "lng": 152.875,
-        "comment": "Talk to Arthas",
+        "comment": "mapping.map_icons.wotlk.the_culling_of_stratholme.talk_to_arthas",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

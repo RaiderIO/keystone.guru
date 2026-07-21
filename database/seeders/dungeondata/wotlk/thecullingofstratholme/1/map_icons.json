@@ -20,7 +20,7 @@
         "map_icon_type_id": 2,
         "lat": -153.8452,
         "lng": 326.258,
-        "comment": "Talk to Chromie",
+        "comment": "mapping.map_icons.wotlk.the_culling_of_stratholme.talk_to_chromie",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 2,
         "lat": -106.1475,
         "lng": 183.9227,
-        "comment": "Talk to Chromie again",
+        "comment": "mapping.map_icons.wotlk.the_culling_of_stratholme.talk_to_chromie_again",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
