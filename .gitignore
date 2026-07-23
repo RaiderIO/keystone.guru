@@ -44,7 +44,9 @@ docker-compose/redis-data
 # Local restores of production database dumps
 docker-compose/mysql-prod*/
 
+# AI
 .ladebugermcp/
+.claude/worktrees
 
 # Local scratch data that must never be staged (git add * is allowlisted for agents)
 __pycache__/

@@ -144,4 +144,34 @@ final class DungeonRouteRepositoryTest extends PublicTestCase
             $dungeonRoute->delete();
         }
     }
+
+    #[Test]
+    public function getEnemyForcesPerKillZone_givenNonExistentRoute_returnsEmptyCollection(): void
+    {
+        // Arrange
+        $dungeonRoute = new DungeonRoute();
+
+        // Act
+        $result = $this->repository->getEnemyForcesPerKillZone($dungeonRoute);
+
+        // Assert
+        $this->assertTrue($result->isEmpty());
+    }
+
+    #[Test]
+    public function getEnemyForcesPerKillZone_givenRouteWithNoKillZones_returnsEmptyCollection(): void
+    {
+        // Arrange
+        $dungeonRoute = DungeonRoute::factory()->create();
+
+        try {
+            // Act
+            $result = $this->repository->getEnemyForcesPerKillZone($dungeonRoute);
+
+            // Assert
+            $this->assertTrue($result->isEmpty());
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
 }

@@ -148,6 +148,7 @@ use Override;
  * @property EloquentCollection<int, DungeonRouteThumbnailJob>         $dungeonRouteThumbnailJobs
  * @property EloquentCollection<int, DungeonRouteThumbnail>            $dungeonRouteThumbnails
  * @property EloquentCollection<int, File>                             $thumbnails
+ * @property EloquentCollection<int, File>                             $heroThumbnails
  *
  * @method static Builder<self> visible()
  * @method static Builder<self> visibleWithUnlisted()
@@ -464,7 +465,16 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     public function thumbnails(): BelongsToMany
     {
         return $this->belongsToMany(File::class, 'dungeon_route_thumbnails')
-            ->where('dungeon_route_thumbnails.custom', false);
+            ->where('dungeon_route_thumbnails.custom', false)
+            ->where('dungeon_route_thumbnails.variant', DungeonRouteThumbnailVariant::Standard);
+    }
+
+    /** @return BelongsToMany<File, $this> */
+    public function heroThumbnails(): BelongsToMany
+    {
+        return $this->belongsToMany(File::class, 'dungeon_route_thumbnails')
+            ->where('dungeon_route_thumbnails.custom', false)
+            ->where('dungeon_route_thumbnails.variant', DungeonRouteThumbnailVariant::Hero);
     }
 
     /** @return HasMany<MapIcon, $this> */
@@ -742,6 +752,23 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         $this->loadMissing('thumbnails');
 
         return $this->thumbnails->isNotEmpty();
+    }
+
+    /**
+     * Returns the URL of the larger hero-band thumbnail variant, falling back to the standard thumbnail
+     * URL when no hero variant has been generated yet (backwards compatible with pre-existing routes).
+     */
+    public function getHeroThumbnailUrl(): ?string
+    {
+        // Explicitly load the relations so this also works on routes hydrated in a collection (preventLazyLoading)
+        $this->loadMissing(['heroThumbnails', 'thumbnails']);
+
+        $heroThumbnail = $this->heroThumbnails->first();
+        if ($heroThumbnail !== null) {
+            return $heroThumbnail->getURL();
+        }
+
+        return $this->thumbnails->first()?->getURL();
     }
 
     /**

@@ -2,21 +2,24 @@
 
 namespace App\Service\DungeonRoute;
 
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Models\Team;
+use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\Cache\CacheServiceInterface;
-use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
 use Closure;
-use Illuminate\Support\Facades\App;
+use Illuminate\Support\Collection;
 
 abstract class BaseDiscoverService implements DiscoverServiceInterface
 {
-    protected CacheServiceInterface $cacheService;
-
-    protected ExpansionService $expansionService;
+    /**
+     * The default number of top community routes per dungeon that are promoted into the hero band.
+     */
+    private const int HERO_TOP_ROUTES_PER_DUNGEON = 3;
 
     protected int $limit = 10;
 
@@ -34,10 +37,11 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
     /**
      * DiscoverService constructor.
      */
-    public function __construct()
-    {
-        $this->cacheService     = App::make(CacheServiceInterface::class);
-        $this->expansionService = App::make(ExpansionServiceInterface::class);
+    public function __construct(
+        protected CacheServiceInterface                  $cacheService,
+        protected ExpansionServiceInterface              $expansionService,
+        private readonly DungeonRouteRepositoryInterface $dungeonRouteRepository,
+    ) {
     }
 
     /**
@@ -120,5 +124,36 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
         $this->excludeTeam = $team;
 
         return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function heroRoutes(Season $season, int $topPerDungeon = self::HERO_TOP_ROUTES_PER_DUNGEON): Collection
+    {
+        /** @var Collection<int, DungeonRoute> $heroRoutes */
+        $heroRoutes = collect();
+
+        // The Raider.IO weekly routes (grouped by dungeon key) are always shown as heroes.
+        $this->dungeonRouteRepository->getWeeklyRoutes()
+            ->flatten()
+            ->each(function (WeeklyRoute $weeklyRoute) use ($heroRoutes) {
+                if ($weeklyRoute->dungeonRoute !== null) {
+                    $heroRoutes->push($weeklyRoute->dungeonRoute);
+                }
+            });
+
+        // The top community routes per dungeon, mirroring the discovery page's popularity ordering.
+        $this->excludeTeam(Team::getRaiderIOTeam())
+            ->withSeason($season)
+            ->withLimit($topPerDungeon);
+
+        foreach ($season->dungeons as $dungeon) {
+            $this->popularByDungeon($dungeon)
+                ->take($topPerDungeon)
+                ->each(fn(DungeonRoute $dungeonRoute) => $heroRoutes->push($dungeonRoute));
+        }
+
+        return $heroRoutes->unique('id')->values();
     }
 }

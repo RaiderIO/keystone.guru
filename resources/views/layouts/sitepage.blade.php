@@ -132,7 +132,9 @@ $breadcrumbsParams ??= [];
             <div
                 class="container-fluid mb-4 {{$rootClass}} {{ $wide ? "flex-fill ps-lg-3 pe-lg-3" : ($disableDefaultRootClasses ? "" :  "col-md-8 offset-md-2") }}">
 
-                @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams, 'classes' => 'mx-2'])
+                {{-- No mx-2 here: the utility's !important margin overrides the breadcrumb row's negative
+                     gutter, pushing it ~20px right of the content rows (which the header aligns to). --}}
+                @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams])
 
                 @hasSection('header-title')
                     <div class="row my-4">

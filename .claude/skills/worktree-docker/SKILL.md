@@ -73,6 +73,22 @@ there is no `RefreshDatabase`). A migration in one worktree affects everyone, so
   the code no longer uses it and is deployed).
 - **Never** run `migrate:fresh` / `migrate:refresh` in a worktree — it wipes the shared DB.
 
+## Shared thumbnails (public disk only)
+
+A worktree's `app`/`nginx` don't run Horizon/puppeteer, so `docker-compose.worktree.yml` bind-mounts
+the **main checkout's** `storage/app/public/thumbnails` (`MAIN_THUMBNAILS_DIR`) into every worktree's
+`app` + `nginx`. So thumbnails the **main stack** generates (on the `public` disk, i.e.
+`FILESYSTEM_DISK=public`) appear live in all worktrees — regenerate via the main stack's Horizon and
+they show up everywhere. (To generate a thumbnail *from* a worktree, see the **Thumbnails** section
+below.)
+
+Only the **public** dir is shared. `storage/app/private/thumbnails` (the `local` disk) is **not**
+mounted — it stays per-worktree. That per-branch isolation is exactly what the `render` service's
+Path A (`dungeonroute:renderthumbnail`, see **Thumbnails**) relies on: it forces the `local` disk so a
+branch render never touches the shared public set. (A `disk=local` thumbnail is served through
+Laravel's local-serve route, not the `public/storage` symlink, so it's only visible on the stack that
+created it.)
+
 ## Horizon (opt-in — only when changing queue workers)
 
 Redis is shared, so a worktree Horizon competes with the main one for jobs. While iterating:

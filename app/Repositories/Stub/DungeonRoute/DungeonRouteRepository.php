@@ -5,6 +5,7 @@ namespace App\Repositories\Stub\DungeonRoute;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Season;
+use App\Repositories\Database\DungeonRoute\Dtos\KillZoneEnemyForces;
 use App\Repositories\Database\DungeonRoute\Dtos\SimilarDungeonRoute;
 use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use App\Repositories\Interfaces\DungeonRoute\Dtos\DungeonRouteSearchFilter;
@@ -60,5 +61,13 @@ class DungeonRouteRepository extends StubRepository implements DungeonRouteRepos
     public function findCombatLogRouteByPublicKey(?string $publicKey): ?DungeonRoute
     {
         return null;
+    }
+
+    /**
+     * @return Collection<int, KillZoneEnemyForces>
+     */
+    public function getEnemyForcesPerKillZone(DungeonRoute $dungeonRoute): Collection
+    {
+        return collect();
     }
 }

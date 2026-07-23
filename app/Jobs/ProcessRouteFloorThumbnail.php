@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Jobs\Logging\ProcessRouteFloorThumbnailLoggingInterface;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -23,10 +24,11 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        protected DungeonRoute $dungeonRoute,
-        protected int          $floorIndex,
-        protected bool         $force = false,
-        protected int          $attempts = 0,
+        protected DungeonRoute                 $dungeonRoute,
+        protected int                          $floorIndex,
+        protected bool                         $force = false,
+        protected int                          $attempts = 0,
+        protected DungeonRouteThumbnailVariant $variant = DungeonRouteThumbnailVariant::Standard,
     ) {
         $this->queue = sprintf('%s-%s-thumbnail', config('app.type'), config('app.env'));
     }
@@ -55,13 +57,13 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
                 // Give some additional space since we're refreshing ALL floors - the first floor may get processed,
                 // but the floors after that will otherwise think "oh the thumbnail is up-to-date" and not refresh.
                 if ($this->dungeonRoute->thumbnail_updated_at->isBefore($this->dungeonRoute->updated_at->addHour()) || $this->force) {
-                    $result = $thumbnailService->createThumbnail($this->dungeonRoute, $this->floorIndex, $this->attempts);
+                    $result = $thumbnailService->createThumbnail($this->dungeonRoute, $this->floorIndex, $this->attempts, $this->variant);
 
                     if (!$result) {
                         $log->handleCreateThumbnailError();
 
                         // If there were errors, try again
-                        ProcessRouteFloorThumbnail::dispatch($this->dungeonRoute, $this->floorIndex, $this->force, ++$this->attempts);
+                        ProcessRouteFloorThumbnail::dispatch($this->dungeonRoute, $this->floorIndex, $this->force, ++$this->attempts, $this->variant);
                     }
                 } else {
                     $log->handleThumbnailAlreadyUpToDate();

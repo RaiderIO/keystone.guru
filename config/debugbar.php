@@ -24,6 +24,8 @@ return [
         '_boost/browser-logs',
         'livewire-*/livewire.js',
         'js-gen/*',
+        // Thumbnail preview renders (dungeonroute.preview/previewold) - the debugbar would be baked into the screenshot
+        '*/preview/*',
     ],
 
     /*

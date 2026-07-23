@@ -268,6 +268,8 @@ return [
             'affix_overview' => 12,
             'search'         => 24,
             'per_dungeon'    => 8,
+            /** Routes per page on the reworked (DungeonRouteListRework) dungeon leaderboard */
+            'leaderboard' => 18,
         ],
         /** How many routes to load more when the user uses the infinite scroll */
         'loadmore' => [
@@ -458,12 +460,52 @@ return [
     'api' => [
         'dungeon_route' => [
             'thumbnail' => [
-                'default_viewport_width'  => 768,
-                'default_viewport_height' => 512,
-                'default_image_width'     => 384,
-                'default_image_height'    => 256,
-                'default_zoom_level'      => 1,
-                'default_quality'         => 90,
+                /**
+                 * Per-variant render settings. Each variant is a self-contained set of render
+                 * dimensions, so adding a new variant is a matter of data instead of branching code.
+                 */
+                'variants' => [
+                    /** The standard small thumbnail shown in route cards and lists. */
+                    'standard' => [
+                        'viewport_width'  => 768,
+                        'viewport_height' => 512,
+                        'image_width'     => 384,
+                        'image_height'    => 256,
+                        'zoom_level'      => 1,
+                        'quality'         => 90,
+                        /**
+                         * The killzone-path (pull-connection) lines are multiplied by this when rendering
+                         * the miniature, so it still reads as a route shape (they'd otherwise be too thin
+                         * to see). Null means no thickening.
+                         */
+                        'kill_zone_path_weight_multiplier' => 3,
+                    ],
+                    /**
+                     * Larger "hero" variant, generated for the top routes only (weekly + top community routes).
+                     * Used for the wide, full-width hero band on the discovery page where the small 768x512
+                     * render looks stretched. Rendered (and stored) at full size - no downscale. Uses a higher
+                     * zoom so the route fills the wide frame instead of being letterboxed, and keeps the normal
+                     * (thin) pull-line width since the render is large.
+                     */
+                    'hero' => [
+                        'viewport_width'                   => 1600,
+                        'viewport_height'                  => 640,
+                        'image_width'                      => 1600,
+                        'image_height'                     => 640,
+                        'zoom_level'                       => 2.1,
+                        'quality'                          => 90,
+                        'kill_zone_path_weight_multiplier' => null,
+                    ],
+                    /**
+                     * Custom API-requested renders (viewport/image dimensions come from the request instead
+                     * of this config), so only the values still shared with the standard variant live here.
+                     * Keep `kill_zone_path_weight_multiplier` in sync with the `standard` variant above -
+                     * it is a separate value, not a live reference, so it does not update automatically.
+                     */
+                    'custom' => [
+                        'kill_zone_path_weight_multiplier' => 3,
+                    ],
+                ],
                 /** I observed it to be about 8 but with settings it may be longer, so 10 to be safe. */
                 'estimated_generation_time_seconds' => 10,
                 'expiration_time_seconds'           => 86400,

@@ -89,6 +89,8 @@ use App\Service\DungeonRoute\CoverageService;
 use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\DungeonRoute\DiscoverService;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
+use App\Service\DungeonRoute\DungeonRouteKillZoneService;
+use App\Service\DungeonRoute\DungeonRouteKillZoneServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteSaveService;
 use App\Service\DungeonRoute\DungeonRouteSaveServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteSearchService;
@@ -219,6 +221,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(DungeonRouteSaveServiceInterface::class, DungeonRouteSaveService::class);
         $this->app->bind(DungeonRouteServiceInterface::class, DungeonRouteService::class);
         $this->app->bind(DungeonRouteSearchServiceInterface::class, DungeonRouteSearchService::class);
+        $this->app->bind(DungeonRouteKillZoneServiceInterface::class, DungeonRouteKillZoneService::class);
         $this->app->bind(ImageServiceInterface::class, ImageService::class);
         $this->app->bind(MessageBannerServiceInterface::class, MessageBannerService::class);
         $this->app->bind(MapDrawingServiceInterface::class, MapDrawingService::class);

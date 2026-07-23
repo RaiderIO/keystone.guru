@@ -8,8 +8,11 @@ use App\Models\Floor\Floor;
  * @var Floor                $floor
  * @var float                $defaultZoom
  * @var string               $mapFacadeStyle
+ * @var float|null           $killZonePathWeightMultiplier
  * @var array<string, mixed> $parameters
  */
+
+$killZonePathWeightMultiplier ??= null;
 ?>
 
 @extends('layouts.map', [
@@ -43,6 +46,7 @@ use App\Models\Floor\Floor;
         'edit' => false,
         'echo' => false,
         'noUI' => true,
+        'killZonePathWeightMultiplier' => $killZonePathWeightMultiplier,
         'defaultZoom' => $defaultZoom,
         'mapFacadeStyle' => $mapFacadeStyle,
         'floor' => $floor,

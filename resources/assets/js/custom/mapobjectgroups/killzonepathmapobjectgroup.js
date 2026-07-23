@@ -143,12 +143,20 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
     createNewPath(vertices, options) {
         console.assert(this instanceof KillZonePathMapObjectGroup, 'this is not a KillZonePathMapObjectGroup', this);
 
+        let weight = getState().getKillZonePathWeight();
+        // Thicken the pull-connection lines by the multiplier passed from PHP (e.g. small thumbnail renders)
+        // so the miniature still reads as a route shape. Null/absent keeps the normal width.
+        let killZonePathWeightMultiplier = this.manager.map.options.killZonePathWeightMultiplier;
+        if (killZonePathWeightMultiplier) {
+            weight *= killZonePathWeightMultiplier;
+        }
+
         let path = this.loadMapObject($.extend(true, {}, {
             id: this.currentId++,
             polyline: {
                 color: c.map.polyline.killzonepath.color,
                 color_animated: null,
-                weight: getState().getKillZonePathWeight(),
+                weight: weight,
                 vertices_json: JSON.stringify(vertices),
             }
         }, options));
