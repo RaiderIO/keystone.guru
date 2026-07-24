@@ -36,7 +36,7 @@
         "bootstrap5-toggle": "^5.4.1",
         "bootswatch": "^5.3.8",
         "d3": "7.9.0",
-        "datatables.net": "^2.3.8",
+        "datatables.net": "^3.0.0",
         "datatables.net-dt": "^2.3.8",
         "dotenv": "^17.4.2",
         "geojson-utils": "^1.1.0",
