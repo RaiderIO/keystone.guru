@@ -651,6 +651,12 @@ class DungeonMap extends Signalable {
                 } else if (this.options.showControls.enemyForces) {
                     mapControls.push(new EnemyForcesControls(this));
                 }
+
+                // The per-floor enemy forces pill sits alongside the route-total control above and is
+                // relevant regardless of whether the dungeon uses the speedrun display.
+                if (this.options.showControls.enemyForces) {
+                    mapControls.push(new FloorEnemyForcesControls(this));
+                }
             }
             if (!this.options.embed) {
                 // mapControls.push(new EnemyVisualControls(this));

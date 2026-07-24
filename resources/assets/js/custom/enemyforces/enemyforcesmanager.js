@@ -113,6 +113,39 @@ class EnemyForcesManager extends Signalable {
     }
 
     /**
+     * Get the total amount of enemy forces available on a specific floor. Unlike getEnemyForces(),
+     * which only counts pulled enemies, this sums every enemy that lives on the floor - it reflects
+     * how much enemy forces is present on that floor, regardless of what is currently pulled.
+     * @param floorId {Number}
+     * @returns {Number}
+     */
+    getEnemyForcesForFloor(floorId) {
+        console.assert(this instanceof EnemyForcesManager, 'this is not EnemyForcesManager', this);
+
+        let result = 0;
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        // May be false in an admin setting where there's no enemies
+        if (enemyMapObjectGroup === false) {
+            return result;
+        }
+
+        for (let key in enemyMapObjectGroup.objects) {
+            /** @type {Enemy} */
+            let enemy = enemyMapObjectGroup.objects[key];
+
+            // Mirror the filter used by KillZone.getEnemyForces() (skip obsolete) and additionally skip
+            // enemies that aren't actually present (wrong seasonal type/affix), so the total matches what
+            // is shown on the map.
+            if (enemy.floor_id === floorId && !enemy.isObsolete() && !enemy.shouldBeIgnored()) {
+                result += enemy.getEnemyForces();
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Get the amount of enemy forces that are required to complete this dungeon.
      * @returns {*}
      */
@@ -141,4 +174,10 @@ class EnemyForcesManager extends Signalable {
         killzoneMapObjectGroup.unregister('killzone:enemyadded', this);
         killzoneMapObjectGroup.unregister('killzone:enemieschanged', this);
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = EnemyForcesManager;
 }

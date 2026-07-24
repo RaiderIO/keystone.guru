@@ -996,6 +996,33 @@
     color: #5cb85c;
 }
 
+/* Small pill/banner showing the total enemy forces present on a floor (issue #128). */
+.map_enemy_forces_floor_pill {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    font-size: 0.9em;
+    line-height: 1.4;
+    white-space: nowrap;
+    /* Purely informational - never intercept clicks meant for the map/enemies underneath. */
+    pointer-events: none;
+}
+
+/* Facade layout only: the pill is a Leaflet divIcon marker (iconSize: null), so strip Leaflet's
+   default icon box and center the pill on its anchor point. */
+.map_enemy_forces_floor_pill_icon {
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    pointer-events: none;
+}
+
+.map_enemy_forces_floor_pill_icon .map_enemy_forces_floor_pill {
+    transform: translate(-50%, -50%);
+}
+
 .profile_class_color,
 .map_polyline_edit_popup_class_color {
     height: 32px;
