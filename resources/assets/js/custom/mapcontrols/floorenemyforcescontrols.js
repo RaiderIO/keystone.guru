@@ -3,8 +3,8 @@
  *
  * In the split-floors ("Blizzard") layout this is a single screen-fixed pill at the top-center of
  * the map, reflecting the currently-visible floor. In the facade (MDT-style combined image) layout
- * it renders one floating pill per floor union, anchored at the centroid of that union's area, since
- * every floor is visible on the one image at once.
+ * it renders one floating pill per floor, anchored at the centroid of that floor's enemies (which are
+ * already projected into facade coordinates), since every floor is visible on the one image at once.
  *
  * The label follows the "Enemy number style" map setting: an absolute enemy forces count, or a
  * percentage of the enemy forces required to complete the dungeon.
@@ -80,7 +80,7 @@ class FloorEnemyForcesControls extends MapControl {
     }
 
     /**
-     * (Re)builds the per-union pill markers for the facade layout.
+     * (Re)builds the per-floor pill markers for the facade layout.
      * @private
      */
     _renderFacadeMarkers() {
@@ -93,13 +93,13 @@ class FloorEnemyForcesControls extends MapControl {
         this._facadeMarkers.clearLayers();
 
         let template = Handlebars.templates['map_enemy_forces_floor_pill'];
-        let mapContext = getState().getMapContext();
-        let floorUnions = mapContext.getFloorUnions();
-        let floorUnionAreas = mapContext.getFloorUnionAreas();
 
-        for (let i = 0; i < floorUnions.length; i++) {
-            let floorUnion = floorUnions[i];
-            let floorEnemyForces = this.map.enemyForcesManager.getEnemyForcesForFloor(floorUnion.target_floor_id);
+        // Collect the facade-space positions of every counted enemy, grouped by their real floor, so
+        // each floor's pill can be anchored at the centroid of its enemies on the combined image.
+        let latLngsByFloorId = this._getEnemyLatLngsByFloorId();
+
+        for (let floorId in latLngsByFloorId) {
+            let floorEnemyForces = this.map.enemyForcesManager.getEnemyForcesForFloor(parseInt(floorId));
 
             // Don't clutter the map with pills for floors that have no enemy forces.
             if (floorEnemyForces <= 0) {
@@ -108,7 +108,7 @@ class FloorEnemyForcesControls extends MapControl {
 
             let html = template({value: this._formatValue(floorEnemyForces)});
 
-            L.marker(this._getFloorUnionAnchor(floorUnion, floorUnionAreas), {
+            L.marker(getCenteroid(latLngsByFloorId[floorId]), {
                 icon: L.divIcon({
                     html: html,
                     className: 'map_enemy_forces_floor_pill_icon',
@@ -123,34 +123,34 @@ class FloorEnemyForcesControls extends MapControl {
     }
 
     /**
-     * Resolves the facade-space anchor for a floor union's pill: the centroid of its area polygon(s),
-     * falling back to the union's own marker position when no area vertices are available.
-     * @param floorUnion {Object}
-     * @param floorUnionAreas {Array}
-     * @returns {Object} An L.latLng.
+     * Gathers the (facade-space) lat/lngs of every counted enemy, grouped by the enemy's floor.
+     * @returns {Object} A map of floor id to an array of [lat, lng] pairs.
      * @private
      */
-    _getFloorUnionAnchor(floorUnion, floorUnionAreas) {
+    _getEnemyLatLngsByFloorId() {
         console.assert(this instanceof FloorEnemyForcesControls, 'this is not FloorEnemyForcesControls', this);
 
-        let points = [];
-        for (let i = 0; i < floorUnionAreas.length; i++) {
-            let floorUnionArea = floorUnionAreas[i];
-            if (floorUnionArea.floor_union_id !== floorUnion.id || typeof floorUnionArea.vertices_json === 'undefined') {
+        let latLngsByFloorId = {};
+
+        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        if (enemyMapObjectGroup === false) {
+            return latLngsByFloorId;
+        }
+
+        for (let key in enemyMapObjectGroup.objects) {
+            /** @type {Enemy} */
+            let enemy = enemyMapObjectGroup.objects[key];
+
+            // Match the same enemies that getEnemyForcesForFloor() sums, and that have a placed layer.
+            if (enemy.isObsolete() || enemy.shouldBeIgnored() || enemy.layer === null || typeof enemy.layer === 'undefined') {
                 continue;
             }
 
-            let vertices = JSON.parse(floorUnionArea.vertices_json);
-            for (let j = 0; j < vertices.length; j++) {
-                points.push([vertices[j].lat, vertices[j].lng]);
-            }
+            let latLng = enemy.layer.getLatLng();
+            (latLngsByFloorId[enemy.floor_id] ??= []).push([latLng.lat, latLng.lng]);
         }
 
-        if (points.length > 0) {
-            return getCenteroid(points);
-        }
-
-        return L.latLng(floorUnion.lat, floorUnion.lng);
+        return latLngsByFloorId;
     }
 
     /**
