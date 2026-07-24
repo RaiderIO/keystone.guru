@@ -17,7 +17,7 @@ class FloorEnemyForcesControls extends MapControl {
         let self = this;
 
         this.map = map;
-        // Only set in facade mode - the layer group holding the per-union pill markers.
+        // Only set in facade mode - the layer group holding the per-floor pill markers.
         this._facadeMarkers = null;
 
         // The value is derived from the number style setting and from teeming/shrouded (both the floor
@@ -99,7 +99,7 @@ class FloorEnemyForcesControls extends MapControl {
         let latLngsByFloorId = this._getEnemyLatLngsByFloorId();
 
         for (let floorId in latLngsByFloorId) {
-            let floorEnemyForces = this.map.enemyForcesManager.getEnemyForcesForFloor(parseInt(floorId));
+            let floorEnemyForces = this.map.enemyForcesManager.getEnemyForcesForFloor(parseInt(floorId, 10));
 
             // Don't clutter the map with pills for floors that have no enemy forces.
             if (floorEnemyForces <= 0) {
