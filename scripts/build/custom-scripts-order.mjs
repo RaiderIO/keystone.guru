@@ -184,6 +184,7 @@ export const customScripts = [
     'resources/assets/js/custom/mapcontrols/dungeonspeedrunrequirednpcscontrols.js',
     'resources/assets/js/custom/mapcontrols/echocontrols.js',
     'resources/assets/js/custom/mapcontrols/enemyforcescontrols.js',
+    'resources/assets/js/custom/mapcontrols/floorenemyforcescontrols.js',
     'resources/assets/js/custom/mapcontrols/enemyvisualcontrols.js',
     'resources/assets/js/custom/mapcontrols/factiondisplaycontrols.js',
 
