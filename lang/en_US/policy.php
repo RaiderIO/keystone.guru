@@ -14,4 +14,9 @@ return [
     'add_map_icon_limit_reached'              => 'Unable to add more than :limit map icons to a single route.',
     'schedule_publish_route_not_in_team'      => 'Unable to schedule publish: this route is not assigned to a team.',
 
+    'claim_route_not_claimable'                   => 'This route already has an author and cannot be claimed.',
+    'make_role_only_super_admins_may_grant_admin' => 'Only super admins may grant or revoke the admin role.',
+    'create_global_map_icon_admin_only'           => 'Only administrators may create map icons that are not attached to a route.',
+    'update_map_icon_admin_only'                  => 'Only administrators may change map icons that are not attached to a route or team.',
+
 ];

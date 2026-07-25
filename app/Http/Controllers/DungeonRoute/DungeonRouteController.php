@@ -405,13 +405,17 @@ class DungeonRouteController extends Controller
         }
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function claim(
         Request      $request,
         Dungeon      $dungeon,
         DungeonRoute $dungeonroute,
         string       $title,
     ): RedirectResponse {
-        // Regardless of the result, try to claim the route
+        Gate::authorize('claim', $dungeonroute);
+
         $dungeonroute->claim(Auth::id());
 
         return redirect()->route('dungeonroute.edit', [

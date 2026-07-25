@@ -65,23 +65,15 @@ class AjaxTeamController extends Controller
      */
     public function changeRole(Request $request, Team $team)
     {
-        Gate::authorize('change-role', $team);
-
-        /** @var User $user */
-        $user = Auth::user();
         /** @var User $targetUser */
         $targetUser = User::where('name', $request->get('username'))->firstOrFail();
         $role       = $request->get('role');
 
-        // Only if the current user may do such a thing
-        if ($team->canChangeRole($user, $targetUser, $role)) {
-            $team->changeRole($targetUser, $role);
-            $result = response()->noContent();
-        } else {
-            $result = response('Forbidden', Http::FORBIDDEN);
-        }
+        Gate::authorize('change-role', [$team, $targetUser, $role]);
 
-        return $result;
+        $team->changeRole($targetUser, $role);
+
+        return response()->noContent();
     }
 
     /**
@@ -91,19 +83,12 @@ class AjaxTeamController extends Controller
      */
     public function addRoute(Request $request, Team $team, DungeonRoute $dungeonroute)
     {
+        // moderate-route resolves to TeamPolicy::moderateRoute, which is canAddRemoveRoute()
         Gate::authorize('moderate-route', $team);
 
-        /** @var User $user */
-        $user = Auth::user();
+        $team->addRoute($dungeonroute);
 
-        if ($team->canAddRemoveRoute($user)) {
-            $team->addRoute($dungeonroute);
-            $result = response()->noContent();
-        } else {
-            $result = response('Forbidden', Http::FORBIDDEN);
-        }
-
-        return $result;
+        return response()->noContent();
     }
 
     /**
@@ -113,19 +98,12 @@ class AjaxTeamController extends Controller
      */
     public function removeRoute(Request $request, Team $team, DungeonRoute $dungeonroute)
     {
+        // moderate-route resolves to TeamPolicy::moderateRoute, which is canAddRemoveRoute()
         Gate::authorize('moderate-route', $team);
 
-        /** @var User $user */
-        $user = Auth::user();
+        $team->removeRoute($dungeonroute);
 
-        if ($team->canAddRemoveRoute($user)) {
-            $team->removeRoute($dungeonroute);
-            $result = response()->noContent();
-        } else {
-            $result = response('Forbidden', Http::FORBIDDEN);
-        }
-
-        return $result;
+        return response()->noContent();
     }
 
     /**
@@ -220,16 +198,12 @@ class AjaxTeamController extends Controller
     {
         Gate::authorize('can-ad-free-giveaway', $team);
 
-        /** @var User $currentUser */
-        $currentUser = Auth::user();
-
         if ($user->patreonAdFreeGiveaway === null) {
             abort(422, 'Unable to remove ad-free giveaway - user does not have any at the moment.');
         }
 
-        if ($user->patreonAdFreeGiveaway->giver_user_id !== $currentUser->id) {
-            abort(422, 'Unable to remove ad-free giveaways that was not originally given by you.');
-        }
+        // Only the giver may take their own giveaway back
+        Gate::authorize('revokeAdFreeGiveaway', $user);
 
         $user->patreonAdFreeGiveaway->delete();
 

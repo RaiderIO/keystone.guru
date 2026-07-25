@@ -34,9 +34,14 @@ class TeamPolicy
         return $team->canAddRemoveRoute($user);
     }
 
-    public function changeRole(User $user, Team $team): bool
+    /**
+     * Determine whether the user can change $targetUser's role in the team into $role.
+     * Being a moderator is not enough on its own - canChangeRole() additionally enforces the rank
+     * ordering, so nobody can promote past their own rank or demote someone above them.
+     */
+    public function changeRole(User $user, Team $team, User $targetUser, string $role): bool
     {
-        return $team->isUserModerator($user);
+        return $team->isUserModerator($user) && $team->canChangeRole($user, $targetUser, $role);
     }
 
     public function changeDefaultRole(User $user, Team $team): bool
