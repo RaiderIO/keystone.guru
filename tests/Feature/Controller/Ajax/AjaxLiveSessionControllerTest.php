@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\Ajax;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Laratrust\Role;
 use App\Models\LiveSession;
 use App\Models\PublishedState;
 use App\Models\User;
@@ -15,15 +16,6 @@ use Tests\TestCases\AjaxPublicTestCase;
 #[Group('LiveSession')]
 final class AjaxLiveSessionControllerTest extends AjaxPublicTestCase
 {
-    /**
-     * The delete route sits behind 'role:user|admin', so both actors must carry the "user" role -
-     * a bare User::factory() user would be rejected by the role middleware and mask the policy.
-     * Neither is an admin, since admins may edit every route.
-     */
-    private const int ROUTE_OWNER_USER_ID = 3;
-
-    private const int OTHER_USER_ID = 4;
-
     #[\Override]
     protected function setUp(): void
     {
@@ -36,10 +28,12 @@ final class AjaxLiveSessionControllerTest extends AjaxPublicTestCase
     public function delete_givenAnotherUsersRoute_returnsForbidden(): void
     {
         // Arrange
-        $liveSession = $this->createLiveSession();
+        $owner       = $this->createUserWithUserRole();
+        $nonOwner    = $this->createUserWithUserRole();
+        $liveSession = $this->createLiveSession($owner);
 
         try {
-            $this->be(User::findOrFail(self::OTHER_USER_ID));
+            $this->be($nonOwner);
 
             // Act
             $response = $this->delete($this->deleteUrl($liveSession));
@@ -49,6 +43,8 @@ final class AjaxLiveSessionControllerTest extends AjaxPublicTestCase
             $this->assertNull($liveSession->fresh()->expires_at);
         } finally {
             $this->deleteLiveSession($liveSession);
+            $nonOwner->delete();
+            $owner->delete();
         }
     }
 
@@ -56,10 +52,11 @@ final class AjaxLiveSessionControllerTest extends AjaxPublicTestCase
     public function delete_givenOwnRoute_endsTheLiveSession(): void
     {
         // Arrange
-        $liveSession = $this->createLiveSession();
+        $owner       = $this->createUserWithUserRole();
+        $liveSession = $this->createLiveSession($owner);
 
         try {
-            $this->be(User::findOrFail(self::ROUTE_OWNER_USER_ID));
+            $this->be($owner);
 
             // Act
             $response = $this->delete($this->deleteUrl($liveSession));
@@ -70,24 +67,38 @@ final class AjaxLiveSessionControllerTest extends AjaxPublicTestCase
             $this->assertNotNull($liveSession->fresh()->expires_at);
         } finally {
             $this->deleteLiveSession($liveSession);
+            $owner->delete();
         }
     }
 
     /**
-     * Creates a running live session on a published, non-sandbox route owned by ROUTE_OWNER_USER_ID.
-     * Sandbox routes are editable by anyone by design, so expires_at must be null here.
+     * The delete route sits behind 'role:user|admin', so an actor without the "user" role would be
+     * rejected by the role middleware before the policy ever runs - masking what these tests check.
+     * Not an admin, since an admin may edit every route.
      */
-    private function createLiveSession(): LiveSession
+    private function createUserWithUserRole(): User
+    {
+        $user = User::factory()->create();
+        $user->addRole(Role::firstWhere('name', Role::ROLE_USER));
+
+        return $user;
+    }
+
+    /**
+     * Creates a running live session on a published, non-sandbox route owned by $owner. Sandbox
+     * routes are editable by anyone by design, so expires_at must be null here.
+     */
+    private function createLiveSession(User $owner): LiveSession
     {
         $route = DungeonRoute::factory()->create([
-            'author_id'          => self::ROUTE_OWNER_USER_ID,
+            'author_id'          => $owner->id,
             'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
             'expires_at'         => null,
         ]);
 
         return LiveSession::create([
             'dungeon_route_id' => $route->id,
-            'user_id'          => self::ROUTE_OWNER_USER_ID,
+            'user_id'          => $owner->id,
             'public_key'       => LiveSession::generateRandomPublicKey(),
         ]);
     }
