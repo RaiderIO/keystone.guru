@@ -38,8 +38,8 @@ $header = sprintf(__('view_profile.view.header'), $user->name);
 
 @section('content')
     @if($creatorProfileActive)
-        <div class="creator_hero bg-body-tertiary border mb-4">
-            <div class="row g-3 align-items-center">
+        <div class="card mb-4">
+            <div class="card-body creator_hero row g-3 align-items-center">
                 <div class="col-auto">
                     @if($user->iconfile !== null)
                         <img src="{{ $user->iconfile->getURL() }}"
@@ -76,7 +76,7 @@ $header = sprintf(__('view_profile.view.header'), $user->name);
                             @foreach($socialLinks as $socialLink)
                                 <?php $platformName = __(sprintf('view_profile.view.platform.%s', $socialLink->platform)); ?>
                                 <a href="{{ $socialLink->url }}"
-                                   class="creator_hero_social_link btn btn-outline-secondary"
+                                   class="creator_hero_social_link"
                                    target="_blank"
                                    rel="nofollow noopener noreferrer"
                                    title="{{ __('view_profile.view.social_link', ['platform' => $platformName]) }}"

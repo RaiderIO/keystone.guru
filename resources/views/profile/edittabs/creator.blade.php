@@ -24,7 +24,7 @@ $existingSocialLinks = $user->socialLinks->keyBy('platform');
     </p>
 
     <p>
-        <a href="{{ route('profile.view', ['user' => $user->name]) }}">
+        <a href="{{ route('profile.view', ['user' => $user]) }}">
             <i class="fas fa-external-link-alt"></i> {{ __('view_profile.edit.creator_view_public_profile') }}
         </a>
     </p>
