@@ -80,6 +80,9 @@ $show['controls']['heatmapSearch'] ??= false;
 // This allows you to show heatmaps, but not the sidebar to influence them. You'll have to do that through parameters then.
 $show['controls']['heatmapSearchSidebar'] ??= true;
 $show['controls']['enemyForces']          = $show['controls']['pulls'] && ($show['controls']['enemyForces'] ?? true);
+// The per-floor enemy forces pill describes the mapping rather than the route, so unlike the
+// route-total control above it is also relevant on pages that have no pulls (dungeon explore).
+$show['controls']['floorEnemyForces']     ??= $show['controls']['enemyForces'];
 $show['controls']['draw']                 ??= false;
 $show['controls']['view']                 ??= false;
 $show['controls']['present']                       ??= false;

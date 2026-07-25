@@ -1,10 +1,11 @@
 /**
  * Shows the total enemy forces present on a floor as a small pill/banner.
  *
- * In the split-floors ("Blizzard") layout this is a single screen-fixed pill at the top-center of
- * the map, reflecting the currently-visible floor. In the facade (MDT-style combined image) layout
- * it renders one floating pill per floor, anchored at the centroid of that floor's enemies (which are
- * already projected into facade coordinates), since every floor is visible on the one image at once.
+ * Whenever the map only shows a single floor worth of enemies - the split-floors ("Blizzard") layout,
+ * or a facade (MDT-style combined image) that merges just one real floor - a single pill is pinned to
+ * the top-center of the visible map area. When the facade merges multiple floors they are all visible
+ * on the one image at once, so one floating pill is rendered per floor instead, anchored at the
+ * centroid of that floor's enemies (which are already projected into facade coordinates).
  *
  * The label follows the "Enemy number style" map setting: an absolute enemy forces count, or a
  * percentage of the enemy forces required to complete the dungeon.
@@ -19,6 +20,7 @@ class FloorEnemyForcesControls extends MapControl {
         this.map = map;
         // Only set in facade mode - the layer group holding the per-floor pill markers.
         this._facadeMarkers = null;
+        this.statusbar = null;
 
         // The value is derived from the number style setting and from teeming/shrouded (both the floor
         // total and the required denominator move with teeming), so recompute when either changes.
@@ -29,7 +31,8 @@ class FloorEnemyForcesControls extends MapControl {
             self.refreshUI();
         });
         // On initial page load the control may be added before the enemies have finished loading into
-        // their map object group, which would make the first sum read 0. Refresh once they're loaded.
+        // their map object group, which would make the first sum read 0 - and, in facade mode, hide how
+        // many floors are actually merged. Refresh once they're loaded.
         this.map.register('map:mapobjectgroupsloaded', this, function () {
             self.refreshUI();
         });
@@ -40,11 +43,50 @@ class FloorEnemyForcesControls extends MapControl {
 
                 self.statusbar = $(template({value: ''}))[0];
 
+                // The map fills the viewport underneath the site header, so the top of the Leaflet
+                // container is not the top of the *visible* map. These classes offset the pill down to
+                // where the map's sidebars start.
+                $(self.statusbar).addClass('map_enemy_forces_floor_pill_top_center');
+                if (self.map.options.embed) {
+                    $(self.statusbar).addClass('embed');
+                } else if (isMobile()) {
+                    $(self.statusbar).addClass('mobile');
+                }
+
                 self.refreshUI();
 
                 return self.statusbar;
             }
         };
+    }
+
+    /**
+     * Refreshes the UI to reflect the current per-floor enemy forces.
+     */
+    refreshUI() {
+        console.assert(this instanceof FloorEnemyForcesControls, 'this is not FloorEnemyForcesControls', this);
+
+        // Collect the facade-space positions of every counted enemy, grouped by their real floor. In
+        // facade mode this doubles as the count of floors the facade actually merges.
+        let latLngsByFloorId = this._getEnemyLatLngsByFloorId();
+        let floorIds = Object.keys(latLngsByFloorId);
+
+        // A facade that merges a single floor is just a zoomed-in view of that floor - anchoring the
+        // pill on the enemies would drop it in the middle of the map for no reason, so treat it the
+        // same as the split-floors layout and pin it to the top instead.
+        if (this._facadeMarkers !== null && floorIds.length > 1) {
+            this._renderPerFloorMarkers(latLngsByFloorId);
+
+            return;
+        }
+
+        // In facade mode the current floor is the facade floor itself, which no enemy belongs to, so
+        // take the only floor that has enemies on it instead.
+        let floorId = this._facadeMarkers !== null
+            ? parseInt(floorIds[0], 10)
+            : getState().getCurrentFloor().id;
+
+        this._renderStatusbar(floorId);
     }
 
     /**
@@ -66,37 +108,46 @@ class FloorEnemyForcesControls extends MapControl {
     }
 
     /**
-     * Refreshes the UI to reflect the current per-floor enemy forces.
+     * (Re)builds the single top-center pill for the given floor, hiding it when that floor holds no
+     * enemy forces at all.
+     * @param floorId {Number}
+     * @private
      */
-    refreshUI() {
+    _renderStatusbar(floorId) {
         console.assert(this instanceof FloorEnemyForcesControls, 'this is not FloorEnemyForcesControls', this);
 
-        if (getState().isCurrentDungeonFacadeEnabled()) {
-            this._renderFacadeMarkers();
-        } else if (typeof this.statusbar !== 'undefined') {
-            let floorEnemyForces = this.map.enemyForcesManager.getEnemyForcesForFloor(getState().getCurrentFloor().id);
-            $(this.statusbar).find('.map_enemy_forces_floor_pill_value').html(this._formatValue(floorEnemyForces));
+        // The facade markers and the statusbar are mutually exclusive - clear whichever isn't in use.
+        if (this._facadeMarkers !== null) {
+            this._facadeMarkers.clearLayers();
         }
+
+        if (this.statusbar === null) {
+            return;
+        }
+
+        let floorEnemyForces = isNaN(floorId) ? 0 : this.map.enemyForcesManager.getEnemyForcesForFloor(floorId);
+
+        // Don't show an empty pill on floors that have no enemy forces to speak of.
+        $(this.statusbar).toggleClass('d-none', floorEnemyForces <= 0);
+        $(this.statusbar).find('.map_enemy_forces_floor_pill_value').html(this._formatValue(floorEnemyForces));
     }
 
     /**
-     * (Re)builds the per-floor pill markers for the facade layout.
+     * (Re)builds the per-floor pill markers for a facade that merges multiple floors.
+     * @param latLngsByFloorId {Object} A map of floor id to an array of [lat, lng] pairs.
      * @private
      */
-    _renderFacadeMarkers() {
+    _renderPerFloorMarkers(latLngsByFloorId) {
         console.assert(this instanceof FloorEnemyForcesControls, 'this is not FloorEnemyForcesControls', this);
 
-        if (this._facadeMarkers === null) {
-            return;
+        // The facade markers and the statusbar are mutually exclusive - clear whichever isn't in use.
+        if (this.statusbar !== null) {
+            $(this.statusbar).addClass('d-none');
         }
 
         this._facadeMarkers.clearLayers();
 
         let template = Handlebars.templates['map_enemy_forces_floor_pill'];
-
-        // Collect the facade-space positions of every counted enemy, grouped by their real floor, so
-        // each floor's pill can be anchored at the centroid of its enemies on the combined image.
-        let latLngsByFloorId = this._getEnemyLatLngsByFloorId();
 
         for (let floorId in latLngsByFloorId) {
             let floorEnemyForces = this.map.enemyForcesManager.getEnemyForcesForFloor(parseInt(floorId, 10));
@@ -159,11 +210,10 @@ class FloorEnemyForcesControls extends MapControl {
     addControl() {
         console.assert(this instanceof FloorEnemyForcesControls, 'this is not FloorEnemyForcesControls', this);
 
+        // Both display modes are built up front: whether a facade merges one floor or several is only
+        // known once the enemies have loaded, which happens after this control is added.
         if (getState().isCurrentDungeonFacadeEnabled()) {
             this._facadeMarkers = L.layerGroup().addTo(this.map.leafletMap);
-            this._renderFacadeMarkers();
-
-            return;
         }
 
         // Code for the statusbar
@@ -190,6 +240,8 @@ class FloorEnemyForcesControls extends MapControl {
             this.map.leafletMap.removeLayer(this._facadeMarkers);
             this._facadeMarkers = null;
         }
+
+        this.statusbar = null;
 
         getState().unregister('mapnumberstyle:changed', this);
         getState().getMapContext().unregister('teeming:changed', this);

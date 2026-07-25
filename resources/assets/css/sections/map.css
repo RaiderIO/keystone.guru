@@ -1005,6 +1005,22 @@
     pointer-events: none;
 }
 
+/* The Leaflet container spans the whole viewport underneath the site header, so its top-center
+   corner sits behind the navbar. Push the pill down to where the map's sidebars start, so it lands
+   at the top of the *visible* map area. Values mirror .route_sidebar.right in sass/custom/map.scss. */
+.map_enemy_forces_floor_pill_top_center {
+    margin-top: 150px;
+}
+
+.map_enemy_forces_floor_pill_top_center.mobile {
+    margin-top: 70px;
+}
+
+/* Embeds have no site header to clear. */
+.map_enemy_forces_floor_pill_top_center.embed {
+    margin-top: 0;
+}
+
 /* Facade layout only: the pill is a Leaflet divIcon marker (iconSize: null), so strip Leaflet's
    default icon box and center the pill on its anchor point. */
 .map_enemy_forces_floor_pill_icon {
