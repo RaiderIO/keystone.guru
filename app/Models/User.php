@@ -31,28 +31,30 @@ use Laratrust\Traits\HasRolesAndPermissions;
 use Override;
 
 /**
- * @property int    $id
- * @property string $public_key
- * @property int    $game_server_region_id
- * @property int    $patreon_user_link_id
- * @property int    $game_version_id
- * @property int    $dungeon_id                The dungeon context this user is in.
- * @property string $name
- * @property string $initials                  The initials (two letters) of a user so we can display it as the connected user in case of no avatar
- * @property string $email
- * @property string $locale
- * @property string $theme
- * @property string $echo_color
- * @property bool   $echo_anonymous
- * @property bool   $changed_username
- * @property string $timezone
- * @property string $map_facade_style
- * @property int    $kill_zone_path_weight
- * @property string $password
- * @property string $raw_patreon_response_data
- * @property bool   $legal_agreed
- * @property int    $legal_agreed_ms
- * @property bool   $analytics_cookie_opt_out
+ * @property int         $id
+ * @property string      $public_key
+ * @property int         $game_server_region_id
+ * @property int         $patreon_user_link_id
+ * @property int         $game_version_id
+ * @property int         $dungeon_id                  The dungeon context this user is in.
+ * @property string      $name
+ * @property string|null $bio                         Free-form biography shown on the public creator profile.
+ * @property bool        $hide_from_creator_directory Whether the user opted out of the creator directory.
+ * @property string      $initials                    The initials (two letters) of a user so we can display it as the connected user in case of no avatar
+ * @property string      $email
+ * @property string      $locale
+ * @property string      $theme
+ * @property string      $echo_color
+ * @property bool        $echo_anonymous
+ * @property bool        $changed_username
+ * @property string      $timezone
+ * @property string      $map_facade_style
+ * @property int         $kill_zone_path_weight
+ * @property string      $password
+ * @property string      $raw_patreon_response_data
+ * @property bool        $legal_agreed
+ * @property int         $legal_agreed_ms
+ * @property bool        $analytics_cookie_opt_out
  *
  * @property PatreonUserLink|null       $patreonUserLink
  * @property GameServerRegion|null      $gameServerRegion
@@ -62,12 +64,14 @@ use Override;
  *
  * @property bool $is_admin
  *
- * @property EloquentCollection<int, DungeonRoute>  $dungeonRoutes
- * @property EloquentCollection<int, UserReport>    $reports
- * @property EloquentCollection<int, Team>          $teams
- * @property EloquentCollection<int, Role>          $roles
- * @property EloquentCollection<int, Tag>           $tags
- * @property EloquentCollection<int, UserIpAddress> $ipAddresses
+ * @property EloquentCollection<int, DungeonRoute>           $dungeonRoutes
+ * @property EloquentCollection<int, UserReport>             $reports
+ * @property EloquentCollection<int, Team>                   $teams
+ * @property EloquentCollection<int, Role>                   $roles
+ * @property EloquentCollection<int, Tag>                    $tags
+ * @property EloquentCollection<int, UserIpAddress>          $ipAddresses
+ * @property EloquentCollection<int, UserSocialLink>         $socialLinks
+ * @property EloquentCollection<int, UserPinnedDungeonRoute> $pinnedDungeonRoutes
  *
  * @mixin Eloquent
  */
@@ -131,6 +135,8 @@ class User extends Authenticatable implements LaratrustUser
         'public_key',
         'oauth_id',
         'name',
+        'bio',
+        'hide_from_creator_directory',
         'email',
         'echo_color',
         'map_facade_style',
@@ -218,6 +224,18 @@ class User extends Authenticatable implements LaratrustUser
     public function ipAddresses(): HasMany
     {
         return $this->hasMany(UserIpAddress::class);
+    }
+
+    /** @return HasMany<UserSocialLink, $this> */
+    public function socialLinks(): HasMany
+    {
+        return $this->hasMany(UserSocialLink::class);
+    }
+
+    /** @return HasMany<UserPinnedDungeonRoute, $this> */
+    public function pinnedDungeonRoutes(): HasMany
+    {
+        return $this->hasMany(UserPinnedDungeonRoute::class)->orderBy('order');
     }
 
     /**

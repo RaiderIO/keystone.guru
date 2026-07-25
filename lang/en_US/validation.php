@@ -20,10 +20,22 @@ return [
         'numeric' => 'The :attribute must be between :min and :max.',
         'string'  => 'The :attribute must be between :min and :max characters.',
     ],
-    'boolean'           => 'The :attribute field must be true or false.',
-    'can'               => 'The :attribute field contains an unauthorized value.',
-    'confirmed'         => 'The :attribute confirmation does not match.',
-    'current_password'  => 'The password is incorrect.',
+    'boolean'          => 'The :attribute field must be true or false.',
+    'can'              => 'The :attribute field contains an unauthorized value.',
+    'confirmed'        => 'The :attribute confirmation does not match.',
+    'current_password' => 'The password is incorrect.',
+    'custom'           => [
+        'bio' => [
+            'max' => 'Your bio may not be longer than :max characters.',
+        ],
+        'pinned_dungeon_routes' => [
+            'max'    => 'You may pin at most :max routes to your profile.',
+            'exists' => 'You can only pin routes that you created yourself.',
+        ],
+        'social_links' => [
+            'invalid_url_for_platform' => 'That is not a valid https link for this platform.',
+        ],
+    ],
     'date'              => 'The :attribute is not a valid date.',
     'date_equals'       => 'The :attribute must be a date equal to :date.',
     'date_format'       => 'The :attribute does not match the format :format.',
