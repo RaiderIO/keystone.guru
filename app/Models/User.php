@@ -64,6 +64,9 @@ use Override;
  *
  * @property bool $is_admin
  *
+ * @property int|null $published_route_count Only present when hydrated through
+ *                                           CreatorDirectoryService's withCount().
+ *
  * @property EloquentCollection<int, DungeonRoute>           $dungeonRoutes
  * @property EloquentCollection<int, UserReport>             $reports
  * @property EloquentCollection<int, Team>                   $teams
