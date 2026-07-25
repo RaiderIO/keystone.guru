@@ -6,6 +6,7 @@ use App\Models\Enemy;
 use App\Models\Floor\FloorUnion;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -39,6 +40,7 @@ final class MappingVersionFloorEnemyForcesAnchorsTest extends PublicTestCase
 
         // Assert - a floor whose centroid falls in a gap between its union areas must still be anchored
         // (via the largest-cluster fallback) rather than silently dropped
+        $this->assertNotEmpty($floorIds, 'The chosen mapping version should have enemies to anchor.');
         $this->assertEqualsCanonicalizing(
             $floorIds,
             $anchors->pluck('floor_id')->all(),
@@ -65,10 +67,18 @@ final class MappingVersionFloorEnemyForcesAnchorsTest extends PublicTestCase
             /** @var EloquentCollection<int, Enemy> $enemies */
             $enemies = $enemiesByFloorId->get($anchor['floor_id']);
 
-            $this->assertNotEqualsWithDelta(
+            // Compare on distance rather than on lat or lng alone - a floor union can translate almost
+            // purely along one axis, which would leave the other looking untouched.
+            $distance = $this->getCoordinatesService()->distanceBetweenPoints(
+                (float)$enemies->avg('lng'),
+                $anchor['lng'],
                 (float)$enemies->avg('lat'),
                 $anchor['lat'],
+            );
+
+            $this->assertGreaterThan(
                 0.001,
+                $distance,
                 sprintf('Anchor for floor %d was not translated onto the facade image.', $anchor['floor_id']),
             );
         }
@@ -115,6 +125,11 @@ final class MappingVersionFloorEnemyForcesAnchorsTest extends PublicTestCase
     {
         $mostCarvedUpFloor = FloorUnion::query()
             ->selectRaw('mapping_version_id, count(*) as floor_union_count')
+            // A mapping version that doesn't draw a facade, or has no enemies, would produce no anchors
+            // at all and let every assertion below pass vacuously.
+            ->whereHas('mappingVersion', static fn(Builder $query) => $query
+                ->where('facade_enabled', true)
+                ->whereHas('enemies'))
             ->groupBy('mapping_version_id', 'target_floor_id')
             ->havingRaw('count(*) > 1')
             ->orderByDesc('floor_union_count')
