@@ -11,7 +11,7 @@ class LiveSessionPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can create a tag.
+     * Determine whether the user can view the live session.
      */
     public function view(User $user, LiveSession $liveSession): bool
     {

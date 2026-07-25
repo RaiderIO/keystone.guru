@@ -79,29 +79,11 @@ class DungeonRoutePolicy
     }
 
     /**
-     * Determine whether the user can unpublish dungeon routes.
-     */
-    public function unpublish(User $user, DungeonRoute $dungeonroute): bool
-    {
-        // Only authors or if the user is an admin
-        return $dungeonroute->isOwnedByUser($user) || $user->hasRole(Role::ROLE_ADMIN);
-    }
-
-    /**
      * Determine whether the user can rate a dungeon route.
      */
     public function rate(User $user, DungeonRoute $dungeonroute): bool
     {
-        return !$dungeonroute->isOwnedByUser();
-    }
-
-    /**
-     * Determine whether the user can favorite a dungeon route.
-     */
-    public function favorite(User $user, DungeonRoute $dungeonroute): bool
-    {
-        // All users may favorite all routes
-        return true;
+        return !$dungeonroute->isOwnedByUser($user);
     }
 
     /**
@@ -134,15 +116,6 @@ class DungeonRoutePolicy
     public function delete(User $user, DungeonRoute $dungeonroute): bool
     {
         // Only the admin may delete routes
-        return $dungeonroute->isOwnedByUser($user) || $user->hasRole(Role::ROLE_ADMIN);
-    }
-
-    /**
-     * Determine whether the user can restore the dungeon route.
-     */
-    public function restore(User $user, DungeonRoute $dungeonroute): bool
-    {
-        // Only authors or if the user is an admin
         return $dungeonroute->isOwnedByUser($user) || $user->hasRole(Role::ROLE_ADMIN);
     }
 

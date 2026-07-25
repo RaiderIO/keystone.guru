@@ -8,24 +8,10 @@ use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Database\Eloquent\Model;
 
 class TagPolicy
 {
     use HandlesAuthorization;
-
-    /**
-     * Determine whether the user can edit the tag.
-     */
-    public function createTag(User $user, TagCategory $tagCategory, Model $model): bool
-    {
-        $result = match ($tagCategory->name) {
-            TagCategory::DUNGEON_ROUTE_PERSONAL, TagCategory::DUNGEON_ROUTE_TEAM => $model instanceof DungeonRoute && $model->mayUserEdit($user),
-            default                                                              => false,
-        };
-
-        return $result;
-    }
 
     /**
      * Determine whether the user can edit the tag.
