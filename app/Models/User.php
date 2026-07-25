@@ -162,6 +162,21 @@ class User extends Authenticatable implements LaratrustUser
         'initials',
     ];
 
+    /**
+     * Only the creator-profile column is cast here. The model's other booleans
+     * (echo_anonymous, legal_agreed, analytics_cookie_opt_out) have always been read back as ints
+     * despite their bool docblocks; casting them now would change behaviour well outside this
+     * feature, so that is left alone deliberately.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'hide_from_creator_directory' => 'bool',
+        ];
+    }
+
     public function getInitialsAttribute(): string
     {
         return initials($this->name);

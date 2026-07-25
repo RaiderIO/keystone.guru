@@ -1,15 +1,14 @@
 /**
  * Creator podium - the public profile hero shown above a creator's routes.
  *
- * Colours are deliberately left to Bootstrap 5.3's theme-aware utilities (bg-body-tertiary,
- * text-body-secondary, border) so the hero follows darkly / lux / vapor without a per-theme
- * override here. Only geometry and motion live in this file.
+ * The hero is a Bootstrap .card so it picks up each bootswatch theme's card background. Do NOT
+ * reach for the bg-body-* utilities here: this site ships one stylesheet per theme rather than
+ * using Bootstrap 5.3's data-bs-theme attribute, and bootswatch leaves --bs-tertiary-bg at its
+ * light default (#f8f9fa) even under darkly/vapor - bg-body-tertiary renders a white panel with
+ * white text. --bs-secondary-color *is* themed, so text-body-secondary is safe.
+ *
+ * Only geometry and motion live in this file; colour comes from the theme.
  */
-
-.creator_hero {
-    padding: 1.5rem;
-    border-radius: 0.75rem;
-}
 
 .creator_hero_avatar {
     width: 96px;
@@ -48,19 +47,30 @@
     gap: 0.5rem;
 }
 
+/*
+ * Deliberately not btn-outline-secondary: bootswatch's $secondary is a dark grey under darkly and
+ * vapor, which on the equally dark card reads as an invisible button - and picking a light variant
+ * instead would fail the same way under lux. Inheriting currentColor tracks each theme's body text,
+ * so the icons stay legible on all three.
+ */
 .creator_hero_social_link {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 2.25rem;
     height: 2.25rem;
+    border: 1px solid currentColor;
     border-radius: 50%;
+    color: inherit;
+    opacity: 0.75;
     text-decoration: none;
-    transition: transform 0.12s ease-in-out;
+    transition: transform 0.12s ease-in-out, opacity 0.12s ease-in-out;
 }
 
 .creator_hero_social_link:hover,
 .creator_hero_social_link:focus-visible {
+    color: inherit;
+    opacity: 1;
     transform: translateY(-2px);
 }
 
@@ -77,7 +87,6 @@
 
 @media (max-width: 575.98px) {
     .creator_hero {
-        padding: 1rem;
         text-align: center;
     }
 
