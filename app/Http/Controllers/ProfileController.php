@@ -283,13 +283,15 @@ class ProfileController extends Controller
         $user->bio                         = $validated['bio'] ?? null;
         $user->hide_from_creator_directory = (bool)($validated['hide_from_creator_directory'] ?? false);
 
-        if (!$user->save()) {
-            abort(500, __('controller.profile.flash.unexpected_error_when_saving'));
-        }
-
+        // The user row and its links are saved together: a failure partway through would otherwise
+        // leave the bio updated while the links and pins still describe the previous state.
         // Replace rather than diff - both sets are capped at a handful of rows, and replacing keeps
         // the pin ordering trivially correct without reconciling against what was already stored
         DB::transaction(function () use ($user, $request, $userSocialLinkRepository, $userPinnedDungeonRouteRepository): void {
+            if (!$user->save()) {
+                abort(500, __('controller.profile.flash.unexpected_error_when_saving'));
+            }
+
             $user->socialLinks()->delete();
 
             foreach ($request->socialLinks() as $platform => $url) {

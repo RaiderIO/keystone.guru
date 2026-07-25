@@ -289,6 +289,39 @@ final class ProfileCreatorProfileTest extends PublicTestCase
         }
     }
 
+    /**
+     * user_pinned_dungeon_routes is unique on (user_id, dungeon_route_id), so a duplicate must be
+     * rejected by validation rather than blowing up on the constraint mid-transaction.
+     */
+    #[Test]
+    public function updateCreatorProfile_givenTheSameRoutePinnedTwice_failsValidation(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        $route   = DungeonRoute::factory()->create([
+            'author_id'  => $creator->id,
+            'expires_at' => null,
+        ]);
+
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->patch(route('profile.creator.update'), [
+                'pinned_dungeon_routes' => [$route->id, $route->id],
+            ]);
+
+            // Assert
+            $response->assertSessionHasErrors('pinned_dungeon_routes.0');
+            $this->assertSame(0, UserPinnedDungeonRoute::where('user_id', $creator->id)->count());
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            UserPinnedDungeonRoute::where('user_id', $creator->id)->delete();
+            $route->delete();
+            $creator->delete();
+        }
+    }
+
     #[Test]
     public function updateCreatorProfile_givenFeatureInactive_returnsNotFound(): void
     {
