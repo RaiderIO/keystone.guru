@@ -809,8 +809,13 @@ class Enemy extends VersionableMapObject {
                 text = lang.get('js.no_npc_found_label');
             }
 
-            // Only rebind if the text has changed
-            if (this.tooltipText !== text) {
+            // Only rebind if the text has changed - or if nothing is bound right now (#3670).
+            // Anything that unbinds the tooltip without also resetting tooltipText (the circle menu
+            // in EnemyVisual, a layer swap in MapObjectGroup#setLayerToMapObject) would otherwise
+            // leave this enemy without a tooltip permanently: the recomputed text is identical, so
+            // the guard short-circuits and the rebind never happens.
+            // Leaflet's getTooltip() is undefined before the first bind and null after unbindTooltip().
+            if (this.tooltipText !== text || !this.layer.getTooltip()) {
                 this.tooltipText = text;
 
                 // Remove any previous tooltip
@@ -1355,4 +1360,12 @@ class Enemy extends VersionableMapObject {
             this.visual = null;
         }
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        Enemy,
+    };
 }
