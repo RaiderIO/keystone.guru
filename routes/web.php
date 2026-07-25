@@ -11,6 +11,7 @@
 |
 */
 
+use App\Features\CreatorProfiles;
 use App\Features\NpcCompendium;
 use App\Http\Controllers\Admin\AdminDungeonRouteController;
 use App\Http\Controllers\AdminTools\AdminToolsArtisanCommandsController;
@@ -322,6 +323,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::get('routes', new ProfileController()->routes(...))->name('profile.routes');
             Route::get('favorites', new ProfileController()->favorites(...))->name('profile.favorites');
             Route::get('tags', new ProfileController()->tags(...))->name('profile.tags');
+            // Must be declared before the patch('{user}') route below, which would otherwise match
+            // 'creator' as a user and never reach this handler
+            Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))
+                ->patch('creator', new ProfileController()->updateCreatorProfile(...))->name('profile.creator.update');
             Route::patch('{user}', new ProfileController()->update(...))->name('profile.update');
             Route::delete('delete', new ProfileController()->delete(...))->name('profile.delete');
             Route::patch('{user}/privacy', new ProfileController()->updatePrivacy(...))->name('profile.updateprivacy');

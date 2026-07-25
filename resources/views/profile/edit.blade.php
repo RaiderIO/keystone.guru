@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\CharacterClass;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameServerRegion;
 use App\Models\User;
 use Illuminate\Support\Collection;
@@ -9,6 +10,9 @@ use Illuminate\Support\Collection;
  * @var User                              $user
  * @var Collection<int, CharacterClass>   $allClasses
  * @var Collection<int, GameServerRegion> $allRegions
+ * @var bool                              $creatorProfileActive
+ * @var Collection<int, DungeonRoute>     $ownDungeonRoutes
+ * @var array<int, int>                   $pinnedDungeonRouteIds
  */
 
 $user      = Auth::getUser();
@@ -22,6 +26,11 @@ $menuItems = [
 // Optionally add this menu item
 if (!$isOAuth) {
     $menuItems[] = ['icon' => 'fa-key', 'text' => __('view_profile.edit.change_password'), 'target' => '#change-password'];
+}
+
+if ($creatorProfileActive) {
+    $user->load(['socialLinks', 'pinnedDungeonRoutes']);
+    $menuItems[] = ['icon' => 'fa-star', 'text' => __('view_profile.edit.creator'), 'target' => '#creator'];
 }
 
 $menuItems[] = ['icon' => 'fa-user-secret', 'text' => __('view_profile.edit.privacy'), 'target' => '#privacy'];
@@ -72,6 +81,14 @@ $menuTitle = sprintf(__('view_profile.edit.menu_title'), $user->name);
         @include('profile.edittabs.account', ['user' => $user])
 
         @include('profile.edittabs.patreon', ['user' => $user])
+
+        @if($creatorProfileActive)
+            @include('profile.edittabs.creator', [
+                'user' => $user,
+                'ownDungeonRoutes' => $ownDungeonRoutes,
+                'pinnedDungeonRouteIds' => $pinnedDungeonRouteIds,
+            ])
+        @endif
 
         @if(!$isOAuth)
             @include('profile.edittabs.changepassword', ['user' => $user])
