@@ -81,6 +81,8 @@ use App\Service\Cookies\CookieService;
 use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\Creator\CreatorDirectoryService;
+use App\Service\Creator\CreatorDirectoryServiceInterface;
 use App\Service\Discord\DiscordApiService;
 use App\Service\Discord\DiscordApiServiceInterface;
 use App\Service\Dungeon\DungeonService;
@@ -187,6 +189,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(PatreonApiServiceInterface::class, PatreonApiService::class);
         $this->app->bind(WowToolsServiceInterface::class, WowToolsService::class);
         $this->app->bind(AdProviderServiceInterface::class, AdProviderService::class);
+        $this->app->bind(CreatorDirectoryServiceInterface::class, CreatorDirectoryService::class);
         $this->app->bind(WowheadServiceInterface::class, WowheadService::class);
         $this->app->bind(WowheadTranslationServiceInterface::class, WowheadTranslationService::class);
         if (

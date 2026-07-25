@@ -72,6 +72,7 @@ use App\Http\Controllers\Compendium\ClassCompendiumController;
 use App\Http\Controllers\Compendium\CompendiumController;
 use App\Http\Controllers\Compendium\NpcCompendiumController;
 use App\Http\Controllers\Compendium\SpellCompendiumController;
+use App\Http\Controllers\CreatorDirectoryController;
 use App\Http\Controllers\Dungeon\DungeonController;
 use App\Http\Controllers\Dungeon\DungeonExploreController;
 use App\Http\Controllers\Dungeon\DungeonHeatmapController;
@@ -208,6 +209,12 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Route::prefix('dungeon')->group(static function () {
         Route::get('/{dungeon}', new DungeonController()->changeContext(...))->name('dungeon.changecontext');
     });
+
+    // Creator directory
+    Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))
+        ->prefix('creators')->group(static function () {
+            Route::get('/', new CreatorDirectoryController()->index(...))->name('creators.index');
+        });
 
     // Discover routes
     Route::prefix('routes')->group(static function () {

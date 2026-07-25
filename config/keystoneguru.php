@@ -269,6 +269,21 @@ return [
     ],
 
     /**
+     * The creator directory (see the CreatorProfiles feature flag)
+     */
+    'creators' => [
+        /**
+         * How many world-published routes a user needs before they are listed automatically.
+         * Listing is opt-out: users below this bar never appear, and anyone can remove themselves
+         * with the hide_from_creator_directory switch on their profile.
+         */
+        'min_published_routes' => 3,
+
+        /** How many creators to show per page of the directory */
+        'per_page' => 24,
+    ],
+
+    /**
      * For the discover section of the site - this controls various variables
      */
     'discover' => [
