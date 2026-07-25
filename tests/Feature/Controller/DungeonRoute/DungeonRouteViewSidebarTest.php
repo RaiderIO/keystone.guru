@@ -18,22 +18,15 @@ use Tests\TestCases\PublicTestCase;
 #[Group('DungeonRoute')]
 final class DungeonRouteViewSidebarTest extends PublicTestCase
 {
-    /**
-     * Users 3 and 4 are seeded with the "user" role and are not admins - an admin may edit every
-     * route, which would make the deny case pass vacuously.
-     */
-    private const int ROUTE_OWNER_USER_ID = 3;
-
-    private const int OTHER_USER_ID = 4;
-
     #[Test]
     public function view_givenOwner_rendersTheEditButton(): void
     {
         // Arrange
-        $route = $this->createRoute();
+        $owner = User::factory()->create();
+        $route = $this->createRoute($owner);
 
         try {
-            $this->be(User::findOrFail(self::ROUTE_OWNER_USER_ID));
+            $this->be($owner);
 
             // Act
             $response = $this->followingRedirects()->get($this->viewUrl($route));
@@ -47,6 +40,7 @@ final class DungeonRouteViewSidebarTest extends PublicTestCase
             ]), false);
         } finally {
             $route->delete();
+            $owner->delete();
         }
     }
 
@@ -54,10 +48,12 @@ final class DungeonRouteViewSidebarTest extends PublicTestCase
     public function view_givenNonOwner_hidesTheEditButton(): void
     {
         // Arrange
-        $route = $this->createRoute();
+        $owner    = User::factory()->create();
+        $nonOwner = User::factory()->create();
+        $route    = $this->createRoute($owner);
 
         try {
-            $this->be(User::findOrFail(self::OTHER_USER_ID));
+            $this->be($nonOwner);
 
             // Act
             $response = $this->followingRedirects()->get($this->viewUrl($route));
@@ -71,6 +67,8 @@ final class DungeonRouteViewSidebarTest extends PublicTestCase
             ]), false);
         } finally {
             $route->delete();
+            $owner->delete();
+            $nonOwner->delete();
         }
     }
 
@@ -78,10 +76,11 @@ final class DungeonRouteViewSidebarTest extends PublicTestCase
     public function view_givenOwner_showsTheCannotRateOwnRouteNotice(): void
     {
         // Arrange
-        $route = $this->createRoute();
+        $owner = User::factory()->create();
+        $route = $this->createRoute($owner);
 
         try {
-            $this->be(User::findOrFail(self::ROUTE_OWNER_USER_ID));
+            $this->be($owner);
 
             // Act
             $response = $this->followingRedirects()->get($this->viewUrl($route));
@@ -91,6 +90,7 @@ final class DungeonRouteViewSidebarTest extends PublicTestCase
             $response->assertSee(__('view_common.maps.controls.elements.rating.unable_to_rate_own_route'));
         } finally {
             $route->delete();
+            $owner->delete();
         }
     }
 
@@ -98,10 +98,12 @@ final class DungeonRouteViewSidebarTest extends PublicTestCase
     public function view_givenNonOwner_showsTheRatingOptions(): void
     {
         // Arrange
-        $route = $this->createRoute();
+        $owner    = User::factory()->create();
+        $nonOwner = User::factory()->create();
+        $route    = $this->createRoute($owner);
 
         try {
-            $this->be(User::findOrFail(self::OTHER_USER_ID));
+            $this->be($nonOwner);
 
             // Act
             $response = $this->followingRedirects()->get($this->viewUrl($route));
@@ -112,17 +114,20 @@ final class DungeonRouteViewSidebarTest extends PublicTestCase
             $response->assertSee(__('view_common.maps.controls.elements.rating.your_rating'));
         } finally {
             $route->delete();
+            $owner->delete();
+            $nonOwner->delete();
         }
     }
 
     /**
-     * A published, non-sandbox route owned by ROUTE_OWNER_USER_ID. Sandbox routes (which the
-     * factory creates by default) are editable by anyone, so expires_at must be null here.
+     * A published, non-sandbox route owned by $owner. Sandbox routes (which the factory creates by
+     * default) are editable by anyone, so expires_at must be null here. The view page is public, so
+     * plain factory users suffice - no role is needed to reach it.
      */
-    private function createRoute(): DungeonRoute
+    private function createRoute(User $owner): DungeonRoute
     {
         return DungeonRoute::factory()->create([
-            'author_id'          => self::ROUTE_OWNER_USER_ID,
+            'author_id'          => $owner->id,
             'expires_at'         => null,
             'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
         ]);
