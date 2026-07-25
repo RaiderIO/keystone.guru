@@ -4,8 +4,8 @@
  * Whenever the map only shows a single floor worth of enemies - the split-floors ("Blizzard") layout,
  * or a facade (MDT-style combined image) that merges just one real floor - a single pill is pinned to
  * the top-center of the visible map area. When the facade merges multiple floors they are all visible
- * on the one image at once, so one floating pill is rendered per floor instead, anchored at the
- * centroid of that floor's enemies (which are already projected into facade coordinates).
+ * on the one image at once, so one floating pill is rendered per floor instead, at the anchor point
+ * the server computed for that floor (see MappingVersion::mapContextFloorEnemyForcesAnchors()).
  *
  * The label follows the "Enemy number style" map setting: an absolute enemy forces count, or a
  * percentage of the enemy forces required to complete the dungeon.
@@ -66,24 +66,22 @@ class FloorEnemyForcesControls extends MapControl {
     refreshUI() {
         console.assert(this instanceof FloorEnemyForcesControls, 'this is not FloorEnemyForcesControls', this);
 
-        // Collect the facade-space positions of every counted enemy, grouped by their real floor. In
-        // facade mode this doubles as the count of floors the facade actually merges.
-        let latLngsByFloorId = this._getEnemyLatLngsByFloorId();
-        let floorIds = Object.keys(latLngsByFloorId);
+        // One anchor per floor the facade merges; empty in the split-floors layout.
+        let anchors = getState().getMapContext().getFloorEnemyForcesAnchors();
 
         // A facade that merges a single floor is just a zoomed-in view of that floor - anchoring the
         // pill on the enemies would drop it in the middle of the map for no reason, so treat it the
         // same as the split-floors layout and pin it to the top instead.
-        if (this._facadeMarkers !== null && floorIds.length > 1) {
-            this._renderPerFloorMarkers(latLngsByFloorId);
+        if (this._facadeMarkers !== null && anchors.length > 1) {
+            this._renderPerFloorMarkers(anchors);
 
             return;
         }
 
         // In facade mode the current floor is the facade floor itself, which no enemy belongs to, so
-        // take the only floor that has enemies on it instead.
+        // fall back to the only floor that has enemies on it.
         let floorId = this._facadeMarkers !== null
-            ? parseInt(floorIds[0], 10)
+            ? anchors[0]?.floor_id
             : getState().getCurrentFloor().id;
 
         this._renderStatusbar(floorId);
@@ -125,7 +123,7 @@ class FloorEnemyForcesControls extends MapControl {
             return;
         }
 
-        let floorEnemyForces = isNaN(floorId) ? 0 : this.map.enemyForcesManager.getEnemyForcesForFloor(floorId);
+        let floorEnemyForces = typeof floorId === 'undefined' ? 0 : this.map.enemyForcesManager.getEnemyForcesForFloor(floorId);
 
         // Don't show an empty pill on floors that have no enemy forces to speak of.
         $(this.statusbar).toggleClass('d-none', floorEnemyForces <= 0);
@@ -134,10 +132,10 @@ class FloorEnemyForcesControls extends MapControl {
 
     /**
      * (Re)builds the per-floor pill markers for a facade that merges multiple floors.
-     * @param latLngsByFloorId {Object} A map of floor id to an array of [lat, lng] pairs.
+     * @param anchors {[]} The server-computed anchor point per floor.
      * @private
      */
-    _renderPerFloorMarkers(latLngsByFloorId) {
+    _renderPerFloorMarkers(anchors) {
         console.assert(this instanceof FloorEnemyForcesControls, 'this is not FloorEnemyForcesControls', this);
 
         // The facade markers and the statusbar are mutually exclusive - clear whichever isn't in use.
@@ -149,8 +147,9 @@ class FloorEnemyForcesControls extends MapControl {
 
         let template = Handlebars.templates['map_enemy_forces_floor_pill'];
 
-        for (let floorId in latLngsByFloorId) {
-            let floorEnemyForces = this.map.enemyForcesManager.getEnemyForcesForFloor(parseInt(floorId, 10));
+        for (let index in anchors) {
+            let anchor = anchors[index];
+            let floorEnemyForces = this.map.enemyForcesManager.getEnemyForcesForFloor(anchor.floor_id);
 
             // Don't clutter the map with pills for floors that have no enemy forces.
             if (floorEnemyForces <= 0) {
@@ -159,7 +158,7 @@ class FloorEnemyForcesControls extends MapControl {
 
             let html = template({value: this._formatValue(floorEnemyForces)});
 
-            L.marker(getCenteroid(latLngsByFloorId[floorId]), {
+            L.marker([anchor.lat, anchor.lng], {
                 icon: L.divIcon({
                     html: html,
                     className: 'map_enemy_forces_floor_pill_icon',
@@ -171,37 +170,6 @@ class FloorEnemyForcesControls extends MapControl {
                 keyboard: false,
             }).addTo(this._facadeMarkers);
         }
-    }
-
-    /**
-     * Gathers the (facade-space) lat/lngs of every counted enemy, grouped by the enemy's floor.
-     * @returns {Object} A map of floor id to an array of [lat, lng] pairs.
-     * @private
-     */
-    _getEnemyLatLngsByFloorId() {
-        console.assert(this instanceof FloorEnemyForcesControls, 'this is not FloorEnemyForcesControls', this);
-
-        let latLngsByFloorId = {};
-
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        if (enemyMapObjectGroup === false) {
-            return latLngsByFloorId;
-        }
-
-        for (let key in enemyMapObjectGroup.objects) {
-            /** @type {Enemy} */
-            let enemy = enemyMapObjectGroup.objects[key];
-
-            // Match the same enemies that getEnemyForcesForFloor() sums, and that have a placed layer.
-            if (enemy.isObsolete() || enemy.shouldBeIgnored() || enemy.layer === null || typeof enemy.layer === 'undefined') {
-                continue;
-            }
-
-            let latLng = enemy.layer.getLatLng();
-            (latLngsByFloorId[enemy.floor_id] ??= []).push([latLng.lat, latLng.lng]);
-        }
-
-        return latLngsByFloorId;
     }
 
     /**

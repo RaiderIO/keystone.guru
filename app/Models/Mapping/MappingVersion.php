@@ -506,6 +506,126 @@ class MappingVersion extends Model
         return $this->floorUnionAreas;
     }
 
+    /**
+     * The points at which the front-end can anchor a "total enemy forces on this floor" label when the
+     * map draws the facade (combined) image, where every floor is visible at once - one per floor that
+     * has enemies on it.
+     *
+     * The centroid has to be averaged in the floor's own coordinate space and only then converted:
+     * a floor can be carved up into several floor unions that end up in completely different places on
+     * the combined image (The Nokhud Offensive splits one floor into four), so averaging the already
+     * converted positions would drop the anchor in between the pieces instead of on any of them.
+     *
+     * @return Collection<int, array{floor_id: int, lat: float, lng: float}>
+     */
+    public function mapContextFloorEnemyForcesAnchors(
+        CoordinatesServiceInterface $coordinatesService,
+        bool                        $useFacade,
+    ): Collection {
+        // In the split-floors layout only one floor is on screen at a time, so there's nothing to anchor.
+        if (!($this->facade_enabled && $useFacade)) {
+            return collect();
+        }
+
+        return $this->enemies()
+            ->with('floor')
+            ->get()
+            ->groupBy('floor_id')
+            ->map(function (EloquentCollection $enemies) use ($coordinatesService): ?array {
+                /** @var Enemy $firstEnemy */
+                $firstEnemy = $enemies->first();
+                $floor      = $firstEnemy->floor;
+
+                $centroid = new LatLng((float)$enemies->avg('lat'), (float)$enemies->avg('lng'), $floor);
+
+                // Resolving a union for a point tests it against every floor union area. Without this the
+                // areas are fetched per (point, union) pair, which is thousands of queries once the
+                // fallback below has to resolve a union per enemy. getFloorUnionsForFloor() hands back a
+                // cached collection, so loading the areas onto it once covers every lookup that follows.
+                $floorUnions = $this->getFloorUnionsForFloor($floor)->load('floorUnionAreas');
+
+                // Without any floor unions the floor is drawn onto the combined image untouched, exactly
+                // like its enemies are - the centroid is already in the right place.
+                if ($floorUnions->isEmpty()) {
+                    return $this->toFloorEnemyForcesAnchor($floor, $centroid);
+                }
+
+                $floorUnion = $this->getFloorUnionForLatLng($coordinatesService, $centroid);
+
+                // The centroid landed in a gap between the floor's union areas, which no union can
+                // translate. Fall back to the biggest cluster of enemies that does share a union - that
+                // centroid is guaranteed to convert, and it sits where most of the floor's enemies are.
+                if ($floorUnion === null) {
+                    [$centroid, $floorUnion] = $this->getLargestFloorUnionEnemyCentroid($coordinatesService, $enemies, $floor);
+
+                    if ($floorUnion === null) {
+                        return null;
+                    }
+                }
+
+                return $this->toFloorEnemyForcesAnchor(
+                    $floor,
+                    $coordinatesService->convertMapLocationToFacadeMapLocation($this, $centroid, $floorUnion),
+                );
+            })
+            ->filter()
+            ->values();
+    }
+
+    /**
+     * @return array{floor_id: int, lat: float, lng: float}
+     */
+    private function toFloorEnemyForcesAnchor(Floor $floor, LatLng $latLng): array
+    {
+        return [
+            'floor_id' => $floor->id,
+            'lat'      => $latLng->getLat(),
+            'lng'      => $latLng->getLng(),
+        ];
+    }
+
+    /**
+     * Groups the given enemies by the floor union each of them translates through, and returns the
+     * centroid of the largest group together with that union - forcing the union means the centroid
+     * converts even though it was never checked against the union's areas.
+     *
+     * @param  EloquentCollection<int, Enemy>       $enemies
+     * @return array{0: LatLng, 1: FloorUnion|null}
+     */
+    private function getLargestFloorUnionEnemyCentroid(
+        CoordinatesServiceInterface $coordinatesService,
+        EloquentCollection          $enemies,
+        Floor                       $floor,
+    ): array {
+        /** @var array<int, array{floorUnion: FloorUnion, enemies: array<int, Enemy>}> $enemiesByFloorUnion */
+        $enemiesByFloorUnion = [];
+
+        foreach ($enemies as $enemy) {
+            $floorUnion = $this->getFloorUnionForLatLng($coordinatesService, $enemy->getLatLng());
+
+            if ($floorUnion === null) {
+                continue;
+            }
+
+            $enemiesByFloorUnion[$floorUnion->id] ??= ['floorUnion' => $floorUnion, 'enemies' => []];
+            $enemiesByFloorUnion[$floorUnion->id]['enemies'][] = $enemy;
+        }
+
+        if ($enemiesByFloorUnion === []) {
+            return [new LatLng((float)$enemies->avg('lat'), (float)$enemies->avg('lng'), $floor), null];
+        }
+
+        usort($enemiesByFloorUnion, static fn(array $a, array $b): int => count($b['enemies']) <=> count($a['enemies']));
+
+        $largest        = $enemiesByFloorUnion[0];
+        $largestEnemies = collect($largest['enemies']);
+
+        return [
+            new LatLng((float)$largestEnemies->avg('lat'), (float)$largestEnemies->avg('lng'), $floor),
+            $largest['floorUnion'],
+        ];
+    }
+
     #[Override]
     protected static function boot()
     {

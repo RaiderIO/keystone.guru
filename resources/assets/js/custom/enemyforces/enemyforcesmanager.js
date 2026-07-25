@@ -134,10 +134,15 @@ class EnemyForcesManager extends Signalable {
             /** @type {Enemy} */
             let enemy = enemyMapObjectGroup.objects[key];
 
+            // In the facade layout every enemy has been moved onto the facade floor, so floor_id no
+            // longer says which floor it lives on - source_floor_id, sent along for exactly this reason,
+            // does.
+            let enemyFloorId = enemy.source_floor_id ?? enemy.floor_id;
+
             // Mirror the filter used by KillZone.getEnemyForces() (skip obsolete) and additionally skip
             // enemies that aren't actually present (wrong seasonal type/affix), so the total matches what
             // is shown on the map.
-            if (enemy.floor_id === floorId && !enemy.isObsolete() && !enemy.shouldBeIgnored()) {
+            if (enemyFloorId === floorId && !enemy.isObsolete() && !enemy.shouldBeIgnored()) {
                 result += enemy.getEnemyForces();
             }
         }

@@ -443,6 +443,15 @@ class MapContext extends Signalable {
     }
 
     /**
+     * The facade-space points at which a "total enemy forces on this floor" label can be anchored, one
+     * per floor that has enemies. Empty unless the map is currently drawing the facade image.
+     * @returns {[]}
+     */
+    getFloorEnemyForcesAnchors() {
+        return this._options.dungeon.floorEnemyForcesAnchors ?? [];
+    }
+
+    /**
      *
      * @returns {[]}
      */

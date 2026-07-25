@@ -26,6 +26,7 @@ L.Draw.Enemy = L.Draw.Marker.extend({
 
 /**
  * @property {Number} floor_id
+ * @property {Number|null} source_floor_id The floor the enemy really lives on, when floor_id was replaced by the facade floor
  * @property {Number} enemy_pack_id
  * @property {Number} npc_id
  * @property {Number} mdt_id
@@ -206,6 +207,12 @@ class Enemy extends VersionableMapObject {
                     return getState().getMapContext().getFloorSelectValues();
                 },
                 default: getState().getCurrentFloor().id
+            }),
+            new Attribute({
+                name: 'source_floor_id',
+                type: 'int',
+                edit: false, // Only set server side, when the enemy was moved onto the facade floor
+                default: null
             }),
             new Attribute({
                 name: 'is_mdt',

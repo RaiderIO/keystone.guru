@@ -11,11 +11,12 @@ const EnemyForcesManager = require('./enemyforcesmanager');
 
 /**
  * Builds a fake Enemy exposing only what getEnemyForcesForFloor touches.
- * @param options {{floorId: Number, forces?: Number, obsolete?: Boolean, ignored?: Boolean}}
+ * @param options {{floorId: Number, sourceFloorId?: Number, forces?: Number, obsolete?: Boolean, ignored?: Boolean}}
  */
-function createEnemy({floorId, forces = 0, obsolete = false, ignored = false}) {
+function createEnemy({floorId, sourceFloorId = null, forces = 0, obsolete = false, ignored = false}) {
     return {
         floor_id: floorId,
+        source_floor_id: sourceFloorId,
         isObsolete: () => obsolete,
         shouldBeIgnored: () => ignored,
         getEnemyForces: () => forces,
@@ -50,6 +51,20 @@ describe('EnemyForcesManager.getEnemyForcesForFloor', () => {
 
         expect(manager.getEnemyForcesForFloor(1)).toBe(8);
         expect(manager.getEnemyForcesForFloor(2)).toBe(10);
+    });
+
+    it('getEnemyForcesForFloor_givenFacadeEnemiesWithSourceFloor_sumsBySourceFloor', () => {
+        // In the facade layout every enemy is moved onto the facade floor (99 here), so floor_id no
+        // longer identifies the floor it lives on - source_floor_id does.
+        const manager = createManager([
+            createEnemy({floorId: 99, sourceFloorId: 1, forces: 5}),
+            createEnemy({floorId: 99, sourceFloorId: 1, forces: 3}),
+            createEnemy({floorId: 99, sourceFloorId: 2, forces: 10}),
+        ]);
+
+        expect(manager.getEnemyForcesForFloor(1)).toBe(8);
+        expect(manager.getEnemyForcesForFloor(2)).toBe(10);
+        expect(manager.getEnemyForcesForFloor(99)).toBe(0);
     });
 
     it('getEnemyForcesForFloor_givenObsoleteEnemy_excludesItFromSum', () => {
