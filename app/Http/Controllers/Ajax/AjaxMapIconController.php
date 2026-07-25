@@ -6,6 +6,7 @@ use App\Events\Models\MapIcon\MapIconChangedEvent;
 use App\Events\Models\MapIcon\MapIconDeletedEvent;
 use App\Events\Models\ModelChangedEvent;
 use App\Http\Controllers\Traits\ChangesDungeonRoute;
+use App\Http\Controllers\Traits\EnforcesDungeonRouteLimits;
 use App\Http\Requests\MapIcon\MapIconFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\MapIcon;
@@ -28,6 +29,7 @@ use Throwable;
 
 class AjaxMapIconController extends AjaxMappingModelBaseController
 {
+    use EnforcesDungeonRouteLimits;
     use ChangesDungeonRoute;
 
     #[Override]
@@ -68,7 +70,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         } // We're editing a map comment for the user, carry on
         else {
             Gate::authorize('edit', $dungeonRoute);
-            Gate::authorize('addMapIcon', $dungeonRoute);
+            $this->abortIfDungeonRouteLimitReached($dungeonRoute, self::LIMIT_MAP_ICONS);
         }
 
         $beforeModel = $mapIcon === null ? null : clone $mapIcon;

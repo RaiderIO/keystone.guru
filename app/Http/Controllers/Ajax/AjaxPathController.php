@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ajax;
 use App\Events\Models\Path\PathChangedEvent;
 use App\Events\Models\Path\PathDeletedEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\EnforcesDungeonRouteLimits;
 use App\Http\Controllers\Traits\SavesPolylines;
 use App\Http\Controllers\Traits\ValidatesFloorId;
 use App\Http\Requests\Path\APIPathFormRequest;
@@ -26,6 +27,7 @@ use Teapot\StatusCode\Http;
 
 class AjaxPathController extends Controller
 {
+    use EnforcesDungeonRouteLimits;
     use SavesPolylines;
     use ValidatesFloorId;
 
@@ -43,7 +45,7 @@ class AjaxPathController extends Controller
         $dungeonRoute = $path?->dungeonRoute ?? $dungeonRoute; // @phpstan-ignore nullsafe.neverNull
 
         Gate::authorize('edit', $dungeonRoute);
-        Gate::authorize('addPath', $dungeonRoute);
+        $this->abortIfDungeonRouteLimitReached($dungeonRoute, self::LIMIT_PATHS);
 
         $validated = $request->validated();
 

@@ -7,6 +7,7 @@ use App\Events\Models\KillZone\KillZoneDeletedEvent;
 use App\Events\Models\PridefulEnemy\PridefulEnemyDeletedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesDungeonRoute;
+use App\Http\Controllers\Traits\EnforcesDungeonRouteLimits;
 use App\Http\Requests\KillZone\APIDeleteAllFormRequest;
 use App\Http\Requests\KillZone\APIKillZoneFormRequest;
 use App\Http\Requests\KillZone\APIKillZoneMassFormRequest;
@@ -29,10 +30,12 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Teapot\StatusCode\Http;
 
 class AjaxKillZoneController extends Controller
 {
+    use EnforcesDungeonRouteLimits;
     use ChangesDungeonRoute;
 
     /**
@@ -108,7 +111,7 @@ class AjaxKillZoneController extends Controller
         // resolve the real route the caller's authorization already resolved to.
         $dungeonroute = $killZone->dungeonRoute ?? $dungeonroute;
 
-        Gate::authorize('addKillZone', $dungeonroute);
+        $this->abortIfDungeonRouteLimitReached($dungeonroute, self::LIMIT_KILL_ZONES);
 
         $beforeModel = clone $killZone;
 
@@ -270,8 +273,9 @@ class AjaxKillZoneController extends Controller
 
             $result = $this->saveKillZone($coordinatesService, $dungeonRoute, $data, $killZone !== null);
             $result->setAttribute('killzone_paths', $this->getKillZonePaths($killZonePathService, $dungeonRoute));
-        } catch (AuthorizationException $authorizationException) {
-            throw $authorizationException;
+        } catch (AuthorizationException|HttpException $deliberateResponse) {
+            // A 403 or a 422 we raised on purpose must not be rewritten into the 404 below
+            throw $deliberateResponse;
         } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
@@ -319,8 +323,9 @@ class AjaxKillZoneController extends Controller
                         false,
                     ),
                 );
-            } catch (AuthorizationException $authorizationException) {
-                throw $authorizationException;
+            } catch (AuthorizationException|HttpException $deliberateResponse) {
+                // A 403 or a 422 we raised on purpose must not be rewritten into the 404 below
+                throw $deliberateResponse;
             } catch (Exception) {
                 return response(sprintf('Unable to find kill zone %s', $killZoneData['id']), Http::NOT_FOUND);
             }
