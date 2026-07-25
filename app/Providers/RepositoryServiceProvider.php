@@ -115,8 +115,10 @@ use App\Repositories\Database\TeamUserRepository;
 use App\Repositories\Database\Timewalking\TimewalkingEventRepository;
 use App\Repositories\Database\Translation\TranslationRepository;
 use App\Repositories\Database\UserIpAddressRepository;
+use App\Repositories\Database\UserPinnedDungeonRouteRepository;
 use App\Repositories\Database\UserReportRepository;
 use App\Repositories\Database\UserRepository;
+use App\Repositories\Database\UserSocialLinkRepository;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupBaseRepositoryInterface;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupCouplingRepositoryInterface;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupEaseTierPullRepositoryInterface;
@@ -230,8 +232,10 @@ use App\Repositories\Interfaces\TeamUserRepositoryInterface;
 use App\Repositories\Interfaces\Timewalking\TimewalkingEventRepositoryInterface;
 use App\Repositories\Interfaces\Translation\TranslationRepositoryInterface;
 use App\Repositories\Interfaces\UserIpAddressRepositoryInterface;
+use App\Repositories\Interfaces\UserPinnedDungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\UserReportRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Repositories\Interfaces\UserSocialLinkRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
@@ -396,7 +400,9 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(TeamRepositoryInterface::class, TeamRepository::class);
         $this->app->bind(TeamUserRepositoryInterface::class, TeamUserRepository::class);
         $this->app->bind(UserIpAddressRepositoryInterface::class, UserIpAddressRepository::class);
+        $this->app->bind(UserPinnedDungeonRouteRepositoryInterface::class, UserPinnedDungeonRouteRepository::class);
         $this->app->bind(UserReportRepositoryInterface::class, UserReportRepository::class);
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
+        $this->app->bind(UserSocialLinkRepositoryInterface::class, UserSocialLinkRepository::class);
     }
 }
