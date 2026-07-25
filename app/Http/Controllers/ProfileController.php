@@ -92,11 +92,19 @@ class ProfileController extends Controller
                 ->where('published_state_id', PublishedState::ALL[PublishedState::WORLD])
                 ->count();
 
+            // The pinned routes render through the shared route card, which needs the same relation
+            // set DiscoverService eager loads - lazy loading is disabled, so a miss here is a 500
             $user->load([
                 'socialLinks',
-                'pinnedDungeonRoutes.dungeonRoute.dungeon',
-                'pinnedDungeonRoutes.dungeonRoute.team',
+                'pinnedDungeonRoutes.dungeonRoute.author.iconfile',
                 'pinnedDungeonRoutes.dungeonRoute.affixes',
+                'pinnedDungeonRoutes.dungeonRoute.ratings',
+                'pinnedDungeonRoutes.dungeonRoute.mappingVersion',
+                'pinnedDungeonRoutes.dungeonRoute.thumbnails',
+                'pinnedDungeonRoutes.dungeonRoute.dungeon',
+                'pinnedDungeonRoutes.dungeonRoute.season.expansion',
+                // Needed by mayUserView() for team-published routes
+                'pinnedDungeonRoutes.dungeonRoute.team',
             ]);
 
             $socialLinks = $user->socialLinks;
