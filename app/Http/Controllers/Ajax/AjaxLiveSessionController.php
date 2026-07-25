@@ -8,19 +8,29 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\LiveSession;
 use App\Models\User;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Teapot\StatusCode\Http;
 
 class AjaxLiveSessionController extends Controller
 {
     /**
      * @return Response|ResponseFactory
+     *
+     * @throws AuthorizationException
      */
     public function delete(Request $request, DungeonRoute $dungeonRoute, LiveSession $liveSession)
     {
+        // Prefer the live session's own route over the one in the URL, so that passing an unrelated
+        // route cannot be used to authorize against. Ending a session is an edit of that route.
+        $dungeonRoute = $liveSession->dungeonRoute ?? $dungeonRoute;
+
+        Gate::authorize('edit', $dungeonRoute);
+
         try {
             if ($liveSession->expires_at === null) {
                 $expiresHours = config('keystoneguru.live_sessions.expires_hours');

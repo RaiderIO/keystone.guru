@@ -37,7 +37,6 @@ use App\Http\Controllers\Ajax\AjaxBrushlineController;
 use App\Http\Controllers\Ajax\AjaxDungeonFloorSwitchMarkerController;
 use App\Http\Controllers\Ajax\AjaxDungeonRouteController;
 use App\Http\Controllers\Ajax\AjaxDungeonRouteSearchController;
-use App\Http\Controllers\Ajax\AjaxEchoController;
 use App\Http\Controllers\Ajax\AjaxEnemyController;
 use App\Http\Controllers\Ajax\AjaxEnemyPackController;
 use App\Http\Controllers\Ajax\AjaxEnemyPatrolController;
@@ -726,10 +725,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                     Route::post('/overpulledenemy', new AjaxOverpulledEnemyController()->store(...));
                     Route::delete('/overpulledenemy', new AjaxOverpulledEnemyController()->delete(...));
                 });
-            });
-            Route::prefix('echo')->group(static function () {
-                // Echo controller misc
-                Route::get('{dungeonRoute}/members', new AjaxEchoController()->members(...));
             });
             // Teams
             Route::prefix('team/{team}')->group(static function () {

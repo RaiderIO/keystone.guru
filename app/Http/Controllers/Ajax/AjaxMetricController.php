@@ -9,6 +9,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\Metric\MetricServiceInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 
 class AjaxMetricController extends Controller
 {
@@ -24,11 +25,16 @@ class AjaxMetricController extends Controller
         return response()->noContent();
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function storeDungeonRoute(
         APIDungeonRouteMetricFormRequest $request,
         DungeonRoute                     $dungeonRoute,
         MetricServiceInterface           $metricService,
     ): Response {
+        Gate::authorize('view', $dungeonRoute);
+
         $validated = $request->validated();
 
         $metricService->storeMetricByModel($dungeonRoute, $validated['category'], $validated['tag'], $validated['value']);

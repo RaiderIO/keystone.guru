@@ -19,6 +19,7 @@ use App\Models\KillZone\KillZoneSpell;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\KillZonePath\KillZonePathServiceInterface;
+use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -28,7 +29,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Mockery\Exception;
 use Teapot\StatusCode\Http;
 
 class AjaxKillZoneController extends Controller
@@ -230,6 +230,11 @@ class AjaxKillZoneController extends Controller
     ): KillZone {
         $dungeonRoute = $killZone?->dungeonRoute ?? $dungeonRoute; // @phpstan-ignore nullsafe.neverNull
 
+        // Outside the try/catch on purpose: an authorization failure must surface as a 403, not be
+        // rewritten into the 404 below. saveKillZone() only re-authorizes when updating an existing
+        // kill zone, so without this a new kill zone could be created on any route.
+        Gate::authorize('edit', $dungeonRoute);
+
         try {
             $data = $request->validated();
             // Make sure that if we're unsetting all enemies from the killzone, it's handled differently
@@ -246,6 +251,8 @@ class AjaxKillZoneController extends Controller
 
             $result = $this->saveKillZone($coordinatesService, $dungeonRoute, $data, $killZone !== null);
             $result->setAttribute('killzone_paths', $this->getKillZonePaths($killZonePathService, $dungeonRoute));
+        } catch (AuthorizationException $authorizationException) {
+            throw $authorizationException;
         } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
@@ -284,6 +291,8 @@ class AjaxKillZoneController extends Controller
                         false,
                     ),
                 );
+            } catch (AuthorizationException $authorizationException) {
+                throw $authorizationException;
             } catch (Exception) {
                 return response(sprintf('Unable to find kill zone %s', $killZoneData['id']), Http::NOT_FOUND);
             }
