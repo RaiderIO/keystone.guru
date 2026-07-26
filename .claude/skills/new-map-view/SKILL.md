@@ -254,15 +254,22 @@ and makes buggy code look correct.
 $this->floor_id = $latLng->getFloor()?->id;
 ```
 
-**4. Call site:** `MapContextMappingVersionData::toArray()`, and every
-`MappingVersion::mapContext*()` method (`mapContextMapIcons`, `mapContextEnemyPacks`, …) does the
-same for its own model type.
+**4. Call site — but not every model goes through `setLatLng()`.** Enemies convert inline in
+`MapContextMappingVersionData::toArray()` via `$enemy->setLatLng(...)`, and
+`MappingVersion::mapContextMapIcons()` / `mapContextDungeonFloorSwitchMarkers()` do the same for
+`MapIcon` / `DungeonFloorSwitchMarker`. But `mapContextEnemyPacks()`, `mapContextEnemyPatrols()`,
+and `mapContextMountableAreas()` instead call `setRelation('floor', $newFloor)` *and* assign
+`floor_id` directly — both stay in sync, so those three don't hit the desync trap below.
+`mapContextFloorUnions()` / `mapContextFloorUnionAreas()` return their collections untouched and
+don't convert anything at all.
 
 ### Three secondary traps
 
-- **`floor_id` and the loaded `floor` relation desync.** `setLatLng()` writes only `floor_id` and
+- **`floor_id` and the loaded `floor` relation desync — for the `setLatLng()` models only**
+  (`Enemy`, `MapIcon`, `DungeonFloorSwitchMarker`). `setLatLng()` writes only `floor_id` and
   never resets the eager-loaded relation, so after conversion `$enemy->floor->id` (real floor)
-  ≠ `$enemy->floor_id` (facade floor) *in the same PHP process*.
+  ≠ `$enemy->floor_id` (facade floor) *in the same PHP process*. The `setRelation()` models
+  (`EnemyPack`, `EnemyPatrol`, `MountableArea`) are not affected — see point 4 above.
 - **…but the relation is not a client-side substitute.** `Enemy::$hidden` contains `'floor'`, so it
   is stripped from the JSON. Conversely `Enemy` defines no `$visible`, which is *why* an ad-hoc
   `setAttribute('source_floor_id', …)` on a non-column survives serialization — adding a `$visible`
@@ -274,8 +281,10 @@ same for its own model type.
 
 ### The fix
 
-Carry the real floor alongside as `source_floor_id`, captured **before** the conversion, mirroring
-what `MappingVersion::mapContextDungeonFloorSwitchMarkers()` already does:
+**Not implemented today** — this is the pattern to reach for if you need the real floor on the
+client, not existing behavior. Carry the real floor alongside as `source_floor_id`, captured
+**before** the conversion, mirroring what `MappingVersion::mapContextDungeonFloorSwitchMarkers()`
+already does server-side:
 
 ```php
 $enemy->setAttribute('source_floor_id', $enemy->floor_id);
@@ -286,7 +295,18 @@ $enemy->setLatLng($this->coordinatesService->convertMapLocationToFacadeMapLocati
 ));
 ```
 
-Client-side, read `enemy.source_floor_id ?? enemy.floor_id`.
+That server-side half is only half the fix. `MapObject.loadRemoteMapObject()`
+(`resources/assets/js/custom/models/mapobject.js`) copies only the properties each model declares
+in its own `_getAttributes()` — there's no catch-all `Object.assign` in the
+`loadMapObject → _createMapObject → loadRemoteMapObject` chain. `resources/assets/js/custom/models/enemy.js`
+does not declare `source_floor_id`, so on an `Enemy` instance a client-side
+`enemy.source_floor_id ?? enemy.floor_id` silently falls through to the facade floor every time —
+the `setAttribute()` above never reaches the browser. `DungeonFloorSwitchMarker` works today only
+because it *does* register `source_floor_id` as a real `Attribute` in its own `_getAttributes()`
+(`resources/assets/js/custom/models/dungeonfloorswitchmarker.js`) — that registration, not the `??`
+fallback, is the load-bearing half of the pattern. If you add the server-side `setAttribute()` call
+to `Enemy`, add the matching client-side attribute registration too, or the fallback will do
+nothing.
 
 **Related:** computing a per-floor *centroid* server-side has its own trap — a single floor can be
 carved into several floor unions that land in completely different places on the combined image
