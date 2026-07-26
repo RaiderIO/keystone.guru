@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\DungeonRoute\DungeonRouteCollectionFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
+use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
 use App\Models\User;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteCollectionRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteCollectionRouteRepositoryInterface;
@@ -34,7 +35,7 @@ class DungeonRouteCollectionController extends Controller
             // The overview shows a route count per collection - counted in the query rather than
             // per row, which would be a query per collection
             'dungeonRouteCollections' => $user->dungeonRouteCollections()
-                ->with(['team'])
+                ->with(['team', 'dungeonRouteCollectionCategory'])
                 ->withCount('dungeonRouteCollectionRoutes')
                 ->get(),
         ]);
@@ -53,6 +54,7 @@ class DungeonRouteCollectionController extends Controller
             'ownDungeonRoutes'        => $this->getOwnDungeonRoutes($user),
             'selectedDungeonRouteIds' => [],
             'teams'                   => $user->teams,
+            'categories'              => DungeonRouteCollectionCategory::all(),
         ]);
     }
 
@@ -84,12 +86,13 @@ class DungeonRouteCollectionController extends Controller
             $dungeonRouteCollectionRouteRepository,
         ): DungeonRouteCollection {
             $dungeonRouteCollection = $dungeonRouteCollectionRepository->create([
-                'user_id'            => $user->id,
-                'team_id'            => $request->team()?->id,
-                'public_key'         => DungeonRouteCollection::generateRandomPublicKey(),
-                'published_state_id' => $request->publishedStateId(),
-                'name'               => $request->validated('name'),
-                'description'        => $request->validated('description'),
+                'user_id'                              => $user->id,
+                'team_id'                              => $request->team()?->id,
+                'dungeon_route_collection_category_id' => $request->dungeonRouteCollectionCategory()?->id,
+                'public_key'                           => DungeonRouteCollection::generateRandomPublicKey(),
+                'published_state_id'                   => $request->publishedStateId(),
+                'name'                                 => $request->validated('name'),
+                'description'                          => $request->validated('description'),
             ]);
 
             $this->syncDungeonRoutes($dungeonRouteCollection, $request->dungeonRoutes(), $dungeonRouteCollectionRouteRepository);
@@ -120,6 +123,7 @@ class DungeonRouteCollectionController extends Controller
             'ownDungeonRoutes'        => $this->getOwnDungeonRoutes($dungeonRouteCollection->user),
             'selectedDungeonRouteIds' => $dungeonRouteCollection->dungeonRoutes->pluck('id')->all(),
             'teams'                   => $dungeonRouteCollection->user->teams,
+            'categories'              => DungeonRouteCollectionCategory::all(),
         ]);
     }
 
@@ -145,10 +149,11 @@ class DungeonRouteCollectionController extends Controller
             $dungeonRouteCollectionRouteRepository,
         ): void {
             $dungeonRouteCollectionRepository->update($dungeonRouteCollection, [
-                'team_id'            => $request->team()?->id,
-                'published_state_id' => $request->publishedStateId(),
-                'name'               => $request->validated('name'),
-                'description'        => $request->validated('description'),
+                'team_id'                              => $request->team()?->id,
+                'dungeon_route_collection_category_id' => $request->dungeonRouteCollectionCategory()?->id,
+                'published_state_id'                   => $request->publishedStateId(),
+                'name'                                 => $request->validated('name'),
+                'description'                          => $request->validated('description'),
             ]);
 
             $this->syncDungeonRoutes($dungeonRouteCollection, $request->dungeonRoutes(), $dungeonRouteCollectionRouteRepository);
@@ -192,6 +197,7 @@ class DungeonRouteCollectionController extends Controller
         // DiscoverService eager loads - lazy loading is disabled, so a miss here is a 500
         $dungeonRouteCollection->load([
             'user',
+            'dungeonRouteCollectionCategory',
             'dungeonRoutes.author.iconfile',
             'dungeonRoutes.affixes',
             'dungeonRoutes.ratings',

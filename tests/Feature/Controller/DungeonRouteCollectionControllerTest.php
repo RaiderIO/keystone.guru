@@ -5,6 +5,7 @@ namespace Tests\Feature\Controller;
 use App\Features\CreatorProfiles;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
+use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
 use App\Models\DungeonRoute\DungeonRouteCollectionRoute;
 use App\Models\Laratrust\Role;
 use App\Models\PublishedState;
@@ -193,6 +194,134 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
             Feature::for($creator)->forget(CreatorProfiles::class);
             $this->deleteTeam($team);
             $someoneElse->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function savenew_givenACategory_filesTheCollectionUnderIt(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $dungeonRouteCollection = null;
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->post(route('collections.savenew'), [
+                'name'            => 'ZzTestCategorisedCollection',
+                'published_state' => PublishedState::WORLD,
+                'category_id'     => DungeonRouteCollectionCategory::ALL[DungeonRouteCollectionCategory::PUG_FRIENDLY],
+            ]);
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+
+            $dungeonRouteCollection = DungeonRouteCollection::query()
+                ->where('user_id', $creator->id)
+                ->first();
+
+            $this->assertNotNull($dungeonRouteCollection);
+            $this->assertSame(
+                DungeonRouteCollectionCategory::ALL[DungeonRouteCollectionCategory::PUG_FRIENDLY],
+                $dungeonRouteCollection->dungeon_route_collection_category_id,
+            );
+        } finally {
+            $dungeonRouteCollection?->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function savenew_givenACategoryThatDoesNotExist_failsValidation(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->post(route('collections.savenew'), [
+                'name'            => 'ZzTestBogusCategoryCollection',
+                'published_state' => PublishedState::WORLD,
+                'category_id'     => 99999,
+            ]);
+
+            // Assert
+            $response->assertSessionHasErrors('category_id');
+            $this->assertSame(0, DungeonRouteCollection::where('user_id', $creator->id)->count());
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    /**
+     * A category is optional, so saving the form with the empty option selected has to actually
+     * clear it rather than silently keep the previous one.
+     */
+    #[Test]
+    public function update_givenNoCategory_clearsThePreviousOne(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+            'user_id'                              => $creator->id,
+            'dungeon_route_collection_category_id' => DungeonRouteCollectionCategory::ALL[DungeonRouteCollectionCategory::MDI],
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->patch(
+                route('collections.update', ['dungeonRouteCollection' => $dungeonRouteCollection]),
+                [
+                    'name'            => $dungeonRouteCollection->name,
+                    'published_state' => PublishedState::WORLD,
+                    'category_id'     => null,
+                ],
+            );
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+            $dungeonRouteCollection->refresh();
+            $this->assertNull($dungeonRouteCollection->dungeon_route_collection_category_id);
+        } finally {
+            $dungeonRouteCollection->delete();
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function view_givenACollectionWithACategory_showsTheCategory(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for(null)->activate(CreatorProfiles::class);
+
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+            'user_id'                              => $creator->id,
+            'published_state_id'                   => PublishedState::ALL[PublishedState::WORLD],
+            'dungeon_route_collection_category_id' => DungeonRouteCollectionCategory::ALL[DungeonRouteCollectionCategory::BEGINNER],
+        ]);
+
+        try {
+            // Act
+            $response = $this->get(route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee(__(sprintf(
+                'dungeonroutecollectioncategories.%s',
+                DungeonRouteCollectionCategory::BEGINNER,
+            )));
+        } finally {
+            $dungeonRouteCollection->delete();
+            Feature::for(null)->forget(CreatorProfiles::class);
             $creator->delete();
         }
     }

@@ -33,7 +33,8 @@ use Illuminate\Support\Collection;
         <table class="table table-striped align-middle">
             <thead>
             <tr>
-                <th width="55%">{{ __('view_collection.index.table_header_name') }}</th>
+                <th width="40%">{{ __('view_collection.index.table_header_name') }}</th>
+                <th width="15%">{{ __('view_collection.index.table_header_category') }}</th>
                 <th width="20%">{{ __('view_collection.index.table_header_visibility') }}</th>
                 <th width="10%">{{ __('view_collection.index.table_header_routes') }}</th>
                 <th width="15%"></th>
@@ -47,6 +48,15 @@ use Illuminate\Support\Collection;
                         <a href="{{ route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]) }}">
                             {{ $dungeonRouteCollection->name }}
                         </a>
+                    </td>
+                    <td>
+                        @if($dungeonRouteCollection->dungeonRouteCollectionCategory !== null)
+                            {{ $dungeonRouteCollection->dungeonRouteCollectionCategory->getTranslatedName() }}
+                        @else
+                            <span class="text-body-secondary">
+                                {{ __('view_collection.index.no_category') }}
+                            </span>
+                        @endif
                     </td>
                     <td>
                         {{ __(sprintf('view_collection.published_state.%s', $dungeonRouteCollection->getPublishedStateName())) }}

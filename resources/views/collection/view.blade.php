@@ -31,6 +31,12 @@ $title = sprintf(__('view_collection.view.title'), $dungeonRouteCollection->name
                 </a>
                 &middot;
                 {{ trans_choice('view_collection.view.route_count', $dungeonRoutes->count(), ['count' => $dungeonRoutes->count()]) }}
+                @if($dungeonRouteCollection->dungeonRouteCollectionCategory !== null)
+                    &middot;
+                    <span class="badge bg-info">
+                        {{ $dungeonRouteCollection->dungeonRouteCollectionCategory->getTranslatedName() }}
+                    </span>
+                @endif
             </div>
 
             @if(!empty($dungeonRouteCollection->description))

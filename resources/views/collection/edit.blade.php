@@ -2,6 +2,7 @@
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
+use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
 use App\Models\Team;
 use Illuminate\Support\Collection;
 
@@ -10,6 +11,7 @@ use Illuminate\Support\Collection;
  * @var Collection<int, DungeonRoute> $ownDungeonRoutes
  * @var array<int, int>               $selectedDungeonRouteIds
  * @var Collection<int, Team>         $teams
+ * @var Collection<int, DungeonRouteCollectionCategory> $categories
  */
 
 $title = sprintf(__('view_collection.edit.title'), $dungeonRouteCollection->name);
@@ -35,6 +37,7 @@ $title = sprintf(__('view_collection.edit.title'), $dungeonRouteCollection->name
             'ownDungeonRoutes' => $ownDungeonRoutes,
             'selectedDungeonRouteIds' => $selectedDungeonRouteIds,
             'teams' => $teams,
+            'categories' => $categories,
         ])
     </div>
 @endsection

@@ -2,20 +2,23 @@
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
+use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
 use App\Models\PublishedState;
 use App\Models\Team;
 use Illuminate\Support\Collection;
 
 /**
- * @var DungeonRouteCollection|null   $dungeonRouteCollection
- * @var Collection<int, DungeonRoute> $ownDungeonRoutes
- * @var array<int, int>               $selectedDungeonRouteIds
- * @var Collection<int, Team>         $teams
+ * @var DungeonRouteCollection|null                            $dungeonRouteCollection
+ * @var Collection<int, DungeonRoute>                          $ownDungeonRoutes
+ * @var array<int, int>                                        $selectedDungeonRouteIds
+ * @var Collection<int, Team>                                  $teams
+ * @var Collection<int, DungeonRouteCollectionCategory>        $categories
  */
 
 $dungeonRouteCollection  ??= null;
 $selectedDungeonRouteIds ??= [];
 $teams                   ??= collect();
+$categories              ??= collect();
 
 $publishedStateOptions = [];
 foreach (DungeonRouteCollection::AVAILABLE_PUBLISHED_STATES as $publishedState) {
@@ -25,6 +28,11 @@ foreach (DungeonRouteCollection::AVAILABLE_PUBLISHED_STATES as $publishedState) 
     }
 
     $publishedStateOptions[$publishedState] = __(sprintf('view_collection.published_state.%s', $publishedState));
+}
+
+$categoryOptions = [null => __('view_common.collection.details.category_none')];
+foreach ($categories as $category) {
+    $categoryOptions[$category->id] = $category->getTranslatedName();
 }
 
 $teamOptions = [null => __('view_common.collection.details.team_none')];
@@ -54,6 +62,15 @@ foreach ($teams as $team) {
         ->rows(3)
         ->attribute('maxlength', 1000) }}
     @include('common.forms.form-error', ['key' => 'description'])
+</div>
+
+<div class="mb-3{{ $errors->has('category_id') ? ' has-error' : '' }}">
+    {{ html()->label(__('view_common.collection.details.category'), 'category_id') }}
+    {{ html()->select('category_id', $categoryOptions, $dungeonRouteCollection?->dungeon_route_collection_category_id)->class('form-select') }}
+    <small class="form-text text-body-secondary">
+        {{ __('view_common.collection.details.category_help') }}
+    </small>
+    @include('common.forms.form-error', ['key' => 'category_id'])
 </div>
 
 <div class="mb-3{{ $errors->has('published_state') ? ' has-error' : '' }}">

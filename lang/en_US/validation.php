@@ -49,6 +49,9 @@ return [
             'required_if' => 'Select the team to share this collection with.',
             'exists'      => 'You can only share a collection with a team that you are a member of.',
         ],
+        'collection_category_id' => [
+            'exists' => 'That is not a category you can file a collection under.',
+        ],
         'collection_dungeon_routes' => [
             'max'      => 'A collection may hold at most :max routes.',
             'exists'   => 'You can only collect routes that you created yourself.',
