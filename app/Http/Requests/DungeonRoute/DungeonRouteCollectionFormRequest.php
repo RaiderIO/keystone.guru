@@ -4,6 +4,7 @@ namespace App\Http\Requests\DungeonRoute;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
+use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
 use App\Models\PublishedState;
 use App\Models\Team;
 use Illuminate\Foundation\Http\FormRequest;
@@ -50,6 +51,12 @@ class DungeonRouteCollectionFormRequest extends FormRequest
                 Rule::exists('team_users', 'team_id')
                     ->where('user_id', $userId),
             ],
+            // Optional: a collection without a category is perfectly valid
+            'category_id' => [
+                'nullable',
+                'integer',
+                'exists:dungeon_route_collection_categories,id',
+            ],
             'dungeon_routes' => [
                 'nullable',
                 'array',
@@ -79,6 +86,7 @@ class DungeonRouteCollectionFormRequest extends FormRequest
             'description.max'           => __('validation.custom.collection_description.max'),
             'team_id.required_if'       => __('validation.custom.collection_team_id.required_if'),
             'team_id.exists'            => __('validation.custom.collection_team_id.exists'),
+            'category_id.exists'        => __('validation.custom.collection_category_id.exists'),
             'dungeon_routes.max'        => __('validation.custom.collection_dungeon_routes.max'),
             'dungeon_routes.*.exists'   => __('validation.custom.collection_dungeon_routes.exists'),
             'dungeon_routes.*.distinct' => __('validation.custom.collection_dungeon_routes.distinct'),
@@ -107,6 +115,22 @@ class DungeonRouteCollectionFormRequest extends FormRequest
             }
 
             return Team::query()->findOrFail($teamId);
+        });
+    }
+
+    /**
+     * The category this collection is filed under, if any.
+     */
+    public function dungeonRouteCollectionCategory(): ?DungeonRouteCollectionCategory
+    {
+        return once(function (): ?DungeonRouteCollectionCategory {
+            $categoryId = $this->validated('category_id');
+
+            if ($categoryId === null) {
+                return null;
+            }
+
+            return DungeonRouteCollectionCategory::query()->findOrFail($categoryId);
         });
     }
 

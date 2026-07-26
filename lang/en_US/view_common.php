@@ -6,6 +6,9 @@ return [
         'details' => [
             'name'                 => 'Name',
             'description'          => 'Description',
+            'category'             => 'Category',
+            'category_none'        => 'No category',
+            'category_help'        => 'What kind of routes this collection holds. Key level is deliberately not part of this - a PUG friendly collection is PUG friendly at any key level.',
             'published_state'      => 'Visible to',
             'published_state_help' => 'Sharing a collection never publishes the routes inside it - a route that is not published stays hidden.',
             'team'                 => 'Team',

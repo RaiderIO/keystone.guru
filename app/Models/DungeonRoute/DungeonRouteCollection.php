@@ -28,6 +28,7 @@ use Override;
  * @property int         $id
  * @property int         $user_id
  * @property int|null    $team_id
+ * @property int|null    $dungeon_route_collection_category_id
  * @property string      $public_key
  * @property int         $published_state_id
  * @property string      $name
@@ -38,6 +39,7 @@ use Override;
  *
  * @property User                                                 $user
  * @property Team|null                                            $team
+ * @property DungeonRouteCollectionCategory|null                  $dungeonRouteCollectionCategory
  * @property PublishedState                                       $publishedState
  * @property EloquentCollection<int, DungeonRouteCollectionRoute> $dungeonRouteCollectionRoutes
  * @property EloquentCollection<int, DungeonRoute>                $dungeonRoutes
@@ -75,6 +77,7 @@ class DungeonRouteCollection extends Model
     protected $fillable = [
         'user_id',
         'team_id',
+        'dungeon_route_collection_category_id',
         'public_key',
         'published_state_id',
         'name',
@@ -93,6 +96,12 @@ class DungeonRouteCollection extends Model
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
+    }
+
+    /** @return BelongsTo<DungeonRouteCollectionCategory, $this> */
+    public function dungeonRouteCollectionCategory(): BelongsTo
+    {
+        return $this->belongsTo(DungeonRouteCollectionCategory::class);
     }
 
     /** @return BelongsTo<PublishedState, $this> */
