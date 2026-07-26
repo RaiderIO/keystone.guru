@@ -32,7 +32,9 @@ class EnemyForcesRegionFormRequest extends FormRequest
                 'required',
                 Rule::exists(Floor::class, 'id'),
             ],
-            'name' => 'required|string|max:255',
+            // A region is placed on the map first and named afterwards, so the very first save
+            // legitimately carries no name yet.
+            'name' => 'nullable|string|max:255',
             'lat'  => 'required|numeric',
             'lng'  => 'required|numeric',
         ];

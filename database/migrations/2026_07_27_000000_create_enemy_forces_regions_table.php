@@ -16,7 +16,9 @@ return new class extends Migration {
             // The floor the region's pill is anchored on. The region's enemies may live on other
             // floors as well - a corridor is not bound to a single floor.
             $table->integer('floor_id');
-            $table->string('name');
+            // Optional: a freshly placed region is saved immediately, before the mapper has had a
+            // chance to name it in the popup.
+            $table->string('name')->nullable();
             $table->double('lat');
             $table->double('lng');
 

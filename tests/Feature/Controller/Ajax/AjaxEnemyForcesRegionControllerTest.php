@@ -56,7 +56,40 @@ final class AjaxEnemyForcesRegionControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    public function store_givenMissingName_failsValidation(): void
+    public function store_givenNoName_stillCreatesIt(): void
+    {
+        // A region is placed on the map first and named afterwards in its popup, so the very first
+        // save legitimately carries no name. Requiring one made placing a region fail with a 422.
+        $floor          = $this->getFloorWithEnemies();
+        $mappingVersion = $this->getMappingVersionForFloor($floor);
+
+        $enemyForcesRegionId = null;
+
+        try {
+            // Act
+            $response = $this->post(sprintf('/ajax/admin/mappingVersion/%d/enemyforcesregion', $mappingVersion->id), [
+                'id'                 => -1,
+                'mapping_version_id' => $mappingVersion->id,
+                'floor_id'           => $floor->id,
+                'lat'                => -128.5,
+                'lng'                => 192.5,
+            ]);
+
+            // Assert
+            $response->assertSuccessful();
+
+            $enemyForcesRegionId = $response->json('id');
+            $this->assertNotNull($enemyForcesRegionId);
+            $this->assertNull(EnemyForcesRegion::findOrFail($enemyForcesRegionId)->name);
+        } finally {
+            if ($enemyForcesRegionId !== null) {
+                EnemyForcesRegion::where('id', $enemyForcesRegionId)->delete();
+            }
+        }
+    }
+
+    #[Test]
+    public function store_givenMissingLatLng_failsValidation(): void
     {
         // Arrange
         $floor          = $this->getFloorWithEnemies();
@@ -72,8 +105,7 @@ final class AjaxEnemyForcesRegionControllerTest extends AjaxPublicTestCase
             'id'                 => -1,
             'mapping_version_id' => $mappingVersion->id,
             'floor_id'           => $floor->id,
-            'lat'                => -128.5,
-            'lng'                => 192.5,
+            'name'               => 'Test corridor',
         ]);
     }
 

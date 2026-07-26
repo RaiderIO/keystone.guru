@@ -21,12 +21,12 @@ use Override;
  * tell you how much you must already have killed before entering it. The group is not bound to a
  * single floor; only the anchor point the pill is drawn at is.
  *
- * @property int    $id
- * @property int    $mapping_version_id
- * @property int    $floor_id
- * @property string $name
- * @property float  $lat
- * @property float  $lng
+ * @property int         $id
+ * @property int         $mapping_version_id
+ * @property int         $floor_id
+ * @property string|null $name
+ * @property float       $lat
+ * @property float       $lng
  *
  * @property MappingVersion         $mappingVersion
  * @property Floor                  $floor
