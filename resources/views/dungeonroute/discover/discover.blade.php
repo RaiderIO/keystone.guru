@@ -50,6 +50,10 @@ $expansion ??= null;
         ])
     </div>
 
+    @feature(\App\Features\CreatorProfiles::class)
+        @include('creator.featured')
+    @endfeature
+
     @include('dungeonroute.discover.panel', [
         'gameVersion' => $gameVersion,
         'title' => __('view_dungeonroute.discover.discover.popular'),

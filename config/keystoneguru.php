@@ -281,6 +281,9 @@ return [
 
         /** How many creators to show per page of the directory */
         'per_page' => 24,
+
+        /** How many creators to feature on the discover landing page */
+        'featured_count' => 8,
     ],
 
     /**
