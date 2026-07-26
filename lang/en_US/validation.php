@@ -32,6 +32,10 @@ return [
             'max'    => 'You may pin at most :max routes to your profile.',
             'exists' => 'You can only pin routes that you created yourself.',
         ],
+        'pinned_dungeon_route_collections' => [
+            'max'    => 'You may pin at most :max collections to your profile.',
+            'exists' => 'You can only pin collections that you created yourself.',
+        ],
         'social_links' => [
             'invalid_url_for_platform' => 'That is not a valid https link for this platform.',
         ],
