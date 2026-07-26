@@ -2,6 +2,7 @@
 
 namespace App\Service\Creator;
 
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\PublishedState;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -18,7 +19,7 @@ class CreatorDirectoryService implements CreatorDirectoryServiceInterface
             ->when(
                 $search !== null && $search !== '',
                 static fn(Builder $builder): Builder => $builder->where(
-                    'name',
+                    'users.name',
                     'like',
                     sprintf('%%%s%%', addcslashes((string)$search, '%_\\')),
                 ),
@@ -33,8 +34,21 @@ class CreatorDirectoryService implements CreatorDirectoryServiceInterface
      * Listing is automatic above a threshold and opt-out, so the only people excluded are those
      * below the bar and those who ticked hide_from_creator_directory.
      *
-     * The route count is produced by a single withCount subquery and filtered with having() rather
-     * than a second whereHas subquery, so the threshold and the displayed count cannot drift apart.
+     * The threshold and the count rendered on each card come from the same aggregate, so they
+     * cannot drift apart.
+     *
+     * Deliberately a join against a pre-aggregated derived table rather than withCount() + having().
+     * A correlated withCount subquery cannot be filtered by an index, so MySQL had to evaluate one
+     * COUNT per non-opted-out user - a full scan of `users` - before it could discard anyone, and
+     * then materialise every matching `users.*` row (including the `bio` TEXT column) into a temp
+     * table to sort it. Grouping `dungeon_routes` first inverts that: the aggregate runs once
+     * against the published_state_id index, and `users` is then reached by primary key.
+     *
+     *   before  users type=ALL    key=NULL     rows=173  Using temporary; Using filesort
+     *   after   users type=eq_ref key=PRIMARY  rows=1
+     *
+     * The cost now scales with published routes and qualifying creators instead of with total
+     * registrations, which matters for a page intended to become public and is not cached.
      *
      * @return Builder<User>
      */
@@ -43,17 +57,20 @@ class CreatorDirectoryService implements CreatorDirectoryServiceInterface
         $minPublishedRoutes = (int)config('keystoneguru.creators.min_published_routes');
         $worldPublishedId   = PublishedState::ALL[PublishedState::WORLD];
 
+        $publishedRouteCounts = DungeonRoute::query()
+            ->selectRaw('author_id, COUNT(*) AS published_route_count')
+            ->where('published_state_id', $worldPublishedId)
+            ->groupBy('author_id')
+            ->havingRaw('COUNT(*) >= ?', [$minPublishedRoutes]);
+
         return User::query()
-            ->where('hide_from_creator_directory', false)
-            ->withCount([
-                'dungeonRoutes as published_route_count' => static fn($query) => $query
-                    ->where('published_state_id', $worldPublishedId),
-            ])
-            // The route cards and creator cards both render the avatar
+            ->select('users.*', 'published_routes.published_route_count')
+            ->joinSub($publishedRouteCounts, 'published_routes', 'published_routes.author_id', '=', 'users.id')
+            ->where('users.hide_from_creator_directory', false)
+            // The creator cards render the avatar
             ->with(['iconfile'])
-            ->having('published_route_count', '>=', $minPublishedRoutes)
-            ->orderByDesc('published_route_count')
+            ->orderByDesc('published_routes.published_route_count')
             // Stable tiebreak so pagination cannot repeat or skip a creator between pages
-            ->orderBy('id');
+            ->orderBy('users.id');
     }
 }
