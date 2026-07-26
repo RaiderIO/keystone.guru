@@ -290,6 +290,66 @@ final class ProfileCreatorProfileTest extends PublicTestCase
     }
 
     /**
+     * The whole point of the podium is a page a streamer links from their Twitch bio, so the
+     * overwhelming majority of viewers arrive logged out. profile.view carries no auth middleware,
+     * but nothing else pinned that down - and a guest means Auth::user() is null inside the
+     * mayUserView() filter.
+     */
+    #[Test]
+    public function view_givenAGuestAndFeatureActiveForEveryone_rendersThePodium(): void
+    {
+        // Arrange
+        $creator = User::factory()->create(['bio' => 'Routes by a streamer you follow']);
+
+        $publishedRoute = DungeonRoute::factory()->create([
+            'author_id'          => $creator->id,
+            'expires_at'         => null,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ]);
+        $unpublishedRoute = DungeonRoute::factory()->create([
+            'author_id'          => $creator->id,
+            'expires_at'         => null,
+            'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
+            'title'              => 'Guest must not see this draft',
+        ]);
+
+        $pins = collect();
+        foreach ([$publishedRoute, $unpublishedRoute] as $order => $dungeonRoute) {
+            $pin                   = new UserPinnedDungeonRoute();
+            $pin->user_id          = $creator->id;
+            $pin->dungeon_route_id = $dungeonRoute->id;
+            $pin->order            = $order;
+            $pin->save();
+            $pins->push($pin);
+        }
+
+        // The guest scope is Pennant's null scope; activateForEveryone() does not create that row
+        Feature::for(null)->activate(CreatorProfiles::class);
+
+        try {
+            // Act - explicitly NOT actingAs(), so this is an anonymous visitor
+            $response = $this->get(route('profile.view', ['user' => $creator]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertViewHas('creatorProfileActive', true);
+            $response->assertSee('Routes by a streamer you follow');
+
+            // Only the published pin survives the guest's visibility filter
+            $response->assertViewHas('pinnedDungeonRoutes', static fn($routes): bool => $routes->count() === 1);
+            $response->assertDontSee('Guest must not see this draft');
+        } finally {
+            Feature::for(null)->forget(CreatorProfiles::class);
+            foreach ($pins as $pin) {
+                $pin->delete();
+            }
+            $unpublishedRoute->delete();
+            $publishedRoute->delete();
+            $creator->delete();
+        }
+    }
+
+    /**
      * user_pinned_dungeon_routes is unique on (user_id, dungeon_route_id), so a duplicate must be
      * rejected by validation rather than blowing up on the constraint mid-transaction.
      */
