@@ -50,9 +50,6 @@ use Illuminate\Support\Collection;
                     'pulls' => false,
                     'heatmapSearch' => false,
                     'enemyInfo' => true,
-                    // No pulls here, but how much enemy forces a floor holds is exactly what you come
-                    // to the explore page to find out.
-                    'floorEnemyForces' => true,
                 ],
             ],
             'dungeonContextLinks' => $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [

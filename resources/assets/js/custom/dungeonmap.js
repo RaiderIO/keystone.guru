@@ -652,13 +652,6 @@ class DungeonMap extends Signalable {
                     mapControls.push(new EnemyForcesControls(this));
                 }
             }
-
-            // Unlike the route-total control above, the per-floor enemy forces pill describes the
-            // mapping rather than the route, so it's shown on the explore page too - it just isn't
-            // relevant when editing the mapping itself.
-            if (!state.isMapAdmin() && this.options.showControls.floorEnemyForces) {
-                mapControls.push(new FloorEnemyForcesControls(this));
-            }
             if (!this.options.embed) {
                 // mapControls.push(new EnemyVisualControls(this));
             }

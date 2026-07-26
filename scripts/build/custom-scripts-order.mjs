@@ -186,7 +186,6 @@ export const customScripts = [
     'resources/assets/js/custom/mapcontrols/enemyforcescontrols.js',
     'resources/assets/js/custom/mapcontrols/enemyvisualcontrols.js',
     'resources/assets/js/custom/mapcontrols/factiondisplaycontrols.js',
-    'resources/assets/js/custom/mapcontrols/floorenemyforcescontrols.js',
 
     'resources/assets/js/custom/admin/enemyattaching.js',
     'resources/assets/js/custom/admin/admindungeonmap.js',

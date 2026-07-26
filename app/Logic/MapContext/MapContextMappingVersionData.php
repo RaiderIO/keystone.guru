@@ -68,8 +68,8 @@ class MapContextMappingVersionData implements Arrayable
                 if ($this->mappingVersion->facade_enabled && $useFacade) {
                     foreach ($enemies as $enemy) {
                         // The conversion moves the enemy onto the facade floor, which loses the floor it
-                        // actually lives on. Keep it around - the front-end needs it to total up the
-                        // enemy forces per floor.
+                        // actually lives on. Keep it around - it's the only way the front-end can tell
+                        // which real floor a facade enemy belongs to.
                         $enemy->setAttribute('source_floor_id', $enemy->floor_id);
 
                         $convertedLatLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
@@ -94,7 +94,6 @@ class MapContextMappingVersionData implements Arrayable
                         'mountableAreas'            => $this->mappingVersion->mapContextMountableAreas($this->coordinatesService, $useFacade),
                         'floorUnions'               => $this->mappingVersion->mapContextFloorUnions($this->coordinatesService, $useFacade),
                         'floorUnionAreas'           => $this->mappingVersion->mapContextFloorUnionAreas($this->coordinatesService, $useFacade),
-                        'floorEnemyForcesAnchors'   => $this->mappingVersion->mapContextFloorEnemyForcesAnchors($this->coordinatesService, $useFacade),
                     ],
                 );
             },

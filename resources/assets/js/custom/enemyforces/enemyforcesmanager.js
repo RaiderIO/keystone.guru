@@ -113,38 +113,28 @@ class EnemyForcesManager extends Signalable {
     }
 
     /**
-     * Get the total amount of enemy forces available on a specific floor. Unlike getEnemyForces(),
-     * which only counts pulled enemies, this sums every enemy that lives on the floor - it reflects
-     * how much enemy forces is present on that floor, regardless of what is currently pulled.
-     * @param floorId {Number}
+     * Get the total amount of enemy forces that the given enemies are worth.
+     *
+     * Unlike getEnemyForces(), which only counts what the route pulls, this describes how much enemy
+     * forces those enemies represent regardless of pull state. That difference is deliberate:
+     * KillZone.getEnemyForces() skips obsolete enemies because an obsolete enemy is not pulled, but an
+     * obsolete enemy is still standing there and still yields its enemy forces to whoever walks past
+     * it. Only enemies that aren't actually present at all (wrong seasonal type/affix) are skipped, so
+     * the total always matches what is drawn on the map.
+     *
+     * @param enemies {Enemy[]}
      * @returns {Number}
      */
-    getEnemyForcesForFloor(floorId) {
+    getEnemyForcesForEnemies(enemies) {
         console.assert(this instanceof EnemyForcesManager, 'this is not EnemyForcesManager', this);
 
         let result = 0;
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        // May be false in an admin setting where there's no enemies
-        if (enemyMapObjectGroup === false) {
-            return result;
-        }
-
-        for (let key in enemyMapObjectGroup.objects) {
+        for (let index in enemies) {
             /** @type {Enemy} */
-            let enemy = enemyMapObjectGroup.objects[key];
+            let enemy = enemies[index];
 
-            // In the facade layout every enemy has been moved onto the facade floor, so floor_id no
-            // longer says which floor it lives on - source_floor_id, sent along for exactly this reason,
-            // does.
-            let enemyFloorId = enemy.source_floor_id ?? enemy.floor_id;
-
-            // Unlike KillZone.getEnemyForces() (which sums only pulled enemies and so skips obsolete
-            // ones), this total reflects what's present on the floor regardless of pull state - an
-            // obsolete enemy is still standing there and still yields its enemy forces. Only skip
-            // enemies that aren't actually present (wrong seasonal type/affix), so the total matches
-            // what is shown on the map.
-            if (enemyFloorId === floorId && !enemy.shouldBeIgnored()) {
+            if (enemy !== null && !enemy.shouldBeIgnored()) {
                 result += enemy.getEnemyForces();
             }
         }
