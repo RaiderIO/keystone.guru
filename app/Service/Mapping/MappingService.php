@@ -208,6 +208,10 @@ class MappingService implements MappingServiceInterface
             $mountableArea->cloneForNewMappingVersion($targetMappingVersion);
         }
 
+        // Enemy Forces Regions are deliberately NOT copied here. This code path (MDT import / copying a
+        // mapping to another dungeon) does not copy enemies either, and a region without its member
+        // enemies is an empty region reporting 0% - worse than no region at all.
+
         // Floor Unions (and areas)
         foreach ($sourceMappingVersion->floorUnions as $floorUnion) {
             /** @var FloorUnion $newFloorUnion */
