@@ -30,7 +30,7 @@ use Illuminate\Support\Collection;
             </div>
         </div>
     @else
-        <table class="default_table table-striped">
+        <table class="table table-striped align-middle">
             <thead>
             <tr>
                 <th width="55%">{{ __('view_collection.index.table_header_name') }}</th>
