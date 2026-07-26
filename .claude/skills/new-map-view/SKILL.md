@@ -214,3 +214,81 @@ each path segment:
 | `admin/tools/mypage` | `AdminToolsMypage` |
 
 All file names under `resources/assets/js/custom/inline/` must be **lowercase**.
+
+## Gotcha: facade conversion rewrites `floor_id`
+
+**In facade mode, `enemy.floor_id` on the wire is the *facade* floor, not the floor the enemy
+actually lives on.** Client-side code therefore *cannot* group map objects by their real floor.
+This is invisible from the JS and has silently broken a feature before (#3660): a per-floor total
+computed in the browser collapsed every enemy into one group on every union-based facade, while
+appearing to work on facades that define no floor unions at all.
+
+### The chain
+
+**1. `FloorUnion`'s two floor columns read backwards from their names.**
+`MappingVersion::getFloorUnionsForFloor()` filters on `target_floor_id`:
+
+```php
+$floorUnions = $this->floorUnions()
+    ->where('target_floor_id', $floor->id)   // $floor = the enemy's REAL floor
+```
+
+So `target_floor_id` is the **real/source** floor the union pulls *from*, and `floor_id` /
+`$floorUnion->floor` is the **facade** floor it draws *onto*. Exactly the opposite of what the
+names suggest.
+
+**2. The conversion reassigns the floor.** `CoordinatesService::convertMapLocationToFacadeMapLocation()`:
+
+```php
+// Ok this lat lng is inside a floor union area - this means we must use it's attached floor union's target floor
+$result->setFloor($floorUnion->floor);   // <-- the FACADE floor. The comment is wrong.
+```
+
+Note the early return above it — when no union matches the point, the LatLng is returned
+**unchanged**, which is why a facade with zero floor unions (Lower Karazhan) keeps real floor ids
+and makes buggy code look correct.
+
+**3. `setLatLng()` writes it through to the model.** `app/Models/Traits/HasLatLng.php`:
+
+```php
+$this->floor_id = $latLng->getFloor()?->id;
+```
+
+**4. Call site:** `MapContextMappingVersionData::toArray()`, and every
+`MappingVersion::mapContext*()` method (`mapContextMapIcons`, `mapContextEnemyPacks`, …) does the
+same for its own model type.
+
+### Three secondary traps
+
+- **`floor_id` and the loaded `floor` relation desync.** `setLatLng()` writes only `floor_id` and
+  never resets the eager-loaded relation, so after conversion `$enemy->floor->id` (real floor)
+  ≠ `$enemy->floor_id` (facade floor) *in the same PHP process*.
+- **…but the relation is not a client-side substitute.** `Enemy::$hidden` contains `'floor'`, so it
+  is stripped from the JSON. Conversely `Enemy` defines no `$visible`, which is *why* an ad-hoc
+  `setAttribute('source_floor_id', …)` on a non-column survives serialization — adding a `$visible`
+  to `Enemy` would silently break anything relying on that.
+- **The payload is cached.** It lives under `dungeon_{dungeonId}_{mappingVersionId}_{facadeStyle}`
+  via `rememberLocal(…, 86400, …)` wrapping `cacheService->remember(…)` — *two* layers. A newly
+  added attribute only appears once that entry regenerates, so client-side
+  `?? enemy.floor_id` fallbacks are load-bearing, not defensive noise.
+
+### The fix
+
+Carry the real floor alongside as `source_floor_id`, captured **before** the conversion, mirroring
+what `MappingVersion::mapContextDungeonFloorSwitchMarkers()` already does:
+
+```php
+$enemy->setAttribute('source_floor_id', $enemy->floor_id);
+
+$enemy->setLatLng($this->coordinatesService->convertMapLocationToFacadeMapLocation(
+    $this->mappingVersion,
+    $enemy->getLatLng(),
+));
+```
+
+Client-side, read `enemy.source_floor_id ?? enemy.floor_id`.
+
+**Related:** computing a per-floor *centroid* server-side has its own trap — a single floor can be
+carved into several floor unions that land in completely different places on the combined image
+(The Nokhud Offensive splits one floor into four), so you must average in the floor's own
+coordinate space and convert afterwards, never average already-converted points.
