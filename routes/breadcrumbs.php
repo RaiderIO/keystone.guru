@@ -8,6 +8,7 @@ use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\CharacterClass;
 use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\Expansion;
 use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
@@ -208,6 +209,24 @@ Breadcrumbs::for('profile.overview', static function (Generator $trail) {
 Breadcrumbs::for('profile.tags', static function (Generator $trail) {
     $trail->parent('home');
     $trail->push(__('breadcrumbs.home.my_tags'), route('profile.tags'));
+});
+
+/**
+ * Route collection pages
+ */
+Breadcrumbs::for('collections.index', static function (Generator $trail) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.my_collections'), route('collections.index'));
+});
+
+Breadcrumbs::for('collections.new', static function (Generator $trail) {
+    $trail->parent('collections.index');
+    $trail->push(__('breadcrumbs.home.new_collection'), route('collections.new'));
+});
+
+Breadcrumbs::for('collections.edit', static function (Generator $trail, DungeonRouteCollection $dungeonRouteCollection) {
+    $trail->parent('collections.index');
+    $trail->push(__('breadcrumbs.home.edit_collection'), route('collections.edit', $dungeonRouteCollection));
 });
 
 /**

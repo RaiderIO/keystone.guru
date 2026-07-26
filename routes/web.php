@@ -77,6 +77,7 @@ use App\Http\Controllers\Dungeon\DungeonController;
 use App\Http\Controllers\Dungeon\DungeonExploreController;
 use App\Http\Controllers\Dungeon\DungeonHeatmapController;
 use App\Http\Controllers\Dungeon\MappingVersionController;
+use App\Http\Controllers\DungeonRoute\DungeonRouteCollectionController;
 use App\Http\Controllers\DungeonRoute\DungeonRouteController;
 use App\Http\Controllers\DungeonRoute\DungeonRouteDiscoverController;
 use App\Http\Controllers\DungeonRoute\DungeonRouteDiscoverExpansionSeasonController;
@@ -216,6 +217,12 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::get('/', new CreatorDirectoryController()->index(...))->name('creators.index');
         });
 
+    // Publicly shared route collections
+    Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))
+        ->prefix('collection')->group(static function () {
+            Route::get('/{dungeonRouteCollection}', new DungeonRouteCollectionController()->view(...))->name('collection.view');
+        });
+
     // Discover routes
     Route::prefix('routes')->group(static function () {
         Route::get('/', new DungeonRouteDiscoverController()->discover(...))->name('dungeonroutes');
@@ -342,6 +349,21 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::post('tag', new ProfileController()->createTag(...))->name('profile.tag.create');
             });
         });
+        // Route collections
+        Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))
+            ->prefix('collections')->group(static function () {
+                Route::get('/', new DungeonRouteCollectionController()->index(...))->name('collections.index');
+                Route::get('new', new DungeonRouteCollectionController()->create(...))->name('collections.new');
+                Route::middleware('throttle:create-collection')->group(static function () {
+                    Route::post('new', new DungeonRouteCollectionController()->savenew(...))->name('collections.savenew');
+                });
+                Route::prefix('{dungeonRouteCollection}')->group(static function () {
+                    Route::get('/', new DungeonRouteCollectionController()->edit(...))->name('collections.edit');
+                    Route::patch('/', new DungeonRouteCollectionController()->update(...))->name('collections.update');
+                    Route::delete('/', new DungeonRouteCollectionController()->delete(...))->name('collections.delete');
+                });
+            });
+
         Route::get('teams', new TeamController()->get(...))->name('team.list');
         Route::prefix('team')->group(static function () {
             Route::get('new', new TeamController()->create(...))->name('team.new');

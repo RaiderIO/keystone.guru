@@ -313,6 +313,7 @@ return [
                 'my_routes'                      => 'My routes',
                 'my_favorites'                   => 'My favorites',
                 'my_tags'                        => 'My tags',
+                'my_collections'                 => 'My collections',
                 'my_teams'                       => 'My teams',
                 'my_profile'                     => 'My public profile',
                 'account_settings'               => 'Account settings',
