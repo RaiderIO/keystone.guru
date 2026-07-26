@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 class CreatorDirectoryService implements CreatorDirectoryServiceInterface
 {
@@ -29,5 +30,15 @@ class CreatorDirectoryService implements CreatorDirectoryServiceInterface
             )
             ->paginate($perPage)
             ->withQueryString();
+    }
+
+    /** @return Collection<int, User> */
+    public function getFeaturedCreators(?int $limit = null): Collection
+    {
+        $limit ??= (int)config('keystoneguru.creators.featured_count');
+
+        return $this->userRepository->buildListedCreatorsQuery()
+            ->limit($limit)
+            ->get();
     }
 }
