@@ -72,7 +72,9 @@ class CreatorProfileFormRequest extends FormRequest
                 // then fail on the constraint rather than as a validation error
                 'distinct',
                 Rule::exists('dungeon_routes', 'id')
-                    ->where('author_id', $userId),
+                    ->where('author_id', $userId)
+                    // Sandbox routes expire, so they are deliberately not offered as pinnable
+                    ->whereNull('expires_at'),
             ],
         ];
     }

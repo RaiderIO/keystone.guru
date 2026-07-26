@@ -229,6 +229,39 @@ final class ProfileCreatorProfileTest extends PublicTestCase
         }
     }
 
+    /**
+     * edit() deliberately excludes sandbox routes from the pickable list since they expire - the
+     * exists rule must mirror that exclusion, or a hand-crafted post could still pin one.
+     */
+    #[Test]
+    public function updateCreatorProfile_givenASandboxRoute_failsValidation(): void
+    {
+        // Arrange
+        $creator      = $this->createCreator();
+        $sandboxRoute = DungeonRoute::factory()->create([
+            'author_id'  => $creator->id,
+            'expires_at' => now()->addDay(),
+        ]);
+
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->patch(route('profile.creator.update'), [
+                'pinned_dungeon_routes' => [$sandboxRoute->id],
+            ]);
+
+            // Assert
+            $response->assertSessionHasErrors('pinned_dungeon_routes.0');
+            $this->assertSame(0, UserPinnedDungeonRoute::where('user_id', $creator->id)->count());
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            UserPinnedDungeonRoute::where('user_id', $creator->id)->delete();
+            $sandboxRoute->delete();
+            $creator->delete();
+        }
+    }
+
     #[Test]
     public function updateCreatorProfile_givenAnInvalidSocialUrl_failsValidation(): void
     {
@@ -378,6 +411,38 @@ final class ProfileCreatorProfileTest extends PublicTestCase
             Feature::for($creator)->forget(CreatorProfiles::class);
             UserPinnedDungeonRoute::where('user_id', $creator->id)->delete();
             $route->delete();
+            $creator->delete();
+        }
+    }
+
+    /**
+     * changepassword() re-renders profile.edit directly (it is not a redirect), so it must supply
+     * the same podium view data edit() does - before the fix it omitted all three variables and
+     * the unconditional `if ($creatorProfileActive)` in the blade threw a fatal ErrorException.
+     */
+    #[Test]
+    public function changepassword_givenFeatureActiveAndIncorrectCurrentPassword_rendersPodiumViewDataWithoutError(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->patch(route('profile.changepassword'), [
+                'current_password'     => 'wrong-password',
+                'new_password'         => 'new-password',
+                'new_password-confirm' => 'new-password',
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $response->assertViewHas('creatorProfileActive', true);
+            $response->assertViewHas('ownDungeonRoutes');
+            $response->assertViewHas('pinnedDungeonRouteIds');
+            $response->assertViewHas('errors', static fn($errors): bool => $errors->has('passwords_incorrect'));
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
             $creator->delete();
         }
     }
