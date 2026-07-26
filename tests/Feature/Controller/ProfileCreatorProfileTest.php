@@ -4,10 +4,12 @@ namespace Tests\Feature\Controller;
 
 use App\Features\CreatorProfiles;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\Laratrust\Role;
 use App\Models\PublishedState;
 use App\Models\User;
 use App\Models\UserPinnedDungeonRoute;
+use App\Models\UserPinnedDungeonRouteCollection;
 use App\Models\UserSocialLink;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
@@ -143,6 +145,181 @@ final class ProfileCreatorProfileTest extends PublicTestCase
             $pin->delete();
             $publishedRoute->delete();
             $viewer->delete();
+            $creator->delete();
+        }
+    }
+
+    /**
+     * Same rule as the pinned routes: pinning a collection nobody may see must not share it.
+     */
+    #[Test]
+    public function view_givenAPinnedUnpublishedCollection_hidesItFromOtherViewers(): void
+    {
+        // Arrange
+        $creator = User::factory()->create();
+        $viewer  = User::factory()->create();
+
+        $unpublishedCollection = DungeonRouteCollection::factory()->create([
+            'user_id'            => $creator->id,
+            'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
+            'name'               => 'Secret unpublished collection',
+        ]);
+
+        $pin                              = new UserPinnedDungeonRouteCollection();
+        $pin->user_id                     = $creator->id;
+        $pin->dungeon_route_collection_id = $unpublishedCollection->id;
+        $pin->order                       = 0;
+        $pin->save();
+
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(route('profile.view', ['user' => $creator]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertViewHas(
+                'pinnedDungeonRouteCollections',
+                static fn($collections): bool => $collections->isEmpty(),
+            );
+            $response->assertDontSee('Secret unpublished collection');
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $pin->delete();
+            $unpublishedCollection->delete();
+            $viewer->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function view_givenAPinnedPublishedCollection_showsItToOtherViewers(): void
+    {
+        // Arrange
+        $creator = User::factory()->create();
+        $viewer  = User::factory()->create();
+
+        $publishedCollection = DungeonRouteCollection::factory()->create([
+            'user_id'            => $creator->id,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+            'name'               => 'ZzTestPinnedCollection',
+        ]);
+
+        $pin                              = new UserPinnedDungeonRouteCollection();
+        $pin->user_id                     = $creator->id;
+        $pin->dungeon_route_collection_id = $publishedCollection->id;
+        $pin->order                       = 0;
+        $pin->save();
+
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(route('profile.view', ['user' => $creator]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertViewHas(
+                'pinnedDungeonRouteCollections',
+                static fn($collections): bool => $collections->count() === 1,
+            );
+            $response->assertSee('ZzTestPinnedCollection');
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $pin->delete();
+            $publishedCollection->delete();
+            $viewer->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function updateCreatorProfile_givenPinnedCollections_persistsThem(): void
+    {
+        // Arrange
+        $creator    = $this->createCreator();
+        $collection = DungeonRouteCollection::factory()->create(['user_id' => $creator->id]);
+
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->patch(route('profile.creator.update'), [
+                'pinned_dungeon_route_collections' => [$collection->id],
+            ]);
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+            $this->assertSame(
+                [$collection->id],
+                UserPinnedDungeonRouteCollection::where('user_id', $creator->id)
+                    ->pluck('dungeon_route_collection_id')
+                    ->all(),
+            );
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            UserPinnedDungeonRouteCollection::where('user_id', $creator->id)->delete();
+            $collection->delete();
+            $creator->delete();
+        }
+    }
+
+    /**
+     * Pinning somebody else's collection would surface it from a profile that does not own it.
+     */
+    #[Test]
+    public function updateCreatorProfile_givenACollectionOwnedByAnotherUser_failsValidation(): void
+    {
+        // Arrange
+        $creator           = $this->createCreator();
+        $someoneElse       = User::factory()->create();
+        $foreignCollection = DungeonRouteCollection::factory()->create(['user_id' => $someoneElse->id]);
+
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->patch(route('profile.creator.update'), [
+                'pinned_dungeon_route_collections' => [$foreignCollection->id],
+            ]);
+
+            // Assert
+            $response->assertSessionHasErrors('pinned_dungeon_route_collections.0');
+            $this->assertSame(0, UserPinnedDungeonRouteCollection::where('user_id', $creator->id)->count());
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $foreignCollection->delete();
+            $someoneElse->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function updateCreatorProfile_givenMoreCollectionsThanTheCap_failsValidation(): void
+    {
+        // Arrange
+        $creator     = $this->createCreator();
+        $collections = collect();
+
+        for ($i = 0; $i <= UserPinnedDungeonRouteCollection::MAX_PINNED_COLLECTIONS; $i++) {
+            $collections->push(DungeonRouteCollection::factory()->create(['user_id' => $creator->id]));
+        }
+
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->patch(route('profile.creator.update'), [
+                'pinned_dungeon_route_collections' => $collections->pluck('id')->all(),
+            ]);
+
+            // Assert
+            $response->assertSessionHasErrors('pinned_dungeon_route_collections');
+            $this->assertSame(0, UserPinnedDungeonRouteCollection::where('user_id', $creator->id)->count());
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $collections->each->delete();
             $creator->delete();
         }
     }

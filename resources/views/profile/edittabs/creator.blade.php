@@ -1,8 +1,10 @@
 <?php
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\User;
 use App\Models\UserPinnedDungeonRoute;
+use App\Models\UserPinnedDungeonRouteCollection;
 use App\Models\UserSocialLink;
 use Illuminate\Support\Collection;
 
@@ -10,7 +12,12 @@ use Illuminate\Support\Collection;
  * @var User                          $user
  * @var Collection<int, DungeonRoute> $ownDungeonRoutes
  * @var array<int, int>               $pinnedDungeonRouteIds
+ * @var Collection<int, DungeonRouteCollection> $ownDungeonRouteCollections
+ * @var array<int, int>               $pinnedDungeonRouteCollectionIds
  */
+
+$ownDungeonRouteCollections      ??= collect();
+$pinnedDungeonRouteCollectionIds ??= [];
 
 $existingSocialLinks = $user->socialLinks->keyBy('platform');
 ?>
@@ -93,6 +100,36 @@ $existingSocialLinks = $user->socialLinks->keyBy('platform');
             </small>
         @endif
         @include('common.forms.form-error', ['key' => 'pinned_dungeon_routes'])
+    </div>
+
+    <h5 class="mt-4">
+        {{ __('view_profile.edit.creator_pinned_collections') }}
+    </h5>
+
+    <div class="mb-3{{ $errors->has('pinned_dungeon_route_collections') ? ' has-error' : '' }}">
+        @if($ownDungeonRouteCollections->isEmpty())
+            <p class="text-muted">
+                {{ __('view_profile.edit.creator_pinned_collections_none') }}
+            </p>
+        @else
+            <select name="pinned_dungeon_route_collections[]" id="pinned_dungeon_route_collections"
+                    class="form-select" multiple
+                    size="{{ min(10, max(3, $ownDungeonRouteCollections->count())) }}">
+                @foreach($ownDungeonRouteCollections as $ownDungeonRouteCollection)
+                    <option value="{{ $ownDungeonRouteCollection->id }}"
+                            @if(in_array($ownDungeonRouteCollection->id, $pinnedDungeonRouteCollectionIds, true)) selected @endif>
+                        {{ $ownDungeonRouteCollection->name }}
+                        @if($ownDungeonRouteCollection->dungeonRouteCollectionCategory !== null)
+                            &mdash; {{ $ownDungeonRouteCollection->dungeonRouteCollectionCategory->getTranslatedName() }}
+                        @endif
+                    </option>
+                @endforeach
+            </select>
+            <small class="form-text text-muted">
+                {{ __('view_profile.edit.creator_pinned_collections_help', ['max' => UserPinnedDungeonRouteCollection::MAX_PINNED_COLLECTIONS]) }}
+            </small>
+        @endif
+        @include('common.forms.form-error', ['key' => 'pinned_dungeon_route_collections'])
     </div>
 
     <h5 class="mt-4">

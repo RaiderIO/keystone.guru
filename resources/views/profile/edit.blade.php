@@ -2,6 +2,7 @@
 
 use App\Models\CharacterClass;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\GameServerRegion;
 use App\Models\User;
 use Illuminate\Support\Collection;
@@ -13,6 +14,8 @@ use Illuminate\Support\Collection;
  * @var bool                              $creatorProfileActive
  * @var Collection<int, DungeonRoute>     $ownDungeonRoutes
  * @var array<int, int>                   $pinnedDungeonRouteIds
+ * @var Collection<int, DungeonRouteCollection> $ownDungeonRouteCollections
+ * @var array<int, int>                   $pinnedDungeonRouteCollectionIds
  */
 
 $user      = Auth::getUser();
@@ -29,7 +32,7 @@ if (!$isOAuth) {
 }
 
 if ($creatorProfileActive) {
-    $user->load(['socialLinks', 'pinnedDungeonRoutes']);
+    $user->load(['socialLinks', 'pinnedDungeonRoutes', 'pinnedDungeonRouteCollections']);
     $menuItems[] = ['icon' => 'fa-star', 'text' => __('view_profile.edit.creator'), 'target' => '#creator'];
 }
 
@@ -87,6 +90,8 @@ $menuTitle = sprintf(__('view_profile.edit.menu_title'), $user->name);
                 'user' => $user,
                 'ownDungeonRoutes' => $ownDungeonRoutes,
                 'pinnedDungeonRouteIds' => $pinnedDungeonRouteIds,
+                'ownDungeonRouteCollections' => $ownDungeonRouteCollections,
+                'pinnedDungeonRouteCollectionIds' => $pinnedDungeonRouteCollectionIds,
             ])
         @endif
 

@@ -8,6 +8,7 @@ use App\Http\Requests\CreatorProfileFormRequest;
 use App\Http\Requests\ProfileFormRequest;
 use App\Http\Requests\Tag\TagFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\LiveSession;
 use App\Models\PublishedState;
 use App\Models\Season;
@@ -15,7 +16,9 @@ use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\User;
 use App\Models\UserPinnedDungeonRoute;
+use App\Models\UserPinnedDungeonRouteCollection;
 use App\Models\UserSocialLink;
+use App\Repositories\Interfaces\UserPinnedDungeonRouteCollectionRepositoryInterface;
 use App\Repositories\Interfaces\UserPinnedDungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\UserSocialLinkRepositoryInterface;
 use App\Service\DungeonRoute\CoverageServiceInterface;
@@ -56,7 +59,9 @@ class ProfileController extends Controller
         $socialLinks = collect();
         /** @var Collection<int, DungeonRoute> $pinnedDungeonRoutes */
         $pinnedDungeonRoutes = collect();
-        $publishedRouteCount = 0;
+        /** @var Collection<int, DungeonRouteCollection> $pinnedDungeonRouteCollections */
+        $pinnedDungeonRouteCollections = collect();
+        $publishedRouteCount           = 0;
 
         if ($creatorProfileActive) {
             $publishedRouteCount = DungeonRoute::query()
@@ -77,6 +82,11 @@ class ProfileController extends Controller
                 'pinnedDungeonRoutes.dungeonRoute.season.expansion',
                 // Needed by mayUserView() for team-published routes
                 'pinnedDungeonRoutes.dungeonRoute.team',
+                // The pinned collections render as a compact card - name, category and description
+                // only - so they need far less than the route cards above. The team is only there
+                // for mayUserView() on a team shared collection
+                'pinnedDungeonRouteCollections.dungeonRouteCollection.dungeonRouteCollectionCategory',
+                'pinnedDungeonRouteCollections.dungeonRouteCollection.team',
             ]);
 
             $socialLinks = $user->socialLinks;
@@ -89,14 +99,21 @@ class ProfileController extends Controller
                 ->map(static fn(UserPinnedDungeonRoute $pin): ?DungeonRoute => $pin->dungeonRoute)
                 ->filter(static fn(?DungeonRoute $dungeonRoute): bool => $dungeonRoute?->mayUserView($viewer) ?? false)
                 ->values();
+
+            // Same rule for collections: pinning one that is not shared does not share it
+            $pinnedDungeonRouteCollections = $user->pinnedDungeonRouteCollections
+                ->map(static fn(UserPinnedDungeonRouteCollection $pin): ?DungeonRouteCollection => $pin->dungeonRouteCollection)
+                ->filter(static fn(?DungeonRouteCollection $dungeonRouteCollection): bool => $dungeonRouteCollection?->mayUserView($viewer) ?? false)
+                ->values();
         }
 
         return view('profile.view', [
-            'user'                 => $user,
-            'creatorProfileActive' => $creatorProfileActive,
-            'socialLinks'          => $socialLinks,
-            'pinnedDungeonRoutes'  => $pinnedDungeonRoutes,
-            'publishedRouteCount'  => $publishedRouteCount,
+            'user'                          => $user,
+            'creatorProfileActive'          => $creatorProfileActive,
+            'socialLinks'                   => $socialLinks,
+            'pinnedDungeonRoutes'           => $pinnedDungeonRoutes,
+            'pinnedDungeonRouteCollections' => $pinnedDungeonRouteCollections,
+            'publishedRouteCount'           => $publishedRouteCount,
         ]);
     }
 
@@ -243,9 +260,10 @@ class ProfileController extends Controller
      * opt-out.
      */
     public function updateCreatorProfile(
-        CreatorProfileFormRequest                 $request,
-        UserSocialLinkRepositoryInterface         $userSocialLinkRepository,
-        UserPinnedDungeonRouteRepositoryInterface $userPinnedDungeonRouteRepository,
+        CreatorProfileFormRequest                           $request,
+        UserSocialLinkRepositoryInterface                   $userSocialLinkRepository,
+        UserPinnedDungeonRouteRepositoryInterface           $userPinnedDungeonRouteRepository,
+        UserPinnedDungeonRouteCollectionRepositoryInterface $userPinnedDungeonRouteCollectionRepository,
     ): RedirectResponse {
         /** @var User $user */
         $user = Auth::user();
@@ -259,7 +277,13 @@ class ProfileController extends Controller
         // leave the bio updated while the links and pins still describe the previous state.
         // Replace rather than diff - both sets are capped at a handful of rows, and replacing keeps
         // the pin ordering trivially correct without reconciling against what was already stored
-        DB::transaction(function () use ($user, $request, $userSocialLinkRepository, $userPinnedDungeonRouteRepository): void {
+        DB::transaction(function () use (
+            $user,
+            $request,
+            $userSocialLinkRepository,
+            $userPinnedDungeonRouteRepository,
+            $userPinnedDungeonRouteCollectionRepository,
+        ): void {
             if (!$user->save()) {
                 abort(500, __('controller.profile.flash.unexpected_error_when_saving'));
             }
@@ -281,6 +305,16 @@ class ProfileController extends Controller
                     'user_id'          => $user->id,
                     'dungeon_route_id' => $dungeonRoute->id,
                     'order'            => $order,
+                ]);
+            }
+
+            $user->pinnedDungeonRouteCollections()->delete();
+
+            foreach ($request->pinnedDungeonRouteCollections() as $order => $dungeonRouteCollection) {
+                $userPinnedDungeonRouteCollectionRepository->create([
+                    'user_id'                     => $user->id,
+                    'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+                    'order'                       => $order,
                 ]);
             }
         });
@@ -375,7 +409,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * @return array{creatorProfileActive: bool, ownDungeonRoutes: Collection<int, DungeonRoute>, pinnedDungeonRouteIds: array<int, int>}
+     * @return array{creatorProfileActive: bool, ownDungeonRoutes: Collection<int, DungeonRoute>, pinnedDungeonRouteIds: array<int, int>, ownDungeonRouteCollections: Collection<int, DungeonRouteCollection>, pinnedDungeonRouteCollectionIds: array<int, int>}
      */
     private function creatorProfileEditViewData(): array
     {
@@ -385,6 +419,10 @@ class ProfileController extends Controller
         $ownDungeonRoutes = collect();
         /** @var array<int, int> $pinnedDungeonRouteIds */
         $pinnedDungeonRouteIds = [];
+        /** @var Collection<int, DungeonRouteCollection> $ownDungeonRouteCollections */
+        $ownDungeonRouteCollections = collect();
+        /** @var array<int, int> $pinnedDungeonRouteCollectionIds */
+        $pinnedDungeonRouteCollectionIds = [];
 
         if ($creatorProfileActive) {
             /** @var User $user */
@@ -401,12 +439,22 @@ class ProfileController extends Controller
             $pinnedDungeonRouteIds = $user->pinnedDungeonRoutes
                 ->pluck('dungeon_route_id')
                 ->all();
+
+            $ownDungeonRouteCollections = $user->dungeonRouteCollections()
+                ->with(['dungeonRouteCollectionCategory'])
+                ->get();
+
+            $pinnedDungeonRouteCollectionIds = $user->pinnedDungeonRouteCollections
+                ->pluck('dungeon_route_collection_id')
+                ->all();
         }
 
         return [
-            'creatorProfileActive'  => $creatorProfileActive,
-            'ownDungeonRoutes'      => $ownDungeonRoutes,
-            'pinnedDungeonRouteIds' => $pinnedDungeonRouteIds,
+            'creatorProfileActive'            => $creatorProfileActive,
+            'ownDungeonRoutes'                => $ownDungeonRoutes,
+            'pinnedDungeonRouteIds'           => $pinnedDungeonRouteIds,
+            'ownDungeonRouteCollections'      => $ownDungeonRouteCollections,
+            'pinnedDungeonRouteCollectionIds' => $pinnedDungeonRouteCollectionIds,
         ];
     }
 }

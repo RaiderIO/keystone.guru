@@ -68,15 +68,16 @@ use Override;
  * @property int|null $published_route_count Only present when hydrated through
  *                                           CreatorDirectoryService's withCount().
  *
- * @property EloquentCollection<int, DungeonRoute>           $dungeonRoutes
- * @property EloquentCollection<int, UserReport>             $reports
- * @property EloquentCollection<int, Team>                   $teams
- * @property EloquentCollection<int, Role>                   $roles
- * @property EloquentCollection<int, Tag>                    $tags
- * @property EloquentCollection<int, UserIpAddress>          $ipAddresses
- * @property EloquentCollection<int, UserSocialLink>         $socialLinks
- * @property EloquentCollection<int, UserPinnedDungeonRoute> $pinnedDungeonRoutes
- * @property EloquentCollection<int, DungeonRouteCollection> $dungeonRouteCollections
+ * @property EloquentCollection<int, DungeonRoute>                     $dungeonRoutes
+ * @property EloquentCollection<int, UserReport>                       $reports
+ * @property EloquentCollection<int, Team>                             $teams
+ * @property EloquentCollection<int, Role>                             $roles
+ * @property EloquentCollection<int, Tag>                              $tags
+ * @property EloquentCollection<int, UserIpAddress>                    $ipAddresses
+ * @property EloquentCollection<int, UserSocialLink>                   $socialLinks
+ * @property EloquentCollection<int, UserPinnedDungeonRoute>           $pinnedDungeonRoutes
+ * @property EloquentCollection<int, UserPinnedDungeonRouteCollection> $pinnedDungeonRouteCollections
+ * @property EloquentCollection<int, DungeonRouteCollection>           $dungeonRouteCollections
  *
  * @mixin Eloquent
  */
@@ -256,6 +257,12 @@ class User extends Authenticatable implements LaratrustUser
     public function pinnedDungeonRoutes(): HasMany
     {
         return $this->hasMany(UserPinnedDungeonRoute::class)->orderBy('order');
+    }
+
+    /** @return HasMany<UserPinnedDungeonRouteCollection, $this> */
+    public function pinnedDungeonRouteCollections(): HasMany
+    {
+        return $this->hasMany(UserPinnedDungeonRouteCollection::class)->orderBy('order');
     }
 
     /** @return HasMany<DungeonRouteCollection, $this> */

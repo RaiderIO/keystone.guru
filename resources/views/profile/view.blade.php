@@ -4,10 +4,12 @@
  * @var bool                            $creatorProfileActive
  * @var Collection<int, UserSocialLink> $socialLinks
  * @var Collection<int, DungeonRoute>   $pinnedDungeonRoutes
+ * @var Collection<int, DungeonRouteCollection> $pinnedDungeonRouteCollections
  * @var int                             $publishedRouteCount
  */
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\User;
 use App\Models\UserSocialLink;
 use Illuminate\Support\Collection;
@@ -15,6 +17,7 @@ use Illuminate\Support\Collection;
 $creatorProfileActive ??= false;
 $socialLinks          ??= collect();
 $pinnedDungeonRoutes  ??= collect();
+$pinnedDungeonRouteCollections ??= collect();
 $publishedRouteCount  ??= 0;
 
 $title  = sprintf(__('view_profile.view.title'), $user->name);
@@ -89,6 +92,22 @@ $header = sprintf(__('view_profile.view.header'), $user->name);
                 @endif
             </div>
         </div>
+
+        @if($pinnedDungeonRouteCollections->isNotEmpty())
+            <h2 class="h4 mb-3">
+                {{ __('view_profile.view.pinned_collections') }}
+            </h2>
+
+            <div class="row g-3 row-cols-1 row-cols-md-2 row-cols-xl-3 mb-4">
+                @foreach($pinnedDungeonRouteCollections as $pinnedDungeonRouteCollection)
+                    <div class="col">
+                        @include('common.collection.card', [
+                            'dungeonRouteCollection' => $pinnedDungeonRouteCollection,
+                        ])
+                    </div>
+                @endforeach
+            </div>
+        @endif
 
         @if($pinnedDungeonRoutes->isNotEmpty())
             <h2 class="h4 mb-3">

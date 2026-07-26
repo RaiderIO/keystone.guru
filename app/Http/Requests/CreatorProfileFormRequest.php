@@ -3,7 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\UserPinnedDungeonRoute;
+use App\Models\UserPinnedDungeonRouteCollection;
 use App\Models\UserSocialLink;
 use Closure;
 use Illuminate\Foundation\Http\FormRequest;
@@ -76,6 +78,19 @@ class CreatorProfileFormRequest extends FormRequest
                     // Sandbox routes expire, so they are deliberately not offered as pinnable
                     ->whereNull('expires_at'),
             ],
+            'pinned_dungeon_route_collections' => [
+                'nullable',
+                'array',
+                sprintf('max:%d', UserPinnedDungeonRouteCollection::MAX_PINNED_COLLECTIONS),
+            ],
+            // Same constraint as the pinned routes above: a user may only pin collections they own
+            'pinned_dungeon_route_collections.*' => [
+                'required',
+                'integer',
+                'distinct',
+                Rule::exists('dungeon_route_collections', 'id')
+                    ->where('user_id', $userId),
+            ],
         ];
     }
 
@@ -83,9 +98,11 @@ class CreatorProfileFormRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'bio.max'                        => __('validation.custom.bio.max'),
-            'pinned_dungeon_routes.max'      => __('validation.custom.pinned_dungeon_routes.max'),
-            'pinned_dungeon_routes.*.exists' => __('validation.custom.pinned_dungeon_routes.exists'),
+            'bio.max'                                   => __('validation.custom.bio.max'),
+            'pinned_dungeon_routes.max'                 => __('validation.custom.pinned_dungeon_routes.max'),
+            'pinned_dungeon_routes.*.exists'            => __('validation.custom.pinned_dungeon_routes.exists'),
+            'pinned_dungeon_route_collections.max'      => __('validation.custom.pinned_dungeon_route_collections.max'),
+            'pinned_dungeon_route_collections.*.exists' => __('validation.custom.pinned_dungeon_route_collections.exists'),
         ];
     }
 
@@ -114,6 +131,35 @@ class CreatorProfileFormRequest extends FormRequest
             }
 
             return $result;
+        });
+    }
+
+    /**
+     * The collections to pin, in submitted order, already constrained to the current user's own
+     * collections.
+     *
+     * @return Collection<int, DungeonRouteCollection>
+     */
+    public function pinnedDungeonRouteCollections(): Collection
+    {
+        return once(function (): Collection {
+            /** @var array<int, int> $ids */
+            $ids = $this->validated('pinned_dungeon_route_collections') ?? [];
+
+            if ($ids === []) {
+                return collect();
+            }
+
+            $dungeonRouteCollections = DungeonRouteCollection::query()
+                ->whereIn('id', $ids)
+                ->get()
+                ->keyBy('id');
+
+            // Preserve the order the user submitted them in, which becomes the display order
+            return collect($ids)
+                ->map(static fn(int $id): ?DungeonRouteCollection => $dungeonRouteCollections->get($id))
+                ->filter()
+                ->values();
         });
     }
 
