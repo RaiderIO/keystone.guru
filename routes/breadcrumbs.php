@@ -214,19 +214,25 @@ Breadcrumbs::for('profile.tags', static function (Generator $trail) {
 /**
  * Route collection pages
  */
-Breadcrumbs::for('collections.index', static function (Generator $trail) {
+// Keyed by view name (see GlobalComposer::$viewName), not by route name
+Breadcrumbs::for('collection.index', static function (Generator $trail) {
     $trail->parent('home');
     $trail->push(__('breadcrumbs.home.my_collections'), route('collections.index'));
 });
 
-Breadcrumbs::for('collections.new', static function (Generator $trail) {
-    $trail->parent('collections.index');
+Breadcrumbs::for('collection.new', static function (Generator $trail) {
+    $trail->parent('collection.index');
     $trail->push(__('breadcrumbs.home.new_collection'), route('collections.new'));
 });
 
-Breadcrumbs::for('collections.edit', static function (Generator $trail, DungeonRouteCollection $dungeonRouteCollection) {
-    $trail->parent('collections.index');
+Breadcrumbs::for('collection.edit', static function (Generator $trail, DungeonRouteCollection $dungeonRouteCollection) {
+    $trail->parent('collection.index');
     $trail->push(__('breadcrumbs.home.edit_collection'), route('collections.edit', $dungeonRouteCollection));
+});
+
+Breadcrumbs::for('collection.view', static function (Generator $trail, DungeonRouteCollection $dungeonRouteCollection) {
+    $trail->parent('home');
+    $trail->push($dungeonRouteCollection->name, route('collection.view', $dungeonRouteCollection));
 });
 
 /**

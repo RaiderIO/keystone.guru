@@ -15,6 +15,7 @@ $title = sprintf(__('view_collection.view.title'), $dungeonRouteCollection->name
     'wide' => true,
     'title' => $title,
     'showAds' => false,
+    'breadcrumbsParams' => [$dungeonRouteCollection],
 ])
 
 @section('header-title')
