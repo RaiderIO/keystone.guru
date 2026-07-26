@@ -18,11 +18,11 @@ class CreatorDirectoryService implements CreatorDirectoryServiceInterface
     }
 
     /** @return LengthAwarePaginator<int, User> */
-    public function paginateCreators(?string $search = null, ?int $perPage = null): LengthAwarePaginator
+    public function paginateCreators(?string $search = null, ?int $categoryId = null, ?int $perPage = null): LengthAwarePaginator
     {
         $perPage ??= (int)config('keystoneguru.creators.per_page');
 
-        return $this->userRepository->buildListedCreatorsQuery()
+        return $this->userRepository->buildListedCreatorsQuery($categoryId)
             ->when(
                 $search !== null && $search !== '',
                 static fn(Builder $builder): Builder => $builder->where(
