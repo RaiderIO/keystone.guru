@@ -26,6 +26,7 @@ L.Draw.Enemy = L.Draw.Marker.extend({
 
 /**
  * @property {Number} floor_id
+ * @property {Number|null} enemy_forces_region_id The mapper-defined region (e.g. a corridor) this enemy belongs to
  * @property {Number|null} source_floor_id The floor the enemy really lives on, when floor_id was replaced by the facade floor
  * @property {Number} enemy_pack_id
  * @property {Number} npc_id
@@ -139,6 +140,12 @@ class Enemy extends VersionableMapObject {
                 name: 'enemy_patrol_id',
                 type: 'int',
                 edit: false, // Not directly changeable by user
+                default: null
+            }),
+            new Attribute({
+                name: 'enemy_forces_region_id',
+                type: 'int',
+                edit: false, // Assigned by selecting enemies on the region itself
                 default: null
             }),
             new Attribute({
@@ -865,6 +872,17 @@ class Enemy extends VersionableMapObject {
      *
      * @param enemyPatrol {EnemyPatrol}
      */
+    /**
+     * Assigns this enemy to a mapper-defined enemy forces region (or removes it from one).
+     * @param enemyForcesRegion {EnemyForcesRegion|null}
+     */
+    setEnemyForcesRegion(enemyForcesRegion) {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        this.enemyForcesRegion = enemyForcesRegion;
+        this.enemy_forces_region_id = enemyForcesRegion === null ? null : enemyForcesRegion.id;
+    }
+
     setEnemyPatrol(enemyPatrol) {
         if (this.enemyPatrol !== null) {
             this.enemyPatrol.removeEnemy(this);

@@ -400,6 +400,30 @@ class AdminEnemy extends Enemy {
                 }
             }
 
+            if (currentMapState instanceof EnemyForcesRegionEnemySelection) {
+                /** @type {AdminEnemyForcesRegion} */
+                let enemyForcesRegion = currentMapState.getMapObject();
+                // Clicking an enemy that is already in the region removes it again
+                let newRegion = enemyForcesRegion.id === self.enemy_forces_region_id ? null : enemyForcesRegion;
+
+                self.setEnemyForcesRegion(newRegion);
+                self.save();
+
+                // A pack is pulled as a whole, so it belongs to a region as a whole
+                let regionPackBuddies = self.getPackBuddies();
+                for (let index in regionPackBuddies) {
+                    let packBuddyEnemy = regionPackBuddies[index];
+                    packBuddyEnemy.setEnemyForcesRegion(newRegion);
+                    packBuddyEnemy.save();
+                }
+
+                enemyForcesRegion.refreshPill();
+
+                // Deliberately NOT stopping the map state here - unlike a patrol, a region is built out
+                // of many enemies, and can span floors. The admin closes it themselves (Escape, or the
+                // button on the region) once they're done.
+            }
+
             if (currentMapState instanceof EnemyPatrolEnemySelection) {
                 // We just got assigned an enemy patrol!
                 /** @type {AdminEnemyPatrol} */

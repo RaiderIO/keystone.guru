@@ -427,6 +427,14 @@ class MapContext extends Signalable {
     }
 
     /**
+     * The mapper-defined enemy forces regions (e.g. corridors) of this dungeon.
+     * @returns {[]}
+     */
+    getEnemyForcesRegions() {
+        return this._options.dungeon.enemyForcesRegions ?? [];
+    }
+
+    /**
      *
      * @returns {[]}
      */
