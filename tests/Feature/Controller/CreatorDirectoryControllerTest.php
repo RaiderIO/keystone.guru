@@ -307,6 +307,39 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
         }
     }
 
+    /**
+     * The category select posts an empty string for "Any collection", which must browse unfiltered
+     * rather than fail the integer rule.
+     */
+    #[Test]
+    public function index_givenAnEmptyCategory_listsEveryCreator(): void
+    {
+        // Arrange
+        $viewer  = User::factory()->create();
+        $creator = User::factory()->create();
+        $routes  = $this->createPublishedRoutesFor($creator, $this->minPublishedRoutes());
+
+        Feature::for($viewer)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($viewer)->get(route('creators.index', ['search' => '', 'category_id' => '']));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSessionHasNoErrors();
+            $this->assertTrue(
+                $this->creatorIdsFrom($response)->contains($creator->id),
+                'An empty category means "any category", not a validation error',
+            );
+        } finally {
+            Feature::for($viewer)->forget(CreatorProfiles::class);
+            $this->deleteAll($routes);
+            $creator->delete();
+            $viewer->delete();
+        }
+    }
+
     #[Test]
     public function index_givenACategoryThatDoesNotExist_failsValidation(): void
     {
