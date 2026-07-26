@@ -56,6 +56,22 @@ return [
         'npc_dungeon_ids' => [
             'required' => 'Select at least one dungeon - an NPC with no dungeon has no way to derive which game version it belongs to.',
         ],
+        'collection_name' => [
+            'required' => 'A collection needs a name.',
+            'max'      => 'A collection name may not be longer than :max characters.',
+        ],
+        'collection_description' => [
+            'max' => 'A collection description may not be longer than :max characters.',
+        ],
+        'collection_team_id' => [
+            'required_if' => 'Select the team to share this collection with.',
+            'exists'      => 'You can only share a collection with a team that you are a member of.',
+        ],
+        'collection_dungeon_routes' => [
+            'max'      => 'A collection may hold at most :max routes.',
+            'exists'   => 'You can only collect routes that you created yourself.',
+            'distinct' => 'A route may only appear once in a collection.',
+        ],
     ],
     'date'              => 'The :attribute is not a valid date.',
     'date_equals'       => 'The :attribute must be a date equal to :date.',
