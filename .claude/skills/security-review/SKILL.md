@@ -21,14 +21,20 @@ for reviewing changes and the areas already checked (so a review doesn't re-liti
 ## Authorization
 
 - Policies live in `app/Policies/` (one per per-owner resource: `DungeonRoute`, `Team`,
-  `LiveSession`, `Season`, `Dungeon`, `Expansion`, `GameVersion`, `Tag`, `TagCategory`).
+  `LiveSession`, `Tag`, `TagCategory`). The `Season`/`Dungeon`/`Expansion`/`GameVersion` view
+  policies were removed — those models have no owner to check, so the view gate was dead weight;
+  see `DungeonRouteDiscoverController`/`DungeonRouteDiscoverExpansionSeasonController` for the
+  404-on-retired-content handling that replaced them.
 - The **write surface is the Ajax map editor** (`app/Http/Controllers/Ajax/`), and it enforces
-  ownership with `Gate::authorize('edit'|'view'|'addKillZone'|..., $dungeonRoute)` **in every
-  mutating controller method** (including a re-authorize-after-reload guard in
-  `AjaxKillZoneController` against cross-route hijacking).
+  ownership with `Gate::authorize('edit'|'view', $dungeonRoute)` **in every mutating controller
+  method** (including a re-authorize-after-reload guard in `AjaxKillZoneController` against
+  cross-route hijacking). Per-route object caps (kill zones, brushlines, paths, arrows, map icons)
+  are no longer policy abilities (`addKillZone` et al.) — a quota breach isn't an authorization
+  failure, it's a request the server understood and refuses to process, so it's now a 422 via the
+  `EnforcesDungeonRouteLimits` trait (`app/Http/Controllers/Traits/`), not a 403 via `Gate`.
 - **Admin mapping mutations** (enemy, enemypack, mapicon, mountablearea, floorunion, …) are gated at
   the route level by `Route::middleware(['auth', 'role:admin'])` in `routes/web.php`.
-- **Do not be alarmed by "9 policies for 150+ models."** The models without a policy are
+- **Do not be alarmed by "5 policies for 150+ models."** The models without a policy are
   mapping/reference data gated by role at the route level, not per-owner resources — the ratio is
   *not* a finding.
 

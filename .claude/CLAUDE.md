@@ -51,10 +51,10 @@ dereferences the `@file` into its contents; lowercase `-f` would send the litera
 
 ### Stacked PRs: always target `master`
 
-`php-tests`, `phpstan` and `php-cs-fixer` are all `on: pull_request: branches: [master]`, so a PR
-opened against a *feature* branch silently skips every PHP check. It still shows green — `build`,
-`js-tests` and `php-cs-fixer` run — which looks like a pass until you count the checks (9 when a PR
-is wired up correctly, 3 when it is not).
+`php-tests` and `phpstan` are both `on: pull_request: branches: [master]`, so a PR opened against
+a *feature* branch silently skips both PHP checks. It still shows green — `build`, `js-tests` and
+`php-cs-fixer` run regardless of base branch — which looks like a pass until you count the checks
+(9 when a PR is wired up correctly, 3 when it is not).
 
 When one branch is cut from another, open the PR against `master` anyway and say so in the body;
 the diff collapses on its own once the parent merges. If a PR was already opened against a feature
