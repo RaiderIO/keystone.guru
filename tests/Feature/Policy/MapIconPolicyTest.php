@@ -89,9 +89,12 @@ final class MapIconPolicyTest extends PublicTestCase
     }
 
     #[Test]
-    public function update_givenMappingIconAndNonAdmin_returnsDenied(): void
+    public function update_givenMappingIcon_returnsDeniedRegardlessOfRole(): void
     {
-        // Arrange - no route and no team means the icon belongs to the mapping itself
+        // Arrange - no route and no team means the icon belongs to the mapping itself. This
+        // endpoint is only ever reached with an incoming dungeon route, so allowing it here would
+        // let a global mapping icon be reassigned to a personal route - never possible before,
+        // for anyone including admins - so it stays denied regardless of role.
         $user    = User::factory()->create();
         $mapIcon = new MapIcon();
         $mapIcon->setAttribute('dungeon_route_id', null);
@@ -100,7 +103,7 @@ final class MapIconPolicyTest extends PublicTestCase
         try {
             // Act & Assert
             $this->assertTrue($this->policy->update($user, $mapIcon)->denied());
-            $this->assertTrue($this->policy->update($this->adminUser(), $mapIcon)->allowed());
+            $this->assertTrue($this->policy->update($this->adminUser(), $mapIcon)->denied());
         } finally {
             $user->delete();
         }

@@ -178,7 +178,7 @@ final class UserPolicyTest extends PublicTestCase
 
         try {
             // Act & Assert
-            $this->assertTrue($this->policy->revokeAdFreeGiveaway($giver, $receiver->fresh()));
+            $this->assertTrue($this->policy->revokeAdFreeGiveaway($giver, $receiver->fresh())->allowed());
         } finally {
             $giveaway->delete();
             $receiver->delete();
@@ -200,8 +200,8 @@ final class UserPolicyTest extends PublicTestCase
 
         try {
             // Act & Assert - not even an admin may revoke somebody else's giveaway
-            $this->assertFalse($this->policy->revokeAdFreeGiveaway($bystander, $receiver->fresh()));
-            $this->assertFalse($this->policy->revokeAdFreeGiveaway($this->adminUser(), $receiver->fresh()));
+            $this->assertTrue($this->policy->revokeAdFreeGiveaway($bystander, $receiver->fresh())->denied());
+            $this->assertTrue($this->policy->revokeAdFreeGiveaway($this->adminUser(), $receiver->fresh())->denied());
         } finally {
             $giveaway->delete();
             $bystander->delete();

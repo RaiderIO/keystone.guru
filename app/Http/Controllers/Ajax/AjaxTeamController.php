@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Team\TeamChangeRoleFormRequest;
 use App\Http\Requests\Team\TeamDefaultRoleFormRequest;
 use App\Http\Requests\Team\TeamRoutePublishingFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -63,11 +64,10 @@ class AjaxTeamController extends Controller
      *
      * @throws Exception
      */
-    public function changeRole(Request $request, Team $team)
+    public function changeRole(TeamChangeRoleFormRequest $request, Team $team)
     {
-        /** @var User $targetUser */
-        $targetUser = User::where('name', $request->get('username'))->firstOrFail();
-        $role       = $request->get('role');
+        $targetUser = $request->targetUser();
+        $role       = $request->validated('role');
 
         Gate::authorize('change-role', [$team, $targetUser, $role]);
 

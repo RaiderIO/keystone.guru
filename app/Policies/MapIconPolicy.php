@@ -26,8 +26,10 @@ class MapIconPolicy
 
     /**
      * Determine whether the user can update an existing map icon while editing a dungeon route.
-     * A mapping icon (no dungeon route, no team) belongs to the mapping and is admin-only, even
-     * when the request supplies a route the user may otherwise edit.
+     * A mapping icon (no dungeon route, no team) belongs to the mapping - this endpoint is only
+     * ever reached with an incoming dungeon route, so allowing it here would let anyone (even an
+     * admin) reassign a global mapping icon to a personal route, which was never possible before
+     * this policy existed. That transition is denied unconditionally, not just non-admin-gated.
      */
     public function update(?User $user, MapIcon $mapIcon): Response
     {
@@ -35,9 +37,7 @@ class MapIconPolicy
             return $this->allow();
         }
 
-        return $user !== null && $user->hasRole(Role::ROLE_ADMIN) ?
-            $this->allow() :
-            $this->deny(__('policy.update_map_icon_admin_only'));
+        return $this->deny(__('policy.update_map_icon_admin_only'));
     }
 
     /**
@@ -59,7 +59,7 @@ class MapIconPolicy
 
         return $user !== null && $user->hasRole(Role::ROLE_ADMIN) ?
             $this->allow() :
-            $this->deny(__('policy.update_map_icon_admin_only'));
+            $this->deny(__('policy.delete_map_icon_admin_only'));
     }
 
     /**

@@ -18,5 +18,6 @@ return [
     'make_role_only_super_admins_may_grant_admin' => 'Only super admins may grant or revoke the admin role.',
     'create_global_map_icon_admin_only'           => 'Only administrators may create map icons that are not attached to a route.',
     'update_map_icon_admin_only'                  => 'Only administrators may change map icons that are not attached to a route or team.',
+    'delete_map_icon_admin_only'                  => 'Only administrators may delete map icons that are not attached to a route.',
 
 ];

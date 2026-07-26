@@ -59,11 +59,15 @@ class UserPolicy
 
     /**
      * Determine whether the user can revoke the ad-free giveaway the target user currently has.
-     * Only the giver may take their own giveaway back.
+     * Only the giver may take their own giveaway back. Callers already guard the "no giveaway to
+     * revoke" case themselves before authorizing, so this only needs to carry the "not yours"
+     * message the old inline checks showed instead of a generic deny.
      */
-    public function revokeAdFreeGiveaway(User $user, User $target): bool
+    public function revokeAdFreeGiveaway(User $user, User $target): Response
     {
         return $target->patreonAdFreeGiveaway !== null &&
-            $target->patreonAdFreeGiveaway->giver_user_id === $user->id;
+            $target->patreonAdFreeGiveaway->giver_user_id === $user->id ?
+            $this->allow() :
+            $this->deny(__('controller.profile.error.remove_ad_free_giveaway_not_yours'));
     }
 }
