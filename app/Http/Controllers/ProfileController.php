@@ -42,35 +42,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        $creatorProfileActive = Feature::active(CreatorProfiles::class);
-
-        /** @var Collection<int, DungeonRoute> $ownDungeonRoutes */
-        $ownDungeonRoutes = collect();
-        /** @var array<int, int> $pinnedDungeonRouteIds */
-        $pinnedDungeonRouteIds = [];
-
-        if ($creatorProfileActive) {
-            /** @var User $user */
-            $user = Auth::user();
-
-            // Sandbox routes expire, so they are deliberately not offered as pinnable
-            $ownDungeonRoutes = DungeonRoute::query()
-                ->where('author_id', $user->id)
-                ->whereNull('expires_at')
-                ->with(['dungeon'])
-                ->orderBy('title')
-                ->get();
-
-            $pinnedDungeonRouteIds = $user->pinnedDungeonRoutes
-                ->pluck('dungeon_route_id')
-                ->all();
-        }
-
-        return view('profile.edit', [
-            'creatorProfileActive'  => $creatorProfileActive,
-            'ownDungeonRoutes'      => $ownDungeonRoutes,
-            'pinnedDungeonRouteIds' => $pinnedDungeonRouteIds,
-        ]);
+        return view('profile.edit', $this->creatorProfileEditViewData());
     }
 
     /**
@@ -352,7 +324,7 @@ class ProfileController extends Controller
 
         // @todo Send an e-mail letting the user know the password has been changed
 
-        return view('profile.edit')->withErrors($error);
+        return view('profile.edit', $this->creatorProfileEditViewData())->withErrors($error);
     }
 
     /**
@@ -400,5 +372,41 @@ class ProfileController extends Controller
         }
 
         return redirect()->route('home');
+    }
+
+    /**
+     * @return array{creatorProfileActive: bool, ownDungeonRoutes: Collection<int, DungeonRoute>, pinnedDungeonRouteIds: array<int, int>}
+     */
+    private function creatorProfileEditViewData(): array
+    {
+        $creatorProfileActive = Feature::active(CreatorProfiles::class);
+
+        /** @var Collection<int, DungeonRoute> $ownDungeonRoutes */
+        $ownDungeonRoutes = collect();
+        /** @var array<int, int> $pinnedDungeonRouteIds */
+        $pinnedDungeonRouteIds = [];
+
+        if ($creatorProfileActive) {
+            /** @var User $user */
+            $user = Auth::user();
+
+            // Sandbox routes expire, so they are deliberately not offered as pinnable
+            $ownDungeonRoutes = DungeonRoute::query()
+                ->where('author_id', $user->id)
+                ->whereNull('expires_at')
+                ->with(['dungeon'])
+                ->orderBy('title')
+                ->get();
+
+            $pinnedDungeonRouteIds = $user->pinnedDungeonRoutes
+                ->pluck('dungeon_route_id')
+                ->all();
+        }
+
+        return [
+            'creatorProfileActive'  => $creatorProfileActive,
+            'ownDungeonRoutes'      => $ownDungeonRoutes,
+            'pinnedDungeonRouteIds' => $pinnedDungeonRouteIds,
+        ];
     }
 }
