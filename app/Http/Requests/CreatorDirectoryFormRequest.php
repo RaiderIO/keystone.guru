@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreatorDirectoryFormRequest extends FormRequest
@@ -24,6 +25,11 @@ class CreatorDirectoryFormRequest extends FormRequest
                 'string',
                 'max:24',
             ],
+            'category_id' => [
+                'nullable',
+                'integer',
+                'exists:dungeon_route_collection_categories,id',
+            ],
         ];
     }
 
@@ -31,8 +37,25 @@ class CreatorDirectoryFormRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'search.max' => __('validation.custom.creator_search.max'),
+            'search.max'         => __('validation.custom.creator_search.max'),
+            'category_id.exists' => __('validation.custom.collection_category_id.exists'),
         ];
+    }
+
+    /**
+     * The category to filter the directory on, or null when the user is browsing every category.
+     */
+    public function dungeonRouteCollectionCategory(): ?DungeonRouteCollectionCategory
+    {
+        return once(function (): ?DungeonRouteCollectionCategory {
+            $categoryId = $this->validated('category_id');
+
+            if ($categoryId === null) {
+                return null;
+            }
+
+            return DungeonRouteCollectionCategory::query()->findOrFail($categoryId);
+        });
     }
 
     /**

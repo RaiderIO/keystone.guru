@@ -12,11 +12,11 @@ use Illuminate\Database\Eloquent\Collection;
 class CreatorDirectoryService implements CreatorDirectoryServiceInterface
 {
     /** @return LengthAwarePaginator<int, User> */
-    public function paginateCreators(?string $search = null, ?int $perPage = null): LengthAwarePaginator
+    public function paginateCreators(?string $search = null, ?int $categoryId = null, ?int $perPage = null): LengthAwarePaginator
     {
         $perPage ??= (int)config('keystoneguru.creators.per_page');
 
-        return $this->buildListedCreatorsQuery()
+        return $this->buildListedCreatorsQuery($categoryId)
             ->when(
                 $search !== null && $search !== '',
                 static fn(Builder $builder): Builder => $builder->where(
@@ -61,9 +61,18 @@ class CreatorDirectoryService implements CreatorDirectoryServiceInterface
      * The cost now scales with published routes and qualifying creators instead of with total
      * registrations, which matters for a page intended to become public and is not cached.
      *
+     * The category filter is an EXISTS against dungeon_route_collections, which MySQL resolves per
+     * candidate creator through the user_id index (type=ref, rows=1) - so it costs one index lookup
+     * per creator that already survived the join, not a scan:
+     *
+     *   dungeon_route_collections  type=ref  key=..._user_id_index  rows=1
+     *
+     * @param int|null $categoryId When set, only creators who publicly share a collection filed
+     *                             under this category are listed.
+     *
      * @return Builder<User>
      */
-    private function buildListedCreatorsQuery(): Builder
+    private function buildListedCreatorsQuery(?int $categoryId = null): Builder
     {
         $minPublishedRoutes = (int)config('keystoneguru.creators.min_published_routes');
         $worldPublishedId   = PublishedState::ALL[PublishedState::WORLD];
@@ -78,6 +87,19 @@ class CreatorDirectoryService implements CreatorDirectoryServiceInterface
             ->select('users.*', 'published_routes.published_route_count')
             ->joinSub($publishedRouteCounts, 'published_routes', 'published_routes.author_id', '=', 'users.id')
             ->where('users.hide_from_creator_directory', false)
+            // Filtering on a category asks "does this creator publicly share a collection of this
+            // kind" - so only world published collections count. An unpublished or link-only
+            // collection must never put its author in a filtered listing, since that would leak
+            // that the collection exists at all
+            ->when(
+                $categoryId !== null,
+                static fn(Builder $builder): Builder => $builder->whereHas(
+                    'dungeonRouteCollections',
+                    static fn(Builder $collectionBuilder): Builder => $collectionBuilder
+                        ->where('dungeon_route_collection_category_id', $categoryId)
+                        ->where('published_state_id', PublishedState::ALL[PublishedState::WORLD]),
+                ),
+            )
             // The creator cards render the avatar
             ->with(['iconfile'])
             ->orderByDesc('published_routes.published_route_count')

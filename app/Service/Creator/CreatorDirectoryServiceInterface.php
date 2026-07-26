@@ -11,11 +11,13 @@ interface CreatorDirectoryServiceInterface
     /**
      * A page of listed creators, most published routes first.
      *
-     * @param string|null $search Optional case-insensitive match on the creator's name.
+     * @param string|null $search     Optional case-insensitive match on the creator's name.
+     * @param int|null    $categoryId Optional DungeonRouteCollectionCategory to filter on: only
+     *                                creators who publicly share a collection of that kind.
      *
      * @return LengthAwarePaginator<int, User>
      */
-    public function paginateCreators(?string $search = null, ?int $perPage = null): LengthAwarePaginator;
+    public function paginateCreators(?string $search = null, ?int $categoryId = null, ?int $perPage = null): LengthAwarePaginator;
 
     /**
      * The creators to surface on the discover landing page.
