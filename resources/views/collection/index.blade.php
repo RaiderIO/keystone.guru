@@ -55,7 +55,7 @@ use Illuminate\Support\Collection;
                         @endif
                     </td>
                     <td>
-                        {{ $dungeonRouteCollection->dungeonRouteCollectionRoutes()->count() }}
+                        {{ $dungeonRouteCollection->dungeon_route_collection_routes_count }}
                     </td>
                     <td>
                         <a href="{{ route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection]) }}"

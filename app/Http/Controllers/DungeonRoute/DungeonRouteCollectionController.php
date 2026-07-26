@@ -30,10 +30,13 @@ class DungeonRouteCollectionController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        $user->load(['dungeonRouteCollections.team']);
-
         return view('collection.index', [
-            'dungeonRouteCollections' => $user->dungeonRouteCollections,
+            // The overview shows a route count per collection - counted in the query rather than
+            // per row, which would be a query per collection
+            'dungeonRouteCollections' => $user->dungeonRouteCollections()
+                ->with(['team'])
+                ->withCount('dungeonRouteCollectionRoutes')
+                ->get(),
         ]);
     }
 
