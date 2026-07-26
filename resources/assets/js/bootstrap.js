@@ -29,6 +29,12 @@ import Echo from 'laravel-echo'
 
 import Pusher from 'pusher-js';
 
+// Imported as ESM rather than require()d (#3669): since 1.10.0 the package declares
+// "type": "module", so its `require` export condition (dist/pickr.min.js) is parsed as ESM even
+// though it contains UMD code - the resulting module has no exports at all and Pickr.create is
+// undefined. Only the `import` condition (dist/pickr.min.mjs) exports the class.
+import Pickr from '@simonwep/pickr';
+
 window.Pusher = Pusher;
 
 function startLaravelEcho() {
@@ -108,7 +114,7 @@ window.d3 = require('d3'); // v3.5.14 since Pather uses an out-of-date version
 window.Pather = require('leaflet-pather');
 window.circleMenu = require('zikes-circlemenu');
 window.Noty = require('noty');
-window.Pickr = require('@simonwep/pickr');
+window.Pickr = Pickr; // See the ESM import above (#3669)
 window.AntPath = require('leaflet-ant-path');
 window.Grapick = require('grapick');
 window.simplebar = require('simplebar');
