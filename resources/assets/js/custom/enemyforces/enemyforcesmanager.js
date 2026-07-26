@@ -139,10 +139,12 @@ class EnemyForcesManager extends Signalable {
             // does.
             let enemyFloorId = enemy.source_floor_id ?? enemy.floor_id;
 
-            // Mirror the filter used by KillZone.getEnemyForces() (skip obsolete) and additionally skip
-            // enemies that aren't actually present (wrong seasonal type/affix), so the total matches what
-            // is shown on the map.
-            if (enemyFloorId === floorId && !enemy.isObsolete() && !enemy.shouldBeIgnored()) {
+            // Unlike KillZone.getEnemyForces() (which sums only pulled enemies and so skips obsolete
+            // ones), this total reflects what's present on the floor regardless of pull state - an
+            // obsolete enemy is still standing there and still yields its enemy forces. Only skip
+            // enemies that aren't actually present (wrong seasonal type/affix), so the total matches
+            // what is shown on the map.
+            if (enemyFloorId === floorId && !enemy.shouldBeIgnored()) {
                 result += enemy.getEnemyForces();
             }
         }

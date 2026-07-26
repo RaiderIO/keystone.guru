@@ -67,13 +67,13 @@ describe('EnemyForcesManager.getEnemyForcesForFloor', () => {
         expect(manager.getEnemyForcesForFloor(99)).toBe(0);
     });
 
-    it('getEnemyForcesForFloor_givenObsoleteEnemy_excludesItFromSum', () => {
+    it('getEnemyForcesForFloor_givenObsoleteEnemy_includesItInSum', () => {
         const manager = createManager([
             createEnemy({floorId: 1, forces: 5}),
             createEnemy({floorId: 1, forces: 100, obsolete: true}),
         ]);
 
-        expect(manager.getEnemyForcesForFloor(1)).toBe(5);
+        expect(manager.getEnemyForcesForFloor(1)).toBe(105);
     });
 
     it('getEnemyForcesForFloor_givenIgnoredEnemy_excludesItFromSum', () => {
