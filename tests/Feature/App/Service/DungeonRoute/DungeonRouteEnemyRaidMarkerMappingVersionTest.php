@@ -27,25 +27,9 @@ final class DungeonRouteEnemyRaidMarkerMappingVersionTest extends DungeonRouteSa
     public function upgradeMappingVersion_givenNpcStillExistsInNewMappingVersion_preservesRaidMarker(): void
     {
         // Arrange
-        $dungeon    = $this->getRetailDungeon();
-        $existingMV = $dungeon->getCurrentMappingVersion();
+        [$dungeon, $existingMV, $enemy] = $this->getRetailDungeonWithUniquelyIdentifiedEnemy();
         // Cloning a new mapping version also clones every enemy (same npc_id/mdt_id, new ids)
         $newMV = $this->createNewerMappingVersion($dungeon, $existingMV);
-
-        // npc_id/mdt_id is not guaranteed unique within a mapping version - a handful of NPCs are
-        // placed twice under the same MDT clone index. Excluding those keeps this test aligned
-        // with what production actually resolves (see DungeonRouteEnemyRaidMarkerRepository),
-        // instead of occasionally comparing against an arbitrary sibling via firstOrFail() below.
-        /** @var Enemy $enemy */
-        $enemy = Enemy::where('mapping_version_id', $existingMV->id)
-            ->whereRaw('(
-                SELECT COUNT(*) FROM enemies e2
-                WHERE e2.mapping_version_id = enemies.mapping_version_id
-                  AND COALESCE(e2.mdt_npc_id, e2.npc_id) = COALESCE(enemies.mdt_npc_id, enemies.npc_id)
-                  AND e2.mdt_id <=> enemies.mdt_id
-            ) = 1')
-            ->inRandomOrder()
-            ->first();
 
         $route      = DungeonRoute::factory()->create(['dungeon_id' => $dungeon->id, 'mapping_version_id' => $existingMV->id]);
         $raidMarker = $this->createRaidMarker($route, $enemy);
@@ -151,6 +135,52 @@ final class DungeonRouteEnemyRaidMarkerMappingVersionTest extends DungeonRouteSa
     }
 
     /**
+     * A retail dungeon that actually has an enemy uniquely identified by its
+     * (mdt_npc_id/npc_id, mdt_id) pair on its current mapping version.
+     *
+     * npc_id/mdt_id is not guaranteed unique within a mapping version - a handful of NPCs are
+     * placed twice under the same MDT clone index. Excluding those keeps this test aligned with
+     * what production actually resolves (see DungeonRouteEnemyRaidMarkerRepository) instead of
+     * comparing against an arbitrary sibling.
+     *
+     * Picking a random dungeon and *then* filtering was flaky: 3 of the 70 retail dungeons (The
+     * Arcway, Cathedral of Eternal Night, Maw of Souls) have no uniquely-identified enemy at all,
+     * so roughly one run in twenty drew one of them, got a null enemy and died with a TypeError in
+     * createRaidMarker(). Search across dungeons instead, mirroring
+     * getRetailDungeonWithNullMdtIdEnemy() below.
+     *
+     * @return array{0: Dungeon, 1: MappingVersion, 2: Enemy}
+     */
+    private function getRetailDungeonWithUniquelyIdentifiedEnemy(): array
+    {
+        $dungeons = Dungeon::whereNotNull('challenge_mode_id')->get()->shuffle();
+
+        foreach ($dungeons as $dungeon) {
+            /** @var Dungeon $dungeon */
+            $mappingVersion = $dungeon->getCurrentMappingVersion();
+            if ($mappingVersion === null) {
+                continue;
+            }
+
+            $enemy = Enemy::where('mapping_version_id', $mappingVersion->id)
+                ->whereRaw('(
+                    SELECT COUNT(*) FROM enemies e2
+                    WHERE e2.mapping_version_id = enemies.mapping_version_id
+                      AND COALESCE(e2.mdt_npc_id, e2.npc_id) = COALESCE(enemies.mdt_npc_id, enemies.npc_id)
+                      AND e2.mdt_id <=> enemies.mdt_id
+                ) = 1')
+                ->inRandomOrder()
+                ->first();
+
+            if ($enemy !== null) {
+                return [$dungeon, $mappingVersion, $enemy];
+            }
+        }
+
+        self::markTestSkipped('Unable to find a retail dungeon with a uniquely identified enemy on its current mapping version');
+    }
+
+    /**
      * @return array{0: Dungeon, 1: MappingVersion, 2: Enemy}
      */
     private function getRetailDungeonWithNullMdtIdEnemy(): array
@@ -164,7 +194,23 @@ final class DungeonRouteEnemyRaidMarkerMappingVersionTest extends DungeonRouteSa
                 continue;
             }
 
-            $enemy = Enemy::where('mapping_version_id', $mappingVersion->id)->whereNull('mdt_id')->inRandomOrder()->first();
+            // Same uniqueness constraint as getRetailDungeonWithUniquelyIdentifiedEnemy(): only
+            // 152 of the 1549 null-mdt_id enemies are uniquely identified by their
+            // (mdt_npc_id/npc_id, mdt_id) pair, and an ambiguous one cannot be re-resolved after
+            // the upgrade, so the marker is dropped and the assertion below fails. The test is
+            // about null-safe matching (`<=>` rather than `=`), which an unambiguous enemy
+            // exercises just as well.
+            $enemy = Enemy::where('mapping_version_id', $mappingVersion->id)
+                ->whereNull('mdt_id')
+                ->whereRaw('(
+                    SELECT COUNT(*) FROM enemies e2
+                    WHERE e2.mapping_version_id = enemies.mapping_version_id
+                      AND COALESCE(e2.mdt_npc_id, e2.npc_id) = COALESCE(enemies.mdt_npc_id, enemies.npc_id)
+                      AND e2.mdt_id <=> enemies.mdt_id
+                ) = 1')
+                ->inRandomOrder()
+                ->first();
+
             if ($enemy !== null) {
                 return [$dungeon, $mappingVersion, $enemy];
             }
