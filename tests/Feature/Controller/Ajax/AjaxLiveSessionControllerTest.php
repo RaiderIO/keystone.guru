@@ -71,6 +71,32 @@ final class AjaxLiveSessionControllerTest extends AjaxPublicTestCase
         }
     }
 
+    #[Test]
+    public function delete_givenSessionCreatorIsNotRouteOwner_endsTheLiveSession(): void
+    {
+        // Arrange - the session's creator is neither the route owner nor a collaborator, so the
+        // route's edit gate alone would deny them; they must still be able to end their own session
+        $routeOwner     = $this->createUserWithUserRole();
+        $sessionCreator = $this->createUserWithUserRole();
+        $liveSession    = $this->createLiveSession($routeOwner, $sessionCreator);
+
+        try {
+            $this->be($sessionCreator);
+
+            // Act
+            $response = $this->delete($this->deleteUrl($liveSession));
+
+            // Assert
+            $response->assertOk();
+            $response->assertJsonStructure(['expires_in']);
+            $this->assertNotNull($liveSession->fresh()->expires_at);
+        } finally {
+            $this->deleteLiveSession($liveSession);
+            $sessionCreator->delete();
+            $routeOwner->delete();
+        }
+    }
+
     /**
      * The delete route sits behind 'role:user|admin', so an actor without the "user" role would be
      * rejected by the role middleware before the policy ever runs - masking what these tests check.
@@ -86,9 +112,10 @@ final class AjaxLiveSessionControllerTest extends AjaxPublicTestCase
 
     /**
      * Creates a running live session on a published, non-sandbox route owned by $owner. Sandbox
-     * routes are editable by anyone by design, so expires_at must be null here.
+     * routes are editable by anyone by design, so expires_at must be null here. Pass $sessionCreator
+     * to give the session a creator distinct from the route owner (defaults to $owner).
      */
-    private function createLiveSession(User $owner): LiveSession
+    private function createLiveSession(User $owner, ?User $sessionCreator = null): LiveSession
     {
         $route = DungeonRoute::factory()->create([
             'author_id'          => $owner->id,
@@ -98,7 +125,7 @@ final class AjaxLiveSessionControllerTest extends AjaxPublicTestCase
 
         return LiveSession::create([
             'dungeon_route_id' => $route->id,
-            'user_id'          => $owner->id,
+            'user_id'          => ($sessionCreator ?? $owner)->id,
             'public_key'       => LiveSession::generateRandomPublicKey(),
         ]);
     }

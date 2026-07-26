@@ -21,8 +21,8 @@ class APIMetricFormRequest extends FormRequest
     {
         return [
             'id'          => 'int',
-            'model_id'    => 'int|null',
-            'model_class' => 'string|null',
+            'model_id'    => 'nullable|int',
+            'model_class' => 'nullable|string',
             'category'    => Rule::in(Metric::ALL_CATEGORIES),
             'tag'         => Rule::in(Metric::ALL_TAGS),
             'value'       => 'int',

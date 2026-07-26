@@ -29,7 +29,11 @@ class AjaxLiveSessionController extends Controller
         // route cannot be used to authorize against. Ending a session is an edit of that route.
         $dungeonRoute = $liveSession->dungeonRoute ?? $dungeonRoute;
 
-        Gate::authorize('edit', $dungeonRoute);
+        // The session's own creator may always end it, even if they aren't the route's
+        // owner/collaborator - otherwise a session started by e.g. a guest viewer can never expire.
+        if ((int)$liveSession->user_id !== (int)Auth::id()) {
+            Gate::authorize('edit', $dungeonRoute);
+        }
 
         try {
             if ($liveSession->expires_at === null) {
