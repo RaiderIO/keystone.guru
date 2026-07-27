@@ -15,6 +15,7 @@ use App\Models\Npc\NpcHealth;
 use App\Models\Season;
 use App\Models\Spell\Spell;
 use App\Models\Team;
+use App\Models\User;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator;
 use Illuminate\Support\Carbon;
@@ -181,17 +182,25 @@ Breadcrumbs::for('dungeonroutes.discoverdungeon.new', static function (Generator
  */
 Breadcrumbs::for('profile.edit', static function (Generator $trail) {
     $trail->parent('home');
-    $trail->push(__('breadcrumbs.home.my_profile'), route('profile.edit'));
+    $trail->push(__('breadcrumbs.home.account_settings'), route('profile.edit'));
 });
 
+Breadcrumbs::for('profile.view', static function (Generator $trail, User $user) {
+    $trail->parent('home');
+    $trail->push(sprintf(__('view_profile.view.header'), $user->name), route('profile.view', $user));
+});
+
+Breadcrumbs::for('profile.favorites', static function (Generator $trail) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.my_favorites'), route('profile.favorites'));
+});
+
+// ProfileController::routes() renders the `profile.overview` view (not a `profile.routes` view),
+// and the breadcrumb key defaults to the rendered view's dotted name (GlobalComposer), not the
+// route name - so this is the trail that actually shows on the `profile.routes`-named route.
 Breadcrumbs::for('profile.overview', static function (Generator $trail) {
     $trail->parent('home');
     $trail->push(__('breadcrumbs.home.overview'), route('home'));
-});
-
-Breadcrumbs::for('profile.routes', static function (Generator $trail) {
-    $trail->parent('profile.edit');
-    $trail->push(__('breadcrumbs.home.my_routes'), route('profile.routes'));
 });
 
 Breadcrumbs::for('profile.tags', static function (Generator $trail) {
