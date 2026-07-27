@@ -11,6 +11,7 @@ use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\PublishedState;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteEnemyRaidMarkerRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Service\DungeonRoute\Logging\DungeonRouteServiceLoggingInterface;
@@ -22,10 +23,11 @@ use Illuminate\Support\Facades\DB;
 readonly class DungeonRouteService implements DungeonRouteServiceInterface
 {
     public function __construct(
-        private DungeonRouteRepositoryInterface     $dungeonRouteRepository,
-        private KillZoneEnemyRepositoryInterface    $killZoneEnemyRepository,
-        private ThumbnailServiceInterface           $thumbnailService,
-        private DungeonRouteServiceLoggingInterface $log,
+        private DungeonRouteRepositoryInterface                $dungeonRouteRepository,
+        private KillZoneEnemyRepositoryInterface               $killZoneEnemyRepository,
+        private DungeonRouteEnemyRaidMarkerRepositoryInterface $dungeonRouteEnemyRaidMarkerRepository,
+        private ThumbnailServiceInterface                      $thumbnailService,
+        private DungeonRouteServiceLoggingInterface            $log,
     ) {
     }
 
@@ -208,6 +210,15 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
 
             // Remove enemies that do not exist in the new mapping version
             $this->killZoneEnemyRepository->deleteOrphanedByKillZoneIds($killZoneIds);
+
+            // Reset enemy_id so we don't keep stale raid marker references to the old mapping version
+            $this->dungeonRouteEnemyRaidMarkerRepository->resetEnemyIdByDungeonRouteId($dungeonRoute->id);
+
+            // Re-resolve enemy_id against the new mapping version
+            $this->dungeonRouteEnemyRaidMarkerRepository->updateEnemyIdsByMappingVersion($dungeonRoute->id, $newMappingVersionId);
+
+            // Remove raid markers whose enemy does not exist in the new mapping version
+            $this->dungeonRouteEnemyRaidMarkerRepository->deleteOrphanedByDungeonRouteId($dungeonRoute->id);
 
             // Refresh the enemy forces
             new RefreshEnemyForces($dungeonRoute->id)->handle();

@@ -12,6 +12,7 @@ use App\Models\LiveSession;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Team;
 use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 
 /**
  * @var string|null         $headerTitle
@@ -29,7 +30,7 @@ use App\Models\User;
 $echo               ??= false;
 /** @var User|null $user */
 $user               = Auth::user();
-$mayUserEdit        = $dungeonroute?->mayUserEdit($user) ?? false;
+$mayUserEdit        = $dungeonroute !== null && Gate::allows('edit', $dungeonroute);
 $showShare          = !empty($show['share']) && in_array(true, $show['share'], true);
 $showCreateRouteBtn = isset($dungeonroute) && $dungeonroute->isSandbox();
 
@@ -82,13 +83,13 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
                         <div class="row">
                             <div class="col">
                             <span class="text-primary">
-                                @if($dungeonroute->team->isUserMember(Auth::user()))
+                                @can('edit', $dungeonroute->team)
                                     <a href="{{ route('team.edit', ['team' => $dungeonroute->team]) }}">
                                         <i class="fas fa-users"></i> {{ $dungeonroute->team->name }}
                                     </a>
                                 @else
                                     <i class="fas fa-users"></i> {{ $dungeonroute->team->name }}
-                                @endif
+                                @endcan
                             </span>
                             </div>
                         </div>

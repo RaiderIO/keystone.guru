@@ -297,10 +297,9 @@ final class DungeonRoutePolicyTest extends PublicTestCase
     #[Test]
     public function rate_givenOwner_returnsDenied(): void
     {
-        // Arrange - rate() reads the authenticated user, so act as the owner
+        // Arrange
         $owner = User::factory()->create();
         $route = $this->createRoute($owner);
-        $this->actingAs($owner);
 
         try {
             // Act & Assert - a user may not rate their own route
@@ -318,7 +317,30 @@ final class DungeonRoutePolicyTest extends PublicTestCase
         $owner    = User::factory()->create();
         $nonOwner = User::factory()->create();
         $route    = $this->createRoute($owner);
-        $this->actingAs($nonOwner);
+
+        try {
+            // Act & Assert
+            $this->assertTrue($this->policy->rate($nonOwner, $route));
+        } finally {
+            $route->delete();
+            $owner->delete();
+            $nonOwner->delete();
+        }
+    }
+
+    /**
+     * rate() used to call isOwnedByUser() with no argument, silently falling back to Auth::user()
+     * and discarding the $user the Gate passed in. Acting as the owner while asking about a
+     * different user must not deny.
+     */
+    #[Test]
+    public function rate_givenNonOwnerWhileOwnerIsAuthenticated_returnsAllowed(): void
+    {
+        // Arrange
+        $owner    = User::factory()->create();
+        $nonOwner = User::factory()->create();
+        $route    = $this->createRoute($owner);
+        $this->actingAs($owner);
 
         try {
             // Act & Assert

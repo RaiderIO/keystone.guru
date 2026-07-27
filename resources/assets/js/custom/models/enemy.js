@@ -801,16 +801,21 @@ class Enemy extends VersionableMapObject {
                 let visualData = this.getVisualData();
                 let template = Handlebars.templates['enemy_tooltip_template'];
 
-                text = template($.extend({}, visualData, {
+                text = template($.extend({}, getHandlebarsDefaultVariables(), visualData, {
                     name: lang.get(this.npc.name),
-                    right_click_to_open_details: lang.get('js.right_click_to_open_details')
+                    show_raid_marker_shortcut: this.canOpenRaidMarkerMenu(),
                 }));
             } else {
                 text = lang.get('js.no_npc_found_label');
             }
 
-            // Only rebind if the text has changed
-            if (this.tooltipText !== text) {
+            // Only rebind if the text has changed - or if nothing is bound right now (#3670).
+            // Anything that unbinds the tooltip without also resetting tooltipText (the circle menu
+            // in EnemyVisual, a layer swap in MapObjectGroup#setLayerToMapObject) would otherwise
+            // leave this enemy without a tooltip permanently: the recomputed text is identical, so
+            // the guard short-circuits and the rebind never happens.
+            // Leaflet's getTooltip() is undefined before the first bind and null after unbindTooltip().
+            if (this.tooltipText !== text || !this.layer.getTooltip()) {
                 this.tooltipText = text;
 
                 // Remove any previous tooltip
@@ -1018,8 +1023,30 @@ class Enemy extends VersionableMapObject {
 
         this.layer.on('contextmenu', function (contextMenuEvent) {
             L.DomEvent.preventDefault(contextMenuEvent);
+
+            // Shift+right-click is reserved for the raid marker circle menu (see EnemyVisual).
+            // Signalled from this layer-level Leaflet event - rather than a DOM binding on a
+            // specific visual sub-element - so it fires no matter which part of the enemy's icon
+            // (including an already-assigned marker overlay rendered on top of it) was clicked.
+            if (contextMenuEvent.originalEvent.shiftKey && self.canOpenRaidMarkerMenu()) {
+                self.signal('enemy:raidmarker_contextmenu', {contextMenuEvent: contextMenuEvent});
+                return;
+            }
+
             self.signal('enemy:contextmenu', {contextMenuEvent: contextMenuEvent});
         });
+    }
+
+    /**
+     * Whether the raid marker circle menu may be opened for this enemy right now.
+     * @returns {boolean}
+     */
+    canOpenRaidMarkerMenu() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        return this.map.options.edit &&
+            this.map.getMapState() === null &&
+            !(this instanceof AdminEnemy);
     }
 
     isVisibleOnScreen() {
@@ -1333,4 +1360,12 @@ class Enemy extends VersionableMapObject {
             this.visual = null;
         }
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        Enemy,
+    };
 }

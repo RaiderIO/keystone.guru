@@ -405,6 +405,58 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     }
 
     /**
+     * Builds MDT's raid target icon assignments ({mdtNpcIndex: {mdtCloneIndex: raidTargetIndex}}) -
+     * the counterpart consumed by RaidMarkerImporter on import - from this route's raid markers.
+     * npc_id/mdt_id on DungeonRouteEnemyRaidMarker are already the durable, mapping-version-current
+     * identity (see #1453), so they're used directly instead of re-resolving through the enemy_id.
+     *
+     * @param  Collection<int, ImportWarning> $warnings
+     * @return array<int, mixed>
+     */
+    private function extractEnemyAssignments(MappingVersion $mappingVersion, Collection $warnings): array
+    {
+        $result = [];
+
+        $enemyRaidMarkers = $this->dungeonRoute->enemyRaidMarkers;
+        if ($enemyRaidMarkers->isEmpty()) {
+            return $result;
+        }
+
+        /** @var Collection<int, Enemy> $mdtEnemies */
+        $mdtEnemies = new MDTDungeon($this->cacheService, $this->coordinatesService, $this->dungeonRoute->dungeon)
+            ->getClonesAsEnemies($mappingVersion, $this->dungeonRoute->dungeon->floors);
+
+        foreach ($enemyRaidMarkers as $enemyRaidMarker) {
+            $mdtNpcIndex = -1;
+            foreach ($mdtEnemies as $mdtEnemyCandidate) {
+                if ($mdtEnemyCandidate->npc_id === $enemyRaidMarker->npc_id && $mdtEnemyCandidate->mdt_id === $enemyRaidMarker->mdt_id) {
+                    $mdtNpcIndex = $mdtEnemyCandidate->mdt_npc_index;
+                    break;
+                }
+            }
+
+            if ($mdtNpcIndex === -1) {
+                $warnings->push(new ImportWarning(
+                    __('services.mdt.io.export_string.category.raid_markers'),
+                    sprintf(
+                        __('services.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_raid_marker'),
+                        $enemyRaidMarker->raidMarker->name,
+                        $enemyRaidMarker->npc_id,
+                    ),
+                    ['details' => __('services.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy_details')],
+                ));
+
+                continue;
+            }
+
+            $result[$mdtNpcIndex] ??= [];
+            $result[$mdtNpcIndex][$enemyRaidMarker->mdt_id] = $enemyRaidMarker->raid_marker_id;
+        }
+
+        return $result;
+    }
+
+    /**
      * Gets the MDT encoded string based on the currently set DungeonRoute.
      *
      * @param  Collection<int, ImportWarning> $warnings
@@ -444,8 +496,9 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                         'riftOffsets' => [
 
                         ],
-                        'pulls'           => $this->extractPulls($this->dungeonRoute->mappingVersion, $warnings),
-                        'currentSublevel' => 1,
+                        'pulls'            => $this->extractPulls($this->dungeonRoute->mappingVersion, $warnings),
+                        'enemyAssignments' => $this->extractEnemyAssignments($this->dungeonRoute->mappingVersion, $warnings),
+                        'currentSublevel'  => 1,
                     ],
                     'text' => $this->dungeonRoute->title,
                     'mdi'  => [

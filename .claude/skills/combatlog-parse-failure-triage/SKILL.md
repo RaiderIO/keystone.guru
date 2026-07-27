@@ -1,6 +1,6 @@
 ---
 name: combatlog-parse-failure-triage
-description: Operational runbook to find, download, and reproduce real Staging/Production combat log parse failures before fixing them — the internal-team API endpoints, how to pull a failure's real Raider.IO log segments, the gzip/docker-cp reproduction recipe, and the safety checklist for shipping a fix. Use when triaging CombatLogParseFailure rows, chasing a "combat log parses are failing" report, or verifying a combatlog-parsing-internals fix against real production data. Pairs with combatlog-parsing-internals (how the parser itself works) and create-github-issue / worktree-docker (how to turn a diagnosis into a shipped MR).
+description: Operational runbook to find, download, and reproduce real Staging/Production combat log parse failures before fixing them — the internal-team API endpoints, how to pull a failure's real Raider.IO log segments, the gzip/docker-cp reproduction recipe, and the safety checklist for shipping a fix. Use when triaging CombatLogParseFailure rows, chasing a "combat log parses are failing" report, or verifying a combatlog-parsing-internals fix against real production data. Pairs with combatlog-parsing-internals (how the parser itself works), create-github-issue / worktree-docker (how to turn a diagnosis into a shipped MR), and poll (the lighter on-demand sweep that just files/updates issues without fixing anything).
 ---
 
 # Combat Log Parse-Failure Triage
@@ -18,6 +18,13 @@ else that gets checked in. Each session, ask Wotuu for a current Staging (or Pro
 what's being triaged) admin API service-account credential, use it only for that session, and remind
 him to rotate/delete it once you're done. Treat it like any other secret: environment/conversation
 only, never `.env`, never a file under version control (see `feedback_no_env_file` in memory).
+
+**Exception**: the `/combatlog-parse-failure-poll` skill (a separate, lighter on-demand sweep — see
+below) uses a durable long-lived service account read from a local file outside the repo
+(`~/.config/keystone-guru/combatlog-staging-basic-auth`), since it's meant to be re-run casually
+without re-requesting a credential each time. That file is `/combatlog-parse-failure-poll`'s
+concern, not this skill's — don't reuse it here or assume it exists; keep using fresh per-session
+credentials for the deeper reproduction work this skill covers.
 
 ## 1. List unresolved failures
 
@@ -169,22 +176,27 @@ run doesn't get automatically reprocessed) — **don't do this without being exp
 even then only after the fix has actually shipped, not just been merged. This mirrors the project's
 general "no unattended prod actions without a human saying so in the current conversation" norm.
 
-## Toward full autonomy — what's still a manual gate
+## The diagnosis/fix split — and why it's not a cloud/cron job
 
-The user's end goal is running this loop unattended as new failures show up. What's still manual
-today, and why it's not automated yet:
+The user's end goal is running this loop with minimal manual effort. After weighing it (2026-07-21):
+a true unattended cloud/cron job was ruled out, because the *fix* half of this loop needs real
+Docker access to the shared DB/Redis/seeded test DB (`worktree-docker`) that an isolated cloud
+sandbox doesn't have — running "verified" fixes against a different, unseeded DB would produce false
+confidence, not real verification. The resolved split:
 
-- **Credentials**: no durable secret storage in-repo (by design — public repo). A fully autonomous
-  loop needs its own credential-provisioning story (e.g. a scheduled agent with its own vaulted
-  secret) that doesn't yet exist here.
-- **Shipping**: MRs still go through normal review per this repo's `CLAUDE.md` — nothing here should
-  bypass that, even if the agent is confident in a fix.
-- **Resolving failure rows**: a production data mutation; keep requiring an explicit go-ahead per the
-  paragraph above until there's a clearer signal (e.g. automatic reprocessing) that a resolve is safe
-  to make unattended.
+- **Diagnosis** (find new/worsening failure clusters, file/update GitHub issues) is cheap, read-only,
+  and safe to run often — that's the `/combatlog-parse-failure-poll` skill, invoked manually
+  (`/combatlog-parse-failure-poll`) whenever the user is around. It uses its own durable local
+  credential (see the exception above) precisely because it's low-risk enough to not need a fresh
+  credential every time.
+- **The fix** (this skill, steps 1-6) still needs a real worktree session with Docker access, and
+  still ends at an MR — never merges. Pick up a `/combatlog-parse-failure-poll`-filed issue the
+  same way you'd pick up any other issue.
+- **Resolving failure rows**: still requires an explicit go-ahead each time, for the reasons above —
+  a production data mutation that doesn't by itself confirm anything was fixed.
 
-If/when the user wants to close these gaps (e.g. via `/schedule` or a cron-based agent), that's a
-separate, explicit setup step — don't wire it up implicitly while just doing triage.
+This split is deliberate, not a placeholder — don't try to collapse it back into one unattended job
+without a real answer to the Docker/DB-access problem.
 
 ## Gotchas
 

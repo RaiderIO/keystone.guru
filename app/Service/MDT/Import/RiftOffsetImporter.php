@@ -23,8 +23,10 @@ class RiftOffsetImporter
      */
     public function parseRiftOffsets(ImportStringRiftOffsets $importStringRiftOffsets): ImportStringRiftOffsets
     {
-        // Build an array with a structure that makes more sense
-        $rifts = $importStringRiftOffsets->getRiftOffsets()[$importStringRiftOffsets->getWeek()] ?? [];
+        // Build an array with a structure that makes more sense. No week at all (some MDT strings
+        // don't carry one) means there's no way to know which rift offsets apply.
+        $week  = $importStringRiftOffsets->getWeek();
+        $rifts = $week === null ? [] : ($importStringRiftOffsets->getRiftOffsets()[$week] ?? []);
 
         if (empty($rifts)) {
             return $importStringRiftOffsets;

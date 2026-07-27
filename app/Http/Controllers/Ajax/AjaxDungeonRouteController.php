@@ -124,7 +124,12 @@ class AjaxDungeonRouteController extends Controller
         // If we're viewing a team's route this will be filled
         $team = null;
 
+        // A requirements select that isn't rendered for the current view sends the literal string
+        // 'undefined' instead of omitting the param, same as the tags select below
         $requirements = $request->get('requirements', []);
+        if (!is_array($requirements)) {
+            $requirements = [];
+        }
 
         // Enough enemy forces
         if (in_array('enough_enemy_forces', $requirements, true)) {
@@ -134,7 +139,12 @@ class AjaxDungeonRouteController extends Controller
                                     dungeon_routes.enemy_forces >= mapping_versions.enemy_forces_required)');
         }
 
+        // A tags select that isn't rendered for the current view (e.g. the team edit page's Route
+        // Publishing tab) sends the literal string 'undefined' instead of omitting the param
         $tags = $request->get('tags', []);
+        if (!is_array($tags)) {
+            $tags = [];
+        }
 
         // Must have these tags
         if (!empty($tags)) {
@@ -727,8 +737,8 @@ class AjaxDungeonRouteController extends Controller
      */
     public function favorite(Request $request, DungeonRoute $dungeonRoute): Response
     {
-        Gate::authorize('favorite', $dungeonRoute);
-
+        // No authorization: every user may favorite every route. The route sits behind
+        // ['auth', 'role:user|admin'], which is the only requirement.
         $user = Auth::user();
 
         /** @var DungeonRouteFavorite $dungeonRouteFavorite */
@@ -746,8 +756,7 @@ class AjaxDungeonRouteController extends Controller
      */
     public function favoriteDelete(Request $request, DungeonRoute $dungeonRoute): Response
     {
-        Gate::authorize('favorite', $dungeonRoute);
-
+        // No authorization: every user may unfavorite every route. See favorite().
         $user = Auth::user();
 
         /** @var DungeonRouteFavorite $dungeonRouteFavorite */

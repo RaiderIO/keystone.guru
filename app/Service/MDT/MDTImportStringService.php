@@ -19,11 +19,13 @@ use App\Models\PublishedState;
 use App\Service\Mapping\MappingServiceInterface;
 use App\Service\MDT\Import\ObjectImporter;
 use App\Service\MDT\Import\PullImporter;
+use App\Service\MDT\Import\RaidMarkerImporter;
 use App\Service\MDT\Import\RiftOffsetImporter;
 use App\Service\MDT\Logging\MDTImportStringServiceLoggingInterface;
 use App\Service\MDT\Models\ImportStringDetails;
 use App\Service\MDT\Models\ImportStringObjects;
 use App\Service\MDT\Models\ImportStringPulls;
+use App\Service\MDT\Models\ImportStringRaidMarkers;
 use App\Service\MDT\Models\ImportStringRiftOffsets;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -53,6 +55,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         private readonly PullImporter                           $pullImporter,
         private readonly ObjectImporter                         $objectImporter,
         private readonly RiftOffsetImporter                     $riftOffsetImporter,
+        private readonly RaidMarkerImporter                     $raidMarkerImporter,
         private readonly MappingServiceInterface                $mappingService,
     ) {
     }
@@ -68,7 +71,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         Dungeon    $dungeon,
         bool       $importAsThisWeek = false,
     ): ?AffixGroup {
-        $affixGroup = Conversion::convertWeekToAffixGroup($this->seasonService, $dungeon, $decoded['week']);
+        $affixGroup = Conversion::convertWeekToAffixGroup($this->seasonService, $dungeon, $decoded['week'] ?? null);
 
         // If affix group not found or
         if ($importAsThisWeek || $affixGroup === null) {
@@ -273,7 +276,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                     $currentMappingVersion,
                     $dungeonRoute->seasonal_index,
                     $decoded['value']['riftOffsets'],
-                    $decoded['week'],
+                    $decoded['week'] ?? null,
                 ));
 
                 $this->riftOffsetImporter->applyRiftOffsetsToDungeonRoute($importStringRiftOffsets, $dungeonRoute);
@@ -300,6 +303,17 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 $decoded['objects'],
             ), $assignNotesToPulls);
 
+            // Raid target icons assigned to enemies (MDT's "enemyAssignments")
+            $importStringRaidMarkers = null;
+            if (!empty($decoded['value']['enemyAssignments'])) {
+                $importStringRaidMarkers = $this->raidMarkerImporter->parseEnemyAssignments(new ImportStringRaidMarkers(
+                    $warnings,
+                    $dungeonRoute->dungeon,
+                    $dungeonRoute->mappingVersion,
+                    $decoded['value']['enemyAssignments'],
+                ));
+            }
+
             if ($errors->isNotEmpty()) {
                 // Get rid of it again!
                 $dungeonRoute->delete();
@@ -310,6 +324,10 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 $this->pullImporter->applyPullsToDungeonRoute($importStringPulls, $dungeonRoute);
 
                 $this->objectImporter->applyObjectsToDungeonRoute($importStringObjects, $dungeonRoute);
+
+                if ($importStringRaidMarkers !== null) {
+                    $this->raidMarkerImporter->applyRaidMarkersToDungeonRoute($importStringRaidMarkers, $dungeonRoute);
+                }
 
                 // Successfully imported!
                 $mdtImport->update(['dungeon_route_id' => $dungeonRoute->id]);

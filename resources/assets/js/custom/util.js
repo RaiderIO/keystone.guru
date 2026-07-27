@@ -321,6 +321,14 @@ function filterHTML(input, allowedTags, allowedDomains) {
 }
 
 
+/**
+ * Removes any stray Bootstrap tooltip bubbles left over in the DOM (e.g. from hovering an element
+ * that gets removed/replaced before its tooltip has a chance to hide itself normally).
+ */
+function removeStrayTooltips() {
+    $('.tooltip').remove();
+}
+
 function getEnemies() {
     return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 }

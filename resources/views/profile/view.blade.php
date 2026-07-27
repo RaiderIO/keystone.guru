@@ -12,6 +12,7 @@ $header = sprintf(__('view_profile.view.header'), $user->name);
     'wide' => true,
     'title' => $title,
     'showAds' => false,
+    'breadcrumbsParams' => [$user],
 ])
 
 @include('common.general.inline', ['path' => 'profile/view', 'options' => [
