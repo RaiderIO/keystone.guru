@@ -131,11 +131,14 @@ app()->instance(CacheServiceInterface::class, $mock);
 - The `MapTiles` group is excluded in CI.
 - **A brand new model's factory 404s until `composer dump-autoload` runs** in that worktree
   (`Class "Database\Factories\...Factory" not found`). It is not a broken factory.
-- **`$team->delete()` throws a `LazyLoadingViolationException`** in tests: `Team::deleting()` walks
-  `members.patreonAdFreeGiveaway` and `dungeonRoutes`, which `preventLazyLoading` refuses to
-  hydrate on the fly. Load them first:
-  `$team->load(['members.patreonAdFreeGiveaway', 'dungeonRoutes']);` then delete. The same applies
-  to any model whose `deleting()` hook reads a relation.
+- **`$team->delete()` can throw a `LazyLoadingViolationException`** in tests, but only when `$team`
+  was hydrated as part of a multi-row result — `Builder::hydrate()` only arms `preventsLazyLoading`
+  when the query returned more than one row, so a single-row fetch or a factory-created model is
+  never armed and `Team::deleting()`'s walk over `members.patreonAdFreeGiveaway` and `dungeonRoutes`
+  won't throw for those. If you hit it, load the relations first:
+  `$team->load(['members.patreonAdFreeGiveaway', 'dungeonRoutes']);` then delete. Don't pre-load
+  defensively at every call site on the strength of this note alone — most existing team-deletion
+  tests fetch a single row and are unaffected.
 - **`assertSame()` on an array compares key order**, so asserting a seeded table against an `ALL`
   constant fails on ordering alone. Use `assertEquals()` when only the pairs matter.
 - After writing a test, run it (`--filter`), then run `composer run fix` / `composer run analyse` —
