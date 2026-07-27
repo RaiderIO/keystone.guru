@@ -32,6 +32,20 @@ function createStyledElement(className) {
     return document.querySelector('#subject');
 }
 
+/**
+ * Same as createStyledElement, but nests the subject inside a marker-root
+ * element (as Leaflet renders it), for the rules keyed on the root's state.
+ *
+ * @param {string} rootClassName
+ * @param {string} className
+ * @returns {HTMLElement}
+ */
+function createNestedStyledElement(rootClassName, className) {
+    document.head.innerHTML = `<style>${vendorCss}</style><style>${appCss}</style>`;
+    document.body.innerHTML = `<div class="${rootClassName}"><div id="subject" class="${className}"></div></div>`;
+    return document.querySelector('#subject');
+}
+
 describe('enemy selection border box model (#3696)', () => {
     afterEach(() => {
         document.head.innerHTML = '';
@@ -72,6 +86,29 @@ describe('enemy selection border box model (#3696)', () => {
         const marker = createStyledElement('leaflet-edit-marker-selected');
 
         expect(getComputedStyle(marker).boxSizing).toBe('content-box');
+    });
+
+    test('selectionVisual_givenPlainMarkerRoot_recentersByBorderWidth', () => {
+        // App-driven states (couple/select/delete) put the class only on the
+        // inner visual; the icon would sit 4px right/down of its anchor
+        // without the pull-back (measured in #3701).
+        const wrapper = createNestedStyledElement('leaflet-marker-icon', 'map_icon dungeon_start leaflet-edit-marker-selected');
+
+        const cs = getComputedStyle(wrapper);
+        expect(cs.marginTop).toBe('-4px');
+        expect(cs.marginLeft).toBe('-4px');
+    });
+
+    test('selectionVisual_givenLeafletDrawSelectedRoot_doesNotRecenter', () => {
+        // In leaflet.draw's edit mode the ROOT also carries the class and
+        // leaflet.draw re-centers the marker itself (_offsetMarker(icon, 4));
+        // compensating there too would double-shift the icon.
+        const wrapper = createNestedStyledElement('leaflet-marker-icon leaflet-edit-marker-selected', 'map_icon dungeon_start leaflet-edit-marker-selected');
+
+        const cs = getComputedStyle(wrapper);
+        // jsdom serializes the unset margin as '0'; a browser would say '0px'
+        expect(['0', '0px']).toContain(cs.marginTop);
+        expect(['0', '0px']).toContain(cs.marginLeft);
     });
 
     test('vendorStylesheet_givenCurrentLeafletDraw_stillDeclaresTheAssumedBoxModel', () => {

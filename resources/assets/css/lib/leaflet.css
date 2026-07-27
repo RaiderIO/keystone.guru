@@ -110,6 +110,19 @@
     box-sizing: border-box;
 }
 
+/*
+ * The bordered element is icon size + 8px but anchored at the marker root's top-left, so entering
+ * a selection state shifts the visible icon 4px right/down off its anchor; pull it back so the
+ * border becomes a centered halo. Guarded on the marker ROOT not carrying the class: in
+ * leaflet.draw's own edit mode the root does carry it and leaflet.draw already re-centers the
+ * marker itself (_offsetMarker(icon, 4)), so compensating there too would double-shift.
+ */
+.leaflet-marker-icon:not(.leaflet-edit-marker-selected) .selected_enemy_icon.leaflet-edit-marker-selected,
+.leaflet-marker-icon:not(.leaflet-edit-marker-selected) > .map_icon.leaflet-edit-marker-selected {
+    margin-top: -4px;
+    margin-left: -4px;
+}
+
 /* Make the selection fill the width of the parent */
 .default_color_selection .pickr .pcr-button {
     width: 100%;
