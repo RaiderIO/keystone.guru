@@ -173,6 +173,9 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
                 $currentMappingVersion->game_version_id,
             );
             $this->assertSame($actualLatestMappingVersionId, $data['dungeon_latest_mapping_version_id']);
+            // Strict/type-safe comparison, matching how table.js decides whether to show the "new
+            // mapping version available" warning icon (`row.dungeon_latest_mapping_version_id !== row.mapping_version_id`)
+            $this->assertSame($data['mapping_version_id'], $data['dungeon_latest_mapping_version_id']);
         } finally {
             $dungeonRoute->delete();
         }
@@ -208,6 +211,9 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
      * retail and classic), whose ids aren't comparable, so the lookup must be scoped the same way
      * the controller scopes it - otherwise this would compare against an unrelated game version.
      *
+     * "Latest" is ranked by `version`, not `id`, matching the rest of the codebase's convention
+     * (Dungeon::getCurrentMappingVersionForGameVersion(), MappingVersion::isLatestForDungeon()).
+     *
      * @return array{0: array<string, mixed>, 1: int}
      */
     private function requestAndComputeActualLatestMappingVersionId(DungeonRoute $dungeonRoute, int $gameVersionId): array
@@ -216,11 +222,13 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
         $response->assertOk();
         $data = $this->findRouteInResponseData($response->json('data'), $dungeonRoute->public_key);
 
-        $actualLatestMappingVersionId = MappingVersion::where('dungeon_id', $dungeonRoute->dungeon_id)
+        /** @var MappingVersion $actualLatestMappingVersion */
+        $actualLatestMappingVersion = MappingVersion::where('dungeon_id', $dungeonRoute->dungeon_id)
             ->where('game_version_id', $gameVersionId)
-            ->max('id');
+            ->orderByDesc('version')
+            ->firstOrFail();
 
-        return [$data, $actualLatestMappingVersionId];
+        return [$data, $actualLatestMappingVersion->id];
     }
 
     /**
