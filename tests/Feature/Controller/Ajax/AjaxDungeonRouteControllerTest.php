@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
@@ -87,9 +88,8 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
     #[Test]
     public function get_givenDungeonHasNewerMappingVersionThanTheRoute_returnsDungeonLatestMappingVersionIdOfTheDungeonsNewestVersion(): void
     {
-        // Arrange - expires_at must be null/0, otherwise the route is treated as a temporary
-        // "try" route and excluded from the results entirely
-        $dungeonRoute          = DungeonRoute::factory()->create(['expires_at' => null]);
+        // Arrange
+        $dungeonRoute          = $this->createDungeonRouteForActiveDungeon();
         $currentMappingVersion = $dungeonRoute->dungeon->getCurrentMappingVersion();
 
         $newerMappingVersion = MappingVersion::create([
@@ -105,15 +105,11 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
         ]);
 
         try {
-            // Act
-            $response = $this->get(sprintf('/ajax/routes?%s', $this->titleSearchQuery($dungeonRoute->title)));
-
-            // Assert - compare against the dungeon's actual latest mapping version id (rather than
-            // assuming it's still $newerMappingVersion) since this is a shared, persistent test DB
-            // where other tests may concurrently add mapping versions for the same randomly-picked dungeon
-            $response->assertOk();
-            $data                         = $this->findRouteInResponseData($response->json('data'), $dungeonRoute->public_key);
-            $actualLatestMappingVersionId = MappingVersion::where('dungeon_id', $dungeonRoute->dungeon_id)->max('id');
+            // Act + Assert
+            [$data, $actualLatestMappingVersionId] = $this->requestAndComputeActualLatestMappingVersionId(
+                $dungeonRoute,
+                $currentMappingVersion->game_version_id,
+            );
             $this->assertSame($actualLatestMappingVersionId, $data['dungeon_latest_mapping_version_id']);
             $this->assertGreaterThanOrEqual($newerMappingVersion->id, $data['dungeon_latest_mapping_version_id']);
             $this->assertNotSame($data['mapping_version_id'], $data['dungeon_latest_mapping_version_id']);
@@ -126,9 +122,8 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
     #[Test]
     public function get_givenDungeonHasNewerMappingVersionForADifferentGameVersion_returnsDungeonLatestMappingVersionIdScopedToTheRoutesOwnGameVersion(): void
     {
-        // Arrange - expires_at must be null/0, otherwise the route is treated as a temporary
-        // "try" route and excluded from the results entirely
-        $dungeonRoute          = DungeonRoute::factory()->create(['expires_at' => null]);
+        // Arrange
+        $dungeonRoute          = $this->createDungeonRouteForActiveDungeon();
         $currentMappingVersion = $dungeonRoute->dungeon->getCurrentMappingVersion();
 
         // Some dungeons have mapping versions for multiple game versions (e.g. retail and classic);
@@ -150,16 +145,12 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
         ]);
 
         try {
-            // Act
-            $response = $this->get(sprintf('/ajax/routes?%s', $this->titleSearchQuery($dungeonRoute->title)));
-
-            // Assert - the other game version's mapping version has a higher id, but must not be
-            // reported as the route's dungeon_latest_mapping_version_id
-            $response->assertOk();
-            $data                                       = $this->findRouteInResponseData($response->json('data'), $dungeonRoute->public_key);
-            $actualLatestMappingVersionIdForGameVersion = MappingVersion::where('dungeon_id', $dungeonRoute->dungeon_id)
-                ->where('game_version_id', $currentMappingVersion->game_version_id)
-                ->max('id');
+            // Act + Assert - the other game version's mapping version has a higher id, but must
+            // not be reported as the route's dungeon_latest_mapping_version_id
+            [$data, $actualLatestMappingVersionIdForGameVersion] = $this->requestAndComputeActualLatestMappingVersionId(
+                $dungeonRoute,
+                $currentMappingVersion->game_version_id,
+            );
             $this->assertSame($actualLatestMappingVersionIdForGameVersion, $data['dungeon_latest_mapping_version_id']);
             $this->assertNotSame($otherGameVersionMappingVersion->id, $data['dungeon_latest_mapping_version_id']);
         } finally {
@@ -171,25 +162,65 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
     #[Test]
     public function get_givenDungeonHasNoNewerMappingVersionThanTheRoute_returnsDungeonLatestMappingVersionIdMatchingTheDungeonsActualLatestVersion(): void
     {
-        // Arrange - expires_at must be null/0, otherwise the route is treated as a temporary
-        // "try" route and excluded from the results entirely
-        $dungeonRoute = DungeonRoute::factory()->create(['expires_at' => null]);
+        // Arrange
+        $dungeonRoute          = $this->createDungeonRouteForActiveDungeon();
+        $currentMappingVersion = $dungeonRoute->dungeon->getCurrentMappingVersion();
 
         try {
-            // Act
-            $response = $this->get(sprintf('/ajax/routes?%s', $this->titleSearchQuery($dungeonRoute->title)));
-
-            // Assert - compare against the dungeon's actual latest mapping version id (rather than
-            // assuming $dungeonRoute->mapping_version_id is still it) since this is a shared,
-            // persistent test DB where other tests may concurrently add mapping versions for the
-            // same randomly-picked dungeon
-            $response->assertOk();
-            $data                         = $this->findRouteInResponseData($response->json('data'), $dungeonRoute->public_key);
-            $actualLatestMappingVersionId = MappingVersion::where('dungeon_id', $dungeonRoute->dungeon_id)->max('id');
+            // Act + Assert
+            [$data, $actualLatestMappingVersionId] = $this->requestAndComputeActualLatestMappingVersionId(
+                $dungeonRoute,
+                $currentMappingVersion->game_version_id,
+            );
             $this->assertSame($actualLatestMappingVersionId, $data['dungeon_latest_mapping_version_id']);
         } finally {
             $dungeonRoute->delete();
         }
+    }
+
+    /**
+     * DungeonRoute::factory() doesn't filter out inactive dungeons; a route on an inactive dungeon
+     * never appears in /ajax/routes results (in non-local envs), which would make these tests flake.
+     */
+    private function createDungeonRouteForActiveDungeon(): DungeonRoute
+    {
+        $count = 0;
+        do {
+            if (++$count > 20) {
+                throw new \RuntimeException('Unable to find an active dungeon with a current mapping version and floors');
+            }
+
+            /** @var Dungeon $dungeon */
+            $dungeon = Dungeon::whereNotNull('challenge_mode_id')->where('active', 1)->inRandomOrder()->first();
+        } while ($dungeon->getCurrentMappingVersion() === null || $dungeon->floors->isEmpty());
+
+        return DungeonRoute::factory()->create([
+            // A "try" route is treated as temporary and excluded from the results entirely
+            'expires_at'         => null,
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+        ]);
+    }
+
+    /**
+     * Requests the route and looks up the dungeon's actual latest mapping_versions.id for the
+     * given game version. Most dungeons carry mapping versions for multiple game versions (e.g.
+     * retail and classic), whose ids aren't comparable, so the lookup must be scoped the same way
+     * the controller scopes it - otherwise this would compare against an unrelated game version.
+     *
+     * @return array{0: array<string, mixed>, 1: int}
+     */
+    private function requestAndComputeActualLatestMappingVersionId(DungeonRoute $dungeonRoute, int $gameVersionId): array
+    {
+        $response = $this->get(sprintf('/ajax/routes?%s', $this->titleSearchQuery($dungeonRoute->title)));
+        $response->assertOk();
+        $data = $this->findRouteInResponseData($response->json('data'), $dungeonRoute->public_key);
+
+        $actualLatestMappingVersionId = MappingVersion::where('dungeon_id', $dungeonRoute->dungeon_id)
+            ->where('game_version_id', $gameVersionId)
+            ->max('id');
+
+        return [$data, $actualLatestMappingVersionId];
     }
 
     /**
