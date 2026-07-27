@@ -77,7 +77,10 @@ child clones.
    avoid double-cloning, then call `copyMappingVersionContentsToDungeon()` — which clones only a
    **subset**: floor switch markers (with `linked_dungeon_floor_switch_marker_id` re-linking),
    mapIcons, mountableAreas, floorUnions + floorUnionAreas. Enemies/packs/patrols/npcEnemyForces
-   are intentionally excluded (they come from the MDT import instead).
+   are intentionally excluded (they come from the MDT import instead). `enemyForcesCheckpoints` are
+   excluded too, which is right for the bare-mapping-version caller but silently discards them on
+   every MDT bump — a known, tracked product decision (#3702), not an oversight; see the comment in
+   that method before "fixing" it.
 
 ## Query scoping
 
@@ -134,8 +137,17 @@ one. Repositories that query mapping tables scope manually (e.g.
 ## Gotchas
 
 - The hardcoded model lists (three in `MappingVersion::boot()`, the partial one in
-  `MappingService::copyMappingVersionContentsToDungeon()`, the seeder's `$relationMapping`
-  array) are the classic "new model silently missing from new versions" bug source.
+  `MappingService::copyMappingVersionContentsToDungeon()`, the `$relations` array in
+  `app/Console/Commands/Mapping/Copy.php`, the seeder's `$relationMapping` array) are the classic
+  "new model silently missing from new versions" bug source.
+- **Don't forget `Copy.php`.** `mapping:copy <gameVersion> <source> <target>` goes through
+  `createNewMappingVersionFromPreviousMapping()`, so the boot clones everything correctly — but for a
+  **cross-dungeon** copy `Copy.php` then re-points every cloned model's `floor_id` onto the target
+  dungeon's floors, iterating its own `$relations` list to do it. A model missing from that list is
+  cloned but keeps a `floor_id` belonging to the *source* dungeon, which is worse than not being
+  cloned at all: `Floor::<relation>()` on the target returns nothing, `getDungeonId()` reports the
+  source dungeon, and `mapping:save` exports the row into the source dungeon's floor folder. Any
+  model carrying a `floor_id` belongs in that array (no test covers this command).
 - `mapIcons` relations use `->whereNotNull('mapping_version_id')` in both `MappingVersion` and
   `Floor`: MapIcon doubles as a user-route icon with a **nullable** `mapping_version_id`
   (`MapIcon::getIsAdminAttribute()` returns `mapping_version_id !== null`).

@@ -208,9 +208,21 @@ class MappingService implements MappingServiceInterface
             $mountableArea->cloneForNewMappingVersion($targetMappingVersion);
         }
 
-        // Enemy Forces Checkpoints are deliberately NOT copied here. This code path (MDT import / copying a
-        // mapping to another dungeon) does not copy enemies either, and a checkpoint without its member
-        // enemies is an empty checkpoint reporting 0% - worse than no checkpoint at all.
+        // Enemy Forces Checkpoints are NOT copied here, and the two callers of this method are affected
+        // differently:
+        //
+        // 1. MappingVersionController@store ("Add bare mapping version") - deliberately enemy-less, so a
+        //    copied checkpoint would arrive without its members and report a meaningless number. Skipping
+        //    is correct there.
+        // 2. createNewMappingVersionFromMDTMapping() (above), run by MDTMappingImportService on every MDT
+        //    mapping-hash bump - NOT enemy-less. importEnemies() matches old to new enemies by
+        //    Enemy::getUniqueKey() and already carries teeming/faction/required/skippable/kill_priority
+        //    (plus floor_id/lat/lng on non-force imports) across. Membership could be preserved the same
+        //    way, but is not: every MDT bump therefore discards every checkpoint of every dungeon, and
+        //    mappers re-author them from scratch.
+        //
+        // Whether (2) is acceptable is a product decision, not a limitation of this method. It is tracked
+        // in #3702 together with what implementing the carry-over would take.
 
         // Floor Unions (and areas)
         foreach ($sourceMappingVersion->floorUnions as $floorUnion) {

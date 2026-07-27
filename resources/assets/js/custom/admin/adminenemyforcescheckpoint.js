@@ -66,7 +66,10 @@ class AdminEnemyForcesCheckpoint extends EnemyForcesCheckpoint {
         this.removeExistingConnectionsToEnemies();
 
         // The lines start at this checkpoint's marker, so there's nothing to draw when it isn't on screen.
-        if (!this.shouldBeVisible() || this.layer === null) {
+        // shouldBeVisible() only covers floor/teeming/seasonal state; the Map Elements toggle for the whole
+        // group lives on the group itself, and these lines go straight onto the leaflet map rather than into
+        // the group's layer group, so they escape that toggle unless it is checked here as well.
+        if (!this.shouldBeVisible() || !this.isMapObjectGroupShown() || this.layer === null) {
             return;
         }
 

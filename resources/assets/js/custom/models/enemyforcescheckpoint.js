@@ -65,6 +65,40 @@ class EnemyForcesCheckpoint extends VersionableMapObject {
         getState().register('floorid:changed', this, function () {
             self.refreshPill();
         });
+        // The satellite pill (and, in the admin subclass, the connection lines) are drawn outside the
+        // MapObjectGroup's own layer group, so hiding "Enemy forces checkpoints" in the Map Elements
+        // dropdown would never reach them. Redraw on every toggle - the draw itself is gated on
+        // isMapObjectGroupShown(), so a hidden group draws nothing.
+        let mapObjectGroup = this.getMapObjectGroup();
+        if (mapObjectGroup !== false) {
+            mapObjectGroup.register('visibility:changed', this, function () {
+                self.refreshPill();
+            });
+        }
+    }
+
+    /**
+     * The MapObjectGroup that owns this checkpoint, or false when there is none.
+     * @returns {MapObjectGroup|Boolean}
+     */
+    getMapObjectGroup() {
+        console.assert(this instanceof EnemyForcesCheckpoint, 'this is not an EnemyForcesCheckpoint', this);
+
+        return this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_FORCES_CHECKPOINT);
+    }
+
+    /**
+     * Whether the map object group owning this checkpoint is currently shown. Anything drawn outside that
+     * group's layer group has to consult this itself: MapObjectGroup.setVisibility(false) only ever removes
+     * each map object's own `layer`, so it cannot know about the extra layers we add to the map.
+     * @returns {Boolean}
+     */
+    isMapObjectGroupShown() {
+        console.assert(this instanceof EnemyForcesCheckpoint, 'this is not an EnemyForcesCheckpoint', this);
+
+        let mapObjectGroup = this.getMapObjectGroup();
+
+        return mapObjectGroup === false || mapObjectGroup.isShown();
     }
 
     /**
@@ -243,6 +277,11 @@ class EnemyForcesCheckpoint extends VersionableMapObject {
         getState().unregister('mapnumberstyle:changed', this);
         getState().getMapContext().unregister('teeming:changed', this);
         getState().unregister('floorid:changed', this);
+
+        let mapObjectGroup = this.getMapObjectGroup();
+        if (mapObjectGroup !== false) {
+            mapObjectGroup.unregister('visibility:changed', this);
+        }
     }
 
     /**
@@ -280,6 +319,11 @@ class EnemyForcesCheckpoint extends VersionableMapObject {
         console.assert(this instanceof EnemyForcesCheckpoint, 'this is not an EnemyForcesCheckpoint', this);
 
         this._removeSatellitePill();
+
+        // The user hid this map object group - the satellite must obey that too.
+        if (!this.isMapObjectGroupShown()) {
+            return;
+        }
 
         let currentFloorId = getState().getCurrentFloor().id;
 
@@ -333,4 +377,12 @@ class EnemyForcesCheckpoint extends VersionableMapObject {
             this._satelliteLayerGroup = null;
         }
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        EnemyForcesCheckpoint,
+    };
 }

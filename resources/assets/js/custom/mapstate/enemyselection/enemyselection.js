@@ -7,9 +7,11 @@ class EnemySelection extends MapObjectMapState {
         return 'EnemySelection';
     }
 
-    disablesTooltips() {
-        return true;
-    }
+    // NOTE: disablesTooltips() is deliberately NOT overridden here. Suppressing enemy tooltips is only
+    // wanted where the tooltip fights the selection visuals (the admin mapping page's couple/patrol/
+    // checkpoint flows), which override it individually. Pull-building in the route editor also runs
+    // through an EnemySelection, and there the tooltip carries the npc name, health and enemy forces a
+    // router needs to decide whether to click an enemy at all - so it must keep working.
 
     /**
      * Filter function which should be overriden in implementing classes.
@@ -97,4 +99,12 @@ class EnemySelection extends MapObjectMapState {
             $('.leaflet-draw-edit-remove').removeClass('leaflet-disabled').refreshTooltips();
         }
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        EnemySelection,
+    };
 }

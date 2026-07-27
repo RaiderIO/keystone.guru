@@ -67,9 +67,12 @@ final class EnemyForcesCheckpointMappingVersionTest extends PublicTestCase
             );
         } finally {
             if ($newMappingVersion !== null) {
-                Enemy::where('mapping_version_id', $newMappingVersion->id)->delete();
-                EnemyForcesCheckpoint::where('mapping_version_id', $newMappingVersion->id)->delete();
-                MappingVersion::where('id', $newMappingVersion->id)->delete();
+                // An Eloquent delete, not a query builder one: MappingVersion::boot()'s `deleting` cascade
+                // is what removes everything its `created` hook cloned - enemy packs, patrols and their
+                // polylines, map icons, mountable areas, floor unions and areas and npc enemy forces, on top
+                // of the enemies and checkpoints this test asserts on. A query builder delete fires no model
+                // events, so all of that would leak into the shared test database on every run.
+                $newMappingVersion->delete();
             }
 
             Enemy::where('enemy_forces_checkpoint_id', $enemyForcesCheckpoint->id)

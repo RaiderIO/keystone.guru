@@ -644,7 +644,6 @@ class DungeonMap extends Signalable {
                 mapControls.push(new AdminPanelControls(this));
             }
 
-
             // Only when enemy forces are relevant in their display (not in a view)
             if (!state.isMapAdmin() && !(mapContext instanceof MapContextDungeonExplore)) {
                 if (mapContext.isDungeonSpeedrunEnabled()) {
