@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
  * @var boolean                $isAdmin
  * @var Collection<int, Floor> $floors
  * @var DungeonRoute           $dungeonroute
+ * @var bool                   $facadeEnabled
  */
 ?>
 <nav
@@ -64,6 +65,10 @@ use Illuminate\Support\Collection;
         @endif
 
         <div id="edit_route_misc_actions_container">
+            @if($facadeEnabled && isset($dungeonroute))
+                @include('common.maps.controls.elements.facadetoggle')
+            @endif
+
             @include('common.maps.controls.elements.labeltoggle')
         </div>
     </div>

@@ -315,6 +315,7 @@ if ($isAdmin) {
             'floors' => ($isAdmin ? $dungeon->floors() : $dungeon->floorsForMapFacade($mappingVersion, $useFacade)->active())->get(),
             'selectedFloorId' => $floor->id,
             'isMobile' => $isMobile,
+            'facadeEnabled' => $mappingVersion->facade_enabled,
         ])
     @elseif(isset($show['controls']['liveSession']) && $show['controls']['liveSession'])
         @include('common.maps.controls.livesession', [
