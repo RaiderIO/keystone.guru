@@ -115,6 +115,16 @@ final class FeaturedCreatorsTest extends PublicTestCase
             $response->assertOk();
             $response->assertSee(__('view_creator.featured.title'));
             $response->assertSee(__('view_creator.featured.see_all'));
+
+            // The row is truncated to featured_count and ranked by published route count, so a
+            // creator at the threshold isn't guaranteed a spot on the seeded test DB's rendered
+            // page - assert eligibility against the unlimited query instead, matching
+            // getFeaturedCreators_givenACreatorAboveTheThreshold_includesThem.
+            $featured = app(CreatorDirectoryServiceInterface::class)->getFeaturedCreators(PHP_INT_MAX);
+            $this->assertTrue(
+                $featured->pluck('id')->contains($creator->id),
+                'The arranged creator must be eligible to be featured',
+            );
         } finally {
             Feature::for($viewer)->forget(CreatorProfiles::class);
             $this->deleteAll($routes);

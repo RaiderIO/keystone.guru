@@ -283,7 +283,7 @@ return [
         'per_page' => 24,
 
         /** How many creators to feature on the discover landing page */
-        'featured_count' => 8,
+        'featured_count' => 6,
     ],
 
     /**
