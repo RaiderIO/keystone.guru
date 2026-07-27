@@ -921,6 +921,16 @@ class DungeonMap extends Signalable {
         // Start new map state
         let previousMapState = this.mapState;
         this.mapState = mapState;
+        // Enemy tooltips don't play nice with the yellow selection border or generic editing -
+        // suppressed here (a single class, see the .map_enemy_tooltip CSS rule) rather than by
+        // toggling each Enemy's Leaflet tooltip binding: Leaflet's own bindTooltip()/
+        // unbindTooltip() leaks a raw DOM 'focus' listener on every unbind that it never removes
+        // (Tooltip.js's _addFocusListenersOnLayer has no null-guard), which used to crash on the
+        // next click once _tooltip was null.
+        $(this.leafletMap.getContainer()).toggleClass(
+            'map_enemy_tooltips_suppressed',
+            this.mapState instanceof MapState && this.mapState.disablesTooltips()
+        );
         this.signal('map:mapstatechanged', {previousMapState: previousMapState, newMapState: this.mapState});
         if (this.mapState instanceof MapState) {
             this.mapState.start();

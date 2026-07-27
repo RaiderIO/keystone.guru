@@ -81,10 +81,13 @@ class Enemy extends VersionableMapObject {
 
         let self = this;
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
-            let newMapState = mapStateChangedEvent.data.newMapState;
             // Remove/enable the popup
-            self.setPopupEnabled(!(newMapState instanceof MapState));
-            self.setTooltipEnabled(newMapState === null || !newMapState.disablesTooltips());
+            self.setPopupEnabled(!(mapStateChangedEvent.data.newMapState instanceof MapState));
+            // Tooltip suppression while disablesTooltips() is active is handled by DungeonMap
+            // toggling a CSS class - see setMapState(). Toggling Leaflet's own bindTooltip/
+            // unbindTooltip here instead used to cause this, but every unbind leaks a raw DOM
+            // 'focus' listener that Leaflet never removes (Tooltip.js _addFocusListenersOnLayer
+            // has no null-guard), which crashes on the next click once _tooltip is null.
         });
 
         // Make sure all tooltips are closed to prevent having tooltips remain open after having zoomed (bug)
@@ -792,30 +795,10 @@ class Enemy extends VersionableMapObject {
         return result;
     }
 
-    /**
-     * Sets the tooltip to be enabled or not.
-     * @param enabled {Boolean} True to enable, false to disable.
-     */
-    setTooltipEnabled(enabled) {
-        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-
-        if (enabled) {
-            this.bindTooltip();
-        } else {
-            this.unbindTooltip();
-            this.tooltipText = '';
-        }
-    }
-
     bindTooltip() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
 
-        // The authoritative gate - EnemyVisual.buildVisual() calls this directly on every
-        // map:mapstatechanged rebuild (any map state whose disablesTooltips() is true rebuilds
-        // visuals too), so this guard - not just the setTooltipEnabled() call above - is what
-        // actually keeps a tooltip from reappearing while such a state is active.
-        let mapState = this.map.getMapState();
-        if (this.layer !== null && (mapState === null || !mapState.disablesTooltips())) {
+        if (this.layer !== null) {
             let text;
             if (this.npc !== null) {
                 let visualData = this.getVisualData();
@@ -841,7 +824,10 @@ class Enemy extends VersionableMapObject {
                 // Remove any previous tooltip
                 this.unbindTooltip();
                 this.layer.bindTooltip(text, {
-                    direction: 'top'
+                    direction: 'top',
+                    // Lets DungeonMap suppress just enemy tooltips via CSS (see setMapState())
+                    // without ever touching Leaflet's own tooltip bind state.
+                    className: 'map_enemy_tooltip',
                 });
             }
         }
