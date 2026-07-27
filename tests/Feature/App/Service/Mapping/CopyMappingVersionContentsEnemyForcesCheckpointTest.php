@@ -27,7 +27,7 @@ final class CopyMappingVersionContentsEnemyForcesCheckpointTest extends PublicTe
         // Arrange
         $mappingService = $this->app->make(MappingServiceInterface::class);
 
-        $dungeon               = $this->getDungeonWithEnemies();
+        $dungeon               = $this->getDungeonWithoutEnemyForcesCheckpoints();
         $sourceMappingVersion  = $dungeon->getCurrentMappingVersion();
         $enemyForcesCheckpoint = $this->createEnemyForcesCheckpoint($sourceMappingVersion, 'Test corridor');
 
@@ -77,7 +77,11 @@ final class CopyMappingVersionContentsEnemyForcesCheckpointTest extends PublicTe
         }
     }
 
-    private function getDungeonWithEnemies(): Dungeon
+    /**
+     * A dungeon whose current mapping version holds no checkpoints of its own - the assertions below expect a
+     * single clone, so any hand-made ones in the seeded database would be cloned along and throw that off.
+     */
+    private function getDungeonWithoutEnemyForcesCheckpoints(): Dungeon
     {
         /** @var Dungeon|null $dungeon */
         $dungeon = Dungeon::query()
@@ -86,11 +90,13 @@ final class CopyMappingVersionContentsEnemyForcesCheckpointTest extends PublicTe
             ->first(static function (Dungeon $dungeon): bool {
                 $mappingVersion = $dungeon->getCurrentMappingVersion();
 
-                return $mappingVersion !== null && $mappingVersion->enemies()->exists();
+                return $mappingVersion !== null
+                    && !$mappingVersion->enemyForcesCheckpoints()->exists()
+                    && $mappingVersion->enemies()->exists();
             });
 
         if ($dungeon === null) {
-            $this->fail('No dungeon with enemies found for testing enemy forces checkpoints.');
+            $this->fail('No dungeon without enemy forces checkpoints found for testing enemy forces checkpoints.');
         }
 
         return $dungeon;

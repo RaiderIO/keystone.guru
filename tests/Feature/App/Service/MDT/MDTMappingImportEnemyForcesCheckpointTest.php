@@ -36,7 +36,7 @@ final class MDTMappingImportEnemyForcesCheckpointTest extends PublicTestCase
         // Arrange
         $mappingService = $this->app->make(MappingServiceInterface::class);
 
-        $dungeon              = $this->getDungeonWithEnemies();
+        $dungeon              = $this->getDungeonWithoutEnemyForcesCheckpoints();
         $sourceMappingVersion = $dungeon->getCurrentMappingVersion();
 
         [$survivingEnemy, $removedEnemy] = $this->getTwoEnemiesWithDistinctUniqueKeys($sourceMappingVersion);
@@ -122,7 +122,12 @@ final class MDTMappingImportEnemyForcesCheckpointTest extends PublicTestCase
         }
     }
 
-    private function getDungeonWithEnemies(): Dungeon
+    /**
+     * A dungeon whose current mapping version holds no checkpoints of its own - the assertions below count
+     * the checkpoints in the new mapping version, so any hand-made ones in the seeded database would be
+     * cloned along and throw the count off.
+     */
+    private function getDungeonWithoutEnemyForcesCheckpoints(): Dungeon
     {
         /** @var Dungeon|null $dungeon */
         $dungeon = Dungeon::query()
@@ -131,23 +136,28 @@ final class MDTMappingImportEnemyForcesCheckpointTest extends PublicTestCase
             ->first(static function (Dungeon $dungeon): bool {
                 $mappingVersion = $dungeon->getCurrentMappingVersion();
 
-                return $mappingVersion !== null && $mappingVersion->enemies()->count() > 1;
+                return $mappingVersion !== null
+                    && !$mappingVersion->enemyForcesCheckpoints()->exists()
+                    && $mappingVersion->enemies()->whereNull('enemy_forces_checkpoint_id')->count() > 1;
             });
 
         if ($dungeon === null) {
-            $this->fail('No dungeon with enemies found for testing enemy forces checkpoints.');
+            $this->fail('No dungeon without enemy forces checkpoints found for testing enemy forces checkpoints.');
         }
 
         return $dungeon;
     }
 
     /**
+     * Enemies that are not already a member of some checkpoint, so the test can restore them to null.
+     *
      * @return array{0: Enemy, 1: Enemy}
      */
     private function getTwoEnemiesWithDistinctUniqueKeys(MappingVersion $mappingVersion): array
     {
         /** @var Collection<string, Enemy> $enemies */
         $enemies = $mappingVersion->enemies()
+            ->whereNull('enemy_forces_checkpoint_id')
             ->get()
             ->keyBy(static fn(Enemy $enemy) => $enemy->getUniqueKey())
             ->values();
