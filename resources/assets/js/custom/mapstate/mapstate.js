@@ -58,6 +58,16 @@ class MapState extends Signalable {
         return false;
     }
 
+    /**
+     * Whether enemy tooltips should be suppressed while this map state is active. Tooltips don't
+     * play nice with the yellow selection border (editing) or enemy-selection click handling -
+     * they fight for the same space and get in the way.
+     * @returns {boolean}
+     */
+    disablesTooltips() {
+        return false;
+    }
+
     isStarted() {
         return this._started;
     }

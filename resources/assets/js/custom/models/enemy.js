@@ -81,9 +81,10 @@ class Enemy extends VersionableMapObject {
 
         let self = this;
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
+            let newMapState = mapStateChangedEvent.data.newMapState;
             // Remove/enable the popup
-            self.setPopupEnabled(!(mapStateChangedEvent.data.newMapState instanceof MapState));
-            self.setTooltipEnabled(!(mapStateChangedEvent.data.newMapState instanceof EditMapState));
+            self.setPopupEnabled(!(newMapState instanceof MapState));
+            self.setTooltipEnabled(newMapState === null || !newMapState.disablesTooltips());
         });
 
         // Make sure all tooltips are closed to prevent having tooltips remain open after having zoomed (bug)
@@ -809,7 +810,12 @@ class Enemy extends VersionableMapObject {
     bindTooltip() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
 
-        if (this.layer !== null && !(this.map.getMapState() instanceof EditMapState)) {
+        // The authoritative gate - EnemyVisual.buildVisual() calls this directly on every
+        // map:mapstatechanged rebuild (any map state whose disablesTooltips() is true rebuilds
+        // visuals too), so this guard - not just the setTooltipEnabled() call above - is what
+        // actually keeps a tooltip from reappearing while such a state is active.
+        let mapState = this.map.getMapState();
+        if (this.layer !== null && (mapState === null || !mapState.disablesTooltips())) {
             let text;
             if (this.npc !== null) {
                 let visualData = this.getVisualData();

@@ -7,6 +7,10 @@ class EnemySelection extends MapObjectMapState {
         return 'EnemySelection';
     }
 
+    disablesTooltips() {
+        return true;
+    }
+
     /**
      * Filter function which should be overriden in implementing classes.
      * @param source MapObject
