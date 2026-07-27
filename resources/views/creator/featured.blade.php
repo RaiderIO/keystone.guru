@@ -29,7 +29,7 @@ $featuredCreators ??= collect();
             </div>
         </div>
 
-        <div class="row g-3 mt-1 row-cols-2 row-cols-md-4 row-cols-xl-8">
+        <div class="row g-3 mt-1 row-cols-2 row-cols-md-4 row-cols-xl-6">
             @foreach($featuredCreators as $creator)
                 <div class="col">
                     @include('creator.card', ['creator' => $creator])
