@@ -418,6 +418,8 @@ class AdminEnemy extends Enemy {
                 }
 
                 enemyForcesRegion.refreshPill();
+                // Keeps the (floor-independent) edit panel's count/percentage in step
+                self.map.signal('enemyforcesregion:memberschanged', {enemyForcesRegion: enemyForcesRegion});
 
                 // Deliberately NOT stopping the map state here - unlike a patrol, a region is built out
                 // of many enemies, and can span floors. The admin closes it themselves (Escape, or the

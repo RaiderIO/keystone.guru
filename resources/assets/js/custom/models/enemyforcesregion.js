@@ -180,6 +180,7 @@ class EnemyForcesRegion extends VersionableMapObject {
         }
 
         this._refreshSatellitePill(html);
+        this.rebindTooltip();
     }
 
     /**
@@ -190,6 +191,40 @@ class EnemyForcesRegion extends VersionableMapObject {
         super.onLayerInit();
 
         this.refreshPill();
+    }
+
+    /**
+     * The pill itself only says how much you need before entering. The region's name and what it
+     * actually holds - the numbers that make that figure interpretable - go in the tooltip.
+     * @inheritDoc
+     */
+    bindTooltip() {
+        console.assert(this instanceof EnemyForcesRegion, 'this is not an EnemyForcesRegion', this);
+        super.bindTooltip();
+
+        if (this.map.options.noUI || this.layer === null) {
+            return;
+        }
+
+        let name = this.name === null || this.name === '' ? lang.get('js.enemy_forces_region_unnamed_label') : this.name;
+        let enemyForces = this.getEnemyForces();
+
+        let tooltipText;
+        if (getState().getMapNumberStyle() === NUMBER_STYLE_ENEMY_FORCES) {
+            tooltipText = lang.get('js.enemy_forces_region_tooltip_enemy_forces', {name: name, enemyForces: enemyForces});
+        } else {
+            tooltipText = lang.get('js.enemy_forces_region_tooltip_percentage', {
+                name: name,
+                percentage: getFormattedPercentage(enemyForces, this.map.enemyForcesManager.getEnemyForcesRequired()),
+            });
+        }
+
+        let floorIds = this.getFloorIds();
+        if (floorIds.length > 1) {
+            tooltipText += ` ${lang.get('js.enemy_forces_region_tooltip_spans_floors', {floors: floorIds.length})}`;
+        }
+
+        this.layer.bindTooltip(tooltipText, {direction: 'top'});
     }
 
     /**

@@ -152,6 +152,47 @@ final class AjaxEnemyForcesRegionControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function enemyStore_givenEnemyForcesRegionId_persistsMembership(): void
+    {
+        // A 200 from the enemy endpoint plus an updated pill is indistinguishable from the field being
+        // silently dropped, so assert the column itself. This is the only thing that makes an enemy a
+        // member of a region - there is no dedicated membership endpoint.
+        $floor          = $this->getFloorWithEnemies();
+        $mappingVersion = $this->getMappingVersionForFloor($floor);
+
+        $enemyForcesRegion = EnemyForcesRegion::create([
+            'mapping_version_id' => $mappingVersion->id,
+            'floor_id'           => $floor->id,
+            'name'               => 'Test corridor',
+            'lat'                => -128.5,
+            'lng'                => 192.5,
+        ]);
+
+        /** @var Enemy $enemy */
+        $enemy = Enemy::where('mapping_version_id', $mappingVersion->id)->firstOrFail();
+
+        try {
+            // Act
+            // Send the enemy back exactly as it is, changing only its region - the same shape the map
+            // editor PUTs.
+            $payload                           = $enemy->getAttributes();
+            $payload['enemy_forces_region_id'] = $enemyForcesRegion->id;
+
+            $response = $this->put(
+                sprintf('/ajax/admin/mappingVersion/%d/enemy/%d', $mappingVersion->id, $enemy->id),
+                $payload,
+            );
+
+            // Assert
+            $response->assertSuccessful();
+            $this->assertSame($enemyForcesRegion->id, $enemy->fresh()->enemy_forces_region_id);
+        } finally {
+            Enemy::where('id', $enemy->id)->update(['enemy_forces_region_id' => null]);
+            EnemyForcesRegion::where('id', $enemyForcesRegion->id)->delete();
+        }
+    }
+
+    #[Test]
     public function store_givenNonAdminUser_isForbidden(): void
     {
         // Arrange
