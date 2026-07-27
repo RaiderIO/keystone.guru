@@ -316,6 +316,12 @@ class DungeonrouteTable extends InlineCode {
     _getColumns() {
         let self = this;
 
+        // dungeonroute_table_profile_actions_template and
+        // team_dungeonroute_table_route_actions_own_route both build on this shared partial (see
+        // that file for why it's registered here rather than at module load: this always runs
+        // before either template is rendered, and only once per table instance).
+        Handlebars.registerPartial('dungeonroute_actions_items', Handlebars.templates['dungeonroute_actions_items']);
+
         let columns = {
             preview: {
                 'title': lang.get('js.preview_label'),
@@ -458,58 +464,18 @@ class DungeonrouteTable extends InlineCode {
             actions: {
                 'title': lang.get('js.actions_label'),
                 'render': function (data, type, row, meta) {
-
                     let template = Handlebars.templates['dungeonroute_table_profile_actions_template'];
 
-                    let rowHasAffix = function (row, targetAffix) {
-                        for (let index in row.affixes) {
-                            let affixGroup = row.affixes[index];
-                            for (let affixGroupIndex in affixGroup.affixes) {
-                                let affix = affixGroup.affixes[affixGroupIndex];
-
-                                // If the affix group contains an affix with encrypted, it's not possible to migrate
-                                if (affix.key === targetAffix) {
-                                    return true;
-                                }
-                            }
-                        }
-                        return false;
-                    }
-
-                    // 9 = Shadowlands, 10 = Dragonflight
-                    let expansion = row.dungeon.expansion.shortname;
-                    let isShadowlandsRoute = expansion === EXPANSION_SHADOWLANDS;
-                    // let isDragonflightRoute = expansion === EXPANSION_DRAGONFLIGHT;
-
-                    let rowHasEncryptedAffix = rowHasAffix(row, AFFIX_ENCRYPTED);
-                    let rowHasShroudedAffix = rowHasAffix(row, AFFIX_SHROUDED);
-
-                    // @TODO add an additional check to see if the current route's dungeon is part of previous season?
-                    return template($.extend({}, getHandlebarsDefaultVariables(), {
-                        public_key: row.public_key,
-                        published: row.published,
-                        show_migrate_to_encrypted: isShadowlandsRoute && !rowHasEncryptedAffix && !rowHasShroudedAffix,
-                        show_migrate_to_shrouded: isShadowlandsRoute && !rowHasShroudedAffix,
-                        has_new_mapping_version: row.dungeon_latest_mapping_version_id !== row.mapping_version_id
-                    }));
+                    return template($.extend({}, getHandlebarsDefaultVariables(), self._getProfileActionsTemplateVariables(row)));
                 }
             },
             addremoveroute: {
                 'title': lang.get('js.actions_label'),
                 'render': function (data, type, row, meta) {
-                    let result;
-                    if (row.has_team) {
-                        let template = Handlebars.templates[
-                            row.author.id === self.options.currentUserId ?
-                                'dungeonroute_table_profile_actions_template' :
-                                'team_dungeonroute_table_route_actions'
-                            ];
-                        result = template($.extend({}, getHandlebarsDefaultVariables(), {public_key: row.public_key}));
-                    } else {
-                        let template = Handlebars.templates['team_dungeonroute_table_add_route_actions'];
-                        result = template($.extend({}, getHandlebarsDefaultVariables(), {public_key: row.public_key}));
-                    }
-                    return result;
+                    let {templateName, variables} = self._getAddRemoveRouteTemplate(row);
+
+                    let template = Handlebars.templates[templateName];
+                    return template($.extend({}, getHandlebarsDefaultVariables(), variables));
                 }
             },
             scheduling: {
@@ -555,6 +521,77 @@ class DungeonrouteTable extends InlineCode {
         }
 
         return result;
+    }
+
+    /**
+     * Picks the action-dropdown Handlebars template AND its variables together for the
+     * "addremoveroute" team table column, so the two can never drift apart (unlike returning just
+     * the template name and re-deriving the variables from it elsewhere): an owned route on the
+     * team gets the full profile-style action set (with "remove from team" added), a not-owned
+     * route only gets "remove from team", and a route not yet on the team gets the "add to team"
+     * action.
+     * @param row
+     * @returns {{templateName: string, variables: Object}}
+     */
+    _getAddRemoveRouteTemplate(row) {
+        if (!row.has_team) {
+            return {
+                templateName: 'team_dungeonroute_table_add_route_actions',
+                variables: {public_key: row.public_key},
+            };
+        }
+
+        if (row.author.id === this.options.currentUserId) {
+            return {
+                templateName: 'team_dungeonroute_table_route_actions_own_route',
+                variables: this._getProfileActionsTemplateVariables(row),
+            };
+        }
+
+        return {
+            templateName: 'team_dungeonroute_table_route_actions',
+            variables: {public_key: row.public_key},
+        };
+    }
+
+    /**
+     * Builds the Handlebars variables shared by the profile actions dropdown and its
+     * team-owned-route counterpart (publish state, tag/clone/migrate/delete availability).
+     * @param row
+     * @returns {Object}
+     */
+    _getProfileActionsTemplateVariables(row) {
+        let rowHasAffix = function (row, targetAffix) {
+            for (let index in row.affixes) {
+                let affixGroup = row.affixes[index];
+                for (let affixGroupIndex in affixGroup.affixes) {
+                    let affix = affixGroup.affixes[affixGroupIndex];
+
+                    // If the affix group contains an affix with encrypted, it's not possible to migrate
+                    if (affix.key === targetAffix) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        // 9 = Shadowlands, 10 = Dragonflight
+        let expansion = row.dungeon.expansion.shortname;
+        let isShadowlandsRoute = expansion === EXPANSION_SHADOWLANDS;
+        // let isDragonflightRoute = expansion === EXPANSION_DRAGONFLIGHT;
+
+        let rowHasEncryptedAffix = rowHasAffix(row, AFFIX_ENCRYPTED);
+        let rowHasShroudedAffix = rowHasAffix(row, AFFIX_SHROUDED);
+
+        // @TODO add an additional check to see if the current route's dungeon is part of previous season?
+        return {
+            public_key: row.public_key,
+            published: row.published,
+            show_migrate_to_encrypted: isShadowlandsRoute && !rowHasEncryptedAffix && !rowHasShroudedAffix,
+            show_migrate_to_shrouded: isShadowlandsRoute && !rowHasShroudedAffix,
+            has_new_mapping_version: row.dungeon_latest_mapping_version_id !== row.mapping_version_id
+        };
     }
 
     _renderTitle(data, type, row, meta, showDescription) {
@@ -811,4 +848,10 @@ class DungeonrouteTable extends InlineCode {
 
         return result;
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {DungeonrouteTable};
 }
