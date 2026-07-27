@@ -146,6 +146,12 @@ one. Repositories that query mapping tables scope manually (e.g.
 - Caching: `Dungeon::$currentMappingVersionCache` and `MappingVersion`'s internal caches are
   per-request; the models extend `CacheModel` (query cache), and `mapping:save` runs
   `modelCache:clear` first because stale model caches corrupt exports.
+- Serializing for a facade map **overwrites `floor_id` with the facade floor**, so the front-end
+  can never group by the real floor. Most models go through a `MappingVersion::mapContext*()`
+  method (`mapContextMapIcons`, `mapContextEnemyPacks`, …) — but enemies don't; they're converted
+  inline in `MapContextMappingVersionData::toArray()` via `$enemy->setLatLng(...)`. See "Gotcha:
+  facade conversion rewrites `floor_id`" in the **new-map-view** skill before writing anything that
+  groups map objects per floor.
 
 ## Related skills
 
