@@ -91,6 +91,10 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importEnemiesCannotRecoverPropertiesFromExistingEnemy(string $uniqueKey): void;
 
+    public function importEnemiesCannotRecoverEnemyForcesCheckpoint(string $uniqueKey, int $enemyForcesCheckpointId): void;
+
+    public function importEnemiesDeleteEmptyEnemyForcesCheckpoint(int $enemyForcesCheckpointId, ?string $name): void;
+
     public function importEnemiesSaveNewEnemy(int $enemyId): void;
 
     public function importEnemiesSaveNewEnemyException(Exception $exception): void;
