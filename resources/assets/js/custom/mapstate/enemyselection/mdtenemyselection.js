@@ -11,6 +11,10 @@ class MDTEnemySelection extends EnemySelection {
         return true;
     }
 
+    drawsEnemyEditBorder() {
+        return true;
+    }
+
     shouldRebuildEnemyVisuals() {
         return true;
     }

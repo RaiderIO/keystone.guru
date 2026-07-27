@@ -40,39 +40,31 @@ class MapObjectGroupManager extends Signalable {
         console.assert(this instanceof MapObjectGroupManager, 'this is not a MapObjectGroupManager', this);
         console.assert(name !== MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK, 'unable to create map object group for ' + name, this);
 
-        let result = null;
+        let isMapAdmin = getState().isMapAdmin();
 
-        if (name === MAP_OBJECT_GROUP_USER_MOUSE_POSITION) {
-            result = new UserMousePositionMapObjectGroup(this, getState().isMapAdmin());
-        } else if (name === MAP_OBJECT_GROUP_ENEMY) {
-            result = new EnemyMapObjectGroup(this, getState().isMapAdmin());
-        } else if (name === MAP_OBJECT_GROUP_ENEMY_PATROL) {
-            result = new EnemyPatrolMapObjectGroup(this, getState().isMapAdmin());
-        } else if (name === MAP_OBJECT_GROUP_ENEMY_PACK) {
-            result = new EnemyPackMapObjectGroup(this, getState().isMapAdmin());
-        } else if (name === MAP_OBJECT_GROUP_PATH) {
-            result = new PathMapObjectGroup(this, !getState().isMapAdmin());
-        } else if (name === MAP_OBJECT_GROUP_KILLZONE) {
-            result = new KillZoneMapObjectGroup(this, !getState().isMapAdmin());
-        } else if (name === MAP_OBJECT_GROUP_KILLZONE_PATH) {
-            result = new KillZonePathMapObjectGroup(this, !getState().isMapAdmin());
-        } else if (name === MAP_OBJECT_GROUP_BRUSHLINE) {
-            result = new BrushlineMapObjectGroup(this, !getState().isMapAdmin());
-        } else if (name === MAP_OBJECT_GROUP_ARROW) {
-            result = new ArrowMapObjectGroup(this, !getState().isMapAdmin());
-        } else if (name === MAP_OBJECT_GROUP_MAPICON) {
-            result = new MapIconMapObjectGroup(this, true);
-        } else if (name === MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER) {
-            result = new DungeonFloorSwitchMarkerMapObjectGroup(this, getState().isMapAdmin());
-        } else if (name === MAP_OBJECT_GROUP_ENEMY_FORCES_CHECKPOINT) {
-            result = new EnemyForcesCheckpointMapObjectGroup(this, getState().isMapAdmin());
-        } else if (name === MAP_OBJECT_GROUP_MOUNTABLE_AREA) {
-            result = new MountableAreaMapObjectGroup(this, getState().isMapAdmin());
-        } else if (name === MAP_OBJECT_GROUP_FLOOR_UNION) {
-            result = new FloorUnionMapObjectGroup(this, getState().isMapAdmin());
-        } else if (name === MAP_OBJECT_GROUP_FLOOR_UNION_AREA) {
-            result = new FloorUnionAreaMapObjectGroup(this, getState().isMapAdmin());
-        }
+        // Group name -> factory. Built inside the method so class load order doesn't matter. The second
+        // constructor argument is whether the group's objects are editable here: mapping-owned groups are
+        // editable for admins, route-owned groups for everyone BUT admins, and map icons always (they
+        // exist on both sides).
+        let factories = {
+            [MAP_OBJECT_GROUP_USER_MOUSE_POSITION]: () => new UserMousePositionMapObjectGroup(this, isMapAdmin),
+            [MAP_OBJECT_GROUP_ENEMY]: () => new EnemyMapObjectGroup(this, isMapAdmin),
+            [MAP_OBJECT_GROUP_ENEMY_PATROL]: () => new EnemyPatrolMapObjectGroup(this, isMapAdmin),
+            [MAP_OBJECT_GROUP_ENEMY_PACK]: () => new EnemyPackMapObjectGroup(this, isMapAdmin),
+            [MAP_OBJECT_GROUP_PATH]: () => new PathMapObjectGroup(this, !isMapAdmin),
+            [MAP_OBJECT_GROUP_KILLZONE]: () => new KillZoneMapObjectGroup(this, !isMapAdmin),
+            [MAP_OBJECT_GROUP_KILLZONE_PATH]: () => new KillZonePathMapObjectGroup(this, !isMapAdmin),
+            [MAP_OBJECT_GROUP_BRUSHLINE]: () => new BrushlineMapObjectGroup(this, !isMapAdmin),
+            [MAP_OBJECT_GROUP_ARROW]: () => new ArrowMapObjectGroup(this, !isMapAdmin),
+            [MAP_OBJECT_GROUP_MAPICON]: () => new MapIconMapObjectGroup(this, true),
+            [MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER]: () => new DungeonFloorSwitchMarkerMapObjectGroup(this, isMapAdmin),
+            [MAP_OBJECT_GROUP_ENEMY_FORCES_CHECKPOINT]: () => new EnemyForcesCheckpointMapObjectGroup(this, isMapAdmin),
+            [MAP_OBJECT_GROUP_MOUNTABLE_AREA]: () => new MountableAreaMapObjectGroup(this, isMapAdmin),
+            [MAP_OBJECT_GROUP_FLOOR_UNION]: () => new FloorUnionMapObjectGroup(this, isMapAdmin),
+            [MAP_OBJECT_GROUP_FLOOR_UNION_AREA]: () => new FloorUnionAreaMapObjectGroup(this, isMapAdmin),
+        };
+
+        let result = factories.hasOwnProperty(name) ? factories[name]() : null;
 
         console.assert(result !== null, `Unable to find map object group ${name}`, this);
 

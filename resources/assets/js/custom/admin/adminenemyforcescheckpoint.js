@@ -4,8 +4,8 @@ class AdminEnemyForcesCheckpoint extends EnemyForcesCheckpoint {
 
         this.setSynced(false);
 
-        // Layer group holding the lines drawn from this checkpoint to each of its member enemies.
-        this.enemyConnectionsLayerGroup = null;
+        // Draws the lines from this checkpoint to each of its member enemies.
+        this.enemyConnections = new AdminEnemyConnections(c.map.adminenemyforcescheckpoint.polylineOptions);
 
         getState().register('floorid:changed', this, this.redrawConnectionsToEnemies.bind(this));
         this.map.register('map:mapstatechanged', this, this.redrawConnectionsToEnemies.bind(this));
@@ -73,7 +73,6 @@ class AdminEnemyForcesCheckpoint extends EnemyForcesCheckpoint {
             return;
         }
 
-        let centerLatLng = this.layer.getLatLng();
         let enemies = this.getEnemies();
 
         let latLngs = [];
@@ -85,24 +84,7 @@ class AdminEnemyForcesCheckpoint extends EnemyForcesCheckpoint {
             }
         }
 
-        if (latLngs.length === 0) {
-            return;
-        }
-
-        this.enemyConnectionsLayerGroup = new L.LayerGroup();
-
-        for (let index in latLngs) {
-            this.enemyConnectionsLayerGroup.addLayer(
-                L.polyline([
-                    [centerLatLng.lat, centerLatLng.lng],
-                    latLngs[index],
-                ], c.map.adminenemyforcescheckpoint.polylineOptions)
-            );
-        }
-
-        // Do not prevent clicking on anything else
-        this.enemyConnectionsLayerGroup.setZIndex(-1000);
-        this.enemyConnectionsLayerGroup.addTo(this.map.leafletMap);
+        this.enemyConnections.draw(this.map.leafletMap, this.layer.getLatLng(), latLngs);
     }
 
     /**
@@ -111,10 +93,7 @@ class AdminEnemyForcesCheckpoint extends EnemyForcesCheckpoint {
     removeExistingConnectionsToEnemies() {
         console.assert(this instanceof AdminEnemyForcesCheckpoint, 'this is not an AdminEnemyForcesCheckpoint', this);
 
-        if (this.enemyConnectionsLayerGroup !== null) {
-            this.map.leafletMap.removeLayer(this.enemyConnectionsLayerGroup);
-            this.enemyConnectionsLayerGroup = null;
-        }
+        this.enemyConnections.remove();
     }
 
     /**

@@ -1011,16 +1011,16 @@
     white-space: nowrap;
 }
 
-/* The pill is a Leaflet divIcon marker sized by its content (iconSize: null), so strip Leaflet's
-   default icon box and center the pill on its anchor point. */
+/* The pill marker's divIcon carries an explicit measured iconSize + centered iconAnchor (see
+   EnemyForcesCheckpoint._buildPillIcon()), so Leaflet's own inline width/height/margins do the
+   centering - no CSS sizing or transform here. A transform on the inner pill was tried and reverted:
+   it moves only the painted pill while the marker root (the element leaflet.draw puts the dashed edit
+   border on) stays put, misaligning the border from the label in edit mode. The flex centering keeps
+   the label centered in the icon box even if the measured size drifts a pixel from the rendered one. */
 .map_enemy_forces_checkpoint_pill_icon {
-    width: auto !important;
-    height: auto !important;
-    margin: 0 !important;
-}
-
-.map_enemy_forces_checkpoint_pill_icon .map_enemy_forces_checkpoint_pill {
-    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Cursor preview while placing a checkpoint, and the marker's icon before refreshPill() swaps in the

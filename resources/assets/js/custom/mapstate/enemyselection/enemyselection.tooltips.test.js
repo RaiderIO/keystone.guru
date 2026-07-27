@@ -75,3 +75,41 @@ describe('EnemySelection tooltip suppression scope', () => {
         expect(result).toBe(false);
     });
 });
+
+// `drawsEnemyEditBorder()` replaced EnemyVisual's per-call-site instanceof chains (MDT/patrol/
+// checkpoint), so which selection states render selectable enemies with the dashed edit border is now
+// decided here. Same scoping story as the tooltips above: admin selections yes, pull-building no.
+describe('EnemySelection edit border scope', () => {
+    it('drawsEnemyEditBorder_givenSharedEnemySelectionBase_returnsFalse', () => {
+        // Arrange / Act
+        const result = EnemySelection.prototype.drawsEnemyEditBorder.call({});
+
+        // Assert
+        // The default must be opt-in, or every new selection state would silently get the border.
+        expect(result).toBe(false);
+    });
+
+    it.each([
+        ['EnemyPatrolEnemySelection', EnemyPatrolEnemySelection],
+        ['MDTEnemySelection', MDTEnemySelection],
+        ['EnemyForcesCheckpointEnemySelection', EnemyForcesCheckpointEnemySelection],
+    ])('drawsEnemyEditBorder_givenAdminSelectionState_returnsTrue (%s)', (name, cls) => {
+        // Arrange / Act
+        const result = cls.prototype.drawsEnemyEditBorder.call({});
+
+        // Assert
+        expect(result).toBe(true);
+    });
+
+    it.each([
+        ['EditKillZoneEnemySelection', EditKillZoneEnemySelection],
+        ['SelectKillZoneEnemySelectionOverpull', SelectKillZoneEnemySelectionOverpull],
+    ])('drawsEnemyEditBorder_givenRouteEditorPullBuildingState_returnsFalse (%s)', (name, cls) => {
+        // Arrange / Act
+        const result = cls.prototype.drawsEnemyEditBorder.call({});
+
+        // Assert
+        // Pull-building has its own selection visuals; the dashed border is an admin mapping cue.
+        expect(result).toBe(false);
+    });
+});

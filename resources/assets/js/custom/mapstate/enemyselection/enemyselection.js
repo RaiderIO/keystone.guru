@@ -14,6 +14,18 @@ class EnemySelection extends MapObjectMapState {
     // router needs to decide whether to click an enemy at all - so it must keep working.
 
     /**
+     * Whether selectable enemies should render with the dashed edit border (the
+     * leaflet-edit-marker-selected/selected_enemy_icon classes in EnemyVisual) while this selection is
+     * active. True for the admin mapping selections (patrol/MDT/checkpoint), where the border is the only
+     * cue an enemy is clickable; false for the route editor's pull-building selections, which have their
+     * own selection visuals. Override this rather than adding instanceof checks at the call sites.
+     * @returns {boolean}
+     */
+    drawsEnemyEditBorder() {
+        return false;
+    }
+
+    /**
      * Filter function which should be overriden in implementing classes.
      * @param source MapObject
      * @param enemyCandidate Enemy

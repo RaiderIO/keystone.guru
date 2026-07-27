@@ -191,6 +191,8 @@ export const customScripts = [
     'resources/assets/js/custom/mapcontrols/factiondisplaycontrols.js',
 
     'resources/assets/js/custom/admin/enemyattaching.js',
+    // Shared by adminenemypatrol.js and adminenemyforcescheckpoint.js
+    'resources/assets/js/custom/admin/adminenemyconnections.js',
     'resources/assets/js/custom/admin/admindungeonmap.js',
     'resources/assets/js/custom/admin/adminenemy.js',
     'resources/assets/js/custom/admin/adminenemypack.js',

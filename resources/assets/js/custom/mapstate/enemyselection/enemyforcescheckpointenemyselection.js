@@ -27,6 +27,10 @@ class EnemyForcesCheckpointEnemySelection extends EnemySelection {
         return true;
     }
 
+    drawsEnemyEditBorder() {
+        return true;
+    }
+
     shouldRebuildEnemyVisuals() {
         return true;
     }
