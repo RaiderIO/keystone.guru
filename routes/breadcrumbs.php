@@ -15,6 +15,7 @@ use App\Models\Npc\NpcHealth;
 use App\Models\Season;
 use App\Models\Spell\Spell;
 use App\Models\Team;
+use App\Models\User;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator;
 use Illuminate\Support\Carbon;
@@ -181,7 +182,17 @@ Breadcrumbs::for('dungeonroutes.discoverdungeon.new', static function (Generator
  */
 Breadcrumbs::for('profile.edit', static function (Generator $trail) {
     $trail->parent('home');
-    $trail->push(__('breadcrumbs.home.my_profile'), route('profile.edit'));
+    $trail->push(__('breadcrumbs.home.account_settings'), route('profile.edit'));
+});
+
+Breadcrumbs::for('profile.view', static function (Generator $trail, User $user) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.my_profile'), route('profile.view', $user));
+});
+
+Breadcrumbs::for('profile.favorites', static function (Generator $trail) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.my_favorites'), route('profile.favorites'));
 });
 
 Breadcrumbs::for('profile.overview', static function (Generator $trail) {
