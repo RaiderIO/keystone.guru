@@ -61,6 +61,30 @@ class AjaxKillZoneController extends Controller
     }
 
     /**
+     * Authorizes a kill zone create/update against its real dungeon route - the kill zone's own
+     * route if it already exists and isn't a sandbox, not just the route named in the request -
+     * so the ownership check happens once, up front, before any storage side effect runs, rather
+     * than saveKillZone() repeating the same check on the same route for every non-hijack call.
+     * saveKillZone() still re-authorizes once more in its own race-condition fallback, where a
+     * concurrent request can create the kill zone between this check and the actual insert - that
+     * one can't be hoisted here since it depends on what actually happened during the write.
+     *
+     * @return DungeonRoute the route to actually save the kill zone against
+     */
+    private function authorizeKillZoneEdit(DungeonRoute $dungeonRoute, ?KillZone $killZone): DungeonRoute
+    {
+        if ($killZone?->dungeonRoute !== null && !$killZone->dungeonRoute->isSandbox()) {
+            Gate::authorize('edit', $killZone->dungeonRoute);
+
+            return $killZone->dungeonRoute;
+        }
+
+        Gate::authorize('edit', $dungeonRoute);
+
+        return $dungeonRoute;
+    }
+
+    /**
      * @throws \Exception
      *
      * @param array<string, mixed> $data
@@ -80,11 +104,9 @@ class AjaxKillZoneController extends Controller
         /** @var KillZone $killZone */
         $killZone = KillZone::with('dungeonRoute')->findOrNew($data['id'] ?? null);
 
+        // Ownership is already authorized by authorizeKillZoneEdit() before this is called - just
+        // resolve the real route the caller's authorization already resolved to.
         $dungeonroute = $killZone->dungeonRoute ?? $dungeonroute;
-        // Prevent someone from updating different killzones than they are allowed to
-        if ($killZone->dungeonRoute !== null && !$killZone->dungeonRoute->isSandbox()) {
-            Gate::authorize('edit', $killZone->dungeonRoute);
-        }
 
         Gate::authorize('addKillZone', $dungeonroute);
 
@@ -228,12 +250,9 @@ class AjaxKillZoneController extends Controller
         DungeonRoute                 $dungeonRoute,
         ?KillZone                    $killZone = null,
     ): KillZone {
-        $dungeonRoute = $killZone?->dungeonRoute ?? $dungeonRoute; // @phpstan-ignore nullsafe.neverNull
-
         // Outside the try/catch on purpose: an authorization failure must surface as a 403, not be
-        // rewritten into the 404 below. saveKillZone() only re-authorizes when updating an existing
-        // kill zone, so without this a new kill zone could be created on any route.
-        Gate::authorize('edit', $dungeonRoute);
+        // rewritten into the 404 below.
+        $dungeonRoute = $this->authorizeKillZoneEdit($dungeonRoute, $killZone);
 
         try {
             $data = $request->validated();
@@ -271,6 +290,9 @@ class AjaxKillZoneController extends Controller
         APIKillZoneMassFormRequest   $request,
         DungeonRoute                 $dungeonRoute,
     ) {
+        // Fast-fail on the URL's own route before parsing the batch; each item below is then
+        // re-authorized against its own real route, since a batch entry's id could belong to a
+        // different route than this one.
         Gate::authorize('edit', $dungeonRoute);
 
         $validated = $request->validated();
@@ -279,6 +301,12 @@ class AjaxKillZoneController extends Controller
         $killZones = new Collection();
         foreach ($validated['killzones'] ?? [] as $killZoneData) {
             try {
+                /** @var KillZone|null $existingKillZone */
+                $existingKillZone = isset($killZoneData['id'])
+                    ? KillZone::with('dungeonRoute')->find($killZoneData['id'])
+                    : null;
+                $killZoneDungeonRoute = $this->authorizeKillZoneEdit($dungeonRoute, $existingKillZone);
+
                 // Unset the enemies since we're quicker to update that in bulk here
                 $kzDataWithoutEnemies = $killZoneData;
                 unset($kzDataWithoutEnemies['enemies']);
@@ -286,7 +314,7 @@ class AjaxKillZoneController extends Controller
                 $killZones->push(
                     $this->saveKillZone(
                         $coordinatesService,
-                        $dungeonRoute,
+                        $killZoneDungeonRoute,
                         $kzDataWithoutEnemies,
                         false,
                     ),

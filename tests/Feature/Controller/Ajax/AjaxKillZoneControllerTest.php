@@ -179,7 +179,8 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
     public function storeAll_givenKillZoneOfAnotherUsersRoute_returnsForbidden(): void
     {
         // Arrange - the actor owns $this->dungeonRoute but targets a kill zone that belongs to
-        // someone else's route. saveKillZone() re-authorizes against the kill zone's own route.
+        // someone else's route. authorizeKillZoneEdit() re-authorizes each batch item against the
+        // kill zone's own route before saveKillZone() is ever called.
         $nonOwner      = User::factory()->create();
         $otherRoute    = $this->createRouteOwnedByAnotherUser();
         $otherKillZone = KillZone::factory()->create([
