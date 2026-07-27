@@ -89,17 +89,18 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $newMappingVersion = $mappingService->createNewMappingVersionFromMDTMapping($dungeon, $gameVersion, $this->getMDTMappingHash($dungeon));
             $this->log->importMappingVersionFromMDTCreateMappingVersion($newMappingVersion->version, $newMappingVersion->id);
 
-            // Enemies are re-created from MDT below, so their checkpoint membership has to be re-linked by hand -
-            // which is why the checkpoints are cloned here rather than as part of the mapping version's contents
-            $enemyForcesCheckpointIdMapping = $mappingService->copyEnemyForcesCheckpointsToMappingVersion(
-                $currentMappingVersion,
-                $newMappingVersion,
-            );
-
             $mdtDungeon = new MDTDungeon($this->cacheService, $this->coordinatesService, $dungeon);
 
             try {
                 $this->log->importMappingVersionFromMDTStart($dungeon->id);
+
+                // Enemies are re-created from MDT below, so their checkpoint membership has to be re-linked by
+                // hand - which is why the checkpoints are cloned here rather than as part of the mapping
+                // version's contents
+                $enemyForcesCheckpointIdMapping = $mappingService->copyEnemyForcesCheckpointsToMappingVersion(
+                    $currentMappingVersion,
+                    $newMappingVersion,
+                );
 
                 $this->importDungeon($mdtDungeon, $dungeon, $newMappingVersion);
                 $this->importNpcs($newMappingVersion, $mdtDungeon, $dungeon, $gameVersion);
@@ -601,6 +602,10 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         EnemyForcesCheckpoint::query()
             ->whereIn('id', $emptyEnemyForcesCheckpoints->pluck('id'))
             ->delete();
+
+        // laravel-model-caching only flushes on model events and truncate(), never on a builder delete, so the
+        // reads above would otherwise keep serving the checkpoints this just removed
+        new EnemyForcesCheckpoint()->flushCache();
     }
 
     /**
