@@ -313,6 +313,12 @@ class DungeonrouteTable extends InlineCode {
     _getColumns() {
         let self = this;
 
+        // dungeonroute_table_profile_actions_template and
+        // team_dungeonroute_table_route_actions_own_route both build on this shared partial (see
+        // that file for why it's registered here rather than at module load: this always runs
+        // before either template is rendered, and only once per table instance).
+        Handlebars.registerPartial('dungeonroute_actions_items', Handlebars.templates['dungeonroute_actions_items']);
+
         let columns = {
             preview: {
                 'title': lang.get('js.preview_label'),
