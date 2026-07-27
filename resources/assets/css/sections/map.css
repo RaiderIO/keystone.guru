@@ -1016,17 +1016,11 @@
     transform: translate(-50%, -50%);
 }
 
-/* Admin only: says which region is being edited while assigning enemies to it. Lives in a
-   screen-fixed control rather than on the map, because a region is built across floors and its
-   marker is floor-gated. */
-.map_enemy_forces_region_edit_panel {
-    padding: 8px 12px;
-    border-radius: 6px;
-    background-color: rgba(0, 0, 0, 0.85);
-    color: #fff;
-    font-size: 0.9em;
-    max-width: 220px;
-    text-align: center;
+/* Cursor preview while placing a region, and the marker's icon before refreshPill() swaps in the
+   real pill (see LeafletEnemyForcesRegionIcon). */
+.map_enemy_forces_region_marker_icon {
+    color: #f0ad4e;
+    font-size: 20px;
 }
 
 .profile_class_color,

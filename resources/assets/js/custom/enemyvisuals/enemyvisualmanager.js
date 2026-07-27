@@ -88,6 +88,39 @@ class EnemyVisualManager extends Signalable {
             });
         }
 
+        // Same as above, but for hovering an enemy forces region's pill - highlights its members.
+        let enemyForcesRegionMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_FORCES_REGION);
+        // May be null when rendering thumbnails
+        if (enemyForcesRegionMapObjectGroup instanceof EnemyForcesRegionMapObjectGroup) {
+            enemyForcesRegionMapObjectGroup.register(['object:add', 'save:success'], this, function (objectAddEvent) {
+                /** @type EnemyForcesRegion addedEnemyForcesRegion */
+                let addedEnemyForcesRegion = objectAddEvent.data.object;
+                if (addedEnemyForcesRegion.id > 0) {
+                    addedEnemyForcesRegion.layer.on('mouseover', function (e) {
+                        if (!(self.map.getMapState() instanceof EditMapState)) {
+                            let enemies = addedEnemyForcesRegion.getEnemies();
+                            for (let i = 0; i < enemies.length; i++) {
+                                if (enemies[i].visual !== null) {
+                                    enemies[i].visual.forceMouseOver();
+                                }
+                            }
+                        }
+                    });
+
+                    addedEnemyForcesRegion.layer.on('mouseout', function (e) {
+                        if (!(self.map.getMapState() instanceof EditMapState)) {
+                            let enemies = addedEnemyForcesRegion.getEnemies();
+                            for (let i = 0; i < enemies.length; i++) {
+                                if (enemies[i].visual !== null) {
+                                    enemies[i].visual.forceMouseOut();
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
         getState().register('mapzoomlevel:changed', this, this._onZoomLevelChanged.bind(this));
         getState().register('mapnumberstyle:changed', this, this._onNumberStyleChanged.bind(this));
         getState().register(['unkilledenemyopacity:changed', 'unkilledimportantenemyopacity:changed'], this, this._onUnkilledEnemyOpacityChanged.bind(this));

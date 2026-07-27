@@ -25,11 +25,6 @@ class AdminDungeonMap extends DungeonMap {
         // result.push(new EnemyVisualControls(this));
         result.push(new AdminPanelControls(this));
 
-        // Tells the admin which enemy forces region they're assigning enemies to. Required because the
-        // region's own marker is floor-gated and vanishes on a floor switch, which is exactly when a
-        // cross-floor region is being built.
-        result.push(new EnemyForcesRegionControls(this));
-
         if (getState().isEchoEnabled()) {
             result.push(new EchoControls(this));
         }

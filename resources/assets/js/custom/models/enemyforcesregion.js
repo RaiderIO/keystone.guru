@@ -1,7 +1,10 @@
+// Used for the cursor preview while placing (and briefly for the layer before refreshPill() swaps
+// in the real pill icon). Deliberately a static glyph, not the pill markup: the pill's content
+// (enemy forces need before entering) isn't known until enemies are assigned to the region.
 let LeafletEnemyForcesRegionIcon = new L.divIcon({
-    className: 'map_enemy_forces_region_pill_icon',
-    // The pill is sized by its content; a fixed iconSize would clip or mis-center it.
-    iconSize: null,
+    html: '<i class="fas fa-percent"></i>',
+    iconSize: [30, 30],
+    className: 'marker_div_icon_font_awesome map_enemy_forces_region_marker_icon',
 });
 
 let LeafletEnemyForcesRegionMarker = L.Marker.extend({
