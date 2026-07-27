@@ -10,6 +10,7 @@ namespace App\Logic\Datatables;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\Mapping\MappingVersion;
 use Illuminate\Support\Facades\DB;
 use Override;
 
@@ -26,7 +27,9 @@ class DungeonRoutesDatatablesHandler extends DatatablesHandler
          */
         $result = parent::getResult();
 
-        $result['data'] = $result['data']->each(function (DungeonRoute $dungeonRoute) {
+        $latestMappingVersionIdsByMappingVersionId = $this->getLatestMappingVersionIdsByMappingVersionId();
+
+        $result['data'] = $result['data']->each(function (DungeonRoute $dungeonRoute) use ($latestMappingVersionIdsByMappingVersionId) {
             $dungeonRoute->makeHidden(['mappingVersion']);
             $dungeonRoute->dungeon->makeHidden(['gameVersion']);
             $dungeonRoute->dungeon->floors->each(function (Floor $floor) {
@@ -36,6 +39,14 @@ class DungeonRoutesDatatablesHandler extends DatatablesHandler
                     'facade',
                 ]);
             });
+
+            // Stamped here instead of in the SQL select - see the comment above the query in
+            // AjaxDungeonRouteController::get() for why. Cast to int so this always matches the
+            // native int type of mapping_version_id, whichever route is up to date or not.
+            $dungeonRoute->setAttribute(
+                'dungeon_latest_mapping_version_id',
+                (int)($latestMappingVersionIdsByMappingVersionId[$dungeonRoute->mapping_version_id] ?? $dungeonRoute->mapping_version_id),
+            );
         });
 
         return $result;
@@ -91,5 +102,52 @@ class DungeonRoutesDatatablesHandler extends DatatablesHandler
         }
 
         return $recordsFiltered;
+    }
+
+    /**
+     * Maps every mapping_versions.id to the id of the mapping_versions row with the highest `version`
+     * sharing the same (dungeon_id, game_version_id) pair - i.e. the id of the "latest" mapping version
+     * for that dungeon/game version, using the same max(version) convention as
+     * Dungeon::getCurrentMappingVersionForGameVersion() and MappingVersion::isLatestForDungeon().
+     *
+     * mapping_versions is a small table (~550 rows total today), so fetching it in full and grouping
+     * in PHP is one cheap query regardless of how many dungeon_routes are filtered/paged - unlike a
+     * per-row correlated subquery, which MySQL would run once per pre-LIMIT grouped route.
+     *
+     * @return array<int, int>
+     */
+    private function getLatestMappingVersionIdsByMappingVersionId(): array
+    {
+        /** @var array<string, array{id: int, version: int}> $latestByDungeonAndGameVersion */
+        $latestByDungeonAndGameVersion = [];
+        /** @var array<int, string> $groupKeyByMappingVersionId */
+        $groupKeyByMappingVersionId = [];
+
+        MappingVersion::query()
+            ->without('gameVersion')
+            ->select(['id', 'dungeon_id', 'game_version_id', 'version'])
+            ->get()
+            ->each(function (MappingVersion $mappingVersion) use (&$latestByDungeonAndGameVersion, &$groupKeyByMappingVersionId) {
+                $groupKey                                        = sprintf('%d:%d', $mappingVersion->dungeon_id, $mappingVersion->game_version_id);
+                $groupKeyByMappingVersionId[$mappingVersion->id] = $groupKey;
+
+                $current = $latestByDungeonAndGameVersion[$groupKey] ?? null;
+                if ($current === null
+                    || $mappingVersion->version > $current['version']
+                    || ($mappingVersion->version === $current['version'] && $mappingVersion->id > $current['id'])
+                ) {
+                    $latestByDungeonAndGameVersion[$groupKey] = [
+                        'id'      => $mappingVersion->id,
+                        'version' => $mappingVersion->version,
+                    ];
+                }
+            });
+
+        $result = [];
+        foreach ($groupKeyByMappingVersionId as $mappingVersionId => $groupKey) {
+            $result[$mappingVersionId] = $latestByDungeonAndGameVersion[$groupKey]['id'];
+        }
+
+        return $result;
     }
 }
