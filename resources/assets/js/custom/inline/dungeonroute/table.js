@@ -159,8 +159,11 @@ class DungeonrouteTable extends InlineCode {
             'ajax': {
                 'url': '/ajax/routes',
                 'data': function (d) {
-                    d.requirements = $(self.options.requirementsSelectId).val();
-                    d.tags = $(self.options.tagsSelectId).val();
+                    // .val() on a zero-element jQuery collection (e.g. a select that doesn't exist
+                    // for this table's view) returns undefined, which would otherwise be serialized
+                    // as the literal query string 'requirements=undefined' / 'tags=undefined'
+                    d.requirements = $(self.options.requirementsSelectId).val() || [];
+                    d.tags = $(self.options.tagsSelectId).val() || [];
                     d = $.extend(d, self._tableView.getAjaxParameters());
                 },
                 'cache': false
