@@ -9,7 +9,7 @@ class CleanupExpiredLiveSessions extends SchedulerCommand
 {
     protected $signature = 'livesession:cleanup-expired';
 
-    protected $description = 'Deletes relation data (overpulled/killed/obsolete enemies, player positions, combat log buffer) for expired live sessions.';
+    protected $description = 'Deletes relation data (overpulled/killed/obsolete/in-combat enemies, player positions, combat log buffer) for expired live sessions.';
 
     public function handle(): int
     {

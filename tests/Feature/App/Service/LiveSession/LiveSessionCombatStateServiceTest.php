@@ -125,7 +125,7 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
     }
 
     #[Test]
-    public function getKilledEnemyIds_givenNoKilledEnemies_returnsEmptyCollection(): void
+    public function mapContextKilledEnemyIds_givenNoKilledEnemies_returnsEmptyCollection(): void
     {
         // Arrange
         /** @var LiveSession $liveSession */
