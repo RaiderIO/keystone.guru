@@ -96,6 +96,17 @@
     border-color: red !important;
 }
 
+/*
+ * Leaflet.draw ships this class with box-sizing: content-box, but EnemyVisual.refreshSize() sizes
+ * the selection wrapper as icon size + 8px, expecting the 4px dashed border to be part of that box
+ * (border-box). Under content-box the wrapper grows 16px past the icon instead, leaving a gap on
+ * the right/bottom of the icon (#3696). Scoped to the enemy selection wrapper so leaflet.draw's
+ * own edit-mode markers (which it offsets itself assuming content-box) are unaffected.
+ */
+.selected_enemy_icon.leaflet-edit-marker-selected {
+    box-sizing: border-box;
+}
+
 /* Make the selection fill the width of the parent */
 .default_color_selection .pickr .pcr-button {
     width: 100%;
