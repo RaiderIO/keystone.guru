@@ -195,14 +195,12 @@ Breadcrumbs::for('profile.favorites', static function (Generator $trail) {
     $trail->push(__('breadcrumbs.home.my_favorites'), route('profile.favorites'));
 });
 
+// ProfileController::routes() renders the `profile.overview` view (not a `profile.routes` view),
+// and the breadcrumb key defaults to the rendered view's dotted name (GlobalComposer), not the
+// route name - so this is the trail that actually shows on the `profile.routes`-named route.
 Breadcrumbs::for('profile.overview', static function (Generator $trail) {
     $trail->parent('home');
     $trail->push(__('breadcrumbs.home.overview'), route('home'));
-});
-
-Breadcrumbs::for('profile.routes', static function (Generator $trail) {
-    $trail->parent('profile.edit');
-    $trail->push(__('breadcrumbs.home.my_routes'), route('profile.routes'));
 });
 
 Breadcrumbs::for('profile.tags', static function (Generator $trail) {
