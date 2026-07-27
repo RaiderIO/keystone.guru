@@ -275,6 +275,135 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         }
     }
 
+    /**
+     * The picker showed nothing for a non-owner admin before this was scoped to the collection's
+     * actual owner - regressing this makes an admin's save silently wipe every route in someone
+     * else's collection, since the picker would submit an empty selection.
+     */
+    #[Test]
+    public function edit_givenAdminEditingAnotherUsersCollection_showsTheOwnersOwnRoutes(): void
+    {
+        // Arrange
+        $admin        = $this->adminUser();
+        $owner        = $this->createCreator();
+        $dungeonRoute = $this->createRouteFor($owner);
+        Feature::for($admin)->activate(CreatorProfiles::class);
+
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create(['user_id' => $owner->id]);
+        DungeonRouteCollectionRoute::create([
+            'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+            'dungeon_route_id'            => $dungeonRoute->id,
+            'order'                       => 0,
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAs($admin)->get(
+                route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]),
+            );
+
+            // Assert
+            $response->assertOk();
+            /** @var Collection<int, DungeonRoute> $ownDungeonRoutes */
+            $ownDungeonRoutes = $response->viewData('ownDungeonRoutes');
+            $this->assertSame(
+                [$dungeonRoute->id],
+                $ownDungeonRoutes->pluck('id')->all(),
+                "The picker must show the collection owner's routes, not the acting admin's",
+            );
+        } finally {
+            DungeonRouteCollectionRoute::where('dungeon_route_collection_id', $dungeonRouteCollection->id)->delete();
+            $dungeonRouteCollection->delete();
+            Feature::for($admin)->forget(CreatorProfiles::class);
+            $dungeonRoute->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenAdminEditingAnotherUsersCollection_keepsTheExistingRouteWhenResubmitted(): void
+    {
+        // Arrange
+        $admin        = $this->adminUser();
+        $owner        = $this->createCreator();
+        $dungeonRoute = $this->createRouteFor($owner);
+        Feature::for($admin)->activate(CreatorProfiles::class);
+
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create(['user_id' => $owner->id]);
+        DungeonRouteCollectionRoute::create([
+            'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+            'dungeon_route_id'            => $dungeonRoute->id,
+            'order'                       => 0,
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAs($admin)->patch(
+                route('collections.update', ['dungeonRouteCollection' => $dungeonRouteCollection]),
+                [
+                    'name'            => $dungeonRouteCollection->name,
+                    'published_state' => PublishedState::WORLD,
+                    'dungeon_routes'  => [$dungeonRoute->id],
+                ],
+            );
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+            $dungeonRouteCollection->refresh();
+            $this->assertSame(
+                [$dungeonRoute->id],
+                $dungeonRouteCollection->dungeonRoutes->pluck('id')->all(),
+                "An admin saving someone else's collection must not silently wipe its routes",
+            );
+        } finally {
+            DungeonRouteCollectionRoute::where('dungeon_route_collection_id', $dungeonRouteCollection->id)->delete();
+            $dungeonRouteCollection->delete();
+            Feature::for($admin)->forget(CreatorProfiles::class);
+            $dungeonRoute->delete();
+            $owner->delete();
+        }
+    }
+
+    /**
+     * Without this, a deleted user's still-shareable collection link 500s instead of 404ing,
+     * because the view dereferences the (now missing) owner relation.
+     */
+    #[Test]
+    public function view_givenTheOwningUserWasDeleted_returnsNotFoundInsteadOfServerError(): void
+    {
+        // Arrange
+        $creator      = $this->createCreator();
+        $dungeonRoute = $this->createRouteFor($creator, PublishedState::WORLD);
+        Feature::for(null)->activate(CreatorProfiles::class);
+
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+            'user_id'            => $creator->id,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ]);
+        DungeonRouteCollectionRoute::create([
+            'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+            'dungeon_route_id'            => $dungeonRoute->id,
+            'order'                       => 0,
+        ]);
+        $publicKey = $dungeonRouteCollection->public_key;
+
+        try {
+            // Act
+            $creator->delete();
+            $response = $this->get(route('collection.view', ['dungeonRouteCollection' => $publicKey]));
+
+            // Assert
+            $response->assertNotFound();
+            $this->assertNull(
+                DungeonRouteCollection::where('public_key', $publicKey)->first(),
+                "Deleting the owning user must clean up their collections too",
+            );
+        } finally {
+            Feature::for(null)->forget(CreatorProfiles::class);
+            // $creator's deletion already cascaded the collection, its route coupling, and the route
+        }
+    }
+
     #[Test]
     public function delete_givenOwnCollection_deletesItAndItsCouplings(): void
     {
@@ -507,6 +636,18 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
         $user->addRole(Role::ROLE_USER);
 
         return $user;
+    }
+
+    private function adminUser(): User
+    {
+        /** @var User $admin */
+        $admin = User::findOrFail(1);
+        $this->assertTrue(
+            $admin->hasRole(Role::ROLE_ADMIN),
+            'User id=1 must have the admin role for this test (seed the database).',
+        );
+
+        return $admin;
     }
 
     private function createRouteFor(User $user, string $publishedState = PublishedState::WORLD): DungeonRoute

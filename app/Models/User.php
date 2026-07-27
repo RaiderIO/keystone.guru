@@ -444,6 +444,9 @@ class User extends Authenticatable implements LaratrustUser
         // Delete user properly if it gets deleted
         static::deleting(static function (User $user) {
             $user->dungeonRoutes()->delete();
+            // Deleted per-model rather than mass-deleted, so DungeonRouteCollection's own
+            // deleting() hook fires and cleans up its dungeonRouteCollectionRoutes rows too
+            $user->dungeonRouteCollections->each(static fn(DungeonRouteCollection $dungeonRouteCollection) => $dungeonRouteCollection->delete());
             $user->reports()->delete();
             $user->patreonUserLink()->delete();
             foreach ($user->teams as $team) {
