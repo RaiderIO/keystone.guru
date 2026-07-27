@@ -1,6 +1,6 @@
 ---
 name: mapping-versioned-models
-description: Lifecycle of mapping-versioned models (Enemy, EnemyPack, EnemyPatrol, MapIcon, FloorUnion, MountableArea, ...) — the MappingVersion clone-on-create boot, the clone interfaces/trait, mapping_version_id query scoping, current-version resolution, change logs, and the full wiring checklist (including the hardcoded model lists people forget). Use when creating or modifying a model that carries mapping_version_id, or debugging missing/duplicated mapping data across versions. Not for the JSON seeder mechanics (seeder-load / seeder-save) or the Ajax editor endpoints (ajax-map-editor-crud).
+description: Lifecycle of mapping-versioned models (Enemy, EnemyPack, EnemyPatrol, MapIcon, FloorUnion, MountableArea, EnemyForcesCheckpoint, ...) — the MappingVersion clone-on-create boot, the clone interfaces/trait, mapping_version_id query scoping, current-version resolution, change logs, and the COMPLETE end-to-end checklist for adding a new model: schema → clone boot → mapping:save/seeder round-trip → map-context payload → ajax editor → Leaflet front-end incl. sidebar show/hide visibility (including the hardcoded model lists people forget). Use when creating or modifying a model that carries mapping_version_id, or debugging missing/duplicated mapping data across versions. The deep dives live elsewhere (seeder-load / seeder-save for JSON mechanics, ajax-map-editor-crud for editor endpoints) but the master checklist is here.
 ---
 
 # Mapping-Versioned Models
@@ -15,8 +15,8 @@ from every version at once.
 
 The canonical set of mapping-versioned models is the `HasMany` relation list on `MappingVersion`:
 `dungeonFloorSwitchMarkers`, `enemies`, `enemyPacks`, `enemyPatrols`, `mapIcons`,
-`mountableAreas`, `floorUnions`, `floorUnionAreas`, `npcEnemyForces` (plus `dungeonRoutes`, which
-reference but are not cloned with a version).
+`mountableAreas`, `enemyForcesCheckpoints`, `floorUnions`, `floorUnionAreas`, `npcEnemyForces`
+(plus `dungeonRoutes`, which reference but are not cloned with a version).
 
 ## Which version is "current"
 
@@ -64,10 +64,11 @@ child clones.
 ## The two clone code paths (different model coverage!)
 
 1. **Automatic — `MappingVersion::boot()`** (`app/Models/Mapping/MappingVersion.php`, ~lines
-   505–640). `static::created` copies scalar fields from the previous version, eager-loads the 9
+   505–640). `static::created` copies scalar fields from the previous version, eager-loads the 10
    relations, calls `cloneForNewMappingVersion()` on each, and keeps an `$idMapping` per model
-   class to re-link FKs in a second pass (Enemy → `enemy_pack_id`/`enemy_patrol_id`,
-   FloorUnionArea → `floor_union_id`). `static::deleting` manually deletes all 9 relations.
+   class to re-link FKs in a second pass (Enemy → `enemy_pack_id`/`enemy_patrol_id`/
+   `enemy_forces_checkpoint_id`, FloorUnionArea → `floor_union_id`). `static::deleting` manually
+   deletes all 10 relations.
    ⚠️ This boot contains **three hardcoded model lists** (eager-load array, merge chain,
    `$idMapping` keys) plus the `deleting` chain — a new model must be added to all of them.
 2. **Manual/MDT — `app/Service/Mapping/MappingService.php`**.
@@ -111,28 +112,121 @@ one. Repositories that query mapping tables scope manually (e.g.
 - `MappingCommitLog` (`app/Models/Mapping/MappingCommitLog.php`) — just an id + `merged` flag;
   exported/imported by `mapping:save` and the seeder, not written at runtime by app code.
 
-## Checklist: wiring in a NEW mapping-versioned model
+## Checklist: wiring in a NEW mapping-versioned model, end to end
 
-1. Migration adding the table with a `mapping_version_id` column (no FK constraints — project
-   convention).
-2. Model: `implements MappingModelCloneableInterface, MappingModelInterface`, `use
+The complete flow in dependency order, from schema to a map object an admin can place, edit and
+toggle in the sidebar. **`EnemyForcesCheckpoint` (PR #3660) is the most recent complete worked
+example** — its diff contains exactly one of everything below; when in doubt, mirror it.
+
+### A. Schema, model, repository
+
+1. Migration adding the table with a `mapping_version_id` column (+ `floor_id` and `lat`/`lng` if
+   it is placed on the map). No FK constraints — project convention. If membership/children live
+   on *another* table (e.g. `enemies.enemy_forces_checkpoint_id`), that is a second additive
+   migration.
+2. Model: extends `CacheModel`, `implements MappingModelCloneableInterface,
+   MappingModelInterface` (+ `HasLatLngInterface` with the `HasLatLng` trait if placeable), `use
    CloneForNewMappingVersionNoRelations` (or custom clone if it has children — see EnemyPatrol),
-   `use SeederModel`, implement `getDungeonId()`, add `mappingVersion(): BelongsTo`.
-3. `MappingVersion.php`: add the `HasMany` relation **and** register the model in the `created`
-   boot (eager-load array + merge chain + `$idMapping` if FKs need re-linking) **and** the
-   `deleting` chain.
-4. `MappingService::copyMappingVersionContentsToDungeon()`: add a clone loop **if** the model
-   must survive the MDT-copy path — this is separate from the boot path and easy to forget.
-5. `Floor.php`: add the mapping-version-scoped runtime relation and the `*ForExport` variant.
-6. Export: add the model to `mapping:save` (`app/Console/Commands/Mapping/Save.php`,
-   `saveFloor()` result block or the appropriate save method) — see the **seeder-save** skill.
-7. Import: add a `RelationMapping` subclass in `app/SeederHelpers/RelationImport/Mapping/` and
-   register it in the `$relationMapping` array in `database/seeders/DungeonDataSeeder.php` —
-   **ordering matters: parents before children**. See the **seeder-load** skill.
-8. Repository interface + implementation + `RepositoryServiceProvider` binding — see the
+   `use SeederModel`, implement `getDungeonId()` (typically `$this->floor->dungeon_id`), add
+   `mappingVersion(): BelongsTo`. Put `mappingVersion`/`floor`/`laravel_through_key` in `$hidden`
+   so the map-context JSON stays lean; `$timestamps = false` like its siblings.
+   ⚠️ If deleting the model must release rows pointing at it, hook `static::deleted()`, **not**
+   `deleting`: `SeederModel` already registers a `deleting` listener that returns a bool, and
+   Eloquent fires `deleting` through the dispatcher's `until()`, which halts on the first
+   non-null result — a second `deleting` listener would silently never run.
+3. Repository interface + implementation + `RepositoryServiceProvider` binding — see the
    **repository-pattern** skill.
-9. Ajax editor endpoint if the object is editable on the map — see the **ajax-map-editor-crud**
-   skill.
+
+### B. Mapping-version lifecycle (the hardcoded lists)
+
+4. `MappingVersion.php`: add the `HasMany` relation + `@property` line **and** register the model
+   in the `created` boot (eager-load array + merge chain + `$idMapping` key) **and** the
+   `deleting` chain. If *other* models reference yours by FK (enemy → checkpoint), also add the
+   second-pass re-link in the boot (see the `enemy_forces_checkpoint_id` block) — without it,
+   clones of the referencing model keep pointing at the **old** version's row and the new
+   version looks fine while being subtly wrong.
+5. `MappingService::copyMappingVersionContentsToDungeon()`: add a clone loop **if** the model
+   must survive the MDT-copy path — this is separate from the boot path and easy to forget. If
+   you deliberately skip it, say so in the comment there (checkpoints: tracked in #3702).
+6. `app/Console/Commands/Mapping/Copy.php` `$relations` array: any model carrying a `floor_id`
+   must be listed or cross-dungeon copies strand it on the source dungeon's floors — see Gotchas.
+
+### C. Saving to disk + seeder round-trip
+
+7. Export — `mapping:save` (`app/Console/Commands/Mapping/Save.php`): add
+   `<name>ForExport` to the eager-load list in `saveFloors()` **and** an entry in the per-floor
+   result block (`$result['enemy_forces_checkpoints'] = ...`), with the same
+   `setRelation('floor', $floor)` + lat/lng-rounding treatment its siblings get. See the
+   **seeder-save** skill.
+8. Import — `RelationMapping` subclass in `app/SeederHelpers/RelationImport/Mapping/` (JSON file
+   name + model class, `MappingVersionConditional`), registered in the `$relationMapping` array
+   in `database/seeders/DungeonDataSeeder.php` — **ordering matters: parents before children**.
+   See the **seeder-load** skill. Verify with a real `mapping:save` round-trip in dev, then
+   revert the regenerated seeder JSON before committing (the mapping:sync cron churns it anyway).
+
+### D. Serving it to the map (the JS payload)
+
+9. `Floor.php`: the mapping-version-scoped runtime relation **and** the `*ForExport` variant,
+   plus both `@property` lines.
+10. `MappingVersion::mapContext<YourModel>s()` — clone `mapContextMountableAreas()`: load with
+    `floor`, facade-convert each lat/lng when `facade_enabled && $useFacade`. Read the "facade
+    conversion rewrites `floor_id`" gotcha in the **new-map-view** skill *first* — if the client
+    ever needs the real floor of a converted object, you must also ship `source_floor_id`.
+11. `MapContextMappingVersionData::toArray()` (`app/Logic/MapContext/`): add the
+    `'yourModels' => $this->mappingVersion->mapContext<YourModel>s(...)` entry. That key becomes
+    `dungeon.yourModels` in the JS payload. ⚠️ The payload is cached under
+    `dungeon_{id}_{mvid}_{style}` (two layers) — until caches drop, the new key simply won't
+    appear and the front-end sees `undefined`.
+
+### E. Edit endpoints
+
+12. FormRequest + `Ajax<YourModel>Controller extends AjaxMappingModelBaseController` + the
+    POST/PUT/DELETE routes in `routes/web.php`'s admin ajax group + `<YourModel>ChangedEvent` /
+    `<YourModel>DeletedEvent` broadcast events — full server-side checklist in the
+    **ajax-map-editor-crud** skill. Membership expressed as an FK on another model rides that
+    *other* model's endpoint: add the field to its FormRequest (`APIEnemyFormRequest` gained
+    `enemy_forces_checkpoint_id`) and write a test asserting the column actually **persists** —
+    the 200 response looks identical if the field is silently dropped.
+
+### F. Front-end (Leaflet)
+
+13. `resources/assets/js/custom/constants.js`: a `MAP_OBJECT_GROUP_<NAME>` constant + an entry in
+    `MAP_OBJECT_GROUP_NAMES` (order matters — list it *after* any group it depends on, e.g.
+    checkpoints after enemies) + any admin styling under the `c.map` config object.
+14. `mapcontext/mapcontext.js`: a getter returning `this._options.dungeon.yourModels ?? []` —
+    the key must match step 11 exactly.
+15. JS classes, one file each: `custom/models/<name>.js` (extends `MapObject`;
+    `_getAttributes()` drives the popup fields *and* the save payload),
+    `custom/admin/admin<name>.js` (edit behaviour), and
+    `custom/mapobjectgroups/<name>mapobjectgroup.js` (`_getRawObjects()` reads the step-14
+    getter; `_createMapObject()` returns the admin/non-admin flavour via
+    `getState().isMapAdmin()`), registered in the if/else chain in
+    `mapobjectgroups/mapobjectgroupmanager.js`. If admins place it with the draw toolbar:
+    Leaflet icon/marker classes + a button in `admindrawcontrols.js` (see `drawcontrols.js` for
+    the generic `faClass` handler) — and give the cursor-preview `divIcon` an `html`, or nothing
+    renders under the cursor while placing.
+16. **Register every new JS file in `scripts/build/custom-scripts-order.mjs`** — `custom/**` is
+    NOT auto-globbed (only `custom/inline/**` is), and base classes must be listed before their
+    subclasses.
+17. Translations in `lang/en_US/js.php`: the bare `js.<mapobjectname>` key (popup title + draw
+    button caption), `js.<mapobjectname>_title` (the draw button's hover title in
+    `admindrawcontrols.js`), a `_label` key per popup attribute — including the inherited
+    `faction`/`teeming` ones; full rules in **ajax-map-editor-crud** — and
+    `js.<groupname>_map_object_group_label`, which captions the sidebar show/hide entry.
+18. Sidebar selectability is then **automatic** — there is no per-model registration:
+    `inline/common/maps/map.js` builds the eye-icon dropdown
+    (`#map_map_object_group_visibility_dropdown`, blade shell in
+    `common/maps/controls/elements/mapobjectgroupvisibility.blade.php`) from the map's
+    instantiated groups (`MAP_OBJECT_GROUP_NAMES` minus the page's `hiddenMapObjectGroups`),
+    labels each entry with the step-17 `_map_object_group_label` key, and persists per-user
+    hiding in the `hidden_map_object_groups` cookie. Your only decisions: which *pages* should
+    not show the group at all — add the group name to `hiddenMapObjectGroups` in
+    `resources/views/dungeonroute/preview.blade.php` (route thumbnails) and
+    `dungeonroute/embed.blade.php` if it doesn't belong there — and whether the group overrides
+    `isUserToggleable()` (default true).
+19. Handlebars templates in `resources/assets/js/handlebars/`, CSS in
+    `resources/assets/css/sections/map.css`, vitest coverage for any client-side computation
+    (see `models/enemyforcescheckpoint.test.js`).
 
 ## Gotchas
 
@@ -169,6 +263,8 @@ one. Repositories that query mapping tables scope manually (e.g.
 
 - **seeder-save / seeder-load** — exporting/importing mapping models via the dungeon JSON files
 - **repository-pattern** — the required repository for a new model
-- **ajax-map-editor-crud** — the editor endpoints that mutate mapping models
+- **ajax-map-editor-crud** — the editor endpoints that mutate mapping models, plus the front-end
+  MapObject conventions (per-attribute translation keys, snackbars for transient admin state)
+- **new-map-view** — map-page blade/JS anatomy and the facade `floor_id` conversion gotcha
 - **project-backend-structure** — where mapping code sits in the wider backend
 - **update-mdt-package** — MDT-driven mapping version creation
