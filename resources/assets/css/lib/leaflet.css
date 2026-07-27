@@ -97,13 +97,16 @@
 }
 
 /*
- * Leaflet.draw ships this class with box-sizing: content-box, but EnemyVisual.refreshSize() sizes
- * the selection wrapper as icon size + 8px, expecting the 4px dashed border to be part of that box
- * (border-box). Under content-box the wrapper grows 16px past the icon instead, leaving a gap on
- * the right/bottom of the icon (#3696). Scoped to the enemy selection wrapper so leaflet.draw's
- * own edit-mode markers (which it offsets itself assuming content-box) are unaffected.
+ * Leaflet.draw ships this class with box-sizing: content-box, but both selection visuals size
+ * their bordered element as icon size + 8px (EnemyVisual.refreshSize() and getLeafletIcon()'s
+ * outer_width/outer_height), expecting the 4px dashed border to be part of that box (border-box).
+ * Under content-box the element grows 16px past the icon instead, leaving a gap on the right/
+ * bottom of the icon (#3696). Scoped to those two elements — and away from marker roots via
+ * :not(.leaflet-marker-icon) — so leaflet.draw's own edit-mode markers (which it offsets itself
+ * assuming content-box) are unaffected.
  */
-.selected_enemy_icon.leaflet-edit-marker-selected {
+.selected_enemy_icon.leaflet-edit-marker-selected,
+.map_icon.leaflet-edit-marker-selected:not(.leaflet-marker-icon) {
     box-sizing: border-box;
 }
 

@@ -47,6 +47,24 @@ describe('enemy selection border box model (#3696)', () => {
         expect(getComputedStyle(wrapper).boxSizing).toBe('border-box');
     });
 
+    test('mapIconVisual_givenBundleCascade_computesBorderBox', () => {
+        // getLeafletIcon() renders map_map_icon_visual_template with the
+        // selection class on an inner div sized outer_width/outer_height
+        // (icon + 8px) — the same border-box contract as the enemy wrapper.
+        const visual = createStyledElement('map_icon dungeon_start leaflet-edit-marker-selected');
+
+        expect(getComputedStyle(visual).boxSizing).toBe('border-box');
+    });
+
+    test('mapIconMarkerRoot_givenBundleCascade_keepsContentBox', () => {
+        // The marker ROOT also carries map_icon (icon.js className) and gets
+        // the selection class from leaflet.draw's edit toggle; the
+        // :not(.leaflet-marker-icon) guard must keep the override off it.
+        const root = createStyledElement('map_icon leaflet-edit-marker-selected leaflet-marker-icon');
+
+        expect(getComputedStyle(root).boxSizing).toBe('content-box');
+    });
+
     test('editModeMarker_givenBundleCascade_keepsContentBox', () => {
         // Leaflet.draw's own edit-mode markers get only the vendor class and
         // self-compensate their position assuming content-box (its
