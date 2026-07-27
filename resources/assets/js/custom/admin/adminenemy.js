@@ -87,52 +87,35 @@ class AdminEnemy extends Enemy {
             mapStateChangedEvent.data.previousMapState :
             mapStateChangedEvent.data.newMapState;
 
-        // Only if we WERE ever selecting enemies
+        // Only if we WERE ever selecting enemies. Tooltips are NOT unbound/rebound here to keep them
+        // out of the way during selection - DungeonMap#setMapState() hides them with a CSS class for
+        // every MapState.disablesTooltips() state instead. Doing it by unbinding left the enemies
+        // nearest the selected object with a null Leaflet tooltip while their icon kept the focus
+        // listener leaflet leaks on unbind, so clicking one of them threw (#128).
         if (enemySelection instanceof EnemySelection && this.layer !== null) {
-            let selectedMapObject = enemySelection.getMapObject();
-
-            // We calculate this because tooltip binding is expensive for 100s of enemies on screen. Generally a MDT
-            // enemy is close to the enemy we're selecting, so we only really need to disable tooltips for the enemies that
-            // are close by. If they're far away, we don't really care if we get a tooltip for the odd time it happens
-            // Advantage is that this dramatically speeds up the JS.
-            // 100 = 10 distance
-            // If the source layer doesn't have a latLng just assume everything is far away (expensive)
-            let closeEnough = ((selectedMapObject.layer instanceof L.Marker) ?
-                    getLatLngDistanceSquared(selectedMapObject.layer.getLatLng(), this.layer.getLatLng()) : 0)
-                < 100;
-
-            if (!(mapStateChangedEvent.data.newMapState instanceof EnemySelection)) {
-                if (closeEnough) {
-                    // Attach tooltip again
-                    this.bindTooltip();
+            if (!(mapStateChangedEvent.data.newMapState instanceof EnemySelection) &&
+                enemySelection.getMapObject() === this) {
+                // May save when nothing has changed, but that's okay
+                let connectedEnemy = this.getConnectedMDTEnemy();
+                if (connectedEnemy !== null) {
+                    // Save them, not us
+                    connectedEnemy.save();
                 }
 
-                if (selectedMapObject === this) {
-                    // May save when nothing has changed, but that's okay
-                    let connectedEnemy = this.getConnectedMDTEnemy();
-                    if (connectedEnemy !== null) {
-                        // Save them, not us
-                        connectedEnemy.save();
+                if (this._previousConnectedEnemyId > 0) {
+                    let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                    let previousEnemy = enemyMapObjectGroup.findMapObjectById(this._previousConnectedEnemyId);
+                    // Must be found..
+                    if (previousEnemy !== null) {
+                        previousEnemy.save();
+                        previousEnemy.bindTooltip();
+                    } else {
+                        console.error('Unable to find previous enemy', this._previousConnectedEnemyId);
                     }
-
-                    if (this._previousConnectedEnemyId > 0) {
-                        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-                        let previousEnemy = enemyMapObjectGroup.findMapObjectById(this._previousConnectedEnemyId);
-                        // Must be found..
-                        if (previousEnemy !== null) {
-                            previousEnemy.save();
-                            previousEnemy.bindTooltip();
-                        } else {
-                            console.error('Unable to find previous enemy', this._previousConnectedEnemyId);
-                        }
-                    }
-
-                    // Reset it for the next time
-                    this._previousConnectedEnemyId = -1;
                 }
-            } else if (closeEnough) {
-                // Remove tooltip whilst actively coupling. It gets in the way
-                this.unbindTooltip();
+
+                // Reset it for the next time
+                this._previousConnectedEnemyId = -1;
             }
         }
     }
@@ -536,7 +519,10 @@ class AdminEnemy extends Enemy {
         if (this.layer !== null) {
             this.unbindTooltip();
             this.layer.bindTooltip(template(data), {
-                direction: 'top'
+                direction: 'top',
+                // Same class Enemy#bindTooltip() uses, so DungeonMap#setMapState() can suppress the
+                // admin map's enemy tooltips through CSS too (see .map_enemy_tooltips_suppressed).
+                className: 'map_enemy_tooltip',
             });
         }
     }
