@@ -48,7 +48,6 @@ return [
                 'new'     => 'New',
             ],
         ],
-        'my_profile'       => 'My public profile',
         'my_favorites'     => 'My favorites',
         'account_settings' => 'Account settings',
         'my_routes'        => 'My routes',

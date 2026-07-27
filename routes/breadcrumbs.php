@@ -187,7 +187,7 @@ Breadcrumbs::for('profile.edit', static function (Generator $trail) {
 
 Breadcrumbs::for('profile.view', static function (Generator $trail, User $user) {
     $trail->parent('home');
-    $trail->push(__('breadcrumbs.home.my_profile'), route('profile.view', $user));
+    $trail->push(sprintf(__('view_profile.view.header'), $user->name), route('profile.view', $user));
 });
 
 Breadcrumbs::for('profile.favorites', static function (Generator $trail) {

@@ -23,20 +23,24 @@ final class ProfileBreadcrumbsTest extends TestCase
     }
 
     #[Test]
-    public function breadcrumbGenerate_givenProfileViewKey_returnsMyPublicProfileLabel(): void
+    public function breadcrumbGenerate_givenProfileViewKeyForAnyUser_returnsThatUsersNameInLabel(): void
     {
-        // Arrange
-        $user = User::factory()->create();
+        // Arrange: two distinct users, since the label must reflect whichever profile is being
+        // viewed, not just the currently authenticated user
+        $viewedUser = User::factory()->create(['name' => 'SomeOtherUser']);
+        $authUser   = User::factory()->create(['name' => 'AuthenticatedUser']);
 
         try {
             // Act
-            $breadcrumbs = Breadcrumbs::generate('profile.view', $user);
+            $this->actingAs($authUser);
+            $breadcrumbs = Breadcrumbs::generate('profile.view', $viewedUser);
 
             // Assert
             $this->assertNotEmpty($breadcrumbs);
-            $this->assertSame(__('breadcrumbs.home.my_profile'), $breadcrumbs->last()->title);
+            $this->assertSame(sprintf(__('view_profile.view.header'), $viewedUser->name), $breadcrumbs->last()->title);
         } finally {
-            $user->delete();
+            $viewedUser->delete();
+            $authUser->delete();
         }
     }
 
