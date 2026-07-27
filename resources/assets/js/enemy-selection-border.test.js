@@ -78,10 +78,11 @@ describe('enemy selection border box model (#3696)', () => {
         // If a leaflet-draw update ever drops the content-box declaration or
         // changes the 4px border, the app override and the +8 compensation in
         // EnemyVisual.refreshSize() must be revisited together.
-        const rule = vendorCss.match(/\.leaflet-edit-marker-selected\{[^}]*}/)[0];
+        const rule = vendorCss.match(/\.leaflet-edit-marker-selected\s*\{[^}]*\}/);
 
-        expect(rule).toContain('box-sizing:content-box');
-        expect(rule).toContain('border:4px dashed');
+        expect(rule).not.toBeNull();
+        expect(rule[0]).toMatch(/box-sizing:\s*content-box/);
+        expect(rule[0]).toContain('border:4px dashed');
     });
 
     test('enemyVisual_givenSelectableSizing_compensatesBothBorderSides', () => {
@@ -90,7 +91,7 @@ describe('enemy selection border box model (#3696)', () => {
         // silently.
         const enemyVisualJs = fs.readFileSync(path.join(ROOT, 'resources/assets/js/custom/enemyvisuals/enemyvisual.js'), 'utf8');
 
-        expect(enemyVisualJs).toContain('outerWidth + 8');
-        expect(enemyVisualJs).toContain('outerHeight + 8');
+        expect(enemyVisualJs).toMatch(/outerWidth\s*\+\s*8/);
+        expect(enemyVisualJs).toMatch(/outerHeight\s*\+\s*8/);
     });
 });
