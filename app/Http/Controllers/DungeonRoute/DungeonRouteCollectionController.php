@@ -111,16 +111,15 @@ class DungeonRouteCollectionController extends Controller
     {
         Gate::authorize('edit', $dungeonRouteCollection);
 
-        /** @var User $user */
-        $user = Auth::user();
-
-        $dungeonRouteCollection->load(['dungeonRoutes']);
+        $dungeonRouteCollection->load(['dungeonRoutes', 'user']);
 
         return view('collection.edit', [
-            'dungeonRouteCollection'  => $dungeonRouteCollection,
-            'ownDungeonRoutes'        => $this->getOwnDungeonRoutes($user),
+            'dungeonRouteCollection' => $dungeonRouteCollection,
+            // Scoped to the collection's own owner, not the acting user - otherwise an admin
+            // editing someone else's collection would see an empty picker and no shared teams
+            'ownDungeonRoutes'        => $this->getOwnDungeonRoutes($dungeonRouteCollection->user),
             'selectedDungeonRouteIds' => $dungeonRouteCollection->dungeonRoutes->pluck('id')->all(),
-            'teams'                   => $user->teams,
+            'teams'                   => $dungeonRouteCollection->user->teams,
         ]);
     }
 

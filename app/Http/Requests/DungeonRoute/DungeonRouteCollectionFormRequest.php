@@ -24,7 +24,7 @@ class DungeonRouteCollectionFormRequest extends FormRequest
     /** @return array<string, mixed> */
     public function rules(): array
     {
-        $userId = Auth::id() ?? 0;
+        $userId = $this->dungeonRouteCollectionOwnerId();
 
         return [
             'name' => [
@@ -137,5 +137,19 @@ class DungeonRouteCollectionFormRequest extends FormRequest
                 ->filter()
                 ->values();
         });
+    }
+
+    /**
+     * The id whose own routes/teams the request must validate against - the collection's actual
+     * owner when editing an existing one (an admin may be acting on someone else's collection),
+     * or the current user when creating a brand new one.
+     */
+    private function dungeonRouteCollectionOwnerId(): int
+    {
+        $dungeonRouteCollection = $this->route('dungeonRouteCollection');
+
+        return $dungeonRouteCollection instanceof DungeonRouteCollection
+            ? $dungeonRouteCollection->user_id
+            : (Auth::id() ?? 0);
     }
 }

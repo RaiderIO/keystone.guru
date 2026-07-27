@@ -2,6 +2,23 @@
 
 return [
 
+    'collection' => [
+        'details' => [
+            'name'                 => 'Name',
+            'description'          => 'Description',
+            'published_state'      => 'Visible to',
+            'published_state_help' => 'Sharing a collection never publishes the routes inside it - a route that is not published stays hidden.',
+            'team'                 => 'Team',
+            'team_none'            => 'No team',
+            'team_help'            => 'The team to share this collection with, when the collection is visible to your team.',
+            'dungeon_routes'       => 'Routes',
+            'dungeon_routes_none'  => 'You have not created any routes yet.',
+            'dungeon_routes_help'  => 'Hold ctrl (or cmd) to select multiple routes, up to a maximum of :max. They are shown in the order you selected them in.',
+            'save'                 => 'Save',
+            'submit'               => 'Create collection',
+            'delete'               => 'Delete collection',
+        ],
+    ],
     'dungeon' => [
         'difficulty' => [
             '10_man' => '10-man',

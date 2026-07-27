@@ -438,6 +438,10 @@ class User extends Authenticatable implements LaratrustUser
                 $dungeonRoute->delete();
             }
 
+            // Deleted per-model rather than mass-deleted, so DungeonRouteCollection's own
+            // deleting() hook fires and cleans up its dungeonRouteCollectionRoutes rows too
+            $user->dungeonRouteCollections->each(static fn(DungeonRouteCollection $dungeonRouteCollection) => $dungeonRouteCollection->delete());
+
             // UserReport has no deleting hook, so a mass delete is fine here
             $user->reports()->delete();
 
