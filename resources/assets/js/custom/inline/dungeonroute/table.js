@@ -463,10 +463,7 @@ class DungeonrouteTable extends InlineCode {
             addremoveroute: {
                 'title': lang.get('js.actions_label'),
                 'render': function (data, type, row, meta) {
-                    let templateName = self._getAddRemoveRouteTemplateName(row);
-                    let variables = templateName === 'team_dungeonroute_table_route_actions_own_route' ?
-                        self._getProfileActionsTemplateVariables(row) :
-                        {public_key: row.public_key};
+                    let {templateName, variables} = self._getAddRemoveRouteTemplate(row);
 
                     let template = Handlebars.templates[templateName];
                     return template($.extend({}, getHandlebarsDefaultVariables(), variables));
@@ -518,21 +515,34 @@ class DungeonrouteTable extends InlineCode {
     }
 
     /**
-     * Picks which action-dropdown Handlebars template to render for the "addremoveroute" team
-     * table column: an owned route on the team gets the full profile-style action set (with
-     * "remove from team" added), a not-owned route only gets "remove from team", and a route not
-     * yet on the team gets the "add to team" action.
+     * Picks the action-dropdown Handlebars template AND its variables together for the
+     * "addremoveroute" team table column, so the two can never drift apart (unlike returning just
+     * the template name and re-deriving the variables from it elsewhere): an owned route on the
+     * team gets the full profile-style action set (with "remove from team" added), a not-owned
+     * route only gets "remove from team", and a route not yet on the team gets the "add to team"
+     * action.
      * @param row
-     * @returns {string}
+     * @returns {{templateName: string, variables: Object}}
      */
-    _getAddRemoveRouteTemplateName(row) {
+    _getAddRemoveRouteTemplate(row) {
         if (!row.has_team) {
-            return 'team_dungeonroute_table_add_route_actions';
+            return {
+                templateName: 'team_dungeonroute_table_add_route_actions',
+                variables: {public_key: row.public_key},
+            };
         }
 
-        return row.author.id === this.options.currentUserId ?
-            'team_dungeonroute_table_route_actions_own_route' :
-            'team_dungeonroute_table_route_actions';
+        if (row.author.id === this.options.currentUserId) {
+            return {
+                templateName: 'team_dungeonroute_table_route_actions_own_route',
+                variables: this._getProfileActionsTemplateVariables(row),
+            };
+        }
+
+        return {
+            templateName: 'team_dungeonroute_table_route_actions',
+            variables: {public_key: row.public_key},
+        };
     }
 
     /**
