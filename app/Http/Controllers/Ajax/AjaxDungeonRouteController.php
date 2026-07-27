@@ -124,7 +124,12 @@ class AjaxDungeonRouteController extends Controller
         // If we're viewing a team's route this will be filled
         $team = null;
 
+        // A requirements select that isn't rendered for the current view sends the literal string
+        // 'undefined' instead of omitting the param, same as the tags select below
         $requirements = $request->get('requirements', []);
+        if (!is_array($requirements)) {
+            $requirements = [];
+        }
 
         // Enough enemy forces
         if (in_array('enough_enemy_forces', $requirements, true)) {

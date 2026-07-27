@@ -51,4 +51,33 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
         // Assert
         $response->assertOk();
     }
+
+    #[Test]
+    public function get_givenRequirementsParameterIsTheStringUndefined_returnsOk(): void
+    {
+        // Arrange - same failure mode as the tags parameter above: a requirements select that
+        // isn't rendered for the current view sends the literal string 'undefined'
+        $query = http_build_query([
+            'draw'    => 1,
+            'start'   => 0,
+            'length'  => 25,
+            'columns' => [
+                [
+                    'data'       => 0,
+                    'name'       => 'title',
+                    'searchable' => 'true',
+                    'orderable'  => 'true',
+                    'search'     => ['value' => '', 'regex' => 'false'],
+                ],
+            ],
+            'search'       => ['value' => '', 'regex' => 'false'],
+            'requirements' => 'undefined',
+        ]);
+
+        // Act
+        $response = $this->get(sprintf('/ajax/routes?%s', $query));
+
+        // Assert
+        $response->assertOk();
+    }
 }

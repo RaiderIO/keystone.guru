@@ -30,7 +30,6 @@ use App\Models\Team;
             'affixSelectId' => 'route_publishing_affixes',
             'attributesSelectId' => 'route_publishing_attributes',
             'requirementsSelectId' => 'route_publishing_requirements',
-            'tagsSelectId' => 'route_publishing_tags',
         ])
     </div>
 </div>
