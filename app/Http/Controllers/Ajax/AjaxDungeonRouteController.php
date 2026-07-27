@@ -134,7 +134,12 @@ class AjaxDungeonRouteController extends Controller
                                     dungeon_routes.enemy_forces >= mapping_versions.enemy_forces_required)');
         }
 
+        // A tags select that isn't rendered for the current view (e.g. the team edit page's Route
+        // Publishing tab) sends the literal string 'undefined' instead of omitting the param
         $tags = $request->get('tags', []);
+        if (!is_array($tags)) {
+            $tags = [];
+        }
 
         // Must have these tags
         if (!empty($tags)) {
