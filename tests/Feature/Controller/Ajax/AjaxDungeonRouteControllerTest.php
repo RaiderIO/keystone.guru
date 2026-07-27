@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\Ajax;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -118,6 +119,51 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
             $this->assertNotSame($data['mapping_version_id'], $data['dungeon_latest_mapping_version_id']);
         } finally {
             $newerMappingVersion->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function get_givenDungeonHasNewerMappingVersionForADifferentGameVersion_returnsDungeonLatestMappingVersionIdScopedToTheRoutesOwnGameVersion(): void
+    {
+        // Arrange - expires_at must be null/0, otherwise the route is treated as a temporary
+        // "try" route and excluded from the results entirely
+        $dungeonRoute          = DungeonRoute::factory()->create(['expires_at' => null]);
+        $currentMappingVersion = $dungeonRoute->dungeon->getCurrentMappingVersion();
+
+        // Some dungeons have mapping versions for multiple game versions (e.g. retail and classic);
+        // a higher id for a DIFFERENT game version must not be treated as "newer" for this route,
+        // since mapping version id ranges aren't comparable across game versions
+        /** @var GameVersion $otherGameVersion */
+        $otherGameVersion = GameVersion::where('id', '!=', $currentMappingVersion->game_version_id)->firstOrFail();
+
+        $otherGameVersionMappingVersion = MappingVersion::create([
+            'game_version_id'                 => $otherGameVersion->id,
+            'dungeon_id'                      => $dungeonRoute->dungeon_id,
+            'version'                         => 1,
+            'enemy_forces_required'           => $currentMappingVersion->enemy_forces_required,
+            'enemy_forces_required_teeming'   => $currentMappingVersion->enemy_forces_required_teeming,
+            'enemy_forces_shrouded'           => $currentMappingVersion->enemy_forces_shrouded,
+            'enemy_forces_shrouded_zul_gamux' => $currentMappingVersion->enemy_forces_shrouded_zul_gamux,
+            'timer_max_seconds'               => $currentMappingVersion->timer_max_seconds,
+            'facade_enabled'                  => false,
+        ]);
+
+        try {
+            // Act
+            $response = $this->get(sprintf('/ajax/routes?%s', $this->titleSearchQuery($dungeonRoute->title)));
+
+            // Assert - the other game version's mapping version has a higher id, but must not be
+            // reported as the route's dungeon_latest_mapping_version_id
+            $response->assertOk();
+            $data                                       = $this->findRouteInResponseData($response->json('data'), $dungeonRoute->public_key);
+            $actualLatestMappingVersionIdForGameVersion = MappingVersion::where('dungeon_id', $dungeonRoute->dungeon_id)
+                ->where('game_version_id', $currentMappingVersion->game_version_id)
+                ->max('id');
+            $this->assertSame($actualLatestMappingVersionIdForGameVersion, $data['dungeon_latest_mapping_version_id']);
+            $this->assertNotSame($otherGameVersionMappingVersion->id, $data['dungeon_latest_mapping_version_id']);
+        } finally {
+            $otherGameVersionMappingVersion->delete();
             $dungeonRoute->delete();
         }
     }

@@ -47,6 +47,7 @@ use App\Service\SimulationCraft\RaidEventsServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
@@ -106,8 +107,13 @@ class AjaxDungeonRouteController extends Controller
             ->join('dungeons', 'dungeons.id', '=', 'dungeon_routes.dungeon_id')
             ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
             // Joined separately (rather than reusing the join above) so MAX() reflects the dungeon's
-            // latest mapping version instead of just echoing the route's own mapping_version_id
-            ->join('mapping_versions as dungeon_mapping_versions', 'dungeon_mapping_versions.dungeon_id', 'dungeons.id')
+            // latest mapping version instead of just echoing the route's own mapping_version_id.
+            // Scoped to the route's own game_version_id too - some dungeons have mapping versions for
+            // multiple game versions (e.g. retail and classic), and those id ranges aren't comparable.
+            ->join('mapping_versions as dungeon_mapping_versions', function (JoinClause $join) {
+                $join->on('dungeon_mapping_versions.dungeon_id', 'dungeons.id')
+                    ->on('dungeon_mapping_versions.game_version_id', 'mapping_versions.game_version_id');
+            })
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
             ->where(function (Builder $query) {
