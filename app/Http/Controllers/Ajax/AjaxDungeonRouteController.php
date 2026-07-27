@@ -47,7 +47,6 @@ use App\Service\SimulationCraft\RaidEventsServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
@@ -103,17 +102,19 @@ class AjaxDungeonRouteController extends Controller
         $routes = DungeonRoute::with($withRelations)
             // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
             // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
-            ->selectRaw('dungeon_routes.*, mapping_versions.enemy_forces_required_teeming, mapping_versions.enemy_forces_required, MAX(dungeon_mapping_versions.id) as dungeon_latest_mapping_version_id')
+            // dungeon_latest_mapping_version_id is a correlated subquery rather than a joined MAX() -
+            // a join here would fan out rows per dungeon mapping version, corrupting the non-distinct
+            // COUNT() aggregates that RatingColumnHandler/DungeonRouteAttributesColumnHandler add via
+            // their own joins further down. Scoped to the route's own game_version_id too - some
+            // dungeons have mapping versions for multiple game versions (e.g. retail and classic),
+            // and those id ranges aren't comparable.
+            ->selectRaw('dungeon_routes.*, mapping_versions.enemy_forces_required_teeming, mapping_versions.enemy_forces_required,
+                (SELECT MAX(dungeon_mapping_versions.id) FROM mapping_versions as dungeon_mapping_versions
+                    WHERE dungeon_mapping_versions.dungeon_id = dungeons.id
+                    AND dungeon_mapping_versions.game_version_id = mapping_versions.game_version_id
+                ) as dungeon_latest_mapping_version_id')
             ->join('dungeons', 'dungeons.id', '=', 'dungeon_routes.dungeon_id')
             ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
-            // Joined separately (rather than reusing the join above) so MAX() reflects the dungeon's
-            // latest mapping version instead of just echoing the route's own mapping_version_id.
-            // Scoped to the route's own game_version_id too - some dungeons have mapping versions for
-            // multiple game versions (e.g. retail and classic), and those id ranges aren't comparable.
-            ->join('mapping_versions as dungeon_mapping_versions', function (JoinClause $join) {
-                $join->on('dungeon_mapping_versions.dungeon_id', 'dungeons.id')
-                    ->on('dungeon_mapping_versions.game_version_id', 'mapping_versions.game_version_id');
-            })
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
             ->where(function (Builder $query) {
