@@ -400,30 +400,30 @@ class AdminEnemy extends Enemy {
                 }
             }
 
-            if (currentMapState instanceof EnemyForcesRegionEnemySelection) {
-                /** @type {AdminEnemyForcesRegion} */
-                let enemyForcesRegion = currentMapState.getMapObject();
-                // Clicking an enemy that is already in the region removes it again
-                let newRegion = enemyForcesRegion.id === self.enemy_forces_region_id ? null : enemyForcesRegion;
+            if (currentMapState instanceof EnemyForcesCheckpointEnemySelection) {
+                /** @type {AdminEnemyForcesCheckpoint} */
+                let enemyForcesCheckpoint = currentMapState.getMapObject();
+                // Clicking an enemy that is already in the checkpoint removes it again
+                let newCheckpoint = enemyForcesCheckpoint.id === self.enemy_forces_checkpoint_id ? null : enemyForcesCheckpoint;
 
-                self.setEnemyForcesRegion(newRegion);
+                self.setEnemyForcesCheckpoint(newCheckpoint);
                 self.save();
 
-                // A pack is pulled as a whole, so it belongs to a region as a whole
-                let regionPackBuddies = self.getPackBuddies();
-                for (let index in regionPackBuddies) {
-                    let packBuddyEnemy = regionPackBuddies[index];
-                    packBuddyEnemy.setEnemyForcesRegion(newRegion);
+                // A pack is pulled as a whole, so it belongs to a checkpoint as a whole
+                let checkpointPackBuddies = self.getPackBuddies();
+                for (let index in checkpointPackBuddies) {
+                    let packBuddyEnemy = checkpointPackBuddies[index];
+                    packBuddyEnemy.setEnemyForcesCheckpoint(newCheckpoint);
                     packBuddyEnemy.save();
                 }
 
-                enemyForcesRegion.refreshPill();
-                // Keeps the (floor-independent) edit panel's count/percentage in step
-                self.map.signal('enemyforcesregion:memberschanged', {enemyForcesRegion: enemyForcesRegion});
+                enemyForcesCheckpoint.refreshPill();
+                // Keeps the (floor-independent) snackbar's count/percentage in step
+                self.map.signal('enemyforcescheckpoint:memberschanged', {enemyForcesCheckpoint: enemyForcesCheckpoint});
 
-                // Deliberately NOT stopping the map state here - unlike a patrol, a region is built out
+                // Deliberately NOT stopping the map state here - unlike a patrol, a checkpoint is built out
                 // of many enemies, and can span floors. The admin closes it themselves (Escape, or the
-                // button on the region) once they're done.
+                // button on the checkpoint) once they're done.
             }
 
             if (currentMapState instanceof EnemyPatrolEnemySelection) {

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests\EnemyForcesRegion;
+namespace App\Http\Requests\EnemyForcesCheckpoint;
 
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class EnemyForcesRegionFormRequest extends FormRequest
+class EnemyForcesCheckpointFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -32,7 +32,7 @@ class EnemyForcesRegionFormRequest extends FormRequest
                 'required',
                 Rule::exists(Floor::class, 'id'),
             ],
-            // A region is placed on the map first and named afterwards, so the very first save
+            // A checkpoint is placed on the map first and named afterwards, so the very first save
             // legitimately carries no name yet.
             'name' => 'nullable|string|max:255',
             'lat'  => 'required|numeric',

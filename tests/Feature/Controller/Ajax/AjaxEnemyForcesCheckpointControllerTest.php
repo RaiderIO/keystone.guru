@@ -3,7 +3,7 @@
 namespace Tests\Feature\Controller\Ajax;
 
 use App\Models\Enemy;
-use App\Models\EnemyForcesRegion;
+use App\Models\EnemyForcesCheckpoint;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
@@ -13,21 +13,21 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\AjaxPublicTestCase;
 
 #[Group('Controller')]
-#[Group('EnemyForcesRegion')]
-final class AjaxEnemyForcesRegionControllerTest extends AjaxPublicTestCase
+#[Group('EnemyForcesCheckpoint')]
+final class AjaxEnemyForcesCheckpointControllerTest extends AjaxPublicTestCase
 {
     #[Test]
-    public function store_givenValidRegion_createsIt(): void
+    public function store_givenValidCheckpoint_createsIt(): void
     {
         // Arrange
         $floor          = $this->getFloorWithEnemies();
         $mappingVersion = $this->getMappingVersionForFloor($floor);
 
-        $enemyForcesRegionId = null;
+        $enemyForcesCheckpointId = null;
 
         try {
             // Act
-            $response = $this->post(sprintf('/ajax/admin/mappingVersion/%d/enemyforcesregion', $mappingVersion->id), [
+            $response = $this->post(sprintf('/ajax/admin/mappingVersion/%d/enemyforcescheckpoint', $mappingVersion->id), [
                 'id'                 => -1,
                 'mapping_version_id' => $mappingVersion->id,
                 'floor_id'           => $floor->id,
@@ -39,18 +39,18 @@ final class AjaxEnemyForcesRegionControllerTest extends AjaxPublicTestCase
             // Assert
             $response->assertSuccessful();
 
-            $enemyForcesRegionId = $response->json('id');
-            $this->assertNotNull($enemyForcesRegionId);
+            $enemyForcesCheckpointId = $response->json('id');
+            $this->assertNotNull($enemyForcesCheckpointId);
 
-            $this->assertDatabaseHas('enemy_forces_regions', [
-                'id'                 => $enemyForcesRegionId,
+            $this->assertDatabaseHas('enemy_forces_checkpoints', [
+                'id'                 => $enemyForcesCheckpointId,
                 'mapping_version_id' => $mappingVersion->id,
                 'floor_id'           => $floor->id,
                 'name'               => 'Test corridor',
             ]);
         } finally {
-            if ($enemyForcesRegionId !== null) {
-                EnemyForcesRegion::where('id', $enemyForcesRegionId)->delete();
+            if ($enemyForcesCheckpointId !== null) {
+                EnemyForcesCheckpoint::where('id', $enemyForcesCheckpointId)->delete();
             }
         }
     }
@@ -58,16 +58,16 @@ final class AjaxEnemyForcesRegionControllerTest extends AjaxPublicTestCase
     #[Test]
     public function store_givenNoName_stillCreatesIt(): void
     {
-        // A region is placed on the map first and named afterwards in its popup, so the very first
-        // save legitimately carries no name. Requiring one made placing a region fail with a 422.
+        // A checkpoint is placed on the map first and named afterwards in its popup, so the very first
+        // save legitimately carries no name. Requiring one made placing a checkpoint fail with a 422.
         $floor          = $this->getFloorWithEnemies();
         $mappingVersion = $this->getMappingVersionForFloor($floor);
 
-        $enemyForcesRegionId = null;
+        $enemyForcesCheckpointId = null;
 
         try {
             // Act
-            $response = $this->post(sprintf('/ajax/admin/mappingVersion/%d/enemyforcesregion', $mappingVersion->id), [
+            $response = $this->post(sprintf('/ajax/admin/mappingVersion/%d/enemyforcescheckpoint', $mappingVersion->id), [
                 'id'                 => -1,
                 'mapping_version_id' => $mappingVersion->id,
                 'floor_id'           => $floor->id,
@@ -78,12 +78,12 @@ final class AjaxEnemyForcesRegionControllerTest extends AjaxPublicTestCase
             // Assert
             $response->assertSuccessful();
 
-            $enemyForcesRegionId = $response->json('id');
-            $this->assertNotNull($enemyForcesRegionId);
-            $this->assertNull(EnemyForcesRegion::findOrFail($enemyForcesRegionId)->name);
+            $enemyForcesCheckpointId = $response->json('id');
+            $this->assertNotNull($enemyForcesCheckpointId);
+            $this->assertNull(EnemyForcesCheckpoint::findOrFail($enemyForcesCheckpointId)->name);
         } finally {
-            if ($enemyForcesRegionId !== null) {
-                EnemyForcesRegion::where('id', $enemyForcesRegionId)->delete();
+            if ($enemyForcesCheckpointId !== null) {
+                EnemyForcesCheckpoint::where('id', $enemyForcesCheckpointId)->delete();
             }
         }
     }
@@ -101,7 +101,7 @@ final class AjaxEnemyForcesRegionControllerTest extends AjaxPublicTestCase
         $this->expectException(ValidationException::class);
 
         // Act
-        $this->postJson(sprintf('/ajax/admin/mappingVersion/%d/enemyforcesregion', $mappingVersion->id), [
+        $this->postJson(sprintf('/ajax/admin/mappingVersion/%d/enemyforcescheckpoint', $mappingVersion->id), [
             'id'                 => -1,
             'mapping_version_id' => $mappingVersion->id,
             'floor_id'           => $floor->id,
@@ -110,13 +110,13 @@ final class AjaxEnemyForcesRegionControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    public function delete_givenRegionWithEnemies_deletesItAndReleasesItsEnemies(): void
+    public function delete_givenCheckpointWithEnemies_deletesItAndReleasesItsEnemies(): void
     {
         // Arrange
         $floor          = $this->getFloorWithEnemies();
         $mappingVersion = $this->getMappingVersionForFloor($floor);
 
-        $enemyForcesRegion = EnemyForcesRegion::create([
+        $enemyForcesCheckpoint = EnemyForcesCheckpoint::create([
             'mapping_version_id' => $mappingVersion->id,
             'floor_id'           => $floor->id,
             'name'               => 'Test corridor',
@@ -126,41 +126,41 @@ final class AjaxEnemyForcesRegionControllerTest extends AjaxPublicTestCase
 
         /** @var Enemy $enemy */
         $enemy = Enemy::where('mapping_version_id', $mappingVersion->id)->firstOrFail();
-        $enemy->update(['enemy_forces_region_id' => $enemyForcesRegion->id]);
+        $enemy->update(['enemy_forces_checkpoint_id' => $enemyForcesCheckpoint->id]);
 
         try {
             // Act
             $response = $this->delete(sprintf(
-                '/ajax/admin/mappingVersion/%d/enemyforcesregion/%d',
+                '/ajax/admin/mappingVersion/%d/enemyforcescheckpoint/%d',
                 $mappingVersion->id,
-                $enemyForcesRegion->id,
+                $enemyForcesCheckpoint->id,
             ));
 
             // Assert
             $response->assertSuccessful();
 
-            $this->assertDatabaseMissing('enemy_forces_regions', ['id' => $enemyForcesRegion->id]);
+            $this->assertDatabaseMissing('enemy_forces_checkpoints', ['id' => $enemyForcesCheckpoint->id]);
             $this->assertNull(
-                $enemy->fresh()->enemy_forces_region_id,
-                'Deleting a region must release its member enemies - there are no FK constraints to do it.',
+                $enemy->fresh()->enemy_forces_checkpoint_id,
+                'Deleting a checkpoint must release its member enemies - there are no FK constraints to do it.',
             );
         } finally {
-            Enemy::where('enemy_forces_region_id', $enemyForcesRegion->id)
-                ->update(['enemy_forces_region_id' => null]);
-            EnemyForcesRegion::where('id', $enemyForcesRegion->id)->delete();
+            Enemy::where('enemy_forces_checkpoint_id', $enemyForcesCheckpoint->id)
+                ->update(['enemy_forces_checkpoint_id' => null]);
+            EnemyForcesCheckpoint::where('id', $enemyForcesCheckpoint->id)->delete();
         }
     }
 
     #[Test]
-    public function enemyStore_givenEnemyForcesRegionId_persistsMembership(): void
+    public function enemyStore_givenEnemyForcesCheckpointId_persistsMembership(): void
     {
         // A 200 from the enemy endpoint plus an updated pill is indistinguishable from the field being
         // silently dropped, so assert the column itself. This is the only thing that makes an enemy a
-        // member of a region - there is no dedicated membership endpoint.
+        // member of a checkpoint - there is no dedicated membership endpoint.
         $floor          = $this->getFloorWithEnemies();
         $mappingVersion = $this->getMappingVersionForFloor($floor);
 
-        $enemyForcesRegion = EnemyForcesRegion::create([
+        $enemyForcesCheckpoint = EnemyForcesCheckpoint::create([
             'mapping_version_id' => $mappingVersion->id,
             'floor_id'           => $floor->id,
             'name'               => 'Test corridor',
@@ -173,10 +173,10 @@ final class AjaxEnemyForcesRegionControllerTest extends AjaxPublicTestCase
 
         try {
             // Act
-            // Send the enemy back exactly as it is, changing only its region - the same shape the map
+            // Send the enemy back exactly as it is, changing only its checkpoint - the same shape the map
             // editor PUTs.
-            $payload                           = $enemy->getAttributes();
-            $payload['enemy_forces_region_id'] = $enemyForcesRegion->id;
+            $payload                               = $enemy->getAttributes();
+            $payload['enemy_forces_checkpoint_id'] = $enemyForcesCheckpoint->id;
 
             $response = $this->put(
                 sprintf('/ajax/admin/mappingVersion/%d/enemy/%d', $mappingVersion->id, $enemy->id),
@@ -185,10 +185,10 @@ final class AjaxEnemyForcesRegionControllerTest extends AjaxPublicTestCase
 
             // Assert
             $response->assertSuccessful();
-            $this->assertSame($enemyForcesRegion->id, $enemy->fresh()->enemy_forces_region_id);
+            $this->assertSame($enemyForcesCheckpoint->id, $enemy->fresh()->enemy_forces_checkpoint_id);
         } finally {
-            Enemy::where('id', $enemy->id)->update(['enemy_forces_region_id' => null]);
-            EnemyForcesRegion::where('id', $enemyForcesRegion->id)->delete();
+            Enemy::where('id', $enemy->id)->update(['enemy_forces_checkpoint_id' => null]);
+            EnemyForcesCheckpoint::where('id', $enemyForcesCheckpoint->id)->delete();
         }
     }
 
@@ -202,7 +202,7 @@ final class AjaxEnemyForcesRegionControllerTest extends AjaxPublicTestCase
         $this->be(User::factory()->create());
 
         // Act
-        $response = $this->post(sprintf('/ajax/admin/mappingVersion/%d/enemyforcesregion', $mappingVersion->id), [
+        $response = $this->post(sprintf('/ajax/admin/mappingVersion/%d/enemyforcescheckpoint', $mappingVersion->id), [
             'id'                 => -1,
             'mapping_version_id' => $mappingVersion->id,
             'floor_id'           => $floor->id,
@@ -213,7 +213,7 @@ final class AjaxEnemyForcesRegionControllerTest extends AjaxPublicTestCase
 
         // Assert
         $this->assertContains($response->getStatusCode(), [401, 403]);
-        $this->assertDatabaseMissing('enemy_forces_regions', ['name' => 'Test corridor']);
+        $this->assertDatabaseMissing('enemy_forces_checkpoints', ['name' => 'Test corridor']);
     }
 
     private function getFloorWithEnemies(): Floor

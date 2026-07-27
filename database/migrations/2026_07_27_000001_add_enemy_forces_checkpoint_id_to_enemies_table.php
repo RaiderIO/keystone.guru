@@ -11,9 +11,9 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('enemies', function (Blueprint $table) {
-            $table->integer('enemy_forces_region_id')->default(null)->nullable()->after('enemy_patrol_id');
+            $table->integer('enemy_forces_checkpoint_id')->default(null)->nullable()->after('enemy_patrol_id');
 
-            $table->index(['enemy_forces_region_id']);
+            $table->index(['enemy_forces_checkpoint_id']);
         });
     }
 
@@ -23,9 +23,9 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('enemies', function (Blueprint $table) {
-            $table->dropIndex(['enemy_forces_region_id']);
+            $table->dropIndex(['enemy_forces_checkpoint_id']);
 
-            $table->dropColumn('enemy_forces_region_id');
+            $table->dropColumn('enemy_forces_checkpoint_id');
         });
     }
 };

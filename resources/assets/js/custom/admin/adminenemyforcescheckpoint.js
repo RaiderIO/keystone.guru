@@ -1,10 +1,10 @@
-class AdminEnemyForcesRegion extends EnemyForcesRegion {
+class AdminEnemyForcesCheckpoint extends EnemyForcesCheckpoint {
     constructor(map, layer) {
         super(map, layer);
 
         this.setSynced(false);
 
-        // Layer group holding the lines drawn from this region to each of its member enemies.
+        // Layer group holding the lines drawn from this checkpoint to each of its member enemies.
         this.enemyConnectionsLayerGroup = null;
 
         getState().register('floorid:changed', this, this.redrawConnectionsToEnemies.bind(this));
@@ -15,7 +15,7 @@ class AdminEnemyForcesRegion extends EnemyForcesRegion {
      * @inheritDoc
      */
     _getAttributes(force = false) {
-        console.assert(this instanceof AdminEnemyForcesRegion, 'this is not an AdminEnemyForcesRegion', this);
+        console.assert(this instanceof AdminEnemyForcesCheckpoint, 'this is not an AdminEnemyForcesCheckpoint', this);
 
         if (this._cachedAttributes !== null && !force) {
             return this._cachedAttributes;
@@ -28,15 +28,15 @@ class AdminEnemyForcesRegion extends EnemyForcesRegion {
                 name: 'select_enemies',
                 type: 'button',
                 buttonType: 'info',
-                buttonText: lang.get('js.enemyforcesregion_select_enemies_button_text_label'),
+                buttonText: lang.get('js.enemyforcescheckpoint_select_enemies_button_text_label'),
                 clicked: function () {
                     self.map.leafletMap.closePopup();
 
-                    if (self.map.getMapState() instanceof EnemyForcesRegionEnemySelection) {
+                    if (self.map.getMapState() instanceof EnemyForcesCheckpointEnemySelection) {
                         self.map.setMapState(null);
                     } else {
                         self.map.setMapState(
-                            new EnemyForcesRegionEnemySelection(self.map, self)
+                            new EnemyForcesCheckpointEnemySelection(self.map, self)
                         );
                     }
                 },
@@ -57,15 +57,15 @@ class AdminEnemyForcesRegion extends EnemyForcesRegion {
     }
 
     /**
-     * Draws a line from this region to each of its member enemies that is visible on the current floor,
-     * so a mapper can see at a glance what is in the region.
+     * Draws a line from this checkpoint to each of its member enemies that is visible on the current floor,
+     * so a mapper can see at a glance what is in the checkpoint.
      */
     redrawConnectionsToEnemies() {
-        console.assert(this instanceof AdminEnemyForcesRegion, 'this is not an AdminEnemyForcesRegion', this);
+        console.assert(this instanceof AdminEnemyForcesCheckpoint, 'this is not an AdminEnemyForcesCheckpoint', this);
 
         this.removeExistingConnectionsToEnemies();
 
-        // The lines start at this region's marker, so there's nothing to draw when it isn't on screen.
+        // The lines start at this checkpoint's marker, so there's nothing to draw when it isn't on screen.
         if (!this.shouldBeVisible() || this.layer === null) {
             return;
         }
@@ -93,7 +93,7 @@ class AdminEnemyForcesRegion extends EnemyForcesRegion {
                 L.polyline([
                     [centerLatLng.lat, centerLatLng.lng],
                     latLngs[index],
-                ], c.map.adminenemyforcesregion.polylineOptions)
+                ], c.map.adminenemyforcescheckpoint.polylineOptions)
             );
         }
 
@@ -106,7 +106,7 @@ class AdminEnemyForcesRegion extends EnemyForcesRegion {
      * Removes any existing UI connections to enemies.
      */
     removeExistingConnectionsToEnemies() {
-        console.assert(this instanceof AdminEnemyForcesRegion, 'this is not an AdminEnemyForcesRegion', this);
+        console.assert(this instanceof AdminEnemyForcesCheckpoint, 'this is not an AdminEnemyForcesCheckpoint', this);
 
         if (this.enemyConnectionsLayerGroup !== null) {
             this.map.leafletMap.removeLayer(this.enemyConnectionsLayerGroup);
@@ -118,20 +118,20 @@ class AdminEnemyForcesRegion extends EnemyForcesRegion {
      * @inheritDoc
      */
     refreshPill() {
-        console.assert(this instanceof AdminEnemyForcesRegion, 'this is not an AdminEnemyForcesRegion', this);
+        console.assert(this instanceof AdminEnemyForcesCheckpoint, 'this is not an AdminEnemyForcesCheckpoint', this);
         super.refreshPill();
 
         this.redrawConnectionsToEnemies();
     }
 
     toString() {
-        console.assert(this instanceof AdminEnemyForcesRegion, 'this is not an AdminEnemyForcesRegion', this);
+        console.assert(this instanceof AdminEnemyForcesCheckpoint, 'this is not an AdminEnemyForcesCheckpoint', this);
 
-        return `Enemy forces region-${this.id}`;
+        return `Enemy forces checkpoint-${this.id}`;
     }
 
     cleanup() {
-        console.assert(this instanceof AdminEnemyForcesRegion, 'this is not an AdminEnemyForcesRegion', this);
+        console.assert(this instanceof AdminEnemyForcesCheckpoint, 'this is not an AdminEnemyForcesCheckpoint', this);
         super.cleanup();
 
         this.removeExistingConnectionsToEnemies();

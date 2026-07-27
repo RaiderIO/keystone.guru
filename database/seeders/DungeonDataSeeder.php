@@ -27,7 +27,7 @@ use App\Models\Spell\Spell;
 use App\SeederHelpers\RelationImport\Mapping\DungeonFloorSwitchMarkerRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\DungeonRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\DungeonRouteRelationMapping;
-use App\SeederHelpers\RelationImport\Mapping\EnemyForcesRegionRelationMapping;
+use App\SeederHelpers\RelationImport\Mapping\EnemyForcesCheckpointRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\EnemyPackRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\EnemyPatrolRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\EnemyRelationMapping;
@@ -80,7 +80,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             new DungeonFloorSwitchMarkerRelationMapping(),
             new MapIconRelationMapping(),
             new MountableAreaRelationMapping(),
-            new EnemyForcesRegionRelationMapping(),
+            new EnemyForcesCheckpointRelationMapping(),
             new FloorUnionRelationMapping(),
             new FloorUnionAreaRelationMapping(),
         ];

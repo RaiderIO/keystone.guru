@@ -64,8 +64,8 @@ class MapObjectGroupManager extends Signalable {
             result = new MapIconMapObjectGroup(this, true);
         } else if (name === MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER) {
             result = new DungeonFloorSwitchMarkerMapObjectGroup(this, getState().isMapAdmin());
-        } else if (name === MAP_OBJECT_GROUP_ENEMY_FORCES_REGION) {
-            result = new EnemyForcesRegionMapObjectGroup(this, getState().isMapAdmin());
+        } else if (name === MAP_OBJECT_GROUP_ENEMY_FORCES_CHECKPOINT) {
+            result = new EnemyForcesCheckpointMapObjectGroup(this, getState().isMapAdmin());
         } else if (name === MAP_OBJECT_GROUP_MOUNTABLE_AREA) {
             result = new MountableAreaMapObjectGroup(this, getState().isMapAdmin());
         } else if (name === MAP_OBJECT_GROUP_FLOOR_UNION) {

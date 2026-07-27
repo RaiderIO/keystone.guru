@@ -992,8 +992,8 @@
 }
 
 /* Small pill/banner showing how much enemy forces you need before entering an enemy forces
-   region - a mapper-defined group of enemies such as a corridor (issue #128). */
-.map_enemy_forces_region_pill {
+   checkpoint - a mapper-defined group of enemies such as a corridor (issue #128). */
+.map_enemy_forces_checkpoint_pill {
     display: inline-block;
     padding: 2px 10px;
     border-radius: 10px;
@@ -1006,19 +1006,19 @@
 
 /* The pill is a Leaflet divIcon marker sized by its content (iconSize: null), so strip Leaflet's
    default icon box and center the pill on its anchor point. */
-.map_enemy_forces_region_pill_icon {
+.map_enemy_forces_checkpoint_pill_icon {
     width: auto !important;
     height: auto !important;
     margin: 0 !important;
 }
 
-.map_enemy_forces_region_pill_icon .map_enemy_forces_region_pill {
+.map_enemy_forces_checkpoint_pill_icon .map_enemy_forces_checkpoint_pill {
     transform: translate(-50%, -50%);
 }
 
-/* Cursor preview while placing a region, and the marker's icon before refreshPill() swaps in the
-   real pill (see LeafletEnemyForcesRegionIcon). */
-.map_enemy_forces_region_marker_icon {
+/* Cursor preview while placing a checkpoint, and the marker's icon before refreshPill() swaps in the
+   real pill (see LeafletEnemyForcesCheckpointIcon). */
+.map_enemy_forces_checkpoint_marker_icon {
     color: #f0ad4e;
     font-size: 20px;
 }

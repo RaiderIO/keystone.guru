@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Ajax;
 
-use App\Events\Models\EnemyForcesRegion\EnemyForcesRegionChangedEvent;
-use App\Events\Models\EnemyForcesRegion\EnemyForcesRegionDeletedEvent;
+use App\Events\Models\EnemyForcesCheckpoint\EnemyForcesCheckpointChangedEvent;
+use App\Events\Models\EnemyForcesCheckpoint\EnemyForcesCheckpointDeletedEvent;
 use App\Events\Models\ModelChangedEvent;
-use App\Http\Requests\EnemyForcesRegion\EnemyForcesRegionFormRequest;
-use App\Models\EnemyForcesRegion;
+use App\Http\Requests\EnemyForcesCheckpoint\EnemyForcesCheckpointFormRequest;
+use App\Models\EnemyForcesCheckpoint;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -20,27 +20,27 @@ use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 use Throwable;
 
-class AjaxEnemyForcesRegionController extends AjaxMappingModelBaseController
+class AjaxEnemyForcesCheckpointController extends AjaxMappingModelBaseController
 {
     /**
-     * @return EnemyForcesRegion
+     * @return EnemyForcesCheckpoint
      *
      * @throws Exception
      * @throws Throwable
      */
     public function store(
-        EnemyForcesRegionFormRequest $request,
-        CoordinatesServiceInterface  $coordinatesService,
-        MappingVersion               $mappingVersion,
-        ?EnemyForcesRegion           $enemyForcesRegion = null,
-    ): EnemyForcesRegion {
-        /** @var EnemyForcesRegion */
+        EnemyForcesCheckpointFormRequest $request,
+        CoordinatesServiceInterface      $coordinatesService,
+        MappingVersion                   $mappingVersion,
+        ?EnemyForcesCheckpoint           $enemyForcesCheckpoint = null,
+    ): EnemyForcesCheckpoint {
+        /** @var EnemyForcesCheckpoint */
         return $this->storeModel(
             $coordinatesService,
             $mappingVersion,
             $request->validated(),
-            EnemyForcesRegion::class,
-            $enemyForcesRegion,
+            EnemyForcesCheckpoint::class,
+            $enemyForcesCheckpoint,
         );
     }
 
@@ -49,20 +49,20 @@ class AjaxEnemyForcesRegionController extends AjaxMappingModelBaseController
      *
      * @throws Throwable
      */
-    public function delete(Request $request, MappingVersion $mappingVersion, EnemyForcesRegion $enemyForcesRegion)
+    public function delete(Request $request, MappingVersion $mappingVersion, EnemyForcesCheckpoint $enemyForcesCheckpoint)
     {
-        return DB::transaction(function () use ($enemyForcesRegion) {
+        return DB::transaction(function () use ($enemyForcesCheckpoint) {
             try {
                 // The model's `deleted` hook releases its member enemies, so they don't keep pointing at
-                // a region that no longer exists.
-                if ($enemyForcesRegion->delete()) {
+                // a checkpoint that no longer exists.
+                if ($enemyForcesCheckpoint->delete()) {
                     // Trigger mapping changed event so the mapping gets saved across all environments
-                    $this->mappingChanged($enemyForcesRegion, null);
+                    $this->mappingChanged($enemyForcesCheckpoint, null);
 
                     if (Auth::check()) {
                         /** @var User $user */
                         $user = Auth::user();
-                        broadcast(new EnemyForcesRegionDeletedEvent($enemyForcesRegion->floor->dungeon, $user, $enemyForcesRegion));
+                        broadcast(new EnemyForcesCheckpointDeletedEvent($enemyForcesCheckpoint->floor->dungeon, $user, $enemyForcesCheckpoint));
                     }
                 }
 
@@ -81,6 +81,6 @@ class AjaxEnemyForcesRegionController extends AjaxMappingModelBaseController
         User                        $user,
         Model                       $model,
     ): ModelChangedEvent {
-        return new EnemyForcesRegionChangedEvent($context, $user, $model);
+        return new EnemyForcesCheckpointChangedEvent($context, $user, $model);
     }
 }

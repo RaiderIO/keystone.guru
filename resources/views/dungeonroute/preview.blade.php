@@ -50,7 +50,7 @@ use App\Models\Floor\Floor;
         'zoomToContents' => false,
         'parameters' => $parameters,
         'hiddenMapObjectGroups' => [
-            'enemyforcesregion',
+            'enemyforcescheckpoint',
             'enemypatrol',
             'mountablearea',
             'floorunion',

@@ -8,7 +8,7 @@ use App\Models\CacheModel;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\Enemy;
-use App\Models\EnemyForcesRegion;
+use App\Models\EnemyForcesCheckpoint;
 use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
 use App\Models\MapIcon;
@@ -63,7 +63,7 @@ use Illuminate\Support\Collection;
  * @property EloquentCollection<int, MapIcon>                    $mapIcons
  * @property EloquentCollection<int, DungeonFloorSwitchMarker>   $dungeonFloorSwitchMarkers
  * @property EloquentCollection<int, MountableArea>              $mountableAreas
- * @property EloquentCollection<int, EnemyForcesRegion>          $enemyForcesRegions
+ * @property EloquentCollection<int, EnemyForcesCheckpoint>      $enemyForcesCheckpoints
  * @property EloquentCollection<int, FloorUnion>                 $floorUnions
  * @property EloquentCollection<int, FloorUnionArea>             $floorUnionAreas
  * @property EloquentCollection<int, Enemy>                      $enemiesForExport
@@ -72,7 +72,7 @@ use Illuminate\Support\Collection;
  * @property EloquentCollection<int, MapIcon>                    $mapIconsForExport
  * @property EloquentCollection<int, DungeonFloorSwitchMarker>   $dungeonFloorSwitchMarkersForExport
  * @property EloquentCollection<int, MountableArea>              $mountableAreasForExport
- * @property EloquentCollection<int, EnemyForcesRegion>          $enemyForcesRegionsForExport
+ * @property EloquentCollection<int, EnemyForcesCheckpoint>      $enemyForcesCheckpointsForExport
  * @property EloquentCollection<int, FloorUnion>                 $floorUnionsForExport
  * @property EloquentCollection<int, FloorUnionArea>             $floorUnionAreasForExport
  * @property EloquentCollection<int, FloorCoupling>              $floorcouplings
@@ -316,11 +316,11 @@ class Floor extends CacheModel implements MappingModelInterface
             ->where('mountable_areas.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
-    /** @return HasMany<EnemyForcesRegion, $this> */
-    public function enemyForcesRegions(?MappingVersion $mappingVersion = null): HasMany
+    /** @return HasMany<EnemyForcesCheckpoint, $this> */
+    public function enemyForcesCheckpoints(?MappingVersion $mappingVersion = null): HasMany
     {
-        return $this->hasMany(EnemyForcesRegion::class)
-            ->where('enemy_forces_regions.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+        return $this->hasMany(EnemyForcesCheckpoint::class)
+            ->where('enemy_forces_checkpoints.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     /** @return HasMany<DungeonFloorSwitchMarker, $this> */
@@ -360,10 +360,10 @@ class Floor extends CacheModel implements MappingModelInterface
         return $this->hasMany(MountableArea::class)->orderBy('id');
     }
 
-    /** @return HasMany<EnemyForcesRegion, $this> */
-    public function enemyForcesRegionsForExport(): HasMany
+    /** @return HasMany<EnemyForcesCheckpoint, $this> */
+    public function enemyForcesCheckpointsForExport(): HasMany
     {
-        return $this->hasMany(EnemyForcesRegion::class)->orderBy('id');
+        return $this->hasMany(EnemyForcesCheckpoint::class)->orderBy('id');
     }
 
     /** @return HasMany<FloorUnion, $this> */

@@ -34,7 +34,7 @@ use Override;
  *
  * @mixin Eloquent
  */
-class EnemyForcesRegion extends CacheModel implements HasLatLngInterface, MappingModelCloneableInterface, MappingModelInterface
+class EnemyForcesCheckpoint extends CacheModel implements HasLatLngInterface, MappingModelCloneableInterface, MappingModelInterface
 {
     use CloneForNewMappingVersionNoRelations;
     use HasLatLng;
@@ -84,8 +84,8 @@ class EnemyForcesRegion extends CacheModel implements HasLatLngInterface, Mappin
     }
 
     /**
-     * The enemies that make up this region. They may live on any floor of the dungeon - not just the
-     * floor this region is anchored on.
+     * The enemies that make up this checkpoint. They may live on any floor of the dungeon - not just the
+     * floor this checkpoint is anchored on.
      *
      * @return HasMany<Enemy, $this>
      */
@@ -109,13 +109,13 @@ class EnemyForcesRegion extends CacheModel implements HasLatLngInterface, Mappin
     protected static function booted(): void
     {
         // There are no foreign key constraints in this application, so members would otherwise keep
-        // pointing at a region that no longer exists - and the next region to be handed this
+        // pointing at a checkpoint that no longer exists - and the next checkpoint to be handed this
         // auto-increment id would silently inherit them, reporting enemy forces for enemies nobody
         // ever assigned to it.
-        static::deleted(static function (EnemyForcesRegion $enemyForcesRegion) {
+        static::deleted(static function (EnemyForcesCheckpoint $enemyForcesCheckpoint) {
             Enemy::query()
-                ->where('enemy_forces_region_id', $enemyForcesRegion->id)
-                ->update(['enemy_forces_region_id' => null]);
+                ->where('enemy_forces_checkpoint_id', $enemyForcesCheckpoint->id)
+                ->update(['enemy_forces_checkpoint_id' => null]);
         });
     }
 }

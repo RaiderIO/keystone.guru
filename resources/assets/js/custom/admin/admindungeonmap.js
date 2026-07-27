@@ -36,7 +36,7 @@ class AdminDungeonMap extends DungeonMap {
      * Forwards its arguments rather than swallowing them: DungeonMap.refreshLeafletMap() defaults
      * clearMapState to true, so dropping them here cleared the map state on every floor switch - the
      * floor change handler deliberately passes false so that a selection survives switching floors,
-     * which is the only way to build a cross-floor enemy forces region.
+     * which is the only way to build a cross-floor enemy forces checkpoint.
      */
     refreshLeafletMap(clearMapState = true, center = null, zoom = null) {
         super.refreshLeafletMap(clearMapState, center, zoom);

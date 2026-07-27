@@ -4,7 +4,7 @@ namespace Tests\Feature\App\Model\Mapping;
 
 use App\Models\Dungeon;
 use App\Models\Enemy;
-use App\Models\EnemyForcesRegion;
+use App\Models\EnemyForcesCheckpoint;
 use App\Models\Laratrust\Role;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
@@ -13,11 +13,11 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('MappingVersion')]
-#[Group('EnemyForcesRegion')]
-final class EnemyForcesRegionMappingVersionTest extends PublicTestCase
+#[Group('EnemyForcesCheckpoint')]
+final class EnemyForcesCheckpointMappingVersionTest extends PublicTestCase
 {
     #[Test]
-    public function create_givenMappingVersionWithEnemyForcesRegion_clonesRegionAndRelinksItsEnemies(): void
+    public function create_givenMappingVersionWithEnemyForcesCheckpoint_clonesCheckpointAndRelinksItsEnemies(): void
     {
         // Arrange
         $dungeon                = $this->getDungeonWithEnemies();
@@ -26,7 +26,7 @@ final class EnemyForcesRegionMappingVersionTest extends PublicTestCase
         /** @var Enemy $enemy */
         $enemy = $existingMappingVersion->enemies()->firstOrFail();
 
-        $enemyForcesRegion = EnemyForcesRegion::create([
+        $enemyForcesCheckpoint = EnemyForcesCheckpoint::create([
             'mapping_version_id' => $existingMappingVersion->id,
             'floor_id'           => $enemy->floor_id,
             'name'               => 'Test corridor',
@@ -34,7 +34,7 @@ final class EnemyForcesRegionMappingVersionTest extends PublicTestCase
             'lng'                => $enemy->lng,
         ]);
 
-        $enemy->update(['enemy_forces_region_id' => $enemyForcesRegion->id]);
+        $enemy->update(['enemy_forces_checkpoint_id' => $enemyForcesCheckpoint->id]);
 
         $newMappingVersion = null;
 
@@ -43,43 +43,43 @@ final class EnemyForcesRegionMappingVersionTest extends PublicTestCase
             $newMappingVersion = $this->createNextMappingVersion($dungeon, $existingMappingVersion);
 
             // Assert
-            /** @var EnemyForcesRegion|null $clonedRegion */
-            $clonedRegion = EnemyForcesRegion::where('mapping_version_id', $newMappingVersion->id)->first();
+            /** @var EnemyForcesCheckpoint|null $clonedCheckpoint */
+            $clonedCheckpoint = EnemyForcesCheckpoint::where('mapping_version_id', $newMappingVersion->id)->first();
 
-            $this->assertNotNull($clonedRegion, 'The enemy forces region should have been cloned into the new MappingVersion.');
-            $this->assertSame('Test corridor', $clonedRegion->name);
-            $this->assertNotSame($enemyForcesRegion->id, $clonedRegion->id, 'The clone must be a new row.');
+            $this->assertNotNull($clonedCheckpoint, 'The enemy forces checkpoint should have been cloned into the new MappingVersion.');
+            $this->assertSame('Test corridor', $clonedCheckpoint->name);
+            $this->assertNotSame($enemyForcesCheckpoint->id, $clonedCheckpoint->id, 'The clone must be a new row.');
 
             // This is the part that silently breaks: without the second-pass FK re-link in
-            // MappingVersion::boot() the cloned enemies keep pointing at the OLD region, so the new
-            // mapping version's region would report zero enemies.
-            $clonedEnemyRegionIds = Enemy::where('mapping_version_id', $newMappingVersion->id)
-                ->whereNotNull('enemy_forces_region_id')
-                ->pluck('enemy_forces_region_id')
+            // MappingVersion::boot() the cloned enemies keep pointing at the OLD checkpoint, so the new
+            // mapping version's checkpoint would report zero enemies.
+            $clonedEnemyCheckpointIds = Enemy::where('mapping_version_id', $newMappingVersion->id)
+                ->whereNotNull('enemy_forces_checkpoint_id')
+                ->pluck('enemy_forces_checkpoint_id')
                 ->unique()
                 ->values()
                 ->all();
 
             $this->assertSame(
-                [$clonedRegion->id],
-                $clonedEnemyRegionIds,
-                'Cloned enemies must point at the cloned region, not at the region of the previous mapping version.',
+                [$clonedCheckpoint->id],
+                $clonedEnemyCheckpointIds,
+                'Cloned enemies must point at the cloned checkpoint, not at the checkpoint of the previous mapping version.',
             );
         } finally {
             if ($newMappingVersion !== null) {
                 Enemy::where('mapping_version_id', $newMappingVersion->id)->delete();
-                EnemyForcesRegion::where('mapping_version_id', $newMappingVersion->id)->delete();
+                EnemyForcesCheckpoint::where('mapping_version_id', $newMappingVersion->id)->delete();
                 MappingVersion::where('id', $newMappingVersion->id)->delete();
             }
 
-            Enemy::where('enemy_forces_region_id', $enemyForcesRegion->id)
-                ->update(['enemy_forces_region_id' => null]);
-            EnemyForcesRegion::where('id', $enemyForcesRegion->id)->delete();
+            Enemy::where('enemy_forces_checkpoint_id', $enemyForcesCheckpoint->id)
+                ->update(['enemy_forces_checkpoint_id' => null]);
+            EnemyForcesCheckpoint::where('id', $enemyForcesCheckpoint->id)->delete();
         }
     }
 
     #[Test]
-    public function delete_givenEnemyForcesRegionWithEnemies_releasesItsEnemies(): void
+    public function delete_givenEnemyForcesCheckpointWithEnemies_releasesItsEnemies(): void
     {
         // Arrange
         $admin = User::findOrFail(1);
@@ -92,7 +92,7 @@ final class EnemyForcesRegionMappingVersionTest extends PublicTestCase
         /** @var Enemy $enemy */
         $enemy = $mappingVersion->enemies()->firstOrFail();
 
-        $enemyForcesRegion = EnemyForcesRegion::create([
+        $enemyForcesCheckpoint = EnemyForcesCheckpoint::create([
             'mapping_version_id' => $mappingVersion->id,
             'floor_id'           => $enemy->floor_id,
             'name'               => 'Test corridor',
@@ -100,24 +100,24 @@ final class EnemyForcesRegionMappingVersionTest extends PublicTestCase
             'lng'                => $enemy->lng,
         ]);
 
-        $enemy->update(['enemy_forces_region_id' => $enemyForcesRegion->id]);
+        $enemy->update(['enemy_forces_checkpoint_id' => $enemyForcesCheckpoint->id]);
 
         try {
             // Act
-            $enemyForcesRegion->delete();
+            $enemyForcesCheckpoint->delete();
 
             // Assert
             // There are no foreign key constraints, so without the model's `deleted` hook the enemy
-            // would keep pointing at a region that no longer exists - and the next region handed this
+            // would keep pointing at a checkpoint that no longer exists - and the next checkpoint handed this
             // auto-increment id would silently inherit it.
             $this->assertNull(
-                $enemy->fresh()->enemy_forces_region_id,
-                'Deleting a region must release its member enemies.',
+                $enemy->fresh()->enemy_forces_checkpoint_id,
+                'Deleting a checkpoint must release its member enemies.',
             );
         } finally {
-            Enemy::where('enemy_forces_region_id', $enemyForcesRegion->id)
-                ->update(['enemy_forces_region_id' => null]);
-            EnemyForcesRegion::where('id', $enemyForcesRegion->id)->delete();
+            Enemy::where('enemy_forces_checkpoint_id', $enemyForcesCheckpoint->id)
+                ->update(['enemy_forces_checkpoint_id' => null]);
+            EnemyForcesCheckpoint::where('id', $enemyForcesCheckpoint->id)->delete();
         }
     }
 
@@ -134,7 +134,7 @@ final class EnemyForcesRegionMappingVersionTest extends PublicTestCase
             });
 
         if ($dungeon === null) {
-            $this->fail('No dungeon with enemies found for testing enemy forces regions.');
+            $this->fail('No dungeon with enemies found for testing enemy forces checkpoints.');
         }
 
         return $dungeon;

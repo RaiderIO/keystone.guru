@@ -1,28 +1,28 @@
 // Used for the cursor preview while placing (and briefly for the layer before refreshPill() swaps
 // in the real pill icon). Deliberately a static glyph, not the pill markup: the pill's content
-// (enemy forces need before entering) isn't known until enemies are assigned to the region.
-let LeafletEnemyForcesRegionIcon = new L.divIcon({
+// (enemy forces need before entering) isn't known until enemies are assigned to the checkpoint.
+let LeafletEnemyForcesCheckpointIcon = new L.divIcon({
     html: '<i class="fas fa-percent"></i>',
     iconSize: [30, 30],
-    className: 'marker_div_icon_font_awesome map_enemy_forces_region_marker_icon',
+    className: 'marker_div_icon_font_awesome map_enemy_forces_checkpoint_marker_icon',
 });
 
-let LeafletEnemyForcesRegionMarker = L.Marker.extend({
+let LeafletEnemyForcesCheckpointMarker = L.Marker.extend({
     options: {
-        icon: LeafletEnemyForcesRegionIcon,
+        icon: LeafletEnemyForcesCheckpointIcon,
     },
 });
 
-L.Draw.EnemyForcesRegion = L.Draw.Marker.extend({
+L.Draw.EnemyForcesCheckpoint = L.Draw.Marker.extend({
     statics: {
-        TYPE: 'enemyforcesregion',
+        TYPE: 'enemyforcescheckpoint',
     },
     options: {
-        icon: LeafletEnemyForcesRegionIcon,
+        icon: LeafletEnemyForcesCheckpointIcon,
     },
     initialize: function (map, options) {
         // Save the type so super can fire, need to do this as cannot do this.TYPE :(
-        this.type = L.Draw.EnemyForcesRegion.TYPE;
+        this.type = L.Draw.EnemyForcesCheckpoint.TYPE;
 
         L.Draw.Feature.prototype.initialize.call(this, map, options);
     },
@@ -32,26 +32,26 @@ L.Draw.EnemyForcesRegion = L.Draw.Marker.extend({
  * A mapper-defined group of enemies - typically a corridor - showing how much enemy forces you must
  * already have before entering it.
  *
- * The group may span floors, but the region itself is anchored on one. On any other floor its
+ * The group may span floors, but the checkpoint itself is anchored on one. On any other floor its
  * enemies live on, a satellite pill is drawn at the centroid of that floor's members instead, so the
  * information isn't invisible on exactly the floors it matters for. In the facade layout every enemy
  * has been moved onto the facade floor along with the anchor, so no satellites are ever needed.
  *
  * @property {String} name
  */
-class EnemyForcesRegion extends VersionableMapObject {
+class EnemyForcesCheckpoint extends VersionableMapObject {
     constructor(map, layer) {
-        super(map, layer, {name: 'enemyforcesregion', has_route_model_binding: true});
+        super(map, layer, {name: 'enemyforcescheckpoint', has_route_model_binding: true});
 
         let self = this;
 
-        this.label = 'Enemy Forces Region';
+        this.label = 'Enemy Forces Checkpoint';
 
-        // Satellite pills for floors this region has enemies on, but isn't anchored to.
+        // Satellite pills for floors this checkpoint has enemies on, but isn't anchored to.
         this._satelliteLayerGroup = null;
 
         // The value depends on the enemies (which load after the map objects are created), on the
-        // number style setting, and on teeming - both the region's total and the required denominator
+        // number style setting, and on teeming - both the checkpoint's total and the required denominator
         // move with it.
         this.map.register('map:mapobjectgroupsloaded', this, function () {
             self.refreshPill();
@@ -71,7 +71,7 @@ class EnemyForcesRegion extends VersionableMapObject {
      * @inheritDoc
      */
     _getAttributes(force = false) {
-        console.assert(this instanceof EnemyForcesRegion, 'this was not an EnemyForcesRegion', this);
+        console.assert(this instanceof EnemyForcesCheckpoint, 'this was not an EnemyForcesCheckpoint', this);
 
         if (this._cachedAttributes !== null && !force) {
             return this._cachedAttributes;
@@ -106,11 +106,11 @@ class EnemyForcesRegion extends VersionableMapObject {
     }
 
     /**
-     * All enemies that were assigned to this region, across every floor.
+     * All enemies that were assigned to this checkpoint, across every floor.
      * @returns {Enemy[]}
      */
     getEnemies() {
-        console.assert(this instanceof EnemyForcesRegion, 'this is not an EnemyForcesRegion', this);
+        console.assert(this instanceof EnemyForcesCheckpoint, 'this is not an EnemyForcesCheckpoint', this);
 
         let result = [];
 
@@ -123,7 +123,7 @@ class EnemyForcesRegion extends VersionableMapObject {
         for (let key in enemyMapObjectGroup.objects) {
             let enemy = enemyMapObjectGroup.objects[key];
 
-            if (enemy.enemy_forces_region_id === this.id) {
+            if (enemy.enemy_forces_checkpoint_id === this.id) {
                 result.push(enemy);
             }
         }
@@ -132,23 +132,23 @@ class EnemyForcesRegion extends VersionableMapObject {
     }
 
     /**
-     * The total enemy forces of this region's enemies.
+     * The total enemy forces of this checkpoint's enemies.
      * @returns {Number}
      */
     getEnemyForces() {
-        console.assert(this instanceof EnemyForcesRegion, 'this is not an EnemyForcesRegion', this);
+        console.assert(this instanceof EnemyForcesCheckpoint, 'this is not an EnemyForcesCheckpoint', this);
 
         return this.map.enemyForcesManager.getEnemyForcesForEnemies(this.getEnemies());
     }
 
     /**
-     * The floors this region's enemies actually live on. In the facade layout floor_id has been
+     * The floors this checkpoint's enemies actually live on. In the facade layout floor_id has been
      * replaced by the facade floor, so source_floor_id - shipped for exactly this reason - is used
      * where present.
      * @returns {Number[]}
      */
     getFloorIds() {
-        console.assert(this instanceof EnemyForcesRegion, 'this is not an EnemyForcesRegion', this);
+        console.assert(this instanceof EnemyForcesCheckpoint, 'this is not an EnemyForcesCheckpoint', this);
 
         let result = [];
 
@@ -167,16 +167,16 @@ class EnemyForcesRegion extends VersionableMapObject {
 
     /**
      * Rebuilds the pill label and, when the current floor holds members but isn't the floor this
-     * region is anchored to, the satellite pill for that floor.
+     * checkpoint is anchored to, the satellite pill for that floor.
      */
     refreshPill() {
-        console.assert(this instanceof EnemyForcesRegion, 'this is not an EnemyForcesRegion', this);
+        console.assert(this instanceof EnemyForcesCheckpoint, 'this is not an EnemyForcesCheckpoint', this);
 
         let html = this._getPillHtml();
 
         if (this.layer !== null) {
             this.layer.setIcon(L.divIcon({
-                className: 'map_enemy_forces_region_pill_icon',
+                className: 'map_enemy_forces_checkpoint_pill_icon',
                 iconSize: null,
                 html: html,
             }));
@@ -190,33 +190,33 @@ class EnemyForcesRegion extends VersionableMapObject {
      * @inheritDoc
      */
     onLayerInit() {
-        console.assert(this instanceof EnemyForcesRegion, 'this is not an EnemyForcesRegion', this);
+        console.assert(this instanceof EnemyForcesCheckpoint, 'this is not an EnemyForcesCheckpoint', this);
         super.onLayerInit();
 
         this.refreshPill();
     }
 
     /**
-     * The pill itself only says how much you need before entering. The region's name and what it
+     * The pill itself only says how much you need before entering. The checkpoint's name and what it
      * actually holds - the numbers that make that figure interpretable - go in the tooltip.
      * @inheritDoc
      */
     bindTooltip() {
-        console.assert(this instanceof EnemyForcesRegion, 'this is not an EnemyForcesRegion', this);
+        console.assert(this instanceof EnemyForcesCheckpoint, 'this is not an EnemyForcesCheckpoint', this);
         super.bindTooltip();
 
         if (this.map.options.noUI || this.layer === null) {
             return;
         }
 
-        let name = this.name === null || this.name === '' ? lang.get('js.enemy_forces_region_unnamed_label') : this.name;
+        let name = this.name === null || this.name === '' ? lang.get('js.enemy_forces_checkpoint_unnamed_label') : this.name;
         let enemyForces = this.getEnemyForces();
 
         let tooltipText;
         if (getState().getMapNumberStyle() === NUMBER_STYLE_ENEMY_FORCES) {
-            tooltipText = lang.get('js.enemy_forces_region_tooltip_enemy_forces', {name: name, enemyForces: enemyForces});
+            tooltipText = lang.get('js.enemy_forces_checkpoint_tooltip_enemy_forces', {name: name, enemyForces: enemyForces});
         } else {
-            tooltipText = lang.get('js.enemy_forces_region_tooltip_percentage', {
+            tooltipText = lang.get('js.enemy_forces_checkpoint_tooltip_percentage', {
                 name: name,
                 percentage: getFormattedPercentage(enemyForces, this.map.enemyForcesManager.getEnemyForcesRequired()),
             });
@@ -224,7 +224,7 @@ class EnemyForcesRegion extends VersionableMapObject {
 
         let floorIds = this.getFloorIds();
         if (floorIds.length > 1) {
-            tooltipText += ` ${lang.get('js.enemy_forces_region_tooltip_spans_floors', {floors: floorIds.length})}`;
+            tooltipText += ` ${lang.get('js.enemy_forces_checkpoint_tooltip_spans_floors', {floors: floorIds.length})}`;
         }
 
         this.layer.bindTooltip(tooltipText, {direction: 'top'});
@@ -234,7 +234,7 @@ class EnemyForcesRegion extends VersionableMapObject {
      * @inheritDoc
      */
     cleanup() {
-        console.assert(this instanceof EnemyForcesRegion, 'this is not an EnemyForcesRegion', this);
+        console.assert(this instanceof EnemyForcesCheckpoint, 'this is not an EnemyForcesCheckpoint', this);
         super.cleanup();
 
         this._removeSatellitePill();
@@ -246,38 +246,38 @@ class EnemyForcesRegion extends VersionableMapObject {
     }
 
     /**
-     * Builds the pill's markup: how much enemy forces you need before entering this region, following
+     * Builds the pill's markup: how much enemy forces you need before entering this checkpoint, following
      * the "Enemy number style" map setting.
      * @returns {String}
      * @private
      */
     _getPillHtml() {
-        console.assert(this instanceof EnemyForcesRegion, 'this is not an EnemyForcesRegion', this);
+        console.assert(this instanceof EnemyForcesCheckpoint, 'this is not an EnemyForcesCheckpoint', this);
 
         let enemyForces = this.getEnemyForces();
         let enemyForcesRequired = this.map.enemyForcesManager.getEnemyForcesRequired();
-        // Everything that is NOT in this region - what you must already have killed when you walk in.
+        // Everything that is NOT in this checkpoint - what you must already have killed when you walk in.
         let requiredBefore = Math.max(0, enemyForcesRequired - enemyForces);
 
         let value;
         if (getState().getMapNumberStyle() === NUMBER_STYLE_ENEMY_FORCES) {
-            value = lang.get('js.enemy_forces_region_pill_enemy_forces', {enemyForces: requiredBefore});
+            value = lang.get('js.enemy_forces_checkpoint_pill_enemy_forces', {enemyForces: requiredBefore});
         } else {
-            value = lang.get('js.enemy_forces_region_pill_percentage', {
+            value = lang.get('js.enemy_forces_checkpoint_pill_percentage', {
                 percentage: getFormattedPercentage(requiredBefore, enemyForcesRequired),
             });
         }
 
-        return Handlebars.templates['map_enemy_forces_region_pill']({value: value});
+        return Handlebars.templates['map_enemy_forces_checkpoint_pill']({value: value});
     }
 
     /**
-     * Draws (or removes) the pill for a floor this region has enemies on but isn't anchored to.
+     * Draws (or removes) the pill for a floor this checkpoint has enemies on but isn't anchored to.
      * @param html {String}
      * @private
      */
     _refreshSatellitePill(html) {
-        console.assert(this instanceof EnemyForcesRegion, 'this is not an EnemyForcesRegion', this);
+        console.assert(this instanceof EnemyForcesCheckpoint, 'this is not an EnemyForcesCheckpoint', this);
 
         this._removeSatellitePill();
 
@@ -312,7 +312,7 @@ class EnemyForcesRegion extends VersionableMapObject {
 
         L.marker([lat / latLngs.length, lng / latLngs.length], {
             icon: L.divIcon({
-                className: 'map_enemy_forces_region_pill_icon',
+                className: 'map_enemy_forces_checkpoint_pill_icon',
                 iconSize: null,
                 html: html,
             }),
@@ -326,7 +326,7 @@ class EnemyForcesRegion extends VersionableMapObject {
      * @private
      */
     _removeSatellitePill() {
-        console.assert(this instanceof EnemyForcesRegion, 'this is not an EnemyForcesRegion', this);
+        console.assert(this instanceof EnemyForcesCheckpoint, 'this is not an EnemyForcesCheckpoint', this);
 
         if (this._satelliteLayerGroup !== null) {
             this.map.leafletMap.removeLayer(this._satelliteLayerGroup);

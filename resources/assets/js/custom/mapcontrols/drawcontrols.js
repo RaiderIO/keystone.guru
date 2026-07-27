@@ -54,9 +54,9 @@ L.DrawToolbar.prototype.getModeHandlers = function (map) {
             handler: new L.Draw.MountableArea(map, this.options.mountablearea),
             title: this.options.mountablearea.title
         }, {
-            enabled: this.options.enemyforcesregion,
-            handler: new L.Draw.EnemyForcesRegion(map, this.options.enemyforcesregion),
-            title: this.options.enemyforcesregion.title
+            enabled: this.options.enemyforcescheckpoint,
+            handler: new L.Draw.EnemyForcesCheckpoint(map, this.options.enemyforcescheckpoint),
+            title: this.options.enemyforcescheckpoint.title
         }, {
             enabled: this.options.floorunion,
             handler: new L.Draw.FloorUnion(map, this.options.floorunion),
@@ -330,7 +330,7 @@ class DrawControls extends MapControl {
                 dungeonfloorswitchmarker: false,
                 usermouseposition: false,
                 mountablearea: false,
-                enemyforcesregion: false,
+                enemyforcescheckpoint: false,
                 floorunion: false,
                 floorunionarea: false,
             },

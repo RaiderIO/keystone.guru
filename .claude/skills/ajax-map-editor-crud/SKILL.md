@@ -140,7 +140,7 @@ registry** — the PHP `broadcastAs()` strings and the JS `MessageFactory` switc
 2. **Transient "you're currently doing X" admin state goes in a snackbar, not a bespoke Leaflet
    control.** `getState().addSnackbar(html, options)` / `removeSnackbar(id)`
    (`resources/assets/js/custom/statemanager.js` ~line 737) is the existing mechanism — see
-   `SelectKillZoneEnemySelectionOverpull` or `EnemyForcesRegionEnemySelection` for a `MapState`
+   `SelectKillZoneEnemySelectionOverpull` or `EnemyForcesCheckpointEnemySelection` for a `MapState`
    that shows one on `start()` and removes it on `stop()`, with `onDomAdded` wiring up buttons and
    later calls updating the DOM in place via the snackbar's own `id` (see `drawcontrols.js`'s
    `TOOLBAROPENED`/`TOOLBARCLOSED` handlers for updating an existing snackbar's content live).

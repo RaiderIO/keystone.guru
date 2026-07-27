@@ -406,7 +406,7 @@ class EnemyVisual extends Signalable {
 
             let isDeletable = mapState instanceof DeleteMapState && this.enemy.isDeletable();
             let isSelectable = (
-                (mapState instanceof MDTEnemySelection || mapState instanceof EnemyPatrolEnemySelection || mapState instanceof EnemyForcesRegionEnemySelection) && this.enemy.isSelectable()
+                (mapState instanceof MDTEnemySelection || mapState instanceof EnemyPatrolEnemySelection || mapState instanceof EnemyForcesCheckpointEnemySelection) && this.enemy.isSelectable()
             ) || (
                 mapState instanceof EditMapState && this.enemy.isEditable()
             ) || isDeletable;
@@ -563,7 +563,7 @@ class EnemyVisual extends Signalable {
 
         let isDeletable = mapState instanceof DeleteMapState && this.enemy.isDeletable();
         let isSelectable = (
-            (mapState instanceof MDTEnemySelection || mapState instanceof EnemyPatrolEnemySelection || mapState instanceof EnemyForcesRegionEnemySelection) && this.enemy.isSelectable()
+            (mapState instanceof MDTEnemySelection || mapState instanceof EnemyPatrolEnemySelection || mapState instanceof EnemyForcesCheckpointEnemySelection) && this.enemy.isSelectable()
         ) || (
             mapState instanceof EditMapState && this.enemy.isEditable()
         ) || isDeletable;

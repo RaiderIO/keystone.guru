@@ -8,7 +8,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
-use App\Models\EnemyForcesRegion;
+use App\Models\EnemyForcesCheckpoint;
 use App\Models\Floor\Floor;
 use App\Models\Floor\FloorUnion;
 use App\Models\Interfaces\HasLatLngInterface;
@@ -249,7 +249,7 @@ class Save extends Command
                 'dungeonFloorSwitchMarkersForExport',
                 'mapIconsForExport',
                 'mountableAreasForExport',
-                'enemyForcesRegionsForExport',
+                'enemyForcesCheckpointsForExport',
                 'floorUnionsForExport',
                 'floorUnionAreasForExport',
             ])->get();
@@ -482,9 +482,9 @@ class Save extends Command
             ->values()
             ->each($roundLatLngFn);
         $mountableAreas = $floor->mountableAreasForExport->values()->each($roundLatLngVerticesFn);
-        /** @var EloquentCollection<int, Model&HasLatLngInterface> $enemyForcesRegions */
-        $enemyForcesRegions = $floor->enemyForcesRegionsForExport
-            ->each(static fn(EnemyForcesRegion $item) => $item->setRelation('floor', $floor))
+        /** @var EloquentCollection<int, Model&HasLatLngInterface> $enemyForcesCheckpoints */
+        $enemyForcesCheckpoints = $floor->enemyForcesCheckpointsForExport
+            ->each(static fn(EnemyForcesCheckpoint $item) => $item->setRelation('floor', $floor))
             ->values()
             ->each($roundLatLngFn);
         /** @var EloquentCollection<int, Model&HasLatLngInterface> $floorUnionsCollection */
@@ -507,7 +507,7 @@ class Save extends Command
         $result['dungeon_floor_switch_markers'] = $dungeonFloorSwitchMarkers;
         $result['map_icons']                    = $mapIcons;
         $result['mountable_areas']              = $mountableAreas;
-        $result['enemy_forces_regions']         = $enemyForcesRegions;
+        $result['enemy_forces_checkpoints']     = $enemyForcesCheckpoints;
         $result['floor_unions']                 = $floorUnions;
         $result['floor_union_areas']            = $floorUnionAreas;
 

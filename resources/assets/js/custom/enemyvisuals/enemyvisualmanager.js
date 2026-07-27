@@ -88,17 +88,17 @@ class EnemyVisualManager extends Signalable {
             });
         }
 
-        // Same as above, but for hovering an enemy forces region's pill - highlights its members.
-        let enemyForcesRegionMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_FORCES_REGION);
+        // Same as above, but for hovering an enemy forces checkpoint's pill - highlights its members.
+        let enemyForcesCheckpointMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_FORCES_CHECKPOINT);
         // May be null when rendering thumbnails
-        if (enemyForcesRegionMapObjectGroup instanceof EnemyForcesRegionMapObjectGroup) {
-            enemyForcesRegionMapObjectGroup.register(['object:add', 'save:success'], this, function (objectAddEvent) {
-                /** @type EnemyForcesRegion addedEnemyForcesRegion */
-                let addedEnemyForcesRegion = objectAddEvent.data.object;
-                if (addedEnemyForcesRegion.id > 0) {
-                    addedEnemyForcesRegion.layer.on('mouseover', function (e) {
+        if (enemyForcesCheckpointMapObjectGroup instanceof EnemyForcesCheckpointMapObjectGroup) {
+            enemyForcesCheckpointMapObjectGroup.register(['object:add', 'save:success'], this, function (objectAddEvent) {
+                /** @type EnemyForcesCheckpoint addedEnemyForcesCheckpoint */
+                let addedEnemyForcesCheckpoint = objectAddEvent.data.object;
+                if (addedEnemyForcesCheckpoint.id > 0) {
+                    addedEnemyForcesCheckpoint.layer.on('mouseover', function (e) {
                         if (!(self.map.getMapState() instanceof EditMapState)) {
-                            let enemies = addedEnemyForcesRegion.getEnemies();
+                            let enemies = addedEnemyForcesCheckpoint.getEnemies();
                             for (let i = 0; i < enemies.length; i++) {
                                 if (enemies[i].visual !== null) {
                                     enemies[i].visual.forceMouseOver();
@@ -107,9 +107,9 @@ class EnemyVisualManager extends Signalable {
                         }
                     });
 
-                    addedEnemyForcesRegion.layer.on('mouseout', function (e) {
+                    addedEnemyForcesCheckpoint.layer.on('mouseout', function (e) {
                         if (!(self.map.getMapState() instanceof EditMapState)) {
-                            let enemies = addedEnemyForcesRegion.getEnemies();
+                            let enemies = addedEnemyForcesCheckpoint.getEnemies();
                             for (let i = 0; i < enemies.length; i++) {
                                 if (enemies[i].visual !== null) {
                                     enemies[i].visual.forceMouseOut();
