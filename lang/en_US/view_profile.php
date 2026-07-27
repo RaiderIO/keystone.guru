@@ -78,7 +78,7 @@ return [
         'creator_pinned_routes_none'      => 'You have not created any routes yet, so there is nothing to pin.',
         'creator_pinned_collections'      => 'Pinned collections',
         'creator_pinned_collections_none' => 'You have not created any collections yet.',
-        'creator_pinned_collections_help' => 'Hold ctrl (or cmd) to select up to :max collections. They are shown in the order you selected them in, above your routes.',
+        'creator_pinned_collections_help' => 'Hold ctrl (or cmd) to select up to :max collections to highlight above your routes. Collections that are not publicly visible stay hidden from other people even when pinned.',
         'creator_directory'               => 'Creator directory',
         'creator_directory_hide'          => 'Hide me from the creator directory',
         'creator_directory_hide_help'     => 'Creators with published routes are listed in the directory automatically. Tick this to keep your profile out of it - your routes stay published either way.',

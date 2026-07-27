@@ -298,6 +298,8 @@ class ProfileController extends Controller
                 ]);
             }
 
+            // $order here is submission order (DOM order of the <select multiple>), not the order
+            // the user actually clicked options in - there is no real reorder UI yet. See #3688.
             $user->pinnedDungeonRoutes()->delete();
 
             foreach ($request->pinnedDungeonRoutes() as $order => $dungeonRoute) {

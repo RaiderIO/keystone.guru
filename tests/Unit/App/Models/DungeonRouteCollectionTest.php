@@ -7,6 +7,7 @@ use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\DungeonRoute\DungeonRouteCollectionRoute;
 use App\Models\PublishedState;
 use App\Models\User;
+use App\Models\UserPinnedDungeonRouteCollection;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -146,6 +147,40 @@ final class DungeonRouteCollectionTest extends PublicTestCase
             );
         } finally {
             $dungeonRouteCollection->delete();
+            $owner->delete();
+        }
+    }
+
+    /**
+     * This project uses no foreign keys, so a deleted collection would otherwise leave a dangling
+     * pin behind on whoever pinned it to their creator podium.
+     */
+    #[Test]
+    public function delete_givenAPinnedCollection_removesThePin(): void
+    {
+        // Arrange
+        $owner  = User::factory()->create();
+        $pinner = User::factory()->create();
+
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create(['user_id' => $owner->id]);
+        UserPinnedDungeonRouteCollection::create([
+            'user_id'                     => $pinner->id,
+            'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+            'order'                       => 0,
+        ]);
+
+        try {
+            // Act
+            $dungeonRouteCollection->delete();
+
+            // Assert
+            $this->assertSame(
+                0,
+                UserPinnedDungeonRouteCollection::where('dungeon_route_collection_id', $dungeonRouteCollection->id)->count(),
+                'Deleting a collection must clean up any pins pointing at it',
+            );
+        } finally {
+            $pinner->delete();
             $owner->delete();
         }
     }
