@@ -3,6 +3,7 @@
 namespace Tests\Feature\Console\Commands\Scheduler\LiveSession;
 
 use App\Console\Commands\Scheduler\LiveSession\CleanupExpiredLiveSessions;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionCombatLogBuffer;
 use App\Models\LiveSession\LiveSessionKilledEnemy;
@@ -21,6 +22,9 @@ final class CleanupExpiredLiveSessionsTest extends PublicTestCase
     /** @var array<int> */
     private array $liveSessionIds = [];
 
+    /** @var array<int> */
+    private array $dungeonRouteIds = [];
+
     #[\Override]
     protected function tearDown(): void
     {
@@ -35,6 +39,14 @@ final class CleanupExpiredLiveSessionsTest extends PublicTestCase
                 DB::table('live_session_combat_log_buffers')->whereIn('live_session_id', $this->liveSessionIds)->delete();
                 DB::table('live_sessions')->whereIn('id', $this->liveSessionIds)->delete();
             }
+
+            if ($this->dungeonRouteIds !== []) {
+                DungeonRoute::query()->whereIn('id', $this->dungeonRouteIds)->get()->each(
+                    static function (DungeonRoute $dungeonRoute): void {
+                        $dungeonRoute->delete();
+                    },
+                );
+            }
         } finally {
             parent::tearDown();
         }
@@ -47,7 +59,8 @@ final class CleanupExpiredLiveSessionsTest extends PublicTestCase
         $activeSession = LiveSession::factory()->create([
             'expires_at' => now()->addHour(),
         ]);
-        $this->liveSessionIds[] = $activeSession->id;
+        $this->liveSessionIds[]  = $activeSession->id;
+        $this->dungeonRouteIds[] = $activeSession->dungeon_route_id;
 
         $killedEnemy = LiveSessionKilledEnemy::factory()->create([
             'live_session_id' => $activeSession->id,
@@ -65,8 +78,9 @@ final class CleanupExpiredLiveSessionsTest extends PublicTestCase
     public function handle_givenExpiredSession_deletesRelationsButKeepsSession(): void
     {
         // Arrange
-        $expiredSession         = LiveSession::factory()->expired()->create();
-        $this->liveSessionIds[] = $expiredSession->id;
+        $expiredSession          = LiveSession::factory()->expired()->create();
+        $this->liveSessionIds[]  = $expiredSession->id;
+        $this->dungeonRouteIds[] = $expiredSession->dungeon_route_id;
 
         $overpulledEnemy = LiveSessionOverpulledEnemy::forceCreate([
             'live_session_id' => $expiredSession->id,

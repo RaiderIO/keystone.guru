@@ -1,6 +1,6 @@
 ---
 name: live-session-enemy-state
-description: End-to-end guide to the live-session enemy-state subsystem (killed / obsolete / overpulled / player positions) — the three DB tables, services, broadcast events, MapContext serialization, and the frontend enemy subclass + visual-overlay rendering. Use for any work on live combat-log streaming (#3275 epic) that touches enemy state on the map.
+description: End-to-end guide to the live-session enemy-state subsystem (killed / obsolete / overpulled / in-combat / player positions) — the four DB tables, services, broadcast events, MapContext serialization, and the frontend enemy subclass + visual-overlay rendering. Use for any work on live combat-log streaming (#3275 epic) that touches enemy state on the map.
 ---
 
 # Live-session enemy state
@@ -10,19 +10,31 @@ result is per-enemy state shown on the dungeon map in real time. This subsystem 
 persistence + services + broadcast events and a frontend echo/model/visual stack. The state is **non-obvious
 and overloaded**, so read this before touching it.
 
-## The three enemy states (and a 4th: player positions)
+## The four enemy states (and a 5th: player positions)
 
 | State | Stored in | Meaning | Map visual |
 |-------|-----------|---------|------------|
 | **killed** | `live_session_killed_enemies` | Killed AND part of the planned route (assigned to a kill zone) | green check `fa-check-circle` `text-success` |
 | **overpulled** | `live_session_overpulled_enemies` | Killed but NOT in any kill zone ("oopsie") | orange plus `fa-plus-circle` `text-warning` |
 | **obsolete** | `live_session_obsolete_enemies` | A planned enemy we can now SKIP to compensate for an overpull | red cross `fa-times-circle` `text-danger` |
+| **in-combat** | `live_session_in_combat_enemies` | Currently engaged (alive), recomputed and fully replaced every buffer pass | crosshairs `fa-crosshairs` `text-danger` |
 | (player positions) | `live_session_player_positions` | Live player dots | — (separate render path) |
 
-A detected kill is *either* on-route (→ killed) or off-route (→ overpulled); the states are meant to be
-mutually exclusive. **All three state tables are keyed by `(live_session_id, npc_id, mdt_id)`**, NOT
-`enemy_id` — they resolve to live `Enemy.id` by joining `npc_id`+`mdt_id`+`mapping_version_id`. Do not rely
-on an `enemy_id` column (the legacy one on the overpulled table is dead/being dropped).
+A kill resolved by the **buffer pipeline** is *either* on-route (→ killed) or off-route (→ overpulled) —
+`LiveSessionOverpullDetectionService::processResolvedKills()` branches on kill-zone membership, a structural
+property, so that path can't produce both. The **manual mark path**
+(`AjaxOverpulledEnemyController::store()`, used by the map editor's "mark overpulled" UI) does **not**
+enforce this: it accepts arbitrary `enemy_ids` with no check against kill-zone membership or the killed
+table (`OverpulledEnemyFormRequest` only validates shape), so an enemy can end up in both
+`live_session_killed_enemies` and `live_session_overpulled_enemies`. In that case overpulled wins on the map
+(see precedence below) — the user explicitly marked it, so that's the right call, not a bug to fix.
+**In-combat and obsolete are not mutually exclusive with each other either** — nothing stops a player from
+re-engaging an enemy that was flagged obsolete (skippable), so both can be true at once. The frontend's
+`LiveSessionEnemy.getStateOverlay()` (`resources/assets/js/custom/models/livesessionenemy.js`) resolves the
+display precedence (`overpulled → killed → in-combat → obsolete`). **All four state tables are keyed by
+`(live_session_id, npc_id, mdt_id)`**, NOT `enemy_id` — they resolve to live `Enemy.id` by joining
+`npc_id`+`mdt_id`+`mapping_version_id`. Do not rely on an `enemy_id` column (the legacy one on the
+overpulled table is dead/being dropped).
 
 ## Backend data flow
 
@@ -40,12 +52,13 @@ APILiveSessionCombatLogController (ingest endpoint, #3277)
 
 Key files (all absolute under repo root):
 - `app/Service/LiveSession/LiveSessionBufferProcessingService.php` — orchestrates a buffer; `processKilledEnemies()`, `processPlayerPositions()`, `resolveEnemy()` (npc_id match + nearest lat/lng). `getResultEvents()` returns events in **temporal/stream order** (relied on for "current pull" logic).
-- `app/Service/LiveSession/LiveSessionCombatStateService.php` — `setKilledEnemy()` (`firstOrCreate`, returns `wasRecentlyCreated`), `replaceObsoleteEnemies()` (delete+reinsert), `getObsoleteEnemyIds()`, `setPlayerPosition()`. `resolveEnemyIds()` does the npc/mdt/mapping-version join back to `enemies.id`.
+- `app/Service/LiveSession/LiveSessionCombatStateService.php` — `setKilledEnemy()` (`firstOrCreate`, returns `wasRecentlyCreated`), `replaceObsoleteEnemies()` (delete+reinsert), `getObsoleteEnemyIds()`, `replaceInCombatEnemies()` (delete+reinsert, full-set replace every call), `getInCombatEnemyIds()`, `setPlayerPosition()`. `resolveEnemyIds()` does the npc/mdt/mapping-version join back to `enemies.id`.
+- `app/Service/LiveSession/LiveSessionOverpullDetectionService.php` — `processResolvedKills()` classifies each resolved kill as on-route/off-route, then `persistAndBroadcastInCombat()` fully replaces the in-combat set via `replaceInCombatEnemies()` and broadcasts `InCombatEnemiesChangedEvent` only when the set actually changed; `recomputeObsoleteIfNeeded()` re-derives obsolete whenever any overpulled or obsolete rows currently exist (not only on a new overpull — see the interface docblock).
 - `app/Service/LiveSession/OverpulledEnemyService.php` — `getRouteCorrection(LiveSession): DungeonRouteCorrection`. Reads the overpulled table, groups by kill zone, walks kill zones with `index >` the overpull's to find skippable enemy forces → fills obsolete enemy ids + corrected enemy forces. ⚠️ Its private `getOverpulledEnemyForces()` raw SQL has historically been buggy (wrong `dungeon_routes` join; relied on the dead `enemy_id`) — verify before trusting it.
 - `app/Service/LiveSession/DungeonRouteCorrection.php` — value object: `obsoleteEnemies` collection + `enemyForces`.
-- `app/Models/LiveSession/LiveSession.php` — relations `killedEnemies()`, `overpulledEnemies()`, `obsoleteEnemies()`, `playerPositions()`; `mapContextKilledEnemyIds()`, `getEnemies()` (overpulled→Enemy models), `mapContextPlayerPositions()`. `boot()` cascades deletes.
-- `app/Models/LiveSession/LiveSession{Killed,Overpulled,Obsolete}Enemy.php`, `LiveSessionPlayerPosition.php`.
-- `app/Console/Commands/Scheduler/LiveSession/CleanupExpiredLiveSessions.php` — cleans the state tables on expiry.
+- `app/Models/LiveSession/LiveSession.php` — relations `killedEnemies()`, `overpulledEnemies()`, `obsoleteEnemies()`, `inCombatEnemies()`, `playerPositions()`; `mapContextKilledEnemyIds()`, `mapContextOverpulledEnemies()` (returns `{enemy_id, kill_zone_id}` pairs, not a flat id list), `mapContextInCombatEnemyIds()`, `mapContextPlayerPositions()`. `boot()` cascades deletes.
+- `app/Models/LiveSession/LiveSession{Killed,Overpulled,Obsolete,InCombat}Enemy.php`, `LiveSessionPlayerPosition.php`.
+- `app/Console/Commands/Scheduler/LiveSession/CleanupExpiredLiveSessions.php` — cleans the state tables (overpulled/killed/obsolete/in-combat enemies, player positions, combat log buffer) on expiry.
 
 ## Broadcast events → map reaction
 
@@ -56,25 +69,45 @@ Key files (all absolute under repo root):
 | `LiveSession/RouteCorrectionEvent` | `route-correction` | `echo/messagehandler/listen/livesession/routecorrection.js` |
 | `LiveSession/OverpulledEnemy/OverpulledEnemyChangedEvent` | `overpulledenemy-changed` | `echo/.../models/overpulledenemy/changed.js` |
 | `LiveSession/OverpulledEnemy/OverpulledEnemyDeletedEvent` | `overpulledenemy-deleted` | `echo/.../models/overpulledenemy/deleted.js` |
+| `LiveSession/InCombatEnemiesChangedEvent` | `incombat-changed` | `echo/messagehandler/listen/livesession/incombatchanged.js` |
 
 - The buffer pipeline has **no `Auth`** — broadcast events with `$liveSession->user` as the user (see `EnemyKilledEvent`/`PlayerMovedEvent`).
 - Register a new handler in `echo/echohandler.js` and the message in `echo/message/messagefactory.js` (+ a `ModelMessage`/`Message` under `echo/message/listen/...`).
-- `RouteCorrectionEvent.enemy_ids` carries **obsolete** ids only (merge of `getRouteCorrection()->getObsoleteEnemies()` + `combatStateService->getObsoleteEnemyIds()`), not killed.
+- `RouteCorrectionEvent.enemy_ids` carries **obsolete** ids only, not killed — but the two call sites that
+  broadcast it compute the value differently:
+  - `AjaxOverpulledEnemyController::broadcastRouteCorrection()` (manual overpull mark/unmark via the map
+    editor UI) broadcasts `getRouteCorrection()->getObsoleteEnemies()` **merged** with
+    `combatStateService->getObsoleteEnemyIds()` — the union of the just-computed correction and whatever is
+    currently persisted — but does **not** persist that merged set back via `replaceObsoleteEnemies()`.
+  - `LiveSessionOverpullDetectionService::recomputeAndBroadcastObsolete()` (buffer-processing path) computes
+    `getRouteCorrection()->getObsoleteEnemies()` alone (no merge), immediately persists that exact set via
+    `combatStateService->replaceObsoleteEnemies()`, and broadcasts it.
+  - The persisted-table drift this could otherwise cause is largely masked at boot:
+    `MapContextLiveSession::toArray()` (below) recomputes `getRouteCorrection()->getObsoleteEnemies()` and
+    merges it with the persisted set again on every page load, so a late-joining client still sees the
+    union, not a stale table. The remaining gap is narrower than "late joiners see stale data" — it's that
+    the Ajax path never writes its own merge to the table, so anything reading `live_session_obsolete_enemies`
+    directly (not through `MapContext`) between an Ajax mark and the next buffer pass would miss it. Whether
+    that gap matters is worth confirming with whoever owns this service before relying on it either way.
 
 ## Initial map load: MapContext serialization
 
 `app/Logic/MapContext/Map/MapContextLiveSession.php::toArray()` is what the page boots with:
 ```php
-'overpulledEnemies' => $liveSession->getEnemies()->pluck('id'),
-'obsoleteEnemies'   => $routeCorrection->getObsoleteEnemies()
-                         ->merge($combatStateService->getObsoleteEnemyIds($liveSession))->unique()->values(),
-'enemyForcesOverride'=> $routeCorrection->getEnemyForces(),
-'killedEnemies'     => $liveSession->mapContextKilledEnemyIds(),
-'playerPositions'   => $liveSession->mapContextPlayerPositions(...),
+'overpulledEnemies'   => $liveSession->mapContextOverpulledEnemies(),
+'obsoleteEnemies'     => $routeCorrection->getObsoleteEnemies()
+                           ->merge($combatStateService->getObsoleteEnemyIds($liveSession))->unique()->values(),
+'enemyForcesOverride' => $routeCorrection->getEnemyForces(),
+'killedEnemies'       => $liveSession->mapContextKilledEnemyIds(),
+'inCombatEnemies'     => $liveSession->mapContextInCombatEnemyIds(),
+'playerPositions'     => $liveSession->mapContextPlayerPositions(...),
 ```
-Obsolete is **unioned (persisted + recomputed) with `unique()`**, so persisting obsolete via
-`replaceObsoleteEnemies()` is safe and is needed so late-joining clients get correct state. The frontend
-reads these via `mapcontext/mapcontextlivesession.js` (`getOverpulledEnemies()`, `getObsoleteEnemies()`,
+`mapContextOverpulledEnemies()` returns `{enemy_id, kill_zone_id}` pairs (not a flat id list) — the frontend
+needs the kill zone attribution to draw the connection line back to the pull. Obsolete is **unioned
+(persisted + recomputed) with `unique()`**, so persisting obsolete via `replaceObsoleteEnemies()` is safe and
+is needed so late-joining clients get correct state (see the asymmetry note above though — the Ajax path
+doesn't persist its own merge). The frontend reads these via `mapcontext/mapcontextlivesession.js`
+(`getOverpulledEnemies()`, `getObsoleteEnemies()`, `getInCombatEnemies()`, `getKilledEnemies()` /
 `isKilledEnemy()`, `getPlayerPositions()`).
 
 ## Frontend: enemy subclasses + visual overlay
@@ -103,8 +136,8 @@ Visual rendering stack (one enemy → its overlay icon):
   compiled at build time** (`webpack.mix.js` → `resources/assets/js/handlebars.js`); edit the `.handlebars`
   source then `npm run build` (or `npm run dev` / `composer run dev`).
 - State-change signals are granular (`'killed:changed'`, `'obsolete:changed'`, `'overpulled:changed'`,
-  `'included:changed'`, `'excluded:changed'`). The visual registers the union; registering for a signal an
-  enemy never fires is harmless.
+  `'incombat:changed'`, `'included:changed'`, `'excluded:changed'`). The visual registers the union;
+  registering for a signal an enemy never fires is harmless.
 
 ## Gotchas / conventions
 - Tests use a **shared live MySQL DB** (no `RefreshDatabase`); clean up created rows in a `try/finally`.

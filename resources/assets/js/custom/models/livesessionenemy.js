@@ -81,8 +81,12 @@ class LiveSessionEnemy extends Enemy {
     }
 
     /**
-     * Precedence: killed (green check) → obsolete (red cross) → overpulled (orange plus) → in combat
-     * (crosshairs). In-combat enemies are still alive, so they normally don't overlap the other states.
+     * Precedence: overpulled (orange plus) → killed (green check) → in combat (crosshairs) → obsolete
+     * (red cross). A detected kill is either on-route (killed) or off-route (overpulled), never both, so
+     * their relative order doesn't matter in practice. In-combat is checked before obsolete because
+     * "obsolete" only means "this planned enemy can be skipped" — nothing stops a player from re-engaging
+     * it anyway, and while it's actively being fought that live state is more useful to show than the
+     * stale skip suggestion.
      * @returns {{iconClass: string, colorClass: string}|null}
      */
     getStateOverlay() {

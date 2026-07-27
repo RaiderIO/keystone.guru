@@ -70,7 +70,7 @@ use App\Repositories\Database\LiveSession\LiveSessionCombatLogBufferRepository;
 use App\Repositories\Database\LiveSession\LiveSessionInCombatEnemyRepository;
 use App\Repositories\Database\LiveSession\LiveSessionKilledEnemyRepository;
 use App\Repositories\Database\LiveSession\LiveSessionObsoleteEnemyRepository;
-use App\Repositories\Database\Enemies\LiveSessionOverpulledEnemyRepository;
+use App\Repositories\Database\LiveSession\LiveSessionOverpulledEnemyRepository;
 use App\Repositories\Database\LiveSession\LiveSessionPlayerPositionRepository;
 use App\Repositories\Database\LiveSessionRepository;
 use App\Repositories\Database\MapIconRepository;
@@ -203,7 +203,7 @@ use App\Repositories\Interfaces\LiveSession\LiveSessionCombatLogBufferRepository
 use App\Repositories\Interfaces\LiveSession\LiveSessionInCombatEnemyRepositoryInterface;
 use App\Repositories\Interfaces\LiveSession\LiveSessionKilledEnemyRepositoryInterface;
 use App\Repositories\Interfaces\LiveSession\LiveSessionObsoleteEnemyRepositoryInterface;
-use App\Repositories\Interfaces\Enemies\LiveSessionOverpulledEnemyRepositoryInterface;
+use App\Repositories\Interfaces\LiveSession\LiveSessionOverpulledEnemyRepositoryInterface;
 use App\Repositories\Interfaces\LiveSession\LiveSessionPlayerPositionRepositoryInterface;
 use App\Repositories\Interfaces\LiveSessionRepositoryInterface;
 use App\Repositories\Interfaces\MapIconRepositoryInterface;

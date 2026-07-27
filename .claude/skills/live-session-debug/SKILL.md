@@ -69,7 +69,7 @@ otherwise the buffer fills but no state is computed.
 
 ## 4. Inspect the persisted state
 
-Use the `database-query` MCP tool. Resolve the session id first, then read the three
+Use the `database-query` MCP tool. Resolve the session id first, then read the four
 state tables. Readable join (names + forces):
 
 ```sql
@@ -83,7 +83,11 @@ WHERE o.live_session_id = :id
 UNION ALL
 SELECT 'obsolete', n.name, ob.npc_id, ob.mdt_id, NULL
 FROM live_session_obsolete_enemies ob JOIN npcs n ON n.id = ob.npc_id
-WHERE ob.live_session_id = :id;
+WHERE ob.live_session_id = :id
+UNION ALL
+SELECT 'in_combat', n.name, ic.npc_id, ic.mdt_id, NULL
+FROM live_session_in_combat_enemies ic JOIN npcs n ON n.id = ic.npc_id
+WHERE ic.live_session_id = :id;
 ```
 
 **Key sanity check — an enemy must never be both killed and obsolete** (you cannot skip
@@ -96,6 +100,10 @@ JOIN live_session_obsolete_enemies o
   ON o.live_session_id = k.live_session_id AND o.npc_id = k.npc_id AND o.mdt_id = k.mdt_id
 WHERE k.live_session_id = (SELECT id FROM live_sessions WHERE public_key = '<key>');
 ```
+
+Note: unlike killed/obsolete, **an enemy being both `in_combat` and `obsolete` is expected, not a bug** — a
+player can re-engage an enemy that was flagged obsolete (skippable). See the `live-session-enemy-state`
+skill for how the frontend prioritizes the overlapping icon in that case.
 
 Player positions live in `live_session_player_positions` (one row per player GUID, only
 the latest position is kept).

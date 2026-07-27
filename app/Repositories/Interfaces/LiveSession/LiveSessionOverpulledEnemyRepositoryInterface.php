@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Interfaces\Enemies;
+namespace App\Repositories\Interfaces\LiveSession;
 
 use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Repositories\BaseRepositoryInterface;

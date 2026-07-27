@@ -46,7 +46,7 @@ use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
 use App\Repositories\Interfaces\Laratrust\PermissionRepositoryInterface;
 use App\Repositories\Interfaces\Laratrust\RoleRepositoryInterface;
-use App\Repositories\Interfaces\Enemies\LiveSessionOverpulledEnemyRepositoryInterface;
+use App\Repositories\Interfaces\LiveSession\LiveSessionOverpulledEnemyRepositoryInterface;
 use App\Repositories\Interfaces\LiveSessionRepositoryInterface;
 use App\Repositories\Interfaces\MapIconRepositoryInterface;
 use App\Repositories\Interfaces\MapIconTypeRepositoryInterface;
