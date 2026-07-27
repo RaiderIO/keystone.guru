@@ -129,6 +129,18 @@ app()->instance(CacheServiceInterface::class, $mock);
 - `tests/Unit/App/Logging/StructuredLoggingTest` has a **pre-existing, unrelated failure** — ignore
   it when judging whether your change is green.
 - The `MapTiles` group is excluded in CI.
+- **A brand new model's factory 404s until `composer dump-autoload` runs** in that worktree
+  (`Class "Database\Factories\...Factory" not found`). It is not a broken factory.
+- **`$team->delete()` can throw a `LazyLoadingViolationException`** in tests, but only when `$team`
+  was hydrated as part of a multi-row result — `Builder::hydrate()` only arms `preventsLazyLoading`
+  when the query returned more than one row, so a single-row fetch or a factory-created model is
+  never armed and `Team::deleting()`'s walk over `members.patreonAdFreeGiveaway` and `dungeonRoutes`
+  won't throw for those. If you hit it, load the relations first:
+  `$team->load(['members.patreonAdFreeGiveaway', 'dungeonRoutes']);` then delete. Don't pre-load
+  defensively at every call site on the strength of this note alone — most existing team-deletion
+  tests fetch a single row and are unaffected.
+- **`assertSame()` on an array compares key order**, so asserting a seeded table against an `ALL`
+  constant fails on ordering alone. Use `assertEquals()` when only the pairs matter.
 - After writing a test, run it (`--filter`), then run `composer run fix` / `composer run analyse` —
   note that `composer run fix` also reformats unrelated pre-existing files, so stage only your own.
 

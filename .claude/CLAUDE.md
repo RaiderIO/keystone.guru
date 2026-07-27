@@ -148,6 +148,12 @@ review must start from a pre-reviewed, verified MR:
 ## Database (migrations)
 - Do not use foreign keys for migrations. This application does not use them, and they can cause issues with seeding and testing.
 - **Migrations must be backward-compatible with the currently-running code.** Deploys are not atomic: a cron runs `migrate` independently of the ECS web rollout, so during every deploy the old code and the new schema (and vice-versa) coexist for a window. Additive changes (new nullable/defaulted column, new table, backfill) are safe. **Destructive changes are not** — never drop a table/column, rename it, or narrow its type in the same release that removes the code using it, or the still-running old containers will 500 against the missing schema (this is what broke staging in #3497).
+- **MySQL caps identifier names at 64 characters**, and Laravel's generated index names are
+  `<table>_<column>_index` / `<table>_<col1>_<col2>_unique`. On a long table name that silently
+  overflows and `Schema::create` fails with `Identifier name '...' is too long` — *after* the table
+  itself was already created, so the migration must be dropped by hand before re-running. Pass an
+  explicit short name whenever the table name is long: `$table->unsignedBigInteger('x_id')
+  ->index('short_x_id_index')`, `$table->unique([...], 'short_unique')`.
 - Split destructive schema changes across two releases (expand/contract): release N removes the last code consumer and does any additive/backfill work while leaving the old schema in place; release N+1 ships the `drop`/rename once nothing references it. Column rename = add new + backfill + dual-write in N, drop old in N+1.
 
 ## Localization
