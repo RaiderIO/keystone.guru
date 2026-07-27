@@ -7,6 +7,7 @@ use App\Models\PublishedState;
 use App\Models\Team;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\User;
+use App\Models\UserPinnedDungeonRouteCollection;
 use Database\Factories\DungeonRoute\DungeonRouteCollectionFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -124,6 +125,12 @@ class DungeonRouteCollection extends Model
             ->orderBy('dungeon_route_collection_routes.order');
     }
 
+    /** @return HasMany<UserPinnedDungeonRouteCollection, $this> */
+    public function userPinnedDungeonRouteCollections(): HasMany
+    {
+        return $this->hasMany(UserPinnedDungeonRouteCollection::class);
+    }
+
     public function getPublishedStateName(): string
     {
         return array_search($this->published_state_id, PublishedState::ALL, true) ?: PublishedState::UNPUBLISHED;
@@ -181,6 +188,7 @@ class DungeonRouteCollection extends Model
         // This project does not use foreign keys, so the couplings must be cleaned up by hand
         static::deleting(static function (DungeonRouteCollection $dungeonRouteCollection) {
             $dungeonRouteCollection->dungeonRouteCollectionRoutes()->delete();
+            $dungeonRouteCollection->userPinnedDungeonRouteCollections()->delete();
         });
     }
 }
