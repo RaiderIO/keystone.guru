@@ -25,15 +25,13 @@ class AjaxLiveSessionController extends Controller
      */
     public function delete(Request $request, DungeonRoute $dungeonRoute, LiveSession $liveSession)
     {
-        // Prefer the live session's own route over the one in the URL, so that passing an unrelated
-        // route cannot be used to authorize against. Ending a session is an edit of that route.
-        $dungeonRoute = $liveSession->dungeonRoute ?? $dungeonRoute;
-
-        // The session's own creator may always end it, even if they aren't the route's
-        // owner/collaborator - otherwise a session started by e.g. a guest viewer can never expire.
-        if ((int)$liveSession->user_id !== (int)Auth::id()) {
-            Gate::authorize('edit', $dungeonRoute);
-        }
+        // $dungeonRoute is unused below - kept only so the {dungeonRoute}/live/{liveSession} route's
+        // implicit model binding still resolves both segments; dropping it entirely made the
+        // CallableDispatcher's positional parameter resolution hand the raw dungeonRoute route
+        // parameter to $liveSession instead. A live session may be started on any route its creator
+        // can view, not just their own, so whether they may end it depends on the session's own
+        // ownership, not the dungeon route's edit permissions.
+        Gate::authorize('end', $liveSession);
 
         try {
             if ($liveSession->expires_at === null) {

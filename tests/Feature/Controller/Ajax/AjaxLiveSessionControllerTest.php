@@ -72,6 +72,32 @@ final class AjaxLiveSessionControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function delete_givenRouteOwnerWhoIsNotTheSessionCreator_returnsForbidden(): void
+    {
+        // Arrange - a live session may be started on any route its creator can view, not just their
+        // own, so the route owner being able to edit their own route must not let them end a session
+        // someone else started on it; only the session's own creator (or an admin) may end it
+        $routeOwner     = $this->createUserWithUserRole();
+        $sessionCreator = $this->createUserWithUserRole();
+        $liveSession    = $this->createLiveSession($routeOwner, $sessionCreator);
+
+        try {
+            $this->be($routeOwner);
+
+            // Act
+            $response = $this->delete($this->deleteUrl($liveSession));
+
+            // Assert - the session must still be running
+            $response->assertStatus(StatusCode::FORBIDDEN);
+            $this->assertNull($liveSession->fresh()->expires_at);
+        } finally {
+            $this->deleteLiveSession($liveSession);
+            $sessionCreator->delete();
+            $routeOwner->delete();
+        }
+    }
+
+    #[Test]
     public function delete_givenSessionCreatorIsNotRouteOwner_endsTheLiveSession(): void
     {
         // Arrange - the session's creator is neither the route owner nor a collaborator, so the
@@ -83,6 +109,34 @@ final class AjaxLiveSessionControllerTest extends AjaxPublicTestCase
         try {
             $this->be($sessionCreator);
 
+            // Act
+            $response = $this->delete($this->deleteUrl($liveSession));
+
+            // Assert
+            $response->assertOk();
+            $response->assertJsonStructure(['expires_in']);
+            $this->assertNotNull($liveSession->fresh()->expires_at);
+        } finally {
+            $this->deleteLiveSession($liveSession);
+            $sessionCreator->delete();
+            $routeOwner->delete();
+        }
+    }
+
+    #[Test]
+    public function delete_givenAdminWhoIsNotTheSessionCreator_endsTheLiveSession(): void
+    {
+        // Arrange - LiveSessionPolicy::end() explicitly allows an admin regardless of who started
+        // the session. AjaxPublicTestCase already acts as the seeded admin (id=1) by default, so
+        // there is nothing to $this->be() here - just don't override it like the other tests do.
+        $admin = User::findOrFail(1);
+        $this->assertTrue($admin->hasRole(Role::ROLE_ADMIN), 'User id=1 must be admin (seed the DB).');
+
+        $routeOwner     = $this->createUserWithUserRole();
+        $sessionCreator = $this->createUserWithUserRole();
+        $liveSession    = $this->createLiveSession($routeOwner, $sessionCreator);
+
+        try {
             // Act
             $response = $this->delete($this->deleteUrl($liveSession));
 
