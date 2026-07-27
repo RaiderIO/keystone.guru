@@ -737,8 +737,8 @@ class AjaxDungeonRouteController extends Controller
      */
     public function favorite(Request $request, DungeonRoute $dungeonRoute): Response
     {
-        Gate::authorize('favorite', $dungeonRoute);
-
+        // No authorization: every user may favorite every route. The route sits behind
+        // ['auth', 'role:user|admin'], which is the only requirement.
         $user = Auth::user();
 
         /** @var DungeonRouteFavorite $dungeonRouteFavorite */
@@ -756,8 +756,7 @@ class AjaxDungeonRouteController extends Controller
      */
     public function favoriteDelete(Request $request, DungeonRoute $dungeonRoute): Response
     {
-        Gate::authorize('favorite', $dungeonRoute);
-
+        // No authorization: every user may unfavorite every route. See favorite().
         $user = Auth::user();
 
         /** @var DungeonRouteFavorite $dungeonRouteFavorite */

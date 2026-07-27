@@ -67,6 +67,21 @@ try {
   `$user->is_admin` is an accessor for `hasRole(Role::ROLE_ADMIN)`.
 - **Non-admin**: `User::factory()->create()` — a fresh user never has the admin role.
 - Roles/constants live on `App\Models\Laratrust\Role` (`Role::ROLE_ADMIN`, …).
+- **Only user ids 1–3 exist in CI.** CI seeds with `LaratrustSeeder`, which creates exactly one user
+  per role: **1 = admin, 2 = internal_team, 3 = user**. A local dev database usually has extras (a
+  `Testuser` at id 4, real accounts beyond that), so `User::findOrFail(4)` passes locally and fails
+  in CI with `ModelNotFoundException: No query results for model [App\Models\User] 4`. Never
+  reference a seeded id above 3 — create the user instead.
+- **A factory user has no role at all**, which matters the moment the route under test sits behind
+  Laratrust's `role:` middleware (e.g. everything under `Route::middleware(['auth', 'role:user|admin'])`
+  in `routes/web.php`). The middleware rejects it with a **403 before the controller runs**, so an
+  authorization test asserting 403 passes for entirely the wrong reason. Attach the role explicitly:
+  ```php
+  $user = User::factory()->create();
+  $user->addRole(Role::firstWhere('name', Role::ROLE_USER));
+  ```
+  Sanity check: pair every deny-case test with an allow-case using the same setup. If the allow case
+  returns 200, the role middleware is not what produced the 403.
 
 ## Factories — use them, but know the defaults
 
@@ -111,9 +126,16 @@ $this->assertTrue((new DungeonRoutePolicy())->edit($owner, $route));   // direct
 $this->assertTrue($owner->can('edit', $route));                         // through the Gate
 ```
 
-Methods that read `Auth::user()` internally (e.g. `DungeonRoutePolicy::rate()`) need
-`$this->actingAs($user)` before the assertion — passing the user as an argument is not enough.
-See `tests/Feature/Policy/DungeonRoutePolicyTest.php` for a full worked example.
+Policy methods take the actor as their first argument, so passing `$user` is normally enough. Watch
+for a method that reaches for `Auth::user()` internally instead — that makes the argument a lie and
+the test only passes because `actingAs()` happened to set the same user. `DungeonRoutePolicy::rate()`
+did exactly this (fixed in #3665). See `tests/Feature/Policy/DungeonRoutePolicyTest.php` for a full
+worked example.
+
+**Abilities invoked with an array** — `Gate::authorize('create-tag', [$tagCategory, $model])` —
+resolve the policy from the **first** array element, and the rest are passed as extra arguments.
+Test these through the Gate (`$user->can('create-tag', [...])`), not by instantiating a policy, so
+the test also pins which policy class handles the ability.
 
 ## Swapping services (mocks)
 

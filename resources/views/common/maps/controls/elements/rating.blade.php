@@ -19,7 +19,7 @@ $currentUserRating = $dungeonroute->getRatingByCurrentUser();
             </span>
         </button>
         <div id="map_rating_dropdown" class="dropdown-menu">
-            @if( $dungeonroute->isOwnedByUser())
+            @cannot('rate', $dungeonroute)
                 <a class="dropdown-item disabled">
                     {{ __('view_common.maps.controls.elements.rating.unable_to_rate_own_route') }}
                 </a>
@@ -32,7 +32,7 @@ $currentUserRating = $dungeonroute->getRatingByCurrentUser();
                         {{ $i }}
                     </a>
                 @endfor
-            @endif
+            @endcannot
         </div>
     </div>
 </div>

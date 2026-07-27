@@ -84,9 +84,9 @@ use Illuminate\Support\Collection;
     <div class="col">
         <div id="present_route_actions_container" class="mb-2">
             @auth
-                @if($dungeonroute->mayUserEdit(Auth::user()))
+                @can('edit', $dungeonroute)
                     @include('common.maps.controls.elements.dungeonroute.edit', ['dungeonroute' => $dungeonroute])
-                @endif
+                @endcan
                 @if($dungeonroute->dungeon->active)
                     @include('common.maps.controls.elements.dungeonroute.clone', ['dungeonroute' => $dungeonroute])
                 @endif
