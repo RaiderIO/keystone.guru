@@ -2,10 +2,15 @@
  * Lets an admin click enemies to add them to (or remove them from) an enemy forces region.
  *
  * A region is deliberately allowed to span floors, and the admin mapping page never draws the facade,
- * so the only way to build a cross-floor region is to switch floors while this state is active. That
- * works because a floor change calls refreshLeafletMap(clearMapState = false) - the map state is kept
- * - and because enemies are never cleaned up on a floor switch, only hidden, so their selectable flag
- * and their `enemy:selected` registration survive.
+ * so the only way to build a cross-floor region is to switch floors while this state is active.
+ *
+ * Two things make that work, and both are load-bearing:
+ * - A floor change calls refreshLeafletMap(clearMapState = false), so the map state is kept.
+ *   AdminDungeonMap must therefore FORWARD those arguments to its parent - it used to swallow them,
+ *   which silently reinstated the default of true and killed the selection on every floor switch.
+ * - Enemies are never cleaned up on a floor switch, only hidden (MapObjectGroup.clear() runs from
+ *   reset(), which only the group's constructor calls), so their selectable flag and their
+ *   `enemy:selected` registration survive.
  */
 class EnemyForcesRegionEnemySelection extends EnemySelection {
     constructor(map, sourceMapObject) {
