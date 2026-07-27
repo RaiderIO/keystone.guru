@@ -102,9 +102,12 @@ class AjaxDungeonRouteController extends Controller
         $routes = DungeonRoute::with($withRelations)
             // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
             // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
-            ->selectRaw('dungeon_routes.*, mapping_versions.enemy_forces_required_teeming, mapping_versions.enemy_forces_required, MAX(mapping_versions.id) as dungeon_latest_mapping_version_id')
+            ->selectRaw('dungeon_routes.*, mapping_versions.enemy_forces_required_teeming, mapping_versions.enemy_forces_required, MAX(dungeon_mapping_versions.id) as dungeon_latest_mapping_version_id')
             ->join('dungeons', 'dungeons.id', '=', 'dungeon_routes.dungeon_id')
             ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
+            // Joined separately (rather than reusing the join above) so MAX() reflects the dungeon's
+            // latest mapping version instead of just echoing the route's own mapping_version_id
+            ->join('mapping_versions as dungeon_mapping_versions', 'dungeon_mapping_versions.dungeon_id', 'dungeons.id')
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
             ->where(function (Builder $query) {
