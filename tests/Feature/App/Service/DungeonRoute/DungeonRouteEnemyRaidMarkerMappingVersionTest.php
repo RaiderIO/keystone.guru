@@ -93,12 +93,8 @@ final class DungeonRouteEnemyRaidMarkerMappingVersionTest extends DungeonRouteSa
     public function upgradeMappingVersion_givenNpcNoLongerExistsInNewMappingVersion_deletesRaidMarker(): void
     {
         // Arrange
-        $dungeon    = $this->getRetailDungeon();
-        $existingMV = $dungeon->getCurrentMappingVersion();
-        $newMV      = $this->createNewerMappingVersion($dungeon, $existingMV);
-
-        /** @var Enemy $enemy */
-        $enemy = Enemy::where('mapping_version_id', $existingMV->id)->inRandomOrder()->first();
+        [$dungeon, $existingMV, $enemy] = $this->getRetailDungeonWithEnemy();
+        $newMV                          = $this->createNewerMappingVersion($dungeon, $existingMV);
 
         $route      = DungeonRoute::factory()->create(['dungeon_id' => $dungeon->id, 'mapping_version_id' => $existingMV->id]);
         $raidMarker = $this->createRaidMarker($route, $enemy);
@@ -132,6 +128,42 @@ final class DungeonRouteEnemyRaidMarkerMappingVersionTest extends DungeonRouteSa
             'mdt_id'           => $enemy->mdt_id,
             'enemy_id'         => $enemy->id,
         ]);
+    }
+
+    /**
+     * A retail dungeon that actually has at least one enemy on its current mapping version.
+     *
+     * Picking a random dungeon and *then* querying for an enemy was flaky: 3 of the 70 retail
+     * dungeons (The Arcway, Cathedral of Eternal Night, Maw of Souls) have no enemies at all on
+     * their current mapping version, so roughly one run in twenty drew one of them, got a null
+     * enemy and died with a TypeError in createRaidMarker(). Search across dungeons instead,
+     * mirroring getRetailDungeonWithUniquelyIdentifiedEnemy() above.
+     *
+     * No uniqueness constraint is needed here (unlike the two helpers above): this test deletes
+     * every enemy sharing the picked enemy's (npc_id, mdt_id) pair in the new mapping version, so
+     * an ambiguous pick is deleted just as completely as a unique one.
+     *
+     * @return array{0: Dungeon, 1: MappingVersion, 2: Enemy}
+     */
+    private function getRetailDungeonWithEnemy(): array
+    {
+        $dungeons = Dungeon::whereNotNull('challenge_mode_id')->get()->shuffle();
+
+        foreach ($dungeons as $dungeon) {
+            /** @var Dungeon $dungeon */
+            $mappingVersion = $dungeon->getCurrentMappingVersion();
+            if ($mappingVersion === null) {
+                continue;
+            }
+
+            $enemy = Enemy::where('mapping_version_id', $mappingVersion->id)->inRandomOrder()->first();
+
+            if ($enemy !== null) {
+                return [$dungeon, $mappingVersion, $enemy];
+            }
+        }
+
+        self::markTestSkipped('Unable to find a retail dungeon with an enemy on its current mapping version');
     }
 
     /**
