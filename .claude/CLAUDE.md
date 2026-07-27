@@ -74,8 +74,11 @@ For example:
 ### Before declaring a MR ready for review
 A MR is only "ready" once all three of these hold — human review time is the scarcest resource, so
 review must start from a pre-reviewed, verified MR:
-1. **Self-review**: run the `code-review` skill on the diff and resolve every finding (or note in
-   the MR body why a finding is intentionally not addressed).
+1. **Independent review**: the `code-review` skill is `disable-model-invocation` — only the user
+   can trigger it directly (`/code-review`), an agent calling it itself will error. Once the change
+   is built, hand the diff to a fresh-context agent (no shared context with whoever implemented it —
+   a plain `Agent` call, not a `fork`) to review, and resolve every finding it raises (or note in the
+   MR body why a finding is intentionally not addressed).
 2. **Visual verification**: for any UI-visible change, verify the affected page(s) in headless
    Chrome (`headless-browser-verify` skill) and post before/after screenshots on the MR
    (`post-screenshot.sh`).
