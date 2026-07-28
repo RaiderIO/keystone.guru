@@ -11,6 +11,7 @@ namespace App\Logic\Datatables;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
 use Override;
 
@@ -27,9 +28,9 @@ class DungeonRoutesDatatablesHandler extends DatatablesHandler
          */
         $result = parent::getResult();
 
-        $latestMappingVersionIdsByMappingVersionId = $this->getLatestMappingVersionIdsByMappingVersionId();
+        $latestMappingVersionIdsByDungeonAndGameVersion = $this->getLatestMappingVersionIdsByDungeonAndGameVersion();
 
-        $result['data'] = $result['data']->each(function (DungeonRoute $dungeonRoute) use ($latestMappingVersionIdsByMappingVersionId) {
+        $result['data'] = $result['data']->each(function (DungeonRoute $dungeonRoute) use ($latestMappingVersionIdsByDungeonAndGameVersion) {
             $dungeonRoute->makeHidden(['mappingVersion']);
             $dungeonRoute->dungeon->makeHidden(['gameVersion']);
             $dungeonRoute->dungeon->floors->each(function (Floor $floor) {
@@ -43,9 +44,13 @@ class DungeonRoutesDatatablesHandler extends DatatablesHandler
             // Stamped here instead of in the SQL select - see the comment above the query in
             // AjaxDungeonRouteController::get() for why. Cast to int so this always matches the
             // native int type of mapping_version_id, whichever route is up to date or not.
+            // mapping_version_game_version_id is selected there directly off the joined mapping_versions
+            // row (not via the mappingVersion relation, which isn't eager loaded on this endpoint and
+            // would trip preventLazyLoading).
+            $groupKey = sprintf('%d:%d', $dungeonRoute->dungeon_id, $dungeonRoute->mapping_version_game_version_id);
             $dungeonRoute->setAttribute(
                 'dungeon_latest_mapping_version_id',
-                (int)($latestMappingVersionIdsByMappingVersionId[$dungeonRoute->mapping_version_id] ?? $dungeonRoute->mapping_version_id),
+                (int)($latestMappingVersionIdsByDungeonAndGameVersion[$groupKey] ?? $dungeonRoute->mapping_version_id),
             );
         });
 
@@ -105,47 +110,41 @@ class DungeonRoutesDatatablesHandler extends DatatablesHandler
     }
 
     /**
-     * Maps every mapping_versions.id to the id of the mapping_versions row with the highest `version`
-     * sharing the same (dungeon_id, game_version_id) pair - i.e. the id of the "latest" mapping version
-     * for that dungeon/game version, using the same max(version) convention as
-     * Dungeon::getCurrentMappingVersionForGameVersion() and MappingVersion::isLatestForDungeon().
+     * Maps every "{dungeon_id}:{game_version_id}" pair to the id of the mapping_versions row with the
+     * highest `version` for that pair - i.e. the id of the "latest" mapping version for that dungeon/game
+     * version, using the same max(version) convention as Dungeon::getCurrentMappingVersionForGameVersion()
+     * and MappingVersion::isLatestForDungeon().
      *
-     * mapping_versions is a small table (~550 rows total today), so fetching it in full and grouping
-     * in PHP is one cheap query regardless of how many dungeon_routes are filtered/paged - unlike a
-     * per-row correlated subquery, which MySQL would run once per pre-LIMIT grouped route.
+     * Done as a GROUP BY + MAX() self-join rather than a per-row correlated subquery in the main query:
+     * MySQL materializes the GROUP BY result before applying ORDER BY/LIMIT, so a correlated subquery there
+     * would run once per pre-LIMIT grouped route of the whole filtered set on this public, unauthenticated
+     * endpoint - not once per the handful of rows actually returned. This query runs once, over
+     * mapping_versions alone (a small table), regardless of how many dungeon_routes are filtered/paged.
+     * MySQL 5.7 (this project's minimum) has no window functions, hence the self-join instead of
+     * ROW_NUMBER() OVER (PARTITION BY ...).
      *
-     * @return array<int, int>
+     * @return array<string, int>
      */
-    private function getLatestMappingVersionIdsByMappingVersionId(): array
+    private function getLatestMappingVersionIdsByDungeonAndGameVersion(): array
     {
-        /** @var array<string, array{id: int, version: int}> $latestByDungeonAndGameVersion */
-        $latestByDungeonAndGameVersion = [];
-        /** @var array<int, string> $groupKeyByMappingVersionId */
-        $groupKeyByMappingVersionId = [];
-
-        MappingVersion::query()
-            ->without('gameVersion')
-            ->select(['id', 'dungeon_id', 'game_version_id', 'version'])
-            ->get()
-            ->each(function (MappingVersion $mappingVersion) use (&$latestByDungeonAndGameVersion, &$groupKeyByMappingVersionId) {
-                $groupKey                                        = sprintf('%d:%d', $mappingVersion->dungeon_id, $mappingVersion->game_version_id);
-                $groupKeyByMappingVersionId[$mappingVersion->id] = $groupKey;
-
-                $current = $latestByDungeonAndGameVersion[$groupKey] ?? null;
-                if ($current === null
-                    || $mappingVersion->version > $current['version']
-                    || ($mappingVersion->version === $current['version'] && $mappingVersion->id > $current['id'])
-                ) {
-                    $latestByDungeonAndGameVersion[$groupKey] = [
-                        'id'      => $mappingVersion->id,
-                        'version' => $mappingVersion->version,
-                    ];
-                }
-            });
+        $rows = MappingVersion::query()
+            ->select(['mapping_versions.dungeon_id', 'mapping_versions.game_version_id'])
+            ->selectRaw('MAX(mapping_versions.id) as id')
+            ->joinSub(
+                MappingVersion::query()->selectRaw('dungeon_id, game_version_id, MAX(version) as max_version')->groupBy(['dungeon_id', 'game_version_id']),
+                'latest_mapping_versions',
+                function (JoinClause $join) {
+                    $join->on('mapping_versions.dungeon_id', '=', 'latest_mapping_versions.dungeon_id')
+                        ->on('mapping_versions.game_version_id', '=', 'latest_mapping_versions.game_version_id')
+                        ->on('mapping_versions.version', '=', 'latest_mapping_versions.max_version');
+                },
+            )
+            ->groupBy(['mapping_versions.dungeon_id', 'mapping_versions.game_version_id'])
+            ->get();
 
         $result = [];
-        foreach ($groupKeyByMappingVersionId as $mappingVersionId => $groupKey) {
-            $result[$mappingVersionId] = $latestByDungeonAndGameVersion[$groupKey]['id'];
+        foreach ($rows as $row) {
+            $result[sprintf('%d:%d', $row->dungeon_id, $row->game_version_id)] = (int)$row->id;
         }
 
         return $result;

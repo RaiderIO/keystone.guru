@@ -110,7 +110,7 @@ class AjaxDungeonRouteController extends Controller
             // handful of rows actually returned - which is expensive on this public, unauthenticated endpoint. Instead,
             // DungeonRoutesDatatablesHandler::getResult() stamps dungeon_latest_mapping_version_id onto the already
             // limited result set, using a single cheap query over mapping_versions (a small table).
-            ->selectRaw('dungeon_routes.*, mapping_versions.enemy_forces_required_teeming, mapping_versions.enemy_forces_required')
+            ->selectRaw('dungeon_routes.*, mapping_versions.enemy_forces_required_teeming, mapping_versions.enemy_forces_required, mapping_versions.game_version_id as mapping_version_game_version_id')
             ->join('dungeons', 'dungeons.id', '=', 'dungeon_routes.dungeon_id')
             ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
