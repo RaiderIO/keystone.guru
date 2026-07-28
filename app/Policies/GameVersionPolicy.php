@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\GameVersion\GameVersion;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 
 class GameVersionPolicy
 {
@@ -12,9 +13,16 @@ class GameVersionPolicy
 
     /**
      * Determine whether the user can view the game version.
+     *
+     * A retired game version is gone for everyone, not withheld from this particular user - deny
+     * with a 404 rather than the generic 403 so the response reflects that.
      */
-    public function view(?User $user, GameVersion $gameVersion): bool
+    public function view(?User $user, GameVersion $gameVersion): Response
     {
-        return $gameVersion->active;
+        if (!$gameVersion->active) {
+            return $this->denyAsNotFound(__('policy.game_version_not_active'));
+        }
+
+        return $this->allow();
     }
 }

@@ -158,49 +158,4 @@ class DungeonRoutePolicy
 
         return $this->deny();
     }
-
-    public function addKillZone(?User $user, DungeonRoute $dungeonRoute): Response
-    {
-        if ($dungeonRoute->killZones()->count() >= config('keystoneguru.dungeon_route_limits.kill_zones')) {
-            return $this->deny(__('policy.add_kill_zone_limit_reached', ['limit' => config('keystoneguru.dungeon_route_limits.kill_zones')]));
-        }
-
-        return $this->allow();
-    }
-
-    public function addBrushline(?User $user, DungeonRoute $dungeonRoute): Response
-    {
-        if ($dungeonRoute->brushlines()->count() >= config('keystoneguru.dungeon_route_limits.brushlines')) {
-            return $this->deny(__('policy.add_brushline_limit_reached', ['limit' => config('keystoneguru.dungeon_route_limits.brushlines')]));
-        }
-
-        return $this->allow();
-    }
-
-    public function addPath(?User $user, DungeonRoute $dungeonRoute): Response
-    {
-        if ($dungeonRoute->paths()->count() >= config('keystoneguru.dungeon_route_limits.paths')) {
-            return $this->deny(__('policy.add_path_limit_reached', ['limit' => config('keystoneguru.dungeon_route_limits.paths')]));
-        }
-
-        return $this->allow();
-    }
-
-    public function addArrow(?User $user, DungeonRoute $dungeonRoute): Response
-    {
-        if ($dungeonRoute->arrows()->count() >= config('keystoneguru.dungeon_route_limits.arrows')) {
-            return $this->deny(__('policy.add_arrow_limit_reached', ['limit' => config('keystoneguru.dungeon_route_limits.arrows')]));
-        }
-
-        return $this->allow();
-    }
-
-    public function addMapIcon(?User $user, DungeonRoute $dungeonRoute): Response
-    {
-        if ($dungeonRoute->mapicons()->count() >= config('keystoneguru.dungeon_route_limits.map_icons')) {
-            return $this->deny(__('policy.add_map_icon_limit_reached', ['limit' => config('keystoneguru.dungeon_route_limits.map_icons')]));
-        }
-
-        return $this->allow();
-    }
 }

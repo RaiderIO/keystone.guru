@@ -49,6 +49,19 @@ the appearance of impersonating the user.
 dereferences the `@file` into its contents; lowercase `-f` would send the literal string
 `@<file>` as the body.
 
+### Stacked PRs: always target `master`
+
+`php-tests` and `phpstan` are both `on: pull_request: branches: [master]`, so a PR opened against
+a *feature* branch silently skips both PHP checks. It still shows green — `build`, `js-tests` and
+`php-cs-fixer` run regardless of base branch — which looks like a pass until you count the checks
+(9 when a PR is wired up correctly, 3 when it is not).
+
+When one branch is cut from another, open the PR against `master` anyway and say so in the body;
+the diff collapses on its own once the parent merges. If a PR was already opened against a feature
+branch, retargeting it with `gh api -X PATCH .../pulls/<n> -f base=master` is **not** enough to make
+CI run — that fires `pull_request: edited`, which is not in the default event types. Close and
+reopen the PR (`reopened` *is* a default type) to trigger a full run.
+
 ## Command execution
 - Never run PHP, Artisan, PHPUnit, or Pest directly on the host machine.
 - Always run Laravel, test commands, and any other file system commands inside Docker.

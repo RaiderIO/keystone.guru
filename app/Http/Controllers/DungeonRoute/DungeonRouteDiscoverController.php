@@ -90,7 +90,7 @@ class DungeonRouteDiscoverController extends Controller
         $season = Season::where('expansion_id', $gameVersion->expansion_id)->where('index', $seasonIndex)->first();
 
         Gate::authorize('view', $gameVersion);
-        Gate::authorize('view', $season);
+        Gate::authorize('view', [Season::class, $season]);
 
         $discoverService = $discoverService
             ->withGameVersion($gameVersion)
@@ -130,7 +130,7 @@ class DungeonRouteDiscoverController extends Controller
         $season = Season::where('expansion_id', $gameVersion->expansion_id)->where('index', $seasonIndex)->first();
 
         Gate::authorize('view', $gameVersion);
-        Gate::authorize('view', $season);
+        Gate::authorize('view', [Season::class, $season]);
 
         return view('dungeonroute.discover.season.category', [
             'breadcrumbs'       => 'dungeonroutes.season.popular',
@@ -167,7 +167,7 @@ class DungeonRouteDiscoverController extends Controller
         $season = Season::where('expansion_id', $gameVersion->expansion_id)->where('index', $seasonIndex)->first();
 
         Gate::authorize('view', $gameVersion);
-        Gate::authorize('view', $season);
+        Gate::authorize('view', [Season::class, $season]);
 
         return view('dungeonroute.discover.season.category', [
             'breadcrumbs'       => 'dungeonroutes.season.new',
