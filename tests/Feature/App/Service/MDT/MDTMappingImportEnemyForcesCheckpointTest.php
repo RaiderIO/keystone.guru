@@ -9,7 +9,9 @@ use App\Models\EnemyForcesCheckpoint;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Mapping\MappingServiceInterface;
 use App\Service\MDT\MDTMappingImportServiceInterface;
+use Generator;
 use Illuminate\Support\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use ReflectionMethod;
@@ -31,7 +33,8 @@ use Tests\TestCases\PublicTestCase;
 final class MDTMappingImportEnemyForcesCheckpointTest extends PublicTestCase
 {
     #[Test]
-    public function importEnemies_givenClonedEnemyForcesCheckpoints_relinksMatchedEnemiesAndDropsEmptiedCheckpoints(): void
+    #[DataProvider('importEnemies_givenClonedEnemyForcesCheckpoints_relinksMatchedEnemiesAndDropsEmptiedCheckpoints_dataProvider')]
+    public function importEnemies_givenClonedEnemyForcesCheckpoints_relinksMatchedEnemiesAndDropsEmptiedCheckpoints(bool $forceImport): void
     {
         // Arrange
         $mappingService = $this->app->make(MappingServiceInterface::class);
@@ -75,7 +78,7 @@ final class MDTMappingImportEnemyForcesCheckpointTest extends PublicTestCase
                 $mdtDungeon,
                 $dungeon,
                 $enemyForcesCheckpointIdMapping,
-                true,
+                $forceImport,
             );
 
             // Assert
@@ -119,6 +122,91 @@ final class MDTMappingImportEnemyForcesCheckpointTest extends PublicTestCase
             EnemyForcesCheckpoint::query()
                 ->whereIn('id', [$survivingEnemyForcesCheckpoint->id, $emptiedEnemyForcesCheckpoint->id])
                 ->delete();
+        }
+    }
+
+    /**
+     * `mdt:importmapping` defaults $forceImport to false, and every real mapping bump takes that path - only
+     * the force-import CLI flag skips it. Covering both here closes the gap: the checkpoint re-link logic runs
+     * unconditionally (outside the `if (!$forceImport)` block), but was only ever exercised with true.
+     *
+     * @return Generator<string, array{0: bool}>
+     */
+    public static function importEnemies_givenClonedEnemyForcesCheckpoints_relinksMatchedEnemiesAndDropsEmptiedCheckpoints_dataProvider(): Generator
+    {
+        yield 'force import' => [true];
+        yield 'non-force import (the default; every real mapping bump takes this path)' => [false];
+    }
+
+    /**
+     * #3702's bare-mapping-version case: "Add bare mapping version" clones a checkpoint with zero enemies (the
+     * mapper has not re-assigned members to it yet) and that checkpoint has to survive untouched until the
+     * NEXT MDT import - not be pruned as if it had genuinely lost its members. It never had any to lose.
+     */
+    #[Test]
+    public function importEnemies_givenCheckpointThatNeverHadMembersInSource_survivesEvenThoughItIsEmptyAfterImport(): void
+    {
+        // Arrange
+        $mappingService = $this->app->make(MappingServiceInterface::class);
+
+        $dungeon              = $this->getDungeonWithoutEnemyForcesCheckpoints();
+        $sourceMappingVersion = $dungeon->getCurrentMappingVersion();
+        $floor                = $dungeon->floors()->active()->firstOrFail();
+
+        // Never assigned any enemy - exactly what "Add bare mapping version" produces before the mapper
+        // re-assigns members.
+        $bareEnemyForcesCheckpoint = EnemyForcesCheckpoint::create([
+            'mapping_version_id' => $sourceMappingVersion->id,
+            'floor_id'           => $floor->id,
+            'name'               => 'Bare corridor',
+            'lat'                => 0,
+            'lng'                => 0,
+        ]);
+
+        $newMappingVersion = null;
+
+        try {
+            $newMappingVersion = $mappingService->copyMappingVersionToDungeon($sourceMappingVersion, $dungeon);
+            $mappingService->copyMappingVersionContentsToDungeon($sourceMappingVersion, $newMappingVersion);
+            $enemyForcesCheckpointIdMapping = $mappingService->copyEnemyForcesCheckpointsToMappingVersion(
+                $sourceMappingVersion,
+                $newMappingVersion,
+            );
+
+            // MDT genuinely changed (that is why importEnemies() runs at all) - no enemies are relevant to
+            // this test, only the bare checkpoint's fate is asserted.
+            $mdtDungeon = $this->createMockPublic(MDTDungeon::class);
+            $mdtDungeon->method('getClonesAsEnemies')->willReturn(collect());
+
+            // Act
+            $importEnemies = new ReflectionMethod(
+                $this->app->make(MDTMappingImportServiceInterface::class),
+                'importEnemies',
+            );
+            $importEnemies->invoke(
+                $this->app->make(MDTMappingImportServiceInterface::class),
+                $sourceMappingVersion,
+                $newMappingVersion,
+                $mdtDungeon,
+                $dungeon,
+                $enemyForcesCheckpointIdMapping,
+                false,
+            );
+
+            // Assert
+            $clonedBareEnemyForcesCheckpointId = $enemyForcesCheckpointIdMapping[$bareEnemyForcesCheckpoint->id];
+
+            $this->assertNotNull(
+                EnemyForcesCheckpoint::query()->find($clonedBareEnemyForcesCheckpointId),
+                'A checkpoint that never had members in the source mapping version must survive an MDT ' .
+                'import untouched, even though it is empty afterwards - it never lost anything.',
+            );
+        } finally {
+            if ($newMappingVersion !== null) {
+                $newMappingVersion->delete();
+            }
+
+            EnemyForcesCheckpoint::query()->where('id', $bareEnemyForcesCheckpoint->id)->delete();
         }
     }
 

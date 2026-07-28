@@ -198,6 +198,11 @@ class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMap
         $this->warning(__METHOD__, get_defined_vars());
     }
 
+    public function importEnemiesPrunedEmptyEnemyForcesCheckpoints(int $dungeonId, int $count): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
     public function importEnemiesSaveNewEnemy(int $enemyId): void
     {
         $this->debug(__METHOD__, get_defined_vars());

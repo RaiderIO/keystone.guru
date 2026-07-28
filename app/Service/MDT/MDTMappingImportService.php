@@ -564,7 +564,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 }
             }
 
-            $this->deleteEmptyEnemyForcesCheckpoints($newMappingVersion);
+            $this->deleteEmptyEnemyForcesCheckpoints($currentMappingVersion, $newMappingVersion, $enemyForcesCheckpointIdMapping);
         } finally {
             $this->log->importEnemiesEnd();
         }
@@ -576,9 +576,24 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
      * An MDT mapping bump is exactly when the enemy set changes. A checkpoint whose members were all removed
      * upstream - or which lost them because we could not match them to their predecessor - would otherwise
      * survive as an empty checkpoint reporting zero enemy forces, which is not what the mapper drew (#3702).
+     *
+     * A checkpoint that never had any members in the SOURCE mapping version did not lose anything by staying
+     * empty here - most notably a "bare mapping version" checkpoint (MappingVersionController@saveNew's "Add
+     * bare mapping version" action clones checkpoints without cloning any enemies), which is memberless by
+     * construction until the mapper re-assigns enemies to it by hand. Only a clone whose source counterpart
+     * genuinely had members - and lost them, or could not be matched to them - is pruned. Anything in the new
+     * mapping version that is not in $enemyForcesCheckpointIdMapping's value set is therefore deliberately
+     * left alone, even if it is currently empty.
+     *
+     * @param array<int, int> $enemyForcesCheckpointIdMapping Source checkpoint id => cloned checkpoint id, as
+     *                                                        built by MappingService when it cloned the
+     *                                                        previous mapping version's checkpoints.
      */
-    private function deleteEmptyEnemyForcesCheckpoints(MappingVersion $newMappingVersion): void
-    {
+    private function deleteEmptyEnemyForcesCheckpoints(
+        MappingVersion $currentMappingVersion,
+        MappingVersion $newMappingVersion,
+        array          $enemyForcesCheckpointIdMapping,
+    ): void {
         /** @var Collection<int, EnemyForcesCheckpoint> $emptyEnemyForcesCheckpoints */
         $emptyEnemyForcesCheckpoints = $newMappingVersion->enemyForcesCheckpoints()
             ->whereDoesntHave('enemies')
@@ -588,19 +603,41 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             return;
         }
 
-        foreach ($emptyEnemyForcesCheckpoints as $emptyEnemyForcesCheckpoint) {
+        /** @var array<int, int> $sourceIdsWithMembers Source checkpoint ids that had at least one member */
+        $sourceIdsWithMembers = $currentMappingVersion->enemyForcesCheckpoints()
+            ->has('enemies')
+            ->pluck('id')
+            ->all();
+        // Clone ids whose SOURCE counterpart had members - only these may be pruned when still empty here.
+        $prunableCloneIds = array_intersect_key($enemyForcesCheckpointIdMapping, array_flip($sourceIdsWithMembers));
+
+        /** @var Collection<int, EnemyForcesCheckpoint> $enemyForcesCheckpointsToPrune */
+        $enemyForcesCheckpointsToPrune = $emptyEnemyForcesCheckpoints->whereIn('id', array_values($prunableCloneIds));
+
+        if ($enemyForcesCheckpointsToPrune->isEmpty()) {
+            return;
+        }
+
+        foreach ($enemyForcesCheckpointsToPrune as $emptyEnemyForcesCheckpoint) {
             $this->log->importEnemiesDeleteEmptyEnemyForcesCheckpoint(
                 $emptyEnemyForcesCheckpoint->id,
                 $emptyEnemyForcesCheckpoint->name,
             );
         }
+        // The per-checkpoint line above stays at warning, but the aggregate is worth paging on: after the fix
+        // above, this only fires when a checkpoint that DID have members in the source could not be carried
+        // over - which is exactly the silent whole-dungeon wipe this bug used to cause (#3702).
+        $this->log->importEnemiesPrunedEmptyEnemyForcesCheckpoints(
+            $newMappingVersion->dungeon_id,
+            $enemyForcesCheckpointsToPrune->count(),
+        );
 
         // A query builder delete, not an Eloquent one: SeederModel's `deleting` listener refuses the delete
         // unless an admin is authenticated, and this import runs from the scheduler with nobody logged in.
         // The EnemyForcesCheckpoint `deleted` hook it also skips only releases member enemies - and these
         // checkpoints have none by definition.
         EnemyForcesCheckpoint::query()
-            ->whereIn('id', $emptyEnemyForcesCheckpoints->pluck('id'))
+            ->whereIn('id', $enemyForcesCheckpointsToPrune->pluck('id'))
             ->delete();
 
         // laravel-model-caching only flushes on model events and truncate(), never on a builder delete, so the
