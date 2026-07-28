@@ -35,9 +35,13 @@ final class DungeonRouteEnemyRaidMarkerMappingVersionTest extends DungeonRouteSa
         $raidMarker = $this->createRaidMarker($route, $enemy);
 
         try {
+            // Look up the clone by the same coalesced key updateEnemyIdsByMappingVersion()
+            // resolves markers by, not raw npc_id: getRetailDungeonWithUniquelyIdentifiedEnemy()
+            // only guarantees uniqueness on (COALESCE(mdt_npc_id, npc_id), mdt_id), so a sibling
+            // enemy can share the raw (npc_id, mdt_id) pair while having a different coalesced key.
             /** @var Enemy $clonedEnemy */
             $clonedEnemy = Enemy::where('mapping_version_id', $newMV->id)
-                ->where('npc_id', $enemy->npc_id)
+                ->whereRaw('COALESCE(mdt_npc_id, npc_id) = ?', [$enemy->getMdtNpcId()])
                 ->where('mdt_id', $enemy->mdt_id)
                 ->firstOrFail();
 
@@ -69,9 +73,11 @@ final class DungeonRouteEnemyRaidMarkerMappingVersionTest extends DungeonRouteSa
         $raidMarker = $this->createRaidMarker($route, $enemy);
 
         try {
+            // Same coalesced-key matching as above - raw npc_id alone is not guaranteed to
+            // identify the correct clone.
             /** @var Enemy $clonedEnemy */
             $clonedEnemy = Enemy::where('mapping_version_id', $newMV->id)
-                ->where('npc_id', $enemy->npc_id)
+                ->whereRaw('COALESCE(mdt_npc_id, npc_id) = ?', [$enemy->getMdtNpcId()])
                 ->whereNull('mdt_id')
                 ->firstOrFail();
 
@@ -101,9 +107,10 @@ final class DungeonRouteEnemyRaidMarkerMappingVersionTest extends DungeonRouteSa
 
         try {
             // Remove the cloned counterpart in the new mapping version, simulating an NPC that
-            // was removed from the map in a re-authored version.
+            // was removed from the map in a re-authored version (see the docblock above for why
+            // the coalesced key, not raw npc_id, is what must match here).
             Enemy::where('mapping_version_id', $newMV->id)
-                ->where('npc_id', $enemy->npc_id)
+                ->whereRaw('COALESCE(mdt_npc_id, npc_id) = ?', [$enemy->getMdtNpcId()])
                 ->where('mdt_id', $enemy->mdt_id)
                 ->delete();
 
@@ -133,15 +140,17 @@ final class DungeonRouteEnemyRaidMarkerMappingVersionTest extends DungeonRouteSa
     /**
      * A retail dungeon that actually has at least one enemy on its current mapping version.
      *
-     * Picking a random dungeon and *then* querying for an enemy was flaky: 3 of the 70 retail
-     * dungeons (The Arcway, Cathedral of Eternal Night, Maw of Souls) have no enemies at all on
-     * their current mapping version, so roughly one run in twenty drew one of them, got a null
-     * enemy and died with a TypeError in createRaidMarker(). Search across dungeons instead,
-     * mirroring getRetailDungeonWithUniquelyIdentifiedEnemy() above.
+     * Picking a random dungeon and *then* querying for an enemy was flaky: 4 of the 71 retail
+     * dungeons (The Arcway, Cathedral of Eternal Night, Maw of Souls, Altar of Fangs) have no
+     * enemies at all on their current mapping version, so roughly one run in twenty drew one of
+     * them, got a null enemy and died with a TypeError in createRaidMarker(). Search across
+     * dungeons instead, mirroring getRetailDungeonWithUniquelyIdentifiedEnemy() and
+     * getRetailDungeonWithNullMdtIdEnemy() below.
      *
-     * No uniqueness constraint is needed here (unlike the two helpers above): this test deletes
-     * every enemy sharing the picked enemy's (npc_id, mdt_id) pair in the new mapping version, so
-     * an ambiguous pick is deleted just as completely as a unique one.
+     * No uniqueness constraint is needed here (unlike the two helpers below): this test deletes
+     * every enemy sharing the picked enemy's (COALESCE(mdt_npc_id, npc_id), mdt_id) key - the same
+     * key updateEnemyIdsByMappingVersion() resolves markers by - in the new mapping version, so an
+     * ambiguous pick is deleted just as completely as a unique one.
      *
      * @return array{0: Dungeon, 1: MappingVersion, 2: Enemy}
      */
@@ -175,10 +184,10 @@ final class DungeonRouteEnemyRaidMarkerMappingVersionTest extends DungeonRouteSa
      * what production actually resolves (see DungeonRouteEnemyRaidMarkerRepository) instead of
      * comparing against an arbitrary sibling.
      *
-     * Picking a random dungeon and *then* filtering was flaky: 3 of the 70 retail dungeons (The
-     * Arcway, Cathedral of Eternal Night, Maw of Souls) have no uniquely-identified enemy at all,
-     * so roughly one run in twenty drew one of them, got a null enemy and died with a TypeError in
-     * createRaidMarker(). Search across dungeons instead, mirroring
+     * Picking a random dungeon and *then* filtering was flaky: 4 of the 71 retail dungeons (The
+     * Arcway, Cathedral of Eternal Night, Maw of Souls, Altar of Fangs) have no uniquely-identified
+     * enemy at all, so roughly one run in twenty drew one of them, got a null enemy and died with a
+     * TypeError in createRaidMarker(). Search across dungeons instead, mirroring
      * getRetailDungeonWithNullMdtIdEnemy() below.
      *
      * @return array{0: Dungeon, 1: MappingVersion, 2: Enemy}
