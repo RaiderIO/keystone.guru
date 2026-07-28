@@ -9,10 +9,10 @@ use App\Logic\Datatables\ColumnHandler\Users\IdColumnHandler;
 use App\Logic\Datatables\ColumnHandler\Users\NameColumnHandler;
 use App\Logic\Datatables\UsersDatatablesHandler;
 use App\Models\User;
-use Auth;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
-use Teapot\StatusCode;
+use Illuminate\Support\Facades\Gate;
 
 class AjaxUserController extends Controller
 {
@@ -64,16 +64,15 @@ class AjaxUserController extends Controller
         return $datatablesResult;
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function store(UserFormRequest $request, string $publicKey): User
     {
-        /** @var User|null $user */
-        $user = User::where('public_key', $publicKey)->first();
+        /** @var User $user */
+        $user = User::where('public_key', $publicKey)->firstOrFail();
 
-        /** @var User|null $currentUser */
-        $currentUser = Auth::user();
-        if ($user === null || $user->public_key !== $currentUser?->public_key) {
-            abort(StatusCode::BAD_REQUEST);
-        }
+        Gate::authorize('update', $user);
 
         $user->update($request->validated());
 

@@ -54,9 +54,8 @@ class TeamController extends Controller
         $team->invite_code  = Team::generateRandomPublicKey(12, 'invite_code');
         $team->icon_file_id = -1;
 
-        /** @var User $currentUser */
-        $currentUser = Auth::user();
-        if ($currentUser->hasRole(Role::ROLE_ADMIN)) {
+        // Field-level authorization: only whoever may change route publishing gets to set it here
+        if (Gate::allows('change-route-publishing', $team)) {
             $team->route_publishing_enabled = $request->boolean('route_publishing_enabled');
         }
 

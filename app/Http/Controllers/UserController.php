@@ -8,11 +8,12 @@ use App\Models\Patreon\PatreonUserBenefit;
 use App\Models\Patreon\PatreonUserLink;
 use App\Models\User;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Session;
 use Teapot\StatusCode\Http;
@@ -30,43 +31,40 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function makeRole(Request $request, User $user, string $role): RedirectResponse
     {
-        /** @var User|null $currentUser */
-        $currentUser = Auth::user();
+        Gate::authorize('makeRole', [$user, $role]);
 
-        if ($currentUser !== null) {
-            if ($role === Role::ROLE_ADMIN) {
-                // Only super admins can make someone else admin!
-                if (in_array($currentUser->name, config('keystoneguru.super_admins', []), true)) {
-                    if (!$user->hasRole(Role::ROLE_ADMIN)) {
-                        $user->addRole(Role::ROLE_ADMIN);
-
-                        // Message to the user
-                        Session::flash('status', __('controller.user.flash.user_is_now_an_admin', ['user' => $user->name]));
-                    } else {
-                        $user->removeRole(Role::ROLE_ADMIN);
-
-                        // Message to the user
-                        Session::flash('status', __('controller.user.flash.user_is_no_longer_an_admin', ['user' => $user->name]));
-                    }
-                }
-            } elseif ($role === Role::ROLE_USER) {
-                $user->removeRoles($user->roles->toArray());
-
-                $user->addRole($role);
+        if ($role === Role::ROLE_ADMIN) {
+            if (!$user->hasRole(Role::ROLE_ADMIN)) {
+                $user->addRole(Role::ROLE_ADMIN);
 
                 // Message to the user
-                Session::flash('status', __('controller.user.flash.user_is_now_a_user', ['user' => $user->name]));
+                Session::flash('status', __('controller.user.flash.user_is_now_an_admin', ['user' => $user->name]));
             } else {
-                $user->addRole($role);
+                $user->removeRole(Role::ROLE_ADMIN);
 
                 // Message to the user
-                Session::flash('status', __('controller.user.flash.user_is_now_a_role', [
-                    'user' => $user->name,
-                    'role' => $role,
-                ]));
+                Session::flash('status', __('controller.user.flash.user_is_no_longer_an_admin', ['user' => $user->name]));
             }
+        } elseif ($role === Role::ROLE_USER) {
+            $user->removeRoles($user->roles->toArray());
+
+            $user->addRole($role);
+
+            // Message to the user
+            Session::flash('status', __('controller.user.flash.user_is_now_a_user', ['user' => $user->name]));
+        } else {
+            $user->addRole($role);
+
+            // Message to the user
+            Session::flash('status', __('controller.user.flash.user_is_now_a_role', [
+                'user' => $user->name,
+                'role' => $role,
+            ]));
         }
 
         return redirect()->route('admin.users');
