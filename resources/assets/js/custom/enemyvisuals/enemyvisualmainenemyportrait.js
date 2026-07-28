@@ -19,20 +19,21 @@ class EnemyVisualMainEnemyPortrait extends EnemyVisualMain {
         // Just append a single class
         data.main_visual_outer_classes += ' enemy_icon_npc_enemy_portrait text-white text-center';
 
-        let enemyPortraitUrl = this.enemyvisual.enemy.npc === null ?
+        let enemy = this.enemyvisual.enemy;
+        let overlay = enemy.getStateOverlay();
+        let enemyPortraitUrl = enemy.npc === null ?
             `${this.enemyvisual.map.options.assetsBaseUrl}/images/enemyportraits/unknown.png` :
-            `${this.enemyvisual.map.options.assetsBaseUrl}/${this.enemyvisual.enemy.npc.enemy_portrait_url}`;
+            `${this.enemyvisual.map.options.assetsBaseUrl}/${enemy.npc.enemy_portrait_url}`;
         let template = Handlebars.templates['map_enemy_visual_enemy_portrait_template'];
 
-        let isObsoleteOrOverpulled = this.enemyvisual.enemy.isObsolete() || this.enemyvisual.enemy.getOverpulledKillZoneId() !== null;
         let mainVisualData = $.extend({}, getHandlebarsDefaultVariables(), {
-            id: this.enemyvisual.enemy.id,
-            // Hide the portrait when obsolete or overpulled
-            enemy_portrait_url: isObsoleteOrOverpulled ? null : enemyPortraitUrl,
+            id: enemy.id,
+            // Hide the portrait when an overlay is active
+            enemy_portrait_url: overlay !== null ? null : enemyPortraitUrl,
             // Expensive calculation - only do it when we're going to use it
-            width: isObsoleteOrOverpulled ? this._getTextWidth(3) : 0,
-            obsolete: this.enemyvisual.enemy.isObsolete(),
-            overpulled: this.enemyvisual.enemy.getOverpulledKillZoneId() !== null
+            width: overlay !== null ? this._getTextWidth(3) : 0,
+            state_icon: overlay !== null ? overlay.iconClass : null,
+            state_color: overlay !== null ? overlay.colorClass : null,
         });
 
         data.main_visual_html = template(mainVisualData);
@@ -62,8 +63,7 @@ class EnemyVisualMainEnemyPortrait extends EnemyVisualMain {
         super.refreshSize();
 
         let width = this._getTextWidth();
-        $(`#map_enemy_visual_${this.enemyvisual.enemy.id}_enemy_portrait.obsolete, #map_enemy_visual_${this.enemyvisual.enemy.id}_enemy_portrait.overpulled`)
-            .css('font-size', `${width}px`)
-        ;
+        $(`#map_enemy_visual_${this.enemyvisual.enemy.id}_enemy_portrait .enemy_state`)
+            .css('font-size', `${width}px`);
     }
 }

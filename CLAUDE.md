@@ -85,7 +85,7 @@ This application is a Laravel application and its main Laravel ecosystems packag
 # Test Enforcement
 
 - Every change must be programmatically tested. Write a new test or update an existing test, then run the affected tests to make sure they pass.
-- Run the minimum number of tests needed to ensure code quality and speed. Use `php artisan test --compact` with a specific filename or filter.
+- For *how* to write and run tests in this project — file creation, structure, naming, factories, database cleanup, test groups, data providers, running commands, and the Dungeon/MappingVersion/Floor random-data pitfall (and the traits that already solve it) — see the `writing-tests` skill.
 
 === laravel/core rules ===
 

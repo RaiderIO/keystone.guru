@@ -3,23 +3,24 @@
 namespace Tests\Feature\App\Model\CombatLog;
 
 use App\Models\CombatLog\CombatLogRouteEnemyFailure;
-use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Npc\Npc;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('CombatLog')]
 final class CombatLogRouteEnemyFailureTest extends PublicTestCase
 {
+    use ProvidesDungeon;
+
     #[Test]
     public function create_givenValidData_persistsAndRetrievesRecord(): void
     {
         // Arrange
-        /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::inRandomOrder()->first();
+        $dungeon = $this->getDungeonWithNonFacadeFloor();
 
         /** @var Floor $floor */
         $floor = $dungeon->floors()->where('facade', 0)->first();
@@ -59,8 +60,7 @@ final class CombatLogRouteEnemyFailureTest extends PublicTestCase
         /** @var Npc $npc */
         $npc = Npc::first();
 
-        /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::inRandomOrder()->first();
+        $dungeon = $this->getDungeonWithNonFacadeFloor();
 
         /** @var Floor $floor */
         $floor = $dungeon->floors()->where('facade', 0)->first();

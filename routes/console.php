@@ -73,6 +73,9 @@ $commands[] = Schedule::command('metric:savepending')->everyMinute();
 // Cleanup the generated custom thumbnails
 $commands[] = Schedule::command('thumbnail:deleteexpiredjobs')->everyFifteenMinutes();
 
+// Cleanup relation data for expired live sessions
+$commands[] = Schedule::command('livesession:cleanup-expired')->hourly();
+
 // PID 1's stdout is used to ensure that the output is always logged, even when running in a Docker
 // container. When the scheduler runs as a non-root user (local dev cron runs it as ksg, #3414) it
 // cannot open /proc/1/fd/1 (owned by root), so fall back to the process's own stdout — the local

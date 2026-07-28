@@ -92,16 +92,11 @@ class RowElementKillZone extends RowElement {
             /** @type KillZone */
             let killZone = killZoneMapObjectGroup.findMapObjectById(selectedKillZoneId);
             if (killZone !== null) {
-                // Same as this.options.edit, really
-                if (getState().getMapContext() instanceof MapContextLiveSession) {
-                    newMapState = new SelectKillZoneEnemySelectionOverpull(map, killZone);
+                if (map.options.edit) {
+                    newMapState = new EditKillZoneEnemySelection(map, killZone);
                 } else {
-                    if (map.options.edit) {
-                        newMapState = new EditKillZoneEnemySelection(map, killZone);
-                    } else {
-                        // Just highlight the pull when the user clicked a pull
-                        newMapState = new ViewKillZoneEnemySelection(map, killZone);
-                    }
+                    // Just highlight the pull when the user clicked a pull
+                    newMapState = new ViewKillZoneEnemySelection(map, killZone);
                 }
 
                 // Move the map to the killzone's center location
@@ -204,6 +199,8 @@ class RowElementKillZone extends RowElement {
 
         this.updateText();
 
+        let isLiveSession = getState().getMapContext() instanceof MapContextLiveSession;
+
         // Fill the enemy list
         let npcs = [];
         let obsoleteNpcs = [];
@@ -217,8 +214,15 @@ class RowElementKillZone extends RowElement {
 
             // If enemy found and said enemy has an npc
             if (enemy !== null && enemy.npc !== null) {
+                let npcArr;
                 // Put the enemy in the correct bucket
-                let npcArr = (enemy.getOverpulledKillZoneId() !== null ? overpulledNpcs : (enemy.isObsolete() ? obsoleteNpcs : npcs));
+                if( enemy instanceof LiveSessionEnemy ) {
+                    npcArr = (enemy.getOverpulledKillZoneId() !== null ? overpulledNpcs :
+                        (enemy.isObsolete() ? obsoleteNpcs : npcs)
+                    );
+                } else {
+                    npcArr = npcs;
+                }
                 // If not in our array, add it
                 if (!npcArr.hasOwnProperty(enemy.npc.id)) {
                     npcArr[enemy.npc.id] = {
@@ -226,8 +230,6 @@ class RowElementKillZone extends RowElement {
                         awakened: enemy.isAwakenedNpc(),
                         prideful: enemy.isPridefulNpc(),
                         inspiring: false, // Will be set below
-                        obsolete: enemy.isObsolete(),
-                        overpulled: enemy.getOverpulledKillZoneId() !== null,
                         enemy: enemy,
                         count: 0,
                         enemy_forces: 0
@@ -241,8 +243,11 @@ class RowElementKillZone extends RowElement {
         }).bind(this);
 
         // Add both overpulled enemies and regular enemies to their respective lists
-        for (let i = 0; i < this.killZone.overpulledEnemies.length; i++) {
-            addEnemyToNpcList(this.killZone.overpulledEnemies[i]);
+        if(isLiveSession) {
+            let overpulledEnemies = this.killZone.getOverpulledEnemies();
+            for (let i = 0; i < overpulledEnemies.length; i++) {
+                addEnemyToNpcList(overpulledEnemies[i]);
+            }
         }
 
         for (let i = 0; i < this.killZone.enemies.length; i++) {
@@ -265,8 +270,8 @@ class RowElementKillZone extends RowElement {
                 'awakened': npc.awakened,
                 'prideful': npc.prideful,
                 'inspiring': npc.inspiring,
-                'overpulled': npc.overpulled,
-                'obsolete': npc.obsolete,
+                // Single source of truth for the state icon & color: see LiveSessionEnemy.getStateOverlay()
+                'state_overlay': npc.enemy.getStateOverlay(),
                 'boss': npc.enemy.isBossNpc(),
                 'dangerous': npc.enemy.npc.dangerous === 1,
                 'enemy_portrait_url': `${this.map.options.assetsBaseUrl}/${npc.enemy.npc.enemy_portrait_url}`,
