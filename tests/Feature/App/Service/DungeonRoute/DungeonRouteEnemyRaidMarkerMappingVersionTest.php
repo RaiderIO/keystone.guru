@@ -79,18 +79,24 @@ final class DungeonRouteEnemyRaidMarkerMappingVersionTest extends DungeonRouteSa
         $floorId    = $dungeon->floors()->where('facade', false)->value('id');
         $npcId      = 999999999;
 
-        $enemy = $this->createNullMdtIdEnemy($existingMV->id, $floorId, $npcId);
-        $newMV = $this->createNewerMappingVersion($dungeon, $existingMV);
-        // When boot() does happen to pick $existingMV as its clone source, $enemy was already
-        // carried over automatically - clear that opportunistic copy so the explicit counterpart
-        // created below is the only match, regardless of which mapping version got cloned.
-        Enemy::where('mapping_version_id', $newMV->id)->where('npc_id', $npcId)->delete();
-        $clonedEnemy = $this->createNullMdtIdEnemy($newMV->id, $floorId, $npcId);
-
-        $route      = DungeonRoute::factory()->create(['dungeon_id' => $dungeon->id, 'mapping_version_id' => $existingMV->id]);
-        $raidMarker = $this->createRaidMarker($route, $enemy);
-
+        // $enemy is created directly on $existingMV - the dungeon's real, shared, seeded current
+        // mapping version - so its creation and cleanup both live inside the try/finally: leaving
+        // it behind on a mid-Arrange failure would poison seed data with the exact invalid state
+        // #3713 is about. Cleanup below is query-based rather than object-handle-based so it's
+        // self-healing even if a prior run crashed before $enemy was assigned.
         try {
+            $enemy = $this->createNullMdtIdEnemy($existingMV->id, $floorId, $npcId);
+            $newMV = $this->createNewerMappingVersion($dungeon, $existingMV);
+            // When boot() does happen to pick $existingMV as its clone source, $enemy was already
+            // carried over automatically - clear that opportunistic copy so the explicit
+            // counterpart created below is the only match, regardless of which mapping version
+            // got cloned.
+            Enemy::where('mapping_version_id', $newMV->id)->where('npc_id', $npcId)->delete();
+            $clonedEnemy = $this->createNullMdtIdEnemy($newMV->id, $floorId, $npcId);
+
+            $route      = DungeonRoute::factory()->create(['dungeon_id' => $dungeon->id, 'mapping_version_id' => $existingMV->id]);
+            $raidMarker = $this->createRaidMarker($route, $enemy);
+
             // Act
             app(DungeonRouteServiceInterface::class)->upgradeMappingVersion($route);
 
@@ -98,11 +104,16 @@ final class DungeonRouteEnemyRaidMarkerMappingVersionTest extends DungeonRouteSa
             $fresh = $raidMarker->fresh();
             $this->assertNotNull($fresh);
             $this->assertEquals($clonedEnemy->id, $fresh->enemy_id);
+            $this->assertNull($fresh->mdt_id);
         } finally {
-            $raidMarker->delete();
-            $route->delete();
-            $newMV->delete();
-            $enemy->delete();
+            DungeonRouteEnemyRaidMarker::where('npc_id', $npcId)->delete();
+            if (isset($route)) {
+                $route->delete();
+            }
+            if (isset($newMV)) {
+                $newMV->delete();
+            }
+            Enemy::where('mapping_version_id', $existingMV->id)->where('npc_id', $npcId)->delete();
         }
     }
 
@@ -170,7 +181,7 @@ final class DungeonRouteEnemyRaidMarkerMappingVersionTest extends DungeonRouteSa
      * them, got a null enemy and died with a TypeError in createRaidMarker(). Search across
      * dungeons instead, mirroring getRetailDungeonWithUniquelyIdentifiedEnemy() below.
      *
-     * No uniqueness constraint is needed here (unlike the two helpers below): this test deletes
+     * No uniqueness constraint is needed here (unlike the helper below): this test deletes
      * every enemy sharing the picked enemy's (COALESCE(mdt_npc_id, npc_id), mdt_id) key - the same
      * key updateEnemyIdsByMappingVersion() resolves markers by - in the new mapping version, so an
      * ambiguous pick is deleted just as completely as a unique one.
