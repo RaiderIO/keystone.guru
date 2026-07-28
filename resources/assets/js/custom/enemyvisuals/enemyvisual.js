@@ -49,7 +49,12 @@ class EnemyVisual extends Signalable {
                 }
             } else {
                 // When an object is hidden, its layer is removed from the parent, effectively rendering its display nil.
-                // We don't need to do anything since if the visual is added again, we're going to re-create it anyways
+                // We don't need to do anything since if the visual is added again, we're going to re-create it anyways.
+                // The circle menu is the exception: it lives inside that same (now removed) DOM, so nobody can close
+                // it anymore, and RaidMarkerSelectMapState would stay active for the rest of the session - taking
+                // enemy popups, the raid marker shortcut and (since #3703) every enemy tooltip with it. A floor
+                // switch hides every enemy on the old floor, so this is not an edge case.
+                self._cleanupCircleMenu(false);
             }
         });
 
@@ -285,22 +290,20 @@ class EnemyVisual extends Signalable {
                 refreshTooltips();
             },
             open: function () {
-                self.enemy.unbindTooltip();
                 self.signal('circlemenu:open');
 
+                // Tooltips would cover the menu that is drawn on top of the enemy - suppressed for as
+                // long as this state is active by RaidMarkerSelectMapState.disablesTooltips(), which
+                // covers every enemy on the map rather than just this one (#3703). Unbinding this
+                // enemy's Leaflet tooltip here instead is what #128 moved away from: every unbind
+                // leaks a raw DOM 'focus' listener Leaflet never removes.
                 self.map.setMapState(new RaidMarkerSelectMapState(self.map, self.enemy));
             },
             close: function () {
-                // Unassigned when opened
-                self.enemy.bindTooltip();
-
                 // Delete ourselves again
                 self._cleanupCircleMenu();
             },
             select: function (evt, index) {
-                // Unassigned when opened
-                self.enemy.bindTooltip();
-
                 // Assign the selected raid marker
                 self.enemy.assignRaidMarker($(index).data('name'));
 
@@ -363,12 +366,23 @@ class EnemyVisual extends Signalable {
                 $(this).remove().dequeue();
                 self._circleMenu = null;
 
-                // Only stop the map state at this point
-                self.map.setMapState(null);
+                // Only stop the map state at this point - and only if it is still ours. The menu can
+                // only be opened while no map state is active, but the user can start one while it is
+                // open (hitting "New pull" leaves the radial on screen), and this cleanup then runs
+                // for reasons that have nothing to do with that state - the enemy being hidden by a
+                // floor switch, or its visual being rebuilt. Clearing unconditionally would silently
+                // cancel the selection the user is in the middle of.
+                if (self.map.getMapState() instanceof RaidMarkerSelectMapState) {
+                    self.map.setMapState(null);
+                }
                 self.signal('circlemenu:close');
             };
 
-            if (fadeOut) {
+            // Only fade out when the menu's DOM is still there. If it is already gone - the enemy's
+            // layer was removed while the menu was open - delay()/queue() would be a no-op on the
+            // empty set, so cleanupFn (and with it setMapState(null)) would never run at all. The
+            // synchronous branch handles an undefined element fine: $(undefined) is an empty set.
+            if (fadeOut && $radial.length > 0) {
                 $radial.delay(500).queue(cleanupFn);
             } else {
                 cleanupFn.call($radial[0]);
@@ -763,4 +777,12 @@ class EnemyVisual extends Signalable {
             this._cleanupCircleMenu();
         }
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        EnemyVisual,
+    };
 }
