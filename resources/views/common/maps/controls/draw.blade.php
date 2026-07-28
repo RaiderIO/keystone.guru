@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 /**
  * @var boolean                $isAdmin
  * @var Collection<int, Floor> $floors
- * @var DungeonRoute           $dungeonroute
+ * @var DungeonRoute|null      $dungeonroute
  * @var bool                   $facadeEnabled
  */
 ?>
