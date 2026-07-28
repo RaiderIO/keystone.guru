@@ -24,6 +24,7 @@ class EnemyRepository extends DatabaseRepository implements EnemyRepositoryInter
             'floor.dungeon',
             'enemyPack',
             'enemyPatrol',
+            'mappingVersion',
             'npc',
         ])->where(function (Builder $builder) {
             $builder->whereNull('seasonal_type')

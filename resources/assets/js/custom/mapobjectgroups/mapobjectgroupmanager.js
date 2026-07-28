@@ -48,6 +48,7 @@ class MapObjectGroupManager extends Signalable {
         // exist on both sides).
         let factories = {
             [MAP_OBJECT_GROUP_USER_MOUSE_POSITION]: () => new UserMousePositionMapObjectGroup(this, isMapAdmin),
+            [MAP_OBJECT_GROUP_PLAYER_POSITION]: () => new PlayerPositionMapObjectGroup(this, false),
             [MAP_OBJECT_GROUP_ENEMY]: () => new EnemyMapObjectGroup(this, isMapAdmin),
             [MAP_OBJECT_GROUP_ENEMY_PATROL]: () => new EnemyPatrolMapObjectGroup(this, isMapAdmin),
             [MAP_OBJECT_GROUP_ENEMY_PACK]: () => new EnemyPackMapObjectGroup(this, isMapAdmin),

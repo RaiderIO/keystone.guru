@@ -227,7 +227,6 @@ describe('KillZone constructor', () => {
         expect(killZone.label).toBe('KillZone');
         expect(killZone.enemies).toEqual([]);
         expect(killZone.spellIds).toEqual([]);
-        expect(killZone.overpulledEnemies).toEqual([]);
     });
 
     // Regression test for the Explore-mode "killZoneMapObjectGroup.register is not a

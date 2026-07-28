@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events\OverpulledEnemy;
+namespace App\Events\LiveSession\OverpulledEnemy;
 
 use App\Events\ContextEvent;
 use App\Models\Enemy;

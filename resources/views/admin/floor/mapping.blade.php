@@ -51,6 +51,7 @@ use Illuminate\Support\Collection;
                 'path',
                 'killzone',
                 'killzonepath',
+                'playerposition'
             ],
             'show' => [
                 'header' => true,

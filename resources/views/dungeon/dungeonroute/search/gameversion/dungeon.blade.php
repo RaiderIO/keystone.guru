@@ -60,6 +60,7 @@ use App\Models\GameVersion\GameVersion;
             'hiddenMapObjectGroups' => [
                 'floorunion',
                 'floorunionarea',
+                'playerposition',
             ],
         ])
     </div>

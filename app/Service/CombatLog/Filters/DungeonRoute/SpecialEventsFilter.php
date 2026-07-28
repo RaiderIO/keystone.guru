@@ -27,13 +27,13 @@ class SpecialEventsFilter extends BaseSpecialEventsFilter
         if ($combatLogEvent instanceof ChallengeModeStart) {
             $this->challengeModeStartEvent = $combatLogEvent;
 
-            $this->resultEvents->push((new ChallengeModeStartResultEvent($combatLogEvent)));
+            $this->resultEvents->push(new ChallengeModeStartResultEvent($combatLogEvent));
 
             return true;
         } // Ends
         elseif ($combatLogEvent instanceof ChallengeModeEnd &&
             $this->challengeModeStartEvent instanceof ChallengeModeStart) {
-            $this->resultEvents->push((new ChallengeModeEndResultEvent($this->challengeModeStartEvent, $combatLogEvent)));
+            $this->resultEvents->push(new ChallengeModeEndResultEvent($this->challengeModeStartEvent, $combatLogEvent));
 
             return true;
         }
