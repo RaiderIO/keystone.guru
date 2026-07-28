@@ -126,57 +126,81 @@ final class ProvidesDungeonTest extends PublicTestCase
     }
 
     /**
-     * Pool-constrained on purpose: 154 of the 155 seeded dungeons have an active default floor, so
-     * an unconstrained assertion would pass ~99% of the time even if requireDefaultFloor were a
-     * no-op. Restricting the pool to dungeons that lack one plus a single dungeon that has one makes
-     * the requirement the only thing that can produce the expected answer.
+     * The dungeon that fails the requirement is made, not found.
+     *
+     * Both of these requirements are near-universally satisfied by seeded data - 154 of 155 dungeons
+     * have an active default floor - so an unconstrained assertion would pass even if the filter
+     * were a no-op. Worse, what *doesn't* satisfy them differs per environment: `dungeons.json`
+     * carries no `active` key (the column is in Dungeon::$hidden, so mapping:save omits it), so a
+     * freshly seeded CI database has no inactive dungeon at all, while a long-lived developer
+     * database drifts into having them. Taking a dungeon that qualifies in every other respect and
+     * breaking exactly one thing about it makes that thing the sole possible reason for rejection,
+     * identically in every environment.
      */
     #[Test]
     public function findDungeon_givenRequireDefaultFloor_skipsDungeonsWithoutOne(): void
     {
         // Arrange
-        $withoutDefaultFloor = Dungeon::query()
-            ->whereDoesntHave('floors', static fn(Builder $query) => $query->where('default', 1)->where('active', 1))
-            ->pluck('id')
-            ->all();
-        self::assertNotEmpty($withoutDefaultFloor, 'Expected at least one seeded dungeon without an active default floor');
+        [$expected, $otherwiseValid] = $this->twoInterchangeableDungeons(requireDefaultFloor: true);
 
-        [$expected] = $this->findDungeon(requireDefaultFloor: true);
-        $poolIds    = [...$withoutDefaultFloor, $expected->id];
+        $defaultFloorIds = $otherwiseValid->floors()->where('default', 1)->pluck('id')->all();
+        self::assertNotEmpty($defaultFloorIds);
+        $otherwiseValid->floors()->whereIn('id', $defaultFloorIds)->update(['default' => false]);
 
-        // Act
-        [$dungeon] = $this->findDungeon(
-            requireDefaultFloor: true,
-            constraint:          static fn(Builder $query) => $query->whereIn('dungeons.id', $poolIds),
-        );
+        try {
+            // Act
+            [$dungeon] = $this->findDungeon(
+                requireDefaultFloor: true,
+                constraint:          static fn(Builder $query) => $query->whereIn('dungeons.id', [$otherwiseValid->id, $expected->id]),
+            );
 
-        // Assert
-        self::assertSame($expected->id, $dungeon->id);
+            // Assert
+            self::assertSame($expected->id, $dungeon->id);
+        } finally {
+            $otherwiseValid->floors()->whereIn('id', $defaultFloorIds)->update(['default' => true]);
+        }
     }
 
-    /**
-     * Pool-constrained for the same reason: 134 of 155 seeded dungeons are active, so an
-     * unconstrained assertion would pass ~86% of the time with the filter removed.
-     */
+    /** @see self::findDungeon_givenRequireDefaultFloor_skipsDungeonsWithoutOne() for why the inactive dungeon is created rather than searched for. */
     #[Test]
     public function findDungeon_givenDungeonActive_skipsInactiveDungeons(): void
     {
         // Arrange
-        $inactiveIds = Dungeon::query()->where('active', 0)->pluck('id')->all();
-        self::assertNotEmpty($inactiveIds, 'Expected at least one inactive seeded dungeon');
+        [$expected, $otherwiseValid] = $this->twoInterchangeableDungeons(dungeonActive: true);
 
-        [$expected] = $this->findDungeon(dungeonActive: true);
-        $poolIds    = [...$inactiveIds, $expected->id];
+        $otherwiseValid->update(['active' => false]);
 
-        // Act
-        [$dungeon] = $this->findDungeon(
-            dungeonActive: true,
-            constraint:    static fn(Builder $query) => $query->whereIn('dungeons.id', $poolIds),
+        try {
+            // Act
+            [$dungeon] = $this->findDungeon(
+                dungeonActive: true,
+                constraint:    static fn(Builder $query) => $query->whereIn('dungeons.id', [$otherwiseValid->id, $expected->id]),
+            );
+
+            // Assert
+            self::assertSame($expected->id, $dungeon->id);
+            self::assertTrue((bool)$dungeon->active);
+        } finally {
+            $otherwiseValid->update(['active' => true]);
+        }
+    }
+
+    /**
+     * Two distinct dungeons that both satisfy the given requirement, so that breaking one of them
+     * leaves the other as the only correct answer.
+     *
+     * @return array{0: Dungeon, 1: Dungeon}
+     */
+    private function twoInterchangeableDungeons(bool $requireDefaultFloor = false, ?bool $dungeonActive = null): array
+    {
+        [$first]  = $this->findDungeon(dungeonActive: $dungeonActive, requireDefaultFloor: $requireDefaultFloor);
+        [$second] = $this->findDungeon(
+            dungeonActive:       $dungeonActive,
+            requireDefaultFloor: $requireDefaultFloor,
+            constraint:          static fn(Builder $query) => $query->where('dungeons.id', '!=', $first->id),
         );
 
-        // Assert
-        self::assertSame($expected->id, $dungeon->id);
-        self::assertTrue((bool)$dungeon->active);
+        return [$first, $second];
     }
 
     #[Test]
