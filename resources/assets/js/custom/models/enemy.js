@@ -754,12 +754,53 @@ class Enemy extends VersionableMapObject {
         if (this.layer !== null) {
             if (enabled && !this.isPopupEnabled) {
                 this._assignPopup();
-            } else if (!enabled && this.isPopupEnabled) {
+            } else if (!enabled) {
+                // Disabling is deliberately NOT guarded on isPopupEnabled (it used to be). That flag
+                // records what was last asked for, not what is actually bound: save()/setSynced()
+                // bind a popup by calling _assignPopup() straight through and never touch it. A
+                // freshly loaded enemy is therefore sitting there with a bound popup while the flag
+                // still reads false - so this unbind was skipped, and the enemy's edit popup opened
+                // on the very first click of an enemy selection, closed again by the save's
+                // closePopup(): the flash that was reported.
+                this.layer.off('popupopen');
                 this.layer.unbindPopup();
             }
         }
 
         this.isPopupEnabled = enabled;
+    }
+
+    /**
+     * An enemy's popup must stay unbound for as long as any map state is active - see the
+     * `map:mapstatechanged` handler in the constructor, which is what disables it in the first place.
+     *
+     * The base implementation is also reached from save() and setSynced(), which bypass
+     * setPopupEnabled() entirely. That matters during an EnemySelection that outlives a single click
+     * (the enemy forces checkpoint flow): every click saves the clicked enemy AND each of its pack
+     * buddies, so their popups got silently bound again mid-selection. The next click on any of them
+     * then opened the enemy's edit popup on top of the selection, which the closePopup() in that
+     * click's own save-success closed again.
+     *
+     * The flag itself is deliberately left alone: setPopupEnabled() assigns it AFTER calling us, so
+     * writing to it here would just be overwritten.
+     *
+     * @inheritDoc
+     */
+    _assignPopup(layer = null) {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        if (this.map.getMapState() instanceof MapState) {
+            let targetLayer = layer === null ? this.layer : layer;
+
+            if (targetLayer !== null) {
+                targetLayer.off('popupopen');
+                targetLayer.unbindPopup();
+            }
+
+            return;
+        }
+
+        super._assignPopup(layer);
     }
 
     /**
