@@ -11,6 +11,7 @@ use App\Http\Controllers\Traits\ValidatesFloorId;
 use App\Http\Requests\Brushline\APIBrushlineFormRequest;
 use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteLimitType;
 use App\Models\Polyline;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
@@ -46,7 +47,7 @@ class AjaxBrushlineController extends Controller
         $dungeonRoute = $brushline?->dungeonRoute ?? $dungeonRoute; // @phpstan-ignore nullsafe.neverNull
 
         Gate::authorize('edit', $dungeonRoute);
-        $this->abortIfDungeonRouteLimitReached($dungeonRoute, self::LIMIT_BRUSHLINES);
+        $this->abortIfDungeonRouteLimitReached($dungeonRoute, DungeonRouteLimitType::Brushlines);
 
         $validated = $request->validated();
 

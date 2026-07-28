@@ -13,6 +13,7 @@ use App\Http\Requests\KillZone\APIKillZoneFormRequest;
 use App\Http\Requests\KillZone\APIKillZoneMassFormRequest;
 use App\Jobs\RefreshEnemyForces;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteLimitType;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
@@ -111,7 +112,7 @@ class AjaxKillZoneController extends Controller
         // resolve the real route the caller's authorization already resolved to.
         $dungeonroute = $killZone->dungeonRoute ?? $dungeonroute;
 
-        $this->abortIfDungeonRouteLimitReached($dungeonroute, self::LIMIT_KILL_ZONES);
+        $this->abortIfDungeonRouteLimitReached($dungeonroute, DungeonRouteLimitType::KillZones);
 
         $beforeModel = clone $killZone;
 

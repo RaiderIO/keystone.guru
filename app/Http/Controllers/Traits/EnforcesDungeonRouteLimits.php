@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Traits;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteLimitType;
 
 /**
  * Caps on how many objects of a given type a single dungeon route may hold.
@@ -14,40 +15,28 @@ use App\Models\DungeonRoute\DungeonRoute;
  */
 trait EnforcesDungeonRouteLimits
 {
-    public const LIMIT_KILL_ZONES = 'kill_zones';
-
-    public const LIMIT_BRUSHLINES = 'brushlines';
-
-    public const LIMIT_PATHS = 'paths';
-
-    public const LIMIT_ARROWS = 'arrows';
-
-    public const LIMIT_MAP_ICONS = 'map_icons';
-
     /**
-     * Maps each configured limit onto the relation that counts against it and the message shown
-     * when it is reached.
+     * Maps each limit type onto the relation that counts against it and the message shown when
+     * it is reached.
      *
      * @var array<string, array{relation: string, message: string}>
      */
     private const LIMITS = [
-        self::LIMIT_KILL_ZONES => ['relation' => 'killZones', 'message' => 'add_kill_zone_limit_reached'],
-        self::LIMIT_BRUSHLINES => ['relation' => 'brushlines', 'message' => 'add_brushline_limit_reached'],
-        self::LIMIT_PATHS      => ['relation' => 'paths', 'message' => 'add_path_limit_reached'],
-        self::LIMIT_ARROWS     => ['relation' => 'arrows', 'message' => 'add_arrow_limit_reached'],
-        self::LIMIT_MAP_ICONS  => ['relation' => 'mapicons', 'message' => 'add_map_icon_limit_reached'],
+        DungeonRouteLimitType::KillZones->value  => ['relation' => 'killZones', 'message' => 'add_kill_zone_limit_reached'],
+        DungeonRouteLimitType::Brushlines->value => ['relation' => 'brushlines', 'message' => 'add_brushline_limit_reached'],
+        DungeonRouteLimitType::Paths->value      => ['relation' => 'paths', 'message' => 'add_path_limit_reached'],
+        DungeonRouteLimitType::Arrows->value     => ['relation' => 'arrows', 'message' => 'add_arrow_limit_reached'],
+        DungeonRouteLimitType::MapIcons->value   => ['relation' => 'mapicons', 'message' => 'add_map_icon_limit_reached'],
     ];
 
     /**
      * Aborts with a 422 when the route already holds the configured maximum of the given type.
-     *
-     * @param string $type One of the LIMIT_* constants
      */
-    protected function abortIfDungeonRouteLimitReached(DungeonRoute $dungeonRoute, string $type): void
+    protected function abortIfDungeonRouteLimitReached(DungeonRoute $dungeonRoute, DungeonRouteLimitType $type): void
     {
-        ['relation' => $relation, 'message' => $message] = self::LIMITS[$type];
+        ['relation' => $relation, 'message' => $message] = self::LIMITS[$type->value];
 
-        $limit = (int)config(sprintf('keystoneguru.dungeon_route_limits.%s', $type));
+        $limit = (int)config(sprintf('keystoneguru.dungeon_route_limits.%s', $type->value));
 
         if ($dungeonRoute->{$relation}()->count() >= $limit) {
             abort(422, __(sprintf('policy.%s', $message), ['limit' => $limit]));

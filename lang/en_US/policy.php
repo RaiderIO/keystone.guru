@@ -13,6 +13,10 @@ return [
     'add_arrow_limit_reached'                 => 'Unable to add more than :limit arrows to a single route.',
     'add_map_icon_limit_reached'              => 'Unable to add more than :limit map icons to a single route.',
     'schedule_publish_route_not_in_team'      => 'Unable to schedule publish: this route is not assigned to a team.',
+    'game_version_not_active'                 => 'This game version is no longer active.',
+    'expansion_not_active'                    => 'This expansion is no longer active.',
+    'dungeon_not_active'                      => 'This dungeon is no longer active.',
+    'season_not_active'                       => 'This season could not be found or is no longer active.',
 
     'claim_route_not_claimable'                   => 'This route already has an author and cannot be claimed.',
     'make_role_only_super_admins_may_grant_admin' => 'Only super admins may grant or revoke the admin role.',

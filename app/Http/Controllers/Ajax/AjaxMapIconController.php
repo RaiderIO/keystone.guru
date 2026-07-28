@@ -9,6 +9,7 @@ use App\Http\Controllers\Traits\ChangesDungeonRoute;
 use App\Http\Controllers\Traits\EnforcesDungeonRouteLimits;
 use App\Http\Requests\MapIcon\MapIconFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteLimitType;
 use App\Models\MapIcon;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
@@ -70,7 +71,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         } // We're editing a map comment for the user, carry on
         else {
             Gate::authorize('edit', $dungeonRoute);
-            $this->abortIfDungeonRouteLimitReached($dungeonRoute, self::LIMIT_MAP_ICONS);
+            $this->abortIfDungeonRouteLimitReached($dungeonRoute, DungeonRouteLimitType::MapIcons);
         }
 
         $beforeModel = $mapIcon === null ? null : clone $mapIcon;

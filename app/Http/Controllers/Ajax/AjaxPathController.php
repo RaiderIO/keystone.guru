@@ -11,6 +11,7 @@ use App\Http\Controllers\Traits\ValidatesFloorId;
 use App\Http\Requests\Path\APIPathFormRequest;
 use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteLimitType;
 use App\Models\Path;
 use App\Models\Polyline;
 use App\Models\User;
@@ -45,7 +46,7 @@ class AjaxPathController extends Controller
         $dungeonRoute = $path?->dungeonRoute ?? $dungeonRoute; // @phpstan-ignore nullsafe.neverNull
 
         Gate::authorize('edit', $dungeonRoute);
-        $this->abortIfDungeonRouteLimitReached($dungeonRoute, self::LIMIT_PATHS);
+        $this->abortIfDungeonRouteLimitReached($dungeonRoute, DungeonRouteLimitType::Paths);
 
         $validated = $request->validated();
 

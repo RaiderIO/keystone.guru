@@ -12,6 +12,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class DungeonRouteDiscoverExpansionSeasonController extends Controller
@@ -32,9 +33,9 @@ class DungeonRouteDiscoverExpansionSeasonController extends Controller
         $season = Season::where('expansion_id', $expansion->id)
             ->where('index', $seasonIndex)->first();
 
-        abort_unless($gameVersion->active, 404);
-        abort_unless($expansion->active, 404);
-        abort_if($season === null || !$season->expansion->active, 404);
+        Gate::authorize('view', $gameVersion);
+        Gate::authorize('view', $expansion);
+        Gate::authorize('view', [Season::class, $season]);
 
         $discoverService = $discoverService
             ->withExpansion($expansion)
@@ -74,8 +75,8 @@ class DungeonRouteDiscoverExpansionSeasonController extends Controller
 
         $season = Season::where('expansion_id', $gameVersion->expansion_id)->where('index', $seasonIndex)->first();
 
-        abort_unless($gameVersion->active, 404);
-        abort_if($season === null || !$season->expansion->active, 404);
+        Gate::authorize('view', $gameVersion);
+        Gate::authorize('view', [Season::class, $season]);
 
         return view('dungeonroute.discover.season.category', [
             'breadcrumbs'       => 'dungeonroutes.season.popular',
@@ -111,8 +112,8 @@ class DungeonRouteDiscoverExpansionSeasonController extends Controller
 
         $season = Season::where('expansion_id', $gameVersion->expansion_id)->where('index', $seasonIndex)->first();
 
-        abort_unless($gameVersion->active, 404);
-        abort_if($season === null || !$season->expansion->active, 404);
+        Gate::authorize('view', $gameVersion);
+        Gate::authorize('view', [Season::class, $season]);
 
         return view('dungeonroute.discover.season.category', [
             'breadcrumbs'       => 'dungeonroutes.season.new',
