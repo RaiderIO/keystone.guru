@@ -92,9 +92,10 @@ use Override;
  * @property int                  $enemy_forces
  * @property bool                 $teeming
  * @property bool                 $demo
- * @property array<string, mixed> $setup                       Attribute
- * @property bool                 $has_thumbnail               Attribute
- * @property int                  $has_enemy_forces            Computed column added by CoverageService::selectRaw()
+ * @property array<string, mixed> $setup                           Attribute
+ * @property bool                 $has_thumbnail                   Attribute
+ * @property int                  $has_enemy_forces                Computed column added by CoverageService::selectRaw()
+ * @property int                  $mapping_version_game_version_id Computed column added by AjaxDungeonRouteController::get()'s selectRaw()
  * @property string               $pull_gradient
  * @property bool                 $pull_gradient_apply_always
  * @property int                  $dungeon_difficulty

@@ -102,7 +102,15 @@ class AjaxDungeonRouteController extends Controller
         $routes = DungeonRoute::with($withRelations)
             // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
             // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
-            ->selectRaw('dungeon_routes.*, mapping_versions.enemy_forces_required_teeming, mapping_versions.enemy_forces_required, MAX(mapping_versions.id) as dungeon_latest_mapping_version_id')
+            // dungeon_latest_mapping_version_id is intentionally NOT computed here. A joined MAX() would fan out rows
+            // per dungeon mapping version, corrupting the non-distinct COUNT() aggregates that
+            // RatingColumnHandler/DungeonRouteAttributesColumnHandler add via their own joins further down. A correlated
+            // subquery in the select list avoids that, but MySQL materializes the GROUP BY result before applying
+            // ORDER BY/LIMIT, so it would run once per pre-LIMIT grouped row of the whole filtered set - not once per the
+            // handful of rows actually returned - which is expensive on this public, unauthenticated endpoint. Instead,
+            // DungeonRoutesDatatablesHandler::getResult() stamps dungeon_latest_mapping_version_id onto the already
+            // limited result set, using a single cheap query over mapping_versions (a small table).
+            ->selectRaw('dungeon_routes.*, mapping_versions.enemy_forces_required_teeming, mapping_versions.enemy_forces_required, mapping_versions.game_version_id as mapping_version_game_version_id')
             ->join('dungeons', 'dungeons.id', '=', 'dungeon_routes.dungeon_id')
             ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
