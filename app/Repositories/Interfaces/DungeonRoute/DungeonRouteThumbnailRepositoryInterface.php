@@ -6,6 +6,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnail;
 use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Repositories\BaseRepositoryInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 /**
@@ -27,4 +28,21 @@ interface DungeonRouteThumbnailRepositoryInterface extends BaseRepositoryInterfa
      * reads as stale until the variant is regenerated.
      */
     public function hasFreshThumbnailForVariant(DungeonRoute $dungeonRoute, DungeonRouteThumbnailVariant $variant): bool;
+
+    /**
+     * Thumbnail rows not backed by a usable File - either file_id is null, or it points at a File
+     * row that no longer exists.
+     *
+     * @param  array<int, int|string>         $dungeonRouteIds Optional dungeon route IDs to restrict to; empty scans every route.
+     * @return Builder<DungeonRouteThumbnail>
+     */
+    public function filelessThumbnailsQuery(array $dungeonRouteIds = []): Builder;
+
+    /**
+     * Thumbnail rows whose File still exists, for checking whether the underlying disk object does too.
+     *
+     * @param  array<int, int|string>         $dungeonRouteIds Optional dungeon route IDs to restrict to; empty scans every route.
+     * @return Builder<DungeonRouteThumbnail>
+     */
+    public function fileBackedThumbnailsQuery(array $dungeonRouteIds = []): Builder;
 }

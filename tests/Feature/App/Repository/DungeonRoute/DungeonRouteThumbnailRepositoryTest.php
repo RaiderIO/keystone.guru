@@ -5,6 +5,7 @@ namespace Tests\Feature\App\Repository\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnail;
 use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
+use App\Models\File;
 use App\Repositories\Database\DungeonRoute\DungeonRouteThumbnailRepository;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -288,6 +289,126 @@ final class DungeonRouteThumbnailRepositoryTest extends PublicTestCase
         } finally {
             $thumbnails->each->delete();
             $dungeonRoute->delete();
+        }
+    }
+
+    private function createDungeonRouteWithThumbnail(bool $withFile): DungeonRouteThumbnail
+    {
+        $dungeon        = $this->getDungeonWithNonFacadeFloor();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $floor          = $dungeon->floors()->where('facade', false)->first();
+
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        $thumbnail = DungeonRouteThumbnail::create([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'floor_id'         => $floor->id,
+            'custom'           => false,
+        ]);
+
+        if ($withFile) {
+            $file = File::create([
+                'model_id'    => $thumbnail->id,
+                'model_class' => DungeonRouteThumbnail::class,
+                'disk'        => config('filesystems.default'),
+                'path'        => sprintf('thumbnails/%d.jpg', $thumbnail->id),
+            ]);
+            $thumbnail->update(['file_id' => $file->id]);
+        }
+
+        return $thumbnail;
+    }
+
+    #[Test]
+    public function filelessThumbnailsQuery_givenDungeonRouteIds_onlyIncludesThumbnailsForThoseRoutes(): void
+    {
+        // Arrange
+        $matchingThumbnail    = $this->createDungeonRouteWithThumbnail(false);
+        $nonMatchingThumbnail = $this->createDungeonRouteWithThumbnail(false);
+
+        try {
+            // Act
+            $result = $this->repository->filelessThumbnailsQuery([$matchingThumbnail->dungeon_route_id])->pluck('id');
+
+            // Assert
+            $this->assertTrue($result->contains($matchingThumbnail->id));
+            $this->assertFalse($result->contains($nonMatchingThumbnail->id));
+        } finally {
+            $matchingThumbnail->delete();
+            $nonMatchingThumbnail->delete();
+            DungeonRoute::whereKey([$matchingThumbnail->dungeon_route_id, $nonMatchingThumbnail->dungeon_route_id])->delete();
+        }
+    }
+
+    #[Test]
+    public function filelessThumbnailsQuery_givenNoDungeonRouteIds_includesThumbnailsFromEveryRoute(): void
+    {
+        // Arrange
+        $filelessThumbnail   = $this->createDungeonRouteWithThumbnail(false);
+        $fileBackedThumbnail = $this->createDungeonRouteWithThumbnail(true);
+
+        try {
+            // Act
+            $result = $this->repository->filelessThumbnailsQuery()->pluck('id');
+
+            // Assert - unscoped, so it must find the fileless thumbnail regardless of which route
+            // it belongs to, but never one that has a File.
+            $this->assertTrue($result->contains($filelessThumbnail->id));
+            $this->assertFalse($result->contains($fileBackedThumbnail->id));
+        } finally {
+            $filelessThumbnail->delete();
+            File::whereKey($fileBackedThumbnail->file_id)->delete();
+            $fileBackedThumbnail->delete();
+            DungeonRoute::whereKey([$filelessThumbnail->dungeon_route_id, $fileBackedThumbnail->dungeon_route_id])->delete();
+        }
+    }
+
+    #[Test]
+    public function fileBackedThumbnailsQuery_givenDungeonRouteIds_onlyIncludesThumbnailsForThoseRoutes(): void
+    {
+        // Arrange
+        $matchingThumbnail    = $this->createDungeonRouteWithThumbnail(true);
+        $nonMatchingThumbnail = $this->createDungeonRouteWithThumbnail(true);
+
+        try {
+            // Act
+            $result = $this->repository->fileBackedThumbnailsQuery([$matchingThumbnail->dungeon_route_id])->pluck('id');
+
+            // Assert
+            $this->assertTrue($result->contains($matchingThumbnail->id));
+            $this->assertFalse($result->contains($nonMatchingThumbnail->id));
+        } finally {
+            File::whereKey($matchingThumbnail->file_id)->delete();
+            File::whereKey($nonMatchingThumbnail->file_id)->delete();
+            $matchingThumbnail->delete();
+            $nonMatchingThumbnail->delete();
+            DungeonRoute::whereKey([$matchingThumbnail->dungeon_route_id, $nonMatchingThumbnail->dungeon_route_id])->delete();
+        }
+    }
+
+    #[Test]
+    public function fileBackedThumbnailsQuery_givenNoDungeonRouteIds_excludesFilelessThumbnails(): void
+    {
+        // Arrange
+        $filelessThumbnail   = $this->createDungeonRouteWithThumbnail(false);
+        $fileBackedThumbnail = $this->createDungeonRouteWithThumbnail(true);
+
+        try {
+            // Act
+            $result = $this->repository->fileBackedThumbnailsQuery()->pluck('id');
+
+            // Assert - unscoped, so it must find the file-backed thumbnail regardless of route,
+            // but never a fileless one.
+            $this->assertTrue($result->contains($fileBackedThumbnail->id));
+            $this->assertFalse($result->contains($filelessThumbnail->id));
+        } finally {
+            $filelessThumbnail->delete();
+            File::whereKey($fileBackedThumbnail->file_id)->delete();
+            $fileBackedThumbnail->delete();
+            DungeonRoute::whereKey([$filelessThumbnail->dungeon_route_id, $fileBackedThumbnail->dungeon_route_id])->delete();
         }
     }
 }

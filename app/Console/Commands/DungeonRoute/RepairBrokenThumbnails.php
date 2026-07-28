@@ -4,9 +4,9 @@ namespace App\Console\Commands\DungeonRoute;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnail;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailRepositoryInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Storage;
 
 class RepairBrokenThumbnails extends Command
@@ -27,32 +27,27 @@ class RepairBrokenThumbnails extends Command
      */
     protected $description = 'Repairs broken dungeon route thumbnails: deletes rows that are not backed by a usable File (file_id null or the File row is gone), and re-queues routes whose thumbnail File exists but its disk object is missing.';
 
-    public function handle(ThumbnailServiceInterface $thumbnailService): int
+    public function handle(ThumbnailServiceInterface $thumbnailService, DungeonRouteThumbnailRepositoryInterface $dungeonRouteThumbnailRepository): int
     {
         $dryRun = (bool)$this->option('dry-run');
 
-        $this->deleteFilelessThumbnails($dryRun);
-        $this->requeueThumbnailsMissingFromDisk($thumbnailService, $dryRun);
+        $this->deleteFilelessThumbnails($dungeonRouteThumbnailRepository, $dryRun);
+        $this->requeueThumbnailsMissingFromDisk($thumbnailService, $dungeonRouteThumbnailRepository, $dryRun);
 
         return self::SUCCESS;
     }
 
     /**
-     * Restricts a thumbnail query to the routes named by --dungeon-route-id, if any were given.
+     * The dungeon route IDs named by --dungeon-route-id, if any were given.
      *
-     * @param  Builder<DungeonRouteThumbnail> $query
-     * @return Builder<DungeonRouteThumbnail>
+     * @return array<int, string>
      */
-    private function scopeToRequestedDungeonRoutes(Builder $query): Builder
+    private function requestedDungeonRouteIds(): array
     {
         /** @var array<int, string> $dungeonRouteIds */
         $dungeonRouteIds = (array)$this->option('dungeon-route-id');
 
-        if ($dungeonRouteIds === []) {
-            return $query;
-        }
-
-        return $query->whereIn('dungeon_route_id', $dungeonRouteIds);
+        return $dungeonRouteIds;
     }
 
     /**
@@ -60,12 +55,9 @@ class RepairBrokenThumbnails extends Command
      * points at a File row that no longer exists. Such rows leave has_thumbnail inconsistent; once
      * they are gone the route's cards correctly fall back to the dungeon image.
      */
-    private function deleteFilelessThumbnails(bool $dryRun): void
+    private function deleteFilelessThumbnails(DungeonRouteThumbnailRepositoryInterface $dungeonRouteThumbnailRepository, bool $dryRun): void
     {
-        // whereDoesntHave('file') covers both a null file_id and a file_id pointing at a missing row.
-        $query = $this->scopeToRequestedDungeonRoutes(
-            DungeonRouteThumbnail::query()->whereDoesntHave('file'),
-        );
+        $query = $dungeonRouteThumbnailRepository->filelessThumbnailsQuery($this->requestedDungeonRouteIds());
 
         $total = $query->clone()->count();
 
@@ -111,17 +103,12 @@ class RepairBrokenThumbnails extends Command
      * @note Regeneration is performed by the queued thumbnail jobs, so this only takes effect once
      *       thumbnail generation itself is operational.
      */
-    private function requeueThumbnailsMissingFromDisk(ThumbnailServiceInterface $thumbnailService, bool $dryRun): void
+    private function requeueThumbnailsMissingFromDisk(ThumbnailServiceInterface $thumbnailService, DungeonRouteThumbnailRepositoryInterface $dungeonRouteThumbnailRepository, bool $dryRun): void
     {
         $affectedDungeonRouteIds  = collect();
         $brokenCustomThumbnailIds = collect();
 
-        // The model's default $with would also hydrate the unused floor relation for every row.
-        $query = $this->scopeToRequestedDungeonRoutes(
-            DungeonRouteThumbnail::query()
-                ->whereHas('file')
-                ->without('floor'),
-        );
+        $query = $dungeonRouteThumbnailRepository->fileBackedThumbnailsQuery($this->requestedDungeonRouteIds());
 
         $total = $query->clone()->count();
 

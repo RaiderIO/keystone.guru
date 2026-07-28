@@ -7,6 +7,7 @@ use App\Models\DungeonRoute\DungeonRouteThumbnail;
 use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailRepositoryInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 
 class DungeonRouteThumbnailRepository extends DatabaseRepository implements DungeonRouteThumbnailRepositoryInterface
@@ -48,5 +49,39 @@ class DungeonRouteThumbnailRepository extends DatabaseRepository implements Dung
 
         return $oldestRenderedAt !== null
             && Carbon::parse($oldestRenderedAt)->greaterThanOrEqualTo($dungeonRoute->updated_at);
+    }
+
+    public function filelessThumbnailsQuery(array $dungeonRouteIds = []): Builder
+    {
+        // whereDoesntHave('file') covers both a null file_id and a file_id pointing at a missing row.
+        return $this->scopeToDungeonRoutes(
+            DungeonRouteThumbnail::query()->whereDoesntHave('file'),
+            $dungeonRouteIds,
+        );
+    }
+
+    public function fileBackedThumbnailsQuery(array $dungeonRouteIds = []): Builder
+    {
+        // The model's default $with would also hydrate the unused floor relation for every row.
+        return $this->scopeToDungeonRoutes(
+            DungeonRouteThumbnail::query()
+                ->whereHas('file')
+                ->without('floor'),
+            $dungeonRouteIds,
+        );
+    }
+
+    /**
+     * @param  Builder<DungeonRouteThumbnail> $query
+     * @param  array<int, int|string>         $dungeonRouteIds
+     * @return Builder<DungeonRouteThumbnail>
+     */
+    private function scopeToDungeonRoutes(Builder $query, array $dungeonRouteIds): Builder
+    {
+        if ($dungeonRouteIds === []) {
+            return $query;
+        }
+
+        return $query->whereIn('dungeon_route_id', $dungeonRouteIds);
     }
 }
