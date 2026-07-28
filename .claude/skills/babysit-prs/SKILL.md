@@ -57,6 +57,15 @@ Before touching a branch, check its worktree (if one exists at
 it and note that in your pass report. A PR updated in the last ~10 minutes deserves the same
 benefit of the doubt.
 
+**Skip every draft PR outright, for every step below (merge, cold review, comment-fixing, even
+rebasing) — leave it entirely alone.** `isDraft` is already in the step-1 JSON. Draft is this
+project's signal that the implementing agent still owns the PR and worktree — including its own
+post-push CI monitoring and final verification round (see `.claude/CLAUDE.md`'s worktree section).
+GitHub already refuses to merge a draft (`gh pr merge` 422s), but check `isDraft` explicitly rather
+than relying on that error — a draft PR is *never* this pass's job, not even a "try it, GitHub will
+reject if wrong" case. This is what stops a babysit pass from tearing down another agent's worktree
+mid-verification, which is exactly what happened on #3719 before this rule existed.
+
 ### 3. Triage each MR, in this order
 
 0. **Bring the branch up to date with master, by rebasing — every pass, before anything else.**

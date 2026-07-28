@@ -4,6 +4,7 @@
         "mapping_version_id": 558,
         "enemy_pack_id": null,
         "enemy_patrol_id": null,
+        "enemy_forces_checkpoint_id": null,
         "npc_id": 59080,
         "floor_id": 352,
         "mdt_id": 1,

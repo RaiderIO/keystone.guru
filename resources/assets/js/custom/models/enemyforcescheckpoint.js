@@ -301,7 +301,7 @@ class EnemyForcesCheckpoint extends VersionableMapObject {
             return;
         }
 
-        let name = this.name === null || this.name === '' ? lang.get('js.enemy_forces_checkpoint_unnamed_label') : this.name;
+        let name = this.name === null || this.name === '' ? lang.get('js.enemy_forces_checkpoint_unnamed_label') : lang.get(this.name);
         let enemyForces = this.getEnemyForces();
 
         let tooltipText;

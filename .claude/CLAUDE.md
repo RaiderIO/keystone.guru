@@ -26,10 +26,18 @@ Branch formats are as follows:
   work directly in the main checkout.
 - **The worktree and its branch are yours: you may commit, push, and open a MR without asking.**
   Commit as you go, push the branch with `sh/worktree.sh push` (uses a scoped write deploy key so no
-  password is prompted), and open the MR to `master` (the default branch) with `gh`. Start the MR
-  body with `Closes #<issue>` — because it targets the default branch it auto-links the issue and
-  closes it on merge. This autonomy applies only to a worktree you created — in the main checkout,
-  still ask before committing.
+  password is prompted), and open the MR to `master` (the default branch) with `gh pr create --draft`.
+  Start the MR body with `Closes #<issue>` — because it targets the default branch it auto-links the
+  issue and closes it on merge. This autonomy applies only to a worktree you created — in the main
+  checkout, still ask before committing.
+- **Open every MR as a draft and keep it a draft for as long as you still own the worktree** —
+  including your own post-push CI monitoring and the "ready for review" checklist below. Only mark
+  it ready for review (`gh pr ready <n>`) once all three checklist items are actually done and you
+  are handing the worktree off. A draft PR can't be merged (`gh pr merge` 422s on one), so this is
+  what stops `babysit-prs` — which runs in its own session/loop and merges+tears down worktrees for
+  any green, `pr can merge`-labeled PR the moment it sees one — from grabbing a PR (and ripping out
+  its worktree) while you're still mid-verification on it (see #3719). Don't undraft early just to
+  let Wotuu take an early look; a labeled-but-still-in-flight PR is exactly the race this avoids.
 - The worktree shares the main stack's database/redis, so keep migrations non-destructive and never
   run `migrate:fresh`/`migrate:refresh` in a worktree. See the `worktree-docker` skill for details.
 
@@ -85,6 +93,9 @@ review must start from a pre-reviewed, verified MR:
 3. **Green CI**: wait for the MR's checks and fix any failure yourself — including flaky or
    seemingly unrelated failures (root-cause them; don't re-run and hope, and don't defer to a
    follow-up issue).
+
+Only once all three hold, mark the MR ready for review (`gh pr ready <n>`) — see the draft-PR note
+under Git worktrees above for why it must stay a draft until then.
 
 # Project-specific conventions
 
