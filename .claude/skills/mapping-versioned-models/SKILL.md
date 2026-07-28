@@ -173,8 +173,12 @@ example** — its diff contains exactly one of everything below; when in doubt, 
    clones of the referencing model keep pointing at the **old** version's row and the new
    version looks fine while being subtly wrong.
 5. `MappingService::copyMappingVersionContentsToDungeon()`: add a clone loop **if** the model
-   must survive the MDT-copy path — this is separate from the boot path and easy to forget. If
-   you deliberately skip it, say so in the comment there (checkpoints: tracked in #3702).
+   must survive the MDT-copy path — this is separate from the boot path and easy to forget. If the
+   model's children live in a table this method doesn't touch (the way `enemyForcesCheckpoints`'
+   members live in `enemies`, which this method never copies), clone it via its own paired method
+   instead — see `copyEnemyForcesCheckpointsToMappingVersion()` above — and return a
+   source id => clone id map so the caller can re-link children itself; every existing caller of
+   `copyMappingVersionContentsToDungeon()` must call the paired method too.
 6. `app/Console/Commands/Mapping/Copy.php` `$relations` array: any model carrying a `floor_id`
    must be listed or cross-dungeon copies strand it on the source dungeon's floors — see Gotchas.
 
