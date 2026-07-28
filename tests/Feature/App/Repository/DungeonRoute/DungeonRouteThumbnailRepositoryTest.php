@@ -168,10 +168,14 @@ final class DungeonRouteThumbnailRepositoryTest extends PublicTestCase
         // Arrange - a partially-failed multi-floor render: one floor's thumbnail is fresh, but another
         // floor still carries a stale row from before the route's last content change. The stale floor
         // must not be masked by the fresh one.
-        $dungeon        = $this->getDungeonWithNonFacadeFloor();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
-        $floor          = $dungeon->floors()->where('facade', false)->first();
-        $dungeonRoute   = DungeonRoute::factory()->create([
+        //
+        // Capped at two active floors on purpose: hasFreshThumbnailForVariant() first compares the
+        // thumbnail row count against the dungeon's active floor count, so a dungeon with three or
+        // more floors would return false on that short-circuit and the staleness check this test is
+        // about would never run.
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: false, maxActiveFloors: 2);
+        $floor                      = $dungeon->floors()->where('facade', false)->first();
+        $dungeonRoute               = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $mappingVersion->id,
         ]);
