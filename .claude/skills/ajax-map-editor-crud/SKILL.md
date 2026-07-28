@@ -64,7 +64,10 @@ which is itself inside the site-wide group that includes `read_only_mode`.
   both → `store`, `DELETE /enemy/{enemy}` → `delete`.
 - **Route-scoped endpoints**: `Route::prefix('{dungeonRoute}')` with **no auth middleware**
   (the sandbox works logged-out); authorization happens inside controllers via
-  `Gate::authorize('edit', $dungeonRoute)` (+ ability-specific gates like `addMapIcon`).
+  `Gate::authorize('edit', $dungeonRoute)`. Per-route object caps (kill zones, brushlines, paths,
+  arrows, map icons) are enforced separately via the `EnforcesDungeonRouteLimits` trait
+  (`app/Http/Controllers/Traits/`), which aborts with 422 rather than going through a `Gate`
+  ability — hitting a cap isn't an authorization failure.
 
 ## Broadcast events — `app/Events/`
 

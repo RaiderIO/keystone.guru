@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Ajax;
 use App\Events\Models\Brushline\BrushlineChangedEvent;
 use App\Events\Models\Brushline\BrushlineDeletedEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\EnforcesDungeonRouteLimits;
 use App\Http\Controllers\Traits\SavesPolylines;
 use App\Http\Controllers\Traits\ValidatesFloorId;
 use App\Http\Requests\Brushline\APIBrushlineFormRequest;
 use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteLimitType;
 use App\Models\Polyline;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
@@ -26,6 +28,7 @@ use Throwable;
 
 class AjaxBrushlineController extends Controller
 {
+    use EnforcesDungeonRouteLimits;
     use SavesPolylines;
     use ValidatesFloorId;
 
@@ -44,7 +47,7 @@ class AjaxBrushlineController extends Controller
         $dungeonRoute = $brushline?->dungeonRoute ?? $dungeonRoute; // @phpstan-ignore nullsafe.neverNull
 
         Gate::authorize('edit', $dungeonRoute);
-        Gate::authorize('addBrushline', $dungeonRoute);
+        $this->abortIfDungeonRouteLimitReached($dungeonRoute, DungeonRouteLimitType::Brushlines);
 
         $validated = $request->validated();
 
