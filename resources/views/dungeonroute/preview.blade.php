@@ -54,6 +54,7 @@ $killZonePathWeightMultiplier ??= null;
         'zoomToContents' => false,
         'parameters' => $parameters,
         'hiddenMapObjectGroups' => [
+            'enemyforcescheckpoint',
             'enemypatrol',
             'mountablearea',
             'floorunion',

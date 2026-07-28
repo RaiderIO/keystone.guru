@@ -7,6 +7,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
+use App\Models\EnemyForcesCheckpoint;
 use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
 use App\Models\Floor\Floor;
@@ -57,6 +58,7 @@ use Override;
  * @property EloquentCollection<int, EnemyPatrol>              $enemyPatrols
  * @property EloquentCollection<int, MapIcon>                  $mapIcons
  * @property EloquentCollection<int, MountableArea>            $mountableAreas
+ * @property EloquentCollection<int, EnemyForcesCheckpoint>    $enemyForcesCheckpoints
  * @property EloquentCollection<int, FloorUnion>               $floorUnions
  * @property EloquentCollection<int, FloorUnionArea>           $floorUnionAreas
  * @property EloquentCollection<int, NpcEnemyForces>           $npcEnemyForces
@@ -183,6 +185,12 @@ class MappingVersion extends Model
     public function mountableAreas(): HasMany
     {
         return $this->hasMany(MountableArea::class);
+    }
+
+    /** @return HasMany<EnemyForcesCheckpoint, $this> */
+    public function enemyForcesCheckpoints(): HasMany
+    {
+        return $this->hasMany(EnemyForcesCheckpoint::class);
     }
 
     /** @return HasMany<FloorUnion, $this> */
@@ -492,6 +500,32 @@ class MappingVersion extends Model
         return $mountableAreas;
     }
 
+    /**
+     * @return EloquentCollection<int, EnemyForcesCheckpoint>
+     */
+    public function mapContextEnemyForcesCheckpoints(
+        CoordinatesServiceInterface $coordinatesService,
+        bool                        $useFacade,
+    ): EloquentCollection {
+        /** @var EloquentCollection<int, EnemyForcesCheckpoint> $enemyForcesCheckpoints */
+        $enemyForcesCheckpoints = $this->enemyForcesCheckpoints()
+            ->with(['floor'])
+            ->get();
+
+        if ($this->facade_enabled && $useFacade) {
+            foreach ($enemyForcesCheckpoints as $enemyForcesCheckpoint) {
+                $convertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
+                    $this,
+                    $enemyForcesCheckpoint->getLatLng(),
+                );
+
+                $enemyForcesCheckpoint->setLatLng($convertedLatLng);
+            }
+        }
+
+        return $enemyForcesCheckpoints;
+    }
+
     /** @return EloquentCollection<int, FloorUnion> */
     public function mapContextFloorUnions(CoordinatesServiceInterface $coordinatesService, bool $useFacade): EloquentCollection
     {
@@ -540,11 +574,12 @@ class MappingVersion extends Model
                 'enemyPatrols',
                 'mapIcons',
                 'mountableAreas',
+                'enemyForcesCheckpoints',
                 'floorUnions',
                 'floorUnionAreas',
                 'npcEnemyForces',
             ]);
-            /** @var Collection<int, MappingModelInterface|DungeonFloorSwitchMarker|Enemy|EnemyPack|EnemyPatrol|MapIcon|MountableArea|FloorUnion|FloorUnionArea|NpcEnemyForces> $previousMapping */
+            /** @var Collection<int, MappingModelInterface|DungeonFloorSwitchMarker|Enemy|EnemyPack|EnemyPatrol|MapIcon|MountableArea|EnemyForcesCheckpoint|FloorUnion|FloorUnionArea|NpcEnemyForces> $previousMapping */
             $previousMapping = collect()
                 ->merge($previousMappingVersion->dungeonFloorSwitchMarkers)
                 ->merge($previousMappingVersion->enemies)
@@ -552,6 +587,7 @@ class MappingVersion extends Model
                 ->merge($previousMappingVersion->enemyPatrols)
                 ->merge($previousMappingVersion->mapIcons)
                 ->merge($previousMappingVersion->mountableAreas)
+                ->merge($previousMappingVersion->enemyForcesCheckpoints)
                 ->merge($previousMappingVersion->floorUnions)
                 ->merge($previousMappingVersion->floorUnionAreas)
                 ->merge($previousMappingVersion->npcEnemyForces);
@@ -562,6 +598,7 @@ class MappingVersion extends Model
                 EnemyPatrol::class              => collect(),
                 MapIcon::class                  => collect(),
                 MountableArea::class            => collect(),
+                EnemyForcesCheckpoint::class    => collect(),
                 FloorUnion::class               => collect(),
                 FloorUnionArea::class           => collect(),
                 NpcEnemyForces::class           => collect(),
@@ -591,6 +628,20 @@ class MappingVersion extends Model
                         $enemyRelationCoupling['newModel']->enemy_pack_id = $enemyPackRelationCoupling['newModel']->id;
                         $enemyRelationCoupling['newModel']->save();
                         break;
+                    }
+                }
+
+                $oldEnemyForcesCheckpointId = $enemyRelationCoupling['oldModel']->enemy_forces_checkpoint_id;
+                if ($oldEnemyForcesCheckpointId !== null) {
+                    // Find the new ID of the enemy forces checkpoint
+                    foreach ($idMapping->get(EnemyForcesCheckpoint::class) as $enemyForcesCheckpointRelationCoupling) {
+                        /** @var array{oldModel: EnemyForcesCheckpoint, newModel: EnemyForcesCheckpoint} $enemyForcesCheckpointRelationCoupling */
+                        if ($enemyForcesCheckpointRelationCoupling['oldModel']->id === $oldEnemyForcesCheckpointId) {
+                            $enemyRelationCoupling['newModel']->update([
+                                'enemy_forces_checkpoint_id' => $enemyForcesCheckpointRelationCoupling['newModel']->id,
+                            ]);
+                            break;
+                        }
                     }
                 }
 
@@ -638,6 +689,7 @@ class MappingVersion extends Model
 
             $mappingVersion->mapIcons()->delete();
             $mappingVersion->mountableAreas()->delete();
+            $mappingVersion->enemyForcesCheckpoints()->delete();
             $mappingVersion->floorUnions()->delete();
             $mappingVersion->floorUnionAreas()->delete();
             $mappingVersion->npcEnemyForces()->delete();

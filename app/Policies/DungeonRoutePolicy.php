@@ -95,6 +95,17 @@ class DungeonRoutePolicy
     }
 
     /**
+     * Determine whether the user can claim a dungeon route as their own.
+     * Only sandbox routes are unowned and therefore claimable.
+     */
+    public function claim(User $user, DungeonRoute $dungeonroute): Response
+    {
+        return $dungeonroute->isSandbox() ?
+            $this->allow() :
+            $this->deny(__('policy.claim_route_not_claimable'));
+    }
+
+    /**
      * Determine whether the user can migrate a dungeon route.
      */
     public function migrate(User $user, DungeonRoute $dungeonroute): bool

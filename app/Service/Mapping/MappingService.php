@@ -4,6 +4,7 @@ namespace App\Service\Mapping;
 
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
+use App\Models\EnemyForcesCheckpoint;
 use App\Models\Floor\FloorUnion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
@@ -208,6 +209,10 @@ class MappingService implements MappingServiceInterface
             $mountableArea->cloneForNewMappingVersion($targetMappingVersion);
         }
 
+        // Enemy Forces Checkpoints are cloned by copyEnemyForcesCheckpointsToMappingVersion() instead - the
+        // caller must invoke it, because only the caller knows how to re-link the membership of the enemies
+        // it clones or re-imports, and this method copies no enemies at all (#3702).
+
         // Floor Unions (and areas)
         foreach ($sourceMappingVersion->floorUnions as $floorUnion) {
             /** @var FloorUnion $newFloorUnion */
@@ -239,5 +244,23 @@ class MappingService implements MappingServiceInterface
         ]);
 
         return $targetMappingVersion;
+    }
+
+    public function copyEnemyForcesCheckpointsToMappingVersion(
+        MappingVersion $sourceMappingVersion,
+        MappingVersion $targetMappingVersion,
+    ): array {
+        $enemyForcesCheckpointIdMapping = [];
+
+        foreach ($sourceMappingVersion->enemyForcesCheckpoints as $enemyForcesCheckpoint) {
+            /** @var EnemyForcesCheckpoint $newEnemyForcesCheckpoint */
+            $newEnemyForcesCheckpoint = $enemyForcesCheckpoint->cloneForNewMappingVersion($targetMappingVersion);
+
+            $enemyForcesCheckpointIdMapping[$enemyForcesCheckpoint->id] = $newEnemyForcesCheckpoint->id;
+        }
+
+        $targetMappingVersion->load('enemyForcesCheckpoints');
+
+        return $enemyForcesCheckpointIdMapping;
     }
 }

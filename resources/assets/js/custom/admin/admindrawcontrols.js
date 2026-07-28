@@ -106,6 +106,12 @@ class AdminDrawControls extends DrawControls {
                     title: lang.get('js.mountablearea_title', {hotkey: hotkeys.mountablearea}),
                     hotkey: hotkeys.mountablearea
                 },
+                enemyforcescheckpoint: {
+                    repeatMode: false,
+                    zIndexOffset: 1000,
+                    faClass: 'fa-percent',
+                    title: lang.get('js.enemyforcescheckpoint_title'),
+                },
                 floorunion: {
                     repeatMode: false,
                     zIndexOffset: 1000,

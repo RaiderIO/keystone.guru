@@ -24,6 +24,13 @@
     content: unset;
 }
 
+/* Suppresses enemy tooltips while a MapState.disablesTooltips() state is active (editing, any
+   enemy-selection mode) - see DungeonMap.setMapState(). Only enemy tooltips (map_enemy_tooltip),
+   not e.g. a killzone index or an enemy forces checkpoint's own tooltip. */
+.map_enemy_tooltips_suppressed .map_enemy_tooltip {
+    display: none !important;
+}
+
 .popup_select {
     width: 300px;
 }
@@ -989,6 +996,38 @@
 
 .map_enemy_forces_ok {
     color: #5cb85c;
+}
+
+/* Small pill/banner showing how much enemy forces you need before entering an enemy forces
+   checkpoint - a mapper-defined group of enemies such as a corridor (issue #128). */
+.map_enemy_forces_checkpoint_pill {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    font-size: 0.9em;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+/* The pill marker's divIcon carries an explicit measured iconSize + centered iconAnchor (see
+   EnemyForcesCheckpoint._buildPillIcon()), so Leaflet's own inline width/height/margins do the
+   centering - no CSS sizing or transform here. A transform on the inner pill was tried and reverted:
+   it moves only the painted pill while the marker root (the element leaflet.draw puts the dashed edit
+   border on) stays put, misaligning the border from the label in edit mode. The flex centering keeps
+   the label centered in the icon box even if the measured size drifts a pixel from the rendered one. */
+.map_enemy_forces_checkpoint_pill_icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Cursor preview while placing a checkpoint, and the marker's icon before refreshPill() swaps in the
+   real pill (see LeafletEnemyForcesCheckpointIcon). */
+.map_enemy_forces_checkpoint_marker_icon {
+    color: #f0ad4e;
+    font-size: 20px;
 }
 
 .profile_class_color,
