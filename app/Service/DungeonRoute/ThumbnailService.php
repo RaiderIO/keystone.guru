@@ -7,9 +7,11 @@ use App\Jobs\ProcessRouteFloorThumbnailCustom;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnail;
 use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
+use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Models\File;
 use App\Models\Floor\Floor;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailRepositoryInterface;
 use App\Service\DungeonRoute\Logging\ThumbnailServiceLoggingInterface;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -30,8 +32,9 @@ class ThumbnailService implements ThumbnailServiceInterface
     public const string THUMBNAIL_CUSTOM_FOLDER_PATH = 'thumbnails_custom';
 
     public function __construct(
-        private readonly DungeonRouteRepositoryInterface  $dungeonRouteRepository,
-        private readonly ThumbnailServiceLoggingInterface $log,
+        private readonly DungeonRouteRepositoryInterface          $dungeonRouteRepository,
+        private readonly DungeonRouteThumbnailRepositoryInterface $dungeonRouteThumbnailRepository,
+        private readonly ThumbnailServiceLoggingInterface         $log,
     ) {
     }
 
@@ -39,17 +42,31 @@ class ThumbnailService implements ThumbnailServiceInterface
      * {@inheritDoc}
      */
     public function createThumbnail(
-        DungeonRoute $dungeonRoute,
-        int          $floorIndex,
-        int          $attempts = 0,
+        DungeonRoute                 $dungeonRoute,
+        int                          $floorIndex,
+        int                          $attempts = 0,
+        DungeonRouteThumbnailVariant $variant = DungeonRouteThumbnailVariant::Standard,
     ): ?DungeonRouteThumbnail {
         try {
             $this->log->createThumbnailStart($dungeonRoute->public_key, $floorIndex, $attempts);
+
+            // Each variant carries its own render dimensions in config, so adding a variant needs no
+            // branching here. The hero variant, for instance, is a larger render of the exact same
+            // preview page - stored without downscale so the wide discovery hero band doesn't show a
+            // stretched/pixelated version of the small thumbnail.
+            $settings = config(sprintf('keystoneguru.api.dungeon_route.thumbnail.variants.%s', $variant->value));
 
             return $this->doCreateThumbnail(
                 $dungeonRoute,
                 $floorIndex,
                 self::THUMBNAIL_FOLDER_PATH,
+                $settings['viewport_width'],
+                $settings['viewport_height'],
+                $settings['image_width'],
+                $settings['image_height'],
+                $settings['zoom_level'],
+                $settings['quality'],
+                $variant,
             );
         } finally {
             $this->log->createThumbnailEnd();
@@ -82,7 +99,8 @@ class ThumbnailService implements ThumbnailServiceInterface
                 $imageWidth,
                 $imageHeight,
                 $zoomLevel,
-                $quality ?? config('keystoneguru.api.dungeon_route.thumbnail.default_quality'),
+                $quality ?? config('keystoneguru.api.dungeon_route.thumbnail.variants.standard.quality'),
+                DungeonRouteThumbnailVariant::Custom,
             );
         } finally {
             $this->log->createThumbnailCustomEnd();
@@ -90,15 +108,16 @@ class ThumbnailService implements ThumbnailServiceInterface
     }
 
     private function doCreateThumbnail(
-        DungeonRoute $dungeonRoute,
-        int          $floorIndex,
-        string       $targetFolder,
-        ?int         $viewportWidth = null,
-        ?int         $viewportHeight = null,
-        ?int         $imageWidth = null,
-        ?int         $imageHeight = null,
-        ?float       $zoomLevel = null,
-        ?int         $quality = null,
+        DungeonRoute                 $dungeonRoute,
+        int                          $floorIndex,
+        string                       $targetFolder,
+        ?int                         $viewportWidth = null,
+        ?int                         $viewportHeight = null,
+        ?int                         $imageWidth = null,
+        ?int                         $imageHeight = null,
+        ?float                       $zoomLevel = null,
+        ?int                         $quality = null,
+        DungeonRouteThumbnailVariant $variant = DungeonRouteThumbnailVariant::Standard,
     ): ?DungeonRouteThumbnail {
         $result = null;
 
@@ -131,11 +150,11 @@ class ThumbnailService implements ThumbnailServiceInterface
                 $disk = 'public';
             }
 
-            $viewportWidth ??= config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_width');
-            $viewportHeight ??= config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_height');
-            $imageWidth ??= config('keystoneguru.api.dungeon_route.thumbnail.default_image_width');
-            $imageHeight ??= config('keystoneguru.api.dungeon_route.thumbnail.default_image_height');
-            $zoomLevel ??= config('keystoneguru.api.dungeon_route.thumbnail.default_zoom_level');
+            $viewportWidth ??= config('keystoneguru.api.dungeon_route.thumbnail.variants.standard.viewport_width');
+            $viewportHeight ??= config('keystoneguru.api.dungeon_route.thumbnail.variants.standard.viewport_height');
+            $imageWidth ??= config('keystoneguru.api.dungeon_route.thumbnail.variants.standard.image_width');
+            $imageHeight ??= config('keystoneguru.api.dungeon_route.thumbnail.variants.standard.image_height');
+            $zoomLevel ??= config('keystoneguru.api.dungeon_route.thumbnail.variants.standard.zoom_level');
 
             // 1. Headless chrome saves file in a temp location
             // 2. File is downsized to a smaller thumbnail (can't make the browser window smaller since that'd mess up the image)
@@ -152,7 +171,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                 // Script to execute
                 resource_path('assets/puppeteer/route_thumbnail.js'),
                 // First argument; where to navigate
-                $this->getPreviewUrl($dungeonRoute, $floorIndex, $zoomLevel),
+                $this->getPreviewUrl($dungeonRoute, $floorIndex, $zoomLevel, $variant),
                 // Second argument; where to save the resulting image
                 $tmpFile,
                 $viewportWidth,
@@ -199,7 +218,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                             $target,
                             file_get_contents($tmpFileAfterResize),
                             $disk,
-                            $targetFolder === self::THUMBNAIL_CUSTOM_FOLDER_PATH,
+                            $variant,
                         );
                     } catch (Throwable $e) {
                         $this->log->doCreateThumbnailException($e);
@@ -239,36 +258,56 @@ class ThumbnailService implements ThumbnailServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function queueThumbnailRefresh(DungeonRoute $dungeonRoute, bool $force = false): bool
-    {
-        $result = false;
+    public function queueThumbnailRefresh(
+        DungeonRoute                 $dungeonRoute,
+        bool                         $force = false,
+        DungeonRouteThumbnailVariant $variant = DungeonRouteThumbnailVariant::Standard,
+    ): bool {
+        $result     = false;
+        $isStandard = $variant === DungeonRouteThumbnailVariant::Standard;
+
+        // A regular (standard) refresh honours $force and records thumbnail_refresh_queued_at so the route
+        // isn't retried in a tight loop. The larger hero variant is expensive and only needed for the handful
+        // of routes shown in the discovery hero band, so it isn't produced here - the hourly EnsureHeroThumbnails
+        // command requests it explicitly. Non-standard variants therefore skip routes that are already fresh and
+        // always force the render, and are gated by variant freshness rather than the queued-at timestamp.
+        if (!$isStandard && !$force && $this->dungeonRouteThumbnailRepository->hasFreshThumbnailForVariant($dungeonRoute, $variant)) {
+            return false;
+        }
 
         if ($dungeonRoute->mappingVersion === null) { // @phpstan-ignore identical.alwaysFalse
+            // Non-standard variants have nothing to fall back on, so bail.
+            if (!$isStandard) {
+                return false;
+            }
             $this->log->queueThumbnailRefreshMappingVersionNull($dungeonRoute->public_key);
             // Do not return - we just assume the thumbnail is generated. Otherwise this will keep spamming
             // the logs with this error when it really isn't that important.
         } else {
+            $forceDispatch = $isStandard ? $force : true;
+            /** @var Floor $floor */
             foreach ($dungeonRoute->dungeon->floorsForMapFacade($dungeonRoute->mappingVersion, true)->active()->get() as $floor) {
-                /** @var Floor $floor */
-                // Set it for processing in a queue
-                ProcessRouteFloorThumbnail::dispatch($dungeonRoute, $floor->index, $force);
+                ProcessRouteFloorThumbnail::dispatch($dungeonRoute, $floor->index, $forceDispatch, 0, $variant);
                 $result = true;
 
                 $this->log->queueThumbnailRefreshDispatchedJob(
                     $dungeonRoute->public_key,
                     $floor->index,
-                    $force,
+                    $forceDispatch,
                 );
             }
         }
 
-        // Temporarily disable timestamps since we don't want this action to update the updated_at
-        $dungeonRoute->timestamps = false;
-        $dungeonRoute->update([
-            'thumbnail_refresh_queued_at' => Carbon::now()->toDateTimeString(),
-        ]);
-        // Re-enable them
-        $dungeonRoute->timestamps = true;
+        // Only the standard refresh records the queue timestamp; hero/custom passes are gated by freshness.
+        if ($isStandard) {
+            // Temporarily disable timestamps since we don't want this action to update the updated_at
+            $dungeonRoute->timestamps = false;
+            $dungeonRoute->update([
+                'thumbnail_refresh_queued_at' => Carbon::now()->toDateTimeString(),
+            ]);
+            // Re-enable them
+            $dungeonRoute->timestamps = true;
+        }
 
         return $result;
     }
@@ -410,6 +449,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                     self::getTargetFilePath($targetDungeonRoute, $thumbnail->floor->index, self::THUMBNAIL_FOLDER_PATH),
                     $thumbnailData,
                     $disk,
+                    $thumbnail->variant,
                 );
 
                 if ($copiedThumbnail === null) { // @phpstan-ignore identical.alwaysFalse
@@ -438,17 +478,23 @@ class ThumbnailService implements ThumbnailServiceInterface
     }
 
     private function attachThumbnailToDungeonRoute(
-        DungeonRoute $dungeonRoute,
-        int          $floorIndex,
-        string       $target,
-        string       $thumbnailData,
-        string       $disk,
-        bool         $isCustom = false,
+        DungeonRoute                 $dungeonRoute,
+        int                          $floorIndex,
+        string                       $target,
+        string                       $thumbnailData,
+        string                       $disk,
+        DungeonRouteThumbnailVariant $variant = DungeonRouteThumbnailVariant::Standard,
     ): DungeonRouteThumbnail {
+        // Custom-ness is derived from the variant - it's not an independent flag. The legacy `custom`
+        // boolean column is still dual-written here (kept in sync with the variant) until the follow-up
+        // migration drops it; see the expand/contract note on the model.
+        $isCustom = $variant === DungeonRouteThumbnailVariant::Custom;
+
         return DB::transaction(function () use (
             $dungeonRoute,
             $floorIndex,
             $isCustom,
+            $variant,
             $target,
             $thumbnailData,
             $disk,
@@ -458,6 +504,8 @@ class ThumbnailService implements ThumbnailServiceInterface
 
             /** @var Collection<int, DungeonRouteThumbnail> $existingThumbnailsToDelete */
             $existingThumbnailsToDelete = $isCustom ? collect() : DungeonRouteThumbnail::where('dungeon_route_id', $dungeonRoute->id)
+                // Only replace thumbnails of the same variant so the standard and hero renders don't delete each other
+                ->where('variant', $variant)
                 // When the target floor is NOT a facade, we want to keep just this floor's thumbnail
                 // Routes with a facade will have a thumbnail for the facade, and nothing else, so this query will
                 // in that case delete all thumbnails for the route before attaching the new one
@@ -470,6 +518,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                 'dungeon_route_id' => $dungeonRoute->id,
                 'floor_id'         => $floor->id,
                 'custom'           => $isCustom,
+                'variant'          => $variant,
             ]);
 
             $file = File::create([
@@ -518,8 +567,12 @@ class ThumbnailService implements ThumbnailServiceInterface
      * prefixed with it instead of the app's absolute URL, so puppeteer (running inside the app
      * container) can reach a nginx/webserver hostname unreachable via the public APP_URL.
      */
-    private function getPreviewUrl(DungeonRoute $dungeonRoute, int $floorIndex, ?float $zoomLevel): string
-    {
+    private function getPreviewUrl(
+        DungeonRoute                 $dungeonRoute,
+        int                          $floorIndex,
+        ?float                       $zoomLevel,
+        DungeonRouteThumbnailVariant $variant = DungeonRouteThumbnailVariant::Standard,
+    ): string {
         $params = [
             'dungeon'      => $dungeonRoute->dungeon,
             'dungeonroute' => $dungeonRoute->public_key,
@@ -528,6 +581,17 @@ class ThumbnailService implements ThumbnailServiceInterface
             'secret'       => config('keystoneguru.thumbnail.preview_secret'),
             'z'            => $zoomLevel,
         ];
+
+        // Multiply the killzone-path (pull-connection) line weight so a small render still reads as a route
+        // shape. The large hero render keeps normal-width lines (null); only pass the param when there's an
+        // actual multiplier so the preview page can fall back to its own default.
+        $killZonePathWeightMultiplier = config(sprintf(
+            'keystoneguru.api.dungeon_route.thumbnail.variants.%s.kill_zone_path_weight_multiplier',
+            $variant->value,
+        ));
+        if ($killZonePathWeightMultiplier !== null) {
+            $params['killzonepathweight'] = $killZonePathWeightMultiplier;
+        }
 
         $previewBaseUrl = config('keystoneguru.thumbnail.preview_base_url');
         if ($previewBaseUrl === null) {

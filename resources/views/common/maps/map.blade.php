@@ -112,6 +112,9 @@ if ($embed || $dungeonroute?->demo === true) {
 
 // No UI on the map
 $noUI            = isset($noUI) && $noUI;
+// The factor to multiply the killzone-path (pull-connection) line weight by (see dungeonroute.preview),
+// so a small thumbnail render still reads as a route shape. Null on normal map viewing keeps the default.
+$killZonePathWeightMultiplier = $killZonePathWeightMultiplier ?? null;
 $gestureHandling = isset($gestureHandling) && $gestureHandling;
 // Default zoom for the map
 $defaultZoom    ??= 2;
@@ -171,6 +174,7 @@ if ($isAdmin) {
     'defaultEnemyAggressivenessBorder' => $defaultEnemyAggressivenessBorder,
     'mapFacadeStyle' => $mapFacadeStyle,
     'noUI' => $noUI,
+    'killZonePathWeightMultiplier' => $killZonePathWeightMultiplier,
     'showControls' => $show['controls'],
     'gestureHandling' => $gestureHandling,
     'zoomToContents' => $zoomToContents,

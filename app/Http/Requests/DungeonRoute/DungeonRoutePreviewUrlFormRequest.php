@@ -31,6 +31,16 @@ class DungeonRoutePreviewUrlFormRequest extends DungeonRouteBaseUrlFormRequest
                 'nullable',
                 'string',
             ],
+            // The factor the killzone-path (pull-connection) line weight is multiplied by for this render, so
+            // a small miniature still reads as a route shape. Absent/null keeps the map's normal line width
+            // (e.g. the large hero variant).
+            'killzonepathweight' => [
+                'sometimes',
+                'nullable',
+                'numeric',
+                'min:1',
+                'max:10',
+            ],
         ]);
     }
 }

@@ -4,11 +4,13 @@ namespace App\Service\DungeonRoute;
 
 use App\Models\AffixGroup\AffixGroupBase;
 use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Models\Team;
 use Closure;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 interface DiscoverServiceInterface
@@ -71,6 +73,23 @@ interface DiscoverServiceInterface
 
     /** @return Collection<int, mixed> */
     public function popularByDungeon(Dungeon $dungeon): Collection;
+
+    /**
+     * The popular routes of a single dungeon, wrapped in a classic length-aware paginator so the
+     * reworked discovery leaderboard can render numbered pages. Bypasses the discover cache (the
+     * cache key is not offset-aware); per-row card caching still applies.
+     *
+     * @return LengthAwarePaginator<int, DungeonRoute>
+     */
+    public function popularByDungeonPaginated(Dungeon $dungeon, int $perPage): LengthAwarePaginator;
+
+    /**
+     * The routes shown as heroes on the discovery pages: every Raider.IO weekly route plus the top
+     * community routes of each of the season's dungeons, deduplicated by id.
+     *
+     * @return Collection<int, DungeonRoute>
+     */
+    public function heroRoutes(Season $season, int $topPerDungeon = 3): Collection;
 
     /** @return Collection<int, mixed> */
     public function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection;
