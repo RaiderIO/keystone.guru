@@ -173,6 +173,11 @@ services:
       - "34006:3306"
     command:
       - '--default-authentication-plugin=mysql_native_password'
+      # MySQL 8.0 turns binary logging on by default; 5.7 had it off. With sync_binlog=1 that adds a
+      # second fsync per commit, which on a bind-mounted data dir halves write throughput (measured
+      # in #3717: 2000 single-row inserts went 9.5s -> 18.7s). Local dev has no replication and no
+      # point-in-time-recovery story, so the binlog is pure cost - this restores the 5.7 behaviour.
+      - '--skip-log-bin'
     volumes:
       # create_host_path: false makes compose fail loudly when the data dir is missing
       # (e.g. bad DB_DATA_VARIANT) instead of silently mounting a fresh empty dir that
@@ -201,6 +206,11 @@ services:
       - "34007:3306"
     command:
       - '--default-authentication-plugin=mysql_native_password'
+      # MySQL 8.0 turns binary logging on by default; 5.7 had it off. With sync_binlog=1 that adds a
+      # second fsync per commit, which on a bind-mounted data dir halves write throughput (measured
+      # in #3717: 2000 single-row inserts went 9.5s -> 18.7s). Local dev has no replication and no
+      # point-in-time-recovery story, so the binlog is pure cost - this restores the 5.7 behaviour.
+      - '--skip-log-bin'
     volumes:
       - type: bind
         source: ./docker-compose/mysql${DB_DATA_VARIANT:-}-combatlog
