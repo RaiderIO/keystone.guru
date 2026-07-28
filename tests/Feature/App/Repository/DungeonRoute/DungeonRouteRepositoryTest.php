@@ -2,7 +2,11 @@
 
 namespace Tests\Feature\App\Repository\DungeonRoute;
 
+use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\GameVersion\GameVersion;
+use App\Models\Mapping\MappingVersion;
+use App\Models\User;
 use App\Repositories\Database\DungeonRoute\DungeonRouteRepository;
 use App\Repositories\Interfaces\DungeonRoute\Dtos\DungeonRouteSearchFilter;
 use App\Service\Season\SeasonServiceInterface;
@@ -10,11 +14,14 @@ use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Attributes\SlowTest;
+use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('DungeonRouteRepository')]
 final class DungeonRouteRepositoryTest extends PublicTestCase
 {
+    use ProvidesDungeon;
+
     private DungeonRouteRepository $repository;
 
     #[\Override]
@@ -173,5 +180,73 @@ final class DungeonRouteRepositoryTest extends PublicTestCase
         } finally {
             $dungeonRoute->delete();
         }
+    }
+
+    #[Test]
+    public function getRoutesForUserAndDungeon_givenRoutesOnDifferentGameVersions_returnsOnlyTheMatchingGameVersion(): void
+    {
+        // Arrange - a dungeon with two isolated mapping versions, one per game version, each with its
+        // own route by the same user. Regression for #3446: this method used to ignore game version
+        // entirely, so a user's route on one game version's mapping could leak into another game
+        // version's "Your routes" panel.
+        $dungeon                = $this->getDungeonWithNonFacadeFloor();
+        $existingMappingVersion = $dungeon->getCurrentMappingVersion();
+        $this->assertNotNull($existingMappingVersion, 'Need a dungeon with a current mapping version');
+
+        $retailGameVersion  = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+        $classicGameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA);
+
+        $retailMappingVersion  = $this->createIsolatedMappingVersion($dungeon, $existingMappingVersion, $retailGameVersion->id, 1000);
+        $classicMappingVersion = $this->createIsolatedMappingVersion($dungeon, $existingMappingVersion, $classicGameVersion->id, 2000);
+
+        $user = User::findOrFail(1);
+
+        $retailRoute = DungeonRoute::factory()->create([
+            'author_id'          => $user->id,
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $retailMappingVersion->id,
+            'demo'               => false,
+            'expires_at'         => null,
+        ]);
+        $classicRoute = DungeonRoute::factory()->create([
+            'author_id'          => $user->id,
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $classicMappingVersion->id,
+            'demo'               => false,
+            'expires_at'         => null,
+        ]);
+
+        try {
+            // Act
+            $result = $this->repository->getRoutesForUserAndDungeon($user, $dungeon, $retailGameVersion, 10);
+
+            // Assert
+            $this->assertTrue($result->contains('id', $retailRoute->id), 'Same-game-version route must be included');
+            $this->assertFalse($result->contains('id', $classicRoute->id), 'Different-game-version route must be excluded');
+        } finally {
+            $retailRoute->delete();
+            $classicRoute->delete();
+            $retailMappingVersion->delete();
+            $classicMappingVersion->delete();
+        }
+    }
+
+    /**
+     * Creates a newer, isolated mapping version for the dungeon on the given game version, so its
+     * seeded mapping version becomes "non-current" for that game version.
+     */
+    private function createIsolatedMappingVersion(Dungeon $dungeon, MappingVersion $existing, int $gameVersionId, int $versionOffset): MappingVersion
+    {
+        return MappingVersion::create([
+            'game_version_id'                 => $gameVersionId,
+            'dungeon_id'                      => $dungeon->id,
+            'version'                         => $existing->version + $versionOffset,
+            'enemy_forces_required'           => $existing->enemy_forces_required,
+            'enemy_forces_required_teeming'   => $existing->enemy_forces_required_teeming,
+            'enemy_forces_shrouded'           => $existing->enemy_forces_shrouded,
+            'enemy_forces_shrouded_zul_gamux' => $existing->enemy_forces_shrouded_zul_gamux,
+            'timer_max_seconds'               => $existing->timer_max_seconds,
+            'facade_enabled'                  => false,
+        ]);
     }
 }

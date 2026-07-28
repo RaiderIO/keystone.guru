@@ -6,6 +6,7 @@ use App\Models\Affix;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\NpcClassification;
 use App\Models\PublishedState;
 use App\Models\Season;
@@ -143,12 +144,13 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
     /**
      * @return Collection<int, DungeonRoute>
      */
-    public function getRoutesForUserAndDungeon(User $user, Dungeon $dungeon, int $limit): Collection
+    public function getRoutesForUserAndDungeon(User $user, Dungeon $dungeon, GameVersion $gameVersion, int $limit): Collection
     {
         return $user->dungeonRoutes()
             ->where('dungeon_id', $dungeon->id)
             ->whereNull('expires_at')
             ->where('demo', false)
+            ->whereRelation('mappingVersion', 'game_version_id', $gameVersion->id)
             ->with([
                 // Everything the rendered route cards read - DungeonRoute no longer eager loads relations globally
                 'author.iconfile',
