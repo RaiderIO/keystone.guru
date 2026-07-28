@@ -10,6 +10,7 @@ use App\Models\Npc\NpcClassification;
 use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\Tags\TagCategory;
+use App\Models\User;
 use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Database\DungeonRoute\Dtos\KillZoneEnemyForces;
 use App\Repositories\Database\DungeonRoute\Dtos\SimilarDungeonRoute;
@@ -137,6 +138,30 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
 
                 return $result;
             });
+    }
+
+    /**
+     * @return Collection<int, DungeonRoute>
+     */
+    public function getRoutesForUserAndDungeon(User $user, Dungeon $dungeon, int $limit): Collection
+    {
+        return $user->dungeonRoutes()
+            ->where('dungeon_id', $dungeon->id)
+            ->whereNull('expires_at')
+            ->where('demo', false)
+            ->with([
+                // Everything the rendered route cards read - DungeonRoute no longer eager loads relations globally
+                'author.iconfile',
+                'dungeon',
+                'affixes',
+                'mappingVersion',
+                'season.expansion',
+                'thumbnails',
+                'ratings',
+            ])
+            ->orderByDesc('updated_at')
+            ->limit($limit)
+            ->get();
     }
 
     /**

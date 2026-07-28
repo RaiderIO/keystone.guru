@@ -5,6 +5,7 @@ namespace App\Repositories\Stub\DungeonRoute;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Season;
+use App\Models\User;
 use App\Repositories\Database\DungeonRoute\Dtos\KillZoneEnemyForces;
 use App\Repositories\Database\DungeonRoute\Dtos\SimilarDungeonRoute;
 use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
@@ -38,6 +39,14 @@ class DungeonRouteRepository extends StubRepository implements DungeonRouteRepos
      * @return Collection<string, Collection<int, WeeklyRoute>>
      */
     public function getWeeklyRoutes(?Dungeon $dungeon = null, ?Season $season = null): Collection
+    {
+        return collect();
+    }
+
+    /**
+     * @return Collection<int, DungeonRoute>
+     */
+    public function getRoutesForUserAndDungeon(User $user, Dungeon $dungeon, int $limit): Collection
     {
         return collect();
     }
