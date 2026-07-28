@@ -738,7 +738,7 @@ class CommonMapsMap extends InlineCode {
             url: `/ajax/${getState().getMapContext().getPublicKey()}/favorite`,
             dataType: 'json',
             success: function (json) {
-
+                showSuccessNotification(lang.get(value ? 'js.dungeonroute_favorite_added_success' : 'js.dungeonroute_favorite_removed_success'));
             }
         });
     }
@@ -935,4 +935,12 @@ class CommonMapsMap extends InlineCode {
         getState().unregister('snackbar:add', this);
         getState().unregister('snackbar:remove', this);
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        CommonMapsMap,
+    };
 }

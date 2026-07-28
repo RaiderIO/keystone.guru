@@ -278,6 +278,8 @@ return [
     'sidebar_enemy_skippable_info_label'                                   => 'A skippable enemy is an enemy that can be skipped without using invisibility potions or Rogue Shroud. These enemies may be excluded from your routes once you mark enemies as overpulled during a live session.',
     'user_report_enemy_success'                                            => 'Report sent successfully. Thank you for helping improve Keystone.guru!',
     'dungeonroute_report_enemy_success'                                    => 'Report sent successfully. Thank you for helping improve Keystone.guru!',
+    'dungeonroute_favorite_added_success'                                  => 'Route added to your favorites',
+    'dungeonroute_favorite_removed_success'                                => 'Route removed from your favorites',
     'tag_delete_success'                                                   => 'Tag removed successfully',
     'tag_create_success'                                                   => 'Tag created successfully',
     'killzone_sidebar_kill_location_label'                                 => 'Kill location',
