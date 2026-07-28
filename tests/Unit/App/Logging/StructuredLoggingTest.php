@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\App\Logging;
 
+use App\Logging\StructuredLogging;
 use Illuminate\Support\Facades\Context;
 use LogicException;
 use PHPUnit\Framework\Attributes\Group;
@@ -318,5 +319,40 @@ class StructuredLoggingTest extends PublicTestCase
 
         // Act
         $log->end('suspend');
+    }
+
+    /**
+     * The stderr channel exists so a locally-run artisan command shows its own output. Under PHPUnit
+     * it only interleaves structured log lines with the test progress output, which is what happened
+     * in CI: the channel is static, so a single logger built before the application had bound its
+     * environment latched stderr on for the whole process. Resolving per call instead means "am I
+     * running tests" is answered once the application can actually answer it.
+     */
+    #[Test]
+    public function resolveChannel_GivenRunningTestsOnALocalConsole_ShouldNotSelectAConsoleChannel(): void
+    {
+        // Arrange - the exact configuration that selects stderr outside of tests
+        config(['app.type' => 'local']);
+        self::assertTrue($this->app->runningInConsole(), 'Only meaningful when run from the console');
+
+        // Act
+        $channel = StructuredLogging::resolveChannel();
+
+        // Assert
+        self::assertNull($channel, 'Structured logging must fall through to the default channel while testing');
+    }
+
+    #[Test]
+    public function resolveChannel_GivenAnExplicitChannel_ShouldReturnIt(): void
+    {
+        // Arrange
+        StructuredLogging::setChannel('daily');
+
+        try {
+            // Act & Assert
+            self::assertSame('daily', StructuredLogging::resolveChannel());
+        } finally {
+            StructuredLogging::setChannel(null);
+        }
     }
 }
