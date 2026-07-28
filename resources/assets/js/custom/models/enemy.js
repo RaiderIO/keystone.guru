@@ -781,8 +781,10 @@ class Enemy extends VersionableMapObject {
      * then opened the enemy's edit popup on top of the selection, which the closePopup() in that
      * click's own save-success closed again.
      *
-     * The flag itself is deliberately left alone: setPopupEnabled() assigns it AFTER calling us, so
-     * writing to it here would just be overwritten.
+     * The isPopupEnabled flag is deliberately left alone here. It tracks what was last asked for and
+     * stays owned by setPopupEnabled(), which assigns it after calling us anyway; the save()/
+     * setSynced() callers never assign it at all, and shouldn't - they are not the ones deciding
+     * whether an enemy is supposed to have a popup.
      *
      * @inheritDoc
      */
