@@ -386,10 +386,15 @@ class EnemyVisual extends Signalable {
 
             // Only fade out when the menu's DOM is still on screen. If it is already detached - the
             // enemy's layer was removed while the menu was open - there is nothing left to animate,
-            // and delay()/queue() would sit on a queue nothing ever drains, so cleanupFn (and with it
-            // setMapState(null)) would never run at all. This has to be an explicit
-            // document.contains() check: the set is the plugin's own, so its length stays 1 whether
-            // the radial is attached or not.
+            // and sitting out the 500ms would leave the plugin's own handlers on that detached radial
+            // for the duration: its `open` hook may still be pending, in which case it starts a
+            // RaidMarkerSelectMapState for a menu nobody can see, suppressing every enemy tooltip
+            // until this cleanup gets around to ending it again.
+            //
+            // Whether the radial is attached has to be asked explicitly: the set is the plugin's own,
+            // so its length stays 1 either way (a selector would have gone empty, which is what the
+            // length check used to stand in for), and jQuery's queue drains on a detached element
+            // just fine - it is keyed off the element's data, not off the document tree.
             if (fadeOut && $radial.length > 0 && document.contains($radial[0])) {
                 $radial.delay(500).queue(cleanupFn);
             } else {
@@ -436,6 +441,10 @@ class EnemyVisual extends Signalable {
 
         if (enemyMapObjectGroup.isMapObjectVisible(this.enemy)) {
 
+            // Runs synchronously, and ends RaidMarkerSelectMapState if that was ours. That does not
+            // re-enter this method only because RaidMarkerSelectMapState#shouldRebuildEnemyVisuals()
+            // is false (inherited from MapState) - the map:mapstatechanged handler above would
+            // otherwise rebuild us from inside this call.
             let hadCircleMenu = this._cleanupCircleMenu(false);
 
             let template = Handlebars.templates['map_enemy_visual_template'];
@@ -802,9 +811,11 @@ class EnemyVisual extends Signalable {
         this.enemy.unregister('enemy:set_raid_marker', this);
         this.map.unregister('map:mapstatechanged', this);
 
-        if (this._circleMenu !== null) {
-            this._cleanupCircleMenu();
-        }
+        // Without fading out: this visual is being discarded, so there is nobody left to animate for,
+        // and a queued cleanup would end up calling setMapState(null) half a second later on behalf
+        // of an object that no longer exists. _cleanupCircleMenu() no-ops on its own when no menu is
+        // open, so it needs no guard here.
+        this._cleanupCircleMenu(false);
     }
 }
 

@@ -129,14 +129,16 @@ describe('EnemyVisual#_cleanupCircleMenu (#3703)', () => {
         document.body.innerHTML = '';
     });
 
-    test('_cleanupCircleMenu_givenTheRadialDomIsGone_stillEndsTheMapState', () => {
+    test('_cleanupCircleMenu_givenTheRadialDomIsGone_cleansUpWithoutWaitingForTheFadeOut', () => {
         // Arrange: the enemy was hidden (floor switch), taking the radial's DOM with it
         const {self, radial, setMapStateCalls} = makeCleanupContext(false);
 
         // Act: the default fade-out path
         const result = EnemyVisual.prototype._cleanupCircleMenu.call(self, true);
 
-        // Assert: cleaned up synchronously instead of queueing onto a queue nothing drains
+        // Assert: nothing to animate, so the plugin's handlers come off and the map state ends now
+        // rather than 500ms from now - long enough for a pending open hook to start a state for a
+        // menu nobody can see
         expect(result).toBe(true);
         expect(radial.delayCalls).toBe(0);
         expect(radial.queueCalls).toBe(0);
@@ -214,6 +216,10 @@ global.EditMapState = class EditMapState extends MapState {
 global.DeleteMapState = class DeleteMapState extends MapState {
 };
 global.EnemySelection = class EnemySelection extends MapState {
+    // Matching the real base, which the states that draw a selection border override.
+    drawsEnemyEditBorder() {
+        return false;
+    }
 };
 global.Handlebars = {templates: {map_enemy_visual_template: () => '<div></div>'}};
 global.c = {map: {enemy: {calculateMargin: () => 4}}};
@@ -302,6 +308,18 @@ describe('EnemyVisual#buildVisual circle menu re-open (#3723)', () => {
         expect(initCalls).toEqual([]);
     });
 
+    test('buildVisual_givenAPullIsBeingBuilt_leavesTheCircleMenuClosed', () => {
+        // Arrange: the most common way to get here - attaching the enemy to a killzone rebuilds its
+        // visual while the enemy selection for that pull is still running
+        const {self, initCalls} = makeBuildVisualContext(new global.EnemySelection());
+
+        // Act
+        EnemyVisual.prototype.buildVisual.call(self);
+
+        // Assert
+        expect(initCalls).toEqual([]);
+    });
+
     test('buildVisual_givenReopeningIsNotWanted_leavesTheCircleMenuClosed', () => {
         // Arrange: assigning a raid marker rebuilds the visual with the menu deliberately closed
         const {self, initCalls} = makeBuildVisualContext(null);
@@ -345,10 +363,14 @@ function makeVisual() {
                 handlers[event] = callback;
             }
         },
+        unregister: () => {
+        },
     });
     const map = Object.assign(new global.DungeonMap(), {
         getMapState: () => null,
         register: () => {
+        },
+        unregister: () => {
         },
     });
 
@@ -361,7 +383,7 @@ function makeVisual() {
 }
 
 describe('EnemyVisual shown/hidden handling (#3723)', () => {
-    test('hidden_givenAnEnemyIsHidden_cleansUpTheCircleMenuWithoutFadingOut', () => {
+    test('constructor_givenTheEnemyIsHidden_cleansUpTheCircleMenuWithoutFadingOut', () => {
         // Arrange
         const {visual, handlers} = makeVisual();
         const cleanupCalls = [];
@@ -375,7 +397,7 @@ describe('EnemyVisual shown/hidden handling (#3723)', () => {
         expect(cleanupCalls).toEqual([false]);
     });
 
-    test('shown_givenAnEnemyIsShownWithoutAVisual_buildsItInsteadOfCleaningUp', () => {
+    test('constructor_givenTheEnemyIsShownWithoutAVisual_buildsItInsteadOfCleaningUp', () => {
         // Arrange
         const {visual, handlers} = makeVisual();
         const cleanupCalls = [];
@@ -389,5 +411,19 @@ describe('EnemyVisual shown/hidden handling (#3723)', () => {
         // Assert
         expect(buildCalls).toBe(1);
         expect(cleanupCalls).toEqual([]);
+    });
+
+    test('cleanup_givenAnOpenCircleMenu_cleansItUpWithoutFadingOut', () => {
+        // Arrange
+        const {visual} = makeVisual();
+        const cleanupCalls = [];
+        visual._cleanupCircleMenu = (fadeOut) => cleanupCalls.push(fadeOut);
+
+        // Act: the visual is being discarded (a layer swap, the map being torn down)
+        visual.cleanup();
+
+        // Assert: a queued cleanup would call setMapState(null) 500ms later on behalf of a visual
+        // that no longer exists - and it has already unregistered from map:mapstatechanged by then
+        expect(cleanupCalls).toEqual([false]);
     });
 });
