@@ -366,8 +366,15 @@ class EnemyVisual extends Signalable {
                 $(this).remove().dequeue();
                 self._circleMenu = null;
 
-                // Only stop the map state at this point
-                self.map.setMapState(null);
+                // Only stop the map state at this point - and only if it is still ours. The menu can
+                // only be opened while no map state is active, but the user can start one while it is
+                // open (hitting "New pull" leaves the radial on screen), and this cleanup then runs
+                // for reasons that have nothing to do with that state - the enemy being hidden by a
+                // floor switch, or its visual being rebuilt. Clearing unconditionally would silently
+                // cancel the selection the user is in the middle of.
+                if (self.map.getMapState() instanceof RaidMarkerSelectMapState) {
+                    self.map.setMapState(null);
+                }
                 self.signal('circlemenu:close');
             };
 

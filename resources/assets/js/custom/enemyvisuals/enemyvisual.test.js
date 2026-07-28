@@ -7,12 +7,24 @@
 // .delay().queue() on it, which is a silent no-op on an empty set: the map state then stayed active
 // for the rest of the session, suppressing every enemy tooltip on the map.
 //
+// The mirror image matters just as much: the user can start another map state while the menu is open
+// ("New pull" leaves the radial on screen), so a cleanup triggered by the enemy being hidden must not
+// clear whatever state is running then.
+//
 // Follows the load-time-stub recipe from models/killzone.test.js. EnemyVisual's constructor pulls in
 // the whole EnemyVisualMain* hierarchy, so these tests call the method off the prototype with a fake
 // `this` instead of building one.
 
 global.Signalable = class Signalable {
 };
+
+// The real chain, so the `instanceof RaidMarkerSelectMapState` guard is the real one.
+const {MapState} = require('../mapstate/mapstate');
+global.MapState = MapState;
+const {MapObjectMapState} = require('../mapstate/mapobjectmapstate');
+global.MapObjectMapState = MapObjectMapState;
+const {RaidMarkerSelectMapState} = require('../mapstate/raidmarkerselectmapstate');
+global.RaidMarkerSelectMapState = RaidMarkerSelectMapState;
 
 const {EnemyVisual} = require('./enemyvisual');
 
@@ -58,11 +70,19 @@ function makeFakeSet(found) {
 }
 
 /**
+ * A map state instance without running its constructor, which asserts on collaborators (DungeonMap,
+ * MapObject) these tests have no use for. Only its type matters here.
+ */
+function makeMapState(cls) {
+    return Object.create(cls.prototype);
+}
+
+/**
  * Builds the collaborators _cleanupCircleMenu touches: an open circle menu, an enemy with an id, and a
  * map recording what it was asked to set. `this` is created off the prototype so the method's
  * `console.assert(this instanceof EnemyVisual)` holds.
  */
-function makeCleanupContext(radialFound) {
+function makeCleanupContext(radialFound, activeMapState = makeMapState(RaidMarkerSelectMapState)) {
     const radial = makeFakeSet(radialFound);
     const setMapStateCalls = [];
     const signals = [];
@@ -70,7 +90,10 @@ function makeCleanupContext(radialFound) {
     const self = Object.create(EnemyVisual.prototype);
     self._circleMenu = {};
     self.enemy = {id: 42};
-    self.map = {setMapState: (mapState) => setMapStateCalls.push(mapState)};
+    self.map = {
+        getMapState: () => activeMapState,
+        setMapState: (mapState) => setMapStateCalls.push(mapState),
+    };
     self.signal = (name) => signals.push(name);
 
     // The method resolves the radial through `$('#map_enemy_raid_marker_radial_<id>')` and then wraps
@@ -121,6 +144,20 @@ describe('EnemyVisual#_cleanupCircleMenu (#3703)', () => {
         expect(radial.delayCalls).toBe(0);
         expect(setMapStateCalls).toEqual([null]);
         expect(signals).toContain('circlemenu:close');
+    });
+
+    test('_cleanupCircleMenu_givenAnotherMapStateWasStarted_leavesItRunning', () => {
+        // Arrange: the menu stayed on screen while the user hit "New pull", then the enemy was hidden
+        const pullBuilding = makeMapState(MapObjectMapState);
+        const {self, setMapStateCalls, signals} = makeCleanupContext(false, pullBuilding);
+
+        // Act
+        EnemyVisual.prototype._cleanupCircleMenu.call(self, false);
+
+        // Assert: the menu is cleaned up, but the selection the user is in the middle of survives
+        expect(self._circleMenu).toBeNull();
+        expect(signals).toContain('circlemenu:close');
+        expect(setMapStateCalls).toEqual([]);
     });
 
     test('_cleanupCircleMenu_givenNoOpenCircleMenu_doesNothing', () => {
