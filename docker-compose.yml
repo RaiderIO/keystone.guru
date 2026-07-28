@@ -153,8 +153,13 @@ services:
   # Set DB_DATA_VARIANT=-prod in .env to mount the prod data copies instead
   # (mysql-prod / mysql-prod-combatlog), then recreate with `docker compose up -d db db-combatlog`.
   # Container names stay -prod either way so worktree.sh auto-attach keeps working.
+  #
+  # MySQL 8.0 performs a one-way in-place data dictionary upgrade the first time it starts on a
+  # 5.7 data dir — there is no downgrade path. Any data dir that has not been through that upgrade
+  # yet (a variant you have not started since #3717, or a restored 5.7 backup) must be cleanly shut
+  # down and copied aside *before* you point an 8.0 server at it.
   db:
-    image: mysql:5.7
+    image: mysql:8.0.42
     container_name: keystone.guru-db-prod
     restart: unless-stopped
     environment:
@@ -182,7 +187,7 @@ services:
       - keystone.guru
 
   db-combatlog:
-    image: mysql:5.7
+    image: mysql:8.0.42
     container_name: keystone.guru-db-prod-combatlog
     restart: unless-stopped
     environment:
