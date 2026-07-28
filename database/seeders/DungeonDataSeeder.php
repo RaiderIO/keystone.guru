@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
+use App\Models\EnemyForcesCheckpoint;
 use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
 use App\Models\Expansion;
@@ -536,6 +537,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             EnemyPatrol::class,
             DungeonFloorSwitchMarker::class,
             MountableArea::class,
+            EnemyForcesCheckpoint::class,
             FloorUnion::class,
             FloorUnionArea::class,
             DungeonSpeedrunRequiredNpc::class,

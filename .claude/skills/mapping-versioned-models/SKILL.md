@@ -78,10 +78,37 @@ child clones.
    avoid double-cloning, then call `copyMappingVersionContentsToDungeon()` — which clones only a
    **subset**: floor switch markers (with `linked_dungeon_floor_switch_marker_id` re-linking),
    mapIcons, mountableAreas, floorUnions + floorUnionAreas. Enemies/packs/patrols/npcEnemyForces
-   are intentionally excluded (they come from the MDT import instead). `enemyForcesCheckpoints` are
-   excluded too, which is right for the bare-mapping-version caller but silently discards them on
-   every MDT bump — a known, tracked product decision (#3702), not an oversight; see the comment in
-   that method before "fixing" it.
+   are intentionally excluded (they come from the MDT import instead, or are re-linked by the
+   caller afterwards — see below). `enemyForcesCheckpoints` are cloned by a **separate paired
+   method** the caller must remember to invoke too — see the next subsection (#3702).
+
+### The `copyEnemyForcesCheckpointsToMappingVersion()` pairing (#3702)
+
+`EnemyForcesCheckpoint` clones **outside** `copyMappingVersionContentsToDungeon()` on purpose:
+neither that method nor the MDT-copy path clones enemies (a checkpoint's members live in
+`enemies`), so only the caller can re-link membership afterwards — cloning the checkpoint *inside*
+`copyMappingVersionContentsToDungeon()` would give it zero members with no way for the caller to
+fix that up later. `MappingService::copyEnemyForcesCheckpointsToMappingVersion(source, target):
+array<int, int>` returns **source checkpoint id => clone id**. That map has to cross the
+`MappingService` boundary back to the caller — currently only
+`MDTMappingImportService::importMappingVersionFromMDT()` (which threads it into `importEnemies()`)
+— so the caller can translate each surviving enemy's `enemy_forces_checkpoint_id` through it;
+copying that field verbatim would attach the enemy to the *previous* mapping version's checkpoint.
+**Not every caller of `copyMappingVersionContentsToDungeon()` should pair it with this** —
+`MappingVersionController::saveNew()`'s "Add bare mapping version" action deliberately does *not*:
+a bare mapping version has no enemies at all, so a checkpoint cloned there would sit permanently
+empty with nothing to assign it to. Whether a given caller should pair the two is a judgment call
+documented on `MappingServiceInterface::copyMappingVersionContentsToDungeon()`'s doc-block, not
+enforced by the type system — read that doc-block before adding a new caller. A by-reference
+out-param was tried and abandoned instead of a return value: the repo's
+`ErickSkrauch/align_multiline_parameters` php-cs-fixer rule mangles `&$param` into
+`?array   &   $param`.
+
+A checkpoint cloned with zero members must not be treated as having *lost* its members on the next
+MDT import. `MDTMappingImportService::deleteEmptyEnemyForcesCheckpoints()` only prunes a
+still-empty clone whose **source** counterpart genuinely had members (checked against the id map
+above) — anything else, even if currently empty, survives untouched. Getting this wrong silently
+wipes every checkpoint of every dungeon on the very next real MDT change.
 
 ## Query scoping
 
@@ -146,8 +173,13 @@ example** — its diff contains exactly one of everything below; when in doubt, 
    clones of the referencing model keep pointing at the **old** version's row and the new
    version looks fine while being subtly wrong.
 5. `MappingService::copyMappingVersionContentsToDungeon()`: add a clone loop **if** the model
-   must survive the MDT-copy path — this is separate from the boot path and easy to forget. If
-   you deliberately skip it, say so in the comment there (checkpoints: tracked in #3702).
+   must survive the MDT-copy path — this is separate from the boot path and easy to forget. If the
+   model's children live in a table this method doesn't touch (the way `enemyForcesCheckpoints`'
+   members live in `enemies`, which this method never copies), clone it via its own paired method
+   instead — see `copyEnemyForcesCheckpointsToMappingVersion()` above — and return a
+   source id => clone id map so the caller can re-link children itself; only pair it from callers
+   that will actually populate those children afterwards (a caller with no children to assign,
+   like a bare mapping version, must not pair it or the clone sits permanently empty).
 6. `app/Console/Commands/Mapping/Copy.php` `$relations` array: any model carrying a `floor_id`
    must be listed or cross-dungeon copies strand it on the source dungeon's floors — see Gotchas.
 
@@ -233,7 +265,16 @@ example** — its diff contains exactly one of everything below; when in doubt, 
 - The hardcoded model lists (three in `MappingVersion::boot()`, the partial one in
   `MappingService::copyMappingVersionContentsToDungeon()`, the `$relations` array in
   `app/Console/Commands/Mapping/Copy.php`, the seeder's `$relationMapping` array) are the classic
-  "new model silently missing from new versions" bug source.
+  "new model silently missing from new versions" bug source. A fifth spot of the same shape, but
+  inverted: a caller of `copyMappingVersionContentsToDungeon()` that *should* clone enemy forces
+  checkpoints (i.e. anything that will also re-create/re-link the enemies to assign to them, like
+  an MDT import) must remember to also call `copyEnemyForcesCheckpointsToMappingVersion()`
+  (#3702) — nothing enforces this but a doc-block comment on the interface, and forgetting it
+  silently drops every checkpoint on that call path. Not every caller should pair it though —
+  a caller with no enemies at all (bare mapping versions) must *not*, or the clone sits
+  permanently empty. When it does apply, the fix also has to thread an id map (source checkpoint
+  id => clone id) back across the service boundary to the caller, because only the caller can
+  re-link the children (`enemies`) that method never copies.
 - **Don't forget `Copy.php`.** `mapping:copy <gameVersion> <source> <target>` goes through
   `createNewMappingVersionFromPreviousMapping()`, so the boot clones everything correctly — but for a
   **cross-dungeon** copy `Copy.php` then re-points every cloned model's `floor_id` onto the target

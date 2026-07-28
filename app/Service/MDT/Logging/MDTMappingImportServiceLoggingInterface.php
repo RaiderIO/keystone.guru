@@ -91,6 +91,17 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importEnemiesCannotRecoverPropertiesFromExistingEnemy(string $uniqueKey): void;
 
+    public function importEnemiesCannotRecoverEnemyForcesCheckpoint(string $uniqueKey, int $enemyForcesCheckpointId): void;
+
+    public function importEnemiesDeleteEmptyEnemyForcesCheckpoint(int $enemyForcesCheckpointId, ?string $name): void;
+
+    /**
+     * A dungeon-wide summary of the deletions above, logged at a level that reaches Discord: post-#3702 this
+     * only fires for checkpoints that genuinely had members in the source mapping version, so it is worth a
+     * human's attention.
+     */
+    public function importEnemiesPrunedEmptyEnemyForcesCheckpoints(int $dungeonId, int $count): void;
+
     public function importEnemiesSaveNewEnemy(int $enemyId): void;
 
     public function importEnemiesSaveNewEnemyException(Exception $exception): void;
