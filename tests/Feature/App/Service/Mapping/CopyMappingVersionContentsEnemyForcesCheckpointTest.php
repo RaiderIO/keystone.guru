@@ -12,10 +12,11 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
 /**
- * #3702: "Add bare mapping version" and every MDT mapping import clone a mapping version through
- * MappingService, deliberately bypassing the MappingVersion::boot() clone hook. Neither path copies enemies,
- * so the checkpoints they clone arrive without members - the source id => clone id mapping
- * copyEnemyForcesCheckpointsToMappingVersion() returns is what lets a caller re-link membership itself.
+ * #3702: an MDT mapping import clones a mapping version through MappingService, deliberately bypassing the
+ * MappingVersion::boot() clone hook. That path copies no enemies, so the checkpoints it clones arrive without
+ * members - the source id => clone id mapping copyEnemyForcesCheckpointsToMappingVersion() returns is what
+ * lets the caller re-link membership itself. A bare mapping version has no enemies at all and deliberately
+ * does not call this method, so its checkpoints stay empty until enemies are assigned to them by hand.
  */
 #[Group('MappingVersion')]
 #[Group('EnemyForcesCheckpoint')]
@@ -34,7 +35,7 @@ final class CopyMappingVersionContentsEnemyForcesCheckpointTest extends PublicTe
         $targetMappingVersion = null;
 
         try {
-            // Act - exactly what MappingVersionController@saveNew does for "Add bare mapping version"
+            // Act - exactly what MDTMappingImportService does on a mapping re-import
             $targetMappingVersion = $mappingService->copyMappingVersionToDungeon($sourceMappingVersion, $dungeon);
             $mappingService->copyMappingVersionContentsToDungeon($sourceMappingVersion, $targetMappingVersion);
             $enemyForcesCheckpointIdMapping = $mappingService->copyEnemyForcesCheckpointsToMappingVersion(

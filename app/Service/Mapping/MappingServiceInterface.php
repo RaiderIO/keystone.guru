@@ -37,7 +37,9 @@ interface MappingServiceInterface
      *
      * Enemy forces checkpoints are NOT part of this: their members live in `enemies`, which this method does
      * not copy either, so the caller has to be able to re-link membership itself. Clone them with
-     * copyEnemyForcesCheckpointsToMappingVersion() - every caller of this method should call that too (#3702).
+     * copyEnemyForcesCheckpointsToMappingVersion() when the target should inherit them - only the MDT
+     * re-import path does; a bare mapping version deliberately starts with none, since it has no enemies to
+     * assign them to (#3702).
      */
     public function copyMappingVersionContentsToDungeon(
         MappingVersion $sourceMappingVersion,

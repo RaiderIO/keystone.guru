@@ -49,12 +49,8 @@ class MappingVersionController extends Controller
                     $newMappingVersion,
                 );
 
-                // A bare mapping version has no enemies, so its checkpoints arrive without members - but the
-                // mapper who added the checkpoints should not have to draw them again (#3702)
-                $mappingService->copyEnemyForcesCheckpointsToMappingVersion(
-                    $currentMappingVersion,
-                    $newMappingVersion,
-                );
+                // A bare mapping version has no enemies, so enemy forces checkpoints - which are only
+                // meaningful once enemies are assigned to them - deliberately don't come along either (#3702).
             }
 
             Session::flash('status', __('controller.mappingversion.created_bare_successfully'));
