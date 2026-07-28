@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
@@ -251,9 +252,8 @@ class ProfileController extends Controller
     {
         /** @var User $user */
         $user = Auth::getUser();
-        if ($user->hasRole(Role::ROLE_ADMIN)) {
-            throw new Exception(__('controller.profile.flash.admins_cannot_delete_themselves'));
-        }
+
+        Gate::authorize('delete', $user);
 
         try {
             User::findOrFail($user->id)->delete();

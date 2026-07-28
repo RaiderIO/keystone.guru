@@ -115,6 +115,36 @@ class EnemyForcesManager extends Signalable {
     }
 
     /**
+     * Get the total amount of enemy forces that the given enemies are worth.
+     *
+     * Unlike getEnemyForces(), which only counts what the route pulls, this describes how much enemy
+     * forces those enemies represent regardless of pull state. That difference is deliberate:
+     * KillZone.getEnemyForces() skips obsolete enemies because an obsolete enemy is not pulled, but an
+     * obsolete enemy is still standing there and still yields its enemy forces to whoever walks past
+     * it. Only enemies that aren't actually present at all (wrong seasonal type/affix) are skipped, so
+     * the total always matches what is drawn on the map.
+     *
+     * @param enemies {Enemy[]}
+     * @returns {Number}
+     */
+    getEnemyForcesForEnemies(enemies) {
+        console.assert(this instanceof EnemyForcesManager, 'this is not EnemyForcesManager', this);
+
+        let result = 0;
+
+        for (let index in enemies) {
+            /** @type {Enemy} */
+            let enemy = enemies[index];
+
+            if (enemy !== null && !enemy.shouldBeIgnored()) {
+                result += enemy.getEnemyForces();
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Get the amount of enemy forces that are required to complete this dungeon.
      * @returns {*}
      */
@@ -143,4 +173,10 @@ class EnemyForcesManager extends Signalable {
         killzoneMapObjectGroup.unregister('killzone:enemyadded', this);
         killzoneMapObjectGroup.unregister('killzone:enemieschanged', this);
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = EnemyForcesManager;
 }

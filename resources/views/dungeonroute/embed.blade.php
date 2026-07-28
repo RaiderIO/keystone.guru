@@ -80,6 +80,7 @@ if ($dungeon->floorsForMapFacade($dungeonroute->mappingVersion, $useFacade)->act
             'showAttribution' => false,
             'parameters' => $parameters,
             'hiddenMapObjectGroups' => [
+                'enemyforcescheckpoint',
                 'mountablearea',
                 'floorunion',
                 'floorunionarea',

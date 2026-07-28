@@ -11,6 +11,10 @@ class EditMapState extends MapState {
         return true;
     }
 
+    disablesTooltips() {
+        return true;
+    }
+
     start() {
         super.start();
         let self = this;

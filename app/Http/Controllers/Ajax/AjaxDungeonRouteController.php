@@ -183,12 +183,10 @@ class AjaxDungeonRouteController extends Controller
 
             // Handle team if set
             if ($teamPublicKey) {
-                // @TODO Policy?
-                // You must be a member of this team to retrieve their routes
+                // You must be a member of this team to retrieve their routes - TeamPolicy::edit is
+                // exactly that check
                 $team = Team::where('public_key', $teamPublicKey)->firstOrFail();
-                if (!$team->isUserMember($user)) {
-                    abort(403, 'Unauthorized');
-                }
+                Gate::authorize('edit', $team);
 
                 // If available, we need all routes which MAY be assigned to this team, so all routes where
                 // team_id = null and the author is one of the team members

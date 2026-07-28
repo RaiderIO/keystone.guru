@@ -76,6 +76,12 @@ $commands[] = Schedule::command('thumbnail:deleteexpiredjobs')->everyFifteenMinu
 // Cleanup relation data for expired live sessions
 $commands[] = Schedule::command('livesession:cleanup-expired')->hourly();
 
+// Keep the wide hero-band thumbnails fresh for the routes shown as heroes on the discovery pages.
+// Rendering needs headless chrome, so skip it locally like the other thumbnail refreshers.
+if (!app()->environment('local')) {
+    $commands[] = Schedule::command('thumbnail:ensureheroes')->hourly();
+}
+
 // PID 1's stdout is used to ensure that the output is always logged, even when running in a Docker
 // container. When the scheduler runs as a non-root user (local dev cron runs it as ksg, #3414) it
 // cannot open /proc/1/fd/1 (owned by root), so fall back to the process's own stdout — the local

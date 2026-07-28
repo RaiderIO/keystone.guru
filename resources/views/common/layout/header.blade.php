@@ -120,6 +120,9 @@ $isActiveRoute = function (string $route, bool $strict = false) {
                         'selectable' => true,
                         'showMore' => $showMore,
                         'selected' => Dungeon::getUserOrDefaultDungeon()->key,
+                        // "What's easy this week" ease tiers (archon.gg), resolved in HeaderComposer.
+                        'easeTiers' => $dungeonContextEaseTiers ?? collect(),
+                        'currentAffixGroup' => $dungeonContextCurrentAffixGroup ?? null,
                         'links' => $dungeonContextLinks ?? $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [
                                 $dungeon->key => route('dungeon.changecontext', [
                                     'dungeon' => $dungeon,

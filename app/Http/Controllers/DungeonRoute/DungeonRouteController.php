@@ -310,7 +310,10 @@ class DungeonRouteController extends Controller
             'mapContext'     => $mapContextService->createMapContextDungeonRoute($dungeonroute, $mapFacadeStyle),
             'defaultZoom'    => $zoomLevel,
             'mapFacadeStyle' => $mapFacadeStyle,
-            'parameters'     => $request->validated(),
+            // The factor to multiply the killzone-path (pull-connection) line weight by so a small miniature
+            // still reads as a route shape. Null (the default) keeps the map's normal line width.
+            'killZonePathWeightMultiplier' => $request->has('killzonepathweight') ? (float)$request->input('killzonepathweight') : null,
+            'parameters'                   => $request->validated(),
         ]);
     }
 
@@ -405,13 +408,17 @@ class DungeonRouteController extends Controller
         }
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function claim(
         Request      $request,
         Dungeon      $dungeon,
         DungeonRoute $dungeonroute,
         string       $title,
     ): RedirectResponse {
-        // Regardless of the result, try to claim the route
+        Gate::authorize('claim', $dungeonroute);
+
         $dungeonroute->claim(Auth::id());
 
         return redirect()->route('dungeonroute.edit', [

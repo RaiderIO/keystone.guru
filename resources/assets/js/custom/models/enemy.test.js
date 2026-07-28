@@ -31,6 +31,8 @@ global.EditMapState = class EditMapState extends global.MapState {};
 // 1c. Lightweight base class standing in for VersionableMapObject -> MapObject, providing only
 // what Enemy calls on `super` / `this`. unbindTooltip() mirrors the real MapObject implementation,
 // which forwards to the layer without touching tooltipText - that asymmetry is the bug under test.
+// _assignPopup() likewise mirrors MapObject#_assignPopup (mapobject.js): unbind first, then bind
+// again only when the map is editable and this object wants a popup.
 global.VersionableMapObject = class VersionableMapObject {
     constructor(map, layer = null, options = {}) {
         this.map = map;
@@ -51,6 +53,31 @@ global.VersionableMapObject = class VersionableMapObject {
 
     unbindTooltip() {
         this.layer.unbindTooltip();
+    }
+
+    isEditableByPopup() {
+        return true;
+    }
+
+    _getPopupHtml() {
+        return '<div>popup</div>';
+    }
+
+    _assignPopup(layer = null) {
+        if (layer === null) {
+            layer = this.layer;
+        }
+
+        if (layer !== null) {
+            layer.off('popupopen');
+            layer.unbindPopup();
+
+            if (this.map.options.edit && this.isEditable() && this.isEditableByPopup()) {
+                layer.bindPopup(this._getPopupHtml(), {});
+                layer.on('popupopen', () => {
+                });
+            }
+        }
     }
 };
 
@@ -169,5 +196,157 @@ describe('Enemy#bindTooltip (#3670)', () => {
         // Act + Assert: no layer to bind to, so this must not throw
         expect(() => enemy.bindTooltip()).not.toThrow();
         expect(enemy.tooltipText).toBe('');
+    });
+});
+
+// ---------------------------------------------------------------------------
+// Enemy#_assignPopup: an enemy's edit popup must stay unbound for as long as a map state is active.
+//
+// setPopupEnabled() unbinds it when a map state starts, but save()/setSynced() call _assignPopup()
+// straight through and bypass that gate. During an EnemySelection that survives more than one click -
+// the enemy forces checkpoint flow, which deliberately never stops itself - every click saves the
+// clicked enemy AND each of its pack buddies, so their popups came back mid-selection. The next click
+// on any of them opened the edit popup, which the closePopup() in that click's own save-success shut
+// again: a popup flashing up on nearly every assignment.
+// ---------------------------------------------------------------------------
+
+/**
+ * Extends the fake layer with Leaflet's popup surface: getPopup() is undefined before the first bind
+ * and null after unbindPopup(), and event handlers are recorded so the popupopen cleanup is visible.
+ */
+function makeFakePopupLayer() {
+    return Object.assign(makeFakeLayer(), {
+        _popup: undefined,
+        handlers: {},
+        getPopup() {
+            return this._popup;
+        },
+        bindPopup(html) {
+            this._popup = {html};
+        },
+        unbindPopup() {
+            this._popup = null;
+        },
+        on(event, fn) {
+            (this.handlers[event] = this.handlers[event] || []).push(fn);
+        },
+        off(event) {
+            delete this.handlers[event];
+        },
+    });
+}
+
+/**
+ * A fake DungeonMap in edit mode that drives the real `map:mapstatechanged` chain: setMapState()
+ * flips what getMapState() returns and then calls the handler Enemy registered in its constructor,
+ * exactly as DungeonMap does.
+ */
+function makeFakeEditMap() {
+    return {
+        options: {edit: true},
+        _mapState: null,
+        _handlers: [],
+        register(event, context, fn) {
+            if (event === 'map:mapstatechanged') {
+                this._handlers.push(fn);
+            }
+        },
+        unregister() {
+        },
+        getMapState() {
+            return this._mapState;
+        },
+        setMapState(mapState) {
+            this._mapState = mapState;
+            for (const fn of this._handlers) {
+                fn({data: {newMapState: mapState}});
+            }
+        },
+    };
+}
+
+/**
+ * An enemy on an editable map that wants a popup - i.e. what an AdminEnemy is on the admin mapping
+ * page (plain enemies return false from isEditable(), so they never get one at all).
+ */
+function makeEditableEnemy() {
+    const map = makeFakeEditMap();
+    const layer = makeFakePopupLayer();
+    const enemy = new Enemy(map, layer);
+    enemy.npc = {id: 1, name: 'Murkbrine Shorerunner'};
+    enemy.getVisualData = () => ({info: [], custom: []});
+    enemy.isEditable = () => true;
+
+    return {enemy, layer, map};
+}
+
+describe('Enemy#_assignPopup during a map state', () => {
+    test('_assignPopup_givenNoMapState_bindsThePopup', () => {
+        // Arrange
+        const {enemy, layer} = makeEditableEnemy();
+
+        // Act
+        enemy._assignPopup();
+
+        // Assert: the guard must not break the ordinary case it wraps
+        expect(layer.getPopup()).not.toBeNull();
+    });
+
+    test('_assignPopup_givenAnActiveMapState_leavesThePopupUnbound', () => {
+        // Arrange: the enemy was saved while an enemy selection is running (setSynced -> _assignPopup)
+        const {enemy, layer, map} = makeEditableEnemy();
+        map.setMapState(new global.MapState());
+
+        // Act
+        enemy._assignPopup();
+
+        // Assert
+        expect(layer.getPopup()).toBeNull();
+        expect(layer.handlers['popupopen']).toBeUndefined();
+    });
+
+    test('_assignPopup_givenAnActiveMapStateAndAPreviouslyBoundPopup_unbindsIt', () => {
+        // Arrange
+        const {enemy, layer, map} = makeEditableEnemy();
+        enemy._assignPopup();
+        expect(layer.getPopup()).not.toBeNull();
+
+        // Act
+        map.setMapState(new global.MapState());
+        enemy._assignPopup();
+
+        // Assert
+        expect(layer.getPopup()).toBeNull();
+    });
+
+    test('setPopupEnabled_givenAPopupBoundOutsideTheFlag_stillUnbindsWhenAMapStateStarts', () => {
+        // Arrange: exactly the page-load situation - setSynced(true) bound the popup through
+        // _assignPopup(), which never touches isPopupEnabled, so the flag still reads false.
+        const {enemy, layer, map} = makeEditableEnemy();
+        enemy._assignPopup();
+        expect(layer.getPopup()).not.toBeNull();
+        expect(enemy.isPopupEnabled).toBe(false);
+
+        // Act: the mapper hits "Select enemies"
+        map.setMapState(new global.MapState());
+
+        // Assert: the old `!enabled && this.isPopupEnabled` guard short-circuited here, leaving the
+        // popup bound - so the first enemy click of the selection opened it.
+        expect(layer.getPopup()).toBeNull();
+    });
+
+    test('_assignPopup_givenTheMapStateEnded_bindsThePopupAgain', () => {
+        // Arrange: a save during the selection must not leave the popup dead afterwards
+        const {enemy, layer, map} = makeEditableEnemy();
+        map.setMapState(new global.MapState());
+        enemy._assignPopup();
+        expect(layer.getPopup()).toBeNull();
+
+        // Act: DungeonMap clears the state, which runs setPopupEnabled(true) via mapstatechanged
+        map.setMapState(null);
+
+        // Assert
+        expect(layer.getPopup()).not.toBeNull();
+        expect(enemy.isPopupEnabled).toBe(true);
     });
 });

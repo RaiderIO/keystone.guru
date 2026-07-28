@@ -6,6 +6,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Season;
 use App\Repositories\BaseRepositoryInterface;
+use App\Repositories\Database\DungeonRoute\Dtos\KillZoneEnemyForces;
 use App\Repositories\Database\DungeonRoute\Dtos\SimilarDungeonRoute;
 use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use App\Repositories\Interfaces\DungeonRoute\Dtos\DungeonRouteSearchFilter;
@@ -37,6 +38,16 @@ interface DungeonRouteRepositoryInterface extends BaseRepositoryInterface
 
     /** @return Collection<int, SimilarDungeonRoute> */
     public function findSimilarRoutes(DungeonRoute $dungeonRoute, int $limit = 5): Collection;
+
+    /**
+     * Gets the summed enemy forces for each kill zone (pull) in the given route, ordered by the kill
+     * zone's index, along with whether that pull contains a boss. Used to render the "route
+     * fingerprint" bar graph. Single aggregate query mirroring the enemy-forces accounting of
+     * DungeonRoute::getEnemyForces() but grouped per pull instead of per route.
+     *
+     * @return Collection<int, KillZoneEnemyForces>
+     */
+    public function getEnemyForcesPerKillZone(DungeonRoute $dungeonRoute): Collection;
 
     /**
      * @return Collection<int, DungeonRoute>

@@ -427,6 +427,41 @@ final class DungeonRoutePolicyTest extends PublicTestCase
     }
 
     #[Test]
+    public function claim_givenSandboxRoute_returnsAllowed(): void
+    {
+        // Arrange - a sandbox route is unowned until somebody claims it
+        $user  = User::factory()->create();
+        $route = $this->createRoute($user, ['expires_at' => now()->addHours(2)]);
+
+        try {
+            // Act & Assert
+            $this->assertTrue($this->policy->claim($user, $route)->allowed());
+        } finally {
+            $route->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function claim_givenAlreadyOwnedRoute_returnsDenied(): void
+    {
+        // Arrange
+        $owner = User::factory()->create();
+        $other = User::factory()->create();
+        $route = $this->createRoute($owner);
+
+        try {
+            // Act & Assert - neither a stranger nor the owner may re-claim a non-sandbox route
+            $this->assertTrue($this->policy->claim($other, $route)->denied());
+            $this->assertTrue($this->policy->claim($owner, $route)->denied());
+        } finally {
+            $route->delete();
+            $other->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
     public function can_givenEditAbilityAndOwner_resolvesThroughGate(): void
     {
         // Arrange - proves the policy is wired to the Gate via auto-discovery

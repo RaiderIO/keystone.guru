@@ -42,6 +42,7 @@ export const customScripts = [
     'resources/assets/js/custom/mapobjectgroups/usermousepositionmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/playerpositionmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/mountableareamapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/enemyforcescheckpointmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/floorunionmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/floorunionareamapobjectgroup.js',
 
@@ -155,6 +156,7 @@ export const customScripts = [
     'resources/assets/js/custom/models/usermouseposition.js',
     'resources/assets/js/custom/models/playerposition.js',
     'resources/assets/js/custom/models/mountablearea.js',
+    'resources/assets/js/custom/models/enemyforcescheckpoint.js',
 
     'resources/assets/js/custom/input/usermousepositionplayer.js',
     'resources/assets/js/custom/input/playerpositionplayer.js',
@@ -170,6 +172,7 @@ export const customScripts = [
     'resources/assets/js/custom/mapstate/enemyselection/enemyselection.js',
     'resources/assets/js/custom/mapstate/enemyselection/dungeonroutesearchenemyselection.js',
     'resources/assets/js/custom/mapstate/enemyselection/editkillzoneenemyselection.js',
+    'resources/assets/js/custom/mapstate/enemyselection/enemyforcescheckpointenemyselection.js',
     'resources/assets/js/custom/mapstate/enemyselection/enemypatrolenemyselection.js',
     'resources/assets/js/custom/mapstate/enemyselection/mdtenemyselection.js',
     'resources/assets/js/custom/mapstate/enemyselection/viewkillzoneenemyselection.js',
@@ -202,6 +205,8 @@ export const customScripts = [
     'resources/assets/js/custom/mapcontrols/factiondisplaycontrols.js',
 
     'resources/assets/js/custom/admin/enemyattaching.js',
+    // Shared by adminenemypatrol.js and adminenemyforcescheckpoint.js
+    'resources/assets/js/custom/admin/adminenemyconnections.js',
     'resources/assets/js/custom/admin/admindungeonmap.js',
     'resources/assets/js/custom/admin/adminenemy.js',
     'resources/assets/js/custom/admin/adminenemypack.js',
@@ -213,6 +218,8 @@ export const customScripts = [
     'resources/assets/js/custom/admin/admindungeonfloorswitchmarker.js',
     'resources/assets/js/custom/admin/adminmapicon.js',
     'resources/assets/js/custom/admin/adminmountablearea.js',
+    // Depends on models/enemyforcescheckpoint.js (base class)
+    'resources/assets/js/custom/admin/adminenemyforcescheckpoint.js',
 
     // Inline code
     'resources/assets/js/custom/inline/inlinemanager.js',

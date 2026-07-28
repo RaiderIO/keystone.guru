@@ -58,6 +58,16 @@ class MapState extends Signalable {
         return false;
     }
 
+    /**
+     * Whether enemy tooltips should be suppressed while this map state is active. Tooltips don't
+     * play nice with the yellow selection border (editing) or enemy-selection click handling -
+     * they fight for the same space and get in the way.
+     * @returns {boolean}
+     */
+    disablesTooltips() {
+        return false;
+    }
+
     isStarted() {
         return this._started;
     }
@@ -65,4 +75,12 @@ class MapState extends Signalable {
     isStopped() {
         return this._stopped;
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        MapState,
+    };
 }

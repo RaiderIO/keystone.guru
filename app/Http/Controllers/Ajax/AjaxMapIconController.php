@@ -8,7 +8,6 @@ use App\Events\Models\ModelChangedEvent;
 use App\Http\Controllers\Traits\ChangesDungeonRoute;
 use App\Http\Requests\MapIcon\MapIconFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Laratrust\Role;
 use App\Models\MapIcon;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
@@ -24,7 +23,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Override;
-use Teapot\StatusCode;
 use Teapot\StatusCode\Http;
 use Throwable;
 
@@ -64,15 +62,9 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         $validated                     = $request->validated();
         $validated['dungeon_route_id'] = $dungeonRoute?->id;
 
-        /** @var User|null $user */
-        $user = Auth::user();
-
-        $isUserAdmin = $user?->hasRole(Role::ROLE_ADMIN);
-        // Must be an admin to use this endpoint like this!
+        // No dungeon route means this icon is part of the mapping itself - admin only
         if ($dungeonRoute === null) {
-            if (!$isUserAdmin) {
-                throw new Exception('Unable to save map icon!');
-            }
+            Gate::authorize('createGlobal', MapIcon::class);
         } // We're editing a map comment for the user, carry on
         else {
             Gate::authorize('edit', $dungeonRoute);
@@ -88,23 +80,20 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
             $validated,
             MapIcon::class,
             $mapIcon,
-            function (MapIcon $mapIcon) use ($coordinatesService, $validated, $user, $dungeonRoute, &$beforeModel) {
+            function (MapIcon $mapIcon) use ($coordinatesService, $validated, $dungeonRoute, &$beforeModel) {
                 // Set the team_id if the user has the rights to do this. May be null if not set or no rights for it.
                 $updateAttributes = [];
                 $teamId           = $validated['team_id'];
-                if ($teamId !== null) {
-                    $team = Team::find($teamId);
-                    if ($team !== null && $user !== null && $team->isUserCollaborator($user)) {
-                        $updateAttributes = [
-                            'team_id'          => $teamId,
-                            'dungeon_route_id' => null,
-                        ];
-                    }
+                if ($teamId !== null && Gate::allows('assignToTeam', [$mapIcon, Team::find($teamId)])) {
+                    $updateAttributes = [
+                        'team_id'          => $teamId,
+                        'dungeon_route_id' => null,
+                    ];
                 }
 
                 // Prevent people being able to update icons that only the admin should if they're supplying a valid dungeon route
-                if ($mapIcon->exists && $mapIcon->dungeon_route_id === null && $dungeonRoute !== null && $mapIcon->team_id === null) {
-                    throw new Exception('Unable to save map icon!');
+                if ($mapIcon->exists && $dungeonRoute !== null) {
+                    Gate::authorize('update', $mapIcon);
                 }
 
                 // The incoming lat/lngs are facade lat/lngs, save the icon on the proper floor
@@ -169,12 +158,10 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
     {
         $dungeonRoute = $mapIcon->dungeonRoute;
 
-        $isAdmin = Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN);
-        // Must be an admin to use this endpoint like this!
-        if (!$isAdmin && ($dungeonRoute === null || $mapIcon->dungeon_route_id === null)) {
-            return response(null, StatusCode::FORBIDDEN);
-        } // We're editing a map icon for the user, carry on
-        elseif ($dungeonRoute !== null) {
+        // Anything not attached to a dungeon route is part of the mapping - admin only
+        Gate::authorize('delete', $mapIcon);
+
+        if ($dungeonRoute !== null) {
             // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's map comment
             Gate::authorize('edit', $dungeonRoute);
         }

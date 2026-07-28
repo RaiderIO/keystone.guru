@@ -26,6 +26,8 @@ L.Draw.Enemy = L.Draw.Marker.extend({
 
 /**
  * @property {Number} floor_id
+ * @property {Number|null} enemy_forces_checkpoint_id The mapper-defined checkpoint (e.g. a corridor) this enemy belongs to
+ * @property {Number|null} source_floor_id The floor the enemy really lives on, when floor_id was replaced by the facade floor
  * @property {Number} enemy_pack_id
  * @property {Number} npc_id
  * @property {Number} mdt_id
@@ -79,7 +81,11 @@ class Enemy extends VersionableMapObject {
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             // Remove/enable the popup
             self.setPopupEnabled(!(mapStateChangedEvent.data.newMapState instanceof MapState));
-            self.setTooltipEnabled(!(mapStateChangedEvent.data.newMapState instanceof EditMapState));
+            // Tooltip suppression while disablesTooltips() is active is handled by DungeonMap
+            // toggling a CSS class - see setMapState(). Toggling Leaflet's own bindTooltip/
+            // unbindTooltip here instead used to cause this, but every unbind leaks a raw DOM
+            // 'focus' listener that Leaflet never removes (Tooltip.js _addFocusListenersOnLayer
+            // has no null-guard), which crashes on the next click once _tooltip is null.
         });
 
         // Make sure all tooltips are closed to prevent having tooltips remain open after having zoomed (bug)
@@ -136,6 +142,12 @@ class Enemy extends VersionableMapObject {
                 name: 'enemy_patrol_id',
                 type: 'int',
                 edit: false, // Not directly changeable by user
+                default: null
+            }),
+            new Attribute({
+                name: 'enemy_forces_checkpoint_id',
+                type: 'int',
+                edit: false, // Assigned by selecting enemies on the checkpoint itself
                 default: null
             }),
             new Attribute({
@@ -204,6 +216,12 @@ class Enemy extends VersionableMapObject {
                     return getState().getMapContext().getFloorSelectValues();
                 },
                 default: getState().getCurrentFloor().id
+            }),
+            new Attribute({
+                name: 'source_floor_id',
+                type: 'int',
+                edit: false, // Only set server side, when the enemy was moved onto the facade floor
+                default: null
             }),
             new Attribute({
                 name: 'is_mdt',
@@ -734,12 +752,55 @@ class Enemy extends VersionableMapObject {
         if (this.layer !== null) {
             if (enabled && !this.isPopupEnabled) {
                 this._assignPopup();
-            } else if (!enabled && this.isPopupEnabled) {
+            } else if (!enabled) {
+                // Disabling is deliberately NOT guarded on isPopupEnabled (it used to be). That flag
+                // records what was last asked for, not what is actually bound: save()/setSynced()
+                // bind a popup by calling _assignPopup() straight through and never touch it. A
+                // freshly loaded enemy is therefore sitting there with a bound popup while the flag
+                // still reads false - so this unbind was skipped, and the enemy's edit popup opened
+                // on the very first click of an enemy selection, closed again by the save's
+                // closePopup(): the flash that was reported.
+                this.layer.off('popupopen');
                 this.layer.unbindPopup();
             }
         }
 
         this.isPopupEnabled = enabled;
+    }
+
+    /**
+     * An enemy's popup must stay unbound for as long as any map state is active - see the
+     * `map:mapstatechanged` handler in the constructor, which is what disables it in the first place.
+     *
+     * The base implementation is also reached from save() and setSynced(), which bypass
+     * setPopupEnabled() entirely. That matters during an EnemySelection that outlives a single click
+     * (the enemy forces checkpoint flow): every click saves the clicked enemy AND each of its pack
+     * buddies, so their popups got silently bound again mid-selection. The next click on any of them
+     * then opened the enemy's edit popup on top of the selection, which the closePopup() in that
+     * click's own save-success closed again.
+     *
+     * The isPopupEnabled flag is deliberately left alone here. It tracks what was last asked for and
+     * stays owned by setPopupEnabled(), which assigns it after calling us anyway; the save()/
+     * setSynced() callers never assign it at all, and shouldn't - they are not the ones deciding
+     * whether an enemy is supposed to have a popup.
+     *
+     * @inheritDoc
+     */
+    _assignPopup(layer = null) {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        if (this.map.getMapState() instanceof MapState) {
+            let targetLayer = layer === null ? this.layer : layer;
+
+            if (targetLayer !== null) {
+                targetLayer.off('popupopen');
+                targetLayer.unbindPopup();
+            }
+
+            return;
+        }
+
+        super._assignPopup(layer);
     }
 
     /**
@@ -775,25 +836,10 @@ class Enemy extends VersionableMapObject {
         return result;
     }
 
-    /**
-     * Sets the tooltip to be enabled or not.
-     * @param enabled {Boolean} True to enable, false to disable.
-     */
-    setTooltipEnabled(enabled) {
-        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-
-        if (enabled) {
-            this.bindTooltip();
-        } else {
-            this.unbindTooltip();
-            this.tooltipText = '';
-        }
-    }
-
     bindTooltip() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
 
-        if (this.layer !== null && !(this.map.getMapState() instanceof EditMapState)) {
+        if (this.layer !== null) {
             let text;
             if (this.npc !== null) {
                 let visualData = this.getVisualData();
@@ -819,7 +865,10 @@ class Enemy extends VersionableMapObject {
                 // Remove any previous tooltip
                 this.unbindTooltip();
                 this.layer.bindTooltip(text, {
-                    direction: 'top'
+                    direction: 'top',
+                    // Lets DungeonMap suppress just enemy tooltips via CSS (see setMapState())
+                    // without ever touching Leaflet's own tooltip bind state.
+                    className: 'map_enemy_tooltip',
                 });
             }
         }
@@ -856,6 +905,17 @@ class Enemy extends VersionableMapObject {
      *
      * @param enemyPatrol {EnemyPatrol}
      */
+    /**
+     * Assigns this enemy to a mapper-defined enemy forces checkpoint (or removes it from one).
+     * @param enemyForcesCheckpoint {EnemyForcesCheckpoint|null}
+     */
+    setEnemyForcesCheckpoint(enemyForcesCheckpoint) {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        this.enemyForcesCheckpoint = enemyForcesCheckpoint;
+        this.enemy_forces_checkpoint_id = enemyForcesCheckpoint === null ? null : enemyForcesCheckpoint.id;
+    }
+
     setEnemyPatrol(enemyPatrol) {
         if (this.enemyPatrol !== null) {
             this.enemyPatrol.removeEnemy(this);

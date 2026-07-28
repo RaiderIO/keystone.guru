@@ -427,6 +427,14 @@ class MapContext extends Signalable {
     }
 
     /**
+     * The mapper-defined enemy forces checkpoints (e.g. corridors) of this dungeon.
+     * @returns {[]}
+     */
+    getEnemyForcesCheckpoints() {
+        return this._options.dungeon.enemyForcesCheckpoints ?? [];
+    }
+
+    /**
      *
      * @returns {[]}
      */

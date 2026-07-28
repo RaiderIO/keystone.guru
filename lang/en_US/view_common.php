@@ -13,6 +13,11 @@ return [
             'popular' => 'Popular',
             'new'     => 'New',
         ],
+        'list' => [
+            'card' => [
+                'this_week_tier' => 'This week\'s difficulty tier (archon.gg)',
+            ],
+        ],
         'gridtabs' => [
             'raid' => 'Raid',
         ],
@@ -56,6 +61,23 @@ return [
         ],
         'rating' => [
             'nr_of_votes' => '%s vote(s)',
+        ],
+        'poster' => [
+            'views'     => '%s views',
+            'favorites' => '%s favorites',
+        ],
+        'cardhero' => [
+            'top_community_route'    => 'Top community route',
+            'ranked_community_route' => '#%d community route',
+            'views'                  => '%s views',
+            'favorites'              => '%s favorites',
+            'pulls'                  => '{1} :count pull|[2,*] :count pulls',
+        ],
+        'cardrow' => [
+            'new'       => 'New',
+            'views'     => '%s views',
+            'favorites' => '%s favorites',
+            'pulls'     => '{1} :count pull|[2,*] :count pulls',
         ],
         'table' => [
             'team'                  => 'Team',

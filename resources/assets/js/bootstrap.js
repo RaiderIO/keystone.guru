@@ -86,6 +86,8 @@ window.axios = require('axios');
 
 window.datatables = require('datatables.net');
 window.leaflet = require('leaflet');
+// Null-guards the raw DOM 'focus' listener leaflet leaks on every unbindTooltip() (#128)
+require('./leaflet-tooltip-focus-fix').applyLeafletTooltipFocusFix(window.leaflet);
 window.leafletdraw = require('leaflet-draw');
 // window.leafleteditable = require('leaflet-editable');
 window.leafletcontextmenu = require('leaflet-contextmenu');

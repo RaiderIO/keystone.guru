@@ -44,6 +44,7 @@ use App\Repositories\Database\DungeonRoute\DungeonRouteThumbnailJobRepository;
 use App\Repositories\Database\DungeonRoute\DungeonRouteThumbnailRepository;
 use App\Repositories\Database\Enemies\PridefulEnemyRepository;
 use App\Repositories\Database\EnemyActiveAuraRepository;
+use App\Repositories\Database\EnemyForcesCheckpointRepository;
 use App\Repositories\Database\EnemyPackRepository;
 use App\Repositories\Database\EnemyPatrolRepository;
 use App\Repositories\Database\EnemyRepository;
@@ -163,6 +164,7 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailJobRepositoryI
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailRepositoryInterface;
 use App\Repositories\Interfaces\Enemies\PridefulEnemyRepositoryInterface;
 use App\Repositories\Interfaces\EnemyActiveAuraRepositoryInterface;
+use App\Repositories\Interfaces\EnemyForcesCheckpointRepositoryInterface;
 use App\Repositories\Interfaces\EnemyPackRepositoryInterface;
 use App\Repositories\Interfaces\EnemyPatrolRepositoryInterface;
 use App\Repositories\Interfaces\EnemyRepositoryInterface;
@@ -368,6 +370,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(DungeonFloorSwitchMarkerRepositoryInterface::class, DungeonFloorSwitchMarkerRepository::class);
         $this->app->bind(DungeonRepositoryInterface::class, DungeonRepository::class);
         $this->app->bind(EnemyActiveAuraRepositoryInterface::class, EnemyActiveAuraRepository::class);
+        $this->app->bind(EnemyForcesCheckpointRepositoryInterface::class, EnemyForcesCheckpointRepository::class);
         $this->app->bind(EnemyPackRepositoryInterface::class, EnemyPackRepository::class);
         $this->app->bind(EnemyPatrolRepositoryInterface::class, EnemyPatrolRepository::class);
         $this->app->bind(EnemyRepositoryInterface::class, EnemyRepository::class);

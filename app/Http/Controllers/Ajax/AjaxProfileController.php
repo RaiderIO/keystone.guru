@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Patreon\PatreonAdFreeGiveaway;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class AjaxProfileController extends Controller
 {
@@ -49,18 +51,17 @@ class AjaxProfileController extends Controller
         ]);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function removeAdFreeGiveaway(Request $request, User $user): Response
     {
-        /** @var User $currentUser */
-        $currentUser = Auth::user();
-
         if ($user->patreonAdFreeGiveaway === null) {
             abort(422, __('controller.profile.error.remove_ad_free_giveaway_not_found'));
         }
 
-        if ($user->patreonAdFreeGiveaway->giver_user_id !== $currentUser->id) {
-            abort(422, __('controller.profile.error.remove_ad_free_giveaway_not_yours'));
-        }
+        // Only the giver may take their own giveaway back
+        Gate::authorize('revokeAdFreeGiveaway', $user);
 
         $user->patreonAdFreeGiveaway->delete();
 

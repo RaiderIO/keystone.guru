@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int         $mapping_version_id
  * @property int|null    $enemy_pack_id
  * @property int|null    $enemy_patrol_id
+ * @property int|null    $enemy_forces_checkpoint_id    The mapper-defined group of enemies (e.g. a corridor) this enemy belongs to
  * @property int|null    $npc_id
  * @property int         $floor_id
  * @property int|null    $mdt_id                        The ID in MDT (clone index) that this enemy is coupled to
@@ -53,6 +54,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Npc|null                                 $npc
  * @property Floor                                    $floor
  * @property EnemyPatrol|null                         $enemyPatrol
+ * @property EnemyForcesCheckpoint|null               $enemyForcesCheckpoint
  * @property Enemy|null                               $exclusiveEnemy
  * @property MappingVersion                           $mappingVersion
  * @property EloquentCollection<int, EnemyActiveAura> $enemyActiveAuras
@@ -75,6 +77,7 @@ class Enemy extends CacheModel implements MappingModelCloneableInterface, Mappin
         'floor_id',
         'enemy_pack_id',
         'enemy_patrol_id',
+        'enemy_forces_checkpoint_id',
         'npc_id',
         'mdt_id',
         'mdt_npc_id',
@@ -117,22 +120,23 @@ class Enemy extends CacheModel implements MappingModelCloneableInterface, Mappin
     protected function casts(): array
     {
         return [
-            'id'                 => 'integer',
-            'mapping_version_id' => 'integer',
-            'floor_id'           => 'integer',
-            'npc_id'             => 'integer',
-            'mdt_id'             => 'integer',
-            'mdt_npc_id'         => 'integer',
-            'exclusive_enemy_id' => 'integer',
-            'mdt_scale'          => 'double',
-            'enemy_pack_id'      => 'integer',
-            'enemy_patrol_id'    => 'integer',
-            'required'           => 'integer',
-            'skippable'          => 'integer',
-            'hyper_respawn'      => 'integer',
-            'lat'                => 'double',
-            'lng'                => 'double',
-            'kill_priority'      => 'integer',
+            'id'                         => 'integer',
+            'mapping_version_id'         => 'integer',
+            'floor_id'                   => 'integer',
+            'npc_id'                     => 'integer',
+            'mdt_id'                     => 'integer',
+            'mdt_npc_id'                 => 'integer',
+            'exclusive_enemy_id'         => 'integer',
+            'mdt_scale'                  => 'double',
+            'enemy_pack_id'              => 'integer',
+            'enemy_patrol_id'            => 'integer',
+            'enemy_forces_checkpoint_id' => 'integer',
+            'required'                   => 'integer',
+            'skippable'                  => 'integer',
+            'hyper_respawn'              => 'integer',
+            'lat'                        => 'double',
+            'lng'                        => 'double',
+            'kill_priority'              => 'integer',
         ];
     }
 
@@ -204,6 +208,12 @@ class Enemy extends CacheModel implements MappingModelCloneableInterface, Mappin
     public function enemyPatrol(): BelongsTo
     {
         return $this->belongsTo(EnemyPatrol::class);
+    }
+
+    /** @return BelongsTo<EnemyForcesCheckpoint, $this> */
+    public function enemyForcesCheckpoint(): BelongsTo
+    {
+        return $this->belongsTo(EnemyForcesCheckpoint::class);
     }
 
     /** @return BelongsTo<Npc, $this> */

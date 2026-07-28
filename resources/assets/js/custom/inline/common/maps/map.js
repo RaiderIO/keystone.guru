@@ -12,6 +12,7 @@
  * @property {boolean} defaultEnemyAggressivenessBorder
  * @property {string} mapFacadeStyle
  * @property {boolean} noUI
+ * @property {?number} killZonePathWeightMultiplier
  * @property {boolean} showControls
  * @property {boolean} gestureHandling
  * @property {boolean} zoomToContents
