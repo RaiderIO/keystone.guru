@@ -6,6 +6,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnail;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Storage;
 
 class RepairBrokenThumbnails extends Command
@@ -15,7 +16,9 @@ class RepairBrokenThumbnails extends Command
      *
      * @var string
      */
-    protected $signature = 'dungeonroute:repairbrokenthumbnails {--dry-run : Report what would happen without deleting or queueing anything}';
+    protected $signature = 'dungeonroute:repairbrokenthumbnails
+        {--dry-run : Report what would happen without deleting or queueing anything}
+        {--dungeon-route-id=* : Repair only these dungeon routes instead of scanning every thumbnail row}';
 
     /**
      * The console command description.
@@ -35,6 +38,24 @@ class RepairBrokenThumbnails extends Command
     }
 
     /**
+     * Restricts a thumbnail query to the routes named by --dungeon-route-id, if any were given.
+     *
+     * @param  Builder<DungeonRouteThumbnail> $query
+     * @return Builder<DungeonRouteThumbnail>
+     */
+    private function scopeToRequestedDungeonRoutes(Builder $query): Builder
+    {
+        /** @var array<int, string> $dungeonRouteIds */
+        $dungeonRouteIds = (array)$this->option('dungeon-route-id');
+
+        if ($dungeonRouteIds === []) {
+            return $query;
+        }
+
+        return $query->whereIn('dungeon_route_id', $dungeonRouteIds);
+    }
+
+    /**
      * Deletes thumbnail rows that are not backed by a usable File - either file_id is null, or it
      * points at a File row that no longer exists. Such rows leave has_thumbnail inconsistent; once
      * they are gone the route's cards correctly fall back to the dungeon image.
@@ -42,7 +63,9 @@ class RepairBrokenThumbnails extends Command
     private function deleteFilelessThumbnails(bool $dryRun): void
     {
         // whereDoesntHave('file') covers both a null file_id and a file_id pointing at a missing row.
-        $query = DungeonRouteThumbnail::query()->whereDoesntHave('file');
+        $query = $this->scopeToRequestedDungeonRoutes(
+            DungeonRouteThumbnail::query()->whereDoesntHave('file'),
+        );
 
         $total = $query->clone()->count();
 
@@ -94,9 +117,11 @@ class RepairBrokenThumbnails extends Command
         $brokenCustomThumbnailIds = collect();
 
         // The model's default $with would also hydrate the unused floor relation for every row.
-        $query = DungeonRouteThumbnail::query()
-            ->whereHas('file')
-            ->without('floor');
+        $query = $this->scopeToRequestedDungeonRoutes(
+            DungeonRouteThumbnail::query()
+                ->whereHas('file')
+                ->without('floor'),
+        );
 
         $total = $query->clone()->count();
 
