@@ -14,13 +14,15 @@ use App\Models\User;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Feature\Fixtures\DungeonFixtures;
+use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
 #[Group('Compendium')]
 final class ClassCompendiumControllerTest extends PublicTestCase
 {
+    use ProvidesDungeon;
+
     #[\Override]
     protected function setUp(): void
     {
@@ -113,7 +115,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
 
         // Find a dungeon whose current mapping version has enemies for the Retail game version
         $defaultGameVersion = GameVersion::getDefaultGameVersion();
-        $dungeon            = DungeonFixtures::getDungeonWithCurrentMappingVersionWithEnemies($defaultGameVersion->id);
+        $dungeon            = $this->getDungeonWithCurrentMappingVersionWithEnemies($defaultGameVersion);
         $mappingVersion     = $dungeon->getCurrentMappingVersionForGameVersion($defaultGameVersion);
         $this->assertNotNull($mappingVersion);
 

@@ -65,13 +65,6 @@ abstract class StructuredLogging implements StructuredLoggingInterface
 
     public function __construct()
     {
-        /** @var Application $app */
-        $app = app();
-
-        if ($app->runningInConsole() && !$app->runningUnitTests() && config('app.type') === 'local') {
-            static::setChannel('stderr');
-        }
-
         foreach ($this->getDefaultLoggers() as $defaultLogger) {
             $this->addLogger($defaultLogger);
         }
@@ -292,12 +285,14 @@ abstract class StructuredLogging implements StructuredLoggingInterface
     /** @return array<int, LoggerInterface> */
     private function resolveLoggers(): array
     {
-        if ($this->resolvedLoggers === null || $this->resolvedLoggersChannel !== self::$CHANNEL) {
+        $channel = self::resolveChannel();
+
+        if ($this->resolvedLoggers === null || $this->resolvedLoggersChannel !== $channel) {
             $this->resolvedLoggers = [];
             foreach ($this->loggers as $logger) {
-                $this->resolvedLoggers[] = $logger instanceof LogManager ? $logger->channel(self::$CHANNEL) : $logger;
+                $this->resolvedLoggers[] = $logger instanceof LogManager ? $logger->channel($channel) : $logger;
             }
-            $this->resolvedLoggersChannel = self::$CHANNEL;
+            $this->resolvedLoggersChannel = $channel;
         }
 
         return $this->resolvedLoggers;
@@ -344,6 +339,33 @@ abstract class StructuredLogging implements StructuredLoggingInterface
     private static function shouldPrettyPrint(): bool
     {
         return self::$PRETTY_PRINT ??= config('app.type') === 'local';
+    }
+
+    /**
+     * The channel every structured log line is written to: an explicit setChannel() override if one
+     * was made, otherwise stderr for local console usage so an artisan command shows its own output,
+     * and otherwise the configured default.
+     *
+     * Resolved here, per log call, rather than once in the constructor. $CHANNEL is static, so a
+     * single instance built before the application had bound its environment - which
+     * runningUnitTests() needs - would latch stderr on for the entire process, including PHPUnit
+     * runs. That is how structured log lines ended up interleaved with the test progress output in
+     * CI while never appearing locally: it depends on when the first logger happens to be built.
+     */
+    public static function resolveChannel(): ?string
+    {
+        if (self::$CHANNEL !== null) {
+            return self::$CHANNEL;
+        }
+
+        /** @var Application $app */
+        $app = app();
+
+        if ($app->runningInConsole() && !$app->runningUnitTests() && config('app.type') === 'local') {
+            return 'stderr';
+        }
+
+        return null;
     }
 
     public static function setChannel(?string $channel): void
