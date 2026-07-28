@@ -2,11 +2,15 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
+use App\Models\PublishedState;
+use App\Models\User;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Teapot\StatusCode;
 use Tests\Feature\Controller\DungeonRouteTestBase;
 
 #[Group('Controller')]
@@ -114,6 +118,105 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
     }
 
     #[Test]
+    public function store_givenNewKillZoneOnAnotherUsersRoute_returnsForbidden(): void
+    {
+        // Arrange
+        $nonOwner = User::factory()->create();
+        $route    = $this->createRouteOwnedByAnotherUser();
+
+        try {
+            $this->actingAs($nonOwner);
+
+            // Act
+            $response = $this->post(sprintf('/ajax/%s/killzone', $route->public_key), [
+                'color'   => '#ff0000',
+                'index'   => 1,
+                'enemies' => [],
+                'spells'  => [],
+            ]);
+
+            // Assert - a new kill zone previously bypassed the edit gate entirely
+            $response->assertStatus(StatusCode::FORBIDDEN);
+            $this->assertSame(0, $route->killZones()->count());
+        } finally {
+            $route->killZones()->delete();
+            $route->delete();
+            $nonOwner->delete();
+        }
+    }
+
+    #[Test]
+    public function storeAll_givenAnotherUsersRoute_returnsForbidden(): void
+    {
+        // Arrange
+        $nonOwner = User::factory()->create();
+        $route    = $this->createRouteOwnedByAnotherUser();
+
+        try {
+            $this->actingAs($nonOwner);
+
+            // Act
+            $response = $this->put(sprintf('/ajax/%s/killzone/mass', $route->public_key), [
+                'killzones' => [
+                    [
+                        'color' => '#00ff00',
+                        'index' => 1,
+                    ],
+                ],
+            ]);
+
+            // Assert
+            $response->assertStatus(StatusCode::FORBIDDEN);
+            $this->assertSame(0, $route->killZones()->count());
+        } finally {
+            $route->killZones()->delete();
+            $route->delete();
+            $nonOwner->delete();
+        }
+    }
+
+    #[Test]
+    public function storeAll_givenKillZoneOfAnotherUsersRoute_returnsForbidden(): void
+    {
+        // Arrange - the actor owns $this->dungeonRoute but targets a kill zone that belongs to
+        // someone else's route. authorizeKillZoneEdit() re-authorizes each batch item against the
+        // kill zone's own route before saveKillZone() is ever called.
+        $nonOwner      = User::factory()->create();
+        $otherRoute    = $this->createRouteOwnedByAnotherUser();
+        $otherKillZone = KillZone::factory()->create([
+            'dungeon_route_id' => $otherRoute->id,
+            'floor_id'         => null,
+            'lat'              => null,
+            'lng'              => null,
+            'color'            => '#000000',
+            'index'            => 1,
+        ]);
+
+        try {
+            $this->actingAs($nonOwner);
+
+            // Act - $this->dungeonRoute is a sandbox route, so the outer edit gate lets us in
+            $response = $this->put(sprintf('/ajax/%s/killzone/mass', $this->dungeonRoute->public_key), [
+                'killzones' => [
+                    [
+                        'id'    => $otherKillZone->id,
+                        'color' => '#ff0000',
+                        'index' => 1,
+                    ],
+                ],
+            ]);
+
+            // Assert - a 403, not the generic 404 the surrounding catch would otherwise produce
+            $response->assertStatus(StatusCode::FORBIDDEN);
+            $this->assertSame('#000000', $otherKillZone->fresh()->color);
+        } finally {
+            $otherKillZone->delete();
+            $otherRoute->delete();
+            $nonOwner->delete();
+        }
+    }
+
+    #[Test]
     public function storeAll_givenEnemyIds_shouldSetEnemyIdOnKillZoneEnemies(): void
     {
         // Arrange
@@ -150,5 +253,19 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
         } finally {
             $killZone->delete();
         }
+    }
+
+    /**
+     * A published, non-sandbox route authored by user 1. Sandbox routes (expires_at set, which the
+     * factory does by default) are editable by anyone by design, so expires_at must be null for an
+     * authorization assertion to mean anything.
+     */
+    private function createRouteOwnedByAnotherUser(): DungeonRoute
+    {
+        return DungeonRoute::factory()->create([
+            'author_id'          => 1,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+            'expires_at'         => null,
+        ]);
     }
 }
