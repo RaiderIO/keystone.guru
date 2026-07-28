@@ -7,6 +7,24 @@ class EnemySelection extends MapObjectMapState {
         return 'EnemySelection';
     }
 
+    // NOTE: disablesTooltips() is deliberately NOT overridden here. Suppressing enemy tooltips is only
+    // wanted where the tooltip fights the selection visuals (the admin mapping page's couple/patrol/
+    // checkpoint flows), which override it individually. Pull-building in the route editor also runs
+    // through an EnemySelection, and there the tooltip carries the npc name, health and enemy forces a
+    // router needs to decide whether to click an enemy at all - so it must keep working.
+
+    /**
+     * Whether selectable enemies should render with the dashed edit border (the
+     * leaflet-edit-marker-selected/selected_enemy_icon classes in EnemyVisual) while this selection is
+     * active. True for the admin mapping selections (patrol/MDT/checkpoint), where the border is the only
+     * cue an enemy is clickable; false for the route editor's pull-building selections, which have their
+     * own selection visuals. Override this rather than adding instanceof checks at the call sites.
+     * @returns {boolean}
+     */
+    drawsEnemyEditBorder() {
+        return false;
+    }
+
     /**
      * Filter function which should be overriden in implementing classes.
      * @param source MapObject
@@ -93,4 +111,12 @@ class EnemySelection extends MapObjectMapState {
             $('.leaflet-draw-edit-remove').removeClass('leaflet-disabled').refreshTooltips();
         }
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        EnemySelection,
+    };
 }

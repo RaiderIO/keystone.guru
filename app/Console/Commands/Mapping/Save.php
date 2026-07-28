@@ -8,6 +8,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
+use App\Models\EnemyForcesCheckpoint;
 use App\Models\Floor\Floor;
 use App\Models\Floor\FloorUnion;
 use App\Models\Interfaces\HasLatLngInterface;
@@ -248,6 +249,7 @@ class Save extends Command
                 'dungeonFloorSwitchMarkersForExport',
                 'mapIconsForExport',
                 'mountableAreasForExport',
+                'enemyForcesCheckpointsForExport',
                 'floorUnionsForExport',
                 'floorUnionAreasForExport',
             ])->get();
@@ -480,6 +482,11 @@ class Save extends Command
             ->values()
             ->each($roundLatLngFn);
         $mountableAreas = $floor->mountableAreasForExport->values()->each($roundLatLngVerticesFn);
+        /** @var EloquentCollection<int, Model&HasLatLngInterface> $enemyForcesCheckpoints */
+        $enemyForcesCheckpoints = $floor->enemyForcesCheckpointsForExport
+            ->each(static fn(EnemyForcesCheckpoint $item) => $item->setRelation('floor', $floor))
+            ->values()
+            ->each($roundLatLngFn);
         /** @var EloquentCollection<int, Model&HasLatLngInterface> $floorUnionsCollection */
         $floorUnionsCollection = $floor->floorUnionsForExport()->without(['floorUnionAreas'])->get()
             ->each(static fn(FloorUnion $item) => $item->setRelation('floor', $floor))
@@ -500,6 +507,7 @@ class Save extends Command
         $result['dungeon_floor_switch_markers'] = $dungeonFloorSwitchMarkers;
         $result['map_icons']                    = $mapIcons;
         $result['mountable_areas']              = $mountableAreas;
+        $result['enemy_forces_checkpoints']     = $enemyForcesCheckpoints;
         $result['floor_unions']                 = $floorUnions;
         $result['floor_union_areas']            = $floorUnionAreas;
 

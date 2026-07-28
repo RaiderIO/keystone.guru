@@ -88,6 +88,39 @@ class EnemyVisualManager extends Signalable {
             });
         }
 
+        // Same as above, but for hovering an enemy forces checkpoint's pill - highlights its members.
+        let enemyForcesCheckpointMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_FORCES_CHECKPOINT);
+        // May be null when rendering thumbnails
+        if (enemyForcesCheckpointMapObjectGroup instanceof EnemyForcesCheckpointMapObjectGroup) {
+            enemyForcesCheckpointMapObjectGroup.register(['object:add', 'save:success'], this, function (objectAddEvent) {
+                /** @type EnemyForcesCheckpoint addedEnemyForcesCheckpoint */
+                let addedEnemyForcesCheckpoint = objectAddEvent.data.object;
+                if (addedEnemyForcesCheckpoint.id > 0) {
+                    addedEnemyForcesCheckpoint.layer.on('mouseover', function (e) {
+                        if (!(self.map.getMapState() instanceof EditMapState)) {
+                            let enemies = addedEnemyForcesCheckpoint.getEnemies();
+                            for (let i = 0; i < enemies.length; i++) {
+                                if (enemies[i].visual !== null) {
+                                    enemies[i].visual.forceMouseOver();
+                                }
+                            }
+                        }
+                    });
+
+                    addedEnemyForcesCheckpoint.layer.on('mouseout', function (e) {
+                        if (!(self.map.getMapState() instanceof EditMapState)) {
+                            let enemies = addedEnemyForcesCheckpoint.getEnemies();
+                            for (let i = 0; i < enemies.length; i++) {
+                                if (enemies[i].visual !== null) {
+                                    enemies[i].visual.forceMouseOut();
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
         getState().register('mapzoomlevel:changed', this, this._onZoomLevelChanged.bind(this));
         getState().register('mapnumberstyle:changed', this, this._onNumberStyleChanged.bind(this));
         getState().register(['unkilledenemyopacity:changed', 'unkilledimportantenemyopacity:changed'], this, this._onUnkilledEnemyOpacityChanged.bind(this));

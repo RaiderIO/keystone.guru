@@ -7,6 +7,14 @@ class MDTEnemySelection extends EnemySelection {
         return 'MDTEnemySelection';
     }
 
+    disablesTooltips() {
+        return true;
+    }
+
+    drawsEnemyEditBorder() {
+        return true;
+    }
+
     shouldRebuildEnemyVisuals() {
         return true;
     }
@@ -33,4 +41,12 @@ class MDTEnemySelection extends EnemySelection {
     _getLayerIcon() {
         return MDTEnemyIconSelected;
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        MDTEnemySelection,
+    };
 }

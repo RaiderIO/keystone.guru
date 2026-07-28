@@ -1,6 +1,6 @@
 ---
 name: ajax-map-editor-crud
-description: The map editor's server-side CRUD layer — AjaxMappingModelBaseController, the Ajax*Controller pattern, FormRequests, routes/web.php ajax groups, broadcast events (ContextEvent/ModelChangedEvent/ModelDeletedEvent), presence channels in routes/channels.php, and the checklist for adding a new editable map-object type. Use when adding or changing an ajax map endpoint, a broadcast event, or debugging collaborative-editing sync. Not for the model versioning itself (mapping-versioned-models), the front-end Leaflet layer (new-map-view), or public API endpoints (api-endpoint).
+description: The map editor's server-side CRUD layer — AjaxMappingModelBaseController, the Ajax*Controller pattern, FormRequests, routes/web.php ajax groups, broadcast events (ContextEvent/ModelChangedEvent/ModelDeletedEvent), presence channels in routes/channels.php, and the checklists for adding a new editable map-object type (server-side, and the front-end MapObject conventions — per-attribute translation keys, snackbars for transient admin state). Use when adding or changing an ajax map endpoint, a broadcast event, or debugging collaborative-editing sync. Not for the model versioning itself (mapping-versioned-models), the front-end Leaflet layer (new-map-view), or public API endpoints (api-endpoint).
 ---
 
 # Ajax Map-Editor CRUD & Broadcast Events
@@ -105,7 +105,7 @@ events are mapped by `e.__name` through the big switch in `message/messagefactor
 classes in `message/listen/models/<type>/changed.js|deleted.js`. **There is no server-side
 registry** — the PHP `broadcastAs()` strings and the JS `MessageFactory` switch are the coupling.
 
-## Checklist — adding a new editable map-object type (server side)
+## Checklist — adding a new editable map-object type (server-side)
 
 1. Model implements `MappingModelInterface` (+ `HasLatLng`/`HasVertices` traits if it has
    coordinates — that's what powers `getCoordinatesData()`). See **mapping-versioned-models**
@@ -121,6 +121,32 @@ registry** — the PHP `broadcastAs()` strings and the JS `MessageFactory` switc
 7. Front-end echo (only if live sync is needed): message classes + `messagefactory.js` switch +
    handler under `messagehandler/listen/models/<type>/` + registration in the `EchoHandler`
    constructor's `_handlers` array.
+
+## Checklist — adding a new editable map-object type (front-end)
+
+1. **Every popup attribute needs a translation key, generated dynamically.**
+   `MapObject._getPopupHtml()` (`resources/assets/js/custom/models/mapobject.js` ~line 483) calls
+   `lang.get(\`js.${mapObjectName}_${attributeName}_label\`)` for **every** attribute your
+   `_getAttributes()` returns — including the base class's own `faction`/`teeming` attributes that
+   every `MapObject` subclass inherits, and a `_select_default_label` key for any `select`-type
+   attribute. A `button`-type attribute needs **two** separate keys: `..._label` (the label above
+   the button) and `..._button_text_label` (the button's own caption, set explicitly via
+   `buttonText:` in the `Attribute`). The bare `js.<mapObjectName>` key is used both as the popup
+   title and (for a draw-tool button routed through `drawcontrols.js`'s generic `faClass` handler)
+   the button caption — keep it short, one word, matching sibling models (`Patrol`, `Mountable`,
+   `Union`). Missing any of these doesn't error — it just silently renders `js.foo_bar_label` as
+   literal text in the popup. Grep the model's `_getAttributes()` for every `name:` and confirm a
+   matching `lang/en_US/js.php` entry exists for each.
+2. **Transient "you're currently doing X" admin state goes in a snackbar, not a bespoke Leaflet
+   control.** `getState().addSnackbar(html, options)` / `removeSnackbar(id)`
+   (`resources/assets/js/custom/statemanager.js` ~line 737) is the existing mechanism — see
+   `SelectKillZoneEnemySelectionOverpull` or `EnemyForcesCheckpointEnemySelection` for a `MapState`
+   that shows one on `start()` and removes it on `stop()`, with `onDomAdded` wiring up buttons and
+   later calls updating the DOM in place via the snackbar's own `id` (see `drawcontrols.js`'s
+   `TOOLBAROPENED`/`TOOLBARCLOSED` handlers for updating an existing snackbar's content live).
+   Don't build a `MapControl` + Handlebars panel for this — it's more code for a worse result (a
+   `MapControl` is re-instantiated on every floor switch and has no built-in fade/stacking with
+   other transient messages).
 
 ## Gotchas
 

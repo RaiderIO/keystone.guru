@@ -34,9 +34,27 @@ interface MappingServiceInterface
 
     /**
      * Takes an existing mapping version's contents and applies it to another mapping version.
+     *
+     * Enemy forces checkpoints are NOT part of this: their members live in `enemies`, which this method does
+     * not copy either, so the caller has to be able to re-link membership itself. Clone them with
+     * copyEnemyForcesCheckpointsToMappingVersion() when the target should inherit them - only the MDT
+     * re-import path does; a bare mapping version deliberately starts with none, since it has no enemies to
+     * assign them to (#3702).
      */
     public function copyMappingVersionContentsToDungeon(
         MappingVersion $sourceMappingVersion,
         MappingVersion $targetMappingVersion,
     ): MappingVersion;
+
+    /**
+     * Clones a mapping version's enemy forces checkpoints into another mapping version, without their members -
+     * enemies are cloned by another code path entirely, or (on an MDT mapping import) re-created from scratch.
+     *
+     * @return array<int, int> Source checkpoint id => cloned checkpoint id, so the caller can re-link the
+     *                         membership of the enemies it clones or imports afterwards.
+     */
+    public function copyEnemyForcesCheckpointsToMappingVersion(
+        MappingVersion $sourceMappingVersion,
+        MappingVersion $targetMappingVersion,
+    ): array;
 }

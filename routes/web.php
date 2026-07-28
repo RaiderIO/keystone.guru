@@ -38,6 +38,7 @@ use App\Http\Controllers\Ajax\AjaxDungeonFloorSwitchMarkerController;
 use App\Http\Controllers\Ajax\AjaxDungeonRouteController;
 use App\Http\Controllers\Ajax\AjaxDungeonRouteSearchController;
 use App\Http\Controllers\Ajax\AjaxEnemyController;
+use App\Http\Controllers\Ajax\AjaxEnemyForcesCheckpointController;
 use App\Http\Controllers\Ajax\AjaxEnemyPackController;
 use App\Http\Controllers\Ajax\AjaxEnemyPatrolController;
 use App\Http\Controllers\Ajax\AjaxHeatmapController;
@@ -636,6 +637,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                     Route::post('/mountablearea', new AjaxMountableAreaController()->store(...));
                     Route::put('/mountablearea/{mountableArea}', new AjaxMountableAreaController()->store(...));
                     Route::delete('/mountablearea/{mountableArea}', new AjaxMountableAreaController()->delete(...));
+
+                    Route::post('/enemyforcescheckpoint', new AjaxEnemyForcesCheckpointController()->store(...))->name('ajax.admin.enemyforcescheckpoint.create');
+                    Route::put('/enemyforcescheckpoint/{enemyForcesCheckpoint}', new AjaxEnemyForcesCheckpointController()->store(...))->name('ajax.admin.enemyforcescheckpoint.update');
+                    Route::delete('/enemyforcescheckpoint/{enemyForcesCheckpoint}', new AjaxEnemyForcesCheckpointController()->delete(...))->name('ajax.admin.enemyforcescheckpoint.delete');
 
                     Route::post('/floorunion', new AjaxFloorUnionController()->store(...));
                     Route::put('/floorunion/{floorUnion}', new AjaxFloorUnionController()->store(...));

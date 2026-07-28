@@ -4,6 +4,7 @@ namespace App\Http\Requests\Enemy;
 
 use App\Models\Dungeon;
 use App\Models\Enemy;
+use App\Models\EnemyForcesCheckpoint;
 use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
 use App\Models\Faction;
@@ -37,6 +38,10 @@ class APIEnemyFormRequest extends FormRequest
             'enemy_patrol_id' => [
                 'nullable',
                 Rule::exists(EnemyPatrol::class, 'id'),
+            ],
+            'enemy_forces_checkpoint_id' => [
+                'nullable',
+                Rule::exists(EnemyForcesCheckpoint::class, 'id'),
             ],
             'npc_id' => [
                 'nullable',
