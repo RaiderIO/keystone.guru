@@ -333,7 +333,6 @@ class EnemyVisual extends Signalable {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual!', this);
 
         let self = this;
-        let id = self.enemy.id;
 
         let shouldCleanUp = self._circleMenu !== null;
 
@@ -348,22 +347,29 @@ class EnemyVisual extends Signalable {
             // destroyed a moment later anyway, in cleanupFn below.
             removeStrayTooltips();
 
-            // Delay it by 500 ms so the animations have a chance to complete
-            let $radial = $(`#map_enemy_raid_marker_radial_${id}`);
+            // The radial as the circle menu plugin itself holds it, rather than re-resolving it by id:
+            // this set stays valid once the enemy's icon has been removed from the DOM (Leaflet does
+            // that natively, so the detached radial keeps all of its jQuery data), where the selector
+            // matches nothing at all. Everything below depends on that (#3723).
+            let $radial = self._circleMenu;
             let cleanupFn = function () {
                 // Dispose each item's Bootstrap Tooltip instance before removing its DOM. Safe to do
                 // here (unlike eagerly above): by now any in-flight show/hide transition has settled,
                 // either immediately (fadeOut = false) or after the 500ms delay below. Bootstrap keys
                 // instances by element in a plain Map (not a WeakMap), so skipping this would leak a
                 // Tooltip instance for every marker assigned/cleared this session.
-                $(this).find('[data-bs-toggle="tooltip"]').each(function () {
+                $radial.find('[data-bs-toggle="tooltip"]').each(function () {
                     let tooltip = bootstrap.Tooltip.getInstance(this);
                     if (tooltip !== null) {
                         tooltip.dispose();
                     }
                 });
 
-                $(this).remove().dequeue();
+                // Also detaches the plugin's own jQuery handlers - among them the one that fires its
+                // `open` hook, which is triggered from a setTimeout and would otherwise still start a
+                // RaidMarkerSelectMapState for a menu that no longer exists. With _circleMenu already
+                // nulled here, nothing could ever end that state again (#3723).
+                $radial.remove().dequeue();
                 self._circleMenu = null;
 
                 // Only stop the map state at this point - and only if it is still ours. The menu can
@@ -378,18 +384,41 @@ class EnemyVisual extends Signalable {
                 self.signal('circlemenu:close');
             };
 
-            // Only fade out when the menu's DOM is still there. If it is already gone - the enemy's
-            // layer was removed while the menu was open - delay()/queue() would be a no-op on the
-            // empty set, so cleanupFn (and with it setMapState(null)) would never run at all. The
-            // synchronous branch handles an undefined element fine: $(undefined) is an empty set.
-            if (fadeOut && $radial.length > 0) {
+            // Only fade out when the menu's DOM is still on screen. If it is already detached - the
+            // enemy's layer was removed while the menu was open - there is nothing left to animate,
+            // and delay()/queue() would sit on a queue nothing ever drains, so cleanupFn (and with it
+            // setMapState(null)) would never run at all. This has to be an explicit
+            // document.contains() check: the set is the plugin's own, so its length stays 1 whether
+            // the radial is attached or not.
+            if (fadeOut && $radial.length > 0 && document.contains($radial[0])) {
                 $radial.delay(500).queue(cleanupFn);
             } else {
-                cleanupFn.call($radial[0]);
+                cleanupFn();
             }
         }
 
         return shouldCleanUp;
+    }
+
+    /**
+     * Whether a circle menu that was open before the visual got rebuilt may be put back on screen.
+     * Re-opening it starts a RaidMarkerSelectMapState (see the plugin's open callback), so it must
+     * honour the same invariant _cleanupCircleMenu() does at the other end: the user can start a map
+     * state while the menu is open, and several of those rebuild the enemy visual (EditMapState,
+     * DeleteMapState and the EnemySelection states). Re-opening regardless would replace the state
+     * the user just started with a raid marker selection they did not ask for (#3723).
+     *
+     * Not to be confused with Enemy#canOpenRaidMarkerMenu(), which gates opening a menu from scratch
+     * and requires no map state at all.
+     * @returns {boolean}
+     * @private
+     */
+    _canReopenCircleMenu() {
+        console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual!', this);
+
+        let mapState = this.map.getMapState();
+
+        return mapState === null || mapState instanceof RaidMarkerSelectMapState;
     }
 
     /**
@@ -502,7 +531,7 @@ class EnemyVisual extends Signalable {
             // $(`#map_enemy_visual_${data.id}`).mouseout(this._mouseOut.bind(this));
 
             // Restore circle menu
-            if (hadCircleMenu && reopenCircleMenu) {
+            if (hadCircleMenu && reopenCircleMenu && this._canReopenCircleMenu()) {
                 this._initCircleMenu(false);
             }
 
