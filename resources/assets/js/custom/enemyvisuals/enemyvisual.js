@@ -49,7 +49,12 @@ class EnemyVisual extends Signalable {
                 }
             } else {
                 // When an object is hidden, its layer is removed from the parent, effectively rendering its display nil.
-                // We don't need to do anything since if the visual is added again, we're going to re-create it anyways
+                // We don't need to do anything since if the visual is added again, we're going to re-create it anyways.
+                // The circle menu is the exception: it lives inside that same (now removed) DOM, so nobody can close
+                // it anymore, and RaidMarkerSelectMapState would stay active for the rest of the session - taking
+                // enemy popups, the raid marker shortcut and (since #3703) every enemy tooltip with it. A floor
+                // switch hides every enemy on the old floor, so this is not an edge case.
+                self._cleanupCircleMenu(false);
             }
         });
 
@@ -366,7 +371,11 @@ class EnemyVisual extends Signalable {
                 self.signal('circlemenu:close');
             };
 
-            if (fadeOut) {
+            // Only fade out when the menu's DOM is still there. If it is already gone - the enemy's
+            // layer was removed while the menu was open - delay()/queue() would be a no-op on the
+            // empty set, so cleanupFn (and with it setMapState(null)) would never run at all. The
+            // synchronous branch handles an undefined element fine: $(undefined) is an empty set.
+            if (fadeOut && $radial.length > 0) {
                 $radial.delay(500).queue(cleanupFn);
             } else {
                 cleanupFn.call($radial[0]);
@@ -761,4 +770,12 @@ class EnemyVisual extends Signalable {
             this._cleanupCircleMenu();
         }
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        EnemyVisual,
+    };
 }

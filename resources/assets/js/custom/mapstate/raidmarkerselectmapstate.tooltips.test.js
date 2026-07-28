@@ -40,7 +40,7 @@ describe('RaidMarkerSelectMapState tooltip suppression (#3703)', () => {
     it.each([
         ['MapState', MapState],
         ['MapObjectMapState', MapObjectMapState],
-    ])('disablesTooltips_givenBaseState_isNotOverriddenAndStaysOff (%s)', (name, cls) => {
+    ])('disablesTooltips_givenABaseState_returnsFalse (%s)', (name, cls) => {
         // Arrange / Act
         const result = disablesTooltips(cls);
 
@@ -48,6 +48,14 @@ describe('RaidMarkerSelectMapState tooltip suppression (#3703)', () => {
         // Pushing the suppression up the chain would silently take the tooltips away from every other
         // state too - pull-building in the route editor needs them (see enemyselection.tooltips.test.js).
         expect(result).toBe(false);
-        expect(Object.prototype.hasOwnProperty.call(MapObjectMapState.prototype, 'disablesTooltips')).toBe(false);
+    });
+
+    it('disablesTooltips_givenTheSharedMapObjectMapStateBase_isNotOverridden', () => {
+        // Arrange / Act
+        const ownProperty = Object.prototype.hasOwnProperty.call(MapObjectMapState.prototype, 'disablesTooltips');
+
+        // Assert
+        // Every EnemySelection extends this base too, so an override here would reach pull-building.
+        expect(ownProperty).toBe(false);
     });
 });

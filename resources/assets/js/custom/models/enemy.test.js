@@ -362,9 +362,10 @@ describe('Enemy#_assignPopup during a map state', () => {
 //
 // bindTooltip() caches the rendered text and only rebinds when it changes, so anything baked into it
 // that depends on the current map state sticks. canOpenRaidMarkerMenu() is exactly that (it requires
-// no active map state), and assigning a raid marker rebinds the tooltip while
-// RaidMarkerSelectMapState is still active - which dropped the hint from the tooltip for good, until
-// something else happened to change the text.
+// no active map state), and plenty of rebinds happen while a map state is running: EnemyVisual used
+// to bindTooltip() straight from the circle menu's select callback, and MapObjectGroup#
+// setLayerToMapObject() unbinds + rebinds on every floor switch, which does not clear the map state.
+// Either dropped the hint from the tooltip for good, until something else happened to change the text.
 // ---------------------------------------------------------------------------
 
 /**
@@ -411,8 +412,8 @@ describe('Enemy raid marker shortcut hint (#3703)', () => {
         enemy.bindTooltip();
         expect(layer.getTooltip().text).toContain('shift+right-click');
 
-        // Act: assigning a marker saves the enemy (setSynced -> bindTooltip) while
-        // RaidMarkerSelectMapState is still active
+        // Act: something rebinds the tooltip while a map state is still active - a floor switch
+        // during a selection, or the circle menu's own select callback before #3703 removed it
         map.setMapState(new global.MapState());
         enemy.npc = {id: 2, name: 'Deathwhisper Necrolyte'};
         enemy.bindTooltip();

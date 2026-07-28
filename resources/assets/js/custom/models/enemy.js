@@ -850,9 +850,12 @@ class Enemy extends VersionableMapObject {
                 text = template($.extend({}, getHandlebarsDefaultVariables(), visualData, {
                     name: lang.get(this.npc.name),
                     // Deliberately the state-independent variant, not canOpenRaidMarkerMenu(): the
-                    // text is cached below, so baking a map-state-dependent value into it would
-                    // strip the hint for good on any rebind that happens while a map state is
-                    // active - e.g. the save right after a marker was assigned (#3703).
+                    // text is cached below, so baking a map-state-dependent value into it strips the
+                    // hint for good on any rebind that happens while a map state is active - e.g. a
+                    // floor switch during a selection, which runs MapObjectGroup#setLayerToMapObject()
+                    // -> unbind -> rebind (#3703). The flipside is that the hint also renders during a
+                    // map state that keeps tooltips visible (pull-building), where shift+right-click
+                    // does nothing until the selection ends - that is the deliberate trade.
                     show_raid_marker_shortcut: this.supportsRaidMarkerMenu(),
                 }));
             } else {
