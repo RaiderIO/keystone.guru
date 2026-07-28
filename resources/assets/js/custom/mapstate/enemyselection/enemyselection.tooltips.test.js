@@ -2,9 +2,9 @@
 //
 // `disablesTooltips()` used to live on the shared `EnemySelection` base, which silently also silenced
 // tooltips during ordinary pull-building in the (non-admin) route editor - `EditKillZoneEnemySelection`
-// and `SelectKillZoneEnemySelectionOverpull` extend the same base. A router needs the npc name, health
-// and enemy forces in that tooltip to decide whether to click an enemy at all, so these tests pin the
-// override down onto the admin-side selection states only.
+// extends the same base. A router needs the npc name, health and enemy forces in that tooltip to
+// decide whether to click an enemy at all, so these tests pin the override down onto the admin-side
+// selection states only.
 //
 // Follows the global-script recipe from models/killzone.test.js: stub the collaborators the class
 // bodies touch at LOAD time, then require the sources.
@@ -30,7 +30,6 @@ const {EnemyPatrolEnemySelection} = require('./enemypatrolenemyselection');
 const {MDTEnemySelection} = require('./mdtenemyselection');
 const {EnemyForcesCheckpointEnemySelection} = require('./enemyforcescheckpointenemyselection');
 const {EditKillZoneEnemySelection} = require('./editkillzoneenemyselection');
-const {SelectKillZoneEnemySelectionOverpull} = require('./selectkillzoneenemyselectionoverpull');
 
 /**
  * Calls `disablesTooltips()` off the prototype, so no constructor (and none of its Leaflet/DOM wiring)
@@ -65,7 +64,6 @@ describe('EnemySelection tooltip suppression scope', () => {
 
     it.each([
         ['EditKillZoneEnemySelection', EditKillZoneEnemySelection],
-        ['SelectKillZoneEnemySelectionOverpull', SelectKillZoneEnemySelectionOverpull],
     ])('disablesTooltips_givenRouteEditorPullBuildingState_returnsFalse (%s)', (name, cls) => {
         // Arrange / Act
         const result = disablesTooltips(cls);
@@ -103,7 +101,6 @@ describe('EnemySelection edit border scope', () => {
 
     it.each([
         ['EditKillZoneEnemySelection', EditKillZoneEnemySelection],
-        ['SelectKillZoneEnemySelectionOverpull', SelectKillZoneEnemySelectionOverpull],
     ])('drawsEnemyEditBorder_givenRouteEditorPullBuildingState_returnsFalse (%s)', (name, cls) => {
         // Arrange / Act
         const result = cls.prototype.drawsEnemyEditBorder.call({});
