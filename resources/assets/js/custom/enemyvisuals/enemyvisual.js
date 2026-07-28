@@ -285,22 +285,20 @@ class EnemyVisual extends Signalable {
                 refreshTooltips();
             },
             open: function () {
-                self.enemy.unbindTooltip();
                 self.signal('circlemenu:open');
 
+                // Tooltips would cover the menu that is drawn on top of the enemy - suppressed for as
+                // long as this state is active by RaidMarkerSelectMapState.disablesTooltips(), which
+                // covers every enemy on the map rather than just this one (#3703). Unbinding this
+                // enemy's Leaflet tooltip here instead is what #128 moved away from: every unbind
+                // leaks a raw DOM 'focus' listener Leaflet never removes.
                 self.map.setMapState(new RaidMarkerSelectMapState(self.map, self.enemy));
             },
             close: function () {
-                // Unassigned when opened
-                self.enemy.bindTooltip();
-
                 // Delete ourselves again
                 self._cleanupCircleMenu();
             },
             select: function (evt, index) {
-                // Unassigned when opened
-                self.enemy.bindTooltip();
-
                 // Assign the selected raid marker
                 self.enemy.assignRaidMarker($(index).data('name'));
 

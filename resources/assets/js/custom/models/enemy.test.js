@@ -6,10 +6,10 @@
 //
 // Enemy#bindTooltip() only rebinds when the rendered text changed. That guard
 // checked the text but not whether a tooltip was actually bound, so any code
-// path that unbinds without also resetting `tooltipText` (the raid marker circle
-// menu in EnemyVisual, a layer swap in MapObjectGroup#setLayerToMapObject) left
-// the enemy without a tooltip permanently - the recomputed text is identical, so
-// the guard short-circuited and nothing was ever rebound.
+// path that unbinds without also resetting `tooltipText` (a layer swap in
+// MapObjectGroup#setLayerToMapObject) left the enemy without a tooltip
+// permanently - the recomputed text is identical, so the guard short-circuited
+// and nothing was ever rebound.
 // ---------------------------------------------------------------------------
 
 // 1a. Leaflet: enemy.js builds div icons and draw handlers at load time.
@@ -81,11 +81,13 @@ global.VersionableMapObject = class VersionableMapObject {
     }
 };
 
-// 1d. Handlebars template + default variables used to render the tooltip body. The template simply
-// echoes the name so a test can change the rendered text by changing the npc.
+// 1d. Handlebars template + default variables used to render the tooltip body. The template echoes
+// the name so a test can change the rendered text by changing the npc, and renders the raid marker
+// shortcut hint the same way the real template does - conditionally on show_raid_marker_shortcut.
 global.Handlebars = {
     templates: {
-        enemy_tooltip_template: (data) => `<div>${data.name}</div>`,
+        enemy_tooltip_template: (data) =>
+            `<div>${data.name}</div>${data.show_raid_marker_shortcut ? '<div>shift+right-click</div>' : ''}`,
     },
 };
 global.getHandlebarsDefaultVariables = () => ({});
@@ -98,6 +100,10 @@ global.getState = () => ({
 });
 
 const {Enemy} = require('./enemy');
+
+// 1f. Only ever used through `instanceof` (raid markers are not available on the admin mapping page).
+global.AdminEnemy = class AdminEnemy extends Enemy {
+};
 
 /**
  * A fake Leaflet layer mirroring Leaflet's own tooltip semantics: getTooltip() is undefined before
@@ -148,7 +154,7 @@ function makeBoundEnemy(npcName = 'Murkbrine Shorerunner') {
 
 describe('Enemy#bindTooltip (#3670)', () => {
     test('bindTooltip_givenTooltipWasUnboundAndTextUnchanged_rebindsTheTooltip', () => {
-        // Arrange: the circle menu / a layer swap unbinds without resetting tooltipText
+        // Arrange: a layer swap unbinds without resetting tooltipText
         const {enemy, layer} = makeBoundEnemy();
         const textBefore = enemy.tooltipText;
         enemy.unbindTooltip();
@@ -348,5 +354,87 @@ describe('Enemy#_assignPopup during a map state', () => {
         // Assert
         expect(layer.getPopup()).not.toBeNull();
         expect(enemy.isPopupEnabled).toBe(true);
+    });
+});
+
+// ---------------------------------------------------------------------------
+// The tooltip's "shift + right-click to assign a raid marker" hint (#3703).
+//
+// bindTooltip() caches the rendered text and only rebinds when it changes, so anything baked into it
+// that depends on the current map state sticks. canOpenRaidMarkerMenu() is exactly that (it requires
+// no active map state), and assigning a raid marker rebinds the tooltip while
+// RaidMarkerSelectMapState is still active - which dropped the hint from the tooltip for good, until
+// something else happened to change the text.
+// ---------------------------------------------------------------------------
+
+/**
+ * An enemy on an editable map, i.e. the route editor where raid markers can be assigned.
+ */
+function makeRaidMarkerEnemy() {
+    const map = makeFakeEditMap();
+    // The popup surface is needed too: starting/stopping a map state runs setPopupEnabled().
+    const layer = makeFakePopupLayer();
+    const enemy = new Enemy(map, layer);
+    enemy.npc = {id: 1, name: 'Murkbrine Shorerunner'};
+    enemy.getVisualData = () => ({info: [], custom: []});
+
+    return {enemy, layer, map};
+}
+
+describe('Enemy raid marker shortcut hint (#3703)', () => {
+    test('supportsRaidMarkerMenu_givenAnActiveMapState_staysTrue', () => {
+        // Arrange
+        const {enemy, map} = makeRaidMarkerEnemy();
+        expect(enemy.supportsRaidMarkerMenu()).toBe(true);
+
+        // Act
+        map.setMapState(new global.MapState());
+
+        // Assert: the tooltip hint is built from this, so it must not follow the map state
+        expect(enemy.supportsRaidMarkerMenu()).toBe(true);
+    });
+
+    test('canOpenRaidMarkerMenu_givenAnActiveMapState_returnsFalse', () => {
+        // Arrange
+        const {enemy, map} = makeRaidMarkerEnemy();
+
+        // Act
+        map.setMapState(new global.MapState());
+
+        // Assert: opening a second circle menu on top of the current one stays blocked
+        expect(enemy.canOpenRaidMarkerMenu()).toBe(false);
+    });
+
+    test('bindTooltip_givenARebindWhileAMapStateIsActive_keepsTheShortcutHint', () => {
+        // Arrange: the tooltip as it renders before the raid marker menu is opened
+        const {enemy, layer, map} = makeRaidMarkerEnemy();
+        enemy.bindTooltip();
+        expect(layer.getTooltip().text).toContain('shift+right-click');
+
+        // Act: assigning a marker saves the enemy (setSynced -> bindTooltip) while
+        // RaidMarkerSelectMapState is still active
+        map.setMapState(new global.MapState());
+        enemy.npc = {id: 2, name: 'Deathwhisper Necrolyte'};
+        enemy.bindTooltip();
+        map.setMapState(null);
+
+        // Assert
+        expect(layer.getTooltip().text).toContain('shift+right-click');
+    });
+
+    test('supportsRaidMarkerMenu_givenANonEditableMap_returnsFalse', () => {
+        // Arrange
+        const enemy = new Enemy(makeFakeMap(), makeFakeLayer());
+
+        // Act / Assert: no hint when the route cannot be edited at all
+        expect(enemy.supportsRaidMarkerMenu()).toBe(false);
+    });
+
+    test('supportsRaidMarkerMenu_givenAnAdminEnemy_returnsFalse', () => {
+        // Arrange
+        const adminEnemy = new global.AdminEnemy(makeFakeEditMap(), makeFakePopupLayer());
+
+        // Act / Assert: raid markers do not exist on the admin mapping page
+        expect(adminEnemy.supportsRaidMarkerMenu()).toBe(false);
     });
 });
