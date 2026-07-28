@@ -96,6 +96,33 @@
     border-color: red !important;
 }
 
+/*
+ * Leaflet.draw ships this class with box-sizing: content-box, but both selection visuals size
+ * their bordered element as icon size + 8px (EnemyVisual.refreshSize() and getLeafletIcon()'s
+ * outer_width/outer_height), expecting the 4px dashed border to be part of that box (border-box).
+ * Under content-box the element grows 16px past the icon instead, leaving a gap on the right/
+ * bottom of the icon (#3696). Scoped to those two elements — and away from marker roots via
+ * :not(.leaflet-marker-icon) — so leaflet.draw's own edit-mode markers (which it offsets itself
+ * assuming content-box) are unaffected.
+ */
+.selected_enemy_icon.leaflet-edit-marker-selected,
+.map_icon.leaflet-edit-marker-selected:not(.leaflet-marker-icon) {
+    box-sizing: border-box;
+}
+
+/*
+ * The bordered element is icon size + 8px but anchored at the marker root's top-left, so entering
+ * a selection state shifts the visible icon 4px right/down off its anchor; pull it back so the
+ * border becomes a centered halo. Guarded on the marker ROOT not carrying the class: in
+ * leaflet.draw's own edit mode the root does carry it and leaflet.draw already re-centers the
+ * marker itself (_offsetMarker(icon, 4)), so compensating there too would double-shift.
+ */
+.leaflet-marker-icon:not(.leaflet-edit-marker-selected) .selected_enemy_icon.leaflet-edit-marker-selected,
+.leaflet-marker-icon:not(.leaflet-edit-marker-selected) > .map_icon.leaflet-edit-marker-selected {
+    margin-top: -4px;
+    margin-left: -4px;
+}
+
 /* Make the selection fill the width of the parent */
 .default_color_selection .pickr .pcr-button {
     width: 100%;
