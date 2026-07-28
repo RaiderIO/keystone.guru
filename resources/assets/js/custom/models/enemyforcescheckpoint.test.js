@@ -15,7 +15,11 @@ global.VersionableMapObject = class VersionableMapObject {
         this.map = map;
         this.layer = layer;
     }
+
+    bindTooltip() {}
 };
+global.NUMBER_STYLE_ENEMY_FORCES = 'enemy_forces';
+global.NUMBER_STYLE_PERCENTAGE = 'percentage';
 global.MAP_OBJECT_GROUP_ENEMY = 'enemy';
 global.MAP_OBJECT_GROUP_ENEMY_FORCES_CHECKPOINT = 'enemyforcescheckpoint';
 
@@ -139,6 +143,115 @@ describe('EnemyForcesCheckpoint._refreshSatellitePill', () => {
 
         // Assert
         expect(checkpoint._satelliteLayerGroup).toBeNull();
+    });
+});
+
+/**
+ * Builds a checkpoint with just the collaborators the pill and the tooltip reach for.
+ *
+ * The two number style settings are deliberately given OPPOSING values, so a test can tell which of
+ * the two was consulted: a checkpoint is a group total (like a pull), so it must follow "Pull number
+ * style" and never "Enemy number style" - which is about the numbers drawn on individual enemies.
+ *
+ * @param options {{killZonesNumberStyle: String, mapNumberStyle: String}}
+ */
+function createCheckpointForNumberStyle({killZonesNumberStyle, mapNumberStyle}) {
+    const enemyMapObjectGroup = {
+        objects: {
+            1: {id: 1, enemy_forces_checkpoint_id: 55, floor_id: 1, source_floor_id: null},
+        },
+    };
+
+    const checkpoint = Object.create(EnemyForcesCheckpoint.prototype);
+    checkpoint.id = 55;
+    checkpoint.floor_id = 1;
+    checkpoint.name = 'Corridor';
+    checkpoint.layer = {bindTooltip: (text) => (checkpoint._boundTooltipText = text)};
+    checkpoint.map = {
+        options: {noUI: false},
+        mapObjectGroupManager: {
+            getByName: (name) => (name === 'enemy' ? enemyMapObjectGroup : false),
+        },
+        enemyForcesManager: {
+            getEnemyForcesForEnemies: () => 20,
+            getEnemyForcesRequired: () => 100,
+        },
+    };
+
+    global.getState = () => ({
+        getCurrentFloor: () => ({id: 1}),
+        getKillZonesNumberStyle: () => killZonesNumberStyle,
+        getMapNumberStyle: () => mapNumberStyle,
+    });
+
+    // Echo the key back with its parameters, so a test can assert both which branch ran and the value.
+    global.lang = {get: (key, params = {}) => `${key}:${JSON.stringify(params)}`};
+    global.getFormattedPercentage = (amount, total) => `${Math.round((amount / total) * 100)}%`;
+    global.Handlebars = {templates: {map_enemy_forces_checkpoint_pill: ({value}) => `<div>${value}</div>`}};
+
+    return checkpoint;
+}
+
+describe('EnemyForcesCheckpoint number style', () => {
+    it('getPillHtml_givenPullNumberStyleIsEnemyForces_rendersRawEnemyForces', () => {
+        // Arrange
+        const checkpoint = createCheckpointForNumberStyle({
+            killZonesNumberStyle: NUMBER_STYLE_ENEMY_FORCES,
+            mapNumberStyle: NUMBER_STYLE_PERCENTAGE,
+        });
+
+        // Act
+        const html = checkpoint._getPillHtml();
+
+        // Assert
+        // 100 required - 20 held by this checkpoint = 80 needed before entering.
+        expect(html).toContain('js.enemy_forces_checkpoint_pill_enemy_forces');
+        expect(html).toContain('80');
+    });
+
+    it('getPillHtml_givenPullNumberStyleIsPercentage_rendersAPercentage', () => {
+        // Arrange
+        const checkpoint = createCheckpointForNumberStyle({
+            killZonesNumberStyle: NUMBER_STYLE_PERCENTAGE,
+            mapNumberStyle: NUMBER_STYLE_ENEMY_FORCES,
+        });
+
+        // Act
+        const html = checkpoint._getPillHtml();
+
+        // Assert
+        // The opposing "Enemy number style" value must not be able to reach the pill.
+        expect(html).toContain('js.enemy_forces_checkpoint_pill_percentage');
+        expect(html).toContain('80%');
+    });
+
+    it('bindTooltip_givenPullNumberStyleIsEnemyForces_rendersRawEnemyForces', () => {
+        // Arrange
+        const checkpoint = createCheckpointForNumberStyle({
+            killZonesNumberStyle: NUMBER_STYLE_ENEMY_FORCES,
+            mapNumberStyle: NUMBER_STYLE_PERCENTAGE,
+        });
+
+        // Act
+        checkpoint.bindTooltip();
+
+        // Assert
+        expect(checkpoint._boundTooltipText).toContain('js.enemy_forces_checkpoint_tooltip_enemy_forces');
+    });
+
+    it('bindTooltip_givenPullNumberStyleIsPercentage_rendersAPercentage', () => {
+        // Arrange
+        const checkpoint = createCheckpointForNumberStyle({
+            killZonesNumberStyle: NUMBER_STYLE_PERCENTAGE,
+            mapNumberStyle: NUMBER_STYLE_ENEMY_FORCES,
+        });
+
+        // Act
+        checkpoint.bindTooltip();
+
+        // Assert
+        expect(checkpoint._boundTooltipText).toContain('js.enemy_forces_checkpoint_tooltip_percentage');
+        expect(checkpoint._boundTooltipText).toContain('20%');
     });
 });
 

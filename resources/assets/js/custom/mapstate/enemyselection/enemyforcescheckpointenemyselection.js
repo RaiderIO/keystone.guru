@@ -88,7 +88,7 @@ class EnemyForcesCheckpointEnemySelection extends EnemySelection {
             }
         );
 
-        getState().register('mapnumberstyle:changed', this, this._refreshSnackbar.bind(this));
+        getState().register('killzonesnumberstyle:changed', this, this._refreshSnackbar.bind(this));
         this.map.register('enemyforcescheckpoint:memberschanged', this, this._refreshSnackbar.bind(this));
     }
 
@@ -102,7 +102,7 @@ class EnemyForcesCheckpointEnemySelection extends EnemySelection {
             this.snackbarId = null;
         }
 
-        getState().unregister('mapnumberstyle:changed', this);
+        getState().unregister('killzonesnumberstyle:changed', this);
         this.map.unregister('enemyforcescheckpoint:memberschanged', this);
     }
 
@@ -119,7 +119,7 @@ class EnemyForcesCheckpointEnemySelection extends EnemySelection {
         let enemyForces = enemyForcesCheckpoint.getEnemyForces();
 
         let amount;
-        if (getState().getMapNumberStyle() === NUMBER_STYLE_ENEMY_FORCES) {
+        if (getState().getKillZonesNumberStyle() === NUMBER_STYLE_ENEMY_FORCES) {
             amount = lang.get('js.enemy_forces_checkpoint_snackbar_enemy_forces', {enemyForces: enemyForces});
         } else {
             amount = lang.get('js.enemy_forces_checkpoint_snackbar_percentage', {
