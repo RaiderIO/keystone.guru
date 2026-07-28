@@ -20,6 +20,20 @@ mkdir -p .chrome-tmp && cp .claude/skills/headless-browser-verify/browse.js .chr
 
 No published ports, so every worktree stack can run its own chrome simultaneously.
 
+**In a worktree, `node_modules` must be a real directory, not a symlink.** `sh/worktree.sh create`
+does not provide one at all, and browse.js resolves `puppeteer` from `/var/www/node_modules` *inside*
+the container - where a host symlink into the main checkout does not resolve (only the worktree is
+mounted). A symlink is fine for `npx vitest` on the host but fails here with
+`Cannot find module 'puppeteer'`. Hardlink a copy instead - seconds, and it shares the main
+checkout's blocks:
+
+```sh
+cp -al /home/wouterkoppenol/Git/private/keystone.guru/node_modules ./node_modules
+rm -rf node_modules/.cache   # the only entries cp -al cannot link (root-owned); harmless
+```
+
+Delete it again before teardown.
+
 ## Running
 
 ```sh
@@ -59,6 +73,23 @@ both** to the PR, not just the branch shot.
   for master and `http://nginx/<page>` for the branch, same viewport.
 - Check the baseline is actually master: the page footer shows the built commit
   (`v15.3.2 (05d7dc)`); if the main checkout's assets are stale, rebuild there first.
+- **For a JS/CSS change, prefer an in-worktree baseline over the main stack.** The main checkout
+  often has no built asset for its own HEAD (`public/js/app-<sha>.js` missing), so its pages load
+  without JS and cannot serve a baseline at all — and building there to fix that touches the user's
+  checkout. Instead flip the changed files in place:
+
+  ```sh
+  git checkout HEAD~1 -- <changed files>   # or the merge-base commit
+  npm run development                       # host-side; ~10s incremental
+  # ...run the driver, save the "before" shots...
+  git checkout HEAD -- <changed files>
+  npm run development
+  ```
+
+  The asset filename is derived from **git HEAD**, which never moves during this, so nginx serves
+  the same URL throughout and only the bundle contents change. Confirm the restore with
+  `grep -c <new symbol> public/js/custom-<sha>.js` before moving on — a forgotten restore leaves the
+  worktree silently reverted.
 - **Exercise dynamic UI, not just page load.** JS-inserted content (map sidebar, dropdown menus)
   breaks differently from server-rendered HTML, and a regression can hit only the
   dynamically-inserted elements. Use `--click` and screenshot the opened/expanded state on both
@@ -96,6 +127,30 @@ Chrome's DevTools endpoint rejects `Host:` headers that are not an IP or localho
 resolves the `chrome` service name to its IP, fetches `/json/version` from the IP, rewrites the
 `webSocketDebuggerUrl` to that IP, and uses `puppeteer.connect`. Disconnect (do not close) so the
 browser stays warm for the next run.
+
+## Map settings: the page cannot write its own cookies
+
+`map.js` sets `cookieDefaultAttributes` to `{secure: true, sameSite: 'None'}` unless the environment
+is `ENVIRONMENT_LOCAL`, so **every `Cookies.set` the page makes is silently dropped over plain
+`http://nginx`**. Two consequences that will cost an hour each if you don't know them:
+
+- **Driving a setting through its state-manager setter does nothing.** Calling
+  `getState().setKillZonesNumberStyle('enemy_forces')` writes no cookie, so the matching getter keeps
+  returning the old value and the UI correctly does not change — which reads exactly like "my signal
+  wiring is broken". To set a value, use `page.setCookie(...)` **before** `page.goto` (puppeteer
+  writes it directly, bypassing the secure attribute). To test that a *signal registration* fires,
+  stub the getter and emit the signal yourself — which is all the setter does after writing:
+
+  ```js
+  await page.evaluate(() => { getState().getKillZonesNumberStyle = () => 'enemy_forces'; });
+  await page.evaluate(() => getState().signal('killzonesnumberstyle:changed'));
+  // then assert the element repainted — and that the OLD signal name does not repaint it
+  ```
+
+- **Every map page logs one benign console error.** `Exception! SyntaxError: "undefined" is not valid
+  JSON` comes from `map.js:658` doing `JSON.parse(Cookies.get('hidden_map_object_groups'))` on the
+  cookie `_initDefaults()` just failed to write. It is caught, pre-existing, and unrelated to
+  whatever you are verifying — do not chase it.
 
 ## Gotchas
 
