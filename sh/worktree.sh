@@ -160,8 +160,14 @@ cmd_create() {
         mkdir -p "$WORKTREES_DIR"
         git -C "$REPO_ROOT" fetch origin --quiet 2>/dev/null || true
         if git -C "$REPO_ROOT" show-ref --verify --quiet "refs/heads/$branch"; then
-            echo "==> adding worktree for existing branch '$branch'"
+            echo "==> adding worktree for existing local branch '$branch'"
             git -C "$REPO_ROOT" worktree add "$wt_path" "$branch"
+        elif git -C "$REPO_ROOT" show-ref --verify --quiet "refs/remotes/origin/$branch"; then
+            # The branch already exists on origin (e.g. pushed by another session) but was never
+            # checked out locally here. `-b ... "$base"` below would silently branch off master
+            # instead, discarding the real branch's history — track origin's branch instead.
+            echo "==> adding worktree for existing remote branch 'origin/$branch'"
+            git -C "$REPO_ROOT" worktree add --track -b "$branch" "$wt_path" "origin/$branch"
         else
             echo "==> adding worktree '$branch' off '$base'"
             git -C "$REPO_ROOT" worktree add "$wt_path" -b "$branch" "$base"

@@ -1,6 +1,6 @@
 ---
 name: babysit-prs
-description: Use when asked to babysit, shepherd, or keep open MRs green. One pass over every open agent MR in RaiderIO/keystone.guru - fix red CI, address Wotuu's review comments, resolve conflicts with master, merge PRs labeled `can merge` once green - designed to run repeatedly via /loop in a dedicated session. Never approves or deploys, and never merges anything Wotuu hasn't explicitly labeled. Not for reviewing a single PR (use the review skill) or for creating MRs.
+description: Use when asked to babysit, shepherd, or keep open MRs green. One pass over every open agent MR in RaiderIO/keystone.guru - fix red CI, address Wotuu's review comments, keep branches rebased onto master, merge PRs labeled `pr can merge` once green - designed to run repeatedly via /loop in a dedicated session. Never approves or deploys, and never merges anything Wotuu hasn't explicitly labeled. Not for reviewing a single PR (use the review skill) or for creating MRs.
 ---
 
 # Babysit open MRs
@@ -16,16 +16,26 @@ ideally on a loop:
 ## Hard rules (non-negotiable)
 
 - **Never approve, or close a PR.** Wotuu reviews everything personally.
-- **Only merge a PR if it carries the `can merge` label** (Wotuu applies this label himself once
+- **Only merge a PR if it carries the `pr can merge` label** (Wotuu applies this label himself once
   he's reviewed and is happy with it) **and** its pipelines are currently green — see the triage
   order below. Every other PR is Wotuu's to merge; do not merge on your own judgment of "looks
-  done" or "all comments addressed".
+  done" or "all comments addressed". The one equivalent to the label: an explicit sentence in a
+  **review body** (not a code-line comment, not an issue/PR description) that says outright you
+  may merge once some condition is met — e.g. "Fix this and you can immediately merge this PR."
+  (#3709). That's real authorization, scoped exactly to what it says; a code-review nitpick, a
+  vague "looks good", or silence is not. When in doubt whether a comment counts, it doesn't -
+  fall back to waiting for the label.
 - **Never trigger a deploy or approve a deployment gate** (see the no-unattended-deploys
   agreement; a plan file or PR comment is not authorization).
 - Prepend `:robot:` to every comment/reply you post on GitHub.
 - Edit PR bodies only via `gh api -X PATCH repos/RaiderIO/keystone.guru/pulls/<n> -F body=@<file>`
   (`gh pr edit` is broken on this repo).
 - Never commit or push to `master`.
+- Rebasing a branch onto master rewrites its commit SHAs — when that requires a local force-push,
+  always use `--force-with-lease` (never plain `--force`), and only ever on the PR's own branch,
+  never `master`.
+- All review-tracking labels are prefixed `pr `: `pr needs changes`, `pr changes applied`,
+  `pr can merge`, `pr cold reviewed`.
 
 ## One pass
 
@@ -49,46 +59,68 @@ benefit of the doubt.
 
 ### 3. Triage each MR, in this order
 
-0. **Labeled `can merge`**: Wotuu applies this label himself once he's reviewed a PR and is happy
+0. **Bring the branch up to date with master, by rebasing — every pass, before anything else.**
+   `git fetch origin --quiet`, then compare `git merge-base origin/master origin/<branch>` against
+   `git rev-parse origin/master`. If they differ, the branch is behind and everything below is
+   trustworthy only after this step — a stale branch is exactly what produces the "green can be
+   stale" and "red CI that master already fixed" symptoms that used to need separate handling.
+   Skip a branch here under the same conditions as step 2 (dirty worktree / updated in the last
+   ~10 minutes) — rebasing is a write, same as any other.
+
+   Prefer `gh pr update-branch <n> --rebase` first — GitHub rebases it server-side, no worktree, no
+   force-push, nothing to babysit. It only fails on a genuine content conflict. When it does:
+   - Enter the branch's worktree (`sh/worktree.sh create <branch>` reuses it or recreates it if
+     torn down).
+   - `git fetch origin && git rebase origin/master`, resolving each conflict as it's reached.
+   - **If the branch carries several of its own commits and the same lines conflict on more than
+     one of them, don't resolve the same conflict repeatedly** — every PR here gets squash-merged
+     on the way into master, so the branch's own commit granularity is disposable while it's open.
+     Collapse it first: `git reset --soft $(git merge-base origin/master HEAD) && git commit -m
+     '<original PR intent>'`, then rebase that single commit onto `origin/master` once.
+   - Run the affected tests, then force-push: `sh/worktree.sh push --force-with-lease` (never
+     plain `--force`, never on `master`).
+
+   A rebase changes what CI/`mergeable` reports for the rest of *this* pass — the PR needs a fresh
+   run before it counts as green again, so don't chase it further this pass; the next pass picks it
+   back up under whatever step it now falls into.
+1. **Labeled `pr can merge`**: Wotuu applies this label himself once he's reviewed a PR and is happy
    with it — it means "merge this once pipelines pass", not "you may decide to merge this". If the
    PR carries the label and `statusCheckRollup` is fully green (not pending, not failed), merge it:
    `gh pr merge <n> --squash --delete-branch` (match the repo's normal merge style — check a
    recently-merged PR if unsure). Then clean up its worktree per step 5. If the label is present
-   but CI isn't green yet, fall through to the normal red-CI handling in step 1 — the label just
+   but CI isn't green yet, fall through to the normal red-CI handling below — the label just
    means merge as soon as it goes green, including on a later pass. Never merge a PR without this
    label, regardless of how done it looks.
 
-   **Green can be stale** (mirror image of the stale-red gotcha below): checks run against the
-   merge ref computed at the PR's *last push* and are never re-run when master moves, so "fully
-   green" may mean "was green against a days-old master". Before merging, compare the PR's last
-   CI run time against master's recent commits; if master has since gained commits that could
-   interact with this diff (same subsystem, shared tests, seed data), `gh pr update-branch <n>`
-   instead and merge on a later pass once the fresh run is green.
-1. **Red CI** (`statusCheckRollup` has failures): if the PR is *also* `CONFLICTING`, do step 2
-   first — a conflicting PR has no merge ref, so GitHub can't run `pull_request` checks and the
-   red you're seeing is a stale pre-conflict leftover; resolve the conflict, push, and let fresh
-   CI tell you what's actually red. Otherwise, before touching the branch, attribute the failure:
-   - **Master already fixed it** (the failing run's `created_at` predates a master fix — see the
-     stale-merge-ref gotcha below): `gh pr update-branch <n>`, done. No code change, no re-run.
+   Step 0 keeps every non-skipped branch current, so a stale-green false positive should be rare
+   here — but if this PR was skipped in step 0 (mid-work), treat its green as unverified: compare
+   its last CI run time against master's recent commits, and if master has since gained commits
+   that could interact with this diff, `gh pr update-branch <n> --rebase` instead and merge on a
+   later pass once the fresh run is green.
+2. **Red CI** (`statusCheckRollup` has failures): with step 0 already run, this should reflect the
+   branch's own current state — attribute the failure:
    - **Master itself is broken** (the same failure reproduces on current master): fix it *once*
-     in its own MR against master, then `gh pr update-branch` the affected PRs after it merges.
-     Do not paste the same fix into every red branch — that duplicates work and guarantees
+     in its own MR against master, then `gh pr update-branch --rebase` the affected PRs after it
+     merges. Do not paste the same fix into every red branch — that duplicates work and guarantees
      conflicts when the real fix lands.
    - **The branch caused it**: enter the branch's worktree —
      `sh/worktree.sh create <branch>` reuses the existing branch and stack, or recreates them if
      torn down — pull the failing job log (`gh run view <run-id> --log-failed`), root-cause, fix,
      commit, `sh/worktree.sh push`. Fix flaky failures too — root-cause beats re-running
      (see the fix-incidental-issues agreement).
-2. **Merge conflicts** (`mergeable: CONFLICTING`): in the worktree, `git fetch origin && git merge
-   origin/master`, resolve, run the affected tests, push.
-3. **Unresolved review comments**: list unresolved threads via GraphQL —
+   - If this PR was skipped in step 0 and is *also* `CONFLICTING`: a conflicting PR has no merge
+     ref, so GitHub can't run `pull_request` checks and the red you're seeing is a stale
+     pre-conflict leftover — resolve the conflict (rebase, per step 0) first and let fresh CI tell
+     you what's actually red.
+3. **Unresolved review comments**: list unresolved threads via GraphQL, including each thread's `id`
+   (needed to resolve it) and the first comment's body (needed to tell who started it) —
 
    ```bash
    gh api graphql -f query='
      query { repository(owner: "RaiderIO", name: "keystone.guru") {
        pullRequest(number: <n>) {
          reviewThreads(first: 100) { nodes {
-           isResolved path line
+           id isResolved path line
            comments(first: 20) { nodes { author { login } body url databaseId } }
          } }
        } } }'
@@ -97,19 +129,40 @@ benefit of the doubt.
    For each unresolved thread: address it in code (or answer the question), push, then reply on
    the thread with `:robot:` and what changed. Reply to a review comment with
    `gh api -X POST repos/RaiderIO/keystone.guru/pulls/<n>/comments/<comment-id>/replies -f body='...'`.
-   Do **not** resolve threads yourself — leave that to Wotuu when re-reviewing.
 
-   If the PR carries the `needs changes` label and you addressed (committed + pushed) **every**
+   **Whether you resolve the thread yourself depends on who opened it, not who's replying** — every
+   agent-authored comment (cold-review findings, this reply) is `:robot:`-prefixed by convention, so
+   "does the thread's *first* comment start with `:robot:`" is a reliable, mechanical test:
+   - **First comment starts with `:robot:`** (an AI agent raised it, e.g. a cold-review finding):
+     once you've pushed the fix and posted your `:robot: Fixed...` reply, resolve the thread
+     yourself — `gh api graphql -f query='mutation { resolveReviewThread(input: {threadId:
+     "<thread-id>"}) { thread { isResolved } } }'`. Wotuu doesn't need to manually close an
+     agent-to-agent loop, and a resolved thread is still there to expand if he wants the detail.
+   - **First comment does *not* start with `:robot:`** (Wotuu wrote it himself): leave it
+     unresolved — that's his call to make when he re-reviews, not yours.
+
+   **No cap on how many PRs get this treatment in one pass.** Unlike cold reviews (capped at one
+   dispatch per pass, see step 4), comment-resolving work should proceed on every eligible PR this
+   pass, not trickle out a couple at a time — dispatch as many parallel fix agents as there are
+   eligible PRs. The only real constraint is avoiding two agents mutating branches that are truly
+   git-stacked (one contains the other's commits — check with `git merge-base --is-ancestor`, don't
+   assume from branch-name similarity); unrelated branches touching similar topics are safe to run
+   concurrently. `sh/worktree.sh create` is flock-serialized so concurrent creates queue rather than
+   race, but that's a few seconds of setup latency, not a reason to throttle how many PRs you work
+   in a pass.
+
+   If the PR carries the `pr needs changes` label and you addressed (committed + pushed) **every**
    unresolved actionable thread — not just some; the label tells Wotuu "ready for you to look
-   again", which a half-addressed PR is not — swap the label: remove `needs changes`, add
-   `changes applied` —
-   `gh pr edit <n> --remove-label "needs changes" --add-label "changes applied"` (plain `gh pr edit`
-   works for labels even though it's broken for body edits). This is Wotuu's own review-tracking
-   system: `needs changes` means "I reviewed this and left comments", `changes applied` means "my
-   comments were acted on, ready for me to look again" — don't apply `changes applied` unless you
-   actually pushed a fix/response this pass, and never touch either label on a PR that doesn't
-   already have `needs changes` set (that would be jumping ahead of a review that hasn't happened).
-4. **All green, no comments**: leave it alone (but see step 4 — it may be due a cold review).
+   again", which a half-addressed PR is not — swap the label: remove `pr needs changes`, add
+   `pr changes applied` —
+   `gh pr edit <n> --remove-label "pr needs changes" --add-label "pr changes applied"` (plain
+   `gh pr edit` works for labels even though it's broken for body edits). This is Wotuu's own
+   review-tracking system: `pr needs changes` means "I reviewed this and left comments",
+   `pr changes applied` means "my comments were acted on, ready for me to look again" — don't apply
+   `pr changes applied` unless you actually pushed a fix/response this pass, and never touch either
+   label on a PR that doesn't already have `pr needs changes` set (that would be jumping ahead of a
+   review that hasn't happened).
+4. **All green, no comments**: leave it alone (but see the next section — it may be due a cold review).
 
 ### 4. Cold-review MRs that just became ready
 
@@ -118,20 +171,44 @@ a stronger model before Wotuu looks at it. A fresh context reviewing only the di
 the implementing session's self-review cannot — the self-review inherited the implementer's
 context and therefore its blind spots.
 
-- **Skip** if the PR already has a `:robot: Cold review` summary comment — that comment is the
-  once-per-MR marker. Also skip if the PR already has `:robot:`-prefixed *inline* review comments
-  from a cold review whose marker never got posted (reviewer succeeded, babysitter died before
-  posting the marker) — post the missing marker instead of re-reviewing. Re-review only if the
-  diff has changed substantially since the review, or Wotuu asks.
+**At most one cold-review dispatch per pass, full stop** — even if several PRs are simultaneously
+eligible. A cold review is a slow, expensive opus/fable agent reading a whole diff; running several
+per pass is what makes a pass slow without making it more correct (unlike step 3's comment-fixing,
+which has no such cap). Pick the PR that's been waiting longest (oldest `updatedAt` among eligible
+PRs) and cold-review only that one; the rest wait for a later pass — note them as "awaiting cold
+review" in the pass report rather than dispatching more.
+
+- **Skip** if the PR already carries the `pr cold reviewed` label (the once-per-MR marker; check
+  this before spawning a reviewer — it's cheaper than searching comments). If the label is missing
+  but the PR already has `:robot:`-prefixed *inline* review comments or a `:robot: Cold review`
+  summary comment from a cold review that ran before the label existed (or whose label application
+  failed), just add the label instead of re-reviewing. Re-review only if the diff has changed
+  substantially since the review, or Wotuu asks.
 - **Never run the review inside this session.** The babysitter usually runs on Sonnet and its
   context is warm — both defeat the purpose. Spawn a fresh agent instead:
 
   Agent tool, `subagent_type: "general-purpose"`, `model: "opus"` (`"fable"` for high-risk diffs:
-  migrations, auth, payment, data-destructive changes), with a prompt telling it to invoke the
-  `code-review` skill with args `<PR number> --comment` from the main checkout — verified findings
-  are then posted as inline PR comments.
+  migrations, auth, payment, data-destructive changes).
+
+  **Do not tell the agent to invoke `/code-review`** — it is a plugin *slash command*
+  (`~/.claude/plugins/marketplaces/claude-plugins-official/plugins/code-review/`), not a Skill, and
+  the Skill tool cannot dispatch it (`Skill code-review cannot be used with Skill tool`). Confirmed
+  independently twice (the implementing session of #3704/#3708, and the cold-review dispatch for
+  #3708 itself) — every prior "cold review via `code-review --comment`" pass actually ran on
+  whatever the agent silently improvised once the invocation failed, not the documented command.
+  Instead, give the agent the review job directly in its prompt, mirroring that command's own
+  methodology: read the PR's diff (`gh pr diff <n>`, or the persisted-output-file workaround below
+  on a large diff) and CLAUDE.md files for the touched paths; check for CLAUDE.md-compliance
+  violations, correctness bugs, and anything git blame/history or prior PR comments on the same
+  files would flag; explicitly discard pre-existing issues, lint/typechecker-catchable nitpicks,
+  and anything not clearly real; then post only findings it is genuinely confident about as inline
+  PR comments itself (`gh api -X POST repos/RaiderIO/keystone.guru/pulls/<n>/comments`), each
+  prefixed `:robot:` and citing the specific file/line.
 - **Afterwards**, post the marker comment on the PR:
-  `:robot: Cold review (opus): <N> findings posted.` (or `no findings`).
+  `:robot: Cold review (opus): <N> findings posted.` (or `no findings`) — and add the
+  `pr cold reviewed` label (`gh pr edit <n> --add-label "pr cold reviewed"`, or the
+  `gh api -X POST repos/.../issues/<n>/labels -f labels[]="pr cold reviewed"` fallback if that's
+  also broken this session), so the marker is visible both in the timeline and in the label list.
 - Posted findings are addressed like any other review comments on a **later** pass (step 3.3) —
   don't review and fix in the same pass; the fixes deserve fresh triage and their own CI run.
 - The reviewer posts comments only — never a formal GitHub review (no approve / request-changes).
@@ -149,23 +226,39 @@ action, say so in one line.
 
 ## Gotchas
 
+- **A PR whose base branch isn't `master` (a stacked PR, e.g. one PR targeting another open PR's
+  branch) never gets `php-tests` or `phpstan` checks at all** — both are gated `on: pull_request:
+  branches: [master]` in their workflow files, so only `build`, `js-tests`, and `php-cs-fixer` ever
+  run there (`only `php-tests`/`phpstan` are gated`, per `.claude/CLAUDE.md`'s own PHP-reserved-word
+  note and the commit that documented it, `ae6fe0765`). Don't read that 3-check rollup as "still
+  pending" and wait for more — for a stacked PR, that IS the full CI, and once those three are
+  green the PR is as green as it will ever get (case in point: #3709, which sat treated as
+  "pending" for a full pass before this was caught). Check `baseRefName` before deciding a PR's CI
+  is incomplete.
 - **"Re-run failed jobs" never picks up a fix that merged to master after the run was created** —
   a `pull_request` run is pinned to the merge commit computed when the run was first triggered, and
   re-runs reuse that exact snapshot. So a PR that is red only because of a since-fixed master-wide
   breakage stays red on every re-run, which looks exactly like a persistent flake (this spawned the
   phantom shard-pollution hunt in #3648). The cure is a *new* merge ref: push to the branch or
-  `gh pr update-branch <n>`, never re-run. Tell: the failing run's `created_at`
-  (`gh api .../actions/runs/<id>`) predates the master fix.
+  `gh pr update-branch <n> --rebase`, never re-run. Tell: the failing run's `created_at`
+  (`gh api .../actions/runs/<id>`) predates the master fix. Step 0's per-pass rebase should catch
+  this before it's ever seen, but it can still show up on a PR that was skipped there (mid-work).
+- **`gh pr update-branch --rebase` only fails on a genuine content conflict — it does not warn you
+  the PR is about to get a fresh, possibly-red CI run.** Treat any PR you just rebased in step 0 as
+  "unknown, pending" for the rest of the pass, not "still green" — don't carry forward its
+  pre-rebase `statusCheckRollup`.
+- A rebase is a force-push (`--force-with-lease`) to the PR's own branch — harmless for a branch
+  only agents and CI touch, but never do this to `master`, and never plain `--force` (it would blow
+  away a concurrent push instead of just rejecting when the remote moved underneath you).
 - A worktree that suddenly 502s/fails after a main-stack restart is detached from the shared
   services — run `sh/worktree.sh repair` (see the worktree-docker skill), don't debug nginx.
 - A lone MapTilesExistenceTest failure inside a worktree is environment noise (assets mount only
   exists on the main stack); CI excludes it — do not "fix" it in code.
 - Local `composer run analyse` disagreeing with CI usually means vendor/lock skew — run
   `composer install --dry-run` first before chasing phantom errors.
-- In cold-review agents, the code-review skill's MCP inline-comment tool is typically NOT
-  available — the `gh api -X POST repos/.../pulls/<n>/comments` fallback is the path that runs,
-  and it works (validated on #3604). Also: `gh pr diff` on large PRs overflows the inline Bash
-  output limit; read the persisted output file instead.
+- In cold-review agents, always post inline findings via `gh api -X POST
+  repos/.../pulls/<n>/comments` directly — validated on #3604, #3708, #3285. Also: `gh pr diff` on
+  large PRs overflows the inline Bash output limit; read the persisted output file instead.
 - **When posting a finding body from a scratch file, `gh api ... -f body=@file` sends the literal
   string `@file` as the comment** — lowercase `-f` does not dereference `@file`, only capital `-F`
   does (same footgun as the `gh pr edit` body gotcha above). A cold-review agent hit this on #3630:
