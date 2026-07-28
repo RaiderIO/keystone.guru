@@ -303,6 +303,10 @@ trait ProvidesDungeon
      */
     protected function getDungeonWithCurrentMappingVersionWithEnemies(?GameVersion $gameVersion = null): Dungeon
     {
+        // Defaults to Retail, mirroring the guarantee the deleted DungeonFixtures fixture enforced -
+        // a null $gameVersion here means "no requirement", not "Retail", which would silently drop it.
+        $gameVersion ??= GameVersion::getDefaultGameVersion();
+
         return $this->findDungeon(
             challengeMode: true,
             minEnemies:    1,
