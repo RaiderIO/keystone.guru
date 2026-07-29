@@ -189,7 +189,7 @@ return [
         ],
         'pullsettings' => [
             'pull_number_style'                 => 'Pull number style',
-            'pull_number_style_title'           => 'This controls how the pulls sidebar displays numbers.',
+            'pull_number_style_title'           => 'This controls how the pulls sidebar and enemy forces checkpoints display numbers.',
             'pull_number_style_percentage'      => 'Percentage',
             'pull_number_style_enemy_forces'    => 'Enemy forces',
             'show_floor_breakdown'              => 'Show floor breakdown',
