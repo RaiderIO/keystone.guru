@@ -315,10 +315,13 @@ final class MDT2Codec
     private static function toCborObject(mixed $value): CBORObject
     {
         if (is_array($value)) {
-            // Empty Lua tables are ambiguous (array or map) - Blizzard and we both emit an empty map,
-            // and both decoders turn either representation into an empty table/array anyway
+            // Empty Lua tables are ambiguous (array or map). Blizzard's SerializeCBOR resolves that
+            // ambiguity towards an empty ARRAY (0x80) - verified against the real 12.1 PTR strings in
+            // MDTImportStringServiceMDT2AuthoritativeTest, which asserts that re-encoding a decoded
+            // real preset reproduces the client's payload byte for byte. Both decoders turn either
+            // representation back into an empty table, so this only matters for that fidelity.
             if ($value === []) {
-                return MapObject::create();
+                return ListObject::create();
             }
 
             if (self::isDenseSequence($value)) {

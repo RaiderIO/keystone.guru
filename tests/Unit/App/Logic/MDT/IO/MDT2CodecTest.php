@@ -92,13 +92,14 @@ final class MDT2CodecTest extends TestCase
     }
 
     #[Test]
-    public function encode_givenEmptyArray_emitsEmptyMap(): void
+    public function encode_givenEmptyArray_emitsEmptyList(): void
     {
         // Act
         $encoded = MDT2Codec::encode(['selection' => []]);
 
-        // Assert - A0 = empty map
-        $this->assertEquals('a14973656c656374696f6ea0', bin2hex($this->rawCbor($encoded)));
+        // Assert - 80 = empty array, which is how Blizzard's SerializeCBOR resolves the empty-Lua-table
+        // ambiguity (see MDTImportStringServiceMDT2AuthoritativeTest's byte-for-byte round trip)
+        $this->assertEquals('a14973656c656374696f6e80', bin2hex($this->rawCbor($encoded)));
     }
 
     #[Test]

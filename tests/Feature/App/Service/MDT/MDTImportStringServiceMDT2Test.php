@@ -68,9 +68,11 @@ final class MDTImportStringServiceMDT2Test extends MDTImportStringServiceTestBas
     #[Test]
     public function getDungeonRoute_givenReEncodedRuntimeExport_producesSameRouteAsLegacyExport(): void
     {
-        $dungeonRoute = null;
-        $legacyString = null;
-        $mdt2String   = null;
+        $dungeonRoute        = null;
+        $legacyString        = null;
+        $mdt2String          = null;
+        $legacyImportedRoute = null;
+        $mdt2ImportedRoute   = null;
 
         try {
             // Arrange - a runtime-generated route WITH actual pulls, exported through the existing
@@ -118,6 +120,8 @@ final class MDTImportStringServiceMDT2Test extends MDTImportStringServiceTestBas
             );
         } finally {
             $dungeonRoute?->delete();
+            $legacyImportedRoute?->delete();
+            $mdt2ImportedRoute?->delete();
             MDTImport::query()->whereIn('import_string', array_filter([$legacyString, $mdt2String]))->delete();
         }
     }

@@ -25,9 +25,12 @@ use PHPUnit\Framework\Attributes\Test;
  *
  * - `C_EncodingUtil.CompressString(..., Enum.CompressionMethod.Deflate)` emits a RAW deflate stream
  *   (`gzinflate`), not a zlib container (`gzuncompress`) - open question 1 on the issue.
- * - Blizzard's `SerializeCBOR` really does emit Lua strings as CBOR byte strings (major type 2) and
- *   not text strings (major type 3), which is what MDT2Codec::encode() mirrors for the eventual
- *   export flip (#3740).
+ * - MDT2Codec::encode() reproduces a real client string BYTE FOR BYTE from its own decode output,
+ *   which proves every type choice at once: Lua strings really are CBOR byte strings (major type 2)
+ *   rather than text strings, the float/int widths match, map key order is preserved, and Blizzard
+ *   resolves the empty-Lua-table ambiguity towards an empty array (0x80) rather than an empty map.
+ *   That last one was an incorrect assumption in the encoder until these fixtures landed. This is
+ *   the guarantee the eventual export flip (#3740) rests on.
  * - Neither `week` nor `addonVersion` survives into an MDT 6.2 export. `week` is explicitly nilled
  *   by the addon (Presets.lua), and `addonVersion` is derived as
  *   `tonumber(("6.2.0-alpha3"):gsub("%.", ""))`, which is nil on any alpha/PTR build - a released
@@ -65,7 +68,7 @@ final class MDTImportStringServiceMDT2AuthoritativeTest extends MDTImportStringS
 
     #[Test]
     #[DataProvider('realMdt2String_Provider')]
-    public function decode_givenRealMdt2Payload_usesRawDeflateAndByteStrings(string $fixture): void
+    public function decode_givenRealMdt2Payload_returnsRawDeflatedCbor(string $fixture): void
     {
         // Arrange - peel the encoding layers by hand so the assertions are about the real client's
         // output rather than about MDT2Codec agreeing with itself
@@ -79,20 +82,31 @@ final class MDTImportStringServiceMDT2AuthoritativeTest extends MDTImportStringS
         $this->assertIsString($compressed);
         $this->assertIsString($cbor, 'A real MDT 6.2 payload must inflate as a raw deflate stream');
         $this->assertFalse(@gzuncompress($compressed), 'A real MDT 6.2 payload must NOT be zlib-wrapped');
-
-        // Assert - the CBOR root is a map, and its first key is a byte string (major type 2), which
-        // is what MDT2Codec::encode() emits for Lua strings. Byte 1 is only the first key when the
-        // map's pair count fits in the initial byte's additional-information field (< 24), so guard
-        // that too - a future fixture with 24+ top-level keys would otherwise assert on a length
-        // byte and silently stop proving anything.
         $this->assertSame(0b101, ord($cbor[0]) >> 5, 'The CBOR root must be a map (major type 5)');
-        $this->assertLessThan(24, ord($cbor[0]) & 0b11111, 'The root map must pack its pair count into the initial byte');
-        $this->assertSame(0b010, ord($cbor[1]) >> 5, 'Blizzard must serialize Lua strings as CBOR byte strings (major type 2)');
     }
 
     #[Test]
     #[DataProvider('realMdt2String_Provider')]
-    public function getDecoded_givenRealMdt2String_carriesNoWeekOrAddonVersion(string $fixture): void
+    public function encode_givenDecodedRealMdt2String_returnsTheClientStringByteForByte(string $fixture): void
+    {
+        // Arrange
+        $encodedString = self::readFixture($fixture);
+
+        // Act - decode the real client string and hand the resulting array straight back to our encoder
+        $reEncoded = MDT2Codec::encode(
+            app()->make(MDTImportStringServiceInterface::class)->setEncodedString($encodedString)->getDecoded(),
+        );
+
+        // Assert - byte identity is the strongest available proof that every type choice the encoder
+        // makes matches Blizzard's SerializeCBOR: byte strings over text strings for Lua strings, the
+        // float/int widths, map key ordering, the empty-Lua-table-as-empty-array convention, and the
+        // deflate + base64 parameters. This is what the eventual export flip (#3740) rests on.
+        $this->assertSame($encodedString, $reEncoded);
+    }
+
+    #[Test]
+    #[DataProvider('realMdt2String_Provider')]
+    public function getDecoded_givenRealMdt2String_returnsPresetWithoutWeekOrAddonVersion(string $fixture): void
     {
         // Act
         $decoded = app()->make(MDTImportStringServiceInterface::class)
@@ -109,7 +123,7 @@ final class MDTImportStringServiceMDT2AuthoritativeTest extends MDTImportStringS
 
     #[Test]
     #[DataProvider('realMdt2String_Provider')]
-    public function getMappingVersionForMdtAddonVersion_givenRealMdt2String_fallsBackToCurrent(string $fixture): void
+    public function getMappingVersionForMdtAddonVersion_givenRealMdt2String_returnsCurrentMappingVersion(string $fixture): void
     {
         // Arrange - a string without addonVersion must land on the dungeon's current mapping version
         $decoded = app()->make(MDTImportStringServiceInterface::class)
@@ -134,6 +148,7 @@ final class MDTImportStringServiceMDT2AuthoritativeTest extends MDTImportStringS
     {
         // Arrange
         $encodedString = self::readFixture($fixture);
+        $dungeonRoute  = null;
 
         try {
             // Act
@@ -144,19 +159,22 @@ final class MDTImportStringServiceMDT2AuthoritativeTest extends MDTImportStringS
             $this->assertSame($expectedDungeonKey, $dungeonRoute->dungeon->key);
             $this->assertNotEmpty($dungeonRoute->killZones);
         } finally {
+            $dungeonRoute?->delete();
             MDTImport::query()->where('import_string', $encodedString)->delete();
         }
     }
 
     #[Test]
     #[DataProvider('realMdt2String_Provider')]
-    public function getDetails_givenRealMdt2String_matchesTheSamePresetInTheLegacyFormat(string $fixture): void
+    public function getDetails_givenRealMdt2String_returnsSameDetailsAsLegacyFormat(string $fixture): void
     {
         // Arrange - re-encode the real preset into the legacy format so both formats can be run
         // through the identical pipeline. Any import warning a real string produces is then proven
         // to come from the mapping rather than from the format.
         $mdt2String          = self::readFixture($fixture);
         $importStringService = app()->make(MDTImportStringServiceInterface::class);
+        $mdt2Route           = null;
+        $legacyRoute         = null;
 
         Artisan::call('mdt:encode', ['string' => json_encode($importStringService->setEncodedString($mdt2String)->getDecoded())]);
         $legacyString = trim(Artisan::output());
@@ -183,6 +201,8 @@ final class MDTImportStringServiceMDT2AuthoritativeTest extends MDTImportStringS
                 $mdt2Route->killZones->map(fn($killZone) => $killZone->killZoneEnemies->count()),
             );
         } finally {
+            $mdt2Route?->delete();
+            $legacyRoute?->delete();
             MDTImport::query()->whereIn('import_string', [$mdt2String, $legacyString])->delete();
         }
     }
@@ -200,7 +220,7 @@ final class MDTImportStringServiceMDT2AuthoritativeTest extends MDTImportStringS
 
     private static function readFixture(string $fixture): string
     {
-        return file_get_contents($fixture);
+        return trim(file_get_contents($fixture));
     }
 
     /**
