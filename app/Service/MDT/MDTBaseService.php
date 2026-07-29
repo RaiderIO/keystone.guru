@@ -3,6 +3,9 @@
 namespace App\Service\MDT;
 
 use App\Logic\MDT\Exception\CliWeakaurasParserNotFoundException;
+use App\Logic\MDT\Exception\MDT2DecodeException;
+use App\Logic\MDT\Exception\MDT2EncodeException;
+use App\Logic\MDT\IO\MDT2Codec;
 use Illuminate\Support\Facades\Artisan;
 use Lua;
 
@@ -27,9 +30,17 @@ abstract class MDTBaseService
 
     /**
      * @param array<string, mixed> $contents
+     * @param bool                 $useMDT2Format True to encode into the MDT 6.2+ `!~MDT2~` format instead of the
+     *                                            legacy `!` format. Kept off by default until MDT drops legacy
+     *                                            import support with WoW 12.2.
+     * @throws MDT2EncodeException
      */
-    protected function encode(array $contents): string
+    protected function encode(array $contents, bool $useMDT2Format = false): string
     {
+        if ($useMDT2Format) {
+            return MDT2Codec::encode($contents);
+        }
+
         Artisan::call('mdt:encode', ['string' => json_encode($contents)]);
 
         $output = trim(Artisan::output());
@@ -46,6 +57,21 @@ abstract class MDTBaseService
      */
     protected function decode(string $string): ?array
     {
+        // MDT 6.2+ strings are decoded natively in PHP - cli_weakauras_parser only handles the legacy format
+        if (MDT2Codec::appliesTo($string)) {
+            try {
+                return MDT2Codec::decode($string);
+            } catch (MDT2DecodeException $mdt2DecodeException) {
+                // The prefix matched, so this string genuinely claimed to be an MDT export - always worth
+                // reporting, mirroring what ConvertsMDTStrings::transform() does for plausible legacy strings
+                logger()->error($mdt2DecodeException->getMessage(), [
+                    'string' => $string,
+                ]);
+
+                return null;
+            }
+        }
+
         Artisan::call('mdt:decode', ['string' => $string]);
 
         $output = trim(Artisan::output());

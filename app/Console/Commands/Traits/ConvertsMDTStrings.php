@@ -17,7 +17,10 @@ trait ConvertsMDTStrings
     private static string $CLI_PARSER_DECODE_CMD = '/usr/bin/cli_weakauras_parser decode %s';
 
     /**
-     * Checks if we should log a string to the error logger should it fail parsing
+     * Checks if we should log a string to the error logger should it fail parsing.
+     * Only legacy-format strings are of interest here - MDT 6.2+ `!~MDT2~` strings are decoded
+     * natively in PHP (MDT2Codec) and never reach cli_weakauras_parser, so `~` is deliberately
+     * not part of this character class.
      *
      * @see https://stackoverflow.com/a/34982057/771270
      */

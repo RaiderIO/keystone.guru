@@ -4,6 +4,7 @@ namespace App\Console\Commands\MDT;
 
 use App\Console\Commands\Traits\ConvertsMDTStrings;
 use App\Console\Commands\Traits\ExecutesShellCommands;
+use App\Logic\MDT\IO\MDT2Codec;
 use Illuminate\Console\Command;
 
 class Encode extends Command
@@ -16,7 +17,7 @@ class Encode extends Command
      *
      * @var string
      */
-    protected $signature = 'mdt:encode {string}';
+    protected $signature = 'mdt:encode {string} {--mdt2 : Encode into the MDT 6.2+ !~MDT2~ format instead of the legacy format}';
 
     /**
      * The console command description.
@@ -30,6 +31,14 @@ class Encode extends Command
      */
     public function handle(): void
     {
-        $this->info($this->encode($this->argument('string')));
+        $string = $this->argument('string');
+
+        if ($this->option('mdt2')) {
+            $this->info(MDT2Codec::encode(json_decode($string, true)));
+
+            return;
+        }
+
+        $this->info($this->encode($string));
     }
 }

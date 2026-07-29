@@ -4,6 +4,8 @@ namespace App\Console\Commands\MDT;
 
 use App\Console\Commands\Traits\ConvertsMDTStrings;
 use App\Console\Commands\Traits\ExecutesShellCommands;
+use App\Logic\MDT\Exception\MDT2DecodeException;
+use App\Logic\MDT\IO\MDT2Codec;
 use Illuminate\Console\Command;
 
 class Decode extends Command
@@ -30,6 +32,23 @@ class Decode extends Command
      */
     public function handle(): void
     {
-        $this->info($this->decode($this->argument('string')) ?? ''); // @phpstan-ignore nullCoalesce.expr
+        $string = $this->argument('string');
+
+        // MDT 6.2+ strings are decoded natively in PHP - cli_weakauras_parser only handles the legacy format
+        if (MDT2Codec::appliesTo($string)) {
+            try {
+                $this->info(json_encode(MDT2Codec::decode($string)));
+            } catch (MDT2DecodeException $mdt2DecodeException) {
+                $this->error($mdt2DecodeException->getMessage());
+
+                logger()->error($mdt2DecodeException->getMessage(), [
+                    'string' => $string,
+                ]);
+            }
+
+            return;
+        }
+
+        $this->info($this->decode($string) ?? ''); // @phpstan-ignore nullCoalesce.expr
     }
 }

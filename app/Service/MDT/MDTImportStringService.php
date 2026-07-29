@@ -108,7 +108,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             $decoded = $this->decode($this->encodedString);
 
             if ($decoded === null) {
-                throw new MDTStringParseException('Unable to decode MDT import string');
+                throw new MDTStringParseException(__('services.mdt.io.import_string.unable_to_decode_mdt_import_string'));
             }
 
             // Check if it's valid
@@ -116,7 +116,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             $isValid = $this->getLua()->call('ValidateImportPreset', [$decoded]);
 
             if (!$isValid) {
-                throw new InvalidMDTStringException('Unable to validate MDT import string in Lua');
+                throw new InvalidMDTStringException(__('services.mdt.io.import_string.unable_to_validate_mdt_import_string'));
             }
 
             $warnings = collect();
