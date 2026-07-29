@@ -461,7 +461,7 @@
     {
         "id": 1098,
         "game_version_id": 1,
-        "category": "spells.category.general",
+        "category": "spellcategory.general",
         "cooldown_group": "all",
         "dispel_type": "n_a",
         "mechanic": "spellmechanic.charmed",
@@ -12888,7 +12888,7 @@
     {
         "id": 111673,
         "game_version_id": 1,
-        "category": "spells.category.general",
+        "category": "spellcategory.general",
         "cooldown_group": "all",
         "dispel_type": "n_a",
         "mechanic": "spellmechanic.charmed",

@@ -110,7 +110,10 @@ tail -n +1 -F release-watch.log \
 
 ## Related
 
-- `create-release` cuts the tag that starts the pipeline this script watches — its final
-  step suggests running `sh/release-watch.sh <version>` next.
+- `create-release` cuts the tag that starts the pipeline this script watches, and its own
+  final step launches this script in `--watch-only` mode automatically (plus a `Monitor` on
+  its log) as soon as the tag is pushed — no need to be asked separately to "run the
+  watcher". That auto-drive stops at staging verification; production approval is still a
+  human action per the hard safety rule above.
 - `deployment-pipeline` is the map of how the pipeline works; this script is the preferred
   way to verify a release end-to-end rather than doing it by hand.

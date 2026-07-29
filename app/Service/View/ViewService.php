@@ -223,7 +223,7 @@ class ViewService implements ViewServiceInterface
     public function getSelectableSpellsByCategory(): Collection
     {
         return $this->cachedGlobal('selectable_spells_by_category', static fn() => Spell::where('selectable', true)
-            ->orderByRaw("CASE WHEN category = 'spells.category.general' THEN 0 ELSE 1 END")
+            ->orderByRaw("CASE WHEN category = 'spellcategory.general' THEN 0 ELSE 1 END")
             ->orderBy('category')
             ->orderBy('name')
             ->get()

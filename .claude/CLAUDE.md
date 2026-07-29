@@ -51,6 +51,11 @@ Prepend every message you post on GitHub (PR/issue comments, review replies, PR/
 a `:robot:` emoji so it is clear the message is from Claude and not the account owner. This avoids
 the appearance of impersonating the user.
 
+**Bodies and comments only — never titles.** A PR or issue *title* gets no `:robot:` prefix (and no
+🤖). Titles are read in lists, notifications and the merge commit, where the prefix is just noise;
+the body directly underneath already carries it. Same for commit messages — those are attributed via
+the `Co-Authored-By: Claude` trailer, not an emoji.
+
 `gh pr edit` always fails on this repo with a Projects-classic GraphQL deprecation error
 (`repository.pullRequest.projectCards`). Update PRs through the REST API instead:
 `gh api -X PATCH repos/RaiderIO/keystone.guru/pulls/<number> -F body=@<file>` — capital `-F`
