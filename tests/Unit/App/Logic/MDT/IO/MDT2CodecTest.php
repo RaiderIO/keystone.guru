@@ -132,6 +132,51 @@ final class MDT2CodecTest extends TestCase
     }
 
     #[Test]
+    #[DataProvider('encode_givenIntAtMinimalWidthBoundary_emitsCanonicalMinimalHeader_Provider')]
+    public function encode_givenIntAtMinimalWidthBoundary_emitsCanonicalMinimalHeader(int $value, string $expectedHex): void
+    {
+        // Act
+        $encoded = MDT2Codec::encode(['value' => $value]);
+
+        // Assert
+        $this->assertEquals($expectedHex, bin2hex($this->rawCbor($encoded)));
+    }
+
+    /**
+     * Boundary values where UnsignedIntegerObject::create()/NegativeIntegerObject::create()'s
+     * off-by-one (`isLessThan` instead of `isLessThanOrEqualTo` against 0xFF/0xFFFF/0xFFFFFFFF)
+     * would previously widen the header by one step (e.g. 255 as a 2-byte 0x19 00ff instead of the
+     * canonical 1-byte 0x18 ff). 4294967295 (0xFFFFFFFF) is the largest magnitude this codec
+     * supports - one past it (0x1_0000_0000) is covered by
+     * encode_givenIntBeyondUint32_throwsMDT2EncodeException above.
+     *
+     * @return array<string, array{int, string}>
+     */
+    public static function encode_givenIntAtMinimalWidthBoundary_emitsCanonicalMinimalHeader_Provider(): array
+    {
+        return [
+            '255 (uint8 boundary)'       => [255, 'a14576616c756518ff'],
+            '65535 (uint16 boundary)'    => [65535, 'a14576616c756519ffff'],
+            '-256 (negint8 boundary)'    => [-256, 'a14576616c756538ff'],
+            '-65536 (negint16 boundary)' => [-65536, 'a14576616c756539ffff'],
+            '4294967295 (uint32 max)'    => [4294967295, 'a14576616c75651affffffff'],
+            '-4294967296 (negint32 max)' => [-4294967296, 'a14576616c75653affffffff'],
+        ];
+    }
+
+    #[Test]
+    public function encode_givenIntKeyAtMinimalWidthBoundary_emitsCanonicalMinimalHeaderForKey(): void
+    {
+        // Act - a boundary int used as a map key, not a value (currentDungeonIdx-shaped: intToCborObject
+        // encodes map keys too, per `is_int($key) ? self::intToCborObject($key) : ...`). Not a dense
+        // sequence (array_keys() !== range(1, 1)), so this is a CBOR map with an int key.
+        $encoded = MDT2Codec::encode([255 => 'x']);
+
+        // Assert - A1 (map, 1 pair) 18ff (uint8 255, canonical minimal form) 4178 (byte string 'x')
+        $this->assertEquals('a118ff4178', bin2hex($this->rawCbor($encoded)));
+    }
+
+    #[Test]
     public function encode_givenObjectValue_throwsMDT2EncodeException(): void
     {
         // Assert

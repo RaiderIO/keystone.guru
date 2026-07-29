@@ -20,7 +20,6 @@ use CBOR\OtherObject\TrueObject;
 use CBOR\StringStream;
 use CBOR\TextStringObject;
 use CBOR\UnsignedIntegerObject;
-use InvalidArgumentException;
 use Throwable;
 
 /**
@@ -357,17 +356,33 @@ final class MDT2Codec
     }
 
     /**
+     * UnsignedIntegerObject::create()/NegativeIntegerObject::create() pick their header width with
+     * an off-by-one (`isLessThan(0xFF)` etc. instead of `isLessThanOrEqualTo`), so e.g. 255 would
+     * round-trip correctly but encode one byte wider than CBOR's canonical minimal-length form -
+     * not a bug MDT's DeserializeCBOR would notice, but one the byte-for-byte fidelity claim in this
+     * class's docblock does not survive. Compute the minimal width ourselves and call
+     * createObjectForValue() directly instead of going through create().
+     *
      * @throws MDT2EncodeException
      */
     private static function intToCborObject(int $value): CBORObject
     {
-        try {
-            return $value >= 0 ? UnsignedIntegerObject::create($value) : NegativeIntegerObject::create($value);
-        } catch (InvalidArgumentException $invalidArgumentException) {
-            // cbor-php caps basic int encoding at 32 bits and wants big-integer tags beyond that,
+        // CBOR negative integers are encoded as -(magnitude + 1), i.e. magnitude = -1 - value
+        $magnitude = $value >= 0 ? $value : -1 - $value;
+
+        [$additionalInformation, $data] = match (true) {
+            $magnitude < 24          => [$magnitude, null],
+            $magnitude <= 0xFF       => [24, pack('C', $magnitude)],
+            $magnitude <= 0xFFFF     => [25, pack('n', $magnitude)],
+            $magnitude <= 0xFFFFFFFF => [26, pack('N', $magnitude)],
+            // cbor-php caps basic int encoding at 32 bits and wants a big-integer tag beyond that,
             // but the WoW client rejects tags - fail loudly instead
-            throw new MDT2EncodeException(sprintf('Unable to encode integer %d: %s', $value, $invalidArgumentException->getMessage()), 0, $invalidArgumentException);
-        }
+            default => throw new MDT2EncodeException(sprintf('Unable to encode integer %d: value exceeds the 32-bit range this codec supports', $value)),
+        };
+
+        return $value >= 0
+            ? UnsignedIntegerObject::createObjectForValue($additionalInformation, $data)
+            : NegativeIntegerObject::createObjectForValue($additionalInformation, $data);
     }
 
     /**
