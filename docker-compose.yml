@@ -155,9 +155,10 @@ services:
   # Container names stay -prod either way so worktree.sh auto-attach keeps working.
   #
   # MySQL 8.0 performs a one-way in-place data dictionary upgrade the first time it starts on a
-  # 5.7 data dir — there is no downgrade path. All four data dirs were upgraded to 8.0.42 in #3717,
-  # so both variants are safe to mount; but if you ever restore a 5.7-era backup or copy in an old
-  # data dir, shut it down cleanly under 5.7 and copy it aside *before* pointing 8.0 at it.
+  # 5.7 data dir — there is no downgrade path. The maintainer's four data dirs were upgraded to
+  # 8.0.42 in #3717 (see that MR for the procedure), but yours are your own: if any local data dir
+  # is still 5.7 — including a restored 5.7-era backup or a copied-in old dir — shut it down
+  # cleanly under 5.7 and copy it aside *before* pointing 8.0 at it.
   db:
     image: mysql:8.0.42
     container_name: keystone.guru-db-prod
