@@ -7,6 +7,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Mapping\MappingServiceInterface;
 use App\Service\MDT\MDTMappingImportServiceInterface;
+use Illuminate\Database\Eloquent\Model;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
@@ -121,6 +122,51 @@ final class MDTMappingImportCrashRecoveryTest extends PublicTestCase
                 ->where('dungeon_id', $dungeon->id)
                 ->whereNotIn('id', $mappingVersionIdsBefore)
                 ->delete();
+        }
+    }
+
+    /**
+     * The crash-recovery test above only proves that a failed import does not stamp a hash - it does not
+     * distinguish "the hash is written after success" from "the hash is never written at all", since it
+     * forces a failure before that point is ever reached. This exercises the real, full import pipeline (no
+     * decorator) so the actual write on success is asserted directly.
+     */
+    #[Test]
+    public function importMappingVersionFromMDT_givenImportSucceeds_stampsTheNewMappingVersionWithTheMdtMappingHash(): void
+    {
+        // Arrange
+        /** @var Dungeon $dungeon */
+        $dungeon     = Dungeon::query()->where('key', 'throne_of_the_tides')->firstOrFail();
+        $gameVersion = GameVersion::query()->findOrFail($dungeon->getCurrentMappingVersion()->game_version_id);
+
+        $mappingService       = $this->app->make(MappingServiceInterface::class);
+        $mappingImportService = $this->app->make(MDTMappingImportServiceInterface::class);
+
+        $expectedHash = $mappingImportService->getMDTMappingHash($dungeon);
+
+        $newMappingVersion = null;
+
+        // importNpcsDataFromMDT() does not eager-load Npc::npcHealths before reading it - a real,
+        // pre-existing bug unrelated to #3737 (it is one of the crash causes #3737 cites as an example
+        // trigger, not something this PR fixes). In production that only logs and lazy-loads anyway
+        // (AppServiceProvider::boot()); in dev/test it throws. Match production's tolerance here so this
+        // test can exercise a genuinely successful import instead of tripping over that unrelated bug.
+        Model::preventLazyLoading(false);
+
+        try {
+            // Act
+            $newMappingVersion = $mappingImportService->importMappingVersionFromMDT($mappingService, $dungeon, $gameVersion, true);
+
+            // Assert
+            $this->assertSame(
+                $expectedHash,
+                $newMappingVersion->fresh()->mdt_mapping_hash,
+                'A successful import must stamp the new mapping version with the freshly computed MDT hash.',
+            );
+        } finally {
+            Model::preventLazyLoading();
+
+            $newMappingVersion?->delete();
         }
     }
 }
