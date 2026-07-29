@@ -248,6 +248,10 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
     searchWithFilters(filters) {
         this._restoreFiltersFromQueryParams(filters);
 
+        // Same as in activate(): restoring the event type doesn't fire its change event, so its side effects
+        // must be applied before we build the search params from the filters (#3744).
+        this._applyEventTypeVisibility();
+
         this._search();
 
         // Make sure the select dropdowns are updated properly - external changes don't cause a UI refresh
@@ -263,8 +267,9 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
     _applyEventTypeVisibility() {
         console.assert(this instanceof CommonMapsHeatmapsearchsidebar, 'this is not a CommonMapsHeatmapsearchsidebar', this);
 
-        // In pass through mode there is no sidebar to show/hide, and the filters are fully controlled by
-        // whoever embedded us - don't disable any of them based on the event type they passed.
+        // Pass through mode means the sidebar is hidden entirely (see 'passThroughEverything' in
+        // heatmapsearch.blade.php) and the filters are fully controlled by whoever embedded us - there's no UI
+        // to keep in sync, so don't disable any of the filters they passed based on the event type.
         if (this.options.passThroughEverything) {
             return;
         }

@@ -188,14 +188,19 @@ function buildSidebarDom() {
 
 /**
  * @param {String} queryString
+ * @param {Object} optionOverrides
  * @returns {CommonMapsHeatmapsearchsidebar}
  */
-function activateSidebar(queryString) {
+function activateSidebar(queryString, optionOverrides = {}) {
     buildSidebarDom();
     // jsdom doesn't allow assigning document.location.search - see custom/util.test.js for the same approach.
     window.history.replaceState({}, '', `/heatmap/retail/algethar-academy/1${queryString}`);
 
-    const sidebar = new CommonMapsHeatmapsearchsidebar('heatmapsearchsidebar', 'common/maps/heatmapsearchsidebar', OPTIONS);
+    const sidebar = new CommonMapsHeatmapsearchsidebar(
+        'heatmapsearchsidebar',
+        'common/maps/heatmapsearchsidebar',
+        $.extend({}, OPTIONS, optionOverrides)
+    );
     sidebar.activate();
 
     return sidebar;
@@ -282,6 +287,43 @@ describe('CommonMapsHeatmapsearchsidebar - restoring filters from the URL', () =
             dataType: COMBAT_LOG_EVENT_DATA_TYPE_PLAYER_POSITION,
             region: 'world',
         });
+    });
+
+    test('activate_givenNoQueryParams_showsTheDataTypeFilterItWritesToTheUrl', () => {
+        // Arrange & Act
+        activateSidebar('');
+
+        // Assert - the data type applies to npc deaths, so on a first visit its control must be reachable
+        expect(isVisible('#filter_data_type_container')).toBe(true);
+        expect(isVisible('#filter_player_spells_container')).toBe(false);
+    });
+
+    test('activate_givenPassThroughEverything_leavesTheFiltersItWasGivenAlone', () => {
+        // Arrange & Act - a sidebar-less embed is fully driven by whoever embedded us
+        activateSidebar(
+            `?type=${COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_SPELL}&dataType=${COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_POSITION}&region=world`,
+            {passThroughEverything: true}
+        );
+
+        // Assert
+        expect(searchSpy.mock.calls[0][0].params.dataType).toBe(COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_POSITION);
+    });
+
+    test('searchWithFilters_givenPlayerSpellEventType_appliesTheEventTypeSideEffects', () => {
+        // Arrange - an embed with a visible sidebar posts its filters in through postMessage
+        const sidebar = activateSidebar('');
+        searchSpy.mockClear();
+
+        // Act
+        sidebar.searchWithFilters({
+            type: COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_SPELL,
+            includePlayerSpellIds: SPELL_IDS.join(','),
+        });
+
+        // Assert
+        expect(isVisible('#filter_player_spells_container')).toBe(true);
+        expect(isVisible('#filter_data_type_container')).toBe(false);
+        expect(searchSpy.mock.calls[0][0].params).not.toHaveProperty('dataType');
     });
 
     test('activate_givenAFilteredUrl_writesBackTheSameParams', () => {
