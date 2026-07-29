@@ -113,7 +113,14 @@ class LayoutsApp extends InlineCode {
 /**
  * The default function that should be called when an ajax request fails (error handler)
  **/
-function defaultAjaxErrorFn(xhr/*, textStatus, errorThrown*/) {
+function defaultAjaxErrorFn(xhr, textStatus/*, errorThrown*/) {
+    // We abort in-flight requests ourselves whenever they're superseded (see SearchHandler.search) - that is
+    // not a failure the user needs to know about. It'd show up as a '0: ...' notification since an aborted
+    // request never got a response, i.e. xhr.status is 0 (#3744).
+    if (textStatus === 'abort') {
+        return;
+    }
+
     let message = lang.get('js.ajax_error_default');
 
     switch (xhr.status) {
@@ -340,4 +347,10 @@ function showWarningNotification(text, opts = {}) {
  */
 function showErrorNotification(text, opts = {}) {
     _showNotification($.extend({type: 'error', text: '<i class="fas fa-times-circle"></i> ' + text}, opts));
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {LayoutsApp, defaultAjaxErrorFn};
 }

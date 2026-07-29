@@ -84,23 +84,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
 
         this.filters = {
             'type': new SearchFilterRadioEventType(this.options.filterEventTypeContainerSelector, this.options.filterEventTypeSelector, function () {
-                let $this = $(`${self.options.filterEventTypeSelector}:checked`);
-
-                let isNpcDeath = $this.val() === COMBAT_LOG_EVENT_EVENT_TYPE_NPC_DEATH;
-                $(self.options.filterDataTypeContainerSelector).toggle(isNpcDeath);
-                self.filters['dataType'].toggle(isNpcDeath);
-
-
-                let isPlayerDeath = $this.val() === COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_DEATH;
-                $(self.options.filterClassesPlayerDeathsContainerSelector).toggle(isPlayerDeath);
-                $(self.options.filterSpecializationsPlayerDeathsContainerSelector).toggle(isPlayerDeath);
-                self.filters['includePlayerDeathClassIds'].toggle(isPlayerDeath);
-                self.filters['includePlayerDeathSpecIds'].toggle(isPlayerDeath);
-
-
-                let isPlayerSpell = $this.val() === COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_SPELL;
-                $(self.options.filterPlayerSpellsContainerSelector).toggle(isPlayerSpell);
-                self.filters['includePlayerSpellIds'].toggle(isPlayerSpell);
+                self._applyEventTypeVisibility();
 
                 self._search();
             }),
@@ -251,6 +235,12 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             this.sidebar.showSidebar();
         }
 
+        // The filters were just restored from the URL by super.activate(). Restoring a radio doesn't fire its
+        // change event, so the event type's side effects (which filters apply, which containers are visible)
+        // must be applied by hand - otherwise the filters that don't apply to the restored event type stay
+        // enabled and end up back in the URL, while their containers stay hidden (#3744).
+        this._applyEventTypeVisibility();
+
         this.initializing = false;
         this._search();
     }
@@ -262,6 +252,40 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
 
         // Make sure the select dropdowns are updated properly - external changes don't cause a UI refresh
         refreshSelectPickers();
+    }
+
+    /**
+     * Enables/disables the filters that only apply to a specific event type, and shows/hides their containers
+     * (which the blade renders hidden by default).
+     *
+     * @protected
+     */
+    _applyEventTypeVisibility() {
+        console.assert(this instanceof CommonMapsHeatmapsearchsidebar, 'this is not a CommonMapsHeatmapsearchsidebar', this);
+
+        // In pass through mode there is no sidebar to show/hide, and the filters are fully controlled by
+        // whoever embedded us - don't disable any of them based on the event type they passed.
+        if (this.options.passThroughEverything) {
+            return;
+        }
+
+        let eventType = this.filters['type'].getValue();
+
+        let isNpcDeath = eventType === COMBAT_LOG_EVENT_EVENT_TYPE_NPC_DEATH;
+        $(this.options.filterDataTypeContainerSelector).toggle(isNpcDeath);
+        this.filters['dataType'].toggle(isNpcDeath);
+
+
+        let isPlayerDeath = eventType === COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_DEATH;
+        $(this.options.filterClassesPlayerDeathsContainerSelector).toggle(isPlayerDeath);
+        $(this.options.filterSpecializationsPlayerDeathsContainerSelector).toggle(isPlayerDeath);
+        this.filters['includePlayerDeathClassIds'].toggle(isPlayerDeath);
+        this.filters['includePlayerDeathSpecIds'].toggle(isPlayerDeath);
+
+
+        let isPlayerSpell = eventType === COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_SPELL;
+        $(this.options.filterPlayerSpellsContainerSelector).toggle(isPlayerSpell);
+        this.filters['includePlayerSpellIds'].toggle(isPlayerSpell);
     }
 
     _toggleHeatmap(enabled) {
@@ -305,4 +329,10 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         console.assert(this instanceof CommonMapsHeatmapsearchsidebar, 'this is not a CommonMapsHeatmapsearchsidebar', this);
 
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {CommonMapsHeatmapsearchsidebar};
 }
