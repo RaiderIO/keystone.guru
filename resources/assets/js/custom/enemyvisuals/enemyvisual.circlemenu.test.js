@@ -183,4 +183,58 @@ describe('EnemyVisual circle menu teardown (#3723)', () => {
         expect(self._circleMenu).toBeNull();
         expect(setMapStateCalls[1]).toBeNull();
     });
+
+    test('_cleanupCircleMenu_givenARebuildLandsWhileTheMenuIsFadingOut_doesNotReportAReopenableMenu', () => {
+        // Arrange: the menu opened normally, then the user closed it - the close/select callback's
+        // default fadeOut=true call, which queues cleanupFn 500ms out and leaves _circleMenu non-null
+        // in the meantime
+        const {self, setMapStateCalls} = makeOpenCircleMenu();
+        vi.advanceTimersByTime(1000);
+        EnemyVisual.prototype._cleanupCircleMenu.call(self, true);
+        expect(setMapStateCalls).toHaveLength(1);
+
+        // Act: a rebuild lands inside that 500ms window - killzone:attached, overpulled:changed, an
+        // Echo object:changed - and buildVisual() calls this exact form to tear down before rebuilding
+        const hadCircleMenu = EnemyVisual.prototype._cleanupCircleMenu.call(self, false);
+
+        // Assert: not reported as an interrupted, reopenable menu (#3730) - the menu the user just
+        // dismissed must not be treated as one buildVisual() should put back afterwards. Nothing about
+        // the already-queued fade-out is disturbed either.
+        expect(hadCircleMenu).toBe(false);
+        expect(document.getElementById('map_enemy_raid_marker_radial_42')).not.toBeNull();
+        expect(setMapStateCalls).toHaveLength(1);
+
+        // Act: the original fade-out still completes on its own
+        vi.advanceTimersByTime(1000);
+
+        // Assert
+        expect(document.getElementById('map_enemy_raid_marker_radial_42')).toBeNull();
+        expect(self._circleMenu).toBeNull();
+        expect(setMapStateCalls[1]).toBeNull();
+    });
+
+    test('_cleanupCircleMenu_givenTheRebuildDetachesTheRadialWhileClosing_stillEndsTheMapStateLater', () => {
+        // Arrange: the menu opened normally, then the user closed it, queuing the 500ms fade-out
+        const {self, container, setMapStateCalls} = makeOpenCircleMenu();
+        vi.advanceTimersByTime(1000);
+        EnemyVisual.prototype._cleanupCircleMenu.call(self, true);
+        expect(setMapStateCalls).toHaveLength(1);
+
+        // Act: a rebuild lands inside that window - the no-op call from #3730 above - and then goes
+        // on to replace the enemy's icon HTML entirely (buildVisual() -> layer.setIcon()), which
+        // detaches the still-fading radial from the document exactly like Leaflet destroying the
+        // enemy's icon natively does elsewhere (#3723)
+        EnemyVisual.prototype._cleanupCircleMenu.call(self, false);
+        container.remove();
+
+        // Act: the original fade-out's queue still runs against the now-detached radial
+        vi.advanceTimersByTime(1000);
+
+        // Assert: cleanupFn must not have been skipped just because its target left the document -
+        // the plugin's own jQuery set (self._circleMenu) stays valid regardless (#3723), so the map
+        // state this menu started still gets ended, exactly once
+        expect(self._circleMenu).toBeNull();
+        expect(setMapStateCalls).toHaveLength(2);
+        expect(setMapStateCalls[1]).toBeNull();
+    });
 });
