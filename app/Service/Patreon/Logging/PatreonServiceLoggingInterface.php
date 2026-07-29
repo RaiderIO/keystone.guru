@@ -57,7 +57,7 @@ interface PatreonServiceLoggingInterface
 
     public function applyPaidBenefitsForMemberEmptyMemberEmail(): void;
 
-    public function applyPaidBenefitsForMemberStart(string $memberEmail): void;
+    public function applyPaidBenefitsForMemberStart(string $memberId): void;
 
     public function applyPaidBenefitsForMemberCannotFindPatreonData(): void;
 
@@ -70,6 +70,8 @@ interface PatreonServiceLoggingInterface
     public function applyPaidBenefitsAddedPatreonBenefit(string $benefit, string $email): void;
 
     public function applyPaidBenefitsRevokedPatreonBenefit(string $removedBenefit, string $email): void;
+
+    public function applyPaidBenefitsUnknownPatreonBenefit(string $benefit, string $email): void;
 
     public function applyPaidBenefitsForMemberEnd(): void;
 

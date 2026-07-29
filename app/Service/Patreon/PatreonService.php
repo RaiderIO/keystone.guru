@@ -196,6 +196,15 @@ class PatreonService implements PatreonServiceInterface
             } else {
                 // Update the patreon benefits to their new status
                 foreach ($newBenefits as $benefit) {
+                    // The benefit titles come straight from the campaign on patreon.com, so a renamed or newly added
+                    // benefit is not necessarily one we know about. hasPatreonBenefit() already returns false for
+                    // those, which would let an unknown title fall through into an undefined array key (#3748)
+                    if (!isset(PatreonBenefit::ALL[$benefit])) {
+                        $this->log->applyPaidBenefitsUnknownPatreonBenefit($benefit, $user->email);
+
+                        continue;
+                    }
+
                     if (!$user->hasPatreonBenefit($benefit)) {
                         PatreonUserBenefit::create([
                             'patreon_user_link_id' => $user->patreon_user_link_id,
@@ -209,6 +218,12 @@ class PatreonService implements PatreonServiceInterface
                 $removedBenefits = $user->getPatreonBenefits()->diff($newBenefits);
                 if ($removedBenefits->isNotEmpty()) {
                     foreach ($removedBenefits as $removedBenefit) {
+                        if (!isset(PatreonBenefit::ALL[$removedBenefit])) {
+                            $this->log->applyPaidBenefitsUnknownPatreonBenefit($removedBenefit, $user->email);
+
+                            continue;
+                        }
+
                         PatreonUserBenefit::where('patreon_user_link_id', $user->patreon_user_link_id)
                             ->where('patreon_benefit_id', PatreonBenefit::ALL[$removedBenefit])
                             ->delete();
