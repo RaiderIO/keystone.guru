@@ -6,6 +6,7 @@ use App\Models\Patreon\PatreonBenefit;
 use App\Models\Patreon\PatreonUserBenefit;
 use App\Models\Patreon\PatreonUserLink;
 use App\Models\User;
+use App\Service\Patreon\Dtos\ApplyPaidBenefitsForMemberResult;
 use App\Service\Patreon\PatreonServiceInterface;
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
@@ -28,13 +29,15 @@ final class PatreonServiceTest extends PublicTestCase
     protected function tearDown(): void
     {
         try {
-            if ($this->patreonUserLink !== null) {
-                PatreonUserBenefit::query()->where('patreon_user_link_id', $this->patreonUserLink->id)->delete();
-                $this->user?->update(['patreon_user_link_id' => null]);
-                $this->patreonUserLink->delete();
+            try {
+                if ($this->patreonUserLink !== null) {
+                    PatreonUserBenefit::query()->where('patreon_user_link_id', $this->patreonUserLink->id)->delete();
+                    $this->user?->update(['patreon_user_link_id' => null]);
+                    $this->patreonUserLink->delete();
+                }
+            } finally {
+                $this->user?->delete();
             }
-
-            $this->user?->delete();
         } finally {
             parent::tearDown();
         }
@@ -55,7 +58,7 @@ final class PatreonServiceTest extends PublicTestCase
         $result = $this->applyPaidBenefitsForMember($campaignBenefits, $campaignTiers);
 
         // Assert
-        $this->assertTrue($result);
+        $this->assertSame(ApplyPaidBenefitsForMemberResult::Applied, $result);
         $this->assertDatabaseHas('patreon_user_benefits', [
             'patreon_user_link_id' => $this->patreonUserLink->id,
             'patreon_benefit_id'   => PatreonBenefit::ALL[PatreonBenefit::AD_FREE],
@@ -78,7 +81,7 @@ final class PatreonServiceTest extends PublicTestCase
         $result = $this->applyPaidBenefitsForMember($campaignBenefits, $campaignTiers);
 
         // Assert
-        $this->assertFalse($result);
+        $this->assertSame(ApplyPaidBenefitsForMemberResult::UnknownBenefits, $result);
         $this->assertSame(0, PatreonUserBenefit::query()
             ->where('patreon_user_link_id', $this->patreonUserLink->id)
             ->count());
@@ -106,7 +109,7 @@ final class PatreonServiceTest extends PublicTestCase
         $result = $this->applyPaidBenefitsForMember($campaignBenefits, $campaignTiers);
 
         // Assert
-        $this->assertFalse($result);
+        $this->assertSame(ApplyPaidBenefitsForMemberResult::UnknownBenefits, $result);
         $this->assertDatabaseHas('patreon_user_benefits', ['id' => $patreonUserBenefit->id]);
     }
 
@@ -147,7 +150,7 @@ final class PatreonServiceTest extends PublicTestCase
      * @param array<int, array<string, mixed>> $campaignBenefits
      * @param array<int, array<string, mixed>> $campaignTiers
      */
-    private function applyPaidBenefitsForMember(array $campaignBenefits, array $campaignTiers): bool
+    private function applyPaidBenefitsForMember(array $campaignBenefits, array $campaignTiers): ApplyPaidBenefitsForMemberResult
     {
         $member = [
             'id'            => 'member-1',

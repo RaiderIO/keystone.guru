@@ -3,6 +3,7 @@
 namespace App\Service\Patreon;
 
 use App\Models\User;
+use App\Service\Patreon\Dtos\ApplyPaidBenefitsForMemberResult;
 use App\Service\Patreon\Dtos\LinkToUserIdResult;
 
 interface PatreonServiceInterface
@@ -27,7 +28,7 @@ interface PatreonServiceInterface
      * @param array<int, array<string, mixed>> $campaignTiers
      * @param array<string, mixed>             $member
      */
-    public function applyPaidBenefitsForMember(array $campaignBenefits, array $campaignTiers, array $member): bool;
+    public function applyPaidBenefitsForMember(array $campaignBenefits, array $campaignTiers, array $member): ApplyPaidBenefitsForMemberResult;
 
     public function linkToUserAccount(User $user, string $code, string $redirectUri): LinkToUserIdResult;
 }

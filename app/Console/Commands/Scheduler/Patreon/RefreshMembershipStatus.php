@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Scheduler\Patreon;
 
 use App\Console\Commands\Scheduler\SchedulerCommand;
+use App\Service\Patreon\Dtos\ApplyPaidBenefitsForMemberResult;
 use App\Service\Patreon\PatreonServiceInterface;
 use Throwable;
 
@@ -63,13 +64,25 @@ class RefreshMembershipStatus extends SchedulerCommand
                 $memberId = isset($member['id']) && is_scalar($member['id']) ? (string)$member['id'] : 'unknown';
 
                 try {
-                    $patreonService->applyPaidBenefitsForMember($campaignBenefits, $campaignTiers, $member);
+                    $result = $patreonService->applyPaidBenefitsForMember($campaignBenefits, $campaignTiers, $member);
+
+                    // A member without a linked Keystone.guru account is the common case and not a failure, but a
+                    // member whose benefits we cannot compute is - silently counting it as updated would let the
+                    // hourly alert go quiet while benefits stop being applied (#3748)
+                    if ($result === ApplyPaidBenefitsForMemberResult::UnknownBenefits) {
+                        $failedMemberIds[] = $memberId;
+
+                        $this->error(sprintf(
+                            'Member %s is entitled to a benefit that is missing from PatreonBenefit::ALL - see the logged benefit titles',
+                            $memberId,
+                        ));
+                    }
                 } catch (Throwable $throwable) {
                     $this->error(sprintf('Unable to apply the paid benefits of member %s: %s', $memberId, $throwable->getMessage()));
 
-                    // A systemic failure fails on every single member - reporting each one would flood the error
-                    // channels with the same throwable. The first few are enough to diagnose it, and the summary
-                    // below still names every member that failed
+                    // A systemic failure fails on every single member - reporting each one would write the same
+                    // stack trace to the log hundreds of times over. The first few are enough to diagnose it, and
+                    // the summary below still names every member that failed
                     if (count($failedMemberIds) < self::MAX_REPORTED_MEMBER_FAILURES) {
                         $this->reportThrowable($throwable, ['memberId' => $memberId]);
                     }

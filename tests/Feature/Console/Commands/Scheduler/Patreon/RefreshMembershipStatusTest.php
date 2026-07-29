@@ -3,6 +3,7 @@
 namespace Tests\Feature\Console\Commands\Scheduler\Patreon;
 
 use App\Console\Commands\Scheduler\Patreon\RefreshMembershipStatus;
+use App\Service\Patreon\Dtos\ApplyPaidBenefitsForMemberResult;
 use App\Service\Patreon\PatreonServiceInterface;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Debug\ExceptionHandler;
@@ -61,12 +62,12 @@ final class RefreshMembershipStatusTest extends PublicTestCase
         $patreonService->method('loadCampaignMembers')->willReturn($members);
         $patreonService->expects($this->exactly(count($members)))
             ->method('applyPaidBenefitsForMember')
-            ->willReturnCallback(static function (array $campaignBenefits, array $campaignTiers, array $member) use ($exception): bool {
+            ->willReturnCallback(static function (array $campaignBenefits, array $campaignTiers, array $member) use ($exception): ApplyPaidBenefitsForMemberResult {
                 if ($member['id'] === 'member-2') {
                     throw $exception;
                 }
 
-                return true;
+                return ApplyPaidBenefitsForMemberResult::Applied;
             });
         $this->app->instance(PatreonServiceInterface::class, $patreonService);
 
@@ -92,12 +93,87 @@ final class RefreshMembershipStatusTest extends PublicTestCase
         $patreonService->method('loadCampaignMembers')->willReturn($members);
         $patreonService->expects($this->exactly(count($members)))
             ->method('applyPaidBenefitsForMember')
-            ->willReturn(true);
+            ->willReturn(ApplyPaidBenefitsForMemberResult::Applied);
         $this->app->instance(PatreonServiceInterface::class, $patreonService);
 
         // Act & Assert
         $this->artisan(RefreshMembershipStatus::class)
             ->expectsOutputToContain('Updated memberships of 2 users')
             ->assertExitCode(Command::SUCCESS);
+    }
+
+    #[Test]
+    public function handle_givenAMemberWithUnknownBenefits_returnsFailureInsteadOfCountingItAsUpdated(): void
+    {
+        // Arrange
+        $members = [
+            ['id' => 'member-1', 'type' => 'member'],
+            ['id' => 'member-2', 'type' => 'member'],
+        ];
+
+        $patreonService = $this->createMockPublic(PatreonServiceInterface::class);
+        $patreonService->method('loadCampaignBenefits')->willReturn([]);
+        $patreonService->method('loadCampaignTiers')->willReturn([]);
+        $patreonService->method('loadCampaignMembers')->willReturn($members);
+        $patreonService->method('applyPaidBenefitsForMember')
+            ->willReturnCallback(static fn(array $campaignBenefits, array $campaignTiers, array $member) => $member['id'] === 'member-2'
+                ? ApplyPaidBenefitsForMemberResult::UnknownBenefits
+                : ApplyPaidBenefitsForMemberResult::Applied);
+        $this->app->instance(PatreonServiceInterface::class, $patreonService);
+
+        // Act & Assert
+        $this->artisan(RefreshMembershipStatus::class)
+            ->expectsOutputToContain('Updated memberships of 1 users')
+            ->expectsOutputToContain('member-2')
+            ->assertExitCode(Command::FAILURE);
+    }
+
+    #[Test]
+    public function handle_givenAMemberWithoutALinkedAccount_countsItAsUpdatedAndReturnsSuccess(): void
+    {
+        // Arrange - by far the most common outcome, and not something to alert on
+        $members = [
+            ['id' => 'member-1', 'type' => 'member'],
+            ['id' => 'member-2', 'type' => 'member'],
+        ];
+
+        $patreonService = $this->createMockPublic(PatreonServiceInterface::class);
+        $patreonService->method('loadCampaignBenefits')->willReturn([]);
+        $patreonService->method('loadCampaignTiers')->willReturn([]);
+        $patreonService->method('loadCampaignMembers')->willReturn($members);
+        $patreonService->method('applyPaidBenefitsForMember')
+            ->willReturn(ApplyPaidBenefitsForMemberResult::MemberNotLinked);
+        $this->app->instance(PatreonServiceInterface::class, $patreonService);
+
+        // Act & Assert
+        $this->artisan(RefreshMembershipStatus::class)
+            ->assertExitCode(Command::SUCCESS);
+    }
+
+    #[Test]
+    public function handle_givenMoreFailingMembersThanTheReportCap_reportsOnlyTheCappedAmount(): void
+    {
+        // Arrange - a systemic failure throws on every member, which must not write the same stack trace
+        // to the log once per member
+        $members = array_map(static fn(int $index) => ['id' => sprintf('member-%d', $index), 'type' => 'member'], range(1, 10));
+
+        $exceptionHandler = $this->createMockPublic(ExceptionHandler::class);
+        $exceptionHandler->expects($this->exactly(3))
+            ->method('report');
+        $this->app->instance(ExceptionHandler::class, $exceptionHandler);
+
+        $patreonService = $this->createMockPublic(PatreonServiceInterface::class);
+        $patreonService->method('loadCampaignBenefits')->willReturn([]);
+        $patreonService->method('loadCampaignTiers')->willReturn([]);
+        $patreonService->method('loadCampaignMembers')->willReturn($members);
+        $patreonService->expects($this->exactly(count($members)))
+            ->method('applyPaidBenefitsForMember')
+            ->willThrowException(new RuntimeException('Everything is broken'));
+        $this->app->instance(PatreonServiceInterface::class, $patreonService);
+
+        // Act & Assert
+        $this->artisan(RefreshMembershipStatus::class)
+            ->expectsOutputToContain('Updated memberships of 0 users')
+            ->assertExitCode(Command::FAILURE);
     }
 }

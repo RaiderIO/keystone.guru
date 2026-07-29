@@ -6,6 +6,7 @@ use App\Models\Patreon\PatreonBenefit;
 use App\Models\Patreon\PatreonUserBenefit;
 use App\Models\Patreon\PatreonUserLink;
 use App\Models\User;
+use App\Service\Patreon\Dtos\ApplyPaidBenefitsForMemberResult;
 use App\Service\Patreon\Dtos\LinkToUserIdResult;
 use App\Service\Patreon\Logging\PatreonServiceLoggingInterface;
 use Exception;
@@ -143,7 +144,7 @@ class PatreonService implements PatreonServiceInterface
      * @param array<int, array<string, mixed>> $campaignTiers
      * @param array<string, mixed>             $member
      */
-    public function applyPaidBenefitsForMember(array $campaignBenefits, array $campaignTiers, array $member): bool
+    public function applyPaidBenefitsForMember(array $campaignBenefits, array $campaignTiers, array $member): ApplyPaidBenefitsForMemberResult
     {
         try {
             $this->log->applyPaidBenefitsForMemberStart($member['id']);
@@ -153,7 +154,7 @@ class PatreonService implements PatreonServiceInterface
             if (empty($memberEmail)) {
                 $this->log->applyPaidBenefitsForMemberEmptyMemberEmail();
 
-                return false;
+                return ApplyPaidBenefitsForMemberResult::MemberNotLinked;
             }
 
             /** @var PatreonUserLink|null $patreonUserLink */
@@ -162,21 +163,21 @@ class PatreonService implements PatreonServiceInterface
             if ($patreonUserLink === null) {
                 $this->log->applyPaidBenefitsForMemberCannotFindPatreonData();
 
-                return false;
+                return ApplyPaidBenefitsForMemberResult::MemberNotLinked;
             }
 
             $user = $patreonUserLink->user;
             if ($user === null) { // @phpstan-ignore identical.alwaysFalse
                 $this->log->applyPaidBenefitsForMemberCannotFindUserForPatreonUserLink();
 
-                return false;
+                return ApplyPaidBenefitsForMemberResult::MemberNotLinked;
             }
 
             // Exception for users that were granted their membership status
             if ($patreonUserLink->refresh_token === PatreonUserLink::PERMANENT_TOKEN) {
                 $this->log->applyPaidBenefitsForMemberUserManuallyAssignedAllBenefits();
 
-                return true;
+                return ApplyPaidBenefitsForMemberResult::Applied;
             }
 
             // We now know which user this is - update the benefits of this user
@@ -197,7 +198,7 @@ class PatreonService implements PatreonServiceInterface
             if ($unknownBenefits->isNotEmpty()) {
                 $this->log->applyPaidBenefitsForMemberUnknownPatreonBenefits($unknownBenefits->all(), $user->email);
 
-                return false;
+                return ApplyPaidBenefitsForMemberResult::UnknownBenefits;
             }
 
             // If the user has no benefits (maybe user unsubbed or didn't pay up)
@@ -222,7 +223,8 @@ class PatreonService implements PatreonServiceInterface
                 if ($removedBenefits->isNotEmpty()) {
                     foreach ($removedBenefits as $removedBenefit) {
                         // Benefits are keyed by title, so a benefit row in the database that we no longer know about
-                        // (PatreonBenefit::ALL is the source of truth) has no id to delete by
+                        // (PatreonBenefit::ALL is the source of truth) has no id to delete by. Defensive only - every
+                        // key currently seeded into patreon_benefits is present in PatreonBenefit::ALL
                         if (!isset(PatreonBenefit::ALL[$removedBenefit])) {
                             $this->log->applyPaidBenefitsForMemberUnknownPatreonBenefits([$removedBenefit], $user->email);
 
@@ -241,7 +243,7 @@ class PatreonService implements PatreonServiceInterface
             $this->log->applyPaidBenefitsForMemberEnd();
         }
 
-        return true;
+        return ApplyPaidBenefitsForMemberResult::Applied;
     }
 
     public function linkToUserAccount(User $user, string $code, string $redirectUri): LinkToUserIdResult
