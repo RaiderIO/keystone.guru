@@ -20,10 +20,11 @@ use PHPUnit\Framework\Attributes\Test;
  * be compared for equivalence. Comparisons use assertEquals (loose): the legacy path decodes
  * integral Lua numbers as floats where CBOR yields real ints.
  *
- * Fixture-based equivalence stops at the decode level: the fixture's dungeon (Mists of Tirna
- * Scithe) was dropped from the MDT addon in 6.2, so the full import pipeline rejects it in either
- * format. getDetails/getDungeonRoute equivalence therefore runs on a runtime-exported route for a
- * currently-supported dungeon instead.
+ * Equivalence on this fixture pair stops at the decode level: its dungeon (Mists of Tirna Scithe)
+ * is no longer MDT-supported, so the full import pipeline rejects it in either format.
+ * getDetails/getDungeonRoute equivalence therefore runs on a runtime-exported route for a
+ * currently-supported dungeon instead - and, on real client strings, in
+ * MDTImportStringServiceMDT2AuthoritativeTest.
  */
 #[Group('UsesLua')]
 #[Group('MDTImportStringService')]
@@ -53,7 +54,9 @@ final class MDTImportStringServiceMDT2Test extends MDTImportStringServiceTestBas
     #[Test]
     public function getDecoded_givenMdt2Fixture_exposesAddonVersion(): void
     {
-        // Act - the addonVersion drives mapping-version selection (#3380), so the new format must carry it
+        // Act - the addonVersion drives mapping-version selection (#3380), so the new format must be
+        // able to carry it. Note that MDT 6.2 itself only stamps one on a released build - see
+        // MDTImportStringServiceMDT2AuthoritativeTest for what the real client emits.
         $decoded = app()->make(MDTImportStringServiceInterface::class)
             ->setEncodedString(file_get_contents(self::MDT2_FIXTURE))
             ->getDecoded();
