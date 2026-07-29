@@ -183,4 +183,33 @@ describe('EnemyVisual circle menu teardown (#3723)', () => {
         expect(self._circleMenu).toBeNull();
         expect(setMapStateCalls[1]).toBeNull();
     });
+
+    test('_cleanupCircleMenu_givenARebuildLandsWhileTheMenuIsFadingOut_doesNotReportAReopenableMenu', () => {
+        // Arrange: the menu opened normally, then the user closed it - the close/select callback's
+        // default fadeOut=true call, which queues cleanupFn 500ms out and leaves _circleMenu non-null
+        // in the meantime
+        const {self, setMapStateCalls} = makeOpenCircleMenu();
+        vi.advanceTimersByTime(1000);
+        EnemyVisual.prototype._cleanupCircleMenu.call(self, true);
+        expect(setMapStateCalls).toHaveLength(1);
+
+        // Act: a rebuild lands inside that 500ms window - killzone:attached, overpulled:changed, an
+        // Echo object:changed - and buildVisual() calls this exact form to tear down before rebuilding
+        const hadCircleMenu = EnemyVisual.prototype._cleanupCircleMenu.call(self, false);
+
+        // Assert: not reported as an interrupted, reopenable menu (#3730) - the menu the user just
+        // dismissed must not be treated as one buildVisual() should put back afterwards. Nothing about
+        // the already-queued fade-out is disturbed either.
+        expect(hadCircleMenu).toBe(false);
+        expect(document.getElementById('map_enemy_raid_marker_radial_42')).not.toBeNull();
+        expect(setMapStateCalls).toHaveLength(1);
+
+        // Act: the original fade-out still completes on its own
+        vi.advanceTimersByTime(1000);
+
+        // Assert
+        expect(document.getElementById('map_enemy_raid_marker_radial_42')).toBeNull();
+        expect(self._circleMenu).toBeNull();
+        expect(setMapStateCalls[1]).toBeNull();
+    });
 });

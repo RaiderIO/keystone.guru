@@ -30,6 +30,10 @@ class EnemyVisual extends Signalable {
         this.cachedRadius = 0;
 
         this._circleMenu = null;
+        // True for the entire 500ms fade-out queued by _cleanupCircleMenu(true) - the window in which
+        // _circleMenu is still non-null (nothing else marks a menu that is on its way out rather than
+        // open) but must not be treated as reopenable by buildVisual() (#3730).
+        this._circleMenuClosing = false;
 
         // Can be set to force the building of a visual when it's shown again
         this._forceBuildVisualOnShow = false;
@@ -325,6 +329,11 @@ class EnemyVisual extends Signalable {
 
     /**
      * Cleans up the circle menu, removing it from the object completely.
+     *
+     * A no-op while the menu is already mid fade-out (a previous call already queued cleanupFn below):
+     * without this, buildVisual() calling in here to tear down for a rebuild would see a menu the user
+     * is actively closing as one that just got interrupted, and put it right back afterwards (#3730).
+     * The already-queued cleanupFn is left alone to finish the teardown once its delay elapses.
      * @param fadeOut {boolean}
      * @return true if the menu was cleaned up, false if it was not
      * @private
@@ -334,7 +343,7 @@ class EnemyVisual extends Signalable {
 
         let self = this;
 
-        let shouldCleanUp = self._circleMenu !== null;
+        let shouldCleanUp = self._circleMenu !== null && !self._circleMenuClosing;
 
         if (shouldCleanUp) {
             // Remove any stray tooltip bubbles left over from hovering the circle menu items.
@@ -371,6 +380,7 @@ class EnemyVisual extends Signalable {
                 // nulled here, nothing could ever end that state again (#3723).
                 $radial.remove().dequeue();
                 self._circleMenu = null;
+                self._circleMenuClosing = false;
 
                 // Only stop the map state at this point - and only if it is still ours. The menu can
                 // only be opened while no map state is active, but the user can start one while it is
@@ -396,6 +406,7 @@ class EnemyVisual extends Signalable {
             // length check used to stand in for), and jQuery's queue drains on a detached element
             // just fine - it is keyed off the element's data, not off the document tree.
             if (fadeOut && $radial.length > 0 && document.contains($radial[0])) {
+                self._circleMenuClosing = true;
                 $radial.delay(500).queue(cleanupFn);
             } else {
                 cleanupFn();
