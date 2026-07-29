@@ -13,34 +13,20 @@ use Illuminate\Support\Collection;
 
 trait GeneratesDungeonRoutes
 {
+    use ProvidesDungeon;
+
     protected function createNonFacadeDungeonRouteWithEnemies(): DungeonRoute
     {
-        // Iterate over every challenge-mode dungeon (shuffled for randomness) instead of drawing a
-        // single random dungeon a limited number of times. The old approach re-sampled with
-        // Dungeon::inRandomOrder()->first() and gave up after 20 tries, so it could repeatedly draw
-        // unsuitable dungeons and throw even when a suitable one existed - an intermittent CI flake.
-        $dungeons = Dungeon::whereNotNull('challenge_mode_id')->with('floors')->get()->shuffle();
+        [$dungeon, $mappingVersion] = $this->findDungeon(
+            facadeEnabled: false,
+            challengeMode: true,
+            minEnemies:    1,
+        );
 
-        foreach ($dungeons as $dungeon) {
-            /** @var Dungeon $dungeon */
-            $mappingVersion = $dungeon->getCurrentMappingVersion();
-
-            if (
-                $mappingVersion === null ||
-                $mappingVersion->facade_enabled ||
-                $dungeon->floors->isEmpty() ||
-                $mappingVersion->enemies()->count() === 0
-            ) {
-                continue;
-            }
-
-            return DungeonRoute::factory()->create([
-                'dungeon_id'         => $dungeon->id,
-                'mapping_version_id' => $mappingVersion->id,
-            ]);
-        }
-
-        throw new \RuntimeException('Unable to find a non-facade dungeon with enemies');
+        return DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
     }
 
     /**

@@ -8,12 +8,14 @@ use App\Repositories\Database\Npc\NpcRepository;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Feature\Fixtures\DungeonFixtures;
+use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('NpcRepository')]
 final class NpcRepositoryTest extends PublicTestCase
 {
+    use ProvidesDungeon;
+
     private NpcRepository $repository;
 
     #[\Override]
@@ -28,7 +30,7 @@ final class NpcRepositoryTest extends PublicTestCase
     public function getInUseNpcs_givenMappingVersion_returnsNonEmptyCollection(): void
     {
         // Arrange
-        $dungeon = DungeonFixtures::getDungeonWithCurrentMappingVersionWithEnemies();
+        $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
 
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         $this->assertNotNull($mappingVersion, 'No current mapping version found for test dungeon.');
@@ -45,7 +47,7 @@ final class NpcRepositoryTest extends PublicTestCase
     public function getInUseNpcs_givenMappingVersion_returnsOnlyNpcsForThatDungeon(): void
     {
         // Arrange
-        $dungeon = DungeonFixtures::getDungeonWithCurrentMappingVersionWithEnemies();
+        $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
 
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         $this->assertNotNull($mappingVersion, 'No current mapping version found for test dungeon.');
@@ -67,7 +69,7 @@ final class NpcRepositoryTest extends PublicTestCase
     public function getInUseNpcIds_givenMappingVersion_returnsCollectionOfIntegers(): void
     {
         // Arrange
-        $dungeon = DungeonFixtures::getDungeonWithCurrentMappingVersionWithEnemies();
+        $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
 
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         $this->assertNotNull($mappingVersion, 'No current mapping version found for test dungeon.');
@@ -87,7 +89,7 @@ final class NpcRepositoryTest extends PublicTestCase
     public function getInUseNpcIds_givenMappingVersion_alwaysIncludesBrackenhideGnollId(): void
     {
         // Arrange — the Brackenhide Gnoll (194373) is hardcoded into getInUseNpcIds for Witherling conversion
-        $dungeon = DungeonFixtures::getDungeonWithCurrentMappingVersionWithEnemies();
+        $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
 
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         $this->assertNotNull($mappingVersion, 'No current mapping version found for test dungeon.');
@@ -103,7 +105,7 @@ final class NpcRepositoryTest extends PublicTestCase
     public function getInUseNpcIds_givenPreloadedNpcCollection_usesItInsteadOfQuerying(): void
     {
         // Arrange
-        $dungeon = DungeonFixtures::getDungeonWithCurrentMappingVersionWithEnemies();
+        $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
 
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         $this->assertNotNull($mappingVersion, 'No current mapping version found for test dungeon.');

@@ -43,6 +43,8 @@ docker-compose/mysql-combatlog
 docker-compose/redis-data
 # Local restores of production database dumps
 docker-compose/mysql-prod*/
+# Backups taken before an in-place MySQL data dir upgrade (#3717)
+docker-compose/mysql*-upgrade-bak/
 
 # AI
 .ladebugermcp/

@@ -18,6 +18,22 @@ Branch formats are as follows:
 - In the main checkout, commits should not be done unless explicitly asked (see the worktree
   exception below).
 
+### Commit subjects start with `#`, which git silently eats on rebase
+Because subjects here begin with the issue number (`#3722 Fix the thing`), and git treats a line
+starting with `#` as a **comment** whenever it re-reads a message through the editor path, any
+`git rebase --continue` after a conflict strips the subject and promotes the first body paragraph
+in its place. `git commit -F <file>` does *not* strip comments, so the original commit is fine and
+only the rebase is affected — which makes it easy to miss.
+
+- Amend or re-create such a commit with `--cleanup=verbatim`:
+  `git commit --amend --cleanup=verbatim -F <msgfile>`.
+- After any rebase that hit a conflict, check `git log --oneline` and repair a mangled subject
+  before pushing.
+- To rewrite a commit that isn't `HEAD` without interactive rebase (unsupported here), mark it
+  first: `git branch -f save HEAD`, `git reset --hard <target>`, amend, then `git cherry-pick save`.
+  Note `git tag` needs `-m` in this repo (annotated tags are forced), so a branch is the easier
+  marker.
+
 ### Git worktrees
 - By default, do every task from an isolated git worktree with its own Docker `app` stack, created
   with `sh/worktree.sh create <issue>-<slug>`. Run all commands (artisan, tests, `composer run

@@ -51,7 +51,31 @@ docker compose exec -T app composer run fix
 docker compose exec -T app composer run analyse
 ```
 
+Note the `docker compose exec -T app` prefix is not optional for `composer run fix` / `analyse`:
+run on the host they abort in `vendor/composer/platform_check.php` (the host PHP is the wrong
+version).
+
 Open `http://localhost:<port>` in a browser to view the worktree's front-end.
+
+## No `node_modules` — front-end work needs one
+
+`create` does not install node modules, so `npx vitest`, `npm run development` and anything that
+resolves `puppeteer` all fail until you provide one. Hardlink the main checkout's copy (seconds,
+shares its blocks):
+
+```bash
+cp -al ../../keystone.guru/node_modules ./node_modules
+rm -rf node_modules/.cache   # the only entries cp -al cannot link (root-owned); harmless
+```
+
+A **symlink** also works for host-side commands (`npx vitest`) but NOT for anything running inside
+the `app` container — only the worktree is bind-mounted, so a symlink pointing into the main
+checkout dangles there. Use the hardlink copy if you need either. Delete it before
+`sh/worktree.sh remove`.
+
+A JS/CSS change is only visible in the worktree's browser after `npm run development` (host-side);
+the served filename is `public/js/app-<git HEAD sha>.js`, so a fresh worktree serves nothing until
+that first build.
 
 ## How the isolation works
 
