@@ -88,7 +88,7 @@ final class MDT2CodecTest extends TestCase
         $encoded = MDT2Codec::encode([1 => 3, 2 => 5, 'color' => 'ff0000']);
 
         // Assert - A3 = map of 3 pairs; 45 'color' as byte string key, 46 'ff0000' as byte string value
-        $this->assertEquals('a301030205'.'45636f6c6f72'.'46666630303030', bin2hex($this->rawCbor($encoded)));
+        $this->assertEquals('a301030205' . '45636f6c6f72' . '46666630303030', bin2hex($this->rawCbor($encoded)));
     }
 
     #[Test]
@@ -116,7 +116,7 @@ final class MDT2CodecTest extends TestCase
         // Assert - FB 3FF8...=double 1.5, F5=true, F4=false, F6=null, 22=negint -3
         $this->assertEquals(
             'a545666c6f6174fb3ff80000000000004474727565f54566616c7365f4446e756c6cf6486e6567617469766522',
-            bin2hex($this->rawCbor($encoded))
+            bin2hex($this->rawCbor($encoded)),
         );
     }
 
@@ -160,9 +160,9 @@ final class MDT2CodecTest extends TestCase
                     [1 => [5.0, 7.0], 2 => [4.0], 'color' => '4fb3ff'],
                     [1 => [9.0], 'color' => 'ff0000'],
                 ],
-                'riftOffsets'       => [],
+                'riftOffsets' => [],
             ],
-            'objects'      => [
+            'objects' => [
                 [
                     // Dense details (0-based list) and sparse details (gap at 6, 1-based keys)
                     'd' => [51.5, 37.25, 1.0, true, 'ffffff', -8.0],
@@ -171,7 +171,7 @@ final class MDT2CodecTest extends TestCase
                     'd' => [1 => 51.5, 2 => 37.25, 3 => 1.0, 4 => true, 5 => 'ffffff', 7 => 'a note'],
                 ],
             ],
-            'uid'          => 'aBcDeFgHiJ(',
+            'uid' => 'aBcDeFgHiJ(',
         ];
 
         // Act
@@ -291,10 +291,10 @@ final class MDT2CodecTest extends TestCase
     public static function decode_givenCorruptString_throwsMDT2DecodeException_Provider(): array
     {
         return [
-            'no prefix'        => ['!fBcBcAWnPXhz'],
-            'invalid base64'   => ['!~MDT2~%%%not-base64%%%'],
-            'invalid deflate'  => [sprintf('!~MDT2~%s', base64_encode('this is not a deflate stream'))],
-            'truncated cbor'   => [sprintf('!~MDT2~%s', base64_encode(gzdeflate("\xA5\x41\x61", 9)))],
+            'no prefix'       => ['!fBcBcAWnPXhz'],
+            'invalid base64'  => ['!~MDT2~%%%not-base64%%%'],
+            'invalid deflate' => [sprintf('!~MDT2~%s', base64_encode('this is not a deflate stream'))],
+            'truncated cbor'  => [sprintf('!~MDT2~%s', base64_encode(gzdeflate("\xA5\x41\x61", 9)))],
         ];
     }
 

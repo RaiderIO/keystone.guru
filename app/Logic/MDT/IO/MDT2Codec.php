@@ -57,8 +57,8 @@ final class MDT2Codec
     }
 
     /**
-     * @param array<int|string, mixed> $contents The preset as a PHP array, in the shape decode() produces
-     * @return string The full `!~MDT2~...` export string
+     * @param  array<int|string, mixed> $contents The preset as a PHP array, in the shape decode() produces
+     * @return string                   The full `!~MDT2~...` export string
      * @throws MDT2EncodeException
      */
     public static function encode(array $contents): string
@@ -149,9 +149,9 @@ final class MDT2Codec
             $cborObject instanceof HalfPrecisionFloatObject,
             $cborObject instanceof SinglePrecisionFloatObject,
             $cborObject instanceof DoublePrecisionFloatObject => (float)$cborObject->normalize(),
-            $cborObject instanceof TrueObject  => true,
-            $cborObject instanceof FalseObject => false,
-            $cborObject instanceof NullObject  => null,
+            $cborObject instanceof TrueObject                 => true,
+            $cborObject instanceof FalseObject                => false,
+            $cborObject instanceof NullObject                 => null,
             // Tags, indefinite-length items, undefined, etc. - the WoW client never emits these
             default => throw new MDT2DecodeException(sprintf('Unsupported CBOR item: %s', $cborObject::class)),
         };
@@ -167,7 +167,7 @@ final class MDT2Codec
             $cborObject instanceof NegativeIntegerObject => (int)$cborObject->getValue(),
             $cborObject instanceof ByteStringObject,
             $cborObject instanceof TextStringObject => $cborObject->getValue(),
-            default => throw new MDT2DecodeException(sprintf('Unsupported CBOR map key: %s', $cborObject::class)),
+            default                                 => throw new MDT2DecodeException(sprintf('Unsupported CBOR map key: %s', $cborObject::class)),
         };
     }
 
@@ -196,7 +196,7 @@ final class MDT2Codec
             foreach ($value as $key => $item) {
                 $mapObject->add(
                     is_int($key) ? self::intToCborObject($key) : ByteStringObject::create($key),
-                    self::toCborObject($item)
+                    self::toCborObject($item),
                 );
             }
 
@@ -208,10 +208,10 @@ final class MDT2Codec
             // Blizzard serializes Lua strings as byte strings (major type 2), never text strings
             is_string($value) => ByteStringObject::create($value),
             // Lua numbers are doubles; the client's DeserializeCBOR reads all float widths
-            is_float($value)  => DoublePrecisionFloatObject::createFromFloat($value),
-            is_bool($value)   => $value ? TrueObject::create() : FalseObject::create(),
-            $value === null   => NullObject::create(),
-            default           => throw new MDT2EncodeException(sprintf('Unsupported value type: %s', get_debug_type($value))),
+            is_float($value) => DoublePrecisionFloatObject::createFromFloat($value),
+            is_bool($value)  => $value ? TrueObject::create() : FalseObject::create(),
+            $value === null  => NullObject::create(),
+            default          => throw new MDT2EncodeException(sprintf('Unsupported value type: %s', get_debug_type($value))),
         };
     }
 

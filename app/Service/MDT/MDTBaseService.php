@@ -29,10 +29,10 @@ abstract class MDTBaseService
     }
 
     /**
-     * @param array<string, mixed> $contents
-     * @param bool                 $useMDT2Format True to encode into the MDT 6.2+ `!~MDT2~` format instead of the
-     *                                            legacy `!` format. Kept off by default until MDT drops legacy
-     *                                            import support with WoW 12.2.
+     * @param  array<string, mixed> $contents
+     * @param  bool                 $useMDT2Format True to encode into the MDT 6.2+ `!~MDT2~` format instead of the
+     *                                             legacy `!` format. Kept off by default until MDT drops legacy
+     *                                             import support with WoW 12.2.
      * @throws MDT2EncodeException
      */
     protected function encode(array $contents, bool $useMDT2Format = false): string
