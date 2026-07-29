@@ -97,7 +97,7 @@ final class MDTImportStringServiceMDT2Test extends MDTImportStringServiceTestBas
                 ->getDecoded();
 
             // Act - re-encode the same preset into the MDT2 format and run both through the full pipeline
-            $mdt2String = MDT2Codec::encode($decoded);
+            $mdt2String = (new MDT2Codec())->encode($decoded);
 
             // getDetails also proves the natively-decoded PHP array marshals into Lua's ValidateImportPreset
             $legacyDetails = $importStringService->setEncodedString($legacyString)->getDetails(collect(), collect());

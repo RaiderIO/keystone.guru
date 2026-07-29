@@ -40,7 +40,7 @@ use Throwable;
  * 0-based lists - downstream importers depend on this shape (e.g. ObjectImporter discriminates
  * dense vs sparse object details via isset($d[0])).
  */
-final class MDT2Codec
+final class MDT2Codec implements MDTStringCodecInterface
 {
     public const PREFIX = '!~MDT2~';
 
@@ -66,7 +66,7 @@ final class MDT2Codec
     /**
      * @param string $string A (potential) MDT export string, e.g. pasted user input
      */
-    public static function appliesTo(string $string): bool
+    public function appliesTo(string $string): bool
     {
         return str_starts_with(trim($string), self::PREFIX);
     }
@@ -76,7 +76,7 @@ final class MDT2Codec
      * @return string                   The full `!~MDT2~...` export string
      * @throws MDT2EncodeException
      */
-    public static function encode(array $contents): string
+    public function encode(array $contents): string
     {
         $deflated = gzdeflate((string)self::toCborObject($contents), 9);
 
@@ -91,7 +91,7 @@ final class MDT2Codec
      * @return array<int|string, mixed> The preset in the same shape the legacy decode path produces
      * @throws MDT2DecodeException
      */
-    public static function decode(string $string): array
+    public function decode(string $string): array
     {
         $string = trim($string);
 

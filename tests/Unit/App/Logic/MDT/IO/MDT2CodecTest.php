@@ -15,12 +15,21 @@ use Tests\TestCase;
 #[Group('MDT2Codec')]
 final class MDT2CodecTest extends TestCase
 {
+    private MDT2Codec $codec;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->codec = new MDT2Codec();
+    }
+
     #[Test]
     #[DataProvider('appliesTo_givenString_returnsExpectedResult_Provider')]
     public function appliesTo_givenString_returnsExpectedResult(string $string, bool $expected): void
     {
         // Act
-        $result = MDT2Codec::appliesTo($string);
+        $result = $this->codec->appliesTo($string);
 
         // Assert
         $this->assertEquals($expected, $result);
@@ -45,7 +54,7 @@ final class MDT2CodecTest extends TestCase
     public function encode_givenStringKeyedMap_producesByteStringKeyedDefiniteLengthCbor(): void
     {
         // Act
-        $encoded = MDT2Codec::encode(['a' => 1]);
+        $encoded = $this->codec->encode(['a' => 1]);
 
         // Assert - {h'61': 1} = A1 (map, 1 pair) 41 61 (byte string 'a') 01 (uint 1)
         $this->assertEquals('a1416101', bin2hex($this->rawCbor($encoded)));
@@ -55,7 +64,7 @@ final class MDT2CodecTest extends TestCase
     public function encode_givenOneBasedDenseArray_emitsCborArray(): void
     {
         // Act
-        $encoded = MDT2Codec::encode(['pulls' => [1 => 10, 2 => 20, 3 => 30]]);
+        $encoded = $this->codec->encode(['pulls' => [1 => 10, 2 => 20, 3 => 30]]);
 
         // Assert - map(1): 'pulls' => [10, 20, 30] (0x83 = array of 3)
         $this->assertEquals('a14570756c6c73830a14181e', bin2hex($this->rawCbor($encoded)));
@@ -65,7 +74,7 @@ final class MDT2CodecTest extends TestCase
     public function encode_givenZeroBasedPhpList_emitsCborArray(): void
     {
         // Act - a plain PHP list represents the same dense Lua sequence
-        $encoded = MDT2Codec::encode(['pulls' => [10, 20, 30]]);
+        $encoded = $this->codec->encode(['pulls' => [10, 20, 30]]);
 
         // Assert - identical bytes to the 1-based variant
         $this->assertEquals('a14570756c6c73830a14181e', bin2hex($this->rawCbor($encoded)));
@@ -75,7 +84,7 @@ final class MDT2CodecTest extends TestCase
     public function encode_givenSparseIntKeys_emitsCborMapWithIntKeys(): void
     {
         // Act - gap at index 6, like MDT object details tables
-        $encoded = MDT2Codec::encode([1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 7 => 7]);
+        $encoded = $this->codec->encode([1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 7 => 7]);
 
         // Assert - A6 = map of 6 pairs, keys as CBOR ints (01..05, 07)
         $this->assertEquals('a6010102020303040405050707', bin2hex($this->rawCbor($encoded)));
@@ -85,7 +94,7 @@ final class MDT2CodecTest extends TestCase
     public function encode_givenMixedKeys_emitsCborMap(): void
     {
         // Act - shaped like an MDT pull table: array part + string hash part
-        $encoded = MDT2Codec::encode([1 => 3, 2 => 5, 'color' => 'ff0000']);
+        $encoded = $this->codec->encode([1 => 3, 2 => 5, 'color' => 'ff0000']);
 
         // Assert - A3 = map of 3 pairs; 45 'color' as byte string key, 46 'ff0000' as byte string value
         $this->assertEquals('a301030205' . '45636f6c6f72' . '46666630303030', bin2hex($this->rawCbor($encoded)));
@@ -95,7 +104,7 @@ final class MDT2CodecTest extends TestCase
     public function encode_givenEmptyArray_emitsEmptyList(): void
     {
         // Act
-        $encoded = MDT2Codec::encode(['selection' => []]);
+        $encoded = $this->codec->encode(['selection' => []]);
 
         // Assert - 80 = empty array, which is how Blizzard's SerializeCBOR resolves the empty-Lua-table
         // ambiguity (see MDTImportStringServiceMDT2AuthoritativeTest's byte-for-byte round trip)
@@ -106,7 +115,7 @@ final class MDT2CodecTest extends TestCase
     public function encode_givenScalarValues_emitsExpectedCborTypes(): void
     {
         // Act
-        $encoded = MDT2Codec::encode([
+        $encoded = $this->codec->encode([
             'float'    => 1.5,
             'true'     => true,
             'false'    => false,
@@ -128,7 +137,7 @@ final class MDT2CodecTest extends TestCase
         $this->expectException(MDT2EncodeException::class);
 
         // Act
-        MDT2Codec::encode(['value' => 0x1_0000_0000]);
+        $this->codec->encode(['value' => 0x1_0000_0000]);
     }
 
     #[Test]
@@ -136,7 +145,7 @@ final class MDT2CodecTest extends TestCase
     public function encode_givenIntAtMinimalWidthBoundary_emitsCanonicalMinimalHeader(int $value, string $expectedHex): void
     {
         // Act
-        $encoded = MDT2Codec::encode(['value' => $value]);
+        $encoded = $this->codec->encode(['value' => $value]);
 
         // Assert
         $this->assertEquals($expectedHex, bin2hex($this->rawCbor($encoded)));
@@ -170,7 +179,7 @@ final class MDT2CodecTest extends TestCase
         // Act - a boundary int used as a map key, not a value (currentDungeonIdx-shaped: intToCborObject
         // encodes map keys too, per `is_int($key) ? self::intToCborObject($key) : ...`). Not a dense
         // sequence (array_keys() !== range(1, 1)), so this is a CBOR map with an int key.
-        $encoded = MDT2Codec::encode([255 => 'x']);
+        $encoded = $this->codec->encode([255 => 'x']);
 
         // Assert - A1 (map, 1 pair) 18ff (uint8 255, canonical minimal form) 4178 (byte string 'x')
         $this->assertEquals('a118ff4178', bin2hex($this->rawCbor($encoded)));
@@ -183,7 +192,7 @@ final class MDT2CodecTest extends TestCase
         $this->expectException(MDT2EncodeException::class);
 
         // Act
-        MDT2Codec::encode(['value' => new stdClass()]);
+        $this->codec->encode(['value' => new stdClass()]);
     }
 
     #[Test]
@@ -221,7 +230,7 @@ final class MDT2CodecTest extends TestCase
         ];
 
         // Act
-        $decoded = MDT2Codec::decode(MDT2Codec::encode($preset));
+        $decoded = $this->codec->decode($this->codec->encode($preset));
 
         // Assert - assertSame: keys, order, types and values must all survive the round trip
         $this->assertSame($preset, $decoded);
@@ -235,7 +244,7 @@ final class MDT2CodecTest extends TestCase
         $cbor = hex2bin('a1476f626a656374738241614162');
 
         // Act
-        $decoded = MDT2Codec::decode($this->buildMdt2String($cbor));
+        $decoded = $this->codec->decode($this->buildMdt2String($cbor));
 
         // Assert
         $this->assertSame(['objects' => ['a', 'b']], $decoded);
@@ -249,7 +258,7 @@ final class MDT2CodecTest extends TestCase
         $cbor = hex2bin('a14164a2010a0714');
 
         // Act
-        $decoded = MDT2Codec::decode($this->buildMdt2String($cbor));
+        $decoded = $this->codec->decode($this->buildMdt2String($cbor));
 
         // Assert
         $this->assertSame(['d' => [1 => 10, 7 => 20]], $decoded);
@@ -262,7 +271,7 @@ final class MDT2CodecTest extends TestCase
         $cbor = hex2bin('a1636b65796576616c7565');
 
         // Act
-        $decoded = MDT2Codec::decode($this->buildMdt2String($cbor));
+        $decoded = $this->codec->decode($this->buildMdt2String($cbor));
 
         // Assert
         $this->assertSame(['key' => 'value'], $decoded);
@@ -275,7 +284,7 @@ final class MDT2CodecTest extends TestCase
         $cbor = hex2bin('a2416101416102');
 
         // Act
-        $decoded = MDT2Codec::decode($this->buildMdt2String($cbor));
+        $decoded = $this->codec->decode($this->buildMdt2String($cbor));
 
         // Assert
         $this->assertSame(['a' => 2], $decoded);
@@ -291,7 +300,7 @@ final class MDT2CodecTest extends TestCase
         $this->expectException(MDT2DecodeException::class);
 
         // Act
-        MDT2Codec::decode($this->buildMdt2String($cbor));
+        $this->codec->decode($this->buildMdt2String($cbor));
     }
 
     #[Test]
@@ -304,7 +313,7 @@ final class MDT2CodecTest extends TestCase
         $this->expectException(MDT2DecodeException::class);
 
         // Act
-        MDT2Codec::decode($this->buildMdt2String($cbor));
+        $this->codec->decode($this->buildMdt2String($cbor));
     }
 
     #[Test]
@@ -319,7 +328,7 @@ final class MDT2CodecTest extends TestCase
         $this->expectExceptionMessageMatches('/nesting levels/');
 
         // Act
-        MDT2Codec::decode($this->buildMdt2String($cbor));
+        $this->codec->decode($this->buildMdt2String($cbor));
     }
 
     #[Test]
@@ -333,7 +342,7 @@ final class MDT2CodecTest extends TestCase
         $this->expectExceptionMessageMatches('/items/');
 
         // Act
-        MDT2Codec::decode($this->buildMdt2String($cbor));
+        $this->codec->decode($this->buildMdt2String($cbor));
     }
 
     #[Test]
@@ -347,7 +356,7 @@ final class MDT2CodecTest extends TestCase
         $this->expectExceptionMessageMatches('/inflate/');
 
         // Act
-        MDT2Codec::decode($this->buildMdt2String($cbor));
+        $this->codec->decode($this->buildMdt2String($cbor));
     }
 
     #[Test]
@@ -361,7 +370,7 @@ final class MDT2CodecTest extends TestCase
         $this->expectExceptionMessageMatches('/Trailing/');
 
         // Act
-        MDT2Codec::decode($this->buildMdt2String($cbor));
+        $this->codec->decode($this->buildMdt2String($cbor));
     }
 
     #[Test]
@@ -375,7 +384,7 @@ final class MDT2CodecTest extends TestCase
         $this->expectExceptionMessageMatches('/out of range/');
 
         // Act
-        MDT2Codec::decode($this->buildMdt2String($cbor));
+        $this->codec->decode($this->buildMdt2String($cbor));
     }
 
     #[Test]
@@ -388,7 +397,7 @@ final class MDT2CodecTest extends TestCase
         $this->expectException(MDT2DecodeException::class);
 
         // Act
-        MDT2Codec::decode($this->buildMdt2String($cbor));
+        $this->codec->decode($this->buildMdt2String($cbor));
     }
 
     #[Test]
@@ -399,7 +408,7 @@ final class MDT2CodecTest extends TestCase
         $this->expectException(MDT2DecodeException::class);
 
         // Act
-        MDT2Codec::decode($string);
+        $this->codec->decode($string);
     }
 
     /**

@@ -4,7 +4,7 @@ namespace App\Console\Commands\MDT;
 
 use App\Console\Commands\Traits\ConvertsMDTStrings;
 use App\Console\Commands\Traits\ExecutesShellCommands;
-use App\Logic\MDT\IO\MDT2Codec;
+use App\Logic\MDT\IO\MDTStringFormat;
 use Illuminate\Console\Command;
 
 class Encode extends Command
@@ -31,22 +31,20 @@ class Encode extends Command
      */
     public function handle(): void
     {
-        $string = $this->argument('string');
+        $string  = $this->argument('string');
+        $decoded = json_decode($string, true);
 
-        if ($this->option('mdt2')) {
-            $decoded = json_decode($string, true);
-
-            if (!is_array($decoded)) {
-                $this->error('The string argument must be valid JSON describing a preset');
-
-                return;
-            }
-
-            $this->info(MDT2Codec::encode($decoded));
+        if (!is_array($decoded)) {
+            $this->error('The string argument must be valid JSON describing a preset');
 
             return;
         }
 
-        $this->info($this->encode($string));
+        $format  = $this->option('mdt2') ? MDTStringFormat::MDT2 : MDTStringFormat::Legacy;
+        $encoded = $this->encode($decoded, $format);
+
+        if ($encoded !== null) {
+            $this->info($encoded);
+        }
     }
 }

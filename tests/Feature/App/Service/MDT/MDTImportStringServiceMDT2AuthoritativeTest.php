@@ -93,7 +93,7 @@ final class MDTImportStringServiceMDT2AuthoritativeTest extends MDTImportStringS
         $encodedString = self::readFixture($fixture);
 
         // Act - decode the real client string and hand the resulting array straight back to our encoder
-        $reEncoded = MDT2Codec::encode(
+        $reEncoded = (new MDT2Codec())->encode(
             app()->make(MDTImportStringServiceInterface::class)->setEncodedString($encodedString)->getDecoded(),
         );
 
