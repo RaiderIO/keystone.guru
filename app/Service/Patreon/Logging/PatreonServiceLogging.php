@@ -144,7 +144,10 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
         $this->info(__METHOD__, get_defined_vars());
     }
 
-    public function applyPaidBenefitsUnknownPatreonBenefit(string $benefit, string $email): void
+    /**
+     * @param array<int, string> $benefits
+     */
+    public function applyPaidBenefitsForMemberUnknownPatreonBenefits(array $benefits, string $email): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }

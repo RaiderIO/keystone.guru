@@ -8,6 +8,9 @@ use Throwable;
 
 class RefreshMembershipStatus extends SchedulerCommand
 {
+    /** @var int How many individual member failures are reported through the exception handler before we stop */
+    private const int MAX_REPORTED_MEMBER_FAILURES = 3;
+
     /**
      * The name and signature of the console command.
      *
@@ -62,10 +65,16 @@ class RefreshMembershipStatus extends SchedulerCommand
                 try {
                     $patreonService->applyPaidBenefitsForMember($campaignBenefits, $campaignTiers, $member);
                 } catch (Throwable $throwable) {
-                    $failedMemberIds[] = $memberId;
-
                     $this->error(sprintf('Unable to apply the paid benefits of member %s: %s', $memberId, $throwable->getMessage()));
-                    $this->reportThrowable($throwable, ['memberId' => $memberId]);
+
+                    // A systemic failure fails on every single member - reporting each one would flood the error
+                    // channels with the same throwable. The first few are enough to diagnose it, and the summary
+                    // below still names every member that failed
+                    if (count($failedMemberIds) < self::MAX_REPORTED_MEMBER_FAILURES) {
+                        $this->reportThrowable($throwable, ['memberId' => $memberId]);
+                    }
+
+                    $failedMemberIds[] = $memberId;
                 }
             }
 
