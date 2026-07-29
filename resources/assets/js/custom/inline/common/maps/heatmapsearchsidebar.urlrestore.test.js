@@ -324,6 +324,9 @@ describe('CommonMapsHeatmapsearchsidebar - restoring filters from the URL', () =
         expect(isVisible('#filter_player_spells_container')).toBe(true);
         expect(isVisible('#filter_data_type_container')).toBe(false);
         expect(searchSpy.mock.calls[0][0].params).not.toHaveProperty('dataType');
+        // The disabled -> enabled direction: the spells only reach the request once the event type enables them
+        expect(searchSpy.mock.calls[0][0].params.includePlayerSpellIds)
+            .toEqual(SPELL_IDS.map((spellId) => `${spellId}`));
     });
 
     test('activate_givenAFilteredUrl_writesBackTheSameParams', () => {
