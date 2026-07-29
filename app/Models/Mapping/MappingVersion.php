@@ -550,8 +550,13 @@ class MappingVersion extends Model
             if ($newMappingVersion->dungeon === null) {
                 return;
             }
+            // Scope by game_version_id - `version` is only unique per game version, so a dungeon with
+            // mapping versions on multiple game versions would otherwise have their `version` numbers
+            // interleaved when ordered globally, picking the wrong previous mapping version to clone from.
             /** @var EloquentCollection<int, MappingVersion> $existingMappingVersions */
-            $existingMappingVersions = $newMappingVersion->dungeon->mappingVersions()->get();
+            $existingMappingVersions = $newMappingVersion->dungeon->mappingVersions()
+                ->where('game_version_id', $newMappingVersion->game_version_id)
+                ->get();
             // Nothing to do if we don't have an older mapping version
             if ($existingMappingVersions->count() < 2) {
                 return;
