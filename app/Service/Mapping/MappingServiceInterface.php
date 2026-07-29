@@ -16,9 +16,10 @@ interface MappingServiceInterface
     ): MappingVersion;
 
     /**
-     * Creates a new mapping version for a dungeon.
+     * Creates a new mapping version for a dungeon. Always created with a null `mdt_mapping_hash` -
+     * the caller must set it once the MDT import has actually finished successfully (#3737).
      */
-    public function createNewMappingVersionFromMDTMapping(Dungeon $dungeon, ?GameVersion $gameVersion, ?string $hash): MappingVersion;
+    public function createNewMappingVersionFromMDTMapping(Dungeon $dungeon, ?GameVersion $gameVersion): MappingVersion;
 
     /**
      * Resolves the mapping version that best matches an imported MDT string's `addonVersion`, so a route
