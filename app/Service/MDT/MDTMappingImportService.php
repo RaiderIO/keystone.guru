@@ -126,6 +126,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 // The partially-imported mapping version is not safe to leave behind as the dungeon's
                 // current one - cascading delete removes whatever enemies/packs/etc. made it in before the
                 // failure, and the next run retries against the still-null hash instead of silently no-oping.
+                $this->log->importMappingVersionFromMDTDeletePartialMappingVersion($newMappingVersion->version, $newMappingVersion->id, $throwable);
+
                 $newMappingVersion->delete();
 
                 throw $throwable;
