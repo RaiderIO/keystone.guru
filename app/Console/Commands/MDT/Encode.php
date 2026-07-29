@@ -34,7 +34,15 @@ class Encode extends Command
         $string = $this->argument('string');
 
         if ($this->option('mdt2')) {
-            $this->info(MDT2Codec::encode(json_decode($string, true)));
+            $decoded = json_decode($string, true);
+
+            if (!is_array($decoded)) {
+                $this->error('The string argument must be valid JSON describing a preset');
+
+                return;
+            }
+
+            $this->info(MDT2Codec::encode($decoded));
 
             return;
         }

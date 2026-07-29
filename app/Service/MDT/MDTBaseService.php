@@ -63,9 +63,10 @@ abstract class MDTBaseService
                 return MDT2Codec::decode($string);
             } catch (MDT2DecodeException $mdt2DecodeException) {
                 // The prefix matched, so this string genuinely claimed to be an MDT export - always worth
-                // reporting, mirroring what ConvertsMDTStrings::transform() does for plausible legacy strings
+                // reporting, mirroring what ConvertsMDTStrings::transform() does for plausible legacy strings.
+                // Truncated: the input is unvalidated user input of arbitrary size
                 logger()->error($mdt2DecodeException->getMessage(), [
-                    'string' => $string,
+                    'string' => substr($string, 0, 2048),
                 ]);
 
                 return null;

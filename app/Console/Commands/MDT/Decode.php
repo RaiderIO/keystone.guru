@@ -37,12 +37,19 @@ class Decode extends Command
         // MDT 6.2+ strings are decoded natively in PHP - cli_weakauras_parser only handles the legacy format
         if (MDT2Codec::appliesTo($string)) {
             try {
-                $this->info(json_encode(MDT2Codec::decode($string)));
+                // CBOR byte strings may contain non-UTF-8 binary - substitute rather than have json_encode fail
+                $json = json_encode(MDT2Codec::decode($string), JSON_INVALID_UTF8_SUBSTITUTE | JSON_PARTIAL_OUTPUT_ON_ERROR);
+
+                if ($json === false) {
+                    $this->error('Unable to encode the decoded preset as JSON');
+                } else {
+                    $this->info($json);
+                }
             } catch (MDT2DecodeException $mdt2DecodeException) {
                 $this->error($mdt2DecodeException->getMessage());
 
                 logger()->error($mdt2DecodeException->getMessage(), [
-                    'string' => $string,
+                    'string' => substr($string, 0, 2048),
                 ]);
             }
 

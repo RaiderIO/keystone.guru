@@ -262,6 +262,77 @@ final class MDT2CodecTest extends TestCase
     }
 
     #[Test]
+    public function decode_givenDeeplyNestedPayload_throwsMDT2DecodeException(): void
+    {
+        // Arrange - 200 nested single-element arrays (0x81) around a uint; cbor-php's recursive
+        // decoder would segfault on extreme depths, so the iterative pre-scan must reject this
+        $cbor = str_repeat("\x81", 200) . "\x01";
+
+        // Assert
+        $this->expectException(MDT2DecodeException::class);
+        $this->expectExceptionMessageMatches('/nesting levels/');
+
+        // Act
+        MDT2Codec::decode($this->buildMdt2String($cbor));
+    }
+
+    #[Test]
+    public function decode_givenTooManyItems_throwsMDT2DecodeException(): void
+    {
+        // Arrange - a flat array of 300,000 one-byte uints, comfortably over the item cap
+        $cbor = "\x9A" . pack('N', 300000) . str_repeat("\x01", 300000);
+
+        // Assert
+        $this->expectException(MDT2DecodeException::class);
+        $this->expectExceptionMessageMatches('/items/');
+
+        // Act
+        MDT2Codec::decode($this->buildMdt2String($cbor));
+    }
+
+    #[Test]
+    public function decode_givenOversizedPayload_throwsMDT2DecodeException(): void
+    {
+        // Arrange - decompresses to 2 MiB, over the 1 MiB cap, from a tiny compressed string
+        $cbor = str_repeat("\x00", 2097152);
+
+        // Assert
+        $this->expectException(MDT2DecodeException::class);
+        $this->expectExceptionMessageMatches('/inflate/');
+
+        // Act
+        MDT2Codec::decode($this->buildMdt2String($cbor));
+    }
+
+    #[Test]
+    public function decode_givenTrailingBytes_throwsMDT2DecodeException(): void
+    {
+        // Arrange - an empty map followed by a stray byte
+        $cbor = hex2bin('a001');
+
+        // Assert
+        $this->expectException(MDT2DecodeException::class);
+        $this->expectExceptionMessageMatches('/Trailing/');
+
+        // Act
+        MDT2Codec::decode($this->buildMdt2String($cbor));
+    }
+
+    #[Test]
+    public function decode_givenUint64BeyondPhpIntRange_throwsMDT2DecodeException(): void
+    {
+        // Arrange - {h'a': 2^64-1}; a bare (int) cast would silently saturate to PHP_INT_MAX
+        $cbor = hex2bin('a141611bffffffffffffffff');
+
+        // Assert
+        $this->expectException(MDT2DecodeException::class);
+        $this->expectExceptionMessageMatches('/out of range/');
+
+        // Act
+        MDT2Codec::decode($this->buildMdt2String($cbor));
+    }
+
+    #[Test]
     public function decode_givenNonMapRoot_throwsMDT2DecodeException(): void
     {
         // Arrange - hand-built CBOR: bare uint 42

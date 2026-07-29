@@ -45,8 +45,24 @@ final class MDT2Codec
 {
     public const PREFIX = '!~MDT2~';
 
-    /** Cap on the decompressed payload size to guard the public import endpoint against deflate bombs */
-    private const MAX_DECOMPRESSED_BYTES = 33554432;
+    /**
+     * Cap on the decompressed payload size to guard the public import endpoint against deflate
+     * bombs. Real MDT strings decompress to a few dozen KB, so 1 MiB is ample headroom.
+     */
+    private const MAX_DECOMPRESSED_BYTES = 1048576;
+
+    /**
+     * Cap on the CBOR nesting depth. The WoW client itself refuses to (de)serialize beyond 100
+     * levels; more importantly, cbor-php's decoder recurses per level and would exhaust the C
+     * stack (segfault, uncatchable) on a deeply nested crafted payload without this pre-check.
+     */
+    private const MAX_DEPTH = 128;
+
+    /**
+     * Cap on the total CBOR item count - cbor-php materializes an object per item, so an
+     * unbounded flat payload would exhaust PHP's memory_limit from a KB-scale request.
+     */
+    private const MAX_ITEMS = 262144;
 
     /**
      * @param string $string A (potential) MDT export string, e.g. pasted user input
@@ -96,6 +112,8 @@ final class MDT2Codec
             throw new MDT2DecodeException('Unable to inflate payload (not a raw DEFLATE stream, or too large)');
         }
 
+        self::assertSafeCborPayload($inflated);
+
         try {
             $cborObject = Decoder::create()->decode(StringStream::create($inflated));
         } catch (Throwable $throwable) {
@@ -142,7 +160,7 @@ final class MDT2Codec
 
         return match (true) {
             $cborObject instanceof UnsignedIntegerObject,
-            $cborObject instanceof NegativeIntegerObject => (int)$cborObject->getValue(),
+            $cborObject instanceof NegativeIntegerObject => self::intFromCborObject($cborObject),
             // Blizzard emits byte strings; accept text strings too, mirroring DeserializeCBOR's leniency
             $cborObject instanceof ByteStringObject,
             $cborObject instanceof TextStringObject => $cborObject->getValue(),
@@ -158,17 +176,137 @@ final class MDT2Codec
     }
 
     /**
+     * Note: float map keys are rejected here (they surface as float objects) - the legacy JSON
+     * path would have turned them into string keys, but real presets never use them and the WoW
+     * client itself cannot round-trip them faithfully either.
+     *
      * @throws MDT2DecodeException
      */
     private static function keyFromCborObject(CBORObject $cborObject): int|string
     {
         return match (true) {
             $cborObject instanceof UnsignedIntegerObject,
-            $cborObject instanceof NegativeIntegerObject => (int)$cborObject->getValue(),
+            $cborObject instanceof NegativeIntegerObject => self::intFromCborObject($cborObject),
             $cborObject instanceof ByteStringObject,
             $cborObject instanceof TextStringObject => $cborObject->getValue(),
             default                                 => throw new MDT2DecodeException(sprintf('Unsupported CBOR map key: %s', $cborObject::class)),
         };
+    }
+
+    /**
+     * @throws MDT2DecodeException When the value does not fit in a PHP int (a bare (int) cast
+     *                             would silently saturate to PHP_INT_MAX on crafted uint64 input)
+     */
+    private static function intFromCborObject(UnsignedIntegerObject|NegativeIntegerObject $cborObject): int
+    {
+        $value = $cborObject->getValue();
+
+        if ((string)(int)$value !== $value) {
+            throw new MDT2DecodeException(sprintf('CBOR integer out of range: %s', $value));
+        }
+
+        return (int)$value;
+    }
+
+    /**
+     * Validates the raw CBOR payload iteratively before it is handed to cbor-php: its decoder
+     * recurses once per nesting level (a deeply nested payload would exhaust the C stack - an
+     * uncatchable segfault) and materializes an object per item with no ceiling. This walk only
+     * reads item headers, so it is allocation-free and enforces MAX_DEPTH/MAX_ITEMS up front.
+     * It also rejects indefinite-length items and trailing garbage, neither of which the WoW
+     * client produces.
+     *
+     * @throws MDT2DecodeException
+     */
+    private static function assertSafeCborPayload(string $bytes): void
+    {
+        $length    = strlen($bytes);
+        $position  = 0;
+        $itemCount = 0;
+        /** @var array<int, int|float> $stack Remaining direct children per open container */
+        $stack = [];
+
+        do {
+            if ($position >= $length) {
+                throw new MDT2DecodeException('Truncated CBOR payload');
+            }
+
+            $initialByte    = ord($bytes[$position++]);
+            $majorType      = $initialByte >> 5;
+            $additionalInfo = $initialByte & 0x1F;
+
+            if ($additionalInfo === 31) {
+                throw new MDT2DecodeException('Indefinite-length CBOR items are not supported');
+            }
+
+            if ($additionalInfo > 27) {
+                throw new MDT2DecodeException('Invalid CBOR additional information');
+            }
+
+            $value = $additionalInfo;
+            if ($additionalInfo >= 24) {
+                // For major type 7 these bytes are the float/simple payload rather than a length -
+                // the byte count consumed is identical, and $value goes unused there
+                $extraBytes = 1 << ($additionalInfo - 24);
+                if ($position + $extraBytes > $length) {
+                    throw new MDT2DecodeException('Truncated CBOR payload');
+                }
+
+                $value = 0;
+                for ($i = 0; $i < $extraBytes; $i++) {
+                    $value = $value * 256 + ord($bytes[$position++]);
+                }
+            }
+
+            if (++$itemCount > self::MAX_ITEMS) {
+                throw new MDT2DecodeException(sprintf('CBOR payload exceeds %d items', self::MAX_ITEMS));
+            }
+
+            // This item is one child of the currently open container (if any)
+            $openContainers = count($stack);
+            if ($openContainers > 0) {
+                $stack[$openContainers - 1]--;
+            }
+
+            switch ($majorType) {
+                case 2: // byte string
+                case 3: // text string
+                    if ($position + $value > $length) {
+                        throw new MDT2DecodeException('Truncated CBOR payload');
+                    }
+
+                    $position += $value;
+                    break;
+                case 4: // array
+                case 5: // map
+                case 6: // tag (fromCborObject rejects it later; walk it correctly here)
+                    $children = match ($majorType) {
+                        4       => $value,
+                        5       => $value * 2,
+                        default => 1,
+                    };
+
+                    if ($children > 0) {
+                        if ($openContainers >= self::MAX_DEPTH) {
+                            throw new MDT2DecodeException(sprintf('CBOR payload exceeds %d nesting levels', self::MAX_DEPTH));
+                        }
+
+                        $stack[] = $children;
+                    }
+
+                    break;
+                default: // ints (0/1) and floats/simple values (7) carry no further payload
+                    break;
+            }
+
+            while ($stack !== [] && end($stack) === 0) {
+                array_pop($stack);
+            }
+        } while ($stack !== []);
+
+        if ($position !== $length) {
+            throw new MDT2DecodeException('Trailing bytes after CBOR payload');
+        }
     }
 
     /**

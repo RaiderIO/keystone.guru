@@ -3,6 +3,7 @@
 namespace Tests\Feature\App\Service\MDT;
 
 use App\Logic\MDT\IO\MDT2Codec;
+use App\Models\KillZone\KillZone;
 use App\Models\MDTImport;
 use App\Service\MDT\MDTImportStringServiceInterface;
 use Illuminate\Support\Facades\Artisan;
@@ -66,10 +67,22 @@ final class MDTImportStringServiceMDT2Test extends MDTImportStringServiceTestBas
     {
         $dungeonRoute = null;
         $legacyString = null;
+        $mdt2String   = null;
 
         try {
-            // Arrange - a runtime-generated route, exported through the existing (legacy) export path
-            $dungeonRoute = $this->getMDTCompatibleNonFacadeDungeonRoute();
+            // Arrange - a runtime-generated route WITH actual pulls, exported through the existing
+            // (legacy) export path - empty routes would make the pull/enemy assertions below vacuous
+            $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies();
+            $randomEnemy  = $this->getSafeMdtEnemies($dungeonRoute)->first();
+
+            foreach (range(1, 3) as $index) {
+                KillZone::factory()->withEnemies($randomEnemy)->create([
+                    'dungeon_route_id' => $dungeonRoute->id,
+                    'index'            => $index,
+                    'description'      => null,
+                ]);
+            }
+
             $legacyString = $this->exportDungeonRouteToString($dungeonRoute);
 
             $importStringService = app()->make(MDTImportStringServiceInterface::class);
@@ -88,9 +101,13 @@ final class MDTImportStringServiceMDT2Test extends MDTImportStringServiceTestBas
             $legacyImportedRoute = $this->importStringToDungeonRoute($legacyString);
             $mdt2ImportedRoute   = $this->importStringToDungeonRoute($mdt2String);
 
+            $legacyImportedRoute->load(['killZones.killZoneEnemies']);
+            $mdt2ImportedRoute->load(['killZones.killZoneEnemies']);
+
             // Assert - our encoder's output is consumable end-to-end and equivalent to the legacy format
             $this->assertEquals($legacyDetails->toArray(), $mdt2Details->toArray());
             $this->assertEquals($legacyImportedRoute->dungeon_id, $mdt2ImportedRoute->dungeon_id);
+            $this->assertNotEmpty($legacyImportedRoute->killZones, 'The exported route must have pulls or this test is vacuous');
             $this->assertCount($legacyImportedRoute->killZones->count(), $mdt2ImportedRoute->killZones);
             $this->assertEquals(
                 $legacyImportedRoute->killZones->map(fn($killZone) => $killZone->killZoneEnemies->count()),
@@ -98,10 +115,7 @@ final class MDTImportStringServiceMDT2Test extends MDTImportStringServiceTestBas
             );
         } finally {
             $dungeonRoute?->delete();
-            if ($legacyString !== null) {
-                MDTImport::query()->where('import_string', $legacyString)->delete();
-                MDTImport::query()->where('import_string', 'LIKE', sprintf('%s%%', MDT2Codec::PREFIX))->delete();
-            }
+            MDTImport::query()->whereIn('import_string', array_filter([$legacyString, $mdt2String]))->delete();
         }
     }
 
