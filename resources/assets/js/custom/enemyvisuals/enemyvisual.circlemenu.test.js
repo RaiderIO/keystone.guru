@@ -212,4 +212,29 @@ describe('EnemyVisual circle menu teardown (#3723)', () => {
         expect(self._circleMenu).toBeNull();
         expect(setMapStateCalls[1]).toBeNull();
     });
+
+    test('_cleanupCircleMenu_givenTheRebuildDetachesTheRadialWhileClosing_stillEndsTheMapStateLater', () => {
+        // Arrange: the menu opened normally, then the user closed it, queuing the 500ms fade-out
+        const {self, container, setMapStateCalls} = makeOpenCircleMenu();
+        vi.advanceTimersByTime(1000);
+        EnemyVisual.prototype._cleanupCircleMenu.call(self, true);
+        expect(setMapStateCalls).toHaveLength(1);
+
+        // Act: a rebuild lands inside that window - the no-op call from #3730 above - and then goes
+        // on to replace the enemy's icon HTML entirely (buildVisual() -> layer.setIcon()), which
+        // detaches the still-fading radial from the document exactly like Leaflet destroying the
+        // enemy's icon natively does elsewhere (#3723)
+        EnemyVisual.prototype._cleanupCircleMenu.call(self, false);
+        container.remove();
+
+        // Act: the original fade-out's queue still runs against the now-detached radial
+        vi.advanceTimersByTime(1000);
+
+        // Assert: cleanupFn must not have been skipped just because its target left the document -
+        // the plugin's own jQuery set (self._circleMenu) stays valid regardless (#3723), so the map
+        // state this menu started still gets ended, exactly once
+        expect(self._circleMenu).toBeNull();
+        expect(setMapStateCalls).toHaveLength(2);
+        expect(setMapStateCalls[1]).toBeNull();
+    });
 });
