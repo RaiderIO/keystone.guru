@@ -18,6 +18,8 @@ use Illuminate\Support\Str;
  * @var Collection<int, Dungeon>     $gameVersionDungeons
  * @var Season                       $currentSeason
  * @var Season|null                  $nextSeason
+ * @var Season|null                  $dungeonContextNextSeason
+ * @var string|null                  $dungeonContextNextSeasonLink
  * @var bool                         $forceShrink
  * @var bool                         $showMore
  * @var bool                         $showDungeonContext
@@ -119,6 +121,9 @@ $isActiveRoute = function (string $route, bool $strict = false) {
                         'useAbbreviation' => true,
                         'selectable' => true,
                         'showMore' => $showMore,
+                        // Only set when the next season is close enough to be advertised (#3761)
+                        'nextSeason' => $dungeonContextNextSeason,
+                        'nextSeasonLink' => $dungeonContextNextSeasonLink,
                         'selected' => Dungeon::getUserOrDefaultDungeon()->key,
                         // "What's easy this week" ease tiers (archon.gg), resolved in HeaderComposer.
                         'easeTiers' => $dungeonContextEaseTiers ?? collect(),
