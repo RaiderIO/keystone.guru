@@ -3,6 +3,7 @@
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Season;
 use App\Service\Expansion\ExpansionService;
 use Illuminate\Support\Collection;
 
@@ -11,6 +12,8 @@ use Illuminate\Support\Collection;
  * @var Expansion                $expansion
  * @var Collection<int, Dungeon> $dungeons
  * @var boolean                  $useAbbreviation
+ * @var Season|null              $nextSeason
+ * @var string|null              $nextSeasonLink
  */
 
 $dungeons        ??= $expansion->dungeonsAndRaids()->active()->get();
@@ -23,6 +26,11 @@ $subtextFn       ??= null;
 $width           ??= null;
 $showMore        ??= false;
 $maxColCount     ??= 8;
+// The upcoming season is shown as an extra card next to the dungeons, leading to a selection of just
+// its dungeons - it never takes the place of the current season's dungeons (#3761). Only set when the
+// season is close enough to its start to be advertised.
+$nextSeason     ??= null;
+$nextSeasonLink ??= null;
 // Ease tiers ("what's easy this week") - a Collection<affixGroupId, Collection<dungeonId, tier>>
 $easeTiers         ??= collect();
 $currentAffixGroup ??= null;
@@ -58,6 +66,19 @@ $currentAffixGroup ??= null;
             'isSelected' => !$hasSelectedDungeon,
             'imageUrl' => $gameVersion->expansion->getWallpaperUrl(),
             'imageAlt' => __($gameVersion->expansion->name),
+            'width' => $width,
+        ])
+    <?php
+    }
+
+    if($nextSeason !== null && $nextSeasonLink !== null) {
+        ?>
+        @include('common.dungeon.list.card', [
+            'link' => $nextSeasonLink,
+            'title' => __('view_common.dungeon.list.next_season'),
+            'isSelected' => false,
+            'imageUrl' => $nextSeason->expansion->getWallpaperUrl(),
+            'imageAlt' => __($nextSeason->expansion->name),
             'width' => $width,
         ])
     <?php

@@ -57,6 +57,31 @@ try {
 
 `DungeonRoute` has no soft-deletes, so `delete()` truly removes the row.
 
+### `SeederModel` models silently refuse `$model->delete()`
+
+Models using the `SeederModel` trait (`Season`, `SeasonDungeon`, `Dungeon`, `Expansion`, …) register a
+`deleting` hook that returns `false` unless the **authenticated** user is an admin. `$model->delete()`
+then does nothing and returns `false` — no exception — so a `finally` that looks correct leaves the row
+behind and poisons the shared DB for every later test (a leftover `Season` with no dungeons breaks any
+test doing `Season::orderByDesc('id')->first()->dungeons()`).
+
+Clean these up through the query builder, which does not fire model events:
+
+```php
+} finally {
+    Season::query()->whereKey($season->id)->delete();
+    // No model events fired, so laravel-model-caching does not invalidate on its own
+    new Season()->flushCache();
+}
+```
+
+Two caches make freshly created/deleted rows invisible in tests, and neither is the `array` store
+`phpunit.xml` configures:
+- **laravel-model-caching** (every `CacheModel`) — flush with `new Model()->flushCache()`.
+- **`RemembersToFile`** (`ViewService::cachedGlobal`, map context, …) writes to `Cache::store('tmp_file')`,
+  a **file** store that survives between test runs. If your test touches `ViewService`, flush it:
+  `Cache::store('tmp_file')->flush()`.
+
 ## Creating users & roles (Laratrust)
 
 - **Admin**: `User::findOrFail(1)` — the seeded admin. Assert it defensively:

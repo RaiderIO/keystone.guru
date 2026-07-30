@@ -2,13 +2,18 @@
 
 namespace Tests\Feature\App\Service\Dungeon\DungeonService;
 
+use App\Models\Dungeon;
+use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
+use App\Models\SeasonDungeon;
 use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Dungeon\DungeonService;
+use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\Dungeon\Logging\DungeonServiceLoggingInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -32,17 +37,16 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
     }
 
     /**
-     * Scenario: a season has been seeded before its start date, so getNextSeason() returns a season
-     * instead of null. Reading its dungeons lazily throws, and because HeaderComposer calls this for
-     * the site header that takes down every page rendering layouts/sitepage.blade.php (#3746).
+     * Scenario: a season has been seeded before its start date. Its dungeons are not playable yet, so the
+     * selector must keep showing the current season's dungeons instead of swapping over to them (#3761).
+     *
+     * The seasons are deliberately loaded as a collection: preventLazyLoading only enforces on models
+     * loaded as part of a multi-row result, which is how the site header used to be taken down (#3746).
      */
     #[Test]
-    public function getDungeonsForGameVersion_givenAnUpcomingSeason_returnsThatSeasonsDungeons(): void
+    public function getDungeonsForGameVersion_givenAnUpcomingSeason_returnsTheCurrentSeasonsDungeons(): void
     {
-        // Arrange - both seasons come out of a multi-row result on purpose. That is what
-        // SeasonService hands back, and preventLazyLoading only enforces on models loaded as part of
-        // a collection - a single-model load is exempt, which is why the current-season fallback
-        // never tripped this.
+        // Arrange
         $seasons = Season::query()->orderByDesc('id')->limit(2)->get();
 
         $this->assertCount(2, $seasons, 'Need at least two seeded seasons to load them as a collection');
@@ -61,16 +65,14 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
 
         // Assert
         $this->assertEqualsCanonicalizing(
-            $nextSeason->dungeons()->pluck('dungeons.id')->all(),
+            $currentSeason->dungeons()->pluck('dungeons.id')->all(),
             $dungeons->pluck('id')->all(),
         );
     }
 
     /**
-     * Scenario: no season has been seeded ahead of its start date, so the method falls back to the
-     * current season. In production that season is loaded as a single model and the guard exempts
-     * it, which is why this path never crashed - it is loaded as a collection here so the fallback
-     * is covered by the same guarantee as the branch above.
+     * Scenario: no season has been seeded ahead of its start date, so there is nothing that could take
+     * over the selector to begin with.
      */
     #[Test]
     public function getDungeonsForGameVersion_givenNoUpcomingSeason_returnsTheCurrentSeasonsDungeons(): void
@@ -93,5 +95,84 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
             $currentSeason->dungeons()->pluck('dungeons.id')->all(),
             $dungeons->pluck('id')->all(),
         );
+    }
+
+    /**
+     * Scenario: an expansion without an active season - the game version's expansion is all we can show.
+     */
+    #[Test]
+    public function getDungeonsForGameVersion_givenNoCurrentSeason_returnsTheExpansionsDungeons(): void
+    {
+        // Arrange
+        $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
+        $seasonService->method('getCurrentSeason')->willReturn(null);
+        $seasonService->method('getNextSeason')->willReturn(null);
+
+        $gameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+
+        // Act
+        $dungeons = $this->buildService($seasonService)->getDungeonsForGameVersion($gameVersion);
+
+        // Assert
+        $this->assertEqualsCanonicalizing(
+            $gameVersion->expansion->dungeons->pluck('id')->all(),
+            $dungeons->pluck('id')->all(),
+        );
+    }
+
+    /**
+     * Scenario: the real thing - a season for the current expansion is seeded weeks before it starts, the
+     * way a new season is prepared for review and QA. The whole site's dungeon selector used to switch to
+     * that season's dungeons the moment its row existed, dropping every current season dungeon (#3761).
+     */
+    #[Test]
+    public function getDungeonsForGameVersion_givenAFutureSeasonSeededForTheCurrentExpansion_returnsOnlyTheCurrentSeasonsDungeons(): void
+    {
+        // Arrange
+        $gameVersion   = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+        $currentSeason = Season::findOrFail(Season::SEASON_MIDNIGHT_S1);
+        $expansion     = Expansion::firstWhere('shortname', Expansion::EXPANSION_MIDNIGHT);
+        // A dungeon that is not part of the current season, so the assert below can tell the two apart
+        $futureSeasonDungeon = Dungeon::firstWhere('key', Dungeon::DUNGEON_ARA_KARA_CITY_OF_ECHOES);
+
+        $futureSeason = Season::create([
+            'expansion_id'            => $expansion->id,
+            'seasonal_affix_id'       => null,
+            'index'                   => $currentSeason->index + 1,
+            'start'                   => Carbon::now()->addDays(60)->toDateTimeString(),
+            'presets'                 => 0,
+            'affix_group_count'       => 8,
+            'start_affix_group_index' => 0,
+            'key_level_min'           => 2,
+            'key_level_max'           => 25,
+            'item_level_min'          => 240,
+            'item_level_max'          => 300,
+        ]);
+
+        $futureSeasonDungeonRow = SeasonDungeon::create([
+            'season_id'  => $futureSeason->id,
+            'dungeon_id' => $futureSeasonDungeon->id,
+        ]);
+
+        try {
+            // Act - resolved after seeding the season so the season service starts with a cold cache
+            $dungeons = app(DungeonServiceInterface::class)->getDungeonsForGameVersion($gameVersion);
+
+            // Assert
+            $this->assertEqualsCanonicalizing(
+                $currentSeason->dungeons()->pluck('dungeons.id')->all(),
+                $dungeons->pluck('id')->all(),
+            );
+            $this->assertNotContains($futureSeasonDungeon->id, $dungeons->pluck('id')->all());
+        } finally {
+            // Through the query builder on purpose - SeederModel blocks deleting these models for anyone
+            // who is not an admin, and it does so silently, so $model->delete() would leave the rows behind.
+            // That skips the model events too, hence flushing the model cache by hand afterwards.
+            SeasonDungeon::query()->whereKey($futureSeasonDungeonRow->id)->delete();
+            Season::query()->whereKey($futureSeason->id)->delete();
+
+            new SeasonDungeon()->flushCache();
+            new Season()->flushCache();
+        }
     }
 }
