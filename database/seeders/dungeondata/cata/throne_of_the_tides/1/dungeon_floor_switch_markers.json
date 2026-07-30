@@ -58,5 +58,17 @@
         "hidden_in_facade": false,
         "lat": -83.88,
         "lng": 192.41
+    },
+    {
+        "id": 3262,
+        "mapping_version_id": 831,
+        "floor_id": 248,
+        "source_floor_id": null,
+        "target_floor_id": 249,
+        "linked_dungeon_floor_switch_marker_id": 3261,
+        "direction": null,
+        "hidden_in_facade": false,
+        "lat": -83.88,
+        "lng": 192.41
     }
 ]
