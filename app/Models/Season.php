@@ -13,22 +13,22 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
- * @property int    $id
- * @property int    $expansion_id
- * @property int    $seasonal_affix_id
- * @property int    $index
- * @property Carbon $start
- * @property int    $presets
- * @property int    $affix_group_count
- * @property int    $start_affix_group_index The index of the affix that was the first affix to be available upon season start
- * @property int    $key_level_min
- * @property int    $key_level_max
- * @property int    $item_level_min          The minimum item level of items that can be obtained in this season
- * @property int    $item_level_max          The maximum item level of items that can be obtained in this season
- * @property string $name                    Dynamic attribute
- * @property string $name_med                Dynamic attribute
- * @property string $name_long               Dynamic attribute
- * @property int    $start_period            Dynamic attribute
+ * @property int      $id
+ * @property int      $expansion_id
+ * @property int|null $seasonal_affix_id
+ * @property int      $index
+ * @property Carbon   $start
+ * @property int      $presets
+ * @property int      $affix_group_count
+ * @property int      $start_affix_group_index The index of the affix that was the first affix to be available upon season start
+ * @property int      $key_level_min
+ * @property int      $key_level_max
+ * @property int      $item_level_min          The minimum item level of items that can be obtained in this season
+ * @property int      $item_level_max          The maximum item level of items that can be obtained in this season
+ * @property string   $name                    Dynamic attribute
+ * @property string   $name_med                Dynamic attribute
+ * @property string   $name_long               Dynamic attribute
+ * @property int      $start_period            Dynamic attribute
  *
  * @property Expansion $expansion
  *

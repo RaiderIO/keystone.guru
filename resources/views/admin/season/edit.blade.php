@@ -57,7 +57,7 @@ use Illuminate\Support\Collection;
 
         <div class="mb-3{{ $errors->has('seasonal_affix_id') ? ' has-error' : '' }}">
             {{ html()->label(__('view_admin.season.edit.seasonal_affix_id'), 'seasonal_affix_id') }}
-            {{ html()->select('seasonal_affix_id', $seasonalAffixSelect)->class('form-control selectpicker')->attribute('data-none-selected-text', __('view_admin.season.edit.seasonal_affix_id_none')) }}
+            {{ html()->select('seasonal_affix_id', $seasonalAffixSelect, old('seasonal_affix_id', ($season ?? null)?->seasonal_affix_id ?? -1))->class('form-control selectpicker') }}
             @include('common.forms.form-error', ['key' => 'seasonal_affix_id'])
         </div>
 

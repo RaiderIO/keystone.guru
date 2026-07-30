@@ -25,8 +25,9 @@ class SeasonFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'expansion_id'            => ['required', Rule::exists(Expansion::class, 'id')],
-            'seasonal_affix_id'       => 'nullable|integer|min:0',
+            'expansion_id' => ['required', Rule::exists(Expansion::class, 'id')],
+            // A <select> always submits a value; -1 is the "none selected" sentinel option.
+            'seasonal_affix_id'       => 'required|integer|min:-1',
             'index'                   => 'required|integer|min:1',
             'start'                   => 'required|date',
             'presets'                 => 'nullable|integer|min:0',

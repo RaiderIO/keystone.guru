@@ -25,6 +25,10 @@ class SeasonController extends Controller
 
         $validated['presets'] ??= 0;
 
+        if ((int)$validated['seasonal_affix_id'] === -1) {
+            $validated['seasonal_affix_id'] = null;
+        }
+
         $dungeonIds = $validated['dungeon_ids'] ?? [];
         unset($validated['dungeon_ids']);
 
@@ -130,9 +134,12 @@ class SeasonController extends Controller
      */
     private function getSeasonalAffixSelect(): Collection
     {
-        return Affix::whereIn('key', Affix::SEASONAL_AFFIXES)
-            ->orderBy('name')
-            ->get()
-            ->mapWithKeys(fn(Affix $affix) => [$affix->affix_id => __($affix->name)]);
+        return collect([-1 => __('view_admin.season.edit.seasonal_affix_id_none')])
+            ->union(
+                Affix::whereIn('key', Affix::SEASONAL_AFFIXES)
+                    ->orderBy('name')
+                    ->get()
+                    ->mapWithKeys(fn(Affix $affix) => [$affix->affix_id => __($affix->name)]),
+            );
     }
 }

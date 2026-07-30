@@ -48,6 +48,7 @@ $affixSelectWithNone = collect([-1 => __('view_admin.affixgroup.edit.no_affix')]
     <div class="mb-3{{ $errors->has('affix_id_1') || $errors->has('key_level_1') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.affixgroup.edit.affix'), 'affix_id_1')->class('fw-bold') }}
         <span class="form-required">*</span>
+        <small class="text-muted d-block">{{ __('view_admin.affixgroup.edit.slots_hint') }}</small>
         <div class="row">
             <div class="col">
                 {{ html()->select('affix_id_1', $affixSelect, old('affix_id_1', $couplings[0]['affix_id'] ?? null))->class('form-control selectpicker')->data('live-search', 'true') }}

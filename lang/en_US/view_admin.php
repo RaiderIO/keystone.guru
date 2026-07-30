@@ -324,6 +324,7 @@ return [
             'affix'          => 'Affix',
             'key_level'      => 'Key level',
             'no_affix'       => 'No affix',
+            'slots_hint'     => 'Empty slots are removed on save and remaining affixes are renumbered to close the gap — slot numbers are not saved, only their order.',
             'submit'         => 'Submit',
         ],
     ],

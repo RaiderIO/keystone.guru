@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controller\Admin;
 
+use App\Models\Affix;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\Laratrust\Role;
@@ -76,6 +77,69 @@ final class AdminSeasonControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function edit_givenSeasonWithNoSeasonalAffix_preselectsNoneOption(): void
+    {
+        // Arrange
+        $season = Season::create([
+            'expansion_id'            => Expansion::query()->firstOrFail()->id,
+            'seasonal_affix_id'       => null,
+            'index'                   => 994,
+            'start'                   => '2026-01-01 00:00:00',
+            'presets'                 => 0,
+            'affix_group_count'       => 4,
+            'start_affix_group_index' => 0,
+            'key_level_min'           => 2,
+            'key_level_max'           => 30,
+        ]);
+
+        try {
+            // Act
+            $response = $this->get(route('admin.season.edit', $season));
+
+            // Assert - a real bug: without this, the browser silently preselects the
+            // alphabetically-first seasonal affix instead of leaving the field unset.
+            $response->assertOk();
+            $response->assertSee('value="-1" selected="selected"', false);
+        } finally {
+            $season->delete();
+        }
+    }
+
+    #[Test]
+    public function savenew_givenRealSeasonalAffixId_persistsAndPreselectsIt(): void
+    {
+        // Arrange
+        $expansion = Expansion::query()->firstOrFail();
+        $affix     = Affix::whereIn('key', Affix::SEASONAL_AFFIXES)->firstOrFail();
+        $season    = null;
+
+        try {
+            // Act
+            $response = $this->post(route('admin.season.savenew'), [
+                'expansion_id'            => $expansion->id,
+                'seasonal_affix_id'       => $affix->affix_id,
+                'index'                   => 993,
+                'start'                   => '2026-01-01 00:00:00',
+                'affix_group_count'       => 4,
+                'start_affix_group_index' => 0,
+                'key_level_min'           => 2,
+                'key_level_max'           => 30,
+            ]);
+
+            // Assert
+            $season = Season::query()->where('index', 993)->first();
+            $this->assertNotNull($season);
+            $response->assertRedirect(route('admin.season.edit', $season));
+            $this->assertSame($affix->affix_id, $season->seasonal_affix_id);
+
+            $editResponse = $this->get(route('admin.season.edit', $season));
+            $editResponse->assertSee(sprintf('value="%d" selected="selected"', $affix->affix_id), false);
+        } finally {
+            $season?->delete();
+        }
+    }
+
+    #[Test]
     public function savenew_givenValidDataWithDungeons_createsSeasonAndSyncsDungeons(): void
     {
         // Arrange
@@ -87,6 +151,7 @@ final class AdminSeasonControllerTest extends PublicTestCase
             // Act
             $response = $this->post(route('admin.season.savenew'), [
                 'expansion_id'            => $expansion->id,
+                'seasonal_affix_id'       => -1,
                 'index'                   => 999,
                 'start'                   => '2026-01-01 00:00:00',
                 'affix_group_count'       => 10,
@@ -101,12 +166,13 @@ final class AdminSeasonControllerTest extends PublicTestCase
             $this->assertNotNull($season);
             $response->assertRedirect(route('admin.season.edit', $season));
             $this->assertSame(0, $season->presets);
+            $this->assertNull($season->seasonal_affix_id, '-1 (the "none selected" option) must be normalized to null');
             $this->assertEqualsCanonicalizing(
                 $dungeons->pluck('id')->toArray(),
                 $season->seasonDungeons()->pluck('dungeon_id')->toArray(),
             );
         } finally {
-            $season?->seasonDungeons()->delete();
+            $season?->syncDungeons([]);
             $season?->delete();
         }
     }
@@ -120,6 +186,7 @@ final class AdminSeasonControllerTest extends PublicTestCase
         // Act
         $response = $this->post(route('admin.season.savenew'), [
             'expansion_id'            => $expansion->id,
+            'seasonal_affix_id'       => -1,
             'index'                   => 998,
             'start'                   => '2026-01-01 00:00:00',
             'affix_group_count'       => 4,
@@ -158,6 +225,7 @@ final class AdminSeasonControllerTest extends PublicTestCase
             // Act
             $response = $this->patch(route('admin.season.update', $season), [
                 'expansion_id'            => $expansion->id,
+                'seasonal_affix_id'       => -1,
                 'index'                   => 997,
                 'start'                   => '2026-01-01 00:00:00',
                 'affix_group_count'       => 4,
@@ -174,7 +242,7 @@ final class AdminSeasonControllerTest extends PublicTestCase
                 $season->seasonDungeons()->pluck('dungeon_id')->toArray(),
             );
         } finally {
-            $season->seasonDungeons()->delete();
+            $season->syncDungeons([]);
             $season->delete();
         }
     }
