@@ -37,6 +37,7 @@ use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Collection;
 use Psr\SimpleCache\InvalidArgumentException;
 use Str;
+use Throwable;
 
 class MDTMappingImportService implements MDTMappingImportServiceInterface
 {
@@ -86,7 +87,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         if ($forceImport || $currentMappingVersion->mdt_mapping_hash !== $latestMdtMappingHash) {
             $this->log->importMappingVersionFromMDTMappingChanged($currentMappingVersion->mdt_mapping_hash, $latestMdtMappingHash);
 
-            $newMappingVersion = $mappingService->createNewMappingVersionFromMDTMapping($dungeon, $gameVersion, $this->getMDTMappingHash($dungeon));
+            $newMappingVersion = $mappingService->createNewMappingVersionFromMDTMapping($dungeon, $gameVersion);
             $this->log->importMappingVersionFromMDTCreateMappingVersion($newMappingVersion->version, $newMappingVersion->id);
 
             $mdtDungeon = new MDTDungeon($this->cacheService, $this->coordinatesService, $dungeon);
@@ -115,6 +116,21 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $this->importEnemyPacks($newMappingVersion, $mdtDungeon, $dungeon, $enemies);
                 $this->importEnemyPatrols($currentMappingVersion, $newMappingVersion, $mdtDungeon, $dungeon, $enemies);
                 $this->importMapPOIs($currentMappingVersion, $newMappingVersion, $mdtDungeon, $dungeon);
+
+                // Only stamp the hash once every step above actually succeeded (#3737) - a mapping version
+                // recorded with the hash of MDT data it never finished importing would look up to date to
+                // every subsequent run and be skipped forever ("no change detected"), leaving the dungeon
+                // stuck on a half-built "current" mapping version.
+                $newMappingVersion->update(['mdt_mapping_hash' => $latestMdtMappingHash]);
+            } catch (Throwable $throwable) {
+                // The partially-imported mapping version is not safe to leave behind as the dungeon's
+                // current one - cascading delete removes whatever enemies/packs/etc. made it in before the
+                // failure, and the next run retries against the still-null hash instead of silently no-oping.
+                $this->log->importMappingVersionFromMDTDeletePartialMappingVersion($newMappingVersion->version, $newMappingVersion->id, $throwable);
+
+                $newMappingVersion->delete();
+
+                throw $throwable;
             } finally {
                 $this->log->importMappingVersionFromMDTEnd();
             }

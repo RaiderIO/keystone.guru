@@ -5,6 +5,7 @@ namespace App\Service\MDT\Logging;
 use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 use Exception;
+use Throwable;
 
 class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMappingImportServiceLoggingInterface
 {
@@ -25,6 +26,11 @@ class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMap
     public function importMappingVersionFromMDTStart(int $dungeonId): void
     {
         $this->start(__METHOD__, get_defined_vars());
+    }
+
+    public function importMappingVersionFromMDTDeletePartialMappingVersion(int $version, int $id, Throwable $throwable): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
     }
 
     public function importMappingVersionFromMDTEnd(): void
