@@ -71,14 +71,18 @@ final class MDTMappingImportEnemyForcesCheckpointTest extends PublicTestCase
                 $this->app->make(MDTMappingImportServiceInterface::class),
                 'importEnemies',
             );
-            $importEnemies->invoke(
+            $failures = [];
+            $importEnemies->invokeArgs(
                 $this->app->make(MDTMappingImportServiceInterface::class),
-                $sourceMappingVersion,
-                $newMappingVersion,
-                $mdtDungeon,
-                $dungeon,
-                $enemyForcesCheckpointIdMapping,
-                $forceImport,
+                [
+                    $sourceMappingVersion,
+                    $newMappingVersion,
+                    $mdtDungeon,
+                    $dungeon,
+                    $enemyForcesCheckpointIdMapping,
+                    $forceImport,
+                    &$failures,
+                ],
             );
 
             // Assert
@@ -183,14 +187,18 @@ final class MDTMappingImportEnemyForcesCheckpointTest extends PublicTestCase
                 $this->app->make(MDTMappingImportServiceInterface::class),
                 'importEnemies',
             );
-            $importEnemies->invoke(
+            $failures = [];
+            $importEnemies->invokeArgs(
                 $this->app->make(MDTMappingImportServiceInterface::class),
-                $sourceMappingVersion,
-                $newMappingVersion,
-                $mdtDungeon,
-                $dungeon,
-                $enemyForcesCheckpointIdMapping,
-                false,
+                [
+                    $sourceMappingVersion,
+                    $newMappingVersion,
+                    $mdtDungeon,
+                    $dungeon,
+                    $enemyForcesCheckpointIdMapping,
+                    false,
+                    &$failures,
+                ],
             );
 
             // Assert
