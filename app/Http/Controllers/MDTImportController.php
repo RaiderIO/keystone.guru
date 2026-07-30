@@ -8,6 +8,7 @@ use App\Http\Requests\MDT\ImportStringFormRequest;
 use App\Logic\MDT\Exception\CliWeakaurasParserNotFoundException;
 use App\Logic\MDT\Exception\InvalidMDTStringException;
 use App\Logic\MDT\Exception\MDTStringParseException;
+use App\Logic\MDT\IO\MDTStringFormat;
 use App\Service\MDT\MDTImportStringServiceInterface;
 use App\Service\MDT\Models\ImportStringDetails;
 use Exception;
@@ -101,7 +102,7 @@ class MDTImportController extends Controller
                 return abort(StatusCode::BAD_REQUEST, __('controller.mdtimport.error.mdt_string_format_not_recognized'));
             } catch (Exception $ex) {
                 // We're not interested if the string was 100% not an MDT string - it will never work then
-                if (isValidBase64($string)) {
+                if (MDTStringFormat::isValid($string)) {
                     report($ex);
                 }
 

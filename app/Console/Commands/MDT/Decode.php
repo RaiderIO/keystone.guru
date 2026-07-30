@@ -30,6 +30,21 @@ class Decode extends Command
      */
     public function handle(): void
     {
-        $this->info($this->decode($this->argument('string')) ?? ''); // @phpstan-ignore nullCoalesce.expr
+        $string  = $this->argument('string');
+        $decoded = $this->decode($string);
+
+        if ($decoded === null) {
+            // The trait already reported the failure via $this->error()/logger()
+            return;
+        }
+
+        // CBOR byte strings may contain non-UTF-8 binary - substitute rather than have json_encode fail
+        $json = json_encode($decoded, JSON_INVALID_UTF8_SUBSTITUTE | JSON_PARTIAL_OUTPUT_ON_ERROR);
+
+        if ($json === false) {
+            $this->error('Unable to encode the decoded preset as JSON');
+        } else {
+            $this->info($json);
+        }
     }
 }

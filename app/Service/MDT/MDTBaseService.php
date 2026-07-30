@@ -3,8 +3,9 @@
 namespace App\Service\MDT;
 
 use App\Logic\MDT\Exception\CliWeakaurasParserNotFoundException;
-use Illuminate\Support\Facades\Artisan;
+use App\Logic\MDT\IO\MDTStringFormat;
 use Lua;
+use Throwable;
 
 abstract class MDTBaseService
 {
@@ -26,34 +27,36 @@ abstract class MDTBaseService
     }
 
     /**
-     * @param array<string, mixed> $contents
+     * @param  array<string, mixed>                $contents
+     * @param  MDTStringFormat                     $format   Which MDT export-string format to encode into. Defaults to
+     *                                                       the legacy format until MDT drops legacy import support with
+     *                                                       WoW 12.2.
+     * @throws CliWeakaurasParserNotFoundException
+     * @throws Throwable
      */
-    protected function encode(array $contents): string
+    protected function encode(array $contents, MDTStringFormat $format = MDTStringFormat::Legacy): string
     {
-        Artisan::call('mdt:encode', ['string' => json_encode($contents)]);
-
-        $output = trim(Artisan::output());
-
-        if (str_contains($output, 'cli_weakauras_parser: command not found')) {
-            throw new CliWeakaurasParserNotFoundException($output);
-        }
-
-        return $output;
+        return $format->codec()->encode($contents);
     }
 
     /**
-     * @return array<string, mixed>|null Null if the string could not be decoded
+     * @return array<string, mixed>|null           Null if the string could not be decoded
+     * @throws CliWeakaurasParserNotFoundException
      */
     protected function decode(string $string): ?array
     {
-        Artisan::call('mdt:decode', ['string' => $string]);
+        try {
+            return MDTStringFormat::detect($string)->codec()->decode($string);
+        } catch (CliWeakaurasParserNotFoundException $cliWeakaurasParserNotFoundException) {
+            throw $cliWeakaurasParserNotFoundException;
+        } catch (Throwable $throwable) {
+            // detect() matched a format, so this string genuinely claimed to be an MDT export -
+            // always worth reporting. Truncated: the input is unvalidated user input of arbitrary size.
+            logger()->error($throwable->getMessage(), [
+                'string' => substr($string, 0, 2048),
+            ]);
 
-        $output = trim(Artisan::output());
-
-        if (str_contains($output, 'cli_weakauras_parser: command not found')) {
-            throw new CliWeakaurasParserNotFoundException($output);
+            return null;
         }
-
-        return json_decode($output, true);
     }
 }

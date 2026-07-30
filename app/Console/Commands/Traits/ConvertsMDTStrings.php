@@ -2,88 +2,56 @@
 
 namespace App\Console\Commands\Traits;
 
+use App\Logic\MDT\IO\MDTStringFormat;
 use Illuminate\Console\Command;
-use Symfony\Component\Process\Process;
+use Throwable;
 
 /**
+ * Dispatches MDT export-string encoding/decoding to the correct format implementation (see
+ * MDTStringFormat / MDTStringCodecInterface) and wires up the CLI-specific error reporting -
+ * console output plus, for decode failures, structured logging - both artisan commands need.
+ *
  * @mixin Command
  */
 trait ConvertsMDTStrings
 {
-    private static string $SUDO = '/usr/bin/sudo';
-
-    private static string $CLI_PARSER_ENCODE_CMD = '/usr/bin/cli_weakauras_parser encode %s';
-
-    private static string $CLI_PARSER_DECODE_CMD = '/usr/bin/cli_weakauras_parser decode %s';
-
     /**
-     * Checks if we should log a string to the error logger should it fail parsing
-     *
-     * @see https://stackoverflow.com/a/34982057/771270
+     * @param  array<int|string, mixed> $contents
+     * @param  MDTStringFormat          $format   Which MDT export-string format to encode into.
+     * @return string|null              Null if encoding failed - the failure is already reported
+     *                                  via $this->error().
      */
-    private function shouldErrorLog(string $string): bool
+    protected function encode(array $contents, MDTStringFormat $format = MDTStringFormat::Legacy): ?string
     {
-        // Check if it's a base64 encoded string - ish
-        return (bool)preg_match('%^![a-zA-Z0-9/+()]*={0,2}$%', $string);
+        try {
+            return $format->codec()->encode($contents);
+        } catch (Throwable $throwable) {
+            $this->error($throwable->getMessage());
+
+            return null;
+        }
     }
 
     /**
-     * @param bool   $encode True to encode, false to decode it.
-     * @param string $string The string you want to encode/decode.
+     * @return array<int|string, mixed>|null Null if the string could not be decoded
      */
-    private function transform(bool $encode, string $string): ?string
+    protected function decode(string $string): ?array
     {
-        $result   = null;
-        $fileName = null;
+        $format = MDTStringFormat::detect($string);
 
         try {
-            $tmpFile = tempnam(sys_get_temp_dir(), 'ksg_mdt_');
+            return $format->codec()->decode($string);
+        } catch (Throwable $throwable) {
+            $this->error($throwable->getMessage());
 
-            if ($tmpFile !== false) {
-                $fileName = $tmpFile;
-                file_put_contents($fileName, $string);
+            // detect() matched a format, so this string genuinely claimed to be an MDT export -
+            // always worth reporting. Truncated: decode() is fed unvalidated user input of
+            // arbitrary size.
+            logger()->error($throwable->getMessage(), [
+                'string' => substr($string, 0, 2048),
+            ]);
 
-                $cmd = sprintf($encode ? self::$CLI_PARSER_ENCODE_CMD : self::$CLI_PARSER_DECODE_CMD, $fileName);
-                $cmd = sprintf('%s %s', self::$SUDO, $cmd);
-
-                $process = new Process(explode(' ', $cmd));
-                $process->run();
-
-                // executes after the command finishes
-                if (!$process->isSuccessful()) {
-                    $errorOutput = trim($process->getErrorOutput());
-
-                    // Give output to the artisan command
-                    $this->error($errorOutput);
-
-                    // Only interested in decode - we're really only interested if it wasn't encoded, which would indicate some issue
-                    // with either the string or a new format the tool I use can't handle. We don't care for things that aren't
-                    // MDT strings - they should be ignored
-                    if (!$encode && $this->shouldErrorLog($string)) {
-                        logger()->error($errorOutput, [
-                            'string' => $string,
-                        ]);
-                    }
-                }
-
-                $result = $process->getOutput();
-            }
-        } finally {
-            if ($fileName !== null) {
-                unlink($fileName);
-            }
+            return null;
         }
-
-        return $result;
-    }
-
-    protected function encode(string $string): ?string
-    {
-        return $this->transform(true, $string);
-    }
-
-    protected function decode(string $string): string
-    {
-        return $this->transform(false, $string);
     }
 }
