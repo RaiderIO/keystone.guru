@@ -4,7 +4,9 @@ namespace App\Repositories\Interfaces\DungeonRoute;
 
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
+use App\Models\User;
 use App\Repositories\BaseRepositoryInterface;
 use App\Repositories\Database\DungeonRoute\Dtos\KillZoneEnemyForces;
 use App\Repositories\Database\DungeonRoute\Dtos\SimilarDungeonRoute;
@@ -35,6 +37,14 @@ interface DungeonRouteRepositoryInterface extends BaseRepositoryInterface
 
     /** @return Collection<string, Collection<int, WeeklyRoute>> */
     public function getWeeklyRoutes(?Dungeon $dungeon = null, ?Season $season = null): Collection;
+
+    /**
+     * A user's own (non-demo, non-expired) routes for a dungeon, scoped to the given game version, most
+     * recently edited first, with the relations a route card needs eager-loaded.
+     *
+     * @return Collection<int, DungeonRoute>
+     */
+    public function getRoutesForUserAndDungeon(User $user, Dungeon $dungeon, GameVersion $gameVersion, int $limit): Collection;
 
     /** @return Collection<int, SimilarDungeonRoute> */
     public function findSimilarRoutes(DungeonRoute $dungeonRoute, int $limit = 5): Collection;

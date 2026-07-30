@@ -3,12 +3,15 @@
 namespace App\Service\Dungeon;
 
 use App\Models\Dungeon;
+use App\Models\Enemy;
 use App\Models\GameVersion\GameVersion;
 use App\Models\User;
+use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Dungeon\Logging\DungeonServiceLoggingInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class DungeonService implements DungeonServiceInterface
@@ -20,6 +23,7 @@ class DungeonService implements DungeonServiceInterface
         private readonly SeasonServiceInterface         $seasonService,
         private readonly DungeonServiceLoggingInterface $log,
         private readonly GameVersionServiceInterface    $gameVersionService,
+        private readonly CacheServiceInterface          $cacheService,
     ) {
     }
 
@@ -131,5 +135,43 @@ class DungeonService implements DungeonServiceInterface
         // stale dungeon list into later ones. That was measurable - loadMissing() turned the suite red with
         // a route being created against the wrong dungeon.
         return ($nextSeason ?? $currentSeason)?->dungeons()->get() ?? $gameVersion->expansion->dungeons;
+    }
+
+    public function getDungeonOverviewStats(Dungeon $dungeon, GameVersion $gameVersion): array
+    {
+        return $this->cacheService->remember(
+            sprintf('dungeon.overview.stats.%d.%d', $dungeon->id, $gameVersion->id),
+            static function () use ($dungeon, $gameVersion): array {
+                $mappingVersion = $dungeon->getCurrentMappingVersion($gameVersion);
+
+                $pullCount  = 0;
+                $enemyCount = 0;
+
+                if ($mappingVersion !== null) {
+                    $pullCount = $dungeon->enemyPacks()
+                        ->where('enemy_packs.mapping_version_id', $mappingVersion->id)
+                        ->count();
+
+                    // Only enemies that belong to an actual pack contribute to the "avg enemies per
+                    // pull" figure - unpacked enemies (bosses, lone enemies) don't inflate pull size.
+                    $enemyCount = $dungeon->enemies()
+                        ->where('enemies.mapping_version_id', $mappingVersion->id)
+                        ->whereNotNull('enemies.enemy_pack_id')
+                        ->where(static function (Builder $query) {
+                            $query->whereNull('enemies.seasonal_type')
+                                ->orWhere('enemies.seasonal_type', '!=', Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER);
+                        })
+                        ->count();
+                }
+
+                return [
+                    'npc'                  => $dungeon->npcs()->count(),
+                    'spell'                => $dungeon->spells()->count(),
+                    'pull_count'           => $pullCount,
+                    'avg_enemies_per_pull' => $pullCount > 0 ? round($enemyCount / $pullCount, 1) : 0.0,
+                ];
+            },
+            '1 hour',
+        );
     }
 }

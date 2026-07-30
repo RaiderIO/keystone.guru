@@ -4,6 +4,7 @@ namespace Tests\Feature\App\Service\Dungeon\DungeonService;
 
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
+use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Dungeon\DungeonService;
 use App\Service\Dungeon\Logging\DungeonServiceLoggingInterface;
@@ -28,6 +29,7 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
             $seasonService,
             $this->createMockPublic(DungeonServiceLoggingInterface::class),
             $this->createMockPublic(GameVersionServiceInterface::class),
+            $this->createMockPublic(CacheServiceInterface::class),
         );
     }
 

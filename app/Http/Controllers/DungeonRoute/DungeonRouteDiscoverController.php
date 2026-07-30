@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\DungeonRoute;
 
+use App\Features\DungeonOverview;
 use App\Features\DungeonRouteListRework;
 use App\Http\Controllers\Controller;
 use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Models\Team;
+use App\Models\User;
 use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\Dungeon\DungeonServiceInterface;
@@ -23,6 +26,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
@@ -294,6 +298,24 @@ class DungeonRouteDiscoverController extends Controller
             $currentAffixGroup = $expansionService->getCurrentAffixGroup($gameVersion->expansion, $userRegion);
         }
 
+        if (Feature::active(DungeonOverview::class)) {
+            return view('dungeonroute.discover.dungeon.landing', [
+                // No breadcrumbs on the landing itself - the trail's last crumb just duplicates the page
+                // title. Breadcrumbs reappear (with this dungeon as a clickable parent) on nested pages.
+                'breadcrumbs'       => '',
+                'gameVersion'       => $gameVersion,
+                'dungeon'           => $dungeon,
+                'currentAffixGroup' => $currentAffixGroup,
+                'weeklyRoutes'      => $dungeonWeeklyRoutes,
+                'popularRoutes'     => $discoverService
+                    ->withLimit(config('keystoneguru.discover.limits.dungeon_overview_popular'))
+                    ->popularByDungeon($dungeon),
+                'userRoutes'          => $this->getUserRoutesForDungeon($dungeon, $gameVersion, $dungeonRouteRepository),
+                'dungeonStats'        => $dungeonService->getDungeonOverviewStats($dungeon, $gameVersion),
+                'gameVersionDungeons' => $gameVersionDungeons,
+            ]);
+        }
+
         return view('dungeonroute.discover.dungeon.overview', [
             'breadcrumbs'       => 'dungeonroutes.discoverdungeon',
             'gameVersion'       => $gameVersion,
@@ -422,5 +444,26 @@ class DungeonRouteDiscoverController extends Controller
                 ->newByDungeon($dungeon),
             'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($gameVersion),
         ]);
+    }
+
+    /**
+     * The current user's own routes for a dungeon, or an empty collection for guests.
+     *
+     * @return Collection<int, DungeonRoute>
+     */
+    private function getUserRoutesForDungeon(Dungeon $dungeon, GameVersion $gameVersion, DungeonRouteRepositoryInterface $dungeonRouteRepository): Collection
+    {
+        /** @var User|null $user */
+        $user = Auth::user();
+        if ($user === null) {
+            return collect();
+        }
+
+        return $dungeonRouteRepository->getRoutesForUserAndDungeon(
+            $user,
+            $dungeon,
+            $gameVersion,
+            config('keystoneguru.discover.limits.per_dungeon'),
+        );
     }
 }
