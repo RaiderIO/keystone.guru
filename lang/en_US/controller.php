@@ -40,6 +40,19 @@ return [
             'combatlog_parse_failure_resolved'       => 'Parse failure marked as resolved.',
         ],
     ],
+    'affix' => [
+        'flash' => [
+            'affix_created' => 'Affix created',
+            'affix_updated' => 'Affix updated',
+        ],
+    ],
+    'affixgroup' => [
+        'flash' => [
+            'affixgroup_created' => 'Affix group created',
+            'affixgroup_updated' => 'Affix group updated',
+            'affixgroup_deleted' => 'Affix group deleted',
+        ],
+    ],
     'apidungeonroute' => [
         'mdt_generate_error'  => 'An error occurred generating your MDT string: %s',
         'mdt_generate_no_lua' => 'MDT importer is not configured properly. Please contact the admin about this issue',
@@ -180,6 +193,12 @@ return [
             'add_ad_free_giveaway_already_has_giveaway' => 'Unable to add ad-free giveaways, user is already ad-free through an existing giveaway.',
             'remove_ad_free_giveaway_not_found'         => 'Unable to remove ad-free giveaway - user does not have any at the moment.',
             'remove_ad_free_giveaway_not_yours'         => 'Unable to remove ad-free giveaways that was not originally given by you.',
+        ],
+    ],
+    'season' => [
+        'flash' => [
+            'season_created' => 'Season created',
+            'season_updated' => 'Season updated',
         ],
     ],
     'spell' => [

@@ -162,4 +162,20 @@ class Season extends CacheModel
     {
         return $this->seasonDungeons()->where('dungeon_id', $dungeon->id)->exists();
     }
+
+    /**
+     * @param array<int, int> $dungeonIds
+     */
+    public function syncDungeons(array $dungeonIds): void
+    {
+        // Individually deleted so each SeasonDungeon's cache is properly invalidated (a mass query
+        // delete would bypass model events and leave stale cached results behind).
+        foreach ($this->seasonDungeons()->get() as $seasonDungeon) {
+            $seasonDungeon->delete();
+        }
+
+        foreach (array_unique($dungeonIds) as $dungeonId) {
+            $this->seasonDungeons()->create(['dungeon_id' => $dungeonId]);
+        }
+    }
 }

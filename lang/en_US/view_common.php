@@ -302,6 +302,8 @@ return [
                 'tools'                          => 'Tools',
                 'view_expansions'                => 'View expansions',
                 'view_dungeons'                  => 'View dungeons',
+                'view_affixes'                   => 'View affixes',
+                'view_seasons'                   => 'View seasons',
                 'view_npcs'                      => 'View NPCs',
                 'view_spells'                    => 'View spells',
                 'view_users'                     => 'View users',

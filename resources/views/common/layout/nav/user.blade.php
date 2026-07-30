@@ -42,6 +42,10 @@ $user = Auth::user();
                     <a class="dropdown-item"
                        href="{{ route('admin.dungeons') }}">{{__('view_common.layout.nav.user.view_dungeons')}}</a>
 {{--                @endif--}}
+                <a class="dropdown-item"
+                   href="{{ route('admin.affixes') }}">{{__('view_common.layout.nav.user.view_affixes')}}</a>
+                <a class="dropdown-item"
+                   href="{{ route('admin.seasons') }}">{{__('view_common.layout.nav.user.view_seasons')}}</a>
 {{--                @if( $user->isAbleTo('read-npcs') )--}}
                     <a class="dropdown-item"
                        href="{{ route('admin.npcs') }}">{{__('view_common.layout.nav.user.view_npcs')}}</a>

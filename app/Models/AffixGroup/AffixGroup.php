@@ -64,6 +64,22 @@ class AffixGroup extends AffixGroupBase
     }
 
     /**
+     * @param array<int, array{affix_id: int, key_level: int}> $couplings In display order.
+     */
+    public function syncAffixGroupCouplings(array $couplings): void
+    {
+        // Individually deleted so each coupling's cache is properly invalidated (a mass query delete
+        // would bypass model events and leave stale cached results behind).
+        foreach ($this->affixGroupCouplings()->get() as $affixGroupCoupling) {
+            $affixGroupCoupling->delete();
+        }
+
+        foreach ($couplings as $coupling) {
+            $this->affixGroupCouplings()->create($coupling);
+        }
+    }
+
+    /**
      * @param  Collection<int, int>        $affixIds
      * @return Collection<int, AffixGroup>
      */
