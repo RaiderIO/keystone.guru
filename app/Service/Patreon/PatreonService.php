@@ -149,7 +149,9 @@ class PatreonService implements PatreonServiceInterface
         try {
             $this->log->applyPaidBenefitsForMemberStart($member['id']);
 
-            $memberEmail = $member['attributes']['email'];
+            // The email attribute can be entirely absent for a member instead of present-but-null, so this can't
+            // rely on the key always being set (#3767) - a missing key is handled the same as an empty value below
+            $memberEmail = $member['attributes']['email'] ?? null;
 
             if (empty($memberEmail)) {
                 $this->log->applyPaidBenefitsForMemberEmptyMemberEmail();
