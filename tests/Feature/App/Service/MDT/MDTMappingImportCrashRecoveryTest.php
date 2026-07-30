@@ -7,8 +7,10 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\Mapping\MappingService;
 use App\Service\Mapping\MappingServiceInterface;
 use App\Service\MDT\Logging\MDTMappingImportServiceLoggingInterface;
+use App\Service\MDT\MDTAddonVersionServiceInterface;
 use App\Service\MDT\MDTMappingImportService;
 use App\Service\MDT\MDTMappingImportServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
@@ -27,10 +29,11 @@ use Tests\TestCases\PublicTestCase;
  * version instead of leaving it behind - so the dungeon's current mapping version is left completely
  * unchanged and the next run genuinely retries.
  *
- * The forced failure is injected via a decorator around MappingServiceInterface (a method parameter of
+ * The forced failure is injected via a partial mock of the concrete MappingService (a method parameter of
  * importMappingVersionFromMDT(), not a constructor dependency) that throws from
- * copyEnemyForcesCheckpointsToMappingVersion() - the first call inside the try block - so nothing downstream
- * of it runs: no shared Npc/Spell rows are touched, and the only residue is the mapping version row itself.
+ * copyEnemyForcesCheckpointsToMappingVersion() - the first call inside the try block - while every other
+ * method falls through to the real implementation, so nothing downstream of it runs: no shared Npc/Spell
+ * rows are touched, and the only residue is the mapping version row itself.
  */
 #[Group('MDT')]
 #[Group('MappingVersion')]
@@ -47,53 +50,20 @@ final class MDTMappingImportCrashRecoveryTest extends PublicTestCase
         $mappingVersionIdsBefore       = MappingVersion::query()->where('dungeon_id', $dungeon->id)->pluck('id')->sort()->values()->all();
         $currentMappingVersionIdBefore = $dungeon->getCurrentMappingVersion($gameVersion)->id;
 
-        $realMappingService   = $this->app->make(MappingServiceInterface::class);
         $mappingImportService = $this->app->make(MDTMappingImportServiceInterface::class);
 
-        $throwingMappingService = new class ($realMappingService) implements MappingServiceInterface {
-            public function __construct(private readonly MappingServiceInterface $real)
-            {
-            }
+        // Partial mock of the concrete MappingService: only copyEnemyForcesCheckpointsToMappingVersion()
+        // is mocked to throw, every other method falls through to the real implementation.
+        $throwingMappingService = $this->getMockBuilderPublic(MappingService::class)
+            ->setConstructorArgs([
+                $this->app->make(MDTAddonVersionServiceInterface::class),
+            ])
+            ->onlyMethods(['copyEnemyForcesCheckpointsToMappingVersion'])
+            ->getMock();
 
-            public function createNewBareMappingVersion(Dungeon $dungeon, GameVersion $gameVersion): MappingVersion
-            {
-                return $this->real->createNewBareMappingVersion($dungeon, $gameVersion);
-            }
-
-            public function createNewMappingVersionFromPreviousMapping(Dungeon $dungeon, GameVersion $gameVersion): MappingVersion
-            {
-                return $this->real->createNewMappingVersionFromPreviousMapping($dungeon, $gameVersion);
-            }
-
-            public function createNewMappingVersionFromMDTMapping(Dungeon $dungeon, ?GameVersion $gameVersion): MappingVersion
-            {
-                return $this->real->createNewMappingVersionFromMDTMapping($dungeon, $gameVersion);
-            }
-
-            public function getMappingVersionForMdtAddonVersion(Dungeon $dungeon, ?int $addonVersion, ?GameVersion $gameVersion = null): ?MappingVersion
-            {
-                return $this->real->getMappingVersionForMdtAddonVersion($dungeon, $addonVersion, $gameVersion);
-            }
-
-            public function copyMappingVersionToDungeon(MappingVersion $sourceMappingVersion, Dungeon $dungeon): MappingVersion
-            {
-                return $this->real->copyMappingVersionToDungeon($sourceMappingVersion, $dungeon);
-            }
-
-            public function copyMappingVersionContentsToDungeon(
-                MappingVersion $sourceMappingVersion,
-                MappingVersion $targetMappingVersion,
-            ): MappingVersion {
-                return $this->real->copyMappingVersionContentsToDungeon($sourceMappingVersion, $targetMappingVersion);
-            }
-
-            public function copyEnemyForcesCheckpointsToMappingVersion(
-                MappingVersion $sourceMappingVersion,
-                MappingVersion $targetMappingVersion,
-            ): array {
-                throw new RuntimeException('Forced failure to test crash recovery (#3737)');
-            }
-        };
+        $throwingMappingService
+            ->method('copyEnemyForcesCheckpointsToMappingVersion')
+            ->willThrowException(new RuntimeException('Forced failure to test crash recovery (#3737)'));
 
         try {
             // Act
@@ -138,8 +108,9 @@ final class MDTMappingImportCrashRecoveryTest extends PublicTestCase
     /**
      * The crash-recovery test above only proves that a failed import does not stamp a hash - it does not
      * distinguish "the hash is written after success" from "the hash is never written at all", since it
-     * forces a failure before that point is ever reached. This exercises the real import pipeline (no
-     * decorator around MappingServiceInterface) so the actual write on success is asserted directly.
+     * forces a failure before that point is ever reached. This exercises the real import pipeline - the
+     * MappingService passed in below is the real one, unlike the crash-recovery test above - so the actual
+     * write on success is asserted directly.
      *
      * importNpcsDataFromMDT() is stubbed out via a partial mock rather than left real: it save()s every MDT
      * NPC, upserts NpcHealth, and mass-inserts NpcSpell/NpcDungeon, and for genuinely new NPCs also writes
