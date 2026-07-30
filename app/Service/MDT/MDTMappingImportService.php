@@ -31,6 +31,7 @@ use App\Models\Spell\SpellDungeon;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Mapping\MappingServiceInterface;
+use App\Service\MDT\Exceptions\MDTMappingImportPartialFailureException;
 use App\Service\MDT\Logging\MDTMappingImportServiceLoggingInterface;
 use Exception;
 use Illuminate\Database\UniqueConstraintViolationException;
@@ -92,6 +93,10 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
             $mdtDungeon = new MDTDungeon($this->cacheService, $this->coordinatesService, $dungeon);
 
+            /** @var array<int, Exception> $importFailures NPC/enemy saves that were individually caught and
+             *  logged rather than propagated, so the loop kept going for the remaining items (#3755) */
+            $importFailures = [];
+
             try {
                 $this->log->importMappingVersionFromMDTStart($dungeon->id);
 
@@ -104,7 +109,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 );
 
                 $this->importDungeon($mdtDungeon, $dungeon, $newMappingVersion);
-                $this->importNpcs($newMappingVersion, $mdtDungeon, $dungeon, $gameVersion);
+                $this->importNpcs($newMappingVersion, $mdtDungeon, $dungeon, $gameVersion, $importFailures);
                 $enemies = $this->importEnemies(
                     $currentMappingVersion,
                     $newMappingVersion,
@@ -112,10 +117,18 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     $dungeon,
                     $enemyForcesCheckpointIdMapping,
                     $forceImport,
+                    $importFailures,
                 );
                 $this->importEnemyPacks($newMappingVersion, $mdtDungeon, $dungeon, $enemies);
                 $this->importEnemyPatrols($currentMappingVersion, $newMappingVersion, $mdtDungeon, $dungeon, $enemies);
                 $this->importMapPOIs($currentMappingVersion, $newMappingVersion, $mdtDungeon, $dungeon);
+
+                if (!empty($importFailures)) {
+                    // Every step above ran, but one or more individual NPCs/enemies were silently dropped
+                    // along the way - the mapping version is incomplete even though nothing propagated to
+                    // this try block on its own, so it must not be treated as a success (#3755).
+                    throw new MDTMappingImportPartialFailureException($importFailures);
+                }
 
                 // Only stamp the hash once every step above actually succeeded (#3737) - a mapping version
                 // recorded with the hash of MDT data it never finished importing would look up to date to
@@ -161,7 +174,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         );
     }
 
-    public function importNpcsDataFromMDT(MDTDungeon $mdtDungeon, Dungeon $dungeon, GameVersion $gameVersion): void
+    public function importNpcsDataFromMDT(MDTDungeon $mdtDungeon, Dungeon $dungeon, GameVersion $gameVersion, array &$failures = []): void
     {
         try {
             $this->log->importNpcsDataFromMDTStart($dungeon->key);
@@ -270,9 +283,12 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         $npc->createNpcEnemyForcesForExistingMappingVersions($mdtNpc->getCount());
                     }
                 } catch (UniqueConstraintViolationException) {
+                    // Expected and recoverable: another dungeon's import already inserted this NPC (or its
+                    // historical NpcEnemyForces rows) between our lookup and our write - not a real failure.
                     $this->log->importNpcsDataFromMDTNpcNotMarkedForAllDungeons($npc->id);
                 } catch (Exception $exception) {
                     $this->log->importNpcsDataFromMDTSaveNpcException($exception);
+                    $failures[] = $exception;
                 }
             }
 
@@ -388,6 +404,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     }
 
     /**
+     * @param  array<int, Exception> $failures Appended with NPC saves that failed - see
+     *                                         importNpcsDataFromMDT()'s $failures parameter.
      * @throws Exception
      */
     private function importNpcs(
@@ -395,11 +413,12 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         MDTDungeon     $mdtDungeon,
         Dungeon        $dungeon,
         GameVersion    $gameVersion,
+        array          &          $failures,
     ): void {
         try {
             $this->log->importNpcsStart();
 
-            $this->importNpcsDataFromMDT($mdtDungeon, $dungeon, $gameVersion);
+            $this->importNpcsDataFromMDT($mdtDungeon, $dungeon, $gameVersion, $failures);
 
             // Get a list of NPCs and update/save them (re-fetch the list to include any new NPCs)
             $npcs = $dungeon->npcs()->get()->keyBy('id');
@@ -439,6 +458,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     }
                 } catch (Exception $exception) {
                     $this->log->importNpcsDataFromMDTSaveNpcException($exception);
+                    $failures[] = $exception;
                 }
             }
         } finally {
@@ -450,6 +470,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
      * @param  array<int, int>        $enemyForcesCheckpointIdMapping Source checkpoint id => cloned checkpoint id, as
      *                                                                built by MappingService when it cloned the
      *                                                                previous mapping version's checkpoints.
+     * @param  array<int, Exception>  $failures                       Appended with enemy saves that failed - see
+     *                                                                importNpcsDataFromMDT()'s $failures parameter.
      * @return Collection<int, Enemy>
      */
     private function importEnemies(
@@ -458,7 +480,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         MDTDungeon     $mdtDungeon,
         Dungeon        $dungeon,
         array          $enemyForcesCheckpointIdMapping,
-        bool           $forceImport = false,
+        bool           $forceImport,
+        array          &          $failures,
     ): Collection {
         // Get a list of new enemies and save them
         try {
@@ -577,6 +600,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     }
                 } catch (Exception $exception) {
                     $this->log->importEnemiesSaveNewEnemyException($exception);
+                    $failures[] = $exception;
                 }
             }
 

@@ -9,12 +9,14 @@ use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Mapping\MappingService;
 use App\Service\Mapping\MappingServiceInterface;
+use App\Service\MDT\Exceptions\MDTMappingImportPartialFailureException;
 use App\Service\MDT\Logging\MDTMappingImportServiceLoggingInterface;
 use App\Service\MDT\MDTAddonVersionServiceInterface;
 use App\Service\MDT\MDTMappingImportService;
 use App\Service\MDT\MDTMappingImportServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\MockObject;
 use RuntimeException;
 use Tests\TestCases\PublicTestCase;
 
@@ -166,5 +168,111 @@ final class MDTMappingImportCrashRecoveryTest extends PublicTestCase
 
             $dungeon->update(['mdt_id' => $originalDungeonMdtId]);
         }
+    }
+
+    /**
+     * #3755: importNpcs() used to catch a per-NPC exception, log it, and move on to the next NPC - so a
+     * genuine save failure never reached importMappingVersionFromMDT()'s outer catch, the new mapping
+     * version still got stamped with the fresh mdt_mapping_hash, and the next run saw "no change detected"
+     * and skipped retrying forever, exactly like #3737's symptom but through a different door.
+     *
+     * The failure is forced via a mocked MDTMappingImportServiceLoggingInterface that throws from
+     * importNpcsUpdateExistingNpc() - a log call inside importNpcs()'s per-NPC try block, right after the
+     * new mapping version's NpcEnemyForces row is created for it. That exercises the real per-item catch at
+     * the exact point #3755 describes, without needing to fabricate a genuine NPC-save failure.
+     *
+     * importNpcsDataFromMDT() is stubbed out for the same reason the success-path test above stubs it: it
+     * writes to shared Npc/NpcHealth/NpcSpell/NpcDungeon rows that are not scoped to the new mapping version,
+     * so a mapping-version delete cannot revert them. throne_of_the_tides already has every NPC MDT reports
+     * for it seeded, so importNpcs()'s re-fetch of the dungeon's NPCs still finds a real NPC - with count > 0
+     * - to reach the per-NPC try block that is being forced to fail.
+     */
+    #[Test]
+    public function importMappingVersionFromMDT_givenPerNpcSaveThrows_failsTheWholeImportInsteadOfSilentlyStampingTheHash(): void
+    {
+        // Arrange
+        /** @var Dungeon $dungeon */
+        $dungeon     = Dungeon::query()->where('key', 'throne_of_the_tides')->firstOrFail();
+        $gameVersion = GameVersion::query()->findOrFail($dungeon->getCurrentMappingVersion()->game_version_id);
+
+        $mappingVersionIdsBefore       = MappingVersion::query()->where('dungeon_id', $dungeon->id)->pluck('id')->sort()->values()->all();
+        $currentMappingVersionIdBefore = $this->highestVersionMappingVersionId($dungeon, $gameVersion);
+
+        $mappingService = $this->app->make(MappingServiceInterface::class);
+
+        $forcedFailureMessage = 'Forced failure to test partial-failure accumulation (#3755)';
+
+        /** @var MDTMappingImportServiceLoggingInterface&MockObject $mockLog */
+        $mockLog = $this->createMockPublic(MDTMappingImportServiceLoggingInterface::class);
+        $mockLog->method('importNpcsUpdateExistingNpc')
+            ->willThrowException(new RuntimeException($forcedFailureMessage));
+
+        $mappingImportService = $this->getMockBuilderPublic(MDTMappingImportService::class)
+            ->setConstructorArgs([
+                $this->app->make(CacheServiceInterface::class),
+                $this->app->make(CoordinatesServiceInterface::class),
+                $mockLog,
+            ])
+            ->onlyMethods(['importNpcsDataFromMDT'])
+            ->getMock();
+
+        // importDungeon() writes dungeons.mdt_id - the only side effect left outside the new mapping version
+        // once importNpcsDataFromMDT() is stubbed out - so it can be restored below.
+        $originalDungeonMdtId = $dungeon->mdt_id;
+
+        try {
+            // Act
+            try {
+                $mappingImportService->importMappingVersionFromMDT($mappingService, $dungeon, $gameVersion, true);
+
+                $this->fail('Expected the import to throw.');
+            } catch (MDTMappingImportPartialFailureException $exception) {
+                $this->assertNotEmpty($exception->getFailures(), 'The partial-failure exception must carry the failures that caused it.');
+                $this->assertSame($forcedFailureMessage, $exception->getFailures()[0]->getMessage());
+            }
+
+            // Assert
+            /** @var Dungeon $freshDungeon */
+            $freshDungeon = Dungeon::query()->findOrFail($dungeon->id);
+
+            $this->assertSame(
+                $currentMappingVersionIdBefore,
+                $this->highestVersionMappingVersionId($freshDungeon, $gameVersion),
+                'A partially-failed import must not change the dungeon\'s current mapping version.',
+            );
+
+            $this->assertSame(
+                $mappingVersionIdsBefore,
+                MappingVersion::query()->where('dungeon_id', $dungeon->id)->pluck('id')->sort()->values()->all(),
+                'A partially-failed import must not leave a half-built mapping version behind, even though ' .
+                'every import step ran to completion.',
+            );
+        } finally {
+            // Same cascade-safe cleanup as the crash-recovery test above, in case the fix regresses.
+            MappingVersion::destroy(
+                MappingVersion::query()
+                    ->where('dungeon_id', $dungeon->id)
+                    ->whereNotIn('id', $mappingVersionIdsBefore)
+                    ->pluck('id'),
+            );
+
+            $dungeon->update(['mdt_id' => $originalDungeonMdtId]);
+        }
+    }
+
+    /**
+     * A direct, game-version-scoped query, deliberately not Dungeon::getCurrentMappingVersion() - that
+     * method falls back through the caller's own game version, then the default game version, then (if
+     * still unmatched) the highest mapping version ID across ALL game versions. Comparing "before" and
+     * "after" through that fallback chain risks silently comparing two different game versions if either
+     * side happens to miss the scoped lookup.
+     */
+    private function highestVersionMappingVersionId(Dungeon $dungeon, GameVersion $gameVersion): ?int
+    {
+        return MappingVersion::query()
+            ->where('dungeon_id', $dungeon->id)
+            ->where('game_version_id', $gameVersion->id)
+            ->orderByDesc('version')
+            ->value('id');
     }
 }
