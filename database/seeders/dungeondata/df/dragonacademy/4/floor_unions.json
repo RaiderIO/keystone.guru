@@ -148,5 +148,35 @@
         "lng": 127.22,
         "size": 325,
         "rotation": 0
+    },
+    {
+        "id": 1108,
+        "mapping_version_id": 94,
+        "floor_id": 280,
+        "target_floor_id": 145,
+        "lat": -125.04,
+        "lng": 329.2,
+        "size": 335,
+        "rotation": 0
+    },
+    {
+        "id": 1109,
+        "mapping_version_id": 94,
+        "floor_id": 280,
+        "target_floor_id": 145,
+        "lat": -88.28,
+        "lng": 297.2,
+        "size": 350,
+        "rotation": 0
+    },
+    {
+        "id": 1110,
+        "mapping_version_id": 94,
+        "floor_id": 280,
+        "target_floor_id": 144,
+        "lat": -143.73,
+        "lng": 127.22,
+        "size": 325,
+        "rotation": 0
     }
 ]

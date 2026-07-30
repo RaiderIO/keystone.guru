@@ -25,6 +25,11 @@ return new class extends Migration {
      * This repoints them onto the dungeon's current Legion Remix mapping version, which does have the
      * mapping. Selecting by "not one of the surviving mapping versions" rather than by the removed ids
      * makes this correct whether it runs before or after the seeder drops them.
+     *
+     * The repointed routes change game version along with their mapping version, so they move from the
+     * retail listings into the Legion Remix ones and keep a `season_id` naming a retail season. Their
+     * thumbnails are also left as they are. All of that is cosmetic here precisely because these routes have
+     * no pulls - there is no content whose meaning could shift - and it beats the alternative of a 500.
      */
     public function up(): void
     {
@@ -54,9 +59,14 @@ return new class extends Migration {
                 continue;
             }
 
+            // whereNotIn evaluates to NULL for a NULL mapping_version_id, so those rows need saying out loud -
+            // they read their mapping version just as unguardedly as a dangling one does.
             DB::table('dungeon_routes')
                 ->where('dungeon_id', $dungeonId)
-                ->whereNotIn('mapping_version_id', $survivingMappingVersionIds)
+                ->where(static function ($query) use ($survivingMappingVersionIds) {
+                    $query->whereNotIn('mapping_version_id', $survivingMappingVersionIds)
+                        ->orWhereNull('mapping_version_id');
+                })
                 ->update(['mapping_version_id' => $survivingMappingVersionIds->first()]);
         }
     }

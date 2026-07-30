@@ -29,10 +29,13 @@ final class FloorUnionAreaBelongsToItsOwnFloorUnionTest extends PublicTestCase
         // Arrange
         $floorUnionsById = FloorUnion::query()->get()->keyBy('id');
 
-        $failures = [];
+        $failures               = [];
+        $checkedFloorUnionAreas = 0;
 
         // Act
         foreach (FloorUnionArea::query()->get() as $floorUnionArea) {
+            $checkedFloorUnionAreas++;
+
             /** @var FloorUnion|null $floorUnion */
             $floorUnion = $floorUnionsById->get($floorUnionArea->floor_union_id);
 
@@ -70,6 +73,10 @@ final class FloorUnionAreaBelongsToItsOwnFloorUnionTest extends PublicTestCase
 
         // Assert
         $this->assertEmpty($failures, implode("\n", $failures));
-        $this->assertGreaterThan(0, $floorUnionsById->count(), 'Nothing was checked - the seeded data has no floor unions at all.');
+        $this->assertGreaterThan(
+            0,
+            $checkedFloorUnionAreas,
+            'No floor union area was examined - the assertion above proved nothing.',
+        );
     }
 }

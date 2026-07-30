@@ -24,38 +24,46 @@ final class FacadeEnabledRequiresFacadeFloorUnionsTest extends PublicTestCase
      * getClonesAsEnemies() with the route's own mapping version, so a mapping version in this shape breaks
      * regular player actions on every existing route that uses it, not just an admin reimport.
      *
-     * Six retail mapping versions had this shape in seeded data and are fixed in #3739: Cathedral of
-     * Eternal Night and Maw of Souls dropped their retail mapping version entirely (both were empty stubs
-     * that predate the Legion Remix mappings holding all the real data), while Halls of Valor, Lower
-     * Karazhan, Upper Karazhan and Vault of the Wardens copied the floor unions from their newest Legion
-     * Remix mapping version.
+     * Fifteen retail mapping versions had this shape in seeded data and are fixed in #3739. Six were the
+     * current version for their dungeon: Cathedral of Eternal Night and Maw of Souls dropped their retail
+     * mapping version entirely (both were empty stubs that predate the Legion Remix mappings holding all
+     * the real data), while Halls of Valor, Lower Karazhan, Upper Karazhan and Vault of the Wardens copied
+     * the floor unions from their newest Legion Remix mapping version. The other nine were superseded
+     * versions that copied theirs from their own dungeon's current version.
      *
-     * Scoped to the current (highest `version`) mapping version per dungeon per game version, matching
-     * FacadeFloorUnionsRequireFacadeEnabledTest: a superseded mapping version in this shape can still be
-     * hit by an old route, but fixing history is a data migration rather than something seeded data can
-     * assert, and every dungeon's current mapping version is what a reimport writes into.
+     * Deliberately NOT scoped to the current mapping version per game version, unlike
+     * FacadeFloorUnionsRequireFacadeEnabledTest. That scope is right for the inverse direction, which only
+     * misplaces a reimport's enemies and so is inert on a version nothing reimports into. This direction is
+     * not: getClonesAsEnemies() is called with the *route's own* mapping version, so a superseded version
+     * in this shape throws on every export and pull import of every route still pinned to it - 690 of them
+     * across Black Rook Hold, Waycrest Manor and Algeth'ar Academy alone.
+     *
+     * The facade floors are filtered to active ones because that is what mdt:importmapping passes in
+     * (`$dungeon->floors()->active()->get()`), which is the strictest of the callers - the player-facing
+     * ones pass every floor.
      */
     #[Test]
-    public function facadeEnabled_givenAllDungeonsCurrentMappingVersions_requiresFloorUnionsOnAFacadeFloor(): void
+    public function facadeEnabled_givenEveryMappingVersion_requiresFloorUnionsOnAFacadeFloor(): void
     {
         // Arrange
         $dungeons = Dungeon::with(['floors', 'mappingVersions'])->get();
 
-        $failures = [];
+        $failures               = [];
+        $checkedMappingVersions = 0;
 
         // Act
         foreach ($dungeons as $dungeon) {
             $facadeFloorIds = $dungeon->floors->where('facade', true)->where('active', true)->pluck('id');
 
-            /** @var Collection<int, MappingVersion> $currentMappingVersionsPerGameVersion */
-            $currentMappingVersionsPerGameVersion = $dungeon->mappingVersions
-                ->groupBy('game_version_id')
-                ->map(static fn($mappingVersions) => $mappingVersions->sortByDesc('version')->first());
+            /** @var Collection<int, MappingVersion> $mappingVersions */
+            $mappingVersions = $dungeon->mappingVersions;
 
-            foreach ($currentMappingVersionsPerGameVersion as $mappingVersion) {
+            foreach ($mappingVersions as $mappingVersion) {
                 if (!$mappingVersion->facade_enabled) {
                     continue;
                 }
+
+                $checkedMappingVersions++;
 
                 if ($facadeFloorIds->isEmpty()) {
                     $failures[] = sprintf(
@@ -68,17 +76,34 @@ final class FacadeEnabledRequiresFacadeFloorUnionsTest extends PublicTestCase
                     continue;
                 }
 
-                $hasFacadeFloorUnions = FloorUnion::query()
+                /** @var Collection<int, FloorUnion> $facadeFloorUnions */
+                $facadeFloorUnions = FloorUnion::query()
+                    ->withCount('floorUnionAreas')
                     ->where('mapping_version_id', $mappingVersion->id)
                     ->whereIn('floor_id', $facadeFloorIds)
-                    ->exists();
+                    ->get();
 
-                if (!$hasFacadeFloorUnions) {
+                if ($facadeFloorUnions->isEmpty()) {
                     $failures[] = sprintf(
                         '%s mapping version %d (game_version_id %d) has facade_enabled but no floor unions on a facade floor',
                         $dungeon->key,
                         $mappingVersion->id,
                         $mappingVersion->game_version_id,
+                    );
+
+                    continue;
+                }
+
+                // A floor union with no areas is skipped by CoordinatesService::convertFacadeMapLocationToMapLocation()
+                // just as surely as a missing one - it iterates the union's areas looking for the one containing the
+                // point, so with none it never resolves a target floor and leaves the coordinate on the facade plane.
+                foreach ($facadeFloorUnions->where('floor_union_areas_count', 0) as $floorUnion) {
+                    $failures[] = sprintf(
+                        '%s mapping version %d (game_version_id %d) has facade floor union %d with no floor union areas',
+                        $dungeon->key,
+                        $mappingVersion->id,
+                        $mappingVersion->game_version_id,
+                        $floorUnion->id,
                     );
                 }
             }
@@ -86,5 +111,10 @@ final class FacadeEnabledRequiresFacadeFloorUnionsTest extends PublicTestCase
 
         // Assert
         $this->assertEmpty($failures, implode("\n", $failures));
+        $this->assertGreaterThan(
+            0,
+            $checkedMappingVersions,
+            'No facade-enabled mapping version was examined - the assertion above proved nothing.',
+        );
     }
 }
