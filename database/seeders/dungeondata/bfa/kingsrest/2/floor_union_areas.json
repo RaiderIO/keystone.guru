@@ -1,1 +1,16 @@
-[]
+[
+    {
+        "id": 1058,
+        "mapping_version_id": 828,
+        "floor_id": 458,
+        "floor_union_id": 1069,
+        "vertices_json": "[{\"lat\":0,\"lng\":0},{\"lat\":-255.8,\"lng\":0},{\"lat\":-255.8,\"lng\":383.8},{\"lat\":0,\"lng\":383.8}]"
+    },
+    {
+        "id": 1059,
+        "mapping_version_id": 829,
+        "floor_id": 458,
+        "floor_union_id": 1070,
+        "vertices_json": "[{\"lat\":0,\"lng\":0},{\"lat\":-255.8,\"lng\":0},{\"lat\":-255.8,\"lng\":383.8},{\"lat\":0,\"lng\":383.8}]"
+    }
+]

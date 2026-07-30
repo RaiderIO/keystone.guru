@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "41dbd19f68d151d5e5ef4d88b28d1eab",
+    "content-hash": "b3db45cdd10e029eaf88f8a55b0161ec",
     "packages": [
         {
             "name": "akaunting/laravel-language",
@@ -5950,25 +5950,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Wotuu/MDT_Legacy.git",
-                "reference": "c617a034280b2d3967ae5537b25be792d9bac272"
+                "reference": "5cfa26f16ea57693f55466fec146e8df90c55527"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/Wotuu/MDT_Legacy/archive/c617a034280b2d3967ae5537b25be792d9bac272.zip"
+                "url": "https://github.com/Wotuu/MDT_Legacy/archive/5cfa26f16ea57693f55466fec146e8df90c55527.zip"
             },
             "type": "library"
         },
         {
             "name": "nnoggie/mythicdungeontools",
-            "version": "6.1.20",
+            "version": "6.2.0-alpha3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Wotuu/MythicDungeonTools.git",
-                "reference": "b9def8665d85b0902dd59aa106bb5ea974747e2e"
+                "reference": "ff4ef5fc933dc9304263203e3ba4d94ceaf2fe95"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/Wotuu/MythicDungeonTools/archive/b9def8665d85b0902dd59aa106bb5ea974747e2e.zip"
+                "url": "https://github.com/Wotuu/MythicDungeonTools/archive/ff4ef5fc933dc9304263203e3ba4d94ceaf2fe95.zip"
             },
             "type": "library"
         },
@@ -18633,6 +18633,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "codeartmk/opensearch-laravel": 20,
+        "nnoggie/mythicdungeontools": 15,
         "paquettg/php-html-parser": 20,
         "vildanbina/laravel-auto-translation": 20
     },

@@ -381,7 +381,7 @@ return [
     7800      => 'Mekgénieur Thermojoncteur',
     7849      => 'Système d\'alarme mobile',
     7850      => 'Kernobee',
-    7897      => 'Alarme-bombe 2600',
+    7897      => 'Alarme-bombe 2600',
     7915      => 'Bombe ambulante',
     7998      => 'Maître-dynamiteur Emi Courtemèche',
     8035      => 'Mine sombrefer',

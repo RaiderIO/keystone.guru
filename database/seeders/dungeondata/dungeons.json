@@ -15587,7 +15587,7 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 340,
@@ -15654,7 +15654,7 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 342,
@@ -15783,7 +15783,7 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 345,
@@ -15864,7 +15864,7 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 347,
@@ -15945,7 +15945,7 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 349,
@@ -16085,7 +16085,7 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 353,
@@ -16261,7 +16261,7 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 357,
@@ -16401,7 +16401,7 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 360,
@@ -17057,8 +17057,8 @@
         "zone_id": 16368,
         "map_id": 2825,
         "instance_id": 1311,
-        "challenge_mode_id": null,
-        "mdt_id": 0,
+        "challenge_mode_id": 586,
+        "mdt_id": 161,
         "raid": 0,
         "key": "den_of_nalorakk",
         "name": "dungeons.midnight.den_of_nalorakk.name",
@@ -17067,7 +17067,7 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "mdt_supported": false,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 393,
@@ -17626,7 +17626,7 @@
         "zone_id": 16091,
         "map_id": 2813,
         "instance_id": 1304,
-        "challenge_mode_id": null,
+        "challenge_mode_id": 587,
         "mdt_id": 160,
         "raid": 0,
         "key": "murder_row",
@@ -17810,8 +17810,8 @@
         "zone_id": 16359,
         "map_id": 2859,
         "instance_id": 1309,
-        "challenge_mode_id": null,
-        "mdt_id": 0,
+        "challenge_mode_id": 584,
+        "mdt_id": 162,
         "raid": 0,
         "key": "the_blinding_vale",
         "name": "dungeons.midnight.the_blinding_vale.name",
@@ -17820,7 +17820,7 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "mdt_supported": false,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 408,
@@ -17877,8 +17877,8 @@
         "zone_id": 16425,
         "map_id": 2923,
         "instance_id": 1313,
-        "challenge_mode_id": null,
-        "mdt_id": 0,
+        "challenge_mode_id": 585,
+        "mdt_id": 163,
         "raid": 0,
         "key": "voidscar_arena",
         "name": "dungeons.midnight.voidscar_arena.name",
@@ -17887,7 +17887,7 @@
         "heatmap_enabled": 0,
         "speedrun_enabled": 0,
         "has_wallpaper": 0,
-        "mdt_supported": false,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 454,
@@ -19882,7 +19882,7 @@
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "has_wallpaper": 1,
-        "mdt_supported": false,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 461,

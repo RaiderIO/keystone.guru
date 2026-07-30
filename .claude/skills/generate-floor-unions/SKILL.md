@@ -155,10 +155,30 @@ handles: `MappingVersion::create()` fires a `created` boot hook that clones the 
 mapping - bare versions must be created with the quiet `MappingVersion::insertGetId()` (same
 trick as `MappingService::copyMappingVersionToDungeon()`).
 
+**A bare version is only right for a dungeon that has no mapping yet.** For a dungeon that already
+has enemies, create the new version normally (`MappingService::createNewMappingVersionFromPreviousMapping()`,
+which clones them) and point the script at it:
+
+```bash
+docker compose exec -T -e KSG_FLOOR_UNION_IMPORT=storage/app/floor_union_import_<dungeon>.json \
+    -e KSG_FLOOR_UNION_MAPPING_VERSION_ID=<id> \
+    app php artisan tinker .claude/skills/generate-floor-unions/scripts/insert_floor_unions.php
+```
+
+It inserts the unions into that version and enables its facade instead of creating a new version. A
+bare version slotted between the old mapping and a later `mdt:importmapping` **silently discards
+every hand-placed enemy position** (#3734): that import recovers `floor_id`/`lat`/`lng`/`required`/
+`skippable`/`kill_priority` and enemy forces checkpoint membership from the *immediately preceding*
+version only, so an empty predecessor makes every enemy log
+`importEnemiesCannotRecoverPropertiesFromExistingEnemy` and fall back to MDT's raw position rather
+than the one a mapper placed by hand.
+
 Side effects to tell the user about:
 - The new version is now the dungeon's **current** mapping version in dev.
-- The `mapping:sync` cron exports it into `database/seeders/dungeondata/` in the main checkout -
-  do not commit that drift; deleting the mapping version reverts it.
+- Nothing exports it into `database/seeders/dungeondata/` on its own - `mapping:sync` was deleted in
+  #3358 and no mapping work is scheduled anywhere. That JSON only changes when you run `mapping:save`
+  explicitly, so drift there is a real signal rather than background noise. Deleting the mapping
+  version reverts the database side.
 - To retry, delete the created version first (`MappingVersion::find(id)->delete()` cascades to
   its unions/areas) - each script run creates a NEW version.
 

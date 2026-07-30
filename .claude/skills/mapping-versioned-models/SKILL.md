@@ -192,8 +192,10 @@ example** — its diff contains exactly one of everything below; when in doubt, 
 8. Import — `RelationMapping` subclass in `app/SeederHelpers/RelationImport/Mapping/` (JSON file
    name + model class, `MappingVersionConditional`), registered in the `$relationMapping` array
    in `database/seeders/DungeonDataSeeder.php` — **ordering matters: parents before children**.
-   See the **seeder-load** skill. Verify with a real `mapping:save` round-trip in dev, then
-   revert the regenerated seeder JSON before committing (the mapping:sync cron churns it anyway).
+   See the **seeder-load** skill. Verify with a real `mapping:save` round-trip in dev, then decide
+   deliberately what to keep — nothing rewrites `database/seeders/dungeondata/` on a timer, so
+   anything that shows up there came from your own `mapping:save` and is a real change, not churn
+   to be discarded blindly.
 
 ### D. Serving it to the map (the JS payload)
 

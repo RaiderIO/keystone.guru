@@ -34,6 +34,16 @@
  * version has the highest version number it BECOMES the dungeon's current
  * mapping version - with no enemies attached. Intended for dev review only;
  * delete the created version to revert.
+ *
+ * A bare version is only appropriate for a dungeon whose mapping is about to be
+ * created from scratch. For a dungeon that ALREADY has enemies, set
+ *   KSG_FLOOR_UNION_MAPPING_VERSION_ID=<id>
+ * to insert the unions into that existing version instead (its facade is enabled
+ * as part of the insert). A bare version between the old mapping and a later
+ * `mdt:importmapping` severs that import's property recovery - it restores
+ * floor_id/lat/lng/required/skippable/kill_priority and enemy forces checkpoint
+ * membership from the immediately preceding version only, so an empty
+ * predecessor silently discards every hand-placed enemy position (#3734).
  */
 
 use App\Models\Dungeon;
@@ -94,24 +104,54 @@ foreach ($import['placements'] as $index => $placement) {
 
 $now = Carbon::now()->toDateTimeString();
 
-// Quiet insert - see the docblock, MappingVersion::create() would clone the previous mapping.
-$newMappingVersionId = MappingVersion::insertGetId([
-    'dungeon_id'        => $dungeon->id,
-    'game_version_id'   => $latestMappingVersion->game_version_id,
-    'mdt_mapping_hash'  => null,
-    'mdt_addon_version' => null,
-    'version'           => $latestMappingVersion->version + 1,
-    'facade_enabled'    => true,
-    'created_at'        => $now,
-    'updated_at'        => $now,
-]);
+$targetMappingVersionId = getenv('KSG_FLOOR_UNION_MAPPING_VERSION_ID');
+if ($targetMappingVersionId !== false && $targetMappingVersionId !== '') {
+    /** @var MappingVersion $targetMappingVersion */
+    $targetMappingVersion = MappingVersion::query()->findOrFail((int)$targetMappingVersionId);
 
-echo sprintf(
-    "Created bare mapping version %d (version %d) for %s\n",
-    $newMappingVersionId,
-    $latestMappingVersion->version + 1,
-    $dungeon->key
-);
+    if ($targetMappingVersion->dungeon_id !== $dungeon->id) {
+        throw new RuntimeException(
+            sprintf('mapping version %d belongs to dungeon %d, not to %s', $targetMappingVersion->id, $targetMappingVersion->dungeon_id, $dungeon->key)
+        );
+    }
+
+    $existingFloorUnionCount = FloorUnion::query()->where('mapping_version_id', $targetMappingVersion->id)->count();
+    if ($existingFloorUnionCount > 0) {
+        throw new RuntimeException(
+            sprintf('mapping version %d already has %d floor union(s) - delete them first to avoid duplicates', $targetMappingVersion->id, $existingFloorUnionCount)
+        );
+    }
+
+    $targetMappingVersion->update(['facade_enabled' => true]);
+
+    $newMappingVersionId = $targetMappingVersion->id;
+
+    echo sprintf(
+        "Using existing mapping version %d (version %d) for %s, facade enabled\n",
+        $targetMappingVersion->id,
+        $targetMappingVersion->version,
+        $dungeon->key
+    );
+} else {
+    // Quiet insert - see the docblock, MappingVersion::create() would clone the previous mapping.
+    $newMappingVersionId = MappingVersion::insertGetId([
+        'dungeon_id'        => $dungeon->id,
+        'game_version_id'   => $latestMappingVersion->game_version_id,
+        'mdt_mapping_hash'  => null,
+        'mdt_addon_version' => null,
+        'version'           => $latestMappingVersion->version + 1,
+        'facade_enabled'    => true,
+        'created_at'        => $now,
+        'updated_at'        => $now,
+    ]);
+
+    echo sprintf(
+        "Created bare mapping version %d (version %d) for %s\n",
+        $newMappingVersionId,
+        $latestMappingVersion->version + 1,
+        $dungeon->key
+    );
+}
 
 foreach ($import['placements'] as $placement) {
     $floorUnion = FloorUnion::create([
