@@ -113,6 +113,27 @@ final class PatreonServiceTest extends PublicTestCase
         $this->assertDatabaseHas('patreon_user_benefits', ['id' => $patreonUserBenefit->id]);
     }
 
+    #[Test]
+    public function applyPaidBenefitsForMember_givenMemberAttributesWithoutEmailKey_returnsMemberNotLinked(): void
+    {
+        // Arrange
+        $member = [
+            'id'            => 'member-1',
+            'type'          => 'member',
+            'attributes'    => [],
+            'relationships' => ['currently_entitled_tiers' => ['data' => []]],
+        ];
+
+        /** @var PatreonServiceInterface $patreonService */
+        $patreonService = $this->app->make(PatreonServiceInterface::class);
+
+        // Act
+        $result = $patreonService->applyPaidBenefitsForMember([], [], $member);
+
+        // Assert
+        $this->assertSame(ApplyPaidBenefitsForMemberResult::MemberNotLinked, $result);
+    }
+
     private function createPatron(): void
     {
         $this->user = User::factory()->create();
