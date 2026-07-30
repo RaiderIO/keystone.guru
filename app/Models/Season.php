@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use ReflectionClass;
 
 /**
  * @property int      $id
@@ -177,5 +178,24 @@ class Season extends CacheModel
         foreach (array_unique($dungeonIds) as $dungeonId) {
             $this->seasonDungeons()->create(['dungeon_id' => $dungeonId]);
         }
+    }
+
+    /**
+     * The Season::SEASON_* ids that don't have a row yet - the only ids a new season is allowed
+     * to take, since a season's id is a deliberate code change rather than an auto-increment value.
+     *
+     * @return array<int, int>
+     */
+    public static function getAvailableIds(): array
+    {
+        $usedIds = self::pluck('id')->all();
+
+        $constants = (new ReflectionClass(self::class))->getConstants();
+
+        return collect($constants)
+            ->filter(fn($value, $name) => is_int($value) && str_starts_with($name, 'SEASON_'))
+            ->reject(fn(int $id) => in_array($id, $usedIds, true))
+            ->values()
+            ->all();
     }
 }

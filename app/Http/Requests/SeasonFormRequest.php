@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Affix;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\Laratrust\Role;
+use App\Models\Season;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -24,10 +26,15 @@ class SeasonFormRequest extends FormRequest
      */
     public function rules(): array
     {
+        $isCreate = $this->route()->parameter('season') === null;
+
         return [
+            // Only settable on create - a season's id is one of the declared Season::SEASON_*
+            // constants, not an auto-increment value, so it must already exist in code.
+            'id'           => [Rule::requiredIf($isCreate), Rule::in(Season::getAvailableIds())],
             'expansion_id' => ['required', Rule::exists(Expansion::class, 'id')],
             // A <select> always submits a value; -1 is the "none selected" sentinel option.
-            'seasonal_affix_id'       => 'required|integer|min:-1',
+            'seasonal_affix_id'       => ['required', 'integer', Rule::in([-1, ...$this->getSeasonalAffixIds()])],
             'index'                   => 'required|integer|min:1',
             'start'                   => 'required|date',
             'presets'                 => 'nullable|integer|min:0',
@@ -40,5 +47,13 @@ class SeasonFormRequest extends FormRequest
             'dungeon_ids'             => 'nullable|array',
             'dungeon_ids.*'           => ['integer', Rule::exists(Dungeon::class, 'id')],
         ];
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    private function getSeasonalAffixIds(): array
+    {
+        return Affix::whereIn('key', Affix::SEASONAL_AFFIXES)->pluck('affix_id')->all();
     }
 }

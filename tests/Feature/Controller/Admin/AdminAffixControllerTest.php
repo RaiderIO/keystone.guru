@@ -63,40 +63,78 @@ final class AdminAffixControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function create_givenNoAffix_returnsOk(): void
+    public function create_givenAllDeclaredAffixIdsAlreadyUsed_showsNoAvailableIdsWarning(): void
     {
-        // Arrange
+        // Arrange - every Affix::ALL id already has a seeded row in the fixture DB, so this is the
+        // only reachable state for the create page today.
+        $this->assertEmpty(Affix::getAvailableIds(), 'Fixture DB assumption changed - add a covering test for the id-select branch.');
 
         // Act
         $response = $this->get(route('admin.affix.new'));
 
         // Assert
         $response->assertOk();
+        $response->assertSee(__('view_admin.affix.edit.no_available_ids'));
     }
 
     #[Test]
-    public function savenew_givenValidData_createsAffixWithPlaceholderIconFileId(): void
+    public function savenew_givenNoId_returnsValidationError(): void
     {
         // Arrange
-        $key = 'TestAffixKey';
+        $key = 'TestAffixNoId';
 
-        try {
-            // Act
-            $response = $this->post(route('admin.affix.savenew'), [
-                'key'         => $key,
-                'affix_id'    => 999,
-                'name'        => 'Test Affix',
-                'description' => 'Test description',
-            ]);
+        // Act
+        $response = $this->post(route('admin.affix.savenew'), [
+            'key'         => $key,
+            'affix_id'    => 999,
+            'name'        => 'Test Affix',
+            'description' => 'Test description',
+        ]);
 
-            // Assert
-            $affix = Affix::query()->where('key', $key)->first();
-            $this->assertNotNull($affix);
-            $response->assertRedirect(route('admin.affix.edit', $affix));
-            $this->assertSame(-1, $affix->icon_file_id);
-        } finally {
-            Affix::query()->where('key', $key)->delete();
-        }
+        // Assert
+        $response->assertSessionHasErrors('id');
+        $this->assertFalse(Affix::query()->where('key', $key)->exists());
+    }
+
+    #[Test]
+    public function savenew_givenIdNotDeclaredAsAffixConstant_returnsValidationError(): void
+    {
+        // Arrange
+        $key = 'TestAffixUndeclaredId';
+
+        // Act
+        $response = $this->post(route('admin.affix.savenew'), [
+            'id'          => 90000,
+            'key'         => $key,
+            'affix_id'    => 999,
+            'name'        => 'Test Affix',
+            'description' => 'Test description',
+        ]);
+
+        // Assert
+        $response->assertSessionHasErrors('id');
+        $this->assertFalse(Affix::query()->where('key', $key)->exists());
+    }
+
+    #[Test]
+    public function savenew_givenIdAlreadyTaken_returnsValidationError(): void
+    {
+        // Arrange
+        $key           = 'TestAffixTakenId';
+        $alreadyUsedId = Affix::query()->value('id');
+
+        // Act
+        $response = $this->post(route('admin.affix.savenew'), [
+            'id'          => $alreadyUsedId,
+            'key'         => $key,
+            'affix_id'    => 999,
+            'name'        => 'Test Affix',
+            'description' => 'Test description',
+        ]);
+
+        // Assert
+        $response->assertSessionHasErrors('id');
+        $this->assertFalse(Affix::query()->where('key', $key)->exists());
     }
 
     #[Test]

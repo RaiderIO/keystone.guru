@@ -1,9 +1,11 @@
 <?php
 
 use App\Models\Affix;
+use Illuminate\Support\Collection;
 
 /**
- * @var Affix $affix
+ * @var Affix                   $affix
+ * @var Collection<int, string> $availableAffixIds Only present when creating a new affix.
  */
 ?>
 
@@ -18,6 +20,11 @@ use App\Models\Affix;
 @endsection
 
 @section('content')
+    @if(!isset($affix) && $availableAffixIds->isEmpty())
+        <div class="alert alert-warning">
+            {{ __('view_admin.affix.edit.no_available_ids') }}
+        </div>
+    @else
     @isset($affix)
         {{ html()->modelForm($affix, 'PATCH', route('admin.affix.update', $affix))->open() }}
     @else
@@ -33,6 +40,13 @@ use App\Models\Affix;
         <div class="mb-3">
             {{ __('view_admin.affix.edit.current_image') }}: <img src="{{ $affix->image_url }}"
                                                                     style="width: 32px; height: 32px;"/>
+        </div>
+    @else
+        <div class="mb-3{{ $errors->has('id') ? ' has-error' : '' }}">
+            {{ html()->label(__('view_admin.affix.edit.id'), 'id') }}
+            <span class="form-required">*</span>
+            {{ html()->select('id', $availableAffixIds)->class('form-control selectpicker') }}
+            @include('common.forms.form-error', ['key' => 'id'])
         </div>
     @endisset
 
@@ -63,4 +77,5 @@ use App\Models\Affix;
     {{ html()->input('submit')->value(__('view_admin.affix.edit.submit'))->class('btn btn-info') }}
 
     {{ html()->closeModelForm() }}
+    @endif
 @endsection

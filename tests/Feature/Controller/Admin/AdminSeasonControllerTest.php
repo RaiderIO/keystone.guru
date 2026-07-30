@@ -37,6 +37,20 @@ final class AdminSeasonControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function get_asAdmin_ordersSeasonsByIdDescending(): void
+    {
+        // Arrange
+        $ids = Season::query()->orderByDesc('id')->pluck('id')->toArray();
+
+        // Act
+        $response = $this->get(route('admin.seasons'));
+
+        // Assert
+        $response->assertOk();
+        $this->assertSame($ids, $response->viewData('models')->pluck('id')->toArray());
+    }
+
+    #[Test]
     public function get_asNonAdmin_returnsForbidden(): void
     {
         // Arrange
@@ -65,15 +79,18 @@ final class AdminSeasonControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function create_givenNoSeason_returnsOk(): void
+    public function create_givenAllDeclaredSeasonIdsAlreadyUsed_showsNoAvailableIdsWarning(): void
     {
-        // Arrange
+        // Arrange - every Season::SEASON_* constant already has a seeded row in the fixture DB, so
+        // this is the only reachable state for the create page today.
+        $this->assertEmpty(Season::getAvailableIds(), 'Fixture DB assumption changed - add a covering test for the id-select branch.');
 
         // Act
         $response = $this->get(route('admin.season.new'));
 
         // Assert
         $response->assertOk();
+        $response->assertSee(__('view_admin.season.edit.no_available_ids'));
     }
 
     #[Test]
@@ -106,16 +123,26 @@ final class AdminSeasonControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function savenew_givenRealSeasonalAffixId_persistsAndPreselectsIt(): void
+    public function update_givenRealSeasonalAffixId_persistsAndPreselectsIt(): void
     {
         // Arrange
         $expansion = Expansion::query()->firstOrFail();
         $affix     = Affix::whereIn('key', Affix::SEASONAL_AFFIXES)->firstOrFail();
-        $season    = null;
+        $season    = Season::create([
+            'expansion_id'            => $expansion->id,
+            'seasonal_affix_id'       => null,
+            'index'                   => 993,
+            'start'                   => '2026-01-01 00:00:00',
+            'presets'                 => 0,
+            'affix_group_count'       => 4,
+            'start_affix_group_index' => 0,
+            'key_level_min'           => 2,
+            'key_level_max'           => 30,
+        ]);
 
         try {
             // Act
-            $response = $this->post(route('admin.season.savenew'), [
+            $response = $this->patch(route('admin.season.update', $season), [
                 'expansion_id'            => $expansion->id,
                 'seasonal_affix_id'       => $affix->affix_id,
                 'index'                   => 993,
@@ -127,29 +154,35 @@ final class AdminSeasonControllerTest extends PublicTestCase
             ]);
 
             // Assert
-            $season = Season::query()->where('index', 993)->first();
-            $this->assertNotNull($season);
-            $response->assertRedirect(route('admin.season.edit', $season));
-            $this->assertSame($affix->affix_id, $season->seasonal_affix_id);
-
-            $editResponse = $this->get(route('admin.season.edit', $season));
-            $editResponse->assertSee(sprintf('value="%d" selected="selected"', $affix->affix_id), false);
+            $response->assertOk();
+            $this->assertSame($affix->affix_id, $season->fresh()->seasonal_affix_id);
+            $response->assertSee(sprintf('value="%d" selected="selected"', $affix->affix_id), false);
         } finally {
-            $season?->delete();
+            $season->delete();
         }
     }
 
     #[Test]
-    public function savenew_givenValidDataWithDungeons_createsSeasonAndSyncsDungeons(): void
+    public function update_givenValidDataWithDungeons_syncsDungeonsAndDefaultsPresetsAndSeasonalAffixId(): void
     {
         // Arrange
         $expansion = Expansion::query()->firstOrFail();
         $dungeons  = Dungeon::query()->limit(2)->get();
-        $season    = null;
+        $season    = Season::create([
+            'expansion_id'            => $expansion->id,
+            'seasonal_affix_id'       => null,
+            'index'                   => 999,
+            'start'                   => '2026-01-01 00:00:00',
+            'presets'                 => 5,
+            'affix_group_count'       => 10,
+            'start_affix_group_index' => 0,
+            'key_level_min'           => 2,
+            'key_level_max'           => 30,
+        ]);
 
         try {
-            // Act
-            $response = $this->post(route('admin.season.savenew'), [
+            // Act - presets is omitted so the controller must default it back to 0
+            $response = $this->patch(route('admin.season.update', $season), [
                 'expansion_id'            => $expansion->id,
                 'seasonal_affix_id'       => -1,
                 'index'                   => 999,
@@ -162,9 +195,8 @@ final class AdminSeasonControllerTest extends PublicTestCase
             ]);
 
             // Assert
-            $season = Season::query()->where('index', 999)->first();
-            $this->assertNotNull($season);
-            $response->assertRedirect(route('admin.season.edit', $season));
+            $response->assertOk();
+            $season->refresh();
             $this->assertSame(0, $season->presets);
             $this->assertNull($season->seasonal_affix_id, '-1 (the "none selected" option) must be normalized to null');
             $this->assertEqualsCanonicalizing(
@@ -172,8 +204,8 @@ final class AdminSeasonControllerTest extends PublicTestCase
                 $season->seasonDungeons()->pluck('dungeon_id')->toArray(),
             );
         } finally {
-            $season?->syncDungeons([]);
-            $season?->delete();
+            $season->syncDungeons([]);
+            $season->delete();
         }
     }
 
@@ -198,6 +230,78 @@ final class AdminSeasonControllerTest extends PublicTestCase
         // Assert
         $response->assertSessionHasErrors('start_affix_group_index');
         $this->assertFalse(Season::query()->where('index', 998)->exists());
+    }
+
+    #[Test]
+    public function savenew_givenNoId_returnsValidationError(): void
+    {
+        // Arrange
+        $expansion = Expansion::query()->firstOrFail();
+
+        // Act
+        $response = $this->post(route('admin.season.savenew'), [
+            'expansion_id'            => $expansion->id,
+            'seasonal_affix_id'       => -1,
+            'index'                   => 996,
+            'start'                   => '2026-01-01 00:00:00',
+            'affix_group_count'       => 4,
+            'start_affix_group_index' => 0,
+            'key_level_min'           => 2,
+            'key_level_max'           => 30,
+        ]);
+
+        // Assert
+        $response->assertSessionHasErrors('id');
+        $this->assertFalse(Season::query()->where('index', 996)->exists());
+    }
+
+    #[Test]
+    public function savenew_givenIdNotDeclaredAsSeasonConstant_returnsValidationError(): void
+    {
+        // Arrange
+        $expansion = Expansion::query()->firstOrFail();
+
+        // Act
+        $response = $this->post(route('admin.season.savenew'), [
+            'id'                      => 90000,
+            'expansion_id'            => $expansion->id,
+            'seasonal_affix_id'       => -1,
+            'index'                   => 995,
+            'start'                   => '2026-01-01 00:00:00',
+            'affix_group_count'       => 4,
+            'start_affix_group_index' => 0,
+            'key_level_min'           => 2,
+            'key_level_max'           => 30,
+        ]);
+
+        // Assert
+        $response->assertSessionHasErrors('id');
+        $this->assertFalse(Season::query()->where('index', 995)->exists());
+    }
+
+    #[Test]
+    public function savenew_givenIdAlreadyTaken_returnsValidationError(): void
+    {
+        // Arrange
+        $expansion     = Expansion::query()->firstOrFail();
+        $alreadyUsedId = Season::query()->value('id');
+
+        // Act
+        $response = $this->post(route('admin.season.savenew'), [
+            'id'                      => $alreadyUsedId,
+            'expansion_id'            => $expansion->id,
+            'seasonal_affix_id'       => -1,
+            'index'                   => 992,
+            'start'                   => '2026-01-01 00:00:00',
+            'affix_group_count'       => 4,
+            'start_affix_group_index' => 0,
+            'key_level_min'           => 2,
+            'key_level_max'           => 30,
+        ]);
+
+        // Assert
+        $response->assertSessionHasErrors('id');
+        $this->assertFalse(Season::query()->where('index', 992)->exists());
     }
 
     #[Test]

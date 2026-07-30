@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SeasonFormRequest;
 use App\Models\Affix;
-use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\Season;
 use Exception;
@@ -12,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
+use ReflectionClass;
 use Session;
 
 class SeasonController extends Controller
@@ -33,7 +33,18 @@ class SeasonController extends Controller
         unset($validated['dungeon_ids']);
 
         if ($season === null) {
-            $season = Season::create($validated);
+            // The id must be one of Season::ALL_SEASONS - explicit rather than auto-incrementing so
+            // that a season's identity is a deliberate code change (see SeasonFormRequest::rules()),
+            // matching the constants the rest of the codebase references by name (e.g.
+            // Season::SEASON_TWW_S1). MySQL's LAST_INSERT_ID() is not updated by an explicit
+            // AUTO_INCREMENT value on a bulk query-builder insert(), but a normal Eloquent save()
+            // does correctly report it back - verified empirically before relying on this.
+            $id = (int)$validated['id'];
+            unset($validated['id']);
+
+            $season     = new Season($validated);
+            $season->id = $id;
+            $season->save();
         } else {
             $season->update($validated);
         }
@@ -49,9 +60,9 @@ class SeasonController extends Controller
     public function create(): View
     {
         return view('admin.season.edit', [
+            'availableSeasonIds'  => $this->getAvailableSeasonIdsSelect(),
             'expansions'          => $this->getExpansionsSelect(),
             'seasonalAffixSelect' => $this->getSeasonalAffixSelect(),
-            'dungeonsSelect'      => $this->getDungeonsSelect(),
             'selectedDungeonIds'  => [],
         ]);
     }
@@ -64,7 +75,6 @@ class SeasonController extends Controller
         return view('admin.season.edit', [
             'expansions'          => $this->getExpansionsSelect(),
             'seasonalAffixSelect' => $this->getSeasonalAffixSelect(),
-            'dungeonsSelect'      => $this->getDungeonsSelect(),
             'selectedDungeonIds'  => $season->seasonDungeons()->pluck('dungeon_id')->toArray(),
             'season'              => $season,
         ]);
@@ -109,7 +119,7 @@ class SeasonController extends Controller
     public function get(): View
     {
         return view('admin.season.list', [
-            'models' => Season::with(['expansion'])->orderByDesc('start')->get(),
+            'models' => Season::with(['expansion'])->orderByDesc('id')->get(),
         ]);
     }
 
@@ -124,14 +134,6 @@ class SeasonController extends Controller
     /**
      * @return Collection<int, string>
      */
-    private function getDungeonsSelect(): Collection
-    {
-        return Dungeon::orderBy('name')->get()->mapWithKeys(fn(Dungeon $dungeon) => [$dungeon->id => __($dungeon->name)]);
-    }
-
-    /**
-     * @return Collection<int, string>
-     */
     private function getSeasonalAffixSelect(): Collection
     {
         return collect([-1 => __('view_admin.season.edit.seasonal_affix_id_none')])
@@ -141,5 +143,23 @@ class SeasonController extends Controller
                     ->get()
                     ->mapWithKeys(fn(Affix $affix) => [$affix->affix_id => __($affix->name)]),
             );
+    }
+
+    /**
+     * The season ids that are declared as a Season::SEASON_* constant but don't have a row yet -
+     * the only ids a new season is allowed to take.
+     *
+     * @return Collection<int, string>
+     */
+    private function getAvailableSeasonIdsSelect(): Collection
+    {
+        $availableIds = Season::getAvailableIds();
+
+        $constants = (new ReflectionClass(Season::class))->getConstants();
+
+        return collect($constants)
+            ->filter(fn($value, $name) => is_int($value) && str_starts_with($name, 'SEASON_') && in_array($value, $availableIds, true))
+            ->flip()
+            ->sortKeys();
     }
 }

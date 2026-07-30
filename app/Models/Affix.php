@@ -184,4 +184,20 @@ class Affix extends CacheModel
     {
         return self::SEASONAL_TYPE_AFFIX_MAPPING[$seasonalType] ?? null;
     }
+
+    /**
+     * The Affix::ALL ids that don't have a row yet - the only ids a new affix is allowed to take,
+     * since an affix's id is a deliberate code change rather than an auto-increment value.
+     *
+     * @return array<int, int>
+     */
+    public static function getAvailableIds(): array
+    {
+        $usedIds = self::pluck('id')->all();
+
+        return collect(self::ALL)
+            ->reject(fn(int $id) => in_array($id, $usedIds, true))
+            ->values()
+            ->all();
+    }
 }

@@ -23,7 +23,12 @@ class AffixFormRequest extends FormRequest
      */
     public function rules(): array
     {
+        $isCreate = $this->route()->parameter('affix') === null;
+
         return [
+            // Only settable on create - an affix's id is one of Affix::ALL's values, not an
+            // auto-increment value, so it must already exist in code.
+            'id'  => [Rule::requiredIf($isCreate), Rule::in(Affix::getAvailableIds())],
             'key' => [
                 'required',
                 Rule::unique(Affix::class, 'key')->ignore($this->route()->parameter('affix')),

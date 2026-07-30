@@ -4,11 +4,11 @@ use App\Models\Season;
 use Illuminate\Support\Collection;
 
 /**
- * @var Season                   $season
- * @var Collection<int, string>  $expansions
- * @var Collection<int, string>  $seasonalAffixSelect
- * @var Collection<int, string>  $dungeonsSelect
- * @var array<int, int>          $selectedDungeonIds
+ * @var Season                  $season
+ * @var Collection<int, string> $expansions
+ * @var Collection<int, string> $seasonalAffixSelect
+ * @var Collection<int, string> $availableSeasonIds Only present when creating a new season.
+ * @var array<int, int>         $selectedDungeonIds
  */
 ?>
 
@@ -23,6 +23,11 @@ use Illuminate\Support\Collection;
 @endsection
 
 @section('content')
+    @if(!isset($season) && $availableSeasonIds->isEmpty())
+        <div class="alert alert-warning">
+            {{ __('view_admin.season.edit.no_available_ids') }}
+        </div>
+    @else
     <div class="mb-4">
         @isset($season)
             {{ html()->modelForm($season, 'PATCH', route('admin.season.update', $season))->open() }}
@@ -34,6 +39,13 @@ use Illuminate\Support\Collection;
             <div class="mb-3">
                 {{ html()->label(__('view_admin.season.edit.id'), 'id') }}
                 {{ html()->number('id')->class('form-control')->attribute('disabled', 'disabled') }}
+            </div>
+        @else
+            <div class="mb-3{{ $errors->has('id') ? ' has-error' : '' }}">
+                {{ html()->label(__('view_admin.season.edit.id'), 'id') }}
+                <span class="form-required">*</span>
+                {{ html()->select('id', $availableSeasonIds)->class('form-control selectpicker') }}
+                @include('common.forms.form-error', ['key' => 'id'])
             </div>
         @endisset
 
@@ -112,16 +124,22 @@ use Illuminate\Support\Collection;
             </div>
         </div>
 
-        <div class="mb-3{{ $errors->has('dungeon_ids') ? ' has-error' : '' }}">
-            {{ html()->label(__('view_admin.season.edit.dungeon_ids'), 'dungeon_ids') }}
-            {{ html()->multiselect('dungeon_ids[]', $dungeonsSelect, $selectedDungeonIds)->id('dungeon_ids')->class('form-control selectpicker')->data('live-search', 'true') }}
-            @include('common.forms.form-error', ['key' => 'dungeon_ids'])
-        </div>
+        @include('common.dungeon.select', [
+            'name' => 'dungeon_ids[]',
+            'selected' => $selectedDungeonIds,
+            'multiple' => true,
+            'showAll' => false,
+            'activeOnly' => false,
+            'ignoreGameVersion' => true,
+            'label' => __('view_admin.season.edit.dungeon_ids'),
+        ])
+        @include('common.forms.form-error', ['key' => 'dungeon_ids'])
 
         {{ html()->input('submit')->value(__('view_admin.season.edit.submit'))->class('btn btn-info') }}
 
         {{ html()->closeModelForm() }}
     </div>
+    @endif
 
     @isset($season)
         <div class="mb-3">

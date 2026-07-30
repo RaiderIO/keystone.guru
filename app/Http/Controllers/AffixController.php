@@ -7,6 +7,7 @@ use App\Models\Affix;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Session;
 
@@ -23,7 +24,10 @@ class AffixController extends Controller
             // No icon is uploaded through the admin panel - mapping:save does not export icon_file_id,
             // and the real seeder always creates its own File row pointing at a static images/affixes/*.jpg asset.
             $validated['icon_file_id'] = -1;
-            $affix                     = Affix::create($validated);
+            // The id must be one of Affix::ALL's values - explicit rather than auto-incrementing so
+            // that a new affix's identity is a deliberate code change, matching how the rest of the
+            // codebase references affixes by their Affix::AFFIX_* constant (see AffixFormRequest).
+            $affix = Affix::create($validated);
         } else {
             $affix->update($validated);
         }
@@ -36,7 +40,9 @@ class AffixController extends Controller
      */
     public function create(): View
     {
-        return view('admin.affix.edit');
+        return view('admin.affix.edit', [
+            'availableAffixIds' => $this->getAvailableAffixIdsSelect(),
+        ]);
     }
 
     /**
@@ -86,5 +92,21 @@ class AffixController extends Controller
     public function get(): View
     {
         return view('admin.affix.list', ['models' => Affix::orderBy('key')->get()]);
+    }
+
+    /**
+     * The affix ids declared in Affix::ALL that don't have a row yet - the only ids a new affix is
+     * allowed to take.
+     *
+     * @return Collection<int, string>
+     */
+    private function getAvailableAffixIdsSelect(): Collection
+    {
+        $availableIds = Affix::getAvailableIds();
+
+        return collect(Affix::ALL)
+            ->filter(fn(int $id) => in_array($id, $availableIds, true))
+            ->flip()
+            ->sortKeys();
     }
 }
