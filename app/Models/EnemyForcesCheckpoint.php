@@ -100,10 +100,11 @@ class EnemyForcesCheckpoint extends CacheModel implements HasLatLngInterface, Ma
     }
 
     /**
-     * Registered as `deleted` rather than `deleting` on purpose: SeederModel's `deleting` listener
-     * always returns a boolean, and Eloquent fires `deleting` through the dispatcher's `until()`,
-     * which halts on the first non-null result. A second `deleting` listener would therefore never
-     * run at all.
+     * Registered as `deleted` rather than `deleting`: the members only need detaching once the checkpoint is
+     * really gone. It also used to be the only option that worked at all - SeederModel registered a
+     * `deleting` listener returning a boolean, and Eloquent fires `deleting` through the dispatcher's
+     * `until()`, which halts on the first non-null result, so a second `deleting` listener never ran. That
+     * listener has since been removed.
      */
     #[Override]
     protected static function booted(): void
