@@ -109,7 +109,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
         $this->info(__METHOD__, get_defined_vars());
     }
 
-    public function applyPaidBenefitsForMemberStart(string $memberEmail): void
+    public function applyPaidBenefitsForMemberStart(string $memberId): void
     {
         $this->start(__METHOD__, get_defined_vars());
     }
@@ -142,6 +142,14 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     public function applyPaidBenefitsRevokedPatreonBenefit(string $removedBenefit, string $email): void
     {
         $this->info(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * @param array<int, string> $benefits
+     */
+    public function applyPaidBenefitsForMemberUnknownPatreonBenefits(array $benefits, string $email): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
     }
 
     public function applyPaidBenefitsForMemberEnd(): void
