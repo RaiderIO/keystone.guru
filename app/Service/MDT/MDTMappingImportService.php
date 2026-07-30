@@ -283,8 +283,10 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         $npc->createNpcEnemyForcesForExistingMappingVersions($mdtNpc->getCount());
                     }
                 } catch (UniqueConstraintViolationException) {
-                    // Expected and recoverable: another dungeon's import already inserted this NPC (or its
-                    // historical NpcEnemyForces rows) between our lookup and our write - not a real failure.
+                    // Expected and recoverable, not a real failure: the NPC row already exists globally but
+                    // is not linked to this dungeon yet, so the dungeon-scoped lookup above missed it and we
+                    // attempted an insert on an existing primary key - the npc_dungeons link is written below,
+                    // so the next run takes the update path.
                     $this->log->importNpcsDataFromMDTNpcNotMarkedForAllDungeons($npc->id);
                 } catch (Exception $exception) {
                     $this->log->importNpcsDataFromMDTSaveNpcException($exception);

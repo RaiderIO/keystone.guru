@@ -19,11 +19,17 @@ class MDTMappingImportPartialFailureException extends Exception
      */
     public function __construct(private readonly array $failures)
     {
-        parent::__construct(sprintf(
-            '%d item(s) failed to import: %s',
-            count($failures),
-            implode('; ', array_map(static fn(Exception $failure) => $failure->getMessage(), $failures)),
-        ));
+        $messages = array_map(static fn(Exception $failure) => $failure->getMessage(), $failures);
+        $shown    = array_slice($messages, 0, 10);
+        if (count($messages) > 10) {
+            $shown[] = sprintf('and %d more', count($messages) - 10);
+        }
+
+        parent::__construct(
+            sprintf('%d item(s) failed to import: %s', count($failures), implode('; ', $shown)),
+            0,
+            $failures[0] ?? null,
+        );
     }
 
     /**

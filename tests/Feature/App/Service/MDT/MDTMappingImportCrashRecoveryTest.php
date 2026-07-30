@@ -229,6 +229,11 @@ final class MDTMappingImportCrashRecoveryTest extends PublicTestCase
             } catch (MDTMappingImportPartialFailureException $exception) {
                 $this->assertNotEmpty($exception->getFailures(), 'The partial-failure exception must carry the failures that caused it.');
                 $this->assertSame($forcedFailureMessage, $exception->getFailures()[0]->getMessage());
+                $this->assertSame(
+                    $exception->getFailures()[0],
+                    $exception->getPrevious(),
+                    'The first accumulated failure must be preserved as the previous exception so its original stack trace is not lost.',
+                );
             }
 
             // Assert
