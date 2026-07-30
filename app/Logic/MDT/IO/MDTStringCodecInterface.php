@@ -16,7 +16,8 @@ interface MDTStringCodecInterface
     /**
      * Cheap plausibility check: does $string look like it is encoded in this codec's format? This
      * is a dispatch hint, not a validity guarantee - a string this returns true for can still fail
-     * to decode() (see MDTStringFormat::isValid() for a real structural check).
+     * to decode() (see MDTStringFormat::isValid(), which is built directly on this method across
+     * every format).
      */
     public function appliesTo(string $string): bool;
 

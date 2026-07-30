@@ -59,11 +59,12 @@ final class MDTStringFormatTest extends TestCase
     {
         return [
             'valid mdt2 string' => [self::VALID_MDT2_STRING, true],
-            // The whole point of #3: the prefix alone is not enough - the payload must actually
-            // base64/deflate/CBOR-decode, or the "is this worth report()-ing" check would say yes
-            // to any string that merely starts with the MDT2 prefix.
-            'mdt2 prefix with non-base64 payload'  => ['!~MDT2~%%%not-base64%%%', false],
-            'mdt2 prefix with non-deflate payload' => [sprintf('!~MDT2~%s', base64_encode('this is not a deflate stream')), false],
+            // isValid() is deliberately just a prefix/character-class check now, not a full decode
+            // (see the isValid() docblock) - so a string carrying the MDT2 prefix is considered
+            // valid here even though its payload is garbage. It genuinely claimed to be an MDT
+            // export string, so it is still worth report()-ing if decode() later fails on it.
+            'mdt2 prefix with non-base64 payload'  => ['!~MDT2~%%%not-base64%%%', true],
+            'mdt2 prefix with non-deflate payload' => [sprintf('!~MDT2~%s', base64_encode('this is not a deflate stream')), true],
             'legacy-shaped string'                 => ['!fBcBcAWnPXhz(abc)', true],
             // What isValidBase64() got wrong: this is genuinely valid Base64, but it is not an MDT
             // string at all (no `!` prefix), so it must not be reported as one.

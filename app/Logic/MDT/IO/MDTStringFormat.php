@@ -2,8 +2,6 @@
 
 namespace App\Logic\MDT\IO;
 
-use Throwable;
-
 /**
  * The MDT export-string formats this application understands. Both cases resolve to an
  * MDTStringCodecInterface implementation via codec(), so callers never need to instanceof-check or
@@ -28,7 +26,7 @@ enum MDTStringFormat
      * every non-`!~MDT2~` string was handed to cli_weakauras_parser regardless of its shape, and
      * that fallback must keep working for real-world legacy strings this cheap check does not
      * otherwise recognize. This is deliberately a plausibility check, not a validity one - see
-     * isValid() below for a real structural check per format.
+     * isValid() below for a cheap, still-not-a-decode check across both formats.
      */
     public static function detect(string $string): self
     {
@@ -36,29 +34,22 @@ enum MDTStringFormat
     }
 
     /**
-     * Checks whether $string is genuinely encoded in a supported MDT export-string format - unlike
-     * detect(), which only exists to pick an implementation and always returns something. For the
-     * MDT2 format this actually attempts to decode the payload (base64 + deflate + CBOR), since a
-     * string can start with the `!~MDT2~` prefix and still be garbage - merely checking the prefix
-     * (or "is this valid base64") is not a thorough check. For the legacy format, this uses the same
-     * character-class check LegacyMDTCodec::appliesTo() does - a full validity check would mean
-     * shelling out to cli_weakauras_parser, which is too expensive for what is ultimately just a
-     * "is this worth reporting" heuristic.
+     * Checks whether $string plausibly claims to be one of the MDT export-string formats - unlike
+     * detect(), which only exists to pick an implementation and always returns something, this can
+     * say no. This is deliberately just each codec's own appliesTo() (prefix check for MDT2,
+     * character-class check for legacy) - not a full decode. Fully decoding here to "really" verify
+     * would mean paying that cost on every call for what is ultimately just an "is this worth
+     * reporting" heuristic (its only caller decides whether an unexpected decode failure elsewhere
+     * is worth a report() call), and would mean decoding valid strings twice.
      */
     public static function isValid(string $string): bool
     {
-        $mdt2 = new MDT2Codec();
-
-        if ($mdt2->appliesTo($string)) {
-            try {
-                $mdt2->decode($string);
-
+        foreach (self::cases() as $format) {
+            if ($format->codec()->appliesTo($string)) {
                 return true;
-            } catch (Throwable) {
-                return false;
             }
         }
 
-        return (new LegacyMDTCodec())->appliesTo($string);
+        return false;
     }
 }

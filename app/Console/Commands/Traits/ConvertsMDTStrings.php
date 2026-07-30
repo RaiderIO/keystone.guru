@@ -54,15 +54,4 @@ trait ConvertsMDTStrings
             return null;
         }
     }
-
-    /**
-     * Checks whether $string is genuinely encoded in either MDT export-string format this app
-     * understands. Unlike encode()/decode() above, this is a plain static check with no
-     * console/logging side effects, so - unlike them - it is safe to call from any class, not just
-     * a Command. See MDTStringFormat::isValid() for what "genuinely" means per format.
-     */
-    public static function isValidMdtString(string $string): bool
-    {
-        return MDTStringFormat::isValid($string);
-    }
 }
