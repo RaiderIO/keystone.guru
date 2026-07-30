@@ -4,7 +4,9 @@ namespace Tests\Feature\View;
 
 use App\Http\View\Composers\HeaderComposer;
 use App\Models\Expansion;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
+use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use PHPUnit\Framework\Attributes\Group;
@@ -36,10 +38,12 @@ final class HeaderComposerTest extends PublicTestCase
     #[Test]
     public function compose_givenAnUpcomingSeasonWithinTheWindow_setsTheNextSeasonCard(): void
     {
-        // Arrange
-        $upcomingSeason = $this->createUpcomingSeason(Carbon::now()->addWeek());
+        // Arrange - inside the try so a failure halfway through still cleans up
+        $upcomingSeason = null;
 
         try {
+            $upcomingSeason = $this->createUpcomingSeason(Carbon::now()->addWeek());
+
             $view = view('common.layout.header');
 
             // Act
@@ -52,7 +56,9 @@ final class HeaderComposerTest extends PublicTestCase
             $this->assertSame($upcomingSeason->id, $data['dungeonContextNextSeason']->id);
             $this->assertStringContainsString(sprintf('season=%d', $upcomingSeason->id), $data['dungeonContextNextSeasonLink']);
         } finally {
-            $this->deleteSeason($upcomingSeason);
+            if ($upcomingSeason !== null) {
+                $this->deleteSeason($upcomingSeason);
+            }
         }
     }
 
@@ -60,9 +66,11 @@ final class HeaderComposerTest extends PublicTestCase
     public function compose_givenAnUpcomingSeasonBeyondTheWindow_omitsTheNextSeasonCard(): void
     {
         // Arrange - the situation a season dry run puts the site in: seeded, but months out
-        $upcomingSeason = $this->createUpcomingSeason(Carbon::now()->addWeeks(8));
+        $upcomingSeason = null;
 
         try {
+            $upcomingSeason = $this->createUpcomingSeason(Carbon::now()->addWeeks(8));
+
             $view = view('common.layout.header');
 
             // Act
@@ -75,7 +83,79 @@ final class HeaderComposerTest extends PublicTestCase
             $this->assertNull($data['dungeonContextNextSeason']);
             $this->assertNull($data['dungeonContextNextSeasonLink']);
         } finally {
-            $this->deleteSeason($upcomingSeason);
+            if ($upcomingSeason !== null) {
+                $this->deleteSeason($upcomingSeason);
+            }
+        }
+    }
+
+    /**
+     * Seasons are a retail concept. The dungeon selection hides every season tab for a game version without
+     * them, so advertising an upcoming season there would be a card leading to a page that cannot show it.
+     */
+    #[Test]
+    public function compose_givenAGameVersionWithoutSeasons_omitsTheNextSeasonCard(): void
+    {
+        // Arrange
+        $upcomingSeason = null;
+        $user           = null;
+
+        try {
+            $upcomingSeason = $this->createUpcomingSeason(Carbon::now()->addWeek());
+
+            $classicEra = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA);
+
+            $this->assertFalse((bool)$classicEra->has_seasons, 'Classic Era must be a game version without seasons');
+
+            $user = User::factory()->create(['game_version_id' => $classicEra->id]);
+            $this->actingAs($user);
+
+            $view = view('common.layout.header');
+
+            // Act
+            app(HeaderComposer::class)->compose($view);
+
+            // Assert
+            $data = $view->getData();
+
+            $this->assertSame($upcomingSeason->id, $data['nextSeason']?->id, 'The season should still be found, just not advertised');
+            $this->assertNull($data['dungeonContextNextSeason']);
+            $this->assertNull($data['dungeonContextNextSeasonLink']);
+        } finally {
+            $user?->delete();
+
+            if ($upcomingSeason !== null) {
+                $this->deleteSeason($upcomingSeason);
+            }
+        }
+    }
+
+    /**
+     * The window is configuration, not a constant - the same season that is too far out by default is
+     * advertised once the window is widened past it.
+     */
+    #[Test]
+    public function compose_givenAWidenedWindow_setsTheNextSeasonCardForASeasonThatWasBeyondIt(): void
+    {
+        // Arrange
+        $upcomingSeason = null;
+
+        try {
+            $upcomingSeason = $this->createUpcomingSeason(Carbon::now()->addWeeks(8));
+
+            config(['keystoneguru.season.upcoming_visible_days' => 90]);
+
+            $view = view('common.layout.header');
+
+            // Act
+            app(HeaderComposer::class)->compose($view);
+
+            // Assert
+            $this->assertSame($upcomingSeason->id, $view->getData()['dungeonContextNextSeason']?->id);
+        } finally {
+            if ($upcomingSeason !== null) {
+                $this->deleteSeason($upcomingSeason);
+            }
         }
     }
 

@@ -37,10 +37,12 @@ final class DungeonExploreControllerTest extends PublicTestCase
     #[Test]
     public function select_givenAnUpcomingSeason_opensOnTheCurrentSeasonsTab(): void
     {
-        // Arrange
-        $upcomingSeason = $this->createUpcomingSeason();
+        // Arrange - inside the try so a failure halfway through still cleans up
+        $upcomingSeason = null;
 
         try {
+            $upcomingSeason = $this->createUpcomingSeason();
+
             // Act
             $response = $this->get(route('dungeon.explore.gameversion.select', [
                 'gameVersion' => GameVersion::GAME_VERSION_RETAIL,
@@ -52,17 +54,21 @@ final class DungeonExploreControllerTest extends PublicTestCase
             $this->assertSeasonTabActive($response->content(), Season::SEASON_MIDNIGHT_S1);
             $this->assertSeasonTabInactive($response->content(), $upcomingSeason->id);
         } finally {
-            $this->deleteUpcomingSeason($upcomingSeason);
+            if ($upcomingSeason !== null) {
+                $this->deleteUpcomingSeason($upcomingSeason);
+            }
         }
     }
 
     #[Test]
     public function select_givenASeasonParameter_opensOnThatSeasonsTab(): void
     {
-        // Arrange
-        $upcomingSeason = $this->createUpcomingSeason();
+        // Arrange - inside the try so a failure halfway through still cleans up
+        $upcomingSeason = null;
 
         try {
+            $upcomingSeason = $this->createUpcomingSeason();
+
             // Act
             $response = $this->get(route('dungeon.explore.gameversion.select', [
                 'gameVersion' => GameVersion::GAME_VERSION_RETAIL,
@@ -75,7 +81,9 @@ final class DungeonExploreControllerTest extends PublicTestCase
             $this->assertSeasonTabActive($response->content(), $upcomingSeason->id);
             $this->assertSeasonTabInactive($response->content(), Season::SEASON_MIDNIGHT_S1);
         } finally {
-            $this->deleteUpcomingSeason($upcomingSeason);
+            if ($upcomingSeason !== null) {
+                $this->deleteUpcomingSeason($upcomingSeason);
+            }
         }
     }
 

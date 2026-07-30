@@ -67,6 +67,9 @@ $currentAffixGroup ??= null;
             'imageUrl' => $gameVersion->expansion->getWallpaperUrl(),
             'imageAlt' => __($gameVersion->expansion->name),
             'width' => $width,
+            // Explicitly null: an @include inherits the enclosing scope, so the last dungeon's tier would
+            // otherwise leak into this card - it is not a dungeon and has no difficulty tier
+            'thisWeekTier' => null,
         ])
     <?php
     }
@@ -80,6 +83,7 @@ $currentAffixGroup ??= null;
             'imageUrl' => $nextSeason->expansion->getWallpaperUrl(),
             'imageAlt' => __($nextSeason->expansion->name),
             'width' => $width,
+            'thisWeekTier' => null,
         ])
     <?php
     }

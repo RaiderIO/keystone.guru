@@ -135,26 +135,29 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
         // A dungeon that is not part of the current season, so the assert below can tell the two apart
         $futureSeasonDungeon = Dungeon::firstWhere('key', Dungeon::DUNGEON_ARA_KARA_CITY_OF_ECHOES);
 
-        $futureSeason = Season::create([
-            'expansion_id'            => $expansion->id,
-            'seasonal_affix_id'       => null,
-            'index'                   => $currentSeason->index + 1,
-            'start'                   => Carbon::now()->addDays(60)->toDateTimeString(),
-            'presets'                 => 0,
-            'affix_group_count'       => 8,
-            'start_affix_group_index' => 0,
-            'key_level_min'           => 2,
-            'key_level_max'           => 25,
-            'item_level_min'          => 240,
-            'item_level_max'          => 300,
-        ]);
-
-        $futureSeasonDungeonRow = SeasonDungeon::create([
-            'season_id'  => $futureSeason->id,
-            'dungeon_id' => $futureSeasonDungeon->id,
-        ]);
+        // Created inside the try so a failure halfway through still cleans up
+        $futureSeason = null;
 
         try {
+            $futureSeason = Season::create([
+                'expansion_id'            => $expansion->id,
+                'seasonal_affix_id'       => null,
+                'index'                   => $currentSeason->index + 1,
+                'start'                   => Carbon::now()->addDays(60)->toDateTimeString(),
+                'presets'                 => 0,
+                'affix_group_count'       => 8,
+                'start_affix_group_index' => 0,
+                'key_level_min'           => 2,
+                'key_level_max'           => 25,
+                'item_level_min'          => 240,
+                'item_level_max'          => 300,
+            ]);
+
+            SeasonDungeon::create([
+                'season_id'  => $futureSeason->id,
+                'dungeon_id' => $futureSeasonDungeon->id,
+            ]);
+
             // Act - resolved after seeding the season so the season service starts with a cold cache
             $dungeons = app(DungeonServiceInterface::class)->getDungeonsForGameVersion($gameVersion);
 
@@ -168,11 +171,13 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
             // Through the query builder on purpose - SeederModel blocks deleting these models for anyone
             // who is not an admin, and it does so silently, so $model->delete() would leave the rows behind.
             // That skips the model events too, hence flushing the model cache by hand afterwards.
-            SeasonDungeon::query()->whereKey($futureSeasonDungeonRow->id)->delete();
-            Season::query()->whereKey($futureSeason->id)->delete();
+            if ($futureSeason !== null) {
+                SeasonDungeon::query()->where('season_id', $futureSeason->id)->delete();
+                Season::query()->whereKey($futureSeason->id)->delete();
 
-            new SeasonDungeon()->flushCache();
-            new Season()->flushCache();
+                new SeasonDungeon()->flushCache();
+                new Season()->flushCache();
+            }
         }
     }
 }

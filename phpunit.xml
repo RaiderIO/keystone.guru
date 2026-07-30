@@ -31,6 +31,10 @@
         <env name="PENNANT_STORE" value="array"/>
         <env name="LOG_CHANNEL" value="daily"/>
         <env name="APP_SERVICES_CACHE" value="/tmp/phpunit_services.php"/>
+        <!-- The 'tmp_file' store (RemembersToFile, used by ViewService among others) is a file cache that
+             CACHE_STORE does not cover. Without this the tests read, write and flush the cache of the
+             application running out of the same checkout. -->
+        <env name="CACHE_FILE_PATH" value="/tmp/phpunit_cache"/>
     </php>
     <source>
         <include>

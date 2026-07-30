@@ -47,7 +47,11 @@ readonly class HeaderComposer implements ViewComposerInterface
 
         // The dungeon context bar follows the current season only (#3761) - the upcoming season is
         // advertised next to it as a card of its own, leading to a selection of just its dungeons.
-        $upcomingSeason = $this->getUpcomingSeason($nextSeason, $gameServerRegion);
+        // Seasons are a retail concept: the dungeon selection hides every season for a game version
+        // without them, so advertising one there would lead to a page that cannot show it.
+        $upcomingSeason = $userOrDefaultGameVersion->has_seasons
+            ? $this->getUpcomingSeason($nextSeason, $gameServerRegion)
+            : null;
 
         $view->with('dungeonContextNextSeason', $upcomingSeason);
         $view->with('dungeonContextNextSeasonLink', $upcomingSeason === null ? null : route('dungeon.explore.gameversion.select', [
