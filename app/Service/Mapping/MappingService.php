@@ -154,17 +154,21 @@ class MappingService implements MappingServiceInterface
 
     public function copyMappingVersionToDungeon(MappingVersion $sourceMappingVersion, Dungeon $dungeon): MappingVersion
     {
-        /** @var MappingVersion|null $currentMappingVersion */
-        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
-        $now                   = Carbon::now()->toDateTimeString();
+        // The target's game_version_id and next `version` must be derived from $sourceMappingVersion's
+        // OWN game version, not $dungeon's ambient "current" mapping version - that resolves through
+        // the acting user's/default game version and can land on a completely different
+        // game_version_id than the one actually being copied (see #3720).
+        /** @var MappingVersion|null $currentMappingVersionForGameVersion */
+        $currentMappingVersionForGameVersion = $dungeon->getCurrentMappingVersionForGameVersion($sourceMappingVersion->gameVersion);
+        $now                                 = Carbon::now()->toDateTimeString();
         // This needs to happen quietly as to not trigger MappingVersion events defined in its class
         $id = MappingVersion::insertGetId([
             'dungeon_id'        => $dungeon->id,
-            'game_version_id'   => $currentMappingVersion?->game_version_id ?? GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL], // @phpstan-ignore nullsafe.neverNull
+            'game_version_id'   => $sourceMappingVersion->game_version_id,
             'mdt_mapping_hash'  => $sourceMappingVersion->mdt_mapping_hash,
             'mdt_addon_version' => $sourceMappingVersion->mdt_addon_version,
-            'version'           => ($currentMappingVersion?->version ?? 0) + 1, // @phpstan-ignore nullsafe.neverNull
-            'facade_enabled'    => $currentMappingVersion?->facade_enabled ?? false, // @phpstan-ignore nullsafe.neverNull
+            'version'           => ($currentMappingVersionForGameVersion?->version ?? 0) + 1, // @phpstan-ignore nullsafe.neverNull
+            'facade_enabled'    => $currentMappingVersionForGameVersion?->facade_enabled ?? false, // @phpstan-ignore nullsafe.neverNull
             'created_at'        => $now,
             'updated_at'        => $now,
         ]);

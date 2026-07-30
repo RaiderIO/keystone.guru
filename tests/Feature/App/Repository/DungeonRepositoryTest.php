@@ -3,6 +3,7 @@
 namespace Tests\Feature\App\Repository;
 
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Repositories\Database\DungeonRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -15,12 +16,15 @@ final class DungeonRepositoryTest extends PublicTestCase
 {
     private DungeonRepository $repository;
 
+    private GameVersion $retailGameVersion;
+
     #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->repository = new DungeonRepository();
+        $this->repository        = new DungeonRepository();
+        $this->retailGameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
     }
 
     #[Test]
@@ -64,11 +68,14 @@ final class DungeonRepositoryTest extends PublicTestCase
     {
         // Arrange
         /** @var Dungeon $dungeon */
-        $dungeon        = Dungeon::whereNotNull('challenge_mode_id')->first();
-        $mappingVersion = $dungeon->mappingVersions()->first();
+        $dungeon = Dungeon::whereNotNull('challenge_mode_id')->firstOrFail();
+        /** @var MappingVersion $mappingVersion */
+        $mappingVersion = $dungeon->mappingVersions()
+            ->where('game_version_id', $this->retailGameVersion->id)
+            ->firstOrFail();
 
         // Act
-        $result = $this->repository->getMappingVersionByVersion($dungeon, $mappingVersion->version);
+        $result = $this->repository->getMappingVersionByVersion($dungeon, $this->retailGameVersion, $mappingVersion->version);
 
         // Assert
         $this->assertInstanceOf(MappingVersion::class, $result);
@@ -83,10 +90,56 @@ final class DungeonRepositoryTest extends PublicTestCase
         $dungeon = Dungeon::whereNotNull('challenge_mode_id')->first();
 
         // Act
-        $result = $this->repository->getMappingVersionByVersion($dungeon, PHP_INT_MAX);
+        $result = $this->repository->getMappingVersionByVersion($dungeon, $this->retailGameVersion, PHP_INT_MAX);
 
         // Assert
         $this->assertNull($result);
+    }
+
+    /**
+     * #3720/#3754 follow-up: `version` is only unique per game_version_id, so a raw version number
+     * shared with a mapping version on a DIFFERENT game version must not match here.
+     */
+    #[Test]
+    public function getMappingVersionByVersion_givenVersionOnlyExistsOnAnotherGameVersion_returnsNull(): void
+    {
+        // Arrange
+        /** @var Dungeon $dungeon */
+        $dungeon = Dungeon::whereNotNull('challenge_mode_id')->firstOrFail();
+
+        /** @var GameVersion $otherGameVersion */
+        $otherGameVersion = GameVersion::query()
+            ->where('id', '!=', $this->retailGameVersion->id)
+            ->firstOrFail();
+
+        // Inserted via insertGetId(), not MappingVersion::create(), so creating it doesn't trigger the
+        // clone-on-create hook.
+        $decoyId = MappingVersion::insertGetId([
+            'game_version_id'                 => $otherGameVersion->id,
+            'dungeon_id'                      => $dungeon->id,
+            'version'                         => 999000,
+            'enemy_forces_required'           => 0,
+            'enemy_forces_required_teeming'   => 0,
+            'enemy_forces_shrouded'           => 0,
+            'enemy_forces_shrouded_zul_gamux' => 0,
+            'timer_max_seconds'               => 0,
+            'facade_enabled'                  => false,
+            'created_at'                      => now(),
+            'updated_at'                      => now(),
+        ]);
+
+        try {
+            // Act
+            $result = $this->repository->getMappingVersionByVersion($dungeon, $this->retailGameVersion, 999000);
+
+            // Assert
+            $this->assertNull(
+                $result,
+                'A version number that only exists on a different game version must not match when looking up by retail.',
+            );
+        } finally {
+            MappingVersion::query()->where('id', $decoyId)->delete();
+        }
     }
 
     #[Test]
@@ -122,7 +175,7 @@ final class DungeonRepositoryTest extends PublicTestCase
         $dungeon = Dungeon::whereNotNull('challenge_mode_id')->first();
 
         // Act
-        $result = $this->repository->getByMappingVersion($dungeon->challenge_mode_id, null);
+        $result = $this->repository->getByMappingVersion($dungeon->challenge_mode_id, $this->retailGameVersion, null);
 
         // Assert
         $this->assertNull($result);
@@ -133,14 +186,66 @@ final class DungeonRepositoryTest extends PublicTestCase
     {
         // Arrange
         /** @var Dungeon $dungeon */
-        $dungeon        = Dungeon::whereNotNull('challenge_mode_id')->first();
-        $mappingVersion = $dungeon->mappingVersions()->first();
+        $dungeon = Dungeon::whereNotNull('challenge_mode_id')->firstOrFail();
+        /** @var MappingVersion $mappingVersion */
+        $mappingVersion = $dungeon->mappingVersions()
+            ->where('game_version_id', $this->retailGameVersion->id)
+            ->firstOrFail();
 
         // Act
-        $result = $this->repository->getByMappingVersion($dungeon->challenge_mode_id, $mappingVersion->version);
+        $result = $this->repository->getByMappingVersion($dungeon->challenge_mode_id, $this->retailGameVersion, $mappingVersion->version);
 
         // Assert
         $this->assertNotNull($result);
         $this->assertEquals($dungeon->challenge_mode_id, $result->challenge_mode_id);
+    }
+
+    /**
+     * #3720/#3754 follow-up: the version/game_version_id pair must match the SAME mapping version row.
+     * A dungeon that has a retail row with some version A and an unrelated decoy row (different game
+     * version) with version B must not match when queried for (retail, B) - two independent
+     * `whereRelation()` EXISTS clauses would each be satisfiable by a different row and wrongly match.
+     */
+    #[Test]
+    public function getByMappingVersion_givenVersionOnlyExistsOnAnotherGameVersion_returnsNull(): void
+    {
+        // Arrange
+        /** @var Dungeon $dungeon */
+        $dungeon = Dungeon::whereNotNull('challenge_mode_id')->firstOrFail();
+        // The dungeon must already have SOME retail mapping version for the "two independent EXISTS
+        // clauses" bug to be exercised at all.
+        $dungeon->mappingVersions()->where('game_version_id', $this->retailGameVersion->id)->firstOrFail();
+
+        /** @var GameVersion $otherGameVersion */
+        $otherGameVersion = GameVersion::query()
+            ->where('id', '!=', $this->retailGameVersion->id)
+            ->firstOrFail();
+
+        $decoyId = MappingVersion::insertGetId([
+            'game_version_id'                 => $otherGameVersion->id,
+            'dungeon_id'                      => $dungeon->id,
+            'version'                         => 999000,
+            'enemy_forces_required'           => 0,
+            'enemy_forces_required_teeming'   => 0,
+            'enemy_forces_shrouded'           => 0,
+            'enemy_forces_shrouded_zul_gamux' => 0,
+            'timer_max_seconds'               => 0,
+            'facade_enabled'                  => false,
+            'created_at'                      => now(),
+            'updated_at'                      => now(),
+        ]);
+
+        try {
+            // Act
+            $result = $this->repository->getByMappingVersion($dungeon->challenge_mode_id, $this->retailGameVersion, 999000);
+
+            // Assert
+            $this->assertNull(
+                $result,
+                'The dungeon has no RETAIL mapping version with this version number - it must not match via its unrelated decoy on another game version.',
+            );
+        } finally {
+            MappingVersion::query()->where('id', $decoyId)->delete();
+        }
     }
 }

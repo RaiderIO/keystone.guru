@@ -5,6 +5,7 @@ namespace App\Http\Models\Request\CombatLog\Route;
 use App\Http\Models\Request\RequestModel;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Faction;
+use App\Models\GameVersion\GameVersion;
 use App\Models\PublishedState;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
@@ -64,8 +65,13 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
         DungeonRepositoryInterface                $dungeonRepository,
         ?int                                      $userId = null,
     ): DungeonRoute {
+        // Combat-log-derived route creation (the Auto Route Creator) only ever runs on retail - the
+        // combat log payload carries no game version of its own, and `version` is only unique per
+        // game_version_id (see #3720/#3754), so retail is used explicitly rather than left ambiguous.
+        $retailGameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+
         try {
-            $dungeon = $dungeonRepository->getByMappingVersion($this->challengeMode->challengeModeId, $this->settings->mappingVersion) ??
+            $dungeon = $dungeonRepository->getByMappingVersion($this->challengeMode->challengeModeId, $retailGameVersion, $this->settings->mappingVersion) ??
                 $dungeonRepository->getByChallengeModeIdOrFail($this->challengeMode->challengeModeId);
         } catch (Exception) {
             throw new DungeonNotSupportedException(
@@ -77,12 +83,13 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
         if ($this->settings->mappingVersion !== null) {
             $mappingVersion = $dungeonRepository->getMappingVersionByVersion(
                 $dungeon,
+                $retailGameVersion,
                 $this->settings->mappingVersion,
             );
         }
 
         // Fallback if not set or not found
-        $mappingVersion ??= $dungeon->getCurrentMappingVersion();
+        $mappingVersion ??= $dungeon->getCurrentMappingVersion($retailGameVersion);
 
         $currentSeasonForDungeon = $dungeon->getActiveSeason($seasonService);
 
