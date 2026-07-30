@@ -119,6 +119,7 @@ final class AdminAffixGroupControllerTest extends PublicTestCase
         $this->assertNotNull($affixGroup);
         $response->assertRedirect(route('admin.affixgroup.edit', ['season' => $this->season, 'affixGroup' => $affixGroup]));
         $this->assertTrue((bool)$affixGroup->confirmed);
+        $this->assertSame($this->season->expansion_id, $affixGroup->expansion_id);
 
         $couplings = $affixGroup->affixGroupCouplings()->orderBy('id')->get(['affix_id', 'key_level']);
         $this->assertSame(

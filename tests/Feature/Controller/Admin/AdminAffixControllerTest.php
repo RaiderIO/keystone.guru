@@ -41,11 +41,15 @@ final class AdminAffixControllerTest extends PublicTestCase
         $user->addRole(Role::firstWhere('name', Role::ROLE_USER));
         $this->be($user);
 
-        // Act
-        $response = $this->get(route('admin.affixes'));
+        try {
+            // Act
+            $response = $this->get(route('admin.affixes'));
 
-        // Assert
-        $response->assertForbidden();
+            // Assert
+            $response->assertForbidden();
+        } finally {
+            $user->delete();
+        }
     }
 
     #[Test]

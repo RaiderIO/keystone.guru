@@ -58,11 +58,15 @@ final class AdminSeasonControllerTest extends PublicTestCase
         $user->addRole(Role::firstWhere('name', Role::ROLE_USER));
         $this->be($user);
 
-        // Act
-        $response = $this->get(route('admin.seasons'));
+        try {
+            // Act
+            $response = $this->get(route('admin.seasons'));
 
-        // Assert
-        $response->assertForbidden();
+            // Assert
+            $response->assertForbidden();
+        } finally {
+            $user->delete();
+        }
     }
 
     #[Test]

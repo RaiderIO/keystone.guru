@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
-use ReflectionClass;
 
 /**
  * @property int      $id
@@ -190,10 +189,7 @@ class Season extends CacheModel
     {
         $usedIds = self::pluck('id')->all();
 
-        $constants = (new ReflectionClass(self::class))->getConstants();
-
-        return collect($constants)
-            ->filter(fn($value, $name) => is_int($value) && str_starts_with($name, 'SEASON_'))
+        return collect(self::ALL_SEASONS)
             ->reject(fn(int $id) => in_array($id, $usedIds, true))
             ->values()
             ->all();

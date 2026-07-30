@@ -29,6 +29,9 @@ class AffixController extends Controller
             // codebase references affixes by their Affix::AFFIX_* constant (see AffixFormRequest).
             $affix = Affix::create($validated);
         } else {
+            // id is only settable on create (see AffixFormRequest::rules()) - strip it defensively
+            // so an update request can never reassign an existing affix's primary key.
+            unset($validated['id']);
             $affix->update($validated);
         }
 

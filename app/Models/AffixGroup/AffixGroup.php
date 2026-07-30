@@ -30,6 +30,7 @@ class AffixGroup extends AffixGroupBase
 
     public $fillable = [
         'season_id',
+        'expansion_id',
         'seasonal_index',
         'confirmed',
     ];
