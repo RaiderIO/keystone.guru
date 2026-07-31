@@ -34,5 +34,9 @@ interface AffixGroupEaseTierServiceInterface
      */
     public function getTiers(): Collection;
 
+    /**
+     * Finds the first affix group of the current season that has all affixes in the given comma separated list of
+     * (English) affix names, or null if no such affix group exists.
+     */
     public function getAffixGroupByString(string $affixString): ?AffixGroup;
 }

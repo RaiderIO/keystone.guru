@@ -237,41 +237,53 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
      */
     public function getAffixGroupByString(string $affixString): ?AffixGroup
     {
-        $result = null;
+        $currentSeason = $this->seasonService->getCurrentSeason();
+        if ($currentSeason === null) {
+            return null;
+        }
 
-        $affixList                = Affix::all();
-        $currentSeason            = $this->seasonService->getCurrentSeason();
-        $currentSeasonAffixGroups = $currentSeason->affixGroups;
+        /** @var Collection<string, Affix> $affixesByName */
+        $affixesByName = Affix::all()->keyBy(static fn(Affix $affix): string => (string)__($affix->name, [], 'en_US'));
 
-        $affixes = collect(explode(', ', $affixString));
+        $affixNames = collect(explode(',', $affixString))
+            ->map(static fn(string $affixName): string => trim($affixName))
+            ->filter(static fn(string $affixName): bool => $affixName !== '');
 
-        // Filter out properties that don't have the correct amount of affixes
-        if ($affixes->count() === 3 + (int)($currentSeason->seasonal_affix_id !== null)) {
-            // Check if there's any affixes in the list that we cannot find in our own database
-            $invalidAffixes = $affixes->filter(static fn(string $affixName) => $affixList->filter(static fn(
-                Affix $affix,
-            ) => __($affix->name, [], 'en_US') === $affixName)->isEmpty());
+        // Without any affixes to match on every affix group would be a match - refuse to guess instead
+        if ($affixNames->isEmpty()) {
+            $this->log->getAffixGroupByStringNoMatchingAffixGroup($affixString);
 
-            // No invalid affixes found, great!
-            if ($invalidAffixes->isEmpty()) {
-                // Now we must find affix groups that correspond to the affix list
-                foreach ($currentSeasonAffixGroups as $affixGroup) {
-                    // Loop over the affixes of the affix group and empty the list
-                    $notFoundAffixes = $affixGroup->affixes->filter(static fn(
-                        Affix $affix,
-                    ) => $affixes->search($affix->key) === false);
+            return null;
+        }
 
-                    // If we have found the match, we're done
-                    if ($notFoundAffixes->isEmpty()) {
-                        $result = $affixGroup;
-                        break;
-                    }
-                }
-            } else {
-                $this->log->getAffixGroupByStringUnknownAffixes($invalidAffixes->join(', '));
+        // Check if there's any affixes in the list that we cannot find in our own database
+        $invalidAffixes = $affixNames->reject(static fn(string $affixName): bool => $affixesByName->has($affixName));
+
+        if ($invalidAffixes->isNotEmpty()) {
+            $this->log->getAffixGroupByStringUnknownAffixes($invalidAffixes->join(', '));
+
+            return null;
+        }
+
+        $affixKeys = $affixNames->map(static function (string $affixName) use ($affixesByName): string {
+            /** @var Affix $affix Guaranteed to exist - any name that could not be resolved was rejected above */
+            $affix = $affixesByName->get($affixName);
+
+            return $affix->key;
+        });
+
+        // The amount of affixes an affix group has varies per season (three in DF S4, four in TWW S3, five in
+        // Midnight S1), so match on the affixes an affix group actually has rather than on a hardcoded count.
+        // A season may contain multiple affix groups with the exact same set of affixes - they share an ease tier,
+        // so returning the first affix group that has all the given affixes is fine.
+        foreach ($currentSeason->affixGroups as $affixGroup) {
+            if ($affixKeys->every(static fn(string $affixKey): bool => $affixGroup->hasAffix($affixKey))) {
+                return $affixGroup;
             }
         }
 
-        return $result;
+        $this->log->getAffixGroupByStringNoMatchingAffixGroup($affixString);
+
+        return null;
     }
 }

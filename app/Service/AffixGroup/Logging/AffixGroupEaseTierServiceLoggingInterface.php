@@ -23,4 +23,6 @@ interface AffixGroupEaseTierServiceLoggingInterface
     public function parseTierListDataNotUpdatedYet(): void;
 
     public function getAffixGroupByStringUnknownAffixes(string $unknownAffixes): void;
+
+    public function getAffixGroupByStringNoMatchingAffixGroup(string $affixString): void;
 }
