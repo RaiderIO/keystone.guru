@@ -104,17 +104,22 @@ final class MappingServiceCreateNewMappingVersionFromMDTMappingTest extends Publ
      * #3762 review follow-up: Wotuu asked why the null-predecessor path only clones FloorUnions and not every
      * physical property (floor switches, map icons, mountable areas). The answer differs per model:
      *
-     * - MountableAreas ARE the same class of physical geometry as FloorUnions (fixed dungeon terrain, e.g. a
-     *   mount-speed zone) and MDT has no concept of them at all, so nothing else ever (re)creates them - they
-     *   need the same explicit clone FloorUnions get, or a first-ever import silently loses all mount-speed data.
-     * - MapIcons and DungeonFloorSwitchMarkers correctly stay empty here, but not because they're curated: MDT's
-     *   own map POI/MapLink data DOES describe them (graveyards, dungeon entrances, staircases, ...), and
+     * - MountableAreas and DungeonFloorSwitchMarkers ARE the same class of physical geometry as FloorUnions
+     *   (fixed dungeon terrain/structure, e.g. a mount-speed zone or a staircase between floors) with no other
+     *   source to backfill them: MDT has no mount-speed-zone concept at all, and (per Wotuu, second round of
+     *   this same thread) modern MDT exports only generate a combined/facade view and no longer supply the
+     *   per-floor MapLink POI data MDTMappingImportService::importMapPOIs() used to recreate floor switch
+     *   markers from - yet this app still needs them, for both facade mode and the per-floor "visit style"
+     *   mode. So both need the same explicit clone FloorUnions get, or a first-ever import silently loses them
+     *   forever. importMapPOIs() now guards against duplicating whatever gets cloned in here.
+     * - MapIcons correctly stay empty here, but not because they're curated: MDT's own map POI data DOES
+     *   describe the physical subset it recognizes (graveyards, dungeon entrances, ...), and
      *   MDTMappingImportService::importMapPOIs() - called right after this method returns, as part of the same
-     *   import - already (re)creates both from that data whenever $currentMappingVersion is null. Cloning them
+     *   import - already (re)creates those from that data whenever $currentMappingVersion is null. Cloning them
      *   here too would just create duplicate rows moments later in the same import.
      */
     #[Test]
-    public function createNewMappingVersionFromMDTMapping_givenNoPredecessor_clonesMountableAreasButLeavesMapIconsAndDungeonFloorSwitchMarkersEmpty(): void
+    public function createNewMappingVersionFromMDTMapping_givenNoPredecessor_clonesMountableAreasAndDungeonFloorSwitchMarkersButLeavesMapIconsEmpty(): void
     {
         // Arrange
         $mappingService = $this->app->make(MappingServiceInterface::class);
@@ -170,15 +175,15 @@ final class MappingServiceCreateNewMappingVersionFromMDTMappingTest extends Publ
                 'MapIcons must NOT be cloned here - MDTMappingImportService::importMapPOIs() (re)creates the physical ones from MDT\'s own map POI data right after this method returns, so cloning them too would create duplicates.',
             );
 
+            $this->assertSame(
+                $retailMappingVersion->dungeonFloorSwitchMarkers()->count(),
+                $newMappingVersion->dungeonFloorSwitchMarkers()->count(),
+                'DungeonFloorSwitchMarkers are physical dungeon geometry with no other source (modern MDT exports no longer supply per-floor MapLink POI data), so they must be cloned from the facade source mapping version just like FloorUnions/MountableAreas.',
+            );
             $this->assertGreaterThan(
                 0,
-                $retailMappingVersion->dungeonFloorSwitchMarkers()->count(),
-                'Sanity check on the fixture: the retail mapping version must have DungeonFloorSwitchMarkers, otherwise leaving the new mapping version empty would prove nothing.',
-            );
-            $this->assertSame(
-                0,
                 $newMappingVersion->dungeonFloorSwitchMarkers()->count(),
-                'DungeonFloorSwitchMarkers must NOT be cloned here - MDTMappingImportService::importMapPOIs() (re)creates them from MDT\'s own MapLink POI data right after this method returns, so cloning them too would create duplicates.',
+                'Sanity check on the fixture: the retail mapping version this is supposed to clone from must actually have DungeonFloorSwitchMarkers to prove the clone happened.',
             );
         } finally {
             $newMappingVersion?->delete();

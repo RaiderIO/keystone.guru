@@ -989,6 +989,15 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $this->log->importMapPOIsStart();
             $mdtMapPOIs = $mdtDungeon->getMDTMapPOIs();
 
+            // Whether $newMappingVersion already has floor switch markers of its own - either cloned from
+            // $currentMappingVersion by copyMappingVersionContentsToDungeon(), or (#3757/#3762) cloned from a
+            // prior game version's facade-source mapping version by
+            // MappingService::createNewMappingVersionFromMDTMapping() on a genuinely first-ever import (where
+            // $currentMappingVersion is null). Querying $newMappingVersion directly - rather than inspecting
+            // $currentMappingVersion, which is null in exactly the case that now pre-populates markers - is
+            // what keeps this from creating duplicates on top of a first-ever import's cloned markers.
+            $newMappingVersionHasDungeonFloorSwitchMarkers = $newMappingVersion->dungeonFloorSwitchMarkers()->exists();
+
             if ($mdtMapPOIs->isNotEmpty()) {
                 $this->log->importMapPOIsMDTHasMapPOIs();
 
@@ -1051,8 +1060,12 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         // We cannot for sure map the floor switches between different versions to one another
                         // We could use coordinates but if they change it's iffy.
                         // They also don't change between mapping versions, it's not really something Blizzard _can_ change
-                        // No predecessor means there is nothing to preserve - always create fresh (#3757).
-                        if ($currentMappingVersion === null || $currentMappingVersion->dungeonFloorSwitchMarkers->isEmpty()) {
+                        // Only create fresh markers when $newMappingVersion doesn't already have any - whether
+                        // because copyMappingVersionContentsToDungeon() cloned them from $currentMappingVersion,
+                        // or because a first-ever import for this game version cloned them from a prior game
+                        // version's facade-source mapping version (#3757/#3762) - to avoid creating duplicates
+                        // on top of either.
+                        if (!$newMappingVersionHasDungeonFloorSwitchMarkers) {
                             $floor = $this->findFloorByMdtSubLevel($dungeon, $mdtMapPOI->getSubLevel());
 
                             $latLng = Conversion::convertMDTCoordinateToLatLng([
@@ -1073,7 +1086,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                             );
                         } else {
                             $this->log->importMapPOIsHaveExistingFloorSwitchMarkers(
-                                $currentMappingVersion->dungeonFloorSwitchMarkers->count(),
+                                $newMappingVersion->dungeonFloorSwitchMarkers()->count(),
                             );
                         }
                     }

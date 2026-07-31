@@ -105,14 +105,18 @@ class MappingService implements MappingServiceInterface
 
         if ($currentMappingVersion === null) {
             // Checkpoints/enemies stay empty for a genuinely first-ever import of this game version - there is
-            // no game-version-agnostic source for curated content like that. Map icons and dungeon floor switch
-            // markers ALSO stay empty here, but not because they're curated: importMapPOIs() (called right
-            // after this method returns, as part of the same import) already (re)creates them itself from
-            // MDT's own map POI/MapLink data whenever $currentMappingVersion is null - see its "(#3757)"
-            // comments. Cloning them here too would just create duplicate rows a few lines later in the same
-            // import. Mountable areas have no such backfill - MDT has no mount-speed-zone concept at all, so
-            // nothing ever (re)creates them - which makes them PHYSICAL data (fixed dungeon terrain, like floor
-            // unions) with no other source, and they need the same explicit clone floor unions get.
+            // no game-version-agnostic source for curated content like that. Map icons ALSO stay empty here,
+            // but not because they're curated: importMapPOIs() (called right after this method returns, as
+            // part of the same import) already (re)creates the physical subset it recognizes itself from MDT's
+            // own map POI data whenever $currentMappingVersion is null - see its "(#3757)" comments. Cloning
+            // them here too would just create duplicate rows a few lines later in the same import. Mountable
+            // areas and dungeon floor switch markers have no such backfill to rely on: MDT has no
+            // mount-speed-zone concept at all, and per Wotuu (#3762 review) modern MDT exports only generate a
+            // combined/facade view and no longer supply the per-floor MapLink POI data importMapPOIs() used to
+            // recreate floor switch markers from - so both are PHYSICAL data (fixed dungeon terrain/geometry,
+            // like floor unions) with no other source, and need the same explicit clone floor unions get.
+            // importMapPOIs() still guards against duplicating whatever gets cloned in here (it only creates a
+            // fresh floor switch marker when the new mapping version doesn't already have one).
             // The physical facade geometry resolved above still needs cloning in, though, along with
             // timer_max_seconds - it's a NOT NULL DEFAULT 0 column that several call sites divide by unguarded
             // (CombatLogEventFilter::fromHeatmapDataFilter(), CombatLogEvent::setTimeInterval()), so leaving it
@@ -120,6 +124,7 @@ class MappingService implements MappingServiceInterface
             if ($facadeSourceMappingVersion !== null) {
                 $this->cloneFloorUnionsToMappingVersion($facadeSourceMappingVersion, $newMappingVersion);
                 $this->cloneMountableAreasToMappingVersion($facadeSourceMappingVersion, $newMappingVersion);
+                $this->cloneDungeonFloorSwitchMarkersToMappingVersion($facadeSourceMappingVersion, $newMappingVersion);
 
                 $newMappingVersion->update([
                     'timer_max_seconds' => $facadeSourceMappingVersion->timer_max_seconds,
@@ -241,24 +246,7 @@ class MappingService implements MappingServiceInterface
         // MDT mapping
 
         // Dungeon Floor Switch Markers
-        $dungeonFloorSwitchMarkerIdMapping = [];
-        $newDungeonFloorSwitchMarkers      = [];
-
-        foreach ($sourceMappingVersion->dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
-            /** @var DungeonFloorSwitchMarker $newDungeonFloorSwitchMarker */
-            $newDungeonFloorSwitchMarker = $dungeonFloorSwitchMarker->cloneForNewMappingVersion(
-                $targetMappingVersion,
-            );
-            $dungeonFloorSwitchMarkerIdMapping[$dungeonFloorSwitchMarker->id] = $newDungeonFloorSwitchMarker->id;
-            $newDungeonFloorSwitchMarkers[]                                   = $newDungeonFloorSwitchMarker;
-        }
-
-        // Restore the links between the floor switches
-        foreach ($newDungeonFloorSwitchMarkers as $newDungeonFloorSwitchMarker) {
-            $newDungeonFloorSwitchMarker->update([
-                'linked_dungeon_floor_switch_marker_id' => $dungeonFloorSwitchMarkerIdMapping[$newDungeonFloorSwitchMarker['linked_dungeon_floor_switch_marker_id']] ?? null,
-            ]);
-        }
+        $this->cloneDungeonFloorSwitchMarkersToMappingVersion($sourceMappingVersion, $targetMappingVersion);
 
         // Map Icons
         foreach ($sourceMappingVersion->mapIcons as $mapIcon) {
@@ -336,6 +324,28 @@ class MappingService implements MappingServiceInterface
     {
         foreach ($sourceMappingVersion->mountableAreas as $mountableArea) {
             $mountableArea->cloneForNewMappingVersion($targetMappingVersion);
+        }
+    }
+
+    private function cloneDungeonFloorSwitchMarkersToMappingVersion(MappingVersion $sourceMappingVersion, MappingVersion $targetMappingVersion): void
+    {
+        $dungeonFloorSwitchMarkerIdMapping = [];
+        $newDungeonFloorSwitchMarkers      = [];
+
+        foreach ($sourceMappingVersion->dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
+            /** @var DungeonFloorSwitchMarker $newDungeonFloorSwitchMarker */
+            $newDungeonFloorSwitchMarker = $dungeonFloorSwitchMarker->cloneForNewMappingVersion(
+                $targetMappingVersion,
+            );
+            $dungeonFloorSwitchMarkerIdMapping[$dungeonFloorSwitchMarker->id] = $newDungeonFloorSwitchMarker->id;
+            $newDungeonFloorSwitchMarkers[]                                   = $newDungeonFloorSwitchMarker;
+        }
+
+        // Restore the links between the floor switches
+        foreach ($newDungeonFloorSwitchMarkers as $newDungeonFloorSwitchMarker) {
+            $newDungeonFloorSwitchMarker->update([
+                'linked_dungeon_floor_switch_marker_id' => $dungeonFloorSwitchMarkerIdMapping[$newDungeonFloorSwitchMarker['linked_dungeon_floor_switch_marker_id']] ?? null,
+            ]);
         }
     }
 }
