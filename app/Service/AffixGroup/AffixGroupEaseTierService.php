@@ -278,7 +278,10 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         // group of the current week whenever it has the given affixes.
         $currentAffixGroup = $this->seasonAffixGroupService->getCurrentAffixGroup($currentSeason);
 
-        if ($currentAffixGroup !== null && $this->hasAllAffixes($currentAffixGroup, $affixKeys)) {
+        // The current affix group may be that of a timewalking event, which is not an affix group of this season
+        if ($currentAffixGroup !== null &&
+            $currentAffixGroup->season_id === $currentSeason->id &&
+            $this->hasAllAffixes($currentAffixGroup, $affixKeys)) {
             return $currentAffixGroup;
         }
 

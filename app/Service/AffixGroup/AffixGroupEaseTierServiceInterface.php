@@ -6,6 +6,7 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\AffixGroup\AffixGroupEaseTier;
 use App\Models\AffixGroup\AffixGroupEaseTierPull;
 use App\Models\Dungeon;
+use Exception;
 use Illuminate\Support\Collection;
 
 interface AffixGroupEaseTierServiceInterface
@@ -35,8 +36,10 @@ interface AffixGroupEaseTierServiceInterface
     public function getTiers(): Collection;
 
     /**
-     * Finds the first affix group of the current season that has all affixes in the given comma separated list of
-     * (English) affix names, or null if no such affix group exists.
+     * Finds the affix group of the current season that has all affixes in the given comma separated list of (English)
+     * affix names, or null if no such affix group exists or if multiple affix groups with different affixes have them.
+     *
+     * @throws Exception
      */
     public function getAffixGroupByString(string $affixString): ?AffixGroup;
 }
