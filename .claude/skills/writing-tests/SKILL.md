@@ -36,7 +36,12 @@ Do **not** extend `TestCase` directly for feature tests — use one of the `Test
 ## The test database — READ THIS
 
 The test DB is a **real MySQL connection** (`phpunit`), and it is **persistent and pre-seeded**.
-There is **no `RefreshDatabase` / no transactions** wrapping tests. Two consequences:
+There is **no `RefreshDatabase` / no transactions** wrapping tests. In the main checkout (and
+`--shared-db` worktrees) it is the shared dev schema; in a default **isolated worktree** it is the
+worktree's private schema — same seeded contents, and if it ever gets poisoned you can rebuild it
+wholesale there (`sh/worktree.sh provision-db`, or `migrate:fresh` + reseed — isolated worktrees
+only!). The cleanup discipline below applies **everywhere** regardless: leaked rows break *later
+tests in the same schema*, isolated or not. Two consequences:
 
 1. **Seeded data already exists** and you should rely on it: dungeons + their mapping versions,
    game versions, seasons, and **user id=1 is the admin** (has `Role::ROLE_ADMIN`, seeded by

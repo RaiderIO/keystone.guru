@@ -69,8 +69,12 @@ only the rebase is affected — which makes it easy to miss.
   any green, `pr can merge`-labeled PR the moment it sees one — from grabbing a PR (and ripping out
   its worktree) while you're still mid-verification on it (see #3719). Don't undraft early just to
   let Wotuu take an early look; a labeled-but-still-in-flight PR is exactly the race this avoids.
-- The worktree shares the main stack's database/redis, so keep migrations non-destructive and never
-  run `migrate:fresh`/`migrate:refresh` in a worktree. See the `worktree-docker` skill for details.
+- By default a worktree gets its **own freshly-seeded database schemas** (main + combatlog, on the
+  shared MySQL servers) plus its own redis prefix — parallel agents can't touch each other's data,
+  and destructive operations (`migrate:fresh`, destructive migrations) are safe to *test* there.
+  `create ... --shared-db` opts back into sharing the main stack's data; then the old rules apply:
+  non-destructive migrations only, never `migrate:fresh`/`migrate:refresh`. See the
+  `worktree-docker` skill for details (isolated creates take ~5–15 min to seed).
 
 ## Github
 
@@ -87,11 +91,17 @@ the appearance of impersonating the user.
 the body directly underneath already carries it. Same for commit messages — those are attributed via
 the `Co-Authored-By: Claude` trailer, not an emoji.
 
-`gh pr edit` always fails on this repo with a Projects-classic GraphQL deprecation error
-(`repository.pullRequest.projectCards`). Update PRs through the REST API instead:
+`gh pr edit` **works again as of gh 2.96.0** (verified 2026-07-29 on PR #3750 with a no-op
+`--body-file` edit). It used to fail on this repo with a Projects-classic GraphQL deprecation error
+(`repository.pullRequest.projectCards`) — `gh pr edit` fetched that field in its pre-edit query
+regardless of which flag you passed, so it died before applying the change. That was a client-side
+query in the old apt `gh` 2.4.0; the 2.96.0 build in `~/.local/bin` no longer requests it.
+
+If it ever regresses, the REST fallback still works:
 `gh api -X PATCH repos/RaiderIO/keystone.guru/pulls/<number> -F body=@<file>` — capital `-F`
 dereferences the `@file` into its contents; lowercase `-f` would send the literal string
-`@<file>` as the body.
+`@<file>` as the body. Note the apt-installed `gh` 2.4.0 is still on `PATH` at `/usr/bin/gh`,
+shadowed by `~/.local/bin/gh`; if the error reappears, check `gh --version` first.
 
 ### Stacked PRs: always target `master`
 
@@ -135,7 +145,11 @@ review must start from a pre-reviewed, verified MR:
    can trigger it directly (`/code-review`), an agent calling it itself will error. Once the change
    is built, hand the diff to a fresh-context agent (no shared context with whoever implemented it —
    a plain `Agent` call, not a `fork`) to review, and resolve every finding it raises (or note in the
-   MR body why a finding is intentionally not addressed).
+   MR body why a finding is intentionally not addressed). Afterwards, post the `:robot: Cold review:
+   <N> findings` marker comment on the MR and add the `pr cold reviewed` label
+   (`gh pr edit <n> --add-label "pr cold reviewed"`) — this is the same marker/label `babysit-prs`
+   step 4 checks for before dispatching its own cold review, so doing this here is what stops a PR
+   from getting reviewed twice (once here, once by babysit-prs the moment it goes green + non-draft).
 2. **Visual verification**: for any UI-visible change, verify the affected page(s) in headless
    Chrome (`headless-browser-verify` skill) and post before/after screenshots on the MR
    (`post-screenshot.sh`).

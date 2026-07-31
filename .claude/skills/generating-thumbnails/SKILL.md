@@ -26,7 +26,12 @@ renders to the **`public`** disk, which is bind-mounted into every worktree and 
 docker compose exec -T app php artisan dungeonroute:queuethumbnail <publicKey> --force
 ```
 
-- Works from the main checkout or any worktree (dispatch only needs Redis; Horizon does the render).
+- **Does NOT work from a default (isolated-DB) worktree**: the route row only exists in the
+  worktree's private schema, and the dispatch lands under the worktree's private redis prefix — the
+  shared Horizon sees neither. Use Path A there, or create the worktree with
+  `sh/worktree.sh create ... --shared-db` when real thumbnails are the point of the task.
+- Works from the main checkout or any `--shared-db` worktree (dispatch only needs Redis; Horizon
+  does the render).
 - Uses **master's** code (Horizon runs the main checkout), so it does NOT reflect uncommitted branch
   changes to the render/preview — use Path A for that.
 - Give Horizon a few seconds, then verify: the route's thumbnail row is on the `public` disk and
