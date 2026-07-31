@@ -33,12 +33,18 @@ class SeasonController extends Controller
         unset($validated['dungeon_ids']);
 
         if ($season === null) {
-            // The id must be one of Season::ALL_SEASONS - explicit rather than auto-incrementing so
-            // that a season's identity is a deliberate code change (see SeasonFormRequest::rules()),
-            // matching the constants the rest of the codebase references by name (e.g.
-            // Season::SEASON_TWW_S1). MySQL's LAST_INSERT_ID() is not updated by an explicit
-            // AUTO_INCREMENT value on a bulk query-builder insert(), but a normal Eloquent save()
-            // does correctly report it back - verified empirically before relying on this.
+            // Deliberately not Season::create($validated): 'id' is intentionally absent from
+            // Season::$fillable, so mass-assigning it would be silently dropped (this app never
+            // calls preventSilentlyDiscardingAttributeFill()) and the row would get whatever id
+            // MySQL's AUTO_INCREMENT hands out next, instead of the intended
+            // Season::SEASON_TWW_S1-style constant that the rest of the codebase references by
+            // name (see SeasonFormRequest::rules(), which restricts 'id' to Season::ALL_SEASONS).
+            // Making 'id' fillable to allow create() would reopen the same primary-key-reassignment
+            // hole fixed for Affix in 21ba580f5: SeasonFormRequest only requires 'id' on create, it
+            // doesn't forbid it on update, so a PATCH carrying an 'id' would mass-assign a new
+            // primary key onto an existing season. Instead we strip 'id' from the mass-assigned
+            // data and set it directly on the model, bypassing the fillable guard for just this one
+            // explicitly-validated case.
             $id = (int)$validated['id'];
             unset($validated['id']);
 

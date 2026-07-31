@@ -1,3 +1,13 @@
+<?php
+
+use App\Models\Affix;
+use Illuminate\Support\Collection;
+
+/**
+ * @var Collection<int, Affix> $models
+ */
+?>
+
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.affix.list.title')])
 
 @section('header-title')
@@ -13,16 +23,6 @@
         </div>
     </div>
 @endsection
-
-<?php
-
-use App\Models\Affix;
-use Illuminate\Support\Collection;
-
-/**
- * @var Collection<int, Affix> $models
- */
-?>
 
 @section('scripts')
     @parent

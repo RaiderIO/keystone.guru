@@ -1,3 +1,13 @@
+<?php
+
+use App\Models\Season;
+use Illuminate\Support\Collection;
+
+/**
+ * @var Collection<int, Season> $models
+ */
+?>
+
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.season.list.title')])
 
 @section('header-title')
@@ -13,16 +23,6 @@
         </div>
     </div>
 @endsection
-
-<?php
-
-use App\Models\Season;
-use Illuminate\Support\Collection;
-
-/**
- * @var Collection<int, Season> $models
- */
-?>
 
 @section('scripts')
     @parent

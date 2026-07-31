@@ -8,6 +8,7 @@ use App\Models\Expansion;
 use App\Models\Laratrust\Role;
 use App\Models\Season;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -306,6 +307,46 @@ final class AdminSeasonControllerTest extends PublicTestCase
         // Assert
         $response->assertSessionHasErrors('id');
         $this->assertFalse(Season::query()->where('index', 992)->exists());
+    }
+
+    #[Test]
+    public function savenew_givenAvailableDeclaredId_persistsThatExactIdRatherThanAnAutoIncrementedOne(): void
+    {
+        // Arrange - the fixture DB has every Season::SEASON_* constant already seeded (see
+        // create_givenAllDeclaredSeasonIdsAlreadyUsed_showsNoAvailableIdsWarning), so there is
+        // never a "naturally" free id to post. Free one up for the duration of this test only,
+        // inside a DB transaction that is always rolled back, instead of permanently mutating the
+        // shared season fixtures. This is the regression test for SeasonController::store()'s
+        // explicit `$season->id = $id` assignment: it must persist the requested constant, not
+        // whatever id MySQL's AUTO_INCREMENT would hand out.
+        $expansion = Expansion::query()->firstOrFail();
+        $freedId   = Season::query()->max('id');
+
+        DB::beginTransaction();
+
+        try {
+            Season::query()->where('id', $freedId)->delete();
+
+            // Act
+            $response = $this->post(route('admin.season.savenew'), [
+                'id'                      => $freedId,
+                'expansion_id'            => $expansion->id,
+                'seasonal_affix_id'       => -1,
+                'index'                   => 989,
+                'start'                   => '2026-01-01 00:00:00',
+                'affix_group_count'       => 4,
+                'start_affix_group_index' => 0,
+                'key_level_min'           => 2,
+                'key_level_max'           => 30,
+            ]);
+
+            // Assert
+            $response->assertRedirect();
+            $season = Season::query()->where('index', 989)->firstOrFail();
+            $this->assertSame($freedId, $season->id);
+        } finally {
+            DB::rollBack();
+        }
     }
 
     #[Test]
