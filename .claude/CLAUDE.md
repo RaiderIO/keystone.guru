@@ -211,16 +211,9 @@ to stage the table as `<table>_temp` while seeding.
 
 - **Nothing outside the admin panel, the mapping editor and the seeders should delete these rows.** That is a
   convention, not an enforced rule: the routes that delete them already sit behind `role:admin`, and there is
-  no model-level guard. Deleting mapping data is recoverable — it shows up as a diff the next time
-  `mapping:save` runs — but anything not exported to `database/seeders/dungeondata` (seasons, expansions,
-  published states, character classes, …) has no such safety net, so treat a delete there as permanent.
-- The trait used to register a `deleting` listener returning `false` for non-admins. It was removed because it
-  guarded nothing while breaking two things: `$model->delete()` silently became a no-op wherever no user is
-  authenticated (Artisan commands, queued jobs, tests), and because `deleting` is fired through the
-  dispatcher's `until()` — which halts on the first non-null result — it swallowed any `deleting` listener a
-  model registered in `booted()`. `Npc`'s cleanup listener was one of those, so deleting an NPC as an admin
-  left its spells, characteristics and couplings orphaned. Don't reintroduce it; authorization belongs on the
-  route.
+  no model-level guard. A delete is recoverable directly from `database/seeders` — that's where these models'
+  rows are authored (some are being migrated to `.json` files under there instead, but the recovery path is
+  the same: restore from the seeder files).
 
 ### Controllers & Validation
 - Always create Form Request classes for validation rather than inline validation in controllers. Include both validation rules and custom error messages.
