@@ -110,13 +110,8 @@ class MappingService implements MappingServiceInterface
             // part of the same import) already (re)creates the physical subset it recognizes itself from MDT's
             // own map POI data whenever $currentMappingVersion is null - see its "(#3757)" comments. Cloning
             // them here too would just create duplicate rows a few lines later in the same import. Mountable
-            // areas and dungeon floor switch markers have no such backfill to rely on: MDT has no
-            // mount-speed-zone concept at all, and per Wotuu (#3762 review) modern MDT exports only generate a
-            // combined/facade view and no longer supply the per-floor MapLink POI data importMapPOIs() used to
-            // recreate floor switch markers from - so both are PHYSICAL data (fixed dungeon terrain/geometry,
-            // like floor unions) with no other source, and need the same explicit clone floor unions get.
-            // importMapPOIs() still guards against duplicating whatever gets cloned in here (it only creates a
-            // fresh floor switch marker when the new mapping version doesn't already have one).
+            // areas have no such backfill to rely on: MDT has no mount-speed-zone concept at all, so they need
+            // the same explicit clone floor unions get.
             // The physical facade geometry resolved above still needs cloning in, though, along with
             // timer_max_seconds - it's a NOT NULL DEFAULT 0 column that several call sites divide by unguarded
             // (CombatLogEventFilter::fromHeatmapDataFilter(), CombatLogEvent::setTimeInterval()), so leaving it
@@ -124,12 +119,30 @@ class MappingService implements MappingServiceInterface
             if ($facadeSourceMappingVersion !== null) {
                 $this->cloneFloorUnionsToMappingVersion($facadeSourceMappingVersion, $newMappingVersion);
                 $this->cloneMountableAreasToMappingVersion($facadeSourceMappingVersion, $newMappingVersion);
-                $this->cloneDungeonFloorSwitchMarkersToMappingVersion($facadeSourceMappingVersion, $newMappingVersion);
 
                 $newMappingVersion->update([
                     'timer_max_seconds' => $facadeSourceMappingVersion->timer_max_seconds,
                 ]);
             }
+
+            // Dungeon floor switch markers have no MDT backfill either, but unlike FloorUnions they are NOT
+            // facade-specific geometry - every dungeon has staircases between floors, facade-enabled or not
+            // (per Wotuu, #3762 review round 2: modern MDT exports only generate a combined/facade view and no
+            // longer supply the per-floor MapLink POI data importMapPOIs() used to recreate them from, and this
+            // app still needs them for both facade mode and the per-floor "visit style" mode). So their source
+            // must NOT be gated behind $facadeSourceMappingVersion the way FloorUnion/MountableArea legitimately
+            // are - that would silently drop them for every non-facade dungeon's first-ever import, which is
+            // most of them. Fall back to the newest mapping version of ANY game version, deterministically,
+            // same rationale as the facade source above.
+            $physicalGeometrySourceMappingVersion = $facadeSourceMappingVersion
+                ?? $dungeon->mappingVersions()->orderByDesc('id')->first();
+
+            if ($physicalGeometrySourceMappingVersion !== null) {
+                $this->cloneDungeonFloorSwitchMarkersToMappingVersion($physicalGeometrySourceMappingVersion, $newMappingVersion);
+            }
+
+            // importMapPOIs() still guards against duplicating whatever gets cloned in here (it only creates a
+            // fresh floor switch marker when the new mapping version doesn't already have one).
 
             return $newMappingVersion->load([
                 'dungeonFloorSwitchMarkers',

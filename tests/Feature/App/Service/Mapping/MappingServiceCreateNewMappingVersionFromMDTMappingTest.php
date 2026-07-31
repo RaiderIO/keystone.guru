@@ -307,4 +307,94 @@ final class MappingServiceCreateNewMappingVersionFromMDTMappingTest extends Publ
 
         return $dungeon;
     }
+
+    /**
+     * #3762 review round 2: Wotuu corrected the original decision to leave DungeonFloorSwitchMarkers uncloned.
+     * Unlike FloorUnions/MountableAreas (facade-specific/ambiguous-without-a-facade-source), DungeonFloorSwitch-
+     * Markers are NOT facade-specific geometry - every dungeon has staircases between floors regardless of
+     * whether it has a facade floor. A dungeon with NO facade floor at all resolves both `$facadeEnabled` and
+     * `$facadeSourceMappingVersion` to false/null, so cloning DungeonFloorSwitchMarkers must not be gated
+     * behind either of those - it needs its own source, falling back to the newest mapping version of ANY
+     * game version, same deterministic-pin rationale as the facade source.
+     */
+    #[Test]
+    public function createNewMappingVersionFromMDTMapping_givenNoPredecessorAndDungeonWithoutFacadeFloor_stillClonesDungeonFloorSwitchMarkersFromNewestMappingVersionOfAnyGameVersion(): void
+    {
+        // Arrange
+        $mappingService = $this->app->make(MappingServiceInterface::class);
+
+        /** @var GameVersion $targetGameVersion */
+        $targetGameVersion = GameVersion::query()->where('key', GameVersion::GAME_VERSION_BETA)->firstOrFail();
+
+        $dungeon = $this->getNonFacadeDungeonWithDungeonFloorSwitchMarkersAndNoMappingForGameVersion($targetGameVersion);
+
+        $sourceMappingVersion = $dungeon->mappingVersions()->orderByDesc('id')->without('dungeon')->firstOrFail();
+
+        $newMappingVersion = null;
+
+        try {
+            // Act - a genuinely first-ever import for $targetGameVersion on a dungeon with no facade floor at
+            // all: $currentMappingVersion is null.
+            $newMappingVersion = $mappingService->createNewMappingVersionFromMDTMapping(
+                $dungeon,
+                $targetGameVersion,
+                null,
+            );
+
+            // Assert
+            $this->assertFalse(
+                (bool)$newMappingVersion->facade_enabled,
+                'Sanity check on the fixture: this dungeon must have no facade floor, otherwise this test would not distinguish the fix from the already-covered facade case above.',
+            );
+            $this->assertSame(
+                $sourceMappingVersion->dungeonFloorSwitchMarkers()->count(),
+                $newMappingVersion->dungeonFloorSwitchMarkers()->count(),
+                'DungeonFloorSwitchMarkers must be cloned even for a dungeon with no facade floor - they are ' .
+                'physical geometry that exists on every dungeon, not facade-specific like FloorUnions, so ' .
+                'their clone source must not be gated behind $facadeSourceMappingVersion.',
+            );
+            $this->assertGreaterThan(
+                0,
+                $newMappingVersion->dungeonFloorSwitchMarkers()->count(),
+                'Sanity check on the fixture: the source mapping version this is supposed to clone from must actually have DungeonFloorSwitchMarkers to prove the clone happened.',
+            );
+        } finally {
+            $newMappingVersion?->delete();
+        }
+    }
+
+    /**
+     * A dungeon that (a) physically has NO facade floor at all, (b) has at least one mapping version (of any
+     * game version) with a DungeonFloorSwitchMarker, and (c) has zero mapping versions for the target game
+     * version, so importing it is a genuine "first ever" case.
+     */
+    private function getNonFacadeDungeonWithDungeonFloorSwitchMarkersAndNoMappingForGameVersion(GameVersion $gameVersion): Dungeon
+    {
+        /** @var Dungeon|null $dungeon */
+        $dungeon = Dungeon::query()
+            ->with(['mappingVersions', 'floors'])
+            ->get()
+            ->first(static function (Dungeon $dungeon) use ($gameVersion): bool {
+                if ($dungeon->mappingVersions->where('game_version_id', $gameVersion->id)->isNotEmpty()) {
+                    return false;
+                }
+
+                if ($dungeon->getFacadeFloor() !== null) {
+                    return false;
+                }
+
+                $newestMappingVersion = $dungeon->mappingVersions->sortByDesc('id')->first();
+
+                return $newestMappingVersion !== null && $newestMappingVersion->dungeonFloorSwitchMarkers()->count() > 0;
+            });
+
+        if ($dungeon === null) {
+            $this->fail(
+                'No dungeon found with no facade floor at all, a DungeonFloorSwitchMarker on its newest ' .
+                'mapping version, and no mapping version for the target game version.',
+            );
+        }
+
+        return $dungeon;
+    }
 }
