@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\App\Model\Trait;
+namespace Tests\Feature\App\Models\Trait;
 
 use App\Models\Dungeon;
 use App\Models\Season;

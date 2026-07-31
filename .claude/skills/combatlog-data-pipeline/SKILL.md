@@ -133,7 +133,7 @@ precedes `PropertyChanged` in the feed:
 a warning if there is no current season). Three phases:
 
 1. `removeStaleNpcCharacteristics()` — deletes `NpcCharacteristic` rows with no fresh observation
-   (`->toBase()->delete()` to bypass the `SeederModel` admin-only observer) + emits
+   (`->toBase()->delete()`, a bulk delete that skips Eloquent's caching builder layer) + emits
    `CharacteristicRemoved`.
 2. `removeStaleSpellProperties()` — clears stale `aura`/`debuff`/miss-type bits on `Spell` + emits
    `PropertyRemoved`.
