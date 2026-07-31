@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Email\CustomPasswordResetEmail;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Feature\Feature;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonAdFreeGiveaway;
@@ -399,6 +400,11 @@ class User extends Authenticatable implements LaratrustUser
 
         // Delete user properly if it gets deleted
         static::deleting(static function (User $user) {
+            // Laratrust's own deleting hook clears roles via roles()->sync([]) rather than syncRoles()/
+            // removeRoles(), so no role.removed/role.synced event fires here and Feature::forgetAllForUser()
+            // never runs - drop the user's stored feature values explicitly instead
+            Feature::forgetAllForUser($user);
+
             $user->dungeonRoutes()->delete();
             $user->reports()->delete();
             $user->patreonUserLink()->delete();

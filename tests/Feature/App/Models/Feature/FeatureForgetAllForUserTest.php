@@ -104,6 +104,28 @@ final class FeatureForgetAllForUserTest extends PublicTestCase
     }
 
     #[Test]
+    public function delete_givenUserWithStoredFeatureValues_forgetsThoseValues(): void
+    {
+        // Arrange - Laratrust's own deleting hook clears roles via roles()->sync([]), which fires neither
+        // role.removed nor role.synced, so User::boot() must drop the stored values itself
+        $user = User::factory()->create();
+
+        try {
+            $user->addRole(Role::ROLE_INTERNAL_TEAM);
+            PennantFeature::for($user)->activate(NpcCompendium::class);
+            $this->assertSame(1, $this->countStoredFeaturesOf($user), 'Expected the stored value to be arranged.');
+
+            // Act
+            $user->delete();
+
+            // Assert
+            $this->assertSame(0, $this->countStoredFeaturesOf($user));
+        } finally {
+            $this->deleteStoredFeaturesOf($user);
+        }
+    }
+
+    #[Test]
     public function forgetAllForUser_givenAdminUser_keepsStoredFeatureValues(): void
     {
         // Arrange - the admin's stored values are the global on/off switch of every feature, so dropping them

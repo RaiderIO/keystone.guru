@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\AdminTools;
 
 use App\Http\Controllers\Controller;
+use App\Models\Feature\Feature;
+use App\Models\User;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Laravel\Pennant\Feature;
+use Laravel\Pennant\Feature as PennantFeature;
 use Session;
 
 class AdminToolsFeaturesController extends Controller
@@ -23,11 +25,17 @@ class AdminToolsFeaturesController extends Controller
     {
         $feature = (string)$request->get('feature');
 
-        $wasActive = Feature::active($feature);
+        $wasActive = Feature::getAdminValue($feature);
+
+        // Purge every stored value first, so that each user's feature re-resolves against their own roles the
+        // next time it's checked, instead of blanket-flipping their already-cached rows to the new switch value
+        PennantFeature::purge($feature);
+
+        $adminUser = User::findOrFail(Feature::ADMIN_USER_ID);
         if ($wasActive) {
-            Feature::deactivateForEveryone($feature);
+            PennantFeature::for($adminUser)->deactivate($feature);
         } else {
-            Feature::activateForEveryone($feature);
+            PennantFeature::for($adminUser)->activate($feature);
         }
 
         Session::flash('status', __(!$wasActive ?
@@ -43,8 +51,8 @@ class AdminToolsFeaturesController extends Controller
     {
         $feature = (string)$request->get('feature');
 
-        Feature::forget($feature);
-        Feature::for(null)->forget($feature);
+        PennantFeature::forget($feature);
+        PennantFeature::for(null)->forget($feature);
 
         Session::flash('status', __('controller.admintools.flash.feature_forgotten', ['feature' => $feature]));
 
