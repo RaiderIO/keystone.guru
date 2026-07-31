@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\AffixGroup\AffixGroup;
-use App\Models\Traits\HasIconFile;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -12,7 +11,10 @@ use Str;
 
 /**
  * @property int    $id           The ID of this Affix.
- * @property int    $icon_file_id The file ID of the icon associated with this Affix.
+ * @property int    $icon_file_id Vestigial - always -1. The icon itself is a static asset from the
+ *                                assets project (see image_url), not an admin-editable File upload.
+ *                                Column kept for now (NOT NULL, no default); dropping it needs its
+ *                                own migration - see #3775.
  * @property int    $affix_id     The ID of the affix in-game.
  * @property string $key          The identifying key of the Affix.
  * @property string $name         The name of the Affix.
@@ -27,7 +29,6 @@ use Str;
  */
 class Affix extends CacheModel
 {
-    use HasIconFile;
     use SeederModel;
 
     public $hidden = [
