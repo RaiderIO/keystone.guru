@@ -13,22 +13,22 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
- * @property int    $id
- * @property int    $expansion_id
- * @property int    $seasonal_affix_id
- * @property int    $index
- * @property Carbon $start
- * @property int    $presets
- * @property int    $affix_group_count
- * @property int    $start_affix_group_index The index of the affix that was the first affix to be available upon season start
- * @property int    $key_level_min
- * @property int    $key_level_max
- * @property int    $item_level_min          The minimum item level of items that can be obtained in this season
- * @property int    $item_level_max          The maximum item level of items that can be obtained in this season
- * @property string $name                    Dynamic attribute
- * @property string $name_med                Dynamic attribute
- * @property string $name_long               Dynamic attribute
- * @property int    $start_period            Dynamic attribute
+ * @property int      $id
+ * @property int      $expansion_id
+ * @property int|null $seasonal_affix_id
+ * @property int      $index
+ * @property Carbon   $start
+ * @property int      $presets
+ * @property int      $affix_group_count
+ * @property int      $start_affix_group_index The index of the affix that was the first affix to be available upon season start
+ * @property int      $key_level_min
+ * @property int      $key_level_max
+ * @property int      $item_level_min          The minimum item level of items that can be obtained in this season
+ * @property int      $item_level_max          The maximum item level of items that can be obtained in this season
+ * @property string   $name                    Dynamic attribute
+ * @property string   $name_med                Dynamic attribute
+ * @property string   $name_long               Dynamic attribute
+ * @property int      $start_period            Dynamic attribute
  *
  * @property Expansion $expansion
  *
@@ -161,5 +161,37 @@ class Season extends CacheModel
     public function hasDungeon(Dungeon $dungeon): bool
     {
         return $this->seasonDungeons()->where('dungeon_id', $dungeon->id)->exists();
+    }
+
+    /**
+     * @param array<int, int> $dungeonIds
+     */
+    public function syncDungeons(array $dungeonIds): void
+    {
+        // Individually deleted so each SeasonDungeon's cache is properly invalidated (a mass query
+        // delete would bypass model events and leave stale cached results behind).
+        foreach ($this->seasonDungeons()->get() as $seasonDungeon) {
+            $seasonDungeon->delete();
+        }
+
+        foreach (array_unique($dungeonIds) as $dungeonId) {
+            $this->seasonDungeons()->create(['dungeon_id' => $dungeonId]);
+        }
+    }
+
+    /**
+     * The Season::SEASON_* ids that don't have a row yet - the only ids a new season is allowed
+     * to take, since a season's id is a deliberate code change rather than an auto-increment value.
+     *
+     * @return array<int, int>
+     */
+    public static function getAvailableIds(): array
+    {
+        $usedIds = self::pluck('id')->all();
+
+        return collect(self::ALL_SEASONS)
+            ->reject(fn(int $id) => in_array($id, $usedIds, true))
+            ->values()
+            ->all();
     }
 }

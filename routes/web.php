@@ -31,6 +31,8 @@ use App\Http\Controllers\AdminTools\AdminToolsSpellsController;
 use App\Http\Controllers\AdminTools\AdminToolsThumbnailsController;
 use App\Http\Controllers\AdminTools\AdminToolsWagoGgController;
 use App\Http\Controllers\AdminToolsController;
+use App\Http\Controllers\AffixController;
+use App\Http\Controllers\AffixGroupController;
 use App\Http\Controllers\Ajax\AjaxAdminCombatLogRouteController;
 use App\Http\Controllers\Ajax\AjaxArrowController;
 use App\Http\Controllers\Ajax\AjaxBrushlineController;
@@ -90,6 +92,7 @@ use App\Http\Controllers\NpcEnemyForcesController;
 use App\Http\Controllers\NpcHealthController;
 use App\Http\Controllers\PatreonController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\Speedrun\DungeonSpeedrunRequiredNpcsController;
 use App\Http\Controllers\SpellController;
@@ -386,6 +389,32 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::patch('{expansion}', new ExpansionController()->update(...))->name('admin.expansion.update');
             });
             Route::get('expansions', new ExpansionController()->get(...))->name('admin.expansions');
+            // Affixes
+            Route::prefix('affix')->group(static function () {
+                Route::get('new', new AffixController()->create(...))->name('admin.affix.new');
+                Route::get('{affix}', new AffixController()->edit(...))->name('admin.affix.edit');
+                Route::post('new', new AffixController()->savenew(...))->name('admin.affix.savenew');
+                Route::patch('{affix}', new AffixController()->update(...))->name('admin.affix.update');
+            });
+            Route::get('affixes', new AffixController()->get(...))->name('admin.affixes');
+            // Seasons
+            Route::prefix('season')->group(static function () {
+                Route::get('new', new SeasonController()->create(...))->name('admin.season.new');
+                Route::get('{season}', new SeasonController()->edit(...))->name('admin.season.edit');
+                Route::post('new', new SeasonController()->savenew(...))->name('admin.season.savenew');
+                Route::patch('{season}', new SeasonController()->update(...))->name('admin.season.update');
+                // Affix groups (rotation weeks)
+                Route::prefix('{season}/affixgroup')->group(static function () {
+                    Route::get('new', new AffixGroupController()->create(...))->name('admin.affixgroup.new');
+                    Route::post('new', new AffixGroupController()->savenew(...))->name('admin.affixgroup.savenew');
+                    Route::prefix('{affixGroup}')->group(static function () {
+                        Route::get('/', new AffixGroupController()->edit(...))->name('admin.affixgroup.edit');
+                        Route::patch('/', new AffixGroupController()->update(...))->name('admin.affixgroup.update');
+                        Route::delete('/', new AffixGroupController()->delete(...))->name('admin.affixgroup.delete');
+                    });
+                });
+            });
+            Route::get('seasons', new SeasonController()->get(...))->name('admin.seasons');
             // NPCs
             Route::prefix('npc')->group(static function () {
                 Route::get('new', new NpcController()->create(...))->name('admin.npc.new');

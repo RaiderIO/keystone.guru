@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\AffixGroup\AffixGroup;
-use App\Models\Traits\HasIconFile;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -12,7 +11,10 @@ use Str;
 
 /**
  * @property int    $id           The ID of this Affix.
- * @property int    $icon_file_id The file ID of the icon associated with this Affix.
+ * @property int    $icon_file_id Vestigial - always -1. The icon itself is a static asset from the
+ *                                assets project (see image_url), not an admin-editable File upload.
+ *                                Column kept for now (NOT NULL, no default); dropping it needs its
+ *                                own migration - see #3775.
  * @property int    $affix_id     The ID of the affix in-game.
  * @property string $key          The identifying key of the Affix.
  * @property string $name         The name of the Affix.
@@ -27,7 +29,6 @@ use Str;
  */
 class Affix extends CacheModel
 {
-    use HasIconFile;
     use SeederModel;
 
     public $hidden = [
@@ -183,5 +184,21 @@ class Affix extends CacheModel
     public static function getAffixBySeasonalType(string $seasonalType): ?string
     {
         return self::SEASONAL_TYPE_AFFIX_MAPPING[$seasonalType] ?? null;
+    }
+
+    /**
+     * The Affix::ALL ids that don't have a row yet - the only ids a new affix is allowed to take,
+     * since an affix's id is a deliberate code change rather than an auto-increment value.
+     *
+     * @return array<int, int>
+     */
+    public static function getAvailableIds(): array
+    {
+        $usedIds = self::pluck('id')->all();
+
+        return collect(self::ALL)
+            ->reject(fn(int $id) => in_array($id, $usedIds, true))
+            ->values()
+            ->all();
     }
 }
