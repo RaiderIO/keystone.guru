@@ -115,7 +115,8 @@ class AffixSeeder extends Seeder implements TableSeederInterface
         $season14 = ['season_id' => Season::SEASON_TWW_S1, 'expansion_id' => $tww, 'key_levels' => [2, 4, 7, 10, 12]];
         $season15 = ['season_id' => Season::SEASON_TWW_S2, 'expansion_id' => $tww, 'key_levels' => [4, 7, 10, 12]];
         $season16 = ['season_id' => Season::SEASON_TWW_S3, 'expansion_id' => $tww, 'key_levels' => [4, 7, 10, 12]];
-        $season18 = ['season_id' => Season::SEASON_MIDNIGHT_S1, 'expansion_id' => $midnight, 'key_levels' => [2, 5, 7, 10, 12]];
+        $season17 = ['season_id' => Season::SEASON_MIDNIGHT_S1, 'expansion_id' => $midnight, 'key_levels' => [2, 5, 7, 10, 12]];
+        $season18 = ['season_id' => Season::SEASON_MIDNIGHT_S2, 'expansion_id' => $midnight, 'key_levels' => [2, 5, 7, 10, 12]];
 
         $groups = [
             array_merge($season1, ['seasonal_index' => 0, 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_SANGUINE, Affix::AFFIX_NECROTIC, Affix::AFFIX_INFESTED]]),
@@ -299,14 +300,26 @@ class AffixSeeder extends Seeder implements TableSeederInterface
             // New season: remember to rearrange the affixes! $season->start_affix_group_index is not taken into account when calculating
             // affixes overview. You need to offset the affixes yourself by this number. Fiddle around with it - the current week needs to match
             // the affix overview page's current week!
-            array_merge($season18, ['affixes' => [Affix::AFFIX_LINDORMIS_GUIDANCE, Affix::AFFIX_FORTIFIED, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XALATATHS_BARGAIN_DEVOUR, Affix::AFFIX_XALATATHS_GUILE]]),
-            array_merge($season18, ['affixes' => [Affix::AFFIX_LINDORMIS_GUIDANCE, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_BARGAIN_ASCENDANT, Affix::AFFIX_XALATATHS_GUILE]]),
-            array_merge($season18, ['affixes' => [Affix::AFFIX_LINDORMIS_GUIDANCE, Affix::AFFIX_FORTIFIED, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XALATATHS_BARGAIN_PULSAR, Affix::AFFIX_XALATATHS_GUILE]]),
-            array_merge($season18, ['affixes' => [Affix::AFFIX_LINDORMIS_GUIDANCE, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_BARGAIN_VOIDBOUND, Affix::AFFIX_XALATATHS_GUILE]]),
-            array_merge($season18, ['affixes' => [Affix::AFFIX_LINDORMIS_GUIDANCE, Affix::AFFIX_FORTIFIED, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XALATATHS_BARGAIN_DEVOUR, Affix::AFFIX_XALATATHS_GUILE]]),
-            array_merge($season18, ['affixes' => [Affix::AFFIX_LINDORMIS_GUIDANCE, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_BARGAIN_PULSAR, Affix::AFFIX_XALATATHS_GUILE]]),
-            array_merge($season18, ['affixes' => [Affix::AFFIX_LINDORMIS_GUIDANCE, Affix::AFFIX_FORTIFIED, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XALATATHS_BARGAIN_ASCENDANT, Affix::AFFIX_XALATATHS_GUILE]]),
-            array_merge($season18, ['affixes' => [Affix::AFFIX_LINDORMIS_GUIDANCE, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_BARGAIN_VOIDBOUND, Affix::AFFIX_XALATATHS_GUILE]]),
+            array_merge($season17, ['affixes' => [Affix::AFFIX_LINDORMIS_GUIDANCE, Affix::AFFIX_FORTIFIED, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XALATATHS_BARGAIN_DEVOUR, Affix::AFFIX_XALATATHS_GUILE]]),
+            array_merge($season17, ['affixes' => [Affix::AFFIX_LINDORMIS_GUIDANCE, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_BARGAIN_ASCENDANT, Affix::AFFIX_XALATATHS_GUILE]]),
+            array_merge($season17, ['affixes' => [Affix::AFFIX_LINDORMIS_GUIDANCE, Affix::AFFIX_FORTIFIED, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XALATATHS_BARGAIN_PULSAR, Affix::AFFIX_XALATATHS_GUILE]]),
+            array_merge($season17, ['affixes' => [Affix::AFFIX_LINDORMIS_GUIDANCE, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_BARGAIN_VOIDBOUND, Affix::AFFIX_XALATATHS_GUILE]]),
+            array_merge($season17, ['affixes' => [Affix::AFFIX_LINDORMIS_GUIDANCE, Affix::AFFIX_FORTIFIED, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XALATATHS_BARGAIN_DEVOUR, Affix::AFFIX_XALATATHS_GUILE]]),
+            array_merge($season17, ['affixes' => [Affix::AFFIX_LINDORMIS_GUIDANCE, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_BARGAIN_PULSAR, Affix::AFFIX_XALATATHS_GUILE]]),
+            array_merge($season17, ['affixes' => [Affix::AFFIX_LINDORMIS_GUIDANCE, Affix::AFFIX_FORTIFIED, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XALATATHS_BARGAIN_ASCENDANT, Affix::AFFIX_XALATATHS_GUILE]]),
+            array_merge($season17, ['affixes' => [Affix::AFFIX_LINDORMIS_GUIDANCE, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_BARGAIN_VOIDBOUND, Affix::AFFIX_XALATATHS_GUILE]]),
+
+            // Midnight season 2 (patch 12.1). The affix rotation is not published yet, so every slot of every
+            // week is seeded as Unknown and flagged unconfirmed. Once the real rotation is known, replace these
+            // and remember to rearrange them by $season->start_affix_group_index as the comment above explains.
+            array_merge($season18, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN], 'confirmed' => false]),
+            array_merge($season18, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN], 'confirmed' => false]),
+            array_merge($season18, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN], 'confirmed' => false]),
+            array_merge($season18, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN], 'confirmed' => false]),
+            array_merge($season18, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN], 'confirmed' => false]),
+            array_merge($season18, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN], 'confirmed' => false]),
+            array_merge($season18, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN], 'confirmed' => false]),
+            array_merge($season18, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN], 'confirmed' => false]),
         ];
         // @formatter:on
 

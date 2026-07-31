@@ -381,6 +381,42 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                     ->orderBy('expansions.released_at')
                     ->get(),
             ],
+            [
+                'expansion_id'      => $expansions->get(Expansion::EXPANSION_MIDNIGHT),
+                'seasonal_affix_id' => null,
+                'index'             => 2,
+                // TEMPORARY PLACEHOLDER (#3739, at Wotuu's explicit request): pushed out to 2026-10-19 so
+                // merging this dry-run PR doesn't trip the "season starts within ~2 weeks" behavior the site
+                // has around a season's real start date. This is NOT the real Season 18 start - whoever
+                // finalizes the 12.1 release date must correct this to the real date (kept a Monday) before
+                // launch, well before the placeholder date arrives.
+                'start'             => '2026-10-19 00:00:00',
+                'presets'           => 0,
+                'affix_group_count' => 8,
+                // TODO: placeholder - the 12.1 affix rotation is not published yet. Whoever swaps in the
+                // real rotation must set this to the correct starting index rather than inherit 0 as if verified.
+                'start_affix_group_index' => 0,
+                'key_level_min'           => 2,
+                'key_level_max'           => 25,
+                // Working assumption: the S1 item level range carries forward.
+                // TODO: confirm against the 12.1 item squish on release day.
+                'item_level_min' => 240,
+                'item_level_max' => 300,
+                'dungeons'       => Dungeon::select('dungeons.*')
+                    ->join('expansions', 'dungeons.expansion_id', 'expansions.id')
+                    ->whereIn('dungeons.key', [
+                        Dungeon::DUNGEON_KINGS_REST,
+                        Dungeon::DUNGEON_TEMPLE_OF_SETHRALISS,
+                        Dungeon::DUNGEON_RUBY_LIFE_POOLS,
+                        Dungeon::DUNGEON_ALTAR_OF_FANGS,
+                        Dungeon::DUNGEON_DEN_OF_NALORAKK,
+                        Dungeon::DUNGEON_MURDER_ROW,
+                        Dungeon::DUNGEON_THE_BLINDING_VALE,
+                        Dungeon::DUNGEON_VOIDSCAR_ARENA,
+                    ])
+                    ->orderBy('expansions.released_at')
+                    ->get(),
+            ],
         ];
 
         $seasonDungeonAttributes = [];

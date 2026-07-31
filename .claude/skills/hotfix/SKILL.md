@@ -118,6 +118,6 @@ differs from HEAD, staged or unstaged**. Consequences:
   so a bad hotfix keeps coming back until you overwrite the key or deploy a new version.
 - `make:hotfix` must run where git can see the changes - the app container's `/var/www`
   bind mount of the main checkout. Do not run PHP on the host.
-- Local `mapping:sync` cron drift (dungeondata seeder JSONs) shows up in `git diff HEAD`
-  and would be swept into a bucket-wide (no `--file`) upload - another reason to prefer
-  `--file`.
+- Any local mapping drift (dungeondata seeder JSONs) shows up in `git diff HEAD` and would be
+  swept into a bucket-wide (no `--file`) upload - another reason to prefer `--file`. Note such
+  drift is never automatic - it only appears after someone runs `mapping:save` by hand.

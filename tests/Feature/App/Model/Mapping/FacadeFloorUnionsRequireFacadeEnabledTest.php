@@ -25,21 +25,14 @@ final class FacadeFloorUnionsRequireFacadeEnabledTest extends PublicTestCase
      * carrying this exact shape is inert rather than a live bug. This mirrors the "current mapping version
      * per game version" scope MDTNpcMappingCoverageTest already uses for the same reason.
      *
-     * Deliberately one-directional: this only checks "floor unions present without facade_enabled", the
-     * shape that stranded Throne of the Tides' enemies. The inverse (facade_enabled true but no facade
-     * floor, or a facade floor with no floor unions) is a different, pre-existing gotcha that several
-     * legacy dungeons (e.g. Cathedral of Eternal Night, Halls/Upper/Lower Karazhan, Maw of Souls, Vault of
-     * the Wardens) already have in seeded data - fixing those is out of scope here. That shape is instead
-     * covered going forward by FacadeNotConfiguredException, which getClonesAsEnemies() throws for it (see
-     * #3739) - a loud runtime failure the moment anyone reimports one of those dungeons.
+     * One direction of the invariant only: this checks "floor unions present without facade_enabled", the
+     * shape that stranded Throne of the Tides' enemies. The inverse - facade_enabled true with no usable
+     * facade to redistribute through - is checked by FacadeEnabledRequiresFacadeFloorUnionsTest.
      *
-     * Temple of Sethraliss (dungeon_id 19) is excluded below: its one and only committed mapping version
-     * (mapping_version_id 19, version 1) has this exact bug shape in the seeder data today - facade floor
-     * unions with facade_enabled false, same as Throne of the Tides before #3742. It is not a superseded
-     * version with a fixed successor; there is no version 2 in the committed seeder JSON. A fix already
-     * exists in MR #3739 (open, not yet merged), which creates a new mapping version with facade_enabled
-     * true - but until that lands, master's committed data still has the bug. Tracked as its own
-     * out-of-scope follow-up: #3763.
+     * Temple of Sethraliss used to be excluded here: its only committed mapping version (19, version 1)
+     * had this exact bug shape, with no fixed successor in the seeder JSON, tracked as #3763. That fix
+     * landed with the Midnight Season 2 mapping in #3739, which adds mapping version 826 (version 2) with
+     * facade_enabled true, so the exclusion is gone and the dungeon is asserted like every other one.
      */
     #[Test]
     public function facadeFloorUnions_givenAllDungeonsCurrentMappingVersions_requiresFacadeEnabled(): void
@@ -51,12 +44,6 @@ final class FacadeFloorUnionsRequireFacadeEnabledTest extends PublicTestCase
 
         // Act
         foreach ($dungeons as $dungeon) {
-            // Temple of Sethraliss has this exact bug in its one committed mapping version -
-            // tracked as its own out-of-scope follow-up, see #3763.
-            if ($dungeon->key === Dungeon::DUNGEON_TEMPLE_OF_SETHRALISS) {
-                continue;
-            }
-
             $facadeFloorIds = $dungeon->floors->where('facade', true)->pluck('id');
 
             if ($facadeFloorIds->isEmpty()) {

@@ -543,7 +543,7 @@ return [
     ],
 
     'mdt' => [
-        'version' => 'v6.1.20',
+        'version' => 'v6.2.0-alpha3',
     ],
 
     'combat_log_route_regeneration' => [

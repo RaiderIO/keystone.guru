@@ -183,8 +183,10 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         try {
             $this->log->importNpcsDataFromMDTStart($dungeon->key);
 
-            // Get a list of NPCs and update/save them
-            $existingNpcs = $dungeon->npcs()->with('npcSpells')->get()->keyBy('id');
+            // Get a list of NPCs and update/save them. npcHealths must be eager loaded here - it is read
+            // per NPC below via getHealthByGameVersion(), which would otherwise be an N+1 that hard-fails
+            // under preventLazyLoading (dev) for any dungeon that already has NPCs.
+            $existingNpcs = $dungeon->npcs()->with(['npcSpells', 'npcHealths'])->get()->keyBy('id');
 
             $npcsUpdated           = $npcsInserted = 0;
             $npcSpellsAttributes   = [];
@@ -1013,7 +1015,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 ];
 
                 foreach ($mdtMapPOIs as $mdtMapPOI) {
-                    $floor = $this->findFloorByMdtSubLevel($dungeon, $mdtMapPOI->getSubLevel());
+                    $floor = $this->findFloorByMdtSubLevel($dungeon, $newMappingVersion, $mdtMapPOI->getSubLevel());
 
                     $latLng = Conversion::convertMDTCoordinateToLatLng([
                         'x' => $mdtMapPOI->getX(),
@@ -1065,7 +1067,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         // version's facade-source mapping version (#3757/#3762) - to avoid creating duplicates
                         // on top of either.
                         if (!$newMappingVersionHasDungeonFloorSwitchMarkers) {
-                            $floor = $this->findFloorByMdtSubLevel($dungeon, $mdtMapPOI->getSubLevel());
+                            $floor = $this->findFloorByMdtSubLevel($dungeon, $newMappingVersion, $mdtMapPOI->getSubLevel());
 
                             $latLng = Conversion::convertMDTCoordinateToLatLng([
                                 'x' => $mdtMapPOI->getX(),
@@ -1076,7 +1078,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                             $dungeonFloorSwitchMarker = DungeonFloorSwitchMarker::create(array_merge([
                                 'mapping_version_id' => $newMappingVersion->id,
                                 'floor_id'           => $floor->id,
-                                'target_floor_id'    => $this->findFloorByMdtSubLevel($dungeon, $mdtMapPOI->getTarget())->id,
+                                'target_floor_id'    => $this->findFloorByMdtSubLevel($dungeon, $newMappingVersion, $mdtMapPOI->getTarget())->id,
                             ], $latLng->toArray()));
                             $this->log->importMapPOIsNewDungeonFloorSwitchMarkerOK(
                                 $dungeonFloorSwitchMarker->id,
@@ -1106,9 +1108,19 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         ) => $enemy->npc_id === $npcId && $enemy->mdt_id === $mdtId);
     }
 
-    public function findFloorByMdtSubLevel(Dungeon $dungeon, int $mdtSubLevel): Floor
+    public function findFloorByMdtSubLevel(Dungeon $dungeon, MappingVersion $mappingVersion, int $mdtSubLevel): Floor
     {
         $activeFloors = $dungeon->floors()->active()->get();
+
+        // A facade floor is only a usable host for a coordinate when the mapping version actually has its
+        // facade enabled - convertFacadeMapLocationToMapLocation() is a no-op otherwise, which would leave
+        // the coordinate stranded on the facade floor and blow up in CoordinatesService. Facade floors are
+        // seeded with mdt_sub_level = 1, so without this they win the lookup for sub level 1 on every
+        // dungeon that has a facade floor but has not enabled it - Throne of the Tides today (#3742),
+        // and every historical mapping version from before its dungeon's facade was switched on.
+        if (!$mappingVersion->facade_enabled) {
+            $activeFloors = $activeFloors->filter(static fn(Floor $floor) => !$floor->facade);
+        }
 
         // First check for mdt_sub_level, if that isn't found just match on our own index
         return $activeFloors->first(static fn(
