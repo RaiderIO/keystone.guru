@@ -321,20 +321,19 @@ final class AdminSeasonControllerTest extends PublicTestCase
         // whatever id MySQL's AUTO_INCREMENT would hand out.
         //
         // Season is a CacheModel (laravel-model-caching): the create below fires Eloquent events
-        // and flushes/repopulates the cache with this test's throwaway data, but DB::rollBack()
-        // only undoes the MySQL rows, not the shared Redis cache - flush it by hand afterwards so
-        // a stale entry can't leak into the shared dev environment or another test.
+        // that write to the cache, but DB::rollBack() only undoes the MySQL rows, not the shared
+        // Redis cache - flush it by hand afterwards so a stale entry can't leak into the shared
+        // dev environment or another test.
         $expansion = Expansion::query()->firstOrFail();
         $freedId   = Season::query()->max('id');
 
         DB::beginTransaction();
 
         try {
-            // Bulk delete via the query builder deliberately - Season::$deleting is guarded to
-            // admin-only via SeederModel, and a query-builder delete doesn't fire model events
-            // (so it also can't accidentally trigger a cache flush before the transaction is set
-            // up), matching the project's established test-cleanup convention for SeederModel
-            // models.
+            // Query-builder delete rather than $season->delete(): it fires no model events, so
+            // the cache invalidation for this row stays entirely under this test's control
+            // (flushed explicitly in finally) rather than depending on the package's
+            // write-through behaviour inside an open transaction.
             Season::query()->where('id', $freedId)->delete();
 
             // Act
