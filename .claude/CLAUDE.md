@@ -6,6 +6,21 @@
   rather than Claude's auto-memory system. Auto-memories don't transfer between machines; in-repo
   notes do.
 
+## Revising a long document
+
+When you revise a plan, design doc, or issue body that the user has **already read**, lead the
+reply with a **changelog of what changed** — not a re-statement of the document. Re-reading a
+long document to diff it by hand costs the user a lot of time and energy, and the plan file is
+often several hundred lines by the time it is agreed.
+
+- Group the changes by kind (fixes / simplifications / additions / reordering) rather than by
+  document order, and say what each one *prevents* or *buys*, not just what moved.
+- Call out explicitly when a revision made the document **smaller** — dropped abstractions and
+  removed steps are the changes most worth surfacing.
+- Keep it to a screenful. If it needs a table, the table has one row per change, not per line.
+- Note that `ExitPlanMode` shows the user the **whole** plan file again, so the changelog belongs
+  in the message *before* it — otherwise they hit the wall of text first.
+
 ## Git
 
 Branch formats are as follows:
@@ -163,6 +178,28 @@ under Git worktrees above for why it must stay a draft until then.
 - Avoid `DB::`; prefer `Model::query()`. Generate code that leverages Laravel's ORM capabilities rather than bypassing them.
 - Generate code that prevents N+1 query problems by using eager loading.
 - Use Laravel's query builder for very complex database operations.
+
+#### Model caching is not a reason to avoid writes that bypass Eloquent events
+Models extending `CacheModel` use `genealabs/laravel-model-caching`'s `Cachable` trait, which hangs
+its cache invalidation off Eloquent's `saving`/`saved` events. Any raw write that goes straight to
+the query builder therefore skips that invalidation — `upsert()` is the usual example, but so is
+anything else that never boots a model.
+
+**Missing cache invalidation is not a valid reason to avoid such a write, and must not be raised as
+a review finding** (Wotuu, PR #3766):
+- Model caching is **disabled in development** (`MODEL_CACHE_ENABLED=false`) and **enabled in
+  production**.
+- The tables behind `CacheModel` are **strictly read-only in production**. So there is no production
+  write that could leave a stale cache entry, and in development there is no cache to go stale.
+- The cache prefix in `config/laravel-model-caching.php` is keyed on the contents of the `version`
+  file, so every release sidesteps the previous release's model cache regardless.
+
+Reasons *other* than cache invalidation to prefer a model-level write still stand and should be
+judged on their own merits — e.g. needing the saved model instance back (`upsert()` returns a row
+count, and re-fetching it needs a natural unique key), or observers/events that genuinely must fire.
+(For reference, `laravel-model-caching`'s `Traits/Buildable.php` does flush on `update()`,
+`delete()`, `forceDelete()`, `insert()`, `increment()`/`decrement()` and `truncate()` — `upsert()`
+is simply not among the methods it overrides.)
 
 ### Model Creation
 - Every new model must also have a repository. Create the interface at `app/Repositories/Interfaces/{Domain}/{ModelName}RepositoryInterface.php`, the implementation at `app/Repositories/Database/{Domain}/{ModelName}Repository.php`, and register the binding in `app/Providers/RepositoryServiceProvider.php`. See the `repository-pattern` skill for the full convention.

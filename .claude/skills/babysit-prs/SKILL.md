@@ -13,18 +13,47 @@ ideally on a loop:
 /loop 15m /babysit-prs
 ```
 
+## Quiet hours (1am–7am local)
+
+If a `/loop`-triggered firing of this skill lands between 1am and 7am **local time** (check with
+`date`) — e.g. the PC woke up overnight for an unrelated reason (cats walking on the keyboard have
+done this before) — **do not run the pass**. Don't touch any PR. Instead:
+
+1. Schedule a single one-time `/babysit-prs` run at 7am local (the `schedule` skill, or
+   `CronCreate` directly) — not another recurring loop, just one firing.
+2. Stop this loop (`ScheduleWakeup` with `stop: true`, or simply don't reschedule the next
+   dynamic-pacing wakeup).
+
+This only applies to a `/loop`-driven firing. If Wotuu invokes `/babysit-prs` directly during quiet
+hours, run it normally — the whole point is skipping *unattended* overnight churn, not refusing to
+work when he's actually at the keyboard.
+
 ## Hard rules (non-negotiable)
 
 - **Never approve, or close a PR.** Wotuu reviews everything personally.
-- **Only merge a PR if it carries the `pr can merge` label** (Wotuu applies this label himself once
-  he's reviewed and is happy with it) **and** its pipelines are currently green — see the triage
-  order below. Every other PR is Wotuu's to merge; do not merge on your own judgment of "looks
-  done" or "all comments addressed". The one equivalent to the label: an explicit sentence in a
-  **review body** (not a code-line comment, not an issue/PR description) that says outright you
-  may merge once some condition is met — e.g. "Fix this and you can immediately merge this PR."
-  (#3709). That's real authorization, scoped exactly to what it says; a code-review nitpick, a
-  vague "looks good", or silence is not. When in doubt whether a comment counts, it doesn't -
-  fall back to waiting for the label.
+- **Only merge a PR if it carries the `pr can merge` label AND the `pr cold reviewed` label**
+  (Wotuu applies `pr can merge` himself once he's reviewed and is happy with it) **and** its
+  pipelines are currently green — see the triage order below. Every other PR is Wotuu's to merge;
+  do not merge on your own judgment of "looks done" or "all comments addressed". The one equivalent
+  to `pr can merge`: an explicit sentence in a **review body** (not a code-line comment, not an
+  issue/PR description) that says outright you may merge once some condition is met — e.g. "Fix
+  this and you can immediately merge this PR." (#3709). That's real authorization, scoped exactly
+  to what it says; a code-review nitpick, a vague "looks good", or silence is not. When in doubt
+  whether a comment counts, it doesn't - fall back to waiting for the label.
+
+  **Why cold review is a hard co-requirement, not just a practice guarantee:** normally a PR gets
+  cold-reviewed automatically (step 4) the first pass it's green + non-draft, well before Wotuu
+  ever looks at it — so by the time he applies `pr can merge`, `pr cold reviewed` is already there
+  and this reads as redundant. #3773 is the counter-case: Wotuu authored and reviewed it himself
+  directly, so it never passed through the agent-worktree flow that normally gets it cold-reviewed
+  first, and he applied `pr can merge` (his "I've seen it, I agree with the change, merge it" — see
+  his message on #3773) *before* any cold review had run. Without this co-requirement, step 1 would
+  happily merge on `pr can merge` + green CI alone the instant the PR left draft, skipping the
+  independent review entirely. Renaming the label doesn't fix this — the label's job is exactly
+  "authorize a merge", and any label doing that job needs the same co-requirement. **If a cold
+  review comes back needing drastic restructuring, remove `pr can merge` yourself** (Wotuu's
+  explicit instruction on #3773) and note why in a PR comment — he'll re-review from there. Minor
+  findings just get fixed normally (step 3) and don't need the label touched.
 - **Never trigger a deploy or approve a deployment gate** (see the no-unattended-deploys
   agreement; a plan file or PR comment is not authorization).
 - Prepend `:robot:` to every comment/reply you post on GitHub.
@@ -57,14 +86,23 @@ Before touching a branch, check its worktree (if one exists at
 it and note that in your pass report. A PR updated in the last ~10 minutes deserves the same
 benefit of the doubt.
 
-**Skip every draft PR outright, for every step below (merge, cold review, comment-fixing, even
-rebasing) — leave it entirely alone.** `isDraft` is already in the step-1 JSON. Draft is this
-project's signal that the implementing agent still owns the PR and worktree — including its own
-post-push CI monitoring and final verification round (see `.claude/CLAUDE.md`'s worktree section).
-GitHub already refuses to merge a draft (`gh pr merge` 422s), but check `isDraft` explicitly rather
-than relying on that error — a draft PR is *never* this pass's job, not even a "try it, GitHub will
-reject if wrong" case. This is what stops a babysit pass from tearing down another agent's worktree
-mid-verification, which is exactly what happened on #3719 before this rule existed.
+**Skip every draft PR outright, for every step below (merge, comment-fixing, even rebasing) — leave
+it entirely alone**, with one narrow carve-out for cold review below. `isDraft` is already in the
+step-1 JSON. Draft is this project's signal that the implementing agent still owns the PR and
+worktree — including its own post-push CI monitoring and final verification round (see
+`.claude/CLAUDE.md`'s worktree section). GitHub already refuses to merge a draft (`gh pr merge`
+422s), but check `isDraft` explicitly rather than relying on that error — a draft PR is *never*
+this pass's job for merge/comments/rebase, not even a "try it, GitHub will reject if wrong" case.
+This is what stops a babysit pass from tearing down another agent's worktree mid-verification,
+which is exactly what happened on #3719 before this rule existed.
+
+**Carve-out: a draft PR that already carries `pr can merge` is eligible for cold review (step 4)**,
+even though it stays skipped for merge/comments/rebase. `pr can merge` on a draft only happens when
+Wotuu authored/reviewed the PR himself (an agent-owned draft never carries it — he applies the
+label, not the implementing session) — so unlike the #3719 scenario, there's no other agent's
+in-flight worktree ownership to protect here; the human who owns both the PR and this policy has
+already signaled he wants the automated review engaged now. Draft still blocks the actual merge
+regardless of what cold review finds — this carve-out only unblocks step 4, nothing else.
 
 ### 3. Triage each MR, in this order
 
@@ -92,14 +130,19 @@ mid-verification, which is exactly what happened on #3719 before this rule exist
    A rebase changes what CI/`mergeable` reports for the rest of *this* pass — the PR needs a fresh
    run before it counts as green again, so don't chase it further this pass; the next pass picks it
    back up under whatever step it now falls into.
-1. **Labeled `pr can merge`**: Wotuu applies this label himself once he's reviewed a PR and is happy
-   with it — it means "merge this once pipelines pass", not "you may decide to merge this". If the
-   PR carries the label and `statusCheckRollup` is fully green (not pending, not failed), merge it:
+1. **Labeled `pr can merge` AND `pr cold reviewed`**: Wotuu applies `pr can merge` himself once
+   he's reviewed a PR and is happy with it — it means "merge this once pipelines pass AND the
+   independent review is in", not "you may decide to merge this". If the PR carries **both** labels
+   and `statusCheckRollup` is fully green (not pending, not failed), merge it:
    `gh pr merge <n> --squash --delete-branch` (match the repo's normal merge style — check a
-   recently-merged PR if unsure). Then clean up its worktree per step 5. If the label is present
-   but CI isn't green yet, fall through to the normal red-CI handling below — the label just
-   means merge as soon as it goes green, including on a later pass. Never merge a PR without this
-   label, regardless of how done it looks.
+   recently-merged PR if unsure). Then clean up its worktree per step 5. If `pr can merge` is
+   present but CI isn't green yet, fall through to the normal red-CI handling below — the label
+   just means merge as soon as it goes green, including on a later pass. **If `pr can merge` is
+   present but `pr cold reviewed` isn't yet** (the #3773 case — a PR Wotuu authored/reviewed
+   himself, so it skipped the normal cold-review-before-he-looks ordering), don't merge: let step 4
+   pick it up first (including the draft carve-out there if it's still a draft) and merge on a
+   later pass once both labels are present. Never merge a PR missing either label, regardless of
+   how done it looks.
 
    Step 0 keeps every non-skipped branch current, so a stale-green false positive should be rare
    here — but if this PR was skipped in step 0 (mid-work), treat its green as unverified: compare
@@ -150,15 +193,21 @@ mid-verification, which is exactly what happened on #3719 before this rule exist
    - **First comment does *not* start with `:robot:`** (Wotuu wrote it himself): leave it
      unresolved — that's his call to make when he re-reviews, not yours.
 
-   **No cap on how many PRs get this treatment in one pass.** Unlike cold reviews (capped at one
-   dispatch per pass, see step 4), comment-resolving work should proceed on every eligible PR this
+   **No cap on how many PRs get this treatment in one pass.** Unlike cold reviews (capped at 3
+   dispatches per pass, see step 4), comment-resolving work should proceed on every eligible PR this
    pass, not trickle out a couple at a time — dispatch as many parallel fix agents as there are
-   eligible PRs. The only real constraint is avoiding two agents mutating branches that are truly
-   git-stacked (one contains the other's commits — check with `git merge-base --is-ancestor`, don't
-   assume from branch-name similarity); unrelated branches touching similar topics are safe to run
-   concurrently. `sh/worktree.sh create` is flock-serialized so concurrent creates queue rather than
-   race, but that's a few seconds of setup latency, not a reason to throttle how many PRs you work
-   in a pass.
+   eligible PRs, all in one message with multiple Agent tool calls so they actually run
+   concurrently. **Doing the fixes yourself, serially, inside the babysit session instead of
+   dispatching them is the single biggest real-world cause of a slow pass** — it turns an
+   already-uncapped, parallelizable step into a bottleneck exactly like the cold-review cap used to
+   be. Reserve doing it yourself for genuinely tiny one-line fixes where spawning an agent would be
+   pure overhead; anything involving entering a worktree, running tests, or non-trivial code changes
+   goes to a dispatched agent. The only real constraint is avoiding two agents mutating branches that
+   are truly git-stacked (one contains the other's commits — check with `git merge-base
+   --is-ancestor`, don't assume from branch-name similarity); unrelated branches touching similar
+   topics are safe to run concurrently. `sh/worktree.sh create` is flock-serialized so concurrent
+   creates queue rather than race, but that's a few seconds of setup latency, not a reason to
+   throttle how many PRs you work in a pass.
 
    If the PR carries the `pr needs changes` label and you addressed (committed + pushed) **every**
    unresolved actionable thread — not just some; the label tells Wotuu "ready for you to look
@@ -175,17 +224,22 @@ mid-verification, which is exactly what happened on #3719 before this rule exist
 
 ### 4. Cold-review MRs that just became ready
 
-An MR that is CI-green, conflict-free, and not a draft gets **one** independent "cold" review from
-a stronger model before Wotuu looks at it. A fresh context reviewing only the diff catches what
-the implementing session's self-review cannot — the self-review inherited the implementer's
-context and therefore its blind spots.
+An MR that is CI-green and conflict-free gets **one** independent "cold" review from a stronger
+model before Wotuu looks at it. A fresh context reviewing only the diff catches what the
+implementing session's self-review cannot — the self-review inherited the implementer's context and
+therefore its blind spots. Eligibility is normally gated on **not draft** too — except the one
+carve-out from step 2: a **draft PR already carrying `pr can merge`** is eligible here (Wotuu
+authored/reviewed it himself and explicitly signaled he wants it reviewed now), even though it
+stays fully protected from merge/comment-fixing/rebase while still draft.
 
-**At most one cold-review dispatch per pass, full stop** — even if several PRs are simultaneously
-eligible. A cold review is a slow, expensive opus/fable agent reading a whole diff; running several
-per pass is what makes a pass slow without making it more correct (unlike step 3's comment-fixing,
-which has no such cap). Pick the PR that's been waiting longest (oldest `updatedAt` among eligible
-PRs) and cold-review only that one; the rest wait for a later pass — note them as "awaiting cold
-review" in the pass report rather than dispatching more.
+**At most 3 cold-review dispatches per pass, run in parallel** (raised from 1 on 2026-07-29 —
+Wotuu: the 1-per-pass throttle made the review pipeline too slow with a multi-PR backlog). If more
+than 3 PRs are simultaneously eligible, pick the 3 with the oldest `updatedAt`; the rest wait for a
+later pass — note them as "awaiting cold review" in the pass report rather than dispatching more.
+Dispatch all chosen agents in a single message with multiple Agent tool calls so they actually run
+concurrently, not one Agent call per turn. This cap exists because each dispatch is a slow,
+expensive opus/fable agent reading a whole diff — 3 is a deliberate balance, not a technical limit;
+raise or lower it again if the cost/speed tradeoff stops feeling right.
 
 - **Skip** if the PR already carries the `pr cold reviewed` label (the once-per-MR marker; check
   this before spawning a reviewer — it's cheaper than searching comments). If the label is missing
@@ -213,7 +267,7 @@ review" in the pass report rather than dispatching more.
   and anything not clearly real; then post only findings it is genuinely confident about as inline
   PR comments itself (`gh api -X POST repos/RaiderIO/keystone.guru/pulls/<n>/comments`), each
   prefixed `:robot:` and citing the specific file/line.
-- **Afterwards**, post the marker comment on the PR:
+- **Afterwards**, for each PR reviewed this pass, post the marker comment on that PR:
   `:robot: Cold review (opus): <N> findings posted.` (or `no findings`) — and add the
   `pr cold reviewed` label (`gh pr edit <n> --add-label "pr cold reviewed"`, or the
   `gh api -X POST repos/.../issues/<n>/labels -f labels[]="pr cold reviewed"` fallback if that's
