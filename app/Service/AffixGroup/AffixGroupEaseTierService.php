@@ -251,7 +251,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 
         // Without any affixes to match on every affix group would be a match - refuse to guess instead
         if ($affixNames->isEmpty()) {
-            $this->log->getAffixGroupByStringNoMatchingAffixGroup($affixString);
+            $this->log->getAffixGroupByStringNoAffixes($affixString);
 
             return null;
         }
@@ -272,18 +272,46 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
             return $affix->key;
         });
 
-        // The amount of affixes an affix group has varies per season (three in DF S4, four in TWW S3, five in
-        // Midnight S1), so match on the affixes an affix group actually has rather than on a hardcoded count.
-        // A season may contain multiple affix groups with the exact same set of affixes - they share an ease tier,
-        // so returning the first affix group that has all the given affixes is fine.
-        foreach ($currentSeason->affixGroups as $affixGroup) {
-            if ($affixKeys->every(static fn(string $affixKey): bool => $affixGroup->hasAffix($affixKey))) {
-                return $affixGroup;
-            }
+        // A season has multiple affix groups with the exact same affixes - one for each week that the affixes are
+        // active - which no affix string can tell apart. Ease tiers are stored and read per affix group, so picking
+        // the wrong one hides them entirely. The tier list is always that of the current week, so prefer the affix
+        // group of the current week whenever it has the given affixes.
+        $currentAffixGroup = $this->seasonAffixGroupService->getCurrentAffixGroup($currentSeason);
+
+        if ($currentAffixGroup !== null && $this->hasAllAffixes($currentAffixGroup, $affixKeys)) {
+            return $currentAffixGroup;
         }
 
-        $this->log->getAffixGroupByStringNoMatchingAffixGroup($affixString);
+        // The amount of affixes an affix group has varies per season (three in DF S4, four in TWW S3, five in
+        // Midnight S1), so match on the affixes an affix group actually has rather than on a hardcoded count
+        $matchingAffixGroups = $currentSeason->affixGroups
+            ->filter(fn(AffixGroup $affixGroup): bool => $this->hasAllAffixes($affixGroup, $affixKeys));
 
-        return null;
+        if ($matchingAffixGroups->isEmpty()) {
+            $this->log->getAffixGroupByStringNoMatchingAffixGroup($affixString);
+
+            return null;
+        }
+
+        // Too few affixes were given to tell affix groups with different affixes apart - refuse to guess
+        $matchingAffixes = $matchingAffixGroups->map(
+            static fn(AffixGroup $affixGroup): string => $affixGroup->affixes->pluck('key')->sort()->join(', '),
+        )->unique();
+
+        if ($matchingAffixes->count() > 1) {
+            $this->log->getAffixGroupByStringAmbiguousAffixes($affixString, $matchingAffixes->join(' / '));
+
+            return null;
+        }
+
+        return $matchingAffixGroups->first();
+    }
+
+    /**
+     * @param Collection<int, string> $affixKeys
+     */
+    private function hasAllAffixes(AffixGroup $affixGroup, Collection $affixKeys): bool
+    {
+        return $affixKeys->every(static fn(string $affixKey): bool => $affixGroup->hasAffix($affixKey));
     }
 }

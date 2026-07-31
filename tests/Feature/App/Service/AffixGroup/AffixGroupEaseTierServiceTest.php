@@ -5,6 +5,7 @@ namespace Tests\Feature\App\Service\AffixGroup;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\AffixGroup\AffixGroupEaseTierPull;
 use App\Models\Season;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use DB;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -278,16 +279,20 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
             $this,
             $this->getSeasonService($seasonId),
             LoggingFixtures::createAffixGroupEaseTierServiceLogging($this),
+            [],
+            $this->getSeasonAffixGroupService(null),
         );
 
         // Act
         $result = $affixGroupEaseTierService->getAffixGroupByString($affixString);
 
         // Assert
-        // Multiple affix groups of a season may have the exact same affixes, so assert the affixes of the affix
-        // group we found rather than which affix group specifically we found
+        // Multiple affix groups of a season have the exact same affixes, so assert the affixes of the affix group we
+        // found rather than which affix group specifically we found - which affix group of those is the correct one
+        // is decided by the current affix group instead, see getAffixGroupByString_givenAffixesOfTheCurrentAffixGroup_
         $this->assertInstanceOf(AffixGroup::class, $result);
         $this->assertSame($seasonId, $result->season_id);
+        // The affixes are compared by name, which is currently the same as the key of an affix
         $this->assertEqualsCanonicalizing(
             explode(', ', $affixString),
             $result->affixes->pluck('key')->toArray(),
@@ -301,11 +306,41 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
     {
         return [
             // The amount of affixes an affix group has differs per season - it must not be assumed to be 3 or 4
-            'DF S4 (3 affixes)'            => [13, 'Fortified, Entangling, Bolstering'],
-            'TWW S3 (4 affixes)'           => [16, "Xal'atath's Bargain: Ascendant, Fortified, Tyrannical, Xal'atath's Guile"],
-            'Midnight S1 (5 affixes)'      => [17, "Lindormi's Guidance, Fortified, Tyrannical, Xal'atath's Bargain: Devour, Xal'atath's Guile"],
-            'Affixes in a different order' => [17, "Xal'atath's Guile, Tyrannical, Lindormi's Guidance, Xal'atath's Bargain: Devour, Fortified"],
+            'DF S4 (3 affixes)'            => [Season::SEASON_DF_S4, 'Fortified, Entangling, Bolstering'],
+            'TWW S3 (4 affixes)'           => [Season::SEASON_TWW_S3, "Xal'atath's Bargain: Ascendant, Fortified, Tyrannical, Xal'atath's Guile"],
+            'Midnight S1 (5 affixes)'      => [Season::SEASON_MIDNIGHT_S1, "Lindormi's Guidance, Fortified, Tyrannical, Xal'atath's Bargain: Devour, Xal'atath's Guile"],
+            'Affixes in a different order' => [Season::SEASON_MIDNIGHT_S1, "Xal'atath's Guile, Tyrannical, Lindormi's Guidance, Xal'atath's Bargain: Devour, Fortified"],
         ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    #[Group('AffixGroupEaseTierService')]
+    public function getAffixGroupByString_givenAffixesOfTheCurrentAffixGroup_returnsTheCurrentAffixGroup(): void
+    {
+        // Arrange
+        // A season has multiple affix groups with the exact same affixes - the one of the current week must be
+        // returned, since ease tiers are looked up by the id of the current affix group
+        $currentAffixGroup = AffixGroup::findOrFail(167);
+
+        $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
+            $this,
+            $this->getSeasonService(Season::SEASON_MIDNIGHT_S1),
+            LoggingFixtures::createAffixGroupEaseTierServiceLogging($this),
+            [],
+            $this->getSeasonAffixGroupService($currentAffixGroup),
+        );
+
+        // Act
+        $result = $affixGroupEaseTierService->getAffixGroupByString(
+            $currentAffixGroup->affixes->pluck('key')->join(', '),
+        );
+
+        // Assert
+        $this->assertInstanceOf(AffixGroup::class, $result);
+        $this->assertSame($currentAffixGroup->id, $result->id);
     }
 
     /**
@@ -318,17 +353,50 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         // Arrange
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
             $this,
-            $this->getSeasonService(17),
+            $this->getSeasonService(Season::SEASON_MIDNIGHT_S1),
             LoggingFixtures::createAffixGroupEaseTierServiceLogging($this),
+            [],
+            $this->getSeasonAffixGroupService(null),
         );
 
         // Act
         $result = $affixGroupEaseTierService->getAffixGroupByString("Fortified, Xal'atath's Bargain: Devour");
 
         // Assert
+        // Only the affix groups of the Devour weeks have both affixes, and they all have the exact same affixes
         $this->assertInstanceOf(AffixGroup::class, $result);
-        $this->assertTrue($result->hasAffix('Fortified'));
-        $this->assertTrue($result->hasAffix("Xal'atath's Bargain: Devour"));
+        $this->assertEqualsCanonicalizing(
+            ["Lindormi's Guidance", 'Fortified', 'Tyrannical', "Xal'atath's Bargain: Devour", "Xal'atath's Guile"],
+            $result->affixes->pluck('key')->toArray(),
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    #[Group('AffixGroupEaseTierService')]
+    public function getAffixGroupByString_givenTooFewAffixesToTellAffixGroupsApart_returnsNull(): void
+    {
+        // Arrange
+        $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
+        $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
+            $this,
+            $this->getSeasonService(Season::SEASON_DF_S3),
+            $log,
+            [],
+            $this->getSeasonAffixGroupService(null),
+        );
+
+        $log->expects($this->once())
+            ->method('getAffixGroupByStringAmbiguousAffixes');
+
+        // Act
+        // Five affix groups of DF S3 have Tyrannical, all with different other affixes
+        $result = $affixGroupEaseTierService->getAffixGroupByString('Tyrannical');
+
+        // Assert
+        $this->assertNull($result);
     }
 
     /**
@@ -342,8 +410,10 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
             $this,
-            $this->getSeasonService(17),
+            $this->getSeasonService(Season::SEASON_MIDNIGHT_S1),
             $log,
+            [],
+            $this->getSeasonAffixGroupService(null),
         );
 
         $log->expects($this->once())
@@ -369,7 +439,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
             $this,
-            $this->getSeasonService(17),
+            $this->getSeasonService(Season::SEASON_MIDNIGHT_S1),
             $log,
         );
 
@@ -396,12 +466,12 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
             $this,
-            $this->getSeasonService(17),
+            $this->getSeasonService(Season::SEASON_MIDNIGHT_S1),
             $log,
         );
 
         $log->expects($this->once())
-            ->method('getAffixGroupByStringNoMatchingAffixGroup');
+            ->method('getAffixGroupByStringNoAffixes');
 
         // Act
         $result = $affixGroupEaseTierService->getAffixGroupByString($affixString);
@@ -448,7 +518,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
      * @return SeasonServiceInterface|MockObject
      * @throws Exception
      */
-    private function getSeasonService(?int $seasonId = 13): MockObject|SeasonServiceInterface
+    private function getSeasonService(?int $seasonId = Season::SEASON_DF_S4): MockObject|SeasonServiceInterface
     {
         // Hard code a season that fits the affix groups for the response, DF S4
         $season        = $seasonId === null ? null : Season::findOrFail($seasonId);
@@ -464,5 +534,25 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
             ->willReturn($season);
 
         return $seasonService;
+    }
+
+    /**
+     * @param  AffixGroup|null                             $currentAffixGroup Which affix group is active this week
+     * @return SeasonAffixGroupServiceInterface|MockObject
+     * @throws Exception
+     */
+    private function getSeasonAffixGroupService(
+        ?AffixGroup $currentAffixGroup,
+    ): MockObject|SeasonAffixGroupServiceInterface {
+        $seasonAffixGroupService = ServiceFixtures::getSeasonAffixGroupServiceMock(
+            $this,
+            null,
+            null,
+            ['getCurrentAffixGroup'],
+        );
+        $seasonAffixGroupService->method('getCurrentAffixGroup')
+            ->willReturn($currentAffixGroup);
+
+        return $seasonAffixGroupService;
     }
 }

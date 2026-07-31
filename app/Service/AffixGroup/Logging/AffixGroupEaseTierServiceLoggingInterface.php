@@ -24,5 +24,9 @@ interface AffixGroupEaseTierServiceLoggingInterface
 
     public function getAffixGroupByStringUnknownAffixes(string $unknownAffixes): void;
 
+    public function getAffixGroupByStringNoAffixes(string $affixString): void;
+
     public function getAffixGroupByStringNoMatchingAffixGroup(string $affixString): void;
+
+    public function getAffixGroupByStringAmbiguousAffixes(string $affixString, string $matchingAffixes): void;
 }
