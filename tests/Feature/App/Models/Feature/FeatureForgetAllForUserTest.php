@@ -107,14 +107,17 @@ final class FeatureForgetAllForUserTest extends PublicTestCase
     public function forgetAllForUser_givenAdminUser_keepsStoredFeatureValues(): void
     {
         // Arrange - the admin's stored values are the global on/off switch of every feature, so dropping them
-        // would disable the lot site-wide. A synthetic name keeps the real switches out of this test entirely.
-        $admin = User::findOrFail(Feature::ADMIN_USER_ID);
+        // would disable the lot site-wide. Asserting on a synthetic name keeps the real switches out of it.
+        $admin      = User::findOrFail(Feature::ADMIN_USER_ID);
+        $adminScope = $this->serializeScopeOf($admin);
         $this->assertTrue($admin->hasRole(Role::ROLE_ADMIN), 'User id=1 must be admin (seed the DB).');
+
+        $storedValuesOfAdmin = Feature::query()->where('scope', $adminScope)->get();
 
         try {
             Feature::query()->insert([
                 'name'       => self::SYNTHETIC_FEATURE_NAME,
-                'scope'      => $this->serializeScopeOf($admin),
+                'scope'      => $adminScope,
                 'value'      => 'true',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -126,10 +129,24 @@ final class FeatureForgetAllForUserTest extends PublicTestCase
             // Assert
             $this->assertSame(1, Feature::query()
                 ->where('name', self::SYNTHETIC_FEATURE_NAME)
-                ->where('scope', $this->serializeScopeOf($admin))
+                ->where('scope', $adminScope)
                 ->count());
         } finally {
             Feature::query()->where('name', self::SYNTHETIC_FEATURE_NAME)->delete();
+
+            // The Act purges every stored name, not just the synthetic one - so should the guard under test ever
+            // regress, put the admin's real rows back rather than leaving the shared test database (which has no
+            // RefreshDatabase to save it) without the global on/off switch of every feature
+            foreach ($storedValuesOfAdmin as $storedValueOfAdmin) {
+                Feature::query()->updateOrInsert([
+                    'name'  => $storedValueOfAdmin->name,
+                    'scope' => $adminScope,
+                ], [
+                    'value'      => $storedValueOfAdmin->value,
+                    'created_at' => $storedValueOfAdmin->created_at,
+                    'updated_at' => $storedValueOfAdmin->updated_at,
+                ]);
+            }
         }
     }
 
