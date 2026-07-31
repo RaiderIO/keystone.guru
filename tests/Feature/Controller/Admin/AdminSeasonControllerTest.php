@@ -319,12 +319,22 @@ final class AdminSeasonControllerTest extends PublicTestCase
         // shared season fixtures. This is the regression test for SeasonController::store()'s
         // explicit `$season->id = $id` assignment: it must persist the requested constant, not
         // whatever id MySQL's AUTO_INCREMENT would hand out.
+        //
+        // Season is a CacheModel (laravel-model-caching): the create below fires Eloquent events
+        // and flushes/repopulates the cache with this test's throwaway data, but DB::rollBack()
+        // only undoes the MySQL rows, not the shared Redis cache - flush it by hand afterwards so
+        // a stale entry can't leak into the shared dev environment or another test.
         $expansion = Expansion::query()->firstOrFail();
         $freedId   = Season::query()->max('id');
 
         DB::beginTransaction();
 
         try {
+            // Bulk delete via the query builder deliberately - Season::$deleting is guarded to
+            // admin-only via SeederModel, and a query-builder delete doesn't fire model events
+            // (so it also can't accidentally trigger a cache flush before the transaction is set
+            // up), matching the project's established test-cleanup convention for SeederModel
+            // models.
             Season::query()->where('id', $freedId)->delete();
 
             // Act
@@ -346,6 +356,7 @@ final class AdminSeasonControllerTest extends PublicTestCase
             $this->assertSame($freedId, $season->id);
         } finally {
             DB::rollBack();
+            (new Season())->flushCache();
         }
     }
 
