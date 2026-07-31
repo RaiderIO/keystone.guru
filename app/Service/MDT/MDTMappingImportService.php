@@ -686,10 +686,9 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $enemyForcesCheckpointsToPrune->count(),
         );
 
-        // A query builder delete, not an Eloquent one: SeederModel's `deleting` listener refuses the delete
-        // unless an admin is authenticated, and this import runs from the scheduler with nobody logged in.
-        // The EnemyForcesCheckpoint `deleted` hook it also skips only releases member enemies - and these
-        // checkpoints have none by definition.
+        // A bulk query builder delete rather than looping model deletes: it skips per-model events, including
+        // the EnemyForcesCheckpoint `deleted` hook - which only releases member enemies, and these checkpoints
+        // have none by definition, so skipping it here is fine.
         EnemyForcesCheckpoint::query()
             ->whereIn('id', $enemyForcesCheckpointsToPrune->pluck('id'))
             ->delete();

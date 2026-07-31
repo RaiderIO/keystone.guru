@@ -168,15 +168,12 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
             );
             $this->assertNotContains($futureSeasonDungeon->id, $dungeons->pluck('id')->all());
         } finally {
-            // Through the query builder on purpose - SeederModel blocks deleting these models for anyone
-            // who is not an admin, and it does so silently, so $model->delete() would leave the rows behind.
-            // That skips the model events too, hence flushing the model cache by hand afterwards.
             if ($futureSeason !== null) {
-                SeasonDungeon::query()->where('season_id', $futureSeason->id)->delete();
-                Season::query()->whereKey($futureSeason->id)->delete();
+                foreach ($futureSeason->seasonDungeons as $seasonDungeon) {
+                    $seasonDungeon->delete();
+                }
 
-                new SeasonDungeon()->flushCache();
-                new Season()->flushCache();
+                $futureSeason->delete();
             }
         }
     }

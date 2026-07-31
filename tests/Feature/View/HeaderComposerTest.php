@@ -159,21 +159,19 @@ final class HeaderComposerTest extends PublicTestCase
         }
     }
 
-    /**
-     * Removes a season created by this test. Through the query builder on purpose - SeederModel silently blocks
-     * deleting a Season for anyone who is not an admin, so $season->delete() would leave the row behind. That does
-     * mean no model events fire, so the caches keyed on seasons are flushed by hand.
-     */
     private function deleteSeason(Season $season): void
     {
-        Season::query()->whereKey($season->id)->delete();
+        $season->delete();
 
         $this->flushSeasonCaches();
     }
 
+    /**
+     * The model events take care of laravel-model-caching; ViewService's 'tmp_file' store is a plain file cache
+     * that nothing invalidates, and it holds the season for an hour.
+     */
     private function flushSeasonCaches(): void
     {
-        new Season()->flushCache();
         Cache::store('tmp_file')->flush();
     }
 

@@ -157,10 +157,9 @@ example** — its diff contains exactly one of everything below; when in doubt, 
    `use SeederModel`, implement `getDungeonId()` (typically `$this->floor->dungeon_id`), add
    `mappingVersion(): BelongsTo`. Put `mappingVersion`/`floor`/`laravel_through_key` in `$hidden`
    so the map-context JSON stays lean; `$timestamps = false` like its siblings.
-   ⚠️ If deleting the model must release rows pointing at it, hook `static::deleted()`, **not**
-   `deleting`: `SeederModel` already registers a `deleting` listener that returns a bool, and
-   Eloquent fires `deleting` through the dispatcher's `until()`, which halts on the first
-   non-null result — a second `deleting` listener would silently never run.
+   If deleting the model must release rows pointing at it, prefer hooking `static::deleted()` over
+   `deleting`: the referencing rows only need detaching once the delete is confirmed to have gone
+   through, not beforehand — see `EnemyForcesCheckpoint::booted()` for a worked example.
 3. Repository interface + implementation + `RepositoryServiceProvider` binding — see the
    **repository-pattern** skill.
 

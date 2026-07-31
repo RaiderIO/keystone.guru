@@ -218,6 +218,25 @@ is simply not among the methods it overrides.)
 ### Model Creation
 - Every new model must also have a repository. Create the interface at `app/Repositories/Interfaces/{Domain}/{ModelName}RepositoryInterface.php`, the implementation at `app/Repositories/Database/{Domain}/{ModelName}Repository.php`, and register the binding in `app/Providers/RepositoryServiceProvider.php`. See the `repository-pattern` skill for the full convention.
 
+### Seeded models (`SeederModel`)
+Models using the `App\Models\Traits\SeederModel` trait use `DatabaseSeeder::getTempTableName()` to stage
+their table as `<table>_temp` while seeding — the trait is a marker only, not a guarantee about where a
+model's rows come from.
+
+For the mapping/season/expansion-style models (dungeons, seasons, expansions, mapping objects, …), rows are
+authored in `database/seeders` (some are being migrated to `.json` files under there instead), so a delete
+is recoverable directly from those files.
+
+- **A subset of trait users are combat-log-derived instead and are *not* recoverable from seeders:**
+  `SpellDungeon`, `NpcCharacteristic` and `NpcSpell` are intentionally omitted from the seeder export (see
+  `DungeonDataSeeder::getAffectedModelClasses()`), and `CombatLogNpcEvent`, `CombatLogSpellEvent` and
+  `ParsedCombatLog` (declared via grouped `use` statements, so `grep "use SeederModel;"` misses them) hold
+  pure runtime/audit data that was never seeder-sourced to begin with. A delete of one of these rows is
+  permanent unless fresh combat log data re-derives it.
+- **Nothing outside the admin panel, the mapping editor, the seeders and the hourly
+  `combatlog:detectstaledata` sweep should delete these rows.** That is a convention, not an enforced rule:
+  the routes that delete them already sit behind `role:admin`, and there is no model-level guard.
+
 ### Controllers & Validation
 - Always create Form Request classes for validation rather than inline validation in controllers. Include both validation rules and custom error messages.
 - Check sibling Form Requests to see if the application uses array or string based validation rules.

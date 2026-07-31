@@ -117,7 +117,8 @@ class DetectStaleCombatLogDataCommand extends Command
                 }
 
                 if (!empty($staleIds)) {
-                    // Use toBase() to bypass SeederModel's deleting observer, which only allows admin users to delete
+                    // toBase() drops to the plain query builder for this bulk delete, skipping Eloquent's
+                    // caching builder layer.
                     NpcCharacteristic::query()->whereIn('id', $staleIds)->toBase()->delete();
                 }
             });

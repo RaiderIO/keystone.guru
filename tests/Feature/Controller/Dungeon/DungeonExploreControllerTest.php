@@ -139,23 +139,23 @@ final class DungeonExploreControllerTest extends PublicTestCase
         return $season;
     }
 
-    /**
-     * Through the query builder on purpose - SeederModel silently blocks deleting these models for anyone who is
-     * not an admin, so $model->delete() would leave the rows behind. That skips the model events too, hence
-     * flushing the caches keyed on seasons by hand.
-     */
     private function deleteUpcomingSeason(Season $season): void
     {
-        SeasonDungeon::query()->where('season_id', $season->id)->delete();
-        Season::query()->whereKey($season->id)->delete();
+        foreach ($season->seasonDungeons as $seasonDungeon) {
+            $seasonDungeon->delete();
+        }
+
+        $season->delete();
 
         $this->flushSeasonCaches();
     }
 
+    /**
+     * The model events take care of laravel-model-caching; ViewService's 'tmp_file' store is a plain file cache
+     * that nothing invalidates, and it holds the seasons it hands the composers for an hour.
+     */
     private function flushSeasonCaches(): void
     {
-        new SeasonDungeon()->flushCache();
-        new Season()->flushCache();
         Cache::store('tmp_file')->flush();
     }
 }

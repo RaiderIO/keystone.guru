@@ -62,27 +62,20 @@ try {
 
 `DungeonRoute` has no soft-deletes, so `delete()` truly removes the row.
 
-### `SeederModel` models silently refuse `$model->delete()`
+### Seeded rows leak loudly — a leftover breaks unrelated tests
 
-~51 models use the `SeederModel` trait (`Season`, `SeasonDungeon`, `Expansion`, `EnemyPack`,
-`GameServerRegion`, … — check with `grep -rln "use SeederModel;" app/Models/`; `Dungeon` is **not** one of
-them). It registers a `deleting` hook that returns `false` unless the **authenticated** user is an admin.
-`$model->delete()` then does nothing and returns `false` — no exception — so a `finally` that looks
-correct leaves the row behind and poisons the shared DB for every later test (a leftover `Season` with no
-dungeons breaks any test doing `Season::orderByDesc('id')->first()->dungeons()`). The hook exempts
-`MappingVersion`, `Floor` and `Enemy`, which delete normally.
+The ~51 models using the `SeederModel` trait (`Season`, `SeasonDungeon`, `Expansion`, `EnemyPack`,
+`GameServerRegion`, … — `grep -rln "use SeederModel;" app/Models/`) hold the data every other test reads, so
+one leaked row is not a private mess: a leftover `Season` with no dungeons breaks any test doing
+`Season::orderByDesc('id')->first()->dungeons()`. Create as few as you can get away with, and always clean
+up in a `finally`.
 
-Clean these up through the query builder, which does not fire model events:
+`$model->delete()` works on them — the trait is a marker now. Prefer it over a query-builder delete: it fires
+the model events, so laravel-model-caching invalidates on its own and any cleanup the model registers in
+`booted()` still runs. Reach for `Model::query()->where(...)->delete()` only for bulk cleanup, and flush by
+hand there (`new Model()->flushCache()`), since no events fire.
 
-```php
-} finally {
-    Season::query()->whereKey($season->id)->delete();
-    // No model events fired, so laravel-model-caching does not invalidate on its own
-    new Season()->flushCache();
-}
-```
-
-Two caches make freshly created/deleted rows invisible in tests, and neither is the `array` store
+Two caches can still make freshly created/deleted rows invisible in tests, and neither is the `array` store
 `phpunit.xml` configures:
 - **laravel-model-caching** (every `CacheModel`) — flush with `new Model()->flushCache()`.
 - **`RemembersToFile`** (`ViewService::cachedGlobal`, map context, …) writes to `Cache::store('tmp_file')`,
