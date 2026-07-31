@@ -1,12 +1,13 @@
 ---
 name: worktree-docker
-description: Use when starting a task that should run in an isolated git worktree with its own Docker app stack, or when the user mentions worktrees, parallel branches, or running multiple checkouts side by side. Covers sh/worktree.sh (create/down/remove/list), how the isolated stack shares the main DB/redis, and how to run artisan/tests inside it. Do not use for the main development stack or generic docker-compose questions.
+description: Use when starting a task that should run in an isolated git worktree with its own Docker app stack, or when the user mentions worktrees, parallel branches, or running multiple checkouts side by side. Covers sh/worktree.sh (create/down/remove/provision-db/prune-db/list), the per-worktree private database (and the --shared-db escape hatch), and how to run artisan/tests inside it. Do not use for the main development stack or generic docker-compose questions.
 ---
 
 # Worktree + Docker stack
 
-Run each task in its own git **worktree** with a minimal Docker stack (`app` + `nginx`) that shares
-the main stack's database, redis, reverb, etc. This lets parallel agents work without colliding.
+Run each task in its own git **worktree** with a minimal Docker stack (`app` + `nginx`). By default
+each worktree also gets its **own freshly-seeded database schemas** (on the shared MySQL servers)
+and its own redis prefix, so parallel agents cannot touch each other's data — or the main stack's.
 
 By default, **every task starts in a fresh worktree** created with `sh/worktree.sh` (see the "Git
 worktrees" rule in `.claude/CLAUDE.md`), unless the user says otherwise.
@@ -19,14 +20,21 @@ isn't, start it from the main repo: `docker compose up -d`.
 ## Create a worktree
 
 ```bash
-sh/worktree.sh create <issue>-<slug>            # branches off origin/master
-sh/worktree.sh create <issue>-<slug> <base-ref> # or off an explicit base
+sh/worktree.sh create <issue>-<slug>              # branches off origin/master
+sh/worktree.sh create <issue>-<slug> <base-ref>   # or off an explicit base
+sh/worktree.sh create <issue>-<slug> --shared-db  # share the main stack's DB data (see below)
 ```
 
 This creates the worktree at `../keystone.guru-worktrees/<issue>-<slug>`, copies the main `.env`
-(never read — a plain shell `cp`), rewrites only `APP_URL`/`URL_HOST` to the worktree's port,
-appends `COMPOSE_PROJECT_NAME` / `COMPOSE_FILE` / `WORKTREE_HTTP_PORT` to that copy, starts the
-stack, wires up the shared services, and prints the URL (e.g. `http://localhost:8100`).
+(never read — a plain shell `cp`), rewrites `APP_URL`/`URL_HOST` to the worktree's port (and, in the
+default isolated mode, `DB_DATABASE`/`DB_PHPUNIT_DATABASE`/`DB_COMBATLOG_DATABASE`/`REDIS_PREFIX`
+to per-worktree values), appends `COMPOSE_PROJECT_NAME` / `COMPOSE_FILE` / `WORKTREE_HTTP_PORT` to
+that copy, starts the stack, wires up the shared services, provisions the private DB (isolated mode:
+create schemas + migrate + full seed — **expect ~5–15 minutes**, the streamed seeder output is the
+progress bar), and prints the URL (e.g. `http://localhost:8100`).
+
+A `.worktree-db` marker file in the worktree root records the DB mode and schema name — `remove`
+and `prune-db` read it to know what to drop. Don't delete or edit it.
 
 It also marks issue `#<issue>` (the leading number of the branch) with the `in progress` label on
 GitHub, so you can see at a glance what's actively being worked on. `remove` clears it again (see
@@ -87,15 +95,53 @@ that first build.
   `db-combatlog`, `redis`, `reverb`, `app-assets`, `opensearch-node1`, `influxdb`) INTO the
   worktree network with matching aliases — so the copied `.env` needs no host changes and the main
   stack stays untouched.
+- **Database isolation** rides on the same shared MySQL *servers*: `create` provisions a private
+  schema `ksg_wt_<branch>_<hash>` on **both** servers (main + combatlog), loads the Laravel schema
+  dumps, runs all migrations, the full `DatabaseSeeder`, and `LaratrustSeeder` (users **1=admin,
+  2=internal_team, 3=user** — log in as `admin@app.com` / `password`). Tests hit the same private
+  schema (`DB_PHPUNIT_DATABASE` is rewritten too). No extra mysql containers exist per worktree.
 
-## Shared database — keep migrations non-destructive
+### What is / isn't isolated (default mode)
 
-All worktrees and your main app share the single `keystone.guru.dev` schema (tests run against it;
-there is no `RefreshDatabase`). A migration in one worktree affects everyone, so:
+Isolated per worktree:
+- Main DB schema (app + migrations + tests) and combatlog DB schema (empty, migrated).
+- Redis, via a per-worktree `REDIS_PREFIX` — covers the cache, **model cache**
+  (laravel-model-caching), **sessions**, and **queues**.
+- The file cache (`/tmp/...` inside the worktree's own `app` container).
 
-- Keep migrations **non-destructive** (project policy: only drop a column in a follow-up ticket once
-  the code no longer uses it and is deployed).
-- **Never** run `migrate:fresh` / `migrate:refresh` in a worktree — it wipes the shared DB.
+Still shared with the main stack:
+- The OpenSearch index, reverb, influxdb, `app-assets` — and the few endpoints nginx proxies to the
+  main `app-swoole`, which run **main code against the main DB**.
+- The public thumbnails dir (see below).
+
+Consequences to know about:
+- A freshly seeded schema has **no dungeon routes** — use the `seed-dev-routes` skill when a task
+  needs route/demo data.
+- Queued jobs dispatched in an isolated worktree are invisible to the shared Horizon (different
+  schema *and* different redis prefix). Run a worker in the worktree if needed, or use
+  `--shared-db`.
+- Search-driven pages query the shared OpenSearch index, whose ids reference main-DB rows.
+- Sessions are per-worktree, so switching between main-stack and worktree tabs re-logins each side.
+
+### Destructive operations are now OK (isolated mode only)
+
+The private schema has its own `migrations` table, so in an **isolated** worktree you may test
+destructive migrations and even run `migrate:fresh` — it only wipes *your* schema (re-seed after
+with `db:seed` or `worktree.sh provision-db`). The production deploy rules in `.claude/CLAUDE.md`
+(backward-compatible, expand/contract) still apply to the migration you *ship*, of course.
+
+### `--shared-db` — the escape hatch
+
+`create <branch> --shared-db` skips all of the above and shares the main stack's schemas and redis
+prefix, exactly like worktrees used to. Use it when a task genuinely needs production-like data:
+heatmaps, Path B thumbnail generation via shared Horizon, big route datasets, queue/Horizon work
+against the shared stack. **All the old rules then apply**:
+
+- Keep migrations **non-destructive** (only drop a column in a follow-up ticket once the code no
+  longer uses it and is deployed).
+- **Never** run `migrate:fresh` / `migrate:refresh` — it wipes the shared DB for everyone.
+- Test records must be cleaned up meticulously (see the `writing-tests` skill) — the main checkout
+  and other `--shared-db` worktrees see everything you write.
 
 ## Shared thumbnails (public disk only)
 
@@ -115,7 +161,15 @@ created it.)
 
 ## Horizon (opt-in — only when changing queue workers)
 
-Redis is shared, so a worktree Horizon competes with the main one for jobs. While iterating:
+In the default **isolated** mode the worktree has its own redis prefix, so its jobs are invisible
+to the main Horizon (and vice versa) — just run a worker in the worktree when you need one:
+
+```bash
+docker compose exec -T app php artisan horizon        # or: php artisan queue:work --once
+```
+
+In `--shared-db` mode redis is shared and a worktree Horizon competes with the main one for jobs.
+While iterating:
 
 ```bash
 # from the MAIN repo: pause the main worker so it doesn't steal your jobs
@@ -167,6 +221,11 @@ real thumbnails, or render this branch's code to the local disk for inspection
 (`docker compose --profile render run --rm render dungeonroute:renderthumbnail <key>`). Never call
 `ThumbnailService::createThumbnail()` synchronously in the `app` container — it has no Chrome.
 
+**Path B (shared Horizon) does not work from an isolated worktree**: the route row only exists in
+the worktree's private schema, and the dispatch lands under the worktree's private redis prefix, so
+the main Horizon never sees either. Use Path A, or create the worktree with `--shared-db` when real
+thumbnails are the point of the task.
+
 ## Broken worktree after a main-stack restart? Run `repair`
 
 Restarting the **main** stack detaches its shared containers from every worktree network — the
@@ -184,10 +243,18 @@ run blindly whenever a worktree suddenly stops serving pages.
 ## Tear down
 
 ```bash
-sh/worktree.sh down   <issue>-<slug>   # stop the stack, keep the checkout
-sh/worktree.sh remove <issue>-<slug>   # stop the stack and remove the worktree
+sh/worktree.sh down   <issue>-<slug>   # stop the stack, keep the checkout AND the private DB
+sh/worktree.sh remove <issue>-<slug>   # stop the stack, remove the worktree, DROP the private DB
+sh/worktree.sh provision-db <issue>-<slug>  # retry a failed/interrupted DB provisioning (idempotent)
+sh/worktree.sh prune-db [--force]      # list/drop private schemas whose worktree checkout is gone
 sh/worktree.sh list                    # list worktrees and running stacks
 ```
+
+The private DB lifecycle follows the checkout, not the stack: `down` + a later `create` re-attaches
+to the existing schema and **skips the seed** (fast). `remove` drops the schemas on both servers.
+If a `create` fails mid-seed the stack is left up on purpose — retry with `provision-db` (safe to
+re-run) or `remove` to give up. If a worktree was deleted behind the script's back (raw
+`git worktree remove`, `rm -rf`), its schemas linger — `prune-db` finds and drops them.
 
 `remove` also clears the `in progress` label from issue `#<issue>` (best-effort). `down` leaves it
 in place — a stopped-but-present worktree still counts as being worked on. Note a worktree torn down
