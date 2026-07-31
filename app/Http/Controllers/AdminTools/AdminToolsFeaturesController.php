@@ -8,6 +8,7 @@ use App\Models\User;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Laravel\Pennant\Feature as PennantFeature;
 use Session;
@@ -27,16 +28,19 @@ class AdminToolsFeaturesController extends Controller
 
         $wasActive = Feature::getAdminValue($feature);
 
-        // Purge every stored value first, so that each user's feature re-resolves against their own roles the
-        // next time it's checked, instead of blanket-flipping their already-cached rows to the new switch value
-        PennantFeature::purge($feature);
+        // Purge every stored value and set the new switch value in one transaction - otherwise a request that
+        // resolves this feature in the gap between the purge and the set would read a momentarily-missing switch
+        // row as an admin-disabled feature, and (for an otherwise-entitled user) persist that stale 'false' again
+        DB::transaction(function () use ($feature, $wasActive): void {
+            PennantFeature::purge($feature);
 
-        $adminUser = User::findOrFail(Feature::ADMIN_USER_ID);
-        if ($wasActive) {
-            PennantFeature::for($adminUser)->deactivate($feature);
-        } else {
-            PennantFeature::for($adminUser)->activate($feature);
-        }
+            $adminUser = User::findOrFail(Feature::ADMIN_USER_ID);
+            if ($wasActive) {
+                PennantFeature::for($adminUser)->deactivate($feature);
+            } else {
+                PennantFeature::for($adminUser)->activate($feature);
+            }
+        });
 
         Session::flash('status', __(!$wasActive ?
             'controller.admintools.flash.feature_toggle_activated' :

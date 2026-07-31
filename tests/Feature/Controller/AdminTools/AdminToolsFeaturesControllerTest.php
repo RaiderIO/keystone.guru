@@ -4,6 +4,7 @@ namespace Tests\Feature\Controller\AdminTools;
 
 use App\Features\NpcCompendium;
 use App\Models\Feature\Feature;
+use App\Models\Laratrust\Role;
 use App\Models\User;
 use Laravel\Pennant\Feature as PennantFeature;
 use PHPUnit\Framework\Attributes\Group;
@@ -14,8 +15,6 @@ use Tests\TestCases\PublicTestCase;
 #[Group('AdminTools')]
 final class AdminToolsFeaturesControllerTest extends PublicTestCase
 {
-    private const int ADMIN_USER_ID = 1;
-
     #[\Override]
     protected function setUp(): void
     {
@@ -40,9 +39,10 @@ final class AdminToolsFeaturesControllerTest extends PublicTestCase
     {
         // Arrange - the admin switch starts off, and an ordinary (non-internal-team) user already has a stored
         // 'false' from browsing the site before the toggle, which is exactly the row #3774 was blanket-flipped
-        $admin        = User::findOrFail(self::ADMIN_USER_ID);
+        $admin        = User::findOrFail(Feature::ADMIN_USER_ID);
         $ordinaryUser = User::factory()->create();
-        $adminBackup  = Feature::query()->where('scope', $this->serializeScopeOf($admin))
+        $this->assertTrue($admin->hasRole(Role::ROLE_ADMIN), 'User id=1 must be admin (seed the DB).');
+        $adminBackup = Feature::query()->where('scope', $this->serializeScopeOf($admin))
             ->where('name', NpcCompendium::class)
             ->first();
 
@@ -90,15 +90,22 @@ final class AdminToolsFeaturesControllerTest extends PublicTestCase
     #[Test]
     public function toggleFeature_givenActiveSwitch_deactivatesItAndPurgesStoredValues(): void
     {
-        // Arrange
-        $admin       = User::findOrFail(self::ADMIN_USER_ID);
+        // Arrange - an entitled user's stored 'true' row must be purged, not merely updated to 'false' in place;
+        // updating it in place would leave a row that never re-resolves once the switch is turned back on, which
+        // would recreate the exact stale-value bug #3772 fixed for the role-change direction
+        $admin        = User::findOrFail(Feature::ADMIN_USER_ID);
+        $ordinaryUser = User::factory()->create();
+        $this->assertTrue($admin->hasRole(Role::ROLE_ADMIN), 'User id=1 must be admin (seed the DB).');
         $adminBackup = Feature::query()->where('scope', $this->serializeScopeOf($admin))
             ->where('name', NpcCompendium::class)
             ->first();
 
         try {
+            $ordinaryUser->addRole(Role::ROLE_INTERNAL_TEAM);
             PennantFeature::for($admin)->activate(NpcCompendium::class);
+            PennantFeature::for($ordinaryUser)->activate(NpcCompendium::class);
             $this->assertTrue(Feature::getAdminValue(NpcCompendium::class), 'Expected the switch to be arranged on.');
+            $this->assertSame(1, $this->countStoredFeaturesOf($ordinaryUser), 'Expected the stored value to be arranged.');
 
             // Act
             $this->be($admin);
@@ -107,7 +114,15 @@ final class AdminToolsFeaturesControllerTest extends PublicTestCase
             // Assert
             $response->assertRedirect(route('admin.tools.features.list'));
             $this->assertFalse(Feature::getAdminValue(NpcCompendium::class), 'Expected the switch to be flipped off.');
+            $this->assertSame(
+                0,
+                $this->countStoredFeaturesOf($ordinaryUser),
+                'Expected the stored row to be purged, not updated to false in place.',
+            );
         } finally {
+            $this->deleteStoredFeaturesOf($ordinaryUser);
+            $ordinaryUser->delete();
+
             Feature::query()->where('scope', $this->serializeScopeOf($admin))
                 ->where('name', NpcCompendium::class)
                 ->delete();
