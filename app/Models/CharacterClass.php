@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\DungeonRoute\DungeonRoutePlayerClass;
 use App\Models\DungeonRoute\DungeonRoutePlayerRace;
-use App\Models\Traits\HasIconFile;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -14,7 +13,11 @@ use Str;
 
 /**
  * @property int    $id
- * @property int    $class_id Blizzard class ID
+ * @property int    $class_id     Blizzard class ID
+ * @property string $icon_file_id Vestigial - always -1. The icon itself is a static asset from the
+ *                                assets project (see icon_url), not an admin-editable File upload.
+ *                                Column kept for now (varchar(255) NOT NULL, no default); dropping
+ *                                it needs its own migration - see #3786.
  * @property string $key
  * @property string $name
  * @property string $color
@@ -30,7 +33,6 @@ use Str;
  */
 class CharacterClass extends CacheModel
 {
-    use HasIconFile;
     use SeederModel;
 
     public $timestamps = false;

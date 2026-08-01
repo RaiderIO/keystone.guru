@@ -63,7 +63,7 @@ class MapContextStaticData implements Arrayable
                 'characterClasses'                  => $characterClasses,
                 'characterClassSpecializations'     => CharacterClassSpecialization::all(),
                 'raidMarkers'                       => RaidMarker::all(),
-                'factions'                          => Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
+                'factions'                          => Faction::where('name', '<>', 'Unspecified')->get(),
                 'publishStates'                     => PublishedState::all(),
                 'gameVersions'                      => GameVersion::all(),
                 'selectableSpells'                  => $selectableSpells,

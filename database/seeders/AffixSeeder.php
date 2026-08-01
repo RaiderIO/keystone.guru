@@ -6,7 +6,6 @@ use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\AffixGroup\AffixGroupCoupling;
 use App\Models\Expansion;
-use App\Models\File;
 use App\Models\Season;
 use App\SeederHelpers\Traits\FindsAffixes;
 use Illuminate\Database\Seeder;
@@ -73,17 +72,6 @@ class AffixSeeder extends Seeder implements TableSeederInterface
 
         foreach ($affixes as $affix) {
             /** @var Affix $affix */
-            $affix->setTable(DatabaseSeeder::getTempTableName(Affix::class))->save();
-
-            $iconName          = $affix->image_url;
-            $icon              = new File();
-            $icon->model_id    = $affix->id;
-            $icon->model_class = get_class($affix);
-            $icon->disk        = 'public';
-            $icon->path        = sprintf('images/affixes/%s.jpg', $iconName);
-            $icon->save();
-
-            $affix->icon_file_id = $icon->id;
             $affix->setTable(DatabaseSeeder::getTempTableName(Affix::class))->save();
         }
 
