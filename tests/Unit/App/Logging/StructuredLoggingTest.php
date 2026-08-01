@@ -342,6 +342,34 @@ class StructuredLoggingTest extends PublicTestCase
         self::assertNull($channel, 'Structured logging must fall through to the default channel while testing');
     }
 
+    /**
+     * #3782: a test is free to change app.env, and several do to exercise production-only behaviour -
+     * MDTMappingImportGameVersionScopingTest did it around a full MDT mapping import and put ~1000
+     * ANSI-coloured log lines in the CI test output. "Am I running tests" must therefore not be answered
+     * by app.env alone.
+     */
+    #[Test]
+    public function resolveChannel_GivenTheApplicationEnvironmentIsFlippedToProduction_ShouldNotSelectAConsoleChannel(): void
+    {
+        // Arrange
+        config(['app.type' => 'local']);
+        self::assertTrue($this->app->runningInConsole(), 'Only meaningful when run from the console');
+
+        $originalEnvironment = $this->app['env'];
+        $this->app->detectEnvironment(static fn() => 'production');
+
+        try {
+            // Act
+            $channel = StructuredLogging::resolveChannel();
+
+            // Assert
+            self::assertFalse($this->app->runningUnitTests(), 'The environment flip must actually have taken effect');
+            self::assertNull($channel, 'A test flipping app.env must not redirect structured logging to the console');
+        } finally {
+            $this->app->detectEnvironment(static fn() => $originalEnvironment);
+        }
+    }
+
     #[Test]
     public function resolveChannel_GivenAnExplicitChannel_ShouldReturnIt(): void
     {

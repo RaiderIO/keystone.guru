@@ -13,6 +13,7 @@ use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Mapping\MappingServiceInterface;
 use App\Service\MDT\MDTMappingImportServiceInterface;
+use Illuminate\Database\Eloquent\Model;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -87,11 +88,17 @@ final class MDTMappingImportGameVersionScopingTest extends PublicTestCase
             // importNpcsDataFromMDT() lazy-loads Npc::$npcHealths (App\Models\Npc.php:353,
             // getHealthByGameVersion()) without eager-loading it first - the mapping-import pipeline is designed
             // to run from the scheduler/CLI in production, where Model::preventLazyLoading()'s violation handler
-            // only logs (see [[project_autoeager_no_lazyviolation]]); it THROWS in dev/test. Temporarily flip
-            // the environment for the Act step only, exactly as the mapping:save runbook does via
-            // `APP_ENV=production` for the same reason - this is a pre-existing gap in the import pipeline,
-            // unrelated to #3757, not something to paper over with a production code change here.
-            $this->app->detectEnvironment(static fn() => 'production');
+            // only logs (see [[project_autoeager_no_lazyviolation]]); it THROWS in dev/test. This is a
+            // pre-existing gap in the import pipeline, unrelated to #3757, not something to paper over with a
+            // production code change here - so switch off exactly the guard that gets in the way, for the Act
+            // step only.
+            //
+            // This used to flip the whole application environment to 'production' instead (the way the
+            // mapping:save runbook does via `APP_ENV=production`). That also made runningUnitTests() answer
+            // false, so StructuredLogging::resolveChannel() selected 'stderr' and the import dumped ~1000
+            // ANSI-coloured log lines straight into the CI test output - see #3782.
+            $preventsLazyLoading = Model::preventsLazyLoading();
+            Model::preventLazyLoading(false);
 
             try {
                 $newMappingVersion = $mappingImportService->importMappingVersionFromMDT(
@@ -103,7 +110,7 @@ final class MDTMappingImportGameVersionScopingTest extends PublicTestCase
                     false,
                 );
             } finally {
-                $this->app->detectEnvironment(static fn() => 'testing');
+                Model::preventLazyLoading($preventsLazyLoading);
             }
 
             // Assert
