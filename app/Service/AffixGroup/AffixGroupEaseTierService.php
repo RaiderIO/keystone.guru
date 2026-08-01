@@ -235,7 +235,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getAffixGroupByString(string $affixString): ?AffixGroup
+    public function getAffixGroupByString(string $easeTierAffixString): ?AffixGroup
     {
         $currentSeason = $this->seasonService->getCurrentSeason();
         if ($currentSeason === null) {
@@ -245,13 +245,13 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         /** @var Collection<string, Affix> $affixesByName */
         $affixesByName = Affix::all()->keyBy(static fn(Affix $affix): string => (string)__($affix->name, [], 'en_US'));
 
-        $affixNames = collect(explode(',', $affixString))
+        $affixNames = collect(explode(',', $easeTierAffixString))
             ->map(static fn(string $affixName): string => trim($affixName))
             ->filter(static fn(string $affixName): bool => $affixName !== '');
 
         // Without any affixes to match on every affix group would be a match - refuse to guess instead
         if ($affixNames->isEmpty()) {
-            $this->log->getAffixGroupByStringNoAffixes($affixString);
+            $this->log->getAffixGroupByStringNoAffixes($easeTierAffixString);
 
             return null;
         }
@@ -291,7 +291,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
             ->filter(fn(AffixGroup $affixGroup): bool => $this->hasAllAffixes($affixGroup, $affixKeys));
 
         if ($matchingAffixGroups->isEmpty()) {
-            $this->log->getAffixGroupByStringNoMatchingAffixGroup($affixString);
+            $this->log->getAffixGroupByStringNoMatchingAffixGroup($easeTierAffixString);
 
             return null;
         }
@@ -302,7 +302,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         )->unique();
 
         if ($matchingAffixes->count() > 1) {
-            $this->log->getAffixGroupByStringAmbiguousAffixes($affixString, $matchingAffixes->join(' / '));
+            $this->log->getAffixGroupByStringAmbiguousAffixes($easeTierAffixString, $matchingAffixes->join(' / '));
 
             return null;
         }

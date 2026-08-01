@@ -37,9 +37,11 @@ interface AffixGroupEaseTierServiceInterface
 
     /**
      * Finds the affix group of the current season that has all affixes in the given comma separated list of (English)
-     * affix names, or null if no such affix group exists or if multiple affix groups with different affixes have them.
+     * affix names - the affix group may have more affixes than were given. Prefers the affix group of the current
+     * week when it has them; otherwise returns the matching affix group, or null when no affix group of the season
+     * has them, or when multiple affix groups with differing affixes do.
      *
      * @throws Exception
      */
-    public function getAffixGroupByString(string $affixString): ?AffixGroup;
+    public function getAffixGroupByString(string $easeTierAffixString): ?AffixGroup;
 }

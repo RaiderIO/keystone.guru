@@ -392,6 +392,49 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
      */
     #[Test]
     #[Group('AffixGroupEaseTierService')]
+    public function getAffixGroupByString_givenCurrentAffixGroupIsOfADifferentSeason_doesNotShortCircuitToThatAffixGroup(): void
+    {
+        // Arrange
+        // The current affix group can be that of a timewalking event, which belongs to a different season than the
+        // one getAffixGroupByString() is resolving against (SeasonAffixGroupService::getAffixGroupAt() defers to
+        // TimewalkingEventService::getAffixGroupAt() in that case, which returns an affix group of
+        // getCurrentSeason($expansion) rather than the queried season). Pick a current affix group whose affixes
+        // would otherwise satisfy the requested string, to prove the season_id guard - not a lack of matching
+        // affixes - is what stops the wrong affix group from being returned.
+        $affixGroupsOfADifferentSeason = $this->getAffixGroupsWithTheSameAffixes(
+            Season::SEASON_DF_S4,
+            'Fortified, Entangling, Bolstering',
+        );
+        $this->assertGreaterThan(0, $affixGroupsOfADifferentSeason->count());
+        $currentAffixGroupOfADifferentSeason = $affixGroupsOfADifferentSeason->first();
+        $this->assertInstanceOf(AffixGroup::class, $currentAffixGroupOfADifferentSeason);
+
+        $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
+        $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
+            $this,
+            $this->getSeasonService(Season::SEASON_MIDNIGHT_S1),
+            $log,
+            [],
+            $this->getSeasonAffixGroupService($currentAffixGroupOfADifferentSeason),
+        );
+
+        $log->expects($this->once())
+            ->method('getAffixGroupByStringNoMatchingAffixGroup');
+
+        // Act
+        // None of Midnight S1's affix groups have Entangling or Bolstering, so without the season_id guard this
+        // would incorrectly short-circuit to $currentAffixGroupOfADifferentSeason instead of falling through
+        $result = $affixGroupEaseTierService->getAffixGroupByString('Fortified, Entangling, Bolstering');
+
+        // Assert
+        $this->assertNull($result);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    #[Group('AffixGroupEaseTierService')]
     public function getAffixGroupByString_givenPartialAffixStringOfTheCurrentSeason_returnsAffixGroupHavingThoseAffixes(): void
     {
         // Arrange
@@ -437,6 +480,45 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
 
         // Act
         // Five affix groups of DF S3 have Tyrannical, all with different other affixes
+        $result = $affixGroupEaseTierService->getAffixGroupByString('Tyrannical');
+
+        // Assert
+        $this->assertNull($result);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    #[Group('AffixGroupEaseTierService')]
+    public function getAffixGroupByString_givenTooFewAffixesToTellAffixGroupsApartAndACurrentAffixGroupThatDoesNotMatch_returnsNull(): void
+    {
+        // Arrange
+        // Unlike getAffixGroupByString_givenTooFewAffixesToTellAffixGroupsApart_returnsNull, this sets a real current
+        // affix group (a live season always has one) that does not have the requested affixes, so the current-week
+        // fast path is skipped on its own merits and the ambiguity check below it is reached the way it would be in
+        // production, not only because getCurrentAffixGroup() was mocked to null.
+        $currentAffixGroup = $this->getAffixGroupsWithTheSameAffixes(
+            Season::SEASON_DF_S3,
+            'Fortified, Incorporeal, Sanguine',
+        )->first();
+        $this->assertInstanceOf(AffixGroup::class, $currentAffixGroup);
+
+        $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
+        $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
+            $this,
+            $this->getSeasonService(Season::SEASON_DF_S3),
+            $log,
+            [],
+            $this->getSeasonAffixGroupService($currentAffixGroup),
+        );
+
+        $log->expects($this->once())
+            ->method('getAffixGroupByStringAmbiguousAffixes');
+
+        // Act
+        // Five affix groups of DF S3 have Tyrannical, all with different other affixes; the current affix group
+        // (Fortified, Incorporeal, Sanguine) is not one of them
         $result = $affixGroupEaseTierService->getAffixGroupByString('Tyrannical');
 
         // Assert
