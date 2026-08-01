@@ -121,11 +121,14 @@ For example:
 Human review time is the scarcest resource, so review must start from a pre-reviewed, verified MR —
 but the checklist is **tiered by change size** so small MRs don't pay full ceremony:
 
-- **Trivial tier** — ALL of: ≤ ~20 changed lines (excluding tests/docs), no UI-visible impact, no
-  schema/auth/security change, and covered by a passing test (or docs/config-only). Skip item 1
-  (cold review); still require item 3 (green CI). State in the MR body: "Cold review skipped under
-  the trivial-change rule" and add the `pr cold reviewed` label anyway so `babysit-prs` doesn't
-  dispatch its own review.
+- **Trivial tier** — either (a) a code change with ≤ 20 changed lines (excluding tests/docs), no
+  UI-visible impact, no schema/auth/security change, covered by a passing test; or (b) a
+  docs/config-only change of ≤ 50 changed lines total. Skip item 1 (cold review); still require
+  item 3 (green CI). State in the MR body: "Cold review skipped under the trivial-change rule" and
+  add the `pr cold reviewed` label anyway so `babysit-prs` doesn't dispatch its own review.
+  Docs-only does NOT mean low blast radius: a larger docs MR — especially one touching `.claude/`
+  instruction/process files, which degrade every future session when wrong — takes the standard
+  tier.
 - **Standard tier** — everything else: all applicable items below.
 
 1. **Independent review**: the `code-review` skill is `disable-model-invocation` — only the user

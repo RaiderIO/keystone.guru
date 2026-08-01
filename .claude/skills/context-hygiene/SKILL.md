@@ -56,10 +56,14 @@ offender, don't mechanically truncate):
 
 | Surface | Budget | Measure |
 |---|---|---|
-| `.claude/CLAUDE.md` | ≤ 13,000 B | `wc -c .claude/CLAUDE.md` |
+| `.claude/CLAUDE.md` | ≤ 18,000 B | `wc -c .claude/CLAUDE.md` |
 | `MEMORY.md` | ≤ 9,500 B | `wc -c MEMORY.md` |
-| All skill descriptions combined | ≤ 18,000 B | sum of each frontmatter `description:` value |
-| Any single skill description | ≤ 450 B | same |
+| All skill descriptions combined | ≤ 18,500 B | sum of each frontmatter `description:` value |
+| Any single skill description | ≤ 550 B | same |
+
+These budgets are the post-#3783 baseline plus a little headroom — a **ratchet, not a target**:
+when a sweep trims a surface below budget, tighten the budget here to the new level (never loosen
+one to silence a warning; that needs Wotuu's sign-off).
 
 Per-skill description bytes:
 
@@ -91,9 +95,10 @@ for Wotuu to decide rather than guessing.
 ## 5. Applying the changes
 
 - Memory-dir moves and MEMORY.md edits apply **directly** — they live outside the repo.
-- Repo edits (CLAUDE.md, skills) go through the normal worktree + draft MR flow. They are
-  docs-only, so the **trivial tier** of the ready-for-review checklist applies (green CI, no cold
-  review; label + MR-body note per `.claude/CLAUDE.md`).
+- Repo edits (CLAUDE.md, skills) go through the normal worktree + draft MR flow. A small sweep
+  (≤ 50 changed lines) qualifies for the **trivial tier** of the ready-for-review checklist (green
+  CI, no cold review; label + MR-body note per `.claude/CLAUDE.md`); a larger restructuring of
+  instruction files takes the standard tier — docs-only is not low blast radius here.
 - After skill-frontmatter edits, sanity-check the YAML: `description:` present, quotes balanced,
   `---` fences intact (see the skill-frontmatter-pitfalls memory — a broken frontmatter silently
   delists the skill).
