@@ -17,6 +17,7 @@ use App\Http\View\Composers\DungeonGridTabsComposer;
 use App\Http\View\Composers\DungeonSelectComposer;
 use App\Http\View\Composers\DungeonStartSelectComposer;
 use App\Http\View\Composers\EmbedComposer;
+use App\Http\View\Composers\FeaturedCreatorsComposer;
 use App\Http\View\Composers\GameVersionsNavComposer;
 use App\Http\View\Composers\GlobalComposer;
 use App\Http\View\Composers\HeaderComposer;
@@ -81,6 +82,8 @@ use App\Service\Cookies\CookieService;
 use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\Creator\CreatorDirectoryService;
+use App\Service\Creator\CreatorDirectoryServiceInterface;
 use App\Service\Discord\DiscordApiService;
 use App\Service\Discord\DiscordApiServiceInterface;
 use App\Service\Dungeon\DungeonService;
@@ -187,6 +190,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(PatreonApiServiceInterface::class, PatreonApiService::class);
         $this->app->bind(WowToolsServiceInterface::class, WowToolsService::class);
         $this->app->bind(AdProviderServiceInterface::class, AdProviderService::class);
+        $this->app->bind(CreatorDirectoryServiceInterface::class, CreatorDirectoryService::class);
         $this->app->bind(WowheadServiceInterface::class, WowheadService::class);
         $this->app->bind(WowheadTranslationServiceInterface::class, WowheadTranslationService::class);
         if (
@@ -354,6 +358,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Dungeon grid view
         view()->composer('dungeonroute.discover.search', DiscoverSearchComposer::class);
+
+        view()->composer('creator.featured', FeaturedCreatorsComposer::class);
 
         view()->composer('common.dungeonroute.create.dungeondifficultyselect', DungeonDifficultySelectComposer::class);
 

@@ -82,6 +82,11 @@ $user = Auth::user();
             <a class="dropdown-item" href="{{ route('profile.tags') }}">
                 <i class="fa fa-tag"></i> {{ __('view_common.layout.nav.user.my_tags') }}
             </a>
+            @feature(\App\Features\CreatorProfiles::class)
+                <a class="dropdown-item" href="{{ route('collections.index') }}">
+                    <i class="fa fa-layer-group"></i> {{ __('view_common.layout.nav.user.my_collections') }}
+                </a>
+            @endfeature
             <a class="dropdown-item" href="{{ route('team.list') }}">
                 <i class="fa fa-users"></i> {{ __('view_common.layout.nav.user.my_teams') }}
             </a>
