@@ -1,0 +1,54 @@
+/**
+ * Creator directory tiles.
+ *
+ * As with creator-profile.css, colour is left to the theme: the tile is a Bootstrap .card and text
+ * uses text-body-secondary. Do not reach for bg-body-* utilities - this site ships one class-scoped
+ * stylesheet per bootswatch theme rather than using data-bs-theme, so --bs-tertiary-bg stays at its
+ * light default and renders an unreadable panel under darkly/vapor.
+ */
+
+.creator_card {
+    color: inherit;
+    transition: transform 0.12s ease-in-out;
+}
+
+.creator_card:hover,
+.creator_card:focus-visible {
+    color: inherit;
+    transform: translateY(-2px);
+}
+
+.creator_card_avatar,
+.creator_card_initials {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.creator_card_initials {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.creator_card_name {
+    font-weight: 600;
+    word-break: break-word;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .creator_card {
+        transition: none;
+    }
+
+    .creator_card:hover,
+    .creator_card:focus-visible {
+        transform: none;
+    }
+}

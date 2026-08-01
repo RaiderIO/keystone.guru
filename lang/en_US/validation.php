@@ -20,10 +20,48 @@ return [
         'numeric' => 'The :attribute must be between :min and :max.',
         'string'  => 'The :attribute must be between :min and :max characters.',
     ],
-    'boolean'           => 'The :attribute field must be true or false.',
-    'can'               => 'The :attribute field contains an unauthorized value.',
-    'confirmed'         => 'The :attribute confirmation does not match.',
-    'current_password'  => 'The password is incorrect.',
+    'boolean'          => 'The :attribute field must be true or false.',
+    'can'              => 'The :attribute field contains an unauthorized value.',
+    'confirmed'        => 'The :attribute confirmation does not match.',
+    'current_password' => 'The password is incorrect.',
+    'custom'           => [
+        'bio' => [
+            'max' => 'Your bio may not be longer than :max characters.',
+        ],
+        'pinned_dungeon_routes' => [
+            'max'    => 'You may pin at most :max routes to your profile.',
+            'exists' => 'You can only pin routes that you created yourself.',
+        ],
+        'pinned_dungeon_route_collections' => [
+            'max'    => 'You may pin at most :max collections to your profile.',
+            'exists' => 'You can only pin collections that you created yourself.',
+        ],
+        'social_links' => [
+            'invalid_url_for_platform' => 'That is not a valid https link for this platform.',
+        ],
+        'creator_search' => [
+            'max' => 'A creator name is at most :max characters, so a longer search cannot match anyone.',
+        ],
+        'collection_name' => [
+            'required' => 'A collection needs a name.',
+            'max'      => 'A collection name may not be longer than :max characters.',
+        ],
+        'collection_description' => [
+            'max' => 'A collection description may not be longer than :max characters.',
+        ],
+        'collection_team_id' => [
+            'required_if' => 'Select the team to share this collection with.',
+            'exists'      => 'You can only share a collection with a team that you are a member of.',
+        ],
+        'collection_category_id' => [
+            'exists' => 'That is not a category you can file a collection under.',
+        ],
+        'collection_dungeon_routes' => [
+            'max'      => 'A collection may hold at most :max routes.',
+            'exists'   => 'You can only collect routes that you created yourself.',
+            'distinct' => 'A route may only appear once in a collection.',
+        ],
+    ],
     'date'              => 'The :attribute is not a valid date.',
     'date_equals'       => 'The :attribute must be a date equal to :date.',
     'date_format'       => 'The :attribute does not match the format :format.',

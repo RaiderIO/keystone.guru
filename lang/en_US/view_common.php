@@ -2,6 +2,26 @@
 
 return [
 
+    'collection' => [
+        'details' => [
+            'name'                 => 'Name',
+            'description'          => 'Description',
+            'category'             => 'Category',
+            'category_none'        => 'No category',
+            'category_help'        => 'What kind of routes this collection holds. Key level is deliberately not part of this - a PUG friendly collection is PUG friendly at any key level.',
+            'published_state'      => 'Visible to',
+            'published_state_help' => 'Sharing a collection never publishes the routes inside it - a route that is not published stays hidden.',
+            'team'                 => 'Team',
+            'team_none'            => 'No team',
+            'team_help'            => 'The team to share this collection with, when the collection is visible to your team.',
+            'dungeon_routes'       => 'Routes',
+            'dungeon_routes_none'  => 'You have not created any routes yet.',
+            'dungeon_routes_help'  => 'Hold ctrl (or cmd) to select multiple routes, up to a maximum of :max. They are shown in the order you selected them in.',
+            'save'                 => 'Save',
+            'submit'               => 'Create collection',
+            'delete'               => 'Delete collection',
+        ],
+    ],
     'dungeon' => [
         'difficulty' => [
             '10_man' => '10-man',
@@ -313,6 +333,7 @@ return [
                 'my_routes'                      => 'My routes',
                 'my_favorites'                   => 'My favorites',
                 'my_tags'                        => 'My tags',
+                'my_collections'                 => 'My collections',
                 'my_teams'                       => 'My teams',
                 'my_profile'                     => 'My public profile',
                 'account_settings'               => 'Account settings',
