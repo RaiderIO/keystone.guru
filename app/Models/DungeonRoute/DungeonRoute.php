@@ -516,6 +516,12 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         return $this->belongsToMany(RouteAttribute::class, 'dungeon_route_attributes');
     }
 
+    /** @return HasMany<DungeonRouteCollectionRoute, $this> */
+    public function dungeonRouteCollectionRoutes(): HasMany
+    {
+        return $this->hasMany(DungeonRouteCollectionRoute::class);
+    }
+
     /** @return HasMany<PageView, $this> */
     public function pageviews(): HasMany
     {
@@ -1490,6 +1496,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             // External
             $dungeonRoute->ratings()->delete();
             $dungeonRoute->favorites()->delete();
+            $dungeonRoute->dungeonRouteCollectionRoutes()->delete();
             foreach ($dungeonRoute->livesessions as $liveSession) {
                 $liveSession->delete();
             }

@@ -170,6 +170,14 @@ return [
             'internal_error_occurred' => 'An error occurred while processing Patreon\'s response - it appears to be malformed. The error was logged and will be dealt with. Please try again later.',
         ],
     ],
+    'dungeonroutecollection' => [
+        'flash' => [
+            'collection_created'      => 'Collection created',
+            'collection_updated'      => 'Collection updated',
+            'collection_deleted'      => 'Collection deleted',
+            'max_collections_reached' => 'You may have at most :max collections.',
+        ],
+    ],
     'profile' => [
         'flash' => [
             'email_already_in_use'             => 'That username is already in use.',
@@ -177,6 +185,7 @@ return [
             'profile_updated'                  => 'Profile updated',
             'unexpected_error_when_saving'     => 'An unexpected error occurred trying to save your profile',
             'privacy_settings_updated'         => 'Privacy settings updated',
+            'creator_profile_updated'          => 'Creator profile updated',
             'password_changed'                 => 'Password changed',
             'new_password_equals_old_password' => 'New password equals the old password',
             'new_passwords_do_not_match'       => 'New passwords do not match',
