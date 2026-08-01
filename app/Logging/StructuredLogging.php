@@ -345,10 +345,9 @@ abstract class StructuredLogging implements StructuredLoggingInterface
      * Whether this process is a test run - deliberately not just runningUnitTests().
      *
      * runningUnitTests() answers "is app.env equal to testing", which is not the question being asked: tests are
-     * free to change it, and several do to exercise production-only behaviour (ThumbnailServiceTest, FileTest,
-     * MigrateThumbnailDiskTest, RenderThumbnailTest, MDTMappingImportGameVersionScopingTest). One of those flipping
-     * the environment around a chatty service is what dumped ~1000 ANSI-coloured log lines into the CI test output
-     * in #3782. PHPUNIT_COMPOSER_INSTALL is defined by PHPUnit's own entrypoint (vendor/bin/phpunit, which is how
+     * free to change it, and several do to exercise production-only behaviour. One of those flipping the
+     * environment around a chatty service is what dumped ~1000 ANSI-coloured log lines into the CI test output in
+     * #3782. PHPUNIT_COMPOSER_INSTALL is defined by PHPUnit's own entrypoint (vendor/bin/phpunit, which is how
      * both CI and `php artisan test` invoke it) and phpunit is a require-dev package, so the constant answers
      * "is PHPUnit running" without depending on any application state that a test can rewrite.
      */

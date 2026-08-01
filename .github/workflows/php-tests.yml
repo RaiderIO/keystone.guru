@@ -61,4 +61,17 @@ jobs:
         run: php artisan db:seed --class=LaratrustSeeder --database=migrate
 
       - name: Run PHPUnit (${{ matrix.shard }})
-        run: ./vendor/bin/phpunit ${{ matrix.phpunit-args }}
+        run: |
+          set -o pipefail
+          ./vendor/bin/phpunit ${{ matrix.phpunit-args }} 2>&1 | tee phpunit-output.log
+
+      # Structured logging reaching the console during a test run interleaves ANSI-coloured log lines with the
+      # progress output, and has now regressed twice (#3722, #3782) because every guard against it lived in
+      # application state that a test is free to change. Assert on the PHPUnit step's own output only: the setup
+      # steps above run real artisan commands, which log to stderr legitimately.
+      - name: Assert no log lines leaked into the test output
+        run: |
+          if grep -nE '\] [a-z_]+\.(DEBUG|INFO|NOTICE|WARNING|ERROR|CRITICAL|ALERT|EMERGENCY): ' phpunit-output.log; then
+            echo "::error::Log lines leaked into PHPUnit's own output - see #3782"
+            exit 1
+          fi

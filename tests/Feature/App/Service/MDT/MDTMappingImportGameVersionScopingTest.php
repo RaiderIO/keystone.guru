@@ -13,9 +13,11 @@ use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Mapping\MappingServiceInterface;
 use App\Service\MDT\MDTMappingImportServiceInterface;
+use Closure;
 use Illuminate\Database\Eloquent\Model;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use ReflectionProperty;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -97,8 +99,17 @@ final class MDTMappingImportGameVersionScopingTest extends PublicTestCase
             // mapping:save runbook does via `APP_ENV=production`). That also made runningUnitTests() answer
             // false, so StructuredLogging::resolveChannel() selected 'stderr' and the import dumped ~1000
             // ANSI-coloured log lines straight into the CI test output - see #3782.
-            $preventsLazyLoading = Model::preventsLazyLoading();
-            Model::preventLazyLoading(false);
+            //
+            // Swapping the violation handler is what replaces that flip, NOT Model::preventLazyLoading(false):
+            // the handler is a static consulted at violation time (Model::handleLazyLoadingViolation), which is
+            // exactly why flipping the environment worked, whereas the prevention flag is snapshotted onto each
+            // model instance as it is hydrated (Builder::hydrate()). Instances that laravel-model-caching
+            // unserializes from cache therefore carry whatever the flag was when they were cached and still
+            // throw - which is why the flag variant passed locally (MODEL_CACHE_ENABLED=false) and errored in
+            // CI (MODEL_CACHE_ENABLED=true).
+            /** @var Closure|null $originalViolationCallback */
+            $originalViolationCallback = new ReflectionProperty(Model::class, 'lazyLoadingViolationCallback')->getValue();
+            Model::handleLazyLoadingViolationUsing(static fn() => null);
 
             try {
                 $newMappingVersion = $mappingImportService->importMappingVersionFromMDT(
@@ -110,7 +121,7 @@ final class MDTMappingImportGameVersionScopingTest extends PublicTestCase
                     false,
                 );
             } finally {
-                Model::preventLazyLoading($preventsLazyLoading);
+                Model::handleLazyLoadingViolationUsing($originalViolationCallback);
             }
 
             // Assert

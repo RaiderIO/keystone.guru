@@ -356,17 +356,17 @@ class StructuredLoggingTest extends PublicTestCase
         self::assertTrue($this->app->runningInConsole(), 'Only meaningful when run from the console');
 
         $originalEnvironment = $this->app['env'];
-        $this->app->detectEnvironment(static fn() => 'production');
+        $this->app['env']    = 'production';
+        self::assertFalse($this->app->runningUnitTests(), 'The environment flip must actually have taken effect');
 
         try {
             // Act
             $channel = StructuredLogging::resolveChannel();
 
             // Assert
-            self::assertFalse($this->app->runningUnitTests(), 'The environment flip must actually have taken effect');
             self::assertNull($channel, 'A test flipping app.env must not redirect structured logging to the console');
         } finally {
-            $this->app->detectEnvironment(static fn() => $originalEnvironment);
+            $this->app['env'] = $originalEnvironment;
         }
     }
 
