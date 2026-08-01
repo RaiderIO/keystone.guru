@@ -213,6 +213,14 @@ To re-provision the deploy key (e.g. on a new machine): generate a passphraseles
 as a write deploy key —
 `gh api -X POST repos/RaiderIO/keystone.guru/keys -f title=claude-worktree-push -f key="$(cat ~/.ssh/keystone_worktree_ed25519.pub)" -F read_only=false`.
 
+### Rewriting a commit that isn't `HEAD` (interactive rebase is unsupported here)
+
+Mark the tip first, reset, amend, then replay: `git branch -f save HEAD`,
+`git reset --hard <target>`, `git commit --amend --cleanup=verbatim -F <msgfile>`, then
+`git cherry-pick save`. Use a branch as the marker, not a tag — `git tag` in this repo forces
+annotated tags and needs `-m`. Remember `--cleanup=verbatim` whenever the subject starts with
+`#<issue>` (see the commit-subject gotcha in `.claude/CLAUDE.md`).
+
 ## Thumbnails
 
 A worktree does not run Horizon/puppeteer. To make a route thumbnail, use the two canonical paths in

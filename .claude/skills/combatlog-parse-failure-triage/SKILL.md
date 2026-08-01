@@ -1,6 +1,6 @@
 ---
 name: combatlog-parse-failure-triage
-description: Operational runbook to find, download, and reproduce real Staging/Production combat log parse failures before fixing them — the internal-team API endpoints, how to pull a failure's real Raider.IO log segments, the gzip/docker-cp reproduction recipe, and the safety checklist for shipping a fix. Use when triaging CombatLogParseFailure rows, chasing a "combat log parses are failing" report, or verifying a combatlog-parsing-internals fix against real production data. Pairs with combatlog-parsing-internals (how the parser itself works), create-github-issue / worktree-docker (how to turn a diagnosis into a shipped MR), and poll (the lighter on-demand sweep that just files/updates issues without fixing anything).
+description: "Runbook to find, download, and reproduce real Staging/Production combat log parse failures before fixing them — internal API endpoints, pulling a failure's Raider.IO log segments, the reproduction recipe, and the ship checklist. Use when triaging CombatLogParseFailure rows or verifying a parser fix against real data. Parser internals: combatlog-parsing-internals. Lighter issue-filing sweep: combatlog-parse-failure-poll."
 ---
 
 # Combat Log Parse-Failure Triage

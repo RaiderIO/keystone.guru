@@ -1,6 +1,6 @@
 ---
 name: combatlog-parsing-internals
-description: How a single raw WoW combat log line becomes a parsed event object — CombatLogEntry's dispatch logic, the BaseEvent/SpecialEvent/CombatEvent class hierarchy, the CombatLogVersion registry and its getVersionLong() formula, the builder-with-default-fallback pattern every version-gated class uses, and the safe procedure for registering a new WoW client build. Use when a combat log line fails to parse, when a new WoW patch needs its version registered, or when touching CombatLogEntry/CombatLogVersion/SpecialEvent/Prefix/Suffix classes. For what happens AFTER a line becomes an event (NPC/spell mapping extraction, NPC Compendium) use combatlog-data-pipeline instead. For the operational runbook to find/download/reproduce real failing logs from Staging, use combatlog-parse-failure-triage.
+description: "How a raw WoW combat log line becomes a parsed event object — CombatLogEntry dispatch, the event class hierarchy, the CombatLogVersion registry, and registering a new WoW client build. Use when a combat log line fails to parse, a new patch needs its version registered, or when touching CombatLogEntry/CombatLogVersion/SpecialEvent/Prefix/Suffix. Downstream extraction: combatlog-data-pipeline. Reproducing real failing logs: combatlog-parse-failure-triage."
 ---
 
 # Combat Log Parsing Internals

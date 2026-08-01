@@ -1,14 +1,6 @@
 ---
 name: keystoneguru-infra-cdk
-description: >
-  How to make and VERIFY changes to the keystoneguru-infra CDK app (the sibling
-  RaiderIO/keystoneguru-infra repo that owns AWS: ECS services, queue workers, task
-  sizing). Covers the repo layout, the queue-worker config surface (queue:work flags,
-  --memory, LOG_LEVEL, per-worker desiredCount / cpu / memoryLimit), and the reliable
-  `cdk synth` verification recipe plus the traps that silently produce no output. Use when
-  editing ECS task definitions, queue workers, memory/CPU, or any CDK construct here, or
-  when a worker crashes/exits (e.g. queue worker exit code 12). NOT for the app-side
-  build/deploy pipeline (use deployment-pipeline) or the release changelog (create-release).
+description: Make and VERIFY changes to the sibling RaiderIO/keystoneguru-infra CDK app (AWS — ECS services, queue workers, task sizing) — repo layout, the queue-worker config surface, and the reliable `cdk synth` verification recipe. Use when editing ECS task definitions, queue workers, memory/CPU, or when a worker crashes/exits (e.g. exit code 12). NOT for the app-side deploy pipeline (deployment-pipeline) or changelogs (create-release).
 ---
 
 # keystoneguru-infra CDK
