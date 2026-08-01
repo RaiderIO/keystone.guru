@@ -107,6 +107,10 @@ final class MDTMappingImportGameVersionScopingTest extends PublicTestCase
             // unserializes from cache therefore carry whatever the flag was when they were cached and still
             // throw - which is why the flag variant passed locally (MODEL_CACHE_ENABLED=false) and errored in
             // CI (MODEL_CACHE_ENABLED=true).
+            //
+            // Reflection rather than re-registering AppServiceProvider to restore it: Application::register()
+            // re-runs boot(), which would duplicate its Event::listen() registrations. A Laravel rename of the
+            // property fails loudly here with a ReflectionException rather than silently skipping the restore.
             /** @var Closure|null $originalViolationCallback */
             $originalViolationCallback = new ReflectionProperty(Model::class, 'lazyLoadingViolationCallback')->getValue();
             Model::handleLazyLoadingViolationUsing(static fn() => null);

@@ -68,10 +68,14 @@ jobs:
       # Structured logging reaching the console during a test run interleaves ANSI-coloured log lines with the
       # progress output, and has now regressed twice (#3722, #3782) because every guard against it lived in
       # application state that a test is free to change. Assert on the PHPUnit step's own output only: the setup
-      # steps above run real artisan commands, which log to stderr legitimately.
+      # steps above run real artisan commands, which log to stderr legitimately. The pattern is verified against
+      # the log of the run that prompted #3782 - it matches all 965 of its leaked lines.
+      #
+      # Skipped when PHPUnit itself fails (the default success() condition), deliberately: a red shard has a real
+      # failure to fix first, and a failure diff is exactly the kind of output that could match by accident.
       - name: Assert no log lines leaked into the test output
         run: |
-          if grep -nE '\] [a-z_]+\.(DEBUG|INFO|NOTICE|WARNING|ERROR|CRITICAL|ALERT|EMERGENCY): ' phpunit-output.log; then
+          if grep -nE '\] [A-Za-z0-9_-]+\.(DEBUG|INFO|NOTICE|WARNING|ERROR|CRITICAL|ALERT|EMERGENCY): ' phpunit-output.log; then
             echo "::error::Log lines leaked into PHPUnit's own output - see #3782"
             exit 1
           fi

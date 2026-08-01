@@ -57,6 +57,13 @@ abstract class TestCase extends BaseTestCase
         // previous test must not leak into this one
         StructuredLogging::flushConfigCache();
 
+        // An explicit channel is the one input resolveChannel() honours before any of its "am I running tests"
+        // checks, so a setChannel() a previous test failed to unwind would send every later test's log lines to
+        // that channel - the #3782 leak again, through the one door the guard there cannot close. Not folded into
+        // flushConfigCache() because that is also called from StructuredLogging::enable(), where clearing a
+        // deliberately-set channel would be wrong.
+        StructuredLogging::setChannel(null);
+
         // Use a hacky global so that we really only execute this once
         global $initialized;
 
