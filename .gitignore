@@ -60,3 +60,6 @@ __pycache__/
 /tmp/
 /tmp_combatlogs/
 /storage/api-docs/
+
+# Scratch dir used by the headless-browser-verify skill (screenshots + driver scripts)
+/.chrome-tmp

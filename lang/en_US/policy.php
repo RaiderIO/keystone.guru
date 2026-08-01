@@ -2,6 +2,7 @@
 
 return [
 
+    'view_collection_not_published'           => 'This collection is not shared and cannot be viewed. Please ask the author to share this collection to view it.',
     'view_route_not_published'                => 'This route is not published and cannot be viewed. Please ask the author to publish this route to view it.',
     'present_route_not_published'             => 'This route is not published and cannot be presented. Please ask the author to publish this route to present it.',
     'embed_route_not_published'               => 'This route is not published and cannot be viewed. Please ask the author to publish this route to view it.',

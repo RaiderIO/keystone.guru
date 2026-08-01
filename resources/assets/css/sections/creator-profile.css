@@ -1,0 +1,100 @@
+/**
+ * Creator podium - the public profile hero shown above a creator's routes.
+ *
+ * The hero is a Bootstrap .card so it picks up each bootswatch theme's card background. Do NOT
+ * reach for the bg-body-* utilities here: this site ships one stylesheet per theme rather than
+ * using Bootstrap 5.3's data-bs-theme attribute, and bootswatch leaves --bs-tertiary-bg at its
+ * light default (#f8f9fa) even under darkly/vapor - bg-body-tertiary renders a white panel with
+ * white text. --bs-secondary-color *is* themed, so text-body-secondary is safe.
+ *
+ * Only geometry and motion live in this file; colour comes from the theme.
+ */
+
+.creator_hero_avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Initials fallback for users without an uploaded avatar, mirroring the sizing above */
+.creator_hero_initials {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.creator_hero_name {
+    margin-bottom: 0.25rem;
+    word-break: break-word;
+}
+
+.creator_hero_bio {
+    max-width: 70ch;
+    margin-bottom: 0;
+    white-space: pre-line;
+}
+
+.creator_hero_socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+/*
+ * Deliberately not btn-outline-secondary: bootswatch's $secondary is a dark grey under darkly and
+ * vapor, which on the equally dark card reads as an invisible button - and picking a light variant
+ * instead would fail the same way under lux. Inheriting currentColor tracks each theme's body text,
+ * so the icons stay legible on all three.
+ */
+.creator_hero_social_link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    color: inherit;
+    opacity: 0.75;
+    text-decoration: none;
+    transition: transform 0.12s ease-in-out, opacity 0.12s ease-in-out;
+}
+
+.creator_hero_social_link:hover,
+.creator_hero_social_link:focus-visible {
+    color: inherit;
+    opacity: 1;
+    transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .creator_hero_social_link {
+        transition: none;
+    }
+
+    .creator_hero_social_link:hover,
+    .creator_hero_social_link:focus-visible {
+        transform: none;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .creator_hero {
+        text-align: center;
+    }
+
+    .creator_hero_socials {
+        justify-content: center;
+    }
+
+    .creator_hero_bio {
+        text-align: left;
+    }
+}
