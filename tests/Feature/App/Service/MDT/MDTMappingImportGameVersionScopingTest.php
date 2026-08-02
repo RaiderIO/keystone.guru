@@ -87,30 +87,15 @@ final class MDTMappingImportGameVersionScopingTest extends PublicTestCase
         try {
             // Act
 
-            // importNpcsDataFromMDT() lazy-loads Npc::$npcHealths (App\Models\Npc.php:353,
-            // getHealthByGameVersion()) without eager-loading it first - the mapping-import pipeline is designed
-            // to run from the scheduler/CLI in production, where Model::preventLazyLoading()'s violation handler
-            // only logs (see [[project_autoeager_no_lazyviolation]]); it THROWS in dev/test. This is a
-            // pre-existing gap in the import pipeline, unrelated to #3757, not something to paper over with a
-            // production code change here - so switch off exactly the guard that gets in the way, for the Act
-            // step only.
-            //
-            // This used to flip the whole application environment to 'production' instead (the way the
-            // mapping:save runbook does via `APP_ENV=production`). That also made runningUnitTests() answer
-            // false, so StructuredLogging::resolveChannel() selected 'stderr' and the import dumped ~1000
-            // ANSI-coloured log lines straight into the CI test output - see #3782.
-            //
-            // Swapping the violation handler is what replaces that flip, NOT Model::preventLazyLoading(false):
-            // the handler is a static consulted at violation time (Model::handleLazyLoadingViolation), which is
-            // exactly why flipping the environment worked, whereas the prevention flag is snapshotted onto each
-            // model instance as it is hydrated (Builder::hydrate()). Instances that laravel-model-caching
-            // unserializes from cache therefore carry whatever the flag was when they were cached and still
-            // throw - which is why the flag variant passed locally (MODEL_CACHE_ENABLED=false) and errored in
-            // CI (MODEL_CACHE_ENABLED=true).
-            //
-            // Reflection rather than re-registering AppServiceProvider to restore it: Application::register()
-            // re-runs boot(), which would duplicate its Event::listen() registrations. A Laravel rename of the
-            // property fails loudly here with a ReflectionException rather than silently skipping the restore.
+            // importNpcsDataFromMDT() lazy-loads Npc::$npcHealths without eager-loading it first. That only
+            // logs in production (see [[project_autoeager_no_lazyviolation]]) but throws in dev/test - a
+            // pre-existing gap unrelated to #3757 - so swap out just the violation handler for the Act step.
+            // Not a whole-environment flip to 'production' (the old approach here): that made
+            // StructuredLogging::resolveChannel() dump the import's ~1000 log lines to stderr into CI output
+            // (#3782). Not Model::preventLazyLoading(false) either: that flag is snapshotted per model
+            // instance at hydration, so instances laravel-model-caching unserializes from cache keep whatever
+            // value was cached and still throw. Restored via reflection rather than re-registering
+            // AppServiceProvider, which would duplicate its Event::listen() registrations.
             /** @var Closure|null $originalViolationCallback */
             $originalViolationCallback = new ReflectionProperty(Model::class, 'lazyLoadingViolationCallback')->getValue();
             Model::handleLazyLoadingViolationUsing(static fn() => null);
