@@ -54,4 +54,19 @@ class AffixGroupEaseTierServiceLogging extends StructuredLogging implements Affi
     {
         $this->error(__METHOD__, get_defined_vars());
     }
+
+    public function getAffixGroupByStringNoAffixes(string $affixString): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function getAffixGroupByStringNoMatchingAffixGroup(string $affixString): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function getAffixGroupByStringAmbiguousAffixes(string $affixString, string $matchingAffixes): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
 }

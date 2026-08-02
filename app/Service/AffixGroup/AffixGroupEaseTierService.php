@@ -235,43 +235,86 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getAffixGroupByString(string $affixString): ?AffixGroup
+    public function getAffixGroupByString(string $easeTierAffixString): ?AffixGroup
     {
-        $result = null;
-
-        $affixList                = Affix::all();
-        $currentSeason            = $this->seasonService->getCurrentSeason();
-        $currentSeasonAffixGroups = $currentSeason->affixGroups;
-
-        $affixes = collect(explode(', ', $affixString));
-
-        // Filter out properties that don't have the correct amount of affixes
-        if ($affixes->count() === 3 + (int)($currentSeason->seasonal_affix_id !== null)) {
-            // Check if there's any affixes in the list that we cannot find in our own database
-            $invalidAffixes = $affixes->filter(static fn(string $affixName) => $affixList->filter(static fn(
-                Affix $affix,
-            ) => __($affix->name, [], 'en_US') === $affixName)->isEmpty());
-
-            // No invalid affixes found, great!
-            if ($invalidAffixes->isEmpty()) {
-                // Now we must find affix groups that correspond to the affix list
-                foreach ($currentSeasonAffixGroups as $affixGroup) {
-                    // Loop over the affixes of the affix group and empty the list
-                    $notFoundAffixes = $affixGroup->affixes->filter(static fn(
-                        Affix $affix,
-                    ) => $affixes->search($affix->key) === false);
-
-                    // If we have found the match, we're done
-                    if ($notFoundAffixes->isEmpty()) {
-                        $result = $affixGroup;
-                        break;
-                    }
-                }
-            } else {
-                $this->log->getAffixGroupByStringUnknownAffixes($invalidAffixes->join(', '));
-            }
+        $currentSeason = $this->seasonService->getCurrentSeason();
+        if ($currentSeason === null) {
+            return null;
         }
 
-        return $result;
+        /** @var Collection<string, Affix> $affixesByName */
+        $affixesByName = Affix::all()->keyBy(static fn(Affix $affix): string => (string)__($affix->name, [], 'en_US'));
+
+        $affixNames = collect(explode(',', $easeTierAffixString))
+            ->map(static fn(string $affixName): string => trim($affixName))
+            ->filter(static fn(string $affixName): bool => $affixName !== '');
+
+        // Without any affixes to match on every affix group would be a match - refuse to guess instead
+        if ($affixNames->isEmpty()) {
+            $this->log->getAffixGroupByStringNoAffixes($easeTierAffixString);
+
+            return null;
+        }
+
+        // Check if there's any affixes in the list that we cannot find in our own database
+        $invalidAffixes = $affixNames->reject(static fn(string $affixName): bool => $affixesByName->has($affixName));
+
+        if ($invalidAffixes->isNotEmpty()) {
+            $this->log->getAffixGroupByStringUnknownAffixes($invalidAffixes->join(', '));
+
+            return null;
+        }
+
+        $affixKeys = $affixNames->map(static function (string $affixName) use ($affixesByName): string {
+            /** @var Affix $affix Guaranteed to exist - any name that could not be resolved was rejected above */
+            $affix = $affixesByName->get($affixName);
+
+            return $affix->key;
+        });
+
+        // A season has multiple affix groups with the exact same affixes - one for each week that the affixes are
+        // active - which no affix string can tell apart. Ease tiers are stored and read per affix group, so picking
+        // the wrong one hides them entirely. The tier list is always that of the current week, so prefer the affix
+        // group of the current week whenever it has the given affixes.
+        $currentAffixGroup = $this->seasonAffixGroupService->getCurrentAffixGroup($currentSeason);
+
+        // The current affix group may be that of a timewalking event, which is not an affix group of this season
+        if ($currentAffixGroup !== null &&
+            $currentAffixGroup->season_id === $currentSeason->id &&
+            $this->hasAllAffixes($currentAffixGroup, $affixKeys)) {
+            return $currentAffixGroup;
+        }
+
+        // The amount of affixes an affix group has varies per season (three in DF S4, four in TWW S3, five in
+        // Midnight S1), so match on the affixes an affix group actually has rather than on a hardcoded count
+        $matchingAffixGroups = $currentSeason->affixGroups
+            ->filter(fn(AffixGroup $affixGroup): bool => $this->hasAllAffixes($affixGroup, $affixKeys));
+
+        if ($matchingAffixGroups->isEmpty()) {
+            $this->log->getAffixGroupByStringNoMatchingAffixGroup($easeTierAffixString);
+
+            return null;
+        }
+
+        // Too few affixes were given to tell affix groups with different affixes apart - refuse to guess
+        $matchingAffixes = $matchingAffixGroups->map(
+            static fn(AffixGroup $affixGroup): string => $affixGroup->affixes->pluck('key')->sort()->join(', '),
+        )->unique();
+
+        if ($matchingAffixes->count() > 1) {
+            $this->log->getAffixGroupByStringAmbiguousAffixes($easeTierAffixString, $matchingAffixes->join(' / '));
+
+            return null;
+        }
+
+        return $matchingAffixGroups->first();
+    }
+
+    /**
+     * @param Collection<int, string> $affixKeys
+     */
+    private function hasAllAffixes(AffixGroup $affixGroup, Collection $affixKeys): bool
+    {
+        return $affixKeys->every(static fn(string $affixKey): bool => $affixGroup->hasAffix($affixKey));
     }
 }
