@@ -178,11 +178,17 @@ regardless of what cold review finds — this carve-out only unblocks step 4, no
        } } }'
    ```
 
-   For each unresolved thread: address it in code (or answer the question), push, then reply on
-   the thread with `:robot:` and what changed. Reply to a review comment with
+   **Every unresolved thread gets fixed this pass, no matter who opened it — Wotuu's own comments
+   are not exempt.** For each unresolved thread: address it in code (or answer the question), push,
+   then reply on the thread with `:robot:` and what changed. Reply to a review comment with
    `gh api -X POST repos/RaiderIO/keystone.guru/pulls/<n>/comments/<comment-id>/replies -f body='...'`.
+   A thread whose first comment isn't `:robot:`-prefixed (i.e. Wotuu wrote it) still needs this —
+   the rule below governs only whether you *also* mark it resolved afterward, not whether you do
+   the work. Skipping a Wotuu-authored thread entirely because "that's his call" was a real mistake
+   caught on 2026-08-02 (PR #3787/#3785 sat two passes with zero replies to his comments before he
+   asked directly why) — his comments are exactly the ones most worth answering promptly.
 
-   **Whether you resolve the thread yourself depends on who opened it, not who's replying** — every
+   **Whether you resolve the thread yourself, after fixing it, depends on who opened it** — every
    agent-authored comment (cold-review findings, this reply) is `:robot:`-prefixed by convention, so
    "does the thread's *first* comment start with `:robot:`" is a reliable, mechanical test:
    - **First comment starts with `:robot:`** (an AI agent raised it, e.g. a cold-review finding):
@@ -190,8 +196,10 @@ regardless of what cold review finds — this carve-out only unblocks step 4, no
      yourself — `gh api graphql -f query='mutation { resolveReviewThread(input: {threadId:
      "<thread-id>"}) { thread { isResolved } } }'`. Wotuu doesn't need to manually close an
      agent-to-agent loop, and a resolved thread is still there to expand if he wants the detail.
-   - **First comment does *not* start with `:robot:`** (Wotuu wrote it himself): leave it
-     unresolved — that's his call to make when he re-reviews, not yours.
+   - **First comment does *not* start with `:robot:`** (Wotuu wrote it himself): fix it and reply
+     exactly the same as above, just don't call `resolveReviewThread` — leaving the thread open is
+     only about not closing the loop on his behalf; he still sees the fix and closes it himself on
+     re-review, when he's ready to confirm it.
 
    **No cap on how many PRs get this treatment in one pass.** Unlike cold reviews (capped at 3
    dispatches per pass, see step 4), comment-resolving work should proceed on every eligible PR this
@@ -251,30 +259,24 @@ raise or lower it again if the cost/speed tradeoff stops feeling right.
   failed), just add the label instead of re-reviewing. Re-review only if the diff has changed
   substantially since the review, or Wotuu asks.
 - **Never run the review inside this session.** The babysitter usually runs on Sonnet and its
-  context is warm — both defeat the purpose. Spawn a fresh agent instead:
-
-  Agent tool, `subagent_type: "general-purpose"`, `model: "opus"` (`"fable"` for high-risk diffs:
-  migrations, auth, payment, data-destructive changes).
-
-  **Do not tell the agent to invoke `/code-review`** — it is a plugin *slash command*
-  (`~/.claude/plugins/marketplaces/claude-plugins-official/plugins/code-review/`), not a Skill, and
-  the Skill tool cannot dispatch it (`Skill code-review cannot be used with Skill tool`). Confirmed
-  independently twice (the implementing session of #3704/#3708, and the cold-review dispatch for
-  #3708 itself) — every prior "cold review via `code-review --comment`" pass actually ran on
-  whatever the agent silently improvised once the invocation failed, not the documented command.
-  Instead, give the agent the review job directly in its prompt, mirroring that command's own
-  methodology: read the PR's diff (`gh pr diff <n>`, or the persisted-output-file workaround below
-  on a large diff) and CLAUDE.md files for the touched paths; check for CLAUDE.md-compliance
-  violations, correctness bugs, and anything git blame/history or prior PR comments on the same
-  files would flag; explicitly discard pre-existing issues, lint/typechecker-catchable nitpicks,
-  and anything not clearly real; then post only findings it is genuinely confident about as inline
-  PR comments itself (`gh api -X POST repos/RaiderIO/keystone.guru/pulls/<n>/comments`), each
-  prefixed `:robot:` and citing the specific file/line.
-- **Afterwards**, for each PR reviewed this pass, post the marker comment on that PR:
-  `:robot: Cold review (opus): <N> findings posted.` (or `no findings`) — and add the
-  `pr cold reviewed` label (`gh pr edit <n> --add-label "pr cold reviewed"`, or the
-  `gh api -X POST repos/.../issues/<n>/labels -f labels[]="pr cold reviewed"` fallback if that's
-  also broken this session), so the marker is visible both in the timeline and in the label list.
+  context is warm — both defeat the purpose. Spawn a fresh agent instead, using the repo's own
+  custom subagent types rather than `general-purpose` — `Agent` tool, `subagent_type:
+  "cold-reviewer-opus"` (`"cold-reviewer-fable"` for high-risk diffs: migrations, auth, payment,
+  data-destructive changes). Both live at `.claude/agents/cold-reviewer-{opus,fable}.md` and are
+  pinned to **`effort: medium`** in their frontmatter (added 2026-08-02 — Wotuu flagged cold
+  reviews as the single biggest token burn in a pass; unset effort defaults to a much more
+  expensive tier, and this is the only lever that controls it, since the plain `Agent` tool has no
+  `effort` parameter of its own). The full review methodology — what to read, what to discard, the
+  `gh api` posting mechanics, the `-f`/`-F` footgun, the summary-comment format — is baked into
+  each definition's system prompt, so the dispatch prompt here only needs the PR number and any
+  extra routing context (e.g. why a diff was routed to the fable variant). Don't tell either agent
+  to invoke `/code-review` — it's a plugin *slash command*, not a Skill, and the Skill tool can't
+  dispatch it (confirmed independently twice, on #3704/#3708) — both custom agents already know
+  this and carry the direct-methodology instructions instead.
+- **Afterwards**, for each PR reviewed this pass, confirm the agent posted its marker comment
+  (`:robot: Cold review (opus|fable): <N> findings posted.` or `no findings`) and added the
+  `pr cold reviewed` label — both are part of each agent definition's own instructions, but verify
+  rather than assume, same as spot-checking finding bodies below.
 - Posted findings are addressed like any other review comments on a **later** pass (step 3.3) —
   don't review and fix in the same pass; the fixes deserve fresh triage and their own CI run.
 - The reviewer posts comments only — never a formal GitHub review (no approve / request-changes).
