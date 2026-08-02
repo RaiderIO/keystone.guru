@@ -5,17 +5,20 @@ namespace Tests\Unit\App\Logic\CombatLog\SpecialEvents\Emote;
 use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\CombatLogVersion;
 use App\Logic\CombatLog\SpecialEvents\Emote;
+use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
+use Illuminate\Support\Carbon;
+use InvalidArgumentException;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
+#[Group('CombatLog')]
+#[Group('Emote')]
 final class EmoteTest extends PublicTestCase
 {
     #[Test]
-    #[Group('CombatLog')]
-    #[Group('Emote')]
     #[DataProvider('parseEvent_givenEmoteEvent_returnsCorrectValues_DataProvider')]
     public function parseEvent_givenEmoteEvent_returnsCorrectValues(
         string $emoteEvent,
@@ -33,7 +36,8 @@ final class EmoteTest extends PublicTestCase
         $result = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_12_0_1);
 
         // Assert
-        Assert::assertInstanceOf(Emote::class, $combatLogEntry->getParsedEvent());
+        Assert::assertInstanceOf(Emote::class, $result);
+        Assert::assertSame($result, $combatLogEntry->getParsedEvent());
         Assert::assertEquals($expectedSourceGuid, $result->getSourceGuid());
         Assert::assertEquals($expectedSourceName, $result->getSourceName());
         Assert::assertEquals($expectedDestGuid, $result->getDestGuid());
@@ -91,6 +95,46 @@ final class EmoteTest extends PublicTestCase
                 'Novakk',
                 '|TInterface\Icons\Spell_Nature_Slow.blp:20|tChargath, Bane of Scales targets you with |cFFFF0000|Hspell:373424|h[Grounding Spear]|h|r!',
             ],
+            // A quoted emote text is split as a single parameter, so it must be unquoted like any other field
+            // rather than kept verbatim from the raw line.
+            'fully-quoted-emote-text' => [
+                '3/25/2026 10:16:13.2761  EMOTE,Player-1427-0E8EA11C,"Baifrosth",Player-1427-0E8EA11C,"Baifrosth","Esto es patético, antiguo maestro."',
+                'Player-1427-0E8EA11C',
+                'Baifrosth',
+                'Player-1427-0E8EA11C',
+                'Baifrosth',
+                'Esto es patético, antiguo maestro.',
+            ],
+            // An escaped quote inside a name is understood by CombatLogStringParser but not by the regex that
+            // recovers the text from the raw line, so the two disagree and the parameters must win - at the
+            // cost of the space that followed the comma.
+            'escaped-quote-in-source-name-falls-back-to-parameters' => [
+                '3/25/2026 10:16:13.2761  EMOTE,Creature-0-3019-2519-13090-189340-00005D7992,"Na\"me, X",Player-3684-0D90C5CC,"Novakk",Hello, there',
+                'Creature-0-3019-2519-13090-189340-00005D7992',
+                'Na\"me, X',
+                'Player-3684-0D90C5CC',
+                'Novakk',
+                'Hello,there',
+            ],
         ];
+    }
+
+    #[Test]
+    public function setParameters_givenFewerParametersThanTheEventHasFields_throwsInvalidArgumentException(): void
+    {
+        // Arrange
+        $rawEvent = '3/25/2026 10:16:13.2761  EMOTE,Player-1427-0E8EA11C,"Baifrosth",Player-1427-0E8EA11C';
+
+        // Assert
+        $this->expectException(InvalidArgumentException::class);
+
+        // Act
+        new Emote(
+            CombatLogVersion::RETAIL_12_0_1,
+            Carbon::parse('2026-03-25 10:16:13'),
+            SpecialEvent::SPECIAL_EVENT_EMOTE,
+            ['Player-1427-0E8EA11C', 'Baifrosth', 'Player-1427-0E8EA11C'],
+            $rawEvent,
+        );
     }
 }

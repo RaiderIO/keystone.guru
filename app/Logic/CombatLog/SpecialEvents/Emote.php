@@ -23,9 +23,10 @@ class Emote extends SpecialEvent
 
     /**
      * Skips the four leading fields - each either a quoted string, which may itself contain commas, or an
-     * unquoted one - to recover the emote text from the raw line exactly as it was logged.
+     * unquoted one - to recover the emote text from the raw line exactly as it was logged. Deliberately
+     * without the /s modifier, to match CombatLogEntry's own line regex in never running past a newline.
      */
-    private const string EMOTE_TEXT_REGEX = '/(?:^|\s)EMOTE,(?:(?:"[^"]*"|[^,]*),){4}(.*)$/s';
+    private const string EMOTE_TEXT_REGEX = '/(?:^|\s)EMOTE,(?:(?:"[^"]*"|[^,]*),){4}(.*)$/';
 
     private string $sourceGuid;
 
@@ -79,7 +80,7 @@ class Emote extends SpecialEvent
         $this->sourceName = (string)$foldedParameters[1];
         $this->destGuid   = (string)$foldedParameters[2];
         $this->destName   = (string)$foldedParameters[3];
-        $this->emoteText  = $this->parseEmoteTextFromRawEvent() ?? (string)$foldedParameters[4];
+        $this->emoteText  = $this->resolveEmoteText((string)$foldedParameters[4]);
 
         return $this;
     }
@@ -109,18 +110,26 @@ class Emote extends SpecialEvent
     }
 
     /**
-     * @return string|null Null if the raw event did not have the expected shape, in which case the caller must
-     *                     fall back to the re-joined parameters, which lose any whitespace directly following
-     *                     a comma in the emote text.
+     * Re-joining the folded parameters loses any whitespace that directly followed a comma in the emote text,
+     * so the text is preferably recovered from the raw line instead. That recovery has to find the field
+     * boundaries with a regex, which - unlike CombatLogStringParser - cannot account for escaped quotes, so
+     * it is only trusted when both agree on everything but whitespace. Otherwise the parameters win: losing
+     * a space beats silently returning a differently-delimited string.
+     *
+     * @param string $foldedEmoteText The emote text as recovered from the folded parameters.
      */
-    private function parseEmoteTextFromRawEvent(): ?string
+    private function resolveEmoteText(string $foldedEmoteText): string
     {
         $matches = [];
 
         if (preg_match(self::EMOTE_TEXT_REGEX, $this->getRawEvent(), $matches) !== 1) {
-            return null;
+            return $foldedEmoteText;
         }
 
-        return trim($matches[1]);
+        $rawEmoteText = trim($matches[1]);
+
+        return str_replace(' ', '', $rawEmoteText) === str_replace(' ', '', $foldedEmoteText)
+            ? $rawEmoteText
+            : $foldedEmoteText;
     }
 }
