@@ -5,6 +5,7 @@ namespace Tests\Unit\App\Logging;
 use App\Logging\StructuredLogging;
 use Illuminate\Support\Facades\Context;
 use LogicException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
@@ -382,5 +383,40 @@ class StructuredLoggingTest extends PublicTestCase
         } finally {
             StructuredLogging::setChannel(null);
         }
+    }
+
+    /**
+     * resolveChannel() can never observe the 'stderr' branch under PHPUnit - PHPUNIT_COMPOSER_INSTALL is
+     * defined for the whole process, so isRunningTests() can never return false from within a test. The
+     * decision was extracted into resolveConsoleChannel() specifically so this branch stays testable.
+     */
+    #[Test]
+    #[DataProvider('resolveConsoleChannelDataProvider')]
+    public function resolveConsoleChannel_GivenInputCombination_ShouldReturnExpectedChannel(
+        bool    $runningInConsole,
+        bool    $isRunningTests,
+        bool    $isLocalAppType,
+        ?string $expectedChannel,
+    ): void {
+        // Act
+        $channel = StructuredLogging::resolveConsoleChannel($runningInConsole, $isRunningTests, $isLocalAppType);
+
+        // Assert
+        self::assertSame($expectedChannel, $channel);
+    }
+
+    /** @return array<string, array{bool, bool, bool, ?string}> */
+    public static function resolveConsoleChannelDataProvider(): array
+    {
+        return [
+            'console + not tests + local => stderr'       => [true, false, true, 'stderr'],
+            'console + tests + local => null'             => [true, true, true, null],
+            'console + not tests + non-local => null'     => [true, false, false, null],
+            'console + tests + non-local => null'         => [true, true, false, null],
+            'not console + not tests + local => null'     => [false, false, true, null],
+            'not console + tests + local => null'         => [false, true, true, null],
+            'not console + not tests + non-local => null' => [false, false, false, null],
+            'not console + tests + non-local => null'     => [false, true, false, null],
+        ];
     }
 }

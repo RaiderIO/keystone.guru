@@ -376,7 +376,27 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         /** @var Application $app */
         $app = app();
 
-        if ($app->runningInConsole() && !self::isRunningTests($app) && config('app.type') === 'local') {
+        // Named arguments here on purpose: all three parameters are bool, so a transposition (e.g.
+        // runningInConsole <-> isRunningTests) would type-check and pass PHPStan while silently
+        // inverting the decision. Naming them makes that mistake visible at the call site.
+        return self::resolveConsoleChannel(
+            runningInConsole: $app->runningInConsole(),
+            isRunningTests: self::isRunningTests($app),
+            isLocalAppType: config('app.type') === 'local',
+        );
+    }
+
+    /**
+     * Pure decision extracted from resolveChannel() so the stderr branch can be unit-tested directly.
+     * Under PHPUnit, defined('PHPUNIT_COMPOSER_INSTALL') is true for the entire lifetime of the process,
+     * so that branch is permanently unreachable from resolveChannel() itself - there is no way to make
+     * isRunningTests() return false from within a test. Public (rather than private) for the same reason
+     * the other resolve/get/set methods here are public: it is stateless and side-effect-free, and a
+     * subclass-based test double cannot expose a private static method the way it can a protected instance one.
+     */
+    public static function resolveConsoleChannel(bool $runningInConsole, bool $isRunningTests, bool $isLocalAppType): ?string
+    {
+        if ($runningInConsole && !$isRunningTests && $isLocalAppType) {
             return 'stderr';
         }
 
