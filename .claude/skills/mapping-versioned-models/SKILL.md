@@ -1,6 +1,6 @@
 ---
 name: mapping-versioned-models
-description: "Lifecycle of mapping-versioned models (Enemy, EnemyPack, MapIcon, FloorUnion, ...) — MappingVersion clone-on-create, mapping_version_id scoping, and the master end-to-end checklist for adding a new model (schema → clone boot → seeder round-trip → map context → ajax editor → Leaflet front-end). Use when creating/modifying a model carrying mapping_version_id or debugging missing/duplicated mapping data. Deep dives: seeder-load/seeder-save, ajax-map-editor-crud."
+description: Lifecycle of mapping-versioned models (Enemy, EnemyPack, MapIcon, FloorUnion, ...) — MappingVersion clone-on-create, mapping_version_id scoping, and the master end-to-end checklist for adding a new model (schema → clone boot → seeder round-trip → map context → ajax editor → Leaflet front-end). Use when creating/modifying a model carrying mapping_version_id or debugging missing/duplicated mapping data. Deep dives in seeder-load/seeder-save and ajax-map-editor-crud.
 ---
 
 # Mapping-Versioned Models

@@ -1,6 +1,6 @@
 ---
 name: combatlog-parse-failure-poll
-description: On-demand, human-run combat log parse-failure sweep — checks Staging for new or worsening CombatLogParseFailure clusters and files/updates GitHub issues. Read-only against the app — never writes code, opens MRs, or marks failures resolved. Use when the user runs /combatlog-parse-failure-poll or asks to check/sweep for new combat log parse failures.
+description: On-demand, human-run combat log parse-failure sweep — checks Staging for new or worsening CombatLogParseFailure clusters and files/updates GitHub issues. Read-only against the app — never writes code, opens MRs, or marks failures resolved. Use when asked to check or sweep for new combat log parse failures.
 ---
 
 # /combatlog-parse-failure-poll — Combat Log Parse-Failure Sweep
