@@ -3,7 +3,7 @@
 use App\Logging\Handlers\ColoredLineFormatter;
 use App\Logging\Handlers\DeduplicateHandlers;
 use App\Logging\Handlers\SkipsExceptionMirrors;
-use Monolog\Handler\NullHandler;
+use Monolog\Handler\NoopHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Processor\PsrLogMessageProcessor;
 
@@ -71,10 +71,12 @@ return [
 
         // When no webhook is configured (e.g. local/testing) discord must still resolve to a
         // valid channel, otherwise any stack that includes it (like 'scheduler') fails to build
-        // and falls back to the emergency logger. A NullHandler makes discord logging a safe no-op.
+        // and falls back to the emergency logger. A NoopHandler makes discord logging a safe no-op.
+        // It must be NoopHandler and not NullHandler: NullHandler::handle() returns true, which ends
+        // Monolog's handler loop, so in a stack it would swallow every channel listed after discord.
         'discord' => empty(env('APP_LOG_DISCORD_WEBHOOK')) ? [
             'driver'  => 'monolog',
-            'handler' => NullHandler::class,
+            'handler' => NoopHandler::class,
         ] : [
             'driver' => 'custom',
             'url'    => env('APP_LOG_DISCORD_WEBHOOK'),
@@ -96,7 +98,7 @@ return [
         // any Throwable thrown while registering it, so the guard is not purely theoretical.
         'sentry' => empty(env('SENTRY_LARAVEL_DSN', env('SENTRY_DSN'))) ? [
             'driver'  => 'monolog',
-            'handler' => NullHandler::class,
+            'handler' => NoopHandler::class,
         ] : [
             'driver' => 'sentry',
             'level'  => 'error',
@@ -104,10 +106,10 @@ return [
             // full stack trace; this only suppresses framework-level duplicates such as the emergency logger, since
             // StructuredLogging names its parameters $e/$ex/$throwable rather than $exception
             'report_exceptions' => false,
-            // Order matters - the last tap wraps outermost, so mirrors are dropped before they reach the dedup store.
-            // The ':sentry' argument gives this channel its own store; sharing discord's would make the two channels
-            // suppress each other's records.
-            'tap' => [DeduplicateHandlers::class . ':sentry', SkipsExceptionMirrors::class],
+            // Deliberately not deduplicated the way discord is: DeduplicationHandler forwards through handleBatch(),
+            // and SentryHandler::handleBatch() still compares a Monolog 3 Level enum as an integer, so every record
+            // would be filtered out and silently never reach Sentry. Sentry groups and rate-limits server-side anyway.
+            'tap' => [SkipsExceptionMirrors::class],
         ],
     ],
 

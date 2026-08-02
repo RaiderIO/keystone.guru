@@ -2,40 +2,50 @@
 
 namespace Tests\Unit\App\Logging;
 
-use App\Logging\Handlers\DeduplicateHandlers;
-use App\Logging\Handlers\FlushingDeduplicationHandler;
-use App\Logging\Handlers\SkipsExceptionMirrors;
 use App\Logging\Handlers\SkipsExceptionMirrorsHandler;
-use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\Log;
-use Monolog\Handler\DeduplicationHandler;
-use Monolog\Handler\HandlerWrapper;
-use Monolog\Logger as MonologLogger;
+use Monolog\Handler\NoopHandler;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use ReflectionProperty;
+use Psr\Log\LoggerInterface;
+use Sentry\ClientBuilder;
+use Sentry\Options;
+use Sentry\State\Hub;
+use Sentry\State\HubInterface;
 use Tests\TestCases\PublicTestCase;
 
 /**
  * The 'sentry' channel is what turns error-level StructuredLogging records into Sentry issues - Integration::handles()
- * only ever sees uncaught exceptions. These tests guard the two ways that quietly stops working: the channel failing
- * to resolve without a DSN (the #3445 failure mode, which falls back to the emergency logger), and a stack being
- * added or edited without including it.
+ * only ever sees uncaught exceptions.
+ *
+ * The tests that matter here are the end-to-end ones. Every previous way this broke was silent: the channel resolved,
+ * the logging call succeeded, and no event was ever sent. Asserting on configuration shape alone reproduces none of
+ * that, so these resolve the real DSN-shaped channel against a stub transport and assert an event actually arrives.
  */
 #[Group('Logging')]
 final class SentryLogChannelTest extends PublicTestCase
 {
+    /**
+     * Name the DSN-shaped channel is registered under. It has to be a real configured channel rather than an
+     * on-demand Log::build() one: LogManager::tap() looks the taps up by channel name in logging.channels, so a
+     * built channel silently gets none of them.
+     */
+    private const string DSN_SHAPED_CHANNEL = 'sentry_dsn_shape';
+
     #[Test]
     public function sentryChannel_givenEmptyDsn_resolvesToValidChannel(): void
     {
         // Arrange - a configured DSN selects the real driver, which is not the case this test guards
-        $sentryConfig = config('logging.channels.sentry');
         if (!empty(config('sentry.dsn'))) {
             self::markTestSkipped('A Sentry DSN is configured; this test covers the empty-DSN default.');
         }
 
-        // Act & Assert
-        self::assertArrayHasKey('driver', $sentryConfig, 'sentry must be a valid channel even without a DSN.');
+        // Act
+        $sentryConfig = config('logging.channels.sentry');
+
+        // Assert - NullHandler would resolve too, but its handle() returns true, which ends Monolog's handler loop and
+        // would swallow every channel listed after sentry in a stack
+        self::assertSame(NoopHandler::class, $sentryConfig['handler'] ?? null);
     }
 
     #[Test]
@@ -67,60 +77,99 @@ final class SentryLogChannelTest extends PublicTestCase
     }
 
     /**
-     * The DSN-present shape of the channel is never exercised locally or in CI, so its taps are asserted here by
-     * resolving that shape explicitly. Both matter and both fail silently: without the dedup tap's ':sentry' argument
-     * this channel would share Discord's deduplication store and the two would suppress each other's records, and
-     * without the mirror tap every uncaught exception would collapse into a single Sentry issue.
+     * The regression test for the whole feature: with a DSN configured, an error-level record must actually reach the
+     * transport. A buffering tap in front of SentryHandler breaks exactly this while leaving every other assertion in
+     * this file green, because SentryHandler::handleBatch() compares a Monolog 3 Level enum as an integer and drops
+     * every record.
      */
     #[Test]
-    public function sentryChannel_givenConfiguredDsn_wrapsHandlerInBothTaps(): void
+    public function sentryChannel_givenConfiguredDsn_sendsErrorRecordToSentry(): void
     {
         // Arrange
-        $loggingConfig   = require config_path('logging.php');
-        $configuredShape = [
-            'driver'            => 'sentry',
-            'level'             => 'error',
-            'report_exceptions' => false,
-            'tap'               => $loggingConfig['channels']['sentry']['tap']
-                ?? [DeduplicateHandlers::class . ':sentry', SkipsExceptionMirrors::class],
-        ];
-
-        config(['logging.channels.sentry_dsn_shape' => $configuredShape]);
-        Log::forgetChannel('sentry_dsn_shape');
+        $transport = $this->bindStubHub();
 
         // Act
-        $channel = Log::channel('sentry_dsn_shape');
+        $this->sentryChannel()
+            ->error('ProcessCombatLogSegmentsLogging::handleSegmentsNotAvailable', ['runId' => 42015954]);
 
         // Assert
-        self::assertInstanceOf(Logger::class, $channel);
-
-        $monolog = $channel->getLogger();
-        self::assertInstanceOf(MonologLogger::class, $monolog);
-
-        $handlers = $monolog->getHandlers();
-        self::assertCount(1, $handlers);
-
-        $mirrorFilter = $handlers[0];
-        self::assertInstanceOf(SkipsExceptionMirrorsHandler::class, $mirrorFilter);
-
-        $deduplicator = (new ReflectionProperty(HandlerWrapper::class, 'handler'))->getValue($mirrorFilter);
-        self::assertInstanceOf(FlushingDeduplicationHandler::class, $deduplicator);
-
+        self::assertCount(1, $transport->capturedEvents, 'The sentry channel must actually send the record.');
         self::assertSame(
-            storage_path('logs/sentry-deduplication.log'),
-            (new ReflectionProperty(DeduplicationHandler::class, 'deduplicationStore'))->getValue($deduplicator),
-            'The sentry channel must deduplicate against its own store, not discord\'s.',
+            'ProcessCombatLogSegmentsLogging::handleSegmentsNotAvailable',
+            $transport->capturedEvents[0]->getMessage(),
         );
     }
 
+    #[Test]
+    public function sentryChannel_givenConfiguredDsn_ignoresRecordsBelowError(): void
+    {
+        // Arrange
+        $transport = $this->bindStubHub();
+
+        // Act
+        $this->sentryChannel()->warning('Something suspicious but not actionable.');
+
+        // Assert
+        self::assertCount(0, $transport->capturedEvents);
+    }
+
+    #[Test]
+    public function sentryChannel_givenConfiguredDsn_appliesTheExceptionMirrorFilter(): void
+    {
+        // Arrange
+        $transport = $this->bindStubHub();
+
+        // Act
+        $this->sentryChannel()->error('HandlerLogging::uncaughtException', [
+            'exceptionClass'         => 'RuntimeException',
+            'reportedByErrorTracker' => true,
+        ]);
+
+        // Assert
+        self::assertCount(0, $transport->capturedEvents, 'A record the SDK already reported must not be sent again.');
+    }
+
     /**
-     * Asserted against the configuration rather than a resolved logger on purpose: phpunit.xml pins
-     * LOG_CHANNEL=daily, so resolving the default channel would not exercise any of the stacks.
+     * Guards the stack-bubbling trap: Monolog stops calling handlers as soon as one returns true, so a channel using
+     * NullHandler ahead of sentry in a stack silently swallows it. Production runs LOG_CHANNEL=stack with discord
+     * listed before sentry, and discord resolves to a no-op handler whenever no webhook is configured.
+     */
+    #[Test]
+    public function sentryChannel_givenAPrecedingNoOpChannelInAStack_stillReceivesTheRecord(): void
+    {
+        // Arrange
+        $transport = $this->bindStubHub();
+
+        $this->sentryChannel();
+        Log::forgetChannel('discord');
+
+        // Act
+        Log::stack(['discord', self::DSN_SHAPED_CHANNEL])->error('Errors must survive a no-op channel ahead of sentry.');
+
+        // Assert
+        self::assertCount(1, $transport->capturedEvents);
+    }
+
+    #[Test]
+    public function sentryChannel_givenConfiguredDsn_wrapsHandlerInTheMirrorFilter(): void
+    {
+        // Act
+        $taps = $this->configuredSentryChannel()['tap'] ?? [];
+
+        // Assert - asserted against the real config file, not a copy, so removing the tap fails this test
+        self::assertContains(SkipsExceptionMirrorsHandler::class, array_map(
+            static fn(string $tap): string => sprintf('%sHandler', explode(':', $tap)[0]),
+            $taps,
+        ));
+    }
+
+    /**
+     * Asserted against the configuration rather than a resolved logger on purpose: phpunit.xml pins LOG_CHANNEL=daily,
+     * so resolving the default channel would not exercise any of the stacks.
      *
-     * Scoped to the stacks this repository declares, by reading config/logging.php directly rather than the merged
-     * configuration. Laravel merges the framework's own logging config in, which contributes a 'stack' channel built
-     * from the LOG_STACK environment variable - that one is only reachable from the deployment environment, so
-     * including it here would assert something this repository cannot satisfy.
+     * Scoped to the stacks this repository declares. Laravel merges the framework's own logging config in, which
+     * contributes a 'stack' channel built from LOG_STACK - that one lives in the deployment environment (production
+     * runs LOG_CHANNEL=stack), so it cannot be satisfied from here.
      */
     #[Test]
     public function stackChannels_givenAnyStackDeclaredByThisApplication_includeSentry(): void
@@ -148,5 +197,67 @@ final class SentryLogChannelTest extends PublicTestCase
             $stacksWithoutSentry,
             'Every log stack must include the sentry channel, or its errors never become Sentry issues.',
         );
+    }
+
+    private function sentryChannel(): LoggerInterface
+    {
+        config([sprintf('logging.channels.%s', self::DSN_SHAPED_CHANNEL) => $this->configuredSentryChannel()]);
+        Log::forgetChannel(self::DSN_SHAPED_CHANNEL);
+
+        return Log::channel(self::DSN_SHAPED_CHANNEL);
+    }
+
+    /**
+     * Re-evaluates config/logging.php with a DSN present so the tests run against the branch production uses, rather
+     * than a hand-written copy of it that would stay green if the real config changed.
+     *
+     * @return array<string, mixed>
+     */
+    private function configuredSentryChannel(): array
+    {
+        $originalEnv    = $_ENV['SENTRY_LARAVEL_DSN'] ?? null;
+        $originalServer = $_SERVER['SENTRY_LARAVEL_DSN'] ?? null;
+
+        $_ENV['SENTRY_LARAVEL_DSN'] = $_SERVER['SENTRY_LARAVEL_DSN'] = 'https://publickey@sentry.example.com/1';
+
+        try {
+            $loggingConfig = require config_path('logging.php');
+        } finally {
+            if ($originalEnv === null) {
+                unset($_ENV['SENTRY_LARAVEL_DSN']);
+            } else {
+                $_ENV['SENTRY_LARAVEL_DSN'] = $originalEnv;
+            }
+
+            if ($originalServer === null) {
+                unset($_SERVER['SENTRY_LARAVEL_DSN']);
+            } else {
+                $_SERVER['SENTRY_LARAVEL_DSN'] = $originalServer;
+            }
+        }
+
+        $sentryChannel = $loggingConfig['channels']['sentry'];
+        self::assertSame('sentry', $sentryChannel['driver'], 'Expected the DSN branch of the sentry channel.');
+
+        return $sentryChannel;
+    }
+
+    /**
+     * Binds a Hub backed by an in-memory transport, which is what the 'sentry' log driver resolves out of the
+     * container, so nothing leaves the test.
+     */
+    private function bindStubHub(): CapturingTransport
+    {
+        $transport = new CapturingTransport();
+
+        $clientBuilder = new ClientBuilder(new Options([
+            'dsn'                  => 'https://publickey@sentry.example.com/1',
+            'default_integrations' => false,
+        ]));
+        $clientBuilder->setTransport($transport);
+
+        $this->app->instance(HubInterface::class, new Hub($clientBuilder->getClient()));
+
+        return $transport;
     }
 }

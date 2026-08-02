@@ -74,7 +74,12 @@ class Handler extends ExceptionHandler
             if ($e instanceof TooManyRequestsHttpException) {
                 $handlerLogging->tooManyRequests($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, $e);
             } elseif (!in_array($e::class, $this->dontReport)) {
-                $handlerLogging->uncaughtException($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, $this->maskSensitiveVariables($request?->all()), $e::class, $e->getMessage());
+                // parent::report() below also reports the exception itself whenever shouldReport() allows it, so this
+                // record can be a duplicate - but only for that subset. $dontReport here is an exact class match while
+                // shouldReport() matches with instanceof, so an HttpException subclass is logged here yet never
+                // reported natively. Passing the answer along lets a sink drop the genuine duplicates without also
+                // discarding the records that are the only trace of a failure.
+                $handlerLogging->uncaughtException($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, $this->maskSensitiveVariables($request?->all()), $e::class, $e->getMessage(), $this->shouldReport($e));
             }
         }
 

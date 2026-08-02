@@ -12,8 +12,6 @@ use Sentry\Event;
 use Sentry\Laravel\SentryHandler;
 use Sentry\Options;
 use Sentry\State\Hub;
-use Sentry\Transport\Result;
-use Sentry\Transport\ResultStatus;
 use Sentry\Transport\TransportInterface;
 use Tests\TestCases\PublicTestCase;
 
@@ -35,22 +33,7 @@ final class SentryStructuredContextTest extends PublicTestCase
     public function sentryHandler_givenStructuredLogRecord_capturesExtrasAndBareMessage(): void
     {
         // Arrange - an in-memory transport so the assertions run against the Event the client actually built
-        $transport = new class implements TransportInterface {
-            /** @var array<int, Event> Every event the client handed to this transport, in order */
-            public array $capturedEvents = [];
-
-            public function send(Event $event): Result
-            {
-                $this->capturedEvents[] = $event;
-
-                return new Result(ResultStatus::success(), $event);
-            }
-
-            public function close(?int $timeout = null): Result
-            {
-                return new Result(ResultStatus::success());
-            }
-        };
+        $transport = new CapturingTransport();
 
         $hub = $this->createHubUsing($transport);
 

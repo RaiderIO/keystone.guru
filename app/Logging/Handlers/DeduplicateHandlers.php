@@ -16,20 +16,14 @@ class DeduplicateHandlers
 
     /**
      * Customize the given logger instance.
-     *
-     * @param string $store Name of the deduplication store to use, passed as a tap argument
-     *                      (`DeduplicateHandlers::class . ':sentry'`). Every channel must use its own store:
-     *                      the store is keyed on level + message only, so channels sharing one would suppress
-     *                      each other's records - an error already sent to Discord would silently never reach
-     *                      Sentry, and vice versa.
      */
-    public function __invoke(Logger $logger, string $store = 'discord'): void
+    public function __invoke(Logger $logger): void
     {
         $handlers = [];
         foreach ($logger->getHandlers() as $handler) {
             $handlers[] = new FlushingDeduplicationHandler(
                 $handler,
-                storage_path(sprintf('logs/%s-deduplication.log', $store)),
+                storage_path('logs/discord-deduplication.log'),
                 Level::Error,
                 self::DEDUPLICATION_TIME_SECONDS,
             );

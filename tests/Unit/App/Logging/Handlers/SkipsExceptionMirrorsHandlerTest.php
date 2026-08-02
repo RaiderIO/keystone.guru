@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\App\Logging\Handlers;
 
-use App\Exceptions\Logging\HandlerLogging;
 use App\Logging\Handlers\SkipsExceptionMirrorsHandler;
 use DateTimeImmutable;
 use Monolog\Handler\TestHandler;
@@ -10,7 +9,8 @@ use Monolog\Level;
 use Monolog\LogRecord;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use ReflectionClass;
+use RuntimeException;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Logging')]
@@ -18,85 +18,134 @@ use Tests\TestCases\PublicTestCase;
 class SkipsExceptionMirrorsHandlerTest extends PublicTestCase
 {
     #[Test]
-    public function handle_GivenUncaughtExceptionMirror_ShouldNotForwardRecord(): void
+    public function handle_GivenExceptionAlreadyReportedNatively_ShouldNotForwardRecord(): void
     {
         // Arrange
         $testHandler = new TestHandler();
         $handler     = new SkipsExceptionMirrorsHandler($testHandler);
 
         // Act
-        $handler->handle($this->createLogRecord($this->structuredMessageFor('uncaughtException')));
-
-        // Assert
-        self::assertCount(0, $testHandler->getRecords());
-    }
-
-    #[Test]
-    public function handle_GivenTooManyRequestsMirror_ShouldNotForwardRecord(): void
-    {
-        // Arrange
-        $testHandler = new TestHandler();
-        $handler     = new SkipsExceptionMirrorsHandler($testHandler);
-
-        // Act
-        $handler->handle($this->createLogRecord($this->structuredMessageFor('tooManyRequests')));
+        $handler->handle($this->createUncaughtExceptionRecord(RuntimeException::class, true));
 
         // Assert
         self::assertCount(0, $testHandler->getRecords());
     }
 
     /**
-     * Under APP_TYPE=local, StructuredLogging pads the message and prefixes one '-' per open start() group, so the
-     * filter cannot compare the message strictly.
+     * Handler::$dontReport matches on the exact class while shouldReport() matches with instanceof, so an
+     * HttpException subclass is logged without ever being reported natively. Dropping those would make the failure
+     * invisible rather than merely deduplicated.
      */
     #[Test]
-    public function handle_GivenPrettyPrintedMirror_ShouldNotForwardRecord(): void
+    public function handle_GivenExceptionNotReportedNatively_ShouldForwardRecord(): void
     {
         // Arrange
         $testHandler = new TestHandler();
         $handler     = new SkipsExceptionMirrorsHandler($testHandler);
 
         // Act
-        $handler->handle($this->createLogRecord(sprintf('  --%s', $this->structuredMessageFor('uncaughtException'))));
-
-        // Assert
-        self::assertCount(0, $testHandler->getRecords());
-    }
-
-    #[Test]
-    public function handle_GivenOrdinaryStructuredRecord_ShouldForwardRecord(): void
-    {
-        // Arrange
-        $testHandler = new TestHandler();
-        $handler     = new SkipsExceptionMirrorsHandler($testHandler);
-
-        // Act
-        $handler->handle($this->createLogRecord('ProcessCombatLogSegmentsLogging::handleSegmentsNotAvailable'));
+        $handler->handle($this->createUncaughtExceptionRecord(ConflictHttpException::class, false));
 
         // Assert
         self::assertCount(1, $testHandler->getRecords());
     }
 
     /**
-     * The filter matches on the message StructuredLogging writes, which is the short class name plus the method name.
-     * Deriving it here rather than hardcoding the string means renaming either side fails this test instead of
-     * silently turning the filter into a no-op - at which point every uncaught exception would collapse into a single
-     * Sentry issue.
+     * HandlerLogging::uncaughtException logs under a constant message, and Sentry groups message events by their
+     * message - without a fingerprint every kept exception would collapse into a single issue.
      */
-    private function structuredMessageFor(string $methodName): string
+    #[Test]
+    public function handle_GivenExceptionNotReportedNatively_ShouldFingerprintByExceptionClass(): void
     {
-        $handlerLogging = new ReflectionClass(HandlerLogging::class);
+        // Arrange
+        $testHandler = new TestHandler();
+        $handler     = new SkipsExceptionMirrorsHandler($testHandler);
 
-        self::assertTrue(
-            $handlerLogging->hasMethod($methodName),
-            sprintf('%s::%s no longer exists; the mirror filter needs updating.', $handlerLogging->getName(), $methodName),
+        // Act
+        $handler->handle($this->createUncaughtExceptionRecord(ConflictHttpException::class, false));
+
+        // Assert
+        $records = $testHandler->getRecords();
+        self::assertSame(
+            ['HandlerLogging::uncaughtException', ConflictHttpException::class],
+            $records[0]->context['fingerprint'] ?? null,
         );
-
-        return sprintf('%s::%s', $handlerLogging->getShortName(), $methodName);
     }
 
-    private function createLogRecord(string $message): LogRecord
+    #[Test]
+    public function handle_GivenOrdinaryStructuredRecord_ShouldForwardRecordUnchanged(): void
     {
-        return new LogRecord(new DateTimeImmutable(), 'test', Level::Error, $message);
+        // Arrange
+        $testHandler = new TestHandler();
+        $handler     = new SkipsExceptionMirrorsHandler($testHandler);
+
+        $record = new LogRecord(
+            new DateTimeImmutable(),
+            'testing',
+            Level::Error,
+            'ProcessCombatLogSegmentsLogging::handleSegmentsNotAvailable',
+            ['runId' => 42015954],
+        );
+
+        // Act
+        $handler->handle($record);
+
+        // Assert
+        $records = $testHandler->getRecords();
+        self::assertCount(1, $records);
+        self::assertArrayNotHasKey('fingerprint', $records[0]->context, 'Only exception records get a fingerprint.');
+    }
+
+    /**
+     * A buffering handler in front of this one forwards through handleBatch(), which would bypass the filter unless it
+     * is overridden.
+     */
+    #[Test]
+    public function handleBatch_GivenExceptionAlreadyReportedNatively_ShouldNotForwardRecord(): void
+    {
+        // Arrange
+        $testHandler = new TestHandler();
+        $handler     = new SkipsExceptionMirrorsHandler($testHandler);
+
+        // Act
+        $handler->handleBatch([
+            $this->createUncaughtExceptionRecord(RuntimeException::class, true),
+            $this->createUncaughtExceptionRecord(ConflictHttpException::class, false),
+        ]);
+
+        // Assert
+        self::assertCount(1, $testHandler->getRecords());
+    }
+
+    /**
+     * Returning false keeps the record bubbling to the rest of a stack's handlers - returning true would end Monolog's
+     * handler loop and silently swallow every channel listed after this one.
+     */
+    #[Test]
+    public function handle_GivenDroppedRecord_ShouldNotStopBubbling(): void
+    {
+        // Arrange
+        $handler = new SkipsExceptionMirrorsHandler(new TestHandler());
+
+        // Act
+        $handled = $handler->handle($this->createUncaughtExceptionRecord(RuntimeException::class, true));
+
+        // Assert
+        self::assertFalse($handled);
+    }
+
+    private function createUncaughtExceptionRecord(string $exceptionClass, bool $reportedByErrorTracker): LogRecord
+    {
+        return new LogRecord(
+            new DateTimeImmutable(),
+            'testing',
+            Level::Error,
+            'HandlerLogging::uncaughtException',
+            [
+                'exceptionClass'         => $exceptionClass,
+                'message'                => 'Something broke',
+                'reportedByErrorTracker' => $reportedByErrorTracker,
+            ],
+        );
     }
 }

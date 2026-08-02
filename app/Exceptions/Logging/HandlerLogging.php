@@ -22,6 +22,9 @@ class HandlerLogging extends StructuredLogging implements HandlerLoggingInterfac
 
     /**
      * @param array<string, mixed>|null $body
+     * @param bool                      $reportedByErrorTracker Ends up in the log context, where a channel that also
+     *                                                          receives the exception natively filters this record
+     *                                                          out again - see SkipsExceptionMirrorsHandler.
      */
     public function uncaughtException(
         string  $ip,
@@ -31,6 +34,7 @@ class HandlerLogging extends StructuredLogging implements HandlerLoggingInterfac
         ?array  $body,
         string  $exceptionClass,
         string  $message,
+        bool    $reportedByErrorTracker,
     ): void {
         $this->error(__METHOD__, get_defined_vars());
     }
