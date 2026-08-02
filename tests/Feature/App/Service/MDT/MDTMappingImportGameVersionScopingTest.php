@@ -13,8 +13,11 @@ use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Mapping\MappingServiceInterface;
 use App\Service\MDT\MDTMappingImportServiceInterface;
+use Closure;
+use Illuminate\Database\Eloquent\Model;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use ReflectionProperty;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -84,14 +87,18 @@ final class MDTMappingImportGameVersionScopingTest extends PublicTestCase
         try {
             // Act
 
-            // importNpcsDataFromMDT() lazy-loads Npc::$npcHealths (App\Models\Npc.php:353,
-            // getHealthByGameVersion()) without eager-loading it first - the mapping-import pipeline is designed
-            // to run from the scheduler/CLI in production, where Model::preventLazyLoading()'s violation handler
-            // only logs (see [[project_autoeager_no_lazyviolation]]); it THROWS in dev/test. Temporarily flip
-            // the environment for the Act step only, exactly as the mapping:save runbook does via
-            // `APP_ENV=production` for the same reason - this is a pre-existing gap in the import pipeline,
-            // unrelated to #3757, not something to paper over with a production code change here.
-            $this->app->detectEnvironment(static fn() => 'production');
+            // importNpcsDataFromMDT() lazy-loads Npc::$npcHealths without eager-loading it first. That only
+            // logs in production (see [[project_autoeager_no_lazyviolation]]) but throws in dev/test - a
+            // pre-existing gap unrelated to #3757 - so swap out just the violation handler for the Act step.
+            // Not a whole-environment flip to 'production' (the old approach here): that made
+            // StructuredLogging::resolveChannel() dump the import's ~1000 log lines to stderr into CI output
+            // (#3782). Not Model::preventLazyLoading(false) either: that flag is snapshotted per model
+            // instance at hydration, so instances laravel-model-caching unserializes from cache keep whatever
+            // value was cached and still throw. Restored via reflection rather than re-registering
+            // AppServiceProvider, which would duplicate its Event::listen() registrations.
+            /** @var Closure|null $originalViolationCallback */
+            $originalViolationCallback = new ReflectionProperty(Model::class, 'lazyLoadingViolationCallback')->getValue();
+            Model::handleLazyLoadingViolationUsing(static fn() => null);
 
             try {
                 $newMappingVersion = $mappingImportService->importMappingVersionFromMDT(
@@ -103,7 +110,7 @@ final class MDTMappingImportGameVersionScopingTest extends PublicTestCase
                     false,
                 );
             } finally {
-                $this->app->detectEnvironment(static fn() => 'testing');
+                Model::handleLazyLoadingViolationUsing($originalViolationCallback);
             }
 
             // Assert

@@ -54,8 +54,17 @@ abstract class TestCase extends BaseTestCase
         $this->testStartTime = microtime(true);
 
         // StructuredLogging caches config values in statics that survive across tests - a config() change made by a
-        // previous test must not leak into this one
-        StructuredLogging::flushConfigCache();
+        // previous test must not leak into this one. enable() is used instead of flushConfigCache() alone because
+        // it also resets the $ENABLED latch: a disable() left unwound by some other test would otherwise silence
+        // structured logging for the rest of the shard, and the CI leak-guard would then pass for the wrong reason.
+        StructuredLogging::enable();
+
+        // An explicit channel is the one input resolveChannel() honours before any of its "am I running tests"
+        // checks, so a setChannel() a previous test failed to unwind would send every later test's log lines to
+        // that channel - the #3782 leak again, through the one door the guard there cannot close. Not folded into
+        // flushConfigCache() because that is also called from StructuredLogging::enable(), where clearing a
+        // deliberately-set channel would be wrong.
+        StructuredLogging::setChannel(null);
 
         // Use a hacky global so that we really only execute this once
         global $initialized;
