@@ -17,10 +17,7 @@ use Str;
  * @property string $key
  * @property string $name
  * @property string $color
- * @property string $icon_file_id Vestigial - always -1. The icon itself is a static asset from the
- *                                assets project (see icon_url), not an admin-editable File upload.
- *                                Column kept for now (varchar(255) NOT NULL, no default); dropping
- *                                it needs its own migration - see #3786.
+ * @property string $icon_file_id
  *
  * @property string $icon_url Appended
  *

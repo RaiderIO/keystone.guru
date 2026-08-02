@@ -10,10 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int    $id
- * @property int    $icon_file_id Vestigial - always -1. The icon itself is a static asset from the
- *                                assets project (see icon_url), not an admin-editable File upload.
- *                                Column kept for now (int NOT NULL, no default); dropping it needs
- *                                its own migration - see #3786.
+ * @property int    $icon_file_id
  * @property string $key
  * @property string $name
  * @property string $color
