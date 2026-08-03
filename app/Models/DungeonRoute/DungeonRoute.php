@@ -45,6 +45,7 @@ use App\Models\Traits\Reportable;
 use App\Models\Traits\SerializesDates;
 use App\Models\Traits\Taggable;
 use App\Models\User;
+use App\Models\UserPinnedDungeonRoute;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
@@ -436,6 +437,12 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     public function favorites(): HasMany
     {
         return $this->hasMany(DungeonRouteFavorite::class);
+    }
+
+    /** @return HasMany<UserPinnedDungeonRoute, $this> */
+    public function pinnedByUsers(): HasMany
+    {
+        return $this->hasMany(UserPinnedDungeonRoute::class);
     }
 
     /** @return HasMany<LiveSession, $this> */
@@ -1490,6 +1497,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             // External
             $dungeonRoute->ratings()->delete();
             $dungeonRoute->favorites()->delete();
+            // Otherwise a pin would dangle, pointing at a route that no longer exists
+            $dungeonRoute->pinnedByUsers()->delete();
             foreach ($dungeonRoute->livesessions as $liveSession) {
                 $liveSession->delete();
             }

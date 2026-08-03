@@ -9,6 +9,7 @@ use App\Models\PublishedState;
 use App\Models\User;
 use App\Models\UserPinnedDungeonRoute;
 use App\Models\UserSocialLink;
+use App\Models\UserSocialLinkPlatform;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -47,7 +48,7 @@ final class ProfileCreatorProfileTest extends PublicTestCase
 
         $socialLink           = new UserSocialLink();
         $socialLink->user_id  = $creator->id;
-        $socialLink->platform = UserSocialLink::PLATFORM_TWITCH;
+        $socialLink->platform = UserSocialLinkPlatform::Twitch->value;
         $socialLink->url      = 'https://twitch.tv/someone';
         $socialLink->save();
 
@@ -165,8 +166,8 @@ final class ProfileCreatorProfileTest extends PublicTestCase
                 'bio'                         => 'Routes for everyone',
                 'hide_from_creator_directory' => 1,
                 'social_links'                => [
-                    UserSocialLink::PLATFORM_TWITCH  => 'https://twitch.tv/someone',
-                    UserSocialLink::PLATFORM_YOUTUBE => '',
+                    UserSocialLinkPlatform::Twitch->value  => 'https://twitch.tv/someone',
+                    UserSocialLinkPlatform::Youtube->value => '',
                 ],
                 'pinned_dungeon_routes' => [$route->id],
             ]);
@@ -273,7 +274,7 @@ final class ProfileCreatorProfileTest extends PublicTestCase
             // Act
             $response = $this->actingAs($creator)->patch(route('profile.creator.update'), [
                 'social_links' => [
-                    UserSocialLink::PLATFORM_TWITCH => 'https://evil.example.com/someone',
+                    UserSocialLinkPlatform::Twitch->value => 'https://evil.example.com/someone',
                 ],
             ]);
 

@@ -11,9 +11,14 @@ use Illuminate\Support\Carbon;
  * A single social/streaming link shown on a user's public creator profile.
  *
  * URLs are user supplied and rendered on a public page, so they are constrained twice: the scheme
- * must be https, and the host must appear in this platform's entry of {@see self::PLATFORM_HOSTS}.
+ * must be https, and the host must appear in the matching {@see UserSocialLinkPlatform::hosts()}.
  * That rules out `javascript:` payloads and stops the profile from being used to launder arbitrary
  * outbound links.
+ *
+ * `platform` is deliberately kept a plain string column rather than a native enum cast - an
+ * unrecognised value (e.g. a platform removed from {@see UserSocialLinkPlatform} after rows using it
+ * were already persisted) must still degrade gracefully via {@see self::getIconClass()} rather than
+ * throw on hydration.
  *
  * @property int    $id
  * @property int    $user_id
@@ -29,71 +34,6 @@ use Illuminate\Support\Carbon;
  */
 class UserSocialLink extends Model
 {
-    public const string PLATFORM_TWITCH    = 'twitch';
-    public const string PLATFORM_YOUTUBE   = 'youtube';
-    public const string PLATFORM_X         = 'x';
-    public const string PLATFORM_DISCORD   = 'discord';
-    public const string PLATFORM_BLUESKY   = 'bluesky';
-    public const string PLATFORM_TIKTOK    = 'tiktok';
-    public const string PLATFORM_INSTAGRAM = 'instagram';
-    public const string PLATFORM_PATREON   = 'patreon';
-    public const string PLATFORM_WEBSITE   = 'website';
-
-    /**
-     * Rendered in this order on the public profile.
-     *
-     * @var array<int, string>
-     */
-    public const array ALL = [
-        self::PLATFORM_TWITCH,
-        self::PLATFORM_YOUTUBE,
-        self::PLATFORM_X,
-        self::PLATFORM_DISCORD,
-        self::PLATFORM_BLUESKY,
-        self::PLATFORM_TIKTOK,
-        self::PLATFORM_INSTAGRAM,
-        self::PLATFORM_PATREON,
-        self::PLATFORM_WEBSITE,
-    ];
-
-    /**
-     * Hosts accepted per platform. A `null` entry means any host is allowed, which is only the case
-     * for the free-form website link.
-     *
-     * Matching is exact or on a `.`-prefixed suffix, so `twitch.tv` accepts `www.twitch.tv` but
-     * rejects `nottwitch.tv` and `twitch.tv.evil.com`.
-     *
-     * @var array<string, array<int, string>|null>
-     */
-    public const array PLATFORM_HOSTS = [
-        self::PLATFORM_TWITCH    => ['twitch.tv'],
-        self::PLATFORM_YOUTUBE   => ['youtube.com', 'youtu.be'],
-        self::PLATFORM_X         => ['x.com', 'twitter.com'],
-        self::PLATFORM_DISCORD   => ['discord.gg', 'discord.com'],
-        self::PLATFORM_BLUESKY   => ['bsky.app'],
-        self::PLATFORM_TIKTOK    => ['tiktok.com'],
-        self::PLATFORM_INSTAGRAM => ['instagram.com'],
-        self::PLATFORM_PATREON   => ['patreon.com'],
-        self::PLATFORM_WEBSITE   => null,
-    ];
-
-    /**
-     * Font Awesome classes, all verified present in the pinned Font Awesome 7 release.
-     *
-     * @var array<string, string>
-     */
-    public const array PLATFORM_ICONS = [
-        self::PLATFORM_TWITCH    => 'fab fa-twitch',
-        self::PLATFORM_YOUTUBE   => 'fab fa-youtube',
-        self::PLATFORM_X         => 'fab fa-x-twitter',
-        self::PLATFORM_DISCORD   => 'fab fa-discord',
-        self::PLATFORM_BLUESKY   => 'fab fa-bluesky',
-        self::PLATFORM_TIKTOK    => 'fab fa-tiktok',
-        self::PLATFORM_INSTAGRAM => 'fab fa-instagram',
-        self::PLATFORM_PATREON   => 'fab fa-patreon',
-        self::PLATFORM_WEBSITE   => 'fas fa-globe',
-    ];
-
     protected $fillable = [
         'user_id',
         'platform',
@@ -110,10 +50,13 @@ class UserSocialLink extends Model
 
     /**
      * The Font Awesome icon class for this link's platform.
+     *
+     * Falls back to the website icon for a platform value that no longer maps to a
+     * {@see UserSocialLinkPlatform} case, rather than throwing.
      */
     public function getIconClass(): string
     {
-        return self::PLATFORM_ICONS[$this->platform] ?? self::PLATFORM_ICONS[self::PLATFORM_WEBSITE];
+        return (UserSocialLinkPlatform::tryFrom($this->platform) ?? UserSocialLinkPlatform::Website)->icon();
     }
 
     /**
@@ -123,37 +66,6 @@ class UserSocialLink extends Model
      */
     public static function isValidUrlForPlatform(string $platform, string $url): bool
     {
-        if (!array_key_exists($platform, self::PLATFORM_HOSTS)) {
-            return false;
-        }
-
-        $parsed = parse_url($url);
-
-        // parse_url returns false on seriously malformed input
-        if ($parsed === false || !isset($parsed['scheme'], $parsed['host'])) {
-            return false;
-        }
-
-        // Only https, which also excludes javascript: and data: payloads
-        if (strtolower((string)$parsed['scheme']) !== 'https') {
-            return false;
-        }
-
-        $allowedHosts = self::PLATFORM_HOSTS[$platform];
-
-        // The website link accepts any host, having already been constrained to https above
-        if ($allowedHosts === null) {
-            return true;
-        }
-
-        $host = strtolower((string)$parsed['host']);
-
-        foreach ($allowedHosts as $allowedHost) {
-            if ($host === $allowedHost || str_ends_with($host, sprintf('.%s', $allowedHost))) {
-                return true;
-            }
-        }
-
-        return false;
+        return UserSocialLinkPlatform::tryFrom($platform)?->isValidUrl($url) ?? false;
     }
 }

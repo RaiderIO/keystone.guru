@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\UserPinnedDungeonRoute;
-use App\Models\UserSocialLink;
+use App\Models\UserSocialLinkPlatform;
 use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Collection;
@@ -52,7 +52,7 @@ class CreatorProfileFormRequest extends FormRequest
 
                     $platform = last(explode('.', $attribute));
 
-                    if (!UserSocialLink::isValidUrlForPlatform((string)$platform, (string)$value)) {
+                    if (!(UserSocialLinkPlatform::tryFrom((string)$platform)?->isValidUrl((string)$value) ?? false)) {
                         $fail(__('validation.custom.social_links.invalid_url_for_platform'));
                     }
                 },
@@ -102,7 +102,7 @@ class CreatorProfileFormRequest extends FormRequest
 
             $result = [];
             foreach ($submitted as $platform => $url) {
-                if (!in_array($platform, UserSocialLink::ALL, true)) {
+                if (UserSocialLinkPlatform::tryFrom((string)$platform) === null) {
                     continue;
                 }
 
