@@ -16,7 +16,7 @@ use App\Models\User;
 
     @include('common.general.messages')
 
-    @if(isset($user->patreonUserLink) || $user->is_admin)
+    @if(isset($user->patreonUserLink))
         @php(ob_start())
         @include('common.thirdparty.patreon.fancylink')
         @php($patreonLink = trim(ob_get_clean()))
@@ -107,6 +107,13 @@ use App\Models\User;
             </table>
         @endif
     @else
+        @if($user->is_admin)
+            <p class="mt-2">
+                <span class="text-danger"><i class="fa fa-exclamation-triangle"></i></span>
+                {{ __('view_profile.edit.link_to_patreon_admin') }}
+            </p>
+        @endif
+
         <a class="btn patreon-color text-white" href="{{
                         'https://patreon.com/oauth2/authorize?' . http_build_query(
                             ['response_type' => 'code',
