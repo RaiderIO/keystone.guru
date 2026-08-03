@@ -110,7 +110,11 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
 
             $result = true;
         } catch (RuntimeException $e) {
-            // Re-throw download failures so the job can be retried with fresh one-time URLs.
+            // Re-throw so the job is retried instead of recording a permanent CombatLogParseFailure: this
+            // covers download failures (fresh one-time URLs on retry) as well as RedisException, which
+            // extends RuntimeException and is rethrown unwrapped by CombatLogService::parseCombatLog() for
+            // the same reason - a dropped Redis/Valkey connection mid-parse is a transient infra blip, not
+            // an unparsable line (see #3791).
             throw $e;
         } catch (Throwable $e) {
             $log->handleParseError($this->runId, $this->combatLogVersion, $e->getMessage(), $e::class);
