@@ -9,6 +9,36 @@ trait Curl
      */
     public function curlGet(string $url, array $options = []): string
     {
+        return $this->curlExec($url, $options)['body'];
+    }
+
+    /**
+     * Downloads $url to $filePath, refusing to write the response body unless the request actually
+     * succeeded (transport-level success and a 2xx status). Without this, an S3/HTTP error body (e.g.
+     * an XML error document from an expired presigned URL) gets written to disk and silently treated
+     * as a valid combat log segment by the caller.
+     *
+     * @param  string $url
+     * @param  string $filePath
+     * @return bool
+     */
+    public function curlSaveToFile(string $url, string $filePath): bool
+    {
+        $result = $this->curlExec($url);
+
+        if ($result['errno'] !== 0 || $result['httpCode'] < 200 || $result['httpCode'] >= 300) {
+            return false;
+        }
+
+        return file_put_contents($filePath, $result['body']) !== false;
+    }
+
+    /**
+     * @param  array<string, mixed>                           $options
+     * @return array{body: string, httpCode: int, errno: int}
+     */
+    private function curlExec(string $url, array $options = []): array
+    {
         $ch = curl_init();
 
         curl_setopt_array($ch, $options + [
@@ -35,23 +65,17 @@ trait Curl
 
         try {
             $response = curl_exec($ch);
+            $errno    = curl_errno($ch);
+            $httpCode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
         } finally {
             curl_close($ch);
         }
 
-        return $response;
-    }
-
-    /**
-     * @param  string $url
-     * @param  string $filePath
-     * @return bool
-     */
-    public function curlSaveToFile(string $url, string $filePath): bool
-    {
-        $rawImage = $this->curlGet($url);
-
-        return file_put_contents($filePath, $rawImage) !== false;
+        return [
+            'body'     => $response !== false ? $response : '',
+            'httpCode' => $httpCode,
+            'errno'    => $errno,
+        ];
     }
 
     /**
