@@ -30,7 +30,7 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
         protected int                          $attempts = 0,
         protected DungeonRouteThumbnailVariant $variant = DungeonRouteThumbnailVariant::Standard,
     ) {
-        $this->queue = sprintf('%s-%s-thumbnail', config('app.type'), config('app.env'));
+        $this->queue = sprintf('%s-thumbnail', config('app.type'));
     }
 
     /**

@@ -24,7 +24,7 @@ class ProcessCombatLogFanout implements ShouldQueue
         private readonly int                           $combatLogVersion,
         private readonly ?CombatLogRunContextInterface $runContext = null,
     ) {
-        $this->queue = sprintf('%s-%s-cl-fanout', config('app.type'), config('app.env'));
+        $this->queue = sprintf('%s-cl-fanout', config('app.type'));
     }
 
     public function handle(ProcessCombatLogFanoutLoggingInterface $log): void
