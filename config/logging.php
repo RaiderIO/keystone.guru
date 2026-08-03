@@ -2,7 +2,8 @@
 
 use App\Logging\Handlers\ColoredLineFormatter;
 use App\Logging\Handlers\DeduplicateHandlers;
-use Monolog\Handler\NullHandler;
+use App\Logging\Handlers\SkipsExceptionMirrors;
+use Monolog\Handler\NoopHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Processor\PsrLogMessageProcessor;
 
@@ -11,13 +12,13 @@ return [
     'channels' => [
         'stack_docker' => [
             'driver'            => 'stack',
-            'channels'          => ['stderr', 'daily'],
+            'channels'          => ['stderr', 'daily', 'sentry'],
             'ignore_exceptions' => false,
         ],
 
         'stack_docker_local' => [
             'driver'            => 'stack',
-            'channels'          => ['stderr', 'daily'],
+            'channels'          => ['stderr', 'daily', 'sentry'],
             'ignore_exceptions' => false,
         ],
 
@@ -31,7 +32,7 @@ return [
 
         'scheduler' => [
             'driver'   => 'stack',
-            'channels' => ['scheduler_file', 'discord'],
+            'channels' => ['scheduler_file', 'discord', 'sentry'],
         ],
 
         'scheduler_file' => [
@@ -70,10 +71,12 @@ return [
 
         // When no webhook is configured (e.g. local/testing) discord must still resolve to a
         // valid channel, otherwise any stack that includes it (like 'scheduler') fails to build
-        // and falls back to the emergency logger. A NullHandler makes discord logging a safe no-op.
+        // and falls back to the emergency logger. A NoopHandler makes discord logging a safe no-op.
+        // It must be NoopHandler and not NullHandler: NullHandler::handle() returns true, which ends
+        // Monolog's handler loop, so in a stack it would swallow every channel listed after discord.
         'discord' => empty(env('APP_LOG_DISCORD_WEBHOOK')) ? [
             'driver'  => 'monolog',
-            'handler' => NullHandler::class,
+            'handler' => NoopHandler::class,
         ] : [
             'driver' => 'custom',
             'url'    => env('APP_LOG_DISCORD_WEBHOOK'),
@@ -85,6 +88,28 @@ return [
             //            'formatter_with' => [
             //                'format' => "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n",
             //            ],
+        ],
+
+        // Errors logged through StructuredLogging are not exceptions, so Integration::handles() in bootstrap/app.php
+        // never sees them - this channel is what turns them into Sentry issues so they can be triaged from there
+        // instead of only being read off Discord. Same empty-value guard as discord above: without a DSN the channel
+        // must still resolve, or every stack including it falls back to the emergency logger (#3445). The sentry
+        // driver is normally registered unconditionally by the SDK, but ServiceProvider::registerFeatures() swallows
+        // any Throwable thrown while registering it, so the guard is not purely theoretical.
+        'sentry' => empty(env('SENTRY_LARAVEL_DSN', env('SENTRY_DSN'))) ? [
+            'driver'  => 'monolog',
+            'handler' => NoopHandler::class,
+        ] : [
+            'driver' => 'sentry',
+            'level'  => 'error',
+            // Records carrying a Throwable under the 'exception' context key are already reported by the SDK with a
+            // full stack trace; this only suppresses framework-level duplicates such as the emergency logger, since
+            // StructuredLogging names its parameters $e/$ex/$throwable rather than $exception
+            'report_exceptions' => false,
+            // Deliberately not deduplicated the way discord is: DeduplicationHandler forwards through handleBatch(),
+            // and SentryHandler::handleBatch() still compares a Monolog 3 Level enum as an integer, so every record
+            // would be filtered out and silently never reach Sentry. Sentry groups and rate-limits server-side anyway.
+            'tap' => [SkipsExceptionMirrors::class],
         ],
     ],
 
