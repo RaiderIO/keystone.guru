@@ -1,0 +1,4429 @@
+[
+    {
+        "id": 1,
+        "season_id": 1,
+        "expansion_id": 2,
+        "seasonal_index": 0,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 11,
+                "key_level": 4
+            },
+            {
+                "affix_id": 7,
+                "key_level": 7
+            },
+            {
+                "affix_id": 6,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "season_id": 1,
+        "expansion_id": 2,
+        "seasonal_index": 1,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 2,
+                "key_level": 4
+            },
+            {
+                "affix_id": 12,
+                "key_level": 7
+            },
+            {
+                "affix_id": 6,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "season_id": 1,
+        "expansion_id": 2,
+        "seasonal_index": 2,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 13,
+                "key_level": 4
+            },
+            {
+                "affix_id": 8,
+                "key_level": 7
+            },
+            {
+                "affix_id": 6,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "season_id": 1,
+        "expansion_id": 2,
+        "seasonal_index": 0,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 9,
+                "key_level": 4
+            },
+            {
+                "affix_id": 7,
+                "key_level": 7
+            },
+            {
+                "affix_id": 6,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "season_id": 1,
+        "expansion_id": 2,
+        "seasonal_index": 1,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 1,
+                "key_level": 4
+            },
+            {
+                "affix_id": 12,
+                "key_level": 7
+            },
+            {
+                "affix_id": 6,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "season_id": 1,
+        "expansion_id": 2,
+        "seasonal_index": 2,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 13,
+                "key_level": 4
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 6,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "season_id": 1,
+        "expansion_id": 2,
+        "seasonal_index": 0,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 11,
+                "key_level": 4
+            },
+            {
+                "affix_id": 5,
+                "key_level": 7
+            },
+            {
+                "affix_id": 6,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "season_id": 1,
+        "expansion_id": 2,
+        "seasonal_index": 1,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 1,
+                "key_level": 4
+            },
+            {
+                "affix_id": 3,
+                "key_level": 7
+            },
+            {
+                "affix_id": 6,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "season_id": 1,
+        "expansion_id": 2,
+        "seasonal_index": 2,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 2,
+                "key_level": 4
+            },
+            {
+                "affix_id": 8,
+                "key_level": 7
+            },
+            {
+                "affix_id": 6,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "season_id": 1,
+        "expansion_id": 2,
+        "seasonal_index": 0,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 9,
+                "key_level": 4
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 6,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "season_id": 1,
+        "expansion_id": 2,
+        "seasonal_index": 1,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 13,
+                "key_level": 4
+            },
+            {
+                "affix_id": 3,
+                "key_level": 7
+            },
+            {
+                "affix_id": 6,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 12,
+        "season_id": 1,
+        "expansion_id": 2,
+        "seasonal_index": 2,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 1,
+                "key_level": 4
+            },
+            {
+                "affix_id": 5,
+                "key_level": 7
+            },
+            {
+                "affix_id": 6,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 13,
+        "season_id": 2,
+        "expansion_id": 2,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 11,
+                "key_level": 4
+            },
+            {
+                "affix_id": 7,
+                "key_level": 7
+            },
+            {
+                "affix_id": 16,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 14,
+        "season_id": 2,
+        "expansion_id": 2,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 2,
+                "key_level": 4
+            },
+            {
+                "affix_id": 12,
+                "key_level": 7
+            },
+            {
+                "affix_id": 16,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 15,
+        "season_id": 2,
+        "expansion_id": 2,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 13,
+                "key_level": 4
+            },
+            {
+                "affix_id": 8,
+                "key_level": 7
+            },
+            {
+                "affix_id": 16,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 16,
+        "season_id": 2,
+        "expansion_id": 2,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 9,
+                "key_level": 4
+            },
+            {
+                "affix_id": 7,
+                "key_level": 7
+            },
+            {
+                "affix_id": 16,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 17,
+        "season_id": 2,
+        "expansion_id": 2,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 1,
+                "key_level": 4
+            },
+            {
+                "affix_id": 12,
+                "key_level": 7
+            },
+            {
+                "affix_id": 16,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 18,
+        "season_id": 2,
+        "expansion_id": 2,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 13,
+                "key_level": 4
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 16,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 19,
+        "season_id": 2,
+        "expansion_id": 2,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 13,
+                "key_level": 4
+            },
+            {
+                "affix_id": 8,
+                "key_level": 7
+            },
+            {
+                "affix_id": 16,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 20,
+        "season_id": 2,
+        "expansion_id": 2,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 9,
+                "key_level": 4
+            },
+            {
+                "affix_id": 7,
+                "key_level": 7
+            },
+            {
+                "affix_id": 16,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 21,
+        "season_id": 2,
+        "expansion_id": 2,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 1,
+                "key_level": 4
+            },
+            {
+                "affix_id": 12,
+                "key_level": 7
+            },
+            {
+                "affix_id": 16,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 22,
+        "season_id": 2,
+        "expansion_id": 2,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 13,
+                "key_level": 4
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 16,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 23,
+        "season_id": 2,
+        "expansion_id": 2,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 13,
+                "key_level": 4
+            },
+            {
+                "affix_id": 3,
+                "key_level": 7
+            },
+            {
+                "affix_id": 16,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 24,
+        "season_id": 2,
+        "expansion_id": 2,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 1,
+                "key_level": 4
+            },
+            {
+                "affix_id": 5,
+                "key_level": 7
+            },
+            {
+                "affix_id": 16,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 25,
+        "season_id": 3,
+        "expansion_id": 2,
+        "seasonal_index": 1,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 1,
+                "key_level": 4
+            },
+            {
+                "affix_id": 12,
+                "key_level": 7
+            },
+            {
+                "affix_id": 17,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 26,
+        "season_id": 3,
+        "expansion_id": 2,
+        "seasonal_index": 2,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 2,
+                "key_level": 4
+            },
+            {
+                "affix_id": 7,
+                "key_level": 7
+            },
+            {
+                "affix_id": 17,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 27,
+        "season_id": 3,
+        "expansion_id": 2,
+        "seasonal_index": 0,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 11,
+                "key_level": 4
+            },
+            {
+                "affix_id": 8,
+                "key_level": 7
+            },
+            {
+                "affix_id": 17,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 28,
+        "season_id": 3,
+        "expansion_id": 2,
+        "seasonal_index": 1,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 1,
+                "key_level": 4
+            },
+            {
+                "affix_id": 3,
+                "key_level": 7
+            },
+            {
+                "affix_id": 17,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 29,
+        "season_id": 3,
+        "expansion_id": 2,
+        "seasonal_index": 2,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 2,
+                "key_level": 4
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 17,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 30,
+        "season_id": 3,
+        "expansion_id": 2,
+        "seasonal_index": 0,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 9,
+                "key_level": 4
+            },
+            {
+                "affix_id": 7,
+                "key_level": 7
+            },
+            {
+                "affix_id": 17,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 31,
+        "season_id": 3,
+        "expansion_id": 2,
+        "seasonal_index": 1,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 13,
+                "key_level": 4
+            },
+            {
+                "affix_id": 8,
+                "key_level": 7
+            },
+            {
+                "affix_id": 17,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 32,
+        "season_id": 3,
+        "expansion_id": 2,
+        "seasonal_index": 2,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 2,
+                "key_level": 4
+            },
+            {
+                "affix_id": 12,
+                "key_level": 7
+            },
+            {
+                "affix_id": 17,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 33,
+        "season_id": 3,
+        "expansion_id": 2,
+        "seasonal_index": 0,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 1,
+                "key_level": 4
+            },
+            {
+                "affix_id": 5,
+                "key_level": 7
+            },
+            {
+                "affix_id": 17,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 34,
+        "season_id": 3,
+        "expansion_id": 2,
+        "seasonal_index": 1,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 9,
+                "key_level": 4
+            },
+            {
+                "affix_id": 3,
+                "key_level": 7
+            },
+            {
+                "affix_id": 17,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 35,
+        "season_id": 3,
+        "expansion_id": 2,
+        "seasonal_index": 2,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 11,
+                "key_level": 4
+            },
+            {
+                "affix_id": 5,
+                "key_level": 7
+            },
+            {
+                "affix_id": 17,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 36,
+        "season_id": 3,
+        "expansion_id": 2,
+        "seasonal_index": 0,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 13,
+                "key_level": 4
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 17,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 37,
+        "season_id": 4,
+        "expansion_id": 2,
+        "seasonal_index": 0,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 1,
+                "key_level": 4
+            },
+            {
+                "affix_id": 12,
+                "key_level": 7
+            },
+            {
+                "affix_id": 18,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 38,
+        "season_id": 4,
+        "expansion_id": 2,
+        "seasonal_index": 1,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 2,
+                "key_level": 4
+            },
+            {
+                "affix_id": 7,
+                "key_level": 7
+            },
+            {
+                "affix_id": 18,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 39,
+        "season_id": 4,
+        "expansion_id": 2,
+        "seasonal_index": 1,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 11,
+                "key_level": 4
+            },
+            {
+                "affix_id": 8,
+                "key_level": 7
+            },
+            {
+                "affix_id": 18,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 40,
+        "season_id": 4,
+        "expansion_id": 2,
+        "seasonal_index": 0,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 1,
+                "key_level": 4
+            },
+            {
+                "affix_id": 3,
+                "key_level": 7
+            },
+            {
+                "affix_id": 18,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 41,
+        "season_id": 4,
+        "expansion_id": 2,
+        "seasonal_index": 0,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 2,
+                "key_level": 4
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 18,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 42,
+        "season_id": 4,
+        "expansion_id": 2,
+        "seasonal_index": 1,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 9,
+                "key_level": 4
+            },
+            {
+                "affix_id": 7,
+                "key_level": 7
+            },
+            {
+                "affix_id": 18,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 43,
+        "season_id": 4,
+        "expansion_id": 2,
+        "seasonal_index": 1,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 13,
+                "key_level": 4
+            },
+            {
+                "affix_id": 8,
+                "key_level": 7
+            },
+            {
+                "affix_id": 18,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 44,
+        "season_id": 4,
+        "expansion_id": 2,
+        "seasonal_index": 0,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 2,
+                "key_level": 4
+            },
+            {
+                "affix_id": 12,
+                "key_level": 7
+            },
+            {
+                "affix_id": 18,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 45,
+        "season_id": 4,
+        "expansion_id": 2,
+        "seasonal_index": 0,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 1,
+                "key_level": 4
+            },
+            {
+                "affix_id": 5,
+                "key_level": 7
+            },
+            {
+                "affix_id": 18,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 46,
+        "season_id": 4,
+        "expansion_id": 2,
+        "seasonal_index": 1,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 9,
+                "key_level": 4
+            },
+            {
+                "affix_id": 3,
+                "key_level": 7
+            },
+            {
+                "affix_id": 18,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 47,
+        "season_id": 4,
+        "expansion_id": 2,
+        "seasonal_index": 1,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 11,
+                "key_level": 4
+            },
+            {
+                "affix_id": 5,
+                "key_level": 7
+            },
+            {
+                "affix_id": 18,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 48,
+        "season_id": 4,
+        "expansion_id": 2,
+        "seasonal_index": 0,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 13,
+                "key_level": 4
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 18,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 49,
+        "season_id": 5,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 20,
+                "key_level": 4
+            },
+            {
+                "affix_id": 5,
+                "key_level": 7
+            },
+            {
+                "affix_id": 22,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 50,
+        "season_id": 5,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 19,
+                "key_level": 4
+            },
+            {
+                "affix_id": 7,
+                "key_level": 7
+            },
+            {
+                "affix_id": 22,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 51,
+        "season_id": 5,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 11,
+                "key_level": 4
+            },
+            {
+                "affix_id": 8,
+                "key_level": 7
+            },
+            {
+                "affix_id": 22,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 52,
+        "season_id": 5,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 9,
+                "key_level": 4
+            },
+            {
+                "affix_id": 3,
+                "key_level": 7
+            },
+            {
+                "affix_id": 22,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 53,
+        "season_id": 5,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 20,
+                "key_level": 4
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 22,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 54,
+        "season_id": 5,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 1,
+                "key_level": 4
+            },
+            {
+                "affix_id": 7,
+                "key_level": 7
+            },
+            {
+                "affix_id": 22,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 55,
+        "season_id": 5,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 19,
+                "key_level": 4
+            },
+            {
+                "affix_id": 21,
+                "key_level": 7
+            },
+            {
+                "affix_id": 22,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 56,
+        "season_id": 5,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 2,
+                "key_level": 4
+            },
+            {
+                "affix_id": 3,
+                "key_level": 7
+            },
+            {
+                "affix_id": 22,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 57,
+        "season_id": 5,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 11,
+                "key_level": 4
+            },
+            {
+                "affix_id": 5,
+                "key_level": 7
+            },
+            {
+                "affix_id": 22,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 58,
+        "season_id": 5,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 9,
+                "key_level": 4
+            },
+            {
+                "affix_id": 8,
+                "key_level": 7
+            },
+            {
+                "affix_id": 22,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 59,
+        "season_id": 5,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 2,
+                "key_level": 4
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 22,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 60,
+        "season_id": 5,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 1,
+                "key_level": 4
+            },
+            {
+                "affix_id": 21,
+                "key_level": 7
+            },
+            {
+                "affix_id": 22,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 61,
+        "season_id": 6,
+        "expansion_id": 3,
+        "seasonal_index": 0,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 19,
+                "key_level": 4
+            },
+            {
+                "affix_id": 8,
+                "key_level": 7
+            },
+            {
+                "affix_id": 23,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 62,
+        "season_id": 6,
+        "expansion_id": 3,
+        "seasonal_index": 1,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 11,
+                "key_level": 4
+            },
+            {
+                "affix_id": 7,
+                "key_level": 7
+            },
+            {
+                "affix_id": 23,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 63,
+        "season_id": 6,
+        "expansion_id": 3,
+        "seasonal_index": 1,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 1,
+                "key_level": 4
+            },
+            {
+                "affix_id": 3,
+                "key_level": 7
+            },
+            {
+                "affix_id": 23,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 64,
+        "season_id": 6,
+        "expansion_id": 3,
+        "seasonal_index": 0,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 2,
+                "key_level": 4
+            },
+            {
+                "affix_id": 21,
+                "key_level": 7
+            },
+            {
+                "affix_id": 23,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 65,
+        "season_id": 6,
+        "expansion_id": 3,
+        "seasonal_index": 0,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 9,
+                "key_level": 4
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 23,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 66,
+        "season_id": 6,
+        "expansion_id": 3,
+        "seasonal_index": 1,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 19,
+                "key_level": 4
+            },
+            {
+                "affix_id": 5,
+                "key_level": 7
+            },
+            {
+                "affix_id": 23,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 67,
+        "season_id": 6,
+        "expansion_id": 3,
+        "seasonal_index": 1,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 20,
+                "key_level": 4
+            },
+            {
+                "affix_id": 7,
+                "key_level": 7
+            },
+            {
+                "affix_id": 23,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 68,
+        "season_id": 6,
+        "expansion_id": 3,
+        "seasonal_index": 0,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 1,
+                "key_level": 4
+            },
+            {
+                "affix_id": 8,
+                "key_level": 7
+            },
+            {
+                "affix_id": 23,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 69,
+        "season_id": 6,
+        "expansion_id": 3,
+        "seasonal_index": 0,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 11,
+                "key_level": 4
+            },
+            {
+                "affix_id": 21,
+                "key_level": 7
+            },
+            {
+                "affix_id": 23,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 70,
+        "season_id": 6,
+        "expansion_id": 3,
+        "seasonal_index": 1,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 9,
+                "key_level": 4
+            },
+            {
+                "affix_id": 3,
+                "key_level": 7
+            },
+            {
+                "affix_id": 23,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 71,
+        "season_id": 6,
+        "expansion_id": 3,
+        "seasonal_index": 1,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 2,
+                "key_level": 4
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 23,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 72,
+        "season_id": 6,
+        "expansion_id": 3,
+        "seasonal_index": 0,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 20,
+                "key_level": 4
+            },
+            {
+                "affix_id": 5,
+                "key_level": 7
+            },
+            {
+                "affix_id": 23,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 73,
+        "season_id": 7,
+        "expansion_id": 1,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 2,
+                "key_level": 4
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 25,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 74,
+        "season_id": 7,
+        "expansion_id": 1,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 11,
+                "key_level": 4
+            },
+            {
+                "affix_id": 8,
+                "key_level": 7
+            },
+            {
+                "affix_id": 25,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 75,
+        "season_id": 8,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 19,
+                "key_level": 4
+            },
+            {
+                "affix_id": 8,
+                "key_level": 7
+            },
+            {
+                "affix_id": 26,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 76,
+        "season_id": 8,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 11,
+                "key_level": 4
+            },
+            {
+                "affix_id": 5,
+                "key_level": 7
+            },
+            {
+                "affix_id": 26,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 77,
+        "season_id": 8,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 1,
+                "key_level": 4
+            },
+            {
+                "affix_id": 3,
+                "key_level": 7
+            },
+            {
+                "affix_id": 26,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 78,
+        "season_id": 8,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 2,
+                "key_level": 4
+            },
+            {
+                "affix_id": 21,
+                "key_level": 7
+            },
+            {
+                "affix_id": 26,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 79,
+        "season_id": 8,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 9,
+                "key_level": 4
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 26,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 80,
+        "season_id": 8,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 19,
+                "key_level": 4
+            },
+            {
+                "affix_id": 5,
+                "key_level": 7
+            },
+            {
+                "affix_id": 26,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 81,
+        "season_id": 8,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 20,
+                "key_level": 4
+            },
+            {
+                "affix_id": 7,
+                "key_level": 7
+            },
+            {
+                "affix_id": 26,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 82,
+        "season_id": 8,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 1,
+                "key_level": 4
+            },
+            {
+                "affix_id": 8,
+                "key_level": 7
+            },
+            {
+                "affix_id": 26,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 83,
+        "season_id": 8,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 11,
+                "key_level": 4
+            },
+            {
+                "affix_id": 21,
+                "key_level": 7
+            },
+            {
+                "affix_id": 26,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 84,
+        "season_id": 8,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 9,
+                "key_level": 4
+            },
+            {
+                "affix_id": 3,
+                "key_level": 7
+            },
+            {
+                "affix_id": 26,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 85,
+        "season_id": 8,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 2,
+                "key_level": 4
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 26,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 86,
+        "season_id": 8,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 20,
+                "key_level": 4
+            },
+            {
+                "affix_id": 7,
+                "key_level": 7
+            },
+            {
+                "affix_id": 26,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 87,
+        "season_id": 9,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 19,
+                "key_level": 4
+            },
+            {
+                "affix_id": 8,
+                "key_level": 7
+            },
+            {
+                "affix_id": 27,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 88,
+        "season_id": 9,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 11,
+                "key_level": 4
+            },
+            {
+                "affix_id": 5,
+                "key_level": 7
+            },
+            {
+                "affix_id": 27,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 89,
+        "season_id": 9,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 1,
+                "key_level": 4
+            },
+            {
+                "affix_id": 3,
+                "key_level": 7
+            },
+            {
+                "affix_id": 27,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 90,
+        "season_id": 9,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 2,
+                "key_level": 4
+            },
+            {
+                "affix_id": 21,
+                "key_level": 7
+            },
+            {
+                "affix_id": 27,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 91,
+        "season_id": 9,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 9,
+                "key_level": 4
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 27,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 92,
+        "season_id": 9,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 19,
+                "key_level": 4
+            },
+            {
+                "affix_id": 5,
+                "key_level": 7
+            },
+            {
+                "affix_id": 27,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 93,
+        "season_id": 9,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 20,
+                "key_level": 4
+            },
+            {
+                "affix_id": 7,
+                "key_level": 7
+            },
+            {
+                "affix_id": 27,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 94,
+        "season_id": 9,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 1,
+                "key_level": 4
+            },
+            {
+                "affix_id": 8,
+                "key_level": 7
+            },
+            {
+                "affix_id": 27,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 95,
+        "season_id": 9,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 11,
+                "key_level": 4
+            },
+            {
+                "affix_id": 21,
+                "key_level": 7
+            },
+            {
+                "affix_id": 27,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 96,
+        "season_id": 9,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 9,
+                "key_level": 4
+            },
+            {
+                "affix_id": 3,
+                "key_level": 7
+            },
+            {
+                "affix_id": 27,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 97,
+        "season_id": 9,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 2,
+                "key_level": 4
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 27,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 98,
+        "season_id": 9,
+        "expansion_id": 3,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 20,
+                "key_level": 4
+            },
+            {
+                "affix_id": 7,
+                "key_level": 7
+            },
+            {
+                "affix_id": 27,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 99,
+        "season_id": 10,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 20,
+                "key_level": 4
+            },
+            {
+                "affix_id": 8,
+                "key_level": 7
+            },
+            {
+                "affix_id": 28,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 100,
+        "season_id": 10,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 2,
+                "key_level": 4
+            },
+            {
+                "affix_id": 3,
+                "key_level": 7
+            },
+            {
+                "affix_id": 28,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 101,
+        "season_id": 10,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 1,
+                "key_level": 4
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 28,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 102,
+        "season_id": 10,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 9,
+                "key_level": 4
+            },
+            {
+                "affix_id": 8,
+                "key_level": 7
+            },
+            {
+                "affix_id": 28,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 103,
+        "season_id": 10,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 2,
+                "key_level": 4
+            },
+            {
+                "affix_id": 5,
+                "key_level": 7
+            },
+            {
+                "affix_id": 28,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 104,
+        "season_id": 10,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 11,
+                "key_level": 4
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 28,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 105,
+        "season_id": 10,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 9,
+                "key_level": 4
+            },
+            {
+                "affix_id": 21,
+                "key_level": 7
+            },
+            {
+                "affix_id": 28,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 106,
+        "season_id": 10,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 20,
+                "key_level": 4
+            },
+            {
+                "affix_id": 5,
+                "key_level": 7
+            },
+            {
+                "affix_id": 28,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 107,
+        "season_id": 10,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 11,
+                "key_level": 4
+            },
+            {
+                "affix_id": 3,
+                "key_level": 7
+            },
+            {
+                "affix_id": 28,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 108,
+        "season_id": 10,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 1,
+                "key_level": 4
+            },
+            {
+                "affix_id": 21,
+                "key_level": 7
+            },
+            {
+                "affix_id": 28,
+                "key_level": 10
+            }
+        ]
+    },
+    {
+        "id": 109,
+        "season_id": 11,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 29,
+                "key_level": 7
+            },
+            {
+                "affix_id": 1,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 110,
+        "season_id": 11,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 31,
+                "key_level": 7
+            },
+            {
+                "affix_id": 11,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 111,
+        "season_id": 11,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 30,
+                "key_level": 7
+            },
+            {
+                "affix_id": 2,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 112,
+        "season_id": 11,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 20,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 113,
+        "season_id": 11,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 21,
+                "key_level": 7
+            },
+            {
+                "affix_id": 9,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 114,
+        "season_id": 11,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 30,
+                "key_level": 7
+            },
+            {
+                "affix_id": 1,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 115,
+        "season_id": 11,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 31,
+                "key_level": 7
+            },
+            {
+                "affix_id": 20,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 116,
+        "season_id": 11,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 29,
+                "key_level": 7
+            },
+            {
+                "affix_id": 9,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 117,
+        "season_id": 11,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 11,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 118,
+        "season_id": 11,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 21,
+                "key_level": 7
+            },
+            {
+                "affix_id": 2,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 119,
+        "season_id": 12,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 29,
+                "key_level": 7
+            },
+            {
+                "affix_id": 1,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 120,
+        "season_id": 12,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 31,
+                "key_level": 7
+            },
+            {
+                "affix_id": 11,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 121,
+        "season_id": 12,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 30,
+                "key_level": 7
+            },
+            {
+                "affix_id": 2,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 122,
+        "season_id": 12,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 20,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 123,
+        "season_id": 12,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 21,
+                "key_level": 7
+            },
+            {
+                "affix_id": 9,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 124,
+        "season_id": 12,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 30,
+                "key_level": 7
+            },
+            {
+                "affix_id": 1,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 125,
+        "season_id": 12,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 31,
+                "key_level": 7
+            },
+            {
+                "affix_id": 20,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 126,
+        "season_id": 12,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 29,
+                "key_level": 7
+            },
+            {
+                "affix_id": 9,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 127,
+        "season_id": 12,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 11,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 128,
+        "season_id": 12,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 21,
+                "key_level": 7
+            },
+            {
+                "affix_id": 2,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 129,
+        "season_id": 13,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 29,
+                "key_level": 7
+            },
+            {
+                "affix_id": 1,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 130,
+        "season_id": 13,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 31,
+                "key_level": 7
+            },
+            {
+                "affix_id": 11,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 131,
+        "season_id": 13,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 30,
+                "key_level": 7
+            },
+            {
+                "affix_id": 2,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 132,
+        "season_id": 13,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 20,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 133,
+        "season_id": 13,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 21,
+                "key_level": 7
+            },
+            {
+                "affix_id": 9,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 134,
+        "season_id": 13,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 30,
+                "key_level": 7
+            },
+            {
+                "affix_id": 1,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 135,
+        "season_id": 13,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 31,
+                "key_level": 7
+            },
+            {
+                "affix_id": 20,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 136,
+        "season_id": 13,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 29,
+                "key_level": 7
+            },
+            {
+                "affix_id": 9,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 137,
+        "season_id": 13,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 14,
+                "key_level": 2
+            },
+            {
+                "affix_id": 15,
+                "key_level": 7
+            },
+            {
+                "affix_id": 11,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 138,
+        "season_id": 13,
+        "expansion_id": 10,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 4,
+                "key_level": 2
+            },
+            {
+                "affix_id": 21,
+                "key_level": 7
+            },
+            {
+                "affix_id": 2,
+                "key_level": 14
+            }
+        ]
+    },
+    {
+        "id": 139,
+        "season_id": 14,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 32,
+                "key_level": 2
+            },
+            {
+                "affix_id": 4,
+                "key_level": 4
+            },
+            {
+                "affix_id": 38,
+                "key_level": 7
+            },
+            {
+                "affix_id": 14,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 140,
+        "season_id": 14,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 33,
+                "key_level": 2
+            },
+            {
+                "affix_id": 14,
+                "key_level": 4
+            },
+            {
+                "affix_id": 38,
+                "key_level": 7
+            },
+            {
+                "affix_id": 4,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 141,
+        "season_id": 14,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 34,
+                "key_level": 2
+            },
+            {
+                "affix_id": 4,
+                "key_level": 4
+            },
+            {
+                "affix_id": 38,
+                "key_level": 7
+            },
+            {
+                "affix_id": 14,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 142,
+        "season_id": 14,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 32,
+                "key_level": 2
+            },
+            {
+                "affix_id": 14,
+                "key_level": 4
+            },
+            {
+                "affix_id": 38,
+                "key_level": 7
+            },
+            {
+                "affix_id": 4,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 143,
+        "season_id": 14,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 35,
+                "key_level": 2
+            },
+            {
+                "affix_id": 4,
+                "key_level": 4
+            },
+            {
+                "affix_id": 38,
+                "key_level": 7
+            },
+            {
+                "affix_id": 14,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 144,
+        "season_id": 14,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 34,
+                "key_level": 2
+            },
+            {
+                "affix_id": 14,
+                "key_level": 4
+            },
+            {
+                "affix_id": 38,
+                "key_level": 7
+            },
+            {
+                "affix_id": 4,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 145,
+        "season_id": 14,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 33,
+                "key_level": 2
+            },
+            {
+                "affix_id": 4,
+                "key_level": 4
+            },
+            {
+                "affix_id": 38,
+                "key_level": 7
+            },
+            {
+                "affix_id": 14,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 146,
+        "season_id": 14,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 35,
+                "key_level": 2
+            },
+            {
+                "affix_id": 14,
+                "key_level": 4
+            },
+            {
+                "affix_id": 38,
+                "key_level": 7
+            },
+            {
+                "affix_id": 4,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 147,
+        "season_id": 15,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 32,
+                "key_level": 4
+            },
+            {
+                "affix_id": 4,
+                "key_level": 7
+            },
+            {
+                "affix_id": 14,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 148,
+        "season_id": 15,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 33,
+                "key_level": 4
+            },
+            {
+                "affix_id": 14,
+                "key_level": 7
+            },
+            {
+                "affix_id": 4,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 149,
+        "season_id": 15,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 34,
+                "key_level": 4
+            },
+            {
+                "affix_id": 4,
+                "key_level": 7
+            },
+            {
+                "affix_id": 14,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 150,
+        "season_id": 15,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 32,
+                "key_level": 4
+            },
+            {
+                "affix_id": 14,
+                "key_level": 7
+            },
+            {
+                "affix_id": 4,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 151,
+        "season_id": 15,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 39,
+                "key_level": 4
+            },
+            {
+                "affix_id": 4,
+                "key_level": 7
+            },
+            {
+                "affix_id": 14,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 152,
+        "season_id": 15,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 34,
+                "key_level": 4
+            },
+            {
+                "affix_id": 14,
+                "key_level": 7
+            },
+            {
+                "affix_id": 4,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 153,
+        "season_id": 15,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 33,
+                "key_level": 4
+            },
+            {
+                "affix_id": 4,
+                "key_level": 7
+            },
+            {
+                "affix_id": 14,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 154,
+        "season_id": 15,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 39,
+                "key_level": 4
+            },
+            {
+                "affix_id": 14,
+                "key_level": 7
+            },
+            {
+                "affix_id": 4,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 155,
+        "season_id": 16,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 32,
+                "key_level": 4
+            },
+            {
+                "affix_id": 4,
+                "key_level": 7
+            },
+            {
+                "affix_id": 14,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 156,
+        "season_id": 16,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 33,
+                "key_level": 4
+            },
+            {
+                "affix_id": 14,
+                "key_level": 7
+            },
+            {
+                "affix_id": 4,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 157,
+        "season_id": 16,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 34,
+                "key_level": 4
+            },
+            {
+                "affix_id": 4,
+                "key_level": 7
+            },
+            {
+                "affix_id": 14,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 158,
+        "season_id": 16,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 32,
+                "key_level": 4
+            },
+            {
+                "affix_id": 14,
+                "key_level": 7
+            },
+            {
+                "affix_id": 4,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 159,
+        "season_id": 16,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 39,
+                "key_level": 4
+            },
+            {
+                "affix_id": 4,
+                "key_level": 7
+            },
+            {
+                "affix_id": 14,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 160,
+        "season_id": 16,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 34,
+                "key_level": 4
+            },
+            {
+                "affix_id": 14,
+                "key_level": 7
+            },
+            {
+                "affix_id": 4,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 161,
+        "season_id": 16,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 33,
+                "key_level": 4
+            },
+            {
+                "affix_id": 4,
+                "key_level": 7
+            },
+            {
+                "affix_id": 14,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 162,
+        "season_id": 16,
+        "expansion_id": 11,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 39,
+                "key_level": 4
+            },
+            {
+                "affix_id": 14,
+                "key_level": 7
+            },
+            {
+                "affix_id": 4,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 163,
+        "season_id": 17,
+        "expansion_id": 12,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 40,
+                "key_level": 2
+            },
+            {
+                "affix_id": 4,
+                "key_level": 5
+            },
+            {
+                "affix_id": 14,
+                "key_level": 7
+            },
+            {
+                "affix_id": 33,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 164,
+        "season_id": 17,
+        "expansion_id": 12,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 40,
+                "key_level": 2
+            },
+            {
+                "affix_id": 14,
+                "key_level": 5
+            },
+            {
+                "affix_id": 4,
+                "key_level": 7
+            },
+            {
+                "affix_id": 32,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 165,
+        "season_id": 17,
+        "expansion_id": 12,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 40,
+                "key_level": 2
+            },
+            {
+                "affix_id": 4,
+                "key_level": 5
+            },
+            {
+                "affix_id": 14,
+                "key_level": 7
+            },
+            {
+                "affix_id": 39,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 166,
+        "season_id": 17,
+        "expansion_id": 12,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 40,
+                "key_level": 2
+            },
+            {
+                "affix_id": 14,
+                "key_level": 5
+            },
+            {
+                "affix_id": 4,
+                "key_level": 7
+            },
+            {
+                "affix_id": 34,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 167,
+        "season_id": 17,
+        "expansion_id": 12,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 40,
+                "key_level": 2
+            },
+            {
+                "affix_id": 4,
+                "key_level": 5
+            },
+            {
+                "affix_id": 14,
+                "key_level": 7
+            },
+            {
+                "affix_id": 33,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 168,
+        "season_id": 17,
+        "expansion_id": 12,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 40,
+                "key_level": 2
+            },
+            {
+                "affix_id": 14,
+                "key_level": 5
+            },
+            {
+                "affix_id": 4,
+                "key_level": 7
+            },
+            {
+                "affix_id": 39,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 169,
+        "season_id": 17,
+        "expansion_id": 12,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 40,
+                "key_level": 2
+            },
+            {
+                "affix_id": 4,
+                "key_level": 5
+            },
+            {
+                "affix_id": 14,
+                "key_level": 7
+            },
+            {
+                "affix_id": 32,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 170,
+        "season_id": 17,
+        "expansion_id": 12,
+        "seasonal_index": null,
+        "confirmed": true,
+        "affixes": [
+            {
+                "affix_id": 40,
+                "key_level": 2
+            },
+            {
+                "affix_id": 14,
+                "key_level": 5
+            },
+            {
+                "affix_id": 4,
+                "key_level": 7
+            },
+            {
+                "affix_id": 34,
+                "key_level": 10
+            },
+            {
+                "affix_id": 37,
+                "key_level": 12
+            }
+        ]
+    }
+,
+    {
+        "id": 171,
+        "season_id": 18,
+        "expansion_id": 12,
+        "seasonal_index": null,
+        "confirmed": false,
+        "affixes": [
+            {
+                "affix_id": 24,
+                "key_level": 2
+            },
+            {
+                "affix_id": 24,
+                "key_level": 5
+            },
+            {
+                "affix_id": 24,
+                "key_level": 7
+            },
+            {
+                "affix_id": 24,
+                "key_level": 10
+            },
+            {
+                "affix_id": 24,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 172,
+        "season_id": 18,
+        "expansion_id": 12,
+        "seasonal_index": null,
+        "confirmed": false,
+        "affixes": [
+            {
+                "affix_id": 24,
+                "key_level": 2
+            },
+            {
+                "affix_id": 24,
+                "key_level": 5
+            },
+            {
+                "affix_id": 24,
+                "key_level": 7
+            },
+            {
+                "affix_id": 24,
+                "key_level": 10
+            },
+            {
+                "affix_id": 24,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 173,
+        "season_id": 18,
+        "expansion_id": 12,
+        "seasonal_index": null,
+        "confirmed": false,
+        "affixes": [
+            {
+                "affix_id": 24,
+                "key_level": 2
+            },
+            {
+                "affix_id": 24,
+                "key_level": 5
+            },
+            {
+                "affix_id": 24,
+                "key_level": 7
+            },
+            {
+                "affix_id": 24,
+                "key_level": 10
+            },
+            {
+                "affix_id": 24,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 174,
+        "season_id": 18,
+        "expansion_id": 12,
+        "seasonal_index": null,
+        "confirmed": false,
+        "affixes": [
+            {
+                "affix_id": 24,
+                "key_level": 2
+            },
+            {
+                "affix_id": 24,
+                "key_level": 5
+            },
+            {
+                "affix_id": 24,
+                "key_level": 7
+            },
+            {
+                "affix_id": 24,
+                "key_level": 10
+            },
+            {
+                "affix_id": 24,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 175,
+        "season_id": 18,
+        "expansion_id": 12,
+        "seasonal_index": null,
+        "confirmed": false,
+        "affixes": [
+            {
+                "affix_id": 24,
+                "key_level": 2
+            },
+            {
+                "affix_id": 24,
+                "key_level": 5
+            },
+            {
+                "affix_id": 24,
+                "key_level": 7
+            },
+            {
+                "affix_id": 24,
+                "key_level": 10
+            },
+            {
+                "affix_id": 24,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 176,
+        "season_id": 18,
+        "expansion_id": 12,
+        "seasonal_index": null,
+        "confirmed": false,
+        "affixes": [
+            {
+                "affix_id": 24,
+                "key_level": 2
+            },
+            {
+                "affix_id": 24,
+                "key_level": 5
+            },
+            {
+                "affix_id": 24,
+                "key_level": 7
+            },
+            {
+                "affix_id": 24,
+                "key_level": 10
+            },
+            {
+                "affix_id": 24,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 177,
+        "season_id": 18,
+        "expansion_id": 12,
+        "seasonal_index": null,
+        "confirmed": false,
+        "affixes": [
+            {
+                "affix_id": 24,
+                "key_level": 2
+            },
+            {
+                "affix_id": 24,
+                "key_level": 5
+            },
+            {
+                "affix_id": 24,
+                "key_level": 7
+            },
+            {
+                "affix_id": 24,
+                "key_level": 10
+            },
+            {
+                "affix_id": 24,
+                "key_level": 12
+            }
+        ]
+    },
+    {
+        "id": 178,
+        "season_id": 18,
+        "expansion_id": 12,
+        "seasonal_index": null,
+        "confirmed": false,
+        "affixes": [
+            {
+                "affix_id": 24,
+                "key_level": 2
+            },
+            {
+                "affix_id": 24,
+                "key_level": 5
+            },
+            {
+                "affix_id": 24,
+                "key_level": 7
+            },
+            {
+                "affix_id": 24,
+                "key_level": 10
+            },
+            {
+                "affix_id": 24,
+                "key_level": 12
+            }
+        ]
+    }
+]
