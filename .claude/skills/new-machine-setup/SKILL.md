@@ -37,7 +37,10 @@ the same session; you are the last person who will have the context to.
 
 Six files are gitignored, secret, and **cannot be regenerated or reconstructed**. If the old machine
 is gone before these are copied off it, the environment cannot be rebuilt without reissuing every
-credential by hand.
+credential by hand. On top of these six, `~/Git/private/keystone.guru.assets/tiles/` (~36G,
+gitignored — see phase 2) is *also* unrecoverable: it isn't in any repo and neither is the software
+that generates it (`readme.md:59-61`). It doesn't need "reissuing" like a credential, but if the old
+machine is gone before it's copied or synced, it is simply gone.
 
 | File | Why it is unrecoverable |
 |---|---|
@@ -110,21 +113,50 @@ Takes effect only after `wsl --shutdown` — the user must do that themselves.
 
 ---
 
-## Phase 2 — Clone layout
+## Phase 2 — SSH keys, then clone
 
-Two repos, **siblings in the same parent directory**. This is not cosmetic: `docker-compose.yml`
-bind-mounts `../keystone.guru.assets` into both the `app` and `app-assets` services, and
-`create_host_path: false` is not set on that mount — a missing sibling gives you an empty dir and
-silently broken images.
+The clone below is over `git@github.com:` (a private repo), and phase-4 git config turns on
+`commit.gpgsign true` globally — so the SSH auth key and the signing key both have to exist
+**before** cloning, not after. Restore them here, first, rather than waiting for the "Restore
+secrets" phase:
+
+```bash
+mkdir -p ~/.ssh && chmod 700 ~/.ssh
+cp <bundle>/ssh/* ~/.ssh/
+chmod 600 ~/.ssh/wotuu_passwordless ~/.ssh/keystone_worktree_ed25519 ~/.ssh/git_signing_ed25519
+chmod 644 ~/.ssh/*.pub ~/.ssh/config ~/.ssh/allowed_signers
+```
+
+`~/.ssh/config` must contain:
+
+```
+Host github.com
+    HostName github.com
+    IdentityFile ~/.ssh/wotuu_passwordless
+    IdentitiesOnly yes
+```
+
+**Probe:** `ssh -T git@github.com` returns `Hi Wotuu! You've successfully authenticated…` with no
+passphrase prompt.
+
+Now clone. Two repos, **siblings in the same parent directory**. This is not cosmetic:
+`docker-compose.yml` bind-mounts `../keystone.guru.assets` into both the `app` and `app-assets`
+services, and `create_host_path: false` is not set on that mount — a missing sibling gives you an
+empty dir and silently broken images.
 
 ```bash
 mkdir -p ~/Git/private && cd ~/Git/private
 git clone git@github.com:RaiderIO/keystone.guru.git
-git clone git@github.com:RaiderIO/keystone.guru.assets.git   # ~342M, images only
+git clone git@github.com:RaiderIO/keystone.guru.assets.git   # ~342M tracked (images, webfonts)
 ```
 
 `sh/worktree.sh` also expects `~/Git/private/keystone.guru-worktrees/` as its worktree root; it
 creates that itself on first use.
+
+The clone above only brings `images/` and `webfonts/`. The checkout also has a `tiles/` directory
+(~36G, gitignored per `keystone.guru.assets/.gitignore:1`) that is **not** part of the git history —
+map tiles have to be transferred separately (rsync/external drive/etc. from the old machine). See
+the tiles note in phase 4 for what happens if you skip this.
 
 Git config (global — replicate from the old machine):
 
@@ -158,39 +190,27 @@ mkdir -p ~/.config/git && echo '**/.claude/settings.local.json' >> ~/.config/git
 
 ---
 
-## Phase 3 — Restore secrets
+## Phase 3 — Restore remaining secrets
+
+The SSH keys were already restored in phase 2 (they had to be, before the clone could happen). What's
+left is the two `.env` files, which do need the repo cloned first since they're copied into it:
 
 ```bash
 cd ~/Git/private/keystone.guru
 cp <bundle>/env                  .env
 cp <bundle>/app-env              docker-compose/app/.env
-
-mkdir -p ~/.ssh && chmod 700 ~/.ssh
-cp <bundle>/ssh/* ~/.ssh/
-chmod 600 ~/.ssh/wotuu_passwordless ~/.ssh/keystone_worktree_ed25519 ~/.ssh/git_signing_ed25519
-chmod 644 ~/.ssh/*.pub ~/.ssh/config ~/.ssh/allowed_signers
-```
-
-`~/.ssh/config` must contain:
-
-```
-Host github.com
-    HostName github.com
-    IdentityFile ~/.ssh/wotuu_passwordless
-    IdentitiesOnly yes
 ```
 
 Note `~/.ssh` is bind-mounted read-write into the `app` container (`~/.ssh:/home/ksg/.ssh`), which
 is how in-container composer reaches private VCS repos.
 
-**Probe:** `ssh -T git@github.com` returns `Hi Wotuu! You've successfully authenticated…` with no
-passphrase prompt.
+**Probe:** `.env` and `docker-compose/app/.env` both exist and are non-empty.
 
 ---
 
 ## Phase 4 — Per-machine `.env` edits
 
-The restored `.env` is correct except for three things that are machine-specific:
+The restored `.env` is correct except for four things that are machine-specific:
 
 1. **`PUID` / `PGID`** must match the new host user, or every file the container writes into the
    bind mount lands root-owned (breaks `git status`, and root-owned `storage/logs` puts php-fpm
@@ -204,6 +224,15 @@ The restored `.env` is correct except for three things that are machine-specific
    rather than mount an empty dir, so a wrong value here shows up as a compose error, not silent
    data loss.
 3. **`ASSETS_BASE_URL=https://assets.keystone.guru`** — see the tiles note below.
+4. **`ASSETS_BASE_URL_INTERNAL`** — changing `ASSETS_BASE_URL` alone is not enough.
+   `config/keystoneguru.php:21` derives a separate `tiles_base_url_internal` from
+   `ASSETS_BASE_URL_INTERNAL`, and `DungeonRouteController::preview()`
+   (`app/Http/Controllers/DungeonRoute/DungeonRouteController.php:301-304`) swaps to that internal
+   URL specifically for the server-side (puppeteer/thumbnail) render path when there's no
+   authenticated user. `.env.docker.example:64` ships `ASSETS_BASE_URL_INTERNAL=http://app-assets`,
+   which is correct for the default Docker Compose network — verify the restored `.env` has this
+   set, or the phase-9 browser-render probe will silently render against a tile-less/asset-less
+   container instead of erroring.
 
 Also create the empty data dirs compose refuses to create for you:
 
@@ -213,18 +242,22 @@ mkdir -p docker-compose/mysql docker-compose/mysql-combatlog docker-compose/redi
 
 ### About map tiles
 
-Map tiles are **not** in any repo (`readme.md`: "Not included in this repository"). The
-`keystone.guru.assets` checkout contains `images/` only. `config/keystoneguru.php` derives
-`tiles_base_url` from `ASSETS_BASE_URL`, so with `ASSETS_BASE_URL=https://assets.keystone.guru` the
-maps load tiles straight from the production CDN and **everything renders correctly with no local
-tiles**. Do not go hunting for a tiles download; there isn't one.
+Map tiles themselves, and the software that generates them, are **not** in any repo
+(`readme.md:59-61`: "Not included in this repository"). The `keystone.guru.assets` checkout does
+hold a `tiles/` directory locally (~36G) — it's just gitignored, so cloning the repo does not bring
+it; it has to be transferred from an existing machine by other means (phase 0/2). `config/
+keystoneguru.php` derives `tiles_base_url` from `ASSETS_BASE_URL`, so with
+`ASSETS_BASE_URL=https://assets.keystone.guru` the maps load tiles straight from the production CDN
+regardless of whether `tiles/` was transferred locally — **everything renders correctly with no
+local tiles**, since production CDN tiles are used either way.
 
 The one consequence: `tests/Unit/MapTiles/MapTilesExistenceTest.php` asserts tile files exist on
-disk under `../keystone.guru.assets/tiles/`, so it **fails on every dev machine**. That is expected.
-Do not chase it, and do not "fix" it.
+disk under `../keystone.guru.assets/tiles/`. It only fails if `tiles/` was never transferred to this
+machine — it is not expected to fail once tiles are present. If it fails and you don't intend to
+transfer tiles here, that is fine to leave; do not "fix" the test itself.
 
-**Probe:** `grep -E '^(PUID|PGID|DB_DATA_VARIANT|ASSETS_BASE_URL)=' .env` shows your real uid/gid,
-an empty variant, and the https assets URL.
+**Probe:** `grep -E '^(PUID|PGID|DB_DATA_VARIANT|ASSETS_BASE_URL|ASSETS_BASE_URL_INTERNAL)=' .env`
+shows your real uid/gid, an empty variant, the https assets URL, and `http://app-assets`.
 
 ---
 
@@ -393,7 +426,8 @@ Do not report the machine as ready until all six pass. Fix failures here rather 
    ```
    This one specifically exercises ext-lua + the sudo/`ksg` path, so it catches a bad image build.
    Then a broader sweep: `docker compose exec -T app php artisan test --compact`. The only expected
-   failure is `MapTilesExistenceTest`.
+   failure is `MapTilesExistenceTest`, and only if `keystone.guru.assets/tiles/` wasn't transferred
+   to this machine (see phase 4) — if tiles are present, it should pass too.
 5. **Toolchain**: `docker compose exec -T app composer run fix` and
    `docker compose exec -T app composer run analyse` both clean.
    > `composer run fix` reformats *pre-existing* style drift across the whole repo, so on a fresh
@@ -453,13 +487,18 @@ laptop are deliberately not carried over.
 | `Unable to locate file in Vite manifest` / stale JS in browser | Assets not built, or `version` stale | `npm run production` (writes `version` from the git rev) |
 | PHPStan red locally, green in CI | Local `vendor/` drifted from `composer.lock` | `docker compose exec -T app composer install` |
 | WSL crashes / everything freezes | VM-wide OOM | `.wslconfig` (phase 1) + keep OpenSearch off + `wsl --shutdown` |
-| `worktree.sh push` dies on a missing key | `~/.ssh/keystone_worktree_ed25519` not restored | Phase 3 |
+| `worktree.sh push` dies on a missing key | `~/.ssh/keystone_worktree_ed25519` not restored | Phase 2 |
 
 ## Known-good failures — do not chase
 
-- **`MapTilesExistenceTest`** fails on every dev machine (no local tiles; see phase 4).
-- **Cron drift in `database/seeders/dungeondata/`** — the `cron` container runs `mapping:sync` every
-  5 minutes and rewrites seeder JSON. Benign dev noise. Never `git add -A` while working on seeders.
+- **`MapTilesExistenceTest`** fails only if tiles weren't transferred to
+  `keystone.guru.assets/tiles/` (see phase 4). If tiles are present, it should pass.
+
+**Not** a known-good failure: drift in `database/seeders/dungeondata/`. There is no cron rewriting
+it — `mapping:sync` was deleted in #3358 and nothing seeder-related is scheduled anywhere (checked
+`routes/console.php`). That JSON only changes when `mapping:save` is run explicitly, so any
+unexpected diff there is a real signal to investigate, not benign noise. Still never `git add -A`
+while working on seeders — but if a diff shows up unprompted, find out why instead of dismissing it.
 
 ## Where to go next
 
