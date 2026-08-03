@@ -79,33 +79,18 @@ $existingSocialLinks = $user->socialLinks->keyBy('platform');
                 {{ __('view_profile.edit.creator_pinned_routes_none') }}
             </p>
         @else
-            {{ html()->text('pinned_dungeon_routes_filter')
-                ->id('pinned_dungeon_routes_filter')
-                ->class('form-control mb-2')
-                ->placeholder(__('view_profile.edit.creator_pinned_routes_filter_placeholder')) }}
-            <div id="pinned_dungeon_routes" class="list-group pinned-dungeon-routes-list" style="max-height: 260px; overflow-y: auto;">
+            <select name="pinned_dungeon_routes[]" id="pinned_dungeon_routes" class="form-select"
+                    multiple size="{{ min(10, max(3, $ownDungeonRoutes->count())) }}">
                 @foreach($ownDungeonRoutes as $ownDungeonRoute)
-                    <label class="list-group-item d-flex align-items-center gap-2 pinned-dungeon-route-item"
-                           data-search="{{ strtolower($ownDungeonRoute->title . ' ' . __($ownDungeonRoute->dungeon?->name ?? '')) }}">
-                        <input type="checkbox" class="form-check-input flex-shrink-0" name="pinned_dungeon_routes[]"
-                               value="{{ $ownDungeonRoute->id }}"
-                               @if(in_array($ownDungeonRoute->id, $pinnedDungeonRouteIds, true)) checked @endif>
-                        <span>{{ $ownDungeonRoute->title }} &mdash; {{ __($ownDungeonRoute->dungeon?->name ?? '') }}</span>
-                    </label>
+                    <option value="{{ $ownDungeonRoute->id }}"
+                            @if(in_array($ownDungeonRoute->id, $pinnedDungeonRouteIds, true)) selected @endif>
+                        {{ $ownDungeonRoute->title }} &mdash; {{ __($ownDungeonRoute->dungeon?->name ?? '') }}
+                    </option>
                 @endforeach
-            </div>
+            </select>
             <small class="form-text text-muted">
                 {{ __('view_profile.edit.creator_pinned_routes_help', ['max' => UserPinnedDungeonRoute::MAX_PINNED_ROUTES]) }}
             </small>
-
-            @include('common.general.inline', [
-                'path' => 'profile/edittabs/creator',
-                'options' => [
-                    'filterInputSelector' => '#pinned_dungeon_routes_filter',
-                    'itemSelector' => '.pinned-dungeon-route-item',
-                    'maxPinnedRoutes' => UserPinnedDungeonRoute::MAX_PINNED_ROUTES,
-                ],
-            ])
         @endif
         @include('common.forms.form-error', ['key' => 'pinned_dungeon_routes'])
     </div>
