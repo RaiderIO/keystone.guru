@@ -1497,7 +1497,6 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             // External
             $dungeonRoute->ratings()->delete();
             $dungeonRoute->favorites()->delete();
-            // Otherwise a pin would dangle, pointing at a route that no longer exists
             $dungeonRoute->pinnedByUsers()->delete();
             foreach ($dungeonRoute->livesessions as $liveSession) {
                 $liveSession->delete();
