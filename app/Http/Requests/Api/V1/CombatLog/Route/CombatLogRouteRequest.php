@@ -9,11 +9,11 @@ use App\Rules\CombatLogRouteNpcChronologicalRule;
 use Illuminate\Validation\Rule;
 
 /**
- * @method CombatLogRouteRequestDTO|null getModel()
+ * @method CombatLogRouteRequestDTO|null getDTO()
  */
 class CombatLogRouteRequest extends APIFormRequest
 {
-    protected function getRequestModelClass(): string
+    protected function getRequestDTOClass(): string
     {
         return CombatLogRouteRequestDTO::class;
     }

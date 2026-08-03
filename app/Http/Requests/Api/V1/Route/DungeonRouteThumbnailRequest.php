@@ -6,11 +6,11 @@ use App\Dto\Request\Route\DungeonRouteThumbnailRequestDTO;
 use App\Http\Requests\Api\V1\APIFormRequest;
 
 /**
- * @method DungeonRouteThumbnailRequestDTO|null getModel()
+ * @method DungeonRouteThumbnailRequestDTO|null getDTO()
  */
 class DungeonRouteThumbnailRequest extends APIFormRequest
 {
-    protected function getRequestModelClass(): ?string
+    protected function getRequestDTOClass(): ?string
     {
         return DungeonRouteThumbnailRequestDTO::class;
     }

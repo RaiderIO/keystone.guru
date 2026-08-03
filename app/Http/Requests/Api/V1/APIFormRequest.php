@@ -10,7 +10,7 @@ use Override;
 
 abstract class APIFormRequest extends FormRequest
 {
-    protected abstract function getRequestModelClass(): ?string;
+    protected abstract function getRequestDTOClass(): ?string;
 
     #[Override]
     protected function failedValidation(Validator $validator)
@@ -22,13 +22,13 @@ abstract class APIFormRequest extends FormRequest
         ], 422));
     }
 
-    public function getModel(): ?RequestDTO
+    public function getDTO(): ?RequestDTO
     {
-        $requestModelClass = $this->getRequestModelClass();
-        if ($requestModelClass === null) {
+        $requestDTOClass = $this->getRequestDTOClass();
+        if ($requestDTOClass === null) {
             return null;
         }
 
-        return new $requestModelClass($this->validated());
+        return new $requestDTOClass($this->validated());
     }
 }
