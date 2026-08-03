@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Models\Request\CombatLog\Route;
+namespace App\Dto\Request\CombatLog\Route;
 
 /**
  * @OA\Schema(schema="CombatLogRouteSpellCorrection")
@@ -10,14 +10,14 @@ namespace App\Http\Models\Request\CombatLog\Route;
  * @OA\Property(property="coord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
  * @OA\Property(property="gridCoord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
  */
-class CombatLogRouteSpellCorrectionRequestModel extends CombatLogRouteSpellRequestModel
+class CombatLogRouteSpellCorrectionRequestDto extends CombatLogRouteSpellRequestDto
 {
     public function __construct(
-        ?int                                    $spellId = null,
-        ?string                                 $playerUid = null,
-        ?string                                 $castAt = null,
-        ?CombatLogRouteCoordRequestModel        $coord = null,
-        public ?CombatLogRouteCoordRequestModel $gridCoord = null,
+        ?int                                  $spellId = null,
+        ?string                               $playerUid = null,
+        ?string                               $castAt = null,
+        ?CombatLogRouteCoordRequestDto        $coord = null,
+        public ?CombatLogRouteCoordRequestDto $gridCoord = null,
     ) {
         parent::__construct($spellId, $playerUid, $castAt, $coord);
     }

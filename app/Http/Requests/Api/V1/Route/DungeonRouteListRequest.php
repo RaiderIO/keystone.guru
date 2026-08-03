@@ -6,7 +6,7 @@ use App\Http\Requests\Api\V1\APIFormRequest;
 
 class DungeonRouteListRequest extends APIFormRequest
 {
-    protected function getRequestModelClass(): ?string
+    protected function getRequestDtoClass(): ?string
     {
         return null;
     }

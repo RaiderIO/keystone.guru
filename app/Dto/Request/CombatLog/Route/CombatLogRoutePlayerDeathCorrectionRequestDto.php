@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Models\Request\CombatLog\Route;
+namespace App\Dto\Request\CombatLog\Route;
 
 /**
  * @OA\Schema(schema="CombatLogRoutePlayerDeathCorrection")
@@ -12,16 +12,16 @@ namespace App\Http\Models\Request\CombatLog\Route;
  * @OA\Property(property="coord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
  * @OA\Property(property="gridCoord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
  */
-class CombatLogRoutePlayerDeathCorrectionRequestModel extends CombatLogRoutePlayerDeathRequestModel
+class CombatLogRoutePlayerDeathCorrectionRequestDto extends CombatLogRoutePlayerDeathRequestDto
 {
     public function __construct(
-        ?int                                    $characterId = null,
-        ?int                                    $classId = null,
-        ?int                                    $specId = null,
-        ?float                                  $itemLevel = null,
-        ?string                                 $diedAt = null,
-        ?CombatLogRouteCoordRequestModel        $coord = null,
-        public ?CombatLogRouteCoordRequestModel $gridCoord = null,
+        ?int                                  $characterId = null,
+        ?int                                  $classId = null,
+        ?int                                  $specId = null,
+        ?float                                $itemLevel = null,
+        ?string                               $diedAt = null,
+        ?CombatLogRouteCoordRequestDto        $coord = null,
+        public ?CombatLogRouteCoordRequestDto $gridCoord = null,
     ) {
         parent::__construct($characterId, $classId, $specId, $itemLevel, $diedAt, $coord);
     }

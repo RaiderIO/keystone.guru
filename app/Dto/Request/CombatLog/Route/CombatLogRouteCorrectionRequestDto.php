@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Models\Request\CombatLog\Route;
+namespace App\Dto\Request\CombatLog\Route;
 
 use Illuminate\Support\Collection;
 use Override;
@@ -14,11 +14,11 @@ use Override;
  * @OA\Property(property="spells",type="array",items={"$ref":"#/components/schemas/CombatLogRouteSpellCorrection"}, nullable=true)
  * @OA\Property(property="playerDeaths",type="array",items={"$ref":"#/components/schemas/CombatLogRoutePlayerDeathCorrection"}, nullable=true)
  *
- * @property Collection<int, CombatLogRouteNpcCorrectionRequestModel>         $npcs
- * @property Collection<int, CombatLogRouteSpellCorrectionRequestModel>       $spells
- * @property Collection<int, CombatLogRoutePlayerDeathCorrectionRequestModel> $playerDeaths
+ * @property Collection<int, CombatLogRouteNpcCorrectionRequestDto>         $npcs
+ * @property Collection<int, CombatLogRouteSpellCorrectionRequestDto>       $spells
+ * @property Collection<int, CombatLogRoutePlayerDeathCorrectionRequestDto> $playerDeaths
  */
-class CombatLogRouteCorrectionRequestModel extends CombatLogRouteRequestModel
+class CombatLogRouteCorrectionRequestDto extends CombatLogRouteRequestDto
 {
     //    public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:sP';
     public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s.vP';
@@ -27,9 +27,9 @@ class CombatLogRouteCorrectionRequestModel extends CombatLogRouteRequestModel
     public static function getCollectionItemType(string $key): ?string
     {
         return match ($key) {
-            'npcs'         => CombatLogRouteNpcCorrectionRequestModel::class,
-            'spells'       => CombatLogRouteSpellCorrectionRequestModel::class,
-            'playerDeaths' => CombatLogRoutePlayerDeathCorrectionRequestModel::class,
+            'npcs'         => CombatLogRouteNpcCorrectionRequestDto::class,
+            'spells'       => CombatLogRouteSpellCorrectionRequestDto::class,
+            'playerDeaths' => CombatLogRoutePlayerDeathCorrectionRequestDto::class,
             default        => null,
         };
     }

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Models\Request\CombatLog\Route;
+namespace App\Dto\Request\CombatLog\Route;
 
-use App\Http\Models\Request\RequestModel;
+use App\Dto\Request\RequestDto;
 use App\Models\Enemy;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Carbon;
@@ -16,7 +16,7 @@ use Illuminate\Support\Carbon;
  * @OA\Property(property="coord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
  * @implements Arrayable<string, mixed>
  */
-class CombatLogRouteNpcRequestModel extends RequestModel implements Arrayable
+class CombatLogRouteNpcRequestDto extends RequestDto implements Arrayable
 {
     private Carbon $engagedAtCarbon;
 
@@ -25,24 +25,24 @@ class CombatLogRouteNpcRequestModel extends RequestModel implements Arrayable
     private ?Enemy $resolvedEnemy = null;
 
     public function __construct(
-        public ?int                             $npcId = null,
-        public ?string                          $spawnUid = null,
-        public ?string                          $engagedAt = null,
-        public ?string                          $diedAt = null,
-        public ?CombatLogRouteCoordRequestModel $coord = null,
+        public ?int                           $npcId = null,
+        public ?string                        $spawnUid = null,
+        public ?string                        $engagedAt = null,
+        public ?string                        $diedAt = null,
+        public ?CombatLogRouteCoordRequestDto $coord = null,
     ) {
     }
 
     public function getEngagedAt(): Carbon
     {
         return $this->engagedAtCarbon ??
-            $this->engagedAtCarbon = Carbon::createFromFormat(CombatLogRouteRequestModel::DATE_TIME_FORMAT, $this->engagedAt);
+            $this->engagedAtCarbon = Carbon::createFromFormat(CombatLogRouteRequestDto::DATE_TIME_FORMAT, $this->engagedAt);
     }
 
     public function getDiedAt(): Carbon
     {
         return $this->diedAtCarbon ??
-            $this->diedAtCarbon = Carbon::createFromFormat(CombatLogRouteRequestModel::DATE_TIME_FORMAT, $this->diedAt);
+            $this->diedAtCarbon = Carbon::createFromFormat(CombatLogRouteRequestDto::DATE_TIME_FORMAT, $this->diedAt);
     }
 
     public function getUniqueId(): string

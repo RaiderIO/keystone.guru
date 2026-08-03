@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Models\Request\CombatLog\Route;
+namespace App\Dto\Request\CombatLog\Route;
 
 /**
  * This class is used when Raider.io sends combat log info to our API, we then push it through ARC and this correction class
@@ -33,17 +33,17 @@ namespace App\Http\Models\Request\CombatLog\Route;
  * @OA\Property(property="gridCoord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
  * @OA\Property(property="gridCoordEnemy",type="object",ref="#/components/schemas/CombatLogRouteCoord")
  */
-class CombatLogRouteNpcCorrectionRequestModel extends CombatLogRouteNpcRequestModel
+class CombatLogRouteNpcCorrectionRequestDto extends CombatLogRouteNpcRequestDto
 {
     public function __construct(
-        ?int                                    $npcId = null,
-        ?string                                 $spawnUid = null,
-        ?string                                 $engagedAt = null,
-        ?string                                 $diedAt = null,
-        ?CombatLogRouteCoordRequestModel        $coord = null,
-        public ?CombatLogRouteCoordRequestModel $coordEnemy = null,
-        public ?CombatLogRouteCoordRequestModel $gridCoord = null,
-        public ?CombatLogRouteCoordRequestModel $gridCoordEnemy = null,
+        ?int                                  $npcId = null,
+        ?string                               $spawnUid = null,
+        ?string                               $engagedAt = null,
+        ?string                               $diedAt = null,
+        ?CombatLogRouteCoordRequestDto        $coord = null,
+        public ?CombatLogRouteCoordRequestDto $coordEnemy = null,
+        public ?CombatLogRouteCoordRequestDto $gridCoord = null,
+        public ?CombatLogRouteCoordRequestDto $gridCoordEnemy = null,
     ) {
         parent::__construct(
             $npcId,

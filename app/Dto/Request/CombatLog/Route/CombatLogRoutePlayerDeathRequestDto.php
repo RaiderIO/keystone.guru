@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Models\Request\CombatLog\Route;
+namespace App\Dto\Request\CombatLog\Route;
 
-use App\Http\Models\Request\RequestModel;
+use App\Dto\Request\RequestDto;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Carbon;
 
@@ -16,25 +16,25 @@ use Illuminate\Support\Carbon;
  * @OA\Property(property="coord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
  * @implements Arrayable<string, mixed>
  */
-class CombatLogRoutePlayerDeathRequestModel extends RequestModel implements Arrayable
+class CombatLogRoutePlayerDeathRequestDto extends RequestDto implements Arrayable
 {
     private Carbon $diedAtCarbon;
 
 //    private ?Enemy $resolvedEnemy = null;
 
     public function __construct(
-        public ?int                             $characterId = null,
-        public ?int                             $classId = null,
-        public ?int                             $specId = null,
-        public ?float                           $itemLevel = null,
-        public ?string                          $diedAt = null,
-        public ?CombatLogRouteCoordRequestModel $coord = null,
+        public ?int                           $characterId = null,
+        public ?int                           $classId = null,
+        public ?int                           $specId = null,
+        public ?float                         $itemLevel = null,
+        public ?string                        $diedAt = null,
+        public ?CombatLogRouteCoordRequestDto $coord = null,
     ) {
     }
 
     public function getDiedAt(): Carbon
     {
         return $this->diedAtCarbon ??
-            $this->diedAtCarbon = Carbon::createFromFormat(CombatLogRouteRequestModel::DATE_TIME_FORMAT, $this->diedAt);
+            $this->diedAtCarbon = Carbon::createFromFormat(CombatLogRouteRequestDto::DATE_TIME_FORMAT, $this->diedAt);
     }
 }

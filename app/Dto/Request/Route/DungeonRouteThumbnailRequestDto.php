@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Models\Request\Route;
+namespace App\Dto\Request\Route;
 
-use App\Http\Models\Request\RequestModel;
+use App\Dto\Request\RequestDto;
 
 /**
  * @OA\Schema(schema="RouteThumbnailRequest")
  */
-class DungeonRouteThumbnailRequestModel extends RequestModel
+class DungeonRouteThumbnailRequestDto extends RequestDto
 {
     public function __construct()
     {

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Models\Request\CombatLog\Route;
+namespace App\Dto\Request\CombatLog\Route;
 
-use App\Http\Models\Request\RequestModel;
+use App\Dto\Request\RequestDto;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Faction;
 use App\Models\GameVersion\GameVersion;
@@ -28,29 +28,29 @@ use Override;
  * @OA\Property(property="spells",type="array",items={"$ref":"#/components/schemas/CombatLogRouteSpell"}, nullable=true)
  * @OA\Property(property="playerDeaths",type="array",items={"$ref":"#/components/schemas/CombatLogRoutePlayerDeath"}, nullable=true)
  *
- * @property Collection<int, CombatLogRouteNpcRequestModel>|null         $npcs
- * @property Collection<int, CombatLogRouteSpellRequestModel>|null       $spells
- * @property Collection<int, CombatLogRoutePlayerDeathRequestModel>|null $playerDeaths
+ * @property Collection<int, CombatLogRouteNpcRequestDto>|null         $npcs
+ * @property Collection<int, CombatLogRouteSpellRequestDto>|null       $spells
+ * @property Collection<int, CombatLogRoutePlayerDeathRequestDto>|null $playerDeaths
  * @implements Arrayable<string, mixed>
  */
-class CombatLogRouteRequestModel extends RequestModel implements Arrayable
+class CombatLogRouteRequestDto extends RequestDto implements Arrayable
 {
     //    public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:sP';
     public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s.vP';
 
     /**
-     * @param Collection<int, CombatLogRouteNpcRequestModel>|null         $npcs
-     * @param Collection<int, CombatLogRouteSpellRequestModel>|null       $spells
-     * @param Collection<int, CombatLogRoutePlayerDeathRequestModel>|null $playerDeaths
+     * @param Collection<int, CombatLogRouteNpcRequestDto>|null         $npcs
+     * @param Collection<int, CombatLogRouteSpellRequestDto>|null       $spells
+     * @param Collection<int, CombatLogRoutePlayerDeathRequestDto>|null $playerDeaths
      */
     public function __construct(
-        public ?CombatLogRouteMetadataRequestModel      $metadata = null,
-        public ?CombatLogRouteSettingsRequestModel      $settings = null,
-        public ?CombatLogRouteChallengeModeRequestModel $challengeMode = null,
-        public ?CombatLogRouteRosterRequestModel        $roster = null,
-        public ?Collection                              $npcs = null,
-        public ?Collection                              $spells = null,
-        public ?Collection                              $playerDeaths = null,
+        public ?CombatLogRouteMetadataRequestDto      $metadata = null,
+        public ?CombatLogRouteSettingsRequestDto      $settings = null,
+        public ?CombatLogRouteChallengeModeRequestDto $challengeMode = null,
+        public ?CombatLogRouteRosterRequestDto        $roster = null,
+        public ?Collection                            $npcs = null,
+        public ?Collection                            $spells = null,
+        public ?Collection                            $playerDeaths = null,
     ) {
     }
 
@@ -144,9 +144,9 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
     public static function getCollectionItemType(string $key): ?string
     {
         return match ($key) {
-            'npcs'         => CombatLogRouteNpcRequestModel::class,
-            'spells'       => CombatLogRouteSpellRequestModel::class,
-            'playerDeaths' => CombatLogRoutePlayerDeathRequestModel::class,
+            'npcs'         => CombatLogRouteNpcRequestDto::class,
+            'spells'       => CombatLogRouteSpellRequestDto::class,
+            'playerDeaths' => CombatLogRoutePlayerDeathRequestDto::class,
             default        => null,
         };
     }

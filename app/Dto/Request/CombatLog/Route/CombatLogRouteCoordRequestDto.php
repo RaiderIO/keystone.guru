@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Models\Request\CombatLog\Route;
+namespace App\Dto\Request\CombatLog\Route;
 
-use App\Http\Models\Request\RequestModel;
+use App\Dto\Request\RequestDto;
 use Illuminate\Contracts\Support\Arrayable;
 
 /**
@@ -12,7 +12,7 @@ use Illuminate\Contracts\Support\Arrayable;
  * @OA\Property(type="integer",property="uiMapId")
  * @implements Arrayable<string, mixed>
  */
-class CombatLogRouteCoordRequestModel extends RequestModel implements Arrayable
+class CombatLogRouteCoordRequestDto extends RequestDto implements Arrayable
 {
     public function __construct(
         public ?float $x = null,

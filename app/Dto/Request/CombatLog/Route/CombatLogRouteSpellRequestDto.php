@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Models\Request\CombatLog\Route;
+namespace App\Dto\Request\CombatLog\Route;
 
-use App\Http\Models\Request\RequestModel;
+use App\Dto\Request\RequestDto;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Carbon;
 
@@ -14,21 +14,21 @@ use Illuminate\Support\Carbon;
  * @OA\Property(property="coord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
  * @implements Arrayable<string, mixed>
  */
-class CombatLogRouteSpellRequestModel extends RequestModel implements Arrayable
+class CombatLogRouteSpellRequestDto extends RequestDto implements Arrayable
 {
     private Carbon $castAtCarbon;
 
     public function __construct(
-        public ?int                             $spellId = null,
-        public ?string                          $playerUid = null,
-        public ?string                          $castAt = null,
-        public ?CombatLogRouteCoordRequestModel $coord = null,
+        public ?int                           $spellId = null,
+        public ?string                        $playerUid = null,
+        public ?string                        $castAt = null,
+        public ?CombatLogRouteCoordRequestDto $coord = null,
     ) {
     }
 
     public function getCastAt(): Carbon
     {
         return $this->castAtCarbon ??
-            $this->castAtCarbon = Carbon::createFromFormat(CombatLogRouteRequestModel::DATE_TIME_FORMAT, $this->castAt);
+            $this->castAtCarbon = Carbon::createFromFormat(CombatLogRouteRequestDto::DATE_TIME_FORMAT, $this->castAt);
     }
 }

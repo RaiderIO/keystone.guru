@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Models\Request\CombatLog\Route;
+namespace App\Dto\Request\CombatLog\Route;
 
-use App\Http\Models\Request\RequestModel;
+use App\Dto\Request\RequestDto;
 use Illuminate\Contracts\Support\Arrayable;
 
 /**
@@ -19,7 +19,7 @@ use Illuminate\Contracts\Support\Arrayable;
  * @OA\Property(property="affixes",type="array", @OA\Items(type="integer"))
  * @implements Arrayable<string, mixed>
  */
-class CombatLogRouteChallengeModeRequestModel extends RequestModel implements Arrayable
+class CombatLogRouteChallengeModeRequestDto extends RequestDto implements Arrayable
 {
     /**
      * @param array<int>|null $affixes
