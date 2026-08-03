@@ -96,7 +96,6 @@ class CharacterRace extends CacheModel
     public $timestamps = false;
 
     public $hidden = [
-        'icon_file_id',
         'pivot',
     ];
 

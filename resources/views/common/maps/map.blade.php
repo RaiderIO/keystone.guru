@@ -254,29 +254,6 @@ if ($isAdmin) {
         });
     </script>
 
-    @if($dungeon->isFactionSelectionRequired())
-        <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
-            <div id="map_faction_display_controls" class="leaflet-draw-section">
-                <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
-            @foreach(Faction::where('key', '<>', Faction::FACTION_UNSPECIFIED)->get() as $faction)
-                <a class="map_faction_display_control map_controls_custom" href="#"
-                   data-faction="{{ strtolower($faction->key) }}"
-                           title="{{ __($faction->name) }}">
-                            <i class="{{ $loop->index === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
-                               style="width: 15px"></i>
-                            <img src="{{ $faction->iconfile->icon_url }}" class="select_icon faction_icon"
-                                 data-bs-toggle="tooltip" title="{{ __($faction->name) }}"
-                                 alt="Faction"/>
-                        </a>
-
-            @endforeach
-            </div>
-            <ul class="leaflet-draw-actions"></ul>
-        </div>
-
-
-        </script>
-    @endif
 @endsection
 
 @if(!$noUI)

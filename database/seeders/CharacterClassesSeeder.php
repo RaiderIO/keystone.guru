@@ -4,9 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\CharacterClass;
 use App\Models\Faction;
-use App\Models\File;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Collection;
 
 class CharacterClassesSeeder extends Seeder implements TableSeederInterface
 {
@@ -112,21 +110,6 @@ class CharacterClassesSeeder extends Seeder implements TableSeederInterface
 
         // Insert all classes at once
         CharacterClass::from(DatabaseSeeder::getTempTableName(CharacterClass::class))->insert($characterClassesAttributes);
-
-        // Set icons for each inserted class
-        /** @var Collection<int, CharacterClass> $characterClasses */
-        $characterClasses = CharacterClass::from(DatabaseSeeder::getTempTableName(CharacterClass::class))->get();
-        foreach ($characterClasses as $characterClass) {
-            $icon = File::create([
-                'model_id'    => $characterClass->id,
-                'model_class' => CharacterClass::class,
-                'disk'        => 'public',
-                'path'        => sprintf('images/classes/%s.png', strtolower(str_replace(' ', '', $characterClass->key))),
-            ]);
-
-            // Update the class with the icon ID
-            $characterClass->setTable(DatabaseSeeder::getTempTableName(CharacterClass::class))->update(['icon_file_id' => $icon->id]);
-        }
     }
 
     public static function getAffectedModelClasses(): array

@@ -554,14 +554,6 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         return $this->loadMappingVersions()->mappingVersions->map(static fn(MappingVersion $mappingVersion) => $mappingVersion->gameVersion)->unique('id');
     }
 
-    public function isFactionSelectionRequired(): bool
-    {
-        return in_array($this->key, [
-            self::DUNGEON_SIEGE_OF_BORALUS,
-            self::DUNGEON_THE_NEXUS,
-        ]);
-    }
-
     public function getImageLink(): ?string
     {
         return $this->getImageUrl();

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\DungeonRoute\DungeonRoutePlayerClass;
 use App\Models\DungeonRoute\DungeonRoutePlayerRace;
-use App\Models\Traits\HasIconFile;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -14,10 +13,11 @@ use Str;
 
 /**
  * @property int    $id
- * @property int    $class_id Blizzard class ID
+ * @property int    $class_id     Blizzard class ID
  * @property string $key
  * @property string $name
  * @property string $color
+ * @property string $icon_file_id
  *
  * @property string $icon_url Appended
  *
@@ -30,7 +30,6 @@ use Str;
  */
 class CharacterClass extends CacheModel
 {
-    use HasIconFile;
     use SeederModel;
 
     public $timestamps = false;

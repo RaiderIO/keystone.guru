@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Faction;
-use App\Models\File;
 use Illuminate\Database\Seeder;
 
 class FactionsSeeder extends Seeder implements TableSeederInterface
@@ -39,18 +38,6 @@ class FactionsSeeder extends Seeder implements TableSeederInterface
 
         foreach ($factions as $faction) {
             /** @var $faction Faction */
-            $faction->setTable(DatabaseSeeder::getTempTableName(Faction::class))->save();
-
-            // Translate faction name to English and convert it to lower case
-            $iconName          = strtolower(str_replace(' ', '', $faction->key));
-            $icon              = new File();
-            $icon->model_id    = $faction->id;
-            $icon->model_class = get_class($faction);
-            $icon->disk        = 'public';
-            $icon->path        = sprintf('images/factions/%s.png', $iconName);
-            $icon->save();
-
-            $faction->icon_file_id = $icon->id;
             $faction->setTable(DatabaseSeeder::getTempTableName(Faction::class))->save();
         }
     }

@@ -10,7 +10,6 @@ class FactionDisplayControls extends MapControl {
             onAdd: function (leafletMap) {
                 let template = Handlebars.templates['map_faction_display_controls_template'];
 
-                // factionsData is defined in map.blade.php
                 let factionsData = [];
                 let stateFactions = getState().getMapContext().getStaticFactions();
                 for (let index in stateFactions) {
@@ -19,7 +18,7 @@ class FactionDisplayControls extends MapControl {
                         factionsData.push({
                             name: lang.get(faction.name),
                             name_lc: lang.get(faction.name).toLowerCase(),
-                            icon_url: faction.iconfile.icon_url,
+                            icon_url: faction.icon_url,
                             fa_class: parseInt(index) === 0 ? 'fas' : 'far'
                         });
                     }
