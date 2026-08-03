@@ -95,8 +95,8 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
 
                 $tempFiles[] = $tempPath;
 
-                if ($this->isErrorDocument($tempPath)) {
-                    $log->handleSegmentIsErrorDocument($this->runId, $segment->id, $tempPath);
+                if (!$this->isPlausibleSegment($tempPath)) {
+                    $log->handleSegmentIsNotACombatLog($this->runId, $segment->id, $tempPath);
 
                     throw new RuntimeException(
                         sprintf('Downloaded segment %d for run %d is not a combat log', $segment->id, $this->runId),
@@ -153,18 +153,22 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
     }
 
     /**
-     * A second line of defence against a storage error response reaching the parser: `curlSaveToFile()` already
-     * rejects a non-2xx download, but a proxy or CDN in front of S3 may hand back an error document with a 200.
-     * Neither a combat log (a timestamp) nor a zip archive (`PK`) can start with `<`, so an opening angle bracket
-     * means an XML or HTML document rather than the segment we asked for (see #3789).
+     * A second line of defence against a bad download reaching the parser: `curlSaveToFile()` already rejects a
+     * non-2xx response, but a proxy or CDN in front of S3 may hand back an error document with a 200, and an
+     * empty body is a successful response by every measure curl reports.
+     *
+     * Neither a combat log (which starts with a timestamp) nor a zip archive (`PK`) can start with `<`, so an
+     * opening angle bracket means an XML or HTML document rather than the segment we asked for. A zero-byte
+     * segment carries nothing to extract either way, and is far more likely a broken download than a real
+     * (empty) part of a run - failing it retries rather than silently reporting a successful ingest (see #3789).
      */
-    private function isErrorDocument(string $filePath): bool
+    private function isPlausibleSegment(string $filePath): bool
     {
-        if (!is_file($filePath)) {
+        if (!is_file($filePath) || filesize($filePath) === 0) {
             return false;
         }
 
-        return file_get_contents($filePath, length: 1) === '<';
+        return file_get_contents($filePath, length: 1) !== '<';
     }
 
     /**

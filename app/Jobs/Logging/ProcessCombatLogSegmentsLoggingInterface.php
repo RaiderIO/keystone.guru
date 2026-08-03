@@ -12,7 +12,7 @@ interface ProcessCombatLogSegmentsLoggingInterface
 
     public function handleSegmentDownloadFailed(int $runId, int $segmentId, string $tempPath): void;
 
-    public function handleSegmentIsErrorDocument(int $runId, int $segmentId, string $tempPath): void;
+    public function handleSegmentIsNotACombatLog(int $runId, int $segmentId, string $tempPath): void;
 
     public function handleParseError(int $runId, int $combatLogVersion, string $message, string $class): void;
 

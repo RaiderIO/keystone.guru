@@ -14,6 +14,7 @@ use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Constraint\IsType;
@@ -125,7 +126,7 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
             ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION])
             ->onlyMethods(['curlSaveToFile'])
             ->getMock();
-        $job->method('curlSaveToFile')->willReturn(true);
+        $job->method('curlSaveToFile')->willReturnCallback($this->writeSegmentContents(...));
 
         // Act
         app()->call([$job, 'handle']);
@@ -186,7 +187,7 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
             ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION])
             ->onlyMethods(['curlSaveToFile'])
             ->getMock();
-        $job->method('curlSaveToFile')->willReturn(true);
+        $job->method('curlSaveToFile')->willReturnCallback($this->writeSegmentContents(...));
 
         // Act
         app()->call([$job, 'handle']);
@@ -304,9 +305,11 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
      * @throws Exception
      */
     #[Test]
-    public function handle_givenSegmentIsAnXmlErrorDocument_throwsRuntimeExceptionInsteadOfRecordingParseFailure(): void
-    {
-        // Arrange — a storage error response that still arrives with a 2xx status, so the download itself "succeeds".
+    #[DataProvider('implausibleSegmentBodyProvider')]
+    public function handle_givenSegmentIsNotACombatLog_throwsRuntimeExceptionInsteadOfRecordingParseFailure(
+        string $body,
+    ): void {
+        // Arrange — a bad download that still arrives with a 2xx status, so the download itself "succeeds".
         $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
         $raiderIOApiService->method('getCombatLogSegmentsForRun')
             ->willReturn(new CombatLogSegmentsResponse(
@@ -325,7 +328,7 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
         app()->instance(CombatLogParseFailureRepositoryInterface::class, $parseFailureRepository);
 
         $log = $this->createMockPublic(ProcessCombatLogSegmentsLoggingInterface::class);
-        $log->expects($this->once())->method('handleSegmentIsErrorDocument');
+        $log->expects($this->once())->method('handleSegmentIsNotACombatLog');
         $log->expects($this->never())->method('handleParseError');
         $log->expects($this->once())->method('handleEnd')->with(self::RUN_ID, false);
         app()->instance(ProcessCombatLogSegmentsLoggingInterface::class, $log);
@@ -336,8 +339,8 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
             ->getMock();
 
         $job->method('curlSaveToFile')
-            ->willReturnCallback(function (string $url, string $tempPath): bool {
-                file_put_contents($tempPath, '<?xml version="1.0" encoding="UTF-8"?><Error><Code>AccessDenied</Code></Error>');
+            ->willReturnCallback(function (string $url, string $tempPath) use ($body): bool {
+                file_put_contents($tempPath, $body);
 
                 return true;
             });
@@ -345,5 +348,27 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
         // Assert + Act
         $this->expectException(RuntimeException::class);
         app()->call([$job, 'handle']);
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function implausibleSegmentBodyProvider(): array
+    {
+        return [
+            'xml error document' => ['<?xml version="1.0" encoding="UTF-8"?><Error><Code>AccessDenied</Code></Error>'],
+            'html error page'    => ['<html><body>403 Forbidden</body></html>'],
+            'empty body'         => [''],
+        ];
+    }
+
+    /**
+     * Stand-in for a successful download: writes plausible combat log content to the segment's temp path.
+     */
+    private function writeSegmentContents(string $url, string $tempPath): bool
+    {
+        file_put_contents($tempPath, sprintf('8/2/2026 20:15:01.123-4  ENCOUNTER_START,from %s', $url));
+
+        return true;
     }
 }
