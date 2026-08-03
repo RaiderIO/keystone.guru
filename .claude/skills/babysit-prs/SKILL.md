@@ -1,6 +1,6 @@
 ---
 name: babysit-prs
-description: Use when asked to babysit, shepherd, or keep open MRs green. One pass over every open agent MR in RaiderIO/keystone.guru - fix red CI, address Wotuu's review comments, keep branches rebased onto master, merge PRs labeled `pr can merge` once green - designed to run repeatedly via /loop in a dedicated session. Never approves or deploys, and never merges anything Wotuu hasn't explicitly labeled. Not for reviewing a single PR (use the review skill) or for creating MRs.
+description: Use when asked to babysit, shepherd, or keep open MRs green — one pass over every open agent MR; fix red CI, address Wotuu's comments, rebase onto master, merge PRs labeled `pr can merge` once green. Designed for /loop in a dedicated session. Never approves, deploys, or merges anything Wotuu hasn't labeled. Not for reviewing a single PR (review skill) or creating MRs.
 ---
 
 # Babysit open MRs
@@ -242,7 +242,10 @@ expensive opus/fable agent reading a whole diff — 3 is a deliberate balance, n
 raise or lower it again if the cost/speed tradeoff stops feeling right.
 
 - **Skip** if the PR already carries the `pr cold reviewed` label (the once-per-MR marker; check
-  this before spawning a reviewer — it's cheaper than searching comments). If the label is missing
+  this before spawning a reviewer — it's cheaper than searching comments). The label is also
+  applied when the implementing session skipped cold review under the trivial-change rule
+  (`.claude/CLAUDE.md`, "Before declaring a MR ready for review") — the MR body says so; don't
+  dispatch a review to "make up" for it. If the label is missing
   but the PR already has `:robot:`-prefixed *inline* review comments or a `:robot: Cold review`
   summary comment from a cold review that ran before the label existed (or whose label application
   failed), just add the label instead of re-reviewing. Re-review only if the diff has changed

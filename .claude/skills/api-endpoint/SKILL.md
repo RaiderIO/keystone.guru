@@ -128,6 +128,20 @@ Route::prefix('routes/{gameVersion}')->group(static function () {
 
 No middleware for public, unauthenticated endpoints. Add `middleware('throttle:...')` if the endpoint is write-heavy or expensive.
 
+### Reserved-word controller methods
+
+Never name a controller method that's registered with the first-class callable syntax above after
+a PHP reserved word (`new`, `list`, `print`, `echo`, `class`, `function`, ...). It parses and
+passes tests fine, but `php artisan route:cache` serializes the closure via
+laravel-serializable-closure, and reconstituting it later `eval`s code like `function new(...)` —
+invalid syntax, since a function can't be named after a reserved word outside class context. The
+crash only appears in production, per-request, once the route cache is warm and that request hits
+the route (`ParseError: syntax error, unexpected token "new"`) — not at cache-build time and not
+in tests (routes aren't cached under `runningUnitTests()`). Fix: rename the controller method
+(e.g. `new` → `newest`); the route path/name (`'new'`, `api.v1.discover.new`) can stay unchanged
+since that's just a string, not a callable identifier. This has bitten `new`
+(APIDungeonRouteDiscoverController) and `list` before.
+
 ## Route Model Binding Cheat Sheet
 
 | Model | Route parameter | Resolved by |

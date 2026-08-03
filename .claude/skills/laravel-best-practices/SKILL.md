@@ -1,6 +1,6 @@
 ---
 name: laravel-best-practices
-description: "Apply this skill whenever writing, reviewing, or refactoring Laravel PHP code. This includes creating or modifying controllers, models, migrations, form requests, policies, jobs, scheduled commands, service classes, and Eloquent queries. Triggers for N+1 and query performance issues, caching strategies, authorization and security patterns, validation, error handling, queue and job configuration, route definitions, and architectural decisions. Also use for Laravel code reviews and refactoring existing Laravel code to follow best practices. Covers any task involving Laravel backend PHP code patterns."
+description: "Apply whenever writing, reviewing, or refactoring Laravel PHP code — controllers, models, migrations, form requests, policies, jobs, service classes, Eloquent queries; N+1/performance, caching, authorization/security, validation, error handling, queues, routes, and architectural decisions."
 license: MIT
 metadata:
   author: laravel
@@ -180,6 +180,30 @@ Check sibling files, related controllers, models, or tests for established patte
 - Prefer Laravel helpers (`Str`, `Arr`, `Number`, `Uri`, `Str::of()`, `$request->string()`) over raw PHP functions
 - No JS/CSS in Blade, no HTML in PHP classes
 - Code should be readable; comments only for config files
+
+## Model caching vs raw writes (project-specific — overrides generic review instincts)
+
+Models extending `CacheModel` use `genealabs/laravel-model-caching`'s `Cachable` trait, which hangs
+its cache invalidation off Eloquent's `saving`/`saved` events. Any raw write that goes straight to
+the query builder skips that invalidation — `upsert()` is the usual example, but so is anything
+else that never boots a model.
+
+**Missing cache invalidation is not a valid reason to avoid such a write, and must not be raised as
+a review finding** (Wotuu, PR #3766):
+
+- Model caching is **disabled in development** (`MODEL_CACHE_ENABLED=false`) and **enabled in
+  production**.
+- The tables behind `CacheModel` are **strictly read-only in production** — no production write can
+  leave a stale cache entry, and in development there is no cache to go stale.
+- The cache prefix in `config/laravel-model-caching.php` is keyed on the contents of the `version`
+  file, so every release sidesteps the previous release's model cache regardless.
+
+Reasons *other* than cache invalidation to prefer a model-level write still stand on their own
+merits — e.g. needing the saved model instance back (`upsert()` returns a row count, and
+re-fetching it needs a natural unique key), or observers/events that genuinely must fire. (For
+reference, `laravel-model-caching`'s `Traits/Buildable.php` does flush on `update()`, `delete()`,
+`forceDelete()`, `insert()`, `increment()`/`decrement()` and `truncate()` — `upsert()` is simply
+not among the methods it overrides.)
 
 ## How to Apply
 

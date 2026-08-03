@@ -34,20 +34,12 @@ Branch formats are as follows:
   exception below).
 
 ### Commit subjects start with `#`, which git silently eats on rebase
-Because subjects here begin with the issue number (`#3722 Fix the thing`), and git treats a line
-starting with `#` as a **comment** whenever it re-reads a message through the editor path, any
-`git rebase --continue` after a conflict strips the subject and promotes the first body paragraph
-in its place. `git commit -F <file>` does *not* strip comments, so the original commit is fine and
-only the rebase is affected — which makes it easy to miss.
-
-- Amend or re-create such a commit with `--cleanup=verbatim`:
-  `git commit --amend --cleanup=verbatim -F <msgfile>`.
-- After any rebase that hit a conflict, check `git log --oneline` and repair a mangled subject
-  before pushing.
-- To rewrite a commit that isn't `HEAD` without interactive rebase (unsupported here), mark it
-  first: `git branch -f save HEAD`, `git reset --hard <target>`, amend, then `git cherry-pick save`.
-  Note `git tag` needs `-m` in this repo (annotated tags are forced), so a branch is the easier
-  marker.
+Subjects begin with the issue number (`#3722 Fix the thing`), and any `git rebase --continue`
+after a conflict re-reads the message through the editor path, where a leading `#` line is a
+comment — the subject is stripped and the first body paragraph promoted in its place. After any
+rebase that hit a conflict, check `git log --oneline` and repair a mangled subject with
+`git commit --amend --cleanup=verbatim -F <msgfile>` before pushing. (Rewriting a non-HEAD
+commit without interactive rebase: see the `worktree-docker` skill.)
 
 ### Git worktrees
 - By default, do every task from an isolated git worktree with its own Docker `app` stack, created
@@ -91,30 +83,17 @@ the appearance of impersonating the user.
 the body directly underneath already carries it. Same for commit messages — those are attributed via
 the `Co-Authored-By: Claude` trailer, not an emoji.
 
-`gh pr edit` **works again as of gh 2.96.0** (verified 2026-07-29 on PR #3750 with a no-op
-`--body-file` edit). It used to fail on this repo with a Projects-classic GraphQL deprecation error
-(`repository.pullRequest.projectCards`) — `gh pr edit` fetched that field in its pre-edit query
-regardless of which flag you passed, so it died before applying the change. That was a client-side
-query in the old apt `gh` 2.4.0; the 2.96.0 build in `~/.local/bin` no longer requests it.
-
-If it ever regresses, the REST fallback still works:
-`gh api -X PATCH repos/RaiderIO/keystone.guru/pulls/<number> -F body=@<file>` — capital `-F`
-dereferences the `@file` into its contents; lowercase `-f` would send the literal string
-`@<file>` as the body. Note the apt-installed `gh` 2.4.0 is still on `PATH` at `/usr/bin/gh`,
-shadowed by `~/.local/bin/gh`; if the error reappears, check `gh --version` first.
+`gh pr edit` works on gh ≥ 2.96.0 (`~/.local/bin/gh`; the apt 2.4.0 at `/usr/bin/gh` fails with a
+Projects-classic GraphQL error — if that error appears, check `gh --version`). REST fallback:
+`gh api -X PATCH repos/RaiderIO/keystone.guru/pulls/<n> -F body=@<file>` — capital `-F`
+dereferences the `@file`; lowercase `-f` sends the literal string `@<file>`.
 
 ### Stacked PRs: always target `master`
 
-`php-tests` and `phpstan` are both `on: pull_request: branches: [master]`, so a PR opened against
-a *feature* branch silently skips both PHP checks. It still shows green — `build`, `js-tests` and
-`php-cs-fixer` run regardless of base branch — which looks like a pass until you count the checks
-(9 when a PR is wired up correctly, 3 when it is not).
-
-When one branch is cut from another, open the PR against `master` anyway and say so in the body;
-the diff collapses on its own once the parent merges. If a PR was already opened against a feature
-branch, retargeting it with `gh api -X PATCH .../pulls/<n> -f base=master` is **not** enough to make
-CI run — that fires `pull_request: edited`, which is not in the default event types. Close and
-reopen the PR (`reopened` *is* a default type) to trigger a full run.
+`php-tests`/`phpstan` only run on PRs targeting `master`, so a PR against a feature branch
+silently skips them yet still shows green (9 checks when wired correctly, 3 when not). Open
+stacked PRs against `master` anyway and say so in the body — the diff collapses when the parent
+merges. Retargeting an existing PR via PATCH does **not** retrigger CI; close and reopen it.
 
 ## Command execution
 - Never run PHP, Artisan, PHPUnit, or Pest directly on the host machine.
@@ -139,26 +118,37 @@ For example:
 - `composer run fix` reformats any files with pre-existing style drift, not just the ones you changed. After running it, stage only the files you actually intended to touch (`git checkout -- <other files>` to discard the unrelated reformats) so your diff/PR stays focused.
 
 ### Before declaring a MR ready for review
-A MR is only "ready" once all three of these hold — human review time is the scarcest resource, so
-review must start from a pre-reviewed, verified MR:
+Human review time is the scarcest resource, so review must start from a pre-reviewed, verified MR —
+but the checklist is **tiered by change size** so small MRs don't pay full ceremony:
+
+- **Trivial tier** — either (a) a code change with ≤ 20 changed lines (excluding tests/docs), no
+  UI-visible impact, no schema/auth/security change, covered by a passing test; or (b) a
+  docs/config-only change of ≤ 50 changed lines total. Skip item 1 (cold review); still require
+  item 3 (green CI). State in the MR body: "Cold review skipped under the trivial-change rule" and
+  add the `pr cold reviewed` label anyway so `babysit-prs` doesn't dispatch its own review.
+  Docs-only does NOT mean low blast radius: a larger docs MR — especially one touching `.claude/`
+  instruction/process files, which degrade every future session when wrong — takes the standard
+  tier.
+- **Standard tier** — everything else: all applicable items below.
+
 1. **Independent review**: the `code-review` skill is `disable-model-invocation` — only the user
    can trigger it directly (`/code-review`), an agent calling it itself will error. Once the change
    is built, hand the diff to a fresh-context agent (no shared context with whoever implemented it —
    a plain `Agent` call, not a `fork`) to review, and resolve every finding it raises (or note in the
    MR body why a finding is intentionally not addressed). Afterwards, post the `:robot: Cold review:
    <N> findings` marker comment on the MR and add the `pr cold reviewed` label
-   (`gh pr edit <n> --add-label "pr cold reviewed"`) — this is the same marker/label `babysit-prs`
-   step 4 checks for before dispatching its own cold review, so doing this here is what stops a PR
-   from getting reviewed twice (once here, once by babysit-prs the moment it goes green + non-draft).
-2. **Visual verification**: for any UI-visible change, verify the affected page(s) in headless
-   Chrome (`headless-browser-verify` skill) and post before/after screenshots on the MR
-   (`post-screenshot.sh`).
+   (`gh pr edit <n> --add-label "pr cold reviewed"`) — the same marker/label `babysit-prs` checks
+   before dispatching its own cold review, which is what stops a PR from being reviewed twice.
+2. **Visual verification**: ONLY when rendered output actually changed — verify the affected
+   page(s) in headless Chrome (`headless-browser-verify` skill) and post before/after screenshots
+   on the MR (`post-screenshot.sh`). Backend-only MRs skip this explicitly; don't screenshot "to
+   be safe".
 3. **Green CI**: wait for the MR's checks and fix any failure yourself — including flaky or
    seemingly unrelated failures (root-cause them; don't re-run and hope, and don't defer to a
    follow-up issue).
 
-Only once all three hold, mark the MR ready for review (`gh pr ready <n>`) — see the draft-PR note
-under Git worktrees above for why it must stay a draft until then.
+Only once the applicable items hold, mark the MR ready for review (`gh pr ready <n>`) — see the
+draft-PR note under Git worktrees above for why it must stay a draft until then.
 
 # Project-specific conventions
 
@@ -194,48 +184,22 @@ under Git worktrees above for why it must stay a draft until then.
 - Use Laravel's query builder for very complex database operations.
 
 #### Model caching is not a reason to avoid writes that bypass Eloquent events
-Models extending `CacheModel` use `genealabs/laravel-model-caching`'s `Cachable` trait, which hangs
-its cache invalidation off Eloquent's `saving`/`saved` events. Any raw write that goes straight to
-the query builder therefore skips that invalidation — `upsert()` is the usual example, but so is
-anything else that never boots a model.
-
-**Missing cache invalidation is not a valid reason to avoid such a write, and must not be raised as
-a review finding** (Wotuu, PR #3766):
-- Model caching is **disabled in development** (`MODEL_CACHE_ENABLED=false`) and **enabled in
-  production**.
-- The tables behind `CacheModel` are **strictly read-only in production**. So there is no production
-  write that could leave a stale cache entry, and in development there is no cache to go stale.
-- The cache prefix in `config/laravel-model-caching.php` is keyed on the contents of the `version`
-  file, so every release sidesteps the previous release's model cache regardless.
-
-Reasons *other* than cache invalidation to prefer a model-level write still stand and should be
-judged on their own merits — e.g. needing the saved model instance back (`upsert()` returns a row
-count, and re-fetching it needs a natural unique key), or observers/events that genuinely must fire.
-(For reference, `laravel-model-caching`'s `Traits/Buildable.php` does flush on `update()`,
-`delete()`, `forceDelete()`, `insert()`, `increment()`/`decrement()` and `truncate()` — `upsert()`
-is simply not among the methods it overrides.)
+Raw writes (e.g. `upsert()`) on `CacheModel` models skip `laravel-model-caching`'s invalidation —
+but **missing cache invalidation must not be raised as a review finding** (Wotuu, PR #3766): the
+`CacheModel` tables are read-only in production, caching is off in development, and every release
+rotates the cache prefix anyway. Full rationale and the legitimate reasons to still prefer a
+model-level write: see the `laravel-best-practices` skill, "Model caching vs raw writes".
 
 ### Model Creation
 - Every new model must also have a repository. Create the interface at `app/Repositories/Interfaces/{Domain}/{ModelName}RepositoryInterface.php`, the implementation at `app/Repositories/Database/{Domain}/{ModelName}Repository.php`, and register the binding in `app/Providers/RepositoryServiceProvider.php`. See the `repository-pattern` skill for the full convention.
 
 ### Seeded models (`SeederModel`)
-Models using the `App\Models\Traits\SeederModel` trait use `DatabaseSeeder::getTempTableName()` to stage
-their table as `<table>_temp` while seeding — the trait is a marker only, not a guarantee about where a
-model's rows come from.
-
-For the mapping/season/expansion-style models (dungeons, seasons, expansions, mapping objects, …), rows are
-authored in `database/seeders` (some are being migrated to `.json` files under there instead), so a delete
-is recoverable directly from those files.
-
-- **A subset of trait users are combat-log-derived instead and are *not* recoverable from seeders:**
-  `SpellDungeon`, `NpcCharacteristic` and `NpcSpell` are intentionally omitted from the seeder export (see
-  `DungeonDataSeeder::getAffectedModelClasses()`), and `CombatLogNpcEvent`, `CombatLogSpellEvent` and
-  `ParsedCombatLog` (declared via grouped `use` statements, so `grep "use SeederModel;"` misses them) hold
-  pure runtime/audit data that was never seeder-sourced to begin with. A delete of one of these rows is
-  permanent unless fresh combat log data re-derives it.
-- **Nothing outside the admin panel, the mapping editor, the seeders and the hourly
-  `combatlog:detectstaledata` sweep should delete these rows.** That is a convention, not an enforced rule:
-  the routes that delete them already sit behind `role:admin`, and there is no model-level guard.
+The `SeederModel` trait is a marker, not a guarantee rows come from seeders — some trait users
+(`SpellDungeon`, `NpcCharacteristic`, `NpcSpell`, `CombatLogNpcEvent`, `CombatLogSpellEvent`,
+`ParsedCombatLog`) are combat-log-derived and a delete is **permanent**, not recoverable from
+`database/seeders`. Only the admin panel, mapping editor, seeders and the hourly
+`combatlog:detectstaledata` sweep may delete such rows (convention, not enforced). Full list and
+rationale: `seeder-load` skill, "SeederModel rows".
 
 ### Controllers & Validation
 - Always create Form Request classes for validation rather than inline validation in controllers. Include both validation rules and custom error messages.
@@ -252,7 +216,11 @@ is recoverable directly from those files.
 ```
 
 ### Routes & controller method naming
-- Routes are registered with first-class callable syntax, e.g. `Route::get('new', new FooController()->new(...))`. Never name a controller method that's registered this way after a PHP reserved word (`new`, `list`, `print`, `echo`, `class`, `function`, ...). It parses and passes tests fine, but `php artisan route:cache` serializes the closure via laravel-serializable-closure, and reconstituting it later `eval`s code like `function new(...)` — invalid syntax, since a function can't be named after a reserved word outside class context. The crash only appears in production, per-request, once the route cache is warm and that request hits the route (`ParseError: syntax error, unexpected token "new"`), not at cache-build time or in tests (routes aren't cached under `runningUnitTests()`). Fix: rename the controller method (e.g. `new` → `newest`); the route path/name (`'new'`, `api.v1.discover.new`) can stay unchanged since that's just a string, not a callable identifier. This has bitten `new` (APIDungeonRouteDiscoverController) and `list` before.
+- Never name a controller method registered with first-class callable syntax
+  (`Route::get('new', new FooController()->new(...))`) after a PHP reserved word (`new`, `list`,
+  `print`, ...) — `route:cache` serialization crashes per-request in production only, not in tests.
+  The route path/name string may keep the reserved word; only the method needs renaming. Full
+  mechanics: `api-endpoint` skill, "Reserved-word controller methods".
 
 ### Queues
 - Use queued jobs for time-consuming operations with the `ShouldQueue` interface.
@@ -266,13 +234,13 @@ is recoverable directly from those files.
 ## Database (migrations)
 - Do not use foreign keys for migrations. This application does not use them, and they can cause issues with seeding and testing.
 - **Migrations must be backward-compatible with the currently-running code.** Deploys are not atomic: a cron runs `migrate` independently of the ECS web rollout, so during every deploy the old code and the new schema (and vice-versa) coexist for a window. Additive changes (new nullable/defaulted column, new table, backfill) are safe. **Destructive changes are not** — never drop a table/column, rename it, or narrow its type in the same release that removes the code using it, or the still-running old containers will 500 against the missing schema (this is what broke staging in #3497).
-- **MySQL caps identifier names at 64 characters**, and Laravel's generated index names are
-  `<table>_<column>_index` / `<table>_<col1>_<col2>_unique`. On a long table name that silently
-  overflows and `Schema::create` fails with `Identifier name '...' is too long` — *after* the table
-  itself was already created, so the migration must be dropped by hand before re-running. Pass an
-  explicit short name whenever the table name is long: `$table->unsignedBigInteger('x_id')
-  ->index('short_x_id_index')`, `$table->unique([...], 'short_unique')`.
-- Split destructive schema changes across two releases (expand/contract): release N removes the last code consumer and does any additive/backfill work while leaving the old schema in place; release N+1 ships the `drop`/rename once nothing references it. Column rename = add new + backfill + dual-write in N, drop old in N+1.
+- **MySQL caps identifier names at 64 characters** and Laravel's generated index names include the
+  table name — on long table names pass an explicit short name: `->index('short_x_id_index')`,
+  `$table->unique([...], 'short_unique')`. (The failure hits *after* the table is created, so the
+  half-made table must be dropped by hand before re-running.)
+- Split destructive schema changes across two releases (expand/contract): release N removes the
+  last code consumer while leaving the old schema in place; release N+1 ships the drop/rename.
+  Column rename = add new + backfill + dual-write in N, drop old in N+1.
 
 ## Localization
 - Use the `__()` helper function for localization and translation of strings. Use translation keys. For example: `__('view_common.my.folder.structure.welcome_to_the_website')`.

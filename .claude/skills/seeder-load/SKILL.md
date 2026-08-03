@@ -155,3 +155,23 @@ foreach ($floor['dungeon_speedrun_required_npcs25_man'] ?? [] as $speedrunNpc) {
 5. Confirm the companion `seeder-save` export produces the JSON structure this parser expects.
 
 See also: `seeder-save` skill for the corresponding export side.
+
+## `SeederModel` rows: which are recoverable from seeders, which are not
+
+Models using the `App\Models\Traits\SeederModel` trait stage their table as `<table>_temp` via
+`DatabaseSeeder::getTempTableName()` while seeding — the trait is a marker only, not a guarantee
+about where a model's rows come from.
+
+For the mapping/season/expansion-style models (dungeons, seasons, expansions, mapping objects, …),
+rows are authored in `database/seeders` (some as `.json` files under there), so a delete is
+recoverable directly from those files. **A subset of trait users are combat-log-derived and NOT
+recoverable from seeders:** `SpellDungeon`, `NpcCharacteristic` and `NpcSpell` are intentionally
+omitted from the seeder export (see `DungeonDataSeeder::getAffectedModelClasses()`), and
+`CombatLogNpcEvent`, `CombatLogSpellEvent` and `ParsedCombatLog` (declared via grouped `use`
+statements, so `grep "use SeederModel;"` misses them) hold pure runtime/audit data that was never
+seeder-sourced. A delete of one of these rows is permanent unless fresh combat log data re-derives
+it.
+
+**Nothing outside the admin panel, the mapping editor, the seeders and the hourly
+`combatlog:detectstaledata` sweep should delete these rows.** That is a convention, not an enforced
+rule: the deleting routes sit behind `role:admin`, and there is no model-level guard.

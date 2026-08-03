@@ -1,6 +1,6 @@
 ---
 name: ajax-map-editor-crud
-description: The map editor's server-side CRUD layer — AjaxMappingModelBaseController, the Ajax*Controller pattern, FormRequests, routes/web.php ajax groups, broadcast events (ContextEvent/ModelChangedEvent/ModelDeletedEvent), presence channels in routes/channels.php, and the checklists for adding a new editable map-object type (server-side, and the front-end MapObject conventions — per-attribute translation keys, snackbars for transient admin state). Use when adding or changing an ajax map endpoint, a broadcast event, or debugging collaborative-editing sync. Not for the model versioning itself (mapping-versioned-models), the front-end Leaflet layer (new-map-view), or public API endpoints (api-endpoint).
+description: The map editor's server-side CRUD layer — AjaxMappingModelBaseController, the Ajax*Controller pattern, FormRequests, broadcast events, presence channels, and the checklists for adding a new editable map-object type. Use when adding/changing an ajax map endpoint or broadcast event, or debugging collaborative-editing sync. Not for model versioning (mapping-versioned-models), the Leaflet front-end (new-map-view), or public API endpoints (api-endpoint).
 ---
 
 # Ajax Map-Editor CRUD & Broadcast Events

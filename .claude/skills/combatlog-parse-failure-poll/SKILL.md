@@ -1,6 +1,6 @@
 ---
 name: combatlog-parse-failure-poll
-description: On-demand combat log parse-failure sweep — run manually via /combatlog-parse-failure-poll whenever you're at your machine. Checks Staging (and, once configured, Production) for new or worsening CombatLogParseFailure clusters and files/updates GitHub issues describing them. Read-only against the app: never writes code, never opens MRs, never marks failures resolved. Mirrors the update-mdt-package skill's "human-run check" pattern rather than being a scheduled/autonomous job. Use when the user runs /combatlog-parse-failure-poll, or asks to "check for new combat log failures" / "sweep Staging for parse failures".
+description: On-demand, human-run combat log parse-failure sweep — checks Staging for new or worsening CombatLogParseFailure clusters and files/updates GitHub issues. Read-only against the app — never writes code, opens MRs, or marks failures resolved. Use when asked to check or sweep for new combat log parse failures.
 ---
 
 # /combatlog-parse-failure-poll — Combat Log Parse-Failure Sweep
