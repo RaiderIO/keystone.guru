@@ -34,8 +34,10 @@
              resolves the 'sentry' channel by name, or triggers the SDK directly, sends to whichever project the
              developer's .env points at. Both keys are pinned because config/sentry.php falls back from the first to
              the second. Tests that need the DSN branch build it themselves against a stub transport. -->
-        <env name="SENTRY_LARAVEL_DSN" value=""/>
-        <env name="SENTRY_DSN" value=""/>
+        <!-- force="true" matters: PHPUnit skips an <env> entry when the variable already exists in the environment
+             (PhpHandler: `if ($force || getenv($name) === false)`), so without it an exported DSN would still win. -->
+        <env name="SENTRY_LARAVEL_DSN" value="" force="true"/>
+        <env name="SENTRY_DSN" value="" force="true"/>
         <env name="APP_SERVICES_CACHE" value="/tmp/phpunit_services.php"/>
         <!-- The 'tmp_file' store (RemembersToFile, used by ViewService among others) is a file cache that
              CACHE_STORE does not cover. Without this the tests read, write and flush the cache of the

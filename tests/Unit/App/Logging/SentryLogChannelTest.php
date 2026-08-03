@@ -3,11 +3,13 @@
 namespace Tests\Unit\App\Logging;
 
 use App\Logging\Handlers\SkipsExceptionMirrorsHandler;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Monolog\Handler\NoopHandler;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Sentry\ClientBuilder;
 use Sentry\Options;
 use Sentry\State\Hub;
@@ -216,6 +218,63 @@ final class SentryLogChannelTest extends PublicTestCase
             $transport->capturedEvents[0]->getFingerprint(),
             $transport->capturedEvents[1]->getFingerprint(),
         );
+    }
+
+    /**
+     * The real shape of a parse failure, and the one that matters most: CombatLogStringParser interpolates the
+     * offending line into its message, so the `message` context key carries character names and hex GUIDs. Collapsing
+     * digit runs alone leaves those intact, which would give every failing line its own issue and stop the throttle
+     * (which keys on the fingerprint) from ever engaging.
+     */
+    #[Test]
+    public function sentryChannel_givenParseErrorsCarryingDifferentCombatLogLines_fingerprintsThemTogether(): void
+    {
+        // Arrange
+        $transport = $this->bindStubHub();
+        $channel   = $this->sentryChannel();
+
+        // Act - the same failure on two different lines, from two different players
+        $channel->error('ProcessCombatLogSegmentsLogging::handleParseError', [
+            'exceptionClass' => 'InvalidArgumentException',
+            'message'        => 'Unbalanced quotes in string SPELL_DAMAGE,Player-1084-0B4087DE,"Rhaellyn-Ravencrest',
+        ]);
+        $channel->error('ProcessCombatLogSegmentsLogging::handleParseError', [
+            'exceptionClass' => 'InvalidArgumentException',
+            'message'        => 'Unbalanced quotes in string SPELL_DAMAGE,Player-3676-0A1B2C3D,"Someoneelse-Kazzak',
+        ]);
+
+        // Assert
+        self::assertCount(2, $transport->capturedEvents);
+        self::assertSame(
+            $transport->capturedEvents[0]->getFingerprint(),
+            $transport->capturedEvents[1]->getFingerprint(),
+            'Two occurrences of one parse failure must group, even though each quotes a different combat log line.',
+        );
+    }
+
+    /**
+     * This handler runs inside Monolog's handler loop, which rethrows, and the sentry channel is a member of every
+     * stack this application declares - including the one Handler::report() logs through. A Redis outage must
+     * therefore never turn Log::error() into a thrown exception.
+     */
+    #[Test]
+    public function sentryChannel_givenAnUnreachableCache_stillLogsWithoutThrowing(): void
+    {
+        // Arrange
+        $transport = $this->bindStubHub();
+        $channel   = $this->sentryChannel();
+
+        Cache::shouldReceive('increment')->andThrow(new RuntimeException('Connection refused'));
+        Cache::shouldReceive('put')->andThrow(new RuntimeException('Connection refused'));
+
+        // Act
+        $channel->error('ProcessCombatLogSegmentsLogging::handleParseError', [
+            'exceptionClass' => 'InvalidArgumentException',
+            'message'        => 'Invalid parameter count',
+        ]);
+
+        // Assert - failing open: the record is still reported rather than lost or rethrown
+        self::assertCount(1, $transport->capturedEvents);
     }
 
     /**

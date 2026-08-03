@@ -54,6 +54,12 @@ class FingerprintsStructuredErrorsHandler extends HandlerWrapper
     /** Hard cap the error tracker applies to tag values; a longer value is dropped rather than truncated. */
     private const int MAX_TAG_LENGTH = 200;
 
+    /**
+     * How much of the normalised message contributes to the fingerprint. Long enough to tell failure shapes apart,
+     * short enough that a message with an entire combat log line appended cannot make every event unique.
+     */
+    private const int MAX_FINGERPRINT_MESSAGE_LENGTH = 120;
+
     #[Override]
     public function handle(LogRecord $record): bool
     {
@@ -141,8 +147,15 @@ class FingerprintsStructuredErrorsHandler extends HandlerWrapper
     }
 
     /**
-     * Reduces a failure message to its stable shape by collapsing every digit run to a `#`, so
-     * "Unable to find combat log version 21" and "... version 22" group together.
+     * Reduces a failure message to its stable shape, so "Unable to find combat log version 21" and "... version 22"
+     * group together.
+     *
+     * Collapsing digit runs alone is not enough here. Parsing exceptions routinely interpolate the offending combat
+     * log line into their message - `CombatLogStringParser` throws "Unbalanced quotes in string <line>", and
+     * `CombatLogService` wraps that as the message - and such a line carries character names and hex GUIDs. Left
+     * alone those make every single failing line its own fingerprint, which would defeat both the grouping and the
+     * throttle that keys on it. Quoted segments and GUID-shaped tokens are therefore flattened first, and the result
+     * is capped so a very long line cannot reintroduce uniqueness past the cap.
      *
      * Known limitation, inherited from the manual clustering this replaces: two genuinely different root causes that
      * happen to share a normalised shape merge into one issue. That is acceptable for a triage feed - re-cluster by
@@ -150,6 +163,19 @@ class FingerprintsStructuredErrorsHandler extends HandlerWrapper
      */
     private static function normalizeMessage(string $message): string
     {
-        return trim((string)preg_replace('/\d+/', '#', $message));
+        // Quoted segments in a combat log line are names and free text; the failure shape does not depend on them
+        $normalized = (string)preg_replace('/"[^"]*"/', '""', $message);
+
+        // An unbalanced quote - the single most common parse failure - leaves a dangling `"Somebody-Realm` that the
+        // pass above cannot match, and that trailing name is per-player. Flatten it the same way.
+        $normalized = (string)preg_replace('/"[^"]*$/', '""', $normalized);
+
+        // WoW GUIDs (Player-1234-0A1B2C3D, Creature-0-3886-2291-16093-208862-00003EDB78) are per-entity by design
+        $normalized = (string)preg_replace('/\b[A-Za-z]+(?:-[0-9A-Fa-f]+)+\b/', '#', $normalized);
+
+        $normalized = (string)preg_replace('/\d+/', '#', $normalized);
+        $normalized = (string)preg_replace('/\s+/', ' ', $normalized);
+
+        return mb_substr(trim($normalized), 0, self::MAX_FINGERPRINT_MESSAGE_LENGTH);
     }
 }

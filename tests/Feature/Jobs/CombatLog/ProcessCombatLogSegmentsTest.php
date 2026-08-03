@@ -180,7 +180,20 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
         app()->instance(CombatLogParseFailureRepositoryInterface::class, $parseFailureRepository);
 
         $log = $this->createMockPublic(ProcessCombatLogSegmentsLoggingInterface::class);
-        $log->expects($this->once())->method('handleParseError');
+        // Asserted in full, and deliberately mirroring the recordFailure expectation above: the log line used to
+        // report the CombatLogParseException wrapper while the recorded failure reported the cause, so the two could
+        // never be correlated. Both must now name InvalidArgumentException.
+        $log->expects($this->once())
+            ->method('handleParseError')
+            ->with(
+                self::RUN_ID,
+                $this->isNull(),
+                self::COMBAT_LOG_VERSION,
+                257080,
+                InvalidArgumentException::class,
+                'Unbalanced quotes in string SPELL_DAMAGE,Player-1084-0B4087DE,"Pa',
+                'SPELL_DAMAGE,Player-1084-0B4087DE,"Pa',
+            );
         $log->expects($this->once())->method('handleEnd')->with(self::RUN_ID, false);
         app()->instance(ProcessCombatLogSegmentsLoggingInterface::class, $log);
 

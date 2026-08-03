@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Cache;
 use Monolog\Handler\HandlerWrapper;
 use Monolog\LogRecord;
 use Override;
+use Throwable;
 
 /**
  * Caps how many times the same failure is forwarded to the error tracker within a window.
@@ -60,25 +61,47 @@ class ThrottlesRepeatedEventsHandler extends HandlerWrapper
     /**
      * Counts this record against its signature's window and reports whether it is still within the allowance.
      *
-     * A cache failure must never cost us an error report, so anything unexpected forwards the record.
+     * The whole body is guarded: this runs inside Monolog's handler loop, which rethrows (Logger::handleException),
+     * and the `sentry` channel is a member of every stack this application declares. An unreachable cache must
+     * therefore never turn a Log::error() call into a thrown exception - that would break error logging itself, and
+     * Handler::report() logs through exactly this path. Failing open costs at worst a burst of duplicate events.
      */
     private function shouldForward(LogRecord $record): bool
     {
-        $key = sprintf('%s:%s', self::CACHE_KEY_PREFIX, sha1($this->signature($record)));
+        try {
+            $key = $this->cacheKey($record);
 
-        // add() only succeeds when the key is absent, which both starts the window and counts the first event
-        if (Cache::add($key, 1, self::WINDOW_SECONDS)) {
+            $count = Cache::increment($key);
+
+            // A store that cannot increment returns false/null - nothing to count against, so forward the record
+            if (!is_int($count)) {
+                return true;
+            }
+
+            if ($count === 1) {
+                // increment() creates the key without a lifetime (Redis INCRBY does not set one), so the counter has
+                // to be given its window here or it would never expire and the signature would be silenced forever
+                Cache::put($key, 1, self::WINDOW_SECONDS);
+            }
+
+            return $count <= self::MAX_EVENTS_PER_WINDOW;
+        } catch (Throwable) {
             return true;
         }
+    }
 
-        $count = Cache::increment($key);
-
-        // Stores that cannot increment (or a key that expired between the two calls) return false/null - forward it
-        if (!is_int($count)) {
-            return true;
-        }
-
-        return $count <= self::MAX_EVENTS_PER_WINDOW;
+    /**
+     * Bucketing the key by wall-clock window rather than relying purely on the entry's lifetime means a counter that
+     * somehow outlives its window still cannot silence the next one - the next window simply uses a different key.
+     */
+    private function cacheKey(LogRecord $record): string
+    {
+        return sprintf(
+            '%s:%d:%s',
+            self::CACHE_KEY_PREFIX,
+            intdiv(time(), self::WINDOW_SECONDS),
+            sha1($this->signature($record)),
+        );
     }
 
     /**
