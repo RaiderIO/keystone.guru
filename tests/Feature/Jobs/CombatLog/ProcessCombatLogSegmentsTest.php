@@ -299,4 +299,51 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
         $this->expectException(RuntimeException::class);
         app()->call([$job, 'handle']);
     }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenSegmentIsAnXmlErrorDocument_throwsRuntimeExceptionInsteadOfRecordingParseFailure(): void
+    {
+        // Arrange — a storage error response that still arrives with a 2xx status, so the download itself "succeeds".
+        $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->method('getCombatLogSegmentsForRun')
+            ->willReturn(new CombatLogSegmentsResponse(
+                sourceUserId: 1,
+                segments:     [new CombatLogSegment(id: 1, type: 'combat_log', downloadUrl: self::DOWNLOAD_URL_1)],
+            ));
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+
+        $extractionService = $this->createMockPublic(CombatLogDataExtractionServiceInterface::class);
+        $extractionService->expects($this->never())->method('extractData');
+        app()->instance(CombatLogDataExtractionServiceInterface::class, $extractionService);
+
+        // The download is retryable, so it must not leave behind a parse failure blaming the parser.
+        $parseFailureRepository = $this->createMockPublic(CombatLogParseFailureRepositoryInterface::class);
+        $parseFailureRepository->expects($this->never())->method('recordFailure');
+        app()->instance(CombatLogParseFailureRepositoryInterface::class, $parseFailureRepository);
+
+        $log = $this->createMockPublic(ProcessCombatLogSegmentsLoggingInterface::class);
+        $log->expects($this->once())->method('handleSegmentIsErrorDocument');
+        $log->expects($this->never())->method('handleParseError');
+        $log->expects($this->once())->method('handleEnd')->with(self::RUN_ID, false);
+        app()->instance(ProcessCombatLogSegmentsLoggingInterface::class, $log);
+
+        $job = $this->getMockBuilder(ProcessCombatLogSegments::class)
+            ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION])
+            ->onlyMethods(['curlSaveToFile'])
+            ->getMock();
+
+        $job->method('curlSaveToFile')
+            ->willReturnCallback(function (string $url, string $tempPath): bool {
+                file_put_contents($tempPath, '<?xml version="1.0" encoding="UTF-8"?><Error><Code>AccessDenied</Code></Error>');
+
+                return true;
+            });
+
+        // Assert + Act
+        $this->expectException(RuntimeException::class);
+        app()->call([$job, 'handle']);
+    }
 }

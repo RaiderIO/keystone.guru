@@ -94,6 +94,14 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
                 }
 
                 $tempFiles[] = $tempPath;
+
+                if ($this->isErrorDocument($tempPath)) {
+                    $log->handleSegmentIsErrorDocument($this->runId, $segment->id, $tempPath);
+
+                    throw new RuntimeException(
+                        sprintf('Downloaded segment %d for run %d is not a combat log', $segment->id, $this->runId),
+                    );
+                }
             }
 
             foreach ($tempFiles as $tempFile) {
@@ -142,6 +150,21 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
         $path = (string)parse_url($downloadUrl, PHP_URL_PATH);
 
         return str_ends_with($path, '.zip') ? 'zip' : 'txt';
+    }
+
+    /**
+     * A second line of defence against a storage error response reaching the parser: `curlSaveToFile()` already
+     * rejects a non-2xx download, but a proxy or CDN in front of S3 may hand back an error document with a 200.
+     * Neither a combat log (a timestamp) nor a zip archive (`PK`) can start with `<`, so an opening angle bracket
+     * means an XML or HTML document rather than the segment we asked for (see #3789).
+     */
+    private function isErrorDocument(string $filePath): bool
+    {
+        if (!is_file($filePath)) {
+            return false;
+        }
+
+        return file_get_contents($filePath, length: 1) === '<';
     }
 
     /**
