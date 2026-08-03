@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Api\V1\CombatLog\Route;
 
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Http\Requests\Api\V1\APIFormRequest;
 use App\Models\Dungeon;
 use App\Rules\CombatLogRouteNpcChronologicalRule;

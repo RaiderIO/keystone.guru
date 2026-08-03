@@ -2,7 +2,7 @@
 
 namespace App\Service\ChallengeModeRunData;
 
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Models\CombatLog\ChallengeModeRunData;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Dungeon;

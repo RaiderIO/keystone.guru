@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\CombatLog\Route;
 
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Override;

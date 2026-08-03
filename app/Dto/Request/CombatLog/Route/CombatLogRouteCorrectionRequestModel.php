@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Models\Request\CombatLog\Route;
+namespace App\Dto\Request\CombatLog\Route;
 
 use Illuminate\Support\Collection;
 use Override;

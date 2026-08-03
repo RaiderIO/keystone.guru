@@ -49,7 +49,7 @@ return [
                 */
                 'annotations' => [
                     base_path('app/Http/Resources'),
-                    base_path('app/Http/Models'),
+                    base_path('app/Dto'),
                     base_path('app/Http/Controllers/Api/V1/Spec'),
                     base_path('app/Http/Controllers/Api/V1/Public'),
                 ],
@@ -104,7 +104,7 @@ return [
                 */
                 'annotations' => [
                     base_path('app/Http/Resources'),
-                    base_path('app/Http/Models'),
+                    base_path('app/Dto'),
                     base_path('app/Http/Controllers/Api/V1/Spec'),
                     base_path('app/Http/Controllers/Api/V1/InternalTeam'),
                 ],

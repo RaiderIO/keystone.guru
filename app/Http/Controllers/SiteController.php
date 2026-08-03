@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Logic\Utils\Stopwatch;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;

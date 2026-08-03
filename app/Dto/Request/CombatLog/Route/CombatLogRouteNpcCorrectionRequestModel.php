@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Models\Request\CombatLog\Route;
+namespace App\Dto\Request\CombatLog\Route;
 
 /**
  * This class is used when Raider.io sends combat log info to our API, we then push it through ARC and this correction class

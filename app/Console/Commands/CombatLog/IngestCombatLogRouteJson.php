@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\CombatLog;
 
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Logging\StructuredLogging;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
 use Auth;

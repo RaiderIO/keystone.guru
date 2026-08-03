@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Api\V1\Route;
 
-use App\Http\Models\Request\Route\DungeonRouteThumbnailRequestModel;
+use App\Dto\Request\Route\DungeonRouteThumbnailRequestModel;
 use App\Http\Requests\Api\V1\APIFormRequest;
 
 /**

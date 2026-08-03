@@ -2,8 +2,8 @@
 
 namespace App\Service\CombatLog;
 
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteCorrectionRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteCorrectionRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\DungeonRoute\DungeonRoute;
 use Illuminate\Support\Collection;

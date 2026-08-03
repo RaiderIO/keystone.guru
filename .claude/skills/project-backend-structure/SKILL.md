@@ -30,6 +30,10 @@ app/
 │                       Dungeon, Github, Release, Scheduler, ...). Shared traits in
 │                       Console/Commands/Traits. Commands extend custom base classes and
 │                       sometimes other commands — check the hierarchy before adding one.
+├── Dto                 Transport-agnostic DTOs. Dto/Request holds the request-body DTOs
+│                       (base RequestModel.php) — they carry the OpenAPI @OA\Schema
+│                       annotations and are consumed by controllers, commands AND the
+│                       service layer, which is why they must not live under app/Http.
 ├── Email               Custom mailables (e.g. CustomPasswordResetEmail.php). Tiny.
 ├── Events              Broadcast events for Reverb (see Events section). No PHP listeners.
 ├── Exceptions          Handler.php (bound in AppServiceProvider) + its structured-logging
@@ -38,8 +42,8 @@ app/
 │                       (e.g. Heatmap.php, NpcCompendium.php). Pure class definitions.
 ├── Helpers             Global FUNCTION files (CustomHelper.php, ColorHelper.php), loaded via
 │                       require_once in HelperServiceProvider — NOT PSR-4 classes.
-├── Http                Controllers, FormRequests, request DTOs, middleware, resources
-│                       (see Http section).
+├── Http                Controllers, FormRequests, middleware, resources (see Http section).
+│                       Request DTOs live in app/Dto, not here.
 ├── Jobs                Queued jobs, all `implements ShouldQueue`, no shared base class.
 │                       Subfolders Jobs/CombatLog, Jobs/Logging.
 ├── Larex               Override of the Larex CSV↔translation importer (Crowdin sync tooling,
@@ -173,10 +177,11 @@ seeder-load and seeder-save skills.
 
 - `app/Http/Requests/` — validation `FormRequest` classes (mostly named `*FormRequest`, some just
   `*Request`), subfoldered per model/domain plus `Api/V1/...`.
-- `app/Http/Models/Request/` — plain DTO classes (base `RequestModel.php`) that give a validated
+- `app/Dto/Request/` — plain DTO classes (base `RequestModel.php`) that give a validated
   request body a typed shape (e.g. `CombatLog/Route/CombatLogRoute*RequestModel.php`). These are
   **not** validators; a controller typically validates with a FormRequest and then builds a
-  RequestModel from it.
+  RequestModel from it. They deliberately sit outside `app/Http` because the service layer consumes
+  them too — a service must not have to know its caller arrived over HTTP (#3803).
 
 ### Middleware & Resources
 
@@ -276,7 +281,9 @@ project-specific configs: `laratrust.php`, `laravel-model-caching.php`, `larex.p
 - Mapping-mutable models must implement the mapping interfaces, scope queries by
   `mapping_version_id`, and be wired into seeder import (`SeederHelpers`) and export
   (`mapping:save`).
-- `Http/Models/Request` DTOs are not FormRequests — validation happens in `Http/Requests`.
+- `Dto/Request` DTOs are not FormRequests — validation happens in `Http/Requests`. They are also
+  scanned by l5-swagger for `@OA\Schema` annotations, so `config/l5-swagger.php` must list
+  `app/Dto` in its `annotations` paths.
 - `Stub`/`Swoole` repository variants and `Dev.../...Stub` service variants exist because of
   Octane/Swoole long-lived workers — state must not leak across requests; check
   `app/Repositories/Swoole/` before assuming a repository is request-scoped.

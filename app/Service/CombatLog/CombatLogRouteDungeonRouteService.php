@@ -2,16 +2,16 @@
 
 namespace App\Service\CombatLog;
 
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteChallengeModeRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteCoordRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteCorrectionRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteMetadataRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRoutePlayerDeathRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRosterRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSettingsRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteChallengeModeRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteCoordRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteCorrectionRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteMetadataRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRoutePlayerDeathRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteRosterRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteSettingsRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd as ChallengeModeEndSpecialEvent;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart as ChallengeModeStartSpecialEvent;
 use App\Logic\Structs\IngameXY;
@@ -36,6 +36,9 @@ use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
+// The Stub\* repositories below are imported concretely on purpose and must NOT be replaced by their interfaces: the
+// container binds those interfaces to the persisting Database\* implementations. See the docblocks on
+// convertCombatLogRouteToCombatLogEvents() and correctCombatLogRoute() for why those two flows must not persist.
 use App\Repositories\Stub\DungeonRoute\DungeonRouteAffixGroupRepository as DungeonRouteAffixGroupRepositoryStub;
 use App\Repositories\Stub\DungeonRoute\DungeonRouteRepository as DungeonRouteRepositoryStub;
 use App\Repositories\Stub\KillZone\KillZoneEnemyRepository as KillZoneEnemyRepositoryStub;
@@ -143,6 +146,13 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     }
 
     /**
+     * Converts a combat log route into CombatLogEvents WITHOUT persisting anything: the DungeonRoute and its kill zones
+     * are only scaffolding needed to place the events on the map, and the caller discards them.
+     *
+     * The builder writes through repositories, so the ones that would otherwise create rows are passed as explicit
+     * Stub\* instances rather than resolved from the container - the container binds those interfaces to the persisting
+     * Database\* implementations. The read-only repositories ($enemyRepository and friends) are the injected ones.
+     *
      * @throws DungeonNotSupportedException
      * @throws Exception
      */
@@ -171,6 +181,13 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     }
 
     /**
+     * Corrects a combat log route in-place and hands the corrected route back to the caller. Nothing is persisted - the
+     * DungeonRoute built along the way exists only so the builder can resolve enemies/floors, and is thrown away.
+     *
+     * Same reasoning as convertCombatLogRouteToCombatLogEvents(): the writing repositories are explicit Stub\* instances
+     * because the container binds their interfaces to the persisting Database\* implementations. The read-only ones pick
+     * the Swoole variant when running on Octane, which caches its data across requests instead of hitting the DB.
+     *
      * @throws DungeonNotSupportedException
      * @throws Exception
      */

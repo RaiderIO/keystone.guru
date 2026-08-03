@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Models\Request\CombatLog\Route;
+namespace App\Dto\Request\CombatLog\Route;
 
-use App\Http\Models\Request\RequestModel;
+use App\Dto\Request\RequestModel;
 use Illuminate\Contracts\Support\Arrayable;
 
 /**

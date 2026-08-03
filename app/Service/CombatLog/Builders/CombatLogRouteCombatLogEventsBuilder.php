@@ -3,7 +3,7 @@
 namespace App\Service\CombatLog\Builders;
 
 use App;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;

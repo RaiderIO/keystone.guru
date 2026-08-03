@@ -3,8 +3,8 @@
 namespace App\Service\CombatLog\Builders;
 
 use App;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;

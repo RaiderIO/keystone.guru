@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Models\Request\CombatLog\Route;
+namespace App\Dto\Request\CombatLog\Route;
 
 /**
  * @OA\Schema(schema="CombatLogRoutePlayerDeathCorrection")

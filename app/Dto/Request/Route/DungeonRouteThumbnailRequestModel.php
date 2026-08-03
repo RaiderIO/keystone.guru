@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Models\Request\Route;
+namespace App\Dto\Request\Route;
 
-use App\Http\Models\Request\RequestModel;
+use App\Dto\Request\RequestModel;
 
 /**
  * @OA\Schema(schema="RouteThumbnailRequest")

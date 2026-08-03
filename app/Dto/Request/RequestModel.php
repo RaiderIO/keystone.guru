@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Models\Request;
+namespace App\Dto\Request;
 
 use Illuminate\Support\Collection;
 use ReflectionNamedType;
