@@ -1,6 +1,6 @@
 ---
 name: combatlog-parse-failure-poll
-description: On-demand, human-run combat log parse-failure sweep — checks Staging for new or worsening CombatLogParseFailure clusters and files/updates GitHub issues. Read-only against the app — never writes code, opens MRs, or marks failures resolved. Use when asked to check or sweep for new combat log parse failures.
+description: On-demand, human-run combat log parse-failure sweep — checks Staging for new or worsening CombatLogParseFailure clusters and files/updates GitHub issues. Read-only against the app; never writes code, opens MRs, or marks failures resolved. Use when the user runs /combatlog-parse-failure-poll or asks to check/sweep for new combat log parse failures.
 ---
 
 # /combatlog-parse-failure-poll — Combat Log Parse-Failure Sweep
@@ -28,8 +28,9 @@ Format: a single line, `user@example.com:password` (exactly the value you'd pass
 - If the file doesn't exist, **stop and tell the user** how to create it — don't ask them to paste
   the secret into chat, and don't create the file yourself from a chat-provided value unless they
   explicitly ask you to. Provisioning the actual admin service account (an app-level user with the
-  `admin` role) is a separate, deliberate step the user does — see
-  `combatlog-parse-failure-triage`'s credentials section for the general handling rules.
+  `admin` role) is a separate, deliberate step the user does. (This section is the authoritative
+  handling rule for the Staging file; `combatlog-parse-failure-triage`'s credentials section adds
+  only the Production-credential rules.)
 - Only check for existence (`test -f ... && echo present`) — never `cat`/print the file's contents
   back into the conversation.
 - Production isn't wired up yet. If/when it is, the convention will be a second file
@@ -71,6 +72,23 @@ Every issue this skill files embeds a hidden marker in its body:
 For each cluster from Step 2, compute its signature and check whether any open `combatlog`-labeled
 issue already carries it.
 
+Compute it **exactly** this way, or an identical cluster hashes differently and gets re-filed as a
+duplicate — trailing whitespace in `message` is trimmed before hashing (some messages end in a
+newline):
+
+```bash
+jq -r '.data[] | (.exceptionClass + "|" + (.message | gsub("[0-9]+"; "#")))' /tmp/poll_failures.json \
+  | sed -E 's/[[:space:]]+$//' | sort | uniq -c
+# uniq -c prepends "<count> " to each line — that prefix is the count:<N> value but must NOT be
+# part of the hash input (or the signature changes every time the count moves). Hash only the
+# "exceptionClass|normalizedMessage" part, with printf '%s' (echo would append a newline):
+#   printf '%s' "<exceptionClass>|<normalizedMessage>" | sha1sum
+```
+
+`count:<N>` is the number of *unresolved* rows in the cluster at poll time, not a lifetime total —
+a later decrease usually means rows were resolved in the admin panel, not that anything regressed.
+Say so in the issue body.
+
 ## Step 4 — New cluster → file an issue
 
 No matching open issue found. File one (label `combatlog`; add a second topic label only if
@@ -79,7 +97,7 @@ obviously fitting, same rules as `create-github-issue`):
 - Title: short description of the error shape (e.g. `Combat log parse failures: unable to find
   combat log version <example>`), **not** prefixed with an issue number (this skill files it, no
   existing number to reference).
-- Body: failure count, 1-2 example rows verbatim (`run_id`, `season_id`, `raw_line`, `message`),
+- Body: failure count, 1-2 example rows verbatim (`runId`, `seasonId`, `rawLine`, `message`),
   and — **only if directly inferable from the message/exceptionClass alone, not from a deep
   dive** — a one-line hypothesis pointing at the likely area (e.g. "likely an unregistered
   `CombatLogVersion` — see the `combatlog-parsing-internals` skill's registration procedure").

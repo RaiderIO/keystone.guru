@@ -1,6 +1,6 @@
 ---
 name: combatlog-parse-failure-triage
-description: Runbook to find, download, and reproduce real Staging/Production combat log parse failures before fixing them — internal API endpoints, pulling a failure's Raider.IO log segments, the reproduction recipe, and the ship checklist. Use when triaging CombatLogParseFailure rows or verifying a parser fix against real data. Parser internals in combatlog-parsing-internals; lighter issue-filing sweep in combatlog-parse-failure-poll.
+description: Runbook to find, download, and locally reproduce real Staging/Production combat log parse failures before fixing them. Use when triaging CombatLogParseFailure rows or verifying a parser fix against real data. Parser internals in combatlog-parsing-internals; lighter issue-filing sweep in combatlog-parse-failure-poll.
 ---
 
 # Combat Log Parse-Failure Triage
@@ -10,21 +10,23 @@ locally-reproduced, tested fix. Read `combatlog-parsing-internals` first if you 
 assumes you know the parser architecture and focuses on the *operational* loop: find → download →
 reproduce → fix → verify → ship.
 
-## 0. Credentials — get them fresh, never persist them
+## 0. Credentials
 
 The parse-failure API lives behind `api_role:admin` (HTTP Basic auth, Laratrust). **This repo is
 public** — never write a real username/password into a skill file, a commit, a script, or anywhere
-else that gets checked in. Each session, ask Wotuu for a current Staging (or Production, if that's
-what's being triaged) admin API service-account credential, use it only for that session, and remind
-him to rotate/delete it once you're done. Treat it like any other secret: environment/conversation
-only, never `.env`, never a file under version control (see `feedback_no_env_file` in memory).
+else that gets checked in.
 
-**Exception**: the `/combatlog-parse-failure-poll` skill (a separate, lighter on-demand sweep — see
-below) uses a durable long-lived service account read from a local file outside the repo
-(`~/.config/keystone-guru/combatlog-staging-basic-auth`), since it's meant to be re-run casually
-without re-requesting a credential each time. That file is `/combatlog-parse-failure-poll`'s
-concern, not this skill's — don't reuse it here or assume it exists; keep using fresh per-session
-credentials for the deeper reproduction work this skill covers.
+For Staging, always read the durable service-account credential from
+`~/.config/keystone-guru/combatlog-staging-basic-auth` (same file `/combatlog-parse-failure-poll`
+uses) — don't prompt Wotuu for one, this file is the standing credential for both skills. If the
+file doesn't exist, stop and tell the user how to create it (format and rules in the poll skill's
+Credentials section) — never ask them to paste the secret into chat. Treat it
+like any other secret: never `.env`, never a file under version control (see `feedback_no_env_file`
+in memory).
+
+For Production triage, that file doesn't apply — ask Wotuu for a current Production admin API
+service-account credential each session, use it only for that session, and remind him to
+rotate/delete it once you're done.
 
 ## 1. List unresolved failures
 
@@ -58,7 +60,7 @@ rows = json.load(open('parse_failures.json'))['data']
 
 **Cluster first, don't fix the first row you see.** Group by `message` (strip the specific numeric ID
 out of it) to find the dominant failure mode before picking a repro target — one root cause is
-typically 90%+ of the rows. `exception_class` + the stable part of `message` is the cluster key.
+typically 90%+ of the rows. `exceptionClass` + the stable part of `message` is the cluster key.
 
 ## 2. Get a failing run's log segments
 
@@ -135,7 +137,7 @@ be luck; the point is confidence that the fix generalizes, not just that it sati
 ## 5. Diagnose, don't just patch the symptom
 
 - Read the exception message/class carefully — `"Invalid parameter count ... wanted X-Y, got Z"`
-  tells you exactly how many fields were present vs expected; compare the failing `raw_line` against a
+  tells you exactly how many fields were present vs expected; compare the failing `rawLine` against a
   known-good line of the same event type to see what's structurally different (missing trailing
   fields → truncation; different field *count* patterns across failures of the same message → genuine
   truncation, not a clean version/format difference — different failures missing a *consistent* set of
@@ -186,8 +188,8 @@ confidence, not real verification. The resolved split:
 
 - **Diagnosis** (find new/worsening failure clusters, file/update GitHub issues) is cheap, read-only,
   and safe to run often — that's the `/combatlog-parse-failure-poll` skill, invoked manually
-  (`/combatlog-parse-failure-poll`) whenever the user is around. It uses its own durable local
-  credential (see the exception above) precisely because it's low-risk enough to not need a fresh
+  (`/combatlog-parse-failure-poll`) whenever the user is around. It uses the durable local Staging
+  credential file (section 0) precisely because it's low-risk enough to not need a fresh
   credential every time.
 - **The fix** (this skill, steps 1-6) still needs a real worktree session with Docker access, and
   still ends at an MR — never merges. Pick up a `/combatlog-parse-failure-poll`-filed issue the

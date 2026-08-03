@@ -1,6 +1,6 @@
 ---
 name: sentry-error-triage
-description: One pass over the unresolved Sentry issues for keystone.guru production and staging - file or update a GitHub issue per error, and for the clearly tractable ones open a green draft PR with a fix. Designed to run repeatedly via /loop in a dedicated session. Never merges, never resolves a Sentry issue by hand, never deploys or hotfixes. Use when asked to triage production errors, check Sentry, or work through incoming error reports. Not for debugging one specific Sentry issue you already have in hand (use sentry:sentry-debug-issue directly), and not for combat log parse failures (combatlog-parse-failure-poll).
+description: One pass over unresolved Sentry issues for keystone.guru production/staging - file or update a GitHub issue per error, and open a green draft PR for the clearly tractable ones. Runs repeatedly via /loop. Never merges, resolves Sentry issues, deploys, or hotfixes. Use when asked to triage production errors or check Sentry. Not for one specific issue in hand (sentry:sentry-debug-issue) or combat log parse failures (combatlog-parse-failure-poll).
 ---
 
 # Sentry error triage

@@ -217,8 +217,38 @@ regardless of what cold review finds — this carve-out only unblocks step 4, no
    creates queue rather than race, but that's a few seconds of setup latency, not a reason to
    throttle how many PRs you work in a pass.
 
+   **Top-level PR/issue comments are a separate feed from review threads and must be checked
+   too — GraphQL `reviewThreads` only returns inline/code-line review comments, not general PR
+   conversation comments.** Missing this caused two real misses: #3773 (caught 2026-08-02) and
+   #3811 (caught 2026-08-03, https://github.com/RaiderIO/keystone.guru/pull/3811#issuecomment-5167829104
+   — Wotuu asked to rename all `DTO`-cased classes to `Dto`, posted as a plain PR comment, and it
+   sat unaddressed through a full pass because only `reviewThreads` was queried). And there is a
+   **third** feed: submitted review *bodies* (the summary text of an approve/comment/request-changes
+   review) appear in neither `reviewThreads` nor `--json comments` — verified on #3811, where a
+   review body was returned only by `--json reviews`. This feed matters most of all, because step 2's
+   merge-authorization rule ("an explicit sentence in a **review body**") lives exactly there. Pull
+   all three feeds every pass:
+
+   ```bash
+   gh pr view <n> --repo RaiderIO/keystone.guru --json comments \
+     --jq '.comments[] | {author: .author.login, createdAt, body}'
+   gh pr view <n> --repo RaiderIO/keystone.guru --json reviews \
+     --jq '.reviews[] | select(.body != "") | {author: .author.login, state, submittedAt, body}'
+   ```
+
+   Apply the same first-responder logic as review threads, just without thread IDs to resolve:
+   walk the comments in chronological order and find any comment **not** `:robot:`-prefixed (i.e.
+   from Wotuu) that has no later `:robot:`-prefixed comment addressing it. Treat that the same as
+   an unresolved review thread — fix it in code (or answer it), push, then reply as a **new**
+   top-level comment (`gh api -X POST repos/RaiderIO/keystone.guru/issues/<n>/comments -F
+   body=@<file>`, `:robot:`-prefixed) describing what changed. There is no `resolveReviewThread`
+   equivalent for flat comments — a `:robot:` reply comment is the whole mechanism, nothing to mark
+   resolved. A comment thread here (via `-X POST .../pulls/<n>/comments/<comment-id>/replies`) only
+   applies to inline review comments, not these top-level ones.
+
    If the PR carries the `pr needs changes` label and you addressed (committed + pushed) **every**
-   unresolved actionable thread — not just some; the label tells Wotuu "ready for you to look
+   unresolved actionable item across all three feeds — review threads, top-level PR comments, and
+   review bodies — not just some; the label tells Wotuu "ready for you to look
    again", which a half-addressed PR is not — swap the label: remove `pr needs changes`, add
    `pr changes applied` —
    `gh pr edit <n> --remove-label "pr needs changes" --add-label "pr changes applied"` (plain
