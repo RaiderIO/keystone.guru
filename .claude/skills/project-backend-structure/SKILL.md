@@ -10,7 +10,7 @@ description: Architectural map of the PHP backend — every app/ directory expla
 Laravel 12 with the streamlined (Laravel 11+) structure: there is **no** `app/Console/Kernel.php`
 or `app/Http/Kernel.php`. Middleware and exception wiring live in `bootstrap/app.php`, the
 schedule lives in `routes/console.php`, and providers are registered in `bootstrap/providers.php`.
-The backend is ~1,500 PHP files across 21 top-level directories under `app/`.
+The backend is ~1,500 PHP files across 22 top-level directories under `app/`.
 
 The layering for a typical request:
 
