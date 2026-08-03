@@ -33,17 +33,17 @@ namespace App\Dto\Request\CombatLog\Route;
  * @OA\Property(property="gridCoord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
  * @OA\Property(property="gridCoordEnemy",type="object",ref="#/components/schemas/CombatLogRouteCoord")
  */
-class CombatLogRouteNpcCorrectionRequestModel extends CombatLogRouteNpcRequestModel
+class CombatLogRouteNpcCorrectionRequestDTO extends CombatLogRouteNpcRequestDTO
 {
     public function __construct(
-        ?int                                    $npcId = null,
-        ?string                                 $spawnUid = null,
-        ?string                                 $engagedAt = null,
-        ?string                                 $diedAt = null,
-        ?CombatLogRouteCoordRequestModel        $coord = null,
-        public ?CombatLogRouteCoordRequestModel $coordEnemy = null,
-        public ?CombatLogRouteCoordRequestModel $gridCoord = null,
-        public ?CombatLogRouteCoordRequestModel $gridCoordEnemy = null,
+        ?int                                  $npcId = null,
+        ?string                               $spawnUid = null,
+        ?string                               $engagedAt = null,
+        ?string                               $diedAt = null,
+        ?CombatLogRouteCoordRequestDTO        $coord = null,
+        public ?CombatLogRouteCoordRequestDTO $coordEnemy = null,
+        public ?CombatLogRouteCoordRequestDTO $gridCoord = null,
+        public ?CombatLogRouteCoordRequestDTO $gridCoordEnemy = null,
     ) {
         parent::__construct(
             $npcId,

@@ -2,17 +2,17 @@
 
 namespace App\Http\Requests\Api\V1\Route;
 
-use App\Dto\Request\Route\DungeonRouteThumbnailRequestModel;
+use App\Dto\Request\Route\DungeonRouteThumbnailRequestDTO;
 use App\Http\Requests\Api\V1\APIFormRequest;
 
 /**
- * @method DungeonRouteThumbnailRequestModel|null getModel()
+ * @method DungeonRouteThumbnailRequestDTO|null getModel()
  */
 class DungeonRouteThumbnailRequest extends APIFormRequest
 {
     protected function getRequestModelClass(): ?string
     {
-        return DungeonRouteThumbnailRequestModel::class;
+        return DungeonRouteThumbnailRequestDTO::class;
     }
 
     /**

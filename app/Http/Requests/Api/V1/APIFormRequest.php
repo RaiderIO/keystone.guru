@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Api\V1;
 
-use App\Dto\Request\RequestModel;
+use App\Dto\Request\RequestDTO;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -22,7 +22,7 @@ abstract class APIFormRequest extends FormRequest
         ], 422));
     }
 
-    public function getModel(): ?RequestModel
+    public function getModel(): ?RequestDTO
     {
         $requestModelClass = $this->getRequestModelClass();
         if ($requestModelClass === null) {

@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 use ReflectionNamedType;
 use ReflectionProperty;
 
-abstract class RequestModel
+abstract class RequestDTO
 {
     /**
      * You MUST be able to make an instance without any parameters!
@@ -21,12 +21,12 @@ abstract class RequestModel
         $result = [];
 
         foreach (get_object_vars($this) as $key => $value) {
-            if ($value instanceof RequestModel) {
-                // Recursively call toArray for nested RequestModel
+            if ($value instanceof RequestDTO) {
+                // Recursively call toArray for nested RequestDTO
                 $result[$key] = $value->toArray();
             } elseif ($value instanceof Collection) {
                 // Map each item in the collection to its array representation
-                $result[$key] = $value->map(fn($item) => $item instanceof RequestModel ? $item->toArray() : $item)->toArray();
+                $result[$key] = $value->map(fn($item) => $item instanceof RequestDTO ? $item->toArray() : $item)->toArray();
             } else {
                 // Directly assign scalar or non-nested types
                 $result[$key] = $value;
@@ -57,7 +57,7 @@ abstract class RequestModel
                         $collection = collect();
                         $itemType   = static::getCollectionItemType($key);
 
-                        if ($itemType && is_subclass_of($itemType, RequestModel::class) && is_array($value)) {
+                        if ($itemType && is_subclass_of($itemType, RequestDTO::class) && is_array($value)) {
                             foreach ($value as $item) {
                                 $collection->push($itemType::createFromArray(is_array($item) ? $item : []));
                             }
@@ -69,8 +69,8 @@ abstract class RequestModel
                         }
 
                         $object->$key = $collection;
-                    } // Handle nested RequestModel
-                    elseif (!$type->isBuiltin() && is_subclass_of($typeName, RequestModel::class)) {
+                    } // Handle nested RequestDTO
+                    elseif (!$type->isBuiltin() && is_subclass_of($typeName, RequestDTO::class)) {
                         $object->$key = $typeName::createFromArray(is_array($value) ? $value : []);
                     } else {
                         // Direct assignment for other types

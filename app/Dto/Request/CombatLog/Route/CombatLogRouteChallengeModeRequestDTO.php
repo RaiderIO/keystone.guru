@@ -2,7 +2,7 @@
 
 namespace App\Dto\Request\CombatLog\Route;
 
-use App\Dto\Request\RequestModel;
+use App\Dto\Request\RequestDTO;
 use Illuminate\Contracts\Support\Arrayable;
 
 /**
@@ -19,7 +19,7 @@ use Illuminate\Contracts\Support\Arrayable;
  * @OA\Property(property="affixes",type="array", @OA\Items(type="integer"))
  * @implements Arrayable<string, mixed>
  */
-class CombatLogRouteChallengeModeRequestModel extends RequestModel implements Arrayable
+class CombatLogRouteChallengeModeRequestDTO extends RequestDTO implements Arrayable
 {
     /**
      * @param array<int>|null $affixes

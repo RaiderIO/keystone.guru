@@ -3,19 +3,19 @@
 namespace App\Service\CombatLog\Builders;
 
 use App;
-use App\Dto\Request\CombatLog\Route\CombatLogRouteChallengeModeRequestModel;
-use App\Dto\Request\CombatLog\Route\CombatLogRouteCoordRequestModel;
-use App\Dto\Request\CombatLog\Route\CombatLogRouteCorrectionRequestModel;
-use App\Dto\Request\CombatLog\Route\CombatLogRouteMetadataRequestModel;
-use App\Dto\Request\CombatLog\Route\CombatLogRouteNpcCorrectionRequestModel;
-use App\Dto\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
-use App\Dto\Request\CombatLog\Route\CombatLogRoutePlayerDeathCorrectionRequestModel;
-use App\Dto\Request\CombatLog\Route\CombatLogRoutePlayerDeathRequestModel;
-use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestModel;
-use App\Dto\Request\CombatLog\Route\CombatLogRouteRosterRequestModel;
-use App\Dto\Request\CombatLog\Route\CombatLogRouteSettingsRequestModel;
-use App\Dto\Request\CombatLog\Route\CombatLogRouteSpellCorrectionRequestModel;
-use App\Dto\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteChallengeModeRequestDTO;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteCoordRequestDTO;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteCorrectionRequestDTO;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteMetadataRequestDTO;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteNpcCorrectionRequestDTO;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteNpcRequestDTO;
+use App\Dto\Request\CombatLog\Route\CombatLogRoutePlayerDeathCorrectionRequestDTO;
+use App\Dto\Request\CombatLog\Route\CombatLogRoutePlayerDeathRequestDTO;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestDTO;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteRosterRequestDTO;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteSettingsRequestDTO;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteSpellCorrectionRequestDTO;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteSpellRequestDTO;
 use App\Logic\Structs\IngameXY;
 use App\Models\Floor\Floor;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
@@ -36,7 +36,7 @@ use Illuminate\Support\Collection;
 use Override;
 
 /**
- * Takes a CombatLogRouteRequestModel and pushes it through ARC. It then returns a new CombatLogRouteRequestModel with the locations corrected
+ * Takes a CombatLogRouteRequestDTO and pushes it through ARC. It then returns a new CombatLogRouteRequestDTO with the locations corrected
  * to those of resolved enemies.
  *
  * @author Wouter
@@ -61,7 +61,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
         SpellRepositoryInterface                  $spellRepository,
         FloorRepositoryInterface                  $floorRepository,
         DungeonRepositoryInterface                $dungeonRepository,
-        CombatLogRouteRequestModel                $combatLogRoute,
+        CombatLogRouteRequestDTO                  $combatLogRoute,
     ) {
         /** @var CombatLogRouteCorrectionBuilderLoggingInterface $log */
         $log       = App::make(CombatLogRouteCorrectionBuilderLoggingInterface::class);
@@ -92,13 +92,13 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
         $this->dungeonRoute->setRelation('killZones', $this->killZones);
     }
 
-    public function getCombatLogRoute(): CombatLogRouteCorrectionRequestModel
+    public function getCombatLogRoute(): CombatLogRouteCorrectionRequestDTO
     {
-        /** @var Collection<int, CombatLogRouteNpcRequestModel> $npcs */
+        /** @var Collection<int, CombatLogRouteNpcRequestDTO> $npcs */
         $npcs = new Collection();
-        /** @var Collection<int, CombatLogRouteSpellRequestModel> $spells */
+        /** @var Collection<int, CombatLogRouteSpellRequestDTO> $spells */
         $spells = new Collection();
-        /** @var Collection<int, CombatLogRoutePlayerDeathRequestModel> $playerDeaths */
+        /** @var Collection<int, CombatLogRoutePlayerDeathRequestDTO> $playerDeaths */
         $playerDeaths = new Collection();
 
         try {
@@ -152,27 +152,27 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                 );
 
                 $npcs->push(
-                    new CombatLogRouteNpcCorrectionRequestModel(
+                    new CombatLogRouteNpcCorrectionRequestDTO(
                         $npc->npcId,
                         $npc->spawnUid,
                         $npc->engagedAt,
                         $npc->diedAt,
-                        new CombatLogRouteCoordRequestModel(
+                        new CombatLogRouteCoordRequestDTO(
                             $npc->coord->x,
                             $npc->coord->y,
                             $npc->coord->uiMapId,
                         ),
-                        new CombatLogRouteCoordRequestModel(
+                        new CombatLogRouteCoordRequestDTO(
                             $ingameXY->getX(2),
                             $ingameXY->getY(2),
                             $resolvedEnemyFloor->ui_map_id,
                         ),
-                        new CombatLogRouteCoordRequestModel(
+                        new CombatLogRouteCoordRequestDTO(
                             $gridLocation->getX(2),
                             $gridLocation->getY(2),
                             $npc->coord->uiMapId,
                         ),
-                        new CombatLogRouteCoordRequestModel(
+                        new CombatLogRouteCoordRequestDTO(
                             $gridLocationEnemy->getX(2),
                             $gridLocationEnemy->getY(2),
                             $resolvedEnemyFloor->ui_map_id,
@@ -207,12 +207,12 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                 );
 
                 $spells->push(
-                    new CombatLogRouteSpellCorrectionRequestModel(
+                    new CombatLogRouteSpellCorrectionRequestDTO(
                         $spell->spellId,
                         $spell->playerUid,
                         $spell->castAt,
                         $spell->coord,
-                        new CombatLogRouteCoordRequestModel(
+                        new CombatLogRouteCoordRequestDTO(
                             $gridLocation->getX(2),
                             $gridLocation->getY(2),
                             $spell->coord->uiMapId,
@@ -247,14 +247,14 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                 );
 
                 $playerDeaths->push(
-                    new CombatLogRoutePlayerDeathCorrectionRequestModel(
+                    new CombatLogRoutePlayerDeathCorrectionRequestDTO(
                         $playerDeath->characterId,
                         $playerDeath->classId,
                         $playerDeath->specId,
                         $playerDeath->itemLevel,
                         $playerDeath->diedAt,
                         $playerDeath->coord,
-                        new CombatLogRouteCoordRequestModel(
+                        new CombatLogRouteCoordRequestDTO(
                             $gridLocation->getX(2),
                             $gridLocation->getY(2),
                             $playerDeath->coord->uiMapId,
@@ -263,9 +263,9 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                 );
             }
 
-            $result = new CombatLogRouteCorrectionRequestModel(
+            $result = new CombatLogRouteCorrectionRequestDTO(
                 // For now no changes in these, but making copies regardless
-                new CombatLogRouteMetadataRequestModel(
+                new CombatLogRouteMetadataRequestDTO(
                     $this->combatLogRoute->metadata->runId,
                     $this->combatLogRoute->metadata->keystoneRunId,
                     $this->combatLogRoute->metadata->loggedRunId,
@@ -275,12 +275,12 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                     $this->combatLogRoute->metadata->realmType,
                     $this->combatLogRoute->metadata->wowInstanceId,
                 ),
-                new CombatLogRouteSettingsRequestModel(
+                new CombatLogRouteSettingsRequestDTO(
                     $this->combatLogRoute->settings->temporary,
                     $this->combatLogRoute->settings->debugIcons,
                     $this->combatLogRoute->settings->mappingVersion,
                 ),
-                new CombatLogRouteChallengeModeRequestModel(
+                new CombatLogRouteChallengeModeRequestDTO(
                     $this->combatLogRoute->challengeMode->start,
                     $this->combatLogRoute->challengeMode->end,
                     $this->combatLogRoute->challengeMode->success,
@@ -292,7 +292,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                     $this->combatLogRoute->challengeMode->numDeaths,
                     $this->combatLogRoute->challengeMode->affixes,
                 ),
-                new CombatLogRouteRosterRequestModel(
+                new CombatLogRouteRosterRequestDTO(
                     $this->combatLogRoute->roster?->numMembers,
                     $this->combatLogRoute->roster?->averageItemLevel,
                     $this->combatLogRoute->roster?->characterIds,

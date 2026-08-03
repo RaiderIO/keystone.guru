@@ -10,14 +10,14 @@ namespace App\Dto\Request\CombatLog\Route;
  * @OA\Property(property="coord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
  * @OA\Property(property="gridCoord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
  */
-class CombatLogRouteSpellCorrectionRequestModel extends CombatLogRouteSpellRequestModel
+class CombatLogRouteSpellCorrectionRequestDTO extends CombatLogRouteSpellRequestDTO
 {
     public function __construct(
-        ?int                                    $spellId = null,
-        ?string                                 $playerUid = null,
-        ?string                                 $castAt = null,
-        ?CombatLogRouteCoordRequestModel        $coord = null,
-        public ?CombatLogRouteCoordRequestModel $gridCoord = null,
+        ?int                                  $spellId = null,
+        ?string                               $playerUid = null,
+        ?string                               $castAt = null,
+        ?CombatLogRouteCoordRequestDTO        $coord = null,
+        public ?CombatLogRouteCoordRequestDTO $gridCoord = null,
     ) {
         parent::__construct($spellId, $playerUid, $castAt, $coord);
     }

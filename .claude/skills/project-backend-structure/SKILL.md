@@ -31,7 +31,7 @@ app/
 │                       Console/Commands/Traits. Commands extend custom base classes and
 │                       sometimes other commands — check the hierarchy before adding one.
 ├── Dto                 Transport-agnostic DTOs. Dto/Request holds the request-body DTOs
-│                       (base RequestModel.php) — they carry the OpenAPI @OA\Schema
+│                       (base RequestDTO.php) — they carry the OpenAPI @OA\Schema
 │                       annotations and are consumed by controllers, commands AND the
 │                       service layer, which is why they must not live under app/Http.
 ├── Email               Custom mailables (e.g. CustomPasswordResetEmail.php). Tiny.
@@ -43,7 +43,6 @@ app/
 ├── Helpers             Global FUNCTION files (CustomHelper.php, ColorHelper.php), loaded via
 │                       require_once in HelperServiceProvider — NOT PSR-4 classes.
 ├── Http                Controllers, FormRequests, middleware, resources (see Http section).
-│                       Request DTOs live in app/Dto, not here.
 ├── Jobs                Queued jobs, all `implements ShouldQueue`, no shared base class.
 │                       Subfolders Jobs/CombatLog, Jobs/Logging.
 ├── Larex               Override of the Larex CSV↔translation importer (Crowdin sync tooling,
@@ -177,10 +176,10 @@ seeder-load and seeder-save skills.
 
 - `app/Http/Requests/` — validation `FormRequest` classes (mostly named `*FormRequest`, some just
   `*Request`), subfoldered per model/domain plus `Api/V1/...`.
-- `app/Dto/Request/` — plain DTO classes (base `RequestModel.php`) that give a validated
-  request body a typed shape (e.g. `CombatLog/Route/CombatLogRoute*RequestModel.php`). These are
+- `app/Dto/Request/` — plain DTO classes (base `RequestDTO.php`) that give a validated
+  request body a typed shape (e.g. `CombatLog/Route/CombatLogRoute*RequestDTO.php`). These are
   **not** validators; a controller typically validates with a FormRequest and then builds a
-  RequestModel from it. They deliberately sit outside `app/Http` because the service layer consumes
+  RequestDTO from it. They deliberately sit outside `app/Http` because the service layer consumes
   them too — a service must not have to know its caller arrived over HTTP (#3803).
 
 ### Middleware & Resources

@@ -2,7 +2,7 @@
 
 namespace App\Dto\Request\CombatLog\Route;
 
-use App\Dto\Request\RequestModel;
+use App\Dto\Request\RequestDTO;
 use Illuminate\Contracts\Support\Arrayable;
 
 /**
@@ -17,7 +17,7 @@ use Illuminate\Contracts\Support\Arrayable;
  * @OA\Property(property="wowInstanceId",type="integer",nullable=true)
  * @implements Arrayable<string, mixed>
  */
-class CombatLogRouteMetadataRequestModel extends RequestModel implements Arrayable
+class CombatLogRouteMetadataRequestDTO extends RequestDTO implements Arrayable
 {
     public function __construct(
         public ?string $runId = null,

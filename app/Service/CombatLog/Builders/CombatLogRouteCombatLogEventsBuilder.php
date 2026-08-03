@@ -3,7 +3,7 @@
 namespace App\Service\CombatLog\Builders;
 
 use App;
-use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestDTO;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
@@ -49,7 +49,7 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
         SpellRepositoryInterface                  $spellRepository,
         FloorRepositoryInterface                  $floorRepository,
         DungeonRepositoryInterface                $dungeonRepository,
-        CombatLogRouteRequestModel                $combatLogRoute,
+        CombatLogRouteRequestDTO                  $combatLogRoute,
     ) {
         /** @var CombatLogRouteCombatLogEventsBuilderLoggingInterface $log */
         $log       = App::make(CombatLogRouteCombatLogEventsBuilderLoggingInterface::class);
@@ -86,8 +86,8 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
             $correctedCombatLogRoute = $this->getCombatLogRoute();
 
             $now   = Carbon::now();
-            $start = Carbon::createFromFormat(CombatLogRouteRequestModel::DATE_TIME_FORMAT, $correctedCombatLogRoute->challengeMode->start);
-            $end   = Carbon::createFromFormat(CombatLogRouteRequestModel::DATE_TIME_FORMAT, $correctedCombatLogRoute->challengeMode->end);
+            $start = Carbon::createFromFormat(CombatLogRouteRequestDTO::DATE_TIME_FORMAT, $correctedCombatLogRoute->challengeMode->start);
+            $end   = Carbon::createFromFormat(CombatLogRouteRequestDTO::DATE_TIME_FORMAT, $correctedCombatLogRoute->challengeMode->end);
 
             foreach ($correctedCombatLogRoute->npcs as $npc) {
                 $result->push(new CombatLogEvent(array_merge(
@@ -160,11 +160,11 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
      * @return array<string, mixed>
      */
     private function getBaseCombatLogEventAttributes(
-        CombatLogRouteRequestModel $correctedCombatLogRoute,
-        Carbon                     $now,
-        Carbon                     $start,
-        Carbon                     $end,
-        int                        $uiMapId,
+        CombatLogRouteRequestDTO $correctedCombatLogRoute,
+        Carbon                   $now,
+        Carbon                   $start,
+        Carbon                   $end,
+        int                      $uiMapId,
     ): array {
         return [
             'run_id'             => $correctedCombatLogRoute->metadata->runId,
@@ -196,7 +196,7 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
     }
 
     private function getCharactersJsonFromRoster(
-        CombatLogRouteRequestModel $correctedCombatLogRoute,
+        CombatLogRouteRequestDTO $correctedCombatLogRoute,
     ): string {
         $result = [];
 

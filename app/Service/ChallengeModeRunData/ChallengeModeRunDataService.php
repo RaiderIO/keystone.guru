@@ -2,7 +2,7 @@
 
 namespace App\Service\ChallengeModeRunData;
 
-use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestDTO;
 use App\Models\CombatLog\ChallengeModeRunData;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Dungeon;
@@ -78,7 +78,7 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
             }
 
             $combatLogEvents = $this->createRouteDungeonRouteService->convertCombatLogRouteToCombatLogEvents(
-                CombatLogRouteRequestModel::createFromArray($decoded),
+                CombatLogRouteRequestDTO::createFromArray($decoded),
             );
 
             $attributes = [];

@@ -2,7 +2,7 @@
 
 namespace App\Dto\Request\CombatLog\Route;
 
-use App\Dto\Request\RequestModel;
+use App\Dto\Request\RequestDTO;
 use Illuminate\Contracts\Support\Arrayable;
 
 /**
@@ -12,7 +12,7 @@ use Illuminate\Contracts\Support\Arrayable;
  * @OA\Property(type="integer",property="uiMapId")
  * @implements Arrayable<string, mixed>
  */
-class CombatLogRouteCoordRequestModel extends RequestModel implements Arrayable
+class CombatLogRouteCoordRequestDTO extends RequestDTO implements Arrayable
 {
     public function __construct(
         public ?float $x = null,

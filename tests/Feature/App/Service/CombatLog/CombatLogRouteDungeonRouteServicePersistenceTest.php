@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\App\Service\CombatLog;
 
-use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestDTO;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteAffixGroup;
 use App\Models\KillZone\KillZone;
@@ -43,7 +43,7 @@ final class CombatLogRouteDungeonRouteServicePersistenceTest extends PublicTestC
     public function correctCombatLogRoute_givenValidCombatLogRoute_persistsNothing(): void
     {
         // Arrange
-        $combatLogRoute = $this->getCombatLogRouteRequestModel();
+        $combatLogRoute = $this->getCombatLogRouteRequestDTO();
         $countsBefore   = $this->getRowCounts();
 
         // Act
@@ -57,7 +57,7 @@ final class CombatLogRouteDungeonRouteServicePersistenceTest extends PublicTestC
     public function convertCombatLogRouteToCombatLogEvents_givenValidCombatLogRoute_persistsNothing(): void
     {
         // Arrange
-        $combatLogRoute = $this->getCombatLogRouteRequestModel();
+        $combatLogRoute = $this->getCombatLogRouteRequestDTO();
         $countsBefore   = $this->getRowCounts();
 
         // Act
@@ -67,9 +67,9 @@ final class CombatLogRouteDungeonRouteServicePersistenceTest extends PublicTestC
         $this->assertSame($countsBefore, $this->getRowCounts());
     }
 
-    private function getCombatLogRouteRequestModel(): CombatLogRouteRequestModel
+    private function getCombatLogRouteRequestDTO(): CombatLogRouteRequestDTO
     {
-        return CombatLogRouteRequestModel::createFromArray(
+        return CombatLogRouteRequestDTO::createFromArray(
             $this->getJsonData(self::FIXTURE_NAME, self::FIXTURE_ROOT_PATH),
         );
     }

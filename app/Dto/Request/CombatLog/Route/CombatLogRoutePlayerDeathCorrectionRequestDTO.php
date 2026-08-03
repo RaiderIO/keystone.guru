@@ -12,16 +12,16 @@ namespace App\Dto\Request\CombatLog\Route;
  * @OA\Property(property="coord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
  * @OA\Property(property="gridCoord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
  */
-class CombatLogRoutePlayerDeathCorrectionRequestModel extends CombatLogRoutePlayerDeathRequestModel
+class CombatLogRoutePlayerDeathCorrectionRequestDTO extends CombatLogRoutePlayerDeathRequestDTO
 {
     public function __construct(
-        ?int                                    $characterId = null,
-        ?int                                    $classId = null,
-        ?int                                    $specId = null,
-        ?float                                  $itemLevel = null,
-        ?string                                 $diedAt = null,
-        ?CombatLogRouteCoordRequestModel        $coord = null,
-        public ?CombatLogRouteCoordRequestModel $gridCoord = null,
+        ?int                                  $characterId = null,
+        ?int                                  $classId = null,
+        ?int                                  $specId = null,
+        ?float                                $itemLevel = null,
+        ?string                               $diedAt = null,
+        ?CombatLogRouteCoordRequestDTO        $coord = null,
+        public ?CombatLogRouteCoordRequestDTO $gridCoord = null,
     ) {
         parent::__construct($characterId, $classId, $specId, $itemLevel, $diedAt, $coord);
     }
