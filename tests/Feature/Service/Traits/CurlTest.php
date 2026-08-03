@@ -25,7 +25,7 @@ final class CurlTest extends PublicTestCase
     {
         parent::setUpBeforeClass();
 
-        self::$port       = random_int(20000, 29999);
+        self::$port       = self::findFreePort();
         self::$routerPath = sprintf('%s/curl_test_router_%s.php', sys_get_temp_dir(), uniqid());
 
         file_put_contents(
@@ -58,6 +58,24 @@ PHP,
         }
 
         self::fail('Local test HTTP server did not start in time.');
+    }
+
+    /**
+     * Binding to port 0 asks the OS to hand back an ephemeral free port, avoiding collisions with
+     * whatever else happens to be listening (a fixed/random port range is a CI flake waiting to happen).
+     */
+    private static function findFreePort(): int
+    {
+        $socket = stream_socket_server('tcp://127.0.0.1:0', $errno, $errstr);
+
+        if ($socket === false) {
+            self::fail(sprintf('Could not allocate a free port: %s', $errstr));
+        }
+
+        $name = stream_socket_get_name($socket, false);
+        fclose($socket);
+
+        return (int)substr((string)strrchr($name, ':'), 1);
     }
 
     public static function tearDownAfterClass(): void
