@@ -6,7 +6,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && rm -rf /var/lib/apt/lists/*
 
 RUN cargo --version && rustc --version
-RUN cargo install --git https://codeberg.org/Velithris/cli-weakauras-parser.git --locked
+# Pinned to the same commit as .github/actions/php-ci-setup/action.yml (= v0.1.8) so CI and this
+# image stay in lockstep - see #3802.
+RUN cargo install --git https://codeberg.org/Velithris/cli-weakauras-parser.git --rev febb57faeaa805a79c9c2e0425c804e441a0e969 --locked
 
 ### ---- PHP extension builder ----
 # Compiles every PHP extension (and the Lua modules) with the full toolchain and
@@ -40,10 +42,12 @@ RUN ln -s /usr/include/lua5.3/ /usr/include/lua \
  && ln /usr/include/lua5.3/lua.h /usr/include/lua.h || true \
  && ln /usr/include/lua5.3/lua.h /usr/include/luaconf.h || true
 
-# Build & enable the PHP Lua extension
+# Build & enable the PHP Lua extension. Pinned to the same commit as
+# .github/actions/php-ci-setup/action.yml so CI and this image stay in lockstep - see #3802.
 RUN mkdir -p /tmp/php-lua \
  && cd /tmp/php-lua \
  && git clone https://github.com/Wotuu/php-lua.git . \
+ && git checkout a76f01149e6132810fe6b3095f2b9bc597d34f9e \
  && phpize \
  && ./configure \
  && make -j"$(nproc)" \
