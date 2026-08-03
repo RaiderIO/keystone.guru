@@ -391,8 +391,7 @@ class ProfileController extends Controller
             $user = Auth::user();
 
             // Sandbox routes expire, so they are deliberately not offered as pinnable
-            $ownDungeonRoutes = DungeonRoute::query()
-                ->where('author_id', $user->id)
+            $ownDungeonRoutes = $user->dungeonRoutes()
                 ->whereNull('expires_at')
                 ->with(['dungeon'])
                 ->orderBy('title')

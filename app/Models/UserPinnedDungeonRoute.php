@@ -24,8 +24,11 @@ use Illuminate\Support\Carbon;
  * @property Carbon $created_at
  *
  * @property User              $user
- * @property DungeonRoute|null $dungeonRoute This project uses no foreign keys, so a pinned route
- *                                           that was since deleted leaves a dangling pin behind.
+ * @property DungeonRoute|null $dungeonRoute This project uses no foreign keys, so nothing at the
+ *                                           database level stops a dangling pin - the pin is instead
+ *                                           deleted alongside its route by
+ *                                           {@see DungeonRoute::boot()}'s `deleting` listener, the
+ *                                           same place every other route-owned relation is cleaned up.
  *
  * @mixin Eloquent
  */
