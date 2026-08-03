@@ -3,8 +3,8 @@
 namespace App\Service\CombatLog\Builders;
 
 use App;
-use App\Dto\Request\CombatLog\Route\CombatLogRouteNpcRequestDTO;
-use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestDTO;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteNpcRequestDto;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestDto;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
@@ -31,7 +31,7 @@ use Illuminate\Support\Collection;
 use Random\RandomException;
 
 /**
- * Converts the NPC timeline from a CombatLogRouteRequestDTO into kill zones by walking engaged/died events
+ * Converts the NPC timeline from a CombatLogRouteRequestDto into kill zones by walking engaged/died events
  * in chronological order and grouping them into pulls using chain-pull detection.
  *
  * @author Wouter
@@ -81,7 +81,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         protected readonly SpellRepositoryInterface       $spellRepository,
         protected readonly FloorRepositoryInterface       $floorRepository,
         protected readonly DungeonRepositoryInterface     $dungeonRepository,
-        protected readonly CombatLogRouteRequestDTO       $combatLogRoute,
+        protected readonly CombatLogRouteRequestDto       $combatLogRoute,
         ?int                                              $userId = null,
     ) {
         $log = App::make(CombatLogRouteDungeonRouteBuilderLoggingInterface::class);
@@ -123,16 +123,16 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
     private function buildKillZones(): void
     {
         $filteredNpcs = $this->combatLogRoute->npcs->filter(fn(
-            CombatLogRouteNpcRequestDTO $npc,
+            CombatLogRouteNpcRequestDto $npc,
         ) => $this->validNpcIds->search((int)$npc->npcId) !== false);
 
-        $npcEngagedEvents = $filteredNpcs->map(static fn(CombatLogRouteNpcRequestDTO $npc) => [
+        $npcEngagedEvents = $filteredNpcs->map(static fn(CombatLogRouteNpcRequestDto $npc) => [
             'type'      => 'engaged',
             'timestamp' => $npc->getEngagedAt(),
             'npc'       => $npc,
         ]);
 
-        $npcDiedEvents = $filteredNpcs->map(static fn(CombatLogRouteNpcRequestDTO $npc) => [
+        $npcDiedEvents = $filteredNpcs->map(static fn(CombatLogRouteNpcRequestDto $npc) => [
             'type' => 'died',
             // A bit of a hack - but prevent one-shot enemies from having their diedAt event
             // potentially come _before_ engagedAt event due to sorting
@@ -165,7 +165,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         $firstEngagedAt      = null;
         $totalSpellsAssigned = 0;
         foreach ($npcEngagedAndDiedEvents as $event) {
-            /** @var array{type: string, timestamp: Carbon, npc: CombatLogRouteNpcRequestDTO} $event */
+            /** @var array{type: string, timestamp: Carbon, npc: CombatLogRouteNpcRequestDto} $event */
             $realUiMapId = Floor::UI_MAP_ID_MAPPING[$event['npc']->coord->uiMapId] ?? $event['npc']->coord->uiMapId;
             if ($this->currentFloor === null || $realUiMapId !== $this->currentFloor->ui_map_id) {
                 /** @var Floor|null $newFloor */
@@ -326,7 +326,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         return $assignedSpells;
     }
 
-    private function createActivePullEnemy(CombatLogRouteNpcRequestDTO $npc): ActivePullEnemy
+    private function createActivePullEnemy(CombatLogRouteNpcRequestDto $npc): ActivePullEnemy
     {
         return new ActivePullEnemy(
             $npc->getUniqueId(),

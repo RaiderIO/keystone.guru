@@ -24,7 +24,7 @@ Reuse existing resources when they fit — `DungeonRouteSummaryResource` + `Dung
 
 Extends `App\Http\Requests\Api\V1\APIFormRequest`. Always:
 - `authorize(): bool` → `true` for public endpoints
-- `getRequestDTOClass(): ?string` → `null` unless a typed request DTO is needed
+- `getRequestDtoClass(): ?string` → `null` unless a typed request DTO is needed
 - `rules(): array` — validated inputs
 
 Use typed accessor methods on the request instead of sprinkling `?? default` throughout the controller.

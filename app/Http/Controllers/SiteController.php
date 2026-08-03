@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestDTO;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestDto;
 use App\Logic\Utils\Stopwatch;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -84,7 +84,7 @@ class SiteController extends Controller
 
         Stopwatch::start('SiteController::benchmark');
         $result = $combatLogRouteDungeonRouteService->correctCombatLogRoute(
-            CombatLogRouteRequestDTO::createFromArray($validated),
+            CombatLogRouteRequestDto::createFromArray($validated),
         );
         Stopwatch::stop('SiteController::benchmark');
 

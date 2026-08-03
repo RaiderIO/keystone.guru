@@ -2,7 +2,7 @@
 
 namespace App\Dto\Request\CombatLog\Route;
 
-use App\Dto\Request\RequestDTO;
+use App\Dto\Request\RequestDto;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Carbon;
 
@@ -14,7 +14,7 @@ use Illuminate\Support\Carbon;
  * @OA\Property(property="coord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
  * @implements Arrayable<string, mixed>
  */
-class CombatLogRouteSpellRequestDTO extends RequestDTO implements Arrayable
+class CombatLogRouteSpellRequestDto extends RequestDto implements Arrayable
 {
     private Carbon $castAtCarbon;
 
@@ -22,13 +22,13 @@ class CombatLogRouteSpellRequestDTO extends RequestDTO implements Arrayable
         public ?int                           $spellId = null,
         public ?string                        $playerUid = null,
         public ?string                        $castAt = null,
-        public ?CombatLogRouteCoordRequestDTO $coord = null,
+        public ?CombatLogRouteCoordRequestDto $coord = null,
     ) {
     }
 
     public function getCastAt(): Carbon
     {
         return $this->castAtCarbon ??
-            $this->castAtCarbon = Carbon::createFromFormat(CombatLogRouteRequestDTO::DATE_TIME_FORMAT, $this->castAt);
+            $this->castAtCarbon = Carbon::createFromFormat(CombatLogRouteRequestDto::DATE_TIME_FORMAT, $this->castAt);
     }
 }

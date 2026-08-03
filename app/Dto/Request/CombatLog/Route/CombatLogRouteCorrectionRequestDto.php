@@ -14,11 +14,11 @@ use Override;
  * @OA\Property(property="spells",type="array",items={"$ref":"#/components/schemas/CombatLogRouteSpellCorrection"}, nullable=true)
  * @OA\Property(property="playerDeaths",type="array",items={"$ref":"#/components/schemas/CombatLogRoutePlayerDeathCorrection"}, nullable=true)
  *
- * @property Collection<int, CombatLogRouteNpcCorrectionRequestDTO>         $npcs
- * @property Collection<int, CombatLogRouteSpellCorrectionRequestDTO>       $spells
- * @property Collection<int, CombatLogRoutePlayerDeathCorrectionRequestDTO> $playerDeaths
+ * @property Collection<int, CombatLogRouteNpcCorrectionRequestDto>         $npcs
+ * @property Collection<int, CombatLogRouteSpellCorrectionRequestDto>       $spells
+ * @property Collection<int, CombatLogRoutePlayerDeathCorrectionRequestDto> $playerDeaths
  */
-class CombatLogRouteCorrectionRequestDTO extends CombatLogRouteRequestDTO
+class CombatLogRouteCorrectionRequestDto extends CombatLogRouteRequestDto
 {
     //    public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:sP';
     public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s.vP';
@@ -27,9 +27,9 @@ class CombatLogRouteCorrectionRequestDTO extends CombatLogRouteRequestDTO
     public static function getCollectionItemType(string $key): ?string
     {
         return match ($key) {
-            'npcs'         => CombatLogRouteNpcCorrectionRequestDTO::class,
-            'spells'       => CombatLogRouteSpellCorrectionRequestDTO::class,
-            'playerDeaths' => CombatLogRoutePlayerDeathCorrectionRequestDTO::class,
+            'npcs'         => CombatLogRouteNpcCorrectionRequestDto::class,
+            'spells'       => CombatLogRouteSpellCorrectionRequestDto::class,
+            'playerDeaths' => CombatLogRoutePlayerDeathCorrectionRequestDto::class,
             default        => null,
         };
     }

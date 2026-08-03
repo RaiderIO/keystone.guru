@@ -2,7 +2,7 @@
 
 namespace App\Dto\Request\CombatLog\Route;
 
-use App\Dto\Request\RequestDTO;
+use App\Dto\Request\RequestDto;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Faction;
 use App\Models\GameVersion\GameVersion;
@@ -28,26 +28,26 @@ use Override;
  * @OA\Property(property="spells",type="array",items={"$ref":"#/components/schemas/CombatLogRouteSpell"}, nullable=true)
  * @OA\Property(property="playerDeaths",type="array",items={"$ref":"#/components/schemas/CombatLogRoutePlayerDeath"}, nullable=true)
  *
- * @property Collection<int, CombatLogRouteNpcRequestDTO>|null         $npcs
- * @property Collection<int, CombatLogRouteSpellRequestDTO>|null       $spells
- * @property Collection<int, CombatLogRoutePlayerDeathRequestDTO>|null $playerDeaths
+ * @property Collection<int, CombatLogRouteNpcRequestDto>|null         $npcs
+ * @property Collection<int, CombatLogRouteSpellRequestDto>|null       $spells
+ * @property Collection<int, CombatLogRoutePlayerDeathRequestDto>|null $playerDeaths
  * @implements Arrayable<string, mixed>
  */
-class CombatLogRouteRequestDTO extends RequestDTO implements Arrayable
+class CombatLogRouteRequestDto extends RequestDto implements Arrayable
 {
     //    public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:sP';
     public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s.vP';
 
     /**
-     * @param Collection<int, CombatLogRouteNpcRequestDTO>|null         $npcs
-     * @param Collection<int, CombatLogRouteSpellRequestDTO>|null       $spells
-     * @param Collection<int, CombatLogRoutePlayerDeathRequestDTO>|null $playerDeaths
+     * @param Collection<int, CombatLogRouteNpcRequestDto>|null         $npcs
+     * @param Collection<int, CombatLogRouteSpellRequestDto>|null       $spells
+     * @param Collection<int, CombatLogRoutePlayerDeathRequestDto>|null $playerDeaths
      */
     public function __construct(
-        public ?CombatLogRouteMetadataRequestDTO      $metadata = null,
-        public ?CombatLogRouteSettingsRequestDTO      $settings = null,
-        public ?CombatLogRouteChallengeModeRequestDTO $challengeMode = null,
-        public ?CombatLogRouteRosterRequestDTO        $roster = null,
+        public ?CombatLogRouteMetadataRequestDto      $metadata = null,
+        public ?CombatLogRouteSettingsRequestDto      $settings = null,
+        public ?CombatLogRouteChallengeModeRequestDto $challengeMode = null,
+        public ?CombatLogRouteRosterRequestDto        $roster = null,
         public ?Collection                            $npcs = null,
         public ?Collection                            $spells = null,
         public ?Collection                            $playerDeaths = null,
@@ -144,9 +144,9 @@ class CombatLogRouteRequestDTO extends RequestDTO implements Arrayable
     public static function getCollectionItemType(string $key): ?string
     {
         return match ($key) {
-            'npcs'         => CombatLogRouteNpcRequestDTO::class,
-            'spells'       => CombatLogRouteSpellRequestDTO::class,
-            'playerDeaths' => CombatLogRoutePlayerDeathRequestDTO::class,
+            'npcs'         => CombatLogRouteNpcRequestDto::class,
+            'spells'       => CombatLogRouteSpellRequestDto::class,
+            'playerDeaths' => CombatLogRoutePlayerDeathRequestDto::class,
             default        => null,
         };
     }

@@ -116,7 +116,7 @@ class APIDungeonRouteController extends Controller
         APIDungeonRouteControllerServiceInterface $apiDungeonRouteControllerService,
         DungeonRoute                              $dungeonRoute,
     ): DungeonRouteThumbnailJobEnvelopeResource {
-        $dto = $request->getDTO();
+        $dto = $request->getDto();
 
         return new DungeonRouteThumbnailJobEnvelopeResource(
             $apiDungeonRouteControllerService->createThumbnails(

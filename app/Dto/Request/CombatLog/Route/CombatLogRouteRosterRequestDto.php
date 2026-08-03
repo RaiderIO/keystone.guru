@@ -2,7 +2,7 @@
 
 namespace App\Dto\Request\CombatLog\Route;
 
-use App\Dto\Request\RequestDTO;
+use App\Dto\Request\RequestDto;
 use Illuminate\Contracts\Support\Arrayable;
 
 /**
@@ -14,7 +14,7 @@ use Illuminate\Contracts\Support\Arrayable;
  * @OA\Property(property="classIds", type="array", @OA\Items(type="integer"))
  * @implements Arrayable<string, mixed>
  */
-class CombatLogRouteRosterRequestDTO extends RequestDTO implements Arrayable
+class CombatLogRouteRosterRequestDto extends RequestDto implements Arrayable
 {
     /**
      * @param array<int>|null $characterIds

@@ -2,12 +2,12 @@
 
 namespace App\Dto\Request\Route;
 
-use App\Dto\Request\RequestDTO;
+use App\Dto\Request\RequestDto;
 
 /**
  * @OA\Schema(schema="RouteThumbnailRequest")
  */
-class DungeonRouteThumbnailRequestDTO extends RequestDTO
+class DungeonRouteThumbnailRequestDto extends RequestDto
 {
     public function __construct()
     {

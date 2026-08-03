@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api\V1;
 
 class APIOffsetPaginatedRequest extends APIFormRequest
 {
-    protected function getRequestDTOClass(): ?string
+    protected function getRequestDtoClass(): ?string
     {
         return null;
     }
