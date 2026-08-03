@@ -10,6 +10,15 @@ inputs:
 runs:
   using: "composite"
   steps:
+    # Pinned commits for third-party toolchain repos with no tagged releases. Bump these
+    # deliberately (not via unpinned HEAD) when an upstream fix/feature is needed - the pin is
+    # baked into the cache keys below so a bump busts the cache correctly.
+    - name: Pin toolchain commit SHAs
+      id: pins
+      run: |
+        echo "php-lua-sha=a76f01149e6132810fe6b3095f2b9bc597d34f9e" >> "$GITHUB_OUTPUT"
+        echo "cli-weakauras-parser-sha=febb57faeaa805a79c9c2e0425c804e441a0e969" >> "$GITHUB_OUTPUT"
+      shell: bash
     - name: Checkout
       uses: actions/checkout@v5
       with:
@@ -47,14 +56,14 @@ runs:
       shell: bash
 
     # Cache the compiled lua.so / bit.so so we skip the ~30-40s phpize/configure/make on every run
-    # (paid per shard once the test job is sharded). Bump the trailing "-v1" to bust the cache if the
-    # Wotuu/php-lua repo (built from HEAD, unpinned) changes and a rebuild is needed.
+    # (paid per shard once the test job is sharded). The pinned php-lua SHA is part of the key so
+    # bumping it above busts the cache and triggers a rebuild.
     - name: Restore Lua extension build cache
       id: cache-lua-ext
       uses: actions/cache@v5
       with:
         path: ~/lua-ext-cache
-        key: lua-ext-php8.4-${{ hashFiles('storage/lua/LuaBitOp-1.0.3.zip') }}-v1
+        key: lua-ext-php8.4-${{ hashFiles('storage/lua/LuaBitOp-1.0.3.zip') }}-${{ steps.pins.outputs.php-lua-sha }}
 
     - name: Build PHP Lua extension
       run: |
@@ -75,6 +84,7 @@ runs:
           echo "==> Building Lua extension from source"
           git clone https://github.com/Wotuu/php-lua.git /tmp/php-lua
           cd /tmp/php-lua
+          git checkout "${{ steps.pins.outputs.php-lua-sha }}"
           phpize
           ./configure
           make -j$(nproc)
@@ -98,14 +108,14 @@ runs:
       uses: actions/cache@v5
       with:
         path: ~/.cargo/bin/cli_weakauras_parser
-        key: cli-weakauras-parser-rust-1.91.1
+        key: cli-weakauras-parser-rust-1.91.1-${{ steps.pins.outputs.cli-weakauras-parser-sha }}
 
     - name: Build cli_weakauras_parser
       if: steps.cache-cli-weakauras-parser.outputs.cache-hit != 'true'
       run: |
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain 1.91.1 -y
         source "$HOME/.cargo/env"
-        cargo install --git https://codeberg.org/Velithris/cli-weakauras-parser.git --locked
+        cargo install --git https://codeberg.org/Velithris/cli-weakauras-parser.git --rev "${{ steps.pins.outputs.cli-weakauras-parser-sha }}" --locked
       shell: bash
 
     - name: Install cli_weakauras_parser system-wide
