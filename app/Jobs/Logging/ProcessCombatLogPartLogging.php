@@ -21,8 +21,12 @@ class ProcessCombatLogPartLogging extends StructuredLogging implements ProcessCo
         $this->error(__METHOD__, get_defined_vars());
     }
 
-    public function handleParseError(int $combatLogVersion, string $offendingLine, string $reason, string $filePath): void
-    {
+    public function handleParseError(
+        int    $combatLogVersion,
+        string $message,
+        string $exceptionClass,
+        string $filePath,
+    ): void {
         $this->error(__METHOD__, get_defined_vars());
     }
 
