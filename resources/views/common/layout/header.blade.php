@@ -26,11 +26,15 @@ use Illuminate\Support\Str;
  * @var Collection<string, string>   $dungeonContextLinks
  */
 
-$navs                = [];
-$showMore            ??= false;
-$showDungeonContext  ??= true;
-$forceShrink         ??= false;
-$dungeonContextLinks ??= null;
+$navs                   = [];
+$showMore               ??= false;
+$showDungeonContext     ??= true;
+$forceShrink            ??= false;
+$dungeonContextLinks    ??= null;
+// Defense in depth for #3806 - GlobalComposer normally supplies this, but view composers are
+// skipped entirely on paths ViewService::shouldLoadViewVariables() blacklists (e.g. /ajax/),
+// so an HTML error view rendered for one of those paths would otherwise crash here.
+$currentUserGameVersion ??= GameVersion::getUserOrDefaultGameVersion();
 
 if ($currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
     if ($nextSeason !== null) {
