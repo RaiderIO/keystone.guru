@@ -11,15 +11,17 @@ use Tests\TestCases\PublicTestCase;
 final class ErrorResponseTest extends PublicTestCase
 {
     #[Test]
-    public function fallback_givenGetRequestToDeleteOnlyRoute_returns405HtmlPage(): void
+    public function fallback_givenGetRequestToDeleteOnlyAjaxRoute_returns405Json(): void
     {
-        // Act - /ajax/profile/adfree/{user} is registered for POST and DELETE, but not GET
+        // Act - /ajax/profile/adfree/{user} is registered for POST and DELETE, but not GET. No view
+        // composers ever run on /ajax/ (ViewService::shouldLoadViewVariables()), so this must never
+        // render an HTML error view - it would crash on a missing view variable (#3806).
         $response = $this->get('/ajax/profile/adfree/1');
 
         // Assert
         $response->assertStatus(405);
         $response->assertHeader('Allow', 'POST, DELETE');
-        $response->assertSee(__('view_errors.405.title'));
+        $response->assertJson(['message' => 'Method Not Allowed']);
     }
 
     #[Test]

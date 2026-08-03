@@ -145,9 +145,19 @@ class Handler extends ExceptionHandler
         return redirect()->guest('login');
     }
 
+    /**
+     * /ajax/ endpoints only ever render HTML in their success responses (some deliberately, e.g.
+     * the search/view routes whitelisted in ViewService::VIEW_VARIABLES_URL_WHITELIST); no view
+     * composers run for them otherwise (KeystoneGuruServiceProvider::boot(), gated by
+     * ViewService::shouldLoadViewVariables()), so an HTML error view rendered for one of them is
+     * guaranteed to crash on a missing view variable (#3806). Route every /ajax/ error to JSON,
+     * matching how /api/ is already treated here.
+     */
     private function isApiRequest(Request $request): bool
     {
-        return str_starts_with($request->decodedPath(), 'api/');
+        $path = $request->decodedPath();
+
+        return str_starts_with($path, 'api/') || str_starts_with($path, 'ajax/');
     }
 
     /**
