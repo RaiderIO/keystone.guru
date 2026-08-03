@@ -3,8 +3,11 @@
 namespace Tests\Unit\App\Service\CombatLog;
 
 use App\Service\CombatLog\CombatLogServiceInterface;
+use App\Service\CombatLog\Exceptions\CombatLogParseException;
+use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use RedisException;
 use Tests\TestCases\PublicTestCase;
 use ZipArchive;
 
@@ -68,6 +71,59 @@ final class CombatLogServiceTest extends PublicTestCase
         } finally {
             if (file_exists($txtFilePath)) {
                 unlink($txtFilePath);
+            }
+        }
+    }
+
+    #[Test]
+    public function parseCombatLog_givenCallbackThrowsRedisException_rethrowsUnwrapped(): void
+    {
+        // Arrange — a dropped Redis/Valkey connection mid-parse (#3791) is a transient infra failure, not an
+        // unparsable line. It must propagate as-is (not wrapped in CombatLogParseException) so the caller's
+        // retry logic applies instead of the blip being recorded as a permanent parse failure.
+        $filePath = sprintf('%s/keystone_test_combatlog_%d.txt', sys_get_temp_dir(), random_int(1, PHP_INT_MAX));
+        file_put_contents($filePath, "COMBAT_LOG_VERSION,21\nZONE_CHANGE,1234\n");
+
+        try {
+            /** @var CombatLogServiceInterface $combatLogService */
+            $combatLogService = app(CombatLogServiceInterface::class);
+
+            // Assert
+            $this->expectException(RedisException::class);
+            $this->expectExceptionMessage('read error on connection to tcp://ksg-valkey:6379');
+
+            // Act
+            $combatLogService->parseCombatLog($filePath, function (): void {
+                throw new RedisException('read error on connection to tcp://ksg-valkey:6379');
+            });
+        } finally {
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+        }
+    }
+
+    #[Test]
+    public function parseCombatLog_givenCallbackThrowsOtherException_wrapsInCombatLogParseException(): void
+    {
+        // Arrange — genuine parse errors are still wrapped so the failing line/number can be recorded.
+        $filePath = sprintf('%s/keystone_test_combatlog_%d.txt', sys_get_temp_dir(), random_int(1, PHP_INT_MAX));
+        file_put_contents($filePath, "COMBAT_LOG_VERSION,21\nZONE_CHANGE,1234\n");
+
+        try {
+            /** @var CombatLogServiceInterface $combatLogService */
+            $combatLogService = app(CombatLogServiceInterface::class);
+
+            // Assert
+            $this->expectException(CombatLogParseException::class);
+
+            // Act
+            $combatLogService->parseCombatLog($filePath, function (): void {
+                throw new InvalidArgumentException('Unbalanced quotes');
+            });
+        } finally {
+            if (file_exists($filePath)) {
+                unlink($filePath);
             }
         }
     }

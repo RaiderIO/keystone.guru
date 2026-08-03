@@ -31,6 +31,7 @@ use File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use RedisException;
 use Throwable;
 use ZipArchive;
 
@@ -399,6 +400,12 @@ readonly class CombatLogService implements CombatLogServiceInterface
                     $this->log->parseCombatLogParseEventsChangedCombatLogVersion($combatLogVersion, $isAdvancedLoggingEnabled);
                 }
             }
+        } catch (RedisException $exception) {
+            // A dropped Redis/Valkey connection is a transient infrastructure failure, not a malformed
+            // combat log line - the line the reader happened to be on when it hit is not the cause. Let it
+            // propagate unwrapped so the caller's retry logic (queue tries/backoff) applies instead of it
+            // being recorded as a permanent CombatLogParseFailure.
+            throw $exception;
         } catch (Exception $exception) {
             $this->log->parseCombatLogParseEventsException(sprintf('%d: %s', $lineNr, $rawEvent), $exception);
 
