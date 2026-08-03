@@ -4,6 +4,9 @@ namespace App\Console\Commands\Mapping;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
 use App\Logic\Structs\LatLng;
+use App\Models\Affix;
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\AffixGroup\AffixGroupCoupling;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -16,12 +19,15 @@ use App\Models\Interfaces\HasVerticesInterface;
 use App\Models\MapIcon;
 use App\Models\Mapping\MappingCommitLog;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Season;
+use App\Models\SeasonDungeon;
 use App\Service\Mapping\MappingExportServiceInterface;
 use App\Traits\SavesArrayToJsonFile;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -62,6 +68,7 @@ class Save extends Command
         $this->call('modelCache:clear');
 
         $dungeonDataDir = database_path('seeders/dungeondata/');
+        $seasonDataDir  = database_path('seeders/seasondata/');
 
         $this->saveMappingVersions($dungeonDataDir);
         $this->saveMappingCommitLogs($dungeonDataDir);
@@ -69,6 +76,11 @@ class Save extends Command
         $this->saveNpcs($dungeonDataDir);
         $this->saveSpells($dungeonDataDir);
         $this->saveDungeonData($dungeonDataDir);
+
+        $this->saveAffixes($seasonDataDir);
+        $this->saveAffixGroups($seasonDataDir);
+        $this->saveSeasons($seasonDataDir);
+        $this->saveSeasonDungeons($seasonDataDir);
 
         $mappingBackupDir = config('keystoneguru.mapping_backup_dir');
 
@@ -86,6 +98,16 @@ class Save extends Command
                 sprintf('mkdir -p "%s"', $targetDir),
                 sprintf('cp -R "%s/%s" "%s"', $tmpZippedFilePath, $zippedFileName, $targetDir),
                 sprintf('rm %s/%s', $tmpZippedFilePath, $zippedFileName),
+            ]);
+
+            // Backed up as a sibling archive rather than folded into mapping.gz, so that the existing
+            // archive's layout stays byte-compatible with backups taken before season data was exported.
+            $seasonDataZippedFileName = 'seasondata.gz';
+            $this->info(sprintf('Saving backup of season data to %s/%s', $targetDir, $seasonDataZippedFileName));
+            $this->shell(sprintf('tar -zcf %s/%s -C %s .', $tmpZippedFilePath, $seasonDataZippedFileName, $seasonDataDir));
+            $this->shell([
+                sprintf('cp -R "%s/%s" "%s"', $tmpZippedFilePath, $seasonDataZippedFileName, $targetDir),
+                sprintf('rm %s/%s', $tmpZippedFilePath, $seasonDataZippedFileName),
             ]);
         }
 
@@ -217,6 +239,115 @@ class Save extends Command
         $this->info('Saving Spells');
 
         $this->saveDataToJsonFile($this->mappingExportService->serializeSpells(), $dungeonDataDir, 'spells.json');
+    }
+
+    /**
+     * Attributes are listed explicitly rather than relying on toArray(), so that the file format is a
+     * deliberate contract instead of a by-product of the model's $hidden/$appends/$with configuration.
+     *
+     * @throws Exception
+     */
+    private function saveAffixes(string $seasonDataDir): void
+    {
+        $this->info('Saving affixes');
+
+        $affixes = Affix::query()
+            ->orderBy('id')
+            ->get()
+            ->map(static fn(Affix $affix): array => [
+                'id'          => $affix->id,
+                'key'         => $affix->key,
+                'affix_id'    => $affix->affix_id,
+                'name'        => $affix->name,
+                'description' => $affix->description,
+            ]);
+
+        $this->saveDataToJsonFile($affixes->all(), $seasonDataDir, 'affixes.json');
+    }
+
+    /**
+     * Affix group couplings are nested inside their affix group so that a rotation change reads as
+     * "this week's third affix changed" in review, rather than as opaque coupling churn.
+     *
+     * The couplings deliberately carry no id of their own: nothing references affix_group_couplings.id,
+     * it only encodes the display order (see the explicit orderBy in AffixGroupBase::affixes()). Array
+     * order therefore *is* the contract - it becomes insertion order, which becomes id order.
+     *
+     * @throws Exception
+     */
+    private function saveAffixGroups(string $seasonDataDir): void
+    {
+        $this->info('Saving affix groups');
+
+        $affixGroups = AffixGroup::without(['affixes'])
+            // affixGroupCouplings() is an unordered HasMany - without this the nested order would be
+            // whatever the database happens to return, making the export non-deterministic.
+            ->with(['affixGroupCouplings' => static fn(Relation $query) => $query->orderBy('id')])
+            ->orderBy('id')
+            ->get()
+            ->map(static fn(AffixGroup $affixGroup): array => [
+                'id'             => $affixGroup->id,
+                'season_id'      => $affixGroup->season_id,
+                'expansion_id'   => $affixGroup->expansion_id,
+                'seasonal_index' => $affixGroup->seasonal_index,
+                'confirmed'      => (bool)$affixGroup->confirmed,
+                'affixes'        => $affixGroup->affixGroupCouplings
+                    ->map(static fn(AffixGroupCoupling $affixGroupCoupling): array => [
+                        'affix_id'  => $affixGroupCoupling->affix_id,
+                        'key_level' => $affixGroupCoupling->key_level,
+                    ])->all(),
+            ]);
+
+        $this->saveDataToJsonFile($affixGroups->all(), $seasonDataDir, 'affix_groups.json');
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function saveSeasons(string $seasonDataDir): void
+    {
+        $this->info('Saving seasons');
+
+        $seasons = Season::query()
+            ->orderBy('id')
+            ->get()
+            ->map(static fn(Season $season): array => [
+                'id'                => $season->id,
+                'expansion_id'      => $season->expansion_id,
+                'seasonal_affix_id' => $season->seasonal_affix_id,
+                'index'             => $season->index,
+                // Formatted rather than left as the datetime cast: the seeder inserts through the query
+                // builder, which would hand MySQL an ISO-8601 string that a `datetime` column rejects.
+                'start'                   => $season->start->toDateTimeString(),
+                'presets'                 => $season->presets,
+                'affix_group_count'       => $season->affix_group_count,
+                'start_affix_group_index' => $season->start_affix_group_index,
+                'key_level_min'           => $season->key_level_min,
+                'key_level_max'           => $season->key_level_max,
+                'item_level_min'          => $season->item_level_min,
+                'item_level_max'          => $season->item_level_max,
+            ]);
+
+        $this->saveDataToJsonFile($seasons->all(), $seasonDataDir, 'seasons.json');
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function saveSeasonDungeons(string $seasonDataDir): void
+    {
+        $this->info('Saving season dungeons');
+
+        $seasonDungeons = SeasonDungeon::without(['season', 'dungeon'])
+            ->orderBy('id')
+            ->get()
+            ->map(static fn(SeasonDungeon $seasonDungeon): array => [
+                'id'         => $seasonDungeon->id,
+                'season_id'  => $seasonDungeon->season_id,
+                'dungeon_id' => $seasonDungeon->dungeon_id,
+            ]);
+
+        $this->saveDataToJsonFile($seasonDungeons->all(), $seasonDataDir, 'season_dungeons.json');
     }
 
     /**

@@ -1,6 +1,6 @@
 ---
 name: seeder-save
-description: Guide for adding a model or nested relation to the `mapping:save` Artisan command so it is exported to the dungeon JSON seeder files. Use when a new model or child relation needs to be persisted into `database/seeders/dungeondata/` as part of the mapping export.
+description: Guide for adding a model or nested relation to the `mapping:save` Artisan command so it is exported to the dungeon JSON seeder files. Use when a new model or child relation needs to be persisted into `database/seeders/dungeondata/` as part of the mapping export. Also covers the separate, differently-conventioned `database/seeders/seasondata/` export (affixes, affix groups, seasons, season dungeons) added by `saveAffixes()`/`saveAffixGroups()`/`saveSeasons()`/`saveSeasonDungeons()`.
 ---
 
 # Seeder Save
@@ -132,3 +132,31 @@ After running `php artisan mapping:save`, confirm the JSON contains the expected
 5. Confirm the companion `seeder-load` parser handles the new structure.
 
 See also: `seeder-load` skill for the corresponding import side.
+
+---
+
+## Season data (`database/seeders/seasondata/`) — a deliberately different convention
+
+`Save.php` also exports affixes, affix groups, seasons and season dungeons to
+`database/seeders/seasondata/` via `saveAffixes()`, `saveAffixGroups()`, `saveSeasons()` and
+`saveSeasonDungeons()`. This data is small, hand-curated through the admin panel, and load-bearing for
+gameplay logic (`App\Logic\MDT\Conversion`, `SeasonAffixGroupService`), so these methods deliberately do
+not follow the `toArray()`/`makeVisible()`/`makeHidden()` pattern above:
+
+- **Attributes are listed explicitly** in the `->map()` closure (e.g. `['id' => ..., 'key' => ..., ...]`)
+  rather than relying on `toArray()`. The JSON shape is then a deliberate contract independent of the
+  model's `$hidden`/`$appends`/`$with` configuration — a future column or accessor added to the model
+  can't silently change what's exported.
+- **Nested children carry no id of their own.** `affix_groups.json` nests each group's affix couplings as
+  `{"affix_id": ..., "key_level": ...}` — no `affix_group_couplings.id`. Nothing references that id; it
+  only encodes display order, which the array position already captures.
+- **Eager loads are explicitly ordered**, not left to `->with([...])` defaults. Array order in
+  `affix_groups.json` *is* the contract: it becomes insertion order on import, which becomes
+  `affix_group_couplings.id` order, which is what `AffixGroupBase::affixes()` sorts on. `saveAffixGroups()`
+  therefore eager-loads with `->with(['affixGroupCouplings' => fn($q) => $q->orderBy('id')])` — omitting
+  that `orderBy` would make the export non-deterministic and silently re-slot which affix renders in which
+  week.
+
+It also loads back in through a different path than `RelationMapping`/`RelationParser` — see the
+"Season data" section in the `seeder-load` skill for why, and use `LoadsSeasonData` rather than adding a
+`RelationParser` for these four files.

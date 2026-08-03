@@ -1,0 +1,282 @@
+[
+    {
+        "id": 1,
+        "key": "Bolstering",
+        "affix_id": 7,
+        "name": "affixes.bolstering.name",
+        "description": "affixes.bolstering.description"
+    },
+    {
+        "id": 2,
+        "key": "Bursting",
+        "affix_id": 11,
+        "name": "affixes.bursting.name",
+        "description": "affixes.bursting.description"
+    },
+    {
+        "id": 3,
+        "key": "Explosive",
+        "affix_id": 13,
+        "name": "affixes.explosive.name",
+        "description": "affixes.explosive.description"
+    },
+    {
+        "id": 4,
+        "key": "Fortified",
+        "affix_id": 10,
+        "name": "affixes.fortified.name",
+        "description": "affixes.fortified.description"
+    },
+    {
+        "id": 5,
+        "key": "Grievous",
+        "affix_id": 12,
+        "name": "affixes.grievous.name",
+        "description": "affixes.grievous.description"
+    },
+    {
+        "id": 6,
+        "key": "Infested",
+        "affix_id": 16,
+        "name": "affixes.infested.name",
+        "description": "affixes.infested.description"
+    },
+    {
+        "id": 7,
+        "key": "Necrotic",
+        "affix_id": 4,
+        "name": "affixes.necrotic.name",
+        "description": "affixes.necrotic.description"
+    },
+    {
+        "id": 8,
+        "key": "Quaking",
+        "affix_id": 14,
+        "name": "affixes.quaking.name",
+        "description": "affixes.quaking.description"
+    },
+    {
+        "id": 9,
+        "key": "Raging",
+        "affix_id": 6,
+        "name": "affixes.raging.name",
+        "description": "affixes.raging.description"
+    },
+    {
+        "id": 10,
+        "key": "Relentless",
+        "affix_id": 1,
+        "name": "affixes.relentless.name",
+        "description": "affixes.relentless.description"
+    },
+    {
+        "id": 11,
+        "key": "Sanguine",
+        "affix_id": 8,
+        "name": "affixes.sanguine.name",
+        "description": "affixes.sanguine.description"
+    },
+    {
+        "id": 12,
+        "key": "Skittish",
+        "affix_id": 2,
+        "name": "affixes.skittish.name",
+        "description": "affixes.skittish.description"
+    },
+    {
+        "id": 13,
+        "key": "Teeming",
+        "affix_id": 5,
+        "name": "affixes.teeming.name",
+        "description": "affixes.teeming.description"
+    },
+    {
+        "id": 14,
+        "key": "Tyrannical",
+        "affix_id": 9,
+        "name": "affixes.tyrannical.name",
+        "description": "affixes.tyrannical.description"
+    },
+    {
+        "id": 15,
+        "key": "Volcanic",
+        "affix_id": 3,
+        "name": "affixes.volcanic.name",
+        "description": "affixes.volcanic.description"
+    },
+    {
+        "id": 16,
+        "key": "Reaping",
+        "affix_id": 117,
+        "name": "affixes.reaping.name",
+        "description": "affixes.reaping.description"
+    },
+    {
+        "id": 17,
+        "key": "Beguiling",
+        "affix_id": 119,
+        "name": "affixes.beguiling.name",
+        "description": "affixes.beguiling.description"
+    },
+    {
+        "id": 18,
+        "key": "Awakened",
+        "affix_id": 120,
+        "name": "affixes.awakened.name",
+        "description": "affixes.awakened.description"
+    },
+    {
+        "id": 19,
+        "key": "Inspiring",
+        "affix_id": 122,
+        "name": "affixes.inspiring.name",
+        "description": "affixes.inspiring.description"
+    },
+    {
+        "id": 20,
+        "key": "Spiteful",
+        "affix_id": 123,
+        "name": "affixes.spiteful.name",
+        "description": "affixes.spiteful.description"
+    },
+    {
+        "id": 21,
+        "key": "Storming",
+        "affix_id": 124,
+        "name": "affixes.storming.name",
+        "description": "affixes.storming.description"
+    },
+    {
+        "id": 22,
+        "key": "Prideful",
+        "affix_id": 121,
+        "name": "affixes.prideful.name",
+        "description": "affixes.prideful.description"
+    },
+    {
+        "id": 23,
+        "key": "Tormented",
+        "affix_id": 128,
+        "name": "affixes.tormented.name",
+        "description": "affixes.tormented.description"
+    },
+    {
+        "id": 24,
+        "key": "Unknown",
+        "affix_id": 1,
+        "name": "affixes.unknown.name",
+        "description": "affixes.unknown.description"
+    },
+    {
+        "id": 25,
+        "key": "Infernal",
+        "affix_id": 129,
+        "name": "affixes.infernal.name",
+        "description": "affixes.infernal.description"
+    },
+    {
+        "id": 26,
+        "key": "Encrypted",
+        "affix_id": 130,
+        "name": "affixes.encrypted.name",
+        "description": "affixes.encrypted.description"
+    },
+    {
+        "id": 27,
+        "key": "Shrouded",
+        "affix_id": 131,
+        "name": "affixes.shrouded.name",
+        "description": "affixes.shrouded.description"
+    },
+    {
+        "id": 28,
+        "key": "Thundering",
+        "affix_id": 132,
+        "name": "affixes.thundering.name",
+        "description": "affixes.thundering.description"
+    },
+    {
+        "id": 29,
+        "key": "Afflicted",
+        "affix_id": 135,
+        "name": "affixes.afflicted.name",
+        "description": "affixes.afflicted.description"
+    },
+    {
+        "id": 30,
+        "key": "Entangling",
+        "affix_id": 134,
+        "name": "affixes.entangling.name",
+        "description": "affixes.entangling.description"
+    },
+    {
+        "id": 31,
+        "key": "Incorporeal",
+        "affix_id": 136,
+        "name": "affixes.incorporeal.name",
+        "description": "affixes.incorporeal.description"
+    },
+    {
+        "id": 32,
+        "key": "Xal'atath's Bargain: Ascendant",
+        "affix_id": 148,
+        "name": "affixes.xalataths_bargain_ascendant.name",
+        "description": "affixes.xalataths_bargain_ascendant.description"
+    },
+    {
+        "id": 33,
+        "key": "Xal'atath's Bargain: Devour",
+        "affix_id": 160,
+        "name": "affixes.xalataths_bargain_devour.name",
+        "description": "affixes.xalataths_bargain_devour.description"
+    },
+    {
+        "id": 34,
+        "key": "Xal'atath's Bargain: Voidbound",
+        "affix_id": 158,
+        "name": "affixes.xalataths_bargain_voidbound.name",
+        "description": "affixes.xalataths_bargain_voidbound.description"
+    },
+    {
+        "id": 35,
+        "key": "Xal'atath's Bargain: Oblivion",
+        "affix_id": 159,
+        "name": "affixes.xalataths_bargain_oblivion.name",
+        "description": "affixes.xalataths_bargain_oblivion.description"
+    },
+    {
+        "id": 36,
+        "key": "Xal'atath's Bargain: Frenzied",
+        "affix_id": 153,
+        "name": "affixes.xalataths_bargain_frenzied.name",
+        "description": "affixes.xalataths_bargain_frenzied.description"
+    },
+    {
+        "id": 37,
+        "key": "Xal'atath's Guile",
+        "affix_id": 147,
+        "name": "affixes.xalataths_guile.name",
+        "description": "affixes.xalataths_guile.description"
+    },
+    {
+        "id": 38,
+        "key": "Challenger's Peril",
+        "affix_id": 152,
+        "name": "affixes.challengers_peril.name",
+        "description": "affixes.challengers_peril.description"
+    },
+    {
+        "id": 39,
+        "key": "Xal'atath's Bargain: Pulsar",
+        "affix_id": 162,
+        "name": "affixes.xalataths_bargain_pulsar.name",
+        "description": "affixes.xalataths_bargain_pulsar.description"
+    },
+    {
+        "id": 40,
+        "key": "Lindormi's Guidance",
+        "affix_id": 165,
+        "name": "affixes.lindormis_guidance.name",
+        "description": "affixes.lindormis_guidance.description"
+    }
+]
