@@ -59,6 +59,17 @@ final class ErrorResponseTest extends PublicTestCase
     }
 
     #[Test]
+    public function fallback_givenPlainGetRequestToUnmatchedAjaxRoute_returns404Json(): void
+    {
+        // Act - a plain (non-JSON, non-XHR) request is exactly the crawler shape from #3806
+        $response = $this->get('/ajax/this/route/does/not/exist/xyz');
+
+        // Assert
+        $response->assertStatus(404);
+        $response->assertJson(['message' => __('exceptions.handler.api_route_not_found')]);
+    }
+
+    #[Test]
     public function render_givenJsonWrongMethodToExistingRoute_returns405JsonWithAllowHeader(): void
     {
         // Act - the home page is GET only, so a POST is a genuine method mismatch thrown by the router

@@ -146,12 +146,13 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * /ajax/ endpoints only ever render HTML in their success responses (some deliberately, e.g.
-     * the search/view routes whitelisted in ViewService::VIEW_VARIABLES_URL_WHITELIST); no view
-     * composers run for them otherwise (KeystoneGuruServiceProvider::boot(), gated by
-     * ViewService::shouldLoadViewVariables()), so an HTML error view rendered for one of them is
-     * guaranteed to crash on a missing view variable (#3806). Route every /ajax/ error to JSON,
-     * matching how /api/ is already treated here.
+     * No view composers run on /ajax/ (KeystoneGuruServiceProvider::boot(), gated by
+     * ViewService::shouldLoadViewVariables()) - not even for the handful of /ajax/ routes
+     * whitelisted there to deliberately render an HTML fragment on success (search/view). So an
+     * HTML error view rendered for ANY /ajax/ request is guaranteed to crash on a missing view
+     * variable (#3806); route every /ajax/ error to JSON instead, matching how /api/ is already
+     * treated here. This is shared with unauthenticated() below, so an unauthenticated /ajax/
+     * request now gets a JSON 401 instead of a redirect to the login page too.
      */
     private function isApiRequest(Request $request): bool
     {
