@@ -52,7 +52,7 @@ combatlog:pollruns (Raider.IO)        External S3 upload (dispatcher lives outsi
         │                                     │
         ▼                                     ▼
 ProcessCombatLogSegments        ProcessCombatLogFanout → ProcessCombatLogFromS3 (per file)
-   (queue *-combat-log-process)         (queue *-combat-log-process)
+   (queue *-cl-process)          (queue *-cl-fanout)      (queue *-cl-process)
         └──────────────┬───────────────────────┘
                        ▼   (also: combatlog:extractdata CLI, extractDataAsync analyze flow)
         CombatLogDataExtractionService::extractData()
@@ -81,7 +81,7 @@ UPSERT observations   mutate canonical mapping   INSERT audit events
 Everything funnels into `CombatLogDataExtractionService::extractData(string $filePath, ?bool $force,
 ?callable $onProcessLine, ?CombatLogRunContextInterface $runContext)`:
 
-- `ProcessCombatLogFromS3::handle()` — S3 fanout path (queue `*-combat-log-process`, timeout 1800).
+- `ProcessCombatLogFromS3::handle()` — S3 fanout path (queue `*-cl-process`, timeout 1800).
 - `ProcessCombatLogSegments::handle()` — Raider.IO segment path (`ShouldBeUnique`, tries 3, backoff
   `[30,120]`); dispatched by `PollCombatLogRunsCommand` (`combatlog:pollruns`).
 - `combatlog:extractdata {filePath} {--force}` (`ExtractData.php`) — manual/local CLI.

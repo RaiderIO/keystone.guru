@@ -90,11 +90,7 @@ final class JobQueueNameTest extends PublicTestCase
     public function horizonConfig_givenEnvironment_onlyWatchesQueuesJobsDispatchTo(string $environment): void
     {
         // Arrange
-        // 'default' is the connection's fallback queue for jobs that never set $this->queue
-        $knownSuffixes = ['default'];
-        foreach (self::queueNameProvider() as [1 => $expectedQueue]) {
-            $knownSuffixes[] = substr($expectedQueue, strlen(self::APP_TYPE) + 1);
-        }
+        $knownSuffixes = self::dispatchedQueueSuffixes();
 
         // Act
         $supervisors = config(sprintf('horizon.environments.%s', $environment));
@@ -122,5 +118,50 @@ final class JobQueueNameTest extends PublicTestCase
             'production' => ['production'],
             'local'      => ['local'],
         ];
+    }
+
+    /**
+     * The mirror of the test above: a queue with no supervisor means those jobs pile up unprocessed, which is how
+     * 'cl-fanout' went unconsumed locally before #3804. Only asserted for 'local' - the 'production' block is
+     * deliberately partial because AWS runs its workers as ECS services against SQS rather than through Horizon.
+     */
+    #[Test]
+    public function horizonConfig_givenLocalEnvironment_watchesEveryQueueJobsDispatchTo(): void
+    {
+        // Arrange
+        $expectedSuffixes = self::dispatchedQueueSuffixes();
+
+        // Act
+        $watchedSuffixes = [];
+        foreach (config('horizon.environments.local') as $supervisorConfig) {
+            foreach ($supervisorConfig['queue'] as $queueName) {
+                $watchedSuffixes[] = substr($queueName, strpos($queueName, '-') + 1);
+            }
+        }
+
+        // Assert
+        foreach ($expectedSuffixes as $expectedSuffix) {
+            $this->assertContains(
+                $expectedSuffix,
+                $watchedSuffixes,
+                sprintf('No local Horizon supervisor watches the "%s" queue, so those jobs are never processed', $expectedSuffix),
+            );
+        }
+    }
+
+    /**
+     * Every queue suffix (the part after the APP_TYPE prefix) that some job dispatches to.
+     *
+     * @return string[]
+     */
+    private static function dispatchedQueueSuffixes(): array
+    {
+        // 'default' is the connection's fallback queue for jobs that never set $this->queue
+        $suffixes = ['default'];
+        foreach (self::queueNameProvider() as [1 => $expectedQueue]) {
+            $suffixes[] = substr($expectedQueue, strlen(self::APP_TYPE) + 1);
+        }
+
+        return array_unique($suffixes);
     }
 }
