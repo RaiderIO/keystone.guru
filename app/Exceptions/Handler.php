@@ -97,28 +97,50 @@ class Handler extends ExceptionHandler
     #[Override]
     public function render($request, Throwable $e)
     {
-        if ($request->isJson() || $this->isApiRequest($request)) {
-            if ($e instanceof ModelNotFoundException) {
+        if ($this->shouldReturnJson($request, $e)) {
+            if ($e instanceof ValidationException) {
+                // ValidationException doesn't render an HTML error view (parent::render() either
+                // returns JSON or redirects back with flashed session errors, per
+                // shouldReturnJson() below), so it was never part of the #3806 crash class - leave
+                // its normal expectsJson()-driven behavior alone rather than forcing JSON, since
+                // some /ajax/ forms rely on the redirect+flash for a non-JSON request.
+                return parent::render($request, $e);
+            } elseif ($e instanceof ModelNotFoundException) {
                 return response()->json([
                     'message' => __('exceptions.handler.api_model_not_found', [
                         'ids'   => implode(', ', $e->getIds()),
                         'model' => $e->getModel(),
                     ]),
                 ], StatusCode::NOT_FOUND);
-            } elseif ($e instanceof NotFoundHttpException) {
+            }
+
+            // Normalize the same way parent::render() would (AuthorizationException -> 403,
+            // TokenMismatchException -> 419, ...) before the instanceof checks below, so a
+            // forced-JSON /ajax/ request (which isn't necessarily an HttpException already) gets
+            // the exception's real status instead of collapsing into the generic 500 tail.
+            $normalized = $this->prepareException($this->mapException($e));
+
+            if ($normalized instanceof NotFoundHttpException) {
                 return response()->json(['message' => __('exceptions.handler.api_route_not_found')], StatusCode::NOT_FOUND);
-            } elseif ($e instanceof ThrottleRequestsException) {
+            } elseif ($normalized instanceof ThrottleRequestsException) {
                 return response()->json(['message' => __('exceptions.handler.too_many_requests')], RFC6585::TOO_MANY_REQUESTS);
-            } elseif ($e instanceof HttpExceptionInterface) {
-                // Preserve the real HTTP status (e.g. 405 Method Not Allowed) and any headers (such as
-                // the Allow header on a 405) instead of collapsing every remaining HttpException to a 500.
-                $statusCode = $e->getStatusCode();
+            } elseif ($normalized instanceof MethodNotAllowedHttpException) {
+                // The router's own message here is a verbose "The GET method is not supported for
+                // route ...", not meant for API consumers - use the plain status text instead, but
+                // still preserve the Allow header.
+                $statusCode = $normalized->getStatusCode();
 
                 return response()->json(
                     ['message' => SymfonyResponse::$statusTexts[$statusCode] ?? __('exceptions.handler.internal_server_error')],
                     $statusCode,
-                    $e->getHeaders(),
+                    $normalized->getHeaders(),
                 );
+            } elseif ($normalized instanceof HttpExceptionInterface) {
+                // Any other HttpException (e.g. a policy denial normalized above, or a deliberate
+                // abort($status, $message) elsewhere in the app) carries a message meant to be shown
+                // to the caller - delegate to parent::render() so it's preserved verbatim instead of
+                // being collapsed into a generic status text.
+                return parent::render($request, $e);
             } elseif (!config('app.debug')) {
                 return response()->json(['message' => __('exceptions.handler.internal_server_error')], StatusCode::INTERNAL_SERVER_ERROR);
             } elseif (config('app.type') !== 'local') {
@@ -138,7 +160,7 @@ class Handler extends ExceptionHandler
     #[Override]
     protected function unauthenticated($request, AuthenticationException $exception)
     {
-        if ($request->isJson() || $this->isApiRequest($request)) {
+        if ($this->shouldReturnJson($request, $exception)) {
             return response()->json(['error' => __('exceptions.handler.unauthenticated')], StatusCode::UNAUTHORIZED);
         }
 
@@ -150,10 +172,24 @@ class Handler extends ExceptionHandler
      * ViewService::shouldLoadViewVariables()) - not even for the handful of /ajax/ routes
      * whitelisted there to deliberately render an HTML fragment on success (search/view). So an
      * HTML error view rendered for ANY /ajax/ request is guaranteed to crash on a missing view
-     * variable (#3806); route every /ajax/ error to JSON instead, matching how /api/ is already
-     * treated here. This is shared with unauthenticated() below, so an unauthenticated /ajax/
-     * request now gets a JSON 401 instead of a redirect to the login page too.
+     * variable (#3806). Force JSON for every /ajax/ error (matching how /api/ is already treated
+     * here) except ValidationException, which render() above already carves out since it never
+     * renders an HTML error view in the first place.
      */
+    #[Override]
+    protected function shouldReturnJson($request, Throwable $e): bool
+    {
+        if ($request->isJson()) {
+            return true;
+        }
+
+        if ($e instanceof ValidationException) {
+            return parent::shouldReturnJson($request, $e);
+        }
+
+        return $this->isApiRequest($request) || parent::shouldReturnJson($request, $e);
+    }
+
     private function isApiRequest(Request $request): bool
     {
         $path = $request->decodedPath();
