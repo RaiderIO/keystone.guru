@@ -2,7 +2,9 @@
 
 use App\Logging\Handlers\ColoredLineFormatter;
 use App\Logging\Handlers\DeduplicateHandlers;
+use App\Logging\Handlers\FingerprintsStructuredErrors;
 use App\Logging\Handlers\SkipsExceptionMirrors;
+use App\Logging\Handlers\ThrottlesRepeatedEvents;
 use Monolog\Handler\NoopHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Processor\PsrLogMessageProcessor;
@@ -108,8 +110,20 @@ return [
             'report_exceptions' => false,
             // Deliberately not deduplicated the way discord is: DeduplicationHandler forwards through handleBatch(),
             // and SentryHandler::handleBatch() still compares a Monolog 3 Level enum as an integer, so every record
-            // would be filtered out and silently never reach Sentry. Sentry groups and rate-limits server-side anyway.
-            'tap' => [SkipsExceptionMirrors::class],
+            // would be filtered out and silently never reach Sentry. ThrottlesRepeatedEvents below bounds the volume
+            // instead, without buffering.
+            //
+            // Order matters, and reads backwards: each tap wraps the handlers the previous one produced, so the LAST
+            // entry ends up outermost and runs FIRST. Execution is therefore
+            //   SkipsExceptionMirrors -> FingerprintsStructuredErrors -> ThrottlesRepeatedEvents -> SentryHandler
+            // which is the order these have to run in: drop the exception mirrors before doing any work on them, then
+            // derive the fingerprint, then throttle on that fingerprint so the throttle bounds exactly what Sentry
+            // will group into one issue.
+            'tap' => [
+                ThrottlesRepeatedEvents::class,
+                FingerprintsStructuredErrors::class,
+                SkipsExceptionMirrors::class,
+            ],
         ],
     ],
 

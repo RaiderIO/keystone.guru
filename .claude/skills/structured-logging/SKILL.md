@@ -101,6 +101,37 @@ the context/extras. This is the granularity you want, so:
   (an array). `SkipsExceptionMirrorsHandler` uses this to split `HandlerLogging::uncaughtException`
   by exception class.
 
+### Fingerprinting, tags and throttling (#3820)
+
+"One issue per log site" is right for most sites but wrong for the ones that report a *failure*: a
+hundred distinct combat log parse failures collapsing into one issue is not triageable. Three taps
+on the `sentry` channel handle that, and the array order in `config/logging.php` **reads backwards** —
+each tap wraps the handlers the previous one produced, so the last entry is outermost and runs first.
+Execution order is `SkipsExceptionMirrors` → `FingerprintsStructuredErrors` → `ThrottlesRepeatedEvents`
+→ `SentryHandler`.
+
+- **`FingerprintsStructuredErrorsHandler`** sets `context['fingerprint']` to
+  `[$logSite, $exceptionClass, $normalizedMessage]` (digit runs collapsed to `#`) and promotes
+  `runId`, `seasonId`, `combatLogVersion`, `lineNumber`, `exceptionClass` into `context['tags']`.
+  It never overwrites a fingerprint another handler already set.
+- **Context key names are load-bearing.** The tap keys on the literal keys `exceptionClass` and
+  `message`, and `StructuredLogging` builds its context from `get_defined_vars()` — so **renaming a
+  Logging method's parameter silently changes grouping**. Both `handleParseError` methods carry a
+  docblock saying so.
+- **`rawLine` is deliberately not a tag.** Tags are capped at 200 characters and indexed; a raw
+  combat log line is long and carries player names and GUIDs. It stays in the context, which the SDK
+  files as extra data.
+- **`ThrottlesRepeatedEventsHandler`** caps events per fingerprint per hour. Sentry meters every
+  event even though it groups them, so an unthrottled failure loop burns the account's budget and
+  starts dropping novel errors. Consequence to remember when triaging: **a throttled issue's event
+  count is a lower bound, not the true occurrence count** — read real volume off the file logs.
+
+**Test taps end to end, never by calling the handler directly.** #3792 shipped three silent failures
+past tests that asserted on configuration shape or invoked the handler in isolation — the one path
+production never takes. `SentryLogChannelTest` resolves the real DSN-shaped channel against
+`CapturingTransport` and asserts an event actually arrives; extend that, and check your new test
+fails when the tap is removed.
+
 ### Traps, all of which fail silently
 
 These were found by review on #3792 after the tests went green; each one produced a channel that

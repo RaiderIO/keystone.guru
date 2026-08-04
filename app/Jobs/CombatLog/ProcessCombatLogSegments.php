@@ -117,16 +117,31 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
             // an unparsable line (see #3791).
             throw $e;
         } catch (Throwable $e) {
-            $log->handleParseError($this->runId, $this->combatLogVersion, $e->getMessage(), $e::class);
+            // CombatLogParseException only wraps the real failure, so the class worth grouping and reporting on is
+            // the one it wrapped. Resolved once here because the log line used to report the wrapper while the
+            // recorded failure reported the cause, which made the two impossible to correlate.
+            $exceptionClass = $e instanceof CombatLogParseException ? $e->getOriginalExceptionClass() : $e::class;
+            $lineNumber     = $e instanceof CombatLogParseException ? $e->lineNumber : null;
+            $rawLine        = $e instanceof CombatLogParseException ? $e->rawLine : null;
+
+            $log->handleParseError(
+                $this->runId,
+                $this->season->id,
+                $this->combatLogVersion,
+                $lineNumber,
+                $exceptionClass,
+                $e->getMessage(),
+                $rawLine,
+            );
 
             $parseFailureRepository->recordFailure(
                 $this->runId,
                 $this->season->id,
                 $this->combatLogVersion,
-                $e instanceof CombatLogParseException ? $e->lineNumber : null,
-                $e instanceof CombatLogParseException ? $e->rawLine : null,
+                $lineNumber,
+                $rawLine,
                 $e->getMessage(),
-                $e instanceof CombatLogParseException ? $e->getOriginalExceptionClass() : $e::class,
+                $exceptionClass,
             );
         } finally {
             foreach ($tempFiles as $tempFile) {

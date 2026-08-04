@@ -3,11 +3,13 @@
 namespace Tests\Unit\App\Logging;
 
 use App\Logging\Handlers\SkipsExceptionMirrorsHandler;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Monolog\Handler\NoopHandler;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Sentry\ClientBuilder;
 use Sentry\Options;
 use Sentry\State\Hub;
@@ -51,7 +53,15 @@ final class SentryLogChannelTest extends PublicTestCase
     #[Test]
     public function sentryChannel_givenEmptyDsn_logsWithoutEmittingPhpErrors(): void
     {
-        // Arrange - force a fresh resolution so channel resolution (and any warning) actually happens
+        // Arrange - a configured DSN selects the real driver, and unlike the other tests here this one logs for real
+        // rather than against a stub transport. Without this guard the record is delivered to whichever project the
+        // developer's .env points at, which is how this suite ended up filing its own assertion string as a
+        // production issue. phpunit.xml pins the DSN empty as well; this keeps the test honest on its own terms.
+        if (!empty(config('sentry.dsn'))) {
+            self::markTestSkipped('A Sentry DSN is configured; this test covers the empty-DSN default.');
+        }
+
+        // Force a fresh resolution so channel resolution (and any warning) actually happens
         Log::forgetChannel('sentry');
 
         $capturedErrors = [];
@@ -148,6 +158,218 @@ final class SentryLogChannelTest extends PublicTestCase
 
         // Assert
         self::assertCount(1, $transport->capturedEvents);
+    }
+
+    /**
+     * Without a fingerprint every record of a given log site collapses into one Sentry issue, because Sentry groups
+     * message events by their message and StructuredLogging logs under a constant `ClassLogging::method`. Two
+     * different root causes must therefore end up with two different fingerprints.
+     */
+    #[Test]
+    public function sentryChannel_givenParseErrorsOfDifferentExceptionClasses_fingerprintsThemApart(): void
+    {
+        // Arrange
+        $transport = $this->bindStubHub();
+        $channel   = $this->sentryChannel();
+
+        // Act
+        $channel->error('ProcessCombatLogSegmentsLogging::handleParseError', [
+            'exceptionClass' => 'InvalidArgumentException',
+            'message'        => 'Invalid parameter count, wanted 30-32, got 29',
+        ]);
+        $channel->error('ProcessCombatLogSegmentsLogging::handleParseError', [
+            'exceptionClass' => 'OutOfBoundsException',
+            'message'        => 'Invalid parameter count, wanted 30-32, got 29',
+        ]);
+
+        // Assert
+        self::assertCount(2, $transport->capturedEvents);
+        self::assertNotSame(
+            $transport->capturedEvents[0]->getFingerprint(),
+            $transport->capturedEvents[1]->getFingerprint(),
+            'Two distinct root causes at one log site must not group into a single Sentry issue.',
+        );
+    }
+
+    /**
+     * The other half of the grouping contract: the same cause differing only in the numbers embedded in its message
+     * must stay one issue, or a single bad WoW patch becomes thousands of one-event issues.
+     */
+    #[Test]
+    public function sentryChannel_givenParseErrorsDifferingOnlyInDigits_fingerprintsThemTogether(): void
+    {
+        // Arrange
+        $transport = $this->bindStubHub();
+        $channel   = $this->sentryChannel();
+
+        // Act
+        $channel->error('ProcessCombatLogSegmentsLogging::handleParseError', [
+            'exceptionClass' => 'InvalidArgumentException',
+            'message'        => 'Unable to find combat log version 21',
+        ]);
+        $channel->error('ProcessCombatLogSegmentsLogging::handleParseError', [
+            'exceptionClass' => 'InvalidArgumentException',
+            'message'        => 'Unable to find combat log version 1337',
+        ]);
+
+        // Assert
+        self::assertCount(2, $transport->capturedEvents);
+        self::assertSame(
+            $transport->capturedEvents[0]->getFingerprint(),
+            $transport->capturedEvents[1]->getFingerprint(),
+        );
+    }
+
+    /**
+     * The real shape of a parse failure, and the one that matters most: CombatLogStringParser interpolates the
+     * offending line into its message, so the `message` context key carries character names and hex GUIDs. Collapsing
+     * digit runs alone leaves those intact, which would give every failing line its own issue and stop the throttle
+     * (which keys on the fingerprint) from ever engaging.
+     */
+    #[Test]
+    public function sentryChannel_givenParseErrorsCarryingDifferentCombatLogLines_fingerprintsThemTogether(): void
+    {
+        // Arrange
+        $transport = $this->bindStubHub();
+        $channel   = $this->sentryChannel();
+
+        // Act - the same failure on two different lines, from two different players
+        $channel->error('ProcessCombatLogSegmentsLogging::handleParseError', [
+            'exceptionClass' => 'InvalidArgumentException',
+            'message'        => 'Unbalanced quotes in string SPELL_DAMAGE,Player-1084-0B4087DE,"Rhaellyn-Ravencrest',
+        ]);
+        $channel->error('ProcessCombatLogSegmentsLogging::handleParseError', [
+            'exceptionClass' => 'InvalidArgumentException',
+            'message'        => 'Unbalanced quotes in string SPELL_DAMAGE,Player-3676-0A1B2C3D,"Someoneelse-Kazzak',
+        ]);
+
+        // Assert
+        self::assertCount(2, $transport->capturedEvents);
+        self::assertSame(
+            $transport->capturedEvents[0]->getFingerprint(),
+            $transport->capturedEvents[1]->getFingerprint(),
+            'Two occurrences of one parse failure must group, even though each quotes a different combat log line.',
+        );
+    }
+
+    /**
+     * This handler runs inside Monolog's handler loop, which rethrows, and the sentry channel is a member of every
+     * stack this application declares - including the one Handler::report() logs through. A Redis outage must
+     * therefore never turn Log::error() into a thrown exception.
+     */
+    #[Test]
+    public function sentryChannel_givenAnUnreachableCache_stillLogsWithoutThrowing(): void
+    {
+        // Arrange
+        $transport = $this->bindStubHub();
+        $channel   = $this->sentryChannel();
+
+        Cache::shouldReceive('increment')->andThrow(new RuntimeException('Connection refused'));
+        Cache::shouldReceive('put')->andThrow(new RuntimeException('Connection refused'));
+
+        // Act
+        $channel->error('ProcessCombatLogSegmentsLogging::handleParseError', [
+            'exceptionClass' => 'InvalidArgumentException',
+            'message'        => 'Invalid parameter count',
+        ]);
+
+        // Assert - failing open: the record is still reported rather than lost or rethrown
+        self::assertCount(1, $transport->capturedEvents);
+    }
+
+    /**
+     * Tags are the only searchable and aggregatable surface Sentry offers, and they are what lets a triage pass pick
+     * two distinct runs to reproduce against without opening events one by one.
+     */
+    #[Test]
+    public function sentryChannel_givenParseErrorRecord_promotesIdentifiersToTagsButNotTheRawLine(): void
+    {
+        // Arrange
+        $transport = $this->bindStubHub();
+
+        // Act
+        $this->sentryChannel()->error('ProcessCombatLogSegmentsLogging::handleParseError', [
+            'runId'            => 42015954,
+            'seasonId'         => 15,
+            'combatLogVersion' => 21,
+            'lineNumber'       => 8842,
+            'exceptionClass'   => 'InvalidArgumentException',
+            'message'          => 'Invalid parameter count',
+            'rawLine'          => '8/3 21:15:02.123  SPELL_AURA_APPLIED,Player-1234-ABCDEF,"Somebody-Realm",...',
+        ]);
+
+        // Assert
+        self::assertCount(1, $transport->capturedEvents);
+
+        $tags = $transport->capturedEvents[0]->getTags();
+        self::assertSame('42015954', $tags['runId'] ?? null);
+        self::assertSame('15', $tags['seasonId'] ?? null);
+        self::assertSame('21', $tags['combatLogVersion'] ?? null);
+        self::assertSame('8842', $tags['lineNumber'] ?? null);
+        self::assertSame('InvalidArgumentException', $tags['exceptionClass'] ?? null);
+
+        self::assertArrayNotHasKey(
+            'rawLine',
+            $tags,
+            'The raw line carries player names and GUIDs and must never become an indexed tag.',
+        );
+    }
+
+    /**
+     * Sentry meters every event even though it groups them, so an unthrottled failure loop can burn the whole event
+     * budget and start dropping genuinely novel errors. The file and stderr channels keep the complete record.
+     */
+    #[Test]
+    public function sentryChannel_givenTheSameFailureRepeatedly_stopsForwardingAfterTheAllowance(): void
+    {
+        // Arrange
+        $transport = $this->bindStubHub();
+        $channel   = $this->sentryChannel();
+
+        // Act - well past any sane per-window allowance
+        for ($i = 0; $i < 50; $i++) {
+            $channel->error('ProcessCombatLogSegmentsLogging::handleParseError', [
+                'exceptionClass' => 'InvalidArgumentException',
+                'message'        => 'Invalid parameter count',
+            ]);
+        }
+
+        // Assert
+        self::assertGreaterThan(0, count($transport->capturedEvents), 'The first occurrences must still be reported.');
+        self::assertLessThan(
+            50,
+            count($transport->capturedEvents),
+            'A repeating failure must be throttled rather than metered in full.',
+        );
+    }
+
+    /**
+     * Distinct failures must not throttle each other - the allowance is per fingerprint, not per channel, or one noisy
+     * error would silence every other error on the site.
+     */
+    #[Test]
+    public function sentryChannel_givenDistinctFailures_throttlesThemIndependently(): void
+    {
+        // Arrange
+        $transport = $this->bindStubHub();
+        $channel   = $this->sentryChannel();
+
+        for ($i = 0; $i < 50; $i++) {
+            $channel->error('ProcessCombatLogSegmentsLogging::handleParseError', [
+                'exceptionClass' => 'InvalidArgumentException',
+                'message'        => 'The noisy one',
+            ]);
+        }
+        $throttled = count($transport->capturedEvents);
+
+        // Act
+        $channel->error('ProcessCombatLogSegmentsLogging::handleParseError', [
+            'exceptionClass' => 'OutOfBoundsException',
+            'message'        => 'The rare one that actually matters',
+        ]);
+
+        // Assert
+        self::assertCount($throttled + 1, $transport->capturedEvents);
     }
 
     #[Test]

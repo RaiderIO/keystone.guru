@@ -30,6 +30,9 @@
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="PENNANT_STORE" value="array"/>
         <env name="LOG_CHANNEL" value="daily"/>
+        <!-- No test may ever reach the real error tracker, full stop. -->
+        <env name="SENTRY_LARAVEL_DSN" value="" force="true"/>
+        <env name="SENTRY_DSN" value="" force="true"/>
         <env name="APP_SERVICES_CACHE" value="/tmp/phpunit_services.php"/>
         <!-- The 'tmp_file' store (RemembersToFile, used by ViewService among others) is a file cache that
              CACHE_STORE does not cover. Without this the tests read, write and flush the cache of the
