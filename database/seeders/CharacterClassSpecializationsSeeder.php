@@ -264,11 +264,7 @@ class CharacterClassSpecializationsSeeder extends Seeder implements TableSeederI
         // @formatter:on
 
         CharacterClassSpecialization::from(DatabaseSeeder::getTempTableName(CharacterClassSpecialization::class))
-            ->insert(collect($characterClassSpecializationsAttributes)->map(function ($row) {
-                $row['icon_file_id'] = -1;
-
-                return $row;
-            })->toArray());
+            ->insert($characterClassSpecializationsAttributes);
     }
 
     public static function getAffectedModelClasses(): array

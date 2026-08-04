@@ -142,16 +142,15 @@ final class AdminAffixControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function update_givenValidData_updatesAffixWithoutTouchingIconFileId(): void
+    public function update_givenValidData_updatesAffix(): void
     {
         // Arrange
         $key   = 'TestUpdateAffixKey';
         $affix = Affix::create([
-            'key'          => $key,
-            'icon_file_id' => -1,
-            'affix_id'     => 998,
-            'name'         => 'Original name',
-            'description'  => 'Original description',
+            'key'         => $key,
+            'affix_id'    => 998,
+            'name'        => 'Original name',
+            'description' => 'Original description',
         ]);
 
         try {
@@ -169,7 +168,6 @@ final class AdminAffixControllerTest extends PublicTestCase
             $updated = Affix::query()->findOrFail($affix->id);
             $this->assertSame('Updated name', $updated->name);
             $this->assertSame('Updated description', $updated->description);
-            $this->assertSame(-1, $updated->icon_file_id);
         } finally {
             $affix->delete();
         }

@@ -10,12 +10,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Str;
 
 /**
- * @property int    $id           The ID of this Affix.
- * @property int    $icon_file_id
- * @property int    $affix_id     The ID of the affix in-game.
- * @property string $key          The identifying key of the Affix.
- * @property string $name         The name of the Affix.
- * @property string $description  The description of this Affix.
+ * @property int    $id          The ID of this Affix.
+ * @property int    $affix_id    The ID of the affix in-game.
+ * @property string $key         The identifying key of the Affix.
+ * @property string $name        The name of the Affix.
+ * @property string $description The description of this Affix.
  *
  * @property string $image_name The name of the image of this Affix (appended).
  * @property string $image_url  The URL to the image of this Affix (appended).
@@ -29,7 +28,6 @@ class Affix extends CacheModel
     use SeederModel;
 
     public $hidden = [
-        'icon_file_id',
         'pivot',
     ];
 
@@ -37,7 +35,6 @@ class Affix extends CacheModel
 
     protected $fillable = [
         'id',
-        'icon_file_id',
         'affix_id',
         'key',
         'name',

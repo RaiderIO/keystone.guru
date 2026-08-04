@@ -51,9 +51,6 @@ class AffixSeeder extends Seeder implements TableSeederInterface
                 'affix_id'    => $affixData['affix_id'],
                 'name'        => $affixData['name'],
                 'description' => $affixData['description'],
-                // Vestigial: no admin upload exists for Affix icons (they come from the assets
-                // project), so this stays -1 like the other HasIconFile-less models. See #3766.
-                'icon_file_id' => -1,
             ];
 
             $seededAffixIds[$affixData['id']] = $affixData['id'];

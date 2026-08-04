@@ -47,9 +47,8 @@ final class FactionTest extends PublicTestCase
         $array = $faction->toArray();
 
         // Assert - the map controls read faction.icon_url off this payload; the `iconfile` File
-        // relation and the vestigial icon_file_id column must never reach the front-end again.
+        // relation must never reach the front-end again.
         $this->assertArrayHasKey('icon_url', $array);
         $this->assertArrayNotHasKey('iconfile', $array);
-        $this->assertArrayNotHasKey('icon_file_id', $array);
     }
 }
