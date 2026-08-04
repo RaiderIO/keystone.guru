@@ -35,6 +35,9 @@ return [
         'social_links' => [
             'invalid_url_for_platform' => 'That is not a valid https link for this platform.',
         ],
+        'creator_search' => [
+            'max' => 'A creator name is at most :max characters, so a longer search cannot match anyone.',
+        ],
     ],
     'date'              => 'The :attribute is not a valid date.',
     'date_equals'       => 'The :attribute must be a date equal to :date.',
