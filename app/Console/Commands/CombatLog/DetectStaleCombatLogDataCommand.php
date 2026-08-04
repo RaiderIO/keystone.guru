@@ -160,7 +160,7 @@ class DetectStaleCombatLogDataCommand extends Command
             $property === SpellProperty::Aura   => $query->where('aura', true),
             $property === SpellProperty::Debuff => $query->where('debuff', true),
             $property->isCounter()              => $query->whereRaw(sprintf('counters_mask & %d != 0', $this->getCounterBit($property))),
-            default                              => $query->whereRaw(sprintf('miss_types_mask & %d != 0', $this->getMissTypeBit($property))),
+            default                             => $query->whereRaw(sprintf('miss_types_mask & %d != 0', $this->getMissTypeBit($property))),
         };
 
         $total        = (clone $query)->count();

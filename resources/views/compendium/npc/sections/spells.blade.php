@@ -28,6 +28,11 @@ use App\Models\Spell\Spell;
                                title="{{ __('view_compendium.npc.sections.spells.header_miss_types_tooltip') }}"></i>
                         </th>
                         <th>
+                            {{ __('view_compendium.npc.sections.spells.header_counters') }}
+                            <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top"
+                               title="{{ __('view_compendium.npc.sections.spells.header_counters_tooltip') }}"></i>
+                        </th>
+                        <th>
                             {{ __('view_compendium.npc.sections.spells.header_dispel_type') }}
                             <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top"
                                title="{{ __('view_compendium.npc.sections.spells.header_dispel_type_tooltip') }}"></i>
@@ -48,6 +53,7 @@ use App\Models\Spell\Spell;
                             <td>@include('common.spell.link', ['spell' => $spell, 'size' => 24])</td>
                             <td>{{ Spell::maskToReadableString(Spell::ALL_SCHOOLS, $spell->schools_mask, 'spellschools') }}</td>
                             <td>{{ Spell::maskToReadableString(Spell::ALL_MISS_TYPES, $spell->miss_types_mask, 'spellmisstypes') }}</td>
+                            <td>{{ Spell::maskToReadableString(Spell::ALL_COUNTERS, $spell->counters_mask, 'spellcounters') }}</td>
                             <td>{{ __($spell->dispel_type) }}</td>
                             <td>{{ __($spell->mechanic) }}</td>
                             <td>{{ $spell->cast_time > 0 ? ($spell->cast_time / 1000) . 's' : '-' }}</td>

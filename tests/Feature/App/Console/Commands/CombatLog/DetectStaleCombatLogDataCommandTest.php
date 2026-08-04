@@ -258,6 +258,49 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenStaleSpellCounter_clearsCounterBitAndCreatesRemovedEvent(): void
+    {
+        // Arrange
+        $this->createTestSpell(['counters_mask' => Spell::COUNTER_VANISH]);
+        $this->linkSpellToCurrentSeason();
+        $this->createSpellPropertyObservation(
+            SpellProperty::CounterVanish,
+            now()->subDays(config('keystoneguru.combat_log_staleness.observation_window_days') + 1),
+        );
+
+        // Act
+        $this->artisan(DetectStaleCombatLogDataCommand::class)->assertSuccessful();
+
+        // Assert
+        $this->assertDatabaseHas('spells', ['id' => self::SPELL_ID, 'counters_mask' => 0]);
+        $this->assertDatabaseHas('combat_log_spell_events', [
+            'spell_id'   => self::SPELL_ID,
+            'event_type' => CombatLogSpellEventType::PropertyRemoved->value,
+            'property'   => SpellProperty::CounterVanish->value,
+        ], 'combatlog');
+    }
+
+    #[Test]
+    public function handle_givenFreshSpellCounter_doesNothing(): void
+    {
+        // Arrange
+        $this->createTestSpell(['counters_mask' => Spell::COUNTER_VANISH]);
+        $this->linkSpellToCurrentSeason();
+        $this->createSpellPropertyObservation(SpellProperty::CounterVanish, now());
+
+        // Act
+        $this->artisan(DetectStaleCombatLogDataCommand::class)->assertSuccessful();
+
+        // Assert
+        $this->assertDatabaseHas('spells', ['id' => self::SPELL_ID, 'counters_mask' => Spell::COUNTER_VANISH]);
+        $this->assertDatabaseMissing('combat_log_spell_events', [
+            'spell_id'   => self::SPELL_ID,
+            'event_type' => CombatLogSpellEventType::PropertyRemoved->value,
+            'property'   => SpellProperty::CounterVanish->value,
+        ], 'combatlog');
+    }
+
+    #[Test]
     public function handle_givenStaleSpellPropertyNotInCurrentSeason_keepsSpellProperty(): void
     {
         // Arrange
