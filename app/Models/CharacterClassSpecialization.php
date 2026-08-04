@@ -15,7 +15,6 @@ use Str;
  * @property int    $specialization_id  Blizzard ID
  * @property string $key
  * @property string $name
- * @property string $icon_file_id
  *
  * @property string $icon_url Appended
  *
@@ -31,7 +30,6 @@ class CharacterClassSpecialization extends CacheModel implements CombatLogCriter
     public $timestamps = false;
 
     public $hidden = [
-        'icon_file_id',
         'pivot',
     ];
 
@@ -40,7 +38,6 @@ class CharacterClassSpecialization extends CacheModel implements CombatLogCriter
         'specialization_id',
         'key',
         'name',
-        'icon_file_id',
     ];
 
     /**

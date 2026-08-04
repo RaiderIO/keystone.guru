@@ -23,7 +23,6 @@ final class CharacterClassTest extends PublicTestCase
         // Assert - the icon comes from the assets project, never from a File upload.
         $this->assertArrayHasKey('icon_url', $array);
         $this->assertArrayNotHasKey('iconfile', $array);
-        $this->assertArrayNotHasKey('icon_file_id', $array);
     }
 
     #[Test]

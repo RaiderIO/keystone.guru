@@ -21,9 +21,6 @@ class AffixController extends Controller
         $validated = $request->validated();
 
         if ($affix === null) {
-            // No icon is uploaded through the admin panel - mapping:save does not export icon_file_id,
-            // and the real seeder always creates its own File row pointing at a static images/affixes/*.jpg asset.
-            $validated['icon_file_id'] = -1;
             // The id must be one of Affix::ALL's values - explicit rather than auto-incrementing so
             // that a new affix's identity is a deliberate code change, matching how the rest of the
             // codebase references affixes by their Affix::AFFIX_* constant (see AffixFormRequest).

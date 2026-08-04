@@ -13,11 +13,10 @@ use Str;
 
 /**
  * @property int    $id
- * @property int    $class_id     Blizzard class ID
+ * @property int    $class_id Blizzard class ID
  * @property string $key
  * @property string $name
  * @property string $color
- * @property string $icon_file_id
  *
  * @property string $icon_url Appended
  *
@@ -35,7 +34,6 @@ class CharacterClass extends CacheModel
     public $timestamps = false;
 
     public $hidden = [
-        'icon_file_id',
         'pivot',
     ];
 
@@ -44,7 +42,6 @@ class CharacterClass extends CacheModel
         'key',
         'name',
         'color',
-        'icon_file_id',
     ];
 
     protected $appends = ['icon_url'];

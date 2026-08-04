@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int    $id
- * @property int    $icon_file_id
  * @property string $key
  * @property string $name
  * @property string $color
@@ -29,13 +28,11 @@ class Faction extends CacheModel
     public $timestamps = false;
 
     public $hidden = [
-        'icon_file_id',
         'pivot',
     ];
 
     public $fillable = [
         'id',
-        'icon_file_id',
         'key',
         'name',
         'color',
