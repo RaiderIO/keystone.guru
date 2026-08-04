@@ -19,4 +19,6 @@ interface SpellCounterDataExtractorLoggingInterface
     public function afterExtractSpellNotFound(int $spellId, string $property): void;
 
     public function afterExtractCounterAlreadyKnown(int $spellId, string $property): void;
+
+    public function afterExtractAssignedCounteredSpellToNpc(int $npcId, int $spellId): void;
 }

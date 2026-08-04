@@ -5,12 +5,16 @@ namespace Tests\Feature\App\Service\CombatLog\DataExtractors;
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\CombatLogVersion;
+use App\Models\CombatLog\CombatLogNpcEvent;
+use App\Models\CombatLog\CombatLogNpcEventType;
 use App\Models\CombatLog\CombatLogSpellEvent;
 use App\Models\CombatLog\CombatLogSpellEventType;
 use App\Models\CombatLog\CombatLogSpellPropertyObservation;
 use App\Models\CombatLog\SpellProperty;
 use App\Models\Dungeon;
+use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellDungeon;
 use App\Service\CombatLog\DataExtractors\Logging\SpellCounterDataExtractorLoggingInterface;
 use App\Service\CombatLog\DataExtractors\SpellCounterDataExtractor;
 use App\Service\CombatLog\DataExtractors\SpellCounters\ShadowmeldSpellCounterDefinition;
@@ -33,6 +37,9 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
     private const string PLAYER_GUID       = 'Player-1084-0A5F8492';
     private const string OTHER_PLAYER_GUID = 'Player-1084-0B123456';
     private const string CREATURE_GUID     = 'Creature-0-4237-1209-2796-76149-0000293D52';
+
+    /** @var int The npc id embedded in CREATURE_GUID - Dread Raven, present in the seeded Skyreach mapping */
+    private const int CREATURE_NPC_ID = 76149;
 
     /** @var int The first test spell id - all test spells live in [TEST_SPELL_ID_FIRST, TEST_SPELL_ID_LAST] */
     private const int TEST_SPELL_ID_FIRST = 9990001;
@@ -99,6 +106,16 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
         $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
         $this->assertCounterRecorded($castSpellId, Spell::COUNTER_VANISH, SpellProperty::CounterVanish);
         $this->assertNoCounterRecorded($debuffSpellId);
+
+        // Assert - the countered spell is assigned to the casting NPC (cast-only spells with a nil destination never
+        // pass SpellDataExtractor's assignment gate, so the counter detection is the only proof the NPC casts it)
+        $this->assertTrue(NpcSpell::where('npc_id', self::CREATURE_NPC_ID)->where('spell_id', $castSpellId)->exists());
+        $this->assertTrue(SpellDungeon::where('spell_id', $castSpellId)->where('dungeon_id', $this->currentDungeon->dungeon->id)->exists());
+        $this->assertSame(1, CombatLogNpcEvent::where('npc_id', self::CREATURE_NPC_ID)
+            ->where('event_type', CombatLogNpcEventType::SpellAssigned)
+            ->where('model_class', Spell::class)
+            ->where('model_id', $castSpellId)
+            ->count());
     }
 
     #[Test]
@@ -510,6 +527,9 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
     {
         CombatLogSpellPropertyObservation::whereBetween('spell_id', [self::TEST_SPELL_ID_FIRST, self::TEST_SPELL_ID_LAST])->delete();
         CombatLogSpellEvent::whereBetween('spell_id', [self::TEST_SPELL_ID_FIRST, self::TEST_SPELL_ID_LAST])->delete();
+        CombatLogNpcEvent::where('model_class', Spell::class)->whereBetween('model_id', [self::TEST_SPELL_ID_FIRST, self::TEST_SPELL_ID_LAST])->delete();
+        NpcSpell::query()->whereBetween('spell_id', [self::TEST_SPELL_ID_FIRST, self::TEST_SPELL_ID_LAST])->delete();
+        SpellDungeon::query()->whereBetween('spell_id', [self::TEST_SPELL_ID_FIRST, self::TEST_SPELL_ID_LAST])->delete();
         Spell::query()->whereBetween('id', [self::TEST_SPELL_ID_FIRST, self::TEST_SPELL_ID_LAST])->delete();
     }
 

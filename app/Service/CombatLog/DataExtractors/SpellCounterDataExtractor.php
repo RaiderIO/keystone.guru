@@ -20,11 +20,16 @@ use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
 use App\Logic\CombatLog\SpecialEvents\ZoneChange;
+use App\Models\CombatLog\CombatLogNpcEvent;
+use App\Models\CombatLog\CombatLogNpcEventType;
 use App\Models\CombatLog\CombatLogSpellEvent;
 use App\Models\CombatLog\CombatLogSpellEventType;
 use App\Models\CombatLog\CombatLogSpellPropertyObservation;
 use App\Models\CombatLog\SpellProperty;
+use App\Models\Npc\Npc;
+use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell as SpellModel;
+use App\Models\Spell\SpellDungeon;
 use App\Service\CombatLog\DataExtractors\Logging\SpellCounterDataExtractorLoggingInterface;
 use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitionInterface;
 use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitions;
@@ -103,21 +108,21 @@ class SpellCounterDataExtractor implements DataExtractorInterface
     /**
      * Debuffs currently applied to players by a nil source or an NPC creature.
      *
-     * @var Collection<string, array{appliedAt: Carbon, sourceGuid: string|null, spellId: int, linkedNpcCastSpellId: int|null}>
+     * @var Collection<string, array{appliedAt: Carbon, sourceGuid: string|null, spellId: int, npcId: int|null, linkedNpcCastSpellId: int|null}>
      */
     private Collection $activeDebuffs;
 
     /**
      * Recent NPC SPELL_CAST_START events, used to link nil-source debuffs back to the cast that applied them.
      *
-     * @var Collection<int, array{ts: Carbon, casterGuid: string, spellId: int, spellName: string}>
+     * @var Collection<int, array{ts: Carbon, casterGuid: string, npcId: int, spellId: int, spellName: string}>
      */
     private Collection $recentNpcCastStarts;
 
     /**
      * The single in-flight cast per NPC caster guid.
      *
-     * @var Collection<string, array{spellId: int, startedAt: Carbon, disturbed: bool}>
+     * @var Collection<string, array{spellId: int, npcId: int, startedAt: Carbon, disturbed: bool}>
      */
     private Collection $pendingNpcCasts;
 
@@ -131,14 +136,14 @@ class SpellCounterDataExtractor implements DataExtractorInterface
     /**
      * Debuff removals seen *before* the counter cast that caused them - the backward half of the two-sided window.
      *
-     * @var Collection<int, array{ts: Carbon, playerGuid: string, attributedSpellId: int, appliedAt: Carbon, signature: string}>
+     * @var Collection<int, array{ts: Carbon, playerGuid: string, attributedSpellId: int, npcId: int|null, appliedAt: Carbon, signature: string}>
      */
     private Collection $recentDebuffRemovals;
 
     /**
      * All (spell_id, property) counter pairs detected this session - batch-upserted in afterExtract.
      *
-     * @var Collection<string, array{spell_id: int, property: SpellProperty}>
+     * @var Collection<string, array{spell_id: int, property: SpellProperty, npc_id: int|null, dungeon_id: int|null}>
      */
     private Collection $pendingCounterObservations;
 
@@ -159,6 +164,9 @@ class SpellCounterDataExtractor implements DataExtractorInterface
     private readonly SpellCounterDataExtractorLoggingInterface $log;
 
     private ?string $currentCombatLogFilePath = null;
+
+    /** @var int|null The dungeon the extraction currently takes place in - used for SpellDungeon assignment. */
+    private ?int $currentDungeonId = null;
 
     public function __construct()
     {
@@ -197,6 +205,8 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         DataExtractionCurrentDungeon $currentDungeon,
         BaseEvent                    $parsedEvent,
     ): void {
+        $this->currentDungeonId = $currentDungeon->dungeon->id;
+
         // A new run invalidates every in-flight correlation
         if ($parsedEvent instanceof ChallengeModeStart ||
             $parsedEvent instanceof ChallengeModeEnd ||
@@ -236,8 +246,8 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         $destNpcGuid   = $this->npcCreatureGuid($destGuid);
 
         if ($suffix instanceof CastStart) {
-            if ($sourceNpcGuid !== null) {
-                $this->handleNpcCastStart($sourceNpcGuid, $prefix->getSpellId(), $prefix->getSpellName(), $timestamp);
+            if ($sourceNpcGuid !== null && $sourceGuid instanceof Creature) {
+                $this->handleNpcCastStart($sourceNpcGuid, $sourceGuid->getId(), $prefix->getSpellId(), $prefix->getSpellName(), $timestamp);
             }
         } elseif ($suffix instanceof CastSuccess) {
             if ($sourceGuid instanceof Player) {
@@ -293,6 +303,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
 
             foreach ($this->pendingCounterObservations as $observation) {
                 $this->applyCounterToSpell($result, $spells, $observation['spell_id'], $observation['property']);
+                $this->assignSpellToNpc($result, $spells, $observation);
             }
         }
 
@@ -300,6 +311,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         $this->spellDurationCache         = collect();
         $this->spellMechanicCache         = collect();
         $this->currentCombatLogFilePath   = null;
+        $this->currentDungeonId           = null;
         $this->resetCorrelationState();
     }
 
@@ -351,11 +363,62 @@ class SpellCounterDataExtractor implements DataExtractorInterface
     }
 
     /**
+     * A detected counter is proof the NPC casts this spell. Cast-only spells with a nil destination (Lens Flare,
+     * Repel, ...) never pass SpellDataExtractor's assignment gate - which requires a player or buffed-NPC target -
+     * so without this the countered spell would be invisible on the NPC's compendium page.
+     *
+     * @param Collection<int, SpellModel>                                                           $spells
+     * @param array{spell_id: int, property: SpellProperty, npc_id: int|null, dungeon_id: int|null} $observation
+     */
+    private function assignSpellToNpc(ExtractedDataResult $result, Collection $spells, array $observation): void
+    {
+        $npcId = $observation['npc_id'];
+        if ($npcId === null || $spells->get($observation['spell_id']) === null) {
+            return;
+        }
+
+        /** @var Npc|null $npc */
+        $npc = Npc::with('npcSpells')->find($npcId);
+        if ($npc === null) {
+            return;
+        }
+
+        $spellId = $observation['spell_id'];
+        if ($npc->npcSpells->filter(fn(NpcSpell $npcSpell) => $npcSpell->spell_id === $spellId)->isNotEmpty()) {
+            return;
+        }
+
+        NpcSpell::create([
+            'npc_id'   => $npcId,
+            'spell_id' => $spellId,
+        ]);
+
+        if ($observation['dungeon_id'] !== null && !SpellDungeon::where('spell_id', $spellId)
+            ->where('dungeon_id', $observation['dungeon_id'])->exists()) {
+            SpellDungeon::create([
+                'spell_id'   => $spellId,
+                'dungeon_id' => $observation['dungeon_id'],
+            ]);
+        }
+
+        CombatLogNpcEvent::create([
+            'npc_id'          => $npcId,
+            'event_type'      => CombatLogNpcEventType::SpellAssigned,
+            'model_class'     => SpellModel::class,
+            'model_id'        => $spellId,
+            'combat_log_path' => $this->currentCombatLogFilePath,
+        ]);
+
+        $result->createdNpcSpell();
+        $this->log->afterExtractAssignedCounteredSpellToNpc($npcId, $spellId);
+    }
+
+    /**
      * Signature C: resolve the previous, unresolved cast of this caster before recording the new one.
      */
-    private function handleNpcCastStart(string $casterGuid, int $spellId, string $spellName, Carbon $timestamp): void
+    private function handleNpcCastStart(string $casterGuid, int $casterNpcId, int $spellId, string $spellName, Carbon $timestamp): void
     {
-        /** @var array{spellId: int, startedAt: Carbon, disturbed: bool}|null $pendingCast */
+        /** @var array{spellId: int, npcId: int, startedAt: Carbon, disturbed: bool}|null $pendingCast */
         $pendingCast = $this->pendingNpcCasts->get($casterGuid);
         if ($pendingCast !== null) {
             $this->resolveAbandonedCast($casterGuid, $pendingCast, $timestamp);
@@ -363,6 +426,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
 
         $this->pendingNpcCasts->put($casterGuid, [
             'spellId'   => $spellId,
+            'npcId'     => $casterNpcId,
             'startedAt' => $timestamp,
             'disturbed' => false,
         ]);
@@ -371,6 +435,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         $this->recentNpcCastStarts->push([
             'ts'         => $timestamp,
             'casterGuid' => $casterGuid,
+            'npcId'      => $casterNpcId,
             'spellId'    => $spellId,
             'spellName'  => $spellName,
         ]);
@@ -381,7 +446,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
      * A cast that never resolved counts as countered only when nothing else explains it and a counter cast happened
      * while it was in flight.
      *
-     * @param array{spellId: int, startedAt: Carbon, disturbed: bool} $pendingCast
+     * @param array{spellId: int, npcId: int, startedAt: Carbon, disturbed: bool} $pendingCast
      */
     private function resolveAbandonedCast(string $casterGuid, array $pendingCast, Carbon $timestamp): void
     {
@@ -411,7 +476,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
                 continue;
             }
 
-            $this->queueCounterObservation('C', $pendingCast['spellId'], $counterCast['definition'], $counterCast['playerGuid']);
+            $this->queueCounterObservation('C', $pendingCast['spellId'], $counterCast['definition'], $counterCast['playerGuid'], $pendingCast['npcId']);
 
             return;
         }
@@ -447,7 +512,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
                 continue;
             }
 
-            $this->queueCounterObservation($debuffRemoval['signature'], $debuffRemoval['attributedSpellId'], $definition, $playerGuid);
+            $this->queueCounterObservation($debuffRemoval['signature'], $debuffRemoval['attributedSpellId'], $definition, $playerGuid, $debuffRemoval['npcId']);
         }
     }
 
@@ -457,7 +522,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         // Plain damage/utility debuffs land on trash near-constantly and are not disqualifying.
         $destNpcGuid = $this->npcCreatureGuid($destGuid);
         if ($destNpcGuid !== null) {
-            /** @var array{spellId: int, startedAt: Carbon, disturbed: bool}|null $pendingCast */
+            /** @var array{spellId: int, npcId: int, startedAt: Carbon, disturbed: bool}|null $pendingCast */
             $pendingCast = $this->pendingNpcCasts->get($destNpcGuid);
             if ($pendingCast !== null && $this->isCastDisturbingDebuff($spellId)) {
                 $pendingCast['disturbed'] = true;
@@ -476,11 +541,14 @@ class SpellCounterDataExtractor implements DataExtractorInterface
             return;
         }
 
+        $linkedNpcCast = $sourceGuid === null ? $this->findLinkedNpcCast($spellName, $timestamp) : null;
+
         $this->activeDebuffs->put($this->activeDebuffKey($destGuid->getGuid(), $spellId), [
             'appliedAt'            => $timestamp,
             'sourceGuid'           => $sourceGuid?->getGuid(),
             'spellId'              => $spellId,
-            'linkedNpcCastSpellId' => $sourceGuid === null ? $this->findLinkedNpcCastSpellId($spellName, $timestamp) : null,
+            'npcId'                => $sourceGuid instanceof Creature ? $sourceGuid->getId() : ($linkedNpcCast['npcId'] ?? null),
+            'linkedNpcCastSpellId' => $linkedNpcCast['spellId'] ?? null,
         ]);
         $this->pruneActiveDebuffs($timestamp);
     }
@@ -489,7 +557,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
     {
         $activeDebuffKey = $this->activeDebuffKey($playerGuid, $spellId);
 
-        /** @var array{appliedAt: Carbon, sourceGuid: string|null, spellId: int, linkedNpcCastSpellId: int|null}|null $activeDebuff */
+        /** @var array{appliedAt: Carbon, sourceGuid: string|null, spellId: int, npcId: int|null, linkedNpcCastSpellId: int|null}|null $activeDebuff */
         $activeDebuff = $this->activeDebuffs->get($activeDebuffKey);
         if ($activeDebuff === null) {
             return;
@@ -519,7 +587,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
                 continue;
             }
 
-            $this->queueCounterObservation($signature, $attributedSpellId, $counterCast['definition'], $playerGuid);
+            $this->queueCounterObservation($signature, $attributedSpellId, $counterCast['definition'], $playerGuid, $activeDebuff['npcId']);
 
             return;
         }
@@ -529,10 +597,16 @@ class SpellCounterDataExtractor implements DataExtractorInterface
             'ts'                => $timestamp,
             'playerGuid'        => $playerGuid,
             'attributedSpellId' => $attributedSpellId,
+            'npcId'             => $activeDebuff['npcId'],
             'appliedAt'         => $activeDebuff['appliedAt'],
             'signature'         => $signature,
         ]);
-        $this->pruneByAge($this->recentDebuffRemovals, $timestamp, self::EPSILON_MS);
+        $this->recentDebuffRemovals->forget(
+            $this->recentDebuffRemovals
+                ->filter(fn(array $debuffRemoval) => $this->millisecondsBetween($debuffRemoval['ts'], $timestamp) > self::EPSILON_MS)
+                ->keys()
+                ->all(),
+        );
     }
 
     private function queueCounterObservation(
@@ -540,6 +614,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         int                             $spellId,
         SpellCounterDefinitionInterface $definition,
         string                          $playerGuid,
+        ?int                            $npcId,
     ): void {
         $property = $definition->getProperty();
         $dedupKey = sprintf('%d-%s', $spellId, $property->value);
@@ -551,8 +626,10 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         }
 
         $this->pendingCounterObservations->put($dedupKey, [
-            'spell_id' => $spellId,
-            'property' => $property,
+            'spell_id'   => $spellId,
+            'property'   => $property,
+            'npc_id'     => $npcId,
+            'dungeon_id' => $this->currentDungeonId,
         ]);
 
         $this->log->extractDataDetectedSpellCounter($signature, $spellId, $property->value, $playerGuid);
@@ -561,10 +638,12 @@ class SpellCounterDataExtractor implements DataExtractorInterface
     /**
      * A targeting debuff is logged with a nil source guid - it is linked back to the NPC cast that applied it by
      * temporal adjacency, preferring an exact spell name match.
+     *
+     * @return array{spellId: int, npcId: int}|null
      */
-    private function findLinkedNpcCastSpellId(string $spellName, Carbon $timestamp): ?int
+    private function findLinkedNpcCast(string $spellName, Carbon $timestamp): ?array
     {
-        $fallbackSpellId = null;
+        $fallback = null;
 
         foreach ($this->recentNpcCastStarts->reverse() as $npcCastStart) {
             if (abs($this->millisecondsBetween($npcCastStart['ts'], $timestamp)) > self::CAST_START_LINK_WINDOW_MS) {
@@ -572,13 +651,13 @@ class SpellCounterDataExtractor implements DataExtractorInterface
             }
 
             if ($npcCastStart['spellName'] === $spellName) {
-                return $npcCastStart['spellId'];
+                return ['spellId' => $npcCastStart['spellId'], 'npcId' => $npcCastStart['npcId']];
             }
 
-            $fallbackSpellId ??= $npcCastStart['spellId'];
+            $fallback ??= ['spellId' => $npcCastStart['spellId'], 'npcId' => $npcCastStart['npcId']];
         }
 
-        return $fallbackSpellId;
+        return $fallback;
     }
 
     /**

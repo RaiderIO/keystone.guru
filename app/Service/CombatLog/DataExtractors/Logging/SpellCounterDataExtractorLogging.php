@@ -48,4 +48,9 @@ class SpellCounterDataExtractorLogging extends StructuredLogging implements Spel
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
+
+    public function afterExtractAssignedCounteredSpellToNpc(int $npcId, int $spellId): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
 }
