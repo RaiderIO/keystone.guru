@@ -48,10 +48,17 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo(fn() => route('login'));
         $middleware->redirectUsersTo('/home');
 
-        // Only the external webhook endpoints (called by GitHub / Wowhead without a session)
-        // are exempt from CSRF verification; every other route sends a token.
+        // Only the external webhook endpoints (called by GitHub / Wowhead without a session), and
+        // the heatmap embed data endpoint, are exempt from CSRF verification; every other route
+        // sends a token. The heatmap embed page is designed to be loaded in an <iframe> on
+        // third-party sites, where SameSite=Lax session/XSRF cookies aren't sent on the
+        // same-origin XHR issued from inside that cross-site iframe, so the token never arrives.
+        // ajax.heatmap.data is a read-only, unauthenticated data fetch (see
+        // AjaxHeatmapController::getData()), so exempting it from CSRF carries no state-changing
+        // risk (see #3836).
         $middleware->validateCsrfTokens(except: [
             'webhook/*',
+            'ajax/heatmap/data',
         ]);
 
         // Prepend so every log line of the request - including those of other global middleware - carries the trace_id
