@@ -27,11 +27,6 @@ enum SpellProperty: string
         return self::from(sprintf('miss_%s', Spell::ALL_MISS_TYPES[$bit]));
     }
 
-    public static function fromCounterBit(int $bit): self
-    {
-        return self::from(sprintf('counter_%s', Spell::ALL_COUNTERS[$bit]));
-    }
-
     public function isCounter(): bool
     {
         return str_starts_with($this->value, 'counter_');

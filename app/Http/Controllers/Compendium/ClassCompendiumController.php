@@ -85,9 +85,13 @@ class ClassCompendiumController extends Controller
         foreach ($definitions as $definition) {
             $bit = $definition->getCounterBit();
 
+            // Scoped to the context dungeon so the listed spells match the section's "for this dungeon" framing
             $spells = Spell::query()
                 ->whereRaw(sprintf('counters_mask & %d != 0', $bit))
                 ->when($mappingVersion !== null, static fn($q) => $q->where('game_version_id', $mappingVersion->game_version_id))
+                ->whereIn('id', static function ($query) use ($dungeon): void {
+                    $query->select('spell_id')->from('spell_dungeons')->where('dungeon_id', $dungeon->id);
+                })
                 ->get();
 
             /** @var Collection<int, Collection<int, Npc>> $npcsBySpellId */

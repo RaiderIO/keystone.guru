@@ -373,6 +373,50 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
     }
 
     #[Test]
+    public function extractData_givenCounteredSpellWithPlayerCategory_doesNotAssignSpellToNpc(): void
+    {
+        // Arrange - a categorized player spell must never gain a permanent NpcSpell row, even when a counter is
+        // (mis)attributed to it; the counter bit itself is still recorded and self-corrects via staleness
+        $channelSpellId = 9990019;
+        $this->createTestSpell($channelSpellId, 6000, 'spellcategory.rogue');
+
+        // Act
+        $this->runExtract([
+            $this->npcCastSuccess(0, $channelSpellId, 'Solar Flame'),
+            $this->debuffApplied(0, $channelSpellId, 'Solar Flame', self::CREATURE_GUID),
+            $this->playerCastSuccess(1700, VanishSpellCounterDefinition::SPELL_ID_VANISH_CAST, 'Vanish'),
+            $this->debuffRemoved(1700, $channelSpellId, 'Solar Flame', self::CREATURE_GUID),
+        ]);
+
+        // Assert
+        $this->assertCounterRecorded($channelSpellId, Spell::COUNTER_VANISH, SpellProperty::CounterVanish);
+        $this->assertFalse(NpcSpell::where('npc_id', self::CREATURE_NPC_ID)->where('spell_id', $channelSpellId)->exists());
+    }
+
+    #[Test]
+    public function extractData_givenRefreshedDebuffRemovedAtVanish_setsCounterOnDebuffSpell(): void
+    {
+        // Arrange - a 6s debuff is refreshed at 5s, then countered at 8s: measured from the original application it
+        // has outlived its duration, but the refresh restarted the clock, so the natural-expiry guard must not veto
+        $channelSpellId = 9990018;
+        $this->createTestSpell($channelSpellId, 6000);
+        $this->expectDetectionLoggedForSignature('B', $channelSpellId, SpellProperty::CounterVanish);
+
+        // Act
+        $this->runExtract([
+            $this->npcCastSuccess(0, $channelSpellId, 'Solar Flame'),
+            $this->debuffApplied(0, $channelSpellId, 'Solar Flame', self::CREATURE_GUID),
+            $this->debuffRefreshed(5000, $channelSpellId, 'Solar Flame', self::CREATURE_GUID),
+            $this->playerCastSuccess(8000, VanishSpellCounterDefinition::SPELL_ID_VANISH_CAST, 'Vanish'),
+            $this->debuffRemoved(8000, $channelSpellId, 'Solar Flame', self::CREATURE_GUID),
+        ]);
+
+        // Assert
+        $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
+        $this->assertCounterRecorded($channelSpellId, Spell::COUNTER_VANISH, SpellProperty::CounterVanish);
+    }
+
+    #[Test]
     public function extractData_givenSameCounterDetectedTwice_writesOneObservationAndOneEvent(): void
     {
         // Arrange
@@ -510,11 +554,12 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
         ], 'combatlog');
     }
 
-    private function createTestSpell(int $spellId, ?int $duration = null): Spell
+    private function createTestSpell(int $spellId, ?int $duration = null, ?string $category = null): Spell
     {
         return Spell::create([
             'id'              => $spellId,
             'game_version_id' => 1,
+            'category'        => $category,
             'dispel_type'     => 'none',
             'icon_name'       => 'inv_misc_questionmark',
             'name'            => sprintf('Test Spell %d', $spellId),
@@ -580,6 +625,23 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
     ): BaseEvent {
         return $this->parse(sprintf(
             '%s  SPELL_AURA_APPLIED,%s,%s,%d,"%s",0x4,DEBUFF',
+            $this->timestamp($offsetMs),
+            $this->actorFields($sourceGuid),
+            $this->actorFields($destGuid),
+            $spellId,
+            $spellName,
+        ));
+    }
+
+    private function debuffRefreshed(
+        int     $offsetMs,
+        int     $spellId,
+        string  $spellName,
+        ?string $sourceGuid,
+        string  $destGuid = self::PLAYER_GUID,
+    ): BaseEvent {
+        return $this->parse(sprintf(
+            '%s  SPELL_AURA_REFRESH,%s,%s,%d,"%s",0x4,DEBUFF',
             $this->timestamp($offsetMs),
             $this->actorFields($sourceGuid),
             $this->actorFields($destGuid),

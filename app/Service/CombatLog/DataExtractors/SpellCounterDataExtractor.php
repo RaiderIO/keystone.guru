@@ -8,6 +8,7 @@ use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Range;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraApplied\AuraAppliedInterface;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBase;
+use App\Logic\CombatLog\CombatEvents\Suffixes\AuraRefresh;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraRemoved\AuraRemovedInterface;
 use App\Logic\CombatLog\CombatEvents\Suffixes\CastFailed;
 use App\Logic\CombatLog\CombatEvents\Suffixes\CastStart;
@@ -273,6 +274,12 @@ class SpellCounterDataExtractor implements DataExtractorInterface
             if ($suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF && $destGuid instanceof Player) {
                 $this->handleDebuffRemoved($destGuid->getGuid(), $prefix->getSpellId(), $timestamp);
             }
+        } elseif ($suffix instanceof AuraRefresh) {
+            // A refresh restarts the debuff's duration - without this, a genuinely countered removal after a
+            // refresh would be rejected by the natural-expiry guard for outliving its single-application duration
+            if ($suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF && $destGuid instanceof Player) {
+                $this->handleDebuffRefreshed($destGuid->getGuid(), $prefix->getSpellId(), $timestamp);
+            }
         }
     }
 
@@ -373,7 +380,17 @@ class SpellCounterDataExtractor implements DataExtractorInterface
     private function assignSpellToNpc(ExtractedDataResult $result, Collection $spells, array $observation): void
     {
         $npcId = $observation['npc_id'];
-        if ($npcId === null || $spells->get($observation['spell_id']) === null) {
+
+        /** @var SpellModel|null $spell */
+        $spell = $spells->get($observation['spell_id']);
+
+        // Same intent as NpcSpellAssignmentCollector's gate: a categorized player spell must never be assigned to
+        // an NPC - NpcSpell rows are permanent (the staleness sweep only clears counter bits). Unlike that
+        // collector, a null category is allowed: spells first created from a combat log carry no category until
+        // their Wowhead data is fetched, and the countered spell is often exactly such a spell.
+        if ($npcId === null ||
+            $spell === null ||
+            ($spell->category !== null && $spell->category !== sprintf('spellcategory.%s', SpellModel::CATEGORY_UNKNOWN))) {
             return;
         }
 
@@ -553,6 +570,20 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         $this->pruneActiveDebuffs($timestamp);
     }
 
+    private function handleDebuffRefreshed(string $playerGuid, int $spellId, Carbon $timestamp): void
+    {
+        $activeDebuffKey = $this->activeDebuffKey($playerGuid, $spellId);
+
+        /** @var array{appliedAt: Carbon, sourceGuid: string|null, spellId: int, npcId: int|null, linkedNpcCastSpellId: int|null}|null $activeDebuff */
+        $activeDebuff = $this->activeDebuffs->get($activeDebuffKey);
+        if ($activeDebuff === null) {
+            return;
+        }
+
+        $activeDebuff['appliedAt'] = $timestamp;
+        $this->activeDebuffs->put($activeDebuffKey, $activeDebuff);
+    }
+
     private function handleDebuffRemoved(string $playerGuid, int $spellId, Carbon $timestamp): void
     {
         $activeDebuffKey = $this->activeDebuffKey($playerGuid, $spellId);
@@ -661,9 +692,6 @@ class SpellCounterDataExtractor implements DataExtractorInterface
     }
 
     /**
-     * @return int|null The spell's duration in milliseconds, or null when the spell is unknown or has no duration
-     */
-    /**
      * Whether this debuff carries a loss-of-control mechanic that would explain an NPC abandoning a cast. Unknown
      * spells (no row yet) and mechanic-less debuffs are NOT disturbing - being permissive here is what lets signature
      * C fire at all mid-combat; the observation staleness window self-corrects rare misattributions.
@@ -690,6 +718,9 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         return false;
     }
 
+    /**
+     * @return int|null The spell's duration in milliseconds, or null when the spell is unknown or has no duration
+     */
     private function getSpellDurationMs(int $spellId): ?int
     {
         if (!$this->spellDurationCache->has($spellId)) {
