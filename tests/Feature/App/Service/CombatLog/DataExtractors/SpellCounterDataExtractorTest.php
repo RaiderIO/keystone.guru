@@ -115,7 +115,7 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
             $this->npcCastStart(0, $castSpellId, 'Lens Flare'),
             $this->debuffApplied(0, $debuffSpellId, 'Lens Flare', null),
             $this->playerCastSuccess(2000, VanishSpellCounterDefinition::SPELL_ID_VANISH_CAST, 'Vanish'),
-            $this->debuffRemoved(2300, $debuffSpellId, 'Lens Flare', null),
+            $this->debuffRemoved(2080, $debuffSpellId, 'Lens Flare', null),
         ]);
 
         // Assert
@@ -313,7 +313,8 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
     #[Test]
     public function extractData_givenDebuffRemovedOutsideEpsilon_doesNotSetCounter(): void
     {
-        // Arrange - the debuff simply ran out long after the counter
+        // Arrange - the debuff dropped 300ms after the counter: a real server-tick match is 0-1ms, and the one
+        // observed bulk-validation false positive (a churning AoE debuff) sat at 392ms, so this must NOT match
         $channelSpellId = 9990013;
         $this->createTestSpell($channelSpellId);
 
@@ -322,7 +323,7 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
             $this->npcCastSuccess(0, $channelSpellId, 'Solar Flame'),
             $this->debuffApplied(0, $channelSpellId, 'Solar Flame', self::CREATURE_GUID),
             $this->playerCastSuccess(1000, VanishSpellCounterDefinition::SPELL_ID_VANISH_CAST, 'Vanish'),
-            $this->debuffRemoved(3400, $channelSpellId, 'Solar Flame', self::CREATURE_GUID),
+            $this->debuffRemoved(1300, $channelSpellId, 'Solar Flame', self::CREATURE_GUID),
         ]);
 
         // Assert

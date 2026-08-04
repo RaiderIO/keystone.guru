@@ -48,8 +48,13 @@ use Illuminate\Support\Collection;
  */
 class SpellCounterDataExtractor implements DataExtractorInterface
 {
-    /** @var int Two-sided window between a counter cast and the debuff removal it caused. */
-    public const int EPSILON_MS = 500;
+    /**
+     * Two-sided window between a counter cast and the debuff removal it caused. The server handles both in the same
+     * tick, so every verified true positive correlates within 0-1 ms; a churning AoE debuff whose natural removal
+     * landed 392 ms from an unrelated Vanish was the only observed false positive, so 100 ms keeps ample slack
+     * without admitting coincidences.
+     */
+    public const int EPSILON_MS = 100;
 
     /** @var int Window in which a nil-source debuff is linked back to a temporally adjacent NPC SPELL_CAST_START. */
     public const int CAST_START_LINK_WINDOW_MS = 500;
