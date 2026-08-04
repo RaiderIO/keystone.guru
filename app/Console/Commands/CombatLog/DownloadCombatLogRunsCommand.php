@@ -7,6 +7,7 @@ use App\Service\RaiderIO\Dtos\CombatLogSegment;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRun;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use App\Service\Traits\CombatLogSegmentFile;
 use App\Service\Traits\Curl;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
@@ -24,6 +25,7 @@ class DownloadCombatLogRunsCommand extends Command
 {
     use Curl;
     use ResolvesCombatLogSearchFilter;
+    use CombatLogSegmentFile;
 
     /**
      * The name and signature of the console command.
@@ -174,29 +176,5 @@ class DownloadCombatLogRunsCommand extends Command
         $response = $this->raiderIOApiService->searchAdvancedRuns($filter);
 
         return array_map(fn(SearchAdvancedRun $run): int => $run->id, $response->runs);
-    }
-
-    /**
-     * Derive the file extension from the (presigned) download URL, mirroring
-     * {@see \App\Jobs\CombatLog\ProcessCombatLogSegments::resolveSegmentExtension()}.
-     */
-    private function resolveSegmentExtension(string $downloadUrl): string
-    {
-        $path = (string)parse_url($downloadUrl, PHP_URL_PATH);
-
-        return str_ends_with($path, '.zip') ? 'zip' : 'txt';
-    }
-
-    /**
-     * Guards against a bad download reaching the parser, mirroring
-     * {@see \App\Jobs\CombatLog\ProcessCombatLogSegments::isPlausibleSegment()}.
-     */
-    private function isPlausibleSegment(string $filePath): bool
-    {
-        if (!is_file($filePath) || filesize($filePath) === 0) {
-            return false;
-        }
-
-        return file_get_contents($filePath, length: 1) !== '<';
     }
 }
