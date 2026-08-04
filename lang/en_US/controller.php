@@ -177,6 +177,7 @@ return [
             'profile_updated'                  => 'Profile updated',
             'unexpected_error_when_saving'     => 'An unexpected error occurred trying to save your profile',
             'privacy_settings_updated'         => 'Privacy settings updated',
+            'creator_profile_updated'          => 'Creator profile updated',
             'password_changed'                 => 'Password changed',
             'new_password_equals_old_password' => 'New password equals the old password',
             'new_passwords_do_not_match'       => 'New passwords do not match',

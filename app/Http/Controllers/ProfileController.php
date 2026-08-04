@@ -3,14 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Events\UserColorChangedEvent;
+use App\Features\CreatorProfiles;
+use App\Http\Requests\CreatorProfileFormRequest;
 use App\Http\Requests\ProfileFormRequest;
 use App\Http\Requests\Tag\TagFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\LiveSession;
+use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\User;
+use App\Models\UserPinnedDungeonRoute;
+use App\Models\UserSocialLink;
+use App\Repositories\Interfaces\UserPinnedDungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\UserSocialLinkRepositoryInterface;
 use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -18,11 +25,14 @@ use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
+use Laravel\Pennant\Feature;
 use Session;
 
 class ProfileController extends Controller
@@ -32,7 +42,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit');
+        return view('profile.edit', $this->creatorProfileEditViewData());
     }
 
     /**
@@ -40,7 +50,54 @@ class ProfileController extends Controller
      */
     public function view(Request $request, User $user): View
     {
-        return view('profile.view', ['user' => $user]);
+        $creatorProfileActive = Feature::active(CreatorProfiles::class);
+
+        /** @var Collection<int, UserSocialLink> $socialLinks */
+        $socialLinks = collect();
+        /** @var Collection<int, DungeonRoute> $pinnedDungeonRoutes */
+        $pinnedDungeonRoutes = collect();
+        $publishedRouteCount = 0;
+
+        if ($creatorProfileActive) {
+            $publishedRouteCount = DungeonRoute::query()
+                ->where('author_id', $user->id)
+                ->where('published_state_id', PublishedState::ALL[PublishedState::WORLD])
+                ->count();
+
+            // The pinned routes render through the shared route card, which needs the same relation
+            // set DiscoverService eager loads - lazy loading is disabled, so a miss here is a 500
+            $user->load([
+                'socialLinks',
+                'pinnedDungeonRoutes.dungeonRoute.author.iconfile',
+                'pinnedDungeonRoutes.dungeonRoute.affixes',
+                'pinnedDungeonRoutes.dungeonRoute.ratings',
+                'pinnedDungeonRoutes.dungeonRoute.mappingVersion',
+                'pinnedDungeonRoutes.dungeonRoute.thumbnails',
+                'pinnedDungeonRoutes.dungeonRoute.dungeon',
+                'pinnedDungeonRoutes.dungeonRoute.season.expansion',
+                // Needed by mayUserView() for team-published routes
+                'pinnedDungeonRoutes.dungeonRoute.team',
+            ]);
+
+            $socialLinks = $user->socialLinks;
+
+            $viewer = Auth::user();
+
+            // A pin only records intent - the viewer's own visibility rules still decide what is
+            // actually shown, so pinning an unpublished route does not expose it
+            $pinnedDungeonRoutes = $user->pinnedDungeonRoutes
+                ->map(static fn(UserPinnedDungeonRoute $pin): ?DungeonRoute => $pin->dungeonRoute)
+                ->filter(static fn(?DungeonRoute $dungeonRoute): bool => $dungeonRoute?->mayUserView($viewer) ?? false)
+                ->values();
+        }
+
+        return view('profile.view', [
+            'user'                 => $user,
+            'creatorProfileActive' => $creatorProfileActive,
+            'socialLinks'          => $socialLinks,
+            'pinnedDungeonRoutes'  => $pinnedDungeonRoutes,
+            'publishedRouteCount'  => $publishedRouteCount,
+        ]);
     }
 
     public function routes(
@@ -182,6 +239,58 @@ class ProfileController extends Controller
     }
 
     /**
+     * Persist the creator podium settings: bio, social links, pinned routes and the directory
+     * opt-out.
+     */
+    public function updateCreatorProfile(
+        CreatorProfileFormRequest                 $request,
+        UserSocialLinkRepositoryInterface         $userSocialLinkRepository,
+        UserPinnedDungeonRouteRepositoryInterface $userPinnedDungeonRouteRepository,
+    ): RedirectResponse {
+        /** @var User $user */
+        $user = Auth::user();
+
+        $validated = $request->validated();
+
+        $user->bio                         = $validated['bio'] ?? null;
+        $user->hide_from_creator_directory = (bool)($validated['hide_from_creator_directory'] ?? false);
+
+        // The user row and its links are saved together: a failure partway through would otherwise
+        // leave the bio updated while the links and pins still describe the previous state.
+        // Replace rather than diff - both sets are capped at a handful of rows, and replacing keeps
+        // the pin ordering trivially correct without reconciling against what was already stored
+        DB::transaction(function () use ($user, $request, $userSocialLinkRepository, $userPinnedDungeonRouteRepository): void {
+            if (!$user->save()) {
+                abort(500, __('controller.profile.flash.unexpected_error_when_saving'));
+            }
+
+            $user->socialLinks()->delete();
+
+            foreach ($request->socialLinks() as $platform => $url) {
+                $userSocialLinkRepository->create([
+                    'user_id'  => $user->id,
+                    'platform' => $platform,
+                    'url'      => $url,
+                ]);
+            }
+
+            $user->pinnedDungeonRoutes()->delete();
+
+            foreach ($request->pinnedDungeonRoutes() as $order => $dungeonRoute) {
+                $userPinnedDungeonRouteRepository->create([
+                    'user_id'          => $user->id,
+                    'dungeon_route_id' => $dungeonRoute->id,
+                    'order'            => $order,
+                ]);
+            }
+        });
+
+        Session::flash('status', __('controller.profile.flash.creator_profile_updated'));
+
+        return redirect()->route('profile.edit');
+    }
+
+    /**
      * @return View
      */
     public function changepassword(Request $request): View
@@ -215,7 +324,7 @@ class ProfileController extends Controller
 
         // @todo Send an e-mail letting the user know the password has been changed
 
-        return view('profile.edit')->withErrors($error);
+        return view('profile.edit', $this->creatorProfileEditViewData())->withErrors($error);
     }
 
     /**
@@ -263,5 +372,40 @@ class ProfileController extends Controller
         }
 
         return redirect()->route('home');
+    }
+
+    /**
+     * @return array{creatorProfileActive: bool, ownDungeonRoutes: Collection<int, DungeonRoute>, pinnedDungeonRouteIds: array<int, int>}
+     */
+    private function creatorProfileEditViewData(): array
+    {
+        $creatorProfileActive = Feature::active(CreatorProfiles::class);
+
+        /** @var Collection<int, DungeonRoute> $ownDungeonRoutes */
+        $ownDungeonRoutes = collect();
+        /** @var array<int, int> $pinnedDungeonRouteIds */
+        $pinnedDungeonRouteIds = [];
+
+        if ($creatorProfileActive) {
+            /** @var User $user */
+            $user = Auth::user();
+
+            // Sandbox routes expire, so they are deliberately not offered as pinnable
+            $ownDungeonRoutes = $user->dungeonRoutes()
+                ->whereNull('expires_at')
+                ->with(['dungeon'])
+                ->orderBy('title')
+                ->get();
+
+            $pinnedDungeonRouteIds = $user->pinnedDungeonRoutes
+                ->pluck('dungeon_route_id')
+                ->all();
+        }
+
+        return [
+            'creatorProfileActive'  => $creatorProfileActive,
+            'ownDungeonRoutes'      => $ownDungeonRoutes,
+            'pinnedDungeonRouteIds' => $pinnedDungeonRouteIds,
+        ];
     }
 }
