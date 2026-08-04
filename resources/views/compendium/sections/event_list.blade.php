@@ -66,6 +66,11 @@ $spellPropertyName = static function (SpellProperty $property): string {
         return __('view_compendium.event.property.' . $property->value);
     }
 
+    if ($property->isCounter()) {
+        // counter_vanish → vanish
+        return __('spellcounters.' . substr($property->value, 8));
+    }
+
     // miss_reflect → reflect
     return __('spellmisstypes.' . substr($property->value, 5));
 };
@@ -82,14 +87,15 @@ $eventDescription = static function (CombatLogNpcEvent|CombatLogSpellEvent $even
     }
 
     $spellName = $event->spell ? __($event->spell->name) : sprintf('#%d', $event->spell_id);
+    $isCounter = $event->property?->isCounter() ?? false;
 
     return match ($event->event_type) {
         CombatLogSpellEventType::SpellCreated => __('view_compendium.event.spell_created', ['spell' => $spellName]),
-        CombatLogSpellEventType::PropertyChanged => __('view_compendium.event.property_changed', [
+        CombatLogSpellEventType::PropertyChanged => __($isCounter ? 'view_compendium.event.counter_added' : 'view_compendium.event.property_changed', [
             'spell'    => $spellName,
             'property' => $spellPropertyName($event->property)
         ]),
-        CombatLogSpellEventType::PropertyRemoved => __('view_compendium.event.property_removed', [
+        CombatLogSpellEventType::PropertyRemoved => __($isCounter ? 'view_compendium.event.counter_removed' : 'view_compendium.event.property_removed', [
             'spell'    => $spellName,
             'property' => $spellPropertyName($event->property)
         ]),

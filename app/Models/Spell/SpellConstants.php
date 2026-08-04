@@ -72,6 +72,14 @@ trait SpellConstants
         Resist::class  => self::MISS_TYPE_RESIST,
     ];
 
+    public const int COUNTER_VANISH     = 1;
+    public const int COUNTER_SHADOWMELD = 2;
+
+    public const array ALL_COUNTERS = [
+        self::COUNTER_VANISH     => 'vanish',
+        self::COUNTER_SHADOWMELD => 'shadowmeld',
+    ];
+
     public const string DISPEL_TYPE_MAGIC         = 'magic';
     public const string DISPEL_TYPE_DISEASE       = 'disease';
     public const string DISPEL_TYPE_POISON        = 'poison';

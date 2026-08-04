@@ -108,6 +108,37 @@ final class ClassCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function show_givenRogueClass_displaysVanishAndShadowmeldCounterSections(): void
+    {
+        // Arrange — Rogue has Vanish as a class ability, and can be a Night Elf (Shadowmeld racial)
+        $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_ROGUE)->firstOrFail();
+
+        // Act
+        $response = $this->get(route('compendium.class.show', $characterClass));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSeeText(__('spellcounters.vanish'));
+        $response->assertSeeText(__('spellcounters.shadowmeld'));
+    }
+
+    #[Test]
+    public function show_givenPaladinClass_doesNotDisplayVanishOrShadowmeldCounterSections(): void
+    {
+        // Arrange — Vanish is Rogue-only, so Paladin must not see it. Paladin also cannot be a Night
+        // Elf, so the Shadowmeld racial counter must not appear either.
+        $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_PALADIN)->firstOrFail();
+
+        // Act
+        $response = $this->get(route('compendium.class.show', $characterClass));
+
+        // Assert
+        $response->assertOk();
+        $response->assertDontSeeText(__('spellcounters.vanish'));
+        $response->assertDontSeeText(__('spellcounters.shadowmeld'));
+    }
+
+    #[Test]
     public function show_givenNpcWithMatchingCharacteristic_displaysNpcName(): void
     {
         // Arrange

@@ -14,14 +14,16 @@ class MappingExportService implements MappingExportServiceInterface
     {
         $spells = Spell::all();
         foreach ($spells as $spell) {
-            // aura, debuff and miss_types_mask are combat-log-derived behavior - they must not round-trip
-            // through the git seeders; they are re-applied per environment from the combatlog pipeline.
+            // aura, debuff, miss_types_mask and counters_mask are combat-log-derived behavior - they
+            // must not round-trip through the git seeders; they are re-applied per environment from
+            // the combatlog pipeline.
             $spell->makeHidden([
                 'icon_url',
                 'wowhead_url',
                 'aura',
                 'debuff',
                 'miss_types_mask',
+                'counters_mask',
             ]);
         }
 

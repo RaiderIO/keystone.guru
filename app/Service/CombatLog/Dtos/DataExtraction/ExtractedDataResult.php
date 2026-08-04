@@ -18,6 +18,7 @@ class ExtractedDataResult implements Arrayable
     private int $createdSpells             = 0;
     private int $createdSpellDungeon       = 0;
     private int $updatedSpells             = 0;
+    private int $addedSpellCounters        = 0;
 
     public function updatedNpc(): void
     {
@@ -64,6 +65,11 @@ class ExtractedDataResult implements Arrayable
         $this->updatedSpells++;
     }
 
+    public function addedSpellCounter(): void
+    {
+        $this->addedSpellCounters++;
+    }
+
     public function toArray(): array
     {
         return [
@@ -76,6 +82,7 @@ class ExtractedDataResult implements Arrayable
             'createdSpells'             => $this->createdSpells,
             'createdSpellDungeon'       => $this->createdSpellDungeon,
             'updatedSpells'             => $this->updatedSpells,
+            'addedSpellCounters'        => $this->addedSpellCounters,
         ];
     }
 }

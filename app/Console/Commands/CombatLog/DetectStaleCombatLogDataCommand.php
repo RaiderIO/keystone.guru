@@ -156,10 +156,11 @@ class DetectStaleCombatLogDataCommand extends Command
                 $q->select('spell_id')->from('spell_dungeons')->whereIn('dungeon_id', $currentSeasonDungeonIds);
             });
 
-        match ($property) {
-            SpellProperty::Aura   => $query->where('aura', true),
-            SpellProperty::Debuff => $query->where('debuff', true),
-            default               => $query->whereRaw(sprintf('miss_types_mask & %d != 0', $this->getMissTypeBit($property))),
+        match (true) {
+            $property === SpellProperty::Aura   => $query->where('aura', true),
+            $property === SpellProperty::Debuff => $query->where('debuff', true),
+            $property->isCounter()              => $query->whereRaw(sprintf('counters_mask & %d != 0', $this->getCounterBit($property))),
+            default                             => $query->whereRaw(sprintf('miss_types_mask & %d != 0', $this->getMissTypeBit($property))),
         };
 
         $total        = (clone $query)->count();
@@ -200,6 +201,8 @@ class DetectStaleCombatLogDataCommand extends Command
             $spell->aura = false;
         } elseif ($property === SpellProperty::Debuff) {
             $spell->debuff = false;
+        } elseif ($property->isCounter()) {
+            $spell->counters_mask &= ~$this->getCounterBit($property);
         } else {
             $spell->miss_types_mask &= ~$this->getMissTypeBit($property);
         }
@@ -216,6 +219,17 @@ class DetectStaleCombatLogDataCommand extends Command
         }
 
         throw new LogicException(sprintf('No miss type bit found for SpellProperty: %s', $property->value));
+    }
+
+    private function getCounterBit(SpellProperty $property): int
+    {
+        foreach (Spell::ALL_COUNTERS as $bit => $name) {
+            if ($property->value === sprintf('counter_%s', $name)) {
+                return $bit;
+            }
+        }
+
+        throw new LogicException(sprintf('No counter bit found for SpellProperty: %s', $property->value));
     }
 
     private function pruneOldObservations(): void
