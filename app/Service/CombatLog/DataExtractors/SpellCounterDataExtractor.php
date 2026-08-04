@@ -43,7 +43,8 @@ use Illuminate\Support\Collection;
  * - B: an NPC-sourced debuff (a channel) on the counter-caster is removed within EPSILON_MS of the counter cast, well
  *   before its natural duration. The fact attaches to the debuff's own spell id.
  * - C: an NPC SPELL_CAST_START never reaches SPELL_CAST_SUCCESS and the same caster starts a fresh cast shortly after
- *   a counter cast, with no other explanation (no fail, no interrupt, no death, no debuff on the caster).
+ *   a counter cast, with no other explanation (no fail, no interrupt, no death, no loss-of-control debuff on the
+ *   caster).
  */
 class SpellCounterDataExtractor implements DataExtractorInterface
 {
@@ -61,6 +62,32 @@ class SpellCounterDataExtractor implements DataExtractorInterface
 
     /** @var int Debuffs older than this are pruned - they will never be attributed to a counter anymore. */
     public const int ACTIVE_DEBUFF_MAX_AGE_MS = 300000;
+
+    /**
+     * Debuff mechanics that plausibly explain an NPC abandoning a cast (loss of control). Damage and utility debuffs
+     * (bleeds, Judgment, Consecration, ...) land on trash NPCs near-constantly mid-combat and must not veto signature
+     * C, or it would never fire in practice.
+     *
+     * @var array<int, string>
+     */
+    public const array CAST_DISTURBING_MECHANICS = [
+        SpellModel::MECHANIC_ASLEEP,
+        SpellModel::MECHANIC_BANISHED,
+        SpellModel::MECHANIC_CHARMED,
+        SpellModel::MECHANIC_DISORIENTED,
+        SpellModel::MECHANIC_FLEEING,
+        SpellModel::MECHANIC_FROZEN,
+        SpellModel::MECHANIC_GRIPPED,
+        SpellModel::MECHANIC_HORRIFIED,
+        SpellModel::MECHANIC_INCAPACITATED,
+        SpellModel::MECHANIC_INTERRUPTED,
+        SpellModel::MECHANIC_POLYMORPHED,
+        SpellModel::MECHANIC_SAPPED,
+        SpellModel::MECHANIC_SHACKLED,
+        SpellModel::MECHANIC_SILENCED,
+        SpellModel::MECHANIC_STUNNED,
+        SpellModel::MECHANIC_TURNED,
+    ];
 
     /** @var Collection<int, SpellCounterDefinitionInterface> Keyed by trigger cast spell id. */
     private readonly Collection $definitionsByTriggerSpellId;
@@ -117,6 +144,13 @@ class SpellCounterDataExtractor implements DataExtractorInterface
      */
     private Collection $spellDurationCache;
 
+    /**
+     * Lazily memoized `spells`.`mechanic` per spell id. False marks a spell that has no row.
+     *
+     * @var Collection<int, string|null|false>
+     */
+    private Collection $spellMechanicCache;
+
     private readonly SpellCounterDataExtractorLoggingInterface $log;
 
     private ?string $currentCombatLogFilePath = null;
@@ -139,6 +173,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
 
         $this->pendingCounterObservations = collect();
         $this->spellDurationCache         = collect();
+        $this->spellMechanicCache         = collect();
         $this->resetCorrelationState();
 
         $log = App::make(SpellCounterDataExtractorLoggingInterface::class);
@@ -258,6 +293,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
 
         $this->pendingCounterObservations = collect();
         $this->spellDurationCache         = collect();
+        $this->spellMechanicCache         = collect();
         $this->currentCombatLogFilePath   = null;
         $this->resetCorrelationState();
     }
@@ -412,12 +448,13 @@ class SpellCounterDataExtractor implements DataExtractorInterface
 
     private function handleDebuffApplied(?Guid $sourceGuid, ?Guid $destGuid, int $spellId, string $spellName, Carbon $timestamp): void
     {
-        // Any debuff landing on an NPC mid-cast is a possible explanation for it abandoning that cast
+        // A loss-of-control debuff landing on an NPC mid-cast is a possible explanation for it abandoning that cast.
+        // Plain damage/utility debuffs land on trash near-constantly and are not disqualifying.
         $destNpcGuid = $this->npcCreatureGuid($destGuid);
         if ($destNpcGuid !== null) {
             /** @var array{spellId: int, startedAt: Carbon, disturbed: bool}|null $pendingCast */
             $pendingCast = $this->pendingNpcCasts->get($destNpcGuid);
-            if ($pendingCast !== null) {
+            if ($pendingCast !== null && $this->isCastDisturbingDebuff($spellId)) {
                 $pendingCast['disturbed'] = true;
                 $this->pendingNpcCasts->put($destNpcGuid, $pendingCast);
             }
@@ -542,6 +579,33 @@ class SpellCounterDataExtractor implements DataExtractorInterface
     /**
      * @return int|null The spell's duration in milliseconds, or null when the spell is unknown or has no duration
      */
+    /**
+     * Whether this debuff carries a loss-of-control mechanic that would explain an NPC abandoning a cast. Unknown
+     * spells (no row yet) and mechanic-less debuffs are NOT disturbing - being permissive here is what lets signature
+     * C fire at all mid-combat; the observation staleness window self-corrects rare misattributions.
+     */
+    private function isCastDisturbingDebuff(int $spellId): bool
+    {
+        if (!$this->spellMechanicCache->has($spellId)) {
+            $mechanic = SpellModel::query()->where('id', $spellId)->value('mechanic');
+
+            $this->spellMechanicCache->put($spellId, $mechanic ?? false);
+        }
+
+        $mechanic = $this->spellMechanicCache->get($spellId);
+        if (!is_string($mechanic)) {
+            return false;
+        }
+
+        foreach (self::CAST_DISTURBING_MECHANICS as $disturbingMechanic) {
+            if ($mechanic === sprintf('spellmechanic.%s', $disturbingMechanic)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private function getSpellDurationMs(int $spellId): ?int
     {
         if (!$this->spellDurationCache->has($spellId)) {

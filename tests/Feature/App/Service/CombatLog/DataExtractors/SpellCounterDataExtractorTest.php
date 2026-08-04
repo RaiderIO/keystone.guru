@@ -246,9 +246,10 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
     }
 
     #[Test]
-    public function extractData_givenCasterWasDebuffedMidCast_doesNotSetCounter(): void
+    public function extractData_givenCasterWasStunnedMidCast_doesNotSetCounter(): void
     {
-        // Arrange - any debuff on the caster is a possible explanation for the abandoned cast
+        // Arrange - a loss-of-control debuff on the caster (Kidney Shot carries spellmechanic.stunned in the seeded
+        // spells table) is a possible explanation for the abandoned cast
         $castSpellId = 9990011;
         $this->createTestSpell($castSpellId);
 
@@ -263,6 +264,31 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
         // Assert
         $this->assertSame(0, $this->result->toArray()['addedSpellCounters']);
         $this->assertNoCounterRecorded($castSpellId);
+    }
+
+    #[Test]
+    public function extractData_givenCasterHadOnlyDamageDebuffsMidCast_setsCounterOnAbandonedCastSpell(): void
+    {
+        // Arrange - trash NPCs are debuffed by player damage kits near-constantly (Judgment, bleeds, ...); only
+        // loss-of-control mechanics may veto signature C, so a mechanic-less debuff must not block detection
+        $castSpellId   = 9990016;
+        $damageSpellId = 9990017;
+        $this->createTestSpell($castSpellId);
+        $this->createTestSpell($damageSpellId);
+        $this->expectDetectionLoggedForSignature('C', $castSpellId, SpellProperty::CounterVanish);
+
+        // Act
+        $this->runExtract([
+            $this->npcCastStart(0, $castSpellId, 'Dread Wind'),
+            $this->debuffApplied(500, $damageSpellId, 'Test Judgment', self::PLAYER_GUID, self::CREATURE_GUID),
+            $this->playerCastSuccess(1000, VanishSpellCounterDefinition::SPELL_ID_VANISH_CAST, 'Vanish'),
+            $this->debuffApplied(1200, $damageSpellId, 'Test Judgment', self::PLAYER_GUID, self::CREATURE_GUID),
+            $this->npcCastStart(1600, $castSpellId, 'Dread Wind'),
+        ]);
+
+        // Assert
+        $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
+        $this->assertCounterRecorded($castSpellId, Spell::COUNTER_VANISH, SpellProperty::CounterVanish);
     }
 
     #[Test]
