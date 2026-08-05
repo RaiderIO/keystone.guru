@@ -123,7 +123,7 @@ use Illuminate\Support\Collection;
                 @if($counterSpells->isEmpty())
                     <p class="text-muted">{{ __('view_compendium.class.show.counters.no_spells') }}</p>
                 @else
-                    @include('compendium.class.sections.spell_npc_table', [
+                    @include('compendium.class.sections.spell-npc-table', [
                         'tableSpells'        => $counterSpells,
                         'tableNpcsBySpellId' => $npcsBySpellId,
                         'tableSpellHeader'   => 'view_compendium.class.show.counters.table_header_spell',
@@ -154,7 +154,7 @@ use Illuminate\Support\Collection;
         @if($reflectSpells->isEmpty())
             <p class="text-muted">{{ __('view_compendium.class.show.reflect.no_spells') }}</p>
         @else
-            @include('compendium.class.sections.spell_npc_table', [
+            @include('compendium.class.sections.spell-npc-table', [
                 'tableSpells'        => $reflectSpells,
                 'tableNpcsBySpellId' => $reflectNpcsBySpellId,
                 'tableSpellHeader'   => 'view_compendium.class.show.reflect.table_header_spell',
