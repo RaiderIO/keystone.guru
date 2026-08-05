@@ -45,6 +45,20 @@
     position: static;
 }
 
+/* One opaque band behind the centered containers: the spacing between the bars stays,
+   but paints the header color instead of letting the map bleed through. Sized to match
+   the containers' max-width so the left/right gutters remain transparent + click-through
+   (the band is a pseudo-element of a pointer-events: none parent, so it catches no clicks). */
+#map_header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1400px;
+    background-color: var(--theme-header);
+}
+
 #map_header,
 #map_header > div {
     z-index: 100020 !important;
