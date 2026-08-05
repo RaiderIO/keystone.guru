@@ -61,6 +61,7 @@ return [
         'property_removed'       => 'Unaffected by :property',
         'counter_added'          => ':spell can now be countered by :property',
         'counter_removed'        => ':spell can no longer be countered by :property',
+        'school_recorded'        => ':spell deals :schools damage',
         'property'               => [
             'aura'   => 'Aura',
             'debuff' => 'Debuff',

@@ -28,6 +28,20 @@ class Range extends Prefix
         return $this->spellSchool;
     }
 
+    /**
+     * The spell school as a bitmask, ready to be stored in `spells`.`schools_mask`.
+     *
+     * The raw field is a hex string in every retail log ("0x20"), and a plain (int) cast turns that into 0 rather
+     * than 32 - which is how combat-log-created spells ended up school-less (#3845). Decimal is still accepted
+     * because the *suffix* schools are logged that way, and a future format change is cheaper to absorb here.
+     */
+    public function getSpellSchoolMask(): int
+    {
+        return str_starts_with(strtolower($this->spellSchool), '0x')
+            ? (int)hexdec(substr($this->spellSchool, 2))
+            : (int)$this->spellSchool;
+    }
+
     #[Override]
     public function setParameters(array $parameters): HasParameters
     {

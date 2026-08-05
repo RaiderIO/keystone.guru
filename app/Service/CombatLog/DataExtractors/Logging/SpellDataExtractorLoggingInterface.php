@@ -16,5 +16,7 @@ interface SpellDataExtractorLoggingInterface
 
     public function createMissingSpellCreatedSpell(string $name, int $spellId): void;
 
+    public function ensureSpellExistsRepairedSchoolsMask(int $spellId, int $schoolsMask): void;
+
     public function afterExtractDungeonEnd(): void;
 }

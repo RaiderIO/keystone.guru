@@ -39,6 +39,9 @@ final class SpellDataExtractorTest extends PublicTestCase
     /** SPELL_INTERRUPT, source=Player, dest=NPC_ID=999601, prefix=Kick/6552, suffix=TestSpell/999602 → triggers SpellProperty::MissInterrupt */
     private const string RAW_INTERRUPT_EVENT = '8/2/2024 16:24:18.477-4  SPELL_INTERRUPT,Player-1084-0B48C032,"TestPlayer",0x512,0x80000000,Creature-0-2085-2290-22744-999601-000000000,"TestNpc",0xa48,0x0,6552,"Kick",0x1,999602,"TestSpell",32';
 
+    /** SPELL_AURA_APPLIED for an unknown spell, prefix school 0x20 (shadow) - hex, exactly as retail logs it */
+    private const string RAW_SHADOW_BUFF_EVENT = '8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Creature-0-2085-2290-22744-999601-000000000,"TestNpc",0xa48,0x0,Creature-0-2085-2290-22744-999601-000000001,"TestNpc",0xa48,0x0,999602,"TestSpell",0x20,BUFF';
+
     private ExtractedDataResult $result;
 
     private DataExtractionCurrentDungeon $currentDungeon;
@@ -137,6 +140,109 @@ final class SpellDataExtractorTest extends PublicTestCase
             $extractor->extractData($this->result, $this->currentDungeon, $event);
         }
         $extractor->afterExtract($this->result, $combatLogPath);
+    }
+
+    #[Test]
+    public function extractData_givenAnUnknownSpell_createsItWithTheHexPrefixSchool(): void
+    {
+        // Arrange - the spell does not exist yet, so the collector creates it from the event alone
+        $this->createTestNpc();
+        $extractor = $this->makeExtractor();
+
+        // Act
+        $this->runExtract($extractor, [$this->parsedEvent(self::RAW_SHADOW_BUFF_EVENT)]);
+
+        // Assert - 0x20 is 32, not the 0 a plain (int) cast produces
+        $this->assertDatabaseHas('spells', [
+            'id'           => self::SPELL_ID,
+            'schools_mask' => SpellModel::SCHOOL_SHADOW,
+        ]);
+    }
+
+    #[Test]
+    public function extractData_givenAKnownSpellWithoutASchool_repairsItsSchoolsMask(): void
+    {
+        // Arrange - a spell created from a combat log before #3845, so its school was lost
+        $this->createTestSpell(['schools_mask' => 0]);
+        $extractor = $this->makeExtractor();
+
+        // Act
+        $this->runExtract($extractor, [$this->parsedEvent(self::RAW_SHADOW_BUFF_EVENT)]);
+
+        // Assert
+        $this->assertDatabaseHas('spells', [
+            'id'           => self::SPELL_ID,
+            'schools_mask' => SpellModel::SCHOOL_SHADOW,
+        ]);
+
+        // Assert - the repair is auditable from the activity feed, like every other spell mutation here
+        $this->assertDatabaseHas('combat_log_spell_events', [
+            'spell_id'        => self::SPELL_ID,
+            'event_type'      => CombatLogSpellEventType::SchoolRecorded->value,
+            'combat_log_path' => self::COMBAT_LOG_PATH,
+        ], 'combatlog');
+    }
+
+    #[Test]
+    public function extractData_givenAnInterruptedSpellWithoutASchool_repairsItsSchoolsMask(): void
+    {
+        // Arrange - a spell that only ever reappears as the interrupted spell of a SPELL_INTERRUPT
+        $this->createTestSpell(['schools_mask' => 0]);
+        $this->createTestNpc();
+        $extractor = $this->makeExtractor();
+
+        // Act - RAW_INTERRUPT_EVENT carries extraSchool 32, decimal, as retail logs it
+        $this->runExtract($extractor, [$this->parsedEvent(self::RAW_INTERRUPT_EVENT)]);
+
+        // Assert
+        $this->assertDatabaseHas('spells', [
+            'id'           => self::SPELL_ID,
+            'schools_mask' => SpellModel::SCHOOL_SHADOW,
+        ]);
+    }
+
+    #[Test]
+    public function extractData_givenAKnownSpellThatAlreadyHasASchool_leavesItAlone(): void
+    {
+        // Arrange - the database is authoritative once a school is known; a single event must not overwrite it
+        $this->createTestSpell(['schools_mask' => SpellModel::SCHOOL_FIRE]);
+        $extractor = $this->makeExtractor();
+
+        // Act
+        $this->runExtract($extractor, [$this->parsedEvent(self::RAW_SHADOW_BUFF_EVENT)]);
+
+        // Assert
+        $this->assertDatabaseHas('spells', [
+            'id'           => self::SPELL_ID,
+            'schools_mask' => SpellModel::SCHOOL_FIRE,
+        ]);
+    }
+
+    #[Test]
+    public function extractData_givenAKnownSchoollessSpellAndASchoollessEvent_leavesItAlone(): void
+    {
+        // Arrange - a spell that genuinely has no school must not churn a write on every event
+        $this->createTestSpell(['schools_mask' => 0]);
+
+        $log = Mockery::mock(SpellDataExtractorLoggingInterface::class)->shouldIgnoreMissing();
+
+        /** @var Mockery\Expectation $expectation */
+        $expectation = $log->shouldReceive('ensureSpellExistsRepairedSchoolsMask');
+        $expectation->never();
+
+        $this->app->bind(SpellDataExtractorLoggingInterface::class, fn() => $log);
+
+        $extractor = $this->makeExtractor();
+
+        // Act - RAW_BUFF_EVENT is logged as 0x1, so use an explicitly school-less event
+        $schoollessEvent = str_replace('"TestSpell",0x20', '"TestSpell",0x0', self::RAW_SHADOW_BUFF_EVENT);
+        $this->runExtract($extractor, [$this->parsedEvent($schoollessEvent)]);
+
+        // Assert
+        $this->assertDatabaseHas('spells', [
+            'id'           => self::SPELL_ID,
+            'schools_mask' => 0,
+        ]);
     }
 
     #[Test]

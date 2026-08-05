@@ -42,6 +42,7 @@ $eventBadgeClass = static function (CombatLogNpcEvent|CombatLogSpellEvent $event
         CombatLogSpellEventType::SpellCreated => 'info',
         CombatLogSpellEventType::PropertyChanged => 'warning',
         CombatLogSpellEventType::PropertyRemoved => 'danger',
+        CombatLogSpellEventType::SchoolRecorded => 'info',
     };
 };
 
@@ -58,6 +59,7 @@ $eventIcon = static function (CombatLogNpcEvent|CombatLogSpellEvent $event): str
         CombatLogSpellEventType::SpellCreated => 'fas fa-plus',
         CombatLogSpellEventType::PropertyChanged => 'fas fa-arrow-up',
         CombatLogSpellEventType::PropertyRemoved => 'fas fa-times',
+        CombatLogSpellEventType::SchoolRecorded => 'fas fa-plus',
     };
 };
 
@@ -98,6 +100,12 @@ $eventDescription = static function (CombatLogNpcEvent|CombatLogSpellEvent $even
         CombatLogSpellEventType::PropertyRemoved => __($isCounter ? 'view_compendium.event.counter_removed' : 'view_compendium.event.property_removed', [
             'spell'    => $spellName,
             'property' => $spellPropertyName($event->property)
+        ]),
+        CombatLogSpellEventType::SchoolRecorded => __('view_compendium.event.school_recorded', [
+            'spell'   => $spellName,
+            'schools' => $event->spell
+                ? Spell::maskToReadableString(Spell::ALL_SCHOOLS, $event->spell->schools_mask, 'spellschools')
+                : '-',
         ]),
     };
 };

@@ -31,6 +31,11 @@ class SpellDataExtractorLogging extends StructuredLogging implements SpellDataEx
         $this->start(__METHOD__, get_defined_vars());
     }
 
+    public function ensureSpellExistsRepairedSchoolsMask(int $spellId, int $schoolsMask): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
     public function createMissingSpellCreatedSpell(string $name, int $spellId): void
     {
         $this->debug(__METHOD__, get_defined_vars());
