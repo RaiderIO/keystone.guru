@@ -68,9 +68,10 @@
     border-radius: 0 !important;
 }
 
-/* The container only has horizontal padding (px-1); without this the route action
-   buttons sit flush against the bar's bottom edge */
+/* The container only has horizontal padding (px-1); without this the content sits
+   flush against the bar's edges - symmetric so the route title stays centered */
 .navbar-third > .container {
+    padding-top: 0.25rem;
     padding-bottom: 0.25rem;
 }
 
