@@ -39,12 +39,18 @@ class SpellCreationCollector implements SpellDataCollectorInterface
 
     public function ensureSpellExists(ExtractedDataResult $result, Spell $prefix): void
     {
-        $spellId = $prefix->getSpellId();
-        if ($this->allSpells->has($spellId)) {
+        $spellId     = $prefix->getSpellId();
+        $schoolsMask = $prefix->getSpellSchoolMask();
+
+        /** @var SpellModel|null $existingSpell */
+        $existingSpell = $this->allSpells->get($spellId);
+        if ($existingSpell !== null) {
+            $this->repairMissingSchoolsMask($result, $existingSpell, $schoolsMask);
+
             return;
         }
 
-        $createdSpell = $this->createSpellModel($result, $spellId, $prefix->getSpellName(), (int)$prefix->getSpellSchool());
+        $createdSpell = $this->createSpellModel($result, $spellId, $prefix->getSpellName(), $schoolsMask);
         $this->allSpells->put($spellId, $createdSpell);
         $this->pendingNewSpells->put($spellId, $createdSpell);
 
@@ -78,6 +84,25 @@ class SpellCreationCollector implements SpellDataCollectorInterface
 
         $this->pendingNewSpells         = collect();
         $this->currentCombatLogFilePath = null;
+    }
+
+    /**
+     * Backfills the school of a spell that has none. Spells created from a combat log before #3845 all got
+     * schools_mask 0, and their real school cannot be recovered from the database - only from a log that mentions
+     * them again, which is exactly here. Spells that legitimately have no school log 0x0 and stay untouched.
+     */
+    private function repairMissingSchoolsMask(ExtractedDataResult $result, SpellModel $spell, int $schoolsMask): void
+    {
+        if ($schoolsMask === 0 || $spell->schools_mask !== 0) {
+            return;
+        }
+
+        $spell->schools_mask = $schoolsMask;
+
+        if ($spell->save()) {
+            $result->updatedSpell();
+            $this->log->ensureSpellExistsRepairedSchoolsMask($spell->id, $schoolsMask);
+        }
     }
 
     private function createSpellModel(ExtractedDataResult $result, int $spellId, string $name, int $schoolsMask): SpellModel
