@@ -60,7 +60,14 @@ class SpellCreationCollector implements SpellDataCollectorInterface
     public function ensureInterruptSpellExists(ExtractedDataResult $result, Interrupt $interrupt): void
     {
         $spellId = $interrupt->getExtraSpellId();
-        if ($this->allSpells->has($spellId)) {
+
+        /** @var SpellModel|null $existingSpell */
+        $existingSpell = $this->allSpells->get($spellId);
+        if ($existingSpell !== null) {
+            // The interrupted spell's school is trusted to create a spell on the line below, so it is good enough
+            // to repair one too
+            $this->repairMissingSchoolsMask($result, $existingSpell, $interrupt->getExtraSchool());
+
             return;
         }
 
@@ -100,6 +107,15 @@ class SpellCreationCollector implements SpellDataCollectorInterface
         $spell->schools_mask = $schoolsMask;
 
         if ($spell->save()) {
+            // Every other spell mutation in this pipeline is auditable from the Compendium's activity feed and
+            // attributable to a combat log; a repaired school is no different
+            CombatLogSpellEvent::create([
+                'spell_id'        => $spell->id,
+                'event_type'      => CombatLogSpellEventType::SchoolRecorded,
+                'property'        => null,
+                'combat_log_path' => $this->currentCombatLogFilePath,
+            ]);
+
             $result->updatedSpell();
             $this->log->ensureSpellExistsRepairedSchoolsMask($spell->id, $schoolsMask);
         }

@@ -174,6 +174,31 @@ final class SpellDataExtractorTest extends PublicTestCase
             'id'           => self::SPELL_ID,
             'schools_mask' => SpellModel::SCHOOL_SHADOW,
         ]);
+
+        // Assert - the repair is auditable from the activity feed, like every other spell mutation here
+        $this->assertDatabaseHas('combat_log_spell_events', [
+            'spell_id'        => self::SPELL_ID,
+            'event_type'      => CombatLogSpellEventType::SchoolRecorded->value,
+            'combat_log_path' => self::COMBAT_LOG_PATH,
+        ], 'combatlog');
+    }
+
+    #[Test]
+    public function extractData_givenAnInterruptedSpellWithoutASchool_repairsItsSchoolsMask(): void
+    {
+        // Arrange - a spell that only ever reappears as the interrupted spell of a SPELL_INTERRUPT
+        $this->createTestSpell(['schools_mask' => 0]);
+        $this->createTestNpc();
+        $extractor = $this->makeExtractor();
+
+        // Act - RAW_INTERRUPT_EVENT carries extraSchool 32, decimal, as retail logs it
+        $this->runExtract($extractor, [$this->parsedEvent(self::RAW_INTERRUPT_EVENT)]);
+
+        // Assert
+        $this->assertDatabaseHas('spells', [
+            'id'           => self::SPELL_ID,
+            'schools_mask' => SpellModel::SCHOOL_SHADOW,
+        ]);
     }
 
     #[Test]
