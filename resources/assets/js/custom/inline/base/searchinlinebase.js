@@ -7,6 +7,8 @@ class SearchInlineBase extends InlineCode {
         this.searchHandler = searchHandler;
         // Previous search params are used to prevent searching for the same thing multiple times for no reason
         this._previousSearchParams = null;
+        // Every query param name we've written into the URL ourselves - see _updateUrl()
+        this._writtenUrlParamNames = [];
         this.filters = {};
     }
 
@@ -142,9 +144,12 @@ class SearchInlineBase extends InlineCode {
     /**
      * Updates the URL according to the passed searchParams (so users can press F5 and be where they left off, ish)
      *
-     * Query parameters that none of the filters own (embed display options such as defaultZoom or showHeader) are
-     * carried over untouched - rebuilding the query string from the filters alone silently truncated shared embed
-     * URLs (#3837).
+     * Query parameters that we don't own (embed display options such as defaultZoom or showHeader) are carried over
+     * untouched - rebuilding the query string from the filters alone silently truncated shared embed URLs (#3837).
+     *
+     * "Ours" is everything the filters claim plus everything a previous call wrote: a param the caller injected
+     * through `queryParameters` (npc_id on the enemy failures search) would otherwise be preserved forever once it
+     * had been written, even after the search stopped sending it.
      *
      * @param searchParams {SearchParams}
      * @param blacklist {Array}
@@ -159,18 +164,23 @@ class SearchInlineBase extends InlineCode {
         blacklist.push('limit');
 
         // Everything we're not responsible for stays exactly as it was
-        let ownedParams = this._getFilterParamNames().concat(blacklist);
+        let ownedParams = this._getFilterParamNames().concat(blacklist).concat(this._writtenUrlParamNames);
         let existingParams = getQueryParams();
         for (let index in existingParams) {
             if (existingParams.hasOwnProperty(index) && !ownedParams.includes(index) &&
                 !searchParams.params.hasOwnProperty(index)) {
-                urlParams.push(`${index}=${encodeURIComponent(existingParams[index])}`);
+                // The key came out of getQueryParams() decoded, so it needs re-encoding just like the value
+                urlParams.push(`${encodeURIComponent(index)}=${encodeURIComponent(existingParams[index])}`);
             }
         }
 
         for (let index in searchParams.params) {
             if (searchParams.params.hasOwnProperty(index) && !blacklist.includes(index)) {
                 urlParams.push(`${index}=${encodeURIComponent(searchParams.params[index])}`);
+
+                if (!this._writtenUrlParamNames.includes(index)) {
+                    this._writtenUrlParamNames.push(index);
+                }
             }
         }
 
