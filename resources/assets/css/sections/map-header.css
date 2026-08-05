@@ -68,6 +68,12 @@
     border-radius: 0 !important;
 }
 
+/* The container only has horizontal padding (px-1); without this the route action
+   buttons sit flush against the bar's bottom edge */
+.navbar-third > .container {
+    padding-bottom: 0.25rem;
+}
+
 .map_fade_out {
     opacity: 0.8;
     transition: opacity .2s ease-out;
