@@ -64,6 +64,13 @@
     z-index: 100020 !important;
 }
 
+/* Dropdowns opened from the navbar (user menu, language flags) must overlay the route
+   bar below it - as a flex item the included header stacks by z-index, and without this
+   the later-in-DOM .navbar-third (100020) paints on top of them */
+#map_header > .ksg-header {
+    z-index: 100021 !important;
+}
+
 #map_header .rounded {
     border-radius: 0 !important;
 }
