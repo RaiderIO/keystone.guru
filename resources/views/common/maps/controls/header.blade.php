@@ -44,7 +44,7 @@ $hasMobileActions = isset($dungeonroute) || $showShare
 <div class="navbar-third {{ $theme === User::THEME_LUX ? 'navbar-light' : 'navbar-dark' }}">
     <div class="container bg-header text-center text-xl-start px-1 rounded">
         <div class="row g-0">
-            <div class="col col-lg-auto overflow-hidden">
+            <div class="col col-lg-auto overflow-hidden d-flex flex-column justify-content-center">
                 <div class="row g-0 d-flex align-items-center">
                     @auth
                         @isset($dungeonroute)
