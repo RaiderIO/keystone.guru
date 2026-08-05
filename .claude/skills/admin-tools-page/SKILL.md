@@ -51,7 +51,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {   // admin gate
   `@section('header-title', __('...'))` and `@section('content')`.
 - Two table styles:
   - **Plain Bootstrap table** — `<table class="table table-sm table-striped">` with a `@foreach`.
-    Standard for tools pages. Copy `admin/tools/combatlog/rundata.blade.php`.
+    Standard for tools pages. Copy `admin/tools/combatlog/rundata.blade.php` — but note its
+    controller queries through `DB::connection('combatlog')->table(...)`, which the project's own
+    "avoid `DB::`, prefer `Model::query()`" rule says not to copy. Take the *view* from it, not the
+    data access.
   - **DataTables** — `<table class="tablesorter default_table ...">` initialised in
     `@section('scripts')` with `$('#id').DataTable({...})`. Used by model CRUD lists like
     `admin/expansion/list.blade.php`.
@@ -70,7 +73,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {   // admin gate
   warrant top-level visibility. A **count badge** is fed by a shared view variable set in
   `app/Http/View/Composers/GlobalComposer.php` (admin-guarded), rendered as
   `@if($count > 0)<span class="badge badge-warning badge-pill">{{ $count }}</span>@endif` — see
-  `numUserReports` / `numCombatLogParseFailures`.
+  `numUserReports`.
 
 ## Translations
 

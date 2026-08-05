@@ -85,8 +85,17 @@ don't cache the URLs. Response:
 {"segments": [{"id": 1, "type": "trash", "downloadUrl": "https://s3..."}, ...]}
 ```
 
-A 422 means the season id isn't a known season. A 404 with `apicombatlogrun.error.no_segments` means
-Raider.IO no longer has that run's segments — pick a different run from the cluster.
+A 404 means Raider.IO no longer has that run's segments — pick a different run from the cluster. Its
+body is `{"error": "No combat log segments are available for this run."}`: the message is the resolved
+translation of `controller.apicombatlogrun.error.no_segments`, so match on the status code, not on the
+key (the key itself never appears in the response).
+
+A 422 means the season id isn't a known season, and comes back in the form request's envelope rather than
+the `error` shape above:
+
+```json
+{"success": false, "message": "Validation errors", "data": {"season": ["..."]}}
+```
 
 ## 3. Download and decompress
 
