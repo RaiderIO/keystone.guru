@@ -260,6 +260,7 @@ if ($isAdmin) {
     @if(isset($show['header']) && $show['header'])
         <nav id="map_header" class="map_fade_out">
             @include('common.layout.header', [
+                'headerId' => null,
                 'showMore' => true,
                 'showDungeonContext' => !($mapContext instanceof MapContextDungeonRoute),
                 'forceShrink' => true,
@@ -277,17 +278,8 @@ if ($isAdmin) {
                 'mappingVersion' => $mappingVersion,
             ])
         </nav>
-        {{--        @include('common.maps.controls.header', [--}}
-        {{--            'echo' => $echo,--}}
-        {{--            'edit' => $edit,--}}
-        {{--            'mapContext' => $mapContext,--}}
-        {{--            'dungeon' => $dungeon,--}}
-        {{--            'floor' => $floor,--}}
-        {{--            'headerTitle' => $headerTitle,--}}
-        {{--            'dungeonroute' => $dungeonroute,--}}
-        {{--            'liveSession' => $liveSession,--}}
-        {{--            'mappingVersion' => $mappingVersion,--}}
-        {{--        ])--}}
+        {{-- Publishes --ksg-header-height for elements positioned below the header (route sidebar) --}}
+        @include('common.general.inline', ['path' => 'common/general/siteheader'])
     @endif
 
     @if(isset($show['controls']['draw']) && $show['controls']['draw'])

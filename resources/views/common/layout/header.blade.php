@@ -24,6 +24,7 @@ use Illuminate\Support\Str;
  * @var bool                         $showMore
  * @var bool                         $showDungeonContext
  * @var Collection<string, string>   $dungeonContextLinks
+ * @var string|null                  $headerId
  */
 
 $navs                   = [];
@@ -31,6 +32,9 @@ $showMore               ??= false;
 $showDungeonContext     ??= true;
 $forceShrink            ??= false;
 $dungeonContextLinks    ??= null;
+// The map view passes null - its own #map_header wraps this include, and duplicate ids would
+// confuse the header height measurement in siteheader.js.
+$headerId               ??= 'site_header';
 // Defense in depth for #3806 - GlobalComposer normally supplies this, but view composers are
 // skipped entirely on paths ViewService::shouldLoadViewVariables() blacklists (e.g. /ajax/),
 // so an HTML error view rendered for one of those paths would otherwise crash here.
@@ -98,9 +102,10 @@ $isActiveRoute = function (string $route, bool $strict = false) {
     return $active;
 };
 ?>
+<header @if($headerId !== null) id="{{ $headerId }}" @endif
+        class="ksg-header {{ $forceShrink ? 'ksg-header--shrink ksg-header--shrink-forced' : '' }}">
 <div
-    class="game_version_header navbar-first d-none d-lg-block fixed-top
-    {{ $showDungeonContext ? 'has_dungeon_context_header' : '' }}
+    class="game_version_header navbar-first d-none d-lg-block
      {{ User::isThemeDark($theme) ? 'navbar-dark' : 'navbar-light' }}">
     <div class="container discover bg-dark rounded ">
         <div class="row">
@@ -115,8 +120,7 @@ $isActiveRoute = function (string $route, bool $strict = false) {
             </div>
         </div>
         @if($showDungeonContext)
-            <div class="row g-0 dungeon_context_header {{ $forceShrink ? 'navbar-shrink' : '' }}"
-                 data-toggle="navbar-shrink" style="height: 99px;">
+            <div class="row g-0 dungeon_context_header">
                 <div class="col">
                     @include('common.dungeon.list', [
                         'gameVersion' => $currentUserGameVersion,
@@ -143,14 +147,9 @@ $isActiveRoute = function (string $route, bool $strict = false) {
         @endif
     </div>
 </div>
-@if(!$forceShrink)
-    <div class="navbar-top-fixed-spacer" style="height: 190px;"></div>
-@endif
 <nav
-    class="navbar navbar-second fixed-top navbar-expand-lg
-     {{ $forceShrink ? 'navbar-shrink' : '' }}
-     {{ User::isThemeDark($theme) ? 'navbar-dark' : 'navbar-light' }}"
-    data-toggle="navbar-shrink">
+    class="navbar navbar-second navbar-expand-lg
+     {{ User::isThemeDark($theme) ? 'navbar-dark' : 'navbar-light' }}">
     <div class="container px-1 bg-header rounded">
         <a class="navbar-brand" href="/">
             <img src="{{ ksgAssetImage('logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"
@@ -279,3 +278,4 @@ $isActiveRoute = function (string $route, bool $strict = false) {
         </div>
     </div>
 </nav>
+</header>

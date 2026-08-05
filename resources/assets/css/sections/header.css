@@ -1,42 +1,29 @@
-.navbar,
-.navbar-first,
-.navbar-second {
-    -webkit-transition: padding 0.2s ease;
-    -moz-transition: padding 0.2s ease;
-    -o-transition: padding 0.2s ease;
+/* The site header: one sticky wrapper whose bars stack in normal flow.
+   Shrinking is a single class toggle on the wrapper (see siteheader.js) —
+   no fixed-top bars, no hardcoded top offsets, no JS-managed spacer. */
+.ksg-header {
+    position: sticky;
+    top: 0;
+    z-index: 800;
+}
+
+.ksg-header .dungeon_context_header {
+    height: 99px;
+    transition: height 0.2s ease;
+}
+
+.ksg-header--shrink .dungeon_context_header {
+    height: 64px;
+}
+
+.ksg-header .navbar-second {
     transition: padding 0.2s ease;
-
-    -webkit-transition: height 0.2s ease;
-    -moz-transition: height 0.2s ease;
-    -o-transition: height 0.2s ease;
-    transition: height 0.2s ease;
 }
 
-.navbar-shrink {
-    padding-top: 0.2em !important;
-    padding-bottom: 0.2em !important;
-}
-
-/* This takes up the space that the fixed-top navbar leaves because it floats */
-.navbar-top-fixed-spacer {
-    -webkit-transition: height 0.2s ease;
-    -moz-transition: height 0.2s ease;
-    -o-transition: height 0.2s ease;
-    transition: height 0.2s ease;
-}
-
-@media (min-width: 992px) {
-    .navbar-second {
-        top: 126px !important;
-        -webkit-transition: top 0.2s ease;
-        -moz-transition: top 0.2s ease;
-        -o-transition: top 0.2s ease;
-        transition: top 0.2s ease;
-    }
-
-    .navbar-second.navbar-shrink {
-        top: 94px !important;
-    }
+/* rem instead of em so shrunk bar heights stay integer pixels */
+.ksg-header--shrink .navbar-second {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
 }
 
 .game_version_header .game_version {

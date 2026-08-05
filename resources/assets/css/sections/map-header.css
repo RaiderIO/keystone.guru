@@ -1,22 +1,3 @@
-.navbar-third {
-    -webkit-transition: padding 0.2s ease;
-    -moz-transition: padding 0.2s ease;
-    -o-transition: padding 0.2s ease;
-    transition: padding 0.2s ease;
-
-    -webkit-transition: height 0.2s ease;
-    -moz-transition: height 0.2s ease;
-    -o-transition: height 0.2s ease;
-    transition: height 0.2s ease;
-}
-
-.dungeon_context_header  {
-    -webkit-transition: height 0.2s ease;
-    -moz-transition: height 0.2s ease;
-    -o-transition: height 0.2s ease;
-    transition: height 0.2s ease;
-}
-
 .dungeon_context_header .row,
 .dungeon_context_header .col,
 .dungeon_context_header .grid_dungeon,
@@ -50,35 +31,18 @@
     pointer-events: auto;
 }
 
-/*.dungeon_context_header.navbar-shrink img,*/
-.dungeon_context_header.navbar-shrink {
-    padding-top: inherit !important;
-    padding-bottom: inherit !important;
-
-    height: 64px !important;
-}
-
-@media (min-width: 992px) {
-    .navbar-third {
-        top: 151px !important;
-        -webkit-transition: top 0.2s ease;
-        -moz-transition: top 0.2s ease;
-        -o-transition: top 0.2s ease;
-        transition: top 0.2s ease;
-    }
-
-    #map_header:not(:has(> .has_dungeon_context_header)) > .navbar-second {
-        top: 30px !important;
-    }
-
-    #map_header:not(:has(> .has_dungeon_context_header)) > .navbar-third {
-        top: 86px !important;
-    }
-}
-
 /** HEADER */
+/* The map header floats over the map: one fixed flex column, its bars stacking
+   in flow inside it. The included .ksg-header degrades to a plain flow child. */
 #map_header {
     position: fixed;
+    inset: 0 0 auto 0;
+    display: flex;
+    flex-direction: column;
+}
+
+#map_header .ksg-header {
+    position: static;
 }
 
 #map_header,
@@ -112,11 +76,21 @@
     }
 }
 
+/* The map renders behind the floating header; the transparent gutters left and
+   right of the centered containers must stay click-through. Every full-width
+   layer passes pointer events through — only the visible containers catch them. */
+#map_header,
+#map_header .ksg-header,
+#map_header .game_version_header,
+#map_header .navbar-second,
+#map_header .navbar-third {
+    pointer-events: none;
+}
+
 #map_header .game_version_header,
 #map_header .navbar-second,
 #map_header .navbar-third {
     width: 100%;
-    pointer-events: none;
 }
 
 #map_header .game_version_header > .container,

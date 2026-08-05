@@ -4,7 +4,14 @@ body {
     flex-direction: column;
 }
 
-html, body, #app {
+html {
     height: 100%;
+    width: 100%;
+}
+
+/* min-height, not height: a fixed height would cap the sticky site header's
+   travel at one viewport, so it would stop sticking further down the page. */
+body, #app {
+    min-height: 100%;
     width: 100%;
 }
