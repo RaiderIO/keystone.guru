@@ -40,11 +40,11 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         $this->setUpTestForDungeon($dungeon, $rowCountPerFloor, $runCount);
 
         // Act
-        $response = $this->post(route('ajax.heatmap.data'), [
+        $response = $this->get(route('ajax.heatmap.data', [
             'type'      => self::EVENT_TYPE->value,
             'dataType'  => self::DATA_TYPE->value,
             'dungeonId' => $dungeon->id,
-        ]);
+        ]));
 
         // Assert
         $response->assertOk();
@@ -73,11 +73,11 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         $this->setUpTestForDungeon($dungeon, $rowCountPerFloor, $runCount, true);
 
         // Act
-        $response = $this->post(route('ajax.heatmap.data'), [
+        $response = $this->get(route('ajax.heatmap.data', [
             'type'      => self::EVENT_TYPE->value,
             'dataType'  => self::DATA_TYPE->value,
             'dungeonId' => $dungeon->id,
-        ]);
+        ]));
 
         // Assert
         $response->assertOk();

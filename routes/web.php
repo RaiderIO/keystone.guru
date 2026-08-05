@@ -601,7 +601,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::delete('/{tag}/all', new AjaxTagController()->deleteAll(...))->name('ajax.tag.deleteall');
         });
         Route::prefix('heatmap')->group(static function () {
-            Route::post('/data', new AjaxHeatmapController()->getData(...))->name('ajax.heatmap.data');
+            Route::get('/data', new AjaxHeatmapController()->getData(...))->name('ajax.heatmap.data');
         });
 
         Route::middleware('throttle:create-reports')->group(static function () {
