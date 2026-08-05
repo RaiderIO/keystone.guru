@@ -601,9 +601,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::delete('/{tag}/all', new AjaxTagController()->deleteAll(...))->name('ajax.tag.deleteall');
         });
         Route::prefix('heatmap')->group(static function () {
-            // GET on purpose: the heatmap embed page calls this from inside a cross-site <iframe>,
-            // where SameSite=Lax session/XSRF cookies aren't sent on the XHR, so a POST would
-            // always fail CSRF verification (#3836). The endpoint is a stateless read-only fetch.
             Route::get('/data', new AjaxHeatmapController()->getData(...))->name('ajax.heatmap.data');
         });
 
