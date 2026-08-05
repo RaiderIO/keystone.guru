@@ -54,6 +54,11 @@ globalThis.SearchFilterRadioDataType = require('../../common/search/filters/filt
 globalThis.SearchFilterRadioRegion = require('../../common/search/filters/filterradioregion').SearchFilterRadioRegion;
 globalThis.SearchFilterPlayerSpells = require('../../common/search/filters/filterselectplayerspells').SearchFilterPlayerSpells;
 globalThis.SearchFilterPassThrough = require('../../common/search/filters/filterpassthrough').SearchFilterPassThrough;
+const {SearchFilterKeyLevel} = require('../../common/search/filters/filterinputkeylevel');
+globalThis.SearchFilterKeyLevel = SearchFilterKeyLevel;
+// The real key level filter is kept (rather than stubbed like its siblings) because it is the one filter here that
+// claims its URL params through getParamsOverride() - which is where #3837's minMythicLevel truncation lived.
+globalThis.SearchFilterMythicLevel = require('../../common/search/filters/filterinputmythiclevel').SearchFilterMythicLevel;
 
 globalThis.SearchParams = require('../../common/search/searchparams').SearchParams;
 const {SearchInlineBase} = require('../../base/searchinlinebase');
@@ -67,7 +72,6 @@ class StubFilter extends SearchFilter {
 }
 
 for (const name of [
-    'SearchFilterMythicLevel',
     'SearchFilterItemLevel',
     'SearchFilterPlayerDeaths',
     'SearchFilterAffixes',
@@ -82,6 +86,7 @@ for (const name of [
 }
 
 for (const name of [
+    'KeyLevelHandler',
     'HeatOptionMinOpacityHandler',
     'HeatOptionMaxZoomHandler',
     'HeatOptionMaxHandler',
@@ -129,6 +134,9 @@ const BLOODLUST_SPELL_ID = 2825;
 const HEROISM_SPELL_ID = 32182;
 const TIME_WARP_SPELL_ID = 80353;
 const SPELL_IDS = [BLOODLUST_SPELL_ID, HEROISM_SPELL_ID, TIME_WARP_SPELL_ID];
+// The season's own key level bounds - #3837 is about an explicit ?minMythicLevel that happens to equal this minimum.
+const KEY_LEVEL_MIN = 2;
+const KEY_LEVEL_MAX = 99;
 
 const OPTIONS = {
     defaultState: 0,
@@ -146,6 +154,9 @@ const OPTIONS = {
     filterClassesPlayerDeathsSelector: '#filter_classes_player_deaths',
     filterSpecializationsPlayerDeathsContainerSelector: '#filter_specializations_player_deaths_container',
     filterSpecializationsPlayerDeathsSelector: '#filter_specializations_player_deaths',
+    filterKeyLevelSelector: '#filter_key_level',
+    keyLevelMin: KEY_LEVEL_MIN,
+    keyLevelMax: KEY_LEVEL_MAX,
 };
 
 /**
@@ -183,7 +194,16 @@ function buildSidebarDom() {
             <input type="radio" name="region" class="btn-check world" value="world" checked>
             <input type="radio" name="region" class="btn-check us" value="us">
         </div>
+
+        <input type="text" id="filter_key_level" value="${KEY_LEVEL_MIN};${KEY_LEVEL_MAX}">
     `;
+
+    // Stands in for the ion-range-slider instance KeyLevelHandler attaches: the filter reads the input's value and
+    // writes through the slider's update() - both of which have to keep the `min;max` string in sync.
+    const $keyLevel = $('#filter_key_level');
+    $keyLevel.data('rangeSlider', {
+        update: ({from, to}) => $keyLevel.val(`${from};${to}`),
+    });
 }
 
 /**
@@ -369,5 +389,98 @@ describe('CommonMapsHeatmapsearchsidebar - restoring filters from the URL', () =
             dataType: COMBAT_LOG_EVENT_DATA_TYPE_PLAYER_POSITION,
             region: 'world',
         });
+    });
+});
+
+// ---------------------------------------------------------------------------
+// Regression suite for #3837: an embed URL carries display-only options next to the search filters
+// (defaultZoom, showHeader, mapFacadeStyle, ...). The sidebar's initial search used to rebuild the query string
+// from its filters alone, so those options - and any filter value that happened to equal its own default -
+// were silently dropped from the address bar, and an F5 came back with a differently rendered page.
+// ---------------------------------------------------------------------------
+describe('CommonMapsHeatmapsearchsidebar - preserving embed params in the URL', () => {
+    const EMBED_PARAMS = {
+        defaultZoom: '1.4',
+        showHeader: '0',
+        showDataSourceSnackbar: '0',
+        mapFacadeStyle: 'facade',
+    };
+    const EMBED_QUERY_STRING = Object.entries(EMBED_PARAMS).map(([key, value]) => `${key}=${value}`).join('&');
+
+    beforeEach(() => {
+        searchSpy.mockClear();
+    });
+
+    test('activate_givenDisplayOnlyEmbedParams_keepsThemInTheUrl', () => {
+        // Arrange & Act
+        activateSidebar(`?type=${COMBAT_LOG_EVENT_EVENT_TYPE_NPC_DEATH}&dataType=${COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_POSITION}&region=world&${EMBED_QUERY_STRING}`);
+
+        // Assert - none of these belong to a filter, so the sidebar must leave them exactly as it found them
+        expect(writtenParams()).toEqual({
+            type: COMBAT_LOG_EVENT_EVENT_TYPE_NPC_DEATH,
+            dataType: COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_POSITION,
+            region: 'world',
+            ...EMBED_PARAMS,
+        });
+    });
+
+    test('activate_givenDisplayOnlyEmbedParams_doesNotSendThemToTheBackend', () => {
+        // Arrange & Act
+        activateSidebar(`?type=${COMBAT_LOG_EVENT_EVENT_TYPE_NPC_DEATH}&region=world&${EMBED_QUERY_STRING}`);
+
+        // Assert - they're display options for this page, the heatmap endpoint has no use for them
+        for (const key of Object.keys(EMBED_PARAMS)) {
+            expect(searchSpy.mock.calls[0][0].params).not.toHaveProperty(key);
+        }
+    });
+
+    test('changeEventType_givenDisplayOnlyEmbedParams_keepsThemInTheUrl', () => {
+        // Arrange
+        activateSidebar(`?type=${COMBAT_LOG_EVENT_EVENT_TYPE_NPC_DEATH}&region=world&${EMBED_QUERY_STRING}`);
+
+        // Act - a search after the initial restore rewrites the URL again, and must not drop them either
+        $(`input[name="event_type"].${COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_DEATH}`).prop('checked', true).trigger('change');
+
+        // Assert
+        expect(writtenParams()).toMatchObject(EMBED_PARAMS);
+    });
+
+    test('activate_givenADisabledFiltersParamInTheUrl_stillDropsIt', () => {
+        // Arrange & Act - the data type filter only applies to npc deaths
+        activateSidebar(`?type=${COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_DEATH}&dataType=${COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_POSITION}&region=world&${EMBED_QUERY_STRING}`);
+
+        // Assert - preserving unknown params must not turn into preserving params the filters do own
+        expect(writtenParams()).not.toHaveProperty('dataType');
+        expect(writtenParams()).toMatchObject(EMBED_PARAMS);
+    });
+
+    test('activate_givenAMinMythicLevelEqualToTheSeasonDefault_keepsItInTheUrl', () => {
+        // Arrange & Act
+        activateSidebar(`?type=${COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_DEATH}&region=world&minMythicLevel=${KEY_LEVEL_MIN}&maxMythicLevel=${KEY_LEVEL_MAX}`);
+
+        // Assert - an explicitly requested value must round trip even when it matches the filter's own default
+        expect(writtenParams()).toEqual({
+            type: COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_DEATH,
+            region: 'world',
+            minMythicLevel: `${KEY_LEVEL_MIN}`,
+            maxMythicLevel: `${KEY_LEVEL_MAX}`,
+        });
+    });
+
+    test('activate_givenANonDefaultMinMythicLevel_keepsItInTheUrl', () => {
+        // Arrange & Act
+        activateSidebar(`?type=${COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_DEATH}&region=world&minMythicLevel=10`);
+
+        // Assert
+        expect(writtenParams().minMythicLevel).toBe('10');
+    });
+
+    test('activate_givenNoMythicLevelParams_leavesThemOutOfTheUrl', () => {
+        // Arrange & Act
+        activateSidebar(`?type=${COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_DEATH}&region=world`);
+
+        // Assert - untouched filters stay implicit, so a plain link doesn't grow every default under the sun
+        expect(writtenParams()).not.toHaveProperty('minMythicLevel');
+        expect(writtenParams()).not.toHaveProperty('maxMythicLevel');
     });
 });
