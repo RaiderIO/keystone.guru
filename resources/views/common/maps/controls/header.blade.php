@@ -128,7 +128,7 @@ $hasMobileActions = isset($dungeonroute) || $showShare
                     @if( $mapContext instanceof MapContextLiveSession )
                             <?php $stopped = $liveSession->expires_at !== null; ?>
                         @if(!$stopped)
-                            <button id="stop_live_session" class="btn btn-danger btn-sm"
+                            <button id="stop_live_session" class="stop_live_session_trigger btn btn-danger btn-sm"
                                     data-bs-toggle="modal" data-bs-target="#stop_live_session_modal">
                                 <i class="fas fa-stop"></i> {{ __('view_common.maps.controls.header.stop') }}
                             </button>
@@ -254,7 +254,7 @@ $hasMobileActions = isset($dungeonroute) || $showShare
                             @if($mapContext instanceof MapContextLiveSession)
                                 @if($liveSession->expires_at === null)
                                     <li>
-                                        <a class="dropdown-item" href="#"
+                                        <a class="dropdown-item stop_live_session_trigger" href="#"
                                            data-bs-toggle="modal" data-bs-target="#stop_live_session_modal">
                                             <i class="fas fa-stop"></i> {{ __('view_common.maps.controls.header.stop') }}
                                         </a>
