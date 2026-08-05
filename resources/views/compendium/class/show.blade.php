@@ -123,35 +123,12 @@ use Illuminate\Support\Collection;
                 @if($counterSpells->isEmpty())
                     <p class="text-muted">{{ __('view_compendium.class.show.counters.no_spells') }}</p>
                 @else
-                    <div class="table-responsive">
-                        <table class="table table-sm table-striped">
-                            <thead>
-                            <tr>
-                                <th width="35%">{{ __('view_compendium.class.show.counters.table_header_spell') }}</th>
-                                <th width="65%">{{ __('view_compendium.class.show.counters.table_header_npcs') }}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($counterSpells as $counterSpell)
-                                <?php /** @var Spell $counterSpell */ ?>
-                                <?php $castingNpcs = $npcsBySpellId->get($counterSpell->id, collect()); ?>
-                                <tr>
-                                    <td>@include('common.spell.link', ['spell' => $counterSpell])</td>
-                                    <td>
-                                        @if($castingNpcs->isEmpty())
-                                            <span class="text-muted">{{ __('view_compendium.class.show.no_npcs') }}</span>
-                                        @else
-                                            @foreach($castingNpcs as $castingNpc)
-                                                <?php /** @var Npc $castingNpc */ ?>
-                                                @include('common.npc.link', ['npc' => $castingNpc])@if(!$loop->last), @endif
-                                            @endforeach
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                    @include('compendium.class.sections.spell_npc_table', [
+                        'tableSpells'        => $counterSpells,
+                        'tableNpcsBySpellId' => $npcsBySpellId,
+                        'tableSpellHeader'   => 'view_compendium.class.show.counters.table_header_spell',
+                        'tableNpcsHeader'    => 'view_compendium.class.show.counters.table_header_npcs',
+                    ])
                 @endif
             </div>
         @endforeach
@@ -177,35 +154,12 @@ use Illuminate\Support\Collection;
         @if($reflectSpells->isEmpty())
             <p class="text-muted">{{ __('view_compendium.class.show.reflect.no_spells') }}</p>
         @else
-            <div class="table-responsive">
-                <table class="table table-sm table-striped">
-                    <thead>
-                    <tr>
-                        <th width="35%">{{ __('view_compendium.class.show.reflect.table_header_spell') }}</th>
-                        <th width="65%">{{ __('view_compendium.class.show.reflect.table_header_npcs') }}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($reflectSpells as $reflectSpell)
-                        <?php /** @var Spell $reflectSpell */ ?>
-                        <?php $castingNpcs = $reflectNpcsBySpellId->get($reflectSpell->id, collect()); ?>
-                        <tr>
-                            <td>@include('common.spell.link', ['spell' => $reflectSpell])</td>
-                            <td>
-                                @if($castingNpcs->isEmpty())
-                                    <span class="text-muted">{{ __('view_compendium.class.show.no_npcs') }}</span>
-                                @else
-                                    @foreach($castingNpcs as $castingNpc)
-                                        <?php /** @var Npc $castingNpc */ ?>
-                                        @include('common.npc.link', ['npc' => $castingNpc])@if(!$loop->last), @endif
-                                    @endforeach
-                                @endif
-                            </td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
+            @include('compendium.class.sections.spell_npc_table', [
+                'tableSpells'        => $reflectSpells,
+                'tableNpcsBySpellId' => $reflectNpcsBySpellId,
+                'tableSpellHeader'   => 'view_compendium.class.show.reflect.table_header_spell',
+                'tableNpcsHeader'    => 'view_compendium.class.show.reflect.table_header_npcs',
+            ])
         @endif
     @endif
 @endsection

@@ -17,7 +17,9 @@ class ClassCompendiumController extends Controller
 {
     /**
      * Classes that have a spell reflect ability, mapped to the icon shown in the section header.
-     * Retail Mythic+ only has Spell Reflection (Warrior) - the Warlock's Nether Ward is PvP only.
+     * Warrior's Spell Reflection is the only one that matters in Mythic+ - the Warlock's Nether Ward
+     * is PvP only. Not scoped per game version: on a game version where the class has no reflect the
+     * section simply lists nothing, which reads the same as any other dungeon without reflect data.
      */
     private const array SPELL_REFLECT_CLASS_ICONS = [
         CharacterClass::CHARACTER_CLASS_WARRIOR => 'ability_warrior_shieldreflection',
@@ -96,6 +98,7 @@ class ClassCompendiumController extends Controller
 
             // Scoped to the context dungeon so the listed spells match the section's "for this dungeon" framing
             $spells = Spell::query()
+                ->visible()
                 ->whereRaw(sprintf('counters_mask & %d != 0', $bit))
                 ->when($mappingVersion !== null, static fn($q) => $q->where('game_version_id', $mappingVersion->game_version_id))
                 ->whereIn('id', static function ($query) use ($dungeon): void {

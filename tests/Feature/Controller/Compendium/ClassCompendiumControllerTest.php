@@ -180,19 +180,28 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         $mappingVersion     = $dungeon->getCurrentMappingVersionForGameVersion($defaultGameVersion);
         $this->assertNotNull($mappingVersion);
 
+        // Without any characteristic or spell of its own, so the NPC cannot also be listed by the CC
+        // table or a counter section and make the assertion below pass for the wrong reason
         $npc = Npc::query()
             ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
             ->where('enemies.mapping_version_id', $mappingVersion->id)
+            ->whereNotIn('npcs.id', static function ($sub): void {
+                $sub->select('npc_id')->from('npc_characteristics');
+            })
+            ->whereNotIn('npcs.id', static function ($sub): void {
+                $sub->select('npc_id')->from('npc_spells');
+            })
             ->select('npcs.*')
             ->first();
         $this->assertNotNull($npc);
 
-        // Deliberately without a characteristic, so the spell cannot also show up in the CC table
-        // above and make the assertions below pass for the wrong reason
+        // Deliberately without a characteristic or counter bit, so the spell cannot also show up in
+        // the CC table or a counter section and make the assertions below pass for the wrong reason
         $spell = Spell::query()
             ->where('game_version_id', $mappingVersion->game_version_id)
             ->where('hidden_on_map', false)
             ->whereNull('characteristic_id')
+            ->where('counters_mask', 0)
             ->whereRaw('miss_types_mask & ? = 0', [Spell::MISS_TYPE_REFLECT])
             ->first();
         $this->assertNotNull($spell);
