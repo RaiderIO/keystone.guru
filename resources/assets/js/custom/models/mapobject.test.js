@@ -9,8 +9,8 @@
 //
 // `shouldBeVisible()` is the interesting one: it is a chain of four independent
 // filters (floor, teeming, seasonal index, faction) of which only the middle two
-// sit behind the `!isMapAdmin()` guard. That asymmetry is the subject of the open
-// bug #1389 - see the last describe block.
+// sit behind the `!isMapAdmin()` guard. That asymmetry is half of the open bug
+// #1389 - see the `(#1389)` describe block for the other half.
 // ---------------------------------------------------------------------------
 
 // 1a. Seasonal type constants referenced as bare globals by shouldBeVisible().
@@ -29,37 +29,44 @@ global.Attribute = class Attribute {
 
 // 1c. A working - if small - stand-in for Signalable. MapObject registers on its own
 // signals from the constructor and emits 'shown'/'hidden' from setVisible(), so a
-// stub that swallows signals would not exercise those paths. Emitted signals are
-// also recorded on `_emittedSignals` so tests can assert on them.
+// stub that swallows signals would not exercise those paths. It mirrors the real
+// signalable.js on the parts a test can observe: listeners receive the
+// `{name, context, data}` wrapper (NOT the raw payload), and unregister() takes an
+// optional `fn` to narrow the removal. Emitted signals are additionally recorded on
+// `_emittedSignals` so tests can assert on them.
 global.Signalable = class Signalable {
     constructor() {
-        this._signals = {};
+        this._signals = [];
         this._emittedSignals = [];
         this._cleanedUp = false;
     }
 
     register(names, listener, fn) {
         for (const name of Array.isArray(names) ? names : [names]) {
-            (this._signals[name] = this._signals[name] ?? []).push({listener, fn});
+            this._signals.push({name, listener, callback: fn});
         }
     }
 
-    unregister(names, listener) {
+    unregister(names, listener, fn = null) {
         for (const name of Array.isArray(names) ? names : [names]) {
-            this._signals[name] = (this._signals[name] ?? []).filter((entry) => entry.listener !== listener);
+            this._signals = this._signals.filter((caller) => !(
+                caller.name === name && caller.listener === listener && (fn === null || caller.callback === fn)
+            ));
         }
     }
 
-    signal(name, data) {
+    signal(name, data = {}) {
         this._emittedSignals.push({event: name, data});
 
-        for (const entry of this._signals[name] ?? []) {
-            entry.fn(data);
+        for (const caller of this._signals) {
+            if (caller.name === name) {
+                caller.callback({name: name, context: this, data: data});
+            }
         }
     }
 
     _cleanupSignals() {
-        this._signals = {};
+        this._signals = [];
     }
 
     cleanup() {
@@ -194,6 +201,12 @@ describe('MapObject.shouldBeVisible - teeming filter', () => {
         expect(makeMapObject({teeming: 'visible'}).shouldBeVisible()).toBe(true);
     });
 
+    it('shows a teeming-invisible object on a non-teeming map', () => {
+        setFakeState({teeming: false});
+
+        expect(makeMapObject({teeming: 'invisible'}).shouldBeVisible()).toBe(true);
+    });
+
     it('shows an object without a teeming preference on either map', () => {
         setFakeState({teeming: true});
         expect(makeMapObject().shouldBeVisible()).toBe(true);
@@ -291,19 +304,27 @@ describe('MapObject.shouldBeVisible - faction filter', () => {
     });
 });
 
-describe('MapObject.shouldBeVisible - faction filter for map admins (#1389)', () => {
-    // The faction check sits OUTSIDE the `!isMapAdmin()` guard that the teeming and seasonal
-    // checks live in, so faction-specific enemies disappear from the admin mapping editor -
-    // exactly what #1389 reports. This test pins the current behaviour; when #1389 is fixed by
-    // moving the faction check inside that guard, this expectation flips to `true` and the
-    // duplicated coverage in the sibling tests above keeps the non-admin paths honest.
-    it('currently hides an opposing-faction object from a map admin as well', () => {
-        setFakeState({faction: 'horde', mapAdmin: true});
+describe('MapObject.shouldBeVisible - faction filter in the admin mapping editor (#1389)', () => {
+    // Two independent things combine into #1389:
+    //
+    //  1. the faction check sits OUTSIDE the `!isMapAdmin()` guard that the teeming and seasonal
+    //     checks live in, so it still runs for map admins, and
+    //  2. the admin map context does not send the faction *key* 'any' but the string
+    //     'unspecified': MapContextMappingVersion::toArray() emits
+    //     `__(strtolower(Faction 'unspecified'->name))`, and 'unspecified' is not a resolvable
+    //     translation key, so it comes through verbatim. It therefore never equals 'any', and the
+    //     `faction !== 'any'` escape hatch that spares every other map never fires.
+    //
+    // The result is that faction-specific enemies disappear from the mapping editor. These tests
+    // pin the current behaviour; fixing #1389 on either side flips the first expectation to
+    // `true`, and the sibling tests above keep the non-admin paths honest meanwhile.
+    it('currently hides a faction-specific object from the admin mapping editor', () => {
+        setFakeState({faction: 'unspecified', mapAdmin: true});
 
         expect(makeMapObject({faction: 'alliance'}).shouldBeVisible()).toBe(false);
     });
 
-    it('is unaffected for map admins on a faction-agnostic map', () => {
+    it('would show it if the admin map context sent the faction-agnostic key instead', () => {
         setFakeState({faction: 'any', mapAdmin: true});
 
         expect(makeMapObject({faction: 'alliance'}).shouldBeVisible()).toBe(true);
