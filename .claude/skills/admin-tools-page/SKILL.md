@@ -9,9 +9,9 @@ description: >
 
 # Admin tools page conventions
 
-How admin pages are wired in this project. Reference implementation: the "combat log parse failures"
-page (controller `AdminToolsCombatLogParseFailureController`, view
-`resources/views/admin/tools/combatlog/parsefailures.blade.php`).
+How admin pages are wired in this project. Reference implementation: the "combat log run data"
+page (controller `AdminToolsCombatLogRunDataController`, view
+`resources/views/admin/tools/combatlog/rundata.blade.php`).
 
 ## Routing
 
@@ -27,12 +27,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {   // admin gate
 
 - Protection is the `role:admin` middleware — no per-page policy needed.
 - Use the **first-class-callable** style, not the array style:
-  `Route::get('combatlog/parse-failures', new AdminToolsCombatLogParseFailureController()->index(...))->name('admin.tools.combatlog.parsefailures.view');`
+  `Route::get('combatlog/rundata', new AdminToolsCombatLogRunDataController()->index(...))->name('admin.tools.combatlog.rundata');`
 - Naming: `admin.tools.<group>.<action>`, with `.view` / `.submit` suffixes for GET/POST pairs.
 - Import the controller at the top of `routes/web.php` (alphabetically among the other
   `App\Http\Controllers\AdminTools\*` imports).
 - Route-model binding works for combatlog-connection models too; name the parameter to match the
-  controller argument (e.g. `{parseFailure}` → `CombatLogParseFailure $parseFailure`).
+  controller argument (e.g. `{combatLogEvent}` → `CombatLogEvent $combatLogEvent`).
 
 ## Controllers
 
@@ -51,7 +51,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {   // admin gate
   `@section('header-title', __('...'))` and `@section('content')`.
 - Two table styles:
   - **Plain Bootstrap table** — `<table class="table table-sm table-striped">` with a `@foreach`.
-    Standard for tools pages. Copy `admin/tools/combatlog/rundata.blade.php` or `parsefailures.blade.php`.
+    Standard for tools pages. Copy `admin/tools/combatlog/rundata.blade.php`.
   - **DataTables** — `<table class="tablesorter default_table ...">` initialised in
     `@section('scripts')` with `$('#id').DataTable({...})`. Used by model CRUD lists like
     `admin/expansion/list.blade.php`.

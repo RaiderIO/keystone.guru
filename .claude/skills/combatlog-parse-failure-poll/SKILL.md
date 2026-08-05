@@ -5,6 +5,14 @@ description: On-demand, human-run combat log parse-failure sweep — checks Stag
 
 # /combatlog-parse-failure-poll — Combat Log Parse-Failure Sweep
 
+> [!IMPORTANT]
+> **Superseded in part by #3821.** The parse-failure listing and resolve API endpoints, the admin
+> page and the `combat_log_parse_failures` writes were removed — the same failures are now reported
+> to Sentry as fingerprinted, tagged errors (`runId`, `seasonId`, `combatLogVersion`, `lineNumber`,
+> `exceptionClass`), which is where the cluster listing and triage state now live. **#3823 rewrites
+> this skill around that feed**; until it lands, this skill's Step 1 fetch returns a 404 and the sweep
+> cannot run. Do not follow it as written.
+
 A lightweight, **human-initiated** check — you run it (`/combatlog-parse-failure-poll`) when you're around, the same way
 someone would manually re-run `update-mdt-package`'s Step 1 to see if a new MDT release exists.
 There is no cron job, no cloud routine, no unattended execution. Its only output is GitHub issues
