@@ -12,6 +12,19 @@
     pointer-events: auto !important;
 }
 
+/**
+ * The side rails were positioned too far towards the middle of the viewport and overlapped the
+ * page content underneath them; anchor them back to the viewport edges. Reported to Playwire as
+ * well - once they fix it upstream these two rules only re-assert the intended position.
+ */
+#pw-oop-left_rail {
+    left: 0 !important;
+}
+
+#pw-oop-right_rail {
+    right: 0 !important;
+}
+
 /** Otherwise the video will be above the blank space for the bottom rail */
 .pw-corner-ad-video {
     margin-bottom: 0 !important;
