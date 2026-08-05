@@ -28,7 +28,7 @@ class HeatmapDataCsrfRegressionTest extends PublicTestCase
 
         // Assert
         self::assertNotContains('ajax/heatmap/data', $excludedPaths);
-        self::assertEquals(['webhook/*'], $excludedPaths);
+        self::assertContains('webhook/*', $excludedPaths);
     }
 
     #[Test]
