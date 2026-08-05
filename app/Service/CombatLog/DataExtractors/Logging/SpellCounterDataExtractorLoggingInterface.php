@@ -10,6 +10,8 @@ interface SpellCounterDataExtractorLoggingInterface
 
     public function extractDataDebuffExpiredNaturally(int $spellId, int $observedLifetimeMs, int $duration): void;
 
+    public function extractDataDebuffNotStrippableByCounter(int $spellId, string $property, string $dispelType): void;
+
     public function extractDataAbandonedCastWasDisturbed(string $casterGuid, int $spellId): void;
 
     public function extractDataAbandonedCastHasNoCounterInWindow(string $casterGuid, int $spellId): void;

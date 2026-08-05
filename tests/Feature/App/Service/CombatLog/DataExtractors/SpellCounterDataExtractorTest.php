@@ -17,6 +17,9 @@ use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDungeon;
 use App\Service\CombatLog\DataExtractors\Logging\SpellCounterDataExtractorLoggingInterface;
 use App\Service\CombatLog\DataExtractors\SpellCounterDataExtractor;
+use App\Service\CombatLog\DataExtractors\SpellCounters\CloakOfShadowsSpellCounterDefinition;
+use App\Service\CombatLog\DataExtractors\SpellCounters\FeignDeathSpellCounterDefinition;
+use App\Service\CombatLog\DataExtractors\SpellCounters\InvisibilitySpellCounterDefinition;
 use App\Service\CombatLog\DataExtractors\SpellCounters\ShadowmeldSpellCounterDefinition;
 use App\Service\CombatLog\DataExtractors\SpellCounters\VanishSpellCounterDefinition;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
@@ -44,7 +47,7 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
     /** @var int The first test spell id - all test spells live in [TEST_SPELL_ID_FIRST, TEST_SPELL_ID_LAST] */
     private const int TEST_SPELL_ID_FIRST = 9990001;
 
-    private const int TEST_SPELL_ID_LAST = 9990020;
+    private const int TEST_SPELL_ID_LAST = 9990040;
 
     private SpellCounterDataExtractor $extractor;
 
@@ -492,6 +495,228 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
         $this->assertNoCounterRecorded($lateRemovalSpellId);
     }
 
+    #[Test]
+    public function extractData_givenFeignDeathTrigger_setsFeignDeathCounter(): void
+    {
+        // Arrange - Feign Death drops threat exactly like Vanish, so it rides the existing signatures unchanged
+        $channelSpellId = 9990021;
+        $this->createTestSpell($channelSpellId, 6000);
+        $this->expectDetectionLoggedForSignature('B', $channelSpellId, SpellProperty::CounterFeignDeath);
+
+        // Act
+        $this->runExtract([
+            $this->npcCastSuccess(0, $channelSpellId, 'Solar Flame'),
+            $this->debuffApplied(0, $channelSpellId, 'Solar Flame', self::CREATURE_GUID),
+            $this->playerCastSuccess(1700, FeignDeathSpellCounterDefinition::SPELL_ID_FEIGN_DEATH, 'Feign Death'),
+            $this->debuffRemoved(1700, $channelSpellId, 'Solar Flame', self::CREATURE_GUID),
+        ]);
+
+        // Assert
+        $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
+        $this->assertCounterRecorded($channelSpellId, Spell::COUNTER_FEIGN_DEATH, SpellProperty::CounterFeignDeath);
+    }
+
+    #[Test]
+    public function extractData_givenAbandonedCastSupersededAfterFeignDeath_setsCounterOnAbandonedCastSpell(): void
+    {
+        // Arrange - a threat drop is what makes an NPC give up on its cast, so signature C applies to Feign Death
+        $castSpellId = 9990022;
+        $this->createTestSpell($castSpellId);
+        $this->expectDetectionLoggedForSignature('C', $castSpellId, SpellProperty::CounterFeignDeath);
+
+        // Act
+        $this->runExtract([
+            $this->npcCastStart(0, $castSpellId, 'Dread Wind'),
+            $this->playerCastSuccess(1000, FeignDeathSpellCounterDefinition::SPELL_ID_FEIGN_DEATH, 'Feign Death'),
+            $this->npcCastStart(1600, $castSpellId, 'Dread Wind'),
+        ]);
+
+        // Assert
+        $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
+        $this->assertCounterRecorded($castSpellId, Spell::COUNTER_FEIGN_DEATH, SpellProperty::CounterFeignDeath);
+    }
+
+    #[Test]
+    public function extractData_givenGreaterInvisibilityCast_setsInvisibilityCounter(): void
+    {
+        // Arrange - Greater Invisibility has no fade, so its cast is the moment threat drops
+        $channelSpellId = 9990023;
+        $this->createTestSpell($channelSpellId, 6000);
+        $this->expectDetectionLoggedForSignature('B', $channelSpellId, SpellProperty::CounterInvisibility);
+
+        // Act
+        $this->runExtract([
+            $this->npcCastSuccess(0, $channelSpellId, 'Solar Flame'),
+            $this->debuffApplied(0, $channelSpellId, 'Solar Flame', self::CREATURE_GUID),
+            $this->playerCastSuccess(1700, InvisibilitySpellCounterDefinition::SPELL_ID_GREATER_INVISIBILITY, 'Greater Invisibility'),
+            $this->debuffRemoved(1700, $channelSpellId, 'Solar Flame', self::CREATURE_GUID),
+        ]);
+
+        // Assert
+        $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
+        $this->assertCounterRecorded($channelSpellId, Spell::COUNTER_INVISIBILITY, SpellProperty::CounterInvisibility);
+    }
+
+    #[Test]
+    public function extractData_givenInvisibilityFadeAuraApplied_setsInvisibilityCounter(): void
+    {
+        // Arrange - Invisibility only drops threat when the invisible state lands 3 seconds after the cast; the
+        // buff aura, not the cast, is what has to line up with the removal
+        $channelSpellId = 9990024;
+        $this->createTestSpell($channelSpellId, 6000);
+        $this->expectDetectionLoggedForSignature('B', $channelSpellId, SpellProperty::CounterInvisibility);
+
+        // Act
+        $this->runExtract([
+            $this->npcCastSuccess(0, $channelSpellId, 'Solar Flame'),
+            $this->debuffApplied(0, $channelSpellId, 'Solar Flame', self::CREATURE_GUID),
+            $this->playerCastSuccess(1700, InvisibilitySpellCounterDefinition::SPELL_ID_INVISIBILITY_CAST, 'Invisibility'),
+            $this->playerBuffApplied(4700, InvisibilitySpellCounterDefinition::SPELL_ID_INVISIBILITY_AURA, 'Invisibility'),
+            $this->debuffRemoved(4700, $channelSpellId, 'Solar Flame', self::CREATURE_GUID),
+        ]);
+
+        // Assert
+        $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
+        $this->assertCounterRecorded($channelSpellId, Spell::COUNTER_INVISIBILITY, SpellProperty::CounterInvisibility);
+    }
+
+    #[Test]
+    public function extractData_givenDebuffRemovedAtInvisibilityCastInsteadOfItsFade_doesNotSetCounter(): void
+    {
+        // Arrange - the cast only starts the 3 second fade; nothing has happened yet, so a removal next to it is a
+        // coincidence and must not be credited to Invisibility
+        $channelSpellId = 9990025;
+        $this->createTestSpell($channelSpellId, 6000);
+
+        // Act
+        $this->runExtract([
+            $this->npcCastSuccess(0, $channelSpellId, 'Solar Flame'),
+            $this->debuffApplied(0, $channelSpellId, 'Solar Flame', self::CREATURE_GUID),
+            $this->playerCastSuccess(1700, InvisibilitySpellCounterDefinition::SPELL_ID_INVISIBILITY_CAST, 'Invisibility'),
+            $this->debuffRemoved(1700, $channelSpellId, 'Solar Flame', self::CREATURE_GUID),
+        ]);
+
+        // Assert
+        $this->assertSame(0, $this->result->toArray()['addedSpellCounters']);
+        $this->assertNoCounterRecorded($channelSpellId);
+    }
+
+    #[Test]
+    public function extractData_givenMagicDebuffStrippedAtCloakOfShadows_setsCloakOfShadowsCounter(): void
+    {
+        // Arrange - Cloak strips the magic debuff the instant its buff goes up; the fact attaches to the stripped
+        // debuff itself, which is the spell the rogue got out of
+        $debuffSpellId = 9990026;
+        $this->createTestSpell($debuffSpellId, 20000, null, 'spelldispeltype.magic');
+        $this->expectDetectionLoggedForSignature('B', $debuffSpellId, SpellProperty::CounterCloakOfShadows);
+
+        // Act
+        $this->runExtract([
+            $this->npcCastSuccess(0, $debuffSpellId, 'Curse of the Void'),
+            $this->debuffApplied(0, $debuffSpellId, 'Curse of the Void', self::CREATURE_GUID),
+            $this->playerBuffApplied(4000, CloakOfShadowsSpellCounterDefinition::SPELL_ID_CLOAK_OF_SHADOWS, 'Cloak of Shadows'),
+            $this->debuffRemoved(4000, $debuffSpellId, 'Curse of the Void', self::CREATURE_GUID),
+        ]);
+
+        // Assert
+        $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
+        $this->assertCounterRecorded($debuffSpellId, Spell::COUNTER_CLOAK_OF_SHADOWS, SpellProperty::CounterCloakOfShadows);
+    }
+
+    #[Test]
+    public function extractData_givenUnfetchedDebuffStrippedAtCloakOfShadows_setsCloakOfShadowsCounter(): void
+    {
+        // Arrange - a spell first created from a combat log carries no dispel type until its Wowhead data is
+        // fetched, and those are exactly the spells this extractor exists to discover; unresolved must not reject
+        $debuffSpellId = 9990027;
+        $this->createTestSpell($debuffSpellId, 20000, null, '');
+
+        // Act
+        $this->runExtract([
+            $this->npcCastSuccess(0, $debuffSpellId, 'Curse of the Void'),
+            $this->debuffApplied(0, $debuffSpellId, 'Curse of the Void', self::CREATURE_GUID),
+            $this->playerBuffApplied(4000, CloakOfShadowsSpellCounterDefinition::SPELL_ID_CLOAK_OF_SHADOWS, 'Cloak of Shadows'),
+            $this->debuffRemoved(4000, $debuffSpellId, 'Curse of the Void', self::CREATURE_GUID),
+        ]);
+
+        // Assert
+        $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
+        $this->assertCounterRecorded($debuffSpellId, Spell::COUNTER_CLOAK_OF_SHADOWS, SpellProperty::CounterCloakOfShadows);
+    }
+
+    #[Test]
+    public function extractData_givenPoisonDebuffRemovedAtCloakOfShadows_doesNotSetCounter(): void
+    {
+        // Arrange - 9990028 covers the counter-before-removal path, 9990029 the removal-before-counter path. Cloak
+        // provably cannot strip a poison, so either ordering is a coincidence.
+        $lateRemovalSpellId  = 9990028;
+        $earlyRemovalSpellId = 9990029;
+        $this->createTestSpell($lateRemovalSpellId, 20000, null, 'spelldispeltype.poison');
+        $this->createTestSpell($earlyRemovalSpellId, 20000, null, 'spelldispeltype.poison');
+
+        // Act
+        $this->runExtract([
+            $this->npcCastSuccess(0, $lateRemovalSpellId, 'Venom Coating'),
+            $this->debuffApplied(0, $lateRemovalSpellId, 'Venom Coating', self::CREATURE_GUID),
+            $this->playerBuffApplied(4000, CloakOfShadowsSpellCounterDefinition::SPELL_ID_CLOAK_OF_SHADOWS, 'Cloak of Shadows'),
+            $this->debuffRemoved(4020, $lateRemovalSpellId, 'Venom Coating', self::CREATURE_GUID),
+
+            $this->npcCastSuccess(10000, $earlyRemovalSpellId, 'Venom Coating'),
+            $this->debuffApplied(10000, $earlyRemovalSpellId, 'Venom Coating', self::CREATURE_GUID),
+            $this->debuffRemoved(14000, $earlyRemovalSpellId, 'Venom Coating', self::CREATURE_GUID),
+            $this->playerBuffApplied(14020, CloakOfShadowsSpellCounterDefinition::SPELL_ID_CLOAK_OF_SHADOWS, 'Cloak of Shadows'),
+        ]);
+
+        // Assert
+        $this->assertSame(0, $this->result->toArray()['addedSpellCounters']);
+        $this->assertNoCounterRecorded($lateRemovalSpellId);
+        $this->assertNoCounterRecorded($earlyRemovalSpellId);
+    }
+
+    #[Test]
+    public function extractData_givenAbandonedCastSupersededAfterCloakOfShadows_doesNotSetCounter(): void
+    {
+        // Arrange - Cloak leaves the rogue on the threat table, so it has no mechanism to make a caster give up;
+        // without this gate every abandoned cast near a Cloak would be credited to it
+        $castSpellId = 9990030;
+        $this->createTestSpell($castSpellId);
+
+        // Act
+        $this->runExtract([
+            $this->npcCastStart(0, $castSpellId, 'Dread Wind'),
+            $this->playerBuffApplied(1000, CloakOfShadowsSpellCounterDefinition::SPELL_ID_CLOAK_OF_SHADOWS, 'Cloak of Shadows'),
+            $this->npcCastStart(1600, $castSpellId, 'Dread Wind'),
+        ]);
+
+        // Assert
+        $this->assertSame(0, $this->result->toArray()['addedSpellCounters']);
+        $this->assertNoCounterRecorded($castSpellId);
+    }
+
+    #[Test]
+    public function extractData_givenCloakOfShadowsStripsSeveralDebuffsAtOnce_setsCounterOnEach(): void
+    {
+        // Arrange - unlike a threat drop, a strip clears everything magic on the rogue in the same instant
+        $firstDebuffSpellId  = 9990031;
+        $secondDebuffSpellId = 9990032;
+        $this->createTestSpell($firstDebuffSpellId, 20000, null, 'spelldispeltype.magic');
+        $this->createTestSpell($secondDebuffSpellId, 20000, null, 'spelldispeltype.magic');
+
+        // Act
+        $this->runExtract([
+            $this->debuffApplied(0, $firstDebuffSpellId, 'Curse of the Void', self::CREATURE_GUID),
+            $this->debuffApplied(0, $secondDebuffSpellId, 'Shadow Rot', self::CREATURE_GUID),
+            $this->playerBuffApplied(4000, CloakOfShadowsSpellCounterDefinition::SPELL_ID_CLOAK_OF_SHADOWS, 'Cloak of Shadows'),
+            $this->debuffRemoved(4000, $firstDebuffSpellId, 'Curse of the Void', self::CREATURE_GUID),
+            $this->debuffRemoved(4000, $secondDebuffSpellId, 'Shadow Rot', self::CREATURE_GUID),
+        ]);
+
+        // Assert
+        $this->assertSame(2, $this->result->toArray()['addedSpellCounters']);
+        $this->assertCounterRecorded($firstDebuffSpellId, Spell::COUNTER_CLOAK_OF_SHADOWS, SpellProperty::CounterCloakOfShadows);
+        $this->assertCounterRecorded($secondDebuffSpellId, Spell::COUNTER_CLOAK_OF_SHADOWS, SpellProperty::CounterCloakOfShadows);
+    }
+
     /**
      * Runs the full extract lifecycle: beforeExtract → extractData (one or more events) → afterExtract.
      *
@@ -554,13 +779,13 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
         ], 'combatlog');
     }
 
-    private function createTestSpell(int $spellId, ?int $duration = null, ?string $category = null): Spell
+    private function createTestSpell(int $spellId, ?int $duration = null, ?string $category = null, string $dispelType = 'none'): Spell
     {
         return Spell::create([
             'id'              => $spellId,
             'game_version_id' => 1,
             'category'        => $category,
-            'dispel_type'     => 'none',
+            'dispel_type'     => $dispelType,
             'icon_name'       => 'inv_misc_questionmark',
             'name'            => sprintf('Test Spell %d', $spellId),
             'schools_mask'    => 1,
@@ -628,6 +853,22 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
             $this->timestamp($offsetMs),
             $this->actorFields($sourceGuid),
             $this->actorFields($destGuid),
+            $spellId,
+            $spellName,
+        ));
+    }
+
+    /**
+     * A self-buff landing on a player - how a counter whose effect lags its cast (Invisibility) marks the moment it
+     * actually takes effect.
+     */
+    private function playerBuffApplied(int $offsetMs, int $spellId, string $spellName, string $playerGuid = self::PLAYER_GUID): BaseEvent
+    {
+        return $this->parse(sprintf(
+            '%s  SPELL_AURA_APPLIED,%s,%s,%d,"%s",0x1,BUFF',
+            $this->timestamp($offsetMs),
+            $this->actorFields($playerGuid),
+            $this->actorFields($playerGuid),
             $spellId,
             $spellName,
         ));

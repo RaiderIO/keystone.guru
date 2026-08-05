@@ -6,7 +6,7 @@ use App\Models\CharacterClass;
 use App\Models\CombatLog\SpellProperty;
 use App\Models\Spell\Spell;
 
-class VanishSpellCounterDefinition implements SpellCounterDefinitionInterface
+class VanishSpellCounterDefinition extends SpellCounterDefinition
 {
     public const int SPELL_ID_VANISH_CAST = 1856;
 
@@ -42,10 +42,5 @@ class VanishSpellCounterDefinition implements SpellCounterDefinitionInterface
     public function getCharacterClassKey(): ?string
     {
         return CharacterClass::CHARACTER_CLASS_ROGUE;
-    }
-
-    public function getCharacterRaceKey(): ?string
-    {
-        return null;
     }
 }

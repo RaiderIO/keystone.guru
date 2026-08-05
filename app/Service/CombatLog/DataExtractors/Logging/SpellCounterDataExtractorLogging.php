@@ -24,6 +24,11 @@ class SpellCounterDataExtractorLogging extends StructuredLogging implements Spel
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    public function extractDataDebuffNotStrippableByCounter(int $spellId, string $property, string $dispelType): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
     public function extractDataAbandonedCastWasDisturbed(string $casterGuid, int $spellId): void
     {
         $this->debug(__METHOD__, get_defined_vars());
