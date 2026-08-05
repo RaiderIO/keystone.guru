@@ -29,18 +29,33 @@ global.cookieDefaultAttributes = undefined;
 // 1c. Map context classes. Only their identity matters to StateManager: setMapContext() picks one
 // by `type` and isMapAdmin() answers `instanceof MapContextMappingVersionEdit`. Each records the
 // raw context it was constructed with so a test can prove the payload was handed through.
-global.MapContextDungeonRoute = class MapContextDungeonRoute {
+// The `extends` chain mirrors the real one (custom/mapcontext/*.js) exactly:
+//
+//   MapContext
+//   |- MapContextDungeonRoute -> MapContextLiveSession
+//   `- MapContextMappingVersion
+//      |- MapContextDungeonExplore -> MapContextDungeonRouteSearch
+//      `- MapContextMappingVersionEdit
+//
+// isMapAdmin() would answer identically under a flatter stub, but only this shape can tell a
+// widening to `instanceof MapContextMappingVersion` (which would wrongly admit explore/search)
+// apart from a widening to `instanceof MapContextDungeonRoute` (which would not).
+global.MapContext = class MapContext {
     constructor(mapContext) {
         this.mapContext = mapContext;
     }
 };
+global.MapContextDungeonRoute = class MapContextDungeonRoute extends global.MapContext {
+};
 global.MapContextLiveSession = class MapContextLiveSession extends global.MapContextDungeonRoute {
 };
-global.MapContextMappingVersionEdit = class MapContextMappingVersionEdit extends global.MapContextDungeonRoute {
+global.MapContextMappingVersion = class MapContextMappingVersion extends global.MapContext {
 };
-global.MapContextDungeonExplore = class MapContextDungeonExplore extends global.MapContextDungeonRoute {
+global.MapContextMappingVersionEdit = class MapContextMappingVersionEdit extends global.MapContextMappingVersion {
 };
-global.MapContextDungeonRouteSearch = class MapContextDungeonRouteSearch extends global.MapContextDungeonRoute {
+global.MapContextDungeonExplore = class MapContextDungeonExplore extends global.MapContextMappingVersion {
+};
+global.MapContextDungeonRouteSearch = class MapContextDungeonRouteSearch extends global.MapContextDungeonExplore {
 };
 
 // 1d. A cookie jar with real read-back, unlike the shared setup's write-less stub. The settings
@@ -61,6 +76,8 @@ global.c = {
         editsidebar: {
             pullGradient: {defaultHandlers: [[0, '#000000'], [100, '#ffffff']]},
         },
+        // Real value from constants.js - getKillZonePathWeight() falls back to it.
+        polyline: {killzonepath: {weight: 5}},
     },
 };
 
@@ -209,9 +226,12 @@ describe('StateManager floor state', () => {
         expect(stateManager.getCurrentFloor()).toBe(floor);
     });
 
-    test('getCurrentFloor_givenAStringFloorId_stillResolvesTheFloor', () => {
-        // Both sides are pushed through Number(): the id can arrive as a string from the DOM.
-        const floor = {id: '2'};
+    test('getCurrentFloor_givenAFloorIdFromTheDom_stillResolvesTheFloor', () => {
+        // The real asymmetry both Number() calls exist for: visibleFloors comes from
+        // MapContextBase::toArray() with integer ids, while setFloorId() is fed a STRING by the
+        // floor <select> (sidebarnavigation.js) and the map's floor switch. Model both sides as
+        // strings and the lookup would match without any coercion at all.
+        const floor = {id: 2};
         const stateManager = makeStateManager(makeFakeMapContext({visibleFloors: [floor]}));
 
         stateManager.setFloorId('2');
@@ -228,10 +248,12 @@ describe('StateManager floor state', () => {
     });
 
     test('getCurrentFloor_givenTheContextChangedAfterTheFirstCall_keepsTheStaleFloorList', () => {
-        // The visible-floor lookup is built once and never invalidated - not even by
-        // setMapContext() or setFloorId(). Pinned deliberately: anything that swaps the map
-        // context on a live StateManager (a facade style change rebuilding the map) has to
-        // account for this, and today only a fresh StateManager clears it.
+        // The visible-floor lookup is built once and never invalidated - not by setMapContext(),
+        // not by setFloorId(). Nothing swaps _mapContext on a live StateManager today:
+        // setMapContext() has exactly one caller (statemanager.blade.php, once per page load) and
+        // the facade toggle reloads the page rather than rebuilding in place. So this is latent,
+        // not live - pinned so that whoever introduces the first in-page context swap finds out
+        // here rather than through floors silently resolving against the old list.
         const stateManager = makeStateManager(makeFakeMapContext({visibleFloors: [{id: 1}]}));
         stateManager.setFloorId(1);
         expect(stateManager.getCurrentFloor()).toEqual({id: 1});
@@ -347,6 +369,36 @@ describe('StateManager cookie-backed display settings', () => {
 
     test('getMapNumberStyle_givenNoStoredValue_defaultsToPercentage', () => {
         expect(makeStateManager().getMapNumberStyle()).toBe(NUMBER_STYLE_PERCENTAGE);
+    });
+
+    test('getKillZonePathWeight_givenNoStoredValue_fallsBackToTheDefaultWeight', () => {
+        // parseInt(undefined) is NaN; returning that would draw invisible lines. The cookie really
+        // can be missing - cookie-less headless renders reject the secure cookie.
+        expect(makeStateManager().getKillZonePathWeight()).toBe(c.map.polyline.killzonepath.weight);
+    });
+
+    test('setKillZonePathWeight_givenAWeight_storesItAndNotifies', () => {
+        const stateManager = makeStateManager();
+        const received = listenFor(stateManager, 'killzonepathweight:changed');
+
+        stateManager.setKillZonePathWeight(9);
+
+        expect(stateManager.getKillZonePathWeight()).toBe(9);
+        expect(received[0].data).toEqual({weight: 9});
+    });
+
+    test('getMapZoomSpeed_givenAStoredValue_parsesItBackToANumber', () => {
+        const stateManager = makeStateManager();
+
+        stateManager.setMapZoomSpeed(3);
+
+        expect(stateManager.getMapZoomSpeed()).toBe(3);
+    });
+
+    test('getMapZoomSpeed_givenNoStoredValue_returnsNaN', () => {
+        // Unlike getKillZonePathWeight() this one has no isNaN() guard, so a missing cookie yields
+        // NaN rather than a usable default. Pinned as the current behaviour, not endorsed.
+        expect(makeStateManager().getMapZoomSpeed()).toBeNaN();
     });
 });
 
