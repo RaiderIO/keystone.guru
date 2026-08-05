@@ -404,7 +404,7 @@ readonly class CombatLogService implements CombatLogServiceInterface
             // A dropped Redis/Valkey connection is a transient infrastructure failure, not a malformed
             // combat log line - the line the reader happened to be on when it hit is not the cause. Let it
             // propagate unwrapped so the caller's retry logic (queue tries/backoff) applies instead of it
-            // being recorded as a permanent CombatLogParseFailure.
+            // being reported as a permanent parse failure.
             throw $exception;
         } catch (Exception $exception) {
             $this->log->parseCombatLogParseEventsException(sprintf('%d: %s', $lineNr, $rawEvent), $exception);

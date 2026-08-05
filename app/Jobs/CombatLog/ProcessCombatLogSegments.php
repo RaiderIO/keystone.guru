@@ -4,7 +4,6 @@ namespace App\Jobs\CombatLog;
 
 use App\Jobs\Logging\ProcessCombatLogSegmentsLoggingInterface;
 use App\Models\Season;
-use App\Repositories\Interfaces\CombatLog\CombatLogParseFailureRepositoryInterface;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
 use App\Service\CombatLog\Dtos\CombatLogRunContextInterface;
 use App\Service\CombatLog\Exceptions\CombatLogParseException;
@@ -55,7 +54,6 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
     public function handle(
         RaiderIOApiServiceInterface              $raiderIOApiService,
         CombatLogDataExtractionServiceInterface  $extractionService,
-        CombatLogParseFailureRepositoryInterface $parseFailureRepository,
         ProcessCombatLogSegmentsLoggingInterface $log,
     ): void {
         $log->handleStart($this->runId, $this->combatLogVersion);
@@ -112,7 +110,7 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
 
             $result = true;
         } catch (RuntimeException $e) {
-            // Re-throw so the job is retried instead of recording a permanent CombatLogParseFailure: this
+            // Re-throw so the job is retried instead of being reported as a permanent parse failure: this
             // covers download failures (fresh one-time URLs on retry) as well as RedisException, which
             // extends RuntimeException and is rethrown unwrapped by CombatLogService::parseCombatLog() for
             // the same reason - a dropped Redis/Valkey connection mid-parse is a transient infra blip, not
@@ -120,8 +118,7 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
             throw $e;
         } catch (Throwable $e) {
             // CombatLogParseException only wraps the real failure, so the class worth grouping and reporting on is
-            // the one it wrapped. Resolved once here because the log line used to report the wrapper while the
-            // recorded failure reported the cause, which made the two impossible to correlate.
+            // the one it wrapped.
             $exceptionClass = $e instanceof CombatLogParseException ? $e->getOriginalExceptionClass() : $e::class;
             $lineNumber     = $e instanceof CombatLogParseException ? $e->lineNumber : null;
             $rawLine        = $e instanceof CombatLogParseException ? $e->rawLine : null;
@@ -134,16 +131,6 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
                 $exceptionClass,
                 $e->getMessage(),
                 $rawLine,
-            );
-
-            $parseFailureRepository->recordFailure(
-                $this->runId,
-                $this->season->id,
-                $this->combatLogVersion,
-                $lineNumber,
-                $rawLine,
-                $e->getMessage(),
-                $exceptionClass,
             );
         } finally {
             foreach ($tempFiles as $tempFile) {

@@ -5,7 +5,6 @@ namespace Tests\Feature\Jobs\CombatLog;
 use App\Jobs\CombatLog\ProcessCombatLogSegments;
 use App\Jobs\Logging\ProcessCombatLogSegmentsLoggingInterface;
 use App\Models\Season;
-use App\Repositories\Interfaces\CombatLog\CombatLogParseFailureRepositoryInterface;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
 use App\Service\CombatLog\Dtos\CombatLogRunContext;
 use App\Service\CombatLog\Exceptions\CombatLogParseException;
@@ -142,7 +141,7 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
      * @throws Exception
      */
     #[Test]
-    public function handle_givenParseException_recordsParseFailureWithLineInfo(): void
+    public function handle_givenParseException_reportsParseErrorWithLineInfo(): void
     {
         // Arrange
         $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
@@ -164,25 +163,11 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
         $extractionService->method('extractData')->willThrowException($parseException);
         app()->instance(CombatLogDataExtractionServiceInterface::class, $extractionService);
 
-        // The parse error is swallowed and persisted (not re-thrown), so the run is not retried.
-        $parseFailureRepository = $this->createMockPublic(CombatLogParseFailureRepositoryInterface::class);
-        $parseFailureRepository->expects($this->once())
-            ->method('recordFailure')
-            ->with(
-                self::RUN_ID,
-                $this->isNull(),
-                self::COMBAT_LOG_VERSION,
-                257080,
-                'SPELL_DAMAGE,Player-1084-0B4087DE,"Pa',
-                'Unbalanced quotes in string SPELL_DAMAGE,Player-1084-0B4087DE,"Pa',
-                InvalidArgumentException::class,
-            );
-        app()->instance(CombatLogParseFailureRepositoryInterface::class, $parseFailureRepository);
-
+        // The parse error is swallowed and only reported (not re-thrown), so the run is not retried.
         $log = $this->createMockPublic(ProcessCombatLogSegmentsLoggingInterface::class);
-        // Asserted in full, and deliberately mirroring the recordFailure expectation above: the log line used to
-        // report the CombatLogParseException wrapper while the recorded failure reported the cause, so the two could
-        // never be correlated. Both must now name InvalidArgumentException.
+        // Asserted in full: this log line is now the only record of the failure, and it must name the cause
+        // (InvalidArgumentException) rather than the CombatLogParseException wrapper - the error tracker
+        // fingerprints and tags on exactly these values.
         $log->expects($this->once())
             ->method('handleParseError')
             ->with(
@@ -320,7 +305,7 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
      */
     #[Test]
     #[DataProvider('implausibleSegmentBodyProvider')]
-    public function handle_givenSegmentIsNotACombatLog_throwsRuntimeExceptionInsteadOfRecordingParseFailure(
+    public function handle_givenSegmentIsNotACombatLog_throwsRuntimeExceptionInsteadOfReportingParseError(
         string $body,
     ): void {
         // Arrange — a bad download that still arrives with a 2xx status, so the download itself "succeeds".
@@ -336,11 +321,7 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
         $extractionService->expects($this->never())->method('extractData');
         app()->instance(CombatLogDataExtractionServiceInterface::class, $extractionService);
 
-        // The download is retryable, so it must not leave behind a parse failure blaming the parser.
-        $parseFailureRepository = $this->createMockPublic(CombatLogParseFailureRepositoryInterface::class);
-        $parseFailureRepository->expects($this->never())->method('recordFailure');
-        app()->instance(CombatLogParseFailureRepositoryInterface::class, $parseFailureRepository);
-
+        // The download is retryable, so it must not be reported as a parse failure blaming the parser.
         $log = $this->createMockPublic(ProcessCombatLogSegmentsLoggingInterface::class);
         $log->expects($this->once())->method('handleSegmentIsNotACombatLog');
         $log->expects($this->never())->method('handleParseError');
@@ -368,10 +349,10 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
      * @throws Exception
      */
     #[Test]
-    public function handle_givenRedisExceptionDuringExtraction_throwsForRetryInsteadOfRecordingParseFailure(): void
+    public function handle_givenRedisExceptionDuringExtraction_throwsForRetryInsteadOfReportingParseError(): void
     {
         // Arrange — a dropped Redis/Valkey connection mid-parse (#3791) is a transient infra failure, not an
-        // unparsable line: it must be retried by the queue rather than permanently recorded as a parse failure.
+        // unparsable line: it must be retried by the queue rather than reported as a permanent parse failure.
         $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
         $raiderIOApiService->method('getCombatLogSegmentsForRun')
             ->willReturn(new CombatLogSegmentsResponse(
@@ -384,10 +365,6 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
         $extractionService->method('extractData')
             ->willThrowException(new RedisException('read error on connection to tcp://ksg-valkey:6379'));
         app()->instance(CombatLogDataExtractionServiceInterface::class, $extractionService);
-
-        $parseFailureRepository = $this->createMockPublic(CombatLogParseFailureRepositoryInterface::class);
-        $parseFailureRepository->expects($this->never())->method('recordFailure');
-        app()->instance(CombatLogParseFailureRepositoryInterface::class, $parseFailureRepository);
 
         $log = $this->createMockPublic(ProcessCombatLogSegmentsLoggingInterface::class);
         $log->expects($this->never())->method('handleParseError');

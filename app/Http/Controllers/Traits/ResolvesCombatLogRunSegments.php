@@ -2,33 +2,26 @@
 
 namespace App\Http\Controllers\Traits;
 
-use App\Models\CombatLog\CombatLogParseFailure;
+use App\Models\Season;
 use App\Service\RaiderIO\Dtos\CombatLogSegment;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use Illuminate\Http\JsonResponse;
 
-trait ResolvesCombatLogParseFailureSegments
+trait ResolvesCombatLogRunSegments
 {
     /**
-     * Looks up the Raider.IO log segment download URLs for a parse failure's run.
+     * Looks up the Raider.IO log segment download URLs for a run.
      */
-    public function resolveCombatLogParseFailureSegments(
+    public function resolveCombatLogRunSegments(
         RaiderIOApiServiceInterface $raiderIOApiService,
-        CombatLogParseFailure       $parseFailure,
+        Season                      $season,
+        int                         $runId,
     ): JsonResponse {
-        $season = $parseFailure->season();
-
-        if ($season === null) {
-            return response()->json([
-                'error' => __('controller.admintools.error.combatlog_parse_failure_no_season'),
-            ], 422);
-        }
-
-        $segmentsResponse = $raiderIOApiService->getCombatLogSegmentsForRun($season, $parseFailure->run_id);
+        $segmentsResponse = $raiderIOApiService->getCombatLogSegmentsForRun($season, $runId);
 
         if ($segmentsResponse === null || empty($segmentsResponse->segments)) {
             return response()->json([
-                'error' => __('controller.admintools.error.combatlog_parse_failure_no_segments'),
+                'error' => __('controller.apicombatlogrun.error.no_segments'),
             ], 404);
         }
 
