@@ -38,9 +38,16 @@ global.KillZone = class KillZone {
         this.id = id;
     }
 };
-global.MapContextDungeonRoute = class MapContextDungeonRoute {
+// The real chain is MapContextMappingVersionEdit -> MapContextMappingVersion -> MapContext, with
+// MapContextDungeonRoute a SIBLING branch off MapContext - the mapping editor's context is not a
+// dungeon route context. Enemy#getVisualData() branches on exactly that distinction.
+global.MapContext = class MapContext {
 };
-global.MapContextMappingVersionEdit = class MapContextMappingVersionEdit extends global.MapContextDungeonRoute {
+global.MapContextDungeonRoute = class MapContextDungeonRoute extends global.MapContext {
+};
+global.MapContextMappingVersion = class MapContextMappingVersion extends global.MapContext {
+};
+global.MapContextMappingVersionEdit = class MapContextMappingVersionEdit extends global.MapContextMappingVersion {
 };
 
 // 1d. Constants referenced as bare globals, with their real values from constants.js.
@@ -67,7 +74,8 @@ global.NPC_TYPE_CRITTER = 3;
 global.NPC_ID_NATHREZIM_INFILTRATOR = 189878;
 global.NPC_ID_ZUL_GAMUX = 190128;
 // Awakened/Prideful NPC ids are hardcoded in enemy.js itself, mirrored here for readability.
-const NPC_ID_AWAKENED_OBELISK = 161124;
+const NPC_IDS_AWAKENED = [161124, 161241, 161244, 161243];
+const NPC_ID_AWAKENED_OBELISK = NPC_IDS_AWAKENED[0];
 const NPC_ID_PRIDEFUL = 173729;
 
 // 1e. Lightweight base class standing in for VersionableMapObject -> MapObject, providing only
@@ -106,12 +114,28 @@ global.VersionableMapObject = class VersionableMapObject {
         return true;
     }
 
+    // Mirrors MapObject#_assignPopup, guard included: it only binds on an editable map object of an
+    // editable map. Enemy#isEditable() returns false, so a plain enemy never gets a popup bound -
+    // dropping that guard here would let a test assert a bind production never performs.
     _assignPopup(layer = null) {
         const targetLayer = layer === null ? this.layer : layer;
 
         if (targetLayer !== null) {
-            targetLayer.bindPopup('<div>popup</div>', {});
+            targetLayer.off('popupopen');
+            targetLayer.unbindPopup();
+
+            if (this.map.options.edit && this.isEditable() && this.isEditableByPopup()) {
+                targetLayer.bindPopup('<div>popup</div>', {});
+            }
         }
+    }
+
+    isEditable() {
+        return true;
+    }
+
+    isEditableByPopup() {
+        return true;
     }
 
     unbindTooltip() {
@@ -170,8 +194,12 @@ function setFakeState({
         unregister: () => {
         },
         getAuras: () => [],
-        getTeeming: () => teeming,
-        hasAffix: (affix) => affixes.includes(affix),
+        // MapContextMappingVersion hard-codes both of these ("when mapping a dungeon assume we have
+        // all affixes so things show up properly"), so the editor cannot be short an affix or
+        // non-teeming. Honouring that here keeps the caller's affixes/teeming from describing a
+        // state the editor can never be in.
+        getTeeming: () => mappingEditor || teeming,
+        hasAffix: (affix) => mappingEditor || affixes.includes(affix),
         getEnemyForcesShrouded: () => enemyForcesShrouded,
         getEnemyForcesShroudedZulGamux: () => enemyForcesShroudedZulGamux,
         getDungeonDifficulty: () => dungeonDifficulty,
@@ -232,18 +260,19 @@ function makeFakeLayer() {
  * @param {Object} options.killZonesById Kill zones resolvable by id.
  * @returns {Object}
  */
-function makeFakeMap({mapState = null, enemyForcesRequired = 100, killZonesById = {}} = {}) {
+function makeFakeMap({mapState = null, edit = false, enemyForcesRequired = 100, killZonesById = {}} = {}) {
     const listeners = {};
+    let currentMapState = mapState;
 
     return {
-        options: {edit: false},
+        options: {edit},
         listeners,
         register(name, listener, fn) {
             (listeners[name] = listeners[name] ?? []).push(fn);
         },
         unregister() {
         },
-        getMapState: () => mapState,
+        getMapState: () => currentMapState,
         enemyForcesManager: {
             getEnemyForcesRequired: () => enemyForcesRequired,
         },
@@ -253,14 +282,22 @@ function makeFakeMap({mapState = null, enemyForcesRequired = 100, killZonesById 
             }),
         },
         /**
-         * Fires a registered map event, mirroring how Signalable delivers it.
+         * Switches the map state and notifies listeners, mirroring DungeonMap#setMapState(): the
+         * new state is in place BEFORE the event is delivered, so a listener that calls back into
+         * getMapState() sees the same world the signal describes.
          *
-         * @param {String} name
-         * @param {Object} data
+         * @param {MapState|null} newMapState
          */
-        fire(name, data) {
-            for (const fn of listeners[name] ?? []) {
-                fn({name, context: this, data});
+        setMapState(newMapState) {
+            const previousMapState = currentMapState;
+            currentMapState = newMapState;
+
+            for (const fn of listeners['map:mapstatechanged'] ?? []) {
+                fn({
+                    name: 'map:mapstatechanged',
+                    context: this,
+                    data: {newMapState, previousMapState},
+                });
             }
         },
     };
@@ -269,10 +306,11 @@ function makeFakeMap({mapState = null, enemyForcesRequired = 100, killZonesById 
 /**
  * Builds an Enemy with a fake map and layer, with any per-instance properties applied on top.
  *
- * The two overrides are applied as defaults because in production they are installed by
- * MapObject#_setDefaults() from Enemy's own Attribute list (`default: null`). The base class here
- * is a stub that does not run that pass, and `undefined !== null` would take the override branch
- * in getEnemyForces() - so the fake would be *less* forgiving than the real class, not more.
+ * The two overrides are seeded to null because that is what a *loaded* enemy has: neither Attribute
+ * declares a `default:` (so MapObject#_setDefaults() skips them both), and they only become null
+ * when loadRemoteMapObject() assigns them from the server payload. Without the seeding these would
+ * be `undefined` here, and `undefined !== null` takes the override branch in getEnemyForces() -
+ * which is also exactly what a client-constructed, never-loaded enemy would hit in the browser.
  *
  * @param {Object} properties
  * @param {Object|null} map
@@ -395,6 +433,26 @@ describe('Enemy.getEnemyForces', () => {
         }).getEnemyForces()).toBe(90);
     });
 
+    test('getEnemyForces_givenATeemingMapAndOnlyAPlainOverride_ignoresThatOverride', () => {
+        // The teeming branch and the plain-override branch are alternatives in one else-if chain,
+        // so on a teeming map a plain override never applies - the mirror of the test above.
+        setFakeState({teeming: true});
+
+        expect(makeEnemy({
+            npc: makeNpc({enemyForces: 12, enemyForcesTeeming: 8}),
+            enemy_forces_override: 5,
+        }).getEnemyForces()).toBe(8);
+    });
+
+    test('getEnemyForces_givenAZulGamuxEnemyWithoutTheAffix_returnsTheRegularNpcForces', () => {
+        setFakeState({affixes: [], enemyForcesShroudedZulGamux: 90});
+
+        expect(makeEnemy({
+            npc: makeNpc({enemyForces: 12}),
+            seasonal_type: ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX,
+        }).getEnemyForces()).toBe(12);
+    });
+
     test('getEnemyForces_givenAShroudedEnemyWithoutTheAffix_returnsTheRegularNpcForces', () => {
         // isShrouded() also requires the affix to be active, so without it the enemy is worth
         // whatever its npc is worth.
@@ -499,17 +557,26 @@ describe('Enemy.shouldBeIgnored - seasonal types', () => {
         ['awakened', ENEMY_SEASONAL_TYPE_AWAKENED, AFFIX_AWAKENED],
         ['tormented', ENEMY_SEASONAL_TYPE_TORMENTED, AFFIX_TORMENTED],
         ['encrypted', ENEMY_SEASONAL_TYPE_ENCRYPTED, AFFIX_ENCRYPTED],
-    ])('shouldBeIgnored_given%sEnemyWithoutItsAffix_returnsTrue', (label, seasonalType, affix) => {
+    ])('shouldBeIgnored_given%sEnemyWithoutItsAffix_returnsTrue', (label, seasonalType) => {
         setFakeState({affixes: []});
-        expect(makeEnemy({seasonal_type: seasonalType}).shouldBeIgnored()).toBe(true);
 
+        expect(makeEnemy({seasonal_type: seasonalType}).shouldBeIgnored()).toBe(true);
+    });
+
+    test.each([
+        ['beguiling', ENEMY_SEASONAL_TYPE_BEGUILING, AFFIX_BEGUILING],
+        ['awakened', ENEMY_SEASONAL_TYPE_AWAKENED, AFFIX_AWAKENED],
+        ['tormented', ENEMY_SEASONAL_TYPE_TORMENTED, AFFIX_TORMENTED],
+        ['encrypted', ENEMY_SEASONAL_TYPE_ENCRYPTED, AFFIX_ENCRYPTED],
+    ])('shouldBeIgnored_given%sEnemyWithItsAffix_returnsFalse', (label, seasonalType, affix) => {
         setFakeState({affixes: [affix]});
+
         expect(makeEnemy({seasonal_type: seasonalType}).shouldBeIgnored()).toBe(false);
     });
 
     test('shouldBeIgnored_givenAnMdtPlaceholder_returnsTrue', () => {
         // Placeholders only exist to suppress import warnings, so no affix ever brings them back.
-        setFakeState({affixes: [AFFIX_SHROUDED, AFFIX_AWAKENED]});
+        setFakeState({affixes: [AFFIX_SHROUDED]});
 
         expect(makeEnemy({seasonal_type: ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER}).shouldBeIgnored()).toBe(true);
     });
@@ -527,16 +594,33 @@ describe('Enemy.shouldBeIgnored - seasonal types', () => {
         expect(makeEnemy({seasonal_type: ENEMY_SEASONAL_TYPE_NO_SHROUDED}).shouldBeIgnored()).toBe(false);
     });
 
-    test.each([
-        ['the Nathrezim Infiltrator', NPC_ID_NATHREZIM_INFILTRATOR],
-        ["Zul'Gamux", NPC_ID_ZUL_GAMUX],
-    ])('shouldBeIgnored_given%sWithoutTheShroudedAffix_returnsTrue', (label, npcId) => {
+    test('shouldBeIgnored_givenTheNathrezimInfiltratorWithoutTheShroudedAffix_returnsTrue', () => {
+        // Arrange: every seeded npc 189878 row carries seasonal_type 'shrouded'
         setFakeState({affixes: []});
-
-        expect(makeEnemy({
+        const enemy = makeEnemy({
             seasonal_type: ENEMY_SEASONAL_TYPE_SHROUDED,
-            npc: makeNpc({id: npcId}),
-        }).shouldBeIgnored()).toBe(true);
+            npc: makeNpc({id: NPC_ID_NATHREZIM_INFILTRATOR}),
+        });
+
+        // Act + Assert
+        expect(enemy.shouldBeIgnored()).toBe(true);
+    });
+
+    test("shouldBeIgnored_givenZulGamuxAsSeededWithoutTheShroudedAffix_returnsFalse", () => {
+        // Arrange: the special case at the bottom of shouldBeIgnored() names NPC_ID_ZUL_GAMUX, but
+        // it is gated on seasonal_type === 'shrouded' - and every seeded npc 190128 row carries
+        // 'shrouded_zul_gamux' instead, so the branch is unreachable for it. Pinned as-is: a real
+        // Zul'Gamux stays visible without the affix (and isShroudedZulGamux() is false, so
+        // getEnemyForces() falls back to its npc value). Flagged on the MR rather than "fixed"
+        // here, since which half is wrong is a mapping question.
+        setFakeState({affixes: []});
+        const enemy = makeEnemy({
+            seasonal_type: ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX,
+            npc: makeNpc({id: NPC_ID_ZUL_GAMUX}),
+        });
+
+        // Act + Assert
+        expect(enemy.shouldBeIgnored()).toBe(false);
     });
 
     test('shouldBeIgnored_givenTheNathrezimInfiltratorWithTheShroudedAffix_returnsFalse', () => {
@@ -590,6 +674,17 @@ describe('Enemy.shouldBeIgnored - dungeon difficulty and critters', () => {
         setFakeState();
 
         expect(makeEnemy({npc: makeNpc({npcTypeId: NPC_TYPE_CRITTER})}).shouldBeIgnored()).toBe(true);
+    });
+
+    test('shouldBeIgnored_givenACritterWithAMatchingDungeonDifficulty_returnsFalse', () => {
+        // The dungeon difficulty branch returns outright, so it shadows the critter check below it:
+        // a critter that carries a matching difficulty is never filtered out as a critter.
+        setFakeState({dungeonDifficulty: 2});
+
+        expect(makeEnemy({
+            dungeon_difficulty: 2,
+            npc: makeNpc({npcTypeId: NPC_TYPE_CRITTER}),
+        }).shouldBeIgnored()).toBe(false);
     });
 
     test('shouldBeIgnored_givenACritterInTheMappingEditor_returnsFalse', () => {
@@ -782,61 +877,75 @@ describe('Enemy obsolete state', () => {
 });
 
 describe('Enemy popup state transitions', () => {
-    test('setPopupEnabled_givenAMapStateBecomingActive_unbindsThePopup', () => {
-        setFakeState();
-        const map = makeFakeMap();
+    // These cover the constructor's `map:mapstatechanged` wiring - which enemy.test.js does not
+    // touch, testing _assignPopup() directly instead. An editable enemy on an editable map is what
+    // it takes to reach a bind at all: MapObject#_assignPopup() only binds when the map is
+    // editable and the object says it is (Enemy#isEditable() returns false; AdminEnemy overrides).
+    /**
+     * @returns {{enemy: Enemy, map: Object, layer: Object}}
+     */
+    function makeEditableEnemyOnEditMap() {
+        const map = makeFakeMap({edit: true});
         const layer = makeFakeLayer();
         const enemy = makeEnemy({layer}, map);
+        enemy.isEditable = () => true;
 
-        map.fire('map:mapstatechanged', {newMapState: new EnemySelection()});
+        return {enemy, map, layer};
+    }
 
+    test('setPopupEnabled_givenAMapStateBecomingActive_unbindsThePopup', () => {
+        // Arrange
+        setFakeState();
+        const {enemy, map, layer} = makeEditableEnemyOnEditMap();
+
+        // Act
+        map.setMapState(new EnemySelection());
+
+        // Assert
         expect(enemy.isPopupEnabled).toBe(false);
         expect(layer.popupUnbindCount).toBe(1);
+        expect(layer.popupBindCount).toBe(0);
     });
 
     test('setPopupEnabled_givenAMapStateEnding_bindsThePopupAgain', () => {
+        // Arrange
         setFakeState();
-        const map = makeFakeMap();
-        const layer = makeFakeLayer();
-        const enemy = makeEnemy({layer}, map);
-        map.fire('map:mapstatechanged', {newMapState: new EnemySelection()});
+        const {enemy, map, layer} = makeEditableEnemyOnEditMap();
+        map.setMapState(new EnemySelection());
 
-        map.fire('map:mapstatechanged', {newMapState: null});
+        // Act
+        map.setMapState(null);
 
+        // Assert
         expect(enemy.isPopupEnabled).toBe(true);
         expect(layer.popupBindCount).toBe(1);
     });
 
-    test('setPopupEnabled_givenDisableTwice_unbindsBothTimes', () => {
-        // Disabling is deliberately not guarded on isPopupEnabled: save()/setSynced() bind popups
-        // straight through _assignPopup() without ever touching the flag.
+    test('setPopupEnabled_givenANonEditableEnemy_neverBindsAPopup', () => {
+        // Arrange: a plain enemy on a route map - Enemy#isEditable() is false
         setFakeState();
+        const map = makeFakeMap({edit: true});
         const layer = makeFakeLayer();
-        const enemy = makeEnemy({layer});
+        const enemy = makeEnemy({layer}, map);
 
-        enemy.setPopupEnabled(false);
-        enemy.setPopupEnabled(false);
+        // Act
+        map.setMapState(new EnemySelection());
+        map.setMapState(null);
 
-        expect(layer.popupUnbindCount).toBe(2);
-    });
-
-    test('setPopupEnabled_givenEnableTwice_onlyBindsOnce', () => {
-        setFakeState();
-        const layer = makeFakeLayer();
-        const enemy = makeEnemy({layer});
-
-        enemy.setPopupEnabled(true);
-        enemy.setPopupEnabled(true);
-
-        expect(layer.popupBindCount).toBe(1);
+        // Assert
+        expect(enemy.isPopupEnabled).toBe(true);
+        expect(layer.popupBindCount).toBe(0);
     });
 
     test('setPopupEnabled_givenNoLayer_stillRecordsTheFlag', () => {
+        // Arrange
         setFakeState();
         const enemy = makeEnemy({layer: null});
 
+        // Act
         enemy.setPopupEnabled(true);
 
+        // Assert
         expect(enemy.isPopupEnabled).toBe(true);
     });
 });
@@ -846,15 +955,35 @@ describe('Enemy NPC classification', () => {
         setFakeState();
 
         expect(makeEnemy({npc: makeNpc({classificationId: NPC_CLASSIFICATION_ID_RARE})}).isRareNpc()).toBe(true);
+    });
+
+    test('isRareNpc_givenAnotherClassification_returnsFalse', () => {
+        setFakeState();
+
         expect(makeEnemy({npc: makeNpc({classificationId: NPC_CLASSIFICATION_ID_BOSS})}).isRareNpc()).toBe(false);
+    });
+
+    test('isRareNpc_givenNoNpc_returnsFalse', () => {
+        setFakeState();
+
         expect(makeEnemy({npc: null}).isRareNpc()).toBe(false);
     });
 
-    test('isBossNpc_givenABossOrHigherClassification_returnsTrue', () => {
+    test('isBossNpc_givenABossClassification_returnsTrue', () => {
         setFakeState();
 
         expect(makeEnemy({npc: makeNpc({classificationId: NPC_CLASSIFICATION_ID_BOSS})}).isBossNpc()).toBe(true);
+    });
+
+    test('isBossNpc_givenALowerClassification_returnsFalse', () => {
+        setFakeState();
+
         expect(makeEnemy({npc: makeNpc({classificationId: 2})}).isBossNpc()).toBe(false);
+    });
+
+    test('isBossNpc_givenNoNpc_returnsFalse', () => {
+        setFakeState();
+
         expect(makeEnemy({npc: null}).isBossNpc()).toBe(false);
     });
 
@@ -866,10 +995,15 @@ describe('Enemy NPC classification', () => {
         expect(makeEnemy({npc: makeNpc({classificationId: NPC_CLASSIFICATION_ID_RARE})}).isBossNpc()).toBe(true);
     });
 
-    test('isAwakenedNpc_givenAnAwakenedObelisk_returnsTrue', () => {
+    test.each(NPC_IDS_AWAKENED)('isAwakenedNpc_givenAwakenedNpc%i_returnsTrue', (npcId) => {
         setFakeState();
 
-        expect(makeEnemy({npc: makeNpc({id: NPC_ID_AWAKENED_OBELISK})}).isAwakenedNpc()).toBe(true);
+        expect(makeEnemy({npc: makeNpc({id: npcId})}).isAwakenedNpc()).toBe(true);
+    });
+
+    test('isAwakenedNpc_givenAnotherNpc_returnsFalse', () => {
+        setFakeState();
+
         expect(makeEnemy({npc: makeNpc({id: 1})}).isAwakenedNpc()).toBe(false);
     });
 
@@ -877,14 +1011,23 @@ describe('Enemy NPC classification', () => {
         setFakeState();
 
         expect(makeEnemy({npc: makeNpc({id: NPC_ID_PRIDEFUL})}).isPridefulNpc()).toBe(true);
+    });
+
+    test('isPridefulNpc_givenAnotherNpc_returnsFalse', () => {
+        setFakeState();
+
         expect(makeEnemy({npc: makeNpc({id: 1})}).isPridefulNpc()).toBe(false);
     });
 
     test('isInspiring_givenAnInspiringEnemyWithTheAffix_returnsTrue', () => {
         setFakeState({affixes: [AFFIX_INSPIRING]});
-        expect(makeEnemy({seasonal_type: ENEMY_SEASONAL_TYPE_INSPIRING}).isInspiring()).toBe(true);
 
+        expect(makeEnemy({seasonal_type: ENEMY_SEASONAL_TYPE_INSPIRING}).isInspiring()).toBe(true);
+    });
+
+    test('isInspiring_givenAnInspiringEnemyWithoutTheAffix_returnsFalse', () => {
         setFakeState({affixes: []});
+
         expect(makeEnemy({seasonal_type: ENEMY_SEASONAL_TYPE_INSPIRING}).isInspiring()).toBe(false);
     });
 
@@ -912,11 +1055,15 @@ describe('Enemy NPC classification', () => {
         expect(makeEnemy(properties).isImportant()).toBe(true);
     });
 
-    test('isImportant_givenAShroudedEnemy_dependsOnTheAffix', () => {
+    test('isImportant_givenAShroudedEnemyWithTheAffix_returnsTrue', () => {
         setFakeState({affixes: [AFFIX_SHROUDED]});
-        expect(makeEnemy({seasonal_type: ENEMY_SEASONAL_TYPE_SHROUDED}).isImportant()).toBe(true);
 
+        expect(makeEnemy({seasonal_type: ENEMY_SEASONAL_TYPE_SHROUDED}).isImportant()).toBe(true);
+    });
+
+    test('isImportant_givenAShroudedEnemyWithoutTheAffix_returnsFalse', () => {
         setFakeState({affixes: []});
+
         expect(makeEnemy({seasonal_type: ENEMY_SEASONAL_TYPE_SHROUDED}).isImportant()).toBe(false);
     });
 });
