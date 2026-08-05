@@ -17,8 +17,14 @@ class InvisibilitySpellCounterDefinition extends SpellCounterDefinition
     /** The invisible state proper, applied 3 seconds after the cast - this is the moment threat is dropped. */
     public const int SPELL_ID_INVISIBILITY_AURA = 32612;
 
-    /** Greater Invisibility (Arcane) has no fade - its cast and aura land together. */
-    public const int SPELL_ID_GREATER_INVISIBILITY = 110959;
+    /** Greater Invisibility (Arcane) has no fade - its cast and aura land in the same millisecond. */
+    public const int SPELL_ID_GREATER_INVISIBILITY_CAST = 110959;
+
+    /**
+     * The Greater Invisibility buff. Real logs show it cast under this id as well as under
+     * SPELL_ID_GREATER_INVISIBILITY_CAST, so it is registered as both a cast and an aura trigger.
+     */
+    public const int SPELL_ID_GREATER_INVISIBILITY_AURA = 110960;
 
     public function getProperty(): SpellProperty
     {
@@ -35,7 +41,7 @@ class InvisibilitySpellCounterDefinition extends SpellCounterDefinition
      */
     public function getTriggerCastSpellIds(): array
     {
-        return [self::SPELL_ID_GREATER_INVISIBILITY];
+        return [self::SPELL_ID_GREATER_INVISIBILITY_CAST, self::SPELL_ID_GREATER_INVISIBILITY_AURA];
     }
 
     /**
@@ -43,7 +49,7 @@ class InvisibilitySpellCounterDefinition extends SpellCounterDefinition
      */
     public function getTriggerAuraSpellIds(): array
     {
-        return [self::SPELL_ID_INVISIBILITY_AURA, self::SPELL_ID_GREATER_INVISIBILITY];
+        return [self::SPELL_ID_INVISIBILITY_AURA, self::SPELL_ID_GREATER_INVISIBILITY_AURA];
     }
 
     public function getIconName(): string

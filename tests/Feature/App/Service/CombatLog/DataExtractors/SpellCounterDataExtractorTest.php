@@ -548,7 +548,7 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
         $this->runExtract([
             $this->npcCastSuccess(0, $channelSpellId, 'Solar Flame'),
             $this->debuffApplied(0, $channelSpellId, 'Solar Flame', self::CREATURE_GUID),
-            $this->playerCastSuccess(1700, InvisibilitySpellCounterDefinition::SPELL_ID_GREATER_INVISIBILITY, 'Greater Invisibility'),
+            $this->playerCastSuccess(1700, InvisibilitySpellCounterDefinition::SPELL_ID_GREATER_INVISIBILITY_CAST, 'Greater Invisibility'),
             $this->debuffRemoved(1700, $channelSpellId, 'Solar Flame', self::CREATURE_GUID),
         ]);
 
