@@ -29,6 +29,11 @@ use App\Models\Spell\Spell;
                            title="{{ __('view_compendium.spell.sections.details.header_counters_tooltip') }}"></i>
                     </th>
                     <th>
+                        {{ __('view_compendium.spell.sections.details.header_bypasses_immunities') }}
+                        <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top"
+                           title="{{ __('view_compendium.spell.sections.details.header_bypasses_immunities_tooltip') }}"></i>
+                    </th>
+                    <th>
                         {{ __('view_compendium.spell.sections.details.header_dispel_type') }}
                         <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top"
                            title="{{ __('view_compendium.spell.sections.details.header_dispel_type_tooltip') }}"></i>
@@ -43,6 +48,7 @@ use App\Models\Spell\Spell;
                     <td>{{ Spell::maskToReadableString(Spell::ALL_SCHOOLS, $spell->schools_mask, 'spellschools') ?: '-' }}</td>
                     <td>{{ Spell::maskToReadableString(Spell::ALL_MISS_TYPES, $spell->miss_types_mask, 'spellmisstypes') ?: '-' }}</td>
                     <td>{{ Spell::maskToReadableString(Spell::ALL_COUNTERS, $spell->counters_mask, 'spellcounters') ?: '-' }}</td>
+                    <td>{{ Spell::maskToReadableString(Spell::ALL_IMMUNITIES, $spell->bypasses_immunities_mask, 'spellimmunities') ?: '-' }}</td>
                     <td>{{ $spell->dispel_type ? __($spell->dispel_type) : '-' }}</td>
                     <td>{{ $spell->mechanic ? __($spell->mechanic) : '-' }}</td>
                     <td>{{ $spell->cast_time > 0 ? ($spell->cast_time / 1000) . 's' : '-' }}</td>

@@ -109,6 +109,17 @@ their loggers, the extraction service, and `CombatLogService` go through the con
 5. `NpcCharacteristicDataExtractor` — on `SPELL_AURA_APPLIED` targeting a creature where the spell maps
    to a characteristic: upserts a characteristic **observation**, `NpcCharacteristic::firstOrCreate`,
    and on new → `CombatLogNpcEvent` (`CharacteristicAdded`).
+6. `SpellCounterDataExtractor` (#3826) — correlates a player counter cast (Vanish, Shadowmeld) with an
+   NPC ability fizzling; sets `spells`.`counters_mask`. Three signatures, ε = 100 ms.
+7. `ImmunityBypassDataExtractor` (#3835) — the inverse signal: NPC abilities that **land** on a player
+   during an active immunity window (Divine Shield, Ice Block, ...); sets
+   `spells`.`bypasses_immunities_mask`. Each immunity declares its own coverage (protected schools,
+   damage vs harmful auras) in `DataExtractors/ImmunityBypasses/ImmunityDefinitions.php` — without that
+   coverage model most in-window hits are expected behaviour, not bypasses.
+
+Both counter and bypass extractors write the same observation/`CombatLogSpellEvent` plumbing as the
+spell collectors, and assign the spell to its casting NPC themselves (cast-only and nil-destination
+spells never pass `SpellDataExtractor`'s assignment gate).
 
 ### SpellDataExtractor sub-collectors
 

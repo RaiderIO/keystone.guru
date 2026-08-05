@@ -301,6 +301,49 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenStaleImmunityBypass_clearsImmunityBitAndCreatesRemovedEvent(): void
+    {
+        // Arrange
+        $this->createTestSpell(['bypasses_immunities_mask' => Spell::IMMUNITY_DIVINE_SHIELD]);
+        $this->linkSpellToCurrentSeason();
+        $this->createSpellPropertyObservation(
+            SpellProperty::BypassDivineShield,
+            now()->subDays(config('keystoneguru.combat_log_staleness.observation_window_days') + 1),
+        );
+
+        // Act
+        $this->artisan(DetectStaleCombatLogDataCommand::class)->assertSuccessful();
+
+        // Assert
+        $this->assertDatabaseHas('spells', ['id' => self::SPELL_ID, 'bypasses_immunities_mask' => 0]);
+        $this->assertDatabaseHas('combat_log_spell_events', [
+            'spell_id'   => self::SPELL_ID,
+            'event_type' => CombatLogSpellEventType::PropertyRemoved->value,
+            'property'   => SpellProperty::BypassDivineShield->value,
+        ], 'combatlog');
+    }
+
+    #[Test]
+    public function handle_givenFreshImmunityBypass_doesNothing(): void
+    {
+        // Arrange
+        $this->createTestSpell(['bypasses_immunities_mask' => Spell::IMMUNITY_DIVINE_SHIELD]);
+        $this->linkSpellToCurrentSeason();
+        $this->createSpellPropertyObservation(SpellProperty::BypassDivineShield, now());
+
+        // Act
+        $this->artisan(DetectStaleCombatLogDataCommand::class)->assertSuccessful();
+
+        // Assert
+        $this->assertDatabaseHas('spells', ['id' => self::SPELL_ID, 'bypasses_immunities_mask' => Spell::IMMUNITY_DIVINE_SHIELD]);
+        $this->assertDatabaseMissing('combat_log_spell_events', [
+            'spell_id'   => self::SPELL_ID,
+            'event_type' => CombatLogSpellEventType::PropertyRemoved->value,
+            'property'   => SpellProperty::BypassDivineShield->value,
+        ], 'combatlog');
+    }
+
+    #[Test]
     public function handle_givenStaleSpellPropertyNotInCurrentSeason_keepsSpellProperty(): void
     {
         // Arrange

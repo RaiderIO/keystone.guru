@@ -73,6 +73,11 @@ $spellPropertyName = static function (SpellProperty $property): string {
         return __('spellcounters.' . substr($property->value, 8));
     }
 
+    if ($property->isImmunityBypass()) {
+        // bypass_divine_shield → divine_shield
+        return __('spellimmunities.' . substr($property->value, 7));
+    }
+
     // miss_reflect → reflect
     return __('spellmisstypes.' . substr($property->value, 5));
 };
@@ -89,15 +94,31 @@ $eventDescription = static function (CombatLogNpcEvent|CombatLogSpellEvent $even
     }
 
     $spellName = $event->spell ? __($event->spell->name) : sprintf('#%d', $event->spell_id);
-    $isCounter = $event->property?->isCounter() ?? false;
+
+    // Counters and immunity bypasses are properties of what a *player* can do about the spell, so the generic
+    // "Affected by :property" wording does not fit them
+    [$addedKey, $removedKey] = match (true) {
+        $event->property?->isCounter() === true => [
+            'view_compendium.event.counter_added',
+            'view_compendium.event.counter_removed',
+        ],
+        $event->property?->isImmunityBypass() === true => [
+            'view_compendium.event.immunity_bypass_added',
+            'view_compendium.event.immunity_bypass_removed',
+        ],
+        default => [
+            'view_compendium.event.property_changed',
+            'view_compendium.event.property_removed',
+        ],
+    };
 
     return match ($event->event_type) {
         CombatLogSpellEventType::SpellCreated => __('view_compendium.event.spell_created', ['spell' => $spellName]),
-        CombatLogSpellEventType::PropertyChanged => __($isCounter ? 'view_compendium.event.counter_added' : 'view_compendium.event.property_changed', [
+        CombatLogSpellEventType::PropertyChanged => __($addedKey, [
             'spell'    => $spellName,
             'property' => $spellPropertyName($event->property)
         ]),
-        CombatLogSpellEventType::PropertyRemoved => __($isCounter ? 'view_compendium.event.counter_removed' : 'view_compendium.event.property_removed', [
+        CombatLogSpellEventType::PropertyRemoved => __($removedKey, [
             'spell'    => $spellName,
             'property' => $spellPropertyName($event->property)
         ]),

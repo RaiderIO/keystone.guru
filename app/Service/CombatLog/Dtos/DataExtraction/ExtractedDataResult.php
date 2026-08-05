@@ -9,16 +9,17 @@ use Illuminate\Contracts\Support\Arrayable;
  */
 class ExtractedDataResult implements Arrayable
 {
-    private int $createdNpcs               = 0;
-    private int $createdNpcSpells          = 0;
-    private int $createdNpcCharacteristics = 0;
-    private int $updatedNpcs               = 0;
-    private int $updatedFloors             = 0;
-    private int $updatedFloorConnections   = 0;
-    private int $createdSpells             = 0;
-    private int $createdSpellDungeon       = 0;
-    private int $updatedSpells             = 0;
-    private int $addedSpellCounters        = 0;
+    private int $createdNpcs                = 0;
+    private int $createdNpcSpells           = 0;
+    private int $createdNpcCharacteristics  = 0;
+    private int $updatedNpcs                = 0;
+    private int $updatedFloors              = 0;
+    private int $updatedFloorConnections    = 0;
+    private int $createdSpells              = 0;
+    private int $createdSpellDungeon        = 0;
+    private int $updatedSpells              = 0;
+    private int $addedSpellCounters         = 0;
+    private int $addedSpellImmunityBypasses = 0;
 
     public function updatedNpc(): void
     {
@@ -70,19 +71,25 @@ class ExtractedDataResult implements Arrayable
         $this->addedSpellCounters++;
     }
 
+    public function addedSpellImmunityBypass(): void
+    {
+        $this->addedSpellImmunityBypasses++;
+    }
+
     public function toArray(): array
     {
         return [
-            'createdNpcs'               => $this->createdNpcs,
-            'createdNpcSpells'          => $this->createdNpcSpells,
-            'createdNpcCharacteristics' => $this->createdNpcCharacteristics,
-            'updatedNpcs'               => $this->updatedNpcs,
-            'updatedFloors'             => $this->updatedFloors,
-            'updatedFloorConnections'   => $this->updatedFloorConnections,
-            'createdSpells'             => $this->createdSpells,
-            'createdSpellDungeon'       => $this->createdSpellDungeon,
-            'updatedSpells'             => $this->updatedSpells,
-            'addedSpellCounters'        => $this->addedSpellCounters,
+            'createdNpcs'                => $this->createdNpcs,
+            'createdNpcSpells'           => $this->createdNpcSpells,
+            'createdNpcCharacteristics'  => $this->createdNpcCharacteristics,
+            'updatedNpcs'                => $this->updatedNpcs,
+            'updatedFloors'              => $this->updatedFloors,
+            'updatedFloorConnections'    => $this->updatedFloorConnections,
+            'createdSpells'              => $this->createdSpells,
+            'createdSpellDungeon'        => $this->createdSpellDungeon,
+            'updatedSpells'              => $this->updatedSpells,
+            'addedSpellCounters'         => $this->addedSpellCounters,
+            'addedSpellImmunityBypasses' => $this->addedSpellImmunityBypasses,
         ];
     }
 }

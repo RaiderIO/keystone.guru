@@ -160,6 +160,7 @@ class DetectStaleCombatLogDataCommand extends Command
             $property === SpellProperty::Aura   => $query->where('aura', true),
             $property === SpellProperty::Debuff => $query->where('debuff', true),
             $property->isCounter()              => $query->whereRaw(sprintf('counters_mask & %d != 0', $this->getCounterBit($property))),
+            $property->isImmunityBypass()       => $query->whereRaw(sprintf('bypasses_immunities_mask & %d != 0', $this->getImmunityBit($property))),
             default                             => $query->whereRaw(sprintf('miss_types_mask & %d != 0', $this->getMissTypeBit($property))),
         };
 
@@ -203,6 +204,8 @@ class DetectStaleCombatLogDataCommand extends Command
             $spell->debuff = false;
         } elseif ($property->isCounter()) {
             $spell->counters_mask &= ~$this->getCounterBit($property);
+        } elseif ($property->isImmunityBypass()) {
+            $spell->bypasses_immunities_mask &= ~$this->getImmunityBit($property);
         } else {
             $spell->miss_types_mask &= ~$this->getMissTypeBit($property);
         }
@@ -230,6 +233,17 @@ class DetectStaleCombatLogDataCommand extends Command
         }
 
         throw new LogicException(sprintf('No counter bit found for SpellProperty: %s', $property->value));
+    }
+
+    private function getImmunityBit(SpellProperty $property): int
+    {
+        foreach (Spell::ALL_IMMUNITIES as $bit => $name) {
+            if ($property->value === sprintf('bypass_%s', $name)) {
+                return $bit;
+            }
+        }
+
+        throw new LogicException(sprintf('No immunity bit found for SpellProperty: %s', $property->value));
     }
 
     private function pruneOldObservations(): void
