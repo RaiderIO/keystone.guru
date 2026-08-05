@@ -7,6 +7,8 @@ class SearchInlineBase extends InlineCode {
         this.searchHandler = searchHandler;
         // Previous search params are used to prevent searching for the same thing multiple times for no reason
         this._previousSearchParams = null;
+        // Every query param name we've written into the URL ourselves - see _updateUrl()
+        this._writtenUrlParamNames = [];
         this.filters = {};
     }
 
@@ -50,6 +52,9 @@ class SearchInlineBase extends InlineCode {
                     if (paramsOverride !== null && filter.getParamsOverride().hasOwnProperty(filtersKey)) {
                         // It does! Set the value
                         filter.setValueOverride(filtersKey, queryParams[key]);
+                        // The URL asked for this value explicitly, so it must survive a round trip even when it
+                        // happens to equal the filter's default (#3837)
+                        filter.markValueOverrideExplicit(filtersKey);
                         valueAssigned = true;
                         break;
                     }
@@ -106,7 +111,45 @@ class SearchInlineBase extends InlineCode {
     }
 
     /**
+     * All query parameter names the filters of this search own - anything else in the URL belongs to someone else
+     * and must be left alone by _updateUrl().
+     *
+     * Disabled filters are included on purpose: their params must be dropped from the URL, not preserved.
+     *
+     * @returns {String[]}
+     * @protected
+     */
+    _getFilterParamNames() {
+        console.assert(this instanceof SearchInlineBase, 'this is not a SearchInlineBase!', this);
+
+        let names = [];
+
+        for (let name in this.filters) {
+            if (!this.filters.hasOwnProperty(name)) {
+                continue;
+            }
+
+            let paramsOverride = this.filters[name].getParamsOverride();
+            if (paramsOverride !== null) {
+                names = names.concat(Object.keys(paramsOverride));
+            } else {
+                names.push(name);
+                names.push(`${name}[]`);
+            }
+        }
+
+        return names;
+    }
+
+    /**
      * Updates the URL according to the passed searchParams (so users can press F5 and be where they left off, ish)
+     *
+     * Query parameters that we don't own (embed display options such as defaultZoom or showHeader) are carried over
+     * untouched - rebuilding the query string from the filters alone silently truncated shared embed URLs (#3837).
+     *
+     * "Ours" is everything the filters claim plus everything a previous call wrote: a param the caller injected
+     * through `queryParameters` (npc_id on the enemy failures search) would otherwise be preserved forever once it
+     * had been written, even after the search stopped sending it.
      *
      * @param searchParams {SearchParams}
      * @param blacklist {Array}
@@ -120,9 +163,24 @@ class SearchInlineBase extends InlineCode {
         blacklist.push('offset');
         blacklist.push('limit');
 
+        // Everything we're not responsible for stays exactly as it was
+        let ownedParams = this._getFilterParamNames().concat(blacklist).concat(this._writtenUrlParamNames);
+        let existingParams = getQueryParams();
+        for (let index in existingParams) {
+            if (existingParams.hasOwnProperty(index) && !ownedParams.includes(index) &&
+                !searchParams.params.hasOwnProperty(index)) {
+                // The key came out of getQueryParams() decoded, so it needs re-encoding just like the value
+                urlParams.push(`${encodeURIComponent(index)}=${encodeURIComponent(existingParams[index])}`);
+            }
+        }
+
         for (let index in searchParams.params) {
             if (searchParams.params.hasOwnProperty(index) && !blacklist.includes(index)) {
                 urlParams.push(`${index}=${encodeURIComponent(searchParams.params[index])}`);
+
+                if (!this._writtenUrlParamNames.includes(index)) {
+                    this._writtenUrlParamNames.push(index);
+                }
             }
         }
 
