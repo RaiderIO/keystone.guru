@@ -188,6 +188,13 @@ return [
                 'table_header_spell' => 'Spell',
                 'table_header_npcs'  => 'NPCs',
             ],
+            'reflect' => [
+                'title'              => 'Reflectable spells',
+                'description'        => 'NPC spells in this dungeon that have been observed being reflected.',
+                'no_spells'          => 'No reflectable NPC spells found for this dungeon.',
+                'table_header_spell' => 'Spell',
+                'table_header_npcs'  => 'NPCs',
+            ],
         ],
     ],
 ];

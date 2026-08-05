@@ -18,6 +18,11 @@ use Illuminate\Support\Collection;
  *     spells: Collection<int, Spell>,
  *     npcsBySpellId: Collection<int, Collection<int, Npc>>,
  * }> $counterSections
+ * @var array{
+ *     iconName: string,
+ *     spells: Collection<int, Spell>,
+ *     npcsBySpellId: Collection<int, Collection<int, Npc>>,
+ * }|null $reflectSection
  */
 ?>
 @extends('layouts.sitepage', [
@@ -150,5 +155,57 @@ use Illuminate\Support\Collection;
                 @endif
             </div>
         @endforeach
+    @endif
+
+    {{-- Reflectable spells (Spell Reflection) --}}
+    @if($reflectSection !== null)
+        <?php
+        /** @var Collection<int, Spell> $reflectSpells */
+        $reflectSpells = $reflectSection['spells'];
+        /** @var Collection<int, Collection<int, Npc>> $reflectNpcsBySpellId */
+        $reflectNpcsBySpellId = $reflectSection['npcsBySpellId'];
+        ?>
+        <h3 class="mt-4">
+            <img src="{{ ksgAssetImage(sprintf('spells/%s.jpg', $reflectSection['iconName'])) }}"
+                 width="24" height="24"
+                 loading="lazy"
+                 class="rounded me-1"
+                 alt="{{ __('view_compendium.class.show.reflect.title') }}"/>{{ __('view_compendium.class.show.reflect.title') }}
+        </h3>
+        <p class="text-muted">{{ __('view_compendium.class.show.reflect.description') }}</p>
+
+        @if($reflectSpells->isEmpty())
+            <p class="text-muted">{{ __('view_compendium.class.show.reflect.no_spells') }}</p>
+        @else
+            <div class="table-responsive">
+                <table class="table table-sm table-striped">
+                    <thead>
+                    <tr>
+                        <th width="35%">{{ __('view_compendium.class.show.reflect.table_header_spell') }}</th>
+                        <th width="65%">{{ __('view_compendium.class.show.reflect.table_header_npcs') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($reflectSpells as $reflectSpell)
+                        <?php /** @var Spell $reflectSpell */ ?>
+                        <?php $castingNpcs = $reflectNpcsBySpellId->get($reflectSpell->id, collect()); ?>
+                        <tr>
+                            <td>@include('common.spell.link', ['spell' => $reflectSpell])</td>
+                            <td>
+                                @if($castingNpcs->isEmpty())
+                                    <span class="text-muted">{{ __('view_compendium.class.show.no_npcs') }}</span>
+                                @else
+                                    @foreach($castingNpcs as $castingNpc)
+                                        <?php /** @var Npc $castingNpc */ ?>
+                                        @include('common.npc.link', ['npc' => $castingNpc])@if(!$loop->last), @endif
+                                    @endforeach
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
     @endif
 @endsection
