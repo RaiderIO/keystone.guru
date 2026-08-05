@@ -14,7 +14,6 @@ class ReadOnlyMode
     private const array ROUTE_WHITELIST = [
         'login',
         'logout',
-        'ajax/heatmap/data',
     ];
 
     public function __construct(private readonly ReadOnlyModeServiceInterface $readOnlyModeService)

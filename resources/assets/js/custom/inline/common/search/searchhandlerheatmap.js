@@ -44,7 +44,7 @@ class SearchHandlerHeatmap extends SearchHandler {
 
     getAjaxOptions() {
         return {
-            type: 'POST',
+            type: 'GET',
             dataType: 'json'
         };
     }
