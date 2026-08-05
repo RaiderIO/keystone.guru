@@ -38,19 +38,23 @@ use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Str;
 
 /**
- * Detects "spell counter" tricks - a player using a counter ability (Rogue Vanish, Night Elf Shadowmeld) to make an
- * incoming NPC ability fizzle - and records them on the Spell that was countered.
+ * Detects "spell counter" tricks - a player using a counter ability (Rogue Vanish, Night Elf Shadowmeld, Hunter Feign
+ * Death, Mage Invisibility, Rogue Cloak of Shadows) to make an incoming NPC ability fizzle - and records them on the
+ * Spell that was countered.
  *
- * Three signatures are recognized:
+ * A counter is triggered by its own SPELL_CAST_SUCCESS, by a player buff SPELL_AURA_APPLIED, or by both - see
+ * SpellCounterDefinitionInterface::getTriggerAuraSpellIds(). Three signatures are recognized from there:
  * - A: an NPC targeting debuff (applied with a nil source guid, linked back to the NPC's SPELL_CAST_START) is dropped
- *   within EPSILON_MS of a counter cast. The fact attaches to the NPC's *cast* spell id.
- * - B: an NPC-sourced debuff (a channel) on the counter-caster is removed within EPSILON_MS of the counter cast, well
- *   before its natural duration. The fact attaches to the debuff's own spell id.
+ *   within EPSILON_MS of a counter trigger. The fact attaches to the NPC's *cast* spell id.
+ * - B: an NPC-sourced debuff (a channel, or - for Cloak of Shadows - a stripped magic debuff) on the counter-caster is
+ *   removed within EPSILON_MS of the counter trigger, well before its natural duration. The fact attaches to the
+ *   debuff's own spell id.
  * - C: an NPC SPELL_CAST_START never reaches SPELL_CAST_SUCCESS and the same caster starts a fresh cast shortly after
- *   a counter cast, with no other explanation (no fail, no interrupt, no death, no loss-of-control debuff on the
- *   caster).
+ *   a counter trigger, with no other explanation (no fail, no interrupt, no death, no loss-of-control debuff on the
+ *   caster). Only counters that drop threat can produce this signature.
  */
 class SpellCounterDataExtractor implements DataExtractorInterface
 {
@@ -103,6 +107,9 @@ class SpellCounterDataExtractor implements DataExtractorInterface
     /** @var Collection<int, SpellCounterDefinitionInterface> Keyed by trigger cast spell id. */
     private readonly Collection $definitionsByTriggerSpellId;
 
+    /** @var Collection<int, SpellCounterDefinitionInterface> Keyed by trigger player buff aura spell id. */
+    private readonly Collection $definitionsByTriggerAuraSpellId;
+
     /** @var Collection<string, SpellCounterDefinitionInterface> Keyed by SpellProperty value. */
     private readonly Collection $definitionsByProperty;
 
@@ -137,7 +144,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
     /**
      * Debuff removals seen *before* the counter cast that caused them - the backward half of the two-sided window.
      *
-     * @var Collection<int, array{ts: Carbon, playerGuid: string, attributedSpellId: int, npcId: int|null, appliedAt: Carbon, signature: string}>
+     * @var Collection<int, array{ts: Carbon, playerGuid: string, attributedSpellId: int, removedSpellId: int, npcId: int|null, appliedAt: Carbon, signature: string}>
      */
     private Collection $recentDebuffRemovals;
 
@@ -162,6 +169,13 @@ class SpellCounterDataExtractor implements DataExtractorInterface
      */
     private Collection $spellMechanicCache;
 
+    /**
+     * Lazily memoized `spells`.`dispel_type` per spell id. False marks a spell that has no row.
+     *
+     * @var Collection<int, string|null|false>
+     */
+    private Collection $spellDispelTypeCache;
+
     private readonly SpellCounterDataExtractorLoggingInterface $log;
 
     private ?string $currentCombatLogFilePath = null;
@@ -171,23 +185,30 @@ class SpellCounterDataExtractor implements DataExtractorInterface
 
     public function __construct()
     {
-        $definitionsByTriggerSpellId = collect();
-        $definitionsByProperty       = collect();
+        $definitionsByTriggerSpellId     = collect();
+        $definitionsByTriggerAuraSpellId = collect();
+        $definitionsByProperty           = collect();
 
         foreach (SpellCounterDefinitions::all() as $definition) {
             foreach ($definition->getTriggerCastSpellIds() as $triggerCastSpellId) {
                 $definitionsByTriggerSpellId->put($triggerCastSpellId, $definition);
             }
 
+            foreach ($definition->getTriggerAuraSpellIds() as $triggerAuraSpellId) {
+                $definitionsByTriggerAuraSpellId->put($triggerAuraSpellId, $definition);
+            }
+
             $definitionsByProperty->put($definition->getProperty()->value, $definition);
         }
 
-        $this->definitionsByTriggerSpellId = $definitionsByTriggerSpellId;
-        $this->definitionsByProperty       = $definitionsByProperty;
+        $this->definitionsByTriggerSpellId     = $definitionsByTriggerSpellId;
+        $this->definitionsByTriggerAuraSpellId = $definitionsByTriggerAuraSpellId;
+        $this->definitionsByProperty           = $definitionsByProperty;
 
         $this->pendingCounterObservations = collect();
         $this->spellDurationCache         = collect();
         $this->spellMechanicCache         = collect();
+        $this->spellDispelTypeCache       = collect();
         $this->resetCorrelationState();
 
         $log = App::make(SpellCounterDataExtractorLoggingInterface::class);
@@ -252,7 +273,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
             }
         } elseif ($suffix instanceof CastSuccess) {
             if ($sourceGuid instanceof Player) {
-                $this->handlePlayerCastSuccess($sourceGuid->getGuid(), $prefix->getSpellId(), $timestamp);
+                $this->handleCounterTrigger($this->definitionsByTriggerSpellId, $sourceGuid->getGuid(), $prefix->getSpellId(), $timestamp);
             } elseif ($sourceNpcGuid !== null) {
                 // The cast resolved - it needs no further explanation
                 $this->pendingNpcCasts->forget($sourceNpcGuid);
@@ -269,6 +290,8 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         } elseif ($suffix instanceof AuraAppliedInterface) {
             if ($suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF) {
                 $this->handleDebuffApplied($sourceGuid, $destGuid, $prefix->getSpellId(), $prefix->getSpellName(), $timestamp);
+            } elseif ($destGuid instanceof Player) {
+                $this->handleCounterTrigger($this->definitionsByTriggerAuraSpellId, $destGuid->getGuid(), $prefix->getSpellId(), $timestamp);
             }
         } elseif ($suffix instanceof AuraRemovedInterface) {
             if ($suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF && $destGuid instanceof Player) {
@@ -317,6 +340,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         $this->pendingCounterObservations = collect();
         $this->spellDurationCache         = collect();
         $this->spellMechanicCache         = collect();
+        $this->spellDispelTypeCache       = collect();
         $this->currentCombatLogFilePath   = null;
         $this->currentDungeonId           = null;
         $this->resetCorrelationState();
@@ -481,6 +505,11 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         }
 
         foreach ($this->recentCounterCasts->reverse() as $counterCast) {
+            // A counter that does not drop threat gives the NPC no reason to give up on its cast
+            if (!$counterCast['definition']->dropsThreat()) {
+                continue;
+            }
+
             $counterOffsetMs = $this->millisecondsBetween($pendingCast['startedAt'], $counterCast['ts']);
             // The counter must have happened while the cast was in flight - a hair before it started is allowed
             // because same-instant ordering in the combat log is arbitrary
@@ -502,13 +531,15 @@ class SpellCounterDataExtractor implements DataExtractorInterface
     }
 
     /**
-     * A player counter cast closes the backward half of the two-sided window: debuff removals seen just before it are
-     * attributed retroactively.
+     * A counter trigger - its own cast, or the buff aura marking the moment it takes effect - closes the backward
+     * half of the two-sided window: debuff removals seen just before it are attributed retroactively.
+     *
+     * @param Collection<int, SpellCounterDefinitionInterface> $definitionsBySpellId
      */
-    private function handlePlayerCastSuccess(string $playerGuid, int $spellId, Carbon $timestamp): void
+    private function handleCounterTrigger(Collection $definitionsBySpellId, string $playerGuid, int $spellId, Carbon $timestamp): void
     {
         /** @var SpellCounterDefinitionInterface|null $definition */
-        $definition = $this->definitionsByTriggerSpellId->get($spellId);
+        $definition = $definitionsBySpellId->get($spellId);
         if ($definition === null) {
             return;
         }
@@ -526,6 +557,10 @@ class SpellCounterDataExtractor implements DataExtractorInterface
             }
 
             if (abs($this->millisecondsBetween($debuffRemoval['ts'], $timestamp)) > self::EPSILON_MS) {
+                continue;
+            }
+
+            if (!$this->isStrippableDebuff($definition, $debuffRemoval['removedSpellId'])) {
                 continue;
             }
 
@@ -618,6 +653,10 @@ class SpellCounterDataExtractor implements DataExtractorInterface
                 continue;
             }
 
+            if (!$this->isStrippableDebuff($counterCast['definition'], $spellId)) {
+                continue;
+            }
+
             $this->queueCounterObservation($signature, $attributedSpellId, $counterCast['definition'], $playerGuid, $activeDebuff['npcId']);
 
             return;
@@ -628,6 +667,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
             'ts'                => $timestamp,
             'playerGuid'        => $playerGuid,
             'attributedSpellId' => $attributedSpellId,
+            'removedSpellId'    => $spellId,
             'npcId'             => $activeDebuff['npcId'],
             'appliedAt'         => $activeDebuff['appliedAt'],
             'signature'         => $signature,
@@ -714,6 +754,46 @@ class SpellCounterDataExtractor implements DataExtractorInterface
                 return true;
             }
         }
+
+        return false;
+    }
+
+    /**
+     * Whether the removal of this debuff can be attributed to the given counter. Counters that drop threat make the
+     * NPC give up on the player whatever it had applied, so nothing rules them out; Cloak of Shadows can only strip
+     * magic, so a poison or disease falling off in its window is provably not its doing.
+     *
+     * Only a dispel type that positively contradicts the counter rejects - an unresolved one (`n_a`, `unknown`, or
+     * the empty string a combat-log-created spell carries until its Wowhead data is fetched) passes. Being
+     * permissive here mirrors the loss-of-control veto: the spells this extractor discovers are precisely the ones
+     * with no fetched data yet, and the observation staleness window self-corrects rare misattributions.
+     */
+    private function isStrippableDebuff(SpellCounterDefinitionInterface $definition, int $removedSpellId): bool
+    {
+        $unstrippableDispelTypes = $definition->getUnstrippableDebuffDispelTypes();
+        if ($unstrippableDispelTypes === []) {
+            return true;
+        }
+
+        if (!$this->spellDispelTypeCache->has($removedSpellId)) {
+            $dispelType = SpellModel::query()->where('id', $removedSpellId)->value('dispel_type');
+
+            $this->spellDispelTypeCache->put($removedSpellId, $dispelType ?? false);
+        }
+
+        $dispelType = $this->spellDispelTypeCache->get($removedSpellId);
+        if (!is_string($dispelType)) {
+            return true;
+        }
+
+        // Rows predating the translation-key migration still hold the bare value, so compare on that
+        $dispelType = Str::after($dispelType, SpellModel::DISPEL_TYPE_TRANSLATION_KEY_PREFIX);
+
+        if (!in_array($dispelType, $unstrippableDispelTypes, true)) {
+            return true;
+        }
+
+        $this->log->extractDataDebuffNotStrippableByCounter($removedSpellId, $definition->getProperty()->value, $dispelType);
 
         return false;
     }

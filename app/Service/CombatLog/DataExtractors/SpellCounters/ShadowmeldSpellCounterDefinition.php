@@ -6,7 +6,7 @@ use App\Models\CharacterRace;
 use App\Models\CombatLog\SpellProperty;
 use App\Models\Spell\Spell;
 
-class ShadowmeldSpellCounterDefinition implements SpellCounterDefinitionInterface
+class ShadowmeldSpellCounterDefinition extends SpellCounterDefinition
 {
     public const int SPELL_ID_SHADOWMELD = 58984;
 
@@ -31,11 +31,6 @@ class ShadowmeldSpellCounterDefinition implements SpellCounterDefinitionInterfac
     public function getIconName(): string
     {
         return 'ability_ambush';
-    }
-
-    public function getCharacterClassKey(): ?string
-    {
-        return null;
     }
 
     public function getCharacterRaceKey(): ?string

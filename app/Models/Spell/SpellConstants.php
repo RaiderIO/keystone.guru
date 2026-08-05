@@ -72,13 +72,22 @@ trait SpellConstants
         Resist::class  => self::MISS_TYPE_RESIST,
     ];
 
-    public const int COUNTER_VANISH     = 1;
-    public const int COUNTER_SHADOWMELD = 2;
+    public const int COUNTER_VANISH           = 1;
+    public const int COUNTER_SHADOWMELD       = 2;
+    public const int COUNTER_FEIGN_DEATH      = 4;
+    public const int COUNTER_INVISIBILITY     = 8;
+    public const int COUNTER_CLOAK_OF_SHADOWS = 16;
 
     public const array ALL_COUNTERS = [
-        self::COUNTER_VANISH     => 'vanish',
-        self::COUNTER_SHADOWMELD => 'shadowmeld',
+        self::COUNTER_VANISH           => 'vanish',
+        self::COUNTER_SHADOWMELD       => 'shadowmeld',
+        self::COUNTER_FEIGN_DEATH      => 'feign_death',
+        self::COUNTER_INVISIBILITY     => 'invisibility',
+        self::COUNTER_CLOAK_OF_SHADOWS => 'cloak_of_shadows',
     ];
+
+    /** The prefix `spells`.`dispel_type` carries since its values became translation keys. */
+    public const string DISPEL_TYPE_TRANSLATION_KEY_PREFIX = 'spelldispeltype.';
 
     public const string DISPEL_TYPE_MAGIC         = 'magic';
     public const string DISPEL_TYPE_DISEASE       = 'disease';

@@ -6,21 +6,24 @@ use App\Models\Spell\Spell;
 
 enum SpellProperty: string
 {
-    case Aura              = 'aura';
-    case Debuff            = 'debuff';
-    case MissAbsorb        = 'miss_absorb';
-    case MissBlock         = 'miss_block';
-    case MissDeflect       = 'miss_deflect';
-    case MissDodge         = 'miss_dodge';
-    case MissEvade         = 'miss_evade';
-    case MissImmune        = 'miss_immune';
-    case MissMiss          = 'miss_miss';
-    case MissParry         = 'miss_parry';
-    case MissReflect       = 'miss_reflect';
-    case MissResist        = 'miss_resist';
-    case MissInterrupt     = 'miss_interrupt';
-    case CounterVanish     = 'counter_vanish';
-    case CounterShadowmeld = 'counter_shadowmeld';
+    case Aura                  = 'aura';
+    case Debuff                = 'debuff';
+    case MissAbsorb            = 'miss_absorb';
+    case MissBlock             = 'miss_block';
+    case MissDeflect           = 'miss_deflect';
+    case MissDodge             = 'miss_dodge';
+    case MissEvade             = 'miss_evade';
+    case MissImmune            = 'miss_immune';
+    case MissMiss              = 'miss_miss';
+    case MissParry             = 'miss_parry';
+    case MissReflect           = 'miss_reflect';
+    case MissResist            = 'miss_resist';
+    case MissInterrupt         = 'miss_interrupt';
+    case CounterVanish         = 'counter_vanish';
+    case CounterShadowmeld     = 'counter_shadowmeld';
+    case CounterFeignDeath     = 'counter_feign_death';
+    case CounterInvisibility   = 'counter_invisibility';
+    case CounterCloakOfShadows = 'counter_cloak_of_shadows';
 
     public static function fromMissTypeBit(int $bit): self
     {

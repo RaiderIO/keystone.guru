@@ -17,6 +17,9 @@ final class SpellCounterDefinitions
         return self::$definitions ??= collect([
             new VanishSpellCounterDefinition(),
             new ShadowmeldSpellCounterDefinition(),
+            new FeignDeathSpellCounterDefinition(),
+            new InvisibilitySpellCounterDefinition(),
+            new CloakOfShadowsSpellCounterDefinition(),
         ]);
     }
 }
