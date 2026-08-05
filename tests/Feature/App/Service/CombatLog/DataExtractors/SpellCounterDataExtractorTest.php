@@ -717,6 +717,35 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
         $this->assertCounterRecorded($secondDebuffSpellId, Spell::COUNTER_CLOAK_OF_SHADOWS, SpellProperty::CounterCloakOfShadows);
     }
 
+    #[Test]
+    public function extractData_givenCounterLoggedAsBothCastAndAura_recordsOneCounter(): void
+    {
+        // Arrange - Cloak of Shadows and Greater Invisibility are logged as a cast success *and* a buff aura in the
+        // same millisecond, so both triggers fire per use; the queue dedup is what keeps that from double counting
+        $cloakDebuffSpellId        = 9990033;
+        $invisibilityDebuffSpellId = 9990034;
+        $this->createTestSpell($cloakDebuffSpellId, 20000, null, 'spelldispeltype.magic');
+        $this->createTestSpell($invisibilityDebuffSpellId, 20000);
+
+        // Act
+        $this->runExtract([
+            $this->debuffApplied(0, $cloakDebuffSpellId, 'Curse of the Void', self::CREATURE_GUID),
+            $this->playerCastSuccess(4000, CloakOfShadowsSpellCounterDefinition::SPELL_ID_CLOAK_OF_SHADOWS, 'Cloak of Shadows'),
+            $this->playerBuffApplied(4000, CloakOfShadowsSpellCounterDefinition::SPELL_ID_CLOAK_OF_SHADOWS, 'Cloak of Shadows'),
+            $this->debuffRemoved(4000, $cloakDebuffSpellId, 'Curse of the Void', self::CREATURE_GUID),
+
+            $this->debuffApplied(10000, $invisibilityDebuffSpellId, 'Solar Flame', self::CREATURE_GUID),
+            $this->playerCastSuccess(14000, InvisibilitySpellCounterDefinition::SPELL_ID_GREATER_INVISIBILITY_AURA, 'Greater Invisibility'),
+            $this->playerBuffApplied(14000, InvisibilitySpellCounterDefinition::SPELL_ID_GREATER_INVISIBILITY_AURA, 'Greater Invisibility'),
+            $this->debuffRemoved(14000, $invisibilityDebuffSpellId, 'Solar Flame', self::CREATURE_GUID),
+        ]);
+
+        // Assert - one counter per use, not two
+        $this->assertSame(2, $this->result->toArray()['addedSpellCounters']);
+        $this->assertCounterRecorded($cloakDebuffSpellId, Spell::COUNTER_CLOAK_OF_SHADOWS, SpellProperty::CounterCloakOfShadows);
+        $this->assertCounterRecorded($invisibilityDebuffSpellId, Spell::COUNTER_INVISIBILITY, SpellProperty::CounterInvisibility);
+    }
+
     /**
      * Runs the full extract lifecycle: beforeExtract → extractData (one or more events) → afterExtract.
      *

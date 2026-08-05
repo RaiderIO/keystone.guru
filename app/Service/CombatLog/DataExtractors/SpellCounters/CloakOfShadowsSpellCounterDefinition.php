@@ -60,6 +60,12 @@ class CloakOfShadowsSpellCounterDefinition extends SpellCounterDefinition
     }
 
     /**
+     * `Spell::DISPEL_TYPE_NONE` is deliberately absent even though "not dispellable at all"
+     * contradicts a magic strip as squarely as a poison does: `2026_04_20_224500_update_spell_dispel_type_to_translation_keys`
+     * folded the legacy empty string into `none` alongside the explicit `None`, so the value no
+     * longer distinguishes "known to be undispellable" from "never had a value" - and rejecting
+     * on it would rule out spells that only look undispellable because nobody filled the field.
+     *
      * @return array<string>
      */
     public function getUnstrippableDebuffDispelTypes(): array

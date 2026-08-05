@@ -66,9 +66,6 @@ class SpellCounterDataExtractor implements DataExtractorInterface
      */
     public const int EPSILON_MS = 100;
 
-    /** @var string Prefix `spells`.`dispel_type` carries since the values became translation keys. */
-    public const string DISPEL_TYPE_TRANSLATION_KEY_PREFIX = 'spelldispeltype.';
-
     /** @var int Window in which a nil-source debuff is linked back to a temporally adjacent NPC SPELL_CAST_START. */
     public const int CAST_START_LINK_WINDOW_MS = 500;
 
@@ -790,7 +787,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         }
 
         // Rows predating the translation-key migration still hold the bare value, so compare on that
-        $dispelType = Str::after($dispelType, self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX);
+        $dispelType = Str::after($dispelType, SpellModel::DISPEL_TYPE_TRANSLATION_KEY_PREFIX);
 
         if (!in_array($dispelType, $unstrippableDispelTypes, true)) {
             return true;

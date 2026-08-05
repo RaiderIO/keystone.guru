@@ -86,6 +86,9 @@ trait SpellConstants
         self::COUNTER_CLOAK_OF_SHADOWS => 'cloak_of_shadows',
     ];
 
+    /** The prefix `spells`.`dispel_type` carries since its values became translation keys. */
+    public const string DISPEL_TYPE_TRANSLATION_KEY_PREFIX = 'spelldispeltype.';
+
     public const string DISPEL_TYPE_MAGIC         = 'magic';
     public const string DISPEL_TYPE_DISEASE       = 'disease';
     public const string DISPEL_TYPE_POISON        = 'poison';
