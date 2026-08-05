@@ -5,6 +5,15 @@
     position: sticky;
     top: 0;
     z-index: 800;
+    /* One opaque band behind all bars - without it, page content shows through the
+       slivers between the bars' centered containers while scrolling */
+    background-color: var(--theme-header);
+}
+
+/* The map header keeps its floating look: transparent, click-through gutters
+   (see map-header.css) - the map renders behind it by design */
+#map_header .ksg-header {
+    background-color: transparent;
 }
 
 .ksg-header .dungeon_context_header {
