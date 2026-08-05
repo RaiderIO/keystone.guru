@@ -65,6 +65,14 @@ for f in storage/app/combatlogs/rogue/*; do php artisan combatlog:extractdata "$
 - **Negative controls**: search *without* the class filter and pick runs whose member spec ids
   contain none of the target class's specs — logs where the target ability cannot occur. (Races
   are not filterable: any party can still contain e.g. a Night Elf racial.)
+- **Record the run ids of any validation corpus — they are the reproducible artifact, not the
+  files.** Segment files are disposable (hundreds of MB, deleted with the worktree) and their URLs
+  are presigned and expire in minutes, but a run id is permanent: `--run=<id> --run=<id> ...`
+  re-downloads exactly that corpus later. A corpus described only by its *filters* is NOT
+  reproducible — `--from-days` is relative to now, so the same command returns a different set
+  tomorrow. Put the ids in the PR body of whatever the corpus validated, before deleting anything.
+  If they were lost, re-running the identical searches the same day usually recovers them; confirm
+  by checking that run ids you can still name (from filenames quoted in notes) appear in the result.
 - **Localized clients**: spell/NPC *names* in logs may be non-English (`"Schattenmimik"` =
   Shadowmeld); always match on spell **ids**, never names — names are only safe for
   same-log correlation (e.g. matching a cast to its targeting debuff).

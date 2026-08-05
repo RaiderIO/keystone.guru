@@ -33,8 +33,9 @@ use Str;
  * @property int         $schools_mask
  * @property int         $miss_types_mask
  * @property int         $counters_mask
- * @property bool        $aura              Whenever it's a beneficial spell on a friendly target (extracted from CombatLogs)
- * @property bool|null   $debuff            Whenever it's a harmful spell on a hostile target (extracted from CombatLogs)
+ * @property int         $bypasses_immunities_mask
+ * @property bool        $aura                     Whenever it's a beneficial spell on a friendly target (extracted from CombatLogs)
+ * @property bool|null   $debuff                   Whenever it's a harmful spell on a hostile target (extracted from CombatLogs)
  * @property int         $cast_time
  * @property int         $duration
  * @property bool        $selectable
@@ -83,6 +84,7 @@ class Spell extends CacheModel implements MappingModelInterface
         'schools_mask',
         'miss_types_mask',
         'counters_mask',
+        'bypasses_immunities_mask',
         'aura',
         'debuff',
         'cast_time',
@@ -97,19 +99,20 @@ class Spell extends CacheModel implements MappingModelInterface
     protected function casts(): array
     {
         return [
-            'id'                => 'integer',
-            'game_version_id'   => 'integer',
-            'schools_mask'      => 'integer',
-            'miss_types_mask'   => 'integer',
-            'counters_mask'     => 'integer',
-            'aura'              => 'boolean',
-            'debuff'            => 'boolean',
-            'cast_time'         => 'integer',
-            'duration'          => 'integer',
-            'selectable'        => 'boolean',
-            'hidden_on_map'     => 'boolean',
-            'characteristic_id' => 'integer',
-            'fetched_data_at'   => 'datetime',
+            'id'                       => 'integer',
+            'game_version_id'          => 'integer',
+            'schools_mask'             => 'integer',
+            'miss_types_mask'          => 'integer',
+            'counters_mask'            => 'integer',
+            'bypasses_immunities_mask' => 'integer',
+            'aura'                     => 'boolean',
+            'debuff'                   => 'boolean',
+            'cast_time'                => 'integer',
+            'duration'                 => 'integer',
+            'selectable'               => 'boolean',
+            'hidden_on_map'            => 'boolean',
+            'characteristic_id'        => 'integer',
+            'fetched_data_at'          => 'datetime',
         ];
     }
 
