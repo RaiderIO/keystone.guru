@@ -24,7 +24,7 @@ use Illuminate\Support\Str;
  * @var bool                         $showMore
  * @var bool                         $showDungeonContext
  * @var Collection<string, string>   $dungeonContextLinks
- * @var string|null                  $headerId
+ * @var string|false                 $headerId
  */
 
 $navs                   = [];
@@ -32,8 +32,8 @@ $showMore               ??= false;
 $showDungeonContext     ??= true;
 $forceShrink            ??= false;
 $dungeonContextLinks    ??= null;
-// The map view passes null - its own #map_header wraps this include, and duplicate ids would
-// confuse the header height measurement in siteheader.js.
+// The map view passes false (not null - ??= would overwrite null) - its own #map_header wraps
+// this include, and a stray #site_header would make siteheader.js measure the wrong element.
 $headerId               ??= 'site_header';
 // Defense in depth for #3806 - GlobalComposer normally supplies this, but view composers are
 // skipped entirely on paths ViewService::shouldLoadViewVariables() blacklists (e.g. /ajax/),
@@ -102,7 +102,7 @@ $isActiveRoute = function (string $route, bool $strict = false) {
     return $active;
 };
 ?>
-<header @if($headerId !== null) id="{{ $headerId }}" @endif
+<header @if($headerId !== false) id="{{ $headerId }}" @endif
         class="ksg-header {{ $forceShrink ? 'ksg-header--shrink ksg-header--shrink-forced' : '' }}">
 <div
     class="game_version_header navbar-first d-none d-lg-block

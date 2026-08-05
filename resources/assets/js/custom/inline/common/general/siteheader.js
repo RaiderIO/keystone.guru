@@ -31,7 +31,9 @@ class CommonGeneralSiteheader extends InlineCode {
     activate() {
         super.activate();
 
-        this.header = document.getElementById('site_header') ?? document.getElementById('map_header');
+        // #map_header wraps the whole floating map header (including the route bar) - prefer it
+        // so the published height covers all bars, not just the included site header
+        this.header = document.getElementById('map_header') ?? document.getElementById('site_header');
         if (this.header === null) {
             return;
         }

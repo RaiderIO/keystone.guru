@@ -260,7 +260,7 @@ if ($isAdmin) {
     @if(isset($show['header']) && $show['header'])
         <nav id="map_header" class="map_fade_out">
             @include('common.layout.header', [
-                'headerId' => null,
+                'headerId' => false,
                 'showMore' => true,
                 'showDungeonContext' => !($mapContext instanceof MapContextDungeonRoute),
                 'forceShrink' => true,
