@@ -5,11 +5,18 @@
     position: sticky;
     top: 0;
     z-index: 800;
-    /* One opaque band behind all bars - without it, page content shows through the
-       slivers between the bars' centered containers while scrolling. Deliberately the
-       page background color, not --theme-header: the bars' centered containers carry
-       their own header color, and the gutters left/right of them should read as page,
-       not as header (the full-width header band made the page feel top-heavy) */
+    /* Transparent at rest so page background art bleeds through the gutters around
+       the bars' centered containers, like the old fixed bars did */
+    background-color: transparent;
+    transition: background-color 0.2s ease;
+}
+
+/* Once scrolled/shrunk the header is pinned over page content, so it needs an opaque
+   band - without it, content shows through the gutters and the slivers between the
+   bars' centered containers. Deliberately the page background color, not
+   --theme-header: the gutters should read as page, not as header (a full-width
+   header-colored band made the page feel top-heavy) */
+.ksg-header--shrink {
     background-color: var(--theme-darker);
 }
 
