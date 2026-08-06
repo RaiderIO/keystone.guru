@@ -5,6 +5,14 @@ description: Runbook to find, download, and locally reproduce real Staging/Produ
 
 # Combat Log Parse-Failure Triage
 
+> [!IMPORTANT]
+> **Superseded in part by #3821.** The parse-failure listing and resolve API endpoints, the admin
+> page and the `combat_log_parse_failures` writes were removed — the same failures are now reported
+> to Sentry as fingerprinted, tagged errors (`runId`, `seasonId`, `combatLogVersion`, `lineNumber`,
+> `exceptionClass`), which is where the cluster listing and triage state now live. **#3823 rewrites
+> this skill around that feed**; until it lands, only the segment-download step below (§2, retargeted
+> to the run-keyed endpoint) is still accurate. Do not follow §1 or the resolve policy as written.
+
 Runbook for turning "some combat logs are failing to parse in Staging/Production" into a diagnosed,
 locally-reproduced, tested fix. Read `combatlog-parsing-internals` first if you haven't — this skill
 assumes you know the parser architecture and focuses on the *operational* loop: find → download →
@@ -65,20 +73,29 @@ typically 90%+ of the rows. `exceptionClass` + the stable part of `message` is t
 ## 2. Get a failing run's log segments
 
 ```
-GET https://staging.keystone.guru/api/v1/combatlog/parse-failures/{id}/segments
+GET https://staging.keystone.guru/api/v1/combatlog/seasons/{season}/runs/{runId}/segments
 ```
 
-Reuses `RaiderIOApiServiceInterface::getCombatLogSegmentsForRun()` (the same logic the admin panel
-and the ingestion job use) to return **presigned S3 URLs, valid ~5 minutes** — download promptly,
+Keyed on exactly the two identifiers Sentry carries as tags, so a Sentry event is all you need to
+reach the run's logs. Reuses `RaiderIOApiServiceInterface::getCombatLogSegmentsForRun()` (the same
+logic the ingestion job uses) to return **presigned S3 URLs, valid ~5 minutes** — download promptly,
 don't cache the URLs. Response:
 
 ```json
 {"segments": [{"id": 1, "type": "trash", "downloadUrl": "https://s3..."}, ...]}
 ```
 
-If it 404s with `combatlog_parse_failure_no_segments`, or 422s with `..._no_season`, that run's
-segments aren't available (Raider.IO expired them, or the failure predates season resolution) — pick
-a different row from the cluster.
+A 404 means Raider.IO no longer has that run's segments — pick a different run from the cluster. Its
+body is `{"error": "No combat log segments are available for this run."}`: the message is the resolved
+translation of `controller.apicombatlogrun.error.no_segments`, so match on the status code, not on the
+key (the key itself never appears in the response).
+
+A 422 means the season id isn't a known season, and comes back in the form request's envelope rather than
+the `error` shape above:
+
+```json
+{"success": false, "message": "Validation errors", "data": {"season": ["..."]}}
+```
 
 ## 3. Download and decompress
 
