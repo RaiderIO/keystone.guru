@@ -32,7 +32,6 @@ final class MigrateThumbnailDiskTest extends PublicTestCase
         $thumbnail = DungeonRouteThumbnail::create([
             'dungeon_route_id' => $dungeonRoute->id,
             'floor_id'         => $floor->id,
-            'custom'           => false,
         ]);
         $file = File::create([
             'model_id'    => $thumbnail->id,

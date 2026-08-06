@@ -4,6 +4,7 @@ namespace App\Console\Commands\DungeonRoute;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnail;
+use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailRepositoryInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Illuminate\Console\Command;
@@ -122,7 +123,7 @@ class RepairBrokenThumbnails extends Command
                 $file = $thumbnail->file;
 
                 if ($file !== null && !Storage::disk($file->disk)->exists($file->path)) {
-                    if ($thumbnail->custom) {
+                    if ($thumbnail->variant === DungeonRouteThumbnailVariant::Custom) {
                         $brokenCustomThumbnailIds->push($thumbnail->id);
                     } else {
                         $affectedDungeonRouteIds->push($thumbnail->dungeon_route_id);

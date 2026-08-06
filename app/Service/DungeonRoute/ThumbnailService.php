@@ -429,7 +429,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         // Copy over all thumbnails
         foreach ($sourceDungeonRoute->dungeonRouteThumbnails as $thumbnail) {
             /** @var DungeonRouteThumbnail $thumbnail */
-            if ($thumbnail->custom) {
+            if ($thumbnail->variant === DungeonRouteThumbnailVariant::Custom) {
                 // Custom thumbnails are not copied
                 continue;
             }
@@ -474,7 +474,7 @@ class ThumbnailService implements ThumbnailServiceInterface
 
     public function hasThumbnailsGenerated(DungeonRoute $dungeonRoute): bool
     {
-        return $dungeonRoute->dungeonRouteThumbnails()->where('custom', false)->count() > 0;
+        return $dungeonRoute->dungeonRouteThumbnails()->where('variant', '!=', DungeonRouteThumbnailVariant::Custom)->count() > 0;
     }
 
     private function attachThumbnailToDungeonRoute(
@@ -485,9 +485,6 @@ class ThumbnailService implements ThumbnailServiceInterface
         string                       $disk,
         DungeonRouteThumbnailVariant $variant = DungeonRouteThumbnailVariant::Standard,
     ): DungeonRouteThumbnail {
-        // Custom-ness is derived from the variant - it's not an independent flag. The legacy `custom`
-        // boolean column is still dual-written here (kept in sync with the variant) until the follow-up
-        // migration drops it; see the expand/contract note on the model.
         $isCustom = $variant === DungeonRouteThumbnailVariant::Custom;
 
         return DB::transaction(function () use (
@@ -517,7 +514,6 @@ class ThumbnailService implements ThumbnailServiceInterface
             $dungeonRouteThumbnail = DungeonRouteThumbnail::create([
                 'dungeon_route_id' => $dungeonRoute->id,
                 'floor_id'         => $floor->id,
-                'custom'           => $isCustom,
                 'variant'          => $variant,
             ]);
 

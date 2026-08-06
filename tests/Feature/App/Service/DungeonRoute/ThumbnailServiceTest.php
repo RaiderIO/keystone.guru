@@ -316,7 +316,6 @@ final class ThumbnailServiceTest extends PublicTestCase
         $oldThumbnail = DungeonRouteThumbnail::create([
             'dungeon_route_id' => $dungeonRoute->id,
             'floor_id'         => $floor->id,
-            'custom'           => false,
         ]);
         $oldFile = File::create([
             'model_id'    => $oldThumbnail->id,
@@ -348,7 +347,7 @@ final class ThumbnailServiceTest extends PublicTestCase
                 DungeonRouteThumbnail::query()
                     ->where('dungeon_route_id', $dungeonRoute->id)
                     ->where('floor_id', $floor->id)
-                    ->where('custom', false)
+                    ->where('variant', DungeonRouteThumbnailVariant::Standard)
                     ->count(),
             );
         } finally {
@@ -376,7 +375,6 @@ final class ThumbnailServiceTest extends PublicTestCase
         $standardThumbnail = DungeonRouteThumbnail::create([
             'dungeon_route_id' => $dungeonRoute->id,
             'floor_id'         => $floor->id,
-            'custom'           => false,
             'variant'          => DungeonRouteThumbnailVariant::Standard,
         ]);
         $standardFile = File::create([
@@ -440,7 +438,6 @@ final class ThumbnailServiceTest extends PublicTestCase
         $oldThumbnail = DungeonRouteThumbnail::create([
             'dungeon_route_id' => $dungeonRoute->id,
             'floor_id'         => $floor->id,
-            'custom'           => false,
         ]);
         Storage::disk('s3_user_uploads')->put('thumbnails/old.jpg', 'prod-backup-bytes');
         $oldFile = File::create([
@@ -490,7 +487,6 @@ final class ThumbnailServiceTest extends PublicTestCase
         $standardThumbnail = DungeonRouteThumbnail::create([
             'dungeon_route_id' => $dungeonRoute->id,
             'floor_id'         => $floor->id,
-            'custom'           => false,
             'variant'          => DungeonRouteThumbnailVariant::Standard,
         ]);
 
@@ -501,9 +497,8 @@ final class ThumbnailServiceTest extends PublicTestCase
             // Act - attach a custom variant
             $customThumbnail = $method->invoke($service, $dungeonRoute, $floor->index, '/thumbnails_custom/custom.jpg', 'fake-image-bytes', config('filesystems.default'), DungeonRouteThumbnailVariant::Custom);
 
-            // Assert - variant is 'custom' and the legacy custom boolean is dual-written to true
+            // Assert - variant is 'custom'
             $this->assertSame(DungeonRouteThumbnailVariant::Custom, $customThumbnail->variant);
-            $this->assertTrue((bool)$customThumbnail->custom);
             // The pre-existing standard thumbnail is untouched
             $this->assertDatabaseHas('dungeon_route_thumbnails', ['id' => $standardThumbnail->id]);
         } finally {
@@ -557,7 +552,6 @@ final class ThumbnailServiceTest extends PublicTestCase
         $heroThumbnail = DungeonRouteThumbnail::create([
             'dungeon_route_id' => $dungeonRoute->id,
             'floor_id'         => $floor->id,
-            'custom'           => false,
             'variant'          => DungeonRouteThumbnailVariant::Hero,
         ]);
         DungeonRouteThumbnail::where('id', $heroThumbnail->id)
@@ -596,7 +590,6 @@ final class ThumbnailServiceTest extends PublicTestCase
         $heroThumbnail = DungeonRouteThumbnail::create([
             'dungeon_route_id' => $dungeonRoute->id,
             'floor_id'         => $floor->id,
-            'custom'           => false,
             'variant'          => DungeonRouteThumbnailVariant::Hero,
         ]);
         DungeonRouteThumbnail::where('id', $heroThumbnail->id)
@@ -636,7 +629,6 @@ final class ThumbnailServiceTest extends PublicTestCase
             $thumbnail = DungeonRouteThumbnail::create([
                 'dungeon_route_id' => $dungeonRoute->id,
                 'floor_id'         => $floor->id,
-                'custom'           => false,
                 'variant'          => DungeonRouteThumbnailVariant::Hero,
             ]);
             DungeonRouteThumbnail::where('id', $thumbnail->id)
@@ -686,7 +678,6 @@ final class ThumbnailServiceTest extends PublicTestCase
             $thumbnail = DungeonRouteThumbnail::create([
                 'dungeon_route_id' => $dungeonRoute->id,
                 'floor_id'         => $floor->id,
-                'custom'           => false,
             ]);
             $file = File::create([
                 'model_id'    => $thumbnail->id,
