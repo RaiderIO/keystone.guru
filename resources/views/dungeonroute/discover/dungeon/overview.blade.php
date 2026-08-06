@@ -61,10 +61,11 @@ use Laravel\Pennant\Feature;
         $heroRouteIds = collect();
         $startRank    = ($page - 1) * $perPage + 1;
         // Batches the per-pull enemy forces query across every card on this page - hero band and
-        // leaderboard rows alike - into a single grouped query instead of one query per card.
+        // leaderboard rows alike - into a single grouped query instead of one query per card. The
+        // weekly-route hero band only ever renders on page 1, so it's only folded in there.
         $pullForcesResolver = new DungeonRouteEnemyForcesPageResolver(
             app(DungeonRouteKillZoneServiceInterface::class),
-            $weeklyRoutes->pluck('dungeonRoute')->merge($popularItems)->unique('id')->values(),
+            ($page === 1 ? $weeklyRoutes->pluck('dungeonRoute') : collect())->merge($popularItems)->unique('id')->values(),
         );
         ?>
         @if($page === 1)

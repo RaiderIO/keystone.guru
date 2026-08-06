@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\App\Repository\DungeonRoute;
 
+use App\Models\Affix;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Repositories\Database\DungeonRoute\Dtos\KillZoneEnemyForces;
 use App\Repositories\Database\DungeonRoute\DungeonRouteRepository;
@@ -206,11 +207,10 @@ final class DungeonRouteRepositoryTest extends PublicTestCase
     #[Test]
     public function getEnemyForcesPerKillZoneForRoutes_givenRoutesWithKillZones_matchesPerRouteResults(): void
     {
-        // Arrange - a handful of seeded routes that already carry kill zones/enemies, batched together
+        // Arrange - every seeded route that already carries kill zones/enemies, batched together
         $dungeonRoutes = DungeonRoute::query()
             ->has('killZones')
             ->with(['affixes', 'season.expansion'])
-            ->limit(5)
             ->get();
 
         $this->assertNotEmpty($dungeonRoutes, 'Expected some seeded routes with kill zones');
@@ -219,12 +219,53 @@ final class DungeonRouteRepositoryTest extends PublicTestCase
         $batchedResult = $this->repository->getEnemyForcesPerKillZoneForRoutes($dungeonRoutes);
 
         // Assert - the batched call returns the exact same per-pull forces as the single-route call
-        $dungeonRoutes->each(function (DungeonRoute $dungeonRoute) use ($batchedResult) {
-            $singleResult = $this->repository->getEnemyForcesPerKillZone($dungeonRoute);
+        $sawNonZeroForces = false;
+        $sawBoss          = false;
+        $dungeonRoutes->each(function (DungeonRoute $dungeonRoute) use ($batchedResult, &$sawNonZeroForces, &$sawBoss) {
+            $singleResult    = $this->repository->getEnemyForcesPerKillZone($dungeonRoute);
+            $batchedForRoute = $batchedResult->get($dungeonRoute->id, collect());
+
+            $sawNonZeroForces = $sawNonZeroForces || $singleResult->contains(fn(KillZoneEnemyForces $forces) => $forces->enemyForces > 0);
+            $sawBoss          = $sawBoss || $singleResult->contains(fn(KillZoneEnemyForces $forces) => $forces->hasBoss);
 
             $this->assertEquals(
                 $singleResult->map(fn(KillZoneEnemyForces $forces) => [$forces->enemyForces, $forces->hasBoss])->values()->all(),
-                $batchedResult->get($dungeonRoute->id, collect())->map(fn(KillZoneEnemyForces $forces) => [$forces->enemyForces, $forces->hasBoss])->values()->all(),
+                $batchedForRoute->map(fn(KillZoneEnemyForces $forces) => [$forces->enemyForces, $forces->hasBoss])->values()->all(),
+                sprintf('Mismatch for dungeon route %d', $dungeonRoute->id),
+            );
+        });
+
+        // Guards against a vacuous pass - the seeded routes must actually exercise nonzero forces/bosses
+        $this->assertTrue($sawNonZeroForces, 'Expected at least one seeded route with nonzero enemy forces');
+        $this->assertTrue($sawBoss, 'Expected at least one seeded route with a boss pull');
+    }
+
+    #[Test]
+    public function getEnemyForcesPerKillZoneForRoutes_givenShroudedAndNonShroudedRoutes_matchesPerRouteResultsForBoth(): void
+    {
+        // Arrange - split the seeded routes into the two buckets the batched query fires separately
+        $dungeonRoutes = DungeonRoute::query()
+            ->has('killZones')
+            ->with(['affixes', 'season.expansion'])
+            ->get();
+
+        $shroudedRoutes    = $dungeonRoutes->filter(fn(DungeonRoute $r) => $r->getSeasonalAffix()?->key === Affix::AFFIX_SHROUDED);
+        $nonShroudedRoutes = $dungeonRoutes->reject(fn(DungeonRoute $r) => $r->getSeasonalAffix()?->key === Affix::AFFIX_SHROUDED);
+
+        $this->assertNotEmpty($shroudedRoutes, 'Expected some seeded shrouded routes with kill zones');
+        $this->assertNotEmpty($nonShroudedRoutes, 'Expected some seeded non-shrouded routes with kill zones');
+
+        // Act - both buckets batched together in a single call, exercising the union() of the two queries
+        $batchedResult = $this->repository->getEnemyForcesPerKillZoneForRoutes($dungeonRoutes);
+
+        // Assert - neither bucket is dropped or duplicated; every route still matches its single-route result
+        $dungeonRoutes->each(function (DungeonRoute $dungeonRoute) use ($batchedResult) {
+            $singleResult    = $this->repository->getEnemyForcesPerKillZone($dungeonRoute);
+            $batchedForRoute = $batchedResult->get($dungeonRoute->id, collect());
+
+            $this->assertEquals(
+                $singleResult->map(fn(KillZoneEnemyForces $forces) => [$forces->enemyForces, $forces->hasBoss])->values()->all(),
+                $batchedForRoute->map(fn(KillZoneEnemyForces $forces) => [$forces->enemyForces, $forces->hasBoss])->values()->all(),
                 sprintf('Mismatch for dungeon route %d', $dungeonRoute->id),
             );
         });

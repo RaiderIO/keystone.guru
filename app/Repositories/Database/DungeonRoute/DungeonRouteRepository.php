@@ -223,8 +223,9 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
 
     /**
      * Batched variant of {@see self::getEnemyForcesPerKillZone()} - fetches the per-pull enemy forces
-     * for an entire collection of routes (e.g. a leaderboard page) in O(1) queries instead of one
-     * query per route, keyed by dungeon route id.
+     * for an entire collection of routes (e.g. a leaderboard page) in at most two grouped queries
+     * (one per shrouded/non-shrouded bucket, see below) instead of one query per route, keyed by
+     * dungeon route id.
      *
      * @param  Collection<int, DungeonRoute>                         $dungeonRoutes
      * @return Collection<int, Collection<int, KillZoneEnemyForces>>
@@ -236,10 +237,14 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
         // The shrouded enemy-forces expression differs from the non-shrouded one (it reads from
         // mapping_versions.enemy_forces_shrouded* instead of npc_enemy_forces), so shrouded and
         // non-shrouded routes are batched into two separate queries rather than one per route.
-        $isShrouded = static fn(DungeonRoute $dungeonRoute) => $dungeonRoute->getSeasonalAffix()?->key === Affix::AFFIX_SHROUDED;
+        // partition() (not reject()+filter()) so getSeasonalAffix() - which re-queries
+        // affixGroupCouplings for TWW routes - only runs once per route instead of twice.
+        [$shroudedRoutes, $nonShroudedRoutes] = $existingRoutes->partition(
+            static fn(DungeonRoute $dungeonRoute) => $dungeonRoute->getSeasonalAffix()?->key === Affix::AFFIX_SHROUDED,
+        );
 
-        return $this->queryEnemyForcesPerKillZoneForRouteIds($existingRoutes->reject($isShrouded)->pluck('id'), false)
-            ->union($this->queryEnemyForcesPerKillZoneForRouteIds($existingRoutes->filter($isShrouded)->pluck('id'), true));
+        return $this->queryEnemyForcesPerKillZoneForRouteIds($nonShroudedRoutes->pluck('id'), false)
+            ->union($this->queryEnemyForcesPerKillZoneForRouteIds($shroudedRoutes->pluck('id'), true));
     }
 
     /**
