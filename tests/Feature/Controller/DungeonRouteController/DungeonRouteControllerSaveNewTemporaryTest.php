@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\DungeonRouteController;
 
 use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\MapIcon;
 use App\Models\User;
@@ -220,10 +221,10 @@ final class DungeonRouteControllerSaveNewTemporaryTest extends DungeonRouteContr
     public static function validDungeonDifficultyProvider(): array
     {
         return [
-            '10 man' => [Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_10_MAN]],
-            '25 man' => [Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_25_MAN]],
-            '20 man' => [Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_20_MAN]],
-            '40 man' => [Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_40_MAN]],
+            '10 man' => [DungeonDifficulty::TEN_MAN->value],
+            '25 man' => [DungeonDifficulty::TWENTY_FIVE_MAN->value],
+            '20 man' => [DungeonDifficulty::TWENTY_MAN->value],
+            '40 man' => [DungeonDifficulty::FORTY_MAN->value],
         ];
     }
 
@@ -250,7 +251,7 @@ final class DungeonRouteControllerSaveNewTemporaryTest extends DungeonRouteContr
         return [
             'zero'            => [0],
             'out of range'    => [99],
-            'difficulty slug' => [Dungeon::DIFFICULTY_10_MAN],
+            'difficulty slug' => [DungeonDifficulty::TEN_MAN->slug()],
         ];
     }
 

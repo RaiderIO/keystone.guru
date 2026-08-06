@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Database\Npc;
 
-use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Repositories\Database\DatabaseRepository;
@@ -38,14 +38,14 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
                         )->orWhereNull('npc_enemy_forces.id');
                     });
             })
-            ->when($mappingVersion->dungeon->key === Dungeon::DUNGEON_NELTHARIONS_LAIR, function (Builder $builder) {
+            ->when($mappingVersion->dungeon->key === DungeonKey::NELTHARIONS_LAIR->value, function (Builder $builder) {
                 $builder->orWhereIn('npcs.id', [
                     // Burning Geodes are in the mapping but give 0 enemy forces.
                     // They're in the mapping because they're dangerous af
                     101437,
                 ]);
             })
-            ->when($mappingVersion->dungeon->key === Dungeon::DUNGEON_THE_NECROTIC_WAKE, function (Builder $builder) {
+            ->when($mappingVersion->dungeon->key === DungeonKey::THE_NECROTIC_WAKE->value, function (Builder $builder) {
                 $builder->orWhereIn('npcs.id', [
                     // Necrotic Wake:
                     // Brittlebone Warrior is in the mapping but gives 0 enemy forces.
@@ -62,14 +62,14 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
                     163623,
                 ]);
             })
-            ->when($mappingVersion->dungeon->key === Dungeon::DUNGEON_HALLS_OF_INFUSION, function (Builder $builder) {
+            ->when($mappingVersion->dungeon->key === DungeonKey::HALLS_OF_INFUSION->value, function (Builder $builder) {
                 $builder->orWhereIn('npcs.id', [
                     // Aqua Ragers are in the mapping but give 0 enemy forces - so would be excluded.
                     // They're in the mapping because they are a significant drain on time and excluding them would raise questions about why they're gone
                     190407,
                 ]);
             })
-            ->when($mappingVersion->dungeon->key === Dungeon::DUNGEON_BRACKENHIDE_HOLLOW, function (Builder $builder) {
+            ->when($mappingVersion->dungeon->key === DungeonKey::BRACKENHIDE_HOLLOW->value, function (Builder $builder) {
                 $builder->orWhereIn('npcs.id', [
                     // Witherlings that are a significant nuisance to be included in the mapping. They give 0 enemy forces.
                     194273,
@@ -83,7 +83,7 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
                     197857,
                 ]);
             })
-            ->when($mappingVersion->dungeon->key === Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE, function (
+            ->when($mappingVersion->dungeon->key === DungeonKey::THE_NOKHUD_OFFENSIVE->value, function (
                 Builder $builder,
             ) {
                 $builder->orWhereIn('npcs.id', [
@@ -98,8 +98,8 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
                 ]);
             })
             ->when(in_array($mappingVersion->dungeon->key, [
-                Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL,
-                Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE,
+                DungeonKey::DAWN_OF_THE_INFINITE_GALAKRONDS_FALL->value,
+                DungeonKey::DAWN_OF_THE_INFINITE_MUROZONDS_RISE->value,
             ]), function (Builder $builder) {
                 $builder->orWhereIn('npcs.id', [
                     // Temporal Deviation gives 0 enemy forces but is in the mapping regardless
@@ -108,20 +108,20 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
                     204918,
                 ]);
             })
-            ->when($mappingVersion->dungeon->key === Dungeon::DUNGEON_CITY_OF_THREADS, function (Builder $builder) {
+            ->when($mappingVersion->dungeon->key === DungeonKey::CITY_OF_THREADS->value, function (Builder $builder) {
                 $builder->orWhereIn('npcs.id', [
                     // Eye of the Queen gives 0 enemy forces but is in the mapping regardless
                     220003,
                 ]);
             })
-            ->when($mappingVersion->dungeon->key === Dungeon::DUNGEON_WINDRUNNER_SPIRE, function (Builder $builder) {
+            ->when($mappingVersion->dungeon->key === DungeonKey::WINDRUNNER_SPIRE->value, function (Builder $builder) {
                 $builder->whereNotIn('npcs.id', [
                     // Haunting Grunt gives 0 enemy forces, they are summoned by Commander Kroluk but they are never actually summoned
                     // As such they would be assigned to enemies in the mapping, this prevents Haunting Grunts from being assigned at all
                     232446,
                 ]);
             })
-            ->when($mappingVersion->dungeon->key === Dungeon::DUNGEON_SKYREACH, function (Builder $builder) {
+            ->when($mappingVersion->dungeon->key === DungeonKey::SKYREACH->value, function (Builder $builder) {
                 $builder->whereNotIn('npcs.id', [
                     // Solar Orb gives 0 enemy forces
                     251880,

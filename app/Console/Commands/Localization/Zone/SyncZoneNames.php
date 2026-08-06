@@ -4,6 +4,7 @@ namespace App\Console\Commands\Localization\Zone;
 
 use App\Console\Commands\Localization\Traits\ExportsTranslations;
 use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Models\Floor\Floor;
 use App\Service\Wowhead\WowheadTranslationServiceInterface;
 use Exception;
@@ -14,23 +15,23 @@ class SyncZoneNames extends Command
     use ExportsTranslations;
 
     const array EXCLUDE_DUNGEONS = [
-        Dungeon::DUNGEON_SCARLET_MONASTERY_ARMORY,
-        Dungeon::DUNGEON_SCARLET_MONASTERY_CATHEDRAL,
-        Dungeon::DUNGEON_SCARLET_MONASTERY_GRAVEYARD,
-        Dungeon::DUNGEON_SCARLET_MONASTERY_LIBRARY,
+        DungeonKey::SCARLET_MONASTERY_ARMORY->value,
+        DungeonKey::SCARLET_MONASTERY_CATHEDRAL->value,
+        DungeonKey::SCARLET_MONASTERY_GRAVEYARD->value,
+        DungeonKey::SCARLET_MONASTERY_LIBRARY->value,
 
-        Dungeon::DUNGEON_DIRE_MAUL_EAST,
-        Dungeon::DUNGEON_DIRE_MAUL_NORTH,
-        Dungeon::DUNGEON_DIRE_MAUL_WEST,
+        DungeonKey::DIRE_MAUL_EAST->value,
+        DungeonKey::DIRE_MAUL_NORTH->value,
+        DungeonKey::DIRE_MAUL_WEST->value,
 
-        Dungeon::DUNGEON_MECHAGON_JUNKYARD,
-        Dungeon::DUNGEON_MECHAGON_WORKSHOP,
+        DungeonKey::MECHAGON_JUNKYARD->value,
+        DungeonKey::MECHAGON_WORKSHOP->value,
 
-        Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL,
-        Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE,
+        DungeonKey::DAWN_OF_THE_INFINITE_GALAKRONDS_FALL->value,
+        DungeonKey::DAWN_OF_THE_INFINITE_MUROZONDS_RISE->value,
 
-        Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT,
-        Dungeon::DUNGEON_TAZAVESH_STREETS_OF_WONDER,
+        DungeonKey::TAZAVESH_SO_LEAHS_GAMBIT->value,
+        DungeonKey::TAZAVESH_STREETS_OF_WONDER->value,
     ];
 
     /**
@@ -255,7 +256,7 @@ class SyncZoneNames extends Command
                         }
                     }
 
-//                    if ($dungeon->key === Dungeon::DUNGEON_OPERATION_FLOODGATE) {
+//                    if ($dungeon->key === DungeonKey::OPERATION_FLOODGATE->value) {
 //                        dd(
 //                            $zoneId,
                     ////                            $zoneIdIndexReference,

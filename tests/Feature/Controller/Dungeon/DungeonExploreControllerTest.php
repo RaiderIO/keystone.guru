@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\Dungeon;
 
 use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
@@ -133,7 +134,7 @@ final class DungeonExploreControllerTest extends PublicTestCase
 
         SeasonDungeon::create([
             'season_id'  => $season->id,
-            'dungeon_id' => Dungeon::firstWhere('key', Dungeon::DUNGEON_ARA_KARA_CITY_OF_ECHOES)->id,
+            'dungeon_id' => Dungeon::firstWhere('key', DungeonKey::ARA_KARA_CITY_OF_ECHOES->value)->id,
         ]);
 
         return $season;

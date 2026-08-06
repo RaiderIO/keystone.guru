@@ -6,6 +6,7 @@ use App;
 use App\Dto\Request\CombatLog\Route\CombatLogRouteNpcRequestDto;
 use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestDto;
 use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\Spell\Spell;
@@ -233,7 +234,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 // to the beginning, but you're now phased in a Shadow Realm. I split this off in a separate floor so
                 // that the enemies are not on the same floor as the original enemies that you already killed.
                 // So what we do here is forcibly yoink the originally killed enemy (that you sent me) to the new floor.
-                if ($this->dungeonRoute->dungeon->key === Dungeon::DUNGEON_DARKFLAME_CLEFT) {
+                if ($this->dungeonRoute->dungeon->key === DungeonKey::DARKFLAME_CLEFT->value) {
                     $event['npc']->coord->uiMapId = $resolvedEnemy->floor->ui_map_id;
                 }
 

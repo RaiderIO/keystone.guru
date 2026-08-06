@@ -3,6 +3,8 @@
 namespace Tests\Unit\MapTiles;
 
 use App\Models\Dungeon;
+use App\Models\DungeonKey;
+use App\Models\RaidKey;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\Group;
@@ -25,18 +27,18 @@ final class MapTilesExistenceTest extends PublicTestCase
         // Act & Assert
         foreach ($dungeons as $dungeon) {
             if (in_array($dungeon->key, [
-                Dungeon::DUNGEON_PRIORY_OF_THE_SACRED_FLAME,
-                Dungeon::DUNGEON_THE_ROOKERY, // Missing MDT floor (but it's already created since I expect it to come)
-                Dungeon::DUNGEON_AUCHINDOUN,
-                Dungeon::DUNGEON_BLOODMAUL_SLAG_MINES,
-                Dungeon::DUNGEON_BLOODMAUL_SLAG_MINES, // Not implemented
-                Dungeon::DUNGEON_DEN_OF_NALORAKK, // Missing first map
-                Dungeon::DUNGEON_VOIDSCAR_ARENA, // Not implemented
-                Dungeon::RAID_ONYXIAS_LAIR_WOTLK,
-                Dungeon::RAID_ONYXIAS_LAIR,
-                Dungeon::RAID_RUINS_OF_AHN_QIRAJ,
-                Dungeon::RAID_TEMPLE_OF_AHN_QIRAJ,
-                Dungeon::RAID_NAXXRAMAS,
+                DungeonKey::PRIORY_OF_THE_SACRED_FLAME->value,
+                DungeonKey::THE_ROOKERY->value, // Missing MDT floor (but it's already created since I expect it to come)
+                DungeonKey::AUCHINDOUN->value,
+                DungeonKey::BLOODMAUL_SLAG_MINES->value,
+                DungeonKey::BLOODMAUL_SLAG_MINES->value, // Not implemented
+                DungeonKey::DEN_OF_NALORAKK->value, // Missing first map
+                DungeonKey::VOIDSCAR_ARENA->value, // Not implemented
+                RaidKey::ONYXIAS_LAIR_WOTLK->value,
+                RaidKey::ONYXIAS_LAIR->value,
+                RaidKey::RUINS_OF_AHN_QIRAJ->value,
+                RaidKey::TEMPLE_OF_AHN_QIRAJ->value,
+                RaidKey::NAXXRAMAS->value,
                 // Prematurely created - no tiles exist for these yet
             ])) {
                 continue;

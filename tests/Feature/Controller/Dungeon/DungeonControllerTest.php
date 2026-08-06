@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\Dungeon;
 
 use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\User;
 use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Attributes\Group;
@@ -49,8 +50,8 @@ final class DungeonControllerTest extends PublicTestCase
         $originalDifficulties = $dungeon->getEnabledSpeedrunDifficulties();
 
         $expected = [
-            Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_10_MAN],
-            Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_25_MAN],
+            DungeonDifficulty::TEN_MAN->value,
+            DungeonDifficulty::TWENTY_FIVE_MAN->value,
         ];
 
         try {
@@ -78,16 +79,16 @@ final class DungeonControllerTest extends PublicTestCase
         try {
             // Act — first set two difficulties, then re-sync to a single one
             $this->updateDungeon($dungeon, [
-                Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_10_MAN],
-                Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_25_MAN],
+                DungeonDifficulty::TEN_MAN->value,
+                DungeonDifficulty::TWENTY_FIVE_MAN->value,
             ]);
             $this->updateDungeon($dungeon, [
-                Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_20_MAN],
+                DungeonDifficulty::TWENTY_MAN->value,
             ]);
 
             // Assert — only the last set remains
             $this->assertEqualsCanonicalizing(
-                [Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_20_MAN]],
+                [DungeonDifficulty::TWENTY_MAN->value],
                 $dungeon->fresh()->getEnabledSpeedrunDifficulties(),
             );
         } finally {

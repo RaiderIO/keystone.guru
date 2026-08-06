@@ -3,6 +3,7 @@
 namespace Tests\Feature\App\Model\Mapping;
 
 use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\Floor\Floor;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use Illuminate\Support\Collection;
@@ -26,7 +27,7 @@ final class DungeonSpeedrunRequiredNpcsRelationTest extends PublicTestCase
 
             // Assert
             $this->assertEqualsCanonicalizing(
-                array_values(Dungeon::DIFFICULTY_ALL),
+                DungeonDifficulty::values(),
                 $requiredNpcs->whereIn('id', $createdNpcs->pluck('id'))->pluck('difficulty')->all(),
             );
         } finally {
@@ -47,7 +48,7 @@ final class DungeonSpeedrunRequiredNpcsRelationTest extends PublicTestCase
 
             // Assert
             $this->assertEqualsCanonicalizing(
-                array_values(Dungeon::DIFFICULTY_ALL),
+                DungeonDifficulty::values(),
                 $requiredNpcs->whereIn('id', $createdNpcs->pluck('id'))->pluck('difficulty')->all(),
             );
         } finally {
@@ -71,7 +72,7 @@ final class DungeonSpeedrunRequiredNpcsRelationTest extends PublicTestCase
      */
     private function createRequiredNpcForEachDifficulty(int $floorId): Collection
     {
-        return collect(array_values(Dungeon::DIFFICULTY_ALL))->map(static fn(int $difficulty): DungeonSpeedrunRequiredNpc => DungeonSpeedrunRequiredNpc::create([
+        return collect(DungeonDifficulty::values())->map(static fn(int $difficulty): DungeonSpeedrunRequiredNpc => DungeonSpeedrunRequiredNpc::create([
             'floor_id'   => $floorId,
             'difficulty' => $difficulty,
             'count'      => 1,

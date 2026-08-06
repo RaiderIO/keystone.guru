@@ -30,7 +30,7 @@ Schema:
 - `fields` is a `{name, value}` pair array (not an object) so duplicate keys are representable
   (e.g. `class[]` appears once per party member, `route_select_affixes[]` once per selected affix).
 - Values that are code constants or static defaults (`""`, `"-1"`, `"0"`, difficulty `"1"`/`"2"` -
-  `DungeonConstants::DIFFICULTY_ALL` is identical in every environment) are written literally.
+  `DungeonDifficulty` is identical in every environment) are written literally.
 - Values that come from the seeded database (dungeon/team/affix-group/attribute/faction/class/
   specialization/race/key-level ids) are `{{placeholder}}` tokens, substituted by each side with its
   own ids.

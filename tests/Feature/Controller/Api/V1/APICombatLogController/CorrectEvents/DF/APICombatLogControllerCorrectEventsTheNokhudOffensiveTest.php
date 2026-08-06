@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\DF;
 
-use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\APICombatLogControllerCorrectEventsTestBase;
@@ -16,7 +16,7 @@ class APICombatLogControllerCorrectEventsTheNokhudOffensiveTest extends APIComba
 {
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE;
+        return DungeonKey::THE_NOKHUD_OFFENSIVE->value;
     }
 
     #[Test]

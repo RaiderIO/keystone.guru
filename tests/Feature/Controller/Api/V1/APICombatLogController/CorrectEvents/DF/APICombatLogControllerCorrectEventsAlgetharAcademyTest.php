@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\DF;
 
-use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\APICombatLogControllerCorrectEventsTestBase;
@@ -16,7 +16,7 @@ class APICombatLogControllerCorrectEventsAlgetharAcademyTest extends APICombatLo
 {
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_ALGETH_AR_ACADEMY;
+        return DungeonKey::ALGETH_AR_ACADEMY->value;
     }
 
     #[Test]

@@ -11,8 +11,10 @@ namespace App\Logic\MDT;
 use App\Logic\Structs\LatLng;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Models\Expansion;
 use App\Models\Floor\Floor;
+use App\Models\RaidKey;
 use App\Models\Season;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
@@ -40,52 +42,52 @@ class Conversion
     // @formatter:off
     public const array DUNGEON_NAME_MAPPING = [
         //        Expansion::EXPANSION_CLASSIC => [
-        //            Dungeon::DUNGEON_BLACKFATHOM_DEEPS           => 'BlackfathomDeeps',
-        //            Dungeon::DUNGEON_BLACKROCK_DEPTHS            => 'BlackrockDepths',
-        //            Dungeon::DUNGEON_DEADMINES                   => 'Deadmines',
-        //            Dungeon::DUNGEON_DIRE_MAUL_WEST              => 'DireMaulWest',
-        //            Dungeon::DUNGEON_DIRE_MAUL_NORTH             => 'DireMaulNorth',
-        //            Dungeon::DUNGEON_DIRE_MAUL_EAST              => 'DireMaulEast',
-        //            Dungeon::DUNGEON_GNOMEREGAN                  => 'Gnomeregan',
-        //            Dungeon::DUNGEON_LOWER_BLACKROCK_SPIRE       => 'LowerBlackrockSpire',
-        //            Dungeon::DUNGEON_MARAUDON                    => 'Maraudon',
-        //            Dungeon::DUNGEON_RAGEFIRE_CHASM              => 'RagefireChasm',
-        //            Dungeon::DUNGEON_RAZORFEN_DOWNS              => 'RazorfenDowns',
-        //            Dungeon::DUNGEON_RAZORFEN_KRAUL              => 'RazorfenKraul',
-        //            Dungeon::DUNGEON_SCARLET_MONASTERY_ARMORY    => 'ScarletMonasteryArmory',
-        //            Dungeon::DUNGEON_SCARLET_MONASTERY_CATHEDRAL => 'ScarletMonasteryCathedral',
-        //            Dungeon::DUNGEON_SCARLET_MONASTERY_LIBRARY   => 'ScarletMonasteryLibrary',
-        //            Dungeon::DUNGEON_SCARLET_MONASTERY_GRAVEYARD => 'ScarletMonasteryGraveyard',
-        //            Dungeon::DUNGEON_SCHOLOMANCE                 => 'Scholomance',
-        //            Dungeon::DUNGEON_SHADOWFANG_KEEP             => 'ShadowfangKeep',
-        //            Dungeon::DUNGEON_STRATHOLME                  => 'Stratholme',
-        //            Dungeon::DUNGEON_THE_STOCKADE                => 'TheStockade',
-        //            Dungeon::DUNGEON_THE_TEMPLE_OF_ATAL_HAKKAR   => 'TheTempleOfAtalHakkar',
-        //            Dungeon::DUNGEON_ULDAMAN                     => 'Uldaman',
-        //            Dungeon::DUNGEON_UPPER_BLACKROCK_SPIRE       => 'UpperBlackrockSpire',
-        //            Dungeon::DUNGEON_WAILING_CAVERNS             => 'WailingCaverns',
-        //            Dungeon::DUNGEON_ZUL_FARRAK                  => 'ZulFarrak',
+        //            DungeonKey::BLACKFATHOM_DEEPS->value           => 'BlackfathomDeeps',
+        //            DungeonKey::BLACKROCK_DEPTHS->value            => 'BlackrockDepths',
+        //            DungeonKey::DEADMINES->value                   => 'Deadmines',
+        //            DungeonKey::DIRE_MAUL_WEST->value              => 'DireMaulWest',
+        //            DungeonKey::DIRE_MAUL_NORTH->value             => 'DireMaulNorth',
+        //            DungeonKey::DIRE_MAUL_EAST->value              => 'DireMaulEast',
+        //            DungeonKey::GNOMEREGAN->value                  => 'Gnomeregan',
+        //            DungeonKey::LOWER_BLACKROCK_SPIRE->value       => 'LowerBlackrockSpire',
+        //            DungeonKey::MARAUDON->value                    => 'Maraudon',
+        //            DungeonKey::RAGEFIRE_CHASM->value              => 'RagefireChasm',
+        //            DungeonKey::RAZORFEN_DOWNS->value              => 'RazorfenDowns',
+        //            DungeonKey::RAZORFEN_KRAUL->value              => 'RazorfenKraul',
+        //            DungeonKey::SCARLET_MONASTERY_ARMORY->value    => 'ScarletMonasteryArmory',
+        //            DungeonKey::SCARLET_MONASTERY_CATHEDRAL->value => 'ScarletMonasteryCathedral',
+        //            DungeonKey::SCARLET_MONASTERY_LIBRARY->value   => 'ScarletMonasteryLibrary',
+        //            DungeonKey::SCARLET_MONASTERY_GRAVEYARD->value => 'ScarletMonasteryGraveyard',
+        //            DungeonKey::SCHOLOMANCE->value                 => 'Scholomance',
+        //            DungeonKey::SHADOWFANG_KEEP->value             => 'ShadowfangKeep',
+        //            DungeonKey::STRATHOLME->value                  => 'Stratholme',
+        //            DungeonKey::THE_STOCKADE->value                => 'TheStockade',
+        //            DungeonKey::THE_TEMPLE_OF_ATAL_HAKKAR->value   => 'TheTempleOfAtalHakkar',
+        //            DungeonKey::ULDAMAN->value                     => 'Uldaman',
+        //            DungeonKey::UPPER_BLACKROCK_SPIRE->value       => 'UpperBlackrockSpire',
+        //            DungeonKey::WAILING_CAVERNS->value             => 'WailingCaverns',
+        //            DungeonKey::ZUL_FARRAK->value                  => 'ZulFarrak',
         //        ],
         // Never actually got merged into main
         //        Expansion::EXPANSION_WOTLK => [
-        //            Dungeon::DUNGEON_AHN_KAHET_THE_OLD_KINGDOM => 'AhnKahetTheOldKingdom',
-        //            Dungeon::DUNGEON_AZJOL_NERUB               => 'AzjolNerub',
-        //            Dungeon::DUNGEON_DRAK_THARON_KEEP          => 'DrakTharonKeep',
-        //            Dungeon::DUNGEON_GUNDRAK                   => 'Gundrak',
-        //            Dungeon::DUNGEON_HALLS_OF_LIGHTNING        => 'HallsOfLightning',
-        //            Dungeon::DUNGEON_HALLS_OF_STONE            => 'HallsOfStone',
-        //            Dungeon::RAID_NAXXRAMAS                    => 'Naxxramas',
-        //            Dungeon::RAID_ULDUAR                       => 'Ulduar',
-        //            Dungeon::DUNGEON_THE_CULLING_OF_STRATHOLME => 'TheCullingOfStratholme',
-        //            Dungeon::DUNGEON_THE_NEXUS                 => 'TheNexus',
-        //            Dungeon::DUNGEON_THE_OCULUS                => 'TheOculus',
-        //            Dungeon::DUNGEON_THE_VIOLET_HOLD           => 'TheVioletHold',
-        //            Dungeon::DUNGEON_UTGARDE_KEEP              => 'UtgardeKeep',
-        //            Dungeon::DUNGEON_UTGARDE_PINNACLE          => 'UtgardePinnacle',
+        //            DungeonKey::AHN_KAHET_THE_OLD_KINGDOM->value => 'AhnKahetTheOldKingdom',
+        //            DungeonKey::AZJOL_NERUB->value               => 'AzjolNerub',
+        //            DungeonKey::DRAK_THARON_KEEP->value          => 'DrakTharonKeep',
+        //            DungeonKey::GUNDRAK->value                   => 'Gundrak',
+        //            DungeonKey::HALLS_OF_LIGHTNING->value        => 'HallsOfLightning',
+        //            DungeonKey::HALLS_OF_STONE->value            => 'HallsOfStone',
+        //            RaidKey::NAXXRAMAS->value                    => 'Naxxramas',
+        //            RaidKey::ULDUAR->value                       => 'Ulduar',
+        //            DungeonKey::THE_CULLING_OF_STRATHOLME->value => 'TheCullingOfStratholme',
+        //            DungeonKey::THE_NEXUS->value                 => 'TheNexus',
+        //            DungeonKey::THE_OCULUS->value                => 'TheOculus',
+        //            DungeonKey::THE_VIOLET_HOLD->value           => 'TheVioletHold',
+        //            DungeonKey::UTGARDE_KEEP->value              => 'UtgardeKeep',
+        //            DungeonKey::UTGARDE_PINNACLE->value          => 'UtgardePinnacle',
         //        ],
 
         Expansion::EXPANSION_CATACLYSM => [
-            //            Dungeon::DUNGEON_THE_VORTEX_PINNACLE => 'TheVortexPinnacle',
+            //            DungeonKey::THE_VORTEX_PINNACLE->value => 'TheVortexPinnacle',
         ],
 
         // MDT 6.2 (ptr12.1) deleted the MistsOfPandaria folder from the mainline package, and MDT_Legacy
@@ -93,196 +95,196 @@ class Conversion
         // mapped would make hasMDTDungeonName() lie and every caller throw "Unable to find file"; the
         // existing mapping data in Keystone.guru is untouched, only re-importing from MDT is gone.
         Expansion::EXPANSION_MOP => [
-            //            Dungeon::DUNGEON_GATE_OF_THE_SETTING_SUN    => 'GateOfTheSettingSun',
-            //            Dungeon::DUNGEON_MOGU_SHAN_PALACE           => 'MoguShanPalace',
-            //            Dungeon::DUNGEON_SCARLET_HALLS_MOP          => 'ScarletHalls',
-            //            Dungeon::DUNGEON_SCARLET_MONASTERY_MOP      => 'ScarletMonastery',
-            //            Dungeon::DUNGEON_SCHOLOMANCE_MOP            => 'Scholomance',
-            //            Dungeon::DUNGEON_SHADO_PAN_MONASTERY        => 'ShadoPanMonastery',
-            //            Dungeon::DUNGEON_SIEGE_OF_NIUZAO_TEMPLE     => 'SiegeOfNiuzaoTemple',
-            //            Dungeon::DUNGEON_STORMSTOUT_BREWERY         => 'StormstoutBrewery',
-            //            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
+            //            DungeonKey::GATE_OF_THE_SETTING_SUN->value    => 'GateOfTheSettingSun',
+            //            DungeonKey::MOGU_SHAN_PALACE->value           => 'MoguShanPalace',
+            //            DungeonKey::SCARLET_HALLS_MOP->value          => 'ScarletHalls',
+            //            DungeonKey::SCARLET_MONASTERY_MOP->value      => 'ScarletMonastery',
+            //            DungeonKey::SCHOLOMANCE_MOP->value            => 'Scholomance',
+            //            DungeonKey::SHADO_PAN_MONASTERY->value        => 'ShadoPanMonastery',
+            //            DungeonKey::SIEGE_OF_NIUZAO_TEMPLE->value     => 'SiegeOfNiuzaoTemple',
+            //            DungeonKey::STORMSTOUT_BREWERY->value         => 'StormstoutBrewery',
+            //            DungeonKey::TEMPLE_OF_THE_JADE_SERPENT->value => 'TempleOfTheJadeSerpent',
         ],
 
         Expansion::EXPANSION_WOD => [
-            //            Dungeon::DUNGEON_GRIMRAIL_DEPOT            => 'GrimrailDepot',
-            //            Dungeon::DUNGEON_IRON_DOCKS                => 'IronDocks',
-            //            Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS  => 'ShadowmoonBurialGrounds',
+            //            DungeonKey::GRIMRAIL_DEPOT->value            => 'GrimrailDepot',
+            //            DungeonKey::IRON_DOCKS->value                => 'IronDocks',
+            //            DungeonKey::SHADOWMOON_BURIAL_GROUNDS->value  => 'ShadowmoonBurialGrounds',
         ],
 
         Expansion::EXPANSION_LEGION => [
-            Dungeon::DUNGEON_ARCWAY => 'TheArcway',
-            //            Dungeon::DUNGEON_BLACK_ROOK_HOLD             => 'BlackRookHold',
-            Dungeon::DUNGEON_CATHEDRAL_OF_ETERNAL_NIGHT => 'CathedralOfEternalNight',
-            Dungeon::DUNGEON_COURT_OF_STARS             => 'CourtOfStars',
-            Dungeon::DUNGEON_DARKHEART_THICKET          => 'DarkheartThicket',
-            Dungeon::DUNGEON_EYE_OF_AZSHARA             => 'EyeOfAzshara',
-            Dungeon::DUNGEON_HALLS_OF_VALOR             => 'HallsofValor',
-            Dungeon::DUNGEON_LOWER_KARAZHAN             => 'ReturntoKarazhanLower',
-            Dungeon::DUNGEON_MAW_OF_SOULS               => 'MawOfSouls',
-            Dungeon::DUNGEON_NELTHARIONS_LAIR           => 'NeltharionsLair',
-            Dungeon::DUNGEON_UPPER_KARAZHAN             => 'ReturntoKarazhanUpper',
-            //            Dungeon::DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE => 'SeatoftheTriumvirate',
-            Dungeon::DUNGEON_VAULT_OF_THE_WARDENS => 'VaultoftheWardens',
+            DungeonKey::ARCWAY->value => 'TheArcway',
+            //            DungeonKey::BLACK_ROOK_HOLD->value             => 'BlackRookHold',
+            DungeonKey::CATHEDRAL_OF_ETERNAL_NIGHT->value => 'CathedralOfEternalNight',
+            DungeonKey::COURT_OF_STARS->value             => 'CourtOfStars',
+            DungeonKey::DARKHEART_THICKET->value          => 'DarkheartThicket',
+            DungeonKey::EYE_OF_AZSHARA->value             => 'EyeOfAzshara',
+            DungeonKey::HALLS_OF_VALOR->value             => 'HallsofValor',
+            DungeonKey::LOWER_KARAZHAN->value             => 'ReturntoKarazhanLower',
+            DungeonKey::MAW_OF_SOULS->value               => 'MawOfSouls',
+            DungeonKey::NELTHARIONS_LAIR->value           => 'NeltharionsLair',
+            DungeonKey::UPPER_KARAZHAN->value             => 'ReturntoKarazhanUpper',
+            //            DungeonKey::THE_SEAT_OF_THE_TRIUMVIRATE->value => 'SeatoftheTriumvirate',
+            DungeonKey::VAULT_OF_THE_WARDENS->value => 'VaultoftheWardens',
         ],
 
         Expansion::EXPANSION_BFA => [
-            Dungeon::DUNGEON_ATAL_DAZAR => 'AtalDazar',
-            Dungeon::DUNGEON_FREEHOLD   => 'Freehold',
+            DungeonKey::ATAL_DAZAR->value => 'AtalDazar',
+            DungeonKey::FREEHOLD->value   => 'Freehold',
             // Moved into MDT's Midnight/ folder for 12.1 - see the Midnight block below
-            //            Dungeon::DUNGEON_KINGS_REST           => 'KingsRest',
-            Dungeon::DUNGEON_SIEGE_OF_BORALUS    => 'SiegeofBoralus',
-            Dungeon::DUNGEON_SHRINE_OF_THE_STORM => 'ShrineoftheStorm',
+            //            DungeonKey::KINGS_REST->value           => 'KingsRest',
+            DungeonKey::SIEGE_OF_BORALUS->value    => 'SiegeofBoralus',
+            DungeonKey::SHRINE_OF_THE_STORM->value => 'ShrineoftheStorm',
             // Moved into MDT's Midnight/ folder for 12.1 - see the Midnight block below
-            //            Dungeon::DUNGEON_TEMPLE_OF_SETHRALISS => 'TempleofSethraliss',
-            Dungeon::DUNGEON_THE_MOTHERLODE    => 'TheMotherlode',
-            Dungeon::DUNGEON_THE_UNDERROT      => 'TheUnderrot',
-            Dungeon::DUNGEON_TOL_DAGOR         => 'TolDagor',
-            Dungeon::DUNGEON_WAYCREST_MANOR    => 'WaycrestManor',
-            Dungeon::DUNGEON_MECHAGON_JUNKYARD => 'MechagonIsland',
-            Dungeon::DUNGEON_MECHAGON_WORKSHOP => 'MechagonWorkshop',
+            //            DungeonKey::TEMPLE_OF_SETHRALISS->value => 'TempleofSethraliss',
+            DungeonKey::THE_MOTHERLODE->value    => 'TheMotherlode',
+            DungeonKey::THE_UNDERROT->value      => 'TheUnderrot',
+            DungeonKey::TOL_DAGOR->value         => 'TolDagor',
+            DungeonKey::WAYCREST_MANOR->value    => 'WaycrestManor',
+            DungeonKey::MECHAGON_JUNKYARD->value => 'MechagonIsland',
+            DungeonKey::MECHAGON_WORKSHOP->value => 'MechagonWorkshop',
         ],
 
         Expansion::EXPANSION_SHADOWLANDS => [
             // WoD
-            Dungeon::DUNGEON_GRIMRAIL_DEPOT => 'GrimrailDepot',
-            Dungeon::DUNGEON_IRON_DOCKS     => 'IronDocks',
+            DungeonKey::GRIMRAIL_DEPOT->value => 'GrimrailDepot',
+            DungeonKey::IRON_DOCKS->value     => 'IronDocks',
             // SL
-            Dungeon::DUNGEON_DE_OTHER_SIDE              => 'DeOtherSide',
-            Dungeon::DUNGEON_HALLS_OF_ATONEMENT         => 'HallsOfAtonement',
-            Dungeon::DUNGEON_PLAGUEFALL                 => 'Plaguefall',
-            Dungeon::DUNGEON_SANGUINE_DEPTHS            => 'SanguineDepths',
-            Dungeon::DUNGEON_SPIRES_OF_ASCENSION        => 'SpiresOfAscension',
-            Dungeon::DUNGEON_THEATER_OF_PAIN            => 'TheaterOfPain',
-            Dungeon::DUNGEON_THE_NECROTIC_WAKE          => 'TheNecroticWake',
-            Dungeon::DUNGEON_TAZAVESH_STREETS_OF_WONDER => 'TazaveshLower',
-            Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT   => 'TazaveshUpper',
+            DungeonKey::DE_OTHER_SIDE->value              => 'DeOtherSide',
+            DungeonKey::HALLS_OF_ATONEMENT->value         => 'HallsOfAtonement',
+            DungeonKey::PLAGUEFALL->value                 => 'Plaguefall',
+            DungeonKey::SANGUINE_DEPTHS->value            => 'SanguineDepths',
+            DungeonKey::SPIRES_OF_ASCENSION->value        => 'SpiresOfAscension',
+            DungeonKey::THEATER_OF_PAIN->value            => 'TheaterOfPain',
+            DungeonKey::THE_NECROTIC_WAKE->value          => 'TheNecroticWake',
+            DungeonKey::TAZAVESH_STREETS_OF_WONDER->value => 'TazaveshLower',
+            DungeonKey::TAZAVESH_SO_LEAHS_GAMBIT->value   => 'TazaveshUpper',
         ],
 
         Expansion::EXPANSION_DRAGONFLIGHT => [
             // Cata
-            Dungeon::DUNGEON_THE_VORTEX_PINNACLE => 'TheVortexPinnacle',
+            DungeonKey::THE_VORTEX_PINNACLE->value => 'TheVortexPinnacle',
             // MoP - MDT 6.2 dropped the MistsOfPandaria folder, but MDT_Legacy still ships this one under
             // Dragonflight, so it keeps full MDT support (it is deliberately absent from
             // MAINLINE_MDT_DUNGEONS so it resolves to the legacy package).
-            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
-            Dungeon::DUNGEON_THRONE_OF_THE_TIDES        => 'ThroneOfTides',
+            DungeonKey::TEMPLE_OF_THE_JADE_SERPENT->value => 'TempleOfTheJadeSerpent',
+            DungeonKey::THRONE_OF_THE_TIDES->value        => 'ThroneOfTides',
             // WoD
-            Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS => 'ShadowmoonBurialGrounds',
-            Dungeon::DUNGEON_THE_EVERBLOOM             => 'Everbloom',
+            DungeonKey::SHADOWMOON_BURIAL_GROUNDS->value => 'ShadowmoonBurialGrounds',
+            DungeonKey::THE_EVERBLOOM->value             => 'Everbloom',
             // Legion
-            Dungeon::DUNGEON_BLACK_ROOK_HOLD => 'BlackrookHold',
+            DungeonKey::BLACK_ROOK_HOLD->value => 'BlackrookHold',
             // BFA
-            //            Dungeon::DUNGEON_WAYCREST_MANOR => 'WaycrestManor',
+            //            DungeonKey::WAYCREST_MANOR->value => 'WaycrestManor',
             // DF
             // Moved into MDT's Midnight/ folder - see the Midnight block below
-            //            Dungeon::DUNGEON_ALGETH_AR_ACADEMY  => 'AlgetharAcademy',
-            Dungeon::DUNGEON_BRACKENHIDE_HOLLOW => 'BrackenhideHollow',
-            Dungeon::DUNGEON_HALLS_OF_INFUSION  => 'HallsOfInfusion',
-            Dungeon::DUNGEON_NELTHARUS          => 'Neltharus',
+            //            DungeonKey::ALGETH_AR_ACADEMY->value  => 'AlgetharAcademy',
+            DungeonKey::BRACKENHIDE_HOLLOW->value => 'BrackenhideHollow',
+            DungeonKey::HALLS_OF_INFUSION->value  => 'HallsOfInfusion',
+            DungeonKey::NELTHARUS->value          => 'Neltharus',
             // Moved into MDT's Midnight/ folder for 12.1 - see the Midnight block below
-            //            Dungeon::DUNGEON_RUBY_LIFE_POOLS                      => 'RubyLifePools',
-            Dungeon::DUNGEON_THE_AZURE_VAULT                      => 'TheAzureVault',
-            Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE                 => 'TheNokhudOffensive',
-            Dungeon::DUNGEON_ULDAMAN_LEGACY_OF_TYR                => 'UldamanLegacyOfTyr',
-            Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL => 'DawnOfTheInfiniteLower',
-            Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE  => 'DawnOfTheInfiniteUpper',
+            //            DungeonKey::RUBY_LIFE_POOLS->value                      => 'RubyLifePools',
+            DungeonKey::THE_AZURE_VAULT->value                      => 'TheAzureVault',
+            DungeonKey::THE_NOKHUD_OFFENSIVE->value                 => 'TheNokhudOffensive',
+            DungeonKey::ULDAMAN_LEGACY_OF_TYR->value                => 'UldamanLegacyOfTyr',
+            DungeonKey::DAWN_OF_THE_INFINITE_GALAKRONDS_FALL->value => 'DawnOfTheInfiniteLower',
+            DungeonKey::DAWN_OF_THE_INFINITE_MUROZONDS_RISE->value  => 'DawnOfTheInfiniteUpper',
         ],
 
         Expansion::EXPANSION_TWW => [
             // Cata
-            Dungeon::DUNGEON_GRIM_BATOL => 'GrimBatol',
+            DungeonKey::GRIM_BATOL->value => 'GrimBatol',
 
             // TWW
-            Dungeon::DUNGEON_ARA_KARA_CITY_OF_ECHOES    => 'AraKara',
-            Dungeon::DUNGEON_CITY_OF_THREADS            => 'CityOfThreads',
-            Dungeon::DUNGEON_THE_DAWNBREAKER            => 'TheDawnbreaker',
-            Dungeon::DUNGEON_THE_STONEVAULT             => 'TheStonevault',
-            Dungeon::DUNGEON_CINDERBREW_MEADERY         => 'CinderbrewMeadery',
-            Dungeon::DUNGEON_DARKFLAME_CLEFT            => 'DarkflameCleft',
-            Dungeon::DUNGEON_PRIORY_OF_THE_SACRED_FLAME => 'PrioryOfTheSacredFlame',
-            Dungeon::DUNGEON_THE_ROOKERY                => 'TheRookery',
-            Dungeon::DUNGEON_OPERATION_FLOODGATE        => 'OperationFloodgate',
-            Dungeon::DUNGEON_ECO_DOME_AL_DANI           => 'EcoDomeAldani',
+            DungeonKey::ARA_KARA_CITY_OF_ECHOES->value    => 'AraKara',
+            DungeonKey::CITY_OF_THREADS->value            => 'CityOfThreads',
+            DungeonKey::THE_DAWNBREAKER->value            => 'TheDawnbreaker',
+            DungeonKey::THE_STONEVAULT->value             => 'TheStonevault',
+            DungeonKey::CINDERBREW_MEADERY->value         => 'CinderbrewMeadery',
+            DungeonKey::DARKFLAME_CLEFT->value            => 'DarkflameCleft',
+            DungeonKey::PRIORY_OF_THE_SACRED_FLAME->value => 'PrioryOfTheSacredFlame',
+            DungeonKey::THE_ROOKERY->value                => 'TheRookery',
+            DungeonKey::OPERATION_FLOODGATE->value        => 'OperationFloodgate',
+            DungeonKey::ECO_DOME_AL_DANI->value           => 'EcoDomeAldani',
 
         ],
 
         Expansion::EXPANSION_MIDNIGHT => [
             // Wrath of the Lich King
-            Dungeon::DUNGEON_PIT_OF_SARON => 'PitOfSaron',
+            DungeonKey::PIT_OF_SARON->value => 'PitOfSaron',
 
             // Warlords of Draenor
-            Dungeon::DUNGEON_SKYREACH => 'Skyreach',
+            DungeonKey::SKYREACH->value => 'Skyreach',
 
             // Legion
-            Dungeon::DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE => 'SeatoftheTriumvirate',
+            DungeonKey::THE_SEAT_OF_THE_TRIUMVIRATE->value => 'SeatoftheTriumvirate',
 
             // Battle for Azeroth (moved out of MDT_Legacy into mainline Midnight/ for 12.1)
-            Dungeon::DUNGEON_KINGS_REST           => 'KingsRest',
-            Dungeon::DUNGEON_TEMPLE_OF_SETHRALISS => 'TempleOfSethraliss',
+            DungeonKey::KINGS_REST->value           => 'KingsRest',
+            DungeonKey::TEMPLE_OF_SETHRALISS->value => 'TempleOfSethraliss',
 
             // Dragonflight (but Midnight version)
-            Dungeon::DUNGEON_ALGETH_AR_ACADEMY          => 'AlgetharAcademy',
-            Dungeon::DUNGEON_ALGETH_AR_ACADEMY_MIDNIGHT => 'AlgetharAcademy',
+            DungeonKey::ALGETH_AR_ACADEMY->value          => 'AlgetharAcademy',
+            DungeonKey::ALGETH_AR_ACADEMY_MIDNIGHT->value => 'AlgetharAcademy',
             // Dragonflight (moved out of MDT_Legacy into mainline Midnight/ for 12.1)
-            Dungeon::DUNGEON_RUBY_LIFE_POOLS => 'RubyLifePools',
+            DungeonKey::RUBY_LIFE_POOLS->value => 'RubyLifePools',
 
             // Midnight
-            Dungeon::DUNGEON_ALTAR_OF_FANGS             => 'AltarOfFangs',
-            Dungeon::DUNGEON_DEN_OF_NALORAKK            => 'DenOfNalorakk',
-            Dungeon::DUNGEON_MAGISTERS_TERRACE_MIDNIGHT => 'MagistersTerrace',
-            Dungeon::DUNGEON_MAISARA_CAVERNS            => 'MaisaraCaverns',
-            Dungeon::DUNGEON_MURDER_ROW                 => 'MurderRow',
-            Dungeon::DUNGEON_NEXUS_POINT_XENAS          => 'NexusPointXenas',
-            Dungeon::DUNGEON_THE_BLINDING_VALE          => 'TheBlindingVale',
-            Dungeon::DUNGEON_VOIDSCAR_ARENA             => 'VoidscarArena',
-            Dungeon::DUNGEON_WINDRUNNER_SPIRE           => 'WindrunnerSpire',
+            DungeonKey::ALTAR_OF_FANGS->value             => 'AltarOfFangs',
+            DungeonKey::DEN_OF_NALORAKK->value            => 'DenOfNalorakk',
+            DungeonKey::MAGISTERS_TERRACE_MIDNIGHT->value => 'MagistersTerrace',
+            DungeonKey::MAISARA_CAVERNS->value            => 'MaisaraCaverns',
+            DungeonKey::MURDER_ROW->value                 => 'MurderRow',
+            DungeonKey::NEXUS_POINT_XENAS->value          => 'NexusPointXenas',
+            DungeonKey::THE_BLINDING_VALE->value          => 'TheBlindingVale',
+            DungeonKey::VOIDSCAR_ARENA->value             => 'VoidscarArena',
+            DungeonKey::WINDRUNNER_SPIRE->value           => 'WindrunnerSpire',
         ],
     ];
     // @formatter:on
 
     private const array MAINLINE_MDT_DUNGEONS = [
         // Mists of Pandaria - removed from the mainline package in MDT 6.2, see DUNGEON_NAME_MAPPING above
-        //        Dungeon::DUNGEON_GATE_OF_THE_SETTING_SUN,
-        //        Dungeon::DUNGEON_MOGU_SHAN_PALACE,
-        //        Dungeon::DUNGEON_SCARLET_HALLS_MOP,
-        //        Dungeon::DUNGEON_SCARLET_MONASTERY_MOP,
-        //        Dungeon::DUNGEON_SCHOLOMANCE_MOP,
-        //        Dungeon::DUNGEON_SHADO_PAN_MONASTERY,
-        //        Dungeon::DUNGEON_SIEGE_OF_NIUZAO_TEMPLE,
-        //        Dungeon::DUNGEON_STORMSTOUT_BREWERY,
-        //        Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT,
+        //        DungeonKey::GATE_OF_THE_SETTING_SUN->value,
+        //        DungeonKey::MOGU_SHAN_PALACE->value,
+        //        DungeonKey::SCARLET_HALLS_MOP->value,
+        //        DungeonKey::SCARLET_MONASTERY_MOP->value,
+        //        DungeonKey::SCHOLOMANCE_MOP->value,
+        //        DungeonKey::SHADO_PAN_MONASTERY->value,
+        //        DungeonKey::SIEGE_OF_NIUZAO_TEMPLE->value,
+        //        DungeonKey::STORMSTOUT_BREWERY->value,
+        //        DungeonKey::TEMPLE_OF_THE_JADE_SERPENT->value,
 
         // Wrath of the Lich King
-        Dungeon::DUNGEON_PIT_OF_SARON,
+        DungeonKey::PIT_OF_SARON->value,
 
         // Warlords of Draenor
-        Dungeon::DUNGEON_SKYREACH,
+        DungeonKey::SKYREACH->value,
 
         // Legion
-        Dungeon::DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE,
+        DungeonKey::THE_SEAT_OF_THE_TRIUMVIRATE->value,
 
         // Battle for Azeroth (moved out of MDT_Legacy into mainline Midnight/ for 12.1)
-        Dungeon::DUNGEON_KINGS_REST,
-        Dungeon::DUNGEON_TEMPLE_OF_SETHRALISS,
+        DungeonKey::KINGS_REST->value,
+        DungeonKey::TEMPLE_OF_SETHRALISS->value,
 
         // Dragonflight (but Midnight version). Both the Dragonflight dungeon and its Midnight variant
         // resolve to Midnight/AlgetharAcademy.lua - MDT_Legacy no longer ships a Dragonflight copy.
-        Dungeon::DUNGEON_ALGETH_AR_ACADEMY,
-        Dungeon::DUNGEON_ALGETH_AR_ACADEMY_MIDNIGHT,
+        DungeonKey::ALGETH_AR_ACADEMY->value,
+        DungeonKey::ALGETH_AR_ACADEMY_MIDNIGHT->value,
         // Dragonflight (moved out of MDT_Legacy into mainline Midnight/ for 12.1)
-        Dungeon::DUNGEON_RUBY_LIFE_POOLS,
+        DungeonKey::RUBY_LIFE_POOLS->value,
 
         // Midnight
-        Dungeon::DUNGEON_ALTAR_OF_FANGS,
-        Dungeon::DUNGEON_DEN_OF_NALORAKK,
-        Dungeon::DUNGEON_MAGISTERS_TERRACE_MIDNIGHT,
-        Dungeon::DUNGEON_MAISARA_CAVERNS,
-        Dungeon::DUNGEON_MURDER_ROW,
-        Dungeon::DUNGEON_NEXUS_POINT_XENAS,
-        Dungeon::DUNGEON_THE_BLINDING_VALE,
-        Dungeon::DUNGEON_VOIDSCAR_ARENA,
-        Dungeon::DUNGEON_WINDRUNNER_SPIRE,
+        DungeonKey::ALTAR_OF_FANGS->value,
+        DungeonKey::DEN_OF_NALORAKK->value,
+        DungeonKey::MAGISTERS_TERRACE_MIDNIGHT->value,
+        DungeonKey::MAISARA_CAVERNS->value,
+        DungeonKey::MURDER_ROW->value,
+        DungeonKey::NEXUS_POINT_XENAS->value,
+        DungeonKey::THE_BLINDING_VALE->value,
+        DungeonKey::VOIDSCAR_ARENA->value,
+        DungeonKey::WINDRUNNER_SPIRE->value,
     ];
 
     /**

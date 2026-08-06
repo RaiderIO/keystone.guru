@@ -2,7 +2,7 @@
 
 namespace Controller\Api\V1\APICombatLogController\CombatLogRoute\WotLK;
 
-use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\APICombatLogControllerCombatLogRouteTestBase;
@@ -16,7 +16,7 @@ class APICombatLogControllerCombatLogRoutePitOfSaronTest extends APICombatLogCon
 {
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_PIT_OF_SARON;
+        return DungeonKey::PIT_OF_SARON->value;
     }
 
     #[Test]
