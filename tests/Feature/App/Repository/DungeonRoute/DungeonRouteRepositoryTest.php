@@ -3,6 +3,7 @@
 namespace Tests\Feature\App\Repository\DungeonRoute;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Repositories\Database\DungeonRoute\Dtos\KillZoneEnemyForces;
 use App\Repositories\Database\DungeonRoute\DungeonRouteRepository;
 use App\Repositories\Interfaces\DungeonRoute\Dtos\DungeonRouteSearchFilter;
 use App\Service\Season\SeasonServiceInterface;
@@ -173,5 +174,59 @@ final class DungeonRouteRepositoryTest extends PublicTestCase
         } finally {
             $dungeonRoute->delete();
         }
+    }
+
+    #[Test]
+    public function getEnemyForcesPerKillZoneForRoutes_givenEmptyCollection_returnsEmptyCollection(): void
+    {
+        // Act
+        $result = $this->repository->getEnemyForcesPerKillZoneForRoutes(collect());
+
+        // Assert
+        $this->assertTrue($result->isEmpty());
+    }
+
+    #[Test]
+    public function getEnemyForcesPerKillZoneForRoutes_givenRoutesWithoutKillZones_returnsEmptyCollection(): void
+    {
+        // Arrange
+        $dungeonRoutes = DungeonRoute::factory()->count(3)->create();
+
+        try {
+            // Act
+            $result = $this->repository->getEnemyForcesPerKillZoneForRoutes($dungeonRoutes);
+
+            // Assert
+            $this->assertTrue($result->isEmpty());
+        } finally {
+            $dungeonRoutes->each(fn(DungeonRoute $dungeonRoute) => $dungeonRoute->delete());
+        }
+    }
+
+    #[Test]
+    public function getEnemyForcesPerKillZoneForRoutes_givenRoutesWithKillZones_matchesPerRouteResults(): void
+    {
+        // Arrange - a handful of seeded routes that already carry kill zones/enemies, batched together
+        $dungeonRoutes = DungeonRoute::query()
+            ->has('killZones')
+            ->with(['affixes', 'season.expansion'])
+            ->limit(5)
+            ->get();
+
+        $this->assertNotEmpty($dungeonRoutes, 'Expected some seeded routes with kill zones');
+
+        // Act
+        $batchedResult = $this->repository->getEnemyForcesPerKillZoneForRoutes($dungeonRoutes);
+
+        // Assert - the batched call returns the exact same per-pull forces as the single-route call
+        $dungeonRoutes->each(function (DungeonRoute $dungeonRoute) use ($batchedResult) {
+            $singleResult = $this->repository->getEnemyForcesPerKillZone($dungeonRoute);
+
+            $this->assertEquals(
+                $singleResult->map(fn(KillZoneEnemyForces $forces) => [$forces->enemyForces, $forces->hasBoss])->values()->all(),
+                $batchedResult->get($dungeonRoute->id, collect())->map(fn(KillZoneEnemyForces $forces) => [$forces->enemyForces, $forces->hasBoss])->values()->all(),
+                sprintf('Mismatch for dungeon route %d', $dungeonRoute->id),
+            );
+        });
     }
 }
