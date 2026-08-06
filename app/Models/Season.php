@@ -18,6 +18,7 @@ use Illuminate\Support\Carbon;
  * @property int|null $seasonal_affix_id
  * @property int      $index
  * @property Carbon   $start
+ * @property bool     $active                  Whether this season is ready to be advertised publicly (header nav, Create Route dungeon list) - independent of `start`, which is a calendar fact used for game-rotation timing.
  * @property int      $presets
  * @property int      $affix_group_count
  * @property int      $start_affix_group_index The index of the affix that was the first affix to be available upon season start
@@ -88,6 +89,7 @@ class Season extends CacheModel
         'seasonal_affix_id',
         'index',
         'start',
+        'active',
         'presets',
         'affix_group_count',
         'start_affix_group_index',
@@ -111,6 +113,7 @@ class Season extends CacheModel
     {
         return [
             'start'          => 'datetime',
+            'active'         => 'boolean',
             'key_level_min'  => 'integer',
             'key_level_max'  => 'integer',
             'item_level_min' => 'integer',

@@ -30,11 +30,14 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
 
         foreach ($this->loadSeasonDataFile('seasons.json') as $seasonData) {
             $seasonAttributes[] = [
-                'id'                      => $seasonData['id'],
-                'expansion_id'            => $seasonData['expansion_id'],
-                'seasonal_affix_id'       => $seasonData['seasonal_affix_id'],
-                'index'                   => $seasonData['index'],
-                'start'                   => $seasonData['start'],
+                'id'                => $seasonData['id'],
+                'expansion_id'      => $seasonData['expansion_id'],
+                'seasonal_affix_id' => $seasonData['seasonal_affix_id'],
+                'index'             => $seasonData['index'],
+                'start'             => $seasonData['start'],
+                // Defaults to true for entries exported before 'active' existed, so existing
+                // seasons.json rows don't need a hand-edit to keep seeding successfully.
+                'active'                  => $seasonData['active'] ?? true,
                 'presets'                 => $seasonData['presets'],
                 'affix_group_count'       => $seasonData['affix_group_count'],
                 'start_affix_group_index' => $seasonData['start_affix_group_index'],

@@ -319,6 +319,7 @@ class Save extends Command
                 // Formatted rather than left as the datetime cast: the seeder inserts through the query
                 // builder, which would hand MySQL an ISO-8601 string that a `datetime` column rejects.
                 'start'                   => $season->start->toDateTimeString(),
+                'active'                  => $season->active,
                 'presets'                 => $season->presets,
                 'affix_group_count'       => $season->affix_group_count,
                 'start_affix_group_index' => $season->start_affix_group_index,

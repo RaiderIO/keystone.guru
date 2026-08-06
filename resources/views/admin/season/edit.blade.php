@@ -55,6 +55,13 @@ use Illuminate\Support\Collection;
             @include('common.forms.form-error', ['key' => 'expansion_id'])
         </div>
 
+        <div class="mb-3{{ $errors->has('active') ? ' has-error' : '' }}">
+            {{ html()->label(__('view_admin.season.edit.active'), 'active') }}
+            {{ html()->checkbox('active', ($season ?? null)?->active ?? 1, 1)->class('form-check-input') }}
+            <small class="text-muted d-block">{{ __('view_admin.season.edit.active_help') }}</small>
+            @include('common.forms.form-error', ['key' => 'active'])
+        </div>
+
         <div class="mb-3{{ $errors->has('index') ? ' has-error' : '' }}">
             {{ html()->label(__('view_admin.season.edit.index'), 'index') }}
             {{ html()->number('index')->class('form-control') }}

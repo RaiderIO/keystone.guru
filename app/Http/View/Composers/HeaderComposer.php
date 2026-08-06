@@ -4,7 +4,6 @@ namespace App\Http\View\Composers;
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\AffixGroup\AffixGroupEaseTier;
-use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
@@ -13,7 +12,6 @@ use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewServiceInterface;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
@@ -35,7 +33,9 @@ readonly class HeaderComposer implements ViewComposerInterface
 
         $currentSeason = $this->viewService->getCurrentSeasonForRegion($gameServerRegion);
 
-        $nextSeason = $this->viewService->getNextSeasonForRegion($gameServerRegion);
+        // A season is seeded weeks - sometimes months - before it starts so its mapping can be
+        // reviewed; until an admin marks it `active` it must not be visible anywhere (#3761, #3868).
+        $nextSeason = $this->getVisibleUpcomingSeason($this->viewService->getNextSeasonForRegion($gameServerRegion));
 
         $view->with('activeExpansions', $this->viewService->getActiveExpansions());
         $view->with('currentSeason', $currentSeason);
@@ -49,9 +49,7 @@ readonly class HeaderComposer implements ViewComposerInterface
         // advertised next to it as a card of its own, leading to a selection of just its dungeons.
         // Seasons are a retail concept: the dungeon selection hides every season for a game version
         // without them, so advertising one there would lead to a page that cannot show it.
-        $upcomingSeason = $userOrDefaultGameVersion->has_seasons
-            ? $this->getUpcomingSeason($nextSeason, $gameServerRegion)
-            : null;
+        $upcomingSeason = $userOrDefaultGameVersion->has_seasons ? $nextSeason : null;
 
         $view->with('dungeonContextNextSeason', $upcomingSeason);
         $view->with('dungeonContextNextSeasonLink', $upcomingSeason === null ? null : route('dungeon.explore.gameversion.select', [
@@ -69,19 +67,13 @@ readonly class HeaderComposer implements ViewComposerInterface
     }
 
     /**
-     * The next season, but only once it is close enough to its start to be worth advertising. A season is seeded
-     * weeks - sometimes months - before it starts so its mapping can be reviewed, and until then it should not be
+     * The next season, but only once an admin has marked it ready to reveal. A season is seeded weeks -
+     * sometimes months - before it starts so its mapping can be reviewed, and until then it should not be
      * visible on the site at all.
      */
-    private function getUpcomingSeason(?Season $nextSeason, GameServerRegion $gameServerRegion): ?Season
+    private function getVisibleUpcomingSeason(?Season $nextSeason): ?Season
     {
-        if ($nextSeason === null) {
-            return null;
-        }
-
-        $upcomingVisibleAt = Carbon::now()->addDays((int)config('keystoneguru.season.upcoming_visible_days'));
-
-        return $nextSeason->start($gameServerRegion)->isBefore($upcomingVisibleAt) ? $nextSeason : null;
+        return $nextSeason?->active ? $nextSeason : null;
     }
 
     /**

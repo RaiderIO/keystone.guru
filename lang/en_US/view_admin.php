@@ -338,6 +338,8 @@ return [
             'id'                       => 'ID',
             'no_available_ids'         => 'Every id declared in Season::ALL_SEASONS is already in use. Add a new Season::SEASON_* constant and an entry in Season::ALL_SEASONS before creating a new season.',
             'expansion_id'             => 'Expansion',
+            'active'                   => 'Active',
+            'active_help'              => 'Whether this season is ready to be advertised publicly (header nav, Create Route dungeon list). Leave unchecked while its mapping is still being reviewed.',
             'index'                    => 'Index',
             'start'                    => 'Start',
             'seasonal_affix_id'        => 'Seasonal affix',

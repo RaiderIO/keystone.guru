@@ -3,6 +3,7 @@
 namespace Tests\Feature\App\Repository;
 
 use App\Models\Dungeon;
+use App\Models\Expansion;
 use App\Models\Season;
 use App\Repositories\Database\SeasonRepository;
 use PHPUnit\Framework\Attributes\Group;
@@ -77,8 +78,59 @@ final class SeasonRepositoryTest extends PublicTestCase
         // Act
         $result = $this->repository->getUpcomingSeasonForDungeon($dungeon);
 
-        // Assert — the seeded test data is not expected to contain seasons starting more than a year from now
+        // Assert
         $this->assertNull($result);
+    }
+
+    /**
+     * A `season_dungeons` row is a deliberate, curated assignment - not speculative noise - so it must be
+     * honored regardless of how far out its season's start date is, rather than falling back to a stale
+     * historical season (#3868).
+     */
+    #[Test]
+    public function getUpcomingSeasonForDungeon_givenDungeonWithSeasonMoreThanAYearOut_returnsThatSeason(): void
+    {
+        // Arrange - a dungeon with no upcoming season of its own, so it unambiguously picks up the one
+        // this test attaches; only the season and its season_dungeons row are test data
+        $now = now();
+
+        /** @var Dungeon $dungeon */
+        $dungeon = Dungeon::whereNotNull('challenge_mode_id')
+            ->whereDoesntHave('seasonDungeons.season', static function ($query) use ($now) {
+                $query->where('start', '>', $now);
+            })
+            ->firstOrFail();
+        $upcomingSeason = null;
+
+        try {
+            $upcomingSeason = Season::create([
+                'expansion_id'            => Expansion::firstWhere('shortname', Expansion::EXPANSION_MIDNIGHT)->id,
+                'seasonal_affix_id'       => null,
+                'index'                   => 99,
+                'start'                   => now()->addYears(2)->toDateTimeString(),
+                'active'                  => false,
+                'presets'                 => 0,
+                'affix_group_count'       => 8,
+                'start_affix_group_index' => 0,
+                'key_level_min'           => 2,
+                'key_level_max'           => 25,
+                'item_level_min'          => 240,
+                'item_level_max'          => 300,
+            ]);
+            $upcomingSeason->syncDungeons([$dungeon->id]);
+
+            // Act
+            $result = $this->repository->getUpcomingSeasonForDungeon($dungeon);
+
+            // Assert
+            $this->assertNotNull($result);
+            $this->assertSame($upcomingSeason->id, $result->id);
+        } finally {
+            // Individually deleted (not the dungeon itself, which is real seeded data) so each
+            // SeasonDungeon's cache is properly invalidated, matching Season::syncDungeons().
+            $upcomingSeason?->seasonDungeons()->get()->each->delete();
+            $upcomingSeason?->delete();
+        }
     }
 
     #[Test]
