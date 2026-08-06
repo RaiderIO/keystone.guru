@@ -11,12 +11,14 @@ use Illuminate\Validation\Rules\File;
 class ProfileFormRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Authorization is done in ProfileController::update() via Gate::authorize('update', $user),
+     * matching how the rest of the application gates its write endpoints. It has to live there
+     * rather than here because the sibling profile.updateprivacy route takes a plain Request and
+     * needs the same check.
      */
     public function authorize(): bool
     {
         return true;
-        //return Auth::user()?->hasRole(Role::ROLE_ALL) ?? false;
     }
 
     /** @return array<string, mixed> */
