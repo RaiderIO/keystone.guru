@@ -40,7 +40,13 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
 $hasMobileActions = isset($dungeonroute) || $showShare
     || ($mapContext instanceof MapContextMappingVersionEdit)
     || ($mapContext instanceof MapContextDungeonExplore && $isUserAdmin);
+
+// Explore-family pages (explore, heatmap, route search - subclasses included) hold no route:
+// the title bar would only show the dungeon name next to empty space, so skip it entirely.
+// Admins keep it - it carries their Edit mapping version button.
+$showTitleBar = !($mapContext instanceof MapContextDungeonExplore) || $isUserAdmin;
 ?>
+@if($showTitleBar)
 <div class="navbar-third {{ $theme === User::THEME_LUX ? 'navbar-light' : 'navbar-dark' }}">
     <div class="container bg-header text-center text-xl-start px-1 rounded">
         <div class="row g-0">
@@ -339,6 +345,7 @@ $hasMobileActions = isset($dungeonroute) || $showShare
         </div>
     </div>
 </div>
+@endif
 
 @isset($dungeonroute)
 

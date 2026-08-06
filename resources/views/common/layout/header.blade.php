@@ -23,22 +23,25 @@ use Illuminate\Support\Str;
  * @var bool                         $forceShrink
  * @var bool                         $showMore
  * @var bool                         $showDungeonContext
+ * @var bool                         $showGameVersionSelection
  * @var Collection<string, string>   $dungeonContextLinks
  * @var string|false                 $headerId
  */
 
-$navs                   = [];
-$showMore               ??= false;
-$showDungeonContext     ??= true;
-$forceShrink            ??= false;
-$dungeonContextLinks    ??= null;
+$navs                     = [];
+$showMore                 ??= false;
+$showDungeonContext       ??= true;
+// Map pages hide the game version selection row - it made the floating header too bulky
+$showGameVersionSelection ??= true;
+$forceShrink              ??= false;
+$dungeonContextLinks      ??= null;
 // The map view passes false (not null - ??= would overwrite null) - its own #map_header wraps
 // this include, and a stray #site_header would make siteheader.js measure the wrong element.
-$headerId               ??= 'site_header';
+$headerId                 ??= 'site_header';
 // Defense in depth for #3806 - GlobalComposer normally supplies this, but view composers are
 // skipped entirely on paths ViewService::shouldLoadViewVariables() blacklists (e.g. /ajax/),
 // so an HTML error view rendered for one of those paths would otherwise crash here.
-$currentUserGameVersion ??= GameVersion::getUserOrDefaultGameVersion();
+$currentUserGameVersion   ??= GameVersion::getUserOrDefaultGameVersion();
 
 if ($currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
     if ($nextSeason !== null) {
@@ -104,21 +107,24 @@ $isActiveRoute = function (string $route, bool $strict = false) {
 ?>
 <header @if($headerId !== false) id="{{ $headerId }}" @endif
         class="ksg-header {{ $forceShrink ? 'ksg-header--shrink ksg-header--shrink-forced' : '' }}">
+@if($showGameVersionSelection || $showDungeonContext)
 <div
     class="game_version_header navbar-first d-none d-lg-block
      {{ User::isThemeDark($theme) ? 'navbar-dark' : 'navbar-light' }}">
     <div class="container discover bg-dark rounded ">
-        <div class="row">
-            @foreach ($allGameVersions as $gameVersion)
-                @include('common.gameversion.gameversionheader', [
-                    'gameVersion' => $gameVersion,
-                    'currentUserGameVersion' => $currentUserGameVersion,
-                ])
-            @endforeach
-            <div class="col">
-                &nbsp;
+        @if($showGameVersionSelection)
+            <div class="row">
+                @foreach ($allGameVersions as $gameVersion)
+                    @include('common.gameversion.gameversionheader', [
+                        'gameVersion' => $gameVersion,
+                        'currentUserGameVersion' => $currentUserGameVersion,
+                    ])
+                @endforeach
+                <div class="col">
+                    &nbsp;
+                </div>
             </div>
-        </div>
+        @endif
         @if($showDungeonContext)
             <div class="row g-0 dungeon_context_header">
                 <div class="col">
@@ -147,6 +153,7 @@ $isActiveRoute = function (string $route, bool $strict = false) {
         @endif
     </div>
 </div>
+@endif
 <nav
     class="navbar navbar-second navbar-expand-lg
      {{ User::isThemeDark($theme) ? 'navbar-dark' : 'navbar-light' }}">

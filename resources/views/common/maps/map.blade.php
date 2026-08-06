@@ -263,6 +263,7 @@ if ($isAdmin) {
                 'headerId' => false,
                 'showMore' => true,
                 'showDungeonContext' => !($mapContext instanceof MapContextDungeonRoute),
+                'showGameVersionSelection' => false,
                 'forceShrink' => true,
                 'dungeonContextLinks' => $dungeonContextLinks,
             ])

@@ -82,6 +82,15 @@
     padding-bottom: 0.25rem;
 }
 
+/* No vertical padding between the floating header's bars: those strips are
+   pointer-events dead zones (the ::before band paints them but catches nothing),
+   so clicks fell through to the map there and hovering them dropped the
+   map_fade_out hover state, flickering the header back to 0.8 opacity */
+#map_header .navbar-second {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
 .map_fade_out {
     opacity: 0.8;
     transition: opacity .2s ease-out;
