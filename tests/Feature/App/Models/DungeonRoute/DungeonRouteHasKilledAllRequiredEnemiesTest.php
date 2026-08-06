@@ -6,6 +6,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\Mapping\MappingVersion;
+use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -164,6 +165,28 @@ final class DungeonRouteHasKilledAllRequiredEnemiesTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function hasKilledAllRequiredEnemies_givenRouteWhoseMappingVersionWasDeleted_returnsTrue(): void
+    {
+        // Arrange - this schema carries no foreign keys and MappingVersionController::delete() can remove a mapping
+        // version routes still point at, so the relation resolves to null on a non-null id. Dereferencing it would
+        // 500 the publish endpoint and abort the whole scheduled-publish cron run.
+        $route            = $this->createRouteWithOwnMappingVersion();
+        $mappingVersionId = $route->mapping_version_id;
+
+        try {
+            MappingVersion::query()->where('id', $mappingVersionId)->delete();
+
+            // Act
+            $result = $route->fresh()->hasKilledAllRequiredEnemies();
+
+            // Assert
+            $this->assertTrue($result);
+        } finally {
+            $this->cleanup($route);
+        }
+    }
+
     /**
      * Creates a route on a mapping version of its own, so that enemies created for it cannot collide with the
      * seeded mapping data of the dungeon it happens to land on.
@@ -180,13 +203,19 @@ final class DungeonRouteHasKilledAllRequiredEnemiesTest extends PublicTestCase
     }
 
     /**
-     * A brand new, empty mapping version for the route's dungeon, based on the one the route currently points at.
+     * A brand new, genuinely *empty* mapping version for the route's dungeon.
+     *
+     * Inserted quietly, exactly as MappingService::copyMappingVersionToDungeon() does: MappingVersion's `created`
+     * hook clones the entire previous mapping into the new version, which would drag the dungeon's seeded enemies
+     * (some of them `required`) in with it and make these tests depend on whichever dungeon the factory happened to
+     * pick. It also keeps cleanup to this one table instead of every cloned child table.
      */
     private function createMappingVersion(DungeonRoute $route): MappingVersion
     {
         $current = $route->mappingVersion;
+        $now     = Carbon::now()->toDateTimeString();
 
-        return MappingVersion::create([
+        $id = MappingVersion::insertGetId([
             'game_version_id'                 => $current->game_version_id,
             'dungeon_id'                      => $route->dungeon_id,
             'version'                         => $current->version + 1,
@@ -195,7 +224,11 @@ final class DungeonRouteHasKilledAllRequiredEnemiesTest extends PublicTestCase
             'enemy_forces_shrouded'           => $current->enemy_forces_shrouded,
             'enemy_forces_shrouded_zul_gamux' => $current->enemy_forces_shrouded_zul_gamux,
             'timer_max_seconds'               => $current->timer_max_seconds,
+            'created_at'                      => $now,
+            'updated_at'                      => $now,
         ]);
+
+        return MappingVersion::findOrFail($id);
     }
 
     private function createEnemy(MappingVersion $mappingVersion, bool $required, ?string $teeming = null): Enemy

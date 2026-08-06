@@ -286,7 +286,8 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
                     'dungeonRoute.dungeon',
                     'dungeonRoute.author',
                     'dungeonRoute.mappingVersion.enemies',
-                    'dungeonRoute.killZones.enemies',
+                    // .npc because KillZone::getEnemies() loads it - without it that is a query per kill zone
+                    'dungeonRoute.killZones.enemies.npc',
                 ])
                 ->get();
 

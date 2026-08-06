@@ -9,6 +9,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
 use App\Models\User;
 use App\Policies\DungeonRoutePolicy;
+use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -545,8 +546,12 @@ final class DungeonRoutePolicyTest extends PublicTestCase
     private function giveRouteAnUnkilledRequiredEnemy(DungeonRoute $route): int
     {
         $current = $route->mappingVersion;
+        $now     = Carbon::now()->toDateTimeString();
 
-        $mappingVersion = MappingVersion::create([
+        // Inserted quietly, as MappingService::copyMappingVersionToDungeon() does - MappingVersion's `created` hook
+        // clones the entire previous mapping into the new version, which would drag the dungeon's own seeded
+        // (possibly `required`) enemies in with it and make this test depend on the dungeon the factory picked.
+        $mappingVersion = MappingVersion::findOrFail(MappingVersion::insertGetId([
             'game_version_id'                 => $current->game_version_id,
             'dungeon_id'                      => $route->dungeon_id,
             'version'                         => $current->version + 1,
@@ -555,7 +560,9 @@ final class DungeonRoutePolicyTest extends PublicTestCase
             'enemy_forces_shrouded'           => $current->enemy_forces_shrouded,
             'enemy_forces_shrouded_zul_gamux' => $current->enemy_forces_shrouded_zul_gamux,
             'timer_max_seconds'               => $current->timer_max_seconds,
-        ]);
+            'created_at'                      => $now,
+            'updated_at'                      => $now,
+        ]));
 
         Enemy::create([
             'mapping_version_id' => $mappingVersion->id,

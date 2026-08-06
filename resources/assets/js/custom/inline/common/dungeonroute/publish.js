@@ -64,8 +64,11 @@ class CommonDungeonroutePublish extends InlineCode {
         let killZoneMapObjectGroup = this._getKillZoneMapObjectGroup();
         if (killZoneMapObjectGroup !== null) {
             this._refreshRequiredEnemiesState();
+            // KillZone.setEnemies() suppresses the per-enemy signals and emits only enemieschanged - that is the
+            // path remote/live-session updates take, so all three are needed to keep the state fresh
             killZoneMapObjectGroup.register('killzone:enemyadded', this, this._refreshRequiredEnemiesState.bind(this));
             killZoneMapObjectGroup.register('killzone:enemyremoved', this, this._refreshRequiredEnemiesState.bind(this));
+            killZoneMapObjectGroup.register('killzone:enemieschanged', this, this._refreshRequiredEnemiesState.bind(this));
         }
     }
 
@@ -74,6 +77,7 @@ class CommonDungeonroutePublish extends InlineCode {
         if (killZoneMapObjectGroup !== null) {
             killZoneMapObjectGroup.unregister('killzone:enemyadded', this);
             killZoneMapObjectGroup.unregister('killzone:enemyremoved', this);
+            killZoneMapObjectGroup.unregister('killzone:enemieschanged', this);
         }
 
         super.cleanup();
@@ -85,12 +89,13 @@ class CommonDungeonroutePublish extends InlineCode {
      * @private
      */
     _getKillZoneMapObjectGroup() {
-        // The share modal this select lives in is also rendered on pages that have no map at all
-        if (typeof getState !== 'function') {
-            return null;
-        }
+        // The share modal this select lives in is also rendered on pages that have no map. Both fallbacks on that
+        // path yield `false` rather than a nullish value - util.js defines a no-op getState() and
+        // MapObjectGroupManager.getByName() returns false for an absent group - so normalise with ||, not ??.
+        let state = typeof getState === 'function' ? getState() : null;
+        let dungeonMap = state ? state.getDungeonMap() : null;
 
-        return getState().getDungeonMap()?.mapObjectGroupManager?.getByName(MAP_OBJECT_GROUP_KILLZONE) ?? null;
+        return (dungeonMap?.mapObjectGroupManager?.getByName(MAP_OBJECT_GROUP_KILLZONE)) || null;
     }
 
     /**

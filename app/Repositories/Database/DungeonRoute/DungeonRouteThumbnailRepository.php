@@ -20,7 +20,7 @@ class DungeonRouteThumbnailRepository extends DatabaseRepository implements Dung
     public function hasFreshThumbnailForVariant(DungeonRoute $dungeonRoute, DungeonRouteThumbnailVariant $variant): bool
     {
         $mappingVersion = $dungeonRoute->mappingVersion;
-        if ($mappingVersion === null) { // @phpstan-ignore identical.alwaysFalse
+        if ($mappingVersion === null) {
             return false;
         }
 

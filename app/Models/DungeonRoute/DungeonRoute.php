@@ -112,7 +112,7 @@ use Override;
  * @property Carbon               $published_at
  * @property Carbon|null          $expires_at
  *
- * @property MappingVersion                    $mappingVersion
+ * @property MappingVersion|null               $mappingVersion
  * @property Dungeon                           $dungeon
  * @property Path                              $route
  * @property Season|null                       $season
@@ -1148,12 +1148,15 @@ class DungeonRoute extends Model implements TracksPageViewInterface
      */
     public function hasKilledAllRequiredEnemies(): bool
     {
-        // Sandbox/unmigrated routes have no mapping version to compare against - nothing can be required of them.
-        if ($this->mapping_version_id === null) {
+        $this->loadMissing('mappingVersion.enemies');
+
+        // Sandbox/unmigrated routes have no mapping version to compare against - and since this schema carries no
+        // foreign keys, a route can also point at a mapping version that has since been deleted. Nothing can be
+        // required of either, and a hard failure here would 500 the publish endpoint and abort the whole
+        // scheduled-publish cron run.
+        if ($this->mappingVersion === null) {
             return true;
         }
-
-        $this->loadMissing('mappingVersion.enemies');
 
         $requiredEnemies = $this->mappingVersion->enemies
             ->filter(fn(Enemy $enemy) => $enemy->required && $this->isEnemyVisibleForTeeming($enemy));

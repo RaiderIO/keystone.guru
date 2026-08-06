@@ -771,7 +771,7 @@ class MapObject extends Signalable {
                     return false;
                 }
                 // If the map is teeming, but the enemy shouldn't be there for teeming maps..
-                else if (mapContext.getTeeming() && this.teeming === 'invisible') {
+                else if (mapContext.getTeeming() && this.teeming === 'hidden') {
                     debug ? console.log(`Hiding enemy due to teeming B ${this.id}`) : null;
                     return false;
                 }
