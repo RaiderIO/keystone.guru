@@ -32,9 +32,9 @@ use Illuminate\Support\Collection;
 abstract class DungeonRouteBuilder
 {
     private const array DUNGEON_ENEMY_FLOOR_CHECK_ENABLED = [
-        //        Dungeon::DUNGEON_THE_ROOKERY,
-        //        Dungeon::DUNGEON_WAYCREST_MANOR
-        //        Dungeon::DUNGEON_THEATER_OF_PAIN
+        //        DungeonKey::THE_ROOKERY->value,
+        //        DungeonKey::WAYCREST_MANOR->value
+        //        DungeonKey::THEATER_OF_PAIN->value
     ];
 
     protected const array NPC_ID_MAPPING = [

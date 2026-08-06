@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Speedrun;
 
-use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\Floor\Floor;
 use App\Models\Laratrust\Role;
 use App\Models\Npc\Npc;
@@ -38,7 +38,7 @@ class DungeonSpeedrunRequiredNpcsFormRequest extends FormRequest
             'npc3_id'    => Rule::in($npcIdsWithNullable),
             'npc4_id'    => Rule::in($npcIdsWithNullable),
             'npc5_id'    => Rule::in($npcIdsWithNullable),
-            'difficulty' => Rule::in(array_values(Dungeon::DIFFICULTY_ALL)),
+            'difficulty' => Rule::in(DungeonDifficulty::values()),
             'count'      => 'required|int',
         ];
     }

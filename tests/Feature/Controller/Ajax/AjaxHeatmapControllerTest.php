@@ -6,6 +6,7 @@ use App;
 use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventGridAggregationResult;
@@ -36,7 +37,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         // Arrange
         $rowCountPerFloor = 10;
         $runCount         = 20;
-        $dungeon          = Dungeon::firstWhere('key', Dungeon::DUNGEON_THE_STONEVAULT);
+        $dungeon          = Dungeon::firstWhere('key', DungeonKey::THE_STONEVAULT->value);
         $this->setUpTestForDungeon($dungeon, $rowCountPerFloor, $runCount);
 
         // Act
@@ -69,7 +70,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         // Arrange
         $rowCountPerFloor = 10;
         $runCount         = 20;
-        $dungeon          = Dungeon::firstWhere('key', Dungeon::DUNGEON_THE_NECROTIC_WAKE);
+        $dungeon          = Dungeon::firstWhere('key', DungeonKey::THE_NECROTIC_WAKE->value);
         $this->setUpTestForDungeon($dungeon, $rowCountPerFloor, $runCount, true);
 
         // Act

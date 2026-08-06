@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\DungeonRouteController;
 
 use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
@@ -53,7 +54,7 @@ abstract class DungeonRouteControllerCreateTestBase extends PublicTestCase
     {
         $enabled = $dungeon->getEnabledSpeedrunDifficulties();
         // A valid enum difficulty that is not one of this dungeon's enabled speedrun difficulties
-        $notEnabled = collect(array_values(Dungeon::DIFFICULTY_ALL))
+        $notEnabled = collect(DungeonDifficulty::values())
             ->first(static fn(int $difficulty): bool => !in_array($difficulty, $enabled, true));
 
         $this->assertNotNull($notEnabled, 'Expected a valid difficulty that is not enabled for this dungeon.');

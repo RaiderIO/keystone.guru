@@ -8,6 +8,7 @@ use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\CharacterClass;
 use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\Expansion;
 use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
@@ -385,7 +386,7 @@ Breadcrumbs::for('admin.dungeonspeedrunrequirednpc.new', static function (Genera
     $trail->parent('admin.floor.edit', $dungeon, $floor);
     $trail->push(
         __('breadcrumbs.home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc', [
-            'difficulty' => Dungeon::getDifficultyName($difficulty),
+            'difficulty' => DungeonDifficulty::from($difficulty)->translatedName(),
         ]),
         route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon, 'floor' => $floor, 'difficulty' => $difficulty]),
     );

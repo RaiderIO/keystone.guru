@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\Floor\Floor;
 
 /**
@@ -10,8 +11,8 @@ use App\Models\Floor\Floor;
 
 $npcsByDifficulty     = $floor->dungeonSpeedrunRequiredNpcs->groupBy('difficulty');
 $difficultiesWithData = array_filter(
-    Dungeon::DIFFICULTY_ALL,
-    $npcsByDifficulty->has(...),
+    DungeonDifficulty::cases(),
+    static fn(DungeonDifficulty $difficulty) => $npcsByDifficulty->has($difficulty->value),
 );
 ?>
 
@@ -45,10 +46,10 @@ $difficultiesWithData = array_filter(
                 <i class="fas fa-plus"></i> {{ __('view_admin.floor.edit.speedrun_required_npcs.add_npc') }}
             </button>
             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="admin_speedrun_required_npcs_add_dropdown">
-                @foreach (Dungeon::DIFFICULTY_ALL as $difficulty)
+                @foreach (DungeonDifficulty::cases() as $difficulty)
                     <a class="dropdown-item"
-                       href="{{ route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon, 'floor' => $floor, 'difficulty' => $difficulty]) }}">
-                        {{ __('view_admin.floor.edit.speedrun_required_npcs.add_npc_for', ['difficulty' => Dungeon::getDifficultyName($difficulty)]) }}
+                       href="{{ route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon, 'floor' => $floor, 'difficulty' => $difficulty->value]) }}">
+                        {{ __('view_admin.floor.edit.speedrun_required_npcs.add_npc_for', ['difficulty' => $difficulty->translatedName()]) }}
                     </a>
                 @endforeach
             </div>
@@ -60,28 +61,28 @@ $difficultiesWithData = array_filter(
     <p class="text-muted">{{ __('view_admin.floor.edit.speedrun_required_npcs.no_npcs') }}</p>
 @else
     <ul id="admin_speedrun_required_npcs_tabs" class="nav nav-tabs" role="tablist">
-        @foreach ($difficultiesWithData as $difficultyName => $difficulty)
+        @foreach ($difficultiesWithData as $difficulty)
             <li class="nav-item">
-                <a id="admin_speedrun_required_npcs_{{ $difficultyName }}_tab"
+                <a id="admin_speedrun_required_npcs_{{ $difficulty->slug() }}_tab"
                    class="nav-link {{ $loop->first ? 'active' : '' }}"
-                   href="#admin_speedrun_required_npcs_{{ $difficultyName }}_content"
+                   href="#admin_speedrun_required_npcs_{{ $difficulty->slug() }}_content"
                    role="tab"
-                   aria-controls="admin_speedrun_required_npcs_{{ $difficultyName }}_content"
+                   aria-controls="admin_speedrun_required_npcs_{{ $difficulty->slug() }}_content"
                    aria-selected="{{ $loop->first ? 'true' : 'false' }}"
                    data-bs-toggle="tab">
-                    {{ Dungeon::getDifficultyName($difficulty) }}
+                    {{ $difficulty->translatedName() }}
                 </a>
             </li>
         @endforeach
     </ul>
 
     <div class="tab-content">
-        @foreach ($difficultiesWithData as $difficultyName => $difficulty)
-            <div id="admin_speedrun_required_npcs_{{ $difficultyName }}_content"
+        @foreach ($difficultiesWithData as $difficulty)
+            <div id="admin_speedrun_required_npcs_{{ $difficulty->slug() }}_content"
                  class="tab-pane fade show {{ $loop->first ? 'active' : '' }}"
                  role="tabpanel"
-                 aria-labelledby="admin_speedrun_required_npcs_{{ $difficultyName }}_tab">
-                <table id="admin_speedrun_required_npcs_{{ $difficultyName }}_table"
+                 aria-labelledby="admin_speedrun_required_npcs_{{ $difficulty->slug() }}_tab">
+                <table id="admin_speedrun_required_npcs_{{ $difficulty->slug() }}_table"
                        class="admin_speedrun_required_npcs_table tablesorter default_table table-striped">
                     <thead>
                     <tr>
@@ -93,7 +94,7 @@ $difficultiesWithData = array_filter(
                     </thead>
 
                     <tbody>
-                    @foreach ($npcsByDifficulty->get($difficulty) as $speedrunRequiredNpc)
+                    @foreach ($npcsByDifficulty->get($difficulty->value) as $speedrunRequiredNpc)
                         <tr>
                             <td>{{ $speedrunRequiredNpc->id }}</td>
                             <td>{{ $speedrunRequiredNpc->getDisplayText() }}</td>
@@ -105,7 +106,7 @@ $difficultiesWithData = array_filter(
                                             'dungeon' => $dungeon,
                                             'floor' => $floor,
                                             'dungeonspeedrunrequirednpc' => $speedrunRequiredNpc->id,
-                                            'difficulty' => $difficulty,
+                                            'difficulty' => $difficulty->value,
                                         ])
                                         }}"
                                       class="d-inline">

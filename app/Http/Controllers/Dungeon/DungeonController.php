@@ -68,7 +68,7 @@ class DungeonController extends Controller
     {
         $dungeons            = Dungeon::all()->keyBy('key');
         $availableKeysSelect = collect();
-        foreach (array_merge_recursive(Dungeon::ALL, Dungeon::ALL_RAID) as $expansion => $dungeonKeys) {
+        foreach (Dungeon::allKeysByExpansionKey() as $expansion => $dungeonKeys) {
             $availableKeysForExpansion = collect();
             foreach ($dungeonKeys as $dungeonKey) {
                 if (!isset($dungeons[$dungeonKey])) {

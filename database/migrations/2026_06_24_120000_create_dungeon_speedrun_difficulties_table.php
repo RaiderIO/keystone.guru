@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -22,10 +22,10 @@ return new class extends Migration {
         foreach ($rows as $row) {
             $difficulties = [];
             if ($row->speedrun_difficulty_10_man_enabled) {
-                $difficulties[] = Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_10_MAN];
+                $difficulties[] = DungeonDifficulty::TEN_MAN->value;
             }
             if ($row->speedrun_difficulty_25_man_enabled) {
-                $difficulties[] = Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_25_MAN];
+                $difficulties[] = DungeonDifficulty::TWENTY_FIVE_MAN->value;
             }
 
             foreach ($difficulties as $difficulty) {
@@ -58,8 +58,8 @@ return new class extends Migration {
             DB::table('dungeons')
                 ->where('id', $dungeonId)
                 ->update([
-                    'speedrun_difficulty_10_man_enabled' => $difficulties->contains(Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_10_MAN]) ? 1 : 0,
-                    'speedrun_difficulty_25_man_enabled' => $difficulties->contains(Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_25_MAN]) ? 1 : 0,
+                    'speedrun_difficulty_10_man_enabled' => $difficulties->contains(DungeonDifficulty::TEN_MAN->value) ? 1 : 0,
+                    'speedrun_difficulty_25_man_enabled' => $difficulties->contains(DungeonDifficulty::TWENTY_FIVE_MAN->value) ? 1 : 0,
                 ]);
         }
 

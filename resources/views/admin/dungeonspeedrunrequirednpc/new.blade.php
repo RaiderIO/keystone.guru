@@ -1,5 +1,6 @@
 <?php
 use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\Floor\Floor;
 
 /**
@@ -15,12 +16,12 @@ use App\Models\Floor\Floor;
     'showAds' => false,
     'title' => sprintf(
         __('view_admin.dungeonspeedrunrequirednpc.new.title'),
-        Dungeon::getDifficultyName($difficulty)
+        DungeonDifficulty::from($difficulty)->translatedName()
     )]
 )
 @section('header-title')
     {{ __('view_admin.dungeonspeedrunrequirednpc.new.header', [
-        'difficulty' => Dungeon::getDifficultyName($difficulty),
+        'difficulty' => DungeonDifficulty::from($difficulty)->translatedName(),
         'dungeon'    => __($dungeon->name),
     ]) }}
 @endsection

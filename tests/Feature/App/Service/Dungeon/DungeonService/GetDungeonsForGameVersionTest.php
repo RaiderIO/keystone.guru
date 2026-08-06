@@ -3,6 +3,7 @@
 namespace Tests\Feature\App\Service\Dungeon\DungeonService;
 
 use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
@@ -133,7 +134,7 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
         $currentSeason = Season::findOrFail(Season::SEASON_MIDNIGHT_S1);
         $expansion     = Expansion::firstWhere('shortname', Expansion::EXPANSION_MIDNIGHT);
         // A dungeon that is not part of the current season, so the assert below can tell the two apart
-        $futureSeasonDungeon = Dungeon::firstWhere('key', Dungeon::DUNGEON_ARA_KARA_CITY_OF_ECHOES);
+        $futureSeasonDungeon = Dungeon::firstWhere('key', DungeonKey::ARA_KARA_CITY_OF_ECHOES->value);
 
         // Created inside the try so a failure halfway through still cleans up
         $futureSeason = null;

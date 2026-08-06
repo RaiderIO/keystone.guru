@@ -6,6 +6,7 @@ use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
 use App\Models\CharacterRace;
 use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteAffixGroup;
 use App\Models\DungeonRoute\DungeonRouteAttribute;
@@ -377,8 +378,7 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
         );
         $enabledDifficulties = $dungeon->getEnabledSpeedrunDifficulties();
         // A difficulty that is NOT enabled for this dungeon
-        $disabledDifficulty = collect(Dungeon::DIFFICULTY_ALL)
-            ->values()
+        $disabledDifficulty = collect(DungeonDifficulty::values())
             ->first(fn(int $difficulty) => !in_array($difficulty, $enabledDifficulties, true));
 
         $this->assertNotNull($disabledDifficulty, 'Expected a dungeon that does not enable every difficulty');
@@ -420,7 +420,7 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
             'dungeon_id'          => $dungeon->id,
             'faction_id'          => 1,
             'dungeon_route_title' => 'Difficulty Discarded Test',
-            'dungeon_difficulty'  => Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_25_MAN],
+            'dungeon_difficulty'  => DungeonDifficulty::TWENTY_FIVE_MAN->value,
         ];
 
         try {
