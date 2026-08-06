@@ -24,18 +24,25 @@ class TagPolicy
         if ($tag->context_class === User::class && $tag->context_id === $user->id) {
             $result = true;
         } elseif ($tag->context_class === Team::class) {
-            // If we're editing a team tag, and the user is part of this team, we can edit it
-            if (Team::findOrFail($tag->context_id)->isUserMember($user)) {
-                $result = true;
-            }
-        } elseif ($tag->model_id !== null) {
+            // If we're editing a team tag, and the user is part of this team, we can edit it.
+            // find() rather than findOrFail(): a team tag can outlive its team. Team::removeMember()
+            // unassigns a leaving author's routes without dropping their team tags, and the team's
+            // deleting hook only clears tags for routes still assigned to it - so context_id can
+            // dangle, and findOrFail() would 404 every caller instead of denying them.
+            $result = Team::find($tag->context_id)?->isUserMember($user) ?? false;
+        }
+
+        // Falling back to the tagged route's own permissions keeps a tag whose team membership no
+        // longer holds - or whose team is gone entirely - manageable by the people who own the route
+        // it is stuck on, rather than leaving it undeletable by anyone
+        if (!$result && $tag->model_id !== null) {
             switch ($tag->tagCategory->name) {
                 case TagCategory::DUNGEON_ROUTE_PERSONAL:
                 case TagCategory::DUNGEON_ROUTE_TEAM:
-                    /** @var DungeonRoute $dungeonRoute */
+                    /** @var DungeonRoute|null $dungeonRoute */
                     $dungeonRoute = $tag->model;
 
-                    $result = $dungeonRoute->mayUserEdit($user);
+                    $result = $dungeonRoute?->mayUserEdit($user) ?? false;
                     break;
             }
         }
