@@ -87,7 +87,7 @@ final class DungeonRouteHasKilledAllRequiredEnemiesTest extends PublicTestCase
     {
         // Arrange - this is the #3666 regression: a required enemy belonging to a *different* mapping version of the
         // same dungeon must not be held against this route. The route's own map does not even contain this enemy.
-        $route      = $this->createRouteWithOwnMappingVersion();
+        $route               = $this->createRouteWithOwnMappingVersion();
         $otherMappingVersion = $this->createMappingVersion($route);
 
         try {

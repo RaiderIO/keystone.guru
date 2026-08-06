@@ -85,9 +85,12 @@ class CommonDungeonroutePublish extends InlineCode {
      * @private
      */
     _getKillZoneMapObjectGroup() {
-        let dungeonMap = getState().getDungeonMap();
+        // The share modal this select lives in is also rendered on pages that have no map at all
+        if (typeof getState !== 'function') {
+            return null;
+        }
 
-        return dungeonMap?.mapObjectGroupManager?.getByName(MAP_OBJECT_GROUP_KILLZONE) ?? null;
+        return getState().getDungeonMap()?.mapObjectGroupManager?.getByName(MAP_OBJECT_GROUP_KILLZONE) ?? null;
     }
 
     /**
