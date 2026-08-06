@@ -154,10 +154,13 @@ class AjaxTagController extends Controller
     /**
      * @return array<string, mixed>|ResponseFactory|Response
      *
+     * @throws AuthorizationException
      * @throws Exception
      */
     public function delete(Request $request, Tag $tag): array|ResponseFactory|Response
     {
+        Gate::authorize('delete', $tag);
+
         if ($tag->delete()) {
             $result = response()->noContent();
         } else {
