@@ -3,6 +3,8 @@
 namespace Tests\Feature\Controller\Ajax;
 
 use App\Models\Floor\Floor;
+use App\Models\Path;
+use App\Models\Polyline;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Teapot\StatusCode;
@@ -101,5 +103,57 @@ final class AjaxPathControllerTest extends DungeonRouteTestBase
         // Assert
         $response->assertStatus(StatusCode::FOUND);
         $response->assertSessionHasErrors(['polyline.vertices_json']);
+    }
+
+    #[Test]
+    #[Group('Controller')]
+    public function store_givenUpdateThatFailsToSave_shouldReturnNotFoundAndRollBackTransaction(): void
+    {
+        // Arrange
+        /** @var Floor $randomFloor */
+        $randomFloor = $this->dungeonRoute->dungeon->floors()
+            ->where('facade', false)
+            ->get()
+            ->random();
+
+        $path = Path::create([
+            'dungeon_route_id' => $this->dungeonRoute->id,
+            'floor_id'         => $randomFloor->id,
+            'polyline_id'      => -1,
+        ]);
+
+        // Desync the stored floor_id from what the request below will submit, so that
+        // Path::update() actually has a dirty attribute and fires its 'updating' event -
+        // Eloquent skips the event entirely (and always returns true) when nothing changed
+        Path::query()->where('id', $path->id)->update(['floor_id' => $randomFloor->id + 1]);
+
+        $polyline = PolylineFixtures::createPolyline($randomFloor);
+
+        // Force Path::update() to fail, exercising the same 'unable to save' branch a real DB
+        // failure would take, without mocking the global \Exception the controller now catches
+        Path::updating(fn() => false);
+
+        try {
+            // Act
+            $response = $this->put(route('ajax.dungeonroute.path.update', [
+                'dungeonRoute' => $this->dungeonRoute,
+                'path'         => $path,
+            ]), [
+                'floor_id' => $randomFloor->id,
+                'polyline' => $polyline,
+            ]);
+
+            // Assert
+            $response->assertStatus(StatusCode::NOT_FOUND);
+            // The polyline creation happens after the failed update, inside the same transaction -
+            // it must not have been persisted
+            $this->assertDatabaseMissing((new Polyline())->getTable(), [
+                'model_id'    => $path->id,
+                'model_class' => Path::class,
+            ]);
+        } finally {
+            Path::flushEventListeners();
+            $path->delete();
+        }
     }
 }
