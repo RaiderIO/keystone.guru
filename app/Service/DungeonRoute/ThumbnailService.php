@@ -485,6 +485,10 @@ class ThumbnailService implements ThumbnailServiceInterface
         string                       $disk,
         DungeonRouteThumbnailVariant $variant = DungeonRouteThumbnailVariant::Standard,
     ): DungeonRouteThumbnail {
+        // Custom-ness is derived from the variant - it's not an independent flag. The legacy `custom`
+        // boolean column is still dual-written here (kept in sync with the variant) until a follow-up
+        // release, merged only once this one has deployed, drops it; see the expand/contract note on
+        // the model.
         $isCustom = $variant === DungeonRouteThumbnailVariant::Custom;
 
         return DB::transaction(function () use (
@@ -514,6 +518,7 @@ class ThumbnailService implements ThumbnailServiceInterface
             $dungeonRouteThumbnail = DungeonRouteThumbnail::create([
                 'dungeon_route_id' => $dungeonRoute->id,
                 'floor_id'         => $floor->id,
+                'custom'           => $isCustom,
                 'variant'          => $variant,
             ]);
 

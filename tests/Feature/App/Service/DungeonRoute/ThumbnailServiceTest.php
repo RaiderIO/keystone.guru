@@ -497,8 +497,9 @@ final class ThumbnailServiceTest extends PublicTestCase
             // Act - attach a custom variant
             $customThumbnail = $method->invoke($service, $dungeonRoute, $floor->index, '/thumbnails_custom/custom.jpg', 'fake-image-bytes', config('filesystems.default'), DungeonRouteThumbnailVariant::Custom);
 
-            // Assert - variant is 'custom'
+            // Assert - variant is 'custom' and the legacy custom boolean is dual-written to true
             $this->assertSame(DungeonRouteThumbnailVariant::Custom, $customThumbnail->variant);
+            $this->assertTrue((bool)$customThumbnail->custom);
             // The pre-existing standard thumbnail is untouched
             $this->assertDatabaseHas('dungeon_route_thumbnails', ['id' => $standardThumbnail->id]);
         } finally {

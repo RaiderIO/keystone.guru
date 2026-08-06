@@ -15,6 +15,7 @@ use Override;
  * @property int                          $dungeon_route_id
  * @property int                          $floor_id
  * @property int                          $file_id
+ * @property bool                         $custom           Deprecated: superseded by the 'custom' variant. Kept and dual-written until a follow-up release, merged only once this one has deployed, drops it.
  * @property DungeonRouteThumbnailVariant $variant          Which render variant this thumbnail is
  *
  * @property DungeonRoute $dungeonRoute
@@ -32,6 +33,7 @@ class DungeonRouteThumbnail extends Model
         'dungeon_route_id',
         'floor_id',
         'file_id',
+        'custom',
         'variant',
         'created_at',
         'updated_at',
