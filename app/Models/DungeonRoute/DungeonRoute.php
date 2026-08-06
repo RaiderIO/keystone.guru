@@ -1137,37 +1137,34 @@ class DungeonRoute extends Model implements TracksPageViewInterface
      */
     public function isEnemyKilled(int $enemyId): bool
     {
-        $result = false;
-
-        foreach ($this->killZones as $killZone) {
-            if ($killZone->getEnemies()->filter(static fn($enemy) => $enemy->id === $enemyId)->isNotEmpty()) {
-                $result = true;
-                break;
-            }
-        }
-
-        return $result;
+        return isset($this->getKilledEnemyIds()[$enemyId]);
     }
 
     /**
-     * Checks if this route has killed all required enemies.
+     * Checks if this route has killed all enemies that are marked as required in the route's mapping version.
+     *
+     * Enemies are only considered when they are visible for this route's teeming setting - an enemy that only spawns
+     * on teeming keys cannot be required on a non-teeming route and vice versa.
      */
     public function hasKilledAllRequiredEnemies(): bool
     {
-        $result = true;
+        // Sandbox/unmigrated routes have no mapping version to compare against - nothing can be required of them.
+        if ($this->mapping_version_id === null) {
+            return true;
+        }
 
-        //        foreach ($this->dungeon->enemies as $enemy) {
-        //            if ($enemy->required &&
-        //                ($enemy->teeming === null || ($enemy->teeming === 'visible' && $this->teeming) || ($enemy->teeming === 'invisible' && $this->teeming))) {
-        //
-        //                if (!$this->isEnemyKilled($enemy->id)) {
-        //                    $result = false;
-        //                    break;
-        //                }
-        //            }
-        //        }
+        $this->loadMissing('mappingVersion.enemies');
 
-        return $result;
+        $requiredEnemies = $this->mappingVersion->enemies
+            ->filter(fn(Enemy $enemy) => $enemy->required && $this->isEnemyVisibleForTeeming($enemy));
+
+        if ($requiredEnemies->isEmpty()) {
+            return true;
+        }
+
+        $killedEnemyIds = $this->getKilledEnemyIds();
+
+        return $requiredEnemies->every(static fn(Enemy $enemy) => isset($killedEnemyIds[$enemy->id]));
     }
 
     public function hasUniqueAffix(string $affix): bool
@@ -1390,6 +1387,39 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             // Make sure the relation should be reloaded
             $this->unsetRelation('affixGroups');
         }
+    }
+
+    /**
+     * All enemy ids killed by any of this route's kill zones, keyed by enemy id for O(1) lookups.
+     *
+     * @return array<int, true>
+     */
+    private function getKilledEnemyIds(): array
+    {
+        $this->loadMissing('killZones.enemies');
+
+        $result = [];
+
+        foreach ($this->killZones as $killZone) {
+            foreach ($killZone->getEnemies() as $enemy) {
+                $result[$enemy->id] = true;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Whether the enemy spawns at all given this route's teeming setting. Enemies that are not teeming-specific
+     * (teeming === null) always spawn.
+     */
+    private function isEnemyVisibleForTeeming(Enemy $enemy): bool
+    {
+        return match ($enemy->teeming) {
+            Enemy::TEEMING_VISIBLE => (bool)$this->teeming,
+            Enemy::TEEMING_HIDDEN  => !$this->teeming,
+            default                => true,
+        };
     }
 
     /**

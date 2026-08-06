@@ -580,9 +580,9 @@ class AjaxDungeonRouteController extends Controller
      */
     public function publishedState(PublishFormRequest $request, DungeonRoute $dungeonRoute): Response
     {
-        Gate::authorize('publish', $dungeonRoute);
-
         $publishedState = $request->get('published_state', PublishedState::UNPUBLISHED);
+
+        Gate::authorize('publish', [$dungeonRoute, $publishedState]);
 
         if (!PublishedState::getAvailablePublishedStates($dungeonRoute, Auth::user())->contains($publishedState)) {
             abort(422, 'This sharing state is not available for this route');
