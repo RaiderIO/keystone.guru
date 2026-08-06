@@ -6,8 +6,11 @@
     top: 0;
     z-index: 800;
     /* One opaque band behind all bars - without it, page content shows through the
-       slivers between the bars' centered containers while scrolling */
-    background-color: var(--theme-header);
+       slivers between the bars' centered containers while scrolling. Deliberately the
+       page background color, not --theme-header: the bars' centered containers carry
+       their own header color, and the gutters left/right of them should read as page,
+       not as header (the full-width header band made the page feel top-heavy) */
+    background-color: var(--theme-darker);
 }
 
 /* The map header keeps its floating look: transparent, click-through gutters
@@ -26,6 +29,10 @@
 }
 
 .ksg-header .navbar-second {
+    /* Halve the theme's 1rem navbar padding: with the bars stacking in flow the full
+       padding is actually visible (the old fixed bars overlapped it away) and reads bulky */
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
     transition: padding 0.2s ease;
 }
 
