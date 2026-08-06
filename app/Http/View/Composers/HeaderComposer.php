@@ -5,7 +5,6 @@ namespace App\Http\View\Composers;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\AffixGroup\AffixGroupEaseTier;
 use App\Models\GameVersion\GameVersion;
-use App\Models\Season;
 use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Dungeon\DungeonServiceInterface;
@@ -33,9 +32,9 @@ readonly class HeaderComposer implements ViewComposerInterface
 
         $currentSeason = $this->viewService->getCurrentSeasonForRegion($gameServerRegion);
 
-        // A season is seeded weeks - sometimes months - before it starts so its mapping can be
-        // reviewed; until an admin marks it `active` it must not be visible anywhere (#3761, #3868).
-        $nextSeason = $this->getVisibleUpcomingSeason($this->viewService->getNextSeasonForRegion($gameServerRegion));
+        // ViewService::getNextSeasonForRegion() already gates on Season::active - a season is seeded
+        // weeks, sometimes months, before it starts so its mapping can be reviewed (#3761, #3868).
+        $nextSeason = $this->viewService->getNextSeasonForRegion($gameServerRegion);
 
         $view->with('activeExpansions', $this->viewService->getActiveExpansions());
         $view->with('currentSeason', $currentSeason);
@@ -64,16 +63,6 @@ readonly class HeaderComposer implements ViewComposerInterface
 
         $view->with('dungeonContextCurrentAffixGroup', $currentAffixGroup);
         $view->with('dungeonContextEaseTiers', $this->getEaseTiers($currentAffixGroup));
-    }
-
-    /**
-     * The next season, but only once an admin has marked it ready to reveal. A season is seeded weeks -
-     * sometimes months - before it starts so its mapping can be reviewed, and until then it should not be
-     * visible on the site at all.
-     */
-    private function getVisibleUpcomingSeason(?Season $nextSeason): ?Season
-    {
-        return $nextSeason?->active ? $nextSeason : null;
     }
 
     /**

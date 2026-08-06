@@ -133,6 +133,29 @@ final class SeasonRepositoryTest extends PublicTestCase
         }
     }
 
+    /**
+     * Season::SEASON_LEGION_TW_S1 is seeded with a deliberately far-future placeholder start date
+     * (2050) precisely so it is never treated as a dungeon's upcoming season - dropping the cap
+     * outright would resurrect its stale seasonal affix for every Legion dungeon it's attached to
+     * (#3868 cold review).
+     */
+    #[Test]
+    public function getUpcomingSeasonForDungeon_givenDungeonWithOnlyTheFarFuturePlaceholderSeason_returnsNull(): void
+    {
+        // Arrange
+        $placeholderSeason = Season::findOrFail(Season::SEASON_LEGION_TW_S1);
+        $this->assertGreaterThan(now()->addYears(3), $placeholderSeason->start, 'Fixture assumption changed - the placeholder season must still sit well past the lookahead cap.');
+
+        /** @var Dungeon $dungeon */
+        $dungeon = $placeholderSeason->dungeons()->firstOrFail();
+
+        // Act
+        $result = $this->repository->getUpcomingSeasonForDungeon($dungeon);
+
+        // Assert
+        $this->assertNull($result);
+    }
+
     #[Test]
     public function getMostRecentSeasonForDungeon_givenDungeonWithMultipleSeasons_returnsMostRecent(): void
     {
