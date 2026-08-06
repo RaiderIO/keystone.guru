@@ -5,6 +5,7 @@ namespace Tests\Feature\Controller\Ajax;
 use App\Models\Floor\Floor;
 use App\Models\Path;
 use App\Models\Polyline;
+use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Teapot\StatusCode;
@@ -152,7 +153,9 @@ final class AjaxPathControllerTest extends DungeonRouteTestBase
                 'model_class' => Path::class,
             ]);
         } finally {
-            Path::flushEventListeners();
+            // Remove only the listener registered above - Path::flushEventListeners() would also
+            // wipe Path::boot()'s cascade-delete listener for the rest of the PHPUnit process
+            Event::forget('eloquent.updating: ' . Path::class);
             $path->delete();
         }
     }
