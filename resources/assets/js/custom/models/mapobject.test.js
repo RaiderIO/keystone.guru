@@ -215,7 +215,7 @@ describe('MapObject.shouldBeVisible - teeming filter', () => {
         expect(makeMapObject().shouldBeVisible()).toBe(true);
     });
 
-    it('ignores the teeming filter for map admins, who must see every object', () => {
+    it('ignores the teeming filter when the map is in admin (mapping version edit) mode', () => {
         setFakeState({teeming: false, mapAdmin: true});
 
         expect(makeMapObject({teeming: 'visible'}).shouldBeVisible()).toBe(true);
@@ -295,12 +295,12 @@ describe('MapObject.shouldBeVisible - faction filter', () => {
         expect(makeMapObject({faction: 'alliance'}).shouldBeVisible()).toBe(true);
     });
 
-    it('does not apply the faction filter in sandbox mode', () => {
+    it('applies the faction filter the same way in sandbox mode', () => {
         setFakeState({faction: 'horde'});
 
         const mapObject = makeMapObject({faction: 'alliance'}, makeFakeMap({sandbox: true}));
 
-        expect(mapObject.shouldBeVisible()).toBe(true);
+        expect(mapObject.shouldBeVisible()).toBe(false);
     });
 });
 
