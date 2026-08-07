@@ -454,6 +454,8 @@ class Team extends Model
     public function getAvailableTags(): EloquentCollection
     {
         return Tag::where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])
+            ->where('context_class', self::class)
+            ->where('context_id', $this->id)
             ->whereIn('model_id', $this->dungeonRoutes->pluck('id'))
             ->get();
     }
