@@ -37,6 +37,7 @@ class SeasonFormRequest extends FormRequest
             'seasonal_affix_id'       => ['required', 'integer', Rule::in([-1, ...$this->getSeasonalAffixIds()])],
             'index'                   => 'required|integer|min:1',
             'start'                   => 'required|date',
+            'active'                  => 'nullable|boolean',
             'presets'                 => 'nullable|integer|min:0',
             'affix_group_count'       => 'required|integer|min:1',
             'start_affix_group_index' => 'required|integer|min:0|lt:affix_group_count',

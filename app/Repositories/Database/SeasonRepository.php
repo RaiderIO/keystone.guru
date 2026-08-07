@@ -53,8 +53,11 @@ class SeasonRepository extends DatabaseRepository implements SeasonRepositoryInt
             ->join('season_dungeons', 'seasons.id', 'season_dungeons.season_id')
             ->where('season_dungeons.dungeon_id', $dungeon->id)
             ->where('seasons.start', '>', now())
-            // Don't go overboard with trying to fetch seasons in the future
-            ->where('seasons.start', '<', now()->addYear())
+            // A deliberately far-future placeholder start date exists in the data (Season::SEASON_LEGION_TW_S1,
+            // seeded for 2050) to keep it out of "upcoming" resolution for its dungeons - so this cannot be
+            // dropped outright. Widened well past a year (#3868: King's Rest's real Season 2 assignment was
+            // being lost by the old 1-year cap) while staying nowhere near that placeholder.
+            ->where('seasons.start', '<', now()->addYears(3))
             ->orderBy('seasons.start', 'desc')
             ->first();
 

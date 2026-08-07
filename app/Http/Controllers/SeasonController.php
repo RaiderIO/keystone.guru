@@ -24,6 +24,9 @@ class SeasonController extends Controller
         $validated = $request->validated();
 
         $validated['presets'] ??= 0;
+        // Checkboxes don't submit when unchecked, so an absent 'active' means "unchecked" and
+        // must persist as false, matching Dungeon::active's convention.
+        $validated['active'] ??= 0;
 
         if ((int)$validated['seasonal_affix_id'] === -1) {
             $validated['seasonal_affix_id'] = null;

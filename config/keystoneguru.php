@@ -258,17 +258,6 @@ return [
     ],
 
     /**
-     * Seasons of the game
-     */
-    'season' => [
-        /**
-         * The amount of days before a season starts that it is advertised on the site as the upcoming season. Seasons
-         * are seeded well before they start so that their mapping can be reviewed, which should not affect the site.
-         */
-        'upcoming_visible_days' => 14,
-    ],
-
-    /**
      * The creator directory (see the CreatorProfiles feature flag)
      */
     'creators' => [

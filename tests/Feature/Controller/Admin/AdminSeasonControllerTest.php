@@ -360,6 +360,83 @@ final class AdminSeasonControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function update_givenActiveOmitted_persistsAsFalse(): void
+    {
+        // Arrange - checkboxes don't submit when unchecked, so 'active' is simply absent from the payload
+        $expansion = Expansion::query()->firstOrFail();
+        $season    = Season::create([
+            'expansion_id'            => $expansion->id,
+            'index'                   => 991,
+            'start'                   => '2026-01-01 00:00:00',
+            'active'                  => true,
+            'presets'                 => 0,
+            'affix_group_count'       => 4,
+            'start_affix_group_index' => 0,
+            'key_level_min'           => 2,
+            'key_level_max'           => 30,
+        ]);
+
+        try {
+            // Act
+            $response = $this->patch(route('admin.season.update', $season), [
+                'expansion_id'            => $expansion->id,
+                'seasonal_affix_id'       => -1,
+                'index'                   => 991,
+                'start'                   => '2026-01-01 00:00:00',
+                'affix_group_count'       => 4,
+                'start_affix_group_index' => 0,
+                'key_level_min'           => 2,
+                'key_level_max'           => 30,
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertFalse($season->fresh()->active);
+        } finally {
+            $season->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenActiveChecked_persistsAsTrue(): void
+    {
+        // Arrange
+        $expansion = Expansion::query()->firstOrFail();
+        $season    = Season::create([
+            'expansion_id'            => $expansion->id,
+            'index'                   => 990,
+            'start'                   => '2026-01-01 00:00:00',
+            'active'                  => false,
+            'presets'                 => 0,
+            'affix_group_count'       => 4,
+            'start_affix_group_index' => 0,
+            'key_level_min'           => 2,
+            'key_level_max'           => 30,
+        ]);
+
+        try {
+            // Act
+            $response = $this->patch(route('admin.season.update', $season), [
+                'expansion_id'            => $expansion->id,
+                'seasonal_affix_id'       => -1,
+                'index'                   => 990,
+                'start'                   => '2026-01-01 00:00:00',
+                'active'                  => 1,
+                'affix_group_count'       => 4,
+                'start_affix_group_index' => 0,
+                'key_level_min'           => 2,
+                'key_level_max'           => 30,
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertTrue($season->fresh()->active);
+        } finally {
+            $season->delete();
+        }
+    }
+
+    #[Test]
     public function update_givenNewDungeonSet_replacesSeasonDungeons(): void
     {
         // Arrange

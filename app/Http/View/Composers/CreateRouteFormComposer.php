@@ -40,6 +40,7 @@ readonly class CreateRouteFormComposer implements ViewComposerInterface
         $view->with('routeKeyLevelFrom', $currentSeason->key_level_min);
         $view->with('routeKeyLevelTo', $currentSeason->key_level_max);
         $view->with('currentSeason', $seasonLoader($currentSeason));
+        // ViewService::getNextSeasonForRegion() already gates on Season::active (#3868).
         $view->with('nextSeason', $seasonLoader($this->viewService->getNextSeasonForRegion($gameServerRegion)));
     }
 }
