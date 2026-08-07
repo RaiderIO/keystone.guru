@@ -12,6 +12,19 @@ globalThis.MAP_OBJECT_GROUP_ENEMY = MAP_OBJECT_GROUP_ENEMY;
 globalThis.MapObjectGroup = class MapObjectGroup {
 };
 
+// Overpulled enemies live on LiveSessionKillZone, not on the base KillZone, so isEnemyKilled() reaches them behind an
+// instanceof guard - a plain-object pull can never satisfy it.
+globalThis.LiveSessionKillZone = class LiveSessionKillZone {
+    constructor(enemies, overpulledEnemies) {
+        this.enemies = enemies;
+        this.overpulledEnemies = overpulledEnemies;
+    }
+
+    getOverpulledEnemies() {
+        return this.overpulledEnemies;
+    }
+};
+
 const {KillZoneMapObjectGroup} = require('./killzonemapobjectgroup');
 
 /**
@@ -66,7 +79,7 @@ describe('KillZoneMapObjectGroup.hasKilledAllRequiredEnemies', () => {
 
     it('counts an overpulled enemy as killed', () => {
         const group = buildGroup([requiredEnemy(1)], [], false);
-        group.objects = [{enemies: [], overpulledEnemies: [1]}];
+        group.objects = [new globalThis.LiveSessionKillZone([], [1])];
 
         expect(group.hasKilledAllRequiredEnemies()).toBe(true);
     });
