@@ -1481,7 +1481,9 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 'livesessions',
             ]);
 
-            $dungeonRoute->setConnection('combatlog')->challengeModeRun()->delete();
+            // A mass delete on the relation skips ChallengeModeRun::deleting, which is what cleans up
+            // challenge_mode_run_data - fetch and delete the single row instead so the hook fires
+            $dungeonRoute->setConnection('combatlog')->challengeModeRun()->first()?->delete();
             $dungeonRoute->setConnection(null);
 
             // Delete thumbnails
@@ -1523,7 +1525,11 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 $killZone->delete();
             }
 
-            $dungeonRoute->mapicons()->delete();
+            // A mass delete on the relation skips MapIcon::deleting (via HasLinkedAwakenedObelisk),
+            // which is what cleans up map_object_to_awakened_obelisk_links
+            foreach ($dungeonRoute->mapicons()->get() as $mapIcon) {
+                $mapIcon->delete();
+            }
             $dungeonRoute->pridefulEnemies()->delete();
             // External
             $dungeonRoute->ratings()->delete();

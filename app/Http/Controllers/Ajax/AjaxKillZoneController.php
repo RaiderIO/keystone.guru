@@ -449,7 +449,11 @@ class AjaxKillZoneController extends Controller
                 $killZones       = $dungeonRoute->killZones;
                 $pridefulEnemies = $dungeonRoute->pridefulEnemies;
 
-                $dungeonRoute->killZones()->delete();
+                // Deleted one at a time - a mass delete on the relation skips KillZone::deleting, which
+                // is what cleans up the kill zone's enemies and spells
+                foreach ($killZones as $killZone) {
+                    $killZone->delete();
+                }
                 $dungeonRoute->pridefulEnemies()->delete();
 
                 if (Auth::check()) {

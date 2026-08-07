@@ -256,6 +256,45 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
     }
 
     /**
+     * Guards #3873: deleteAll() used to mass-delete the killZones relation via the query builder,
+     * which never fires {@see KillZone::deleting} and silently orphaned its killZoneEnemies rows.
+     */
+    #[Test]
+    public function deleteAll_givenKillZoneWithEnemies_deletesItThroughItsOwnDeletingHook(): void
+    {
+        // Arrange
+        /** @var Enemy $enemy */
+        $enemy    = Enemy::where('mapping_version_id', $this->dungeonRoute->mapping_version_id)->inRandomOrder()->first();
+        $killZone = KillZone::factory()->create([
+            'dungeon_route_id' => $this->dungeonRoute->id,
+            'floor_id'         => null,
+            'lat'              => null,
+            'lng'              => null,
+            'color'            => '#000000',
+            'index'            => 1,
+        ]);
+        $killZoneEnemy = KillZoneEnemy::create([
+            'kill_zone_id' => $killZone->id,
+            'enemy_id'     => $enemy->id,
+        ]);
+
+        try {
+            // Act
+            $response = $this->delete(sprintf('/ajax/%s/killzone', $this->dungeonRoute->public_key), [
+                'confirm' => 'yes',
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertDatabaseMissing('kill_zones', ['id' => $killZone->id]);
+            $this->assertDatabaseMissing('kill_zone_enemies', ['id' => $killZoneEnemy->id]);
+        } finally {
+            KillZoneEnemy::query()->where('id', $killZoneEnemy->id)->delete();
+            KillZone::query()->where('id', $killZone->id)->delete();
+        }
+    }
+
+    /**
      * A published, non-sandbox route authored by user 1. Sandbox routes (expires_at set, which the
      * factory does by default) are editable by anyone by design, so expires_at must be null for an
      * authorization assertion to mean anything.
