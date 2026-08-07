@@ -70,4 +70,13 @@ class DungeonRouteRepository extends StubRepository implements DungeonRouteRepos
     {
         return collect();
     }
+
+    /**
+     * @param  Collection<int, DungeonRoute>                         $dungeonRoutes
+     * @return Collection<int, Collection<int, KillZoneEnemyForces>>
+     */
+    public function getEnemyForcesPerKillZoneForRoutes(Collection $dungeonRoutes): Collection
+    {
+        return collect();
+    }
 }

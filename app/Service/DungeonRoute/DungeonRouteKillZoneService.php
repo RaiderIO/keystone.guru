@@ -21,4 +21,13 @@ class DungeonRouteKillZoneService implements DungeonRouteKillZoneServiceInterfac
     {
         return $this->dungeonRouteRepository->getEnemyForcesPerKillZone($dungeonRoute);
     }
+
+    /**
+     * @param  Collection<int, DungeonRoute>                         $dungeonRoutes
+     * @return Collection<int, Collection<int, KillZoneEnemyForces>>
+     */
+    public function getEnemyForcesPerKillZoneForRoutes(Collection $dungeonRoutes): Collection
+    {
+        return $this->dungeonRouteRepository->getEnemyForcesPerKillZoneForRoutes($dungeonRoutes);
+    }
 }
