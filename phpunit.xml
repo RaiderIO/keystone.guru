@@ -32,6 +32,14 @@
         <env name="SENTRY_LARAVEL_DSN" value="" force="true"/>
         <env name="SENTRY_DSN" value="" force="true"/>
         <env name="APP_SERVICES_CACHE" value="/tmp/phpunit_services.php"/>
+        <!-- ReverbHttpApiService builds its Guzzle client in its CONSTRUCTOR, from
+             reverb.apps.apps.0.options.host/port. An empty host (which is what .env.ci.example ships)
+             makes that base_uri ':6001', and Guzzle throws MalformedUriException while the container
+             is still resolving the controller's dependencies - before any of the service's own
+             try/catch can help. Pin a parseable, unreachable address here rather than in a single
+             test, so every controller test that injects the interface stays unaffected. -->
+        <env name="REVERB_HOST" value="http://127.0.0.1" force="true"/>
+        <env name="REVERB_PORT" value="6001" force="true"/>
         <!-- The 'tmp_file' store (RemembersToFile, used by ViewService among others) is a file cache that
              CACHE_STORE does not cover. Without this the tests read, write and flush the cache of the
              application running out of the same checkout. -->
