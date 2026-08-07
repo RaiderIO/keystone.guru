@@ -84,8 +84,8 @@ the `in progress` description drops keystone.guru's worktree-specific wording):
 |---|---|
 | `in progress` | Issue is actively being worked on. |
 | `pr cold reviewed` | An AI agent has done an independent review pass and posted its findings as inline comments. Once-per-PR marker — don't re-review unless the diff changed substantially or asked to. |
-| `pr needs changes` | A human reviewer looked and left comments; not ready to merge. |
-| `pr changes applied` | Every actionable comment from a `pr needs changes` round has been addressed and pushed; ready for re-review. Only apply this after actually pushing a fix — never speculatively. |
+| `pr needs attention` | A human reviewer looked and left feedback that needs attention — a question or suggestion, not necessarily a required change. |
+| `pr comments addressed` | Every actionable item from a `pr needs attention` round has been addressed (pushed, or answered); ready for re-review. Only apply this after actually pushing a fix/response — never speculatively. |
 | `pr can merge` | The PR owner has reviewed and is happy — "merge once pipelines pass AND cold review is in," not "you may decide to merge this." **Only the human applies this label.** |
 | `follow-up` | Issue spun off from another issue/PR's review or discussion. |
 

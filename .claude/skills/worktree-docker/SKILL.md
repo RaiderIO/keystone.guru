@@ -122,6 +122,12 @@ Consequences to know about:
   `--shared-db`.
 - Search-driven pages query the shared OpenSearch index, whose ids reference main-DB rows.
 - Sessions are per-worktree, so switching between main-stack and worktree tabs re-logins each side.
+- **The git stash is shared.** All worktrees use the one `.git` dir, so `git stash list` is global:
+  a `git stash pop` in your worktree can pop *another session's* entry and drop its changes into
+  your tree as conflicts. To temporarily revert files (e.g. to shoot a "before" screenshot), use
+  `git checkout <ref> -- <paths>` and `git checkout HEAD -- <paths>` instead of stashing. If you do
+  pop the wrong entry, a conflicted pop keeps the stash — `git reset --hard HEAD` restores your
+  tree and the entry stays in the list.
 
 ### Destructive operations are now OK (isolated mode only)
 

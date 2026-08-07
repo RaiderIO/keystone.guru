@@ -19,10 +19,12 @@ If a `/loop`-triggered firing of this skill lands between 1am and 7am **local ti
 `date`) — e.g. the PC woke up overnight for an unrelated reason (cats walking on the keyboard have
 done this before) — **do not run the pass**. Don't touch any PR. Instead:
 
-1. Schedule a single one-time `/babysit-prs` run at 7am local (the `schedule` skill, or
-   `CronCreate` directly) — not another recurring loop, just one firing.
-2. Stop this loop (`ScheduleWakeup` with `stop: true`, or simply don't reschedule the next
-   dynamic-pacing wakeup).
+1. Cancel any recurring loop driving these firings (`CronDelete` the job, or `ScheduleWakeup` with
+   `stop: true` for a dynamic-pacing loop) and stop.
+2. **Do not schedule a wake-up for later** — no one-time 7am `CronCreate`/`schedule` run, no
+   `ScheduleWakeup`. Wotuu wakes the loop back up himself (explicit instruction, 2026-08-05: he
+   doesn't want to be autonomously woken by a scheduled resume) — just stop and wait for him to
+   re-invoke `/babysit-prs` or `/loop 15m /babysit-prs`.
 
 This only applies to a `/loop`-driven firing. If Wotuu invokes `/babysit-prs` directly during quiet
 hours, run it normally — the whole point is skipping *unattended* overnight churn, not refusing to
@@ -63,7 +65,7 @@ work when he's actually at the keyboard.
 - Rebasing a branch onto master rewrites its commit SHAs — when that requires a local force-push,
   always use `--force-with-lease` (never plain `--force`), and only ever on the PR's own branch,
   never `master`.
-- All review-tracking labels are prefixed `pr `: `pr needs changes`, `pr changes applied`,
+- All review-tracking labels are prefixed `pr `: `pr needs attention`, `pr comments addressed`,
   `pr can merge`, `pr cold reviewed`.
 
 ## One pass
@@ -246,18 +248,19 @@ regardless of what cold review finds — this carve-out only unblocks step 4, no
    resolved. A comment thread here (via `-X POST .../pulls/<n>/comments/<comment-id>/replies`) only
    applies to inline review comments, not these top-level ones.
 
-   If the PR carries the `pr needs changes` label and you addressed (committed + pushed) **every**
-   unresolved actionable item across all three feeds — review threads, top-level PR comments, and
-   review bodies — not just some; the label tells Wotuu "ready for you to look
-   again", which a half-addressed PR is not — swap the label: remove `pr needs changes`, add
-   `pr changes applied` —
-   `gh pr edit <n> --remove-label "pr needs changes" --add-label "pr changes applied"` (plain
+   If the PR carries the `pr needs attention` label and you addressed (committed + pushed, or
+   answered) **every** unresolved actionable item across all three feeds — review threads,
+   top-level PR comments, and review bodies — not just some; the label tells Wotuu "ready for you
+   to look again", which a half-addressed PR is not — swap the label: remove `pr needs attention`,
+   add `pr comments addressed` —
+   `gh pr edit <n> --remove-label "pr needs attention" --add-label "pr comments addressed"` (plain
    `gh pr edit` works for labels even though it's broken for body edits). This is Wotuu's own
-   review-tracking system: `pr needs changes` means "I reviewed this and left comments",
-   `pr changes applied` means "my comments were acted on, ready for me to look again" — don't apply
-   `pr changes applied` unless you actually pushed a fix/response this pass, and never touch either
-   label on a PR that doesn't already have `pr needs changes` set (that would be jumping ahead of a
-   review that hasn't happened).
+   review-tracking system: `pr needs attention` means "I left feedback that needs your attention" —
+   a question or suggestion, not necessarily a required change — and `pr comments addressed` means
+   "my feedback was addressed, ready for me to look again". Don't apply `pr comments addressed`
+   unless you actually pushed a fix/response this pass, and never touch either label on a PR that
+   doesn't already have `pr needs attention` set (that would be jumping ahead of a review that
+   hasn't happened).
 4. **All green, no comments**: leave it alone (but see the next section — it may be due a cold review).
 
 ### 4. Cold-review MRs that just became ready
@@ -373,3 +376,20 @@ action, say so in one line.
   all edits) *before* the final `git add`, or re-run `git add <file>` on anything touched after an
   earlier `git add` — `git status --porcelain` showing any `AM`/`M ` (not just ` M`) right before
   `git commit` is the tell.
+- **A dispatched fix agent that runs a destructive git command (`git reset --hard`, `git clean -f`,
+  `git checkout .`) inside a worktree hits this harness's auto-mode confirmation prompt — and since
+  this skill runs unattended on a `/loop`, nobody is there to answer it, so the agent just hangs
+  silently with no error, indistinguishable from "still working."** This stalled #3840's fix agent
+  for 45+ minutes on 2026-08-05: it had already made the correct comment-removal edit, then for no
+  clear reason tried to hard-reset the branch back to `origin/<branch>` — which would have discarded
+  its own uncommitted fix had the prompt been blindly approved. **Dispatch prompts for fix agents
+  should not need `git reset --hard` at all** — the worktree is already verified clean before
+  dispatch (step 2), so there's nothing to reset away; if a dispatched agent's task genuinely needs a
+  clean slate, `git checkout -- <path>` on the specific file is the safe equivalent. **If a dispatched
+  fix agent shows no new commit after ~30 min (two passes) and its worktree is still clean**, don't
+  keep re-skipping it indefinitely — check `git status` in its worktree directly: an unstaged diff
+  matching the intended fix means the agent produced the right change but got stuck on a confirmation
+  it can't answer, so finish the job yourself (stage, commit, push, reply, swap the label) rather than
+  waiting for a notification that may never come. Do **not** blindly approve a pending destructive-git
+  confirmation from a stuck agent — verify what's actually uncommitted first (see the git-safety
+  protocol), since approving it might discard the exact fix you're waiting on.

@@ -139,6 +139,14 @@ but the checklist is **tiered by change size** so small MRs don't pay full cerem
    <N> findings` marker comment on the MR and add the `pr cold reviewed` label
    (`gh pr edit <n> --add-label "pr cold reviewed"`) — the same marker/label `babysit-prs` checks
    before dispatching its own cold review, which is what stops a PR from being reviewed twice.
+
+   **Dispatching this reviewer needs no permission — the implementing session fires it itself.**
+   That is the entire point of the cold review: the agent that wrote the code is the one that must
+   hand it to a fresh pair of eyes. Do not stop and ask first, and do not treat a general
+   "don't spawn subagents unless asked" instruction as covering this case — this `Agent` call *is*
+   the standing request, and stopping to ask just adds a round-trip before work that is required
+   anyway. Pick the reviewer by risk: `cold-reviewer-fable` for migrations, auth, payment or
+   data-destructive diffs, `cold-reviewer-opus` for everything else.
 2. **Visual verification**: ONLY when rendered output actually changed — verify the affected
    page(s) in headless Chrome (`headless-browser-verify` skill) and post before/after screenshots
    on the MR (`post-screenshot.sh`). Backend-only MRs skip this explicitly; don't screenshot "to
