@@ -103,7 +103,7 @@ function makeFakeMap({sandbox = false, bounds = null} = {}) {
         ],
         teemingOptions: [
             {key: 'visible', description: 'Visible'},
-            {key: 'invisible', description: 'Invisible'},
+            {key: 'hidden', description: 'Hidden'},
         ],
     };
     map.register = () => {
@@ -189,10 +189,10 @@ describe('MapObject.shouldBeVisible - teeming filter', () => {
         expect(makeMapObject({teeming: 'visible'}).shouldBeVisible()).toBe(false);
     });
 
-    it('hides a teeming-invisible object on a teeming map', () => {
+    it('hides a teeming-hidden object on a teeming map', () => {
         setFakeState({teeming: true});
 
-        expect(makeMapObject({teeming: 'invisible'}).shouldBeVisible()).toBe(false);
+        expect(makeMapObject({teeming: 'hidden'}).shouldBeVisible()).toBe(false);
     });
 
     it('shows a teeming-only object on a teeming map', () => {
@@ -201,10 +201,10 @@ describe('MapObject.shouldBeVisible - teeming filter', () => {
         expect(makeMapObject({teeming: 'visible'}).shouldBeVisible()).toBe(true);
     });
 
-    it('shows a teeming-invisible object on a non-teeming map', () => {
+    it('shows a teeming-hidden object on a non-teeming map', () => {
         setFakeState({teeming: false});
 
-        expect(makeMapObject({teeming: 'invisible'}).shouldBeVisible()).toBe(true);
+        expect(makeMapObject({teeming: 'hidden'}).shouldBeVisible()).toBe(true);
     });
 
     it('shows an object without a teeming preference on either map', () => {
