@@ -10,14 +10,10 @@ description: Seed public dungeon routes with realistic pack-based pulls into the
 Thumbnails are **not** this skill's job — once the routes exist, hand them to the
 [[generating-thumbnails]] skill.
 
-## Where to run it
-
-Seed from the **main checkout**, or from a worktree created with `sh/worktree.sh create ...
---shared-db`. A default worktree has its own private database schema and redis prefix, so routes
-seeded there are invisible to the shared Horizon that renders thumbnails — you would get routes
-with no thumbnails and no way to render them (see [[generating-thumbnails]], Path B).
-
 ## 1. Seed routes
+
+Runs anywhere — the main checkout or any worktree, isolated or `--shared-db`. (Only step 2 is
+picky about where you are.)
 
 ```sh
 docker compose exec -T -e DUNGEON_KEY=pitofsaron -e ROUTE_COUNT=12 app \
@@ -34,12 +30,18 @@ docker compose exec -T -e DUNGEON_KEY=pitofsaron -e ROUTE_COUNT=12 app \
 
 ## 2. Give them thumbnails
 
+**Needs the main checkout or a `--shared-db` worktree.** A default worktree has its own database
+schema *and* redis prefix, so the shared Horizon sees neither the route rows nor the dispatch. If
+you seeded in an isolated worktree that is not a failure — the routes simply keep falling back to
+the dungeon image, which is usually fine for list/card work. Only re-seed somewhere shared if you
+actually need thumbnail images.
+
 Queue each key onto the shared thumbnail queue (Path B of [[generating-thumbnails]] — the
 main stack's Horizon is the only Chrome-capable container, and it renders to the `public` disk
-that every stack serves at `/storage/...`):
+that every stack serves at `/storage/...`). Step 1 prints the keys comma-separated, so split them:
 
 ```sh
-for key in <keys from step 1's CREATED: line>; do
+for key in $(echo '<CREATED: line from step 1>' | tr ',' ' '); do
   docker compose exec -T app php artisan dungeonroute:queuethumbnail "$key" --force
 done
 ```
@@ -60,8 +62,14 @@ Gotchas that will otherwise look like bugs:
 
 ## Cleanup / gotchas
 
-- Routes live in the **shared** database and are visible on every stack — seed a small batch,
-  and delete them when done: `DungeonRoute::whereIn('public_key', [...])->delete()`.
+- Seeded in a **shared** database (main checkout / `--shared-db`)? The routes are visible on every
+  stack — seed a small batch and delete them when done. Delete them **one model at a time**, so
+  `DungeonRoute`'s `deleting` hook runs and cleans up the pulls, paths, tags, thumbnail rows and
+  the JPGs on the shared `public` disk; a query-builder mass delete fires no model events and
+  leaves all of it orphaned:
+  ```php
+  DungeonRoute::whereIn('public_key', [...])->get()->each->delete();
+  ```
 - Regenerating a route's thumbnail replaces the old `DungeonRouteThumbnail` + `File` rows
   and deletes the old file from disk — safe to re-run.
 - Route cards behind a Pennant feature flag? Activate the admin toggle
