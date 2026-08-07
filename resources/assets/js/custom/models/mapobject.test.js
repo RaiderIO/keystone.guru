@@ -13,10 +13,12 @@
 // #1389 - see the `(#1389)` describe block for the other half.
 // ---------------------------------------------------------------------------
 
-// 1a. Seasonal type constants referenced as bare globals by shouldBeVisible().
+// 1a. Seasonal type and teeming constants referenced as bare globals by shouldBeVisible().
 global.ENEMY_SEASONAL_TYPE_AWAKENED = 'awakened';
 global.ENEMY_SEASONAL_TYPE_TORMENTED = 'tormented';
 global.ENEMY_SEASONAL_TYPE_INSPIRING = 'inspiring';
+global.TEEMING_VISIBLE = 'visible';
+global.TEEMING_HIDDEN = 'hidden';
 
 // 1b. Minimal `Attribute` stub: the real one just copies its options onto itself.
 // MapObject builds three of these in _getAttributes(), which the constructor calls
@@ -102,8 +104,8 @@ function makeFakeMap({sandbox = false, bounds = null} = {}) {
             {key: 'horde', description: 'Horde'},
         ],
         teemingOptions: [
-            {key: 'visible', description: 'Visible'},
-            {key: 'hidden', description: 'Hidden'},
+            {key: TEEMING_VISIBLE, description: 'Visible'},
+            {key: TEEMING_HIDDEN, description: 'Hidden'},
         ],
     };
     map.register = () => {
@@ -186,25 +188,25 @@ describe('MapObject.shouldBeVisible - teeming filter', () => {
     it('hides a teeming-only object on a non-teeming map', () => {
         setFakeState({teeming: false});
 
-        expect(makeMapObject({teeming: 'visible'}).shouldBeVisible()).toBe(false);
+        expect(makeMapObject({teeming: TEEMING_VISIBLE}).shouldBeVisible()).toBe(false);
     });
 
     it('hides a teeming-hidden object on a teeming map', () => {
         setFakeState({teeming: true});
 
-        expect(makeMapObject({teeming: 'hidden'}).shouldBeVisible()).toBe(false);
+        expect(makeMapObject({teeming: TEEMING_HIDDEN}).shouldBeVisible()).toBe(false);
     });
 
     it('shows a teeming-only object on a teeming map', () => {
         setFakeState({teeming: true});
 
-        expect(makeMapObject({teeming: 'visible'}).shouldBeVisible()).toBe(true);
+        expect(makeMapObject({teeming: TEEMING_VISIBLE}).shouldBeVisible()).toBe(true);
     });
 
     it('shows a teeming-hidden object on a non-teeming map', () => {
         setFakeState({teeming: false});
 
-        expect(makeMapObject({teeming: 'hidden'}).shouldBeVisible()).toBe(true);
+        expect(makeMapObject({teeming: TEEMING_HIDDEN}).shouldBeVisible()).toBe(true);
     });
 
     it('shows an object without a teeming preference on either map', () => {
@@ -218,7 +220,7 @@ describe('MapObject.shouldBeVisible - teeming filter', () => {
     it('ignores the teeming filter when the map is in admin (mapping version edit) mode', () => {
         setFakeState({teeming: false, mapAdmin: true});
 
-        expect(makeMapObject({teeming: 'visible'}).shouldBeVisible()).toBe(true);
+        expect(makeMapObject({teeming: TEEMING_VISIBLE}).shouldBeVisible()).toBe(true);
     });
 });
 
@@ -337,7 +339,7 @@ describe('MapObject.shouldBeVisible - filter precedence', () => {
         // teeming/seasonal filters, never the floor the object physically sits on.
         setFakeState({currentFloorId: 2, mapAdmin: true});
 
-        expect(makeMapObject({teeming: 'visible'}).shouldBeVisible()).toBe(false);
+        expect(makeMapObject({teeming: TEEMING_VISIBLE}).shouldBeVisible()).toBe(false);
     });
 });
 

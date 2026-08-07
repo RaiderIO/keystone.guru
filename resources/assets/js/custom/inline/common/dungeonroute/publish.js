@@ -18,10 +18,10 @@ class CommonDungeonroutePublish extends InlineCode {
         let $select = $(this.options.publishSelector);
 
         let icons = {
-            'unpublished': 'fa-plane-arrival',
-            'team': 'fa-users',
-            'world': 'fa-globe',
-            'world_with_link': 'fa-link',
+            [PUBLISHED_STATE_UNPUBLISHED]: 'fa-plane-arrival',
+            [PUBLISHED_STATE_TEAM]: 'fa-users',
+            [PUBLISHED_STATE_WORLD]: 'fa-globe',
+            [PUBLISHED_STATE_WORLD_WITH_LINK]: 'fa-link',
         }
 
         for (let index in this.options.publishStates) {
@@ -108,7 +108,7 @@ class CommonDungeonroutePublish extends InlineCode {
         let $select = $(this.options.publishSelector);
 
         $select.find('option').each((index, option) => {
-            if (option.value === 'unpublished') {
+            if (option.value === PUBLISHED_STATE_UNPUBLISHED) {
                 return;
             }
 

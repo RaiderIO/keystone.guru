@@ -67,9 +67,10 @@ class DungeonRoutePolicy
     /**
      * Determine whether the user can publish dungeon routes.
      *
-     * @param string|null $publishedState The state the route is being changed to, if known. Unpublishing is always
-     *                                    allowed - the required enemies guard would otherwise trap an already
-     *                                    published route in a state its author can no longer undo.
+     * @param string|null $publishedState The state the route is being changed to, if known. The required enemies
+     *                                    check is not executed when you are unpublishing the route - otherwise the
+     *                                    guard would trap an already published route in a state its author can no
+     *                                    longer undo.
      */
     public function publish(User $user, DungeonRoute $dungeonroute, ?string $publishedState = null): Response
     {
