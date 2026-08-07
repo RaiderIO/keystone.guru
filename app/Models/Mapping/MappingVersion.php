@@ -692,7 +692,11 @@ class MappingVersion extends Model
                 $enemyPatrol->delete();
             }
 
-            $mappingVersion->mapIcons()->delete();
+            // A mass delete on the relation skips MapIcon::deleting (via HasLinkedAwakenedObelisk),
+            // which is what cleans up map_object_to_awakened_obelisk_links
+            foreach ($mappingVersion->mapIcons as $mapIcon) {
+                $mapIcon->delete();
+            }
             $mappingVersion->mountableAreas()->delete();
             $mappingVersion->enemyForcesCheckpoints()->delete();
             $mappingVersion->floorUnions()->delete();
