@@ -11,6 +11,7 @@ use App\Models\Traits\HasTags;
 use App\Service\Cache\CacheServiceInterface;
 use Eloquent;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -447,7 +448,8 @@ class Team extends Model
     }
 
     /**
-     * Gets all tags available for routes in this team.
+     * Gets all tags available for routes in this team, including tag definitions not yet applied
+     * to any route.
      *
      * @return EloquentCollection<int, Tag>
      */
@@ -456,7 +458,10 @@ class Team extends Model
         return Tag::where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])
             ->where('context_class', self::class)
             ->where('context_id', $this->id)
-            ->whereIn('model_id', $this->dungeonRoutes->pluck('id'))
+            ->where(function (Builder $query) {
+                $query->whereNull('model_id')
+                    ->orWhereIn('model_id', $this->dungeonRoutes->pluck('id'));
+            })
             ->get();
     }
 
