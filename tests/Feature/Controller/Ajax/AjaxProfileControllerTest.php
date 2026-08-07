@@ -27,6 +27,27 @@ final class AjaxProfileControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function legalAgree_givenAuthenticatedUserWithoutRole_isAllowedToAgree(): void
+    {
+        // Arrange - e.g. the seeded Internal Team account has no 'user'/'admin' role, but must
+        // still be able to clear its own legal modal (it re-shows on every page until agreed)
+        $roleLessUser = User::factory()->create();
+
+        try {
+            $this->actingAs($roleLessUser);
+
+            // Act
+            $response = $this->post('/ajax/profile/legal', ['time' => 123], self::AJAX_HEADERS);
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertSame(1, $roleLessUser->fresh()->legal_agreed);
+        } finally {
+            $roleLessUser->delete();
+        }
+    }
+
+    #[Test]
     public function addAdFreeGiveaway_givenGuest_returnsUnauthorizedInsteadOf500(): void
     {
         // Arrange
@@ -42,6 +63,29 @@ final class AjaxProfileControllerTest extends PublicTestCase
             $response->assertStatus(StatusCode::UNAUTHORIZED);
         } finally {
             $target->delete();
+        }
+    }
+
+    #[Test]
+    public function addAdFreeGiveaway_givenAuthenticatedUserWithoutRole_isForbidden(): void
+    {
+        // Arrange - unlike legalAgree, this route keeps the role:user|admin gate
+        $roleLessUser = User::factory()->create();
+        $target       = User::factory()->create([
+            'public_key' => User::generateRandomPublicKey(),
+        ]);
+
+        try {
+            $this->actingAs($roleLessUser);
+
+            // Act
+            $response = $this->post(sprintf('/ajax/profile/adfree/%s', $target->public_key), [], self::AJAX_HEADERS);
+
+            // Assert
+            $response->assertStatus(StatusCode::FORBIDDEN);
+        } finally {
+            $target->delete();
+            $roleLessUser->delete();
         }
     }
 }

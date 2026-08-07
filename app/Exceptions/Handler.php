@@ -167,7 +167,10 @@ class Handler extends ExceptionHandler
     protected function unauthenticated($request, AuthenticationException $exception)
     {
         if ($this->shouldReturnJson($request, $exception)) {
-            return response()->json(['error' => __('exceptions.handler.unauthenticated')], StatusCode::UNAUTHORIZED);
+            // defaultAjaxErrorFn() (resources/assets/js/custom/inline/layouts/app.js) only reads
+            // responseJSON.errors then responseJSON.message - 'error' was silently dropped, falling
+            // back to the generic "An error occurred" toast.
+            return response()->json(['message' => __('exceptions.handler.unauthenticated')], StatusCode::UNAUTHORIZED);
         }
 
         return redirect()->guest('login');
