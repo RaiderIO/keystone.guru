@@ -441,9 +441,18 @@ class User extends Authenticatable implements LaratrustUser
             // never runs - drop the user's stored feature values explicitly instead
             Feature::forgetAllForUser($user);
 
-            $user->dungeonRoutes()->delete();
+            // Deleted one at a time on purpose: a mass delete on the relation goes straight to the query
+            // builder and never fires DungeonRoute::deleting, which is what cleans up the route's thumbnails
+            // (and their files on disk), thumbnail jobs, challenge mode run, tags and all mapping objects
+            foreach ($user->dungeonRoutes()->get() as $dungeonRoute) {
+                $dungeonRoute->delete();
+            }
+
+            // UserReport has no deleting hook, so a mass delete is fine here
             $user->reports()->delete();
-            $user->patreonUserLink()->delete();
+
+            // Same as the dungeon routes above - PatreonUserLink::deleting drops the user's patreon benefits
+            $user->patreonUserLink()->first()?->delete();
             foreach ($user->teams as $team) {
                 // Remove ourselves from the team
                 $team->removeMember($user);
