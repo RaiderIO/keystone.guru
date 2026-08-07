@@ -275,7 +275,7 @@ class ThumbnailService implements ThumbnailServiceInterface
             return false;
         }
 
-        if ($dungeonRoute->mappingVersion === null) { // @phpstan-ignore identical.alwaysFalse
+        if ($dungeonRoute->mappingVersion === null) {
             // Non-standard variants have nothing to fall back on, so bail.
             if (!$isStandard) {
                 return false;

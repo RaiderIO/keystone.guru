@@ -383,7 +383,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
             // If this enemy SHOULD have been killed by the user
             if (enemy.required &&
                 // If not teeming, OR if enemy is teeming AND we're teeming, or inverse that. THEN this enemy counts, otherwise it does not
-                (enemy.teeming === null || (enemy.teeming === 'visible' && mapContext.getTeeming()) || (enemy.teeming === 'invisible' && !mapContext.getTeeming()))
+                (enemy.teeming === null || (enemy.teeming === 'visible' && mapContext.getTeeming()) || (enemy.teeming === 'hidden' && !mapContext.getTeeming()))
             ) {
                 // But if it's not..
                 if (!this.isEnemyKilled(enemy.id)) {
@@ -480,4 +480,10 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     //         this.setVisibility(true);
     //     }
     // }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {KillZoneMapObjectGroup};
 }
