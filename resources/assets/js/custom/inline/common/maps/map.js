@@ -666,7 +666,7 @@ class CommonMapsMap extends InlineCode {
         // Build a list of elements to hide from the UI
         for (let index in MAP_OBJECT_GROUP_NAMES) {
             let mapObjectGroupName = MAP_OBJECT_GROUP_NAMES[index];
-            let group = getState().getDungeonMap().mapObjectGroupManager.getByName(mapObjectGroupName);
+            let group = getMapObjectGroup(mapObjectGroupName);
 
             if (group instanceof MapObjectGroup) {
                 if (hiddenInUI.includes(mapObjectGroupName) ||

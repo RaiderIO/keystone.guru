@@ -329,48 +329,205 @@ function removeStrayTooltips() {
     $('.tooltip').remove();
 }
 
+/**
+ * Safely get a map object group by name off the currently displayed map.
+ *
+ * Every step of the chain can legitimately be absent, so none of them may be dereferenced blindly:
+ * - pages outside a map context have no state manager at all - the no-op fallback at the top of this
+ *   file returns false for exactly that case, so `typeof getState === 'function'` is never enough
+ *   and the result must be checked for truthiness;
+ * - the state manager returns null for its dungeon map until a map registers itself;
+ * - MapObjectGroupManager.getByName() returns false (not a nullish value) for a group the page
+ *   suppressed through its hiddenMapObjectGroups option, so normalise with `||`, not `??`.
+ *
+ * getState is reached through globalThis rather than as a bare identifier: the fallback declaration
+ * at the top of this file is hoisted, which shadows the real getState() from statemanager.blade.php
+ * when util.js is loaded as a module (as the Vitest suite does). In the browser both are properties
+ * of the global object, so the two forms are equivalent there.
+ *
+ * @param {string} name One of the MAP_OBJECT_GROUP_* constants.
+ * @returns {MapObjectGroup|null} Null when this page has no such map object group.
+ */
+function getMapObjectGroup(name) {
+    let state = typeof globalThis.getState === 'function' ? globalThis.getState() : null;
+    let dungeonMap = state ? state.getDungeonMap() : null;
+
+    return (dungeonMap?.mapObjectGroupManager?.getByName(name)) || null;
+}
+
+/**
+ * Safe per-group accessors, one for each entry of MAP_OBJECT_GROUP_NAMES. All of them return null
+ * rather than throwing when the current page has no map, or hides the group in question.
+ *
+ * MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK deliberately has none: it is an alias that resolves to
+ * the map icon group through its multi-name registration, not a group of its own.
+ *
+ * @returns {UserMousePositionMapObjectGroup|null}
+ */
+function getUserMousePositionMapObjectGroup() {
+    return getMapObjectGroup(MAP_OBJECT_GROUP_USER_MOUSE_POSITION);
+}
+
+/**
+ * @returns {EnemyPatrolMapObjectGroup|null}
+ */
+function getEnemyPatrolMapObjectGroup() {
+    return getMapObjectGroup(MAP_OBJECT_GROUP_ENEMY_PATROL);
+}
+
+/**
+ * @returns {EnemyMapObjectGroup|null}
+ */
+function getEnemyMapObjectGroup() {
+    return getMapObjectGroup(MAP_OBJECT_GROUP_ENEMY);
+}
+
+/**
+ * @returns {EnemyPackMapObjectGroup|null}
+ */
+function getEnemyPackMapObjectGroup() {
+    return getMapObjectGroup(MAP_OBJECT_GROUP_ENEMY_PACK);
+}
+
+/**
+ * @returns {EnemyForcesCheckpointMapObjectGroup|null}
+ */
+function getEnemyForcesCheckpointMapObjectGroup() {
+    return getMapObjectGroup(MAP_OBJECT_GROUP_ENEMY_FORCES_CHECKPOINT);
+}
+
+/**
+ * @returns {PathMapObjectGroup|null}
+ */
+function getPathMapObjectGroup() {
+    return getMapObjectGroup(MAP_OBJECT_GROUP_PATH);
+}
+
+/**
+ * @returns {DungeonFloorSwitchMarkerMapObjectGroup|null}
+ */
+function getDungeonFloorSwitchMarkerMapObjectGroup() {
+    return getMapObjectGroup(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
+}
+
+/**
+ * @returns {BrushlineMapObjectGroup|null}
+ */
+function getBrushlineMapObjectGroup() {
+    return getMapObjectGroup(MAP_OBJECT_GROUP_BRUSHLINE);
+}
+
+/**
+ * @returns {ArrowMapObjectGroup|null}
+ */
+function getArrowMapObjectGroup() {
+    return getMapObjectGroup(MAP_OBJECT_GROUP_ARROW);
+}
+
+/**
+ * @returns {MapIconMapObjectGroup|null}
+ */
+function getMapIconMapObjectGroup() {
+    return getMapObjectGroup(MAP_OBJECT_GROUP_MAPICON);
+}
+
+/**
+ * @returns {KillZoneMapObjectGroup|null}
+ */
+function getKillZoneMapObjectGroup() {
+    return getMapObjectGroup(MAP_OBJECT_GROUP_KILLZONE);
+}
+
+/**
+ * @returns {KillZonePathMapObjectGroup|null}
+ */
+function getKillZonePathMapObjectGroup() {
+    return getMapObjectGroup(MAP_OBJECT_GROUP_KILLZONE_PATH);
+}
+
+/**
+ * @returns {MountableAreaMapObjectGroup|null}
+ */
+function getMountableAreaMapObjectGroup() {
+    return getMapObjectGroup(MAP_OBJECT_GROUP_MOUNTABLE_AREA);
+}
+
+/**
+ * @returns {FloorUnionMapObjectGroup|null}
+ */
+function getFloorUnionMapObjectGroup() {
+    return getMapObjectGroup(MAP_OBJECT_GROUP_FLOOR_UNION);
+}
+
+/**
+ * @returns {FloorUnionAreaMapObjectGroup|null}
+ */
+function getFloorUnionAreaMapObjectGroup() {
+    return getMapObjectGroup(MAP_OBJECT_GROUP_FLOOR_UNION_AREA);
+}
+
+/**
+ * Shorthand aliases for the browser console. They delegate to the accessors above and are therefore
+ * null-safe as well.
+ */
 function getEnemies() {
-    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+    return getEnemyMapObjectGroup();
 }
 
 function getEnemyPacks() {
-    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
+    return getEnemyPackMapObjectGroup();
 }
 
 function getEnemyPatrols() {
-    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PATROL);
+    return getEnemyPatrolMapObjectGroup();
+}
+
+function getEnemyForcesCheckpoints() {
+    return getEnemyForcesCheckpointMapObjectGroup();
 }
 
 function getKillZones() {
-    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+    return getKillZoneMapObjectGroup();
 }
 
 function getKillZonePaths() {
-    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE_PATH);
+    return getKillZonePathMapObjectGroup();
 }
 
 function getPaths() {
-    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_PATH);
+    return getPathMapObjectGroup();
 }
 
 function getBrushlines() {
-    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_BRUSHLINE);
+    return getBrushlineMapObjectGroup();
+}
+
+function getArrows() {
+    return getArrowMapObjectGroup();
 }
 
 function getMapIcons() {
-    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON);
+    return getMapIconMapObjectGroup();
 }
 
 function getDungeonFloorSwitchMarkers() {
-    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
+    return getDungeonFloorSwitchMarkerMapObjectGroup();
 }
 
 function getUserMousePositions() {
-    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_USER_MOUSE_POSITION);
+    return getUserMousePositionMapObjectGroup();
 }
 
 function getMountableAreas() {
-    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MOUNTABLE_AREA);
+    return getMountableAreaMapObjectGroup();
+}
+
+function getFloorUnions() {
+    return getFloorUnionMapObjectGroup();
+}
+
+function getFloorUnionAreas() {
+    return getFloorUnionAreaMapObjectGroup();
 }
 
 /**
@@ -495,5 +652,9 @@ if (typeof module !== 'undefined' && module.exports) {
         getCenteroid,
         getQueryParams,
         isElementFullyVisible,
+        getMapObjectGroup,
+        getKillZoneMapObjectGroup,
+        getEnemyMapObjectGroup,
+        getKillZones,
     };
 }

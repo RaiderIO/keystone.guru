@@ -17,6 +17,10 @@ const {
     getCenteroid,
     getQueryParams,
     isElementFullyVisible,
+    getMapObjectGroup,
+    getKillZoneMapObjectGroup,
+    getEnemyMapObjectGroup,
+    getKillZones,
 } = require('./util');
 
 describe('convertToSlug', () => {
@@ -240,5 +244,102 @@ describe('isElementFullyVisible', () => {
     it('returns false when the element is right of the viewport', () => {
         let element = makeElement({top: 10, left: 10, bottom: 100, right: window.innerWidth + 10});
         expect(isElementFullyVisible(element)).toBe(false);
+    });
+});
+
+// The map object group accessors reach the state manager and the MAP_OBJECT_GROUP_* constants through
+// globals, so each test installs the ones it needs (the recipe documented in models/killzone.test.js)
+// and the suite restores them afterwards. Test names follow the project's
+// [function]_given[Condition]_returns[Result] convention rather than the prose style used above.
+describe('getMapObjectGroup', () => {
+    const originalGetState = globalThis.getState;
+
+    /**
+     * @param {*} groupOrFalse What the stubbed MapObjectGroupManager.getByName() should return.
+     * @returns {function(string): *} The getByName spy, so tests can assert the name it was passed.
+     */
+    const stubMapWithGroup = (groupOrFalse) => {
+        let getByName = vi.fn(() => groupOrFalse);
+        globalThis.getState = () => ({getDungeonMap: () => ({mapObjectGroupManager: {getByName}})});
+
+        return getByName;
+    };
+
+    beforeEach(() => {
+        globalThis.MAP_OBJECT_GROUP_KILLZONE = 'killzone';
+        globalThis.MAP_OBJECT_GROUP_ENEMY = 'enemy';
+    });
+
+    afterEach(() => {
+        globalThis.getState = originalGetState;
+        delete globalThis.MAP_OBJECT_GROUP_KILLZONE;
+        delete globalThis.MAP_OBJECT_GROUP_ENEMY;
+    });
+
+    it('getMapObjectGroup_givenNoStateManager_returnsNull', () => {
+        // Arrange - what getState() falls back to on pages that are not a map
+        globalThis.getState = () => false;
+
+        // Act & Assert
+        expect(getMapObjectGroup('killzone')).toBeNull();
+    });
+
+    it('getMapObjectGroup_givenStateWithoutDungeonMap_returnsNull', () => {
+        // Arrange - the state manager exists but no map has registered itself yet
+        globalThis.getState = () => ({getDungeonMap: () => null});
+
+        // Act & Assert
+        expect(getMapObjectGroup('killzone')).toBeNull();
+    });
+
+    it('getMapObjectGroup_givenGroupHiddenOnThisPage_returnsNull', () => {
+        // Arrange - getByName() answers with false, not a nullish value, for a group that is not registered
+        stubMapWithGroup(false);
+
+        // Act & Assert
+        expect(getMapObjectGroup('killzone')).toBeNull();
+    });
+
+    it('getMapObjectGroup_givenRegisteredGroup_returnsThatGroup', () => {
+        // Arrange
+        let killZoneMapObjectGroup = {name: 'killzone'};
+        stubMapWithGroup(killZoneMapObjectGroup);
+
+        // Act & Assert
+        expect(getMapObjectGroup('killzone')).toBe(killZoneMapObjectGroup);
+    });
+
+    it('getKillZoneMapObjectGroup_givenRegisteredGroup_looksUpTheKillZoneName', () => {
+        // Arrange
+        let killZoneMapObjectGroup = {name: 'killzone'};
+        let getByName = stubMapWithGroup(killZoneMapObjectGroup);
+
+        // Act
+        let result = getKillZoneMapObjectGroup();
+
+        // Assert
+        expect(result).toBe(killZoneMapObjectGroup);
+        expect(getByName).toHaveBeenCalledWith('killzone');
+    });
+
+    it('getEnemyMapObjectGroup_givenRegisteredGroup_looksUpTheEnemyName', () => {
+        // Arrange
+        let enemyMapObjectGroup = {name: 'enemy'};
+        let getByName = stubMapWithGroup(enemyMapObjectGroup);
+
+        // Act
+        let result = getEnemyMapObjectGroup();
+
+        // Assert
+        expect(result).toBe(enemyMapObjectGroup);
+        expect(getByName).toHaveBeenCalledWith('enemy');
+    });
+
+    it('getKillZones_givenNoStateManager_returnsNull', () => {
+        // Arrange - the console shorthands delegate, so they inherit the null-safety
+        globalThis.getState = () => false;
+
+        // Act & Assert
+        expect(getKillZones()).toBeNull();
     });
 });

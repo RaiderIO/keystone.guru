@@ -7,7 +7,6 @@ class MapContextDungeonRouteSearch extends MapContextDungeonExplore {
 
         this._options.dungeonRoute = dungeonRoute;
 
-        let mapObjectGroupManager = getState().getDungeonMap().mapObjectGroupManager;
         let toReset = [
             MAP_OBJECT_GROUP_PATH,
             MAP_OBJECT_GROUP_BRUSHLINE,
@@ -16,8 +15,8 @@ class MapContextDungeonRouteSearch extends MapContextDungeonExplore {
             MAP_OBJECT_GROUP_MAPICON,
         ];
 
-        for (let group of toReset) {
-            mapObjectGroupManager.getByName(group).reset().load();
+        for (let name of toReset) {
+            getMapObjectGroup(name).reset().load();
         }
 
         getState().getDungeonMap().redrawMapContents();
