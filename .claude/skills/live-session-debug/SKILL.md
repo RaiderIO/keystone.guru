@@ -62,7 +62,7 @@ streamer tails only new lines); `--speed N` replays at N× using per-line timest
 (`0` = instant); `--dry-run` inspects batches without sending.
 
 **Queue worker must be running.** Ingested batches dispatch the
-`ProcessLiveSessionCombatLogBuffer` job onto the `*-*-live-session-process` queue;
+`ProcessLiveSessionCombatLogBuffer` job onto the `*-live-session-process` queue;
 enemy state only updates once that job runs. Make sure Horizon / a queue worker is up in
 Docker (e.g. `docker compose exec -T app php artisan horizon` or the worker container),
 otherwise the buffer fills but no state is computed.

@@ -219,7 +219,7 @@ return [
             ],
             'supervisor-live-session-process' => [
                 'connection' => 'redis',
-                'queue'      => [sprintf('%s-local-live-session-process', env('APP_TYPE'))],
+                'queue'      => [sprintf('%s-live-session-process', env('APP_TYPE'))],
                 'balance'    => 'simple',
                 'processes'  => 1,
                 'tries'      => 1,
