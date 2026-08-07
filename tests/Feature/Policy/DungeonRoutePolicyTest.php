@@ -209,10 +209,18 @@ final class DungeonRoutePolicyTest extends PublicTestCase
     public function publish_givenOwner_returnsAllowed(): void
     {
         // Arrange
-        $owner = User::factory()->create();
-        $route = $this->createRoute($owner);
+        $owner            = User::factory()->create();
+        $route            = $this->createRoute($owner);
+        $mappingVersionId = null;
 
         try {
+            // hasKilledAllRequiredEnemies() denies publishing when the route's mapping version has a required
+            // enemy the route hasn't killed - the dungeon the factory randomly picks can carry seeded required
+            // enemies (see giveRouteAnUnkilledRequiredEnemy()'s docblock), which made this happy-path test flaky.
+            // Move the route onto its own guaranteed-empty mapping version so it never depends on which dungeon
+            // was picked.
+            $mappingVersionId = $this->giveRouteAnEmptyMappingVersion($route);
+
             // Act
             $result = $this->policy->publish($owner, $route);
 
@@ -221,6 +229,9 @@ final class DungeonRoutePolicyTest extends PublicTestCase
         } finally {
             $route->delete();
             $owner->delete();
+            if ($mappingVersionId !== null) {
+                MappingVersion::destroy($mappingVersionId);
+            }
         }
     }
 
@@ -537,6 +548,37 @@ final class DungeonRoutePolicyTest extends PublicTestCase
             'expires_at'         => null,
             'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
         ], $overrides));
+    }
+
+    /**
+     * Moves the route onto a mapping version of its own holding no enemies at all, and returns that mapping
+     * version's id so the caller can clean it up. Guarantees hasKilledAllRequiredEnemies() passes regardless of
+     * which dungeon the factory picked for the route - see giveRouteAnUnkilledRequiredEnemy()'s docblock for why
+     * the dungeon's own current mapping version can't be relied on to be required-enemy-free.
+     */
+    private function giveRouteAnEmptyMappingVersion(DungeonRoute $route): int
+    {
+        $current = $route->mappingVersion;
+        $now     = Carbon::now()->toDateTimeString();
+
+        // Inserted quietly, as MappingService::copyMappingVersionToDungeon() does - see
+        // giveRouteAnUnkilledRequiredEnemy() below for why.
+        $mappingVersion = MappingVersion::findOrFail(MappingVersion::insertGetId([
+            'game_version_id'                 => $current->game_version_id,
+            'dungeon_id'                      => $route->dungeon_id,
+            'version'                         => $current->version + 1,
+            'enemy_forces_required'           => $current->enemy_forces_required,
+            'enemy_forces_required_teeming'   => $current->enemy_forces_required_teeming,
+            'enemy_forces_shrouded'           => $current->enemy_forces_shrouded,
+            'enemy_forces_shrouded_zul_gamux' => $current->enemy_forces_shrouded_zul_gamux,
+            'timer_max_seconds'               => $current->timer_max_seconds,
+            'created_at'                      => $now,
+            'updated_at'                      => $now,
+        ]));
+
+        $route->update(['mapping_version_id' => $mappingVersion->id, 'teeming' => false]);
+
+        return $mappingVersion->id;
     }
 
     /**
