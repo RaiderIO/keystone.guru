@@ -164,6 +164,15 @@ but the checklist is **tiered by change size** so small MRs don't pay full cerem
 Only once the applicable items hold, mark the MR ready for review (`gh pr ready <n>`) — see the
 draft-PR note under Git worktrees above for why it must stay a draft until then.
 
+**Undrafting is a one-way handoff — the last thing you do, not a status update.** Undraft only when
+the cold reviewer has finished *and* you have finished fixing everything it raised, with CI green on
+the commit that contains those fixes. After `gh pr ready`, you are done with the MR: do not push
+further commits to it, and do not start another polish/review pass on it. `babysit-prs` runs in its
+own session and merges any green, `pr can merge`-labeled non-draft PR the moment it sees one — a
+commit pushed after undrafting races that merge, and its CI may still be pending or red while the
+PR reads as finished (#3883). If you genuinely must change an undrafted MR, `gh pr ready <n> --undo`
+first, push, wait for green, then undraft again.
+
 # Project-specific conventions
 
 ## General
