@@ -221,8 +221,12 @@ final class DungeonRoutePolicyTest extends PublicTestCase
             // was picked.
             $mappingVersionId = $this->giveRouteAnEmptyMappingVersion($route);
 
-            // Act
-            $result = $this->policy->publish($owner, $route);
+            // Act - ->fresh() is required: giveRouteAnEmptyMappingVersion() only updates the mapping_version_id
+            // column, it doesn't clear $route's already-cached `mappingVersion` relation (accessed internally via
+            // $route->mappingVersion), so hasKilledAllRequiredEnemies()'s loadMissing() would silently keep using
+            // the stale, pre-swap mapping version without this - see the sibling
+            // publish_givenOwnerOfRouteMissingRequiredEnemies_returnsDenied test for the same pattern.
+            $result = $this->policy->publish($owner, $route->fresh());
 
             // Assert
             $this->assertTrue($result->allowed());
