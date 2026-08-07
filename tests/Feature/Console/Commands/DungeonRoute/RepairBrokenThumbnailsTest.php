@@ -6,6 +6,7 @@ use App\Console\Commands\DungeonRoute\RepairBrokenThumbnails;
 use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnail;
+use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Models\File;
 use Closure;
 use Illuminate\Support\Facades\Queue;
@@ -53,7 +54,7 @@ final class RepairBrokenThumbnailsTest extends PublicTestCase
         $thumbnail = DungeonRouteThumbnail::create([
             'dungeon_route_id' => $dungeonRoute->id,
             'floor_id'         => $floor->id,
-            'custom'           => $custom,
+            'variant'          => $custom ? DungeonRouteThumbnailVariant::Custom : DungeonRouteThumbnailVariant::Standard,
         ]);
 
         if ($withFile) {

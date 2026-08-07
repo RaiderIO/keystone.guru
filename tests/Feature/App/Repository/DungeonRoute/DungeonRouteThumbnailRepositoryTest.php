@@ -78,7 +78,6 @@ final class DungeonRouteThumbnailRepositoryTest extends PublicTestCase
         $thumbnail = DungeonRouteThumbnail::create([
             'dungeon_route_id' => $dungeonRoute->id,
             'floor_id'         => $floor->id,
-            'custom'           => false,
             'variant'          => DungeonRouteThumbnailVariant::Hero,
         ]);
         DungeonRouteThumbnail::where('id', $thumbnail->id)
@@ -111,7 +110,6 @@ final class DungeonRouteThumbnailRepositoryTest extends PublicTestCase
         $thumbnail = DungeonRouteThumbnail::create([
             'dungeon_route_id' => $dungeonRoute->id,
             'floor_id'         => $floor->id,
-            'custom'           => false,
             'variant'          => DungeonRouteThumbnailVariant::Hero,
         ]);
         DungeonRouteThumbnail::where('id', $thumbnail->id)
@@ -132,8 +130,7 @@ final class DungeonRouteThumbnailRepositoryTest extends PublicTestCase
     #[Test]
     public function hasFreshThumbnailForVariant_givenFreshCustomVariantThumbnail_returnsTrue(): void
     {
-        // Arrange - the legacy 'custom' boolean is intentionally left false here: 'variant' is the
-        // single source of truth, and gating on both used to make the Custom variant unmatchable.
+        // Arrange
         $dungeon        = $this->getDungeonWithExactlyOneNonFacadeFloor();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         $floor          = $dungeon->floors()->where('facade', false)->first();
@@ -145,7 +142,6 @@ final class DungeonRouteThumbnailRepositoryTest extends PublicTestCase
         $thumbnail = DungeonRouteThumbnail::create([
             'dungeon_route_id' => $dungeonRoute->id,
             'floor_id'         => $floor->id,
-            'custom'           => false,
             'variant'          => DungeonRouteThumbnailVariant::Custom,
         ]);
         DungeonRouteThumbnail::where('id', $thumbnail->id)
@@ -184,7 +180,6 @@ final class DungeonRouteThumbnailRepositoryTest extends PublicTestCase
         $freshThumbnail = DungeonRouteThumbnail::create([
             'dungeon_route_id' => $dungeonRoute->id,
             'floor_id'         => $floor->id,
-            'custom'           => false,
             'variant'          => DungeonRouteThumbnailVariant::Hero,
         ]);
         DungeonRouteThumbnail::where('id', $freshThumbnail->id)
@@ -196,7 +191,6 @@ final class DungeonRouteThumbnailRepositoryTest extends PublicTestCase
             // floor_id exercises the "second floor" scenario without needing one.
             'dungeon_route_id' => $dungeonRoute->id,
             'floor_id'         => $floor->id + 1,
-            'custom'           => false,
             'variant'          => DungeonRouteThumbnailVariant::Hero,
         ]);
         DungeonRouteThumbnail::where('id', $staleThumbnail->id)
@@ -233,7 +227,6 @@ final class DungeonRouteThumbnailRepositoryTest extends PublicTestCase
             $thumbnail = DungeonRouteThumbnail::create([
                 'dungeon_route_id' => $dungeonRoute->id,
                 'floor_id'         => $floor->id,
-                'custom'           => false,
                 'variant'          => DungeonRouteThumbnailVariant::Hero,
             ]);
             DungeonRouteThumbnail::where('id', $thumbnail->id)
@@ -271,7 +264,6 @@ final class DungeonRouteThumbnailRepositoryTest extends PublicTestCase
             $thumbnail = DungeonRouteThumbnail::create([
                 'dungeon_route_id' => $dungeonRoute->id,
                 'floor_id'         => $floor->id,
-                'custom'           => false,
                 'variant'          => DungeonRouteThumbnailVariant::Hero,
             ]);
             DungeonRouteThumbnail::where('id', $thumbnail->id)
@@ -306,7 +298,6 @@ final class DungeonRouteThumbnailRepositoryTest extends PublicTestCase
         $thumbnail = DungeonRouteThumbnail::create([
             'dungeon_route_id' => $dungeonRoute->id,
             'floor_id'         => $floor->id,
-            'custom'           => false,
         ]);
 
         if ($withFile) {

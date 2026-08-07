@@ -473,7 +473,6 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     public function thumbnails(): BelongsToMany
     {
         return $this->belongsToMany(File::class, 'dungeon_route_thumbnails')
-            ->where('dungeon_route_thumbnails.custom', false)
             ->where('dungeon_route_thumbnails.variant', DungeonRouteThumbnailVariant::Standard);
     }
 
@@ -481,7 +480,6 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     public function heroThumbnails(): BelongsToMany
     {
         return $this->belongsToMany(File::class, 'dungeon_route_thumbnails')
-            ->where('dungeon_route_thumbnails.custom', false)
             ->where('dungeon_route_thumbnails.variant', DungeonRouteThumbnailVariant::Hero);
     }
 
