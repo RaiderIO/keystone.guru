@@ -143,6 +143,8 @@ class ProfileController extends Controller
         User                          $user,
         ReverbHttpApiServiceInterface $reverbHttpApiService,
     ): RedirectResponse {
+        Gate::authorize('update', $user);
+
         $validated = $request->validated();
 
         // Allow username change once!
@@ -227,6 +229,8 @@ class ProfileController extends Controller
 
     public function updatePrivacy(Request $request, User $user): RedirectResponse
     {
+        Gate::authorize('update', $user);
+
         $user->analytics_cookie_opt_out = $request->get('analytics_cookie_opt_out');
 
         if (!$user->save()) {
