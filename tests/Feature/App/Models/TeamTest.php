@@ -109,24 +109,31 @@ final class TeamTest extends PublicTestCase
     #[Test]
     public function getAvailableTags_givenAnotherTeamsUnassignedTagDefinition_excludesIt(): void
     {
+        // A team with no routes/tags of its own would make the negative assertion below pass
+        // vacuously (and wouldn't catch the whereNull()/orWhereIn() clause escaping its enclosing
+        // where() and collapsing the entire query into a no-op OR), so this team also gets its own
+        // definition to prove getAvailableTags() is actually finding *something*.
         $team      = null;
         $otherTeam = null;
+        $ownDef    = null;
         $otherDef  = null;
 
         try {
             // Arrange
             $team      = $this->createTeam();
             $otherTeam = $this->createTeam();
+            $ownDef    = $this->createTeamTagDefinition($team);
             $otherDef  = $this->createTeamTagDefinition($otherTeam);
 
             // Act
             $availableTags = $team->getAvailableTags();
 
             // Assert
+            $this->assertTrue($availableTags->contains('id', $ownDef->id));
             $this->assertFalse($availableTags->contains('id', $otherDef->id));
         } finally {
             $this->cleanUp($otherDef, null, $otherTeam, null);
-            $this->cleanUp(null, null, $team, null);
+            $this->cleanUp($ownDef, null, $team, null);
         }
     }
 
