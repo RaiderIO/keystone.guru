@@ -1479,6 +1479,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 'arrows',
                 'killZones',
                 'livesessions',
+                'mapicons',
             ]);
 
             // A mass delete on the relation skips ChallengeModeRun::deleting, which is what cleans up
@@ -1527,7 +1528,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
             // A mass delete on the relation skips MapIcon::deleting (via HasLinkedAwakenedObelisk),
             // which is what cleans up map_object_to_awakened_obelisk_links
-            foreach ($dungeonRoute->mapicons()->get() as $mapIcon) {
+            foreach ($dungeonRoute->mapicons as $mapIcon) {
                 $mapIcon->delete();
             }
             $dungeonRoute->pridefulEnemies()->delete();

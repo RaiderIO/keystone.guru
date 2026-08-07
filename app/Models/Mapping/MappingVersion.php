@@ -694,7 +694,7 @@ class MappingVersion extends Model
 
             // A mass delete on the relation skips MapIcon::deleting (via HasLinkedAwakenedObelisk),
             // which is what cleans up map_object_to_awakened_obelisk_links
-            foreach ($mappingVersion->mapIcons()->get() as $mapIcon) {
+            foreach ($mappingVersion->mapIcons as $mapIcon) {
                 $mapIcon->delete();
             }
             $mappingVersion->mountableAreas()->delete();

@@ -3,6 +3,7 @@
 namespace Tests\Feature\App\Models\DungeonRoute;
 
 use App\Models\CombatLog\ChallengeModeRun;
+use App\Models\CombatLog\ChallengeModeRunData;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
@@ -34,6 +35,16 @@ final class DungeonRouteDeletingCascadesMassDeleteSkippedHooksTest extends Publi
             'duplicate'        => false,
         ]);
 
+        // ChallengeModeRun::deleting is the hook a mass delete on the relation would skip - it's
+        // responsible for cleaning this row up, so assert on it rather than on challenge_mode_runs
+        // itself (that row is deleted by the mass delete either way, hook or no hook)
+        $challengeModeRunData = ChallengeModeRunData::create([
+            'challenge_mode_run_id' => $challengeModeRun->id,
+            'run_id'                => 'test-run-id',
+            'correlation_id'        => 'test-correlation-id',
+            'processed'             => false,
+        ]);
+
         try {
             // Act
             $dungeonRoute->delete();
@@ -44,7 +55,13 @@ final class DungeonRouteDeletingCascadesMassDeleteSkippedHooksTest extends Publi
                 ['id' => $challengeModeRun->id],
                 'combatlog',
             );
+            $this->assertDatabaseMissing(
+                'challenge_mode_run_data',
+                ['id' => $challengeModeRunData->id],
+                'combatlog',
+            );
         } finally {
+            ChallengeModeRunData::query()->where('id', $challengeModeRunData->id)->delete();
             ChallengeModeRun::query()->where('id', $challengeModeRun->id)->delete();
             DungeonRoute::query()->where('id', $dungeonRoute->id)->delete();
         }
