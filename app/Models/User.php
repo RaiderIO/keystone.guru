@@ -443,8 +443,10 @@ class User extends Authenticatable implements LaratrustUser
 
             // Deleted one at a time on purpose: a mass delete on the relation goes straight to the query
             // builder and never fires DungeonRoute::deleting, which is what cleans up the route's thumbnails
-            // (and their files on disk), thumbnail jobs, challenge mode run, tags and all mapping objects
-            foreach ($user->dungeonRoutes()->get() as $dungeonRoute) {
+            // (and their files on disk), thumbnail jobs, challenge mode run, tags and all mapping objects.
+            // lazyById() rather than get() so a user at the route cap doesn't hydrate every route at once -
+            // it pages on id > lastSeen, which stays correct while the rows are being deleted underneath it
+            foreach ($user->dungeonRoutes()->lazyById() as $dungeonRoute) {
                 $dungeonRoute->delete();
             }
 
