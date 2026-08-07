@@ -42,7 +42,7 @@ that every stack serves at `/storage/...`). Step 1 prints the keys comma-separat
 — paste only the keys, not the `CREATED:` prefix:
 
 ```sh
-for key in $(echo '8JxT3PE,pw7FaEt' | tr ',' ' '); do
+for key in $(echo '<key1>,<key2>' | tr ',' ' '); do
   docker compose exec -T app php artisan dungeonroute:queuethumbnail "$key" --force
 done
 ```
