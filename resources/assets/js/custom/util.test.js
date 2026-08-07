@@ -18,10 +18,27 @@ const {
     getQueryParams,
     isElementFullyVisible,
     getMapObjectGroup,
-    getKillZoneMapObjectGroup,
+    getUserMousePositionMapObjectGroup,
+    getEnemyPatrolMapObjectGroup,
     getEnemyMapObjectGroup,
+    getEnemyPackMapObjectGroup,
+    getEnemyForcesCheckpointMapObjectGroup,
+    getPathMapObjectGroup,
+    getDungeonFloorSwitchMarkerMapObjectGroup,
+    getBrushlineMapObjectGroup,
+    getArrowMapObjectGroup,
+    getMapIconMapObjectGroup,
+    getKillZoneMapObjectGroup,
+    getKillZonePathMapObjectGroup,
+    getMountableAreaMapObjectGroup,
+    getFloorUnionMapObjectGroup,
+    getFloorUnionAreaMapObjectGroup,
     getKillZones,
 } = require('./util');
+
+// The real constants, so the accessor tests below assert against the values the site actually uses
+// rather than values the test invented - a mis-paired constant has to fail.
+const MAP_OBJECT_GROUP_CONSTANTS = require('./constants');
 
 describe('convertToSlug', () => {
     it('converts spaced text to a lowercased, dashed slug', () => {
@@ -248,11 +265,31 @@ describe('isElementFullyVisible', () => {
 });
 
 // The map object group accessors reach the state manager and the MAP_OBJECT_GROUP_* constants through
-// globals, so each test installs the ones it needs (the recipe documented in models/killzone.test.js)
-// and the suite restores them afterwards. Test names follow the project's
+// globals, so the suite installs them for the duration and restores them afterwards (the recipe
+// documented in models/killzone.test.js). Test names follow the project's
 // [function]_given[Condition]_returns[Result] convention rather than the prose style used above.
 describe('getMapObjectGroup', () => {
     const originalGetState = globalThis.getState;
+
+    // Every accessor paired with the constant it is supposed to look up. Kept exhaustive by
+    // getMapObjectGroup_givenEveryRegisteredGroupName_hasAnAccessor below.
+    const ACCESSORS = [
+        ['getUserMousePositionMapObjectGroup', getUserMousePositionMapObjectGroup, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_USER_MOUSE_POSITION],
+        ['getEnemyPatrolMapObjectGroup', getEnemyPatrolMapObjectGroup, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_ENEMY_PATROL],
+        ['getEnemyMapObjectGroup', getEnemyMapObjectGroup, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_ENEMY],
+        ['getEnemyPackMapObjectGroup', getEnemyPackMapObjectGroup, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_ENEMY_PACK],
+        ['getEnemyForcesCheckpointMapObjectGroup', getEnemyForcesCheckpointMapObjectGroup, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_ENEMY_FORCES_CHECKPOINT],
+        ['getPathMapObjectGroup', getPathMapObjectGroup, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_PATH],
+        ['getDungeonFloorSwitchMarkerMapObjectGroup', getDungeonFloorSwitchMarkerMapObjectGroup, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER],
+        ['getBrushlineMapObjectGroup', getBrushlineMapObjectGroup, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_BRUSHLINE],
+        ['getArrowMapObjectGroup', getArrowMapObjectGroup, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_ARROW],
+        ['getMapIconMapObjectGroup', getMapIconMapObjectGroup, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_MAPICON],
+        ['getKillZoneMapObjectGroup', getKillZoneMapObjectGroup, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_KILLZONE],
+        ['getKillZonePathMapObjectGroup', getKillZonePathMapObjectGroup, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_KILLZONE_PATH],
+        ['getMountableAreaMapObjectGroup', getMountableAreaMapObjectGroup, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_MOUNTABLE_AREA],
+        ['getFloorUnionMapObjectGroup', getFloorUnionMapObjectGroup, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_FLOOR_UNION],
+        ['getFloorUnionAreaMapObjectGroup', getFloorUnionAreaMapObjectGroup, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_FLOOR_UNION_AREA],
+    ];
 
     /**
      * @param {*} groupOrFalse What the stubbed MapObjectGroupManager.getByName() should return.
@@ -265,15 +302,16 @@ describe('getMapObjectGroup', () => {
         return getByName;
     };
 
+    // util.js reads the constants as bare globals, which is what the concatenated bundle gives it
+    const installedConstants = Object.keys(MAP_OBJECT_GROUP_CONSTANTS).filter(key => key.startsWith('MAP_OBJECT_GROUP_'));
+
     beforeEach(() => {
-        globalThis.MAP_OBJECT_GROUP_KILLZONE = 'killzone';
-        globalThis.MAP_OBJECT_GROUP_ENEMY = 'enemy';
+        installedConstants.forEach(key => globalThis[key] = MAP_OBJECT_GROUP_CONSTANTS[key]);
     });
 
     afterEach(() => {
         globalThis.getState = originalGetState;
-        delete globalThis.MAP_OBJECT_GROUP_KILLZONE;
-        delete globalThis.MAP_OBJECT_GROUP_ENEMY;
+        installedConstants.forEach(key => delete globalThis[key]);
     });
 
     it('getMapObjectGroup_givenNoStateManager_returnsNull', () => {
@@ -309,30 +347,26 @@ describe('getMapObjectGroup', () => {
         expect(getMapObjectGroup('killzone')).toBe(killZoneMapObjectGroup);
     });
 
-    it('getKillZoneMapObjectGroup_givenRegisteredGroup_looksUpTheKillZoneName', () => {
+    it.each(ACCESSORS)('%s_givenRegisteredGroup_looksUpItsOwnGroupName', (name, accessor, expectedGroupName) => {
         // Arrange
-        let killZoneMapObjectGroup = {name: 'killzone'};
-        let getByName = stubMapWithGroup(killZoneMapObjectGroup);
+        let mapObjectGroup = {name: expectedGroupName};
+        let getByName = stubMapWithGroup(mapObjectGroup);
 
         // Act
-        let result = getKillZoneMapObjectGroup();
+        let result = accessor();
 
         // Assert
-        expect(result).toBe(killZoneMapObjectGroup);
-        expect(getByName).toHaveBeenCalledWith('killzone');
+        expect(result).toBe(mapObjectGroup);
+        expect(getByName).toHaveBeenCalledWith(expectedGroupName);
     });
 
-    it('getEnemyMapObjectGroup_givenRegisteredGroup_looksUpTheEnemyName', () => {
-        // Arrange
-        let enemyMapObjectGroup = {name: 'enemy'};
-        let getByName = stubMapWithGroup(enemyMapObjectGroup);
+    it('getMapObjectGroup_givenEveryRegisteredGroupName_hasAnAccessor', () => {
+        // Arrange - MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK is deliberately absent from
+        // MAP_OBJECT_GROUP_NAMES (it is an alias of the map icon group), so it needs no accessor either
+        let covered = ACCESSORS.map(([, , groupName]) => groupName);
 
-        // Act
-        let result = getEnemyMapObjectGroup();
-
-        // Assert
-        expect(result).toBe(enemyMapObjectGroup);
-        expect(getByName).toHaveBeenCalledWith('enemy');
+        // Act & Assert - a new map object group must come with an accessor of its own
+        expect(covered.slice().sort()).toEqual(MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_NAMES.slice().sort());
     });
 
     it('getKillZones_givenNoStateManager_returnsNull', () => {
