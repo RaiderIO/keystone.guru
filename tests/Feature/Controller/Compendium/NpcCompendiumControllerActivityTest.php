@@ -4,8 +4,8 @@ namespace Tests\Feature\Controller\Compendium;
 
 use App\Features\NpcCompendium;
 use App\Models\Dungeon;
-use App\Models\Season;
 use App\Models\User;
+use App\Service\Season\SeasonServiceInterface;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -25,7 +25,11 @@ final class NpcCompendiumControllerActivityTest extends PublicTestCase
         $this->actingAs(User::findOrFail(1));
         Feature::define(NpcCompendium::class, true);
 
-        $this->dungeon = Season::orderByDesc('id')->first()->dungeons()->first();
+        // Must be a dungeon of the CURRENT season - that is what the controller scopes to, and it
+        // redirects away from anything else. Taking the highest season id instead breaks as soon as an
+        // upcoming season is seeded ahead of its start date, which is exactly what happens every time a
+        // new season's mapping is prepared in advance.
+        $this->dungeon = app(SeasonServiceInterface::class)->getCurrentSeason()->dungeons()->first();
     }
 
     #[Test]

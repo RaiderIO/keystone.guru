@@ -30,6 +30,7 @@ class AffixGroup extends AffixGroupBase
 
     public $fillable = [
         'season_id',
+        'expansion_id',
         'seasonal_index',
         'confirmed',
     ];
@@ -61,6 +62,22 @@ class AffixGroup extends AffixGroupBase
     public function easetiers(): HasMany
     {
         return $this->hasMany(AffixGroupEaseTier::class);
+    }
+
+    /**
+     * @param array<int, array{affix_id: int, key_level: int}> $couplings In display order.
+     */
+    public function syncAffixGroupCouplings(array $couplings): void
+    {
+        // Individually deleted so each coupling's cache is properly invalidated (a mass query delete
+        // would bypass model events and leave stale cached results behind).
+        foreach ($this->affixGroupCouplings()->get() as $affixGroupCoupling) {
+            $affixGroupCoupling->delete();
+        }
+
+        foreach ($couplings as $coupling) {
+            $this->affixGroupCouplings()->create($coupling);
+        }
     }
 
     /**

@@ -34,11 +34,22 @@ $showShare          = !empty($show['share']) && in_array(true, $show['share'], t
 $showCreateRouteBtn = isset($dungeonroute) && $dungeonroute->isSandbox();
 
 $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
+
+// Whether the mobile overflow (kebab) menu has anything to show - mirrors the desktop button conditions below
+$hasMobileActions = isset($dungeonroute) || $showShare
+    || ($mapContext instanceof MapContextMappingVersionEdit)
+    || ($mapContext instanceof MapContextDungeonExplore && $isUserAdmin);
+
+// Explore-family pages (explore, heatmap, route search - subclasses included) hold no route:
+// the title bar would only show the dungeon name next to empty space, so skip it entirely.
+// Admins keep it - it carries their Edit mapping version button.
+$showTitleBar = !($mapContext instanceof MapContextDungeonExplore) || $isUserAdmin;
 ?>
-<div class="navbar-third fixed-top d-none d-lg-block {{ $theme === User::THEME_LUX ? 'navbar-light' : 'navbar-dark' }}">
+@if($showTitleBar)
+<div class="navbar-third {{ $theme === User::THEME_LUX ? 'navbar-light' : 'navbar-dark' }}">
     <div class="container bg-header text-center text-xl-start px-1 rounded">
         <div class="row g-0">
-            <div class="col-auto">
+            <div class="col col-lg-auto overflow-hidden d-flex flex-column justify-content-center">
                 <div class="row g-0 d-flex align-items-center">
                     @auth
                         @isset($dungeonroute)
@@ -65,8 +76,8 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
                             />
                         </div>
                     @endif
-                    <div class="col">
-                        <h5 id="route_title" class="mb-0 me-2">
+                    <div class="col overflow-hidden">
+                        <h5 id="route_title" class="mb-0 me-2 text-truncate">
                             @isset($headerTitle)
                                 {!! $headerTitle !!}
                             @else
@@ -107,20 +118,22 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
                     @endif
                 @endif
             </div>
-            <div class="col">
+            <div class="col d-none d-lg-block">
 
             </div>
             @if($echo)
-                <div class="col-auto d-flex align-items-center">
+                <div class="col-auto d-none d-lg-flex align-items-center">
                     @include('common.layout.nav.connectedusers')
                 </div>
             @endif
+            <div class="col-auto d-none d-lg-block">
+            <div class="row g-0">
             @isset($dungeonroute)
                 @component('common.maps.controls.buttons.headerbutton')
                     @if( $mapContext instanceof MapContextLiveSession )
                             <?php $stopped = $liveSession->expires_at !== null; ?>
                         @if(!$stopped)
-                            <button id="stop_live_session" class="btn btn-danger btn-sm"
+                            <button id="stop_live_session" class="stop_live_session_trigger btn btn-danger btn-sm"
                                     data-bs-toggle="modal" data-bs-target="#stop_live_session_modal">
                                 <i class="fas fa-stop"></i> {{ __('view_common.maps.controls.header.stop') }}
                             </button>
@@ -231,9 +244,107 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
                     </button>
                 @endcomponent
             @endif
+            </div>
+            </div>
+            {{-- Mobile: the buttons above are hidden - offer the same actions in an overflow menu.
+                 The modals render once further down, so these items just retarget them. --}}
+            @if($hasMobileActions)
+                <div class="col-auto d-lg-none d-flex align-items-center dropdown">
+                    <button class="btn btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                            aria-label="{{ __('view_common.maps.controls.header.route_actions') }}">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        @isset($dungeonroute)
+                            @if($mapContext instanceof MapContextLiveSession)
+                                @if($liveSession->expires_at === null)
+                                    <li>
+                                        <a class="dropdown-item stop_live_session_trigger" href="#"
+                                           data-bs-toggle="modal" data-bs-target="#stop_live_session_modal">
+                                            <i class="fas fa-stop"></i> {{ __('view_common.maps.controls.header.stop') }}
+                                        </a>
+                                    </li>
+                                @endif
+                            @else
+                                <li>
+                                    <a class="dropdown-item" href="#"
+                                       data-bs-toggle="modal" data-bs-target="#start_live_session_modal">
+                                        <i class="fas fa-play"></i> {{ __('view_common.maps.controls.header.start') }}
+                                    </a>
+                                </li>
+                            @endif
+                        @endisset
+                        @auth
+                            @if($showCreateRouteBtn)
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('dungeonroute.claim', [
+                                        'dungeon' => $dungeonroute->dungeon,
+                                        'title' => $dungeonroute->getTitleSlug(),
+                                        'dungeonroute' => $dungeonroute]
+                                    ) }}">
+                                        <i class="fas fa-save"></i> {{ __('view_common.maps.controls.header.save_to_profile') }}
+                                    </a>
+                                </li>
+                            @endif
+                        @endauth
+                        @isset($dungeonroute)
+                            @if($isUserAdmin)
+                                <li>
+                                    <a class="dropdown-item" href="#"
+                                       data-bs-toggle="modal" data-bs-target="#edit_route_admin_settings_modal">
+                                        <i class="fas fa-toolbox"></i> {{ __('view_common.maps.controls.header.edit_route_admin_settings') }}
+                                    </a>
+                                </li>
+                            @endif
+                            <li>
+                                <a class="dropdown-item" href="#"
+                                   data-bs-toggle="modal" data-bs-target="#simulate_modal">
+                                    <i class="fas fa-atom"></i> {{ __('view_common.maps.controls.header.simulate_route') }}
+                                </a>
+                            </li>
+                            @if(!$dungeonroute->isSandbox() && $edit)
+                                <li>
+                                    <a class="dropdown-item" href="#"
+                                       data-bs-toggle="modal" data-bs-target="#edit_route_settings_modal">
+                                        <i class="fas fa-cog"></i> {{ __('view_common.maps.controls.header.edit_route_settings') }}
+                                    </a>
+                                </li>
+                            @endif
+                        @endisset
+                        @if($mapContext instanceof MapContextDungeonExplore && $isUserAdmin)
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.floor.edit.mapping', [
+                                        'dungeon' => $dungeon,
+                                        'floor' => $dungeon->floors()->first(),
+                                        'mapping_version' => $dungeon->getCurrentMappingVersion()
+                                    ]) }}">
+                                    <i class="fas fa-cog"></i> {{ __('view_common.maps.controls.header.edit_mapping_version') }}
+                                </a>
+                            </li>
+                        @endif
+                        @if($mapContext instanceof MapContextMappingVersionEdit)
+                            <li>
+                                <a class="dropdown-item" href="#"
+                                   data-bs-toggle="modal" data-bs-target="#edit_mapping_version_modal">
+                                    <i class="fas fa-cog"></i> {{ __('view_common.maps.controls.header.edit_mapping_version') }}
+                                </a>
+                            </li>
+                        @endif
+                        @if($showShare)
+                            <li>
+                                <a class="dropdown-item" href="#"
+                                   data-bs-toggle="modal" data-bs-target="#share_modal">
+                                    <i class="fas fa-share"></i> {{ __('view_common.maps.controls.header.share') }}
+                                </a>
+                            </li>
+                        @endif
+                    </ul>
+                </div>
+            @endif
         </div>
     </div>
 </div>
+@endif
 
 @isset($dungeonroute)
 

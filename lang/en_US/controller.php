@@ -17,8 +17,6 @@ return [
             'mdt_mismatched_enemy_count'          => 'NPC %s has mismatched enemy count, MDT: %s, KG: %s',
             'mdt_mismatched_enemy_type'           => 'NPC %s has mismatched enemy type, MDT: %s, KG: %s',
             'mdt_invalid_category'                => 'Invalid category',
-            'combatlog_parse_failure_no_season'   => 'This failure has no associated season, so the download links cannot be re-fetched.',
-            'combatlog_parse_failure_no_segments' => 'No combat log segments are available for this run.',
         ],
         'flash' => [
             'banned_ip_address_added'                => 'IP address banned successfully',
@@ -37,7 +35,24 @@ return [
             'mapping_version_upgrade_already_latest' => 'This mapping version is already the latest for its dungeon — no routes were queued.',
             'read_only_mode_disabled'                => 'Read-only mode disabled',
             'read_only_mode_enabled'                 => 'Read-only mode enabled',
-            'combatlog_parse_failure_resolved'       => 'Parse failure marked as resolved.',
+        ],
+    ],
+    'affix' => [
+        'flash' => [
+            'affix_created' => 'Affix created',
+            'affix_updated' => 'Affix updated',
+        ],
+    ],
+    'affixgroup' => [
+        'flash' => [
+            'affixgroup_created' => 'Affix group created',
+            'affixgroup_updated' => 'Affix group updated',
+            'affixgroup_deleted' => 'Affix group deleted',
+        ],
+    ],
+    'apicombatlogrun' => [
+        'error' => [
+            'no_segments' => 'No combat log segments are available for this run.',
         ],
     ],
     'apidungeonroute' => [
@@ -164,6 +179,7 @@ return [
             'profile_updated'                  => 'Profile updated',
             'unexpected_error_when_saving'     => 'An unexpected error occurred trying to save your profile',
             'privacy_settings_updated'         => 'Privacy settings updated',
+            'creator_profile_updated'          => 'Creator profile updated',
             'password_changed'                 => 'Password changed',
             'new_password_equals_old_password' => 'New password equals the old password',
             'new_passwords_do_not_match'       => 'New passwords do not match',
@@ -180,6 +196,12 @@ return [
             'add_ad_free_giveaway_already_has_giveaway' => 'Unable to add ad-free giveaways, user is already ad-free through an existing giveaway.',
             'remove_ad_free_giveaway_not_found'         => 'Unable to remove ad-free giveaway - user does not have any at the moment.',
             'remove_ad_free_giveaway_not_yours'         => 'Unable to remove ad-free giveaways that was not originally given by you.',
+        ],
+    ],
+    'season' => [
+        'flash' => [
+            'season_created' => 'Season created',
+            'season_updated' => 'Season updated',
         ],
     ],
     'spell' => [

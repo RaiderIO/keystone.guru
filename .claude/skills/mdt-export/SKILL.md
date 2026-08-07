@@ -80,7 +80,7 @@ $latLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation($mapp
 | `app/Logic/MDT/Conversion.php` | `convertLatLngToMDTCoordinateString()`, `convertHtmlToMdtComment()` |
 | `app/Models/Polyline.php` | `getDecodedLatLngs(Floor $floor): Collection<LatLng>` |
 | `app/Service/MDT/PhpArray2LuaTable.php` | Serializes PHP arrays to Lua table syntax |
-| `app/Console/Commands/Traits/ConvertsMDTStrings.php` | `decode(string): string` — used in tests to decode back to JSON |
+| `app/Console/Commands/Traits/ConvertsMDTStrings.php` | `decode(string): ?array` — used in tests to decode back to a PHP array; dispatches to `App\Logic\MDT\IO\MDTStringFormat`/`MDTStringCodecInterface` under the hood |
 
 ## Tests
 
@@ -88,7 +88,7 @@ Base class: `MDTExportStringServiceTestBase` (uses `ConvertsMDTStrings` + `Gener
 
 Key test helper:
 ```php
-$decodedString = json_decode($this->decode($encodedString), true);
+$decodedString = $this->decode($encodedString);
 // $decodedString['objects'] — array of exported MDT objects
 ```
 

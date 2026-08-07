@@ -20,12 +20,10 @@ final class CombatLogRouteEnemyFailureTest extends PublicTestCase
     public function create_givenValidData_persistsAndRetrievesRecord(): void
     {
         // Arrange
-        $dungeon = $this->getDungeonWithNonFacadeFloor();
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: false);
 
         /** @var Floor $floor */
         $floor = $dungeon->floors()->where('facade', 0)->first();
-
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
 
         // Act
         $failure = CombatLogRouteEnemyFailure::create([
@@ -60,12 +58,10 @@ final class CombatLogRouteEnemyFailureTest extends PublicTestCase
         /** @var Npc $npc */
         $npc = Npc::first();
 
-        $dungeon = $this->getDungeonWithNonFacadeFloor();
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: false);
 
         /** @var Floor $floor */
         $floor = $dungeon->floors()->where('facade', 0)->first();
-
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
 
         // Act
         $failure = CombatLogRouteEnemyFailure::create([

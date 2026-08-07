@@ -6,6 +6,7 @@ use App\Console\Commands\DungeonRoute\RepairBrokenThumbnails;
 use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnail;
+use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Models\File;
 use Closure;
 use Illuminate\Support\Facades\Queue;
@@ -26,10 +27,10 @@ final class RepairBrokenThumbnailsTest extends PublicTestCase
     {
         parent::setUp();
 
-        // requeueThumbnailsMissingFromDisk() scans every file-backed dungeon_route_thumbnails row in
-        // the shared test DB, not just the ones this test creates - and most of those rows' File.disk
-        // is 's3_user_uploads', not config('filesystems.default'). Fake every configured disk (not just
-        // the default) so that scan never makes a real Storage::exists() call against S3.
+        // Every configured disk is faked, not just the default: thumbnails carry their own
+        // File.disk (commonly 's3_user_uploads'), and an unfaked one would turn a disk-existence
+        // check into a real S3 round trip. Combined with scopedToRoute(), which keeps the command
+        // off every row this test did not create, that leaves no real storage call at all.
         foreach (array_keys(config('filesystems.disks')) as $disk) {
             Storage::fake($disk);
         }
@@ -53,7 +54,7 @@ final class RepairBrokenThumbnailsTest extends PublicTestCase
         $thumbnail = DungeonRouteThumbnail::create([
             'dungeon_route_id' => $dungeonRoute->id,
             'floor_id'         => $floor->id,
-            'custom'           => $custom,
+            'variant'          => $custom ? DungeonRouteThumbnailVariant::Custom : DungeonRouteThumbnailVariant::Standard,
         ]);
 
         if ($withFile) {
@@ -75,10 +76,24 @@ final class RepairBrokenThumbnailsTest extends PublicTestCase
     }
 
     /**
+     * Confines the command to the route under test.
+     *
+     * Without this it scans every thumbnail row in the shared dev database - 226k of them locally -
+     * and, because setUp() fakes every disk, judges all of them broken: it then re-queues every
+     * route in the database and deletes real fileless rows. That cost ~25 minutes per test and
+     * mutated data the test never created. CI only got away with it because its database is
+     * freshly seeded and nearly empty.
+     *
+     * @return array<string, array<int, int>>
+     */
+    private function scopedToRoute(DungeonRoute $dungeonRoute): array
+    {
+        return ['--dungeon-route-id' => [$dungeonRoute->id]];
+    }
+
+    /**
      * Matches a queued thumbnail job against the given route. The job keeps its route in a
-     * protected property, so bind into the job instance to read it. Assertions must be scoped
-     * per-route: the shared test DB contains seeded file-backed thumbnails whose disk objects do
-     * not exist on the faked disk, so the command legitimately re-queues those routes too.
+     * protected property, so bind into the job instance to read it.
      *
      * @return Closure(ProcessRouteFloorThumbnail): bool
      */
@@ -102,7 +117,7 @@ final class RepairBrokenThumbnailsTest extends PublicTestCase
 
         try {
             // Act
-            $this->artisan(RepairBrokenThumbnails::class)->assertSuccessful();
+            $this->artisan(RepairBrokenThumbnails::class, $this->scopedToRoute($dungeonRoute))->assertSuccessful();
 
             // Assert
             $this->assertDatabaseMissing('dungeon_route_thumbnails', ['id' => $nullFileThumbnail->id]);
@@ -128,7 +143,7 @@ final class RepairBrokenThumbnailsTest extends PublicTestCase
 
         try {
             // Act
-            $this->artisan(RepairBrokenThumbnails::class)->assertSuccessful();
+            $this->artisan(RepairBrokenThumbnails::class, $this->scopedToRoute($dungeonRoute))->assertSuccessful();
 
             // Assert
             Queue::assertPushed(ProcessRouteFloorThumbnail::class, $this->isThumbnailJobForRoute($dungeonRoute));
@@ -151,7 +166,7 @@ final class RepairBrokenThumbnailsTest extends PublicTestCase
 
         try {
             // Act
-            $this->artisan(RepairBrokenThumbnails::class)
+            $this->artisan(RepairBrokenThumbnails::class, $this->scopedToRoute($dungeonRoute))
                 ->expectsOutputToContain('cannot be repaired by re-queueing')
                 ->assertSuccessful();
 
@@ -176,7 +191,7 @@ final class RepairBrokenThumbnailsTest extends PublicTestCase
 
         try {
             // Act
-            $this->artisan(RepairBrokenThumbnails::class, ['--dry-run' => true])->assertSuccessful();
+            $this->artisan(RepairBrokenThumbnails::class, [...$this->scopedToRoute($dungeonRoute), '--dry-run' => true])->assertSuccessful();
 
             // Assert
             $this->assertDatabaseHas('dungeon_route_thumbnails', ['id' => $nullFileThumbnail->id]);
@@ -185,6 +200,38 @@ final class RepairBrokenThumbnailsTest extends PublicTestCase
         } finally {
             DungeonRouteThumbnail::where('dungeon_route_id', $dungeonRoute->id)->get()->each->delete();
             $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * The scoping option is what keeps this suite from running the repair across the entire
+     * database, so prove it actually excludes routes it was not given rather than trusting that the
+     * other tests happen to pass.
+     */
+    #[Test]
+    public function handle_givenDungeonRouteIdOption_leavesThumbnailsOfOtherRoutesUntouched(): void
+    {
+        // Arrange
+        Queue::fake();
+
+        $repairedRoute     = $this->createDungeonRoute();
+        $untouchedRoute    = $this->createDungeonRoute();
+        $repairedFileless  = $this->createThumbnail($repairedRoute, false);
+        $untouchedFileless = $this->createThumbnail($untouchedRoute, false);
+
+        try {
+            // Act
+            $this->artisan(RepairBrokenThumbnails::class, $this->scopedToRoute($repairedRoute))->assertSuccessful();
+
+            // Assert
+            $this->assertDatabaseMissing('dungeon_route_thumbnails', ['id' => $repairedFileless->id]);
+            $this->assertDatabaseHas('dungeon_route_thumbnails', ['id' => $untouchedFileless->id]);
+            Queue::assertNotPushed(ProcessRouteFloorThumbnail::class, $this->isThumbnailJobForRoute($untouchedRoute));
+        } finally {
+            foreach ([$repairedRoute, $untouchedRoute] as $route) {
+                DungeonRouteThumbnail::where('dungeon_route_id', $route->id)->get()->each->delete();
+                $route->delete();
+            }
         }
     }
 }

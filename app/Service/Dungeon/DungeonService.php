@@ -117,9 +117,19 @@ class DungeonService implements DungeonServiceInterface
         // Resort to finding a default dungeon of sorts
         $gameVersion ??= GameVersion::getUserOrDefaultGameVersion();
 
+        // Only ever the current season - a season is seeded weeks ahead of its start for review and QA
+        // (#3739), and until it starts its dungeons are not playable, so they must not push the current
+        // season's dungeons out of the selector (#3761). The upcoming season gets its own entry point
+        // instead: the "next season" card that HeaderComposer adds to the dungeon context bar.
         $currentSeason = $this->seasonService->getCurrentSeason($gameVersion->expansion);
-        $nextSeason    = $currentSeason === null ? null : $this->seasonService->getNextSeason($currentSeason);
 
-        return ($nextSeason ?? $currentSeason)?->dungeons ?? $gameVersion->expansion->dungeons; // @phpstan-ignore nullsafe.neverNull
+        // Load the relation explicitly rather than reading it lazily - a season read out of a collection
+        // trips preventLazyLoading, which takes down every page that renders the header (HeaderComposer).
+        //
+        // Deliberately dungeons()->get() and NOT loadMissing(): SeasonService keeps its season models in a
+        // service-level cache, so memoising the relation onto them makes it outlive the request and leak a
+        // stale dungeon list into later ones. That was measurable - loadMissing() turned the suite red with
+        // a route being created against the wrong dungeon.
+        return $currentSeason?->dungeons()->get() ?? $gameVersion->expansion->dungeons;
     }
 }

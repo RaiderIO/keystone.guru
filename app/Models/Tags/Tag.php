@@ -19,8 +19,8 @@ use Illuminate\Support\Collection;
  * @property int         $context_id
  * @property string      $context_class
  * @property int         $tag_category_id
- * @property int         $model_id
- * @property string      $model_class
+ * @property int|null    $model_id
+ * @property string|null $model_class
  * @property string      $name
  * @property string|null $color
  *

@@ -36,7 +36,12 @@ Do **not** extend `TestCase` directly for feature tests — use one of the `Test
 ## The test database — READ THIS
 
 The test DB is a **real MySQL connection** (`phpunit`), and it is **persistent and pre-seeded**.
-There is **no `RefreshDatabase` / no transactions** wrapping tests. Two consequences:
+There is **no `RefreshDatabase` / no transactions** wrapping tests. In the main checkout (and
+`--shared-db` worktrees) it is the shared dev schema; in a default **isolated worktree** it is the
+worktree's private schema — same seeded contents, and if it ever gets poisoned you can rebuild it
+wholesale there (`sh/worktree.sh provision-db`, or `migrate:fresh` + reseed — isolated worktrees
+only!). The cleanup discipline below applies **everywhere** regardless: leaked rows break *later
+tests in the same schema*, isolated or not. Two consequences:
 
 1. **Seeded data already exists** and you should rely on it: dungeons + their mapping versions,
    game versions, seasons, and **user id=1 is the admin** (has `Role::ROLE_ADMIN`, seeded by
@@ -56,6 +61,41 @@ try {
 ```
 
 `DungeonRoute` has no soft-deletes, so `delete()` truly removes the row.
+
+### Seeded rows leak loudly — a leftover breaks unrelated tests
+
+The ~51 models using the `SeederModel` trait (`Season`, `SeasonDungeon`, `Expansion`, `EnemyPack`,
+`GameServerRegion`, … — `grep -rln "use SeederModel;" app/Models/`) hold the data every other test reads, so
+one leaked row is not a private mess: a leftover `Season` with no dungeons breaks any test doing
+`Season::orderByDesc('id')->first()->dungeons()`. Create as few as you can get away with, and always clean
+up in a `finally`.
+
+`$model->delete()` works on them — the trait is a marker now. Prefer it over a query-builder delete: it fires
+the model events, so laravel-model-caching invalidates on its own and any cleanup the model registers in
+`booted()` still runs. Reach for `Model::query()->where(...)->delete()` only for bulk cleanup, and flush by
+hand there (`new Model()->flushCache()`), since no events fire.
+
+Two caches can still make freshly created/deleted rows invisible in tests, and neither is the `array` store
+`phpunit.xml` configures:
+- **laravel-model-caching** (every `CacheModel`) — flush with `new Model()->flushCache()`.
+- **`RemembersToFile`** (`ViewService::cachedGlobal`, map context, …) writes to `Cache::store('tmp_file')`,
+  a **file** store that survives between test runs. If your test touches `ViewService`, flush it:
+  `Cache::store('tmp_file')->flush()`. `phpunit.xml` points `CACHE_FILE_PATH` at `/tmp/phpunit_cache` so
+  that flush cannot reach the cache of the app running out of the same checkout.
+
+Create fixtures **inside** the `try`, not before it, so a failure halfway through setup still cleans up:
+
+```php
+$season = null;
+
+try {
+    $season = Season::create([...]);
+    SeasonDungeon::create([...]);   // this throwing must not leave $season behind
+    // Act + Assert
+} finally {
+    if ($season !== null) { /* delete */ }
+}
+```
 
 ## Creating users & roles (Laratrust)
 

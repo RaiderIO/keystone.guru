@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
  * @var GameVersion|null           $gameVersion
  * @var Season|null                $nextSeason
  * @var Season                     $currentSeason
+ * @var int|null                   $requestedSeasonId
  * @var Collection<int, Expansion> $activeExpansions
  * @var string                     $id
  * @var string                     $tabsId
@@ -32,12 +33,17 @@ $filterFn              ??= fn(Dungeon $dungeon) => true;
 $nextSeasonDungeons    = $nextSeason?->dungeons->filter($filterFn)->values() ?? collect();
 $currentSeasonDungeons = $currentSeason->dungeons->filter($filterFn)->values();
 
+// Open on the current season - the next season is seeded well before it starts, and until then it should
+// not take over the selection (#3761). It is opened only when it was explicitly asked for, or when the
+// current season has nothing to show for this game version.
 $selectedSeasonId = null;
 if ($gameVersion->has_seasons) {
-    if ($nextSeason !== null && $nextSeasonDungeons->isNotEmpty()) {
+    if ($nextSeason !== null && $nextSeasonDungeons->isNotEmpty() && $requestedSeasonId === $nextSeason->id) {
         $selectedSeasonId = $nextSeason->id;
     } else if ($currentSeasonDungeons->isNotEmpty()) {
         $selectedSeasonId = $currentSeason->id;
+    } else if ($nextSeason !== null && $nextSeasonDungeons->isNotEmpty()) {
+        $selectedSeasonId = $nextSeason->id;
     }
 }
 
@@ -49,7 +55,7 @@ $showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $
             @if($nextSeason !== null && $nextSeasonDungeons->isNotEmpty())
                 <li class="nav-item">
                     <a id="season-{{ $nextSeason->id }}-grid-tab"
-                       class="nav-link active"
+                       class="nav-link {{ $selectedSeasonId === $nextSeason->id ? 'active' : '' }}"
                        href="#season-{{ $nextSeason->id }}-grid-content"
                        role="tab"
                        aria-controls="season-{{ $nextSeason->id }}-grid-content"
@@ -62,7 +68,7 @@ $showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $
             @if($currentSeasonDungeons->isNotEmpty())
                 <li class="nav-item">
                     <a id="season-{{ $currentSeason->id }}-grid-tab"
-                       class="nav-link {{ $nextSeason === null || $nextSeasonDungeons->isEmpty() ? 'active' : '' }}"
+                       class="nav-link {{ $selectedSeasonId === $currentSeason->id ? 'active' : '' }}"
                        href="#season-{{ $currentSeason->id }}-grid-content"
                        role="tab"
                        aria-controls="season-{{ $currentSeason->id }}-grid-content"

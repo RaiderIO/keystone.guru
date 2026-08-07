@@ -88,16 +88,20 @@ class Conversion
             //            Dungeon::DUNGEON_THE_VORTEX_PINNACLE => 'TheVortexPinnacle',
         ],
 
+        // MDT 6.2 (ptr12.1) deleted the MistsOfPandaria folder from the mainline package, and MDT_Legacy
+        // never carried it, so there is no lua for these dungeons in either package any more. Keeping them
+        // mapped would make hasMDTDungeonName() lie and every caller throw "Unable to find file"; the
+        // existing mapping data in Keystone.guru is untouched, only re-importing from MDT is gone.
         Expansion::EXPANSION_MOP => [
-            Dungeon::DUNGEON_GATE_OF_THE_SETTING_SUN    => 'GateOfTheSettingSun',
-            Dungeon::DUNGEON_MOGU_SHAN_PALACE           => 'MoguShanPalace',
-            Dungeon::DUNGEON_SCARLET_HALLS_MOP          => 'ScarletHalls',
-            Dungeon::DUNGEON_SCARLET_MONASTERY_MOP      => 'ScarletMonastery',
-            Dungeon::DUNGEON_SCHOLOMANCE_MOP            => 'Scholomance',
-            Dungeon::DUNGEON_SHADO_PAN_MONASTERY        => 'ShadoPanMonastery',
-            Dungeon::DUNGEON_SIEGE_OF_NIUZAO_TEMPLE     => 'SiegeOfNiuzaoTemple',
-            Dungeon::DUNGEON_STORMSTOUT_BREWERY         => 'StormstoutBrewery',
-            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
+            //            Dungeon::DUNGEON_GATE_OF_THE_SETTING_SUN    => 'GateOfTheSettingSun',
+            //            Dungeon::DUNGEON_MOGU_SHAN_PALACE           => 'MoguShanPalace',
+            //            Dungeon::DUNGEON_SCARLET_HALLS_MOP          => 'ScarletHalls',
+            //            Dungeon::DUNGEON_SCARLET_MONASTERY_MOP      => 'ScarletMonastery',
+            //            Dungeon::DUNGEON_SCHOLOMANCE_MOP            => 'Scholomance',
+            //            Dungeon::DUNGEON_SHADO_PAN_MONASTERY        => 'ShadoPanMonastery',
+            //            Dungeon::DUNGEON_SIEGE_OF_NIUZAO_TEMPLE     => 'SiegeOfNiuzaoTemple',
+            //            Dungeon::DUNGEON_STORMSTOUT_BREWERY         => 'StormstoutBrewery',
+            //            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
         ],
 
         Expansion::EXPANSION_WOD => [
@@ -123,18 +127,20 @@ class Conversion
         ],
 
         Expansion::EXPANSION_BFA => [
-            Dungeon::DUNGEON_ATAL_DAZAR           => 'AtalDazar',
-            Dungeon::DUNGEON_FREEHOLD             => 'Freehold',
-            Dungeon::DUNGEON_KINGS_REST           => 'KingsRest',
-            Dungeon::DUNGEON_SIEGE_OF_BORALUS     => 'SiegeofBoralus',
-            Dungeon::DUNGEON_SHRINE_OF_THE_STORM  => 'ShrineoftheStorm',
-            Dungeon::DUNGEON_TEMPLE_OF_SETHRALISS => 'TempleofSethraliss',
-            Dungeon::DUNGEON_THE_MOTHERLODE       => 'TheMotherlode',
-            Dungeon::DUNGEON_THE_UNDERROT         => 'TheUnderrot',
-            Dungeon::DUNGEON_TOL_DAGOR            => 'TolDagor',
-            Dungeon::DUNGEON_WAYCREST_MANOR       => 'WaycrestManor',
-            Dungeon::DUNGEON_MECHAGON_JUNKYARD    => 'MechagonIsland',
-            Dungeon::DUNGEON_MECHAGON_WORKSHOP    => 'MechagonWorkshop',
+            Dungeon::DUNGEON_ATAL_DAZAR => 'AtalDazar',
+            Dungeon::DUNGEON_FREEHOLD   => 'Freehold',
+            // Moved into MDT's Midnight/ folder for 12.1 - see the Midnight block below
+            //            Dungeon::DUNGEON_KINGS_REST           => 'KingsRest',
+            Dungeon::DUNGEON_SIEGE_OF_BORALUS    => 'SiegeofBoralus',
+            Dungeon::DUNGEON_SHRINE_OF_THE_STORM => 'ShrineoftheStorm',
+            // Moved into MDT's Midnight/ folder for 12.1 - see the Midnight block below
+            //            Dungeon::DUNGEON_TEMPLE_OF_SETHRALISS => 'TempleofSethraliss',
+            Dungeon::DUNGEON_THE_MOTHERLODE    => 'TheMotherlode',
+            Dungeon::DUNGEON_THE_UNDERROT      => 'TheUnderrot',
+            Dungeon::DUNGEON_TOL_DAGOR         => 'TolDagor',
+            Dungeon::DUNGEON_WAYCREST_MANOR    => 'WaycrestManor',
+            Dungeon::DUNGEON_MECHAGON_JUNKYARD => 'MechagonIsland',
+            Dungeon::DUNGEON_MECHAGON_WORKSHOP => 'MechagonWorkshop',
         ],
 
         Expansion::EXPANSION_SHADOWLANDS => [
@@ -156,9 +162,11 @@ class Conversion
         Expansion::EXPANSION_DRAGONFLIGHT => [
             // Cata
             Dungeon::DUNGEON_THE_VORTEX_PINNACLE => 'TheVortexPinnacle',
-            // MoP
-            //            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
-            Dungeon::DUNGEON_THRONE_OF_THE_TIDES => 'ThroneOfTides',
+            // MoP - MDT 6.2 dropped the MistsOfPandaria folder, but MDT_Legacy still ships this one under
+            // Dragonflight, so it keeps full MDT support (it is deliberately absent from
+            // MAINLINE_MDT_DUNGEONS so it resolves to the legacy package).
+            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
+            Dungeon::DUNGEON_THRONE_OF_THE_TIDES        => 'ThroneOfTides',
             // WoD
             Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS => 'ShadowmoonBurialGrounds',
             Dungeon::DUNGEON_THE_EVERBLOOM             => 'Everbloom',
@@ -167,11 +175,13 @@ class Conversion
             // BFA
             //            Dungeon::DUNGEON_WAYCREST_MANOR => 'WaycrestManor',
             // DF
-            Dungeon::DUNGEON_ALGETH_AR_ACADEMY                    => 'AlgetharAcademy',
-            Dungeon::DUNGEON_BRACKENHIDE_HOLLOW                   => 'BrackenhideHollow',
-            Dungeon::DUNGEON_HALLS_OF_INFUSION                    => 'HallsOfInfusion',
-            Dungeon::DUNGEON_NELTHARUS                            => 'Neltharus',
-            Dungeon::DUNGEON_RUBY_LIFE_POOLS                      => 'RubyLifePools',
+            // Moved into MDT's Midnight/ folder - see the Midnight block below
+            //            Dungeon::DUNGEON_ALGETH_AR_ACADEMY  => 'AlgetharAcademy',
+            Dungeon::DUNGEON_BRACKENHIDE_HOLLOW => 'BrackenhideHollow',
+            Dungeon::DUNGEON_HALLS_OF_INFUSION  => 'HallsOfInfusion',
+            Dungeon::DUNGEON_NELTHARUS          => 'Neltharus',
+            // Moved into MDT's Midnight/ folder for 12.1 - see the Midnight block below
+            //            Dungeon::DUNGEON_RUBY_LIFE_POOLS                      => 'RubyLifePools',
             Dungeon::DUNGEON_THE_AZURE_VAULT                      => 'TheAzureVault',
             Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE                 => 'TheNokhudOffensive',
             Dungeon::DUNGEON_ULDAMAN_LEGACY_OF_TYR                => 'UldamanLegacyOfTyr',
@@ -207,31 +217,41 @@ class Conversion
             // Legion
             Dungeon::DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE => 'SeatoftheTriumvirate',
 
+            // Battle for Azeroth (moved out of MDT_Legacy into mainline Midnight/ for 12.1)
+            Dungeon::DUNGEON_KINGS_REST           => 'KingsRest',
+            Dungeon::DUNGEON_TEMPLE_OF_SETHRALISS => 'TempleOfSethraliss',
+
             // Dragonflight (but Midnight version)
             Dungeon::DUNGEON_ALGETH_AR_ACADEMY          => 'AlgetharAcademy',
             Dungeon::DUNGEON_ALGETH_AR_ACADEMY_MIDNIGHT => 'AlgetharAcademy',
+            // Dragonflight (moved out of MDT_Legacy into mainline Midnight/ for 12.1)
+            Dungeon::DUNGEON_RUBY_LIFE_POOLS => 'RubyLifePools',
 
             // Midnight
+            Dungeon::DUNGEON_ALTAR_OF_FANGS             => 'AltarOfFangs',
+            Dungeon::DUNGEON_DEN_OF_NALORAKK            => 'DenOfNalorakk',
             Dungeon::DUNGEON_MAGISTERS_TERRACE_MIDNIGHT => 'MagistersTerrace',
             Dungeon::DUNGEON_MAISARA_CAVERNS            => 'MaisaraCaverns',
             Dungeon::DUNGEON_MURDER_ROW                 => 'MurderRow',
             Dungeon::DUNGEON_NEXUS_POINT_XENAS          => 'NexusPointXenas',
+            Dungeon::DUNGEON_THE_BLINDING_VALE          => 'TheBlindingVale',
+            Dungeon::DUNGEON_VOIDSCAR_ARENA             => 'VoidscarArena',
             Dungeon::DUNGEON_WINDRUNNER_SPIRE           => 'WindrunnerSpire',
         ],
     ];
     // @formatter:on
 
     private const array MAINLINE_MDT_DUNGEONS = [
-        // Mists of Pandaria
-        Dungeon::DUNGEON_GATE_OF_THE_SETTING_SUN,
-        Dungeon::DUNGEON_MOGU_SHAN_PALACE,
-        Dungeon::DUNGEON_SCARLET_HALLS_MOP,
-        Dungeon::DUNGEON_SCARLET_MONASTERY_MOP,
-        Dungeon::DUNGEON_SCHOLOMANCE_MOP,
-        Dungeon::DUNGEON_SHADO_PAN_MONASTERY,
-        Dungeon::DUNGEON_SIEGE_OF_NIUZAO_TEMPLE,
-        Dungeon::DUNGEON_STORMSTOUT_BREWERY,
-        Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT,
+        // Mists of Pandaria - removed from the mainline package in MDT 6.2, see DUNGEON_NAME_MAPPING above
+        //        Dungeon::DUNGEON_GATE_OF_THE_SETTING_SUN,
+        //        Dungeon::DUNGEON_MOGU_SHAN_PALACE,
+        //        Dungeon::DUNGEON_SCARLET_HALLS_MOP,
+        //        Dungeon::DUNGEON_SCARLET_MONASTERY_MOP,
+        //        Dungeon::DUNGEON_SCHOLOMANCE_MOP,
+        //        Dungeon::DUNGEON_SHADO_PAN_MONASTERY,
+        //        Dungeon::DUNGEON_SIEGE_OF_NIUZAO_TEMPLE,
+        //        Dungeon::DUNGEON_STORMSTOUT_BREWERY,
+        //        Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT,
 
         // Wrath of the Lich King
         Dungeon::DUNGEON_PIT_OF_SARON,
@@ -242,14 +262,26 @@ class Conversion
         // Legion
         Dungeon::DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE,
 
-        // Dragonflight (but Midnight version)
+        // Battle for Azeroth (moved out of MDT_Legacy into mainline Midnight/ for 12.1)
+        Dungeon::DUNGEON_KINGS_REST,
+        Dungeon::DUNGEON_TEMPLE_OF_SETHRALISS,
+
+        // Dragonflight (but Midnight version). Both the Dragonflight dungeon and its Midnight variant
+        // resolve to Midnight/AlgetharAcademy.lua - MDT_Legacy no longer ships a Dragonflight copy.
+        Dungeon::DUNGEON_ALGETH_AR_ACADEMY,
         Dungeon::DUNGEON_ALGETH_AR_ACADEMY_MIDNIGHT,
+        // Dragonflight (moved out of MDT_Legacy into mainline Midnight/ for 12.1)
+        Dungeon::DUNGEON_RUBY_LIFE_POOLS,
 
         // Midnight
+        Dungeon::DUNGEON_ALTAR_OF_FANGS,
+        Dungeon::DUNGEON_DEN_OF_NALORAKK,
         Dungeon::DUNGEON_MAGISTERS_TERRACE_MIDNIGHT,
         Dungeon::DUNGEON_MAISARA_CAVERNS,
         Dungeon::DUNGEON_MURDER_ROW,
         Dungeon::DUNGEON_NEXUS_POINT_XENAS,
+        Dungeon::DUNGEON_THE_BLINDING_VALE,
+        Dungeon::DUNGEON_VOIDSCAR_ARENA,
         Dungeon::DUNGEON_WINDRUNNER_SPIRE,
     ];
 

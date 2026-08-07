@@ -1,6 +1,6 @@
 ---
 name: structured-logging
-description: How the StructuredLogging system works and when to use it — per-service Logging classes, start/end context grouping, log levels, and the Discord error alerting flow. Use when adding logging to a service, creating a new {Service}Logging class, choosing a log level, or tracing what a service did from its log output.
+description: How the StructuredLogging system works and when to use it — per-service Logging classes, start/end context grouping, log levels, and the Discord + Sentry error alerting flow. Use when adding logging to a service, creating a new {Service}Logging class, choosing a log level, or tracing what a service did from its log output.
 ---
 
 # Structured Logging
@@ -10,7 +10,7 @@ description: How the StructuredLogging system works and when to use it — per-s
 Every service logs through its own dedicated `Logging` class instead of calling `Log::` or `logger()` directly. The goals:
 
 1. **Traceability** — the logs of a service read as a narrative of what happened (start → detail lines → end with elapsed time), so issues can be traced from log output alone.
-2. **Alerting** — anything logged at `error` or above is posted to a Discord channel (via the `discord` log channel), which notifies the maintainer so a fix can be started immediately. Choose levels with this in mind.
+2. **Alerting** — anything logged at `error` or above is posted to a Discord channel (via the `discord` log channel), which notifies the maintainer, **and** sent to Sentry (via the `sentry` channel, #3792) where it becomes a trackable issue with an occurrence count. Choose levels with this in mind.
 3. **Testability** — services depend on a `{Service}LoggingInterface`, so tests mock the logging away (see `tests/Fixtures/LoggingFixtures.php`).
 
 ## The base class: `app/Logging/StructuredLogging.php`
@@ -83,6 +83,77 @@ Prefer `wrapLog()` for new code; migrate manual start/try/finally/end call sites
 | `error` and above | Something is broken and a human should look at it | **Posted to Discord → maintainer is notified** |
 
 Rule of thumb: log at `error`+ only when you would want to be pinged about it. A failed external request that will be retried is a `warning`; a failed request with no recovery path is an `error`. The `discord` channel in `config/logging.php` is a `MarvinLabs\DiscordLogger` custom channel at level `error`, fed by the `APP_LOG_DISCORD_WEBHOOK` env var.
+
+## The `sentry` channel (#3792)
+
+`Log::error()` from a Logging class is not an exception, so `Integration::handles()` in
+`bootstrap/app.php` never sees it. The `sentry` log channel is what turns these records into Sentry
+issues; it sits alongside `discord` and is included in every stack.
+
+**One Sentry issue is one log site.** For a record with no exception, `SentryHandler` calls
+`captureMessage($record['message'])` and Sentry groups message events by their message — which
+`StructuredLogging` guarantees is the constant `ClassLogging::method`. All the variability lives in
+the context/extras. This is the granularity you want, so:
+
+- **Never enable `attach_stacktrace`** — Sentry would group by stack trace instead, fragmenting one
+  log site into one issue per call path.
+- If a single log site genuinely needs splitting, `SentryHandler` reads `context['fingerprint']`
+  (an array). `SkipsExceptionMirrorsHandler` uses this to split `HandlerLogging::uncaughtException`
+  by exception class.
+
+### Fingerprinting, tags and throttling (#3820)
+
+"One issue per log site" is right for most sites but wrong for the ones that report a *failure*: a
+hundred distinct combat log parse failures collapsing into one issue is not triageable. Three taps
+on the `sentry` channel handle that, and the array order in `config/logging.php` **reads backwards** —
+each tap wraps the handlers the previous one produced, so the last entry is outermost and runs first.
+Execution order is `SkipsExceptionMirrors` → `FingerprintsStructuredErrors` → `ThrottlesRepeatedEvents`
+→ `SentryHandler`.
+
+- **`FingerprintsStructuredErrorsHandler`** sets `context['fingerprint']` to
+  `[$logSite, $exceptionClass, $normalizedMessage]` (digit runs collapsed to `#`) and promotes
+  `runId`, `seasonId`, `combatLogVersion`, `lineNumber`, `exceptionClass` into `context['tags']`.
+  It never overwrites a fingerprint another handler already set.
+- **Context key names are load-bearing.** The tap keys on the literal keys `exceptionClass` and
+  `message`, and `StructuredLogging` builds its context from `get_defined_vars()` — so **renaming a
+  Logging method's parameter silently changes grouping**. Both `handleParseError` methods carry a
+  docblock saying so.
+- **`rawLine` is deliberately not a tag.** Tags are capped at 200 characters and indexed; a raw
+  combat log line is long and carries player names and GUIDs. It stays in the context, which the SDK
+  files as extra data.
+- **`ThrottlesRepeatedEventsHandler`** caps events per fingerprint per hour. Sentry meters every
+  event even though it groups them, so an unthrottled failure loop burns the account's budget and
+  starts dropping novel errors. Consequence to remember when triaging: **a throttled issue's event
+  count is a lower bound, not the true occurrence count** — read real volume off the file logs.
+
+**Test taps end to end, never by calling the handler directly.** #3792 shipped three silent failures
+past tests that asserted on configuration shape or invoked the handler in isolation — the one path
+production never takes. `SentryLogChannelTest` resolves the real DSN-shaped channel against
+`CapturingTransport` and asserts an event actually arrives; extend that, and check your new test
+fails when the tap is removed.
+
+### Traps, all of which fail silently
+
+These were found by review on #3792 after the tests went green; each one produced a channel that
+resolved fine, accepted the logging call, and sent nothing.
+
+- **Never put a buffering handler in front of `SentryHandler`.** Monolog's `DeduplicationHandler`
+  (and so our `FlushingDeduplicationHandler`) forwards through `handleBatch()`, and
+  `SentryHandler::handleBatch()` is still Monolog-2 era — it compares a Monolog 3 `Level` **enum**
+  against an integer, so `array_filter` empties the batch and every record is dropped. This is why
+  the `sentry` channel is not deduplicated the way `discord` is.
+- **Use `NoopHandler`, never `NullHandler`, for an empty-config guard.** `NullHandler::handle()`
+  returns `true`, which ends Monolog's handler loop — inside a stack that silently swallows every
+  channel listed *after* it. `NoopHandler::handle()` returns `false` and keeps the record bubbling.
+  Production runs `LOG_CHANNEL=stack` with `discord` ahead of `sentry`, so this is not theoretical.
+- **`Log::build()` does not apply taps.** `LogManager::tap()` looks them up by channel name in
+  `logging.channels`, so an on-demand built channel gets none of them. Test taps through a real
+  configured channel (`config([...]); Log::forgetChannel(...); Log::channel(...)`), or the test
+  passes while the tap is absent.
+- **`report_exceptions => false` keys on the literal context key `exception`**, not on any
+  `Throwable` in the context. Logging methods here name their parameter `$e`/`$ex`/`$throwable`, so
+  it does not affect them — it only suppresses framework-level duplicates such as the emergency
+  logger.
 
 ## Per-service convention
 

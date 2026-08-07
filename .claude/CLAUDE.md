@@ -6,6 +6,21 @@
   rather than Claude's auto-memory system. Auto-memories don't transfer between machines; in-repo
   notes do.
 
+## Revising a long document
+
+When you revise a plan, design doc, or issue body that the user has **already read**, lead the
+reply with a **changelog of what changed** — not a re-statement of the document. Re-reading a
+long document to diff it by hand costs the user a lot of time and energy, and the plan file is
+often several hundred lines by the time it is agreed.
+
+- Group the changes by kind (fixes / simplifications / additions / reordering) rather than by
+  document order, and say what each one *prevents* or *buys*, not just what moved.
+- Call out explicitly when a revision made the document **smaller** — dropped abstractions and
+  removed steps are the changes most worth surfacing.
+- Keep it to a screenful. If it needs a table, the table has one row per change, not per line.
+- Note that `ExitPlanMode` shows the user the **whole** plan file again, so the changelog belongs
+  in the message *before* it — otherwise they hit the wall of text first.
+
 ## Git
 
 Branch formats are as follows:
@@ -18,6 +33,14 @@ Branch formats are as follows:
 - In the main checkout, commits should not be done unless explicitly asked (see the worktree
   exception below).
 
+### Commit subjects start with `#`, which git silently eats on rebase
+Subjects begin with the issue number (`#3722 Fix the thing`), and any `git rebase --continue`
+after a conflict re-reads the message through the editor path, where a leading `#` line is a
+comment — the subject is stripped and the first body paragraph promoted in its place. After any
+rebase that hit a conflict, check `git log --oneline` and repair a mangled subject with
+`git commit --amend --cleanup=verbatim -F <msgfile>` before pushing. (Rewriting a non-HEAD
+commit without interactive rebase: see the `worktree-docker` skill.)
+
 ### Git worktrees
 - By default, do every task from an isolated git worktree with its own Docker `app` stack, created
   with `sh/worktree.sh create <issue>-<slug>`. Run all commands (artisan, tests, `composer run
@@ -26,12 +49,24 @@ Branch formats are as follows:
   work directly in the main checkout.
 - **The worktree and its branch are yours: you may commit, push, and open a MR without asking.**
   Commit as you go, push the branch with `sh/worktree.sh push` (uses a scoped write deploy key so no
-  password is prompted), and open the MR to `master` (the default branch) with `gh`. Start the MR
-  body with `Closes #<issue>` — because it targets the default branch it auto-links the issue and
-  closes it on merge. This autonomy applies only to a worktree you created — in the main checkout,
-  still ask before committing.
-- The worktree shares the main stack's database/redis, so keep migrations non-destructive and never
-  run `migrate:fresh`/`migrate:refresh` in a worktree. See the `worktree-docker` skill for details.
+  password is prompted), and open the MR to `master` (the default branch) with `gh pr create --draft`.
+  Start the MR body with `Closes #<issue>` — because it targets the default branch it auto-links the
+  issue and closes it on merge. This autonomy applies only to a worktree you created — in the main
+  checkout, still ask before committing.
+- **Open every MR as a draft and keep it a draft for as long as you still own the worktree** —
+  including your own post-push CI monitoring and the "ready for review" checklist below. Only mark
+  it ready for review (`gh pr ready <n>`) once all three checklist items are actually done and you
+  are handing the worktree off. A draft PR can't be merged (`gh pr merge` 422s on one), so this is
+  what stops `babysit-prs` — which runs in its own session/loop and merges+tears down worktrees for
+  any green, `pr can merge`-labeled PR the moment it sees one — from grabbing a PR (and ripping out
+  its worktree) while you're still mid-verification on it (see #3719). Don't undraft early just to
+  let Wotuu take an early look; a labeled-but-still-in-flight PR is exactly the race this avoids.
+- By default a worktree gets its **own freshly-seeded database schemas** (main + combatlog, on the
+  shared MySQL servers) plus its own redis prefix — parallel agents can't touch each other's data,
+  and destructive operations (`migrate:fresh`, destructive migrations) are safe to *test* there.
+  `create ... --shared-db` opts back into sharing the main stack's data; then the old rules apply:
+  non-destructive migrations only, never `migrate:fresh`/`migrate:refresh`. See the
+  `worktree-docker` skill for details (isolated creates take ~5–15 min to seed).
 
 ## Github
 
@@ -43,11 +78,22 @@ Prepend every message you post on GitHub (PR/issue comments, review replies, PR/
 a `:robot:` emoji so it is clear the message is from Claude and not the account owner. This avoids
 the appearance of impersonating the user.
 
-`gh pr edit` always fails on this repo with a Projects-classic GraphQL deprecation error
-(`repository.pullRequest.projectCards`). Update PRs through the REST API instead:
-`gh api -X PATCH repos/RaiderIO/keystone.guru/pulls/<number> -F body=@<file>` — capital `-F`
-dereferences the `@file` into its contents; lowercase `-f` would send the literal string
-`@<file>` as the body.
+**Bodies and comments only — never titles.** A PR or issue *title* gets no `:robot:` prefix (and no
+🤖). Titles are read in lists, notifications and the merge commit, where the prefix is just noise;
+the body directly underneath already carries it. Same for commit messages — those are attributed via
+the `Co-Authored-By: Claude` trailer, not an emoji.
+
+`gh pr edit` works on gh ≥ 2.96.0 (`~/.local/bin/gh`; the apt 2.4.0 at `/usr/bin/gh` fails with a
+Projects-classic GraphQL error — if that error appears, check `gh --version`). REST fallback:
+`gh api -X PATCH repos/RaiderIO/keystone.guru/pulls/<n> -F body=@<file>` — capital `-F`
+dereferences the `@file`; lowercase `-f` sends the literal string `@<file>`.
+
+### Stacked PRs: always target `master`
+
+`php-tests`/`phpstan` only run on PRs targeting `master`, so a PR against a feature branch
+silently skips them yet still shows green (9 checks when wired correctly, 3 when not). Open
+stacked PRs against `master` anyway and say so in the body — the diff collapses when the parent
+merges. Retargeting an existing PR via PATCH does **not** retrigger CI; close and reopen it.
 
 ## Command execution
 - Never run PHP, Artisan, PHPUnit, or Pest directly on the host machine.
@@ -72,19 +118,37 @@ For example:
 - `composer run fix` reformats any files with pre-existing style drift, not just the ones you changed. After running it, stage only the files you actually intended to touch (`git checkout -- <other files>` to discard the unrelated reformats) so your diff/PR stays focused.
 
 ### Before declaring a MR ready for review
-A MR is only "ready" once all three of these hold — human review time is the scarcest resource, so
-review must start from a pre-reviewed, verified MR:
+Human review time is the scarcest resource, so review must start from a pre-reviewed, verified MR —
+but the checklist is **tiered by change size** so small MRs don't pay full ceremony:
+
+- **Trivial tier** — either (a) a code change with ≤ 20 changed lines (excluding tests/docs), no
+  UI-visible impact, no schema/auth/security change, covered by a passing test; or (b) a
+  docs/config-only change of ≤ 50 changed lines total. Skip item 1 (cold review); still require
+  item 3 (green CI). State in the MR body: "Cold review skipped under the trivial-change rule" and
+  add the `pr cold reviewed` label anyway so `babysit-prs` doesn't dispatch its own review.
+  Docs-only does NOT mean low blast radius: a larger docs MR — especially one touching `.claude/`
+  instruction/process files, which degrade every future session when wrong — takes the standard
+  tier.
+- **Standard tier** — everything else: all applicable items below.
+
 1. **Independent review**: the `code-review` skill is `disable-model-invocation` — only the user
    can trigger it directly (`/code-review`), an agent calling it itself will error. Once the change
    is built, hand the diff to a fresh-context agent (no shared context with whoever implemented it —
    a plain `Agent` call, not a `fork`) to review, and resolve every finding it raises (or note in the
-   MR body why a finding is intentionally not addressed).
-2. **Visual verification**: for any UI-visible change, verify the affected page(s) in headless
-   Chrome (`headless-browser-verify` skill) and post before/after screenshots on the MR
-   (`post-screenshot.sh`).
+   MR body why a finding is intentionally not addressed). Afterwards, post the `:robot: Cold review:
+   <N> findings` marker comment on the MR and add the `pr cold reviewed` label
+   (`gh pr edit <n> --add-label "pr cold reviewed"`) — the same marker/label `babysit-prs` checks
+   before dispatching its own cold review, which is what stops a PR from being reviewed twice.
+2. **Visual verification**: ONLY when rendered output actually changed — verify the affected
+   page(s) in headless Chrome (`headless-browser-verify` skill) and post before/after screenshots
+   on the MR (`post-screenshot.sh`). Backend-only MRs skip this explicitly; don't screenshot "to
+   be safe".
 3. **Green CI**: wait for the MR's checks and fix any failure yourself — including flaky or
    seemingly unrelated failures (root-cause them; don't re-run and hope, and don't defer to a
    follow-up issue).
+
+Only once the applicable items hold, mark the MR ready for review (`gh pr ready <n>`) — see the
+draft-PR note under Git worktrees above for why it must stay a draft until then.
 
 # Project-specific conventions
 
@@ -119,8 +183,23 @@ review must start from a pre-reviewed, verified MR:
 - Generate code that prevents N+1 query problems by using eager loading.
 - Use Laravel's query builder for very complex database operations.
 
+#### Model caching is not a reason to avoid writes that bypass Eloquent events
+Raw writes (e.g. `upsert()`) on `CacheModel` models skip `laravel-model-caching`'s invalidation —
+but **missing cache invalidation must not be raised as a review finding** (Wotuu, PR #3766): the
+`CacheModel` tables are read-only in production, caching is off in development, and every release
+rotates the cache prefix anyway. Full rationale and the legitimate reasons to still prefer a
+model-level write: see the `laravel-best-practices` skill, "Model caching vs raw writes".
+
 ### Model Creation
 - Every new model must also have a repository. Create the interface at `app/Repositories/Interfaces/{Domain}/{ModelName}RepositoryInterface.php`, the implementation at `app/Repositories/Database/{Domain}/{ModelName}Repository.php`, and register the binding in `app/Providers/RepositoryServiceProvider.php`. See the `repository-pattern` skill for the full convention.
+
+### Seeded models (`SeederModel`)
+The `SeederModel` trait is a marker, not a guarantee rows come from seeders — some trait users
+(`SpellDungeon`, `NpcCharacteristic`, `NpcSpell`, `CombatLogNpcEvent`, `CombatLogSpellEvent`,
+`ParsedCombatLog`) are combat-log-derived and a delete is **permanent**, not recoverable from
+`database/seeders`. Only the admin panel, mapping editor, seeders and the hourly
+`combatlog:detectstaledata` sweep may delete such rows (convention, not enforced). Full list and
+rationale: `seeder-load` skill, "SeederModel rows".
 
 ### Controllers & Validation
 - Always create Form Request classes for validation rather than inline validation in controllers. Include both validation rules and custom error messages.
@@ -137,7 +216,11 @@ review must start from a pre-reviewed, verified MR:
 ```
 
 ### Routes & controller method naming
-- Routes are registered with first-class callable syntax, e.g. `Route::get('new', new FooController()->new(...))`. Never name a controller method that's registered this way after a PHP reserved word (`new`, `list`, `print`, `echo`, `class`, `function`, ...). It parses and passes tests fine, but `php artisan route:cache` serializes the closure via laravel-serializable-closure, and reconstituting it later `eval`s code like `function new(...)` — invalid syntax, since a function can't be named after a reserved word outside class context. The crash only appears in production, per-request, once the route cache is warm and that request hits the route (`ParseError: syntax error, unexpected token "new"`), not at cache-build time or in tests (routes aren't cached under `runningUnitTests()`). Fix: rename the controller method (e.g. `new` → `newest`); the route path/name (`'new'`, `api.v1.discover.new`) can stay unchanged since that's just a string, not a callable identifier. This has bitten `new` (APIDungeonRouteDiscoverController) and `list` before.
+- Never name a controller method registered with first-class callable syntax
+  (`Route::get('new', new FooController()->new(...))`) after a PHP reserved word (`new`, `list`,
+  `print`, ...) — `route:cache` serialization crashes per-request in production only, not in tests.
+  The route path/name string may keep the reserved word; only the method needs renaming. Full
+  mechanics: `api-endpoint` skill, "Reserved-word controller methods".
 
 ### Queues
 - Use queued jobs for time-consuming operations with the `ShouldQueue` interface.
@@ -151,13 +234,13 @@ review must start from a pre-reviewed, verified MR:
 ## Database (migrations)
 - Do not use foreign keys for migrations. This application does not use them, and they can cause issues with seeding and testing.
 - **Migrations must be backward-compatible with the currently-running code.** Deploys are not atomic: a cron runs `migrate` independently of the ECS web rollout, so during every deploy the old code and the new schema (and vice-versa) coexist for a window. Additive changes (new nullable/defaulted column, new table, backfill) are safe. **Destructive changes are not** — never drop a table/column, rename it, or narrow its type in the same release that removes the code using it, or the still-running old containers will 500 against the missing schema (this is what broke staging in #3497).
-- **MySQL caps identifier names at 64 characters**, and Laravel's generated index names are
-  `<table>_<column>_index` / `<table>_<col1>_<col2>_unique`. On a long table name that silently
-  overflows and `Schema::create` fails with `Identifier name '...' is too long` — *after* the table
-  itself was already created, so the migration must be dropped by hand before re-running. Pass an
-  explicit short name whenever the table name is long: `$table->unsignedBigInteger('x_id')
-  ->index('short_x_id_index')`, `$table->unique([...], 'short_unique')`.
-- Split destructive schema changes across two releases (expand/contract): release N removes the last code consumer and does any additive/backfill work while leaving the old schema in place; release N+1 ships the `drop`/rename once nothing references it. Column rename = add new + backfill + dual-write in N, drop old in N+1.
+- **MySQL caps identifier names at 64 characters** and Laravel's generated index names include the
+  table name — on long table names pass an explicit short name: `->index('short_x_id_index')`,
+  `$table->unique([...], 'short_unique')`. (The failure hits *after* the table is created, so the
+  half-made table must be dropped by hand before re-running.)
+- Split destructive schema changes across two releases (expand/contract): release N removes the
+  last code consumer while leaving the old schema in place; release N+1 ships the drop/rename.
+  Column rename = add new + backfill + dual-write in N, drop old in N+1.
 
 ## Localization
 - Use the `__()` helper function for localization and translation of strings. Use translation keys. For example: `__('view_common.my.folder.structure.welcome_to_the_website')`.

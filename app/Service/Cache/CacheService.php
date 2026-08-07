@@ -250,7 +250,7 @@ class CacheService implements CacheServiceInterface
         $this->deleteKeysByPattern([
             // MDT
             sprintf('/%smdt_npcs_[a-z_]+/', $prefix),
-            sprintf('/%smdt_enemies_[a-z_]+/', $prefix),
+            sprintf('/%smdt_enemies_[a-z_]+_\d+/', $prefix),
             // Cards - one hash per route, keyed dungeonroute_card:{id}
             sprintf('/%sdungeonroute_card:\d+/', $prefix),
             // Dungeon data used in MapContext

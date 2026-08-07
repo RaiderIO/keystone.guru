@@ -223,7 +223,7 @@ class ViewService implements ViewServiceInterface
     public function getSelectableSpellsByCategory(): Collection
     {
         return $this->cachedGlobal('selectable_spells_by_category', static fn() => Spell::where('selectable', true)
-            ->orderByRaw("CASE WHEN category = 'spells.category.general' THEN 0 ELSE 1 END")
+            ->orderByRaw("CASE WHEN category = 'spellcategory.general' THEN 0 ELSE 1 END")
             ->orderBy('category')
             ->orderBy('name')
             ->get()
@@ -432,6 +432,11 @@ class ViewService implements ViewServiceInterface
         );
     }
 
+    /**
+     * The next season, but only once an admin has marked it ready to reveal (`Season::active`). A season is
+     * seeded weeks - sometimes months - before it starts so its mapping can be reviewed, and until then it
+     * must not surface in any view - every consumer of this method wants that gated value (#3761, #3868).
+     */
     public function getNextSeasonForRegion(GameServerRegion $gameServerRegion): ?Season
     {
         return $this->cachedGlobal(
@@ -441,7 +446,9 @@ class ViewService implements ViewServiceInterface
                 // is still part of the current expansion
                 $nextExpansion = $this->expansionService->getNextExpansion($gameServerRegion) ?? $this->getCurrentExpansionForRegion($gameServerRegion);
 
-                return $this->expansionService->getNextSeason($nextExpansion, $gameServerRegion);
+                $nextSeason = $this->expansionService->getNextSeason($nextExpansion, $gameServerRegion);
+
+                return $nextSeason?->active ? $nextSeason : null;
             },
             3600,
         );

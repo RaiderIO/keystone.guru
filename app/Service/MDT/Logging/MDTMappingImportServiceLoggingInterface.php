@@ -3,6 +3,7 @@
 namespace App\Service\MDT\Logging;
 
 use Exception;
+use Throwable;
 
 interface MDTMappingImportServiceLoggingInterface
 {
@@ -14,6 +15,12 @@ interface MDTMappingImportServiceLoggingInterface
     public function importMappingVersionFromMDTCreateMappingVersion(int $version, int $id): void;
 
     public function importMappingVersionFromMDTStart(int $dungeonId): void;
+
+    /**
+     * The mapping version is not safe to leave behind half-built, so it is deleted before the exception is
+     * rethrown - see the catch block in importMappingVersionFromMDT() (#3737).
+     */
+    public function importMappingVersionFromMDTDeletePartialMappingVersion(int $version, int $id, Throwable $throwable): void;
 
     public function importMappingVersionFromMDTEnd(): void;
 

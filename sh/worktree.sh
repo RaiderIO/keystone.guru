@@ -1,14 +1,18 @@
 #!/usr/bin/env bash
 #
 # worktree.sh — manage isolated git worktrees, each with its own minimal Docker stack
-# (app + nginx) that shares the main stack's database/redis/etc.
+# (app + nginx). By default each worktree gets its OWN freshly-seeded database schemas
+# (main + combatlog, on the shared MySQL servers) and its own redis prefix; pass
+# --shared-db to instead share the main stack's database/redis data like before.
 #
 # See the `worktree-docker` skill for the full workflow and rationale.
 #
 # Usage:
-#   sh/worktree.sh create <issue>-<slug> [base-ref]   # default base-ref: origin/master
-#   sh/worktree.sh down   <issue>-<slug>              # stop the stack, keep the checkout
-#   sh/worktree.sh remove <issue>-<slug>              # stop the stack and remove the worktree
+#   sh/worktree.sh create <issue>-<slug> [base-ref] [--shared-db]  # default base-ref: origin/master
+#   sh/worktree.sh down   <issue>-<slug>              # stop the stack, keep the checkout (+ private DB)
+#   sh/worktree.sh remove <issue>-<slug>              # stop the stack, remove the worktree, drop its private DB
+#   sh/worktree.sh provision-db <issue>-<slug>        # (re)run private DB creation + migrate + seed
+#   sh/worktree.sh prune-db [--force]                 # drop private schemas whose worktree is gone
 #   sh/worktree.sh repair [<issue>-<slug>]            # reattach shared services (all stacks if omitted)
 #   sh/worktree.sh list                               # list worktrees and their stacks
 #
@@ -31,6 +35,11 @@ app-assets:keystone.guru-app-assets
 opensearch-node1:keystone.guru-opensearch-node1
 influxdb:keystone.guru-influxdb
 "
+
+# The two MySQL server containers (also listed in SHARED_SERVICES). Private per-worktree schemas
+# are created on these same servers — no extra mysql containers per worktree.
+DB_MAIN_CONTAINER="keystone.guru-db-prod"
+DB_CL_CONTAINER="keystone.guru-db-prod-combatlog"
 
 PORT_RANGE_START=8100
 PORT_RANGE_END=8199
@@ -60,6 +69,39 @@ sanitize() {
 
 project_name() {
     printf 'ksg-%s' "$(sanitize "$1")"
+}
+
+# Deterministic per-worktree schema name, safe as an UNQUOTED MySQL identifier and within the
+# 64-char identifier limit: ksg_wt_<sanitized branch, max 44> _ <8-char sha1> (7+44+1+8 = 60).
+schema_name() {
+    local san hash
+    san="$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]' | tr -c 'a-z0-9' '_' | sed 's/_*$//')"
+    hash="$(printf '%s' "$1" | sha1sum | cut -c1-8)"
+    printf 'ksg_wt_%.44s_%s' "$san" "$hash"
+}
+
+# Run SQL as root inside a db container, results tab-separated without headers. The root password
+# never touches the host or any .env: it is read from the container's own environment
+# (MYSQL_ROOT_PASSWORD), and the SQL arrives via stdin.
+db_root_sql() { # <container> <sql>
+    printf '%s\n' "$2" | docker exec -i "$1" sh -c \
+        'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" exec mysql -uroot -N'
+}
+
+# Replace an env key's value in place, appending only if the key is absent: phpdotenv keeps the
+# FIRST occurrence of a key, so appending a duplicate would silently not override. Values are
+# written, never read back.
+set_env_var() { # <file> <key> <value>
+    if grep -qE "^${2}=" "$1"; then
+        sed -i -E "s#^${2}=.*#${2}=${3}#" "$1"
+    else
+        printf '%s=%s\n' "$2" "$3" >> "$1"
+    fi
+}
+
+# Read a key from a worktree's .worktree-db marker file (empty if missing).
+marker_get() { # <wt_path> <key>
+    grep "^${2}=" "$1/.worktree-db" 2>/dev/null | head -n1 | cut -d= -f2- || true
 }
 
 port_in_use() {
@@ -139,10 +181,101 @@ unbind_session_worktree() {
     return 0
 }
 
+# Load a Laravel schema dump into a private schema as root, but only when the schema has no
+# `migrations` table yet. artisan would normally do this itself, but its schema load shells out to
+# the app image's mysql client — a MariaDB client that refuses the MySQL 8 server's self-signed
+# certificate (ERROR 2026) — so we pipe the dump into the server container directly instead. The
+# dumps include the `migrations` table + rows, so a subsequent `artisan migrate` skips its own
+# schema load and only runs the pending migrations (over PDO, which is unaffected).
+load_schema_dump() { # <container> <schema> <dump file>
+    local container="$1" schema="$2" dump="$3"
+    [ -f "$dump" ] || { echo "  ! schema dump not found: $dump" >&2; return 1; }
+    if [ -n "$(db_root_sql "$container" \
+        "SELECT 1 FROM information_schema.tables WHERE table_schema = '$schema' AND table_name = 'migrations';")" ]; then
+        echo "==> [$container] $schema already has a migrations table — skipping schema dump"
+        return 0
+    fi
+    echo "==> [$container] loading $(basename "$dump") into $schema"
+    docker exec -i "$container" sh -c \
+        'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" exec mysql -uroot "$1"' -- "$schema" < "$dump"
+}
+
+# Create + migrate + seed the worktree's private schemas on both DB servers. Idempotent: schema
+# creation is IF NOT EXISTS, migrate no-ops when current, and seeding is skipped when the schema
+# already has users (LaratrustSeeder is the final step, so seeded users == fully provisioned).
+# Safe to re-run after a mid-seed failure — the seeders swap tables via temp-table + rename.
+#
+# NOTE: every step carries an explicit `|| return 1`. This function is called from an `if !` in
+# cmd_create, and bash suppresses `set -e` inside any function invoked in a condition context —
+# without the explicit returns, a failed migrate/seed would sail through to "ready".
+provision_worktree_db() {
+    local branch="$1" wt_path="$WORKTREES_DIR/$branch" schema
+    [ "$(marker_get "$wt_path" WORKTREE_DB_MODE)" = "isolated" ] \
+        || { echo "ERROR: worktree '$branch' is not in isolated-DB mode (no .worktree-db marker, or --shared-db)" >&2; return 1; }
+    schema="$(marker_get "$wt_path" WORKTREE_DB_SCHEMA)"
+    [[ "$schema" =~ ^ksg_wt_[a-z0-9_]+$ ]] \
+        || { echo "ERROR: invalid schema name '$schema' in $wt_path/.worktree-db" >&2; return 1; }
+
+    local container main_schema users u
+    for container in "$DB_MAIN_CONTAINER" "$DB_CL_CONTAINER"; do
+        docker inspect "$container" >/dev/null 2>&1 \
+            || { echo "ERROR: $container not running — start the main stack first (docker compose up -d)" >&2; return 1; }
+        echo "==> [$container] creating schema $schema + grants"
+        db_root_sql "$container" \
+            "CREATE DATABASE IF NOT EXISTS \`$schema\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;" \
+            || return 1
+        # Grant every user that already has grants on the server's main schema (covers the app,
+        # migration and phpunit users whatever they are named), plus MYSQL_USER as a baseline.
+        main_schema="$(docker exec "$container" printenv MYSQL_DATABASE)" || return 1
+        users="$(db_root_sql "$container" \
+            "SELECT DISTINCT User FROM mysql.db WHERE Db = '${main_schema}';")" || return 1
+        users="$users
+$(docker exec "$container" printenv MYSQL_USER)"
+        for u in $(printf '%s\n' "$users" | sort -u); do
+            db_root_sql "$container" \
+                "GRANT ALL PRIVILEGES ON \`$schema\`.* TO '$u'@'%'; FLUSH PRIVILEGES;" \
+                || return 1
+        done
+    done
+
+    load_schema_dump "$DB_MAIN_CONTAINER" "$schema" "$wt_path/database/schema/migrate-schema.dump" || return 1
+    load_schema_dump "$DB_CL_CONTAINER" "$schema" "$wt_path/database/schema/combatlog-schema.dump" || return 1
+
+    echo "==> [$(date +%T)] migrating $schema (pending migrations, both DBs)"
+    ( cd "$wt_path" && docker compose exec -T app php artisan migrate --database=migrate --force ) \
+        || return 1
+    ( cd "$wt_path" && docker compose exec -T app php artisan migrate --database=combatlog \
+        --path=database/migrations_combatlog --force ) || return 1
+
+    local user_count
+    user_count="$(db_root_sql "$DB_MAIN_CONTAINER" \
+        "SELECT COUNT(*) FROM \`$schema\`.users;" 2>/dev/null || echo 0)"
+    if [ "${user_count:-0}" -gt 0 ]; then
+        echo "==> schema already seeded ($user_count users) — skipping seed"
+    else
+        echo "==> [$(date +%T)] seeding $schema (DungeonDataSeeder dominates — takes several minutes)"
+        ( cd "$wt_path" && docker compose exec -T app php artisan db:seed --database=migrate --force ) \
+            || return 1
+        echo "==> [$(date +%T)] seeding users (LaratrustSeeder: 1=admin, 2=internal_team, 3=user)"
+        ( cd "$wt_path" && docker compose exec -T app php artisan db:seed --class=LaratrustSeeder --database=migrate ) \
+            || return 1
+    fi
+    echo "==> [$(date +%T)] private DB '$schema' ready"
+}
+
 cmd_create() {
+    # `create` is positional; filter out flags first.
+    local shared_db=0 positional=() arg
+    for arg in "$@"; do
+        case "$arg" in
+            --shared-db) shared_db=1 ;;
+            *) positional+=("$arg") ;;
+        esac
+    done
+    set -- ${positional[@]+"${positional[@]}"}
     local branch="${1:-}"
     local base="${2:-origin/master}"
-    [ -n "$branch" ] || die "usage: worktree.sh create <issue>-<slug> [base-ref]"
+    [ -n "$branch" ] || die "usage: worktree.sh create <issue>-<slug> [base-ref] [--shared-db]"
 
     local project wt_path net port
     project="$(project_name "$branch")"
@@ -160,8 +293,14 @@ cmd_create() {
         mkdir -p "$WORKTREES_DIR"
         git -C "$REPO_ROOT" fetch origin --quiet 2>/dev/null || true
         if git -C "$REPO_ROOT" show-ref --verify --quiet "refs/heads/$branch"; then
-            echo "==> adding worktree for existing branch '$branch'"
+            echo "==> adding worktree for existing local branch '$branch'"
             git -C "$REPO_ROOT" worktree add "$wt_path" "$branch"
+        elif git -C "$REPO_ROOT" show-ref --verify --quiet "refs/remotes/origin/$branch"; then
+            # The branch already exists on origin (e.g. pushed by another session) but was never
+            # checked out locally here. `-b ... "$base"` below would silently branch off master
+            # instead, discarding the real branch's history — track origin's branch instead.
+            echo "==> adding worktree for existing remote branch 'origin/$branch'"
+            git -C "$REPO_ROOT" worktree add --track -b "$branch" "$wt_path" "origin/$branch"
         else
             echo "==> adding worktree '$branch' off '$base'"
             git -C "$REPO_ROOT" worktree add "$wt_path" -b "$branch" "$base"
@@ -217,6 +356,21 @@ cmd_create() {
         fi
     done
 
+    # 2d. Record the DB mode + schema name in a marker file BEFORE any DB work, so `remove` and
+    #     `prune-db` can always tell whether this worktree owns private schemas — even after a
+    #     mid-create failure. The marker (not the worktree .env, which is read-protected) is the
+    #     source of truth. A re-create of an existing dir must not silently flip modes.
+    local db_mode schema
+    if [ "$shared_db" -eq 1 ]; then db_mode=shared; else db_mode=isolated; fi
+    schema="$(schema_name "$branch")"
+    if [ -f "$wt_path/.worktree-db" ] && [ "$(marker_get "$wt_path" WORKTREE_DB_MODE)" != "$db_mode" ]; then
+        die "worktree '$branch' already exists with DB mode '$(marker_get "$wt_path" WORKTREE_DB_MODE)' — 'worktree.sh remove $branch' first to switch modes"
+    fi
+    cat > "$wt_path/.worktree-db" <<EOF
+WORKTREE_DB_MODE=$db_mode
+WORKTREE_DB_SCHEMA=$schema
+EOF
+
     # 3. Pick a free host port for this worktree's nginx. Steps 3-5 hold the create lock: the port
     #    is only actually bound at `docker compose up -d`, so pick-and-bind must be atomic across
     #    concurrent creates. Released right after step 5 (lock dies with the process on failure).
@@ -232,6 +386,16 @@ cmd_create() {
         -e "s#^APP_URL=.*#APP_URL=http://localhost:${port}#" \
         -e "s#^URL_HOST=.*#URL_HOST=http://localhost:${port}#" \
         "$wt_path/.env"
+    # Isolated mode: point both DB connections (and the phpunit one) at the private schema on the
+    # shared servers, and give redis its own prefix — the global prefix covers the default/cache/
+    # model-cache/session/queue connections, so this one key stops cached models, sessions and
+    # queued jobs from leaking between the worktree and the main stack.
+    if [ "$shared_db" -eq 0 ]; then
+        set_env_var "$wt_path/.env" DB_DATABASE           "$schema"
+        set_env_var "$wt_path/.env" DB_PHPUNIT_DATABASE   "$schema"
+        set_env_var "$wt_path/.env" DB_COMBATLOG_DATABASE "$schema"
+        set_env_var "$wt_path/.env" REDIS_PREFIX          "${project}-cache:"
+    fi
     # MAIN_THUMBNAILS_DIR is persisted into the worktree .env (not just exported) so that plain
     # `docker compose ...` invocations resolve the bind-mount source too — e.g. the profiled
     # `render` service used for Path A thumbnail rendering (see the generating-thumbnails skill).
@@ -264,7 +428,7 @@ EOF
     # is missing, so it must be (re)started only after the shared services above are attached.
     ( cd "$wt_path" && docker compose restart nginx >/dev/null 2>&1 ) || true
 
-    # 7. First-boot init inside the worktree app (shared DB is already migrated/seeded — no seed).
+    # 7. First-boot init inside the worktree app (DB provisioning, when needed, is step 7b).
     echo "==> initialising worktree app"
     # The app container runs as the host UID (#3414), so the host-owned checkout is directly
     # writable by php-fpm/artisan — no chown needed (and none possible: the exec is unprivileged).
@@ -275,12 +439,31 @@ EOF
         php artisan config:clear >/dev/null 2>&1 || true
     ' ) || echo "  ! init step reported an issue — check the app container"
 
+    # 7b. Isolated mode: create + migrate + seed the private schemas. On failure the stack is left
+    #     UP on purpose — teardown would destroy the evidence, and provisioning is retryable.
+    if [ "$shared_db" -eq 0 ]; then
+        if ! provision_worktree_db "$branch"; then
+            cat >&2 <<EOF
+ERROR: private DB provisioning failed. The stack and worktree are left UP for diagnosis.
+Retry (idempotent) with:  $SCRIPT_DIR/worktree.sh provision-db $branch
+Or tear down with:        $SCRIPT_DIR/worktree.sh remove $branch   (drops the private schemas)
+EOF
+            exit 1
+        fi
+    fi
+
     # 8. Mark the issue as actively worked on (best-effort; skipped if no leading issue number).
     set_wip_label add "$branch"
 
     # 9. Point this session's status line at the worktree (best-effort; needs the Claude session id).
     bind_session_worktree "$wt_path"
 
+    local db_line
+    if [ "$shared_db" -eq 1 ]; then
+        db_line="shared with the main stack (--shared-db — old rules apply: non-destructive migrations only, no migrate:fresh)"
+    else
+        db_line="$schema (private, freshly seeded — log in as admin@app.com / password)"
+    fi
     cat <<EOF
 
 ==> Worktree ready.
@@ -288,6 +471,7 @@ EOF
     Path:     $wt_path
     Project:  $project
     URL:      http://localhost:$port
+    DB:       $db_line
 
     Work in it:
       cd $wt_path
@@ -328,6 +512,28 @@ cmd_down() {
     # Remove the network if Compose left it behind.
     [ -n "$net" ] && docker network rm "$net" >/dev/null 2>&1 || true
     echo "==> stack '$project' stopped"
+    # Second arg suppresses the note when remove (which drops the schema right after) calls us.
+    if [ "${2:-}" != "--from-remove" ] && [ "$(marker_get "$wt_path" WORKTREE_DB_MODE)" = "isolated" ]; then
+        echo "    (private DB schema kept — only 'worktree.sh remove' drops it)"
+    fi
+}
+
+# Drop a private schema on both DB servers. Warn-and-continue on failure: `prune-db` is the
+# safety net for anything left behind.
+drop_worktree_schemas() { # <schema>
+    local schema="$1" container
+    [[ "$schema" =~ ^ksg_wt_[a-z0-9_]+$ ]] || die "refusing to drop suspicious schema name '$schema'"
+    for container in "$DB_MAIN_CONTAINER" "$DB_CL_CONTAINER"; do
+        if docker inspect "$container" >/dev/null 2>&1; then
+            if db_root_sql "$container" "DROP DATABASE IF EXISTS \`$schema\`;"; then
+                echo "==> [$container] dropped $schema"
+            else
+                echo "  ! [$container] drop of $schema failed — run 'worktree.sh prune-db' later"
+            fi
+        else
+            echo "  ! $container not running — schema $schema kept; run 'worktree.sh prune-db' later"
+        fi
+    done
 }
 
 cmd_remove() {
@@ -340,6 +546,15 @@ cmd_remove() {
         set_wip_label remove "$branch"
         unbind_session_worktree
         echo "==> no worktree checkout at $wt_path"
+        # Without a marker file we can't tell whether this worktree owned its schema, so never
+        # auto-drop — just point at prune-db if a candidate schema exists.
+        local orphan
+        orphan="$(schema_name "$branch")"
+        if docker inspect "$DB_MAIN_CONTAINER" >/dev/null 2>&1 \
+            && [ -n "$(db_root_sql "$DB_MAIN_CONTAINER" \
+                "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '$orphan';")" ]; then
+            echo "  ! orphaned schema '$orphan' detected — run 'worktree.sh prune-db' to drop it"
+        fi
         return 0
     fi
     # Seeded build artifacts (vendor/, public/*, version) are untracked and expected, so they must
@@ -348,7 +563,15 @@ cmd_remove() {
         die "worktree '$branch' has uncommitted changes to tracked files — commit/stash first, or force:
        git -C $REPO_ROOT worktree remove --force $wt_path"
     fi
-    cmd_down "$branch"
+    # Read the marker BEFORE teardown deletes the checkout. Pre-feature worktrees (no marker) and
+    # --shared-db worktrees never get a drop.
+    local db_mode="" schema=""
+    db_mode="$(marker_get "$wt_path" WORKTREE_DB_MODE)"
+    schema="$(marker_get "$wt_path" WORKTREE_DB_SCHEMA)"
+    cmd_down "$branch" --from-remove
+    if [ "$db_mode" = "isolated" ]; then
+        drop_worktree_schemas "$schema"
+    fi
 
     # Containers now run as the host UID (#3414) so this is normally a no-op, but worktrees started
     # on an older image may still hold root/www-data-owned files (storage, bootstrap/cache,
@@ -361,6 +584,58 @@ cmd_remove() {
     set_wip_label remove "$branch"
     unbind_session_worktree
     echo "==> worktree '$branch' removed"
+}
+
+# Retry entry point for a failed/interrupted `create` provisioning run. Idempotent.
+cmd_provision_db() {
+    local branch="${1:-}"
+    [ -n "$branch" ] || die "usage: worktree.sh provision-db <issue>-<slug>"
+    [ -d "$WORKTREES_DIR/$branch" ] || die "no worktree checkout at $WORKTREES_DIR/$branch"
+    provision_worktree_db "$branch"
+}
+
+# Drop private ksg_wt_* schemas whose worktree checkout no longer exists. A schema is kept when
+# ANY existing worktree claims it — via its .worktree-db marker, or (fallback, in case a marker
+# was deleted) via the deterministic schema_name of the directory name.
+cmd_prune_db() {
+    local force=0 arg
+    for arg in "$@"; do
+        case "$arg" in
+            --force) force=1 ;;
+            *) die "usage: worktree.sh prune-db [--force]" ;;
+        esac
+    done
+
+    local expected="" dir marker_schema
+    if [ -d "$WORKTREES_DIR" ]; then
+        for dir in "$WORKTREES_DIR"/*/; do
+            [ -d "$dir" ] || continue
+            marker_schema="$(marker_get "${dir%/}" WORKTREE_DB_SCHEMA)"
+            expected="$expected ${marker_schema:-} $(schema_name "$(basename "$dir")")"
+        done
+    fi
+
+    local container orphans schema found=0
+    for container in "$DB_MAIN_CONTAINER" "$DB_CL_CONTAINER"; do
+        docker inspect "$container" >/dev/null 2>&1 || { echo "  ! $container not running — skipping"; continue; }
+        orphans="$(db_root_sql "$container" \
+            "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME LIKE 'ksg\\_wt\\_%';")"
+        for schema in $orphans; do
+            [[ "$schema" =~ ^ksg_wt_[a-z0-9_]+$ ]] || { echo "  ! skipping suspicious schema name '$schema'"; continue; }
+            if printf '%s\n' $expected | grep -qx "$schema"; then
+                continue
+            fi
+            found=1
+            if [ "$force" -eq 1 ]; then
+                db_root_sql "$container" "DROP DATABASE IF EXISTS \`$schema\`;" \
+                    && echo "==> [$container] dropped orphan $schema" \
+                    || echo "  ! [$container] drop of $schema failed"
+            else
+                echo "==> [$container] orphan schema: $schema (re-run with --force to drop)"
+            fi
+        done
+    done
+    [ "$found" -eq 1 ] || echo "==> no orphaned worktree schemas found"
 }
 
 # Re-wire worktree stacks after a main-stack restart: restarting the main stack detaches the shared
@@ -417,19 +692,25 @@ main() {
     local cmd="${1:-}"
     shift || true
     case "$cmd" in
-        create) cmd_create "$@" ;;
-        down)   cmd_down "$@" ;;
-        remove) cmd_remove "$@" ;;
-        repair) cmd_repair "$@" ;;
-        push)   cmd_push "$@" ;;
-        list)   cmd_list "$@" ;;
+        create)       cmd_create "$@" ;;
+        down)         cmd_down "$@" ;;
+        remove)       cmd_remove "$@" ;;
+        provision-db) cmd_provision_db "$@" ;;
+        prune-db)     cmd_prune_db "$@" ;;
+        repair)       cmd_repair "$@" ;;
+        push)         cmd_push "$@" ;;
+        list)         cmd_list "$@" ;;
         *)
             cat >&2 <<EOF
 usage: worktree.sh <command> [args]
 
-  create <issue>-<slug> [base-ref]   create a worktree + isolated Docker stack (base: origin/master)
-  down   <issue>-<slug>              stop the stack, keep the checkout
-  remove <issue>-<slug>              stop the stack and remove the worktree
+  create <issue>-<slug> [base-ref] [--shared-db]
+                                     create a worktree + isolated Docker stack (base: origin/master);
+                                     seeds a private DB unless --shared-db is given
+  down   <issue>-<slug>              stop the stack, keep the checkout (private DB kept too)
+  remove <issue>-<slug>              stop the stack, remove the worktree, drop its private DB
+  provision-db <issue>-<slug>        (re)run private DB creation + migrate + seed (idempotent)
+  prune-db [--force]                 list/drop private schemas whose worktree checkout is gone
   repair [<issue>-<slug>]            reattach shared services + restart nginx (all stacks if omitted)
   push   [git-push-args...]          push the current branch via the scoped deploy key
   list                              list worktrees and running stacks

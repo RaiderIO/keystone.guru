@@ -52,9 +52,12 @@ class Copy extends Command
         // Create a new mapping version for our dungeon
         $newMappingVersion = $mappingService->createNewMappingVersionFromPreviousMapping($sourceDungeon, $gameVersion);
 
+        // Scoped by $gameVersion, not the target dungeon's ambient "current" mapping version - `version`
+        // is only unique per game_version_id, so an unscoped lookup could pick an unrelated game
+        // version's number here (see #3720).
         $newMappingVersion->update([
             'dungeon_id' => $targetDungeon->id,
-            'version'    => ($targetDungeon->getCurrentMappingVersion()?->version ?? 0) + 1, // @phpstan-ignore nullsafe.neverNull
+            'version'    => ($targetDungeon->getCurrentMappingVersionForGameVersion($gameVersion)?->version ?? 0) + 1, // @phpstan-ignore nullsafe.neverNull
         ]);
 
         if ($sourceDungeonKey !== $targetDungeonKey) {

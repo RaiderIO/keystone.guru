@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\DungeonRoute\DungeonRoutePlayerClass;
 use App\Models\DungeonRoute\DungeonRoutePlayerRace;
-use App\Models\Traits\HasIconFile;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -30,13 +29,11 @@ use Str;
  */
 class CharacterClass extends CacheModel
 {
-    use HasIconFile;
     use SeederModel;
 
     public $timestamps = false;
 
     public $hidden = [
-        'icon_file_id',
         'pivot',
     ];
 
@@ -45,7 +42,6 @@ class CharacterClass extends CacheModel
         'key',
         'name',
         'color',
-        'icon_file_id',
     ];
 
     protected $appends = ['icon_url'];

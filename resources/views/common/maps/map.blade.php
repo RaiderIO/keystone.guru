@@ -252,37 +252,16 @@ if ($isAdmin) {
         });
     </script>
 
-    @if($dungeon->isFactionSelectionRequired())
-        <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
-            <div id="map_faction_display_controls" class="leaflet-draw-section">
-                <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
-            @foreach(Faction::where('key', '<>', Faction::FACTION_UNSPECIFIED)->get() as $faction)
-                <a class="map_faction_display_control map_controls_custom" href="#"
-                   data-faction="{{ strtolower($faction->key) }}"
-                           title="{{ __($faction->name) }}">
-                            <i class="{{ $loop->index === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
-                               style="width: 15px"></i>
-                            <img src="{{ $faction->iconfile->icon_url }}" class="select_icon faction_icon"
-                                 data-bs-toggle="tooltip" title="{{ __($faction->name) }}"
-                                 alt="Faction"/>
-                        </a>
-
-            @endforeach
-            </div>
-            <ul class="leaflet-draw-actions"></ul>
-        </div>
-
-
-        </script>
-    @endif
 @endsection
 
 @if(!$noUI)
     @if(isset($show['header']) && $show['header'])
         <nav id="map_header" class="map_fade_out">
             @include('common.layout.header', [
+                'headerId' => false,
                 'showMore' => true,
                 'showDungeonContext' => !($mapContext instanceof MapContextDungeonRoute),
+                'showGameVersionSelection' => false,
                 'forceShrink' => true,
                 'dungeonContextLinks' => $dungeonContextLinks,
             ])
@@ -298,17 +277,8 @@ if ($isAdmin) {
                 'mappingVersion' => $mappingVersion,
             ])
         </nav>
-        {{--        @include('common.maps.controls.header', [--}}
-        {{--            'echo' => $echo,--}}
-        {{--            'edit' => $edit,--}}
-        {{--            'mapContext' => $mapContext,--}}
-        {{--            'dungeon' => $dungeon,--}}
-        {{--            'floor' => $floor,--}}
-        {{--            'headerTitle' => $headerTitle,--}}
-        {{--            'dungeonroute' => $dungeonroute,--}}
-        {{--            'liveSession' => $liveSession,--}}
-        {{--            'mappingVersion' => $mappingVersion,--}}
-        {{--        ])--}}
+        {{-- Publishes --ksg-header-height for elements positioned below the header (route sidebar) --}}
+        @include('common.general.inline', ['path' => 'common/general/siteheader'])
     @endif
 
     @if(isset($show['controls']['draw']) && $show['controls']['draw'])

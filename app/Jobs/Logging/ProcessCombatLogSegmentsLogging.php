@@ -26,8 +26,20 @@ class ProcessCombatLogSegmentsLogging extends StructuredLogging implements Proce
         $this->error(__METHOD__, get_defined_vars());
     }
 
-    public function handleParseError(int $runId, int $combatLogVersion, string $message, string $class): void
+    public function handleSegmentIsNotACombatLog(int $runId, int $segmentId, string $tempPath): void
     {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function handleParseError(
+        int     $runId,
+        ?int    $seasonId,
+        int     $combatLogVersion,
+        ?int    $lineNumber,
+        string  $exceptionClass,
+        string  $message,
+        ?string $rawLine,
+    ): void {
         $this->error(__METHOD__, get_defined_vars());
     }
 

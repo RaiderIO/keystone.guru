@@ -2,16 +2,16 @@
 
 namespace App\Service\CombatLog;
 
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteChallengeModeRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteCoordRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteCorrectionRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteMetadataRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRoutePlayerDeathRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRosterRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSettingsRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteChallengeModeRequestDto;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteCoordRequestDto;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteCorrectionRequestDto;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteMetadataRequestDto;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteNpcRequestDto;
+use App\Dto\Request\CombatLog\Route\CombatLogRoutePlayerDeathRequestDto;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestDto;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteRosterRequestDto;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteSettingsRequestDto;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteSpellRequestDto;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd as ChallengeModeEndSpecialEvent;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart as ChallengeModeStartSpecialEvent;
 use App\Logic\Structs\IngameXY;
@@ -36,6 +36,9 @@ use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
+// The Stub\* repositories below are imported concretely on purpose and must NOT be replaced by their interfaces: the
+// container binds those interfaces to the persisting Database\* implementations. See the docblocks on
+// convertCombatLogRouteToCombatLogEvents() and correctCombatLogRoute() for why those two flows must not persist.
 use App\Repositories\Stub\DungeonRoute\DungeonRouteAffixGroupRepository as DungeonRouteAffixGroupRepositoryStub;
 use App\Repositories\Stub\DungeonRoute\DungeonRouteRepository as DungeonRouteRepositoryStub;
 use App\Repositories\Stub\KillZone\KillZoneEnemyRepository as KillZoneEnemyRepositoryStub;
@@ -108,7 +111,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
      * @throws DungeonNotSupportedException
      * @throws Exception
      */
-    public function convertCombatLogRouteToDungeonRoute(CombatLogRouteRequestModel $combatLogRoute): DungeonRoute
+    public function convertCombatLogRouteToDungeonRoute(CombatLogRouteRequestDto $combatLogRoute): DungeonRoute
     {
         $dungeonRoute = new CombatLogRouteDungeonRouteBuilder(
             $this->seasonService,
@@ -143,10 +146,17 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     }
 
     /**
+     * Converts a combat log route into CombatLogEvents WITHOUT persisting anything: the DungeonRoute and its kill zones
+     * are only scaffolding needed to place the events on the map, and the caller discards them.
+     *
+     * The builder writes through repositories, so the ones that would otherwise create rows are passed as explicit
+     * Stub\* instances rather than resolved from the container - the container binds those interfaces to the persisting
+     * Database\* implementations. The read-only repositories ($enemyRepository and friends) are the injected ones.
+     *
      * @throws DungeonNotSupportedException
      * @throws Exception
      */
-    public function convertCombatLogRouteToCombatLogEvents(CombatLogRouteRequestModel $combatLogRoute): Collection
+    public function convertCombatLogRouteToCombatLogEvents(CombatLogRouteRequestDto $combatLogRoute): Collection
     {
         $builder = new CombatLogRouteCombatLogEventsBuilder(
             $this->seasonService,
@@ -171,12 +181,19 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     }
 
     /**
+     * Corrects a combat log route in-place and hands the corrected route back to the caller. Nothing is persisted - the
+     * DungeonRoute built along the way exists only so the builder can resolve enemies/floors, and is thrown away.
+     *
+     * Same reasoning as convertCombatLogRouteToCombatLogEvents(): the writing repositories are explicit Stub\* instances
+     * because the container binds their interfaces to the persisting Database\* implementations. The read-only ones pick
+     * the Swoole variant when running on Octane, which caches its data across requests instead of hitting the DB.
+     *
      * @throws DungeonNotSupportedException
      * @throws Exception
      */
     public function correctCombatLogRoute(
-        CombatLogRouteRequestModel $combatLogRoute,
-    ): CombatLogRouteCorrectionRequestModel {
+        CombatLogRouteRequestDto $combatLogRoute,
+    ): CombatLogRouteCorrectionRequestDto {
         $isSwoole = onSwooleServer();
 
         $builder = new CombatLogRouteCorrectionBuilder(
@@ -207,7 +224,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     public function getCombatLogRoute(
         string $combatLogFilePath,
         bool   $dungeonOrRaid = false,
-    ): ?CombatLogRouteRequestModel {
+    ): ?CombatLogRouteRequestDto {
         ini_set('max_execution_time', 1800);
 
         try {
@@ -225,9 +242,9 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                 $seconds      = random_int(1200, 2400);
                 $milliseconds = $seconds * 1000;
 
-                $challengeMode = new CombatLogRouteChallengeModeRequestModel(
-                    Carbon::now()->subSeconds($seconds)->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
-                    Carbon::now()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
+                $challengeMode = new CombatLogRouteChallengeModeRequestDto(
+                    Carbon::now()->subSeconds($seconds)->format(CombatLogRouteRequestDto::DATE_TIME_FORMAT),
+                    Carbon::now()->format(CombatLogRouteRequestDto::DATE_TIME_FORMAT),
                     true,
                     $milliseconds,
                     $milliseconds,
@@ -260,9 +277,9 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     BaseResultEvent $resultEvent,
                 ) => $resultEvent instanceof PlayerDiedResultEvent);
 
-                $challengeMode = new CombatLogRouteChallengeModeRequestModel(
-                    $challengeModeStartEvent->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
-                    $challengeModeEndEvent->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
+                $challengeMode = new CombatLogRouteChallengeModeRequestDto(
+                    $challengeModeStartEvent->getTimestamp()->format(CombatLogRouteRequestDto::DATE_TIME_FORMAT),
+                    $challengeModeEndEvent->getTimestamp()->format(CombatLogRouteRequestDto::DATE_TIME_FORMAT),
                     (bool)$challengeModeEndEvent->getSuccess(),
                     $challengeModeEndEvent->getTotalTimeMS(),
                     $challengeModeEndEvent->getTotalTimeMS(),
@@ -325,12 +342,12 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     $npcEngagedEvents->forget($guid->getGuid());
 
                     $npcs->push(
-                        new CombatLogRouteNpcRequestModel(
+                        new CombatLogRouteNpcRequestDto(
                             $guid->getId(),
                             $guid->getSpawnUID(),
-                            $npcEngagedEvent->getEngagedEvent()->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
-                            $resultEvent->getBaseEvent()->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
-                            new CombatLogRouteCoordRequestModel(
+                            $npcEngagedEvent->getEngagedEvent()->getTimestamp()->format(CombatLogRouteRequestDto::DATE_TIME_FORMAT),
+                            $resultEvent->getBaseEvent()->getTimestamp()->format(CombatLogRouteRequestDto::DATE_TIME_FORMAT),
+                            new CombatLogRouteCoordRequestDto(
                                 $npcEngagedEvent->getEngagedEvent()->getAdvancedData()->getPositionX(),
                                 $npcEngagedEvent->getEngagedEvent()->getAdvancedData()->getPositionY(),
                                 $npcEngagedEvent->getEngagedEvent()->getAdvancedData()->getUiMapId(),
@@ -341,12 +358,12 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     $advancedData = $resultEvent->getAdvancedCombatLogEvent()->getAdvancedData();
 
                     $spells->push(
-                        new CombatLogRouteSpellRequestModel(
+                        new CombatLogRouteSpellRequestDto(
                             $resultEvent->getSpellId(),
                             // We use the owner guid if available (in case a pet cast this), otherwise we use the info guid (which is the owner/caster)
                             $advancedData->getOwnerGuid()?->getGuid() ?? $advancedData->getInfoGuid()->getGuid(),
-                            $resultEvent->getBaseEvent()->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
-                            new CombatLogRouteCoordRequestModel(
+                            $resultEvent->getBaseEvent()->getTimestamp()->format(CombatLogRouteRequestDto::DATE_TIME_FORMAT),
+                            new CombatLogRouteCoordRequestDto(
                                 $advancedData->getPositionX(),
                                 $advancedData->getPositionY(),
                                 $advancedData->getUiMapId(),
@@ -363,7 +380,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     }
 
                     $playerDeaths->push(
-                        new CombatLogRoutePlayerDeathRequestModel(
+                        new CombatLogRoutePlayerDeathRequestDto(
                             // Extract the index of the combatant consistently
                             $mostRecentCombatantInfo->mapWithKeys(
                                 static fn(CombatantInfoResultEvent $combatantInfo, string $guidKey) => [
@@ -373,8 +390,8 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                             $combatantInfo->getClass()->class_id,
                             $combatantInfo->getSpecialization()->specialization_id,
                             $combatantInfo->getCombatantInfoEvent()->getAverageItemLevel(),
-                            $resultEvent->getBaseEvent()->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
-                            new CombatLogRouteCoordRequestModel(
+                            $resultEvent->getBaseEvent()->getTimestamp()->format(CombatLogRouteRequestDto::DATE_TIME_FORMAT),
+                            new CombatLogRouteCoordRequestDto(
                                 $resultEvent->getLastKnownEvent()?->getAdvancedData()->getPositionX(),
                                 $resultEvent->getLastKnownEvent()?->getAdvancedData()->getPositionY(),
                                 $resultEvent->getLastKnownEvent()?->getAdvancedData()->getUiMapId(),
@@ -388,8 +405,8 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                 throw new Exception("Found enemies that weren't killed!");
             }
 
-            return new CombatLogRouteRequestModel(
-                new CombatLogRouteMetadataRequestModel(
+            return new CombatLogRouteRequestDto(
+                new CombatLogRouteMetadataRequestDto(
                     Uuid::uuid4()->toString(),
                     98765,
                     87654,
@@ -399,9 +416,9 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     'live',
                     1,
                 ),
-                new CombatLogRouteSettingsRequestModel(true, true, $dungeonRoute->mappingVersion->version),
+                new CombatLogRouteSettingsRequestDto(true, true, $dungeonRoute->mappingVersion->version),
                 $challengeMode,
-                new CombatLogRouteRosterRequestModel(
+                new CombatLogRouteRosterRequestDto(
                     $mostRecentCombatantInfo->count(),
                     $mostRecentCombatantInfo->map(
                         static fn(
@@ -433,7 +450,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         }
     }
 
-    private function saveChallengeModeRun(CombatLogRouteRequestModel $combatLogRoute, DungeonRoute $dungeonRoute): void
+    private function saveChallengeModeRun(CombatLogRouteRequestDto $combatLogRoute, DungeonRoute $dungeonRoute): void
     {
         // The dungeon route ID was changed, so we need to update the challenge mode run
         // but don't store this info twice, not necessary
@@ -473,9 +490,9 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     }
 
     private function saveCombatLogRouteEnemyFailures(
-        MappingVersion             $mappingVersion,
-        CombatLogRouteRequestModel $combatLogRoute,
-        DungeonRoute               $dungeonRoute,
+        MappingVersion           $mappingVersion,
+        CombatLogRouteRequestDto $combatLogRoute,
+        DungeonRoute             $dungeonRoute,
     ): void {
         $now               = now();
         $failureAttributes = [];
@@ -517,9 +534,9 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     }
 
     private function generateMapIcons(
-        MappingVersion             $mappingVersion,
-        CombatLogRouteRequestModel $combatLogRoute,
-        ?DungeonRoute              $dungeonRoute = null,
+        MappingVersion           $mappingVersion,
+        CombatLogRouteRequestDto $combatLogRoute,
+        ?DungeonRoute            $dungeonRoute = null,
     ): void {
         $now                 = now();
         $mapIconAttributes   = [];

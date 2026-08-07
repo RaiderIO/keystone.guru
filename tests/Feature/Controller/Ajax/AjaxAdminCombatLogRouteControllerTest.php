@@ -20,6 +20,7 @@ use Tests\TestCases\AjaxPublicTestCase;
 final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
 {
     use ProvidesDungeon;
+
     private Dungeon $dungeon;
 
     private Floor $floor;
@@ -35,10 +36,16 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
         // instead of returning a JSON 422 response.
         $this->defaultHeaders['Accept'] = 'application/json';
 
-        $dungeon              = $this->getDungeonWithNonFacadeFloor();
-        $this->dungeon        = $dungeon;
-        $this->floor          = $dungeon->floors()->where('facade', 0)->first();
-        $this->mappingVersion = $dungeon->getCurrentMappingVersion();
+        // The default facade style collapses all heatmap data onto the facade floor, which makes
+        // assertions on a specific (non-facade) floor_id non-deterministic depending on the dungeon
+        // picked below. Force split floors so real floor ids are preserved in the response.
+        User::forceMapFacadeStyle(User::MAP_FACADE_STYLE_SPLIT_FLOORS);
+
+        [$this->dungeon, $this->mappingVersion] = $this->findDungeon(facadeEnabled: false);
+
+        /** @var Floor $floor */
+        $floor       = $this->dungeon->floors()->where('facade', 0)->first();
+        $this->floor = $floor;
     }
 
     #[\Override]

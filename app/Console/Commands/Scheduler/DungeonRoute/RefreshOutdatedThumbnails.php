@@ -30,10 +30,8 @@ class RefreshOutdatedThumbnails extends SchedulerCommand
      */
     public function handle(DungeonRouteServiceInterface $dungeonRouteService): int
     {
-        $this->trackTime(function () use ($dungeonRouteService) {
+        return $this->trackTime(function () use ($dungeonRouteService) {
             $dungeonRouteService->refreshOutdatedThumbnails();
         });
-
-        return 0;
     }
 }

@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Ajax;
 use App\Events\Models\Path\PathChangedEvent;
 use App\Events\Models\Path\PathDeletedEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\EnforcesDungeonRouteLimits;
 use App\Http\Controllers\Traits\SavesPolylines;
 use App\Http\Controllers\Traits\ValidatesFloorId;
 use App\Http\Requests\Path\APIPathFormRequest;
 use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteLimitType;
 use App\Models\Path;
 use App\Models\Polyline;
 use App\Models\User;
@@ -21,11 +23,11 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use Mockery\Exception;
 use Teapot\StatusCode\Http;
 
 class AjaxPathController extends Controller
 {
+    use EnforcesDungeonRouteLimits;
     use SavesPolylines;
     use ValidatesFloorId;
 
@@ -43,7 +45,7 @@ class AjaxPathController extends Controller
         $dungeonRoute = $path?->dungeonRoute ?? $dungeonRoute; // @phpstan-ignore nullsafe.neverNull
 
         Gate::authorize('edit', $dungeonRoute);
-        Gate::authorize('addPath', $dungeonRoute);
+        $this->abortIfDungeonRouteLimitReached($dungeonRoute, DungeonRouteLimitType::Paths);
 
         $validated = $request->validated();
 
@@ -52,57 +54,58 @@ class AjaxPathController extends Controller
             return $result;
         }
 
-        DB::transaction(function () use ($coordinatesService, $path, $dungeonRoute, $validated, &$result) {
-            $beforeModel = $path === null ? null : clone $path;
+        try {
+            DB::transaction(function () use ($coordinatesService, $path, $dungeonRoute, $validated, &$result) {
+                $beforeModel = $path === null ? null : clone $path;
 
-            if ($path === null) {
-                $path = Path::create([
-                    'dungeon_route_id' => $dungeonRoute->id,
-                    'floor_id'         => $validated['floor_id'],
-                    'polyline_id'      => -1,
-                ]);
-                $success = true;
-            } else {
-                $success = $path->update([
-                    'dungeon_route_id' => $dungeonRoute->id,
-                    'floor_id'         => $validated['floor_id'],
-                ]);
-            }
-
-            try {
-                if ($success) {
-                    // Create a new polyline and save it
-                    $this->savePolylineToModel(
-                        $coordinatesService,
-                        $dungeonRoute,
-                        $dungeonRoute->mappingVersion,
-                        Polyline::findOrNew($path->polyline_id),
-                        $beforeModel,
-                        $path,
-                        $validated['polyline'],
-                    );
-
-                    // Set or unset the linked awakened obelisks now that we have an ID
-                    $path->setLinkedAwakenedObeliskByMapIconId($validated['linked_awakened_obelisk_id'] ?? null);
-
-                    // Something's updated; broadcast it
-                    if (Auth::check()) {
-                        /** @var User $user */
-                        $user = Auth::getUser();
-                        broadcast(new PathChangedEvent($coordinatesService, $dungeonRoute, $user, $path));
-                    }
-
-                    // Touch the route so that the thumbnail gets updated
-                    $dungeonRoute->touch();
+                if ($path === null) {
+                    $path = Path::create([
+                        'dungeon_route_id' => $dungeonRoute->id,
+                        'floor_id'         => $validated['floor_id'],
+                        'polyline_id'      => -1,
+                    ]);
+                    $success = true;
                 } else {
+                    $success = $path->update([
+                        'dungeon_route_id' => $dungeonRoute->id,
+                        'floor_id'         => $validated['floor_id'],
+                    ]);
+                }
+
+                if (! $success) {
+                    // Caught below, which rolls back this transaction and responds with a 404
                     throw new \Exception(__('controller.path.error.unable_to_save_path'));
                 }
 
+                // Create a new polyline and save it
+                $this->savePolylineToModel(
+                    $coordinatesService,
+                    $dungeonRoute,
+                    $dungeonRoute->mappingVersion,
+                    Polyline::findOrNew($path->polyline_id),
+                    $beforeModel,
+                    $path,
+                    $validated['polyline'],
+                );
+
+                // Set or unset the linked awakened obelisks now that we have an ID
+                $path->setLinkedAwakenedObeliskByMapIconId($validated['linked_awakened_obelisk_id'] ?? null);
+
+                // Something's updated; broadcast it
+                if (Auth::check()) {
+                    /** @var User $user */
+                    $user = Auth::getUser();
+                    broadcast(new PathChangedEvent($coordinatesService, $dungeonRoute, $user, $path));
+                }
+
+                // Touch the route so that the thumbnail gets updated
+                $dungeonRoute->touch();
+
                 $result = $path;
-            } catch (Exception) {
-                $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
-            }
-        });
+            });
+        } catch (\Exception) {
+            $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
+        }
 
         return $result;
     }

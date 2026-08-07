@@ -2,20 +2,20 @@
 
 namespace App\Http\Requests\Api\V1\CombatLog\Route;
 
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestDto;
 use App\Http\Requests\Api\V1\APIFormRequest;
 use App\Models\Dungeon;
 use App\Rules\CombatLogRouteNpcChronologicalRule;
 use Illuminate\Validation\Rule;
 
 /**
- * @method CombatLogRouteRequestModel|null getModel()
+ * @method CombatLogRouteRequestDto|null getDto()
  */
 class CombatLogRouteRequest extends APIFormRequest
 {
-    protected function getRequestModelClass(): string
+    protected function getRequestDtoClass(): string
     {
-        return CombatLogRouteRequestModel::class;
+        return CombatLogRouteRequestDto::class;
     }
 
     /**
@@ -29,7 +29,7 @@ class CombatLogRouteRequest extends APIFormRequest
     /** @return array<string, mixed> */
     public function rules(): array
     {
-        $dateFormat = sprintf('date_format:"%s"', CombatLogRouteRequestModel::DATE_TIME_FORMAT);
+        $dateFormat = sprintf('date_format:"%s"', CombatLogRouteRequestDto::DATE_TIME_FORMAT);
 
         return [
             'metadata.runId' => [

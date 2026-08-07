@@ -1,0 +1,897 @@
+[
+    {
+        "id": 1,
+        "season_id": 1,
+        "dungeon_id": 14
+    },
+    {
+        "id": 2,
+        "season_id": 1,
+        "dungeon_id": 15
+    },
+    {
+        "id": 3,
+        "season_id": 1,
+        "dungeon_id": 16
+    },
+    {
+        "id": 4,
+        "season_id": 1,
+        "dungeon_id": 17
+    },
+    {
+        "id": 5,
+        "season_id": 1,
+        "dungeon_id": 18
+    },
+    {
+        "id": 6,
+        "season_id": 1,
+        "dungeon_id": 19
+    },
+    {
+        "id": 7,
+        "season_id": 1,
+        "dungeon_id": 20
+    },
+    {
+        "id": 8,
+        "season_id": 1,
+        "dungeon_id": 21
+    },
+    {
+        "id": 9,
+        "season_id": 1,
+        "dungeon_id": 22
+    },
+    {
+        "id": 10,
+        "season_id": 1,
+        "dungeon_id": 23
+    },
+    {
+        "id": 11,
+        "season_id": 1,
+        "dungeon_id": 24
+    },
+    {
+        "id": 12,
+        "season_id": 1,
+        "dungeon_id": 25
+    },
+    {
+        "id": 13,
+        "season_id": 1,
+        "dungeon_id": 26
+    },
+    {
+        "id": 14,
+        "season_id": 1,
+        "dungeon_id": 27
+    },
+    {
+        "id": 15,
+        "season_id": 2,
+        "dungeon_id": 14
+    },
+    {
+        "id": 16,
+        "season_id": 2,
+        "dungeon_id": 15
+    },
+    {
+        "id": 17,
+        "season_id": 2,
+        "dungeon_id": 16
+    },
+    {
+        "id": 18,
+        "season_id": 2,
+        "dungeon_id": 17
+    },
+    {
+        "id": 19,
+        "season_id": 2,
+        "dungeon_id": 18
+    },
+    {
+        "id": 20,
+        "season_id": 2,
+        "dungeon_id": 19
+    },
+    {
+        "id": 21,
+        "season_id": 2,
+        "dungeon_id": 20
+    },
+    {
+        "id": 22,
+        "season_id": 2,
+        "dungeon_id": 21
+    },
+    {
+        "id": 23,
+        "season_id": 2,
+        "dungeon_id": 22
+    },
+    {
+        "id": 24,
+        "season_id": 2,
+        "dungeon_id": 23
+    },
+    {
+        "id": 25,
+        "season_id": 2,
+        "dungeon_id": 24
+    },
+    {
+        "id": 26,
+        "season_id": 2,
+        "dungeon_id": 25
+    },
+    {
+        "id": 27,
+        "season_id": 2,
+        "dungeon_id": 26
+    },
+    {
+        "id": 28,
+        "season_id": 2,
+        "dungeon_id": 27
+    },
+    {
+        "id": 29,
+        "season_id": 3,
+        "dungeon_id": 14
+    },
+    {
+        "id": 30,
+        "season_id": 3,
+        "dungeon_id": 15
+    },
+    {
+        "id": 31,
+        "season_id": 3,
+        "dungeon_id": 16
+    },
+    {
+        "id": 32,
+        "season_id": 3,
+        "dungeon_id": 17
+    },
+    {
+        "id": 33,
+        "season_id": 3,
+        "dungeon_id": 18
+    },
+    {
+        "id": 34,
+        "season_id": 3,
+        "dungeon_id": 19
+    },
+    {
+        "id": 35,
+        "season_id": 3,
+        "dungeon_id": 20
+    },
+    {
+        "id": 36,
+        "season_id": 3,
+        "dungeon_id": 21
+    },
+    {
+        "id": 37,
+        "season_id": 3,
+        "dungeon_id": 22
+    },
+    {
+        "id": 38,
+        "season_id": 3,
+        "dungeon_id": 23
+    },
+    {
+        "id": 39,
+        "season_id": 3,
+        "dungeon_id": 24
+    },
+    {
+        "id": 40,
+        "season_id": 3,
+        "dungeon_id": 25
+    },
+    {
+        "id": 41,
+        "season_id": 3,
+        "dungeon_id": 26
+    },
+    {
+        "id": 42,
+        "season_id": 3,
+        "dungeon_id": 27
+    },
+    {
+        "id": 43,
+        "season_id": 4,
+        "dungeon_id": 14
+    },
+    {
+        "id": 44,
+        "season_id": 4,
+        "dungeon_id": 15
+    },
+    {
+        "id": 45,
+        "season_id": 4,
+        "dungeon_id": 16
+    },
+    {
+        "id": 46,
+        "season_id": 4,
+        "dungeon_id": 17
+    },
+    {
+        "id": 47,
+        "season_id": 4,
+        "dungeon_id": 18
+    },
+    {
+        "id": 48,
+        "season_id": 4,
+        "dungeon_id": 19
+    },
+    {
+        "id": 49,
+        "season_id": 4,
+        "dungeon_id": 20
+    },
+    {
+        "id": 50,
+        "season_id": 4,
+        "dungeon_id": 21
+    },
+    {
+        "id": 51,
+        "season_id": 4,
+        "dungeon_id": 22
+    },
+    {
+        "id": 52,
+        "season_id": 4,
+        "dungeon_id": 23
+    },
+    {
+        "id": 53,
+        "season_id": 4,
+        "dungeon_id": 24
+    },
+    {
+        "id": 54,
+        "season_id": 4,
+        "dungeon_id": 25
+    },
+    {
+        "id": 55,
+        "season_id": 4,
+        "dungeon_id": 26
+    },
+    {
+        "id": 56,
+        "season_id": 4,
+        "dungeon_id": 27
+    },
+    {
+        "id": 57,
+        "season_id": 5,
+        "dungeon_id": 28
+    },
+    {
+        "id": 58,
+        "season_id": 5,
+        "dungeon_id": 29
+    },
+    {
+        "id": 59,
+        "season_id": 5,
+        "dungeon_id": 30
+    },
+    {
+        "id": 60,
+        "season_id": 5,
+        "dungeon_id": 31
+    },
+    {
+        "id": 61,
+        "season_id": 5,
+        "dungeon_id": 32
+    },
+    {
+        "id": 62,
+        "season_id": 5,
+        "dungeon_id": 33
+    },
+    {
+        "id": 63,
+        "season_id": 5,
+        "dungeon_id": 34
+    },
+    {
+        "id": 64,
+        "season_id": 5,
+        "dungeon_id": 35
+    },
+    {
+        "id": 65,
+        "season_id": 5,
+        "dungeon_id": 36
+    },
+    {
+        "id": 66,
+        "season_id": 5,
+        "dungeon_id": 37
+    },
+    {
+        "id": 67,
+        "season_id": 6,
+        "dungeon_id": 28
+    },
+    {
+        "id": 68,
+        "season_id": 6,
+        "dungeon_id": 29
+    },
+    {
+        "id": 69,
+        "season_id": 6,
+        "dungeon_id": 30
+    },
+    {
+        "id": 70,
+        "season_id": 6,
+        "dungeon_id": 31
+    },
+    {
+        "id": 71,
+        "season_id": 6,
+        "dungeon_id": 32
+    },
+    {
+        "id": 72,
+        "season_id": 6,
+        "dungeon_id": 33
+    },
+    {
+        "id": 73,
+        "season_id": 6,
+        "dungeon_id": 34
+    },
+    {
+        "id": 74,
+        "season_id": 6,
+        "dungeon_id": 35
+    },
+    {
+        "id": 75,
+        "season_id": 6,
+        "dungeon_id": 36
+    },
+    {
+        "id": 76,
+        "season_id": 6,
+        "dungeon_id": 37
+    },
+    {
+        "id": 77,
+        "season_id": 7,
+        "dungeon_id": 1
+    },
+    {
+        "id": 78,
+        "season_id": 7,
+        "dungeon_id": 2
+    },
+    {
+        "id": 79,
+        "season_id": 7,
+        "dungeon_id": 3
+    },
+    {
+        "id": 80,
+        "season_id": 7,
+        "dungeon_id": 4
+    },
+    {
+        "id": 81,
+        "season_id": 7,
+        "dungeon_id": 5
+    },
+    {
+        "id": 82,
+        "season_id": 7,
+        "dungeon_id": 6
+    },
+    {
+        "id": 83,
+        "season_id": 7,
+        "dungeon_id": 7
+    },
+    {
+        "id": 84,
+        "season_id": 7,
+        "dungeon_id": 8
+    },
+    {
+        "id": 85,
+        "season_id": 7,
+        "dungeon_id": 9
+    },
+    {
+        "id": 86,
+        "season_id": 7,
+        "dungeon_id": 10
+    },
+    {
+        "id": 87,
+        "season_id": 7,
+        "dungeon_id": 11
+    },
+    {
+        "id": 88,
+        "season_id": 7,
+        "dungeon_id": 12
+    },
+    {
+        "id": 89,
+        "season_id": 7,
+        "dungeon_id": 13
+    },
+    {
+        "id": 90,
+        "season_id": 8,
+        "dungeon_id": 28
+    },
+    {
+        "id": 91,
+        "season_id": 8,
+        "dungeon_id": 29
+    },
+    {
+        "id": 92,
+        "season_id": 8,
+        "dungeon_id": 30
+    },
+    {
+        "id": 93,
+        "season_id": 8,
+        "dungeon_id": 31
+    },
+    {
+        "id": 94,
+        "season_id": 8,
+        "dungeon_id": 32
+    },
+    {
+        "id": 95,
+        "season_id": 8,
+        "dungeon_id": 33
+    },
+    {
+        "id": 96,
+        "season_id": 8,
+        "dungeon_id": 34
+    },
+    {
+        "id": 97,
+        "season_id": 8,
+        "dungeon_id": 35
+    },
+    {
+        "id": 98,
+        "season_id": 8,
+        "dungeon_id": 36
+    },
+    {
+        "id": 99,
+        "season_id": 8,
+        "dungeon_id": 37
+    },
+    {
+        "id": 100,
+        "season_id": 9,
+        "dungeon_id": 41
+    },
+    {
+        "id": 101,
+        "season_id": 9,
+        "dungeon_id": 40
+    },
+    {
+        "id": 102,
+        "season_id": 9,
+        "dungeon_id": 8
+    },
+    {
+        "id": 103,
+        "season_id": 9,
+        "dungeon_id": 11
+    },
+    {
+        "id": 104,
+        "season_id": 9,
+        "dungeon_id": 24
+    },
+    {
+        "id": 105,
+        "season_id": 9,
+        "dungeon_id": 25
+    },
+    {
+        "id": 106,
+        "season_id": 9,
+        "dungeon_id": 37
+    },
+    {
+        "id": 107,
+        "season_id": 9,
+        "dungeon_id": 36
+    },
+    {
+        "id": 108,
+        "season_id": 10,
+        "dungeon_id": 76
+    },
+    {
+        "id": 109,
+        "season_id": 10,
+        "dungeon_id": 75
+    },
+    {
+        "id": 110,
+        "season_id": 10,
+        "dungeon_id": 4
+    },
+    {
+        "id": 111,
+        "season_id": 10,
+        "dungeon_id": 7
+    },
+    {
+        "id": 112,
+        "season_id": 10,
+        "dungeon_id": 67
+    },
+    {
+        "id": 113,
+        "season_id": 10,
+        "dungeon_id": 71
+    },
+    {
+        "id": 114,
+        "season_id": 10,
+        "dungeon_id": 72
+    },
+    {
+        "id": 115,
+        "season_id": 10,
+        "dungeon_id": 73
+    },
+    {
+        "id": 116,
+        "season_id": 11,
+        "dungeon_id": 77
+    },
+    {
+        "id": 117,
+        "season_id": 11,
+        "dungeon_id": 10
+    },
+    {
+        "id": 118,
+        "season_id": 11,
+        "dungeon_id": 15
+    },
+    {
+        "id": 119,
+        "season_id": 11,
+        "dungeon_id": 21
+    },
+    {
+        "id": 120,
+        "season_id": 11,
+        "dungeon_id": 68
+    },
+    {
+        "id": 121,
+        "season_id": 11,
+        "dungeon_id": 69
+    },
+    {
+        "id": 122,
+        "season_id": 11,
+        "dungeon_id": 70
+    },
+    {
+        "id": 123,
+        "season_id": 11,
+        "dungeon_id": 74
+    },
+    {
+        "id": 124,
+        "season_id": 12,
+        "dungeon_id": 103
+    },
+    {
+        "id": 125,
+        "season_id": 12,
+        "dungeon_id": 102
+    },
+    {
+        "id": 126,
+        "season_id": 12,
+        "dungeon_id": 2
+    },
+    {
+        "id": 127,
+        "season_id": 12,
+        "dungeon_id": 5
+    },
+    {
+        "id": 128,
+        "season_id": 12,
+        "dungeon_id": 14
+    },
+    {
+        "id": 129,
+        "season_id": 12,
+        "dungeon_id": 23
+    },
+    {
+        "id": 130,
+        "season_id": 12,
+        "dungeon_id": 105
+    },
+    {
+        "id": 131,
+        "season_id": 12,
+        "dungeon_id": 106
+    },
+    {
+        "id": 132,
+        "season_id": 13,
+        "dungeon_id": 68
+    },
+    {
+        "id": 133,
+        "season_id": 13,
+        "dungeon_id": 67
+    },
+    {
+        "id": 134,
+        "season_id": 13,
+        "dungeon_id": 69
+    },
+    {
+        "id": 135,
+        "season_id": 13,
+        "dungeon_id": 70
+    },
+    {
+        "id": 136,
+        "season_id": 13,
+        "dungeon_id": 71
+    },
+    {
+        "id": 137,
+        "season_id": 13,
+        "dungeon_id": 72
+    },
+    {
+        "id": 138,
+        "season_id": 13,
+        "dungeon_id": 73
+    },
+    {
+        "id": 139,
+        "season_id": 13,
+        "dungeon_id": 74
+    },
+    {
+        "id": 140,
+        "season_id": 14,
+        "dungeon_id": 116
+    },
+    {
+        "id": 141,
+        "season_id": 14,
+        "dungeon_id": 18
+    },
+    {
+        "id": 142,
+        "season_id": 14,
+        "dungeon_id": 30
+    },
+    {
+        "id": 143,
+        "season_id": 14,
+        "dungeon_id": 34
+    },
+    {
+        "id": 144,
+        "season_id": 14,
+        "dungeon_id": 108
+    },
+    {
+        "id": 145,
+        "season_id": 14,
+        "dungeon_id": 110
+    },
+    {
+        "id": 146,
+        "season_id": 14,
+        "dungeon_id": 113
+    },
+    {
+        "id": 147,
+        "season_id": 14,
+        "dungeon_id": 115
+    },
+    {
+        "id": 148,
+        "season_id": 15,
+        "dungeon_id": 25
+    },
+    {
+        "id": 149,
+        "season_id": 15,
+        "dungeon_id": 20
+    },
+    {
+        "id": 150,
+        "season_id": 15,
+        "dungeon_id": 35
+    },
+    {
+        "id": 151,
+        "season_id": 15,
+        "dungeon_id": 109
+    },
+    {
+        "id": 152,
+        "season_id": 15,
+        "dungeon_id": 111
+    },
+    {
+        "id": 153,
+        "season_id": 15,
+        "dungeon_id": 137
+    },
+    {
+        "id": 154,
+        "season_id": 15,
+        "dungeon_id": 112
+    },
+    {
+        "id": 155,
+        "season_id": 15,
+        "dungeon_id": 114
+    },
+    {
+        "id": 156,
+        "season_id": 16,
+        "dungeon_id": 29
+    },
+    {
+        "id": 157,
+        "season_id": 16,
+        "dungeon_id": 37
+    },
+    {
+        "id": 158,
+        "season_id": 16,
+        "dungeon_id": 36
+    },
+    {
+        "id": 159,
+        "season_id": 16,
+        "dungeon_id": 108
+    },
+    {
+        "id": 160,
+        "season_id": 16,
+        "dungeon_id": 139
+    },
+    {
+        "id": 161,
+        "season_id": 16,
+        "dungeon_id": 137
+    },
+    {
+        "id": 162,
+        "season_id": 16,
+        "dungeon_id": 112
+    },
+    {
+        "id": 163,
+        "season_id": 16,
+        "dungeon_id": 113
+    },
+    {
+        "id": 164,
+        "season_id": 17,
+        "dungeon_id": 49
+    },
+    {
+        "id": 165,
+        "season_id": 17,
+        "dungeon_id": 148
+    },
+    {
+        "id": 166,
+        "season_id": 17,
+        "dungeon_id": 12
+    },
+    {
+        "id": 167,
+        "season_id": 17,
+        "dungeon_id": 149
+    },
+    {
+        "id": 168,
+        "season_id": 17,
+        "dungeon_id": 141
+    },
+    {
+        "id": 169,
+        "season_id": 17,
+        "dungeon_id": 142
+    },
+    {
+        "id": 170,
+        "season_id": 17,
+        "dungeon_id": 144
+    },
+    {
+        "id": 171,
+        "season_id": 17,
+        "dungeon_id": 147
+    },
+    {
+        "id": 172,
+        "season_id": 18,
+        "dungeon_id": 16
+    },
+    {
+        "id": 173,
+        "season_id": 18,
+        "dungeon_id": 19
+    },
+    {
+        "id": 174,
+        "season_id": 18,
+        "dungeon_id": 72
+    },
+    {
+        "id": 175,
+        "season_id": 18,
+        "dungeon_id": 182
+    },
+    {
+        "id": 176,
+        "season_id": 18,
+        "dungeon_id": 140
+    },
+    {
+        "id": 177,
+        "season_id": 18,
+        "dungeon_id": 143
+    },
+    {
+        "id": 178,
+        "season_id": 18,
+        "dungeon_id": 145
+    },
+    {
+        "id": 179,
+        "season_id": 18,
+        "dungeon_id": 146
+    }
+]

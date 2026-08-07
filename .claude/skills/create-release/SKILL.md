@@ -50,6 +50,33 @@ Cross-check against the latest GitHub Release:
 Release is still a **draft**, the previous version has not rolled out to production yet —
 flag this to the user before stacking another release on top.
 
+### Stacking on an undeployed previous release
+
+If the user proceeds anyway (e.g. a fix needs to go out now), know what will actually
+happen: pushing the new tag starts a new `release-deploy` run against the same
+`environment: production` gate, and GitHub auto-cancels the previous run's pending
+`Deploy to Production` job the moment that happens (a waiting environment deployment is
+voided when a newer run targets the same environment) — even if staging fully passed for
+the older version. **The previous release will never reach production and will never get
+published/announced on its own.** This happened for real with v15.8.0 → v15.8.1 (issue
+#3725/#3726, 2026-07-28).
+
+Since the new release is now the one that actually ships, its changelog must cover
+*everything* since the last **published** release, not just the delta since the
+now-superseded one — otherwise the superseded release's changes go out silently, unannounced.
+Concretely:
+
+1. Compose the new release's changelog as `<last published release>..origin/master`
+   (folding the superseded release's entries in), not `<superseded release>..origin/master`.
+2. Mark the superseded release's draft so nobody publishes it later and double-announces
+   things: `gh release edit v<old> --title "v<old> (SUPERSEDED by v<new> - do not publish)"
+   --notes-file <a short note explaining why + linking the new release>`.
+3. Leave the superseded tag and draft in place — **do not delete them**. A version-number
+   gap is normal and expected (every project has tags that never shipped); it's invisible
+   to the public since draft releases aren't listed or announced. The alternative —
+   force-publishing a release that was never actually live in production — would be an
+   inaccurate record, which is worse than a gap.
+
 ## Step 3 — Collect the commits since the previous release
 
 Commits are squash-merged onto `master`, one per issue, formatted `#NNNN <description>`
@@ -159,11 +186,31 @@ project's** production-rollout step; once published, `release:report` can announ
 Discord.
 
 Summarise to the user: the version, each included change with its category and ticket, the
-issue URL, the draft Release URL, and any commits without an issue number or any new
-category you introduced. Remind them that the tag push deploys to staging and that the
-draft Release gets published (and announced via `release:report`) when production rolls
-out — see the deployment-pipeline roadmap (issues #3327–#3329).
+issue URL, and the draft Release URL, and any commits without an issue number or any new
+category you introduced.
 
-Suggest running `sh/release-watch.sh <version>` next — it tracks the build jobs, both
-staging/production infra deploys, and verification from one terminal (see the `release-watch`
-skill).
+## Step 8 — Watch the pipeline through staging, automatically
+
+The changelog confirmation in Step 4 is the only manual gate in this flow — **do not** wait
+to be separately asked to "run the watcher". As soon as the tag is pushed, launch
+`sh/release-watch.sh <version> --watch-only` yourself (see the `release-watch` skill for
+flags and output format):
+
+```
+LOG=<scratchpad>/release-watch-<version>.log
+nohup sh/release-watch.sh <version> --watch-only > "$LOG" 2>&1 &
+disown
+```
+
+then attach a persistent `Monitor` to that log filtering for its milestone lines (`FAILED`,
+`SUMMARY: (SUCCESS|FAILED)`, `GATE:`, `references compiled/`) so staging verification,
+failures, and the production gate opening all surface as they happen without you polling.
+
+`--watch-only` never approves the production gate on its own (see that skill's hard safety
+rule) — it only gates on a human typing the version string at an interactive prompt, which
+this flow never runs. So driving this automatically through staging is safe: the moment
+staging verification passes (`staging ... references compiled/<version>/`), stop there and
+hand off. Report the staging result to the user and remind them production approval is
+theirs to trigger (in the browser, or by running the script interactively without
+`--watch-only`) — never approve or drive that gate yourself, and don't spawn a second
+watcher process for the same version if one is already running.

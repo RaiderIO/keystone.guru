@@ -8,7 +8,6 @@ $--theme-form-required: --theme-form-required;
 /* Used for things like the header */
 $--theme-header: --theme-header;
 $--theme-header-border: --theme-header-border;
-$--theme-header-height: --theme-header-height;
 $--theme-link: --theme-link;
 $--theme-link-hover: --theme-link-hover;
 $--theme-border-accent: --theme-border-accent;
@@ -28,7 +27,6 @@ $theme-map-darkly: (
         $--theme-dark: #303030,
         $--theme-darker: #202020,
         $--theme-text-contrast: #ebebeb,
-        $--theme-header-height: 114px,
         $--theme-form-required: #c40000,
         $--theme-header: var($--theme-dark),
         $--theme-header-border: unset,
@@ -53,7 +51,6 @@ $theme-map-lux: (
         $--theme-dark: #ebebeb,
         $--theme-darker: #ebebeb,
         $--theme-text-contrast: #1a1a1a,
-        $--theme-header-height: 114px,
         $--theme-form-required: #c40000,
         $--theme-header: var($--theme-light),
         $--theme-header-border: 1px solid #1a1a1a,
@@ -80,7 +77,6 @@ $theme-map-vapor: (
         $--theme-dark: #303030,
         $--theme-darker: #202020,
         $--theme-text-contrast: #ebebeb,
-        $--theme-header-height: 114px,
         $--theme-form-required: #c40000,
         $--theme-header: var($--theme-dark),
         $--theme-header-border: unset,

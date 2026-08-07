@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\Interfaces\CombatLogCriterionModelInterface;
 use App\Models\Traits\HasCombatLogCriterion;
-use App\Models\Traits\HasIconFile;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,7 +13,6 @@ use Str;
  * @property int    $id
  * @property int    $character_class_id Internal ID - not a blizzard ID!
  * @property int    $specialization_id  Blizzard ID
- * @property int    $icon_file_id
  * @property string $key
  * @property string $name
  *
@@ -27,13 +25,11 @@ use Str;
 class CharacterClassSpecialization extends CacheModel implements CombatLogCriterionModelInterface
 {
     use HasCombatLogCriterion;
-    use HasIconFile;
     use SeederModel;
 
     public $timestamps = false;
 
     public $hidden = [
-        'icon_file_id',
         'pivot',
     ];
 
@@ -42,7 +38,6 @@ class CharacterClassSpecialization extends CacheModel implements CombatLogCriter
         'specialization_id',
         'key',
         'name',
-        'icon_file_id',
     ];
 
     /**

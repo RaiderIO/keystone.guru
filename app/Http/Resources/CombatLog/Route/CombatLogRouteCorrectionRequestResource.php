@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\CombatLog\Route;
 
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestDto;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Override;
@@ -16,9 +16,9 @@ use Override;
  * @OA\Property(property="spells",type="array",items={"$ref":"#/components/schemas/CombatLogRouteSpellCorrection"})
  * @OA\Property(property="playerDeaths",type="array",items={"$ref":"#/components/schemas/CombatLogRoutePlayerDeathCorrection"})
  *
- * @property CombatLogRouteRequestModel $resource
+ * @property CombatLogRouteRequestDto $resource
  *
- * @mixin CombatLogRouteRequestModel
+ * @mixin CombatLogRouteRequestDto
  */
 class CombatLogRouteCorrectionRequestResource extends JsonResource
 {

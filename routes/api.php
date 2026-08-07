@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Api\V1\InternalTeam\Cache\APICacheController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogController;
-use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogParseFailureController;
+use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogRunController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APILiveSessionCombatLogController;
 use App\Http\Controllers\Api\V1\Public\Dungeon\APIDungeonController;
 use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteController;
@@ -31,10 +31,8 @@ Route::prefix('v1')->group(static function () {
             Route::post('events', new APILiveSessionCombatLogController()->store(...))->name('api.v1.combatlog.livesession.events.store');
         });
 
-        Route::middleware(['api_role:admin'])->prefix('parse-failures')->group(static function () {
-            Route::get('/', new APICombatLogParseFailureController()->index(...))->name('api.v1.combatlog.parsefailures.index');
-            Route::get('/{parseFailure}/segments', new APICombatLogParseFailureController()->segments(...))->name('api.v1.combatlog.parsefailures.segments');
-            Route::post('/{parseFailure}/resolve', new APICombatLogParseFailureController()->resolve(...))->name('api.v1.combatlog.parsefailures.resolve');
+        Route::middleware(['api_role:admin'])->group(static function () {
+            Route::get('seasons/{season}/runs/{runId}/segments', new APICombatLogRunController()->segments(...))->name('api.v1.combatlog.run.segments');
         });
     });
 

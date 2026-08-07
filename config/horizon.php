@@ -142,14 +142,14 @@ return [
         'production' => [
             'supervisor-default' => [
                 'connection' => 'redis',
-                'queue'      => [sprintf('%s-production-default', env('APP_TYPE'))],
+                'queue'      => [sprintf('%s-default', env('APP_TYPE'))],
                 'balance'    => 'simple',
                 'processes'  => 2,
                 'tries'      => 3,
             ],
             'supervisor-long-running' => [
                 'connection' => 'redis',
-                'queue'      => [sprintf('%s-production-long-running', env('APP_TYPE'))],
+                'queue'      => [sprintf('%s-long-running', env('APP_TYPE'))],
                 'balance'    => 'simple',
                 'processes'  => 1,
                 'tries'      => 1,
@@ -157,14 +157,14 @@ return [
             ],
             //            'supervisor-thumbnail' => [
             //                'connection' => 'redis',
-            //                'queue'      => [sprintf('%s-production-thumbnail', env('APP_TYPE'))],
+            //                'queue'      => [sprintf('%s-thumbnail', env('APP_TYPE'))],
             //                'balance'    => 'simple',
             //                'processes'  => 4,
             //                'tries'      => 1,
             //            ],
             //            'supervisor-thumbnail-api' => [
             //                'connection' => 'redis',
-            //                'queue'      => [sprintf('%s-production-thumbnail-api', env('APP_TYPE'))],
+            //                'queue'      => [sprintf('%s-thumbnail-api', env('APP_TYPE'))],
             //                'balance'    => 'simple',
             //                'processes'  => 1,
             //                'tries'      => 1,
@@ -174,22 +174,30 @@ return [
         'local' => [
             'supervisor-default' => [
                 'connection' => 'redis',
-                'queue'      => [sprintf('%s-local-default', env('APP_TYPE'))],
+                'queue'      => [sprintf('%s-default', env('APP_TYPE'))],
                 'balance'    => 'simple',
                 'processes'  => 1,
                 'tries'      => 3,
             ],
             'supervisor-long-running' => [
                 'connection' => 'redis',
-                'queue'      => [sprintf('%s-local-long-running', env('APP_TYPE'))],
+                'queue'      => [sprintf('%s-long-running', env('APP_TYPE'))],
                 'balance'    => 'simple',
                 'processes'  => 1,
                 'tries'      => 1,
                 'timeout'    => 0,
             ],
-            'supervisor-combat-log-process' => [
+            'supervisor-cl-fanout' => [
                 'connection' => 'redis',
-                'queue'      => [sprintf('%s-local-combat-log-process', env('APP_TYPE'))],
+                'queue'      => [sprintf('%s-cl-fanout', env('APP_TYPE'))],
+                'balance'    => 'simple',
+                'processes'  => 1,
+                'tries'      => 3,
+                'timeout'    => 1800,
+            ],
+            'supervisor-cl-process' => [
+                'connection' => 'redis',
+                'queue'      => [sprintf('%s-cl-process', env('APP_TYPE'))],
                 'balance'    => 'simple',
                 'processes'  => 2,
                 'tries'      => 3,
@@ -197,14 +205,14 @@ return [
             ],
             'supervisor-thumbnail' => [
                 'connection' => 'redis',
-                'queue'      => [sprintf('%s-local-thumbnail', env('APP_TYPE'))],
+                'queue'      => [sprintf('%s-thumbnail', env('APP_TYPE'))],
                 'balance'    => 'simple',
                 'processes'  => 1,
                 'tries'      => 1,
             ],
             'supervisor-thumbnail-api' => [
                 'connection' => 'redis',
-                'queue'      => [sprintf('%s-local-thumbnail-api', env('APP_TYPE'))],
+                'queue'      => [sprintf('%s-thumbnail-api', env('APP_TYPE'))],
                 'balance'    => 'simple',
                 'processes'  => 1,
                 'tries'      => 1,

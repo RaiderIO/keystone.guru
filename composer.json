@@ -30,14 +30,14 @@
             "type": "package",
             "package": {
                 "name": "nnoggie/mythicdungeontools",
-                "version": "6.1.20",
+                "version": "6.2.0-alpha3",
                 "source": {
                     "url": "https://github.com/Wotuu/MythicDungeonTools.git",
                     "type": "git",
-                    "reference": "b9def8665d85b0902dd59aa106bb5ea974747e2e"
+                    "reference": "ff4ef5fc933dc9304263203e3ba4d94ceaf2fe95"
                 },
                 "dist": {
-                    "url": "https://github.com/Wotuu/MythicDungeonTools/archive/b9def8665d85b0902dd59aa106bb5ea974747e2e.zip",
+                    "url": "https://github.com/Wotuu/MythicDungeonTools/archive/ff4ef5fc933dc9304263203e3ba4d94ceaf2fe95.zip",
                     "type": "zip"
                 }
             }
@@ -50,10 +50,10 @@
                 "source": {
                     "url": "https://github.com/Wotuu/MDT_Legacy.git",
                     "type": "git",
-                    "reference": "c617a034280b2d3967ae5537b25be792d9bac272"
+                    "reference": "5cfa26f16ea57693f55466fec146e8df90c55527"
                 },
                 "dist": {
-                    "url": "https://github.com/Wotuu/MDT_Legacy/archive/c617a034280b2d3967ae5537b25be792d9bac272.zip",
+                    "url": "https://github.com/Wotuu/MDT_Legacy/archive/5cfa26f16ea57693f55466fec146e8df90c55527.zip",
                     "type": "zip"
                 }
             }
@@ -97,7 +97,7 @@
         "league/flysystem-aws-s3-v3": "^3.0",
         "marvinlabs/laravel-discord-logger": "^1.4",
         "nnoggie/mdt-legacy": "^2.0",
-        "nnoggie/mythicdungeontools": "^6.0",
+        "nnoggie/mythicdungeontools": "^6.0@alpha",
         "paquettg/php-html-parser": "dev-master#5d1c017c916f6ce8991442f1bead60729919ed8d",
         "patreon/patreon": "^1.0.0",
         "phlak/semver": "^4.1",
@@ -109,6 +109,7 @@
         "socialiteproviders/discord": "^4.2.0",
         "spatie/laravel-html": "^3.11",
         "spatie/url": "^2.3",
+        "spomky-labs/cbor-php": "^3.3",
         "symfony/http-client": "^7.2",
         "symfony/mailgun-mailer": "^7.2",
         "tray-labs/laravel-influxdb": "^1.0",

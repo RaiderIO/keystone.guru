@@ -32,13 +32,29 @@ readonly class HeaderComposer implements ViewComposerInterface
 
         $currentSeason = $this->viewService->getCurrentSeasonForRegion($gameServerRegion);
 
+        // ViewService::getNextSeasonForRegion() already gates on Season::active - a season is seeded
+        // weeks, sometimes months, before it starts so its mapping can be reviewed (#3761, #3868).
+        $nextSeason = $this->viewService->getNextSeasonForRegion($gameServerRegion);
+
         $view->with('activeExpansions', $this->viewService->getActiveExpansions());
         $view->with('currentSeason', $currentSeason);
-        $view->with('nextSeason', $this->viewService->getNextSeasonForRegion($gameServerRegion));
+        $view->with('nextSeason', $nextSeason);
         $view->with('allGameVersions', $this->viewService->getAllGameVersions());
 
         $userOrDefaultGameVersion = GameVersion::getUserOrDefaultGameVersion();
         $view->with('gameVersionDungeons', $this->dungeonService->getDungeonsForGameVersion($userOrDefaultGameVersion));
+
+        // The dungeon context bar follows the current season only (#3761) - the upcoming season is
+        // advertised next to it as a card of its own, leading to a selection of just its dungeons.
+        // Seasons are a retail concept: the dungeon selection hides every season for a game version
+        // without them, so advertising one there would lead to a page that cannot show it.
+        $upcomingSeason = $userOrDefaultGameVersion->has_seasons ? $nextSeason : null;
+
+        $view->with('dungeonContextNextSeason', $upcomingSeason);
+        $view->with('dungeonContextNextSeasonLink', $upcomingSeason === null ? null : route('dungeon.explore.gameversion.select', [
+            'gameVersion' => $userOrDefaultGameVersion,
+            'season'      => $upcomingSeason->id,
+        ]));
 
         // Ease tiers for the dungeon-context strip ("what's easy this week", archon.gg data). The header
         // renders on every page, so the current affix group + tier lookup are resolved once and cached

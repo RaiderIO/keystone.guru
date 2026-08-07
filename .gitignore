@@ -29,6 +29,8 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 .env
+# Written by sh/worktree.sh into each worktree: records the worktree's DB mode + private schema name
+/.worktree-db
 .phpstorm.meta.php
 _ide_helper.php
 .phpunit.result.cache
@@ -43,6 +45,8 @@ docker-compose/mysql-combatlog
 docker-compose/redis-data
 # Local restores of production database dumps
 docker-compose/mysql-prod*/
+# Backups taken before an in-place MySQL data dir upgrade (#3717)
+docker-compose/mysql*-upgrade-bak/
 
 # AI
 .ladebugermcp/
@@ -56,3 +60,6 @@ __pycache__/
 /tmp/
 /tmp_combatlogs/
 /storage/api-docs/
+
+# Scratch dir used by the headless-browser-verify skill (screenshots + driver scripts)
+/.chrome-tmp

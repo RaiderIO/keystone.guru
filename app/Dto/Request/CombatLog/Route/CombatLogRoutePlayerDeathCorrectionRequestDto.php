@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Dto\Request\CombatLog\Route;
+
+/**
+ * @OA\Schema(schema="CombatLogRoutePlayerDeathCorrection")
+ * @OA\Property(property="characterId",type="integer")
+ * @OA\Property(property="classId",type="integer")
+ * @OA\Property(property="specId",type="integer")
+ * @OA\Property(property="itemLevel",type="number",format="float")
+ * @OA\Property(property="diedAt",type="string",format="date-time")
+ * @OA\Property(property="coord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
+ * @OA\Property(property="gridCoord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
+ */
+class CombatLogRoutePlayerDeathCorrectionRequestDto extends CombatLogRoutePlayerDeathRequestDto
+{
+    public function __construct(
+        ?int                                  $characterId = null,
+        ?int                                  $classId = null,
+        ?int                                  $specId = null,
+        ?float                                $itemLevel = null,
+        ?string                               $diedAt = null,
+        ?CombatLogRouteCoordRequestDto        $coord = null,
+        public ?CombatLogRouteCoordRequestDto $gridCoord = null,
+    ) {
+        parent::__construct($characterId, $classId, $specId, $itemLevel, $diedAt, $coord);
+    }
+}

@@ -31,12 +31,14 @@ use App\Models\Spell\SpellDungeon;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Mapping\MappingServiceInterface;
+use App\Service\MDT\Exceptions\MDTMappingImportPartialFailureException;
 use App\Service\MDT\Logging\MDTMappingImportServiceLoggingInterface;
 use Exception;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Collection;
 use Psr\SimpleCache\InvalidArgumentException;
 use Str;
+use Throwable;
 
 class MDTMappingImportService implements MDTMappingImportServiceInterface
 {
@@ -82,14 +84,22 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
         $gameVersion ??= GameVersion::getDefaultGameVersion();
 
-        $currentMappingVersion = $dungeon->getCurrentMappingVersion($gameVersion);
-        if ($forceImport || $currentMappingVersion->mdt_mapping_hash !== $latestMdtMappingHash) {
-            $this->log->importMappingVersionFromMDTMappingChanged($currentMappingVersion->mdt_mapping_hash, $latestMdtMappingHash);
+        // Scoped to $gameVersion only - unlike Dungeon::getCurrentMappingVersion(), this does NOT fall back to
+        // an ambient/unrelated game version's mapping version when the dungeon has none for $gameVersion yet
+        // (e.g. its first-ever import for a newly-added game version). A null here is a real, valid case: the
+        // downstream clone/import calls below all treat it as "nothing to carry over from" (#3757).
+        $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
+        if ($forceImport || $currentMappingVersion === null || $currentMappingVersion->mdt_mapping_hash !== $latestMdtMappingHash) {
+            $this->log->importMappingVersionFromMDTMappingChanged($currentMappingVersion?->mdt_mapping_hash, $latestMdtMappingHash);
 
-            $newMappingVersion = $mappingService->createNewMappingVersionFromMDTMapping($dungeon, $gameVersion, $this->getMDTMappingHash($dungeon));
+            $newMappingVersion = $mappingService->createNewMappingVersionFromMDTMapping($dungeon, $gameVersion, $currentMappingVersion);
             $this->log->importMappingVersionFromMDTCreateMappingVersion($newMappingVersion->version, $newMappingVersion->id);
 
             $mdtDungeon = new MDTDungeon($this->cacheService, $this->coordinatesService, $dungeon);
+
+            /** @var array<int, Exception> $importFailures NPC/enemy saves that were individually caught and
+             *  logged rather than propagated, so the loop kept going for the remaining items (#3755) */
+            $importFailures = [];
 
             try {
                 $this->log->importMappingVersionFromMDTStart($dungeon->id);
@@ -103,7 +113,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 );
 
                 $this->importDungeon($mdtDungeon, $dungeon, $newMappingVersion);
-                $this->importNpcs($newMappingVersion, $mdtDungeon, $dungeon, $gameVersion);
+                $this->importNpcs($newMappingVersion, $mdtDungeon, $dungeon, $gameVersion, $importFailures);
                 $enemies = $this->importEnemies(
                     $currentMappingVersion,
                     $newMappingVersion,
@@ -111,10 +121,33 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     $dungeon,
                     $enemyForcesCheckpointIdMapping,
                     $forceImport,
+                    $importFailures,
                 );
                 $this->importEnemyPacks($newMappingVersion, $mdtDungeon, $dungeon, $enemies);
                 $this->importEnemyPatrols($currentMappingVersion, $newMappingVersion, $mdtDungeon, $dungeon, $enemies);
                 $this->importMapPOIs($currentMappingVersion, $newMappingVersion, $mdtDungeon, $dungeon);
+
+                if (!empty($importFailures)) {
+                    // Every step above ran, but one or more individual NPCs/enemies were silently dropped
+                    // along the way - the mapping version is incomplete even though nothing propagated to
+                    // this try block on its own, so it must not be treated as a success (#3755).
+                    throw new MDTMappingImportPartialFailureException($importFailures);
+                }
+
+                // Only stamp the hash once every step above actually succeeded (#3737) - a mapping version
+                // recorded with the hash of MDT data it never finished importing would look up to date to
+                // every subsequent run and be skipped forever ("no change detected"), leaving the dungeon
+                // stuck on a half-built "current" mapping version.
+                $newMappingVersion->update(['mdt_mapping_hash' => $latestMdtMappingHash]);
+            } catch (Throwable $throwable) {
+                // The partially-imported mapping version is not safe to leave behind as the dungeon's
+                // current one - cascading delete removes whatever enemies/packs/etc. made it in before the
+                // failure, and the next run retries against the still-null hash instead of silently no-oping.
+                $this->log->importMappingVersionFromMDTDeletePartialMappingVersion($newMappingVersion->version, $newMappingVersion->id, $throwable);
+
+                $newMappingVersion->delete();
+
+                throw $throwable;
             } finally {
                 $this->log->importMappingVersionFromMDTEnd();
             }
@@ -145,13 +178,15 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         );
     }
 
-    public function importNpcsDataFromMDT(MDTDungeon $mdtDungeon, Dungeon $dungeon, GameVersion $gameVersion): void
+    public function importNpcsDataFromMDT(MDTDungeon $mdtDungeon, Dungeon $dungeon, GameVersion $gameVersion, array &$failures = []): void
     {
         try {
             $this->log->importNpcsDataFromMDTStart($dungeon->key);
 
-            // Get a list of NPCs and update/save them
-            $existingNpcs = $dungeon->npcs()->with('npcSpells')->get()->keyBy('id');
+            // Get a list of NPCs and update/save them. npcHealths must be eager loaded here - it is read
+            // per NPC below via getHealthByGameVersion(), which would otherwise be an N+1 that hard-fails
+            // under preventLazyLoading (dev) for any dungeon that already has NPCs.
+            $existingNpcs = $dungeon->npcs()->with(['npcSpells', 'npcHealths'])->get()->keyBy('id');
 
             $npcsUpdated           = $npcsInserted = 0;
             $npcSpellsAttributes   = [];
@@ -254,9 +289,14 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         $npc->createNpcEnemyForcesForExistingMappingVersions($mdtNpc->getCount());
                     }
                 } catch (UniqueConstraintViolationException) {
+                    // Expected and recoverable, not a real failure: the NPC row already exists globally but
+                    // is not linked to this dungeon yet, so the dungeon-scoped lookup above missed it and we
+                    // attempted an insert on an existing primary key - the npc_dungeons link is written below,
+                    // so the next run takes the update path.
                     $this->log->importNpcsDataFromMDTNpcNotMarkedForAllDungeons($npc->id);
                 } catch (Exception $exception) {
                     $this->log->importNpcsDataFromMDTSaveNpcException($exception);
+                    $failures[] = $exception;
                 }
             }
 
@@ -372,6 +412,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     }
 
     /**
+     * @param  array<int, Exception> $failures Appended with NPC saves that failed - see
+     *                                         importNpcsDataFromMDT()'s $failures parameter.
      * @throws Exception
      */
     private function importNpcs(
@@ -379,11 +421,12 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         MDTDungeon     $mdtDungeon,
         Dungeon        $dungeon,
         GameVersion    $gameVersion,
+        array          &          $failures,
     ): void {
         try {
             $this->log->importNpcsStart();
 
-            $this->importNpcsDataFromMDT($mdtDungeon, $dungeon, $gameVersion);
+            $this->importNpcsDataFromMDT($mdtDungeon, $dungeon, $gameVersion, $failures);
 
             // Get a list of NPCs and update/save them (re-fetch the list to include any new NPCs)
             $npcs = $dungeon->npcs()->get()->keyBy('id');
@@ -423,6 +466,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     }
                 } catch (Exception $exception) {
                     $this->log->importNpcsDataFromMDTSaveNpcException($exception);
+                    $failures[] = $exception;
                 }
             }
         } finally {
@@ -434,25 +478,30 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
      * @param  array<int, int>        $enemyForcesCheckpointIdMapping Source checkpoint id => cloned checkpoint id, as
      *                                                                built by MappingService when it cloned the
      *                                                                previous mapping version's checkpoints.
+     * @param  array<int, Exception>  $failures                       Appended with enemy saves that failed - see
+     *                                                                importNpcsDataFromMDT()'s $failures parameter.
      * @return Collection<int, Enemy>
      */
     private function importEnemies(
-        MappingVersion $currentMappingVersion,
-        MappingVersion $newMappingVersion,
-        MDTDungeon     $mdtDungeon,
-        Dungeon        $dungeon,
-        array          $enemyForcesCheckpointIdMapping,
-        bool           $forceImport = false,
+        ?MappingVersion $currentMappingVersion,
+        MappingVersion  $newMappingVersion,
+        MDTDungeon      $mdtDungeon,
+        Dungeon         $dungeon,
+        array           $enemyForcesCheckpointIdMapping,
+        bool            $forceImport,
+        array           &           $failures,
     ): Collection {
         // Get a list of new enemies and save them
         try {
             $this->log->importEnemiesStart();
 
+            // No predecessor (e.g. this dungeon's first-ever import for this game version) - nothing to
+            // recover properties from, every MDT enemy below is treated as brand new (#3757).
             $currentEnemies = $currentMappingVersion
-                ->enemies()
+                ?->enemies()
                 ->with('floor')
                 ->get()
-                ->keyBy(static fn(Enemy $enemy) => $enemy->getUniqueKey());
+                ->keyBy(static fn(Enemy $enemy) => $enemy->getUniqueKey()) ?? collect();
 
             $enemies = $mdtDungeon->getClonesAsEnemies($newMappingVersion, $dungeon->floors()->active()->get());
 
@@ -561,6 +610,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     }
                 } catch (Exception $exception) {
                     $this->log->importEnemiesSaveNewEnemyException($exception);
+                    $failures[] = $exception;
                 }
             }
 
@@ -590,10 +640,16 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
      *                                                        previous mapping version's checkpoints.
      */
     private function deleteEmptyEnemyForcesCheckpoints(
-        MappingVersion $currentMappingVersion,
-        MappingVersion $newMappingVersion,
-        array          $enemyForcesCheckpointIdMapping,
+        ?MappingVersion $currentMappingVersion,
+        MappingVersion  $newMappingVersion,
+        array           $enemyForcesCheckpointIdMapping,
     ): void {
+        // No predecessor means $enemyForcesCheckpointIdMapping is already empty (nothing was cloned to prune
+        // from) - nothing to do (#3757).
+        if ($currentMappingVersion === null) {
+            return;
+        }
+
         /** @var Collection<int, EnemyForcesCheckpoint> $emptyEnemyForcesCheckpoints */
         $emptyEnemyForcesCheckpoints = $newMappingVersion->enemyForcesCheckpoints()
             ->whereDoesntHave('enemies')
@@ -632,10 +688,9 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $enemyForcesCheckpointsToPrune->count(),
         );
 
-        // A query builder delete, not an Eloquent one: SeederModel's `deleting` listener refuses the delete
-        // unless an admin is authenticated, and this import runs from the scheduler with nobody logged in.
-        // The EnemyForcesCheckpoint `deleted` hook it also skips only releases member enemies - and these
-        // checkpoints have none by definition.
+        // A bulk query builder delete rather than looping model deletes: it skips per-model events, including
+        // the EnemyForcesCheckpoint `deleted` hook - which only releases member enemies, and these checkpoints
+        // have none by definition, so skipping it here is fine.
         EnemyForcesCheckpoint::query()
             ->whereIn('id', $enemyForcesCheckpointsToPrune->pluck('id'))
             ->delete();
@@ -739,11 +794,11 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
      * @throws Exception
      */
     private function importEnemyPatrols(
-        MappingVersion $currentMappingVersion,
-        MappingVersion $newMappingVersion,
-        MDTDungeon     $mdtDungeon,
-        Dungeon        $dungeon,
-        Collection     $savedEnemies,
+        ?MappingVersion $currentMappingVersion,
+        MappingVersion  $newMappingVersion,
+        MDTDungeon      $mdtDungeon,
+        Dungeon         $dungeon,
+        Collection      $savedEnemies,
     ): void {
         try {
             $this->log->importEnemyPatrolsStart();
@@ -754,14 +809,15 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             // Pretend the patrol is on the facade floor for correct translations, IF the facade floor is available
             $facadeFloor = $dungeon->getFacadeFloor();
 
+            // No predecessor - nothing to match against or re-clone below (#3757).
             /** @var Collection<int, EnemyPatrol> $existingEnemyPatrols */
             $existingEnemyPatrols = $currentMappingVersion
-                ->enemyPatrols()
+                ?->enemyPatrols()
                 ->with([
                     'polyline',
                     'mdtPolyline',
                 ])
-                ->get();
+                ->get() ?? collect();
 
             foreach ($mdtNPCs as $mdtNPC) {
                 foreach ($mdtNPC->getRawMdtNpc()['clones'] as $mdtCloneIndex => $mdtNpcClone) {
@@ -925,14 +981,23 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
      * @throws Exception
      */
     private function importMapPOIs(
-        MappingVersion $currentMappingVersion,
-        MappingVersion $newMappingVersion,
-        MDTDungeon     $mdtDungeon,
-        Dungeon        $dungeon,
+        ?MappingVersion $currentMappingVersion,
+        MappingVersion  $newMappingVersion,
+        MDTDungeon      $mdtDungeon,
+        Dungeon         $dungeon,
     ): void {
         try {
             $this->log->importMapPOIsStart();
             $mdtMapPOIs = $mdtDungeon->getMDTMapPOIs();
+
+            // Whether $newMappingVersion already has floor switch markers of its own - either cloned from
+            // $currentMappingVersion by copyMappingVersionContentsToDungeon(), or (#3757/#3762) cloned from a
+            // prior game version's facade-source mapping version by
+            // MappingService::createNewMappingVersionFromMDTMapping() on a genuinely first-ever import (where
+            // $currentMappingVersion is null). Querying $newMappingVersion directly - rather than inspecting
+            // $currentMappingVersion, which is null in exactly the case that now pre-populates markers - is
+            // what keeps this from creating duplicates on top of a first-ever import's cloned markers.
+            $newMappingVersionHasDungeonFloorSwitchMarkers = $newMappingVersion->dungeonFloorSwitchMarkers()->exists();
 
             if ($mdtMapPOIs->isNotEmpty()) {
                 $this->log->importMapPOIsMDTHasMapPOIs();
@@ -950,7 +1015,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 ];
 
                 foreach ($mdtMapPOIs as $mdtMapPOI) {
-                    $floor = $this->findFloorByMdtSubLevel($dungeon, $mdtMapPOI->getSubLevel());
+                    $floor = $this->findFloorByMdtSubLevel($dungeon, $newMappingVersion, $mdtMapPOI->getSubLevel());
 
                     $latLng = Conversion::convertMDTCoordinateToLatLng([
                         'x' => $mdtMapPOI->getX(),
@@ -959,7 +1024,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation($newMappingVersion, $latLng);
 
                     if (isset($mapIconTypeMapping[$mdtMapPOI->getType()->value])) {
-                        $existingMapIcon = $currentMappingVersion->getMapIconNearLocation($latLng, $mapIconTypeMapping[$mdtMapPOI->getType()->value]);
+                        // No predecessor to match against - always create a new icon (#3757).
+                        $existingMapIcon = $currentMappingVersion?->getMapIconNearLocation($latLng, $mapIconTypeMapping[$mdtMapPOI->getType()->value]);
                         if ($existingMapIcon === null) {
                             $translationKey = null;
                             if ($mdtMapPOI->getType() === MDTMapPOIType::GenericAssignablePOI &&
@@ -995,8 +1061,13 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         // We cannot for sure map the floor switches between different versions to one another
                         // We could use coordinates but if they change it's iffy.
                         // They also don't change between mapping versions, it's not really something Blizzard _can_ change
-                        if ($currentMappingVersion->dungeonFloorSwitchMarkers->isEmpty()) {
-                            $floor = $this->findFloorByMdtSubLevel($dungeon, $mdtMapPOI->getSubLevel());
+                        // Only create fresh markers when $newMappingVersion doesn't already have any - whether
+                        // because copyMappingVersionContentsToDungeon() cloned them from $currentMappingVersion,
+                        // or because a first-ever import for this game version cloned them from a prior game
+                        // version's facade-source mapping version (#3757/#3762) - to avoid creating duplicates
+                        // on top of either.
+                        if (!$newMappingVersionHasDungeonFloorSwitchMarkers) {
+                            $floor = $this->findFloorByMdtSubLevel($dungeon, $newMappingVersion, $mdtMapPOI->getSubLevel());
 
                             $latLng = Conversion::convertMDTCoordinateToLatLng([
                                 'x' => $mdtMapPOI->getX(),
@@ -1007,7 +1078,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                             $dungeonFloorSwitchMarker = DungeonFloorSwitchMarker::create(array_merge([
                                 'mapping_version_id' => $newMappingVersion->id,
                                 'floor_id'           => $floor->id,
-                                'target_floor_id'    => $this->findFloorByMdtSubLevel($dungeon, $mdtMapPOI->getTarget())->id,
+                                'target_floor_id'    => $this->findFloorByMdtSubLevel($dungeon, $newMappingVersion, $mdtMapPOI->getTarget())->id,
                             ], $latLng->toArray()));
                             $this->log->importMapPOIsNewDungeonFloorSwitchMarkerOK(
                                 $dungeonFloorSwitchMarker->id,
@@ -1016,7 +1087,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                             );
                         } else {
                             $this->log->importMapPOIsHaveExistingFloorSwitchMarkers(
-                                $currentMappingVersion->dungeonFloorSwitchMarkers->count(),
+                                $newMappingVersion->dungeonFloorSwitchMarkers()->count(),
                             );
                         }
                     }
@@ -1037,9 +1108,19 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         ) => $enemy->npc_id === $npcId && $enemy->mdt_id === $mdtId);
     }
 
-    public function findFloorByMdtSubLevel(Dungeon $dungeon, int $mdtSubLevel): Floor
+    public function findFloorByMdtSubLevel(Dungeon $dungeon, MappingVersion $mappingVersion, int $mdtSubLevel): Floor
     {
         $activeFloors = $dungeon->floors()->active()->get();
+
+        // A facade floor is only a usable host for a coordinate when the mapping version actually has its
+        // facade enabled - convertFacadeMapLocationToMapLocation() is a no-op otherwise, which would leave
+        // the coordinate stranded on the facade floor and blow up in CoordinatesService. Facade floors are
+        // seeded with mdt_sub_level = 1, so without this they win the lookup for sub level 1 on every
+        // dungeon that has a facade floor but has not enabled it - Throne of the Tides today (#3742),
+        // and every historical mapping version from before its dungeon's facade was switched on.
+        if (!$mappingVersion->facade_enabled) {
+            $activeFloors = $activeFloors->filter(static fn(Floor $floor) => !$floor->facade);
+        }
 
         // First check for mdt_sub_level, if that isn't found just match on our own index
         return $activeFloors->first(static fn(

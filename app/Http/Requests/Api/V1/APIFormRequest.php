@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Api\V1;
 
-use App\Http\Models\Request\RequestModel;
+use App\Dto\Request\RequestDto;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -11,7 +11,7 @@ use Teapot\StatusCode;
 
 abstract class APIFormRequest extends FormRequest
 {
-    protected abstract function getRequestModelClass(): ?string;
+    protected abstract function getRequestDtoClass(): ?string;
 
     #[Override]
     protected function failedAuthorization(): never
@@ -32,13 +32,13 @@ abstract class APIFormRequest extends FormRequest
         ], 422));
     }
 
-    public function getModel(): ?RequestModel
+    public function getDto(): ?RequestDto
     {
-        $requestModelClass = $this->getRequestModelClass();
-        if ($requestModelClass === null) {
+        $requestDtoClass = $this->getRequestDtoClass();
+        if ($requestDtoClass === null) {
             return null;
         }
 
-        return new $requestModelClass($this->validated());
+        return new $requestDtoClass($this->validated());
     }
 }

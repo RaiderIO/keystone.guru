@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Traits\HasIconFile;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -11,10 +10,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int    $id
- * @property int    $icon_file_id
  * @property string $key
  * @property string $name
  * @property string $color
+ *
+ * @property string $icon_url Appended
  *
  * @property EloquentCollection<int, CharacterRace> $races
  * @property EloquentCollection<int, DungeonRoute>  $dungeonRoutes
@@ -23,25 +23,22 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Faction extends CacheModel
 {
-    use HasIconFile;
     use SeederModel;
 
     public $timestamps = false;
 
     public $hidden = [
-        'icon_file_id',
         'pivot',
     ];
 
     public $fillable = [
         'id',
-        'icon_file_id',
         'key',
         'name',
         'color',
     ];
 
-    protected $with = ['iconfile'];
+    protected $appends = ['icon_url'];
 
     public const FACTION_ANY         = 'any';
     public const FACTION_UNSPECIFIED = 'unspecified';
@@ -53,6 +50,11 @@ class Faction extends CacheModel
         self::FACTION_HORDE       => 2,
         self::FACTION_ALLIANCE    => 3,
     ];
+
+    public function getIconUrlAttribute(): string
+    {
+        return ksgAssetImage(sprintf('factions/%s.png', $this->key));
+    }
 
     /** @return HasMany<CharacterRace, $this> */
     public function races(): HasMany

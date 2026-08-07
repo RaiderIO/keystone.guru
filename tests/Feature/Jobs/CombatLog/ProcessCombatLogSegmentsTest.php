@@ -5,7 +5,6 @@ namespace Tests\Feature\Jobs\CombatLog;
 use App\Jobs\CombatLog\ProcessCombatLogSegments;
 use App\Jobs\Logging\ProcessCombatLogSegmentsLoggingInterface;
 use App\Models\Season;
-use App\Repositories\Interfaces\CombatLog\CombatLogParseFailureRepositoryInterface;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
 use App\Service\CombatLog\Dtos\CombatLogRunContext;
 use App\Service\CombatLog\Exceptions\CombatLogParseException;
@@ -14,10 +13,12 @@ use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Constraint\IsType;
 use PHPUnit\Framework\MockObject\Exception;
+use RedisException;
 use RuntimeException;
 use Tests\TestCases\PublicTestCase;
 
@@ -125,7 +126,7 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
             ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION])
             ->onlyMethods(['curlSaveToFile'])
             ->getMock();
-        $job->method('curlSaveToFile')->willReturn(true);
+        $job->method('curlSaveToFile')->willReturnCallback($this->writeSegmentContents(...));
 
         // Act
         app()->call([$job, 'handle']);
@@ -140,7 +141,7 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
      * @throws Exception
      */
     #[Test]
-    public function handle_givenParseException_recordsParseFailureWithLineInfo(): void
+    public function handle_givenParseException_reportsParseErrorWithLineInfo(): void
     {
         // Arrange
         $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
@@ -162,23 +163,22 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
         $extractionService->method('extractData')->willThrowException($parseException);
         app()->instance(CombatLogDataExtractionServiceInterface::class, $extractionService);
 
-        // The parse error is swallowed and persisted (not re-thrown), so the run is not retried.
-        $parseFailureRepository = $this->createMockPublic(CombatLogParseFailureRepositoryInterface::class);
-        $parseFailureRepository->expects($this->once())
-            ->method('recordFailure')
+        // The parse error is swallowed and only reported (not re-thrown), so the run is not retried.
+        $log = $this->createMockPublic(ProcessCombatLogSegmentsLoggingInterface::class);
+        // Asserted in full: this log line is now the only record of the failure, and it must name the cause
+        // (InvalidArgumentException) rather than the CombatLogParseException wrapper - the error tracker
+        // fingerprints and tags on exactly these values.
+        $log->expects($this->once())
+            ->method('handleParseError')
             ->with(
                 self::RUN_ID,
                 $this->isNull(),
                 self::COMBAT_LOG_VERSION,
                 257080,
-                'SPELL_DAMAGE,Player-1084-0B4087DE,"Pa',
-                'Unbalanced quotes in string SPELL_DAMAGE,Player-1084-0B4087DE,"Pa',
                 InvalidArgumentException::class,
+                'Unbalanced quotes in string SPELL_DAMAGE,Player-1084-0B4087DE,"Pa',
+                'SPELL_DAMAGE,Player-1084-0B4087DE,"Pa',
             );
-        app()->instance(CombatLogParseFailureRepositoryInterface::class, $parseFailureRepository);
-
-        $log = $this->createMockPublic(ProcessCombatLogSegmentsLoggingInterface::class);
-        $log->expects($this->once())->method('handleParseError');
         $log->expects($this->once())->method('handleEnd')->with(self::RUN_ID, false);
         app()->instance(ProcessCombatLogSegmentsLoggingInterface::class, $log);
 
@@ -186,7 +186,7 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
             ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION])
             ->onlyMethods(['curlSaveToFile'])
             ->getMock();
-        $job->method('curlSaveToFile')->willReturn(true);
+        $job->method('curlSaveToFile')->willReturnCallback($this->writeSegmentContents(...));
 
         // Act
         app()->call([$job, 'handle']);
@@ -298,5 +298,108 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
         // Assert + Act
         $this->expectException(RuntimeException::class);
         app()->call([$job, 'handle']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    #[DataProvider('implausibleSegmentBodyProvider')]
+    public function handle_givenSegmentIsNotACombatLog_throwsRuntimeExceptionInsteadOfReportingParseError(
+        string $body,
+    ): void {
+        // Arrange — a bad download that still arrives with a 2xx status, so the download itself "succeeds".
+        $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->method('getCombatLogSegmentsForRun')
+            ->willReturn(new CombatLogSegmentsResponse(
+                sourceUserId: 1,
+                segments:     [new CombatLogSegment(id: 1, type: 'combat_log', downloadUrl: self::DOWNLOAD_URL_1)],
+            ));
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+
+        $extractionService = $this->createMockPublic(CombatLogDataExtractionServiceInterface::class);
+        $extractionService->expects($this->never())->method('extractData');
+        app()->instance(CombatLogDataExtractionServiceInterface::class, $extractionService);
+
+        // The download is retryable, so it must not be reported as a parse failure blaming the parser.
+        $log = $this->createMockPublic(ProcessCombatLogSegmentsLoggingInterface::class);
+        $log->expects($this->once())->method('handleSegmentIsNotACombatLog');
+        $log->expects($this->never())->method('handleParseError');
+        $log->expects($this->once())->method('handleEnd')->with(self::RUN_ID, false);
+        app()->instance(ProcessCombatLogSegmentsLoggingInterface::class, $log);
+
+        $job = $this->getMockBuilder(ProcessCombatLogSegments::class)
+            ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION])
+            ->onlyMethods(['curlSaveToFile'])
+            ->getMock();
+
+        $job->method('curlSaveToFile')
+            ->willReturnCallback(function (string $url, string $tempPath) use ($body): bool {
+                file_put_contents($tempPath, $body);
+
+                return true;
+            });
+
+        // Assert + Act
+        $this->expectException(RuntimeException::class);
+        app()->call([$job, 'handle']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenRedisExceptionDuringExtraction_throwsForRetryInsteadOfReportingParseError(): void
+    {
+        // Arrange — a dropped Redis/Valkey connection mid-parse (#3791) is a transient infra failure, not an
+        // unparsable line: it must be retried by the queue rather than reported as a permanent parse failure.
+        $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->method('getCombatLogSegmentsForRun')
+            ->willReturn(new CombatLogSegmentsResponse(
+                sourceUserId: 1,
+                segments:     [new CombatLogSegment(id: 1, type: 'combat_log', downloadUrl: self::DOWNLOAD_URL_1)],
+            ));
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+
+        $extractionService = $this->createMockPublic(CombatLogDataExtractionServiceInterface::class);
+        $extractionService->method('extractData')
+            ->willThrowException(new RedisException('read error on connection to tcp://ksg-valkey:6379'));
+        app()->instance(CombatLogDataExtractionServiceInterface::class, $extractionService);
+
+        $log = $this->createMockPublic(ProcessCombatLogSegmentsLoggingInterface::class);
+        $log->expects($this->never())->method('handleParseError');
+        app()->instance(ProcessCombatLogSegmentsLoggingInterface::class, $log);
+
+        $job = $this->getMockBuilder(ProcessCombatLogSegments::class)
+            ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION])
+            ->onlyMethods(['curlSaveToFile'])
+            ->getMock();
+        $job->method('curlSaveToFile')->willReturnCallback($this->writeSegmentContents(...));
+
+        // Assert + Act
+        $this->expectException(RedisException::class);
+        app()->call([$job, 'handle']);
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function implausibleSegmentBodyProvider(): array
+    {
+        return [
+            'xml error document' => ['<?xml version="1.0" encoding="UTF-8"?><Error><Code>AccessDenied</Code></Error>'],
+            'html error page'    => ['<html><body>403 Forbidden</body></html>'],
+            'empty body'         => [''],
+        ];
+    }
+
+    /**
+     * Stand-in for a successful download: writes plausible combat log content to the segment's temp path.
+     */
+    private function writeSegmentContents(string $url, string $tempPath): bool
+    {
+        file_put_contents($tempPath, sprintf('8/2/2026 20:15:01.123-4  ENCOUNTER_START,from %s', $url));
+
+        return true;
     }
 }

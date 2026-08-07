@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
-use App\Models\File;
 use Exception;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
@@ -262,34 +261,10 @@ class CharacterClassSpecializationsSeeder extends Seeder implements TableSeederI
                 'character_class_id' => $characterClasses->get(CharacterClass::CHARACTER_CLASS_DEMON_HUNTER)->id,
             ],
         ];
-
-        CharacterClassSpecialization::from(DatabaseSeeder::getTempTableName(CharacterClassSpecialization::class))
-            ->insert(collect($characterClassSpecializationsAttributes)->map(function ($row) {
-                $row['icon_file_id'] = -1;
-
-                return $row;
-            })->toArray());
-
-        $characterClasses              = $characterClasses->keyBy('id');
-        $characterClassSpecializations = CharacterClassSpecialization::all();
         // @formatter:on
 
-        // For each class with a bunch of specs
-        foreach ($characterClassSpecializations as $characterClassSpecialization) {
-            /** @var CharacterClass $class */
-            $class = $characterClasses->get($characterClassSpecialization->character_class_id);
-
-            $icon = File::create([
-                'model_id'    => $characterClassSpecialization->id,
-                'model_class' => get_class($characterClassSpecialization),
-                'disk'        => 'public',
-                'path'        => sprintf('images/specializations/%s/%s_%s.png', $class->key, $class->key, $characterClassSpecialization->key),
-            ]);
-
-            $characterClassSpecialization->setTable(DatabaseSeeder::getTempTableName(CharacterClassSpecialization::class))->update([
-                'icon_file_id' => $icon->id,
-            ]);
-        }
+        CharacterClassSpecialization::from(DatabaseSeeder::getTempTableName(CharacterClassSpecialization::class))
+            ->insert($characterClassSpecializationsAttributes);
     }
 
     public static function getAffectedModelClasses(): array

@@ -16,9 +16,25 @@ interface MappingServiceInterface
     ): MappingVersion;
 
     /**
-     * Creates a new mapping version for a dungeon.
+     * Creates a new mapping version for a dungeon from an MDT import. Always created with a null
+     * `mdt_mapping_hash` - the caller must set it once the MDT import has actually finished successfully
+     * (#3737).
+     *
+     * $currentMappingVersion is the dungeon's existing mapping version for $gameVersion to clone
+     * hash/version/curated-content (checkpoints/map icons/mountable areas/dungeon floor switch markers) from -
+     * the caller must scope it to $gameVersion itself (e.g. via
+     * Dungeon::getCurrentMappingVersionForGameVersion()) and pass null when there is genuinely none yet (the
+     * dungeon's first-ever import for this game version), rather than an ambient/unrelated game version's
+     * mapping version (#3757). Curated content legitimately starts empty in that case, but facade_enabled and
+     * FloorUnions - the dungeon's PHYSICAL floor layout, not game-version-specific - are still inherited from
+     * the dungeon's current mapping version in ANY game version, so a facade dungeon's first import for a new
+     * game version doesn't silently degrade coordinate conversion to the identity transform.
      */
-    public function createNewMappingVersionFromMDTMapping(Dungeon $dungeon, ?GameVersion $gameVersion, ?string $hash): MappingVersion;
+    public function createNewMappingVersionFromMDTMapping(
+        Dungeon         $dungeon,
+        GameVersion     $gameVersion,
+        ?MappingVersion $currentMappingVersion,
+    ): MappingVersion;
 
     /**
      * Resolves the mapping version that best matches an imported MDT string's `addonVersion`, so a route
@@ -50,11 +66,14 @@ interface MappingServiceInterface
      * Clones a mapping version's enemy forces checkpoints into another mapping version, without their members -
      * enemies are cloned by another code path entirely, or (on an MDT mapping import) re-created from scratch.
      *
+     * $sourceMappingVersion may be null when there is genuinely no predecessor to clone from (e.g. a dungeon's
+     * first-ever mapping version for a game version) - the target then simply starts with none (#3757).
+     *
      * @return array<int, int> Source checkpoint id => cloned checkpoint id, so the caller can re-link the
      *                         membership of the enemies it clones or imports afterwards.
      */
     public function copyEnemyForcesCheckpointsToMappingVersion(
-        MappingVersion $sourceMappingVersion,
-        MappingVersion $targetMappingVersion,
+        ?MappingVersion $sourceMappingVersion,
+        MappingVersion  $targetMappingVersion,
     ): array;
 }

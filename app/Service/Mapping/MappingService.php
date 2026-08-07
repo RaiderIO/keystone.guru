@@ -59,24 +59,99 @@ class MappingService implements MappingServiceInterface
         ]);
     }
 
-    public function createNewMappingVersionFromMDTMapping(Dungeon $dungeon, ?GameVersion $gameVersion, ?string $hash): MappingVersion
-    {
-        /** @var MappingVersion|null $currentMappingVersion */
-        $currentMappingVersion = $dungeon->getCurrentMappingVersion($gameVersion);
-        $now                   = Carbon::now()->toDateTimeString();
+    public function createNewMappingVersionFromMDTMapping(
+        Dungeon         $dungeon,
+        GameVersion     $gameVersion,
+        ?MappingVersion $currentMappingVersion,
+    ): MappingVersion {
+        // facade_enabled is a PHYSICAL fact about the dungeon (does it have a facade floor at all), not
+        // game-version-specific curated content, and it does not need to be inherited from any mapping
+        // version - Floor::facade is the authoritative source (#3757). Resolving it from a mapping version
+        // instead risks picking up one whose facade_enabled happens to be false for that particular game
+        // version (seen in production: e.g. dungeon 12's legion-remix/dungeon 49's wotlk mapping versions),
+        // even though the dungeon itself is a facade dungeon.
+        $facadeEnabled = $dungeon->getFacadeFloor() !== null;
+
+        // FloorUnions (and areas) ARE actual rows, not a boolean, so they still need a concrete source
+        // mapping version to clone from for a genuinely first-ever import of a game version. Pin that source
+        // explicitly and deterministically to the newest facade-enabled mapping version of ANY game version -
+        // never resolve it ambiently via Dungeon::getCurrentMappingVersion(), which falls back through
+        // GameVersion::getUserOrDefaultGameVersion()/authenticated-user context that doesn't exist for this
+        // pipeline's real caller (the mdt:importmapping CLI command), and can silently source the clone from
+        // the wrong game version's (facade-disabled) mapping version (#3757).
+        $facadeSourceMappingVersion = $currentMappingVersion
+            ?? ($facadeEnabled
+                ? $dungeon->mappingVersions()->where('facade_enabled', true)->orderByDesc('id')->first()
+                : null);
+
+        $now = Carbon::now()->toDateTimeString();
         // This needs to happen quietly as to not trigger MappingVersion events defined in its class
         $id = MappingVersion::insertGetId([
-            'dungeon_id'        => $dungeon->id,
-            'game_version_id'   => $currentMappingVersion?->game_version_id ?? GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL], // @phpstan-ignore nullsafe.neverNull
-            'mdt_mapping_hash'  => $hash,
+            'dungeon_id' => $dungeon->id,
+            // $gameVersion is the source of truth, NOT $currentMappingVersion->game_version_id - the caller is
+            // responsible for scoping $currentMappingVersion to $gameVersion, and it may legitimately be null
+            // (the dungeon's first-ever mapping version for this game version) (#3757).
+            'game_version_id' => $gameVersion->id,
+            // Set only once the import actually succeeds, see importMappingVersionFromMDT() (#3737)
+            'mdt_mapping_hash'  => null,
             'mdt_addon_version' => $this->mdtAddonVersionService->getCurrentAddonVersion(),
             'version'           => ($currentMappingVersion?->version ?? 0) + 1, // @phpstan-ignore nullsafe.neverNull
-            'facade_enabled'    => $currentMappingVersion?->facade_enabled ?? false, // @phpstan-ignore nullsafe.neverNull
+            'facade_enabled'    => $facadeEnabled,
             'created_at'        => $now,
             'updated_at'        => $now,
         ]);
 
         $newMappingVersion = MappingVersion::find($id);
+
+        if ($currentMappingVersion === null) {
+            // Checkpoints/enemies stay empty for a genuinely first-ever import of this game version - there is
+            // no game-version-agnostic source for curated content like that. Map icons ALSO stay empty here,
+            // but not because they're curated: importMapPOIs() (called right after this method returns, as
+            // part of the same import) already (re)creates the physical subset it recognizes itself from MDT's
+            // own map POI data whenever $currentMappingVersion is null - see its "(#3757)" comments. Cloning
+            // them here too would just create duplicate rows a few lines later in the same import. Mountable
+            // areas have no such backfill to rely on: MDT has no mount-speed-zone concept at all, so they need
+            // the same explicit clone floor unions get.
+            // The physical facade geometry resolved above still needs cloning in, though, along with
+            // timer_max_seconds - it's a NOT NULL DEFAULT 0 column that several call sites divide by unguarded
+            // (CombatLogEventFilter::fromHeatmapDataFilter(), CombatLogEvent::setTimeInterval()), so leaving it
+            // at its column default here is a live DivisionByZeroError, not just missing data.
+            if ($facadeSourceMappingVersion !== null) {
+                $this->cloneFloorUnionsToMappingVersion($facadeSourceMappingVersion, $newMappingVersion);
+                $this->cloneMountableAreasToMappingVersion($facadeSourceMappingVersion, $newMappingVersion);
+
+                $newMappingVersion->update([
+                    'timer_max_seconds' => $facadeSourceMappingVersion->timer_max_seconds,
+                ]);
+            }
+
+            // Dungeon floor switch markers have no MDT backfill either, but unlike FloorUnions they are NOT
+            // facade-specific geometry - every dungeon has staircases between floors, facade-enabled or not
+            // (per Wotuu, #3762 review round 2: modern MDT exports only generate a combined/facade view and no
+            // longer supply the per-floor MapLink POI data importMapPOIs() used to recreate them from, and this
+            // app still needs them for both facade mode and the per-floor "visit style" mode). So their source
+            // must NOT be gated behind $facadeSourceMappingVersion the way FloorUnion/MountableArea legitimately
+            // are - that would silently drop them for every non-facade dungeon's first-ever import, which is
+            // most of them. Fall back to the newest mapping version of ANY game version, deterministically,
+            // same rationale as the facade source above.
+            $physicalGeometrySourceMappingVersion = $facadeSourceMappingVersion
+                ?? $dungeon->mappingVersions()->orderByDesc('id')->first();
+
+            if ($physicalGeometrySourceMappingVersion !== null) {
+                $this->cloneDungeonFloorSwitchMarkersToMappingVersion($physicalGeometrySourceMappingVersion, $newMappingVersion);
+            }
+
+            // importMapPOIs() still guards against duplicating whatever gets cloned in here (it only creates a
+            // fresh floor switch marker when the new mapping version doesn't already have one).
+
+            return $newMappingVersion->load([
+                'dungeonFloorSwitchMarkers',
+                'mapIcons',
+                'mountableAreas',
+                'floorUnions',
+                'floorUnionAreas',
+            ]);
+        }
 
         return $this->copyMappingVersionContentsToDungeon($currentMappingVersion, $newMappingVersion);
     }
@@ -154,17 +229,21 @@ class MappingService implements MappingServiceInterface
 
     public function copyMappingVersionToDungeon(MappingVersion $sourceMappingVersion, Dungeon $dungeon): MappingVersion
     {
-        /** @var MappingVersion|null $currentMappingVersion */
-        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
-        $now                   = Carbon::now()->toDateTimeString();
+        // The target's game_version_id and next `version` must be derived from $sourceMappingVersion's
+        // OWN game version, not $dungeon's ambient "current" mapping version - that resolves through
+        // the acting user's/default game version and can land on a completely different
+        // game_version_id than the one actually being copied (see #3720).
+        /** @var MappingVersion|null $currentMappingVersionForGameVersion */
+        $currentMappingVersionForGameVersion = $dungeon->getCurrentMappingVersionForGameVersion($sourceMappingVersion->gameVersion);
+        $now                                 = Carbon::now()->toDateTimeString();
         // This needs to happen quietly as to not trigger MappingVersion events defined in its class
         $id = MappingVersion::insertGetId([
             'dungeon_id'        => $dungeon->id,
-            'game_version_id'   => $currentMappingVersion?->game_version_id ?? GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL], // @phpstan-ignore nullsafe.neverNull
+            'game_version_id'   => $sourceMappingVersion->game_version_id,
             'mdt_mapping_hash'  => $sourceMappingVersion->mdt_mapping_hash,
             'mdt_addon_version' => $sourceMappingVersion->mdt_addon_version,
-            'version'           => ($currentMappingVersion?->version ?? 0) + 1, // @phpstan-ignore nullsafe.neverNull
-            'facade_enabled'    => $currentMappingVersion?->facade_enabled ?? false, // @phpstan-ignore nullsafe.neverNull
+            'version'           => ($currentMappingVersionForGameVersion?->version ?? 0) + 1, // @phpstan-ignore nullsafe.neverNull
+            'facade_enabled'    => $currentMappingVersionForGameVersion?->facade_enabled ?? false, // @phpstan-ignore nullsafe.neverNull
             'created_at'        => $now,
             'updated_at'        => $now,
         ]);
@@ -180,24 +259,7 @@ class MappingService implements MappingServiceInterface
         // MDT mapping
 
         // Dungeon Floor Switch Markers
-        $dungeonFloorSwitchMarkerIdMapping = [];
-        $newDungeonFloorSwitchMarkers      = [];
-
-        foreach ($sourceMappingVersion->dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
-            /** @var DungeonFloorSwitchMarker $newDungeonFloorSwitchMarker */
-            $newDungeonFloorSwitchMarker = $dungeonFloorSwitchMarker->cloneForNewMappingVersion(
-                $targetMappingVersion,
-            );
-            $dungeonFloorSwitchMarkerIdMapping[$dungeonFloorSwitchMarker->id] = $newDungeonFloorSwitchMarker->id;
-            $newDungeonFloorSwitchMarkers[]                                   = $newDungeonFloorSwitchMarker;
-        }
-
-        // Restore the links between the floor switches
-        foreach ($newDungeonFloorSwitchMarkers as $newDungeonFloorSwitchMarker) {
-            $newDungeonFloorSwitchMarker->update([
-                'linked_dungeon_floor_switch_marker_id' => $dungeonFloorSwitchMarkerIdMapping[$newDungeonFloorSwitchMarker['linked_dungeon_floor_switch_marker_id']] ?? null,
-            ]);
-        }
+        $this->cloneDungeonFloorSwitchMarkersToMappingVersion($sourceMappingVersion, $targetMappingVersion);
 
         // Map Icons
         foreach ($sourceMappingVersion->mapIcons as $mapIcon) {
@@ -205,22 +267,14 @@ class MappingService implements MappingServiceInterface
         }
 
         // Mountable Areas
-        foreach ($sourceMappingVersion->mountableAreas as $mountableArea) {
-            $mountableArea->cloneForNewMappingVersion($targetMappingVersion);
-        }
+        $this->cloneMountableAreasToMappingVersion($sourceMappingVersion, $targetMappingVersion);
 
         // Enemy Forces Checkpoints are cloned by copyEnemyForcesCheckpointsToMappingVersion() instead - the
         // caller must invoke it, because only the caller knows how to re-link the membership of the enemies
         // it clones or re-imports, and this method copies no enemies at all (#3702).
 
         // Floor Unions (and areas)
-        foreach ($sourceMappingVersion->floorUnions as $floorUnion) {
-            /** @var FloorUnion $newFloorUnion */
-            $newFloorUnion = $floorUnion->cloneForNewMappingVersion($targetMappingVersion);
-            foreach ($floorUnion->floorUnionAreas as $floorUnionArea) {
-                $floorUnionArea->cloneForNewMappingVersion($targetMappingVersion, $newFloorUnion);
-            }
-        }
+        $this->cloneFloorUnionsToMappingVersion($sourceMappingVersion, $targetMappingVersion);
 
         // Copy these properties over only if the dungeons match - doesn't make sense otherwise
         if ($sourceMappingVersion->dungeon_id === $targetMappingVersion->dungeon_id) {
@@ -247,20 +301,64 @@ class MappingService implements MappingServiceInterface
     }
 
     public function copyEnemyForcesCheckpointsToMappingVersion(
-        MappingVersion $sourceMappingVersion,
-        MappingVersion $targetMappingVersion,
+        ?MappingVersion $sourceMappingVersion,
+        MappingVersion  $targetMappingVersion,
     ): array {
         $enemyForcesCheckpointIdMapping = [];
 
-        foreach ($sourceMappingVersion->enemyForcesCheckpoints as $enemyForcesCheckpoint) {
-            /** @var EnemyForcesCheckpoint $newEnemyForcesCheckpoint */
-            $newEnemyForcesCheckpoint = $enemyForcesCheckpoint->cloneForNewMappingVersion($targetMappingVersion);
+        // No predecessor to clone from (e.g. a dungeon's first-ever mapping version for a game version) - the
+        // target simply starts with none, same as a bare mapping version (#3757).
+        if ($sourceMappingVersion !== null) {
+            foreach ($sourceMappingVersion->enemyForcesCheckpoints as $enemyForcesCheckpoint) {
+                /** @var EnemyForcesCheckpoint $newEnemyForcesCheckpoint */
+                $newEnemyForcesCheckpoint = $enemyForcesCheckpoint->cloneForNewMappingVersion($targetMappingVersion);
 
-            $enemyForcesCheckpointIdMapping[$enemyForcesCheckpoint->id] = $newEnemyForcesCheckpoint->id;
+                $enemyForcesCheckpointIdMapping[$enemyForcesCheckpoint->id] = $newEnemyForcesCheckpoint->id;
+            }
         }
 
         $targetMappingVersion->load('enemyForcesCheckpoints');
 
         return $enemyForcesCheckpointIdMapping;
+    }
+
+    private function cloneFloorUnionsToMappingVersion(MappingVersion $sourceMappingVersion, MappingVersion $targetMappingVersion): void
+    {
+        foreach ($sourceMappingVersion->floorUnions as $floorUnion) {
+            /** @var FloorUnion $newFloorUnion */
+            $newFloorUnion = $floorUnion->cloneForNewMappingVersion($targetMappingVersion);
+            foreach ($floorUnion->floorUnionAreas as $floorUnionArea) {
+                $floorUnionArea->cloneForNewMappingVersion($targetMappingVersion, $newFloorUnion);
+            }
+        }
+    }
+
+    private function cloneMountableAreasToMappingVersion(MappingVersion $sourceMappingVersion, MappingVersion $targetMappingVersion): void
+    {
+        foreach ($sourceMappingVersion->mountableAreas as $mountableArea) {
+            $mountableArea->cloneForNewMappingVersion($targetMappingVersion);
+        }
+    }
+
+    private function cloneDungeonFloorSwitchMarkersToMappingVersion(MappingVersion $sourceMappingVersion, MappingVersion $targetMappingVersion): void
+    {
+        $dungeonFloorSwitchMarkerIdMapping = [];
+        $newDungeonFloorSwitchMarkers      = [];
+
+        foreach ($sourceMappingVersion->dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
+            /** @var DungeonFloorSwitchMarker $newDungeonFloorSwitchMarker */
+            $newDungeonFloorSwitchMarker = $dungeonFloorSwitchMarker->cloneForNewMappingVersion(
+                $targetMappingVersion,
+            );
+            $dungeonFloorSwitchMarkerIdMapping[$dungeonFloorSwitchMarker->id] = $newDungeonFloorSwitchMarker->id;
+            $newDungeonFloorSwitchMarkers[]                                   = $newDungeonFloorSwitchMarker;
+        }
+
+        // Restore the links between the floor switches
+        foreach ($newDungeonFloorSwitchMarkers as $newDungeonFloorSwitchMarker) {
+            $newDungeonFloorSwitchMarker->update([
+                'linked_dungeon_floor_switch_marker_id' => $dungeonFloorSwitchMarkerIdMapping[$newDungeonFloorSwitchMarker['linked_dungeon_floor_switch_marker_id']] ?? null,
+            ]);
+        }
     }
 }

@@ -4,6 +4,8 @@
 
 /** @noinspection PhpParamsInspection */
 
+use App\Models\Affix;
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\CharacterClass;
 use App\Models\Dungeon;
 use App\Models\Expansion;
@@ -387,6 +389,44 @@ Breadcrumbs::for('admin.dungeonspeedrunrequirednpc.new', static function (Genera
         ]),
         route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon, 'floor' => $floor, 'difficulty' => $difficulty]),
     );
+});
+
+// Affixes
+Breadcrumbs::for('admin.affix.list', static function (Generator $trail) {
+    $trail->parent('admin');
+    $trail->push(__('breadcrumbs.home.admin.affixes.affixes'), route('admin.affixes'));
+});
+Breadcrumbs::for('admin.affix.edit', static function (Generator $trail, ?Affix $affix) {
+    $trail->parent('admin.affix.list');
+    if ($affix === null) {
+        $trail->push(__('breadcrumbs.home.admin.affixes.new_affix'), route('admin.affix.new'));
+    } else {
+        $trail->push(__('breadcrumbs.home.admin.affixes.edit_affix', ['affix' => __($affix->name)]), route('admin.affix.edit', $affix));
+    }
+});
+
+// Seasons
+Breadcrumbs::for('admin.season.list', static function (Generator $trail) {
+    $trail->parent('admin');
+    $trail->push(__('breadcrumbs.home.admin.seasons.seasons'), route('admin.seasons'));
+});
+Breadcrumbs::for('admin.season.edit', static function (Generator $trail, ?Season $season) {
+    $trail->parent('admin.season.list');
+    if ($season === null) {
+        $trail->push(__('breadcrumbs.home.admin.seasons.new_season'), route('admin.season.new'));
+    } else {
+        $trail->push(__('breadcrumbs.home.admin.seasons.edit_season', ['season' => __($season->name_long)]), route('admin.season.edit', $season));
+    }
+});
+
+// Affix groups (rotation weeks)
+Breadcrumbs::for('admin.affixgroup.edit', static function (Generator $trail, Season $season, ?AffixGroup $affixGroup) {
+    $trail->parent('admin.season.edit', $season);
+    if ($affixGroup === null) {
+        $trail->push(__('breadcrumbs.home.admin.affixgroups.new_affixgroup'), route('admin.affixgroup.new', ['season' => $season]));
+    } else {
+        $trail->push(__('breadcrumbs.home.admin.affixgroups.edit_affixgroup'), route('admin.affixgroup.edit', ['season' => $season, 'affixGroup' => $affixGroup]));
+    }
 });
 
 // Npcs

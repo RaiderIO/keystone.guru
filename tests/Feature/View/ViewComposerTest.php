@@ -94,6 +94,7 @@ final class ViewComposerTest extends PublicTestCase
     {
         $this->assertComposerSetsKeys(HeaderComposer::class, 'common.layout.header', [
             'activeExpansions', 'currentSeason', 'nextSeason', 'allGameVersions', 'gameVersionDungeons',
+            'dungeonContextNextSeason', 'dungeonContextNextSeasonLink',
         ]);
     }
 
@@ -157,7 +158,7 @@ final class ViewComposerTest extends PublicTestCase
     public function dungeonGridTabsComposer_givenView_setsGridTabsKeys(): void
     {
         $this->assertComposerSetsKeys(DungeonGridTabsComposer::class, 'common.dungeon.gridtabs', [
-            'activeExpansions', 'currentSeason', 'nextSeason',
+            'activeExpansions', 'currentSeason', 'nextSeason', 'requestedSeasonId',
         ]);
     }
 

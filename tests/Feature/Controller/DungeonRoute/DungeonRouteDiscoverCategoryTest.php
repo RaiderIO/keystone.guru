@@ -8,8 +8,10 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameVersion\GameVersion;
 use App\Models\PublishedState;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -187,6 +189,35 @@ final class DungeonRouteDiscoverCategoryTest extends PublicTestCase
             $secondPage->assertSee('leaderboard_rank text-secondary text-end">5</div>', false);
             $secondPage->assertSee('rel="prev"', false);
             $secondPage->assertDontSee('discover_hero_band', false);
+        } finally {
+            $routes->each(fn(DungeonRoute $route) => $route->delete());
+        }
+    }
+
+    #[Test]
+    public function discoverDungeon_givenReworkFlagActiveAndMultipleRoutes_batchesEnemyForcesQueryAcrossCards(): void
+    {
+        // Arrange - several routes, so a hero card and multiple leaderboard rows render on one cold-cache page
+        Feature::define(DungeonRouteListRework::class, true);
+        [$gameVersion, $dungeon, $routes] = $this->createQualifyingRoutes(5);
+
+        try {
+            $forcesQueryCount = 0;
+            DB::listen(function (QueryExecuted $query) use (&$forcesQueryCount) {
+                if (str_contains($query->sql, 'per_identity')) {
+                    $forcesQueryCount++;
+                }
+            });
+
+            // Act
+            $response = $this->get(route('dungeonroutes.discoverdungeon', [
+                'gameVersion' => $gameVersion,
+                'dungeon'     => $dungeon,
+            ]));
+
+            // Assert - one batched query for the whole page instead of one per card (5 routes -> 5 cards)
+            $response->assertOk();
+            $this->assertSame(1, $forcesQueryCount);
         } finally {
             $routes->each(fn(DungeonRoute $route) => $route->delete());
         }

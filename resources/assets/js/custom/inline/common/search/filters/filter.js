@@ -4,6 +4,8 @@ class SearchFilter {
         this.onChange = onChange;
         this.options = options;
         this.enabled = true;
+        // Names of the params override keys that were explicitly restored from the URL - see markValueOverrideExplicit()
+        this.explicitValueOverrides = {};
     }
 
     activate() {
@@ -62,4 +64,30 @@ class SearchFilter {
     getDefaultValueOverride(name) {
         return null;
     }
+
+    /**
+     * Marks a params override key as having been set explicitly (rather than being left at its default).
+     *
+     * A value that happens to equal its own default is otherwise indistinguishable from "not set" and would be
+     * dropped from the URL again on the next search - which silently truncates a shared/embedded link (#3837).
+     *
+     * @param name {String}
+     */
+    markValueOverrideExplicit(name) {
+        this.explicitValueOverrides[name] = true;
+    }
+
+    /**
+     * @param name {String}
+     * @returns {boolean}
+     */
+    hasExplicitValueOverride(name) {
+        return this.explicitValueOverrides.hasOwnProperty(name);
+    }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {SearchFilter};
 }

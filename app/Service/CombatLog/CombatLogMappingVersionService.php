@@ -198,8 +198,12 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                         //                        throw new Exception('Unable to create initial mapping version from combat log - there are already mapping versions for this dungeon!');
                         //                    }
 
-                        // If the dungeon was found, update the mapping version
-                        $mostRecentMappingVersion = MappingVersion::where('dungeon_id', $dungeon->id)->orderByDesc('version')->first();
+                        // If the dungeon was found, update the mapping version - scoped by game_version_id,
+                        // since `version` is only unique per game version (see #3720)
+                        $mostRecentMappingVersion = MappingVersion::where('dungeon_id', $dungeon->id)
+                            ->where('game_version_id', $mappingVersion->game_version_id)
+                            ->orderByDesc('version')
+                            ->first();
 
                         $newMappingVersionVersion = $mostRecentMappingVersion === null ? 1 : $mostRecentMappingVersion->version + 1;
 

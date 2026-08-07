@@ -3,6 +3,14 @@
     width: 100%;
 }
 
+/* .wrapper only exists on full-viewport map pages. Give it a definite height of its own:
+   #app is min-height based (required for the sticky site header, #3851), which ends the
+   percentage-height chain that used to size it. */
+.wrapper {
+    height: 100vh;
+    height: 100dvh;
+}
+
 
 
 .leaflet-tooltip-killzone-index {
@@ -367,13 +375,29 @@
     max-height: calc(100vh - 226px);
 }
 
-/** Heatmap section of the sidebar, no ads */
-#heatmap_search_sidebar .data_container.explore {
-    max-height: calc(100vh - 306px);
+/** Heatmap section of the sidebar. The header holds the active filter badges, which wrap onto as many
+    lines as they need, so the sidebar is bounded as a whole and the filter list below - not the badges -
+    absorbs the difference. The bounds are what the old fixed-height layout worked out to: the header block
+    (133px, of which 71px was a fixed-height badge area) plus max-height: calc(100vh - 306px) here. */
+#heatmap_search_sidebar .bg-header {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 173px);
 }
 
-#heatmap_search_sidebar.ad_loaded .data_container.explore {
-    max-height: calc(100vh - (314px + 198px));
+#heatmap_search_sidebar.ad_loaded .bg-header {
+    max-height: calc(100vh - (181px + 198px));
+}
+
+/** Never shrink the header itself - the filter list is what gives way. */
+#heatmap_search_sidebar .bg-header > .p-1 {
+    flex: 0 0 auto;
+}
+
+#heatmap_search_sidebar .data_container.explore {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none;
 }
 
 /** Dungeonroute search section of the sidebar, no ads */
@@ -1222,16 +1246,13 @@
     height: 16px;
 }
 
-#heatmap_search_options_current_filters {
-    overflow-y: auto;
-}
-
-#heatmap_search_sidebar:not(.embed) #heatmap_search_options_current_filters {
-    height: 71px;
-}
-
-#heatmap_search_sidebar.embed #heatmap_search_options_current_filters {
-    height: 106px;
+/* The active filter badges get as many lines as they need - see the flex rules on
+   #heatmap_search_sidebar .bg-header, which let the filter list below give up the space instead.
+   A badge that doesn't fit on one line (the spell filter lists every spell it filters on) wraps
+   rather than running out of the sidebar. */
+#heatmap_search_options_current_filters .badge {
+    white-space: normal;
+    text-align: left;
 }
 
 /* Map settings range sliders: full width with a themed filled track.

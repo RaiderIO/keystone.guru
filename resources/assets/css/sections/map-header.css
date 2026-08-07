@@ -1,22 +1,3 @@
-.navbar-third {
-    -webkit-transition: padding 0.2s ease;
-    -moz-transition: padding 0.2s ease;
-    -o-transition: padding 0.2s ease;
-    transition: padding 0.2s ease;
-
-    -webkit-transition: height 0.2s ease;
-    -moz-transition: height 0.2s ease;
-    -o-transition: height 0.2s ease;
-    transition: height 0.2s ease;
-}
-
-.dungeon_context_header  {
-    -webkit-transition: height 0.2s ease;
-    -moz-transition: height 0.2s ease;
-    -o-transition: height 0.2s ease;
-    transition: height 0.2s ease;
-}
-
 .dungeon_context_header .row,
 .dungeon_context_header .col,
 .dungeon_context_header .grid_dungeon,
@@ -50,35 +31,32 @@
     pointer-events: auto;
 }
 
-/*.dungeon_context_header.navbar-shrink img,*/
-.dungeon_context_header.navbar-shrink {
-    padding-top: inherit !important;
-    padding-bottom: inherit !important;
-
-    height: 64px !important;
-}
-
-@media (min-width: 992px) {
-    .navbar-third {
-        top: 151px !important;
-        -webkit-transition: top 0.2s ease;
-        -moz-transition: top 0.2s ease;
-        -o-transition: top 0.2s ease;
-        transition: top 0.2s ease;
-    }
-
-    #map_header:not(:has(> .has_dungeon_context_header)) > .navbar-second {
-        top: 30px !important;
-    }
-
-    #map_header:not(:has(> .has_dungeon_context_header)) > .navbar-third {
-        top: 86px !important;
-    }
-}
-
 /** HEADER */
+/* The map header floats over the map: one fixed flex column, its bars stacking
+   in flow inside it. The included .ksg-header degrades to a plain flow child. */
 #map_header {
     position: fixed;
+    inset: 0 0 auto 0;
+    display: flex;
+    flex-direction: column;
+}
+
+#map_header .ksg-header {
+    position: static;
+}
+
+/* One opaque band behind the centered containers: the spacing between the bars stays,
+   but paints the header color instead of letting the map bleed through. Sized to match
+   the containers' max-width so the left/right gutters remain transparent + click-through
+   (the band is a pseudo-element of a pointer-events: none parent, so it catches no clicks). */
+#map_header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1400px;
+    background-color: var(--theme-header);
 }
 
 #map_header,
@@ -86,8 +64,31 @@
     z-index: 100020 !important;
 }
 
+/* Dropdowns opened from the navbar (user menu, language flags) must overlay the route
+   bar below it - as a flex item the included header stacks by z-index, and without this
+   the later-in-DOM .navbar-third (100020) paints on top of them */
+#map_header > .ksg-header {
+    z-index: 100021 !important;
+}
+
 #map_header .rounded {
     border-radius: 0 !important;
+}
+
+/* The container only has horizontal padding (px-1); without this the content sits
+   flush against the bar's edges - symmetric so the route title stays centered */
+.navbar-third > .container {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+
+/* No vertical padding between the floating header's bars: those strips are
+   pointer-events dead zones (the ::before band paints them but catches nothing),
+   so clicks fell through to the map there and hovering them dropped the
+   map_fade_out hover state, flickering the header back to 0.8 opacity */
+#map_header .navbar-second {
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 .map_fade_out {
@@ -112,11 +113,21 @@
     }
 }
 
+/* The map renders behind the floating header; the transparent gutters left and
+   right of the centered containers must stay click-through. Every full-width
+   layer passes pointer events through — only the visible containers catch them. */
+#map_header,
+#map_header .ksg-header,
+#map_header .game_version_header,
+#map_header .navbar-second,
+#map_header .navbar-third {
+    pointer-events: none;
+}
+
 #map_header .game_version_header,
 #map_header .navbar-second,
 #map_header .navbar-third {
     width: 100%;
-    pointer-events: none;
 }
 
 #map_header .game_version_header > .container,

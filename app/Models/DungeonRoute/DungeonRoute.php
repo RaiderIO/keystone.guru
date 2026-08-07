@@ -45,6 +45,7 @@ use App\Models\Traits\Reportable;
 use App\Models\Traits\SerializesDates;
 use App\Models\Traits\Taggable;
 use App\Models\User;
+use App\Models\UserPinnedDungeonRoute;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
@@ -438,6 +439,12 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         return $this->hasMany(DungeonRouteFavorite::class);
     }
 
+    /** @return HasMany<UserPinnedDungeonRoute, $this> */
+    public function pinnedByUsers(): HasMany
+    {
+        return $this->hasMany(UserPinnedDungeonRoute::class);
+    }
+
     /** @return HasMany<LiveSession, $this> */
     public function livesessions(): HasMany
     {
@@ -466,7 +473,6 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     public function thumbnails(): BelongsToMany
     {
         return $this->belongsToMany(File::class, 'dungeon_route_thumbnails')
-            ->where('dungeon_route_thumbnails.custom', false)
             ->where('dungeon_route_thumbnails.variant', DungeonRouteThumbnailVariant::Standard);
     }
 
@@ -474,7 +480,6 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     public function heroThumbnails(): BelongsToMany
     {
         return $this->belongsToMany(File::class, 'dungeon_route_thumbnails')
-            ->where('dungeon_route_thumbnails.custom', false)
             ->where('dungeon_route_thumbnails.variant', DungeonRouteThumbnailVariant::Hero);
     }
 
@@ -1186,14 +1191,18 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     public function getDominantAffix(): ?string
     {
         $fortifiedCount = $tyrannicalCount = 0;
-        if (in_array($this->season_id, [
-            Season::SEASON_TWW_S1,
-            Season::SEASON_TWW_S2,
-            Season::SEASON_TWW_S3,
-        ])) {
-            foreach ($this->affixes as $affixGroup) {
+
+        // Whether a rotation carries both Fortified and Tyrannical in the same affix group (e.g. TWW/Midnight)
+        // or only ever one of the two (older seasons) is detected from the affix group's own data rather than
+        // a hardcoded season list - a season list is a maintenance point that's easy to forget to update (as
+        // happened with Midnight Season 1 here) and this way there's nothing to remember at all.
+        foreach ($this->affixes as $affixGroup) {
+            $hasFortified  = $affixGroup->hasAffix(Affix::AFFIX_FORTIFIED);
+            $hasTyrannical = $affixGroup->hasAffix(Affix::AFFIX_TYRANNICAL);
+
+            if ($hasFortified && $hasTyrannical) {
                 // Look at the 2nd affix - this is what people are going to be focused on mostly!
-                // These affix groups have both fortified and tyrannical, so just look at the one that comes first
+                // This affix group has both fortified and tyrannical, so just look at the one that comes first
                 /** @var Affix $affix */
                 $affix = $affixGroup->affixes->get(1);
                 if ($affix->key === Affix::AFFIX_FORTIFIED) {
@@ -1201,15 +1210,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 } elseif ($affix->key === Affix::AFFIX_TYRANNICAL) {
                     $tyrannicalCount++;
                 }
-            }
-        } else {
-            // These seasons either contain fortified or tyrannical, not both
-            foreach ($this->affixes as $affixGroup) {
-                if ($affixGroup->hasAffix(Affix::AFFIX_FORTIFIED)) {
-                    $fortifiedCount++;
-                } elseif ($affixGroup->hasAffix(Affix::AFFIX_TYRANNICAL)) {
-                    $tyrannicalCount++;
-                }
+            } elseif ($hasFortified) {
+                $fortifiedCount++;
+            } elseif ($hasTyrannical) {
+                $tyrannicalCount++;
             }
         }
 
@@ -1491,6 +1495,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             // External
             $dungeonRoute->ratings()->delete();
             $dungeonRoute->favorites()->delete();
+            $dungeonRoute->pinnedByUsers()->delete();
             foreach ($dungeonRoute->livesessions as $liveSession) {
                 $liveSession->delete();
             }

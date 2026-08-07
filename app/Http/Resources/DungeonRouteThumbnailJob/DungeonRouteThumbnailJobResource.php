@@ -42,7 +42,7 @@ class DungeonRouteThumbnailJobResource extends JsonResource
     #[Override]
     public function toArray(Request $request): array
     {
-        $queueSize = Queue::size(sprintf('%s-%s-thumbnail-api', config('app.type'), config('app.env')));
+        $queueSize = Queue::size(sprintf('%s-thumbnail-api', config('app.type')));
 
         $isCompleted = $this->status === DungeonRouteThumbnailJob::STATUS_COMPLETED;
 

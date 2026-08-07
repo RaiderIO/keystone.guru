@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Exceptions\Handler;
+use App\Models\Feature\Feature;
 use App\Models\Laratrust\Role;
 use App\Models\User;
 use App\Overrides\CustomRateLimiter;
@@ -62,6 +63,19 @@ class AppServiceProvider extends ServiceProvider
         Event::listen(CommandStarting::class, static function (): void {
             Context::addIf('trace_id', (string)Str::uuid());
         });
+
+        // Every feature in App\Features resolves off the user's roles, but Pennant stores the value it resolved
+        // once and keeps serving that forever after - so changing a user's roles has to drop their stored values.
+        // Laratrust passes the changed user as the first argument; the arguments following it differ per event
+        // (added/removed pass the role, synced passes the sync changes) so they're deliberately not accepted here.
+        $forgetFeatures = static function (User $user): void {
+            Feature::forgetAllForUser($user);
+        };
+
+        // removeRoles() loops removeRole() - unless it's handed an empty array, in which case it syncs instead
+        User::roleAdded($forgetFeatures);
+        User::roleRemoved($forgetFeatures);
+        User::roleSynced($forgetFeatures);
 
         $this->app->bind(ExceptionHandler::class, Handler::class);
 

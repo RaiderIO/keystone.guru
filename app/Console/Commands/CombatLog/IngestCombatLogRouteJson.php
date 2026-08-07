@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\CombatLog;
 
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
+use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestDto;
 use App\Logging\StructuredLogging;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
 use Auth;
@@ -76,7 +76,7 @@ class IngestCombatLogRouteJson extends Command
             }
 
             $dungeonRoute = $combatLogRouteDungeonRouteService->convertCombatLogRouteToDungeonRoute(
-                CombatLogRouteRequestModel::createFromArray(
+                CombatLogRouteRequestDto::createFromArray(
                     json_decode(file_get_contents($filePath), true),
                 ),
             );

@@ -2,8 +2,10 @@
 
 namespace Tests\Unit\App\Logging;
 
+use App\Logging\StructuredLogging;
 use Illuminate\Support\Facades\Context;
 use LogicException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
@@ -318,5 +320,103 @@ class StructuredLoggingTest extends PublicTestCase
 
         // Act
         $log->end('suspend');
+    }
+
+    /**
+     * The stderr channel exists so a locally-run artisan command shows its own output. Under PHPUnit
+     * it only interleaves structured log lines with the test progress output, which is what happened
+     * in CI: the channel is static, so a single logger built before the application had bound its
+     * environment latched stderr on for the whole process. Resolving per call instead means "am I
+     * running tests" is answered once the application can actually answer it.
+     */
+    #[Test]
+    public function resolveChannel_GivenRunningTestsOnALocalConsole_ShouldNotSelectAConsoleChannel(): void
+    {
+        // Arrange - the exact configuration that selects stderr outside of tests
+        config(['app.type' => 'local']);
+        self::assertTrue($this->app->runningInConsole(), 'Only meaningful when run from the console');
+
+        // Act
+        $channel = StructuredLogging::resolveChannel();
+
+        // Assert
+        self::assertNull($channel, 'Structured logging must fall through to the default channel while testing');
+    }
+
+    /**
+     * #3782: a test is free to change app.env, and several do to exercise production-only behaviour -
+     * MDTMappingImportGameVersionScopingTest did it around a full MDT mapping import and put ~1000
+     * ANSI-coloured log lines in the CI test output. "Am I running tests" must therefore not be answered
+     * by app.env alone.
+     */
+    #[Test]
+    public function resolveChannel_GivenTheApplicationEnvironmentIsFlippedToProduction_ShouldNotSelectAConsoleChannel(): void
+    {
+        // Arrange
+        config(['app.type' => 'local']);
+        self::assertTrue($this->app->runningInConsole(), 'Only meaningful when run from the console');
+
+        $originalEnvironment = $this->app['env'];
+        $this->app['env']    = 'production';
+        self::assertFalse($this->app->runningUnitTests(), 'The environment flip must actually have taken effect');
+
+        try {
+            // Act
+            $channel = StructuredLogging::resolveChannel();
+
+            // Assert
+            self::assertNull($channel, 'A test flipping app.env must not redirect structured logging to the console');
+        } finally {
+            $this->app['env'] = $originalEnvironment;
+        }
+    }
+
+    #[Test]
+    public function resolveChannel_GivenAnExplicitChannel_ShouldReturnIt(): void
+    {
+        // Arrange
+        StructuredLogging::setChannel('daily');
+
+        try {
+            // Act & Assert
+            self::assertSame('daily', StructuredLogging::resolveChannel());
+        } finally {
+            StructuredLogging::setChannel(null);
+        }
+    }
+
+    /**
+     * resolveChannel() can never observe the 'stderr' branch under PHPUnit - PHPUNIT_COMPOSER_INSTALL is
+     * defined for the whole process, so isRunningTests() can never return false from within a test. The
+     * decision was extracted into resolveConsoleChannel() specifically so this branch stays testable.
+     */
+    #[Test]
+    #[DataProvider('resolveConsoleChannelDataProvider')]
+    public function resolveConsoleChannel_GivenInputCombination_ShouldReturnExpectedChannel(
+        bool    $runningInConsole,
+        bool    $isRunningTests,
+        bool    $isLocalAppType,
+        ?string $expectedChannel,
+    ): void {
+        // Act
+        $channel = StructuredLogging::resolveConsoleChannel($runningInConsole, $isRunningTests, $isLocalAppType);
+
+        // Assert
+        self::assertSame($expectedChannel, $channel);
+    }
+
+    /** @return array<string, array{bool, bool, bool, ?string}> */
+    public static function resolveConsoleChannelDataProvider(): array
+    {
+        return [
+            'console + not tests + local => stderr'       => [true, false, true, 'stderr'],
+            'console + tests + local => null'             => [true, true, true, null],
+            'console + not tests + non-local => null'     => [true, false, false, null],
+            'console + tests + non-local => null'         => [true, true, false, null],
+            'not console + not tests + local => null'     => [false, false, true, null],
+            'not console + tests + local => null'         => [false, true, true, null],
+            'not console + not tests + non-local => null' => [false, false, false, null],
+            'not console + tests + non-local => null'     => [false, true, false, null],
+        ];
     }
 }

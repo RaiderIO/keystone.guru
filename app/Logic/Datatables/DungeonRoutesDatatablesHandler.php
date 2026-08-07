@@ -120,8 +120,9 @@ class DungeonRoutesDatatablesHandler extends DatatablesHandler
      * would run once per pre-LIMIT grouped route of the whole filtered set on this public, unauthenticated
      * endpoint - not once per the handful of rows actually returned. This query runs once, over
      * mapping_versions alone (a small table), regardless of how many dungeon_routes are filtered/paged.
-     * MySQL 5.7 (this project's minimum) has no window functions, hence the self-join instead of
-     * ROW_NUMBER() OVER (PARTITION BY ...).
+     * The self-join predates #3717, when local dev still ran MySQL 5.7 and window functions were off
+     * the table. Local dev and CI are on 8.0 now, so a ROW_NUMBER() OVER (PARTITION BY ...) rewrite is
+     * available there - kept as-is here because it is correct and already runs once over a small table.
      *
      * @return array<string, int>
      */

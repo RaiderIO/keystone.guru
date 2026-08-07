@@ -4,12 +4,12 @@ namespace App\Jobs\CombatLog;
 
 use App\Jobs\Logging\ProcessCombatLogSegmentsLoggingInterface;
 use App\Models\Season;
-use App\Repositories\Interfaces\CombatLog\CombatLogParseFailureRepositoryInterface;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
 use App\Service\CombatLog\Dtos\CombatLogRunContextInterface;
 use App\Service\CombatLog\Exceptions\CombatLogParseException;
 use App\Service\RaiderIO\Dtos\CombatLogSegment;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
+use App\Service\Traits\CombatLogSegmentFile;
 use App\Service\Traits\Curl;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -34,6 +34,7 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
     use Queueable;
     use SerializesModels;
     use Curl;
+    use CombatLogSegmentFile;
 
     public int $timeout = 1800;
 
@@ -47,13 +48,12 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
         private readonly int                           $combatLogVersion,
         private readonly ?CombatLogRunContextInterface $runContext = null,
     ) {
-        $this->queue = sprintf('%s-%s-cl-process', config('app.type'), config('app.env'));
+        $this->queue = sprintf('%s-cl-process', config('app.type'));
     }
 
     public function handle(
         RaiderIOApiServiceInterface              $raiderIOApiService,
         CombatLogDataExtractionServiceInterface  $extractionService,
-        CombatLogParseFailureRepositoryInterface $parseFailureRepository,
         ProcessCombatLogSegmentsLoggingInterface $log,
     ): void {
         $log->handleStart($this->runId, $this->combatLogVersion);
@@ -94,6 +94,14 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
                 }
 
                 $tempFiles[] = $tempPath;
+
+                if (!$this->isPlausibleSegment($tempPath)) {
+                    $log->handleSegmentIsNotACombatLog($this->runId, $segment->id, $tempPath);
+
+                    throw new RuntimeException(
+                        sprintf('Downloaded segment %d for run %d is not a combat log', $segment->id, $this->runId),
+                    );
+                }
             }
 
             foreach ($tempFiles as $tempFile) {
@@ -102,19 +110,27 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
 
             $result = true;
         } catch (RuntimeException $e) {
-            // Re-throw download failures so the job can be retried with fresh one-time URLs.
+            // Re-throw so the job is retried instead of being reported as a permanent parse failure: this
+            // covers download failures (fresh one-time URLs on retry) as well as RedisException, which
+            // extends RuntimeException and is rethrown unwrapped by CombatLogService::parseCombatLog() for
+            // the same reason - a dropped Redis/Valkey connection mid-parse is a transient infra blip, not
+            // an unparsable line (see #3791).
             throw $e;
         } catch (Throwable $e) {
-            $log->handleParseError($this->runId, $this->combatLogVersion, $e->getMessage(), $e::class);
+            // CombatLogParseException only wraps the real failure, so the class worth grouping and reporting on is
+            // the one it wrapped.
+            $exceptionClass = $e instanceof CombatLogParseException ? $e->getOriginalExceptionClass() : $e::class;
+            $lineNumber     = $e instanceof CombatLogParseException ? $e->lineNumber : null;
+            $rawLine        = $e instanceof CombatLogParseException ? $e->rawLine : null;
 
-            $parseFailureRepository->recordFailure(
+            $log->handleParseError(
                 $this->runId,
                 $this->season->id,
                 $this->combatLogVersion,
-                $e instanceof CombatLogParseException ? $e->lineNumber : null,
-                $e instanceof CombatLogParseException ? $e->rawLine : null,
+                $lineNumber,
+                $exceptionClass,
                 $e->getMessage(),
-                $e instanceof CombatLogParseException ? $e->getOriginalExceptionClass() : $e::class,
+                $rawLine,
             );
         } finally {
             foreach ($tempFiles as $tempFile) {
@@ -129,19 +145,6 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
     public function uniqueId(): string
     {
         return (string)$this->runId;
-    }
-
-    /**
-     * Derive the file extension from the (presigned) download URL. The extraction service relies on the
-     * `.zip` extension to know it must unzip the archive before parsing; without it the raw archive bytes
-     * are fed to the parser. Other downloads (e.g. the `.txt.gz`-named Raider.IO segments, whose bodies
-     * arrive already decompressed via the request's content encoding) are plain text and saved as `.txt`.
-     */
-    private function resolveSegmentExtension(string $downloadUrl): string
-    {
-        $path = (string)parse_url($downloadUrl, PHP_URL_PATH);
-
-        return str_ends_with($path, '.zip') ? 'zip' : 'txt';
     }
 
     /**

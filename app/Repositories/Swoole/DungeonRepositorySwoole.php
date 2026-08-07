@@ -3,6 +3,7 @@
 namespace App\Repositories\Swoole;
 
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Repositories\Database\DungeonRepository;
 use App\Repositories\Swoole\Interfaces\DungeonRepositorySwooleInterface;
@@ -48,7 +49,7 @@ class DungeonRepositorySwoole extends DungeonRepository implements DungeonReposi
     }
 
     #[Override]
-    public function getMappingVersionByVersion(Dungeon $dungeon, int $version): ?MappingVersion
+    public function getMappingVersionByVersion(Dungeon $dungeon, GameVersion $gameVersion, int $version): ?MappingVersion
     {
         if (!$this->dungeonMappingVersions->has($dungeon->id)) {
             $this->dungeonMappingVersions->put($dungeon->id, $dungeon->mappingVersions()->get());
@@ -56,8 +57,12 @@ class DungeonRepositorySwoole extends DungeonRepository implements DungeonReposi
 
         /** @var Collection<int, MappingVersion> $mappingVersions */
         $mappingVersions = $this->dungeonMappingVersions->get($dungeon->id);
-        /** @var MappingVersion $mappingVersion */
-        $mappingVersion = $mappingVersions->firstWhere('version', $version);
+        // `version` is only unique per game_version_id (see #3720/#3754) - scoped explicitly by
+        // $gameVersion rather than left ambiguous.
+        /** @var MappingVersion|null $mappingVersion */
+        $mappingVersion = $mappingVersions
+            ->where('game_version_id', $gameVersion->id)
+            ->firstWhere('version', $version);
 
         return $mappingVersion;
     }

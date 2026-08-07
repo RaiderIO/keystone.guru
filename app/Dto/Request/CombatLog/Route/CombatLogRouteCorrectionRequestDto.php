@@ -1,0 +1,36 @@
+<?php
+
+namespace App\Dto\Request\CombatLog\Route;
+
+use Illuminate\Support\Collection;
+use Override;
+
+/**
+ * @OA\Schema(schema="CombatLogRouteCorrectionRequest")
+ * @OA\Property(property="metadata",type="object",ref="#/components/schemas/CombatLogRouteMetadata")
+ * @OA\Property(property="settings",type="object",ref="#/components/schemas/CombatLogRouteSettings")
+ * @OA\Property(property="challengeMode",type="object",ref="#/components/schemas/CombatLogRouteChallengeMode")
+ * @OA\Property(property="npcs",type="array",items={"$ref":"#/components/schemas/CombatLogRouteNpcCorrection"})
+ * @OA\Property(property="spells",type="array",items={"$ref":"#/components/schemas/CombatLogRouteSpellCorrection"}, nullable=true)
+ * @OA\Property(property="playerDeaths",type="array",items={"$ref":"#/components/schemas/CombatLogRoutePlayerDeathCorrection"}, nullable=true)
+ *
+ * @property Collection<int, CombatLogRouteNpcCorrectionRequestDto>         $npcs
+ * @property Collection<int, CombatLogRouteSpellCorrectionRequestDto>       $spells
+ * @property Collection<int, CombatLogRoutePlayerDeathCorrectionRequestDto> $playerDeaths
+ */
+class CombatLogRouteCorrectionRequestDto extends CombatLogRouteRequestDto
+{
+    //    public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:sP';
+    public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s.vP';
+
+    #[Override]
+    public static function getCollectionItemType(string $key): ?string
+    {
+        return match ($key) {
+            'npcs'         => CombatLogRouteNpcCorrectionRequestDto::class,
+            'spells'       => CombatLogRouteSpellCorrectionRequestDto::class,
+            'playerDeaths' => CombatLogRoutePlayerDeathCorrectionRequestDto::class,
+            default        => null,
+        };
+    }
+}

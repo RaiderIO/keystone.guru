@@ -2,18 +2,20 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
-use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\TestCases\AjaxPublicTestCase;
 
 #[Group('Controller')]
 #[Group('DungeonRoute')]
 final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
 {
+    use ProvidesDungeon;
+
     #[Test]
     public function get_givenMissingColumnsParameter_returnsUnprocessableEntity(): void
     {
@@ -187,21 +189,13 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
      */
     private function createDungeonRouteForActiveDungeon(): DungeonRoute
     {
-        $count = 0;
-        do {
-            if (++$count > 20) {
-                throw new \RuntimeException('Unable to find an active dungeon with a current mapping version and floors');
-            }
-
-            /** @var Dungeon $dungeon */
-            $dungeon = Dungeon::whereNotNull('challenge_mode_id')->where('active', 1)->inRandomOrder()->first();
-        } while ($dungeon->getCurrentMappingVersion() === null || $dungeon->floors->isEmpty());
+        [$dungeon, $mappingVersion] = $this->findDungeon(challengeMode: true, dungeonActive: true);
 
         return DungeonRoute::factory()->create([
             // A "try" route is treated as temporary and excluded from the results entirely
             'expires_at'         => null,
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $mappingVersion->id,
         ]);
     }
 

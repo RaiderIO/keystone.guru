@@ -10,20 +10,8 @@ class FactionDisplayControls extends MapControl {
             onAdd: function (leafletMap) {
                 let template = Handlebars.templates['map_faction_display_controls_template'];
 
-                // factionsData is defined in map.blade.php
-                let factionsData = [];
                 let stateFactions = getState().getMapContext().getStaticFactions();
-                for (let index in stateFactions) {
-                    if (stateFactions.hasOwnProperty(index)) {
-                        let faction = stateFactions[index];
-                        factionsData.push({
-                            name: lang.get(faction.name),
-                            name_lc: lang.get(faction.name).toLowerCase(),
-                            icon_url: faction.iconfile.icon_url,
-                            fa_class: parseInt(index) === 0 ? 'fas' : 'far'
-                        });
-                    }
-                }
+                let factionsData = self._buildFactionsData(stateFactions);
 
                 let data = $.extend({}, getHandlebarsDefaultVariables(), {factions: factionsData});
 
@@ -66,6 +54,31 @@ class FactionDisplayControls extends MapControl {
             self._visibilityToggled('horde', true);
             self._visibilityToggled('alliance', false);
         });
+    }
+
+    /**
+     * Builds the per-faction data passed to the Handlebars template.
+     * @param stateFactions
+     * @return {Array}
+     * @private
+     */
+    _buildFactionsData(stateFactions) {
+        console.assert(this instanceof FactionDisplayControls, 'this is not FactionDisplayControls', this);
+
+        let factionsData = [];
+        for (let index in stateFactions) {
+            if (stateFactions.hasOwnProperty(index)) {
+                let faction = stateFactions[index];
+                factionsData.push({
+                    name: lang.get(faction.name),
+                    key: faction.key,
+                    icon_url: faction.icon_url,
+                    fa_class: parseInt(index) === 0 ? 'fas' : 'far'
+                });
+            }
+        }
+
+        return factionsData;
     }
 
     /**
@@ -118,4 +131,8 @@ class FactionDisplayControls extends MapControl {
 
         this.map.unregister('map:mapobjectgroupsloaded', this);
     }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = FactionDisplayControls;
 }

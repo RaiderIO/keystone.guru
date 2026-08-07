@@ -7,7 +7,7 @@ use Illuminate\Validation\Rule;
 
 class DungeonRouteRequest extends APIFormRequest
 {
-    protected function getRequestModelClass(): ?string
+    protected function getRequestDtoClass(): ?string
     {
         return null;
     }

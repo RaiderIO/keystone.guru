@@ -21,7 +21,11 @@ class SearchParams {
                 let paramsOverride = filter.getParamsOverride();
                 if (paramsOverride !== null && paramsOverride.length !== null) {
                     for (let key in paramsOverride) {
-                        if (paramsOverride.hasOwnProperty(key) && paramsOverride[key] !== filter.getDefaultValueOverride(key)) {
+                        // A value equal to its own default is only dropped when it wasn't explicitly asked for -
+                        // otherwise an explicit ?minMythicLevel=2 vanishes from the URL just because 2 also
+                        // happens to be that filter's default (#3837).
+                        if (paramsOverride.hasOwnProperty(key) &&
+                            (filter.hasExplicitValueOverride(key) || paramsOverride[key] !== filter.getDefaultValueOverride(key))) {
                             this.params[key] = paramsOverride[key];
                         }
                     }
@@ -53,4 +57,10 @@ class SearchParams {
         return searchParams instanceof SearchParams &&
             (JSON.stringify(searchParams.params) === JSON.stringify(this.params));
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {SearchParams};
 }

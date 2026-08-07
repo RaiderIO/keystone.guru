@@ -8,6 +8,7 @@ use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Coordinates\CoordinatesService;
 use Illuminate\Support\Collection;
@@ -19,6 +20,28 @@ use Tests\TestCases\PublicTestCase;
 
 final class CoordinatesServiceTest extends PublicTestCase
 {
+    /**
+     * Dungeons whose enemy positions deviate a lot from MDT's but are valid, manually checked.
+     *
+     * King's Rest earns its place differently from the rest: it had a complete hand-made mapping
+     * before MDT 6.2 repointed it to a zoomed facade, and the import deliberately keeps a mapper's
+     * position over MDT's whenever the two are within 150 in-game units. Those kept positions were
+     * placed in the non-facade frame the mapper worked in, so measuring them in MDT's new frame
+     * surfaces drift that comparing within a single frame never showed - 31 of its 101 enemies
+     * exceed the margin, median 17.5. The conversion is not what deviates: the 30 enemies whose
+     * positions do come from MDT 6.2 round-trip back to within 0.07 (#3734).
+     *
+     * @var array<int, string>
+     */
+    private const array DEVIATES_FROM_MDT_DUNGEON_KEYS = [
+        Dungeon::DUNGEON_EYE_OF_AZSHARA,
+        Dungeon::DUNGEON_VAULT_OF_THE_WARDENS,
+        Dungeon::DUNGEON_WINDRUNNER_SPIRE,
+        Dungeon::DUNGEON_NEXUS_POINT_XENAS,
+        Dungeon::DUNGEON_THE_ROOKERY,
+        Dungeon::DUNGEON_KINGS_REST,
+    ];
+
     /**
      * Scenario: Tests that the ingame location is converted correctly from the given map location.
      */
@@ -113,17 +136,33 @@ final class CoordinatesServiceTest extends PublicTestCase
         // Arrange
         $coordinatesService = ServiceFixtures::getCoordinatesServiceMock($this);
 
-        // Select the mapping version with the highest version number, unique by game_version_id
+        // Every dungeon this test can say anything about: present in MDT, and not one of the
+        // manually-checked dungeons that deviate a lot from the MDT data while still being valid.
+        $checkableDungeonIds = Dungeon::query()
+            ->whereNotIn('key', self::DEVIATES_FROM_MDT_DUNGEON_KEYS)
+            ->get()
+            ->filter(static fn(Dungeon $dungeon) => Conversion::hasMDTDungeonName($dungeon->key))
+            ->pluck('id');
+
+        // Select the mapping version with the highest version number, unique by game_version_id.
+        // The uncheckable dungeons are filtered here rather than only in the loop below on purpose:
+        // exactly one mapping version per game version is examined, so a dungeon that gets skipped
+        // owning the newest one leaves this test asserting nothing at all. That is how it silently
+        // stopped covering anything once King's Rest was allowlisted, and it is a live scenario -
+        // a dungeon is unmapped in Conversion right up until it is added to DUNGEON_NAME_MAPPING,
+        // which is exactly when a new season's mapping is being imported (#3734).
         $mappingVersions = MappingVersion::with(['enemies', 'dungeon'])
-            ->whereIn('id', function ($query) {
+            ->whereIn('id', function ($query) use ($checkableDungeonIds) {
                 $query->selectRaw('MAX(id)')
                     ->from('mapping_versions')
 //                    ->where('id', 606) // temp
+                    ->whereIn('dungeon_id', $checkableDungeonIds)
                     ->groupBy('game_version_id');
             })
             ->get();
 
-        $margin = 20;
+        $margin      = 20;
+        $comparisons = 0;
 
         foreach ($mappingVersions as $mappingVersion) {
             // Skip dungeons not available in MDT
@@ -131,14 +170,11 @@ final class CoordinatesServiceTest extends PublicTestCase
                 continue;
             }
 
-            // Manually checked - they deviate a lot from the MDT data but they're valid
-            if (in_array($mappingVersion->dungeon->key, [
-                Dungeon::DUNGEON_EYE_OF_AZSHARA,
-                Dungeon::DUNGEON_VAULT_OF_THE_WARDENS,
-                Dungeon::DUNGEON_WINDRUNNER_SPIRE,
-                Dungeon::DUNGEON_NEXUS_POINT_XENAS,
-                Dungeon::DUNGEON_THE_ROOKERY,
-            ])) {
+            // MDT 6.2 deleted its MistsOfPandaria folder, so there is no MoP mapping left to compare
+            // against. Conversion is keyed by dungeon, not by game version, so a dungeon that exists in
+            // both MoP Classic and retail (Temple of the Jade Serpent) now resolves to its retail lua -
+            // correct for the retail mapping version, meaningless for the MoP one.
+            if ($mappingVersion->gameVersion->key === GameVersion::GAME_VERSION_MOP) {
                 continue;
             }
 
@@ -200,10 +236,21 @@ final class CoordinatesServiceTest extends PublicTestCase
                             "Y coordinate for NPC ID $npcId (index $index) is too high [MDT XY: [$cloneX, $cloneY], MappingVersion: $mvId, Dungeon: $dungeonName]",
                         );
 
+                        $comparisons++;
+
                         break;
                     }
                 }
             }
         }
+
+        // Without this the test reports as passing when every mapping version it selected was
+        // skipped, having asserted nothing at all - which is exactly how it silently stopped
+        // covering anything once a skipped dungeon owned the newest mapping version (#3734).
+        $this->assertGreaterThan(
+            0,
+            $comparisons,
+            'No enemy was compared against MDT at all - this test covered nothing',
+        );
     }
 }

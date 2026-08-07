@@ -18,17 +18,30 @@ use Illuminate\Support\Str;
  * @var Collection<int, Dungeon>     $gameVersionDungeons
  * @var Season                       $currentSeason
  * @var Season|null                  $nextSeason
+ * @var Season|null                  $dungeonContextNextSeason
+ * @var string|null                  $dungeonContextNextSeasonLink
  * @var bool                         $forceShrink
  * @var bool                         $showMore
  * @var bool                         $showDungeonContext
+ * @var bool                         $showGameVersionSelection
  * @var Collection<string, string>   $dungeonContextLinks
+ * @var string|false                 $headerId
  */
 
-$navs                = [];
-$showMore            ??= false;
-$showDungeonContext  ??= true;
-$forceShrink         ??= false;
-$dungeonContextLinks ??= null;
+$navs                     = [];
+$showMore                 ??= false;
+$showDungeonContext       ??= true;
+// Map pages hide the game version selection row - it made the floating header too bulky
+$showGameVersionSelection ??= true;
+$forceShrink              ??= false;
+$dungeonContextLinks      ??= null;
+// The map view passes false (not null - ??= would overwrite null) - its own #map_header wraps
+// this include, and a stray #site_header would make siteheader.js measure the wrong element.
+$headerId                 ??= 'site_header';
+// Defense in depth for #3806 - GlobalComposer normally supplies this, but view composers are
+// skipped entirely on paths ViewService::shouldLoadViewVariables() blacklists (e.g. /ajax/),
+// so an HTML error view rendered for one of those paths would otherwise crash here.
+$currentUserGameVersion   ??= GameVersion::getUserOrDefaultGameVersion();
 
 if ($currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
     if ($nextSeason !== null) {
@@ -92,25 +105,28 @@ $isActiveRoute = function (string $route, bool $strict = false) {
     return $active;
 };
 ?>
+<header @if($headerId !== false) id="{{ $headerId }}" @endif
+        class="ksg-header {{ $forceShrink ? 'ksg-header--shrink ksg-header--shrink-forced' : '' }}">
+@if($showGameVersionSelection || $showDungeonContext)
 <div
-    class="game_version_header navbar-first d-none d-lg-block fixed-top
-    {{ $showDungeonContext ? 'has_dungeon_context_header' : '' }}
+    class="game_version_header navbar-first d-none d-lg-block
      {{ User::isThemeDark($theme) ? 'navbar-dark' : 'navbar-light' }}">
     <div class="container discover bg-dark rounded ">
-        <div class="row">
-            @foreach ($allGameVersions as $gameVersion)
-                @include('common.gameversion.gameversionheader', [
-                    'gameVersion' => $gameVersion,
-                    'currentUserGameVersion' => $currentUserGameVersion,
-                ])
-            @endforeach
-            <div class="col">
-                &nbsp;
+        @if($showGameVersionSelection)
+            <div class="row">
+                @foreach ($allGameVersions as $gameVersion)
+                    @include('common.gameversion.gameversionheader', [
+                        'gameVersion' => $gameVersion,
+                        'currentUserGameVersion' => $currentUserGameVersion,
+                    ])
+                @endforeach
+                <div class="col">
+                    &nbsp;
+                </div>
             </div>
-        </div>
+        @endif
         @if($showDungeonContext)
-            <div class="row g-0 dungeon_context_header {{ $forceShrink ? 'navbar-shrink' : '' }}"
-                 data-toggle="navbar-shrink" style="height: 99px;">
+            <div class="row g-0 dungeon_context_header">
                 <div class="col">
                     @include('common.dungeon.list', [
                         'gameVersion' => $currentUserGameVersion,
@@ -119,6 +135,9 @@ $isActiveRoute = function (string $route, bool $strict = false) {
                         'useAbbreviation' => true,
                         'selectable' => true,
                         'showMore' => $showMore,
+                        // Only set when the next season is close enough to be advertised (#3761)
+                        'nextSeason' => $dungeonContextNextSeason,
+                        'nextSeasonLink' => $dungeonContextNextSeasonLink,
                         'selected' => Dungeon::getUserOrDefaultDungeon()->key,
                         // "What's easy this week" ease tiers (archon.gg), resolved in HeaderComposer.
                         'easeTiers' => $dungeonContextEaseTiers ?? collect(),
@@ -134,14 +153,10 @@ $isActiveRoute = function (string $route, bool $strict = false) {
         @endif
     </div>
 </div>
-@if(!$forceShrink)
-    <div class="navbar-top-fixed-spacer" style="height: 190px;"></div>
 @endif
 <nav
-    class="navbar navbar-second fixed-top navbar-expand-lg
-     {{ $forceShrink ? 'navbar-shrink' : '' }}
-     {{ User::isThemeDark($theme) ? 'navbar-dark' : 'navbar-light' }}"
-    data-toggle="navbar-shrink">
+    class="navbar navbar-second navbar-expand-lg
+     {{ User::isThemeDark($theme) ? 'navbar-dark' : 'navbar-light' }}">
     <div class="container px-1 bg-header rounded">
         <a class="navbar-brand" href="/">
             <img src="{{ ksgAssetImage('logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"
@@ -270,3 +285,4 @@ $isActiveRoute = function (string $route, bool $strict = false) {
         </div>
     </div>
 </nav>
+</header>

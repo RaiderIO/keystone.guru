@@ -16,4 +16,14 @@ interface DungeonRouteKillZoneServiceInterface
      * @return Collection<int, KillZoneEnemyForces>
      */
     public function getEnemyForcesPerKillZone(DungeonRoute $dungeonRoute): Collection;
+
+    /**
+     * Batched variant of {@see self::getEnemyForcesPerKillZone()} - fetches the per-pull enemy forces
+     * for an entire collection of routes (e.g. a leaderboard page) in O(1) queries instead of one
+     * query per route, keyed by dungeon route id.
+     *
+     * @param  Collection<int, DungeonRoute>                         $dungeonRoutes
+     * @return Collection<int, Collection<int, KillZoneEnemyForces>>
+     */
+    public function getEnemyForcesPerKillZoneForRoutes(Collection $dungeonRoutes): Collection;
 }

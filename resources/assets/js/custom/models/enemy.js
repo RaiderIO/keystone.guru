@@ -847,17 +847,24 @@ class Enemy extends VersionableMapObject {
 
                 text = template($.extend({}, getHandlebarsDefaultVariables(), visualData, {
                     name: lang.get(this.npc.name),
-                    show_raid_marker_shortcut: this.canOpenRaidMarkerMenu(),
+                    // Deliberately the state-independent variant, not canOpenRaidMarkerMenu(): the
+                    // text is cached below, so baking a map-state-dependent value into it strips the
+                    // hint for good on any rebind that happens while a map state is active - e.g. a
+                    // floor switch during a selection, which runs MapObjectGroup#setLayerToMapObject()
+                    // -> unbind -> rebind (#3703). The flipside is that the hint also renders during a
+                    // map state that keeps tooltips visible (pull-building), where shift+right-click
+                    // does nothing until the selection ends - that is the deliberate trade.
+                    show_raid_marker_shortcut: this.supportsRaidMarkerMenu(),
                 }));
             } else {
                 text = lang.get('js.no_npc_found_label');
             }
 
             // Only rebind if the text has changed - or if nothing is bound right now (#3670).
-            // Anything that unbinds the tooltip without also resetting tooltipText (the circle menu
-            // in EnemyVisual, a layer swap in MapObjectGroup#setLayerToMapObject) would otherwise
-            // leave this enemy without a tooltip permanently: the recomputed text is identical, so
-            // the guard short-circuits and the rebind never happens.
+            // Anything that unbinds the tooltip without also resetting tooltipText (a layer swap in
+            // MapObjectGroup#setLayerToMapObject) would otherwise leave this enemy without a tooltip
+            // permanently: the recomputed text is identical, so the guard short-circuits and the
+            // rebind never happens.
             // Leaflet's getTooltip() is undefined before the first bind and null after unbindTooltip().
             if (this.tooltipText !== text || !this.layer.getTooltip()) {
                 this.tooltipText = text;
@@ -1096,15 +1103,25 @@ class Enemy extends VersionableMapObject {
     }
 
     /**
+     * Whether this enemy supports the raid marker circle menu at all. Independent of the current map
+     * state on purpose, unlike canOpenRaidMarkerMenu() - this is what the tooltip's shortcut hint is
+     * built from, and that text is cached.
+     * @returns {boolean}
+     */
+    supportsRaidMarkerMenu() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        return this.map.options.edit && !(this instanceof AdminEnemy);
+    }
+
+    /**
      * Whether the raid marker circle menu may be opened for this enemy right now.
      * @returns {boolean}
      */
     canOpenRaidMarkerMenu() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
 
-        return this.map.options.edit &&
-            this.map.getMapState() === null &&
-            !(this instanceof AdminEnemy);
+        return this.supportsRaidMarkerMenu() && this.map.getMapState() === null;
     }
 
     isVisibleOnScreen() {

@@ -58,7 +58,21 @@ return [
         'edit_team'        => 'Edit team',
         'join_team'        => 'Join team',
         'admin'            => [
-            'admin' => 'Admin',
+            'admin'   => 'Admin',
+            'affixes' => [
+                'affixes'    => 'Affixes',
+                'new_affix'  => 'New affix',
+                'edit_affix' => 'Edit :affix',
+            ],
+            'seasons' => [
+                'seasons'     => 'Seasons',
+                'new_season'  => 'New season',
+                'edit_season' => 'Edit :season',
+            ],
+            'affixgroups' => [
+                'new_affixgroup'  => 'New affix group',
+                'edit_affixgroup' => 'Edit affix group',
+            ],
             'tools' => [
                 'admin_tools'                                 => 'Admin tools',
                 'view_exported_dungeondata'                   => 'View exported dungeondata',

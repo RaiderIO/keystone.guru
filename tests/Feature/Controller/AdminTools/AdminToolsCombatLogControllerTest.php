@@ -2,16 +2,18 @@
 
 namespace Tests\Feature\Controller\AdminTools;
 
-use App\Models\Dungeon;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
 #[Group('AdminTools')]
 final class AdminToolsCombatLogControllerTest extends PublicTestCase
 {
+    use ProvidesDungeon;
+
     #[Test]
     public function combatLogRouteEnemyFailures_givenAdmin_returnsOk(): void
     {
@@ -41,8 +43,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         // Arrange
         $this->be(User::findOrFail(1));
 
-        /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::whereNotNull('challenge_mode_id')->inRandomOrder()->first();
+        [$dungeon] = $this->findDungeon(challengeMode: true);
 
         // Act
         $response = $this->getJson(

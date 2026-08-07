@@ -33,6 +33,13 @@ trait SpellConstants
         self::SCHOOL_ARCANE   => 'arcane',
     ];
 
+    /** Every non-physical school - what a magic-only immunity (Anti-Magic Shell, Blessing of Spellwarding) protects against. */
+    public const int SCHOOLS_MASK_MAGIC = self::SCHOOL_HOLY | self::SCHOOL_FIRE | self::SCHOOL_NATURE |
+        self::SCHOOL_FROST | self::SCHOOL_SHADOW | self::SCHOOL_ARCANE;
+
+    /** Every school - what a full immunity (Divine Shield, Ice Block) protects against. */
+    public const int SCHOOLS_MASK_ALL = self::SCHOOL_PHYSICAL | self::SCHOOLS_MASK_MAGIC;
+
     public const int MISS_TYPE_ABSORB    = 1;
     public const int MISS_TYPE_BLOCK     = 2;
     public const int MISS_TYPE_DEFLECT   = 4;
@@ -70,6 +77,39 @@ trait SpellConstants
         Parry::class   => self::MISS_TYPE_PARRY,
         Reflect::class => self::MISS_TYPE_REFLECT,
         Resist::class  => self::MISS_TYPE_RESIST,
+    ];
+
+    public const int COUNTER_VANISH           = 1;
+    public const int COUNTER_SHADOWMELD       = 2;
+    public const int COUNTER_FEIGN_DEATH      = 4;
+    public const int COUNTER_INVISIBILITY     = 8;
+    public const int COUNTER_CLOAK_OF_SHADOWS = 16;
+
+    public const array ALL_COUNTERS = [
+        self::COUNTER_VANISH           => 'vanish',
+        self::COUNTER_SHADOWMELD       => 'shadowmeld',
+        self::COUNTER_FEIGN_DEATH      => 'feign_death',
+        self::COUNTER_INVISIBILITY     => 'invisibility',
+        self::COUNTER_CLOAK_OF_SHADOWS => 'cloak_of_shadows',
+    ];
+
+    /** The prefix `spells`.`dispel_type` carries since its values became translation keys. */
+    public const string DISPEL_TYPE_TRANSLATION_KEY_PREFIX = 'spelldispeltype.';
+
+    public const int IMMUNITY_DIVINE_SHIELD            = 1;
+    public const int IMMUNITY_ICE_BLOCK                = 2;
+    public const int IMMUNITY_ASPECT_OF_THE_TURTLE     = 4;
+    public const int IMMUNITY_BLESSING_OF_PROTECTION   = 8;
+    public const int IMMUNITY_BLESSING_OF_SPELLWARDING = 16;
+    public const int IMMUNITY_ANTI_MAGIC_SHELL         = 32;
+
+    public const array ALL_IMMUNITIES = [
+        self::IMMUNITY_DIVINE_SHIELD            => 'divine_shield',
+        self::IMMUNITY_ICE_BLOCK                => 'ice_block',
+        self::IMMUNITY_ASPECT_OF_THE_TURTLE     => 'aspect_of_the_turtle',
+        self::IMMUNITY_BLESSING_OF_PROTECTION   => 'blessing_of_protection',
+        self::IMMUNITY_BLESSING_OF_SPELLWARDING => 'blessing_of_spellwarding',
+        self::IMMUNITY_ANTI_MAGIC_SHELL         => 'anti_magic_shell',
     ];
 
     public const string DISPEL_TYPE_MAGIC         = 'magic';
@@ -240,6 +280,26 @@ trait SpellConstants
     public const int SPELL_SHROUD_OF_CONCEALMENT = 114018;
     public const int SPELL_CONTROL_UNDEAD        = 111673;
     public const int SPELL_SUBJUGATE_DEMON       = 1098;
+
+    /**
+     * Player defensives that grant an immunity window. Full immunities first, then the partial ones - what each of
+     * them is actually supposed to stop is declared by its ImmunityDefinitionInterface, not by membership of this list.
+     */
+    public const int SPELL_DIVINE_SHIELD            = 642;
+    public const int SPELL_ICE_BLOCK                = 45438;
+    public const int SPELL_ASPECT_OF_THE_TURTLE     = 186265;
+    public const int SPELL_BLESSING_OF_PROTECTION   = 1022;
+    public const int SPELL_BLESSING_OF_SPELLWARDING = 204018;
+    public const int SPELL_ANTI_MAGIC_SHELL         = 48707;
+
+    public const array IMMUNITY_SPELLS = [
+        self::SPELL_DIVINE_SHIELD,
+        self::SPELL_ICE_BLOCK,
+        self::SPELL_ASPECT_OF_THE_TURTLE,
+        self::SPELL_BLESSING_OF_PROTECTION,
+        self::SPELL_BLESSING_OF_SPELLWARDING,
+        self::SPELL_ANTI_MAGIC_SHELL,
+    ];
 
     public const array CHARM_SPELLS = [
         self::SPELL_CONTROL_UNDEAD,

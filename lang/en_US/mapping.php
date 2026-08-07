@@ -544,4 +544,16 @@ return [
         ],
     ],
 
+    'checkpoints' => [
+        'midnight' => [
+            'magisters_terrace' => [
+                'tower_section_name' => 'Tower section',
+            ],
+        ],
+        'wotlk' => [
+            'pit_of_saron' => [
+                'cavern_section_name' => 'Cavern section',
+            ],
+        ],
+    ],
 ];

@@ -30,7 +30,7 @@ class ProcessRouteFloorThumbnailCustom implements ShouldQueue
         protected int                             $attempts = 0,
     ) {
         // Not passed as a constructor parameter since it's not serializable
-        $this->queue = sprintf('%s-%s-thumbnail-api', config('app.type'), config('app.env'));
+        $this->queue = sprintf('%s-thumbnail-api', config('app.type'));
     }
 
     /**

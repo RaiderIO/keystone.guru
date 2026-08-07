@@ -42,6 +42,10 @@ $user = Auth::user();
                     <a class="dropdown-item"
                        href="{{ route('admin.dungeons') }}">{{__('view_common.layout.nav.user.view_dungeons')}}</a>
 {{--                @endif--}}
+                <a class="dropdown-item"
+                   href="{{ route('admin.affixes') }}">{{__('view_common.layout.nav.user.view_affixes')}}</a>
+                <a class="dropdown-item"
+                   href="{{ route('admin.seasons') }}">{{__('view_common.layout.nav.user.view_seasons')}}</a>
 {{--                @if( $user->isAbleTo('read-npcs') )--}}
                     <a class="dropdown-item"
                        href="{{ route('admin.npcs') }}">{{__('view_common.layout.nav.user.view_npcs')}}</a>
@@ -56,12 +60,6 @@ $user = Auth::user();
                    href="{{ route('admin.userreports') }}">{{__('view_common.layout.nav.user.view_user_reports') }}
                     @if($numUserReports > 0)
                         <span class="badge text-bg-warning rounded-pill">{{ $numUserReports }}</span>
-                    @endif
-                </a>
-                <a class="dropdown-item"
-                   href="{{ route('admin.tools.combatlog.parsefailures.view') }}">{{__('view_common.layout.nav.user.view_combat_log_parse_failures') }}
-                    @if($numCombatLogParseFailures > 0)
-                        <span class="badge text-bg-warning rounded-pill">{{ $numCombatLogParseFailures }}</span>
                     @endif
                 </a>
                 <div class="dropdown-divider"></div>

@@ -52,11 +52,11 @@ The InlineCode entry point for the heatmap sidebar. Instantiated via `@include('
 
 **Key responsibilities:**
 - Instantiates all search filters in `this.filters` (see filter list below)
-- Toggles filter section visibility based on the selected event type
+- `_applyEventTypeVisibility()`: enables/disables the filters that only apply to one event type and shows/hides their containers (the blade renders them hidden)
 - Sets up 5 `HeatOption*Handler` range sliders in `_setupLeafletHeatOptions()`
-- On `activate()`: wires the enabled/disabled checkbox, triggers initial `_search()`
+- On `activate()`: wires the enabled/disabled checkbox, applies `_applyEventTypeVisibility()`, triggers initial `_search()`
 - `_search()`: delegates to `super._search()` with `dungeonId` injected; passes the response to `pluginHeat.setRawLatLngsPerFloor()`
-- `searchWithFilters(filters)`: public API used by embed mode to trigger a search with external filter values
+- `searchWithFilters(filters)`: public API used by embed mode to trigger a search with external filter values; applies `_applyEventTypeVisibility()` too
 - `_redrawHeatmap()`: reads current slider values and calls `pluginHeat.setOptions(options)`
 
 **`passThroughEverything` option:** When `true`, all filters that interact with the DOM call `setPassThrough(true)`, making them store values internally without touching UI elements. Used for the embed pass-through API.
@@ -159,7 +159,7 @@ The "too much data" error is triggered when the response contains `message: 'Inv
 
 Base class shared with other search sidebars.
 
-- `activate()`: activates all filters; restores filter values from URL query params
+- `activate()`: activates all filters; restores filter values from URL query params. **Restoring does not fire the widgets' `change` events** — `SearchFilterRadio.setValue()` uses `prop('checked', true)` — so any side effect a filter's `onChange` performs (enabling/disabling other filters, showing their containers) has to be applied by the subclass after `super.activate()`. See `CommonMapsHeatmapsearchsidebar._applyEventTypeVisibility()`; getting this wrong is #3744.
 - `_search(options, queryParameters, blacklist)`: builds `SearchParams`, deduplicates via `JSON.stringify` comparison against `_previousSearchParams`, updates `history.pushState` URL
 - `_updateFilters()`: updates the "active filters" display (selector: `currentFiltersSelector`)
 
@@ -280,7 +280,8 @@ Lat/lng coordinates use the Leaflet map's coordinate system (bounded by `MAP_MAX
 ## Patterns & Gotchas
 
 - **`initializing` flag**: set `true` in the constructor, cleared in `activate()`. `_search()` returns early while `true`, preventing premature AJAX calls during filter setup.
-- **`passThroughEverything`**: when `true`, all DOM-backed filters call `setPassThrough(true)`. Values are set via `searchWithFilters()` rather than UI interaction. This is how the embed PostMessage API controls filters.
+- **`passThroughEverything`**: when `true`, all DOM-backed filters call `setPassThrough(true)`. Values are set via `searchWithFilters()` rather than UI interaction. This is how the embed PostMessage API controls filters. It is `!$showSidebar` (`heatmapsearch.blade.php`), and `showSidebar` defaults to `true` — so the **default embed is not in pass-through mode**. Don't reason about "embed" and "pass-through" as if they were the same thing.
+- **Event-type-specific filters**: `dataType` only applies to `npc_death`, `includePlayerSpellIds` only to `player_spell`, and the player-death class/spec filters only to `player_death`. `_applyEventTypeVisibility()` is what keeps the enabled set (and therefore the URL and the request) in step with the selected event type; it must run on every path that sets the event type without a `change` event — today `activate()` and `searchWithFilters()`.
 - **Weight tooltip uses global max**: `this.weightMax` is the max across all floors combined, not per-floor. This is intentional — it keeps percentage scales consistent when switching floors.
 - **`SearchFilterPassThrough` filters**: `excludeClassIds`, `excludeAffixIds`, `token`, `season`, etc. have no UI. They are set by the embed API or URL params and forwarded to the server transparently.
 - **Admin-only filter**: `minSamplesRequired` is only added to `this.filters` when `state.userHasRole(USER_ROLE_ADMIN)` or `USER_ROLE_INTERNAL_TEAM` is true.

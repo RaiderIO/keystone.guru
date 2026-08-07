@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\AffixGroup\AffixGroup;
-use App\Models\Traits\HasIconFile;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -11,12 +10,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Str;
 
 /**
- * @property int    $id           The ID of this Affix.
- * @property int    $icon_file_id The file ID of the icon associated with this Affix.
- * @property int    $affix_id     The ID of the affix in-game.
- * @property string $key          The identifying key of the Affix.
- * @property string $name         The name of the Affix.
- * @property string $description  The description of this Affix.
+ * @property int    $id          The ID of this Affix.
+ * @property int    $affix_id    The ID of the affix in-game.
+ * @property string $key         The identifying key of the Affix.
+ * @property string $name        The name of the Affix.
+ * @property string $description The description of this Affix.
  *
  * @property string $image_name The name of the image of this Affix (appended).
  * @property string $image_url  The URL to the image of this Affix (appended).
@@ -27,11 +25,9 @@ use Str;
  */
 class Affix extends CacheModel
 {
-    use HasIconFile;
     use SeederModel;
 
     public $hidden = [
-        'icon_file_id',
         'pivot',
     ];
 
@@ -39,7 +35,6 @@ class Affix extends CacheModel
 
     protected $fillable = [
         'id',
-        'icon_file_id',
         'affix_id',
         'key',
         'name',
@@ -183,5 +178,21 @@ class Affix extends CacheModel
     public static function getAffixBySeasonalType(string $seasonalType): ?string
     {
         return self::SEASONAL_TYPE_AFFIX_MAPPING[$seasonalType] ?? null;
+    }
+
+    /**
+     * The Affix::ALL ids that don't have a row yet - the only ids a new affix is allowed to take,
+     * since an affix's id is a deliberate code change rather than an auto-increment value.
+     *
+     * @return array<int, int>
+     */
+    public static function getAvailableIds(): array
+    {
+        $usedIds = self::pluck('id')->all();
+
+        return collect(self::ALL)
+            ->reject(fn(int $id) => in_array($id, $usedIds, true))
+            ->values()
+            ->all();
     }
 }

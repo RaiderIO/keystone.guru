@@ -56,7 +56,7 @@ class EnemyForcesCheckpoint extends VersionableMapObject {
         this.map.register('map:mapobjectgroupsloaded', this, function () {
             self.refreshPill();
         });
-        getState().register('mapnumberstyle:changed', this, function () {
+        getState().register('killzonesnumberstyle:changed', this, function () {
             self.refreshPill();
         });
         getState().getMapContext().register('teeming:changed', this, function () {
@@ -301,11 +301,11 @@ class EnemyForcesCheckpoint extends VersionableMapObject {
             return;
         }
 
-        let name = this.name === null || this.name === '' ? lang.get('js.enemy_forces_checkpoint_unnamed_label') : this.name;
+        let name = this.name === null || this.name === '' ? lang.get('js.enemy_forces_checkpoint_unnamed_label') : lang.get(this.name);
         let enemyForces = this.getEnemyForces();
 
         let tooltipText;
-        if (getState().getMapNumberStyle() === NUMBER_STYLE_ENEMY_FORCES) {
+        if (getState().getKillZonesNumberStyle() === NUMBER_STYLE_ENEMY_FORCES) {
             tooltipText = lang.get('js.enemy_forces_checkpoint_tooltip_enemy_forces', {name: name, enemyForces: enemyForces});
         } else {
             tooltipText = lang.get('js.enemy_forces_checkpoint_tooltip_percentage', {
@@ -332,7 +332,7 @@ class EnemyForcesCheckpoint extends VersionableMapObject {
         this._removeSatellitePill();
 
         this.map.unregister('map:mapobjectgroupsloaded', this);
-        getState().unregister('mapnumberstyle:changed', this);
+        getState().unregister('killzonesnumberstyle:changed', this);
         getState().getMapContext().unregister('teeming:changed', this);
         getState().unregister('floorid:changed', this);
 
@@ -344,7 +344,7 @@ class EnemyForcesCheckpoint extends VersionableMapObject {
 
     /**
      * Builds the pill's markup: how much enemy forces you need before entering this checkpoint, following
-     * the "Enemy number style" map setting.
+     * the "Pull number style" setting - a checkpoint is a group total, like a pull, not a per-enemy number.
      * @returns {String}
      * @private
      */
@@ -357,7 +357,7 @@ class EnemyForcesCheckpoint extends VersionableMapObject {
         let requiredBefore = Math.max(0, enemyForcesRequired - enemyForces);
 
         let value;
-        if (getState().getMapNumberStyle() === NUMBER_STYLE_ENEMY_FORCES) {
+        if (getState().getKillZonesNumberStyle() === NUMBER_STYLE_ENEMY_FORCES) {
             value = lang.get('js.enemy_forces_checkpoint_pill_enemy_forces', {enemyForces: requiredBefore});
         } else {
             value = lang.get('js.enemy_forces_checkpoint_pill_percentage', {

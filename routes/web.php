@@ -11,13 +11,13 @@
 |
 */
 
+use App\Features\CreatorProfiles;
 use App\Features\NpcCompendium;
 use App\Http\Controllers\Admin\AdminDungeonRouteController;
 use App\Http\Controllers\AdminTools\AdminToolsArtisanCommandsController;
 use App\Http\Controllers\AdminTools\AdminToolsBannedIpAddressController;
 use App\Http\Controllers\AdminTools\AdminToolsCombatLogController;
 use App\Http\Controllers\AdminTools\AdminToolsCombatLogCriteriaController;
-use App\Http\Controllers\AdminTools\AdminToolsCombatLogParseFailureController;
 use App\Http\Controllers\AdminTools\AdminToolsCombatLogRunDataController;
 use App\Http\Controllers\AdminTools\AdminToolsDataDumpController;
 use App\Http\Controllers\AdminTools\AdminToolsDungeonRouteController;
@@ -31,6 +31,8 @@ use App\Http\Controllers\AdminTools\AdminToolsSpellsController;
 use App\Http\Controllers\AdminTools\AdminToolsThumbnailsController;
 use App\Http\Controllers\AdminTools\AdminToolsWagoGgController;
 use App\Http\Controllers\AdminToolsController;
+use App\Http\Controllers\AffixController;
+use App\Http\Controllers\AffixGroupController;
 use App\Http\Controllers\Ajax\AjaxAdminCombatLogRouteController;
 use App\Http\Controllers\Ajax\AjaxArrowController;
 use App\Http\Controllers\Ajax\AjaxBrushlineController;
@@ -69,6 +71,7 @@ use App\Http\Controllers\Compendium\ClassCompendiumController;
 use App\Http\Controllers\Compendium\CompendiumController;
 use App\Http\Controllers\Compendium\NpcCompendiumController;
 use App\Http\Controllers\Compendium\SpellCompendiumController;
+use App\Http\Controllers\CreatorDirectoryController;
 use App\Http\Controllers\Dungeon\DungeonController;
 use App\Http\Controllers\Dungeon\DungeonExploreController;
 use App\Http\Controllers\Dungeon\DungeonHeatmapController;
@@ -90,6 +93,7 @@ use App\Http\Controllers\NpcEnemyForcesController;
 use App\Http\Controllers\NpcHealthController;
 use App\Http\Controllers\PatreonController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\Speedrun\DungeonSpeedrunRequiredNpcsController;
 use App\Http\Controllers\SpellController;
@@ -205,6 +209,12 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::get('/{dungeon}', new DungeonController()->changeContext(...))->name('dungeon.changecontext');
     });
 
+    // Creator directory
+    Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))
+        ->prefix('creators')->group(static function () {
+            Route::get('/', new CreatorDirectoryController()->index(...))->name('creators.index');
+        });
+
     // Discover routes
     Route::prefix('routes')->group(static function () {
         Route::get('/', new DungeonRouteDiscoverController()->discover(...))->name('dungeonroutes');
@@ -319,6 +329,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::get('routes', new ProfileController()->routes(...))->name('profile.routes');
             Route::get('favorites', new ProfileController()->favorites(...))->name('profile.favorites');
             Route::get('tags', new ProfileController()->tags(...))->name('profile.tags');
+            // Must be declared before the patch('{user}') route below, which would otherwise match
+            // 'creator' as a user and never reach this handler
+            Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))
+                ->patch('creator', new ProfileController()->updateCreatorProfile(...))->name('profile.creator.update');
             Route::patch('{user}', new ProfileController()->update(...))->name('profile.update');
             Route::delete('delete', new ProfileController()->delete(...))->name('profile.delete');
             Route::patch('{user}/privacy', new ProfileController()->updatePrivacy(...))->name('profile.updateprivacy');
@@ -386,6 +400,32 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::patch('{expansion}', new ExpansionController()->update(...))->name('admin.expansion.update');
             });
             Route::get('expansions', new ExpansionController()->get(...))->name('admin.expansions');
+            // Affixes
+            Route::prefix('affix')->group(static function () {
+                Route::get('new', new AffixController()->create(...))->name('admin.affix.new');
+                Route::get('{affix}', new AffixController()->edit(...))->name('admin.affix.edit');
+                Route::post('new', new AffixController()->savenew(...))->name('admin.affix.savenew');
+                Route::patch('{affix}', new AffixController()->update(...))->name('admin.affix.update');
+            });
+            Route::get('affixes', new AffixController()->get(...))->name('admin.affixes');
+            // Seasons
+            Route::prefix('season')->group(static function () {
+                Route::get('new', new SeasonController()->create(...))->name('admin.season.new');
+                Route::get('{season}', new SeasonController()->edit(...))->name('admin.season.edit');
+                Route::post('new', new SeasonController()->savenew(...))->name('admin.season.savenew');
+                Route::patch('{season}', new SeasonController()->update(...))->name('admin.season.update');
+                // Affix groups (rotation weeks)
+                Route::prefix('{season}/affixgroup')->group(static function () {
+                    Route::get('new', new AffixGroupController()->create(...))->name('admin.affixgroup.new');
+                    Route::post('new', new AffixGroupController()->savenew(...))->name('admin.affixgroup.savenew');
+                    Route::prefix('{affixGroup}')->group(static function () {
+                        Route::get('/', new AffixGroupController()->edit(...))->name('admin.affixgroup.edit');
+                        Route::patch('/', new AffixGroupController()->update(...))->name('admin.affixgroup.update');
+                        Route::delete('/', new AffixGroupController()->delete(...))->name('admin.affixgroup.delete');
+                    });
+                });
+            });
+            Route::get('seasons', new SeasonController()->get(...))->name('admin.seasons');
             // NPCs
             Route::prefix('npc')->group(static function () {
                 Route::get('new', new NpcController()->create(...))->name('admin.npc.new');
@@ -478,9 +518,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::post('combatlog/criteria/thresholds', new AdminToolsCombatLogCriteriaController()->updateThresholds(...))->name('admin.tools.combatlog.criteria.thresholds');
                 Route::get('combatlog/rundata', new AdminToolsCombatLogRunDataController()->index(...))->name('admin.tools.combatlog.rundata');
                 Route::post('combatlog/rundata/prune-batch', new AdminToolsCombatLogRunDataController()->pruneBatch(...))->name('admin.tools.combatlog.rundata.prune_batch');
-                Route::get('combatlog/parse-failures', new AdminToolsCombatLogParseFailureController()->index(...))->name('admin.tools.combatlog.parsefailures.view');
-                Route::get('combatlog/parse-failures/{parseFailure}/segments', new AdminToolsCombatLogParseFailureController()->segments(...))->name('admin.tools.combatlog.parsefailures.segments');
-                Route::post('combatlog/parse-failures/{parseFailure}/resolve', new AdminToolsCombatLogParseFailureController()->resolve(...))->name('admin.tools.combatlog.parsefailures.resolve');
                 Route::prefix('mdt')->group(static function () {
                     // View string contents
                     Route::get('string', new AdminToolsMdtController()->mdtview(...))->name('admin.tools.mdt.string.view');
@@ -560,7 +597,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::delete('/{tag}/all', new AjaxTagController()->deleteAll(...))->name('ajax.tag.deleteall');
         });
         Route::prefix('heatmap')->group(static function () {
-            Route::post('/data', new AjaxHeatmapController()->getData(...))->name('ajax.heatmap.data');
+            Route::get('/data', new AjaxHeatmapController()->getData(...))->name('ajax.heatmap.data');
         });
 
         Route::middleware('throttle:create-reports')->group(static function () {

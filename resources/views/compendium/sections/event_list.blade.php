@@ -42,6 +42,7 @@ $eventBadgeClass = static function (CombatLogNpcEvent|CombatLogSpellEvent $event
         CombatLogSpellEventType::SpellCreated => 'info',
         CombatLogSpellEventType::PropertyChanged => 'warning',
         CombatLogSpellEventType::PropertyRemoved => 'danger',
+        CombatLogSpellEventType::SchoolRecorded => 'info',
     };
 };
 
@@ -58,12 +59,23 @@ $eventIcon = static function (CombatLogNpcEvent|CombatLogSpellEvent $event): str
         CombatLogSpellEventType::SpellCreated => 'fas fa-plus',
         CombatLogSpellEventType::PropertyChanged => 'fas fa-arrow-up',
         CombatLogSpellEventType::PropertyRemoved => 'fas fa-times',
+        CombatLogSpellEventType::SchoolRecorded => 'fas fa-plus',
     };
 };
 
 $spellPropertyName = static function (SpellProperty $property): string {
     if ($property === SpellProperty::Aura || $property === SpellProperty::Debuff) {
         return __('view_compendium.event.property.' . $property->value);
+    }
+
+    if ($property->isCounter()) {
+        // counter_vanish → vanish
+        return __('spellcounters.' . substr($property->value, 8));
+    }
+
+    if ($property->isImmunityBypass()) {
+        // bypass_divine_shield → divine_shield
+        return __('spellimmunities.' . substr($property->value, 7));
     }
 
     // miss_reflect → reflect
@@ -83,15 +95,38 @@ $eventDescription = static function (CombatLogNpcEvent|CombatLogSpellEvent $even
 
     $spellName = $event->spell ? __($event->spell->name) : sprintf('#%d', $event->spell_id);
 
+    // Counters and immunity bypasses are properties of what a *player* can do about the spell, so the generic
+    // "Affected by :property" wording does not fit them
+    [$addedKey, $removedKey] = match (true) {
+        $event->property?->isCounter() === true => [
+            'view_compendium.event.counter_added',
+            'view_compendium.event.counter_removed',
+        ],
+        $event->property?->isImmunityBypass() === true => [
+            'view_compendium.event.immunity_bypass_added',
+            'view_compendium.event.immunity_bypass_removed',
+        ],
+        default => [
+            'view_compendium.event.property_changed',
+            'view_compendium.event.property_removed',
+        ],
+    };
+
     return match ($event->event_type) {
         CombatLogSpellEventType::SpellCreated => __('view_compendium.event.spell_created', ['spell' => $spellName]),
-        CombatLogSpellEventType::PropertyChanged => __('view_compendium.event.property_changed', [
+        CombatLogSpellEventType::PropertyChanged => __($addedKey, [
             'spell'    => $spellName,
             'property' => $spellPropertyName($event->property)
         ]),
-        CombatLogSpellEventType::PropertyRemoved => __('view_compendium.event.property_removed', [
+        CombatLogSpellEventType::PropertyRemoved => __($removedKey, [
             'spell'    => $spellName,
             'property' => $spellPropertyName($event->property)
+        ]),
+        CombatLogSpellEventType::SchoolRecorded => __('view_compendium.event.school_recorded', [
+            'spell'   => $spellName,
+            'schools' => $event->spell
+                ? Spell::maskToReadableString(Spell::ALL_SCHOOLS, $event->spell->schools_mask, 'spellschools')
+                : '-',
         ]),
     };
 };

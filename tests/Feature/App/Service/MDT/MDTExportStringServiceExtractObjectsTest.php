@@ -41,7 +41,7 @@ class MDTExportStringServiceExtractObjectsTest extends MDTExportStringServiceTes
             $encodedString = $mdtExportStringService->setDungeonRoute($dungeonRoute)->getEncodedString($warnings);
 
             // Assert
-            $decodedString = json_decode($this->decode($encodedString), true);
+            $decodedString = $this->decode($encodedString);
 
             Assert::assertIsArray($decodedString);
             Assert::assertEmpty($warnings);
@@ -90,7 +90,7 @@ class MDTExportStringServiceExtractObjectsTest extends MDTExportStringServiceTes
             $encodedString = $mdtExportStringService->setDungeonRoute($dungeonRoute)->getEncodedString($warnings);
 
             // Assert
-            $decodedString = json_decode($this->decode($encodedString), true);
+            $decodedString = $this->decode($encodedString);
 
             Assert::assertIsArray($decodedString);
             Assert::assertEmpty($warnings);

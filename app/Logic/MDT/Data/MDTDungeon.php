@@ -12,6 +12,7 @@ namespace App\Logic\MDT\Data;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Entity\MDTMapPOI;
 use App\Logic\MDT\Entity\MDTNpc;
+use App\Logic\MDT\Exception\FacadeNotConfiguredException;
 use App\Logic\MDT\Exception\InvalidMDTDungeonException;
 use App\Logic\MDT\Exception\InvalidMDTExpansionException;
 use App\Models\Dungeon;
@@ -132,7 +133,7 @@ class MDTDungeon
      */
     public function getClonesAsEnemies(MappingVersion $mappingVersion, Collection $floors): Collection
     {
-        return $this->cacheService->remember(sprintf('mdt_enemies_%s', $this->dungeon->key), function () use (
+        return $this->cacheService->remember(sprintf('mdt_enemies_%s_%d', $this->dungeon->key, $mappingVersion->id), function () use (
             $mappingVersion,
             $floors
         ) {
@@ -154,10 +155,42 @@ class MDTDungeon
             // A bit of a hack, but it works. If we have a floor with a facade in it, we only parse THAT floor
             // since that's the only floor that MDT will have. We will then put the enemies in the correct floors.
             // Pinky promise.
-            $facadeFloors = $floors->filter(static fn(Floor $floor) => $floor->facade);
+            // Facade coordinate redistribution (CoordinatesService::convertFacadeMapLocationToMapLocation())
+            // only works when facade_enabled is actually true, so only take the facade-only path then - Throne
+            // of the Tides has a facade floor it has never switched on (#3742), and so does every historical
+            // mapping version predating its dungeon's facade.
+            if ($mappingVersion->facade_enabled) {
+                $facadeFloors = $floors->filter(static fn(Floor $floor) => $floor->facade);
 
-            if ($facadeFloors->isNotEmpty()) {
+                // facade_enabled promises a usable facade floor plus floor unions to redistribute its
+                // coordinates through - if either is missing, the mapping version's facade setup is
+                // incomplete. Fail loudly instead of guessing: fix the setup and rerun.
+                if ($facadeFloors->isEmpty() || $mappingVersion->floorUnions()->whereIn('floor_id', $facadeFloors->pluck('id'))->doesntExist()) {
+                    throw new FacadeNotConfiguredException(sprintf(
+                        'Mapping version %d of dungeon %s has facade_enabled=true, but no usable facade was found '
+                        . '(no facade floor among the given floors, and/or no floor unions on its facade floor). '
+                        . 'Fix the facade setup on this mapping version and retry.',
+                        $mappingVersion->id,
+                        $this->dungeon->key,
+                    ));
+                }
+
                 $floors = $facadeFloors;
+            } else {
+                // Without a facade the enemies must land on real floors - a facade floor's coordinates cannot
+                // be converted back (CoordinatesService::calculateIngameLocationForMapLocation throws on them).
+                $floors = $floors->filter(static fn(Floor $floor) => !$floor->facade);
+
+                if ($floors->isEmpty()) {
+                    // Returning an empty collection here would silently import zero enemies and report success,
+                    // so say so loudly instead - see #3737 for why a quiet no-op is the worst outcome.
+                    logger()->error(sprintf(
+                        'No usable non-facade floors left for dungeon %s - cannot place any MDT enemies.',
+                        $this->dungeon->key,
+                    ));
+
+                    return $enemies;
+                }
             }
 
             $floors->load(['dungeon']);

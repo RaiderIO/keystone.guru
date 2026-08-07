@@ -19,7 +19,6 @@ final class DungeonRouteGetHeroThumbnailUrlTest extends PublicTestCase
         $thumbnail = DungeonRouteThumbnail::create([
             'dungeon_route_id' => $dungeonRoute->id,
             'floor_id'         => $floorId,
-            'custom'           => false,
             'variant'          => $variant,
         ]);
 

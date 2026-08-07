@@ -18,10 +18,18 @@ return [
 
     // The release version of your application
     // Example with dynamic git hash: trim(exec('git --git-dir ' . base_path('.git') . ' log --pretty="%h" -n1 HEAD'))
-    'release' => env('SENTRY_RELEASE'),
+    // Falls back to the version file that deployed images bake the release tag into (and that holds a commit hash
+    // locally), so Sentry can do release health and regression detection without an extra environment variable.
+    // This is the same source AppServiceProvider uses for Rollbar's code_version, so the two agree.
+    'release' => env('SENTRY_RELEASE') ?: (is_file(base_path('version'))
+        ? trim((string)file_get_contents(base_path('version')))
+        : null),
 
     // When left empty or `null` the Laravel environment will be used (usually discovered from `APP_ENV` in your `.env`)
-    'environment' => env('SENTRY_ENVIRONMENT'),
+    // APP_TYPE ('local'/'staging'/'production') is the deployment identity worth grouping Sentry issues by - APP_ENV
+    // does not distinguish staging from production here. Read through env() rather than config('app.type'): config
+    // files are loaded in filename order, so a cross-config read at load time is not safe (see config/horizon.php).
+    'environment' => env('SENTRY_ENVIRONMENT') ?: env('APP_TYPE', 'local'),
 
     // @see: https://docs.sentry.io/platforms/php/guides/laravel/configuration/options/#sample_rate
     'sample_rate' => env('SENTRY_SAMPLE_RATE') === null ? 1.0 : (float)env('SENTRY_SAMPLE_RATE'),

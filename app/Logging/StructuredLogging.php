@@ -65,13 +65,6 @@ abstract class StructuredLogging implements StructuredLoggingInterface
 
     public function __construct()
     {
-        /** @var Application $app */
-        $app = app();
-
-        if ($app->runningInConsole() && !$app->runningUnitTests() && config('app.type') === 'local') {
-            static::setChannel('stderr');
-        }
-
         foreach ($this->getDefaultLoggers() as $defaultLogger) {
             $this->addLogger($defaultLogger);
         }
@@ -292,12 +285,14 @@ abstract class StructuredLogging implements StructuredLoggingInterface
     /** @return array<int, LoggerInterface> */
     private function resolveLoggers(): array
     {
-        if ($this->resolvedLoggers === null || $this->resolvedLoggersChannel !== self::$CHANNEL) {
+        $channel = self::resolveChannel();
+
+        if ($this->resolvedLoggers === null || $this->resolvedLoggersChannel !== $channel) {
             $this->resolvedLoggers = [];
             foreach ($this->loggers as $logger) {
-                $this->resolvedLoggers[] = $logger instanceof LogManager ? $logger->channel(self::$CHANNEL) : $logger;
+                $this->resolvedLoggers[] = $logger instanceof LogManager ? $logger->channel($channel) : $logger;
             }
-            $this->resolvedLoggersChannel = self::$CHANNEL;
+            $this->resolvedLoggersChannel = $channel;
         }
 
         return $this->resolvedLoggers;
@@ -344,6 +339,68 @@ abstract class StructuredLogging implements StructuredLoggingInterface
     private static function shouldPrettyPrint(): bool
     {
         return self::$PRETTY_PRINT ??= config('app.type') === 'local';
+    }
+
+    /**
+     * Whether this process is a test run - deliberately not just runningUnitTests().
+     *
+     * runningUnitTests() answers "is app.env equal to testing", which is not the question being asked: tests are
+     * free to change it, and several do to exercise production-only behaviour. One of those flipping the
+     * environment around a chatty service is what dumped ~1000 ANSI-coloured log lines into the CI test output in
+     * #3782. PHPUNIT_COMPOSER_INSTALL is defined by PHPUnit's own entrypoint (vendor/bin/phpunit, which is how
+     * both CI and `php artisan test` invoke it) and phpunit is a require-dev package, so the constant answers
+     * "is PHPUnit running" without depending on any application state that a test can rewrite.
+     */
+    private static function isRunningTests(Application $app): bool
+    {
+        return $app->runningUnitTests() || defined('PHPUNIT_COMPOSER_INSTALL');
+    }
+
+    /**
+     * The channel every structured log line is written to: an explicit setChannel() override if one
+     * was made, otherwise stderr for local console usage so an artisan command shows its own output,
+     * and otherwise the configured default.
+     *
+     * Resolved here, per log call, rather than once in the constructor. $CHANNEL is static, so a
+     * single instance built before the application had bound its environment - which
+     * runningUnitTests() needs - would latch stderr on for the entire process, including PHPUnit
+     * runs. That is how structured log lines ended up interleaved with the test progress output in
+     * CI while never appearing locally: it depends on when the first logger happens to be built.
+     */
+    public static function resolveChannel(): ?string
+    {
+        if (self::$CHANNEL !== null) {
+            return self::$CHANNEL;
+        }
+
+        /** @var Application $app */
+        $app = app();
+
+        // Named arguments here on purpose: all three parameters are bool, so a transposition (e.g.
+        // runningInConsole <-> isRunningTests) would type-check and pass PHPStan while silently
+        // inverting the decision. Naming them makes that mistake visible at the call site.
+        return self::resolveConsoleChannel(
+            runningInConsole: $app->runningInConsole(),
+            isRunningTests: self::isRunningTests($app),
+            isLocalAppType: config('app.type') === 'local',
+        );
+    }
+
+    /**
+     * Pure decision extracted from resolveChannel() so the stderr branch can be unit-tested directly.
+     * Under PHPUnit, defined('PHPUNIT_COMPOSER_INSTALL') is true for the entire lifetime of the process,
+     * so that branch is permanently unreachable from resolveChannel() itself - there is no way to make
+     * isRunningTests() return false from within a test. Public (rather than private) for the same reason
+     * the other resolve/get/set methods here are public: it is stateless and side-effect-free, and a
+     * subclass-based test double cannot expose a private static method the way it can a protected instance one.
+     */
+    public static function resolveConsoleChannel(bool $runningInConsole, bool $isRunningTests, bool $isLocalAppType): ?string
+    {
+        if ($runningInConsole && !$isRunningTests && $isLocalAppType) {
+            return 'stderr';
+        }
+
+        return null;
     }
 
     public static function setChannel(?string $channel): void

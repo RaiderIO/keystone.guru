@@ -45,6 +45,7 @@ class AdminToolsExceptionController extends Controller
                 Log::stack([
                     'daily',
                     'discord',
+                    'sentry',
                 ])->error('Manual stack log test from web');
 
                 $handlerLogging = app()->make(HandlerLoggingInterface::class);
@@ -56,12 +57,16 @@ class AdminToolsExceptionController extends Controller
                     null,
                     'DiscordException',
                     'Structured logging test from web',
+                    // False so this test record is not mistaken for a duplicate of a natively reported exception and
+                    // filtered out of Sentry - there is no real exception here for the SDK to have reported
+                    false,
                 );
 
                 return [
                     'logging.default' => Config::get('logging.default'),
                     'stack_channels'  => Config::get('logging.channels.stack.channels'),
                     'discord_config'  => Config::get('logging.channels.discord'),
+                    'sentry_config'   => Config::get('logging.channels.sentry'),
                 ];
         }
 

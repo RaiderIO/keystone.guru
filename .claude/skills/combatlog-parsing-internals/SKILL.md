@@ -1,6 +1,6 @@
 ---
 name: combatlog-parsing-internals
-description: How a single raw WoW combat log line becomes a parsed event object — CombatLogEntry's dispatch logic, the BaseEvent/SpecialEvent/CombatEvent class hierarchy, the CombatLogVersion registry and its getVersionLong() formula, the builder-with-default-fallback pattern every version-gated class uses, and the safe procedure for registering a new WoW client build. Use when a combat log line fails to parse, when a new WoW patch needs its version registered, or when touching CombatLogEntry/CombatLogVersion/SpecialEvent/Prefix/Suffix classes. For what happens AFTER a line becomes an event (NPC/spell mapping extraction, NPC Compendium) use combatlog-data-pipeline instead. For the operational runbook to find/download/reproduce real failing logs from Staging, use combatlog-parse-failure-triage.
+description: How a raw WoW combat log line becomes a parsed event object — CombatLogEntry dispatch, the event class hierarchy, the CombatLogVersion registry, and registering a new WoW client build. Use when a combat log line fails to parse, a new patch needs its version registered, or when touching CombatLogEntry/CombatLogVersion/SpecialEvent/Prefix/Suffix. Downstream extraction in combatlog-data-pipeline; reproducing real failing logs in combatlog-parse-failure-triage.
 ---
 
 # Combat Log Parsing Internals
@@ -162,15 +162,24 @@ idempotency, staleness sweep) see the `combatlog-data-pipeline` skill instead �
 `CombatLogDataExtractionService::extractData()` is built on top of `parseCombatLog()` but has real DB
 side effects, so don't reach for it just to reproduce a parse failure.
 
-## How parse failures get recorded
+## How parse failures get reported
 
 `App\Jobs\CombatLog\ProcessCombatLogSegments::handle()` (the Raider.IO M+ run ingestion path) catches
-any `Throwable` from `extractData()` and calls
-`CombatLogParseFailureRepositoryInterface::recordFailure()`, which `updateOrCreate`s a
-`CombatLogParseFailure` row (connection `combatlog`) deduplicated on `(run_id, line_number)`. Key
-fields: `raw_line`, `message`, `exception_class`, `combat_log_version`, `resolved_at` (null = still
-unresolved). `CombatLogParseException::getOriginalExceptionClass()` unwraps to the *real* underlying
-exception class (`InvalidArgumentException`, etc.) rather than always recording the wrapper.
+any `Throwable` from `extractData()` and calls `ProcessCombatLogSegmentsLoggingInterface::handleParseError()`
+with `runId`, `seasonId`, `combatLogVersion`, `lineNumber`, `exceptionClass`, `message` and `rawLine`.
+
+That is the *only* record of the failure — the `combat_log_parse_failures` table it used to also write
+was retired in #3821 (dropped in #3822). The error reaches Sentry through the `sentry` log channel, where
+`FingerprintsStructuredErrorsHandler` fingerprints it on `[log site, exceptionClass, normalized message]`
+and promotes `runId`/`seasonId`/`combatLogVersion`/`lineNumber`/`exceptionClass` to searchable tags;
+`rawLine` stays in the context, unindexed, because it carries player names and GUIDs.
+
+`CombatLogParseException::getOriginalExceptionClass()` unwraps to the *real* underlying exception class
+(`InvalidArgumentException`, etc.) rather than reporting the wrapper — the fingerprint depends on it, so
+one root cause is one issue.
+
+A `RuntimeException` (which `RedisException` extends) is re-thrown instead, so a transient infra blip is
+retried by the queue rather than reported as a parse failure.
 
 ## Key files
 
@@ -186,8 +195,9 @@ exception class (`InvalidArgumentException`, etc.) rather than always recording 
 | Param count validation | `app/Logic/CombatLog/CombatEvents/Traits/ValidatesParameterCount.php` |
 | Streaming reader | `app/Service/CombatLog/CombatLogService.php` (+ `CombatLogServiceInterface`) |
 | Parse exception | `app/Service/CombatLog/Exceptions/CombatLogParseException.php` |
-| Failure record model/repo | `app/Models/CombatLog/CombatLogParseFailure.php`, `app/Repositories/{Interfaces,Database}/CombatLog/CombatLogParseFailureRepository*.php` |
-| Failure-recording call site | `app/Jobs/CombatLog/ProcessCombatLogSegments.php` |
+| Failure-reporting call site | `app/Jobs/CombatLog/ProcessCombatLogSegments.php` |
+| Sentry fingerprinting/tagging | `app/Logging/Handlers/FingerprintsStructuredErrorsHandler.php` |
+| Log segment download endpoint | `app/Http/Controllers/Api/V1/InternalTeam/Combatlog/APICombatLogRunController.php` |
 | Version unit test | `tests/Unit/App/Logic/CombatLog/SpecialEvents/CombatLogVersion/CombatLogVersionTest.php` |
 | Other parser unit tests | `tests/Unit/App/Logic/CombatLog/**` |
 | Legacy fixture logs (full route-creation tests, not M+ segments) | `tests/CombatLogs/*.zip` |

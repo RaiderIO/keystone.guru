@@ -22,7 +22,6 @@ use App\Repositories\Database\CombatLog\CombatLogAnalyzeRepository;
 use App\Repositories\Database\CombatLog\CombatLogEventRepository;
 use App\Repositories\Database\CombatLog\CombatLogNpcCharacteristicObservationRepository;
 use App\Repositories\Database\CombatLog\CombatLogNpcEventRepository;
-use App\Repositories\Database\CombatLog\CombatLogParseFailureRepository;
 use App\Repositories\Database\CombatLog\CombatLogParsingCriterionRepository;
 use App\Repositories\Database\CombatLog\CombatLogRouteEnemyFailureRepository;
 use App\Repositories\Database\CombatLog\CombatLogSpellEventRepository;
@@ -120,8 +119,10 @@ use App\Repositories\Database\TeamUserRepository;
 use App\Repositories\Database\Timewalking\TimewalkingEventRepository;
 use App\Repositories\Database\Translation\TranslationRepository;
 use App\Repositories\Database\UserIpAddressRepository;
+use App\Repositories\Database\UserPinnedDungeonRouteRepository;
 use App\Repositories\Database\UserReportRepository;
 use App\Repositories\Database\UserRepository;
+use App\Repositories\Database\UserSocialLinkRepository;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupBaseRepositoryInterface;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupCouplingRepositoryInterface;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupEaseTierPullRepositoryInterface;
@@ -142,7 +143,6 @@ use App\Repositories\Interfaces\CombatLog\CombatLogAnalyzeRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\CombatLogEventRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\CombatLogNpcCharacteristicObservationRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\CombatLogNpcEventRepositoryInterface;
-use App\Repositories\Interfaces\CombatLog\CombatLogParseFailureRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\CombatLogParsingCriterionRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\CombatLogRouteEnemyFailureRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\CombatLogSpellEventRepositoryInterface;
@@ -240,8 +240,10 @@ use App\Repositories\Interfaces\TeamUserRepositoryInterface;
 use App\Repositories\Interfaces\Timewalking\TimewalkingEventRepositoryInterface;
 use App\Repositories\Interfaces\Translation\TranslationRepositoryInterface;
 use App\Repositories\Interfaces\UserIpAddressRepositoryInterface;
+use App\Repositories\Interfaces\UserPinnedDungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\UserReportRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Repositories\Interfaces\UserSocialLinkRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
@@ -266,7 +268,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(CombatLogEventRepositoryInterface::class, CombatLogEventRepository::class);
         $this->app->bind(CombatLogNpcCharacteristicObservationRepositoryInterface::class, CombatLogNpcCharacteristicObservationRepository::class);
         $this->app->bind(CombatLogNpcEventRepositoryInterface::class, CombatLogNpcEventRepository::class);
-        $this->app->bind(CombatLogParseFailureRepositoryInterface::class, CombatLogParseFailureRepository::class);
         $this->app->bind(CombatLogParsingCriterionRepositoryInterface::class, CombatLogParsingCriterionRepository::class);
         $this->app->bind(CombatLogRouteEnemyFailureRepositoryInterface::class, CombatLogRouteEnemyFailureRepository::class);
         $this->app->bind(CombatLogSpellEventRepositoryInterface::class, CombatLogSpellEventRepository::class);
@@ -411,7 +412,9 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(TeamRepositoryInterface::class, TeamRepository::class);
         $this->app->bind(TeamUserRepositoryInterface::class, TeamUserRepository::class);
         $this->app->bind(UserIpAddressRepositoryInterface::class, UserIpAddressRepository::class);
+        $this->app->bind(UserPinnedDungeonRouteRepositoryInterface::class, UserPinnedDungeonRouteRepository::class);
         $this->app->bind(UserReportRepositoryInterface::class, UserReportRepository::class);
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
+        $this->app->bind(UserSocialLinkRepositoryInterface::class, UserSocialLinkRepository::class);
     }
 }

@@ -1,0 +1,60 @@
+<?php
+
+namespace App\Http\Requests;
+
+use App\Models\Affix;
+use App\Models\Dungeon;
+use App\Models\Expansion;
+use App\Models\Laratrust\Role;
+use App\Models\Season;
+use Auth;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+class SeasonFormRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return Auth::user()->hasRole(Role::ROLE_ADMIN);
+    }
+
+    /**
+     * @return array<string, array<int, string|Rule>|string|Rule>
+     */
+    public function rules(): array
+    {
+        $isCreate = $this->route()->parameter('season') === null;
+
+        return [
+            // Only settable on create - a season's id is one of the declared Season::SEASON_*
+            // constants, not an auto-increment value, so it must already exist in code.
+            'id'           => [Rule::requiredIf($isCreate), Rule::in(Season::getAvailableIds())],
+            'expansion_id' => ['required', Rule::exists(Expansion::class, 'id')],
+            // A <select> always submits a value; -1 is the "none selected" sentinel option.
+            'seasonal_affix_id'       => ['required', 'integer', Rule::in([-1, ...$this->getSeasonalAffixIds()])],
+            'index'                   => 'required|integer|min:1',
+            'start'                   => 'required|date',
+            'active'                  => 'nullable|boolean',
+            'presets'                 => 'nullable|integer|min:0',
+            'affix_group_count'       => 'required|integer|min:1',
+            'start_affix_group_index' => 'required|integer|min:0|lt:affix_group_count',
+            'key_level_min'           => 'required|integer|min:1',
+            'key_level_max'           => 'required|integer|gte:key_level_min',
+            'item_level_min'          => 'nullable|integer|min:0',
+            'item_level_max'          => 'nullable|integer|gte:item_level_min',
+            'dungeon_ids'             => 'nullable|array',
+            'dungeon_ids.*'           => ['integer', Rule::exists(Dungeon::class, 'id')],
+        ];
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    private function getSeasonalAffixIds(): array
+    {
+        return Affix::whereIn('key', Affix::SEASONAL_AFFIXES)->pluck('affix_id')->all();
+    }
+}

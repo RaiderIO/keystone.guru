@@ -1,6 +1,6 @@
 ---
 name: seeder-load
-description: Guide for adding a RelationParser so a new model or nested relation is correctly imported from the dungeon JSON seeder files. Use when a new model/child table needs to be populated during `php artisan db:seed --class=DungeonDataSeeder`.
+description: Guide for adding a RelationParser so a new model or nested relation is correctly imported from the dungeon JSON seeder files. Use when a new model/child table needs to be populated during `php artisan db:seed --class=DungeonDataSeeder`. Also covers the separate `LoadsSeasonData` load path used by `AffixSeeder`/`SeasonsSeeder` for `database/seeders/seasondata/`, which bypasses `RelationMapping`/`RelationParser` entirely.
 ---
 
 # Seeder Load
@@ -155,3 +155,53 @@ foreach ($floor['dungeon_speedrun_required_npcs25_man'] ?? [] as $speedrunNpc) {
 5. Confirm the companion `seeder-save` export produces the JSON structure this parser expects.
 
 See also: `seeder-save` skill for the corresponding export side.
+
+## `SeederModel` rows: which are recoverable from seeders, which are not
+
+Models using the `App\Models\Traits\SeederModel` trait stage their table as `<table>_temp` via
+`DatabaseSeeder::getTempTableName()` while seeding — the trait is a marker only, not a guarantee
+about where a model's rows come from.
+
+For the mapping/season/expansion-style models (dungeons, seasons, expansions, mapping objects, …),
+rows are authored in `database/seeders` (some as `.json` files under there), so a delete is
+recoverable directly from those files. **A subset of trait users are combat-log-derived and NOT
+recoverable from seeders:** `SpellDungeon`, `NpcCharacteristic` and `NpcSpell` are intentionally
+omitted from the seeder export (see `DungeonDataSeeder::getAffectedModelClasses()`), and
+`CombatLogNpcEvent`, `CombatLogSpellEvent` and `ParsedCombatLog` (declared via grouped `use`
+statements, so `grep "use SeederModel;"` misses them) hold pure runtime/audit data that was never
+seeder-sourced. A delete of one of these rows is permanent unless fresh combat log data re-derives
+it.
+
+**Nothing outside the admin panel, the mapping editor, the seeders and the hourly
+`combatlog:detectstaledata` sweep should delete these rows.** That is a convention, not an enforced
+rule: the deleting routes sit behind `role:admin`, and there is no model-level guard.
+
+---
+
+## Season data (`database/seeders/seasondata/`) — a second, parallel load path
+
+Affixes, affix groups, seasons and season dungeons do **not** go through `RelationMapping`/`RelationParser`
+at all. `AffixSeeder` and `SeasonsSeeder` instead use the `App\SeederHelpers\Traits\LoadsSeasonData` trait,
+whose `loadSeasonDataFile()` reads a JSON file from `database/seeders/seasondata/`, throws if it is
+missing/unreadable/unparseable/empty, and hands back a plain decoded array for the seeder's own `run()` to
+insert.
+
+This exists as a separate path rather than another `RelationMapping` because `DungeonDataSeeder` and
+`SeasonsSeeder`/`AffixSeeder` each run independently and do their **own** temp-table swap — there is no
+shared parent/child relationship between a dungeon and a season the way there is between, say, a dungeon
+and its floors, so there is nothing for a `RelationMapping` to nest under. Reaching for `RelationMapping`
+here would mean inventing a fake parent just to hang the pipeline off of.
+
+When adding a new season/affix-related file:
+
+1. Do **not** write a `RelationParser` for it — add a `loadSeasonDataFile('your_file.json')` call inside
+   the relevant seeder's `run()` instead (`AffixSeeder` or `SeasonsSeeder`, or a new sibling seeder).
+2. Insert explicitly via `Model::from(DatabaseSeeder::getTempTableName(Model::class))->insert(...)` like
+   the existing seeders do — don't route through `NestedModelRelationParser` or a `RelationMapping`.
+3. Still register the model in the seeder's `getAffectedModelClasses()` so the temp-table swap covers it.
+4. If array order matters (see the "Season data" section of the `seeder-save` skill), preserve it through
+   a single batched `insert()` — InnoDB assigns auto-increment ids in VALUES order, so one `insert()` call
+   with the array in the right order re-establishes the same ordering on import.
+
+See also: the "Season data" section in the `seeder-save` skill for why the export side (`Save.php`) also
+diverges from the `dungeondata/` convention.

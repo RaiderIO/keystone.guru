@@ -34,7 +34,6 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
-use Mockery\Exception;
 use Override;
 
 /**
@@ -178,19 +177,15 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
 
         $this->npcs->load('npcEnemyForces');
 
-        try {
-            // Loop through all floors
-            foreach ($this->npcs as $npc) {
-                /** @var Npc $npc */
-                if ($npc->classification_id < NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
-                    /** @var NpcEnemyForces|null $npcEnemyForces */
-                    $npcEnemyForces = $npc->enemyForcesByMappingVersion();
+        // Loop through all floors
+        foreach ($this->npcs as $npc) {
+            /** @var Npc $npc */
+            if ($npc->classification_id < NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
+                /** @var NpcEnemyForces|null $npcEnemyForces */
+                $npcEnemyForces = $npc->enemyForcesByMappingVersion();
 
-                    $npcs[$npc->id] = ($npcEnemyForces?->enemy_forces ?? -1) >= 0; // @phpstan-ignore nullsafe.neverNull
-                }
+                $npcs[$npc->id] = ($npcEnemyForces?->enemy_forces ?? -1) >= 0; // @phpstan-ignore nullsafe.neverNull
             }
-        } catch (Exception $exception) {
-            dd($exception);
         }
 
         // Calculate which ones are unmapped
@@ -552,14 +547,6 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
     public function getMappingVersionGameVersions(): Collection
     {
         return $this->loadMappingVersions()->mappingVersions->map(static fn(MappingVersion $mappingVersion) => $mappingVersion->gameVersion)->unique('id');
-    }
-
-    public function isFactionSelectionRequired(): bool
-    {
-        return in_array($this->key, [
-            self::DUNGEON_SIEGE_OF_BORALUS,
-            self::DUNGEON_THE_NEXUS,
-        ]);
     }
 
     public function getImageLink(): ?string

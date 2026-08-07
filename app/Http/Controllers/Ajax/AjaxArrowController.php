@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Ajax;
 use App\Events\Models\Arrow\ArrowChangedEvent;
 use App\Events\Models\Arrow\ArrowDeletedEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\EnforcesDungeonRouteLimits;
 use App\Http\Controllers\Traits\SavesPolylines;
 use App\Http\Controllers\Traits\ValidatesFloorId;
 use App\Http\Requests\Arrow\APIArrowFormRequest;
 use App\Models\Arrow;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteLimitType;
 use App\Models\Polyline;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
@@ -26,6 +28,7 @@ use Throwable;
 
 class AjaxArrowController extends Controller
 {
+    use EnforcesDungeonRouteLimits;
     use SavesPolylines;
     use ValidatesFloorId;
 
@@ -44,7 +47,7 @@ class AjaxArrowController extends Controller
         $dungeonRoute = $arrow?->dungeonRoute ?? $dungeonRoute; // @phpstan-ignore nullsafe.neverNull
 
         Gate::authorize('edit', $dungeonRoute);
-        Gate::authorize('addArrow', $dungeonRoute);
+        $this->abortIfDungeonRouteLimitReached($dungeonRoute, DungeonRouteLimitType::Arrows);
 
         $validated = $request->validated();
 

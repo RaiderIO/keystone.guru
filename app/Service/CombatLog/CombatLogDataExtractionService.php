@@ -17,8 +17,10 @@ use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\CombatLog\DataExtractors\CreateMissingNpcDataExtractor;
 use App\Service\CombatLog\DataExtractors\DataExtractorInterface;
 use App\Service\CombatLog\DataExtractors\FloorDataExtractor;
+use App\Service\CombatLog\DataExtractors\ImmunityBypassDataExtractor;
 use App\Service\CombatLog\DataExtractors\NpcCharacteristicDataExtractor;
 use App\Service\CombatLog\DataExtractors\NpcUpdateDataExtractor;
+use App\Service\CombatLog\DataExtractors\SpellCounterDataExtractor;
 use App\Service\CombatLog\DataExtractors\SpellDataExtractor;
 use App\Service\CombatLog\Dtos\CombatLogRunContextInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
@@ -59,6 +61,8 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             new FloorDataExtractor($this->floorRepository),
             new SpellDataExtractor(),
             new NpcCharacteristicDataExtractor($this->spellRepository),
+            new SpellCounterDataExtractor(),
+            new ImmunityBypassDataExtractor(),
         ]);
         $this->dataExtractors = $extractors;
     }

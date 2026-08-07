@@ -8,7 +8,6 @@ use App\Models\Laratrust\Role;
 use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -108,40 +107,26 @@ final class DungeonRouteEditSidebarTest extends PublicTestCase
 
     /**
      * Finds a seeded dungeon whose *current* mapping version matches the requested facade_enabled
-     * state, reusing `ProvidesDungeon`'s `inRandomOrder()`-based helpers instead of an ad-hoc
-     * query. Those helpers only guarantee the presence/absence of facade floors, which - as real
-     * seeded data shows - does not always agree with the current mapping version's
-     * `facade_enabled` flag (older facade floors can outlive the mapping version that enabled
-     * them), so this still verifies `facade_enabled` explicitly and retries otherwise.
+     * state, along with that exact mapping version.
      *
-     * Must be called after switching to the acting user (`$this->be(...)`), since the resolved
-     * mapping version is cached per acting-user game version and is returned here for the caller
-     * to reuse verbatim, so the exact row just verified is the one the request under test uses.
+     * Must be called after switching to the acting user (`$this->be(...)`): the mapping version is
+     * resolved against the acting user's game version and cached per model instance (see
+     * `Dungeon::$currentMappingVersionCache`), and the row returned here is the one the request
+     * under test must end up using.
      *
-     * Restricted to Mythic+ dungeons (`challenge_mode_id` not null): non-Mythic+ dungeons (e.g.
-     * Horrific Visions) aren't valid `DungeonRoute` targets and some don't even have a default
-     * floor, which `dungeonroute.edit`'s redirect chain requires.
+     * Restricted to Mythic+ dungeons (`challenge_mode_id` not null) with a default floor: non-Mythic+
+     * dungeons (e.g. Horrific Visions) aren't valid `DungeonRoute` targets, and `dungeonroute.edit`'s
+     * redirect chain requires a default floor.
      *
      * @return array{0: Dungeon, 1: MappingVersion}
      */
     private function dungeonWithFacadeEnabled(bool $facadeEnabled): array
     {
-        $constraint = static fn(Builder $query): Builder => $query->whereNotNull('challenge_mode_id');
-
-        $count = 0;
-        do {
-            if (++$count > 20) {
-                self::fail(sprintf(
-                    'No seeded dungeon with a facade_enabled=%s mapping version found to test the edit sidebar.',
-                    $facadeEnabled ? 'true' : 'false',
-                ));
-            }
-
-            $dungeon = $facadeEnabled
-                ? $this->getDungeonWithFacadeFloor($constraint)
-                : $this->getDungeonWithNonFacadeFloor($constraint);
-            $mappingVersion = $dungeon->getCurrentMappingVersion();
-        } while ($mappingVersion === null || (bool)$mappingVersion->facade_enabled !== $facadeEnabled);
+        [$dungeon, $mappingVersion] = $this->findDungeon(
+            facadeEnabled:       $facadeEnabled,
+            challengeMode:       true,
+            requireDefaultFloor: true,
+        );
 
         return [$dungeon, $mappingVersion];
     }

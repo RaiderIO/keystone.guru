@@ -218,11 +218,44 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
 
     public function getEnemyForcesPerKillZone(DungeonRoute $dungeonRoute): Collection
     {
-        if (!$dungeonRoute->exists) {
+        return $this->getEnemyForcesPerKillZoneForRoutes(collect([$dungeonRoute]))->get($dungeonRoute->id, collect());
+    }
+
+    /**
+     * Batched variant of {@see self::getEnemyForcesPerKillZone()} - fetches the per-pull enemy forces
+     * for an entire collection of routes (e.g. a leaderboard page) in at most two grouped queries
+     * (one per shrouded/non-shrouded bucket, see below) instead of one query per route, keyed by
+     * dungeon route id.
+     *
+     * @param  Collection<int, DungeonRoute>                         $dungeonRoutes
+     * @return Collection<int, Collection<int, KillZoneEnemyForces>>
+     */
+    public function getEnemyForcesPerKillZoneForRoutes(Collection $dungeonRoutes): Collection
+    {
+        $existingRoutes = $dungeonRoutes->filter(static fn(DungeonRoute $dungeonRoute) => $dungeonRoute->exists);
+
+        // The shrouded enemy-forces expression differs from the non-shrouded one (it reads from
+        // mapping_versions.enemy_forces_shrouded* instead of npc_enemy_forces), so shrouded and
+        // non-shrouded routes are batched into two separate queries rather than one per route.
+        // partition() (not reject()+filter()) so getSeasonalAffix() - which re-queries
+        // affixGroupCouplings for TWW routes - only runs once per route instead of twice.
+        [$shroudedRoutes, $nonShroudedRoutes] = $existingRoutes->partition(
+            static fn(DungeonRoute $dungeonRoute) => $dungeonRoute->getSeasonalAffix()?->key === Affix::AFFIX_SHROUDED,
+        );
+
+        return $this->queryEnemyForcesPerKillZoneForRouteIds($nonShroudedRoutes->pluck('id'), false)
+            ->union($this->queryEnemyForcesPerKillZoneForRouteIds($shroudedRoutes->pluck('id'), true));
+    }
+
+    /**
+     * @param  Collection<int, int>                                  $dungeonRouteIds
+     * @return Collection<int, Collection<int, KillZoneEnemyForces>>
+     */
+    private function queryEnemyForcesPerKillZoneForRouteIds(Collection $dungeonRouteIds, bool $isShrouded): Collection
+    {
+        if ($dungeonRouteIds->isEmpty()) {
             return collect();
         }
-
-        $isShrouded = $dungeonRoute->getSeasonalAffix()?->key === Affix::AFFIX_SHROUDED;
 
         // Ignore the shrouded query if we're not shrouded (make it fail)
         $ifIsShroudedEnemyForcesQuery = $isShrouded ? '
@@ -247,19 +280,25 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
             NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
         );
 
+        $dungeonRouteIdList = implode(',', $dungeonRouteIds->map(static fn($id) => (int)$id)->all());
+
         // Mirrors DungeonRoute::getEnemyForces()'s accounting, scoped per kill zone instead of summed for
-        // the whole route: the inner query groups by (kill zone, enemy identity) to cancel join fan-out
-        // per enemy (the `/ COUNT(...)` normalization - an enemy matching >1 npc_enemy_forces/enemies row
-        // must not be counted more than once), then the outer query sums those per-identity values back up
-        // per kill zone. The `enemies.mapping_version_id = dungeon_routes.mapping_version_id` WHERE filter
-        // (also mirrored from getEnemyForces()) turns the `enemies` LEFT JOIN into an effective INNER JOIN,
-        // dropping kill_zone_enemies rows with no matching enemies row for the route's mapping version.
+        // the whole route: the inner query groups by (route, kill zone, enemy identity) to cancel join
+        // fan-out per enemy (the `/ COUNT(...)` normalization - an enemy matching >1 npc_enemy_forces/enemies
+        // row must not be counted more than once), then the outer query sums those per-identity values back
+        // up per route and kill zone. The `enemies.mapping_version_id = dungeon_routes.mapping_version_id`
+        // WHERE filter (also mirrored from getEnemyForces()) turns the `enemies` LEFT JOIN into an effective
+        // INNER JOIN, dropping kill_zone_enemies rows with no matching enemies row for the route's mapping
+        // version. `dungeon_routes`.`id` is repeated in the inner GROUP BY (functionally redundant given
+        // `kill_zones`.`id`) purely so ONLY_FULL_GROUP_BY doesn't reject it through the LEFT JOIN chain.
         $queryResult = DB::select("
-            select `per_identity`.`kill_zone_index` as `index`,
+            select `per_identity`.`dungeon_route_id` as `dungeon_route_id`,
+                   `per_identity`.`kill_zone_index` as `index`,
                    MAX(`per_identity`.`has_boss`) as has_boss,
                    SUM(`per_identity`.`enemy_forces`) as enemy_forces
             from (
-                select `kill_zones`.`id` as `kill_zone_id`,
+                select `dungeon_routes`.`id` as `dungeon_route_id`,
+                       `kill_zones`.`id` as `kill_zone_id`,
                        `kill_zones`.`index` as `kill_zone_index`,
                        MAX(IF(`npcs`.`classification_id` IN ({$bossClassificationIds}), 1, 0)) as has_boss,
                        CAST(
@@ -295,18 +334,20 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
                          left join `npcs` on `npcs`.`id` = `kill_zone_enemies`.`npc_id`
                          left join `npc_enemy_forces` on `npcs`.`id` = `npc_enemy_forces`.`npc_id` AND `dungeon_routes`.`mapping_version_id` = `npc_enemy_forces`.`mapping_version_id`
                          {$ifIsShroudedJoins}
-                where `dungeon_routes`.`id` = :id
+                where `dungeon_routes`.`id` in ({$dungeonRouteIdList})
                   and `kill_zones`.`id` is not null
                   and `enemies`.`mapping_version_id` = `dungeon_routes`.`mapping_version_id`
-                group by `kill_zones`.`id`, `kill_zones`.`index`, concat(`kill_zone_enemies`.`npc_id`, `kill_zone_enemies`.`mdt_id`)
+                group by `dungeon_routes`.`id`, `kill_zones`.`id`, `kill_zones`.`index`, concat(`kill_zone_enemies`.`npc_id`, `kill_zone_enemies`.`mdt_id`)
             ) as `per_identity`
-            group by `per_identity`.`kill_zone_id`, `per_identity`.`kill_zone_index`
-            order by `per_identity`.`kill_zone_index`
-            ", ['id' => $dungeonRoute->id]);
+            group by `per_identity`.`dungeon_route_id`, `per_identity`.`kill_zone_id`, `per_identity`.`kill_zone_index`
+            order by `per_identity`.`dungeon_route_id`, `per_identity`.`kill_zone_index`
+            ");
 
-        return collect($queryResult)->map(static function (stdClass $row): KillZoneEnemyForces {
-            return new KillZoneEnemyForces((int)$row->enemy_forces, (bool)$row->has_boss);
-        });
+        return collect($queryResult)
+            ->groupBy(static fn(stdClass $row) => (int)$row->dungeon_route_id)
+            ->map(static fn(Collection $rows) => $rows
+                ->map(static fn(stdClass $row) => new KillZoneEnemyForces((int)$row->enemy_forces, (bool)$row->has_boss))
+                ->values());
     }
 
     /**

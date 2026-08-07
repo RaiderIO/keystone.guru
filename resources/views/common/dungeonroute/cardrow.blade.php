@@ -5,18 +5,22 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
 use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
+use App\Service\DungeonRoute\DungeonRouteEnemyForcesPageResolver;
 use App\Service\DungeonRoute\DungeonRouteKillZoneServiceInterface;
 use Illuminate\Support\Carbon;
 
 /**
- * @var CacheServiceInterface $cacheService
- * @var DungeonRoute          $dungeonroute
- * @var int                   $rank
- * @var array<string, mixed>  $__env
- * @var bool                  $cache
+ * @var CacheServiceInterface                    $cacheService
+ * @var DungeonRoute                              $dungeonroute
+ * @var int                                       $rank
+ * @var array<string, mixed>                      $__env
+ * @var bool                                      $cache
+ * @var DungeonRouteEnemyForcesPageResolver|null  $pullForcesResolver Batches the per-pull enemy
+ *      forces query for every card on the page instead of one per card - see leaderboard.blade.php.
  */
 
-$isAdmin = Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN);
+$isAdmin           = Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN);
+$pullForcesResolver ??= null;
 ?>
 <?php
 // The route-dependent HTML is cached per route; the rank is positional and therefore rendered outside the cache.
@@ -24,6 +28,7 @@ $cacheFn = static function () use (
     $dungeonroute,
     $isAdmin,
     $__env,
+    $pullForcesResolver,
 ) {
     $enemyForcesPercentage = $dungeonroute->getEnemyForcesPercentage();
     $enemyForcesWarning    = $dungeonroute->enemy_forces < $dungeonroute->mappingVersion->enemy_forces_required || $enemyForcesPercentage >= 105;
@@ -35,7 +40,10 @@ $cacheFn = static function () use (
     $favoritesCount = $dungeonroute->favorites_count ?? null;
     // Enemy forces per pull, ordered by pull index - drives the "route fingerprint" bar graph. Resolved
     // lazily here (not via top-level @inject) so a cache hit never pays the container-resolution cost.
-    $pullForces = app(DungeonRouteKillZoneServiceInterface::class)->getEnemyForcesPerKillZone($dungeonroute);
+    // When a page-level resolver is provided, it batches this query across every card on the page.
+    $pullForces = $pullForcesResolver !== null
+        ? $pullForcesResolver->forRoute($dungeonroute)
+        : app(DungeonRouteKillZoneServiceInterface::class)->getEnemyForcesPerKillZone($dungeonroute);
     // The key-level chip is only meaningful when the route deviates from the season's catch-all range
     $showLevel = $dungeonroute->level_min !== $dungeonroute->season?->key_level_min
         || $dungeonroute->level_max !== $dungeonroute->season?->key_level_max;

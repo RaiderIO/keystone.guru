@@ -1,16 +1,6 @@
 ---
 name: release-watch
-description: >
-  Use after a v* tag has been pushed and release-deploy.yml is running (or about to run),
-  when the user wants to watch or drive a release to completion from one terminal instead
-  of tracking release-deploy.yml, the keystoneguru-infra Deploy runs, and the manual
-  production gate by hand. Runs sh/release-watch.sh, a re-entrant polling loop that tracks
-  build jobs, correlates the staging/production infra runs, runs asset and HTML
-  verification, and can approve the production gate. Use --watch-only for a pure observer
-  with no approval prompt. Gate approval always requires the human typing the exact
-  version string; the script (and this skill) must never approve unattended. Not for
-  authoring the release changelog itself (create-release) or a general map of the pipeline
-  (deployment-pipeline).
+description: Watch or drive a v* release to completion after the tag is pushed — runs sh/release-watch.sh, tracking build jobs, staging/production infra runs and verification; --watch-only is a pure observer. Gate approval always requires the human typing the exact version string — never approve unattended. Not for authoring the changelog (create-release) or the pipeline map (deployment-pipeline).
 ---
 
 # Release watch
@@ -108,9 +98,18 @@ tail -n +1 -F release-watch.log \
   | awk '!seen[$0]++'
 ```
 
+**Attaching a `Monitor` to the log**: anchor the filter to the timestamp-prefixed one-time lines
+only — `^\[[0-9:]+\] EVENT:` plus the terminal `SUMMARY: (SUCCESS|FAILED)`. Do **not** match bare
+`GATE:`/`[PASS]`/`SUMMARY: in progress` substrings: those repeat every 15s cycle for as long as
+the state holds (minutes to hours at the human gate), so the Monitor fires every cycle and gets
+auto-throttled/stopped by the harness. Proven on the v15.8.3 release watch.
+
 ## Related
 
-- `create-release` cuts the tag that starts the pipeline this script watches — its final
-  step suggests running `sh/release-watch.sh <version>` next.
+- `create-release` cuts the tag that starts the pipeline this script watches, and its own
+  final step launches this script in `--watch-only` mode automatically (plus a `Monitor` on
+  its log) as soon as the tag is pushed — no need to be asked separately to "run the
+  watcher". That auto-drive stops at staging verification; production approval is still a
+  human action per the hard safety rule above.
 - `deployment-pipeline` is the map of how the pipeline works; this script is the preferred
   way to verify a release end-to-end rather than doing it by hand.

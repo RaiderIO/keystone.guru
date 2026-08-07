@@ -4,6 +4,7 @@ namespace App\Repositories\Interfaces;
 
 use App\Models\User;
 use App\Repositories\BaseRepositoryInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 /**
@@ -19,4 +20,18 @@ use Illuminate\Support\Collection;
  */
 interface UserRepositoryInterface extends BaseRepositoryInterface
 {
+    /**
+     * Creators eligible for the creator directory, ordered by how many routes they have published.
+     *
+     * Listing is automatic above a threshold and opt-out, so the only people excluded are those
+     * below the bar and those who ticked hide_from_creator_directory.
+     *
+     * The threshold and the count rendered on each card come from the same aggregate (exposed as
+     * `published_route_count` on the returned models), so they cannot drift apart. Results are
+     * ordered by that count descending, with `users.id` as a stable tiebreak so pagination cannot
+     * repeat or skip a creator between pages.
+     *
+     * @return Builder<User>
+     */
+    public function buildListedCreatorsQuery(): Builder;
 }

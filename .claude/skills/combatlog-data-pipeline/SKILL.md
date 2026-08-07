@@ -52,7 +52,7 @@ combatlog:pollruns (Raider.IO)        External S3 upload (dispatcher lives outsi
         │                                     │
         ▼                                     ▼
 ProcessCombatLogSegments        ProcessCombatLogFanout → ProcessCombatLogFromS3 (per file)
-   (queue *-combat-log-process)         (queue *-combat-log-process)
+   (queue *-cl-process)          (queue *-cl-fanout)      (queue *-cl-process)
         └──────────────┬───────────────────────┘
                        ▼   (also: combatlog:extractdata CLI, extractDataAsync analyze flow)
         CombatLogDataExtractionService::extractData()
@@ -81,7 +81,7 @@ UPSERT observations   mutate canonical mapping   INSERT audit events
 Everything funnels into `CombatLogDataExtractionService::extractData(string $filePath, ?bool $force,
 ?callable $onProcessLine, ?CombatLogRunContextInterface $runContext)`:
 
-- `ProcessCombatLogFromS3::handle()` — S3 fanout path (queue `*-combat-log-process`, timeout 1800).
+- `ProcessCombatLogFromS3::handle()` — S3 fanout path (queue `*-cl-process`, timeout 1800).
 - `ProcessCombatLogSegments::handle()` — Raider.IO segment path (`ShouldBeUnique`, tries 3, backoff
   `[30,120]`); dispatched by `PollCombatLogRunsCommand` (`combatlog:pollruns`).
 - `combatlog:extractdata {filePath} {--force}` (`ExtractData.php`) — manual/local CLI.
@@ -109,6 +109,17 @@ their loggers, the extraction service, and `CombatLogService` go through the con
 5. `NpcCharacteristicDataExtractor` — on `SPELL_AURA_APPLIED` targeting a creature where the spell maps
    to a characteristic: upserts a characteristic **observation**, `NpcCharacteristic::firstOrCreate`,
    and on new → `CombatLogNpcEvent` (`CharacteristicAdded`).
+6. `SpellCounterDataExtractor` (#3826) — correlates a player counter cast (Vanish, Shadowmeld) with an
+   NPC ability fizzling; sets `spells`.`counters_mask`. Three signatures, ε = 100 ms.
+7. `ImmunityBypassDataExtractor` (#3835) — the inverse signal: NPC abilities that **land** on a player
+   during an active immunity window (Divine Shield, Ice Block, ...); sets
+   `spells`.`bypasses_immunities_mask`. Each immunity declares its own coverage (protected schools,
+   damage vs harmful auras) in `DataExtractors/ImmunityBypasses/ImmunityDefinitions.php` — without that
+   coverage model most in-window hits are expected behaviour, not bypasses.
+
+Both counter and bypass extractors write the same observation/`CombatLogSpellEvent` plumbing as the
+spell collectors, and assign the spell to its casting NPC themselves (cast-only and nil-destination
+spells never pass `SpellDataExtractor`'s assignment gate).
 
 ### SpellDataExtractor sub-collectors
 
@@ -133,7 +144,7 @@ precedes `PropertyChanged` in the feed:
 a warning if there is no current season). Three phases:
 
 1. `removeStaleNpcCharacteristics()` — deletes `NpcCharacteristic` rows with no fresh observation
-   (`->toBase()->delete()` to bypass the `SeederModel` admin-only observer) + emits
+   (`->toBase()->delete()`, a bulk delete that skips Eloquent's caching builder layer) + emits
    `CharacteristicRemoved`.
 2. `removeStaleSpellProperties()` — clears stale `aura`/`debuff`/miss-type bits on `Spell` + emits
    `PropertyRemoved`.

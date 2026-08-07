@@ -1,6 +1,6 @@
 ---
 name: mapping-versioned-models
-description: Lifecycle of mapping-versioned models (Enemy, EnemyPack, EnemyPatrol, MapIcon, FloorUnion, MountableArea, EnemyForcesCheckpoint, ...) — the MappingVersion clone-on-create boot, the clone interfaces/trait, mapping_version_id query scoping, current-version resolution, change logs, and the COMPLETE end-to-end checklist for adding a new model: schema → clone boot → mapping:save/seeder round-trip → map-context payload → ajax editor → Leaflet front-end incl. sidebar show/hide visibility (including the hardcoded model lists people forget). Use when creating or modifying a model that carries mapping_version_id, or debugging missing/duplicated mapping data across versions. The deep dives live elsewhere (seeder-load / seeder-save for JSON mechanics, ajax-map-editor-crud for editor endpoints) but the master checklist is here.
+description: Lifecycle of mapping-versioned models (Enemy, EnemyPack, MapIcon, FloorUnion, ...) — MappingVersion clone-on-create, mapping_version_id scoping, and the master end-to-end checklist for adding a new model (schema → clone boot → seeder round-trip → map context → ajax editor → Leaflet front-end). Use when creating/modifying a model carrying mapping_version_id or debugging missing/duplicated mapping data. Deep dives in seeder-load/seeder-save and ajax-map-editor-crud.
 ---
 
 # Mapping-Versioned Models
@@ -157,10 +157,9 @@ example** — its diff contains exactly one of everything below; when in doubt, 
    `use SeederModel`, implement `getDungeonId()` (typically `$this->floor->dungeon_id`), add
    `mappingVersion(): BelongsTo`. Put `mappingVersion`/`floor`/`laravel_through_key` in `$hidden`
    so the map-context JSON stays lean; `$timestamps = false` like its siblings.
-   ⚠️ If deleting the model must release rows pointing at it, hook `static::deleted()`, **not**
-   `deleting`: `SeederModel` already registers a `deleting` listener that returns a bool, and
-   Eloquent fires `deleting` through the dispatcher's `until()`, which halts on the first
-   non-null result — a second `deleting` listener would silently never run.
+   If deleting the model must release rows pointing at it, prefer hooking `static::deleted()` over
+   `deleting`: the referencing rows only need detaching once the delete is confirmed to have gone
+   through, not beforehand — see `EnemyForcesCheckpoint::booted()` for a worked example.
 3. Repository interface + implementation + `RepositoryServiceProvider` binding — see the
    **repository-pattern** skill.
 
@@ -193,8 +192,10 @@ example** — its diff contains exactly one of everything below; when in doubt, 
 8. Import — `RelationMapping` subclass in `app/SeederHelpers/RelationImport/Mapping/` (JSON file
    name + model class, `MappingVersionConditional`), registered in the `$relationMapping` array
    in `database/seeders/DungeonDataSeeder.php` — **ordering matters: parents before children**.
-   See the **seeder-load** skill. Verify with a real `mapping:save` round-trip in dev, then
-   revert the regenerated seeder JSON before committing (the mapping:sync cron churns it anyway).
+   See the **seeder-load** skill. Verify with a real `mapping:save` round-trip in dev, then decide
+   deliberately what to keep — nothing rewrites `database/seeders/dungeondata/` on a timer, so
+   anything that shows up there came from your own `mapping:save` and is a real change, not churn
+   to be discarded blindly.
 
 ### D. Serving it to the map (the JS payload)
 

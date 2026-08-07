@@ -6,6 +6,8 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameVersion\GameVersion;
 use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
+use App\Service\DungeonRoute\DungeonRouteEnemyForcesPageResolver;
+use App\Service\DungeonRoute\DungeonRouteKillZoneServiceInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Laravel\Pennant\Feature;
@@ -58,6 +60,13 @@ use Laravel\Pennant\Feature;
         // The routes already promoted into the hero band are excluded from the leaderboard below.
         $heroRouteIds = collect();
         $startRank    = ($page - 1) * $perPage + 1;
+        // Batches the per-pull enemy forces query across every card on this page - hero band and
+        // leaderboard rows alike - into a single grouped query instead of one query per card. The
+        // weekly-route hero band only ever renders on page 1, so it's only folded in there.
+        $pullForcesResolver = new DungeonRouteEnemyForcesPageResolver(
+            app(DungeonRouteKillZoneServiceInterface::class),
+            ($page === 1 ? $weeklyRoutes->pluck('dungeonRoute') : collect())->merge($popularItems)->unique('id')->values(),
+        );
         ?>
         @if($page === 1)
             @if($weeklyRoutes->isNotEmpty())
@@ -79,6 +88,7 @@ use Laravel\Pennant\Feature;
                                 'dungeonroute' => $weeklyRoute->dungeonRoute,
                                 'archetype' => $weeklyRoute->type,
                                 'cache' => true,
+                                'pullForcesResolver' => $pullForcesResolver,
                             ])
                         </div>
                     @endforeach
@@ -96,6 +106,7 @@ use Laravel\Pennant\Feature;
                                     'archetype' => null,
                                     'heroRank' => $index + 1,
                                     'cache' => true,
+                                    'pullForcesResolver' => $pullForcesResolver,
                                 ])
                             </div>
                         @endforeach
@@ -124,6 +135,7 @@ use Laravel\Pennant\Feature;
                     'dungeonroutes' => $leaderboardRoutes,
                     'startRank' => $startRank,
                     'cache' => true,
+                    'pullForcesResolver' => $pullForcesResolver,
                 ])
             </div>
         </div>
