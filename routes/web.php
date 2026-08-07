@@ -619,8 +619,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::post('/mdt/details', new MDTImportController()->details(...))->name('mdt.details');
         });
 
-        Route::post('/profile/legal', new AjaxProfileController()->legalAgree(...));
-        Route::post('/profile/adfree/{user:public_key}', new AjaxProfileController()->addAdFreeGiveaway(...));
+        Route::middleware(['auth', 'role:user|admin'])->group(static function () {
+            Route::post('/profile/legal', new AjaxProfileController()->legalAgree(...));
+            Route::post('/profile/adfree/{user:public_key}', new AjaxProfileController()->addAdFreeGiveaway(...));
+        });
         Route::delete('/profile/adfree/{user:public_key}', new AjaxProfileController()->removeAdFreeGiveaway(...));
 
         // Metrics

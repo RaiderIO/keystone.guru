@@ -112,6 +112,12 @@ class Handler extends ExceptionHandler
                         'model' => $e->getModel(),
                     ]),
                 ], StatusCode::NOT_FOUND);
+            } elseif ($e instanceof AuthenticationException) {
+                // AuthenticationException is not an HttpExceptionInterface, so without this check it
+                // falls through every instanceof branch below and hits the generic 500 tail instead
+                // of the 401 unauthenticated() already builds - a guest hitting any auth-gated
+                // /ajax/ or /api/ route would 500 instead of 401 (#3863).
+                return $this->unauthenticated($request, $e);
             }
 
             // Normalize the same way parent::render() would (AuthorizationException -> 403,
