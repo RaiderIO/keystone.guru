@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
+use App\Models\PublishedState;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
@@ -65,10 +66,15 @@ class DungeonRoutePolicy
 
     /**
      * Determine whether the user can publish dungeon routes.
+     *
+     * @param string|null $publishedState The state the route is being changed to, if known. The required enemies
+     *                                    check is not executed when you are unpublishing the route - otherwise the
+     *                                    guard would trap an already published route in a state its author can no
+     *                                    longer undo.
      */
-    public function publish(User $user, DungeonRoute $dungeonroute): Response
+    public function publish(User $user, DungeonRoute $dungeonroute, ?string $publishedState = null): Response
     {
-        if (!$dungeonroute->hasKilledAllRequiredEnemies()) {
+        if ($publishedState !== PublishedState::UNPUBLISHED && !$dungeonroute->hasKilledAllRequiredEnemies()) {
             return $this->deny(__('policy.publish_not_all_required_enemies_killed'));
         }
 

@@ -207,6 +207,12 @@ const METRIC_TAG_MDT_COPY_EMBED = 'embed';
 const TEEMING_VISIBLE = 'visible';
 const TEEMING_HIDDEN = 'hidden';
 
+// Published states - must match App\Models\PublishedState
+const PUBLISHED_STATE_UNPUBLISHED = 'unpublished';
+const PUBLISHED_STATE_TEAM = 'team';
+const PUBLISHED_STATE_WORLD_WITH_LINK = 'world_with_link';
+const PUBLISHED_STATE_WORLD = 'world';
+
 // Game versions
 const GAME_VERSION_RETAIL = 'retail';
 const GAME_VERSION_CLASSIC_ERA = 'classic';

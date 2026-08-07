@@ -282,7 +282,13 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
             /** @var Collection<int, DungeonRouteScheduledPublish> $scheduledPublishes */
             $scheduledPublishes = DungeonRouteScheduledPublish::query()
                 ->where('publish_at', '<=', now())
-                ->with(['dungeonRoute.dungeon', 'dungeonRoute.author'])
+                ->with([
+                    'dungeonRoute.dungeon',
+                    'dungeonRoute.author',
+                    'dungeonRoute.mappingVersion.enemies',
+                    // .npc because KillZone::getEnemies() loads it - without it that is a query per kill zone
+                    'dungeonRoute.killZones.enemies.npc',
+                ])
                 ->get();
 
             foreach ($scheduledPublishes as $scheduledPublish) {
@@ -298,6 +304,12 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
 
                 if ($publishedState === PublishedState::WORLD && !$dungeonRoute->dungeon->active) {
                     $this->log->publishScheduledDungeonRouteSkippedInactiveDungeon($dungeonRoute->id, $dungeonRoute->dungeon_id, $scheduledPublish->id);
+                    $scheduledPublish->delete();
+                    continue;
+                }
+
+                if (!$dungeonRoute->hasKilledAllRequiredEnemies()) {
+                    $this->log->publishScheduledDungeonRouteSkippedRequiredEnemiesNotKilled($dungeonRoute->id, $scheduledPublish->id);
                     $scheduledPublish->delete();
                     continue;
                 }

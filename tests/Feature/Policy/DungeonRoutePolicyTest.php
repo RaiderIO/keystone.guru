@@ -3,10 +3,13 @@
 namespace Tests\Feature\Policy;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Enemy;
 use App\Models\Laratrust\Role;
+use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
 use App\Models\User;
 use App\Policies\DungeonRoutePolicy;
+use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -217,6 +220,51 @@ final class DungeonRoutePolicyTest extends PublicTestCase
             $this->assertTrue($result->allowed());
         } finally {
             $route->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function publish_givenOwnerOfRouteMissingRequiredEnemies_returnsDenied(): void
+    {
+        // Arrange
+        $owner            = User::factory()->create();
+        $route            = $this->createRoute($owner);
+        $mappingVersionId = null;
+
+        try {
+            $mappingVersionId = $this->giveRouteAnUnkilledRequiredEnemy($route);
+
+            // Act
+            $result = $this->policy->publish($owner, $route->fresh(), PublishedState::WORLD);
+
+            // Assert
+            $this->assertTrue($result->denied());
+        } finally {
+            $this->cleanupRouteMappingVersion($route, $mappingVersionId);
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function publish_givenOwnerOfRouteMissingRequiredEnemiesUnpublishing_returnsAllowed(): void
+    {
+        // Arrange - a route may always be made *less* visible, otherwise a route that was already published when its
+        // mapping gained a required enemy would be stuck published with no way for its author to take it down.
+        $owner            = User::factory()->create();
+        $route            = $this->createRoute($owner);
+        $mappingVersionId = null;
+
+        try {
+            $mappingVersionId = $this->giveRouteAnUnkilledRequiredEnemy($route);
+
+            // Act
+            $result = $this->policy->publish($owner, $route->fresh(), PublishedState::UNPUBLISHED);
+
+            // Assert
+            $this->assertTrue($result->allowed());
+        } finally {
+            $this->cleanupRouteMappingVersion($route, $mappingVersionId);
             $owner->delete();
         }
     }
@@ -489,6 +537,62 @@ final class DungeonRoutePolicyTest extends PublicTestCase
             'expires_at'         => null,
             'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
         ], $overrides));
+    }
+
+    /**
+     * Moves the route onto an empty mapping version of its own holding a single required enemy that the route does
+     * not kill, and returns that mapping version's id so the caller can clean it up.
+     */
+    private function giveRouteAnUnkilledRequiredEnemy(DungeonRoute $route): int
+    {
+        $current = $route->mappingVersion;
+        $now     = Carbon::now()->toDateTimeString();
+
+        // Inserted quietly, as MappingService::copyMappingVersionToDungeon() does - MappingVersion's `created` hook
+        // clones the entire previous mapping into the new version, which would drag the dungeon's own seeded
+        // (possibly `required`) enemies in with it and make this test depend on the dungeon the factory picked.
+        $mappingVersion = MappingVersion::findOrFail(MappingVersion::insertGetId([
+            'game_version_id'                 => $current->game_version_id,
+            'dungeon_id'                      => $route->dungeon_id,
+            'version'                         => $current->version + 1,
+            'enemy_forces_required'           => $current->enemy_forces_required,
+            'enemy_forces_required_teeming'   => $current->enemy_forces_required_teeming,
+            'enemy_forces_shrouded'           => $current->enemy_forces_shrouded,
+            'enemy_forces_shrouded_zul_gamux' => $current->enemy_forces_shrouded_zul_gamux,
+            'timer_max_seconds'               => $current->timer_max_seconds,
+            'created_at'                      => $now,
+            'updated_at'                      => $now,
+        ]));
+
+        Enemy::create([
+            'mapping_version_id' => $mappingVersion->id,
+            'floor_id'           => $mappingVersion->dungeon->floors->first()->id,
+            'npc_id'             => null,
+            'teeming'            => null,
+            'required'           => true,
+            'lat'                => 0,
+            'lng'                => 0,
+        ]);
+
+        $route->update(['mapping_version_id' => $mappingVersion->id, 'teeming' => false]);
+
+        return $mappingVersion->id;
+    }
+
+    /**
+     * Enemy and MappingVersion are SeederModels, whose delete() is silently refused - clean them up through the
+     * query builder instead.
+     */
+    private function cleanupRouteMappingVersion(DungeonRoute $route, ?int $mappingVersionId): void
+    {
+        $route->delete();
+
+        if ($mappingVersionId === null) {
+            return;
+        }
+
+        Enemy::query()->where('mapping_version_id', $mappingVersionId)->delete();
+        MappingVersion::query()->where('id', $mappingVersionId)->delete();
     }
 
     private function adminUser(): User
