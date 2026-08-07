@@ -7,7 +7,7 @@ use App\Models\LiveSession\LiveSession;
 
 class APILiveSessionCombatLogRequest extends APIFormRequest
 {
-    protected function getRequestModelClass(): ?string
+    protected function getRequestDtoClass(): ?string
     {
         return null;
     }
