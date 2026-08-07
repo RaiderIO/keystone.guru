@@ -7,8 +7,8 @@ description: Seed public dungeon routes with realistic pack-based pulls into the
 
 `seed_routes.php` in this directory is a tinker script that creates demo `DungeonRoute`s
 (published `world`, `expires_at = null`, random pack-based pulls, varied views/rating/forces).
-Thumbnails are **not** this skill's job — once the routes exist, hand them to the
-[[generating-thumbnails]] skill.
+The thumbnail *mechanism* is not this skill's — step 2 below just drives
+[[generating-thumbnails]], which owns it.
 
 ## 1. Seed routes
 
@@ -38,10 +38,11 @@ actually need thumbnail images.
 
 Queue each key onto the shared thumbnail queue (Path B of [[generating-thumbnails]] — the
 main stack's Horizon is the only Chrome-capable container, and it renders to the `public` disk
-that every stack serves at `/storage/...`). Step 1 prints the keys comma-separated, so split them:
+that every stack serves at `/storage/...`). Step 1 prints the keys comma-separated, so split them
+— paste only the keys, not the `CREATED:` prefix:
 
 ```sh
-for key in $(echo '<CREATED: line from step 1>' | tr ',' ' '); do
+for key in $(echo '8JxT3PE,pw7FaEt' | tr ',' ' '); do
   docker compose exec -T app php artisan dungeonroute:queuethumbnail "$key" --force
 done
 ```
