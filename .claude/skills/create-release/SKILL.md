@@ -117,6 +117,18 @@ Fetch all issues in parallel for speed.
 
   For non-public changes, a short change line is fine (the commit subject is acceptable).
 
+**#3877 is always non-public — no judgement call.** It is the permanent anchor issue for
+agent-tooling commits (`.claude/skills/**`, `CLAUDE.md`, `.claude/agents/**`, agent/MCP
+config). Anything tagged to it goes in the release issue and **never** in the public
+GitHub Release body, so it never reaches Discord. Don't try to write a user-facing line
+for one — changes to how Claude works are not product changes, however substantial the
+diff. Group them into a single non-public line when a release contains several.
+
+This replaces what used to be an implicit rule: these commits carried no issue number at
+all, and that absence was what kept them out of the public changelog while also making
+`create-release` flag them as untagged on every release. If you see an agent-tooling
+commit with no ticket, it predates #3877 — treat it as non-public too.
+
 Assign **one category** per change. Categories are plain markdown section headers now; use
 the established names:
 

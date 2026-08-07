@@ -32,6 +32,12 @@ Branch formats are as follows:
 - Any newly created files should be staged.
 - In the main checkout, commits should not be done unless explicitly asked (see the worktree
   exception below).
+- **Agent-tooling commits are tagged `#3877`** — the permanent anchor issue for changes to
+  `.claude/skills/**`, `CLAUDE.md`, `.claude/agents/**` and agent/MCP config. It never closes and
+  holds no task list; it exists so these commits have an issue number like everything else, and so
+  `create-release` can classify them as non-public deterministically rather than by inference. When
+  a skill change is part of a larger piece of work, tag it to *that* issue instead — #3877 is the
+  fallback for standalone agent-tooling maintenance, not a catch-all.
 
 ### Commit subjects start with `#`, which git silently eats on rebase
 Subjects begin with the issue number (`#3722 Fix the thing`), and any `git rebase --continue`
