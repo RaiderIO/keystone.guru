@@ -42,7 +42,7 @@ $breadcrumbsParams ??= [];
     @parent
 
     @if($header)
-        @include('common.general.inline', ['path' => 'common/general/navbarshrink'])
+        @include('common.general.inline', ['path' => 'common/general/siteheader'])
     @endif
 @endsection
 

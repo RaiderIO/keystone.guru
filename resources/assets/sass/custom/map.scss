@@ -61,15 +61,15 @@
 }
 
 .route_sidebar.right:not(.embed), {
-  top: 150px;
+  top: var(--ksg-header-height, 150px);
 }
 
 .route_manipulation_tools.mobile:not(.embed, .presenter), {
-  top: 70px;
+  top: var(--ksg-header-height, 70px);
 }
 
 .route_sidebar.right.mobile:not(.embed), {
-  top: 70px;
+  top: var(--ksg-header-height, 70px);
 }
 
 .route_manipulation_tools.right {

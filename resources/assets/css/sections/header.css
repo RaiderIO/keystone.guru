@@ -1,42 +1,52 @@
-.navbar,
-.navbar-first,
-.navbar-second {
-    -webkit-transition: padding 0.2s ease;
-    -moz-transition: padding 0.2s ease;
-    -o-transition: padding 0.2s ease;
+/* The site header: one sticky wrapper whose bars stack in normal flow.
+   Shrinking is a single class toggle on the wrapper (see siteheader.js) —
+   no fixed-top bars, no hardcoded top offsets, no JS-managed spacer. */
+.ksg-header {
+    position: sticky;
+    top: 0;
+    z-index: 800;
+    /* Transparent at rest so page background art bleeds through the gutters around
+       the bars' centered containers, like the old fixed bars did */
+    background-color: transparent;
+    transition: background-color 0.2s ease;
+}
+
+/* Once scrolled/shrunk the header is pinned over page content, so it needs an opaque
+   band - without it, content shows through the gutters and the slivers between the
+   bars' centered containers. Deliberately the page background color, not
+   --theme-header: the gutters should read as page, not as header (a full-width
+   header-colored band made the page feel top-heavy) */
+.ksg-header--shrink {
+    background-color: var(--theme-darker);
+}
+
+/* The map header keeps its floating look: transparent, click-through gutters
+   (see map-header.css) - the map renders behind it by design */
+#map_header .ksg-header {
+    background-color: transparent;
+}
+
+.ksg-header .dungeon_context_header {
+    height: 99px;
+    transition: height 0.2s ease;
+}
+
+.ksg-header--shrink .dungeon_context_header {
+    height: 64px;
+}
+
+.ksg-header .navbar-second {
+    /* Halve the theme's 1rem navbar padding: with the bars stacking in flow the full
+       padding is actually visible (the old fixed bars overlapped it away) and reads bulky */
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
     transition: padding 0.2s ease;
-
-    -webkit-transition: height 0.2s ease;
-    -moz-transition: height 0.2s ease;
-    -o-transition: height 0.2s ease;
-    transition: height 0.2s ease;
 }
 
-.navbar-shrink {
-    padding-top: 0.2em !important;
-    padding-bottom: 0.2em !important;
-}
-
-/* This takes up the space that the fixed-top navbar leaves because it floats */
-.navbar-top-fixed-spacer {
-    -webkit-transition: height 0.2s ease;
-    -moz-transition: height 0.2s ease;
-    -o-transition: height 0.2s ease;
-    transition: height 0.2s ease;
-}
-
-@media (min-width: 992px) {
-    .navbar-second {
-        top: 126px !important;
-        -webkit-transition: top 0.2s ease;
-        -moz-transition: top 0.2s ease;
-        -o-transition: top 0.2s ease;
-        transition: top 0.2s ease;
-    }
-
-    .navbar-second.navbar-shrink {
-        top: 94px !important;
-    }
+/* rem instead of em so shrunk bar heights stay integer pixels */
+.ksg-header--shrink .navbar-second {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
 }
 
 .game_version_header .game_version {

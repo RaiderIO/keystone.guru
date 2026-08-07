@@ -3,6 +3,14 @@
     width: 100%;
 }
 
+/* .wrapper only exists on full-viewport map pages. Give it a definite height of its own:
+   #app is min-height based (required for the sticky site header, #3851), which ends the
+   percentage-height chain that used to size it. */
+.wrapper {
+    height: 100vh;
+    height: 100dvh;
+}
+
 
 
 .leaflet-tooltip-killzone-index {

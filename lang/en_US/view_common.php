@@ -451,6 +451,7 @@ return [
                 'edit_route_settings'            => 'Route settings',
                 'edit_mapping_version'           => 'Edit mapping version',
                 'share'                          => 'Share',
+                'route_actions'                  => 'Route actions',
                 'start_live_session'             => 'Start live session',
                 'start_live_session_paragraph_1' => 'Once you start running your route in-game you can create a live session where Keystone.guru will aid you in completing your M+ key. You may follow another user\'s map movements by selecting the option when clicking their icon/initials in the top header.',
                 'start_live_session_paragraph_2' => 'Any participant of the live session may also select any of your existing pulls (your current pull, in-game) and then on any enemy that is not part of your route to indicate an accidental pull. Keystone.guru will then attempt to correct your route by excluding any enemies that are part of your current route that are potentially skippable without utilizing shroud/invisibility pots.',
