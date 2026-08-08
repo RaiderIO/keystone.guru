@@ -61,7 +61,7 @@ class CommonDungeonroutePublish extends InlineCode {
         });
 
         // Only the route editor has a map (and thus kill zones) to check the required enemies against
-        let killZoneMapObjectGroup = this._getKillZoneMapObjectGroup();
+        let killZoneMapObjectGroup = getKillZoneMapObjectGroup();
         if (killZoneMapObjectGroup !== null) {
             this._refreshRequiredEnemiesState();
             // KillZone.setEnemies() suppresses the per-enemy signals and emits only enemieschanged - that is the
@@ -73,7 +73,7 @@ class CommonDungeonroutePublish extends InlineCode {
     }
 
     cleanup() {
-        let killZoneMapObjectGroup = this._getKillZoneMapObjectGroup();
+        let killZoneMapObjectGroup = getKillZoneMapObjectGroup();
         if (killZoneMapObjectGroup !== null) {
             killZoneMapObjectGroup.unregister('killzone:enemyadded', this);
             killZoneMapObjectGroup.unregister('killzone:enemyremoved', this);
@@ -84,27 +84,12 @@ class CommonDungeonroutePublish extends InlineCode {
     }
 
     /**
-     * The kill zone map object group of the currently displayed map, or null if this page has no editable map.
-     * @returns {KillZoneMapObjectGroup|null}
-     * @private
-     */
-    _getKillZoneMapObjectGroup() {
-        // The share modal this select lives in is also rendered on pages that have no map. Both fallbacks on that
-        // path yield `false` rather than a nullish value - util.js defines a no-op getState() and
-        // MapObjectGroupManager.getByName() returns false for an absent group - so normalise with ||, not ??.
-        let state = typeof getState === 'function' ? getState() : null;
-        let dungeonMap = state ? state.getDungeonMap() : null;
-
-        return (dungeonMap?.mapObjectGroupManager?.getByName(MAP_OBJECT_GROUP_KILLZONE)) || null;
-    }
-
-    /**
      * A route that does not kill all required enemies may not be published - but it must always remain possible to
      * _unpublish_ it, so only the publishing options are disabled rather than the select as a whole.
      * @private
      */
     _refreshRequiredEnemiesState() {
-        let hasKilledAllRequiredEnemies = this._getKillZoneMapObjectGroup().hasKilledAllRequiredEnemies();
+        let hasKilledAllRequiredEnemies = getKillZoneMapObjectGroup().hasKilledAllRequiredEnemies();
         let $select = $(this.options.publishSelector);
 
         $select.find('option').each((index, option) => {
