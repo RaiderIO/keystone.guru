@@ -619,8 +619,15 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::post('/mdt/details', new MDTImportController()->details(...))->name('mdt.details');
         });
 
-        Route::post('/profile/legal', new AjaxProfileController()->legalAgree(...));
-        Route::post('/profile/adfree/{user:public_key}', new AjaxProfileController()->addAdFreeGiveaway(...));
+        // legalAgree only mutates the caller's own record, so plain 'auth' is enough - a role-less
+        // authenticated user (e.g. the seeded Internal Team account) must still be able to clear the
+        // legal modal, which re-shows on every page until legal_agreed is set.
+        Route::middleware('auth')->group(static function () {
+            Route::post('/profile/legal', new AjaxProfileController()->legalAgree(...));
+        });
+        Route::middleware(['auth', 'role:user|admin'])->group(static function () {
+            Route::post('/profile/adfree/{user:public_key}', new AjaxProfileController()->addAdFreeGiveaway(...));
+        });
         Route::delete('/profile/adfree/{user:public_key}', new AjaxProfileController()->removeAdFreeGiveaway(...));
 
         // Metrics

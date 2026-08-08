@@ -112,6 +112,12 @@ class Handler extends ExceptionHandler
                         'model' => $e->getModel(),
                     ]),
                 ], StatusCode::NOT_FOUND);
+            } elseif ($e instanceof AuthenticationException) {
+                // AuthenticationException is not an HttpExceptionInterface, so without this check it
+                // falls through every instanceof branch below and hits the generic 500 tail instead
+                // of the 401 unauthenticated() already builds - a guest hitting any auth-gated
+                // /ajax/ or /api/ route would 500 instead of 401 (#3863).
+                return $this->unauthenticated($request, $e);
             }
 
             // Normalize the same way parent::render() would (AuthorizationException -> 403,
@@ -161,7 +167,10 @@ class Handler extends ExceptionHandler
     protected function unauthenticated($request, AuthenticationException $exception)
     {
         if ($this->shouldReturnJson($request, $exception)) {
-            return response()->json(['error' => __('exceptions.handler.unauthenticated')], StatusCode::UNAUTHORIZED);
+            // defaultAjaxErrorFn() (resources/assets/js/custom/inline/layouts/app.js) only reads
+            // responseJSON.errors then responseJSON.message - 'error' was silently dropped, falling
+            // back to the generic "An error occurred" toast.
+            return response()->json(['message' => __('exceptions.handler.unauthenticated')], StatusCode::UNAUTHORIZED);
         }
 
         return redirect()->guest('login');
