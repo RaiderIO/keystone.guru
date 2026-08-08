@@ -45,7 +45,7 @@ class CommonDungeonroutePublish extends InlineCode {
 
                 let data = {
                     title: lang.get(`js.publish_state_title_${publishState}`),
-                    subtext: this.addNewlines(lang.get(`js.publish_state_subtext_${publishState}`), 60),
+                    subtext: lang.get(`js.publish_state_subtext_${publishState}`),
                     fa_class: icons[publishState]
                 };
 
@@ -141,31 +141,5 @@ class CommonDungeonroutePublish extends InlineCode {
                 showSuccessNotification(lang.get('js.route_published_state_changed'));
             }
         });
-    }
-
-    /**
-     * @param {string} str
-     * @param {number} [count=30]
-     * @returns {string}
-     */
-    addNewlines(str, count = 30) {
-        let result = '';
-        let charsAdded = 0;
-        let words = str.split(' ');
-
-        for (let i = 0; i < words.length; i++) {
-            let word = words[i];
-            if (charsAdded + word.length > count) {
-                result += '<br>';
-                charsAdded = 0;
-            }
-
-            result += word + ' ';
-
-            // Add one for the space added
-            charsAdded += (word.length + 1);
-        }
-
-        return result;
     }
 }
