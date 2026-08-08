@@ -46,11 +46,11 @@ function slideSrc(track, index) {
  * @param {HTMLElement} track
  * @param {number} distance Positive drags right (towards the previous slide).
  */
-function drag(track, distance) {
+function drag(track, distance, endEvent = 'pointerup') {
     const $track = $(track);
     $track.trigger($.Event('pointerdown', {button: 0, pointerId: 1, clientX: 200}));
     $track.trigger($.Event('pointermove', {pointerId: 1, clientX: 200 + distance}));
-    $track.trigger($.Event('pointerup', {pointerId: 1, clientX: 200 + distance}));
+    $track.trigger($.Event(endEvent, {pointerId: 1, clientX: 200 + distance}));
 }
 
 describe('$.fn.thumbnailCarousel (#3595)', () => {
@@ -90,6 +90,7 @@ describe('$.fn.thumbnailCarousel (#3595)', () => {
         expect(document.querySelector('.thumbnail-carousel__nav--prev').getAttribute('aria-label')).toBe('Vorige');
         expect(document.querySelector('.thumbnail-carousel__nav--next').getAttribute('aria-label')).toBe('Volgende');
         expect(document.querySelector('.thumbnail-carousel').getAttribute('aria-roledescription')).toBe('carousel');
+        expect(document.querySelector('.thumbnail-carousel').getAttribute('aria-label')).toBe('Thumbnails');
         expect(track.querySelectorAll('li')[1].getAttribute('aria-label')).toBe('2 / 3');
     });
 
@@ -139,18 +140,30 @@ describe('$.fn.thumbnailCarousel (#3595)', () => {
         expect($('.thumbnail-carousel__nav--prev').prop('disabled')).toBe(false);
     });
 
-    test('thumbnailCarousel_givenInitialised_loadsTheCurrentAndNextSlideImagesOnly', () => {
-        const track = createCarousel(4);
+    test('thumbnailCarousel_givenInitialised_loadsOnlyTheCurrentSlideAndItsNeighbours', () => {
+        const track = createCarousel(5);
 
         $(track).thumbnailCarousel();
 
         expect(slideSrc(track, 1)).toBe('1.jpg');
+        // The slide before the first one is the last one, a single loop-back away.
+        expect(slideSrc(track, 4)).toBe('4.jpg');
         expect(slideSrc(track, 2)).toBe('//:0');
         expect(slideSrc(track, 3)).toBe('//:0');
     });
 
+    test('thumbnailCarousel_givenDragPastThresholdAtTheLastSlideWithoutLoop_snapsBackToIt', () => {
+        const track = createCarousel(2);
+        $(track).thumbnailCarousel({loop: false});
+        $('.thumbnail-carousel__nav--next').trigger('click');
+
+        drag(track, -80);
+
+        expect(track.style.transform).toBe('translateX(-100%)');
+    });
+
     test('thumbnailCarousel_givenSlideChange_loadsTheUpcomingSlideImage', () => {
-        const track = createCarousel(4);
+        const track = createCarousel(6);
         $(track).thumbnailCarousel();
 
         $('.thumbnail-carousel__nav--next').trigger('click');
@@ -196,6 +209,26 @@ describe('$.fn.thumbnailCarousel (#3595)', () => {
         drag(track, -10);
 
         expect(track.style.transform).toBe('translateX(0%)');
+    });
+
+    test('thumbnailCarousel_givenTheBrowserCancelsTheDrag_abandonsItInsteadOfChangingSlide', () => {
+        // pointercancel means the gesture was taken over (reclassified as a page scroll, say).
+        const track = createCarousel(3);
+        $(track).thumbnailCarousel();
+
+        drag(track, -80, 'pointercancel');
+
+        expect(track.style.transform).toBe('translateX(0%)');
+    });
+
+    test('thumbnailCarousel_givenPointerDown_preventsTheBrowsersNativeImageDrag', () => {
+        const track = createCarousel(3);
+        $(track).thumbnailCarousel();
+        const pointerDown = $.Event('pointerdown', {button: 0, pointerId: 1, clientX: 200});
+
+        $(track).trigger(pointerDown);
+
+        expect(pointerDown.isDefaultPrevented()).toBe(true);
     });
 
     test('thumbnailCarousel_givenDragPastTheThreshold_swallowsTheClickThatFollowsIt', () => {

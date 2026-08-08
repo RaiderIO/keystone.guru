@@ -28,7 +28,8 @@ const defaults = {
     loop: true,
     /** Horizontal drag distance (px) that commits to a slide change. lightslider's `swipeThreshold`. */
     swipeThreshold: 40,
-    /** Accessible names for the arrow buttons; the caller passes translated strings. */
+    /** Accessible names for the carousel and its arrow buttons; the caller passes translated strings. */
+    label: 'Thumbnails',
     prevLabel: 'Previous',
     nextLabel: 'Next',
     /** Called as onAfterSlide(index, slideCount) after every slide change. */
@@ -87,9 +88,12 @@ $.fn.thumbnailCarousel = function (options) {
         const $carousel = $track.parent();
         const slideCount = slides.length;
 
+        // `aria-roledescription` requires an accessible name to go with it, or screen readers
+        // announce "carousel" with nothing to identify which one.
         $carousel.addClass('thumbnail-carousel--interactive').attr({
             role: 'group',
             'aria-roledescription': 'carousel',
+            'aria-label': settings.label,
         });
 
         slides.forEach(function (slide, index) {
@@ -114,15 +118,17 @@ $.fn.thumbnailCarousel = function (options) {
         let currentIndex = 0;
 
         /**
-         * Loads the current slide's images plus the next one's, so a slide change never waits
-         * on a network request. This is what lightslider's onBeforeStart/onAfterSlide callbacks
-         * were meant to do before the blades stopped emitting `data-src`.
+         * Loads the current slide's images plus its two neighbours', so a slide change in either
+         * direction never waits on a network request. This is what lightslider's
+         * onBeforeStart/onAfterSlide callbacks were meant to do before the blades stopped emitting
+         * `data-src`.
          *
          * @param {number} index
          */
         function loadAround(index) {
             loadSlideImages(slides[index]);
             loadSlideImages(slides[(index + 1) % slideCount]);
+            loadSlideImages(slides[(index - 1 + slideCount) % slideCount]);
         }
 
         /**
@@ -160,6 +166,10 @@ $.fn.thumbnailCarousel = function (options) {
             const wrapped = target < 0 || target > slideCount - 1;
 
             if (wrapped && !settings.loop) {
+                // Still repaint: a drag past the threshold at either end leaves the track sitting
+                // at its dragged-out offset, so it has to be snapped back to the current slide.
+                paint(true);
+
                 return;
             }
 
@@ -201,6 +211,11 @@ $.fn.thumbnailCarousel = function (options) {
                 return;
             }
 
+            // <img> is natively draggable, so without this every mouse drag on a thumbnail starts
+            // HTML5 drag-and-drop instead - a ghost image follows the cursor and the UA cancels the
+            // pointer sequence. CSS blocks the same thing on the touch/selection side.
+            pointerEvent.preventDefault();
+
             dragStartX = pointerEvent.clientX;
             dragDeltaX = 0;
             track.classList.add('thumbnail-carousel__track--no-transition');
@@ -226,6 +241,10 @@ $.fn.thumbnailCarousel = function (options) {
             }
 
             const delta = dragDeltaX;
+            // A cancelled pointer means the browser took the gesture over (it reclassified the
+            // touch as a page scroll, say) - the swipe was abandoned, not completed, so snap back
+            // however far it got.
+            const completed = pointerEvent.type !== 'pointercancel';
             dragStartX = null;
             $carousel.removeClass('thumbnail-carousel--dragging');
 
@@ -233,10 +252,11 @@ $.fn.thumbnailCarousel = function (options) {
                 track.releasePointerCapture(pointerEvent.pointerId);
             }
 
-            if (Math.abs(delta) > settings.swipeThreshold) {
+            if (completed && Math.abs(delta) > settings.swipeThreshold) {
                 move(delta < 0 ? 1 : -1);
             } else {
-                // Below the threshold: animate back to where we started.
+                // Abandoned, or below the threshold: animate back to where we started.
+                dragDeltaX = 0;
                 paint(true);
             }
         });
