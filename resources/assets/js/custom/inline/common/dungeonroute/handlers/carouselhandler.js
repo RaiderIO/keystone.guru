@@ -17,6 +17,7 @@ class CarouselHandler {
         // the initial server-rendered markup are matched.
         $(function () {
             $(`${prefix} .thumbnail-carousel__track`).thumbnailCarousel($.extend({}, {
+                label: lang.get('js.thumbnail_carousel_label'),
                 prevLabel: lang.get('js.thumbnail_carousel_previous'),
                 nextLabel: lang.get('js.thumbnail_carousel_next'),
             }, settingsOverride));

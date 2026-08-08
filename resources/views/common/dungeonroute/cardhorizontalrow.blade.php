@@ -53,7 +53,6 @@ use (
     $tierAffixGroup        = $tierAffixGroup ?? $dungeonroute->affixes->count() === 1 ?: null;
     $enemyForcesPercentage = $dungeonroute->getEnemyForcesPercentage();
     $enemyForcesWarning    = $dungeonroute->enemy_forces < $dungeonroute->mappingVersion->enemy_forces_required || $enemyForcesPercentage >= 105;
-    $activeFloors          = $dungeonroute->dungeon->floorsForMapFacade($dungeonroute->mappingVersion, true)->get();
     ob_start();
     ?>
 <div id="dungeonroute_card_horizontal_row_{{ $uniqueString }}"

@@ -41,6 +41,10 @@
     width: 100%;
     height: auto;
     max-width: 100%;
+    /* Images are natively draggable and selectable; both would hijack a swipe. The widget also
+       preventDefault()s pointerdown, which covers the mouse path. */
+    -webkit-user-drag: none;
+    user-select: none;
 }
 
 /* Only set by the widget once it has actually taken over a multi-slide carousel, so
