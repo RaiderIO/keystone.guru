@@ -3,7 +3,9 @@
 /**
  * Seed public, non-expiring dungeon routes with pack-based pulls for local development.
  *
- * Run from any checkout/worktree:
+ * Run from any checkout/worktree. Note that routes seeded into an isolated worktree's private
+ * schema can't be given thumbnails - the shared Horizon that renders them sees neither the rows
+ * nor the dispatch, so they fall back to the dungeon image (see SKILL.md step 2):
  *   docker compose exec -T -e DUNGEON_KEY=pitofsaron [-e ROUTE_COUNT=12] app \
  *     php artisan tinker .claude/skills/seed-dev-routes/seed_routes.php
  *
