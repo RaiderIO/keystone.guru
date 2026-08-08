@@ -47,3 +47,31 @@ the site.
 
 To understand how to write JavaScript for blade files, include the `javascript-in-blade-files` skill in your prompt and follow the instructions there.
 
+
+## Theming: never use the `bg-body-*` / `text-bg-*` Bootstrap utilities
+
+This site ships **one class-scoped stylesheet per bootswatch theme** (`<html class="theme darkly">`,
+switched server-side from the user's `theme` column) rather than using Bootstrap 5.3's
+`data-bs-theme` attribute. Bootswatch therefore never overrides the `--bs-*-bg` custom properties:
+under **darkly** and **vapor**, `--bs-tertiary-bg` is still its light default `#f8f9fa`.
+
+So `class="bg-body-tertiary"` renders a **white panel with white text** on the dark themes — it
+looks fine in a light theme and is invisible in a dark one. Found in #1772 by screenshotting the
+page; no test catches it.
+
+- **For panels/cards**: use a Bootstrap `.card` (`<div class="card"><div class="card-body">`), which
+  bootswatch *does* theme per stylesheet.
+- **For borders/text**: `border`, `text-body-secondary` and `text-muted` are safe —
+  `--bs-secondary-color` *is* themed.
+- **For icon buttons on a themed surface**: inherit `currentColor` rather than picking
+  `btn-outline-secondary`. `$secondary` is a dark grey under darkly/vapor (invisible on a dark card)
+  and picking a light variant instead fails the same way under lux. See
+  `resources/assets/css/sections/creator-profile.css`.
+
+**Always verify a new surface under both a dark and a light theme.** Because every theme lives in
+the one stylesheet, swapping the `html` class is a faithful preview and needs no session change:
+
+```sh
+docker compose exec -T -e PRE_EVAL='document.documentElement.className = "theme lux"' app \
+    sh -c 'cd /var/www && node .chrome-tmp/authshot.js ...'
+```

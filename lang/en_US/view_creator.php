@@ -11,6 +11,10 @@ return [
         'empty'              => 'There are no listed creators yet.',
         'empty_for_search'   => 'No creators found matching ":search".',
     ],
+    'featured' => [
+        'title'   => 'Featured creators',
+        'see_all' => 'See all creators',
+    ],
     'card' => [
         'route_count' => '{0} No published routes|{1} :count published route|[2,*] :count published routes',
     ],
