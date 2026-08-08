@@ -4,7 +4,7 @@ namespace App\Events;
 
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 use App\Models\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;

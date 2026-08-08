@@ -36,6 +36,7 @@ class HandlerLogging extends StructuredLogging implements HandlerLoggingInterfac
         string  $message,
         bool    $reportedByErrorTracker,
     ): void {
+        unset($body['lines']);
         $this->error(__METHOD__, get_defined_vars());
     }
 }

@@ -83,6 +83,7 @@ $showHeader = !isset($embedOptions['show']['header']) || $embedOptions['show']['
                 'killzonepath',
                 'mountablearea',
                 'path',
+                'playerposition',
             ],
             'controlOptions' => [
                 'heatmapSearch' => [
