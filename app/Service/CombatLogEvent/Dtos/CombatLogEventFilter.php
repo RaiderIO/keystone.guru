@@ -513,7 +513,7 @@ class CombatLogEventFilter implements Arrayable
 
         if ($heatmapDataFilter->getTimerFractionMin() !== null && $heatmapDataFilter->getTimerFractionMax() !== null) {
             $timerSeconds = $heatmapDataFilter->getDungeon()->getCurrentMappingVersion()->timer_max_seconds;
-            if ($timerSeconds === null) { // @phpstan-ignore identical.alwaysFalse
+            if ($timerSeconds <= 0) {
                 throw new InvalidArgumentException('Mapping version does not have a timer max seconds value');
             }
 
