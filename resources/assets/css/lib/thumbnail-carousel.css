@@ -12,7 +12,11 @@
     overflow: hidden;
 }
 
-.thumbnail-carousel__track {
+/* Deliberately two classes deep: every theme compiles its own copy of Bootstrap into
+   theme-{version}.css, which loads AFTER custom-{version}.css and whose `.darkly ul` reset (0,1,1)
+   otherwise wins over a single-class selector and restores the 2rem list padding - which then eats
+   32px off every slide's width. */
+.thumbnail-carousel .thumbnail-carousel__track {
     display: flex;
     list-style: none outside none;
     padding-left: 0;
@@ -22,17 +26,17 @@
     touch-action: pan-y;
 }
 
-.thumbnail-carousel__track--no-transition {
+.thumbnail-carousel .thumbnail-carousel__track--no-transition {
     transition: none;
 }
 
-.thumbnail-carousel__slide {
+.thumbnail-carousel .thumbnail-carousel__slide {
     flex: 0 0 100%;
     max-width: 100%;
     min-width: 0;
 }
 
-.thumbnail-carousel__slide img {
+.thumbnail-carousel .thumbnail-carousel__slide img {
     display: block;
     width: 100%;
     height: auto;
@@ -41,15 +45,17 @@
 
 /* Only set by the widget once it has actually taken over a multi-slide carousel, so
    single-thumbnail cards keep the default cursor and don't advertise a drag that does nothing. */
-.thumbnail-carousel--interactive .thumbnail-carousel__track {
+.thumbnail-carousel.thumbnail-carousel--interactive .thumbnail-carousel__track {
     cursor: grab;
 }
 
-.thumbnail-carousel--dragging .thumbnail-carousel__track {
+.thumbnail-carousel.thumbnail-carousel--dragging .thumbnail-carousel__track {
     cursor: grabbing;
 }
 
-.thumbnail-carousel__nav {
+/* Two classes deep for the same reason as the track above: the themes' own Bootstrap reboot
+   styles bare `button` elements from a later stylesheet. */
+.thumbnail-carousel .thumbnail-carousel__nav {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -68,39 +74,39 @@
     transition: opacity 150ms ease, background-color 150ms ease;
 }
 
-.thumbnail-carousel__nav--prev {
+.thumbnail-carousel .thumbnail-carousel__nav--prev {
     left: 4px;
 }
 
-.thumbnail-carousel__nav--next {
+.thumbnail-carousel .thumbnail-carousel__nav--next {
     right: 4px;
 }
 
-.thumbnail-carousel__nav:hover,
-.thumbnail-carousel__nav:focus-visible {
+.thumbnail-carousel .thumbnail-carousel__nav:hover,
+.thumbnail-carousel .thumbnail-carousel__nav:focus-visible {
     background-color: rgba(0, 0, 0, 0.75);
 }
 
 /* Keep the arrows out of the way until the card is hovered, but always show them once one is
    focused so they remain reachable by keyboard. */
 .thumbnail-carousel:hover .thumbnail-carousel__nav,
-.thumbnail-carousel__nav:focus-visible {
+.thumbnail-carousel .thumbnail-carousel__nav:focus-visible {
     opacity: 1;
 }
 
-.thumbnail-carousel__nav:disabled {
+.thumbnail-carousel .thumbnail-carousel__nav:disabled {
     opacity: 0.3;
 }
 
 @media (hover: none) {
     /* No hover to reveal them on touch devices, where dragging works but isn't discoverable. */
-    .thumbnail-carousel__nav {
+    .thumbnail-carousel .thumbnail-carousel__nav {
         opacity: 1;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .thumbnail-carousel__track {
+    .thumbnail-carousel .thumbnail-carousel__track {
         transition: none;
     }
 }
