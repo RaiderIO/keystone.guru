@@ -100,7 +100,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
         $bloodlustPerPullSelect.find('option').remove();
         let selectedPulls = [];
 
-        let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+        let killZoneMapObjectGroup = getKillZoneMapObjectGroup();
         let sortedKillZones = _.sortBy(_.values(killZoneMapObjectGroup.objects), 'index');
 
         for (let i = 0; i < sortedKillZones.length; i++) {

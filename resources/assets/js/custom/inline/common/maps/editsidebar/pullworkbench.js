@@ -202,7 +202,7 @@ class PullWorkBench extends Signalable {
                 getState().getDungeonMap().drawnLayers.removeLayer(self.killZone.layer);
                 getState().getDungeonMap().editableLayers.removeLayer(self.killZone.layer);
 
-                let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
+                let killZoneMapObjectGroup = getKillZoneMapObjectGroup();
                 // It's been removed; unset it
                 killZoneMapObjectGroup.setLayerToMapObject(null, self.killZone);
 

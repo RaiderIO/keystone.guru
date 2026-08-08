@@ -89,7 +89,7 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
      */
     activate() {
         // Set the filter values prior to activating them (can't do this before since the map won't be initialized)
-        let enemyMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        let enemyMapObjectGroup = getEnemyMapObjectGroup();
         this.filters.includedEnemies.enemyMapObjectGroup = enemyMapObjectGroup;
         this.filters.excludedEnemies.enemyMapObjectGroup = enemyMapObjectGroup;
 
