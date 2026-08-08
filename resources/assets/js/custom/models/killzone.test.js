@@ -92,8 +92,9 @@ global.getState = () => fakeState;
 const {KillZone} = require('./killzone');
 
 /**
- * A fake enemy collaborator. Tracks its assigned kill zone and answers the
- * classification questions KillZone asks with sensible "plain enemy" defaults.
+ * A fake enemy collaborator. Tracks its assigned kill zone and answers the classification
+ * questions KillZone asks with defaults for an enemy with no special classification (not
+ * prideful, awakened, or linked to the last boss).
  */
 function makeFakeEnemy(id) {
     return {

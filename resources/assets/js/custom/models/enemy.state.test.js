@@ -115,8 +115,9 @@ global.VersionableMapObject = class VersionableMapObject {
     }
 
     // Mirrors MapObject#_assignPopup, guard included: it only binds on an editable map object of an
-    // editable map. Enemy#isEditable() returns false, so a plain enemy never gets a popup bound -
-    // dropping that guard here would let a test assert a bind production never performs.
+    // editable map. Enemy#isEditable() returns false, so a base (non-admin) Enemy never gets a
+    // popup bound - dropping that guard here would let a test assert a bind production never
+    // performs.
     _assignPopup(layer = null) {
         const targetLayer = layer === null ? this.layer : layer;
 
@@ -354,7 +355,7 @@ describe('Enemy.getEnemyForces', () => {
         expect(makeEnemy({npc: {id: 1, enemy_forces: null}}).getEnemyForces()).toBe(0);
     });
 
-    test('getEnemyForces_givenAPlainEnemy_returnsTheNpcForces', () => {
+    test('getEnemyForces_givenAnNpcWithEnemyForces_returnsTheNpcForces', () => {
         setFakeState();
 
         expect(makeEnemy({npc: makeNpc({enemyForces: 12})}).getEnemyForces()).toBe(12);
@@ -922,7 +923,7 @@ describe('Enemy popup state transitions', () => {
     });
 
     test('setPopupEnabled_givenANonEditableEnemy_neverBindsAPopup', () => {
-        // Arrange: a plain enemy on a route map - Enemy#isEditable() is false
+        // Arrange: a base (non-admin) Enemy on a route map - Enemy#isEditable() is false
         setFakeState();
         const map = makeFakeMap({edit: true});
         const layer = makeFakeLayer();
