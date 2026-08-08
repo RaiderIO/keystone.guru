@@ -223,9 +223,13 @@ class TeamController extends Controller
 
     /**
      * Creates a tag from the tag manager
+     *
+     * @throws AuthorizationException
      */
     public function createTag(TagFormRequest $request, Team $team): RedirectResponse
     {
+        Gate::authorize('edit', $team);
+
         $error = [];
 
         $tagCategoryId = TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM];
