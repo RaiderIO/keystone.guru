@@ -87,20 +87,28 @@ use (
 <div id="dungeonroute_card_horizontal_{{ $uniqueString }}"
      class="row g-0 m-xl-1 mx-0 my-3 card_dungeonroute horizontal {{ $showDungeonImage ? 'dungeon_image' : '' }}">
     <div class="col-xl-auto">
-        <div class="{{ $owlClass }} light-slider-container">
-            <ul class="light-slider {{ $owlClass }}">
+        <div class="{{ $owlClass }} thumbnail-carousel">
+            <ul class="thumbnail-carousel__track {{ $owlClass }}">
                 @if( $dungeonroute->has_thumbnail )
                     @foreach($dungeonroute->thumbnails as $thumbnail)
-                        <li>
+                        {{-- Only the first thumbnail loads eagerly, so the card is never blank
+                             (also without JS); $.fn.thumbnailCarousel (#3595) swaps the rest in
+                             from data-src as they are slid into view. --}}
+                        <li class="thumbnail-carousel__slide">
                             <img class="thumbnail"
-                                 src="{{ $thumbnail->getURL() }}"
-                                 style="display: {{ $loop->index === 0 ? 'block' : 'none' }}"
+                                 @if( $loop->index === 0 )
+                                     src="{{ $thumbnail->getURL() }}"
+                                 @else
+                                     src="//:0" data-src="{{ $thumbnail->getURL() }}"
+                                 @endif
                                  alt="{{ __('view_common.dungeonroute.card.thumbnail_alt') }}"/>
                         </li>
                     @endforeach
                 @else
-                    <img class="dungeon" src="{{ $dungeonroute->dungeon->getImage32Url() }}"
-                         alt="{{ __('view_common.dungeonroute.card.thumbnail_dungeon_alt') }}"/>
+                    <li class="thumbnail-carousel__slide">
+                        <img class="dungeon" src="{{ $dungeonroute->dungeon->getImage32Url() }}"
+                             alt="{{ __('view_common.dungeonroute.card.thumbnail_dungeon_alt') }}"/>
+                    </li>
                 @endif
             </ul>
         </div>
