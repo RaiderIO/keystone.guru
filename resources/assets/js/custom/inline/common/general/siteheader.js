@@ -28,6 +28,13 @@ class CommonGeneralSiteheader extends InlineCode {
      */
     static MIN_SCROLLABLE_DISTANCE = 200;
 
+    /**
+     * How long scroll anchoring stays suppressed after the header starts growing back. Must
+     * outlast the CSS height/padding transition in header.css (0.2s), since the document keeps
+     * growing - and anchoring keeps re-evaluating - for its whole duration.
+     */
+    static SCROLL_ANCHOR_SUPPRESSION_MS = 400;
+
     activate() {
         super.activate();
 
@@ -81,8 +88,47 @@ class CommonGeneralSiteheader extends InlineCode {
             shouldShrinkHeader(window.scrollY, currentlyShrunk);
 
         if (shrunk !== currentlyShrunk) {
+            if (shrunk) {
+                // Shrinking wants the compensation - close any suppression window a recent
+                // unshrink left open, or the shrink runs without it
+                this._restoreScrollAnchoring();
+            } else {
+                this._suppressScrollAnchoring();
+            }
+
             this.shrinkTarget.classList.toggle('ksg-header--shrink', shrunk);
         }
+    }
+
+    /**
+     * Stop the browser from compensating for the header growing back (#3893).
+     *
+     * The bars stack in normal document flow since #3851, so unshrinking grows the document by
+     * the height the header regains - above the viewport. Scroll anchoring then adds that same
+     * height to the scroll position to keep the visible content stable, which eats the tail of
+     * an upward fling (already decelerating by then) and leaves the page short of the top.
+     *
+     * Deliberately not applied when the header shrinks: there the compensation is wanted, as it
+     * keeps the content the user is reading from jumping upwards mid-page.
+     */
+    _suppressScrollAnchoring() {
+        document.documentElement.style.overflowAnchor = 'none';
+
+        clearTimeout(this._scrollAnchorRestoreTimer);
+        this._scrollAnchorRestoreTimer = setTimeout(
+            this._restoreScrollAnchoring.bind(this),
+            CommonGeneralSiteheader.SCROLL_ANCHOR_SUPPRESSION_MS
+        );
+    }
+
+    /**
+     * Hand scroll anchoring back to the browser. Suppression is always temporary - leaving it on
+     * would stop the whole page from compensating for anything that resizes above the viewport,
+     * such as an image loading in.
+     */
+    _restoreScrollAnchoring() {
+        clearTimeout(this._scrollAnchorRestoreTimer);
+        document.documentElement.style.removeProperty('overflow-anchor');
     }
 }
 
