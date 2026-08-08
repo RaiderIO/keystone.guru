@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\TWW;
 
-use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\APICombatLogControllerCombatLogRouteTestBase;
@@ -16,7 +16,7 @@ class APICombatLogControllerCombatLogRouteAraKaraCityOfEchoesTest extends APICom
 {
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_ARA_KARA_CITY_OF_ECHOES;
+        return DungeonKey::ARA_KARA_CITY_OF_ECHOES->value;
     }
 
     #[Test]

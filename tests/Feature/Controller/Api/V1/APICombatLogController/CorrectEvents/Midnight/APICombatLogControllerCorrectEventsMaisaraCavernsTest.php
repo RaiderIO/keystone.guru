@@ -2,7 +2,7 @@
 
 namespace Controller\Api\V1\APICombatLogController\CorrectEvents\Midnight;
 
-use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\APICombatLogControllerCorrectEventsTestBase;
@@ -16,7 +16,7 @@ class APICombatLogControllerCorrectEventsMaisaraCavernsTest extends APICombatLog
 {
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_MAISARA_CAVERNS;
+        return DungeonKey::MAISARA_CAVERNS->value;
     }
 
     #[Test]

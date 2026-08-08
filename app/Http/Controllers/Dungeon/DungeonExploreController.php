@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Heatmap\ExploreEmbedUrlFormRequest;
 use App\Http\Requests\Heatmap\ExploreUrlFormRequest;
 use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Models\Floor\Floor;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
@@ -96,7 +97,7 @@ class DungeonExploreController extends Controller
     ): RedirectResponse {
         return redirect()->route('dungeon.explore.gameversion.view.floor', [
             'gameVersion' => GameVersion::GAME_VERSION_RETAIL,
-            'dungeon'     => Dungeon::where('key', Dungeon::DUNGEON_MECHAGON_WORKSHOP)->firstOrFail(),
+            'dungeon'     => Dungeon::where('key', DungeonKey::MECHAGON_WORKSHOP->value)->firstOrFail(),
             'floorIndex'  => $floorIndex,
         ] + $request->validated());
     }
@@ -178,7 +179,7 @@ class DungeonExploreController extends Controller
     ): RedirectResponse {
         return redirect()->route('dungeon.explore.gameversion.embed.floor', [
             'gameVersion' => GameVersion::GAME_VERSION_RETAIL,
-            'dungeon'     => Dungeon::where('key', Dungeon::DUNGEON_MECHAGON_WORKSHOP)->firstOrFail(),
+            'dungeon'     => Dungeon::where('key', DungeonKey::MECHAGON_WORKSHOP->value)->firstOrFail(),
             'floorIndex'  => $floorIndex,
         ] + $request->validated());
     }

@@ -3,7 +3,7 @@
 namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute;
 
 use App\Models\CombatLog\CombatLogRouteEnemyFailure;
-use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 
@@ -18,7 +18,7 @@ final class APICombatLogControllerCombatLogRouteEnemyFailuresTest extends APICom
 
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_MAGISTERS_TERRACE_MIDNIGHT;
+        return DungeonKey::MAGISTERS_TERRACE_MIDNIGHT->value;
     }
 
     #[Test]

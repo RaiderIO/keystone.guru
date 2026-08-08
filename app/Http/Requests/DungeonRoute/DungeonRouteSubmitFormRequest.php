@@ -4,6 +4,7 @@ namespace App\Http\Requests\DungeonRoute;
 
 use App\Logic\Utils\HtmlSanitizer;
 use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\Laratrust\Role;
 use App\Models\User;
 use App\Rules\DungeonRouteLevelRule;
@@ -92,7 +93,7 @@ class DungeonRouteSubmitFormRequest extends FormRequest
             'unlisted' => 'nullable|int',
 
             // Nullable: the difficulty select is empty for non-speedrun dungeons, and Tom Select submits an empty value for it
-            'dungeon_difficulty' => ['nullable', Rule::in(array_values(Dungeon::DIFFICULTY_ALL))],
+            'dungeon_difficulty' => ['nullable', Rule::in(DungeonDifficulty::values())],
 
             // Verified against the dungeon's mapping version in DungeonRouteSaveService
             'dungeon_start_map_icon_id' => 'nullable|integer',

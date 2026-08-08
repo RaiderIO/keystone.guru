@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\SL;
 
-use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\APICombatLogControllerCorrectEventsTestBase;
@@ -16,7 +16,7 @@ class APICombatLogControllerCorrectEventsTazaveshSoLeahsGambitTest extends APICo
 {
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT;
+        return DungeonKey::TAZAVESH_SO_LEAHS_GAMBIT->value;
     }
 
     #[Test]

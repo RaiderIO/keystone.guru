@@ -1,5 +1,5 @@
 {
-    "description": "Classic speedrun dungeon (Tempest Keep-like) with only 25-man enabled: untouched, the difficulty select's sole option (25-man, DungeonConstants::DIFFICULTY_ALL['25_man'] = 2) is auto-selected by the browser - the single-enabled-difficulty case of the 'first enabled difficulty is auto-selected' behaviour. dungeon_start_map_icon_id is entirely absent - see classic-speedrun-ssc-10man.json for why.",
+    "description": "Classic speedrun dungeon (Tempest Keep-like) with only 25-man enabled: untouched, the difficulty select's sole option (25-man, DungeonDifficulty::TWENTY_FIVE_MAN = 2) is auto-selected by the browser - the single-enabled-difficulty case of the 'first enabled difficulty is auto-selected' behaviour. dungeon_start_map_icon_id is entirely absent - see classic-speedrun-ssc-10man.json for why.",
     "endpoint": "dungeonroute.savenew",
     "gameVersion": "classic",
     "auth": true,

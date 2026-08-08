@@ -82,7 +82,6 @@ use Override;
  */
 class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, MappingModelInterface, TracksPageViewInterface
 {
-    use DungeonConstants;
     use HasCombatLogCriterion;
 
     public const PAGE_VIEW_SOURCE_VIEW_DUNGEON               = 1;
@@ -407,8 +406,8 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
     #[Scope]
     protected function factionSelectionRequired(Builder $query): Builder
     {
-        return $query->whereIn('key', [/*self::DUNGEON_SIEGE_OF_BORALUS,*/
-            self::DUNGEON_THE_NEXUS,
+        return $query->whereIn('key', [/*DungeonKey::SIEGE_OF_BORALUS->value,*/
+            DungeonKey::THE_NEXUS->value,
         ]);
     }
 
@@ -579,21 +578,47 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         return $this->has_wallpaper;
     }
 
+    /**
+     * Finds the expansion key (one of the {@see Expansion} EXPANSION_* constants) that a dungeon or raid key belongs to.
+     */
     public static function findExpansionByKey(string $key): ?string
     {
-        return array_find_key(array_merge_recursive(self::ALL, self::ALL_RAID), fn($dungeonKeys) => in_array($key, $dungeonKeys));
+        return DungeonKey::tryFrom($key)?->expansionKey() ?? RaidKey::tryFrom($key)?->expansionKey();
     }
 
     /**
-     * Gets the human-readable, translated name of a difficulty (e.g. "10-man").
+     * All known dungeon and raid keys, grouped by the expansion key they belong to. Raids come after
+     * the dungeons of the same expansion.
+     *
+     * @return array<string, list<string>>
      */
-    public static function getDifficultyName(int $difficulty): string
+    public static function allKeysByExpansionKey(): array
     {
-        return __(sprintf('view_common.dungeon.difficulty.%s', array_search($difficulty, self::DIFFICULTY_ALL, true)));
+        $result = [];
+
+        foreach ([DungeonKey::casesByExpansionKey(), RaidKey::casesByExpansionKey()] as $casesByExpansionKey) {
+            foreach ($casesByExpansionKey as $expansionKey => $cases) {
+                foreach ($cases as $case) {
+                    $result[$expansionKey][] = $case->value;
+                }
+            }
+        }
+
+        return $result;
     }
 
     /**
-     * Gets the list of speedrun difficulty IDs (see {@see Dungeon::DIFFICULTY_ALL}) that are enabled for this dungeon.
+     * All known dungeon and raid keys.
+     *
+     * @return list<string>
+     */
+    public static function allKeys(): array
+    {
+        return array_merge(...array_values(self::allKeysByExpansionKey()));
+    }
+
+    /**
+     * Gets the list of speedrun difficulty IDs (see {@see DungeonDifficulty}) that are enabled for this dungeon.
      *
      * @return list<int>
      */
