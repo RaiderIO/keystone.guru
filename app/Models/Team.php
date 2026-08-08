@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Override;
 
@@ -373,8 +374,34 @@ class Team extends Model
                     $member->patreonAdFreeGiveaway->delete();
                 }
 
-                $this->dungeonRoutes()->where('team_id', $this->id)->where('author_id', $member->id)->update(['team_id' => null]);
-                $result = TeamUser::where('team_id', $this->id)->where('user_id', $member->id)->delete();
+                // Unassigning the routes and dropping their tags has to be all-or-nothing: this used
+                // to be a single UPDATE, and the catch below swallows failures, so without a
+                // transaction a throw partway through would leave the tags permanently deleted
+                // while the routes stayed on the team - a state nothing else can repair
+                $result = DB::transaction(function () use ($member): bool {
+                    // Resolve the routes before unassigning them - once team_id is nulled they can
+                    // no longer be found by this query
+                    $dungeonRouteIds = $this->dungeonRoutes()
+                        ->where('team_id', $this->id)
+                        ->where('author_id', $member->id)
+                        ->pluck('dungeon_routes.id')
+                        ->toArray();
+
+                    DungeonRoute::whereIn('id', $dungeonRouteIds)->update(['team_id' => null]);
+
+                    // A route leaving the team loses that team's tags with it, the same way
+                    // removeRoute() drops them. The update() above bypasses model events, so
+                    // nothing else cleans these up and they would be stranded on a route that is no
+                    // longer part of this team. Scoped to this team's own tags so a tag belonging
+                    // to a different team is left alone.
+                    Tag::where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])
+                        ->where('context_class', self::class)
+                        ->where('context_id', $this->id)
+                        ->whereIn('model_id', $dungeonRouteIds)
+                        ->delete();
+
+                    return (bool)TeamUser::where('team_id', $this->id)->where('user_id', $member->id)->delete();
+                });
             } catch (Exception) {
                 logger()->error('Unable to remove member from team', [
                     'team' => $this,
@@ -483,9 +510,12 @@ class Team extends Model
                     $teamMember->patreonAdFreeGiveaway->delete();
                 }
             }
-            // Delete all tags team tags belonging to our routes
+            // Delete this team's tags by context rather than by the routes it currently holds: a
+            // route that an earlier removeMember() unassigned is no longer in dungeonRoutes, so
+            // filtering on that left its tag behind pointing at a team row about to disappear
             Tag::where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])
-                ->whereIn('model_id', $team->dungeonRoutes->pluck('id')->toArray())
+                ->where('context_class', self::class)
+                ->where('context_id', $team->id)
                 ->delete();
             // Remove all users associated with this team
             TeamUser::where('team_id', $team->id)->delete();

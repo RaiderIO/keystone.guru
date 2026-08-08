@@ -124,12 +124,17 @@ final class AjaxTagControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function delete_givenTeamTagStrandedOnOwnRouteAfterLeavingTheTeam_deletesIt(): void
+    public function delete_givenTeamTagOnOwnRouteWhileNotATeamMember_deletesIt(): void
     {
-        // Team::removeMember() unassigns a leaving author's routes but does NOT drop their team tags
-        // (unlike removeRoute(), which does), so the tag is left behind on a route the user still
-        // owns while they are no longer a member. Without the fallback to the route's own
-        // permissions the author could never clear it.
+        // Team::removeMember() now drops a leaving member's team tags atomically as part of the
+        // same transaction that unassigns their routes (see
+        // TeamTest::removeMember_givenTheirOwnTaggedRoute_dropsTheTeamTagWithIt), so a tag can no
+        // longer become stranded via "author leaves the team" the way it could when #3864 wrote
+        // this test. TagPolicy::edit()'s fallback to the route's own permissions is still needed
+        // though: it covers rows that were already orphaned before that fix shipped (see #3866),
+        // which this arranges directly - a team tag on a route whose author was
+        // never actually a member of the tag's team - to exercise the
+        // `Team::find(...)->isUserMember($user) === false` branch without relying on removeMember().
         $author = null;
         $team   = null;
         $route  = null;
@@ -139,15 +144,8 @@ final class AjaxTagControllerTest extends PublicTestCase
             // Arrange
             $author = User::factory()->create();
             $team   = $this->createTeam();
-            $team->addMember($author, TeamUser::ROLE_MEMBER);
-            $route = DungeonRoute::factory()->create([
-                'author_id' => $author->id,
-                'team_id'   => $team->id,
-            ]);
-            $tag = $this->createTeamTag($team, $route);
-
-            $team->removeMember($author);
-            $this->assertFalse($team->fresh()->isUserMember($author), 'Arrange failed: still a member');
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $tag    = $this->createTeamTag($team, $route);
 
             // Act
             $response = $this->actingAs($author)->delete(sprintf('/ajax/tag/%d', $tag->id));
