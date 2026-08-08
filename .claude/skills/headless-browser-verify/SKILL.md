@@ -152,6 +152,45 @@ is `ENVIRONMENT_LOCAL`, so **every `Cookies.set` the page makes is silently drop
   cookie `_initDefaults()` just failed to write. It is caught, pre-existing, and unrelated to
   whatever you are verifying — do not chase it.
 
+## Scroll bugs: the gesture must decelerate
+
+Verifying "does one scroll gesture reach the top/bottom" needs a gesture that *runs out of
+momentum*, not one that travels a fixed distance. Both of the obvious approaches silently pass on
+a broken build:
+
+- `window.scrollTo({behavior: 'smooth'})` retargets itself when the document resizes mid-scroll.
+- CDP `Input.synthesizeScrollGesture` delivers a fixed `yDistance` at constant speed, so it has
+  travel left over to spend after the page shifts and recovers from the shift.
+
+A real fling's last frames are only a few pixels each, so anything that displaces the scroll
+position at that moment (see #3893: a sticky header growing in flow, and scroll anchoring
+compensating for it) eats the remainder and the gesture stops short. Emulate that with decaying
+wheel deltas summing to exactly the distance back:
+
+```js
+const client = await page.createCDPSession();
+const decay = 0.82;
+let remaining = startScrollY;
+let delta = remaining * (1 - decay);
+while (remaining > 0.5) {
+    const step = Math.min(delta, remaining);
+    await client.send('Input.dispatchMouseEvent', {type: 'mouseWheel', x: 800, y: 500, deltaX: 0, deltaY: -step});
+    remaining -= step;
+    delta *= decay;
+    await new Promise(r => setTimeout(r, 16));
+}
+```
+
+**Always confirm the probe fails on the master baseline before trusting it on the branch** — the
+whole class of bug is invisible to a probe that is slightly too forgiving. In #3893 master landed
+at 43px (desktop) / 8px (mobile) and the branch at 0px; the constant-speed version of the same
+probe reported 0px for both.
+
+For measuring the underlying mechanism rather than the symptom, skip the app entirely: `page
+.setContent()` a synthetic page reproducing just the layout shape (a tall body plus the sticky
+element) and toggle the state directly. No server, no DB, no `npm run production` — one run
+answered every browser-behaviour question in #3893.
+
 ## Gotchas
 
 - **Auth**: guest pages only, unless you log in first with a bespoke script that submits the
