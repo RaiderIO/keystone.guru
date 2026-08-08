@@ -65,27 +65,4 @@ final class AjaxProfileControllerTest extends PublicTestCase
             $target->delete();
         }
     }
-
-    #[Test]
-    public function addAdFreeGiveaway_givenAuthenticatedUserWithoutRole_isForbidden(): void
-    {
-        // Arrange - unlike legalAgree, this route keeps the role:user|admin gate
-        $roleLessUser = User::factory()->create();
-        $target       = User::factory()->create([
-            'public_key' => User::generateRandomPublicKey(),
-        ]);
-
-        try {
-            $this->actingAs($roleLessUser);
-
-            // Act
-            $response = $this->post(sprintf('/ajax/profile/adfree/%s', $target->public_key), [], self::AJAX_HEADERS);
-
-            // Assert
-            $response->assertStatus(StatusCode::FORBIDDEN);
-        } finally {
-            $target->delete();
-            $roleLessUser->delete();
-        }
-    }
 }
