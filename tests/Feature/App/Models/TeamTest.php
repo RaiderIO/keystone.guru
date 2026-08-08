@@ -82,6 +82,61 @@ final class TeamTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function getAvailableTags_givenOwnTeamsUnassignedTagDefinition_returnsIt(): void
+    {
+        // TeamController::createTag() stores a team's tag definitions through Tag::saveFromRequest(),
+        // which writes model_id = NULL. A plain whereIn('model_id', ...) never matches NULL, so a
+        // tag definition never applied to a route would otherwise never show up in the autocomplete.
+        $team = null;
+        $def  = null;
+
+        try {
+            // Arrange
+            $team = $this->createTeam();
+            $def  = $this->createTeamTagDefinition($team);
+
+            // Act
+            $availableTags = $team->getAvailableTags();
+
+            // Assert
+            $this->assertTrue($availableTags->contains('id', $def->id));
+        } finally {
+            $this->cleanUp($def, null, $team, null);
+        }
+    }
+
+    #[Test]
+    public function getAvailableTags_givenAnotherTeamsUnassignedTagDefinition_excludesIt(): void
+    {
+        // A team with no routes/tags of its own would make the negative assertion below pass
+        // vacuously (and wouldn't catch the whereNull()/orWhereIn() clause escaping its enclosing
+        // where() and collapsing the entire query into a no-op OR), so this team also gets its own
+        // definition to prove getAvailableTags() is actually finding *something*.
+        $team      = null;
+        $otherTeam = null;
+        $ownDef    = null;
+        $otherDef  = null;
+
+        try {
+            // Arrange
+            $team      = $this->createTeam();
+            $otherTeam = $this->createTeam();
+            $ownDef    = $this->createTeamTagDefinition($team);
+            $otherDef  = $this->createTeamTagDefinition($otherTeam);
+
+            // Act
+            $availableTags = $team->getAvailableTags();
+
+            // Assert
+            $this->assertTrue($availableTags->contains('id', $ownDef->id));
+            $this->assertFalse($availableTags->contains('id', $otherDef->id));
+        } finally {
+            $this->cleanUp($otherDef, null, $otherTeam, null);
+            $this->cleanUp($ownDef, null, $team, null);
+        }
+    }
+
     private function createTeamTag(Team $team, DungeonRoute $dungeonRoute): Tag
     {
         return Tag::create([
@@ -91,6 +146,23 @@ final class TeamTest extends PublicTestCase
             'model_id'        => $dungeonRoute->id,
             'model_class'     => DungeonRoute::class,
             'name'            => sprintf('test-team-tag-%s', fake()->uuid()),
+            'color'           => null,
+        ]);
+    }
+
+    /**
+     * A tag definition as TeamController::createTag() stores it: owned by the team, not yet applied
+     * to any route, so model_id/model_class are NULL.
+     */
+    private function createTeamTagDefinition(Team $team): Tag
+    {
+        return Tag::create([
+            'context_id'      => $team->id,
+            'context_class'   => Team::class,
+            'tag_category_id' => TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM],
+            'model_id'        => null,
+            'model_class'     => null,
+            'name'            => sprintf('test-team-tag-def-%s', fake()->uuid()),
             'color'           => null,
         ]);
     }
