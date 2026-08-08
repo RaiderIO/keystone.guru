@@ -1,0 +1,106 @@
+/* Visuals for the self-owned $.fn.thumbnailCarousel widget (#3595), which replaced the
+   unmaintained `lightslider` plugin and its vendor stylesheet. The track is a flex row of
+   full-width slides translated by whole multiples of 100%, so the layout is correct - showing
+   the first thumbnail - before any JS runs, and needs no width measurement.
+
+   The fixed container sizes these render at live with the pages that use them:
+   resources/assets/css/sections/discover.css (route cards) and
+   resources/assets/css/lib/datatables.css (routes table). */
+
+.thumbnail-carousel {
+    position: relative;
+    overflow: hidden;
+}
+
+.thumbnail-carousel__track {
+    display: flex;
+    list-style: none outside none;
+    padding-left: 0;
+    margin-bottom: 0;
+    transition: transform 400ms ease;
+    /* Let vertical page scrolling through the carousel keep working on touch devices. */
+    touch-action: pan-y;
+}
+
+.thumbnail-carousel__track--no-transition {
+    transition: none;
+}
+
+.thumbnail-carousel__slide {
+    flex: 0 0 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.thumbnail-carousel__slide img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+}
+
+/* Only set by the widget once it has actually taken over a multi-slide carousel, so
+   single-thumbnail cards keep the default cursor and don't advertise a drag that does nothing. */
+.thumbnail-carousel--interactive .thumbnail-carousel__track {
+    cursor: grab;
+}
+
+.thumbnail-carousel--dragging .thumbnail-carousel__track {
+    cursor: grabbing;
+}
+
+.thumbnail-carousel__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    transition: opacity 150ms ease, background-color 150ms ease;
+}
+
+.thumbnail-carousel__nav--prev {
+    left: 4px;
+}
+
+.thumbnail-carousel__nav--next {
+    right: 4px;
+}
+
+.thumbnail-carousel__nav:hover,
+.thumbnail-carousel__nav:focus-visible {
+    background-color: rgba(0, 0, 0, 0.75);
+}
+
+/* Keep the arrows out of the way until the card is hovered, but always show them once one is
+   focused so they remain reachable by keyboard. */
+.thumbnail-carousel:hover .thumbnail-carousel__nav,
+.thumbnail-carousel__nav:focus-visible {
+    opacity: 1;
+}
+
+.thumbnail-carousel__nav:disabled {
+    opacity: 0.3;
+}
+
+@media (hover: none) {
+    /* No hover to reveal them on touch devices, where dragging works but isn't discoverable. */
+    .thumbnail-carousel__nav {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .thumbnail-carousel__track {
+        transition: none;
+    }
+}

@@ -7,8 +7,9 @@
 // (#3593), and `jquery-visible` has since been replaced by a native
 // `getBoundingClientRect()` check and dropped entirely (#3594). `password-strength-meter`
 // was also replaced by a self-owned widget (#3597, unmaintained upstream) and dropped from
-// here since it's no longer bundled. This audit remains to guard the OTHER bundled plugins
-// below.
+// here since it's no longer bundled, and so was `lightslider` (#3595, replaced by the
+// self-owned $.fn.thumbnailCarousel - see thumbnail-carousel.test.js). This audit remains to
+// guard the OTHER bundled plugins below.
 //
 // A static grep audit for #3590 found no other bundled plugin calling a
 // removed jQuery-4 API. To actually close the loop the way #3589's test did -
@@ -25,24 +26,6 @@
 
 const $ = require('jquery');
 global.$ = global.jQuery = $;
-
-describe('lightslider (#3590)', () => {
-    afterEach(() => {
-        document.body.innerHTML = '';
-    });
-
-    test('lightSlider_givenSlideList_initialisesWithoutThrowing', () => {
-        require('lightslider');
-        document.body.innerHTML = `<ul class="light-slider">
-            <li><img src="1.jpg" /></li>
-            <li><img src="2.jpg" /></li>
-            <li><img src="3.jpg" /></li>
-        </ul>`;
-
-        expect(() => $('.light-slider').lightSlider({loop: false, controls: false, pager: false}))
-            .not.toThrow();
-    });
-});
 
 describe('bootstrap5-toggle (#3590)', () => {
     afterEach(() => {

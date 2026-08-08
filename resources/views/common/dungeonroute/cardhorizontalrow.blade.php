@@ -54,7 +54,6 @@ use (
     $enemyForcesPercentage = $dungeonroute->getEnemyForcesPercentage();
     $enemyForcesWarning    = $dungeonroute->enemy_forces < $dungeonroute->mappingVersion->enemy_forces_required || $enemyForcesPercentage >= 105;
     $activeFloors          = $dungeonroute->dungeon->floorsForMapFacade($dungeonroute->mappingVersion, true)->get();
-    $owlClass              = $dungeonroute->has_thumbnail && $activeFloors->count() > 1 ? 'multiple' : 'single';
     ob_start();
     ?>
 <div id="dungeonroute_card_horizontal_row_{{ $uniqueString }}"
@@ -64,25 +63,6 @@ use (
     <div class="col-auto cursor-pointer p-1 apply_route_radio">
         <i class="far fa-circle"></i>
     </div>
-    {{--    <div class="col-xl-auto">--}}
-    {{--        <div class="{{ $owlClass }} light-slider-container">--}}
-    {{--            <ul class="light-slider {{ $owlClass }}">--}}
-    {{--                @if( $dungeonroute->has_thumbnail )--}}
-    {{--                    @foreach($dungeonroute->thumbnails as $thumbnail)--}}
-    {{--                        <li>--}}
-    {{--                            <img class="thumbnail"--}}
-    {{--                                 src="{{ $thumbnail->getURL() }}"--}}
-    {{--                                 style="display: {{ $loop->index === 0 ? 'block' : 'none' }}"--}}
-    {{--                                 alt="{{ __('view_common.dungeonroute.card.thumbnail_alt') }}"/>--}}
-    {{--                        </li>--}}
-    {{--                    @endforeach--}}
-    {{--                @else--}}
-    {{--                    <img class="dungeon" src="{{ $dungeonroute->dungeon->getImage32Url() }}"--}}
-    {{--                         alt="{{ __('view_common.dungeonroute.card.thumbnail_dungeon_alt') }}"/>--}}
-    {{--                @endif--}}
-    {{--            </ul>--}}
-    {{--        </div>--}}
-    {{--    </div>--}}
     <div class="col border-start border-dark ">
         <div class="d-flex flex-column h-100 bg-card"
              @if($showDungeonImage)

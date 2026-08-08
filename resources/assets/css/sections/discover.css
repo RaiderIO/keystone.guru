@@ -380,11 +380,11 @@
     }
 }
 
-/** Light Slider */
+/** Thumbnail carousel (#3595) */
 @media (min-width: 1200px) {
     /* Container is required for the page load to have a proper width */
     .card_dungeonroute.horizontal .single,
-    .card_dungeonroute.horizontal .light-slider-container,
+    .card_dungeonroute.horizontal .thumbnail-carousel,
     .card_dungeonroute.horizontal .multiple,
     .card_dungeonroute.horizontal img.thumbnail,
     .card_dungeonroute.horizontal img.dungeon {

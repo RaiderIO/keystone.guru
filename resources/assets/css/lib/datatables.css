@@ -529,13 +529,13 @@ div.dt-container .dt-paging .dt-paging-button.disabled, div.dt-container .dt-pag
     cursor: default !important;
 }
 
-.routes_table .light-slider-container {
+.routes_table .thumbnail-carousel {
     width: 192px;
     height: 128px;
 }
 
 @media ( max-width: 600px) {
-    .routes_table .light-slider-container {
+    .routes_table .thumbnail-carousel {
         width: 96px;
         height: 64px;
     }
