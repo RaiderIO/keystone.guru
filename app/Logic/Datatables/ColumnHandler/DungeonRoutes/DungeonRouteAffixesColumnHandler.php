@@ -32,6 +32,11 @@ class DungeonRouteAffixesColumnHandler extends DatatablesColumnHandler
                 $generalSearch,
     ): void {
         $affixIds = $columnData['search']['value'] ?? [];
+        // A select that isn't rendered for the current view sends the literal string 'undefined'
+        // instead of omitting the param
+        if (!is_array($affixIds)) {
+            $affixIds = [];
+        }
         if (!empty($affixIds)) {
             $subBuilder->whereHas('affixes', static function ($query) use (&$affixIds) {
                 /** @var $query Builder */
