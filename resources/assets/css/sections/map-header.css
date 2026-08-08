@@ -74,9 +74,16 @@
 /* The map header's modals (share, simulate, live session, ...) are declared inside #map_header,
    so the `#map_header > div` rule above also matches them - an ID selector beats `.theme .modal`'s
    two classes regardless of value, pinning the modal to 100020 and hiding its close button behind
-   the header. Out-specify it here so these modals float above the whole header again. */
+   the header. Out-specify it here so these modals float above the whole header again. One higher
+   than `.ksg-header` above (not equal) so it outright wins instead of merely tying and depending
+   on DOM order - a future bump of `.ksg-header` would otherwise silently re-hide the close button.
+   pointer-events also needs restoring: these modals inherit `none` from #map_header (below), which
+   silently breaks click-outside-the-dialog-to-dismiss - the backdrop is a sibling of #map_header
+   (Bootstrap appends it to <body>) so it stays clickable, but the click never reaches the modal's
+   own dismiss listener without this. */
 #map_header > .modal {
-    z-index: 100021 !important;
+    z-index: 100022 !important;
+    pointer-events: auto;
 }
 
 #map_header .rounded {
