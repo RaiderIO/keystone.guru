@@ -122,7 +122,6 @@ window.Grapick = require('grapick');
 window.simplebar = require('simplebar');
 window.Draggable = require('@shopify/draggable');
 require('bootstrap5-toggle/js/bootstrap5-toggle.jquery.min.js');
-window.lazysizes = require('lazysizes');
 // Self-owned noUiSlider-backed range slider (#3596); replaces the unmaintained ion-rangeslider plugin
 require('./range-slider');
 
