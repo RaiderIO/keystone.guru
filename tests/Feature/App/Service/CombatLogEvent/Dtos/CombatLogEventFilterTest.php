@@ -60,4 +60,44 @@ final class CombatLogEventFilterTest extends PublicTestCase
             $mappingVersion->save();
         }
     }
+
+    /**
+     * The fraction-to-minutes conversion was inverted ((fraction * 60) / timerSeconds instead of
+     * (fraction * timerSeconds) / 60), which - for any real dungeon timer - truncated every
+     * duration bound to 0 via the (int) cast, silently collapsing the requested filter range.
+     */
+    #[Test]
+    public function fromHeatmapDataFilter_givenTimerFractionRange_computesDurationBoundsInMinutes(): void
+    {
+        // Arrange - a 1800 second (30 minute) timer, filtering the middle half of the run
+        [$dungeon, $mappingVersion] = $this->findDungeon();
+
+        $originalTimerMaxSeconds           = $mappingVersion->timer_max_seconds;
+        $mappingVersion->timer_max_seconds = 1800;
+        $mappingVersion->save();
+
+        try {
+            $heatmapDataFilter = new HeatmapDataFilter(
+                $dungeon,
+                CombatLogEventEventType::NpcDeath,
+                CombatLogEventDataType::PlayerPosition,
+            );
+            $heatmapDataFilter->setTimerFractionMin(0.25);
+            $heatmapDataFilter->setTimerFractionMax(0.75);
+
+            // Act
+            $combatLogEventFilter = CombatLogEventFilter::fromHeatmapDataFilter(
+                App::make(SeasonServiceInterface::class),
+                App::make(SeasonAffixGroupServiceInterface::class),
+                $heatmapDataFilter,
+            );
+
+            // Assert - 0.25 * 1800s / 60 = 7.5 minutes, 0.75 * 1800s / 60 = 22.5 minutes
+            $this->assertSame(7, $combatLogEventFilter->getDurationMin());
+            $this->assertSame(22, $combatLogEventFilter->getDurationMax());
+        } finally {
+            $mappingVersion->timer_max_seconds = $originalTimerMaxSeconds;
+            $mappingVersion->save();
+        }
+    }
 }

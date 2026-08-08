@@ -517,8 +517,11 @@ class CombatLogEventFilter implements Arrayable
                 throw new InvalidArgumentException('Mapping version does not have a timer max seconds value');
             }
 
-            $combatLogEventFilter->setDurationMin((int)(($heatmapDataFilter->getTimerFractionMin() * 60) / $timerSeconds));
-            $combatLogEventFilter->setDurationMax((int)(($heatmapDataFilter->getTimerFractionMax() * 60) / $timerSeconds));
+            // durationMin/Max are minutes (see toArray()'s duration_ms * 60000 below), and a
+            // fraction of the dungeon's timer converts to seconds as fraction * timerSeconds, so
+            // divide by 60 - not the other way around, which silently truncated every duration to 0
+            $combatLogEventFilter->setDurationMin((int)(($heatmapDataFilter->getTimerFractionMin() * $timerSeconds) / 60));
+            $combatLogEventFilter->setDurationMax((int)(($heatmapDataFilter->getTimerFractionMax() * $timerSeconds) / 60));
         }
 
         return $combatLogEventFilter;
