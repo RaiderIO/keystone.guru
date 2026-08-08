@@ -104,6 +104,34 @@ only — `^\[[0-9:]+\] EVENT:` plus the terminal `SUMMARY: (SUCCESS|FAILED)`. Do
 the state holds (minutes to hours at the human gate), so the Monitor fires every cycle and gets
 auto-throttled/stopped by the harness. Proven on the v15.8.3 release watch.
 
+## Wrap-up: cleaning up a superseded draft
+
+Once `SUMMARY: SUCCESS` confirms the new version is live in production, check whether it
+superseded an earlier release that never shipped (see "Stacking on an undeployed previous
+release" in the `create-release` skill — this is the v15.10.0 → v15.10.1 situation).
+
+```
+gh release list --repo RaiderIO/keystone.guru --json tagName,isDraft,name \
+  --jq '.[] | select(.isDraft and (.name | test("SUPERSEDED")))'
+```
+
+For each match confirmed superseded by the version that just went live:
+
+```
+gh release delete v<old> --repo RaiderIO/keystone.guru --yes
+```
+
+This deletes only the draft **Release** object — pass no `--cleanup-tag`, so the git tag
+stays (`git ls-remote --tags origin | grep v<old>` to confirm). The tag plus the
+superseding release's issue body ("Superseded release" section, written at cut time) are
+the permanent record; the draft Release served no purpose once it can never be published,
+and left alone it accumulates on the Releases page forever. Do this as a normal part of
+wrapping up a release, not just when the user notices the clutter and asks.
+
+Only delete a draft once the version that supersedes it is the one just confirmed live —
+never delete a draft for a release that might still be revived (e.g. the *new* release
+also fails before production and the old one becomes relevant again).
+
 ## Related
 
 - `create-release` cuts the tag that starts the pipeline this script watches, and its own

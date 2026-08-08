@@ -71,11 +71,12 @@ Concretely:
 2. Mark the superseded release's draft so nobody publishes it later and double-announces
    things: `gh release edit v<old> --title "v<old> (SUPERSEDED by v<new> - do not publish)"
    --notes-file <a short note explaining why + linking the new release>`.
-3. Leave the superseded tag and draft in place — **do not delete them**. A version-number
-   gap is normal and expected (every project has tags that never shipped); it's invisible
-   to the public since draft releases aren't listed or announced. The alternative —
-   force-publishing a release that was never actually live in production — would be an
-   inaccurate record, which is worse than a gap.
+3. Leave the superseded **tag** in place — **do not delete it**. A version-number gap is
+   normal and expected (every project has tags that never shipped). The superseded
+   **draft Release** itself gets cleaned up later, once the superseding version reaches
+   production — see "Cleaning up a superseded draft" in the `release-watch` skill. Don't
+   delete it here at cut time: it stays until the new release is actually confirmed live,
+   in case the new release also fails to ship and this one needs reviving.
 
 ## Step 3 — Collect the commits since the previous release
 
