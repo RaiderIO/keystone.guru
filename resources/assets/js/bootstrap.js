@@ -104,7 +104,8 @@ window.Handlebars = require('handlebars');
 // Self-owned star-rating widget (#3593); replaces the unmaintained jquery-bar-rating plugin
 require('./star-rating');
 window.polylinedecorator = require('leaflet-polylinedecorator');
-window.lightCarousel = require('lightslider');
+// Self-owned thumbnail-carousel widget (#3595); replaces the unmaintained lightslider plugin
+require('./thumbnail-carousel');
 window.introjs = require('intro.js');
 // Self-owned password-strength widget (#3597); replaces the unmaintained password-strength-meter plugin
 require('./password-strength');
