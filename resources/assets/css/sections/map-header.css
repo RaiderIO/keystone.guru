@@ -71,6 +71,14 @@
     z-index: 100021 !important;
 }
 
+/* The map header's modals (share, simulate, live session, ...) are declared inside #map_header,
+   so the `#map_header > div` rule above also matches them - an ID selector beats `.theme .modal`'s
+   two classes regardless of value, pinning the modal to 100020 and hiding its close button behind
+   the header. Out-specify it here so these modals float above the whole header again. */
+#map_header > .modal {
+    z-index: 100021 !important;
+}
+
 #map_header .rounded {
     border-radius: 0 !important;
 }
