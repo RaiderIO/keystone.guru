@@ -26,9 +26,10 @@ class TagPolicy
         } elseif ($tag->context_class === Team::class) {
             // If we're editing a team tag, and the user is part of this team, we can edit it.
             // find() rather than findOrFail(): a team tag can outlive its team. Team::removeMember()
-            // unassigns a leaving author's routes without dropping their team tags, and the team's
-            // deleting hook only clears tags for routes still assigned to it - so context_id can
-            // dangle, and findOrFail() would 404 every caller instead of denying them.
+            // and the team's deleting hook now clean up a leaving/removed member's team tags going
+            // forward (#3866), but rows orphaned before that fix shipped can still have a
+            // context_id that dangles, and findOrFail() would 404 every caller instead of denying
+            // them.
             $result = Team::find($tag->context_id)?->isUserMember($user) ?? false;
         }
 
