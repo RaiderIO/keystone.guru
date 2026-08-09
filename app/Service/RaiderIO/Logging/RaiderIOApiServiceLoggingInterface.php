@@ -20,7 +20,7 @@ interface RaiderIOApiServiceLoggingInterface
 
     public function getCombatLogSegmentsForRunInvalidResponse(int $runId, string $url, string $response): void;
 
-    public function getCombatLogSegmentsForRunNotYetAvailable(int $runId, string $url): void;
+    public function getCombatLogSegmentsForRunNotYetAvailable(int $runId, string $url, string $response): void;
 
     public function getCombatLogSegmentsForRunEnd(int $runId): void;
 }

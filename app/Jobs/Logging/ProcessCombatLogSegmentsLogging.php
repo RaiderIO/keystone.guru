@@ -13,10 +13,11 @@ class ProcessCombatLogSegmentsLogging extends StructuredLogging implements Proce
 
     public function handleSegmentsNotAvailable(int $runId): void
     {
-        // A run's segments not being available yet is an expected, recurring state (#3918) - the
-        // underlying RaiderIOApiServiceLogging call already logs the specific reason at the
-        // appropriate level (error for a genuinely malformed response, info for "not yet uploaded"),
-        // so this is just an echo and shouldn't page Sentry on its own.
+        // Fires for two distinct callers (#3918), both an expected, recurring state rather than a
+        // broken integration: getCombatLogSegmentsForRun() returned null (in which case
+        // RaiderIOApiServiceLogging already logged the specific reason, at error or info depending
+        // on cause), or it returned a well-formed response whose segments array is simply empty (no
+        // upstream log at all for that case - this is the only signal). Neither should page Sentry.
         $this->info(__METHOD__, get_defined_vars());
     }
 

@@ -50,7 +50,7 @@ class RaiderIOApiServiceLogging extends StructuredLogging implements RaiderIOApi
         $this->error(__METHOD__, get_defined_vars());
     }
 
-    public function getCombatLogSegmentsForRunNotYetAvailable(int $runId, string $url): void
+    public function getCombatLogSegmentsForRunNotYetAvailable(int $runId, string $url, string $response): void
     {
         // A run's segments simply not having been uploaded to Raider.IO yet is an expected,
         // recurring state (#3918) rather than a broken API integration - logged below error so it
