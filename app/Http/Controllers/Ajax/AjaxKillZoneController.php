@@ -253,7 +253,7 @@ class AjaxKillZoneController extends Controller
         APIKillZoneFormRequest       $request,
         DungeonRoute                 $dungeonRoute,
         ?KillZone                    $killZone = null,
-    ): KillZone {
+    ): KillZone|Response {
         // Outside the try/catch on purpose: an authorization failure must surface as a 403, not be
         // rewritten into the 404 below.
         $dungeonRoute = $this->authorizeKillZoneEdit($dungeonRoute, $killZone);
