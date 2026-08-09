@@ -40,6 +40,13 @@
              test, so every controller test that injects the interface stays unaffected. -->
         <env name="REVERB_HOST" value="http://127.0.0.1" force="true"/>
         <env name="REVERB_PORT" value="6001" force="true"/>
+        <!-- Local .env has BROADCAST_CONNECTION=reverb, whose driver calls Laravel's broadcast()
+             straight at REVERB_HOST above - unreachable by design, so it throws a BroadcastException
+             through any controller that broadcasts (and a few controllers catch that alongside
+             unrelated exceptions, turning it into a false-negative response instead of a network
+             error - see #3940). Force the 'log' driver so broadcast() writes to the log instead of
+             making a real HTTP call, matching the fire-and-forget behavior no test relies on. -->
+        <env name="BROADCAST_CONNECTION" value="log" force="true"/>
         <!-- The 'tmp_file' store (RemembersToFile, used by ViewService among others) is a file cache that
              CACHE_STORE does not cover. Without this the tests read, write and flush the cache of the
              application running out of the same checkout. -->
