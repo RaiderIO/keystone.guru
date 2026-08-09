@@ -45,16 +45,28 @@ abstract class MDTBaseService
      */
     protected function decode(string $string): ?array
     {
+        $format = MDTStringFormat::detect($string);
+
         try {
-            return MDTStringFormat::detect($string)->codec()->decode($string);
+            return $format->codec()->decode($string);
         } catch (CliWeakaurasParserNotFoundException $cliWeakaurasParserNotFoundException) {
             throw $cliWeakaurasParserNotFoundException;
         } catch (Throwable $throwable) {
-            // detect() matched a format, so this string genuinely claimed to be an MDT export -
-            // always worth reporting. Truncated: the input is unvalidated user input of arbitrary size.
-            logger()->error($throwable->getMessage(), [
-                'string' => substr($string, 0, 2048),
-            ]);
+            // Truncated: the input is unvalidated user input of arbitrary size.
+            $context = ['string' => substr($string, 0, 2048)];
+
+            if ($format === MDTStringFormat::MDT2) {
+                // detect() only picks MDT2 for a strict `!~MDT2~` prefix match, so a decode
+                // failure here means our own CBOR codec choked on a string that genuinely claimed
+                // to be an MDT export - always worth reporting.
+                logger()->error($throwable->getMessage(), $context);
+            } else {
+                // detect() defaults to Legacy for everything else, including garbage that doesn't
+                // even look like a legacy MDT export string (LegacyMDTCodec shells out to
+                // cli_weakauras_parser, whose stderr becomes the exception message) - most of these
+                // are just malformed user input, not application bugs (#3906).
+                logger()->warning($throwable->getMessage(), $context);
+            }
 
             return null;
         }
