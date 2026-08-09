@@ -73,6 +73,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use InvalidArgumentException;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -508,13 +509,22 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             }
 
             if ($combatLogRouteNpc->getResolvedEnemy() === null) {
-                $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
-                    new IngameXY(
-                        $combatLogRouteNpc->coord->x,
-                        $combatLogRouteNpc->coord->y,
-                        $currentFloor,
-                    ),
-                );
+                // This table is diagnostic bookkeeping only (unresolved-npc triage) - a floor with
+                // unset ingame coordinates (a mapping data gap, #3904) must not fail the whole combat
+                // log route submission just because it can't be recorded here.
+                try {
+                    $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
+                        new IngameXY(
+                            $combatLogRouteNpc->coord->x,
+                            $combatLogRouteNpc->coord->y,
+                            $currentFloor,
+                        ),
+                    );
+                } catch (InvalidArgumentException) {
+                    $this->log->saveCombatLogRouteEnemyFailuresUnableToCalculateMapLocation($currentFloor->id);
+
+                    continue;
+                }
 
                 $failureAttributes[] = array_merge([
                     'dungeon_route_id'   => $dungeonRoute->id,

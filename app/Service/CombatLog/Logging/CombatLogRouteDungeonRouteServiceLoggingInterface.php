@@ -21,4 +21,6 @@ interface CombatLogRouteDungeonRouteServiceLoggingInterface
     public function saveChallengeModeRunUnableToFindFloor(int $uiMapId): void;
 
     public function generateMapIconsUnableToFindFloor(string $uniqueId): void;
+
+    public function saveCombatLogRouteEnemyFailuresUnableToCalculateMapLocation(int $floorId): void;
 }
