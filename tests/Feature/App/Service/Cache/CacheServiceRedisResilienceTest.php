@@ -13,9 +13,8 @@ use RedisException;
 use Tests\TestCases\PublicTestCase;
 
 /**
- * Covers #3914: CacheService::get() is called from TrustProxies on every production request (via
- * CloudflareService::getIpRanges()), so an uncaught RedisException there previously 500'd the whole
- * site on a transient Redis connection blip instead of degrading gracefully.
+ * Covers #3914: a dropped Redis connection must degrade CacheService to a cache miss rather than
+ * propagate out as a 500.
  */
 #[Group('Cache')]
 #[Group('CacheServiceRedisResilience')]
@@ -95,8 +94,7 @@ final class CacheServiceRedisResilienceTest extends PublicTestCase
             return 'fresh value';
         });
 
-        // Assert - even though the value could not be cached, the caller must still get its result
-        // rather than the request 500ing (this is the same failure mode TrustProxies hit in #3914)
+        // Assert - an uncacheable value must still reach the caller
         $this->assertSame('fresh value', $result);
         $this->assertSame(1, $closureCalls);
     }

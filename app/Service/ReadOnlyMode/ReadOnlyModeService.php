@@ -25,10 +25,6 @@ class ReadOnlyModeService implements ReadOnlyModeServiceInterface
      */
     public function isReadOnly(): bool
     {
-        // has() was redundant (a missing key already makes get() return null, which fails the
-        // cast/comparison below the same way) and, unlike get() since #3914, still throws
-        // uncaught on a dropped Redis connection - AppLayoutComposer's isReadOnly() check runs on
-        // every rendered page, so that uncaught exception 500'd the entire site on a Redis blip.
         return (bool)$this->cacheService->get('read_only_mode') === true;
     }
 

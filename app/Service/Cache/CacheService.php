@@ -211,10 +211,8 @@ class CacheService implements CacheServiceInterface
 
     public function get(string $key): mixed
     {
-        // A dropped Redis connection here must not bubble up as a 500 - this is called from
-        // TrustProxies on every production request (via CloudflareService::getIpRanges()), so an
-        // uncaught RedisException here takes the whole site down on a transient Redis blip (#3914).
-        // Degrading to a cache miss lets the caller recompute the value instead.
+        // Called from TrustProxies on every production request (via CloudflareService::getIpRanges()),
+        // so an uncaught RedisException here would take the whole site down on a Redis blip (#3914).
         try {
             return Cache::get($key);
         } catch (RedisException $e) {

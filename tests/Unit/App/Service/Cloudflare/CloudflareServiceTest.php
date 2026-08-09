@@ -162,10 +162,7 @@ final class CloudflareServiceTest extends PublicTestCase
     #[Group('CloudflareService')]
     public function getIpRangesV4_GivenRequest_BoundsConnectAndResponseTimeouts(): void
     {
-        // Arrange - this fetch runs inline in TrustProxies on every production request on a cache
-        // miss, including a miss now caused by a degraded (rather than 500ing) Redis connection
-        // (#3914) - it must fail fast rather than sit on the Curl trait's 120s default and pile up
-        // requests during a Redis outage.
+        // Arrange
         $log = LoggingFixtures::createCloudflareServiceLogging($this);
 
         $cloudflareService = ServiceFixtures::getCloudflareServiceMock(

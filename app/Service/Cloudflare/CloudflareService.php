@@ -16,10 +16,8 @@ class CloudflareService implements CloudflareServiceInterface
     private const string CLOUDFLARE_BASE_URL = 'https://cloudflare.com/';
 
     /**
-     * getIpRanges() runs inline in TrustProxies on every production request on a cache miss - including
-     * the miss now caused by CacheService degrading a dropped Redis connection to "not cached" (#3914)
-     * instead of 500ing - so this fetch must fail fast rather than sit on the Curl trait's 120s default
-     * and pile up requests during an outage.
+     * getIpRanges() runs inline in TrustProxies on every production request on a cache miss, so this
+     * fetch must fail fast rather than sit on the Curl trait's 120s default and pile up requests (#3914).
      */
     private const int FETCH_TIMEOUT_SECONDS = 5;
 

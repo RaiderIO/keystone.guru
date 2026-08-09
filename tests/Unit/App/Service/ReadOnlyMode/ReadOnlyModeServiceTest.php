@@ -20,8 +20,7 @@ final class ReadOnlyModeServiceTest extends PublicTestCase
     #[Test]
     public function isReadOnly_givenCacheServiceNeverCallsHas_reliesOnlyOnGet(): void
     {
-        // Arrange - has() is a bare Cache::has() with no Redis-failure guard, unlike get() since
-        // #3914; isReadOnly() must not depend on it at all
+        // Arrange
         /** @var MockObject&CacheServiceInterface $cacheService */
         $cacheService = $this->createMockPublic(CacheServiceInterface::class);
         $cacheService->expects($this->never())->method('has');
@@ -39,7 +38,7 @@ final class ReadOnlyModeServiceTest extends PublicTestCase
     #[Test]
     public function isReadOnly_givenCacheServiceReturnsNull_returnsFalse(): void
     {
-        // Arrange - a degraded read (Redis blip, #3914) or a genuinely unset key both surface as null
+        // Arrange - a degraded read (Redis blip, #3914) and a genuinely unset key both surface as null
         /** @var MockObject&CacheServiceInterface $cacheService */
         $cacheService = $this->createMockPublic(CacheServiceInterface::class);
         $cacheService->method('get')->with('read_only_mode')->willReturn(null);
