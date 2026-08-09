@@ -61,12 +61,19 @@ class MDTImportStringServiceDecodeTest extends MDTImportStringServiceTestBase
     #[Group('MDTImportStringServiceDecode')]
     public function getDecoded_givenStringThatDoesNotPlausiblyClaimToBeMdt_logsAtWarningNotError(): void
     {
+        // Resolve the service (and its StructuredLogging-backed $log) before spying - StructuredLogging
+        // caches app('log') at construction time, and Log::spy() replaces that binding with a Mockery
+        // spy for the rest of the test; if the service is resolved for the first time AFTER the spy is
+        // in place, the spy itself gets cached as a "logger" and every unstubbed method call on it
+        // (LogManager::channel()) returns null, crashing the very code this test means to exercise
+        $service = app()->make(MDTImportStringServiceInterface::class);
+
         // A spy (rather than shouldReceive(), which replaces Log entirely with a strict mock) only
         // observes calls without failing the test over any OTHER log call made along the way
         $logSpy = Log::spy();
 
         // Act
-        $decoded = app()->make(MDTImportStringServiceInterface::class)
+        $decoded = $service
             ->setEncodedString('this_is_not_a_valid_mdt_string')
             ->getDecoded();
 
@@ -86,11 +93,14 @@ class MDTImportStringServiceDecodeTest extends MDTImportStringServiceTestBase
     #[Group('MDTImportStringServiceDecode')]
     public function getDecoded_givenLegacyShapedStringThatFailsToDecode_logsAtError(): void
     {
+        // Resolve before spying - see the comment on the sibling test above for why
+        $service = app()->make(MDTImportStringServiceInterface::class);
+
         $logSpy = Log::spy();
 
         // Act - `!`-prefixed and otherwise matches LegacyMDTCodec::appliesTo()'s character class,
         // but isn't valid compressed data underneath
-        $decoded = app()->make(MDTImportStringServiceInterface::class)
+        $decoded = $service
             ->setEncodedString('!ThisIsNotReallyValidButLooksLegacyXXX123')
             ->getDecoded();
 
