@@ -184,9 +184,17 @@ $.fn.thumbnailCarousel = function (options) {
                 track.appendChild(clone);
             } else {
                 track.insertBefore(clone, track.firstChild);
+
                 // Prepending shifts every real slide's visual position one slot to the right;
                 // silently correct for that before animating, so the insertion itself doesn't jump.
-                paint(false, currentIndex + 1);
+                // This can't reuse paint()'s own reflow - that one runs *before* it sets the
+                // transform, to stop that specific assignment from animating. Here it's the
+                // opposite: the corrected transform must be flushed as a real committed frame
+                // (transition still off) before the transition is switched back on below, or the
+                // browser coalesces both changes into one and the reveal never animates at all.
+                track.classList.add('thumbnail-carousel__track--no-transition');
+                track.style.transform = `translateX(${(currentIndex + 1) * -100}%)`;
+                void track.offsetHeight;
             }
 
             wrapping = true;
