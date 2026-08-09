@@ -146,6 +146,32 @@ but the checklist is **tiered by change size** so small MRs don't pay full cerem
    (`gh pr edit <n> --add-label "pr cold reviewed"`) — the same marker/label `babysit-prs` checks
    before dispatching its own cold review, which is what stops a PR from being reviewed twice.
 
+   **Every review thread the cold reviewer opened must be *resolved* before you hand the MR off —
+   an open thread means "Wotuu, look at this", nothing else.** The cold review is an agent-to-agent
+   loop that happens inside your session: the reviewer posts its findings as inline threads, you fix
+   them, you reply on each thread with `:robot: Fixed...`, and then you close the loop yourself with
+   `resolveReviewThread`. Wotuu can still expand any resolved thread to read the finding and the
+   fix; what he should not have to do is triage a wall of open threads to work out which ones are
+   already dealt with. So by the end of the session the PR should carry 0–N cold-review threads and
+   **all of them resolved** — the baseline is zero open. The only thread you may leave open is one
+   that genuinely needs his judgement (a finding you decided not to fix, an ambiguity only he can
+   settle); say so explicitly in your reply on that thread, and it should be rare. Threads *he*
+   opened are never yours to resolve — fix and reply, he closes them on re-review.
+
+   ```bash
+   # unresolved threads on the PR, with the ids needed to resolve them
+   gh api graphql -f query='query { repository(owner: "RaiderIO", name: "keystone.guru") {
+     pullRequest(number: <n>) { reviewThreads(first: 100) { nodes {
+       id isResolved path line comments(first: 20) { nodes { author { login } body } } } } } } }'
+
+   gh api graphql -f query='mutation { resolveReviewThread(input: {threadId: "<id>"})
+     { thread { isResolved } } }'
+   ```
+
+   `babysit-prs` double-checks this (its step 3) and resolves fixed-and-replied leftovers it finds,
+   but that is a backstop running in another session on a later pass — not a reason to hand off a PR
+   with open threads.
+
    **Dispatching this reviewer needs no permission — the implementing session fires it itself.**
    That is the entire point of the cold review: the agent that wrote the code is the one that must
    hand it to a fresh pair of eyes. Do not stop and ask first, and do not treat a general

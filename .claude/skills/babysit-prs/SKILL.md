@@ -190,6 +190,21 @@ regardless of what cold review finds — this carve-out only unblocks step 4, no
    caught on 2026-08-02 (PR #3787/#3785 sat two passes with zero replies to his comments before he
    asked directly why) — his comments are exactly the ones most worth answering promptly.
 
+   **Double-check for leftover agent threads: a `:robot:`-opened thread that already has a
+   `:robot:` reply but is still unresolved is a leftover — resolve it.** By the time a PR reaches
+   this pass, every cold-review thread on it should already be resolved: the implementing session
+   dispatches its own cold review and is required to close out its own agent-to-agent loops before
+   handing the PR off (`.claude/CLAUDE.md`, "Before declaring a MR ready for review"). Several PRs
+   were found on 2026-08-09 with fixed-and-replied-to cold-review threads still sitting open, so
+   this pass is the backstop. Mechanically: for each unresolved thread whose *first* comment starts
+   with `:robot:`, if the thread also contains a later `:robot:` comment saying it was addressed,
+   call `resolveReviewThread` on it — no code work, no new reply needed.
+
+   **Do not apply this to a `:robot:` thread with no `:robot:` reply.** That is not a leftover, it
+   is unaddressed work, and it belongs to the normal fix-then-resolve flow below. Resolving it here
+   would silently close a finding nobody fixed — strictly worse than leaving it open. Same for any
+   thread Wotuu opened (first comment not `:robot:`-prefixed): never resolve those, see below.
+
    **Whether you resolve the thread yourself, after fixing it, depends on who opened it** — every
    agent-authored comment (cold-review findings, this reply) is `:robot:`-prefixed by convention, so
    "does the thread's *first* comment start with `:robot:`" is a reliable, mechanical test:
@@ -262,6 +277,58 @@ regardless of what cold review finds — this carve-out only unblocks step 4, no
    doesn't already have `pr needs attention` set (that would be jumping ahead of a review that
    hasn't happened).
 4. **All green, no comments**: leave it alone (but see the next section — it may be due a cold review).
+
+### 3a. Two hygiene checks on every non-draft PR
+
+Both are cheap metadata checks, both fix a defect that otherwise lands on Wotuu manually, and both
+are backstops for something the implementing session was supposed to get right at `gh pr create`
+time (see the `worktree-docker` skill's PR-creation section). Run them every pass — a PR can
+acquire either defect at any point, e.g. by being retitled. Draft PRs are skipped here like
+everywhere else: editing a title or body is a write on a PR another session still owns.
+
+**a) The title must start with `#<issue> `.** The issue number is in `headRefName`
+(`<issue>-<slug>`), already fetched in step 1 — no extra API call. A title missing it (real
+examples: `AjaxProfileController 500s for guests: guard with auth middleware`, `Centralize the
+"safely get map object group" helpers in util.js`) breaks the at-a-glance issue↔PR association in
+the PR list, in notifications, and in the squash-merge commit subject, even when the branch name
+and `Closes #<issue>` body line are both correct — they are separate fields. Fix it in place, no
+comment needed (it's a pure metadata correction, not a change anyone needs notifying about):
+
+```bash
+gh pr edit <n> --repo RaiderIO/keystone.guru --title "#<issue> <existing title>"
+```
+
+`gh pr edit` works fine for titles and labels — only *body* edits are broken on this repo, and only
+on the old apt `gh` (see `.claude/CLAUDE.md`). Never add a `:robot:` prefix to a title.
+
+**b) The issue must be closed by *some* open PR — the check is issue-scoped, not PR-scoped.**
+
+```bash
+gh api graphql -f query='query { repository(owner: "RaiderIO", name: "keystone.guru") {
+  pullRequest(number: <n>) { closingIssuesReferences(first: 5) { nodes { number } } } } }'
+```
+
+An empty result on its own is **not** a defect. Several issues are deliberately split across
+sibling PRs (#3674 → #3847/#3848/#3849), where the convention is that the siblings say
+`Part of #<issue>` and only one claims `Closes`. The actual defect is an issue with open PRs where
+*none* of them — nor any already-merged sibling — closes it, because then merging everything leaves
+the issue open for Wotuu to close by hand.
+
+So when a PR has no closing reference, before touching anything: find its siblings
+(`gh pr list --repo RaiderIO/keystone.guru --state all --search "<issue> in:body" --json number,state,title`)
+and check their `closingIssuesReferences` the same way, and check the issue's own state
+(`gh issue view <issue> --repo RaiderIO/keystone.guru --json state`). Leave it alone if the issue is
+already closed, or if any sibling (open **or** merged) claims it. Only if nothing claims it, add
+`Closes #<issue>` to the top of the body of the *last* PR in the split/stack order — the one whose
+merge should complete the issue — via
+`gh api -X PATCH repos/RaiderIO/keystone.guru/pulls/<n> -F body=@<file>` (capital `-F`; lowercase
+`-f` posts the literal string `@<file>`), and note what you did in a `:robot:` PR comment so Wotuu
+can override the choice of which PR gets it. A single non-split PR whose body just forgot the line
+is the common, easy case: the "last in the stack" is itself.
+
+Worked example of the false positive this rule exists to avoid: #3849 has no closing reference and
+looks broken, but #3847 and #3848 both carry `Closes #3674` and merged, so #3674 is already closed
+— adding `Closes` to #3849 would have been noise.
 
 ### 4. Cold-review MRs that just became ready
 

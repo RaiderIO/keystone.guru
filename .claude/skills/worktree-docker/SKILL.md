@@ -206,8 +206,26 @@ gh pr create --repo RaiderIO/keystone.guru --base master --head <issue>-<slug> \
 <summary of what changed and why>"
 ```
 
+**The `--title` MUST start with `#<issue> ` — this is not optional and easy to drop by accident.**
+Every open PR here follows this format (`#3866 Drop a team's tags when...`, `#3674 Cover
+StateManager's...`); a title missing it (seen in the wild: `AjaxProfileController 500s for guests:
+guard with auth middleware`, `Centralize the "safely get map object group" helpers in util.js`)
+breaks the at-a-glance issue↔PR association everywhere titles are read (PR list, notifications, the
+squash-merge commit subject) even though the branch name and body still carry the number correctly.
+**Before running `gh pr create`, double-check the `--title` string itself contains `#<issue>` as its
+first token** — don't rely on the branch name or `Closes #<issue>` body line to carry that on the
+title's behalf, they're separate fields. If you're fixing an existing PR that's missing it:
+`gh pr edit <n> --title "#<issue> <title>"` (title edits work fine even though `gh pr edit`'s body
+edits are broken on this repo — see the CLAUDE.md note above).
+
 MRs target `master` (the default branch), so a `Closes #<issue>` line in the body auto-links the
-issue in the Development panel and closes it on merge — no manual linking step needed.
+issue in the Development panel and closes it on merge — no manual linking step needed. Verify it
+actually took (`gh api graphql -f query='query { repository(owner: "RaiderIO", name:
+"keystone.guru") { pullRequest(number: <n>) { closingIssuesReferences(first: 5) { nodes { number } }
+} } }'` must be non-empty) — without it the merge leaves the issue open for Wotuu to close by hand.
+When one issue is split across sibling MRs, **exactly one of them says `Closes #<issue>`** (the last
+to merge) and the rest say `Part of #<issue>`; `babysit-prs` checks this issue-scoped, so a sibling
+with no closing reference is fine as long as one of them has it.
 
 `sh/worktree.sh push` uses a passphraseless **write deploy key** scoped to this repo
 (`~/.ssh/keystone_worktree_ed25519`, override with `KSG_WORKTREE_DEPLOY_KEY`) so no password is
