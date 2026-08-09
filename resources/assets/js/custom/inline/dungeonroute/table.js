@@ -54,8 +54,12 @@ class DungeonrouteTable extends InlineCode {
         $(this.options.filterButtonSelector).unbind('click').bind('click', function () {
             // Build the search parameters
             let dungeonId = $(self.options.dungeonSelectId).val();
-            let affixes = $(self.options.affixSelectId).val();
-            let attributes = $(self.options.attributesSelectId).val();
+            // .val() on a zero-element jQuery collection (e.g. a select that doesn't exist for
+            // this table's view) returns undefined, which would otherwise be sent to the server
+            // as the literal search value 'undefined' instead of an empty array. See the same
+            // guard on requirements/tags below.
+            let affixes = $(self.options.affixSelectId).val() || [];
+            let attributes = $(self.options.attributesSelectId).val() || [];
 
             // Find wherever the columns are we're looking for, then filter using them
             // https://stackoverflow.com/questions/32598279/how-to-get-name-of-datatable-column
