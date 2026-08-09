@@ -37,8 +37,18 @@ class ArrowChangedEvent extends ModelChangedEvent
         /** @var Arrow $model */
         $model = $this->model;
 
+        $broadcast = parent::broadcastWith();
+
+        // The receiving client always overwrites model.polyline.vertices_json with the
+        // model_data coordinates below (see ModelChangedHandler::_getCorrectLatLngFromEvent()
+        // and Arrow's changed.js), so broadcasting the raw vertices here too is dead weight
+        // that can push large arrows over Reverb's message size cap (#3909).
+        $modelArray = $model->toArray();
+        unset($modelArray['polyline']['vertices_json']);
+        $broadcast['model'] = $modelArray;
+
         return array_merge(
-            parent::broadcastWith(),
+            $broadcast,
             [
                 'model_data' => $model->polyline->getCoordinatesData(
                     $this->coordinatesService,
