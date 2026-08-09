@@ -5,6 +5,7 @@ namespace Tests\Feature\View;
 use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
+use App\Service\Request\ApiRequestServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\View\ViewService;
 use App\Service\View\ViewServiceInterface;
@@ -86,6 +87,7 @@ final class ViewComposerSmokeTest extends PublicTestCase
                 app(ExpansionServiceInterface::class),
                 app(SeasonAffixGroupServiceInterface::class),
                 app(AffixGroupEaseTierServiceInterface::class),
+                app(ApiRequestServiceInterface::class),
             ])
             ->onlyMethods(['getSelectableSpellsByCategory'])
             ->getMock();
