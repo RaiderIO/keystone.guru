@@ -202,11 +202,13 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
     }
 
     /**
-     * Guards #3908: mdtExport() must return a clean 400 for a dungeon MDTDungeon doesn't recognize
-     * (mdt_supported === false), rather than letting InvalidMDTDungeonException surface uncaught -
-     * and must not Log::error() it, since that's what forwarded this expected, user-input-driven
-     * case to Sentry as a false-positive bug report in the first place (the sentry log channel
-     * alerts on error-level logs; see config/logging.php).
+     * Guards #3908: mdtExport() already returned a clean 400 for a dungeon MDTDungeon doesn't
+     * recognize (mdt_supported === false) - InvalidMDTDungeonException never surfaced uncaught, via
+     * the pre-existing generic catch (Exception). The regression this guards is that generic catch's
+     * Log::error() call, which forwarded this expected, user-input-driven case to Sentry as a
+     * false-positive bug report (the sentry log channel alerts on error-level logs; see
+     * config/logging.php) - so the load-bearing assertion below is shouldNotHaveReceived('error'),
+     * not the 400 (which passed even before this fix).
      */
     #[Test]
     public function get_givenDungeonNotSupportedByMdt_returnsBadRequestWithoutLoggingAnError(): void
