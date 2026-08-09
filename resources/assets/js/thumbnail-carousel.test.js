@@ -262,9 +262,11 @@ describe('$.fn.thumbnailCarousel (#3595)', () => {
         $next.trigger('click'); // interrupts the still-unsettled wrap
 
         // First write: an instant, un-animated settle onto the real first slide's own slot (1) -
-        // content-identical to the clone it was just showing, so nothing visibly jumps. Second
-        // write: the animated move onto slot 2, i.e. one slide forward as the click asked for -
-        // not a two-slot leap backward from the stale clone slot.
+        // the same content the clone slot (4) was heading to, so once the reveal has actually
+        // finished this is content-identical and invisible; interrupting genuinely mid-transition
+        // can still cut away from a partial frame. Second write: the animated move onto slot 2,
+        // i.e. one slide forward as the click asked for - not a two-slot leap backward from the
+        // stale clone slot.
         expect(writes).toEqual(['translateX(-100%)', 'translateX(-200%)']);
         expect(track.style.transform).toBe('translateX(-200%)');
 
