@@ -180,46 +180,80 @@ $.fn.thumbnailCarousel = function (options) {
             const clone = target.cloneNode(true);
             clone.setAttribute('aria-hidden', 'false');
 
-            if (forward) {
-                track.appendChild(clone);
-            } else {
-                track.insertBefore(clone, track.firstChild);
+            wrapping = true;
 
-                // Prepending shifts every real slide's visual position one slot to the right;
-                // silently correct for that before animating, so the insertion itself doesn't jump.
-                // This can't reuse paint()'s own reflow - that one runs *before* it sets the
-                // transform, to stop that specific assignment from animating. Here it's the
-                // opposite: the corrected transform must be flushed as a real committed frame
-                // (transition still off) before the transition is switched back on below, or the
-                // browser coalesces both changes into one and the reveal never animates at all.
-                track.classList.add('thumbnail-carousel__track--no-transition');
-                track.style.transform = `translateX(${(currentIndex + 1) * -100}%)`;
-                void track.offsetHeight;
+            /**
+             * Animates the track onto the clone. Deferred a couple of frames for the backward
+             * case - see below - so it always runs with the correction already painted.
+             */
+            function reveal() {
+                currentIndex = nextIndex;
+                // Forward: the clone sits right after the last real slide, at visual slot
+                // slideCount. Backward: it was just prepended, so it's always at visual slot 0.
+                paint(true, forward ? slideCount : 0);
+
+                let settled = false;
+
+                /**
+                 * Tears the clone back down once the reveal has visibly finished - via whichever
+                 * of the two triggers below gets there first.
+                 */
+                function settle() {
+                    if (settled) {
+                        return;
+                    }
+                    settled = true;
+
+                    track.removeEventListener('transitionend', onTransitionEnd);
+                    clearTimeout(fallbackTimer);
+                    clone.remove();
+                    wrapping = false;
+                    paint(false);
+                    loadAround(currentIndex);
+
+                    if (typeof settings.onAfterSlide === 'function') {
+                        settings.onAfterSlide.call(track, currentIndex, slideCount);
+                    }
+                }
+
+                function onTransitionEnd(transitionEvent) {
+                    if (transitionEvent.target !== track || transitionEvent.propertyName !== 'transform') {
+                        return;
+                    }
+
+                    settle();
+                }
+
+                track.addEventListener('transitionend', onTransitionEnd);
+                // `prefers-reduced-motion: reduce` (thumbnail-carousel.css) turns the transition
+                // off entirely, so transitionend would never fire and the clone/wrapping lock
+                // would be stuck forever without this - 500ms comfortably clears the 400ms
+                // transition with margin for slow devices.
+                const fallbackTimer = setTimeout(settle, 500);
             }
 
-            wrapping = true;
-            currentIndex = nextIndex;
-            // Forward: the clone sits right after the last real slide, at visual slot slideCount.
-            // Backward: it was just prepended, so it's always at visual slot 0.
-            paint(true, forward ? slideCount : 0);
+            if (forward) {
+                track.appendChild(clone);
+                reveal();
 
-            const onTransitionEnd = function (transitionEvent) {
-                if (transitionEvent.target !== track || transitionEvent.propertyName !== 'transform') {
-                    return;
-                }
+                return;
+            }
 
-                track.removeEventListener('transitionend', onTransitionEnd);
-                clone.remove();
-                wrapping = false;
-                paint(false);
-                loadAround(currentIndex);
+            track.insertBefore(clone, track.firstChild);
 
-                if (typeof settings.onAfterSlide === 'function') {
-                    settings.onAfterSlide.call(track, currentIndex, slideCount);
-                }
-            };
-
-            track.addEventListener('transitionend', onTransitionEnd);
+            // Prepending shifts every real slide's visual position one slot to the right;
+            // silently correct for that before animating, so the insertion itself doesn't jump.
+            track.classList.add('thumbnail-carousel__track--no-transition');
+            track.style.transform = `translateX(${(currentIndex + 1) * -100}%)`;
+            // The correction has to actually be painted before reveal() switches the transition
+            // back on, or the browser coalesces both changes into one and it never animates.
+            // Forcing that synchronously (reading offsetHeight) works but visibly janks the first
+            // frame - this page's insert-a-cloned-image-then-force-layout is exactly the kind of
+            // synchronous work that stutters. A double rAF gets the same "definitely painted a
+            // frame" guarantee off the browser's own paint schedule instead, for free.
+            requestAnimationFrame(function () {
+                requestAnimationFrame(reveal);
+            });
         }
 
         /**

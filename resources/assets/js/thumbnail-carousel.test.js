@@ -65,6 +65,18 @@ function dispatchTransitionEnd(track) {
     track.dispatchEvent(transitionEndEvent);
 }
 
+/**
+ * Flushes one requestAnimationFrame callback. beginWrap() defers a backward wrap's reveal by two
+ * of these (see thumbnail-carousel.js), so tests need to await this twice before it runs.
+ *
+ * @returns {Promise<void>}
+ */
+function nextAnimationFrame() {
+    return new Promise(function (resolve) {
+        requestAnimationFrame(resolve);
+    });
+}
+
 describe('$.fn.thumbnailCarousel (#3595)', () => {
     afterEach(() => {
         document.body.innerHTML = '';
@@ -148,17 +160,26 @@ describe('$.fn.thumbnailCarousel (#3595)', () => {
         expect(track.querySelectorAll('li')[0].getAttribute('aria-hidden')).toBe('false');
     });
 
-    test('thumbnailCarousel_givenPrevClickedOnFirstSlide_animatesOntoAClonedLastSlideThenSnapsToTheRealOne', () => {
+    test('thumbnailCarousel_givenPrevClickedOnFirstSlide_animatesOntoAClonedLastSlideThenSnapsToTheRealOne', async () => {
         const track = createCarousel(3);
         $(track).thumbnailCarousel();
         const $prev = $('.thumbnail-carousel__nav--prev');
 
         $prev.trigger('click');
 
-        // The real slides silently shift one slot right to make room for the prepended clone
-        // before the track animates left onto it - both invisible, since it's the same content.
-        expect(track.style.transform).toBe('translateX(0%)');
+        // The real slides silently shift one slot right to make room for the prepended clone,
+        // painted (transition still off) before the reveal below switches transitions back on -
+        // both invisible, since it's the same content. Deferred a couple of frames (rather than
+        // forced synchronously) so this doesn't jank the reveal's first animated frame.
+        expect(track.style.transform).toBe('translateX(-100%)');
+        expect(track.classList.contains('thumbnail-carousel__track--no-transition')).toBe(true);
         expect(track.querySelectorAll('li')).toHaveLength(4);
+
+        await nextAnimationFrame();
+        await nextAnimationFrame();
+
+        expect(track.style.transform).toBe('translateX(0%)');
+        expect(track.classList.contains('thumbnail-carousel__track--no-transition')).toBe(false);
 
         dispatchTransitionEnd(track);
 
@@ -179,6 +200,102 @@ describe('$.fn.thumbnailCarousel (#3595)', () => {
 
         expect(track.querySelectorAll('li')).toHaveLength(4);
         expect(track.style.transform).toBe('translateX(-300%)');
+    });
+
+    test('thumbnailCarousel_givenArrowKeyDuringAWrap_isIgnoredTheSameWayAClickWouldBe', () => {
+        const track = createCarousel(3);
+        $(track).thumbnailCarousel();
+        $('.thumbnail-carousel__nav--next').trigger('click');
+        $('.thumbnail-carousel__nav--next').trigger('click');
+        $('.thumbnail-carousel__nav--next').trigger('click');
+
+        $('.thumbnail-carousel__nav--next').trigger($.Event('keydown', {key: 'ArrowRight'}));
+
+        expect(track.querySelectorAll('li')).toHaveLength(4);
+        expect(track.style.transform).toBe('translateX(-300%)');
+    });
+
+    test('thumbnailCarousel_givenNextClickedAfterAWrapSettles_isNoLongerIgnored', () => {
+        const track = createCarousel(3);
+        $(track).thumbnailCarousel();
+        const $next = $('.thumbnail-carousel__nav--next');
+        $next.trigger('click');
+        $next.trigger('click');
+        $next.trigger('click');
+        dispatchTransitionEnd(track);
+
+        $next.trigger('click');
+
+        expect(track.style.transform).toBe('translateX(-100%)');
+    });
+
+    test('thumbnailCarousel_givenTheTransitionNeverFires_stillSettlesViaTheFallbackTimer', () => {
+        // Covers `prefers-reduced-motion: reduce` (thumbnail-carousel.css sets transition: none),
+        // where transitionend never fires - without a fallback the clone and the `wrapping` lock
+        // would be stuck forever.
+        vi.useFakeTimers();
+        try {
+            const track = createCarousel(3);
+            $(track).thumbnailCarousel();
+            $('.thumbnail-carousel__nav--prev').trigger('click');
+            // Flushes the double rAF (jsdom's shim is timer-based, so fake timers drive it too)
+            // and then the 500ms fallback in one go.
+            vi.advanceTimersByTime(1000);
+
+            expect(track.querySelectorAll('li')).toHaveLength(3);
+            expect(track.style.transform).toBe('translateX(-200%)');
+
+            // Settled at the last slide (index 2); wrapping forward starts a fresh wrap instead
+            // of being ignored, proving the fallback actually cleared the `wrapping` lock.
+            $('.thumbnail-carousel__nav--next').trigger('click');
+            expect(track.style.transform).toBe('translateX(-300%)');
+            expect(track.querySelectorAll('li')).toHaveLength(4);
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+
+    test('thumbnailCarousel_givenTwoSlides_wrapsSmoothlyInBothDirections', async () => {
+        const track = createCarousel(2);
+        $(track).thumbnailCarousel();
+        const $next = $('.thumbnail-carousel__nav--next');
+
+        // Slide 0 -> 1 is a plain move, not a wrap yet - only the second "next" wraps back to 0.
+        $next.trigger('click');
+        expect(track.style.transform).toBe('translateX(-100%)');
+
+        $next.trigger('click');
+        expect(track.style.transform).toBe('translateX(-200%)');
+        dispatchTransitionEnd(track);
+        expect(track.style.transform).toBe('translateX(0%)');
+        expect(track.querySelectorAll('li')).toHaveLength(2);
+
+        $('.thumbnail-carousel__nav--prev').trigger('click');
+        expect(track.style.transform).toBe('translateX(-100%)');
+        await nextAnimationFrame();
+        await nextAnimationFrame();
+        expect(track.style.transform).toBe('translateX(0%)');
+        dispatchTransitionEnd(track);
+        expect(track.style.transform).toBe('translateX(-100%)');
+        expect(track.querySelectorAll('li')).toHaveLength(2);
+    });
+
+    test('thumbnailCarousel_givenAWrapSettles_callsOnAfterSlideOnlyOnceWithTheFinalIndex', () => {
+        const track = createCarousel(3);
+        const onAfterSlide = vi.fn();
+        $(track).thumbnailCarousel({onAfterSlide});
+
+        $('.thumbnail-carousel__nav--next').trigger('click');
+        $('.thumbnail-carousel__nav--next').trigger('click');
+        onAfterSlide.mockClear();
+        $('.thumbnail-carousel__nav--next').trigger('click');
+
+        expect(onAfterSlide).not.toHaveBeenCalled();
+
+        dispatchTransitionEnd(track);
+
+        expect(onAfterSlide).toHaveBeenCalledTimes(1);
+        expect(onAfterSlide).toHaveBeenCalledWith(0, 3);
     });
 
     test('thumbnailCarousel_givenNextClickedOnLastSlideWithoutLoop_staysOnTheLastSlide', () => {
