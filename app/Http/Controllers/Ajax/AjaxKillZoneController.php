@@ -253,7 +253,7 @@ class AjaxKillZoneController extends Controller
         APIKillZoneFormRequest       $request,
         DungeonRoute                 $dungeonRoute,
         ?KillZone                    $killZone = null,
-    ): KillZone {
+    ): KillZone|Response {
         // Outside the try/catch on purpose: an authorization failure must surface as a 403, not be
         // rewritten into the 404 below.
         $dungeonRoute = $this->authorizeKillZoneEdit($dungeonRoute, $killZone);
@@ -273,12 +273,25 @@ class AjaxKillZoneController extends Controller
             $data['id'] = $killZone?->id ?? null; // @phpstan-ignore nullsafe.neverNull
 
             $result = $this->saveKillZone($coordinatesService, $dungeonRoute, $data, $killZone !== null);
-            $result->setAttribute('killzone_paths', $this->getKillZonePaths($killZonePathService, $dungeonRoute));
         } catch (AuthorizationException|HttpException $deliberateResponse) {
             // A 403 or a 422 we raised on purpose must not be rewritten into the 404 below
             throw $deliberateResponse;
-        } catch (Exception) {
-            $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
+        } catch (Exception $exception) {
+            report($exception);
+
+            return response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
+        }
+
+        try {
+            // Deliberately isolated from the save above: the kill zone is already persisted and
+            // broadcast at this point, so a failure computing this cosmetic add-on must not be
+            // reported back to the client as a total failure - the caller would never learn the
+            // save actually succeeded and retry with an id-less payload, creating a duplicate.
+            $result->setAttribute('killzone_paths', $this->getKillZonePaths($killZonePathService, $dungeonRoute));
+        } catch (Exception $exception) {
+            report($exception);
+
+            $result->setAttribute('killzone_paths', []);
         }
 
         return $result;

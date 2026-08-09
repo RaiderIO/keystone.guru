@@ -8,6 +8,8 @@ use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\PublishedState;
 use App\Models\User;
+use App\Service\KillZonePath\KillZonePathServiceInterface;
+use Mockery;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Teapot\StatusCode;
@@ -142,6 +144,46 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
             $route->killZones()->delete();
             $route->delete();
             $nonOwner->delete();
+        }
+    }
+
+    /**
+     * Guards #3916: store()'s catch(Exception) fallback assigned a plain Response to $result while
+     * the method's return type was declared as the non-nullable KillZone, so the fallback itself
+     * threw a TypeError instead of ever reaching the client as the intended 404 (this specific
+     * trigger - getKillZonePaths() throwing - is #3917's facade-floor crash in practice).
+     *
+     * Also guards the cold-review follow-up on #3927: the kill zone is already saved and broadcast
+     * by the time getKillZonePaths() runs, so a failure there must not be reported as a total
+     * failure - the client would never learn the save succeeded, and would retry with an id-less
+     * payload, creating a duplicate kill zone.
+     */
+    #[Test]
+    public function store_givenGetKillZonePathsThrows_savesTheKillZoneAndReturnsEmptyPathsInsteadOfFailingTheWholeRequest(): void
+    {
+        // Arrange
+        $killZonePathServiceMock = Mockery::mock(KillZonePathServiceInterface::class);
+        /** @var Mockery\Expectation $expectation */
+        $expectation = $killZonePathServiceMock->shouldReceive('calculateForRoute');
+        $expectation->andThrow(new \Exception('boom'));
+        app()->instance(KillZonePathServiceInterface::class, $killZonePathServiceMock);
+
+        try {
+            // Act
+            $response = $this->post(sprintf('/ajax/%s/killzone', $this->dungeonRoute->public_key), [
+                'color'   => '#ff0000',
+                'index'   => 1,
+                'enemies' => [],
+                'spells'  => [],
+            ]);
+
+            // Assert - no TypeError, no 404: the save itself succeeded, only the cosmetic paths
+            // add-on degrades
+            $response->assertSuccessful();
+            $response->assertJsonPath('killzone_paths', []);
+            $this->assertSame(1, $this->dungeonRoute->killZones()->count());
+        } finally {
+            $this->dungeonRoute->killZones()->delete();
         }
     }
 
