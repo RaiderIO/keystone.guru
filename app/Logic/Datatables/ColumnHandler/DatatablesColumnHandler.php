@@ -83,7 +83,7 @@ abstract class DatatablesColumnHandler
         if (is_array($order)) {
             $order = $order[0] ?? null;
         }
-        $generalSearch = ($request->get('search'))['value'];
+        $generalSearch = $request->input('search.value');
 
         // Find the column we should handle
         $column = null;
