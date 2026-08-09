@@ -52,6 +52,22 @@ return [
     // @see: https://docs.sentry.io/platforms/php/guides/laravel/configuration/options/#ignore_exceptions
     // 'ignore_exceptions' => [],
 
+    // Laravel's ScheduleRunCommand throws a plain Exception with an identical message shape and
+    // stack trace (inside vendor code) for every failing scheduled command, so Sentry's default
+    // trace-based grouping aggregates failures from unrelated commands (combatlog:detectstaledata,
+    // patreon:refreshmembers, ...) into one issue (#3902). Fingerprint on the command name so each
+    // gets its own issue instead.
+    'before_send' => function (\Sentry\Event $event, ?\Sentry\EventHint $hint): ?\Sentry\Event {
+        $exception = $hint?->exception;
+
+        if ($exception !== null
+            && preg_match('/^Scheduled command \[(.+)] failed with exit code \[\d+]\.$/', $exception->getMessage(), $matches) === 1) {
+            $event->setFingerprint(['schedule-run-command-failed', $matches[1]]);
+        }
+
+        return $event;
+    },
+
     // @see: https://docs.sentry.io/platforms/php/guides/laravel/configuration/options/#ignore_transactions
     'ignore_transactions' => [
         // Ignore Laravel's default health URL
