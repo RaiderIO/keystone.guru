@@ -263,7 +263,7 @@ class DungeonrouteTable extends InlineCode {
                 });
             });
 
-            self.carouselHandler.refreshCarousel('', {autoWidth: false});
+            self.carouselHandler.refreshCarousel();
         });
 
         self._dt.on('click', 'tbody td.clickable', function (clickEvent) {

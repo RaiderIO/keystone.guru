@@ -93,8 +93,8 @@ class SearchHandlerDungeonRoute extends SearchHandler {
         $targetContainer.append($container);
         // Do init of html below here
 
-        // For some reason doing this immediately will cause the carousel to not load properly, maybe because the image is not rendered yet?
-        // This delay causes it to be rendered OK
+        // Safe to call immediately: the carousel is laid out in percentages and no longer measures
+        // the images, which is what lightslider needed them rendered for (#3595).
         (new CarouselHandler()).refreshCarousel(`.${containerClass}`);
         (new ThumbnailRefresh()).refreshHandlers();
 
