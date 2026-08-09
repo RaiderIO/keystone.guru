@@ -2,9 +2,11 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
+use Illuminate\Support\Facades\Log;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -197,6 +199,42 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $mappingVersion->id,
         ]);
+    }
+
+    /**
+     * Guards #3908: mdtExport() must return a clean 400 for a dungeon MDTDungeon doesn't recognize
+     * (mdt_supported === false), rather than letting InvalidMDTDungeonException surface uncaught -
+     * and must not Log::error() it, since that's what forwarded this expected, user-input-driven
+     * case to Sentry as a false-positive bug report in the first place (the sentry log channel
+     * alerts on error-level logs; see config/logging.php).
+     */
+    #[Test]
+    public function get_givenDungeonNotSupportedByMdt_returnsBadRequestWithoutLoggingAnError(): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion] = $this->findDungeon(
+            resolve: static fn(Dungeon $dungeon) => $dungeon->mdt_supported ? null : true,
+        );
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'expires_at'         => null,
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        // A spy (rather than shouldReceive(), which replaces Log entirely with a strict mock) only
+        // observes calls without failing the test over any OTHER log call made along the way
+        $logSpy = Log::spy();
+
+        try {
+            // Act
+            $response = $this->get(sprintf('/ajax/%s/mdtExport', $dungeonRoute->public_key));
+
+            // Assert
+            $response->assertStatus(400);
+            $logSpy->shouldNotHaveReceived('error');
+        } finally {
+            $dungeonRoute->delete();
+        }
     }
 
     /**
