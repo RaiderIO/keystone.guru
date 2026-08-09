@@ -103,6 +103,7 @@ use App\Http\Controllers\UserReportController;
 use App\Http\Controllers\Webhook\GithubWebhookController;
 use App\Http\Controllers\Webhook\WowheadWebhookController;
 use App\Http\Middleware\WowheadCors;
+use App\Models\DungeonDifficulty;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route as RoutingRoute;
 use Symfony\Component\HttpFoundation\Response;
@@ -383,7 +384,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                         Route::patch('/', new FloorController()->update(...))->name('admin.floor.update');
                         Route::get('mapping', new FloorController()->mapping(...))->name('admin.floor.edit.mapping');
                         // Speedrun required npcs
-                        Route::prefix('speedrunrequirednpcs')->group(static function () {
+                        Route::prefix('speedrunrequirednpcs')->whereIn('difficulty', DungeonDifficulty::values())->group(static function () {
                             Route::get('{difficulty}/new', new DungeonSpeedrunRequiredNpcsController()->create(...))->name('admin.dungeonspeedrunrequirednpc.new');
                             Route::post('{difficulty}/new', new DungeonSpeedrunRequiredNpcsController()->createSave(...))->name('admin.dungeonspeedrunrequirednpc.savenew');
                             Route::delete('{difficulty}/{dungeonspeedrunrequirednpc}', new DungeonSpeedrunRequiredNpcsController()->delete(...))->name('admin.dungeonspeedrunrequirednpc.delete');
