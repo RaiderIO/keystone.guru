@@ -45,26 +45,25 @@ abstract class MDTBaseService
      */
     protected function decode(string $string): ?array
     {
-        $format = MDTStringFormat::detect($string);
-
         try {
-            return $format->codec()->decode($string);
+            return MDTStringFormat::detect($string)->codec()->decode($string);
         } catch (CliWeakaurasParserNotFoundException $cliWeakaurasParserNotFoundException) {
             throw $cliWeakaurasParserNotFoundException;
         } catch (Throwable $throwable) {
             // Truncated: the input is unvalidated user input of arbitrary size.
             $context = ['string' => substr($string, 0, 2048)];
 
-            if ($format === MDTStringFormat::MDT2) {
-                // detect() only picks MDT2 for a strict `!~MDT2~` prefix match, so a decode
-                // failure here means our own CBOR codec choked on a string that genuinely claimed
-                // to be an MDT export - always worth reporting.
+            if (MDTStringFormat::isValid($string)) {
+                // The string at least plausibly claims to be an MDT export (one of the codecs'
+                // appliesTo() matched), so a decode failure here is worth reporting - it's either a
+                // genuine bug in our own codec, or (for the Legacy format) a real but corrupted/
+                // truncated export that a user has a right to expect us to import.
                 logger()->error($throwable->getMessage(), $context);
             } else {
-                // detect() defaults to Legacy for everything else, including garbage that doesn't
-                // even look like a legacy MDT export string (LegacyMDTCodec shells out to
-                // cli_weakauras_parser, whose stderr becomes the exception message) - most of these
-                // are just malformed user input, not application bugs (#3906).
+                // detect() unconditionally falls back to Legacy for anything that isn't MDT2, even
+                // garbage that doesn't look like a legacy MDT export at all - LegacyMDTCodec shells
+                // out to cli_weakauras_parser, whose stderr becomes the exception message, so this
+                // covers the common case of a user pasting non-MDT-string input (#3906).
                 logger()->warning($throwable->getMessage(), $context);
             }
 

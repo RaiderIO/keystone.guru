@@ -50,15 +50,16 @@ class MDTImportStringServiceDecodeTest extends MDTImportStringServiceTestBase
     }
 
     /**
-     * Guards #3906: garbage input that MDTStringFormat::detect() falls back to the Legacy codec for
-     * (i.e. anything not `!~MDT2~`-prefixed) must not be logged at 'error' level - LegacyMDTCodec
-     * shells out to cli_weakauras_parser, whose stderr on malformed input ("Failed to decompress
-     * data: Invalid prefix" etc.) was reaching Sentry as noise for what the controller already
-     * handles as a clean 400 response.
+     * Guards #3906: input that doesn't even plausibly claim to be an MDT export string (fails
+     * MDTStringFormat::isValid() - detect() still falls back to Legacy for dispatch purposes, but
+     * that's just a "pick something to try" default) must not be logged at 'error' level -
+     * LegacyMDTCodec shells out to cli_weakauras_parser, whose stderr on malformed input ("Failed to
+     * decompress data: Invalid prefix" etc.) was reaching Sentry as noise for what the controller
+     * already handles as a clean 400 response.
      */
     #[Test]
     #[Group('MDTImportStringServiceDecode')]
-    public function getDecoded_givenGarbageStringRoutedToLegacyCodec_logsAtWarningNotError(): void
+    public function getDecoded_givenStringThatDoesNotPlausiblyClaimToBeMdt_logsAtWarningNotError(): void
     {
         // A spy (rather than shouldReceive(), which replaces Log entirely with a strict mock) only
         // observes calls without failing the test over any OTHER log call made along the way
@@ -73,5 +74,29 @@ class MDTImportStringServiceDecodeTest extends MDTImportStringServiceTestBase
         $this->assertNull($decoded);
         $logSpy->shouldHaveReceived('warning');
         $logSpy->shouldNotHaveReceived('error');
+    }
+
+    /**
+     * Guards the flip side of #3906: a string that DOES plausibly claim to be a legacy MDT export
+     * (matches LegacyMDTCodec::appliesTo()'s character-class check) but fails to actually decode -
+     * e.g. truncated/corrupted in transit - must still be logged at 'error' level, since that's much
+     * more likely a real problem worth investigating than a user pasting arbitrary garbage.
+     */
+    #[Test]
+    #[Group('MDTImportStringServiceDecode')]
+    public function getDecoded_givenLegacyShapedStringThatFailsToDecode_logsAtError(): void
+    {
+        $logSpy = Log::spy();
+
+        // Act - `!`-prefixed and otherwise matches LegacyMDTCodec::appliesTo()'s character class,
+        // but isn't valid compressed data underneath
+        $decoded = app()->make(MDTImportStringServiceInterface::class)
+            ->setEncodedString('!ThisIsNotReallyValidButLooksLegacyXXX123')
+            ->getDecoded();
+
+        // Assert
+        $this->assertNull($decoded);
+        $logSpy->shouldHaveReceived('error');
+        $logSpy->shouldNotHaveReceived('warning');
     }
 }
