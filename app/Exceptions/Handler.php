@@ -186,9 +186,8 @@ class Handler extends ExceptionHandler
      * already carves out since it never renders an HTML error view in the first place.
      *
      * Whether the request is an API request is ApiRequestService's call, not something derived from
-     * the view layer: it is resolved here rather than constructor-injected to match how this class
-     * already resolves HandlerLoggingInterface, keeping the exception handler constructible even
-     * when the container is in a degraded state. The previous hand-rolled check
+     * the view layer: it is resolved here rather than constructor-injected, matching how this class
+     * already resolves HandlerLoggingInterface. The previous hand-rolled check
      * (str_starts_with($path, 'api/') || str_starts_with($path, 'ajax/')) that the service replaces
      * had drifted in two ways: it never covered '/benchmark' at all, and Request::decodedPath()
      * trims the trailing slash, so a bare "/api/" request decoded to "api" and silently failed
