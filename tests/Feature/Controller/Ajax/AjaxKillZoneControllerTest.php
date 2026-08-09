@@ -150,10 +150,16 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
     /**
      * Guards #3916: store()'s catch(Exception) fallback assigned a plain Response to $result while
      * the method's return type was declared as the non-nullable KillZone, so the fallback itself
-     * threw a TypeError instead of ever reaching the client as the intended 404.
+     * threw a TypeError instead of ever reaching the client as the intended 404 (this specific
+     * trigger - getKillZonePaths() throwing - is #3917's facade-floor crash in practice).
+     *
+     * Also guards the cold-review follow-up on #3927: the kill zone is already saved and broadcast
+     * by the time getKillZonePaths() runs, so a failure there must not be reported as a total
+     * failure - the client would never learn the save succeeded, and would retry with an id-less
+     * payload, creating a duplicate kill zone.
      */
     #[Test]
-    public function store_givenGetKillZonePathsThrows_returnsNotFoundInsteadOfTypeError(): void
+    public function store_givenGetKillZonePathsThrows_savesTheKillZoneAndReturnsEmptyPathsInsteadOfFailingTheWholeRequest(): void
     {
         // Arrange
         $killZonePathServiceMock = Mockery::mock(KillZonePathServiceInterface::class);
@@ -171,8 +177,11 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
                 'spells'  => [],
             ]);
 
-            // Assert
-            $response->assertStatus(StatusCode::NOT_FOUND);
+            // Assert - no TypeError, no 404: the save itself succeeded, only the cosmetic paths
+            // add-on degrades
+            $response->assertSuccessful();
+            $response->assertJsonPath('killzone_paths', []);
+            $this->assertSame(1, $this->dungeonRoute->killZones()->count());
         } finally {
             $this->dungeonRoute->killZones()->delete();
         }
