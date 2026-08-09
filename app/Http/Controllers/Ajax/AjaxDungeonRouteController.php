@@ -21,6 +21,7 @@ use App\Logic\Datatables\ColumnHandler\DungeonRoutes\TitleColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\ViewsColumnHandler;
 use App\Logic\Datatables\DungeonRoutesDatatablesHandler;
 use App\Logic\MDT\Exception\ImportWarning;
+use App\Logic\MDT\Exception\InvalidMDTDungeonException;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteFavorite;
@@ -805,6 +806,20 @@ class AjaxDungeonRouteController extends Controller
                 'mdt_string' => $dungeonRoute,
                 'warnings'   => $warningResult,
             ];
+        } catch (InvalidMDTDungeonException $ex) {
+            // Expected, user-input-driven case (#3908): every MDT export entrypoint gates on
+            // Dungeon::mdt_supported (== Conversion::hasMDTDungeonName()), so reaching here means
+            // the button was never rendered for this dungeon in the first place - not an
+            // application defect. Skip the Log::error() the generic catch below does, since the
+            // sentry log channel alerts on error-level logs (config/logging.php) and this isn't
+            // worth paging on. Matches how MDTImportController skips logging its own known domain
+            // exceptions.
+            //
+            // Deliberately NOT InvalidMDTExpansionException here: unlike the dungeon check, nothing
+            // gates the UI on expansion support, so that exception firing means a user-visible
+            // broken button with no signal anywhere if it's ever silenced - let it fall through to
+            // the generic catch below instead.
+            return abort(400, sprintf(__('controller.apidungeonroute.mdt_generate_error'), $ex->getMessage()));
         } catch (Exception $ex) {
             Log::error(sprintf('MDT export error: %s', $ex->getMessage()), ['dungeonroute' => $dungeonRoute]);
 
