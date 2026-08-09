@@ -53,4 +53,14 @@ class CombatLogRouteDungeonRouteServiceLogging extends StructuredLogging impleme
     {
         $this->warning(__METHOD__, get_defined_vars());
     }
+
+    public function generateMapIconsUnableToCalculateMapLocation(string $uniqueId, int $floorId): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
+    public function saveCombatLogRouteEnemyFailuresUnableToCalculateMapLocation(int $dungeonRouteId, ?int $npcId, int $floorId): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
 }

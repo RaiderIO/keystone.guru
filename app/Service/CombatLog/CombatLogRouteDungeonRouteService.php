@@ -73,6 +73,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use InvalidArgumentException;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -507,14 +508,27 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                 continue;
             }
 
+            // Track the floor regardless of whether a failure gets recorded below - later npcs that
+            // fall back to $previousFloor must still see this npc's floor even if this one is skipped.
+            $previousFloor = $currentFloor;
+
             if ($combatLogRouteNpc->getResolvedEnemy() === null) {
-                $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
-                    new IngameXY(
-                        $combatLogRouteNpc->coord->x,
-                        $combatLogRouteNpc->coord->y,
-                        $currentFloor,
-                    ),
-                );
+                // This table is diagnostic bookkeeping only (unresolved-npc triage) - a floor with
+                // unset ingame coordinates (a mapping data gap, #3904) must not fail the whole combat
+                // log route submission just because it can't be recorded here.
+                try {
+                    $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
+                        new IngameXY(
+                            $combatLogRouteNpc->coord->x,
+                            $combatLogRouteNpc->coord->y,
+                            $currentFloor,
+                        ),
+                    );
+                } catch (InvalidArgumentException) {
+                    $this->log->saveCombatLogRouteEnemyFailuresUnableToCalculateMapLocation($dungeonRoute->id, $combatLogRouteNpc->npcId, $currentFloor->id);
+
+                    continue;
+                }
 
                 $failureAttributes[] = array_merge([
                     'dungeon_route_id'   => $dungeonRoute->id,
@@ -526,8 +540,6 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     'updated_at'         => $now,
                 ], $latLng->toArray());
             }
-
-            $previousFloor = $currentFloor;
         }
 
         CombatLogRouteEnemyFailure::insert($failureAttributes);
@@ -559,13 +571,21 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                 continue;
             }
 
-            $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
-                new IngameXY(
-                    $combatLogRouteNpc->coord->x,
-                    $combatLogRouteNpc->coord->y,
-                    $currentFloor,
-                ),
-            );
+            // A floor with unset ingame coordinates (a mapping data gap, #3904) must not fail the
+            // whole request just because this one npc's icon can't be placed.
+            try {
+                $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
+                    new IngameXY(
+                        $combatLogRouteNpc->coord->x,
+                        $combatLogRouteNpc->coord->y,
+                        $currentFloor,
+                    ),
+                );
+            } catch (InvalidArgumentException) {
+                $this->log->generateMapIconsUnableToCalculateMapLocation($combatLogRouteNpc->getUniqueId(), $currentFloor->id);
+
+                continue;
+            }
             $latLngs[] = $latLng;
 
             /** @var Npc|null $npc */
