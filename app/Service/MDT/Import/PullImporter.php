@@ -289,9 +289,12 @@ class PullImporter
                 $npcEnemyForces = $enemyForcesByNpcIds->get($enemy->npc->id);
 
                 if ($npcEnemyForces !== null) {
+                    // enemy_forces_teeming may be null (no teeming-specific override for this NPC) - fall back
+                    // to the regular value, matching the IFNULL(enemy_forces_teeming, enemy_forces) convention
+                    // used everywhere else this column is read (e.g. KillZone::getSkippableEnemyForces()).
                     $importStringPulls->addEnemyForces(
                         $importStringPulls->isRouteTeeming() ?
-                            $npcEnemyForces->enemy_forces_teeming :
+                            $npcEnemyForces->enemy_forces_teeming ?? $npcEnemyForces->enemy_forces :
                             $npcEnemyForces->enemy_forces,
                     );
                 } else {
