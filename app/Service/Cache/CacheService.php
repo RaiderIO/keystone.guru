@@ -12,6 +12,7 @@ use Illuminate\Redis\Connections\Connection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use Psr\SimpleCache\InvalidArgumentException;
+use RedisException;
 
 class CacheService implements CacheServiceInterface
 {
@@ -137,7 +138,7 @@ class CacheService implements CacheServiceInterface
                             if ($this->set($key, $value, $ttl ?? $this->getTtl($key))) {
                                 $result = $value;
                             }
-                        } catch (InvalidArgumentException $e) {
+                        } catch (InvalidArgumentException|RedisException $e) {
                             $this->log->rememberFailedToSetCache($key, $e);
 
                             $result = $value;
@@ -210,7 +211,17 @@ class CacheService implements CacheServiceInterface
 
     public function get(string $key): mixed
     {
-        return Cache::get($key);
+        // A dropped Redis connection here must not bubble up as a 500 - this is called from
+        // TrustProxies on every production request (via CloudflareService::getIpRanges()), so an
+        // uncaught RedisException here takes the whole site down on a transient Redis blip (#3914).
+        // Degrading to a cache miss lets the caller recompute the value instead.
+        try {
+            return Cache::get($key);
+        } catch (RedisException $e) {
+            $this->log->getFailedRedisConnection($key, $e);
+
+            return null;
+        }
     }
 
     /**
