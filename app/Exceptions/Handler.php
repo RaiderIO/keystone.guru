@@ -178,13 +178,15 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * No view composers run on /ajax/ (KeystoneGuruServiceProvider::boot(), gated by
-     * ViewService::shouldLoadViewVariables()) - not even for the handful of /ajax/ routes
-     * whitelisted there to deliberately render an HTML fragment on success (search/view). So an
-     * HTML error view rendered for ANY /ajax/ request is guaranteed to crash on a missing view
-     * variable (#3806). Force JSON for every /ajax/ error (matching how /api/ is already treated
-     * here) except ValidationException, which render() above already carves out since it never
-     * renders an HTML error view in the first place.
+     * No view composer runs for a request whose path ViewService::shouldLoadViewVariables()
+     * blacklists (KeystoneGuruServiceProvider::boot() skips registering them there entirely). An
+     * HTML error view rendered for one of those paths is guaranteed to crash on a missing view
+     * variable (#3806, #3903), so isApiRequest() forces JSON for their errors - except
+     * ValidationException, which render() above already carves out since it never renders an
+     * HTML error view in the first place. The blacklist has a handful of /ajax/ routes
+     * (search/view) explicitly whitelisted back out of it to deliberately render an HTML
+     * fragment on success - composers DO run there, so their errors are left alone too and may
+     * render their own HTML instead of JSON.
      */
     #[Override]
     protected function shouldReturnJson($request, Throwable $e): bool
@@ -200,16 +202,16 @@ class Handler extends ExceptionHandler
         return $this->isApiRequest($request) || parent::shouldReturnJson($request, $e);
     }
 
+    /**
+     * Delegates to the same blacklist check ViewService's composer registration already applies,
+     * rather than duplicating its path list by hand - the previous hand-rolled version
+     * (str_starts_with($path, 'api/') || str_starts_with($path, 'ajax/')) drifted from it in two
+     * ways: it never covered '/benchmark' at all, and Request::decodedPath() trims the trailing
+     * slash Request::path() strips, so a bare "/api/" or "/api" request decoded to "api" and
+     * silently failed "starts with 'api/'" (#3903).
+     */
     private function isApiRequest(Request $request): bool
     {
-        // Any exception rendered as an HTML error view on a path ViewService blacklists is
-        // guaranteed to crash - no view composer ran there, so the view can't read the variables
-        // it unconditionally depends on (#3806, #3903). This used to duplicate that blacklist as
-        // a hand-rolled prefix check here (str_starts_with($path, 'api/')), which drifted from it
-        // in two ways: it never covered '/benchmark' at all, and decodedPath() trims the trailing
-        // slash Request::path() strips, so a bare "/api/" or "/api" request decodes to "api" and
-        // silently fails "starts with 'api/'". Delegating to the same check both sides already
-        // share removes the duplication instead of patching one more case of it.
         return !app(ViewServiceInterface::class)->shouldLoadViewVariables($request->getPathInfo());
     }
 

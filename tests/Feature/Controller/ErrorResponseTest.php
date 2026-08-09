@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Service\View\ViewServiceInterface;
 use Illuminate\Contracts\Http\Kernel as HttpKernel;
 use Illuminate\Http\Request;
 use Illuminate\Testing\TestResponse;
@@ -102,16 +103,51 @@ final class ErrorResponseTest extends PublicTestCase
     #[Test]
     public function fallback_givenPlainGetRequestToBareApiPathWithoutTrailingSlash_returns404HtmlPage(): void
     {
-        // Act - "/api" (no trailing slash) is a different shape from "/api/" above: Laravel's own
-        // Request::path()/getPathInfo() disagree on it, so ViewService::shouldLoadViewVariables()
-        // (raw pathInfo "/api", not blacklisted) and isApiRequest() (delegates to the same check)
-        // agree it's NOT blacklisted - view composers run normally here and it never crashed, so
-        // it's the ordinary HTML 404 page rather than a forced-JSON response.
+        // Act - "/api" (no trailing slash) is a different shape from "/api/" above: its raw
+        // pathInfo is "/api", which ViewService::shouldLoadViewVariables() does NOT blacklist
+        // (only the slash-suffixed '/api/' prefix is), so isApiRequest() - delegating to that same
+        // check - agrees it's not an API request either. This never crashed even before #3903, so
+        // it's the ordinary HTML 404 page rather than a forced-JSON response - not a regression to
+        // fix, just the other half of the boundary the fix above sits on.
         $response = $this->get('/api');
 
         // Assert
         $response->assertStatus(404);
         $response->assertSee(__('view_errors.404.title'));
+    }
+
+    #[Test]
+    public function shouldLoadViewVariables_givenBareApiPathVersusApiPathWithTrailingSlash_disagreesOnBlacklisting(): void
+    {
+        // This pins the exact boundary the two tests above rely on, independent of whether view
+        // composers actually register - KeystoneGuruServiceProvider::boot() only skips
+        // registering them outside of `app()->runningUnitTests()`, so PHPUnit can't observe a
+        // composer-skip regression through an HTTP response either way.
+        $viewService = app(ViewServiceInterface::class);
+
+        $this->assertFalse($viewService->shouldLoadViewVariables('/api/'), "'/api/' must stay blacklisted");
+        $this->assertTrue($viewService->shouldLoadViewVariables('/api'), "'/api' (no trailing slash) must stay outside the blacklist");
+    }
+
+    #[Test]
+    public function fallback_givenPlainWrongMethodRequestToWhitelistedAjaxSearchRoute_returns405HtmlPage(): void
+    {
+        // Act - pins an intentional behavior change: '/ajax/search' is one of the handful of
+        // /ajax/ routes VIEW_VARIABLES_URL_WHITELIST carves back out of the blacklist (it renders
+        // an HTML fragment on success), so composers run there and isApiRequest() - now delegating
+        // to the same whitelist-aware check - no longer force-JSONs its errors either. Before this
+        // fix, isApiRequest()'s blanket '/ajax/' prefix match forced JSON here regardless of the
+        // whitelist. This is safe (composers running means no #3806/#3903-style crash), but it is
+        // an observable response-shape change for anything reading this route's error body as
+        // JSON - contrast with the still-forced-JSON '/ajax/profile/adfree/1' case above, which
+        // stays blacklisted because it isn't one of the three whitelisted paths.
+        $response = $this->post('/ajax/search');
+
+        // Assert - Allow also lists PATCH/DELETE: 'ajax/{dungeonRoute}' matches this exact URI too,
+        // treating "search" as the dungeonRoute slug
+        $response->assertStatus(405);
+        $response->assertHeader('Allow', 'GET, HEAD, PATCH, DELETE');
+        $response->assertSee(__('view_errors.405.title'));
     }
 
     #[Test]
