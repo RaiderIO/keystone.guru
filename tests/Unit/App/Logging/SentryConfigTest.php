@@ -56,21 +56,53 @@ final class SentryConfigTest extends PublicTestCase
      * Sentry's default trace-based grouping aggregated failures from unrelated commands
      * (combatlog:detectstaledata, patreon:refreshmembers, ...) into one issue. before_send must
      * fingerprint on the command name so each gets its own issue.
+     *
+     * The exception message embeds Illuminate\Console\Application::formatCommandString()'s full
+     * output - the shell-escaped php and artisan binaries prefixed onto the actual command (e.g.
+     * `'/usr/local/bin/php' 'artisan' combatlog:detectstaledata`, confirmed against a real run in
+     * this app's container) - not just the bare command name, so the fixture must reproduce that
+     * shape or a regex bug that captures the whole line (embedding an environment-dependent
+     * interpreter path in the fingerprint) would pass unnoticed.
      */
     #[Test]
     public function beforeSend_givenScheduledCommandFailedException_fingerprintsByCommandName(): void
     {
         // Arrange
         $beforeSend = config('sentry.before_send');
-        $exception  = new Exception('Scheduled command [combatlog:detectstaledata] failed with exit code [1].');
-        $event      = Event::createEvent();
-        $hint       = EventHint::fromArray(['exception' => $exception]);
+        $exception  = new Exception(
+            "Scheduled command ['/usr/local/bin/php' 'artisan' combatlog:detectstaledata] failed with exit code [1].",
+        );
+        $event = Event::createEvent();
+        $hint  = EventHint::fromArray(['exception' => $exception]);
+
+        // Act
+        $result = $beforeSend($event, $hint);
+
+        // Assert - the php/artisan binary tokens are stripped, leaving just the command
+        self::assertSame(['schedule-run-command-failed', 'combatlog:detectstaledata'], $result->getFingerprint());
+    }
+
+    /**
+     * A scheduled command with parameters (Schedule::command()'s compileParameters()) appends them
+     * to the command name space-separated, e.g. `dungeonroute:touch teamId=5` - the fingerprint must
+     * still isolate this from the binary prefix.
+     */
+    #[Test]
+    public function beforeSend_givenScheduledCommandWithParametersFailedException_fingerprintsByCommandAndParameters(): void
+    {
+        // Arrange
+        $beforeSend = config('sentry.before_send');
+        $exception  = new Exception(
+            "Scheduled command ['/usr/local/bin/php' 'artisan' dungeonroute:touch teamId=5] failed with exit code [1].",
+        );
+        $event = Event::createEvent();
+        $hint  = EventHint::fromArray(['exception' => $exception]);
 
         // Act
         $result = $beforeSend($event, $hint);
 
         // Assert
-        self::assertSame(['schedule-run-command-failed', 'combatlog:detectstaledata'], $result->getFingerprint());
+        self::assertSame(['schedule-run-command-failed', 'dungeonroute:touch teamId=5'], $result->getFingerprint());
     }
 
     #[Test]
@@ -80,10 +112,14 @@ final class SentryConfigTest extends PublicTestCase
         $beforeSend = config('sentry.before_send');
 
         $firstEvent = $beforeSend(Event::createEvent(), EventHint::fromArray([
-            'exception' => new Exception('Scheduled command [combatlog:detectstaledata] failed with exit code [1].'),
+            'exception' => new Exception(
+                "Scheduled command ['/usr/local/bin/php' 'artisan' combatlog:detectstaledata] failed with exit code [1].",
+            ),
         ]));
         $secondEvent = $beforeSend(Event::createEvent(), EventHint::fromArray([
-            'exception' => new Exception('Scheduled command [patreon:refreshmembers] failed with exit code [1].'),
+            'exception' => new Exception(
+                "Scheduled command ['/usr/local/bin/php' 'artisan' patreon:refreshmembers] failed with exit code [1].",
+            ),
         ]));
 
         // Assert
