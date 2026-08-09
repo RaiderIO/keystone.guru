@@ -2,9 +2,12 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use App\Events\Models\Path\PathChangedEvent;
 use App\Models\Floor\Floor;
 use App\Models\Path;
 use App\Models\Polyline;
+use App\Models\User;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -42,6 +45,47 @@ final class AjaxPathControllerTest extends DungeonRouteTestBase
         $this->assertEquals($polyline['color_animated'], $responseArr['polyline']['color_animated']);
         $this->assertEquals($polyline['weight'], $responseArr['polyline']['weight']);
         $this->assertEquals($polyline['vertices_json'], $responseArr['polyline']['vertices_json']);
+    }
+
+    #[Test]
+    #[Group('Controller')]
+    public function store_givenNewValidPath_broadcastsPayloadWithoutRedundantVerticesJson(): void
+    {
+        // Arrange
+        /** @var Floor $randomFloor */
+        $randomFloor = $this->dungeonRoute->dungeon->floors()
+            ->where('facade', false)
+            ->get()
+            ->random();
+
+        $polyline = PolylineFixtures::createPolyline($randomFloor);
+
+        $response = $this->post(route('ajax.dungeonroute.path.create', ['dungeonRoute' => $this->dungeonRoute]), [
+            'floor_id' => $randomFloor->id,
+            'polyline' => $polyline,
+        ]);
+        $response->assertCreated();
+
+        /** @var Path $path */
+        $path = Path::findOrFail(json_decode($response->content(), true)['id']);
+
+        $event = new PathChangedEvent(
+            app(CoordinatesServiceInterface::class),
+            $this->dungeonRoute,
+            User::findOrFail(1),
+            $path,
+        );
+
+        // Act
+        $broadcastPayload = $event->broadcastWith();
+
+        // Assert - model.polyline.vertices_json is dead weight: PathChangedHandler always
+        // overwrites it client-side with model_data.coordinates before use, so broadcasting both
+        // just tripled the vertex payload and could exceed Reverb's message size cap on large
+        // paths (#3909). The rest of the polyline (used for e.g. color) must still be present.
+        $this->assertArrayNotHasKey('vertices_json', $broadcastPayload['model']['polyline']);
+        $this->assertEquals($polyline['color'], $broadcastPayload['model']['polyline']['color']);
+        $this->assertArrayHasKey('coordinates', $broadcastPayload['model_data']);
     }
 
     #[Test]
