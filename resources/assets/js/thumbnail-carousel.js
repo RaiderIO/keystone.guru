@@ -138,7 +138,7 @@ $.fn.thumbnailCarousel = function (options) {
 
         let currentIndex = 0;
         // The transitionend listener/fallback timer for an in-flight wrap's snap-back onto the
-        // real slide, if one is pending - see scheduleSnap()/cancelPendingSnap().
+        // real slide, if one is pending - see scheduleSnap()/settle().
         let pendingSnap = null;
 
         /**
@@ -166,12 +166,15 @@ $.fn.thumbnailCarousel = function (options) {
          */
         function paint(animate, visualSlot = currentIndex + 1) {
             track.classList.toggle('thumbnail-carousel__track--no-transition', !animate);
+            track.style.transform = `translateX(${visualSlot * -100}%)`;
             if (!animate) {
-                // Force a reflow so the class lands before the transform does; without it the
-                // browser batches both into one frame and animates the jump anyway.
+                // Force the reflow AFTER writing the transform, so the disabled transition and the
+                // new value commit together as one un-animated frame. Forcing it before the write
+                // (which is enough when nothing else follows in the same task) leaves this write
+                // uncommitted for a paint(true, ...) that immediately follows - which would then
+                // still animate from the stale pre-snap value instead of this one (#3595).
                 void track.offsetHeight;
             }
-            track.style.transform = `translateX(${visualSlot * -100}%)`;
 
             slides.forEach(function (slide, index) {
                 slide.setAttribute('aria-hidden', String(index !== currentIndex));
@@ -184,10 +187,15 @@ $.fn.thumbnailCarousel = function (options) {
         }
 
         /**
-         * Cancels a wrap's pending snap-back onto the real slide, if one is in flight. Called at
-         * the top of every move()/drag start so a new gesture can't race the old one's teardown.
+         * Resolves a wrap's pending snap-back onto the real slide immediately, if one exists -
+         * restoring the invariant move()/pointerdown rely on, that the transform reflects
+         * `currentIndex`'s own slot whenever nothing is animating. Without this, interrupting an
+         * unsettled wrap computes its next move from the stale clone slot instead of the real one,
+         * animating an extra slot in the wrong direction (#3595). No-ops if nothing is pending -
+         * called unconditionally at the top of every move()/drag start, and is also what the wrap's
+         * transitionend/fallback-timer triggers call once the animation has genuinely finished.
          */
-        function cancelPendingSnap() {
+        function settle() {
             if (pendingSnap === null) {
                 return;
             }
@@ -195,13 +203,15 @@ $.fn.thumbnailCarousel = function (options) {
             track.removeEventListener('transitionend', pendingSnap.onTransitionEnd);
             clearTimeout(pendingSnap.timer);
             pendingSnap = null;
+            paint(false);
         }
 
         /**
-         * After a wrap's move() animates onto a decorative clone slot, snaps - no transition, and
-         * critically no DOM change, just the transform - back onto the real slide's own slot. That
-         * makes the swap atomic: there's no window where the DOM and the transform disagree about
-         * which slide is showing, which is what let a wrap paint one bad frame before (#3595).
+         * After a wrap's move() animates onto a decorative clone slot, schedules settle() to snap -
+         * no transition, and critically no DOM change, just the transform - back onto the real
+         * slide's own slot once the reveal has visibly finished. That makes the swap atomic: there's
+         * no window where the DOM and the transform disagree about which slide is showing, which is
+         * what let a wrap paint one bad frame before (#3595).
          */
         function scheduleSnap() {
             function onTransitionEnd(transitionEvent) {
@@ -209,18 +219,14 @@ $.fn.thumbnailCarousel = function (options) {
                     return;
                 }
 
-                cancelPendingSnap();
-                paint(false);
+                settle();
             }
 
             track.addEventListener('transitionend', onTransitionEnd);
             // `prefers-reduced-motion: reduce` (thumbnail-carousel.css) turns the transition off
             // entirely, so transitionend would never fire without this - 500ms comfortably clears
             // the 400ms transition with margin for slow devices.
-            const timer = setTimeout(function () {
-                cancelPendingSnap();
-                paint(false);
-            }, 500);
+            const timer = setTimeout(settle, 500);
             pendingSnap = {onTransitionEnd, timer};
         }
 
@@ -230,7 +236,7 @@ $.fn.thumbnailCarousel = function (options) {
          * @param {number} delta
          */
         function move(delta) {
-            cancelPendingSnap();
+            settle();
 
             const target = currentIndex + delta;
             const wrapped = target < 0 || target > slideCount - 1;
@@ -245,6 +251,7 @@ $.fn.thumbnailCarousel = function (options) {
 
             // Computed from the *old* index: for a wrap this lands on the clone slot one past
             // either end (0 or slideCount + 1); otherwise it's just the next real slide's own slot.
+            // settle() above guarantees currentIndex + 1 is where the track actually is right now.
             const visualSlot = currentIndex + 1 + delta;
             currentIndex = (target + slideCount) % slideCount;
             loadAround(currentIndex);
@@ -293,9 +300,11 @@ $.fn.thumbnailCarousel = function (options) {
             // pointer sequence. CSS blocks the same thing on the touch/selection side.
             pointerEvent.preventDefault();
 
-            // A drag starting mid-wrap shouldn't let the pending snap-back (see scheduleSnap())
-            // yank the transform out from under the user's finger once it fires.
-            cancelPendingSnap();
+            // A drag starting mid-wrap must resolve the pending snap-back first (see settle()) -
+            // both so it can't yank the transform out from under the user's finger once it fires,
+            // and because the drag preview below assumes the transform already sits at
+            // currentIndex's own slot.
+            settle();
 
             dragStartX = pointerEvent.clientX;
             dragDeltaX = 0;

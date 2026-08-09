@@ -93,6 +93,33 @@ function dispatchTransitionEnd(track) {
     track.dispatchEvent(transitionEndEvent);
 }
 
+/**
+ * Spies on every assignment to `track.style.transform` from this point on, in order. Needed
+ * because interrupting a pending wrap makes *two* writes in the same task (settle onto the real
+ * slide, then animate to the new target) - asserting only the end state can't tell a correct
+ * settle-then-animate sequence apart from a bug that animates from the stale, unsettled position
+ * (both can land on the same final value - see #3595).
+ *
+ * @param {HTMLElement} track
+ * @returns {string[]} The recorded values, in write order, mutated live as more happen.
+ */
+function recordTransformWrites(track) {
+    const writes = [];
+    let current = track.style.transform;
+    Object.defineProperty(track.style, 'transform', {
+        configurable: true,
+        get() {
+            return current;
+        },
+        set(value) {
+            current = value;
+            writes.push(value);
+        },
+    });
+
+    return writes;
+}
+
 describe('$.fn.thumbnailCarousel (#3595)', () => {
     afterEach(() => {
         document.body.innerHTML = '';
@@ -220,23 +247,47 @@ describe('$.fn.thumbnailCarousel (#3595)', () => {
         expect(track.style.transform).toBe('translateX(-300%)');
     });
 
-    test('thumbnailCarousel_givenNextClickedRepeatedlyThroughAWrap_cancelsThePendingSnapInsteadOfIgnoringTheClick', () => {
+    test('thumbnailCarousel_givenNextClickedRepeatedlyThroughAWrap_settlesOntoTheRealSlideBeforeAnimatingTheNewMove', () => {
+        // A plain end-state assertion can't tell a correct "settle then animate" sequence apart
+        // from the bug this covers (animating straight from the stale, unsettled clone slot) -
+        // both can land on the same final transform. See recordTransformWrites().
         const track = createCarousel(3);
         $(track).thumbnailCarousel();
         const $next = $('.thumbnail-carousel__nav--next');
         $next.trigger('click');
         $next.trigger('click');
-        $next.trigger('click'); // wraps: currentIndex 0, mid-animation onto the end clone
+        $next.trigger('click'); // wraps: currentIndex 0, mid-animation onto the end clone (slot 4)
 
-        $next.trigger('click'); // a plain move from the now-current first slide, not ignored
+        const writes = recordTransformWrites(track);
+        $next.trigger('click'); // interrupts the still-unsettled wrap
 
+        // First write: an instant, un-animated settle onto the real first slide's own slot (1) -
+        // content-identical to the clone it was just showing, so nothing visibly jumps. Second
+        // write: the animated move onto slot 2, i.e. one slide forward as the click asked for -
+        // not a two-slot leap backward from the stale clone slot.
+        expect(writes).toEqual(['translateX(-100%)', 'translateX(-200%)']);
         expect(track.style.transform).toBe('translateX(-200%)');
 
-        // The wrap's pending snap was cancelled along with it - its transitionend listener is
-        // gone, so this is a no-op rather than yanking the transform back to slot 1.
+        // The wrap's pending snap was resolved (not just cancelled) along with it - its
+        // transitionend listener is gone, so this is a no-op rather than yanking the transform.
         const transformBeforeStaleEvent = track.style.transform;
         dispatchTransitionEnd(track);
         expect(track.style.transform).toBe(transformBeforeStaleEvent);
+    });
+
+    test('thumbnailCarousel_givenDragStartedDuringAWrap_settlesOntoTheRealSlideBeforeThePreview', () => {
+        const track = createCarousel(3);
+        $(track).thumbnailCarousel();
+        $('.thumbnail-carousel__nav--prev').trigger('click'); // wraps backward onto the start clone
+
+        const writes = recordTransformWrites(track);
+        // A drag starting here previews from `currentIndex + 1` (thumbnail-carousel.js); if
+        // settle() hadn't run first, that preview would be offset by a whole slide from wherever
+        // the track visually still is (the unsettled clone slot).
+        drag(track, -10); // below the swipe threshold: previews, then snaps back without moving
+
+        expect(writes[0]).toBe('translateX(-300%)'); // settle: real last slide's own slot (3)
+        expect(track.style.transform).toBe('translateX(-300%)');
     });
 
     test('thumbnailCarousel_givenTheTransitionNeverFires_stillSettlesViaTheFallbackTimer', () => {
