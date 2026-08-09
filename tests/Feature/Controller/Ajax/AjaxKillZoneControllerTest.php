@@ -4,21 +4,26 @@ namespace Tests\Feature\Controller\Ajax;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
+use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\PublishedState;
 use App\Models\User;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\KillZonePath\KillZonePathServiceInterface;
 use Mockery;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Teapot\StatusCode;
 use Tests\Feature\Controller\DungeonRouteTestBase;
+use Tests\Feature\Traits\ProvidesDungeon;
 
 #[Group('Controller')]
 #[Group('KillZone')]
 final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
 {
+    use ProvidesDungeon;
+
     #[\Override]
     protected function setUp(): void
     {
@@ -333,6 +338,73 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
         } finally {
             KillZoneEnemy::query()->where('id', $killZoneEnemy->id)->delete();
             KillZone::query()->where('id', $killZone->id)->delete();
+        }
+    }
+
+    /**
+     * Guards #3917: the client places a pull's kill area in whatever plane the map it rendered was
+     * using, so on a facade (combined multi-floor) map it submits the facade floor and facade-plane
+     * coordinates. saveKillZone() used to convert those only when the *acting user's* map facade
+     * style said facade - state the save request need not share with the request that rendered the
+     * map (it leaks across requests on an Octane worker) - and stored the facade floor verbatim
+     * otherwise. The conversion must be driven by the submitted floor instead.
+     */
+    #[Test]
+    public function store_givenAFacadeLocationWhileTheMapFacadeStyleSaysSplitFloors_persistsTheLocationOnItsRealFloor(): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, minEnemies: 1);
+        /** @var Floor $facadeFloor */
+        $facadeFloor = $dungeon->floors()->where('facade', true)->firstOrFail();
+        /** @var Enemy $enemy */
+        $enemy = $mappingVersion->enemies()->whereHas('floor', static fn($query) => $query->where('facade', false))
+            ->whereNotNull('lat')
+            ->firstOrFail();
+
+        /** @var CoordinatesServiceInterface $coordinatesService */
+        $coordinatesService = app(CoordinatesServiceInterface::class);
+        // Exactly the location the client would submit for a kill area placed on top of that enemy
+        // while the facade map is rendered
+        $facadeLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $enemy->getLatLng());
+        $this->assertTrue((bool)$facadeLatLng->getFloor()->facade, 'Expected the enemy to live inside a floor union area');
+
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        // The state an /embed, /explore or /heatmap request handled by the same worker leaves behind
+        User::forceMapFacadeStyle(User::MAP_FACADE_STYLE_SPLIT_FLOORS);
+
+        try {
+            // Act
+            $response = $this->post(sprintf('/ajax/%s/killzone', $dungeonRoute->public_key), [
+                'color'    => '#ff0000',
+                'index'    => 1,
+                'floor_id' => $facadeFloor->id,
+                'lat'      => $facadeLatLng->getLat(),
+                'lng'      => $facadeLatLng->getLng(),
+                'enemies'  => [],
+                'spells'   => [],
+            ]);
+
+            // Assert
+            $response->assertSuccessful();
+
+            /** @var KillZone $killZone */
+            $killZone = $dungeonRoute->killZones()->firstOrFail();
+            $this->assertNotEquals($facadeFloor->id, $killZone->floor_id);
+            $this->assertFalse((bool)$killZone->floor->facade);
+            // Converting the enemy's own location and back must land on the enemy's floor again
+            $this->assertEquals($enemy->floor_id, $killZone->floor_id);
+
+            // ...but the response still echoes the location back in the plane the client renders,
+            // so the marker the user just placed does not jump
+            $response->assertJsonPath('floor_id', $facadeFloor->id);
+        } finally {
+            User::forceMapFacadeStyle(null);
+            $dungeonRoute->killZones()->delete();
+            $dungeonRoute->delete();
         }
     }
 

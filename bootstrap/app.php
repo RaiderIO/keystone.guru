@@ -11,6 +11,7 @@ use App\Http\Middleware\LegalAgreed;
 use App\Http\Middleware\OnlyAjax;
 use App\Http\Middleware\PoweredBySwoole;
 use App\Http\Middleware\ReadOnlyMode;
+use App\Http\Middleware\ResetsMapFacadeStyleOverride;
 use App\Http\Middleware\TracksUserIpAddress;
 use App\Http\Middleware\TrustProxies;
 use App\Http\Middleware\ViewCacheBuster;
@@ -64,6 +65,9 @@ return Application::configure(basePath: dirname(__DIR__))
             ServerTimingMiddleware::class,
             CheckForMaintenanceMode::class,
             PoweredBySwoole::class,
+            // Must run before any controller that calls User::forceMapFacadeStyle() - it writes a
+            // static that would otherwise leak into the next request on the same Octane worker
+            ResetsMapFacadeStyleOverride::class,
         ]);
 
         $middleware->api([

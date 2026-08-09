@@ -12,9 +12,11 @@ use App\Http\Requests\KillZone\APIDeleteAllFormRequest;
 use App\Http\Requests\KillZone\APIKillZoneFormRequest;
 use App\Http\Requests\KillZone\APIKillZoneMassFormRequest;
 use App\Jobs\RefreshEnemyForces;
+use App\Logic\Structs\LatLng;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteLimitType;
 use App\Models\Enemy;
+use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\KillZone\KillZoneSpell;
@@ -89,6 +91,66 @@ class AjaxKillZoneController extends Controller
     }
 
     /**
+     * Rewrites a submitted kill zone location that is expressed on a facade (combined multi-floor)
+     * map onto the real floor it belongs to, mutating $data so the conversion happens *before* the
+     * row is written rather than as a second update afterwards.
+     *
+     * Whether the submitted location is a facade location is derived from the submitted floor's own
+     * `facade` flag, deliberately not from the acting user's map facade style: that style is
+     * request-scoped state which the save request does not necessarily share with the request that
+     * rendered the map the location was placed on, and a mismatch used to persist the facade floor
+     * verbatim (#3917).
+     *
+     * @throws HttpException when the facade location cannot be expressed on any real floor
+     *
+     * @param  array<string, mixed> $data
+     * @return LatLng|null          the location exactly as submitted, so the response can echo it back in the
+     *                              plane the client is rendering, or null if no facade location was submitted
+     */
+    private function convertSubmittedFacadeLocation(
+        CoordinatesServiceInterface $coordinatesService,
+        DungeonRoute                $dungeonRoute,
+        array                      &                       $data,
+    ): ?LatLng {
+        if (!isset($data['floor_id'], $data['lat'], $data['lng'])) {
+            return null;
+        }
+
+        /** @var Floor|null $submittedFloor */
+        $submittedFloor = Floor::find($data['floor_id']);
+
+        if ($submittedFloor === null || !$submittedFloor->facade) {
+            return null;
+        }
+
+        $submittedLatLng = new LatLng((float)$data['lat'], (float)$data['lng'], $submittedFloor);
+
+        $convertedLatLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
+            $dungeonRoute->mappingVersion,
+            $submittedLatLng,
+        );
+
+        $convertedFloor = $convertedLatLng->getFloor();
+
+        // convertFacadeMapLocationToMapLocation() is a no-op when the mapping version does not have
+        // facades enabled, and it hands back the facade floor unchanged when the location falls
+        // outside every floor union area. Refuse the save rather than persist a facade floor: every
+        // consumer downstream (ingame coordinate conversion, kill zone paths, MDT export) assumes a
+        // real floor, and silently dropping the location would throw away what the user just placed.
+        if ($convertedFloor === null || $convertedFloor->facade) {
+            // 422 as a literal, like abortIfDungeonRouteLimitReached() - Teapot's Http does not
+            // expose UNPROCESSABLE_ENTITY
+            abort(422, __('controller.killzone.error.facade_location_not_convertible'));
+        }
+
+        $data['floor_id'] = $convertedFloor->id;
+        $data['lat']      = $convertedLatLng->getLat();
+        $data['lng']      = $convertedLatLng->getLng();
+
+        return $submittedLatLng;
+    }
+
+    /**
      * @throws \Exception
      *
      * @param array<string, mixed> $data
@@ -113,6 +175,9 @@ class AjaxKillZoneController extends Controller
         $dungeonroute = $killZone->dungeonRoute ?? $dungeonroute;
 
         $this->abortIfDungeonRouteLimitReached($dungeonroute, DungeonRouteLimitType::KillZones);
+
+        // Must happen before the row is written - the database may never hold a facade floor
+        $submittedFacadeLatLng = $this->convertSubmittedFacadeLocation($coordinatesService, $dungeonroute, $data);
 
         $beforeModel = clone $killZone;
 
@@ -200,34 +265,13 @@ class AjaxKillZoneController extends Controller
                 $afterAttributes['enemies']  = $killZone->enemies->pluck('id');
             });
 
-            // If killzone has lat/lng set, convert it to facade location if it's not already
-            $useFacade = $dungeonroute->mappingVersion->facade_enabled &&
-                User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
-
-            if ($killZone->hasKillArea()) {
-                // Track this latlng so we can re-echo it back to the user if we still want to use facades
-                $originalLatLng = $killZone->getLatLng();
-
-                // Only when we actually have a kill location set!
-                if ($useFacade && $originalLatLng->getFloor() !== null) {
-                    $latLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
-                        $dungeonroute->mappingVersion,
-                        $originalLatLng,
-                    );
-
-                    // Save the killzone with converted lat/lngs in the database
-                    $killZone->update([
-                        'lat'      => $latLng->getLat(),
-                        'lng'      => $latLng->getLng(),
-                        'floor_id' => $latLng->getFloor()->id,
-                    ]);
-                }
-
-                // But echo it back as facade!
-                $killZone->setAttribute('lat', $originalLatLng->getLat());
-                $killZone->setAttribute('lng', $originalLatLng->getLng());
-                $killZone->setAttribute('floor_id', $originalLatLng->getFloor()->id);
-                $killZone->setRelation('floor', $originalLatLng->getFloor());
+            // The row now holds the real-floor location; echo the location back in the plane the
+            // client submitted it in, so the marker it just placed does not jump on its map
+            if ($submittedFacadeLatLng !== null) {
+                $killZone->setAttribute('lat', $submittedFacadeLatLng->getLat());
+                $killZone->setAttribute('lng', $submittedFacadeLatLng->getLng());
+                $killZone->setAttribute('floor_id', $submittedFacadeLatLng->getFloor()->id);
+                $killZone->setRelation('floor', $submittedFacadeLatLng->getFloor());
             }
 
             if (Auth::check()) {
