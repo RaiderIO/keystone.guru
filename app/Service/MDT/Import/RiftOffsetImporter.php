@@ -14,6 +14,7 @@ use App\Models\Polyline;
 use App\Service\MDT\Models\ImportStringRiftOffsets;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 
 class RiftOffsetImporter
@@ -125,6 +126,14 @@ class RiftOffsetImporter
                 $importStringRiftOffsets->getPaths()->push($pathAttributes);
             } catch (ImportWarning $warning) {
                 $importStringRiftOffsets->getWarnings()->add($warning);
+            } catch (ModelNotFoundException) {
+                // The import string references an NPC/enemy clone that isn't part of the current
+                // mapping version (#3915) - skip this one obelisk skip rather than 500ing the whole
+                // import.
+                $importStringRiftOffsets->getWarnings()->add(new ImportWarning(
+                    __('services.mdt.io.import_string.category.awakened_obelisks'),
+                    __('services.mdt.io.import_string.unable_to_find_awakened_obelisk_enemy'),
+                ));
             }
         }
 

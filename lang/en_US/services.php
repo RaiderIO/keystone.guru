@@ -49,6 +49,7 @@ return [
                 'unable_to_find_enemies_pull_skipped_details'          => 'This may indicate MDT recently had an update that is not integrated in Keystone.guru yet.',
                 'unable_to_find_awakened_obelisks'                     => 'Cannot find Awakened Obelisks for your dungeon/week combination. Your Awakened Obelisk skips will not be imported.',
                 'unable_to_find_awakened_obelisk_different_floor'      => 'Unable to import Awakened Obelisk :name, it is on a different floor than the Obelisk itself. Keystone.guru does not support this at this time.',
+                'unable_to_find_awakened_obelisk_enemy'                => 'Unable to find the enemy for an Awakened Obelisk skip in your dungeon/week combination. This particular skip will not be imported.',
                 'unable_to_decode_mdt_import_string'                   => 'Unable to decode MDT import string',
                 'unable_to_validate_mdt_import_string'                 => 'Unable to validate MDT import string',
             ],
