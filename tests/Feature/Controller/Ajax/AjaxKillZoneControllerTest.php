@@ -373,8 +373,15 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
             'mapping_version_id' => $mappingVersion->id,
         ]);
 
-        // The state an /embed, /explore or /heatmap request handled by the same worker leaves behind
-        User::forceMapFacadeStyle(User::MAP_FACADE_STYLE_SPLIT_FLOORS);
+        // A persisted preference rather than User::forceMapFacadeStyle(), which the new
+        // ResetsMapFacadeStyleOverride middleware would clear before the controller ever read it -
+        // this is the surviving mismatch: the user flipped the setting in another tab while this map
+        // tab kept rendering the facade, so the client still submits facade coordinates
+        /** @var User $user */
+        $user                   = User::findOrFail(1);
+        $originalMapFacadeStyle = $user->map_facade_style;
+        $user->update(['map_facade_style' => User::MAP_FACADE_STYLE_SPLIT_FLOORS]);
+        $this->actingAs($user->fresh());
 
         try {
             // Act
@@ -402,7 +409,47 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
             // so the marker the user just placed does not jump
             $response->assertJsonPath('floor_id', $facadeFloor->id);
         } finally {
-            User::forceMapFacadeStyle(null);
+            $user->update(['map_facade_style' => $originalMapFacadeStyle]);
+            $dungeonRoute->killZones()->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * Guards #3917: a location the user just placed on a facade map that belongs to no real floor -
+     * the dead space of the combined image - must be refused with feedback rather than persisted as
+     * a facade floor or silently dropped. This is the only branch that can hard-fail a save, so it
+     * must stay reachable only for a genuinely new location (see the sibling test below).
+     */
+    #[Test]
+    public function store_givenANewFacadeLocationThatBelongsToNoRealFloor_refusesTheSave(): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true);
+        /** @var Floor $facadeFloor */
+        $facadeFloor = $dungeon->floors()->where('facade', true)->firstOrFail();
+
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        try {
+            // Act - far outside the map, so no floor union area can contain it
+            $response = $this->post(sprintf('/ajax/%s/killzone', $dungeonRoute->public_key), [
+                'color'    => '#ff0000',
+                'index'    => 1,
+                'floor_id' => $facadeFloor->id,
+                'lat'      => -100000.0,
+                'lng'      => 100000.0,
+                'enemies'  => [],
+                'spells'   => [],
+            ]);
+
+            // Assert - refused, and nothing was written
+            $response->assertStatus(422);
+            $this->assertSame(0, $dungeonRoute->killZones()->count());
+        } finally {
             $dungeonRoute->killZones()->delete();
             $dungeonRoute->delete();
         }

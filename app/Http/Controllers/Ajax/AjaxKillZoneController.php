@@ -111,6 +111,7 @@ class AjaxKillZoneController extends Controller
     private function convertSubmittedFacadeLocation(
         CoordinatesServiceInterface $coordinatesService,
         DungeonRoute                $dungeonRoute,
+        KillZone                    $killZone,
         array                      &                       $data,
     ): ?LatLng {
         if (!isset($data['floor_id'], $data['lat'], $data['lng'])) {
@@ -147,12 +148,23 @@ class AjaxKillZoneController extends Controller
 
         // The location falls outside every floor union area, so it belongs to no real floor at all -
         // the dead space of the combined image (0.003% of it, measured across every facade dungeon).
-        // Refuse the save rather than persist a facade floor: every consumer downstream (ingame
-        // coordinate conversion, kill zone paths, MDT export) assumes a real floor, and silently
-        // dropping the location would throw away what the user just placed with no feedback.
+        // It may never be persisted: every consumer downstream (ingame coordinate conversion, kill
+        // zone paths, MDT export) assumes a real floor.
         if ($convertedFloor === null || $convertedFloor->facade) {
-            // 422 as a literal, like abortIfDungeonRouteLimitReached() - Teapot's Http does not
-            // expose UNPROCESSABLE_ENTITY
+            // A location the client is merely echoing back unchanged comes from a row corrupted
+            // before this fix, and refusing it would make that pull uneditable forever. Drop it and
+            // let the save land - the KillZonePathService guard covers the row until it is re-placed.
+            if (!$this->isNewLocationForKillZone($killZone, $data)) {
+                $data['floor_id'] = null;
+                $data['lat']      = null;
+                $data['lng']      = null;
+
+                return null;
+            }
+
+            // A location the user just placed is worth failing on, so they get feedback instead of
+            // watching their marker silently disappear. 422 as a literal, like
+            // abortIfDungeonRouteLimitReached() - Teapot's Http does not expose UNPROCESSABLE_ENTITY
             abort(422, __('controller.killzone.error.facade_location_not_convertible'));
         }
 
@@ -161,6 +173,24 @@ class AjaxKillZoneController extends Controller
         $data['lng']      = $convertedLatLng->getLng();
 
         return $submittedLatLng;
+    }
+
+    /**
+     * Whether the submitted location differs from the one the kill zone already holds, i.e. whether
+     * the user actually placed or moved the kill area rather than the client echoing back what it
+     * loaded. Compared with a tolerance because the coordinates round-trip through JSON as strings.
+     *
+     * @param array<string, mixed> $data
+     */
+    private function isNewLocationForKillZone(KillZone $killZone, array $data): bool
+    {
+        if (!$killZone->exists || $killZone->floor_id === null) {
+            return true;
+        }
+
+        return (int)$killZone->floor_id !== (int)$data['floor_id'] ||
+            abs((float)$killZone->lat - (float)$data['lat']) > 0.0001 ||
+            abs((float)$killZone->lng - (float)$data['lng']) > 0.0001;
     }
 
     /**
@@ -190,7 +220,7 @@ class AjaxKillZoneController extends Controller
         $this->abortIfDungeonRouteLimitReached($dungeonroute, DungeonRouteLimitType::KillZones);
 
         // Must happen before the row is written - the database may never hold a facade floor
-        $submittedFacadeLatLng = $this->convertSubmittedFacadeLocation($coordinatesService, $dungeonroute, $data);
+        $submittedFacadeLatLng = $this->convertSubmittedFacadeLocation($coordinatesService, $dungeonroute, $killZone, $data);
 
         $beforeModel = clone $killZone;
 
