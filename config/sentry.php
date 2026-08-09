@@ -52,34 +52,12 @@ return [
     // @see: https://docs.sentry.io/platforms/php/guides/laravel/configuration/options/#ignore_exceptions
     // 'ignore_exceptions' => [],
 
-    // Laravel's ScheduleRunCommand throws a plain Exception with an identical message shape and
-    // stack trace (inside vendor code) for every failing scheduled command, so Sentry's default
-    // trace-based grouping aggregates failures from unrelated commands (combatlog:detectstaledata,
-    // patreon:refreshmembers, ...) into one issue (#3902). Fingerprint on the command so each gets
-    // its own issue instead.
-    'before_send' => function (\Sentry\Event $event, ?\Sentry\EventHint $hint): ?\Sentry\Event {
-        $exception = $hint?->exception;
-
-        if ($exception !== null
-            && preg_match('/^Scheduled command \[(.+)] failed with exit code \[\d+]\.$/', $exception->getMessage(), $matches) === 1) {
-            $command = $matches[1];
-
-            // $command is Illuminate\Console\Application::formatCommandString()'s output: the php
-            // binary and artisan binary, each individually shell-escaped (single-quoted) via
-            // Illuminate\Support\ProcessUtils::escapeArgument(), followed by the actual artisan
-            // command and its arguments. Strip the two quoted binary tokens so the fingerprint (and
-            // the resulting issue title) reflects the command that actually failed rather than an
-            // environment-dependent interpreter path - without hardcoding 'artisan' as a literal,
-            // since ARTISAN_BINARY can override it.
-            if (preg_match("/^'[^']*'\\s+'[^']*'\\s+(.+)$/", $command, $commandMatches) === 1) {
-                $command = $commandMatches[1];
-            }
-
-            $event->setFingerprint(['schedule-run-command-failed', $command]);
-        }
-
-        return $event;
-    },
+    // Gives each failing scheduled command its own Sentry issue instead of one shared bucket (#3902) - the rationale
+    // and the message parsing live on the class.
+    // This MUST stay a var_export-able array callable: `php artisan config:cache` (run by the infrastructure
+    // repository) var_exports every config value and dies on a Closure. So no closure here, and no first-class
+    // callable syntax (`ScheduledCommandFingerprint::apply(...)`) either - that is a Closure too.
+    'before_send' => [\App\Logging\Sentry\ScheduledCommandFingerprint::class, 'apply'],
 
     // @see: https://docs.sentry.io/platforms/php/guides/laravel/configuration/options/#ignore_transactions
     'ignore_transactions' => [

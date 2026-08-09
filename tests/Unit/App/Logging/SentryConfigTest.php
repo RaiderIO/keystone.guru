@@ -2,12 +2,15 @@
 
 namespace Tests\Unit\App\Logging;
 
+use App\Logging\Sentry\ScheduledCommandFingerprint;
+use Closure;
 use Exception;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
 use Sentry\Event;
 use Sentry\EventHint;
+use Sentry\Options;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -65,18 +68,17 @@ final class SentryConfigTest extends PublicTestCase
      * interpreter path in the fingerprint) would pass unnoticed.
      */
     #[Test]
-    public function beforeSend_givenScheduledCommandFailedException_fingerprintsByCommandName(): void
+    public function apply_givenScheduledCommandFailedException_fingerprintsByCommandName(): void
     {
         // Arrange
-        $beforeSend = config('sentry.before_send');
-        $exception  = new Exception(
+        $exception = new Exception(
             "Scheduled command ['/usr/local/bin/php' 'artisan' combatlog:detectstaledata] failed with exit code [1].",
         );
         $event = Event::createEvent();
         $hint  = EventHint::fromArray(['exception' => $exception]);
 
         // Act
-        $result = $beforeSend($event, $hint);
+        $result = ScheduledCommandFingerprint::apply($event, $hint);
 
         // Assert - the php/artisan binary tokens are stripped, leaving just the command
         self::assertSame(['schedule-run-command-failed', 'combatlog:detectstaledata'], $result->getFingerprint());
@@ -88,35 +90,32 @@ final class SentryConfigTest extends PublicTestCase
      * still isolate this from the binary prefix.
      */
     #[Test]
-    public function beforeSend_givenScheduledCommandWithParametersFailedException_fingerprintsByCommandAndParameters(): void
+    public function apply_givenScheduledCommandWithParametersFailedException_fingerprintsByCommandAndParameters(): void
     {
         // Arrange
-        $beforeSend = config('sentry.before_send');
-        $exception  = new Exception(
+        $exception = new Exception(
             "Scheduled command ['/usr/local/bin/php' 'artisan' dungeonroute:touch teamId=5] failed with exit code [1].",
         );
         $event = Event::createEvent();
         $hint  = EventHint::fromArray(['exception' => $exception]);
 
         // Act
-        $result = $beforeSend($event, $hint);
+        $result = ScheduledCommandFingerprint::apply($event, $hint);
 
         // Assert
         self::assertSame(['schedule-run-command-failed', 'dungeonroute:touch teamId=5'], $result->getFingerprint());
     }
 
     #[Test]
-    public function beforeSend_givenDifferentScheduledCommandFailedException_fingerprintsSeparately(): void
+    public function apply_givenDifferentScheduledCommandFailedException_fingerprintsSeparately(): void
     {
         // Arrange - proves two different commands don't collapse into the same fingerprint
-        $beforeSend = config('sentry.before_send');
-
-        $firstEvent = $beforeSend(Event::createEvent(), EventHint::fromArray([
+        $firstEvent = ScheduledCommandFingerprint::apply(Event::createEvent(), EventHint::fromArray([
             'exception' => new Exception(
                 "Scheduled command ['/usr/local/bin/php' 'artisan' combatlog:detectstaledata] failed with exit code [1].",
             ),
         ]));
-        $secondEvent = $beforeSend(Event::createEvent(), EventHint::fromArray([
+        $secondEvent = ScheduledCommandFingerprint::apply(Event::createEvent(), EventHint::fromArray([
             'exception' => new Exception(
                 "Scheduled command ['/usr/local/bin/php' 'artisan' patreon:refreshmembers] failed with exit code [1].",
             ),
@@ -127,32 +126,62 @@ final class SentryConfigTest extends PublicTestCase
     }
 
     #[Test]
-    public function beforeSend_givenUnrelatedException_leavesFingerprintUntouched(): void
+    public function apply_givenUnrelatedException_leavesFingerprintUntouched(): void
     {
         // Arrange
-        $beforeSend = config('sentry.before_send');
-        $event      = Event::createEvent();
-        $hint       = EventHint::fromArray(['exception' => new RuntimeException('Something else broke entirely')]);
+        $event = Event::createEvent();
+        $hint  = EventHint::fromArray(['exception' => new RuntimeException('Something else broke entirely')]);
 
         // Act
-        $result = $beforeSend($event, $hint);
+        $result = ScheduledCommandFingerprint::apply($event, $hint);
 
         // Assert - Sentry's default (trace-based) grouping applies; no custom fingerprint set
         self::assertSame([], $result->getFingerprint());
     }
 
     #[Test]
-    public function beforeSend_givenNoException_returnsEventUnmodified(): void
+    public function apply_givenNoException_returnsEventUnmodified(): void
     {
         // Arrange
-        $beforeSend = config('sentry.before_send');
-        $event      = Event::createEvent();
+        $event = Event::createEvent();
 
         // Act
-        $result = $beforeSend($event, null);
+        $result = ScheduledCommandFingerprint::apply($event, null);
 
         // Assert
         self::assertSame($event, $result);
         self::assertSame([], $result->getFingerprint());
+    }
+
+    /**
+     * `php artisan config:cache` var_exports every config value and throws a LogicException on anything
+     * non-serializable, so a Closure in this config file breaks config caching (which the infrastructure repository
+     * runs on deploy). An array callable survives var_export; first-class callable syntax would not.
+     */
+    #[Test]
+    public function beforeSend_givenTheConfig_isSerializableForConfigCaching(): void
+    {
+        // Act
+        $beforeSend = config('sentry.before_send');
+
+        // Assert
+        self::assertNotInstanceOf(Closure::class, $beforeSend, 'A Closure here breaks `php artisan config:cache`.');
+        self::assertSame([ScheduledCommandFingerprint::class, 'apply'], $beforeSend);
+        // The exact round-trip ConfigCacheCommand performs - a Closure dies here on Closure::__set_state()
+        self::assertSame($beforeSend, eval(sprintf('return %s;', var_export($beforeSend, true))));
+    }
+
+    /**
+     * Being var_export-able is not the same as being accepted by the SDK - Sentry's Options resolver gates
+     * `before_send` on `is_callable`, which rejects an array callable pointing at a non-static method.
+     */
+    #[Test]
+    public function beforeSend_givenTheConfig_isAcceptedBySentryOptions(): void
+    {
+        // Act
+        $options = new Options(['before_send' => config('sentry.before_send')]);
+
+        // Assert
+        self::assertSame(config('sentry.before_send'), $options->getBeforeSendCallback());
     }
 }
