@@ -144,6 +144,8 @@ use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\RaiderIO\RaiderIOKeystoneGuruApiService;
 use App\Service\ReadOnlyMode\ReadOnlyModeService;
 use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
+use App\Service\Request\ApiRequestService;
+use App\Service\Request\ApiRequestServiceInterface;
 use App\Service\Reverb\ReverbHttpApiService;
 use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use App\Service\Season\SeasonAffixGroupService;
@@ -206,6 +208,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(ReverbHttpApiServiceInterface::class, ReverbHttpApiService::class);
 
         // Internals
+        // No dependencies - resolved very early (ViewService, and Handler on any request that errors)
+        $this->app->bind(ApiRequestServiceInterface::class, ApiRequestService::class);
         $this->app->bind(CoordinatesServiceInterface::class, CoordinatesService::class);
         $this->app->bind(ThumbnailServiceInterface::class, ThumbnailService::class);
         $this->app->bind(PatreonServiceInterface::class, PatreonService::class);

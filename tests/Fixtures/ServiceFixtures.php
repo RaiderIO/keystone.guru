@@ -30,6 +30,8 @@ use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Metric\MetricService;
+use App\Service\Request\ApiRequestService;
+use App\Service\Request\ApiRequestServiceInterface;
 use App\Service\Season\SeasonAffixGroupService;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
@@ -85,6 +87,7 @@ class ServiceFixtures
         ?AffixGroupEaseTierServiceInterface $easeTierService = null,
         array                               $methodsToMock = [],
         ?SeasonAffixGroupServiceInterface   $seasonAffixGroupService = null,
+        ?ApiRequestServiceInterface         $apiRequestService = null,
     ): MockObject|ViewService {
         return $testCase
             ->getMockBuilderPublic(ViewService::class)
@@ -94,6 +97,7 @@ class ServiceFixtures
                 $expansionService ?? self::getExpansionServiceMock($testCase),
                 $seasonAffixGroupService ?? self::getSeasonAffixGroupServiceMock($testCase),
                 $easeTierService ?? self::getAffixGroupEaseTierServiceMock($testCase),
+                $apiRequestService ?? new ApiRequestService(),
             ])
             ->getMock();
     }

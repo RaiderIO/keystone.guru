@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use App\Exceptions\Logging\HandlerLoggingInterface;
 use App\Models\User;
-use App\Service\View\ViewServiceInterface;
+use App\Service\Request\ApiRequestServiceInterface;
 use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -178,15 +178,21 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * No view composer runs for a request whose path ViewService::shouldLoadViewVariables()
-     * blacklists (KeystoneGuruServiceProvider::boot() skips registering them there entirely). An
-     * HTML error view rendered for one of those paths is guaranteed to crash on a missing view
-     * variable (#3806, #3903), so isApiRequest() forces JSON for their errors - except
-     * ValidationException, which render() above already carves out since it never renders an
-     * HTML error view in the first place. The blacklist has a handful of /ajax/ routes
-     * (search/view) explicitly whitelisted back out of it to deliberately render an HTML
-     * fragment on success - composers DO run there, so their errors are left alone too and may
-     * render their own HTML instead of JSON.
+     * An API request must never be answered with an HTML error view: no view composer runs for it
+     * (KeystoneGuruServiceProvider::boot() skips registering them for any path
+     * ViewService::shouldLoadViewVariables() rejects, which is every API path bar a few that render
+     * a view on purpose), so such a view is guaranteed to crash on a missing view variable
+     * (#3806, #3903). Force JSON for those - except ValidationException, which render() above
+     * already carves out since it never renders an HTML error view in the first place.
+     *
+     * Whether the request is an API request is ApiRequestService's call, not something derived from
+     * the view layer: it is resolved here rather than constructor-injected to match how this class
+     * already resolves HandlerLoggingInterface, keeping the exception handler constructible even
+     * when the container is in a degraded state. The previous hand-rolled check
+     * (str_starts_with($path, 'api/') || str_starts_with($path, 'ajax/')) that the service replaces
+     * had drifted in two ways: it never covered '/benchmark' at all, and Request::decodedPath()
+     * trims the trailing slash, so a bare "/api/" request decoded to "api" and silently failed
+     * "starts with 'api/'" (#3903).
      */
     #[Override]
     protected function shouldReturnJson($request, Throwable $e): bool
@@ -199,20 +205,8 @@ class Handler extends ExceptionHandler
             return parent::shouldReturnJson($request, $e);
         }
 
-        return $this->isApiRequest($request) || parent::shouldReturnJson($request, $e);
-    }
-
-    /**
-     * Delegates to the same blacklist check ViewService's composer registration already applies,
-     * rather than duplicating its path list by hand - the previous hand-rolled version
-     * (str_starts_with($path, 'api/') || str_starts_with($path, 'ajax/')) drifted from it in two
-     * ways: it never covered '/benchmark' at all, and Request::decodedPath() trims the trailing
-     * slash Request::path() strips, so a bare "/api/" or "/api" request decoded to "api" and
-     * silently failed "starts with 'api/'" (#3903).
-     */
-    private function isApiRequest(Request $request): bool
-    {
-        return !app(ViewServiceInterface::class)->shouldLoadViewVariables($request->getPathInfo());
+        return app(ApiRequestServiceInterface::class)->isApiRequest($request)
+            || parent::shouldReturnJson($request, $e);
     }
 
     /**
