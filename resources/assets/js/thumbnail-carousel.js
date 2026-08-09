@@ -32,7 +32,8 @@ const defaults = {
     label: 'Thumbnails',
     prevLabel: 'Previous',
     nextLabel: 'Next',
-    /** Called as onAfterSlide(index, slideCount) after every slide change. */
+    /** Called as onAfterSlide(index, slideCount) as soon as the current slide's index changes -
+     *  for a wrap that's immediately, not once the snap-back onto the real slide settles. */
     onAfterSlide: null,
 };
 
@@ -102,6 +103,26 @@ $.fn.thumbnailCarousel = function (options) {
             slide.setAttribute('aria-label', `${index + 1} / ${slideCount}`);
         });
 
+        // A loop-around wrap needs somewhere to slide onto past either end of the track. This
+        // used to insert/remove a real clone per wrap, but that raced the DOM mutation against
+        // the transform snap-back and could paint one frame of blank track or the wrong slide in
+        // between (#3595). Each end instead permanently carries a decorative clone of the
+        // opposite slide, so a wrap is just a normal animated move (see move()) that lands one
+        // slot short/long, then a plain transform-only snap - no DOM change, so no window for a
+        // bad frame - puts the real slide back under it. Slot numbering: 0 is the start clone,
+        // `i + 1` is real slide `i`, `slideCount + 1` is the end clone.
+        loadSlideImages(slides[0]);
+        loadSlideImages(slides[slideCount - 1]);
+        const startClone = slides[slideCount - 1].cloneNode(true);
+        const endClone = slides[0].cloneNode(true);
+        [startClone, endClone].forEach(function (clone) {
+            // Decorative only - screen readers should see exactly `slideCount` slides.
+            clone.setAttribute('aria-hidden', 'true');
+            clone.removeAttribute('aria-label');
+        });
+        track.insertBefore(startClone, slides[0]);
+        track.appendChild(endClone);
+
         const $prev = $('<button>', {
             type: 'button',
             'class': 'thumbnail-carousel__nav thumbnail-carousel__nav--prev',
@@ -116,9 +137,9 @@ $.fn.thumbnailCarousel = function (options) {
         $carousel.append($prev, $next);
 
         let currentIndex = 0;
-        // True while a loop-around wrap is animating; further move()/drag calls are ignored until
-        // it settles, so a rapid double-click or drag can't race the clone/transitionend teardown.
-        let wrapping = false;
+        // The transitionend listener/fallback timer for an in-flight wrap's snap-back onto the
+        // real slide, if one is pending - see scheduleSnap()/cancelPendingSnap().
+        let pendingSnap = null;
 
         /**
          * Loads the current slide's images plus its two neighbours', so a slide change in either
@@ -135,22 +156,22 @@ $.fn.thumbnailCarousel = function (options) {
         }
 
         /**
-         * Paints the track at the given visual position (defaults to `currentIndex`). The two
-         * differ only mid-wrap, where `currentIndex` has already moved to the slide being
-         * animated into view but the track still needs to slide past the clone beginWrap() append-
-         * ed/prepended for it - see beginWrap().
+         * Paints the track at the given visual slot (defaults to the current slide's own slot,
+         * `currentIndex + 1` - see the slot numbering note above). A wrap's move() call animates
+         * onto slot `0` or `slideCount + 1` instead - one of the two decorative clones - so there's
+         * somewhere to slide onto past either end.
          *
          * @param {boolean} animate
-         * @param {number} [visualIndex]
+         * @param {number} [visualSlot]
          */
-        function paint(animate, visualIndex = currentIndex) {
+        function paint(animate, visualSlot = currentIndex + 1) {
             track.classList.toggle('thumbnail-carousel__track--no-transition', !animate);
             if (!animate) {
                 // Force a reflow so the class lands before the transform does; without it the
                 // browser batches both into one frame and animates the jump anyway.
                 void track.offsetHeight;
             }
-            track.style.transform = `translateX(${visualIndex * -100}%)`;
+            track.style.transform = `translateX(${visualSlot * -100}%)`;
 
             slides.forEach(function (slide, index) {
                 slide.setAttribute('aria-hidden', String(index !== currentIndex));
@@ -163,97 +184,44 @@ $.fn.thumbnailCarousel = function (options) {
         }
 
         /**
-         * Animates a loop-around wrap (last slide -> first, or first -> last) instead of
-         * teleporting straight to it. There's nothing to animate *into* past either end of the
-         * track, so this temporarily appends/prepends a clone of the target slide for the track to
-         * slide onto, then swaps back to the real slide - at the same visual position, so nothing
-         * jumps - once the transition finishes.
-         *
-         * @param {number} delta +1 wraps forward past the last slide, -1 wraps backward past the first.
+         * Cancels a wrap's pending snap-back onto the real slide, if one is in flight. Called at
+         * the top of every move()/drag start so a new gesture can't race the old one's teardown.
          */
-        function beginWrap(delta) {
-            const forward = delta > 0;
-            const nextIndex = forward ? 0 : slideCount - 1;
-            const target = slides[nextIndex];
-
-            loadSlideImages(target);
-            const clone = target.cloneNode(true);
-            clone.setAttribute('aria-hidden', 'false');
-
-            wrapping = true;
-
-            /**
-             * Animates the track onto the clone. Deferred a couple of frames for the backward
-             * case - see below - so it always runs with the correction already painted.
-             */
-            function reveal() {
-                currentIndex = nextIndex;
-                // Forward: the clone sits right after the last real slide, at visual slot
-                // slideCount. Backward: it was just prepended, so it's always at visual slot 0.
-                paint(true, forward ? slideCount : 0);
-
-                let settled = false;
-
-                /**
-                 * Tears the clone back down once the reveal has visibly finished - via whichever
-                 * of the two triggers below gets there first.
-                 */
-                function settle() {
-                    if (settled) {
-                        return;
-                    }
-                    settled = true;
-
-                    track.removeEventListener('transitionend', onTransitionEnd);
-                    clearTimeout(fallbackTimer);
-                    clone.remove();
-                    wrapping = false;
-                    paint(false);
-                    loadAround(currentIndex);
-
-                    if (typeof settings.onAfterSlide === 'function') {
-                        settings.onAfterSlide.call(track, currentIndex, slideCount);
-                    }
-                }
-
-                function onTransitionEnd(transitionEvent) {
-                    if (transitionEvent.target !== track || transitionEvent.propertyName !== 'transform') {
-                        return;
-                    }
-
-                    settle();
-                }
-
-                track.addEventListener('transitionend', onTransitionEnd);
-                // `prefers-reduced-motion: reduce` (thumbnail-carousel.css) turns the transition
-                // off entirely, so transitionend would never fire and the clone/wrapping lock
-                // would be stuck forever without this - 500ms comfortably clears the 400ms
-                // transition with margin for slow devices.
-                const fallbackTimer = setTimeout(settle, 500);
-            }
-
-            if (forward) {
-                track.appendChild(clone);
-                reveal();
-
+        function cancelPendingSnap() {
+            if (pendingSnap === null) {
                 return;
             }
 
-            track.insertBefore(clone, track.firstChild);
+            track.removeEventListener('transitionend', pendingSnap.onTransitionEnd);
+            clearTimeout(pendingSnap.timer);
+            pendingSnap = null;
+        }
 
-            // Prepending shifts every real slide's visual position one slot to the right;
-            // silently correct for that before animating, so the insertion itself doesn't jump.
-            track.classList.add('thumbnail-carousel__track--no-transition');
-            track.style.transform = `translateX(${(currentIndex + 1) * -100}%)`;
-            // The correction has to actually be painted before reveal() switches the transition
-            // back on, or the browser coalesces both changes into one and it never animates.
-            // Forcing that synchronously (reading offsetHeight) works but visibly janks the first
-            // frame - this page's insert-a-cloned-image-then-force-layout is exactly the kind of
-            // synchronous work that stutters. A double rAF gets the same "definitely painted a
-            // frame" guarantee off the browser's own paint schedule instead, for free.
-            requestAnimationFrame(function () {
-                requestAnimationFrame(reveal);
-            });
+        /**
+         * After a wrap's move() animates onto a decorative clone slot, snaps - no transition, and
+         * critically no DOM change, just the transform - back onto the real slide's own slot. That
+         * makes the swap atomic: there's no window where the DOM and the transform disagree about
+         * which slide is showing, which is what let a wrap paint one bad frame before (#3595).
+         */
+        function scheduleSnap() {
+            function onTransitionEnd(transitionEvent) {
+                if (transitionEvent.target !== track || transitionEvent.propertyName !== 'transform') {
+                    return;
+                }
+
+                cancelPendingSnap();
+                paint(false);
+            }
+
+            track.addEventListener('transitionend', onTransitionEnd);
+            // `prefers-reduced-motion: reduce` (thumbnail-carousel.css) turns the transition off
+            // entirely, so transitionend would never fire without this - 500ms comfortably clears
+            // the 400ms transition with margin for slow devices.
+            const timer = setTimeout(function () {
+                cancelPendingSnap();
+                paint(false);
+            }, 500);
+            pendingSnap = {onTransitionEnd, timer};
         }
 
         /**
@@ -262,9 +230,7 @@ $.fn.thumbnailCarousel = function (options) {
          * @param {number} delta
          */
         function move(delta) {
-            if (wrapping) {
-                return;
-            }
+            cancelPendingSnap();
 
             const target = currentIndex + delta;
             const wrapped = target < 0 || target > slideCount - 1;
@@ -277,15 +243,16 @@ $.fn.thumbnailCarousel = function (options) {
                 return;
             }
 
-            if (wrapped) {
-                beginWrap(delta);
-
-                return;
-            }
-
-            currentIndex = target;
+            // Computed from the *old* index: for a wrap this lands on the clone slot one past
+            // either end (0 or slideCount + 1); otherwise it's just the next real slide's own slot.
+            const visualSlot = currentIndex + 1 + delta;
+            currentIndex = (target + slideCount) % slideCount;
             loadAround(currentIndex);
-            paint(true);
+            paint(true, visualSlot);
+
+            if (wrapped) {
+                scheduleSnap();
+            }
 
             if (typeof settings.onAfterSlide === 'function') {
                 settings.onAfterSlide.call(track, currentIndex, slideCount);
@@ -316,9 +283,8 @@ $.fn.thumbnailCarousel = function (options) {
         let dragDeltaX = 0;
 
         $track.on('pointerdown', function (pointerEvent) {
-            // Ignore anything but a primary button press; a right-click drag isn't a swipe. Also
-            // ignore while a loop-around wrap is still animating - see move()/beginWrap().
-            if (pointerEvent.button !== 0 || wrapping) {
+            // Ignore anything but a primary button press; a right-click drag isn't a swipe.
+            if (pointerEvent.button !== 0) {
                 return;
             }
 
@@ -326,6 +292,10 @@ $.fn.thumbnailCarousel = function (options) {
             // HTML5 drag-and-drop instead - a ghost image follows the cursor and the UA cancels the
             // pointer sequence. CSS blocks the same thing on the touch/selection side.
             pointerEvent.preventDefault();
+
+            // A drag starting mid-wrap shouldn't let the pending snap-back (see scheduleSnap())
+            // yank the transform out from under the user's finger once it fires.
+            cancelPendingSnap();
 
             dragStartX = pointerEvent.clientX;
             dragDeltaX = 0;
@@ -343,7 +313,7 @@ $.fn.thumbnailCarousel = function (options) {
             }
 
             dragDeltaX = pointerEvent.clientX - dragStartX;
-            track.style.transform = `translateX(calc(${currentIndex * -100}% + ${dragDeltaX}px))`;
+            track.style.transform = `translateX(calc(${(currentIndex + 1) * -100}% + ${dragDeltaX}px))`;
         });
 
         $track.on('pointerup pointercancel pointerleave', function (pointerEvent) {
