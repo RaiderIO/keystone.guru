@@ -230,7 +230,7 @@ final class KillZonePathServiceTest extends PublicTestCase
      * surface uncaught on save.
      */
     #[Test]
-    public function calculateForRoute_givenKillZoneOnFacadeFloor_skipsItInsteadOfThrowing(): void
+    public function findPathsToKillZones_givenKillZoneOnFacadeFloor_skipsKillZoneInsteadOfThrowing(): void
     {
         // Arrange
         [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true);
@@ -266,8 +266,12 @@ final class KillZonePathServiceTest extends PublicTestCase
             $service = app(KillZonePathServiceInterface::class);
             $result  = $service->findPathsToKillZones($dungeonRoute);
 
-            // Assert - no InvalidArgumentException, and the real-floor kill zone is still resolvable
-            $this->assertArrayNotHasKey($facadeKillZone->id, $result);
+            // Assert - no InvalidArgumentException, the facade kill zone is excluded, and the
+            // real-floor one is the only remaining entry (findPathsToKillZones() creates a key for
+            // every non-skipped kill zone regardless of whether a path was found, so asserting the
+            // count pins down that exactly one kill zone survived rather than merely that the key
+            // exists)
+            $this->assertCount(1, $result);
             $this->assertArrayHasKey($realKillZone->id, $result);
         } finally {
             $realKillZone->delete();
