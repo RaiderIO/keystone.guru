@@ -53,6 +53,18 @@ function drag(track, distance, endEvent = 'pointerup') {
     $track.trigger($.Event(endEvent, {pointerId: 1, clientX: 200 + distance}));
 }
 
+/**
+ * Simulates the browser finishing the CSS transition beginWrap() animates onto the appended/
+ * prepended clone - jsdom never runs real transitions, so nothing fires this on its own.
+ *
+ * @param {HTMLElement} track
+ */
+function dispatchTransitionEnd(track) {
+    const transitionEndEvent = new Event('transitionend', {bubbles: true});
+    transitionEndEvent.propertyName = 'transform';
+    track.dispatchEvent(transitionEndEvent);
+}
+
 describe('$.fn.thumbnailCarousel (#3595)', () => {
     afterEach(() => {
         document.body.innerHTML = '';
@@ -115,7 +127,7 @@ describe('$.fn.thumbnailCarousel (#3595)', () => {
         expect(track.querySelectorAll('li')[1].getAttribute('aria-hidden')).toBe('false');
     });
 
-    test('thumbnailCarousel_givenNextClickedOnLastSlide_wrapsAroundToTheFirst', () => {
+    test('thumbnailCarousel_givenNextClickedOnLastSlide_animatesOntoAClonedFirstSlideThenSnapsToTheRealOne', () => {
         const track = createCarousel(3);
         $(track).thumbnailCarousel();
         const $next = $('.thumbnail-carousel__nav--next');
@@ -124,7 +136,49 @@ describe('$.fn.thumbnailCarousel (#3595)', () => {
         $next.trigger('click');
         $next.trigger('click');
 
+        // Mid-wrap: animating onto the appended clone, not teleported straight to the first slide.
+        expect(track.style.transform).toBe('translateX(-300%)');
+        expect(track.classList.contains('thumbnail-carousel__track--no-transition')).toBe(false);
+        expect(track.querySelectorAll('li')).toHaveLength(4);
+
+        dispatchTransitionEnd(track);
+
         expect(track.style.transform).toBe('translateX(0%)');
+        expect(track.querySelectorAll('li')).toHaveLength(3);
+        expect(track.querySelectorAll('li')[0].getAttribute('aria-hidden')).toBe('false');
+    });
+
+    test('thumbnailCarousel_givenPrevClickedOnFirstSlide_animatesOntoAClonedLastSlideThenSnapsToTheRealOne', () => {
+        const track = createCarousel(3);
+        $(track).thumbnailCarousel();
+        const $prev = $('.thumbnail-carousel__nav--prev');
+
+        $prev.trigger('click');
+
+        // The real slides silently shift one slot right to make room for the prepended clone
+        // before the track animates left onto it - both invisible, since it's the same content.
+        expect(track.style.transform).toBe('translateX(0%)');
+        expect(track.querySelectorAll('li')).toHaveLength(4);
+
+        dispatchTransitionEnd(track);
+
+        expect(track.style.transform).toBe('translateX(-200%)');
+        expect(track.querySelectorAll('li')).toHaveLength(3);
+        expect(track.querySelectorAll('li')[2].getAttribute('aria-hidden')).toBe('false');
+    });
+
+    test('thumbnailCarousel_givenNextClickedWhileAWrapIsStillAnimating_ignoresItUntilTheWrapSettles', () => {
+        const track = createCarousel(3);
+        $(track).thumbnailCarousel();
+        const $next = $('.thumbnail-carousel__nav--next');
+        $next.trigger('click');
+        $next.trigger('click');
+        $next.trigger('click');
+
+        $next.trigger('click');
+
+        expect(track.querySelectorAll('li')).toHaveLength(4);
+        expect(track.style.transform).toBe('translateX(-300%)');
     });
 
     test('thumbnailCarousel_givenNextClickedOnLastSlideWithoutLoop_staysOnTheLastSlide', () => {

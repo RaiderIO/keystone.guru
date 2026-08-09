@@ -116,6 +116,9 @@ $.fn.thumbnailCarousel = function (options) {
         $carousel.append($prev, $next);
 
         let currentIndex = 0;
+        // True while a loop-around wrap is animating; further move()/drag calls are ignored until
+        // it settles, so a rapid double-click or drag can't race the clone/transitionend teardown.
+        let wrapping = false;
 
         /**
          * Loads the current slide's images plus its two neighbours', so a slide change in either
@@ -132,19 +135,22 @@ $.fn.thumbnailCarousel = function (options) {
         }
 
         /**
-         * Paints the track at the current index. `animate` is false when wrapping around either
-         * end, where animating would sweep backwards past every slide in between.
+         * Paints the track at the given visual position (defaults to `currentIndex`). The two
+         * differ only mid-wrap, where `currentIndex` has already moved to the slide being
+         * animated into view but the track still needs to slide past the clone beginWrap() append-
+         * ed/prepended for it - see beginWrap().
          *
          * @param {boolean} animate
+         * @param {number} [visualIndex]
          */
-        function paint(animate) {
+        function paint(animate, visualIndex = currentIndex) {
             track.classList.toggle('thumbnail-carousel__track--no-transition', !animate);
             if (!animate) {
                 // Force a reflow so the class lands before the transform does; without it the
                 // browser batches both into one frame and animates the jump anyway.
                 void track.offsetHeight;
             }
-            track.style.transform = `translateX(${currentIndex * -100}%)`;
+            track.style.transform = `translateX(${visualIndex * -100}%)`;
 
             slides.forEach(function (slide, index) {
                 slide.setAttribute('aria-hidden', String(index !== currentIndex));
@@ -157,11 +163,67 @@ $.fn.thumbnailCarousel = function (options) {
         }
 
         /**
+         * Animates a loop-around wrap (last slide -> first, or first -> last) instead of
+         * teleporting straight to it. There's nothing to animate *into* past either end of the
+         * track, so this temporarily appends/prepends a clone of the target slide for the track to
+         * slide onto, then swaps back to the real slide - at the same visual position, so nothing
+         * jumps - once the transition finishes.
+         *
+         * @param {number} delta +1 wraps forward past the last slide, -1 wraps backward past the first.
+         */
+        function beginWrap(delta) {
+            const forward = delta > 0;
+            const nextIndex = forward ? 0 : slideCount - 1;
+            const target = slides[nextIndex];
+
+            loadSlideImages(target);
+            const clone = target.cloneNode(true);
+            clone.setAttribute('aria-hidden', 'false');
+
+            if (forward) {
+                track.appendChild(clone);
+            } else {
+                track.insertBefore(clone, track.firstChild);
+                // Prepending shifts every real slide's visual position one slot to the right;
+                // silently correct for that before animating, so the insertion itself doesn't jump.
+                paint(false, currentIndex + 1);
+            }
+
+            wrapping = true;
+            currentIndex = nextIndex;
+            // Forward: the clone sits right after the last real slide, at visual slot slideCount.
+            // Backward: it was just prepended, so it's always at visual slot 0.
+            paint(true, forward ? slideCount : 0);
+
+            const onTransitionEnd = function (transitionEvent) {
+                if (transitionEvent.target !== track || transitionEvent.propertyName !== 'transform') {
+                    return;
+                }
+
+                track.removeEventListener('transitionend', onTransitionEnd);
+                clone.remove();
+                wrapping = false;
+                paint(false);
+                loadAround(currentIndex);
+
+                if (typeof settings.onAfterSlide === 'function') {
+                    settings.onAfterSlide.call(track, currentIndex, slideCount);
+                }
+            };
+
+            track.addEventListener('transitionend', onTransitionEnd);
+        }
+
+        /**
          * Moves the given number of slides, wrapping when `loop` is set and clamping otherwise.
          *
          * @param {number} delta
          */
         function move(delta) {
+            if (wrapping) {
+                return;
+            }
+
             const target = currentIndex + delta;
             const wrapped = target < 0 || target > slideCount - 1;
 
@@ -173,9 +235,15 @@ $.fn.thumbnailCarousel = function (options) {
                 return;
             }
 
-            currentIndex = (target + slideCount) % slideCount;
+            if (wrapped) {
+                beginWrap(delta);
+
+                return;
+            }
+
+            currentIndex = target;
             loadAround(currentIndex);
-            paint(!wrapped);
+            paint(true);
 
             if (typeof settings.onAfterSlide === 'function') {
                 settings.onAfterSlide.call(track, currentIndex, slideCount);
@@ -206,8 +274,9 @@ $.fn.thumbnailCarousel = function (options) {
         let dragDeltaX = 0;
 
         $track.on('pointerdown', function (pointerEvent) {
-            // Ignore anything but a primary button press; a right-click drag isn't a swipe.
-            if (pointerEvent.button !== 0) {
+            // Ignore anything but a primary button press; a right-click drag isn't a swipe. Also
+            // ignore while a loop-around wrap is still animating - see move()/beginWrap().
+            if (pointerEvent.button !== 0 || wrapping) {
                 return;
             }
 
