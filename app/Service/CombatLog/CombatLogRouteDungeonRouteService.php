@@ -508,6 +508,10 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                 continue;
             }
 
+            // Track the floor regardless of whether a failure gets recorded below - later npcs that
+            // fall back to $previousFloor must still see this npc's floor even if this one is skipped.
+            $previousFloor = $currentFloor;
+
             if ($combatLogRouteNpc->getResolvedEnemy() === null) {
                 // This table is diagnostic bookkeeping only (unresolved-npc triage) - a floor with
                 // unset ingame coordinates (a mapping data gap, #3904) must not fail the whole combat
@@ -521,7 +525,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                         ),
                     );
                 } catch (InvalidArgumentException) {
-                    $this->log->saveCombatLogRouteEnemyFailuresUnableToCalculateMapLocation($currentFloor->id);
+                    $this->log->saveCombatLogRouteEnemyFailuresUnableToCalculateMapLocation($dungeonRoute->id, $combatLogRouteNpc->npcId, $currentFloor->id);
 
                     continue;
                 }
@@ -536,8 +540,6 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     'updated_at'         => $now,
                 ], $latLng->toArray());
             }
-
-            $previousFloor = $currentFloor;
         }
 
         CombatLogRouteEnemyFailure::insert($failureAttributes);
@@ -569,13 +571,21 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                 continue;
             }
 
-            $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
-                new IngameXY(
-                    $combatLogRouteNpc->coord->x,
-                    $combatLogRouteNpc->coord->y,
-                    $currentFloor,
-                ),
-            );
+            // A floor with unset ingame coordinates (a mapping data gap, #3904) must not fail the
+            // whole request just because this one npc's icon can't be placed.
+            try {
+                $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
+                    new IngameXY(
+                        $combatLogRouteNpc->coord->x,
+                        $combatLogRouteNpc->coord->y,
+                        $currentFloor,
+                    ),
+                );
+            } catch (InvalidArgumentException) {
+                $this->log->generateMapIconsUnableToCalculateMapLocation($combatLogRouteNpc->getUniqueId(), $currentFloor->id);
+
+                continue;
+            }
             $latLngs[] = $latLng;
 
             /** @var Npc|null $npc */

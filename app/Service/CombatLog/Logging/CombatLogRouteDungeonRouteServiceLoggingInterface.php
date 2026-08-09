@@ -22,5 +22,7 @@ interface CombatLogRouteDungeonRouteServiceLoggingInterface
 
     public function generateMapIconsUnableToFindFloor(string $uniqueId): void;
 
-    public function saveCombatLogRouteEnemyFailuresUnableToCalculateMapLocation(int $floorId): void;
+    public function generateMapIconsUnableToCalculateMapLocation(string $uniqueId, int $floorId): void;
+
+    public function saveCombatLogRouteEnemyFailuresUnableToCalculateMapLocation(int $dungeonRouteId, ?int $npcId, int $floorId): void;
 }
