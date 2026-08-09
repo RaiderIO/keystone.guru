@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use App\Exceptions\Logging\HandlerLoggingInterface;
 use App\Models\User;
+use App\Service\View\ViewServiceInterface;
 use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -201,9 +202,15 @@ class Handler extends ExceptionHandler
 
     private function isApiRequest(Request $request): bool
     {
-        $path = $request->decodedPath();
-
-        return str_starts_with($path, 'api/') || str_starts_with($path, 'ajax/');
+        // Any exception rendered as an HTML error view on a path ViewService blacklists is
+        // guaranteed to crash - no view composer ran there, so the view can't read the variables
+        // it unconditionally depends on (#3806, #3903). This used to duplicate that blacklist as
+        // a hand-rolled prefix check here (str_starts_with($path, 'api/')), which drifted from it
+        // in two ways: it never covered '/benchmark' at all, and decodedPath() trims the trailing
+        // slash Request::path() strips, so a bare "/api/" or "/api" request decodes to "api" and
+        // silently fails "starts with 'api/'". Delegating to the same check both sides already
+        // share removes the duplication instead of patching one more case of it.
+        return !app(ViewServiceInterface::class)->shouldLoadViewVariables($request->getPathInfo());
     }
 
     /**
