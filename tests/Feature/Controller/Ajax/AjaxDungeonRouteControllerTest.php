@@ -144,6 +144,81 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function get_givenRouteAttributesColumnSearchValueIsTheStringUndefined_returnsOk(): void
+    {
+        // Arrange - same failure mode as the tags/requirements parameters above, but for the
+        // routeattributes.name DataTables column's own search value: a route-attributes select
+        // that isn't rendered for the current view sends the literal string 'undefined' instead
+        // of an array of attribute ids, which DungeonRouteAttributesColumnHandler::applyFilter()
+        // passed straight into array_diff()'s second (array) argument
+        $query = http_build_query([
+            'draw'    => 1,
+            'start'   => 0,
+            'length'  => 25,
+            'columns' => [
+                [
+                    'data'       => 0,
+                    'name'       => 'title',
+                    'searchable' => 'true',
+                    'orderable'  => 'true',
+                    'search'     => ['value' => '', 'regex' => 'false'],
+                ],
+                [
+                    'data'       => 1,
+                    'name'       => 'routeattributes.name',
+                    'searchable' => 'true',
+                    'orderable'  => 'true',
+                    'search'     => ['value' => 'undefined', 'regex' => 'false'],
+                ],
+            ],
+            'search' => ['value' => '', 'regex' => 'false'],
+        ]);
+
+        // Act
+        $response = $this->get(sprintf('/ajax/routes?%s', $query));
+
+        // Assert
+        $response->assertOk();
+    }
+
+    #[Test]
+    public function get_givenAffixesColumnSearchValueIsTheStringUndefined_returnsOk(): void
+    {
+        // Arrange - same failure mode as the routeattributes.name column above, but for the
+        // affixes.id column: an affixes select that isn't rendered for the current view sends the
+        // literal string 'undefined' instead of an array of affix ids, which
+        // DungeonRouteAffixesColumnHandler::applyFilter() passed straight into whereIn()
+        $query = http_build_query([
+            'draw'    => 1,
+            'start'   => 0,
+            'length'  => 25,
+            'columns' => [
+                [
+                    'data'       => 0,
+                    'name'       => 'title',
+                    'searchable' => 'true',
+                    'orderable'  => 'true',
+                    'search'     => ['value' => '', 'regex' => 'false'],
+                ],
+                [
+                    'data'       => 1,
+                    'name'       => 'affixes.id',
+                    'searchable' => 'true',
+                    'orderable'  => 'true',
+                    'search'     => ['value' => 'undefined', 'regex' => 'false'],
+                ],
+            ],
+            'search' => ['value' => '', 'regex' => 'false'],
+        ]);
+
+        // Act
+        $response = $this->get(sprintf('/ajax/routes?%s', $query));
+
+        // Assert
+        $response->assertOk();
+    }
+
+    #[Test]
     public function get_givenDungeonHasNewerMappingVersionThanTheRoute_returnsDungeonLatestMappingVersionIdOfTheDungeonsNewestVersion(): void
     {
         // Arrange
