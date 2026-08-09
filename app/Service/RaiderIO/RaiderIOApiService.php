@@ -19,6 +19,7 @@ use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\Traits\Curl;
 use Str;
+use Teapot\StatusCode\Http;
 
 class RaiderIOApiService implements RaiderIOApiServiceInterface
 {
@@ -185,7 +186,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
                 // hapi-style, whose default route-not-found body is also {"statusCode":404,"error":
                 // "Not Found","message":"Not Found"} - identical statusCode, but a real integration
                 // break (wrong path, unrecognized season) that must still page.
-                if (($json['statusCode'] ?? null) === 404
+                if (($json['statusCode'] ?? null) === Http::NOT_FOUND
                     && str_contains((string)($json['message'] ?? ''), 'combat log segments')) {
                     $this->log->getCombatLogSegmentsForRunNotYetAvailable($runId, $url, $response);
                 } else {
