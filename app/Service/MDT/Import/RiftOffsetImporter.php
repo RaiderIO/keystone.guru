@@ -65,6 +65,17 @@ class RiftOffsetImporter
 
         // From the built array, construct our map icons / paths
         foreach ($rifts as $npcId => $mdtXy) {
+            // $npcId comes straight from the user-supplied import string and isn't constrained to
+            // the 4 hardcoded obelisk ids above - an arbitrary id would otherwise hit an undefined
+            // array key below and throw an uncaught Error (the same failure mode as #3915, just a
+            // different exception class than the catch further down handles).
+            if (!isset($npcIdToMapIconMapping[$npcId])) {
+                continue;
+            }
+
+            /** @var MapIcon $obeliskMapIcon */
+            $obeliskMapIcon = $npcIdToMapIconMapping[$npcId];
+
             try {
                 // Find out the floor where the NPC is standing on
                 /** @var Enemy $enemy */
@@ -73,9 +84,6 @@ class RiftOffsetImporter
                     ->whereNotNull('enemy_pack_id')
                     ->whereIn('floor_id', $floorIds)
                     ->firstOrFail();
-
-                /** @var MapIcon $obeliskMapIcon */
-                $obeliskMapIcon = $npcIdToMapIconMapping[$npcId];
 
                 if (isset($mdtXy['sublevel'])) {
                     throw new ImportWarning(
@@ -127,12 +135,16 @@ class RiftOffsetImporter
             } catch (ImportWarning $warning) {
                 $importStringRiftOffsets->getWarnings()->add($warning);
             } catch (ModelNotFoundException) {
-                // The import string references an NPC/enemy clone that isn't part of the current
-                // mapping version (#3915) - skip this one obelisk skip rather than 500ing the whole
-                // import.
+                // No enemy matching this NPC (packed, on the mapping version's floors) resolved -
+                // whether because the clone genuinely isn't in this mapping version, or (the common
+                // case seen while triaging #3915) it exists but with no enemy_pack_id on the current
+                // mapping version. Skip this one obelisk skip rather than 500ing the whole import.
                 $importStringRiftOffsets->getWarnings()->add(new ImportWarning(
                     __('services.mdt.io.import_string.category.awakened_obelisks'),
-                    __('services.mdt.io.import_string.unable_to_find_awakened_obelisk_enemy'),
+                    __(
+                        'services.mdt.io.import_string.unable_to_find_awakened_obelisk_enemy',
+                        ['name' => __($obeliskMapIcon->mapIconType->name)],
+                    ),
                 ));
             }
         }
