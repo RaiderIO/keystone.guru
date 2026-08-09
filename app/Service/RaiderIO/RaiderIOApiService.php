@@ -178,7 +178,14 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
             $json     = json_decode($response, true);
 
             if (!is_array($json) || !isset($json['sourceUserId'], $json['segments']) || !is_array($json['segments'])) {
-                $this->log->getCombatLogSegmentsForRunInvalidResponse($runId, $url, $response);
+                // A 404 with this shape means the run's segments simply haven't been uploaded to
+                // Raider.IO yet (#3918) - an expected, recurring state to log distinctly from a
+                // genuinely malformed/unexpected response, which stays error-level below.
+                if (($json['statusCode'] ?? null) === 404) {
+                    $this->log->getCombatLogSegmentsForRunNotYetAvailable($runId, $url);
+                } else {
+                    $this->log->getCombatLogSegmentsForRunInvalidResponse($runId, $url, $response);
+                }
 
                 return null;
             }

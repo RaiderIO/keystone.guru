@@ -83,7 +83,34 @@ final class RaiderIOApiServiceTest extends PublicTestCase
     {
         // Arrange
         $this->log->expects($this->once())->method('getCombatLogSegmentsForRunInvalidResponse');
+        $this->log->expects($this->never())->method('getCombatLogSegmentsForRunNotYetAvailable');
         $service = $this->makeService(fn(): string => 'not json');
+
+        // Act
+        $result = $service->getCombatLogSegmentsForRun($this->makeSeason(), self::RUN_ID);
+
+        // Assert
+        $this->assertNull($result);
+    }
+
+    /**
+     * Guards #3918: a run's segments simply not having been uploaded to Raider.IO yet (the API
+     * returns a 404 with this specific shape) is an expected, recurring state - it must be logged
+     * distinctly from a genuinely malformed response instead of paging Sentry as an error.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function getCombatLogSegmentsForRun_givenSegmentsNotYetAvailable_logsDistinctlyFromInvalidResponse(): void
+    {
+        // Arrange
+        $this->log->expects($this->once())->method('getCombatLogSegmentsForRunNotYetAvailable');
+        $this->log->expects($this->never())->method('getCombatLogSegmentsForRunInvalidResponse');
+        $service = $this->makeService(fn(): string => json_encode([
+            'statusCode' => 404,
+            'error'      => 'Not Found',
+            'message'    => 'No combat log segments found for this run',
+        ]));
 
         // Act
         $result = $service->getCombatLogSegmentsForRun($this->makeSeason(), self::RUN_ID);

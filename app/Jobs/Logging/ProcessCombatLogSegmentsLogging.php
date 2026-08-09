@@ -13,7 +13,11 @@ class ProcessCombatLogSegmentsLogging extends StructuredLogging implements Proce
 
     public function handleSegmentsNotAvailable(int $runId): void
     {
-        $this->error(__METHOD__, get_defined_vars());
+        // A run's segments not being available yet is an expected, recurring state (#3918) - the
+        // underlying RaiderIOApiServiceLogging call already logs the specific reason at the
+        // appropriate level (error for a genuinely malformed response, info for "not yet uploaded"),
+        // so this is just an echo and shouldn't page Sentry on its own.
+        $this->info(__METHOD__, get_defined_vars());
     }
 
     public function handleDownloadingSegment(int $runId, int $segmentId, string $downloadUrl, string $tempPath): void
