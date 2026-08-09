@@ -126,7 +126,12 @@ class KillZonePathService implements KillZonePathServiceInterface
         $killZoneNodeIds = [];
         foreach ($killZones as $killZone) {
             $killLocation = $killZone->getKillLocation();
-            if ($killLocation === null || $killLocation->getFloor() === null) {
+            // A facade floor's coordinates aren't real ingame coordinates, so
+            // calculateIngameLocationForMapLocation() below rejects them - mirrors the floor-switch
+            // marker skip above (#3917). Excluding the kill zone from the graph entirely (rather than
+            // resolving its real floor) matches that same precedent: this is the collaborative-editing
+            // combined view, not stored data the path visualization needs to trust.
+            if ($killLocation === null || $killLocation->getFloor() === null || $killLocation->getFloor()->facade) {
                 continue;
             }
 

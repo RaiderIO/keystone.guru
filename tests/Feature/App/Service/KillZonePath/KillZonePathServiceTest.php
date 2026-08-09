@@ -11,11 +11,14 @@ use App\Models\Mapping\MappingVersion;
 use App\Service\KillZonePath\KillZonePathServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('KillZonePath')]
 final class KillZonePathServiceTest extends PublicTestCase
 {
+    use ProvidesDungeon;
+
     #[\Override]
     protected function setUp(): void
     {
@@ -217,6 +220,59 @@ final class KillZonePathServiceTest extends PublicTestCase
             $markerA->delete();
             $dungeonRoute->delete();
             $mappingVersion->delete();
+        }
+    }
+
+    /**
+     * Guards #3917: a kill zone whose location was placed on a facade (combined multi-floor) view
+     * has a facade floor_id, which CoordinatesService::calculateIngameLocationForMapLocation()
+     * rejects - loadAndBuildGraph() must skip that kill zone instead of letting the exception
+     * surface uncaught on save.
+     */
+    #[Test]
+    public function calculateForRoute_givenKillZoneOnFacadeFloor_skipsItInsteadOfThrowing(): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true);
+        /** @var Floor $facadeFloor */
+        $facadeFloor = $dungeon->floors()->where('facade', true)->firstOrFail();
+        /** @var Floor $realFloor */
+        $realFloor = $dungeon->floors()->where('facade', false)->firstOrFail();
+
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        // On the facade view, not a real floor - exactly how #3917's reported latlng was stored
+        $facadeKillZone = KillZone::factory()->create([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'floor_id'         => $facadeFloor->id,
+            'lat'              => -100.0,
+            'lng'              => 100.0,
+            'index'            => 1,
+        ]);
+        $realKillZone = KillZone::factory()->create([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'floor_id'         => $realFloor->id,
+            'lat'              => -50.0,
+            'lng'              => 50.0,
+            'index'            => 2,
+        ]);
+
+        try {
+            // Act
+            /** @var KillZonePathServiceInterface $service */
+            $service = app(KillZonePathServiceInterface::class);
+            $result  = $service->findPathsToKillZones($dungeonRoute);
+
+            // Assert - no InvalidArgumentException, and the real-floor kill zone is still resolvable
+            $this->assertArrayNotHasKey($facadeKillZone->id, $result);
+            $this->assertArrayHasKey($realKillZone->id, $result);
+        } finally {
+            $realKillZone->delete();
+            $facadeKillZone->delete();
+            $dungeonRoute->delete();
         }
     }
 }
