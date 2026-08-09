@@ -101,11 +101,12 @@ class AjaxKillZoneController extends Controller
      * rendered the map the location was placed on, and a mismatch used to persist the facade floor
      * verbatim (#3917).
      *
-     * @throws HttpException when the facade location cannot be expressed on any real floor
+     * @throws HttpException when a facade location on a facade-rendering route belongs to no real floor
      *
      * @param  array<string, mixed> $data
      * @return LatLng|null          the location exactly as submitted, so the response can echo it back in the
-     *                              plane the client is rendering, or null if no facade location was submitted
+     *                              plane the client is rendering, or null if no facade location was
+     *                              submitted or the submitted one was dropped
      */
     private function convertSubmittedFacadeLocation(
         CoordinatesServiceInterface $coordinatesService,
@@ -123,6 +124,18 @@ class AjaxKillZoneController extends Controller
             return null;
         }
 
+        // The route's map never renders a facade, so this cannot be a location the user just placed
+        // on one - it is a bad location echoed back by a client that loaded an already-corrupted row
+        // (convertFacadeMapLocationToMapLocation() would hand it straight back unconverted anyway).
+        // Drop it so the save still succeeds: failing here would make every such pull uneditable.
+        if (!$dungeonRoute->mappingVersion->facade_enabled) {
+            $data['floor_id'] = null;
+            $data['lat']      = null;
+            $data['lng']      = null;
+
+            return null;
+        }
+
         $submittedLatLng = new LatLng((float)$data['lat'], (float)$data['lng'], $submittedFloor);
 
         $convertedLatLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
@@ -132,11 +145,11 @@ class AjaxKillZoneController extends Controller
 
         $convertedFloor = $convertedLatLng->getFloor();
 
-        // convertFacadeMapLocationToMapLocation() is a no-op when the mapping version does not have
-        // facades enabled, and it hands back the facade floor unchanged when the location falls
-        // outside every floor union area. Refuse the save rather than persist a facade floor: every
-        // consumer downstream (ingame coordinate conversion, kill zone paths, MDT export) assumes a
-        // real floor, and silently dropping the location would throw away what the user just placed.
+        // The location falls outside every floor union area, so it belongs to no real floor at all -
+        // the dead space of the combined image (0.003% of it, measured across every facade dungeon).
+        // Refuse the save rather than persist a facade floor: every consumer downstream (ingame
+        // coordinate conversion, kill zone paths, MDT export) assumes a real floor, and silently
+        // dropping the location would throw away what the user just placed with no feedback.
         if ($convertedFloor === null || $convertedFloor->facade) {
             // 422 as a literal, like abortIfDungeonRouteLimitReached() - Teapot's Http does not
             // expose UNPROCESSABLE_ENTITY

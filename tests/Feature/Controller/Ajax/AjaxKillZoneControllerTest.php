@@ -409,6 +409,56 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
     }
 
     /**
+     * Guards #3917: a kill zone that already carries a facade floor_id on a route whose mapping
+     * version does not render a facade cannot be converted - convertFacadeMapLocationToMapLocation()
+     * hands the facade floor straight back. Rejecting the save would make every such already-corrupted
+     * pull uneditable, which is worse than the bug; the location is dropped instead so the save lands.
+     */
+    #[Test]
+    public function store_givenAFacadeFloorOnARouteThatDoesNotRenderAFacade_dropsTheLocationInsteadOfFailingTheSave(): void
+    {
+        // Arrange - a facade floor that has nothing to do with this (non-facade) route's dungeon,
+        // exactly the shape of a row corrupted before this fix
+        /** @var Floor $foreignFacadeFloor */
+        $foreignFacadeFloor = Floor::where('facade', true)->firstOrFail();
+        $this->assertFalse((bool)$this->dungeonRoute->mappingVersion->facade_enabled);
+
+        $killZone = KillZone::factory()->create([
+            'dungeon_route_id' => $this->dungeonRoute->id,
+            'floor_id'         => $foreignFacadeFloor->id,
+            'lat'              => -100.0,
+            'lng'              => 100.0,
+            'color'            => '#000000',
+            'index'            => 1,
+        ]);
+
+        try {
+            // Act - the client echoes the stored location back while changing something else
+            $response = $this->put(sprintf('/ajax/%s/killzone/%s', $this->dungeonRoute->public_key, $killZone->id), [
+                'color'    => '#ff0000',
+                'index'    => 1,
+                'floor_id' => $foreignFacadeFloor->id,
+                'lat'      => -100.0,
+                'lng'      => 100.0,
+                'enemies'  => [],
+                'spells'   => [],
+            ]);
+
+            // Assert - the save succeeds, and the unusable location is gone rather than re-persisted
+            $response->assertSuccessful();
+            $this->assertDatabaseHas('kill_zones', [
+                'id'       => $killZone->id,
+                'color'    => '#ff0000',
+                'floor_id' => null,
+                'lat'      => null,
+                'lng'      => null,
+            ]);
+        } finally {
+            KillZone::query()->where('id', $killZone->id)->delete();
+        }
+    }
+
+    /**
      * A published, non-sandbox route authored by user 1. Sandbox routes (expires_at set, which the
      * factory does by default) are editable by anyone by design, so expires_at must be null for an
      * authorization assertion to mean anything.
