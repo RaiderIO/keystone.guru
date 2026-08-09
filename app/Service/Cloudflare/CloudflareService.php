@@ -15,6 +15,14 @@ class CloudflareService implements CloudflareServiceInterface
 
     private const string CLOUDFLARE_BASE_URL = 'https://cloudflare.com/';
 
+    /**
+     * getIpRanges() runs inline in TrustProxies on every production request on a cache miss - including
+     * the miss now caused by CacheService degrading a dropped Redis connection to "not cached" (#3914)
+     * instead of 500ing - so this fetch must fail fast rather than sit on the Curl trait's 120s default
+     * and pile up requests during an outage.
+     */
+    private const int FETCH_TIMEOUT_SECONDS = 5;
+
     public function __construct(
         private readonly CacheServiceInterface             $cacheService,
         private readonly CloudflareServiceLoggingInterface $log,
@@ -41,7 +49,10 @@ class CloudflareService implements CloudflareServiceInterface
     public function getIpRangesV4(bool $useCache = true): array
     {
         return $this->cacheService->rememberWhen($useCache, 'cloudflare:ip-ranges-v4', function () {
-            $response = $this->curlGet(sprintf('%s/ips-v4', self::CLOUDFLARE_BASE_URL));
+            $response = $this->curlGet(sprintf('%s/ips-v4', self::CLOUDFLARE_BASE_URL), [
+                CURLOPT_CONNECTTIMEOUT => self::FETCH_TIMEOUT_SECONDS,
+                CURLOPT_TIMEOUT        => self::FETCH_TIMEOUT_SECONDS,
+            ]);
 
             return $this->validateIpAddressRanges($response, FILTER_FLAG_IPV4);
         });
@@ -56,7 +67,10 @@ class CloudflareService implements CloudflareServiceInterface
     public function getIpRangesV6(bool $useCache = true): array
     {
         return $this->cacheService->rememberWhen($useCache, 'cloudflare:ip-ranges-v6', function () {
-            $response = $this->curlGet(sprintf('%s/ips-v6', self::CLOUDFLARE_BASE_URL));
+            $response = $this->curlGet(sprintf('%s/ips-v6', self::CLOUDFLARE_BASE_URL), [
+                CURLOPT_CONNECTTIMEOUT => self::FETCH_TIMEOUT_SECONDS,
+                CURLOPT_TIMEOUT        => self::FETCH_TIMEOUT_SECONDS,
+            ]);
 
             return $this->validateIpAddressRanges($response, FILTER_FLAG_IPV6);
         });
