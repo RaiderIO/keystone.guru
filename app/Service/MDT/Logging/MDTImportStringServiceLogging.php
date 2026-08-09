@@ -2,9 +2,7 @@
 
 namespace App\Service\MDT\Logging;
 
-use App\Logging\StructuredLogging;
-
-class MDTImportStringServiceLogging extends StructuredLogging implements MDTImportStringServiceLoggingInterface
+class MDTImportStringServiceLogging extends MDTBaseServiceLogging implements MDTImportStringServiceLoggingInterface
 {
     /**
      * @param array<string, mixed> $latLngWithFloor

@@ -4,11 +4,16 @@ namespace App\Service\MDT;
 
 use App\Logic\MDT\Exception\CliWeakaurasParserNotFoundException;
 use App\Logic\MDT\IO\MDTStringFormat;
+use App\Service\MDT\Logging\MDTBaseServiceLoggingInterface;
 use Lua;
 use Throwable;
 
 abstract class MDTBaseService
 {
+    public function __construct(private readonly MDTBaseServiceLoggingInterface $log)
+    {
+    }
+
     /**
      * Gets a Lua instance and load all the required files in it.
      */
@@ -51,20 +56,14 @@ abstract class MDTBaseService
             throw $cliWeakaurasParserNotFoundException;
         } catch (Throwable $throwable) {
             // Truncated: the input is unvalidated user input of arbitrary size.
-            $context = ['string' => substr($string, 0, 2048)];
+            $truncatedString = substr($string, 0, 2048);
 
+            // Whether the string plausibly claims to be an MDT export string at all decides whether this
+            // is worth alerting on - see the two logging methods for the reasoning behind each level.
             if (MDTStringFormat::isValid($string)) {
-                // The string at least plausibly claims to be an MDT export (one of the codecs'
-                // appliesTo() matched), so a decode failure here is worth reporting - it's either a
-                // genuine bug in our own codec, or (for the Legacy format) a real but corrupted/
-                // truncated export that a user has a right to expect us to import.
-                logger()->error($throwable->getMessage(), $context);
+                $this->log->decodeFailed($truncatedString, $throwable::class, $throwable->getMessage());
             } else {
-                // detect() unconditionally falls back to Legacy for anything that isn't MDT2, even
-                // garbage that doesn't look like a legacy MDT export at all - LegacyMDTCodec shells
-                // out to cli_weakauras_parser, whose stderr becomes the exception message, so this
-                // covers the common case of a user pasting non-MDT-string input (#3906).
-                logger()->warning($throwable->getMessage(), $context);
+                $this->log->decodeInvalidStringFailed($truncatedString, $throwable::class, $throwable->getMessage());
             }
 
             return null;

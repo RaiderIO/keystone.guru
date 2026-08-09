@@ -2,8 +2,9 @@
 
 namespace Tests\Feature\App\Service\MDT;
 
+use App\Service\MDT\Logging\MDTImportStringServiceLoggingInterface;
 use App\Service\MDT\MDTImportStringServiceInterface;
-use Illuminate\Support\Facades\Log;
+use Mockery;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 
@@ -59,28 +60,23 @@ class MDTImportStringServiceDecodeTest extends MDTImportStringServiceTestBase
      */
     #[Test]
     #[Group('MDTImportStringServiceDecode')]
-    public function getDecoded_givenStringThatDoesNotPlausiblyClaimToBeMdt_logsAtWarningNotError(): void
+    public function getDecoded_givenStringThatDoesNotPlausiblyClaimToBeMdt_logsDecodeInvalidStringFailed(): void
     {
-        // Resolve the service (and its StructuredLogging-backed $log) before spying - StructuredLogging
-        // caches app('log') at construction time, and Log::spy() replaces that binding with a Mockery
-        // spy for the rest of the test; if the service is resolved for the first time AFTER the spy is
-        // in place, the spy itself gets cached as a "logger" and every unstubbed method call on it
-        // (LogManager::channel()) returns null, crashing the very code this test means to exercise
-        $service = app()->make(MDTImportStringServiceInterface::class);
-
-        // A spy (rather than shouldReceive(), which replaces Log entirely with a strict mock) only
-        // observes calls without failing the test over any OTHER log call made along the way
-        $logSpy = Log::spy();
+        // Arrange - a spy (rather than a strict mock) on the structured logging seam only observes
+        // calls, without failing the test over any OTHER log event raised along the way. It must be
+        // bound before the service is resolved, since the service receives it through its constructor
+        $logSpy = Mockery::spy(MDTImportStringServiceLoggingInterface::class);
+        $this->app->instance(MDTImportStringServiceLoggingInterface::class, $logSpy);
 
         // Act
-        $decoded = $service
+        $decoded = app()->make(MDTImportStringServiceInterface::class)
             ->setEncodedString('this_is_not_a_valid_mdt_string')
             ->getDecoded();
 
-        // Assert
+        // Assert - the levels these two events map onto are asserted by MDTBaseServiceLoggingTest
         $this->assertNull($decoded);
-        $logSpy->shouldHaveReceived('warning');
-        $logSpy->shouldNotHaveReceived('error');
+        $logSpy->shouldHaveReceived('decodeInvalidStringFailed');
+        $logSpy->shouldNotHaveReceived('decodeFailed');
     }
 
     /**
@@ -91,22 +87,21 @@ class MDTImportStringServiceDecodeTest extends MDTImportStringServiceTestBase
      */
     #[Test]
     #[Group('MDTImportStringServiceDecode')]
-    public function getDecoded_givenLegacyShapedStringThatFailsToDecode_logsAtError(): void
+    public function getDecoded_givenLegacyShapedStringThatFailsToDecode_logsDecodeFailed(): void
     {
-        // Resolve before spying - see the comment on the sibling test above for why
-        $service = app()->make(MDTImportStringServiceInterface::class);
-
-        $logSpy = Log::spy();
+        // Arrange - see the comment on the sibling test above for why the spy is bound up front
+        $logSpy = Mockery::spy(MDTImportStringServiceLoggingInterface::class);
+        $this->app->instance(MDTImportStringServiceLoggingInterface::class, $logSpy);
 
         // Act - `!`-prefixed and otherwise matches LegacyMDTCodec::appliesTo()'s character class,
         // but isn't valid compressed data underneath
-        $decoded = $service
+        $decoded = app()->make(MDTImportStringServiceInterface::class)
             ->setEncodedString('!ThisIsNotReallyValidButLooksLegacyXXX123')
             ->getDecoded();
 
-        // Assert
+        // Assert - the levels these two events map onto are asserted by MDTBaseServiceLoggingTest
         $this->assertNull($decoded);
-        $logSpy->shouldHaveReceived('error');
-        $logSpy->shouldNotHaveReceived('warning');
+        $logSpy->shouldHaveReceived('decodeFailed');
+        $logSpy->shouldNotHaveReceived('decodeInvalidStringFailed');
     }
 }
