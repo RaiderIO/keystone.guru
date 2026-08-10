@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\App\Service\MDT;
 
+use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\Npc\NpcEnemyForces;
 use PHPUnit\Framework\Attributes\Group;
@@ -90,27 +91,29 @@ class MDTImportStringServicePullsTest extends MDTImportStringServiceTestBase
         $originalEnemyForcesTeeming = null;
 
         try {
-            // Arrange - getSafeMdtEnemies() shuffles its results, and not every safe enemy's npc has an
-            // NpcEnemyForces row (e.g. shrouded-only npcs), so pull a larger candidate pool and use the
-            // first one that actually has a row to flip null on.
-            $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies(enemyCount: 10, attributes: ['teeming' => true]);
-            $safeEnemies  = $this->getSafeMdtEnemies($dungeonRoute, limit: 10);
+            // Arrange - the enemy must have an NpcEnemyForces row to flip enemy_forces_teeming null on,
+            // and not every safe enemy's npc has one (e.g. shrouded-only npcs) - one MDT dungeon has
+            // none at all. Require it as part of the draw, not afterwards, or the draw succeeds and
+            // the test fails on something it never guaranteed.
+            $hasNpcEnemyForces = static fn(Enemy $enemy): bool => NpcEnemyForces::query()
+                ->where('mapping_version_id', $enemy->mapping_version_id)
+                ->where('npc_id', $enemy->npc_id)
+                ->exists();
 
-            $enemy = null;
-            foreach ($safeEnemies as $candidate) {
-                $npcEnemyForces = NpcEnemyForces::query()
-                    ->where('mapping_version_id', $dungeonRoute->mapping_version_id)
-                    ->where('npc_id', $candidate->npc_id)
-                    ->first();
+            $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies(
+                enemyCount:  1,
+                attributes:  ['teeming' => true],
+                enemyFilter: $hasNpcEnemyForces,
+            );
 
-                if ($npcEnemyForces !== null) {
-                    $enemy = $candidate;
+            /** @var Enemy $enemy */
+            $enemy = $this->getSafeMdtEnemies($dungeonRoute, limit: 1, enemyFilter: $hasNpcEnemyForces)->firstOrFail();
 
-                    break;
-                }
-            }
-
-            $this->assertNotNull($enemy, 'Expected at least one safe MDT enemy with an NpcEnemyForces row for this mapping version');
+            /** @var NpcEnemyForces $npcEnemyForces */
+            $npcEnemyForces = NpcEnemyForces::query()
+                ->where('mapping_version_id', $dungeonRoute->mapping_version_id)
+                ->where('npc_id', $enemy->npc_id)
+                ->firstOrFail();
 
             // enemy_forces_teeming can be null for an npc that has no teeming-specific override (#3912) -
             // PullImporter must fall back to enemy_forces instead of passing null into addEnemyForces(int).

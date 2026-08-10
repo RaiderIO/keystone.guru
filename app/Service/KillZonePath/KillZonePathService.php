@@ -96,12 +96,19 @@ class KillZonePathService implements KillZonePathServiceInterface
 
         // --- Dungeon start node ---
         if ($dungeonStart !== null) {
-            $startLatLng    = $dungeonStart->getLatLng();
-            $nodes['start'] = new PathNode(
-                'start',
-                $startLatLng,
-                $this->coordinatesService->calculateIngameLocationForMapLocation($startLatLng),
-            );
+            $startLatLng = $dungeonStart->getLatLng();
+
+            // Same facade-floor guard as the kill-zone nodes below (#3917) - a stale
+            // dungeon_start_map_icon_id can point at a map icon left on an old mapping version's
+            // facade floor. A missing start node is already an anticipated state everywhere this is
+            // consumed (both findPathsToKillZones() and computePathSegments() check isset()).
+            if ($startLatLng->getFloor()?->facade !== true) {
+                $nodes['start'] = new PathNode(
+                    'start',
+                    $startLatLng,
+                    $this->coordinatesService->calculateIngameLocationForMapLocation($startLatLng),
+                );
+            }
         }
 
         // --- Floor-switch marker nodes ---
@@ -126,7 +133,12 @@ class KillZonePathService implements KillZonePathServiceInterface
         $killZoneNodeIds = [];
         foreach ($killZones as $killZone) {
             $killLocation = $killZone->getKillLocation();
-            if ($killLocation === null || $killLocation->getFloor() === null) {
+            // A facade floor's coordinates aren't real ingame coordinates, so
+            // calculateIngameLocationForMapLocation() below rejects them - mirrors the floor-switch
+            // marker skip above (#3917). Excluding the kill zone from the graph entirely (rather than
+            // resolving its real floor) matches that same precedent: this is the collaborative-editing
+            // combined view, not stored data the path visualization needs to trust.
+            if ($killLocation === null || $killLocation->getFloor() === null || $killLocation->getFloor()->facade) {
                 continue;
             }
 

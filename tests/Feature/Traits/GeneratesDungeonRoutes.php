@@ -9,6 +9,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use Closure;
 use Illuminate\Support\Collection;
 
 trait GeneratesDungeonRoutes
@@ -63,10 +64,19 @@ trait GeneratesDungeonRoutes
      * survive an import round-trip. Filters out teeming-only enemies, MDT placeholders,
      * and seasonally restricted enemies that the import service would skip.
      *
-     * @param array<string, mixed> $attributes
+     * Pass $enemyFilter for any *extra* requirement the test has of those enemies, so the draw
+     * only ever returns a dungeon that satisfies it. Asserting the requirement afterwards instead
+     * is what makes these tests flaky: not every MDT dungeon has e.g. NpcEnemyForces rows, so the
+     * draw succeeds and the test then fails on something it never guaranteed.
+     *
+     * @param array<string, mixed>        $attributes
+     * @param (Closure(Enemy): bool)|null $enemyFilter
      */
-    protected function getMDTCompatibleDungeonRouteWithSafeEnemies(int $enemyCount = 1, array $attributes = []): DungeonRoute
-    {
+    protected function getMDTCompatibleDungeonRouteWithSafeEnemies(
+        int      $enemyCount = 1,
+        array    $attributes = [],
+        ?Closure $enemyFilter = null,
+    ): DungeonRoute {
         do {
             /** @var DungeonRoute $dungeonRoute */
             $dungeonRoute = DungeonRoute::factory()->make($attributes);
@@ -76,7 +86,7 @@ trait GeneratesDungeonRoutes
             if (
                 !Conversion::hasMDTDungeonName($dungeonRoute->dungeon->key) ||
                 $dungeonRoute->mappingVersion->facade_enabled ||
-                $this->getSafeMdtEnemies($dungeonRoute, $enemyCount)->count() < $enemyCount
+                $this->getSafeMdtEnemies($dungeonRoute, $enemyCount, $enemyFilter)->count() < $enemyCount
             ) {
                 $dungeonRoute = null;
             }
@@ -96,9 +106,10 @@ trait GeneratesDungeonRoutes
      * Additionally, applies the same clone-index offset hacks as parseMdtNpcClonesInPull()
      * to exclude enemies that would fail to match during import due to duplicate-NPC merging.
      *
+     * @param  (Closure(Enemy): bool)|null $enemyFilter an extra per-enemy requirement of the caller's
      * @return Collection<int, Enemy>
      */
-    protected function getSafeMdtEnemies(DungeonRoute $dungeonRoute, int $limit = 1): Collection
+    protected function getSafeMdtEnemies(DungeonRoute $dungeonRoute, int $limit = 1, ?Closure $enemyFilter = null): Collection
     {
         $mdtClones = app(MDTDungeon::class, [
             'cacheService'       => app(CacheServiceInterface::class),
@@ -152,6 +163,7 @@ trait GeneratesDungeonRoutes
                 return $mdtClonesByNpcIndex->has($npcIndex) &&
                     $mdtClonesByNpcIndex->get($npcIndex)->contains('mdt_id', $importMdtId);
             })
+            ->filter(static fn(Enemy $enemy): bool => $enemyFilter === null || $enemyFilter($enemy))
             ->shuffle()
             ->take($limit)
             ->values();

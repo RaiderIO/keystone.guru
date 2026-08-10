@@ -123,6 +123,11 @@ return [
             'not_found'                  => 'Not found',
         ],
     ],
+    'killzone' => [
+        'error' => [
+            'facade_location_not_convertible' => 'Unable to place the pull here - this location does not belong to any floor of this dungeon',
+        ],
+    ],
     'oauthlogin' => [
         'flash' => [
             'registered_successfully' => 'Registered successfully. Enjoy the website!',

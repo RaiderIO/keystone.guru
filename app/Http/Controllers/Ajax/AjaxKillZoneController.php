@@ -12,9 +12,11 @@ use App\Http\Requests\KillZone\APIDeleteAllFormRequest;
 use App\Http\Requests\KillZone\APIKillZoneFormRequest;
 use App\Http\Requests\KillZone\APIKillZoneMassFormRequest;
 use App\Jobs\RefreshEnemyForces;
+use App\Logic\Structs\LatLng;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteLimitType;
 use App\Models\Enemy;
+use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\KillZone\KillZoneSpell;
@@ -89,6 +91,118 @@ class AjaxKillZoneController extends Controller
     }
 
     /**
+     * Rewrites a submitted kill zone location that is expressed on a facade (combined multi-floor)
+     * map onto the real floor it belongs to, mutating $data so the conversion happens *before* the
+     * row is written rather than as a second update afterwards.
+     *
+     * Whether the submitted location is a facade location is derived from the submitted floor's own
+     * `facade` flag, deliberately not from the acting user's map facade style: that style is
+     * request-scoped state which the save request does not necessarily share with the request that
+     * rendered the map the location was placed on, and a mismatch used to persist the facade floor
+     * verbatim (#3917).
+     *
+     * @throws HttpException when a facade location on a facade-rendering route belongs to no real floor
+     *
+     * @param  array<string, mixed> $data
+     * @return LatLng|null          the location exactly as submitted, so the response can echo it back in the
+     *                              plane the client is rendering, or null if no facade location was
+     *                              submitted or the submitted one was dropped
+     */
+    private function convertSubmittedFacadeLocation(
+        CoordinatesServiceInterface $coordinatesService,
+        DungeonRoute                $dungeonRoute,
+        KillZone                    $killZone,
+        array                      &                       $data,
+    ): ?LatLng {
+        if (!isset($data['floor_id'], $data['lat'], $data['lng'])) {
+            return null;
+        }
+
+        /** @var Floor|null $submittedFloor */
+        $submittedFloor = Floor::find($data['floor_id']);
+
+        if ($submittedFloor === null || !$submittedFloor->facade) {
+            return null;
+        }
+
+        // The route's map never renders a facade, so this cannot be a location the user just placed
+        // on one - it is a bad location echoed back by a client that loaded an already-corrupted row
+        // (convertFacadeMapLocationToMapLocation() would hand it straight back unconverted anyway).
+        // Drop it so the save still succeeds: failing here would make every such pull uneditable.
+        if (!$dungeonRoute->mappingVersion->facade_enabled) {
+            $data['floor_id'] = null;
+            $data['lat']      = null;
+            $data['lng']      = null;
+
+            return null;
+        }
+
+        $submittedLatLng = new LatLng((float)$data['lat'], (float)$data['lng'], $submittedFloor);
+
+        $convertedLatLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
+            $dungeonRoute->mappingVersion,
+            $submittedLatLng,
+        );
+
+        $convertedFloor = $convertedLatLng->getFloor();
+
+        // The location falls outside every floor union area, so it belongs to no real floor at all -
+        // the dead space of the combined image (0.003% of it, measured across every facade dungeon).
+        // It may never be persisted: every consumer downstream (ingame coordinate conversion, kill
+        // zone paths, MDT export) assumes a real floor.
+        if ($convertedFloor === null || $convertedFloor->facade) {
+            // A location the client is merely echoing back unchanged comes from a row corrupted
+            // before this fix, and refusing it would make that pull uneditable forever. Drop it and
+            // let the save land - the KillZonePathService guard covers the row until it is re-placed.
+            if (!$this->isNewLocationForKillZone($killZone, $data)) {
+                $data['floor_id'] = null;
+                $data['lat']      = null;
+                $data['lng']      = null;
+
+                return null;
+            }
+
+            // A location the user just placed is worth failing on, so they get feedback instead of
+            // watching their marker silently disappear. 422 as a literal, like
+            // abortIfDungeonRouteLimitReached() - Teapot's Http does not expose UNPROCESSABLE_ENTITY
+            //
+            // Floor union areas are expected to tile the entire facade map with no gaps, so this
+            // should never trigger - reported to diagnose which mapping version/floor unions do.
+            report(new Exception(sprintf(
+                'Facade location could not be converted to a real floor for mapping version %d, submitted floor %d',
+                $dungeonRoute->mappingVersion->id,
+                $submittedFloor->id,
+            )));
+
+            abort(422, __('controller.killzone.error.facade_location_not_convertible'));
+        }
+
+        $data['floor_id'] = $convertedFloor->id;
+        $data['lat']      = $convertedLatLng->getLat();
+        $data['lng']      = $convertedLatLng->getLng();
+
+        return $submittedLatLng;
+    }
+
+    /**
+     * Whether the submitted location differs from the one the kill zone already holds, i.e. whether
+     * the user actually placed or moved the kill area rather than the client echoing back what it
+     * loaded. Compared with a tolerance because the coordinates round-trip through JSON as strings.
+     *
+     * @param array<string, mixed> $data
+     */
+    private function isNewLocationForKillZone(KillZone $killZone, array $data): bool
+    {
+        if (!$killZone->exists || $killZone->floor_id === null) {
+            return true;
+        }
+
+        return (int)$killZone->floor_id !== (int)$data['floor_id'] ||
+            abs((float)$killZone->lat - (float)$data['lat']) > 0.0001 ||
+            abs((float)$killZone->lng - (float)$data['lng']) > 0.0001;
+    }
+
+    /**
      * @throws \Exception
      *
      * @param array<string, mixed> $data
@@ -113,6 +227,9 @@ class AjaxKillZoneController extends Controller
         $dungeonroute = $killZone->dungeonRoute ?? $dungeonroute;
 
         $this->abortIfDungeonRouteLimitReached($dungeonroute, DungeonRouteLimitType::KillZones);
+
+        // Must happen before the row is written - the database may never hold a facade floor
+        $submittedFacadeLatLng = $this->convertSubmittedFacadeLocation($coordinatesService, $dungeonroute, $killZone, $data);
 
         $beforeModel = clone $killZone;
 
@@ -200,34 +317,13 @@ class AjaxKillZoneController extends Controller
                 $afterAttributes['enemies']  = $killZone->enemies->pluck('id');
             });
 
-            // If killzone has lat/lng set, convert it to facade location if it's not already
-            $useFacade = $dungeonroute->mappingVersion->facade_enabled &&
-                User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
-
-            if ($killZone->hasKillArea()) {
-                // Track this latlng so we can re-echo it back to the user if we still want to use facades
-                $originalLatLng = $killZone->getLatLng();
-
-                // Only when we actually have a kill location set!
-                if ($useFacade && $originalLatLng->getFloor() !== null) {
-                    $latLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
-                        $dungeonroute->mappingVersion,
-                        $originalLatLng,
-                    );
-
-                    // Save the killzone with converted lat/lngs in the database
-                    $killZone->update([
-                        'lat'      => $latLng->getLat(),
-                        'lng'      => $latLng->getLng(),
-                        'floor_id' => $latLng->getFloor()->id,
-                    ]);
-                }
-
-                // But echo it back as facade!
-                $killZone->setAttribute('lat', $originalLatLng->getLat());
-                $killZone->setAttribute('lng', $originalLatLng->getLng());
-                $killZone->setAttribute('floor_id', $originalLatLng->getFloor()->id);
-                $killZone->setRelation('floor', $originalLatLng->getFloor());
+            // The row now holds the real-floor location; echo the location back in the plane the
+            // client submitted it in, so the marker it just placed does not jump on its map
+            if ($submittedFacadeLatLng !== null) {
+                $killZone->setAttribute('lat', $submittedFacadeLatLng->getLat());
+                $killZone->setAttribute('lng', $submittedFacadeLatLng->getLng());
+                $killZone->setAttribute('floor_id', $submittedFacadeLatLng->getFloor()->id);
+                $killZone->setRelation('floor', $submittedFacadeLatLng->getFloor());
             }
 
             if (Auth::check()) {
