@@ -4,8 +4,13 @@ use ErickSkrauch\PhpCsFixer\Fixers as ErickSkrauchFixers;
 
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__)
-    // It legit breaks views if you let it try to fix them - it removes needed imports
-    ->exclude(['vendor', 'node_modules', 'storage', 'bootstrap/cache', 'resources/views'])
+    // It legit breaks views if you let it try to fix them - it removes needed imports.
+    // docker-compose holds no PHP, but it does hold the bind-mounted MySQL data dirs, whose
+    // internal dirs (e.g. mysql-combatlog/#innodb_temp) are owned by the container's mysql uid
+    // and unreadable on the host - descending into them aborts the entire run with
+    // "RecursiveDirectoryIterator(...): Permission denied". Excluding is what stops the descent:
+    // ignoreVCS()/ignoreVCSIgnored() only filter results, after the traversal has already failed.
+    ->exclude(['vendor', 'node_modules', 'storage', 'bootstrap/cache', 'resources/views', 'docker-compose'])
     ->name('*.php')
     ->ignoreDotFiles(true)
     ->ignoreVCS(true);
