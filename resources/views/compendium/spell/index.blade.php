@@ -55,6 +55,7 @@ use App\Models\Npc\NpcClassification;
                         'render': function (data, type, row) {
                             return spellTemplate({
                                 compendium_url: `${spellShowBaseUrl}/${row.id}-${slugify(data ?? '')}`,
+                                spell_id: row.id,
                                 icon_url: row.icon_url,
                                 name: data ?? '',
                             });
@@ -95,6 +96,11 @@ use App\Models\Npc\NpcClassification;
                             window.location.href = `${spellShowBaseUrl}/${data.id}-${slugify(data.name)}`;
                         }
                     });
+                },
+                'drawCallback': function () {
+                    if (typeof $WowheadPower !== 'undefined') {
+                        $WowheadPower.refreshLinks();
+                    }
                 },
                 'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
                     'emptyTable': lang.get('js.datatable_no_spells_in_table'),
