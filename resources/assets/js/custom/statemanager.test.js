@@ -396,10 +396,11 @@ describe('StateManager cookie-backed display settings', () => {
         expect(stateManager.getMapZoomSpeed()).toBe(3);
     });
 
-    test('getMapZoomSpeed_givenNoStoredValue_returnsNaN', () => {
-        // Unlike getKillZonePathWeight() this one has no isNaN() guard, so a missing cookie yields
-        // NaN rather than a usable default. Pinned as the current behaviour, not endorsed.
-        expect(makeStateManager().getMapZoomSpeed()).toBeNaN();
+    test('getMapZoomSpeed_givenNoStoredValue_returnsTheDefault', () => {
+        // Mirrors getKillZonePathWeight()'s isNaN() guard: a missing cookie now falls back to the
+        // same default (50) that map.js/mapsettings.blade.php use when first setting the cookie,
+        // instead of returning NaN.
+        expect(makeStateManager().getMapZoomSpeed()).toBe(50);
     });
 });
 

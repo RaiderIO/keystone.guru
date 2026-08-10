@@ -434,7 +434,11 @@ class StateManager extends Signalable {
     getMapZoomSpeed() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
-        return parseInt(Cookies.get('map_zoom_speed'));
+        let zoomSpeed = parseInt(Cookies.get('map_zoom_speed'));
+
+        // The cookie may be missing; fall back to the same default used when it's first set
+        // (see map.js/mapsettings.blade.php) rather than returning NaN.
+        return isNaN(zoomSpeed) ? 50 : zoomSpeed;
     }
 
     /**
