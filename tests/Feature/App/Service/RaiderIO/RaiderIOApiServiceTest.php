@@ -14,6 +14,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
+use Teapot\StatusCode\Http;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('RaiderIO')]
@@ -83,7 +84,61 @@ final class RaiderIOApiServiceTest extends PublicTestCase
     {
         // Arrange
         $this->log->expects($this->once())->method('getCombatLogSegmentsForRunInvalidResponse');
+        $this->log->expects($this->never())->method('getCombatLogSegmentsForRunNotYetAvailable');
         $service = $this->makeService(fn(): string => 'not json');
+
+        // Act
+        $result = $service->getCombatLogSegmentsForRun($this->makeSeason(), self::RUN_ID);
+
+        // Assert
+        $this->assertNull($result);
+    }
+
+    /**
+     * Guards #3918: a run's segments simply not having been uploaded to Raider.IO yet (the API
+     * returns a 404 with this specific shape) is an expected, recurring state - it must be logged
+     * distinctly from a genuinely malformed response instead of paging Sentry as an error.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function getCombatLogSegmentsForRun_givenSegmentsNotYetAvailable_logsDistinctlyFromInvalidResponse(): void
+    {
+        // Arrange
+        $this->log->expects($this->once())->method('getCombatLogSegmentsForRunNotYetAvailable');
+        $this->log->expects($this->never())->method('getCombatLogSegmentsForRunInvalidResponse');
+        $service = $this->makeService(fn(): string => json_encode([
+            'statusCode' => Http::NOT_FOUND,
+            'error'      => 'Not Found',
+            'message'    => 'No combat log segments found for this run',
+        ]));
+
+        // Act
+        $result = $service->getCombatLogSegmentsForRun($this->makeSeason(), self::RUN_ID);
+
+        // Assert
+        $this->assertNull($result);
+    }
+
+    /**
+     * Guards #3918: the upstream API is hapi-style, so a genuine route-not-found (wrong path,
+     * unrecognized season) yields the same status code with a generic message - that is a broken
+     * integration and must still be logged at error level rather than swallowed as "not yet
+     * uploaded".
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function getCombatLogSegmentsForRun_givenGenericNotFoundResponse_logsAsInvalidResponse(): void
+    {
+        // Arrange
+        $this->log->expects($this->once())->method('getCombatLogSegmentsForRunInvalidResponse');
+        $this->log->expects($this->never())->method('getCombatLogSegmentsForRunNotYetAvailable');
+        $service = $this->makeService(fn(): string => json_encode([
+            'statusCode' => Http::NOT_FOUND,
+            'error'      => 'Not Found',
+            'message'    => 'Not Found',
+        ]));
 
         // Act
         $result = $service->getCombatLogSegmentsForRun($this->makeSeason(), self::RUN_ID);
