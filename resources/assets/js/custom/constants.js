@@ -58,6 +58,15 @@ const MAP_FACADE_STYLE_BOTH = 'both';
 const MAP_MAX_LAT = -256;
 const MAP_MAX_LNG = 384;
 
+// Enemy display types - must match the options rendered by
+// resources/views/common/maps/controls/elements/enemyvisualtype.blade.php
+const DISPLAY_TYPE_ENEMY_PORTRAIT = 'enemy_portrait';
+const DISPLAY_TYPE_NPC_CLASS = 'npc_class';
+const DISPLAY_TYPE_NPC_TYPE = 'npc_type';
+const DISPLAY_TYPE_ENEMY_FORCES = 'enemy_forces';
+const DISPLAY_TYPE_ENEMY_GROUP = 'enemy_group';
+const DISPLAY_TYPE_ENEMY_SKIPPABLE = 'enemy_skippable';
+
 // Map context
 const MAP_CONTEXT_TYPE_DUNGEON_ROUTE = 'dungeonroute';
 const MAP_CONTEXT_TYPE_LIVE_SESSION = 'livesession';
@@ -714,6 +723,12 @@ if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         c,
         polylineDefaultColor,
+        DISPLAY_TYPE_ENEMY_PORTRAIT,
+        DISPLAY_TYPE_NPC_CLASS,
+        DISPLAY_TYPE_NPC_TYPE,
+        DISPLAY_TYPE_ENEMY_FORCES,
+        DISPLAY_TYPE_ENEMY_GROUP,
+        DISPLAY_TYPE_ENEMY_SKIPPABLE,
         AFFIX_FORTIFIED,
         AFFIX_TYRANNICAL,
         AFFIX_THUNDERING,

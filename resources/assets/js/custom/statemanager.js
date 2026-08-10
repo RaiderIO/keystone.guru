@@ -312,11 +312,16 @@ class StateManager extends Signalable {
 
     /**
      * Get the opacity at which unkilled enemies should be rendered at.
-     * @returns {string}
+     * @returns {Number}
      */
     getUnkilledEnemyOpacity() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return Cookies.get('map_unkilled_enemy_opacity');
+        let opacity = Number(Cookies.get('map_unkilled_enemy_opacity'));
+
+        // Same hazard as getKillZonePathWeight(): the cookie may be missing on a cookie-less
+        // headless render, and `opacity: NaN%` is simply dropped by the browser - rendering
+        // unkilled enemies fully opaque. Fall back to the default map.js first sets it to.
+        return isNaN(opacity) ? 50 : opacity;
     }
 
     /**
@@ -333,11 +338,14 @@ class StateManager extends Signalable {
 
     /**
      * Get the opacity at which unkilled important enemies should be rendered at.
-     * @returns {string}
+     * @returns {Number}
      */
     getUnkilledImportantEnemyOpacity() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return Cookies.get('map_unkilled_important_enemy_opacity');
+        let opacity = Number(Cookies.get('map_unkilled_important_enemy_opacity'));
+
+        // See getUnkilledEnemyOpacity() - same missing-cookie fallback, different default.
+        return isNaN(opacity) ? 80 : opacity;
     }
 
     /**
@@ -401,16 +409,18 @@ class StateManager extends Signalable {
     getCurrentFloor() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
-        if (this._visibleFloorsByFloorId === null) {
-            this._visibleFloorsByFloorId = new Map();
+        return this._getVisibleFloorsByFloorId().get(Number(this._floorId)) ?? false;
+    }
 
-            let floors = this._mapContext.getVisibleFloors();
-            for (let i = 0; i < floors.length; i++) {
-                this._visibleFloorsByFloorId.set(Number(floors[i].id), floors[i]);
-            }
-        }
+    /**
+     * Checks if the given floor is one of the floors visible in the current map context.
+     * @param {Number|String} floorId
+     * @returns {boolean}
+     */
+    isVisibleFloorId(floorId) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
-        return this._visibleFloorsByFloorId?.get(Number(this._floorId)) ?? false;
+        return this._getVisibleFloorsByFloorId().has(Number(floorId));
     }
 
     /**
@@ -421,10 +431,41 @@ class StateManager extends Signalable {
      */
     setFloorId(floorId, center = null, zoom = null) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        // Refuse a floor that isn't visible in this map context. getCurrentFloor() answers `false`
+        // for an unknown floor, and every consumer reads `.id`/`.index` straight off that result -
+        // which is `undefined` rather than a throw, so a bad floor id would otherwise propagate
+        // silently into tile URLs and ajax payloads. Keeping the floor we're on is the safer of the
+        // two bad options, and the error says why. Skipped while the map context is still unset,
+        // so this cannot fire before statemanager.blade.php has installed one.
+        if (this._mapContext !== null && !this.isVisibleFloorId(floorId)) {
+            console.error(`Refusing to set floor id '${floorId}'; it is not visible in the current map context`);
+
+            return;
+        }
+
         this._floorId = floorId;
 
         // Let everyone know it's changed
         this.signal('floorid:changed', {floorId: this._floorId, center: center, zoom: zoom});
+    }
+
+    /**
+     * Builds - once - a lookup of the map context's visible floors, keyed by their numeric id.
+     * @returns {Map<Number, Object>}
+     * @private
+     */
+    _getVisibleFloorsByFloorId() {
+        if (this._visibleFloorsByFloorId === null) {
+            this._visibleFloorsByFloorId = new Map();
+
+            let floors = this._mapContext.getVisibleFloors();
+            for (let i = 0; i < floors.length; i++) {
+                this._visibleFloorsByFloorId.set(Number(floors[i].id), floors[i]);
+            }
+        }
+
+        return this._visibleFloorsByFloorId;
     }
 
     /**
@@ -434,7 +475,11 @@ class StateManager extends Signalable {
     getMapZoomSpeed() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
-        return parseInt(Cookies.get('map_zoom_speed'));
+        let zoomSpeed = parseInt(Cookies.get('map_zoom_speed'));
+
+        // The cookie may be missing; fall back to the same default used when it's first set
+        // (see map.js/mapsettings.blade.php) rather than returning NaN.
+        return isNaN(zoomSpeed) ? 50 : zoomSpeed;
     }
 
     /**
@@ -664,15 +709,26 @@ class StateManager extends Signalable {
                 if (handlers.hasOwnProperty(index)) {
                     let handler = handlers[index];
                     let values = handler.trim().split(' ');
-                    // Only RGB values
-                    if (values[1].indexOf('#') === 0) {
+                    // Only RGB values. The color may be missing entirely - a trailing comma, or a
+                    // handler with no space in it, leaves values[1] undefined - so check for it
+                    // before dereferencing rather than throwing on the way to drawing the map.
+                    if (values.length > 1 && values[1].indexOf('#') === 0) {
                         result.push([parseInt(('' + values[0]).replace('%', '')), values[1]]);
                     } else {
                         console.warn('Invalid handler found:', handler);
                     }
                 }
             }
-        } else {
+        }
+
+        // pull_gradient is persisted without any format validation, so a route may well carry a
+        // gradient from which nothing usable survives. pickHexFromHandlers() indexes handlers[0]
+        // unconditionally, so an empty list is its own TypeError - fall back to the defaults.
+        // A single handler is deliberately kept: it is reachable (grapick lets you remove stops
+        // down to one) and works, since handlers[0] === handlers[length - 1] makes every weight
+        // resolve to that one color. Replacing it would also feed the defaults back into grapick
+        // on SettingsTabPull.activate(), overwriting the user's saved gradient on the next edit.
+        if (result.length < 1) {
             result = c.map.editsidebar.pullGradient.defaultHandlers;
         }
 
@@ -813,4 +869,12 @@ class StateManager extends Signalable {
             }
         });
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        StateManager,
+    };
 }
