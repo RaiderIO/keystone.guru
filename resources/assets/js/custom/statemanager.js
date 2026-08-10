@@ -312,11 +312,11 @@ class StateManager extends Signalable {
 
     /**
      * Get the opacity at which unkilled enemies should be rendered at.
-     * @returns {string}
+     * @returns {Number}
      */
     getUnkilledEnemyOpacity() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return Cookies.get('map_unkilled_enemy_opacity');
+        return Number(Cookies.get('map_unkilled_enemy_opacity'));
     }
 
     /**
@@ -333,11 +333,11 @@ class StateManager extends Signalable {
 
     /**
      * Get the opacity at which unkilled important enemies should be rendered at.
-     * @returns {string}
+     * @returns {Number}
      */
     getUnkilledImportantEnemyOpacity() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return Cookies.get('map_unkilled_important_enemy_opacity');
+        return Number(Cookies.get('map_unkilled_important_enemy_opacity'));
     }
 
     /**

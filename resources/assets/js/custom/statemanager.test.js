@@ -24,6 +24,7 @@ global.MAP_FACADE_STYLE_FACADE = 'facade';
 global.MAP_FACADE_STYLE_SPLIT_FLOORS = 'split_floors';
 global.NUMBER_STYLE_PERCENTAGE = 'percentage';
 global.NUMBER_STYLE_ENEMY_FORCES = 'enemy_forces';
+global.DISPLAY_TYPE_NPC_CLASS = 'npc_class';
 global.cookieDefaultAttributes = undefined;
 
 // 1c. Map context classes. Only their identity matters to StateManager: setMapContext() picks one
@@ -292,11 +293,11 @@ describe('StateManager cookie-backed display settings', () => {
         const stateManager = makeStateManager();
         const received = listenFor(stateManager, 'enemydisplaytype:changed');
 
-        stateManager.setEnemyDisplayType('aggressiveness');
+        stateManager.setEnemyDisplayType(DISPLAY_TYPE_NPC_CLASS);
 
-        expect(stateManager.getEnemyDisplayType()).toBe('aggressiveness');
-        expect(Cookies.get('enemy_display_type')).toBe('aggressiveness');
-        expect(received[0].data).toEqual({enemyDisplayType: 'aggressiveness'});
+        expect(stateManager.getEnemyDisplayType()).toBe(DISPLAY_TYPE_NPC_CLASS);
+        expect(Cookies.get('enemy_display_type')).toBe(DISPLAY_TYPE_NPC_CLASS);
+        expect(received[0].data).toEqual({enemyDisplayType: DISPLAY_TYPE_NPC_CLASS});
     });
 
     test('setUnkilledEnemyOpacity_givenAnOpacity_storesItAndNotifies', () => {
@@ -305,7 +306,7 @@ describe('StateManager cookie-backed display settings', () => {
 
         stateManager.setUnkilledEnemyOpacity(0.5);
 
-        expect(stateManager.getUnkilledEnemyOpacity()).toBe('0.5');
+        expect(stateManager.getUnkilledEnemyOpacity()).toBe(0.5);
         expect(received[0].data).toEqual({opacity: 0.5});
     });
 
@@ -315,7 +316,7 @@ describe('StateManager cookie-backed display settings', () => {
 
         stateManager.setUnkilledImportantEnemyOpacity(0.8);
 
-        expect(stateManager.getUnkilledImportantEnemyOpacity()).toBe('0.8');
+        expect(stateManager.getUnkilledImportantEnemyOpacity()).toBe(0.8);
         expect(received[0].data).toEqual({opacity: 0.8});
     });
 
