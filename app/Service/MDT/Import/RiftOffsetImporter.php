@@ -77,12 +77,16 @@ class RiftOffsetImporter
             $obeliskMapIcon = $npcIdToMapIconMapping[$npcId];
 
             try {
-                // Find out the floor where the NPC is standing on
+                // Find out the floor where the NPC is standing on. Anchored to the obelisk map
+                // icon's own floor rather than filtered by enemy_pack_id: some dungeons only carry
+                // an unpacked Enemy row for this NPC on their current mapping version (packed rows
+                // exist only on older ones - #3935), and the same npc_id can additionally be placed
+                // on multiple floors of the same dungeon, so the obelisk icon's floor is the only
+                // reliable disambiguator between those duplicates.
                 /** @var Enemy $enemy */
                 $enemy = Enemy::where('npc_id', $npcId)
                     ->where('mapping_version_id', $importStringRiftOffsets->getMappingVersion()->id)
-                    ->whereNotNull('enemy_pack_id')
-                    ->whereIn('floor_id', $floorIds)
+                    ->where('floor_id', $obeliskMapIcon->floor_id)
                     ->firstOrFail();
 
                 if (isset($mdtXy['sublevel'])) {
@@ -135,10 +139,10 @@ class RiftOffsetImporter
             } catch (ImportWarning $warning) {
                 $importStringRiftOffsets->getWarnings()->add($warning);
             } catch (ModelNotFoundException) {
-                // No enemy matching this NPC (packed, on the mapping version's floors) resolved -
-                // whether because the clone genuinely isn't in this mapping version, or (the common
-                // case seen while triaging #3915) it exists but with no enemy_pack_id on the current
-                // mapping version. Skip this one obelisk skip rather than 500ing the whole import.
+                // No enemy matching this NPC on the obelisk icon's floor resolved for this mapping
+                // version - the clone genuinely isn't seeded there (e.g. #3935: several BFA
+                // dungeons never carry this NPC at all). Skip this one obelisk skip rather than
+                // 500ing the whole import.
                 $importStringRiftOffsets->getWarnings()->add(new ImportWarning(
                     __('services.mdt.io.import_string.category.awakened_obelisks'),
                     __(
