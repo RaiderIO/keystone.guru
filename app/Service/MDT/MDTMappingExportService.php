@@ -70,8 +70,8 @@ class MDTMappingExportService implements MDTMappingExportServiceInterface
         $dungeonNameTranslationKey = $this->convertStringToTranslationKey(__($mappingVersion->dungeon->name, [], 'en_US'));
 
         return sprintf(
-            'local addonName = ...
-local MDT = MDT
+            'local _, MDT = ...
+local addonName = MDT.AddonName
 local L = MDT.L
 %slocal dungeonIndex = %d
 MDT.dungeonList[dungeonIndex] = L["%s"]
