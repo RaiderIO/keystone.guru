@@ -2,11 +2,13 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
+use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -353,20 +355,45 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
     public function store_givenAFacadeLocationWhileTheMapFacadeStyleSaysSplitFloors_persistsTheLocationOnItsRealFloor(): void
     {
         // Arrange
-        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, minEnemies: 1);
-        /** @var Floor $facadeFloor */
-        $facadeFloor = $dungeon->floors()->where('facade', true)->firstOrFail();
-        /** @var Enemy $enemy */
-        $enemy = $mappingVersion->enemies()->whereHas('floor', static fn($query) => $query->where('facade', false))
-            ->whereNotNull('lat')
-            ->firstOrFail();
-
         /** @var CoordinatesServiceInterface $coordinatesService */
         $coordinatesService = app(CoordinatesServiceInterface::class);
+
+        // Floor union areas cover only part of a floor, so an arbitrary enemy need not sit inside
+        // one - and taking the first enemy and asserting that it did made this test fail for
+        // whichever facade dungeon the shuffle happened to pick (lowerkarazhan, 1 of 53). The
+        // conversion is therefore a *requirement* on the fixture: reject any dungeon with no enemy
+        // that converts onto the facade floor, and hand back the enemy that does.
+        [$dungeon, $mappingVersion, $enemy] = $this->findDungeon(
+            facadeEnabled: true,
+            minEnemies:    1,
+            resolve:       static function (Dungeon $dungeon, MappingVersion $mappingVersion) use ($coordinatesService): ?Enemy {
+                // `floor` is eager loaded because the coordinate conversion reads it, and these
+                // enemies are hydrated as a collection - where preventLazyLoading does enforce
+                $enemies = $mappingVersion->enemies()
+                    ->with('floor')
+                    ->whereHas('floor', static fn($query) => $query->where('facade', false))
+                    ->whereNotNull('lat')
+                    ->get();
+
+                foreach ($enemies as $enemy) {
+                    /** @var Enemy $enemy */
+                    $facadeLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $enemy->getLatLng());
+
+                    if ((bool)$facadeLatLng->getFloor()->facade) {
+                        return $enemy;
+                    }
+                }
+
+                return null;
+            },
+        );
+
+        /** @var Floor $facadeFloor */
+        $facadeFloor = $dungeon->floors()->where('facade', true)->firstOrFail();
+
         // Exactly the location the client would submit for a kill area placed on top of that enemy
         // while the facade map is rendered
         $facadeLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $enemy->getLatLng());
-        $this->assertTrue((bool)$facadeLatLng->getFloor()->facade, 'Expected the enemy to live inside a floor union area');
 
         $dungeonRoute = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
