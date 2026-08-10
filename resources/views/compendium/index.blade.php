@@ -4,7 +4,7 @@
  * @var array{npc: int, spell: int, class: int} $stats
  */
 
-$cards = [
+$sections = [
     [
         'icon'     => 'fa-dragon',
         'title'    => __('view_compendium.index.cards.npc.title'),
@@ -52,73 +52,81 @@ $howItWorks = [
 @endsection
 
 @section('content')
+    {{--
+    Direction contract (#3945, "The Field Record"):
+    THESIS: the Compendium is a field record - one continuous, dense record sheet per subject;
+      it refuses the icon-card dashboard arrangement.
+    OWN-WORLD: DESIGN.md's War Room (tonal ladder via theme variables, Keystone Green accent,
+      hairline registers, sturdy controls); no new palette or faces.
+    STORY: a player looks up a thing, reads its record, trusts the combat-log-backed data.
+    FIRST VIEWPORT: intro line, then a four-row directory register (icon plate / title+count /
+      description / go), data-source panel below.
+    FORM: field-record register, candidate 5 of the grounded list, seed key f2671375.
+    FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review,
+      the verdict, and DESIGN.md.
+    --}}
     <div class="row justify-content-center">
-        <div class="col-12 col-lg-10 text-center">
+        <div class="col-12 col-lg-8 text-center">
             <p class="lead">{{ __('view_compendium.index.intro') }}</p>
         </div>
     </div>
 
-    <div class="row mt-4">
-        @foreach($cards as $card)
-            <div class="col-12 col-md-6 col-lg-3 mb-4">
-                <div class="card h-100 text-center">
-                    <div class="card-body d-flex flex-column">
-                        <div class="mb-3">
-                            <i class="fas {{ $card['icon'] }} fa-3x"></i>
-                        </div>
-                        <h5 class="card-title fw-bold">{{ $card['title'] }}</h5>
-                        <div class="text-muted small mb-2">{{ $card['subtitle'] }}</div>
-                        <p class="card-text flex-grow-1">{{ $card['text'] }}</p>
-                        <a href="{{ $card['route'] }}" class="btn btn-primary mt-2">
-                            {{ $card['cta'] }} <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
+    <div class="row justify-content-center mt-4">
+        <div class="col-12 col-lg-8">
+            <div class="compendium_directory">
+                @foreach($sections as $section)
+                    <a href="{{ $section['route'] }}" class="compendium_directory_row">
+                        <span class="compendium_directory_icon">
+                            <i class="fas {{ $section['icon'] }}"></i>
+                        </span>
+                        <span>
+                            <span class="compendium_directory_title">{{ $section['title'] }}</span>
+                            <span class="compendium_directory_count">{{ $section['subtitle'] }}</span>
+                            <p class="compendium_directory_desc">{{ $section['text'] }}</p>
+                        </span>
+                        <span class="compendium_directory_cta">
+                            {{ $section['cta'] }} <i class="fas fa-arrow-right"></i>
+                        </span>
+                    </a>
+                @endforeach
             </div>
-        @endforeach
+        </div>
     </div>
 
     <div class="row justify-content-center mt-4">
-        <div class="col-12 col-lg-10">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-12 col-md">
-                            <h5 class="fw-bold mb-2">
-                                <i class="fas fa-bolt"></i> {{ __('view_compendium.index.data_source.title') }}
-                            </h5>
-                            <p class="mb-3 mb-md-0">{{ __('view_compendium.index.data_source.description') }}</p>
-                        </div>
-                        <div class="col-12 col-md-auto text-center">
-                            <a href="https://raider.io/addon" target="_blank" rel="noopener"
-                               class="btn btn-accent">
-                                <i class="fas fa-download"></i> {{ __('view_compendium.index.data_source.cta') }}
-                            </a>
-                        </div>
-                    </div>
+        <div class="col-12 col-lg-8">
+            <div class="compendium_identity mb-0">
+                <span class="compendium_directory_icon">
+                    <i class="fas fa-bolt"></i>
+                </span>
+                <div class="compendium_identity_body">
+                    <h5 class="compendium_identity_title">{{ __('view_compendium.index.data_source.title') }}</h5>
+                    <p class="mb-0">{{ __('view_compendium.index.data_source.description') }}</p>
+                </div>
+                <div class="compendium_identity_actions">
+                    <a href="https://raider.io/addon" target="_blank" rel="noopener"
+                       class="btn btn-accent">
+                        <i class="fas fa-download"></i> {{ __('view_compendium.index.data_source.cta') }}
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row justify-content-center mt-5">
-        <div class="col-12 col-lg-10 text-center">
-            <h4 class="fw-bold mb-4">{{ __('view_compendium.index.how_it_works.title') }}</h4>
-            <div class="row">
-                @foreach($howItWorks as $step)
-                    <div class="col-12 col-md-4 mb-4 mb-md-0">
-                        <div class="mb-2">
-                            <i class="fas {{ $step['icon'] }} fa-2x"></i>
-                        </div>
-                        <h6 class="fw-bold">
-                            {{ __(sprintf('view_compendium.index.how_it_works.%s.title', $step['key'])) }}
-                        </h6>
-                        <p class="text-muted">
-                            {{ __(sprintf('view_compendium.index.how_it_works.%s.description', $step['key'])) }}
-                        </p>
+    <div class="row justify-content-center mt-5 mb-4">
+        <div class="col-12 col-lg-8">
+            <h4 class="fw-bold mb-2">{{ __('view_compendium.index.how_it_works.title') }}</h4>
+            @foreach($howItWorks as $step)
+                <div class="compendium_record_section">
+                    <div class="compendium_record_label">
+                        <i class="fas {{ $step['icon'] }} me-1"></i>
+                        {{ __(sprintf('view_compendium.index.how_it_works.%s.title', $step['key'])) }}
                     </div>
-                @endforeach
-            </div>
+                    <div>
+                        {{ __(sprintf('view_compendium.index.how_it_works.%s.description', $step['key'])) }}
+                    </div>
+                </div>
+            @endforeach
         </div>
     </div>
 @endsection

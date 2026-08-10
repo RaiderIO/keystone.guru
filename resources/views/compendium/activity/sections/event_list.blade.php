@@ -18,4 +18,5 @@ use Illuminate\Support\Collection;
     'showSpellSubject' => true,
     'contextDungeon'   => $contextDungeon,
     'date'             => $date,
+    'limit'            => $limit ?? null,
 ])

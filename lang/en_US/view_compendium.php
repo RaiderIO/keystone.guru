@@ -64,6 +64,8 @@ return [
         'school_recorded'         => ':spell deals :schools damage',
         'immunity_bypass_added'   => ':spell was observed landing through :property',
         'immunity_bypass_removed' => ':spell was no longer observed landing through :property',
+        'count'                   => ':count event|:count events',
+        'more'                    => 'and :count more',
         'property'                => [
             'aura'   => 'Aura',
             'debuff' => 'Debuff',
@@ -86,8 +88,10 @@ return [
                 'level' => 'Level',
             ],
             'characteristics' => [
-                'title'   => 'Characteristics',
-                'tooltip' => 'What is this NPC affected by?',
+                'title'        => 'Characteristics',
+                'tooltip'      => 'What is this NPC affected by?',
+                'empty'        => 'No characteristics recorded.',
+                'not_observed' => 'Not observed:',
             ],
             'spells' => [
                 'title'                              => 'Spells',

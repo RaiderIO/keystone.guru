@@ -109,8 +109,8 @@ use App\Models\Npc\NpcClassification;
 @endsection
 
 @section('content')
-    <div class="row mb-3">
-        <div class="col-md-4">
+    <div class="compendium_toolbar">
+        <div class="compendium_toolbar_filter">
             @include('common.dungeon.select', [
                 'id'          => 'compendium_filter_dungeon',
                 'label'       => false,
@@ -122,13 +122,15 @@ use App\Models\Npc\NpcClassification;
         </div>
     </div>
 
-    <table id="compendium_spell_table" class="tablesorter default_table table-striped">
-        <thead>
-        <tr>
-            <th width="25%">{{ __('view_compendium.spell.index.table_header_name') }}</th>
-            <th width="25%">{{ __('view_compendium.spell.index.table_header_dungeons') }}</th>
-            <th width="50%">{{ __('view_compendium.spell.index.table_header_used_by') }}</th>
-        </tr>
-        </thead>
-    </table>
+    <div class="compendium_datatable">
+        <table id="compendium_spell_table" class="tablesorter default_table compendium_table">
+            <thead>
+            <tr>
+                <th width="25%">{{ __('view_compendium.spell.index.table_header_name') }}</th>
+                <th width="25%">{{ __('view_compendium.spell.index.table_header_dungeons') }}</th>
+                <th width="50%">{{ __('view_compendium.spell.index.table_header_used_by') }}</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
 @endsection

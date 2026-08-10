@@ -33,16 +33,17 @@ use Illuminate\Support\Collection;
 
 @section('content')
     {{-- Header --}}
-    <div class="row mb-4">
-        <div class="col-auto">
-            <img src="{{ $characterClass->icon_url }}"
-                 width="64" height="64"
-                 alt="{{ __($characterClass->name) }}"
-                 loading="lazy"
-                 class="rounded"/>
-        </div>
-        <div class="col">
-            <h2 class="mb-1">{{ __($characterClass->name) }}</h2>
+    <div class="compendium_identity">
+        <img src="{{ $characterClass->icon_url }}"
+             width="88" height="88"
+             alt="{{ __($characterClass->name) }}"
+             loading="lazy"
+             class="compendium_identity_portrait"/>
+        <div class="compendium_identity_body">
+            <h2 class="compendium_identity_title">{{ __($characterClass->name) }}</h2>
+            <div class="compendium_identity_meta">
+                <span class="compendium_chip">{{ __($contextDungeon->name) }}</span>
+            </div>
         </div>
     </div>
 
@@ -51,7 +52,7 @@ use Illuminate\Support\Collection;
         <p class="text-muted">{{ __('view_compendium.class.show.no_spells') }}</p>
     @else
         <div class="table-responsive">
-            <table class="table table-sm table-striped">
+            <table class="compendium_table">
                 <thead>
                 <tr>
                     <th width="25%">{{ __('view_compendium.class.show.table_header_spell') }}</th>
@@ -64,7 +65,7 @@ use Illuminate\Support\Collection;
                     <?php /** @var Spell $spell */ ?>
                     <?php $affectedNpcs = $npcsByCharacteristicId->get($spell->characteristic_id, collect()); ?>
                     <tr>
-                        <td>@include('common.spell.link', ['spell' => $spell])</td>
+                        <td class="text-nowrap">@include('common.spell.link', ['spell' => $spell])</td>
                         <td>
                             @if($spell->characteristic)
                                 <img src="{{ ksgAssetImage(sprintf('spells/%s.jpg', $spell->characteristic->icon_name)) }}"
@@ -93,8 +94,6 @@ use Illuminate\Support\Collection;
 
     {{-- Counterable abilities (Vanish / Shadowmeld / ...) --}}
     @if(!empty($counterSections))
-        <h3 class="mt-4">{{ __('view_compendium.class.show.counters.title') }}</h3>
-
         @foreach($counterSections as $counterSection)
             <?php
             /** @var SpellCounterDefinitionInterface $definition */
@@ -106,30 +105,37 @@ use Illuminate\Support\Collection;
             $npcsBySpellId = $counterSection['npcsBySpellId'];
             $counterKey    = Spell::ALL_COUNTERS[$definition->getCounterBit()];
             ?>
-            <div class="mb-4">
-                <h5 class="mb-2">
-                    <img src="{{ ksgAssetImage(sprintf('spells/%s.jpg', $definition->getIconName())) }}"
-                         width="20" height="20"
-                         loading="lazy"
-                         class="rounded me-1"
-                         alt="{{ __('spellcounters.' . $counterKey) }}"/>{{ __('spellcounters.' . $counterKey) }}
-                    @if($raceName !== null)
-                        <span class="badge text-bg-secondary ms-1">
-                            {{ __('view_compendium.class.show.counters.racial', ['race' => __($raceName)]) }}
-                        </span>
+            <div class="compendium_record_section @if($loop->first) mt-4 @endif">
+                <div class="compendium_record_label">
+                    @if($loop->first)
+                        {{ __('view_compendium.class.show.counters.title') }}
                     @endif
-                </h5>
+                </div>
+                <div>
+                    <h5 class="mb-2">
+                        <img src="{{ ksgAssetImage(sprintf('spells/%s.jpg', $definition->getIconName())) }}"
+                             width="20" height="20"
+                             loading="lazy"
+                             class="rounded me-1"
+                             alt="{{ __('spellcounters.' . $counterKey) }}"/>{{ __('spellcounters.' . $counterKey) }}
+                        @if($raceName !== null)
+                            <span class="badge text-bg-secondary ms-1">
+                                {{ __('view_compendium.class.show.counters.racial', ['race' => __($raceName)]) }}
+                            </span>
+                        @endif
+                    </h5>
 
-                @if($counterSpells->isEmpty())
-                    <p class="text-muted">{{ __('view_compendium.class.show.counters.no_spells') }}</p>
-                @else
-                    @include('compendium.class.sections.spell-npc-table', [
-                        'tableSpells'        => $counterSpells,
-                        'tableNpcsBySpellId' => $npcsBySpellId,
-                        'tableSpellHeader'   => 'view_compendium.class.show.counters.table_header_spell',
-                        'tableNpcsHeader'    => 'view_compendium.class.show.counters.table_header_npcs',
-                    ])
-                @endif
+                    @if($counterSpells->isEmpty())
+                        <p class="text-muted mb-0">{{ __('view_compendium.class.show.counters.no_spells') }}</p>
+                    @else
+                        @include('compendium.class.sections.spell-npc-table', [
+                            'tableSpells'        => $counterSpells,
+                            'tableNpcsBySpellId' => $npcsBySpellId,
+                            'tableSpellHeader'   => 'view_compendium.class.show.counters.table_header_spell',
+                            'tableNpcsHeader'    => 'view_compendium.class.show.counters.table_header_npcs',
+                        ])
+                    @endif
+                </div>
             </div>
         @endforeach
     @endif
@@ -142,24 +148,33 @@ use Illuminate\Support\Collection;
         /** @var Collection<int, Collection<int, Npc>> $reflectNpcsBySpellId */
         $reflectNpcsBySpellId = $reflectSection['npcsBySpellId'];
         ?>
-        <h3 class="mt-4">
-            <img src="{{ ksgAssetImage(sprintf('spells/%s.jpg', $reflectSection['iconName'])) }}"
-                 width="24" height="24"
-                 loading="lazy"
-                 class="rounded me-1"
-                 alt="{{ __('view_compendium.class.show.reflect.title') }}"/>{{ __('view_compendium.class.show.reflect.title') }}
-        </h3>
-        <p class="text-muted">{{ __('view_compendium.class.show.reflect.description') }}</p>
+        <div class="compendium_record_section">
+            <div class="compendium_record_label">
+                {{ __('view_compendium.class.show.reflect.title') }}
+                <div class="compendium_record_label_sub">
+                    {{ __('view_compendium.class.show.reflect.description') }}
+                </div>
+            </div>
+            <div>
+                <h5 class="mb-2">
+                    <img src="{{ ksgAssetImage(sprintf('spells/%s.jpg', $reflectSection['iconName'])) }}"
+                         width="20" height="20"
+                         loading="lazy"
+                         class="rounded me-1"
+                         alt="{{ __('view_compendium.class.show.reflect.title') }}"/>{{ __('view_compendium.class.show.reflect.title') }}
+                </h5>
 
-        @if($reflectSpells->isEmpty())
-            <p class="text-muted">{{ __('view_compendium.class.show.reflect.no_spells') }}</p>
-        @else
-            @include('compendium.class.sections.spell-npc-table', [
-                'tableSpells'        => $reflectSpells,
-                'tableNpcsBySpellId' => $reflectNpcsBySpellId,
-                'tableSpellHeader'   => 'view_compendium.class.show.reflect.table_header_spell',
-                'tableNpcsHeader'    => 'view_compendium.class.show.reflect.table_header_npcs',
-            ])
-        @endif
+                @if($reflectSpells->isEmpty())
+                    <p class="text-muted mb-0">{{ __('view_compendium.class.show.reflect.no_spells') }}</p>
+                @else
+                    @include('compendium.class.sections.spell-npc-table', [
+                        'tableSpells'        => $reflectSpells,
+                        'tableNpcsBySpellId' => $reflectNpcsBySpellId,
+                        'tableSpellHeader'   => 'view_compendium.class.show.reflect.table_header_spell',
+                        'tableNpcsHeader'    => 'view_compendium.class.show.reflect.table_header_npcs',
+                    ])
+                @endif
+            </div>
+        </div>
     @endif
 @endsection

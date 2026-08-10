@@ -14,7 +14,7 @@ use Illuminate\Support\Collection;
  */
 ?>
 <div class="table-responsive">
-    <table class="table table-sm table-striped">
+    <table class="compendium_table">
         <thead>
         <tr>
             <th width="35%">{{ __($tableSpellHeader) }}</th>
@@ -26,7 +26,7 @@ use Illuminate\Support\Collection;
             <?php /** @var Spell $tableSpell */ ?>
             <?php $castingNpcs = $tableNpcsBySpellId->get($tableSpell->id, collect()); ?>
             <tr>
-                <td>@include('common.spell.link', ['spell' => $tableSpell])</td>
+                <td class="text-nowrap">@include('common.spell.link', ['spell' => $tableSpell])</td>
                 <td>
                     @if($castingNpcs->isEmpty())
                         <span class="text-muted">{{ __('view_compendium.class.show.no_npcs') }}</span>
