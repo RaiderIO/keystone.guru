@@ -7,6 +7,7 @@ use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
@@ -34,12 +35,12 @@ final class CoordinatesServiceTest extends PublicTestCase
      * @var array<int, string>
      */
     private const array DEVIATES_FROM_MDT_DUNGEON_KEYS = [
-        Dungeon::DUNGEON_EYE_OF_AZSHARA,
-        Dungeon::DUNGEON_VAULT_OF_THE_WARDENS,
-        Dungeon::DUNGEON_WINDRUNNER_SPIRE,
-        Dungeon::DUNGEON_NEXUS_POINT_XENAS,
-        Dungeon::DUNGEON_THE_ROOKERY,
-        Dungeon::DUNGEON_KINGS_REST,
+        DungeonKey::EYE_OF_AZSHARA->value,
+        DungeonKey::VAULT_OF_THE_WARDENS->value,
+        DungeonKey::WINDRUNNER_SPIRE->value,
+        DungeonKey::NEXUS_POINT_XENAS->value,
+        DungeonKey::THE_ROOKERY->value,
+        DungeonKey::KINGS_REST->value,
     ];
 
     /**

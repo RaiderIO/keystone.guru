@@ -8,6 +8,7 @@ use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
 use App\Models\CharacterRace;
 use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Expansion;
 use App\Models\Faction;
@@ -310,7 +311,7 @@ class ViewService implements ViewServiceInterface
 
     public function getSiegeOfBoralus(): ?Dungeon
     {
-        return $this->cachedGlobal('siege_of_boralus', static fn() => Dungeon::where('key', Dungeon::DUNGEON_SIEGE_OF_BORALUS)->first());
+        return $this->cachedGlobal('siege_of_boralus', static fn() => Dungeon::where('key', DungeonKey::SIEGE_OF_BORALUS->value)->first());
     }
 
     /**

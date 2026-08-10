@@ -4,7 +4,7 @@ namespace Tests\Feature\Traits;
 
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
-use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Service\Cache\CacheServiceInterface;
@@ -148,11 +148,11 @@ trait GeneratesDungeonRoutes
                 // These compensate for MDT's duplicate-NPC merging, which shifts clone indices for
                 // specific NPCs. Without this check, enemies near the top of the accessible clone
                 // range would pass the MDT-existence filter but fail during import.
-                if ($dungeon->key === Dungeon::DUNGEON_SIEGE_OF_BORALUS && $npcIndex === 35) {
+                if ($dungeon->key === DungeonKey::SIEGE_OF_BORALUS->value && $npcIndex === 35) {
                     $importMdtId += 15;
-                } elseif ($dungeon->key === Dungeon::DUNGEON_TOL_DAGOR && $npcIndex === 11) {
+                } elseif ($dungeon->key === DungeonKey::TOL_DAGOR->value && $npcIndex === 11) {
                     $importMdtId += 2;
-                } elseif ($dungeon->key === Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE && $npcIndex === 23) {
+                } elseif ($dungeon->key === DungeonKey::MISTS_OF_TIRNA_SCITHE->value && $npcIndex === 23) {
                     $importMdtId += 5;
                 }
 

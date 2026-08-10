@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\Cata;
 
-use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\APICombatLogControllerCorrectEventsTestBase;
@@ -16,7 +16,7 @@ class APICombatLogControllerCorrectEventsGrimBatolTest extends APICombatLogContr
 {
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_GRIM_BATOL;
+        return DungeonKey::GRIM_BATOL->value;
     }
 
     #[Test]

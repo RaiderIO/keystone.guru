@@ -5,7 +5,7 @@ namespace App\Service\CombatLog\DataExtractors;
 use App;
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\SpecialEvents\MapChange;
-use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Models\Floor\Floor;
 use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
 use App\Service\CombatLog\DataExtractors\Logging\FloorDataExtractorLoggingInterface;
@@ -44,9 +44,9 @@ class FloorDataExtractor implements DataExtractorInterface
 
         // Blizzard's floor coordinates are not accurate for The Necrotic Wake
         if (in_array($currentDungeon->dungeon->key, [
-            Dungeon::DUNGEON_THE_NECROTIC_WAKE,
-            Dungeon::DUNGEON_TAZAVESH_STREETS_OF_WONDER,
-            Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT,
+            DungeonKey::THE_NECROTIC_WAKE->value,
+            DungeonKey::TAZAVESH_STREETS_OF_WONDER->value,
+            DungeonKey::TAZAVESH_SO_LEAHS_GAMBIT->value,
         ])) {
             return;
         }

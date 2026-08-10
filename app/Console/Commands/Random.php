@@ -72,7 +72,7 @@ class Random extends Command
 //            CombatLogEventEventType::PlayerDeath,
 //            1000000,
 //            100,
-//            Dungeon::firstWhere('key', Dungeon::DUNGEON_THE_MOTHERLODE),
+//            Dungeon::firstWhere('key', DungeonKey::THE_MOTHERLODE->value),
 //        );
 
 //        $dungeonRouteService->refreshOutdatedThumbnails();
@@ -136,7 +136,7 @@ class Random extends Command
 //        dd($dungeonRoute->id);
 
 //        $dungeonFloorSwitchMarker = DungeonFloorSwitchMarker::find(1654);
-//        $hallsOfInfusion          = Dungeon::firstWhere('key', Dungeon::DUNGEON_HALLS_OF_INFUSION);
+//        $hallsOfInfusion          = Dungeon::firstWhere('key', DungeonKey::HALLS_OF_INFUSION->value);
 //
 //        $latLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
 //            $hallsOfInfusion->currentMappingVersion,

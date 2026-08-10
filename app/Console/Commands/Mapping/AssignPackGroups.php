@@ -2,9 +2,10 @@
 
 namespace App\Console\Commands\Mapping;
 
-use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Models\EnemyPack;
 use App\Models\Mapping\MappingVersion;
+use App\Models\RaidKey;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 
@@ -36,17 +37,17 @@ class AssignPackGroups extends Command
         ])->get();
 
         $dungeonWhitelist = [
-            Dungeon::RAID_THE_EYE,
-            Dungeon::RAID_SERPENTSHRINE_CAVERN,
-            //            Dungeon::DUNGEON_GATE_OF_THE_SETTING_SUN,
-            //            Dungeon::DUNGEON_MOGU_SHAN_PALACE,
-            //            Dungeon::DUNGEON_SCARLET_HALLS_MOP,
-            //            Dungeon::DUNGEON_SCARLET_MONASTERY_MOP,
-            //            Dungeon::DUNGEON_SCHOLOMANCE_MOP,
-            //            Dungeon::DUNGEON_SHADO_PAN_MONASTERY,
-            //            Dungeon::DUNGEON_SIEGE_OF_NIUZAO_TEMPLE,
-            //            Dungeon::DUNGEON_STORMSTOUT_BREWERY,
-            //            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT,
+            RaidKey::THE_EYE->value,
+            RaidKey::SERPENTSHRINE_CAVERN->value,
+            //            DungeonKey::GATE_OF_THE_SETTING_SUN->value,
+            //            DungeonKey::MOGU_SHAN_PALACE->value,
+            //            DungeonKey::SCARLET_HALLS_MOP->value,
+            //            DungeonKey::SCARLET_MONASTERY_MOP->value,
+            //            DungeonKey::SCHOLOMANCE_MOP->value,
+            //            DungeonKey::SHADO_PAN_MONASTERY->value,
+            //            DungeonKey::SIEGE_OF_NIUZAO_TEMPLE->value,
+            //            DungeonKey::STORMSTOUT_BREWERY->value,
+            //            DungeonKey::TEMPLE_OF_THE_JADE_SERPENT->value,
         ];
 
         $count = 0;

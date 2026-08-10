@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\View\Admin\Floor;
 
-use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\Floor\Floor;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use PHPUnit\Framework\Attributes\Group;
@@ -34,10 +34,10 @@ final class SpeedrunRequiredNpcsTest extends PublicTestCase
         );
         $this->assertStringNotContainsString('nav-tabs', $rendered);
 
-        foreach (Dungeon::DIFFICULTY_ALL as $difficulty) {
+        foreach (DungeonDifficulty::cases() as $difficulty) {
             $this->assertStringContainsString(
                 __('view_admin.floor.edit.speedrun_required_npcs.add_npc_for', [
-                    'difficulty' => Dungeon::getDifficultyName($difficulty),
+                    'difficulty' => $difficulty->translatedName(),
                 ]),
                 $rendered,
             );
@@ -56,7 +56,7 @@ final class SpeedrunRequiredNpcsTest extends PublicTestCase
             $this->fail('No seeded floor without speedrun required NPCs found.');
         }
 
-        $createdNpcs = collect([Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_10_MAN], Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_40_MAN]])
+        $createdNpcs = collect([DungeonDifficulty::TEN_MAN->value, DungeonDifficulty::FORTY_MAN->value])
             ->map(static fn(int $difficulty): DungeonSpeedrunRequiredNpc => DungeonSpeedrunRequiredNpc::create([
                 'floor_id'   => $floor->id,
                 'difficulty' => $difficulty,

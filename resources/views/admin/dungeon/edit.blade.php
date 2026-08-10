@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\Floor\Floor;
 use Illuminate\Support\Collection;
 
@@ -63,7 +64,7 @@ use Illuminate\Support\Collection;
                     </div>
 
                     <div class="col {{ $errors->has('speedrun_difficulties') ? ' has-error' : '' }}">
-                        @php($difficultiesSelect = collect(Dungeon::DIFFICULTY_ALL)->mapWithKeys(fn($id, $slug) => [$id => Dungeon::getDifficultyName($id)])->toArray())
+                        @php($difficultiesSelect = collect(DungeonDifficulty::cases())->mapWithKeys(fn(DungeonDifficulty $difficulty) => [$difficulty->value => $difficulty->translatedName()])->toArray())
                         @php($enabledSpeedrunDifficulties = $dungeon?->getEnabledSpeedrunDifficulties() ?? [])
                         {{ html()->label(__('view_admin.dungeon.edit.speedrun_difficulties'), 'speedrun_difficulties') }}
                         {{ html()->multiselect('speedrun_difficulties[]', $difficultiesSelect, $enabledSpeedrunDifficulties)->id('speedrun_difficulties')->class('form-control selectpicker') }}

@@ -2,7 +2,7 @@
 
 namespace Controller\Api\V1\APICombatLogController\CombatLogRoute\Midnight;
 
-use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\APICombatLogControllerCombatLogRouteTestBase;
@@ -16,7 +16,7 @@ class APICombatLogControllerCombatLogRouteAlgetharAcademyMidnightTest extends AP
 {
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_ALGETH_AR_ACADEMY_MIDNIGHT;
+        return DungeonKey::ALGETH_AR_ACADEMY_MIDNIGHT->value;
     }
 
     #[Test]
