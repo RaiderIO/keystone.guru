@@ -22,6 +22,7 @@ use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -205,7 +206,11 @@ class ProfileController extends Controller
                             foreach ($reverbHttpApiService->getChannelUsers($name) as $reverbChannelUser) {
                                 if ((int)$reverbChannelUser['id'] === $user->id) {
                                     // Broadcast that channel that our user's color has changed
-                                    broadcast(new UserColorChangedEvent($context, $user));
+                                    try {
+                                        broadcast(new UserColorChangedEvent($context, $user));
+                                    } catch (BroadcastException) {
+                                        // Ignore broadcast failures
+                                    }
 
                                     break;
                                 }

@@ -128,7 +128,11 @@ class AjaxBrushlineController extends Controller
                     /** @var \App\Models\User $user */
                     $user = Auth::getUser();
 
-                    broadcast(new BrushlineDeletedEvent($dungeonRoute, $user, $brushline));
+                    try {
+                        broadcast(new BrushlineDeletedEvent($dungeonRoute, $user, $brushline));
+                    } catch (BroadcastException) {
+                        // We don't really care if the broadcast fails, so just catch the exception and move on
+                    }
                 }
 
                 $this->dungeonRouteChanged($dungeonRoute, $brushline, null);

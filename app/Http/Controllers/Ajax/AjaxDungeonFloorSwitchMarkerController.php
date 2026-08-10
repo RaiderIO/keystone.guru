@@ -11,6 +11,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -43,7 +44,12 @@ class AjaxDungeonFloorSwitchMarkerController extends AjaxMappingModelBaseControl
                 if (Auth::check()) {
                     /** @var User $user */
                     $user = Auth::getUser();
-                    broadcast(new DungeonFloorSwitchMarkerDeletedEvent($dungeon, $user, $dungeonFloorSwitchMarker));
+
+                    try {
+                        broadcast(new DungeonFloorSwitchMarkerDeletedEvent($dungeon, $user, $dungeonFloorSwitchMarker));
+                    } catch (BroadcastException) {
+                        // Ignore broadcast failures
+                    }
                 }
 
                 // Trigger mapping changed event so the mapping gets saved across all environments

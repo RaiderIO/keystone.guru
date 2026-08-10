@@ -13,6 +13,7 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use Closure;
 use DB;
 use Exception;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
@@ -93,7 +94,12 @@ abstract class AjaxMappingModelBaseController extends Controller
                     /** @var Floor|null $floor */
                     $floor = $model->getAttribute('floor');
                     $echoContext ??= $floor?->dungeon;
-                    broadcast($this->getModelChangedEvent($coordinatesService, $echoContext, Auth::user(), $model));
+
+                    try {
+                        broadcast($this->getModelChangedEvent($coordinatesService, $echoContext, Auth::user(), $model));
+                    } catch (BroadcastException) {
+                        // Ignore broadcast failures
+                    }
                 }
 
                 return $model;

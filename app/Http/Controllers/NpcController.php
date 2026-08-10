@@ -17,6 +17,7 @@ use App\Models\Spell\Spell;
 use App\Models\User;
 use App\Service\Npc\NpcServiceInterface;
 use Exception;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
@@ -162,11 +163,19 @@ class NpcController extends Controller
             /** @var User $user */
             $user = Auth::user();
             foreach ($npc->dungeons as $dungeon) {
-                broadcast(new NpcChangedEvent($dungeon, $user, $npc));
+                try {
+                    broadcast(new NpcChangedEvent($dungeon, $user, $npc));
+                } catch (BroadcastException) {
+                    // Ignore broadcast failures
+                }
             }
 
             foreach ($npcBefore->dungeons as $dungeon) {
-                broadcast(new NpcChangedEvent($dungeon, $user, $npcBefore));
+                try {
+                    broadcast(new NpcChangedEvent($dungeon, $user, $npcBefore));
+                } catch (BroadcastException) {
+                    // Ignore broadcast failures
+                }
             }
 
             // Trigger mapping changed event so the mapping gets saved across all environments

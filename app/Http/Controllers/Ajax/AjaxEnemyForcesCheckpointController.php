@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use DB;
 use Exception;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -62,7 +63,12 @@ class AjaxEnemyForcesCheckpointController extends AjaxMappingModelBaseController
                     if (Auth::check()) {
                         /** @var User $user */
                         $user = Auth::user();
-                        broadcast(new EnemyForcesCheckpointDeletedEvent($enemyForcesCheckpoint->floor->dungeon, $user, $enemyForcesCheckpoint));
+
+                        try {
+                            broadcast(new EnemyForcesCheckpointDeletedEvent($enemyForcesCheckpoint->floor->dungeon, $user, $enemyForcesCheckpoint));
+                        } catch (BroadcastException) {
+                            // Ignore broadcast failures
+                        }
                     }
                 }
 

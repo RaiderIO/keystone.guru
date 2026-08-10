@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
@@ -61,7 +62,12 @@ class AjaxOverpulledEnemyController extends Controller
             if (Auth::check()) {
                 /** @var User $user */
                 $user = Auth::getUser();
-                broadcast(new OverpulledEnemyChangedEvent($liveSession, $user, $overpulledEnemy, $enemy));
+
+                try {
+                    broadcast(new OverpulledEnemyChangedEvent($liveSession, $user, $overpulledEnemy, $enemy));
+                } catch (BroadcastException) {
+                    // Ignore broadcast failures
+                }
             }
         }
 
@@ -100,7 +106,12 @@ class AjaxOverpulledEnemyController extends Controller
                 if ($overpulledEnemy && $overpulledEnemy->delete() && Auth::check()) { // @phpstan-ignore booleanAnd.leftAlwaysTrue
                     /** @var User $user */
                     $user = Auth::getUser();
-                    broadcast(new OverpulledEnemyDeletedEvent($livesession, $user, $enemy));
+
+                    try {
+                        broadcast(new OverpulledEnemyDeletedEvent($livesession, $user, $enemy));
+                    } catch (BroadcastException) {
+                        // Ignore broadcast failures
+                    }
                 }
 
                 // Optionally, don't calculate the return value

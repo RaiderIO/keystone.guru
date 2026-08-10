@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use DB;
 use Exception;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -59,7 +60,12 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
                     if (Auth::check()) {
                         /** @var User $user */
                         $user = Auth::user();
-                        broadcast(new MountableAreaDeletedEvent($mountableArea->floor->dungeon, $user, $mountableArea));
+
+                        try {
+                            broadcast(new MountableAreaDeletedEvent($mountableArea->floor->dungeon, $user, $mountableArea));
+                        } catch (BroadcastException) {
+                            // Ignore broadcast failures
+                        }
                     }
                 }
 

@@ -25,6 +25,7 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\KillZonePath\KillZonePathServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\UniqueConstraintViolationException;
@@ -330,7 +331,12 @@ class AjaxKillZoneController extends Controller
                 // Something's updated; broadcast it
                 /** @var User $user */
                 $user = Auth::user();
-                broadcast(new KillZoneChangedEvent($coordinatesService, $dungeonroute, $user, $killZone));
+
+                try {
+                    broadcast(new KillZoneChangedEvent($coordinatesService, $dungeonroute, $user, $killZone));
+                } catch (BroadcastException) {
+                    // Ignore broadcast failures
+                }
             }
         } else {
             throw new Exception('Unable to save kill zone!');
@@ -513,7 +519,12 @@ class AjaxKillZoneController extends Controller
                 if (Auth::check()) {
                     /** @var User $user */
                     $user = Auth::user();
-                    broadcast(new KillZoneDeletedEvent($dungeonRoute, $user, $killZone));
+
+                    try {
+                        broadcast(new KillZoneDeletedEvent($dungeonRoute, $user, $killZone));
+                    } catch (BroadcastException) {
+                        // Ignore broadcast failures
+                    }
                 }
 
                 $dungeonRoute->load('killZones');
@@ -571,11 +582,19 @@ class AjaxKillZoneController extends Controller
                     foreach ($killZones as $killZone) {
                         $this->dungeonRouteChanged($dungeonRoute, $killZone, null);
 
-                        broadcast(new KillZoneDeletedEvent($dungeonRoute, $user, $killZone));
+                        try {
+                            broadcast(new KillZoneDeletedEvent($dungeonRoute, $user, $killZone));
+                        } catch (BroadcastException) {
+                            // Ignore broadcast failures
+                        }
                     }
 
                     foreach ($pridefulEnemies as $pridefulEnemy) {
-                        broadcast(new PridefulEnemyDeletedEvent($dungeonRoute, $user, $pridefulEnemy));
+                        try {
+                            broadcast(new PridefulEnemyDeletedEvent($dungeonRoute, $user, $pridefulEnemy));
+                        } catch (BroadcastException) {
+                            // Ignore broadcast failures
+                        }
                     }
                 }
 

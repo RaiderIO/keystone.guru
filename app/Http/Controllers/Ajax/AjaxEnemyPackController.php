@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use DB;
 use Exception;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -49,7 +50,12 @@ class AjaxEnemyPackController extends AjaxMappingModelBaseController
                 if (Auth::check()) {
                     /** @var User $user */
                     $user = Auth::getUser();
-                    broadcast(new EnemyPackDeletedEvent($enemyPack->floor->dungeon, $user, $enemyPack));
+
+                    try {
+                        broadcast(new EnemyPackDeletedEvent($enemyPack->floor->dungeon, $user, $enemyPack));
+                    } catch (BroadcastException) {
+                        // Ignore broadcast failures
+                    }
                 }
 
                 $result = response()->noContent();

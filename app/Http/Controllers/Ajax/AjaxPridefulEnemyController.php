@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -53,7 +54,12 @@ class AjaxPridefulEnemyController extends Controller
         if (Auth::check()) {
             /** @var User $user */
             $user = Auth::getUser();
-            broadcast(new PridefulEnemyChangedEvent($coordinatesService, $dungeonRoute, $user, $pridefulEnemy));
+
+            try {
+                broadcast(new PridefulEnemyChangedEvent($coordinatesService, $dungeonRoute, $user, $pridefulEnemy));
+            } catch (BroadcastException) {
+                // Ignore broadcast failures
+            }
         }
 
         $dungeonRoute->touch();
@@ -76,7 +82,12 @@ class AjaxPridefulEnemyController extends Controller
             if ($pridefulEnemy && $pridefulEnemy->delete() && Auth::check()) {
                 /** @var User $user */
                 $user = Auth::getUser();
-                broadcast(new PridefulEnemyDeletedEvent($dungeonRoute, $user, $pridefulEnemy));
+
+                try {
+                    broadcast(new PridefulEnemyDeletedEvent($dungeonRoute, $user, $pridefulEnemy));
+                } catch (BroadcastException) {
+                    // Ignore broadcast failures
+                }
             }
 
             $dungeonRoute->touch();
