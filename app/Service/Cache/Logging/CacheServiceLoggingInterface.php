@@ -4,6 +4,8 @@ namespace App\Service\Cache\Logging;
 
 interface CacheServiceLoggingInterface
 {
+    public function getFailedRedisConnection(string $key, \Throwable $e): void;
+
     public function rememberFailedToSetCache(string $key, \Throwable $e): void;
 
     public function rememberFailedToAcquireLock(string $key, \Throwable $e): void;
