@@ -25,6 +25,7 @@ use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\Traits\RemembersToFile;
 use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionServiceInterface;
+use App\Service\Request\ApiRequestServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
@@ -35,18 +36,18 @@ class ViewService implements ViewServiceInterface
 {
     use RemembersToFile;
 
+    /**
+     * The handful of API-surface paths that DO render a view back to the user, and therefore need
+     * their view variables loaded even though ApiRequestService classifies them as API requests.
+     *
+     * @var array<int, string>
+     */
     private const array VIEW_VARIABLES_URL_WHITELIST = [
         // search actually renders views back to the user which we need
         '/ajax/dungeonroute/search',
         '/ajax/search',
         // Renders views through Ajax
         '/ajax/view',
-    ];
-
-    private const array VIEW_VARIABLES_URL_BLACKLIST = [
-        '/ajax/',
-        '/api/',
-        '/benchmark',
     ];
 
     private string $release;
@@ -59,6 +60,7 @@ class ViewService implements ViewServiceInterface
         private readonly ExpansionServiceInterface          $expansionService,
         private readonly SeasonAffixGroupServiceInterface   $seasonAffixGroupService,
         private readonly AffixGroupEaseTierServiceInterface $easeTierService,
+        private readonly ApiRequestServiceInterface         $apiRequestService,
     ) {
         // Load the release version from the file, this is used to cache view variables
         // We want to cache view variables per release so we don't mix up view variables between releases
@@ -596,19 +598,18 @@ class ViewService implements ViewServiceInterface
         }
     }
 
+    /**
+     * An API request produces JSON and never renders a view, so it needs no view variables - unless
+     * it's one of the few whitelisted paths that deliberately render a view anyway. Whether a
+     * request is an API request is not this service's call to make; ApiRequestService owns it.
+     */
     public function shouldLoadViewVariables(string $pathInfo): bool
     {
-        $isWhitelisted = collect(self::VIEW_VARIABLES_URL_WHITELIST)->contains(static fn($url) => Str::startsWith($pathInfo, $url));
-
-        if (!$isWhitelisted) {
-            // If it's blacklisted..
-            if (collect(self::VIEW_VARIABLES_URL_BLACKLIST)->contains(static fn($url) => Str::startsWith($pathInfo, $url))) {
-                // Don't set the view variables at all
-                return false;
-            }
+        if (Str::startsWith($pathInfo, self::VIEW_VARIABLES_URL_WHITELIST)) {
+            return true;
         }
 
-        return true;
+        return !$this->apiRequestService->isApiRequestPath($pathInfo);
     }
 
     /**

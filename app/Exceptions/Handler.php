@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use App\Exceptions\Logging\HandlerLoggingInterface;
 use App\Models\User;
+use App\Service\Request\ApiRequestServiceInterface;
 use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -177,13 +178,20 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * No view composers run on /ajax/ (KeystoneGuruServiceProvider::boot(), gated by
-     * ViewService::shouldLoadViewVariables()) - not even for the handful of /ajax/ routes
-     * whitelisted there to deliberately render an HTML fragment on success (search/view). So an
-     * HTML error view rendered for ANY /ajax/ request is guaranteed to crash on a missing view
-     * variable (#3806). Force JSON for every /ajax/ error (matching how /api/ is already treated
-     * here) except ValidationException, which render() above already carves out since it never
-     * renders an HTML error view in the first place.
+     * An API request must never be answered with an HTML error view: no view composer runs for it
+     * (KeystoneGuruServiceProvider::boot() skips registering them for any path
+     * ViewService::shouldLoadViewVariables() rejects, which is every API path bar a few that render
+     * a view on purpose), so such a view is guaranteed to crash on a missing view variable
+     * (#3806, #3903). Force JSON for those - except ValidationException, which render() above
+     * already carves out since it never renders an HTML error view in the first place.
+     *
+     * Whether the request is an API request is ApiRequestService's call, not something derived from
+     * the view layer: it is resolved here rather than constructor-injected, matching how this class
+     * already resolves HandlerLoggingInterface. The previous hand-rolled check
+     * (str_starts_with($path, 'api/') || str_starts_with($path, 'ajax/')) that the service replaces
+     * had drifted in two ways: it never covered '/benchmark' at all, and Request::decodedPath()
+     * trims the trailing slash, so a bare "/api/" request decoded to "api" and silently failed
+     * "starts with 'api/'" (#3903).
      */
     #[Override]
     protected function shouldReturnJson($request, Throwable $e): bool
@@ -196,14 +204,8 @@ class Handler extends ExceptionHandler
             return parent::shouldReturnJson($request, $e);
         }
 
-        return $this->isApiRequest($request) || parent::shouldReturnJson($request, $e);
-    }
-
-    private function isApiRequest(Request $request): bool
-    {
-        $path = $request->decodedPath();
-
-        return str_starts_with($path, 'api/') || str_starts_with($path, 'ajax/');
+        return app(ApiRequestServiceInterface::class)->isApiRequest($request)
+            || parent::shouldReturnJson($request, $e);
     }
 
     /**
