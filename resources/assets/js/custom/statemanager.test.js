@@ -240,29 +240,58 @@ describe('StateManager floor state', () => {
         expect(stateManager.getCurrentFloor()).toBe(floor);
     });
 
-    test('getCurrentFloor_givenAFloorThatIsNotVisible_returnsFalse', () => {
+    test('getCurrentFloor_givenNoFloorSetYet_returnsFalse', () => {
+        // getCurrentFloor() answers `false` rather than throwing for a floor it cannot resolve.
+        // Callers read `.id`/`.index` straight off the result, so that `false` becomes `undefined`
+        // rather than an error - which is exactly why setFloorId() now refuses to create the
+        // situation in the first place (see below).
         const stateManager = makeStateManager(makeFakeMapContext({visibleFloors: [{id: 1}]}));
-
-        stateManager.setFloorId(99);
 
         expect(stateManager.getCurrentFloor()).toBe(false);
     });
 
-    test('getCurrentFloor_givenTheContextChangedAfterTheFirstCall_keepsTheStaleFloorList', () => {
+    test('setFloorId_givenAFloorThatIsNotVisible_keepsTheCurrentFloorAndDoesNotNotify', () => {
+        const stateManager = makeStateManager(makeFakeMapContext({visibleFloors: [{id: 1}]}));
+        stateManager.setFloorId(1);
+        const received = listenFor(stateManager, 'floorid:changed');
+        const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {
+        });
+
+        stateManager.setFloorId(99);
+
+        expect(stateManager.getCurrentFloor()).toEqual({id: 1});
+        expect(received).toHaveLength(0);
+        expect(consoleError).toHaveBeenCalled();
+    });
+
+    test('isVisibleFloorId_givenAStringIdFromTheDom_stillMatches', () => {
+        // Same coercion asymmetry getCurrentFloor() handles: integer ids from the server, a string
+        // id from the floor <select>. Without it the guard above would reject every real switch.
+        const stateManager = makeStateManager(makeFakeMapContext({visibleFloors: [{id: 2}]}));
+
+        expect(stateManager.isVisibleFloorId('2')).toBe(true);
+        expect(stateManager.isVisibleFloorId('99')).toBe(false);
+    });
+
+    test('setFloorId_givenTheContextChangedAfterTheFirstCall_refusesAgainstTheStaleFloorList', () => {
         // The visible-floor lookup is built once and never invalidated - not by setMapContext(),
         // not by setFloorId(). Nothing swaps _mapContext on a live StateManager today:
         // setMapContext() has exactly one caller (statemanager.blade.php, once per page load) and
         // the facade toggle reloads the page rather than rebuilding in place. So this is latent,
         // not live - pinned so that whoever introduces the first in-page context swap finds out
-        // here rather than through floors silently resolving against the old list.
+        // here. Since setFloorId() validates against that same lookup, a stale list now surfaces as
+        // a refused floor switch (loud) rather than floors resolving against the old list (silent).
         const stateManager = makeStateManager(makeFakeMapContext({visibleFloors: [{id: 1}]}));
         stateManager.setFloorId(1);
         expect(stateManager.getCurrentFloor()).toEqual({id: 1});
+        const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {
+        });
 
         stateManager._mapContext = makeFakeMapContext({visibleFloors: [{id: 1, name: 'Renamed'}, {id: 5}]});
         stateManager.setFloorId(5);
 
-        expect(stateManager.getCurrentFloor()).toBe(false);
+        expect(stateManager.getCurrentFloor()).toEqual({id: 1});
+        expect(consoleError).toHaveBeenCalled();
     });
 });
 
@@ -318,6 +347,16 @@ describe('StateManager cookie-backed display settings', () => {
 
         expect(stateManager.getUnkilledImportantEnemyOpacity()).toBe(0.8);
         expect(received[0].data).toEqual({opacity: 0.8});
+    });
+
+    test.each([
+        ['unkilled enemy', 'getUnkilledEnemyOpacity', 50],
+        ['unkilled important enemy', 'getUnkilledImportantEnemyOpacity', 80],
+    ])('get%sOpacity_givenNoStoredValue_fallsBackToTheDefault', (label, getter, expected) => {
+        // Number(undefined) is NaN, and `opacity: NaN%` is dropped by the browser - rendering
+        // unkilled enemies fully opaque. Same missing-cookie scenario getKillZonePathWeight()
+        // guards against; these must match the defaults map.js first writes the cookies with.
+        expect(makeStateManager()[getter]()).toBe(expected);
     });
 
     test.each([
@@ -630,12 +669,40 @@ describe('StateManager.getPullGradientHandlers', () => {
     });
 
     test('getPullGradientHandlers_givenAHandlerWithoutAColor_skipsIt', () => {
-        const stateManager = makeStateManager(makeFakeMapContext({pullGradient: '0% #ff0000, 50% notacolor'}));
+        const stateManager = makeStateManager(
+            makeFakeMapContext({pullGradient: '0% #ff0000, 50% notacolor, 100% #00ff00'})
+        );
         const consoleWarn = vi.spyOn(console, 'warn').mockImplementation(() => {
         });
 
-        expect(stateManager.getPullGradientHandlers()).toEqual([[0, '#ff0000']]);
+        expect(stateManager.getPullGradientHandlers()).toEqual([[0, '#ff0000'], [100, '#00ff00']]);
         expect(consoleWarn).toHaveBeenCalled();
+    });
+
+    test.each([
+        ['a trailing comma', '0% #ff0000,'],
+        ['no space between the stop and the color', '0%#ff0000, 100%#00ff00'],
+        ['no color at all', 'red'],
+        ['nothing parseable', 'a,b'],
+    ])('getPullGradientHandlers_given%s_fallsBackToTheDefaultsInsteadOfThrowing', (label, pullGradient) => {
+        // pull_gradient is persisted with no format validation at all (storePullGradient() takes a
+        // bare Request), so these really can be stored. Dereferencing the missing color token threw
+        // a TypeError - verified against a live route carrying '0% #ff0000,'. The blast radius is
+        // the route's own editor rather than its viewers: the three callers are the pull settings
+        // tab's init, createNewPull() and the sidebar's drag-reorder, all edit-mode only.
+        const stateManager = makeStateManager(makeFakeMapContext({pullGradient}));
+        vi.spyOn(console, 'warn').mockImplementation(() => {
+        });
+
+        expect(stateManager.getPullGradientHandlers()).toBe(c.map.editsidebar.pullGradient.defaultHandlers);
+    });
+
+    test('getPullGradientHandlers_givenOnlyOneUsableHandler_fallsBackToTheDefaults', () => {
+        // pickHexFromHandlers() indexes handlers[0] and handlers[length - 1] unconditionally and
+        // asserts length > 1, so handing it a single handler is its own crash.
+        const stateManager = makeStateManager(makeFakeMapContext({pullGradient: '0% #ff0000'}));
+
+        expect(stateManager.getPullGradientHandlers()).toBe(c.map.editsidebar.pullGradient.defaultHandlers);
     });
 });
 
