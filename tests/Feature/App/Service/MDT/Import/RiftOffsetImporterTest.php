@@ -8,6 +8,7 @@ use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Service\MDT\Import\RiftOffsetImporter;
 use App\Service\MDT\Models\ImportStringRiftOffsets;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -92,10 +93,18 @@ final class RiftOffsetImporterTest extends PublicTestCase
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         $floorIds       = $dungeon->floors->pluck('id');
 
+        // Mirror parseRiftOffsets()'s own seasonal_index predicate: with no import string season
+        // set, this dungeon has more than one Brutal obelisk icon on the current mapping version's
+        // floors, and only this predicate (not row order) picks the one the importer would.
         $obeliskMapIcon = MapIcon::where(
             'map_icon_type_id',
             MapIconType::ALL[MapIconType::MAP_ICON_TYPE_AWAKENED_OBELISK_BRUTAL],
-        )->whereIn('floor_id', $floorIds)->firstOrFail();
+        )
+            ->whereIn('floor_id', $floorIds)
+            ->where(static function (Builder $query) {
+                $query->whereNull('seasonal_index')->orWhere('seasonal_index', 1);
+            })
+            ->firstOrFail();
 
         // Pin the test's premise explicitly: this NPC must actually be placed on more than one
         // floor of this dungeon, otherwise this test isn't exercising the disambiguation at all.
@@ -113,6 +122,22 @@ final class RiftOffsetImporterTest extends PublicTestCase
                 self::DUNGEON_KEY_MULTI_FLOOR,
                 $mappingVersion->id,
             ),
+        );
+
+        // Pin the property that makes this test non-vacuous: a floor-unfiltered lookup (the
+        // pre-#3935 disambiguation, minus the enemy_pack_id filter) must land on a *different*
+        // floor than the obelisk icon's, otherwise this test would still pass even without the
+        // floor anchor this PR adds.
+        $firstMatchingEnemyRegardlessOfFloor = Enemy::where('npc_id', self::BRUTAL_NPC_ID)
+            ->where('mapping_version_id', $mappingVersion->id)
+            ->whereIn('floor_id', $floorIds)
+            ->orderBy('id')
+            ->firstOrFail();
+        $this->assertNotSame(
+            $obeliskMapIcon->floor_id,
+            $firstMatchingEnemyRegardlessOfFloor->floor_id,
+            'Test premise no longer holds: a floor-unfiltered enemy lookup now agrees with the '
+            . 'obelisk icon\'s floor, so this test no longer exercises the floor-anchoring disambiguation.',
         );
 
         $importStringRiftOffsets = new ImportStringRiftOffsets(
