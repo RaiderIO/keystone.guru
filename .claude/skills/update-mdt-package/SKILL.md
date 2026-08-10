@@ -27,6 +27,21 @@ the points called out below.
 - Keep a running summary as you go: which dungeons imported, any new POI types/templates
   added, and any tests still failing.
 
+## Step 0 — Baseline the test suite
+
+Before touching anything, run the **full test suite** once on the unmodified worktree and save
+the list of failing tests:
+
+```
+docker compose exec -T app php artisan test --compact > /tmp/mdt_baseline_test_run.log 2>&1
+```
+
+The suite is not guaranteed green even on a fresh checkout (environmental flakes: Reverb/Pusher
+not running locally, `MapTilesExistenceTest` needing an asset mount only the main stack has,
+etc.) — this baseline is what lets Step 8 tell a **pre-existing** failure apart from a **real
+regression** the MDT bump introduced, instead of having to reason about it from scratch after
+the fact. Keep the log file around; don't just eyeball the pass count.
+
 ## Step 1 — Open a tracking GitHub issue
 
 Before touching any files, open an issue on `RaiderIO/keystone.guru` to document the update.
@@ -252,10 +267,15 @@ formatting of the rewritten `npcs.php` files, per the project's finishing-up con
 
 ## Step 8 — Full suite and wrap-up
 
-1. Run the **full test suite**. If anything fails, report it to the user.
+1. Run the **full test suite** and diff its failures against the Step 0 baseline log
+   (`/tmp/mdt_baseline_test_run.log`). A failure present in both is pre-existing/environmental —
+   don't spend time re-diagnosing it. A failure that's **new** (passed at baseline, fails now)
+   is a real regression from the bump — root-cause and fix it before wrapping up, don't just
+   report it (per this repo's "fix incidental issues" convention).
 2. Give the user a **summary**: dungeon mappings imported, any new POI types/templates added,
-   and any tests still failing (especially any unresolved CombatLogRoute failures). Include
-   the **tracking issue number** from Step 1.
+   and any tests still failing, split into **pre-existing** vs **newly broken by this update**
+   (especially any unresolved CombatLogRoute failures). Include the **tracking issue number**
+   from Step 1.
 3. **Remind the user** to visit the explore page for each newly imported dungeon so they can
    visually verify everything looks correct.
 4. Leave all changes uncommitted for the user to review, and leave the tracking issue **open**
