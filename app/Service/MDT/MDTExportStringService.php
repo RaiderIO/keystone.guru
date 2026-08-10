@@ -17,6 +17,7 @@ use App\Models\Path;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\Traits\RemembersToFile;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\MDT\Logging\MDTExportStringServiceLoggingInterface;
 use Exception;
 use Illuminate\Support\Collection;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -41,7 +42,9 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     public function __construct(
         private readonly CacheServiceInterface       $cacheService,
         private readonly CoordinatesServiceInterface $coordinatesService,
+        MDTExportStringServiceLoggingInterface       $log,
     ) {
+        parent::__construct($log);
     }
 
     /**

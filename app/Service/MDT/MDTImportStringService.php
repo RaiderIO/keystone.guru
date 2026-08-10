@@ -58,6 +58,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         private readonly RaidMarkerImporter                     $raidMarkerImporter,
         private readonly MappingServiceInterface                $mappingService,
     ) {
+        parent::__construct($log);
     }
 
     /**
