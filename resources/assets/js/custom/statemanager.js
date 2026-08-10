@@ -722,10 +722,13 @@ class StateManager extends Signalable {
         }
 
         // pull_gradient is persisted without any format validation, so a route may well carry a
-        // gradient that yields fewer than the two handlers pickHexFromHandlers() requires (it
-        // indexes handlers[0] and handlers[length - 1] unconditionally). Fall back to the defaults
-        // rather than handing it a list it cannot work with.
-        if (result.length < 2) {
+        // gradient from which nothing usable survives. pickHexFromHandlers() indexes handlers[0]
+        // unconditionally, so an empty list is its own TypeError - fall back to the defaults.
+        // A single handler is deliberately kept: it is reachable (grapick lets you remove stops
+        // down to one) and works, since handlers[0] === handlers[length - 1] makes every weight
+        // resolve to that one color. Replacing it would also feed the defaults back into grapick
+        // on SettingsTabPull.activate(), overwriting the user's saved gradient on the next edit.
+        if (result.length < 1) {
             result = c.map.editsidebar.pullGradient.defaultHandlers;
         }
 

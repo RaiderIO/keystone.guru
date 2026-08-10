@@ -680,7 +680,6 @@ describe('StateManager.getPullGradientHandlers', () => {
     });
 
     test.each([
-        ['a trailing comma', '0% #ff0000,'],
         ['no space between the stop and the color', '0%#ff0000, 100%#00ff00'],
         ['no color at all', 'red'],
         ['nothing parseable', 'a,b'],
@@ -697,12 +696,25 @@ describe('StateManager.getPullGradientHandlers', () => {
         expect(stateManager.getPullGradientHandlers()).toBe(c.map.editsidebar.pullGradient.defaultHandlers);
     });
 
-    test('getPullGradientHandlers_givenOnlyOneUsableHandler_fallsBackToTheDefaults', () => {
-        // pickHexFromHandlers() indexes handlers[0] and handlers[length - 1] unconditionally and
-        // asserts length > 1, so handing it a single handler is its own crash.
-        const stateManager = makeStateManager(makeFakeMapContext({pullGradient: '0% #ff0000'}));
+    test('getPullGradientHandlers_givenATrailingComma_keepsTheHandlersThatParsed', () => {
+        // The empty trailing segment is skipped rather than throwing, and the one handler that did
+        // parse is kept - see below for why a single handler is not replaced by the defaults.
+        const stateManager = makeStateManager(makeFakeMapContext({pullGradient: '0% #ff0000,'}));
+        vi.spyOn(console, 'warn').mockImplementation(() => {
+        });
 
-        expect(stateManager.getPullGradientHandlers()).toBe(c.map.editsidebar.pullGradient.defaultHandlers);
+        expect(stateManager.getPullGradientHandlers()).toEqual([[0, '#ff0000']]);
+    });
+
+    test('getPullGradientHandlers_givenOnlyOneUsableHandler_keepsIt', () => {
+        // grapick lets the user remove stops down to a single one, and handler:remove persists
+        // immediately - so a one-stop gradient is real, saved data. It also renders correctly:
+        // pickHexFromHandlers()'s length assert only logs, and handlers[0] === handlers[length - 1]
+        // makes every weight resolve to that color. Substituting the defaults here would show the
+        // user a gradient they did not save and write it back over theirs on the next edit.
+        const stateManager = makeStateManager(makeFakeMapContext({pullGradient: '50% #ff0000'}));
+
+        expect(stateManager.getPullGradientHandlers()).toEqual([[50, '#ff0000']]);
     });
 });
 
