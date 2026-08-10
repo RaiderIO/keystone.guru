@@ -450,9 +450,15 @@ Do not report the machine as ready until all six pass. Fix failures here rather 
    `ASSETS_BASE_URL` on the CDN the socat asset forward is unnecessary):
 
    ```bash
-   docker run -d --name ksg-chrome --network keystoneguru_keystone.guru \
+   # The network is named <compose project>_<network>; derive it rather than hardcoding it.
+   NET=$(docker network ls --format '{{.Name}}' | grep keystone)
+   docker rm -f ksg-chrome 2>/dev/null   # idempotent: re-running would hit a name conflict
+   docker run -d --rm --name ksg-chrome --network "$NET" \
        --network-alias chrome --shm-size 1gb chromedp/headless-shell:latest
    ```
+
+   Tear it down with `docker rm -f ksg-chrome` when the probe is done. It is not part of the compose
+   stack, so `docker compose down` leaves it running.
 
    Expect ~10 `Unable to find enemy patrol <id> that is coupled to enemy <id>` console errors on
    some dungeons. Those are stale cross-mapping-version references in the tracked seeder data
