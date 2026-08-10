@@ -77,6 +77,8 @@ $spellPropertyName = static function (SpellProperty $property): string {
 /**
  * Returns HTML: spell names inside descriptions render as links to their compendium page, so
  * every interpolated plain string is escaped here and the caller prints with {!! !!}.
+ * That means the translation lines themselves are part of the HTML trust boundary: lang files
+ * (en_US in-repo, other locales via the managed translation pipeline) render unescaped.
  * When the row already leads with the spell as its subject link ($subjectShown), the
  * description switches to the subject-less wording instead of repeating the spell name.
  */
@@ -209,14 +211,18 @@ $eventSubjectHtml = static function (CombatLogNpcEvent|CombatLogSpellEvent $even
                 </span>
             </div>
         @endforeach
-        @if($hiddenCount > 0 && $contextDungeon !== null && $date !== null)
+        @if($hiddenCount > 0)
             <div class="compendium_log_row">
                 <span class="compendium_log_time"></span>
                 <span class="compendium_log_icon text-muted"><i class="fas fa-ellipsis-h"></i></span>
                 <span class="compendium_log_text">
-                    <a href="{{ route('compendium.activity.day', ['dungeon' => $contextDungeon, 'date' => $date]) }}">
+                    @if($contextDungeon !== null && $date !== null)
+                        <a href="{{ route('compendium.activity.day', ['dungeon' => $contextDungeon, 'date' => $date]) }}">
+                            {{ __('view_compendium.event.more', ['count' => $hiddenCount]) }}
+                        </a>
+                    @else
                         {{ __('view_compendium.event.more', ['count' => $hiddenCount]) }}
-                    </a>
+                    @endif
                 </span>
             </div>
         @endif

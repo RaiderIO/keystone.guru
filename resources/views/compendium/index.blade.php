@@ -52,19 +52,6 @@ $howItWorks = [
 @endsection
 
 @section('content')
-    {{--
-    Direction contract (#3945, "The Field Record"):
-    THESIS: the Compendium is a field record - one continuous, dense record sheet per subject;
-      it refuses the icon-card dashboard arrangement.
-    OWN-WORLD: DESIGN.md's War Room (tonal ladder via theme variables, Keystone Green accent,
-      hairline registers, sturdy controls); no new palette or faces.
-    STORY: a player looks up a thing, reads its record, trusts the combat-log-backed data.
-    FIRST VIEWPORT: intro line, then a four-row directory register (icon plate / title+count /
-      description / go), data-source panel below.
-    FORM: field-record register, candidate 5 of the grounded list, seed key f2671375.
-    FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review,
-      the verdict, and DESIGN.md.
-    --}}
     <div class="row justify-content-center">
         <div class="col-12 col-lg-8 text-center">
             <p class="lead">{{ __('view_compendium.index.intro') }}</p>

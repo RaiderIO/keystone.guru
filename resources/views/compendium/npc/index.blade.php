@@ -79,7 +79,7 @@ use App\Models\Npc\NpcClassification;
                             return data.filter((spell) => !spell.hidden_on_map).map(function (spell) {
                                 return spellTemplate({
                                     compendium_url: `${spellShowBaseUrl}/${spell.id}-${slugify(lang.get(spell.name))}`,
-                                    spell_id: spell.id,
+                                    wowhead_tooltip_data: spell.wowhead_tooltip_data,
                                     icon_url: spell.icon_url,
                                     name: lang.get(spell.name),
                                 });

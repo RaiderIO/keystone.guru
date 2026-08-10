@@ -55,7 +55,7 @@ use App\Models\Npc\NpcClassification;
                         'render': function (data, type, row) {
                             return spellTemplate({
                                 compendium_url: `${spellShowBaseUrl}/${row.id}-${slugify(data ?? '')}`,
-                                spell_id: row.id,
+                                wowhead_tooltip_data: row.wowhead_tooltip_data,
                                 icon_url: row.icon_url,
                                 name: data ?? '',
                             });
