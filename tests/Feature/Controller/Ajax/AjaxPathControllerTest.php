@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use App\Events\Models\Path\PathChangedEvent;
 use App\Models\Floor\Floor;
 use App\Models\Path;
 use App\Models\Polyline;
@@ -42,6 +43,43 @@ final class AjaxPathControllerTest extends DungeonRouteTestBase
         $this->assertEquals($polyline['color_animated'], $responseArr['polyline']['color_animated']);
         $this->assertEquals($polyline['weight'], $responseArr['polyline']['weight']);
         $this->assertEquals($polyline['vertices_json'], $responseArr['polyline']['vertices_json']);
+    }
+
+    #[Test]
+    #[Group('Controller')]
+    public function store_givenNewValidPath_broadcastsPayloadWithoutRedundantVerticesJson(): void
+    {
+        // Arrange
+        Event::fake([PathChangedEvent::class]);
+
+        /** @var Floor $randomFloor */
+        $randomFloor = $this->dungeonRoute->dungeon->floors()
+            ->where('facade', false)
+            ->get()
+            ->random();
+
+        $polyline = PolylineFixtures::createPolyline($randomFloor);
+
+        // Act
+        $response = $this->post(route('ajax.dungeonroute.path.create', ['dungeonRoute' => $this->dungeonRoute]), [
+            'floor_id' => $randomFloor->id,
+            'polyline' => $polyline,
+        ]);
+        $response->assertCreated();
+
+        // Assert - model.polyline.vertices_json is dead weight: PathChangedHandler always
+        // overwrites it client-side with model_data.coordinates before use, so broadcasting both
+        // just tripled the vertex payload and could exceed Reverb's message size cap on large
+        // paths (#3909). The rest of the polyline (used for e.g. color) must still be present.
+        Event::assertDispatched(PathChangedEvent::class, function (PathChangedEvent $event) use ($polyline) {
+            $broadcastPayload = $event->broadcastWith();
+
+            $this->assertArrayNotHasKey('vertices_json', $broadcastPayload['model']['polyline']);
+            $this->assertEquals($polyline['color'], $broadcastPayload['model']['polyline']['color']);
+            $this->assertArrayHasKey('coordinates', $broadcastPayload['model_data']);
+
+            return true;
+        });
     }
 
     #[Test]

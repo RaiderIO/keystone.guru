@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use App\Events\Models\Arrow\ArrowChangedEvent;
 use App\Models\Floor\Floor;
+use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Teapot\StatusCode;
@@ -39,6 +41,42 @@ final class AjaxArrowControllerTest extends DungeonRouteTestBase
         $this->assertEquals($polyline['color_animated'], $responseArr['polyline']['color_animated']);
         $this->assertEquals($polyline['weight'], $responseArr['polyline']['weight']);
         $this->assertEquals($polyline['vertices_json'], $responseArr['polyline']['vertices_json']);
+    }
+
+    #[Test]
+    public function store_givenNewValidArrow_broadcastsPayloadWithoutRedundantVerticesJson(): void
+    {
+        // Arrange
+        Event::fake([ArrowChangedEvent::class]);
+
+        /** @var Floor $randomFloor */
+        $randomFloor = $this->dungeonRoute->dungeon->floors()
+            ->where('facade', false)
+            ->inRandomOrder()
+            ->first();
+
+        $polyline = PolylineFixtures::createPolyline($randomFloor);
+
+        // Act
+        $response = $this->post(route('ajax.dungeonroute.arrow.create', ['dungeonRoute' => $this->dungeonRoute]), [
+            'floor_id' => $randomFloor->id,
+            'polyline' => $polyline,
+        ]);
+        $response->assertCreated();
+
+        // Assert - model.polyline.vertices_json is dead weight: ArrowChangedHandler always
+        // overwrites it client-side with model_data.coordinates before use, so broadcasting both
+        // just duplicated the vertex payload and could exceed Reverb's message size cap (#3909).
+        // The rest of the polyline (used for e.g. color) must still be present.
+        Event::assertDispatched(ArrowChangedEvent::class, function (ArrowChangedEvent $event) use ($polyline) {
+            $broadcastPayload = $event->broadcastWith();
+
+            $this->assertArrayNotHasKey('vertices_json', $broadcastPayload['model']['polyline']);
+            $this->assertEquals($polyline['color'], $broadcastPayload['model']['polyline']['color']);
+            $this->assertArrayHasKey('coordinates', $broadcastPayload['model_data']);
+
+            return true;
+        });
     }
 
     #[Test]
