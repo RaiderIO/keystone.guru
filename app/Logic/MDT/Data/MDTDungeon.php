@@ -385,7 +385,7 @@ class MDTDungeon
 
             $replaceStrings = [
                 'local addonName = ...' => 'local addonName = "MythicDungeonTools"',
-                'local _, MDT = ...'    => 'local _, MDT = "MythicDungeonTools", MDT',
+                'local _, MDT = ...'    => 'local MDT = MDT',
             ];
             foreach ($replaceStrings as $search => $replace) {
                 $eval = str_replace($search, $replace, $eval);
