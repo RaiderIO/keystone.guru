@@ -74,9 +74,20 @@ $spellPropertyName = static function (SpellProperty $property): string {
     return __('spellmisstypes.' . substr($property->value, 5));
 };
 
-$eventDescription = static function (CombatLogNpcEvent|CombatLogSpellEvent $event) use ($spellPropertyName): string {
+/**
+ * Returns HTML: spell names inside descriptions render as links to their compendium page, so
+ * every interpolated plain string is escaped here and the caller prints with {!! !!}.
+ * When the row already leads with the spell as its subject link ($subjectShown), the
+ * description switches to the subject-less wording instead of repeating the spell name.
+ */
+$eventDescription = static function (CombatLogNpcEvent|CombatLogSpellEvent $event, bool $subjectShown) use ($spellPropertyName): string {
     if ($event instanceof CombatLogNpcEvent) {
-        $modelName = $event->model ? __($event->model->getAttribute('name')) : sprintf('#%d', $event->model_id);
+        $model = $event->model;
+
+        // An assigned spell has its own compendium page - render the name as a spell link
+        $modelName = $model instanceof Spell
+            ? view('common.spell.link', ['spell' => $model])->render()
+            : e($model ? __($model->getAttribute('name')) : sprintf('#%d', $event->model_id));
 
         return match ($event->event_type) {
             CombatLogNpcEventType::CharacteristicAdded => __('view_compendium.event.characteristic_added', ['name' => $modelName]),
@@ -85,16 +96,22 @@ $eventDescription = static function (CombatLogNpcEvent|CombatLogSpellEvent $even
         };
     }
 
-    $spellName = $event->spell ? __($event->spell->name) : sprintf('#%d', $event->spell_id);
+    $spellName = e($event->spell ? __($event->spell->name) : sprintf('#%d', $event->spell_id));
 
     // Counters and immunity bypasses are properties of what a *player* can do about the spell, so the generic
     // "Affected by :property" wording does not fit them
     [$addedKey, $removedKey] = match (true) {
-        $event->property?->isCounter() === true => [
+        $event->property?->isCounter() === true => $subjectShown ? [
+            'view_compendium.event.counter_added_no_subject',
+            'view_compendium.event.counter_removed_no_subject',
+        ] : [
             'view_compendium.event.counter_added',
             'view_compendium.event.counter_removed',
         ],
-        $event->property?->isImmunityBypass() === true => [
+        $event->property?->isImmunityBypass() === true => $subjectShown ? [
+            'view_compendium.event.immunity_bypass_added_no_subject',
+            'view_compendium.event.immunity_bypass_removed_no_subject',
+        ] : [
             'view_compendium.event.immunity_bypass_added',
             'view_compendium.event.immunity_bypass_removed',
         ],
@@ -105,21 +122,27 @@ $eventDescription = static function (CombatLogNpcEvent|CombatLogSpellEvent $even
     };
 
     return match ($event->event_type) {
-        CombatLogSpellEventType::SpellCreated => __('view_compendium.event.spell_created', ['spell' => $spellName]),
+        CombatLogSpellEventType::SpellCreated => __(
+            $subjectShown ? 'view_compendium.event.spell_created_no_subject' : 'view_compendium.event.spell_created',
+            ['spell' => $spellName]
+        ),
         CombatLogSpellEventType::PropertyChanged => __($addedKey, [
             'spell'    => $spellName,
-            'property' => $spellPropertyName($event->property)
+            'property' => e($spellPropertyName($event->property))
         ]),
         CombatLogSpellEventType::PropertyRemoved => __($removedKey, [
             'spell'    => $spellName,
-            'property' => $spellPropertyName($event->property)
+            'property' => e($spellPropertyName($event->property))
         ]),
-        CombatLogSpellEventType::SchoolRecorded => __('view_compendium.event.school_recorded', [
-            'spell'   => $spellName,
-            'schools' => $event->spell
-                ? Spell::maskToReadableString(Spell::ALL_SCHOOLS, $event->spell->schools_mask, 'spellschools')
-                : '-',
-        ]),
+        CombatLogSpellEventType::SchoolRecorded => __(
+            $subjectShown ? 'view_compendium.event.school_recorded_no_subject' : 'view_compendium.event.school_recorded',
+            [
+                'spell'   => $spellName,
+                'schools' => e($event->spell
+                    ? Spell::maskToReadableString(Spell::ALL_SCHOOLS, $event->spell->schools_mask, 'spellschools')
+                    : '-'),
+            ]
+        ),
     };
 };
 
@@ -164,6 +187,7 @@ $eventSubjectHtml = static function (CombatLogNpcEvent|CombatLogSpellEvent $even
                 <?php /** @var CombatLogNpcEvent|CombatLogSpellEvent $event */ ?>
                 <?php $anchorId = $eventAnchorId($event); ?>
                 <?php $glyph = $eventGlyph($event); ?>
+                <?php $subjectHtml = $shouldShowSubject($event) ? $eventSubjectHtml($event) : ''; ?>
             <div @if($contextDungeon) id="{{ $anchorId }}" @endif class="compendium_log_row">
                 <span class="compendium_log_time">
                     @if($contextDungeon)
@@ -178,10 +202,10 @@ $eventSubjectHtml = static function (CombatLogNpcEvent|CombatLogSpellEvent $even
                     <i class="{{ $glyph['icon'] }}"></i>
                 </span>
                 <span class="compendium_log_text">
-                    @if($shouldShowSubject($event))
-                        <span class="me-1">{!! $eventSubjectHtml($event) !!}</span>
+                    @if($subjectHtml !== '')
+                        <span class="me-1">{!! $subjectHtml !!}</span>
                     @endif
-                    <span>{{ $eventDescription($event) }}</span>
+                    <span>{!! $eventDescription($event, $subjectHtml !== '') !!}</span>
                 </span>
             </div>
         @endforeach

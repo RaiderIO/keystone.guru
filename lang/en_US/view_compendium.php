@@ -64,9 +64,17 @@ return [
         'school_recorded'         => ':spell deals :schools damage',
         'immunity_bypass_added'   => ':spell was observed landing through :property',
         'immunity_bypass_removed' => ':spell was no longer observed landing through :property',
-        'count'                   => ':count event|:count events',
-        'more'                    => 'and :count more',
-        'property'                => [
+        // Subject-less variants: used when the row already leads with the spell link as its
+        // subject, so the description does not repeat the spell name
+        'spell_created_no_subject'           => 'Added to database',
+        'counter_added_no_subject'           => 'Can now be countered by :property',
+        'counter_removed_no_subject'         => 'Can no longer be countered by :property',
+        'school_recorded_no_subject'         => 'Deals :schools damage',
+        'immunity_bypass_added_no_subject'   => 'Observed landing through :property',
+        'immunity_bypass_removed_no_subject' => 'No longer observed landing through :property',
+        'count'                              => ':count event|:count events',
+        'more'                               => 'and :count more',
+        'property'                           => [
             'aura'   => 'Aura',
             'debuff' => 'Debuff',
         ],
