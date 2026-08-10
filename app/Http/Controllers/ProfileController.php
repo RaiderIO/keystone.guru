@@ -208,8 +208,9 @@ class ProfileController extends Controller
                                     // Broadcast that channel that our user's color has changed
                                     try {
                                         broadcast(new UserColorChangedEvent($context, $user));
-                                    } catch (BroadcastException) {
-                                        // Ignore broadcast failures
+                                    } catch (BroadcastException $exception) {
+                                        // Ignore broadcast failures, but keep the visibility the outer catch below used to give this
+                                        report($exception);
                                     }
 
                                     break;

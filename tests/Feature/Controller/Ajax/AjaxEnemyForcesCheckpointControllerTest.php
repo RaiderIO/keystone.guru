@@ -312,8 +312,8 @@ final class AjaxEnemyForcesCheckpointControllerTest extends AjaxPublicTestCase
             }
 
             /**
-             * @param  array<int, mixed>    $channels
-             * @param  array<string, mixed> $payload
+             * @param array<int, mixed>    $channels
+             * @param array<string, mixed> $payload
              */
             public function broadcast(array $channels, $event, array $payload = []): void
             {

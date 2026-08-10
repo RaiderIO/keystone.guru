@@ -69,8 +69,9 @@ class LiveSessionController extends Controller
                     try {
                         // Broadcast that channel that a team member has started a live session and that we're invited!
                         broadcast(new InviteEvent($liveSession, $user, $invitees));
-                    } catch (BroadcastException) {
-                        // Ignore broadcast failures
+                    } catch (BroadcastException $exception) {
+                        // Ignore broadcast failures, but keep the visibility the outer catch below used to give this
+                        report($exception);
                     }
                 }
             } catch (Exception $exception) {
