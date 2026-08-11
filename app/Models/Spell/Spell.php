@@ -10,6 +10,8 @@ use App\Models\Mapping\MappingModelInterface;
 use App\Models\Npc\Npc;
 use App\Models\Traits\SeederModel;
 use App\Models\Traits\SerializesDates;
+use App\Service\Spell\Description\Dtos\RenderedSpellDescription;
+use App\Service\Spell\Description\Dtos\SpellDescriptionValue;
 use Carbon\Exceptions\InvalidFormatException;
 use Eloquent;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -22,15 +24,18 @@ use Illuminate\Support\Carbon;
 use Str;
 
 /**
- * @property int         $id
- * @property int         $game_version_id
- * @property string|null $category
- * @property string|null $cooldown_group
- * @property string      $dispel_type
- * @property string      $mechanic
- * @property string      $icon_name
- * @property string      $name
- * @property string|null $description_template
+ * @property int                    $id
+ * @property int                    $game_version_id
+ * @property string|null            $category
+ * @property string|null            $cooldown_group
+ * @property string                 $dispel_type
+ * @property string                 $mechanic
+ * @property string                 $icon_name
+ * @property string                 $name
+ * @property string|null            $description_template
+ * @property string|null            $description_format
+ * @property array<int, mixed>|null $description_values
+ *
  * @property string|null $description
  * @property int         $schools_mask
  * @property int         $miss_types_mask
@@ -86,7 +91,8 @@ class Spell extends CacheModel implements MappingModelInterface
         'icon_name',
         'name',
         'description_template',
-        'description',
+        'description_format',
+        'description_values',
         'schools_mask',
         'miss_types_mask',
         'counters_mask',
@@ -119,7 +125,26 @@ class Spell extends CacheModel implements MappingModelInterface
             'hidden_on_map'            => 'boolean',
             'characteristic_id'        => 'integer',
             'fetched_data_at'          => 'datetime',
+            'description_values'       => 'array',
         ];
+    }
+
+    /**
+     * The description as it reads with the values it was rendered with.
+     *
+     * Kept as an accessor rather than a column: the format and its values are the source of truth, so
+     * that damage and healing can be recalculated for a key level without a stored sentence going stale.
+     */
+    public function getDescriptionAttribute(): ?string
+    {
+        if ($this->description_format === null) {
+            return null;
+        }
+
+        return new RenderedSpellDescription(
+            $this->description_format,
+            array_map(SpellDescriptionValue::fromArray(...), $this->description_values ?? []),
+        )->render();
     }
 
     public function getWowheadUrlAttribute(): string

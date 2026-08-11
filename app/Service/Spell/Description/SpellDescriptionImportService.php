@@ -3,13 +3,16 @@
 namespace App\Service\Spell\Description;
 
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellDungeon;
 use App\Service\Spell\Description\Dtos\SpellDescriptionImportResult;
 use App\Service\Spell\Description\Dtos\SpellDescriptionTemplates;
+use App\Service\Spell\Description\Dtos\SpellDescriptionValue;
 use App\Service\Spell\Description\Dtos\SpellEffectData;
 use App\Service\Spell\Description\Logging\SpellDescriptionImportServiceLoggingInterface;
 use App\Service\WagoTools\WagoToolsServiceInterface;
 use Closure;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Builds the descriptions of every spell we know from the game client's DB2 tables.
@@ -57,7 +60,7 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
             // its business - a retail build knows nothing about the spells of the classic ones.
             /** @var Collection<int, Spell> $spells */
             $spells = Spell::query()
-                ->select(['id', 'description', 'description_template'])
+                ->select(['id', 'description_template', 'description_format', 'description_values'])
                 ->where('game_version_id', $gameVersionId)
                 ->get();
             $ourIds = array_fill_keys($spells->pluck('id')->all(), true);
@@ -80,7 +83,7 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
                 descriptionVariables: $this->readDescriptionVariables($build),
             );
 
-            $updatedCount = $this->renderAndPersist($context, $spells, $templates, $onProgress);
+            $updatedCount = $this->renderAndPersist($context, $spells, $templates, $this->getDamageMultipliers(), $onProgress);
 
             return new SpellDescriptionImportResult(
                 build: $build,
@@ -94,13 +97,34 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
     }
 
     /**
+     * What a damage or healing coefficient is multiplied by, per spell, taken from the dungeon the spell
+     * is cast in. A spell seen in more than one dungeon takes the highest, and a spell we have never seen
+     * cast has no multiplier at all - its coefficients stay coefficients rather than becoming a number
+     * that would be wrong.
+     *
+     * @return array<int, float>
+     */
+    private function getDamageMultipliers(): array
+    {
+        return SpellDungeon::query()
+            ->join('dungeons', 'dungeons.id', '=', 'spell_dungeons.dungeon_id')
+            ->whereNotNull('dungeons.spell_damage_coefficient')
+            ->groupBy('spell_dungeons.spell_id')
+            ->pluck(DB::raw('MAX(dungeons.spell_damage_coefficient)'), 'spell_dungeons.spell_id')
+            ->map(static fn(mixed $coefficient): float => (float)$coefficient)
+            ->all();
+    }
+
+    /**
      * @param Collection<int, Spell>       $spells
+     * @param array<int, float>            $damageMultipliers
      * @param Closure(int, int): void|null $onProgress
      */
     private function renderAndPersist(
         SpellDescriptionContextInterface $context,
         Collection                       $spells,
         SpellDescriptionTemplates        $templates,
+        array                            $damageMultipliers,
         ?Closure                         $onProgress,
     ): int {
         $updatedCount = 0;
@@ -121,14 +145,23 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
             // A spell that lost its description in this build must lose ours as well
             $description = $template === null
                 ? null
-                : ($this->spellDescriptionParser->parse($context, $spell->id, $template) ?: null);
+                : $this->spellDescriptionParser->parse($context, $spell->id, $template, $damageMultipliers[$spell->id] ?? 0.0);
 
-            if ($template !== $spell->description_template || $description !== $spell->description) {
+            $format = $description === null || $description->isEmpty() ? null : $description->format;
+            $values = $format === null ? null : array_map(
+                static fn(SpellDescriptionValue $value): array => $value->toArray(),
+                $description->values,
+            );
+
+            if ($template !== $spell->description_template
+                || $format !== $spell->description_format
+                || $values !== $spell->description_values) {
                 Spell::query()
                     ->whereKey($spell->id)
                     ->update([
                         'description_template' => $template,
-                        'description'          => $description,
+                        'description_format'   => $format,
+                        'description_values'   => $values === null ? null : json_encode($values),
                     ]);
 
                 $updatedCount++;
@@ -244,6 +277,8 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
             $maxRadiusIndex = (int)($row['EffectRadiusIndex_1'] ?? 0);
 
             $effects[$spellId][$effectIndex] = new SpellEffectData(
+                effectType: (int)($row['Effect'] ?? 0),
+                auraType: (int)($row['EffectAura'] ?? 0),
                 basePoints: (float)($row['EffectBasePointsF'] ?? 0),
                 variance: (float)($row['Variance'] ?? 0),
                 periodMs: (int)($row['EffectAuraPeriod'] ?? 0),

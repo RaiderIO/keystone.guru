@@ -78,13 +78,13 @@ final class SpellLinkTest extends PublicTestCase
     private function createSpell(?string $description): Spell
     {
         return Spell::create([
-            'id'              => self::SPELL_ID,
-            'game_version_id' => 1,
-            'dispel_type'     => 'spelldispeltype.none',
-            'icon_name'       => 'inv_misc_questionmark',
-            'name'            => 'spells.test',
-            'schools_mask'    => 1,
-            'description'     => $description,
+            'id'                 => self::SPELL_ID,
+            'game_version_id'    => 1,
+            'dispel_type'        => 'spelldispeltype.none',
+            'icon_name'          => 'inv_misc_questionmark',
+            'name'               => 'spells.test',
+            'schools_mask'       => 1,
+            'description_format' => $description,
         ]);
     }
 }

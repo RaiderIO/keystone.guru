@@ -80,7 +80,7 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
             // Assert - the spell has no description in this build, so ours must go as well
             $spell->refresh();
 
-            $this->assertNull($spell->description);
+            $this->assertNull($spell->description_format);
             $this->assertNull($spell->description_template);
         } finally {
             $spell?->delete();
@@ -181,13 +181,13 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
     private function createSpell(int $spellId, ?string $description, ?int $gameVersionId = null): Spell
     {
         return Spell::create([
-            'id'              => $spellId,
-            'game_version_id' => $gameVersionId ?? GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
-            'dispel_type'     => 'spelldispeltype.none',
-            'icon_name'       => 'inv_misc_questionmark',
-            'name'            => 'spells.test',
-            'schools_mask'    => 1,
-            'description'     => $description,
+            'id'                 => $spellId,
+            'game_version_id'    => $gameVersionId ?? GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
+            'dispel_type'        => 'spelldispeltype.none',
+            'icon_name'          => 'inv_misc_questionmark',
+            'name'               => 'spells.test',
+            'schools_mask'       => 1,
+            'description_format' => $description,
         ]);
     }
 

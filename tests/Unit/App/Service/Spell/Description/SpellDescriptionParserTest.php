@@ -28,7 +28,7 @@ final class SpellDescriptionParserTest extends TestCase
         $parser = new SpellDescriptionParser();
 
         // Act
-        $result = $parser->parse($this->createContext(), self::SPELL_ID, $template);
+        $result = $parser->parse($this->createContext(), self::SPELL_ID, $template)->render();
 
         // Assert
         $this->assertSame($expected, $result, $template);
@@ -176,16 +176,16 @@ final class SpellDescriptionParserTest extends TestCase
         return new ArraySpellDescriptionContext(
             effects: [
                 self::SPELL_ID => [
-                    0 => new SpellEffectData(basePoints: 25, variance: 0, periodMs: 0, chainTargets: 0, radius: 12, maxRadius: 20),
-                    1 => new SpellEffectData(basePoints: 50, variance: 0, periodMs: 3000, chainTargets: 0, radius: null, maxRadius: null),
-                    2 => new SpellEffectData(basePoints: -30, variance: 0, periodMs: 0, chainTargets: 0, radius: null, maxRadius: null),
-                    3 => new SpellEffectData(basePoints: 1, variance: 0, periodMs: 0, chainTargets: 0, radius: null, maxRadius: null),
+                    0 => new SpellEffectData(effectType: 2, auraType: 0, basePoints: 25, variance: 0, periodMs: 0, chainTargets: 0, radius: 12, maxRadius: 20),
+                    1 => new SpellEffectData(effectType: 6, auraType: 3, basePoints: 50, variance: 0, periodMs: 3000, chainTargets: 0, radius: null, maxRadius: null),
+                    2 => new SpellEffectData(effectType: 6, auraType: 22, basePoints: -30, variance: 0, periodMs: 0, chainTargets: 0, radius: null, maxRadius: null),
+                    3 => new SpellEffectData(effectType: 6, auraType: 0, basePoints: 1, variance: 0, periodMs: 0, chainTargets: 0, radius: null, maxRadius: null),
                     // A player ability whose damage only exists on a real character
-                    4  => new SpellEffectData(basePoints: 0, variance: 0, periodMs: 0, chainTargets: 0, radius: null, maxRadius: null),
-                    10 => new SpellEffectData(basePoints: 7, variance: 0, periodMs: 0, chainTargets: 0, radius: null, maxRadius: null),
+                    4  => new SpellEffectData(effectType: 2, auraType: 0, basePoints: 0, variance: 0, periodMs: 0, chainTargets: 0, radius: null, maxRadius: null),
+                    10 => new SpellEffectData(effectType: 6, auraType: 0, basePoints: 7, variance: 0, periodMs: 0, chainTargets: 0, radius: null, maxRadius: null),
                 ],
                 self::OTHER_SPELL_ID => [
-                    0 => new SpellEffectData(basePoints: 6, variance: 0, periodMs: 0, chainTargets: 0, radius: null, maxRadius: null),
+                    0 => new SpellEffectData(effectType: 2, auraType: 0, basePoints: 6, variance: 0, periodMs: 0, chainTargets: 0, radius: null, maxRadius: null),
                 ],
             ],
             durationsMs: [
