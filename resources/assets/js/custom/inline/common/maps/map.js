@@ -25,6 +25,8 @@
  * @property {string} tilesBaseUrl
  * @property {Object} parameters
  * @property {number} floorId
+ * @property {boolean} npcCompendiumEnabled
+ * @property {string} npcCompendiumBaseUrl
  */
 
 /**
@@ -577,10 +579,17 @@ class CommonMapsMap extends InlineCode {
         let enemy = enemyContextMenuEvent.context;
         let visualData = enemy.getVisualData();
 
-        // The modal is only rendered on route/explore maps - on e.g. the admin mapping pages this is a no-op
+        // The modal (and the NPC Compendium tab below) is only relevant on route/explore maps -
+        // on e.g. the admin mapping pages this is a no-op
         let enemyDetailsModal = document.getElementById('enemy_details_modal');
 
         if (visualData !== null && enemyDetailsModal !== null) {
+            if (this.options.npcCompendiumEnabled) {
+                // Opened synchronously from the user gesture so popup blockers don't intervene
+                window.open(`${this.options.npcCompendiumBaseUrl}/${enemy.npc.id}`);
+                return;
+            }
+
             let $title = $('#enemy_details_modal_title_text').html(lang.get(enemy.npc.name));
             if (getState().isMapAdmin()) {
                 $title.empty().append(

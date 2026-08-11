@@ -1,5 +1,6 @@
 <?php
 
+use App\Features\NpcCompendium;
 use App\Logic\MapContext\MapContextMappingVersionData;
 use App\Logic\MapContext\Map\MapContextBase;
 use App\Logic\MapContext\Map\MapContextDungeonExplore;
@@ -58,6 +59,7 @@ $user?->setRelation('roles', $user->roles->map(fn($role) => $role->makeHidden([
 $headerTitle         ??= null;
 $season              ??= null;
 $isAdmin             = isset($admin) && $admin;
+$npcCompendiumEnabled = Feature::active(NpcCompendium::class);
 $embed               = isset($embed) && $embed;
 $embedStyle          ??= '';
 $edit                = isset($edit) && $edit;
@@ -187,6 +189,8 @@ if ($isAdmin) {
     'tilesBaseUrl' => $tilesBaseUrl,
     'parameters' => $parameters,
     'floorId' => $floor->id,
+    'npcCompendiumEnabled' => $npcCompendiumEnabled,
+    'npcCompendiumBaseUrl' => url('/compendium/npc'),
 ], $adminOptions)])
 
 @section('scripts')
