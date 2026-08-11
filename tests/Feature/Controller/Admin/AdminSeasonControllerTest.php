@@ -168,6 +168,43 @@ final class AdminSeasonControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function edit_givenSeasonWithMultipleDungeons_preselectsAllOfThem(): void
+    {
+        // Arrange - a regression test for a real bug: the multi-select builder truncated the
+        // preselected values down to the first one whenever `multiple` was applied as a plain
+        // HTML attribute instead of via the builder's dedicated `multiple()` method.
+        $expansion = Expansion::query()->firstOrFail();
+        $dungeons  = Dungeon::query()->orderBy('id')->limit(3)->get();
+        $season    = Season::create([
+            'expansion_id'            => $expansion->id,
+            'index'                   => 987,
+            'start'                   => '2026-01-01 00:00:00',
+            'presets'                 => 0,
+            'affix_group_count'       => 4,
+            'start_affix_group_index' => 0,
+            'key_level_min'           => 2,
+            'key_level_max'           => 30,
+        ]);
+        $season->syncDungeons($dungeons->pluck('id')->toArray());
+
+        try {
+            // Act
+            $response = $this->get(route('admin.season.edit', $season));
+
+            // Assert - match the option's value AND text together so this can't pass by
+            // accidentally matching the unrelated expansion_id/seasonal_affix_id selects, which
+            // may share the same numeric id as a dungeon.
+            $response->assertOk();
+            foreach ($dungeons as $dungeon) {
+                $response->assertSee(sprintf('value="%d" selected="selected">%s', $dungeon->id, e(__($dungeon->name))), false);
+            }
+        } finally {
+            $season->syncDungeons([]);
+            $season->delete();
+        }
+    }
+
+    #[Test]
     public function update_givenValidDataWithDungeons_syncsDungeonsAndDefaultsPresetsAndSeasonalAffixId(): void
     {
         // Arrange
