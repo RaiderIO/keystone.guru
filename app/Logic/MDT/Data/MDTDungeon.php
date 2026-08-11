@@ -341,6 +341,7 @@ class MDTDungeon
 
             $eval = '
                         local MDT = {}
+                        MDT.AddonName = "MythicDungeonTools"
                         MDT.L = {atalTeemingNote = "", underrotVoidNote = "", tdBuffGateNote = "", wcmWorldquestNote = ""}
                         MDT.dungeonTotalCount = {}
                         MDT.mapInfo = {}
@@ -384,6 +385,7 @@ class MDTDungeon
 
             $replaceStrings = [
                 'local addonName = ...' => 'local addonName = "MythicDungeonTools"',
+                'local _, MDT = ...'    => 'local MDT = MDT',
             ];
             foreach ($replaceStrings as $search => $replace) {
                 $eval = str_replace($search, $replace, $eval);
