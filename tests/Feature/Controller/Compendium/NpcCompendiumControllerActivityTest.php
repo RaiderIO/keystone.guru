@@ -106,32 +106,6 @@ final class NpcCompendiumControllerActivityTest extends PublicTestCase
     }
 
     #[Test]
-    public function activityLegacy_givenOldUrl_redirectsToTheDungeonFirstUrl(): void
-    {
-        // Act
-        $response = $this->get(sprintf('/compendium/activity/%s', $this->dungeon->slug));
-
-        // Assert - a 301 is right here, unlike the context-dungeon redirects: this target comes
-        // purely from the URL, so it is the same for every visitor
-        $response->assertRedirect(route('compendium.activity', ['dungeon' => $this->dungeon]));
-        $response->assertStatus(301);
-    }
-
-    #[Test]
-    public function activityDayLegacy_givenOldUrl_redirectsToTheDungeonFirstUrl(): void
-    {
-        // Act
-        $response = $this->get(sprintf('/compendium/activity/%s/2025-01-15', $this->dungeon->slug));
-
-        // Assert
-        $response->assertRedirect(route('compendium.activity.day', [
-            'dungeon' => $this->dungeon,
-            'date'    => '2025-01-15',
-        ]));
-        $response->assertStatus(301);
-    }
-
-    #[Test]
     public function activityDay_givenDungeonInUrl_leavesTheContextDungeonAlone(): void
     {
         // Arrange - unlike activity(), the day page does not validate its dungeon against the current

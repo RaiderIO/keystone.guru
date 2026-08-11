@@ -89,21 +89,6 @@ class NpcCompendiumController extends Controller
         return redirect()->route('compendium.activity', ['dungeon' => $dungeon]);
     }
 
-    /**
-     * The activity pages used to hang off /compendium/activity/{dungeon}, before the dungeon moved to
-     * the front of the path. A 301 is right here where it is wrong for the context-dungeon
-     * redirects: this target is derived purely from the URL, so it is the same for every visitor.
-     */
-    public function activityLegacy(Dungeon $dungeon): RedirectResponse
-    {
-        return redirect(route('compendium.activity', ['dungeon' => $dungeon]), 301);
-    }
-
-    public function activityDayLegacy(Dungeon $dungeon, string $date): RedirectResponse
-    {
-        return redirect(route('compendium.activity.day', ['dungeon' => $dungeon, 'date' => $date]), 301);
-    }
-
     public function activity(
         Dungeon                       $dungeon,
         SeasonServiceInterface        $seasonService,

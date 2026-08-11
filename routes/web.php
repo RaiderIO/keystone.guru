@@ -200,12 +200,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('/', new SpellCompendiumController()->index(...))->name('spell.compendium.index');
                 Route::get('/{spell}', new SpellCompendiumController()->show(...))->name('spell.compendium.show');
             });
-            Route::prefix('activity')->group(static function () {
-                Route::get('/', new NpcCompendiumController()->activityIndex(...))->name('compendium.activity.index');
-                // The activity pages lived here before the dungeon moved to the front of the path
-                Route::get('/{dungeon}', new NpcCompendiumController()->activityLegacy(...));
-                Route::get('/{dungeon}/{date}', new NpcCompendiumController()->activityDayLegacy(...));
-            });
+            Route::get('activity', new NpcCompendiumController()->activityIndex(...))->name('compendium.activity.index');
             Route::prefix('class')->group(static function () {
                 Route::get('/', new ClassCompendiumController()->index(...))->name('compendium.class.index');
                 Route::get('/{characterClass:key}', new ClassCompendiumController()->show(...))->name('compendium.class.show');
