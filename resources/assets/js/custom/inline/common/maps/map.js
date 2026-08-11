@@ -584,9 +584,11 @@ class CommonMapsMap extends InlineCode {
         let enemyDetailsModal = document.getElementById('enemy_details_modal');
 
         if (visualData !== null && enemyDetailsModal !== null) {
-            if (this.options.npcCompendiumEnabled) {
-                // Opened synchronously from the user gesture so popup blockers don't intervene
-                window.open(`${this.options.npcCompendiumBaseUrl}/${enemy.npc.id}`);
+            // Opened synchronously from the user gesture so popup blockers don't intervene. On an
+            // embedded route map this can still run inside a sandboxed iframe without
+            // `allow-popups` - window.open() then returns null, so fall through to the modal
+            // instead of silently doing nothing.
+            if (this.options.npcCompendiumEnabled && window.open(`${this.options.npcCompendiumBaseUrl}/${enemy.npc.id}`) !== null) {
                 return;
             }
 

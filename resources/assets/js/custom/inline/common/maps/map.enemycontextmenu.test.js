@@ -20,6 +20,7 @@ describe('CommonMapsMap._onEnemyContextMenu', () => {
     let visualData;
     let enemy;
     let windowOpenSpy;
+    let modalShowSpy;
 
     beforeEach(() => {
         document.body.innerHTML = '';
@@ -35,8 +36,16 @@ describe('CommonMapsMap._onEnemyContextMenu', () => {
         }));
         globalThis.lang = {get: (key) => key};
 
-        windowOpenSpy = vi.spyOn(window, 'open').mockImplementation(() => {
-        });
+        // Returns a fake Window-like object by default, i.e. the popup was not blocked
+        windowOpenSpy = vi.spyOn(window, 'open').mockImplementation(() => ({}));
+
+        modalShowSpy = vi.fn();
+        globalThis.Handlebars = {templates: {map_sidebar_enemy_info_template: () => ''}};
+        globalThis.refreshTooltips = vi.fn();
+        globalThis.bootstrap = {
+            Collapse: {getOrCreateInstance: () => ({hide: vi.fn()})},
+            Modal: {getOrCreateInstance: () => ({show: modalShowSpy})},
+        };
     });
 
     afterEach(() => {
@@ -74,15 +83,9 @@ describe('CommonMapsMap._onEnemyContextMenu', () => {
         expect(windowOpenSpy).toHaveBeenCalledWith('/compendium/npc/123');
     });
 
-    it('_onEnemyContextMenu_givenFlagDisabled_doesNotOpenNewTab', () => {
+    it('_onEnemyContextMenu_givenFlagDisabled_doesNotOpenNewTabAndShowsModal', () => {
         // Arrange
         document.body.innerHTML = '<div id="enemy_details_modal"></div><div id="enemy_details_modal_title_text"></div><div id="enemy_details_modal_body"></div>';
-        globalThis.Handlebars = {templates: {map_sidebar_enemy_info_template: () => ''}};
-        globalThis.refreshTooltips = vi.fn();
-        globalThis.bootstrap = {
-            Collapse: {getOrCreateInstance: () => ({hide: vi.fn()})},
-            Modal: {getOrCreateInstance: () => ({show: vi.fn()})},
-        };
         let map = buildMap({npcCompendiumEnabled: false, npcCompendiumBaseUrl: '/compendium/npc'});
 
         // Act
@@ -90,5 +93,20 @@ describe('CommonMapsMap._onEnemyContextMenu', () => {
 
         // Assert
         expect(windowOpenSpy).not.toHaveBeenCalled();
+        expect(modalShowSpy).toHaveBeenCalled();
+    });
+
+    it('_onEnemyContextMenu_givenFlagEnabledButPopupBlocked_fallsBackToModal', () => {
+        // Arrange - a sandboxed embed iframe without allow-popups returns null from window.open()
+        document.body.innerHTML = '<div id="enemy_details_modal"></div><div id="enemy_details_modal_title_text"></div><div id="enemy_details_modal_body"></div>';
+        windowOpenSpy.mockImplementation(() => null);
+        let map = buildMap({npcCompendiumEnabled: true, npcCompendiumBaseUrl: '/compendium/npc'});
+
+        // Act
+        map._onEnemyContextMenu({context: enemy});
+
+        // Assert
+        expect(windowOpenSpy).toHaveBeenCalledWith('/compendium/npc/123');
+        expect(modalShowSpy).toHaveBeenCalled();
     });
 });

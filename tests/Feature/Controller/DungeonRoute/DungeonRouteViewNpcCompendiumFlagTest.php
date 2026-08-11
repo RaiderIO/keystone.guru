@@ -40,7 +40,7 @@ final class DungeonRouteViewNpcCompendiumFlagTest extends PublicTestCase
             $response->assertSee('"npcCompendiumEnabled":true', false);
             $response->assertSee(
                 '"npcCompendiumBaseUrl":"' . str_replace('/', '\/', url('/compendium/npc')),
-                false
+                false,
             );
         } finally {
             $route->delete();
