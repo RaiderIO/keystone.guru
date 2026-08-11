@@ -93,6 +93,7 @@ class Spell extends CacheModel implements MappingModelInterface
         'description_template',
         'description_format',
         'description_values',
+        'damage_multiplier',
         'schools_mask',
         'miss_types_mask',
         'counters_mask',
@@ -126,6 +127,7 @@ class Spell extends CacheModel implements MappingModelInterface
             'characteristic_id'        => 'integer',
             'fetched_data_at'          => 'datetime',
             'description_values'       => 'array',
+            'damage_multiplier'        => 'float',
         ];
     }
 

@@ -254,9 +254,14 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
             return;
         }
 
-        $amount = $damageMultiplier > 0.0
-            ? $value / self::COEFFICIENT_SCALE * $damageMultiplier
-            : $value;
+        // A coefficient without its multiplier is not a number anyone can read - 10 where the game shows
+        // 50,845 - so it is omitted, the same as any other value we cannot work out
+        if ($damageMultiplier <= 0.0) {
+            return;
+        }
+
+        // An amount of damage is always a whole number; the fraction is an artefact of the coefficient
+        $amount = round($value / self::COEFFICIENT_SCALE * $damageMultiplier);
 
         $builder->appendValue(new SpellDescriptionValue(
             kind: $kind,

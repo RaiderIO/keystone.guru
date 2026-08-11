@@ -3,7 +3,7 @@
 namespace App\Service\Spell\Description;
 
 use App\Models\Spell\Spell;
-use App\Models\Spell\SpellDungeon;
+use App\Models\Spell\SpellEffect;
 use App\Service\Spell\Description\Dtos\SpellDescriptionImportResult;
 use App\Service\Spell\Description\Dtos\SpellDescriptionTemplates;
 use App\Service\Spell\Description\Dtos\SpellDescriptionValue;
@@ -12,7 +12,6 @@ use App\Service\Spell\Description\Logging\SpellDescriptionImportServiceLoggingIn
 use App\Service\WagoTools\WagoToolsServiceInterface;
 use Closure;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\DB;
 
 /**
  * Builds the descriptions of every spell we know from the game client's DB2 tables.
@@ -25,6 +24,8 @@ use Illuminate\Support\Facades\DB;
 class SpellDescriptionImportService implements SpellDescriptionImportServiceInterface
 {
     private const int PROGRESS_INTERVAL = 250;
+
+    private const int PERSIST_CHUNK_SIZE = 500;
 
     /**
      * How often the Spell table is re-read to follow the references a description makes to other
@@ -60,7 +61,7 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
             // its business - a retail build knows nothing about the spells of the classic ones.
             /** @var Collection<int, Spell> $spells */
             $spells = Spell::query()
-                ->select(['id', 'description_template', 'description_format', 'description_values'])
+                ->select(['id', 'description_template', 'description_format', 'description_values', 'damage_multiplier'])
                 ->where('game_version_id', $gameVersionId)
                 ->get();
             $ourIds = array_fill_keys($spells->pluck('id')->all(), true);
@@ -75,15 +76,20 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
                 return null;
             }
 
+            $wantedIds = $templates->getWantedIds($ourIds);
+            $effects   = $this->readEffects($build, $wantedIds);
+
             $context = new ArraySpellDescriptionContext(
-                effects: $this->readEffects($build, $templates->getWantedIds($ourIds)),
-                durationsMs: $this->readDurations($build, $templates->getWantedIds($ourIds)),
-                names: $this->readNames($build, $templates->getWantedIds($ourIds)),
+                effects: $effects,
+                durationsMs: $this->readDurations($build, $wantedIds),
+                names: $this->readNames($build, $wantedIds),
                 templates: $templates->described,
                 descriptionVariables: $this->readDescriptionVariables($build),
             );
 
-            $updatedCount = $this->renderAndPersist($context, $spells, $templates, $this->getDamageMultipliers(), $onProgress);
+            $this->persistEffects(array_intersect_key($effects, $ourIds));
+
+            $updatedCount = $this->renderAndPersist($context, $spells, $templates, $onProgress);
 
             return new SpellDescriptionImportResult(
                 build: $build,
@@ -97,34 +103,47 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
     }
 
     /**
-     * What a damage or healing coefficient is multiplied by, per spell, taken from the dungeon the spell
-     * is cast in. A spell seen in more than one dungeon takes the highest, and a spell we have never seen
-     * cast has no multiplier at all - its coefficients stay coefficients rather than becoming a number
-     * that would be wrong.
+     * Store the coefficients themselves, not just the sentence they were rendered into - they are what a
+     * later key level recalculates from.
      *
-     * @return array<int, float>
+     * @param array<int, array<int, SpellEffectData>> $effects
      */
-    private function getDamageMultipliers(): array
+    private function persistEffects(array $effects): void
     {
-        return SpellDungeon::query()
-            ->join('dungeons', 'dungeons.id', '=', 'spell_dungeons.dungeon_id')
-            ->whereNotNull('dungeons.spell_damage_coefficient')
-            ->groupBy('spell_dungeons.spell_id')
-            ->pluck(DB::raw('MAX(dungeons.spell_damage_coefficient)'), 'spell_dungeons.spell_id')
-            ->map(static fn(mixed $coefficient): float => (float)$coefficient)
-            ->all();
+        $rows = [];
+
+        foreach ($effects as $spellId => $spellEffects) {
+            foreach ($spellEffects as $effectIndex => $effect) {
+                $rows[] = [
+                    'spell_id'      => $spellId,
+                    'effect_index'  => $effectIndex,
+                    'effect_type'   => $effect->effectType,
+                    'aura_type'     => $effect->auraType,
+                    'base_points'   => $effect->basePoints,
+                    'variance'      => $effect->variance,
+                    'period_ms'     => $effect->periodMs,
+                    'chain_targets' => $effect->chainTargets,
+                    'radius'        => $effect->radius,
+                    'max_radius'    => $effect->maxRadius,
+                ];
+            }
+        }
+
+        foreach (array_chunk($rows, self::PERSIST_CHUNK_SIZE) as $chunk) {
+            SpellEffect::query()->upsert($chunk, ['spell_id', 'effect_index']);
+        }
+
+        new SpellEffect()->flushCache();
     }
 
     /**
      * @param Collection<int, Spell>       $spells
-     * @param array<int, float>            $damageMultipliers
      * @param Closure(int, int): void|null $onProgress
      */
     private function renderAndPersist(
         SpellDescriptionContextInterface $context,
         Collection                       $spells,
         SpellDescriptionTemplates        $templates,
-        array                            $damageMultipliers,
         ?Closure                         $onProgress,
     ): int {
         $updatedCount = 0;
@@ -145,7 +164,7 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
             // A spell that lost its description in this build must lose ours as well
             $description = $template === null
                 ? null
-                : $this->spellDescriptionParser->parse($context, $spell->id, $template, $damageMultipliers[$spell->id] ?? 0.0);
+                : $this->spellDescriptionParser->parse($context, $spell->id, $template, $spell->damage_multiplier ?? 0.0);
 
             $format = $description === null || $description->isEmpty() ? null : $description->format;
             $values = $format === null ? null : array_map(
