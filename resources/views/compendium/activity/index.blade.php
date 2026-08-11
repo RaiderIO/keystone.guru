@@ -28,11 +28,12 @@ use Illuminate\Support\Collection;
     @else
         @foreach($dates->items() as $date)
                 <?php /** @var string $date */ ?>
-            <div class="mb-5">
+            <div class="mb-4">
                 @include('compendium.activity.sections.event_list', [
                     'events'         => $eventsByDay[$date],
                     'date'           => $date,
                     'contextDungeon' => $contextDungeon,
+                    'limit'          => 15,
                 ])
             </div>
         @endforeach

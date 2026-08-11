@@ -17,16 +17,13 @@ use Illuminate\Support\Collection;
     <div class="row">
         @foreach($characterClasses as $characterClass)
             <?php /** @var CharacterClass $characterClass */ ?>
-            <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
-                <a href="{{ route('compendium.class.show', $characterClass) }}" class="text-decoration-none">
-                    <div class="card h-100 text-center py-3 px-2">
-                        <img src="{{ $characterClass->icon_url }}"
-                             width="56" height="56"
-                             alt="{{ __($characterClass->name) }}"
-                             loading="lazy"
-                             class="mx-auto mb-2 rounded"/>
-                        <div class="fw-bold small">{{ __($characterClass->name) }}</div>
-                    </div>
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+                <a href="{{ route('compendium.class.show', $characterClass) }}" class="compendium_class_tile">
+                    <img src="{{ $characterClass->icon_url }}"
+                         width="48" height="48"
+                         alt="{{ __($characterClass->name) }}"
+                         loading="lazy"/>
+                    <span>{{ __($characterClass->name) }}</span>
                 </a>
             </div>
         @endforeach

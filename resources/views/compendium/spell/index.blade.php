@@ -55,6 +55,7 @@ use App\Models\Npc\NpcClassification;
                         'render': function (data, type, row) {
                             return spellTemplate({
                                 compendium_url: `${spellShowBaseUrl}/${row.id}-${slugify(data ?? '')}`,
+                                wowhead_tooltip_data: row.wowhead_tooltip_data,
                                 icon_url: row.icon_url,
                                 name: data ?? '',
                             });
@@ -96,6 +97,11 @@ use App\Models\Npc\NpcClassification;
                         }
                     });
                 },
+                'drawCallback': function () {
+                    if (typeof $WowheadPower !== 'undefined') {
+                        $WowheadPower.refreshLinks();
+                    }
+                },
                 'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
                     'emptyTable': lang.get('js.datatable_no_spells_in_table'),
                 }),
@@ -109,8 +115,8 @@ use App\Models\Npc\NpcClassification;
 @endsection
 
 @section('content')
-    <div class="row mb-3">
-        <div class="col-md-4">
+    <div class="compendium_toolbar">
+        <div class="compendium_toolbar_filter">
             @include('common.dungeon.select', [
                 'id'          => 'compendium_filter_dungeon',
                 'label'       => false,
@@ -122,13 +128,15 @@ use App\Models\Npc\NpcClassification;
         </div>
     </div>
 
-    <table id="compendium_spell_table" class="tablesorter default_table table-striped">
-        <thead>
-        <tr>
-            <th width="25%">{{ __('view_compendium.spell.index.table_header_name') }}</th>
-            <th width="25%">{{ __('view_compendium.spell.index.table_header_dungeons') }}</th>
-            <th width="50%">{{ __('view_compendium.spell.index.table_header_used_by') }}</th>
-        </tr>
-        </thead>
-    </table>
+    <div class="compendium_datatable">
+        <table id="compendium_spell_table" class="tablesorter default_table compendium_table">
+            <thead>
+            <tr>
+                <th width="25%">{{ __('view_compendium.spell.index.table_header_name') }}</th>
+                <th width="25%">{{ __('view_compendium.spell.index.table_header_dungeons') }}</th>
+                <th width="50%">{{ __('view_compendium.spell.index.table_header_used_by') }}</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
 @endsection

@@ -79,6 +79,7 @@ use App\Models\Npc\NpcClassification;
                             return data.filter((spell) => !spell.hidden_on_map).map(function (spell) {
                                 return spellTemplate({
                                     compendium_url: `${spellShowBaseUrl}/${spell.id}-${slugify(lang.get(spell.name))}`,
+                                    wowhead_tooltip_data: spell.wowhead_tooltip_data,
                                     icon_url: spell.icon_url,
                                     name: lang.get(spell.name),
                                 });
@@ -111,8 +112,8 @@ use App\Models\Npc\NpcClassification;
 @endsection
 
 @section('content')
-    <div class="row mb-3">
-        <div class="col-md-4">
+    <div class="compendium_toolbar">
+        <div class="compendium_toolbar_filter">
             @include('common.dungeon.select', [
                 'id'       => 'compendium_filter_dungeon',
                 'label'    => false,
@@ -124,13 +125,15 @@ use App\Models\Npc\NpcClassification;
         </div>
     </div>
 
-    <table id="compendium_npc_table" class="tablesorter default_table table-striped">
-        <thead>
-        <tr>
-            <th width="25%">{{ __('view_compendium.npc.index.table_header_name') }}</th>
-            <th width="25%">{{ __('view_compendium.npc.index.table_header_dungeons') }}</th>
-            <th width="50%">{{ __('view_compendium.npc.index.table_header_spells') }}</th>
-        </tr>
-        </thead>
-    </table>
+    <div class="compendium_datatable">
+        <table id="compendium_npc_table" class="tablesorter default_table compendium_table">
+            <thead>
+            <tr>
+                <th width="25%">{{ __('view_compendium.npc.index.table_header_name') }}</th>
+                <th width="25%">{{ __('view_compendium.npc.index.table_header_dungeons') }}</th>
+                <th width="50%">{{ __('view_compendium.npc.index.table_header_spells') }}</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
 @endsection

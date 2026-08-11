@@ -44,6 +44,7 @@ use Str;
  * @property Carbon      $fetched_data_at
  *
  * @property string $icon_url
+ * @property string $wowhead_tooltip_data
  *
  * @property GameVersion                           $gameVersion
  * @property EloquentCollection<int, Dungeon>      $dungeons
@@ -70,6 +71,7 @@ class Spell extends CacheModel implements MappingModelInterface
     protected $appends = [
         'icon_url',
         'wowhead_url',
+        'wowhead_tooltip_data',
     ];
 
     protected $fillable = [
@@ -119,6 +121,11 @@ class Spell extends CacheModel implements MappingModelInterface
     public function getWowheadUrlAttribute(): string
     {
         return self::getWowheadLink($this->game_version_id, $this->id, $this->name);
+    }
+
+    public function getWowheadTooltipDataAttribute(): string
+    {
+        return self::getWowheadTooltipData($this->game_version_id, $this->id);
     }
 
     public function setFetchedDataAtAttribute(mixed $value): void
@@ -249,6 +256,25 @@ class Spell extends CacheModel implements MappingModelInterface
         }
 
         return $result;
+    }
+
+    /**
+     * The data-wowhead attribute value for the Wowhead tooltip script. The domain parameter must
+     * match getWowheadLink()'s URL prefix for the same game version, or the hover tooltip shows
+     * retail data while the link points at a classic database.
+     */
+    public static function getWowheadTooltipData(?int $gameVersionId, int $spellId): string
+    {
+        $domain = match ($gameVersionId) {
+            GameVersion::ALL[GameVersion::GAME_VERSION_WRATH]       => 'wrath',
+            GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA] => 'classic',
+            GameVersion::ALL[GameVersion::GAME_VERSION_MOP]         => 'mop-classic',
+            default                                                 => null,
+        };
+
+        return $domain === null
+            ? sprintf('spell=%d', $spellId)
+            : sprintf('spell=%d&domain=%s', $spellId, $domain);
     }
 
     /** @param array<int|string, int|string> $mapping */

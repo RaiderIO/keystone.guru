@@ -18,48 +18,40 @@ use Illuminate\Support\Carbon;
  * @var bool                                                   $showSpellSubject Whether to render the Spell icon+name before the description on Spell events
  * @var Dungeon|null                                           $contextDungeon   When set, the timestamp becomes a link to the activity day page
  * @var string|null                                            $date             Y-m-d date string, required when $contextDungeon is set
+ * @var int|null                                               $limit            Cap the rendered rows; the remainder collapses into an "and :count more" link to the day page
  */
 
 $showNpcSubject   ??= false;
 $showSpellSubject ??= false;
 $contextDungeon   ??= null;
 $date             ??= null;
+$limit            ??= null;
+
+$hiddenCount    = $limit !== null ? max(0, $events->count() - $limit) : 0;
+$displayedEvents = $hiddenCount > 0 ? $events->take($limit) : $events;
 
 $shouldShowSubject = (static fn(CombatLogNpcEvent|CombatLogSpellEvent $event): bool => $event instanceof CombatLogNpcEvent ? $showNpcSubject : $showSpellSubject);
 
-$eventTypeIcon = (static fn(CombatLogNpcEvent|CombatLogSpellEvent $event): string => $event instanceof CombatLogNpcEvent ? 'fas fa-dragon' : 'fas fa-magic');
-
-$eventBadgeClass = static function (CombatLogNpcEvent|CombatLogSpellEvent $event): string {
+/**
+ * One colored icon per event type carries the add/change/remove semantics in the log's icon
+ * column (the old badge-block + type-icon pair collapsed into a single glyph).
+ *
+ * @return array{icon: string, color: string}
+ */
+$eventGlyph = static function (CombatLogNpcEvent|CombatLogSpellEvent $event): array {
     if ($event instanceof CombatLogNpcEvent) {
         return match ($event->event_type) {
-            CombatLogNpcEventType::CharacteristicAdded => 'success',
-            CombatLogNpcEventType::CharacteristicRemoved => 'danger',
-            CombatLogNpcEventType::SpellAssigned => 'info',
+            CombatLogNpcEventType::CharacteristicAdded => ['icon' => 'fas fa-plus', 'color' => 'text-success'],
+            CombatLogNpcEventType::CharacteristicRemoved => ['icon' => 'fas fa-minus', 'color' => 'text-danger'],
+            CombatLogNpcEventType::SpellAssigned => ['icon' => 'fas fa-bolt', 'color' => 'text-info'],
         };
     }
 
     return match ($event->event_type) {
-        CombatLogSpellEventType::SpellCreated => 'info',
-        CombatLogSpellEventType::PropertyChanged => 'warning',
-        CombatLogSpellEventType::PropertyRemoved => 'danger',
-        CombatLogSpellEventType::SchoolRecorded => 'info',
-    };
-};
-
-$eventIcon = static function (CombatLogNpcEvent|CombatLogSpellEvent $event): string {
-    if ($event instanceof CombatLogNpcEvent) {
-        return match ($event->event_type) {
-            CombatLogNpcEventType::CharacteristicAdded => 'fas fa-plus',
-            CombatLogNpcEventType::CharacteristicRemoved => 'fas fa-minus',
-            CombatLogNpcEventType::SpellAssigned => 'fas fa-bolt',
-        };
-    }
-
-    return match ($event->event_type) {
-        CombatLogSpellEventType::SpellCreated => 'fas fa-plus',
-        CombatLogSpellEventType::PropertyChanged => 'fas fa-arrow-up',
-        CombatLogSpellEventType::PropertyRemoved => 'fas fa-times',
-        CombatLogSpellEventType::SchoolRecorded => 'fas fa-plus',
+        CombatLogSpellEventType::SpellCreated => ['icon' => 'fas fa-plus', 'color' => 'text-info'],
+        CombatLogSpellEventType::PropertyChanged => ['icon' => 'fas fa-arrow-up', 'color' => 'text-warning'],
+        CombatLogSpellEventType::PropertyRemoved => ['icon' => 'fas fa-times', 'color' => 'text-danger'],
+        CombatLogSpellEventType::SchoolRecorded => ['icon' => 'fas fa-plus', 'color' => 'text-info'],
     };
 };
 
@@ -82,9 +74,22 @@ $spellPropertyName = static function (SpellProperty $property): string {
     return __('spellmisstypes.' . substr($property->value, 5));
 };
 
-$eventDescription = static function (CombatLogNpcEvent|CombatLogSpellEvent $event) use ($spellPropertyName): string {
+/**
+ * Returns HTML: spell names inside descriptions render as links to their compendium page, so
+ * every interpolated plain string is escaped here and the caller prints with {!! !!}.
+ * That means the translation lines themselves are part of the HTML trust boundary: lang files
+ * (en_US in-repo, other locales via the managed translation pipeline) render unescaped.
+ * When the row already leads with the spell as its subject link ($subjectShown), the
+ * description switches to the subject-less wording instead of repeating the spell name.
+ */
+$eventDescription = static function (CombatLogNpcEvent|CombatLogSpellEvent $event, bool $subjectShown) use ($spellPropertyName): string {
     if ($event instanceof CombatLogNpcEvent) {
-        $modelName = $event->model ? __($event->model->getAttribute('name')) : sprintf('#%d', $event->model_id);
+        $model = $event->model;
+
+        // An assigned spell has its own compendium page - render the name as a spell link
+        $modelName = $model instanceof Spell
+            ? view('common.spell.link', ['spell' => $model])->render()
+            : e($model ? __($model->getAttribute('name')) : sprintf('#%d', $event->model_id));
 
         return match ($event->event_type) {
             CombatLogNpcEventType::CharacteristicAdded => __('view_compendium.event.characteristic_added', ['name' => $modelName]),
@@ -93,16 +98,22 @@ $eventDescription = static function (CombatLogNpcEvent|CombatLogSpellEvent $even
         };
     }
 
-    $spellName = $event->spell ? __($event->spell->name) : sprintf('#%d', $event->spell_id);
+    $spellName = e($event->spell ? __($event->spell->name) : sprintf('#%d', $event->spell_id));
 
     // Counters and immunity bypasses are properties of what a *player* can do about the spell, so the generic
     // "Affected by :property" wording does not fit them
     [$addedKey, $removedKey] = match (true) {
-        $event->property?->isCounter() === true => [
+        $event->property?->isCounter() === true => $subjectShown ? [
+            'view_compendium.event.counter_added_no_subject',
+            'view_compendium.event.counter_removed_no_subject',
+        ] : [
             'view_compendium.event.counter_added',
             'view_compendium.event.counter_removed',
         ],
-        $event->property?->isImmunityBypass() === true => [
+        $event->property?->isImmunityBypass() === true => $subjectShown ? [
+            'view_compendium.event.immunity_bypass_added_no_subject',
+            'view_compendium.event.immunity_bypass_removed_no_subject',
+        ] : [
             'view_compendium.event.immunity_bypass_added',
             'view_compendium.event.immunity_bypass_removed',
         ],
@@ -113,21 +124,27 @@ $eventDescription = static function (CombatLogNpcEvent|CombatLogSpellEvent $even
     };
 
     return match ($event->event_type) {
-        CombatLogSpellEventType::SpellCreated => __('view_compendium.event.spell_created', ['spell' => $spellName]),
+        CombatLogSpellEventType::SpellCreated => __(
+            $subjectShown ? 'view_compendium.event.spell_created_no_subject' : 'view_compendium.event.spell_created',
+            ['spell' => $spellName]
+        ),
         CombatLogSpellEventType::PropertyChanged => __($addedKey, [
             'spell'    => $spellName,
-            'property' => $spellPropertyName($event->property)
+            'property' => e($spellPropertyName($event->property))
         ]),
         CombatLogSpellEventType::PropertyRemoved => __($removedKey, [
             'spell'    => $spellName,
-            'property' => $spellPropertyName($event->property)
+            'property' => e($spellPropertyName($event->property))
         ]),
-        CombatLogSpellEventType::SchoolRecorded => __('view_compendium.event.school_recorded', [
-            'spell'   => $spellName,
-            'schools' => $event->spell
-                ? Spell::maskToReadableString(Spell::ALL_SCHOOLS, $event->spell->schools_mask, 'spellschools')
-                : '-',
-        ]),
+        CombatLogSpellEventType::SchoolRecorded => __(
+            $subjectShown ? 'view_compendium.event.school_recorded_no_subject' : 'view_compendium.event.school_recorded',
+            [
+                'spell'   => $spellName,
+                'schools' => e($event->spell
+                    ? Spell::maskToReadableString(Spell::ALL_SCHOOLS, $event->spell->schools_mask, 'spellschools')
+                    : '-'),
+            ]
+        ),
     };
 };
 
@@ -154,45 +171,62 @@ $eventSubjectHtml = static function (CombatLogNpcEvent|CombatLogSpellEvent $even
 };
 ?>
 @isset($date)
-    <h4 id="day-{{ $date }}">
-        <a href="{{ route('compendium.activity.day', ['dungeon' => $contextDungeon, 'date' => $date]) }}">
-            {{ Carbon::parse($date)->format('F j, Y') }}
-        </a>
-    </h4>
+    <div class="compendium_log_day" id="day-{{ $date }}">
+        <h4 class="compendium_log_day_title">
+            <a href="{{ route('compendium.activity.day', ['dungeon' => $contextDungeon, 'date' => $date]) }}">
+                {{ Carbon::parse($date)->format('F j, Y') }}
+            </a>
+        </h4>
+        <span class="compendium_log_day_count">
+            {{ trans_choice('view_compendium.event.count', $events->count()) }}
+        </span>
+    </div>
 @endisset
 
 @if($events->isNotEmpty())
-    <ul class="list-unstyled mb-0">
-        @foreach($events as $event)
+    <div>
+        @foreach($displayedEvents as $event)
                 <?php /** @var CombatLogNpcEvent|CombatLogSpellEvent $event */ ?>
                 <?php $anchorId = $eventAnchorId($event); ?>
-            <li @if($contextDungeon) id="{{ $anchorId }}" @endif class="d-flex align-items-start mb-2">
-                <span class="text-muted me-1" style="min-width: 14px; text-align: center;">
-                    <i class="{{ $eventTypeIcon($event) }}" style="font-size: .75rem;"></i>
-                </span>
-                <span class="badge text-bg-{{ $eventBadgeClass($event) }} me-2 mt-1" style="min-width: 20px;">
-                    <i class="{{ $eventIcon($event) }}"></i>
-                </span>
-                <div>
-                    @if($shouldShowSubject($event))
-                        <span class="me-1">{!! $eventSubjectHtml($event) !!}</span>
-                    @endif
-                    <span>{{ $eventDescription($event) }}</span>
-                    <small class="text-muted ms-1">
-                        -
-                        @if($contextDungeon)
-                            <a href="{{ route('compendium.activity.day', ['dungeon' => $contextDungeon, 'date' => $date]) }}#{{ $anchorId }}"
-                               class="text-muted">
-                                {{ $event->created_at->diffForHumans() }}
-                            </a>
-                        @else
+                <?php $glyph = $eventGlyph($event); ?>
+                <?php $subjectHtml = $shouldShowSubject($event) ? $eventSubjectHtml($event) : ''; ?>
+            <div @if($contextDungeon) id="{{ $anchorId }}" @endif class="compendium_log_row">
+                <span class="compendium_log_time">
+                    @if($contextDungeon)
+                        <a href="{{ route('compendium.activity.day', ['dungeon' => $contextDungeon, 'date' => $date]) }}#{{ $anchorId }}">
                             {{ $event->created_at->diffForHumans() }}
-                        @endif
-                    </small>
-                </div>
-            </li>
+                        </a>
+                    @else
+                        {{ $event->created_at->diffForHumans() }}
+                    @endif
+                </span>
+                <span class="compendium_log_icon {{ $glyph['color'] }}">
+                    <i class="{{ $glyph['icon'] }}"></i>
+                </span>
+                <span class="compendium_log_text">
+                    @if($subjectHtml !== '')
+                        <span class="me-1">{!! $subjectHtml !!}</span>
+                    @endif
+                    <span>{!! $eventDescription($event, $subjectHtml !== '') !!}</span>
+                </span>
+            </div>
         @endforeach
-    </ul>
+        @if($hiddenCount > 0)
+            <div class="compendium_log_row">
+                <span class="compendium_log_time"></span>
+                <span class="compendium_log_icon text-muted"><i class="fas fa-ellipsis-h"></i></span>
+                <span class="compendium_log_text">
+                    @if($contextDungeon !== null && $date !== null)
+                        <a href="{{ route('compendium.activity.day', ['dungeon' => $contextDungeon, 'date' => $date]) }}">
+                            {{ __('view_compendium.event.more', ['count' => $hiddenCount]) }}
+                        </a>
+                    @else
+                        {{ __('view_compendium.event.more', ['count' => $hiddenCount]) }}
+                    @endif
+                </span>
+            </div>
+        @endif
+    </div>
 @else
     <p class="text-muted">{{ __($emptyKey) }}</p>
 @endif

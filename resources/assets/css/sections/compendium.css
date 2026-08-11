@@ -1,7 +1,449 @@
 /**
- * Placeholder: no compendium-specific rules exist yet. The compendium views
- * (resources/views/compendium/**) currently style entirely with stock Bootstrap classes
- * (card/badge/col/btn), so there is nothing to move here from the old grab-bag files (verified by
- * grepping compendium blade files against custom.css/general.css/header.css/map.css during the
- * #3506 CSS reorg). This file is the designated home for compendium CSS going forward.
+ * Compendium — "The Field Record" (#3945).
+ *
+ * Every compendium page reads as one continuous record sheet: an identity band on top, then
+ * labeled register sections (label rail left, content right) separated by hairline rules.
+ * Surfaces sit on the tonal ladder through theme variables (never hardcoded theme hexes) so
+ * darkly, lux and vapor all hold; muted text uses Bootstrap's per-theme --bs-secondary-color
+ * because --theme-light is white in lux and unreadable on light surfaces.
  */
+
+/* ===== Record register skeleton ===== */
+
+.compendium_record_section {
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    gap: 0 1.5rem;
+    padding: 1.25rem 0;
+    border-top: 1px solid rgba(128, 128, 128, 0.25);
+}
+
+.compendium_record_section:first-child {
+    border-top: 0;
+}
+
+.compendium_record_label {
+    color: var(--bs-secondary-color);
+    font-size: 0.875rem;
+    line-height: 1.4;
+    padding-top: 0.2rem;
+}
+
+.compendium_record_label .fa-info-circle {
+    opacity: 0.6;
+}
+
+.compendium_record_label_sub {
+    font-size: 0.8125rem;
+    margin-top: 0.25rem;
+}
+
+@media (max-width: 767.98px) {
+    .compendium_record_section {
+        display: block;
+    }
+
+    .compendium_record_label {
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* ===== Identity band ===== */
+
+.compendium_identity {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.25rem;
+    align-items: center;
+    padding: 1.25rem;
+    background-color: var(--theme-bg-card);
+    border: 1px solid rgba(128, 128, 128, 0.25);
+    border-radius: 0.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.compendium_identity_portrait {
+    width: 88px;
+    height: 88px;
+    border-radius: 0.25rem;
+    border: 1px solid rgba(128, 128, 128, 0.35);
+    flex-shrink: 0;
+}
+
+.compendium_identity_body {
+    flex: 1 1 16rem;
+    min-width: 0;
+}
+
+.compendium_identity_title {
+    margin-bottom: 0.35rem;
+    font-weight: 600;
+}
+
+.compendium_identity_meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    align-items: center;
+}
+
+.compendium_identity_actions {
+    flex-shrink: 0;
+}
+
+/* Key: value stat chip in the identity band; one tonal rung above the band itself */
+.compendium_chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background-color: var(--theme-bg-card-footer);
+    color: var(--bs-body-color);
+    border-radius: 0.25rem;
+    padding: 0.2rem 0.55rem;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+}
+
+.compendium_chip_label {
+    color: var(--bs-secondary-color);
+}
+
+/* ===== Characteristics ===== */
+
+.compendium_characteristics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.compendium_characteristic {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--theme-bg-card);
+    border: 1px solid rgba(128, 128, 128, 0.25);
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.6rem 0.25rem 0.25rem;
+    font-size: 0.875rem;
+    color: var(--bs-body-color);
+}
+
+.compendium_characteristic img {
+    width: 28px;
+    height: 28px;
+    border-radius: 0.2rem;
+}
+
+/* The "not observed" cluster: small grayscale icon-only strip below the active chips */
+.compendium_characteristics_muted {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.75rem;
+}
+
+.compendium_characteristics_muted img {
+    width: 22px;
+    height: 22px;
+    border-radius: 0.2rem;
+    filter: grayscale(100%);
+    opacity: 0.35;
+}
+
+.compendium_characteristics_muted_label {
+    color: var(--bs-secondary-color);
+    font-size: 0.8125rem;
+    margin-right: 0.25rem;
+}
+
+/* ===== Dense data tables ===== */
+
+.compendium_table {
+    width: 100%;
+    font-size: 0.875rem;
+    border-collapse: collapse;
+    margin-bottom: 0;
+}
+
+.compendium_table thead th {
+    background-color: var(--theme-dark);
+    color: var(--bs-secondary-color);
+    font-weight: 400;
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.35);
+    text-align: left;
+    vertical-align: bottom;
+}
+
+.compendium_table tbody td {
+    padding: 0.5rem 0.75rem;
+    border-top: 1px solid rgba(128, 128, 128, 0.15);
+    color: var(--bs-body-color);
+    vertical-align: middle;
+}
+
+.compendium_table tbody tr:first-child td {
+    border-top: 0;
+}
+
+.compendium_table tbody tr:hover {
+    background-color: rgba(128, 128, 128, 0.08);
+}
+
+.compendium_table .compendium_table_muted {
+    color: var(--bs-secondary-color);
+}
+
+/* ===== Key-value register (the data plate) ===== */
+
+.compendium_kv {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+    gap: 1px;
+    background-color: rgba(128, 128, 128, 0.2);
+    border: 1px solid rgba(128, 128, 128, 0.2);
+    border-radius: 0.25rem;
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
+.compendium_kv_item {
+    background-color: var(--theme-dark);
+    padding: 0.6rem 0.75rem;
+}
+
+.compendium_kv_item dt {
+    color: var(--bs-secondary-color);
+    font-size: 0.8125rem;
+    font-weight: 400;
+    margin-bottom: 0.1rem;
+}
+
+.compendium_kv_item dd {
+    margin: 0;
+    color: var(--bs-body-color);
+    font-size: 0.9375rem;
+}
+
+/* ===== Activity log ===== */
+
+.compendium_log_row {
+    display: grid;
+    grid-template-columns: 6.5rem 1.25rem minmax(0, 1fr);
+    gap: 0 0.75rem;
+    padding: 0.45rem 0;
+    border-top: 1px solid rgba(128, 128, 128, 0.12);
+    align-items: center;
+    font-size: 0.875rem;
+}
+
+.compendium_log_row:first-child {
+    border-top: 0;
+}
+
+.compendium_log_time {
+    color: var(--bs-secondary-color);
+    font-size: 0.8125rem;
+    white-space: nowrap;
+}
+
+.compendium_log_time a {
+    color: inherit;
+}
+
+.compendium_log_icon {
+    text-align: center;
+    font-size: 0.8125rem;
+}
+
+.compendium_log_text {
+    color: var(--bs-body-color);
+    min-width: 0;
+}
+
+.compendium_log_text img {
+    width: 20px;
+    height: 20px;
+    border-radius: 0.2rem;
+    vertical-align: -0.3em;
+    margin-right: 0.15rem;
+}
+
+/* Day header used by the activity pages: date left, event count right */
+.compendium_log_day {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.compendium_log_day_title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.compendium_log_day_count {
+    color: var(--bs-secondary-color);
+    font-size: 0.8125rem;
+    white-space: nowrap;
+}
+
+@media (max-width: 575.98px) {
+    .compendium_log_row {
+        grid-template-columns: 1.25rem minmax(0, 1fr);
+    }
+
+    .compendium_log_time {
+        grid-column: 2;
+        order: 2;
+    }
+}
+
+/* ===== Landing directory ===== */
+
+.compendium_directory {
+    border: 1px solid rgba(128, 128, 128, 0.25);
+    border-radius: 0.25rem;
+    overflow: hidden;
+}
+
+a.compendium_directory_row {
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr) auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.9rem 1.1rem;
+    background-color: var(--theme-bg-card);
+    border-top: 1px solid rgba(128, 128, 128, 0.2);
+    color: var(--bs-body-color);
+    text-decoration: none;
+    transition: background-color 0.15s ease;
+}
+
+a.compendium_directory_row:first-child {
+    border-top: 0;
+}
+
+a.compendium_directory_row:hover {
+    background-color: var(--theme-bg-card-footer);
+    color: var(--bs-body-color);
+    text-decoration: none;
+}
+
+.compendium_directory_icon {
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--theme-darker);
+    border-radius: 0.25rem;
+    color: var(--theme-link);
+    font-size: 1.15rem;
+}
+
+.compendium_directory_title {
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.compendium_directory_count {
+    color: var(--bs-secondary-color);
+    font-size: 0.8125rem;
+    margin-left: 0.5rem;
+}
+
+.compendium_directory_desc {
+    color: var(--bs-secondary-color);
+    font-size: 0.875rem;
+    margin: 0.1rem 0 0;
+}
+
+.compendium_directory_cta {
+    color: var(--theme-link);
+    white-space: nowrap;
+    font-size: 0.875rem;
+}
+
+a.compendium_directory_row:hover .compendium_directory_cta {
+    color: var(--theme-link-hover);
+}
+
+@media (max-width: 575.98px) {
+    a.compendium_directory_row {
+        grid-template-columns: 3rem minmax(0, 1fr);
+    }
+
+    .compendium_directory_cta {
+        display: none;
+    }
+}
+
+/* ===== Class tiles ===== */
+
+a.compendium_class_tile {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    background-color: var(--theme-bg-card);
+    border: 1px solid rgba(128, 128, 128, 0.25);
+    border-radius: 0.25rem;
+    color: var(--bs-body-color);
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: background-color 0.15s ease;
+    height: 100%;
+}
+
+a.compendium_class_tile:hover {
+    background-color: var(--theme-bg-card-footer);
+    color: var(--bs-body-color);
+    text-decoration: none;
+}
+
+a.compendium_class_tile img {
+    width: 36px;
+    height: 36px;
+    border-radius: 0.25rem;
+    flex-shrink: 0;
+}
+
+/* ===== Index toolbar ===== */
+
+.compendium_toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.compendium_toolbar_filter {
+    flex: 0 1 20rem;
+    min-width: 14rem;
+}
+
+/* DataTables chrome inside a compendium index: align the generated search box and pager
+   with the register language */
+.compendium_datatable div.dt-container div.dt-search {
+    margin-bottom: 0.5rem;
+}
+
+.compendium_datatable div.dt-container div.dt-search input {
+    background-color: var(--theme-dark);
+    color: var(--bs-body-color);
+    border: 1px solid rgba(128, 128, 128, 0.5);
+    border-radius: 0.25rem;
+    padding: 0.3rem 0.6rem;
+}
+
+.compendium_datatable table.dataTable {
+    border-collapse: collapse;
+}

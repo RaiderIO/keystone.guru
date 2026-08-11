@@ -2,35 +2,21 @@
 
 use App\Models\Dungeon;
 use App\Models\Spell\Spell;
-use Illuminate\Support\Collection;
 
 /**
- * @var Spell                    $spell
- * @var Collection<int, Dungeon> $spell ->dungeons
+ * The section title lives in the parent record section's label rail (see show.blade.php).
+ * A one-column table earned nothing; the dungeons render as a chip list.
+ *
+ * @var Spell $spell
  */
 ?>
-<div class="row mb-4">
-    <div class="col">
-        <h4>{{ __('view_compendium.spell.sections.dungeons.title') }}</h4>
-        @if($spell->dungeons->isNotEmpty())
-            <div class="table-responsive">
-                <table class="table table-sm mt-2">
-                    <thead>
-                    <tr>
-                        <th>{{ __('view_compendium.spell.sections.dungeons.header_name') }}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($spell->dungeons as $dungeon)
-                        <tr>
-                            <td>{{ __($dungeon->name) }}</td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @else
-            <p class="text-muted">{{ __('view_compendium.spell.sections.dungeons.empty') }}</p>
-        @endif
+@if($spell->dungeons->isNotEmpty())
+    <div class="compendium_identity_meta">
+        @foreach($spell->dungeons as $dungeon)
+            <?php /** @var Dungeon $dungeon */ ?>
+            <span class="compendium_chip">{{ __($dungeon->name) }}</span>
+        @endforeach
     </div>
-</div>
+@else
+    <p class="text-muted mb-0">{{ __('view_compendium.spell.sections.dungeons.empty') }}</p>
+@endif

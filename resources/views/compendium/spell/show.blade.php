@@ -33,11 +33,39 @@ use Illuminate\Support\Collection;
 @section('content')
     @include('compendium.spell.sections.header')
 
-    @include('compendium.spell.sections.details')
+    <div class="compendium_record_section">
+        <div class="compendium_record_label">
+            {{ __('view_compendium.spell.sections.details.title') }}
+        </div>
+        <div>
+            @include('compendium.spell.sections.details')
+        </div>
+    </div>
 
-    @include('compendium.spell.sections.dungeons')
+    <div class="compendium_record_section">
+        <div class="compendium_record_label">
+            {{ __('view_compendium.spell.sections.dungeons.title') }}
+        </div>
+        <div>
+            @include('compendium.spell.sections.dungeons')
+        </div>
+    </div>
 
-    @include('compendium.spell.sections.npcs')
+    <div class="compendium_record_section">
+        <div class="compendium_record_label">
+            {{ __('view_compendium.spell.sections.npcs.title') }}
+        </div>
+        <div>
+            @include('compendium.spell.sections.npcs')
+        </div>
+    </div>
 
-    @include('compendium.spell.sections.event_feed')
+    <div class="compendium_record_section">
+        <div class="compendium_record_label">
+            {{ __('view_compendium.spell.sections.event_feed.title') }}
+        </div>
+        <div>
+            @include('compendium.spell.sections.event_feed')
+        </div>
+    </div>
 @endsection
