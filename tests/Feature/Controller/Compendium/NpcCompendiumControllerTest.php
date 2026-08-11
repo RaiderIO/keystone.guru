@@ -10,12 +10,15 @@ use App\Models\User;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Traits\ReadsDungeonSelect;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
 #[Group('Compendium')]
 final class NpcCompendiumControllerTest extends PublicTestCase
 {
+    use ReadsDungeonSelect;
+
     /** @var array<string, mixed> */
     private array $datatableParams = [
         'draw'    => 1,
@@ -72,7 +75,7 @@ final class NpcCompendiumControllerTest extends PublicTestCase
         $this->actingAsGuest();
 
         // Act
-        $response = $this->get(route('npc.compendium.index'));
+        $response = $this->get(route('npc.compendium.index.dungeon', ['dungeon' => Dungeon::active()->firstOrFail()]));
 
         // Assert
         $response->assertOk();
@@ -82,17 +85,76 @@ final class NpcCompendiumControllerTest extends PublicTestCase
     public function index_givenAdminFeatureEnabled_returnsOk(): void
     {
         // Act
-        $response = $this->get(route('npc.compendium.index'));
+        $response = $this->get(route('npc.compendium.index.dungeon', ['dungeon' => Dungeon::active()->firstOrFail()]));
 
         // Assert
         $response->assertOk();
     }
 
     #[Test]
+    public function index_givenNoDungeonInUrl_redirectsToContextDungeon(): void
+    {
+        // Arrange
+        $dungeon           = Dungeon::active()->firstOrFail();
+        $user              = User::findOrFail(1);
+        $originalDungeonId = $user->dungeon_id;
+        $user->dungeon_id  = $dungeon->id;
+        $user->save();
+
+        try {
+            // Act
+            $response = $this->actingAs($user->fresh())->get(route('npc.compendium.index'));
+
+            // Assert - a 302, not a 301: the target depends on the visitor's own context dungeon
+            $response->assertRedirect(route('npc.compendium.index.dungeon', ['dungeon' => $dungeon]));
+            $response->assertStatus(302);
+        } finally {
+            $user->dungeon_id = $originalDungeonId;
+            $user->save();
+        }
+    }
+
+    #[Test]
+    public function indexDungeon_givenDungeonOtherThanContextDungeon_rendersThatDungeonAndMakesItTheContext(): void
+    {
+        // Arrange - two different dungeons, so the URL is provably what decides what is rendered
+        $contextDungeon   = Dungeon::active()->orderBy('id')->firstOrFail();
+        $requestedDungeon = Dungeon::active()->where('id', '!=', $contextDungeon->id)->orderBy('id')->firstOrFail();
+
+        $user              = User::findOrFail(1);
+        $originalDungeonId = $user->dungeon_id;
+        $user->dungeon_id  = $contextDungeon->id;
+        $user->save();
+
+        try {
+            // Act
+            $response = $this->actingAs($user->fresh())->get(route('npc.compendium.index.dungeon', ['dungeon' => $requestedDungeon]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame($requestedDungeon->id, $this->getSelectedDungeonId($response->getContent()));
+            $this->assertSame($requestedDungeon->id, User::findOrFail(1)->dungeon_id);
+        } finally {
+            $user->dungeon_id = $originalDungeonId;
+            $user->save();
+        }
+    }
+
+    #[Test]
+    public function indexDungeon_givenUnknownDungeonSlug_returnsNotFound(): void
+    {
+        // Act
+        $response = $this->get('/compendium/npc/dungeon/not-a-dungeon');
+
+        // Assert
+        $response->assertNotFound();
+    }
+
+    #[Test]
     public function index_givenShowSeasons_returnsNoDuplicateDungeonsInSelect(): void
     {
         // Act
-        $response = $this->get(route('npc.compendium.index'));
+        $response = $this->get(route('npc.compendium.index.dungeon', ['dungeon' => Dungeon::active()->firstOrFail()]));
 
         // Assert
         $response->assertOk();

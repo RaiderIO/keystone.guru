@@ -181,10 +181,14 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::get('/', new CompendiumController()->index(...))->name('compendium.index');
             Route::prefix('npc')->group(static function () {
                 Route::get('/', new NpcCompendiumController()->index(...))->name('npc.compendium.index');
+                // Behind a literal segment - /{npc} owns the next path segment already
+                Route::get('/dungeon/{dungeon}', new NpcCompendiumController()->indexDungeon(...))->name('npc.compendium.index.dungeon');
                 Route::get('/{npc}', new NpcCompendiumController()->show(...))->name('npc.compendium.show');
             });
             Route::prefix('spell')->group(static function () {
                 Route::get('/', new SpellCompendiumController()->index(...))->name('spell.compendium.index');
+                // Behind a literal segment - /{spell} owns the next path segment already
+                Route::get('/dungeon/{dungeon}', new SpellCompendiumController()->indexDungeon(...))->name('spell.compendium.index.dungeon');
                 Route::get('/{spell}', new SpellCompendiumController()->show(...))->name('spell.compendium.show');
             });
             Route::prefix('activity')->group(static function () {
@@ -197,6 +201,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::prefix('class')->group(static function () {
                 Route::get('/', new ClassCompendiumController()->index(...))->name('compendium.class.index');
                 Route::get('/{characterClass:key}', new ClassCompendiumController()->show(...))->name('compendium.class.show');
+                Route::get('/{characterClass:key}/{dungeon}', new ClassCompendiumController()->showDungeon(...))->name('compendium.class.show.dungeon');
             });
         });
 

@@ -83,6 +83,29 @@ final class NpcCompendiumControllerActivityTest extends PublicTestCase
     }
 
     #[Test]
+    public function activity_givenDungeonInUrl_makesItTheContextDungeon(): void
+    {
+        // Arrange - a context dungeon other than the one in the URL, so the URL is provably what wins
+        $otherDungeon      = Dungeon::active()->where('id', '!=', $this->dungeon->id)->orderBy('id')->firstOrFail();
+        $user              = User::findOrFail(1);
+        $originalDungeonId = $user->dungeon_id;
+        $user->dungeon_id  = $otherDungeon->id;
+        $user->save();
+
+        try {
+            // Act
+            $response = $this->actingAs($user->fresh())->get(route('compendium.activity', $this->dungeon));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame($this->dungeon->id, User::findOrFail(1)->dungeon_id);
+        } finally {
+            $user->dungeon_id = $originalDungeonId;
+            $user->save();
+        }
+    }
+
+    #[Test]
     public function activity_givenFeatureEnabledNoAuth_returnsOk(): void
     {
         // Arrange

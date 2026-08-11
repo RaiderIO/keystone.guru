@@ -2,12 +2,20 @@
 
 use App\Models\Dungeon;
 use App\Models\Npc\NpcClassification;
+use Illuminate\Support\Collection;
 
 /**
- * @var Dungeon $contextDungeon
+ * @var Dungeon                  $contextDungeon
+ * @var Collection<int, Dungeon> $gameVersionDungeons
+ * @var Collection<int, string>  $dungeonSlugsById
  */
 ?>
-@extends('layouts.sitepage', ['title' => __('view_compendium.spell.index.title')])
+@extends('layouts.sitepage', [
+    'title' => __('view_compendium.spell.index.title'),
+    'dungeonContextLinks' => $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [
+        $dungeon->key => route('spell.compendium.index.dungeon', ['dungeon' => $dungeon])
+    ]),
+])
 
 @section('header-title')
     {{ __('view_compendium.spell.index.header') }}
@@ -107,8 +115,21 @@ use App\Models\Npc\NpcClassification;
                 }),
             });
 
+            // The dungeon is part of the URL, so picking another one navigates to that dungeon's
+            // page - that keeps the URL, the header's dungeon selection and the dungeon context in
+            // sync. Should the selection ever hold something that is not a dungeon id (the select
+            // can emit season/expansion options), fall back to just reloading the table.
+            const dungeonSlugsById = @json($dungeonSlugsById);
+            const dungeonIndexBaseUrl = '{{ url('/compendium/spell/dungeon') }}';
+
             $('#compendium_filter_dungeon').on('change', function () {
-                table.ajax.reload();
+                const dungeonSlug = dungeonSlugsById[$(this).val()];
+
+                if (dungeonSlug) {
+                    window.location.href = `${dungeonIndexBaseUrl}/${dungeonSlug}`;
+                } else {
+                    table.ajax.reload();
+                }
             });
         });
     </script>

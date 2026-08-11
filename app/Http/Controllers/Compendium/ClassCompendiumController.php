@@ -10,7 +10,10 @@ use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
 use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitionInterface;
 use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitions;
+use App\Service\Dungeon\DungeonServiceInterface;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class ClassCompendiumController extends Controller
@@ -32,9 +35,27 @@ class ClassCompendiumController extends Controller
         ]);
     }
 
-    public function show(CharacterClass $characterClass): View
+    /**
+     * The class page without a dungeon in the URL - bounces to the canonical URL of the visitor's
+     * context dungeon.
+     *
+     * Deliberately a 302: the target depends on the visitor's own context dungeon, so a permanent
+     * redirect would get cached and pin one dungeon into every later visit.
+     */
+    public function show(CharacterClass $characterClass): RedirectResponse
     {
-        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        return redirect()->route('compendium.class.show.dungeon', [
+            'characterClass' => $characterClass,
+            'dungeon'        => Dungeon::getUserOrDefaultDungeon(),
+        ]);
+    }
+
+    public function showDungeon(CharacterClass $characterClass, Dungeon $dungeon, DungeonServiceInterface $dungeonService): View
+    {
+        // The URL is the source of truth for which dungeon is being viewed - make it the context
+        // dungeon as well, so the header's dungeon selection follows along (as on explore/heatmap)
+        $dungeonService->setDungeonContext($dungeon, Auth::user());
+
         $mappingVersion = $dungeon->getCurrentMappingVersion();
 
         $spells = Spell::query()
@@ -71,6 +92,9 @@ class ClassCompendiumController extends Controller
             'npcsByCharacteristicId' => $npcsByCharacteristicId,
             'counterSections'        => $this->getCounterSections($characterClass, $dungeon, $mappingVersion),
             'reflectSection'         => $this->getReflectSection($characterClass, $dungeon, $mappingVersion),
+            // HeaderComposer only injects this into the header view itself - the dungeon context
+            // links this page overrides are built in the view, so it needs its own copy
+            'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion(),
         ]);
     }
 

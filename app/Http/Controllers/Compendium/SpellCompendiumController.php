@@ -10,17 +10,43 @@ use App\Logic\Datatables\SpellsDatatablesHandler;
 use App\Models\Dungeon;
 use App\Models\Spell\Spell;
 use App\Service\Compendium\SpellCompendiumServiceInterface;
+use App\Service\Dungeon\DungeonServiceInterface;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class SpellCompendiumController extends Controller
 {
-    public function index(): View
+    /**
+     * The spell index without a dungeon in the URL - bounces to the canonical URL of the visitor's
+     * context dungeon.
+     *
+     * Deliberately a 302: the target depends on the visitor's own context dungeon, so a permanent
+     * redirect would get cached and pin one dungeon into every later visit.
+     */
+    public function index(): RedirectResponse
     {
+        return redirect()->route('spell.compendium.index.dungeon', [
+            'dungeon' => Dungeon::getUserOrDefaultDungeon(),
+        ]);
+    }
+
+    public function indexDungeon(Dungeon $dungeon, DungeonServiceInterface $dungeonService): View
+    {
+        // The URL is the source of truth for which dungeon is being viewed - make it the context
+        // dungeon as well, so the header's dungeon selection follows along (as on explore/heatmap)
+        $dungeonService->setDungeonContext($dungeon, Auth::user());
+
         return view('compendium.spell.index', [
-            'contextDungeon' => Dungeon::getUserOrDefaultDungeon(),
+            'contextDungeon' => $dungeon,
+            // HeaderComposer only injects this into the header view itself - the dungeon context
+            // links this page overrides are built in the view, so it needs its own copy
+            'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion(),
+            // The dungeon filter's options are dungeon ids; navigating to another dungeon's page
+            // needs their slugs
+            'dungeonSlugsById' => Dungeon::query()->pluck('slug', 'id'),
         ]);
     }
 
