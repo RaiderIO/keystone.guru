@@ -122,13 +122,13 @@ use Illuminate\Support\Collection;
             // hold something that is not a dungeon id (the select can emit season/expansion
             // options), fall back to just reloading the table.
             const dungeonSlugsById = @json($dungeonSlugsById);
-            const dungeonIndexBaseUrl = '{{ url('/compendium/npc/dungeon') }}';
+            const dungeonBaseUrl = '{{ url('/compendium/dungeon') }}';
 
             $('#compendium_filter_dungeon').on('change', function () {
                 const dungeonSlug = dungeonSlugsById[$(this).val()];
 
                 if (dungeonSlug) {
-                    window.location.href = `${dungeonIndexBaseUrl}/${dungeonSlug}`;
+                    window.location.href = `${dungeonBaseUrl}/${dungeonSlug}/npc`;
                 } else {
                     table.ajax.reload();
                 }

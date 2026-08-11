@@ -164,7 +164,7 @@ final class SpellCompendiumControllerTest extends PublicTestCase
     public function indexDungeon_givenUnknownDungeonSlug_returnsNotFound(): void
     {
         // Act
-        $response = $this->get('/compendium/spell/dungeon/not-a-dungeon');
+        $response = $this->get('/compendium/dungeon/not-a-dungeon/spell');
 
         // Assert
         $response->assertNotFound();

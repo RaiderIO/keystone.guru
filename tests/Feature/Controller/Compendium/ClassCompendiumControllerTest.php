@@ -151,7 +151,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_MAGE)->firstOrFail();
 
         // Act
-        $response = $this->get(sprintf('/compendium/class/%s/not-a-dungeon', $characterClass->key));
+        $response = $this->get(sprintf('/compendium/dungeon/not-a-dungeon/class/%s', $characterClass->key));
 
         // Assert
         $response->assertNotFound();

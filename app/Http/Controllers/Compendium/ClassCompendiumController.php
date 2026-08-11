@@ -50,7 +50,11 @@ class ClassCompendiumController extends Controller
         ]);
     }
 
-    public function showDungeon(CharacterClass $characterClass, Dungeon $dungeon, DungeonServiceInterface $dungeonService): View
+    /**
+     * Parameters follow the URL's order (/compendium/dungeon/{dungeon}/class/{characterClass}) - a
+     * route registered with first-class callable syntax binds them positionally, not by name.
+     */
+    public function showDungeon(Dungeon $dungeon, CharacterClass $characterClass, DungeonServiceInterface $dungeonService): View
     {
         // The URL is the source of truth for which dungeon is being viewed - make it the context
         // dungeon as well, so the header's dungeon selection follows along (as on explore/heatmap)

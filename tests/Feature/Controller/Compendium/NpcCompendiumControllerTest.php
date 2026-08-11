@@ -164,7 +164,7 @@ final class NpcCompendiumControllerTest extends PublicTestCase
     public function indexDungeon_givenUnknownDungeonSlug_returnsNotFound(): void
     {
         // Act
-        $response = $this->get('/compendium/npc/dungeon/not-a-dungeon');
+        $response = $this->get('/compendium/dungeon/not-a-dungeon/npc');
 
         // Assert
         $response->assertNotFound();
