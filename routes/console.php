@@ -73,6 +73,9 @@ $commands[] = Schedule::command('metric:savepending')->everyMinute();
 // Cleanup the generated custom thumbnails
 $commands[] = Schedule::command('thumbnail:deleteexpiredjobs')->everyFifteenMinutes();
 
+// Cleanup relation data for expired live sessions
+$commands[] = Schedule::command('livesession:cleanup-expired')->hourly();
+
 // Keep the wide hero-band thumbnails fresh for the routes shown as heroes on the discovery pages.
 // Rendering needs headless chrome, so skip it locally like the other thumbnail refreshers.
 if (!app()->environment('local')) {

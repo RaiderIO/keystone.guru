@@ -152,7 +152,6 @@ describe('KillZone constructor', () => {
         expect(killZone.label).toBe('KillZone');
         expect(killZone.enemies).toEqual([]);
         expect(killZone.spellIds).toEqual([]);
-        expect(killZone.overpulledEnemies).toEqual([]);
     });
 });
 

@@ -3,7 +3,7 @@
 namespace App\Events\LiveSession;
 
 use App\Events\ContextEvent;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 use App\Models\User;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Support\Collection;

@@ -530,6 +530,10 @@ function getFloorUnionAreas() {
     return getFloorUnionAreaMapObjectGroup();
 }
 
+function getPlayerPositions() {
+    return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_PLAYER_POSITION);
+}
+
 /**
  * Helper functions to help debug the site.
  */
@@ -571,6 +575,10 @@ function getUserMousePosition(id) {
 
 function getMountableArea(id) {
     return getMountableAreas().findMapObjectById(id);
+}
+
+function getPlayerPosition(id) {
+    return getPlayerPositions().findMapObjectById(id);
 }
 
 $.fn.insertIndex = function (i) {

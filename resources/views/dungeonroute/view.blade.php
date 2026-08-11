@@ -73,6 +73,7 @@ if (count($affixes) == 0) {
             'hiddenMapObjectGroups' => [
                 'floorunion',
                 'floorunionarea',
+                'playerposition',
             ],
         ])
     </div>

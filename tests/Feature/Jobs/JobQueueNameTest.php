@@ -5,6 +5,7 @@ namespace Tests\Feature\Jobs;
 use App\Jobs\CombatLog\ProcessCombatLogFanout;
 use App\Jobs\CombatLog\ProcessCombatLogFromS3;
 use App\Jobs\CombatLog\ProcessCombatLogSegments;
+use App\Jobs\LiveSession\ProcessLiveSessionCombatLogBuffer;
 use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Jobs\ProcessRouteFloorThumbnailCustom;
 use App\Jobs\RefreshDiscoverCache;
@@ -77,6 +78,10 @@ final class JobQueueNameTest extends PublicTestCase
             'ProcessCombatLogFanout' => [
                 static fn() => new ProcessCombatLogFanout('bucket', 'path/', 1),
                 sprintf('%s-cl-fanout', self::APP_TYPE),
+            ],
+            'ProcessLiveSessionCombatLogBuffer' => [
+                static fn() => new ProcessLiveSessionCombatLogBuffer(1),
+                sprintf('%s-live-session-process', self::APP_TYPE),
             ],
         ];
     }

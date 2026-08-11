@@ -81,6 +81,7 @@ use Illuminate\Support\Collection;
                 'killzonepath',
                 'mountablearea',
                 'path',
+                'playerposition',
             ],
             'controlOptions' => [
                 'heatmapSearch' => [

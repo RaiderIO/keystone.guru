@@ -303,8 +303,7 @@ class KillZone extends Model
             ' : '';
 
         $queryResult = DB::select("
-            select `kill_zone_enemies`.*,
-                    enemies.id as enemy_id,
+            select enemies.id as enemy_id,
                     enemies.enemy_pack_id,
                    CAST(IFNULL(
                            IF(:teeming = 1,
