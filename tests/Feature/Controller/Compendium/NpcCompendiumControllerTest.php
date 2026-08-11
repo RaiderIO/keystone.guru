@@ -5,6 +5,7 @@ namespace Tests\Feature\Controller\Compendium;
 use App\Features\NpcCompendium;
 use App\Models\Dungeon;
 use App\Models\Enemy;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\User;
 use Laravel\Pennant\Feature;
@@ -138,6 +139,25 @@ final class NpcCompendiumControllerTest extends PublicTestCase
             $user->dungeon_id = $originalDungeonId;
             $user->save();
         }
+    }
+
+    #[Test]
+    public function indexDungeon_givenDungeonNotOfferedByTheFilter_stillDrivesTheTableFromTheUrlDungeon(): void
+    {
+        // Arrange - the dungeon filter only lists dungeons mapped for the visitor's game version, so
+        // a dungeon outside it is not among its options. The table must still show the URL's dungeon
+        $gameVersion = GameVersion::getUserOrDefaultGameVersion();
+        $dungeon     = Dungeon::query()
+            ->whereDoesntHave('mappingVersions', static fn($query) => $query->where('game_version_id', $gameVersion->id))
+            ->firstOrFail();
+
+        // Act
+        $response = $this->get(route('npc.compendium.index.dungeon', ['dungeon' => $dungeon]));
+
+        // Assert
+        $response->assertOk();
+        $this->assertNotSame($dungeon->id, $this->getSelectedDungeonId($response->getContent()));
+        $response->assertSee(sprintf('const contextDungeonId = %d;', $dungeon->id), false);
     }
 
     #[Test]

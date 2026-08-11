@@ -137,9 +137,10 @@ class NpcCompendiumController extends Controller
             abort(404);
         }
 
-        // The URL is the source of truth for which dungeon is being viewed - make it the context
-        // dungeon as well, so the header's dungeon selection follows along (as on explore/heatmap)
-        $dungeonService->setDungeonContext($dungeon, Auth::user());
+        // Deliberately no setDungeonContext() here, unlike every other dungeon-in-the-URL page: only
+        // pages that validate their dungeon write the site-wide context, and this one does not.
+        // activity() one route up rejects any dungeon outside the current season, so persisting one
+        // from here would leave the visitor with a context its own overview refuses to show.
 
         return view('compendium.activity.day', [
             'contextDungeon'      => $dungeon,

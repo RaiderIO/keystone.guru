@@ -106,6 +106,33 @@ final class NpcCompendiumControllerActivityTest extends PublicTestCase
     }
 
     #[Test]
+    public function activityDay_givenDungeonInUrl_leavesTheContextDungeonAlone(): void
+    {
+        // Arrange - unlike activity(), the day page does not validate its dungeon against the current
+        // season, so it must not push one into the site-wide context either
+        $otherDungeon      = Dungeon::active()->where('id', '!=', $this->dungeon->id)->orderBy('id')->firstOrFail();
+        $user              = User::findOrFail(1);
+        $originalDungeonId = $user->dungeon_id;
+        $user->dungeon_id  = $otherDungeon->id;
+        $user->save();
+
+        try {
+            // Act
+            $response = $this->actingAs($user->fresh())->get(route('compendium.activity.day', [
+                'dungeon' => $this->dungeon,
+                'date'    => '2025-01-15',
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame($otherDungeon->id, User::findOrFail(1)->dungeon_id);
+        } finally {
+            $user->dungeon_id = $originalDungeonId;
+            $user->save();
+        }
+    }
+
+    #[Test]
     public function activity_givenFeatureEnabledNoAuth_returnsOk(): void
     {
         // Arrange

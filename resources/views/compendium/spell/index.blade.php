@@ -37,6 +37,11 @@ use Illuminate\Support\Collection;
             const npcShowBaseUrl = '{{ url('/compendium/npc') }}';
             const spellTemplate = Handlebars.templates['spell_template'];
             const npcTemplate = Handlebars.templates['npc'];
+            // The dungeon in the URL is what this page is about; the filter below is only a way to
+            // navigate to another dungeon's page. Reading the table's dungeon off the select instead
+            // would list a different dungeon whenever the select does not offer this one - it only
+            // lists dungeons mapped for the visitor's game version, which the URL is not bound by.
+            const contextDungeonId = {{ $contextDungeon->id }};
 
             const table = $('#compendium_spell_table').DataTable({
                 'processing': true,
@@ -46,10 +51,7 @@ use Illuminate\Support\Collection;
                 'ajax': {
                     'url': '{{ route('ajax.spell.compendium.search') }}',
                     'data': function (d) {
-                        const dungeonId = $('#compendium_filter_dungeon').val();
-                        if (dungeonId) {
-                            d.dungeon_id = dungeonId;
-                        }
+                        d.dungeon_id = contextDungeonId;
                     },
                 },
                 'lengthMenu': [25],
@@ -115,10 +117,10 @@ use Illuminate\Support\Collection;
                 }),
             });
 
-            // The dungeon is part of the URL, so picking another one navigates to that dungeon's
-            // page - that keeps the URL, the header's dungeon selection and the dungeon context in
-            // sync. Should the selection ever hold something that is not a dungeon id (the select
-            // can emit season/expansion options), fall back to just reloading the table.
+            // Picking another dungeon navigates to that dungeon's page - that keeps the URL, the
+            // header's dungeon selection and the dungeon context in sync. Should the selection ever
+            // hold something that is not a dungeon id (the select can emit season/expansion
+            // options), fall back to just reloading the table.
             const dungeonSlugsById = @json($dungeonSlugsById);
             const dungeonIndexBaseUrl = '{{ url('/compendium/spell/dungeon') }}';
 
