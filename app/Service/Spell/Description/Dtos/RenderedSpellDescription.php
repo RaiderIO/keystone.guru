@@ -24,13 +24,23 @@ class RenderedSpellDescription
     public function render(): string
     {
         if ($this->values === []) {
-            return $this->format;
+            return self::closeGaps(str_replace('%%', '%', $this->format));
         }
 
-        return vsprintf($this->format, array_map(
+        return self::closeGaps(vsprintf($this->format, array_map(
             static fn(SpellDescriptionValue $value): string => $value->text,
             $this->values,
-        ));
+        )));
+    }
+
+    /**
+     * A value we could not work out renders as nothing, leaving the spaces that surrounded it behind
+     * ("causing  Shadow damage"). Runs of whitespace that follow other text are closed up, while leading
+     * indentation - which descriptions use to lay out lists - is left alone.
+     */
+    public static function closeGaps(string $description): string
+    {
+        return trim(preg_replace('/(?<=\S)[ \t]{2,}/', ' ', $description) ?? $description);
     }
 
     public function isEmpty(): bool

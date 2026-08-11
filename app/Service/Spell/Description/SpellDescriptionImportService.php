@@ -133,6 +133,15 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
             SpellEffect::query()->upsert($chunk, ['spell_id', 'effect_index']);
         }
 
+        // An upsert never deletes, so an effect a patch took away would otherwise linger forever - and
+        // ride into every environment through the seeder (#3972 review)
+        foreach ($effects as $spellId => $spellEffects) {
+            SpellEffect::query()
+                ->where('spell_id', $spellId)
+                ->whereNotIn('effect_index', array_keys($spellEffects))
+                ->delete();
+        }
+
         new SpellEffect()->flushCache();
     }
 

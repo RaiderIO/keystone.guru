@@ -23,4 +23,9 @@ class SpellDamageCalibrationServiceLogging extends StructuredLogging implements 
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
+
+    public function calibrateMisaligned(int $spellId, float $ours, float $theirs): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
 }

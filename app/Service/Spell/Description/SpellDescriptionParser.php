@@ -255,17 +255,17 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
         }
 
         // A coefficient without its multiplier is not a number anyone can read - 10 where the game shows
-        // 50,845 - so it is omitted, the same as any other value we cannot work out
-        if ($damageMultiplier <= 0.0) {
-            return;
-        }
-
-        // An amount of damage is always a whole number; the fraction is an artefact of the coefficient
-        $amount = round($value / self::COEFFICIENT_SCALE * $damageMultiplier);
+        // 50,845 - so nothing is shown for it. The value itself is still recorded: it carries the
+        // coefficient, which is what the calibration measures the multiplier from in the first place.
+        // Dropping it here would leave calibration with nothing to work with (#3972 review).
+        $amount = $damageMultiplier > 0.0
+            // An amount of damage is a whole number; the fraction is an artefact of the coefficient
+            ? $this->formatNumber(round($value / self::COEFFICIENT_SCALE * $damageMultiplier))
+            : '';
 
         $builder->appendValue(new SpellDescriptionValue(
             kind: $kind,
-            text: $this->formatNumber($amount),
+            text: $amount,
             coefficient: $value,
             spellId: $spellId,
             effectIndex: $effectIndex,

@@ -32,18 +32,6 @@ class SpellDescriptionBuilder
 
     public function build(): RenderedSpellDescription
     {
-        return new RenderedSpellDescription($this->trimFormat(), $this->values);
-    }
-
-    /**
-     * Trim the format without touching the placeholders, and close the gaps an omitted token leaves
-     * behind ("causing  Shadow damage"). Leading indentation, which descriptions use to lay out lists,
-     * is left alone.
-     */
-    private function trimFormat(): string
-    {
-        $format = preg_replace('/(?<=\S)[ \t]{2,}/', ' ', $this->format) ?? $this->format;
-
-        return trim($format);
+        return new RenderedSpellDescription(trim($this->format), $this->values);
     }
 }

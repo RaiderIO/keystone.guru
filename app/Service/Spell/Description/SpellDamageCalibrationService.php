@@ -113,10 +113,26 @@ class SpellDamageCalibrationService implements SpellDamageCalibrationServiceInte
         $agreed = [];
 
         foreach ($values as $index => $value) {
+            // A value that does not scale - a duration, a radius - is the same number on both sides. If
+            // it is not, we lined the two descriptions up wrongly and nothing else here can be trusted:
+            // most spells have a single damage value, so the agreement check below would pass vacuously
+            // on a bad pairing (#3972 review).
+            if ($value->coefficient === null) {
+                $ours = $this->extractNumbers($value->text)[0] ?? null;
+
+                if ($ours !== null && abs($paired[$index] - $ours) > 0.01) {
+                    $this->log->calibrateMisaligned($spell->id, $ours, $paired[$index]);
+
+                    return ['multiplier' => null, 'disagreed' => true];
+                }
+
+                continue;
+            }
+
             // Measured against the coefficient rather than against what we display, because what we
             // display already has a multiplier in it once one has been measured - comparing that would
             // report a multiplier of one and quietly undo the previous run
-            if ($value->coefficient === null || $value->coefficient <= 0.0) {
+            if ($value->coefficient <= 0.0) {
                 continue;
             }
 

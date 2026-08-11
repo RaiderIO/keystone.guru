@@ -42,7 +42,10 @@
 
         return String(payload.format ?? '')
             .replace(/%(\d+)\$s/g, (match, index) => values[parseInt(index, 10) - 1]?.text ?? '')
-            .replace(/%%/g, '%');
+            .replace(/%%/g, '%')
+            // A value we could not work out renders as nothing, leaving the spaces around it behind
+            .replace(/(?<=\S)[ \t]{2,}/g, ' ')
+            .trim();
     }
 
     /**
