@@ -7,6 +7,9 @@ use App\Models\EnemyForcesCheckpoint;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
+use Illuminate\Broadcasting\BroadcastException;
+use Illuminate\Contracts\Broadcasting\Broadcaster;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Validation\ValidationException;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -110,6 +113,48 @@ final class AjaxEnemyForcesCheckpointControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function store_givenBroadcastFails_stillCreatesCheckpoint(): void
+    {
+        // Arrange - a broadcast failure (e.g. Reverb briefly unreachable) must not turn a
+        // successfully saved model into an error response (#3941)
+        $this->forceBroadcastFailure();
+
+        $floor          = $this->getFloorWithEnemies();
+        $mappingVersion = $this->getMappingVersionForFloor($floor);
+
+        $enemyForcesCheckpointId = null;
+
+        try {
+            // Act
+            $response = $this->post(sprintf('/ajax/admin/mappingVersion/%d/enemyforcescheckpoint', $mappingVersion->id), [
+                'id'                 => -1,
+                'mapping_version_id' => $mappingVersion->id,
+                'floor_id'           => $floor->id,
+                'name'               => 'Test corridor',
+                'lat'                => -128.5,
+                'lng'                => 192.5,
+            ]);
+
+            // Assert
+            $response->assertSuccessful();
+
+            $enemyForcesCheckpointId = $response->json('id');
+            $this->assertNotNull($enemyForcesCheckpointId);
+
+            $this->assertDatabaseHas('enemy_forces_checkpoints', [
+                'id'                 => $enemyForcesCheckpointId,
+                'mapping_version_id' => $mappingVersion->id,
+                'floor_id'           => $floor->id,
+                'name'               => 'Test corridor',
+            ]);
+        } finally {
+            if ($enemyForcesCheckpointId !== null) {
+                EnemyForcesCheckpoint::where('id', $enemyForcesCheckpointId)->delete();
+            }
+        }
+    }
+
+    #[Test]
     public function delete_givenCheckpointWithEnemies_deletesItAndReleasesItsEnemies(): void
     {
         // Arrange
@@ -147,6 +192,41 @@ final class AjaxEnemyForcesCheckpointControllerTest extends AjaxPublicTestCase
         } finally {
             Enemy::where('enemy_forces_checkpoint_id', $enemyForcesCheckpoint->id)
                 ->update(['enemy_forces_checkpoint_id' => null]);
+            EnemyForcesCheckpoint::where('id', $enemyForcesCheckpoint->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function delete_givenBroadcastFails_stillDeletesCheckpoint(): void
+    {
+        // Arrange - a broadcast failure must not turn an already-succeeded delete into an error
+        // response describing a state that isn't true (#3941)
+        $this->forceBroadcastFailure();
+
+        $floor          = $this->getFloorWithEnemies();
+        $mappingVersion = $this->getMappingVersionForFloor($floor);
+
+        $enemyForcesCheckpoint = EnemyForcesCheckpoint::create([
+            'mapping_version_id' => $mappingVersion->id,
+            'floor_id'           => $floor->id,
+            'name'               => 'Test corridor',
+            'lat'                => -128.5,
+            'lng'                => 192.5,
+        ]);
+
+        try {
+            // Act
+            $response = $this->delete(sprintf(
+                '/ajax/admin/mappingVersion/%d/enemyforcescheckpoint/%d',
+                $mappingVersion->id,
+                $enemyForcesCheckpoint->id,
+            ));
+
+            // Assert
+            $response->assertSuccessful();
+
+            $this->assertDatabaseMissing('enemy_forces_checkpoints', ['id' => $enemyForcesCheckpoint->id]);
+        } finally {
             EnemyForcesCheckpoint::where('id', $enemyForcesCheckpoint->id)->delete();
         }
     }
@@ -214,6 +294,37 @@ final class AjaxEnemyForcesCheckpointControllerTest extends AjaxPublicTestCase
         // Assert
         $this->assertContains($response->getStatusCode(), [401, 403]);
         $this->assertDatabaseMissing('enemy_forces_checkpoints', ['name' => 'Test corridor']);
+    }
+
+    /**
+     * Swaps the default broadcast connection for one that always throws a BroadcastException,
+     * simulating a Reverb outage without making a real network call.
+     */
+    private function forceBroadcastFailure(): void
+    {
+        Broadcast::extend('failing', static fn() => new class implements Broadcaster {
+            public function auth($request)
+            {
+            }
+
+            public function validAuthenticationResponse($request, $result)
+            {
+            }
+
+            /**
+             * @param array<int, mixed>    $channels
+             * @param array<string, mixed> $payload
+             */
+            public function broadcast(array $channels, $event, array $payload = []): void
+            {
+                throw new BroadcastException('Simulated broadcast failure');
+            }
+        });
+
+        config([
+            'broadcasting.connections.failing' => ['driver' => 'failing'],
+            'broadcasting.default'             => 'failing',
+        ]);
     }
 
     private function getFloorWithEnemies(): Floor

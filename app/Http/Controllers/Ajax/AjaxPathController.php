@@ -17,6 +17,7 @@ use App\Models\Polyline;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -95,7 +96,12 @@ class AjaxPathController extends Controller
                 if (Auth::check()) {
                     /** @var User $user */
                     $user = Auth::getUser();
-                    broadcast(new PathChangedEvent($coordinatesService, $dungeonRoute, $user, $path));
+
+                    try {
+                        broadcast(new PathChangedEvent($coordinatesService, $dungeonRoute, $user, $path));
+                    } catch (BroadcastException) {
+                        // Ignore broadcast failures
+                    }
                 }
 
                 // Touch the route so that the thumbnail gets updated
@@ -127,7 +133,12 @@ class AjaxPathController extends Controller
                 if (Auth::check()) {
                     /** @var User $user */
                     $user = Auth::getUser();
-                    broadcast(new PathDeletedEvent($dungeonRoute, $user, $path));
+
+                    try {
+                        broadcast(new PathDeletedEvent($dungeonRoute, $user, $path));
+                    } catch (BroadcastException) {
+                        // Ignore broadcast failures
+                    }
                 }
 
                 $this->dungeonRouteChanged($dungeonRoute, $path, null);

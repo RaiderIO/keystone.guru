@@ -18,6 +18,7 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use DB;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -192,7 +193,12 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
                     if (Auth::check()) {
                         /** @var User $user */
                         $user = Auth::getUser();
-                        broadcast(new EnemyDeletedEvent($enemy->floor->dungeon, $user, $enemy));
+
+                        try {
+                            broadcast(new EnemyDeletedEvent($enemy->floor->dungeon, $user, $enemy));
+                        } catch (BroadcastException) {
+                            // Ignore broadcast failures
+                        }
                     }
                 }
 

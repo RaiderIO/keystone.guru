@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use DB;
 use Exception;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -60,7 +61,12 @@ class AjaxFloorUnionController extends AjaxMappingModelBaseController
                     if (Auth::check()) {
                         /** @var User $user */
                         $user = Auth::getUser();
-                        broadcast(new FloorUnionDeletedEvent($floorUnion->floor->dungeon, $user, $floorUnion));
+
+                        try {
+                            broadcast(new FloorUnionDeletedEvent($floorUnion->floor->dungeon, $user, $floorUnion));
+                        } catch (BroadcastException) {
+                            // Ignore broadcast failures
+                        }
                     }
                 }
 

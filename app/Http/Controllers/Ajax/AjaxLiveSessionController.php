@@ -9,6 +9,7 @@ use App\Models\LiveSession;
 use App\Models\User;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -43,7 +44,12 @@ class AjaxLiveSessionController extends Controller
                 if (Auth::check()) {
                     /** @var User $user */
                     $user = Auth::user();
-                    broadcast(new StopEvent($liveSession, $user));
+
+                    try {
+                        broadcast(new StopEvent($liveSession, $user));
+                    } catch (BroadcastException) {
+                        // Ignore broadcast failures
+                    }
                 }
 
                 // Convert to seconds

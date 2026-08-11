@@ -18,6 +18,7 @@ use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -172,7 +173,11 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         try {
             if ($mapIcon->delete()) {
                 if (Auth::check()) {
-                    broadcast(new MapIconDeletedEvent($dungeonRoute ?? $mapIcon->floor->dungeon, Auth::user(), $mapIcon));
+                    try {
+                        broadcast(new MapIconDeletedEvent($dungeonRoute ?? $mapIcon->floor->dungeon, Auth::user(), $mapIcon));
+                    } catch (BroadcastException) {
+                        // Ignore broadcast failures
+                    }
                 }
 
                 // Only when icons that are sticky to the map are saved

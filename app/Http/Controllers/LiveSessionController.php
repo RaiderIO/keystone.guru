@@ -14,6 +14,7 @@ use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use Auth;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -65,8 +66,13 @@ class LiveSessionController extends Controller
                 }
 
                 if ($invitees->isNotEmpty()) {
-                    // Broadcast that channel that a team member has started a live session and that we're invited!
-                    broadcast(new InviteEvent($liveSession, $user, $invitees));
+                    try {
+                        // Broadcast that channel that a team member has started a live session and that we're invited!
+                        broadcast(new InviteEvent($liveSession, $user, $invitees));
+                    } catch (BroadcastException $exception) {
+                        // Ignore broadcast failures, but keep the visibility the outer catch below used to give this
+                        report($exception);
+                    }
                 }
             } catch (Exception $exception) {
                 report($exception);

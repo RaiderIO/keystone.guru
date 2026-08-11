@@ -13,6 +13,7 @@ use App\Models\Polyline;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -78,7 +79,12 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
                 if (Auth::check()) {
                     /** @var User $user */
                     $user = Auth::getUser();
-                    broadcast(new EnemyPatrolDeletedEvent($enemyPatrol->floor->dungeon, $user, $enemyPatrol));
+
+                    try {
+                        broadcast(new EnemyPatrolDeletedEvent($enemyPatrol->floor->dungeon, $user, $enemyPatrol));
+                    } catch (BroadcastException) {
+                        // Ignore broadcast failures
+                    }
                 }
 
                 // Trigger mapping changed event so the mapping gets saved across all environments

@@ -12,6 +12,7 @@ use App\Logic\Datatables\NpcsDatatablesHandler;
 use App\Models\Npc\Npc;
 use App\Models\User;
 use Exception;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -34,7 +35,11 @@ class AjaxNpcController extends Controller
                 /** @var User $user */
                 $user = Auth::user();
                 foreach ($npc->dungeons as $dungeon) {
-                    broadcast(new NpcDeletedEvent($dungeon, $user, $npc));
+                    try {
+                        broadcast(new NpcDeletedEvent($dungeon, $user, $npc));
+                    } catch (BroadcastException) {
+                        // Ignore broadcast failures
+                    }
                 }
             }
 

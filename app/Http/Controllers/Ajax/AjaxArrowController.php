@@ -124,7 +124,11 @@ class AjaxArrowController extends Controller
                     /** @var \App\Models\User $user */
                     $user = Auth::getUser();
 
-                    broadcast(new ArrowDeletedEvent($dungeonRoute, $user, $arrow));
+                    try {
+                        broadcast(new ArrowDeletedEvent($dungeonRoute, $user, $arrow));
+                    } catch (BroadcastException) {
+                        // Ignore broadcast failures
+                    }
                 }
 
                 $this->dungeonRouteChanged($dungeonRoute, $arrow, null);
