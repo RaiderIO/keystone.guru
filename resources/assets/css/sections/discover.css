@@ -31,11 +31,39 @@
     height: 16rem;
     border-radius: 6px;
     overflow: hidden;
+    /* Scrim-family fallback, not a theme color: the card is a dark-imagery object in every theme,
+       and its white scrimmed text needs a dark ground even when the thumbnail is missing or the
+       dungeon fallback image is transparent (which would otherwise expose lux's light page). */
+    background-color: #222;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Long titles otherwise wrap unbounded (4+ lines on narrow columns) and crowd the fixed-height
+   card; the full title stays available via the link's title attribute. */
+.card_dungeonroute.poster .title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* The footer band stays part of the dark-imagery object in every theme; lux's near-transparent
+   --theme-bg-card-footer would leave its text floating on the image. */
+.card_dungeonroute.poster .poster_footer {
+    background-color: rgba(0, 0, 0, 0.55);
+}
+
+.card_dungeonroute.poster .poster_footer a {
+    color: #fff;
+}
+
+.card_dungeonroute.poster .poster_social {
+    color: rgba(255, 255, 255, 0.75);
 }
 
 .card_dungeonroute.poster:hover {
@@ -78,6 +106,8 @@
     min-height: 15rem;
     border-radius: 8px;
     overflow: hidden;
+    /* Same scrim-family fallback as the poster card: dark ground under white text in every theme */
+    background-color: #222;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -105,6 +135,15 @@
     font-weight: 700;
     letter-spacing: 0.08em;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+/* Long titles clamp to two lines so cards in the hero band keep a uniform height */
+.card_dungeonroute.hero .hero_title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .card_dungeonroute.hero .hero_title a {
@@ -180,10 +219,19 @@
 
 /* Darkly fills every page-link with the same success teal and marks the active page with a
    box-shadow, but $enable-shadows is off so the current page is indistinguishable. Give the
-   pagination a conventional look instead: subdued links with an accent-filled current page. */
+   pagination a conventional look instead: subdued links with an accent-filled current page.
+   Neutral gray-based borders/washes stay visible on darkly, lux, and vapor alike (the same family
+   as DESIGN.md's standard control border). */
+.discover_pagination .pagination {
+    /* On phones the link row otherwise overflows the viewport and clips the first pages */
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 0.25rem;
+}
+
 .discover_pagination .page-link {
     background-color: transparent;
-    border-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(128, 128, 128, 0.35);
     color: var(--bs-body-color);
     border-radius: var(--bs-border-radius);
 }
@@ -194,32 +242,34 @@
 }
 
 .discover_pagination .page-link:hover {
-    background-color: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.25);
-    color: #fff;
+    background-color: rgba(128, 128, 128, 0.15);
+    border-color: rgba(128, 128, 128, 0.5);
+    color: var(--theme-text-contrast);
 }
 
 .discover_pagination .page-item.active .page-link {
-    background-color: var(--bs-success);
-    border-color: var(--bs-success);
+    background-color: var(--theme-btn-accent);
+    border-color: var(--theme-btn-accent);
     color: #fff;
     font-weight: 700;
 }
 
 .discover_pagination .page-item.disabled .page-link {
     background-color: transparent;
-    border-color: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.35);
+    border-color: rgba(128, 128, 128, 0.2);
+    color: rgba(128, 128, 128, 0.6);
 }
 
+/* Rows sit on the page background, which is dark in darkly/vapor but light in lux - every color
+   here must come from a theme variable or the neutral gray family, never a hardcoded white. */
 .card_dungeonroute.leaderboard_row {
     padding: 0.5rem 0.25rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(128, 128, 128, 0.18);
     transition: background-color 0.12s ease;
 }
 
 .card_dungeonroute.leaderboard_row:hover {
-    background-color: rgba(255, 255, 255, 0.04);
+    background-color: rgba(128, 128, 128, 0.1);
 }
 
 .card_dungeonroute.leaderboard_row .leaderboard_rank {
@@ -238,7 +288,7 @@
     margin-right: 0.75rem;
     border-radius: 6px;
     /* Subtle always-on backdrop so a transparent fallback image still reads as an intentional slot */
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(128, 128, 128, 0.15);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -250,7 +300,7 @@
 }
 
 .card_dungeonroute.leaderboard_row .leaderboard_title a {
-    color: #fff;
+    color: var(--theme-text-contrast);
     font-weight: 600;
     text-decoration: none;
 }
@@ -260,7 +310,7 @@
 }
 
 .card_dungeonroute.leaderboard_row .leaderboard_author a {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--bs-secondary-color);
 }
 
 /* Fixed-ish column widths so the stats scan as vertical columns across rows */
@@ -268,9 +318,9 @@
     display: inline-block;
     min-width: 5rem;
     padding: 0.1rem 0.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(128, 128, 128, 0.5);
     border-radius: 999px;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--bs-secondary-color);
     text-align: end;
     white-space: nowrap;
 }
@@ -312,7 +362,7 @@
 }
 
 .card_dungeonroute.leaderboard_row .menu_actions_btn i {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--bs-secondary-color);
 }
 
 @media (max-width: 767.98px) {

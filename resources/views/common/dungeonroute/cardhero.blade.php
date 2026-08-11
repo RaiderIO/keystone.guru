@@ -114,7 +114,9 @@ use (
         <div class="row g-0 px-3 hero_title_row">
             <div class="col">
                 <h3 class="mb-1 hero_title">
-                    <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}">
+                    {{-- The title clamps to two lines (see discover.css); the attribute keeps the full text reachable --}}
+                    <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
+                       title="{{ $dungeonroute->title }}">
                         {{ $dungeonroute->title }}
                     </a>
                 </h3>

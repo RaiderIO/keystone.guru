@@ -143,7 +143,8 @@ use Laravel\Pennant\Feature;
         @if($paginator->hasPages())
             <div class="row mt-4">
                 <div class="col d-flex justify-content-center discover_pagination">
-                    {{ $paginator->links() }}
+                    <?php // A compact window: the full page list otherwise overflows phone viewports ?>
+                    {{ $paginator->onEachSide(1)->links() }}
                 </div>
             </div>
         @endif

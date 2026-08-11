@@ -82,7 +82,9 @@ use (
         <div class="row g-0 px-2 align-items-end poster_title_row">
             <div class="col">
                 <h4 class="mb-0 title">
-                    <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}">
+                    {{-- The title clamps to two lines (see discover.css); the attribute keeps the full text reachable --}}
+                    <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
+                       title="{{ $dungeonroute->title }}">
                         {{ $dungeonroute->title }}
                     </a>
                 </h4>
@@ -110,14 +112,15 @@ use (
             </div>
         @endif
 
-        <div class="row g-0 bg-card-footer px-2 py-1 poster_footer">
+        <?php // The footer is styled in discover.css as part of the dark-imagery object (bg-card-footer is near-transparent in lux) ?>
+        <div class="row g-0 px-2 py-1 poster_footer">
             <div class="col">
                 <div class="poster_author d-flex align-items-center">
                     @include('common.user.name', ['user' => $dungeonroute->author, 'link' => true, 'showAnonIcon' => false])
                     {{-- Reserved slot for the future Raider.IO author trust badge (see #3349) --}}
                     <span class="poster_trust_badge ms-1"></span>
                 </div>
-                <div class="poster_social small text-muted">
+                <div class="poster_social small">
                     @if( $ratingCount > 0 )
                         <span class="poster_rating">
                             @include('common.dungeonroute.rating', ['count' => $ratingCount, 'rating' => (int) round($dungeonroute->rating)])
