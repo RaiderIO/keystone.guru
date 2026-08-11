@@ -105,8 +105,10 @@ class MapContextDungeonData implements Arrayable
                         'fetched_data_at',
                         // Nothing on the map renders a spell description, and one per spell of the dungeon
                         // would grow the map context by a fair amount of text
-                        'description',
                         'description_template',
+                        'description_format',
+                        'description_values',
+                        'tooltip_data',
                     ])
                     ->keyBy('id')
                     ->values();

@@ -143,6 +143,9 @@ return [
                 'aura'   => 'Aura',
                 'debuff' => 'Debuff',
             ],
+            'description' => [
+                'title' => 'Description',
+            ],
             'details' => [
                 'title'                              => 'Details',
                 'header_schools'                     => 'Schools',

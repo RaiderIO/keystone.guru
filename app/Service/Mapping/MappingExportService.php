@@ -23,6 +23,7 @@ class MappingExportService implements MappingExportServiceInterface
                 'icon_url',
                 'wowhead_url',
                 'wowhead_tooltip_data',
+                'tooltip_data',
                 'aura',
                 'debuff',
                 'miss_types_mask',

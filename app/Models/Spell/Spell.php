@@ -75,10 +75,20 @@ class Spell extends CacheModel implements MappingModelInterface
 
     public $hidden = ['pivot'];
 
+    /** Dispel types that carry no information, and so earn no row in the tooltip. */
+    private const array UNINFORMATIVE_DISPEL_TYPES = [
+        null,
+        '',
+        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_NONE,
+        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_NOT_AVAILABLE,
+        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_UNKNOWN,
+    ];
+
     protected $appends = [
         'icon_url',
         'wowhead_url',
         'wowhead_tooltip_data',
+        'tooltip_data',
     ];
 
     protected $fillable = [
@@ -147,6 +157,36 @@ class Spell extends CacheModel implements MappingModelInterface
             $this->description_format,
             array_map(SpellDescriptionValue::fromArray(...), $this->description_values ?? []),
         )->render();
+    }
+
+    /**
+     * Everything the hover tooltip shows, in one payload.
+     *
+     * The description travels as its format plus its values rather than as a finished sentence, so the
+     * browser can put different numbers in when a key level is picked (#3971). Null when we have no
+     * description, which is what makes a link fall back to Wowhead's tooltip instead.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function getTooltipDataAttribute(): ?array
+    {
+        if ($this->description_format === null) {
+            return null;
+        }
+
+        return array_filter([
+            'name'    => __($this->name),
+            'format'  => $this->description_format,
+            'values'  => $this->description_values ?? [],
+            'schools' => self::maskToReadableString(self::ALL_SCHOOLS, $this->schools_mask, 'spellschools') ?: null,
+            // A dispel type of none, n/a or unknown says nothing worth a row in the tooltip
+            'dispelType' => in_array($this->dispel_type, self::UNINFORMATIVE_DISPEL_TYPES, true)
+                ? null
+                : __($this->dispel_type),
+            'mechanic' => $this->mechanic ? __($this->mechanic) : null,
+            'castTime' => $this->cast_time > 0 ? $this->cast_time / 1000 : null,
+            'duration' => $this->duration > 0 ? $this->duration / 1000 : null,
+        ], static fn(mixed $value): bool => $value !== null && $value !== []);
     }
 
     public function getWowheadUrlAttribute(): string

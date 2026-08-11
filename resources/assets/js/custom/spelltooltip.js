@@ -2,27 +2,47 @@
  * Hover tooltips for spell links, rendered from the spell descriptions we import from the game
  * client's DB2 data (#3951) rather than from Wowhead's tooltip script.
  *
- * Links opt in by carrying the description in data-spell-description; spells we could not render a
+ * Links opt in by carrying their tooltip payload in data-spell-tooltip; spells we could not render a
  * description for keep their data-wowhead attribute instead, so those still get Wowhead's tooltip.
  *
+ * The description arrives as a sprintf-style format plus one entry per number rather than as a
+ * finished sentence, so a key level selector can put different damage numbers in without asking the
+ * server for the sentence again (#3971).
+ *
  * Bound on the document rather than on the links themselves - spell links appear in Handlebars
- * templates that are rendered long after page load, such as the map's enemy details.
+ * templates rendered long after page load, such as the compendium tables.
  */
 (function () {
-    const SELECTOR = '[data-spell-description]';
+    const SELECTOR = '[data-spell-tooltip]';
     const VIEWPORT_MARGIN = 8;
 
     let $tooltip = null;
 
     /**
-     * Read straight off the attribute rather than through jQuery's data(), which would try to
-     * interpret a description that happens to start with a bracket or brace as JSON.
-     *
      * @param $link {jQuery}
+     * @returns {Object|null}
+     */
+    function getPayload($link) {
+        try {
+            return JSON.parse($link.attr('data-spell-tooltip'));
+        } catch (exception) {
+            return null;
+        }
+    }
+
+    /**
+     * Put the numbers back into the format. Both come from our own database, and the format only ever
+     * reaches a replace() - never anything that could execute - with every value inserted as text.
+     *
+     * @param payload {Object}
      * @returns {string}
      */
-    function getDescription($link) {
-        return $link.attr('data-spell-description') ?? '';
+    function renderDescription(payload) {
+        const values = payload.values ?? [];
+
+        return String(payload.format ?? '')
+            .replace(/%(\d+)\$s/g, (match, index) => values[parseInt(index, 10) - 1]?.text ?? '')
+            .replace(/%%/g, '%');
     }
 
     /**
@@ -37,12 +57,26 @@
     }
 
     /**
-     * Fills the tooltip with the spell of the hovered link. Everything is set as text - the
-     * description comes from an external data source and must never be interpreted as HTML.
+     * @param $facts {jQuery}
+     * @param label {string}
+     * @param value {string}
+     */
+    function appendFact($facts, label, value) {
+        let $fact = $('<div class="spell_tooltip_fact"/>').appendTo($facts);
+
+        $('<span class="spell_tooltip_fact_label"/>').text(label).appendTo($fact);
+        $('<span class="spell_tooltip_fact_value"/>').text(value).appendTo($fact);
+    }
+
+    /**
+     * Fills the tooltip. Everything is set as text - a description comes from an external data source
+     * and must never be interpreted as HTML.
      *
      * @param $link {jQuery}
+     * @param payload {Object}
+     * @returns {jQuery}
      */
-    function fillTooltip($link) {
+    function fillTooltip($link, payload) {
         let $result = getTooltip().empty();
 
         let $header = $('<div class="spell_tooltip_header"/>').appendTo($result);
@@ -52,13 +86,39 @@
             $('<img class="spell_tooltip_icon" alt="" width="24" height="24"/>').attr('src', iconUrl).appendTo($header);
         }
 
-        $('<div class="spell_tooltip_name"/>').text($link.attr('data-spell-name') ?? $link.text().trim()).appendTo($header);
+        $('<div class="spell_tooltip_name"/>').text(payload.name ?? $link.text().trim()).appendTo($header);
 
         // The description keeps the game's own paragraph breaks
-        for (let paragraph of getDescription($link).split('\n')) {
+        for (let paragraph of renderDescription(payload).split('\n')) {
             if (paragraph.trim().length > 0) {
                 $('<p class="spell_tooltip_description"/>').text(paragraph).appendTo($result);
             }
+        }
+
+        let $facts = $('<div class="spell_tooltip_facts"/>').appendTo($result);
+
+        if (payload.castTime) {
+            appendFact($facts, lang.get('js.spell_cast_time_label'), `${payload.castTime}s`);
+        }
+
+        if (payload.duration) {
+            appendFact($facts, lang.get('js.spell_duration_label'), `${payload.duration}s`);
+        }
+
+        if (payload.schools) {
+            appendFact($facts, lang.get('js.spell_schools_label'), payload.schools);
+        }
+
+        if (payload.dispelType) {
+            appendFact($facts, lang.get('js.spell_dispel_type_label'), payload.dispelType);
+        }
+
+        if (payload.mechanic) {
+            appendFact($facts, lang.get('js.spell_mechanic_label'), payload.mechanic);
+        }
+
+        if ($facts.children().length === 0) {
+            $facts.remove();
         }
 
         return $result;
@@ -100,12 +160,13 @@
 
     function showTooltip() {
         let $link = $(this);
+        let payload = getPayload($link);
 
-        if (getDescription($link).trim().length === 0) {
+        if (payload === null) {
             return;
         }
 
-        positionTooltip($link, fillTooltip($link));
+        positionTooltip($link, fillTooltip($link, payload));
     }
 
     $(function () {

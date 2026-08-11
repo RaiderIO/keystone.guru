@@ -48,3 +48,28 @@
 .spell_tooltip_description:last-child {
     margin-bottom: 0;
 }
+
+/* ===== Facts register ===== */
+
+.spell_tooltip_facts {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.15rem 0.75rem;
+    margin-top: 0.6rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(128, 128, 128, 0.25);
+    font-size: 0.8125rem;
+}
+
+.spell_tooltip_fact {
+    display: contents;
+}
+
+.spell_tooltip_fact_label {
+    color: var(--bs-secondary-color);
+    white-space: nowrap;
+}
+
+.spell_tooltip_fact_value {
+    text-align: right;
+}
