@@ -19,7 +19,9 @@ return new class extends Migration {
             // the spell, which the client links from the creature, not from the spell. So it is measured
             // once per patch and shipped in the seeders; null means we could not, and the description
             // then shows no number rather than a made up one.
-            $table->double('damage_multiplier')->nullable()->after('description_values');
+            // Anchored on `description`, which the first of these migrations adds - the format and values
+            // columns arrive in a later one, so they are not there yet when this runs
+            $table->double('damage_multiplier')->nullable()->after('description');
         });
     }
 
