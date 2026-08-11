@@ -153,6 +153,21 @@ git clone git@github.com:RaiderIO/keystone.guru.assets.git   # ~342M tracked (im
 `sh/worktree.sh` also expects `~/Git/private/keystone.guru-worktrees/` as its worktree root; it
 creates that itself on first use.
 
+**Check `~/Git` and `~/Git/private` are owned by you, not root.** If an earlier attempt cloned the
+repo under `sudo`, the parent dirs end up `root:root` while `keystone.guru` itself looks correctly
+owned — so nothing is obviously wrong until the second clone fails with
+`could not create work tree dir 'keystone.guru.assets': Permission denied`. That failure is easy to
+miss because it is routinely piped (`git clone … | tail`), and a pipe reports the *tail* exit code,
+so the clone reads as success. Worse, the missing sibling does not stay missing: the Docker daemon
+runs as root and will happily create `../keystone.guru.assets` as a root-owned empty dir for the
+bind mount, which is exactly the silent-broken-images failure above. Fix ownership before cloning:
+
+```bash
+sudo chown -R "$(id -u):$(id -g)" ~/Git
+# no sudo available? the daemon runs as root, so borrow it:
+docker run --rm -v ~/Git:/git alpine chown -R "$(id -u):$(id -g)" /git
+```
+
 The clone above only brings `images/` and `webfonts/`. The checkout also has a `tiles/` directory
 (~36G, gitignored per `keystone.guru.assets/.gitignore:1`) that is **not** part of the git history —
 map tiles have to be transferred separately (rsync/external drive/etc. from the old machine). See
@@ -309,10 +324,18 @@ nvm use && npm ci && npm run production
 `npm run production` can be memory-hungry; if WSL OOMs, `npm run development` produces a working
 (unminified) build and is fine for dev.
 
+**`npm ci` dies in puppeteer's postinstall if the host has no `unzip`** — the error is
+`Failed to set up chrome-headless-shell … no zip archiver is available`, which reads like a
+puppeteer/network problem rather than the missing phase-1 package it is. Install `unzip` (phase 1)
+and re-run. To unblock without sudo, `PUPPETEER_SKIP_DOWNLOAD=1 npm ci` installs everything else —
+asset builds do not need puppeteer's browser, and the in-container thumbnail path uses the worker
+image's own Chrome. Run `npx puppeteer browsers install` once `unzip` is available.
+
 **Probe:**
 ```bash
 [ -s version ] && echo "version: $(cat version)"
-ls public/js/app.js public/css/app.css        # both exist
+# Assets are version-suffixed from the git rev — there is no unsuffixed app.js/app.css
+ls public/js/app-$(cat version).js public/css/app-$(cat version).css
 docker compose exec -T app php artisan --version
 ```
 
@@ -387,7 +410,7 @@ provision, and tests run against this seeded data (see the `writing-tests` skill
 
 **Probe:**
 ```bash
-docker compose exec -T app php artisan tinker --execute 'echo User::count()." users, ".Dungeon::count()." dungeons";'
+docker compose exec -T app php artisan tinker --execute 'echo \App\Models\User::count()." users, ".\App\Models\Dungeon::count()." dungeons";'
 ```
 Expect 3 users and a few hundred dungeons. Zero dungeons = the seed did not finish.
 
@@ -416,9 +439,31 @@ MySQL 34006 / 34007.
 Do not report the machine as ready until all six pass. Fix failures here rather than noting them.
 
 1. **Site renders**: `curl -s http://localhost:8008 | grep -q "Keystone.guru"`.
-2. **A map renders**: use the `headless-browser-verify` skill against a dungeon explore page and
-   look at the screenshot with `Read`. Tiles must be visible (they come from the CDN), enemies must
-   be plotted. A blank grey map means `ASSETS_BASE_URL` is wrong.
+2. **A map renders**: use the `headless-browser-verify` skill against a dungeon explore page (e.g.
+   `/explore/retail/court-of-stars`) and look at the screenshot with `Read`. Tiles must be visible
+   (they come from the CDN), enemies must be plotted. A blank grey map means `ASSETS_BASE_URL` is
+   wrong.
+
+   That skill's `chrome` service is defined in `docker-compose.worktree.yml`, which the **main**
+   checkout's `docker compose` does not load — `--profile chrome up -d chrome` there fails with
+   "no such service". Run it standalone on the stack network instead (with
+   `ASSETS_BASE_URL` on the CDN the socat asset forward is unnecessary):
+
+   ```bash
+   # The network is named <compose project>_<network>; derive it rather than hardcoding it.
+   NET=$(docker network ls --format '{{.Name}}' | grep keystone)
+   docker rm -f ksg-chrome 2>/dev/null   # idempotent: re-running would hit a name conflict
+   docker run -d --rm --name ksg-chrome --network "$NET" \
+       --network-alias chrome --shm-size 1gb chromedp/headless-shell:latest
+   ```
+
+   Tear it down with `docker rm -f ksg-chrome` when the probe is done. It is not part of the compose
+   stack, so `docker compose down` leaves it running.
+
+   Expect ~10 `Unable to find enemy patrol <id> that is coupled to enemy <id>` console errors on
+   some dungeons. Those are stale cross-mapping-version references in the tracked seeder data
+   (~53 of 7319 patrol-carrying enemies; zero patrols missing outright), not a bad seed — the map
+   still plots every enemy. Do not chase them.
 3. **Login works**: `admin@app.com` / `password`.
 4. **Tests are green**:
    ```bash
@@ -483,6 +528,8 @@ laptop are deliberately not carried over.
 | `error getting credentials` on pull/build | `~/.docker/config.json` has `"credsStore": "wincred.exe"`, which flakes over WSL interop | Back up `config.json`, delete the `credsStore` key, pull/build, restore |
 | `docker compose up` panics in `monitor.Start` | Rancher-bundled compose 5.0.1 | Install compose ≥ 5.1.0 into `~/.docker/cli-plugins/` and remove `cliPluginsExtraDirs` from `~/.docker/config.json` (Rancher rewrites it on update — re-remove) |
 | `sudo: you do not exist in the passwd database`; MDT tests all fail | Image built with wrong `PUID`/`PGID`, so no matching `ksg` user | Fix `.env`, `docker compose build app`, `docker compose up -d --force-recreate` |
+| Every `Scheduler` test fails with `cURL error 7: Failed to connect to influxdb port <n>` | `INFLUXDB_PORT` is not the container-internal `8086`. `docker-compose.yml` publishes influx on the host as **8096**, but `INFLUXDB_HOST=influxdb` is the service name, so the internal port is what counts | Set `INFLUXDB_PORT=8086`. (`.env.docker.example` shipped `3000` until this was fixed — an old `.env` restored from a bundle may be *more* correct than the example) |
+| `composer run fix` aborts: `RecursiveDirectoryIterator(...#innodb_temp): Permission denied` | php-cs-fixer descended into the bind-mounted MySQL data dirs under `docker-compose/`, whose internals are owned by the container's mysql uid | `docker-compose` must be in the finder's `exclude()` in `.php-cs-fixer.php`. Note `ignoreVCSIgnored(true)` does **not** help — Finder filters results only after traversal has already failed |
 | Every page 504s; `git status` shows root-owned files | Something ran as root and wrote root-owned files into the bind mount; php-fpm then loops on logging exceptions | `sudo chown -R $(id -u):$(id -g) storage/logs storage/framework` and check `PUID`/`PGID` |
 | `Unable to locate file in Vite manifest` / stale JS in browser | Assets not built, or `version` stale | `npm run production` (writes `version` from the git rev) |
 | PHPStan red locally, green in CI | Local `vendor/` drifted from `composer.lock` | `docker compose exec -T app composer install` |
