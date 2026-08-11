@@ -21,6 +21,7 @@ $commands = [];
 $commands[] = Schedule::command('combatlog:detectstaledata')->hourly();
 if (in_array($appType, [
     'staging',
+    'production',
 ])) {
     $commands[] = Schedule::command('combatlog:pollruns')->hourly();
 }
