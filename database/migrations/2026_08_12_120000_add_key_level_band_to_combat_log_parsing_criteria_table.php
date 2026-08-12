@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\CombatLog\CombatLogParsingCriterion;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,6 +16,13 @@ return new class extends Migration {
             $table->unsignedInteger('mythic_level_max')->nullable()->after('mythic_level_min');
         });
 
+        // A null mythic_level_max marks the always-parsed top band, so pre-existing rows must not
+        // be left with one: the admin page would render today's rows as a top band and hide their
+        // threshold inputs until tomorrow's rows are created.
+        CombatLogParsingCriterion::query()
+            ->whereNull('mythic_level_max')
+            ->update(['mythic_level_max' => 0]);
+
         Schema::table('combat_log_parsing_criteria', function (Blueprint $table) {
             $table->dropUnique('clpc_version_model_class_model_id_date_unique');
 
@@ -24,7 +32,8 @@ return new class extends Migration {
             );
 
             // Used by getDefaultThreshold(): WHERE model_class = ? AND mythic_level_min = ? ORDER BY date DESC.
-            // Supersedes clpc_model_class_date_index, which it fully covers by prefix.
+            // Replaces clpc_model_class_date_index, whose lookup it serves by prefix - only the
+            // ordering falls back to a filesort, which this table is far too small to care about.
             $table->index(['model_class', 'mythic_level_min', 'date'], 'clpc_model_class_band_date_index');
             $table->dropIndex('clpc_model_class_date_index');
         });

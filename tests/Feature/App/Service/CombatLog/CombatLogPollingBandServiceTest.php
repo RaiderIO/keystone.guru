@@ -114,6 +114,44 @@ final class CombatLogPollingBandServiceTest extends PublicTestCase
      * @throws Exception
      */
     #[Test]
+    public function getMaxKeyLevel_givenNoLevelPlayedInVolume_failsClosedOnTheCeiling(): void
+    {
+        // Arrange — cannot happen in a live season, so treat it as a broken probe
+        $service = $this->makeService(fn(int $level): int => 0);
+
+        // Act
+        $result = $service->getMaxKeyLevel($this->season);
+
+        // Assert — falling back to the minimum level would make the top band match every run there
+        // is, and the top band is dispatched without consulting any budget
+        $this->assertSame(self::PROBE_CEILING, $result);
+    }
+
+    /**
+     * A throttled or malformed response has no run count. Counting that as "nobody plays this
+     * level" walks the probe all the way to the bottom and caches the result for a week.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function getMaxKeyLevel_givenUnreadableRunCount_failsClosedInsteadOfWalkingDown(): void
+    {
+        // Arrange
+        $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->method('searchAdvancedRuns')->willReturn(new SearchAdvancedRunsResponse([], null));
+        $service = new CombatLogPollingBandService($raiderIOApiService);
+
+        // Act
+        $result = $service->getMaxKeyLevel($this->season);
+
+        // Assert
+        $this->assertSame(self::PROBE_CEILING, $result);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
     public function getMaxKeyLevel_givenPriorResultCached_doesNotProbeAgain(): void
     {
         // Arrange
@@ -218,8 +256,8 @@ final class CombatLogPollingBandServiceTest extends PublicTestCase
     #[Test]
     public function getSpreadBandForHour_givenNoRoomBelowTheTopBand_returnsNull(): void
     {
-        // Arrange — nothing is played in volume, so the top band floor sits at the minimum level
-        $service = $this->makeService(fn(int $level): int => 0);
+        // Arrange — a max of 3 puts the top band floor at the minimum level, leaving no room below
+        $service = $this->makeService(fn(int $level): int => $level <= 3 ? 300 : 0);
 
         // Act
         $result = $service->getSpreadBandForHour($this->season, 0);

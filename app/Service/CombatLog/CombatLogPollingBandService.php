@@ -9,6 +9,7 @@ use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use RuntimeException;
 use Throwable;
 
 class CombatLogPollingBandService implements CombatLogPollingBandServiceInterface
@@ -123,9 +124,15 @@ class CombatLogPollingBandService implements CombatLogPollingBandServiceInterfac
             }
         }
 
-        return $levelMin;
+        // Nothing at all is being played in volume, which cannot be true of a live season. Fail
+        // closed on the ceiling rather than on the minimum level: a top band that starts at the
+        // minimum matches every run there is, and the top band is parsed without any budget.
+        return $ceiling;
     }
 
+    /**
+     * @throws RuntimeException When the upstream run count could not be established.
+     */
     private function isPlayedInVolume(Season $season, int $keyLevel): bool
     {
         $minRuns    = (int)config('keystoneguru.raider_io.combat_log_polling.top_band.min_runs_for_level');
@@ -143,7 +150,13 @@ class CombatLogPollingBandService implements CombatLogPollingBandServiceInterfac
             offset:          0,
         ));
 
-        return ($response->total ?? 0) >= $minRuns;
+        // A malformed or throttled response yields a null total. Reading that as "nobody plays
+        // this level" would walk the probe all the way down and cache the result for a week.
+        if ($response->total === null) {
+            throw new RuntimeException(sprintf('No run count returned for keystone level %d', $keyLevel));
+        }
+
+        return $response->total >= $minRuns;
     }
 
     private function getBandLevelMin(): int
