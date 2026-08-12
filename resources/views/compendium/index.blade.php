@@ -6,9 +6,6 @@ use App\Models\Dungeon;
  * @var array{npc: int, spell: int, class: int} $stats
  */
 
-// Link straight to the dungeon-scoped canonical routes rather than the bare (no dungeon) endpoints -
-// those still exist for backward-compatible bookmarks, but internal navigation shouldn't pay for
-// their extra 302 redirect hop.
 $contextDungeon = Dungeon::getUserOrDefaultDungeon();
 
 $sections = [

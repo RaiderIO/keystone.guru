@@ -507,9 +507,6 @@ Breadcrumbs::for('admin.userreport.list', static function (Generator $trail) {
  */
 Breadcrumbs::for('compendium.npc.index', static function (Generator $trail) {
     $trail->parent('home');
-    // Link straight to the dungeon-scoped canonical route rather than the bare (no dungeon) endpoint -
-    // that still exists for backward-compatible bookmarks, but internal navigation shouldn't pay for
-    // its extra 302 redirect hop.
     $trail->push(__('breadcrumbs.home.compendium.npc'), route('npc.compendium.index.dungeon', ['dungeon' => Dungeon::getUserOrDefaultDungeon()]));
 });
 
@@ -520,9 +517,6 @@ Breadcrumbs::for('compendium.npc.show', static function (Generator $trail, Npc $
 
 Breadcrumbs::for('compendium.spell.index', static function (Generator $trail) {
     $trail->parent('home');
-    // Link straight to the dungeon-scoped canonical route rather than the bare (no dungeon) endpoint -
-    // that still exists for backward-compatible bookmarks, but internal navigation shouldn't pay for
-    // its extra 302 redirect hop.
     $trail->push(__('breadcrumbs.home.compendium.spell'), route('spell.compendium.index.dungeon', ['dungeon' => Dungeon::getUserOrDefaultDungeon()]));
 });
 

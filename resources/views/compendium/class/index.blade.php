@@ -8,9 +8,6 @@ use Illuminate\Support\Collection;
  * @var Collection<int, CharacterClass> $characterClasses
  */
 
-// Link straight to the dungeon-scoped canonical route rather than the bare (no dungeon) endpoint -
-// that still exists for backward-compatible bookmarks, but internal navigation shouldn't pay for
-// its extra 302 redirect hop.
 $contextDungeon = Dungeon::getUserOrDefaultDungeon();
 ?>
 @extends('layouts.sitepage', ['title' => __('view_compendium.class.index.title')])

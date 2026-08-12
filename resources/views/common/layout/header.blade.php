@@ -198,9 +198,6 @@ $isActiveRoute = function (string $route, bool $strict = false) {
 
                 @if(Feature::active(NpcCompendium::class))
                         <?php
-                        // Link straight to the dungeon-scoped canonical routes rather than the bare
-                        // (no dungeon) endpoints - those still exist for backward-compatible bookmarks,
-                        // but internal navigation shouldn't pay for their extra 302 redirect hop.
                         $compendiumContextDungeon = Dungeon::getUserOrDefaultDungeon();
                         $compendiumRoutes         = [
                             route('compendium.index')                                                      => sprintf('%s %s', '<i class="fas fa-book-open"></i>', __('view_common.layout.header.compendium_overview')),
