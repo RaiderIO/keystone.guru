@@ -219,19 +219,6 @@ class Spell extends CacheModel implements MappingModelInterface
         return 0;
     }
 
-    public function isAssignedDungeon(Dungeon $dungeon): bool
-    {
-        $result = false;
-        foreach ($this->spellDungeons as $spellDungeon) {
-            if ($spellDungeon->dungeon_id === $dungeon->id) {
-                $result = true;
-                break;
-            }
-        }
-
-        return $result;
-    }
-
     public static function getWowheadLink(?int $gameVersionId, int $spellId, ?string $name = null): string
     {
         $wowheadBaseUrl = 'https://www.wowhead.com';

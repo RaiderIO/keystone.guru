@@ -25,11 +25,8 @@ use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcDungeon;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcHealth;
-use App\Models\Npc\NpcSpell;
 use App\Models\Npc\NpcType;
 use App\Models\Polyline;
-use App\Models\Spell\Spell;
-use App\Models\Spell\SpellDungeon;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Mapping\MappingServiceInterface;
@@ -214,20 +211,16 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             // Get a list of NPCs and update/save them. npcHealths must be eager loaded here - it is read
             // per NPC below via getHealthByGameVersion(), which would otherwise be an N+1 that hard-fails
             // under preventLazyLoading (dev) for any dungeon that already has NPCs.
-            $existingNpcs = $dungeon->npcs()->with(['npcSpells', 'npcHealths'])->get()->keyBy('id');
+            $existingNpcs = $dungeon->npcs()->with(['npcHealths'])->get()->keyBy('id');
 
             $npcsUpdated           = $npcsInserted = 0;
-            $npcSpellsAttributes   = [];
             $npcDungeonsAttributes = [];
-            $affectedNpcIds        = [];
 
             foreach ($mdtDungeon->getMDTNPCs() as $mdtNpc) {
                 if (in_array($mdtNpc->getId(), self::IGNORE_NPC_DATA_NPC_IDS)) {
                     $this->log->importNpcsDataFromMDTIgnoreNpc($mdtNpc->getId());
                     continue;
                 }
-
-                $affectedNpcIds[] = $mdtNpc->getId();
 
                 $npc = $existingNpcs->get($mdtNpc->getId());
 
@@ -276,26 +269,9 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $npcHealth->percentage = $npc->health_percentage ?? $mdtNpc->getHealthPercentage();
                 $npcHealth->save();
 
-                // Save spells that we don't know of yet
-                foreach ($mdtNpc->getSpells() as $spellId => $obj) {
-                    if (in_array($spellId, Spell::EXCLUDE_MDT_IMPORT_SPELLS)) {
-                        $this->log->importNpcsDataFromMDTSpellInExcludeList();
-                        continue;
-                    }
-
-                    // Check if it's already associated
-                    foreach ($npc->npcSpells as $npcSpell) {
-                        if ($npcSpell->spell_id === $spellId) {
-                            // It is, don't save the attributes
-                            continue 2;
-                        }
-                    }
-
-                    $npcSpellsAttributes[sprintf('%s-%s', $npc->id, $spellId)] = [
-                        'npc_id'   => $npc->id,
-                        'spell_id' => $spellId,
-                    ];
-                }
+                // Spells an MDT NPC lists are deliberately not imported (#3989): which spells an NPC casts
+                // is derived exclusively from parsed combat log data (see NpcSpellAssignmentCollector),
+                // which is curated data we gathered ourselves - MDT's list is not.
 
                 try {
                     if ($newlyCreated) {
@@ -328,87 +304,16 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 }
             }
 
-            // Do not delete existing spells - we're only interested in new ones
-//            $npcSpellsDeleted = NpcSpell::whereIn('npc_id', $affectedNpcIds)->delete();
             // Do not delete existing dungeons - we're only interested in new ones
-//            $npcDungeonsDeleted = NpcDungeon::whereIn('npc_id', $affectedNpcIds)->delete();
-
-            NpcSpell::insert($npcSpellsAttributes);
             NpcDungeon::insert($npcDungeonsAttributes);
 
-            $this->log->importNpcsDataFromMDTCharacteristicsAndSpellsUpdate(
+            $this->log->importNpcsDataFromMDTNpcsUpdate(
                 $npcsUpdated,
                 $npcsInserted,
-                0,
-                count($npcSpellsAttributes),
-                0,
                 count($npcDungeonsAttributes),
             );
         } finally {
             $this->log->importNpcsDataFromMDTEnd();
-        }
-    }
-
-    public function importSpellDataFromMDT(MDTDungeon $mdtDungeon, Dungeon $dungeon): void
-    {
-        try {
-            $this->log->importSpellDataFromMDTStart($dungeon->key);
-
-            $existingSpells = Spell::with('spellDungeons')->get()->keyBy('id');
-
-            $spellsAttributes        = [];
-            $spellDungeonsAttributes = [];
-            foreach ($mdtDungeon->getMDTNPCs() as $mdtNpc) {
-                $mdtSpells = $mdtNpc->getSpells();
-
-                foreach ($mdtSpells as $spellId => $spell) {
-                    /** @var Spell|null $existingSpell */
-                    $existingSpell = $existingSpells->get($spellId);
-                    // Ignore spells that we know of - we really only have IDs from MDT, so keep any data that was already there
-                    if ($existingSpell !== null) {
-                        if (!$existingSpell->isAssignedDungeon($dungeon)) {
-                            // Assign to dungeon
-                            $spellDungeonsAttributes[sprintf('%d-%d', $spellId, $dungeon->id)] = [
-                                'spell_id'   => $existingSpell->id,
-                                'dungeon_id' => $dungeon->id,
-                            ];
-                        }
-                        continue;
-                    }
-
-                    if (in_array($spellId, Spell::EXCLUDE_MDT_IMPORT_SPELLS)) {
-                        $this->log->importSpellDataFromMDTSpellInExcludeList();
-
-                        continue;
-                    }
-
-                    $spellsAttributes[$spellId] = [
-                        'id'             => $spellId,
-                        'category'       => sprintf('spellcategory.%s', Spell::CATEGORY_UNKNOWN),
-                        'cooldown_group' => sprintf('spellcooldowngroup.%s', Spell::COOLDOWN_GROUP_UNKNOWN),
-                        'dispel_type'    => Spell::DISPEL_TYPE_UNKNOWN,
-                        'icon_name'      => '',
-                        'name'           => '',
-                        'schools_mask'   => 0,
-                        'aura'           => 0,
-                        'selectable'     => 0,
-                    ];
-
-                    // Couple the spell to this dungeon
-                    $spellDungeonsAttributes[sprintf('%d-%d', $spellId, $dungeon->id)] = [
-                        'spell_id'   => $spellId,
-                        'dungeon_id' => $dungeon->id,
-                    ];
-                }
-            }
-
-            if (Spell::insert($spellsAttributes) && SpellDungeon::insert($spellDungeonsAttributes)) {
-                $this->log->importSpellDataFromMDTResult(count($spellsAttributes), count($spellDungeonsAttributes));
-            } else {
-                $this->log->importSpellDataFromMDTFailed();
-            }
-        } finally {
-            $this->log->importSpellDataFromMDTEnd();
         }
     }
 

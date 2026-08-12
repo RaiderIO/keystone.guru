@@ -50,10 +50,11 @@ class AssignMissingSpellDungeons extends Command
                         /** @var Spell|null $spell */
                         $spell = $npcSpell->spell;
 
-                        // The MDT import deliberately records every spell an NPC casts, including ones the
-                        // spells table does not have yet ("Save spells that we don't know of yet" in
-                        // MDTMappingImportService) - those are filled in later by the spell data pipeline.
-                        // Nothing can be inferred for them until then.
+                        // An NpcSpell can point at a spell the spells table does not have yet: the combat log
+                        // pipeline records the (npc, spell) pair the moment it observes the cast, and the
+                        // spells row is filled in later by the spell data pipeline. The MDT import used to
+                        // create such rows too and no longer does (#3989), but the ones it already created
+                        // remain. Nothing can be inferred for either until the spell itself is known.
                         // (a bare return skips this NpcSpell; returning false would stop the whole each())
                         if ($spell === null) {
                             return;

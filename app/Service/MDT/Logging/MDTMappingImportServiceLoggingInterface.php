@@ -43,12 +43,9 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importNpcsDataFromMDTIgnoreNpc(int $npcId): void;
 
-    public function importNpcsDataFromMDTCharacteristicsAndSpellsUpdate(
+    public function importNpcsDataFromMDTNpcsUpdate(
         int $npcsUpdated,
         int $npcsInserted,
-        int $npcSpellsDeleted,
-        int $npcSpellsInserted,
-        int $npcDungeonsDeleted,
         int $npcDungeonsInserted,
     ): void;
 
@@ -58,19 +55,7 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importNpcsDataFromMDTEnd(): void;
 
-    public function importSpellDataFromMDTStart(string $key): void;
-
-    public function importSpellDataFromMDTSpellInExcludeList(): void;
-
-    public function importSpellDataFromMDTResult(int $spellCount, int $spellDungeonCount): void;
-
-    public function importSpellDataFromMDTFailed(): void;
-
-    public function importSpellDataFromMDTEnd(): void;
-
     public function importNpcsStart(): void;
-
-    public function importNpcsDataFromMDTSpellInExcludeList(): void;
 
     public function importNpcsDataFromMDTSaveNewNpc(int $npcId): void;
 
