@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\Compendium;
 
 use App\Features\NpcCompendium;
+use App\Models\Dungeon;
 use App\Models\User;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
@@ -53,8 +54,11 @@ final class CompendiumControllerTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
-        $response->assertSee(route('npc.compendium.index'));
-        $response->assertSee(route('spell.compendium.index'));
+        // The npc/spell cards link straight to the visitor's context-dungeon canonical URL - the bare
+        // (no dungeon) routes still exist, but only for backward-compatible bookmarks, not internal use.
+        $contextDungeon = Dungeon::getUserOrDefaultDungeon();
+        $response->assertSee(route('npc.compendium.index.dungeon', ['dungeon' => $contextDungeon]));
+        $response->assertSee(route('spell.compendium.index.dungeon', ['dungeon' => $contextDungeon]));
         $response->assertSee(route('compendium.activity.index'));
         $response->assertSee(route('compendium.class.index'));
         $response->assertSee('https://raider.io/addon');
