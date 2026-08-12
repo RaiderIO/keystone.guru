@@ -136,6 +136,10 @@ class CombatLogParsingCriteriaService implements CombatLogParsingCriteriaService
         $lastConfiguredThreshold = CombatLogParsingCriterion::query()
             ->where('model_class', $modelClass)
             ->where('mythic_level_min', $band->min)
+            // Top band rows share this column with whichever spread band starts on the same level
+            // once the max key level rises, and they carry a meaningless threshold of 0. Inheriting
+            // that would leave the new spread band permanently at its budget, day after day.
+            ->whereNotNull('mythic_level_max')
             ->orderBy('date', 'desc')
             ->value('threshold');
 

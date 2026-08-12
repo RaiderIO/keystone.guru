@@ -41,6 +41,19 @@ return new class extends Migration {
 
     public function down(): void
     {
+        // After a day of banded polling there are several rows per (version, model_class, model_id,
+        // date) - one per band - so the narrower unique index cannot be restored while they exist.
+        // These rows are daily counters that the poller recreates on demand, so collapsing them to
+        // the single lowest-banded row per key loses nothing that matters.
+        $survivingIds = CombatLogParsingCriterion::query()
+            ->selectRaw('MIN(id) as id')
+            ->groupBy('combat_log_version', 'model_class', 'model_id', 'date')
+            ->pluck('id');
+
+        CombatLogParsingCriterion::query()
+            ->whereNotIn('id', $survivingIds)
+            ->delete();
+
         Schema::table('combat_log_parsing_criteria', function (Blueprint $table) {
             $table->index(['model_class', 'date'], 'clpc_model_class_date_index');
             $table->dropIndex('clpc_model_class_band_date_index');

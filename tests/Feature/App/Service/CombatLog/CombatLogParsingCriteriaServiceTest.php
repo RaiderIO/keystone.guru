@@ -363,6 +363,34 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
         );
     }
 
+    /**
+     * Top band rows carry a meaningless threshold of 0 and share mythic_level_min with whichever
+     * spread band starts on that level once the max key level of the season rises. Inheriting that
+     * 0 would leave the new spread band at its budget from the moment it is created, every day.
+     */
+    #[Test]
+    public function shouldParse_givenBandThatUsedToBeTheTopBand_ignoresItsThresholdOfZero(): void
+    {
+        // Arrange — yesterday 22+ was the always-parsed top band
+        Carbon::setTestNow(Carbon::yesterday());
+        CombatLogParsingCriterion::factory()->forDungeon(self::DUNGEON_ID)->forBand(22, null)->create(['threshold' => 0]);
+        Carbon::setTestNow(null);
+
+        // Act — the max key level rose, so today 22-26 is an ordinary budgeted band
+        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(new KeyLevelBand(22, 26)));
+
+        // Assert
+        $this->assertTrue($result);
+        $this->assertEquals(
+            (int)config('keystoneguru.raider_io.combat_log_polling.bands.default_threshold'),
+            CombatLogParsingCriterion::query()
+                ->where('model_id', self::DUNGEON_ID)
+                ->where('mythic_level_min', 22)
+                ->where('date', Carbon::now()->toDateString())
+                ->value('threshold'),
+        );
+    }
+
     #[Test]
     public function getModelsEligibleForPolling_givenDungeonAtThresholdInOtherBand_includesDungeon(): void
     {
