@@ -66,4 +66,10 @@ foreach (['dangerous', 'truesight', /*'bursting', 'bolstering', 'sanguine',*/ 'r
 {{--            @endif--}}
         </div>
     </div>
+    <div class="compendium_identity_actions">
+        <a href="{{ $npc->wowhead_url }}" target="_blank" rel="noopener" class="btn btn-sm btn-secondary" data-wh-icon-size="small">
+            {{ __('view_compendium.npc.show.wowhead') }}
+            <i class="fas fa-external-link-alt ms-1"></i>
+        </a>
+    </div>
 </div>

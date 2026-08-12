@@ -89,7 +89,8 @@ return [
             'table_header_spells'   => 'Spells',
         ],
         'show' => [
-            'title' => ':name - NPC Compendium',
+            'title'   => ':name - NPC Compendium',
+            'wowhead' => 'View on Wowhead',
         ],
         'sections' => [
             'header' => [
