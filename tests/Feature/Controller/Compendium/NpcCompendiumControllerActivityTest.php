@@ -83,6 +83,56 @@ final class NpcCompendiumControllerActivityTest extends PublicTestCase
     }
 
     #[Test]
+    public function activity_givenDungeonInUrl_makesItTheContextDungeon(): void
+    {
+        // Arrange - a context dungeon other than the one in the URL, so the URL is provably what wins
+        $otherDungeon      = Dungeon::active()->where('id', '!=', $this->dungeon->id)->orderBy('id')->firstOrFail();
+        $user              = User::findOrFail(1);
+        $originalDungeonId = $user->dungeon_id;
+        $user->dungeon_id  = $otherDungeon->id;
+        $user->save();
+
+        try {
+            // Act
+            $response = $this->actingAs($user->fresh())->get(route('compendium.activity', $this->dungeon));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame($this->dungeon->id, User::findOrFail(1)->dungeon_id);
+        } finally {
+            $user->dungeon_id = $originalDungeonId;
+            $user->save();
+        }
+    }
+
+    #[Test]
+    public function activityDay_givenDungeonInUrl_leavesTheContextDungeonAlone(): void
+    {
+        // Arrange - unlike activity(), the day page does not validate its dungeon against the current
+        // season, so it must not push one into the site-wide context either
+        $otherDungeon      = Dungeon::active()->where('id', '!=', $this->dungeon->id)->orderBy('id')->firstOrFail();
+        $user              = User::findOrFail(1);
+        $originalDungeonId = $user->dungeon_id;
+        $user->dungeon_id  = $otherDungeon->id;
+        $user->save();
+
+        try {
+            // Act
+            $response = $this->actingAs($user->fresh())->get(route('compendium.activity.day', [
+                'dungeon' => $this->dungeon,
+                'date'    => '2025-01-15',
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame($otherDungeon->id, User::findOrFail(1)->dungeon_id);
+        } finally {
+            $user->dungeon_id = $originalDungeonId;
+            $user->save();
+        }
+    }
+
+    #[Test]
     public function activity_givenFeatureEnabledNoAuth_returnsOk(): void
     {
         // Arrange
@@ -288,7 +338,7 @@ final class NpcCompendiumControllerActivityTest extends PublicTestCase
     public function activityDay_givenInvalidDateFormat_returnsNotFound(): void
     {
         // Act
-        $response = $this->get(sprintf('/compendium/activity/%s/not-a-date', $this->dungeon->slug));
+        $response = $this->get(sprintf('/compendium/dungeon/%s/activity/not-a-date', $this->dungeon->slug));
 
         // Assert
         $response->assertNotFound();

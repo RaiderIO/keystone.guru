@@ -2,12 +2,20 @@
 
 use App\Models\Dungeon;
 use App\Models\Npc\NpcClassification;
+use Illuminate\Support\Collection;
 
 /**
- * @var Dungeon $contextDungeon
+ * @var Dungeon                  $contextDungeon
+ * @var Collection<int, Dungeon> $gameVersionDungeons
+ * @var Collection<int, string>  $dungeonSlugsById
  */
 ?>
-@extends('layouts.sitepage', ['title' => __('view_compendium.npc.index.title')])
+@extends('layouts.sitepage', [
+    'title' => __('view_compendium.npc.index.title'),
+    'dungeonContextLinks' => $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [
+        $dungeon->key => route('npc.compendium.index.dungeon', ['dungeon' => $dungeon])
+    ]),
+])
 
 @section('header-title')
     {{ __('view_compendium.npc.index.header') }}
@@ -29,6 +37,11 @@ use App\Models\Npc\NpcClassification;
             const spellShowBaseUrl = '{{ url('/compendium/spell') }}';
             const npcTemplate = Handlebars.templates['npc'];
             const spellTemplate = Handlebars.templates['spell_template'];
+            // The dungeon in the URL is what this page is about; the filter below is only a way to
+            // navigate to another dungeon's page. Reading the table's dungeon off the select instead
+            // would list a different dungeon whenever the select does not offer this one - it only
+            // lists dungeons mapped for the visitor's game version, which the URL is not bound by.
+            const contextDungeonId = {{ $contextDungeon->id }};
 
             const table = $('#compendium_npc_table').DataTable({
                 'processing': true,
@@ -38,7 +51,7 @@ use App\Models\Npc\NpcClassification;
                 'ajax': {
                     'url': '{{ route('ajax.npc.compendium.search') }}',
                     'data': function (d) {
-                        d.dungeon_id = $('#compendium_filter_dungeon').val();
+                        d.dungeon_id = contextDungeonId;
                     },
                 },
                 'lengthMenu': [25],
@@ -104,8 +117,21 @@ use App\Models\Npc\NpcClassification;
                 }),
             });
 
+            // Picking another dungeon navigates to that dungeon's page - that keeps the URL, the
+            // header's dungeon selection and the dungeon context in sync. Should the selection ever
+            // hold something that is not a dungeon id (the select can emit season/expansion
+            // options), fall back to just reloading the table.
+            const dungeonSlugsById = @json($dungeonSlugsById);
+            const dungeonBaseUrl = '{{ url('/compendium/dungeon') }}';
+
             $('#compendium_filter_dungeon').on('change', function () {
-                table.ajax.reload();
+                const dungeonSlug = dungeonSlugsById[$(this).val()];
+
+                if (dungeonSlug) {
+                    window.location.href = `${dungeonBaseUrl}/${dungeonSlug}/npc`;
+                } else {
+                    table.ajax.reload();
+                }
             });
         });
     </script>

@@ -198,12 +198,13 @@ $isActiveRoute = function (string $route, bool $strict = false) {
 
                 @if(Feature::active(NpcCompendium::class))
                         <?php
-                        $compendiumRoutes       = [
-                            route('compendium.index')          => sprintf('%s %s', '<i class="fas fa-book-open"></i>', __('view_common.layout.header.compendium_overview')),
-                            route('npc.compendium.index')      => sprintf('%s %s', '<i class="fas fa-dragon"></i>', __('view_common.layout.header.npc_compendium')),
-                            route('spell.compendium.index')    => sprintf('%s %s', '<i class="fas fa-magic"></i>', __('view_common.layout.header.spell_compendium')),
-                            route('compendium.activity.index') => sprintf('%s %s', '<i class="fas fa-stream"></i>', __('view_common.layout.header.compendium_activity')),
-                            route('compendium.class.index')    => sprintf('%s %s', '<i class="fas fa-hat-wizard"></i>', __('view_common.layout.header.class_compendium')),
+                        $compendiumContextDungeon = Dungeon::getUserOrDefaultDungeon();
+                        $compendiumRoutes         = [
+                            route('compendium.index')                                                      => sprintf('%s %s', '<i class="fas fa-book-open"></i>', __('view_common.layout.header.compendium_overview')),
+                            route('npc.compendium.index.dungeon', ['dungeon' => $compendiumContextDungeon])   => sprintf('%s %s', '<i class="fas fa-dragon"></i>', __('view_common.layout.header.npc_compendium')),
+                            route('spell.compendium.index.dungeon', ['dungeon' => $compendiumContextDungeon]) => sprintf('%s %s', '<i class="fas fa-magic"></i>', __('view_common.layout.header.spell_compendium')),
+                            route('compendium.activity.index')                                               => sprintf('%s %s', '<i class="fas fa-stream"></i>', __('view_common.layout.header.compendium_activity')),
+                            route('compendium.class.index')                                                  => sprintf('%s %s', '<i class="fas fa-hat-wizard"></i>', __('view_common.layout.header.class_compendium')),
                         ];
                         $hasCompendiumSubActive = null;
                         $compendiumHeaderText   = __('view_common.layout.header.compendium');

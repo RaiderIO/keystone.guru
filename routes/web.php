@@ -179,6 +179,19 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Route::middleware(sprintf('feature_active:%s', NpcCompendium::class))
         ->prefix('compendium')->group(static function () {
             Route::get('/', new CompendiumController()->index(...))->name('compendium.index');
+            // Every page whose content is scoped to a dungeon lives under the dungeon it is about.
+            // The literal segment keeps the slug unambiguous, so no section here can ever be mistaken
+            // for a dungeon (or the other way around) no matter what a dungeon is called.
+            Route::prefix('dungeon/{dungeon}')->group(static function () {
+                Route::get('npc', new NpcCompendiumController()->indexDungeon(...))->name('npc.compendium.index.dungeon');
+                Route::get('spell', new SpellCompendiumController()->indexDungeon(...))->name('spell.compendium.index.dungeon');
+                Route::get('activity', new NpcCompendiumController()->activity(...))->name('compendium.activity');
+                Route::get('activity/{date}', new NpcCompendiumController()->activityDay(...))->name('compendium.activity.day');
+                // withoutScopedBindings: a child binding with a custom key is scoped to its parent by
+                // default, which would have Laravel resolve the class through $dungeon->characterClasses()
+                Route::get('class/{characterClass:key}', new ClassCompendiumController()->showDungeon(...))
+                    ->withoutScopedBindings()->name('compendium.class.show.dungeon');
+            });
             Route::prefix('npc')->group(static function () {
                 Route::get('/', new NpcCompendiumController()->index(...))->name('npc.compendium.index');
                 Route::get('/{npc}', new NpcCompendiumController()->show(...))->name('npc.compendium.show');
@@ -187,13 +200,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('/', new SpellCompendiumController()->index(...))->name('spell.compendium.index');
                 Route::get('/{spell}', new SpellCompendiumController()->show(...))->name('spell.compendium.show');
             });
-            Route::prefix('activity')->group(static function () {
-                Route::get('/', new NpcCompendiumController()->activityIndex(...))->name('compendium.activity.index');
-                Route::prefix('{dungeon}')->group(static function () {
-                    Route::get('/', new NpcCompendiumController()->activity(...))->name('compendium.activity');
-                    Route::get('/{date}', new NpcCompendiumController()->activityDay(...))->name('compendium.activity.day');
-                });
-            });
+            Route::get('activity', new NpcCompendiumController()->activityIndex(...))->name('compendium.activity.index');
             Route::prefix('class')->group(static function () {
                 Route::get('/', new ClassCompendiumController()->index(...))->name('compendium.class.index');
                 Route::get('/{characterClass:key}', new ClassCompendiumController()->show(...))->name('compendium.class.show');

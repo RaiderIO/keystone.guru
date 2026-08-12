@@ -23,12 +23,19 @@ use Illuminate\Support\Collection;
  *     spells: Collection<int, Spell>,
  *     npcsBySpellId: Collection<int, Collection<int, Npc>>,
  * }|null $reflectSection
+ * @var Collection<int, Dungeon> $gameVersionDungeons
  */
 ?>
 @extends('layouts.sitepage', [
     'breadcrumbs'       => 'compendium.class.show',
     'breadcrumbsParams' => [$characterClass, $contextDungeon],
     'title'             => __('view_compendium.class.show.title', ['name' => __($characterClass->name)]),
+    'dungeonContextLinks' => $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [
+        $dungeon->key => route('compendium.class.show.dungeon', [
+            'characterClass' => $characterClass,
+            'dungeon' => $dungeon,
+        ])
+    ]),
 ])
 
 @section('content')

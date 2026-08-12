@@ -79,10 +79,84 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_MAGE)->firstOrFail();
 
         // Act
-        $response = $this->get(route('compendium.class.show', $characterClass));
+        $response = $this->get(route('compendium.class.show.dungeon', [
+            'characterClass' => $characterClass,
+            'dungeon'        => Dungeon::getUserOrDefaultDungeon(),
+        ]));
 
         // Assert
         $response->assertOk();
+    }
+
+    #[Test]
+    public function show_givenNoDungeonInUrl_redirectsToContextDungeon(): void
+    {
+        // Arrange
+        $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_MAGE)->firstOrFail();
+        $dungeon        = Dungeon::active()->firstOrFail();
+
+        $user              = User::findOrFail(1);
+        $originalDungeonId = $user->dungeon_id;
+        $user->dungeon_id  = $dungeon->id;
+        $user->save();
+
+        try {
+            // Act
+            $response = $this->actingAs($user->fresh())->get(route('compendium.class.show', $characterClass));
+
+            // Assert - a 302, not a 301: the target depends on the visitor's own context dungeon
+            $response->assertRedirect(route('compendium.class.show.dungeon', [
+                'characterClass' => $characterClass,
+                'dungeon'        => $dungeon,
+            ]));
+            $response->assertStatus(302);
+        } finally {
+            $user->dungeon_id = $originalDungeonId;
+            $user->save();
+        }
+    }
+
+    #[Test]
+    public function showDungeon_givenDungeonOtherThanContextDungeon_rendersThatDungeonAndMakesItTheContext(): void
+    {
+        // Arrange - two different dungeons, so the URL is provably what decides what is rendered
+        $characterClass   = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_MAGE)->firstOrFail();
+        $contextDungeon   = Dungeon::active()->orderBy('id')->firstOrFail();
+        $requestedDungeon = Dungeon::active()->where('id', '!=', $contextDungeon->id)->orderBy('id')->firstOrFail();
+
+        $user              = User::findOrFail(1);
+        $originalDungeonId = $user->dungeon_id;
+        $user->dungeon_id  = $contextDungeon->id;
+        $user->save();
+
+        try {
+            // Act
+            $response = $this->actingAs($user->fresh())->get(route('compendium.class.show.dungeon', [
+                'characterClass' => $characterClass,
+                'dungeon'        => $requestedDungeon,
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSeeText(__($requestedDungeon->name));
+            $this->assertSame($requestedDungeon->id, User::findOrFail(1)->dungeon_id);
+        } finally {
+            $user->dungeon_id = $originalDungeonId;
+            $user->save();
+        }
+    }
+
+    #[Test]
+    public function showDungeon_givenUnknownDungeonSlug_returnsNotFound(): void
+    {
+        // Arrange
+        $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_MAGE)->firstOrFail();
+
+        // Act
+        $response = $this->get(sprintf('/compendium/dungeon/not-a-dungeon/class/%s', $characterClass->key));
+
+        // Assert
+        $response->assertNotFound();
     }
 
     #[Test]
@@ -103,7 +177,10 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         $dungeon        = Dungeon::getUserOrDefaultDungeon();
 
         // Act
-        $response = $this->get(route('compendium.class.show', $characterClass));
+        $response = $this->get(route('compendium.class.show.dungeon', [
+            'characterClass' => $characterClass,
+            'dungeon'        => Dungeon::getUserOrDefaultDungeon(),
+        ]));
 
         // Assert
         $response->assertOk();
@@ -118,7 +195,10 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_ROGUE)->firstOrFail();
 
         // Act
-        $response = $this->get(route('compendium.class.show', $characterClass));
+        $response = $this->get(route('compendium.class.show.dungeon', [
+            'characterClass' => $characterClass,
+            'dungeon'        => Dungeon::getUserOrDefaultDungeon(),
+        ]));
 
         // Assert
         $response->assertOk();
@@ -134,7 +214,10 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_PALADIN)->firstOrFail();
 
         // Act
-        $response = $this->get(route('compendium.class.show', $characterClass));
+        $response = $this->get(route('compendium.class.show.dungeon', [
+            'characterClass' => $characterClass,
+            'dungeon'        => Dungeon::getUserOrDefaultDungeon(),
+        ]));
 
         // Assert
         $response->assertOk();
@@ -149,7 +232,10 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_WARRIOR)->firstOrFail();
 
         // Act
-        $response = $this->get(route('compendium.class.show', $characterClass));
+        $response = $this->get(route('compendium.class.show.dungeon', [
+            'characterClass' => $characterClass,
+            'dungeon'        => Dungeon::getUserOrDefaultDungeon(),
+        ]));
 
         // Assert
         $response->assertOk();
@@ -163,7 +249,10 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_PALADIN)->firstOrFail();
 
         // Act
-        $response = $this->get(route('compendium.class.show', $characterClass));
+        $response = $this->get(route('compendium.class.show.dungeon', [
+            'characterClass' => $characterClass,
+            'dungeon'        => Dungeon::getUserOrDefaultDungeon(),
+        ]));
 
         // Assert
         $response->assertOk();
@@ -241,7 +330,10 @@ final class ClassCompendiumControllerTest extends PublicTestCase
             ]);
 
             // Act
-            $response = $this->actingAs($user)->get(route('compendium.class.show', $characterClass));
+            $response = $this->actingAs($user)->get(route('compendium.class.show.dungeon', [
+                'characterClass' => $characterClass,
+                'dungeon'        => $dungeon,
+            ]));
 
             // Assert
             $response->assertOk();
@@ -305,7 +397,10 @@ final class ClassCompendiumControllerTest extends PublicTestCase
             ]);
 
             // Act
-            $response = $this->actingAs($user)->get(route('compendium.class.show', $characterClass));
+            $response = $this->actingAs($user)->get(route('compendium.class.show.dungeon', [
+                'characterClass' => $characterClass,
+                'dungeon'        => $dungeon,
+            ]));
 
             // Assert
             $response->assertOk();

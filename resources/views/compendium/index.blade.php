@@ -1,8 +1,12 @@
 <?php
 
+use App\Models\Dungeon;
+
 /**
  * @var array{npc: int, spell: int, class: int} $stats
  */
+
+$contextDungeon = Dungeon::getUserOrDefaultDungeon();
 
 $sections = [
     [
@@ -10,7 +14,7 @@ $sections = [
         'title'    => __('view_compendium.index.cards.npc.title'),
         'text'     => __('view_compendium.index.cards.npc.description'),
         'cta'      => __('view_compendium.index.cards.npc.cta'),
-        'route'    => route('npc.compendium.index'),
+        'route'    => route('npc.compendium.index.dungeon', ['dungeon' => $contextDungeon]),
         'subtitle' => sprintf('%s %s', number_format($stats['npc']), __('view_compendium.index.cards.npc.count_suffix')),
     ],
     [
@@ -18,7 +22,7 @@ $sections = [
         'title'    => __('view_compendium.index.cards.spell.title'),
         'text'     => __('view_compendium.index.cards.spell.description'),
         'cta'      => __('view_compendium.index.cards.spell.cta'),
-        'route'    => route('spell.compendium.index'),
+        'route'    => route('spell.compendium.index.dungeon', ['dungeon' => $contextDungeon]),
         'subtitle' => sprintf('%s %s', number_format($stats['spell']), __('view_compendium.index.cards.spell.count_suffix')),
     ],
     [
