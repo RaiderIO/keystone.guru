@@ -7,12 +7,14 @@ use App\Models\CharacterClass;
 use App\Models\Characteristic;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcCharacteristic;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDungeon;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -174,25 +176,33 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         // Arrange
         $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_WARRIOR)->firstOrFail();
 
-        // Find a dungeon whose current mapping version has enemies for the Retail game version
-        $defaultGameVersion = GameVersion::getDefaultGameVersion();
-        $dungeon            = $this->getDungeonWithCurrentMappingVersionWithEnemies($defaultGameVersion);
-        $mappingVersion     = $dungeon->getCurrentMappingVersionForGameVersion($defaultGameVersion);
-        $this->assertNotNull($mappingVersion);
-
-        // Without any characteristic or spell of its own, so the NPC cannot also be listed by the CC
-        // table or a counter section and make the assertion below pass for the wrong reason
-        $npc = Npc::query()
-            ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
-            ->where('enemies.mapping_version_id', $mappingVersion->id)
-            ->whereNotIn('npcs.id', static function ($sub): void {
-                $sub->select('npc_id')->from('npc_characteristics');
-            })
-            ->whereNotIn('npcs.id', static function ($sub): void {
-                $sub->select('npc_id')->from('npc_spells');
-            })
-            ->select('npcs.*')
-            ->first();
+        // Find a Retail dungeon whose current mapping version has enemies AND an NPC without any
+        // characteristic or spell of its own, so the NPC cannot also be listed by the CC table or a
+        // counter section and make the assertion below pass for the wrong reason. The NPC requirement
+        // has to be part of the dungeon selection rather than a follow-up query: an MDT mapping import
+        // can give every NPC in a given dungeon a spell (MDT 6.2.1 did exactly that to the Midnight
+        // dungeons, see #3980), which leaves that dungeon with no candidate at all.
+        $defaultGameVersion               = GameVersion::getDefaultGameVersion();
+        [$dungeon, $mappingVersion, $npc] = $this->findDungeon(
+            challengeMode: true,
+            minEnemies:    1,
+            gameVersion:   $defaultGameVersion,
+            shuffle:       false,
+            constraint:    static fn(Builder $query) => $query
+                ->where('challenge_mode_id', '>', 0)
+                ->orderByDesc('dungeons.id'),
+            resolve:       static fn(Dungeon $dungeon, MappingVersion $mappingVersion) => Npc::query()
+                ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
+                ->where('enemies.mapping_version_id', $mappingVersion->id)
+                ->whereNotIn('npcs.id', static function ($sub): void {
+                    $sub->select('npc_id')->from('npc_characteristics');
+                })
+                ->whereNotIn('npcs.id', static function ($sub): void {
+                    $sub->select('npc_id')->from('npc_spells');
+                })
+                ->select('npcs.*')
+                ->first(),
+        );
         $this->assertNotNull($npc);
 
         // Deliberately without a characteristic or counter bit, so the spell cannot also show up in

@@ -12,6 +12,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Traits\IsolatesSeededUpcomingSeasons;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -23,6 +24,8 @@ use Tests\TestCases\PublicTestCase;
 #[Group('DungeonExplore')]
 final class DungeonExploreControllerTest extends PublicTestCase
 {
+    use IsolatesSeededUpcomingSeasons;
+
     #[\Override]
     protected function setUp(): void
     {
@@ -33,6 +36,10 @@ final class DungeonExploreControllerTest extends PublicTestCase
         // ViewService caches the seasons it hands the composers for an hour in the 'tmp_file' store, which -
         // unlike the array store the tests run on - survives between test runs
         $this->flushSeasonCaches();
+
+        // The season tabs render the current and the upcoming season, so a seeded upcoming season would take
+        // the slot these tests expect their own season to occupy.
+        $this->hideSeededUpcomingSeasons();
     }
 
     #[Test]

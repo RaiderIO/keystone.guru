@@ -6117,7 +6117,7 @@ return [
     262822    => 'Aspix',
     263109    => 'Ula\'tek\'s Chosen',
     263112    => 'Living Venom',
-    263181    => 'Egg Marker',
+    263181    => 'Egg',
     263228    => 'Agitated Voidscythe',
     263383    => 'Snake',
     263658    => 'Galvazzt',

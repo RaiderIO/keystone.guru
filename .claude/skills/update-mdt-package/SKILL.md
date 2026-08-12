@@ -22,8 +22,15 @@ the points called out below.
 
 - **Run every command inside Docker:** `docker compose exec -T app …` (e.g.
   `docker compose exec -T app php artisan …`, `docker compose exec -T app composer …`).
-- **Do not commit.** Leave all changes (composer.json, composer.lock, config, mapping JSON,
-  fixtures, lang files) uncommitted for the user to review at the end.
+- **Work in a worktree and drive it to a draft MR**, per CLAUDE.md's default — the worktree and
+  its branch are yours, so commit the whole run (composer.json, composer.lock, config, mapping
+  JSON, fixtures, lang files) as you go and open a draft MR at the end. Only leave the diff
+  uncommitted when the user asked you to work in the main checkout instead.
+- **Stage only what you meant to touch.** A `mapping:save` run reliably produces trailing-newline
+  / comma-placement churn in `database/seeders/seasondata/affix_groups.json`,
+  `database/seeders/seasondata/seasons.json` and `database/seeders/dungeondata/spells.json` with
+  no content change; `git checkout --` those before committing so the (already large) mapping diff
+  stays reviewable.
 - Keep a running summary as you go: which dungeons imported, any new POI types/templates
   added, and any tests still failing.
 
@@ -44,7 +51,12 @@ the fact. Keep the log file around; don't just eyeball the pass count.
 
 ## Step 1 — Open a tracking GitHub issue
 
-Before touching any files, open an issue on `RaiderIO/keystone.guru` to document the update.
+**A bot already files these.** An automation opens an `Update MDT to v<version>` issue (label
+`mdt`) when a new upstream release appears, so check first — `gh issue list -R
+RaiderIO/keystone.guru --label mdt --state open` — and if the issue exists, skip straight to
+Step 2 with its number. Only create one when there is none.
+
+Otherwise, open an issue on `RaiderIO/keystone.guru` to document the update.
 First grab the target version (the upstream tag name) so the title matches convention:
 
 ```
@@ -63,20 +75,20 @@ Tracking the update of the Mythic Dungeon Tools (MDT) composer package and reimp
 current retail season's dungeon mappings.
 
 - [ ] Bump composer package reference (version + commit SHA) and `composer update`
+- [ ] Bump `config/keystoneguru.php` MDT version (before the reimport - it stamps `mdt_addon_version`)
 - [ ] Reimport each retail-season dungeon mapping
 - [ ] Handle any new POI types/templates and missing map-icon translations
 - [ ] Run per-dungeon tests (rewrite stale CorrectEvents fixtures)
-- [ ] Bump `config/keystoneguru.php` MDT version
+- [ ] Refresh the MDT addonVersion => release-date map
 - [ ] Re-export NPC translations and re-seed
 - [ ] Run the full test suite
 EOF
 )"
 ```
 
-**Record the issue number** it prints — reference it in the final summary so the user can
-track the work, and (if they later ask you to commit) use it as the `#<number>` prefix that
-this repo's commit messages follow (e.g. `#3192 Update MDT to v6.1.4`). Do **not** commit or
-close the issue yourself unless asked.
+**Record the issue number** — it is the `#<number>` prefix this repo's commit subjects and MR
+title take (e.g. `#3192 Update MDT to v6.1.4`) and what Step 8's MR body closes. Do not close
+the issue yourself unless asked; the MR closes it on merge.
 
 ## Step 2 — Bump the composer package reference
 
@@ -109,17 +121,68 @@ The package is a fork: composer downloads it from the user's fork
    ```
    **If the sync fails** (no access, conflict, etc.): pause and **ask the user for the commit
    hash AND the version number**, then continue with what they provide.
+
+   **Known, non-blocking failure — `HTTP 422 Repository rule violations found`** (`gh repo sync`
+   may report it as a misleading `HTTP 404` on `git/refs/heads/master`). A repository ruleset on
+   the fork blocks updating `master`, so it can't be fast-forwarded. Don't stop: GitHub forks
+   share an object store, so the upstream commit is **already reachable in the fork by SHA**.
+   Verify that instead of syncing, then continue:
+   ```
+   gh api repos/Wotuu/MythicDungeonTools/commits/<sha> --jq '.sha'
+   curl -sIL -o /dev/null -w '%{http_code}\n' \
+     https://github.com/Wotuu/MythicDungeonTools/archive/<sha>.zip
+   ```
+   The **dist** install is what CI and production use (`config.preferred-install` is `dist`), so
+   a 200 on the archive URL means the bump is sound. See the Step 2.5 note below for the local
+   vendor gotcha this exposes.
 4. Edit `composer.json` (the MDT package block, around **lines 30–43**, package
    `nnoggie/mythicdungeontools`). The commit hash appears in **two** places — update both,
    plus the version:
    - `package.version` → new version (no `v` prefix, e.g. `6.1.5`)
    - `package.source.reference` → new commit SHA
    - `package.dist.url` → swap the SHA embedded in the archive URL
-   Leave the `^6.0` `require` constraint (line ~99) unchanged unless a pre-approved major bump.
+   Leave the `require` constraint (`^6.0@alpha`, line ~100) unchanged unless a pre-approved major
+   bump — the `@alpha` stability flag is what lets a prerelease like `6.2.0-alpha5` install, and a
+   stable release such as `6.2.1` satisfies it too.
 5. Download the new version (also updates `composer.lock`):
    ```
    docker compose exec -T app composer update nnoggie/mythicdungeontools
    ```
+   **If it fails with `<sha> is gone (history was rewritten?)` / `fatal: unable to read tree`:**
+   the local `vendor/nnoggie/mythicdungeontools` was previously installed from **source**, and
+   composer keeps the existing install type on update — so it tries a `git checkout` in a clone
+   of the fork, which genuinely lacks the commit when the fork couldn't be synced (step 3).
+   `--prefer-dist` does **not** override this. The lock file is already written correctly at this
+   point, so just reinstall the package from the lock, which honours `preferred-install: dist`:
+   ```
+   rm -rf vendor/nnoggie/mythicdungeontools
+   docker compose exec -T app composer install
+   ```
+   Confirm afterwards with `grep '^## Version' vendor/nnoggie/mythicdungeontools/MythicDungeonTools.toc`.
+
+## Step 2.5 — Bump the config version *before* importing
+
+Update `config/keystoneguru.php` → `keystoneguru.mdt.version` to the new version, matching the
+existing `v`-prefixed format (e.g. `v6.2.1`), **before** running any `mdt:importmapping`.
+
+`MappingService` stamps each new `mapping_versions` row's `mdt_addon_version` from
+`MDTAddonVersionService::getCurrentAddonVersion()`, which reads this config value directly. Bump
+it afterwards and every row imported in this run carries the **previous** release's addon version
+— which silently mis-binds imported MDT strings to the wrong mapping version via the release-date
+tie-break in `getMappingVersionForMdtAddonVersion()` (#3380). This was cold-review finding #1 on
+PR #3944.
+
+The integer is `preg_replace('/\D/', '', $version)`, mirroring MDT's own
+`version:gsub("%.", "")` — so `v6.2.1` → `621`, while `v6.2.0-alpha5` → `6205`. **It is not
+monotonic and is not meant to be**; all comparisons happen on release dates, so a "lower" number
+for a newer release is expected, not a bug.
+
+After the imports, verify rather than trust:
+```sql
+SELECT mv.id, d.`key`, mv.version, mv.mdt_addon_version
+FROM mapping_versions mv JOIN dungeons d ON d.id = mv.dungeon_id
+WHERE mv.created_at >= DATE_SUB(NOW(), INTERVAL 2 HOUR) ORDER BY mv.id;
+```
 
 ## Step 3 — Determine which dungeons to reimport
 
@@ -180,7 +243,13 @@ Read the output for each dungeon and handle:
   (`MDTMappingImportService::getMDTMappingHash()`); nothing changed, move on. (`--force`
   overrides this if you ever need to reimport anyway.)
 - **New-enemy warnings/errors** that simply indicate an enemy not present in the previous
-  mapping: expected and fine.
+  mapping: expected and fine. This also covers
+  `importEnemiesCannotRecoverPropertiesFromExistingEnemy`,
+  `importEnemiesDistanceTooLargeNotTransferringExistingEnemyLatLng`,
+  `importEnemyPatrolsFoundPatrolIsEmpty` and
+  `importNpcsDataFromMDTNpcNotMarkedForAllDungeons` — the last one is logged at `ERROR` but is
+  explicitly documented in `MDTMappingImportService` as expected and recoverable (an NPC that
+  already exists globally is being linked to an additional dungeon).
 - **`importMapPOIsMissingTranslation` error** with a key like
   `mapping.map_icons.mdt.<comment>` (e.g. `mapping.map_icons.mdt.captive`): MDT introduced a
   new map-icon comment that has no translation yet. This is logged as `ERROR` but **does NOT
@@ -232,10 +301,10 @@ skip the test step for any dungeon with none.
 
 Repeat Steps 4–5 for every dungeon before moving on.
 
-## Step 6 — Bump the config version
+## Step 6 — Refresh the addon-version map
 
-Update `config/keystoneguru.php` → `keystoneguru.mdt.version` (near the bottom of the file) to
-the new version, matching the existing `v`-prefixed format (e.g. `v6.1.5`).
+The config version itself was already bumped in **Step 2.5** — it has to happen before the
+imports. Don't bump it again here; just confirm it reads the new version.
 
 Then refresh the MDT addonVersion → release-date map so imported MDT strings resolve to the correct
 mapping version (#3380):
@@ -253,11 +322,11 @@ Importing MDT mappings resets NPC names to MDT's values, so re-extract the datab
 the translation files and re-seed (inside Docker):
 
 ```
-php artisan localization:exportnpcnames && \
-php artisan localization:importnpcnames && \
-php artisan localization:syncnpcnames retail && \
-php artisan mapping:save && \
-php artisan db:seed --database=migrate
+docker compose exec -T app sh -c 'php artisan localization:exportnpcnames && \
+  php artisan localization:importnpcnames && \
+  php artisan localization:syncnpcnames retail && \
+  php artisan mapping:save && \
+  php artisan db:seed --database=migrate'
 ```
 
 These commands rewrite `npcs.php` across **all** locales (not just `en_US`) — that is expected
@@ -276,7 +345,21 @@ formatting of the rewritten `npcs.php` files, per the project's finishing-up con
    and any tests still failing, split into **pre-existing** vs **newly broken by this update**
    (especially any unresolved CombatLogRoute failures). Include the **tracking issue number**
    from Step 1.
-3. **Remind the user** to visit the explore page for each newly imported dungeon so they can
-   visually verify everything looks correct.
-4. Leave all changes uncommitted for the user to review, and leave the tracking issue **open**
-   (don't close it yourself unless asked).
+3. **Verify visually.** Enemy/pack positions are rendered output, so this is *not* a backend-only
+   change — screenshot the explore page of the dungeons whose mapping actually changed with the
+   `headless-browser-verify` skill (A/B against the main stack as baseline) and post them on the
+   MR. Also remind the user to browse the explore pages themselves.
+4. **Also check what the suite can't see:** `MapTilesExistenceTest` fails on its *first* dungeon
+   in a worktree (the assets dir isn't mounted), so it never reaches the newly imported ones and
+   cannot tell you a new floor is missing map tiles. Check the seeder export instead. **Floors are
+   not their own file** — there is no `floors.json`; each dungeon object in
+   `database/seeders/dungeondata/dungeons.json` carries a nested `floors` array, so that one file
+   is the whole check:
+   ```
+   git diff --stat database/seeders/dungeondata/dungeons.json   # unchanged => no new floors
+   git diff database/seeders/dungeondata/dungeons.json | grep -E '^\+.*"index"'
+   ```
+   If a floor was added, the assets repo needs its tiles and the update is not complete.
+5. Commit and push the worktree branch and open the **draft** MR (`Closes #<issue>` in the body),
+   then follow CLAUDE.md's "before declaring a MR ready for review" checklist. Leave the tracking
+   issue **open** (don't close it yourself unless asked) — the MR closes it on merge.

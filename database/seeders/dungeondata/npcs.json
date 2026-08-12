@@ -159390,7 +159390,7 @@
                 "id": 3633,
                 "npc_id": 133384,
                 "game_version_id": 1,
-                "health": 3535073,
+                "health": 15540596,
                 "percentage": null
             }
         ],
@@ -159462,7 +159462,7 @@
                 "id": 3635,
                 "npc_id": 133392,
                 "game_version_id": 1,
-                "health": 1536990,
+                "health": 21621700,
                 "percentage": null
             }
         ],
@@ -160469,11 +160469,18 @@
                 "id": 3649,
                 "npc_id": 133935,
                 "game_version_id": 1,
-                "health": 1306442,
+                "health": 5513534,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21741,
+                "mapping_version_id": 837,
+                "npc_id": 133935,
+                "enemy_forces": 22,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21679,
                 "mapping_version_id": 829,
@@ -160527,7 +160534,7 @@
                 "id": 3650,
                 "npc_id": 133943,
                 "game_version_id": 1,
-                "health": 36,
+                "health": 340110,
                 "percentage": null
             }
         ],
@@ -161366,11 +161373,18 @@
                 "id": 3667,
                 "npc_id": 134157,
                 "game_version_id": 1,
-                "health": 768494,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21744,
+                "mapping_version_id": 837,
+                "npc_id": 134157,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21682,
                 "mapping_version_id": 829,
@@ -161424,11 +161438,18 @@
                 "id": 3668,
                 "npc_id": 134158,
                 "game_version_id": 1,
-                "health": 1229590,
+                "health": 5189208,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21743,
+                "mapping_version_id": 837,
+                "npc_id": 134158,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21681,
                 "mapping_version_id": 829,
@@ -161526,11 +161547,18 @@
                 "id": 3670,
                 "npc_id": 134174,
                 "game_version_id": 1,
-                "health": 1152741,
+                "health": 4864883,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21742,
+                "mapping_version_id": 837,
+                "npc_id": 134174,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21680,
                 "mapping_version_id": 829,
@@ -161642,11 +161670,18 @@
                 "id": 3672,
                 "npc_id": 134251,
                 "game_version_id": 1,
-                "health": 768494,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21749,
+                "mapping_version_id": 837,
+                "npc_id": 134251,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21687,
                 "mapping_version_id": 829,
@@ -161793,11 +161828,18 @@
                 "id": 3674,
                 "npc_id": 134331,
                 "game_version_id": 1,
-                "health": 1229590,
+                "health": 5189208,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21751,
+                "mapping_version_id": 837,
+                "npc_id": 134331,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21689,
                 "mapping_version_id": 829,
@@ -161895,11 +161937,18 @@
                 "id": 3676,
                 "npc_id": 134364,
                 "game_version_id": 1,
-                "health": 768495,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21774,
+                "mapping_version_id": 838,
+                "npc_id": 134364,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21616,
                 "mapping_version_id": 826,
@@ -161946,7 +161995,7 @@
                 "id": 9191,
                 "npc_id": 134388,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 540542,
                 "percentage": null
             }
         ],
@@ -161982,7 +162031,7 @@
                 "id": 9192,
                 "npc_id": 134389,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 1405411,
                 "percentage": null
             }
         ],
@@ -162018,7 +162067,7 @@
                 "id": 9193,
                 "npc_id": 134390,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 2972984,
                 "percentage": null
             }
         ],
@@ -162222,7 +162271,7 @@
                 "id": 9194,
                 "npc_id": 134487,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 307716,
                 "percentage": null
             }
         ],
@@ -162302,11 +162351,18 @@
                 "id": 3682,
                 "npc_id": 134599,
                 "game_version_id": 1,
-                "health": 768495,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21777,
+                "mapping_version_id": 838,
+                "npc_id": 134599,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21619,
                 "mapping_version_id": 826,
@@ -162353,11 +162409,18 @@
                 "id": 3683,
                 "npc_id": 134600,
                 "game_version_id": 1,
-                "health": 768495,
+                "health": 3567581,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21764,
+                "mapping_version_id": 838,
+                "npc_id": 134600,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21606,
                 "mapping_version_id": 826,
@@ -162404,11 +162467,18 @@
                 "id": 3684,
                 "npc_id": 134602,
                 "game_version_id": 1,
-                "health": 614796,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21768,
+                "mapping_version_id": 838,
+                "npc_id": 134602,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21610,
                 "mapping_version_id": 826,
@@ -162455,11 +162525,18 @@
                 "id": 3685,
                 "npc_id": 134616,
                 "game_version_id": 1,
-                "health": 461097,
+                "health": 2594604,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21765,
+                "mapping_version_id": 838,
+                "npc_id": 134616,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21607,
                 "mapping_version_id": 826,
@@ -162550,11 +162627,18 @@
                 "id": 3687,
                 "npc_id": 134629,
                 "game_version_id": 1,
-                "health": 1229592,
+                "health": 5189208,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21769,
+                "mapping_version_id": 838,
+                "npc_id": 134629,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21611,
                 "mapping_version_id": 826,
@@ -162601,11 +162685,18 @@
                 "id": 3688,
                 "npc_id": 134686,
                 "game_version_id": 1,
-                "health": 768495,
+                "health": 4216232,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21773,
+                "mapping_version_id": 838,
+                "npc_id": 134686,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21615,
                 "mapping_version_id": 826,
@@ -162652,11 +162743,18 @@
                 "id": 3689,
                 "npc_id": 134691,
                 "game_version_id": 1,
-                "health": 768495,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21778,
+                "mapping_version_id": 838,
+                "npc_id": 134691,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21620,
                 "mapping_version_id": 826,
@@ -162703,11 +162801,18 @@
                 "id": 3690,
                 "npc_id": 134739,
                 "game_version_id": 1,
-                "health": 1844388,
+                "health": 7783811,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21754,
+                "mapping_version_id": 837,
+                "npc_id": 134739,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21692,
                 "mapping_version_id": 829,
@@ -162761,11 +162866,18 @@
                 "id": 3691,
                 "npc_id": 134990,
                 "game_version_id": 1,
-                "health": 768495,
+                "health": 2918930,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21766,
+                "mapping_version_id": 838,
+                "npc_id": 134990,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21608,
                 "mapping_version_id": 826,
@@ -162812,11 +162924,18 @@
                 "id": 3692,
                 "npc_id": 134991,
                 "game_version_id": 1,
-                "health": 1229592,
+                "health": 5837859,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21767,
+                "mapping_version_id": 838,
+                "npc_id": 134991,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21609,
                 "mapping_version_id": 826,
@@ -162863,7 +162982,7 @@
                 "id": 3693,
                 "npc_id": 134993,
                 "game_version_id": 1,
-                "health": 5379459,
+                "health": 21283860,
                 "percentage": null
             }
         ],
@@ -162950,11 +163069,18 @@
                 "id": 3695,
                 "npc_id": 135007,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 6486510,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21781,
+                "mapping_version_id": 838,
+                "npc_id": 135007,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21623,
                 "mapping_version_id": 826,
@@ -163231,11 +163357,18 @@
                 "id": 3699,
                 "npc_id": 135167,
                 "game_version_id": 1,
-                "health": 922193,
+                "health": 3891906,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21757,
+                "mapping_version_id": 837,
+                "npc_id": 135167,
+                "enemy_forces": 22,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21695,
                 "mapping_version_id": 829,
@@ -163289,11 +163422,18 @@
                 "id": 3700,
                 "npc_id": 135192,
                 "game_version_id": 1,
-                "health": 768494,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21760,
+                "mapping_version_id": 837,
+                "npc_id": 135192,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21698,
                 "mapping_version_id": 829,
@@ -163347,11 +163487,18 @@
                 "id": 3701,
                 "npc_id": 135204,
                 "game_version_id": 1,
-                "health": 691644,
+                "health": 2918930,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21756,
+                "mapping_version_id": 837,
+                "npc_id": 135204,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21694,
                 "mapping_version_id": 829,
@@ -163405,11 +163552,18 @@
                 "id": 3702,
                 "npc_id": 135231,
                 "game_version_id": 1,
-                "health": 1536988,
+                "health": 6486509,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21759,
+                "mapping_version_id": 837,
+                "npc_id": 135231,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21697,
                 "mapping_version_id": 829,
@@ -163593,11 +163747,18 @@
                 "id": 3705,
                 "npc_id": 135239,
                 "game_version_id": 1,
-                "health": 768494,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21758,
+                "mapping_version_id": 837,
+                "npc_id": 135239,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21696,
                 "mapping_version_id": 829,
@@ -164097,7 +164258,7 @@
                 "id": 3712,
                 "npc_id": 135322,
                 "game_version_id": 1,
-                "health": 5379459,
+                "health": 21283860,
                 "percentage": null
             }
         ],
@@ -164335,7 +164496,7 @@
                 "id": 9186,
                 "npc_id": 135406,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 224807,
                 "percentage": null
             }
         ],
@@ -164371,7 +164532,7 @@
                 "id": 9195,
                 "npc_id": 135445,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 21621699,
                 "percentage": null
             }
         ],
@@ -164594,11 +164755,18 @@
                 "id": 3720,
                 "npc_id": 135562,
                 "game_version_id": 1,
-                "health": 307398,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21770,
+                "mapping_version_id": 838,
+                "npc_id": 135562,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21612,
                 "mapping_version_id": 826,
@@ -164733,7 +164901,7 @@
                 "id": 9175,
                 "npc_id": 135761,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 324326,
                 "percentage": null
             }
         ],
@@ -164769,7 +164937,7 @@
                 "id": 9176,
                 "npc_id": 135764,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 374121,
                 "percentage": null
             }
         ],
@@ -164805,7 +164973,7 @@
                 "id": 9177,
                 "npc_id": 135765,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 324326,
                 "percentage": null
             }
         ],
@@ -164841,11 +165009,18 @@
                 "id": 3723,
                 "npc_id": 135846,
                 "game_version_id": 1,
-                "health": 307398,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21771,
+                "mapping_version_id": 838,
+                "npc_id": 135846,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21613,
                 "mapping_version_id": 826,
@@ -164892,7 +165067,7 @@
                 "id": 3724,
                 "npc_id": 135971,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 648651,
                 "percentage": null
             }
         ],
@@ -165036,11 +165211,18 @@
                 "id": 3728,
                 "npc_id": 136076,
                 "game_version_id": 1,
-                "health": 1229592,
+                "health": 5189208,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21776,
+                "mapping_version_id": 838,
+                "npc_id": 136076,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21618,
                 "mapping_version_id": 826,
@@ -165145,7 +165327,7 @@
                 "id": 3730,
                 "npc_id": 136160,
                 "game_version_id": 1,
-                "health": 5994255,
+                "health": 30405514,
                 "percentage": null
             }
         ],
@@ -165313,11 +165495,18 @@
                 "id": 3734,
                 "npc_id": 136250,
                 "game_version_id": 1,
-                "health": 768495,
+                "health": 4864883,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21779,
+                "mapping_version_id": 838,
+                "npc_id": 136250,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21621,
                 "mapping_version_id": 826,
@@ -165364,7 +165553,7 @@
                 "id": 9178,
                 "npc_id": 136256,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 540543,
                 "percentage": null
             }
         ],
@@ -165902,7 +166091,7 @@
                 "id": 9179,
                 "npc_id": 136976,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 27027123,
                 "percentage": null
             }
         ],
@@ -165938,7 +166127,7 @@
                 "id": 9180,
                 "npc_id": 136984,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 3783797,
                 "percentage": null
             }
         ],
@@ -166068,11 +166257,18 @@
                 "id": 3748,
                 "npc_id": 137473,
                 "game_version_id": 1,
-                "health": 1248802,
+                "health": 5270289,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21750,
+                "mapping_version_id": 837,
+                "npc_id": 137473,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21688,
                 "mapping_version_id": 829,
@@ -166126,11 +166322,18 @@
                 "id": 3749,
                 "npc_id": 137474,
                 "game_version_id": 1,
-                "health": 1229590,
+                "health": 7783811,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21752,
+                "mapping_version_id": 837,
+                "npc_id": 137474,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21690,
                 "mapping_version_id": 829,
@@ -166184,11 +166387,18 @@
                 "id": 3750,
                 "npc_id": 137478,
                 "game_version_id": 1,
-                "health": 1229590,
+                "health": 7783811,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21753,
+                "mapping_version_id": 837,
+                "npc_id": 137478,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21691,
                 "mapping_version_id": 829,
@@ -166242,11 +166452,18 @@
                 "id": 3751,
                 "npc_id": 137484,
                 "game_version_id": 1,
-                "health": 1998085,
+                "health": 8432462,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21747,
+                "mapping_version_id": 837,
+                "npc_id": 137484,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21685,
                 "mapping_version_id": 829,
@@ -166300,11 +166517,18 @@
                 "id": 3752,
                 "npc_id": 137485,
                 "game_version_id": 1,
-                "health": 768494,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21748,
+                "mapping_version_id": 837,
+                "npc_id": 137485,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21686,
                 "mapping_version_id": 829,
@@ -166358,11 +166582,18 @@
                 "id": 3753,
                 "npc_id": 137486,
                 "game_version_id": 1,
-                "health": 1229590,
+                "health": 5189208,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21746,
+                "mapping_version_id": 837,
+                "npc_id": 137486,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21684,
                 "mapping_version_id": 829,
@@ -166416,11 +166647,18 @@
                 "id": 3754,
                 "npc_id": 137487,
                 "game_version_id": 1,
-                "health": 768494,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21745,
+                "mapping_version_id": 837,
+                "npc_id": 137487,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21683,
                 "mapping_version_id": 829,
@@ -166790,7 +167028,7 @@
                 "id": 9187,
                 "npc_id": 137591,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 374121,
                 "percentage": null
             }
         ],
@@ -167165,11 +167403,18 @@
                 "id": 3766,
                 "npc_id": 137969,
                 "game_version_id": 1,
-                "health": 1536988,
+                "health": 5837859,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21755,
+                "mapping_version_id": 837,
+                "npc_id": 137969,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21693,
                 "mapping_version_id": 829,
@@ -167223,11 +167468,18 @@
                 "id": 3767,
                 "npc_id": 137989,
                 "game_version_id": 1,
-                "health": 461096,
+                "health": 1945953,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21762,
+                "mapping_version_id": 837,
+                "npc_id": 137989,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21700,
                 "mapping_version_id": 829,
@@ -168115,11 +168367,18 @@
                 "id": 3780,
                 "npc_id": 138489,
                 "game_version_id": 1,
-                "health": 2612880,
+                "health": 8432462,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21761,
+                "mapping_version_id": 837,
+                "npc_id": 138489,
+                "enemy_forces": 30,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21699,
                 "mapping_version_id": 829,
@@ -168173,7 +168432,7 @@
                 "id": 9181,
                 "npc_id": 138493,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 243242,
                 "percentage": null
             }
         ],
@@ -168209,7 +168468,7 @@
                 "id": 9196,
                 "npc_id": 139097,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 439629,
                 "percentage": null
             }
         ],
@@ -168245,7 +168504,7 @@
                 "id": 9197,
                 "npc_id": 139108,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 3243255,
                 "percentage": null
             }
         ],
@@ -168281,11 +168540,18 @@
                 "id": 3781,
                 "npc_id": 139110,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 972977,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21783,
+                "mapping_version_id": 838,
+                "npc_id": 139110,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21625,
                 "mapping_version_id": 826,
@@ -168447,11 +168713,18 @@
                 "id": 3783,
                 "npc_id": 139422,
                 "game_version_id": 1,
-                "health": 1229592,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21772,
+                "mapping_version_id": 838,
+                "npc_id": 139422,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21614,
                 "mapping_version_id": 826,
@@ -168498,11 +168771,18 @@
                 "id": 3784,
                 "npc_id": 139425,
                 "game_version_id": 1,
-                "health": 768495,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21775,
+                "mapping_version_id": 838,
+                "npc_id": 139425,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21617,
                 "mapping_version_id": 826,
@@ -210759,7 +211039,7 @@
                 "id": 4531,
                 "npc_id": 187894,
                 "game_version_id": 1,
-                "health": 2315989,
+                "health": 3243255,
                 "percentage": null
             }
         ],
@@ -210838,11 +211118,18 @@
                 "id": 4532,
                 "npc_id": 187897,
                 "game_version_id": 1,
-                "health": 20139032,
+                "health": 9729765,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21789,
+                "mapping_version_id": 839,
+                "npc_id": 187897,
+                "enemy_forces": 30,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21529,
                 "mapping_version_id": 822,
@@ -210924,11 +211211,18 @@
                 "id": 4533,
                 "npc_id": 187969,
                 "game_version_id": 1,
-                "health": 6713011,
+                "health": 3891906,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21786,
+                "mapping_version_id": 839,
+                "npc_id": 187969,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21526,
                 "mapping_version_id": 822,
@@ -211046,11 +211340,18 @@
                 "id": 4535,
                 "npc_id": 188011,
                 "game_version_id": 1,
-                "health": 6713011,
+                "health": 3567581,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21787,
+                "mapping_version_id": 839,
+                "npc_id": 188011,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21527,
                 "mapping_version_id": 822,
@@ -211168,11 +211469,18 @@
                 "id": 4537,
                 "npc_id": 188067,
                 "game_version_id": 1,
-                "health": 6713011,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21788,
+                "mapping_version_id": 839,
+                "npc_id": 188067,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21528,
                 "mapping_version_id": 822,
@@ -211348,11 +211656,18 @@
                 "id": 4539,
                 "npc_id": 188244,
                 "game_version_id": 1,
-                "health": 13426021,
+                "health": 6486510,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21785,
+                "mapping_version_id": 839,
+                "npc_id": 188244,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21525,
                 "mapping_version_id": 822,
@@ -211434,7 +211749,7 @@
                 "id": 4540,
                 "npc_id": 188252,
                 "game_version_id": 1,
-                "health": 46843573,
+                "health": 20270342,
                 "percentage": null
             }
         ],
@@ -211563,7 +211878,7 @@
                 "id": 4542,
                 "npc_id": 189232,
                 "game_version_id": 1,
-                "health": 40151634,
+                "health": 21621698,
                 "percentage": null
             }
         ],
@@ -213437,7 +213752,7 @@
         "encounter_id": null,
         "name": "npcs.189886",
         "level": 91,
-        "mdt_scale": 1,
+        "mdt_scale": 1.8,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -213451,7 +213766,7 @@
                 "id": 9214,
                 "npc_id": 189886,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 2162170,
                 "percentage": null
             }
         ],
@@ -213487,7 +213802,7 @@
                 "id": 9215,
                 "npc_id": 189893,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 810814,
                 "percentage": null
             }
         ],
@@ -213595,11 +213910,18 @@
                 "id": 4569,
                 "npc_id": 190034,
                 "game_version_id": 1,
-                "health": 11412119,
+                "health": 7135161,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21792,
+                "mapping_version_id": 839,
+                "npc_id": 190034,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21532,
                 "mapping_version_id": 822,
@@ -213824,7 +214146,7 @@
                 "id": 4573,
                 "npc_id": 190205,
                 "game_version_id": 1,
-                "health": 1342602,
+                "health": 648651,
                 "percentage": null
             }
         ],
@@ -213903,11 +214225,18 @@
                 "id": 4574,
                 "npc_id": 190206,
                 "game_version_id": 1,
-                "health": 7384312,
+                "health": 3567581,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21793,
+                "mapping_version_id": 839,
+                "npc_id": 190206,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21533,
                 "mapping_version_id": 822,
@@ -213989,11 +214318,18 @@
                 "id": 4575,
                 "npc_id": 190207,
                 "game_version_id": 1,
-                "health": 6713011,
+                "health": 2918930,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21791,
+                "mapping_version_id": 839,
+                "npc_id": 190207,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21531,
                 "mapping_version_id": 822,
@@ -215901,7 +216237,7 @@
                 "id": 4594,
                 "npc_id": 190484,
                 "game_version_id": 1,
-                "health": 24090980,
+                "health": 13513562,
                 "percentage": null
             }
         ],
@@ -215937,7 +216273,7 @@
                 "id": 4595,
                 "npc_id": 190485,
                 "game_version_id": 1,
-                "health": 30113726,
+                "health": 15202757,
                 "percentage": null
             }
         ],
@@ -219912,7 +220248,7 @@
                 "id": 9216,
                 "npc_id": 194622,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 648651,
                 "percentage": null
             }
         ],
@@ -220522,6 +220858,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21794,
+                "mapping_version_id": 839,
+                "npc_id": 195119,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21534,
                 "mapping_version_id": 822,
@@ -225369,7 +225712,7 @@
                 "id": 4724,
                 "npc_id": 197509,
                 "game_version_id": 1,
-                "health": 995103,
+                "health": 1621628,
                 "percentage": null
             }
         ],
@@ -225405,11 +225748,18 @@
                 "id": 4725,
                 "npc_id": 197535,
                 "game_version_id": 1,
-                "health": 20139032,
+                "health": 6486510,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21798,
+                "mapping_version_id": 839,
+                "npc_id": 197535,
+                "enemy_forces": 30,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21538,
                 "mapping_version_id": 822,
@@ -225491,11 +225841,18 @@
                 "id": 4726,
                 "npc_id": 197697,
                 "game_version_id": 1,
-                "health": 20139032,
+                "health": 9729765,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21795,
+                "mapping_version_id": 839,
+                "npc_id": 197697,
+                "enemy_forces": 40,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21535,
                 "mapping_version_id": 822,
@@ -225577,11 +225934,18 @@
                 "id": 4727,
                 "npc_id": 197698,
                 "game_version_id": 1,
-                "health": 20139032,
+                "health": 8432463,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21790,
+                "mapping_version_id": 839,
+                "npc_id": 197698,
+                "enemy_forces": 48,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21530,
                 "mapping_version_id": 822,
@@ -225835,11 +226199,18 @@
                 "id": 4732,
                 "npc_id": 197982,
                 "game_version_id": 1,
-                "health": 6713011,
+                "health": 3567581,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21796,
+                "mapping_version_id": 839,
+                "npc_id": 197982,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21536,
                 "mapping_version_id": 822,
@@ -226000,11 +226371,18 @@
                 "id": 4734,
                 "npc_id": 198047,
                 "game_version_id": 1,
-                "health": 10740817,
+                "health": 5189208,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21797,
+                "mapping_version_id": 839,
+                "npc_id": 198047,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21537,
                 "mapping_version_id": 822,
@@ -254883,7 +255261,7 @@
                 "id": 9040,
                 "npc_id": 234647,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 23648733,
                 "percentage": null
             }
         ],
@@ -254919,7 +255297,7 @@
                 "id": 9041,
                 "npc_id": 234648,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 20270342,
                 "percentage": null
             }
         ],
@@ -254955,7 +255333,7 @@
                 "id": 9042,
                 "npc_id": 234649,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 23648733,
                 "percentage": null
             }
         ],
@@ -254991,7 +255369,7 @@
                 "id": 9043,
                 "npc_id": 234660,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 20270342,
                 "percentage": null
             }
         ],
@@ -255149,7 +255527,7 @@
                 "id": 9044,
                 "npc_id": 234763,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 17567630,
                 "percentage": null
             }
         ],
@@ -255221,7 +255599,7 @@
                 "id": 9045,
                 "npc_id": 234799,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 1621628,
                 "percentage": null
             }
         ],
@@ -255365,11 +255743,18 @@
                 "id": 9031,
                 "npc_id": 234849,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 601841,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21839,
+                "mapping_version_id": 842,
+                "npc_id": 234849,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21712,
                 "mapping_version_id": 832,
@@ -255416,7 +255801,7 @@
                 "id": 9046,
                 "npc_id": 234852,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 514394,
                 "percentage": null
             }
         ],
@@ -255452,7 +255837,7 @@
                 "id": 9047,
                 "npc_id": 234860,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 648651,
                 "percentage": null
             }
         ],
@@ -256118,7 +256503,7 @@
                 "id": 9048,
                 "npc_id": 234984,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 648651,
                 "percentage": null
             }
         ],
@@ -256256,11 +256641,18 @@
                 "id": 9036,
                 "npc_id": 235257,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 1621628,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21844,
+                "mapping_version_id": 842,
+                "npc_id": 235257,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21717,
                 "mapping_version_id": 832,
@@ -256307,11 +256699,18 @@
                 "id": 9032,
                 "npc_id": 235261,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 3405418,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21840,
+                "mapping_version_id": 842,
+                "npc_id": 235261,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21713,
                 "mapping_version_id": 832,
@@ -256358,11 +256757,18 @@
                 "id": 9035,
                 "npc_id": 235265,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 5027045,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21843,
+                "mapping_version_id": 842,
+                "npc_id": 235265,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21716,
                 "mapping_version_id": 832,
@@ -256409,11 +256815,18 @@
                 "id": 9034,
                 "npc_id": 235267,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 3405418,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21842,
+                "mapping_version_id": 842,
+                "npc_id": 235267,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21715,
                 "mapping_version_id": 832,
@@ -256460,11 +256873,18 @@
                 "id": 9033,
                 "npc_id": 235268,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 3405418,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21841,
+                "mapping_version_id": 842,
+                "npc_id": 235268,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21714,
                 "mapping_version_id": 832,
@@ -256511,11 +256931,18 @@
                 "id": 9039,
                 "npc_id": 235322,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 8432463,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21847,
+                "mapping_version_id": 842,
+                "npc_id": 235322,
+                "enemy_forces": 35,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21720,
                 "mapping_version_id": 832,
@@ -256562,11 +256989,18 @@
                 "id": 9037,
                 "npc_id": 235465,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 5513534,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21845,
+                "mapping_version_id": 842,
+                "npc_id": 235465,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21718,
                 "mapping_version_id": 832,
@@ -256613,7 +257047,7 @@
                 "id": 9049,
                 "npc_id": 235520,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 1013518,
                 "percentage": null
             }
         ],
@@ -256685,7 +257119,7 @@
                 "id": 9050,
                 "npc_id": 235841,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 648651,
                 "percentage": null
             }
         ],
@@ -256786,11 +257220,18 @@
                 "id": 9024,
                 "npc_id": 236071,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 5189208,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21832,
+                "mapping_version_id": 842,
+                "npc_id": 236071,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21705,
                 "mapping_version_id": 832,
@@ -256837,11 +257278,18 @@
                 "id": 9022,
                 "npc_id": 236073,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 1945953,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21830,
+                "mapping_version_id": 842,
+                "npc_id": 236073,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21703,
                 "mapping_version_id": 832,
@@ -256888,11 +257336,18 @@
                 "id": 9026,
                 "npc_id": 236082,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 2270279,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21834,
+                "mapping_version_id": 842,
+                "npc_id": 236082,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21707,
                 "mapping_version_id": 832,
@@ -256939,11 +257394,18 @@
                 "id": 9023,
                 "npc_id": 236084,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 2854064,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21831,
+                "mapping_version_id": 842,
+                "npc_id": 236084,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21704,
                 "mapping_version_id": 832,
@@ -256990,11 +257452,18 @@
                 "id": 9021,
                 "npc_id": 236085,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 1297302,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21829,
+                "mapping_version_id": 842,
+                "npc_id": 236085,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21702,
                 "mapping_version_id": 832,
@@ -257077,11 +257546,18 @@
                 "id": 9028,
                 "npc_id": 236091,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 2918930,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21836,
+                "mapping_version_id": 842,
+                "npc_id": 236091,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21709,
                 "mapping_version_id": 832,
@@ -257192,7 +257668,7 @@
                 "id": 9052,
                 "npc_id": 236525,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 648651,
                 "percentage": null
             }
         ],
@@ -257228,11 +257704,18 @@
                 "id": 9029,
                 "npc_id": 236893,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 2270279,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21837,
+                "mapping_version_id": 842,
+                "npc_id": 236893,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21710,
                 "mapping_version_id": 832,
@@ -257365,11 +257848,18 @@
                 "id": 9030,
                 "npc_id": 236897,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21838,
+                "mapping_version_id": 842,
+                "npc_id": 236897,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21711,
                 "mapping_version_id": 832,
@@ -257416,11 +257906,18 @@
                 "id": 9027,
                 "npc_id": 236902,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 4540557,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21835,
+                "mapping_version_id": 842,
+                "npc_id": 236902,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21708,
                 "mapping_version_id": 832,
@@ -257467,11 +257964,18 @@
                 "id": 9038,
                 "npc_id": 236905,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 6486510,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21846,
+                "mapping_version_id": 842,
+                "npc_id": 236905,
+                "enemy_forces": 30,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21719,
                 "mapping_version_id": 832,
@@ -257876,7 +258380,7 @@
                 "id": 9053,
                 "npc_id": 237626,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 399253,
                 "percentage": null
             }
         ],
@@ -259004,7 +259508,7 @@
                 "id": 9054,
                 "npc_id": 238414,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 202703424,
                 "percentage": null
             }
         ],
@@ -261092,11 +261596,18 @@
                 "id": 9128,
                 "npc_id": 238883,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 3891906,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21871,
+                "mapping_version_id": 844,
+                "npc_id": 238883,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21449,
                 "mapping_version_id": 815,
@@ -261136,7 +261647,7 @@
                 "id": 9148,
                 "npc_id": 238887,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 21283860,
                 "percentage": null
             }
         ],
@@ -261244,7 +261755,7 @@
                 "id": 9149,
                 "npc_id": 239008,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 21283860,
                 "percentage": null
             }
         ],
@@ -261316,7 +261827,7 @@
                 "id": 9151,
                 "npc_id": 239070,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 945949,
                 "percentage": null
             }
         ],
@@ -261352,7 +261863,7 @@
                 "id": 9150,
                 "npc_id": 239167,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 24324411,
                 "percentage": null
             }
         ],
@@ -261869,7 +262380,7 @@
                 "id": 9055,
                 "npc_id": 240289,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 648651,
                 "percentage": null
             }
         ],
@@ -261905,7 +262416,7 @@
                 "id": 9199,
                 "npc_id": 240681,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 287585,
                 "percentage": null
             }
         ],
@@ -263647,11 +264158,18 @@
                 "id": 9129,
                 "npc_id": 241496,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 6227050,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21872,
+                "mapping_version_id": 844,
+                "npc_id": 241496,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21450,
                 "mapping_version_id": 815,
@@ -264567,11 +265085,25 @@
                 "id": 9065,
                 "npc_id": 241808,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 3729743,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21852,
+                "mapping_version_id": 843,
+                "npc_id": 241808,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 21814,
+                "mapping_version_id": 841,
+                "npc_id": 241808,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21412,
                 "mapping_version_id": 813,
@@ -264585,6 +265117,11 @@
                 "id": 6487,
                 "npc_id": 241808,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6644,
+                "npc_id": 241808,
+                "dungeon_id": 145
             }
         ]
     },
@@ -264611,7 +265148,7 @@
                 "id": 9077,
                 "npc_id": 241809,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 778381,
                 "percentage": null
             }
         ],
@@ -264621,6 +265158,11 @@
                 "id": 6499,
                 "npc_id": 241809,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6655,
+                "npc_id": 241809,
+                "dungeon_id": 145
             }
         ]
     },
@@ -264647,7 +265189,7 @@
                 "id": 9078,
                 "npc_id": 241812,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 23648733,
                 "percentage": null
             }
         ],
@@ -264657,6 +265199,11 @@
                 "id": 6500,
                 "npc_id": 241812,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6656,
+                "npc_id": 241812,
+                "dungeon_id": 145
             }
         ]
     },
@@ -264683,11 +265230,25 @@
                 "id": 9064,
                 "npc_id": 241813,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21851,
+                "mapping_version_id": 843,
+                "npc_id": 241813,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 21813,
+                "mapping_version_id": 841,
+                "npc_id": 241813,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21411,
                 "mapping_version_id": 813,
@@ -264701,6 +265262,11 @@
                 "id": 6486,
                 "npc_id": 241813,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6643,
+                "npc_id": 241813,
+                "dungeon_id": 145
             }
         ]
     },
@@ -264727,11 +265293,25 @@
                 "id": 9063,
                 "npc_id": 241814,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 3729743,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21850,
+                "mapping_version_id": 843,
+                "npc_id": 241814,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 21812,
+                "mapping_version_id": 841,
+                "npc_id": 241814,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21410,
                 "mapping_version_id": 813,
@@ -264745,6 +265325,11 @@
                 "id": 6485,
                 "npc_id": 241814,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6642,
+                "npc_id": 241814,
+                "dungeon_id": 145
             }
         ]
     },
@@ -264771,11 +265356,25 @@
                 "id": 9079,
                 "npc_id": 241816,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 2918930,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21863,
+                "mapping_version_id": 843,
+                "npc_id": 241816,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 21825,
+                "mapping_version_id": 841,
+                "npc_id": 241816,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21423,
                 "mapping_version_id": 813,
@@ -264789,6 +265388,11 @@
                 "id": 6501,
                 "npc_id": 241816,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6657,
+                "npc_id": 241816,
+                "dungeon_id": 145
             }
         ]
     },
@@ -264837,7 +265441,7 @@
         "encounter_id": null,
         "name": "npcs.241869",
         "level": 91,
-        "mdt_scale": 1,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -264851,11 +265455,25 @@
                 "id": 9071,
                 "npc_id": 241869,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 6486510,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21858,
+                "mapping_version_id": 843,
+                "npc_id": 241869,
+                "enemy_forces": 28,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 21820,
+                "mapping_version_id": 841,
+                "npc_id": 241869,
+                "enemy_forces": 28,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21418,
                 "mapping_version_id": 813,
@@ -264869,6 +265487,11 @@
                 "id": 6493,
                 "npc_id": 241869,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6650,
+                "npc_id": 241869,
+                "dungeon_id": 145
             }
         ]
     },
@@ -264895,11 +265518,25 @@
                 "id": 9069,
                 "npc_id": 241872,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 3567581,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21856,
+                "mapping_version_id": 843,
+                "npc_id": 241872,
+                "enemy_forces": 9,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 21818,
+                "mapping_version_id": 841,
+                "npc_id": 241872,
+                "enemy_forces": 9,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21416,
                 "mapping_version_id": 813,
@@ -264913,6 +265550,11 @@
                 "id": 6491,
                 "npc_id": 241872,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6648,
+                "npc_id": 241872,
+                "dungeon_id": 145
             }
         ]
     },
@@ -264939,11 +265581,25 @@
                 "id": 9067,
                 "npc_id": 241874,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 2789199,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21854,
+                "mapping_version_id": 843,
+                "npc_id": 241874,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 21816,
+                "mapping_version_id": 841,
+                "npc_id": 241874,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21414,
                 "mapping_version_id": 813,
@@ -264957,6 +265613,11 @@
                 "id": 6489,
                 "npc_id": 241874,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6646,
+                "npc_id": 241874,
+                "dungeon_id": 145
             }
         ]
     },
@@ -264983,11 +265644,25 @@
                 "id": 9070,
                 "npc_id": 241876,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 3081092,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21857,
+                "mapping_version_id": 843,
+                "npc_id": 241876,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 21819,
+                "mapping_version_id": 841,
+                "npc_id": 241876,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21417,
                 "mapping_version_id": 813,
@@ -265001,6 +265676,11 @@
                 "id": 6492,
                 "npc_id": 241876,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6649,
+                "npc_id": 241876,
+                "dungeon_id": 145
             }
         ]
     },
@@ -265099,11 +265779,25 @@
                 "id": 9068,
                 "npc_id": 241911,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 2918930,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21855,
+                "mapping_version_id": 843,
+                "npc_id": 241911,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 21817,
+                "mapping_version_id": 841,
+                "npc_id": 241911,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21415,
                 "mapping_version_id": 813,
@@ -265117,6 +265811,11 @@
                 "id": 6490,
                 "npc_id": 241911,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6647,
+                "npc_id": 241911,
+                "dungeon_id": 145
             }
         ]
     },
@@ -267217,11 +267916,18 @@
                 "id": 9143,
                 "npc_id": 243736,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 698699,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21886,
+                "mapping_version_id": 844,
+                "npc_id": 243736,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21464,
                 "mapping_version_id": 815,
@@ -267297,11 +268003,18 @@
                 "id": 9141,
                 "npc_id": 243766,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 6227050,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21884,
+                "mapping_version_id": 844,
+                "npc_id": 243766,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21462,
                 "mapping_version_id": 815,
@@ -267341,11 +268054,18 @@
                 "id": 9140,
                 "npc_id": 243835,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 3405418,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21883,
+                "mapping_version_id": 844,
+                "npc_id": 243835,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21461,
                 "mapping_version_id": 815,
@@ -267421,11 +268141,18 @@
                 "id": 9126,
                 "npc_id": 243983,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 2918930,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21869,
+                "mapping_version_id": 844,
+                "npc_id": 243983,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21447,
                 "mapping_version_id": 815,
@@ -267465,11 +268192,18 @@
                 "id": 9127,
                 "npc_id": 243985,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21870,
+                "mapping_version_id": 844,
+                "npc_id": 243985,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21448,
                 "mapping_version_id": 815,
@@ -267509,11 +268243,18 @@
                 "id": 9125,
                 "npc_id": 243988,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 3405418,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21868,
+                "mapping_version_id": 844,
+                "npc_id": 243988,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21446,
                 "mapping_version_id": 815,
@@ -267553,11 +268294,18 @@
                 "id": 9124,
                 "npc_id": 243996,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 2918930,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21867,
+                "mapping_version_id": 844,
+                "npc_id": 243996,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21445,
                 "mapping_version_id": 815,
@@ -268389,7 +269137,7 @@
                 "id": 9080,
                 "npc_id": 244100,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 21283860,
                 "percentage": null
             }
         ],
@@ -268399,6 +269147,11 @@
                 "id": 6502,
                 "npc_id": 244100,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6658,
+                "npc_id": 244100,
+                "dungeon_id": 145
             }
         ]
     },
@@ -268893,11 +269646,18 @@
                 "id": 9134,
                 "npc_id": 244260,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 5837859,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21877,
+                "mapping_version_id": 844,
+                "npc_id": 244260,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21455,
                 "mapping_version_id": 815,
@@ -268973,11 +269733,18 @@
                 "id": 9137,
                 "npc_id": 244309,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 7135161,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21880,
+                "mapping_version_id": 844,
+                "npc_id": 244309,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21458,
                 "mapping_version_id": 815,
@@ -269053,7 +269820,7 @@
                 "id": 9081,
                 "npc_id": 244696,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 428857,
                 "percentage": null
             }
         ],
@@ -269063,6 +269830,11 @@
                 "id": 6503,
                 "npc_id": 244696,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6659,
+                "npc_id": 244696,
+                "dungeon_id": 145
             }
         ]
     },
@@ -269089,11 +269861,18 @@
                 "id": 9147,
                 "npc_id": 244708,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 6227050,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21890,
+                "mapping_version_id": 844,
+                "npc_id": 244708,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21468,
                 "mapping_version_id": 815,
@@ -269133,7 +269912,7 @@
                 "id": 9082,
                 "npc_id": 244759,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 675678,
                 "percentage": null
             }
         ],
@@ -269143,6 +269922,11 @@
                 "id": 6504,
                 "npc_id": 244759,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6660,
+                "npc_id": 244759,
+                "dungeon_id": 145
             }
         ]
     },
@@ -269256,16 +270040,36 @@
                 "id": 9083,
                 "npc_id": 244889,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 7783812,
                 "percentage": null
             }
         ],
-        "npc_enemy_forces": [],
+        "npc_enemy_forces": [
+            {
+                "id": 21864,
+                "mapping_version_id": 843,
+                "npc_id": 244889,
+                "enemy_forces": 35,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 21826,
+                "mapping_version_id": 841,
+                "npc_id": 244889,
+                "enemy_forces": 35,
+                "enemy_forces_teeming": null
+            }
+        ],
         "npc_dungeons": [
             {
                 "id": 6505,
                 "npc_id": 244889,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6661,
+                "npc_id": 244889,
+                "dungeon_id": 145
             }
         ]
     },
@@ -269440,7 +270244,7 @@
                 "id": 9093,
                 "npc_id": 245076,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 537461,
                 "percentage": null
             }
         ],
@@ -269450,6 +270254,11 @@
                 "id": 6515,
                 "npc_id": 245076,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6670,
+                "npc_id": 245076,
+                "dungeon_id": 145
             }
         ]
     },
@@ -269534,11 +270343,25 @@
                 "id": 9073,
                 "npc_id": 245139,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 2918930,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21860,
+                "mapping_version_id": 843,
+                "npc_id": 245139,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 21822,
+                "mapping_version_id": 841,
+                "npc_id": 245139,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21420,
                 "mapping_version_id": 813,
@@ -269552,6 +270375,11 @@
                 "id": 6495,
                 "npc_id": 245139,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6652,
+                "npc_id": 245139,
+                "dungeon_id": 145
             }
         ]
     },
@@ -269578,11 +270406,25 @@
                 "id": 9072,
                 "npc_id": 245143,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21859,
+                "mapping_version_id": 843,
+                "npc_id": 245143,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 21821,
+                "mapping_version_id": 841,
+                "npc_id": 245143,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21419,
                 "mapping_version_id": 813,
@@ -269596,6 +270438,11 @@
                 "id": 6494,
                 "npc_id": 245143,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6651,
+                "npc_id": 245143,
+                "dungeon_id": 145
             }
         ]
     },
@@ -269622,11 +270469,25 @@
                 "id": 9075,
                 "npc_id": 245145,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 3081092,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21862,
+                "mapping_version_id": 843,
+                "npc_id": 245145,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 21824,
+                "mapping_version_id": 841,
+                "npc_id": 245145,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21422,
                 "mapping_version_id": 813,
@@ -269640,6 +270501,11 @@
                 "id": 6497,
                 "npc_id": 245145,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6654,
+                "npc_id": 245145,
+                "dungeon_id": 145
             }
         ]
     },
@@ -269666,11 +270532,25 @@
                 "id": 9074,
                 "npc_id": 245146,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 5513534,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21861,
+                "mapping_version_id": 843,
+                "npc_id": 245146,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 21823,
+                "mapping_version_id": 841,
+                "npc_id": 245146,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21421,
                 "mapping_version_id": 813,
@@ -269684,6 +270564,11 @@
                 "id": 6496,
                 "npc_id": 245146,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6653,
+                "npc_id": 245146,
+                "dungeon_id": 145
             }
         ]
     },
@@ -269710,7 +270595,7 @@
                 "id": 9084,
                 "npc_id": 245148,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 698700,
                 "percentage": null
             }
         ],
@@ -269720,6 +270605,11 @@
                 "id": 6506,
                 "npc_id": 245148,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6662,
+                "npc_id": 245148,
+                "dungeon_id": 145
             }
         ]
     },
@@ -269746,11 +270636,25 @@
                 "id": 9085,
                 "npc_id": 245190,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 2594604,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21865,
+                "mapping_version_id": 843,
+                "npc_id": 245190,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 21827,
+                "mapping_version_id": 841,
+                "npc_id": 245190,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21424,
                 "mapping_version_id": 813,
@@ -269764,6 +270668,11 @@
                 "id": 6507,
                 "npc_id": 245190,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6663,
+                "npc_id": 245190,
+                "dungeon_id": 145
             }
         ]
     },
@@ -270386,7 +271295,7 @@
                 "id": 9086,
                 "npc_id": 245567,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 557514,
                 "percentage": null
             }
         ],
@@ -270396,6 +271305,11 @@
                 "id": 6508,
                 "npc_id": 245567,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6664,
+                "npc_id": 245567,
+                "dungeon_id": 145
             }
         ]
     },
@@ -270422,11 +271336,25 @@
                 "id": 9094,
                 "npc_id": 245752,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 2918930,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21866,
+                "mapping_version_id": 843,
+                "npc_id": 245752,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 21828,
+                "mapping_version_id": 841,
+                "npc_id": 245752,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21425,
                 "mapping_version_id": 813,
@@ -270440,6 +271368,11 @@
                 "id": 6516,
                 "npc_id": 245752,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6671,
+                "npc_id": 245752,
+                "dungeon_id": 145
             }
         ]
     },
@@ -270466,11 +271399,25 @@
                 "id": 9062,
                 "npc_id": 245855,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 4864883,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21849,
+                "mapping_version_id": 843,
+                "npc_id": 245855,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 21811,
+                "mapping_version_id": 841,
+                "npc_id": 245855,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21409,
                 "mapping_version_id": 813,
@@ -270484,6 +271431,11 @@
                 "id": 6484,
                 "npc_id": 245855,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6641,
+                "npc_id": 245855,
+                "dungeon_id": 145
             }
         ]
     },
@@ -270561,11 +271513,18 @@
                 "id": 9144,
                 "npc_id": 245950,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 8756789,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21887,
+                "mapping_version_id": 844,
+                "npc_id": 245950,
+                "enemy_forces": 65,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21465,
                 "mapping_version_id": 815,
@@ -270742,7 +271701,7 @@
                 "id": 9087,
                 "npc_id": 246404,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 21891970,
                 "percentage": null
             }
         ],
@@ -270752,6 +271711,11 @@
                 "id": 6509,
                 "npc_id": 246404,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6665,
+                "npc_id": 246404,
+                "dungeon_id": 145
             }
         ]
     },
@@ -270778,7 +271742,7 @@
                 "id": 9088,
                 "npc_id": 246409,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 21891970,
                 "percentage": null
             }
         ],
@@ -270788,6 +271752,11 @@
                 "id": 6510,
                 "npc_id": 246409,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6666,
+                "npc_id": 246409,
+                "dungeon_id": 145
             }
         ]
     },
@@ -270901,7 +271870,7 @@
                 "id": 9089,
                 "npc_id": 247301,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 3378390,
                 "percentage": null
             }
         ],
@@ -270911,6 +271880,11 @@
                 "id": 6511,
                 "npc_id": 247301,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6667,
+                "npc_id": 247301,
+                "dungeon_id": 145
             }
         ]
     },
@@ -271522,6 +272496,11 @@
                 "id": 6518,
                 "npc_id": 248666,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6640,
+                "npc_id": 248666,
+                "dungeon_id": 145
             },
             {
                 "id": 6574,
@@ -273170,11 +274149,18 @@
                 "id": 9138,
                 "npc_id": 249461,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21881,
+                "mapping_version_id": 844,
+                "npc_id": 249461,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21459,
                 "mapping_version_id": 815,
@@ -273214,11 +274200,18 @@
                 "id": 9139,
                 "npc_id": 249590,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 3567581,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21882,
+                "mapping_version_id": 844,
+                "npc_id": 249590,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21460,
                 "mapping_version_id": 815,
@@ -273258,11 +274251,18 @@
                 "id": 9136,
                 "npc_id": 249603,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 1945953,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21879,
+                "mapping_version_id": 844,
+                "npc_id": 249603,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21457,
                 "mapping_version_id": 815,
@@ -273302,11 +274302,18 @@
                 "id": 9135,
                 "npc_id": 249608,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 3891906,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21878,
+                "mapping_version_id": 844,
+                "npc_id": 249608,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21456,
                 "mapping_version_id": 815,
@@ -273592,7 +274599,7 @@
         "encounter_id": null,
         "name": "npcs.250478",
         "level": 91,
-        "mdt_scale": 1,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -273606,11 +274613,25 @@
                 "id": 9066,
                 "npc_id": 250478,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21853,
+                "mapping_version_id": 843,
+                "npc_id": 250478,
+                "enemy_forces": 50,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 21815,
+                "mapping_version_id": 841,
+                "npc_id": 250478,
+                "enemy_forces": 50,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21413,
                 "mapping_version_id": 813,
@@ -273624,6 +274645,11 @@
                 "id": 6488,
                 "npc_id": 250478,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6645,
+                "npc_id": 250478,
+                "dungeon_id": 145
             }
         ]
     },
@@ -273937,7 +274963,7 @@
                 "id": 9090,
                 "npc_id": 251189,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 648651,
                 "percentage": null
             }
         ],
@@ -273947,6 +274973,11 @@
                 "id": 6512,
                 "npc_id": 251189,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6668,
+                "npc_id": 251189,
+                "dungeon_id": 145
             }
         ]
     },
@@ -274434,11 +275465,18 @@
                 "id": 9131,
                 "npc_id": 252053,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 5675696,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21874,
+                "mapping_version_id": 844,
+                "npc_id": 252053,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21452,
                 "mapping_version_id": 815,
@@ -274478,11 +275516,18 @@
                 "id": 9130,
                 "npc_id": 252072,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 5513534,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21873,
+                "mapping_version_id": 844,
+                "npc_id": 252072,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21451,
                 "mapping_version_id": 815,
@@ -274522,11 +275567,18 @@
                 "id": 9146,
                 "npc_id": 252508,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 1297302,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21889,
+                "mapping_version_id": 844,
+                "npc_id": 252508,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21467,
                 "mapping_version_id": 815,
@@ -274566,11 +275618,18 @@
                 "id": 9025,
                 "npc_id": 252529,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 7783812,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21833,
+                "mapping_version_id": 842,
+                "npc_id": 252529,
+                "enemy_forces": 35,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21706,
                 "mapping_version_id": 832,
@@ -276186,7 +277245,7 @@
                 "id": 9056,
                 "npc_id": 253081,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 648651,
                 "percentage": null
             }
         ],
@@ -276343,7 +277402,7 @@
                 "id": 9057,
                 "npc_id": 253324,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 648651,
                 "percentage": null
             }
         ],
@@ -276994,7 +278053,7 @@
                 "id": 9152,
                 "npc_id": 254677,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 817478,
                 "percentage": null
             }
         ],
@@ -277540,7 +278599,7 @@
                 "id": 9123,
                 "npc_id": 255001,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 540543,
                 "percentage": null
             }
         ],
@@ -277612,7 +278671,7 @@
                 "id": 9058,
                 "npc_id": 255050,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 5405427,
                 "percentage": null
             }
         ],
@@ -277849,11 +278908,18 @@
                 "id": 9059,
                 "npc_id": 255604,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 2270279,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21848,
+                "mapping_version_id": 842,
+                "npc_id": 255604,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21721,
                 "mapping_version_id": 832,
@@ -278395,7 +279461,7 @@
                 "id": 9167,
                 "npc_id": 259445,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 21216291,
                 "percentage": null
             }
         ],
@@ -278431,7 +279497,7 @@
                 "id": 9168,
                 "npc_id": 259446,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 30405514,
                 "percentage": null
             }
         ],
@@ -278467,7 +279533,7 @@
                 "id": 9169,
                 "npc_id": 259447,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 27027123,
                 "percentage": null
             }
         ],
@@ -278539,11 +279605,18 @@
                 "id": 9164,
                 "npc_id": 261550,
                 "game_version_id": 1,
-                "health": 1749045,
+                "health": 1945953,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21808,
+                "mapping_version_id": 840,
+                "npc_id": 261550,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21478,
                 "mapping_version_id": 816,
@@ -278583,11 +279656,18 @@
                 "id": 9155,
                 "npc_id": 261552,
                 "game_version_id": 1,
-                "health": 2915075,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21800,
+                "mapping_version_id": 840,
+                "npc_id": 261552,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21470,
                 "mapping_version_id": 816,
@@ -278627,11 +279707,18 @@
                 "id": 9160,
                 "npc_id": 261553,
                 "game_version_id": 1,
-                "health": 3206583,
+                "health": 3567581,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21804,
+                "mapping_version_id": 840,
+                "npc_id": 261553,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21474,
                 "mapping_version_id": 816,
@@ -278671,11 +279758,18 @@
                 "id": 9163,
                 "npc_id": 261554,
                 "game_version_id": 1,
-                "health": 4955628,
+                "health": 5513534,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21807,
+                "mapping_version_id": 840,
+                "npc_id": 261554,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21477,
                 "mapping_version_id": 816,
@@ -278715,7 +279809,7 @@
                 "id": 9157,
                 "npc_id": 261556,
                 "game_version_id": 1,
-                "health": 874523,
+                "health": 972977,
                 "percentage": null
             }
         ],
@@ -278751,11 +279845,18 @@
                 "id": 9156,
                 "npc_id": 261557,
                 "game_version_id": 1,
-                "health": 2623568,
+                "health": 2918930,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21801,
+                "mapping_version_id": 840,
+                "npc_id": 261557,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21471,
                 "mapping_version_id": 816,
@@ -278795,11 +279896,18 @@
                 "id": 9159,
                 "npc_id": 261560,
                 "game_version_id": 1,
-                "health": 2623568,
+                "health": 2918930,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21803,
+                "mapping_version_id": 840,
+                "npc_id": 261560,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21473,
                 "mapping_version_id": 816,
@@ -278839,11 +279947,18 @@
                 "id": 9162,
                 "npc_id": 261573,
                 "game_version_id": 1,
-                "health": 9328240,
+                "health": 9081114,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21806,
+                "mapping_version_id": 840,
+                "npc_id": 261573,
+                "enemy_forces": 30,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21476,
                 "mapping_version_id": 816,
@@ -278883,11 +279998,18 @@
                 "id": 9165,
                 "npc_id": 262011,
                 "game_version_id": 1,
-                "health": 4955628,
+                "health": 5513534,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21809,
+                "mapping_version_id": 840,
+                "npc_id": 262011,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21479,
                 "mapping_version_id": 816,
@@ -278927,7 +280049,7 @@
                 "id": 9170,
                 "npc_id": 262398,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 361821,
                 "percentage": null
             }
         ],
@@ -278963,7 +280085,7 @@
                 "id": 9200,
                 "npc_id": 262530,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 10135172,
                 "percentage": null
             }
         ],
@@ -278999,7 +280121,7 @@
                 "id": 9201,
                 "npc_id": 262822,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 10135172,
                 "percentage": null
             }
         ],
@@ -279035,11 +280157,18 @@
                 "id": 9161,
                 "npc_id": 263109,
                 "game_version_id": 1,
-                "health": 4372613,
+                "health": 4864883,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21805,
+                "mapping_version_id": 840,
+                "npc_id": 263109,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21475,
                 "mapping_version_id": 816,
@@ -279079,11 +280208,18 @@
                 "id": 9158,
                 "npc_id": 263112,
                 "game_version_id": 1,
-                "health": 1166030,
+                "health": 1297302,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21802,
+                "mapping_version_id": 840,
+                "npc_id": 263112,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21472,
                 "mapping_version_id": 816,
@@ -279159,11 +280295,18 @@
                 "id": 9142,
                 "npc_id": 263228,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 5189208,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21885,
+                "mapping_version_id": 844,
+                "npc_id": 263228,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21463,
                 "mapping_version_id": 815,
@@ -279203,7 +280346,7 @@
                 "id": 9211,
                 "npc_id": 263383,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 1081085,
                 "percentage": null
             }
         ],
@@ -279239,7 +280382,7 @@
                 "id": 9203,
                 "npc_id": 263658,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 21621699,
                 "percentage": null
             }
         ],
@@ -279275,7 +280418,7 @@
                 "id": 9060,
                 "npc_id": 263940,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 648651,
                 "percentage": null
             }
         ],
@@ -279311,7 +280454,7 @@
                 "id": 9204,
                 "npc_id": 264785,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 810814,
                 "percentage": null
             }
         ],
@@ -279347,7 +280490,7 @@
                 "id": 9171,
                 "npc_id": 264798,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 648651,
                 "percentage": null
             }
         ],
@@ -279383,11 +280526,18 @@
                 "id": 9190,
                 "npc_id": 265057,
                 "game_version_id": 1,
-                "health": 1229590,
+                "health": 648651,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21780,
+                "mapping_version_id": 838,
+                "npc_id": 265057,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21622,
                 "mapping_version_id": 826,
@@ -279433,6 +280583,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 21875,
+                "mapping_version_id": 844,
+                "npc_id": 267545,
+                "enemy_forces": 40,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 21453,
                 "mapping_version_id": 815,
                 "npc_id": 267545,
@@ -279471,11 +280628,18 @@
                 "id": 9133,
                 "npc_id": 267546,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 7459487,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21876,
+                "mapping_version_id": 844,
+                "npc_id": 267546,
+                "enemy_forces": 40,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21454,
                 "mapping_version_id": 815,
@@ -279515,11 +280679,18 @@
                 "id": 9145,
                 "npc_id": 268184,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 6227050,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21888,
+                "mapping_version_id": 844,
+                "npc_id": 268184,
+                "enemy_forces": 30,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21466,
                 "mapping_version_id": 815,
@@ -279559,11 +280730,18 @@
                 "id": 9205,
                 "npc_id": 268317,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 1135139,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21782,
+                "mapping_version_id": 838,
+                "npc_id": 268317,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21624,
                 "mapping_version_id": 826,
@@ -279603,7 +280781,7 @@
                 "id": 9206,
                 "npc_id": 268344,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 1702709,
                 "percentage": null
             }
         ],
@@ -279675,7 +280853,7 @@
                 "id": 9207,
                 "npc_id": 268364,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 330722,
                 "percentage": null
             }
         ],
@@ -279711,7 +280889,7 @@
                 "id": 9208,
                 "npc_id": 268427,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 4324340,
                 "percentage": null
             }
         ],
@@ -279747,7 +280925,7 @@
                 "id": 9209,
                 "npc_id": 268491,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 2351360,
                 "percentage": null
             }
         ],
@@ -279783,7 +280961,7 @@
                 "id": 9210,
                 "npc_id": 268729,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 486488,
                 "percentage": null
             }
         ],
@@ -279855,11 +281033,18 @@
                 "id": 9213,
                 "npc_id": 269227,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 1945953,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21784,
+                "mapping_version_id": 838,
+                "npc_id": 269227,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21626,
                 "mapping_version_id": 826,
@@ -279899,7 +281084,7 @@
                 "id": 9182,
                 "npc_id": 269808,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 8108137,
                 "percentage": null
             }
         ],
@@ -279935,7 +281120,7 @@
                 "id": 9183,
                 "npc_id": 269810,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 10135171,
                 "percentage": null
             }
         ],
@@ -279971,7 +281156,7 @@
                 "id": 9184,
                 "npc_id": 269811,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 5405425,
                 "percentage": null
             }
         ],
@@ -280007,11 +281192,18 @@
                 "id": 9154,
                 "npc_id": 270306,
                 "game_version_id": 1,
-                "health": 4664120,
+                "health": 5189208,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21799,
+                "mapping_version_id": 840,
+                "npc_id": 270306,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21469,
                 "mapping_version_id": 816,
@@ -280051,7 +281243,7 @@
                 "id": 9173,
                 "npc_id": 270378,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 5189208,
                 "percentage": null
             }
         ],
@@ -280087,7 +281279,7 @@
                 "id": 9174,
                 "npc_id": 270417,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 32432550,
                 "percentage": null
             }
         ],
@@ -280123,11 +281315,18 @@
                 "id": 9185,
                 "npc_id": 270502,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21763,
+                "mapping_version_id": 837,
+                "npc_id": 270502,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21701,
                 "mapping_version_id": 829,
@@ -280167,11 +281366,18 @@
                 "id": 9166,
                 "npc_id": 271453,
                 "game_version_id": 1,
-                "health": 2915075,
+                "health": 3243255,
                 "percentage": null
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 21810,
+                "mapping_version_id": 840,
+                "npc_id": 271453,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 21480,
                 "mapping_version_id": 816,
@@ -280211,7 +281417,7 @@
                 "id": 9092,
                 "npc_id": 272074,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 698699,
                 "percentage": null
             }
         ],
@@ -280221,6 +281427,11 @@
                 "id": 6514,
                 "npc_id": 272074,
                 "dungeon_id": 140
+            },
+            {
+                "id": 6669,
+                "npc_id": 272074,
+                "dungeon_id": 145
             }
         ]
     },
