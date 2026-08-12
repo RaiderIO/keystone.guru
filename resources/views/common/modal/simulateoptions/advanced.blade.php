@@ -50,14 +50,16 @@ $hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(\App\M
                     </div>
 
                     <div class="mb-3">
-                        <label for="simulate_use_mounts">
-                            {{ __('view_common.modal.simulateoptions.advanced.use_mounts') }}
-                            <i class="fas fa-info-circle" data-bs-toggle="tooltip"
-                               title="{{ __('view_common.modal.simulateoptions.advanced.use_mounts_title') }}"></i>
-                        </label>
                         <div class="row">
                             <div class="col">
-                                {{ html()->checkbox('simulate_use_mounts', true, 1)->id('simulate_use_mounts')->class('form-check-input') }}
+                                <div class="form-check">
+                                    {{ html()->checkbox('simulate_use_mounts', true, 1)->id('simulate_use_mounts')->class('form-check-input') }}
+                                    <label for="simulate_use_mounts" class="form-check-label">
+                                        {{ __('view_common.modal.simulateoptions.advanced.use_mounts') }}
+                                        <i class="fas fa-info-circle" data-bs-toggle="tooltip"
+                                           title="{{ __('view_common.modal.simulateoptions.advanced.use_mounts_title') }}"></i>
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>

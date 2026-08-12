@@ -100,10 +100,12 @@ $existingSocialLinks = $user->socialLinks->keyBy('platform');
     </h5>
 
     <div class="mb-3{{ $errors->has('hide_from_creator_directory') ? ' has-error' : '' }}">
-        <label for="hide_from_creator_directory">
-            {{ __('view_profile.edit.creator_directory_hide') }}
-        </label>
-        {{ html()->checkbox('hide_from_creator_directory', $user->hide_from_creator_directory, 1)->class('form-check-input') }}
+        <div class="form-check">
+            {{ html()->checkbox('hide_from_creator_directory', $user->hide_from_creator_directory, 1)->class('form-check-input') }}
+            <label for="hide_from_creator_directory" class="form-check-label">
+                {{ __('view_profile.edit.creator_directory_hide') }}
+            </label>
+        </div>
         <small class="form-text text-muted d-block">
             {{ __('view_profile.edit.creator_directory_hide_help') }}
         </small>

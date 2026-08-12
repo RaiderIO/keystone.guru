@@ -40,12 +40,14 @@ $errors   ??= collect();
             </div>
 
             <div class="mb-3">
-                <label for="{{ $modalClass }}login_remember">
-                    {{ __('view_common.forms.login.remember_me') }}
-                </label>
                 <div class="col col-xl-{{ $width }}">
-                    <input id="{{ $modalClass }}login_remember" type="checkbox"
-                           name="remember" class="form-check-input" {{ old('remember') ? 'checked' : '' }}>
+                    <div class="form-check">
+                        <input id="{{ $modalClass }}login_remember" type="checkbox"
+                               name="remember" class="form-check-input" {{ old('remember') ? 'checked' : '' }}>
+                        <label for="{{ $modalClass }}login_remember" class="form-check-label">
+                            {{ __('view_common.forms.login.remember_me') }}
+                        </label>
+                    </div>
                 </div>
             </div>
 

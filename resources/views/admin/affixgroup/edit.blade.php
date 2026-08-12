@@ -40,8 +40,10 @@ $affixSelectWithNone = collect([-1 => __('view_admin.affixgroup.edit.no_affix')]
     </div>
 
     <div class="mb-3{{ $errors->has('confirmed') ? ' has-error' : '' }}">
-        {{ html()->label(__('view_admin.affixgroup.edit.confirmed'), 'confirmed') }}
-        {{ html()->checkbox('confirmed', old('confirmed', $affixGroup->confirmed ?? false), 1)->class('form-check-input') }}
+        <div class="form-check">
+            {{ html()->checkbox('confirmed', old('confirmed', $affixGroup->confirmed ?? false), 1)->class('form-check-input') }}
+            {{ html()->label(__('view_admin.affixgroup.edit.confirmed'), 'confirmed')->class('form-check-label') }}
+        </div>
         @include('common.forms.form-error', ['key' => 'confirmed'])
     </div>
 

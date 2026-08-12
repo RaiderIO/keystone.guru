@@ -102,14 +102,16 @@ $errors   ??= collect();
             </div>
 
             <div class="mb-3">
-                <label for="{{ $modalClass }}legal_agreed" class="control-label">
-                    {!! sprintf(__('view_common.forms.register.legal_agree'),
-                     '<a href="' . route('legal.terms') . '">' . __('view_common.forms.register.terms_of_service') . '</a>',
-                     '<a href="' . route('legal.privacy') . '">' . __('view_common.forms.register.privacy_policy') . '</a>',
-                     '<a href="' . route('legal.cookies') . '">' . __('view_common.forms.register.cookie_policy') . '</a>')
-                     !!}
-                </label>
-                {{ html()->checkbox('legal_agreed', null, 1)->id($modalClass . 'legal_agreed')->class('form-check-input') }}
+                <div class="form-check">
+                    {{ html()->checkbox('legal_agreed', null, 1)->id($modalClass . 'legal_agreed')->class('form-check-input') }}
+                    <label for="{{ $modalClass }}legal_agreed" class="form-check-label">
+                        {!! sprintf(__('view_common.forms.register.legal_agree'),
+                         '<a href="' . route('legal.terms') . '">' . __('view_common.forms.register.terms_of_service') . '</a>',
+                         '<a href="' . route('legal.privacy') . '">' . __('view_common.forms.register.privacy_policy') . '</a>',
+                         '<a href="' . route('legal.cookies') . '">' . __('view_common.forms.register.cookie_policy') . '</a>')
+                         !!}
+                    </label>
+                </div>
                 {{ html()->hidden('legal_agreed_ms', -1)->id($modalClass . 'legal_agreed_ms') }}
             </div>
 

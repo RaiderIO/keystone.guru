@@ -47,17 +47,15 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
     <div class="mb-3">
         <div class="row g-0">
             <div class="col pe-2">
-                <label for="map_settings_heatmap_show_tooltips">
-                    {{ __('view_common.forms.mapsettings.show_heatmap_tooltips') }}
-                    <i class="fas fa-info-circle"
-                       data-bs-toggle="tooltip"
-                       title="{{ __('view_common.forms.mapsettings.show_heatmap_tooltips_title') }}"></i>
-                </label>
-            </div>
-        </div>
-        <div class="row g-0">
-            <div class="col pe-2">
-                {{ html()->checkbox('map_settings_heatmap_show_tooltips', $mapHeatmapShowTooltips, 1)->id('map_settings_heatmap_show_tooltips')->class('form-check-input') }}
+                <div class="form-check">
+                    {{ html()->checkbox('map_settings_heatmap_show_tooltips', $mapHeatmapShowTooltips, 1)->id('map_settings_heatmap_show_tooltips')->class('form-check-input') }}
+                    <label for="map_settings_heatmap_show_tooltips" class="form-check-label">
+                        {{ __('view_common.forms.mapsettings.show_heatmap_tooltips') }}
+                        <i class="fas fa-info-circle"
+                           data-bs-toggle="tooltip"
+                           title="{{ __('view_common.forms.mapsettings.show_heatmap_tooltips_title') }}"></i>
+                    </label>
+                </div>
             </div>
         </div>
     </div>
@@ -161,17 +159,15 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
     <div class="mb-3">
         <div class="row g-0">
             <div class="col pe-2">
-                <label for="map_settings_enemy_aggressiveness_border">
-                    {{ __('view_common.forms.mapsettings.show_aggressiveness_border') }}
-                    <i class="fas fa-info-circle"
-                       data-bs-toggle="tooltip"
-                       title="{{ __('view_common.forms.mapsettings.show_aggressiveness_border_title') }}"></i>
-                </label>
-            </div>
-        </div>
-        <div class="row g-0">
-            <div class="col pe-2">
-                {{ html()->checkbox('map_settings_enemy_aggressiveness_border', $mapEnemyAggressivenessBorder, 1)->id('map_settings_enemy_aggressiveness_border')->class('form-check-input') }}
+                <div class="form-check">
+                    {{ html()->checkbox('map_settings_enemy_aggressiveness_border', $mapEnemyAggressivenessBorder, 1)->id('map_settings_enemy_aggressiveness_border')->class('form-check-input') }}
+                    <label for="map_settings_enemy_aggressiveness_border" class="form-check-label">
+                        {{ __('view_common.forms.mapsettings.show_aggressiveness_border') }}
+                        <i class="fas fa-info-circle"
+                           data-bs-toggle="tooltip"
+                           title="{{ __('view_common.forms.mapsettings.show_aggressiveness_border_title') }}"></i>
+                    </label>
+                </div>
             </div>
         </div>
     </div>
@@ -180,19 +176,17 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
     <div class="mb-3">
         <div class="row g-0">
             <div class="col pe-2">
-                <label for="map_settings_enemy_dangerous_border">
-                    {{ __('view_common.forms.mapsettings.highlight_dangerous_enemies') }}
-                    <i class="fas fa-info-circle"
-                       data-bs-toggle="tooltip"
-                       title="{{ __('view_common.forms.mapsettings.highlight_dangerous_enemies_title') }}">
+                <div class="form-check">
+                    {{ html()->checkbox('map_settings_enemy_dangerous_border', $mapEnemyDangerousBorder, 1)->id('map_settings_enemy_dangerous_border')->class('form-check-input') }}
+                    <label for="map_settings_enemy_dangerous_border" class="form-check-label">
+                        {{ __('view_common.forms.mapsettings.highlight_dangerous_enemies') }}
+                        <i class="fas fa-info-circle"
+                           data-bs-toggle="tooltip"
+                           title="{{ __('view_common.forms.mapsettings.highlight_dangerous_enemies_title') }}">
 
-                    </i>
-                </label>
-            </div>
-        </div>
-        <div class="row g-0">
-            <div class="col pe-2">
-                {{ html()->checkbox('map_settings_enemy_dangerous_border', $mapEnemyDangerousBorder, 1)->id('map_settings_enemy_dangerous_border')->class('form-check-input') }}
+                        </i>
+                    </label>
+                </div>
             </div>
         </div>
     </div>

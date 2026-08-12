@@ -37,8 +37,10 @@ $gameVersionsSelect = $allGameVersions
 </div>
 
 <div class="mb-3">
-    {{ html()->label(__('view_common.modal.mappingversion.facade_enabled'), 'map_mapping_version_facade_enabled') }}
-    {{ html()->checkbox('facade_enabled', $mappingVersion->facade_enabled, 1)->id('map_mapping_version_facade_enabled')->class('form-check-input') }}
+    <div class="form-check">
+        {{ html()->checkbox('facade_enabled', $mappingVersion->facade_enabled, 1)->id('map_mapping_version_facade_enabled')->class('form-check-input') }}
+        {{ html()->label(__('view_common.modal.mappingversion.facade_enabled'), 'map_mapping_version_facade_enabled')->class('form-check-label') }}
+    </div>
 </div>
 
 <div class="mb-3">
