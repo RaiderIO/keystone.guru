@@ -15361,8 +15361,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -128.3343,
-        "lng": 255.9559,
+        "lat": -128.33,
+        "lng": 255.96,
         "kill_priority": null
     },
     {
@@ -15387,8 +15387,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -172.1298,
-        "lng": 277.8234,
+        "lat": -172.13,
+        "lng": 277.82,
         "kill_priority": null
     },
     {
@@ -15465,8 +15465,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -219.6792,
-        "lng": 224.8426,
+        "lat": -219.68,
+        "lng": 224.84,
         "kill_priority": null
     },
     {
@@ -15491,8 +15491,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -170.4464,
-        "lng": 150.7963,
+        "lat": -170.45,
+        "lng": 150.8,
         "kill_priority": null
     },
     {
@@ -15907,8 +15907,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -214.4103,
-        "lng": 224.1474,
+        "lat": -214.41,
+        "lng": 224.15,
         "kill_priority": null
     },
     {
@@ -17025,8 +17025,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -112.7391,
-        "lng": 163.6098,
+        "lat": -112.74,
+        "lng": 163.61,
         "kill_priority": null
     },
     {
@@ -17051,8 +17051,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -119.0906,
-        "lng": 159.7914,
+        "lat": -119.09,
+        "lng": 159.79,
         "kill_priority": null
     }
 ]

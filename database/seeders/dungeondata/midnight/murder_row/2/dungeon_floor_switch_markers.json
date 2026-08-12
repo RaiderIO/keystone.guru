@@ -80,8 +80,8 @@
         "linked_dungeon_floor_switch_marker_id": 3272,
         "direction": null,
         "hidden_in_facade": false,
-        "lat": -171.75,
-        "lng": 297.5
+        "lat": -51.19,
+        "lng": 293.65
     },
     {
         "id": 3274,
@@ -92,7 +92,7 @@
         "linked_dungeon_floor_switch_marker_id": 3275,
         "direction": null,
         "hidden_in_facade": false,
-        "lat": -209.25,
-        "lng": 184.25
+        "lat": -179.67,
+        "lng": 116.88
     }
 ]
