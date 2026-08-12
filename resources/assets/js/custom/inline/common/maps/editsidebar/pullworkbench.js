@@ -179,15 +179,21 @@ class PullWorkBench extends Signalable {
          * Code to prevent calling refreshTooltips too often
          */
         let $killAreaLabel = $(`#map_killzonessidebar_killzone_kill_area_label`);
+        let $killAreaButton = $(`#map_killzonessidebar_killzone_has_killzone`);
+        let $killAreaIcon = $(`#map_killzonessidebar_killzone_has_killzone_icon`);
 
         let resultMessage;
         // Set and is currently 0
         if (this.killZone.hasKillArea()) {
             // It was not, update it
             resultMessage = lang.get('js.pull_workbench_remove_kill_area_label');
+            $killAreaButton.removeClass('btn-primary').addClass('btn-danger');
+            $killAreaIcon.removeClass('fa-bullseye').addClass('fa-ban');
         } else {
             // Default
             resultMessage = lang.get('js.pull_workbench_add_kill_area_label');
+            $killAreaButton.removeClass('btn-danger').addClass('btn-primary');
+            $killAreaIcon.removeClass('fa-ban').addClass('fa-bullseye');
         }
 
         $killAreaLabel.attr('title', resultMessage).refreshTooltips();

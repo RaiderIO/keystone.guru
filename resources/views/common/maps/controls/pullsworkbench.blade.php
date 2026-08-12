@@ -56,7 +56,7 @@ $spellsSelect = $spellsSelect->mapWithKeys(static fn(Collection $spells, string 
                  data-bs-toggle="tooltip" title="">
                 <button id="map_killzonessidebar_killzone_has_killzone"
                         class="btn btn-primary" data-bs-toggle="button" aria-pressed="false">
-                    <i class="fas fa-bullseye"></i>
+                    <i id="map_killzonessidebar_killzone_has_killzone_icon" class="fas fa-bullseye"></i>
                 </button>
             </div>
         </div>
