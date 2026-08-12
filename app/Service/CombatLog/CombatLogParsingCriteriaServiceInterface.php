@@ -6,13 +6,15 @@ use App\Models\CombatLog\CombatLogParsingCriterion;
 use App\Models\Interfaces\CombatLogCriterionModelInterface;
 use App\Models\Season;
 use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
+use App\Service\CombatLog\Dtos\KeyLevelBand;
 use Illuminate\Support\Collection;
 
 interface CombatLogParsingCriteriaServiceInterface
 {
     /**
      * Returns true if ALL given criteria counts for today are below their configured thresholds
-     * for the given combat log version.
+     * for the given combat log version. Criteria in the top band are always parseable: those runs
+     * bypass the budgets entirely.
      *
      * Note: call recordParsed() immediately when this returns true (at webhook accept time,
      * not after processing) so concurrent requests see updated counts.
@@ -52,12 +54,13 @@ interface CombatLogParsingCriteriaServiceInterface
     public function getAllModelsForCriteria(string $modelClass, Season $season): Collection;
 
     /**
-     * Returns all models from getAllModelsForCriteria() that are still eligible for polling today:
-     * models with no row yet (implicit count = 0) and models with count < threshold.
-     * Models with count >= threshold are excluded.
+     * Returns all models from getAllModelsForCriteria() that are still eligible for polling today
+     * in the given band: models with no row yet for that band (implicit count = 0) and models with
+     * count < threshold. Models with count >= threshold are excluded, and every model is eligible
+     * in the top band.
      *
      * @param  class-string<CombatLogCriterionModelInterface>    $modelClass
      * @return Collection<int, CombatLogCriterionModelInterface>
      */
-    public function getModelsEligibleForPolling(int $combatLogVersion, string $modelClass, Season $season): Collection;
+    public function getModelsEligibleForPolling(int $combatLogVersion, string $modelClass, Season $season, KeyLevelBand $band): Collection;
 }

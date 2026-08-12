@@ -22,10 +22,20 @@ class CombatLogParsingCriterionFactory extends Factory
             'combat_log_version' => CombatLogVersion::RETAIL_12_0_5,
             'model_class'        => Dungeon::class,
             'model_id'           => 1,
+            'mythic_level_min'   => 2,
+            'mythic_level_max'   => 6,
             'date'               => Carbon::now()->toDateString(),
             'count'              => 0,
             'threshold'          => 100,
         ];
+    }
+
+    public function forBand(int $mythicLevelMin, ?int $mythicLevelMax): self
+    {
+        return $this->state([
+            'mythic_level_min' => $mythicLevelMin,
+            'mythic_level_max' => $mythicLevelMax,
+        ]);
     }
 
     public function forDungeon(int $dungeonId, int $combatLogVersion = CombatLogVersion::RETAIL_12_0_5): self

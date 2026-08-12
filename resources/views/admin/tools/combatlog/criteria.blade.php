@@ -38,47 +38,66 @@
                         <?php $modelCriteria = $versionCriteria->where('model_class', $modelClass); ?>
                         @if($modelCriteria->isNotEmpty())
                             <h4 class="mt-3">{{ class_basename($modelClass) }}</h4>
-                            @foreach($modelCriteria as $criterion)
+                            @foreach($modelCriteria->groupBy('mythic_level_min') as $bandCriteria)
                                 @php
-                                    /** @var CombatLogCriterionModelInterface|null $model */
-                                    $model     = $modelsById[$modelClass]->get($criterion->model_id);
-                                    $label     = $model?->getName() ?? sprintf('#%d', $criterion->model_id);
-                                    $imageLink = $model?->getImageLink();
-                                    $pct       = $criterion->threshold > 0 ? min(100, round($criterion->count / $criterion->threshold * 100)) : 0;
+                                    /** @var CombatLogParsingCriterion $firstOfBand */
+                                    $firstOfBand = $bandCriteria->first();
+                                    $isTopBand   = $firstOfBand->isTopBand();
                                 @endphp
-                                <div class="d-flex align-items-center mb-2">
-                                    @if($imageLink !== null)
-                                        <img src="{{ $imageLink }}" alt="{{ $label }}" style="height: 48px; width: auto; object-fit: cover;" class="me-3 rounded flex-shrink-0">
-                                    @endif
-                                    <div class="flex-grow-1">
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <span>{{ $label }}</span>
-                                            <div class="d-flex align-items-center ms-3" style="gap: 4px;">
-                                                <small class="text-muted">{{ $criterion->count }} /</small>
-                                                <input
-                                                    type="number"
-                                                    name="thresholds[{{ $criterion->id }}]"
-                                                    value="{{ $criterion->threshold }}"
-                                                    min="1"
-                                                    class="form-control form-control-sm"
-                                                    style="width: 70px;"
-                                                >
+                                <h5 class="mt-3 text-muted">
+                                    {{ $isTopBand
+                                        ? __('view_admin.tools.combatlog.criteria.band_top', ['band' => $firstOfBand->getBandName()])
+                                        : __('view_admin.tools.combatlog.criteria.band', ['band' => $firstOfBand->getBandName()]) }}
+                                </h5>
+                                @foreach($bandCriteria as $criterion)
+                                    @php
+                                        /** @var CombatLogCriterionModelInterface|null $model */
+                                        $model     = $modelsById[$modelClass]->get($criterion->model_id);
+                                        $label     = $model?->getName() ?? sprintf('#%d', $criterion->model_id);
+                                        $imageLink = $model?->getImageLink();
+                                        $pct       = $criterion->threshold > 0 ? min(100, round($criterion->count / $criterion->threshold * 100)) : 0;
+                                    @endphp
+                                    <div class="d-flex align-items-center mb-2">
+                                        @if($imageLink !== null)
+                                            <img src="{{ $imageLink }}" alt="{{ $label }}" style="height: 48px; width: auto; object-fit: cover;" class="me-3 rounded flex-shrink-0">
+                                        @endif
+                                        <div class="flex-grow-1">
+                                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                                <span>{{ $label }}</span>
+                                                <div class="d-flex align-items-center ms-3" style="gap: 4px;">
+                                                    @if($isTopBand)
+                                                        {{-- The top band is always parsed, so it has no threshold to configure --}}
+                                                        <small class="text-muted">{{ __('view_admin.tools.combatlog.criteria.parsed_count', ['count' => $criterion->count]) }}</small>
+                                                    @else
+                                                        <small class="text-muted">{{ $criterion->count }} /</small>
+                                                        <input
+                                                            type="number"
+                                                            name="thresholds[{{ $criterion->id }}]"
+                                                            value="{{ $criterion->threshold }}"
+                                                            min="1"
+                                                            class="form-control form-control-sm"
+                                                            style="width: 70px;"
+                                                        >
+                                                    @endif
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="progress">
-                                            <div
-                                                class="progress-bar {{ $criterion->count >= $criterion->threshold ? 'bg-success' : '' }}"
-                                                role="progressbar"
-                                                style="width: {{ $pct }}%;"
-                                                aria-valuenow="{{ $criterion->count }}"
-                                                aria-valuemin="0"
-                                                aria-valuemax="{{ $criterion->threshold }}"
-                                            >
-                                                {{ $pct }}%
-                                            </div>
+                                            @unless($isTopBand)
+                                                <div class="progress">
+                                                    <div
+                                                        class="progress-bar {{ $criterion->count >= $criterion->threshold ? 'bg-success' : '' }}"
+                                                        role="progressbar"
+                                                        style="width: {{ $pct }}%;"
+                                                        aria-valuenow="{{ $criterion->count }}"
+                                                        aria-valuemin="0"
+                                                        aria-valuemax="{{ $criterion->threshold }}"
+                                                    >
+                                                        {{ $pct }}%
+                                                    </div>
+                                                </div>
+                                            @endunless
                                         </div>
                                     </div>
-                                </div>
+                                @endforeach
                             @endforeach
                         @endif
                     @endforeach

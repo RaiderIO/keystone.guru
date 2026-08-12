@@ -11,8 +11,10 @@ use App\Models\Dungeon;
 use App\Models\Interfaces\CombatLogCriterionModelInterface;
 use App\Models\Season;
 use App\Service\CombatLog\CombatLogParsingCriteriaServiceInterface;
+use App\Service\CombatLog\CombatLogPollingBandServiceInterface;
 use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
 use App\Service\CombatLog\Dtos\CombatLogRunContext;
+use App\Service\CombatLog\Dtos\KeyLevelBand;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRun;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
@@ -29,6 +31,7 @@ class PollCombatLogRunsCommand extends Command
 
     public function __construct(
         private readonly CombatLogParsingCriteriaServiceInterface $criteriaService,
+        private readonly CombatLogPollingBandServiceInterface     $bandService,
         private readonly RaiderIOApiServiceInterface              $raiderIOApiService,
         private readonly SeasonServiceInterface                   $seasonService,
     ) {
@@ -48,26 +51,17 @@ class PollCombatLogRunsCommand extends Command
         $combatLogVersion = array_key_last(CombatLogVersion::RETAIL_ALL);
 
         $windowDays      = (int)config('keystoneguru.raider_io.combat_log_polling.completed_at_window_days');
-        $mythicLevelMin  = (int)config('keystoneguru.raider_io.combat_log_polling.mythic_level_min');
         $limit           = (int)config('keystoneguru.raider_io.combat_log_polling.limit');
         $completedAtFrom = Carbon::now()->subDays($windowDays);
 
-        $allModelsByClass      = [];
-        $eligibleModelsByClass = [];
-        $criteriaSummary       = [];
-
-        foreach (array_keys(CombatLogParsingCriterion::VALID_CRITERIA) as $modelClass) {
-            $allModelsByClass[$modelClass]      = $this->criteriaService->getAllModelsForCriteria($modelClass, $season);
-            $eligibleModelsByClass[$modelClass] = $this->criteriaService->getModelsEligibleForPolling($combatLogVersion, $modelClass, $season);
-
-            $shortClass        = class_basename($modelClass);
-            $allCount          = $allModelsByClass[$modelClass]->count();
-            $eligibleCount     = $eligibleModelsByClass[$modelClass]->count();
-            $criteriaSummary[] = sprintf('%s=%d/%d eligible', $shortClass, $eligibleCount, $allCount);
-        }
+        // Only one band is polled per hour: polling all of them every hour would multiply the
+        // number of Raider.IO calls by the band count for no extra coverage.
+        $spreadBand = $this->bandService->getSpreadBandForHour($season, Carbon::now()->hour);
+        $topBand    = $this->bandService->getTopBand($season);
 
         $force = (bool)$this->option('force');
 
+        /** @var array<int, true> $existingRunIds */
         $existingRunIds = $force ? [] : ParsedCombatLog::query()
             ->whereNotNull('run_id')
             ->pluck('run_id')
@@ -75,35 +69,98 @@ class PollCombatLogRunsCommand extends Command
             ->all();
 
         $this->info(sprintf(
-            'combatlog:pollruns — season=%s version=%d window=%dd min_level=%d limit=%d existing_parsed=%d force=%s | %s',
+            'combatlog:pollruns — season=%s version=%d window=%dd limit=%d existing_parsed=%d force=%s | bands=[%s] this_hour=%s top=%s',
             $season->name,
             $combatLogVersion,
             $windowDays,
-            $mythicLevelMin,
             $limit,
             count($existingRunIds),
             $force ? 'yes' : 'no',
-            implode(', ', $criteriaSummary),
+            implode(', ', array_map(strval(...), $this->bandService->getSpreadBands($season))),
+            $spreadBand === null ? 'none' : (string)$spreadBand,
+            (string)$topBand,
         ));
 
-        if (collect($eligibleModelsByClass)->every(fn(Collection $c) => $c->isEmpty())) {
-            $this->warn('combatlog:pollruns — all criteria at threshold, nothing to poll');
-
-            return self::SUCCESS;
-        }
+        $dispatchCounts = [
+            'dispatched'       => 0,
+            'skippedParsed'    => 0,
+            'skippedNoDungeon' => 0,
+        ];
 
         /** @var Collection<int|string, Dungeon> $dungeonsByChallengeModeId */
-        $dungeonsByChallengeModeId = $allModelsByClass[Dungeon::class]->keyBy('challenge_mode_id');
+        $dungeonsByChallengeModeId = $this->criteriaService->getAllModelsForCriteria(Dungeon::class, $season)
+            ->keyBy('challenge_mode_id');
         /** @var Collection<int|string, CharacterClassSpecialization> $allSpecsByBlizzardId */
-        $allSpecsByBlizzardId = $allModelsByClass[CharacterClassSpecialization::class]->keyBy('specialization_id');
+        $allSpecsByBlizzardId = $this->criteriaService->getAllModelsForCriteria(CharacterClassSpecialization::class, $season)
+            ->keyBy('specialization_id');
 
-        $totalDispatched       = 0;
-        $totalSkippedParsed    = 0;
-        $totalSkippedNoDungeon = 0;
+        if ($spreadBand !== null) {
+            $this->pollSpreadBand(
+                $season,
+                $combatLogVersion,
+                $spreadBand,
+                $completedAtFrom,
+                $limit,
+                $dungeonsByChallengeModeId,
+                $allSpecsByBlizzardId,
+                $existingRunIds,
+                $force,
+                $dispatchCounts,
+            );
+        }
+
+        $this->pollTopBand(
+            $season,
+            $combatLogVersion,
+            $topBand,
+            $completedAtFrom,
+            $limit,
+            $dungeonsByChallengeModeId,
+            $allSpecsByBlizzardId,
+            $existingRunIds,
+            $force,
+            $dispatchCounts,
+        );
+
+        $this->info(sprintf(
+            'combatlog:pollruns — done dispatched=%d skipped_parsed=%d skipped_no_dungeon=%d',
+            $dispatchCounts['dispatched'],
+            $dispatchCounts['skippedParsed'],
+            $dispatchCounts['skippedNoDungeon'],
+        ));
+
+        return self::SUCCESS;
+    }
+
+    /**
+     * Polls each dungeon and each spec that still has budget left in this hour's band.
+     *
+     * @param Collection<string|int, Dungeon>                      $dungeonsByChallengeModeId
+     * @param Collection<string|int, CharacterClassSpecialization> $allSpecsByBlizzardId
+     * @param array<int, true>                                     $existingRunIds
+     * @param array<string, int>                                   $dispatchCounts
+     */
+    private function pollSpreadBand(
+        Season       $season,
+        int          $combatLogVersion,
+        KeyLevelBand $band,
+        Carbon       $completedAtFrom,
+        int          $limit,
+        Collection   $dungeonsByChallengeModeId,
+        Collection   $allSpecsByBlizzardId,
+        array        &        $existingRunIds,
+        bool         $force,
+        array        &        $dispatchCounts,
+    ): void {
+        $criteriaSummary = [];
 
         foreach (array_keys(CombatLogParsingCriterion::VALID_CRITERIA) as $modelClass) {
-            foreach ($eligibleModelsByClass[$modelClass] as $model) {
-                $primaryCheck = new CombatLogParsingCriterionCheck($modelClass, $model->getKey());
+            $eligibleModels = $this->criteriaService->getModelsEligibleForPolling($combatLogVersion, $modelClass, $season, $band);
+
+            $criteriaSummary[] = sprintf('%s=%d eligible', class_basename($modelClass), $eligibleModels->count());
+
+            foreach ($eligibleModels as $model) {
+                $primaryCheck = new CombatLogParsingCriterionCheck($modelClass, $model->getKey(), $band);
 
                 // Re-evaluate before each API call: prior dispatches may have already
                 // recorded enough runs for this criterion via recordParsed().
@@ -111,65 +168,108 @@ class PollCombatLogRunsCommand extends Command
                     continue;
                 }
 
-                $filter   = $this->buildFilterForCriterion($modelClass, $model, $season, $completedAtFrom, $mythicLevelMin, $limit);
+                $filter   = $this->buildFilterForCriterion($modelClass, $model, $season, $band, $completedAtFrom, $limit);
                 $response = $this->raiderIOApiService->searchAdvancedRuns($filter);
 
                 foreach ($response->runs as $run) {
                     if (isset($existingRunIds[$run->id])) {
-                        $totalSkippedParsed++;
+                        $dispatchCounts['skippedParsed']++;
                         continue;
                     }
 
-                    if (!$this->criteriaService->shouldParse($combatLogVersion, [$primaryCheck])) { // @phpstan-ignore booleanNot.alwaysFalse
+                    if (!$this->criteriaService->shouldParse($combatLogVersion, [$primaryCheck])) {
                         break;
                     }
 
-                    $dispatched = $this->dispatchRun($run, $season, $combatLogVersion, $dungeonsByChallengeModeId, $allSpecsByBlizzardId, $existingRunIds, $force);
-
-                    if ($dispatched) {
-                        $totalDispatched++;
-                    } else {
-                        $totalSkippedNoDungeon++;
-                    }
+                    $this->dispatchRun($run, $season, $combatLogVersion, $band, $dungeonsByChallengeModeId, $allSpecsByBlizzardId, $existingRunIds, $force, $dispatchCounts);
                 }
             }
         }
 
-        $this->info(sprintf(
-            'combatlog:pollruns — done dispatched=%d skipped_parsed=%d skipped_no_dungeon=%d',
-            $totalDispatched,
-            $totalSkippedParsed,
-            $totalSkippedNoDungeon,
-        ));
-
-        return self::SUCCESS;
+        $this->info(sprintf('combatlog:pollruns — band %s | %s', $band, implode(', ', $criteriaSummary)));
     }
 
     /**
-     * @param  Season                                               $season
-     * @param  array<int, true>                                     $existingRunIds
-     * @param  Collection<string|int, Dungeon>                      $dungeonsByChallengeModeId
-     * @param  Collection<string|int, CharacterClassSpecialization> $allSpecsByBlizzardId
-     * @return bool                                                 Whether the run was dispatched (false means the dungeon was not found)
+     * Polls the highest keys of the season in a single query across all dungeons. These runs are
+     * always dispatched: no budget is consulted, and they are counted against their own band so
+     * they cannot eat into the budgets of the spread bands.
+     *
+     * @param Collection<string|int, Dungeon>                      $dungeonsByChallengeModeId
+     * @param Collection<string|int, CharacterClassSpecialization> $allSpecsByBlizzardId
+     * @param array<int, true>                                     $existingRunIds
+     * @param array<string, int>                                   $dispatchCounts
+     */
+    private function pollTopBand(
+        Season       $season,
+        int          $combatLogVersion,
+        KeyLevelBand $band,
+        Carbon       $completedAtFrom,
+        int          $limit,
+        Collection   $dungeonsByChallengeModeId,
+        Collection   $allSpecsByBlizzardId,
+        array        &        $existingRunIds,
+        bool         $force,
+        array        &        $dispatchCounts,
+    ): void {
+        $dispatchedBefore = $dispatchCounts['dispatched'];
+
+        $response = $this->raiderIOApiService->searchAdvancedRuns(new SearchAdvancedRunsFilter(
+            dungeon:         null,
+            season:          $season,
+            specs:           collect(),
+            completedAtFrom: $completedAtFrom,
+            completedAtTo:   null,
+            mythicLevelMin:  $band->min,
+            mythicLevelMax:  $band->max,
+            limit:           $limit,
+            offset:          0,
+        ));
+
+        foreach ($response->runs as $run) {
+            if (isset($existingRunIds[$run->id])) {
+                $dispatchCounts['skippedParsed']++;
+                continue;
+            }
+
+            $this->dispatchRun($run, $season, $combatLogVersion, $band, $dungeonsByChallengeModeId, $allSpecsByBlizzardId, $existingRunIds, $force, $dispatchCounts);
+        }
+
+        $this->info(sprintf(
+            'combatlog:pollruns — top band %s | available=%s dispatched=%d',
+            $band,
+            $response->total ?? '?',
+            $dispatchCounts['dispatched'] - $dispatchedBefore,
+        ));
+    }
+
+    /**
+     * @param array<int, true>                                     $existingRunIds
+     * @param Collection<string|int, Dungeon>                      $dungeonsByChallengeModeId
+     * @param Collection<string|int, CharacterClassSpecialization> $allSpecsByBlizzardId
+     * @param array<string, int>                                   $dispatchCounts
      */
     private function dispatchRun(
         SearchAdvancedRun $run,
         Season            $season,
         int               $combatLogVersion,
+        KeyLevelBand      $band,
         Collection        $dungeonsByChallengeModeId,
         Collection        $allSpecsByBlizzardId,
-        array            &             $existingRunIds,
-        bool              $force = false,
-    ): bool {
+        array             &             $existingRunIds,
+        bool              $force,
+        array             &             $dispatchCounts,
+    ): void {
         /** @var ?Dungeon $dungeon */
         $dungeon = $dungeonsByChallengeModeId->get($run->challengeModeId);
 
         if ($dungeon === null) {
-            return false;
+            $dispatchCounts['skippedNoDungeon']++;
+
+            return;
         }
 
-        $dungeonCriterion = new CombatLogParsingCriterionCheck(Dungeon::class, $dungeon->id);
-        $specCriteria     = $this->buildSpecCriteria($run->memberSpecIds, $allSpecsByBlizzardId);
+        $dungeonCriterion = new CombatLogParsingCriterionCheck(Dungeon::class, $dungeon->id, $band);
+        $specCriteria     = $this->buildSpecCriteria($run->memberSpecIds, $allSpecsByBlizzardId, $band);
 
         $this->criteriaService->recordParsed($combatLogVersion, array_merge([$dungeonCriterion], $specCriteria));
 
@@ -180,58 +280,45 @@ class PollCombatLogRunsCommand extends Command
 
         ProcessCombatLogSegments::dispatch($season, $run->id, $combatLogVersion, new CombatLogRunContext($run->mythicLevel, $run->affixes));
 
-        return true;
+        $dispatchCounts['dispatched']++;
     }
 
     /**
-     * @param  class-string                     $modelClass
-     * @param  CombatLogCriterionModelInterface $model
-     * @param  Season                           $season
-     * @param  Carbon                           $completedAtFrom
-     * @param  int                              $mythicLevelMin
-     * @param  int                              $limit
-     * @return SearchAdvancedRunsFilter
+     * @param class-string                     $modelClass
+     * @param CombatLogCriterionModelInterface $model
      */
     private function buildFilterForCriterion(
         string                           $modelClass,
         CombatLogCriterionModelInterface $model,
         Season                           $season,
+        KeyLevelBand                     $band,
         Carbon                           $completedAtFrom,
-        int                              $mythicLevelMin,
         int                              $limit,
     ): SearchAdvancedRunsFilter {
         if ($modelClass === Dungeon::class) {
             /** @var Dungeon $model */
-            return new SearchAdvancedRunsFilter(
-                dungeon:         $model,
-                season:          $season,
-                specs:           collect(),
-                completedAtFrom: $completedAtFrom,
-                completedAtTo:   null,
-                mythicLevelMin:  $mythicLevelMin,
-                limit:           $limit,
-                offset:          0,
-            );
-        }
-
-        if ($modelClass === CharacterClassSpecialization::class) {
-            /** @var CharacterClassSpecialization $model */
+            $dungeon = $model;
+            /** @var Collection<int, CharacterClassSpecialization> $specs */
+            $specs = collect();
+        } elseif ($modelClass === CharacterClassSpecialization::class) {
+            $dungeon = null;
             /** @var Collection<int, CharacterClassSpecialization> $specs */
             $specs = collect([$model]);
-
-            return new SearchAdvancedRunsFilter(
-                dungeon:         null,
-                season:          $season,
-                specs:           $specs,
-                completedAtFrom: $completedAtFrom,
-                completedAtTo:   null,
-                mythicLevelMin:  $mythicLevelMin,
-                limit:           $limit,
-                offset:          0,
-            );
+        } else {
+            throw new \UnexpectedValueException(sprintf('Unknown model class: %s', $modelClass));
         }
 
-        throw new \UnexpectedValueException(sprintf('Unknown model class: %s', $modelClass));
+        return new SearchAdvancedRunsFilter(
+            dungeon:         $dungeon,
+            season:          $season,
+            specs:           $specs,
+            completedAtFrom: $completedAtFrom,
+            completedAtTo:   null,
+            mythicLevelMin:  $band->min,
+            mythicLevelMax:  $band->max,
+            limit:           $limit,
+            offset:          0,
+        );
     }
 
     /**
@@ -239,7 +326,7 @@ class PollCombatLogRunsCommand extends Command
      * @param  Collection<int|string, CharacterClassSpecialization> $specsByBlizzardId
      * @return CombatLogParsingCriterionCheck[]
      */
-    private function buildSpecCriteria(array $memberSpecIds, Collection $specsByBlizzardId): array
+    private function buildSpecCriteria(array $memberSpecIds, Collection $specsByBlizzardId, KeyLevelBand $band): array
     {
         $criteria = [];
 
@@ -248,7 +335,7 @@ class PollCombatLogRunsCommand extends Command
             $spec = $specsByBlizzardId->get($blizzardSpecId);
 
             if ($spec !== null) {
-                $criteria[] = new CombatLogParsingCriterionCheck(CharacterClassSpecialization::class, $spec->id);
+                $criteria[] = new CombatLogParsingCriterionCheck(CharacterClassSpecialization::class, $spec->id, $band);
             }
         }
 

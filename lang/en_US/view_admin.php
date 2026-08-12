@@ -739,6 +739,9 @@ return [
                 'version'             => 'Combat log version :version',
                 'section_dungeons'    => 'Dungeons',
                 'section_class_specs' => 'Class / Specializations',
+                'band'                => 'Key level :band',
+                'band_top'            => 'Key level :band (always parsed)',
+                'parsed_count'        => ':count parsed',
             ],
             'route' => [
                 'enemy_failures' => [
