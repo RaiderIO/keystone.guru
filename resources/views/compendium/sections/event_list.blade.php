@@ -49,8 +49,8 @@ $eventGlyph = static function (CombatLogNpcEvent|CombatLogSpellEvent $event): ar
 
     return match ($event->event_type) {
         CombatLogSpellEventType::SpellCreated => ['icon' => 'fas fa-plus', 'color' => 'text-info'],
-        CombatLogSpellEventType::PropertyChanged => ['icon' => 'fas fa-arrow-up', 'color' => 'text-warning'],
-        CombatLogSpellEventType::PropertyRemoved => ['icon' => 'fas fa-times', 'color' => 'text-danger'],
+        CombatLogSpellEventType::PropertyChanged => ['icon' => 'fas fa-plus', 'color' => 'text-success'],
+        CombatLogSpellEventType::PropertyRemoved => ['icon' => 'fas fa-minus', 'color' => 'text-danger'],
         CombatLogSpellEventType::SchoolRecorded => ['icon' => 'fas fa-plus', 'color' => 'text-info'],
     };
 };
