@@ -122,28 +122,32 @@ use Laravel\Pennant\Feature;
             ->reject(fn(DungeonRoute $route) => $heroRouteIds->contains($route->id))
             ->values();
         ?>
-        <div class="row mt-5 align-items-center discover_section_header">
-            <div class="col">
-                <h5 class="mb-0 text-center">
-                    {{ __('view_dungeonroute.discover.dungeon.overview.community_routes') }}
-                </h5>
+        <?php // When every route already fills the hero band above, an empty "no routes" leaderboard here would be misleading ?>
+        @if($leaderboardRoutes->isNotEmpty() || $heroRouteIds->isEmpty())
+            <div class="row mt-5 align-items-center discover_section_header">
+                <div class="col">
+                    <h5 class="mb-0 text-center">
+                        {{ __('view_dungeonroute.discover.dungeon.overview.community_routes') }}
+                    </h5>
+                </div>
             </div>
-        </div>
-        <div class="row mt-2">
-            <div class="col">
-                @include('common.dungeonroute.leaderboard', [
-                    'dungeonroutes' => $leaderboardRoutes,
-                    'startRank' => $startRank,
-                    'cache' => true,
-                    'pullForcesResolver' => $pullForcesResolver,
-                ])
+            <div class="row mt-2">
+                <div class="col">
+                    @include('common.dungeonroute.leaderboard', [
+                        'dungeonroutes' => $leaderboardRoutes,
+                        'startRank' => $startRank,
+                        'cache' => true,
+                        'pullForcesResolver' => $pullForcesResolver,
+                    ])
+                </div>
             </div>
-        </div>
+        @endif
 
         @if($paginator->hasPages())
             <div class="row mt-4">
                 <div class="col d-flex justify-content-center discover_pagination">
-                    {{ $paginator->links() }}
+                    <?php // A compact window: the full page list otherwise overflows phone viewports ?>
+                    {{ $paginator->onEachSide(1)->links() }}
                 </div>
             </div>
         @endif

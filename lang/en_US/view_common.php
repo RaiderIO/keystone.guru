@@ -60,6 +60,9 @@ return [
         'cardlist' => [
             'no_dungeonroutes' => 'No routes found',
         ],
+        'leaderboard' => [
+            'create_first_route' => 'Create the first route',
+        ],
         'rating' => [
             'nr_of_votes' => '%s vote(s)',
         ],

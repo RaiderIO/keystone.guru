@@ -38,6 +38,28 @@ final class CardPosterTest extends PublicTestCase
     }
 
     #[Test]
+    public function render_givenRoute_returnsTitleAttributeOnTitleLink(): void
+    {
+        // Arrange
+        $dungeonroute = DungeonRoute::factory()->create([
+            'title' => 'A very long route title that the poster card clamps to two lines',
+        ]);
+
+        try {
+            // Act
+            $html = view('common.dungeonroute.cardposter', [
+                'dungeonroute' => $dungeonroute,
+                'cache'        => false,
+            ])->render();
+
+            // Assert - the visible title clamps to two lines, so the link carries the full text as a title attribute
+            $this->assertStringContainsString(sprintf('title="%s"', e($dungeonroute->title)), $html);
+        } finally {
+            $dungeonroute->delete();
+        }
+    }
+
+    #[Test]
     public function render_givenRatedRoute_returnsRatingStars(): void
     {
         // Arrange
