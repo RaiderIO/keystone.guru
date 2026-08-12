@@ -202,6 +202,89 @@ final class NpcCompendiumControllerActivityTest extends PublicTestCase
     }
 
     #[Test]
+    public function activityDay_givenAddedNpcAndSpellEvents_rendersSameGlyph(): void
+    {
+        // Arrange - a "something started applying" event from each of the NPC and spell tables,
+        // on the same unique day, must render with the same icon/color regardless of which table
+        // the event came from
+        $uniqueDate       = '2025-07-21';
+        $npcId            = DB::table('npc_dungeons')->where('dungeon_id', $this->dungeon->id)->value('npc_id');
+        $characteristicId = Characteristic::query()->orderBy('id')->value('id');
+
+        $npcEventId = CombatLogNpcEvent::query()->insertGetId([
+            'npc_id'      => $npcId,
+            'event_type'  => CombatLogNpcEventType::CharacteristicAdded->value,
+            'model_class' => Characteristic::class,
+            'model_id'    => $characteristicId,
+            'created_at'  => $uniqueDate . ' 12:00:00',
+        ]);
+        $spellEventId = CombatLogSpellEvent::query()->insertGetId([
+            'spell_id'   => self::TEST_SPELL_ID,
+            'event_type' => CombatLogSpellEventType::PropertyChanged->value,
+            'property'   => SpellProperty::Aura->value,
+            'created_at' => $uniqueDate . ' 12:01:00',
+        ]);
+
+        try {
+            // Act
+            $response = $this->get(route('compendium.activity.day', ['dungeon' => $this->dungeon, 'date' => $uniqueDate]));
+
+            // Assert - both rows use the "added" glyph (fa-plus, text-success) and none of them use
+            // the old spell-only fa-arrow-up/text-warning glyph
+            $response->assertOk();
+            $response->assertSeeInOrder([
+                '<span class="compendium_log_icon text-success">',
+                '<i class="fas fa-plus"></i>',
+            ], false);
+            $response->assertDontSee('fa-arrow-up');
+        } finally {
+            CombatLogNpcEvent::query()->where('id', $npcEventId)->delete();
+            CombatLogSpellEvent::query()->where('id', $spellEventId)->delete();
+        }
+    }
+
+    #[Test]
+    public function activityDay_givenRemovedNpcAndSpellEvents_rendersSameGlyph(): void
+    {
+        // Arrange - a "something stopped applying" event from each of the NPC and spell tables, on
+        // the same unique day, must render with the same icon/color regardless of which table the
+        // event came from
+        $uniqueDate       = '2025-07-22';
+        $npcId            = DB::table('npc_dungeons')->where('dungeon_id', $this->dungeon->id)->value('npc_id');
+        $characteristicId = Characteristic::query()->orderBy('id')->value('id');
+
+        $npcEventId = CombatLogNpcEvent::query()->insertGetId([
+            'npc_id'      => $npcId,
+            'event_type'  => CombatLogNpcEventType::CharacteristicRemoved->value,
+            'model_class' => Characteristic::class,
+            'model_id'    => $characteristicId,
+            'created_at'  => $uniqueDate . ' 12:00:00',
+        ]);
+        $spellEventId = CombatLogSpellEvent::query()->insertGetId([
+            'spell_id'   => self::TEST_SPELL_ID,
+            'event_type' => CombatLogSpellEventType::PropertyRemoved->value,
+            'property'   => SpellProperty::Aura->value,
+            'created_at' => $uniqueDate . ' 12:01:00',
+        ]);
+
+        try {
+            // Act
+            $response = $this->get(route('compendium.activity.day', ['dungeon' => $this->dungeon, 'date' => $uniqueDate]));
+
+            // Assert - both rows use the same "removed" glyph (fa-minus, text-danger)
+            $response->assertOk();
+            $response->assertSeeInOrder([
+                '<span class="compendium_log_icon text-danger">',
+                '<i class="fas fa-minus"></i>',
+            ], false);
+            $response->assertDontSee('fa-times');
+        } finally {
+            CombatLogNpcEvent::query()->where('id', $npcEventId)->delete();
+            CombatLogSpellEvent::query()->where('id', $spellEventId)->delete();
+        }
+    }
+
+    #[Test]
     public function activityDay_givenInvalidDateFormat_returnsNotFound(): void
     {
         // Act
