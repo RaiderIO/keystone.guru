@@ -104,6 +104,7 @@ class Npc extends CacheModel implements MappingModelInterface
 
     protected $appends = [
         'enemy_portrait_url',
+        'wowhead_url',
     ];
 
     protected function casts(): array
@@ -138,6 +139,17 @@ class Npc extends CacheModel implements MappingModelInterface
     public function getEnemyPortraitUrlAttribute(): string
     {
         return sprintf('images/enemyportraits/%d.png', $this->id);
+    }
+
+    public function getWowheadUrlAttribute(): string
+    {
+        $result = sprintf('https://www.wowhead.com/npc=%d', $this->id);
+
+        if (!empty(__($this->name))) {
+            $result .= '/' . Str::slug(__($this->name));
+        }
+
+        return $result;
     }
 
     /**

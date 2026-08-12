@@ -183,6 +183,21 @@ final class NpcCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function show_givenValidNpc_seesWowheadLink(): void
+    {
+        // Arrange
+        $npc = Npc::with('classification')->first();
+        $this->assertNotNull($npc);
+
+        // Act
+        $response = $this->get(route('npc.compendium.show', $npc));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee($npc->wowhead_url, false);
+    }
+
+    #[Test]
     public function show_givenCorrectSlug_returnsOk(): void
     {
         // Arrange
