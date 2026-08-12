@@ -5,6 +5,7 @@ namespace Tests\Feature\Traits;
 use App\Models\Season;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use RuntimeException;
 
 /**
  * Hides every *seeded* upcoming season for the duration of a test.
@@ -17,10 +18,17 @@ use Illuminate\Support\Facades\DB;
  * assertions silently describe the seeded season instead, and "no season is advertised" cannot hold at all.
  *
  * Rather than chase the seeded dates, these tests take ownership of the upcoming-season set: every seeded
- * season that has not started yet is parked far in the future and deactivated, and restored afterwards.
+ * season that still counts as upcoming is parked far in the future and deactivated, then restored.
  */
 trait IsolatesSeededUpcomingSeasons
 {
+    /**
+     * Parked seasons are stamped with this exact start rather than a relative one, so a row that was left
+     * behind by a run that could not restore (a fatal error, a killed process) is recognisable as parked on
+     * the next run instead of being captured as if it were its own original value.
+     */
+    private const string PARKED_START = '2999-01-01 00:00:00';
+
     /** @var array<int, array{start: string, active: int}> */
     private array $parkedUpcomingSeasons = [];
 
@@ -32,12 +40,22 @@ trait IsolatesSeededUpcomingSeasons
     {
         $this->parkedUpcomingSeasons = [];
 
-        $upcomingSeasons = DB::table('seasons')
-            ->select(['id', 'start', 'active'])
-            ->where('start', '>', now()->toDateTimeString())
-            ->get();
+        // Registered before anything is parked, so a failure part-way through the loop below still restores
+        // what it managed to park. PHPUnit skips tearDown() entirely when setUp() throws, so this must not
+        // rely on a tearDown() override in the using class either.
+        $this->beforeApplicationDestroyed(fn() => $this->restoreSeededUpcomingSeasons());
 
-        foreach ($upcomingSeasons as $season) {
+        foreach ($this->getUpcomingSeasons() as $season) {
+            if ($season->start === self::PARKED_START) {
+                throw new RuntimeException(sprintf(
+                    'Season %d is still parked by an earlier test run that could not restore it; its real start ' .
+                    'and active flag are unrecoverable. Re-seed the test database (php artisan db:seed) before ' .
+                    'running this suite again.',
+                    $season->id,
+                ));
+            }
+
+            // Recorded before the update, so the restore covers this row even if the update itself throws
             $this->parkedUpcomingSeasons[(int)$season->id] = [
                 'start'  => $season->start,
                 'active' => (int)$season->active,
@@ -45,19 +63,23 @@ trait IsolatesSeededUpcomingSeasons
 
             DB::table('seasons')
                 ->where('id', $season->id)
-                // Far enough out that it cannot win "soonest upcoming" against any date a test picks
-                ->update(['start' => now()->addYears(50)->toDateTimeString(), 'active' => 0]);
+                ->update(['start' => self::PARKED_START, 'active' => 0]);
         }
 
         $this->flushSeededSeasonCaches();
     }
 
     /**
-     * Restores the parked seasons. Call from tearDown() - the test database persists between runs, so
-     * leaving a season parked would corrupt every later test rather than just this one.
+     * Restores the parked seasons. Runs automatically via beforeApplicationDestroyed() - the test database
+     * persists between runs, so leaving a season parked would corrupt every later run rather than just this
+     * test.
      */
     protected function restoreSeededUpcomingSeasons(): void
     {
+        if ($this->parkedUpcomingSeasons === []) {
+            return;
+        }
+
         foreach ($this->parkedUpcomingSeasons as $seasonId => $attributes) {
             DB::table('seasons')->where('id', $seasonId)->update($attributes);
         }
@@ -65,6 +87,28 @@ trait IsolatesSeededUpcomingSeasons
         $this->parkedUpcomingSeasons = [];
 
         $this->flushSeededSeasonCaches();
+    }
+
+    /**
+     * Mirrors `Expansion::nextSeason()`, which treats a season as upcoming until its start plus the acting
+     * region's reset offset has passed - so a season stays "next" for up to ~3 days after its start date.
+     * Selecting on a plain `start > now()` instead would leave the season unparked, yet still winning
+     * `orderBy('start')->limit(1)` against the test's own season, for those few days only.
+     *
+     * The widest offset across all regions is used so no region is left un-isolated, and it is read from the
+     * table rather than hardcoded so seeding a new region cannot silently reopen that window.
+     *
+     * @return \Illuminate\Support\Collection<int, \stdClass>
+     */
+    private function getUpcomingSeasons(): \Illuminate\Support\Collection
+    {
+        $maxRegionOffsetHours = (int)DB::table('game_server_regions')
+            ->max(DB::raw('reset_day_offset * 24 + reset_hours_offset'));
+
+        return DB::table('seasons')
+            ->select(['id', 'start', 'active'])
+            ->whereRaw('DATE_ADD(`start`, INTERVAL ? hour) >= ?', [$maxRegionOffsetHours, now()])
+            ->get();
     }
 
     /**

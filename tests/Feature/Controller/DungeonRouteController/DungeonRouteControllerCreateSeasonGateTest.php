@@ -38,14 +38,6 @@ final class DungeonRouteControllerCreateSeasonGateTest extends DungeonRouteContr
         $this->hideSeededUpcomingSeasons();
     }
 
-    #[\Override]
-    protected function tearDown(): void
-    {
-        $this->restoreSeededUpcomingSeasons();
-
-        parent::tearDown();
-    }
-
     #[Test]
     public function create_givenAnInactiveUpcomingSeason_omitsItsDungeonOptgroup(): void
     {

@@ -40,14 +40,6 @@ final class CreateRouteFormComposerTest extends PublicTestCase
         $this->hideSeededUpcomingSeasons();
     }
 
-    #[\Override]
-    protected function tearDown(): void
-    {
-        $this->restoreSeededUpcomingSeasons();
-
-        parent::tearDown();
-    }
-
     #[Test]
     public function compose_givenAnActiveUpcomingSeason_offersItsNextSeason(): void
     {

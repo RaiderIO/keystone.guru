@@ -42,14 +42,6 @@ final class DungeonExploreControllerTest extends PublicTestCase
         $this->hideSeededUpcomingSeasons();
     }
 
-    #[\Override]
-    protected function tearDown(): void
-    {
-        $this->restoreSeededUpcomingSeasons();
-
-        parent::tearDown();
-    }
-
     #[Test]
     public function select_givenAnUpcomingSeason_opensOnTheCurrentSeasonsTab(): void
     {
