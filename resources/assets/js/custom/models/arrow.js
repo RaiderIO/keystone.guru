@@ -37,10 +37,23 @@ class Arrow extends Polyline {
         super(map, layer, {name: 'arrow', has_route_model_binding: true, ignore_mapping_version_suffix: true});
 
         this.label = 'Arrow';
-        this.layer.options.allowVertexCreationDuringEdit = false;
         this.decorator = null;
 
         this.setSynced(false);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    onLayerInit() {
+        console.assert(this instanceof Arrow, 'this is not an Arrow', this);
+        super.onLayerInit();
+
+        // An arrow is always exactly two vertices, so it opts out of the middle markers that
+        // Leaflet.draw uses to insert new ones. MapObjectGroup#setLayerToMapObject() hands the map
+        // object a brand new layer on every rebuild (floor switch, live session update), so this
+        // must be (re)applied per layer rather than once in the constructor (#3966).
+        this.layer.options.allowVertexCreationDuringEdit = false;
     }
 
     /**
@@ -74,4 +87,10 @@ class Arrow extends Polyline {
     toString() {
         return 'Arrow';
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = Arrow;
 }
