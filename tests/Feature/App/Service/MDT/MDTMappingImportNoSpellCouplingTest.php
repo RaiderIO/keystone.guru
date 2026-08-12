@@ -7,7 +7,9 @@ use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Entity\MDTNpc;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Npc\Npc;
 use App\Models\Npc\NpcDungeon;
+use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcHealth;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
@@ -61,8 +63,13 @@ final class MDTMappingImportNoSpellCouplingTest extends PublicTestCase
         $spellCountBefore        = Spell::query()->count();
         $spellDungeonCountBefore = SpellDungeon::query()->count();
 
-        // Unlike the spell tables, NpcHealth/NpcDungeon rows are a legitimate product of this import and are not
-        // scoped to (nor cascade-deleted by) a mapping version, so snapshot what exists to clean up anything new.
+        // Unlike the spell tables, the Npc/NpcHealth/NpcDungeon/NpcEnemyForces rows this import writes are a
+        // legitimate product of it and are not scoped to (nor cascade-deleted by) a mapping version, so
+        // snapshot what exists to clean up anything new. Today every MDT NPC of every dungeon is already
+        // seeded, so nothing is inserted at all - but that invariant breaks the moment an MDT bump introduces
+        // an NPC (#3980), and this test must not be the thing that leaves rows behind in the shared test DB
+        // when it does. A brand new NPC also gets NpcEnemyForces written into EVERY historical mapping version.
+        $preExistingNpcIds       = Npc::query()->whereIn('id', $mdtNpcIds)->pluck('id')->all();
         $preExistingNpcHealthIds = NpcHealth::query()
             ->where('game_version_id', $retailGameVersion->id)
             ->whereIn('npc_id', $mdtNpcIds)
@@ -112,6 +119,15 @@ final class MDTMappingImportNoSpellCouplingTest extends PublicTestCase
                 ->whereIn('npc_id', $mdtNpcIds)
                 ->whereNotIn('id', $preExistingNpcDungeonIds)
                 ->delete();
+
+            // Npc last: its dependents above are keyed by npc_id. Query-builder deletes throughout - Npc and
+            // NpcEnemyForces are SeederModels, whose ->delete() is silently refused on the model instance.
+            $insertedNpcIds = array_values(array_diff($mdtNpcIds, $preExistingNpcIds));
+
+            if ($insertedNpcIds !== []) {
+                NpcEnemyForces::query()->whereIn('npc_id', $insertedNpcIds)->delete();
+                Npc::query()->whereIn('id', $insertedNpcIds)->delete();
+            }
         }
     }
 
