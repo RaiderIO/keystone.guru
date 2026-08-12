@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Traits\IsolatesSeededUpcomingSeasons;
 
 /**
  * The Create Route dungeon-selection popup is composed by two separate view composers that both
@@ -19,6 +20,8 @@ use PHPUnit\Framework\Attributes\Test;
 #[Group('CreateRouteSeasonGate')]
 final class DungeonRouteControllerCreateSeasonGateTest extends DungeonRouteControllerCreateTestBase
 {
+    use IsolatesSeededUpcomingSeasons;
+
     #[\Override]
     protected function setUp(): void
     {
@@ -29,6 +32,18 @@ final class DungeonRouteControllerCreateSeasonGateTest extends DungeonRouteContr
         // ViewService caches the season it hands the composers for an hour in the 'tmp_file' store, which -
         // unlike the array store the tests run on - survives between test runs.
         Cache::store('tmp_file')->flush();
+
+        // These tests assert on which season's dungeons the popup offers, so a seeded upcoming season would
+        // contribute an optgroup of its own and answer for the one under test.
+        $this->hideSeededUpcomingSeasons();
+    }
+
+    #[\Override]
+    protected function tearDown(): void
+    {
+        $this->restoreSeededUpcomingSeasons();
+
+        parent::tearDown();
     }
 
     #[Test]

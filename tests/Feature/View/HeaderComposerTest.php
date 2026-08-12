@@ -11,6 +11,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Traits\IsolatesSeededUpcomingSeasons;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -23,6 +24,8 @@ use Tests\TestCases\PublicTestCase;
 #[Group('HeaderComposer')]
 final class HeaderComposerTest extends PublicTestCase
 {
+    use IsolatesSeededUpcomingSeasons;
+
     #[\Override]
     protected function setUp(): void
     {
@@ -34,6 +37,18 @@ final class HeaderComposerTest extends PublicTestCase
         // the array store the tests run on - survives between test runs. Seasons created below would otherwise be
         // invisible to the composer, or worse, stay visible to whatever runs next.
         $this->flushSeasonCaches();
+
+        // These tests assert on which season is upcoming site-wide, so a seeded upcoming season would answer
+        // for them - and no assertion of "nothing is advertised" could hold at all.
+        $this->hideSeededUpcomingSeasons();
+    }
+
+    #[\Override]
+    protected function tearDown(): void
+    {
+        $this->restoreSeededUpcomingSeasons();
+
+        parent::tearDown();
     }
 
     #[Test]
