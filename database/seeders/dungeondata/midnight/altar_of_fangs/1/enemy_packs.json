@@ -225,7 +225,7 @@
         "color": null,
         "color_animated": null,
         "label": "Imported from MDT - group 7",
-        "vertices_json": "[{\"lat\":-106.9477,\"lng\":105.15},{\"lat\":-27.73,\"lng\":105.15},{\"lat\":-27.73,\"lng\":225.7},{\"lat\":-106.9477,\"lng\":225.7}]"
+        "vertices_json": "[{\"lat\":-108.1114,\"lng\":220.8336},{\"lat\":-88.4548,\"lng\":219.1349},{\"lat\":-88.0908,\"lng\":227.3859},{\"lat\":-106.9477,\"lng\":225.7}]"
     },
     {
         "id": 26098,
@@ -333,7 +333,7 @@
         "color": null,
         "color_animated": null,
         "label": "Imported from MDT - group 50",
-        "vertices_json": "[{\"lat\":-162.2,\"lng\":191.14},{\"lat\":-160.2,\"lng\":191.14},{\"lat\":-160.2,\"lng\":193.14},{\"lat\":-162.2,\"lng\":193.14}]"
+        "vertices_json": "[{\"lat\":-162.3832,\"lng\":183.3633},{\"lat\":-160.0088,\"lng\":182.9381},{\"lat\":-160.2,\"lng\":193.14},{\"lat\":-162.2,\"lng\":193.14}]"
     },
     {
         "id": 26126,
