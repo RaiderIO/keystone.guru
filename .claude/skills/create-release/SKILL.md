@@ -152,11 +152,19 @@ Both bodies group changes by category, matching the format of existing releases:
 
 ```
 Bugfixes:
-  * #3321 redis:clearidlekeys no longer removes sessions from localhost.
+* #3321 redis:clearidlekeys no longer removes sessions from localhost.
 
 General changes:
-  * #3320 Updated CI workflows to use OIDC for AWS credentials.
+* #3320 Updated CI workflows to use OIDC for AWS credentials.
 ```
+
+**No leading whitespace before any `*`.** Discord's markdown renderer treats a bullet's
+indentation relative to the previous line as significant: the first bullet after a
+`Category:` header (no leading space) renders fine, but if it's indented at all, every
+*following* bullet in that category reads as a nested sub-list and renders offset. This
+bit us for real — a discord release announcement had every bullet but the first one in
+each category visibly inset. Keep every `*` flush against the left margin, in the
+template above and in the actual body text written to the notes files.
 
 - **Public body** (for the draft GitHub Release): public changes only. If there are **no
   public changes, the body is empty** — that is what makes the release silent
