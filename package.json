@@ -15,7 +15,7 @@
         "chokidar": "^5.0.0",
         "concurrently": "^10.0.4",
         "cross-env": "^10.1.0",
-        "esbuild": "^0.28.1",
+        "esbuild": "^0.28.2",
         "fast-glob": "^3.3.3",
         "jquery": "^4.0.0",
         "jsdom": "^30.0.1",
