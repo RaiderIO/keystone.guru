@@ -75,20 +75,20 @@ Tracking the update of the Mythic Dungeon Tools (MDT) composer package and reimp
 current retail season's dungeon mappings.
 
 - [ ] Bump composer package reference (version + commit SHA) and `composer update`
+- [ ] Bump `config/keystoneguru.php` MDT version (before the reimport - it stamps `mdt_addon_version`)
 - [ ] Reimport each retail-season dungeon mapping
 - [ ] Handle any new POI types/templates and missing map-icon translations
 - [ ] Run per-dungeon tests (rewrite stale CorrectEvents fixtures)
-- [ ] Bump `config/keystoneguru.php` MDT version
+- [ ] Refresh the MDT addonVersion => release-date map
 - [ ] Re-export NPC translations and re-seed
 - [ ] Run the full test suite
 EOF
 )"
 ```
 
-**Record the issue number** it prints — reference it in the final summary so the user can
-track the work, and (if they later ask you to commit) use it as the `#<number>` prefix that
-this repo's commit messages follow (e.g. `#3192 Update MDT to v6.1.4`). Do **not** commit or
-close the issue yourself unless asked.
+**Record the issue number** — it is the `#<number>` prefix this repo's commit subjects and MR
+title take (e.g. `#3192 Update MDT to v6.1.4`) and what Step 8's MR body closes. Do not close
+the issue yourself unless asked; the MR closes it on merge.
 
 ## Step 2 — Bump the composer package reference
 
@@ -141,7 +141,9 @@ The package is a fork: composer downloads it from the user's fork
    - `package.version` → new version (no `v` prefix, e.g. `6.1.5`)
    - `package.source.reference` → new commit SHA
    - `package.dist.url` → swap the SHA embedded in the archive URL
-   Leave the `^6.0` `require` constraint (line ~99) unchanged unless a pre-approved major bump.
+   Leave the `require` constraint (`^6.0@alpha`, line ~100) unchanged unless a pre-approved major
+   bump — the `@alpha` stability flag is what lets a prerelease like `6.2.0-alpha5` install, and a
+   stable release such as `6.2.1` satisfies it too.
 5. Download the new version (also updates `composer.lock`):
    ```
    docker compose exec -T app composer update nnoggie/mythicdungeontools
@@ -349,9 +351,15 @@ formatting of the rewritten `npcs.php` files, per the project's finishing-up con
    MR. Also remind the user to browse the explore pages themselves.
 4. **Also check what the suite can't see:** `MapTilesExistenceTest` fails on its *first* dungeon
    in a worktree (the assets dir isn't mounted), so it never reaches the newly imported ones and
-   cannot tell you a new floor is missing map tiles. Confirm directly that
-   `git status database/seeders/dungeondata/**` lists no changed `floors.json` / `dungeon.json` —
-   if it does, the assets repo needs the tiles and the update is not complete.
+   cannot tell you a new floor is missing map tiles. Check the seeder export instead. **Floors are
+   not their own file** — there is no `floors.json`; each dungeon object in
+   `database/seeders/dungeondata/dungeons.json` carries a nested `floors` array, so that one file
+   is the whole check:
+   ```
+   git diff --stat database/seeders/dungeondata/dungeons.json   # unchanged => no new floors
+   git diff database/seeders/dungeondata/dungeons.json | grep -E '^\+.*"index"'
+   ```
+   If a floor was added, the assets repo needs its tiles and the update is not complete.
 5. Commit and push the worktree branch and open the **draft** MR (`Closes #<issue>` in the body),
    then follow CLAUDE.md's "before declaring a MR ready for review" checklist. Leave the tracking
    issue **open** (don't close it yourself unless asked) — the MR closes it on merge.
