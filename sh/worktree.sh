@@ -396,8 +396,8 @@ EOF
         set_env_var "$wt_path/.env" DB_COMBATLOG_DATABASE "$schema"
         set_env_var "$wt_path/.env" REDIS_PREFIX          "${project}-cache:"
     fi
-    # MAIN_THUMBNAILS_DIR is persisted into the worktree .env (not just exported) so that plain
-    # `docker compose ...` invocations resolve the bind-mount source too — e.g. the profiled
+    # MAIN_THUMBNAILS_DIR / MAIN_ASSETS_DIR are persisted into the worktree .env (not just exported) so
+    # that plain `docker compose ...` invocations resolve the bind-mount sources too — e.g. the profiled
     # `render` service used for Path A thumbnail rendering (see the generating-thumbnails skill).
     cat >> "$wt_path/.env" <<EOF
 
@@ -406,12 +406,19 @@ COMPOSE_PROJECT_NAME=${project}
 COMPOSE_FILE=docker-compose.worktree.yml
 WORKTREE_HTTP_PORT=${port}
 MAIN_THUMBNAILS_DIR=${REPO_ROOT}/storage/app/public/thumbnails
+MAIN_ASSETS_DIR=$(dirname "$REPO_ROOT")/keystone.guru.assets
 EOF
 
     # 4b. Main's thumbnail directory is bind-mounted into the worktree (live-shares thumbnails
     #     generated on the main stack — see #3548); the mount source must exist beforehand.
     export MAIN_THUMBNAILS_DIR="$REPO_ROOT/storage/app/public/thumbnails"
     mkdir -p "$MAIN_THUMBNAILS_DIR"
+
+    # 4c. The assets repo is bind-mounted at the same path the main stack uses, so the mapicon:*
+    #     commands work from a worktree (#3993). It is a checkout, not a generated dir — if it is
+    #     missing, warn rather than mkdir an empty one that would silently shadow nothing.
+    export MAIN_ASSETS_DIR="$(dirname "$REPO_ROOT")/keystone.guru.assets"
+    [ -d "$MAIN_ASSETS_DIR" ] || echo "==> WARNING: assets repo not found at $MAIN_ASSETS_DIR - mapicon:* commands will not work"
 
     # 5. Bring up the stack (reads COMPOSE_* + WORKTREE_HTTP_PORT from the worktree .env).
     echo "==> starting stack '$project' (nginx on :$port)"

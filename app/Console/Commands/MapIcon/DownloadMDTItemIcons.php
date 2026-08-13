@@ -94,6 +94,9 @@ class DownloadMDTItemIcons extends Command
                     $status = $downloaded[$iconFileName];
                 } elseif (file_exists(sprintf('%s/%s.jpg', $targetFolder, $iconFileName))) {
                     $status = 'already present';
+                    // Despite the service name this fetches from `wow.zamimg.com`, Wowhead's asset CDN, which
+                    // serves us fine. It is wowhead.com's *pages* that answer 403 - so the file name has to
+                    // come from wago.tools above rather than by scraping the icon page (#3993).
                 } elseif ($wowheadService->downloadIcon($iconFileName, $targetFolder)) {
                     $status = 'downloaded';
                 } else {

@@ -14,10 +14,16 @@ use Illuminate\Console\Command;
  * {@see \App\Logic\MDT\Conversion::MAP_POI_GENERIC_ITEM_SPELL_ID_MAP_ICON_TYPE_MAPPING}. Note that adding an
  * MDT mapping for an icon that was already placed by hand duplicates it on the next reimport (#3993).
  *
- * To get the raw icon: do **not** scrape Wowhead, its pages 403 the app container. Resolve the icon file name
- * from a texture FileDataID through wago.tools' ManifestInterfaceData DB2 and download it off Wowhead's CDN -
- * `mapicon:downloadmdtitemicons` does exactly that for every MDT POI we have no icon for. This command only
- * runs from the main checkout: the assets repo is not mounted into a worktree's container.
+ * To get the raw icon: do **not** scrape wowhead.com, its pages 403 the app container - not because of the
+ * container, but because {@see \App\Service\Traits\Curl} sends a spoofed Chrome user agent that Cloudflare
+ * rejects (plain curl from the same container gets a 200). Resolve the icon file name from a texture
+ * FileDataID through wago.tools' ManifestInterfaceData DB2 and download it off Wowhead's CDN at
+ * `wow.zamimg.com`, which serves us fine - `mapicon:downloadmdtitemicons` does exactly that for every MDT
+ * POI we have no icon for.
+ *
+ * Both this command and that one write into the `keystone.guru.assets` checkout, which is bind-mounted into
+ * the app container by both the main stack and (since #3993) every worktree stack. That repo is shared, not
+ * worktree-isolated, so `git status` it after a run.
  *
  * The full runbook lives in the `update-mdt-package` skill, which is where this is needed almost every time.
  */
