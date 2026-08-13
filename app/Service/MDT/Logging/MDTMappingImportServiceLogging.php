@@ -330,18 +330,10 @@ class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMap
         string $dungeonKey,
         int    $previousNpcCount,
         int    $incomingNpcCount,
-        bool   $allowNpcSetReplacement,
+        int    $keptPercentage,
+        bool   $forceImport,
     ): void {
         $this->error(__METHOD__, get_defined_vars());
-    }
-
-    public function importMappingVersionFromMDTNpcSetChangedSignificantly(
-        string $dungeonKey,
-        int    $keptPercentage,
-        int    $keptNpcCount,
-        int    $previousNpcCount,
-    ): void {
-        $this->warning(__METHOD__, get_defined_vars());
     }
 
     public function importMapPOIsStart(): void

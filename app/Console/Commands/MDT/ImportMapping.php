@@ -17,7 +17,7 @@ class ImportMapping extends Command
      *
      * @var string
      */
-    protected $signature = 'mdt:importmapping {dungeon} {gameVersion} {--force} {--allow-npc-set-replacement}';
+    protected $signature = 'mdt:importmapping {dungeon} {gameVersion} {--force}';
 
     /**
      * The console command description.
@@ -39,9 +39,6 @@ class ImportMapping extends Command
         $dungeonKey     = $this->argument('dungeon');
         $gameVersionKey = $this->argument('gameVersion');
         $force          = (bool)$this->option('force');
-        // Escape hatch for the guard that refuses an import whose NPCs are disjoint from the current
-        // mapping version's - see MDTMappingImportService::assertMDTNpcSetIsPlausible() (#3995)
-        $allowNpcSetReplacement = (bool)$this->option('allow-npc-set-replacement');
 
         $gameVersion = GameVersion::firstWhere('key', $gameVersionKey);
         if ($gameVersion === null) {
@@ -56,7 +53,7 @@ class ImportMapping extends Command
             foreach ($season->dungeons as $dungeon) {
                 try {
                     $dungeon->setRelation('npcs', $dungeon->npcs()->get());
-                    $mappingImportService->importMappingVersionFromMDT($mappingService, $dungeon, $gameVersion, $force, $allowNpcSetReplacement);
+                    $mappingImportService->importMappingVersionFromMDT($mappingService, $dungeon, $gameVersion, $force);
                 } catch (Exception $exception) {
                     $this->error($exception->getMessage());
                 }
@@ -68,7 +65,7 @@ class ImportMapping extends Command
 
             $dungeon->setRelation('npcs', $dungeon->npcs()->get());
 
-            $mappingImportService->importMappingVersionFromMDT($mappingService, $dungeon, $gameVersion, $force, $allowNpcSetReplacement);
+            $mappingImportService->importMappingVersionFromMDT($mappingService, $dungeon, $gameVersion, $force);
         }
     }
 }

@@ -45,11 +45,11 @@ use Throwable;
 class MDTMappingImportService implements MDTMappingImportServiceInterface
 {
     /**
-     * Below this fraction of the previous mapping version's NPCs surviving an import, the import still runs
-     * but says so loudly. The lowest legitimate transition observed across all 307 in the database was 59%,
-     * so this leaves 9 percentage points of headroom (#3995).
+     * An import must keep at least this fraction of the previous mapping version's NPCs, or it is refused.
+     * The lowest legitimate transition observed across all 307 in the database was 59%, so this leaves 9
+     * percentage points of headroom (#3995).
      */
-    private const float NPC_SET_OVERLAP_WARNING_THRESHOLD = 0.5;
+    public const float NPC_SET_OVERLAP_MINIMUM = 0.5;
 
     /** @var array<int, int> Ignore these enemies when their NPC ID is in this list */
     private const array IGNORE_ENEMY_NPC_IDS = [
@@ -88,7 +88,6 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         Dungeon                 $dungeon,
         ?GameVersion            $gameVersion = null,
         bool                    $forceImport = false,
-        bool                    $allowNpcSetReplacement = false,
     ): MappingVersion {
         $latestMdtMappingHash = $this->getMDTMappingHash($dungeon);
 
@@ -105,7 +104,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             // Before anything is created: refuse outright if MDT is handing us a different dungeon's NPCs
             // (#3995). Checking here rather than mid-import means no mapping version is created and deleted
             // again, and mdt_mapping_hash is never touched - the next run simply retries.
-            $this->assertMDTNpcSetIsPlausible($dungeon, $currentMappingVersion, $allowNpcSetReplacement);
+            $this->assertMDTNpcSetIsPlausible($dungeon, $currentMappingVersion, $forceImport);
 
             $newMappingVersion = $mappingService->createNewMappingVersionFromMDTMapping($dungeon, $gameVersion, $currentMappingVersion);
             $this->log->importMappingVersionFromMDTCreateMappingVersion($newMappingVersion->version, $newMappingVersion->id);
@@ -1120,10 +1119,9 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
      * the import replaced The Blinding Vale's entire mapping with Den of Nalorakk's enemies at exit code 0,
      * without a single warning - nobody noticed until the map was eyeballed weeks later (#3995).
      *
-     * The thresholds are measured rather than guessed. Across all 307 consecutive mapping-version transitions
-     * in the database, the lowest overlap of a legitimate transition was 59% and not one was 0%, so a total
-     * miss cannot happen legitimately and anything under {@see self::NPC_SET_OVERLAP_WARNING_THRESHOLD} is
-     * worth a human look.
+     * The threshold is measured rather than guessed. Across all 307 consecutive mapping-version transitions
+     * in the database, the lowest overlap of a legitimate transition was 59% and not one was 0%, so anything
+     * under {@see self::NPC_SET_OVERLAP_MINIMUM} means the incoming data is wrong, not the mapping.
      *
      * @throws MDTMappingNpcSetReplacedException
      * @throws Exception
@@ -1131,7 +1129,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     private function assertMDTNpcSetIsPlausible(
         Dungeon         $dungeon,
         ?MappingVersion $currentMappingVersion,
-        bool            $allowNpcSetReplacement,
+        bool            $forceImport,
     ): void {
         // Nothing to compare against on a first-ever import, or one whose predecessor holds no enemies
         if ($currentMappingVersion === null) {
@@ -1148,8 +1146,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             return;
         }
 
-        $mdtDungeon     = new MDTDungeon($this->cacheService, $this->coordinatesService, $dungeon);
-        $incomingNpcIds = $mdtDungeon->getMDTNPCs()
+        $incomingNpcIds = new MDTDungeon($this->cacheService, $this->coordinatesService, $dungeon)
+            ->getMDTNPCs()
             ->map(static fn(MDTNpc $mdtNpc): int => $mdtNpc->getId())
             ->unique()
             ->all();
@@ -1158,31 +1156,28 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             return;
         }
 
-        $keptNpcCount = count(array_intersect($previousNpcIds, $incomingNpcIds));
-        $keptRatio    = $keptNpcCount / count($previousNpcIds);
+        $keptNpcCount   = count(array_intersect($previousNpcIds, $incomingNpcIds));
+        $keptPercentage = (int)round(100 * $keptNpcCount / count($previousNpcIds));
 
-        if ($keptNpcCount === 0) {
-            $this->log->importMappingVersionFromMDTNpcSetReplaced(
+        if ($keptNpcCount / count($previousNpcIds) >= self::NPC_SET_OVERLAP_MINIMUM) {
+            return;
+        }
+
+        $this->log->importMappingVersionFromMDTNpcSetReplaced(
+            $dungeon->key,
+            count($previousNpcIds),
+            count($incomingNpcIds),
+            $keptPercentage,
+            $forceImport,
+        );
+
+        if (!$forceImport) {
+            throw new MDTMappingNpcSetReplacedException(
                 $dungeon->key,
                 count($previousNpcIds),
                 count($incomingNpcIds),
-                $allowNpcSetReplacement,
-            );
-
-            if (!$allowNpcSetReplacement) {
-                throw new MDTMappingNpcSetReplacedException(
-                    $dungeon->key,
-                    count($previousNpcIds),
-                    count($incomingNpcIds),
-                    $this->findDungeonKeyOwningNpcs($dungeon, $incomingNpcIds),
-                );
-            }
-        } elseif ($keptRatio < self::NPC_SET_OVERLAP_WARNING_THRESHOLD) {
-            $this->log->importMappingVersionFromMDTNpcSetChangedSignificantly(
-                $dungeon->key,
-                (int)round($keptRatio * 100),
-                $keptNpcCount,
-                count($previousNpcIds),
+                $keptPercentage,
+                $this->findDungeonKeyOwningNpcs($dungeon, $incomingNpcIds),
             );
         }
     }

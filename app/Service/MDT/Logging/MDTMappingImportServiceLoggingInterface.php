@@ -165,14 +165,8 @@ interface MDTMappingImportServiceLoggingInterface
         string $dungeonKey,
         int    $previousNpcCount,
         int    $incomingNpcCount,
-        bool   $allowNpcSetReplacement,
-    ): void;
-
-    public function importMappingVersionFromMDTNpcSetChangedSignificantly(
-        string $dungeonKey,
         int    $keptPercentage,
-        int    $keptNpcCount,
-        int    $previousNpcCount,
+        bool   $forceImport,
     ): void;
 
     public function importMapPOIsStart(): void;

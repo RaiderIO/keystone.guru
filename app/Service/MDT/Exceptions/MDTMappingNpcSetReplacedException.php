@@ -5,17 +5,18 @@ namespace App\Service\MDT\Exceptions;
 use Exception;
 
 /**
- * Thrown by {@see \App\Service\MDT\MDTMappingImportService::importMappingVersionFromMDT()} when the NPCs MDT
- * offers for a dungeon have *nothing* in common with the ones its previous mapping version holds.
+ * Thrown by {@see \App\Service\MDT\MDTMappingImportService::importMappingVersionFromMDT()} when too few of
+ * the NPCs MDT offers for a dungeon appear in the mapping version it is about to replace.
  *
- * A dungeon cannot legitimately be remapped onto a completely disjoint set of NPCs: across all 307
- * mapping-version transitions in the database at the time of writing, the lowest overlap of a real transition
- * was 59%, and not one was 0%. A 0% overlap means MDT handed us another dungeon's data - which is exactly
- * what MDT 6.2.1 did, shipping a `TheBlindingVale.lua` that was a duplicate of Den of Nalorakk's, replacing
- * The Blinding Vale's entire mapping without a single warning (#3995).
+ * Across all 307 mapping-version transitions in the database at the time of writing, the lowest overlap of a
+ * real transition was 59%, so falling under
+ * {@see \App\Service\MDT\MDTMappingImportService::NPC_SET_OVERLAP_MINIMUM} means something is wrong with
+ * the incoming data - most likely MDT handing us another dungeon's, which is exactly what MDT 6.2.1 did,
+ * shipping a `TheBlindingVale.lua` that was a duplicate of Den of Nalorakk's and replacing The Blinding
+ * Vale's entire mapping without a single warning (#3995).
  *
- * Pass `$allowNpcSetReplacement` to importMappingVersionFromMDT() (`--allow-npc-set-replacement` on
- * `mdt:importmapping`) when a wholesale remap really is intended.
+ * Pass `$forceImport` to importMappingVersionFromMDT() (`--force` on `mdt:importmapping`) when a wholesale
+ * remap really is intended.
  */
 class MDTMappingNpcSetReplacedException extends Exception
 {
@@ -23,13 +24,15 @@ class MDTMappingNpcSetReplacedException extends Exception
         string  $dungeonKey,
         int     $previousNpcCount,
         int     $incomingNpcCount,
+        int     $keptPercentage,
         ?string $looksLikeDungeonKey,
     ) {
         $message = sprintf(
-            'MDT offers %d NPC(s) for dungeon %s that have NOTHING in common with the %d NPC(s) of its ' .
+            'MDT offers %d NPC(s) for dungeon %s, of which only %d%% appear in the %d NPC(s) of its ' .
             'current mapping version - refusing to replace the mapping.',
             $incomingNpcCount,
             $dungeonKey,
+            $keptPercentage,
             $previousNpcCount,
         );
 
@@ -38,7 +41,7 @@ class MDTMappingNpcSetReplacedException extends Exception
                 'wrong dungeon\'s data in its .lua file.', $looksLikeDungeonKey);
         }
 
-        $message .= ' Pass --allow-npc-set-replacement if this really is intended.';
+        $message .= ' Pass --force if this really is intended.';
 
         parent::__construct($message);
     }
