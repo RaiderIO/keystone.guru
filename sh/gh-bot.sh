@@ -61,6 +61,15 @@ fi
 
 export GH_HOST=github.com
 
+# `gh` honours GITHUB_TOKEN as well as GH_TOKEN, and it outranks the GH_CONFIG_DIR credential — so
+# an inherited GITHUB_TOKEN would win on the config-dir path. On the default path the identity guard
+# below would still fail closed (while misreporting the cause), but under KSG_BOT_GH_SKIP_VERIFY=1
+# it would silently post as that token's owner. Clear it unconditionally: this script's own token
+# input is $KSG_BOT_GH_TOKEN, never GITHUB_TOKEN, so nothing legitimate is being discarded.
+# GH_ENTERPRISE_TOKEN / GITHUB_ENTERPRISE_TOKEN need no such handling — they apply only to a
+# non-github.com host, and GH_HOST is pinned to github.com just above.
+unset GITHUB_TOKEN
+
 if [ -n "$token" ]; then
     # Export rather than `exec env GH_TOKEN=… gh …`: an env-prefixed exec puts the token in the new
     # process's argv, readable by any local process via /proc/<pid>/cmdline and recorded

@@ -272,7 +272,16 @@ Provisioning (one-off, per machine; steps 1–3 need a human with a browser):
    (`gh api -X PUT repos/RaiderIO/keystone.guru/collaborators/keystone-guru-bot -f permission=push`),
    and accept the invite from the bot account. Note it does **not** need to join the organization —
    repo collaborator is enough, and `members_can_invite_outside_collaborators` is `true`.
-3. Give it a credential. **Prefer route A** — it needs no PAT at all:
+3. Give it a credential — two routes, and the choice is a real tradeoff rather than a strict
+   preference. **Route A is recommended here** because route B may simply not be available: org
+   owners can gate fine-grained PATs, and a plain org member cannot approve their own. But route A
+   buys that at the cost of a **wider** credential — `gh auth login` grants `repo`, `workflow` and
+   `gist` across *every* repo the bot account can reach, where route B's PAT is one repo and four
+   permissions. That difference is small only because the bot is a purpose-made account whose sole
+   access is this repo; it would not be acceptable for a credential belonging to a human.
+
+   Whichever you pick: a token (`$KSG_BOT_GH_TOKEN`, then the token file) always wins over the
+   config dir if both happen to be present.
 
    **A. OAuth login in an isolated gh config dir (recommended).**
    ```bash
@@ -298,8 +307,6 @@ Provisioning (one-off, per machine; steps 1–3 need a human with a browser):
    `KSG_BOT_GH_TOKEN_FILE`, or skip the file entirely by exporting `KSG_BOT_GH_TOKEN`. **Check Org
    Settings → Personal access tokens first** — org policy can require an owner to approve
    fine-grained PATs, and that approval is not something a non-owner can grant themselves.
-
-   A token (env var, then file) wins over the config dir if both are present.
 5. Verify: `sh/gh-bot.sh api user --jq .login` prints `keystone-guru-bot`.
 
 The token file lives outside the repo and is never committed.
