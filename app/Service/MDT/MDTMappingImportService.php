@@ -1113,11 +1113,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                             );
                         }
                     } elseif (Conversion::isMDTMapPOIUnhandled($mdtMapPOI)) {
-                        // MDT draws something we have no map icon type for - our map will be missing it. This
-                        // used to disappear without a trace, which is how six Midnight dungeons ended up short
-                        // of 19 icons before anyone noticed (#3993). It is deliberately not an import failure:
-                        // $importFailures aborts and deletes the whole mapping version, and the rest of the
-                        // mapping is still worth having. `mdt:importmapping` summarises these in a table.
+                        // MDT draws something we have no map icon type for - our map will be missing it.
                         $this->log->importMapPOIsUnhandledMapPOI(
                             $mdtMapPOI->getType()->value,
                             $mdtMapPOI->getSpellId(),
