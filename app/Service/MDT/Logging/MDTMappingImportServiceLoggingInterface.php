@@ -161,6 +161,14 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importEnemyPatrolsEnd(): void;
 
+    public function importMappingVersionFromMDTNpcSetReplaced(
+        string $dungeonKey,
+        int    $previousNpcCount,
+        int    $incomingNpcCount,
+        int    $keptPercentage,
+        bool   $forceImport,
+    ): void;
+
     public function importMapPOIsStart(): void;
 
     public function importMapPOIsMDTHasMapPOIs(): void;
