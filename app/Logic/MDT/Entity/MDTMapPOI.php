@@ -122,6 +122,25 @@ class MDTMapPOI implements Arrayable
         return $this->info['atlas'] ?? null;
     }
 
+    /**
+     * The spell MDT pulls this POI's tooltip from - set on {@see MDTMapPOIType::GenericItem} POIs, which MDT
+     * renders as `GameTooltip:SetSpellByID(info.spellId)`. It is the only thing distinguishing one generic
+     * item from another, so it is what a map icon type is keyed on.
+     */
+    public function getSpellId(): ?int
+    {
+        return $this->info['spellId'] ?? null;
+    }
+
+    /**
+     * The FileDataID of the texture MDT draws for this POI. Resolvable to an icon file name through
+     * wago.tools' ManifestInterfaceData DB2 - see {@see \App\Service\Wago\WagoToolsServiceInterface}.
+     */
+    public function getTextureFileDataId(): ?int
+    {
+        return $this->info['texture'] ?? null;
+    }
+
     public function getSizeMult(): ?float
     {
         return $this->sizeMult;

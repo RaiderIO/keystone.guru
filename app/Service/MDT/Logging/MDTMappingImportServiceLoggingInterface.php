@@ -174,6 +174,16 @@ interface MDTMappingImportServiceLoggingInterface
     public function importMapPOIsMDTHasMapPOIs(): void;
 
     public function importMapPOIsMissingTranslation(string $translationKey): void;
+
+    public function importMapPOIsDeletedClonedGenericItemMapIcons(int $deletedCount): void;
+
+    public function importMapPOIsUnhandledMapPOI(
+        string $mdtMapPOIType,
+        ?int   $spellId,
+        ?int   $textureFileDataId,
+        int    $subLevel,
+    ): void;
+
     public function importMapPOIsCreatedNewMapIcon(int $mapIconId, int $floorId, int $mapIconTypeId): void;
 
     /**

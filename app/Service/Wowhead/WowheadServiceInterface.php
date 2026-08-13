@@ -12,6 +12,11 @@ interface WowheadServiceInterface
 
     public function downloadMissingSpellIcons(): bool;
 
+    /**
+     * Downloads an icon off Wowhead's CDN by its icon file name (without extension) into $targetFolder.
+     */
+    public function downloadIcon(string $iconName, string $targetFolder): bool;
+
     public function getNpcDisplayId(GameVersion $gameVersion, Npc $npc, ?string $html = null): ?int;
 
     public function getSpellData(GameVersion $gameVersion, int $spellId, ?string $html = null): ?SpellDataResult;

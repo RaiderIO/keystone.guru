@@ -166,6 +166,8 @@ use App\Service\View\RequestViewContext;
 use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewService;
 use App\Service\View\ViewServiceInterface;
+use App\Service\Wago\WagoToolsService;
+use App\Service\Wago\WagoToolsServiceInterface;
 use App\Service\Wowhead\WowheadService;
 use App\Service\Wowhead\WowheadServiceInterface;
 use App\Service\Wowhead\WowheadTranslationService;
@@ -190,6 +192,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(ArchonApiServiceInterface::class, ArchonApiService::class);
         $this->app->bind(PatreonApiServiceInterface::class, PatreonApiService::class);
         $this->app->bind(WowToolsServiceInterface::class, WowToolsService::class);
+        $this->app->bind(WagoToolsServiceInterface::class, WagoToolsService::class);
         $this->app->bind(AdProviderServiceInterface::class, AdProviderService::class);
         $this->app->bind(CreatorDirectoryServiceInterface::class, CreatorDirectoryService::class);
         $this->app->bind(WowheadServiceInterface::class, WowheadService::class);

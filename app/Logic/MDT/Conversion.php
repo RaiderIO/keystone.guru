@@ -8,12 +8,15 @@
 
 namespace App\Logic\MDT;
 
+use App\Logic\MDT\Entity\MDTMapPOI;
+use App\Logic\MDT\Entity\MDTMapPOIType;
 use App\Logic\Structs\LatLng;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\DungeonKey;
 use App\Models\Expansion;
 use App\Models\Floor\Floor;
+use App\Models\MapIconType;
 use App\Models\RaidKey;
 use App\Models\Season;
 use App\Service\Season\SeasonServiceInterface;
@@ -288,6 +291,69 @@ class Conversion
     ];
 
     /**
+     * The map icon type each MDT POI type imports as. Types absent from this list are either handled
+     * separately ({@see MDTMapPOIType::MapLink} becomes a dungeon floor switch marker), deliberately not
+     * imported ({@see self::MAP_POI_TYPES_NOT_IMPORTED}), or not supported yet - the last of which is what
+     * {@see self::isMDTMapPOIUnhandled()} reports on.
+     *
+     * @var array<string, string>
+     */
+    public const array MAP_POI_TYPE_MAP_ICON_TYPE_MAPPING = [
+        MDTMapPOIType::Graveyard->value            => MapIconType::MAP_ICON_TYPE_GRAVEYARD,
+        MDTMapPOIType::DungeonEntrance->value      => MapIconType::MAP_ICON_TYPE_DUNGEON_START,
+        MDTMapPOIType::PrioryItem->value           => MapIconType::MAP_ICON_TYPE_PRIORY_BLESSING_OF_THE_SACRED_FLAME,
+        MDTMapPOIType::FloodgateItem->value        => MapIconType::MAP_ICON_TYPE_FLOODGATE_WEAPONS_STOCKPILE_EXPLOSION,
+        MDTMapPOIType::EcoDomeAlDaniItem1->value   => MapIconType::MAP_ICON_TYPE_ECO_DOME_AL_DANI_SHATTER_CONDUIT,
+        MDTMapPOIType::EcoDomeAlDaniItem2->value   => MapIconType::MAP_ICON_TYPE_ECO_DOME_AL_DANI_DISRUPTION_GRENADE,
+        MDTMapPOIType::EcoDomeAlDaniItem3->value   => MapIconType::MAP_ICON_TYPE_ECO_DOME_AL_DANI_KARESHI_SURGE,
+        MDTMapPOIType::GeneralNote->value          => MapIconType::MAP_ICON_TYPE_EXCLAMATION_YELLOW,
+        MDTMapPOIType::GenericAssignablePOI->value => MapIconType::MAP_ICON_TYPE_DOT_YELLOW,
+    ];
+
+    /**
+     * {@see MDTMapPOIType::GenericItem} is a single MDT type covering every item pickup MDT draws, so unlike
+     * every other type it cannot map to one map icon type. MDT tells the items apart by the spell it shows
+     * the tooltip of, and so do we.
+     *
+     * @var array<int, string>
+     */
+    public const array MAP_POI_GENERIC_ITEM_SPELL_ID_MAP_ICON_TYPE_MAPPING = [
+        // Algeth'ar Academy
+        389501 => MapIconType::MAP_ICON_TYPE_ALGETHAR_ACADEMY_RED_DRAGONFLIGHT_PLEDGE_PIN,
+        389512 => MapIconType::MAP_ICON_TYPE_ALGETHAR_ACADEMY_BRONZE_DRAGONFLIGHT_PLEDGE_PIN,
+        389516 => MapIconType::MAP_ICON_TYPE_ALGETHAR_ACADEMY_BLACK_DRAGONFLIGHT_PLEDGE_PIN,
+        389521 => MapIconType::MAP_ICON_TYPE_ALGETHAR_ACADEMY_BLUE_DRAGONFLIGHT_PLEDGE_PIN,
+        389536 => MapIconType::MAP_ICON_TYPE_ALGETHAR_ACADEMY_GREEN_DRAGONFLIGHT_PLEDGE_PIN,
+        // Magisters' Terrace
+        1254550 => MapIconType::MAP_ICON_TYPE_MAGISTERS_TERRACE_ARCANE_EMPOWERMENT,
+        // Maisara Caverns
+        1269056 => MapIconType::MAP_ICON_TYPE_MAISARA_CAVERNS_HEARTY_VILEBRANCH_STEW,
+        // Murder Row
+        1217960 => MapIconType::MAP_ICON_TYPE_MURDER_ROW_LOADED_PISTOL,
+        1223133 => MapIconType::MAP_ICON_TYPE_MURDER_ROW_OVERLOAD_GOLEM,
+        1223537 => MapIconType::MAP_ICON_TYPE_MURDER_ROW_FELSTONE,
+        1223570 => MapIconType::MAP_ICON_TYPE_MURDER_ROW_FELWYRM_EGG,
+        1223607 => MapIconType::MAP_ICON_TYPE_MURDER_ROW_HEARTSTOP_POISON,
+        1270638 => MapIconType::MAP_ICON_TYPE_MURDER_ROW_FEL_CONTRABAND,
+        // Seat of the Triumvirate
+        244300 => MapIconType::MAP_ICON_TYPE_SEAT_OF_THE_TRIUMVIRATE_VOID_INFUSION,
+        // The Blinding Vale
+        1265942 => MapIconType::MAP_ICON_TYPE_THE_BLINDING_VALE_FLOURISHING_STRIDE,
+    ];
+
+    /**
+     * POI types that are part of MDT's own UI rather than of the dungeon mapping - a zoom affordance and the
+     * user's own text annotations. They have no keystone.guru equivalent by design, so they must not be
+     * reported as unhandled.
+     *
+     * @var array<MDTMapPOIType>
+     */
+    public const array MAP_POI_TYPES_NOT_IMPORTED = [
+        MDTMapPOIType::Zoom,
+        MDTMapPOIType::TextFrame,
+    ];
+
+    /**
      * Rounds a number to the nearest two decimals.
      */
     private static function round(float|int $nr): float
@@ -481,5 +547,37 @@ class Conversion
     public static function isDungeonInMainlineMDT(Dungeon $dungeon): bool
     {
         return in_array($dungeon->key, self::MAINLINE_MDT_DUNGEONS, true);
+    }
+
+    /**
+     * The {@see MapIconType} key an MDT POI imports as, or null when we have no map icon type for it.
+     */
+    public static function convertMDTMapPOIToMapIconTypeKey(MDTMapPOI $mdtMapPOI): ?string
+    {
+        if ($mdtMapPOI->getType() === MDTMapPOIType::GenericItem) {
+            return self::MAP_POI_GENERIC_ITEM_SPELL_ID_MAP_ICON_TYPE_MAPPING[$mdtMapPOI->getSpellId()] ?? null;
+        }
+
+        return self::MAP_POI_TYPE_MAP_ICON_TYPE_MAPPING[$mdtMapPOI->getType()->value] ?? null;
+    }
+
+    /**
+     * Whether MDT draws this POI but keystone.guru has nothing to import it as - the map will be missing
+     * something MDT shows. This is deliberately not an exception: the rest of the mapping is still worth
+     * importing, so it is reported instead (see `MDTMappingImportService::importMapPOIs()` and
+     * `mdt:importmapping`'s summary table).
+     */
+    public static function isMDTMapPOIUnhandled(MDTMapPOI $mdtMapPOI): bool
+    {
+        // Floor switch markers rather than map icons, handled on their own terms
+        if ($mdtMapPOI->getType() === MDTMapPOIType::MapLink) {
+            return false;
+        }
+
+        if (in_array($mdtMapPOI->getType(), self::MAP_POI_TYPES_NOT_IMPORTED, true)) {
+            return false;
+        }
+
+        return self::convertMDTMapPOIToMapIconTypeKey($mdtMapPOI) === null;
     }
 }

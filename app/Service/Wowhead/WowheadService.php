@@ -22,6 +22,8 @@ class WowheadService implements WowheadServiceInterface
 {
     use Curl;
 
+    private const string ICON_URL_FORMAT = 'https://wow.zamimg.com/images/wow/icons/large/%s';
+
     private const string IDENTIFYING_TOKEN_HEALTH     = '$(document).ready(function(){$(".infobox li").last().after("<li><div><span class=\"tip\" onmouseover=\"WH.Tooltip.showAtCursor(event, ';
     private const string IDENTIFYING_TOKEN_DISPLAY_ID = 'linksButton.dataset.displayId =';
 
@@ -120,11 +122,16 @@ class WowheadService implements WowheadServiceInterface
 
     public function downloadSpellIcon(Spell $spell, string $targetFolder): bool
     {
-        $fileName       = sprintf('%s.jpg', $spell->icon_name);
+        return $this->downloadIcon($spell->icon_name, $targetFolder);
+    }
+
+    public function downloadIcon(string $iconName, string $targetFolder): bool
+    {
+        $fileName       = sprintf('%s.jpg', $iconName);
         $targetFilePath = sprintf('%s/%s', $targetFolder, $fileName);
 
         $result = $this->curlSaveToFile(
-            sprintf('https://wow.zamimg.com/images/wow/icons/large/%s', $fileName),
+            sprintf(self::ICON_URL_FORMAT, $fileName),
             $targetFilePath,
         );
 

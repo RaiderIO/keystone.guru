@@ -351,6 +351,20 @@ class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMap
         $this->error(__METHOD__, get_defined_vars());
     }
 
+    public function importMapPOIsDeletedClonedGenericItemMapIcons(int $deletedCount): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
+    public function importMapPOIsUnhandledMapPOI(
+        string $mdtMapPOIType,
+        ?int   $spellId,
+        ?int   $textureFileDataId,
+        int    $subLevel,
+    ): void {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
     public function importMapPOIsCreatedNewMapIcon(int $mapIconId, int $floorId, int $mapIconTypeId): void
     {
         $this->debug(__METHOD__, get_defined_vars());
