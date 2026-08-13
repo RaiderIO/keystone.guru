@@ -267,11 +267,24 @@ branch — just use `gh` and a `:robot:`-prefixed body; that is expected, not a 
 
 Provisioning (one-off, per machine; steps 1–3 need a human with a browser):
 
-1. Create the `keystone-guru-bot` GitHub account, verify its email, enable 2FA.
+1. Create the `keystone-guru-bot` GitHub account, verify its email, and **enable 2FA — this is
+   mandatory, not hygiene.** `RaiderIO` requires 2FA of all members *and outside collaborators*, so
+   without it step 2 fails with `403 The RaiderIO organization requires all members to have
+   two-factor authentication enabled`. Use TOTP and keep the secret plus the recovery codes in the
+   password manager — a machine account nobody can log into is a machine account nobody can
+   re-authenticate.
 2. Invite it as a collaborator with **write** access
    (`gh api -X PUT repos/RaiderIO/keystone.guru/collaborators/keystone-guru-bot -f permission=push`),
-   and accept the invite from the bot account. Note it does **not** need to join the organization —
-   repo collaborator is enough, and `members_can_invite_outside_collaborators` is `true`.
+   then accept the invite *as the bot*:
+   ```bash
+   inv=$(sh/gh-bot.sh api user/repository_invitations \
+     --jq '.[] | select(.repository.full_name == "RaiderIO/keystone.guru") | .id')
+   sh/gh-bot.sh api -X PATCH "user/repository_invitations/$inv"
+   ```
+   It does **not** need to join the organization — repo collaborator is enough, and
+   `members_can_invite_outside_collaborators` is `true`. Write is required rather than Triage:
+   "mark a draft PR as ready for review" is ✗ for Triage, and creating a same-repo PR and resolving
+   review threads are both push-gated.
 3. Give it a credential — two routes, and the choice is a real tradeoff rather than a strict
    preference. **Route A is recommended here** because route B may simply not be available: org
    owners can gate fine-grained PATs, and a plain org member cannot approve their own. But route A
