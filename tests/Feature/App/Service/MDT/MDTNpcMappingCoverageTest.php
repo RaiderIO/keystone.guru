@@ -23,7 +23,8 @@ final class MDTNpcMappingCoverageTest extends PublicTestCase
     public function mdtNpcMapping_givenAllDungeons_hasNoUnmappedClones(): void
     {
         // Arrange
-        $failures = [];
+        $failures         = [];
+        $unrelatedMdtData = [];
 
         // Cover the current season AND the newest one of the same expansion. getCurrentSeason() alone
         // stops gating a season the moment the next one is seeded but has not started yet - which is
@@ -69,10 +70,27 @@ final class MDTNpcMappingCoverageTest extends PublicTestCase
             // would otherwise contribute zero failures and look like full coverage.
             $this->assertNotEmpty($mdtClones, sprintf('%s produced no MDT clones at all', $dungeon->key));
 
+            $mappingEnemies = $mappingVersion->enemies()->whereNotNull('mdt_id')->get();
+
+            // MDT occasionally ships one dungeon's data under another dungeon's name - Midnight 6.2.1
+            // has DenOfNalorakk.lua duplicated as TheBlindingVale.lua (see #3995). Our mapping is then
+            // the correct one and MDT's is not, so measuring coverage against it reports every clone as
+            // missing and drowns out the real gaps this test exists to find. Skip such a dungeon: a
+            // non-empty mapping version sharing no NPC at all with MDT's clones is never a coverage
+            // problem, and the skip lifts itself the moment MDT ships the right file.
+            $sharesAnyNpc = $mappingEnemies
+                ->pluck('npc_id')
+                ->intersect($mdtClones->pluck('npc_id'))
+                ->isNotEmpty();
+
+            if ($mappingEnemies->isNotEmpty() && !$sharesAnyNpc) {
+                $unrelatedMdtData[] = $dungeon->key;
+
+                continue;
+            }
+
             // Build a lookup of KG enemy (effectiveNpcId_mdtId) pairs for this mapping version
-            $kgPairs = $mappingVersion->enemies()
-                ->whereNotNull('mdt_id')
-                ->get()
+            $kgPairs = $mappingEnemies
                 ->map(static fn(Enemy $enemy) => sprintf('%d_%d', $enemy->mdt_npc_id ?? $enemy->npc_id, $enemy->mdt_id))
                 ->flip();
 
@@ -97,6 +115,13 @@ final class MDTNpcMappingCoverageTest extends PublicTestCase
         }
 
         // Assert
+        if ($unrelatedMdtData !== []) {
+            fwrite(STDERR, sprintf(
+                "\nMDTNpcMappingCoverage: skipped %s - MDT ships unrelated data for it, see #3995\n",
+                implode(', ', $unrelatedMdtData),
+            ));
+        }
+
         $this->assertEmpty(
             $failures,
             sprintf(
