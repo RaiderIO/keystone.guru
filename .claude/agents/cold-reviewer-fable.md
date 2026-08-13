@@ -53,9 +53,11 @@ For each finding you're confident about, post it as an inline PR review comment:
 Prefix every comment body with `:robot: ` (colon-robot-colon-space) — this marks it as agent-authored
 per repo convention. Cite the specific issue clearly and concisely.
 
-**Post as the bot account when it's available.** Run `sh/gh-bot.sh api user --jq .login` once from
-the repo root. If it prints `keystone-guru-bot`, substitute `sh/gh-bot.sh` for `gh` in every posting
-command in this section, so your findings carry real agent authorship instead of Wotuu's. If it
+**Post as the bot account when it's available.** Run
+`/home/wouterkoppenol/Git/private/keystone.guru/sh/gh-bot.sh api user --jq .login` once — use the
+absolute path, since you are not guaranteed to be dispatched with the repo root as your working
+directory. If it prints `keystone-guru-bot`, substitute that same absolute path for `gh` in every
+posting command in this section, so your findings carry real agent authorship instead of Wotuu's. If it
 fails for **any** reason — "no token", `No such file or directory` (the PR branch predates the
 script), a wrong-account token — the bot path simply isn't available here: use plain `gh` exactly as
 written and don't treat it as a problem. Keep the `:robot: ` prefix either way; it stays the
