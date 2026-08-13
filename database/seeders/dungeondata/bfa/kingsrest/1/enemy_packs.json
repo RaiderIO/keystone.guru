@@ -1041,7 +1041,7 @@
         "color": null,
         "color_animated": null,
         "label": "Imported from MDT - group 18",
-        "vertices_json": "[{\"lat\":-66.62,\"lng\":193.19},{\"lat\":-47.48,\"lng\":193.19},{\"lat\":-47.48,\"lng\":207.19},{\"lat\":-66.62,\"lng\":207.19}]"
+        "vertices_json": "[{\"lat\":-66.62,\"lng\":193.19},{\"lat\":-51.0813,\"lng\":192.8693},{\"lat\":-50.7393,\"lng\":207.1464},{\"lat\":-66.62,\"lng\":207.19}]"
     },
     {
         "id": 26018,

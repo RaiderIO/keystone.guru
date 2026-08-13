@@ -396,6 +396,20 @@ class Conversion
     }
 
     /**
+     * The same conversion as {@see self::convertLatLngToMDTCoordinate()} but without the rounding, so that
+     * a calculated coordinate can be compared against one MDT stored at full precision.
+     *
+     * @return array{x: float, y: float}
+     */
+    public static function convertLatLngToMDTCoordinateUnrounded(LatLng $latLng): array
+    {
+        return [
+            'x' => $latLng->getLng() * 2.185,
+            'y' => $latLng->getLat() * 2.185,
+        ];
+    }
+
+    /**
      * Convert a MDT week to a matching affix group
      *
      *

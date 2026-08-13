@@ -943,10 +943,10 @@ return [
             ],
         ],
         'kings_rest' => [
-            'name'         => 'Kings\' Rest',
+            'name'         => 'King\'s Rest',
             'abbreviation' => 'KR',
             'floors'       => [
-                'kings_rest' => 'Kings\' Rest',
+                'kings_rest' => 'King\'s Rest',
             ],
         ],
         'mechagon_junkyard' => [
