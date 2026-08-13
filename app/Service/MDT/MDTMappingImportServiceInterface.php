@@ -16,6 +16,7 @@ interface MDTMappingImportServiceInterface
         Dungeon                 $dungeon,
         ?GameVersion            $gameVersion = null,
         bool                    $forceImport = false,
+        bool                    $allowNpcSetReplacement = false,
     ): MappingVersion;
 
     public function getMDTMappingHash(Dungeon $dungeon): string;

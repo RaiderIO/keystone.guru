@@ -257,6 +257,19 @@ Read the output for each dungeon and handle:
   `lang/en_US/mapping.php` with a sensible English string (e.g. `'captive' => 'Captive'`),
   then **notify the user** so they can refine the wording. Only ever edit `lang/en_US`. No
   re-import is needed — translations resolve at display time, not import time.
+- **`MDTMappingNpcSetReplacedException` / "refusing to replace the mapping"**: the import aborted
+  because MDT's NPCs for that dungeon have **nothing** in common with its current mapping version.
+  This is almost always MDT shipping the wrong dungeon's data in its `.lua` — 6.2.1 shipped a
+  `TheBlindingVale.lua` that was a duplicate of Den of Nalorakk's, and before this guard existed it
+  silently replaced the whole mapping at exit 0 (#3995). The message names the dungeon the incoming
+  NPCs actually belong to. **Do not reach for `--allow-npc-set-replacement` to make it go away** —
+  verify against the `.lua` first (`grep '\["name"\]' vendor/nnoggie/mythicdungeontools/<Expansion>/<Dungeon>.lua | head`)
+  and report it upstream; the flag is only for a genuine wholesale remap. Nothing was written when
+  this fires: no mapping version is created and `mdt_mapping_hash` is untouched, so the dungeon keeps
+  its previous mapping and the next run retries.
+- **`importMappingVersionFromMDTNpcSetChangedSignificantly` warning**: the import kept going, but
+  under 50% of the previous mapping version's NPCs survived — below every legitimate transition ever
+  observed. Sanity-check that dungeon on the map before handing over.
 - **Other errors:** try to fix them yourself first (the user prefers this). Only pause for the
   user if you get genuinely stuck.
 
@@ -264,7 +277,7 @@ Read the output for each dungeon and handle:
 > lines. Redirect to a file and grep for the markers that matter rather than dumping it all,
 > e.g. `... > /tmp/mdt_<key>.log 2>&1; echo "exit=$?"` then
 > `grep -ciE 'Found new (template|type)' /tmp/mdt_<key>.log` and
-> `grep -iE 'No change detected|MappingChanged|MissingTranslation' /tmp/mdt_<key>.log`.
+> `grep -iE 'No change detected|MappingChanged|MissingTranslation|NpcSetReplaced|NpcSetChangedSignificantly' /tmp/mdt_<key>.log`.
 > A new POI type/template would make the command **exit non-zero**, so an `exit=0` with zero
 > `Found new` matches confirms no enum changes were needed.
 

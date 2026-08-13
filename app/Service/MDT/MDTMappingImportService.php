@@ -5,6 +5,7 @@ namespace App\Service\MDT;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Entity\MDTMapPOIType;
+use App\Logic\MDT\Entity\MDTNpc;
 use App\Logic\MDT\Entity\MDTPatrol;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
@@ -32,6 +33,7 @@ use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Mapping\MappingServiceInterface;
 use App\Service\MDT\Exceptions\MDTMappingImportPartialFailureException;
+use App\Service\MDT\Exceptions\MDTMappingNpcSetReplacedException;
 use App\Service\MDT\Logging\MDTMappingImportServiceLoggingInterface;
 use Exception;
 use Illuminate\Database\UniqueConstraintViolationException;
@@ -42,6 +44,13 @@ use Throwable;
 
 class MDTMappingImportService implements MDTMappingImportServiceInterface
 {
+    /**
+     * Below this fraction of the previous mapping version's NPCs surviving an import, the import still runs
+     * but says so loudly. The lowest legitimate transition observed across all 307 in the database was 59%,
+     * so this leaves 9 percentage points of headroom (#3995).
+     */
+    private const float NPC_SET_OVERLAP_WARNING_THRESHOLD = 0.5;
+
     /** @var array<int, int> Ignore these enemies when their NPC ID is in this list */
     private const array IGNORE_ENEMY_NPC_IDS = [
         // Black Rook Hold, Troubled Soul
@@ -79,6 +88,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         Dungeon                 $dungeon,
         ?GameVersion            $gameVersion = null,
         bool                    $forceImport = false,
+        bool                    $allowNpcSetReplacement = false,
     ): MappingVersion {
         $latestMdtMappingHash = $this->getMDTMappingHash($dungeon);
 
@@ -91,6 +101,11 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
         if ($forceImport || $currentMappingVersion === null || $currentMappingVersion->mdt_mapping_hash !== $latestMdtMappingHash) {
             $this->log->importMappingVersionFromMDTMappingChanged($currentMappingVersion?->mdt_mapping_hash, $latestMdtMappingHash);
+
+            // Before anything is created: refuse outright if MDT is handing us a different dungeon's NPCs
+            // (#3995). Checking here rather than mid-import means no mapping version is created and deleted
+            // again, and mdt_mapping_hash is never touched - the next run simply retries.
+            $this->assertMDTNpcSetIsPlausible($dungeon, $currentMappingVersion, $allowNpcSetReplacement);
 
             $newMappingVersion = $mappingService->createNewMappingVersionFromMDTMapping($dungeon, $gameVersion, $currentMappingVersion);
             $this->log->importMappingVersionFromMDTCreateMappingVersion($newMappingVersion->version, $newMappingVersion->id);
@@ -1096,6 +1111,104 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         } finally {
             $this->log->importMapPOIsEnd();
         }
+    }
+
+    /**
+     * Refuses an import whose incoming NPCs have nothing in common with the dungeon's current mapping.
+     *
+     * MDT 6.2.1 shipped a `TheBlindingVale.lua` that was a byte-for-byte duplicate of Den of Nalorakk's, and
+     * the import replaced The Blinding Vale's entire mapping with Den of Nalorakk's enemies at exit code 0,
+     * without a single warning - nobody noticed until the map was eyeballed weeks later (#3995).
+     *
+     * The thresholds are measured rather than guessed. Across all 307 consecutive mapping-version transitions
+     * in the database, the lowest overlap of a legitimate transition was 59% and not one was 0%, so a total
+     * miss cannot happen legitimately and anything under {@see self::NPC_SET_OVERLAP_WARNING_THRESHOLD} is
+     * worth a human look.
+     *
+     * @throws MDTMappingNpcSetReplacedException
+     * @throws Exception
+     */
+    private function assertMDTNpcSetIsPlausible(
+        Dungeon         $dungeon,
+        ?MappingVersion $currentMappingVersion,
+        bool            $allowNpcSetReplacement,
+    ): void {
+        // Nothing to compare against on a first-ever import, or one whose predecessor holds no enemies
+        if ($currentMappingVersion === null) {
+            return;
+        }
+
+        $previousNpcIds = $currentMappingVersion->enemies()
+            ->whereNotNull('npc_id')
+            ->distinct()
+            ->pluck('npc_id')
+            ->all();
+
+        if ($previousNpcIds === []) {
+            return;
+        }
+
+        $mdtDungeon     = new MDTDungeon($this->cacheService, $this->coordinatesService, $dungeon);
+        $incomingNpcIds = $mdtDungeon->getMDTNPCs()
+            ->map(static fn(MDTNpc $mdtNpc): int => $mdtNpc->getId())
+            ->unique()
+            ->all();
+
+        if ($incomingNpcIds === []) {
+            return;
+        }
+
+        $keptNpcCount = count(array_intersect($previousNpcIds, $incomingNpcIds));
+        $keptRatio    = $keptNpcCount / count($previousNpcIds);
+
+        if ($keptNpcCount === 0) {
+            $this->log->importMappingVersionFromMDTNpcSetReplaced(
+                $dungeon->key,
+                count($previousNpcIds),
+                count($incomingNpcIds),
+                $allowNpcSetReplacement,
+            );
+
+            if (!$allowNpcSetReplacement) {
+                throw new MDTMappingNpcSetReplacedException(
+                    $dungeon->key,
+                    count($previousNpcIds),
+                    count($incomingNpcIds),
+                    $this->findDungeonKeyOwningNpcs($dungeon, $incomingNpcIds),
+                );
+            }
+        } elseif ($keptRatio < self::NPC_SET_OVERLAP_WARNING_THRESHOLD) {
+            $this->log->importMappingVersionFromMDTNpcSetChangedSignificantly(
+                $dungeon->key,
+                (int)round($keptRatio * 100),
+                $keptNpcCount,
+                count($previousNpcIds),
+            );
+        }
+    }
+
+    /**
+     * The dungeon that most of $npcIds are linked to, if it is not $dungeon itself - i.e. whose data MDT
+     * appears to have handed us. Null when the NPCs are not predominantly another dungeon's.
+     *
+     * @param array<int> $npcIds
+     */
+    private function findDungeonKeyOwningNpcs(Dungeon $dungeon, array $npcIds): ?string
+    {
+        /** @var NpcDungeon|null $topNpcDungeon */
+        $topNpcDungeon = NpcDungeon::query()
+            ->selectRaw('dungeon_id, COUNT(*) AS npc_count')
+            ->whereIn('npc_id', $npcIds)
+            ->whereNot('dungeon_id', $dungeon->id)
+            ->groupBy('dungeon_id')
+            ->orderByDesc('npc_count')
+            ->first();
+
+        if ($topNpcDungeon === null || $topNpcDungeon->npc_count < count($npcIds) / 2) {
+            return null;
+        }
+
+        return Dungeon::find($topNpcDungeon->dungeon_id)?->key;
     }
 
     /**
