@@ -165,9 +165,11 @@ the `Co-Authored-By: Claude` trailer, not an emoji.
 
 #### Writing as the bot: `sh/gh-bot.sh`
 
-`sh/gh-bot.sh` is a pass-through wrapper around `gh` that injects the bot's token as `GH_TOKEN` for
-that one process. The human's `gh auth login` credential on disk is untouched, so plain `gh` in the
-same shell still runs as Wotuu:
+`sh/gh-bot.sh` is a pass-through wrapper around `gh` that runs it as the bot — using either a token
+(`GH_TOKEN`, exported for that one process) or a gh config dir the bot logged into itself
+(`GH_CONFIG_DIR=~/.config/gh-bot gh auth login`, which stores an OAuth token and needs no PAT). The
+human's `gh auth login` credential on disk is untouched either way, so plain `gh` in the same shell
+still runs as Wotuu:
 
 ```bash
 sh/gh-bot.sh api user --jq .login      # self-check: must print keystone-guru-bot

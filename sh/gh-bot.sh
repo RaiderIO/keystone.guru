@@ -10,9 +10,18 @@
 #   sh/gh-bot.sh api -X POST repos/RaiderIO/keystone.guru/issues/123/comments -F body=@comment.md
 #   sh/gh-bot.sh api user --jq .login          # self-check: must print the bot login, not Wotuu
 #
-# The bot token is exported as GH_TOKEN for this process only. `gh` prefers GH_TOKEN over the
-# credential in ~/.config/gh/hosts.yml, so the human's own `gh auth login` session is left entirely
-# untouched — plain `gh` in the same shell still runs as the human.
+# Two ways to supply the bot's credential, tried in this order. Either way the human's own
+# `gh auth login` session is left entirely untouched — plain `gh` in the same shell still runs as
+# the human:
+#
+#   1. A token (fine-grained PAT), via $KSG_BOT_GH_TOKEN or a token file. Exported as GH_TOKEN for
+#      this process only; `gh` prefers GH_TOKEN over the credential in ~/.config/gh/hosts.yml.
+#   2. A separate gh config directory the bot has logged into itself:
+#          GH_CONFIG_DIR=~/.config/gh-bot gh auth login
+#      This stores an *OAuth* token, not a PAT — no PAT is created and no fine-grained-PAT org
+#      approval is involved, which matters because org owners can gate those. GH_CONFIG_DIR fully
+#      isolates the two identities; the human's ~/.config/gh/hosts.yml is never read or written.
+#      Prefer this route when PAT creation or approval is blocked.
 #
 # There is deliberately NO fallback to plain `gh`, and no path on which this script posts as anyone
 # other than the bot. A missing token is a hard failure, and so is a token belonging to some *other*
@@ -23,6 +32,7 @@ set -euo pipefail
 
 BOT_LOGIN="${KSG_BOT_GH_LOGIN:-keystone-guru-bot}"
 TOKEN_FILE="${KSG_BOT_GH_TOKEN_FILE:-$HOME/.config/keystone-guru/bot-gh-token}"
+BOT_CONFIG_DIR="${KSG_BOT_GH_CONFIG_DIR:-$HOME/.config/gh-bot}"
 
 die() {
     echo "gh-bot.sh: $*" >&2
@@ -47,20 +57,29 @@ if [ -z "$token" ] && [ -f "$TOKEN_FILE" ]; then
     token="$(tr -d '[:space:]' < "$TOKEN_FILE")"
 fi
 
-if [ -z "$token" ]; then
-    die "no token for '$BOT_LOGIN'.
-  Set \$KSG_BOT_GH_TOKEN, or write the fine-grained PAT to $TOKEN_FILE (chmod 600).
+[ $# -gt 0 ] || die "no arguments — this is a pass-through wrapper around gh"
+
+export GH_HOST=github.com
+
+if [ -n "$token" ]; then
+    # Export rather than `exec env GH_TOKEN=… gh …`: an env-prefixed exec puts the token in the new
+    # process's argv, readable by any local process via /proc/<pid>/cmdline and recorded
+    # persistently by execve process accounting. Exporting is behaviour-identical and leaks neither.
+    export GH_TOKEN="$token"
+elif [ -f "$BOT_CONFIG_DIR/hosts.yml" ]; then
+    # The bot logged itself in with `GH_CONFIG_DIR=$BOT_CONFIG_DIR gh auth login`. Point gh at that
+    # config dir and make sure GH_TOKEN is unset — GH_TOKEN takes precedence over the config dir, so
+    # an inherited one from the caller's environment would silently win and post as its owner.
+    export GH_CONFIG_DIR="$BOT_CONFIG_DIR"
+    unset GH_TOKEN
+else
+    die "no credential for '$BOT_LOGIN'. Either:
+  - log the bot in (no PAT needed, avoids fine-grained-PAT org approval):
+      GH_CONFIG_DIR=$BOT_CONFIG_DIR gh auth login
+  - or set \$KSG_BOT_GH_TOKEN / write a PAT to $TOKEN_FILE (chmod 600).
   Until the bot account is provisioned, use plain 'gh' with a ':robot:' prefixed body instead.
   Setup steps: see the 'worktree-docker' skill, 'Posting to GitHub as the bot account'."
 fi
-
-[ $# -gt 0 ] || die "no arguments — this is a pass-through wrapper around gh"
-
-# Export rather than `exec env GH_TOKEN=… gh …`: an env-prefixed exec puts the PAT in the new
-# process's argv, where it is readable by any local process via /proc/<pid>/cmdline and is recorded
-# persistently by execve process accounting. Exporting is behaviour-identical and leaks neither.
-export GH_TOKEN="$token"
-export GH_HOST=github.com
 
 # Confirm the token really belongs to the bot before handing it to gh. Without this check the
 # "never silently posts as the human" guarantee would cover only a *missing* token — a stale,
@@ -73,11 +92,11 @@ if [ "${KSG_BOT_GH_SKIP_VERIFY:-0}" != "1" ]; then
     # (e.g. {"message":"Bad credentials"}) to *stdout* on an HTTP error, so `|| true` plus an
     # emptiness test would sail past a 401 and then report the JSON blob as the account name.
     if ! actual_login="$("$GH_BIN" api user --jq .login 2>/dev/null)"; then
-        die "GitHub rejected the token (expired, revoked, or blocked by org policy — fine-grained
-  PATs can need org-owner approval). Re-check it, or use plain 'gh' with a ':robot:' prefixed body
-  in the meantime."
+        die "GitHub rejected the credential (expired, revoked, logged out, or blocked by org policy
+  — fine-grained PATs can need org-owner approval; an OAuth login via GH_CONFIG_DIR does not).
+  Re-check it, or use plain 'gh' with a ':robot:' prefixed body in the meantime."
     fi
-    [ "$actual_login" = "$BOT_LOGIN" ] || die "refusing to run: this token belongs to
+    [ "$actual_login" = "$BOT_LOGIN" ] || die "refusing to run: this credential belongs to
   '$actual_login', not '$BOT_LOGIN'. Posting with it would attribute agent activity to the wrong
   account — the exact failure this wrapper exists to prevent. Fix the token, or call plain 'gh'
   directly if posting as '$actual_login' is really what you meant."

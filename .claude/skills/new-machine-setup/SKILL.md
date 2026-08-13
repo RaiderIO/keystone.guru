@@ -54,11 +54,12 @@ machine is gone before it's copied or synced, it is simply gone.
 Nice-to-have, trivially recreated from this file if lost: `~/.claude/settings.json`,
 `.claude/settings.local.json`, `~/.config/git/ignore`.
 
-`~/.config/keystone-guru/bot-gh-token` (the `keystone-guru-bot` fine-grained PAT used by
-`sh/gh-bot.sh`, #3924) sits between the two: copying it across is far easier than re-minting, but it
-*is* recreatable from the bot account, and nothing hard-fails without it — agents fall back to plain
-`gh` with a `:robot:`-prefixed body. Re-mint per the `worktree-docker` skill, "Posting to GitHub as
-the bot account".
+The `keystone-guru-bot` credential used by `sh/gh-bot.sh` (#3924) sits between the two: either
+`~/.config/gh-bot/hosts.yml` (an OAuth login — the preferred route, no PAT involved) or
+`~/.config/keystone-guru/bot-gh-token` (a fine-grained PAT). Copying one across is easier than
+redoing it, but both are recreatable from the bot account, and nothing hard-fails without them —
+agents fall back to plain `gh` with a `:robot:`-prefixed body. Re-create per the `worktree-docker`
+skill, "Posting to GitHub as the bot account".
 
 **Do not copy the MySQL data dirs** (`docker-compose/mysql*`, ~800M). Phase 7 rebuilds them from
 the tracked schema dumps + seeders in ~10–15 minutes.

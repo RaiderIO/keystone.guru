@@ -255,34 +255,51 @@ sh/gh-bot.sh pr create --repo RaiderIO/keystone.guru --base master --draft \
   --title "#<issue> <title>" --body-file body.md
 ```
 
-It injects the bot's PAT as `GH_TOKEN` for that one process, so the human `gh auth login` session on
-disk is untouched and plain `gh` in the same shell still runs as Wotuu. It **never** silently falls
-back to plain `gh` — a missing token is a hard error, because a silent fallback would post as Wotuu
-while you believed you had posted as the bot.
+Whichever credential it uses, the human's `gh auth login` session on disk is untouched and plain
+`gh` in the same shell still runs as Wotuu. `gh-bot.sh` **never** silently falls back to plain `gh`,
+and refuses outright if the credential turns out to belong to a *different* account — either would
+end with a message attributed to Wotuu while you believed you had posted as the bot.
 
 **Until the account is provisioned on this machine, plain `gh` remains the default** — the
 `gh pr create` command earlier in this section is still correct as written. If `gh-bot.sh` errors
-for **any** reason — no token, wrong-account token, or the script not existing on an older branch
-— just use `gh` and a `:robot:`-prefixed body; that is expected, not a blocker.
+for **any** reason — no credential, wrong-account credential, or the script not existing on an older
+branch — just use `gh` and a `:robot:`-prefixed body; that is expected, not a blocker.
 
-Provisioning (one-off, per machine, and steps 1–4 need a human with a browser):
+Provisioning (one-off, per machine; steps 1–3 need a human with a browser):
 
 1. Create the `keystone-guru-bot` GitHub account, verify its email, enable 2FA.
 2. Invite it as a collaborator with **write** access
    (`gh api -X PUT repos/RaiderIO/keystone.guru/collaborators/keystone-guru-bot -f permission=push`),
-   and accept the invite from the bot account.
-3. From the bot account, mint a **fine-grained PAT** scoped to `RaiderIO/keystone.guru` only, with
-   repository permissions: Contents (read/write), Pull requests (read/write), Issues (read/write),
-   Metadata (read). Note that org policy may require an owner to approve fine-grained PATs — check
-   Org Settings → Personal access tokens.
-4. Store it — create the file with the token in it, *then* lock it down:
+   and accept the invite from the bot account. Note it does **not** need to join the organization —
+   repo collaborator is enough, and `members_can_invite_outside_collaborators` is `true`.
+3. Give it a credential. **Prefer route A** — it needs no PAT at all:
+
+   **A. OAuth login in an isolated gh config dir (recommended).**
+   ```bash
+   GH_CONFIG_DIR=~/.config/gh-bot gh auth login     # log in as keystone-guru-bot
+   ```
+   `gh auth login` stores an **OAuth** token, not a PAT, so the org's fine-grained-PAT approval
+   policy — which an org *owner* controls and a plain member cannot change — never enters the
+   picture. `GH_CONFIG_DIR` fully isolates the two identities: the bot's credential lands in
+   `~/.config/gh-bot/hosts.yml` and the human's `~/.config/gh/hosts.yml` is neither read nor
+   written. Override the path with `KSG_BOT_GH_CONFIG_DIR`. Prerequisite: the gh CLI OAuth app must
+   be authorized for the `RaiderIO` org — it already is, which is how the human's own `gho_` token
+   works today.
+
+   **B. Fine-grained PAT (only if route A is unavailable).** From the bot account, mint one scoped
+   to `RaiderIO/keystone.guru` only: Contents (read/write), Pull requests (read/write), Issues
+   (read/write), Metadata (read). Then create the file *with the token in it* and lock it down:
    ```bash
    mkdir -p ~/.config/keystone-guru
    install -m 600 /dev/null ~/.config/keystone-guru/bot-gh-token   # create empty, 0600 from birth
    read -rs token && printf '%s' "$token" > ~/.config/keystone-guru/bot-gh-token; unset token
    ```
    `read -rs` keeps the PAT out of shell history and off the terminal. Override the path with
-   `KSG_BOT_GH_TOKEN_FILE`, or skip the file entirely by exporting `KSG_BOT_GH_TOKEN`.
+   `KSG_BOT_GH_TOKEN_FILE`, or skip the file entirely by exporting `KSG_BOT_GH_TOKEN`. **Check Org
+   Settings → Personal access tokens first** — org policy can require an owner to approve
+   fine-grained PATs, and that approval is not something a non-owner can grant themselves.
+
+   A token (env var, then file) wins over the config dir if both are present.
 5. Verify: `sh/gh-bot.sh api user --jq .login` prints `keystone-guru-bot`.
 
 The token file lives outside the repo and is never committed.
