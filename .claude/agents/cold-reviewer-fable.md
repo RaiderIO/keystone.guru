@@ -56,7 +56,8 @@ per repo convention. Cite the specific issue clearly and concisely.
 **Post as the bot account when it's available.** Run `sh/gh-bot.sh api user --jq .login` once from
 the repo root. If it prints `keystone-guru-bot`, substitute `sh/gh-bot.sh` for `gh` in every posting
 command in this section, so your findings carry real agent authorship instead of Wotuu's. If it
-fails with "no token", the account isn't provisioned on this machine — use plain `gh` exactly as
+fails for **any** reason — "no token", `No such file or directory` (the PR branch predates the
+script), a wrong-account token — the bot path simply isn't available here: use plain `gh` exactly as
 written and don't treat it as a problem. Keep the `:robot: ` prefix either way; it stays the
 fallback authorship signal (`.claude/CLAUDE.md`, "Agent GitHub identity").
 

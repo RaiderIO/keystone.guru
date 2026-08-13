@@ -101,8 +101,8 @@ instead). See `.claude/CLAUDE.md`.
 
 **Post as the bot account when it's provisioned.** If `sh/gh-bot.sh api user --jq .login` prints
 `keystone-guru-bot`, use `sh/gh-bot.sh` in place of `gh` for the issue/PR/comment writes in the
-steps below (#3924). If it errors with "no token", use plain `gh` as written — that's expected, not
-a blocker. Keep the `:robot:` prefix either way.
+steps below (#3924). If it fails for **any** reason (missing token, missing script, wrong-account
+token), use plain `gh` as written — that's expected, not a blocker. Keep the `:robot:` prefix either way.
 
 ## Step 0 — Preflight
 

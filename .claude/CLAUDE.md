@@ -175,9 +175,12 @@ sh/gh-bot.sh pr create --repo RaiderIO/keystone.guru --base master --draft --tit
 ```
 
 **Plain `gh` remains the documented default everywhere until the account is provisioned on this
-machine.** If `gh-bot.sh` dies with "no token", the bot account or its PAT isn't set up here — fall
-back to plain `gh` with a `:robot:`-prefixed body and carry on. That is not a blocker and not
-something to stop and ask about. The wrapper never falls back on its own, on purpose: a silent
+machine.** If `sh/gh-bot.sh` fails **for any reason at all** — "no token", `No such file or
+directory` (a worktree branched from a commit before the script existed), a wrong-account token, a
+relative-path miss because you aren't at the repo root — fall back to plain `gh` with a
+`:robot:`-prefixed body and carry on. Do not key the fallback on the specific "no token" message;
+during the transition the *common* failure is the script simply not being present. This is never a
+blocker and never something to stop and ask about. The wrapper never falls back on its own, on purpose: a silent
 fallback would post as Wotuu while you believed you had posted as the bot, which is exactly the
 ambiguity the bot account exists to remove. Setup steps: `worktree-docker` skill, "Posting to
 GitHub as the bot account".

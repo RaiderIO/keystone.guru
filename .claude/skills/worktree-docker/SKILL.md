@@ -262,7 +262,8 @@ while you believed you had posted as the bot.
 
 **Until the account is provisioned on this machine, plain `gh` remains the default** — the
 `gh pr create` command earlier in this section is still correct as written. If `gh-bot.sh` errors
-with "no token", just use `gh` and a `:robot:`-prefixed body; that is expected, not a blocker.
+for **any** reason — no token, wrong-account token, or the script not existing on an older branch
+— just use `gh` and a `:robot:`-prefixed body; that is expected, not a blocker.
 
 Provisioning (one-off, per machine, and steps 1–4 need a human with a browser):
 
@@ -274,8 +275,14 @@ Provisioning (one-off, per machine, and steps 1–4 need a human with a browser)
    repository permissions: Contents (read/write), Pull requests (read/write), Issues (read/write),
    Metadata (read). Note that org policy may require an owner to approve fine-grained PATs — check
    Org Settings → Personal access tokens.
-4. Store it: `mkdir -p ~/.config/keystone-guru && chmod 600 ~/.config/keystone-guru/bot-gh-token`
-   (override the path with `KSG_BOT_GH_TOKEN_FILE`, or pass the token via `KSG_BOT_GH_TOKEN`).
+4. Store it — create the file with the token in it, *then* lock it down:
+   ```bash
+   mkdir -p ~/.config/keystone-guru
+   install -m 600 /dev/null ~/.config/keystone-guru/bot-gh-token   # create empty, 0600 from birth
+   read -rs token && printf '%s' "$token" > ~/.config/keystone-guru/bot-gh-token; unset token
+   ```
+   `read -rs` keeps the PAT out of shell history and off the terminal. Override the path with
+   `KSG_BOT_GH_TOKEN_FILE`, or skip the file entirely by exporting `KSG_BOT_GH_TOKEN`.
 5. Verify: `sh/gh-bot.sh api user --jq .login` prints `keystone-guru-bot`.
 
 The token file lives outside the repo and is never committed.

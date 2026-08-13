@@ -14,9 +14,10 @@
 # credential in ~/.config/gh/hosts.yml, so the human's own `gh auth login` session is left entirely
 # untouched — plain `gh` in the same shell still runs as the human.
 #
-# There is deliberately NO fallback to plain `gh` when the token is missing. Falling back would
-# silently post as the human while the caller believes it posted as the bot, which is the exact
-# ambiguity this script exists to remove — so a missing token is a hard failure instead.
+# There is deliberately NO fallback to plain `gh`, and no path on which this script posts as anyone
+# other than the bot. A missing token is a hard failure, and so is a token belonging to some *other*
+# account — both would otherwise end with a comment attributed to the human while the caller
+# believed it had posted as the bot, which is the exact ambiguity this script exists to remove.
 
 set -euo pipefail
 
@@ -55,4 +56,31 @@ fi
 
 [ $# -gt 0 ] || die "no arguments — this is a pass-through wrapper around gh"
 
-exec env GH_TOKEN="$token" GH_HOST=github.com "$GH_BIN" "$@"
+# Export rather than `exec env GH_TOKEN=… gh …`: an env-prefixed exec puts the PAT in the new
+# process's argv, where it is readable by any local process via /proc/<pid>/cmdline and is recorded
+# persistently by execve process accounting. Exporting is behaviour-identical and leaks neither.
+export GH_TOKEN="$token"
+export GH_HOST=github.com
+
+# Confirm the token really belongs to the bot before handing it to gh. Without this check the
+# "never silently posts as the human" guarantee would cover only a *missing* token — a stale,
+# swapped or copy-pasted-from-the-wrong-place PAT would post under whoever actually owns it, with
+# no visible sign, which is precisely the ambiguity this script exists to remove. One extra HTTP
+# round trip per invocation is a fair price; set KSG_BOT_GH_SKIP_VERIFY=1 inside a loop that has
+# already verified once.
+if [ "${KSG_BOT_GH_SKIP_VERIFY:-0}" != "1" ]; then
+    # Branch on gh's exit status, not on whether output is empty: `gh api` prints the error body
+    # (e.g. {"message":"Bad credentials"}) to *stdout* on an HTTP error, so `|| true` plus an
+    # emptiness test would sail past a 401 and then report the JSON blob as the account name.
+    if ! actual_login="$("$GH_BIN" api user --jq .login 2>/dev/null)"; then
+        die "GitHub rejected the token (expired, revoked, or blocked by org policy — fine-grained
+  PATs can need org-owner approval). Re-check it, or use plain 'gh' with a ':robot:' prefixed body
+  in the meantime."
+    fi
+    [ "$actual_login" = "$BOT_LOGIN" ] || die "refusing to run: this token belongs to
+  '$actual_login', not '$BOT_LOGIN'. Posting with it would attribute agent activity to the wrong
+  account — the exact failure this wrapper exists to prevent. Fix the token, or call plain 'gh'
+  directly if posting as '$actual_login' is really what you meant."
+fi
+
+exec "$GH_BIN" "$@"
