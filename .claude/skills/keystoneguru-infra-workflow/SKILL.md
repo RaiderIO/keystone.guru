@@ -105,6 +105,12 @@ Prepend `:robot:` to every comment/reply an agent posts on GitHub here too (PR/i
 review replies, PR/issue bodies) — same reasoning as keystone.guru: it marks agent-authored content
 so it's never mistaken for the account owner speaking. Never on titles.
 
+**`sh/gh-bot.sh` does not apply in this repo — use plain `gh` here.** The `keystone-guru-bot`
+account introduced in #3924 is a collaborator on `RaiderIO/keystone.guru` only, and its fine-grained
+PAT is scoped to that single repository; pointing it at `RaiderIO/keystoneguru-infra` would 403/404
+rather than post. So here the `:robot:` prefix isn't a fallback signal — it remains the *only* one,
+which is one more reason never to drop it from a message in this repo.
+
 ## Cold review
 
 There is no automated `babysit-prs`-equivalent loop running against this repo (yet — if that's

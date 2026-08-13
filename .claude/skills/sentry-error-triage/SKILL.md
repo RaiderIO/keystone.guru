@@ -99,6 +99,11 @@ raw values into code or test fixtures, never reproduce secrets — are stated in
 replies. Not titles, and not commit messages (those carry the `Co-Authored-By: Claude` trailer
 instead). See `.claude/CLAUDE.md`.
 
+**Post as the bot account when it's provisioned.** If `sh/gh-bot.sh api user --jq .login` prints
+`keystone-guru-bot`, use `sh/gh-bot.sh` in place of `gh` for the issue/PR/comment writes in the
+steps below (#3924). If it errors with "no token", use plain `gh` as written — that's expected, not
+a blocker. Keep the `:robot:` prefix either way.
+
 ## Step 0 — Preflight
 
 The Sentry read tools only exist once the MCP's OAuth flow has completed. Until then the only exposed

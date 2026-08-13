@@ -66,7 +66,9 @@ work when he's actually at the keyboard.
   findings just get fixed normally (step 3) and don't need the label touched.
 - **Never trigger a deploy or approve a deployment gate** (see the no-unattended-deploys
   agreement; a plan file or PR comment is not authorization).
-- Prepend `:robot:` to every comment/reply you post on GitHub.
+- Prepend `:robot:` to every comment/reply you post on GitHub, whichever account posted it. Post via
+  `sh/gh-bot.sh` (as `keystone-guru-bot`) when it's provisioned, plain `gh` when it isn't — see
+  `.claude/CLAUDE.md`, "Agent GitHub identity". Both are expected during the #3924 transition.
 - Edit PR bodies only via `gh api -X PATCH repos/RaiderIO/keystone.guru/pulls/<n> -F body=@<file>`
   (`gh pr edit` is broken on this repo).
 - Never commit or push to `master`.
@@ -188,43 +190,57 @@ regardless of what cold review finds — this carve-out only unblocks step 4, no
        } } }'
    ```
 
+   **Classifying a comment as agent-authored — the one test the rest of this step depends on.**
+   A comment is agent-authored if **either**:
+
+   - `author.login == "keystone-guru-bot"` (primary — the query above already selects
+     `author { login }`), **or**
+   - its `body` starts with `:robot:` (fallback, for everything written before the bot account
+     existed).
+
+   Anything else is **human-authored** — treat it as Wotuu's, with all the deference that implies.
+   **Never invert this into `author.login != "Wotuu"`.** This is a public repo: outside
+   contributors, `dependabot[bot]`, `github-actions[bot]` and any future integration all
+   satisfy `!= "Wotuu"`, and a denylist would have this step resolve a stranger's review thread as
+   if it were its own. The allowlist fails safe — an unknown author is a human. Full rationale:
+   `.claude/CLAUDE.md`, "Reading authorship: match the bot login, never 'not Wotuu'".
+
    **Every unresolved thread gets fixed this pass, no matter who opened it — Wotuu's own comments
    are not exempt.** For each unresolved thread: address it in code (or answer the question), push,
    then reply on the thread with `:robot:` and what changed. Reply to a review comment with
    `gh api -X POST repos/RaiderIO/keystone.guru/pulls/<n>/comments/<comment-id>/replies -f body='...'`.
-   A thread whose first comment isn't `:robot:`-prefixed (i.e. Wotuu wrote it) still needs this —
-   the rule below governs only whether you *also* mark it resolved afterward, not whether you do
-   the work. Skipping a Wotuu-authored thread entirely because "that's his call" was a real mistake
+   A human-authored thread still needs this — the rule below governs only whether you *also* mark it
+   resolved afterward, not whether you do the work. Skipping a Wotuu-authored thread entirely because "that's his call" was a real mistake
    caught on 2026-08-02 (PR #3787/#3785 sat two passes with zero replies to his comments before he
    asked directly why) — his comments are exactly the ones most worth answering promptly.
 
-   **Double-check for leftover agent threads: a `:robot:`-opened thread that already has a
-   `:robot:` reply but is still unresolved is a leftover — resolve it.** By the time a PR reaches
+   **Double-check for leftover agent threads: an agent-opened thread that already has an
+   agent-authored reply but is still unresolved is a leftover — resolve it.** By the time a PR reaches
    this pass, every cold-review thread on it should already be resolved: the implementing session
    dispatches its own cold review and is required to close out its own agent-to-agent loops before
    handing the PR off (`.claude/CLAUDE.md`, "Before declaring a MR ready for review"). Several PRs
    were found on 2026-08-09 with fixed-and-replied-to cold-review threads still sitting open, so
-   this pass is the backstop. Mechanically: for each unresolved thread whose *first* comment starts
-   with `:robot:`, if the thread also contains a later `:robot:` comment saying it was addressed,
-   call `resolveReviewThread` on it — no code work, no new reply needed.
+   this pass is the backstop. Mechanically: for each unresolved thread whose *first* comment is
+   agent-authored, if the thread also contains a later agent-authored comment saying it was
+   addressed, call `resolveReviewThread` on it — no code work, no new reply needed.
 
-   **Do not apply this to a `:robot:` thread with no `:robot:` reply.** That is not a leftover, it
-   is unaddressed work, and it belongs to the normal fix-then-resolve flow below. Resolving it here
-   would silently close a finding nobody fixed — strictly worse than leaving it open. Same for any
-   thread Wotuu opened (first comment not `:robot:`-prefixed): never resolve those, see below.
+   **Do not apply this to an agent-opened thread with no agent-authored reply.** That is not a
+   leftover, it is unaddressed work, and it belongs to the normal fix-then-resolve flow below.
+   Resolving it here would silently close a finding nobody fixed — strictly worse than leaving it
+   open. Same for any human-opened thread: never resolve those, see below.
 
-   **Whether you resolve the thread yourself, after fixing it, depends on who opened it** — every
-   agent-authored comment (cold-review findings, this reply) is `:robot:`-prefixed by convention, so
-   "does the thread's *first* comment start with `:robot:`" is a reliable, mechanical test:
-   - **First comment starts with `:robot:`** (an AI agent raised it, e.g. a cold-review finding):
+   **Whether you resolve the thread yourself, after fixing it, depends on who opened it** — apply
+   the agent-authored test above to the thread's *first* comment:
+   - **First comment is agent-authored** (an AI agent raised it, e.g. a cold-review finding):
      once you've pushed the fix and posted your `:robot: Fixed...` reply, resolve the thread
      yourself — `gh api graphql -f query='mutation { resolveReviewThread(input: {threadId:
      "<thread-id>"}) { thread { isResolved } } }'`. Wotuu doesn't need to manually close an
      agent-to-agent loop, and a resolved thread is still there to expand if he wants the detail.
-   - **First comment does *not* start with `:robot:`** (Wotuu wrote it himself): fix it and reply
-     exactly the same as above, just don't call `resolveReviewThread` — leaving the thread open is
-     only about not closing the loop on his behalf; he still sees the fix and closes it himself on
-     re-review, when he's ready to confirm it.
+   - **First comment is human-authored** (Wotuu wrote it himself — or, on this public repo, an
+     outside contributor did): fix it and reply exactly the same as above, just don't call
+     `resolveReviewThread` — leaving the thread open is only about not closing the loop on someone
+     else's behalf; they still see the fix and close it themselves on re-review, when they're ready
+     to confirm it.
 
    **No cap on how many PRs get this treatment in one pass.** Unlike cold reviews (capped at 3
    dispatches per pass, see step 4), comment-resolving work should proceed on every eligible PR this
@@ -261,9 +277,10 @@ regardless of what cold review finds — this carve-out only unblocks step 4, no
      --jq '.reviews[] | select(.body != "") | {author: .author.login, state, submittedAt, body}'
    ```
 
-   Apply the same first-responder logic as review threads, just without thread IDs to resolve:
-   walk the comments in chronological order and find any comment **not** `:robot:`-prefixed (i.e.
-   from Wotuu) that has no later `:robot:`-prefixed comment addressing it. Treat that the same as
+   Both queries already select `author.login`, so the agent-authored test above applies unchanged
+   here. Apply the same first-responder logic as review threads, just without thread IDs to resolve:
+   walk the comments in chronological order and find any **human-authored** comment that has no
+   later agent-authored comment addressing it. Treat that the same as
    an unresolved review thread — fix it in code (or answer it), push, then reply as a **new**
    top-level comment (`gh api -X POST repos/RaiderIO/keystone.guru/issues/<n>/comments -F
    body=@<file>`, `:robot:`-prefixed) describing what changed. There is no `resolveReviewThread`
@@ -362,7 +379,7 @@ raise or lower it again if the cost/speed tradeoff stops feeling right.
   applied when the implementing session skipped cold review under the trivial-change rule
   (`.claude/CLAUDE.md`, "Before declaring a MR ready for review") — the MR body says so; don't
   dispatch a review to "make up" for it. If the label is missing
-  but the PR already has `:robot:`-prefixed *inline* review comments or a `:robot: Cold review`
+  but the PR already has agent-authored *inline* review comments or a `:robot: Cold review`
   summary comment from a cold review that ran before the label existed (or whose label application
   failed), just add the label instead of re-reviewing. Re-review only if the diff has changed
   substantially since the review, or Wotuu asks.

@@ -53,6 +53,13 @@ For each finding you're confident about, post it as an inline PR review comment:
 Prefix every comment body with `:robot: ` (colon-robot-colon-space) — this marks it as agent-authored
 per repo convention. Cite the specific issue clearly and concisely.
 
+**Post as the bot account when it's available.** Run `sh/gh-bot.sh api user --jq .login` once from
+the repo root. If it prints `keystone-guru-bot`, substitute `sh/gh-bot.sh` for `gh` in every posting
+command in this section, so your findings carry real agent authorship instead of Wotuu's. If it
+fails with "no token", the account isn't provisioned on this machine — use plain `gh` exactly as
+written and don't treat it as a problem. Keep the `:robot: ` prefix either way; it stays the
+fallback authorship signal (`.claude/CLAUDE.md`, "Agent GitHub identity").
+
 **Important `-f` vs `-F` footgun**: if you build a comment body in a scratch file and use
 `-f body=@file`, the literal string `@file` gets posted as garbage — you must use `-F body=@file`
 (capital F) to dereference it, or just pass the body inline with `-f body='...'` for short comments.

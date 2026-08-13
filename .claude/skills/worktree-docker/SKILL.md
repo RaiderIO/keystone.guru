@@ -243,6 +243,43 @@ To re-provision the deploy key (e.g. on a new machine): generate a passphraseles
 as a write deploy key —
 `gh api -X POST repos/RaiderIO/keystone.guru/keys -f title=claude-worktree-push -f key="$(cat ~/.ssh/keystone_worktree_ed25519.pub)" -F read_only=false`.
 
+### Posting to GitHub as the bot account
+
+The deploy key above covers `git push` only. The `gh` CLI / REST surface — `gh pr create`, comments,
+review replies, label edits — runs as whichever account `gh auth login` stored, i.e. Wotuu. Issue
+#3924 moves that half to a dedicated bot account, **`keystone-guru-bot`**, via `sh/gh-bot.sh`:
+
+```bash
+sh/gh-bot.sh api user --jq .login    # self-check — must print keystone-guru-bot
+sh/gh-bot.sh pr create --repo RaiderIO/keystone.guru --base master --draft \
+  --title "#<issue> <title>" --body-file body.md
+```
+
+It injects the bot's PAT as `GH_TOKEN` for that one process, so the human `gh auth login` session on
+disk is untouched and plain `gh` in the same shell still runs as Wotuu. It **never** silently falls
+back to plain `gh` — a missing token is a hard error, because a silent fallback would post as Wotuu
+while you believed you had posted as the bot.
+
+**Until the account is provisioned on this machine, plain `gh` remains the default** — the
+`gh pr create` command earlier in this section is still correct as written. If `gh-bot.sh` errors
+with "no token", just use `gh` and a `:robot:`-prefixed body; that is expected, not a blocker.
+
+Provisioning (one-off, per machine, and steps 1–4 need a human with a browser):
+
+1. Create the `keystone-guru-bot` GitHub account, verify its email, enable 2FA.
+2. Invite it as a collaborator with **write** access
+   (`gh api -X PUT repos/RaiderIO/keystone.guru/collaborators/keystone-guru-bot -f permission=push`),
+   and accept the invite from the bot account.
+3. From the bot account, mint a **fine-grained PAT** scoped to `RaiderIO/keystone.guru` only, with
+   repository permissions: Contents (read/write), Pull requests (read/write), Issues (read/write),
+   Metadata (read). Note that org policy may require an owner to approve fine-grained PATs — check
+   Org Settings → Personal access tokens.
+4. Store it: `mkdir -p ~/.config/keystone-guru && chmod 600 ~/.config/keystone-guru/bot-gh-token`
+   (override the path with `KSG_BOT_GH_TOKEN_FILE`, or pass the token via `KSG_BOT_GH_TOKEN`).
+5. Verify: `sh/gh-bot.sh api user --jq .login` prints `keystone-guru-bot`.
+
+The token file lives outside the repo and is never committed.
+
 ### Rewriting a commit that isn't `HEAD` (interactive rebase is unsupported here)
 
 Mark the tip first, reset, amend, then replay: `git branch -f save HEAD`,

@@ -146,14 +146,58 @@ You can use `gh issue view <issue number> --repo RaiderIO/keystone.guru --json n
 to request info from Github. Any call to `gh issue view` MUST be accompanied by `--json` to prevent deprecation warnings
 and the command failing.
 
+### Agent GitHub identity
+
+Agent-authored GitHub activity is migrating from "Wotuu's own account plus a `:robot:` prefix" to a
+dedicated bot account, **`keystone-guru-bot`** (#3924). Both mechanisms are deliberately live at
+once during the transition — every PR opened before the bot existed carries only the prefix, so
+dropping the prefix half would break triage on all of them. Do not remove either half until #3924's
+follow-up says the pre-migration PRs have drained.
+
 Prepend every message you post on GitHub (PR/issue comments, review replies, PR/issue bodies) with
-a `:robot:` emoji so it is clear the message is from Claude and not the account owner. This avoids
-the appearance of impersonating the user.
+a `:robot:` emoji, **whichever account posted it**. It marks the message as agent-authored at a
+glance, and it is the fallback authorship signal wherever the bot account wasn't used.
 
 **Bodies and comments only — never titles.** A PR or issue *title* gets no `:robot:` prefix (and no
 🤖). Titles are read in lists, notifications and the merge commit, where the prefix is just noise;
 the body directly underneath already carries it. Same for commit messages — those are attributed via
 the `Co-Authored-By: Claude` trailer, not an emoji.
+
+#### Writing as the bot: `sh/gh-bot.sh`
+
+`sh/gh-bot.sh` is a pass-through wrapper around `gh` that injects the bot's token as `GH_TOKEN` for
+that one process. The human's `gh auth login` credential on disk is untouched, so plain `gh` in the
+same shell still runs as Wotuu:
+
+```bash
+sh/gh-bot.sh api user --jq .login      # self-check: must print keystone-guru-bot
+sh/gh-bot.sh pr create --repo RaiderIO/keystone.guru --base master --draft --title '...' --body-file b.md
+```
+
+**Plain `gh` remains the documented default everywhere until the account is provisioned on this
+machine.** If `gh-bot.sh` dies with "no token", the bot account or its PAT isn't set up here — fall
+back to plain `gh` with a `:robot:`-prefixed body and carry on. That is not a blocker and not
+something to stop and ask about. The wrapper never falls back on its own, on purpose: a silent
+fallback would post as Wotuu while you believed you had posted as the bot, which is exactly the
+ambiguity the bot account exists to remove. Setup steps: `worktree-docker` skill, "Posting to
+GitHub as the bot account".
+
+#### Reading authorship: match the bot login, never "not Wotuu"
+
+To decide whether a comment, review thread or PR was written by an agent, test the author against
+the bot login — an **allowlist**:
+
+```bash
+# agent-authored  <=>  author.login == "keystone-guru-bot"  (primary)
+#                 or   body starts with ":robot:"           (fallback, pre-migration content)
+# everything else <=>  human — treat as Wotuu's, with all the deference that implies
+```
+
+**Never write the inverse test (`author.login != "Wotuu"` ⇒ agent).** `RaiderIO/keystone.guru` is a
+public repo: an outside contributor, `dependabot[bot]`, `github-actions[bot]` and every future
+integration all satisfy `!= "Wotuu"`. Under a denylist, `babysit-prs` would classify a stranger's
+review thread as its own and `resolveReviewThread` it away. The allowlist fails safe — an unknown
+author is treated as a human whose thread an agent must never resolve on their behalf.
 
 `gh pr edit` works on gh ≥ 2.96.0 (`~/.local/bin/gh`; the apt 2.4.0 at `/usr/bin/gh` fails with a
 Projects-classic GraphQL error — if that error appears, check `gh --version`). REST fallback:
