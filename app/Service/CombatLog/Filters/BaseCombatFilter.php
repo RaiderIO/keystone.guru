@@ -6,6 +6,7 @@ use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
+use App\Logic\CombatLog\CombatEvents\Interfaces\HasGenericData;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Spell as SpellPrefix;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraApplied\AuraAppliedInterface;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
@@ -202,8 +203,17 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
                     return false;
                 }
-            } elseif ($combatLogEvent instanceof CombatLogEvent) {
+            } elseif ($combatLogEvent instanceof HasGenericData) {
+                // UnitDied is a GenericSpecialEvent rather than a CombatLogEvent - both carry generic data, so type
+                // check against the interface. Checking against CombatLogEvent alone discards every enemy death.
                 $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
+
+                if ($destGuid === null) {
+                    $this->log->parseInvalidCombatLogEvent($lineNr);
+
+                    return false;
+                }
+
                 $this->log->parseUnitDied($lineNr, $destGuid->getGuid());
             } else {
                 $this->log->parseInvalidCombatLogEvent($lineNr);
