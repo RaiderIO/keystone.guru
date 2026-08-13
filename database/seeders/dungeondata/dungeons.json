@@ -17899,7 +17899,7 @@
                 "id": 454,
                 "index": 1,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 2572,
                 "map_name": null,
                 "name": "dungeons.midnight.voidscar_arena.floors.halls_of_spite",
                 "default": 1,
@@ -17915,14 +17915,21 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1342,
+                        "floor1_id": 454,
+                        "floor2_id": 455,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
                 "id": 455,
                 "index": 2,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 2573,
                 "map_name": null,
                 "name": "dungeons.midnight.voidscar_arena.floors.voidscar_arena",
                 "default": 0,
@@ -17938,14 +17945,27 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1343,
+                        "floor1_id": 455,
+                        "floor2_id": 454,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1344,
+                        "floor1_id": 455,
+                        "floor2_id": 456,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
                 "id": 456,
                 "index": 3,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 2574,
                 "map_name": null,
                 "name": "dungeons.midnight.voidscar_arena.floors.domanaars_ascent",
                 "default": 0,
@@ -17961,7 +17981,14 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1345,
+                        "floor1_id": 456,
+                        "floor2_id": 455,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             },
             {
