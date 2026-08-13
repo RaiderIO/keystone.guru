@@ -105,6 +105,18 @@ Prepend `:robot:` to every comment/reply an agent posts on GitHub here too (PR/i
 review replies, PR/issue bodies) — same reasoning as keystone.guru: it marks agent-authored content
 so it's never mistaken for the account owner speaking. Never on titles.
 
+**`sh/gh-bot.sh` does not apply in this repo — use plain `gh` here.** The `keystone-guru-bot`
+account introduced in #3924 is a collaborator on `RaiderIO/keystone.guru` only, so it has no write
+access here and would 403/404 rather than post. The reason is **collaboratorship, not credential
+scope** — under the recommended OAuth route the bot's credential carries `repo` broadly, so it is
+repo access, not token scope, that stops it. Don't "fix" this by widening the credential; it would
+change nothing.
+
+This is unlikely to change soon: Wotuu has `push` but **not `admin`** on `keystoneguru-infra`, so he
+cannot add the bot here himself — it would take an org owner. So in this repo the `:robot:` prefix
+isn't a fallback signal, it remains the *only* one, which is one more reason never to drop it from a
+message here.
+
 ## Cold review
 
 There is no automated `babysit-prs`-equivalent loop running against this repo (yet — if that's
