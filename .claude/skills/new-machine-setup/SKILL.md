@@ -408,6 +408,12 @@ docker compose exec -T app php artisan db:seed --database=migrate --force
 docker compose exec -T app php artisan db:seed --class=LaratrustSeeder --database=migrate
 ```
 
+> `--class` is safe **here only** because `LaratrustSeeder::getAffectedModelClasses()` is empty, so
+> it needs no `*_temp` staging tables. For any seeder that does have affected models —
+> `DungeonDataSeeder` above all — `--class` bypasses `DatabaseSeeder`'s temp-table wrapper and
+> leaves the database with committed deletes and nothing loaded back. Use
+> `php artisan db:seedone --database=migrate <SeederClass>` instead; see the `seeder-load` skill.
+
 `LaratrustSeeder` creates exactly three users: **1 = admin (`admin@app.com` / `password`)**,
 2 = internal_team, 3 = user. Tests assume user id 1 is the admin, so skipping this step yields a
 schema that looks fine and fails half the suite.

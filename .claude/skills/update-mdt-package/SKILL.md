@@ -272,6 +272,52 @@ Read the output for each dungeon and handle:
 - **Other errors:** try to fix them yourself first (the user prefers this). Only pause for the
   user if you get genuinely stuck.
 
+### A dungeon can import cleanly and still end up with zero enemy packs
+
+`MDTMappingImportService::importEnemyPacks()` builds packs purely from the per-clone `["g"]`
+group field in MDT's own Lua. Some dungeons ship **without any `["g"]` data at all** — the
+import then succeeds, exits 0, logs no warning, and simply creates no packs. Every enemy lands
+with `enemy_pack_id: null` and the dungeon is unusable for routing.
+
+Check it per dungeon after importing — it costs one grep, and the failure is otherwise silent:
+
+```sh
+grep -c '\["g"\]' vendor/nnoggie/mythicdungeontools/<Expansion>/<Dungeon>.lua
+```
+
+A healthy dungeon returns 100–300. A `0` means packs must be **authored by hand** from enemy
+positions; there is nothing upstream to import and re-running the import will never fix it.
+Report any such dungeon to the user rather than silently shipping a pack-less mapping.
+
+Hand-authoring, when it comes to that (Den of Nalorakk, MDT 6.2.1, mv 841 — 60 packs):
+
+- Cluster the mapping version's enemies per floor by proximity (single-linkage, cap 5 members),
+  excluding NPCs MDT marks `["isBoss"] = true`. Enemy `classification_id` is **not** a boss
+  signal — it is `2` for every NPC in a fresh Midnight import, and `lang/en_US/npcs.php` has no
+  entries yet, so MDT's Lua is the only place the boss flag and the real NPC names exist.
+- Write `enemy_packs.json` in the exact shape `mapping:save` emits (key order `id`,
+  `mapping_version_id`, `floor_id`, `group`, `teeming`, `faction`, `color`, `color_animated`,
+  `label`, `vertices_json`; sorted by `id`; 4-space indent; no trailing newline). `vertices_json`
+  is a **JSON-encoded string**, not a nested array, and there is no vertices table.
+- Match `getVerticesBoundingBoxFromEnemies()`: a 4-point axis-aligned box with padding `1`, in
+  `(minLat,minLng) → (maxLat,minLng) → (maxLat,maxLng) → (minLat,maxLng)` order. Round the
+  padded bounds — float noise like `-227.17000000000002` otherwise lands in the file and
+  re-diffs on the next export. Whole numbers are written bare (`-217`, never `-217.0`), which is
+  what PHP's `json_encode` produces and what all existing pack data uses.
+- `label` is `"Enemy pack"` (what the map editor writes), **not** `"Imported from MDT - group N"`.
+- `id` is a global autoincrement shared across every dungeon — take the max across
+  `database/seeders/dungeondata/**/enemy_packs.json` and continue from there. `group` numbers
+  run sequentially **dungeon-wide**, continuing across floors.
+- Patch `enemy_pack_id` into `enemies.json` **textually**, one line at a time. Do not load and
+  re-dump the file: it holds every mapping version side by side, and a re-dump risks reformatting
+  rows belonging to older versions. The diff must contain nothing but `enemy_pack_id` lines.
+- Remember the numbered dungeon subfolders are **floor indexes**, not mapping versions.
+
+> **Seeder JSON changes are invisible in the app until the data reaches the database.** Writing
+> `enemy_packs.json` does not put packs on the map — the app renders from the DB, and
+> `DungeonDataSeeder` is what closes that gap. Say so explicitly when handing such work over;
+> "the files are written and verified" reads as "go look at it" and it will not be there.
+
 > **Reading import output:** the command emits a very large volume of `DEBUG`/`INFO` log
 > lines. Redirect to a file and grep for the markers that matter rather than dumping it all,
 > e.g. `... > /tmp/mdt_<key>.log 2>&1; echo "exit=$?"` then

@@ -1,6 +1,6 @@
 ---
 name: seeder-load
-description: Guide for adding a RelationParser so a new model or nested relation is correctly imported from the dungeon JSON seeder files. Use when a new model/child table needs to be populated during `php artisan db:seed --class=DungeonDataSeeder`. Also covers the separate `LoadsSeasonData` load path used by `AffixSeeder`/`SeasonsSeeder` for `database/seeders/seasondata/`, which bypasses `RelationMapping`/`RelationParser` entirely.
+description: Guide for adding a RelationParser so a new model or nested relation is correctly imported from the dungeon JSON seeder files. Use when a new model/child table needs to be populated by `DungeonDataSeeder` (run it with `db:seedone`, never `db:seed --class=`). Also covers the separate `LoadsSeasonData` load path used by `AffixSeeder`/`SeasonsSeeder` for `database/seeders/seasondata/`, which bypasses `RelationMapping`/`RelationParser` entirely.
 ---
 
 # Seeder Load
@@ -151,10 +151,45 @@ foreach ($floor['dungeon_speedrun_required_npcs25_man'] ?? [] as $speedrunNpc) {
 1. Create a `RelationParser` class with the three interface methods.
 2. Add the parser to the correct `RelationMapping` (`setPreSaveRelationParsers` or `setPostSaveRelationParsers`).
 3. Add the model class to `DungeonDataSeeder::getAffectedModelClasses()`.
-4. Run `php artisan db:seed --class=DungeonDataSeeder` inside Docker and verify row counts.
+4. Run `php artisan db:seedone --database=migrate DungeonDataSeeder` inside Docker (see below —
+   **never** `db:seed --class=...`) and verify row counts.
 5. Confirm the companion `seeder-save` export produces the JSON structure this parser expects.
 
 See also: `seeder-save` skill for the corresponding export side.
+
+## Never run `db:seed --class=<Seeder>` — it destroys data
+
+`--class` makes Laravel call the seeder's `run()` **directly**, bypassing `DatabaseSeeder::run()`.
+That wrapper is what does the prepare → apply → cleanup dance: it creates the `<table>_temp`
+staging tables, lets the seeder fill them, then atomically `RENAME`s them into place. Skip it and
+the seeder writes into `*_temp` tables that were never created, dying on
+`Base table or view not found: … 'floors_temp' doesn't exist`.
+
+The failure is **not** clean. `DungeonDataSeeder::rollback()` runs first and issues real,
+committed deletes before the staged import that would restore them:
+
+- demo `DungeonRoute`s (`where demo = true`), with their killzones/paths/brushlines,
+- every `map_icons` row with a non-null `mapping_version_id`,
+- every `polylines` row with `model_class = EnemyPatrol`.
+
+So a `--class` run leaves the database missing all three with nothing loaded back. Recovery is a
+correct seed run, which restores them from the JSON.
+
+Use one of these instead — both go through `DatabaseSeeder::run()`:
+
+```sh
+# one seeder (or several, comma-separated — bare class names under Database\Seeders)
+docker compose exec -T app php artisan db:seedone --database=migrate DungeonDataSeeder
+
+# everything (the full documented path; several minutes)
+docker compose exec -T app php artisan db:seed --database=migrate --force
+```
+
+`db:seedone` exists precisely because `--class` is unsafe here
+(`app/Console/Commands/Database/SeedOne.php`, signature `db:seedone {--database=} {className}`).
+
+> Seeder JSON edits are invisible in the app until a seed run lands them in the database — the
+> site renders from the DB, not from `database/seeders`.
 
 ## `SeederModel` rows: which are recoverable from seeders, which are not
 
