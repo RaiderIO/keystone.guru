@@ -13,6 +13,14 @@ ideally on a loop:
 /loop 15m /babysit-prs
 ```
 
+**Run this session on Opus, not Sonnet.** A babysit loop is a long-lived session, and long sessions
+are exactly where Sonnet costs more than Opus rather than less — see "Model routing" in
+`.claude/CLAUDE.md`. Measured over 30 days of transcripts, one `/loop /babysit-prs` session on
+Sonnet ran to 1,256 assistant turns; Sonnet writes roughly half as much per turn as Opus, so it
+needs about twice the turns, and every extra turn re-reads the whole accumulated context. Cache
+reads are ~84% of a session's token spend, so turn count — not the per-token rate — is what sets
+the bill. Sonnet's cheaper rate does not survive that multiplier past ~100 turns.
+
 ## Quiet hours (1am–7am local)
 
 If a `/loop`-triggered firing of this skill lands between 1am and 7am **local time** (check with
@@ -358,8 +366,8 @@ raise or lower it again if the cost/speed tradeoff stops feeling right.
   summary comment from a cold review that ran before the label existed (or whose label application
   failed), just add the label instead of re-reviewing. Re-review only if the diff has changed
   substantially since the review, or Wotuu asks.
-- **Never run the review inside this session.** The babysitter usually runs on Sonnet and its
-  context is warm — both defeat the purpose. Spawn a fresh agent instead, using the repo's own
+- **Never run the review inside this session.** This session's context is warm, which defeats the
+  purpose of a *cold* review. Spawn a fresh agent instead, using the repo's own
   custom subagent types rather than `general-purpose` — `Agent` tool, `subagent_type:
   "cold-reviewer-opus"` (`"cold-reviewer-fable"` for high-risk diffs: migrations, auth, payment,
   data-destructive changes). Both live at `.claude/agents/cold-reviewer-{opus,fable}.md` and are

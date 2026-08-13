@@ -6,6 +6,72 @@
   rather than Claude's auto-memory system. Auto-memories don't transfer between machines; in-repo
   notes do.
 
+## Model routing: pick by expected session *length*, not task difficulty
+
+**Opus is the default.** Route by how long the session will run, because session length — not task
+complexity — is what actually predicts token spend.
+
+| Expected session | Model | Why |
+|---|---|---|
+| Short, bounded (< ~100 turns) | Sonnet | Genuinely efficient here: ~$2/session vs Opus ~$5 |
+| Anything open-ended, or already past ~100 turns | **Opus** | Sonnet's rate advantage is gone by here |
+| Long unattended runs, `/loop` sessions, cross-cutting migrations, unknown-root-cause debugging, multi-part architecture | **Fable** | Fewest turns per unit of work |
+
+**Why it inverts.** ~84% of a session's token spend is *cache reads* — re-reading the accumulated
+conversation on every turn. So cost is driven by turn count, not by the per-token rate. Sonnet
+writes ~547 output tokens per turn against Opus's ~906, so it needs roughly twice the turns for the
+same work, and burns 468 context tokens per output token against Opus's 225. Net effect measured
+over 30 days of transcripts: **Sonnet costs more per unit of delivered work than Opus** ($171 vs
+$156 per 1M output tokens) despite being 40% cheaper per token. In sessions ≥ 300 turns Sonnet
+averaged $71 against Opus's $78 — near-identical cost for a weaker model.
+
+**Corollaries:**
+- Don't reach for a cheaper model to save budget on a big task. It costs more, not less. This is
+  also why Haiku has no place in the implementation path.
+- If a "short" Sonnet task is still going at ~100 turns, it was mis-routed. Don't switch models
+  mid-session (that invalidates the prompt cache and re-reads the whole transcript cold) — finish,
+  then restart the remainder on Opus.
+- **The largest lever is not model choice at all.** Since cache reads dominate, anything that
+  shortens sessions beats any routing rule: `/clear` between tasks, one worktree per task, and
+  pushing file-reading fan-out into subagents so the main context stays small. Halving average
+  session length is worth more than every routing change combined.
+
+Escalate to Fable regardless of length for high-risk diffs (migrations, auth, payment,
+data-destructive) — there the reason is capability, not cost.
+
+### Check the model before starting a task
+
+You cannot switch model mid-session, and switching would be the wrong move anyway (it invalidates
+the prompt cache and re-reads the whole transcript cold). So the check happens **once, at the top of
+a task, before any work** — before `sh/worktree.sh create` in particular, whose isolated seed takes
+5–15 minutes that a restart throws away.
+
+Estimate the task's **turn count** from its shape, then compare against the session's model:
+
+| Task shape | Est. turns | Wants |
+|---|---|---|
+| Mechanical, enumerable edits — translation files, renames, a templated sibling of an already-worked issue, a one-file fix with a known cause | < ~100 | Sonnet |
+| A bug with an unknown-but-findable cause, a medium refactor, a feature touching a handful of files | ~100–300 | Opus |
+| A new feature spanning many files, a cross-cutting migration, unknown-root-cause debugging, multi-part design, anything unattended | > ~300 | Fable |
+
+**Speak up only when the session is under-powered — stay silent when it is over-powered.** The
+asymmetry is deliberate and comes from the measured data: running Opus on a short task costs ~$5
+against Sonnet's ~$2, which is noise, while running Sonnet on a long task costs about what Opus
+would *and* delivers weaker results. A gate that fires in both directions is a gate that gets
+ignored, so being over-powered is never worth a turn of the user's attention.
+
+When under-powered, say so in one or two sentences and **stop — do no work and create no worktree**:
+
+> This looks like a > ~300-turn task (new feature, many files). We're on Opus; this wants Fable.
+> Restart on Fable, or tell me to proceed on Opus and I will.
+
+Then wait. If told to proceed anyway, proceed without re-raising it.
+
+**Mid-session tripwire.** The estimate will sometimes be wrong. If a session routed as Sonnet-short
+is still going at ~100 turns, or an Opus session at ~300, say so once — the same one-liner, offering
+to finish the current step and hand the remainder to a fresh session on the heavier model. Once per
+session, not every 50 turns.
+
 ## Revising a long document
 
 When you revise a plan, design doc, or issue body that the user has **already read**, lead the
@@ -109,6 +175,20 @@ For example:
 - `docker compose exec -T app php ...`
 - `docker compose exec -T app php artisan ...`
 - `docker compose exec -T app vendor/bin/phpunit ...`
+
+### Seeding: never `db:seed --class=<Seeder>`
+`--class` calls the seeder's `run()` directly, skipping `DatabaseSeeder`'s prepare/apply wrapper —
+so the `<table>_temp` staging tables are never created and the run dies on
+`Table '..._temp' doesn't exist`. It is **not** a clean failure: `DungeonDataSeeder::rollback()`
+has already committed deletes of demo dungeon routes, all `map_icons` with a `mapping_version_id`,
+and all `EnemyPatrol` polylines, and the import that restores them never happens. Use:
+
+- one seeder: `docker compose exec -T app php artisan db:seedone --database=migrate <SeederClass>`
+- everything: `docker compose exec -T app php artisan db:seed --database=migrate --force`
+
+(`--class` is only safe for a seeder with no affected model classes, e.g. `LaratrustSeeder`.)
+Seeder JSON edits are invisible in the app until a seed run lands them in the DB. Full detail:
+`seeder-load` skill.
 
 ## Host Machine
 - The host machine runs Windows.
@@ -290,6 +370,34 @@ rationale: `seeder-load` skill, "SeederModel rows".
 - Split destructive schema changes across two releases (expand/contract): release N removes the
   last code consumer while leaving the old schema in place; release N+1 ships the drop/rename.
   Column rename = add new + backfill + dual-write in N, drop old in N+1.
+
+## Mapping
+
+### Lat/lng is display-only — never measure with it
+A map object's `lat`/`lng` are **presentation coordinates on a fixed 256×384 image**, not positions in
+a shared space. Never use them to compute a distance, a size, a bearing, or to compare two objects'
+extents. They are not comparable across floors, and not even isotropic *within* one floor:
+
+- **Across floors** — every floor is stretched to the same 384-lng-wide image regardless of how much
+  world it covers. Den of Nalorakk floor 394 spans 750 ingame X over those 384 lng; floor 395 spans
+  140. So "this pack is 25 lng wide" means 5.4× more world on 394 than on 395 — the mistake that made
+  the floor-395 corridor packs look twice as wide as anything else when they were normal size.
+- **Within one floor** — lat and lng do not always share a scale, so even same-floor maths can be
+  skewed. Most floors (~325 of 397) have `sizeX/sizeY == -1.5`, which happens to make lat and lng
+  isotropic; the other ~72 (34 dungeons, incl. Den of Nalorakk, Murder Row, Altar of Fangs, and most
+  Classic/Legacy dungeons) have `sizeX/sizeY == +0.667`, where 10 lat = 43.95 ingame units but
+  10 lng = 19.53 — a 2.25× stretch. Never assume which kind a floor is.
+
+Convert first, via `CoordinatesServiceInterface` (`app/Service/Coordinates/`), then measure:
+
+```php
+$ingameXY = $coordinatesService->calculateIngameLocationForMapLocation(new LatLng($lat, $lng, $floor));
+$distance = $coordinatesService->distanceIngameXY($a, $b);
+```
+
+`calculateMapLocationForIngameLocation()` converts back for storage/display. Both need the `Floor`
+set on the struct, and both throw on a facade floor — convert a facade lat/lng down to a real floor
+with `convertFacadeMapLocationToMapLocation()` first.
 
 ## Localization
 - Use the `__()` helper function for localization and translation of strings. Use translation keys. For example: `__('view_common.my.folder.structure.welcome_to_the_website')`.

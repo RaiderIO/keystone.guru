@@ -19,6 +19,12 @@ isn't, start it from the main repo: `docker compose up -d`.
 
 ## Create a worktree
 
+**First, check the model against the task** — see "Check the model before starting a task" in
+`.claude/CLAUDE.md`. Estimate the task's turn count from its shape and, *if the session is
+under-powered for it*, say so and stop before running `create`. Don't raise it when the session is
+over-powered. This check belongs here specifically because an isolated `create` seeds a database for
+5–15 minutes, and restarting on the right model throws all of that away.
+
 ```bash
 sh/worktree.sh create <issue>-<slug>              # branches off origin/master
 sh/worktree.sh create <issue>-<slug> <base-ref>   # or off an explicit base
