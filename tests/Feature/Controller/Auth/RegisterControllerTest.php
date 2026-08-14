@@ -162,6 +162,39 @@ final class RegisterControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function register_givenNoLegalAgreedMs_createsUserAnyway(): void
+    {
+        // Arrange - the write-only legal_agreed_ms tracking was removed, so neither the form nor
+        // the AJAX modal path posts the key anymore. Registration must not depend on it.
+        $postData = $this->validRegistrationData();
+        $this->assertArrayNotHasKey('legal_agreed_ms', $postData);
+        $user = null;
+
+        try {
+            // Act
+            $response = $this->post(route('register'), $postData);
+
+            // Assert
+            $response->assertRedirect();
+            $user = User::firstWhere('email', $postData['email']);
+            $this->assertNotNull($user, 'Registration should have created the user');
+        } finally {
+            $this->deleteRegisteredUser($user);
+        }
+    }
+
+    #[Test]
+    public function showRegistrationForm_givenGuest_rendersNoLegalAgreedMsHiddenField(): void
+    {
+        // Act
+        $response = $this->get(route('register'));
+
+        // Assert
+        $response->assertOk();
+        $response->assertDontSee('legal_agreed_ms', false);
+    }
+
+    #[Test]
     public function showRegistrationForm_givenGuest_rendersRegionSelectWithRegionIdsAsValues(): void
     {
         // Arrange
@@ -193,7 +226,6 @@ final class RegisterControllerTest extends PublicTestCase
             'password'              => 'password123',
             'password_confirmation' => 'password123',
             'legal_agreed'          => '1',
-            'legal_agreed_ms'       => '1000',
         ], $overrides);
     }
 

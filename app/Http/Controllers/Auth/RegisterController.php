@@ -94,7 +94,6 @@ class RegisterController extends Controller implements HasMiddleware
             'game_server_region_id' => $data['region'] ?? GameServerRegion::ALL[GameServerRegion::DEFAULT_REGION],
             'password'              => Hash::make($data['password']),
             'legal_agreed'          => $data['legal_agreed'],
-            'legal_agreed_ms'       => intval($data['legal_agreed_ms']),
         ]);
 
         $user->addRole($userRole);

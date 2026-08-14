@@ -18,19 +18,6 @@ $errors   ??= collect();
 $authSuccessUrl ??= null;
 ?>
 
-@section('scripts')
-    @parent
-
-    <script>
-        $(function () {
-            $(document).on('submit', '#{{ $modalClass }}register_form', function () {
-                // Defined in sitescripts.blade
-                $('#{{ $modalClass }}legal_agreed_ms').val(new Date().getTime() - _legalStartTimer);
-            });
-        });
-    </script>
-@endsection
-
 <div class="row">
     <div class="col">
         <form id="{{ $modalClass }}register_form" class="form-horizontal" method="POST"
@@ -129,7 +116,6 @@ $authSuccessUrl ??= null;
                     </label>
                     @include('common.forms.form-error', ['key' => 'legal_agreed'])
                 </div>
-                {{ html()->hidden('legal_agreed_ms', -1)->id($modalClass . 'legal_agreed_ms') }}
             </div>
 
             <div class="mb-3">

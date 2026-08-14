@@ -75,13 +75,12 @@ class LaratrustSeeder extends Seeder implements TableSeederInterface
                 $this->command->info("Creating '{$key}' user");
                 // Create default user for each role
                 $user = User::create([
-                    'name'            => ucwords(str_replace('_', ' ', $key)),
-                    'public_key'      => User::generateRandomPublicKey(),
-                    'echo_color'      => randomHexColor(),
-                    'email'           => $key . '@app.com',
-                    'password'        => Hash::make('password'),
-                    'legal_agreed'    => 1,
-                    'legal_agreed_ms' => -1,
+                    'name'         => ucwords(str_replace('_', ' ', $key)),
+                    'public_key'   => User::generateRandomPublicKey(),
+                    'echo_color'   => randomHexColor(),
+                    'email'        => $key . '@app.com',
+                    'password'     => Hash::make('password'),
+                    'legal_agreed' => 1,
                 ]);
                 $user->addRole($role);
             }

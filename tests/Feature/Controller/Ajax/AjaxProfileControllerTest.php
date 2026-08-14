@@ -22,7 +22,7 @@ final class AjaxProfileControllerTest extends PublicTestCase
     public function legalAgree_givenGuest_returnsUnauthorizedInsteadOf500(): void
     {
         // Act - no actingAs(), request is unauthenticated
-        $response = $this->post('/ajax/profile/legal', ['time' => 123], self::AJAX_HEADERS);
+        $response = $this->post('/ajax/profile/legal', [], self::AJAX_HEADERS);
 
         // Assert
         $response->assertStatus(StatusCode::UNAUTHORIZED);
@@ -39,7 +39,7 @@ final class AjaxProfileControllerTest extends PublicTestCase
             $this->actingAs($roleLessUser);
 
             // Act
-            $response = $this->post('/ajax/profile/legal', ['time' => 123], self::AJAX_HEADERS);
+            $response = $this->post('/ajax/profile/legal', [], self::AJAX_HEADERS);
 
             // Assert
             $response->assertNoContent();
