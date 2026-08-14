@@ -15,7 +15,12 @@ return new class extends Migration {
      */
     public function up(): void
     {
+        // toBase() drops to the query builder on purpose: the Eloquent builder's update() appends
+        // updated_at = now(), which would rewrite the timestamp of every affected user (-1 was the
+        // register form's placeholder default, so that is a large slice of the table) for a
+        // backfill that down() deliberately cannot undo
         User::where('game_server_region_id', -1)
+            ->toBase()
             ->update(['game_server_region_id' => GameServerRegion::ALL[GameServerRegion::DEFAULT_REGION]]);
     }
 

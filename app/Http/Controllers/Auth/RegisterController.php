@@ -142,8 +142,11 @@ class RegisterController extends Controller implements HasMiddleware
 
         // The modal form reloads the page itself on success - a 201 instead of a redirect keeps
         // the flashed status message alive for that reload (jquery would silently follow the
-        // redirect and the hidden GET would consume the flash)
-        return $request->wantsJson()
+        // redirect and the hidden GET would consume the flash).
+        // expectsJson() rather than wantsJson(), to match the failure path above: a plain XHR that
+        // does not send an explicit JSON Accept header would otherwise get a 422 on failure but a
+        // silently followed redirect on success - exactly the flash-eating hop this avoids
+        return $request->expectsJson()
             ? new JsonResponse([], StatusCode::CREATED)
             : redirect($this->redirectPath());
     }

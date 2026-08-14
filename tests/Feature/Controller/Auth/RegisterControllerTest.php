@@ -128,6 +128,39 @@ final class RegisterControllerTest extends PublicTestCase
         }
     }
 
+    /**
+     * A plain XHR (no explicit JSON Accept header) satisfies expectsJson() but not wantsJson(), so
+     * the success and failure paths must both gate on expectsJson() - otherwise the same request
+     * gets a JSON 422 on failure and a silently followed redirect on success, which is the
+     * flash-eating extra hop #4003 removes.
+     */
+    #[Test]
+    public function register_givenAjaxRequestWithoutJsonAcceptHeader_returnsJsonOnBothFailureAndSuccess(): void
+    {
+        // Arrange
+        $ajaxHeaders = ['X-Requested-With' => 'XMLHttpRequest', 'Accept' => '*/*'];
+        $invalidData = $this->validRegistrationData(['email' => 'not-an-email']);
+        $validData   = $this->validRegistrationData();
+        $user        = null;
+
+        try {
+            // Act
+            $failureResponse = $this->post(route('register'), $invalidData, $ajaxHeaders);
+            $successResponse = $this->post(route('register'), $validData, $ajaxHeaders);
+
+            // Assert
+            $failureResponse->assertUnprocessable();
+            $failureResponse->assertJsonValidationErrors(['email']);
+
+            $successResponse->assertCreated();
+            $user = User::firstWhere('email', $validData['email']);
+            $this->assertNotNull($user, 'Registration should have created the user');
+        } finally {
+            auth()->logout();
+            $this->deleteRegisteredUser($user);
+        }
+    }
+
     #[Test]
     public function showRegistrationForm_givenGuest_rendersRegionSelectWithRegionIdsAsValues(): void
     {
