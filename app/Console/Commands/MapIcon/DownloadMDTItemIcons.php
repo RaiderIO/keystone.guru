@@ -126,7 +126,8 @@ class DownloadMDTItemIcons extends Command
         );
 
         $this->newLine();
-        $this->line('Next: add a MapIconType for each item (constant + id in MapIconType::ALL, MapIconTypesSeeder,');
+        $this->line('Next: add a MapIconType for each item (constant + id in MapIconType::ALL,');
+        $this->line('database/seeders/mapicontypedata/map_icon_types.json,');
         $this->line('lang/en_US/mapicontypes.php, GenerateItemIcons and Conversion::MAP_POI_GENERIC_ITEM_SPELL_ID_MAP_ICON_TYPE_MAPPING),');
         $this->line('then run <comment>mapicon:generateitemicons</comment>.');
 

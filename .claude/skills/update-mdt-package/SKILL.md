@@ -282,7 +282,8 @@ Read the output for each dungeon and handle:
   downloads each item's icon into `keystone.guru.assets/images/mapicon_gen/` (MDT's
   `info.texture` is a FileDataID → wago.tools' `ManifestInterfaceData` DB2 → Wowhead's CDN;
   Wowhead's *pages* 403 the container, so do not try to scrape a name from there). Then add a
-  map icon type per item — constant + id in `MapIconType::ALL`, `MapIconTypesSeeder`,
+  map icon type per item — constant + id in `MapIconType::ALL`, an object in
+  `database/seeders/mapicontypedata/map_icon_types.json`,
   `lang/en_US/mapicontypes.php`, `GenerateItemIcons`, and
   `Conversion::MAP_POI_GENERIC_ITEM_SPELL_ID_MAP_ICON_TYPE_MAPPING` — run
   `mapicon:generateitemicons`, and **notify the user** with the table so they can sanity-check

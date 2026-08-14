@@ -1,0 +1,790 @@
+[
+    {
+        "key": "unknown",
+        "name": "mapicontypes.unknown",
+        "width": 24,
+        "height": 24
+    },
+    {
+        "key": "comment",
+        "name": "mapicontypes.comment",
+        "width": 24,
+        "height": 24
+    },
+    {
+        "key": "door",
+        "name": "mapicontypes.door",
+        "width": 25,
+        "height": 22,
+        "admin_only": true
+    },
+    {
+        "key": "door_down",
+        "name": "mapicontypes.door_down",
+        "width": 23,
+        "height": 24,
+        "admin_only": true
+    },
+    {
+        "key": "door_left",
+        "name": "mapicontypes.door_left",
+        "width": 23,
+        "height": 22,
+        "admin_only": true
+    },
+    {
+        "key": "door_locked",
+        "name": "mapicontypes.door_locked",
+        "width": 26,
+        "height": 24,
+        "admin_only": true
+    },
+    {
+        "key": "door_right",
+        "name": "mapicontypes.door_right",
+        "width": 23,
+        "height": 22,
+        "admin_only": true
+    },
+    {
+        "key": "door_up",
+        "name": "mapicontypes.door_up",
+        "width": 23,
+        "height": 24,
+        "admin_only": true
+    },
+    {
+        "key": "dot_yellow",
+        "name": "mapicontypes.dot_yellow",
+        "width": 19,
+        "height": 19
+    },
+    {
+        "key": "dungeon_start",
+        "name": "mapicontypes.dungeon_start",
+        "width": 24,
+        "height": 24,
+        "admin_only": true
+    },
+    {
+        "key": "gateway",
+        "name": "mapicontypes.gateway",
+        "width": 29,
+        "height": 28
+    },
+    {
+        "key": "graveyard",
+        "name": "mapicontypes.graveyard",
+        "width": 14,
+        "height": 18,
+        "admin_only": true
+    },
+    {
+        "key": "greasebot",
+        "name": "mapicontypes.greasebot",
+        "width": 20,
+        "height": 19,
+        "admin_only": true
+    },
+    {
+        "key": "shockbot",
+        "name": "mapicontypes.shockbot",
+        "width": 16,
+        "height": 17,
+        "admin_only": true
+    },
+    {
+        "key": "warlock_gateway",
+        "name": "mapicontypes.warlock_gateway",
+        "width": 35,
+        "height": 34
+    },
+    {
+        "key": "weldingbot",
+        "name": "mapicontypes.weldingbot",
+        "width": 16,
+        "height": 19,
+        "admin_only": true
+    },
+    {
+        "key": "awakened_obelisk_brutal",
+        "name": "mapicontypes.awakened_obelisk_brutal",
+        "width": 25,
+        "height": 37,
+        "admin_only": true
+    },
+    {
+        "key": "awakened_obelisk_cursed",
+        "name": "mapicontypes.awakened_obelisk_cursed",
+        "width": 25,
+        "height": 37,
+        "admin_only": true
+    },
+    {
+        "key": "awakened_obelisk_defiled",
+        "name": "mapicontypes.awakened_obelisk_defiled",
+        "width": 25,
+        "height": 37,
+        "admin_only": true
+    },
+    {
+        "key": "awakened_obelisk_entropic",
+        "name": "mapicontypes.awakened_obelisk_entropic",
+        "width": 25,
+        "height": 37,
+        "admin_only": true
+    },
+    {
+        "key": "skip_flight",
+        "name": "mapicontypes.skip_flight",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "skip_teleport",
+        "name": "mapicontypes.skip_teleport",
+        "width": 25,
+        "height": 25,
+        "admin_only": true
+    },
+    {
+        "key": "skip_walk",
+        "name": "mapicontypes.skip_walk",
+        "width": 26,
+        "height": 34,
+        "admin_only": true
+    },
+    {
+        "key": "raid_marker_star",
+        "name": "mapicontypes.raid_marker_star",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "raid_marker_circle",
+        "name": "mapicontypes.raid_marker_circle",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "raid_marker_diamond",
+        "name": "mapicontypes.raid_marker_diamond",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "raid_marker_triangle",
+        "name": "mapicontypes.raid_marker_triangle",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "raid_marker_moon",
+        "name": "mapicontypes.raid_marker_moon",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "raid_marker_square",
+        "name": "mapicontypes.raid_marker_square",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "raid_marker_cross",
+        "name": "mapicontypes.raid_marker_cross",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "raid_marker_skull",
+        "name": "mapicontypes.raid_marker_skull",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "spell_bloodlust",
+        "name": "mapicontypes.spell_bloodlust",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "spell_heroism",
+        "name": "mapicontypes.spell_heroism",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "spell_shadowmeld",
+        "name": "mapicontypes.spell_shadowmeld",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "spell_shroud_of_concealment",
+        "name": "mapicontypes.spell_shroud_of_concealment",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "item_invisibility",
+        "name": "mapicontypes.item_invisibility",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "item_drums_of_speed",
+        "name": "mapicontypes.item_drums_of_speed",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "item_free_action_potion",
+        "name": "mapicontypes.item_free_action_potion",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "item_global_thermal_sapper_charge",
+        "name": "mapicontypes.item_global_thermal_sapper_charge",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "item_rocket_boots_xtreme",
+        "name": "mapicontypes.item_rocket_boots_xtreme",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "question_yellow",
+        "name": "mapicontypes.question_yellow",
+        "width": 17,
+        "height": 28
+    },
+    {
+        "key": "question_blue",
+        "name": "mapicontypes.question_blue",
+        "width": 17,
+        "height": 28
+    },
+    {
+        "key": "question_orange",
+        "name": "mapicontypes.question_orange",
+        "width": 17,
+        "height": 28
+    },
+    {
+        "key": "exclamation_yellow",
+        "name": "mapicontypes.exclamation_yellow",
+        "width": 13,
+        "height": 30
+    },
+    {
+        "key": "exclamation_blue",
+        "name": "mapicontypes.exclamation_blue",
+        "width": 13,
+        "height": 30
+    },
+    {
+        "key": "exclamation_orange",
+        "name": "mapicontypes.exclamation_orange",
+        "width": 13,
+        "height": 30
+    },
+    {
+        "key": "neonbutton_blue",
+        "name": "mapicontypes.neonbutton_blue",
+        "width": 24,
+        "height": 24
+    },
+    {
+        "key": "neonbutton_cyan",
+        "name": "mapicontypes.neonbutton_cyan",
+        "width": 24,
+        "height": 24
+    },
+    {
+        "key": "neonbutton_green",
+        "name": "mapicontypes.neonbutton_green",
+        "width": 24,
+        "height": 24
+    },
+    {
+        "key": "neonbutton_orange",
+        "name": "mapicontypes.neonbutton_orange",
+        "width": 24,
+        "height": 24
+    },
+    {
+        "key": "neonbutton_pink",
+        "name": "mapicontypes.neonbutton_pink",
+        "width": 24,
+        "height": 24
+    },
+    {
+        "key": "neonbutton_purple",
+        "name": "mapicontypes.neonbutton_purple",
+        "width": 24,
+        "height": 24
+    },
+    {
+        "key": "neonbutton_red",
+        "name": "mapicontypes.neonbutton_red",
+        "width": 24,
+        "height": 24
+    },
+    {
+        "key": "neonbutton_yellow",
+        "name": "mapicontypes.neonbutton_yellow",
+        "width": 24,
+        "height": 24
+    },
+    {
+        "key": "neonbutton_darkred",
+        "name": "mapicontypes.neonbutton_darkred",
+        "width": 24,
+        "height": 24
+    },
+    {
+        "key": "neonbutton_darkgreen",
+        "name": "mapicontypes.neonbutton_darkgreen",
+        "width": 24,
+        "height": 24
+    },
+    {
+        "key": "neonbutton_darkblue",
+        "name": "mapicontypes.neonbutton_darkblue",
+        "width": 24,
+        "height": 24
+    },
+    {
+        "key": "spell_mind_soothe",
+        "name": "mapicontypes.spell_mind_soothe",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "spell_combustion",
+        "name": "mapicontypes.spell_combustion",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "covenant_kyrian",
+        "name": "mapicontypes.covenant_kyrian",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "covenant_necrolords",
+        "name": "mapicontypes.covenant_necrolords",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "covenant_nightfae",
+        "name": "mapicontypes.covenant_nightfae",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "covenant_venthyr",
+        "name": "mapicontypes.covenant_venthyr",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "portal_blue",
+        "name": "mapicontypes.portal_blue",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "portal_green",
+        "name": "mapicontypes.portal_green",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "portal_orange",
+        "name": "mapicontypes.portal_orange",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "portal_pink",
+        "name": "mapicontypes.portal_pink",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "portal_red",
+        "name": "mapicontypes.portal_red",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "nw_item_anima",
+        "name": "mapicontypes.nw_item_anima",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "nw_item_goliath",
+        "name": "mapicontypes.nw_item_goliath",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "nw_item_hammer",
+        "name": "mapicontypes.nw_item_hammer",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "nw_item_shield",
+        "name": "mapicontypes.nw_item_shield",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "nw_item_spear",
+        "name": "mapicontypes.nw_item_spear",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "spell_incarnation",
+        "name": "mapicontypes.spell_incarnation",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "spell_misdirection",
+        "name": "mapicontypes.spell_misdirection",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "spell_tricks_of_the_trade",
+        "name": "mapicontypes.spell_tricks_of_the_trade",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "role_tank",
+        "name": "mapicontypes.role_tank",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "role_healer",
+        "name": "mapicontypes.role_healer",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "role_dps",
+        "name": "mapicontypes.role_dps",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "class_warrior",
+        "name": "mapicontypes.class_warrior",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "class_hunter",
+        "name": "mapicontypes.class_hunter",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "class_deathknight",
+        "name": "mapicontypes.class_death_knight",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "class_mage",
+        "name": "mapicontypes.class_mage",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "class_priest",
+        "name": "mapicontypes.class_priest",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "class_monk",
+        "name": "mapicontypes.class_monk",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "class_rogue",
+        "name": "mapicontypes.class_rogue",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "class_warlock",
+        "name": "mapicontypes.class_warlock",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "class_shaman",
+        "name": "mapicontypes.class_shaman",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "class_paladin",
+        "name": "mapicontypes.class_paladin",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "class_druid",
+        "name": "mapicontypes.class_druid",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "class_demonhunter",
+        "name": "mapicontypes.class_demon_hunter",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "class_evoker",
+        "name": "mapicontypes.class_evoker",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "chest",
+        "name": "mapicontypes.chest",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "chest_locked",
+        "name": "mapicontypes.chest_locked",
+        "width": 32,
+        "height": 32
+    },
+    {
+        "key": "mists_item_statshroom",
+        "name": "mapicontypes.mists_statshroom",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "mists_item_toughshroom",
+        "name": "mapicontypes.mists_toughshroom",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "mists_item_overgrown_roots",
+        "name": "mapicontypes.mists_overgrown_roots",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "cot_item_shadecaster",
+        "name": "mapicontypes.cot_shadecaster",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "sv_item_imbued_iron_energy",
+        "name": "mapicontypes.sv_imbued_iron_energy",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "ara_kara_item_silk_wrap",
+        "name": "mapicontypes.ara_kara_silk_wrap",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "karazhan_crypts_spider_nest",
+        "name": "mapicontypes.karazhan_crypts_spider_nest",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "priory_blessing_of_the_sacred_flame",
+        "name": "mapicontypes.priory_blessing_of_the_sacred_flame",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "floodgate_weapons_stockpile_explosion",
+        "name": "mapicontypes.floodgate_weapons_stockpile_explosion",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "gate_of_the_setting_sun_brazier",
+        "name": "mapicontypes.gate_of_the_setting_sun_brazier",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "eco_dome_al_dani_shatter_conduit",
+        "name": "mapicontypes.eco_dome_al_dani_shatter_conduit",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "eco_dome_al_dani_disruption_grenade",
+        "name": "mapicontypes.eco_dome_al_dani_disruption_grenade",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "eco_dome_al_dani_kareshi_surge",
+        "name": "mapicontypes.eco_dome_al_dani_kareshi_surge",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "seat_of_the_triumvirate_void_infusion",
+        "name": "mapicontypes.seat_of_the_triumvirate_void_infusion",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "maisara_caverns_hearty_vilebranch_stew",
+        "name": "mapicontypes.maisara_caverns_hearty_vilebranch_stew",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "algethar_academy_black_dragonflight_pledge_pin",
+        "name": "mapicontypes.algethar_academy_black_dragonflight_pledge_pin",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "algethar_academy_blue_dragonflight_pledge_pin",
+        "name": "mapicontypes.algethar_academy_blue_dragonflight_pledge_pin",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "algethar_academy_bronze_dragonflight_pledge_pin",
+        "name": "mapicontypes.algethar_academy_bronze_dragonflight_pledge_pin",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "algethar_academy_green_dragonflight_pledge_pin",
+        "name": "mapicontypes.algethar_academy_green_dragonflight_pledge_pin",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "algethar_academy_red_dragonflight_pledge_pin",
+        "name": "mapicontypes.algethar_academy_red_dragonflight_pledge_pin",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "magisters_terrace_arcane_empowerment",
+        "name": "mapicontypes.magisters_terrace_arcane_empowerment",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "murder_row_fel_contraband",
+        "name": "mapicontypes.murder_row_fel_contraband",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "murder_row_felstone",
+        "name": "mapicontypes.murder_row_felstone",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "murder_row_felwyrm_egg",
+        "name": "mapicontypes.murder_row_felwyrm_egg",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "murder_row_heartstop_poison",
+        "name": "mapicontypes.murder_row_heartstop_poison",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "murder_row_loaded_pistol",
+        "name": "mapicontypes.murder_row_loaded_pistol",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "murder_row_overload_golem",
+        "name": "mapicontypes.murder_row_overload_golem",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "the_blinding_vale_flourishing_stride",
+        "name": "mapicontypes.the_blinding_vale_flourishing_stride",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    }
+]
