@@ -118,9 +118,10 @@ final class SpellCompendiumControllerTest extends PublicTestCase
     #[Test]
     public function indexDungeon_givenDungeonOtherThanContextDungeon_rendersThatDungeonAndMakesItTheContext(): void
     {
-        // Arrange - two different dungeons, so the URL is provably what decides what is rendered
-        $contextDungeon   = Dungeon::active()->orderBy('id')->firstOrFail();
-        $requestedDungeon = Dungeon::active()->where('id', '!=', $contextDungeon->id)->orderBy('id')->firstOrFail();
+        // Arrange - two different dungeons, so the URL is provably what decides what is rendered. Both must
+        // be ones the filter actually offers, or no option renders as selected and there is nothing to read.
+        $contextDungeon   = $this->dungeonsOfferedByDungeonSelect()->orderBy('id')->firstOrFail();
+        $requestedDungeon = $this->dungeonsOfferedByDungeonSelect()->where('id', '!=', $contextDungeon->id)->orderBy('id')->firstOrFail();
 
         $user              = User::findOrFail(1);
         $originalDungeonId = $user->dungeon_id;
