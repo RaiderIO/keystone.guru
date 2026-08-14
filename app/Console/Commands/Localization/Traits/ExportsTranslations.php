@@ -30,7 +30,7 @@ trait ExportsTranslations
 
         $exportToString = $this->arrayToPhpCode($data) . PHP_EOL;
 
-        if (file_put_contents($filePath, '<?php ' . PHP_EOL . PHP_EOL . 'return ' . $exportToString . ';')) {
+        if (file_put_contents($filePath, '<?php' . PHP_EOL . PHP_EOL . 'return ' . $exportToString . ';' . PHP_EOL)) {
             $this->info(sprintf('Translations exported successfully to %s/%s', $locale, $fileName));
 
             return true;
