@@ -138,6 +138,8 @@ return [
             'remember_me'          => 'Remember me',
             'forgot_your_password' => 'Forgot your password?',
             'login_through_oauth2' => 'Login through OAuth2',
+            'no_account_yet'       => 'No account yet?',
+            'register_now'         => 'Register',
         ],
         'mapsettings' => [
             'general'                                       => 'General',
@@ -189,7 +191,11 @@ return [
             'import_route'                           => 'Import route',
         ],
         'oauth' => [
-            'battletag_warning' => 'If you publish routes, your battletag/discord username will be visible until you change your username in your profile.',
+            'battletag_warning'       => 'If you publish routes, your battletag/discord username will be visible until you change your username in your profile.',
+            'battlenet_region'        => 'Battle.net region',
+            'continue_with_battlenet' => 'Continue with Battle.net',
+            'continue_with_discord'   => 'Continue with Discord',
+            'continue_with_google'    => 'Continue with Google',
         ],
         'pullsettings' => [
             'pull_number_style'                 => 'Pull number style',
@@ -221,6 +227,8 @@ return [
             'terms_of_service'        => 'terms of service',
             'privacy_policy'          => 'privacy policy',
             'cookie_policy'           => 'cookie policy',
+            'already_have_an_account' => 'Already have an account?',
+            'login_now'               => 'Login',
         ],
         'timezoneselect' => [
             'africa'     => 'Africa',

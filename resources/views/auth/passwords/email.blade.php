@@ -2,28 +2,23 @@
 
 @section('header-title', __('view_auth.passwords.email.header'))
 @section('content')
-    <form class="form-horizontal" method="POST" action="{{ route('password.email') }}">
+    <form method="POST" action="{{ route('password.email') }}">
         {{ csrf_field() }}
 
         <div class="mb-3">
-            <label for="email"
-                   class="col-md-4 control-label">{{ __('view_auth.passwords.email.email_address') }}</label>
+            <label for="email" class="form-label">{{ __('view_auth.passwords.email.email_address') }}</label>
 
-            <div class="col-md-6">
-                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
-                       name="email" value="{{ old('email') }}" required autocomplete="email"
-                       @if($errors->has('email')) aria-invalid="true" @endif>
+            <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
+                   name="email" value="{{ old('email') }}" required autocomplete="email"
+                   @if($errors->has('email')) aria-invalid="true" @endif>
 
-                @include('common.forms.form-error', ['key' => 'email'])
-            </div>
+            @include('common.forms.form-error', ['key' => 'email'])
         </div>
 
         <div class="mb-3">
-            <div class="col-md-6 col-md-offset-4">
-                <button type="submit" class="btn btn-primary">
-                    {{ __('view_auth.passwords.email.send_password_reset_link') }}
-                </button>
-            </div>
+            <button type="submit" class="btn btn-primary">
+                {{ __('view_auth.passwords.email.send_password_reset_link') }}
+            </button>
         </div>
     </form>
 @endsection

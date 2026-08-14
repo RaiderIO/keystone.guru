@@ -132,17 +132,6 @@ table.dataTable thead .sorting_desc_disabled {
 
 
 /**
-  * General
- */
-.google_login_image {
-  background-image: url('#{$asset-url}/images/oauth/btn_google_signin_dark_normal_web.png');
-}
-
-.google_login_image:hover {
-  background-image: url('#{$asset-url}/images/oauth/btn_google_signin_dark_pressed_web.png');
-}
-
-/**
   * Custom
  */
 .sorting_asc {

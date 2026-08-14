@@ -231,29 +231,49 @@ body {
     }
   }
 
-  @media (min-width: 900px) {
-    .login-modal-dialog {
-      max-width: 900px;
-    }
+  /** The login/register modals hold a two-column form that Bootstrap's 500px .modal-dialog is far
+      too narrow for. This lives here rather than in css/lib/modals.css because the `.theme` wrapper
+      gives it the specificity it needs to beat Bootstrap's own single-class .modal-dialog rule.
 
-    .register-modal-dialog {
+      Keyed to `lg` (992px), the same breakpoint the columns themselves use: widening the dialog any
+      earlier buys 900px of width for a layout that is still one stacked full-width column. */
+  @media (min-width: 992px) {
+    .modal-dialog-small {
       max-width: 900px;
-    }
-
-    .register-modal-dialog .border-left.border-white {
-      border: hidden;
     }
   }
 
-  /** Hide the separating border between login/register when on a small screen, when they're stacked vertically */
-  @media (max-width: 900px) {
-    .login-modal-dialog .border-left.border-white {
-      border: none !important;
+  /** Divider between the credential and OAuth columns of the auth forms. Only drawn from `lg` up,
+      where those columns (col-12 col-lg-6) actually sit side by side. */
+  @media (min-width: 992px) {
+    .auth-form-divider {
+      border-left: var($--theme-border-subtle) solid 1px;
     }
+  }
 
-    .register-modal-dialog .border-left.border-white {
-      border: none !important;
-    }
+  /** One button component for every OAuth provider. Bootstrap's outline variants are keyed to
+      fixed palette colors - `btn-outline-secondary` lands on #444, which is all but invisible
+      against the #303030 modal surface - so this is themed instead. */
+  .btn-oauth {
+    color: var($--theme-text-contrast);
+    background-color: transparent;
+    border: 1px solid var($--theme-text-contrast);
+  }
+
+  .btn-oauth:hover {
+    color: var($--theme-dark);
+    background-color: var($--theme-text-contrast);
+    border-color: var($--theme-text-contrast);
+  }
+
+  /** Bootstrap resolves .btn's focus ring from --bs-btn-focus-shadow-rgb, which only its colour
+      variants define, so a bare .btn like this one focuses invisibly - exactly what left the old
+      .btn-bnet as the only control on this surface with no focus indicator. An outline rather
+      than a box-shadow, because `.btn:focus-visible` already claims box-shadow and wins the tie. */
+  .btn-oauth:focus,
+  .btn-oauth:focus-visible {
+    outline: 2px solid var($--theme-text-contrast);
+    outline-offset: 2px;
   }
 
   /* normal container */

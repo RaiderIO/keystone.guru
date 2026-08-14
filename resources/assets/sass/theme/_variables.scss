@@ -11,6 +11,9 @@ $--theme-header-border: --theme-header-border;
 $--theme-link: --theme-link;
 $--theme-link-hover: --theme-link-hover;
 $--theme-border-accent: --theme-border-accent;
+/* A structural hairline that must read on both the page background and the raised card/modal
+   surface - neither --theme-darker nor --theme-light is visible against both */
+$--theme-border-subtle: --theme-border-subtle;
 $--theme-btn-accent: --theme-btn-accent;
 $--theme-btn-accent-hover: --theme-btn-accent-hover;
 $--theme-bg-card: --theme-bg-card;
@@ -34,6 +37,7 @@ $theme-map-darkly: (
         $--theme-link: #00bc8c,
         $--theme-link-hover: #007053,
         $--theme-border-accent: #00bc8c,
+        $--theme-border-subtle: #444,
         $--theme-btn-accent: #00bc8c,
         $--theme-btn-accent-hover: #007053,
         $--theme-bg-card: #303030,
@@ -58,6 +62,7 @@ $theme-map-lux: (
         $--theme-link: #1a1a1a,
         $--theme-link-hover: black,
         $--theme-border-accent: #1a1a1a,
+        $--theme-border-subtle: #dee2e6,
         $--theme-btn-accent: #1a1a1a,
         $--theme-btn-accent-hover: black,
         $--theme-bg-card: #fff,
@@ -84,6 +89,7 @@ $theme-map-vapor: (
         $--theme-link: #6a2dbd,
         $--theme-link-hover: #4b1f87,
         $--theme-border-accent: #6a2dbd,
+        $--theme-border-subtle: #444,
         $--theme-btn-accent: #6a2dbd,
         $--theme-btn-accent-hover: #4b1f87,
         $--theme-bg-card: #303030,
