@@ -224,6 +224,14 @@ title's behalf, they're separate fields. If you're fixing an existing PR that's 
 `gh pr edit <n> --title "#<issue> <title>"` (title edits work fine even though `gh pr edit`'s body
 edits are broken on this repo — see the CLAUDE.md note above).
 
+**Do not hard-wrap the MR body — write each paragraph as one long line and let GitHub word-wrap
+it.** Agent-written bodies tend to come out pre-formatted at ~80–100 columns, which renders as
+ragged mid-sentence breaks in GitHub's own wrapping and "reads annoyingly" (Wotuu, PR #3962).
+This is the opposite of the convention for files in this repo, where hard wrapping is correct —
+it applies to MR/issue bodies and comments, which are rendered markdown, not source. Line breaks
+you *mean* (between paragraphs, list items, headings) are still fine; it's the wrapping of a
+single paragraph across several source lines that has to go.
+
 MRs target `master` (the default branch), so a `Closes #<issue>` line in the body auto-links the
 issue in the Development panel and closes it on merge — no manual linking step needed. Verify it
 actually took (`gh api graphql -f query='query { repository(owner: "RaiderIO", name:
