@@ -104,7 +104,9 @@ class MapContextDungeonData implements Arrayable
                         'selectable',
                         'fetched_data_at',
                         // Nothing on the map renders a spell description, and one per spell of the dungeon
-                        // would grow the map context by a fair amount of text
+                        // would grow the map context by a fair amount of text. The effects a description
+                        // is rendered from are not listed because this query does not load that relation -
+                        // add them here the day it does, or the coefficients ship with every map (#3972 review)
                         'description_template',
                         'description_format',
                         'description_values',

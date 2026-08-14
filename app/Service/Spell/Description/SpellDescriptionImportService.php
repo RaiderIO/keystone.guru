@@ -114,18 +114,8 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
 
         foreach ($effects as $spellId => $spellEffects) {
             foreach ($spellEffects as $effectIndex => $effect) {
-                $rows[] = [
-                    'spell_id'      => $spellId,
-                    'effect_index'  => $effectIndex,
-                    'effect_type'   => $effect->effectType,
-                    'aura_type'     => $effect->auraType,
-                    'base_points'   => $effect->basePoints,
-                    'variance'      => $effect->variance,
-                    'period_ms'     => $effect->periodMs,
-                    'chain_targets' => $effect->chainTargets,
-                    'radius'        => $effect->radius,
-                    'max_radius'    => $effect->maxRadius,
-                ];
+                // The effect names its own columns, so a field added to it cannot miss this call
+                $rows[] = $effect->toArray($spellId, $effectIndex);
             }
         }
 

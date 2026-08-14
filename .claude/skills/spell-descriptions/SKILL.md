@@ -11,6 +11,17 @@ what makes a changed description reviewable in a seeder diff, and what tells you
 description reads oddly because of the parser or because of the game. Re-rendering it still needs
 the DB2 tables, which is what the download cache below is for.
 
+## When to run it
+
+**On a game patch, by hand — never as part of a release.** The trigger is a new WoW client build,
+not a deploy: releases go out far more often than patches do and would re-download 140MB of DB2 for
+nothing, and the output is a seeder diff a human has to read and commit before it means anything.
+Nothing schedules any of these commands, and nothing in `create-release` calls them.
+
+A patch has landed when https://wago.tools/db2/Spell offers a build newer than the one the last
+`spells.json` commit was made from. Re-run the sequence below, review the diff, commit it — the next
+release picks it up, because the data ships in the seeder rather than being fetched at runtime.
+
 ## Re-running it for a new game patch
 
 ```sh

@@ -4,6 +4,7 @@ namespace Tests\Feature\Console\Commands\WagoTools;
 
 use App\Models\GameVersion\GameVersion;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellEffect;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Attributes\SlowTest;
@@ -53,6 +54,45 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
                 $spell->description_template,
             );
         } finally {
+            $spell?->delete();
+            new Spell()->flushCache();
+            $this->removeDb2Tables();
+        }
+    }
+
+    #[Test]
+    public function handle_givenDb2Tables_persistsEveryColumnOfTheSpellEffect(): void
+    {
+        // Arrange - the effect names its own columns, so this is what guards that shape against drift
+        $spell = null;
+
+        try {
+            $this->writeDb2Tables();
+
+            $spell = $this->createSpell(self::SPELL_ID, null);
+
+            // Act
+            $this->artisan('wagotools:importspelldescriptions', ['--build' => self::BUILD])
+                ->assertSuccessful();
+
+            // Assert
+            $effect = SpellEffect::query()
+                ->where('spell_id', self::SPELL_ID)
+                ->where('effect_index', 0)
+                ->first();
+
+            $this->assertNotNull($effect);
+            $this->assertSame(0, $effect->effect_type);
+            $this->assertSame(0, $effect->aura_type);
+            $this->assertSame(25.0, $effect->base_points);
+            $this->assertSame(0.0, $effect->variance);
+            $this->assertSame(0, $effect->period_ms);
+            $this->assertSame(0, $effect->chain_targets);
+            $this->assertSame(12.0, $effect->radius);
+            $this->assertSame(12.0, $effect->max_radius);
+        } finally {
+            SpellEffect::query()->where('spell_id', self::SPELL_ID)->delete();
+            new SpellEffect()->flushCache();
             $spell?->delete();
             new Spell()->flushCache();
             $this->removeDb2Tables();

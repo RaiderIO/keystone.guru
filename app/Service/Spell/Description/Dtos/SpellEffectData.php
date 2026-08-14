@@ -7,24 +7,6 @@ namespace App\Service\Spell\Description\Dtos;
  */
 class SpellEffectData
 {
-    /** SpellEffect.Effect values that produce an amount of damage or healing. */
-    private const int EFFECT_SCHOOL_DAMAGE = 2;
-
-    private const int EFFECT_HEAL = 10;
-
-    private const int EFFECT_WEAPON_DAMAGE = 58;
-
-    private const int EFFECT_WEAPON_DAMAGE_NOSCHOOL = 121;
-
-    /** SpellEffect.EffectAura values that do the same over time. */
-    private const int AURA_PERIODIC_DAMAGE = 3;
-
-    private const int AURA_PERIODIC_HEAL = 8;
-
-    private const int AURA_PERIODIC_LEECH = 53;
-
-    private const int AURA_SCHOOL_ABSORB = 69;
-
     public function __construct(
         public readonly int    $effectType,
         public readonly int    $auraType,
@@ -56,17 +38,34 @@ class SpellEffectData
      */
     public function getPointsKind(): SpellDescriptionValueKind
     {
-        return match (true) {
-            in_array($this->effectType, [
-                self::EFFECT_SCHOOL_DAMAGE,
-                self::EFFECT_WEAPON_DAMAGE,
-                self::EFFECT_WEAPON_DAMAGE_NOSCHOOL,
-            ], true)                                                                                 => SpellDescriptionValueKind::Damage,
-            $this->effectType === self::EFFECT_HEAL                                                  => SpellDescriptionValueKind::Healing,
-            in_array($this->auraType, [self::AURA_PERIODIC_DAMAGE, self::AURA_PERIODIC_LEECH], true) => SpellDescriptionValueKind::Damage,
-            in_array($this->auraType, [self::AURA_PERIODIC_HEAL, self::AURA_SCHOOL_ABSORB], true)    => SpellDescriptionValueKind::Healing,
-            default                                                                                  => SpellDescriptionValueKind::Value,
-        };
+        return SpellEffectType::tryFrom($this->effectType)?->getPointsKind()
+            ?? SpellEffectAuraType::tryFrom($this->auraType)?->getPointsKind()
+            ?? SpellDescriptionValueKind::Value;
+    }
+
+    /**
+     * The row this effect is stored as, so that a field added to the effect cannot be forgotten by the
+     * import that persists it.
+     *
+     * The spell and the index it sits at are the effect's place in the table rather than its own state,
+     * which is why they are passed in.
+     *
+     * @return array{spell_id: int, effect_index: int, effect_type: int, aura_type: int, base_points: float, variance: float, period_ms: int, chain_targets: int, radius: float|null, max_radius: float|null}
+     */
+    public function toArray(int $spellId, int $effectIndex): array
+    {
+        return [
+            'spell_id'      => $spellId,
+            'effect_index'  => $effectIndex,
+            'effect_type'   => $this->effectType,
+            'aura_type'     => $this->auraType,
+            'base_points'   => $this->basePoints,
+            'variance'      => $this->variance,
+            'period_ms'     => $this->periodMs,
+            'chain_targets' => $this->chainTargets,
+            'radius'        => $this->radius,
+            'max_radius'    => $this->maxRadius,
+        ];
     }
 
     /** The lowest value this effect rolls, i.e. `$m` in a description. */
