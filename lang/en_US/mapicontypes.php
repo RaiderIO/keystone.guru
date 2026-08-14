@@ -112,4 +112,18 @@ return [
     'seat_of_the_triumvirate_void_infusion'  => 'Void Infusion',
     'maisara_caverns_hearty_vilebranch_stew' => 'Hearty Vilebranch Stew',
 
+    'algethar_academy_black_dragonflight_pledge_pin'  => 'Black Dragonflight Pledge Pin',
+    'algethar_academy_blue_dragonflight_pledge_pin'   => 'Blue Dragonflight Pledge Pin',
+    'algethar_academy_bronze_dragonflight_pledge_pin' => 'Bronze Dragonflight Pledge Pin',
+    'algethar_academy_green_dragonflight_pledge_pin'  => 'Green Dragonflight Pledge Pin',
+    'algethar_academy_red_dragonflight_pledge_pin'    => 'Red Dragonflight Pledge Pin',
+    'magisters_terrace_arcane_empowerment'            => 'Arcane Empowerment',
+    'murder_row_fel_contraband'                       => 'Fel Contraband',
+    'murder_row_felstone'                             => 'Felstone',
+    'murder_row_felwyrm_egg'                          => 'Felwyrm Egg',
+    'murder_row_heartstop_poison'                     => 'Heartstop Poison',
+    'murder_row_loaded_pistol'                        => 'Loaded Pistol',
+    'murder_row_overload_golem'                       => 'Overload Golem',
+    'the_blinding_vale_flourishing_stride'            => 'Flourishing Stride',
+
 ];

@@ -631,6 +631,88 @@ class MapIconTypesSeeder extends Seeder implements TableSeederInterface
                 'height'     => 32,
                 'admin_only' => true,
             ],
+
+            MapIconType::MAP_ICON_TYPE_ALGETHAR_ACADEMY_BLACK_DRAGONFLIGHT_PLEDGE_PIN => [
+                'name'       => 'mapicontypes.algethar_academy_black_dragonflight_pledge_pin',
+                'width'      => 32,
+                'height'     => 32,
+                'admin_only' => true,
+            ],
+            MapIconType::MAP_ICON_TYPE_ALGETHAR_ACADEMY_BLUE_DRAGONFLIGHT_PLEDGE_PIN => [
+                'name'       => 'mapicontypes.algethar_academy_blue_dragonflight_pledge_pin',
+                'width'      => 32,
+                'height'     => 32,
+                'admin_only' => true,
+            ],
+            MapIconType::MAP_ICON_TYPE_ALGETHAR_ACADEMY_BRONZE_DRAGONFLIGHT_PLEDGE_PIN => [
+                'name'       => 'mapicontypes.algethar_academy_bronze_dragonflight_pledge_pin',
+                'width'      => 32,
+                'height'     => 32,
+                'admin_only' => true,
+            ],
+            MapIconType::MAP_ICON_TYPE_ALGETHAR_ACADEMY_GREEN_DRAGONFLIGHT_PLEDGE_PIN => [
+                'name'       => 'mapicontypes.algethar_academy_green_dragonflight_pledge_pin',
+                'width'      => 32,
+                'height'     => 32,
+                'admin_only' => true,
+            ],
+            MapIconType::MAP_ICON_TYPE_ALGETHAR_ACADEMY_RED_DRAGONFLIGHT_PLEDGE_PIN => [
+                'name'       => 'mapicontypes.algethar_academy_red_dragonflight_pledge_pin',
+                'width'      => 32,
+                'height'     => 32,
+                'admin_only' => true,
+            ],
+
+            MapIconType::MAP_ICON_TYPE_MAGISTERS_TERRACE_ARCANE_EMPOWERMENT => [
+                'name'       => 'mapicontypes.magisters_terrace_arcane_empowerment',
+                'width'      => 32,
+                'height'     => 32,
+                'admin_only' => true,
+            ],
+
+            MapIconType::MAP_ICON_TYPE_MURDER_ROW_FEL_CONTRABAND => [
+                'name'       => 'mapicontypes.murder_row_fel_contraband',
+                'width'      => 32,
+                'height'     => 32,
+                'admin_only' => true,
+            ],
+            MapIconType::MAP_ICON_TYPE_MURDER_ROW_FELSTONE => [
+                'name'       => 'mapicontypes.murder_row_felstone',
+                'width'      => 32,
+                'height'     => 32,
+                'admin_only' => true,
+            ],
+            MapIconType::MAP_ICON_TYPE_MURDER_ROW_FELWYRM_EGG => [
+                'name'       => 'mapicontypes.murder_row_felwyrm_egg',
+                'width'      => 32,
+                'height'     => 32,
+                'admin_only' => true,
+            ],
+            MapIconType::MAP_ICON_TYPE_MURDER_ROW_HEARTSTOP_POISON => [
+                'name'       => 'mapicontypes.murder_row_heartstop_poison',
+                'width'      => 32,
+                'height'     => 32,
+                'admin_only' => true,
+            ],
+            MapIconType::MAP_ICON_TYPE_MURDER_ROW_LOADED_PISTOL => [
+                'name'       => 'mapicontypes.murder_row_loaded_pistol',
+                'width'      => 32,
+                'height'     => 32,
+                'admin_only' => true,
+            ],
+            MapIconType::MAP_ICON_TYPE_MURDER_ROW_OVERLOAD_GOLEM => [
+                'name'       => 'mapicontypes.murder_row_overload_golem',
+                'width'      => 32,
+                'height'     => 32,
+                'admin_only' => true,
+            ],
+
+            MapIconType::MAP_ICON_TYPE_THE_BLINDING_VALE_FLOURISHING_STRIDE => [
+                'name'       => 'mapicontypes.the_blinding_vale_flourishing_stride',
+                'width'      => 32,
+                'height'     => 32,
+                'admin_only' => true,
+            ],
         ];
 
         $mapIconTypeAttributes = [];

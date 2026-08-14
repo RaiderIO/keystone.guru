@@ -4,6 +4,7 @@ namespace App\Service\MDT;
 
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
+use App\Logic\MDT\Entity\MDTMapPOI;
 use App\Logic\MDT\Entity\MDTMapPOIType;
 use App\Logic\MDT\Entity\MDTNpc;
 use App\Logic\MDT\Entity\MDTPatrol;
@@ -190,6 +191,19 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 'floorSwitchMarkers' => $mdtDungeon->getMDTMapPOIs()->toArray(),
             ]),
         );
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws Exception
+     */
+    public function getUnhandledMapPOIs(Dungeon $dungeon): Collection
+    {
+        return new MDTDungeon($this->cacheService, $this->coordinatesService, $dungeon)
+            ->getMDTMapPOIs()
+            ->filter(static fn(MDTMapPOI $mdtMapPOI): bool => Conversion::isMDTMapPOIUnhandled($mdtMapPOI))
+            ->values();
     }
 
     public function importNpcsDataFromMDT(MDTDungeon $mdtDungeon, Dungeon $dungeon, GameVersion $gameVersion, array &$failures = []): void
@@ -1016,17 +1030,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             if ($mdtMapPOIs->isNotEmpty()) {
                 $this->log->importMapPOIsMDTHasMapPOIs();
 
-                $mapIconTypeMapping = [
-                    MDTMapPOIType::Graveyard->value            => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GRAVEYARD],
-                    MDTMapPOIType::DungeonEntrance->value      => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START],
-                    MDTMapPOIType::PrioryItem->value           => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_PRIORY_BLESSING_OF_THE_SACRED_FLAME],
-                    MDTMapPOIType::FloodgateItem->value        => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_FLOODGATE_WEAPONS_STOCKPILE_EXPLOSION],
-                    MDTMapPOIType::EcoDomeAlDaniItem1->value   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_ECO_DOME_AL_DANI_SHATTER_CONDUIT],
-                    MDTMapPOIType::EcoDomeAlDaniItem2->value   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_ECO_DOME_AL_DANI_DISRUPTION_GRENADE],
-                    MDTMapPOIType::EcoDomeAlDaniItem3->value   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_ECO_DOME_AL_DANI_KARESHI_SURGE],
-                    MDTMapPOIType::GeneralNote->value          => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_EXCLAMATION_YELLOW],
-                    MDTMapPOIType::GenericAssignablePOI->value => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DOT_YELLOW],
-                ];
+                $this->deleteClonedGenericItemMapIcons($newMappingVersion);
 
                 foreach ($mdtMapPOIs as $mdtMapPOI) {
                     $floor = $this->findFloorByMdtSubLevel($dungeon, $newMappingVersion, $mdtMapPOI->getSubLevel());
@@ -1037,9 +1041,13 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     ], $floor);
                     $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation($newMappingVersion, $latLng);
 
-                    if (isset($mapIconTypeMapping[$mdtMapPOI->getType()->value])) {
+                    $mapIconTypeKey = Conversion::convertMDTMapPOIToMapIconTypeKey($mdtMapPOI);
+
+                    if ($mapIconTypeKey !== null) {
+                        $mapIconTypeId = MapIconType::ALL[$mapIconTypeKey];
+
                         // No predecessor to match against - always create a new icon (#3757).
-                        $existingMapIcon = $currentMappingVersion?->getMapIconNearLocation($latLng, $mapIconTypeMapping[$mdtMapPOI->getType()->value]);
+                        $existingMapIcon = $currentMappingVersion?->getMapIconNearLocation($latLng, $mapIconTypeId);
                         if ($existingMapIcon === null) {
                             $translationKey = null;
                             if ($mdtMapPOI->getType() === MDTMapPOIType::GenericAssignablePOI &&
@@ -1054,7 +1062,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                             $mapIcon = MapIcon::create(array_merge(array_filter([
                                 'mapping_version_id' => $newMappingVersion->id,
-                                'map_icon_type_id'   => $mapIconTypeMapping[$mdtMapPOI->getType()->value],
+                                'map_icon_type_id'   => $mapIconTypeId,
                                 'comment'            => $translationKey,
                             ]), $latLng->toArrayWithFloor()));
 
@@ -1104,6 +1112,14 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                                 $newMappingVersion->dungeonFloorSwitchMarkers()->count(),
                             );
                         }
+                    } elseif (Conversion::isMDTMapPOIUnhandled($mdtMapPOI)) {
+                        // MDT draws something we have no map icon type for - our map will be missing it.
+                        $this->log->importMapPOIsUnhandledMapPOI(
+                            $mdtMapPOI->getType()->value,
+                            $mdtMapPOI->getSpellId(),
+                            $mdtMapPOI->getTextureFileDataId(),
+                            $mdtMapPOI->getSubLevel(),
+                        );
                     }
                 }
             }
@@ -1179,6 +1195,33 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $keptPercentage,
                 $this->findDungeonKeyOwningNpcs($dungeon, $incomingNpcIds),
             );
+        }
+    }
+
+    /**
+     * MDT owns the item icons it draws - every map icon type in
+     * {@see Conversion::MAP_POI_GENERIC_ITEM_SPELL_ID_MAP_ICON_TYPE_MAPPING} exists for one specific MDT
+     * `genericItem` POI and nothing else, so the import below re-creates the complete set from MDT.
+     *
+     * Until this import existed those items could only be placed by hand, and
+     * `copyMappingVersionContentsToDungeon()` clones such an icon into every subsequent mapping version -
+     * where it would now sit next to the imported copy as a duplicate. `getMapIconNearLocation()` does not
+     * catch it: its window is +/-5 lat/lng, while Maisara Caverns' hand-placed Hearty Vilebranch Stew is
+     * 5.3 off MDT's position and Seat of the Triumvirate's Void Infusion 13.9 (#3993).
+     */
+    private function deleteClonedGenericItemMapIcons(MappingVersion $newMappingVersion): void
+    {
+        $genericItemMapIconTypeIds = array_map(
+            static fn(string $mapIconTypeKey): int => MapIconType::ALL[$mapIconTypeKey],
+            array_values(Conversion::MAP_POI_GENERIC_ITEM_SPELL_ID_MAP_ICON_TYPE_MAPPING),
+        );
+
+        $deletedCount = $newMappingVersion->mapIcons()
+            ->whereIn('map_icon_type_id', $genericItemMapIconTypeIds)
+            ->delete();
+
+        if ($deletedCount > 0) {
+            $this->log->importMapPOIsDeletedClonedGenericItemMapIcons($deletedCount);
         }
     }
 

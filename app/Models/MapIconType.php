@@ -148,6 +148,20 @@ class MapIconType extends CacheModel
     public const string MAP_ICON_TYPE_SEAT_OF_THE_TRIUMVIRATE_VOID_INFUSION  = 'seat_of_the_triumvirate_void_infusion';
     public const string MAP_ICON_TYPE_MAISARA_CAVERNS_HEARTY_VILEBRANCH_STEW = 'maisara_caverns_hearty_vilebranch_stew';
 
+    public const string MAP_ICON_TYPE_ALGETHAR_ACADEMY_BLACK_DRAGONFLIGHT_PLEDGE_PIN  = 'algethar_academy_black_dragonflight_pledge_pin';
+    public const string MAP_ICON_TYPE_ALGETHAR_ACADEMY_BLUE_DRAGONFLIGHT_PLEDGE_PIN   = 'algethar_academy_blue_dragonflight_pledge_pin';
+    public const string MAP_ICON_TYPE_ALGETHAR_ACADEMY_BRONZE_DRAGONFLIGHT_PLEDGE_PIN = 'algethar_academy_bronze_dragonflight_pledge_pin';
+    public const string MAP_ICON_TYPE_ALGETHAR_ACADEMY_GREEN_DRAGONFLIGHT_PLEDGE_PIN  = 'algethar_academy_green_dragonflight_pledge_pin';
+    public const string MAP_ICON_TYPE_ALGETHAR_ACADEMY_RED_DRAGONFLIGHT_PLEDGE_PIN    = 'algethar_academy_red_dragonflight_pledge_pin';
+    public const string MAP_ICON_TYPE_MAGISTERS_TERRACE_ARCANE_EMPOWERMENT            = 'magisters_terrace_arcane_empowerment';
+    public const string MAP_ICON_TYPE_MURDER_ROW_FEL_CONTRABAND                       = 'murder_row_fel_contraband';
+    public const string MAP_ICON_TYPE_MURDER_ROW_FELSTONE                             = 'murder_row_felstone';
+    public const string MAP_ICON_TYPE_MURDER_ROW_FELWYRM_EGG                          = 'murder_row_felwyrm_egg';
+    public const string MAP_ICON_TYPE_MURDER_ROW_HEARTSTOP_POISON                     = 'murder_row_heartstop_poison';
+    public const string MAP_ICON_TYPE_MURDER_ROW_LOADED_PISTOL                        = 'murder_row_loaded_pistol';
+    public const string MAP_ICON_TYPE_MURDER_ROW_OVERLOAD_GOLEM                       = 'murder_row_overload_golem';
+    public const string MAP_ICON_TYPE_THE_BLINDING_VALE_FLOURISHING_STRIDE            = 'the_blinding_vale_flourishing_stride';
+
     public const array ALL = [
         self::MAP_ICON_TYPE_UNKNOWN                   => 1,
         self::MAP_ICON_TYPE_COMMENT                   => 2,
@@ -284,6 +298,23 @@ class MapIconType extends CacheModel
 
         self::MAP_ICON_TYPE_SEAT_OF_THE_TRIUMVIRATE_VOID_INFUSION  => 108,
         self::MAP_ICON_TYPE_MAISARA_CAVERNS_HEARTY_VILEBRANCH_STEW => 109,
+
+        self::MAP_ICON_TYPE_ALGETHAR_ACADEMY_BLACK_DRAGONFLIGHT_PLEDGE_PIN  => 110,
+        self::MAP_ICON_TYPE_ALGETHAR_ACADEMY_BLUE_DRAGONFLIGHT_PLEDGE_PIN   => 111,
+        self::MAP_ICON_TYPE_ALGETHAR_ACADEMY_BRONZE_DRAGONFLIGHT_PLEDGE_PIN => 112,
+        self::MAP_ICON_TYPE_ALGETHAR_ACADEMY_GREEN_DRAGONFLIGHT_PLEDGE_PIN  => 113,
+        self::MAP_ICON_TYPE_ALGETHAR_ACADEMY_RED_DRAGONFLIGHT_PLEDGE_PIN    => 114,
+
+        self::MAP_ICON_TYPE_MAGISTERS_TERRACE_ARCANE_EMPOWERMENT => 115,
+
+        self::MAP_ICON_TYPE_MURDER_ROW_FEL_CONTRABAND   => 116,
+        self::MAP_ICON_TYPE_MURDER_ROW_FELSTONE         => 117,
+        self::MAP_ICON_TYPE_MURDER_ROW_FELWYRM_EGG      => 118,
+        self::MAP_ICON_TYPE_MURDER_ROW_HEARTSTOP_POISON => 119,
+        self::MAP_ICON_TYPE_MURDER_ROW_LOADED_PISTOL    => 120,
+        self::MAP_ICON_TYPE_MURDER_ROW_OVERLOAD_GOLEM   => 121,
+
+        self::MAP_ICON_TYPE_THE_BLINDING_VALE_FLOURISHING_STRIDE => 122,
     ];
 
     public function getIconUrlAttribute(): string

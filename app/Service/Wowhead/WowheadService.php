@@ -22,6 +22,8 @@ class WowheadService implements WowheadServiceInterface
 {
     use Curl;
 
+    private const string ICON_URL_FORMAT = 'https://wow.zamimg.com/images/wow/icons/large/%s';
+
     private const string IDENTIFYING_TOKEN_HEALTH     = '$(document).ready(function(){$(".infobox li").last().after("<li><div><span class=\"tip\" onmouseover=\"WH.Tooltip.showAtCursor(event, ';
     private const string IDENTIFYING_TOKEN_DISPLAY_ID = 'linksButton.dataset.displayId =';
 
@@ -120,11 +122,24 @@ class WowheadService implements WowheadServiceInterface
 
     public function downloadSpellIcon(Spell $spell, string $targetFolder): bool
     {
-        $fileName       = sprintf('%s.jpg', $spell->icon_name);
+        return $this->downloadIcon($spell->icon_name, $targetFolder);
+    }
+
+    /**
+     * Downloads an icon by its file name off `wow.zamimg.com` - Wowhead's asset CDN, NOT wowhead.com.
+     *
+     * Worth stating explicitly because the two behave differently for us: the CDN serves us normally, while
+     * wowhead.com's pages answer 403 to {@see \App\Service\Traits\Curl}'s spoofed Chrome user agent. So an
+     * icon can always be fetched given its file name - but the name itself cannot be scraped off Wowhead, and
+     * is resolved from a texture FileDataID via wago.tools' ManifestInterfaceData DB2 instead (#3993).
+     */
+    public function downloadIcon(string $iconName, string $targetFolder): bool
+    {
+        $fileName       = sprintf('%s.jpg', $iconName);
         $targetFilePath = sprintf('%s/%s', $targetFolder, $fileName);
 
         $result = $this->curlSaveToFile(
-            sprintf('https://wow.zamimg.com/images/wow/icons/large/%s', $fileName),
+            sprintf(self::ICON_URL_FORMAT, $fileName),
             $targetFilePath,
         );
 

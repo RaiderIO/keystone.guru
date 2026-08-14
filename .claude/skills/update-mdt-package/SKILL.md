@@ -77,7 +77,7 @@ current retail season's dungeon mappings.
 - [ ] Bump composer package reference (version + commit SHA) and `composer update`
 - [ ] Bump `config/keystoneguru.php` MDT version (before the reimport - it stamps `mdt_addon_version`)
 - [ ] Reimport each retail-season dungeon mapping
-- [ ] Handle any new POI types/templates and missing map-icon translations
+- [ ] Handle any new POI types/templates, unhandled-POI tables, and missing map-icon translations
 - [ ] Run per-dungeon tests (rewrite stale CorrectEvents fixtures)
 - [ ] Refresh the MDT addonVersion => release-date map
 - [ ] Re-export NPC translations and re-seed
@@ -269,6 +269,21 @@ Read the output for each dungeon and handle:
   and report it upstream; `--force` is only for a genuine wholesale remap. Nothing was written when
   this fires: no mapping version is created and `mdt_mapping_hash` is untouched, so the dungeon keeps
   its previous mapping and the next run retries.
+- **The "N MDT map POI(s) … have no map icon type and were NOT imported" table** at the end of
+  the command: MDT draws these, we do not, and the map is missing them. This is the check that
+  catches a *known* POI type we simply have no icon for — the `Found new type` exception above
+  only fires on a type that is not in the enum at all, which is exactly why 19 `genericItem`
+  POIs went missing across six Midnight dungeons unnoticed (#3993). Handle it:
+  `docker compose exec -T app php artisan mapicon:downloadmdtitemicons <dungeonKey> retail`
+  downloads each item's icon into `keystone.guru.assets/images/mapicon_gen/` (MDT's
+  `info.texture` is a FileDataID → wago.tools' `ManifestInterfaceData` DB2 → Wowhead's CDN;
+  Wowhead's *pages* 403 the container, so do not try to scrape a name from there). Then add a
+  map icon type per item — constant + id in `MapIconType::ALL`, `MapIconTypesSeeder`,
+  `lang/en_US/mapicontypes.php`, `GenerateItemIcons`, and
+  `Conversion::MAP_POI_GENERIC_ITEM_SPELL_ID_MAP_ICON_TYPE_MAPPING` — run
+  `mapicon:generateitemicons`, and **notify the user** with the table so they can sanity-check
+  the naming. The table is printed even on "No change detected", and does **not** affect the
+  exit code.
 - **Other errors:** try to fix them yourself first (the user prefers this). Only pause for the
   user if you get genuinely stuck.
 
@@ -322,9 +337,12 @@ Hand-authoring, when it comes to that (Den of Nalorakk, MDT 6.2.1, mv 841 — 60
 > lines. Redirect to a file and grep for the markers that matter rather than dumping it all,
 > e.g. `... > /tmp/mdt_<key>.log 2>&1; echo "exit=$?"` then
 > `grep -ciE 'Found new (template|type)' /tmp/mdt_<key>.log` and
-> `grep -iE 'No change detected|MappingChanged|MissingTranslation|NpcSetReplaced' /tmp/mdt_<key>.log`.
+> `grep -iE 'No change detected|MappingChanged|MissingTranslation|NpcSetReplaced|UnhandledMapPOI|were NOT imported' /tmp/mdt_<key>.log`.
 > A new POI type/template would make the command **exit non-zero**, so an `exit=0` with zero
-> `Found new` matches confirms no enum changes were needed.
+> `Found new` matches confirms no *enum* changes were needed — it does **not** mean every POI was
+> imported. A known type we have no icon for exits 0 and is only visible in the
+> `were NOT imported` table and the `importMapPOIsUnhandledMapPOI` lines, so grep for those too
+> (#3993).
 
 ## Step 5 — Run that dungeon's tests
 
@@ -399,7 +417,8 @@ formatting of the rewritten `npcs.php` files, per the project's finishing-up con
    don't spend time re-diagnosing it. A failure that's **new** (passed at baseline, fails now)
    is a real regression from the bump — root-cause and fix it before wrapping up, don't just
    report it (per this repo's "fix incidental issues" convention).
-2. Give the user a **summary**: dungeon mappings imported, any new POI types/templates added,
+2. Give the user a **summary**: dungeon mappings imported, any new POI types/templates added, any
+   unhandled-POI table rows (with the map icon types you created for them),
    and any tests still failing, split into **pre-existing** vs **newly broken by this update**
    (especially any unresolved CombatLogRoute failures). Include the **tracking issue number**
    from Step 1.
@@ -407,10 +426,10 @@ formatting of the rewritten `npcs.php` files, per the project's finishing-up con
    change — screenshot the explore page of the dungeons whose mapping actually changed with the
    `headless-browser-verify` skill (A/B against the main stack as baseline) and post them on the
    MR. Also remind the user to browse the explore pages themselves.
-4. **Also check what the suite can't see:** `MapTilesExistenceTest` fails on its *first* dungeon
-   in a worktree (the assets dir isn't mounted), so it never reaches the newly imported ones and
-   cannot tell you a new floor is missing map tiles. Check the seeder export instead. **Floors are
-   not their own file** — there is no `floors.json`; each dungeon object in
+4. **Also check the seeder export for new floors.** `MapTilesExistenceTest` does run in a worktree
+   since #3993 mounted the assets repo into the worktree stack — it used to fail on its *first*
+   dungeon and never reach the newly imported ones — so it can now tell you a new floor is missing
+   map tiles. Check the export anyway, it is instant. **Floors are not their own file** — there is no `floors.json`; each dungeon object in
    `database/seeders/dungeondata/dungeons.json` carries a nested `floors` array, so that one file
    is the whole check:
    ```

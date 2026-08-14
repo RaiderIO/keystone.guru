@@ -3,11 +3,13 @@
 namespace App\Service\MDT;
 
 use App\Logic\MDT\Data\MDTDungeon;
+use App\Logic\MDT\Entity\MDTMapPOI;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Mapping\MappingServiceInterface;
 use Exception;
+use Illuminate\Support\Collection;
 
 interface MDTMappingImportServiceInterface
 {
@@ -19,6 +21,15 @@ interface MDTMappingImportServiceInterface
     ): MappingVersion;
 
     public function getMDTMappingHash(Dungeon $dungeon): string;
+
+    /**
+     * Every POI MDT draws for this dungeon that we have no map icon type for, and which the map is therefore
+     * missing - see {@see \App\Logic\MDT\Conversion::isMDTMapPOIUnhandled()}. Derived straight from MDT's own
+     * data, so it does not depend on an import having run.
+     *
+     * @return Collection<int, MDTMapPOI>
+     */
+    public function getUnhandledMapPOIs(Dungeon $dungeon): Collection;
 
     /**
      * @param array<int, Exception> $failures Appended with any exception a per-NPC save legitimately failed
