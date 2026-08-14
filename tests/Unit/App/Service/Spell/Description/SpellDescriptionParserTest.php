@@ -3,6 +3,7 @@
 namespace Tests\Unit\App\Service\Spell\Description;
 
 use App\Service\Spell\Description\ArraySpellDescriptionContext;
+use App\Service\Spell\Description\Dtos\SpellDescriptionValueKind;
 use App\Service\Spell\Description\Dtos\SpellEffectData;
 use App\Service\Spell\Description\SpellDescriptionContextInterface;
 use App\Service\Spell\Description\SpellDescriptionParser;
@@ -20,6 +21,12 @@ final class SpellDescriptionParserTest extends TestCase
     /** A second spell, for the cross-spell references descriptions are full of. */
     private const int OTHER_SPELL_ID = 2000;
 
+    /**
+     * Damage is a coefficient of the content the caster belongs to. A multiplier of ten means an amount
+     * is its coefficient, which keeps the expectations below about the parsing rather than the scaling.
+     */
+    private const float DAMAGE_MULTIPLIER = 10.0;
+
     #[Test]
     #[DataProvider('templateProvider')]
     public function parse_givenTemplate_returnsRenderedDescription(string $template, string $expected): void
@@ -28,7 +35,7 @@ final class SpellDescriptionParserTest extends TestCase
         $parser = new SpellDescriptionParser();
 
         // Act
-        $result = $parser->parse($this->createContext(), self::SPELL_ID, $template);
+        $result = $parser->parse($this->createContext(), self::SPELL_ID, $template, self::DAMAGE_MULTIPLIER)->render();
 
         // Assert
         $this->assertSame($expected, $result, $template);
@@ -89,9 +96,10 @@ final class SpellDescriptionParserTest extends TestCase
                 'Deals ${$s1*2} damage.',
                 'Deals 50 damage.',
             ],
+            // Arithmetic built from a damage token is itself an amount of damage, so it rounds like one
             'arithmetic across spells' => [
                 'Deals ${$s1*(1+$2000s1/100)} damage.',
-                'Deals 26.5 damage.',
+                'Deals 27 damage.',
             ],
             'a named description variable' => [
                 'Deals ${$s1*$<mult>} damage.',
@@ -168,6 +176,50 @@ final class SpellDescriptionParserTest extends TestCase
         ];
     }
 
+    #[Test]
+    public function parse_givenDamageAndAMultiplier_scalesTheCoefficient(): void
+    {
+        // Arrange
+        $parser = new SpellDescriptionParser();
+
+        // Act - the game stores damage in tenths of the content's expected damage
+        $result = $parser->parse($this->createContext(), self::SPELL_ID, 'Inflicts $s1 Fire damage.', 20345.8);
+
+        // Assert
+        $this->assertSame('Inflicts 50,865 Fire damage.', $result->render());
+    }
+
+    #[Test]
+    public function parse_givenDamageWithoutAMultiplier_omitsTheNumber(): void
+    {
+        // Arrange - a coefficient shown raw reads as "this boss hits for 25"
+        $parser = new SpellDescriptionParser();
+
+        // Act
+        $result = $parser->parse($this->createContext(), self::SPELL_ID, 'Inflicts $s1 Fire damage for $d.');
+
+        // Assert - the duration is not a coefficient and stays
+        $this->assertSame('Inflicts Fire damage for 8 sec.', $result->render());
+    }
+
+    #[Test]
+    public function parse_givenDamage_keepsTheCoefficientItCameFrom(): void
+    {
+        // Arrange - what makes a later key level a multiplication rather than a re-import
+        $parser = new SpellDescriptionParser();
+
+        // Act
+        $result = $parser->parse($this->createContext(), self::SPELL_ID, 'Inflicts $s1 Fire damage for $d.', self::DAMAGE_MULTIPLIER);
+
+        // Assert
+        $this->assertSame('Inflicts %1$s Fire damage for %2$s.', $result->format);
+        $this->assertSame(SpellDescriptionValueKind::Damage, $result->values[0]->kind);
+        $this->assertSame(25.0, $result->values[0]->coefficient);
+        $this->assertSame(self::SPELL_ID, $result->values[0]->spellId);
+        $this->assertSame(SpellDescriptionValueKind::Duration, $result->values[1]->kind);
+        $this->assertNull($result->values[1]->coefficient);
+    }
+
     /**
      * A spell with a handful of effects, plus a second spell for the cross-spell references.
      */
@@ -176,16 +228,16 @@ final class SpellDescriptionParserTest extends TestCase
         return new ArraySpellDescriptionContext(
             effects: [
                 self::SPELL_ID => [
-                    0 => new SpellEffectData(basePoints: 25, variance: 0, periodMs: 0, chainTargets: 0, radius: 12, maxRadius: 20),
-                    1 => new SpellEffectData(basePoints: 50, variance: 0, periodMs: 3000, chainTargets: 0, radius: null, maxRadius: null),
-                    2 => new SpellEffectData(basePoints: -30, variance: 0, periodMs: 0, chainTargets: 0, radius: null, maxRadius: null),
-                    3 => new SpellEffectData(basePoints: 1, variance: 0, periodMs: 0, chainTargets: 0, radius: null, maxRadius: null),
+                    0 => new SpellEffectData(effectType: 2, auraType: 0, basePoints: 25, variance: 0, periodMs: 0, chainTargets: 0, radius: 12, maxRadius: 20),
+                    1 => new SpellEffectData(effectType: 6, auraType: 3, basePoints: 50, variance: 0, periodMs: 3000, chainTargets: 0, radius: null, maxRadius: null),
+                    2 => new SpellEffectData(effectType: 6, auraType: 22, basePoints: -30, variance: 0, periodMs: 0, chainTargets: 0, radius: null, maxRadius: null),
+                    3 => new SpellEffectData(effectType: 6, auraType: 0, basePoints: 1, variance: 0, periodMs: 0, chainTargets: 0, radius: null, maxRadius: null),
                     // A player ability whose damage only exists on a real character
-                    4  => new SpellEffectData(basePoints: 0, variance: 0, periodMs: 0, chainTargets: 0, radius: null, maxRadius: null),
-                    10 => new SpellEffectData(basePoints: 7, variance: 0, periodMs: 0, chainTargets: 0, radius: null, maxRadius: null),
+                    4  => new SpellEffectData(effectType: 2, auraType: 0, basePoints: 0, variance: 0, periodMs: 0, chainTargets: 0, radius: null, maxRadius: null),
+                    10 => new SpellEffectData(effectType: 6, auraType: 0, basePoints: 7, variance: 0, periodMs: 0, chainTargets: 0, radius: null, maxRadius: null),
                 ],
                 self::OTHER_SPELL_ID => [
-                    0 => new SpellEffectData(basePoints: 6, variance: 0, periodMs: 0, chainTargets: 0, radius: null, maxRadius: null),
+                    0 => new SpellEffectData(effectType: 2, auraType: 0, basePoints: 6, variance: 0, periodMs: 0, chainTargets: 0, radius: null, maxRadius: null),
                 ],
             ],
             durationsMs: [

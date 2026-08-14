@@ -4,6 +4,7 @@ namespace Tests\Feature\Console\Commands\WagoTools;
 
 use App\Models\GameVersion\GameVersion;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellEffect;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Attributes\SlowTest;
@@ -60,6 +61,45 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenDb2Tables_persistsEveryColumnOfTheSpellEffect(): void
+    {
+        // Arrange - the effect names its own columns, so this is what guards that shape against drift
+        $spell = null;
+
+        try {
+            $this->writeDb2Tables();
+
+            $spell = $this->createSpell(self::SPELL_ID, null);
+
+            // Act
+            $this->artisan('wagotools:importspelldescriptions', ['--build' => self::BUILD])
+                ->assertSuccessful();
+
+            // Assert
+            $effect = SpellEffect::query()
+                ->where('spell_id', self::SPELL_ID)
+                ->where('effect_index', 0)
+                ->first();
+
+            $this->assertNotNull($effect);
+            $this->assertSame(0, $effect->effect_type);
+            $this->assertSame(0, $effect->aura_type);
+            $this->assertSame(25.0, $effect->base_points);
+            $this->assertSame(0.0, $effect->variance);
+            $this->assertSame(0, $effect->period_ms);
+            $this->assertSame(0, $effect->chain_targets);
+            $this->assertSame(12.0, $effect->radius);
+            $this->assertSame(12.0, $effect->max_radius);
+        } finally {
+            SpellEffect::query()->where('spell_id', self::SPELL_ID)->delete();
+            new SpellEffect()->flushCache();
+            $spell?->delete();
+            new Spell()->flushCache();
+            $this->removeDb2Tables();
+        }
+    }
+
+    #[Test]
     public function handle_givenASpellWithoutADescription_clearsTheOneWeHad(): void
     {
         // Arrange
@@ -80,7 +120,7 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
             // Assert - the spell has no description in this build, so ours must go as well
             $spell->refresh();
 
-            $this->assertNull($spell->description);
+            $this->assertNull($spell->description_format);
             $this->assertNull($spell->description_template);
         } finally {
             $spell?->delete();
@@ -181,13 +221,13 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
     private function createSpell(int $spellId, ?string $description, ?int $gameVersionId = null): Spell
     {
         return Spell::create([
-            'id'              => $spellId,
-            'game_version_id' => $gameVersionId ?? GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
-            'dispel_type'     => 'spelldispeltype.none',
-            'icon_name'       => 'inv_misc_questionmark',
-            'name'            => 'spells.test',
-            'schools_mask'    => 1,
-            'description'     => $description,
+            'id'                 => $spellId,
+            'game_version_id'    => $gameVersionId ?? GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
+            'dispel_type'        => 'spelldispeltype.none',
+            'icon_name'          => 'inv_misc_questionmark',
+            'name'               => 'spells.test',
+            'schools_mask'       => 1,
+            'description_format' => $description,
         ]);
     }
 

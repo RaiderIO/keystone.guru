@@ -25,6 +25,7 @@ use App\Models\Speedrun\DungeonSpeedrunDifficulty;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpcNpc;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellEffect;
 use App\SeederHelpers\RelationImport\Mapping\DungeonFloorSwitchMarkerRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\DungeonRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\DungeonRouteRelationMapping;
@@ -524,6 +525,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             MappingVersion::class,
             MappingCommitLog::class,
             Spell::class,
+            SpellEffect::class,
             // SpellDungeon, NpcCharacteristic and NpcSpell are combat-log-derived behavior and are
             // intentionally omitted: they are not exported to the seeders, so their live tables must
             // survive a re-seed untouched instead of being rebuilt (and wiped) from the JSON files.

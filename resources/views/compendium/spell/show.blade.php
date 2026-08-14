@@ -33,6 +33,17 @@ use Illuminate\Support\Collection;
 @section('content')
     @include('compendium.spell.sections.header')
 
+    @if($spell->description !== null)
+        <div class="compendium_record_section">
+            <div class="compendium_record_label">
+                {{ __('view_compendium.spell.sections.description.title') }}
+            </div>
+            <div>
+                @include('compendium.spell.sections.description')
+            </div>
+        </div>
+    @endif
+
     <div class="compendium_record_section">
         <div class="compendium_record_label">
             {{ __('view_compendium.spell.sections.details.title') }}

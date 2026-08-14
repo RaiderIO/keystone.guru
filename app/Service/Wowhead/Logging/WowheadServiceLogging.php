@@ -64,4 +64,9 @@ class WowheadServiceLogging extends StructuredLogging implements WowheadServiceL
     ): void {
         $this->warning(__METHOD__, get_defined_vars());
     }
+
+    public function getSpellTooltipTextInvalidResponse(int $spellId): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
 }

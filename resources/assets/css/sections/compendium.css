@@ -447,3 +447,14 @@ a.compendium_class_tile img {
 .compendium_datatable table.dataTable {
     border-collapse: collapse;
 }
+
+/* ===== Spell description (#3971) ===== */
+
+.compendium_spell_description {
+    margin-bottom: 0.5rem;
+    max-width: 60ch;
+}
+
+.compendium_spell_description:last-child {
+    margin-bottom: 0;
+}

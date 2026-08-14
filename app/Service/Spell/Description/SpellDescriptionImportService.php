@@ -3,8 +3,10 @@
 namespace App\Service\Spell\Description;
 
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellEffect;
 use App\Service\Spell\Description\Dtos\SpellDescriptionImportResult;
 use App\Service\Spell\Description\Dtos\SpellDescriptionTemplates;
+use App\Service\Spell\Description\Dtos\SpellDescriptionValue;
 use App\Service\Spell\Description\Dtos\SpellEffectData;
 use App\Service\Spell\Description\Logging\SpellDescriptionImportServiceLoggingInterface;
 use App\Service\WagoTools\WagoToolsServiceInterface;
@@ -22,6 +24,8 @@ use Illuminate\Database\Eloquent\Collection;
 class SpellDescriptionImportService implements SpellDescriptionImportServiceInterface
 {
     private const int PROGRESS_INTERVAL = 250;
+
+    private const int PERSIST_CHUNK_SIZE = 500;
 
     /**
      * How often the Spell table is re-read to follow the references a description makes to other
@@ -57,7 +61,7 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
             // its business - a retail build knows nothing about the spells of the classic ones.
             /** @var Collection<int, Spell> $spells */
             $spells = Spell::query()
-                ->select(['id', 'description', 'description_template'])
+                ->select(['id', 'description_template', 'description_format', 'description_values', 'damage_multiplier'])
                 ->where('game_version_id', $gameVersionId)
                 ->get();
             $ourIds = array_fill_keys($spells->pluck('id')->all(), true);
@@ -72,13 +76,18 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
                 return null;
             }
 
+            $wantedIds = $templates->getWantedIds($ourIds);
+            $effects   = $this->readEffects($build, $wantedIds);
+
             $context = new ArraySpellDescriptionContext(
-                effects: $this->readEffects($build, $templates->getWantedIds($ourIds)),
-                durationsMs: $this->readDurations($build, $templates->getWantedIds($ourIds)),
-                names: $this->readNames($build, $templates->getWantedIds($ourIds)),
+                effects: $effects,
+                durationsMs: $this->readDurations($build, $wantedIds),
+                names: $this->readNames($build, $wantedIds),
                 templates: $templates->described,
                 descriptionVariables: $this->readDescriptionVariables($build),
             );
+
+            $this->persistEffects(array_intersect_key($effects, $ourIds));
 
             $updatedCount = $this->renderAndPersist($context, $spells, $templates, $onProgress);
 
@@ -91,6 +100,39 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
         } finally {
             $this->log->importDescriptionsEnd();
         }
+    }
+
+    /**
+     * Store the coefficients themselves, not just the sentence they were rendered into - they are what a
+     * later key level recalculates from.
+     *
+     * @param array<int, array<int, SpellEffectData>> $effects
+     */
+    private function persistEffects(array $effects): void
+    {
+        $rows = [];
+
+        foreach ($effects as $spellId => $spellEffects) {
+            foreach ($spellEffects as $effectIndex => $effect) {
+                // The effect names its own columns, so a field added to it cannot miss this call
+                $rows[] = $effect->toArray($spellId, $effectIndex);
+            }
+        }
+
+        foreach (array_chunk($rows, self::PERSIST_CHUNK_SIZE) as $chunk) {
+            SpellEffect::query()->upsert($chunk, ['spell_id', 'effect_index']);
+        }
+
+        // An upsert never deletes, so an effect a patch took away would otherwise linger forever - and
+        // ride into every environment through the seeder (#3972 review)
+        foreach ($effects as $spellId => $spellEffects) {
+            SpellEffect::query()
+                ->where('spell_id', $spellId)
+                ->whereNotIn('effect_index', array_keys($spellEffects))
+                ->delete();
+        }
+
+        new SpellEffect()->flushCache();
     }
 
     /**
@@ -121,14 +163,23 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
             // A spell that lost its description in this build must lose ours as well
             $description = $template === null
                 ? null
-                : ($this->spellDescriptionParser->parse($context, $spell->id, $template) ?: null);
+                : $this->spellDescriptionParser->parse($context, $spell->id, $template, $spell->damage_multiplier ?? 0.0);
 
-            if ($template !== $spell->description_template || $description !== $spell->description) {
+            $format = $description === null || $description->isEmpty() ? null : $description->format;
+            $values = $format === null ? null : array_map(
+                static fn(SpellDescriptionValue $value): array => $value->toArray(),
+                $description->values,
+            );
+
+            if ($template !== $spell->description_template
+                || $format !== $spell->description_format
+                || $values !== $spell->description_values) {
                 Spell::query()
                     ->whereKey($spell->id)
                     ->update([
                         'description_template' => $template,
-                        'description'          => $description,
+                        'description_format'   => $format,
+                        'description_values'   => $values === null ? null : json_encode($values),
                     ]);
 
                 $updatedCount++;
@@ -244,6 +295,8 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
             $maxRadiusIndex = (int)($row['EffectRadiusIndex_1'] ?? 0);
 
             $effects[$spellId][$effectIndex] = new SpellEffectData(
+                effectType: (int)($row['Effect'] ?? 0),
+                auraType: (int)($row['EffectAura'] ?? 0),
                 basePoints: (float)($row['EffectBasePointsF'] ?? 0),
                 variance: (float)($row['Variance'] ?? 0),
                 periodMs: (int)($row['EffectAuraPeriod'] ?? 0),

@@ -36,6 +36,10 @@ $shouldShowSubject = (static fn(CombatLogNpcEvent|CombatLogSpellEvent $event): b
  * One colored icon per event type carries the add/change/remove semantics in the log's icon
  * column (the old badge-block + type-icon pair collapsed into a single glyph).
  *
+ * The glyph follows what the row says, not which table it came from: an NPC gaining a
+ * characteristic and a spell gaining a property both read "Affected by ...", so both get the same
+ * plus, and their two removals both get the same minus (#3976).
+ *
  * @return array{icon: string, color: string}
  */
 $eventGlyph = static function (CombatLogNpcEvent|CombatLogSpellEvent $event): array {

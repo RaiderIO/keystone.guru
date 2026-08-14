@@ -25,7 +25,8 @@ final class SpellLinkTest extends PublicTestCase
             $result = view('common.spell.link', ['spell' => $spell])->render();
 
             // Assert
-            $this->assertStringContainsString('data-spell-description="Slams the ground for 8 sec."', $result);
+            $this->assertStringContainsString('data-spell-tooltip', $result);
+            $this->assertStringContainsString('Slams the ground for 8 sec.', $result);
             $this->assertStringNotContainsString('data-wowhead', $result);
         } finally {
             $spell?->delete();
@@ -47,7 +48,7 @@ final class SpellLinkTest extends PublicTestCase
 
             // Assert
             $this->assertStringContainsString(sprintf('data-wowhead="spell=%d"', self::SPELL_ID), $result);
-            $this->assertStringNotContainsString('data-spell-description', $result);
+            $this->assertStringNotContainsString('data-spell-tooltip', $result);
         } finally {
             $spell?->delete();
             new Spell()->flushCache();
@@ -78,13 +79,13 @@ final class SpellLinkTest extends PublicTestCase
     private function createSpell(?string $description): Spell
     {
         return Spell::create([
-            'id'              => self::SPELL_ID,
-            'game_version_id' => 1,
-            'dispel_type'     => 'spelldispeltype.none',
-            'icon_name'       => 'inv_misc_questionmark',
-            'name'            => 'spells.test',
-            'schools_mask'    => 1,
-            'description'     => $description,
+            'id'                 => self::SPELL_ID,
+            'game_version_id'    => 1,
+            'dispel_type'        => 'spelldispeltype.none',
+            'icon_name'          => 'inv_misc_questionmark',
+            'name'               => 'spells.test',
+            'schools_mask'       => 1,
+            'description_format' => $description,
         ]);
     }
 }

@@ -12,8 +12,13 @@ class MappingExportService implements MappingExportServiceInterface
      */
     public function serializeSpells(): array
     {
-        $spells = Spell::all();
+        // The effects are eager loaded (rather than lazily accessed) so they are serialized into the
+        // spells.json output - they are inferred from the game client's data, so every environment has
+        // to be told about them rather than deriving them itself.
+        $spells = Spell::with(['spellEffects'])->get();
         foreach ($spells as $spell) {
+            $spell->spellEffects->makeHidden(['id', 'spell_id', 'spell']);
+
             // icon_url, wowhead_url and wowhead_tooltip_data are computed accessors in Spell::$appends,
             // not columns - every entry in that list must be hidden here or it lands in the seeder file.
             // aura, debuff, miss_types_mask, counters_mask and bypasses_immunities_mask are combat-log-derived
@@ -23,6 +28,7 @@ class MappingExportService implements MappingExportServiceInterface
                 'icon_url',
                 'wowhead_url',
                 'wowhead_tooltip_data',
+                'tooltip_data',
                 'aura',
                 'debuff',
                 'miss_types_mask',

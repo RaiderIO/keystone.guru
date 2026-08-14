@@ -2,6 +2,10 @@
 
 namespace App\Service\Spell\Description;
 
+use App\Service\Spell\Description\Dtos\RenderedSpellDescription;
+use App\Service\Spell\Description\Dtos\SpellDescriptionValue;
+use App\Service\Spell\Description\Dtos\SpellDescriptionValueKind;
+
 /**
  * Turns a game client spell description template into readable text.
  *
@@ -15,6 +19,10 @@ namespace App\Service\Spell\Description;
  * arithmetic (`${...}`), named variables (`$<mult>`), cross-spell name and description inserts
  * (`$@spellname123`, `$@spelldesc123`), conditionals (`$?s123[...][...]`), plural and gender macros
  * (`$lpoint:points;`, `|4ally:allies;`, `$ghe:she;`) and the UI escape codes (`|cFFFFFFFF...|r`).
+ *
+ * The result is not one finished sentence but a format string plus the numbers that go in it, each
+ * tagged with what it means - so damage and healing, which are coefficients of the content the caster
+ * belongs to, can be recalculated per key level without re-parsing anything (#3951).
  *
  * Conditionals are player state - whether the viewer knows a talent, has an aura, plays a class, is in
  * a given difficulty - which we have no answer for while rendering up front. They therefore render
@@ -34,23 +42,24 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
      */
     private const array SPELL_WIDE_TOKENS = ['d', 'D'];
 
-    public function parse(SpellDescriptionContextInterface $context, int $spellId, string $template): string
-    {
+    /**
+     * The game stores creature damage and healing in tenths of the content's expected damage, so a
+     * coefficient is divided by this before the content's multiplier is applied.
+     */
+    private const float COEFFICIENT_SCALE = 10.0;
+
+    public function parse(
+        SpellDescriptionContextInterface $context,
+        int                              $spellId,
+        string                           $template,
+        float                            $damageMultiplier = 0.0,
+    ): RenderedSpellDescription {
+        $builder    = new SpellDescriptionBuilder();
         $lastNumber = null;
 
-        $result = $this->render($context, $spellId, $this->normalizeNewlines($template), 0, $lastNumber);
+        $this->render($context, $spellId, $this->normalizeNewlines($template), 0, $lastNumber, $builder, $damageMultiplier);
 
-        return trim($this->collapseGapsLeftByOmissions($result));
-    }
-
-    /**
-     * An omitted token leaves the spaces that surrounded it behind ("causing  Shadow damage"). Runs of
-     * whitespace that follow other text are collapsed to close those gaps, while leading indentation -
-     * which descriptions use to lay out lists - is left alone.
-     */
-    private function collapseGapsLeftByOmissions(string $description): string
-    {
-        return preg_replace('/(?<=\S)[ \t]{2,}/', ' ', $description) ?? $description;
+        return $builder->build();
     }
 
     /**
@@ -63,8 +72,9 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
         string                           $template,
         int                              $depth,
         ?float                           &                           $lastNumber,
-    ): string {
-        $result = '';
+        SpellDescriptionBuilder          $builder,
+        float                            $damageMultiplier,
+    ): void {
         $offset = 0;
         $length = strlen($template);
 
@@ -72,16 +82,14 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
             $character = $template[$offset];
 
             if ($character === '$') {
-                $result .= $this->renderDollarToken($context, $spellId, $template, $offset, $depth, $lastNumber);
+                $this->renderDollarToken($context, $spellId, $template, $offset, $depth, $lastNumber, $builder, $damageMultiplier);
             } elseif ($character === '|') {
-                $result .= $this->renderEscapeCode($template, $offset, $lastNumber);
+                $this->renderEscapeCode($template, $offset, $lastNumber, $builder);
             } else {
-                $result .= $character;
+                $builder->appendText($character);
                 $offset++;
             }
         }
-
-        return $result;
     }
 
     /**
@@ -94,56 +102,69 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
         int                              &                              $offset,
         int                              $depth,
         ?float                           &                           $lastNumber,
-    ): string {
+        SpellDescriptionBuilder          $builder,
+        float                            $damageMultiplier,
+    ): void {
         $next = $template[$offset + 1] ?? '';
 
         // An escaped dollar sign
         if ($next === '$') {
             $offset += 2;
+            $builder->appendText('$');
 
-            return '$';
+            return;
         }
 
         if ($next === '{') {
             $offset += 2;
             $expression = $this->readUntilClosingBrace($template, $offset);
+            $kind       = SpellDescriptionValueKind::Value;
 
-            $value = $expression === null ? null : $this->evaluateExpression($context, $spellId, $expression, $depth);
+            $value = $expression === null
+                ? null
+                : $this->evaluateExpression($context, $spellId, $expression, $depth, $kind);
 
-            if ($value === null) {
-                return '';
+            if ($value !== null) {
+                $lastNumber = abs($value);
+                $this->appendNumber($builder, $lastNumber, $kind, $damageMultiplier);
             }
 
-            $lastNumber = abs($value);
-
-            return $this->formatNumber($lastNumber);
+            return;
         }
 
         if ($next === '<') {
             $offset += 2;
             $variableName = $this->readUntil($template, $offset, '>');
+            $kind         = SpellDescriptionValueKind::Value;
 
-            $value = $variableName === null ? null : $this->resolveVariable($context, $spellId, $variableName, $depth);
+            $value = $variableName === null
+                ? null
+                : $this->resolveVariable($context, $spellId, $variableName, $depth, $kind);
 
-            if ($value === null) {
-                return '';
+            if ($value !== null) {
+                $lastNumber = abs($value);
+                $this->appendNumber($builder, $lastNumber, $kind, $damageMultiplier);
             }
 
-            $lastNumber = abs($value);
-
-            return $this->formatNumber($lastNumber);
+            return;
         }
 
         if ($next === '?') {
             $offset += 2;
+            $branch = $this->readConditionalBranch($context, $spellId, $template, $offset, $depth);
 
-            return $this->renderConditional($context, $spellId, $template, $offset, $depth, $lastNumber);
+            if ($branch !== null) {
+                $this->render($context, $spellId, $branch, $depth, $lastNumber, $builder, $damageMultiplier);
+            }
+
+            return;
         }
 
         if ($next === '@') {
             $offset += 2;
+            $this->renderFunction($context, $template, $offset, $depth, $builder, $damageMultiplier);
 
-            return $this->renderFunction($context, $template, $offset, $depth);
+            return;
         }
 
         // $lsingular:plural; and $ghe:she; - not a value but a choice between two words
@@ -153,12 +174,13 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
 
             if ($macro !== null && str_contains($macro, ':')) {
                 $offset = $macroOffset;
+                $builder->appendText($this->chooseMacroOption($macro, $next === 'l' || $next === 'L' ? $lastNumber : null));
 
-                return $this->chooseMacroOption($macro, $next === 'l' || $next === 'L' ? $lastNumber : null);
+                return;
             }
         }
 
-        return $this->renderValueToken($context, $spellId, $template, $offset, $lastNumber);
+        $this->renderValueToken($context, $spellId, $template, $offset, $lastNumber, $builder, $damageMultiplier);
     }
 
     /**
@@ -171,14 +193,16 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
         string                           $template,
         int                              &                              $offset,
         ?float                           &                           $lastNumber,
-    ): string {
+        SpellDescriptionBuilder          $builder,
+        float                            $damageMultiplier,
+    ): void {
         $pattern = sprintf('/\G\$(\d*)(%s|[a-zA-Z])(\d{0,2})/', implode('|', array_keys(self::ALIAS_TOKENS)));
 
         if (preg_match($pattern, $template, $matches, 0, $offset) !== 1) {
             // Not a token at all - drop the dollar sign and carry on
             $offset++;
 
-            return '';
+            return;
         }
 
         $offset += strlen($matches[0]);
@@ -193,33 +217,75 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
 
         $referencedSpellId = $matches[1] === '' ? $spellId : (int)$matches[1];
         $effectIndex       = $matches[3] === '' ? 0 : max(0, (int)$matches[3] - 1);
+        $kind              = SpellDescriptionValueKind::Value;
 
-        $value = $this->resolveValueToken($context, $referencedSpellId, $token, $effectIndex);
+        $value = $this->resolveValueToken($context, $referencedSpellId, $token, $effectIndex, $kind);
 
         if ($value === null) {
-            return '';
+            return;
         }
 
         $lastNumber = $value;
 
-        if ($token === 'd' || $token === 'D') {
-            return $this->formatDuration($value);
+        if ($kind === SpellDescriptionValueKind::Duration) {
+            $builder->appendValue(new SpellDescriptionValue($kind, $this->formatDuration($value)));
+
+            return;
         }
 
-        return $this->formatNumber($value);
+        $this->appendNumber($builder, $value, $kind, $damageMultiplier, $referencedSpellId, $effectIndex);
     }
 
     /**
-     * The numeric value of a single description token, or null when we cannot know it.
+     * Record a number, keeping the coefficient behind it when it is one so the amount can be worked out
+     * again later for a different key level.
+     */
+    private function appendNumber(
+        SpellDescriptionBuilder   $builder,
+        float                     $value,
+        SpellDescriptionValueKind $kind,
+        float                     $damageMultiplier,
+        ?int                      $spellId = null,
+        ?int                      $effectIndex = null,
+    ): void {
+        if (!$kind->isScalable()) {
+            $builder->appendValue(new SpellDescriptionValue($kind, $this->formatNumber($value)));
+
+            return;
+        }
+
+        // A coefficient without its multiplier is not a number anyone can read - 10 where the game shows
+        // 50,845 - so nothing is shown for it. The value itself is still recorded: it carries the
+        // coefficient, which is what the calibration measures the multiplier from in the first place.
+        // Dropping it here would leave calibration with nothing to work with (#3972 review).
+        $amount = $damageMultiplier > 0.0
+            // An amount of damage is a whole number; the fraction is an artefact of the coefficient
+            ? $this->formatNumber(round($value / self::COEFFICIENT_SCALE * $damageMultiplier))
+            : '';
+
+        $builder->appendValue(new SpellDescriptionValue(
+            kind: $kind,
+            text: $amount,
+            coefficient: $value,
+            spellId: $spellId,
+            effectIndex: $effectIndex,
+        ));
+    }
+
+    /**
+     * The numeric value of a single description token, or null when we cannot know it. `$kind` comes back
+     * saying what that number is, which decides whether it scales.
      */
     private function resolveValueToken(
         SpellDescriptionContextInterface $context,
         int                              $spellId,
         string                           $token,
         int                              $effectIndex,
+        SpellDescriptionValueKind        &        $kind,
     ): ?float {
         if ($token === 'd' || $token === 'D') {
             $durationMs = $context->getDurationMs($spellId);
+            $kind       = SpellDescriptionValueKind::Duration;
 
             return $durationMs === null ? null : $durationMs / 1000;
         }
@@ -239,8 +305,17 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
         };
 
         if ($points !== null) {
+            $kind = $effect->getPointsKind();
+
             return $effect->hasKnownPoints() ? abs($points) : null;
         }
+
+        $kind = match ($token) {
+            't', 'T' => SpellDescriptionValueKind::Period,
+            'a', 'A' => SpellDescriptionValueKind::Radius,
+            'x'      => SpellDescriptionValueKind::Count,
+            default  => SpellDescriptionValueKind::Value,
+        };
 
         return match ($token) {
             't', 'T' => $effect->periodMs > 0 ? $effect->periodMs / 1000 : null,
@@ -268,22 +343,6 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
         }
 
         return $basePoints * floor($durationMs / $periodMs);
-    }
-
-    /**
-     * Render `$?<condition>[<true>][<false>]`, where the false branch is optional.
-     */
-    private function renderConditional(
-        SpellDescriptionContextInterface $context,
-        int                              $spellId,
-        string                           $template,
-        int                              &                              $offset,
-        int                              $depth,
-        ?float                           &                           $lastNumber,
-    ): string {
-        $branch = $this->readConditionalBranch($context, $spellId, $template, $offset, $depth);
-
-        return $branch === null ? '' : $this->render($context, $spellId, $branch, $depth, $lastNumber);
     }
 
     /**
@@ -338,7 +397,9 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
         int                              $depth,
     ): bool {
         if (str_contains($condition, '$')) {
-            return ($this->evaluateExpression($context, $spellId, $condition, $depth) ?? 0.0) !== 0.0;
+            $kind = SpellDescriptionValueKind::Value;
+
+            return ($this->evaluateExpression($context, $spellId, $condition, $depth, $kind) ?? 0.0) !== 0.0;
         }
 
         foreach (explode('|', $condition) as $conjunction) {
@@ -365,36 +426,46 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
         string                           $template,
         int                              &                              $offset,
         int                              $depth,
-    ): string {
+        SpellDescriptionBuilder          $builder,
+        float                            $damageMultiplier,
+    ): void {
         if (preg_match('/\G([a-zA-Z]+)(\d*)/', $template, $matches, 0, $offset) !== 1) {
-            return '';
+            return;
         }
 
         $offset += strlen($matches[0]);
 
-        $referencedSpellId = $matches[2] === '' ? null : (int)$matches[2];
-
-        if ($referencedSpellId === null) {
-            return '';
+        if ($matches[2] === '') {
+            return;
         }
 
+        $referencedSpellId = (int)$matches[2];
+
         if (strtolower($matches[1]) === 'spellname') {
-            return $context->getName($referencedSpellId) ?? '';
+            $builder->appendText($context->getName($referencedSpellId) ?? '');
+
+            return;
         }
 
         if (strtolower($matches[1]) === 'spelldesc' && $depth < self::MAX_RECURSION_DEPTH) {
             $referencedTemplate = $context->getDescriptionTemplate($referencedSpellId);
 
             if ($referencedTemplate === null) {
-                return '';
+                return;
             }
 
             $nestedLastNumber = null;
 
-            return $this->render($context, $referencedSpellId, $this->normalizeNewlines($referencedTemplate), $depth + 1, $nestedLastNumber);
+            $this->render(
+                $context,
+                $referencedSpellId,
+                $this->normalizeNewlines($referencedTemplate),
+                $depth + 1,
+                $nestedLastNumber,
+                $builder,
+                $damageMultiplier,
+            );
         }
-
-        return '';
     }
 
     /**
@@ -405,6 +476,7 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
         int                              $spellId,
         string                           $variableName,
         int                              $depth,
+        SpellDescriptionValueKind        &        $kind,
     ): ?float {
         if ($depth >= self::MAX_RECURSION_DEPTH) {
             return null;
@@ -412,20 +484,26 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
 
         $expression = $context->getDescriptionVariables($spellId)[$variableName] ?? null;
 
-        return $expression === null ? null : $this->evaluateExpression($context, $spellId, $expression, $depth + 1);
+        return $expression === null
+            ? null
+            : $this->evaluateExpression($context, $spellId, $expression, $depth + 1, $kind);
     }
 
     /**
      * Evaluate the arithmetic in `${...}`, a `$<var>` definition or a comparison condition. Every token
      * inside is resolved to a number first; if any of them cannot be, the whole expression is unknown.
+     *
+     * The arithmetic around a coefficient is linear in practice ("twice this effect's damage"), so an
+     * expression built from damage tokens is itself a coefficient and `$kind` says so.
      */
     private function evaluateExpression(
         SpellDescriptionContextInterface $context,
         int                              $spellId,
         string                           $expression,
         int                              $depth,
+        SpellDescriptionValueKind        &        $kind,
     ): ?float {
-        $substituted = $this->substituteNumbers($context, $spellId, $expression, $depth);
+        $substituted = $this->substituteNumbers($context, $spellId, $expression, $depth, $kind);
 
         if ($substituted === null) {
             return null;
@@ -443,6 +521,7 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
         int                              $spellId,
         string                           $expression,
         int                              $depth,
+        SpellDescriptionValueKind        &        $kind,
     ): ?string {
         $result = '';
         $offset = 0;
@@ -456,16 +535,17 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
                 continue;
             }
 
-            $next = $expression[$offset + 1] ?? '';
+            $next      = $expression[$offset + 1] ?? '';
+            $tokenKind = SpellDescriptionValueKind::Value;
 
             if ($next === '{') {
                 $offset += 2;
                 $nested = $this->readUntilClosingBrace($expression, $offset);
-                $value  = $nested === null ? null : $this->evaluateExpression($context, $spellId, $nested, $depth);
+                $value  = $nested === null ? null : $this->evaluateExpression($context, $spellId, $nested, $depth, $tokenKind);
             } elseif ($next === '<') {
                 $offset += 2;
                 $variableName = $this->readUntil($expression, $offset, '>');
-                $value        = $variableName === null ? null : $this->resolveVariable($context, $spellId, $variableName, $depth);
+                $value        = $variableName === null ? null : $this->resolveVariable($context, $spellId, $variableName, $depth, $tokenKind);
             } elseif ($next === '?') {
                 $offset += 2;
                 $branch = $this->readConditionalBranch($context, $spellId, $expression, $offset, $depth);
@@ -474,13 +554,18 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
                     return null;
                 }
 
-                $value = $this->evaluateExpression($context, $spellId, $branch, $depth);
+                $value = $this->evaluateExpression($context, $spellId, $branch, $depth, $tokenKind);
             } else {
-                $value = $this->substituteValueToken($context, $spellId, $expression, $offset);
+                $value = $this->substituteValueToken($context, $spellId, $expression, $offset, $tokenKind);
             }
 
             if ($value === null) {
                 return null;
+            }
+
+            // The first amount the expression is built from is what the whole expression is an amount of
+            if ($tokenKind->isScalable() && !$kind->isScalable()) {
+                $kind = $tokenKind;
             }
 
             // Wrapped, so that a negative value does not turn `2-$s1` into `2--5`, and written out in
@@ -499,6 +584,7 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
         int                              $spellId,
         string                           $expression,
         int                              &                              $offset,
+        SpellDescriptionValueKind        &        $kind,
     ): ?float {
         $pattern = sprintf('/\G\$(\d*)(%s|[a-zA-Z])(\d{0,2})/', implode('|', array_keys(self::ALIAS_TOKENS)));
 
@@ -512,28 +598,33 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
         $referencedSpellId = $matches[1] === '' ? $spellId : (int)$matches[1];
         $effectIndex       = $matches[3] === '' ? 0 : max(0, (int)$matches[3] - 1);
 
-        return $this->resolveValueToken($context, $referencedSpellId, $token, $effectIndex);
+        return $this->resolveValueToken($context, $referencedSpellId, $token, $effectIndex, $kind);
     }
 
     /**
      * Render the client's UI escape codes: colours, textures and hyperlinks are dropped, keeping the text
      * they wrap; `|4singular:plural;` picks a word.
      */
-    private function renderEscapeCode(string $template, int &$offset, ?float &$lastNumber): string
-    {
+    private function renderEscapeCode(
+        string                  $template,
+        int                     &                     $offset,
+        ?float                  &                  $lastNumber,
+        SpellDescriptionBuilder $builder,
+    ): void {
         $code = $template[$offset + 1] ?? '';
 
         // |cFFFFFFFF opens a colour, |r closes it
         if (($code === 'c' || $code === 'C') && preg_match('/\G\|[cC][0-9a-fA-F]{8}/', $template, $matches, 0, $offset) === 1) {
             $offset += strlen($matches[0]);
 
-            return '';
+            return;
         }
 
         if ($code === 'n') {
             $offset += 2;
+            $builder->appendText("\n");
 
-            return "\n";
+            return;
         }
 
         // |4singular:plural; and its declension variants
@@ -543,8 +634,9 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
 
             if ($macro !== null && str_contains($macro, ':')) {
                 $offset = $macroOffset;
+                $builder->appendText($this->chooseMacroOption($macro, $lastNumber));
 
-                return $this->chooseMacroOption($macro, $lastNumber);
+                return;
             }
         }
 
@@ -552,12 +644,10 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
         if (preg_match('/\G\|[a-zA-Z][^|]*/', $template, $matches, 0, $offset) === 1 && ($code === 'H' || $code === 'T')) {
             $offset += strlen($matches[0]);
 
-            return '';
+            return;
         }
 
         $offset += 2;
-
-        return '';
     }
 
     /**
@@ -675,10 +765,10 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
         $rounded = round($value, 2);
 
         if ($rounded === floor($rounded)) {
-            return (string)(int)$rounded;
+            return number_format($rounded, 0, '.', ',');
         }
 
-        return rtrim(rtrim(number_format($rounded, 2, '.', ''), '0'), '.');
+        return rtrim(rtrim(number_format($rounded, 2, '.', ','), '0'), '.');
     }
 
     /**

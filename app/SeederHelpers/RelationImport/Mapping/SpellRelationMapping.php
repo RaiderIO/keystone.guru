@@ -3,7 +3,9 @@
 namespace App\SeederHelpers\RelationImport\Mapping;
 
 use App\Models\Spell\Spell;
+use App\SeederHelpers\RelationImport\Parsers\Attribute\JsonAttributeParser;
 use App\SeederHelpers\RelationImport\Parsers\Attribute\TimestampAttributeParser;
+use App\SeederHelpers\RelationImport\Parsers\Relation\SpellSpellEffectsRelationParser;
 
 class SpellRelationMapping extends RelationMapping
 {
@@ -16,6 +18,11 @@ class SpellRelationMapping extends RelationMapping
 
         $this->setAttributeParsers(collect([
             new TimestampAttributeParser(),
+            new JsonAttributeParser(['description_values']),
+        ]));
+
+        $this->setPreSaveRelationParsers(collect([
+            new SpellSpellEffectsRelationParser(),
         ]));
     }
 
