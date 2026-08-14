@@ -9,7 +9,8 @@ use Illuminate\Console\Command;
  * Renders the hexagonal item map icons from the raw WoW icons in `keystone.guru.assets/images/mapicon_gen`.
  *
  * Adding one is five registrations, all of which must agree on the same key: a constant + a new id in
- * {@see \App\Models\MapIconType::ALL}, a `MapIconTypesSeeder` entry, a `lang/en_US/mapicontypes.php` string,
+ * {@see \App\Models\MapIconType::ALL}, an object in `database/seeders/mapicontypedata/map_icon_types.json`,
+ * a `lang/en_US/mapicontypes.php` string,
  * a source => target pair below, and - if MDT draws it - an entry in
  * {@see \App\Logic\MDT\Conversion::MAP_POI_GENERIC_ITEM_SPELL_ID_MAP_ICON_TYPE_MAPPING}. Note that adding an
  * MDT mapping for an icon that was already placed by hand duplicates it on the next reimport (#3993).
