@@ -465,8 +465,11 @@ action, say so in one line.
   away a concurrent push instead of just rejecting when the remote moved underneath you).
 - A worktree that suddenly 502s/fails after a main-stack restart is detached from the shared
   services — run `sh/worktree.sh repair` (see the worktree-docker skill), don't debug nginx.
-- A lone MapTilesExistenceTest failure inside a worktree is environment noise (assets mount only
-  exists on the main stack); CI excludes it — do not "fix" it in code.
+- A lone MapTilesExistenceTest failure inside a worktree **used to be** environment noise, because
+  worktree stacks had no assets mount. #3994 added one (`MAIN_ASSETS_DIR` →
+  `/var/keystone.guru.assets`, merged 2026-08-14), and the test now passes in a worktree — so a
+  failure there is a **real signal** again, not something to wave away. CI still excludes the
+  `MapTiles` group, so it will never be caught for you.
 - Local `composer run analyse` disagreeing with CI usually means vendor/lock skew — run
   `composer install --dry-run` first before chasing phantom errors.
 - In cold-review agents, always post inline findings via `gh api -X POST
