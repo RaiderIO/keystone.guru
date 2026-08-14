@@ -69,10 +69,12 @@ L.DrawToolbar.prototype.getModeHandlers = function (map) {
     ];
 };
 
-// Prevent the editing of
+// Prevent the creation of new vertices during edit for layers that opted out (arrows, which are
+// always exactly two vertices). Every other polyline keeps Leaflet.draw's middle markers - dragging
+// one is the only way to insert a vertex into an existing line (#3966).
 const _originalCreateMiddleMarker = L.Edit.PolyVerticesEdit.prototype._createMiddleMarker;
 L.Edit.PolyVerticesEdit.prototype._createMiddleMarker = function (marker1, marker2) {
-    if (!this._poly.options.allowVertexCreationDuringEdit) {
+    if (this._poly.options.allowVertexCreationDuringEdit === false) {
         return;
     }
     _originalCreateMiddleMarker.call(this, marker1, marker2);
