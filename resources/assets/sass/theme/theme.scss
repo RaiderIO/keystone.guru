@@ -257,11 +257,20 @@ body {
     border: 1px solid var($--theme-text-contrast);
   }
 
-  .btn-oauth:hover,
-  .btn-oauth:focus {
+  .btn-oauth:hover {
     color: var($--theme-dark);
     background-color: var($--theme-text-contrast);
     border-color: var($--theme-text-contrast);
+  }
+
+  /** Bootstrap resolves .btn's focus ring from --bs-btn-focus-shadow-rgb, which only its colour
+      variants define, so a bare .btn like this one focuses invisibly - exactly what left the old
+      .btn-bnet as the only control on this surface with no focus indicator. An outline rather
+      than a box-shadow, because `.btn:focus-visible` already claims box-shadow and wins the tie. */
+  .btn-oauth:focus,
+  .btn-oauth:focus-visible {
+    outline: 2px solid var($--theme-text-contrast);
+    outline-offset: 2px;
   }
 
   /* normal container */

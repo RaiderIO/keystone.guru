@@ -106,6 +106,37 @@ final class AuthFormCompositionTest extends PublicTestCase
         $response->assertSee('auth-form-divider', false);
     }
 
+    /**
+     * @param array<string, string> $parameters
+     */
+    #[Test]
+    #[DataProvider('passwordPageProvider')]
+    public function passwordForms_givenPasswordPage_carryNoDeadBootstrap3Classes(
+        string $routeName,
+        array  $parameters,
+    ): void {
+        // Arrange & Act - these two blades carried the only col-md-offset-4 in the codebase, a
+        // class Bootstrap 5 does not have at all, on columns with no parent .row
+        $response = $this->get(route($routeName, $parameters));
+
+        // Assert
+        $response->assertOk();
+        $response->assertDontSee('form-horizontal');
+        $response->assertDontSee('control-label');
+        $response->assertDontSee('col-md-offset');
+    }
+
+    /**
+     * @return array<string, array{string, array<string, string>}>
+     */
+    public static function passwordPageProvider(): array
+    {
+        return [
+            'password.request' => ['password.request', []],
+            'password.reset'   => ['password.reset', ['token' => 'a-reset-token']],
+        ];
+    }
+
     #[Test]
     public function loginForm_givenLoginPage_crossLinksToRegister(): void
     {
