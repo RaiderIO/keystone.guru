@@ -42,9 +42,18 @@ class SyncAddonVersions extends Command
     {
         $this->info('Refreshing addon version map from GitHub...');
 
+        $headers = ['Accept' => 'application/vnd.github+json'];
+
+        // Unauthenticated GitHub requests are rate limited per IP, which a shared dev/CI egress address
+        // exhausts quickly - the refresh then dies on a HTTP 403 that reads like a permissions problem.
+        $token = config('github.connections.main.token');
+        if (is_string($token) && $token !== '') {
+            $headers['Authorization'] = sprintf('Bearer %s', $token);
+        }
+
         $releaseDates = [];
         for ($page = 1; ; $page++) {
-            $response = Http::withHeaders(['Accept' => 'application/vnd.github+json'])
+            $response = Http::withHeaders($headers)
                 ->get(self::GITHUB_RELEASES_URL, ['per_page' => 100, 'page' => $page]);
 
             if (!$response->successful()) {
