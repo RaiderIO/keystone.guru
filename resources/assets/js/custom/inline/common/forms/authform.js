@@ -30,13 +30,6 @@ class CommonFormsAuthform extends InlineCode {
 
         let $form = $(this.options.formSelector);
 
-        // The register form's own submit handler also writes this, but handler order is not
-        // guaranteed, so write it before serializing (defined in sitescripts.blade)
-        let $legalAgreedMs = $form.find('input[name="legal_agreed_ms"]');
-        if ($legalAgreedMs.length > 0 && typeof _legalStartTimer !== 'undefined') {
-            $legalAgreedMs.val(new Date().getTime() - _legalStartTimer);
-        }
-
         this._clearErrors($form);
 
         $.ajax({

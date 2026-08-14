@@ -54,7 +54,6 @@ use Override;
  * @property string      $password
  * @property string      $raw_patreon_response_data
  * @property bool        $legal_agreed
- * @property int         $legal_agreed_ms
  * @property bool        $analytics_cookie_opt_out
  *
  * @property PatreonUserLink|null       $patreonUserLink
@@ -147,7 +146,6 @@ class User extends Authenticatable implements LaratrustUser
         'kill_zone_path_weight',
         'password',
         'legal_agreed',
-        'legal_agreed_ms',
     ];
 
     /**

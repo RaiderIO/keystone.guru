@@ -14,15 +14,12 @@ use Illuminate\Support\Facades\Gate;
 
 class AjaxProfileController extends Controller
 {
-    public function legalAgree(Request $request): Response
+    public function legalAgree(): Response
     {
-        $time = $request->get('time', -1);
-
         /** @var User $user */
         $user = Auth::user();
         $user->update([
-            'legal_agreed'    => 1,
-            'legal_agreed_ms' => $time,
+            'legal_agreed' => 1,
         ]);
 
         return response()->noContent();
