@@ -8,7 +8,9 @@
       "Bash(npx vitest run *)",
       "Bash(git merge-base *)",
       "mcp__laravel-boost__database-query",
-      "Bash(sh/worktree.sh *)"
+      "Bash(sh/worktree.sh *)",
+      "Bash(sh/gh-bot.sh pr merge *)",
+      "Bash(sh/gh-bot.sh pr edit *)"
     ]
   },
   "statusLine": {
