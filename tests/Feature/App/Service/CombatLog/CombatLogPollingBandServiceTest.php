@@ -13,6 +13,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
 use RuntimeException;
+use Tests\Fixtures\LoggingFixtures;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('CombatLog')]
@@ -23,6 +24,7 @@ final class CombatLogPollingBandServiceTest extends PublicTestCase
     private const int BAND_WIDTH    = 5;
     private const int PROBE_CEILING = 40;
     private const int MIN_RUNS      = 25;
+    private const int CACHE_MINUTES = 50;
 
     private Season $season;
 
@@ -34,12 +36,13 @@ final class CombatLogPollingBandServiceTest extends PublicTestCase
         $this->season = Season::query()->firstOrFail();
 
         config([
-            'keystoneguru.raider_io.combat_log_polling.bands.level_min'              => self::LEVEL_MIN,
-            'keystoneguru.raider_io.combat_log_polling.bands.width'                  => self::BAND_WIDTH,
-            'keystoneguru.raider_io.combat_log_polling.top_band.levels_below_max'    => 2,
-            'keystoneguru.raider_io.combat_log_polling.top_band.min_runs_for_level'  => self::MIN_RUNS,
-            'keystoneguru.raider_io.combat_log_polling.top_band.probe_window_days'   => 7,
-            'keystoneguru.raider_io.combat_log_polling.top_band.probe_level_ceiling' => self::PROBE_CEILING,
+            'keystoneguru.raider_io.combat_log_polling.bands.level_min'                      => self::LEVEL_MIN,
+            'keystoneguru.raider_io.combat_log_polling.bands.width'                          => self::BAND_WIDTH,
+            'keystoneguru.raider_io.combat_log_polling.top_band.levels_below_max'            => 2,
+            'keystoneguru.raider_io.combat_log_polling.top_band.min_runs_for_level'          => self::MIN_RUNS,
+            'keystoneguru.raider_io.combat_log_polling.top_band.probe_window_days'           => 7,
+            'keystoneguru.raider_io.combat_log_polling.top_band.probe_level_ceiling'         => self::PROBE_CEILING,
+            'keystoneguru.raider_io.combat_log_polling.top_band.max_key_level_cache_minutes' => self::CACHE_MINUTES,
         ]);
 
         $this->forgetCaches();
@@ -101,7 +104,7 @@ final class CombatLogPollingBandServiceTest extends PublicTestCase
         // Arrange
         $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
         $raiderIOApiService->method('searchAdvancedRuns')->willThrowException(new RuntimeException('upstream down'));
-        $service = new CombatLogPollingBandService($raiderIOApiService);
+        $service = new CombatLogPollingBandService($raiderIOApiService, LoggingFixtures::createCombatLogPollingBandServiceLogging($this));
 
         // Act
         $result = $service->getMaxKeyLevel($this->season);
@@ -139,7 +142,7 @@ final class CombatLogPollingBandServiceTest extends PublicTestCase
         // Arrange
         $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
         $raiderIOApiService->method('searchAdvancedRuns')->willReturn(new SearchAdvancedRunsResponse([], null));
-        $service = new CombatLogPollingBandService($raiderIOApiService);
+        $service = new CombatLogPollingBandService($raiderIOApiService, LoggingFixtures::createCombatLogPollingBandServiceLogging($this));
 
         // Act
         $result = $service->getMaxKeyLevel($this->season);
@@ -170,6 +173,35 @@ final class CombatLogPollingBandServiceTest extends PublicTestCase
         // Assert
         $this->assertSame(24, $result);
         $this->assertSame($probesForFirstCall, $probeCount);
+    }
+
+    /**
+     * At the start of a season everybody starts at the minimum key level and climbs from there. If
+     * the probed max were cached for days, the top band's floor would stay pinned near the bottom -
+     * and since the top band is dispatched without consulting any budget, that means parsing every
+     * run of the season instead of a spread of them.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function getMaxKeyLevel_givenTheMaxClimbsEarlyInASeason_reprobesWithinTheHour(): void
+    {
+        // Arrange - the first day of the season, where nobody is past a +3 yet
+        Carbon::setTestNow(Carbon::create(2026, 3, 4, 12));
+        $highestPlayedLevel = 3;
+        $service            = $this->makeService(function (int $level) use (&$highestPlayedLevel): int {
+            return $level <= $highestPlayedLevel ? 300 : 0;
+        });
+
+        $this->assertSame(3, $service->getMaxKeyLevel($this->season));
+
+        // Act - the raiders have caught up by the time the next hourly run comes around
+        $highestPlayedLevel = 14;
+        Carbon::setTestNow(Carbon::now()->addMinutes(self::CACHE_MINUTES + 1));
+
+        // Assert - the cached max did not survive into the next scheduled run of combatlog:pollruns
+        $this->assertSame(14, $service->getMaxKeyLevel($this->season));
+        $this->assertSame(12, $service->getTopBand($this->season)->min);
     }
 
     /**
@@ -282,18 +314,12 @@ final class CombatLogPollingBandServiceTest extends PublicTestCase
             },
         );
 
-        return new CombatLogPollingBandService($raiderIOApiService);
+        return new CombatLogPollingBandService($raiderIOApiService, LoggingFixtures::createCombatLogPollingBandServiceLogging($this));
     }
 
     private function forgetCaches(): void
     {
-        $now = Carbon::now();
-
-        Cache::forget(sprintf(
-            'combatlog:pollruns:max_key_level:%d:%s',
-            $this->season->id,
-            sprintf('%d-%d', $now->isoWeekYear, $now->isoWeek),
-        ));
+        Cache::forget(sprintf('combatlog:pollruns:max_key_level:%d', $this->season->id));
         Cache::forget(sprintf('combatlog:pollruns:max_key_level_last_known:%d', $this->season->id));
     }
 }

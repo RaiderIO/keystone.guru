@@ -16,8 +16,10 @@ use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsResponse;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
@@ -329,6 +331,81 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
             foreach ($recordedCriteria as $criterion) {
                 $this->assertTrue($criterion->getBand()->isTopBand());
                 $this->assertSame($this->topBand->min, $criterion->getBand()->min);
+            }
+        } finally {
+            ParsedCombatLog::query()->where('run_id', $run->id)->delete();
+        }
+    }
+
+    /**
+     * The same run legitimately comes back from several criterion queries and again from the top
+     * band. Dispatching it more than once wastes a parse, and inserting it twice trips the unique
+     * index on parsed_combat_logs.run_id.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenSameRunReturnedByMultipleBands_dispatchesItOnce(): void
+    {
+        // Arrange
+        Bus::fake();
+
+        $run = $this->makeRun(5001, $this->dungeon->challenge_mode_id, mythicLevel: 23);
+
+        $criteriaService = $this->makeCriteriaService(eligibleDungeons: collect([$this->dungeon]));
+        $criteriaService->method('shouldParse')->willReturn(true);
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $this->mockRaiderIOApiService(spreadRuns: [$run], topRuns: [$run]);
+
+        try {
+            // Act
+            $this->artisan('combatlog:pollruns')->assertSuccessful();
+
+            // Assert
+            Bus::assertDispatchedTimes(ProcessCombatLogSegments::class, 1);
+            $this->assertSame(1, ParsedCombatLog::query()->where('run_id', $run->id)->count());
+        } finally {
+            ParsedCombatLog::query()->where('run_id', $run->id)->delete();
+        }
+    }
+
+    /**
+     * parsed_combat_logs grows into the many thousands of rows over a season, so the already-parsed
+     * check must never load the table - it looks up only the run ids of the batch it just received.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenRunsReturned_looksUpOnlyTheRunIdsOfThatBatch(): void
+    {
+        // Arrange
+        Bus::fake();
+
+        $run = $this->makeRun(5002, $this->dungeon->challenge_mode_id);
+
+        $criteriaService = $this->makeCriteriaService(eligibleDungeons: collect([$this->dungeon]));
+        $criteriaService->method('shouldParse')->willReturn(true);
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $this->mockRaiderIOApiService(spreadRuns: [$run]);
+
+        /** @var string[] $selects */
+        $selects = [];
+        DB::connection('combatlog')->listen(function (QueryExecuted $query) use (&$selects): void {
+            if (str_contains($query->sql, 'parsed_combat_logs') && str_starts_with($query->sql, 'select')) {
+                $selects[] = $query->sql;
+            }
+        });
+
+        try {
+            // Act
+            $this->artisan('combatlog:pollruns')->assertSuccessful();
+
+            // Assert - every read of the table is scoped to the run ids of a single response
+            $this->assertNotEmpty($selects);
+            foreach ($selects as $sql) {
+                $this->assertStringContainsString('`run_id` in (', $sql);
             }
         } finally {
             ParsedCombatLog::query()->where('run_id', $run->id)->delete();

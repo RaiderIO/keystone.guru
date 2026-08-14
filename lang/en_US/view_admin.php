@@ -741,6 +741,9 @@ return [
                 'section_class_specs' => 'Class / Specializations',
                 'band'                => 'Key level :band',
                 'band_top'            => 'Key level :band (always parsed)',
+                'band_summary'        => ':fulfilled / :total fulfilled',
+                'band_summary_top'    => ':count parsed',
+                'band_summary_parsed' => ':count / :threshold parsed',
                 'parsed_count'        => ':count parsed',
             ],
             'route' => [

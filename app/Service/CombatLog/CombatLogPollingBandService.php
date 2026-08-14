@@ -4,24 +4,25 @@ namespace App\Service\CombatLog;
 
 use App\Models\Season;
 use App\Service\CombatLog\Dtos\KeyLevelBand;
+use App\Service\CombatLog\Logging\CombatLogPollingBandServiceLoggingInterface;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use RuntimeException;
 use Throwable;
 
 class CombatLogPollingBandService implements CombatLogPollingBandServiceInterface
 {
-    private const string MAX_KEY_LEVEL_CACHE_KEY = 'combatlog:pollruns:max_key_level:%d:%s';
+    private const string MAX_KEY_LEVEL_CACHE_KEY = 'combatlog:pollruns:max_key_level:%d';
 
     private const string MAX_KEY_LEVEL_LAST_KNOWN_CACHE_KEY = 'combatlog:pollruns:max_key_level_last_known:%d';
 
     private const int MAX_KEY_LEVEL_LAST_KNOWN_TTL_DAYS = 60;
 
     public function __construct(
-        private readonly RaiderIOApiServiceInterface $raiderIOApiService,
+        private readonly RaiderIOApiServiceInterface                 $raiderIOApiService,
+        private readonly CombatLogPollingBandServiceLoggingInterface $log,
     ) {
     }
 
@@ -38,18 +39,23 @@ class CombatLogPollingBandService implements CombatLogPollingBandServiceInterfac
         } catch (Throwable $throwable) {
             $lastKnown = Cache::get($this->getMaxKeyLevelLastKnownCacheKey($season));
 
-            Log::warning('combatlog:pollruns - probing the max key level failed', [
-                'season'     => $season->id,
-                'last_known' => $lastKnown,
-                'exception'  => $throwable->getMessage(),
-            ]);
+            $this->log->getMaxKeyLevelProbeFailed(
+                $season->id,
+                is_int($lastKnown) ? $lastKnown : null,
+                $throwable::class,
+                $throwable->getMessage(),
+            );
 
             // Fail closed: without a probe result the top band collapses to the probe ceiling,
             // which matches no runs. Parsing nothing extra beats always parsing everything.
             return is_int($lastKnown) ? $lastKnown : $this->getProbeLevelCeiling();
         }
 
-        Cache::put($this->getMaxKeyLevelCacheKey($season), $maxKeyLevel, Carbon::now()->addDays(8));
+        $cacheMinutes = $this->getMaxKeyLevelCacheMinutes();
+
+        $this->log->getMaxKeyLevelProbed($season->id, $maxKeyLevel, $cacheMinutes);
+
+        Cache::put($this->getMaxKeyLevelCacheKey($season), $maxKeyLevel, Carbon::now()->addMinutes($cacheMinutes));
         Cache::put(
             $this->getMaxKeyLevelLastKnownCacheKey($season),
             $maxKeyLevel,
@@ -169,11 +175,20 @@ class CombatLogPollingBandService implements CombatLogPollingBandServiceInterfac
         return (int)config('keystoneguru.raider_io.combat_log_polling.top_band.probe_level_ceiling');
     }
 
+    /**
+     * How long a probed max key level stays valid. This must stay short: at the start of a season
+     * everyone begins at the minimum key level and climbs over the following days, so a max cached
+     * for a long time pins the top band's floor near the bottom - and the top band is dispatched
+     * without consulting any budget, so it would parse every run of the season.
+     */
+    private function getMaxKeyLevelCacheMinutes(): int
+    {
+        return max(1, (int)config('keystoneguru.raider_io.combat_log_polling.top_band.max_key_level_cache_minutes'));
+    }
+
     private function getMaxKeyLevelCacheKey(Season $season): string
     {
-        $now = Carbon::now();
-
-        return sprintf(self::MAX_KEY_LEVEL_CACHE_KEY, $season->id, sprintf('%d-%d', $now->isoWeekYear, $now->isoWeek));
+        return sprintf(self::MAX_KEY_LEVEL_CACHE_KEY, $season->id);
     }
 
     private function getMaxKeyLevelLastKnownCacheKey(Season $season): string

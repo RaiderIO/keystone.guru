@@ -550,6 +550,13 @@ return [
                 'min_runs_for_level'  => (int)env('COMBAT_LOG_POLLING_TOP_BAND_MIN_RUNS_FOR_LEVEL', 25),
                 'probe_window_days'   => (int)env('COMBAT_LOG_POLLING_TOP_BAND_PROBE_WINDOW_DAYS', 7),
                 'probe_level_ceiling' => (int)env('COMBAT_LOG_POLLING_TOP_BAND_PROBE_LEVEL_CEILING', 40),
+
+                // Kept below the hourly schedule of combatlog:pollruns so the max key level is
+                // re-probed on every run. At the start of a season everyone starts at the minimum
+                // key level and climbs over the following days; a max cached for longer pins the
+                // top band's floor near the bottom, and the top band is dispatched without
+                // consulting any budget - so it would parse every run of the season.
+                'max_key_level_cache_minutes' => (int)env('COMBAT_LOG_POLLING_TOP_BAND_MAX_KEY_LEVEL_CACHE_MINUTES', 50),
             ],
         ],
         'weekly_route' => [

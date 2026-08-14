@@ -61,20 +61,19 @@ class PollCombatLogRunsCommand extends Command
 
         $force = (bool)$this->option('force');
 
-        /** @var array<int, true> $existingRunIds */
-        $existingRunIds = $force ? [] : ParsedCombatLog::query()
-            ->whereNotNull('run_id')
-            ->pluck('run_id')
-            ->flip()
-            ->all();
+        // Runs that must not be dispatched (again): those already parsed in an earlier invocation,
+        // and those dispatched earlier in this one. Filled in per API response instead of up front -
+        // parsed_combat_logs grows into the many thousands over a season, and every run id we could
+        // care about is already right there in the response we just received.
+        /** @var array<int, true> $knownRunIds */
+        $knownRunIds = [];
 
         $this->info(sprintf(
-            'combatlog:pollruns — season=%s version=%d window=%dd limit=%d existing_parsed=%d force=%s | bands=[%s] this_hour=%s top=%s',
+            'combatlog:pollruns — season=%s version=%d window=%dd limit=%d force=%s | bands=[%s] this_hour=%s top=%s',
             $season->name,
             $combatLogVersion,
             $windowDays,
             $limit,
-            count($existingRunIds),
             $force ? 'yes' : 'no',
             implode(', ', array_map(strval(...), $this->bandService->getSpreadBands($season))),
             $spreadBand === null ? 'none' : (string)$spreadBand,
@@ -103,7 +102,7 @@ class PollCombatLogRunsCommand extends Command
                 $limit,
                 $dungeonsByChallengeModeId,
                 $allSpecsByBlizzardId,
-                $existingRunIds,
+                $knownRunIds,
                 $force,
                 $dispatchCounts,
             );
@@ -117,7 +116,7 @@ class PollCombatLogRunsCommand extends Command
             $limit,
             $dungeonsByChallengeModeId,
             $allSpecsByBlizzardId,
-            $existingRunIds,
+            $knownRunIds,
             $force,
             $dispatchCounts,
         );
@@ -137,7 +136,7 @@ class PollCombatLogRunsCommand extends Command
      *
      * @param Collection<string|int, Dungeon>                      $dungeonsByChallengeModeId
      * @param Collection<string|int, CharacterClassSpecialization> $allSpecsByBlizzardId
-     * @param array<int, true>                                     $existingRunIds
+     * @param array<int, true>                                     $knownRunIds
      * @param array<string, int>                                   $dispatchCounts
      */
     private function pollSpreadBand(
@@ -148,7 +147,7 @@ class PollCombatLogRunsCommand extends Command
         int          $limit,
         Collection   $dungeonsByChallengeModeId,
         Collection   $allSpecsByBlizzardId,
-        array        &        $existingRunIds,
+        array        &        $knownRunIds,
         bool         $force,
         array        &        $dispatchCounts,
     ): void {
@@ -171,8 +170,10 @@ class PollCombatLogRunsCommand extends Command
                 $filter   = $this->buildFilterForCriterion($modelClass, $model, $season, $band, $completedAtFrom, $limit);
                 $response = $this->raiderIOApiService->searchAdvancedRuns($filter);
 
+                $this->markAlreadyParsedRuns($response->runs, $knownRunIds, $force);
+
                 foreach ($response->runs as $run) {
-                    if (isset($existingRunIds[$run->id])) {
+                    if (isset($knownRunIds[$run->id])) {
                         $dispatchCounts['skippedParsed']++;
                         continue;
                     }
@@ -181,7 +182,7 @@ class PollCombatLogRunsCommand extends Command
                         break;
                     }
 
-                    $this->dispatchRun($run, $season, $combatLogVersion, $band, $dungeonsByChallengeModeId, $allSpecsByBlizzardId, $existingRunIds, $force, $dispatchCounts);
+                    $this->dispatchRun($run, $season, $combatLogVersion, $band, $dungeonsByChallengeModeId, $allSpecsByBlizzardId, $knownRunIds, $force, $dispatchCounts);
                 }
             }
         }
@@ -196,7 +197,7 @@ class PollCombatLogRunsCommand extends Command
      *
      * @param Collection<string|int, Dungeon>                      $dungeonsByChallengeModeId
      * @param Collection<string|int, CharacterClassSpecialization> $allSpecsByBlizzardId
-     * @param array<int, true>                                     $existingRunIds
+     * @param array<int, true>                                     $knownRunIds
      * @param array<string, int>                                   $dispatchCounts
      */
     private function pollTopBand(
@@ -207,7 +208,7 @@ class PollCombatLogRunsCommand extends Command
         int          $limit,
         Collection   $dungeonsByChallengeModeId,
         Collection   $allSpecsByBlizzardId,
-        array        &        $existingRunIds,
+        array        &        $knownRunIds,
         bool         $force,
         array        &        $dispatchCounts,
     ): void {
@@ -225,13 +226,15 @@ class PollCombatLogRunsCommand extends Command
             offset:          0,
         ));
 
+        $this->markAlreadyParsedRuns($response->runs, $knownRunIds, $force);
+
         foreach ($response->runs as $run) {
-            if (isset($existingRunIds[$run->id])) {
+            if (isset($knownRunIds[$run->id])) {
                 $dispatchCounts['skippedParsed']++;
                 continue;
             }
 
-            $this->dispatchRun($run, $season, $combatLogVersion, $band, $dungeonsByChallengeModeId, $allSpecsByBlizzardId, $existingRunIds, $force, $dispatchCounts);
+            $this->dispatchRun($run, $season, $combatLogVersion, $band, $dungeonsByChallengeModeId, $allSpecsByBlizzardId, $knownRunIds, $force, $dispatchCounts);
         }
 
         $this->info(sprintf(
@@ -243,7 +246,7 @@ class PollCombatLogRunsCommand extends Command
     }
 
     /**
-     * @param array<int, true>                                     $existingRunIds
+     * @param array<int, true>                                     $knownRunIds
      * @param Collection<string|int, Dungeon>                      $dungeonsByChallengeModeId
      * @param Collection<string|int, CharacterClassSpecialization> $allSpecsByBlizzardId
      * @param array<string, int>                                   $dispatchCounts
@@ -255,7 +258,7 @@ class PollCombatLogRunsCommand extends Command
         KeyLevelBand      $band,
         Collection        $dungeonsByChallengeModeId,
         Collection        $allSpecsByBlizzardId,
-        array             &             $existingRunIds,
+        array             &             $knownRunIds,
         bool              $force,
         array             &             $dispatchCounts,
     ): void {
@@ -275,12 +278,46 @@ class PollCombatLogRunsCommand extends Command
 
         if (!$force) {
             ParsedCombatLog::create(['run_id' => $run->id]);
-            $existingRunIds[$run->id] = true;
         }
+
+        // Marked even when forcing: the same run legitimately comes back from several criterion
+        // queries and from the top band, and dispatching it twice in one invocation helps nobody.
+        $knownRunIds[$run->id] = true;
 
         ProcessCombatLogSegments::dispatch($season, $run->id, $combatLogVersion, new CombatLogRunContext($run->mythicLevel, $run->affixes));
 
         $dispatchCounts['dispatched']++;
+    }
+
+    /**
+     * Marks every run in this batch that was already parsed in an earlier invocation. Only the run
+     * ids of this one batch are looked up - bounded by the configured page limit and served by the
+     * unique index on run_id - so the size of parsed_combat_logs never enters into it.
+     *
+     * @param SearchAdvancedRun[] $runs
+     * @param array<int, true>    $knownRunIds
+     */
+    private function markAlreadyParsedRuns(array $runs, array &$knownRunIds, bool $force): void
+    {
+        if ($force) {
+            return;
+        }
+
+        $runIdsToCheck = [];
+
+        foreach ($runs as $run) {
+            if (!isset($knownRunIds[$run->id])) {
+                $runIdsToCheck[] = $run->id;
+            }
+        }
+
+        if ($runIdsToCheck === []) {
+            return;
+        }
+
+        foreach (ParsedCombatLog::query()->whereIn('run_id', $runIdsToCheck)->pluck('run_id') as $runId) {
+            $knownRunIds[(int)$runId] = true;
+        }
     }
 
     /**
