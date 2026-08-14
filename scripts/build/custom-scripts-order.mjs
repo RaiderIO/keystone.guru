@@ -16,6 +16,7 @@ export const customScripts = [
     'resources/assets/js/custom/colorutil.js',
     'resources/assets/js/custom/util.js',
     'resources/assets/js/custom/constants.js',
+    'resources/assets/js/custom/spelltooltip.js',
 
     // Include in proper order
     'resources/assets/js/custom/signalable.js',
