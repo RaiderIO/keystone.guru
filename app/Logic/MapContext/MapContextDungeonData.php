@@ -103,6 +103,10 @@ class MapContextDungeonData implements Arrayable
                         'debuff',
                         'selectable',
                         'fetched_data_at',
+                        // Nothing on the map renders a spell description, and one per spell of the dungeon
+                        // would grow the map context by a fair amount of text
+                        'description',
+                        'description_template',
                     ])
                     ->keyBy('id')
                     ->values();

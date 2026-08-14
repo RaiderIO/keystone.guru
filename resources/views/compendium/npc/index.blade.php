@@ -93,6 +93,7 @@ use Illuminate\Support\Collection;
                                 return spellTemplate({
                                     compendium_url: `${spellShowBaseUrl}/${spell.id}-${slugify(lang.get(spell.name))}`,
                                     wowhead_tooltip_data: spell.wowhead_tooltip_data,
+                                    description: spell.description,
                                     icon_url: spell.icon_url,
                                     name: lang.get(spell.name),
                                 });

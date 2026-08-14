@@ -66,6 +66,7 @@ use Illuminate\Support\Collection;
                             return spellTemplate({
                                 compendium_url: `${spellShowBaseUrl}/${row.id}-${slugify(data ?? '')}`,
                                 wowhead_tooltip_data: row.wowhead_tooltip_data,
+                                description: row.description,
                                 icon_url: row.icon_url,
                                 name: data ?? '',
                             });

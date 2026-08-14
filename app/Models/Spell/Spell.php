@@ -30,6 +30,8 @@ use Str;
  * @property string      $mechanic
  * @property string      $icon_name
  * @property string      $name
+ * @property string|null $description_template
+ * @property string|null $description
  * @property int         $schools_mask
  * @property int         $miss_types_mask
  * @property int         $counters_mask
@@ -83,6 +85,8 @@ class Spell extends CacheModel implements MappingModelInterface
         'mechanic',
         'icon_name',
         'name',
+        'description_template',
+        'description',
         'schools_mask',
         'miss_types_mask',
         'counters_mask',
