@@ -426,10 +426,10 @@ formatting of the rewritten `npcs.php` files, per the project's finishing-up con
    change — screenshot the explore page of the dungeons whose mapping actually changed with the
    `headless-browser-verify` skill (A/B against the main stack as baseline) and post them on the
    MR. Also remind the user to browse the explore pages themselves.
-4. **Also check what the suite can't see:** `MapTilesExistenceTest` fails on its *first* dungeon
-   in a worktree (the assets dir isn't mounted), so it never reaches the newly imported ones and
-   cannot tell you a new floor is missing map tiles. Check the seeder export instead. **Floors are
-   not their own file** — there is no `floors.json`; each dungeon object in
+4. **Also check the seeder export for new floors.** `MapTilesExistenceTest` does run in a worktree
+   since #3993 mounted the assets repo into the worktree stack — it used to fail on its *first*
+   dungeon and never reach the newly imported ones — so it can now tell you a new floor is missing
+   map tiles. Check the export anyway, it is instant. **Floors are not their own file** — there is no `floors.json`; each dungeon object in
    `database/seeders/dungeondata/dungeons.json` carries a nested `floors` array, so that one file
    is the whole check:
    ```
