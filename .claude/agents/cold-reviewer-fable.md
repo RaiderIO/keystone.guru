@@ -74,7 +74,7 @@ After posting all findings (or determining there are none), post a summary comme
 `gh api -X POST repos/RaiderIO/keystone.guru/issues/<n>/comments -f body=':robot: Cold review (fable): <N> findings posted.'`
 (or `no findings` if N=0)
 
-Then add the label: `gh pr edit <n> --repo RaiderIO/keystone.guru --add-label "pr cold reviewed"`
+Then add the label, through the bot so it is not attributed to Wotuu: `sh/gh-bot.sh pr edit <n> --repo RaiderIO/keystone.guru --add-label "pr cold reviewed"`
 
 ## Report back
 

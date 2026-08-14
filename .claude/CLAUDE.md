@@ -163,6 +163,13 @@ glance, and it is the fallback authorship signal wherever the bot account wasn't
 the body directly underneath already carries it. Same for commit messages — those are attributed via
 the `Co-Authored-By: Claude` trailer, not an emoji.
 
+**The `:robot:` prefix covers messages; the bot account covers *every write*.** Labels, titles and
+merges carry no prefix and have no body to put one in, so the account is the only authorship signal
+they have. Route them through `sh/gh-bot.sh` too — a plain `gh pr edit --add-label` renders in the
+timeline as `Wotuu added <label>`, leaving him unable to tell his own triage from an agent's
+(caught 2026-08-14, where a whole `babysit-prs` session's label swaps were misattributed). The bot
+holds `push` + `triage` on this repo, so label and title edits work. Reads stay on plain `gh`.
+
 #### Writing as the bot: `sh/gh-bot.sh`
 
 `sh/gh-bot.sh` is a pass-through wrapper around `gh` that runs it as the bot — using either a token

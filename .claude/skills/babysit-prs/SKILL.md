@@ -80,6 +80,13 @@ work when he's actually at the keyboard.
 - Prepend `:robot:` to every comment/reply you post on GitHub, whichever account posted it. Post via
   `sh/gh-bot.sh` (as `keystone-guru-bot`) when it's provisioned, plain `gh` when it isn't — see
   `.claude/CLAUDE.md`, "Agent GitHub identity". Both are expected during the #3924 transition.
+- **`sh/gh-bot.sh` is for every *write*, not just comments — labels and titles included.** A label
+  swap is the one write with no `:robot:` prefix to fall back on, so plain `gh pr edit --add-label`
+  is indistinguishable from Wotuu doing it by hand: the timeline reads
+  `Wotuu added pr comments addressed and removed pr needs attention`, and he cannot tell his own
+  triage from an agent's (caught 2026-08-14 — every label swap in that session was misattributed).
+  The bot has `push` + `triage` on this repo, so `sh/gh-bot.sh pr edit <n> --add-label ...` works.
+  Reads stay on plain `gh`; it's only writes that need the bot.
 - Edit PR bodies only via `gh api -X PATCH repos/RaiderIO/keystone.guru/pulls/<n> -F body=@<file>`
   (`gh pr edit` is broken on this repo).
 - Never commit or push to `master`.
@@ -304,8 +311,9 @@ regardless of what cold review finds — this carve-out only unblocks step 4, no
    top-level PR comments, and review bodies — not just some; the label tells Wotuu "ready for you
    to look again", which a half-addressed PR is not — swap the label: remove `pr needs attention`,
    add `pr comments addressed` —
-   `gh pr edit <n> --remove-label "pr needs attention" --add-label "pr comments addressed"` (plain
-   `gh pr edit` works for labels even though it's broken for body edits). This is Wotuu's own
+   `sh/gh-bot.sh pr edit <n> --remove-label "pr needs attention" --add-label "pr comments addressed"`
+   (`pr edit` works for labels even though it's broken for body edits — and it must run through
+   `sh/gh-bot.sh`, or the swap is attributed to Wotuu). This is Wotuu's own
    review-tracking system: `pr needs attention` means "I left feedback that needs your attention" —
    a question or suggestion, not necessarily a required change — and `pr comments addressed` means
    "my feedback was addressed, ready for me to look again". Don't apply `pr comments addressed`
@@ -331,11 +339,12 @@ and `Closes #<issue>` body line are both correct — they are separate fields. F
 comment needed (it's a pure metadata correction, not a change anyone needs notifying about):
 
 ```bash
-gh pr edit <n> --repo RaiderIO/keystone.guru --title "#<issue> <existing title>"
+sh/gh-bot.sh pr edit <n> --repo RaiderIO/keystone.guru --title "#<issue> <existing title>"
 ```
 
-`gh pr edit` works fine for titles and labels — only *body* edits are broken on this repo, and only
-on the old apt `gh` (see `.claude/CLAUDE.md`). Never add a `:robot:` prefix to a title.
+`pr edit` works fine for titles and labels — only *body* edits are broken on this repo, and only
+on the old apt `gh` (see `.claude/CLAUDE.md`). Run it through `sh/gh-bot.sh` so the edit is
+attributed to the bot, per the hard rule above. Never add a `:robot:` prefix to a title.
 
 **b) The issue must be closed by *some* open PR — the check is issue-scoped, not PR-scoped.**
 
