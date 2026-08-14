@@ -44,7 +44,10 @@ class BattleNetLoginController extends OAuthLoginController
         $this->redirectTo = $request->get('redirect', '/');
 
         $region = $request->get('region', GameServerRegion::DEFAULT_REGION);
-        if (GameServerRegion::where('short', $region)->doesntExist()) {
+        // An explicit allowlist rather than a table-existence check: `world` is a region row that
+        // Battle.net cannot authenticate against, and any future non-OAuth region row would
+        // otherwise pass the check and build an OAuth URL nobody can log in through (#4004)
+        if (!in_array($region, GameServerRegion::BATTLE_NET_REGIONS, true)) {
             abort(404);
         }
 

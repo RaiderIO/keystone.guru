@@ -102,13 +102,13 @@ $rootClass ??= '';
 
 @guest
     <!-- Modal login -->
-    @component('common.general.modal', ['id' => 'login_modal', 'class' => 'modal-dialog-small'])
+    @component('common.general.modal', ['id' => 'login_modal', 'class' => 'modal-dialog-small', 'keyboard' => true])
         @include('common.forms.login', array_merge(['modal' => true], $loginParams))
     @endcomponent
     <!-- END modal login -->
 
     <!-- Modal register -->
-    @component('common.general.modal', ['id' => 'register_modal', 'class' => 'modal-dialog-small register-modal-dialog'])
+    @component('common.general.modal', ['id' => 'register_modal', 'class' => 'modal-dialog-small', 'keyboard' => true])
         @include('common.forms.register', array_merge(['modal' => true], $registerParams))
     @endcomponent
     <!-- END modal register -->

@@ -5,48 +5,53 @@ use Illuminate\Support\Collection;
 
 /**
  * @var Collection<int, GameServerRegion> $allRegions
+ * @var string                            $idPrefix
  */
+
+// This partial renders up to three times in one document (the page form plus both modals), so ids
+// cannot be derived from $modalClass alone - the caller passes a prefix unique to its own form.
+$idPrefix ??= '';
+
+// `world` is a Keystone.guru region row with no Battle.net OAuth endpoint behind it
+$battleNetRegions = $allRegions->filter(
+    static fn(GameServerRegion $region): bool => in_array($region->short, GameServerRegion::BATTLE_NET_REGIONS, true)
+);
 ?>
-<div class="mb-3">
-    <div class="row">
-        <div class="col">
-            <img alt="Battle.net" src="{{ ksgAssetImage('oauth/battlenet_logo.png') }}" class="mx-auto d-block"/>
-        </div>
+
+{{-- A GET form, so the selected region ends up as ?region=<short> - exactly what the per-region
+     links used to carry, without needing six sibling buttons to express it --}}
+<form method="GET" action="{{ route('login.battlenet') }}">
+    <div class="mb-3">
+        <label for="{{ $idPrefix }}oauth_battlenet_region" class="form-label">
+            {{ __('view_common.forms.oauth.battlenet_region') }}
+        </label>
+
+        {{ html()->select('region', $battleNetRegions->mapWithKeys(function (GameServerRegion $region) {
+    return [$region->short => __($region->name)];
+})->toArray())->id($idPrefix . 'oauth_battlenet_region')->value(GameServerRegion::DEFAULT_REGION)->class('form-select') }}
     </div>
-</div>
-<div class="mb-3">
-    <div class="row g-0">
-        @foreach($allRegions as $region)
-            <div class="col">
-                <a href="{{ route('login.battlenet', ['region' => $region->short]) }}"
-                   class="btn btn-bnet mx-auto d-block border-start border-secondary">
-                    {{ __($region->name) }}
-                </a>
-            </div>
-        @endforeach
+
+    <div class="mb-3">
+        <button type="submit"
+                class="btn btn-oauth w-100 d-flex align-items-center justify-content-center gap-2">
+            <i class="fab fa-battle-net"></i>
+            {{ __('view_common.forms.oauth.continue_with_battlenet') }}
+        </button>
     </div>
-</div>
-<hr>
+</form>
 
 <div class="mb-3">
-    <div class="row">
-        <div class="col">
-            <a href="{{ route('login.discord') }}">
-                <img alt="Discord" src="{{ ksgAssetImage('oauth/discord_logo.png') }}" class="mx-auto d-block"
-                     style="max-height: 64px;"/>
-            </a>
-        </div>
-    </div>
+    <a href="{{ route('login.discord') }}"
+       class="btn btn-oauth w-100 d-flex align-items-center justify-content-center gap-2">
+        <i class="fab fa-discord"></i>
+        {{ __('view_common.forms.oauth.continue_with_discord') }}
+    </a>
 </div>
 
-<hr>
-
 <div class="mb-3">
-    <div class="row">
-        <div class="col">
-            <a href="{{ route('login.google') }}">
-                <div class="google_login_image mx-auto d-block"></div>
-            </a>
-        </div>
-    </div>
+    <a href="{{ route('login.google') }}"
+       class="btn btn-oauth w-100 d-flex align-items-center justify-content-center gap-2">
+        <i class="fab fa-google"></i>
+        {{ __('view_common.forms.oauth.continue_with_google') }}
+    </a>
 </div>
