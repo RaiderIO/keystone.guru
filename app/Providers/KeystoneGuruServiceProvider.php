@@ -8,6 +8,7 @@ use App\Http\View\Composers\AdminNpcHealthEditComposer;
 use App\Http\View\Composers\AdminSpellEditComposer;
 use App\Http\View\Composers\AffixesComposer;
 use App\Http\View\Composers\AppLayoutComposer;
+use App\Http\View\Composers\AuthFormComposer;
 use App\Http\View\Composers\CompositionComposer;
 use App\Http\View\Composers\CreateRouteFormComposer;
 use App\Http\View\Composers\DiscoverAffixGroupComposer;
@@ -385,6 +386,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             'common.forms.oauth',
             'common.forms.register',
         ], OAuthRegisterFormComposer::class);
+
+        view()->composer([
+            'common.forms.login',
+            'common.forms.register',
+        ], AuthFormComposer::class);
 
         view()->composer([
             'common.forms.createroute',
