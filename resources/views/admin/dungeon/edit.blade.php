@@ -32,34 +32,44 @@ use Illuminate\Support\Collection;
 
         <div class="row mb-3">
             <div class="col {{ $errors->has('active') ? ' has-error' : '' }}">
-                {{ html()->label(__('view_admin.dungeon.edit.active'), 'active') }}
-                {{ html()->checkbox('active', $dungeon?->active ?? 1, 1)->class('form-check-input') }}
+                <div class="form-check">
+                    {{ html()->checkbox('active', $dungeon?->active ?? 1, 1)->class('form-check-input') }}
+                    {{ html()->label(__('view_admin.dungeon.edit.active'), 'active')->class('form-check-label') }}
+                </div>
                 @include('common.forms.form-error', ['key' => 'active'])
             </div>
 
             <div class="col {{ $errors->has('raid') ? ' has-error' : '' }}">
-                {{ html()->label(__('view_admin.dungeon.edit.raid'), 'raid') }}
-                {{ html()->checkbox('raid', $dungeon?->raid ?? 0, 1)->class('form-check-input') }}
+                <div class="form-check">
+                    {{ html()->checkbox('raid', $dungeon?->raid ?? 0, 1)->class('form-check-input') }}
+                    {{ html()->label(__('view_admin.dungeon.edit.raid'), 'raid')->class('form-check-label') }}
+                </div>
                 @include('common.forms.form-error', ['key' => 'raid'])
             </div>
 
             <div class="col {{ $errors->has('heatmap_enabled') ? ' has-error' : '' }}">
-                {{ html()->label(__('view_admin.dungeon.edit.heatmap_enabled'), 'heatmap_enabled') }}
-                {{ html()->checkbox('heatmap_enabled', $dungeon?->heatmap_enabled ?? 0, 1)->class('form-check-input') }}
+                <div class="form-check">
+                    {{ html()->checkbox('heatmap_enabled', $dungeon?->heatmap_enabled ?? 0, 1)->class('form-check-input') }}
+                    {{ html()->label(__('view_admin.dungeon.edit.heatmap_enabled'), 'heatmap_enabled')->class('form-check-label') }}
+                </div>
                 @include('common.forms.form-error', ['key' => 'heatmap_enabled'])
             </div>
 
             <div class="col {{ $errors->has('has_wallpaper') ? ' has-error' : '' }}">
-                {{ html()->label(__('view_admin.dungeon.edit.has_wallpaper'), 'has_wallpaper') }}
-                {{ html()->checkbox('has_wallpaper', $dungeon?->has_wallpaper ?? 0, 1)->class('form-check-input') }}
+                <div class="form-check">
+                    {{ html()->checkbox('has_wallpaper', $dungeon?->has_wallpaper ?? 0, 1)->class('form-check-input') }}
+                    {{ html()->label(__('view_admin.dungeon.edit.has_wallpaper'), 'has_wallpaper')->class('form-check-label') }}
+                </div>
                 @include('common.forms.form-error', ['key' => 'has_wallpaper'])
             </div>
 
             <div class="col">
                 <div class="row">
                     <div class="col-auto {{ $errors->has('speedrun_enabled') ? ' has-error' : '' }}">
-                        {{ html()->label(__('view_admin.dungeon.edit.speedrun_enabled'), 'speedrun_enabled') }}
-                        {{ html()->checkbox('speedrun_enabled', $dungeon?->speedrun_enabled ?? 0, 1)->id('speedrun_enabled')->class('form-check-input') }}
+                        <div class="form-check">
+                            {{ html()->checkbox('speedrun_enabled', $dungeon?->speedrun_enabled ?? 0, 1)->id('speedrun_enabled')->class('form-check-input') }}
+                            {{ html()->label(__('view_admin.dungeon.edit.speedrun_enabled'), 'speedrun_enabled')->class('form-check-label') }}
+                        </div>
                         @include('common.forms.form-error', ['key' => 'speedrun_enabled'])
                     </div>
 

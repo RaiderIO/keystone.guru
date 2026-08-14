@@ -338,12 +338,39 @@ body {
   }
 
   /*
-   * Bootstrap 5's `.form-check-input` checkboxes default to 1em, which is tiny in our standalone
-   * (label-less) checkbox layouts. Restore the larger size the old `.left_checkbox` shim gave them.
+   * Bootstrap 5 lays a `.form-check` out as a block with `padding-left: 1.5em` and floats the input
+   * into that gutter with a matching negative margin. That pairing only works for BS5's own 1em
+   * checkbox: ours is 40px (see below), so the floated box is both wider than the 22.5px gutter and
+   * taller than the 26px line the `.form-check` collapses to - it takes up no space in the flow and
+   * hangs 19px out of its own container, into whatever sits underneath it (#3969).
+   *
+   * Lay the row out with flex instead: the checkbox occupies real space again, and the label is
+   * vertically centred against it rather than floating up to the first line of text.
+   */
+  .form-check {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-left: 0;
+  }
+
+  .form-check .form-check-input {
+    float: none;
+    margin-top: 0;
+    margin-left: 0;
+  }
+
+  .form-check .form-check-label {
+    margin-bottom: 0;
+  }
+
+  /*
+   * Restores the checkbox to the same 40px box the old label-less `.left_checkbox` shim gave it,
+   * now that checkboxes are wrapped in `.form-check` and sit inline next to a `.form-check-label`.
    */
   .form-check-input[type="checkbox"] {
     width: 40px;
-    height: calc(1.6em + 0.75rem + 2px);
+    height: 40px;
   }
 
   .modal-backdrop {
