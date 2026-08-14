@@ -317,9 +317,4 @@ trait SpellConstants
         self::SPELL_THUNDEROUS_DRUMS,
         self::SPELL_HARRIERS_CRY,
     ];
-
-    public const array EXCLUDE_MDT_IMPORT_SPELLS = [
-        186439,
-        // Shadow Mend, was removed from the game
-    ];
 }

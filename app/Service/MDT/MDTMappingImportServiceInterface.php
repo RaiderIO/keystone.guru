@@ -41,6 +41,4 @@ interface MDTMappingImportServiceInterface
      *                                        keeps behaving as before.
      */
     public function importNpcsDataFromMDT(MDTDungeon $mdtDungeon, Dungeon $dungeon, GameVersion $gameVersion, array &$failures = []): void;
-
-    public function importSpellDataFromMDT(MDTDungeon $mdtDungeon, Dungeon $dungeon): void;
 }

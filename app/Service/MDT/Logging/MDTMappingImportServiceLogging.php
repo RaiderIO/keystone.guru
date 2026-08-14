@@ -88,12 +88,9 @@ class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMap
         $this->error(__METHOD__, get_defined_vars());
     }
 
-    public function importNpcsDataFromMDTCharacteristicsAndSpellsUpdate(
+    public function importNpcsDataFromMDTNpcsUpdate(
         int $npcsUpdated,
         int $npcsInserted,
-        int $npcSpellsDeleted,
-        int $npcSpellsInserted,
-        int $npcDungeonsDeleted,
         int $npcDungeonsInserted,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
@@ -104,39 +101,9 @@ class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMap
         $this->end(__METHOD__);
     }
 
-    public function importSpellDataFromMDTStart(string $key): void
-    {
-        $this->start(__METHOD__, get_defined_vars());
-    }
-
-    public function importSpellDataFromMDTSpellInExcludeList(): void
-    {
-        $this->debug(__METHOD__);
-    }
-
-    public function importSpellDataFromMDTResult(int $spellCount, int $spellDungeonCount): void
-    {
-        $this->debug(__METHOD__, get_defined_vars());
-    }
-
-    public function importSpellDataFromMDTFailed(): void
-    {
-        $this->error(__METHOD__);
-    }
-
-    public function importSpellDataFromMDTEnd(): void
-    {
-        $this->end(__METHOD__);
-    }
-
     public function importNpcsStart(): void
     {
         $this->start(__METHOD__);
-    }
-
-    public function importNpcsDataFromMDTSpellInExcludeList(): void
-    {
-        $this->debug(__METHOD__);
     }
 
     public function importNpcsDataFromMDTSaveNewNpc(int $npcId): void
