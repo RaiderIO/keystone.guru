@@ -91,6 +91,35 @@ For each commit, parse the **leading `#NNNN`** as the ticket and the subject (mi
 trailing `(#PR)`) as the raw change line. Commits with no `#NNNN` have no ticket; surface
 them to the user, as they usually need a manual decision.
 
+### A squash commit can carry more than one issue — check the body too
+
+"One per issue" is the convention, not a guarantee. A branch sometimes carries a commit for
+a different issue (a small adjacent fix made while in there), or — worse — a stacked child
+gets merged before its parent and swallows the parent's whole diff. Either way the squash
+subject keeps exactly **one** leading `#NNNN`, and every other issue in that commit would
+silently never get a changelog line.
+
+The repo's squash setting is `squash_merge_commit_message: COMMIT_MESSAGES`, so the squash
+body already lists each inner commit as `* #NNNN <subject>`. Harvest those:
+
+```bash
+git log "v<prev>..origin/master" --no-merges --pretty=format:'%H' | while read -r sha; do
+  extra=$(git show -s --format=%b "$sha" | grep -oE '^\* #[0-9]+' | grep -oE '[0-9]+' | sort -u)
+  echo "$sha $(git show -s --format=%s "$sha") | inner: ${extra:-none}"
+done
+```
+
+Any inner issue number that isn't the subject's leading one is an **extra ticket in that
+commit**. Do not decide alone what to do with it: enrich it like any other ticket (Step 4)
+and show it in the Step 5 approval table, marked as coming from the commit body rather than
+the subject, so the user can confirm it belongs in the changelog or drop it. Most of the
+time it is a genuine second change that deserves its own line; occasionally it is work that
+already shipped in an earlier release under its own PR, in which case it is a duplicate and
+gets dropped.
+
+This is the counterpart to the untagged-commit check further down: that one catches commits
+carrying **no** issue number, this one catches commits carrying **two**.
+
 ## Step 4 — Enrich each line, assign a category, and decide public/non-public
 
 For each ticket:
@@ -207,8 +236,8 @@ project's** production-rollout step; once published, `release:report` can announ
 Discord.
 
 Summarise to the user: the version, each included change with its category and ticket, the
-issue URL, and the draft Release URL, and any commits without an issue number or any new
-category you introduced.
+issue URL, and the draft Release URL, and any commits without an issue number, any commit
+that carried a second issue number in its body (Step 3), or any new category you introduced.
 
 ## Step 8 — Watch the pipeline through staging, automatically
 

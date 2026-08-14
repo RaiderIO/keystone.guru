@@ -127,7 +127,7 @@ commit without interactive rebase: see the `worktree-docker` skill.)
   checkout, still ask before committing.
 - **Open every MR as a draft and keep it a draft for as long as you still own the worktree** —
   including your own post-push CI monitoring and the "ready for review" checklist below. Only mark
-  it ready for review (`gh pr ready <n>`) once all three checklist items are actually done and you
+  it ready for review (`gh pr ready <n>`) once every applicable checklist item is actually done and you
   are handing the worktree off. A draft PR can't be merged (`gh pr merge` 422s on one), so this is
   what stops `babysit-prs` — which runs in its own session/loop and merges+tears down worktrees for
   any green, `pr can merge`-labeled PR the moment it sees one — from grabbing a PR (and ripping out
@@ -223,6 +223,13 @@ silently skips them yet still shows green (9 checks when wired correctly, 3 when
 stacked PRs against `master` anyway and say so in the body — the diff collapses when the parent
 merges. Retargeting an existing PR via PATCH does **not** retrigger CI; close and reopen it.
 
+**Merge order is not enforced by anything — the parent must merge first.** Because both target
+`master`, merging the child first squashes the parent's whole diff onto master under the child's
+subject: the parent's issue gets no changelog line (only the leading `#NNNN` is parsed) and the
+parent PR is left open and empty. GitHub won't stop you — `mergeable` stays clean and CI stays
+green. `babysit-prs` checks this with `git merge-base --is-ancestor` before every merge; do the
+same if you merge one by hand.
+
 ## Command execution
 - Never run PHP, Artisan, PHPUnit, or Pest directly on the host machine.
 - Always run Laravel, test commands, and any other file system commands inside Docker.
@@ -266,7 +273,7 @@ but the checklist is **tiered by change size** so small MRs don't pay full cerem
 - **Trivial tier** — either (a) a code change with ≤ 20 changed lines (excluding tests/docs), no
   UI-visible impact, no schema/auth/security change, covered by a passing test; or (b) a
   docs/config-only change of ≤ 50 changed lines total. Skip item 1 (cold review); still require
-  item 3 (green CI). State in the MR body: "Cold review skipped under the trivial-change rule" and
+  items 3 (green CI) and 4 (one issue per MR). State in the MR body: "Cold review skipped under the trivial-change rule" and
   add the `pr cold reviewed` label anyway so `babysit-prs` doesn't dispatch its own review.
   Docs-only does NOT mean low blast radius: a larger docs MR — especially one touching `.claude/`
   instruction/process files, which degrade every future session when wrong — takes the standard
@@ -322,6 +329,18 @@ but the checklist is **tiered by change size** so small MRs don't pay full cerem
 3. **Green CI**: wait for the MR's checks and fix any failure yourself — including flaky or
    seemingly unrelated failures (root-cause them; don't re-run and hope, and don't defer to a
    follow-up issue).
+4. **One issue per MR** — a squash commit keeps exactly one leading `#NNNN`, so any other issue
+   the branch carries is invisible to `create-release`. Check before undrafting:
+
+   ```bash
+   git log origin/master..HEAD --pretty=%s | grep -oE '^#[0-9]+' | sort -u
+   ```
+
+   More than one number means a fix for another issue rode along. Move it to its own branch if it
+   stands alone; if it genuinely can't be separated, say so in the MR body and add `Closes #N` for
+   it, so at least the issue closes and a human sees the second number. Applies to a stacked child
+   too: it will show the parent's issue numbers until the parent merges, which is fine — it's only
+   a defect if the *parent has already merged* and the numbers are still there.
 
 Only once the applicable items hold, mark the MR ready for review (`gh pr ready <n>`) — see the
 draft-PR note under Git worktrees above for why it must stay a draft until then.

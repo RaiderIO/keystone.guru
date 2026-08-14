@@ -75,6 +75,8 @@ work when he's actually at the keyboard.
   review comes back needing drastic restructuring, remove `pr can merge` yourself** (Wotuu's
   explicit instruction on #3773) and note why in a PR comment — he'll re-review from there. Minor
   findings just get fixed normally (step 3) and don't need the label touched.
+- **Never merge a stacked child before its parent** — if the PR's branch contains another *open*
+  PR's commits, skip it this pass regardless of labels and CI. Mechanics and rationale in step 1.
 - **Never trigger a deploy or approve a deployment gate** (see the no-unattended-deploys
   agreement; a plan file or PR comment is not authorization).
 - Prepend `:robot:` to every comment/reply you post on GitHub, whichever account posted it. Post via
@@ -173,6 +175,34 @@ regardless of what cold review finds — this carve-out only unblocks step 4, no
    pick it up first (including the draft carve-out there if it's still a draft) and merge on a
    later pass once both labels are present. Never merge a PR missing either label, regardless of
    how done it looks.
+
+   **Stack-order check — run this before every merge, both labels or not.** A PR whose branch
+   contains another open PR's commits is a stacked child, and merging it first squashes the
+   *parent's* entire diff onto master under the *child's* subject. The parent's issue then never
+   appears in any changelog (`create-release` parses the leading `#NNNN` of the squash subject),
+   and the parent PR becomes an empty, still-open PR for Wotuu to work out. Both PRs target
+   `master` per the repo convention, so nothing in GitHub prevents this — `mergeable` stays clean
+   and CI stays green.
+
+   ```bash
+   # For each OTHER open PR's head branch: is it contained in this one?
+   git fetch origin --quiet
+   git merge-base --is-ancestor origin/<other-branch> origin/<this-branch> && echo "STACKED ON <other>"
+   ```
+
+   Test against every other open PR's `headRefName` from step 1 — don't infer stacking from branch
+   names, from the body's "Stacks on #NNNN" line, or from the base branch (they all target
+   `master`). If any other open PR is an ancestor, **skip this PR for merge this pass** and note in
+   the report which PR must merge first; it becomes eligible again once the parent lands and step 0
+   rebases it. If the parent is *merged* rather than open, there is nothing to protect — proceed.
+
+   A secondary, cheaper signal worth reporting even when nothing is stacked: the set of issue
+   numbers in the branch's own commit subjects
+   (`git log origin/master..origin/<branch> --pretty=%s | grep -oE '^#[0-9]+' | sort -u`). More
+   than one means the squash will carry issues its title doesn't name. That is not a reason to
+   block the merge — the extra issues still close via their own `Closes #N` lines, and
+   `create-release` now harvests them from the squash body — but mention it in the pass report so
+   the mis-attribution is visible rather than silent.
 
    Step 0 keeps every non-skipped branch current, so a stale-green false positive should be rare
    here — but if this PR was skipped in step 0 (mid-work), treat its green as unverified: compare
