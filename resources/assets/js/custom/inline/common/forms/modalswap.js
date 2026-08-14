@@ -26,6 +26,12 @@ class CommonFormsModalswap extends InlineCode {
      * @private
      */
     _swap(event) {
+        // The cross-link carries a real href to the standalone page, so a modified click (new tab,
+        // new window, middle click) must be left to the browser rather than swapped in place
+        if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.which === 2) {
+            return;
+        }
+
         event.preventDefault();
 
         let $fromModal = $(this.options.fromModal);

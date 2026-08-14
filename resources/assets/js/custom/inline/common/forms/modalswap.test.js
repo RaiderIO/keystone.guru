@@ -76,13 +76,14 @@ function makeSwapHarness() {
 
     return {
         calls,
-        swap: () => withStubs(() => {
+        swap: (event = {}) => withStubs(() => {
             let prevented = false;
 
             modalswap._swap({
                 preventDefault: () => {
                     prevented = true;
                 },
+                ...event,
             });
 
             return prevented;
@@ -113,6 +114,35 @@ describe('CommonFormsModalswap._swap', () => {
 
         // Assert
         expect(calls).toEqual(['one:hidden.bs.modal', 'hide:#login_modal element']);
+    });
+
+    it.each([
+        ['ctrlKey'],
+        ['metaKey'],
+        ['shiftKey'],
+        ['altKey'],
+    ])('_swap_givenAModifiedClickWith%s_leavesTheNavigationToTheBrowser', (modifier) => {
+        // Arrange - the cross-link has a real href to the standalone page
+        const {calls, swap} = makeSwapHarness();
+
+        // Act
+        const prevented = swap({[modifier]: true});
+
+        // Assert - nothing swapped, and the default was not suppressed
+        expect(prevented).toBe(false);
+        expect(calls).toEqual([]);
+    });
+
+    it('_swap_givenAMiddleClick_leavesTheNavigationToTheBrowser', () => {
+        // Arrange
+        const {calls, swap} = makeSwapHarness();
+
+        // Act
+        const prevented = swap({which: 2});
+
+        // Assert
+        expect(prevented).toBe(false);
+        expect(calls).toEqual([]);
     });
 
     it('_swap_givenTheFirstModalFinishedHiding_showsTheSecondModal', () => {

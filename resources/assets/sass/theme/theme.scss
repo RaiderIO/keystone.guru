@@ -233,8 +233,11 @@ body {
 
   /** The login/register modals hold a two-column form that Bootstrap's 500px .modal-dialog is far
       too narrow for. This lives here rather than in css/lib/modals.css because the `.theme` wrapper
-      gives it the specificity it needs to beat Bootstrap's own single-class .modal-dialog rule. */
-  @media (min-width: 900px) {
+      gives it the specificity it needs to beat Bootstrap's own single-class .modal-dialog rule.
+
+      Keyed to `lg` (992px), the same breakpoint the columns themselves use: widening the dialog any
+      earlier buys 900px of width for a layout that is still one stacked full-width column. */
+  @media (min-width: 992px) {
     .modal-dialog-small {
       max-width: 900px;
     }

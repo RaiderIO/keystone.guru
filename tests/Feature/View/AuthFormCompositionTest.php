@@ -107,6 +107,17 @@ final class AuthFormCompositionTest extends PublicTestCase
     }
 
     /**
+     * @return array<string, array{string}>
+     */
+    public static function authPageProvider(): array
+    {
+        return [
+            'login'    => ['login'],
+            'register' => ['register'],
+        ];
+    }
+
+    /**
      * @param array<string, string> $parameters
      */
     #[Test]
@@ -162,14 +173,17 @@ final class AuthFormCompositionTest extends PublicTestCase
     }
 
     #[Test]
-    public function authModals_givenGuestOnHomePage_areDismissableWithEscape(): void
+    public function authModals_givenGuestOnHomePage_areDismissableWithEscapeAndNoOtherModalIs(): void
     {
-        // Arrange & Act - a guest who opened the wrong modal must be able to get out of it
-        $response = $this->get(route('home'));
+        // Arrange - a guest who opened the wrong modal must be able to get out of it, but ESC stays
+        // off everywhere else: the legal modal in particular must be answered, not dismissed
 
-        // Assert
-        $response->assertOk();
-        $response->assertSee('data-bs-keyboard="true"', false);
+        // Act
+        $content = (string)$this->get(route('home'))->assertOk()->getContent();
+
+        // Assert - exactly the login and register modals opt in, and other modals still render
+        $this->assertSame(2, substr_count($content, 'data-bs-keyboard="true"'));
+        $this->assertGreaterThan(0, substr_count($content, 'data-bs-keyboard="false"'));
     }
 
     #[Test]
@@ -189,16 +203,5 @@ final class AuthFormCompositionTest extends PublicTestCase
                 sprintf('Expected exactly one element with id %s', $id),
             );
         }
-    }
-
-    /**
-     * @return array<string, array{string}>
-     */
-    public static function authPageProvider(): array
-    {
-        return [
-            'login'    => ['login'],
-            'register' => ['register'],
-        ];
     }
 }
