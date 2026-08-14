@@ -185,10 +185,21 @@ regardless of what cold review finds — this carve-out only unblocks step 4, no
    and CI stays green.
 
    ```bash
-   # For each OTHER open PR's head branch: is it contained in this one?
    git fetch origin --quiet
-   git merge-base --is-ancestor origin/<other-branch> origin/<this-branch> && echo "STACKED ON <other>"
+   for other in <every OTHER open PR's headRefName from step 1>; do
+     git rev-parse --verify -q "origin/$other" >/dev/null || continue          # remote branch gone
+     git merge-base --is-ancestor "origin/$other" origin/master && continue    # already in master
+     git merge-base --is-ancestor "origin/$other" "origin/<this-branch>" \
+       && echo "STACKED ON $other"
+   done
    ```
+
+   **Both guard lines are load-bearing.** `--is-ancestor` is reflexive and true for anything master
+   already contains, so a branch that got force-pushed back to master (or a second open PR pointing
+   at the same head) is an ancestor of *every* branch built on master — without the
+   `origin/master` filter this reports every PR as stacked on it and, given the hard rule above,
+   stops the pass merging anything at all while naming a parent that isn't one. That failure is
+   silent and fails closed, which is the worst shape for an unattended loop.
 
    Test against every other open PR's `headRefName` from step 1 — don't infer stacking from branch
    names, from the body's "Stacks on #NNNN" line, or from the base branch (they all target
@@ -203,6 +214,11 @@ regardless of what cold review finds — this carve-out only unblocks step 4, no
    block the merge — the extra issues still close via their own `Closes #N` lines, and
    `create-release` now harvests them from the squash body — but mention it in the pass report so
    the mis-attribution is visible rather than silent.
+
+   **Neither check subsumes the other, so don't simplify one away.** Split-issue siblings
+   (#3674 → #3847/#3848/#3849) are git-stacked on each other while all carrying the *same* issue
+   number: the number-set check sees one number and passes, and only the ancestor test catches the
+   ordering. Conversely a one-off adjacent fix carries a second number without any stacking at all.
 
    Step 0 keeps every non-skipped branch current, so a stale-green false positive should be rare
    here — but if this PR was skipped in step 0 (mid-work), treat its green as unverified: compare

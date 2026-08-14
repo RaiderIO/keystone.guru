@@ -333,8 +333,11 @@ but the checklist is **tiered by change size** so small MRs don't pay full cerem
    the branch carries is invisible to `create-release`. Check before undrafting:
 
    ```bash
-   git log origin/master..HEAD --pretty=%s | grep -oE '^#[0-9]+' | sort -u
+   git fetch origin --quiet && git log origin/master..HEAD --pretty=%s | grep -oE '^#[0-9]+' | sort -u
    ```
+
+   The `fetch` is not optional — a worktree created days ago has a stale `origin/master`, and the
+   range then includes master commits the branch doesn't own, reporting a pile of unrelated issues.
 
    More than one number means a fix for another issue rode along. Move it to its own branch if it
    stands alone; if it genuinely can't be separated, say so in the MR body and add `Closes #N` for
