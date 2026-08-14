@@ -6,6 +6,7 @@ use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
 use App\Service\Cache\Logging\CacheServiceLoggingInterface;
 use App\Service\Cloudflare\Logging\CloudflareServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLoggingInterface;
+use App\Service\CombatLog\Logging\CombatLogPollingBandServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogServiceLoggingInterface;
 use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLoggingInterface;
 use App\Service\DungeonRoute\Logging\DungeonRouteSaveServiceLoggingInterface;
@@ -54,6 +55,15 @@ class LoggingFixtures
         PublicTestCase $testCase,
     ): MockObject|CombatLogDungeonRouteServiceLoggingInterface {
         return $testCase->createMockPublic(CombatLogDungeonRouteServiceLoggingInterface::class);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function createCombatLogPollingBandServiceLogging(
+        PublicTestCase $testCase,
+    ): MockObject|CombatLogPollingBandServiceLoggingInterface {
+        return $testCase->createMockPublic(CombatLogPollingBandServiceLoggingInterface::class);
     }
 
     /**

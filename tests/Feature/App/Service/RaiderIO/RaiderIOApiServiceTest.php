@@ -6,10 +6,12 @@ use App\Models\Expansion;
 use App\Models\Season;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
+use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\Logging\RaiderIOApiServiceLoggingInterface;
 use App\Service\RaiderIO\RaiderIOApiService;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
@@ -145,6 +147,113 @@ final class RaiderIOApiServiceTest extends PublicTestCase
 
         // Assert
         $this->assertNull($result);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function searchAdvancedRuns_givenBandedFilter_boundsMythicLevelOnBothSides(): void
+    {
+        // Arrange
+        $capturedUrl = null;
+        $service     = $this->makeService(function (string $url) use (&$capturedUrl): string {
+            $capturedUrl = $url;
+
+            return json_encode(['total' => ['value' => 1231], 'matches' => []]);
+        });
+
+        // Act
+        $result = $service->searchAdvancedRuns($this->makeSearchFilter(2, 6));
+
+        // Assert
+        $decodedUrl = urldecode((string)$capturedUrl);
+        $this->assertStringContainsString('mythicLevel[0][gte]=2', $decodedUrl);
+        $this->assertStringContainsString('mythicLevel[0][lte]=6', $decodedUrl);
+        $this->assertSame(1231, $result->total);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function searchAdvancedRuns_givenOpenEndedFilter_omitsUpperBound(): void
+    {
+        // Arrange
+        $capturedUrl = null;
+        $service     = $this->makeService(function (string $url) use (&$capturedUrl): string {
+            $capturedUrl = $url;
+
+            return json_encode(['total' => ['value' => 542], 'matches' => []]);
+        });
+
+        // Act
+        $service->searchAdvancedRuns($this->makeSearchFilter(22, null));
+
+        // Assert
+        $decodedUrl = urldecode((string)$capturedUrl);
+        $this->assertStringContainsString('mythicLevel[0][gte]=22', $decodedUrl);
+        $this->assertStringNotContainsString('mythicLevel[0][lte]', $decodedUrl);
+    }
+
+    /**
+     * The upstream API returns `"total": {"value": n}` for a non-empty result set, but a plain
+     * scalar `"total": 0` when nothing matches. Reading only the object shape reports "unknown"
+     * for an empty band, which is the one answer the top band probe has to be able to trust.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function searchAdvancedRuns_givenEmptyResultSet_readsScalarTotalAsZero(): void
+    {
+        // Arrange
+        $service = $this->makeService(fn(): string => json_encode(['total' => 0, 'matches' => []]));
+
+        // Act
+        $result = $service->searchAdvancedRuns($this->makeSearchFilter(26, 26));
+
+        // Assert
+        $this->assertSame(0, $result->total);
+        $this->assertEmpty($result->runs);
+    }
+
+    /**
+     * Sorting on anything stable hands every repeated poll of the same filter the exact same page,
+     * by which time every run on it has already been parsed.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function searchAdvancedRuns_givenAnyFilter_sortsByRecency(): void
+    {
+        // Arrange
+        $capturedUrl = null;
+        $service     = $this->makeService(function (string $url) use (&$capturedUrl): string {
+            $capturedUrl = $url;
+
+            return json_encode(['total' => 0, 'matches' => []]);
+        });
+
+        // Act
+        $service->searchAdvancedRuns($this->makeSearchFilter(2, 6));
+
+        // Assert
+        $this->assertStringContainsString('sort[completedAt]=desc', urldecode((string)$capturedUrl));
+    }
+
+    private function makeSearchFilter(int $mythicLevelMin, ?int $mythicLevelMax): SearchAdvancedRunsFilter
+    {
+        return new SearchAdvancedRunsFilter(
+            dungeon:         null,
+            season:          $this->makeSeason(),
+            specs:           collect(),
+            completedAtFrom: Carbon::now()->subDay(),
+            completedAtTo:   null,
+            mythicLevelMin:  $mythicLevelMin,
+            mythicLevelMax:  $mythicLevelMax,
+            limit:           100,
+            offset:          0,
+        );
     }
 
     /**

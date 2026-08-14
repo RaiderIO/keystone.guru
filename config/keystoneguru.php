@@ -532,9 +532,32 @@ return [
         'team_id'            => 2136,
         'combat_log_polling' => [
             'completed_at_window_days' => (int)env('COMBAT_LOG_POLLING_COMPLETED_AT_WINDOW_DAYS', 1),
-            'mythic_level_min'         => (int)env('COMBAT_LOG_POLLING_MYTHIC_LEVEL_MIN', 10),
             'limit'                    => (int)env('COMBAT_LOG_POLLING_LIMIT', 100),
             'download_url'             => env('COMBAT_LOG_POLLING_DOWNLOAD_URL'),
+
+            // Runs are polled in key level bands so that what we parse covers the whole spectrum
+            // instead of the (by far most populous) 10-16 range. One band is polled per hour.
+            'bands' => [
+                'level_min'         => (int)env('COMBAT_LOG_POLLING_BAND_LEVEL_MIN', 2),
+                'width'             => (int)env('COMBAT_LOG_POLLING_BAND_WIDTH', 5),
+                'default_threshold' => (int)env('COMBAT_LOG_POLLING_BAND_DEFAULT_THRESHOLD', 60),
+            ],
+
+            // The highest keys of a season are always parsed, bypassing the band budgets
+            // entirely - those are the runs where players have it all figured out.
+            'top_band' => [
+                'levels_below_max'    => (int)env('COMBAT_LOG_POLLING_TOP_BAND_LEVELS_BELOW_MAX', 2),
+                'min_runs_for_level'  => (int)env('COMBAT_LOG_POLLING_TOP_BAND_MIN_RUNS_FOR_LEVEL', 25),
+                'probe_window_days'   => (int)env('COMBAT_LOG_POLLING_TOP_BAND_PROBE_WINDOW_DAYS', 7),
+                'probe_level_ceiling' => (int)env('COMBAT_LOG_POLLING_TOP_BAND_PROBE_LEVEL_CEILING', 40),
+
+                // Kept below the hourly schedule of combatlog:pollruns so the max key level is
+                // re-probed on every run. At the start of a season everyone starts at the minimum
+                // key level and climbs over the following days; a max cached for longer pins the
+                // top band's floor near the bottom, and the top band is dispatched without
+                // consulting any budget - so it would parse every run of the season.
+                'max_key_level_cache_minutes' => (int)env('COMBAT_LOG_POLLING_TOP_BAND_MAX_KEY_LEVEL_CACHE_MINUTES', 50),
+            ],
         ],
         'weekly_route' => [
             'url'  => 'https://raider.io/weekly-routes',

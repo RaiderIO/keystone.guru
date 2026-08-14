@@ -52,6 +52,7 @@ final class RaiderIOKeystoneGuruApiServiceTest extends PublicTestCase
             completedAtFrom: Carbon::now(),
             completedAtTo:   null,
             mythicLevelMin:  0,
+            mythicLevelMax:  null,
             limit:           10,
             offset:          0,
         );

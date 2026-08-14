@@ -115,19 +115,29 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
             ->values()
             ->toArray();
 
+        $mythicLevel = ['gte' => $filter->mythicLevelMin];
+
+        if ($filter->mythicLevelMax !== null) {
+            $mythicLevel['lte'] = $filter->mythicLevelMax;
+        }
+
         $params = array_filter([
             'type'         => 'mythic_plus_runs',
             'hasAutoRoute' => [0 => ['eq' => 1]],
             'season'       => [0 => ['eq' => $this->buildSeasonString($filter->season->expansion->shortname, $filter->season->index)]],
-            'mythicLevel'  => [0 => ['gte' => $filter->mythicLevelMin]],
+            'mythicLevel'  => [0 => $mythicLevel],
             'numChests'    => [
                 0 => ['eq' => 1],
                 1 => ['eq' => 2],
                 2 => ['eq' => 3],
             ],
-            'completedAt'   => [0 => $completedAt],
-            'timezone'      => 'UTC',
-            'sort'          => ['hasAutoRoute' => 'desc'],
+            'completedAt' => [0 => $completedAt],
+            'timezone'    => 'UTC',
+            // Sorting on hasAutoRoute is a no-op - it is already filtered to 1 - which leaves the
+            // ordering stable across identical calls. Repeated polls of the same narrow filter then
+            // return the exact same page, and every run on it has already been parsed. Ordering by
+            // recency instead means each poll leads with the runs that appeared since the last one.
+            'sort'          => ['completedAt' => 'desc'],
             'limit'         => $filter->limit,
             'offset'        => $filter->offset,
             'dungeonZoneId' => $dungeonZoneId !== null ? [0 => ['eq' => $dungeonZoneId]] : null,
@@ -156,7 +166,12 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
                 $runs[] = SearchAdvancedRun::fromArray($match['data']);
             }
 
-            $total = isset($json['total']['value']) ? (int)$json['total']['value'] : null;
+            // An empty result set returns a scalar `"total": 0` instead of `{"value": n}`
+            $total = match (true) {
+                isset($json['total']['value'])     => (int)$json['total']['value'],
+                is_numeric($json['total'] ?? null) => (int)$json['total'],
+                default                            => null,
+            };
 
             return new SearchAdvancedRunsResponse($runs, $total);
         } finally {

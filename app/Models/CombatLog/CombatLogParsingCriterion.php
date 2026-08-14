@@ -16,6 +16,8 @@ use Illuminate\Support\Carbon;
  * @property int          $combat_log_version
  * @property class-string $model_class
  * @property int          $model_id
+ * @property int          $mythic_level_min
+ * @property int|null     $mythic_level_max
  * @property Carbon       $date
  * @property int          $count
  * @property int          $threshold
@@ -47,10 +49,29 @@ class CombatLogParsingCriterion extends Model
         'combat_log_version',
         'model_class',
         'model_id',
+        'mythic_level_min',
+        'mythic_level_max',
         'date',
         'count',
         'threshold',
     ];
+
+    /**
+     * Whether this row tracks the open ended band of the highest keys of the season. Those runs
+     * are always parsed, so the row is a counter for visibility only - it has no budget and its
+     * threshold is meaningless.
+     */
+    public function isTopBand(): bool
+    {
+        return $this->mythic_level_max === null;
+    }
+
+    public function getBandName(): string
+    {
+        return $this->isTopBand()
+            ? sprintf('%d+', $this->mythic_level_min)
+            : sprintf('%d-%d', $this->mythic_level_min, $this->mythic_level_max);
+    }
 
     protected static function newFactory(): CombatLogParsingCriterionFactory
     {
