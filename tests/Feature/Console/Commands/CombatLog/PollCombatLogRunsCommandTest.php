@@ -371,6 +371,47 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
     }
 
     /**
+     * --force deliberately re-queues runs that were parsed before, but re-queuing the same run
+     * twice within one invocation is never what is wanted - and it must not insert a second row
+     * against the unique index either.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenForceAndARunInMultipleBands_dispatchesItOnceAndInsertsNothing(): void
+    {
+        // Arrange
+        Bus::fake();
+
+        $run = $this->makeRun(5003, $this->dungeon->challenge_mode_id, mythicLevel: 23);
+
+        $criteriaService = $this->makeCriteriaService(eligibleDungeons: collect([$this->dungeon]));
+        $criteriaService->method('shouldParse')->willReturn(true);
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $this->mockRaiderIOApiService(spreadRuns: [$run], topRuns: [$run]);
+
+        $selects = 0;
+        DB::connection('combatlog')->listen(function (QueryExecuted $query) use (&$selects): void {
+            if (str_contains($query->sql, 'parsed_combat_logs') && str_starts_with($query->sql, 'select')) {
+                $selects++;
+            }
+        });
+
+        try {
+            // Act
+            $this->artisan('combatlog:pollruns', ['--force' => true])->assertSuccessful();
+
+            // Assert - forcing bypasses the already-parsed bookkeeping entirely
+            Bus::assertDispatchedTimes(ProcessCombatLogSegments::class, 1);
+            $this->assertSame(0, $selects);
+            $this->assertSame(0, ParsedCombatLog::query()->where('run_id', $run->id)->count());
+        } finally {
+            ParsedCombatLog::query()->where('run_id', $run->id)->delete();
+        }
+    }
+
+    /**
      * parsed_combat_logs grows into the many thousands of rows over a season, so the already-parsed
      * check must never load the table - it looks up only the run ids of the batch it just received.
      *

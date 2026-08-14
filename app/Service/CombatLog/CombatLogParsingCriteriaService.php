@@ -117,17 +117,19 @@ class CombatLogParsingCriteriaService implements CombatLogParsingCriteriaService
             [
                 'mythic_level_max' => $band->max,
                 'count'            => 0,
-                'threshold'        => $this->getDefaultThreshold($criterion->getModelClass(), $band),
+                'threshold'        => $this->getDefaultThreshold($criterion->getModelClass(), $criterion->getModelId(), $band),
             ],
         );
     }
 
     /**
-     * Thresholds are per band: inheriting the most recent threshold of the model class as a whole
-     * would hand every band the budget that was configured for a single one, multiplying the
-     * volume that gets parsed each day by the number of bands.
+     * Thresholds are configured per model per band - that is the granularity of the inputs on the
+     * admin page - so a new row inherits from the same model in the same band, and nothing else.
+     * Inheriting across bands would hand every band the budget that was configured for a single
+     * one; inheriting across models would silently apply one dungeon's raised threshold to every
+     * other dungeon whose row happens to be created later.
      */
-    private function getDefaultThreshold(string $modelClass, KeyLevelBand $band): int
+    private function getDefaultThreshold(string $modelClass, int $modelId, KeyLevelBand $band): int
     {
         if ($band->isTopBand()) {
             return 0;
@@ -135,6 +137,7 @@ class CombatLogParsingCriteriaService implements CombatLogParsingCriteriaService
 
         $lastConfiguredThreshold = CombatLogParsingCriterion::query()
             ->where('model_class', $modelClass)
+            ->where('model_id', $modelId)
             ->where('mythic_level_min', $band->min)
             // Top band rows share this column with whichever spread band starts on the same level
             // once the max key level rises, and they carry a meaningless threshold of 0. Inheriting

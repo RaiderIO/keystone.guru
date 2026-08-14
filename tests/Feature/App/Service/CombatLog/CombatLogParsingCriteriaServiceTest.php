@@ -364,6 +364,38 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
     }
 
     /**
+     * Thresholds are edited per criterion row on the admin page, so they are per model per band.
+     * Inheriting across models would apply one dungeon's hand-raised threshold to every other
+     * dungeon whose row for that band happens to be created afterwards.
+     */
+    #[Test]
+    public function shouldParse_givenThresholdConfiguredForAnotherModelInSameBand_usesConfiguredDefault(): void
+    {
+        // Arrange - a threshold was raised by hand yesterday, but for a different dungeon
+        $otherDungeonId = 999899;
+        Carbon::setTestNow(Carbon::yesterday());
+        CombatLogParsingCriterion::factory()->forDungeon($otherDungeonId)->forBand(2, 6)->create(['threshold' => 300]);
+        Carbon::setTestNow(null);
+
+        try {
+            // Act
+            $this->service->shouldParse(self::VERSION, $this->defaultCriteria(new KeyLevelBand(2, 6)));
+
+            // Assert
+            $this->assertEquals(
+                (int)config('keystoneguru.raider_io.combat_log_polling.bands.default_threshold'),
+                CombatLogParsingCriterion::query()
+                    ->where('model_id', self::DUNGEON_ID)
+                    ->where('mythic_level_min', 2)
+                    ->where('date', Carbon::now()->toDateString())
+                    ->value('threshold'),
+            );
+        } finally {
+            CombatLogParsingCriterion::query()->where('model_id', $otherDungeonId)->delete();
+        }
+    }
+
+    /**
      * Top band rows carry a meaningless threshold of 0 and share mythic_level_min with whichever
      * spread band starts on that level once the max key level of the season rises. Inheriting that
      * 0 would leave the new spread band at its budget from the moment it is created, every day.
