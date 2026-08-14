@@ -41,20 +41,6 @@ class MapIconTypesSeeder extends Seeder implements TableSeederInterface
         MapIconType::from(DatabaseSeeder::getTempTableName(MapIconType::class))->insert($mapIconTypeAttributes);
     }
 
-    public static function getAffectedModelClasses(): array
-    {
-        return [MapIconType::class];
-    }
-
-    /**
-     * @return array<int, string>|null
-     */
-    public static function getAffectedEnvironments(): ?array
-    {
-        // All environments
-        return null;
-    }
-
     /**
      * The JSON file supplies the data of a map icon type, MapIconType::ALL supplies its id - a key present
      * in only one of the two would otherwise silently seed nothing, or seed a duplicate id.
@@ -79,5 +65,19 @@ class MapIconTypesSeeder extends Seeder implements TableSeederInterface
         if ($idsWithoutData !== []) {
             throw new Exception(sprintf('MapIconType::ALL contains keys that are missing from the map icon type data file: %s', implode(', ', $idsWithoutData)));
         }
+    }
+
+    public static function getAffectedModelClasses(): array
+    {
+        return [MapIconType::class];
+    }
+
+    /**
+     * @return array<int, string>|null
+     */
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
     }
 }
