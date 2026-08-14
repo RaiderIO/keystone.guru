@@ -63,3 +63,13 @@ __pycache__/
 
 # Scratch dir used by the headless-browser-verify skill (screenshots + driver scripts)
 /.chrome-tmp
+
+# impeccable skill: per-machine runtime state (hook consent, cache, generated critiques)
+/.impeccable/
+# impeccable skill: GitHub Copilot agent-surface mirror, not used by this repo
+/.github/agents/
+/.github/hooks/
+/.github/skills/
+
+# Stray placeholder symlink for a dev-environment node_modules mount
+/www_main_node_modules_placeholder
