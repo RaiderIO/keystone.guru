@@ -24,6 +24,9 @@ class WowheadService implements WowheadServiceInterface
 
     private const string ICON_URL_FORMAT = 'https://wow.zamimg.com/images/wow/icons/large/%s';
 
+    /** Wowhead's own tooltip endpoint, which answers with the rendered description as html. */
+    private const string SPELL_TOOLTIP_URL = 'https://nether.wowhead.com/tooltip/spell/%d?dataEnv=1&locale=0';
+
     private const string IDENTIFYING_TOKEN_HEALTH     = '$(document).ready(function(){$(".infobox li").last().after("<li><div><span class=\"tip\" onmouseover=\"WH.Tooltip.showAtCursor(event, ';
     private const string IDENTIFYING_TOKEN_DISPLAY_ID = 'linksButton.dataset.displayId =';
 
@@ -350,6 +353,22 @@ class WowheadService implements WowheadServiceInterface
                 Str::slug($npc->name),
             ),
         );
+    }
+
+    public function getSpellTooltipText(int $spellId): ?string
+    {
+        $response = $this->curlGet(sprintf(self::SPELL_TOOLTIP_URL, $spellId));
+
+        $tooltip = json_decode($response, true)['tooltip'] ?? null;
+
+        if (!is_string($tooltip)) {
+            $this->log->getSpellTooltipTextInvalidResponse($spellId);
+
+            return null;
+        }
+
+        // The tooltip is a small block of html; everything we want out of it is the text
+        return trim(html_entity_decode(preg_replace('/<[^>]+>/', ' ', $tooltip) ?? ''));
     }
 
     public function getSpellPageHtml(GameVersion $gameVersion, int $spellId): string

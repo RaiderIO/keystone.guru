@@ -56,6 +56,7 @@ use Str;
  * @property GameVersion                           $gameVersion
  * @property EloquentCollection<int, Dungeon>      $dungeons
  * @property EloquentCollection<int, SpellDungeon> $spellDungeons
+ * @property EloquentCollection<int, SpellEffect>  $spellEffects
  * @property EloquentCollection<int, Npc>          $npcs
  * @property Characteristic|null                   $characteristic
  *
@@ -268,6 +269,12 @@ class Spell extends CacheModel implements MappingModelInterface
     public function dungeons(): BelongsToMany
     {
         return $this->belongsToMany(Dungeon::class, 'spell_dungeons', 'spell_id', 'dungeon_id');
+    }
+
+    /** @return HasMany<SpellEffect, $this> */
+    public function spellEffects(): HasMany
+    {
+        return $this->hasMany(SpellEffect::class);
     }
 
     /** @return HasMany<SpellDungeon, $this> */
