@@ -92,11 +92,12 @@ the issue yourself unless asked; the MR closes it on merge.
 
 ## Step 2 — Bump the composer package reference
 
-Composer downloads the package straight from upstream `Nnoggie/MythicDungeonTools` (#4008). It used
-to come from the `Wotuu/MythicDungeonTools` fork, which existed so our own corrections could be
-pinned before upstream took them; a repository ruleset then blocked syncing that fork's `master`.
-Both problems are gone — **do not reintroduce the fork.** If a bump ever needs an unmerged
-correction, open the PR upstream, wait for it to merge, and pin the tag that contains it.
+Composer downloads the package straight from upstream `Nnoggie/MythicDungeonTools` (#4008) — the
+default. Wotuu does point the reference back at the `Wotuu/MythicDungeonTools` fork on purpose, to
+test a change before contributing it upstream. **Never switch to the fork on your own initiative** —
+an agent silently reintroducing it was the original failure — but if the reference already points at
+the fork, that is deliberate: bump within it and note it in the MR body rather than "correcting" it
+back.
 
 1. You already fetched the latest **upstream tag** (version) in Step 1; now also capture its
    **commit SHA**. Re-confirm the version and resolve the SHA:
