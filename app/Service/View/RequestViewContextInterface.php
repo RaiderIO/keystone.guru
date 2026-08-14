@@ -22,4 +22,10 @@ interface RequestViewContextInterface
     public function isUserAdmin(): bool;
 
     public function isAdFree(): bool;
+
+    /**
+     * Whether the current route is only reachable by a guest, i.e. it is behind the `guest`
+     * middleware and would bounce an authenticated user elsewhere.
+     */
+    public function isCurrentRouteGuestOnly(): bool;
 }

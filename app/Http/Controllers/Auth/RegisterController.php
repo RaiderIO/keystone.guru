@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Random\RandomException;
 use Session;
+use Teapot\StatusCode;
 
 class RegisterController extends Controller implements HasMiddleware
 {
@@ -60,11 +62,11 @@ class RegisterController extends Controller implements HasMiddleware
     protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($data, [
-            'name'                  => 'required|alpha_dash|max:32|unique:users',
-            'email'                 => 'required|email|max:255|unique:users',
-            'game_server_region_id' => 'nullable|int',
-            'password'              => 'required|min:8|confirmed',
-            'legal_agreed'          => 'required|accepted',
+            'name'         => 'required|alpha_dash|max:32|unique:users',
+            'email'        => 'required|email|max:255|unique:users',
+            'region'       => 'nullable|integer|exists:game_server_regions,id',
+            'password'     => 'required|min:8|confirmed',
+            'legal_agreed' => 'required|accepted',
         ], [
             'legal_agreed.required' => __('controller.register.legal_agreed_required'),
             'legal_agreed.accepted' => __('controller.register.legal_agreed_accepted'),
@@ -84,11 +86,12 @@ class RegisterController extends Controller implements HasMiddleware
 
         /** @var User $user */
         $user = User::create([
-            'public_key'            => User::generateRandomPublicKey(),
-            'name'                  => $data['name'],
-            'email'                 => $data['email'],
-            'echo_color'            => randomHexColor(),
-            'game_server_region_id' => $data['region'] ?? GameServerRegion::DEFAULT_REGION,
+            'public_key' => User::generateRandomPublicKey(),
+            'name'       => $data['name'],
+            'email'      => $data['email'],
+            'echo_color' => randomHexColor(),
+            // ALL maps the region short to its id - DEFAULT_REGION itself is the short ('us'), not an id
+            'game_server_region_id' => $data['region'] ?? GameServerRegion::ALL[GameServerRegion::DEFAULT_REGION],
             'password'              => Hash::make($data['password']),
             'legal_agreed'          => $data['legal_agreed'],
             'legal_agreed_ms'       => intval($data['legal_agreed_ms']),
@@ -102,7 +105,7 @@ class RegisterController extends Controller implements HasMiddleware
     /**
      * Handle a registration request for the application.
      *
-     * @return Application|RedirectResponse|Response|Redirector
+     * @return Application|JsonResponse|RedirectResponse|Response|Redirector
      *
      * @throws ValidationException
      */
@@ -113,7 +116,13 @@ class RegisterController extends Controller implements HasMiddleware
 
         try {
             $validator->validate();
-        } catch (ValidationException) {
+        } catch (ValidationException $validationException) {
+            // The modal register form submits over AJAX and renders the 422's errors inside the
+            // modal - rethrow so the exception handler builds that JSON response
+            if ($request->expectsJson()) {
+                throw $validationException;
+            }
+
             // We always want to redirect to /register, even if you tried to register from modal anywhere on the side
             return redirect('/register')->withInput()->withErrors($validator->messages()->getMessages());
         }
@@ -127,6 +136,15 @@ class RegisterController extends Controller implements HasMiddleware
         // Set the redirect path if it was set
         $this->redirectTo = $request->get('redirect', '/profile');
 
-        return $this->registered($request, $user) ?: redirect($this->redirectPath());
+        if ($response = $this->registered($request, $user)) {
+            return $response;
+        }
+
+        // The modal form reloads the page itself on success - a 201 instead of a redirect keeps
+        // the flashed status message alive for that reload (jquery would silently follow the
+        // redirect and the hidden GET would consume the flash)
+        return $request->wantsJson()
+            ? new JsonResponse([], StatusCode::CREATED)
+            : redirect($this->redirectPath());
     }
 }

@@ -6,36 +6,44 @@ $redirect   ??= Request::get('redirect', Request::getPathInfo());
 // May be set if the user failed his initial login and needs another passthrough of redirect
 $redirect = old('redirect', $redirect);
 $errors   ??= collect();
+// Set by AuthFormComposer - the home page URL when the current page is guest-only, null otherwise
+$authSuccessUrl ??= null;
 ?>
 
 <div class="row">
     <div class="col">
-        <form class="form-horizontal" method="POST"
+        <form id="{{ $modalClass }}login_form" class="form-horizontal" method="POST"
               action="{{ route('login', ['redirect' => $redirect]) }}">
             {{ csrf_field() }}
             <h3>
                 {{ __('view_common.forms.login.login') }}
             </h3>
 
-            <div class="mb-3{{ $errors->has('email') ? ' has-error' : '' }}">
+            <div class="mb-3">
                 <label for="{{ $modalClass }}login_email" class="control-label">
                     {{ __('view_common.forms.login.email_address') }}
                 </label>
 
                 <div class="col col-xl-{{ $width }}">
-                    <input id="{{ $modalClass }}login_email" type="email" class="form-control" name="email"
-                           value="{{ old('email') }}" required autofocus autocomplete="username email">
+                    <input id="{{ $modalClass }}login_email" type="email"
+                           class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email"
+                           value="{{ old('email') }}" required autofocus autocomplete="username email"
+                           @if($errors->has('email')) aria-invalid="true" @endif>
+                    @include('common.forms.form-error', ['key' => 'email'])
                 </div>
             </div>
 
-            <div class="mb-3{{ $errors->has('password') ? ' has-error' : '' }}">
+            <div class="mb-3">
                 <label for="{{ $modalClass }}login_password" class="control-label">
                     {{ __('view_common.forms.login.password') }}
                 </label>
 
                 <div class="col col-xl-{{ $width }}">
-                    <input id="{{ $modalClass }}login_password" type="password" class="form-control" name="password"
-                           autocomplete="current-password" required>
+                    <input id="{{ $modalClass }}login_password" type="password"
+                           class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password"
+                           autocomplete="current-password" required
+                           @if($errors->has('password')) aria-invalid="true" @endif>
+                    @include('common.forms.form-error', ['key' => 'password'])
                 </div>
             </div>
 
@@ -71,3 +79,15 @@ $errors   ??= collect();
         @include('common.forms.oauth')
     </div>
 </div>
+
+@if ($modal)
+    {{-- Submit over AJAX so a failed login renders its errors inside the modal instead of ejecting
+         the user to the login page (and losing their page state) --}}
+    @include('common.general.inline', ['path' => 'common/forms/authform', 'modal' => '#login_modal', 'options' => [
+        'formSelector' => '#' . $modalClass . 'login_form',
+        // Non-null when the current page is guest-only: reloading it would bounce the
+        // now-authenticated user off the `guest` middleware, and that extra hop eats the flashed
+        // status message. Go to the home page directly instead.
+        'successUrl'   => $authSuccessUrl,
+    ]])
+@endif
