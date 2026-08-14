@@ -92,9 +92,12 @@ the issue yourself unless asked; the MR closes it on merge.
 
 ## Step 2 — Bump the composer package reference
 
-The package is a fork: composer downloads it from the user's fork
-`https://github.com/Wotuu/MythicDungeonTools.git`, but the source of truth is upstream
-`nnoggie/MythicDungeonTools`.
+Composer downloads the package straight from upstream `Nnoggie/MythicDungeonTools` (#4008) — the
+default. Wotuu does point the reference back at the `Wotuu/MythicDungeonTools` fork on purpose, to
+test a change before contributing it upstream. **Never switch to the fork on your own initiative** —
+an agent silently reintroducing it was the original failure — but if the reference already points at
+the fork, that is deliberate: bump within it and note it in the MR body rather than "correcting" it
+back.
 
 1. You already fetched the latest **upstream tag** (version) in Step 1; now also capture its
    **commit SHA**. Re-confirm the version and resolve the SHA:
@@ -115,32 +118,32 @@ The package is a fork: composer downloads it from the user's fork
    For a lightweight tag (type `commit`), the SHA from the first call is already the commit SHA.
 2. **Major version check:** the current constraint is `^6.0`. If the new release is a major
    bump (e.g. `7.x`, `8.x`), **stop and hand off to the user** — do not proceed.
-3. **Sync the fork** to upstream so the commit exists where composer downloads from:
+3. **If the user is bumping because a correction of ours was merged upstream, prove the tag
+   contains it** before pinning — a release cut minutes before the merge would give you the new
+   version without the fix, and the whole reason for the bump silently evaporates:
    ```
-   gh repo sync Wotuu/MythicDungeonTools --source nnoggie/MythicDungeonTools
+   gh pr list -R Nnoggie/MythicDungeonTools --author Wotuu --state merged \
+     --json number,title,mergedAt,mergeCommit
+   gh api repos/Nnoggie/MythicDungeonTools/compare/<mergeCommit>...<tagSha> \
+     --jq '{status, ahead: .ahead_by, behind: .behind_by}'
    ```
-   **If the sync fails** (no access, conflict, etc.): pause and **ask the user for the commit
-   hash AND the version number**, then continue with what they provide.
+   `behind: 0` means the merge is an ancestor of the tag. If it is not, pin `master`'s tip SHA
+   instead and say so in the MR body.
 
-   **Known, non-blocking failure — `HTTP 422 Repository rule violations found`** (`gh repo sync`
-   may report it as a misleading `HTTP 404` on `git/refs/heads/master`). A repository ruleset on
-   the fork blocks updating `master`, so it can't be fast-forwarded. Don't stop: GitHub forks
-   share an object store, so the upstream commit is **already reachable in the fork by SHA**.
-   Verify that instead of syncing, then continue:
+   Then confirm the archive composer will actually download exists — **dist** is what CI and
+   production install (`config.preferred-install` is `dist`):
    ```
-   gh api repos/Wotuu/MythicDungeonTools/commits/<sha> --jq '.sha'
    curl -sIL -o /dev/null -w '%{http_code}\n' \
-     https://github.com/Wotuu/MythicDungeonTools/archive/<sha>.zip
+     https://github.com/Nnoggie/MythicDungeonTools/archive/<sha>.zip
    ```
-   The **dist** install is what CI and production use (`config.preferred-install` is `dist`), so
-   a 200 on the archive URL means the bump is sound. See the Step 2.5 note below for the local
-   vendor gotcha this exposes.
 4. Edit `composer.json` (the MDT package block, around **lines 30–43**, package
    `nnoggie/mythicdungeontools`). The commit hash appears in **two** places — update both,
    plus the version:
    - `package.version` → new version (no `v` prefix, e.g. `6.1.5`)
    - `package.source.reference` → new commit SHA
    - `package.dist.url` → swap the SHA embedded in the archive URL
+   The `source.url` / `dist.url` host is `https://github.com/Nnoggie/MythicDungeonTools` and stays
+   that way.
    Leave the `require` constraint (`^6.0@alpha`, line ~100) unchanged unless a pre-approved major
    bump — the `@alpha` stability flag is what lets a prerelease like `6.2.0-alpha5` install, and a
    stable release such as `6.2.1` satisfies it too.
@@ -148,15 +151,16 @@ The package is a fork: composer downloads it from the user's fork
    ```
    docker compose exec -T app composer update nnoggie/mythicdungeontools
    ```
-   **If it fails with `<sha> is gone (history was rewritten?)` / `fatal: unable to read tree`:**
-   the local `vendor/nnoggie/mythicdungeontools` was previously installed from **source**, and
-   composer keeps the existing install type on update — so it tries a `git checkout` in a clone
-   of the fork, which genuinely lacks the commit when the fork couldn't be synced (step 3).
-   `--prefer-dist` does **not** override this. The lock file is already written correctly at this
-   point, so just reinstall the package from the lock, which honours `preferred-install: dist`:
+   `rm -rf vendor/nnoggie/mythicdungeontools` **first**: composer keeps a package's existing install
+   type on update, so a previously source-installed copy tries a `git checkout` in a clone whose
+   remote may no longer hold the ref, failing with `<sha> is gone (history was rewritten?)` /
+   `fatal: unable to read tree`. `--prefer-dist` does not override it; deleting the directory does.
+
+   **`Could not authenticate against github.com`** means composer found no token: `COMPOSER_HOME`
+   resolves to `~/.composer` once that directory exists, while the container's `auth.json` lives at
+   `~/.config/composer/auth.json`. Copy it across and retry:
    ```
-   rm -rf vendor/nnoggie/mythicdungeontools
-   docker compose exec -T app composer install
+   docker compose exec -T app sh -c 'cp ~/.config/composer/auth.json ~/.composer/auth.json'
    ```
    Confirm afterwards with `grep '^## Version' vendor/nnoggie/mythicdungeontools/MythicDungeonTools.toc`.
 
@@ -304,6 +308,12 @@ A healthy dungeon returns 100–300. A `0` means packs must be **authored by han
 positions; there is nothing upstream to import and re-running the import will never fix it.
 Report any such dungeon to the user rather than silently shipping a pack-less mapping.
 
+**Before hand-authoring, check whether upstream will simply take the data.** Den of Nalorakk was
+hand-authored against MDT 6.2.1 and the result was contributed back as
+`Nnoggie/MythicDungeonTools#744`; 6.2.2 ships it as real `["g"]` data and the reimport now rebuilds
+the same 74 packs on its own. That round-trip is strictly better than carrying the packs in our
+seeders forever, so raise it with the user before spending a session clustering enemies.
+
 Hand-authoring, when it comes to that (Den of Nalorakk, MDT 6.2.1, mv 841 — 60 packs):
 
 - Cluster the mapping version's enemies per floor by proximity (single-linkage, cap 5 members),
@@ -391,6 +401,12 @@ docker compose exec -T app php artisan mdt:syncaddonversions --refresh
 
 This rewrites `database/data/mdt/addon_versions.json` from the GitHub releases and backfills any
 mapping versions still missing `mdt_addon_version`. Leave the regenerated JSON staged for review.
+A one-line diff adding the new version is the expected result; anything larger means the map was
+stale, which is fine but worth mentioning in the MR body.
+
+The command authenticates with `GITHUB_ACCESS_TOKEN` when one is configured (#4008). Without it,
+GitHub's unauthenticated per-IP rate limit answers `HTTP 403`, which reads like a permissions
+problem — if you see that, the token is missing from the environment, not wrong.
 
 ## Step 7 — Re-export NPC translations and re-seed
 
