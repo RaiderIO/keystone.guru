@@ -112,6 +112,24 @@ trait SpellConstants
         self::IMMUNITY_ANTI_MAGIC_SHELL         => 'anti_magic_shell',
     ];
 
+    /**
+     * Columns holding behavior derived from combat logs rather than from the game client, so their
+     * values are per-environment and must never round-trip through the git seeders.
+     *
+     * Every entry must be hidden by MappingExportServiceInterface::serializeSpells() (so it stays out
+     * of spells.json) *and* preserved by SpellRelationMapping::getPreservedColumns() (so a re-seed
+     * copies the live value into the temp table instead of nulling it). Those two lists are the same
+     * list, which is why it lives here: `counters_mask` and `bypasses_immunities_mask` were added to
+     * the first and missed from the second, and every staging deploy silently wiped them (#4033).
+     */
+    public const array COMBAT_LOG_DERIVED_COLUMNS = [
+        'aura',
+        'debuff',
+        'miss_types_mask',
+        'counters_mask',
+        'bypasses_immunities_mask',
+    ];
+
     public const string DISPEL_TYPE_MAGIC         = 'magic';
     public const string DISPEL_TYPE_DISEASE       = 'disease';
     public const string DISPEL_TYPE_POISON        = 'poison';
