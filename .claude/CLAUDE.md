@@ -168,10 +168,10 @@ Prepend every message you post on GitHub (comments, review replies, PR/issue bod
 wasn't used. **Bodies/comments only, never titles or commit messages** (commits use the
 `Co-Authored-By: Claude` trailer instead).
 
-**Labels, titles, and merges have no body to prefix, so the account is their only authorship
-signal** — route them through `sh/gh-bot.sh` too, not plain `gh` (which renders as "Wotuu added
-<label>" and hides agent triage from his own). The bot holds `push` + `triage`. Reads stay on plain
-`gh`.
+**The `:robot:` prefix covers messages; the bot account covers *every write*.** Labels, titles and
+merges carry no body to prefix, so the account is their only authorship signal — route every write
+(not just those) through `sh/gh-bot.sh`, not plain `gh` (which renders as "Wotuu added <label>" and
+hides agent triage from his own). The bot holds `push` + `triage`. Reads stay on plain `gh`.
 
 #### Writing as the bot: `sh/gh-bot.sh`
 
@@ -290,12 +290,19 @@ but the checklist is **tiered by change size** so small MRs don't pay full cerem
    fix each finding, reply on-thread with `:robot: Fixed...`, then close it yourself via
    `resolveReviewThread`. Baseline is zero open threads; leave one open only for a genuine judgement
    call, and say so explicitly in the reply. Threads *Wotuu* opened are never yours to resolve — fix
-   and reply, he closes them. GraphQL for listing/resolving threads: `gh api graphql -f query='query
-   { repository(owner: "RaiderIO", name: "keystone.guru") { pullRequest(number: <n>) {
-   reviewThreads(first: 100) { nodes { id isResolved path line comments(first: 20) { nodes { author {
-   login } body } } } } } } }'` and `mutation { resolveReviewThread(input: {threadId: "<id>"}) {
-   thread { isResolved } } }'`. `babysit-prs` is a backstop for leftovers, not a reason to hand off
-   with open threads.
+   and reply, he closes them.
+
+   ```bash
+   # unresolved threads on the PR, with the ids needed to resolve them
+   gh api graphql -f query='query { repository(owner: "RaiderIO", name: "keystone.guru") {
+     pullRequest(number: <n>) { reviewThreads(first: 100) { nodes {
+       id isResolved path line comments(first: 20) { nodes { author { login } body } } } } } } }'
+
+   gh api graphql -f query='mutation { resolveReviewThread(input: {threadId: "<id>"})
+     { thread { isResolved } } }'
+   ```
+
+   `babysit-prs` is a backstop for leftovers, not a reason to hand off with open threads.
 
    **Dispatching this reviewer needs no permission — the implementing session fires it itself,**
    without stopping to ask; a general "don't spawn subagents unless asked" instruction does not cover
@@ -328,7 +335,8 @@ Only once the applicable items hold, mark the MR ready for review (`gh pr ready 
 draft-PR note under Git worktrees above for why it must stay a draft until then.
 
 **Undrafting is a one-way handoff — the last thing you do, not a status update.** Undraft only once
-the cold reviewer has finished and every finding is fixed with CI green. After `gh pr ready`, don't
+the cold reviewer has finished and every finding is fixed, with CI green on the commit that contains
+those fixes. After `gh pr ready`, don't
 push further commits or start another polish pass — `babysit-prs` merges any green, `pr can
 merge`-labeled non-draft PR the moment it sees one, and a post-undraft commit races that merge with
 CI still pending (#3883). To change an undrafted MR: `gh pr ready <n> --undo` first, push, wait for

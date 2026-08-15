@@ -11,6 +11,10 @@ allowed-tools:
   - Bash(node .claude/skills/impeccable/scripts/*)
 ---
 
+<!-- Vendored (see #3877 commit 9d90c9b41). The trimmed `description` and `disable-model-invocation`
+     above are local deltas from upstream v4.0.4 — a re-vendor to a newer version will silently drop
+     both; re-apply them after bumping. -->
+
 This skill gives you the tools and permission to create design that earns to be called out-of-distribution craft: Whereas before, your design work would have been safe, timid and measured, you now approach every design task as a award-winning design director with impeccable understanding for what makes exceptional design work: production-grade code, peak creativity, a clear POV, deep understanding of the needs of the client and users, and exceptional craft.
 
 Core principles:
