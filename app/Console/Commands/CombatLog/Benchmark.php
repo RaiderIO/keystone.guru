@@ -417,7 +417,7 @@ class Benchmark extends BaseCombatLogCommand
      *
      * @param array<string, array{files: array<int, array{path: string, sha256: string, lines: int}>}> $corpus
      *
-     * @return array{wallMs: float, extractors: array<int, array{class: string, calls: int, totalMs: float, pct: float}>, queries: array<int, array{connection: string, sql: string, count: int, totalMs: float}>}
+     * @return array{wallMs: float, extractors: array<int, array{class: string, calls: int, totalMs: float, pct: float, lifecycle: array<string, array{totalMs: float, calls: int}>}>, queries: array<int, array{connection: string, sql: string, count: int, totalMs: float}>}
      */
     private function runPhaseB(array $corpus): array
     {
@@ -437,7 +437,7 @@ class Benchmark extends BaseCombatLogCommand
     /**
      * @param array<string, array{files: array<int, array{path: string, sha256: string, lines: int}>}> $corpus
      *
-     * @return array{wallMs: float, extractors: array<int, array{class: string, calls: int, totalMs: float, pct: float}>, queries: array<int, array{connection: string, sql: string, count: int, totalMs: float}>}
+     * @return array{wallMs: float, extractors: array<int, array{class: string, calls: int, totalMs: float, pct: float, lifecycle: array<string, array{totalMs: float, calls: int}>}>, queries: array<int, array{connection: string, sql: string, count: int, totalMs: float}>}
      */
     private function runInstrumented(array $corpus, ProfilingDataExtractorFactory $profilingFactory): array
     {
@@ -457,8 +457,10 @@ class Benchmark extends BaseCombatLogCommand
             $queryBuckets[$bucketKey]['totalMs'] += $query->time;
         };
 
-        DB::connection()->listen($onQuery);
-        DB::connection(new CombatLogNpcEvent()->getConnectionName())->listen($onQuery);
+        // One registration catches every connection: Connection::listen() registers on the application's
+        // shared event dispatcher (QueryExecuted carries the connection name), so registering per connection
+        // would double-count every query.
+        DB::listen($onQuery);
 
         $phaseBRun = $this->runCorpusOnce($corpus);
 
@@ -467,18 +469,31 @@ class Benchmark extends BaseCombatLogCommand
             /** @var ProfilingDataExtractor $profilingDataExtractor */
             $class = $profilingDataExtractor->getDataExtractor()::class;
 
-            $extractorTotals[$class] ??= ['class' => $class, 'calls' => 0, 'totalNanos' => 0];
+            $extractorTotals[$class] ??= ['class' => $class, 'calls' => 0, 'totalNanos' => 0, 'lifecycle' => []];
             $extractorTotals[$class]['calls'] += $profilingDataExtractor->getTotalCalls();
             $extractorTotals[$class]['totalNanos'] += $profilingDataExtractor->getTotalNanos();
+
+            // Keep the per-lifecycle split: beforeExtract/afterExtract fire once per file regardless of the
+            // log's contents, so extractData's own call count is the only signal that events actually
+            // reached the extractors
+            foreach ($profilingDataExtractor->getTimings() as $lifecycleMethod => $timing) {
+                $extractorTotals[$class]['lifecycle'][$lifecycleMethod] ??= ['nanos' => 0, 'calls' => 0];
+                $extractorTotals[$class]['lifecycle'][$lifecycleMethod]['nanos'] += $timing['nanos'];
+                $extractorTotals[$class]['lifecycle'][$lifecycleMethod]['calls'] += $timing['calls'];
+            }
         }
 
         $allExtractorNanos = array_sum(array_column($extractorTotals, 'totalNanos'));
 
         $extractors = array_values(array_map(static fn(array $totals) => [
-            'class'   => $totals['class'],
-            'calls'   => $totals['calls'],
-            'totalMs' => round($totals['totalNanos'] / 1e6, 2),
-            'pct'     => $allExtractorNanos > 0 ? round($totals['totalNanos'] / $allExtractorNanos * 100, 2) : 0.0,
+            'class'     => $totals['class'],
+            'calls'     => $totals['calls'],
+            'totalMs'   => round($totals['totalNanos'] / 1e6, 2),
+            'pct'       => $allExtractorNanos > 0 ? round($totals['totalNanos'] / $allExtractorNanos * 100, 2) : 0.0,
+            'lifecycle' => array_map(static fn(array $timing) => [
+                'totalMs' => round($timing['nanos'] / 1e6, 2),
+                'calls'   => $timing['calls'],
+            ], $totals['lifecycle']),
         ], $extractorTotals));
         usort($extractors, static fn(array $a, array $b) => $b['totalMs'] <=> $a['totalMs']);
 
@@ -601,7 +616,7 @@ class Benchmark extends BaseCombatLogCommand
     }
 
     /**
-     * @param array{wallMs: float, extractors: array<int, array{class: string, calls: int, totalMs: float, pct: float}>, queries: array<int, array{connection: string, sql: string, count: int, totalMs: float}>} $phaseB
+     * @param array{wallMs: float, extractors: array<int, array{class: string, calls: int, totalMs: float, pct: float, lifecycle: array<string, array{totalMs: float, calls: int}>}>, queries: array<int, array{connection: string, sql: string, count: int, totalMs: float}>} $phaseB
      */
     private function outputPhaseB(array $phaseB): void
     {
@@ -706,6 +721,12 @@ class Benchmark extends BaseCombatLogCommand
             if (!$phaseA['steadyState'] || $phaseA['highVariance']) {
                 $sidesInvalid[] = sprintf('%s (steadyState=%s, highVariance=%s)', $side, json_encode($phaseA['steadyState']), json_encode($phaseA['highVariance']));
             }
+        }
+
+        // A single measured run makes both validity guards inert: steady state compares the run against
+        // itself and the spread over one value is zero. Evidence needs at least two measured runs.
+        if ($current['fingerprint']['runs'] < 2) {
+            $sidesInvalid[] = sprintf('both sides (--runs=%d - single-run artifacts have no steady-state or variance backing)', $current['fingerprint']['runs']);
         }
 
         if (!empty($sidesInvalid)) {

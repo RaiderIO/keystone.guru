@@ -152,7 +152,13 @@ final class BenchmarkTest extends PublicTestCase
                 ImmunityBypassDataExtractor::class,
             ], $reportedClasses);
             foreach ($result['phaseB']['extractors'] as $extractor) {
-                $this->assertGreaterThan(0, $extractor['calls'], sprintf('%s was never called', $extractor['class']));
+                // Specifically extractData: beforeExtract/afterExtract fire once per file no matter what the
+                // log contains, so only extractData's call count proves events actually reached the extractors
+                $this->assertGreaterThan(
+                    0,
+                    $extractor['lifecycle']['extractData']['calls'],
+                    sprintf('%s never received an event - the synthetic log did not drive the extractor loop', $extractor['class']),
+                );
             }
             $this->assertEqualsWithDelta(100.0, array_sum(array_column($result['phaseB']['extractors'], 'pct')), 0.1);
         } finally {
@@ -192,6 +198,38 @@ final class BenchmarkTest extends PublicTestCase
             ])
                 ->expectsOutputToContain('Fingerprint mismatch')
                 ->doesntExpectOutputToContain('Delta vs baseline')
+                ->assertExitCode(1);
+        } finally {
+            $this->cleanupExtractionResults($npcId, $logPath);
+        }
+    }
+
+    #[Test]
+    #[SlowTest]
+    public function handle_givenSingleRunBaseline_refusesDeltaAsEvidenceAndReturnsExitCodeOne(): void
+    {
+        // Arrange
+        $npcId        = $this->uniqueNpcId();
+        $logPath      = $this->createSyntheticCombatLog($npcId);
+        $baselinePath = $this->temporaryFilePath('json');
+
+        try {
+            $this->artisan('combatlog:benchmark', [
+                '--file'                 => $logPath,
+                '--runs'                 => 1,
+                '--json'                 => $baselinePath,
+                '--i-know-what-im-doing' => true,
+            ])->assertExitCode(0);
+
+            // Act + Assert - a single measured run makes the steady-state and variance guards inert, so the
+            // delta must not be presented as evidence
+            $this->artisan('combatlog:benchmark', [
+                '--file'                 => $logPath,
+                '--runs'                 => 1,
+                '--baseline'             => $baselinePath,
+                '--i-know-what-im-doing' => true,
+            ])
+                ->expectsOutputToContain('THIS DELTA IS NOT EVIDENCE')
                 ->assertExitCode(1);
         } finally {
             $this->cleanupExtractionResults($npcId, $logPath);
