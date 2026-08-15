@@ -268,6 +268,7 @@ if ($isAdmin) {
                 'showMore' => true,
                 'showDungeonContext' => !($mapContext instanceof MapContextDungeonRoute),
                 'showGameVersionSelection' => false,
+                'showExpansionNav' => false,
                 'forceShrink' => true,
                 'dungeonContextLinks' => $dungeonContextLinks,
             ])

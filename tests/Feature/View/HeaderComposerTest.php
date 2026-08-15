@@ -16,9 +16,9 @@ use Tests\TestCases\PublicTestCase;
 
 /**
  * The dungeon context bar follows the current season only. The upcoming season is advertised next to it
- * as a card of its own, and in the header nav link, but only once an admin has marked it `active` -
- * seasons are seeded weeks before they start so their mapping can be reviewed, and until then they should
- * not show up anywhere (#3761, #3868).
+ * as a card of its own, but only once an admin has marked it `active` - seasons are seeded weeks before
+ * they start so their mapping can be reviewed, and until then they should not show up anywhere
+ * (#3761, #3868).
  */
 #[Group('ViewComposers')]
 #[Group('HeaderComposer')]
@@ -44,7 +44,7 @@ final class HeaderComposerTest extends PublicTestCase
     }
 
     #[Test]
-    public function compose_givenAnActiveUpcomingSeason_setsTheNextSeasonAndCard(): void
+    public function compose_givenAnActiveUpcomingSeason_setsTheNextSeasonCard(): void
     {
         // Arrange - inside the try so a failure halfway through still cleans up
         $upcomingSeason = null;
@@ -60,7 +60,6 @@ final class HeaderComposerTest extends PublicTestCase
             // Assert
             $data = $view->getData();
 
-            $this->assertSame($upcomingSeason->id, $data['nextSeason']?->id);
             $this->assertNotNull($data['dungeonContextNextSeason']);
             $this->assertSame($upcomingSeason->id, $data['dungeonContextNextSeason']->id);
             $this->assertStringContainsString(sprintf('season=%d', $upcomingSeason->id), $data['dungeonContextNextSeasonLink']);
@@ -88,7 +87,6 @@ final class HeaderComposerTest extends PublicTestCase
             // Assert
             $data = $view->getData();
 
-            $this->assertNull($data['nextSeason'], 'An inactive season must not leak into the header nav link either');
             $this->assertNull($data['dungeonContextNextSeason']);
             $this->assertNull($data['dungeonContextNextSeasonLink']);
         } finally {
@@ -127,7 +125,6 @@ final class HeaderComposerTest extends PublicTestCase
             // Assert
             $data = $view->getData();
 
-            $this->assertSame($upcomingSeason->id, $data['nextSeason']?->id, 'The season should still be found, just not advertised as a card');
             $this->assertNull($data['dungeonContextNextSeason']);
             $this->assertNull($data['dungeonContextNextSeasonLink']);
         } finally {
