@@ -30,8 +30,9 @@ $linkMapFn             = static fn(Dungeon $dungeon) => [
 ];
 $subtextFn             ??= null;
 $filterFn              ??= fn(Dungeon $dungeon) => true;
-$nextSeasonDungeons    = $nextSeason?->dungeons->filter($filterFn)->values() ?? collect();
-$currentSeasonDungeons = $currentSeason->dungeons->filter($filterFn)->values();
+$activeFilterFn        = fn(Dungeon $dungeon) => $dungeon->active && $filterFn($dungeon);
+$nextSeasonDungeons    = $nextSeason?->dungeons->filter($activeFilterFn)->values() ?? collect();
+$currentSeasonDungeons = $currentSeason->dungeons->filter($activeFilterFn)->values();
 
 // Open on the current season - the next season is seeded well before it starts, and until then it should
 // not take over the selection (#3761). It is opened only when it was explicitly asked for, or when the
