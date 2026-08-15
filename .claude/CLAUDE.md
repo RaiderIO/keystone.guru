@@ -17,24 +17,18 @@ complexity — is what actually predicts token spend.
 | Anything open-ended, or already past ~100 turns | **Opus** | Sonnet's rate advantage is gone by here |
 | Long unattended runs, `/loop` sessions, cross-cutting migrations, unknown-root-cause debugging, multi-part architecture | **Fable** | Fewest turns per unit of work |
 
-**Why it inverts.** ~84% of a session's token spend is *cache reads* — re-reading the accumulated
-conversation on every turn. So cost is driven by turn count, not by the per-token rate. Sonnet
-writes ~547 output tokens per turn against Opus's ~906, so it needs roughly twice the turns for the
-same work, and burns 468 context tokens per output token against Opus's 225. Net effect measured
-over 30 days of transcripts: **Sonnet costs more per unit of delivered work than Opus** ($171 vs
-$156 per 1M output tokens) despite being 40% cheaper per token. In sessions ≥ 300 turns Sonnet
-averaged $71 against Opus's $78 — near-identical cost for a weaker model.
+**Why it inverts.** ~84% of a session's spend is *cache reads* of the accumulated conversation, so
+cost tracks turn count, not per-token rate — Sonnet needs roughly twice the turns of Opus for the
+same work. Measured over 30 days: Sonnet costs *more* per unit of delivered work than Opus overall,
+and about the same in sessions ≥ 300 turns, for a weaker model.
 
 **Corollaries:**
-- Don't reach for a cheaper model to save budget on a big task. It costs more, not less. This is
-  also why Haiku has no place in the implementation path.
-- If a "short" Sonnet task is still going at ~100 turns, it was mis-routed. Don't switch models
-  mid-session (that invalidates the prompt cache and re-reads the whole transcript cold) — finish,
-  then restart the remainder on Opus.
-- **The largest lever is not model choice at all.** Since cache reads dominate, anything that
-  shortens sessions beats any routing rule: `/clear` between tasks, one worktree per task, and
-  pushing file-reading fan-out into subagents so the main context stays small. Halving average
-  session length is worth more than every routing change combined.
+- Don't reach for a cheaper model to save budget on a big task — it costs more, not less. Haiku has
+  no place in the implementation path.
+- Don't switch models mid-session (invalidates the prompt cache, re-reads the transcript cold) —
+  finish, then restart the remainder on the heavier model.
+- **The largest lever is not model choice.** Anything that shortens sessions — `/clear` between
+  tasks, one worktree per task, pushing file-reading fan-out into subagents — beats any routing rule.
 
 Escalate to Fable regardless of length for high-risk diffs (migrations, auth, payment,
 data-destructive) — there the reason is capability, not cost.
@@ -54,11 +48,10 @@ Estimate the task's **turn count** from its shape, then compare against the sess
 | A bug with an unknown-but-findable cause, a medium refactor, a feature touching a handful of files | ~100–300 | Opus |
 | A new feature spanning many files, a cross-cutting migration, unknown-root-cause debugging, multi-part design, anything unattended | > ~300 | Fable |
 
-**Speak up only when the session is under-powered — stay silent when it is over-powered.** The
-asymmetry is deliberate and comes from the measured data: running Opus on a short task costs ~$5
-against Sonnet's ~$2, which is noise, while running Sonnet on a long task costs about what Opus
-would *and* delivers weaker results. A gate that fires in both directions is a gate that gets
-ignored, so being over-powered is never worth a turn of the user's attention.
+**Speak up only when the session is under-powered — stay silent when it is over-powered.** Running a
+heavier model on a short task is noise-cheap; running a lighter model on a long task costs about the
+same *and* delivers weaker results, so the asymmetry is deliberate — being over-powered is never
+worth a turn of the user's attention.
 
 When under-powered, say so in one or two sentences and **stop — do no work and create no worktree**:
 
@@ -166,50 +159,34 @@ review-thread replies, and the same calls through `sh/gh-bot.sh`.
 ### Agent GitHub identity
 
 Agent-authored GitHub activity is migrating from "Wotuu's own account plus a `:robot:` prefix" to a
-dedicated bot account, **`keystone-guru-bot`** (#3924). Both mechanisms are deliberately live at
-once during the transition — every PR opened before the bot existed carries only the prefix, so
-dropping the prefix half would break triage on all of them. Do not remove either half until #3924's
-follow-up says the pre-migration PRs have drained.
+dedicated bot account, **`keystone-guru-bot`** (#3924). Both mechanisms stay live during the
+transition — pre-bot PRs carry only the prefix — so don't remove either until #3924's follow-up says
+pre-migration PRs have drained.
 
-Prepend every message you post on GitHub (PR/issue comments, review replies, PR/issue bodies) with
-a `:robot:` emoji, **whichever account posted it**. It marks the message as agent-authored at a
-glance, and it is the fallback authorship signal wherever the bot account wasn't used.
+Prepend every message you post on GitHub (comments, review replies, PR/issue bodies) with a
+`:robot:` emoji, whichever account posted it — it's the fallback authorship signal wherever the bot
+wasn't used. **Bodies/comments only, never titles or commit messages** (commits use the
+`Co-Authored-By: Claude` trailer instead).
 
-**Bodies and comments only — never titles.** A PR or issue *title* gets no `:robot:` prefix (and no
-🤖). Titles are read in lists, notifications and the merge commit, where the prefix is just noise;
-the body directly underneath already carries it. Same for commit messages — those are attributed via
-the `Co-Authored-By: Claude` trailer, not an emoji.
-
-**The `:robot:` prefix covers messages; the bot account covers *every write*.** Labels, titles and
-merges carry no prefix and have no body to put one in, so the account is the only authorship signal
-they have. Route them through `sh/gh-bot.sh` too — a plain `gh pr edit --add-label` renders in the
-timeline as `Wotuu added <label>`, leaving him unable to tell his own triage from an agent's
-(caught 2026-08-14, where a whole `babysit-prs` session's label swaps were misattributed). The bot
-holds `push` + `triage` on this repo, so label and title edits work. Reads stay on plain `gh`.
+**Labels, titles, and merges have no body to prefix, so the account is their only authorship
+signal** — route them through `sh/gh-bot.sh` too, not plain `gh` (which renders as "Wotuu added
+<label>" and hides agent triage from his own). The bot holds `push` + `triage`. Reads stay on plain
+`gh`.
 
 #### Writing as the bot: `sh/gh-bot.sh`
 
-`sh/gh-bot.sh` is a pass-through wrapper around `gh` that runs it as the bot — using either a token
-(`GH_TOKEN`, exported for that one process) or a gh config dir the bot logged into itself
-(`GH_CONFIG_DIR=~/.config/gh-bot gh auth login`, which stores an OAuth token and needs no PAT). The
-human's `gh auth login` credential on disk is untouched either way, so plain `gh` in the same shell
-still runs as Wotuu:
+Pass-through wrapper around `gh` that runs as the bot (`GH_TOKEN` or `GH_CONFIG_DIR=~/.config/gh-bot`
+— human `gh auth login` on disk is untouched either way):
 
 ```bash
 sh/gh-bot.sh api user --jq .login      # self-check: must print keystone-guru-bot
 sh/gh-bot.sh pr create --repo RaiderIO/keystone.guru --base master --draft --title '...' --body-file b.md
 ```
 
-**Plain `gh` remains the documented default everywhere until the account is provisioned on this
-machine.** If `sh/gh-bot.sh` fails **for any reason at all** — "no token", `No such file or
-directory` (a worktree branched from a commit before the script existed), a wrong-account token, a
-relative-path miss because you aren't at the repo root — fall back to plain `gh` with a
-`:robot:`-prefixed body and carry on. Do not key the fallback on the specific "no token" message;
-during the transition the *common* failure is the script simply not being present. This is never a
-blocker and never something to stop and ask about. The wrapper never falls back on its own, on purpose: a silent
-fallback would post as Wotuu while you believed you had posted as the bot, which is exactly the
-ambiguity the bot account exists to remove. Setup steps: `worktree-docker` skill, "Posting to
-GitHub as the bot account".
+**If `sh/gh-bot.sh` fails for any reason** (no token, missing on an old worktree, wrong account,
+wrong cwd) — fall back to plain `gh` with a `:robot:`-prefixed body and carry on; never stop to ask.
+The wrapper never falls back on its own — a silent fallback would post as Wotuu while you believed
+you'd posted as the bot. Setup: `worktree-docker` skill, "Posting to GitHub as the bot account".
 
 #### Reading authorship: match the bot login, never "not Wotuu"
 
@@ -222,11 +199,10 @@ the bot login — an **allowlist**:
 # everything else <=>  human — treat as Wotuu's, with all the deference that implies
 ```
 
-**Never write the inverse test (`author.login != "Wotuu"` ⇒ agent).** `RaiderIO/keystone.guru` is a
-public repo: an outside contributor, `dependabot[bot]`, `github-actions[bot]` and every future
-integration all satisfy `!= "Wotuu"`. Under a denylist, `babysit-prs` would classify a stranger's
-review thread as its own and `resolveReviewThread` it away. The allowlist fails safe — an unknown
-author is treated as a human whose thread an agent must never resolve on their behalf.
+**Never write the inverse test (`author.login != "Wotuu"` ⇒ agent).** This is a public repo — an
+outside contributor, `dependabot[bot]`, `github-actions[bot]` etc. all satisfy `!= "Wotuu"`, and a
+denylist would make `babysit-prs` resolve a stranger's review thread as its own. The allowlist fails
+safe: an unknown author is treated as human, whose thread an agent must never resolve.
 
 `gh pr edit` works on gh ≥ 2.96.0 (`~/.local/bin/gh`; the apt 2.4.0 at `/usr/bin/gh` fails with a
 Projects-classic GraphQL error — if that error appears, check `gh --version`). REST fallback:
@@ -310,39 +286,21 @@ but the checklist is **tiered by change size** so small MRs don't pay full cerem
    (`gh pr edit <n> --add-label "pr cold reviewed"`) — the same marker/label `babysit-prs` checks
    before dispatching its own cold review, which is what stops a PR from being reviewed twice.
 
-   **Every review thread the cold reviewer opened must be *resolved* before you hand the MR off —
-   an open thread means "Wotuu, look at this", nothing else.** The cold review is an agent-to-agent
-   loop that happens inside your session: the reviewer posts its findings as inline threads, you fix
-   them, you reply on each thread with `:robot: Fixed...`, and then you close the loop yourself with
-   `resolveReviewThread`. Wotuu can still expand any resolved thread to read the finding and the
-   fix; what he should not have to do is triage a wall of open threads to work out which ones are
-   already dealt with. So by the end of the session the PR should carry 0–N cold-review threads and
-   **all of them resolved** — the baseline is zero open. The only thread you may leave open is one
-   that genuinely needs his judgement (a finding you decided not to fix, an ambiguity only he can
-   settle); say so explicitly in your reply on that thread, and it should be rare. Threads *he*
-   opened are never yours to resolve — fix and reply, he closes them on re-review.
-
-   ```bash
-   # unresolved threads on the PR, with the ids needed to resolve them
-   gh api graphql -f query='query { repository(owner: "RaiderIO", name: "keystone.guru") {
-     pullRequest(number: <n>) { reviewThreads(first: 100) { nodes {
-       id isResolved path line comments(first: 20) { nodes { author { login } body } } } } } } }'
-
-   gh api graphql -f query='mutation { resolveReviewThread(input: {threadId: "<id>"})
-     { thread { isResolved } } }'
-   ```
-
-   `babysit-prs` double-checks this (its step 3) and resolves fixed-and-replied leftovers it finds,
-   but that is a backstop running in another session on a later pass — not a reason to hand off a PR
+   **Every review thread the cold reviewer opened must be *resolved* before you hand the MR off** —
+   fix each finding, reply on-thread with `:robot: Fixed...`, then close it yourself via
+   `resolveReviewThread`. Baseline is zero open threads; leave one open only for a genuine judgement
+   call, and say so explicitly in the reply. Threads *Wotuu* opened are never yours to resolve — fix
+   and reply, he closes them. GraphQL for listing/resolving threads: `gh api graphql -f query='query
+   { repository(owner: "RaiderIO", name: "keystone.guru") { pullRequest(number: <n>) {
+   reviewThreads(first: 100) { nodes { id isResolved path line comments(first: 20) { nodes { author {
+   login } body } } } } } } }'` and `mutation { resolveReviewThread(input: {threadId: "<id>"}) {
+   thread { isResolved } } }'`. `babysit-prs` is a backstop for leftovers, not a reason to hand off
    with open threads.
 
-   **Dispatching this reviewer needs no permission — the implementing session fires it itself.**
-   That is the entire point of the cold review: the agent that wrote the code is the one that must
-   hand it to a fresh pair of eyes. Do not stop and ask first, and do not treat a general
-   "don't spawn subagents unless asked" instruction as covering this case — this `Agent` call *is*
-   the standing request, and stopping to ask just adds a round-trip before work that is required
-   anyway. Pick the reviewer by risk: `cold-reviewer-fable` for migrations, auth, payment or
-   data-destructive diffs, `cold-reviewer-opus` for everything else.
+   **Dispatching this reviewer needs no permission — the implementing session fires it itself,**
+   without stopping to ask; a general "don't spawn subagents unless asked" instruction does not cover
+   this case. Pick by risk: `cold-reviewer-fable` for migrations/auth/payment/data-destructive diffs,
+   `cold-reviewer-opus` for everything else.
 2. **Visual verification**: ONLY when rendered output actually changed — verify the affected
    page(s) in headless Chrome (`headless-browser-verify` skill) and post before/after screenshots
    on the MR (`post-screenshot.sh`). Backend-only MRs skip this explicitly; don't screenshot "to
@@ -369,14 +327,12 @@ but the checklist is **tiered by change size** so small MRs don't pay full cerem
 Only once the applicable items hold, mark the MR ready for review (`gh pr ready <n>`) — see the
 draft-PR note under Git worktrees above for why it must stay a draft until then.
 
-**Undrafting is a one-way handoff — the last thing you do, not a status update.** Undraft only when
-the cold reviewer has finished *and* you have finished fixing everything it raised, with CI green on
-the commit that contains those fixes. After `gh pr ready`, you are done with the MR: do not push
-further commits to it, and do not start another polish/review pass on it. `babysit-prs` runs in its
-own session and merges any green, `pr can merge`-labeled non-draft PR the moment it sees one — a
-commit pushed after undrafting races that merge, and its CI may still be pending or red while the
-PR reads as finished (#3883). If you genuinely must change an undrafted MR, `gh pr ready <n> --undo`
-first, push, wait for green, then undraft again.
+**Undrafting is a one-way handoff — the last thing you do, not a status update.** Undraft only once
+the cold reviewer has finished and every finding is fixed with CI green. After `gh pr ready`, don't
+push further commits or start another polish pass — `babysit-prs` merges any green, `pr can
+merge`-labeled non-draft PR the moment it sees one, and a post-undraft commit races that merge with
+CI still pending (#3883). To change an undrafted MR: `gh pr ready <n> --undo` first, push, wait for
+green, then undraft again.
 
 # Project-specific conventions
 
