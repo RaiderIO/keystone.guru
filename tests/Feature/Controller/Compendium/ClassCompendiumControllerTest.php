@@ -27,6 +27,9 @@ final class ClassCompendiumControllerTest extends PublicTestCase
 {
     use ProvidesDungeon;
 
+    /** @var array<int, array{0: int, 1: int}> npc_id/characteristic_id pairs this test created */
+    private array $createdNpcCharacteristics = [];
+
     #[\Override]
     protected function setUp(): void
     {
@@ -506,6 +509,39 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function showDungeon_givenNpcObservedOnlyForTaunt_omitsItFromTheUnaffectedUniverse(): void
+    {
+        // Arrange
+        $scenario = $this->arrangeCharacteristicScenario();
+
+        try {
+            // Without the taunt exclusion the fourth NPC would join the universe, making the second
+            // characteristic's unaffected list two long and therefore no shorter than its affected
+            // list - which would flip the row back to listing the two affected NPCs
+            $this->assignCharacteristics([
+                $scenario['npcs'][0]->id => $scenario['characteristicIds'][0],
+                $scenario['npcs'][1]->id => $scenario['characteristicIds'][1],
+                $scenario['npcs'][2]->id => $scenario['characteristicIds'][1],
+                $scenario['npcs'][3]->id => $scenario['tauntCharacteristicId'],
+            ]);
+
+            // Act
+            $response = $this->actingAs($scenario['user'])->get(route('compendium.class.show.dungeon', [
+                'characterClass' => $scenario['characterClass'],
+                'dungeon'        => $scenario['dungeon'],
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSeeText(__($scenario['npcs'][0]->name));
+            $response->assertDontSeeText(__($scenario['npcs'][1]->name));
+            $response->assertDontSeeText(__($scenario['npcs'][2]->name));
+        } finally {
+            $scenario['cleanUp']();
+        }
+    }
+
     /**
      * A dungeon with four uniquely named NPCs and no characteristic data whatsoever, plus two of the
      * chosen class's characteristics to hand out among them.
@@ -519,6 +555,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
      *     dungeon: Dungeon,
      *     user: User,
      *     characteristicIds: array<int, int>,
+     *     tauntCharacteristicId: int,
      *     npcs: array<int, Npc>,
      *     cleanUp: callable(): void,
      * }
@@ -538,10 +575,18 @@ final class ClassCompendiumControllerTest extends PublicTestCase
             ->pluck('characteristic_id')
             ->unique()
             ->values();
-        $this->assertGreaterThanOrEqual(2, $classCharacteristicIds->count());
 
-        // The universe an unaffected list is drawn from spans every characteristic of the class, so
-        // any pre-existing row would silently widen it and make the counts below wrong
+        // Paladin has a taunt (Hand of Reckoning) and taunt is deliberately kept out of the universe,
+        // so the two characteristics handed out below must not be it
+        $tauntCharacteristicId   = Characteristic::ALL[Characteristic::CHARACTERISTIC_TAUNT];
+        $usableCharacteristicIds = $classCharacteristicIds->reject(
+            static fn(int $characteristicId) => $characteristicId === $tauntCharacteristicId,
+        )->values();
+        $this->assertGreaterThanOrEqual(2, $usableCharacteristicIds->count());
+        $this->assertTrue($classCharacteristicIds->contains($tauntCharacteristicId));
+
+        // Every characteristic of the class renders a row, so any pre-existing one would both widen
+        // the universe and put NPC names on the page that the assertions below expect to be absent
         $npcsInDungeon = Npc::query()
             ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
             ->where('enemies.mapping_version_id', $mappingVersion->id)
@@ -562,16 +607,23 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         $user->dungeon_id  = $dungeon->id;
         $user->save();
 
-        $npcIds = $npcs->pluck('id');
-
         return [
-            'characterClass'    => $characterClass,
-            'dungeon'           => $dungeon,
-            'user'              => $user->fresh(),
-            'characteristicIds' => $classCharacteristicIds->take(2)->all(),
-            'npcs'              => $npcs->all(),
-            'cleanUp'           => static function () use ($npcIds, $user, $originalDungeonId): void {
-                NpcCharacteristic::whereIn('npc_id', $npcIds)->delete();
+            'characterClass'        => $characterClass,
+            'dungeon'               => $dungeon,
+            'user'                  => $user->fresh(),
+            'characteristicIds'     => $usableCharacteristicIds->take(2)->all(),
+            'tauntCharacteristicId' => $tauntCharacteristicId,
+            'npcs'                  => $npcs->all(),
+            // Only ever remove what this test created - NpcCharacteristic rows are combat-log-derived
+            // and a delete of somebody else's row is not recoverable from the seeders
+            'cleanUp' => function () use ($user, $originalDungeonId): void {
+                foreach ($this->createdNpcCharacteristics as [$npcId, $characteristicId]) {
+                    NpcCharacteristic::where('npc_id', $npcId)
+                        ->where('characteristic_id', $characteristicId)
+                        ->delete();
+                }
+
+                $this->createdNpcCharacteristics = [];
 
                 $user->dungeon_id = $originalDungeonId;
                 $user->save();
@@ -589,6 +641,8 @@ final class ClassCompendiumControllerTest extends PublicTestCase
                 'npc_id'            => $npcId,
                 'characteristic_id' => $characteristicId,
             ]);
+
+            $this->createdNpcCharacteristics[] = [$npcId, $characteristicId];
         }
     }
 }

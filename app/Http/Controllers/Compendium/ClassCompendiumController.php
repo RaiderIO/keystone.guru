@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Compendium;
 
 use App\Http\Controllers\Controller;
 use App\Models\CharacterClass;
+use App\Models\Characteristic;
 use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
@@ -111,8 +112,12 @@ class ClassCompendiumController extends Controller
      * `npc_characteristics` only ever records positive evidence - there is no NPC immunity table -
      * so the complement is taken against the NPCs affected by at least one of *this class's*
      * characteristics rather than against every NPC in the dungeon. An NPC that only ever shows up
-     * with an unrelated characteristic (taunt is applied to nearly every tauntable trash mob) is no
-     * evidence at all that this class's crowd control fails on it.
+     * with an unrelated characteristic is no evidence at all that this class's crowd control fails
+     * on it.
+     *
+     * Taunt is excluded from that universe even though seven of the classes have one: it is a
+     * tanking mechanic that lands on nearly every tauntable trash mob, so "we have seen this NPC
+     * taunted" says nothing about whether it can be stunned. Its own row still renders normally.
      *
      * @param  Collection<int, int>                  $characteristicIds
      * @param  Collection<int, Collection<int, Npc>> $npcsByCharacteristicId
@@ -120,10 +125,17 @@ class ClassCompendiumController extends Controller
      */
     private function getUnaffectedNpcsByCharacteristicId(Collection $characteristicIds, Collection $npcsByCharacteristicId): Collection
     {
+        $tauntCharacteristicId = Characteristic::ALL[Characteristic::CHARACTERISTIC_TAUNT];
+
         // The same Npc may be hydrated once per characteristic - any of them will do, since only the
-        // npc itself is rendered and never the characteristic_id that was selected alongside it
+        // npc itself is rendered and never the characteristic_id that was selected alongside it.
+        // reject() and not except(): on an Eloquent collection except() filters by model key
+
         /** @var Collection<int, Npc> $npcsInUniverse */
-        $npcsInUniverse = $npcsByCharacteristicId->flatten(1)->unique('id');
+        $npcsInUniverse = $npcsByCharacteristicId
+            ->reject(static fn(Collection $npcs, int $characteristicId) => $characteristicId === $tauntCharacteristicId)
+            ->flatten(1)
+            ->unique('id');
 
         return $characteristicIds->mapWithKeys(static fn(int $characteristicId) => [
             $characteristicId => $npcsInUniverse

@@ -206,7 +206,7 @@ return [
             'no_npcs'                     => '-',
             'npcs_affected'               => 'Affected',
             'npcs_unaffected'             => 'Not affected',
-            'npcs_description'            => 'Whichever list is shorter is shown. An NPC is only listed as not affected if another of this class\'s crowd control abilities has been observed landing on it.',
+            'npcs_description'            => 'Each row lists the affected NPCs, or the unaffected ones where that is the shorter list. An NPC is only ever listed as not affected if another crowd control effect from this table has been observed landing on it - a taunt does not count.',
             'counters'                    => [
                 'title'              => 'Counterable abilities',
                 'racial'             => 'Racial (:race)',
