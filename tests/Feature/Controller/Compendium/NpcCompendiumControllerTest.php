@@ -8,8 +8,10 @@ use App\Models\Enemy;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
+use App\Models\Season;
 use App\Models\User;
-use App\Service\Season\SeasonServiceInterface;
+use App\Service\View\RequestViewContextInterface;
+use App\Service\View\ViewServiceInterface;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -188,7 +190,19 @@ final class NpcCompendiumControllerTest extends PublicTestCase
             'The visitor game version has no seasons, so the select never builds the season optgroups this test is about',
         );
 
-        $seasonDungeonIds = app(SeasonServiceInterface::class)->getCurrentSeason()->dungeons->pluck('id')->all();
+        // Sourced exactly as DungeonSelectComposer feeds the blade, next season included: a season seeded
+        // ahead of its start date is normal here, and reading only the current one would let the
+        // intersection below go empty while the scenario is live through the next
+        $region      = app(RequestViewContextInterface::class)->getUserOrDefaultRegion();
+        $viewService = app(ViewServiceInterface::class);
+
+        $seasonDungeonIds = collect([
+            $viewService->getNextSeasonForRegion($region),
+            $viewService->getCurrentSeasonForRegion($region),
+        ])->filter()
+            ->flatMap(static fn(Season $season) => $season->dungeons->pluck('id'))
+            ->unique()
+            ->all();
 
         // Act
         $response = $this->get(route('npc.compendium.index.dungeon', ['dungeon' => Dungeon::active()->firstOrFail()]));
@@ -199,7 +213,7 @@ final class NpcCompendiumControllerTest extends PublicTestCase
 
         $this->assertNotEmpty(
             array_intersect($seasonDungeonIds, $dungeonIds),
-            'The select rendered no dungeon of the current season, so no dungeon could have landed in two optgroups',
+            'The select rendered no season dungeon, so no dungeon could have landed in two optgroups',
         );
         $this->assertSame(count($dungeonIds), count(array_unique($dungeonIds)), 'Dungeon select contains duplicate dungeon IDs');
     }
