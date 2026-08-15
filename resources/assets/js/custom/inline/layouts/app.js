@@ -179,9 +179,19 @@ function refreshTooltips($element = null) {
         } else {
             $('.tooltip').remove();
             $element.each(function () {
-                // Dispose and recreate so a changed title attribute is re-read (BS4 _fixTitle equivalent)
+                // Dispose and recreate so a changed title attribute is re-read (BS4 _fixTitle equivalent).
+                // BS5's dispose() restores `title` from `data-bs-original-title` (the element's very
+                // first-ever title) before tearing down, which would clobber a title attribute changed
+                // since - clear the stale value first so the fresh title survives the refresh. Only do
+                // this when `title` was actually re-set: after the first construction BS5's _fixTitle()
+                // moves `title` into `data-bs-original-title` and removes `title` entirely, so on an
+                // unchanged refresh there is no `title` attribute to fall back to and clearing
+                // `data-bs-original-title` unconditionally would leave the tooltip with no content at all.
                 let existingTooltip = bootstrap.Tooltip.getInstance(this);
                 if (existingTooltip !== null) {
+                    if (this.getAttribute('title')) {
+                        this.removeAttribute('data-bs-original-title');
+                    }
                     existingTooltip.dispose();
                 }
                 new bootstrap.Tooltip(this);
@@ -352,5 +362,5 @@ function showErrorNotification(text, opts = {}) {
 // Guarded export for the test runner (Vitest). This is a no-op in the browser,
 // where `module` is undefined, so it does not affect the concatenated bundle.
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {LayoutsApp, defaultAjaxErrorFn};
+    module.exports = {LayoutsApp, defaultAjaxErrorFn, refreshTooltips};
 }
