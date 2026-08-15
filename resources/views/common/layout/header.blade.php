@@ -16,7 +16,6 @@ use Illuminate\Support\Str;
  * @var Collection<int, GameVersion> $allGameVersions
  * @var Collection<int, Expansion>   $activeExpansions
  * @var Collection<int, Dungeon>     $gameVersionDungeons
- * @var Season                       $currentSeason
  * @var Season|null                  $dungeonContextNextSeason
  * @var string|null                  $dungeonContextNextSeasonLink
  * @var bool                         $forceShrink
@@ -50,13 +49,15 @@ $navs[route('dungeonroutes.gameVersion', ['gameVersion' => $currentUserGameVersi
 ];
 
 $expansionRoutes = [];
-foreach ($activeExpansions as $expansion) {
-    $expansionRoutes[route('dungeonroutes.expansion', ['expansion' => $expansion])] =
-        sprintf('<img src="%s" alt="%s" style="width: 50px"/> %s',
-            $expansion->getIconUrl(),
-            __($expansion->name),
-            __('view_common.layout.header.routes', ['expansion' => __($expansion->name)])
-        );
+if ($showExpansionNav) {
+    foreach ($activeExpansions as $expansion) {
+        $expansionRoutes[route('dungeonroutes.expansion', ['expansion' => $expansion])] =
+            sprintf('<img src="%s" alt="%s" style="width: 50px"/> %s',
+                $expansion->getIconUrl(),
+                __($expansion->name),
+                __('view_common.layout.header.routes', ['expansion' => __($expansion->name)])
+            );
+    }
 }
 
 if (Feature::active(Heatmap::class) && $currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {

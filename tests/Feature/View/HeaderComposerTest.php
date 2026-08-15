@@ -7,6 +7,8 @@ use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Models\User;
+use App\Service\View\RequestViewContextInterface;
+use App\Service\View\ViewServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use PHPUnit\Framework\Attributes\Group;
@@ -127,6 +129,14 @@ final class HeaderComposerTest extends PublicTestCase
 
             $this->assertNull($data['dungeonContextNextSeason']);
             $this->assertNull($data['dungeonContextNextSeasonLink']);
+
+            // The season lookup itself must be unaffected by has_seasons - only the card is gated on it.
+            // Without this, the has_seasons gate could be broken (e.g. silently suppressing the season
+            // lookup itself) and the assertions above would pass vacuously.
+            $region      = app(RequestViewContextInterface::class)->getUserOrDefaultRegion();
+            $foundSeason = app(ViewServiceInterface::class)->getNextSeasonForRegion($region);
+            $this->assertNotNull($foundSeason, 'The season should still be found, just not advertised as a card');
+            $this->assertSame($upcomingSeason->id, $foundSeason->id);
         } finally {
             $user?->delete();
 
@@ -134,6 +144,30 @@ final class HeaderComposerTest extends PublicTestCase
                 $this->deleteSeason($upcomingSeason);
             }
         }
+    }
+
+    /**
+     * Map pages pass `showExpansionNav => false` to reclaim header space; every other page renders
+     * with the default (#4024).
+     */
+    #[Test]
+    public function render_givenShowExpansionNavDefault_rendersTheDropdown(): void
+    {
+        // Act
+        $html = view('common.layout.header')->render();
+
+        // Assert
+        $this->assertStringContainsString(__('view_common.layout.header.browse_by_expansion'), $html);
+    }
+
+    #[Test]
+    public function render_givenShowExpansionNavFalse_omitsTheDropdown(): void
+    {
+        // Act
+        $html = view('common.layout.header', ['showExpansionNav' => false])->render();
+
+        // Assert
+        $this->assertStringNotContainsString(__('view_common.layout.header.browse_by_expansion'), $html);
     }
 
     private function deleteSeason(Season $season): void
