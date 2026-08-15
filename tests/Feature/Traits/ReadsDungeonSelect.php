@@ -6,6 +6,7 @@ use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use DOMDocument;
 use DOMElement;
+use DOMNode;
 use DOMNodeList;
 use DOMXPath;
 use Illuminate\Database\Eloquent\Builder;
@@ -104,6 +105,24 @@ trait ReadsDungeonSelect
     }
 
     /**
+     * The dungeon ids the filter rendered as options, in document order.
+     *
+     * The select also carries `all`, season and expansion options; those are not dungeon ids and are left
+     * out. Throws when the select is not on the page at all.
+     *
+     * @return list<int>
+     */
+    protected function getOfferedDungeonIds(string $html, string $selectId = 'compendium_filter_dungeon'): array
+    {
+        $offered = $this->readDungeonSelect($html, $selectId)['offered'];
+
+        return array_values(array_map(
+            static fn(string $value) => (int)$value,
+            array_filter($offered, static fn(string $value) => ctype_digit($value) && (int)$value > 0),
+        ));
+    }
+
+    /**
      * Reads the dungeon filter out of a rendered page.
      *
      * Throws when the select is not on the page at all: no caller wants that outcome, and every one of them
@@ -135,7 +154,7 @@ trait ReadsDungeonSelect
     }
 
     /**
-     * @param  DOMNodeList<DOMElement>|false $nodes
+     * @param  DOMNodeList<DOMNode>|false $nodes
      * @return list<string>
      */
     private function attributeValues(DOMNodeList|false $nodes, string $attribute): array

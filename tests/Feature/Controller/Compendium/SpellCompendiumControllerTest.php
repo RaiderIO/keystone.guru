@@ -8,9 +8,11 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDungeon;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\Feature\Traits\ReadsDungeonSelect;
 use Tests\TestCases\PublicTestCase;
 
@@ -18,6 +20,7 @@ use Tests\TestCases\PublicTestCase;
 #[Group('Compendium')]
 final class SpellCompendiumControllerTest extends PublicTestCase
 {
+    use ProvidesDungeon;
     use ReadsDungeonSelect;
 
     /** @var array<string, mixed> */
@@ -303,25 +306,44 @@ final class SpellCompendiumControllerTest extends PublicTestCase
     #[Test]
     public function get_givenDungeonFilter_returnsOnlySpellsForDungeon(): void
     {
-        // Arrange
-        $dungeon = Dungeon::active()->first();
-        $this->assertNotNull($dungeon);
+        // Arrange - the couplings are created here rather than picked out of the seed data. Since #3989
+        // stopped MDT coupling NPC spells, `spell_dungeons` seeds empty, so every dungeon returned zero
+        // rows and the loop below asserted nothing at all. Two dungeons, so the filter is provably
+        // filtering rather than just returning everything it has
+        [$dungeon]      = $this->findDungeon(dungeonActive: true);
+        [$otherDungeon] = $this->findDungeon(dungeonActive: true, constraint: static fn(Builder $query) => $query->where('id', '!=', $dungeon->id));
 
-        // Act
-        $response = $this->call('GET', route('ajax.spell.compendium.search'), array_merge($this->datatableParams, [
-            'dungeon_id' => $dungeon->id,
-        ]), [], [], ['HTTP_X-Requested-With' => 'XMLHttpRequest']);
+        [$includedSpell, $excludedSpell] = Spell::where('hidden_on_map', false)->orderBy('id')->limit(2)->get()->all();
 
-        // Assert
-        $response->assertOk();
-        $data = $response->json();
-        $this->assertArrayHasKey('data', $data);
-        foreach ($data['data'] as $spell) {
-            $this->assertTrue(
-                SpellDungeon::where('spell_id', $spell['id'])
-                    ->where('dungeon_id', $dungeon->id)
-                    ->exists(),
-            );
+        $couplings = collect([
+            SpellDungeon::create(['spell_id' => $includedSpell->id, 'dungeon_id' => $dungeon->id]),
+            SpellDungeon::create(['spell_id' => $excludedSpell->id, 'dungeon_id' => $otherDungeon->id]),
+        ]);
+
+        try {
+            // Act
+            $response = $this->call('GET', route('ajax.spell.compendium.search'), array_merge($this->datatableParams, [
+                'dungeon_id' => $dungeon->id,
+            ]), [], [], ['HTTP_X-Requested-With' => 'XMLHttpRequest']);
+
+            // Assert
+            $response->assertOk();
+            $data = $response->json();
+            $this->assertArrayHasKey('data', $data);
+
+            $returnedSpellIds = array_column($data['data'], 'id');
+            $this->assertContains($includedSpell->id, $returnedSpellIds);
+            $this->assertNotContains($excludedSpell->id, $returnedSpellIds);
+
+            foreach ($data['data'] as $spell) {
+                $this->assertTrue(
+                    SpellDungeon::where('spell_id', $spell['id'])
+                        ->where('dungeon_id', $dungeon->id)
+                        ->exists(),
+                );
+            }
+        } finally {
+            SpellDungeon::query()->whereIn('id', $couplings->pluck('id'))->delete();
         }
     }
 

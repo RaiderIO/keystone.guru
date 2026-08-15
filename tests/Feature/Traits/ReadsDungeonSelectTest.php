@@ -86,6 +86,32 @@ final class ReadsDungeonSelectTest extends PublicTestCase
     }
 
     #[Test]
+    public function getOfferedDungeonIds_givenNonDungeonOptions_returnsOnlyTheDungeonIds(): void
+    {
+        // Arrange - `-1` is "all dungeons", and the season/expansion options are not dungeons either
+        $html = $this->renderSelect(['-1' => false, 'season-3' => true, 'expansion-9' => false, '12' => false, '34' => false]);
+
+        // Act
+        $dungeonIds = $this->getOfferedDungeonIds($html);
+
+        // Assert
+        self::assertSame([12, 34], $dungeonIds);
+    }
+
+    #[Test]
+    public function getOfferedDungeonIds_givenMissingSelect_throws(): void
+    {
+        // Arrange
+        $html = $this->renderSelect(['12' => false], 'compendium_filter_class');
+
+        // Act & Assert
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('has no <select id="compendium_filter_dungeon">');
+
+        $this->getOfferedDungeonIds($html);
+    }
+
+    #[Test]
     public function assertNoDungeonSelected_givenSelectWithNoSelectedOption_passes(): void
     {
         // Arrange
@@ -122,12 +148,14 @@ final class ReadsDungeonSelectTest extends PublicTestCase
     }
 
     /**
-     * @param array<string, bool> $options Option value => whether it carries the `selected` attribute.
+     * @param array<array-key, bool> $options Option value => whether it carries the `selected` attribute. PHP casts
+     *                                        numeric-string keys to int, hence the loose key type.
      */
     private function renderSelect(array $options, string $selectId = 'compendium_filter_dungeon'): string
     {
         $renderedOptions = '';
         foreach ($options as $value => $selected) {
+            $value = (string)$value;
             $renderedOptions .= sprintf(
                 '<option value="%s"%s>Dungeon %s</option>',
                 $value,
