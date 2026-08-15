@@ -10,6 +10,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcCharacteristic;
+use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDungeon;
@@ -356,7 +357,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function show_givenNpcWithMatchingCharacteristic_displaysNpcName(): void
+    public function show_givenNonBossNpcAffected_omitsItAsExpectedBehaviour(): void
     {
         // Arrange
         $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_MAGE)->firstOrFail();
@@ -373,10 +374,16 @@ final class ClassCompendiumControllerTest extends PublicTestCase
             ->first();
         $this->assertNotNull($spell);
 
-        // Find an NPC already in this dungeon that doesn't yet have this characteristic
+        // Find a non-boss NPC already in this dungeon that doesn't yet have this characteristic. Boss
+        // is excluded on purpose: a boss that can be crowd controlled is the one affected NPC the page
+        // still reports, so picking one here would test the opposite rule.
         $npc = Npc::query()
             ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
             ->where('enemies.mapping_version_id', $mappingVersion->id)
+            ->whereNotIn('npcs.classification_id', [
+                NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
+                NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
+            ])
             ->whereNotIn('npcs.id', static function ($sub) use ($spell) {
                 $sub->select('npc_id')
                     ->from('npc_characteristics')
@@ -405,9 +412,10 @@ final class ClassCompendiumControllerTest extends PublicTestCase
                 'dungeon'        => $dungeon,
             ]));
 
-            // Assert
+            // Assert - trash being crowd controlled is what a player already assumes, so listing it is
+            // the noise this page exists to leave out
             $response->assertOk();
-            $response->assertSeeText(__($npc->name));
+            $response->assertDontSeeText(__($npc->name));
         } finally {
             NpcCharacteristic::where('npc_id', $npc->id)
                 ->where('characteristic_id', $spell->characteristic_id)
@@ -418,18 +426,17 @@ final class ClassCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function showDungeon_givenMoreAffectedThanUnaffectedNpcs_displaysUnaffectedNpcs(): void
+    public function showDungeon_givenEliteObservedForAnotherCharacteristic_displaysItUnderNoEffect(): void
     {
         // Arrange
         $scenario = $this->arrangeCharacteristicScenario();
 
         try {
-            // The second characteristic lands on two of the three NPCs, so its unaffected list (one
-            // NPC) is the shorter of the two and is what the row must render
+            // Both elites enter the universe, but each was only ever observed for one of the two
+            // characteristics - so on the other's row it is the surprise worth reporting
             $this->assignCharacteristics([
-                $scenario['npcs'][0]->id => $scenario['characteristicIds'][0],
-                $scenario['npcs'][1]->id => $scenario['characteristicIds'][1],
-                $scenario['npcs'][2]->id => $scenario['characteristicIds'][1],
+                $scenario['elites'][0]->id => $scenario['characteristicIds'][0],
+                $scenario['elites'][1]->id => $scenario['characteristicIds'][1],
             ]);
 
             // Act
@@ -440,26 +447,27 @@ final class ClassCompendiumControllerTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
-            $response->assertSeeText(__('view_compendium.class.show.npcs_unaffected'));
-            $response->assertSeeText(__($scenario['npcs'][0]->name));
-            $response->assertDontSeeText(__($scenario['npcs'][1]->name));
-            $response->assertDontSeeText(__($scenario['npcs'][2]->name));
+            $response->assertSeeText(__('view_compendium.class.show.npcs_no_effect'));
+            $response->assertSeeText(__($scenario['elites'][0]->name));
+            $response->assertSeeText(__($scenario['elites'][1]->name));
         } finally {
             $scenario['cleanUp']();
         }
     }
 
     #[Test]
-    public function showDungeon_givenEquallyManyAffectedAndUnaffectedNpcs_displaysAffectedNpcs(): void
+    public function showDungeon_givenNormalNpcInTheDungeon_omitsItFromNoEffect(): void
     {
         // Arrange
         $scenario = $this->arrangeCharacteristicScenario();
 
         try {
-            // One NPC per characteristic - both lists are one long, and a tie must resolve to affected
+            // Crowd control landing on small trash is what every player already assumes, and a missing
+            // observation there is far more likely to be thin data than a real immunity - so a normal
+            // NPC must never be reported in either direction
             $this->assignCharacteristics([
-                $scenario['npcs'][0]->id => $scenario['characteristicIds'][0],
-                $scenario['npcs'][1]->id => $scenario['characteristicIds'][1],
+                $scenario['elites'][0]->id => $scenario['characteristicIds'][0],
+                $scenario['normal']->id    => $scenario['characteristicIds'][1],
             ]);
 
             // Act
@@ -470,28 +478,25 @@ final class ClassCompendiumControllerTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
-            $response->assertSeeText(__('view_compendium.class.show.npcs_affected'));
-            $response->assertDontSeeText(__('view_compendium.class.show.npcs_unaffected'));
-            $response->assertSeeText(__($scenario['npcs'][0]->name));
-            $response->assertSeeText(__($scenario['npcs'][1]->name));
+            $response->assertSeeText(__('view_compendium.class.show.npcs_no_effect'));
+            $response->assertSeeText(__($scenario['elites'][0]->name));
+            $response->assertDontSeeText(__($scenario['normal']->name));
         } finally {
             $scenario['cleanUp']();
         }
     }
 
     #[Test]
-    public function showDungeon_givenNpcWithoutAnyCharacteristic_omitsItFromUnaffectedList(): void
+    public function showDungeon_givenBossObservedAffected_displaysItUnderWorksOn(): void
     {
         // Arrange
         $scenario = $this->arrangeCharacteristicScenario();
 
         try {
-            // The fourth NPC deliberately gets no characteristic at all - never having been observed
-            // affected by anything is no evidence that this class's crowd control fails on it
+            // A boss that can be crowd controlled at all is the other half of the surprise this page
+            // reports - and unlike the unaffected side it rests on a positive observation
             $this->assignCharacteristics([
-                $scenario['npcs'][0]->id => $scenario['characteristicIds'][0],
-                $scenario['npcs'][1]->id => $scenario['characteristicIds'][1],
-                $scenario['npcs'][2]->id => $scenario['characteristicIds'][1],
+                $scenario['boss']->id => $scenario['characteristicIds'][0],
             ]);
 
             // Act
@@ -502,28 +507,25 @@ final class ClassCompendiumControllerTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
-            $response->assertSeeText(__('view_compendium.class.show.npcs_unaffected'));
-            $response->assertDontSeeText(__($scenario['npcs'][3]->name));
+            $response->assertSeeText(__('view_compendium.class.show.npcs_works_on'));
+            $response->assertSeeText(__($scenario['boss']->name));
         } finally {
             $scenario['cleanUp']();
         }
     }
 
     #[Test]
-    public function showDungeon_givenNpcObservedOnlyForTaunt_omitsItFromTheUnaffectedUniverse(): void
+    public function showDungeon_givenBossObservedForOneCharacteristic_omitsItFromNoEffectOnTheOthers(): void
     {
         // Arrange
         $scenario = $this->arrangeCharacteristicScenario();
 
         try {
-            // Without the taunt exclusion the fourth NPC would join the universe, making the second
-            // characteristic's unaffected list two long and therefore no shorter than its affected
-            // list - which would flip the row back to listing the two affected NPCs
+            // Were bosses allowed into the unaffected universe, this single observation ("this boss was
+            // stunned") would silently become a claim on every other row ("...so it resists fear")
             $this->assignCharacteristics([
-                $scenario['npcs'][0]->id => $scenario['characteristicIds'][0],
-                $scenario['npcs'][1]->id => $scenario['characteristicIds'][1],
-                $scenario['npcs'][2]->id => $scenario['characteristicIds'][1],
-                $scenario['npcs'][3]->id => $scenario['tauntCharacteristicId'],
+                $scenario['boss']->id      => $scenario['characteristicIds'][0],
+                $scenario['elites'][0]->id => $scenario['characteristicIds'][1],
             ]);
 
             // Act
@@ -534,21 +536,107 @@ final class ClassCompendiumControllerTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
-            $response->assertSeeText(__($scenario['npcs'][0]->name));
-            $response->assertDontSeeText(__($scenario['npcs'][1]->name));
-            $response->assertDontSeeText(__($scenario['npcs'][2]->name));
+            $response->assertSeeText(__('view_compendium.class.show.npcs_works_on'));
+
+            // Counting the link rather than the name: the boss legitimately appears once, under
+            // worksOn, so only a second occurrence proves it leaked into the unaffected universe
+            $bossLink = sprintf('href="%s"', route('npc.compendium.show', $scenario['boss']));
+            $this->assertSame(1, substr_count((string)$response->getContent(), $bossLink));
+        } finally {
+            $scenario['cleanUp']();
+        }
+    }
+
+    #[Test]
+    public function showDungeon_givenNpcObservedOnlyForTaunt_omitsItFromTheNoEffectUniverse(): void
+    {
+        // Arrange
+        $scenario = $this->arrangeCharacteristicScenario();
+
+        try {
+            // Taunt lands on nearly every tauntable trash mob, so "we have seen this NPC taunted" is no
+            // evidence at all that it can be stunned - the third elite must stay out of the universe
+            $this->assignCharacteristics([
+                $scenario['elites'][0]->id => $scenario['characteristicIds'][0],
+                $scenario['elites'][1]->id => $scenario['characteristicIds'][1],
+                $scenario['elites'][2]->id => $scenario['tauntCharacteristicId'],
+            ]);
+
+            // Act
+            $response = $this->actingAs($scenario['user'])->get(route('compendium.class.show.dungeon', [
+                'characterClass' => $scenario['characterClass'],
+                'dungeon'        => $scenario['dungeon'],
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertDontSeeText(__($scenario['elites'][2]->name));
+        } finally {
+            $scenario['cleanUp']();
+        }
+    }
+
+    #[Test]
+    public function showDungeon_givenCharacteristicNeverObserved_displaysNoData(): void
+    {
+        // Arrange
+        $scenario = $this->arrangeCharacteristicScenario();
+
+        try {
+            // Only the first characteristic gets an observation - the second has never been seen landing
+            // on anything, which says nothing about the NPCs it did not land on
+            $this->assignCharacteristics([
+                $scenario['elites'][0]->id => $scenario['characteristicIds'][0],
+            ]);
+
+            // Act
+            $response = $this->actingAs($scenario['user'])->get(route('compendium.class.show.dungeon', [
+                'characterClass' => $scenario['characterClass'],
+                'dungeon'        => $scenario['dungeon'],
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSeeText(__('view_compendium.class.show.npcs_no_data'));
+        } finally {
+            $scenario['cleanUp']();
+        }
+    }
+
+    #[Test]
+    public function showDungeon_givenOnlyNormalTrashObserved_displaysNothingUnexpected(): void
+    {
+        // Arrange
+        $scenario = $this->arrangeCharacteristicScenario();
+
+        try {
+            // The characteristic was observed landing, and everything it landed on behaved exactly as a
+            // player would assume - which must read differently from having no observations at all
+            $this->assignCharacteristics([
+                $scenario['normal']->id => $scenario['characteristicIds'][0],
+            ]);
+
+            // Act
+            $response = $this->actingAs($scenario['user'])->get(route('compendium.class.show.dungeon', [
+                'characterClass' => $scenario['characterClass'],
+                'dungeon'        => $scenario['dungeon'],
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSeeText(__('view_compendium.class.show.npcs_no_exceptions'));
         } finally {
             $scenario['cleanUp']();
         }
     }
 
     /**
-     * A dungeon with four uniquely named NPCs and no characteristic data whatsoever, plus two of the
-     * chosen class's characteristics to hand out among them.
+     * A dungeon carrying no characteristic data of its own, plus one NPC of every classification this
+     * page treats differently and two of the chosen class's characteristics to hand out among them.
      *
      * Paladin on purpose: it has six characteristics but neither a counter nor a reflect section, so
      * the crowd control table is the only place an NPC name can appear and `assertDontSeeText` on an
-     * NPC actually means "this row did not list it".
+     * NPC actually means "no row listed it".
      *
      * @return array{
      *     characterClass: CharacterClass,
@@ -556,7 +644,9 @@ final class ClassCompendiumControllerTest extends PublicTestCase
      *     user: User,
      *     characteristicIds: array<int, int>,
      *     tauntCharacteristicId: int,
-     *     npcs: array<int, Npc>,
+     *     elites: array<int, Npc>,
+     *     normal: Npc,
+     *     boss: Npc,
      *     cleanUp: callable(): void,
      * }
      */
@@ -565,13 +655,10 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_PALADIN)->firstOrFail();
 
         $defaultGameVersion = GameVersion::getDefaultGameVersion();
-        $dungeon            = $this->getDungeonWithCurrentMappingVersionWithEnemies($defaultGameVersion);
-        $mappingVersion     = $dungeon->getCurrentMappingVersionForGameVersion($defaultGameVersion);
-        $this->assertNotNull($mappingVersion);
 
         $classCharacteristicIds = Spell::where('category', sprintf('spellcategory.%s', $characterClass->key))
             ->whereNotNull('characteristic_id')
-            ->where('game_version_id', $mappingVersion->game_version_id)
+            ->where('game_version_id', $defaultGameVersion->id)
             ->pluck('characteristic_id')
             ->unique()
             ->values();
@@ -585,22 +672,10 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         $this->assertGreaterThanOrEqual(2, $usableCharacteristicIds->count());
         $this->assertTrue($classCharacteristicIds->contains($tauntCharacteristicId));
 
-        // Every characteristic of the class renders a row, so any pre-existing one would both widen
-        // the universe and put NPC names on the page that the assertions below expect to be absent
-        $npcsInDungeon = Npc::query()
-            ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
-            ->where('enemies.mapping_version_id', $mappingVersion->id)
-            ->select('npcs.*')
-            ->distinct()
-            ->orderBy('npcs.id')
-            ->get();
-
-        $this->assertSame(0, NpcCharacteristic::whereIn('npc_id', $npcsInDungeon->pluck('id'))
-            ->whereIn('characteristic_id', $classCharacteristicIds)
-            ->count());
-
-        $npcs = $npcsInDungeon->unique('name')->values()->take(4);
-        $this->assertCount(4, $npcs);
+        [$dungeon, $elites, $normal, $boss] = $this->findDungeonWithEveryClassification(
+            $defaultGameVersion,
+            $classCharacteristicIds->all(),
+        );
 
         $user              = User::findOrFail(1);
         $originalDungeonId = $user->dungeon_id;
@@ -613,7 +688,9 @@ final class ClassCompendiumControllerTest extends PublicTestCase
             'user'                  => $user->fresh(),
             'characteristicIds'     => $usableCharacteristicIds->take(2)->all(),
             'tauntCharacteristicId' => $tauntCharacteristicId,
-            'npcs'                  => $npcs->all(),
+            'elites'                => $elites,
+            'normal'                => $normal,
+            'boss'                  => $boss,
             // Only ever remove what this test created - NpcCharacteristic rows are combat-log-derived
             // and a delete of somebody else's row is not recoverable from the seeders
             'cleanUp' => function () use ($user, $originalDungeonId): void {
@@ -629,6 +706,69 @@ final class ClassCompendiumControllerTest extends PublicTestCase
                 $user->save();
             },
         ];
+    }
+
+    /**
+     * The page reports elites/rares and bosses in opposite directions and leaves normal trash out
+     * altogether, so a scenario needs all three. The dungeon must also carry no characteristic data of
+     * its own: every pre-existing row would widen the universe and put NPC names on the page that the
+     * assertions expect to be absent.
+     *
+     * @param  array<int, int>                                       $classCharacteristicIds
+     * @return array{0: Dungeon, 1: array<int, Npc>, 2: Npc, 3: Npc}
+     */
+    private function findDungeonWithEveryClassification(GameVersion $gameVersion, array $classCharacteristicIds): array
+    {
+        $eliteClassificationIds = [
+            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE],
+            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE],
+        ];
+        $bossClassificationIds = [
+            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
+            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
+        ];
+        $normalClassificationId = NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_NORMAL];
+
+        $dungeons = Dungeon::query()
+            ->where('challenge_mode_id', '>', 0)
+            ->where('active', true)
+            ->orderByDesc('id')
+            ->get();
+
+        foreach ($dungeons as $dungeon) {
+            $mappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
+
+            if ($mappingVersion === null) {
+                continue;
+            }
+
+            // unique('name'): two enemies of the same NPC would make assertDontSeeText ambiguous
+            $npcs = Npc::query()
+                ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
+                ->where('enemies.mapping_version_id', $mappingVersion->id)
+                ->select('npcs.*')
+                ->distinct()
+                ->get()
+                ->unique('name');
+
+            $hasCharacteristicData = NpcCharacteristic::whereIn('npc_id', $npcs->pluck('id'))
+                ->whereIn('characteristic_id', $classCharacteristicIds)
+                ->exists();
+
+            if ($hasCharacteristicData) {
+                continue;
+            }
+
+            $elites = $npcs->whereIn('classification_id', $eliteClassificationIds)->values()->take(3);
+            $normal = $npcs->where('classification_id', $normalClassificationId)->first();
+            $boss   = $npcs->whereIn('classification_id', $bossClassificationIds)->first();
+
+            if ($elites->count() === 3 && $normal !== null && $boss !== null) {
+                return [$dungeon, $elites->all(), $normal, $boss];
+            }
+        }
+
+        $this->fail('No dungeon found with three elites, a normal NPC, a boss and no characteristic data of its own');
     }
 
     /**
