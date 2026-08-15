@@ -157,7 +157,7 @@ final class NpcCompendiumControllerTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
-        $this->assertNotSame($dungeon->id, $this->getSelectedDungeonId($response->getContent()));
+        $this->assertNoDungeonSelected($response->getContent());
         $response->assertSee(sprintf('const contextDungeonId = %d;', $dungeon->id), false);
     }
 
