@@ -72,6 +72,8 @@ use App\Service\CombatLog\CombatLogService;
 use App\Service\CombatLog\CombatLogServiceInterface;
 use App\Service\CombatLog\CombatLogSplitService;
 use App\Service\CombatLog\CombatLogSplitServiceInterface;
+use App\Service\CombatLog\DataExtractors\DataExtractorFactory;
+use App\Service\CombatLog\DataExtractors\DataExtractorFactoryInterface;
 use App\Service\CombatLog\ResultEventDungeonRouteService;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
 use App\Service\CombatLogEvent\CombatLogEventService;
@@ -323,6 +325,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->scoped(RequestViewContextInterface::class, RequestViewContext::class);
 
         // Depends on CombatLogService, SeasonService, WowheadService
+        $this->app->bind(DataExtractorFactoryInterface::class, DataExtractorFactory::class);
         $this->app->bind(CombatLogDataExtractionServiceInterface::class, CombatLogDataExtractionService::class);
     }
 
