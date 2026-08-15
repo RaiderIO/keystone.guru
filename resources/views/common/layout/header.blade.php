@@ -16,14 +16,13 @@ use Illuminate\Support\Str;
  * @var Collection<int, GameVersion> $allGameVersions
  * @var Collection<int, Expansion>   $activeExpansions
  * @var Collection<int, Dungeon>     $gameVersionDungeons
- * @var Season                       $currentSeason
- * @var Season|null                  $nextSeason
  * @var Season|null                  $dungeonContextNextSeason
  * @var string|null                  $dungeonContextNextSeasonLink
  * @var bool                         $forceShrink
  * @var bool                         $showMore
  * @var bool                         $showDungeonContext
  * @var bool                         $showGameVersionSelection
+ * @var bool                         $showExpansionNav
  * @var Collection<string, string>   $dungeonContextLinks
  * @var string|false                 $headerId
  */
@@ -33,6 +32,7 @@ $showMore                 ??= false;
 $showDungeonContext       ??= true;
 // Map pages hide the game version selection row - it made the floating header too bulky
 $showGameVersionSelection ??= true;
+$showExpansionNav         ??= true;
 $forceShrink              ??= false;
 $dungeonContextLinks      ??= null;
 // The map view passes false (not null - ??= would overwrite null) - its own #map_header wraps
@@ -43,44 +43,21 @@ $headerId                 ??= 'site_header';
 // so an HTML error view rendered for one of those paths would otherwise crash here.
 $currentUserGameVersion   ??= GameVersion::getUserOrDefaultGameVersion();
 
-if ($currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
-    if ($nextSeason !== null) {
-        if ($nextSeason->expansion_id !== $currentSeason->expansion_id) {
-            $navs[route('dungeonroutes.expansion.season', [
-                'expansion' => $nextSeason->expansion,
-                'season'    => $nextSeason->index,
-            ])] = [
-                'text' => $nextSeason->name_long,
-            ];
-        } else {
-            $navs[route('dungeonroutes.season', [
-                'gameVersion' => $currentUserGameVersion,
-                'season'      => $nextSeason->index,
-            ])] = [
-                'text' => $nextSeason->name,
-            ];
-        }
-    }
-
-    $navs[route('dungeonroutes.gameVersion', ['gameVersion' => $currentUserGameVersion,])] = [
-        'fa'   => 'fa fa-route',
-        'text' => __('view_common.layout.header.browse_routes'),
-    ];
-} else {
-    $navs[route('dungeonroutes.gameVersion', ['gameVersion' => $currentUserGameVersion])] = [
-        'fa'   => 'fa fa-route',
-        'text' => __('view_common.layout.header.browse_routes'),
-    ];
-}
+$navs[route('dungeonroutes.gameVersion', ['gameVersion' => $currentUserGameVersion])] = [
+    'fa'   => 'fa fa-route',
+    'text' => __('view_common.layout.header.browse_routes'),
+];
 
 $expansionRoutes = [];
-foreach ($activeExpansions as $expansion) {
-    $expansionRoutes[route('dungeonroutes.expansion', ['expansion' => $expansion])] =
-        sprintf('<img src="%s" alt="%s" style="width: 50px"/> %s',
-            $expansion->getIconUrl(),
-            __($expansion->name),
-            __('view_common.layout.header.routes', ['expansion' => __($expansion->name)])
-        );
+if ($showExpansionNav) {
+    foreach ($activeExpansions as $expansion) {
+        $expansionRoutes[route('dungeonroutes.expansion', ['expansion' => $expansion])] =
+            sprintf('<img src="%s" alt="%s" style="width: 50px"/> %s',
+                $expansion->getIconUrl(),
+                __($expansion->name),
+                __('view_common.layout.header.routes', ['expansion' => __($expansion->name)])
+            );
+    }
 }
 
 if (Feature::active(Heatmap::class) && $currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
@@ -231,30 +208,32 @@ $isActiveRoute = function (string $route, bool $strict = false) {
                 @endif
             </ul>
             <ul class="navbar-nav">
-                <?php
-                /** @noinspection PhpUndefinedVariableInspection */
-                $hasSubItemActive = null;
-                $headerText       = __('view_common.layout.header.browse_by_expansion');
-                $dropdownId       = Str::slug($headerText);
-                // Determine if any of the sub-items are active
-                foreach ($expansionRoutes as $itemKey => $item) {
-                    $hasSubItemActive ??= $isActiveRoute($itemKey);
-                }
-                ?>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle {{ $hasSubItemActive }}" href="#" id="{{ $dropdownId }}"
-                       role="button"
-                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-stream"></i>
-                        {{ $headerText }}
-                    </a>
-                    <div class="dropdown-menu text-center text-xl-start" aria-labelledby="{{ $dropdownId }}">
-                        @foreach($expansionRoutes as $itemKey => $item)
-                            <a class="dropdown-item {{ $isActiveRoute($itemKey) }}"
-                               href="{{ $itemKey }}">{!! $item !!}</a>
-                        @endforeach
-                    </div>
-                </li>
+                @if($showExpansionNav)
+                    <?php
+                    /** @noinspection PhpUndefinedVariableInspection */
+                    $hasSubItemActive = null;
+                    $headerText       = __('view_common.layout.header.browse_by_expansion');
+                    $dropdownId       = Str::slug($headerText);
+                    // Determine if any of the sub-items are active
+                    foreach ($expansionRoutes as $itemKey => $item) {
+                        $hasSubItemActive ??= $isActiveRoute($itemKey);
+                    }
+                    ?>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {{ $hasSubItemActive }}" href="#" id="{{ $dropdownId }}"
+                           role="button"
+                           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-stream"></i>
+                            {{ $headerText }}
+                        </a>
+                        <div class="dropdown-menu text-center text-xl-start" aria-labelledby="{{ $dropdownId }}">
+                            @foreach($expansionRoutes as $itemKey => $item)
+                                <a class="dropdown-item {{ $isActiveRoute($itemKey) }}"
+                                   href="{{ $itemKey }}">{!! $item !!}</a>
+                            @endforeach
+                        </div>
+                    </li>
+                @endif
                 @php($route = route('dungeon.explore.gameversion', ['gameVersion' => $currentUserGameVersion]))
                 <li class="nav-item">
                     <a class="nav-link pe-3 {{ $isActiveRoute($route) }}"

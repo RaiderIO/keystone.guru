@@ -38,7 +38,6 @@ readonly class HeaderComposer implements ViewComposerInterface
 
         $view->with('activeExpansions', $this->viewService->getActiveExpansions());
         $view->with('currentSeason', $currentSeason);
-        $view->with('nextSeason', $nextSeason);
         $view->with('allGameVersions', $this->viewService->getAllGameVersions());
 
         $userOrDefaultGameVersion = GameVersion::getUserOrDefaultGameVersion();

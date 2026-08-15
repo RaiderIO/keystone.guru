@@ -93,7 +93,7 @@ final class ViewComposerTest extends PublicTestCase
     public function headerComposer_givenView_setsHeaderKeys(): void
     {
         $this->assertComposerSetsKeys(HeaderComposer::class, 'common.layout.header', [
-            'activeExpansions', 'currentSeason', 'nextSeason', 'allGameVersions', 'gameVersionDungeons',
+            'activeExpansions', 'currentSeason', 'allGameVersions', 'gameVersionDungeons',
             'dungeonContextNextSeason', 'dungeonContextNextSeasonLink',
         ]);
     }
