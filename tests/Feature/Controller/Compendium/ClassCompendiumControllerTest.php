@@ -16,6 +16,7 @@ use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDungeon;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -357,71 +358,39 @@ final class ClassCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function show_givenNonBossNpcAffected_omitsItAsExpectedBehaviour(): void
+    public function showDungeon_givenAffectedElite_omitsItAsExpectedBehaviour(): void
     {
-        // Arrange
-        $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_MAGE)->firstOrFail();
-
-        // Find a dungeon whose current mapping version has enemies for the Retail game version
-        $defaultGameVersion = GameVersion::getDefaultGameVersion();
-        $dungeon            = $this->getDungeonWithCurrentMappingVersionWithEnemies($defaultGameVersion);
-        $mappingVersion     = $dungeon->getCurrentMappingVersionForGameVersion($defaultGameVersion);
-        $this->assertNotNull($mappingVersion);
-
-        $spell = Spell::where('category', sprintf('spellcategory.%s', $characterClass->key))
-            ->whereNotNull('characteristic_id')
-            ->where('game_version_id', $mappingVersion->game_version_id)
-            ->first();
-        $this->assertNotNull($spell);
-
-        // Find a non-boss NPC already in this dungeon that doesn't yet have this characteristic. Boss
-        // is excluded on purpose: a boss that can be crowd controlled is the one affected NPC the page
-        // still reports, so picking one here would test the opposite rule.
-        $npc = Npc::query()
-            ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
-            ->where('enemies.mapping_version_id', $mappingVersion->id)
-            ->whereNotIn('npcs.classification_id', [
-                NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
-                NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
-            ])
-            ->whereNotIn('npcs.id', static function ($sub) use ($spell) {
-                $sub->select('npc_id')
-                    ->from('npc_characteristics')
-                    ->where('characteristic_id', $spell->characteristic_id);
-            })
-            ->select('npcs.*')
-            ->first();
-        $this->assertNotNull($npc);
-
-        // Set the user's context dungeon to the one with enemies
-        $user              = User::findOrFail(1);
-        $originalDungeonId = $user->dungeon_id;
-        $user->dungeon_id  = $dungeon->id;
-        $user->save();
-        $user = $user->fresh();
+        // Arrange - on the Paladin scenario rather than a live class/dungeon pair. Picking an
+        // arbitrary NPC out of a real dungeon made this pass for the wrong reason: an elite one would
+        // enter the unaffected universe and get listed under "No effect observed" on the class's other
+        // rows, and Mage additionally renders NPC names in its counter section, so assertDontSeeText
+        // could not tell "the row omitted it" from "nothing put it there yet".
+        $scenario = $this->arrangeCharacteristicScenario();
 
         try {
-            NpcCharacteristic::create([
-                'npc_id'            => $npc->id,
-                'characteristic_id' => $spell->characteristic_id,
+            // The elite was observed affected, which is exactly what a player already assumes for
+            // trash - so the row reports the absence of surprises rather than the NPC
+            $this->assignCharacteristics([
+                $scenario['elites'][0]->id => $scenario['characteristicIds'][0],
             ]);
 
             // Act
-            $response = $this->actingAs($user)->get(route('compendium.class.show.dungeon', [
-                'characterClass' => $characterClass,
-                'dungeon'        => $dungeon,
+            $response = $this->actingAs($scenario['user'])->get(route('compendium.class.show.dungeon', [
+                'characterClass' => $scenario['characterClass'],
+                'dungeon'        => $scenario['dungeon'],
             ]));
 
-            // Assert - trash being crowd controlled is what a player already assumes, so listing it is
-            // the noise this page exists to leave out
+            // Assert
             $response->assertOk();
-            $response->assertDontSeeText(__($npc->name));
+            $response->assertDontSeeText(__($scenario['elites'][0]->name));
+
+            $observedSpell = $scenario['spells']->firstWhere('characteristic_id', $scenario['characteristicIds'][0]);
+            $this->assertNotNull($observedSpell);
+
+            $row = $this->getRowHtmlForSpell((string)$response->getContent(), $observedSpell);
+            $this->assertStringContainsString(__('view_compendium.class.show.npcs_no_exceptions'), $row);
         } finally {
-            NpcCharacteristic::where('npc_id', $npc->id)
-                ->where('characteristic_id', $spell->characteristic_id)
-                ->delete();
-            $user->dungeon_id = $originalDungeonId;
-            $user->save();
+            $scenario['cleanUp']();
         }
     }
 
@@ -595,9 +564,17 @@ final class ClassCompendiumControllerTest extends PublicTestCase
                 'dungeon'        => $scenario['dungeon'],
             ]));
 
-            // Assert
+            // Assert - scoped to the second characteristic's own row. Several other rows of the class
+            // legitimately render "No data" too, so a page-level assertion would pass even with the
+            // arrangement above deleted
             $response->assertOk();
-            $response->assertSeeText(__('view_compendium.class.show.npcs_no_data'));
+
+            $unobservedSpell = $scenario['spells']->firstWhere('characteristic_id', $scenario['characteristicIds'][1]);
+            $this->assertNotNull($unobservedSpell);
+
+            $row = $this->getRowHtmlForSpell((string)$response->getContent(), $unobservedSpell);
+            $this->assertStringContainsString(__('view_compendium.class.show.npcs_no_data'), $row);
+            $this->assertStringNotContainsString(__('view_compendium.class.show.npcs_no_exceptions'), $row);
         } finally {
             $scenario['cleanUp']();
         }
@@ -622,9 +599,16 @@ final class ClassCompendiumControllerTest extends PublicTestCase
                 'dungeon'        => $scenario['dungeon'],
             ]));
 
-            // Assert
+            // Assert - on the observed characteristic's own row, since "No data" rows elsewhere must
+            // not be mistaken for this state
             $response->assertOk();
-            $response->assertSeeText(__('view_compendium.class.show.npcs_no_exceptions'));
+
+            $observedSpell = $scenario['spells']->firstWhere('characteristic_id', $scenario['characteristicIds'][0]);
+            $this->assertNotNull($observedSpell);
+
+            $row = $this->getRowHtmlForSpell((string)$response->getContent(), $observedSpell);
+            $this->assertStringContainsString(__('view_compendium.class.show.npcs_no_exceptions'), $row);
+            $this->assertStringNotContainsString(__('view_compendium.class.show.npcs_no_data'), $row);
         } finally {
             $scenario['cleanUp']();
         }
@@ -644,6 +628,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
      *     user: User,
      *     characteristicIds: array<int, int>,
      *     tauntCharacteristicId: int,
+     *     spells: Collection<int, Spell>,
      *     elites: array<int, Npc>,
      *     normal: Npc,
      *     boss: Npc,
@@ -656,12 +641,12 @@ final class ClassCompendiumControllerTest extends PublicTestCase
 
         $defaultGameVersion = GameVersion::getDefaultGameVersion();
 
-        $classCharacteristicIds = Spell::where('category', sprintf('spellcategory.%s', $characterClass->key))
+        $classSpells = Spell::where('category', sprintf('spellcategory.%s', $characterClass->key))
             ->whereNotNull('characteristic_id')
             ->where('game_version_id', $defaultGameVersion->id)
-            ->pluck('characteristic_id')
-            ->unique()
-            ->values();
+            ->get();
+
+        $classCharacteristicIds = $classSpells->pluck('characteristic_id')->unique()->values();
 
         // Paladin has a taunt (Hand of Reckoning) and taunt is deliberately kept out of the universe,
         // so the two characteristics handed out below must not be it
@@ -688,6 +673,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
             'user'                  => $user->fresh(),
             'characteristicIds'     => $usableCharacteristicIds->take(2)->all(),
             'tauntCharacteristicId' => $tauntCharacteristicId,
+            'spells'                => $classSpells,
             'elites'                => $elites,
             'normal'                => $normal,
             'boss'                  => $boss,
@@ -742,14 +728,18 @@ final class ClassCompendiumControllerTest extends PublicTestCase
                 continue;
             }
 
-            // unique('name'): two enemies of the same NPC would make assertDontSeeText ambiguous
+            // Dedupe on the *rendered* name. `npcs`.`name` is a per-id translation key, so a
+            // unique('name') never collapses anything - while lang/en_US/npcs.php maps hundreds of
+            // distinct ids onto a single name (Scarlet Infantry covers eleven). Two of those picked
+            // into one scenario would make assertDontSeeText ambiguous, since it cannot tell which
+            // id put the name on the page.
             $npcs = Npc::query()
                 ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
                 ->where('enemies.mapping_version_id', $mappingVersion->id)
                 ->select('npcs.*')
                 ->distinct()
                 ->get()
-                ->unique('name');
+                ->unique(static fn(Npc $npc) => __($npc->name));
 
             $hasCharacteristicData = NpcCharacteristic::whereIn('npc_id', $npcs->pluck('id'))
                 ->whereIn('characteristic_id', $classCharacteristicIds)
@@ -769,6 +759,67 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         }
 
         $this->fail('No dungeon found with three elites, a normal NPC, a boss and no characteristic data of its own');
+    }
+
+    #[Test]
+    public function showDungeon_givenMultipleSpells_ordersRowsByRenderedSpellName(): void
+    {
+        // Arrange
+        $scenario = $this->arrangeCharacteristicScenario();
+
+        try {
+            $expectedOrder = $scenario['spells']->sortBy(static fn(Spell $spell) => __($spell->name))->values();
+
+            // Without this the test could pass on a query that never sorts at all - it only means
+            // something while the two orders actually differ
+            $this->assertNotSame(
+                $scenario['spells']->sortBy('id')->pluck('id')->all(),
+                $expectedOrder->pluck('id')->all(),
+                'This class\'s spells sort identically by id and by rendered name, so this test cannot detect the regression',
+            );
+
+            // Act
+            $response = $this->actingAs($scenario['user'])->get(route('compendium.class.show.dungeon', [
+                'characterClass' => $scenario['characterClass'],
+                'dungeon'        => $scenario['dungeon'],
+            ]));
+
+            // Assert - `spells`.`name` holds a translation key, so an orderBy('name') in the query
+            // would sort spells.103828 ahead of spells.1715 ahead of spells.355: it looks sorted and
+            // is not. The sort has to happen after __() resolution, which is what this pins.
+            $response->assertOk();
+            $content = (string)$response->getContent();
+
+            $positions = $expectedOrder->map(
+                fn(Spell $spell) => strpos($content, sprintf('href="%s"', route('spell.compendium.show', $spell))),
+            );
+
+            $this->assertNotContains(false, $positions->all(), 'Not every spell rendered a link');
+            $this->assertSame($positions->sort()->values()->all(), $positions->all());
+        } finally {
+            $scenario['cleanUp']();
+        }
+    }
+
+    /**
+     * The one table row that belongs to a spell.
+     *
+     * Page-level assertions are nearly worthless on this table: every characteristic of the class
+     * renders a row, so "No data" and "Nothing unexpected" legitimately appear several times over.
+     * An assertSeeText for either would still pass with the arrangement deleted or the grouping
+     * broken - it only proves *some* row reached that state, never that this one did.
+     */
+    private function getRowHtmlForSpell(string $content, Spell $spell): string
+    {
+        $needle = sprintf('href="%s"', route('spell.compendium.show', $spell));
+
+        foreach (explode('<tr', $content) as $row) {
+            if (str_contains($row, $needle)) {
+                return $row;
+            }
+        }
+
+        $this->fail(sprintf('No table row found for spell %s', __($spell->name)));
     }
 
     /**
