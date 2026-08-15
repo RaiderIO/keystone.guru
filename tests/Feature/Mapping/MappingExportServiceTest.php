@@ -3,7 +3,9 @@
 namespace Tests\Feature\Mapping;
 
 use App\Models\Spell\Spell;
+use App\SeederHelpers\RelationImport\Mapping\SpellRelationMapping;
 use App\Service\Mapping\MappingExportServiceInterface;
+use Illuminate\Support\Facades\Schema;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -53,6 +55,66 @@ class MappingExportServiceTest extends TestCase
 
         // Assert
         Assert::assertEmpty($leaked, sprintf('Combat-log-derived properties leaked into exported spells: %s', $this->describeLeaks($leaked)));
+    }
+
+    /**
+     * The other half of the contract the test above guards. A column kept out of spells.json has no value
+     * to load back, so unless SpellRelationMapping preserves it, DungeonDataSeeder's temp-table swap
+     * replaces it with the column default - and every deploy runs `db:seed`. That is how `counters_mask`
+     * and `bypasses_immunities_mask` were wiped on every staging deploy for ten days (#4033): they were
+     * added to the export's hidden list and missed from the preserved list.
+     *
+     * Asserted against the live schema rather than a hand-written list, so a sixth combat-log-derived
+     * column fails here the moment it is added rather than on the next deploy.
+     */
+    #[Test]
+    public function getPreservedColumns_givenColumnsMissingFromTheExport_preservesEveryOneOfThem(): void
+    {
+        // Arrange
+        /** @var MappingExportServiceInterface $mappingExportService */
+        $mappingExportService = app(MappingExportServiceInterface::class);
+        $columns              = Schema::getColumnListing(new Spell()->getTable());
+
+        Assert::assertNotEmpty($columns, 'The spells table reports no columns - this test no longer guards anything');
+
+        // Act
+        $serializedSpells = $mappingExportService->serializeSpells();
+
+        Assert::assertNotEmpty($serializedSpells, 'No spells were exported - this test no longer guards anything');
+
+        $exported  = array_keys($serializedSpells[array_key_first($serializedSpells)]);
+        $omitted   = array_values(array_diff($columns, $exported));
+        $preserved = new SpellRelationMapping()->getPreservedColumns();
+
+        // Assert
+        Assert::assertEmpty(
+            array_diff($omitted, $preserved),
+            sprintf(
+                'Columns are omitted from spells.json but not preserved across a re-seed, so `db:seed` will reset them to their default: %s',
+                implode(', ', array_diff($omitted, $preserved)),
+            ),
+        );
+    }
+
+    /**
+     * A preserved column that does not exist fails the seeder's `UPDATE ... SET t.<col> = orig.<col>`
+     * with a SQL error mid-seed, which is a deploy outage rather than a silent data loss - but it is
+     * just as avoidable, and a typo is the likely cause.
+     */
+    #[Test]
+    public function getPreservedColumns_givenTheSpellsSchema_namesOnlyRealColumns(): void
+    {
+        // Arrange
+        $columns = Schema::getColumnListing(new Spell()->getTable());
+
+        // Act
+        $preserved = new SpellRelationMapping()->getPreservedColumns();
+
+        // Assert
+        Assert::assertEmpty(
+            array_diff($preserved, $columns),
+            sprintf('Preserved columns do not exist on the spells table: %s', implode(', ', array_diff($preserved, $columns))),
+        );
     }
 
     /**

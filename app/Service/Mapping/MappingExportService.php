@@ -21,19 +21,15 @@ class MappingExportService implements MappingExportServiceInterface
 
             // icon_url, wowhead_url and wowhead_tooltip_data are computed accessors in Spell::$appends,
             // not columns - every entry in that list must be hidden here or it lands in the seeder file.
-            // aura, debuff, miss_types_mask, counters_mask and bypasses_immunities_mask are combat-log-derived
-            // behavior - they must not round-trip through the git seeders; they are re-applied per
-            // environment from the combatlog pipeline.
+            // The combat-log-derived columns must not round-trip through the git seeders either; they are
+            // re-applied per environment from the combatlog pipeline, and SpellRelationMapping preserves
+            // them across a re-seed from the same constant.
             $spell->makeHidden([
                 'icon_url',
                 'wowhead_url',
                 'wowhead_tooltip_data',
                 'tooltip_data',
-                'aura',
-                'debuff',
-                'miss_types_mask',
-                'counters_mask',
-                'bypasses_immunities_mask',
+                ...Spell::COMBAT_LOG_DERIVED_COLUMNS,
             ]);
         }
 
