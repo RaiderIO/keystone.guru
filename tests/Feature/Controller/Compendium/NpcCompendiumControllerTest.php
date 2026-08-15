@@ -6,11 +6,16 @@ use App\Features\NpcCompendium;
 use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
+use App\Models\Season;
 use App\Models\User;
+use App\Service\View\RequestViewContextInterface;
+use App\Service\View\ViewServiceInterface;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\Feature\Traits\ReadsDungeonSelect;
 use Tests\TestCases\PublicTestCase;
 
@@ -18,6 +23,7 @@ use Tests\TestCases\PublicTestCase;
 #[Group('Compendium')]
 final class NpcCompendiumControllerTest extends PublicTestCase
 {
+    use ProvidesDungeon;
     use ReadsDungeonSelect;
 
     /** @var array<string, mixed> */
@@ -157,7 +163,7 @@ final class NpcCompendiumControllerTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
-        $this->assertNotSame($dungeon->id, $this->getSelectedDungeonId($response->getContent()));
+        $this->assertNoDungeonSelected($response->getContent());
         $response->assertSee(sprintf('const contextDungeonId = %d;', $dungeon->id), false);
     }
 
@@ -174,27 +180,42 @@ final class NpcCompendiumControllerTest extends PublicTestCase
     #[Test]
     public function index_givenShowSeasons_returnsNoDuplicateDungeonsInSelect(): void
     {
+        // Arrange - the duplicate this guards against can only arise for a dungeon that renders in a season
+        // optgroup *and* in its expansion's, which `common/dungeon/select` prevents by rejecting the season
+        // dungeons from the expansion groups. That branch is skipped whole when the visitor's game version
+        // has no seasons, so without these two preconditions "unique" would hold for a reason unrelated to
+        // the scenario in the name
+        $this->assertTrue(
+            (bool)GameVersion::getUserOrDefaultGameVersion()->has_seasons,
+            'The visitor game version has no seasons, so the select never builds the season optgroups this test is about',
+        );
+
+        // Sourced exactly as DungeonSelectComposer feeds the blade, next season included: a season seeded
+        // ahead of its start date is normal here, and reading only the current one would let the
+        // intersection below go empty while the scenario is live through the next
+        $region      = app(RequestViewContextInterface::class)->getUserOrDefaultRegion();
+        $viewService = app(ViewServiceInterface::class);
+
+        $seasonDungeonIds = collect([
+            $viewService->getNextSeasonForRegion($region),
+            $viewService->getCurrentSeasonForRegion($region),
+        ])->filter()
+            ->flatMap(static fn(Season $season) => $season->dungeons->pluck('id'))
+            ->unique()
+            ->all();
+
         // Act
         $response = $this->get(route('npc.compendium.index.dungeon', ['dungeon' => Dungeon::active()->firstOrFail()]));
 
         // Assert
         $response->assertOk();
-        $dom = new \DOMDocument();
-        @$dom->loadHTML($response->getContent());
-        $xpath   = new \DOMXPath($dom);
-        $options = $xpath->query('//select[@id="compendium_filter_dungeon"]//option');
-        $values  = [];
-        foreach ($options as $option) {
-            if (!$option instanceof \DOMElement) {
-                continue;
-            }
-            $value = $option->getAttribute('value');
-            if (is_numeric($value) && (int)$value > 0) {
-                $values[] = (int)$value;
-            }
-        }
+        $dungeonIds = $this->getOfferedDungeonIds($response->getContent());
 
-        $this->assertSame(count($values), count(array_unique($values)), 'Dungeon select contains duplicate dungeon IDs');
+        $this->assertNotEmpty(
+            array_intersect($seasonDungeonIds, $dungeonIds),
+            'The select rendered no season dungeon, so no dungeon could have landed in two optgroups',
+        );
+        $this->assertSame(count($dungeonIds), count(array_unique($dungeonIds)), 'Dungeon select contains duplicate dungeon IDs');
     }
 
     #[Test]
@@ -212,10 +233,14 @@ final class NpcCompendiumControllerTest extends PublicTestCase
     #[Test]
     public function get_givenDungeonFilter_returnsOnlyNpcsForDungeon(): void
     {
-        // Arrange
-        $dungeon        = Dungeon::active()->first();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
-        $this->assertNotNull($mappingVersion);
+        // Arrange - the endpoint joins npcs through enemies, so a dungeon whose mapping version carries no
+        // enemy with an npc returns an empty set and the loop below then asserts nothing at all. Require the
+        // property rather than hoping the pick happens to have it
+        [$dungeon, $mappingVersion] = $this->findDungeon(
+            dungeonActive: true,
+            minEnemies:    1,
+            resolve:       static fn(Dungeon $dungeon, MappingVersion $mappingVersion) => $mappingVersion->enemies()->whereNotNull('npc_id')->exists() ?: null,
+        );
 
         // Act
         $response = $this->call('GET', route('ajax.npc.compendium.search'), array_merge($this->datatableParams, [
@@ -226,6 +251,7 @@ final class NpcCompendiumControllerTest extends PublicTestCase
         $response->assertOk();
         $data = $response->json();
         $this->assertArrayHasKey('data', $data);
+        $this->assertNotEmpty($data['data'], 'The dungeon filter returned no NPCs, so the check below proves nothing');
         foreach ($data['data'] as $npc) {
             $this->assertTrue(
                 Enemy::where('npc_id', $npc['id'])
