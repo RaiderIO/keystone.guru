@@ -52,4 +52,20 @@ describe('refreshTooltips (#3967)', () => {
         refreshTooltips($target);
         expect(bootstrap.Tooltip.getInstance($target[0])._getTitle()).toBe('Add kill area');
     });
+
+    test('refreshTooltips_givenTheTitleDidNotChange_stillShowsTheSameTitle', () => {
+        // Arrange: e.g. the workbench re-renders other buttons and calls the global
+        // no-arg refreshTooltips(), which sweeps every [data-bs-toggle="tooltip"] element on the
+        // page - including ones whose title never changed since they were first initialized.
+        document.body.innerHTML = '<div id="target" data-bs-toggle="tooltip" title="Static tip"></div>';
+        const $target = $('#target');
+        refreshTooltips($target);
+        expect(bootstrap.Tooltip.getInstance($target[0])._getTitle()).toBe('Static tip');
+
+        // Act: refresh again without touching `title` at all
+        refreshTooltips($target);
+
+        // Assert: still showing its one and only title, not silently emptied
+        expect(bootstrap.Tooltip.getInstance($target[0])._getTitle()).toBe('Static tip');
+    });
 });

@@ -182,10 +182,16 @@ function refreshTooltips($element = null) {
                 // Dispose and recreate so a changed title attribute is re-read (BS4 _fixTitle equivalent).
                 // BS5's dispose() restores `title` from `data-bs-original-title` (the element's very
                 // first-ever title) before tearing down, which would clobber a title attribute changed
-                // since - clear it first so the fresh title actually survives the refresh.
+                // since - clear the stale value first so the fresh title survives the refresh. Only do
+                // this when `title` was actually re-set: after the first construction BS5's _fixTitle()
+                // moves `title` into `data-bs-original-title` and removes `title` entirely, so on an
+                // unchanged refresh there is no `title` attribute to fall back to and clearing
+                // `data-bs-original-title` unconditionally would leave the tooltip with no content at all.
                 let existingTooltip = bootstrap.Tooltip.getInstance(this);
                 if (existingTooltip !== null) {
-                    this.removeAttribute('data-bs-original-title');
+                    if (this.getAttribute('title')) {
+                        this.removeAttribute('data-bs-original-title');
+                    }
                     existingTooltip.dispose();
                 }
                 new bootstrap.Tooltip(this);
