@@ -313,14 +313,24 @@ final class SpellCompendiumControllerTest extends PublicTestCase
         [$dungeon]      = $this->findDungeon(dungeonActive: true);
         [$otherDungeon] = $this->findDungeon(dungeonActive: true, constraint: static fn(Builder $query) => $query->where('id', '!=', $dungeon->id));
 
-        [$includedSpell, $excludedSpell] = Spell::where('hidden_on_map', false)->orderBy('id')->limit(2)->get()->all();
+        // Uncoupled spells, so the only dungeon either of them answers to is the one coupled below - without
+        // that, `assertNotContains()` would be resting on `spell_dungeons` happening to seed empty today
+        [$includedSpell, $excludedSpell] = Spell::query()
+            ->where('hidden_on_map', false)
+            ->whereDoesntHave('dungeons')
+            ->orderBy('id')
+            ->limit(2)
+            ->get()
+            ->all();
 
-        $couplings = collect([
-            SpellDungeon::create(['spell_id' => $includedSpell->id, 'dungeon_id' => $dungeon->id]),
-            SpellDungeon::create(['spell_id' => $excludedSpell->id, 'dungeon_id' => $otherDungeon->id]),
-        ]);
+        // Collected as they are created, so a throw on the second one still hands the first to the finally.
+        // `spell_dungeons` seeds empty on a shared MySQL server, so a leak here is permanent
+        $couplings = collect();
 
         try {
+            $couplings->push(SpellDungeon::create(['spell_id' => $includedSpell->id, 'dungeon_id' => $dungeon->id]));
+            $couplings->push(SpellDungeon::create(['spell_id' => $excludedSpell->id, 'dungeon_id' => $otherDungeon->id]));
+
             // Act
             $response = $this->call('GET', route('ajax.spell.compendium.search'), array_merge($this->datatableParams, [
                 'dungeon_id' => $dungeon->id,
@@ -332,6 +342,9 @@ final class SpellCompendiumControllerTest extends PublicTestCase
             $this->assertArrayHasKey('data', $data);
 
             $returnedSpellIds = array_column($data['data'], 'id');
+
+            // Page 1 holds the whole result set, so the two checks below are not at pagination's mercy
+            $this->assertSame(count($returnedSpellIds), $data['recordsFiltered']);
             $this->assertContains($includedSpell->id, $returnedSpellIds);
             $this->assertNotContains($excludedSpell->id, $returnedSpellIds);
 

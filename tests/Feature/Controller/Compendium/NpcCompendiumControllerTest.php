@@ -9,6 +9,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\User;
+use App\Service\Season\SeasonServiceInterface;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -177,6 +178,18 @@ final class NpcCompendiumControllerTest extends PublicTestCase
     #[Test]
     public function index_givenShowSeasons_returnsNoDuplicateDungeonsInSelect(): void
     {
+        // Arrange - the duplicate this guards against can only arise for a dungeon that renders in a season
+        // optgroup *and* in its expansion's, which `common/dungeon/select` prevents by rejecting the season
+        // dungeons from the expansion groups. That branch is skipped whole when the visitor's game version
+        // has no seasons, so without these two preconditions "unique" would hold for a reason unrelated to
+        // the scenario in the name
+        $this->assertTrue(
+            (bool)GameVersion::getUserOrDefaultGameVersion()->has_seasons,
+            'The visitor game version has no seasons, so the select never builds the season optgroups this test is about',
+        );
+
+        $seasonDungeonIds = app(SeasonServiceInterface::class)->getCurrentSeason()->dungeons->pluck('id')->all();
+
         // Act
         $response = $this->get(route('npc.compendium.index.dungeon', ['dungeon' => Dungeon::active()->firstOrFail()]));
 
@@ -184,7 +197,10 @@ final class NpcCompendiumControllerTest extends PublicTestCase
         $response->assertOk();
         $dungeonIds = $this->getOfferedDungeonIds($response->getContent());
 
-        $this->assertNotEmpty($dungeonIds, 'Dungeon select offers no dungeons at all, so it cannot show duplicates either');
+        $this->assertNotEmpty(
+            array_intersect($seasonDungeonIds, $dungeonIds),
+            'The select rendered no dungeon of the current season, so no dungeon could have landed in two optgroups',
+        );
         $this->assertSame(count($dungeonIds), count(array_unique($dungeonIds)), 'Dungeon select contains duplicate dungeon IDs');
     }
 
