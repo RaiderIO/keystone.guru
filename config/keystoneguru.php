@@ -531,7 +531,11 @@ return [
     'raider_io' => [
         'team_id'            => 2136,
         'combat_log_polling' => [
-            'completed_at_window_days' => (int)env('COMBAT_LOG_POLLING_COMPLETED_AT_WINDOW_DAYS', 1),
+            // Widened from 1 to 7 (#4035): between seasons there's typically a week with no M+ runs
+            // completed at all, and a 1-day window then finds nothing to poll. 7 days still finds
+            // last week's runs once M+ activity resumes, so this survives every future season gap
+            // too, not just the current one.
+            'completed_at_window_days' => (int)env('COMBAT_LOG_POLLING_COMPLETED_AT_WINDOW_DAYS', 7),
             'limit'                    => (int)env('COMBAT_LOG_POLLING_LIMIT', 100),
             'download_url'             => env('COMBAT_LOG_POLLING_DOWNLOAD_URL'),
 
