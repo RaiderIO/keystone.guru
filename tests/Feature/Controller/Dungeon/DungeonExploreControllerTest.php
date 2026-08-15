@@ -95,6 +95,48 @@ final class DungeonExploreControllerTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function select_givenAnUpcomingSeasonWithAnInactiveDungeon_omitsItFromTheGrid(): void
+    {
+        // Arrange - inside the try so a failure halfway through still cleans up
+        $upcomingSeason  = null;
+        $inactiveDungeon = Dungeon::firstWhere('key', DungeonKey::DEN_OF_NALORAKK->value);
+        $wasActive       = $inactiveDungeon->active;
+
+        try {
+            $upcomingSeason = $this->createUpcomingSeason();
+
+            SeasonDungeon::create([
+                'season_id'  => $upcomingSeason->id,
+                'dungeon_id' => $inactiveDungeon->id,
+            ]);
+
+            $inactiveDungeon->active = false;
+            $inactiveDungeon->save();
+
+            // Act
+            $response = $this->get(route('dungeon.explore.gameversion.select', [
+                'gameVersion' => GameVersion::GAME_VERSION_RETAIL,
+                'season'      => $upcomingSeason->id,
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee(
+                sprintf('data-id="%d"', Dungeon::firstWhere('key', DungeonKey::ARA_KARA_CITY_OF_ECHOES->value)->id),
+                false,
+            );
+            $response->assertDontSee(sprintf('data-id="%d"', $inactiveDungeon->id), false);
+        } finally {
+            $inactiveDungeon->active = $wasActive;
+            $inactiveDungeon->save();
+
+            if ($upcomingSeason !== null) {
+                $this->deleteUpcomingSeason($upcomingSeason);
+            }
+        }
+    }
+
     private function assertSeasonTabActive(string $content, int $seasonId): void
     {
         $this->assertStringContainsString('active', $this->getSeasonTabClasses($content, $seasonId));
