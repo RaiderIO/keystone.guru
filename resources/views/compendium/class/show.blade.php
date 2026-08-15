@@ -12,6 +12,7 @@ use Illuminate\Support\Collection;
  * @var Dungeon                               $contextDungeon
  * @var Collection<int, Spell>                $spells
  * @var Collection<int, Collection<int, Npc>> $npcsByCharacteristicId
+ * @var Collection<int, Collection<int, Npc>> $unaffectedNpcsByCharacteristicId
  * @var array<int, array{
  *     definition: SpellCounterDefinitionInterface,
  *     raceName: string|null,
@@ -54,7 +55,7 @@ use Illuminate\Support\Collection;
         </div>
     </div>
 
-    {{-- Spell → Characteristic → Affected NPCs table --}}
+    {{-- Spell → Characteristic → NPCs table (whichever of affected/unaffected is the shorter list) --}}
     @if($spells->isEmpty())
         <p class="text-muted">{{ __('view_compendium.class.show.no_spells') }}</p>
     @else
@@ -70,7 +71,18 @@ use Illuminate\Support\Collection;
                 <tbody>
                 @foreach($spells as $spell)
                     <?php /** @var Spell $spell */ ?>
-                    <?php $affectedNpcs = $npcsByCharacteristicId->get($spell->characteristic_id, collect()); ?>
+                    <?php
+                    $affectedNpcs   = $npcsByCharacteristicId->get($spell->characteristic_id, collect());
+                    $unaffectedNpcs = $unaffectedNpcsByCharacteristicId->get($spell->characteristic_id, collect());
+
+                    // Show the unaffected list only when it is strictly shorter, and only when this
+                    // characteristic was observed landing on something in the first place - having
+                    // never seen it land at all says nothing about the NPCs it did not land on
+                    $showUnaffected = $affectedNpcs->isNotEmpty() &&
+                        $unaffectedNpcs->isNotEmpty() &&
+                        $unaffectedNpcs->count() < $affectedNpcs->count();
+                    $npcsToShow = $showUnaffected ? $unaffectedNpcs : $affectedNpcs;
+                    ?>
                     <tr>
                         <td class="text-nowrap">@include('common.spell.link', ['spell' => $spell])</td>
                         <td>
@@ -83,10 +95,13 @@ use Illuminate\Support\Collection;
                             @endif
                         </td>
                         <td>
-                            @if($affectedNpcs->isEmpty())
+                            @if($npcsToShow->isEmpty())
                                 <span class="text-muted">{{ __('view_compendium.class.show.no_npcs') }}</span>
                             @else
-                                @foreach($affectedNpcs as $npc)
+                                <span class="compendium_chip me-1">
+                                    {{ __($showUnaffected ? 'view_compendium.class.show.npcs_unaffected' : 'view_compendium.class.show.npcs_affected') }}
+                                </span>
+                                @foreach($npcsToShow as $npc)
                                     <?php /** @var Npc $npc */ ?>
                                     @include('common.npc.link', ['npc' => $npc])@if(!$loop->last), @endif
                                 @endforeach
@@ -97,6 +112,9 @@ use Illuminate\Support\Collection;
                 </tbody>
             </table>
         </div>
+        <p class="text-muted mt-2 mb-0">
+            <small>{{ __('view_compendium.class.show.npcs_description') }}</small>
+        </p>
     @endif
 
     {{-- Counterable abilities (Vanish / Shadowmeld / ...) --}}

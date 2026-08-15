@@ -201,9 +201,12 @@ return [
             'title'                       => ':name - By Class',
             'table_header_spell'          => 'Spell',
             'table_header_characteristic' => 'Characteristic',
-            'table_header_npcs'           => 'Affected NPCs',
+            'table_header_npcs'           => 'NPCs',
             'no_spells'                   => 'No CC spells found for this class in this game version.',
             'no_npcs'                     => '-',
+            'npcs_affected'               => 'Affected',
+            'npcs_unaffected'             => 'Not affected',
+            'npcs_description'            => 'Whichever list is shorter is shown. An NPC is only listed as not affected if another of this class\'s crowd control abilities has been observed landing on it.',
             'counters'                    => [
                 'title'              => 'Counterable abilities',
                 'racial'             => 'Racial (:race)',

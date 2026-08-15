@@ -85,20 +85,50 @@ class ClassCompendiumController extends Controller
                 ->select('npcs.*', 'npc_characteristics.characteristic_id')
                 ->with('classification')
                 ->distinct()
+                ->orderBy('npcs.id')
                 ->get()
                 ->groupBy('characteristic_id');
         }
 
         return view('compendium.class.show', [
-            'characterClass'         => $characterClass,
-            'contextDungeon'         => $dungeon,
-            'spells'                 => $spells,
-            'npcsByCharacteristicId' => $npcsByCharacteristicId,
-            'counterSections'        => $this->getCounterSections($characterClass, $dungeon, $mappingVersion),
-            'reflectSection'         => $this->getReflectSection($characterClass, $dungeon, $mappingVersion),
+            'characterClass'                   => $characterClass,
+            'contextDungeon'                   => $dungeon,
+            'spells'                           => $spells,
+            'npcsByCharacteristicId'           => $npcsByCharacteristicId,
+            'unaffectedNpcsByCharacteristicId' => $this->getUnaffectedNpcsByCharacteristicId($characteristicIds, $npcsByCharacteristicId),
+            'counterSections'                  => $this->getCounterSections($characterClass, $dungeon, $mappingVersion),
+            'reflectSection'                   => $this->getReflectSection($characterClass, $dungeon, $mappingVersion),
             // HeaderComposer only injects this into the header view itself - the dungeon context
             // links this page overrides are built in the view, so it needs its own copy
             'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion(),
+        ]);
+    }
+
+    /**
+     * The complement of the affected-NPC lists: per characteristic, the dungeon's NPCs that were
+     * *not* observed being affected by it.
+     *
+     * `npc_characteristics` only ever records positive evidence - there is no NPC immunity table -
+     * so the complement is taken against the NPCs affected by at least one of *this class's*
+     * characteristics rather than against every NPC in the dungeon. An NPC that only ever shows up
+     * with an unrelated characteristic (taunt is applied to nearly every tauntable trash mob) is no
+     * evidence at all that this class's crowd control fails on it.
+     *
+     * @param  Collection<int, int>                  $characteristicIds
+     * @param  Collection<int, Collection<int, Npc>> $npcsByCharacteristicId
+     * @return Collection<int, Collection<int, Npc>>
+     */
+    private function getUnaffectedNpcsByCharacteristicId(Collection $characteristicIds, Collection $npcsByCharacteristicId): Collection
+    {
+        // The same Npc may be hydrated once per characteristic - any of them will do, since only the
+        // npc itself is rendered and never the characteristic_id that was selected alongside it
+        /** @var Collection<int, Npc> $npcsInUniverse */
+        $npcsInUniverse = $npcsByCharacteristicId->flatten(1)->unique('id');
+
+        return $characteristicIds->mapWithKeys(static fn(int $characteristicId) => [
+            $characteristicId => $npcsInUniverse
+                ->whereNotIn('id', $npcsByCharacteristicId->get($characteristicId, collect())->pluck('id'))
+                ->values(),
         ]);
     }
 

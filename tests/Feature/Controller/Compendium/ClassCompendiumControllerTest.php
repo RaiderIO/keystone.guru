@@ -413,4 +413,182 @@ final class ClassCompendiumControllerTest extends PublicTestCase
             $user->save();
         }
     }
+
+    #[Test]
+    public function showDungeon_givenMoreAffectedThanUnaffectedNpcs_displaysUnaffectedNpcs(): void
+    {
+        // Arrange
+        $scenario = $this->arrangeCharacteristicScenario();
+
+        try {
+            // The second characteristic lands on two of the three NPCs, so its unaffected list (one
+            // NPC) is the shorter of the two and is what the row must render
+            $this->assignCharacteristics([
+                $scenario['npcs'][0]->id => $scenario['characteristicIds'][0],
+                $scenario['npcs'][1]->id => $scenario['characteristicIds'][1],
+                $scenario['npcs'][2]->id => $scenario['characteristicIds'][1],
+            ]);
+
+            // Act
+            $response = $this->actingAs($scenario['user'])->get(route('compendium.class.show.dungeon', [
+                'characterClass' => $scenario['characterClass'],
+                'dungeon'        => $scenario['dungeon'],
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSeeText(__('view_compendium.class.show.npcs_unaffected'));
+            $response->assertSeeText(__($scenario['npcs'][0]->name));
+            $response->assertDontSeeText(__($scenario['npcs'][1]->name));
+            $response->assertDontSeeText(__($scenario['npcs'][2]->name));
+        } finally {
+            $scenario['cleanUp']();
+        }
+    }
+
+    #[Test]
+    public function showDungeon_givenEquallyManyAffectedAndUnaffectedNpcs_displaysAffectedNpcs(): void
+    {
+        // Arrange
+        $scenario = $this->arrangeCharacteristicScenario();
+
+        try {
+            // One NPC per characteristic - both lists are one long, and a tie must resolve to affected
+            $this->assignCharacteristics([
+                $scenario['npcs'][0]->id => $scenario['characteristicIds'][0],
+                $scenario['npcs'][1]->id => $scenario['characteristicIds'][1],
+            ]);
+
+            // Act
+            $response = $this->actingAs($scenario['user'])->get(route('compendium.class.show.dungeon', [
+                'characterClass' => $scenario['characterClass'],
+                'dungeon'        => $scenario['dungeon'],
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSeeText(__('view_compendium.class.show.npcs_affected'));
+            $response->assertDontSeeText(__('view_compendium.class.show.npcs_unaffected'));
+            $response->assertSeeText(__($scenario['npcs'][0]->name));
+            $response->assertSeeText(__($scenario['npcs'][1]->name));
+        } finally {
+            $scenario['cleanUp']();
+        }
+    }
+
+    #[Test]
+    public function showDungeon_givenNpcWithoutAnyCharacteristic_omitsItFromUnaffectedList(): void
+    {
+        // Arrange
+        $scenario = $this->arrangeCharacteristicScenario();
+
+        try {
+            // The fourth NPC deliberately gets no characteristic at all - never having been observed
+            // affected by anything is no evidence that this class's crowd control fails on it
+            $this->assignCharacteristics([
+                $scenario['npcs'][0]->id => $scenario['characteristicIds'][0],
+                $scenario['npcs'][1]->id => $scenario['characteristicIds'][1],
+                $scenario['npcs'][2]->id => $scenario['characteristicIds'][1],
+            ]);
+
+            // Act
+            $response = $this->actingAs($scenario['user'])->get(route('compendium.class.show.dungeon', [
+                'characterClass' => $scenario['characterClass'],
+                'dungeon'        => $scenario['dungeon'],
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSeeText(__('view_compendium.class.show.npcs_unaffected'));
+            $response->assertDontSeeText(__($scenario['npcs'][3]->name));
+        } finally {
+            $scenario['cleanUp']();
+        }
+    }
+
+    /**
+     * A dungeon with four uniquely named NPCs and no characteristic data whatsoever, plus two of the
+     * chosen class's characteristics to hand out among them.
+     *
+     * Paladin on purpose: it has six characteristics but neither a counter nor a reflect section, so
+     * the crowd control table is the only place an NPC name can appear and `assertDontSeeText` on an
+     * NPC actually means "this row did not list it".
+     *
+     * @return array{
+     *     characterClass: CharacterClass,
+     *     dungeon: Dungeon,
+     *     user: User,
+     *     characteristicIds: array<int, int>,
+     *     npcs: array<int, Npc>,
+     *     cleanUp: callable(): void,
+     * }
+     */
+    private function arrangeCharacteristicScenario(): array
+    {
+        $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_PALADIN)->firstOrFail();
+
+        $defaultGameVersion = GameVersion::getDefaultGameVersion();
+        $dungeon            = $this->getDungeonWithCurrentMappingVersionWithEnemies($defaultGameVersion);
+        $mappingVersion     = $dungeon->getCurrentMappingVersionForGameVersion($defaultGameVersion);
+        $this->assertNotNull($mappingVersion);
+
+        $classCharacteristicIds = Spell::where('category', sprintf('spellcategory.%s', $characterClass->key))
+            ->whereNotNull('characteristic_id')
+            ->where('game_version_id', $mappingVersion->game_version_id)
+            ->pluck('characteristic_id')
+            ->unique()
+            ->values();
+        $this->assertGreaterThanOrEqual(2, $classCharacteristicIds->count());
+
+        // The universe an unaffected list is drawn from spans every characteristic of the class, so
+        // any pre-existing row would silently widen it and make the counts below wrong
+        $npcsInDungeon = Npc::query()
+            ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
+            ->where('enemies.mapping_version_id', $mappingVersion->id)
+            ->select('npcs.*')
+            ->distinct()
+            ->orderBy('npcs.id')
+            ->get();
+
+        $this->assertSame(0, NpcCharacteristic::whereIn('npc_id', $npcsInDungeon->pluck('id'))
+            ->whereIn('characteristic_id', $classCharacteristicIds)
+            ->count());
+
+        $npcs = $npcsInDungeon->unique('name')->values()->take(4);
+        $this->assertCount(4, $npcs);
+
+        $user              = User::findOrFail(1);
+        $originalDungeonId = $user->dungeon_id;
+        $user->dungeon_id  = $dungeon->id;
+        $user->save();
+
+        $npcIds = $npcs->pluck('id');
+
+        return [
+            'characterClass'    => $characterClass,
+            'dungeon'           => $dungeon,
+            'user'              => $user->fresh(),
+            'characteristicIds' => $classCharacteristicIds->take(2)->all(),
+            'npcs'              => $npcs->all(),
+            'cleanUp'           => static function () use ($npcIds, $user, $originalDungeonId): void {
+                NpcCharacteristic::whereIn('npc_id', $npcIds)->delete();
+
+                $user->dungeon_id = $originalDungeonId;
+                $user->save();
+            },
+        ];
+    }
+
+    /**
+     * @param array<int, int> $characteristicIdByNpcId
+     */
+    private function assignCharacteristics(array $characteristicIdByNpcId): void
+    {
+        foreach ($characteristicIdByNpcId as $npcId => $characteristicId) {
+            NpcCharacteristic::create([
+                'npc_id'            => $npcId,
+                'characteristic_id' => $characteristicId,
+            ]);
+        }
+    }
 }
