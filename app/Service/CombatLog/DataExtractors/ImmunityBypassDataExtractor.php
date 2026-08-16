@@ -636,10 +636,16 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
      * Drops every key whose most recent resolution is too old to explain anything that could still land, walking the
      * oldest-first map from the front and stopping at the first key that is still live.
      *
-     * Amortised O(1) per event - a key is visited exactly once, on the event that evicts it - where pruning by map
-     * size instead rebuilt all of it on every event once the live set sat near the threshold. Keys are dropped whole
-     * rather than filtered per timestamp, so a surviving key can still hold individually stale timestamps; stripping
-     * those is the read path's job, see withinProvenanceAge.
+     * A key is evicted exactly once, by the event that expires it, where pruning by map size instead rebuilt the whole
+     * map on every event once the live set sat near the threshold. Not quite constant per event: unset leaves a tombstone
+     * behind and array_key_first skips the leading run of them, which costs a few hundred nanoseconds at realistic live
+     * set sizes and is repaid whenever PHP compacts the array - well below what the old prune cost at any size.
+     *
+     * Keys are dropped whole rather than filtered per timestamp, so a surviving key can still hold individually stale
+     * timestamps; stripping those is the read path's job, see withinProvenanceAge.
+     *
+     * Deliberately a while loop over array_key_first rather than a foreach: iterating the property by value holds a
+     * second reference to it, so the first unset would separate and copy the whole hashtable - on every event.
      */
     private function expireProvenance(int $timestampMs): void
     {

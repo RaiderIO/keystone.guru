@@ -579,8 +579,10 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
     #[Test]
     public function extractData_givenManyOtherCastersRememberedSinceTheCast_stillDoesNotSetImmunityBypass(): void
     {
-        // Arrange - provenance expires by age, and a live entry must survive no matter how many *other* caster/spell
-        // keys were remembered after it. A caster guid is per mob instance, so a long log remembers a great many
+        // Arrange - provenance expires by age alone, so a live entry must survive no matter how many *other*
+        // caster/spell keys were remembered after it. A caster guid is per mob instance, so a long log remembers a
+        // great many. This guards specifically against a size cap being (re)introduced: it passes on the pre-change
+        // implementation too, whose prune was also age-based once triggered
         $spellId = 9991030;
         $this->createTestSpell($spellId);
 
