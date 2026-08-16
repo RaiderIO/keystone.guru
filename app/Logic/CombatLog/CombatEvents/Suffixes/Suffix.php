@@ -131,6 +131,18 @@ abstract class Suffix implements HasParameters
         self::SUFFIX_EMPOWER_END           => EmpowerEnd::class,
     ];
 
+    /**
+     * Concrete suffix class per already-resolved event name, keyed by "<combatLogVersion>|<eventName>".
+     *
+     * Bounded by the event names that actually resolve to a suffix - the closed set the game emits
+     * (32 distinct names across the benchmark corpus) times the handful of combat log versions a
+     * file can carry; a name that resolves to nothing throws instead of being cached. The mapping is
+     * a pure function of those two values, so retaining it between requests under Octane is safe.
+     *
+     * @var array<string, class-string<Suffix>>
+     */
+    private static array $resolvedClassNames = [];
+
     public function __construct(protected int $combatLogVersion)
     {
     }
@@ -150,12 +162,25 @@ abstract class Suffix implements HasParameters
      */
     public static function createFromEventName(int $combatLogVersion, string $eventName): Suffix
     {
+        $cacheKey = $combatLogVersion . '|' . $eventName;
+
+        // Every line pays this lookup, and the answer only ever depends on the two values in the key,
+        // so resolve an event name once and construct directly from the remembered class after that.
+        if (isset(self::$resolvedClassNames[$cacheKey])) {
+            $className = self::$resolvedClassNames[$cacheKey];
+
+            return new $className($combatLogVersion);
+        }
+
         foreach (self::SUFFIX_CLASS_MAPPING as $prefix => $className) {
             if (Str::endsWith($eventName, $prefix)) {
-                $suffix = new $className($combatLogVersion);
-                if ($suffix instanceof SuffixBuilderInterface) {
-                    return $suffix::create($combatLogVersion);
-                }
+                // is_subclass_of() answers this from the class name, so a builder no longer has an
+                // instance built and thrown away before create() is called on it.
+                $suffix = is_subclass_of($className, SuffixBuilderInterface::class)
+                    ? $className::create($combatLogVersion)
+                    : new $className($combatLogVersion);
+
+                self::$resolvedClassNames[$cacheKey] = $suffix::class;
 
                 return $suffix;
             }
