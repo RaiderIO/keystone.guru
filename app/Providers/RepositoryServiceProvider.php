@@ -105,6 +105,7 @@ use App\Repositories\Database\SimulationCraft\SimulationCraftRaidEventsOptionsRe
 use App\Repositories\Database\Speedrun\DungeonSpeedrunDifficultyRepository;
 use App\Repositories\Database\Speedrun\DungeonSpeedrunRequiredNpcNpcRepository;
 use App\Repositories\Database\Speedrun\DungeonSpeedrunRequiredNpcRepository;
+use App\Repositories\Database\Spell\SpellDescriptionImportStateRepository;
 use App\Repositories\Database\Spell\SpellDungeonRepository;
 use App\Repositories\Database\Spell\SpellEffectRepository;
 use App\Repositories\Database\SpellRepository;
@@ -222,6 +223,7 @@ use App\Repositories\Interfaces\SimulationCraft\SimulationCraftRaidEventsOptions
 use App\Repositories\Interfaces\Speedrun\DungeonSpeedrunDifficultyRepositoryInterface;
 use App\Repositories\Interfaces\Speedrun\DungeonSpeedrunRequiredNpcNpcRepositoryInterface;
 use App\Repositories\Interfaces\Speedrun\DungeonSpeedrunRequiredNpcRepositoryInterface;
+use App\Repositories\Interfaces\Spell\SpellDescriptionImportStateRepositoryInterface;
 use App\Repositories\Interfaces\Spell\SpellDungeonRepositoryInterface;
 use App\Repositories\Interfaces\Spell\SpellEffectRepositoryInterface;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
@@ -338,6 +340,7 @@ class RepositoryServiceProvider extends ServiceProvider
         // Spell
         $this->app->bind(SpellDungeonRepositoryInterface::class, SpellDungeonRepository::class);
         $this->app->bind(SpellEffectRepositoryInterface::class, SpellEffectRepository::class);
+        $this->app->bind(SpellDescriptionImportStateRepositoryInterface::class, SpellDescriptionImportStateRepository::class);
 
         // Tags
         $this->app->bind(TagCategoryRepositoryInterface::class, TagCategoryRepository::class);

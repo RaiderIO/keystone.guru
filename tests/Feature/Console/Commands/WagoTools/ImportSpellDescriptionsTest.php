@@ -4,6 +4,7 @@ namespace Tests\Feature\Console\Commands\WagoTools;
 
 use App\Models\GameVersion\GameVersion;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellDescriptionImportState;
 use App\Models\Spell\SpellEffect;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -56,6 +57,7 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
         } finally {
             $spell?->delete();
             new Spell()->flushCache();
+            $this->clearImportState();
             $this->removeDb2Tables();
         }
     }
@@ -95,6 +97,7 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
             new SpellEffect()->flushCache();
             $spell?->delete();
             new Spell()->flushCache();
+            $this->clearImportState();
             $this->removeDb2Tables();
         }
     }
@@ -126,6 +129,7 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
             $spell?->delete();
             $describedSpell?->delete();
             new Spell()->flushCache();
+            $this->clearImportState();
             $this->removeDb2Tables();
         }
     }
@@ -152,6 +156,7 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
         } finally {
             $spell?->delete();
             new Spell()->flushCache();
+            $this->clearImportState();
             $this->removeDb2Tables();
         }
     }
@@ -185,6 +190,7 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
             $classicSpell?->delete();
             $describedSpell?->delete();
             new Spell()->flushCache();
+            $this->clearImportState();
             $this->removeDb2Tables();
         }
     }
@@ -214,8 +220,16 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
             $unknownSpell?->delete();
             $describedSpell?->delete();
             new Spell()->flushCache();
+            $this->clearImportState();
             $this->removeDb2Tables();
         }
+    }
+
+    private function clearImportState(): void
+    {
+        SpellDescriptionImportState::query()
+            ->where('game_version_id', GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL])
+            ->delete();
     }
 
     private function createSpell(int $spellId, ?string $description, ?int $gameVersionId = null): Spell

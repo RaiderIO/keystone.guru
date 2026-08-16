@@ -4,6 +4,7 @@ namespace App\Service\Spell\Description;
 
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellEffect;
+use App\Repositories\Interfaces\Spell\SpellDescriptionImportStateRepositoryInterface;
 use App\Service\Spell\Description\Dtos\SpellDescriptionImportResult;
 use App\Service\Spell\Description\Dtos\SpellDescriptionTemplates;
 use App\Service\Spell\Description\Dtos\SpellDescriptionValue;
@@ -12,6 +13,7 @@ use App\Service\Spell\Description\Logging\SpellDescriptionImportServiceLoggingIn
 use App\Service\WagoTools\WagoToolsServiceInterface;
 use Closure;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
 
 /**
  * Builds the descriptions of every spell we know from the game client's DB2 tables.
@@ -34,9 +36,10 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
     private const int MAX_REFERENCE_PASSES = 3;
 
     public function __construct(
-        private readonly WagoToolsServiceInterface                     $wagoToolsService,
-        private readonly SpellDescriptionParserInterface               $spellDescriptionParser,
-        private readonly SpellDescriptionImportServiceLoggingInterface $log,
+        private readonly WagoToolsServiceInterface                      $wagoToolsService,
+        private readonly SpellDescriptionParserInterface                $spellDescriptionParser,
+        private readonly SpellDescriptionImportStateRepositoryInterface $spellDescriptionImportStateRepository,
+        private readonly SpellDescriptionImportServiceLoggingInterface  $log,
     ) {
     }
 
@@ -90,6 +93,8 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
             $this->persistEffects(array_intersect_key($effects, $ourIds));
 
             $updatedCount = $this->renderAndPersist($context, $spells, $templates, $onProgress);
+
+            $this->spellDescriptionImportStateRepository->recordImport($gameVersionId, $product, $build, Carbon::now());
 
             return new SpellDescriptionImportResult(
                 build: $build,
