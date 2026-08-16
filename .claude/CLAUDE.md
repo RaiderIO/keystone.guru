@@ -412,7 +412,9 @@ Raw writes (e.g. `upsert()`) on `CacheModel` models skip `laravel-model-caching`
 but **missing cache invalidation must not be raised as a review finding** (Wotuu, PR #3766): the
 `CacheModel` tables are read-only in production, caching is off in development, and every release
 rotates the cache prefix anyway. Full rationale and the legitimate reasons to still prefer a
-model-level write: see the `laravel-best-practices` skill, "Model caching vs raw writes".
+model-level write: see the `project-backend-structure` skill, "Model caching vs raw writes".
+(It lives there, not in `laravel-best-practices`: Boost owns that skill's directory and wipes it
+wholesale on every `boost:update`.)
 
 ### Model Creation
 - Every new model must also have a repository. Create the interface at `app/Repositories/Interfaces/{Domain}/{ModelName}RepositoryInterface.php`, the implementation at `app/Repositories/Database/{Domain}/{ModelName}Repository.php`, and register the binding in `app/Providers/RepositoryServiceProvider.php`. See the `repository-pattern` skill for the full convention.

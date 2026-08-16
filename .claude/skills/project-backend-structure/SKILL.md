@@ -145,6 +145,29 @@ cache busting is tied to the model-caching package (`config/laravel-model-cachin
   `TracksPageViewInterface`, `CloneForNewMappingVersionInterface`, ...
 - Every model gets a repository (see repository-pattern skill).
 
+### Model caching vs raw writes (overrides generic review instincts)
+
+`laravel-model-caching`'s `Cachable` trait hangs its cache invalidation off Eloquent's
+`saving`/`saved` events. Any raw write that goes straight to the query builder skips that
+invalidation — `upsert()` is the usual example, but so is anything else that never boots a model.
+
+**Missing cache invalidation is not a valid reason to avoid such a write, and must not be raised as
+a review finding** (Wotuu, PR #3766):
+
+- Model caching is **disabled in development** (`MODEL_CACHE_ENABLED=false`) and **enabled in
+  production**.
+- The tables behind `CacheModel` are **strictly read-only in production** — no production write can
+  leave a stale cache entry, and in development there is no cache to go stale.
+- The cache prefix in `config/laravel-model-caching.php` is keyed on the contents of the `version`
+  file, so every release sidesteps the previous release's model cache regardless.
+
+Reasons *other* than cache invalidation to prefer a model-level write still stand on their own
+merits — e.g. needing the saved model instance back (`upsert()` returns a row count, and
+re-fetching it needs a natural unique key), or observers/events that genuinely must fire. (For
+reference, `laravel-model-caching`'s `Traits/Buildable.php` does flush on `update()`, `delete()`,
+`forceDelete()`, `insert()`, `increment()`/`decrement()` and `truncate()` — `upsert()` is simply
+not among the methods it overrides.)
+
 ### Mapping-versioned models
 
 The dungeon "mapping" (enemies, packs, patrols, map icons, floor unions, mountable areas, ...)

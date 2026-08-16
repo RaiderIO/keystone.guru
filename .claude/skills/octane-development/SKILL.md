@@ -1,6 +1,6 @@
 ---
 name: octane-development
-description: "Use this skill when working with Laravel Octane, a long-running PHP worker server (Swoole, FrankenPHP, RoadRunner) where the application boots once and serves many requests instead of rebooting for each request like PHP-FPM. Trigger when installing Octane or starting its server; configuring or detecting the active driver for driver-specific code; using Octane::concurrently(), Octane::table(), the Octane cache, or shared in-memory state across workers; controlling worker memory growth; or testing Octane behavior. Skip plain PHP-FPM applications with no persistent worker."
+description: "Use when working with Laravel Octane, the long-running PHP worker server (Swoole, FrankenPHP, RoadRunner) where the app boots once and serves many requests — installing/starting it, detecting the active driver, `Octane::concurrently()`/`Octane::table()`, the Octane cache, shared in-memory state, worker memory growth, and testing Octane behaviour. Not for plain PHP-FPM apps."
 license: MIT
 metadata:
   author: laravel

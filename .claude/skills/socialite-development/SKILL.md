@@ -1,6 +1,6 @@
 ---
 name: socialite-development
-description: "Manages OAuth social authentication with Laravel Socialite. Activate when adding social login providers; configuring OAuth redirect/callback flows; retrieving authenticated user details; customizing scopes or parameters; setting up community providers; testing with Socialite fakes; or when the user mentions social login, OAuth, Socialite, or third-party authentication."
+description: "Use for OAuth social authentication with Laravel Socialite — adding providers, redirect/callback flows, retrieving the authenticated user, scopes/parameters, community providers, and testing with Socialite fakes."
 license: MIT
 metadata:
   author: laravel

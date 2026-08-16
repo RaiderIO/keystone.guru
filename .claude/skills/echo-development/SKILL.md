@@ -1,6 +1,6 @@
 ---
 name: echo-development
-description: "Develops real-time broadcasting with Laravel Echo. Activates when setting up broadcasting (Reverb, Pusher, Ably); creating ShouldBroadcast events; defining broadcast channels (public, private, presence, encrypted); authorizing channels; configuring Echo; listening for events; implementing client events (whisper); setting up model broadcasting; broadcasting notifications; or when the user mentions broadcasting, Echo, WebSockets, real-time events, Reverb, or presence channels."
+description: "Use for real-time broadcasting with Laravel Echo/Reverb — ShouldBroadcast events, public/private/presence/encrypted channels and their authorization, Echo config, listening, client events (whisper), model broadcasting, and broadcast notifications."
 license: MIT
 metadata:
   author: laravel

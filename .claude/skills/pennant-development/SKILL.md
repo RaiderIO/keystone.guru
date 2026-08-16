@@ -1,6 +1,6 @@
 ---
 name: pennant-development
-description: "Use when working with Laravel Pennant the official Laravel feature flag package. Trigger whenever the query mentions Pennant by name or involves feature flags or feature toggles in a Laravel project. Tasks include defining feature flags checking whether features are active creating class based features in `app/Features` using Blade `@feature` directives scoping flags to users or teams building custom Pennant storage drivers protecting routes with feature flags testing feature flags with Pest or PHPUnit and implementing A B testing or gradual rollouts with feature flags. Do not trigger for generic Laravel configuration authorization policies authentication or non Pennant feature management systems."
+description: "Use when working with Laravel Pennant or feature flags/toggles in a Laravel project — defining/checking flags, class-based features in `app/Features`, Blade `@feature`, scoping to users/teams, custom storage drivers, protecting routes, testing flags, A/B or gradual rollouts. Not for generic Laravel configuration, authorization, or non-Pennant feature systems."
 license: MIT
 metadata:
   author: laravel
