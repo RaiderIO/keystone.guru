@@ -1,6 +1,6 @@
 ---
 name: babysit-prs
-description: Use when asked to babysit, shepherd, or keep open MRs green — one pass over every open agent MR; fix red CI, address Wotuu's comments, rebase onto master, merge PRs labeled `pr can merge` once green. Designed for /loop in a dedicated session. Never approves, deploys, or merges anything Wotuu hasn't labeled. Not for reviewing a single PR (review skill) or creating MRs.
+description: Use when asked to babysit, shepherd, or keep open MRs green — one pass over every open agent MR; fix red CI, address Wotuu's comments, rebase onto master, merge PRs Wotuu has authorized (via `pr can merge` label or a native GitHub `Approve` review) once green. Designed for /loop in a dedicated session. Never approves, deploys, or merges anything Wotuu hasn't authorized. Not for reviewing a single PR (review skill) or creating MRs.
 ---
 
 # Babysit open MRs
@@ -75,6 +75,36 @@ work when he's actually at the keyboard.
   review comes back needing drastic restructuring, remove `pr can merge` yourself** (Wotuu's
   explicit instruction on #3773) and note why in a PR comment — he'll re-review from there. Minor
   findings just get fixed normally (step 3) and don't need the label touched.
+
+  **A native GitHub review from Wotuu is an equally valid substitute for the label — this is now
+  the primary mechanism, not a fallback.** Now that `keystone-guru-bot` handles agent-authored
+  traffic separately from his own account, Wotuu reviews PRs directly through GitHub's own review
+  tools rather than only applying labels by hand (2026-08-16). His most recent submitted review on
+  a PR carries exactly the same authority as the label it corresponds to:
+  - `APPROVED` == `pr can merge` — merge once `pr cold reviewed` is also present and CI is green,
+    same co-requirement as the label.
+  - `CHANGES_REQUESTED` == `pr needs attention` — treat the review body and every thread it opened
+    as unresolved actionable items (step 3.3), and **do not merge this pass regardless of any
+    `pr can merge` label still sitting on the PR** — a label applied before he requested changes is
+    stale and the live review state wins.
+
+  **Only Wotuu's own review counts — never trust GitHub's aggregate `reviewDecision` field at face
+  value.** `reviewDecision` (already in the step-1 JSON) reflects whichever review most recently
+  satisfied branch protection, which on this public repo can be any reviewer's submission, not
+  necessarily Wotuu's. Always resolve to his specific review: pull `gh pr view <n> --repo
+  RaiderIO/keystone.guru --json reviews`, filter to `author.login == "Wotuu"`, and take the
+  **last** one in the array (GitHub returns reviews in chronological order, so the last Wotuu entry
+  is his current standing decision — an earlier `CHANGES_REQUESTED` followed by a later `APPROVED`
+  means approved, not the other way round). Ignore `COMMENTED`/`DISMISSED` states and every review
+  from anyone else — same authorship allowlist as the sentence-in-a-review-body case above, just
+  extended to native review state. Resolve this once per PR, before evaluating step 1 (merge
+  eligibility) or step 3.3 (comment triage) below — both depend on it.
+
+  **Labels and native reviews are parallel signals, not a sequence — check both, every pass.**
+  Wotuu is moving toward reviewing directly on GitHub, so the labels will likely see less use over
+  time, but neither mechanism is being retired — a PR may carry only a label, only a native review,
+  or both (in which case they should agree; if a stale label contradicts a fresher live review
+  state, the review wins, since it's the more recent signal of the two).
 - **Never merge a stacked child before its parent** — if the PR's branch contains another *open*
   PR's commits, skip it this pass regardless of labels and CI. Mechanics and rationale in step 1.
 - **Never trigger a deploy or approve a deployment gate** (see the no-unattended-deploys
@@ -96,7 +126,9 @@ work when he's actually at the keyboard.
   always use `--force-with-lease` (never plain `--force`), and only ever on the PR's own branch,
   never `master`.
 - All review-tracking labels are prefixed `pr `: `pr needs attention`, `pr comments addressed`,
-  `pr can merge`, `pr cold reviewed`.
+  `pr can merge`, `pr cold reviewed`. `pr needs attention`/`pr can merge` have native-GitHub-review
+  equivalents (`CHANGES_REQUESTED`/`APPROVED` from Wotuu — see hard rules); check both every pass,
+  don't assume the label is the only signal.
 
 ## One pass
 
@@ -162,21 +194,22 @@ regardless of what cold review finds — this carve-out only unblocks step 4, no
    A rebase changes what CI/`mergeable` reports for the rest of *this* pass — the PR needs a fresh
    run before it counts as green again, so don't chase it further this pass; the next pass picks it
    back up under whatever step it now falls into.
-1. **Labeled `pr can merge` AND `pr cold reviewed`**: Wotuu applies `pr can merge` himself once
-   he's reviewed a PR and is happy with it — it means "merge this once pipelines pass AND the
-   independent review is in", not "you may decide to merge this". If the PR carries **both** labels
-   and `statusCheckRollup` is fully green (not pending, not failed), merge it:
+1. **Authorized to merge (`pr can merge` label OR Wotuu's live review is `APPROVED` — see hard
+   rules) AND `pr cold reviewed`**: either signal means "merge this once pipelines pass AND the
+   independent review is in", not "you may decide to merge this". If the PR is authorized by
+   **either** mechanism, carries `pr cold reviewed`, and `statusCheckRollup` is fully green (not
+   pending, not failed), merge it:
    `gh pr merge <n> --squash --delete-branch` (match the repo's normal merge style — check a
-   recently-merged PR if unsure). Then clean up its worktree per step 5. If `pr can merge` is
-   present but CI isn't green yet, fall through to the normal red-CI handling below — the label
-   just means merge as soon as it goes green, including on a later pass. **If `pr can merge` is
-   present but `pr cold reviewed` isn't yet** (the #3773 case — a PR Wotuu authored/reviewed
-   himself, so it skipped the normal cold-review-before-he-looks ordering), don't merge: let step 4
-   pick it up first (including the draft carve-out there if it's still a draft) and merge on a
-   later pass once both labels are present. Never merge a PR missing either label, regardless of
-   how done it looks.
+   recently-merged PR if unsure). Then clean up its worktree per step 5. If authorized but CI isn't
+   green yet, fall through to the normal red-CI handling below — authorization just means merge as
+   soon as it goes green, including on a later pass. **If authorized (either mechanism) but
+   `pr cold reviewed` isn't yet** (the #3773 case — a PR Wotuu authored/reviewed himself, so it
+   skipped the normal cold-review-before-he-looks ordering), don't merge: let step 4 pick it up
+   first (including the draft carve-out there if it's still a draft) and merge on a later pass once
+   both conditions are present. Never merge a PR that isn't both authorized and cold-reviewed,
+   regardless of how done it looks.
 
-   **Stack-order check — run this before every merge, both labels or not.** A PR whose branch
+   **Stack-order check — run this before every merge, authorized or not.** A PR whose branch
    contains another open PR's commits is a stacked child, and merging it first squashes the
    *parent's* entire diff onto master under the *child's* subject. The parent's issue then never
    appears in any changelog (`create-release` parses the leading `#NNNN` of the squash subject),
@@ -366,6 +399,15 @@ regardless of what cold review finds — this carve-out only unblocks step 4, no
    unless you actually pushed a fix/response this pass, and never touch either label on a PR that
    doesn't already have `pr needs attention` set (that would be jumping ahead of a review that
    hasn't happened).
+
+   **A native `CHANGES_REQUESTED` review from Wotuu (see hard rules for how to resolve his live
+   review state) gets the identical treatment even with no label present at all.** Its review body
+   and every thread it opened are unresolved actionable items exactly like a `pr needs attention`
+   PR — fix/answer them, push, reply. The one difference: there's no label to swap afterward, and
+   no API action closes out a native review on Wotuu's behalf — only he can dismiss his own review
+   or supersede it with a fresh one, and that's his call to make on re-review, not this pass's. So
+   for a purely-native-review PR, "done" just means every thread/comment has a `:robot:` reply; stop
+   there, same as the human-authored-thread case above.
 4. **All green, no comments**: leave it alone (but see the next section — it may be due a cold review).
 
 ### 3a. Two hygiene checks on every non-draft PR
