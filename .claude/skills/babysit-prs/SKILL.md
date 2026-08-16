@@ -385,29 +385,33 @@ regardless of what cold review finds — this carve-out only unblocks step 4, no
    resolved. A comment thread here (via `-X POST .../pulls/<n>/comments/<comment-id>/replies`) only
    applies to inline review comments, not these top-level ones.
 
-   If the PR carries the `pr needs attention` label and you addressed (committed + pushed, or
-   answered) **every** unresolved actionable item across all three feeds — review threads,
-   top-level PR comments, and review bodies — not just some; the label tells Wotuu "ready for you
-   to look again", which a half-addressed PR is not — swap the label: remove `pr needs attention`,
-   add `pr comments addressed` —
-   `sh/gh-bot.sh pr edit <n> --remove-label "pr needs attention" --add-label "pr comments addressed"`
-   (`pr edit` works for labels even though it's broken for body edits — and it must run through
-   `sh/gh-bot.sh`, or the swap is attributed to Wotuu). This is Wotuu's own
-   review-tracking system: `pr needs attention` means "I left feedback that needs your attention" —
-   a question or suggestion, not necessarily a required change — and `pr comments addressed` means
-   "my feedback was addressed, ready for me to look again". Don't apply `pr comments addressed`
-   unless you actually pushed a fix/response this pass, and never touch either label on a PR that
-   doesn't already have `pr needs attention` set (that would be jumping ahead of a review that
-   hasn't happened).
+   If you addressed (committed + pushed, or answered) **every** unresolved actionable item across
+   all three feeds — review threads, top-level PR comments, and review bodies — not just some,
+   close the loop with **both** of the following that apply, so Wotuu reliably sees the PR needs
+   his attention again regardless of which signal he's watching (2026-08-16, his explicit request —
+   he missed a PR being ready because he was only watching the native review state, not the label):
 
-   **A native `CHANGES_REQUESTED` review from Wotuu (see hard rules for how to resolve his live
-   review state) gets the identical treatment even with no label present at all.** Its review body
-   and every thread it opened are unresolved actionable items exactly like a `pr needs attention`
-   PR — fix/answer them, push, reply. The one difference: there's no label to swap afterward, and
-   no API action closes out a native review on Wotuu's behalf — only he can dismiss his own review
-   or supersede it with a fresh one, and that's his call to make on re-review, not this pass's. So
-   for a purely-native-review PR, "done" just means every thread/comment has a `:robot:` reply; stop
-   there, same as the human-authored-thread case above.
+   - **Label** (if the PR carries `pr needs attention`): swap it — remove `pr needs attention`, add
+     `pr comments addressed` — `sh/gh-bot.sh pr edit <n> --remove-label "pr needs attention"
+     --add-label "pr comments addressed"` (`pr edit` works for labels even though it's broken for
+     body edits — and it must run through `sh/gh-bot.sh`, or the swap is attributed to Wotuu). This
+     is Wotuu's own review-tracking system: `pr needs attention` means "I left feedback that needs
+     your attention" — a question or suggestion, not necessarily a required change — and
+     `pr comments addressed` means "my feedback was addressed, ready for me to look again". Don't
+     apply `pr comments addressed` unless you actually pushed a fix/response this pass, and never
+     touch either label on a PR that doesn't already have `pr needs attention` set (that would be
+     jumping ahead of a review that hasn't happened).
+   - **Native re-request** (if Wotuu's live review state — resolved per the hard rules — is
+     `CHANGES_REQUESTED`, label present or not): re-request his review — `sh/gh-bot.sh pr edit <n>
+     --repo RaiderIO/keystone.guru --add-reviewer Wotuu`. `CHANGES_REQUESTED` is sticky — it does
+     **not** clear just because every thread has a `:robot:` reply, and a reply alone raises no
+     signal in Wotuu's GitHub notifications, his "review requested" queue, or the PR's merge-box
+     badge. Re-requesting is the same action the "Re-request review" button in GitHub's own UI
+     performs, and it's the only thing (short of Wotuu submitting a fresh review himself) that
+     clears the stale `CHANGES_REQUESTED` badge and puts the PR back in front of him. This is *in
+     addition to* any label swap above, not instead of it — apply both whenever both conditions
+     hold. Only he can actually submit a superseding review or dismiss his own — this action just
+     makes sure he's asked again, it doesn't decide anything on his behalf.
 4. **All green, no comments**: leave it alone (but see the next section — it may be due a cold review).
 
 ### 3a. Two hygiene checks on every non-draft PR
