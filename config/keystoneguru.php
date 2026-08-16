@@ -271,7 +271,7 @@ return [
         /** How many creators to show per page of the directory */
         'per_page' => 24,
 
-        /** How many creators to feature in the rail - four fit one clean row at its 70rem measure */
+        /** How many creators to feature in the rail - four is what fits its 70rem measure without the shelf needing to scroll on a desktop */
         'featured_count' => 4,
 
         /** The rail is a site-wide list off a heavy GROUP BY, so it may go this stale - see getFeaturedCreators() */

@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\Collection;
  *
  * Opening the page is what makes it a rail rather than a section. A six-across grid of tiles here
  * would cold-open the page on creators and push the routes the visitor came for below the fold; one
- * row of horizontal entries costs about 100px and reads as a caption above the hero, not as a
- * section competing with it.
+ * row of horizontal entries costs 94px and reads as a caption above the hero, not as a section
+ * competing with it.
  *
  * Two earlier passes read as a list of tags rather than as people, and neither cause was size: the
  * label sat inline ahead of the entries ("label: item item item" is tag-list grammar), and each
@@ -33,8 +33,9 @@ use Illuminate\Database\Eloquent\Collection;
  */
 ?>
 @if($featuredCreators->isNotEmpty())
-    {{-- A named landmark rather than a heading: dropping the heading row left seven sibling links
-         with nothing to announce or navigate to them by. What this is, is navigation. --}}
+    {{-- A named landmark rather than a heading: the label is a link, not a heading element, so
+         without this the rail is a run of sibling links at the top of the page with nothing to
+         announce it or navigate to it by. What this is, is navigation. --}}
     <nav class="discover_creator_rail mt-4" aria-label="{{ __('view_creator.featured.title') }}">
         {{-- On its own line, not inline ahead of the entries: "label: item item item" on one line is
              the grammar of a tag list, and the rail read as one. The link doubles as the label. --}}
@@ -55,8 +56,8 @@ use Illuminate\Database\Eloquent\Collection;
                 ?>
                 <a href="{{ route('profile.view', ['user' => $creator]) }}"
                    class="discover_creator_entry"
-                   {{-- Carries the name too, not just the count: the name clips to an ellipsis at
-                        rail width (always, under the phone cap) and the tooltip is its reveal path --}}
+                   {{-- Carries the name too, not just the count: a long name clips to an ellipsis at
+                        the entry's fixed width, and the tooltip is its only reveal path --}}
                    title="{{ __('view_creator.featured.entry_title', [
                        'name'   => $creator->name,
                        'routes' => trans_choice('view_creator.card.route_count', $publishedRouteCount, ['count' => $publishedRouteCount]),

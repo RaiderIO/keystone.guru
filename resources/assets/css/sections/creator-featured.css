@@ -90,9 +90,16 @@
     color: inherit;
 }
 
+/*
+ * An inset ring, not an outset one. The entries live in a scroll container now, and an outline
+ * contributes nothing to the scrollable overflow region - so a positive offset is simply clipped:
+ * the top 4px on every entry (overflow-x: auto makes the block axis a scrollport too), and the
+ * left edge of the first entry at scroll position 0. A negative offset draws the ring just inside
+ * the entry's own border box, where nothing can crop it, at any width or scroll position.
+ */
 .discover_creator_entry:focus-visible {
     outline: 2px solid var(--theme-btn-accent);
-    outline-offset: 2px;
+    outline-offset: -2px;
 }
 
 .discover_creator_avatar,
@@ -145,9 +152,9 @@
     line-height: 1.25;
 }
 
-/* One line each: the rail wraps between entries, never inside one. A name clipped here stays
-   readable via the entry's title attribute, which carries the full name alongside the published
-   route count - keep those two in step (see creator/featured.blade.php). */
+/* One line each: an entry is always exactly two lines tall, whatever the name's length. Text clipped
+   here stays readable via the entry's title attribute, which carries the full name alongside the
+   published route count - keep those two in step (see creator/featured.blade.php). */
 .discover_creator_name,
 .discover_creator_count {
     overflow: hidden;
