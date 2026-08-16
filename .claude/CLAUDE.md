@@ -345,7 +345,9 @@ green, then undraft again.
 General PHP style, Eloquent/DB conventions, model/repository creation, `SeederModel` rows,
 controller validation, routes, queues, auth, and migrations (including the backward-compatible
 deploy rule from #3497 and the no-foreign-keys override) all now live in the `laravel-best-practices`
-skill, "Project conventions" section — load it before writing or reviewing any PHP/Laravel code.
+skill, §21 "Project conventions" — load it before writing or reviewing any PHP/Laravel code.
+That skill's §20 also carries a **reviewer-facing** rule: missing model-cache invalidation on a raw
+write must **not** be raised as a review finding (Wotuu, PR #3766).
 
 #### Model caching is not a reason to avoid writes that bypass Eloquent events
 Raw writes (e.g. `upsert()`) on `CacheModel` models skip `laravel-model-caching`'s invalidation —

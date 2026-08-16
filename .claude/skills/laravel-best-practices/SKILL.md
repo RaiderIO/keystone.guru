@@ -18,24 +18,32 @@ Check sibling files, related controllers, models, or tests for established patte
 
 ## Project conventions (project-specific — apply alongside the generic rules above)
 
-### General
+These are keystone.guru's own conventions, moved here from `.claude/CLAUDE.md`. Where they
+contradict a generic rule from the index below, **these win** — most notably the no-foreign-keys
+rule under Migrations, which overrides `rules/migrations.md`'s `constrained()` guidance. Model
+caching vs raw writes is a separate project-specific override that lives in the
+`project-backend-structure` skill instead of here, because Boost wipes this skill's directory
+wholesale on every `boost:update` — see `.claude/CLAUDE.md`, "Model caching is not a reason to
+avoid writes that bypass Eloquent events".
+
+#### General
 - `sprintf` should always be used over direct concatenation for dynamic strings.
 
-### PHP style
+#### PHP style
 - If there's existing comments in the code, prefer to keep them around if they aren't completely redundant.
 - Class definition order: traits, constants, static properties, private properties, protected properties, public properties, constructor, public methods, protected methods, private methods, static methods, magic methods (like `__call` or `__get`).
 
-### Database & Eloquent
+#### Database & Eloquent
 - Always use proper Eloquent relationship methods with return type hints. Prefer relationship methods over raw queries or manual joins.
 - Use Eloquent models and relationships before suggesting raw database queries.
 - Avoid `DB::`; prefer `Model::query()`. Generate code that leverages Laravel's ORM capabilities rather than bypassing them.
 - Generate code that prevents N+1 query problems by using eager loading.
 - Use Laravel's query builder for very complex database operations.
 
-### Model Creation
+#### Model Creation
 - Every new model must also have a repository. Create the interface at `app/Repositories/Interfaces/{Domain}/{ModelName}RepositoryInterface.php`, the implementation at `app/Repositories/Database/{Domain}/{ModelName}Repository.php`, and register the binding in `app/Providers/RepositoryServiceProvider.php`. See the `repository-pattern` skill for the full convention.
 
-### Seeded models (`SeederModel`)
+#### Seeded models (`SeederModel`)
 The `SeederModel` trait is a marker, not a guarantee rows come from seeders — some trait users
 (`SpellDungeon`, `NpcCharacteristic`, `NpcSpell`, `CombatLogNpcEvent`, `CombatLogSpellEvent`,
 `ParsedCombatLog`) are combat-log-derived and a delete is **permanent**, not recoverable from
@@ -43,7 +51,7 @@ The `SeederModel` trait is a marker, not a guarantee rows come from seeders — 
 `combatlog:detectstaledata` sweep may delete such rows (convention, not enforced). Full list and
 rationale: `seeder-load` skill, "SeederModel rows".
 
-### Controllers & Validation
+#### Controllers & Validation
 - Always create Form Request classes for validation rather than inline validation in controllers. Include both validation rules and custom error messages.
 - Check sibling Form Requests to see if the application uses array or string based validation rules.
 - Any IDs in the post body of a request should be validated to ensure they exist in the database and are of the correct type. For example: `['user_id' => ['required', 'integer', 'exists:users,id']]`. Do not put this validation in a controller; it should be in a Form Request.
@@ -57,20 +65,20 @@ rationale: `seeder-load` skill, "SeederModel rows".
     }
 ```
 
-### Routes & controller method naming
+#### Routes & controller method naming
 - Never name a controller method registered with first-class callable syntax
   (`Route::get('new', new FooController()->new(...))`) after a PHP reserved word (`new`, `list`,
   `print`, ...) — `route:cache` serialization crashes per-request in production only, not in tests.
   The route path/name string may keep the reserved word; only the method needs renaming. Full
   mechanics: `api-endpoint` skill, "Reserved-word controller methods".
 
-### Queues
+#### Queues
 - Use queued jobs for time-consuming operations with the `ShouldQueue` interface.
 
-### Authentication & Authorization
+#### Authentication & Authorization
 - Use Laravel's built-in authentication and authorization features (gates, policies, Sanctum, etc.).
 
-### Migrations
+#### Migrations
 - **Do not use foreign keys** — this overrides the generic `constrained()` rule above. This
   application does not use them; they can cause issues with seeding and testing.
 - **Migrations must be backward-compatible with the currently-running code.** Deploys are not atomic: a cron runs `migrate` independently of the ECS web rollout, so during every deploy the old code and the new schema (and vice-versa) coexist for a window. Additive changes (new nullable/defaulted column, new table, backfill) are safe. **Destructive changes are not** — never drop a table/column, rename it, or narrow its type in the same release that removes the code using it, or the still-running old containers will 500 against the missing schema (this is what broke staging in #3497).
@@ -85,7 +93,7 @@ rationale: `seeder-load` skill, "SeederModel rows".
 ## How to Apply
 
 1. Check the changed files, nearby code, project configuration, and relevant tests for established patterns. Deviate only for a correctness or security defect, and call the deviation out.
-2. Map every affected concern to the rule index below. Read each mapped rule file before editing. Skip unrelated rule files.
+2. Map every affected concern to the rule index below. Read each mapped rule file before editing. Skip unrelated rule files. **Always apply the "Project conventions" section above too, whatever the file type** — it's keystone.guru's own conventions and overrides the generic rules (no foreign keys in migrations, among others).
 3. Make the smallest coherent change. Keep the application's architecture and naming instead of introducing a second pattern for the same job.
 4. Verify version-sensitive Laravel APIs for the installed version with `search-docs`, or inspect the installed framework when it is unavailable.
 5. Run the narrowest relevant tests first, then the project's formatting and static-analysis checks when the change warrants them.

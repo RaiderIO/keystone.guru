@@ -21,7 +21,9 @@ it was blind to its own assumptions.
    the inline Bash output limit.
 2. Get the PR title/body for context: `gh pr view <n> --repo RaiderIO/keystone.guru --json title,body`.
 3. Read the CLAUDE.md files relevant to touched paths (repo root `CLAUDE.md` and `.claude/CLAUDE.md`,
-   plus any directory-specific conventions) to check for compliance violations.
+   plus any directory-specific conventions) to check for compliance violations. **If the diff touches
+   PHP, also load the `laravel-best-practices` skill** — this repo's PHP/Laravel conventions live in
+   its §21, and its §20 records findings you must *not* raise (missing model-cache invalidation).
 4. Use `git log`/`git blame` on touched files (after `git fetch origin`) and check prior PR review
    comments on the same files if useful context.
 5. Look for: CLAUDE.md-compliance violations, correctness bugs, missed edge cases, security issues

@@ -123,8 +123,8 @@ curl -s https://staging.keystone.guru/ | grep -oE "compiled/[^/\"']+/js/app-[^\"
   release that removes its code consumers will 500 the still-running old containers against the
   missing schema. This is exactly what broke staging in **#3497** (dropped the `release_*`
   tables while old code still queried them). Split it expand/contract: release N removes the
-  code + does additive/backfill work, release N+1 does the `drop`. See CLAUDE.md → *Database
-  (migrations)*.
+  code + does additive/backfill work, release N+1 does the `drop`. See the `laravel-best-practices`
+  skill, §21 *Project conventions → Migrations*.
 - **Cron/scheduler AWS calls need the task-role creds re-exported.** The ECS `cron` service runs
   the system cron daemon, which executes `schedule:run` with a **scrubbed environment** — so the
   ECS-injected `AWS_CONTAINER_CREDENTIALS_RELATIVE_URI` (the task-role endpoint pointer) is lost,

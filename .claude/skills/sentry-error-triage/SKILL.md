@@ -198,7 +198,8 @@ a filed issue.
 
 **Do not enter the fix phase at all** when the change would touch:
 
-- database migrations (deploys are not atomic — see the backward-compatibility rules in `CLAUDE.md`)
+- database migrations (deploys are not atomic — see the backward-compatibility rules in the
+  `laravel-best-practices` skill, §21 *Project conventions → Migrations*)
 - authentication, authorization or anything in the `security-review` skill's surface
 - infra/CDK, or payment/Patreon code
 
