@@ -152,6 +152,11 @@ use Laravel\Pennant\Feature;
             </div>
         @endif
 
+        <?php // Creators close the page rather than open it: the visitor came for a route, not for whoever wrote it ?>
+        @feature(\App\Features\CreatorProfiles::class)
+            @include('creator.featured')
+        @endfeature
+
         @if( !$adFree && !$isMobile)
             <div align="center" class="mt-4">
                 @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header', 'reportAdPosition' => 'top-right'])

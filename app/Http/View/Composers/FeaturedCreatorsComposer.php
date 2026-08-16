@@ -6,11 +6,12 @@ use App\Service\Creator\CreatorDirectoryServiceInterface;
 use Illuminate\View\View;
 
 /**
- * Binds the featured creators onto the partial itself rather than onto the discover landing page.
+ * Binds the featured creators onto the partial itself rather than onto the page including it.
  *
- * Three different controller methods render dungeonroute.discover.discover, so passing the data
- * from each one would have to be repeated three times and would silently break the day a fourth is
- * added. Composing the partial keeps the landing page's change to a single @include.
+ * The strip is a self-contained section that any of the discover surfaces may pick up, and the
+ * controllers behind them already assemble a lot. Composing the partial means adding it to another
+ * page is a single @include that can never silently render empty because someone forgot to pass the
+ * data - the same reason DiscoverSearchComposer and DiscoverAffixGroupComposer exist.
  */
 readonly class FeaturedCreatorsComposer implements ViewComposerInterface
 {

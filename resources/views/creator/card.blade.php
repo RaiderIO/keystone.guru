@@ -3,8 +3,9 @@
 use App\Models\User;
 
 /**
- * A single creator tile. Shared by the creator directory and the featured row on the discover
- * landing page, so it must not assume either page's surrounding layout.
+ * A single creator tile, as the creator directory renders it. The featured-creators strip on the
+ * per-dungeon route page deliberately uses its own flatter markup instead - see
+ * creator/featured.blade.php for why.
  *
  * @var User $creator
  */

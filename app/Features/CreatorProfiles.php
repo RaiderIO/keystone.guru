@@ -8,7 +8,7 @@ use App\Models\User;
 
 /**
  * Gates the creator podium: the revamped public profile (bio, socials, pinned routes), the creator
- * directory, and the featured-creators row on the discover landing page.
+ * directory, and the featured-creators strip on the per-dungeon route page.
  *
  * While in development this resolves only for admins and the internal team, so the work can merge
  * dark. Opening it to the public is a one-line change here - drop the role check and return true
