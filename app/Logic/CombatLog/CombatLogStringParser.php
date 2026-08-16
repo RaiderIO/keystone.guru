@@ -28,8 +28,7 @@ class CombatLogStringParser
         $length = strlen($line);
         for ($i = 0; $i < $length; $i++) {
             // Everything that is not one of these six characters is copied through verbatim, so jump
-            // straight to the next one instead of walking the line a character at a time. This is the
-            // hot loop of the entire combat log ingest - it was ~72% of parse time when done per-char.
+            // straight to the next one instead of walking the line a character at a time.
             $runLength = strcspn($line, self::CONTROL_CHARACTERS, $i);
             if ($runLength > 0) {
                 $current .= substr($line, $i, $runLength);
