@@ -132,14 +132,16 @@ abstract class Suffix implements HasParameters
     ];
 
     /**
-     * Concrete suffix class per already-resolved event name, keyed by "<combatLogVersion>|<eventName>".
+     * Concrete suffix class per already-resolved event name, per combat log version. Nested rather
+     * than keyed on a "<version>|<eventName>" string because building that key costs more per line
+     * than the second array lookup does.
      *
      * Bounded by the event names that actually resolve to a suffix - the closed set the game emits
      * (32 distinct names across the benchmark corpus) times the handful of combat log versions a
      * file can carry; a name that resolves to nothing throws instead of being cached. The mapping is
      * a pure function of those two values, so retaining it between requests under Octane is safe.
      *
-     * @var array<string, class-string<Suffix>>
+     * @var array<int, array<string, class-string<Suffix>>>
      */
     private static array $resolvedClassNames = [];
 
@@ -162,12 +164,10 @@ abstract class Suffix implements HasParameters
      */
     public static function createFromEventName(int $combatLogVersion, string $eventName): Suffix
     {
-        $cacheKey = $combatLogVersion . '|' . $eventName;
-
-        // Every line pays this lookup, and the answer only ever depends on the two values in the key,
-        // so resolve an event name once and construct directly from the remembered class after that.
-        if (isset(self::$resolvedClassNames[$cacheKey])) {
-            $className = self::$resolvedClassNames[$cacheKey];
+        // Every line pays this lookup, and the answer only ever depends on the version and the event
+        // name, so resolve a name once and construct directly from the remembered class after that.
+        if (isset(self::$resolvedClassNames[$combatLogVersion][$eventName])) {
+            $className = self::$resolvedClassNames[$combatLogVersion][$eventName];
 
             return new $className($combatLogVersion);
         }
@@ -180,7 +180,7 @@ abstract class Suffix implements HasParameters
                     ? $className::create($combatLogVersion)
                     : new $className($combatLogVersion);
 
-                self::$resolvedClassNames[$cacheKey] = $suffix::class;
+                self::$resolvedClassNames[$combatLogVersion][$eventName] = $suffix::class;
 
                 return $suffix;
             }
