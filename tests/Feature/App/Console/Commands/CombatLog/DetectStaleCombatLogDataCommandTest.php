@@ -5,9 +5,7 @@ namespace Tests\Feature\App\Console\Commands\CombatLog;
 use App\Console\Commands\CombatLog\DetectStaleCombatLogDataCommand;
 use App\Models\Characteristic;
 use App\Models\CombatLog\CombatLogNpcCharacteristicObservation;
-use App\Models\CombatLog\CombatLogNpcEvent;
 use App\Models\CombatLog\CombatLogNpcEventType;
-use App\Models\CombatLog\CombatLogSpellEvent;
 use App\Models\CombatLog\CombatLogSpellEventType;
 use App\Models\CombatLog\CombatLogSpellPropertyObservation;
 use App\Models\CombatLog\SpellProperty;
@@ -19,6 +17,7 @@ use App\Models\Spell\SpellDungeon;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\Season\SeasonServiceStub;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Attributes\SlowTest;
@@ -32,27 +31,24 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
     private const int SPELL_ID      = 9995098;
     private const int FILLER_NPC_ID = 9995096;
 
-    /** @var array<int, array<string, mixed>> */
-    private array $originalNpcObservations = [];
-
-    /** @var array<int, array<string, mixed>> */
-    private array $originalSpellObservations = [];
-
     #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
 
         // The staleness/prune cutoffs are now derived from the full, global contents of both
-        // observation tables, so a leftover row from seed data or a sibling test would silently
-        // shift which index a date lands on. Snapshot and empty both tables for the duration of
-        // the test; tearDown() restores them.
-        $this->originalNpcObservations = CombatLogNpcCharacteristicObservation::query()->get()
-            ->map(fn(CombatLogNpcCharacteristicObservation $observation) => $observation->getAttributes())
-            ->all();
-        $this->originalSpellObservations = CombatLogSpellPropertyObservation::query()->get()
-            ->map(fn(CombatLogSpellPropertyObservation $observation) => $observation->getAttributes())
-            ->all();
+        // observation tables, so a leftover row from real data or a sibling test would silently
+        // shift which index a date lands on. Wrap both connections in a transaction for the
+        // duration of the test and roll back in tearDown() — this both empties the observation
+        // tables for a clean, controlled slate AND undoes any real npc_characteristics/spells
+        // rows the command mutates while scanning every current-season fact against that empty
+        // slate (those rows are combat-log-derived and not recoverable, so a plain
+        // truncate-and-restore of only the observation tables is not safe here).
+        // The default connection is 'phpunit' in the test environment (config/database.php), not
+        // 'mysql' — use the unqualified DB facade so this targets whichever connection the models
+        // actually resolve to.
+        DB::beginTransaction();
+        DB::connection('combatlog')->beginTransaction();
 
         CombatLogNpcCharacteristicObservation::query()->toBase()->delete();
         CombatLogSpellPropertyObservation::query()->toBase()->delete();
@@ -62,23 +58,8 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
     protected function tearDown(): void
     {
         try {
-            NpcDungeon::where('npc_id', self::NPC_ID)->delete();
-            SpellDungeon::where('spell_id', self::SPELL_ID)->delete();
-            NpcCharacteristic::where('npc_id', self::NPC_ID)->delete();
-            Npc::where('id', self::NPC_ID)->delete();
-            CombatLogNpcEvent::where('npc_id', self::NPC_ID)->delete();
-            CombatLogSpellEvent::where('spell_id', self::SPELL_ID)->delete();
-            Spell::where('id', self::SPELL_ID)->delete();
-
-            CombatLogNpcCharacteristicObservation::query()->toBase()->delete();
-            CombatLogSpellPropertyObservation::query()->toBase()->delete();
-
-            if (!empty($this->originalNpcObservations)) {
-                CombatLogNpcCharacteristicObservation::query()->toBase()->insert($this->originalNpcObservations);
-            }
-            if (!empty($this->originalSpellObservations)) {
-                CombatLogSpellPropertyObservation::query()->toBase()->insert($this->originalSpellObservations);
-            }
+            DB::rollBack();
+            DB::connection('combatlog')->rollBack();
         } finally {
             parent::tearDown();
         }
@@ -593,9 +574,11 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
     public function handle_givenFewerObservationDaysThanWindowPlusOne_prunesNothing(): void
     {
         // Arrange — window_days+1 distinct data-days exist, one short of the window_days+2 needed
-        // to define a prune cutoff at all.
+        // to define a prune cutoff at all. Offset them well into the past (not ending "today") so
+        // the old calendar-based cutoff would have pruned every one of them — otherwise this test
+        // would pass vacuously even with the null-guard removed.
         $windowDays = config('keystoneguru.combat_log_staleness.observation_window_days');
-        $this->seedObservationDays($windowDays + 1);
+        $this->seedObservationDays($windowDays + 1, 10);
 
         $countBefore = CombatLogNpcCharacteristicObservation::count();
 
