@@ -21,10 +21,13 @@ it was blind to its own assumptions.
    the inline Bash output limit.
 2. Get the PR title/body for context: `gh pr view <n> --repo RaiderIO/keystone.guru --json title,body`.
 3. Read the CLAUDE.md files relevant to touched paths (repo root `CLAUDE.md` and `.claude/CLAUDE.md`,
-   plus any directory-specific conventions) to check for compliance violations. They carry this
-   repo's PHP/Laravel conventions directly, so reading them is enough — do not go hunting in skills
-   for rules. One finding you must *not* raise: missing model-cache invalidation on a raw write
-   (`.claude/CLAUDE.md`, Database & Eloquent; rationale in `project-backend-structure`, "Model caching vs raw writes").
+   plus any directory-specific conventions) to check for compliance violations. They state this
+   repo's PHP/Laravel conventions in full, so you do not need to load `laravel-best-practices` to
+   learn them — but *do* follow the specific skill pointers they issue (`writing-tests`,
+   `repository-pattern`, `seeder-load`, `api-endpoint`, `security-review`) when a finding turns on
+   that area's detail. One finding you must *not* raise: missing model-cache invalidation on a raw
+   write (`.claude/CLAUDE.md`, Database & Eloquent; rationale in `project-backend-structure`, "Model
+   caching vs raw writes").
 4. Use `git log`/`git blame` on touched files (after `git fetch origin`) and check prior PR review
    comments on the same files if useful context.
 5. Look for: CLAUDE.md-compliance violations, correctness bugs, missed edge cases, security issues
