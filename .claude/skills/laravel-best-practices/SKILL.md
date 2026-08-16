@@ -6,6 +6,15 @@ metadata:
   author: laravel
 ---
 
+<!-- UPSTREAM SKILL — §1-§19 and rules/** came from Laravel (MIT, bulk-added in #3240). Everything
+     below is a keystone.guru-local addition that a re-vendor would silently delete, taking rules
+     that no longer exist anywhere else with it:
+       - §20 Model caching vs raw writes  (the #3766 review-suppression rule)
+       - §21 Project conventions          (no-foreign-keys, #3497 migration rule, SeederModel, ...)
+       - the "always include §20 and §21" line in How to Apply
+     `.claude/CLAUDE.md` points at §21 as the sole home for those conventions, so re-apply all
+     three after any upstream refresh. Same caveat as the vendored `impeccable` skill. -->
+
 # Laravel Best Practices
 
 Best practices for Laravel, organized as an index of rule files. Each rule file teaches what to do and why. For exact API syntax, verify with `search-docs`.
