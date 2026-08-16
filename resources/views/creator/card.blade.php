@@ -3,7 +3,7 @@
 use App\Models\User;
 
 /**
- * A single creator tile, as the creator directory renders it. The featured-creators strip on the
+ * A single creator tile, as the creator directory renders it. The featured-creators rail on the
  * per-dungeon route page deliberately uses its own flatter markup instead - see
  * creator/featured.blade.php for why.
  *

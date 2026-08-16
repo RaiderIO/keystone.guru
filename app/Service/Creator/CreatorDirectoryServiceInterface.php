@@ -18,7 +18,7 @@ interface CreatorDirectoryServiceInterface
     public function paginateCreators(?string $search = null, ?int $perPage = null): LengthAwarePaginator;
 
     /**
-     * The creators to surface in the featured strip on the per-dungeon route page.
+     * The creators to surface in the featured rail on the per-dungeon route page.
      *
      * @return Collection<int, User>
      */

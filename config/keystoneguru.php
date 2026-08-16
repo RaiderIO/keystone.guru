@@ -271,10 +271,10 @@ return [
         /** How many creators to show per page of the directory */
         'per_page' => 24,
 
-        /** How many creators to feature in the strip on the per-dungeon route page */
+        /** How many creators to feature in the rail on the per-dungeon route page */
         'featured_count' => 6,
 
-        /** The strip is a site-wide list off a heavy GROUP BY, so it may go this stale - see getFeaturedCreators() */
+        /** The rail is a site-wide list off a heavy GROUP BY, so it may go this stale - see getFeaturedCreators() */
         'featured_ttl' => '1 hour',
     ],
 

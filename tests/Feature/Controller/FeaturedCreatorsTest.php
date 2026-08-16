@@ -28,7 +28,7 @@ final class FeaturedCreatorsTest extends PublicTestCase
         $routes  = $this->createPublishedRoutesFor($creator, $this->minPublishedRoutes());
 
         try {
-            // Act - a generous limit, because the featured strip is ranked by published route count
+            // Act - a generous limit, because the featured rail is ranked by published route count
             // and a brand new creator at the threshold sits below the established ones
             $featured = app(CreatorDirectoryServiceInterface::class)->getFeaturedCreators(PHP_INT_MAX);
 
@@ -44,7 +44,7 @@ final class FeaturedCreatorsTest extends PublicTestCase
     }
 
     /**
-     * The featured strip and the directory must agree on who counts as a creator - they share
+     * The featured rail and the directory must agree on who counts as a creator - they share
      * buildListedCreatorsQuery() precisely so the opt-out cannot be honoured on one and ignored on
      * the other.
      */
@@ -101,9 +101,9 @@ final class FeaturedCreatorsTest extends PublicTestCase
     }
 
     #[Test]
-    public function discoverDungeon_givenBothFlagsActive_rendersTheFeaturedStrip(): void
+    public function discoverDungeon_givenBothFlagsActive_rendersTheFeaturedRail(): void
     {
-        // Arrange - a creator at the threshold guarantees the strip has at least one entry to render
+        // Arrange - a creator at the threshold guarantees the rail has at least one entry to render
         Feature::define(CreatorProfiles::class, true);
         Feature::define(DungeonRouteListRework::class, true);
 
@@ -111,7 +111,7 @@ final class FeaturedCreatorsTest extends PublicTestCase
         $routes  = $this->createPublishedRoutesFor($creator, $this->minPublishedRoutes());
 
         try {
-            // The strip is truncated to featured_count and ranked by published route count, so the
+            // The rail is truncated to featured_count and ranked by published route count, so the
             // creator arranged above isn't guaranteed a spot on a seeded database. Assert against
             // whoever the service actually features instead of assuming it is them.
             $featuredCreator = app(CreatorDirectoryServiceInterface::class)->getFeaturedCreators()->first();
@@ -120,9 +120,9 @@ final class FeaturedCreatorsTest extends PublicTestCase
             // Act
             $response = $this->get($this->dungeonRouteListUrl());
 
-            // Assert - the section, its heading link into the directory, and the featured creator
+            // Assert - the rail, its label linking into the directory, and the featured creator
             $response->assertOk();
-            $response->assertSee('discover_creator_strip', false);
+            $response->assertSee('discover_creator_rail', false);
             $response->assertSee(__('view_creator.featured.title'));
             $response->assertSee(route('creators.index'), false);
             $response->assertSee($featuredCreator->name);
@@ -133,7 +133,7 @@ final class FeaturedCreatorsTest extends PublicTestCase
     }
 
     #[Test]
-    public function discoverDungeon_givenCreatorProfilesInactive_doesNotRenderTheFeaturedStrip(): void
+    public function discoverDungeon_givenCreatorProfilesInactive_doesNotRenderTheFeaturedRail(): void
     {
         // Arrange
         Feature::define(CreatorProfiles::class, false);
@@ -144,16 +144,16 @@ final class FeaturedCreatorsTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
-        $response->assertDontSee('discover_creator_strip', false);
+        $response->assertDontSee('discover_creator_rail', false);
         $response->assertDontSee(__('view_creator.featured.title'));
     }
 
     /**
-     * The strip is written for the reworked hero-band/leaderboard layout and is included from that
+     * The rail is written for the reworked hero-band/leaderboard layout and is included from that
      * branch only - it must not leak into the legacy multi-panel overview it was never styled for.
      */
     #[Test]
-    public function discoverDungeon_givenListReworkInactive_doesNotRenderTheFeaturedStrip(): void
+    public function discoverDungeon_givenListReworkInactive_doesNotRenderTheFeaturedRail(): void
     {
         // Arrange
         Feature::define(CreatorProfiles::class, true);
@@ -164,13 +164,13 @@ final class FeaturedCreatorsTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
-        $response->assertDontSee('discover_creator_strip', false);
+        $response->assertDontSee('discover_creator_rail', false);
         $response->assertDontSee(__('view_creator.featured.title'));
     }
 
     /**
      * The per-dungeon route page - the page "Browse routes" actually lands on, and the one the
-     * featured strip closes.
+     * featured rail opens.
      */
     private function dungeonRouteListUrl(): string
     {

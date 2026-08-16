@@ -38,8 +38,9 @@ class CreatorDirectoryService implements CreatorDirectoryServiceInterface
     /**
      * Cached, unlike paginateCreators(): buildListedCreatorsQuery() derives its published route
      * counts with a GROUP BY over the whole dungeon_routes table, which materialises in full before
-     * the LIMIT can take six rows off it. The strip renders on the per-dungeon route page - one of
-     * the busiest on the site - and, sitting below the paginator, on every page of results.
+     * the LIMIT can take six rows off it. The rail renders on the per-dungeon route page - one of
+     * the busiest on the site - and, unlike the hero band, on every page of results, not just the
+     * first.
      *
      * The result does not vary by viewer, dungeon or page, so there is nothing to key on and no
      * invalidation question: it is a site-wide list that goes stale gracefully within the TTL.

@@ -1,11 +1,12 @@
 /**
- * Featured creators strip - the closing section of the reworked per-dungeon route page.
+ * Featured creators rail - the opening line of the reworked per-dungeon route page, above the hero
+ * band.
  *
- * A deliberately quieter treatment than the creator directory's .card tiles: the page descends from
- * the cinematic hero band, through the dense ranked leaderboard, to this. It therefore borrows the
- * leaderboard's vocabulary (page-background rows, neutral-gray hairlines, a gray hover wash, the
- * same 70rem measure) instead of stacking another grid of cards under it. Same creator, different
- * skin - exactly as a route already renders as a poster, a hero and a leaderboard row.
+ * A rail rather than a section, because it opens the page: a grid of tiles here would push the
+ * routes the visitor came for below the fold. One line of avatar-plus-name reads as a caption above
+ * the hero band instead of a second section competing with it. It borrows the leaderboard's
+ * vocabulary - page-background rows, neutral-gray hairlines, a gray hover wash, the same 70rem
+ * measure - so the whole page reads on one system.
  *
  * Colour comes from the theme. Do not reach for bg-body-* utilities: this site ships one
  * class-scoped stylesheet per bootswatch theme rather than using data-bs-theme, so --bs-tertiary-bg
@@ -13,19 +14,32 @@
  */
 
 /* Matches .dungeonroute_leaderboard and .discover_pagination so the three stack on one measure */
-.discover_creator_strip {
+.discover_creator_rail {
+    display: flex;
     max-width: 70rem;
     margin-left: auto;
     margin-right: auto;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem 0.5rem;
+}
+
+.discover_creator_rail_label {
+    margin-right: 0.25rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
 }
 
 .discover_creator_entry {
-    display: block;
-    padding: 0.75rem 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+    padding: 0.25rem 0.625rem 0.25rem 0.25rem;
     border: 1px solid transparent;
     border-radius: var(--bs-border-radius);
     color: inherit;
-    text-align: center;
     text-decoration: none;
     transition: background-color 0.12s ease, border-color 0.12s ease;
 }
@@ -44,17 +58,17 @@
 
 .discover_creator_avatar,
 .discover_creator_initials {
-    width: 56px;
-    height: 56px;
-    margin-left: auto;
-    margin-right: auto;
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    margin-right: 0.5rem;
     border: 2px solid rgba(128, 128, 128, 0.35);
     border-radius: 50%;
     object-fit: cover;
     transition: border-color 0.12s ease;
 }
 
-/* The one accent moment in the section: the ring picks up the theme's "go" colour on hover */
+/* The one accent moment in the rail: the ring picks up the theme's "go" colour on hover */
 .discover_creator_entry:hover .discover_creator_avatar,
 .discover_creator_entry:focus-visible .discover_creator_avatar,
 .discover_creator_entry:hover .discover_creator_initials,
@@ -74,25 +88,50 @@
  * moment next to the hover ring, and reads as low-contrast lettering on the neutral disc.
  */
 .discover_creator_initials {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     background-color: rgba(128, 128, 128, 0.25);
     color: var(--theme-text-contrast);
-    font-size: 1.25rem;
+    font-size: 0.75rem;
     font-weight: 600;
     line-height: 1;
 }
 
-/* One line: six names across 70rem have no room to wrap, and the title attribute keeps the full
-   name reachable when it is truncated. */
+/* One line: the rail wraps between entries, never inside a name. The full name stays reachable via
+   the entry's title attribute, which also carries the published route count. */
 .discover_creator_name {
-    margin-top: 0.5rem;
     overflow: hidden;
     color: var(--theme-text-contrast);
     font-weight: 600;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+@media (max-width: 575.98px) {
+    /* Phones fit two entries per line; a full-width label above them keeps the first line from
+       being label-plus-one-lonely-creator. */
+    .discover_creator_rail_label {
+        flex-basis: 100%;
+        margin-right: 0;
+        text-align: center;
+    }
+
+    /* Narrow enough that two always share a line, rather than a long name orphaning one per row */
+    .discover_creator_name {
+        max-width: 6.5rem;
+    }
+
+    /*
+     * Trim the rail to four on phones. All six wrap to four lines here and push the hero band - the
+     * routes the visitor actually came for - most of the way off the first screen; the whole point
+     * of opening with a rail instead of a grid is that it stays a caption. The label still links to
+     * the full directory. Same call the leaderboard already makes with its rating and favourites
+     * columns (see discover.css).
+     */
+    .discover_creator_entry:nth-child(n+6) {
+        display: none;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
