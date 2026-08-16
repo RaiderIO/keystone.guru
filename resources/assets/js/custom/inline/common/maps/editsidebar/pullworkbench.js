@@ -25,7 +25,7 @@ class PullWorkBench extends Signalable {
         // If we finished adding a killzone (kill area) we refresh the workbench to update tooltips
         getState().getDungeonMap().register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             if (mapStateChangedEvent.data.previousMapState instanceof AddKillZoneMapState) {
-                self.editPull(self.killZone.id);
+                self.editPull(self.killZone.id, {forceReopen: true});
             }
         });
     }
@@ -67,16 +67,23 @@ class PullWorkBench extends Signalable {
     /**
      *
      * @param killZoneId
+     * @param {Object} [options]
+     * @param {boolean} [options.forceReopen] Skip the "close on same id" toggle behavior. Used by
+     *   internal refresh calls (after add/remove kill area) which pass the currently open pull's
+     *   own id purely to re-render, and must not be mistaken for the external "click the edit
+     *   button of the already-open pull again to close it" interaction.
      */
-    editPull(killZoneId) {
+    editPull(killZoneId, {forceReopen = false} = {}) {
         console.assert(this instanceof PullWorkBench, 'this is not a PullWorkBench', this);
 
         // Depress a toggle button
         let oldKillZoneId = null;
         if (this.killZone !== null) {
-            $(`#map_killzonessidebar_killzone_${this.killZone.id}_edit`).each(function () {
-                bootstrap.Button.getOrCreateInstance(this).toggle();
-            });
+            if (!forceReopen) {
+                $(`#map_killzonessidebar_killzone_${this.killZone.id}_edit`).each(function () {
+                    bootstrap.Button.getOrCreateInstance(this).toggle();
+                });
+            }
             oldKillZoneId = this.killZone.id;
         }
 
@@ -88,7 +95,7 @@ class PullWorkBench extends Signalable {
             console.warn(`Unable to find killzone ${killZoneId}!`);
             this.$workbench.hide();
             return;
-        } else if (oldKillZoneId === this.killZone.id) {
+        } else if (!forceReopen && oldKillZoneId === this.killZone.id) {
             // Toggle it off again since our keypress turned it on just now
             $(`#map_killzonessidebar_killzone_${this.killZone.id}_edit`).each(function () {
                 bootstrap.Button.getOrCreateInstance(this).toggle();
@@ -218,17 +225,19 @@ class PullWorkBench extends Signalable {
                 self.killZone.save();
 
                 // Re-init the workbench
-                self.editPull(self.killZone.id);
+                self.editPull(self.killZone.id, {forceReopen: true});
             }
         });
 
-        // If we have a killzone layer
-        if (self.killZone.hasKillArea()) {
-            // Was inactive (always starts inactive), is active now
-            $hasKillZone.each(function () {
+        // Sync the toggle button's pressed state to whether we actually have a killzone layer.
+        // Compare against the current state rather than blindly toggling - this method may run
+        // more than once for the same pull (e.g. a `forceReopen` refresh after add/remove).
+        let hasKillArea = self.killZone.hasKillArea();
+        $hasKillZone.each(function () {
+            if (this.classList.contains('active') !== hasKillArea) {
                 bootstrap.Button.getOrCreateInstance(this).toggle();
-            });
-        }
+            }
+        });
     }
 
     /**
@@ -300,4 +309,12 @@ class PullWorkBench extends Signalable {
             self.killZone.delete();
         }
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        PullWorkBench,
+    };
 }
