@@ -14,6 +14,8 @@ return [
     'featured' => [
         'title'   => 'Featured creators',
         'see_all' => 'See all creators',
+        /** Tooltip on a rail entry - it carries the name because the name itself may be clipped to an ellipsis */
+        'entry_title' => ':name - :routes',
     ],
     'card' => [
         'route_count' => '{0} No published routes|{1} :count published route|[2,*] :count published routes',

@@ -29,7 +29,9 @@ use Illuminate\Database\Eloquent\Collection;
  */
 ?>
 @if($featuredCreators->isNotEmpty())
-    <div class="discover_creator_rail mt-4">
+    {{-- A named landmark rather than a heading: dropping the heading row left seven sibling links
+         with nothing to announce or navigate to them by. What this is, is navigation. --}}
+    <nav class="discover_creator_rail mt-4" aria-label="{{ __('view_creator.featured.title') }}">
         {{-- The directory link is the rail's own label, so the rail needs no separate heading row --}}
         <a href="{{ route('creators.index') }}"
            class="discover_creator_rail_label"
@@ -45,7 +47,12 @@ use Illuminate\Database\Eloquent\Collection;
             ?>
             <a href="{{ route('profile.view', ['user' => $creator]) }}"
                class="discover_creator_entry"
-               title="{{ trans_choice('view_creator.card.route_count', $publishedRouteCount, ['count' => $publishedRouteCount]) }}">
+               {{-- Carries the name too, not just the count: the name clips to an ellipsis at rail
+                    width (always, under the phone cap) and the tooltip is its only reveal path --}}
+               title="{{ __('view_creator.featured.entry_title', [
+                   'name'   => $creator->name,
+                   'routes' => trans_choice('view_creator.card.route_count', $publishedRouteCount, ['count' => $publishedRouteCount]),
+               ]) }}">
                 @if($creator->iconfile !== null)
                     {{-- Decorative: the name is already the link's own text, right beside it --}}
                     <img src="{{ $creator->iconfile->getURL() }}"
@@ -62,5 +69,5 @@ use Illuminate\Database\Eloquent\Collection;
                 </span>
             </a>
         @endforeach
-    </div>
+    </nav>
 @endif

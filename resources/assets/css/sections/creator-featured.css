@@ -98,8 +98,9 @@
     line-height: 1;
 }
 
-/* One line: the rail wraps between entries, never inside a name. The full name stays reachable via
-   the entry's title attribute, which also carries the published route count. */
+/* One line: the rail wraps between entries, never inside a name. A name clipped here stays readable
+   via the entry's title attribute, which carries the full name alongside the published route count -
+   keep those two in step (see creator/featured.blade.php). */
 .discover_creator_name {
     overflow: hidden;
     color: var(--theme-text-contrast);
