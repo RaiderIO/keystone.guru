@@ -67,11 +67,31 @@ the budget here to the new level (never loosen one to silence a warning; that ne
 sign-off).
 
 The `.claude/CLAUDE.md` budget was **18,000 B until PR #4046**, which raised it to 29,000 B —
-proposed by an agent, **approved by Wotuu on the number** in that PR's conversation. Reasoning:
-18,000 B was aspirational and never once met, and could only be reached by deleting rules, which is
-what #4046 tried and had to undo (below). A budget satisfiable only by doing the wrong thing trains
-everyone to ignore the warning. 29,000 B is the file with every rule intact and prose trimmed hard —
-an achievable floor to ratchet down from. Tighten it only by cutting prose.
+proposed by an agent, **approved by Wotuu on the number** in that PR's conversation.
+
+**Read the history before trusting the new number, because it is a concession, not a correction.**
+18,000 B was genuinely met: on 2026-08-03 (#3783, `762974243`) the file was 17,923 B with every rule
+present, using the compact-rule-plus-skill-pointer pattern this section recommends. It then grew
+**89% in eleven days** — 17,923 → 33,788 B by 2026-08-14 — through real additions, not bloat (model
+routing +8.8KB, the bot identity section +3KB, worktree and MR-handoff rules). #4046 trimmed prose
+hard and reached 28,977 B, so 29,000 B is the honest floor *for the file's current content*, not
+evidence that 18,000 B was ever unreasonable.
+
+Two consequences for a sweep:
+
+- **Watch the growth rate, not just the breach.** A budget re-ratcheted upward every time the file
+  grows is a rubber stamp. If `.claude/CLAUDE.md` is approaching 29,000 B again, the question is
+  which recent additions earn their place — not what the next number should be.
+- **Tighten it only by cutting prose**, and never by moving rules out (below).
+
+The **skill-description budget was deliberately left at 18,500 B** in the same PR, while breached
+(19,982 B at #4046's head, 21,023 B on master), and Wotuu offered to raise it. Declining is the
+point: descriptions are pure routing text, so trimming one costs no rule — the worst case is a skill
+that triggers less readily, which is visible and recoverable. The breach is ~28 B per skill across
+52 skills, and #4046 recovered ~1,041 B from four descriptions with no loss, so it is reachable by
+ordinary trimming. **That is the test for whether raising a budget is legitimate: can the breach be
+cleared without losing a rule?** If yes, trim. If no — as with `.claude/CLAUDE.md`, where the only
+route to 18,000 B was deleting current rules — raise it and say plainly that you did.
 
 ### Cut prose, never rules — and never by relocating a rule behind a skill trigger
 
