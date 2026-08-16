@@ -68,6 +68,11 @@ use Laravel\Pennant\Feature;
             ($page === 1 ? $weeklyRoutes->pluck('dungeonRoute') : collect())->merge($popularItems)->unique('id')->values(),
         );
         ?>
+        <?php // Above the hero band, not between it and the leaderboard: startRank continues from the band into the list ?>
+        @feature(\App\Features\CreatorProfiles::class)
+            @include('creator.featured')
+        @endfeature
+
         @if($page === 1)
             @if($weeklyRoutes->isNotEmpty())
                 <div class="row mt-4 align-items-center discover_section_header">

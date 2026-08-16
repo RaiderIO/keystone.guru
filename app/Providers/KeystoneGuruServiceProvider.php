@@ -18,6 +18,7 @@ use App\Http\View\Composers\DungeonGridTabsComposer;
 use App\Http\View\Composers\DungeonSelectComposer;
 use App\Http\View\Composers\DungeonStartSelectComposer;
 use App\Http\View\Composers\EmbedComposer;
+use App\Http\View\Composers\FeaturedCreatorsComposer;
 use App\Http\View\Composers\GameVersionsNavComposer;
 use App\Http\View\Composers\GlobalComposer;
 use App\Http\View\Composers\HeaderComposer;
@@ -387,6 +388,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Dungeon grid view
         view()->composer('dungeonroute.discover.search', DiscoverSearchComposer::class);
+
+        view()->composer('creator.featured', FeaturedCreatorsComposer::class);
 
         view()->composer('common.dungeonroute.create.dungeondifficultyselect', DungeonDifficultySelectComposer::class);
 
