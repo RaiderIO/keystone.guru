@@ -11,8 +11,11 @@
     "guidelines": true,
     "skills": [
         "laravel-best-practices",
+        "octane-development",
         "pennant-development",
+        "socialite-development",
         "configuring-horizon",
+        "echo-development",
         "phpstan-fixer"
     ]
 }
