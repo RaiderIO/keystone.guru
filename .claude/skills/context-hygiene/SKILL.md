@@ -66,11 +66,13 @@ These budgets are a **ratchet, not a target**: when a sweep trims a surface belo
 the budget here to the new level (never loosen one to silence a warning; that needs Wotuu's
 sign-off).
 
-The `.claude/CLAUDE.md` budget was **18,000 B until PR #4046**, where it was re-ratcheted to 29,000 B
-with Wotuu's sign-off. 18,000 B was aspirational and never once met: it could only be reached by
-deleting rules, which is what #4046's first attempt did and then had to undo (see below). 29,000 B
-is the size of the file with every rule intact and the prose trimmed hard — i.e. an actually
-achievable floor. Tighten it further only by cutting prose.
+The `.claude/CLAUDE.md` budget was **18,000 B until PR #4046**, which raised it to 29,000 B.
+**Set by an agent under delegated authority, not approved by Wotuu on the number** — he asked the
+agent to make the call and has not reviewed 29,000 B specifically, so treat it as a working figure
+open to revision, not a ruling. The reasoning: 18,000 B was aspirational and never once met, and
+could only be reached by deleting rules — which #4046 tried and had to undo (below). 29,000 B is the
+file with every rule intact and prose trimmed hard, i.e. an achievable floor to ratchet down from.
+Tighten it only by cutting prose.
 
 ### Cut prose, never rules — and never by relocating a rule behind a skill trigger
 
@@ -78,18 +80,19 @@ achievable floor. Tighten it further only by cutting prose.
 compressing a rule's wording, or moving the *why* into the skill that owns the topic and leaving a
 one-line rule plus a pointer. It does **not** mean relocating the rule itself.
 
-This is measured, not a style preference. PR #4046 moved ~5.7KB of PHP/Laravel conventions out of
-`.claude/CLAUDE.md` into the `laravel-best-practices` skill:
+PR #4046 moved ~5.7KB of PHP/Laravel conventions out of `.claude/CLAUDE.md` into the
+`laravel-best-practices` skill, and reverted it. Why, strongest argument first:
 
-- **The saving inverts.** Reclaiming those rules costs a 16.5KB `SKILL.md` load (plus a 58KB
-  `rules/` tree) to recover 5.7KB. In a Laravel app, where nearly every session touches PHP, the
-  move makes the typical session *larger*.
-- **The trigger is not reliable.** The very next cold review read the CLAUDE.md files, never loaded
-  the skill, and re-raised a finding Wotuu had explicitly banned (#3766) — the exact failure it was
-  warned about, on the first attempt.
 - **The costs are wildly asymmetric.** Carrying a rule you didn't need costs a few hundred
   well-cached tokens. Missing one costs a foreign key in a migration, or a destructive schema change
-  shipped in a single release — which is what took staging down in #3497.
+  shipped in a single release — which is what took staging down in #3497. No estimate of the saving
+  changes that ratio, so the saving is not the deciding factor.
+- **The trigger is not reliable.** The very next cold review read the CLAUDE.md files, never loaded
+  the skill, and re-raised a finding Wotuu had explicitly banned (#3766) — the exact failure it was
+  warned about, on the first attempt. A skill that "should" load is not a guarantee.
+- **The saving is smaller than it looks**, and can invert: reclaiming those rules costs a 16.5KB
+  `SKILL.md` load (plus a 58KB `rules/` tree) against 5.7KB removed. This leg is the weakest of the
+  three — it assumes the skill wouldn't have loaded anyway — so don't lean on it alone.
 
 So if a breach can only be cleared by moving a rule out of always-loaded context, **report the
 breach and leave it**. An honest over-budget warning beats a rule that silently isn't there.

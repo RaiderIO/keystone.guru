@@ -343,8 +343,8 @@ green, then undraft again.
 
 These are **rules**, kept deliberately terse. The reasoning behind each one lives in the skill named
 next to it — load that skill when you need the *why*, but follow the rule either way. The
-`laravel-best-practices` skill, "Project conventions" section, is the detailed reference for
-everything in this section.
+`laravel-best-practices` skill holds the generic Laravel guidance these override, and the
+`project-backend-structure` skill the reasoning behind the model-caching rule below.
 
 ## General
 - `sprintf` over direct concatenation for dynamic strings.
