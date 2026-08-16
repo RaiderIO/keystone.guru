@@ -102,6 +102,50 @@ class CombatLogStringParserParseCombatLogLineTest extends PublicTestCase
                     '14644',
                 ],
             ],
+            'Control Character At Start Of Line' => [
+                'line'     => '"Player,1084",123',
+                'expected' => [
+                    'Player,1084',
+                    '123',
+                ],
+            ],
+            'Consecutive Separators Produce Empty Values' => [
+                'line'     => 'a,,b',
+                'expected' => [
+                    'a',
+                    '',
+                    'b',
+                ],
+            ],
+            'Trailing Separator Drops The Empty Last Value' => [
+                'line'     => 'a,b,',
+                'expected' => [
+                    'a',
+                    'b',
+                ],
+            ],
+            'Whitespace Around Values Is Trimmed' => [
+                'line'     => ' a , b ',
+                'expected' => [
+                    'a',
+                    'b',
+                ],
+            ],
+            'Control Characters Inside Quotes Are Literal' => [
+                'line'     => '"[unclosed",")",a',
+                'expected' => [
+                    '[unclosed',
+                    ')',
+                    'a',
+                ],
+            ],
+            'Line Ending In A Long Unquoted Value' => [
+                'line'     => 'a,Creature-0-4251-2662-13168-213892-00002FDE4F',
+                'expected' => [
+                    'a',
+                    'Creature-0-4251-2662-13168-213892-00002FDE4F',
+                ],
+            ],
             'Failing Test' => [
                 'line'     => '10/18/2024 21:34:24.8572,COMBATANT_INFO,[(102380,126443,1)],(0,0,0,0),[(211024,606,())]',
                 'expected' => [
@@ -141,6 +185,9 @@ class CombatLogStringParserParseCombatLogLineTest extends PublicTestCase
             ],
             'Malformed Input (Unbalanced Quotes)' => [
                 'line' => '"Data,123',
+            ],
+            'Malformed Input (Line Ending In An Unbalanced Bracket)' => [
+                'line' => 'a,b]',
             ],
         ];
     }
