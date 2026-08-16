@@ -4,7 +4,6 @@ namespace App\Models\Spell;
 
 use App\Models\CacheModel;
 use App\Models\Dungeon;
-use App\Models\Traits\SeederModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -17,8 +16,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class SpellDungeon extends CacheModel
 {
-    use SeederModel;
-
     public $timestamps = false;
 
     protected $fillable = [
