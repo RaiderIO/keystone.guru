@@ -146,6 +146,23 @@ You can use `gh issue view <issue number> --repo RaiderIO/keystone.guru --json n
 to request info from Github. Any call to `gh issue view` MUST be accompanied by `--json` to prevent deprecation warnings
 and the command failing.
 
+### Never hard-wrap a GitHub body — one paragraph is one line
+
+GitHub renders a single newline inside a paragraph as a literal `<br>`, so prose wrapped at
+80/100 columns comes out with a line break at every wrap point. Write **each paragraph of a PR
+body, issue body or comment as one unbroken line**, however long, and let GitHub wrap it.
+
+This is the opposite of the convention for markdown files in the repo (skills, `CLAUDE.md`,
+`docs/`), which stay wrapped — and that is exactly why it goes wrong: composing the body in a
+file first and passing it to `--body-file` makes it feel like a document, but the file *is* the
+rendered body, verbatim. The rule is about the destination, not the authoring method.
+
+Blank lines between paragraphs, list items, table rows, headings and fenced code blocks are
+structural — keep those. Only wrapping *within* a paragraph or a list item is the problem.
+
+Applies to every write path: `gh pr create/edit`, `gh issue create/edit`, `gh pr comment`,
+review-thread replies, and the same calls through `sh/gh-bot.sh`.
+
 ### Agent GitHub identity
 
 Agent-authored GitHub activity is migrating from "Wotuu's own account plus a `:robot:` prefix" to a
