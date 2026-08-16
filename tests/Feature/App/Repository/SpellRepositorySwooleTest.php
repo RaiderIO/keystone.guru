@@ -4,6 +4,7 @@ namespace Tests\Feature\App\Repository;
 
 use App\Models\Characteristic;
 use App\Models\Spell\Spell;
+use App\Repositories\Swoole\Interfaces\SpellRepositorySwooleInterface;
 use App\Repositories\Swoole\SpellRepositorySwoole;
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
@@ -60,6 +61,36 @@ final class SpellRepositorySwooleTest extends PublicTestCase
             'hidden_on_map'   => false,
             'fetched_data_at' => Carbon::now(),
         ], $overrides));
+    }
+
+    #[Test]
+    public function container_givenTwoResolutions_returnsTheSameProcessPersistentInstance(): void
+    {
+        // Arrange / Act - the whole optimization rests on OctaneServiceProvider's app()->instance() binding
+        // surviving provider registration; a later bind() would silently revert to a repository per job
+        $first  = $this->app->make(SpellRepositorySwooleInterface::class);
+        $second = $this->app->make(SpellRepositorySwooleInterface::class);
+
+        // Assert - identity, not equality: one shared repository per process
+        $this->assertSame($first, $second);
+        $this->assertInstanceOf(SpellRepositorySwoole::class, $first);
+    }
+
+    #[Test]
+    public function getAllKeyedWithSpellDungeons_givenThisProcessesOwnSpellCreation_returnsSameCatalogWithoutRebuild(): void
+    {
+        // Arrange - build the catalog, then mirror what SpellCreationCollector does on a spell create: insert
+        // the row AND put() the model into the shared catalog
+        $catalog = $this->repository->getAllKeyedWithSpellDungeons();
+        $spell   = $this->createTestSpell();
+        $spell->setRelation('spellDungeons', collect());
+        $catalog->put($spell->id, $spell);
+
+        // Act
+        $secondCatalog = $this->repository->getAllKeyedWithSpellDungeons();
+
+        // Assert - the database matches the live catalog, so a self-write must not force a full rebuild
+        $this->assertSame($catalog, $secondCatalog);
     }
 
     #[Test]

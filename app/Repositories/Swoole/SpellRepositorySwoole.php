@@ -39,11 +39,11 @@ class SpellRepositorySwoole extends SpellRepository implements SpellRepositorySw
      */
     private ?Collection $allSpellsKeyedWithSpellDungeons = null;
 
-    /** @var int|null `spells` row count when the catalogs were built - a mismatch means another process inserted or deleted a spell */
+    /** @var int|null `spells` row count just before the catalogs were built - `spells` and `spell_dungeons` carry no timestamps, so row counts are the change detector. Only consulted while the full catalog is absent; see invalidateCatalogsIfStale() */
     private ?int $catalogSpellCount = null;
 
-    /** @var int|null Highest `spell_dungeons` id when the catalogs were built - `spells` and `spell_dungeons` carry no timestamps, so the auto-increment watermark is the cheapest insert detector */
-    private ?int $catalogMaxSpellDungeonId = null;
+    /** @var int|null `spell_dungeons` row count just before the catalogs were built */
+    private ?int $catalogSpellDungeonCount = null;
 
     /** @var int|null Unix timestamp of the last catalog build, for the TTL fallback */
     private ?int $catalogBuiltAtTimestamp = null;
@@ -101,8 +101,10 @@ class SpellRepositorySwoole extends SpellRepository implements SpellRepositorySw
         $this->invalidateCatalogsIfStale();
 
         if ($this->spellsWithCharacteristics === null) {
-            $this->spellsWithCharacteristics = parent::getAllWithCharacteristic();
+            // Stamp BEFORE the build: a row another process inserts while the query runs then mismatches the
+            // next check and forces a rebuild - over-invalidation, never silent staleness
             $this->stampCatalogs();
+            $this->spellsWithCharacteristics = parent::getAllWithCharacteristic();
         }
 
         return $this->spellsWithCharacteristics;
@@ -118,17 +120,24 @@ class SpellRepositorySwoole extends SpellRepository implements SpellRepositorySw
         $this->invalidateCatalogsIfStale();
 
         if ($this->allSpellsKeyedWithSpellDungeons === null) {
-            $this->allSpellsKeyedWithSpellDungeons = parent::getAllKeyedWithSpellDungeons();
+            // Stamp BEFORE the build - see getAllWithCharacteristic(). For the full catalog the stored
+            // stamps are only a fallback anyway: once it exists, staleness compares against the live catalog
             $this->stampCatalogs();
+            $this->allSpellsKeyedWithSpellDungeons = parent::getAllKeyedWithSpellDungeons();
         }
 
         return $this->allSpellsKeyedWithSpellDungeons;
     }
 
     /**
-     * Drops both memoized catalogs when the stamps say the tables changed (or the TTL ran out). Two cheap
+     * Drops both memoized catalogs when the database no longer matches them (or the TTL ran out). Two cheap
      * aggregate queries per call - callers hit this once per extraction job, against the ~160 ms a full
      * rebuild costs.
+     *
+     * When the full catalog exists, the expected counts are derived from the catalog itself rather than the
+     * stored stamps: the extraction collectors keep the shared catalog current with this worker's own writes
+     * (put() on spell creation, spellDungeons relation reloads), so a self-write matches the database and
+     * does NOT force a pointless full rebuild on the next job - only writes from OTHER processes mismatch.
      */
     private function invalidateCatalogsIfStale(): void
     {
@@ -136,10 +145,20 @@ class SpellRepositorySwoole extends SpellRepository implements SpellRepositorySw
             return;
         }
 
+        if ($this->allSpellsKeyedWithSpellDungeons !== null) {
+            $expectedSpellCount        = $this->allSpellsKeyedWithSpellDungeons->count();
+            $expectedSpellDungeonCount = (int)$this->allSpellsKeyedWithSpellDungeons->sum(
+                static fn(Spell $spell) => $spell->spellDungeons->count(),
+            );
+        } else {
+            $expectedSpellCount        = $this->catalogSpellCount;
+            $expectedSpellDungeonCount = $this->catalogSpellDungeonCount;
+        }
+
         $stale = $this->catalogBuiltAtTimestamp === null
             || Carbon::now()->getTimestamp() - $this->catalogBuiltAtTimestamp >= self::CATALOG_TTL_SECONDS
-            || $this->catalogSpellCount !== Spell::query()->count()
-            || $this->catalogMaxSpellDungeonId !== (int)SpellDungeon::query()->max('id');
+            || $expectedSpellCount !== Spell::query()->count()
+            || $expectedSpellDungeonCount !== SpellDungeon::query()->count();
 
         if ($stale) {
             $this->allSpellsKeyedWithSpellDungeons = null;
@@ -150,7 +169,7 @@ class SpellRepositorySwoole extends SpellRepository implements SpellRepositorySw
     private function stampCatalogs(): void
     {
         $this->catalogSpellCount        = Spell::query()->count();
-        $this->catalogMaxSpellDungeonId = (int)SpellDungeon::query()->max('id');
+        $this->catalogSpellDungeonCount = SpellDungeon::query()->count();
         $this->catalogBuiltAtTimestamp  = Carbon::now()->getTimestamp();
     }
 }
