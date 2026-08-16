@@ -2,33 +2,20 @@
 
 namespace App\Service\CombatLog\DataExtractors;
 
-use App;
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
-use App\Logic\CombatLog\Guid\Creature;
 use App\Models\Npc\Npc;
-use App\Service\CombatLog\CombatLogDataExtractionService;
-use App\Service\CombatLog\DataExtractors\Logging\NpcUpdateDataExtractorLoggingInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
-use Illuminate\Support\Collection;
 
+/**
+ * Placeholder for updating NPC base health from advanced combat log data - see extractBaseHealth() below, which
+ * cannot be enabled until the combat log's game version is known. Until then this extractor deliberately does
+ * nothing: it used to scan a list of seen NPC ids and issue an Npc::find() per distinct NPC on every advanced
+ * event, only to hand the result to a method whose body is commented out.
+ */
 class NpcUpdateDataExtractor implements DataExtractorInterface
 {
-    /** @var Collection<int, int> */
-    private readonly Collection $checkedNpcIds;
-
-    private readonly NpcUpdateDataExtractorLoggingInterface $log;
-
-    public function __construct()
-    {
-        $this->checkedNpcIds = collect(CombatLogDataExtractionService::SUMMONED_NPC_IDS);
-        $log                 = App::make(NpcUpdateDataExtractorLoggingInterface::class);
-        /** @var NpcUpdateDataExtractorLoggingInterface $log */
-
-        $this->log = $log;
-    }
-
     public function beforeExtract(ExtractedDataResult $result, string $combatLogFilePath): void
     {
     }
@@ -38,32 +25,13 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
         DataExtractionCurrentDungeon $currentDungeon,
         BaseEvent                    $parsedEvent,
     ): void {
-        if (!($parsedEvent instanceof AdvancedCombatLogEvent)) {
-            return;
-        }
-        $guid = $parsedEvent->getAdvancedData()->getInfoGuid();
-
-        if ($guid instanceof Creature && $this->checkedNpcIds->search($guid->getId()) === false) {
-            $npc = Npc::find($guid->getId());
-
-            if ($npc === null) {
-                $this->log->extractDataNpcNotFound($guid->getId());
-
-                $this->checkedNpcIds->push($guid->getId());
-
-                return;
-            }
-
-            $this->extractBaseHealth($result, $currentDungeon, $parsedEvent, $npc);
-
-            $this->checkedNpcIds->push($npc->id);
-        }
     }
 
     public function afterExtract(ExtractedDataResult $result, string $combatLogFilePath): void
     {
     }
 
+    /** @phpstan-ignore method.unused (retained placeholder for the base health work, see #2449) */
     private function extractBaseHealth(
         ExtractedDataResult          $result,
         DataExtractionCurrentDungeon $currentDungeon,
