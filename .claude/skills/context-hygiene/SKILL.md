@@ -57,14 +57,43 @@ offender, don't mechanically truncate):
 | Surface | Budget | Measure |
 |---|---|---|
 | `CLAUDE.md` (Boost-generated) | ≤ 7,300 B | `wc -c CLAUDE.md` |
-| `.claude/CLAUDE.md` | ≤ 18,000 B | `wc -c .claude/CLAUDE.md` |
+| `.claude/CLAUDE.md` | ≤ 29,000 B | `wc -c .claude/CLAUDE.md` |
 | `MEMORY.md` | ≤ 9,500 B | `wc -c MEMORY.md` |
 | All skill descriptions combined | ≤ 18,500 B | sum of each frontmatter `description:` value |
 | Any single skill description | ≤ 550 B | same |
 
-These budgets are the post-#3783 baseline plus a little headroom — a **ratchet, not a target**:
-when a sweep trims a surface below budget, tighten the budget here to the new level (never loosen
-one to silence a warning; that needs Wotuu's sign-off).
+These budgets are a **ratchet, not a target**: when a sweep trims a surface below budget, tighten
+the budget here to the new level (never loosen one to silence a warning; that needs Wotuu's
+sign-off).
+
+The `.claude/CLAUDE.md` budget was **18,000 B until PR #4046**, where it was re-ratcheted to 29,000 B
+with Wotuu's sign-off. 18,000 B was aspirational and never once met: it could only be reached by
+deleting rules, which is what #4046's first attempt did and then had to undo (see below). 29,000 B
+is the size of the file with every rule intact and the prose trimmed hard — i.e. an actually
+achievable floor. Tighten it further only by cutting prose.
+
+### Cut prose, never rules — and never by relocating a rule behind a skill trigger
+
+**A rule stays in always-loaded context. Only its rationale may move into a skill.** Trimming means
+compressing a rule's wording, or moving the *why* into the skill that owns the topic and leaving a
+one-line rule plus a pointer. It does **not** mean relocating the rule itself.
+
+This is measured, not a style preference. PR #4046 moved ~5.7KB of PHP/Laravel conventions out of
+`.claude/CLAUDE.md` into the `laravel-best-practices` skill:
+
+- **The saving inverts.** Reclaiming those rules costs a 16.5KB `SKILL.md` load (plus a 58KB
+  `rules/` tree) to recover 5.7KB. In a Laravel app, where nearly every session touches PHP, the
+  move makes the typical session *larger*.
+- **The trigger is not reliable.** The very next cold review read the CLAUDE.md files, never loaded
+  the skill, and re-raised a finding Wotuu had explicitly banned (#3766) — the exact failure it was
+  warned about, on the first attempt.
+- **The costs are wildly asymmetric.** Carrying a rule you didn't need costs a few hundred
+  well-cached tokens. Missing one costs a foreign key in a migration, or a destructive schema change
+  shipped in a single release — which is what took staging down in #3497.
+
+So if a breach can only be cleared by moving a rule out of always-loaded context, **report the
+breach and leave it**. An honest over-budget warning beats a rule that silently isn't there.
+Budgets govern prose; they do not govern coverage.
 
 ### Boost regenerates some of these surfaces — always diff after `boost:update`
 

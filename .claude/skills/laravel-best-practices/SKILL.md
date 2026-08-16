@@ -6,14 +6,17 @@ metadata:
   author: laravel
 ---
 
-<!-- UPSTREAM SKILL — §1-§19 and rules/** came from Laravel (MIT, bulk-added in #3240). Everything
-     below is a keystone.guru-local addition that a re-vendor would silently delete, taking rules
-     that no longer exist anywhere else with it:
-       - §20 Model caching vs raw writes  (the #3766 review-suppression rule)
-       - §21 Project conventions          (no-foreign-keys, #3497 migration rule, SeederModel, ...)
-       - the "always include §20 and §21" line in How to Apply
-     `.claude/CLAUDE.md` points at §21 as the sole home for those conventions, so re-apply all
-     three after any upstream refresh. Same caveat as the vendored `impeccable` skill. -->
+<!-- UPSTREAM SKILL — the Rule Index, rules/** and everything above "Project conventions" came from
+     Laravel (MIT, bulk-added in #3240, restructured by the boost:update in #4061). "Project
+     conventions" below is a keystone.guru-local addition that a re-vendor would silently delete, so
+     re-apply it after any upstream refresh (same caveat as the vendored `impeccable` skill) — that
+     includes the "Always apply the Project conventions section" line in How to Apply. Model caching
+     vs raw writes is a separate project-specific override kept in `project-backend-structure`
+     instead of here, precisely because this directory doesn't survive a re-vendor.
+     The *rules* under "Project conventions" also live in `.claude/CLAUDE.md`, which is always
+     loaded — that is the authoritative copy and a re-vendor cannot touch it. What is unique to this
+     section is the reasoning, so losing it degrades explanation, not compliance. Keep the two
+     in sync. -->
 
 # Laravel Best Practices
 
@@ -27,13 +30,13 @@ Check sibling files, related controllers, models, or tests for established patte
 
 ## Project conventions (project-specific — apply alongside the generic rules above)
 
-These are keystone.guru's own conventions, moved here from `.claude/CLAUDE.md`. Where they
-contradict a generic rule from the index below, **these win** — most notably the no-foreign-keys
-rule under Migrations, which overrides `rules/migrations.md`'s `constrained()` guidance. Model
-caching vs raw writes is a separate project-specific override that lives in the
+keystone.guru's own conventions. Where they contradict a generic rule from the index below, **these
+win** — most notably the no-foreign-keys rule under Migrations, which overrides
+`rules/migrations.md`'s `constrained()` guidance. The same rules are in `.claude/CLAUDE.md` (always
+loaded, authoritative, in compact form); this section is the expanded reference — if you change one,
+change both. Model caching vs raw writes is a separate project-specific override that lives in the
 `project-backend-structure` skill instead of here, because Boost wipes this skill's directory
-wholesale on every `boost:update` — see `.claude/CLAUDE.md`, "Model caching is not a reason to
-avoid writes that bypass Eloquent events".
+wholesale on every `boost:update` — see `.claude/CLAUDE.md`, "Database & Eloquent".
 
 #### General
 - `sprintf` should always be used over direct concatenation for dynamic strings.

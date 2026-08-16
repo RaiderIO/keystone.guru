@@ -341,22 +341,83 @@ green, then undraft again.
 
 # Project-specific conventions
 
-## PHP / Laravel / migrations
-General PHP style, Eloquent/DB conventions, model/repository creation, `SeederModel` rows,
-controller validation, routes, queues, auth, and migrations (including the backward-compatible
-deploy rule from #3497 and the no-foreign-keys override) all now live in the `laravel-best-practices`
-skill, §21 "Project conventions" — load it before writing or reviewing any PHP/Laravel code.
-That skill's §20 also carries a **reviewer-facing** rule: missing model-cache invalidation on a raw
-write must **not** be raised as a review finding (Wotuu, PR #3766).
+These are **rules**, kept deliberately terse. The reasoning behind each one lives in the skill named
+next to it — load that skill when you need the *why*, but follow the rule either way. The
+`laravel-best-practices` skill, "Project conventions" section, is the detailed reference for
+everything in this section.
 
-#### Model caching is not a reason to avoid writes that bypass Eloquent events
-Raw writes (e.g. `upsert()`) on `CacheModel` models skip `laravel-model-caching`'s invalidation —
-but **missing cache invalidation must not be raised as a review finding** (Wotuu, PR #3766): the
-`CacheModel` tables are read-only in production, caching is off in development, and every release
-rotates the cache prefix anyway. Full rationale and the legitimate reasons to still prefer a
-model-level write: see the `project-backend-structure` skill, "Model caching vs raw writes".
-(It lives there, not in `laravel-best-practices`: Boost owns that skill's directory and wipes it
-wholesale on every `boost:update`.)
+## General
+- `sprintf` over direct concatenation for dynamic strings.
+
+## PHP
+- Keep existing comments unless they're completely redundant.
+- Class definition order: traits, constants, static properties, private → protected → public
+  properties, constructor, public → protected → private methods, static methods, magic methods.
+
+## Backend (Laravel)
+
+### Database & Eloquent
+- Use proper Eloquent relationship methods with return type hints; prefer them over raw queries or
+  manual joins, and over `DB::` (use `Model::query()`).
+- Eager-load to avoid N+1. Query builder is fine for genuinely complex operations.
+- **Missing model-cache invalidation on a raw write (e.g. `upsert()` on a `CacheModel`) must not be
+  raised as a review finding** (Wotuu, PR #3766) — the tables are read-only in production, caching
+  is off in development, and each release rotates the cache prefix. Rationale and the legitimate
+  reasons to still prefer a model-level write: `project-backend-structure` skill, "Model caching vs
+  raw writes" (it lives there, not in `laravel-best-practices`, because Boost wipes that skill's
+  directory wholesale on every `boost:update`).
+
+### Model Creation
+- Every new model needs a repository: interface at
+  `app/Repositories/Interfaces/{Domain}/{ModelName}RepositoryInterface.php`, implementation at
+  `app/Repositories/Database/{Domain}/{ModelName}Repository.php`, binding in
+  `RepositoryServiceProvider`. Full convention: `repository-pattern` skill.
+
+### Seeded models (`SeederModel`)
+- The trait is a marker, **not** a guarantee rows come from seeders. `SpellDungeon`,
+  `NpcCharacteristic`, `NpcSpell`, `CombatLogNpcEvent`, `CombatLogSpellEvent` and `ParsedCombatLog`
+  are combat-log-derived, so **a delete is permanent** — not recoverable from `database/seeders`.
+  Only the admin panel, mapping editor, seeders and the hourly `combatlog:detectstaledata` sweep
+  may delete such rows (convention, not enforced). Full list: `seeder-load` skill.
+
+### Controllers & Validation
+- Validate in Form Request classes, never inline in controllers; include rules and custom messages.
+  Check sibling Form Requests for array vs string rule style.
+- Every ID in a request body needs an `exists` rule of the right type
+  (`['user_id' => ['required', 'integer', 'exists:users,id']]`), in the Form Request.
+- Every `exists`-validated ID also gets a cached getter on the Form Request so the controller gets a
+  model directly: `return once(fn() => Dungeon::query()->where(...)->firstOrFail());`
+
+### Routes & controller method naming
+- Never name a controller method registered with first-class callable syntax after a PHP reserved
+  word (`new`, `list`, `print`, ...) — `route:cache` serialization then crashes per-request, in
+  production only, not in tests. The route path/name may keep the word; only the method needs
+  renaming. Mechanics: `api-endpoint` skill.
+
+### Queues
+- Time-consuming operations go in queued jobs implementing `ShouldQueue`.
+
+### Authentication & Authorization
+- Use Laravel's built-in gates, policies and Sanctum.
+
+### Configuration
+- `env()` only inside config files — always `config('app.name')`, never `env('APP_NAME')`.
+
+## Database (migrations)
+- **Do not use foreign keys.** This application does not use them; they break seeding and testing.
+  This overrides any generic `constrained()` advice.
+- **Migrations must be backward-compatible with the currently-running code.** Deploys are not
+  atomic — a cron runs `migrate` independently of the ECS web rollout, so old code and new schema
+  coexist during every deploy. Additive changes (nullable/defaulted column, new table, backfill)
+  are safe; dropping, renaming or narrowing in the same release that removes the consuming code is
+  not, and will 500 the still-running old containers. This broke staging in **#3497**.
+- Split destructive changes expand/contract across two releases: release N removes the last code
+  consumer, release N+1 ships the drop/rename. Column rename = add new + backfill + dual-write in
+  N, drop old in N+1.
+- **MySQL caps identifiers at 64 characters** and Laravel's generated index names include the table
+  name — on long table names pass an explicit short name (`->index('short_x_id_index')`,
+  `$table->unique([...], 'short_unique')`). The failure hits *after* the table is created, so drop
+  the half-made table by hand before re-running.
 
 ## Mapping
 
