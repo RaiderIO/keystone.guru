@@ -56,4 +56,27 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Excluded Skills
+    |--------------------------------------------------------------------------
+    |
+    | Boost re-adds a skill for every package it detects, so removing one from
+    | `boost.json` does not stick - it has to be excluded here.
+    |
+    | - `socialite-development` - Socialite is installed, but its OAuth surface
+    |                             is small and stable here; the skill's always-
+    |                             loaded description is not worth its keep.
+    |
+    | Same caveat as above: this key is not present in the package's shipped
+    | config, so re-check it after every Boost upgrade.
+    |
+    */
+
+    'skills' => [
+        'exclude' => [
+            'socialite-development',
+        ],
+    ],
+
 ];

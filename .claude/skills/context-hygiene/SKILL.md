@@ -84,6 +84,9 @@ git diff --stat CLAUDE.md .claude/skills/
 - **A Boost skill lost content** — project-specific text was added inside a Boost-owned directory
   and cannot survive there. Move it to a project-owned skill and repoint whatever links to it
   (this is how "Model caching vs raw writes" ended up in `project-backend-structure`).
+- **A skill we removed came back** — Boost re-adds a skill for every package it detects, so
+  deleting it from `boost.json` never sticks. Use `skills.exclude` in `config/boost.php`, keyed on
+  the skill name as `boost:list-skills` prints it.
 
 Per-skill description bytes:
 

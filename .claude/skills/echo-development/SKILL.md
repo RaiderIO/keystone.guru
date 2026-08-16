@@ -1,6 +1,6 @@
 ---
 name: echo-development
-description: "Use for real-time broadcasting with Laravel Echo/Reverb — ShouldBroadcast events, public/private/presence/encrypted channels and their authorization, Echo config, listening, client events (whisper), model broadcasting, and broadcast notifications."
+description: "Use for real-time broadcasting over **Laravel Reverb** (our websocket server) with Laravel Echo on the client — ShouldBroadcast events, channel authorization, listening, whisper, model broadcasting. Not Pusher/Ably or the retired laravel-echo-server."
 license: MIT
 metadata:
   author: laravel

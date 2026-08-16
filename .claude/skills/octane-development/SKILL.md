@@ -1,6 +1,6 @@
 ---
 name: octane-development
-description: "Use when working with Laravel Octane, the long-running PHP worker server (Swoole, FrankenPHP, RoadRunner) where the app boots once and serves many requests — installing/starting it, detecting the active driver, `Octane::concurrently()`/`Octane::table()`, the Octane cache, shared in-memory state, worker memory growth, and testing Octane behaviour. Not for plain PHP-FPM apps."
+description: "Use when working with Laravel Octane, the long-running PHP worker server — driver detection, `Octane::concurrently()`/`Octane::table()`, the Octane cache, shared in-memory state, worker memory growth, testing Octane. Not for plain PHP-FPM apps."
 license: MIT
 metadata:
   author: laravel
