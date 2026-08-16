@@ -7,6 +7,7 @@ use App\Models\CharacterClass;
 use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
+use App\Models\Npc\NpcClassification;
 use App\Models\Spell\Spell;
 use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitionInterface;
 use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitions;
@@ -62,12 +63,18 @@ class ClassCompendiumController extends Controller
 
         $mappingVersion = $dungeon->getCurrentMappingVersion();
 
-        $spells = Spell::query()
-            ->where('category', sprintf('spellcategory.%s', $characterClass->key))
-            ->whereNotNull('characteristic_id')
-            ->when($mappingVersion !== null, static fn($q) => $q->where('game_version_id', $mappingVersion->game_version_id))
-            ->with('characteristic')
-            ->get();
+        // Alphabetically by the name the player actually reads: they look up the spell they are about
+        // to press. Spell id - the order this arrives in otherwise - reshuffles the whole table every
+        // time the game adds an ability, and grouping by characteristic would order the rows by a
+        // taxonomy nobody thinks in.
+        $spells = self::sortByTranslatedName(
+            Spell::query()
+                ->where('category', sprintf('spellcategory.%s', $characterClass->key))
+                ->whereNotNull('characteristic_id')
+                ->when($mappingVersion !== null, static fn($q) => $q->where('game_version_id', $mappingVersion->game_version_id))
+                ->with('characteristic')
+                ->get(),
+        );
 
         $characteristicIds = $spells->pluck('characteristic_id')->unique()->filter();
 
@@ -85,21 +92,99 @@ class ClassCompendiumController extends Controller
                 ->select('npcs.*', 'npc_characteristics.characteristic_id')
                 ->with('classification')
                 ->distinct()
+                ->orderBy('npcs.id')
                 ->get()
                 ->groupBy('characteristic_id');
         }
 
         return view('compendium.class.show', [
-            'characterClass'         => $characterClass,
-            'contextDungeon'         => $dungeon,
-            'spells'                 => $spells,
-            'npcsByCharacteristicId' => $npcsByCharacteristicId,
-            'counterSections'        => $this->getCounterSections($characterClass, $dungeon, $mappingVersion),
-            'reflectSection'         => $this->getReflectSection($characterClass, $dungeon, $mappingVersion),
+            'characterClass'                => $characterClass,
+            'contextDungeon'                => $dungeon,
+            'spells'                        => $spells,
+            'npcsByCharacteristicId'        => $npcsByCharacteristicId,
+            'notableNpcsByCharacteristicId' => $this->getNotableNpcsByCharacteristicId($characteristicIds, $npcsByCharacteristicId),
+            'counterSections'               => $this->getCounterSections($characterClass, $dungeon, $mappingVersion),
+            'reflectSection'                => $this->getReflectSection($characterClass, $dungeon, $mappingVersion),
             // HeaderComposer only injects this into the header view itself - the dungeon context
             // links this page overrides are built in the view, so it needs its own copy
             'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion(),
         ]);
+    }
+
+    /**
+     * Per characteristic, the NPCs that behave *differently from what a player already assumes* -
+     * the only part of this data that is worth the screen space.
+     *
+     * Crowd control working on trash and failing on bosses is assumed knowledge, so listing it is
+     * noise. Two exceptions to that assumption are worth knowing before a pull, and they are what
+     * this returns:
+     *
+     * - `noEffect`: any non-boss NPC (normal, elite or rare) that resisted, i.e. was never observed
+     *               affected. Normal trash is exactly as "everyone assumes it's affected by
+     *               everything" as an elite or a rare, so a real immunity there is just as surprising.
+     * - `worksOn`:  bosses that *were* observed affected - the arena-style fights where crowd
+     *               control unexpectedly lands.
+     *
+     * The two groups are deliberately keyed off the NPC's classification rather than off list
+     * lengths, so a given NPC can only ever appear in the direction that is surprising for what it
+     * is. That also keeps each claim honest, because the two directions rest on very different
+     * evidence:
+     *
+     * `worksOn` is positive evidence - `npc_characteristics` recorded the aura landing - so it needs
+     * no qualification. `noEffect` is the absence of a recording, which is only meaningful for an
+     * NPC we have *other* observations for; there is no NPC immunity table to consult. So the
+     * unaffected side is drawn from a universe of NPCs already observed being affected by at least
+     * one characteristic of this class (including this one's own row), and never from every NPC in
+     * the dungeon.
+     *
+     * Taunt still contributes to that universe like any other characteristic - an elite/rare only
+     * ever observed being taunted must stay eligible to appear in another characteristic's `noEffect`
+     * row (and, if it was never observed taunted itself, in Taunt's own row). What taunt does *not*
+     * do is get treated as stronger evidence than that: it is a tanking mechanic that lands on nearly
+     * every tauntable trash mob, so "we have seen this NPC taunted" says nothing about whether it can
+     * be stunned beyond making the NPC eligible for the universe in the first place, same as any
+     * other characteristic's observation would.
+     *
+     * @param  Collection<int, int>                                                                  $characteristicIds
+     * @param  Collection<int, Collection<int, Npc>>                                                 $npcsByCharacteristicId
+     * @return Collection<int, array{noEffect: Collection<int, Npc>, worksOn: Collection<int, Npc>}>
+     */
+    private function getNotableNpcsByCharacteristicId(Collection $characteristicIds, Collection $npcsByCharacteristicId): Collection
+    {
+        // The same Npc may be hydrated once per characteristic - any of them will do, since only the
+        // npc itself is rendered and never the characteristic_id that was selected alongside it.
+        // reject() and not except(): on an Eloquent collection except() filters by model key
+
+        /** @var Collection<int, Npc> $npcsInUniverse */
+        $npcsInUniverse = $npcsByCharacteristicId
+            ->flatten(1)
+            ->unique('id')
+            // Bosses are only ever reported through worksOn. Letting one into the unaffected universe
+            // would turn a single observation ("this boss was stunned") into a claim on every other
+            // row ("...so it is immune to fear"), which is the exact inference this method avoids.
+            ->reject(static fn(Npc $npc) => $npc->isBoss())
+            // Every non-boss classification (normal, elite, rare) is fair game: a normal-classification
+            // trash mob is exactly as "everyone assumes it's affected by everything" as an elite or a
+            // rare, so a real immunity there is just as surprising and worth reporting. `classification_id`
+            // is NOT NULL and boss/finalboss are already rejected above, so this currently admits
+            // everything left - it stays an explicit allowlist rather than a bare "not a boss" check so a
+            // future classification does not silently join the universe.
+            ->filter(static fn(Npc $npc) => in_array($npc->classification_id, [
+                NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_NORMAL],
+                NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE],
+                NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE],
+            ], true));
+
+        return $characteristicIds->mapWithKeys(static function (int $characteristicId) use ($npcsByCharacteristicId, $npcsInUniverse) {
+            $affectedNpcs = $npcsByCharacteristicId->get($characteristicId, collect());
+
+            return [
+                $characteristicId => [
+                    'noEffect' => self::sortByTranslatedName($npcsInUniverse->whereNotIn('id', $affectedNpcs->pluck('id'))),
+                    'worksOn'  => self::sortByTranslatedName($affectedNpcs->filter(static fn(Npc $npc) => $npc->isBoss())),
+                ],
+            ];
+        });
     }
 
     /**
@@ -211,5 +296,21 @@ class ClassCompendiumController extends Controller
             ->groupBy('spell_id');
 
         return $npcsBySpellId;
+    }
+
+    /**
+     * Sorts on the *rendered* name. Both tables hold a translation key rather than a name
+     * (`npcs.160495`, `spells.46968`), so an `orderBy('name')` in the query would sort those keys
+     * lexicographically - putting `spells.103828` ahead of `spells.1715` ahead of `spells.355`,
+     * which is neither id order nor alphabetical.
+     *
+     * @template TModel of Npc|Spell
+     *
+     * @param  Collection<int, TModel> $models
+     * @return Collection<int, TModel>
+     */
+    private static function sortByTranslatedName(Collection $models): Collection
+    {
+        return $models->sortBy(static fn(Npc|Spell $model) => __($model->name))->values();
     }
 }

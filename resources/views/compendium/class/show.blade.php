@@ -12,6 +12,7 @@ use Illuminate\Support\Collection;
  * @var Dungeon                               $contextDungeon
  * @var Collection<int, Spell>                $spells
  * @var Collection<int, Collection<int, Npc>> $npcsByCharacteristicId
+ * @var Collection<int, array{noEffect: Collection<int, Npc>, worksOn: Collection<int, Npc>}> $notableNpcsByCharacteristicId
  * @var array<int, array{
  *     definition: SpellCounterDefinitionInterface,
  *     raceName: string|null,
@@ -54,7 +55,7 @@ use Illuminate\Support\Collection;
         </div>
     </div>
 
-    {{-- Spell → Characteristic → Affected NPCs table --}}
+    {{-- Spell → Characteristic → the NPCs that defy the usual expectation for what they are --}}
     @if($spells->isEmpty())
         <p class="text-muted">{{ __('view_compendium.class.show.no_spells') }}</p>
     @else
@@ -64,15 +65,28 @@ use Illuminate\Support\Collection;
                 <tr>
                     <th width="25%">{{ __('view_compendium.class.show.table_header_spell') }}</th>
                     <th width="20%">{{ __('view_compendium.class.show.table_header_characteristic') }}</th>
-                    <th width="55%">{{ __('view_compendium.class.show.table_header_npcs') }}</th>
+                    <th width="55%">
+                        {{ __('view_compendium.class.show.table_header_npcs') }}
+                        <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top"
+                           title="{{ __('view_compendium.class.show.npcs_description') }}"></i>
+                    </th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($spells as $spell)
                     <?php /** @var Spell $spell */ ?>
-                    <?php $affectedNpcs = $npcsByCharacteristicId->get($spell->characteristic_id, collect()); ?>
+                    <?php
+                    $affectedNpcs = $npcsByCharacteristicId->get($spell->characteristic_id, collect());
+                    $notableNpcs  = $notableNpcsByCharacteristicId->get($spell->characteristic_id, ['noEffect' => collect(), 'worksOn' => collect()]);
+
+                    // Three distinct states, and the difference between the last two matters: having
+                    // never seen this characteristic land at all says nothing about the NPCs it did
+                    // not land on, so that must not read as "we checked and nothing was surprising"
+                    $hasObservations = $affectedNpcs->isNotEmpty();
+                    $hasExceptions   = $notableNpcs['noEffect']->isNotEmpty() || $notableNpcs['worksOn']->isNotEmpty();
+                    ?>
                     <tr>
-                        <td class="text-nowrap">@include('common.spell.link', ['spell' => $spell])</td>
+                        <td class="compendium_table_spell">@include('common.spell.link', ['spell' => $spell])</td>
                         <td>
                             @if($spell->characteristic)
                                 <img src="{{ ksgAssetImage(sprintf('spells/%s.jpg', $spell->characteristic->icon_name)) }}"
@@ -83,12 +97,25 @@ use Illuminate\Support\Collection;
                             @endif
                         </td>
                         <td>
-                            @if($affectedNpcs->isEmpty())
-                                <span class="text-muted">{{ __('view_compendium.class.show.no_npcs') }}</span>
+                            @if(!$hasObservations)
+                                <span class="text-muted">{{ __('view_compendium.class.show.npcs_no_data') }}</span>
+                            @elseif(!$hasExceptions)
+                                <span class="text-muted">{{ __('view_compendium.class.show.npcs_no_exceptions') }}</span>
                             @else
-                                @foreach($affectedNpcs as $npc)
-                                    <?php /** @var Npc $npc */ ?>
-                                    @include('common.npc.link', ['npc' => $npc])@if(!$loop->last), @endif
+                                @foreach(['worksOn' => 'npcs_works_on', 'noEffect' => 'npcs_no_effect'] as $group => $labelKey)
+                                    @if($notableNpcs[$group]->isNotEmpty())
+                                        <div class="compendium_exception compendium_exception--{{ $group === 'worksOn' ? 'works' : 'noeffect' }}">
+                                            <span class="compendium_chip compendium_chip--{{ $group === 'worksOn' ? 'works' : 'noeffect' }}">
+                                                {{ __(sprintf('view_compendium.class.show.%s', $labelKey)) }}
+                                            </span>
+                                            <span class="compendium_exception_npcs">
+                                                @foreach($notableNpcs[$group] as $npc)
+                                                    <?php /** @var Npc $npc */ ?>
+                                                    @include('common.npc.link', ['npc' => $npc])@if(!$loop->last), @endif
+                                                @endforeach
+                                            </span>
+                                        </div>
+                                    @endif
                                 @endforeach
                             @endif
                         </td>

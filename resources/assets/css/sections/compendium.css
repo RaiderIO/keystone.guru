@@ -108,6 +108,85 @@
     color: var(--bs-secondary-color);
 }
 
+/*
+ * The two exception chips carry opposite meanings, so they are separated by more than colour:
+ * a leading glyph and a left border keep them apart for anyone who cannot tell the hues apart.
+ */
+.compendium_chip--works,
+.compendium_chip--noeffect {
+    border-left: 3px solid;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.compendium_chip--works {
+    border-left-color: var(--bs-success);
+}
+
+.compendium_chip--works::before {
+    content: '\002B';
+    font-weight: 700;
+    color: var(--bs-success);
+}
+
+.compendium_chip--noeffect {
+    border-left-color: var(--bs-warning);
+}
+
+.compendium_chip--noeffect::before {
+    content: '\2013';
+    font-weight: 700;
+    color: var(--bs-warning);
+}
+
+/* Each exception group is its own line - two groups in one cell must not read as one list */
+.compendium_exception {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.15rem 0;
+}
+
+.compendium_exception + .compendium_exception {
+    border-top: 1px solid rgba(128, 128, 128, 0.2);
+    margin-top: 0.25rem;
+    padding-top: 0.4rem;
+}
+
+.compendium_exception_npcs {
+    min-width: 0;
+}
+
+/* Keeps a spell and its icon on one line, but only where there is room for it - see below */
+.compendium_table_spell {
+    white-space: nowrap;
+}
+
+/*
+ * Three columns whose content all refuses to wrap add up to more than a phone is wide, and the table
+ * then hides the NPC names behind a horizontal scroll - the one thing on the row worth reading. The
+ * chip keeps its own nowrap (a label broken across two lines is unreadable) and instead moves above
+ * its NPCs, while the spell name is allowed to wrap.
+ */
+@media (max-width: 767.98px) {
+    .compendium_exception {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.15rem;
+    }
+
+    .compendium_table_spell {
+        white-space: normal;
+    }
+
+    .compendium_chip--works,
+    .compendium_chip--noeffect {
+        padding: 0.15rem 0.35rem;
+        font-size: 0.6875rem;
+        gap: 0.25rem;
+    }
+}
+
 /* ===== Characteristics ===== */
 
 .compendium_characteristics {
