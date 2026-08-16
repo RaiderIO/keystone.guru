@@ -229,13 +229,15 @@ class PullWorkBench extends Signalable {
             }
         });
 
-        // If we have a killzone layer
-        if (self.killZone.hasKillArea()) {
-            // Was inactive (always starts inactive), is active now
-            $hasKillZone.each(function () {
+        // Sync the toggle button's pressed state to whether we actually have a killzone layer.
+        // Compare against the current state rather than blindly toggling - this method may run
+        // more than once for the same pull (e.g. a `forceReopen` refresh after add/remove).
+        let hasKillArea = self.killZone.hasKillArea();
+        $hasKillZone.each(function () {
+            if (this.classList.contains('active') !== hasKillArea) {
                 bootstrap.Button.getOrCreateInstance(this).toggle();
-            });
-        }
+            }
+        });
     }
 
     /**

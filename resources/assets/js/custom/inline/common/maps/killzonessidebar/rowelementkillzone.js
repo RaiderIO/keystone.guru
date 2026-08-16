@@ -369,8 +369,13 @@ class RowElementKillZone extends RowElement {
             }
 
             // // If we're editing a pull through the workbench, open this pull instead now
-            if (this.killZonesSidebar.pullWorkBench.isActive()) {
-                this.killZonesSidebar.pullWorkBench.editPull(this.killZone.id)
+            let pullWorkBench = this.killZonesSidebar.pullWorkBench;
+            if (pullWorkBench.isActive()) {
+                // Only force a reopen if this pull is already the one open in the workbench -
+                // otherwise this is a genuine switch to a different pull, which must still depress
+                // the previously open pull's edit-toggle button.
+                let forceReopen = pullWorkBench.killZone !== null && pullWorkBench.killZone.id === this.killZone.id;
+                pullWorkBench.editPull(this.killZone.id, {forceReopen: forceReopen})
             }
         }
 
