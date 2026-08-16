@@ -56,6 +56,7 @@ offender, don't mechanically truncate):
 
 | Surface | Budget | Measure |
 |---|---|---|
+| `CLAUDE.md` (Boost-generated) | ≤ 7,300 B | `wc -c CLAUDE.md` |
 | `.claude/CLAUDE.md` | ≤ 18,000 B | `wc -c .claude/CLAUDE.md` |
 | `MEMORY.md` | ≤ 9,500 B | `wc -c MEMORY.md` |
 | All skill descriptions combined | ≤ 18,500 B | sum of each frontmatter `description:` value |
@@ -64,6 +65,28 @@ offender, don't mechanically truncate):
 These budgets are the post-#3783 baseline plus a little headroom — a **ratchet, not a target**:
 when a sweep trims a surface below budget, tighten the budget here to the new level (never loosen
 one to silence a warning; that needs Wotuu's sign-off).
+
+### Boost regenerates some of these surfaces — always diff after `boost:update`
+
+The root `CLAUDE.md` and every skill listed in `boost.json` are **owned by Boost**. `boost:update`
+rewrites the `<laravel-boost-guidelines>` block and *deletes and recopies each Boost skill
+directory wholesale*, so upstream silently reverts our trims and destroys any project-specific
+section added inside one. After every `boost:update` (or Boost upgrade):
+
+```bash
+git diff --stat CLAUDE.md .claude/skills/
+```
+
+- **Root `CLAUDE.md` grew** — a Boost upgrade added a guideline pack. Audit the pack rather than
+  trimming: if it contradicts our rules, add its key to `guidelines.exclude` in `config/boost.php`
+  (#4061).
+- **A Boost skill's `description:` grew** — upstream reverted a #3783 trim. Re-trim it.
+- **A Boost skill lost content** — project-specific text was added inside a Boost-owned directory
+  and cannot survive there. Move it to a project-owned skill and repoint whatever links to it
+  (this is how "Model caching vs raw writes" ended up in `project-backend-structure`).
+- **A skill we removed came back** — Boost re-adds a skill for every package it detects, so
+  deleting it from `boost.json` never sticks. Use `skills.exclude` in `config/boost.php`, keyed on
+  the skill name as `boost:list-skills` prints it.
 
 Per-skill description bytes:
 
