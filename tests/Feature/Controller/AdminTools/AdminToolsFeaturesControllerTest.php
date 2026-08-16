@@ -35,10 +35,11 @@ final class AdminToolsFeaturesControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function toggleFeature_givenOrdinaryUserWithStoredFalseValue_doesNotGrantTheFeatureToThatUser(): void
+    public function toggleFeature_givenOrdinaryUserWithStoredFalseValue_grantsTheFeatureToThatUserOnceSwitchedOn(): void
     {
-        // Arrange - the admin switch starts off, and an ordinary (non-internal-team) user already has a stored
-        // 'false' from browsing the site before the toggle, which is exactly the row #3774 was blanket-flipped
+        // Arrange - the admin switch starts off, and an ordinary user already has a stored 'false' from browsing
+        // the site before the toggle. The feature has no role gate anymore, so once the admin switch flips on,
+        // that stale 'false' must be purged rather than left to shadow the now-enabled switch
         $admin        = User::findOrFail(Feature::ADMIN_USER_ID);
         $ordinaryUser = User::factory()->create();
         $this->assertTrue($admin->hasRole(Role::ROLE_ADMIN), 'User id=1 must be admin (seed the DB).');
@@ -62,11 +63,11 @@ final class AdminToolsFeaturesControllerTest extends PublicTestCase
             $this->assertSame(
                 0,
                 $this->countStoredFeaturesOf($ordinaryUser),
-                'Expected the stored row of a user with no entitling role to be purged, not flipped to true.',
+                'Expected the stale stored row to be purged, not left in place.',
             );
-            $this->assertFalse(
+            $this->assertTrue(
                 PennantFeature::for($ordinaryUser)->active(NpcCompendium::class),
-                'Expected the feature to resolve to false for a user without the entitling role.',
+                'Expected the feature to resolve to true for any user once the admin switch is on.',
             );
         } finally {
             $this->deleteStoredFeaturesOf($ordinaryUser);
@@ -90,9 +91,9 @@ final class AdminToolsFeaturesControllerTest extends PublicTestCase
     #[Test]
     public function toggleFeature_givenActiveSwitch_deactivatesItAndPurgesStoredValues(): void
     {
-        // Arrange - an entitled user's stored 'true' row must be purged, not merely updated to 'false' in place;
-        // updating it in place would leave a row that never re-resolves once the switch is turned back on, which
-        // would recreate the exact stale-value bug #3772 fixed for the role-change direction
+        // Arrange - a user's stored 'true' row must be purged, not merely updated to 'false' in place; updating it
+        // in place would leave a row that never re-resolves once the switch is turned back on, which would
+        // recreate the exact stale-value bug #3772 fixed for the role-change direction
         $admin        = User::findOrFail(Feature::ADMIN_USER_ID);
         $ordinaryUser = User::factory()->create();
         $this->assertTrue($admin->hasRole(Role::ROLE_ADMIN), 'User id=1 must be admin (seed the DB).');
@@ -101,7 +102,6 @@ final class AdminToolsFeaturesControllerTest extends PublicTestCase
             ->first();
 
         try {
-            $ordinaryUser->addRole(Role::ROLE_INTERNAL_TEAM);
             PennantFeature::for($admin)->activate(NpcCompendium::class);
             PennantFeature::for($ordinaryUser)->activate(NpcCompendium::class);
             $this->assertTrue(Feature::getAdminValue(NpcCompendium::class), 'Expected the switch to be arranged on.');
