@@ -12,16 +12,8 @@ use App\Models\CombatLog\CombatLogAnalyzeStatus;
 use App\Models\CombatLog\ParsedCombatLog;
 use App\Models\Dungeon;
 use App\Repositories\Interfaces\CombatLog\ParsedCombatLogRepositoryInterface;
-use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
-use App\Repositories\Interfaces\SpellRepositoryInterface;
-use App\Service\CombatLog\DataExtractors\CreateMissingNpcDataExtractor;
+use App\Service\CombatLog\DataExtractors\DataExtractorFactoryInterface;
 use App\Service\CombatLog\DataExtractors\DataExtractorInterface;
-use App\Service\CombatLog\DataExtractors\FloorDataExtractor;
-use App\Service\CombatLog\DataExtractors\ImmunityBypassDataExtractor;
-use App\Service\CombatLog\DataExtractors\NpcCharacteristicDataExtractor;
-use App\Service\CombatLog\DataExtractors\NpcUpdateDataExtractor;
-use App\Service\CombatLog\DataExtractors\SpellCounterDataExtractor;
-use App\Service\CombatLog\DataExtractors\SpellDataExtractor;
 use App\Service\CombatLog\Dtos\CombatLogRunContextInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
@@ -49,22 +41,11 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
     public function __construct(
         private readonly CombatLogServiceInterface                      $combatLogService,
         private readonly SeasonServiceInterface                         $seasonService,
-        private readonly FloorRepositoryInterface                       $floorRepository,
-        private readonly SpellRepositoryInterface                       $spellRepository,
         private readonly ParsedCombatLogRepositoryInterface             $parsedCombatLogRepository,
         private readonly CombatLogDataExtractionServiceLoggingInterface $log,
+        DataExtractorFactoryInterface                                   $dataExtractorFactory,
     ) {
-        /** @var Collection<int, DataExtractorInterface> $extractors */
-        $extractors = collect([
-            new CreateMissingNpcDataExtractor(),
-            new NpcUpdateDataExtractor(),
-            new FloorDataExtractor($this->floorRepository),
-            new SpellDataExtractor(),
-            new NpcCharacteristicDataExtractor($this->spellRepository),
-            new SpellCounterDataExtractor(),
-            new ImmunityBypassDataExtractor(),
-        ]);
-        $this->dataExtractors = $extractors;
+        $this->dataExtractors = $dataExtractorFactory->createExtractors();
     }
 
     public function extractData(
