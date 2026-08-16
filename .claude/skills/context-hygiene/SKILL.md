@@ -66,13 +66,12 @@ These budgets are a **ratchet, not a target**: when a sweep trims a surface belo
 the budget here to the new level (never loosen one to silence a warning; that needs Wotuu's
 sign-off).
 
-The `.claude/CLAUDE.md` budget was **18,000 B until PR #4046**, which raised it to 29,000 B.
-**Set by an agent under delegated authority, not approved by Wotuu on the number** — he asked the
-agent to make the call and has not reviewed 29,000 B specifically, so treat it as a working figure
-open to revision, not a ruling. The reasoning: 18,000 B was aspirational and never once met, and
-could only be reached by deleting rules — which #4046 tried and had to undo (below). 29,000 B is the
-file with every rule intact and prose trimmed hard, i.e. an achievable floor to ratchet down from.
-Tighten it only by cutting prose.
+The `.claude/CLAUDE.md` budget was **18,000 B until PR #4046**, which raised it to 29,000 B —
+proposed by an agent, **approved by Wotuu on the number** in that PR's conversation. Reasoning:
+18,000 B was aspirational and never once met, and could only be reached by deleting rules, which is
+what #4046 tried and had to undo (below). A budget satisfiable only by doing the wrong thing trains
+everyone to ignore the warning. 29,000 B is the file with every rule intact and prose trimmed hard —
+an achievable floor to ratchet down from. Tighten it only by cutting prose.
 
 ### Cut prose, never rules — and never by relocating a rule behind a skill trigger
 
