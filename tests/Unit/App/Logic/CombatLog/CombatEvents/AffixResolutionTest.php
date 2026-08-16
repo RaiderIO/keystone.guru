@@ -5,8 +5,12 @@ namespace Tests\Unit\App\Logic\CombatLog\CombatEvents;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Prefix;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Spell;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Swing;
+use App\Logic\CombatLog\CombatEvents\Suffixes\Absorbed;
+use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBrokenSpell;
+use App\Logic\CombatLog\CombatEvents\Suffixes\CastSuccess;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Damage\V20\DamageV20;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Damage\V22\DamageV22;
+use App\Logic\CombatLog\CombatEvents\Suffixes\Heal;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Suffix;
 use App\Logic\CombatLog\CombatLogVersion;
 use Exception;
@@ -20,11 +24,11 @@ use Tests\TestCases\PublicTestCase;
  * per event name, so the properties worth pinning are that callers still get their own instance and
  * that a resolution under one combat log version never answers for another.
  */
-class AffixResolutionTest extends PublicTestCase
+#[Group('CombatLog')]
+#[Group('AffixResolution')]
+final class AffixResolutionTest extends PublicTestCase
 {
     #[Test]
-    #[Group('CombatLog')]
-    #[Group('AffixResolution')]
     public function createFromEventName_givenRepeatedCalls_returnsADistinctInstanceEachTime(): void
     {
         // Arrange
@@ -45,8 +49,6 @@ class AffixResolutionTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('CombatLog')]
-    #[Group('AffixResolution')]
     public function createFromEventName_givenInterleavedCombatLogVersions_resolvesPerVersion(): void
     {
         // Arrange
@@ -69,8 +71,6 @@ class AffixResolutionTest extends PublicTestCase
      * @param class-string $expected
      */
     #[Test]
-    #[Group('CombatLog')]
-    #[Group('AffixResolution')]
     #[DataProvider('createFromEventName_givenEventName_resolvesToClass_DataProvider')]
     public function createFromEventName_givenEventName_resolvesToClass(string $eventName, string $expected): void
     {
@@ -103,9 +103,55 @@ class AffixResolutionTest extends PublicTestCase
         ];
     }
 
+    /**
+     * The 8 builder-backed mapping entries take the is_subclass_of() true branch; the other 27 take
+     * the plain `new $className()` branch, which is the half the instanceof rewrite touched.
+     *
+     * @param class-string $expected
+     */
     #[Test]
-    #[Group('CombatLog')]
-    #[Group('AffixResolution')]
+    #[DataProvider('createFromEventName_givenANonBuilderSuffix_resolvesToClass_DataProvider')]
+    public function createFromEventName_givenANonBuilderSuffix_resolvesToClass(string $eventName, string $expected): void
+    {
+        // Arrange
+        $version = CombatLogVersion::RETAIL_12_0_5;
+
+        // Act - twice, so the answer is asserted on both the resolving and the memoised path
+        $firstSuffix  = Suffix::createFromEventName($version, $eventName);
+        $secondSuffix = Suffix::createFromEventName($version, $eventName);
+
+        // Assert
+        $this->assertInstanceOf($expected, $firstSuffix);
+        $this->assertInstanceOf($expected, $secondSuffix);
+        $this->assertNotSame($firstSuffix, $secondSuffix);
+    }
+
+    /**
+     * @return array<string, array<string, string>>
+     */
+    public static function createFromEventName_givenANonBuilderSuffix_resolvesToClass_DataProvider(): array
+    {
+        return [
+            'Heal' => [
+                'eventName' => 'SPELL_HEAL',
+                'expected'  => Heal::class,
+            ],
+            'Absorbed' => [
+                'eventName' => 'SPELL_ABSORBED',
+                'expected'  => Absorbed::class,
+            ],
+            'Cast success' => [
+                'eventName' => 'SPELL_CAST_SUCCESS',
+                'expected'  => CastSuccess::class,
+            ],
+            'Longest match wins over a shorter one it ends with' => [
+                'eventName' => 'SPELL_AURA_BROKEN_SPELL',
+                'expected'  => AuraBrokenSpell::class,
+            ],
+        ];
+    }
+
+    #[Test]
     public function createFromEventName_givenUnresolvableEventName_throwsEveryTime(): void
     {
         // Arrange
@@ -119,6 +165,13 @@ class AffixResolutionTest extends PublicTestCase
                 $this->fail('Expected an exception for an unresolvable event name');
             } catch (Exception $exception) {
                 $this->assertStringContainsString('Unable to find prefix', $exception->getMessage());
+            }
+
+            try {
+                Suffix::createFromEventName($version, $eventName);
+                $this->fail('Expected an exception for an unresolvable event name');
+            } catch (Exception $exception) {
+                $this->assertStringContainsString('Unable to find suffix', $exception->getMessage());
             }
         }
     }

@@ -136,14 +136,23 @@ abstract class Suffix implements HasParameters
      * than keyed on a "<version>|<eventName>" string because building that key costs more per line
      * than the second array lookup does.
      *
-     * Bounded by the event names that actually resolve to a suffix - the closed set the game emits
-     * (32 distinct names across the benchmark corpus) times the handful of combat log versions a
-     * file can carry; a name that resolves to nothing throws instead of being cached. The mapping is
-     * a pure function of those two values, so retaining it between requests under Octane is safe.
+     * The mapping is a pure function of those two values - no request, user or connection state - so
+     * retaining it between requests under Octane is safe. Growth is capped rather than argued away:
+     * see {@see RESOLVED_CLASS_NAME_LIMIT}.
      *
      * @var array<int, array<string, class-string<Suffix>>>
      */
     private static array $resolvedClassNames = [];
+
+    /**
+     * Caching stops above this many entries per combat log version. A well formed log needs ~32 -
+     * the distinct event names across the entire benchmark corpus - but nothing constrains a log to
+     * be well formed: resolution only requires the name to *end* in a known suffix, so
+     * SPELL_<anything>_CAST_SUCCESS is accepted and would otherwise add an entry that a long-lived
+     * Octane worker never releases. Past the cap resolution falls back to the scan, which is still
+     * correct, just no faster than it was before.
+     */
+    private const int RESOLVED_CLASS_NAME_LIMIT = 1024;
 
     public function __construct(protected int $combatLogVersion)
     {
@@ -180,7 +189,9 @@ abstract class Suffix implements HasParameters
                     ? $className::create($combatLogVersion)
                     : new $className($combatLogVersion);
 
-                self::$resolvedClassNames[$combatLogVersion][$eventName] = $suffix::class;
+                if (count(self::$resolvedClassNames[$combatLogVersion] ?? []) < self::RESOLVED_CLASS_NAME_LIMIT) {
+                    self::$resolvedClassNames[$combatLogVersion][$eventName] = $suffix::class;
+                }
 
                 return $suffix;
             }

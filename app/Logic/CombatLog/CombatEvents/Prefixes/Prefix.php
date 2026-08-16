@@ -51,6 +51,14 @@ abstract class Prefix implements HasParameters
      */
     private static array $resolvedClassNames = [];
 
+    /**
+     * Caching stops above this many entries, for the same reason as
+     * {@see Suffix::RESOLVED_CLASS_NAME_LIMIT}: resolution only requires the name to *start* with a
+     * known prefix, so SPELL_<anything> is accepted, and this cache is written before the suffix
+     * lookup gets its chance to reject the name. Past the cap resolution falls back to the scan.
+     */
+    private const int RESOLVED_CLASS_NAME_LIMIT = 1024;
+
     public function __construct(protected int $combatLogVersion)
     {
     }
@@ -81,7 +89,9 @@ abstract class Prefix implements HasParameters
 
         foreach (self::PREFIX_CLASS_MAPPING as $prefix => $className) {
             if (Str::startsWith($eventName, $prefix)) {
-                self::$resolvedClassNames[$eventName] = $className;
+                if (count(self::$resolvedClassNames) < self::RESOLVED_CLASS_NAME_LIMIT) {
+                    self::$resolvedClassNames[$eventName] = $className;
+                }
 
                 return new $className($combatLogVersion);
             }
