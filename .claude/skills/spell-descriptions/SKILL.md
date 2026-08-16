@@ -16,11 +16,14 @@ the DB2 tables, which is what the download cache below is for.
 **On a game patch, by hand — never as part of a release.** The trigger is a new WoW client build,
 not a deploy: releases go out far more often than patches do and would re-download 140MB of DB2 for
 nothing, and the output is a seeder diff a human has to read and commit before it means anything.
-Nothing schedules any of these commands, and nothing in `create-release` calls them.
+Nothing schedules the import commands themselves, and nothing in `create-release` calls them.
 
 A patch has landed when https://wago.tools/db2/Spell offers a build newer than the one the last
-`spells.json` commit was made from. Re-run the sequence below, review the diff, commit it — the next
-release picks it up, because the data ships in the seeder rather than being fetched at runtime.
+`spells.json` commit was made from - or when `wagotools:checkforspelldescriptionpatch` (scheduled
+daily, staging/production only, #4021) files a GitHub issue saying so; it compares wago.tools'
+latest build against `database/data/spell_description/import_state.json`, the build the sequence
+below last actually used. Re-run the sequence below, review the diff, commit it — the next release
+picks it up, because the data ships in the seeder rather than being fetched at runtime.
 
 ## Re-running it for a new game patch
 
@@ -29,12 +32,13 @@ docker compose exec -T app php artisan wagotools:importspelldescriptions   # DB2
 docker compose exec -T app php artisan wowhead:calibratespelldamage        # -> spells.damage_multiplier
 docker compose exec -T app php artisan wagotools:importspelldescriptions   # re-render with the multipliers
 docker compose exec -T app php artisan mapping:save                        # -> database/seeders/dungeondata/spells.json
-git add database/seeders/dungeondata/spells.json
+git add database/seeders/dungeondata/spells.json database/data/spell_description/import_state.json
 ```
 
 Everything inferred from the game data ships in the seeder, so staging and production know it without
 running any of this: the templates, the per-effect coefficients (nested under each spell) and the
-damage multipliers.
+damage multipliers - as does the build just imported (`import_state.json`, loaded by
+`SpellDescriptionImportStateSeeder`), which is what the patch check compares against.
 
 - `--product=wow` picks the CDN product (`wowt` is the PTR, `wow_classic` a classic client) and
   `--gameVersion=retail` says which of our game versions that client is. **They must match** - only

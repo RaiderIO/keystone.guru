@@ -14,6 +14,7 @@ use App\Service\WagoTools\WagoToolsServiceInterface;
 use Closure;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\File;
 
 /**
  * Builds the descriptions of every spell we know from the game client's DB2 tables.
@@ -34,6 +35,13 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
      * spells. Chains beyond this are as deep as the parser itself is willing to recurse.
      */
     private const int MAX_REFERENCE_PASSES = 3;
+
+    /**
+     * The build state is committed to the seeders alongside the description data itself (#4021) - a
+     * DB-only write would never reach an environment that never runs this command, which is every
+     * environment except a developer's own machine (see the spell-descriptions skill).
+     */
+    private const string IMPORT_STATE_RELATIVE_DATA_PATH = 'data/spell_description/import_state.json';
 
     public function __construct(
         private readonly WagoToolsServiceInterface                      $wagoToolsService,
@@ -94,7 +102,7 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
 
             $updatedCount = $this->renderAndPersist($context, $spells, $templates, $onProgress);
 
-            $this->spellDescriptionImportStateRepository->recordImport($gameVersionId, $product, $build, Carbon::now());
+            $this->recordImportState($gameVersionId, $product, $build);
 
             return new SpellDescriptionImportResult(
                 build: $build,
@@ -105,6 +113,31 @@ class SpellDescriptionImportService implements SpellDescriptionImportServiceInte
         } finally {
             $this->log->importDescriptionsEnd();
         }
+    }
+
+    /**
+     * Records the build just imported both in the database (so this process sees it immediately) and in
+     * the committed seeder JSON (so a human committing the resulting spells.json also carries the build
+     * forward into every other environment via the normal seed-on-deploy path).
+     */
+    private function recordImportState(int $gameVersionId, string $product, string $build): void
+    {
+        $importedAt = Carbon::now();
+
+        $this->spellDescriptionImportStateRepository->recordImport($gameVersionId, $product, $build, $importedAt);
+
+        $path   = database_path(self::IMPORT_STATE_RELATIVE_DATA_PATH);
+        $states = File::exists($path) ? (json_decode(File::get($path), true) ?? []) : [];
+
+        $states[(string)$gameVersionId] = [
+            'product'    => $product,
+            'build'      => $build,
+            'importedAt' => $importedAt->toDateTimeString(),
+        ];
+        ksort($states);
+
+        File::ensureDirectoryExists(dirname($path));
+        File::put($path, json_encode($states, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL);
     }
 
     /**

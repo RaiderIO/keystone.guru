@@ -9,6 +9,7 @@ use GrahamCampbell\GitHub\Facades\GitHub;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
+use RuntimeException;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('SpellDescription')]
@@ -27,7 +28,7 @@ final class CheckForSpellDescriptionPatchTest extends PublicTestCase
         $this->mockLatestBuild('12.1.0.69214');
 
         // GitHub is never touched when nothing changed
-        GitHub::shouldReceive('search->issues')->never();
+        GitHub::shouldReceive('issue->all')->never();
         GitHub::shouldReceive('issue->create')->never();
 
         try {
@@ -48,16 +49,16 @@ final class CheckForSpellDescriptionPatchTest extends PublicTestCase
         $this->recordImportState('12.1.0.69214');
         $this->mockLatestBuild('12.1.0.69300');
 
-        GitHub::shouldReceive('search->issues')
+        GitHub::shouldReceive('issue->all')
             ->once()
-            ->withArgs(function (string $query): bool {
-                $this->assertStringContainsString('RaiderIO/Keystone.guru', $query);
-                $this->assertStringContainsString('is:open', $query);
-                $this->assertStringContainsString('12.1.0.69300', $query);
+            ->withArgs(function (string $owner, string $repository, array $params): bool {
+                $this->assertSame('RaiderIO', $owner);
+                $this->assertSame('Keystone.guru', $repository);
+                $this->assertSame('open', $params['state']);
 
                 return true;
             })
-            ->andReturn(['items' => []]);
+            ->andReturn([['number' => 111, 'title' => 'Unrelated open issue']]);
 
         GitHub::shouldReceive('issue->create')
             ->once()
@@ -89,9 +90,9 @@ final class CheckForSpellDescriptionPatchTest extends PublicTestCase
         $this->recordImportState('12.1.0.69214');
         $this->mockLatestBuild('12.1.0.69300');
 
-        GitHub::shouldReceive('search->issues')
+        GitHub::shouldReceive('issue->all')
             ->once()
-            ->andReturn(['items' => [['number' => 4321]]]);
+            ->andReturn([['number' => 4321, 'title' => 'Patch 12.1.0.69300 is out - re-run the spell description import']]);
 
         GitHub::shouldReceive('issue->create')->never();
 
@@ -113,7 +114,29 @@ final class CheckForSpellDescriptionPatchTest extends PublicTestCase
         $this->recordImportState('12.1.0.69214');
         $this->mockLatestBuild(null);
 
-        GitHub::shouldReceive('search->issues')->never();
+        GitHub::shouldReceive('issue->all')->never();
+        GitHub::shouldReceive('issue->create')->never();
+
+        try {
+            // Act & Assert
+            $this->artisan('wagotools:checkforspelldescriptionpatch')->assertSuccessful();
+        } finally {
+            $this->clearImportState();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenGithubUnreachable_filesNoIssueAndDoesNotFail(): void
+    {
+        // Arrange - a transport failure (DNS, connect timeout) does not implement Github's own exception
+        // interface, so this guards the catch is broad enough to still fail closed
+        $this->recordImportState('12.1.0.69214');
+        $this->mockLatestBuild('12.1.0.69300');
+
+        GitHub::shouldReceive('issue->all')->once()->andThrow(new RuntimeException('Could not resolve host'));
         GitHub::shouldReceive('issue->create')->never();
 
         try {
@@ -135,9 +158,9 @@ final class CheckForSpellDescriptionPatchTest extends PublicTestCase
         $this->clearImportState();
         $this->mockLatestBuild('12.1.0.69300');
 
-        GitHub::shouldReceive('search->issues')
+        GitHub::shouldReceive('issue->all')
             ->once()
-            ->andReturn(['items' => []]);
+            ->andReturn([]);
 
         GitHub::shouldReceive('issue->create')
             ->once()
