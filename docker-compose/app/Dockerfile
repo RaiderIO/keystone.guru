@@ -141,17 +141,20 @@ COPY var/ /var/
 # Import .env file and apply it to the current environment
 RUN cd /tmp \
  && export $(echo $(cat .env | sed 's/#.*//g' | sed 's/\r//g' | xargs) | envsubst) \
- && envsubst < /root/.config/composer/auth.json > /root/.config/composer/auth.json.tmp \
- && mv /root/.config/composer/auth.json.tmp /root/.config/composer/auth.json \
+ && envsubst < /root/.composer/auth.json > /root/.composer/auth.json.tmp \
+ && mv /root/.composer/auth.json.tmp /root/.composer/auth.json \
  && rm /tmp/.env
 
 # Local-dev user matching the host UID/GID so writes into the bind mount stay owned by the host
 # user. Mirrors root's shell/composer setup (incl. the substituted auth.json above) into its home.
+# Composer's home-dir resolution only considers $XDG_CONFIG_HOME/composer when some XDG_* env var
+# is set; none is here, so it always resolves to ~/.composer (not ~/.config/composer) — that must
+# be where auth.json lives, or composer silently runs unauthenticated.
 # -o tolerates a PUID/PGID that already exists in the base image.
 RUN groupadd -o -g "${PGID}" ksg \
  && useradd -o -m -u "${PUID}" -g "${PGID}" -s /bin/bash ksg \
  && cp /root/.bashrc /home/ksg/.bashrc \
- && cp -r /root/.config /home/ksg/.config \
+ && cp -r /root/.composer /home/ksg/.composer \
  && chown -R ksg:ksg /home/ksg
 
 #ENTRYPOINT ["/usr/local/bin/docker_init.sh"]
