@@ -1285,6 +1285,7 @@ CREATE TABLE `users` (
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `raw_patreon_response_data` longtext COLLATE utf8mb4_unicode_ci,
   `legal_agreed` tinyint(1) NOT NULL DEFAULT '0',
+  `legal_agreed_ms` int(11) NOT NULL DEFAULT '0',
   `analytics_cookie_opt_out` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
