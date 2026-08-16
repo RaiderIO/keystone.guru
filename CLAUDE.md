@@ -10,8 +10,10 @@ the rules the generated guidance most often gets wrong for this project:
 - **Never run PHP, Artisan, PHPUnit or Pest directly on the host machine.** They go through Docker:
   `docker compose exec -T app php artisan ...`, `docker compose exec -T app vendor/bin/phpunit ...`,
   `docker compose exec -T app php artisan test --compact`.
-- **Never use `php artisan make:`** to create files — under WSL it writes root-owned files the host
-  cannot edit or delete (#3414). Create files directly in the codebase instead.
+- **`php artisan make:` is safe to use again** — files/folders created via `docker compose exec`
+  (including `make:`) land owned as your host user, not root. #3414's `PUID`/`PGID` fix resolved
+  this (verified 2026-08-16). A container exec run as root (`docker compose exec -u root ...`)
+  still writes root-owned files.
 - **This project does not use Vite, and `npm run build` does not exist** — ignore the "Frontend
   Bundling" note below. Assets are built by `scripts/build/build.mjs`; the `package.json` scripts
   are `dev`, `development`, `watch`, `prod`, `production`.

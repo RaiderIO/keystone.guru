@@ -276,8 +276,12 @@ Seeder JSON edits are invisible in the app until a seed run lands them in the DB
 - The project uses WSL2, so you can also run basic Linux commands (such as `mkdir` or `ls`) in the WSL2 terminal if needed.
 - Do not run any commands directly on the host machine, such as Powershell commands.
 - All newly created files should have LF line endings.
-- Do not create new files or folders using `docker compose exec`. You will not be able to edit or remove them properly from the host machine otherwise.
-- Do not use `php artisan make:` commands to create new files. Instead, create new files directly in the codebase to ensure they are created with the correct permissions and structure.
+- Files and folders created via `docker compose exec` (including `php artisan make:`) land owned as
+  your host user, not root — the `PUID`/`PGID` fix from #3414 resolved this, verified 2026-08-16 by
+  creating a file and running `php artisan make:controller` inside the `app` container and checking
+  ownership from the host. They're editable/removable from the host normally. The exception is a
+  container exec run as root (`docker compose exec -u root ...`, e.g. some `chrome` service
+  cleanup) — that still writes root-owned files; remove those from inside the container instead.
 
 ## Finishing up your work
 - After completing your work, ensure you run `composer run fix` to run PhpCsFixer and `composer run analyse` to run PhpStan to verify your work.
