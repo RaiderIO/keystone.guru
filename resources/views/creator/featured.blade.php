@@ -15,12 +15,12 @@ use Illuminate\Database\Eloquent\Collection;
  * two sections shedding. See creator-featured.css.
  *
  * featuredCreators is supplied by FeaturedCreatorsComposer rather than by the controller, because
- * several controller methods render the pages this partial is included from.
+ * several controller methods render the pages this partial is included from. It is deliberately not
+ * defaulted here: the composer is bound to this exact view, so an undefined variable means the
+ * binding is gone - which should be a loud error, not a section that silently stops rendering.
  *
  * @var Collection<int, User> $featuredCreators
  */
-
-$featuredCreators ??= collect();
 ?>
 @if($featuredCreators->isNotEmpty())
     <div class="row mt-5 align-items-center discover_section_header">
@@ -45,8 +45,9 @@ $featuredCreators ??= collect();
                 <div class="col">
                     <a href="{{ route('profile.view', ['user' => $creator]) }}" class="discover_creator_entry">
                         @if($creator->iconfile !== null)
+                            {{-- Decorative: the name is already the link's own text, right below it --}}
                             <img src="{{ $creator->iconfile->getURL() }}"
-                                 alt="{{ $creator->name }}"
+                                 alt=""
                                  class="discover_creator_avatar"/>
                         @else
                             <div class="discover_creator_initials" aria-hidden="true">

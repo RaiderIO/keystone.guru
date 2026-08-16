@@ -273,6 +273,9 @@ return [
 
         /** How many creators to feature in the strip on the per-dungeon route page */
         'featured_count' => 6,
+
+        /** The strip is a site-wide list off a heavy GROUP BY, so it may go this stale - see getFeaturedCreators() */
+        'featured_ttl' => '1 hour',
     ],
 
     /**

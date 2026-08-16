@@ -70,14 +70,34 @@ final class FeaturedCreatorsTest extends PublicTestCase
         }
     }
 
+    /**
+     * Arranging three eligible creators is what gives this test teeth: asserting "at most 2" against
+     * whatever the database happens to hold passes on an empty result, and keeps passing with the
+     * limit() removed entirely.
+     */
     #[Test]
-    public function getFeaturedCreators_givenALimit_returnsAtMostThatMany(): void
+    public function getFeaturedCreators_givenALimit_returnsExactlyThatMany(): void
     {
-        // Act
-        $featured = app(CreatorDirectoryServiceInterface::class)->getFeaturedCreators(2);
+        // Arrange
+        $creators = new EloquentCollection();
+        $routes   = new EloquentCollection();
 
-        // Assert
-        $this->assertLessThanOrEqual(2, $featured->count(), 'The limit must be respected');
+        for ($i = 0; $i < 3; $i++) {
+            $creator = User::factory()->create();
+            $creators->push($creator);
+            $routes->push(...$this->createPublishedRoutesFor($creator, $this->minPublishedRoutes()));
+        }
+
+        try {
+            // Act
+            $featured = app(CreatorDirectoryServiceInterface::class)->getFeaturedCreators(2);
+
+            // Assert
+            $this->assertCount(2, $featured, 'The limit must be respected');
+        } finally {
+            $this->deleteAll($routes);
+            $creators->each(fn(User $creator) => $creator->delete());
+        }
     }
 
     #[Test]
