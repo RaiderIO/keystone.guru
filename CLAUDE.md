@@ -1,4 +1,31 @@
 <laravel-boost-guidelines>
+=== .ai/keystone-overrides rules ===
+
+# Keystone.guru overrides — read these first
+
+Everything below the Boost guidelines is generated. **`.claude/CLAUDE.md` (imported on the last line
+of this file) is the authority and wins over anything in the generated block.** These are the rules
+the generated guidance most often gets wrong for this project:
+
+- **Never run PHP, Artisan, PHPUnit or Pest directly on the host machine.** They go through Docker:
+  `docker compose exec -T app php artisan ...`, `docker compose exec -T app vendor/bin/phpunit ...`,
+  `docker compose exec -T app php artisan test --compact`.
+- **Never use `php artisan make:`** to create files — under WSL it writes root-owned files the host
+  cannot edit or delete (#3414). Create files directly in the codebase instead.
+- **This project does not use Vite, and `npm run build` does not exist** — ignore the "Frontend
+  Bundling" note below. Assets are built by `scripts/build/build.mjs`; the `package.json` scripts
+  are `dev`, `development`, `watch`, `prod`, `production`.
+- Useful read-only Artisan tools (host prefix still required):
+  `docker compose exec -T app php artisan route:list --except-vendor --path=api`,
+  `docker compose exec -T app php artisan config:show database.default`.
+- New models get a factory, a seeder and a **repository** (see the `repository-pattern` skill).
+  For APIs use Eloquent API Resources under `app/Http/Controllers/Api/V1/` (`api-endpoint` skill).
+  Link to pages with named routes via `route()`.
+- Tests are PHPUnit (never Pest), built from factories, and run in Docker with
+  `docker compose exec -T app php artisan test --compact --filter=<name>`. The full conventions —
+  base test case, the persistent seeded test DB, `#[Group]`/`#[Test]` attributes, naming and
+  cleanup — are in the `writing-tests` skill.
+
 === foundation rules ===
 
 # Laravel Boost Guidelines
@@ -25,6 +52,10 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - phpunit/phpunit (PHPUNIT) - v11
 - rector/rector (RECTOR) - v2
 - laravel-echo (ECHO) - v2
+
+## Skills Activation
+
+This project has domain-specific skills available in `**/skills/**`. You MUST activate the relevant skill whenever you work in that domain—don't wait until you're stuck.
 
 ## Conventions
 
@@ -53,22 +84,6 @@ This application is a Laravel application and its main Laravel ecosystems packag
 
 - Be concise in your explanations - focus on what's important rather than explaining obvious details.
 
-=== boost rules ===
-
-# Laravel Boost
-
-## Artisan
-
-- Run Artisan commands directly via the command line (e.g., `php artisan route:list`). Use `php artisan list` to discover available commands and `php artisan [command] --help` to check parameters.
-- Inspect routes with `php artisan route:list`. Filter with: `--method=GET`, `--name=users`, `--path=api`, `--except-vendor`, `--only-vendor`.
-- Read configuration values using dot notation: `php artisan config:show app.name`, `php artisan config:show database.default`. Or read config files directly from the `config/` directory.
-
-## Tinker
-
-- Execute PHP in app context for debugging and testing code. Do not create models without user approval, prefer tests with factories instead. Prefer existing Artisan commands over custom tinker code.
-- Always use single quotes to prevent shell expansion: `php artisan tinker --execute 'Your::code();'`
-  - Double quotes for PHP strings inside: `php artisan tinker --execute 'User::where("active", true)->count();'`
-
 === php rules ===
 
 # PHP
@@ -86,36 +101,6 @@ This application is a Laravel application and its main Laravel ecosystems packag
 
 - Every change must be programmatically tested. Write a new test or update an existing test, then run the affected tests to make sure they pass.
 - Run the minimum number of tests needed to ensure code quality and speed. Use `php artisan test --compact` with a specific filename or filter.
-
-=== laravel/core rules ===
-
-# Do Things the Laravel Way
-
-- Use `php artisan make:` commands to create new files (i.e. migrations, controllers, models, etc.). You can list available Artisan commands using `php artisan list` and check their parameters with `php artisan [command] --help`.
-- If you're creating a generic PHP class, use `php artisan make:class`.
-- Pass `--no-interaction` to all Artisan commands to ensure they work without user input. You should also pass the correct `--options` to ensure correct behavior.
-
-### Model Creation
-
-- When creating new models, create useful factories and seeders for them too. Ask the user if they need any other things, using `php artisan make:model --help` to check the available options.
-
-## APIs & Eloquent Resources
-
-- For APIs, default to using Eloquent API Resources and API versioning unless existing API routes do not, then you should follow existing application convention.
-
-## URL Generation
-
-- When generating links to other pages, prefer named routes and the `route()` function.
-
-## Testing
-
-- When creating models for tests, use the factories for the models. Check if the factory has custom states that can be used before manually setting up the model.
-- Faker: Use methods such as `$this->faker->word()` or `fake()->randomDigit()`. Follow existing conventions whether to use `$this->faker` or `fake()`.
-- When creating tests, make use of `php artisan make:test [options] {name}` to create a feature test, and pass `--unit` to create a unit test. Most tests should be feature tests.
-
-## Vite Error
-
-- If you receive an "Illuminate\Foundation\ViteException: Unable to locate file in Vite manifest" error, you can run `npm run build` or ask the user to run `npm run dev` or `composer run dev`.
 
 === laravel/v12 rules ===
 
@@ -141,23 +126,17 @@ This application is a Laravel application and its main Laravel ecosystems packag
 
 - Casts can and likely should be set in a `casts()` method on a model rather than the `$casts` property. Follow existing conventions from other models.
 
-=== phpunit/core rules ===
+=== octane/core rules ===
 
-# PHPUnit
+# Laravel Octane
 
-- This application uses PHPUnit for testing. All tests must be written as PHPUnit classes. Use `php artisan make:test --phpunit {name}` to create a new test.
-- If you see a test using "Pest", convert it to PHPUnit.
-- Every time a test has been updated, run that singular test.
-- When the tests relating to your feature are passing, ask the user if they would like to also run the entire test suite to make sure everything is still passing.
-- Tests should cover all happy paths, failure paths, and edge cases.
-- You must not remove any tests or test files from the tests directory without approval. These are not temporary or helper files; these are core to the application.
+This application uses Laravel Octane, a long-running PHP server. The application bootstraps once and handles many requests within the same process.
 
-## Running Tests
+- Never store request-specific state in singletons or static properties, because it can leak across requests.
+- Use `config('octane.server')` to detect the active driver (`swoole`, `roadrunner`, or `frankenphp`).
+- Prefer scoped bindings (`$this->app->scoped()`) over singletons for per-request services.
 
-- Run the minimal number of tests, using an appropriate filter, before finalizing.
-- To run all tests: `php artisan test --compact`.
-- To run all tests in a file: `php artisan test --compact tests/Feature/ExampleTest.php`.
-- To filter on a particular test name: `php artisan test --compact --filter=testName` (recommended after making a change to a related file).
+When working on Octane-specific features (concurrency, shared tables, memory, driver configuration, testing), invoke `octane-development` for detailed rules.
 
 </laravel-boost-guidelines>
 

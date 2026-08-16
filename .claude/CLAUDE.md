@@ -277,7 +277,7 @@ Seeder JSON edits are invisible in the app until a seed run lands them in the DB
 - Do not run any commands directly on the host machine, such as Powershell commands.
 - All newly created files should have LF line endings.
 - Do not create new files or folders using `docker compose exec`. You will not be able to edit or remove them properly from the host machine otherwise.
-- Do not use `php artisan make:` commands to create new files. Instead, create new files directly in the codebase to ensure they are created with the correct permissions and structure. This overrides the Boost guideline that recommends using `php artisan make:` and running Artisan directly on the command line.
+- Do not use `php artisan make:` commands to create new files. Instead, create new files directly in the codebase to ensure they are created with the correct permissions and structure.
 
 ## Finishing up your work
 - After completing your work, ensure you run `composer run fix` to run PhpCsFixer and `composer run analyse` to run PhpStan to verify your work.
