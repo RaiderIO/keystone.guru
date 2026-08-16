@@ -42,8 +42,7 @@ class SpellCreationCollector implements SpellDataCollectorInterface
         $spellId     = $prefix->getSpellId();
         $schoolsMask = $prefix->getSpellSchoolMask();
 
-        /** @var SpellModel|null $existingSpell */
-        $existingSpell = $this->allSpells->get($spellId);
+        $existingSpell = $this->findSpell($spellId);
         if ($existingSpell !== null) {
             $this->repairMissingSchoolsMask($result, $existingSpell, $schoolsMask);
 
@@ -61,8 +60,7 @@ class SpellCreationCollector implements SpellDataCollectorInterface
     {
         $spellId = $interrupt->getExtraSpellId();
 
-        /** @var SpellModel|null $existingSpell */
-        $existingSpell = $this->allSpells->get($spellId);
+        $existingSpell = $this->findSpell($spellId);
         if ($existingSpell !== null) {
             // The interrupted spell's school is trusted to create a spell on the line below, so it is good enough
             // to repair one too
@@ -91,6 +89,25 @@ class SpellCreationCollector implements SpellDataCollectorInterface
 
         $this->pendingNewSpells         = collect();
         $this->currentCombatLogFilePath = null;
+    }
+
+    /**
+     * The catalog is shared across jobs in a long-lived worker (#4058), so it can miss a spell another
+     * process created after the catalog was built. Never blind-create on a catalog miss - check the table
+     * first, or the insert dies on a duplicate primary key.
+     */
+    private function findSpell(int $spellId): ?SpellModel
+    {
+        /** @var SpellModel|null $existingSpell */
+        $existingSpell = $this->allSpells->get($spellId);
+        if ($existingSpell === null) {
+            $existingSpell = SpellModel::with('spellDungeons')->find($spellId);
+            if ($existingSpell !== null) {
+                $this->allSpells->put($spellId, $existingSpell);
+            }
+        }
+
+        return $existingSpell;
     }
 
     /**

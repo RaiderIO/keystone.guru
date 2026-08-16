@@ -14,6 +14,7 @@ use App\Logic\CombatLog\CombatEvents\Suffixes\Interrupt;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\Guid\Player;
 use App\Models\Spell\Spell as SpellModel;
+use App\Repositories\Swoole\Interfaces\SpellRepositorySwooleInterface;
 use App\Service\CombatLog\DataExtractors\Logging\SpellDataExtractorLoggingInterface;
 use App\Service\CombatLog\DataExtractors\SpellDataCollectors\NpcSpellAssignmentCollector;
 use App\Service\CombatLog\DataExtractors\SpellDataCollectors\SpellCreationCollector;
@@ -48,9 +49,11 @@ class SpellDataExtractor implements DataExtractorInterface
      */
     private readonly array $collectors;
 
-    public function __construct()
+    public function __construct(SpellRepositorySwooleInterface $spellRepository)
     {
-        $this->allSpells = SpellModel::with('spellDungeons')->get()->keyBy('id');
+        // Shared, process-persistent catalog (#4058) - the collectors put() spells they create into it, so
+        // a long-lived worker's catalog stays current with its own writes
+        $this->allSpells = $spellRepository->getAllKeyedWithSpellDungeons();
 
         $log = App::make(SpellDataExtractorLoggingInterface::class);
         /** @var SpellDataExtractorLoggingInterface $log */

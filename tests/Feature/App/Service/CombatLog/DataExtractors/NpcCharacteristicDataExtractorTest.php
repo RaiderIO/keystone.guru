@@ -13,7 +13,7 @@ use App\Models\Dungeon;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcCharacteristic;
 use App\Models\Spell\Spell;
-use App\Repositories\Interfaces\SpellRepositoryInterface;
+use App\Repositories\Swoole\SpellRepositorySwoole;
 use App\Service\CombatLog\DataExtractors\Logging\NpcCharacteristicDataExtractorLoggingInterface;
 use App\Service\CombatLog\DataExtractors\NpcCharacteristicDataExtractor;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
@@ -51,7 +51,9 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
         // Ensure spell 118 has characteristic_id set before the extractor loads its cache
         Spell::where('id', self::SPELL_ID)->update(['characteristic_id' => Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH]]);
 
-        $this->extractor = new NpcCharacteristicDataExtractor($this->app->make(SpellRepositoryInterface::class));
+        // A fresh (non-app-bound) repository per test - the process-persistent app instance would serve a
+        // catalog memoized before the characteristic update above
+        $this->extractor = new NpcCharacteristicDataExtractor(new SpellRepositorySwoole());
         $this->result    = new ExtractedDataResult();
 
         $dungeon              = Dungeon::first();

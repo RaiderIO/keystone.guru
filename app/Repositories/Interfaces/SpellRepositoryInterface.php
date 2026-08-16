@@ -34,4 +34,9 @@ interface SpellRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<int, Spell> keyed by spell ID
      */
     public function getAllWithCharacteristic(): Collection;
+
+    /**
+     * @return Collection<int, Spell> all spells with their spellDungeons relation loaded, keyed by spell ID
+     */
+    public function getAllKeyedWithSpellDungeons(): Collection;
 }
