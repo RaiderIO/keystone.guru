@@ -208,7 +208,7 @@ return [
             'npcs_works_on'               => 'Works on',
             'npcs_no_exceptions'          => 'Nothing unexpected',
             'npcs_no_data'                => 'No data',
-            'npcs_description'            => 'Only the surprises are listed - bigger trash that resisted, and bosses it landed on anyway. Anything behaving the way you already expect is left out. "No effect observed" means other crowd control from this table has been seen landing on that NPC but this one never has: it is evidence, not a confirmed immunity.',
+            'npcs_description'            => 'Only the surprises are listed - trash that resisted, and bosses it landed on anyway. Anything behaving the way you already expect is left out. "No effect observed" means other crowd control from this table has been seen landing on that NPC but this one never has: it is evidence, not a confirmed immunity.',
             'counters'                    => [
                 'title'              => 'Counterable abilities',
                 'racial'             => 'Racial (:race)',

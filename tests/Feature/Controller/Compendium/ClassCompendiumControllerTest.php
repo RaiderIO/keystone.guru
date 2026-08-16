@@ -425,15 +425,15 @@ final class ClassCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function showDungeon_givenNormalNpcInTheDungeon_omitsItFromNoEffect(): void
+    public function showDungeon_givenNormalNpcObservedForAnotherCharacteristic_displaysItUnderNoEffect(): void
     {
         // Arrange
         $scenario = $this->arrangeCharacteristicScenario();
 
         try {
-            // Crowd control landing on small trash is what every player already assumes, and a missing
-            // observation there is far more likely to be thin data than a real immunity - so a normal
-            // NPC must never be reported in either direction
+            // A normal-classification trash mob is exactly as "everyone assumes it's affected by
+            // everything" as an elite or a rare, so a real immunity there is just as surprising and
+            // worth reporting - normal NPCs are no longer excluded from the universe
             $this->assignCharacteristics([
                 $scenario['elites'][0]->id => $scenario['characteristicIds'][0],
                 $scenario['normal']->id    => $scenario['characteristicIds'][1],
@@ -449,7 +449,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
             $response->assertOk();
             $response->assertSeeText(__('view_compendium.class.show.npcs_no_effect'));
             $response->assertSeeText(__($scenario['elites'][0]->name));
-            $response->assertDontSeeText(__($scenario['normal']->name));
+            $response->assertSeeText(__($scenario['normal']->name));
         } finally {
             $scenario['cleanUp']();
         }
@@ -517,17 +517,20 @@ final class ClassCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function showDungeon_givenNpcObservedOnlyForTaunt_omitsItFromTheNoEffectUniverse(): void
+    public function showDungeon_givenNpcObservedOnlyForTaunt_isEligibleForNoEffectOnOtherCharacteristics(): void
     {
         // Arrange
         $scenario = $this->arrangeCharacteristicScenario();
 
         try {
-            // Taunt lands on nearly every tauntable trash mob, so "we have seen this NPC taunted" is no
-            // evidence at all that it can be stunned - the third elite must stay out of the universe
+            // elites[0] is observed for a real characteristic and never for taunt, so it must surface
+            // as unaffected on taunt's own row. elites[2] is only ever observed being taunted - taunt
+            // must still admit it into the universe, so it is eligible to be reported as unaffected on
+            // another characteristic's row, even though the taunt observation itself proves nothing
+            // about that other characteristic. elites[1] is never observed for anything, so it must
+            // stay out of every row.
             $this->assignCharacteristics([
                 $scenario['elites'][0]->id => $scenario['characteristicIds'][0],
-                $scenario['elites'][1]->id => $scenario['characteristicIds'][1],
                 $scenario['elites'][2]->id => $scenario['tauntCharacteristicId'],
             ]);
 
@@ -539,7 +542,20 @@ final class ClassCompendiumControllerTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
-            $response->assertDontSeeText(__($scenario['elites'][2]->name));
+            $content = (string)$response->getContent();
+
+            $observedSpell = $scenario['spells']->firstWhere('characteristic_id', $scenario['characteristicIds'][0]);
+            $this->assertNotNull($observedSpell);
+            $observedCharacteristicRow = $this->getRowHtmlForSpell($content, $observedSpell);
+            $this->assertStringContainsString(__('view_compendium.class.show.npcs_no_effect'), $observedCharacteristicRow);
+            $this->assertStringContainsString(__($scenario['elites'][2]->name), $observedCharacteristicRow);
+            $this->assertStringNotContainsString(__($scenario['elites'][1]->name), $observedCharacteristicRow);
+
+            $tauntSpell = $scenario['spells']->firstWhere('characteristic_id', $scenario['tauntCharacteristicId']);
+            $this->assertNotNull($tauntSpell);
+            $tauntRow = $this->getRowHtmlForSpell($content, $tauntSpell);
+            $this->assertStringContainsString(__('view_compendium.class.show.npcs_no_effect'), $tauntRow);
+            $this->assertStringContainsString(__($scenario['elites'][0]->name), $tauntRow);
         } finally {
             $scenario['cleanUp']();
         }
@@ -648,8 +664,10 @@ final class ClassCompendiumControllerTest extends PublicTestCase
 
         $classCharacteristicIds = $classSpells->pluck('characteristic_id')->unique()->values();
 
-        // Paladin has a taunt (Hand of Reckoning) and taunt is deliberately kept out of the universe,
-        // so the two characteristics handed out below must not be it
+        // Paladin has a taunt (Hand of Reckoning). Taunt is no longer special-cased in the universe,
+        // but it is still kept separate from the two generic ids handed out below so a scenario can
+        // independently observe an NPC via taunt only - proving it stays eligible for other
+        // characteristics' no-effect rows, and that taunt's own row still reports normally
         $tauntCharacteristicId   = Characteristic::ALL[Characteristic::CHARACTERISTIC_TAUNT];
         $usableCharacteristicIds = $classCharacteristicIds->reject(
             static fn(int $characteristicId) => $characteristicId === $tauntCharacteristicId,

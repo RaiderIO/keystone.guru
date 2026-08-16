@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Compendium;
 
 use App\Http\Controllers\Controller;
 use App\Models\CharacterClass;
-use App\Models\Characteristic;
 use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
@@ -120,7 +119,9 @@ class ClassCompendiumController extends Controller
      * noise. Two exceptions to that assumption are worth knowing before a pull, and they are what
      * this returns:
      *
-     * - `noEffect`: bigger trash (elite/rare) that resisted, i.e. was never observed affected.
+     * - `noEffect`: any non-boss NPC (normal, elite or rare) that resisted, i.e. was never observed
+     *               affected. Normal trash is exactly as "everyone assumes it's affected by
+     *               everything" as an elite or a rare, so a real immunity there is just as surprising.
      * - `worksOn`:  bosses that *were* observed affected - the arena-style fights where crowd
      *               control unexpectedly lands.
      *
@@ -133,11 +134,16 @@ class ClassCompendiumController extends Controller
      * no qualification. `noEffect` is the absence of a recording, which is only meaningful for an
      * NPC we have *other* observations for; there is no NPC immunity table to consult. So the
      * unaffected side is drawn from a universe of NPCs already observed being affected by at least
-     * one other characteristic of this class, and never from every NPC in the dungeon.
+     * one characteristic of this class (including this one's own row), and never from every NPC in
+     * the dungeon.
      *
-     * Taunt is excluded from that universe even though seven of the classes have one: it is a
-     * tanking mechanic that lands on nearly every tauntable trash mob, so "we have seen this NPC
-     * taunted" says nothing about whether it can be stunned. Its own row still renders normally.
+     * Taunt still contributes to that universe like any other characteristic - an elite/rare only
+     * ever observed being taunted must stay eligible to appear in another characteristic's `noEffect`
+     * row (and, if it was never observed taunted itself, in Taunt's own row). What taunt does *not*
+     * do is get treated as stronger evidence than that: it is a tanking mechanic that lands on nearly
+     * every tauntable trash mob, so "we have seen this NPC taunted" says nothing about whether it can
+     * be stunned beyond making the NPC eligible for the universe in the first place, same as any
+     * other characteristic's observation would.
      *
      * @param  Collection<int, int>                                                                  $characteristicIds
      * @param  Collection<int, Collection<int, Npc>>                                                 $npcsByCharacteristicId
@@ -145,25 +151,26 @@ class ClassCompendiumController extends Controller
      */
     private function getNotableNpcsByCharacteristicId(Collection $characteristicIds, Collection $npcsByCharacteristicId): Collection
     {
-        $tauntCharacteristicId = Characteristic::ALL[Characteristic::CHARACTERISTIC_TAUNT];
-
         // The same Npc may be hydrated once per characteristic - any of them will do, since only the
         // npc itself is rendered and never the characteristic_id that was selected alongside it.
         // reject() and not except(): on an Eloquent collection except() filters by model key
 
         /** @var Collection<int, Npc> $npcsInUniverse */
         $npcsInUniverse = $npcsByCharacteristicId
-            ->reject(static fn(Collection $npcs, int $characteristicId) => $characteristicId === $tauntCharacteristicId)
             ->flatten(1)
             ->unique('id')
             // Bosses are only ever reported through worksOn. Letting one into the unaffected universe
             // would turn a single observation ("this boss was stunned") into a claim on every other
             // row ("...so it is immune to fear"), which is the exact inference this method avoids.
             ->reject(static fn(Npc $npc) => $npc->isBoss())
-            // Normal trash is the case the player already assumes works, and it is also the thinnest
-            // evidence - a missing observation there is far more likely to be missing data than a
-            // real immunity. Only the bigger trash is surprising enough to report.
+            // Every non-boss classification (normal, elite, rare) is fair game: a normal-classification
+            // trash mob is exactly as "everyone assumes it's affected by everything" as an elite or a
+            // rare, so a real immunity there is just as surprising and worth reporting. `classification_id`
+            // is NOT NULL and boss/finalboss are already rejected above, so this currently admits
+            // everything left - it stays an explicit allowlist rather than a bare "not a boss" check so a
+            // future classification does not silently join the universe.
             ->filter(static fn(Npc $npc) => in_array($npc->classification_id, [
+                NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_NORMAL],
                 NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE],
                 NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE],
             ], true));
