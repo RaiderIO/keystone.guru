@@ -26,6 +26,7 @@ use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use ReflectionProperty;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('CombatLog')]
@@ -576,6 +577,64 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
     }
 
     #[Test]
+    public function extractData_givenManyOtherCastersRememberedSinceTheCast_stillDoesNotSetImmunityBypass(): void
+    {
+        // Arrange - provenance expires by age, and a live entry must survive no matter how many *other* caster/spell
+        // keys were remembered after it. A caster guid is per mob instance, so a long log remembers a great many
+        $spellId = 9991030;
+        $this->createTestSpell($spellId);
+
+        $events = [$this->npcCastSuccess(0, $spellId, 'Arcane Bolt')];
+
+        // Well past the map size that used to trigger the rebuild-everything prune, all inside the provenance window
+        for ($otherCaster = 1; $otherCaster <= 1500; $otherCaster++) {
+            $events[] = $this->npcCastSuccess($otherCaster, $spellId, 'Arcane Bolt', $this->creatureGuid($otherCaster));
+        }
+
+        $events[] = $this->immunityApplied(2000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield');
+        $events[] = $this->npcDamage(2500, $spellId, 'Arcane Bolt');
+        $events[] = $this->immunityRemoved(10000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield');
+
+        // Act
+        $this->runExtract($events);
+
+        // Assert - the original cast resolved before the window, so what landed was already in flight
+        $this->assertSame(0, $this->result->toArray()['addedSpellImmunityBypasses']);
+        $this->assertNoBypassRecorded($spellId);
+    }
+
+    #[Test]
+    public function extractData_givenCastsSpanningLongerThanTheProvenanceWindow_forgetsTheExpiredOnes(): void
+    {
+        // Arrange - the map must be bounded by the provenance window rather than by a size threshold, otherwise it
+        // grows with the length of the log
+        $spellId = 9991031;
+        $this->createTestSpell($spellId);
+        $stepMs = 100;
+        $casts  = 300;
+
+        // Act
+        $this->extractor->beforeExtract($this->result, self::COMBAT_LOG_PATH);
+        for ($cast = 0; $cast < $casts; $cast++) {
+            $this->extractor->extractData(
+                $this->result,
+                $this->currentDungeon,
+                $this->npcCastSuccess($cast * $stepMs, $spellId, 'Arcane Bolt', $this->creatureGuid($cast)),
+            );
+        }
+
+        // Assert - only the casts within CAST_PROVENANCE_MAX_AGE_MS of the most recent one are still remembered
+        $this->assertSame(
+            intdiv(ImmunityBypassDataExtractor::CAST_PROVENANCE_MAX_AGE_MS, $stepMs) + 1,
+            count($this->rememberedNpcCastSuccesses()),
+        );
+
+        // Assert - and the whole map is dropped at the end of the combat log
+        $this->extractor->afterExtract($this->result, self::COMBAT_LOG_PATH);
+        $this->assertSame([], $this->rememberedNpcCastSuccesses());
+    }
+
+    #[Test]
     public function extractData_givenACastRememberedFromAPreviousCombatLog_doesNotAffectTheNextOne(): void
     {
         // Arrange - the extractor instance is reused for every file the extraction command walks
@@ -675,6 +734,29 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
             $this->extractor->extractData($this->result, $this->currentDungeon, $event);
         }
         $this->extractor->afterExtract($this->result, $combatLogPath);
+    }
+
+    /**
+     * A distinct creature guid for the same npc id - a guid identifies one mob *instance*, so every pack member and
+     * every respawn is its own provenance key.
+     */
+    private function creatureGuid(int $spawnIndex): string
+    {
+        return sprintf('Creature-0-4237-1209-2796-%d-%010X', self::CREATURE_NPC_ID, $spawnIndex);
+    }
+
+    /**
+     * The extractor's private provenance map - the structure whose growth this test file guards.
+     *
+     * @return array<string, array<int, int>>
+     */
+    private function rememberedNpcCastSuccesses(): array
+    {
+        /** @var array<string, array<int, int>> $remembered */
+        $remembered = new ReflectionProperty(ImmunityBypassDataExtractor::class, 'recentNpcCastSuccesses')
+            ->getValue($this->extractor);
+
+        return $remembered;
     }
 
     private function assertBypassRecorded(int $spellId, int $immunityMask, SpellProperty $property): void

@@ -70,9 +70,6 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
      */
     public const int CAST_PROVENANCE_MAX_AGE_MS = 15000;
 
-    /** @var int Remembered casts above this count trigger a prune of the expired ones. */
-    private const int CAST_PROVENANCE_PRUNE_THRESHOLD = 1000;
-
     /** @var int How many resolutions of the same ability by the same caster are kept - enough to cover overlap. */
     private const int CAST_PROVENANCE_MAX_PER_ABILITY = 8;
 
@@ -97,13 +94,19 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
     private Collection $activeImmunityWindows;
 
     /**
-     * When each NPC ability recently *resolved*, keyed by caster guid + spell id. A hit whose ability resolved before
-     * the immunity went up was already in flight and is not a bypass - see the check in recordBypassCandidates.
-     * Several timestamps are kept per key because a re-cast must not hide the earlier, still-in-flight one.
+     * When each NPC ability recently *resolved*, keyed by caster guid + spell id, as epoch milliseconds. A hit whose
+     * ability resolved before the immunity went up was already in flight and is not a bypass - see the check in
+     * recordBypassCandidates. Several timestamps are kept per key because a re-cast must not hide the earlier,
+     * still-in-flight one.
      *
-     * @var Collection<string, array<int, Carbon>>
+     * Ordered oldest-first: PHP preserves insertion order and every remember re-inserts its key at the back, so the
+     * front is always the least recently touched entry and expiry is a walk from there rather than a rebuild of the
+     * whole map - see expireProvenance. Kept as a plain array rather than a Collection because this is the hottest
+     * structure in the extractor: it is written on every NPC SPELL_CAST_SUCCESS.
+     *
+     * @var array<string, array<int, int>>
      */
-    private Collection $recentNpcCastSuccesses;
+    private array $recentNpcCastSuccesses;
 
     /**
      * All (spell_id, property) bypasses detected this session - batch-upserted in afterExtract.
@@ -137,7 +140,7 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
 
         $this->pendingBypassObservations = collect();
         $this->activeImmunityWindows     = collect();
-        $this->recentNpcCastSuccesses    = collect();
+        $this->recentNpcCastSuccesses    = [];
 
         $log = App::make(ImmunityBypassDataExtractorLoggingInterface::class);
         /** @var ImmunityBypassDataExtractorLoggingInterface $log */
@@ -186,7 +189,7 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
         // Remembered unconditionally: provenance is needed for casts that resolved *before* a window even opened
         if ($suffix instanceof CastSuccess) {
             if ($this->isNpcCreature($sourceGuid)) {
-                $this->rememberNpcCastSuccess($sourceGuid->getGuid(), $prefix->getSpellId(), $timestamp);
+                $this->rememberNpcCastSuccess($sourceGuid->getGuid(), $prefix->getSpellId(), $timestamp->getTimestampMs());
             }
 
             return;
@@ -281,7 +284,7 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
         }
 
         $this->pendingBypassObservations = collect();
-        $this->recentNpcCastSuccesses    = collect();
+        $this->recentNpcCastSuccesses    = [];
         $this->currentCombatLogFilePath  = null;
         $this->currentDungeonId          = null;
     }
@@ -478,7 +481,7 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
             return;
         }
 
-        $resolvedAts = $this->recentNpcCastSuccessesFor($sourceGuid->getGuid(), $spellId, $timestamp);
+        $resolvedAtsMs = $this->recentNpcCastSuccessesFor($sourceGuid->getGuid(), $spellId, $timestamp);
 
         foreach ($windows as $index => $window) {
             $definition  = $window['definition'];
@@ -510,7 +513,7 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
             // just the newest one: a re-cast inside the window cannot be told apart from the earlier projectile
             // finally landing. Abilities with no cast line at all (persistent ground effects, beams) have no
             // provenance and are judged on the window alone
-            if ($this->resolvedBeforeWindow($resolvedAts, $window['appliedAt'])) {
+            if ($this->resolvedBeforeWindow($resolvedAtsMs, $window['appliedAt'])) {
                 $this->log->extractDataCandidateResolvedBeforeWindow($spellId, $definition->getProperty()->value, $windowAgeMs);
 
                 continue;
@@ -610,45 +613,69 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
         return str_starts_with($eventName, Prefix::PREFIX_SPELL_PERIODIC);
     }
 
-    private function rememberNpcCastSuccess(string $casterGuid, int $spellId, Carbon $timestamp): void
+    private function rememberNpcCastSuccess(string $casterGuid, int $spellId, int $timestampMs): void
     {
         $key = $this->npcCastKey($casterGuid, $spellId);
 
-        /** @var array<int, Carbon> $castAts */
-        $castAts   = $this->recentNpcCastSuccesses->get($key, []);
-        $castAts[] = $timestamp;
+        $castAts = $this->recentNpcCastSuccesses[$key] ?? [];
 
-        $this->recentNpcCastSuccesses->put($key, array_slice($castAts, -self::CAST_PROVENANCE_MAX_PER_ABILITY));
+        // Removed before being written back so the key moves to the back of the map: updating it in place would keep
+        // it at its original position and break the oldest-first ordering expireProvenance relies on
+        unset($this->recentNpcCastSuccesses[$key]);
 
-        if ($this->recentNpcCastSuccesses->count() > self::CAST_PROVENANCE_PRUNE_THRESHOLD) {
-            /** @var Collection<string, array<int, Carbon>> $pruned */
-            $pruned = $this->recentNpcCastSuccesses
-                ->map(fn(array $remembered) => $this->withinProvenanceAge($remembered, $timestamp))
-                ->filter(fn(array $remembered) => $remembered !== []);
+        $castAts[] = $timestampMs;
 
-            $this->recentNpcCastSuccesses = $pruned;
+        $this->recentNpcCastSuccesses[$key] = count($castAts) > self::CAST_PROVENANCE_MAX_PER_ABILITY
+            ? array_slice($castAts, -self::CAST_PROVENANCE_MAX_PER_ABILITY)
+            : $castAts;
+
+        $this->expireProvenance($timestampMs);
+    }
+
+    /**
+     * Drops every key whose most recent resolution is too old to explain anything that could still land, walking the
+     * oldest-first map from the front and stopping at the first key that is still live.
+     *
+     * Amortised O(1) per event - a key is visited exactly once, on the event that evicts it - where pruning by map
+     * size instead rebuilt all of it on every event once the live set sat near the threshold. Keys are dropped whole
+     * rather than filtered per timestamp, so a surviving key can still hold individually stale timestamps; stripping
+     * those is the read path's job, see withinProvenanceAge.
+     */
+    private function expireProvenance(int $timestampMs): void
+    {
+        $cutoffMs = $timestampMs - self::CAST_PROVENANCE_MAX_AGE_MS;
+
+        while ($this->recentNpcCastSuccesses !== []) {
+            $oldestKey = array_key_first($this->recentNpcCastSuccesses);
+            $castAts   = $this->recentNpcCastSuccesses[$oldestKey];
+
+            // The last entry is the newest: timestamps are appended in log order, and array_slice keeps the tail
+            if ($castAts[array_key_last($castAts)] >= $cutoffMs) {
+                break;
+            }
+
+            unset($this->recentNpcCastSuccesses[$oldestKey]);
         }
     }
 
     /**
-     * @return array<int, Carbon> Every remembered resolution of this ability still recent enough to explain this event
+     * @return array<int, int> Every remembered resolution of this ability still recent enough to explain this event
      */
     private function recentNpcCastSuccessesFor(string $casterGuid, int $spellId, Carbon $timestamp): array
     {
-        /** @var array<int, Carbon> $castAts */
-        $castAts = $this->recentNpcCastSuccesses->get($this->npcCastKey($casterGuid, $spellId), []);
+        $castAts = $this->recentNpcCastSuccesses[$this->npcCastKey($casterGuid, $spellId)] ?? [];
 
-        return $this->withinProvenanceAge($castAts, $timestamp);
+        return $castAts === [] ? [] : $this->withinProvenanceAge($castAts, $timestamp->getTimestampMs());
     }
 
     /**
-     * @param  array<int, Carbon> $castAts
-     * @return array<int, Carbon>
+     * @param  array<int, int> $castAts
+     * @return array<int, int>
      */
-    private function withinProvenanceAge(array $castAts, Carbon $timestamp): array
+    private function withinProvenanceAge(array $castAts, int $timestampMs): array
     {
-        return array_values(array_filter($castAts, function (Carbon $castAt) use ($timestamp): bool {
-            $ageMs = $this->millisecondsBetween($castAt, $timestamp);
+        return array_values(array_filter($castAts, static function (int $castAtMs) use ($timestampMs): bool {
+            $ageMs = $timestampMs - $castAtMs;
 
             // A negative age is a cast from the future - only reachable when combat logs are replayed out of order,
             // and never an explanation for this event
@@ -657,12 +684,14 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
     }
 
     /**
-     * @param array<int, Carbon> $resolvedAts
+     * @param array<int, int> $resolvedAtsMs
      */
-    private function resolvedBeforeWindow(array $resolvedAts, Carbon $appliedAt): bool
+    private function resolvedBeforeWindow(array $resolvedAtsMs, Carbon $appliedAt): bool
     {
-        foreach ($resolvedAts as $resolvedAt) {
-            if ($this->millisecondsBetween($appliedAt, $resolvedAt) < -self::EPSILON_MS) {
+        $appliedAtMs = $appliedAt->getTimestampMs();
+
+        foreach ($resolvedAtsMs as $resolvedAtMs) {
+            if ($resolvedAtMs - $appliedAtMs < -self::EPSILON_MS) {
                 return true;
             }
         }
