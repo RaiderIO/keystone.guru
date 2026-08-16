@@ -3,8 +3,10 @@
 namespace Tests\Feature\App\Service\CombatLog\DataExtractors;
 
 use App\Logic\CombatLog\BaseEvent;
+use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\CombatLogVersion;
+use App\Logic\CombatLog\Guid\Creature;
 use App\Models\Dungeon;
 use App\Service\CombatLog\DataExtractors\NpcUpdateDataExtractor;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
@@ -42,6 +44,10 @@ final class NpcUpdateDataExtractorTest extends PublicTestCase
         // Arrange - the extractor is a no-op placeholder until extractBaseHealth() is implemented (#4041)
         $extractor   = new NpcUpdateDataExtractor();
         $parsedEvent = $this->parsedEvent(self::RAW_ADVANCED_NPC_EVENT);
+
+        // Arrange - pin the event shape, otherwise a parser change turns the query assertion below into a vacuous pass
+        $this->assertInstanceOf(AdvancedCombatLogEvent::class, $parsedEvent);
+        $this->assertInstanceOf(Creature::class, $parsedEvent->getAdvancedData()->getInfoGuid());
 
         DB::flushQueryLog();
         DB::enableQueryLog();
