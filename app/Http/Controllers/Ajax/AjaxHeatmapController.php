@@ -8,6 +8,7 @@ use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
 use App\Service\RaiderIO\Exceptions\InvalidApiResponseException;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use Illuminate\Http\JsonResponse;
+use InvalidArgumentException;
 use function response;
 use Teapot\StatusCode;
 
@@ -40,6 +41,14 @@ class AjaxHeatmapController extends Controller
             return response()->json(
                 $exception->toArray(),
                 StatusCode::INTERNAL_SERVER_ERROR,
+            );
+        } catch (InvalidArgumentException $exception) {
+            // Thrown by CombatLogEventFilter::fromHeatmapDataFilter() when a timer-fraction filter
+            // is requested for a dungeon whose current mapping version has no timer set - a user-
+            // reachable state (e.g. legacy dungeons), not a server error.
+            return response()->json(
+                ['message' => $exception->getMessage()],
+                StatusCode::BAD_REQUEST,
             );
         }
     }

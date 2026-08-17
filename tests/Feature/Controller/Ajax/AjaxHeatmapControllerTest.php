@@ -15,13 +15,16 @@ use App\Service\Season\SeasonServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
+use Teapot\StatusCode;
 use Tests\Feature\Controller\DungeonRouteTestBase;
+use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\Fixtures\ServiceFixtures;
 use Tests\Fixtures\Traits\CreatesCombatLogEvent;
 
 final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
 {
     use CreatesCombatLogEvent;
+    use ProvidesDungeon;
 
     const EVENT_TYPE = CombatLogEventEventType::NpcDeath;
     const DATA_TYPE  = CombatLogEventDataType::PlayerPosition;
@@ -93,6 +96,51 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         );
         $this->assertEquals($runCount, $responseArr['run_count']);
         $this->assertEquals(self::DATA_TYPE, CombatLogEventDataType::from($responseArr['data_type']));
+    }
+
+    /**
+     * PHP-LARAVEL-TT: a timer-fraction filter against a dungeon whose current mapping version has
+     * no timer set (timer_max_seconds <= 0, the column's NOT NULL DEFAULT) used to bubble up
+     * CombatLogEventFilter::fromHeatmapDataFilter()'s InvalidArgumentException as an uncaught 500,
+     * instead of a clean 400 - this is a reachable user state (e.g. legacy dungeons), not a server
+     * error.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    #[Group('Controller')]
+    #[Group('HeatmapController')]
+    public function getData_givenTimerFractionFilterAndDungeonWithoutTimer_returnsBadRequest(): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion] = $this->findDungeon();
+
+        $originalTimerMaxSeconds           = $mappingVersion->timer_max_seconds;
+        $mappingVersion->timer_max_seconds = 0;
+        $mappingVersion->save();
+
+        try {
+            $this->setUpTestForDungeon($dungeon, 10, 20);
+
+            // Act
+            $response = $this->get(route('ajax.heatmap.data', [
+                'type'             => self::EVENT_TYPE->value,
+                'dataType'         => self::DATA_TYPE->value,
+                'dungeonId'        => $dungeon->id,
+                'minTimerFraction' => 0.0,
+                'maxTimerFraction' => 1.0,
+            ]));
+
+            // Assert
+            $response->assertStatus(StatusCode::BAD_REQUEST);
+            $this->assertSame(
+                'Mapping version does not have a timer max seconds value',
+                json_decode($response->content(), true)['message'],
+            );
+        } finally {
+            $mappingVersion->timer_max_seconds = $originalTimerMaxSeconds;
+            $mappingVersion->save();
+        }
     }
 
     /**
