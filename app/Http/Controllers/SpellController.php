@@ -47,7 +47,7 @@ class SpellController extends Controller
 
         $spell->id             = $validated['id'];
         $spell->category       = sprintf('spellcategory.%s', $validated['category']);
-        $spell->dispel_type    = $validated['dispel_type'];
+        $spell->dispel_type    = sprintf('spelldispeltype.%s', $validated['dispel_type']);
         $spell->cooldown_group = $validated['cooldown_group'];
         $spell->icon_name      = $validated['icon_name'];
         $spell->name           = $validated['name'];

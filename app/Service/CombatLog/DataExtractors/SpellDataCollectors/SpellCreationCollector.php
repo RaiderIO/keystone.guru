@@ -142,7 +142,7 @@ class SpellCreationCollector implements SpellDataCollectorInterface
     {
         $createdSpell = SpellModel::create([
             'id'           => $spellId,
-            'dispel_type'  => '',
+            'dispel_type'  => sprintf('spelldispeltype.%s', SpellModel::DISPEL_TYPE_UNKNOWN),
             'icon_name'    => '',
             'name'         => $name,
             'schools_mask' => $schoolsMask,
