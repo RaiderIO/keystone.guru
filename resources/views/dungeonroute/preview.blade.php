@@ -38,28 +38,34 @@ $killZonePathWeightMultiplier ??= null;
     </script>
 @endsection
 @section('content')
-    @include('common.maps.map', [
-        'dungeon' => $dungeonroute->dungeon,
-        'mappingVersion' => $dungeonroute->mappingVersion,
-        'dungeonroute' => $dungeonroute,
-        'showAds' => false,
-        'edit' => false,
-        'echo' => false,
-        'noUI' => true,
-        'killZonePathWeightMultiplier' => $killZonePathWeightMultiplier,
-        'defaultZoom' => $defaultZoom,
-        'mapFacadeStyle' => $mapFacadeStyle,
-        'floor' => $floor,
-        'showAttribution' => false,
-        'zoomToContents' => false,
-        'parameters' => $parameters,
-        'hiddenMapObjectGroups' => [
-            'enemyforcescheckpoint',
-            'enemypatrol',
-            'mountablearea',
-            'floorunion',
-            'floorunionarea',
-        ],
-    ])
+    {{-- #app is min-height based (required for the sticky site header, #3851), which ends the
+         percentage-height chain that used to size #map. Every other map view wraps its map in
+         .wrapper, which carries a definite 100dvh of its own; without it #map collapses to 0 and
+         the thumbnail render screenshots nothing but the page background (#4101). --}}
+    <div class="wrapper">
+        @include('common.maps.map', [
+            'dungeon' => $dungeonroute->dungeon,
+            'mappingVersion' => $dungeonroute->mappingVersion,
+            'dungeonroute' => $dungeonroute,
+            'showAds' => false,
+            'edit' => false,
+            'echo' => false,
+            'noUI' => true,
+            'killZonePathWeightMultiplier' => $killZonePathWeightMultiplier,
+            'defaultZoom' => $defaultZoom,
+            'mapFacadeStyle' => $mapFacadeStyle,
+            'floor' => $floor,
+            'showAttribution' => false,
+            'zoomToContents' => false,
+            'parameters' => $parameters,
+            'hiddenMapObjectGroups' => [
+                'enemyforcescheckpoint',
+                'enemypatrol',
+                'mountablearea',
+                'floorunion',
+                'floorunionarea',
+            ],
+        ])
+    </div>
 @endsection
 

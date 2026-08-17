@@ -15,7 +15,7 @@ class EnsureHeroThumbnails extends SchedulerCommand
      *
      * @var string
      */
-    protected $signature = 'thumbnail:ensureheroes';
+    protected $signature = 'thumbnail:ensureheroes {--force : Re-render even when a hero thumbnail already exists and is considered fresh}';
 
     /**
      * The console command description.
@@ -29,7 +29,11 @@ class EnsureHeroThumbnails extends SchedulerCommand
         DiscoverServiceInterface  $discoverService,
         ThumbnailServiceInterface $thumbnailService,
     ): int {
-        return $this->trackTime(function () use ($seasonService, $discoverService, $thumbnailService) {
+        // A hero thumbnail that rendered blank still counts as fresh, so the scheduled run skips it
+        // forever unless the route is edited. --force is the manual recovery lever for that (#4101).
+        $force = (bool)$this->option('force');
+
+        return $this->trackTime(function () use ($seasonService, $discoverService, $thumbnailService, $force) {
             $currentSeason = $seasonService->getCurrentSeason();
             if ($currentSeason === null) {
                 $this->info('No current season; nothing to do');
@@ -41,7 +45,7 @@ class EnsureHeroThumbnails extends SchedulerCommand
 
             $queued = 0;
             foreach ($heroRoutes as $dungeonRoute) {
-                if ($thumbnailService->queueThumbnailRefresh($dungeonRoute, false, DungeonRouteThumbnailVariant::Hero)) {
+                if ($thumbnailService->queueThumbnailRefresh($dungeonRoute, $force, DungeonRouteThumbnailVariant::Hero)) {
                     $queued++;
                 }
             }

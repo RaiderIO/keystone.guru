@@ -23,6 +23,10 @@ class AdminToolsThumbnailsController extends Controller
 
         $dungeonId   = (int)$request->get('dungeon_id');
         $onlyMissing = (int)$request->get('only_missing');
+        // Without this the queued job skips any route whose thumbnail_updated_at is already newer than
+        // the route itself - which includes every thumbnail that rendered blank, since a blank render
+        // still stamps thumbnail_updated_at (#4101).
+        $force = (bool)$request->get('force');
 
         // ThumbnailService::queueThumbnailRefresh() reads dungeon and mappingVersion on every route
         $builder = DungeonRoute::with(['dungeon', 'mappingVersion'])
@@ -36,7 +40,7 @@ class AdminToolsThumbnailsController extends Controller
             $shouldRefresh = !$onlyMissing || !$thumbnailService->hasThumbnailsGenerated($dungeonRoute);
 
             if ($shouldRefresh) {
-                if ($thumbnailService->queueThumbnailRefresh($dungeonRoute)) {
+                if ($thumbnailService->queueThumbnailRefresh($dungeonRoute, $force)) {
                     $successCount++;
                 } else {
                     $failureCount++;
