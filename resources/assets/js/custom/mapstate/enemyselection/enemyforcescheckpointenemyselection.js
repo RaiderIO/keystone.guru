@@ -131,7 +131,7 @@ class EnemyForcesCheckpointEnemySelection extends EnemySelection {
             lang.get('js.enemy_forces_checkpoint_snackbar_editing', {
                 name: enemyForcesCheckpoint.name === null || enemyForcesCheckpoint.name === ''
                     ? lang.get('js.enemy_forces_checkpoint_unnamed_label')
-                    : enemyForcesCheckpoint.name,
+                    : lang.get(enemyForcesCheckpoint.name),
             })
         );
         $('#map_enemy_forces_checkpoint_edit_snackbar_summary').text(

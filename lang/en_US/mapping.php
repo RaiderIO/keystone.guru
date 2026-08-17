@@ -545,7 +545,23 @@ return [
     ],
 
     'checkpoints' => [
+        'bfa' => [
+            'temple_of_sethraliss' => [
+                'the_bazaar_of_watchful_eyes_name' => 'The Bazaar of Watchful Eyes',
+            ],
+        ],
+        'dragonflight' => [
+            'ruby_life_pools' => [
+                'ruby_overlook_name' => 'Ruby Overlook',
+            ],
+        ],
         'midnight' => [
+            'altar_of_fangs' => [
+                'final_room_section_name' => 'Final room',
+            ],
+            'den_of_nalorakk' => [
+                'the_heart_of_rage_name' => 'The Heart of Rage',
+            ],
             'magisters_terrace' => [
                 'tower_section_name' => 'Tower section',
             ],
