@@ -16,15 +16,28 @@ jobs:
     # MySQL, so wall-clock time is the slowest shard instead of the sum:
     #   - combatlog-route / correct-events : the two subgroups of the heavy APICombatLog suite
     #     (together they equal the whole APICombatLog group).
-    #   - feature-controller / feature-other : the Feature suite, split by the Controller group. Since
-    #     "--group=Controller" and "--exclude-group=Controller" are exact complements, the two shards
-    #     are guaranteed to cover the whole Feature suite with no overlap and no dropped tests, while
-    #     staying roughly time-balanced (Controller tests are fewer but slower HTTP-stack tests).
+    #   - feature-controller / feature-seeder / feature-other : the Feature suite, split by the
+    #     Controller and DungeonDataSeeder groups. Since a shard's "--group=X" is always paired with
+    #     "--exclude-group=X" on the catch-all feature-other shard, the three are exact complements:
+    #     guaranteed to cover the whole Feature suite with no overlap and no dropped tests.
     #   - unit : the Unit suite.
-    # The five shards are disjoint and together equal the full run minus MapTiles
-    # (162 + 409 + 46 + 32 + 308 = 957). Using --testsuite (not a positional path) keeps the Unit
+    # The six shards are disjoint and together equal the full run minus MapTiles
+    # (429 + 3 + 1103 + 46 + 32 + 752 = 2365, verified with --list-tests). Using --testsuite (not a positional path) keeps the Unit
     # suite's phpunit.xml <exclude> entries honoured and auto-covers newly added test files. Coverage
     # is NOT computed here (it is instrumentation overhead) — see php-coverage.yml for the coverage run.
+    #
+    # Balance is measured, not guessed - the phpunit-junit-<shard> artifacts each job uploads below hold
+    # the per-test times, so the next rebalance starts from data rather than from a fresh measurement
+    # run. Local timings are NOT a usable substitute: a development test database carries orders of
+    # magnitude more rows than CI's freshly-seeded one, which makes DB-heavy tests wildly slower there.
+    #
+    # feature-seeder exists because DungeonDataSeederTest's three tests each run a full DungeonDataSeeder
+    # (~76s apiece on CI), so that one class was 229s of feature-other's 433s - over half the shard, and
+    # single-handedly the critical path of the whole workflow. It is its own shard rather than being
+    # spread out because #[Group] is applied at the class level in this project, so the class is
+    # indivisible for sharding purposes; 229s is therefore the floor for the slowest shard here. Driving
+    # it lower needs the test itself to change (one seeder run shared across the three assertions, or the
+    # class split into three) - deliberately out of scope for a CI-only change.
     strategy:
       fail-fast: false
       matrix:
@@ -35,8 +48,10 @@ jobs:
             phpunit-args: "--group=CorrectEvents"
           - shard: feature-controller
             phpunit-args: "--testsuite \"Feature Tests\" --group=Controller --exclude-group=APICombatLog --exclude-group=MapTiles"
+          - shard: feature-seeder
+            phpunit-args: "--testsuite \"Feature Tests\" --group=DungeonDataSeeder --exclude-group=MapTiles"
           - shard: feature-other
-            phpunit-args: "--testsuite \"Feature Tests\" --exclude-group=Controller --exclude-group=APICombatLog --exclude-group=MapTiles"
+            phpunit-args: "--testsuite \"Feature Tests\" --exclude-group=Controller --exclude-group=DungeonDataSeeder --exclude-group=APICombatLog --exclude-group=MapTiles"
           - shard: unit
             phpunit-args: "--testsuite \"Unit Tests\" --exclude-group=MapTiles"
 
