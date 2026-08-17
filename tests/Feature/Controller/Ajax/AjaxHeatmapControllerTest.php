@@ -113,11 +113,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
     #[Group('HeatmapController')]
     public function getData_givenTimerFractionFilterAndDungeonWithoutTimer_returnsBadRequest(): void
     {
-        // Arrange - pick a dungeon where every mapping version already has no timer set, rather
-        // than mutating a random seeded row in the shared persistent test DB. Constrained on every
-        // mapping version, not just the "current" one findDungeon() resolved: getCurrentMappingVersion()
-        // falls back across game versions depending on the acting user, so a dungeon with a mix of
-        // timer/no-timer mapping versions across game versions would make this test flaky.
+        // Arrange
         [$dungeon] = $this->findDungeon(
             constraint: static fn(Builder $query) => $query->whereDoesntHave(
                 'mappingVersions',
