@@ -44,8 +44,8 @@ final class CreateMissingNpcDataExtractorTest extends PublicTestCase
     }
 
     #[Test]
-    #[DataProvider('extractData_givenANonCreatureInfoGuid_neverMaterializesAdvancedData_DataProvider')]
-    public function extractData_givenANonCreatureInfoGuid_neverMaterializesAdvancedData(string $infoGuid): void
+    #[DataProvider('extractData_givenANonCreatureInfoGuid_neverParsesInfoGuid_DataProvider')]
+    public function extractData_givenANonCreatureInfoGuid_neverParsesInfoGuid(string $infoGuid): void
     {
         // Arrange
         $extractor    = new CreateMissingNpcDataExtractor();
@@ -57,15 +57,15 @@ final class CreateMissingNpcDataExtractorTest extends PublicTestCase
         $extractor->extractData($this->result, $this->currentDungeon, $parsedEvent);
         $extractor->afterExtract($this->result, self::COMBAT_LOG_PATH);
 
-        // Assert - the raw-prefix gate must bail before touching getInfoGuid(), so the rest of the
-        // fields are never materialized
-        $this->assertFalse($this->parametersHaveBeenMaterialized($advancedData));
+        // Assert - the raw-prefix gate must bail before touching getInfoGuid(), so the info GUID
+        // is never parsed into a Guid instance
+        $this->assertFalse($this->infoGuidHasBeenParsed($advancedData));
     }
 
     /**
      * @return array<string, mixed>
      */
-    public static function extractData_givenANonCreatureInfoGuid_neverMaterializesAdvancedData_DataProvider(): array
+    public static function extractData_givenANonCreatureInfoGuid_neverParsesInfoGuid_DataProvider(): array
     {
         return [
             'Player' => ['Player-1084-0A5F8492'],
@@ -74,8 +74,8 @@ final class CreateMissingNpcDataExtractorTest extends PublicTestCase
     }
 
     #[Test]
-    #[DataProvider('extractData_givenACreatureMappedInfoGuid_materializesAdvancedData_DataProvider')]
-    public function extractData_givenACreatureMappedInfoGuid_materializesAdvancedData(string $infoGuid): void
+    #[DataProvider('extractData_givenACreatureMappedInfoGuid_parsesInfoGuid_DataProvider')]
+    public function extractData_givenACreatureMappedInfoGuid_parsesInfoGuid(string $infoGuid): void
     {
         // Arrange
         $extractor    = new CreateMissingNpcDataExtractor();
@@ -89,13 +89,13 @@ final class CreateMissingNpcDataExtractorTest extends PublicTestCase
 
         // Assert - Creature, Pet and Vehicle GUIDs all resolve to the Creature class and must not be
         // silently skipped by a gate that only recognizes the literal "Creature-" prefix
-        $this->assertTrue($this->parametersHaveBeenMaterialized($advancedData));
+        $this->assertTrue($this->infoGuidHasBeenParsed($advancedData));
     }
 
     /**
      * @return array<string, mixed>
      */
-    public static function extractData_givenACreatureMappedInfoGuid_materializesAdvancedData_DataProvider(): array
+    public static function extractData_givenACreatureMappedInfoGuid_parsesInfoGuid_DataProvider(): array
     {
         return [
             'Creature' => ['Creature-0-4237-1209-2796-76149-0000293D52'],
@@ -111,11 +111,9 @@ final class CreateMissingNpcDataExtractorTest extends PublicTestCase
         return $parsedEvent->getAdvancedData();
     }
 
-    private function parametersHaveBeenMaterialized(AdvancedDataInterface $advancedData): bool
+    private function infoGuidHasBeenParsed(AdvancedDataInterface $advancedData): bool
     {
-        $property = new ReflectionProperty($advancedData, 'parameters');
-
-        return $property->getValue($advancedData) === null;
+        return new ReflectionProperty($advancedData, 'infoGuid')->getValue($advancedData) !== false;
     }
 
     private function parsedEvent(string $rawEvent): BaseEvent

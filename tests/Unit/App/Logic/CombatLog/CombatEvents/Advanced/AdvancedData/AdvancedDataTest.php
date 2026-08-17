@@ -105,7 +105,7 @@ final class AdvancedDataTest extends PublicTestCase
     #[Test]
     #[Group('CombatLog')]
     #[Group('AdvancedData')]
-    public function getAdvancedData_givenNoGetterCalled_neverMaterializesParameters(): void
+    public function getAdvancedData_givenNoGetterCalled_neverParsesLazyFields(): void
     {
         // Arrange
         $combatLogEntry = new CombatLogEntry(self::RAW_ADVANCED_RANGE_DAMAGE_EVENT);
@@ -115,8 +115,13 @@ final class AdvancedDataTest extends PublicTestCase
         $parseEventResult = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_10_1_0);
         $advancedData     = $parseEventResult->getAdvancedData();
 
-        // Assert - retrieving the interface itself must not trigger materialization of the remaining fields
-        Assert::assertFalse($this->parametersHaveBeenMaterialized($advancedData));
+        // Assert - retrieving the interface itself must not trigger parsing of any lazy field
+        Assert::assertFalse($this->guidHasBeenParsed($advancedData, 'infoGuid'));
+        Assert::assertFalse($this->guidHasBeenParsed($advancedData, 'ownerGuid'));
+        Assert::assertFalse($this->powerArrayHasBeenParsed($advancedData, 'powerType'));
+        Assert::assertFalse($this->powerArrayHasBeenParsed($advancedData, 'currentPower'));
+        Assert::assertFalse($this->powerArrayHasBeenParsed($advancedData, 'maxPower'));
+        Assert::assertFalse($this->powerArrayHasBeenParsed($advancedData, 'powerCost'));
     }
 
     /**
@@ -125,7 +130,7 @@ final class AdvancedDataTest extends PublicTestCase
     #[Test]
     #[Group('CombatLog')]
     #[Group('AdvancedData')]
-    public function getInfoGuid_calledTwice_materializesOnceAndReturnsTheSameInstance(): void
+    public function getInfoGuid_calledTwice_parsesOnceAndReturnsTheSameInstance(): void
     {
         // Arrange
         $combatLogEntry = new CombatLogEntry(self::RAW_ADVANCED_RANGE_DAMAGE_EVENT);
@@ -135,11 +140,14 @@ final class AdvancedDataTest extends PublicTestCase
 
         // Act
         $first = $advancedData->getInfoGuid();
-        Assert::assertTrue($this->parametersHaveBeenMaterialized($advancedData));
+        Assert::assertTrue($this->guidHasBeenParsed($advancedData, 'infoGuid'));
         $second = $advancedData->getInfoGuid();
 
-        // Assert - the second call must not re-run materialization, it should return the exact same instance
+        // Assert - the second call must not re-parse, it should return the exact same instance;
+        // and parsing the info GUID must not have dragged the other lazy fields along with it
         Assert::assertSame($first, $second);
+        Assert::assertFalse($this->guidHasBeenParsed($advancedData, 'ownerGuid'));
+        Assert::assertFalse($this->powerArrayHasBeenParsed($advancedData, 'powerType'));
     }
 
     /**
@@ -148,7 +156,7 @@ final class AdvancedDataTest extends PublicTestCase
     #[Test]
     #[Group('CombatLog')]
     #[Group('AdvancedData')]
-    public function getInfoGuidRaw_calledBeforeAndAfterMaterialization_returnsTheSameRawGuidString(): void
+    public function getInfoGuidRaw_calledBeforeAndAfterGuidParsing_returnsTheSameRawGuidString(): void
     {
         // Arrange
         $combatLogEntry = new CombatLogEntry(self::RAW_ADVANCED_RANGE_DAMAGE_EVENT);
@@ -157,24 +165,27 @@ final class AdvancedDataTest extends PublicTestCase
         $advancedData     = $parseEventResult->getAdvancedData();
 
         // Act
-        $rawBeforeMaterialization = $advancedData->getInfoGuidRaw();
-        Assert::assertFalse($this->parametersHaveBeenMaterialized($advancedData));
+        $rawBeforeParsing = $advancedData->getInfoGuidRaw();
+        Assert::assertFalse($this->guidHasBeenParsed($advancedData, 'infoGuid'));
 
         $advancedData->getInfoGuid();
-        Assert::assertTrue($this->parametersHaveBeenMaterialized($advancedData));
+        Assert::assertTrue($this->guidHasBeenParsed($advancedData, 'infoGuid'));
 
-        $rawAfterMaterialization = $advancedData->getInfoGuidRaw();
+        $rawAfterParsing = $advancedData->getInfoGuidRaw();
 
         // Assert
-        Assert::assertEquals('Creature-0-4242-1841-14566-130909-00006285EA', $rawBeforeMaterialization);
-        Assert::assertEquals($rawBeforeMaterialization, $rawAfterMaterialization);
+        Assert::assertEquals('Creature-0-4242-1841-14566-130909-00006285EA', $rawBeforeParsing);
+        Assert::assertEquals($rawBeforeParsing, $rawAfterParsing);
     }
 
-    private function parametersHaveBeenMaterialized(AdvancedDataInterface $advancedData): bool
+    private function guidHasBeenParsed(AdvancedDataInterface $advancedData, string $property): bool
     {
-        $property = new ReflectionProperty($advancedData, 'parameters');
+        return new ReflectionProperty($advancedData, $property)->getValue($advancedData) !== false;
+    }
 
-        return $property->getValue($advancedData) === null;
+    private function powerArrayHasBeenParsed(AdvancedDataInterface $advancedData, string $property): bool
+    {
+        return new ReflectionProperty($advancedData, $property)->isInitialized($advancedData);
     }
 
     /**

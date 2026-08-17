@@ -70,8 +70,8 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
 
         $advancedData = $parsedEvent->getAdvancedData();
 
-        // Cheap raw-string check before materializing the rest of AdvancedData's fields - the vast
-        // majority of advanced lines have a Player- info GUID, which can never be an NPC.
+        // Cheap raw-string check before parsing the info GUID into a Guid instance - a Player- info
+        // GUID can never be an NPC, so those lines skip Guid construction entirely.
         if (!Guid::isCreatureGuidString($advancedData->getInfoGuidRaw())) {
             return;
         }

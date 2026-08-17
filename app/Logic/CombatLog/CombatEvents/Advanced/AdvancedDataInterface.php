@@ -8,9 +8,9 @@ use App\Logic\CombatLog\Guid\Guid;
 interface AdvancedDataInterface extends HasParameters
 {
     /**
-     * The unparsed info-GUID string. Unlike every other getter here, this never triggers parameter
-     * materialization - it is cheap to call on the hot ingest path to decide whether the rest of the
-     * fields are worth materializing at all.
+     * The unparsed info-GUID string. Unlike {@see getInfoGuid()}, this never triggers GUID parsing -
+     * it is cheap to call on the hot ingest path to decide whether the parsed Guid is worth
+     * constructing at all.
      */
     public function getInfoGuidRaw(): string;
 
