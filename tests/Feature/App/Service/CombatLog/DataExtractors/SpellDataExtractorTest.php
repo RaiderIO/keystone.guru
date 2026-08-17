@@ -16,6 +16,7 @@ use App\Models\Npc\Npc;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell as SpellModel;
 use App\Models\Spell\SpellDungeon;
+use App\Repositories\Swoole\SpellRepositorySwoole;
 use App\Service\CombatLog\DataExtractors\Logging\SpellDataExtractorLoggingInterface;
 use App\Service\CombatLog\DataExtractors\SpellDataExtractor;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
@@ -120,7 +121,9 @@ final class SpellDataExtractorTest extends PublicTestCase
 
     private function makeExtractor(): SpellDataExtractor
     {
-        return new SpellDataExtractor();
+        // A fresh (non-app-bound) repository per extractor - tests create/delete spells between
+        // makeExtractor() calls and must not see another test's memoized catalog
+        return new SpellDataExtractor(new SpellRepositorySwoole());
     }
 
     private function parsedEvent(string $rawEvent): BaseEvent
@@ -157,6 +160,30 @@ final class SpellDataExtractorTest extends PublicTestCase
             'id'           => self::SPELL_ID,
             'schools_mask' => SpellModel::SCHOOL_SHADOW,
         ]);
+    }
+
+    #[Test]
+    public function extractData_givenASpellCreatedAfterTheCatalogWasBuilt_findsItInsteadOfCreatingADuplicate(): void
+    {
+        // Arrange - the catalog is shared across jobs in a long-lived worker (#4058): build it first, then
+        // create the spell behind its back, like another worker would
+        $this->createTestNpc();
+        $extractor = $this->makeExtractor();
+        $this->createTestSpell(['schools_mask' => 0]);
+
+        // Act - a blind create here would die on a duplicate primary key
+        $this->runExtract($extractor, [$this->parsedEvent(self::RAW_SHADOW_BUFF_EVENT)]);
+
+        // Assert - the existing-spell path ran: the school got repaired, and no SpellCreated event was written
+        $this->assertSame(1, SpellModel::where('id', self::SPELL_ID)->count());
+        $this->assertDatabaseHas('spells', [
+            'id'           => self::SPELL_ID,
+            'schools_mask' => SpellModel::SCHOOL_SHADOW,
+        ]);
+        $this->assertDatabaseMissing('combat_log_spell_events', [
+            'spell_id'   => self::SPELL_ID,
+            'event_type' => CombatLogSpellEventType::SpellCreated->value,
+        ], 'combatlog');
     }
 
     #[Test]

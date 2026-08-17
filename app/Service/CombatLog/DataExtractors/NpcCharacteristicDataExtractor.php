@@ -15,7 +15,7 @@ use App\Models\CombatLog\CombatLogNpcEventType;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcCharacteristic;
 use App\Models\Spell\Spell as SpellModel;
-use App\Repositories\Interfaces\SpellRepositoryInterface;
+use App\Repositories\Swoole\Interfaces\SpellRepositorySwooleInterface;
 use App\Service\CombatLog\DataExtractors\Logging\NpcCharacteristicDataExtractorLoggingInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
@@ -52,7 +52,7 @@ class NpcCharacteristicDataExtractor implements DataExtractorInterface
     private ?string $currentCombatLogFilePath = null;
 
     public function __construct(
-        private readonly SpellRepositoryInterface $spellRepository,
+        private readonly SpellRepositorySwooleInterface $spellRepository,
     ) {
         $this->npcCache                     = collect();
         $this->addedCharacteristics         = collect();
