@@ -721,6 +721,7 @@ return [
                 'title'        => 'Mass regenerate thumbnails',
                 'header'       => 'Mass regenerate thumbnails',
                 'only_missing' => 'Only queue routes with missing thumbnails',
+                'force'        => 'Force a re-render even if the thumbnail is considered up to date (needed to replace thumbnails that rendered blank). Pick a specific dungeon - combined with all dungeons this queues a real render for every route on the site',
                 'submit'       => 'Submit',
             ],
         ],

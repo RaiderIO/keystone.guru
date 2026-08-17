@@ -9,6 +9,7 @@ use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 class DungeonRouteThumbnailRepository extends DatabaseRepository implements DungeonRouteThumbnailRepositoryInterface
 {
@@ -69,6 +70,23 @@ class DungeonRouteThumbnailRepository extends DatabaseRepository implements Dung
                 ->without('floor'),
             $dungeonRouteIds,
         );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDungeonRouteIdsWithVariant(DungeonRouteThumbnailVariant $variant, ?int $dungeonId = null): Collection
+    {
+        // pluck() drops to the base query builder, so no models are hydrated and the model's $with
+        // relations never load - nothing to exclude here.
+        return DungeonRouteThumbnail::query()
+            ->where('variant', $variant)
+            ->when($dungeonId !== null, static fn(Builder $query) => $query->whereHas(
+                'dungeonRoute',
+                static fn(Builder $dungeonRouteQuery) => $dungeonRouteQuery->where('dungeon_id', $dungeonId),
+            ))
+            ->distinct()
+            ->pluck('dungeon_route_id');
     }
 
     /**

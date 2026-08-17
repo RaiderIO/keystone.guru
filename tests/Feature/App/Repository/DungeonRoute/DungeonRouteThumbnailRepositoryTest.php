@@ -2,11 +2,14 @@
 
 namespace Tests\Feature\App\Repository\DungeonRoute;
 
+use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnail;
 use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Models\File;
+use App\Models\Mapping\MappingVersion;
 use App\Repositories\Database\DungeonRoute\DungeonRouteThumbnailRepository;
+use Illuminate\Database\Eloquent\Builder;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -401,5 +404,57 @@ final class DungeonRouteThumbnailRepositoryTest extends PublicTestCase
             $fileBackedThumbnail->delete();
             DungeonRoute::whereKey([$filelessThumbnail->dungeon_route_id, $fileBackedThumbnail->dungeon_route_id])->delete();
         }
+    }
+
+    #[Test]
+    public function getDungeonRouteIdsWithVariant_givenMixedVariantsAndDungeons_returnsOnlyMatchingRouteIds(): void
+    {
+        // Arrange - three routes: one with a hero thumbnail in the target dungeon, one with only a standard
+        // thumbnail in that same dungeon, and one with a hero thumbnail in a different dungeon. Only the
+        // first may come back when scoped to the target dungeon.
+        [$targetDungeon, $targetMappingVersion] = $this->findDungeon();
+        [$otherDungeon, $otherMappingVersion]   = $this->findDungeon(
+            constraint: static fn(Builder $query) => $query->where('id', '!=', $targetDungeon->id),
+        );
+
+        $heroRoute         = $this->createRouteWithThumbnailVariant($targetDungeon, $targetMappingVersion, DungeonRouteThumbnailVariant::Hero);
+        $standardRoute     = $this->createRouteWithThumbnailVariant($targetDungeon, $targetMappingVersion, DungeonRouteThumbnailVariant::Standard);
+        $otherDungeonRoute = $this->createRouteWithThumbnailVariant($otherDungeon, $otherMappingVersion, DungeonRouteThumbnailVariant::Hero);
+
+        try {
+            // Act
+            $scoped   = $this->repository->getDungeonRouteIdsWithVariant(DungeonRouteThumbnailVariant::Hero, $targetDungeon->id);
+            $unscoped = $this->repository->getDungeonRouteIdsWithVariant(DungeonRouteThumbnailVariant::Hero);
+
+            // Assert
+            $this->assertTrue($scoped->contains($heroRoute->id), 'Expected the hero route in the scoped dungeon.');
+            $this->assertFalse($scoped->contains($standardRoute->id), 'A standard-only route must not be reported as having a hero thumbnail.');
+            $this->assertFalse($scoped->contains($otherDungeonRoute->id), 'The dungeon scope must exclude routes from other dungeons.');
+
+            $this->assertTrue($unscoped->contains($heroRoute->id));
+            $this->assertTrue($unscoped->contains($otherDungeonRoute->id), 'Unscoped must span every dungeon.');
+        } finally {
+            DungeonRouteThumbnail::whereIn('dungeon_route_id', [$heroRoute->id, $standardRoute->id, $otherDungeonRoute->id])->delete();
+            DungeonRoute::whereKey([$heroRoute->id, $standardRoute->id, $otherDungeonRoute->id])->delete();
+        }
+    }
+
+    private function createRouteWithThumbnailVariant(
+        Dungeon                      $dungeon,
+        MappingVersion               $mappingVersion,
+        DungeonRouteThumbnailVariant $variant,
+    ): DungeonRoute {
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        DungeonRouteThumbnail::create([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'floor_id'         => $dungeon->floors()->active()->firstOrFail()->id,
+            'variant'          => $variant,
+        ]);
+
+        return $dungeonRoute;
     }
 }
