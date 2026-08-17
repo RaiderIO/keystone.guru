@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Heatmap\AjaxGetDataFormRequest;
+use App\Service\CombatLogEvent\Exceptions\MappingVersionMissingTimerException;
 use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
 use App\Service\RaiderIO\Exceptions\InvalidApiResponseException;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use Illuminate\Http\JsonResponse;
-use InvalidArgumentException;
 use function response;
 use Teapot\StatusCode;
 
@@ -42,10 +42,7 @@ class AjaxHeatmapController extends Controller
                 $exception->toArray(),
                 StatusCode::INTERNAL_SERVER_ERROR,
             );
-        } catch (InvalidArgumentException $exception) {
-            // Thrown by CombatLogEventFilter::fromHeatmapDataFilter() when a timer-fraction filter
-            // is requested for a dungeon whose current mapping version has no timer set - a user-
-            // reachable state (e.g. legacy dungeons), not a server error.
+        } catch (MappingVersionMissingTimerException $exception) {
             return response()->json(
                 ['message' => $exception->getMessage()],
                 StatusCode::BAD_REQUEST,

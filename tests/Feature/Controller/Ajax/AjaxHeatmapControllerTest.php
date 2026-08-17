@@ -12,6 +12,7 @@ use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventGridAggregationResult;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Database\Eloquent\Builder;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
@@ -112,35 +113,35 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
     #[Group('HeatmapController')]
     public function getData_givenTimerFractionFilterAndDungeonWithoutTimer_returnsBadRequest(): void
     {
-        // Arrange
-        [$dungeon, $mappingVersion] = $this->findDungeon();
+        // Arrange - pick a dungeon where every mapping version already has no timer set, rather
+        // than mutating a random seeded row in the shared persistent test DB. Constrained on every
+        // mapping version, not just the "current" one findDungeon() resolved: getCurrentMappingVersion()
+        // falls back across game versions depending on the acting user, so a dungeon with a mix of
+        // timer/no-timer mapping versions across game versions would make this test flaky.
+        [$dungeon] = $this->findDungeon(
+            constraint: static fn(Builder $query) => $query->whereDoesntHave(
+                'mappingVersions',
+                static fn(Builder $query) => $query->where('timer_max_seconds', '>', 0),
+            ),
+        );
 
-        $originalTimerMaxSeconds           = $mappingVersion->timer_max_seconds;
-        $mappingVersion->timer_max_seconds = 0;
-        $mappingVersion->save();
+        $this->setUpTestForDungeon($dungeon, 10, 20);
 
-        try {
-            $this->setUpTestForDungeon($dungeon, 10, 20);
+        // Act
+        $response = $this->get(route('ajax.heatmap.data', [
+            'type'             => self::EVENT_TYPE->value,
+            'dataType'         => self::DATA_TYPE->value,
+            'dungeonId'        => $dungeon->id,
+            'minTimerFraction' => 0.0,
+            'maxTimerFraction' => 1.0,
+        ]));
 
-            // Act
-            $response = $this->get(route('ajax.heatmap.data', [
-                'type'             => self::EVENT_TYPE->value,
-                'dataType'         => self::DATA_TYPE->value,
-                'dungeonId'        => $dungeon->id,
-                'minTimerFraction' => 0.0,
-                'maxTimerFraction' => 1.0,
-            ]));
-
-            // Assert
-            $response->assertStatus(StatusCode::BAD_REQUEST);
-            $this->assertSame(
-                'Mapping version does not have a timer max seconds value',
-                json_decode($response->content(), true)['message'],
-            );
-        } finally {
-            $mappingVersion->timer_max_seconds = $originalTimerMaxSeconds;
-            $mappingVersion->save();
-        }
+        // Assert
+        $response->assertStatus(StatusCode::BAD_REQUEST);
+        $this->assertSame(
+            'Mapping version does not have a timer max seconds value',
+            json_decode($response->content(), true)['message'],
+        );
     }
 
     /**
