@@ -54,20 +54,12 @@
 
         let $facts = $('<div class="hover_tooltip_facts"/>').appendTo($result);
 
-        if (payload.level) {
-            HoverTooltip.appendFact($facts, lang.get('js.npc_level_label'), `${payload.level}`);
-        }
-
         if (payload.health) {
             HoverTooltip.appendFact($facts, lang.get('js.npc_health_label'), payload.health.toLocaleString());
         }
 
         if (payload.type) {
             HoverTooltip.appendFact($facts, lang.get('js.npc_type_label'), payload.type);
-        }
-
-        if (payload.aggressiveness) {
-            HoverTooltip.appendFact($facts, lang.get('js.npc_aggressiveness_label'), payload.aggressiveness);
         }
 
         if ($facts.children().length === 0) {

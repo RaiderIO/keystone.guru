@@ -160,9 +160,6 @@ class Npc extends CacheModel implements MappingModelInterface
      */
     public function getTooltipDataAttribute(): array
     {
-        $health = $this->npcHealths
-            ->firstWhere('game_version_id', GameVersion::getUserOrDefaultGameVersion()->id)?->health;
-
         return array_filter([
             'name'        => __($this->name),
             'portraitUrl' => ksgAsset($this->enemy_portrait_url),
@@ -170,12 +167,8 @@ class Npc extends CacheModel implements MappingModelInterface
             // so this relation really can come back null - the badge is then left out entirely
             'classification'    => $this->classification === null ? null : __($this->classification->name),
             'classificationKey' => $this->classification?->key,
-            'level'             => $this->level > 0 ? $this->level : null,
-            // A health of exactly the placeholder means we never learned this NPC's health, so it says
-            // nothing worth a row - a fair few dungeons still carry those (#4094)
-            'health'         => $health === null || $health === NpcHealth::HEALTH_PLACEHOLDER ? null : $health,
-            'aggressiveness' => __(sprintf('npcaggressiveness.%s', $this->aggressiveness)),
-            'type'           => $this->type->type,
+            'health'            => $this->getTooltipHealth(),
+            'type'              => $this->type->type,
             // Mirrors the flags the NPC's own compendium page shows; bursting/bolstering/sanguine are
             // deliberately left out there as well
             'flags' => array_values(array_filter([
@@ -468,6 +461,27 @@ class Npc extends CacheModel implements MappingModelInterface
         $dungeon = $this->dungeons->first();
 
         return $dungeon?->id;
+    }
+
+    /**
+     * The NPC's base health as the tooltip states it, or null when we have nothing worth stating.
+     *
+     * `percentage` is part of the answer, not a footnote to it: MDT records a good many creatures as
+     * a fraction of a stored base (a Blinding Vale add at 30% of its pack leader's health), so the
+     * raw column on its own overstates them - the same product calculateHealthForKey() scales from.
+     */
+    private function getTooltipHealth(): ?int
+    {
+        $npcHealth = $this->getHealthByGameVersion(GameVersion::getUserOrDefaultGameVersion());
+
+        // A health of exactly the placeholder means we never learned this NPC's health, so it says
+        // nothing worth a row - a fair few dungeons still carry those (#4094). Checked before the
+        // percentage is applied, since the placeholder is what the column stores, not what it means.
+        if ($npcHealth === null || $npcHealth->health === NpcHealth::HEALTH_PLACEHOLDER) {
+            return null;
+        }
+
+        return (int)round($npcHealth->health * (($npcHealth->percentage ?? 100) / 100));
     }
 
     #[Override]

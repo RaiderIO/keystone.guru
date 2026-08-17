@@ -28,7 +28,6 @@ final class NpcTooltipDataTest extends PublicTestCase
         // Arrange
         $npc = $this->makeNpc([
             'name'      => 'Forgemaster Garfrost',
-            'level'     => 82,
             'dangerous' => true,
         ], NpcClassification::NPC_CLASSIFICATION_ELITE);
 
@@ -43,10 +42,8 @@ final class NpcTooltipDataTest extends PublicTestCase
         $this->assertSame(ksgAsset($npc->enemy_portrait_url), $result['portraitUrl']);
         $this->assertSame(__(sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_ELITE)), $result['classification']);
         $this->assertSame(NpcClassification::NPC_CLASSIFICATION_ELITE, $result['classificationKey']);
-        $this->assertSame(82, $result['level']);
         $this->assertSame(1_234_567, $result['health']);
         $this->assertSame('Humanoid', $result['type']);
-        $this->assertSame(__('npcaggressiveness.aggressive'), $result['aggressiveness']);
         $this->assertSame([__('view_admin.npc.edit.dangerous')], $result['flags']);
         $this->assertSame(['Stun', 'Slow'], array_column($result['characteristics'], 'name'));
     }
@@ -66,6 +63,56 @@ final class NpcTooltipDataTest extends PublicTestCase
 
         // Assert
         $this->assertArrayNotHasKey('characteristics', $result);
+    }
+
+    #[Test]
+    public function tooltipData_givenHealthPercentage_scalesTheHealthByIt(): void
+    {
+        // Arrange - MDT records a good many creatures as a fraction of a stored base, so the raw
+        // column on its own overstates them
+        $npc = $this->makeNpc();
+
+        $this->setHealth($npc, 1_000_000, 30);
+        $this->setCharacteristics($npc, []);
+
+        // Act
+        $result = $npc->tooltip_data;
+
+        // Assert
+        $this->assertSame(300_000, $result['health']);
+    }
+
+    #[Test]
+    public function tooltipData_givenNoHealthPercentage_treatsItAsAHundred(): void
+    {
+        // Arrange
+        $npc = $this->makeNpc();
+
+        $this->setHealth($npc, 1_000_000);
+        $this->setCharacteristics($npc, []);
+
+        // Act
+        $result = $npc->tooltip_data;
+
+        // Assert
+        $this->assertSame(1_000_000, $result['health']);
+    }
+
+    #[Test]
+    public function tooltipData_givenPlaceholderHealthAndAPercentage_stillOmitsHealth(): void
+    {
+        // Arrange - the placeholder is what the column stores, so it is recognised before the
+        // percentage turns it into a number that no longer looks like one (#4094)
+        $npc = $this->makeNpc();
+
+        $this->setHealth($npc, NpcHealth::HEALTH_PLACEHOLDER, 30);
+        $this->setCharacteristics($npc, []);
+
+        // Act
+        $result = $npc->tooltip_data;
+
+        // Assert
+        $this->assertArrayNotHasKey('health', $result);
     }
 
     #[Test]
@@ -188,13 +235,14 @@ final class NpcTooltipDataTest extends PublicTestCase
         return $npc;
     }
 
-    private function setHealth(Npc $npc, int $health): void
+    private function setHealth(Npc $npc, int $health, ?int $percentage = null): void
     {
         $npc->setRelation('npcHealths', new EloquentCollection([
             new NpcHealth([
                 'npc_id'          => $npc->id,
                 'game_version_id' => GameVersion::getUserOrDefaultGameVersion()->id,
                 'health'          => $health,
+                'percentage'      => $percentage,
             ]),
         ]));
     }
