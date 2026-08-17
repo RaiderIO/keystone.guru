@@ -369,9 +369,20 @@ run blindly whenever a worktree suddenly stops serving pages.
 
 ## Tear down
 
+**Not while the MR is open.** A worktree whose MR has not merged stays up after you hand the MR
+off: its running stack is how Wotuu opens the branch in a browser without building anything, and
+recreating it costs another 5–15 minutes of seeding. `babysit-prs` step 5 removes the worktrees of
+merged/closed PRs, so that cleanup already has an owner. `remove` is yours only when the branch
+never became an MR — abandoned work, or a scratch worktree. To free resources meanwhile, use `down`
+(keeps the checkout and the private DB; a later `create` re-attaches and skips the seed).
+
+Hand the URL and path over with the MR. `create` prints both; later, `sh/worktree.sh list` gives the
+paths and each running stack's host port, which is the `http://localhost:<port>` to hand over.
+
 ```bash
 sh/worktree.sh down   <issue>-<slug>   # stop the stack, keep the checkout AND the private DB
 sh/worktree.sh remove <issue>-<slug>   # stop the stack, remove the worktree, DROP the private DB
+                                       #   — only for a branch with no open MR
 sh/worktree.sh provision-db <issue>-<slug>  # retry a failed/interrupted DB provisioning (idempotent)
 sh/worktree.sh prune-db [--force]      # list/drop private schemas whose worktree checkout is gone
 sh/worktree.sh list                    # list worktrees and running stacks
@@ -380,7 +391,20 @@ sh/worktree.sh list                    # list worktrees and running stacks
 The private DB lifecycle follows the checkout, not the stack: `down` + a later `create` re-attaches
 to the existing schema and **skips the seed** (fast). `remove` drops the schemas on both servers.
 If a `create` fails mid-seed the stack is left up on purpose — retry with `provision-db` (safe to
-re-run) or `remove` to give up. If a worktree was deleted behind the script's back (raw
+re-run) or `remove` to give up. **Run `provision-db` from the main repo root**, not from inside the
+worktree: the script resolves the worktree path relative to `$PWD`'s parent, so the same command
+that works from the main checkout dies with `no worktree checkout at
+…/keystone.guru-worktrees/keystone.guru-worktrees/<slug>` from inside the worktree.
+
+**`Class "Database\Seeders\<Something>Seeder" not found` mid-seed is not a broken checkout** — the
+`app` image bakes `vendor/`, so its composer classmap predates any seeder class added since the
+image was last built, and the seeder run dies on the missing class. Fix it in the worktree's own
+container, then retry (this cost two failed creates on #4096):
+
+```bash
+cd <worktree> && docker compose exec -T app composer dump-autoload
+cd <main repo root> && sh/worktree.sh provision-db <issue>-<slug>
+``` If a worktree was deleted behind the script's back (raw
 `git worktree remove`, `rm -rf`), its schemas linger — `prune-db` finds and drops them.
 
 `remove` also clears the `in progress` label from issue `#<issue>` (best-effort). `down` leaves it

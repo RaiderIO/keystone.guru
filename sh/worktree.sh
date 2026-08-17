@@ -485,8 +485,10 @@ EOF
       docker compose exec -T app php artisan <cmd>
       docker compose exec -T app php artisan test --compact --filter=<name>
 
-    Tear down when done:
-      $SCRIPT_DIR/worktree.sh remove $branch
+    Leave it up while its MR is open — the URL above is how the branch gets looked at, and
+    recreating this costs another seed. babysit-prs removes it once the MR merges.
+      $SCRIPT_DIR/worktree.sh down   $branch   # free resources, keep the checkout + DB
+      $SCRIPT_DIR/worktree.sh remove $branch   # only if this branch never became an MR
 EOF
 }
 

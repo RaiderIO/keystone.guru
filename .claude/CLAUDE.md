@@ -105,19 +105,29 @@ commit without interactive rebase: see the `worktree-docker` skill.)
 ### Git worktrees
 - By default, do every task from an isolated git worktree with its own Docker `app` stack, created
   with `sh/worktree.sh create <issue>-<slug>`. Run all commands (artisan, tests, `composer run
-  fix`/`analyse`) through that worktree's `app` container from inside the worktree dir, and tear it
-  down with `sh/worktree.sh remove <issue>-<slug>` when done. Only skip this when the user says to
-  work directly in the main checkout.
+  fix`/`analyse`) through that worktree's `app` container from inside the worktree dir. Only skip
+  this when the user says to work directly in the main checkout.
+- **Never remove a worktree whose MR has not merged — leave it up when you hand the MR off.** Its
+  running stack is how Wotuu opens the branch in a browser without building anything, and it costs
+  5–15 minutes of seeding to recreate. `babysit-prs` step 5 removes worktrees of merged/closed PRs,
+  so cleanup is already someone's job; `sh/worktree.sh remove` is yours only when the branch never
+  became an MR (abandoned work, or a scratch worktree). The stack may be stopped
+  (`sh/worktree.sh down`) to free resources — that keeps the worktree and its database.
+- **Hand off the worktree's URL and path with the MR**, in the message that says the MR is ready:
+  `sh/worktree.sh create` prints both (`URL: http://localhost:<port>`, `Path: …`) and
+  `sh/worktree.sh list` reprints them later. A "it's ready for review" with no URL makes Wotuu ask
+  for one, which is the whole reason the worktree was kept.
 - **The worktree and its branch are yours: you may commit, push, and open a MR without asking.**
   Commit as you go, push the branch with `sh/worktree.sh push` (uses a scoped write deploy key so no
   password is prompted), and open the MR to `master` (the default branch) with `gh pr create --draft`.
   Start the MR body with `Closes #<issue>` — because it targets the default branch it auto-links the
   issue and closes it on merge. This autonomy applies only to a worktree you created — in the main
   checkout, still ask before committing.
-- **Open every MR as a draft and keep it a draft for as long as you still own the worktree** —
-  including your own post-push CI monitoring and the "ready for review" checklist below. Only mark
-  it ready for review (`gh pr ready <n>`) once every applicable checklist item is actually done and you
-  are handing the worktree off. A draft PR can't be merged (`gh pr merge` 422s on one), so this is
+- **Open every MR as a draft and keep it a draft for as long as you are still working on the
+  branch** — including your own post-push CI monitoring and the "ready for review" checklist below.
+  Only mark it ready for review (`gh pr ready <n>`) once every applicable checklist item is actually
+  done and you are handing the MR off. (Handing it off does not mean removing the worktree — that
+  stays up until the MR merges, see above.) A draft PR can't be merged (`gh pr merge` 422s on one), so this is
   what stops `babysit-prs` — which runs in its own session/loop and merges+tears down worktrees for
   any green, `pr can merge`-labeled PR the moment it sees one — from grabbing a PR (and ripping out
   its worktree) while you're still mid-verification on it (see #3719). Don't undraft early just to
