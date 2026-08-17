@@ -58,8 +58,8 @@
    The dungeon art is what makes a row scannable at a glance, so each entry keeps its thumbnail. */
 .dungeon_context_nav_icon {
     flex-shrink: 0;
-    width: 36px;
-    height: 20px;
+    width: 32px;
+    height: 18px;
     object-fit: cover;
     border-radius: 0.25rem;
 }
@@ -69,11 +69,6 @@
 .dungeon_context_nav .nav-link {
     padding-left: 0.25rem;
     padding-right: 0.25rem;
-}
-
-.dungeon_context_nav .dungeon_context_nav_icon {
-    width: 32px;
-    height: 18px;
 }
 
 .dungeon_context_nav .dungeon_context_nav_label {

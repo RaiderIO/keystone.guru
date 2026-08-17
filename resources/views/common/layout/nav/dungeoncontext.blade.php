@@ -2,6 +2,7 @@
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use Illuminate\Support\Collection;
 
@@ -12,20 +13,29 @@ use Illuminate\Support\Collection;
  * is hidden below `lg` - which left mobile users no way to switch dungeon at all (#4097). This
  * dropdown carries the same selection, the same per-page links and the same upcoming-season entry.
  *
+ * @var GameVersion                              $gameVersion
  * @var Collection<int, Dungeon>                 $dungeons
  * @var Dungeon                                  $selectedDungeon
  * @var Collection<string, string>               $links
+ * @var bool                                     $showMore
  * @var Season|null                              $nextSeason
  * @var string|null                              $nextSeasonLink
  * @var Collection<int, Collection<int, string>> $easeTiers
  * @var AffixGroup|null                          $currentAffixGroup
  */
 
+$showMore          ??= false;
 $nextSeason        ??= null;
 $nextSeasonLink    ??= null;
 $easeTiers         ??= collect();
 $currentAffixGroup ??= null;
+// Mirrors common/dungeon/list's own cap, so both selectors offer the same dungeons and the same
+// "More" way into the full selection. Without it, a game version whose dungeon list is not scoped
+// to the active ones would drop 25+ entries into the dropdown that the desktop strip never shows.
+$maxColCount       ??= 8;
 
+$shownDungeons      = $dungeons->take($maxColCount);
+$hasSelectedDungeon = $shownDungeons->contains('key', $selectedDungeon->key);
 $changeDungeonLabel = __('view_common.layout.nav.dungeoncontext.change_dungeon');
 ?>
 <li class="nav-item dropdown dungeon_context_nav">
@@ -39,7 +49,7 @@ $changeDungeonLabel = __('view_common.layout.nav.dungeoncontext.change_dungeon')
     <div class="dropdown-menu dropdown-menu-end dungeon_context_nav_menu"
          aria-labelledby="dungeonContextDropdown">
         <h6 class="dropdown-header">{{ $changeDungeonLabel }}</h6>
-        @foreach($dungeons as $dungeon)
+        @foreach($shownDungeons as $dungeon)
             <?php
             $thisWeekTier = $currentAffixGroup === null ? null : ($easeTiers[$currentAffixGroup->id][$dungeon->id] ?? null);
             ?>
@@ -55,6 +65,16 @@ $changeDungeonLabel = __('view_common.layout.nav.dungeoncontext.change_dungeon')
                 @endif
             </a>
         @endforeach
+        {{-- Explore, heatmap and route search cap the strip and add a 'more' link into their own full
+             dungeon selection page - the mobile dropdown is capped the same way, so it needs it too --}}
+        @if($showMore && $dungeons->count() >= $maxColCount)
+            <a class="dropdown-item d-flex align-items-center {{ $hasSelectedDungeon ? '' : 'active' }}"
+               href="{{ $links->get('more') }}">
+                <img class="dungeon_context_nav_icon me-2" src="{{ $gameVersion->expansion->getWallpaperUrl() }}"
+                     alt="{{ __($gameVersion->expansion->name) }}"/>
+                <span class="flex-grow-1 text-start">{{ __('view_common.dungeon.list.more') }}</span>
+            </a>
+        @endif
         {{-- The upcoming season is advertised next to the dungeons, never in their place (#3761) --}}
         @if($nextSeason !== null && $nextSeasonLink !== null)
             <div class="dropdown-divider"></div>

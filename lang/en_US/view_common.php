@@ -14,6 +14,7 @@ return [
             'new'     => 'New',
         ],
         'list' => [
+            'more'        => 'More',
             'next_season' => 'Next season',
             'card'        => [
                 'this_week_tier' => 'This week\'s difficulty tier (archon.gg)',

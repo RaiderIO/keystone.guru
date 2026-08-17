@@ -154,7 +154,9 @@ $isActiveRoute = function (string $route, bool $strict = false) {
         @if($showDungeonContext)
             <ul class="navbar-nav flex-row d-lg-none">
                 @include('common.layout.nav.dungeoncontext', [
+                    'gameVersion' => $currentUserGameVersion,
                     'dungeons' => $gameVersionDungeons,
+                    'showMore' => $showMore,
                     'selectedDungeon' => $dungeonContextSelectedDungeon,
                     'links' => $resolvedDungeonContextLinks,
                     'nextSeason' => $dungeonContextNextSeason,
