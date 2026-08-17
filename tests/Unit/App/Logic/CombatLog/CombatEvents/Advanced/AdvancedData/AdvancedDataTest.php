@@ -15,6 +15,8 @@ use Tests\TestCases\PublicTestCase;
 
 final class AdvancedDataTest extends PublicTestCase
 {
+    private const string RAW_ADVANCED_RANGE_DAMAGE_EVENT = '5/15 21:20:23.861  RANGE_DAMAGE,Player-1084-0A4BFB68,"Ooteeny-TarrenMill",0x512,0x0,Creature-0-4242-1841-14566-130909-00006285EA,"Fetid Maggot",0xa48,0x0,75,"Auto Shot",0x1,Creature-0-4242-1841-14566-130909-00006285EA,0000000000000000,980750,988005,0,0,5043,0,1,0,0,0,671.47,1235.72,1041,1.1845,70,7255,5182,-1,1,0,0,0,1,nil,nil';
+
     /**
      * @throws \Exception
      */
@@ -96,8 +98,6 @@ final class AdvancedDataTest extends PublicTestCase
         Assert::assertEquals($expectedFacing, $advancedData->getFacing());
         Assert::assertEquals($expectedLevel, $advancedData->getLevel());
     }
-
-    private const string RAW_ADVANCED_RANGE_DAMAGE_EVENT = '5/15 21:20:23.861  RANGE_DAMAGE,Player-1084-0A4BFB68,"Ooteeny-TarrenMill",0x512,0x0,Creature-0-4242-1841-14566-130909-00006285EA,"Fetid Maggot",0xa48,0x0,75,"Auto Shot",0x1,Creature-0-4242-1841-14566-130909-00006285EA,0000000000000000,980750,988005,0,0,5043,0,1,0,0,0,671.47,1235.72,1041,1.1845,70,7255,5182,-1,1,0,0,0,1,nil,nil';
 
     /**
      * @throws \Exception

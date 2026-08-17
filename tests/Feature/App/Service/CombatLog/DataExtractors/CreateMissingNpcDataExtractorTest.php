@@ -8,6 +8,7 @@ use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\CombatLogVersion;
 use App\Models\Dungeon;
+use App\Models\Npc\Npc;
 use App\Service\CombatLog\DataExtractors\CreateMissingNpcDataExtractor;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
@@ -22,6 +23,8 @@ use Tests\TestCases\PublicTestCase;
 final class CreateMissingNpcDataExtractorTest extends PublicTestCase
 {
     private const string COMBAT_LOG_PATH = '/tmp/create-missing-npc-test.log';
+
+    private const int PRE_SEEDED_NPC_ID = 76149;
 
     /**
      * %s is filled in with the advanced-data info GUID under test. The rest of the event mirrors a
@@ -38,6 +41,14 @@ final class CreateMissingNpcDataExtractorTest extends PublicTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        // These tests are write-free only because npc 76149 is pre-seeded, so the Creature-mapped
+        // cases hit the "already existed" branch. Fail loudly here if seed drift ever breaks that
+        // assumption, rather than silently writing an Npc/NpcDungeon into the shared test DB.
+        $this->assertTrue(
+            Npc::query()->where('id', self::PRE_SEEDED_NPC_ID)->exists(),
+            sprintf('Npc %d must be pre-seeded for these tests to stay write-free', self::PRE_SEEDED_NPC_ID),
+        );
 
         $this->result         = new ExtractedDataResult();
         $this->currentDungeon = new DataExtractionCurrentDungeon(Dungeon::firstOrFail());
