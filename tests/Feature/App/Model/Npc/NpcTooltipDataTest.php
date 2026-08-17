@@ -42,6 +42,7 @@ final class NpcTooltipDataTest extends PublicTestCase
         $this->assertSame(__('Forgemaster Garfrost'), $result['name']);
         $this->assertSame(ksgAsset($npc->enemy_portrait_url), $result['portraitUrl']);
         $this->assertSame(__(sprintf('npcclassifications.%s', NpcClassification::NPC_CLASSIFICATION_ELITE)), $result['classification']);
+        $this->assertSame(NpcClassification::NPC_CLASSIFICATION_ELITE, $result['classificationKey']);
         $this->assertSame(82, $result['level']);
         $this->assertSame(1_234_567, $result['health']);
         $this->assertSame('Humanoid', $result['type']);
@@ -116,23 +117,7 @@ final class NpcTooltipDataTest extends PublicTestCase
     }
 
     #[Test]
-    public function tooltipData_givenNonBoss_omitsTheBossFlag(): void
-    {
-        // Arrange
-        $npc = $this->makeNpc([], NpcClassification::NPC_CLASSIFICATION_NORMAL);
-
-        $this->setHealth($npc, 500_000);
-        $this->setCharacteristics($npc, []);
-
-        // Act
-        $result = $npc->tooltip_data;
-
-        // Assert - the JS reads isBoss as a plain truthy check, so an absent key is the "no" answer
-        $this->assertArrayNotHasKey('isBoss', $result);
-    }
-
-    #[Test]
-    public function tooltipData_givenBoss_marksItAsOne(): void
+    public function tooltipData_givenBoss_returnsTheKeyTheBadgeColourIsPickedBy(): void
     {
         // Arrange
         $npc = $this->makeNpc([], NpcClassification::NPC_CLASSIFICATION_BOSS);
@@ -143,8 +128,26 @@ final class NpcTooltipDataTest extends PublicTestCase
         // Act
         $result = $npc->tooltip_data;
 
+        // Assert - the JS colours the badge off this key, exactly as the NPC's own page does
+        $this->assertSame(NpcClassification::NPC_CLASSIFICATION_BOSS, $result['classificationKey']);
+    }
+
+    #[Test]
+    public function tooltipData_givenNpcWithoutAClassificationRow_omitsTheBadge(): void
+    {
+        // Arrange - a handful of seeded NPCs carry a classification_id that matches no row at all
+        $npc = $this->makeNpc();
+
+        $npc->setRelation('classification', null);
+        $this->setHealth($npc, 500_000);
+        $this->setCharacteristics($npc, []);
+
+        // Act
+        $result = $npc->tooltip_data;
+
         // Assert
-        $this->assertTrue($result['isBoss']);
+        $this->assertArrayNotHasKey('classification', $result);
+        $this->assertArrayNotHasKey('classificationKey', $result);
     }
 
     #[Test]

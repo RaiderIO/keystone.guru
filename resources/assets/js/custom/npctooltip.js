@@ -10,6 +10,15 @@
  * spell tooltip.
  */
 (function () {
+    // The colours the NPC's own compendium page gives the classification badge, keyed the same way -
+    // see compendium/npc/sections/header.blade.php
+    const CLASSIFICATION_BADGE_CLASSES = {
+        boss: 'text-bg-danger',
+        final_boss: 'text-bg-danger',
+        rare: 'text-bg-warning',
+        elite: 'text-bg-info',
+    };
+
     /**
      * @param $result {jQuery}
      * @param $link {jQuery}
@@ -30,7 +39,7 @@
 
         if (payload.classification) {
             $('<span class="hover_tooltip_badge"/>')
-                .addClass(payload.isBoss ? 'text-bg-danger' : 'text-bg-secondary')
+                .addClass(CLASSIFICATION_BADGE_CLASSES[payload.classificationKey] ?? 'text-bg-secondary')
                 .text(payload.classification)
                 .appendTo($badges);
         }

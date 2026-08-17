@@ -8,6 +8,7 @@ use App\Models\Enemy;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
+use App\Models\Npc\NpcClassification;
 use App\Models\Season;
 use App\Models\User;
 use App\Service\View\RequestViewContextInterface;
@@ -283,9 +284,47 @@ final class NpcCompendiumControllerTest extends PublicTestCase
         $this->assertNotEmpty($data['data'], 'The dungeon filter returned no NPCs, so the check below proves nothing');
         foreach ($data['data'] as $npc) {
             $this->assertArrayHasKey('tooltip_data', $npc);
-            // Name and classification are on every NPC; the rest is left out when it says nothing
+            // The name is the one row every NPC has; everything else is left out when it says nothing
             $this->assertArrayHasKey('name', $npc['tooltip_data']);
-            $this->assertArrayHasKey('classification', $npc['tooltip_data']);
+        }
+    }
+
+    #[Test]
+    public function get_givenDungeonWithAClassificationlessNpc_returnsOk(): void
+    {
+        // Arrange - a few seeded NPCs carry a classification_id that matches no npc_classifications
+        // row, and some of those are enemies on a current mapping version. Building their tooltip
+        // reads that relation, so this dungeon is what proves the payload survives a null one.
+        $classificationlessNpcIds = Npc::query()
+            ->whereNotIn('classification_id', NpcClassification::query()->select('id'))
+            ->pluck('id');
+
+        $dungeon = Dungeon::all()->first(static function (Dungeon $dungeon) use ($classificationlessNpcIds): bool {
+            $mappingVersion = $dungeon->getCurrentMappingVersion();
+
+            return $mappingVersion !== null && $mappingVersion->enemies()->whereIn('npc_id', $classificationlessNpcIds)->exists();
+        });
+
+        if ($dungeon === null) {
+            $this->markTestSkipped('No mapped NPC carries a classification_id without a matching classification row');
+        }
+
+        // Act - a page long enough to reach it: the endpoint orders by classification_id descending,
+        // so an NPC whose classification does not resolve sorts to the very end of the dungeon
+        $response = $this->call('GET', route('ajax.npc.compendium.search'), array_merge($this->datatableParams, [
+            'dungeon_id' => $dungeon->id,
+            'length'     => 500,
+        ]), [], [], ['HTTP_X-Requested-With' => 'XMLHttpRequest']);
+
+        // Assert
+        $response->assertOk();
+
+        $rowsById           = array_column($response->json()['data'], null, 'id');
+        $classificationless = array_intersect_key($rowsById, array_flip($classificationlessNpcIds->all()));
+
+        $this->assertNotEmpty($classificationless, 'The response carried no classificationless NPC, so it proves nothing');
+        foreach ($classificationless as $npc) {
+            $this->assertArrayNotHasKey('classification', $npc['tooltip_data']);
         }
     }
 

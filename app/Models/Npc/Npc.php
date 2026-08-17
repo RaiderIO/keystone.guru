@@ -45,9 +45,9 @@ use Override;
  * @property string               $wowhead_url
  * @property array<string, mixed> $tooltip_data
  *
- * @property NpcClassification $classification
- * @property NpcType           $type
- * @property NpcClass          $class
+ * @property NpcClassification|null $classification A few seeded NPCs carry an id no classification row matches
+ * @property NpcType                $type
+ * @property NpcClass               $class
  *
  * @property NpcEnemyForces|null                             $enemyForces
  * @property EloquentCollection<int, NpcEnemyForces>         $npcEnemyForces
@@ -164,11 +164,13 @@ class Npc extends CacheModel implements MappingModelInterface
             ->firstWhere('game_version_id', GameVersion::getUserOrDefaultGameVersion()->id)?->health;
 
         return array_filter([
-            'name'           => __($this->name),
-            'portraitUrl'    => ksgAsset($this->enemy_portrait_url),
-            'isBoss'         => $this->isBoss(),
-            'classification' => __($this->classification->name),
-            'level'          => $this->level > 0 ? $this->level : null,
+            'name'        => __($this->name),
+            'portraitUrl' => ksgAsset($this->enemy_portrait_url),
+            // A handful of seeded NPCs carry a classification_id no npc_classifications row matches,
+            // so this relation really can come back null - the badge is then left out entirely
+            'classification'    => $this->classification === null ? null : __($this->classification->name),
+            'classificationKey' => $this->classification?->key,
+            'level'             => $this->level > 0 ? $this->level : null,
             // A health of exactly the placeholder means we never learned this NPC's health, so it says
             // nothing worth a row - a fair few dungeons still carry those (#4094)
             'health'         => $health === null || $health === NpcHealth::HEALTH_PLACEHOLDER ? null : $health,
@@ -187,7 +189,7 @@ class Npc extends CacheModel implements MappingModelInterface
                 'name'    => __($characteristic->name),
                 'iconUrl' => ksgAssetImage(sprintf('spells/%s.jpg', $characteristic->icon_name)),
             ])->values()->all(),
-        ], static fn(mixed $value): bool => $value !== null && $value !== [] && $value !== false);
+        ], static fn(mixed $value): bool => $value !== null && $value !== []);
     }
 
     public function getWowheadUrlAttribute(): string
