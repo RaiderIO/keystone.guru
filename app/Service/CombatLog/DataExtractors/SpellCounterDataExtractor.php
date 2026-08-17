@@ -252,7 +252,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
             return;
         }
 
-        // Range carries the spell id/name and is the base of the Spell, SpellPeriodic and SpellBuilding prefixes
+        // Range carries the spell id/name and is the ancestor of the Spell, SpellPeriodic and SpellBuilding prefixes
         $prefix = $parsedEvent->getPrefix();
         if (!($prefix instanceof Range)) {
             return;
