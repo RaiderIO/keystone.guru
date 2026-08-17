@@ -5,6 +5,7 @@ namespace App\Service\MDT;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
+use App\Logic\MDT\IO\MDTStringFormat;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Arrow;
 use App\Models\Brushline;
@@ -514,7 +515,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 ];
 
                 try {
-                    return $this->encode($mdtObject);
+                    return $this->encode($mdtObject, MDTStringFormat::MDT2);
                 } catch (Exception $exception) {
                     // Encoding issue - adjust the title and try again
                     if (str_contains($exception->getMessage(), 'call to lua function [string &quot;line&quot;]')) {
