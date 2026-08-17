@@ -74,9 +74,11 @@ number Wotuu reviewed and signed off on himself.
 18,000 B was genuinely met: on 2026-08-03 (#3783, `762974243`) the file was 17,923 B with every rule
 present, using the compact-rule-plus-skill-pointer pattern this section recommends. It then grew
 **89% in eleven days** — 17,923 → 33,788 B by 2026-08-14 — through real additions, not bloat (model
-routing +6.9KB — measured from the diff, not the ~8.8KB first claimed here — the bot identity
-section +3.2KB, worktree and MR-handoff rules). #4046 trimmed prose hard and reached 28,977 B, so
-29,000 B is the honest floor *for the file's current content*, not evidence that 18,000 B was ever
+routing +4.3KB, the bot identity section +3.2KB, worktree and MR-handoff rules). #4046 trimmed prose
+hard, landing at **30,154 B** — still ~1.2KB over the 29,000 B figure below, a known small overage
+carried forward rather than chased further, since an earlier commit briefly reached 28,977 B by
+moving rules out of the file entirely and had to revert that (below). 29,000 B is close to, not
+exactly, the honest floor for the file's current content — not evidence that 18,000 B was ever
 unreasonable.
 
 Two consequences for a sweep:
