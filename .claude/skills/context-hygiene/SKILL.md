@@ -67,15 +67,17 @@ the budget here to the new level (never loosen one to silence a warning; that ne
 sign-off).
 
 The `.claude/CLAUDE.md` budget was **18,000 B until PR #4046**, which raised it to 29,000 B —
-proposed by an agent, **approved by Wotuu on the number** in that PR's conversation.
+proposed by an agent under delegated authority, and a working figure open to revision rather than a
+number Wotuu reviewed and signed off on himself.
 
 **Read the history before trusting the new number, because it is a concession, not a correction.**
 18,000 B was genuinely met: on 2026-08-03 (#3783, `762974243`) the file was 17,923 B with every rule
 present, using the compact-rule-plus-skill-pointer pattern this section recommends. It then grew
 **89% in eleven days** — 17,923 → 33,788 B by 2026-08-14 — through real additions, not bloat (model
-routing +8.8KB, the bot identity section +3KB, worktree and MR-handoff rules). #4046 trimmed prose
-hard and reached 28,977 B, so 29,000 B is the honest floor *for the file's current content*, not
-evidence that 18,000 B was ever unreasonable.
+routing +6.9KB — measured from the diff, not the ~8.8KB first claimed here — the bot identity
+section +3.2KB, worktree and MR-handoff rules). #4046 trimmed prose hard and reached 28,977 B, so
+29,000 B is the honest floor *for the file's current content*, not evidence that 18,000 B was ever
+unreasonable.
 
 Two consequences for a sweep:
 
