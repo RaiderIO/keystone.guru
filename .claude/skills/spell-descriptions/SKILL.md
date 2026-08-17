@@ -20,7 +20,7 @@ Nothing schedules the import commands themselves, and nothing in `create-release
 
 A patch has landed when https://wago.tools/db2/Spell offers a build newer than the one the last
 `spells.json` commit was made from - or when `wagotools:checkforspelldescriptionpatch` (scheduled
-daily, staging/production only, #4021) files a GitHub issue saying so; it compares wago.tools'
+daily, production only, #4021) files a GitHub issue saying so; it compares wago.tools'
 latest build against `database/data/spell_description/import_state.json`, the build the sequence
 below last actually used. Re-run the sequence below, review the diff, commit it — the next release
 picks it up, because the data ships in the seeder rather than being fetched at runtime.
