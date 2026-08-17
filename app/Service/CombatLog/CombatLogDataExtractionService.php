@@ -21,6 +21,7 @@ use App\Service\CombatLog\Logging\CombatLogDataExtractionServiceLoggingInterface
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use Illuminate\Support\Collection;
+use Throwable;
 
 class CombatLogDataExtractionService implements CombatLogDataExtractionServiceInterface
 {
@@ -233,11 +234,17 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                         ]);
                     }
                 });
+                $this->log->extractDataAsyncCompleted();
+
                 $combatLogAnalyze->update([
                     'percent_completed' => 100,
                     'result'            => json_encode($result->toArray()),
+                    'status'            => CombatLogAnalyzeStatus::Completed,
                 ]);
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
+                // Throwable, not Exception: lazy AdvancedData parsing surfaces malformed-GUID
+                // TypeErrors here (on first getter access during extraction) rather than in the
+                // verify pass above, and those must mark the analysis as errored too
                 $this->log->extractDataAsyncAnalyzeError($e);
 
                 $combatLogAnalyze->update([
@@ -248,12 +255,6 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                 ]);
 
                 return null;
-            } finally {
-                $this->log->extractDataAsyncCompleted();
-
-                $combatLogAnalyze->update([
-                    'status' => CombatLogAnalyzeStatus::Completed,
-                ]);
             }
         } finally {
             $this->log->extractDataAsyncEnd();

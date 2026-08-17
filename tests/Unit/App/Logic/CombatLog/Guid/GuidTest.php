@@ -8,6 +8,7 @@ use App\Logic\CombatLog\Guid\MissType\Absorb;
 use App\Logic\CombatLog\Guid\MissType\Miss;
 use App\Logic\CombatLog\Guid\Player;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -88,5 +89,59 @@ final class GuidTest extends PublicTestCase
 
         // Assert
         Assert::assertInstanceOf(Miss::class, $result);
+    }
+
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('Guid')]
+    #[DataProvider('isCreatureGuidString_givenACreatureMappedPrefix_returnsTrue_DataProvider')]
+    public function isCreatureGuidString_givenACreatureMappedPrefix_returnsTrue(string $guidString): void
+    {
+        // Act
+        $result = Guid::isCreatureGuidString($guidString);
+
+        // Assert
+        Assert::assertTrue($result);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public static function isCreatureGuidString_givenACreatureMappedPrefix_returnsTrue_DataProvider(): array
+    {
+        return [
+            'Creature'   => ['Creature-0-4241-2526-8814-197219-000043ACE6'],
+            'GameObject' => ['GameObject-0-4241-2526-8814-197219-000043ACE6'],
+            'Pet'        => ['Pet-0-4241-2526-8814-197219-000043ACE6'],
+            'Vehicle'    => ['Vehicle-0-4241-2526-8814-197219-000043ACE6'],
+        ];
+    }
+
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('Guid')]
+    #[DataProvider('isCreatureGuidString_givenANonCreatureMappedGuid_returnsFalse_DataProvider')]
+    public function isCreatureGuidString_givenANonCreatureMappedGuid_returnsFalse(string $guidString): void
+    {
+        // Act
+        $result = Guid::isCreatureGuidString($guidString);
+
+        // Assert
+        Assert::assertFalse($result);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public static function isCreatureGuidString_givenANonCreatureMappedGuid_returnsFalse_DataProvider(): array
+    {
+        return [
+            'Player'         => ['Player-580-0AE12FF4'],
+            'Item'           => ['Item-0-0-0-0-197219-000043ACE6'],
+            'nil GUID'       => ['0000000000000000'],
+            'MISS type'      => ['MISS'],
+            'unknown prefix' => ['SomeUnknownPrefix-0-4241-2526-8814-197219-000043ACE6'],
+            'empty string'   => [''],
+        ];
     }
 }

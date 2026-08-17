@@ -121,6 +121,23 @@ abstract class Guid implements Stringable
         return $result;
     }
 
+    /**
+     * Cheap raw-string check for whether a not-yet-parsed GUID would resolve to {@see Creature} via
+     * {@see createFromGuidString()}, without constructing the Guid subclass. Derived from
+     * {@see GUID_TYPE_CLASS_MAPPING} so it cannot drift if that map gains/loses a Creature-mapped entry -
+     * that map currently has four such prefixes (Creature, GameObject, Pet, Vehicle), not just "Creature-".
+     */
+    public static function isCreatureGuidString(string $guid): bool
+    {
+        if ($guid === '0000000000000000') {
+            return false;
+        }
+
+        $guidType = explode('-', $guid, 2)[0];
+
+        return (self::GUID_TYPE_CLASS_MAPPING[$guidType] ?? null) === Creature::class;
+    }
+
     public function __toString(): string
     {
         return $this->guid;

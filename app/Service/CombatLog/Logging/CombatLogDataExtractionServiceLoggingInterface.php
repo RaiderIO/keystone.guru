@@ -4,6 +4,7 @@ namespace App\Service\CombatLog\Logging;
 
 use App\Logging\StructuredLoggingInterface;
 use Exception;
+use Throwable;
 
 interface CombatLogDataExtractionServiceLoggingInterface extends StructuredLoggingInterface
 {
@@ -33,7 +34,7 @@ interface CombatLogDataExtractionServiceLoggingInterface extends StructuredLoggi
 
     public function extractDataAsyncAnalyzeProgress(int $progressPercent, int $lineNr, int $totalLines): void;
 
-    public function extractDataAsyncAnalyzeError(Exception $e): void;
+    public function extractDataAsyncAnalyzeError(Throwable $e): void;
 
     public function extractDataAsyncCompleted(): void;
 
