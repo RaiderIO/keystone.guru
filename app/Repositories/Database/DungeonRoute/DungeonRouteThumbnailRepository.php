@@ -77,8 +77,9 @@ class DungeonRouteThumbnailRepository extends DatabaseRepository implements Dung
      */
     public function getDungeonRouteIdsWithVariant(DungeonRouteThumbnailVariant $variant, ?int $dungeonId = null): Collection
     {
+        // pluck() drops to the base query builder, so no models are hydrated and the model's $with
+        // relations never load - nothing to exclude here.
         return DungeonRouteThumbnail::query()
-            ->without('floor')
             ->where('variant', $variant)
             ->when($dungeonId !== null, static fn(Builder $query) => $query->whereHas(
                 'dungeonRoute',

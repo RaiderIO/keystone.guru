@@ -6,10 +6,12 @@ use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnail;
 use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
+use App\Models\Floor\Floor;
 use App\Models\Laratrust\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -143,6 +145,105 @@ final class AdminToolsThumbnailsControllerTest extends PublicTestCase
             Queue::assertNotPushed(ProcessRouteFloorThumbnail::class, $this->isVariantJobFor($dungeonRoute, DungeonRouteThumbnailVariant::Hero));
         } finally {
             $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function thumbnailsregeneratesubmit_givenNoForceAndFreshHeroThumbnail_doesNotQueueTheHeroVariant(): void
+    {
+        // Arrange - an unforced run must leave an up-to-date hero thumbnail alone. Hero is gated on variant
+        // freshness rather than the job's timestamp, so this is the case that keeps a routine regeneration
+        // from spending a 1600x640 render on every hero-carrying route.
+        Queue::fake();
+
+        [$dungeonRoute, $thumbnails] = $this->createRouteWithHeroThumbnails(fresh: true);
+
+        try {
+            // Act
+            $this->be($this->getAdmin());
+            $response = $this->post(route('admin.tools.thumbnails.regenerate.submit'), [
+                'dungeon_id'   => $dungeonRoute->dungeon_id,
+                'only_missing' => 0,
+            ]);
+
+            // Assert
+            $response->assertOk();
+            Queue::assertPushed(ProcessRouteFloorThumbnail::class, $this->isVariantJobFor($dungeonRoute, DungeonRouteThumbnailVariant::Standard));
+            Queue::assertNotPushed(ProcessRouteFloorThumbnail::class, $this->isVariantJobFor($dungeonRoute, DungeonRouteThumbnailVariant::Hero));
+        } finally {
+            $this->deleteThumbnails($thumbnails);
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function thumbnailsregeneratesubmit_givenNoForceAndStaleHeroThumbnail_queuesTheHeroVariant(): void
+    {
+        // Arrange - the counterpart: a hero thumbnail rendered before the route's last content change is
+        // stale, and an unforced refresh is expected to replace it (the same call the hourly
+        // thumbnail:ensureheroes would make). queueThumbnailRefresh() then dispatches it forced, because a
+        // non-standard variant has already passed its own freshness gate by that point.
+        Queue::fake();
+
+        [$dungeonRoute, $thumbnails] = $this->createRouteWithHeroThumbnails(fresh: false);
+
+        try {
+            // Act
+            $this->be($this->getAdmin());
+            $response = $this->post(route('admin.tools.thumbnails.regenerate.submit'), [
+                'dungeon_id'   => $dungeonRoute->dungeon_id,
+                'only_missing' => 0,
+            ]);
+
+            // Assert
+            $response->assertOk();
+            Queue::assertPushed(ProcessRouteFloorThumbnail::class, $this->isVariantJobFor($dungeonRoute, DungeonRouteThumbnailVariant::Hero));
+        } finally {
+            $this->deleteThumbnails($thumbnails);
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * A route with a complete hero thumbnail set - one per floor the refresh renders - stamped either after
+     * the route's last content change (fresh) or before it (stale). The set must be complete either way:
+     * hasFreshThumbnailForVariant() short-circuits to false on a partial set, which would make the "fresh"
+     * case indistinguishable from the stale one.
+     *
+     * @return array{0: DungeonRoute, 1: Collection<int, DungeonRouteThumbnail>}
+     */
+    private function createRouteWithHeroThumbnails(bool $fresh): array
+    {
+        $dungeonRoute = $this->createRouteWithNewerThumbnailTimestamp();
+
+        $thumbnails = $dungeonRoute->dungeon
+            ->floorsForMapFacade($dungeonRoute->mappingVersion, true)->active()->get()
+            ->map(function (Floor $floor) use ($dungeonRoute, $fresh): DungeonRouteThumbnail {
+                $thumbnail = DungeonRouteThumbnail::create([
+                    'dungeon_route_id' => $dungeonRoute->id,
+                    'floor_id'         => $floor->id,
+                    'variant'          => DungeonRouteThumbnailVariant::Hero,
+                ]);
+
+                DungeonRouteThumbnail::where('id', $thumbnail->id)->update([
+                    'updated_at' => $fresh
+                        ? $dungeonRoute->updated_at->copy()->addMinute()
+                        : $dungeonRoute->updated_at->copy()->subDay(),
+                ]);
+
+                return $thumbnail;
+            });
+
+        return [$dungeonRoute, $thumbnails];
+    }
+
+    /**
+     * @param Collection<int, DungeonRouteThumbnail> $thumbnails
+     */
+    private function deleteThumbnails(Collection $thumbnails): void
+    {
+        foreach ($thumbnails as $thumbnail) {
+            $thumbnail->delete();
         }
     }
 

@@ -62,6 +62,12 @@ class AdminToolsThumbnailsController extends Controller
                     $failureCount++;
                 }
 
+                // Note the two variants read "unforced" differently, by design in queueThumbnailRefresh():
+                // the standard pass defers to the job's thumbnail_updated_at gate, while a non-standard pass
+                // is gated on variant freshness and then always dispatches forced. So an unforced run here
+                // still re-renders a hero thumbnail that is genuinely stale (a partial floor set, or a route
+                // edited since the render) - which is what a refresh should do, and matches what the hourly
+                // thumbnail:ensureheroes would do anyway. A fresh hero thumbnail is left alone.
                 if ($heroThumbnailRouteIds->has($dungeonRoute->id)) {
                     $thumbnailService->queueThumbnailRefresh($dungeonRoute, $force, DungeonRouteThumbnailVariant::Hero);
                 }
