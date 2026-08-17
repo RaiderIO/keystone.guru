@@ -79,7 +79,7 @@ final class PrefixTest extends PublicTestCase
      * that the per-event-name table above would not think to cover.
      */
     #[Test]
-    public function prefixClassMapping_givenItsDeclaredOrder_listsNoEntryBelowItsOwnPrefix(): void
+    public function createFromEventName_givenTheDeclaredMappingOrder_returnsEveryMappedPrefixClass(): void
     {
         // Arrange
         $mapping = (new ReflectionClass(Prefix::class))->getConstant('PREFIX_CLASS_MAPPING');
@@ -106,12 +106,13 @@ final class PrefixTest extends PublicTestCase
      * exactly as it did while those two classes were unreachable.
      */
     #[Test]
-    #[DataProvider('prefixHierarchy_givenASpellSubtype_isASpellAndARange_DataProvider')]
-    public function prefixHierarchy_givenASpellSubtype_isASpellAndARange(string $className): void
-    {
+    #[DataProvider('createFromEventName_givenAPeriodicOrBuildingEvent_returnsAPrefixThatIsAlsoASpellAndARange_DataProvider')]
+    public function createFromEventName_givenAPeriodicOrBuildingEvent_returnsAPrefixThatIsAlsoASpellAndARange(
+        string $eventName,
+    ): void {
         // Arrange
         // Act
-        $prefix = new $className(CombatLogVersion::RETAIL_11_0_5);
+        $prefix = Prefix::createFromEventName(CombatLogVersion::RETAIL_11_0_5, $eventName);
 
         // Assert
         $this->assertInstanceOf(Spell::class, $prefix);
@@ -119,13 +120,14 @@ final class PrefixTest extends PublicTestCase
     }
 
     /**
-     * @return array<string, array{0: class-string<Prefix>}>
+     * @return array<string, array{0: string}>
      */
-    public static function prefixHierarchy_givenASpellSubtype_isASpellAndARange_DataProvider(): array
+    public static function createFromEventName_givenAPeriodicOrBuildingEvent_returnsAPrefixThatIsAlsoASpellAndARange_DataProvider(): array
     {
         return [
-            'spell periodic' => [SpellPeriodic::class],
-            'spell building' => [SpellBuilding::class],
+            'spell periodic damage' => ['SPELL_PERIODIC_DAMAGE'],
+            'spell periodic heal'   => ['SPELL_PERIODIC_HEAL'],
+            'spell building damage' => ['SPELL_BUILDING_DAMAGE'],
         ];
     }
 }
