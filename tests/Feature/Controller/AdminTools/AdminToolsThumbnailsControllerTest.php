@@ -6,6 +6,7 @@ use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\Group;
@@ -66,9 +67,13 @@ final class AdminToolsThumbnailsControllerTest extends PublicTestCase
                 'only_missing' => 0,
             ]);
 
-            // Assert
+            // Assert - a job for this route must exist (so the negative assertion below isn't vacuous),
+            // but it must not be a forced one
             $response->assertOk();
-            Queue::assertPushed(ProcessRouteFloorThumbnail::class);
+            Queue::assertPushed(
+                ProcessRouteFloorThumbnail::class,
+                $this->isJobFor($dungeonRoute),
+            );
             Queue::assertNotPushed(
                 ProcessRouteFloorThumbnail::class,
                 $this->isForcedJobFor($dungeonRoute),
@@ -78,17 +83,23 @@ final class AdminToolsThumbnailsControllerTest extends PublicTestCase
         }
     }
 
+    /**
+     * The controller sweeps every route in the posted dungeon, and queueThumbnailRefresh() writes
+     * thumbnail_refresh_queued_at on each one - so this must pick a dungeon that has no seeded routes
+     * of its own. Otherwise the test would permanently mutate seeded rows it cannot restore, and the
+     * assertions could be satisfied by another route's jobs rather than the one under test.
+     */
     private function createRouteWithNewerThumbnailTimestamp(): DungeonRoute
     {
-        [$dungeon, $mappingVersion] = $this->findDungeon();
+        [$dungeon, $mappingVersion] = $this->findDungeon(
+            constraint: static fn(Builder $query) => $query->whereDoesntHave('dungeonRoutes'),
+        );
 
-        $dungeonRoute = DungeonRoute::factory()->create([
+        return DungeonRoute::factory()->create([
             'dungeon_id'           => $dungeon->id,
             'mapping_version_id'   => $mappingVersion->id,
             'thumbnail_updated_at' => Carbon::now()->addDay(),
         ]);
-
-        return $dungeonRoute;
     }
 
     private function getAdmin(): User
@@ -100,9 +111,14 @@ final class AdminToolsThumbnailsControllerTest extends PublicTestCase
         return $admin;
     }
 
+    private function isJobFor(DungeonRoute $dungeonRoute): callable
+    {
+        return fn(ProcessRouteFloorThumbnail $job): bool => (fn(): DungeonRoute => $this->dungeonRoute)->call($job)->id === $dungeonRoute->id;
+    }
+
     private function isForcedJobFor(DungeonRoute $dungeonRoute): callable
     {
-        return fn(ProcessRouteFloorThumbnail $job): bool => (fn(): bool => $this->force)->call($job)
-            && (fn(): DungeonRoute => $this->dungeonRoute)->call($job)->id === $dungeonRoute->id;
+        return fn(ProcessRouteFloorThumbnail $job): bool => $this->isJobFor($dungeonRoute)($job)
+            && (fn(): bool => $this->force)->call($job);
     }
 }
