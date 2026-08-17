@@ -150,6 +150,18 @@ trait SpellConstants
         self::DISPEL_TYPE_UNKNOWN,
     ];
 
+    /** {@see self::ALL_DISPEL_TYPES}, in the prefixed form `spells`.`dispel_type` actually stores (#4095). */
+    public const array ALL_DISPEL_TYPE_KEYS = [
+        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_MAGIC,
+        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_DISEASE,
+        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_POISON,
+        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_CURSE,
+        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_ENRAGE,
+        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_NONE,
+        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_NOT_AVAILABLE,
+        self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX . self::DISPEL_TYPE_UNKNOWN,
+    ];
+
     public const string CATEGORY_GENERAL      = 'general';
     public const string CATEGORY_WARRIOR      = 'warrior';
     public const string CATEGORY_HUNTER       = 'hunter';

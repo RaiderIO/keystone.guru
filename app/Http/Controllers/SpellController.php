@@ -47,7 +47,7 @@ class SpellController extends Controller
 
         $spell->id             = $validated['id'];
         $spell->category       = sprintf('spellcategory.%s', $validated['category']);
-        $spell->dispel_type    = sprintf('spelldispeltype.%s', $validated['dispel_type']);
+        $spell->dispel_type    = $validated['dispel_type'];
         $spell->cooldown_group = $validated['cooldown_group'];
         $spell->icon_name      = $validated['icon_name'];
         $spell->name           = $validated['name'];
@@ -150,8 +150,8 @@ class SpellController extends Controller
             'categories'         => collect(Spell::ALL_CATEGORIES)->mapWithKeys(fn(string $category) => [
                 $category => __(sprintf('spellcategory.%s', $category)),
             ])->toArray(),
-            'dispelTypes' => collect(Spell::ALL_DISPEL_TYPES)->mapWithKeys(fn(string $dispelType) => [
-                $dispelType => __(sprintf('spelldispeltype.%s', $dispelType)),
+            'dispelTypes' => collect(Spell::ALL_DISPEL_TYPE_KEYS)->mapWithKeys(fn(string $dispelTypeKey) => [
+                $dispelTypeKey => __($dispelTypeKey),
             ])->toArray(),
             'schools' => collect(Spell::ALL_SCHOOLS)->mapWithKeys(fn(string $name, int $school) => [
                 __(sprintf('spellschools.%s', $name)) => $school,

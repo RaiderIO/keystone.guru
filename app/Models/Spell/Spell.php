@@ -50,8 +50,9 @@ use Str;
  * @property int|null    $characteristic_id
  * @property Carbon      $fetched_data_at
  *
- * @property string $icon_url
- * @property string $wowhead_tooltip_data
+ * @property string      $icon_url
+ * @property string      $wowhead_tooltip_data
+ * @property string|null $informative_dispel_type
  *
  * @property GameVersion                           $gameVersion
  * @property EloquentCollection<int, Dungeon>      $dungeons
@@ -176,33 +177,31 @@ class Spell extends CacheModel implements MappingModelInterface
         }
 
         return array_filter([
-            'name'    => __($this->name),
-            'format'  => $this->description_format,
-            'values'  => $this->description_values ?? [],
-            'schools' => self::maskToReadableString(self::ALL_SCHOOLS, $this->schools_mask, 'spellschools') ?: null,
-            // A dispel type of none, n/a or unknown says nothing worth a row in the tooltip. A value that isn't a
-            // recognised prefixed translation key (legacy/unprefixed data, drift) is suppressed rather than
-            // rendered raw - a tooltip must never surface a bare key to a user.
-            'dispelType' => $this->isInformativeDispelType() ? __($this->dispel_type) : null,
+            'name'       => __($this->name),
+            'format'     => $this->description_format,
+            'values'     => $this->description_values ?? [],
+            'schools'    => self::maskToReadableString(self::ALL_SCHOOLS, $this->schools_mask, 'spellschools') ?: null,
+            'dispelType' => $this->informative_dispel_type,
             'mechanic'   => $this->mechanic ? __($this->mechanic) : null,
             'castTime'   => $this->cast_time > 0 ? $this->cast_time / 1000 : null,
             'duration'   => $this->duration > 0 ? $this->duration / 1000 : null,
         ], static fn(mixed $value): bool => $value !== null && $value !== []);
     }
 
-    /** Whether {@see self::$dispel_type} is a recognised, non-uninformative translation key worth a tooltip row. */
-    private function isInformativeDispelType(): bool
+    /**
+     * The dispel type as a translated label, or null when it carries no information worth showing - a
+     * dispel type of none, n/a or unknown, or a value that isn't a recognised prefixed translation key
+     * (legacy/unprefixed data, drift). Used everywhere `dispel_type` reaches a user (#4095) so none of
+     * them can surface a bare, untranslated key.
+     */
+    public function getInformativeDispelTypeAttribute(): ?string
     {
-        if (in_array($this->dispel_type, self::UNINFORMATIVE_DISPEL_TYPES, true)) {
-            return false;
+        if (in_array($this->dispel_type, self::UNINFORMATIVE_DISPEL_TYPES, true)
+            || !in_array($this->dispel_type, self::ALL_DISPEL_TYPE_KEYS, true)) {
+            return null;
         }
 
-        return str_starts_with($this->dispel_type ?? '', self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX)
-            && in_array(
-                Str::after($this->dispel_type, self::DISPEL_TYPE_TRANSLATION_KEY_PREFIX),
-                self::ALL_DISPEL_TYPES,
-                true,
-            );
+        return __($this->dispel_type);
     }
 
     public function getWowheadUrlAttribute(): string

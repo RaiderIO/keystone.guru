@@ -12,13 +12,7 @@ class AjaxSpellController extends Controller
         AjaxSpellUpdateFormRequest $request,
         Spell                      $spell,
     ): Spell {
-        $validated = $request->validated();
-
-        if (isset($validated['dispel_type'])) {
-            $validated['dispel_type'] = sprintf('spelldispeltype.%s', $validated['dispel_type']);
-        }
-
-        $spell->update($validated);
+        $spell->update($request->validated());
 
         return $spell;
     }

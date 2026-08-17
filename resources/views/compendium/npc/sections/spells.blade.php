@@ -58,7 +58,7 @@ use App\Models\Spell\Spell;
                     <td>{{ Spell::maskToReadableString(Spell::ALL_MISS_TYPES, $spell->miss_types_mask, 'spellmisstypes') }}</td>
                     <td>{{ Spell::maskToReadableString(Spell::ALL_COUNTERS, $spell->counters_mask, 'spellcounters') }}</td>
                     <td>{{ Spell::maskToReadableString(Spell::ALL_IMMUNITIES, $spell->bypasses_immunities_mask, 'spellimmunities') }}</td>
-                    <td>{{ __($spell->dispel_type) }}</td>
+                    <td>{{ $spell->informative_dispel_type }}</td>
                     <td>{{ __($spell->mechanic) }}</td>
                     <td>{{ $spell->cast_time > 0 ? ($spell->cast_time / 1000) . 's' : '-' }}</td>
                     <td>{{ $spell->duration > 0 ? ($spell->duration / 1000) . 's' : '-' }}</td>

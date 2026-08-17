@@ -39,6 +39,20 @@ final class SpellTest extends PublicTestCase
         $this->assertSame('Magic', $tooltipData['dispelType']);
     }
 
+    #[Test]
+    #[DataProvider('uninformativeOrDriftedDispelTypeProvider')]
+    public function getTooltipDataAttribute_givenUninformativeOrDriftedDispelType_omitsDispelTypeRow(string $dispelType): void
+    {
+        // Arrange
+        $spell = $this->makeSpell($dispelType);
+
+        // Act
+        $tooltipData = $spell->tooltip_data;
+
+        // Assert
+        $this->assertArrayNotHasKey('dispelType', $tooltipData);
+    }
+
     /**
      * @return array<string, array<int, string>>
      */
@@ -55,19 +69,5 @@ final class SpellTest extends PublicTestCase
             'unprefixed unknown'     => ['unknown'],
             'not a real dispel type' => ['spelldispeltype.does_not_exist'],
         ];
-    }
-
-    #[Test]
-    #[DataProvider('uninformativeOrDriftedDispelTypeProvider')]
-    public function getTooltipDataAttribute_givenUninformativeOrDriftedDispelType_omitsDispelTypeRow(string $dispelType): void
-    {
-        // Arrange
-        $spell = $this->makeSpell($dispelType);
-
-        // Act
-        $tooltipData = $spell->tooltip_data;
-
-        // Assert
-        $this->assertArrayNotHasKey('dispelType', $tooltipData);
     }
 }
