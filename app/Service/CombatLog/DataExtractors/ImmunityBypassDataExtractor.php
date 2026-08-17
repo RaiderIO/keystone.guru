@@ -5,8 +5,8 @@ namespace App\Service\CombatLog\DataExtractors;
 use App;
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
-use App\Logic\CombatLog\CombatEvents\Prefixes\Prefix;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Range;
+use App\Logic\CombatLog\CombatEvents\Prefixes\SpellPeriodic;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraApplied\AuraAppliedInterface;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBase;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraRemoved\AuraRemovedInterface;
@@ -174,7 +174,7 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
             return;
         }
 
-        // Range carries the spell id/name and is the base of the Spell, SpellPeriodic and SpellBuilding prefixes
+        // Range carries the spell id/name and is the ancestor of the Spell, SpellPeriodic and SpellBuilding prefixes
         $prefix = $parsedEvent->getPrefix();
         if (!($prefix instanceof Range)) {
             return;
@@ -224,9 +224,7 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
         if ($suffix instanceof DamageInterface && $this->isFirsthandDamage($suffix)) {
             // A pre-existing damage over time effect ticking through an immunity is the documented partial case, not a
             // property of the ability - a DoT applied *during* the window is caught by the harmful aura branch instead.
-            // Periodic events are recognized by name: Prefix's mapping matches SPELL before SPELL_PERIODIC, so a
-            // periodic event never actually carries the SpellPeriodic prefix class
-            if ($this->isPeriodic($parsedEvent->getEventName()) || $suffix->getAmount() <= 0) {
+            if ($prefix instanceof SpellPeriodic || $suffix->getAmount() <= 0) {
                 return;
             }
 
@@ -606,11 +604,6 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
         ]);
 
         $this->log->extractDataDetectedImmunityBypass($kind, $spellId, $property->value, $playerGuid, $windowOffsetMs);
-    }
-
-    private function isPeriodic(string $eventName): bool
-    {
-        return str_starts_with($eventName, Prefix::PREFIX_SPELL_PERIODIC);
     }
 
     private function rememberNpcCastSuccess(string $casterGuid, int $spellId, int $timestampMs): void

@@ -34,13 +34,21 @@ abstract class Prefix implements HasParameters
         self::PREFIX_SPELL,
     ];
 
+    /**
+     * Ordered longest-prefix-first, because {@see createFromEventName()} returns the first Str::startsWith hit:
+     * any entry listed below one of its own prefixes is unreachable. PREFIX_SPELL used to sit above
+     * PREFIX_SPELL_PERIODIC/PREFIX_SPELL_BUILDING, which is how those two classes became dead code (#4071).
+     * PrefixTest pins the ordering so it cannot silently regress again.
+     *
+     * @var array<string, class-string<Prefix>>
+     */
     private const PREFIX_CLASS_MAPPING = [
         self::PREFIX_SWING_DAMAGE_LANDED_SUPPORT => SwingDamageLandedSupport::class,
         self::PREFIX_SWING                       => Swing::class,
         self::PREFIX_RANGE                       => Range::class,
-        self::PREFIX_SPELL                       => Spell::class,
         self::PREFIX_SPELL_PERIODIC              => SpellPeriodic::class,
         self::PREFIX_SPELL_BUILDING              => SpellBuilding::class,
+        self::PREFIX_SPELL                       => Spell::class,
     ];
 
     /**
