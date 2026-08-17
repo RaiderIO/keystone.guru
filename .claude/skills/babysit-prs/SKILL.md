@@ -435,7 +435,8 @@ sh/gh-bot.sh pr edit <n> --repo RaiderIO/keystone.guru --title "#<issue> <existi
 ```
 
 `pr edit` works fine for titles and labels — only *body* edits are broken on this repo, and only
-on the old apt `gh` (see `.claude/CLAUDE.md`). Run it through `sh/gh-bot.sh` so the edit is
+on the old apt `gh` (see the `new-machine-setup` skill for the version/install detail). Run it
+through `sh/gh-bot.sh` so the edit is
 attributed to the bot, per the hard rule above. Never add a `:robot:` prefix to a title.
 
 **b) The issue must be closed by *some* open PR — the check is issue-scoped, not PR-scoped.**
@@ -534,8 +535,8 @@ action, say so in one line.
 - **A PR whose base branch isn't `master` (a stacked PR, e.g. one PR targeting another open PR's
   branch) never gets `php-tests` or `phpstan` checks at all** — both are gated `on: pull_request:
   branches: [master]` in their workflow files, so only `build`, `js-tests`, and `php-cs-fixer` ever
-  run there (`only `php-tests`/`phpstan` are gated`, per `.claude/CLAUDE.md`'s own PHP-reserved-word
-  note and the commit that documented it, `ae6fe0765`). Don't read that 3-check rollup as "still
+  run there (per `.claude/CLAUDE.md`, "Stacked PRs: always target `master`", and the commit that
+  documented it, `ae6fe0765`). Don't read that 3-check rollup as "still
   pending" and wait for more — for a stacked PR, that IS the full CI, and once those three are
   green the PR is as green as it will ever get (case in point: #3709, which sat treated as
   "pending" for a full pass before this was caught). Check `baseRefName` before deciding a PR's CI

@@ -1,6 +1,6 @@
 ---
 name: creating-a-service
-description: Runbook for adding a new Service to app/Service — interface + implementation pair, binding in KeystoneGuruServiceProvider (bind vs scoped vs instance, env-conditional swaps), the Logging companion wired in LoggingServiceProvider, Dev/Stub variants, and the Octane/Swoole statefulness rules. Use when creating a new service class or wiring an existing one into the container. Not for repositories (repository-pattern), the logging philosophy itself (structured-logging), or deciding Service vs Logic placement (project-backend-structure).
+description: Runbook for adding a new Service to app/Service — interface + implementation pair, container binding (bind vs scoped vs instance), the Logging companion, Dev/Stub variants, and Octane/Swoole statefulness rules. Use when creating a new service class or wiring one into the container. Not for repositories (repository-pattern), logging philosophy (structured-logging), or Service vs Logic placement (project-backend-structure).
 ---
 
 # Creating a Service

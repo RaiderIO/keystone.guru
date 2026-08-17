@@ -1,6 +1,6 @@
 ---
 name: seeder-load
-description: Guide for adding a RelationParser so a new model or nested relation is correctly imported from the dungeon JSON seeder files. Use when a new model/child table needs to be populated by `DungeonDataSeeder` (run it with `db:seedone`, never `db:seed --class=`). Also covers the two load paths that bypass `RelationMapping`/`RelationParser` entirely: `LoadsSeasonData` (`AffixSeeder`/`SeasonsSeeder`, generated `database/seeders/seasondata/`) and `LoadsMapIconTypeData` (`MapIconTypesSeeder`, hand-edited `database/seeders/mapicontypedata/`).
+description: "Guide for adding a RelationParser so a new model or nested relation is imported from the dungeon JSON seeder files. Use when a new model/child table needs populating by `DungeonDataSeeder` (run via `db:seedone`, never `db:seed --class=`). Also covers the two load paths that bypass `RelationMapping`/`RelationParser`: `LoadsSeasonData` (affixes/seasons) and `LoadsMapIconTypeData` (map icon types)."
 ---
 
 # Seeder Load

@@ -27,7 +27,13 @@ leave the schema in a state the running production code can't handle mid-deploy?
    plus any directory-specific conventions) to check for compliance violations — pay particular
    attention to the migration backward-compatibility rules (deploys are not atomic; destructive
    schema changes must be split expand/contract across two releases) and the security-review
-   conventions if auth/authorization is touched.
+   conventions if auth/authorization is touched. Those files state this repo's PHP/Laravel
+   conventions in full, so you do not need to load `laravel-best-practices` to learn them — but *do*
+   follow the specific skill pointers they issue (`security-review`, `writing-tests`,
+   `repository-pattern`, `seeder-load`, `api-endpoint`) when a finding turns on that area's detail.
+   One finding you must *not* raise: missing model-cache invalidation on a raw write
+   (`.claude/CLAUDE.md`, Database & Eloquent; rationale in `project-backend-structure`, "Model
+   caching vs raw writes").
 4. Use `git log`/`git blame` on touched files (after `git fetch origin`) and check prior PR review
    comments on the same files if useful context.
 5. Look for: CLAUDE.md-compliance violations, correctness bugs, missed edge cases, security issues

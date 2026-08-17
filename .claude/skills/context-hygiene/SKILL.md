@@ -57,14 +57,69 @@ offender, don't mechanically truncate):
 | Surface | Budget | Measure |
 |---|---|---|
 | `CLAUDE.md` (Boost-generated) | ≤ 7,300 B | `wc -c CLAUDE.md` |
-| `.claude/CLAUDE.md` | ≤ 18,000 B | `wc -c .claude/CLAUDE.md` |
+| `.claude/CLAUDE.md` | ≤ 29,000 B | `wc -c .claude/CLAUDE.md` |
 | `MEMORY.md` | ≤ 9,500 B | `wc -c MEMORY.md` |
 | All skill descriptions combined | ≤ 18,500 B | sum of each frontmatter `description:` value |
 | Any single skill description | ≤ 550 B | same |
 
-These budgets are the post-#3783 baseline plus a little headroom — a **ratchet, not a target**:
-when a sweep trims a surface below budget, tighten the budget here to the new level (never loosen
-one to silence a warning; that needs Wotuu's sign-off).
+These budgets are a **ratchet, not a target**: when a sweep trims a surface below budget, tighten
+the budget here to the new level (never loosen one to silence a warning; that needs Wotuu's
+sign-off).
+
+The `.claude/CLAUDE.md` budget was **18,000 B until PR #4046**, which raised it to 29,000 B —
+proposed by an agent under delegated authority, and a working figure open to revision rather than a
+number Wotuu reviewed and signed off on himself.
+
+**Read the history before trusting the new number, because it is a concession, not a correction.**
+18,000 B was genuinely met: on 2026-08-03 (#3783, `762974243`) the file was 17,923 B with every rule
+present, using the compact-rule-plus-skill-pointer pattern this section recommends. It then grew
+**89% in eleven days** — 17,923 → 33,788 B by 2026-08-14 — through real additions, not bloat (model
+routing +4.3KB, the bot identity section +3.2KB, worktree and MR-handoff rules). #4046 trimmed prose
+hard, landing at **30,154 B** — still ~1.2KB over the 29,000 B figure below, a known small overage
+carried forward rather than chased further, since an earlier commit briefly reached 28,977 B by
+moving rules out of the file entirely and had to revert that (below). 29,000 B is close to, not
+exactly, the honest floor for the file's current content — not evidence that 18,000 B was ever
+unreasonable.
+
+Two consequences for a sweep:
+
+- **Watch the growth rate, not just the breach.** A budget re-ratcheted upward every time the file
+  grows is a rubber stamp. If `.claude/CLAUDE.md` is approaching 29,000 B again, the question is
+  which recent additions earn their place — not what the next number should be.
+- **Tighten it only by cutting prose**, and never by moving rules out (below).
+
+The **skill-description budget was deliberately left at 18,500 B** in the same PR, while breached
+(19,982 B at #4046's head, 21,023 B on master), and Wotuu offered to raise it. Declining is the
+point: descriptions are pure routing text, so trimming one costs no rule — the worst case is a skill
+that triggers less readily, which is visible and recoverable. The breach is ~28 B per skill across
+52 skills, and #4046 recovered ~1,041 B from four descriptions with no loss, so it is reachable by
+ordinary trimming. **That is the test for whether raising a budget is legitimate: can the breach be
+cleared without losing a rule?** If yes, trim. If no — as with `.claude/CLAUDE.md`, where the only
+route to 18,000 B was deleting current rules — raise it and say plainly that you did.
+
+### Cut prose, never rules — and never by relocating a rule behind a skill trigger
+
+**A rule stays in always-loaded context. Only its rationale may move into a skill.** Trimming means
+compressing a rule's wording, or moving the *why* into the skill that owns the topic and leaving a
+one-line rule plus a pointer. It does **not** mean relocating the rule itself.
+
+PR #4046 moved ~5.7KB of PHP/Laravel conventions out of `.claude/CLAUDE.md` into the
+`laravel-best-practices` skill, and reverted it. Why, strongest argument first:
+
+- **The costs are wildly asymmetric.** Carrying a rule you didn't need costs a few hundred
+  well-cached tokens. Missing one costs a foreign key in a migration, or a destructive schema change
+  shipped in a single release — which is what took staging down in #3497. No estimate of the saving
+  changes that ratio, so the saving is not the deciding factor.
+- **The trigger is not reliable.** The very next cold review read the CLAUDE.md files, never loaded
+  the skill, and re-raised a finding Wotuu had explicitly banned (#3766) — the exact failure it was
+  warned about, on the first attempt. A skill that "should" load is not a guarantee.
+- **The saving is smaller than it looks**, and can invert: reclaiming those rules costs a 16.5KB
+  `SKILL.md` load (plus a 58KB `rules/` tree) against 5.7KB removed. This leg is the weakest of the
+  three — it assumes the skill wouldn't have loaded anyway — so don't lean on it alone.
+
+So if a breach can only be cleared by moving a rule out of always-loaded context, **report the
+breach and leave it**. An honest over-budget warning beats a rule that silently isn't there.
+Budgets govern prose; they do not govern coverage.
 
 ### Boost regenerates some of these surfaces — always diff after `boost:update`
 

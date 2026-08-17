@@ -1,6 +1,6 @@
 ---
 name: new-machine-setup
-description: Bring up a complete, working keystone.guru development environment on a brand-new machine — from "Docker is installed" to "an agent can run tests, build assets, render maps and create worktrees". Covers the secret files that cannot be regenerated, the clone layout, the app image build, DB bootstrap from a blank data dir, and the acceptance probes that prove the stack really works. Use only when setting up a fresh machine (or repairing one that was never fully set up). Not for day-to-day work, and not for worktrees (worktree-docker).
+description: Bring up a working keystone.guru dev environment on a brand-new machine, from "Docker is installed" to "an agent can run tests and create worktrees". Covers secret files that can't be regenerated, the clone layout, the app image build, DB bootstrap, and acceptance probes. Use only when setting up a fresh machine (or repairing one that was never fully set up). Not for day-to-day work or worktrees (worktree-docker).
 ---
 
 # New machine setup
@@ -90,8 +90,9 @@ sudo apt-get update && sudo apt-get install -y git curl unzip python3 mysql-clie
   # reopen shell, then from the repo root:
   nvm install && nvm use
   ```
-- **A modern `gh`.** Distro packages are far too old — `gh pr edit` needs ≥ 2.96.0 on this repo (see
-  the root `CLAUDE.md`). Install into `~/.local/bin` so it shadows any `/usr/bin/gh`:
+- **A modern `gh`.** Distro packages are far too old — `gh pr edit` needs ≥ 2.96.0 on this repo; the
+  apt 2.4.0 at `/usr/bin/gh` fails with a Projects-classic GraphQL error (check `gh --version` if you
+  see that error). Install into `~/.local/bin` so it shadows any `/usr/bin/gh`:
   ```bash
   mkdir -p ~/.local/bin && cd /tmp
   curl -sSL https://github.com/cli/cli/releases/latest/download/gh_$(curl -s https://api.github.com/repos/cli/cli/releases/latest | grep -Po '"tag_name": "v\K[^"]*')_linux_amd64.tar.gz | tar xz
