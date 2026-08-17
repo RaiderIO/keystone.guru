@@ -30,9 +30,9 @@ use App\Models\Spell\Spell;
                     {{ Spell::maskToReadableString(Spell::ALL_SCHOOLS, $spell->schools_mask, 'spellschools') }}
                 </span>
             @endif
-            @if($spell->informative_dispel_type)
+            @if($spell->dispel_type)
                 <span class="compendium_chip">
-                    {{ $spell->informative_dispel_type }}
+                    {{ __($spell->dispel_type) }}
                 </span>
             @endif
             @if($spell->mechanic)

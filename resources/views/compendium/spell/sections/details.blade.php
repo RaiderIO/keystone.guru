@@ -33,7 +33,7 @@ $details = [
     [
         'label'   => __('view_compendium.spell.sections.details.header_dispel_type'),
         'tooltip' => __('view_compendium.spell.sections.details.header_dispel_type_tooltip'),
-        'value'   => $spell->informative_dispel_type ?? '-',
+        'value'   => $spell->dispel_type ? __($spell->dispel_type) : '-',
     ],
     [
         'label'   => __('view_compendium.spell.sections.details.header_mechanic'),

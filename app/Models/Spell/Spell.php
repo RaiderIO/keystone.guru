@@ -50,9 +50,8 @@ use Str;
  * @property int|null    $characteristic_id
  * @property Carbon      $fetched_data_at
  *
- * @property string      $icon_url
- * @property string      $wowhead_tooltip_data
- * @property string|null $informative_dispel_type
+ * @property string $icon_url
+ * @property string $wowhead_tooltip_data
  *
  * @property GameVersion                           $gameVersion
  * @property EloquentCollection<int, Dungeon>      $dungeons
@@ -181,7 +180,7 @@ class Spell extends CacheModel implements MappingModelInterface
             'format'     => $this->description_format,
             'values'     => $this->description_values ?? [],
             'schools'    => self::maskToReadableString(self::ALL_SCHOOLS, $this->schools_mask, 'spellschools') ?: null,
-            'dispelType' => $this->informative_dispel_type,
+            'dispelType' => $this->hasUninformativeDispelType() ? null : __($this->dispel_type),
             'mechanic'   => $this->mechanic ? __($this->mechanic) : null,
             'castTime'   => $this->cast_time > 0 ? $this->cast_time / 1000 : null,
             'duration'   => $this->duration > 0 ? $this->duration / 1000 : null,
@@ -189,19 +188,14 @@ class Spell extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * The dispel type as a translated label, or null when it carries no information worth showing - a
-     * dispel type of none, n/a or unknown, or a value that isn't a recognised prefixed translation key
-     * (legacy/unprefixed data, drift). Used everywhere `dispel_type` reaches a user (#4095) so none of
-     * them can surface a bare, untranslated key.
+     * Whether `dispel_type` carries no information worth showing in the tooltip - a dispel type of
+     * none, n/a or unknown, or a value that isn't a recognised prefixed translation key
+     * (legacy/unprefixed data, drift).
      */
-    public function getInformativeDispelTypeAttribute(): ?string
+    private function hasUninformativeDispelType(): bool
     {
-        if (in_array($this->dispel_type, self::UNINFORMATIVE_DISPEL_TYPES, true)
-            || !in_array($this->dispel_type, self::ALL_DISPEL_TYPE_KEYS, true)) {
-            return null;
-        }
-
-        return __($this->dispel_type);
+        return in_array($this->dispel_type, self::UNINFORMATIVE_DISPEL_TYPES, true)
+            || !in_array($this->dispel_type, self::ALL_DISPEL_TYPE_KEYS, true);
     }
 
     public function getWowheadUrlAttribute(): string
