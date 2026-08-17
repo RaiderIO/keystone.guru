@@ -4,6 +4,8 @@ namespace Tests\Feature\Controller\AdminTools;
 
 use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteThumbnail;
+use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Models\Laratrust\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -83,6 +85,67 @@ final class AdminToolsThumbnailsControllerTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function thumbnailsregeneratesubmit_givenRouteWithHeroThumbnail_alsoQueuesTheHeroVariant(): void
+    {
+        // Arrange - refreshing a route means refreshing the variants it actually has, so a route carrying a
+        // hero thumbnail must get its (blank) hero render replaced too, not just the standard one.
+        Queue::fake();
+
+        $dungeonRoute = $this->createRouteWithNewerThumbnailTimestamp();
+        $thumbnail    = DungeonRouteThumbnail::create([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'floor_id'         => $dungeonRoute->dungeon->floors()->active()->firstOrFail()->id,
+            'variant'          => DungeonRouteThumbnailVariant::Hero,
+        ]);
+
+        try {
+            // Act
+            $this->be($this->getAdmin());
+            $response = $this->post(route('admin.tools.thumbnails.regenerate.submit'), [
+                'dungeon_id'   => $dungeonRoute->dungeon_id,
+                'only_missing' => 0,
+                'force'        => 1,
+            ]);
+
+            // Assert - both variants queued for this route
+            $response->assertOk();
+            Queue::assertPushed(ProcessRouteFloorThumbnail::class, $this->isVariantJobFor($dungeonRoute, DungeonRouteThumbnailVariant::Standard));
+            Queue::assertPushed(ProcessRouteFloorThumbnail::class, $this->isVariantJobFor($dungeonRoute, DungeonRouteThumbnailVariant::Hero));
+        } finally {
+            $thumbnail->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function thumbnailsregeneratesubmit_givenRouteWithoutHeroThumbnail_doesNotQueueTheHeroVariant(): void
+    {
+        // Arrange - a route that never had a hero thumbnail must not gain one here: only the discovery hero
+        // band displays it, and a 1600x640 render per route across a dungeon is far more expensive than the
+        // standard one. thumbnail:ensureheroes owns creating hero thumbnails for the routes that need them.
+        Queue::fake();
+
+        $dungeonRoute = $this->createRouteWithNewerThumbnailTimestamp();
+
+        try {
+            // Act
+            $this->be($this->getAdmin());
+            $response = $this->post(route('admin.tools.thumbnails.regenerate.submit'), [
+                'dungeon_id'   => $dungeonRoute->dungeon_id,
+                'only_missing' => 0,
+                'force'        => 1,
+            ]);
+
+            // Assert
+            $response->assertOk();
+            Queue::assertPushed(ProcessRouteFloorThumbnail::class, $this->isVariantJobFor($dungeonRoute, DungeonRouteThumbnailVariant::Standard));
+            Queue::assertNotPushed(ProcessRouteFloorThumbnail::class, $this->isVariantJobFor($dungeonRoute, DungeonRouteThumbnailVariant::Hero));
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
     /**
      * The controller sweeps every route in the posted dungeon, and queueThumbnailRefresh() writes
      * thumbnail_refresh_queued_at on each one - so this must pick a dungeon that has no seeded routes
@@ -120,5 +183,11 @@ final class AdminToolsThumbnailsControllerTest extends PublicTestCase
     {
         return fn(ProcessRouteFloorThumbnail $job): bool => $this->isJobFor($dungeonRoute)($job)
             && (fn(): bool => $this->force)->call($job);
+    }
+
+    private function isVariantJobFor(DungeonRoute $dungeonRoute, DungeonRouteThumbnailVariant $variant): callable
+    {
+        return fn(ProcessRouteFloorThumbnail $job): bool => $this->isJobFor($dungeonRoute)($job)
+            && (fn(): DungeonRouteThumbnailVariant => $this->variant)->call($job) === $variant;
     }
 }
