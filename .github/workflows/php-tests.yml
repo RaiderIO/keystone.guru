@@ -63,7 +63,18 @@ jobs:
       - name: Run PHPUnit (${{ matrix.shard }})
         run: |
           set -o pipefail
-          ./vendor/bin/phpunit ${{ matrix.phpunit-args }} 2>&1 | tee phpunit-output.log
+          ./vendor/bin/phpunit ${{ matrix.phpunit-args }} --log-junit phpunit-junit.xml 2>&1 | tee phpunit-output.log
+
+      # Per-test wall-clock times, the input for rebalancing the shards above. Local timings are not a usable
+      # proxy - a development test database carries orders of magnitude more rows than CI's freshly-seeded one,
+      # so DB-heavy tests are wildly slower locally - which makes the CI run itself the only honest measurement.
+      - name: Upload per-test timings (${{ matrix.shard }})
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: phpunit-junit-${{ matrix.shard }}
+          path: phpunit-junit.xml
+          if-no-files-found: warn
 
       # Structured logging reaching the console during a test run interleaves ANSI-coloured log lines with the
       # progress output, and has now regressed twice (#3722, #3782) because every guard against it lived in
