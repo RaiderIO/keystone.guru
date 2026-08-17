@@ -41,9 +41,13 @@ use Override;
  * @property bool       $runs_away_in_fear
  * @property bool       $hyper_respawn
  *
- * @property NpcClassification $classification
- * @property NpcType           $type
- * @property NpcClass          $class
+ * @property string               $enemy_portrait_url
+ * @property string               $wowhead_url
+ * @property array<string, mixed> $tooltip_data
+ *
+ * @property NpcClassification|null $classification A few seeded NPCs carry an id no classification row matches
+ * @property NpcType                $type
+ * @property NpcClass               $class
  *
  * @property NpcEnemyForces|null                             $enemyForces
  * @property EloquentCollection<int, NpcEnemyForces>         $npcEnemyForces
@@ -139,6 +143,46 @@ class Npc extends CacheModel implements MappingModelInterface
     public function getEnemyPortraitUrlAttribute(): string
     {
         return sprintf('images/enemyportraits/%d.png', $this->id);
+    }
+
+    /**
+     * Everything the hover tooltip shows, in one payload - the counterpart of Spell::$tooltip_data (#4096).
+     *
+     * Deliberately NOT in $appends, unlike the spell one: NPCs are serialized in bulk into the map
+     * context, and computing this for every NPC of a dungeon would both lazy-load four relations per
+     * NPC and grow that payload with text no map ever renders. Render sites opt in instead, either by
+     * reading $npc->tooltip_data or by appending it to a collection they eager-loaded themselves.
+     *
+     * Reads the classification, type, characteristics and npcHealths relations - eager-load all four
+     * wherever this is rendered for more than one NPC.
+     *
+     * @return array<string, mixed>
+     */
+    public function getTooltipDataAttribute(): array
+    {
+        return array_filter([
+            'name'        => __($this->name),
+            'portraitUrl' => ksgAsset($this->enemy_portrait_url),
+            // A handful of seeded NPCs carry a classification_id no npc_classifications row matches,
+            // so this relation really can come back null - the badge is then left out entirely
+            'classification'    => $this->classification === null ? null : __($this->classification->name),
+            'classificationKey' => $this->classification?->key,
+            'health'            => $this->getTooltipHealth(),
+            'type'              => $this->type->type,
+            // Mirrors the flags the NPC's own compendium page shows; bursting/bolstering/sanguine are
+            // deliberately left out there as well
+            'flags' => array_values(array_filter([
+                $this->dangerous ? __('view_admin.npc.edit.dangerous') : null,
+                $this->truesight ? __('view_admin.npc.edit.truesight') : null,
+                $this->runs_away_in_fear ? __('view_admin.npc.edit.runs_away_in_fear') : null,
+            ])),
+            // Observed crowd control only - an NPC without a characteristic was never seen affected by
+            // one, which is not the same as being immune to it (#4028), so nothing is listed as absent
+            'characteristics' => $this->characteristics->map(static fn(Characteristic $characteristic): array => [
+                'name'    => __($characteristic->name),
+                'iconUrl' => ksgAssetImage(sprintf('spells/%s.jpg', $characteristic->icon_name)),
+            ])->values()->all(),
+        ], static fn(mixed $value): bool => $value !== null && $value !== []);
     }
 
     public function getWowheadUrlAttribute(): string
@@ -417,6 +461,27 @@ class Npc extends CacheModel implements MappingModelInterface
         $dungeon = $this->dungeons->first();
 
         return $dungeon?->id;
+    }
+
+    /**
+     * The NPC's base health as the tooltip states it, or null when we have nothing worth stating.
+     *
+     * `percentage` is part of the answer, not a footnote to it: MDT records a good many creatures as
+     * a fraction of a stored base (a Blinding Vale add at 30% of its pack leader's health), so the
+     * raw column on its own overstates them - the same product calculateHealthForKey() scales from.
+     */
+    private function getTooltipHealth(): ?int
+    {
+        $npcHealth = $this->getHealthByGameVersion(GameVersion::getUserOrDefaultGameVersion());
+
+        // A health of exactly the placeholder means we never learned this NPC's health, so it says
+        // nothing worth a row - a fair few dungeons still carry those (#4094). Checked before the
+        // percentage is applied, since the placeholder is what the column stores, not what it means.
+        if ($npcHealth === null || $npcHealth->health === NpcHealth::HEALTH_PLACEHOLDER) {
+            return null;
+        }
+
+        return (int)round($npcHealth->health * (($npcHealth->percentage ?? 100) / 100));
     }
 
     #[Override]

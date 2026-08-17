@@ -11,6 +11,7 @@ use App\Models\Dungeon;
 use App\Models\Spell\Spell;
 use App\Service\Compendium\SpellCompendiumServiceInterface;
 use App\Service\Dungeon\DungeonServiceInterface;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -62,7 +63,8 @@ class SpellCompendiumController extends Controller
 
         $spell->load(['gameVersion', 'dungeons.expansion', 'characteristic']);
 
-        $npcs = $spell->npcs()->with(['classification', 'dungeons'])->get();
+        // type/characteristics/npcHealths are what the NPC links' hover tooltips read (#4096)
+        $npcs = $spell->npcs()->with(['classification', 'dungeons', 'type', 'characteristics', 'npcHealths'])->get();
 
         return view('compendium.spell.show', [
             'spell'     => $spell,
@@ -81,7 +83,18 @@ class SpellCompendiumController extends Controller
         $spells = Spell::query()
             ->selectRaw('spells.*, spell_name_translations.translation as name,
                 GROUP_CONCAT(DISTINCT dungeon_translations.translation ORDER BY dungeon_translations.translation SEPARATOR ", ") AS dungeon_names')
-            ->with(['npcs'])
+            // The "used by" column renders an NPC link per npc, each carrying its own hover tooltip
+            // (#4096) - which reads these four relations
+            ->with(['npcs', 'npcs.classification', 'npcs.type', 'npcs.characteristics', 'npcs.npcHealths'])
+            ->afterQuery(static function (EloquentCollection $spells): EloquentCollection {
+                // tooltip_data is deliberately not appended by default - see Npc::$appends
+                foreach ($spells as $spell) {
+                    /** @var Spell $spell */
+                    $spell->npcs->each->append('tooltip_data');
+                }
+
+                return $spells;
+            })
             ->leftJoin('spell_dungeons', 'spell_dungeons.spell_id', '=', 'spells.id')
             ->leftJoin('dungeons', 'spell_dungeons.dungeon_id', '=', 'dungeons.id')
             ->leftJoin('translations as dungeon_translations', static function (JoinClause $clause) {

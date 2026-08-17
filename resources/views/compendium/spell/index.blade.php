@@ -96,6 +96,7 @@ use Illuminate\Support\Collection;
                                     is_boss: bossClassificationIds.includes(npc.classification_id),
                                     boss_icon_url: skullIconUrl,
                                     name: lang.get(npc.name),
+                                    npc_tooltip: npc.tooltip_data ? JSON.stringify(npc.tooltip_data) : null,
                                 });
                             }).join('');
                         },

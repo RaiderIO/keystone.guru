@@ -9,7 +9,9 @@ use App\Models\MapIconType;
  */
 $size ??= 20;
 ?>
-<a href="{{ route('npc.compendium.show', $npc) }}">
+{{-- The tooltip payload travels with the link (#4096). It reads the classification, type,
+     characteristics and npcHealths relations, so eager-load those wherever a list of NPCs renders. --}}
+<a href="{{ route('npc.compendium.show', $npc) }}" data-npc-tooltip="{{ json_encode($npc->tooltip_data) }}">
     @if($npc->enemy_portrait_url)
         <img src="{{ ksgAsset($npc->enemy_portrait_url) }}"
              width="{{ $size }}" height="{{ $size }}"
