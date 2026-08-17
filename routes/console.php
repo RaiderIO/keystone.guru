@@ -81,11 +81,9 @@ if (!app()->environment('local')) {
 }
 
 // A game patch is a trigger for a manual re-import (#4021), not a release - files a GitHub issue when
-// it fires, so only staging/production should be able to reach the real repository.
-if (in_array($appType, [
-    'staging',
-    'production',
-])) {
+// it fires. Only production runs it: staging isn't guaranteed to have a cron running it in the future,
+// and there's no need for both environments to check and potentially file the same issue.
+if ($appType === 'production') {
     $commands[] = Schedule::command('wagotools:checkforspelldescriptionpatch')->daily();
 }
 
