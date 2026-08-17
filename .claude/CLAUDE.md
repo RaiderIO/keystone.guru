@@ -17,10 +17,8 @@ complexity — is what actually predicts token spend.
 | Anything open-ended, or already past ~100 turns | **Opus** | Sonnet's rate advantage is gone by here |
 | Long unattended runs, `/loop` sessions, cross-cutting migrations, unknown-root-cause debugging, multi-part architecture | **Fable** | Fewest turns per unit of work |
 
-**Why it inverts.** ~84% of a session's spend is *cache reads* of the accumulated conversation, so
-cost tracks turn count, not per-token rate — Sonnet needs roughly twice the turns of Opus for the
-same work. Measured over 30 days: Sonnet costs *more* per unit of delivered work than Opus overall,
-and about the same in sessions ≥ 300 turns, for a weaker model.
+**Why it inverts.** Turn count, not per-token rate, sets session cost — most spend is cache-reads of
+the transcript, and Sonnet needs roughly twice Opus's turns for the same work.
 
 **Corollaries:**
 - Don't reach for a cheaper model to save budget on a big task — it costs more, not less. Haiku has
@@ -47,10 +45,10 @@ Estimate the task's **turn count** from its shape, then compare against the sess
 | A bug with an unknown-but-findable cause, a medium refactor, a feature touching a handful of files | ~100–300 | Opus |
 | A new feature spanning many files, a cross-cutting migration, unknown-root-cause debugging, multi-part design, anything unattended | > ~300 | Fable |
 
-**Speak up only when the session is under-powered — stay silent when it is over-powered.** Running a
-heavier model on a short task is noise-cheap; running a lighter model on a long task costs about the
-same *and* delivers weaker results, so the asymmetry is deliberate — being over-powered is never
-worth a turn of the user's attention.
+**Speak up only when the session is under-powered — stay silent when it is over-powered.** Being
+over-powered is cheap; being under-powered on a long task costs about the same and delivers weaker
+results — the asymmetry is deliberate, so it's never worth a turn of the user's attention to flag
+over-provisioning.
 
 When under-powered, say so in one or two sentences and **stop — do no work and create no worktree**:
 
