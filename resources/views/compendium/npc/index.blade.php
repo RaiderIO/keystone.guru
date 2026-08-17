@@ -69,6 +69,7 @@ use Illuminate\Support\Collection;
                                 is_boss: bossClassificationIds.includes(row.classification_id),
                                 boss_icon_url: skullIconUrl,
                                 name: data ?? '',
+                                npc_tooltip: row.tooltip_data ? JSON.stringify(row.tooltip_data) : null,
                             });
                         },
                     },

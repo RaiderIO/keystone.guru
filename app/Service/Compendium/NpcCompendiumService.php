@@ -110,7 +110,11 @@ class NpcCompendiumService implements NpcCompendiumServiceInterface
         );
 
         // Eager-load NPC relation (cross-DB: manual setRelation)
-        $npcs = Npc::whereIn('id', $npcEvents->pluck('npc_id')->unique())->get()->keyBy('id');
+        $npcs = Npc::whereIn('id', $npcEvents->pluck('npc_id')->unique())
+            // What the NPC links' hover tooltips read (#4096)
+            ->with(['classification', 'type', 'characteristics', 'npcHealths'])
+            ->get()
+            ->keyBy('id');
         $npcEvents->each(fn(CombatLogNpcEvent $event) => $event->setRelation('npc', $npcs->get($event->npc_id)));
 
         $spellEvents = CombatLogSpellEvent::query()

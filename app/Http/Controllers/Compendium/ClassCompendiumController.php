@@ -90,7 +90,9 @@ class ClassCompendiumController extends Controller
                 ->when($mappingVersion !== null, static fn($q) => $q->where('mapping_versions.id', $mappingVersion->id))
                 ->whereIn('npc_characteristics.characteristic_id', $characteristicIds)
                 ->select('npcs.*', 'npc_characteristics.characteristic_id')
-                ->with('classification')
+                // classification/type/characteristics/npcHealths are what the NPC links' hover
+                // tooltips read (#4096)
+                ->with(['classification', 'type', 'characteristics', 'npcHealths'])
                 ->distinct()
                 ->orderBy('npcs.id')
                 ->get()
@@ -291,6 +293,9 @@ class ClassCompendiumController extends Controller
             ->when($mappingVersion !== null, static fn($q) => $q->where('mapping_versions.id', $mappingVersion->id))
             ->whereIn('npc_spells.spell_id', $spells->pluck('id'))
             ->select('npcs.*', 'npc_spells.spell_id')
+            // classification/type/characteristics/npcHealths are what the NPC links' hover tooltips
+            // read (#4096)
+            ->with(['classification', 'type', 'characteristics', 'npcHealths'])
             ->distinct()
             ->get()
             ->groupBy('spell_id');

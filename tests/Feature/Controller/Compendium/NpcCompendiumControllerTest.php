@@ -262,6 +262,34 @@ final class NpcCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function get_givenDungeonFilter_returnsTooltipDataPerNpc(): void
+    {
+        // Arrange - the datatable builds each NPC link's hover tooltip off this payload (#4096); it
+        // is not an appended attribute, so the endpoint has to ask for it explicitly
+        [$dungeon, $mappingVersion] = $this->findDungeon(
+            dungeonActive: true,
+            minEnemies:    1,
+            resolve:       static fn(Dungeon $dungeon, MappingVersion $mappingVersion) => $mappingVersion->enemies()->whereNotNull('npc_id')->exists() ?: null,
+        );
+
+        // Act
+        $response = $this->call('GET', route('ajax.npc.compendium.search'), array_merge($this->datatableParams, [
+            'dungeon_id' => $dungeon->id,
+        ]), [], [], ['HTTP_X-Requested-With' => 'XMLHttpRequest']);
+
+        // Assert
+        $response->assertOk();
+        $data = $response->json();
+        $this->assertNotEmpty($data['data'], 'The dungeon filter returned no NPCs, so the check below proves nothing');
+        foreach ($data['data'] as $npc) {
+            $this->assertArrayHasKey('tooltip_data', $npc);
+            // Name and classification are on every NPC; the rest is left out when it says nothing
+            $this->assertArrayHasKey('name', $npc['tooltip_data']);
+            $this->assertArrayHasKey('classification', $npc['tooltip_data']);
+        }
+    }
+
+    #[Test]
     public function get_givenNonExistentDungeonId_returnsUnprocessableContent(): void
     {
         // Arrange — dungeon_id = -1 does not exist in the dungeons table

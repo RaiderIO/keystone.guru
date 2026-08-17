@@ -41,6 +41,10 @@ use Override;
  * @property bool       $runs_away_in_fear
  * @property bool       $hyper_respawn
  *
+ * @property string               $enemy_portrait_url
+ * @property string               $wowhead_url
+ * @property array<string, mixed> $tooltip_data
+ *
  * @property NpcClassification $classification
  * @property NpcType           $type
  * @property NpcClass          $class
@@ -139,6 +143,51 @@ class Npc extends CacheModel implements MappingModelInterface
     public function getEnemyPortraitUrlAttribute(): string
     {
         return sprintf('images/enemyportraits/%d.png', $this->id);
+    }
+
+    /**
+     * Everything the hover tooltip shows, in one payload - the counterpart of Spell::$tooltip_data (#4096).
+     *
+     * Deliberately NOT in $appends, unlike the spell one: NPCs are serialized in bulk into the map
+     * context, and computing this for every NPC of a dungeon would both lazy-load four relations per
+     * NPC and grow that payload with text no map ever renders. Render sites opt in instead, either by
+     * reading $npc->tooltip_data or by appending it to a collection they eager-loaded themselves.
+     *
+     * Reads the classification, type, characteristics and npcHealths relations - eager-load all four
+     * wherever this is rendered for more than one NPC.
+     *
+     * @return array<string, mixed>
+     */
+    public function getTooltipDataAttribute(): array
+    {
+        $health = $this->npcHealths
+            ->firstWhere('game_version_id', GameVersion::getUserOrDefaultGameVersion()->id)?->health;
+
+        return array_filter([
+            'name'           => __($this->name),
+            'portraitUrl'    => ksgAsset($this->enemy_portrait_url),
+            'isBoss'         => $this->isBoss(),
+            'classification' => __($this->classification->name),
+            'level'          => $this->level > 0 ? $this->level : null,
+            // A health of exactly the placeholder means we never learned this NPC's health, so it says
+            // nothing worth a row - a fair few dungeons still carry those (#4094)
+            'health'         => $health === null || $health === NpcHealth::HEALTH_PLACEHOLDER ? null : $health,
+            'aggressiveness' => __(sprintf('npcaggressiveness.%s', $this->aggressiveness)),
+            'type'           => $this->type->type,
+            // Mirrors the flags the NPC's own compendium page shows; bursting/bolstering/sanguine are
+            // deliberately left out there as well
+            'flags' => array_values(array_filter([
+                $this->dangerous ? __('view_admin.npc.edit.dangerous') : null,
+                $this->truesight ? __('view_admin.npc.edit.truesight') : null,
+                $this->runs_away_in_fear ? __('view_admin.npc.edit.runs_away_in_fear') : null,
+            ])),
+            // Observed crowd control only - an NPC without a characteristic was never seen affected by
+            // one, which is not the same as being immune to it (#4028), so nothing is listed as absent
+            'characteristics' => $this->characteristics->map(static fn(Characteristic $characteristic): array => [
+                'name'    => __($characteristic->name),
+                'iconUrl' => ksgAssetImage(sprintf('spells/%s.jpg', $characteristic->icon_name)),
+            ])->values()->all(),
+        ], static fn(mixed $value): bool => $value !== null && $value !== [] && $value !== false);
     }
 
     public function getWowheadUrlAttribute(): string

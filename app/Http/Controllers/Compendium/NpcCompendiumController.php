@@ -16,6 +16,7 @@ use App\Service\Compendium\NpcCompendiumServiceInterface;
 use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -158,8 +159,12 @@ class NpcCompendiumController extends Controller
         $mappingVersion = $request->dungeon()->getCurrentMappingVersion();
 
         $npcs = Npc::query()
-            // The datatable renders the spells column off the serialized spells relation
-            ->with(['spells'])
+            // The datatable renders the spells column off the serialized spells relation, and the
+            // hover tooltip off the four relations behind tooltip_data (#4096)
+            ->with(['spells', 'classification', 'type', 'characteristics', 'npcHealths'])
+            // tooltip_data is not appended by default - it would land in the map context as well,
+            // which renders no tooltips and would carry the text for nothing (see Npc::$appends)
+            ->afterQuery(static fn(EloquentCollection $npcs): EloquentCollection => $npcs->each->append('tooltip_data'))
             ->selectRaw('npcs.*, npc_name_translations.translation as name, GROUP_CONCAT(DISTINCT dungeon_translations.translation SEPARATOR ", ") AS dungeon_names')
             ->join('enemies', 'enemies.npc_id', '=', 'npcs.id')
             ->join('mapping_versions', 'enemies.mapping_version_id', '=', 'mapping_versions.id')
