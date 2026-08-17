@@ -67,6 +67,20 @@ if (Feature::active(Heatmap::class) && $currentUserGameVersion->key === GameVers
     ];
 }
 
+// Resolved once and shared by the desktop dungeon-context strip and its mobile dropdown counterpart:
+// explore, heatmap, the compendiums, search and discover all override these links so that picking a
+// dungeon keeps you on the page type you were already on. Both selectors must honour that override.
+$dungeonContextSelectedDungeon = null;
+$resolvedDungeonContextLinks   = null;
+if ($showDungeonContext) {
+    $dungeonContextSelectedDungeon = Dungeon::getUserOrDefaultDungeon();
+    $resolvedDungeonContextLinks   = $dungeonContextLinks ?? $gameVersionDungeons->mapWithKeys(fn(Dungeon $dungeon) => [
+        $dungeon->key => route('dungeon.changecontext', [
+            'dungeon' => $dungeon,
+        ]),
+    ]);
+}
+
 $isActiveRoute = function (string $route, bool $strict = false) {
     // Check if the route that we're currently on is the same as the route in the nav
     // If so, show it as active
@@ -115,15 +129,11 @@ $isActiveRoute = function (string $route, bool $strict = false) {
                         // Only set when the next season is close enough to be advertised (#3761)
                         'nextSeason' => $dungeonContextNextSeason,
                         'nextSeasonLink' => $dungeonContextNextSeasonLink,
-                        'selected' => Dungeon::getUserOrDefaultDungeon()->key,
+                        'selected' => $dungeonContextSelectedDungeon->key,
                         // "What's easy this week" ease tiers (archon.gg), resolved in HeaderComposer.
                         'easeTiers' => $dungeonContextEaseTiers ?? collect(),
                         'currentAffixGroup' => $dungeonContextCurrentAffixGroup ?? null,
-                        'links' => $dungeonContextLinks ?? $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [
-                                $dungeon->key => route('dungeon.changecontext', [
-                                    'dungeon' => $dungeon,
-                                ])
-                            ]),
+                        'links' => $resolvedDungeonContextLinks,
                     ])
                 </div>
             </div>
@@ -139,6 +149,21 @@ $isActiveRoute = function (string $route, bool $strict = false) {
             <img src="{{ ksgAssetImage('logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"
                  height="44px;" width="200px;">
         </a>
+        {{-- Deliberately outside the collapse: the dungeon context is the topmost, most prominent bar
+             on desktop, so on mobile it stays one tap away rather than buried in the hamburger (#4097) --}}
+        @if($showDungeonContext)
+            <ul class="navbar-nav flex-row d-lg-none">
+                @include('common.layout.nav.dungeoncontext', [
+                    'dungeons' => $gameVersionDungeons,
+                    'selectedDungeon' => $dungeonContextSelectedDungeon,
+                    'links' => $resolvedDungeonContextLinks,
+                    'nextSeason' => $dungeonContextNextSeason,
+                    'nextSeasonLink' => $dungeonContextNextSeasonLink,
+                    'easeTiers' => $dungeonContextEaseTiers ?? collect(),
+                    'currentAffixGroup' => $dungeonContextCurrentAffixGroup ?? null,
+                ])
+            </ul>
+        @endif
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#mainNavbar"
                 aria-controls="mainNavbar" aria-expanded="false"

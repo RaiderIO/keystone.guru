@@ -3,6 +3,7 @@
 namespace Tests\Feature\View;
 
 use App\Http\View\Composers\HeaderComposer;
+use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
@@ -168,6 +169,74 @@ final class HeaderComposerTest extends PublicTestCase
 
         // Assert
         $this->assertStringNotContainsString(__('view_common.layout.header.browse_by_expansion'), $html);
+    }
+
+    /**
+     * The desktop dungeon-context strip is hidden below `lg`, so the mobile dropdown beside the navbar
+     * toggler is the only way to switch dungeon on a phone (#4097).
+     */
+    #[Test]
+    public function render_givenShowDungeonContextDefault_rendersTheMobileDungeonSelector(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::getUserOrDefaultDungeon();
+
+        // Act
+        $selector = $this->getMobileDungeonSelectorHtml(view('common.layout.header')->render());
+
+        // Assert
+        $this->assertNotNull($selector, 'The mobile dungeon selector should render');
+        $this->assertStringContainsString(__('view_common.layout.nav.dungeoncontext.change_dungeon'), $selector);
+        $this->assertStringContainsString(route('dungeon.changecontext', ['dungeon' => $dungeon]), $selector);
+    }
+
+    /**
+     * A dungeon route's map view has no dungeon context to switch - it passes `showDungeonContext => false`
+     * for the desktop strip, and the mobile selector must follow it.
+     */
+    #[Test]
+    public function render_givenShowDungeonContextFalse_omitsTheMobileDungeonSelector(): void
+    {
+        // Act
+        $html = view('common.layout.header', ['showDungeonContext' => false])->render();
+
+        // Assert
+        $this->assertNull($this->getMobileDungeonSelectorHtml($html));
+    }
+
+    /**
+     * Explore, heatmap, the compendiums, search and discover all override the dungeon context links so that
+     * picking a dungeon keeps you on the page type you were already on. The mobile selector honouring the
+     * default instead would silently kick those pages' visitors onto a map.
+     */
+    #[Test]
+    public function render_givenOverriddenDungeonContextLinks_usesThemForTheMobileDungeonSelector(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::getUserOrDefaultDungeon();
+        $links   = collect([$dungeon->key => 'https://example.test/overridden']);
+
+        // Act
+        $selector = $this->getMobileDungeonSelectorHtml(
+            view('common.layout.header', ['dungeonContextLinks' => $links])->render(),
+        );
+
+        // Assert
+        $this->assertNotNull($selector);
+        $this->assertStringContainsString('https://example.test/overridden', $selector);
+        $this->assertStringNotContainsString(route('dungeon.changecontext', ['dungeon' => $dungeon]), $selector);
+    }
+
+    /**
+     * The rendered `<li>` of the mobile dungeon selector, or null when the header did not render one. Scoped
+     * on purpose: the desktop strip carries the same links, so an assertion over the whole header would pass
+     * on the desktop markup alone.
+     */
+    private function getMobileDungeonSelectorHtml(string $html): ?string
+    {
+        $matched = preg_match('/<li class="nav-item dropdown dungeon_context_nav".*?<\/li>/s', $html, $matches);
+
+        return $matched === 1 ? $matches[0] : null;
     }
 
     private function deleteSeason(Season $season): void

@@ -52,3 +52,63 @@
 .game_version_header .game_version {
     border-radius: 0.25rem;
 }
+
+/* Mobile dungeon-context selector (#4097): the desktop strip is a row of image cards that cannot
+   lay out at phone widths, so below lg the same selection is a dropdown beside the navbar toggler.
+   The dungeon art is what makes a row scannable at a glance, so each entry keeps its thumbnail. */
+.dungeon_context_nav_icon {
+    flex-shrink: 0;
+    width: 36px;
+    height: 20px;
+    object-fit: cover;
+    border-radius: 0.25rem;
+}
+
+/* The trigger shares the navbar row with the logo and the toggler, so it stays as narrow as the
+   dungeon abbreviation allows and truncates rather than wrapping the toggler onto a second line */
+.dungeon_context_nav .nav-link {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+}
+
+.dungeon_context_nav .dungeon_context_nav_icon {
+    width: 32px;
+    height: 18px;
+}
+
+.dungeon_context_nav .dungeon_context_nav_label {
+    max-width: 4rem;
+}
+
+/* Same row-budget problem from the other side: the stock 200px logo alone leaves too little room
+   for the selector, and the toggler would wrap onto a line of its own - doubling the header height */
+@media (max-width: 991.98px) {
+    .ksg-header .navbar-brand {
+        margin-right: 0.5rem;
+    }
+
+    .ksg-header .navbar-brand img {
+        width: 150px;
+        height: auto;
+    }
+}
+
+/* Bootstrap only lifts `.navbar-nav .dropdown-menu` out of the flow from the expand breakpoint up -
+   it assumes every navbar dropdown lives inside the collapse. This one sits beside the toggler, so
+   below lg it would push the whole page down instead of overlaying it. Out-specifies rather than
+   merely ties `.navbar-nav .dropdown-menu` - both end up theme-prefixed, so an equal-weight
+   selector would leave this depending on stylesheet order. */
+.ksg-header .navbar-nav .dungeon_context_nav .dropdown-menu {
+    position: absolute;
+}
+
+/* A season's dungeon pool plus the upcoming-season entry runs past a phone viewport otherwise */
+.dungeon_context_nav_menu {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.dungeon_context_nav_tier {
+    font-weight: 700;
+    line-height: 1;
+}

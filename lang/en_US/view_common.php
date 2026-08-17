@@ -306,6 +306,9 @@ return [
             'class_compendium'        => 'By Class',
         ],
         'nav' => [
+            'dungeoncontext' => [
+                'change_dungeon' => 'Change dungeon',
+            ],
             'user' => [
                 'login'              => 'Login',
                 'register'           => 'Register',
