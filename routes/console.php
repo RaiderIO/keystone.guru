@@ -19,6 +19,7 @@ $appType = config('app.type');
 $commands = [];
 
 $commands[] = Schedule::command('combatlog:detectstaledata')->hourly();
+$commands[] = Schedule::command('combatlog:pruneparsedlogs')->daily();
 if (in_array($appType, [
     'staging',
     'production',

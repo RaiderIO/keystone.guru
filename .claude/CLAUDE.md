@@ -372,11 +372,18 @@ next to it — load that skill when you need the *why*, but follow the rule eith
   `RepositoryServiceProvider`. Full convention: `repository-pattern` skill.
 
 ### Seeded models (`SeederModel`)
-- The trait is a marker, **not** a guarantee rows come from seeders. `SpellDungeon`,
-  `NpcCharacteristic`, `NpcSpell`, `CombatLogNpcEvent`, `CombatLogSpellEvent` and `ParsedCombatLog`
-  are combat-log-derived, so **a delete is permanent** — not recoverable from `database/seeders`.
-  Only the admin panel, mapping editor, seeders and the hourly `combatlog:detectstaledata` sweep
-  may delete such rows (convention, not enforced). Full list: `seeder-load` skill.
+The trait marks a model whose rows are populated by `database/seeders`;
+`DatabaseSeeder::getTempTableName()` uses it to stage `<table>_temp` while seeding. As of #4062 six
+combat-log-derived models (`SpellDungeon`, `NpcCharacteristic`, `NpcSpell`, `CombatLogNpcEvent`,
+`CombatLogSpellEvent`, `ParsedCombatLog`) had it removed — it was vestigial there, no seeder ever
+referenced them.
+
+### Combat-log-derived rows are not recoverable from seeders
+Those same six models hold data derived purely from combat log ingestion, not from
+`database/seeders` — a delete is **permanent**. Only the admin panel, mapping editor, the hourly
+`combatlog:detectstaledata` sweep, and (for `ParsedCombatLog`) the daily `combatlog:pruneparsedlogs`
+retention sweep may delete such rows (convention, not enforced). Full list and rationale:
+`seeder-load` skill, "Combat-log-derived rows".
 
 ### Controllers & Validation
 - Validate in Form Request classes, never inline in controllers; include rules and custom messages.

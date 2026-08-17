@@ -191,25 +191,29 @@ docker compose exec -T app php artisan db:seed --database=migrate --force
 > Seeder JSON edits are invisible in the app until a seed run lands them in the database — the
 > site renders from the DB, not from `database/seeders`.
 
-## `SeederModel` rows: which are recoverable from seeders, which are not
+## `SeederModel` rows: recoverable from seeders
 
 Models using the `App\Models\Traits\SeederModel` trait stage their table as `<table>_temp` via
-`DatabaseSeeder::getTempTableName()` while seeding — the trait is a marker only, not a guarantee
-about where a model's rows come from.
+`DatabaseSeeder::getTempTableName()` while seeding. For the mapping/season/expansion-style models
+(dungeons, seasons, expansions, mapping objects, …), rows are authored in `database/seeders` (some
+as `.json` files under there), so a delete is recoverable directly from those files.
 
-For the mapping/season/expansion-style models (dungeons, seasons, expansions, mapping objects, …),
-rows are authored in `database/seeders` (some as `.json` files under there), so a delete is
-recoverable directly from those files. **A subset of trait users are combat-log-derived and NOT
-recoverable from seeders:** `SpellDungeon`, `NpcCharacteristic` and `NpcSpell` are intentionally
-omitted from the seeder export (see `DungeonDataSeeder::getAffectedModelClasses()`), and
-`CombatLogNpcEvent`, `CombatLogSpellEvent` and `ParsedCombatLog` (declared via grouped `use`
-statements, so `grep "use SeederModel;"` misses them) hold pure runtime/audit data that was never
-seeder-sourced. A delete of one of these rows is permanent unless fresh combat log data re-derives
-it.
+Until #4062, the trait was also applied to six combat-log-derived models as a vestigial marker —
+no seeder ever referenced them, so `db:seed` never staged or swapped their tables. The trait was
+removed from all six; see "Combat-log-derived rows" below for what still applies to them.
 
-**Nothing outside the admin panel, the mapping editor, the seeders and the hourly
-`combatlog:detectstaledata` sweep should delete these rows.** That is a convention, not an enforced
-rule: the deleting routes sit behind `role:admin`, and there is no model-level guard.
+## Combat-log-derived rows: NOT recoverable from seeders
+
+`SpellDungeon`, `NpcCharacteristic` and `NpcSpell` are intentionally omitted from the seeder export
+(see `DungeonDataSeeder::getAffectedModelClasses()`), and `CombatLogNpcEvent`, `CombatLogSpellEvent`
+and `ParsedCombatLog` hold pure runtime/audit data that was never seeder-sourced. None of the six
+carries `SeederModel` (see above). A delete of one of these rows is permanent unless fresh combat
+log data re-derives it.
+
+**Nothing outside the admin panel, the mapping editor, the hourly `combatlog:detectstaledata`
+sweep, and (for `ParsedCombatLog`) the daily `combatlog:pruneparsedlogs` retention sweep should
+delete these rows.** That is a convention, not an enforced rule: the deleting routes sit behind
+`role:admin`, and there is no model-level guard.
 
 ---
 
