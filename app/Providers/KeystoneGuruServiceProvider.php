@@ -166,6 +166,8 @@ use App\Service\Spell\Description\SpellDescriptionImportService;
 use App\Service\Spell\Description\SpellDescriptionImportServiceInterface;
 use App\Service\Spell\Description\SpellDescriptionParser;
 use App\Service\Spell\Description\SpellDescriptionParserInterface;
+use App\Service\Spell\Description\SpellDescriptionPatchCheckService;
+use App\Service\Spell\Description\SpellDescriptionPatchCheckServiceInterface;
 use App\Service\Spell\SpellService;
 use App\Service\Spell\SpellServiceInterface;
 use App\Service\StructuredLogging\StructuredLoggingService;
@@ -247,6 +249,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(SpellDescriptionImportServiceInterface::class, SpellDescriptionImportService::class);
         // Depends on WowheadService
         $this->app->bind(SpellDamageCalibrationServiceInterface::class, SpellDamageCalibrationService::class);
+        // Depends on WagoToolsService
+        $this->app->bind(SpellDescriptionPatchCheckServiceInterface::class, SpellDescriptionPatchCheckService::class);
         $this->app->bind(ChallengeModeRunDataServiceInterface::class, ChallengeModeRunDataService::class);
         $this->app->bind(CombatLogEventServiceInterface::class, CombatLogEventService::class);
         $this->app->bind(DungeonServiceInterface::class, DungeonService::class);

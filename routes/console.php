@@ -80,6 +80,13 @@ if (!app()->environment('local')) {
     $commands[] = Schedule::command('thumbnail:ensureheroes')->hourly();
 }
 
+// A game patch is a trigger for a manual re-import (#4021), not a release - files a GitHub issue when
+// it fires. Only production runs it: staging isn't guaranteed to have a cron running it in the future,
+// and there's no need for both environments to check and potentially file the same issue.
+if ($appType === 'production') {
+    $commands[] = Schedule::command('wagotools:checkforspelldescriptionpatch')->daily();
+}
+
 // PID 1's stdout is used to ensure that the output is always logged, even when running in a Docker
 // container. When the scheduler runs as a non-root user (local dev cron runs it as ksg, #3414) it
 // cannot open /proc/1/fd/1 (owned by root), so fall back to the process's own stdout — the local

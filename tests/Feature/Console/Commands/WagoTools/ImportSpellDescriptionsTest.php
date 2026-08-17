@@ -4,7 +4,9 @@ namespace Tests\Feature\Console\Commands\WagoTools;
 
 use App\Models\GameVersion\GameVersion;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellDescriptionImportState;
 use App\Models\Spell\SpellEffect;
+use Illuminate\Support\Facades\File;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Attributes\SlowTest;
@@ -26,6 +28,27 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
 
     /** A spell id the fixture build's Spell table holds no row for at all. */
     private const int UNKNOWN_SPELL_ID = 999999903;
+
+    private const string IMPORT_STATE_DATA_PATH = 'data/spell_description/import_state.json';
+
+    private string $originalImportStateJson;
+
+    #[\Override]
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // A successful import rewrites this committed seeder file - restored in tearDown() below
+        $this->originalImportStateJson = File::get(database_path(self::IMPORT_STATE_DATA_PATH));
+    }
+
+    #[\Override]
+    protected function tearDown(): void
+    {
+        File::put(database_path(self::IMPORT_STATE_DATA_PATH), $this->originalImportStateJson);
+
+        parent::tearDown();
+    }
 
     #[Test]
     public function handle_givenDb2Tables_rendersTheSpellDescription(): void
@@ -56,6 +79,7 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
         } finally {
             $spell?->delete();
             new Spell()->flushCache();
+            $this->clearImportState();
             $this->removeDb2Tables();
         }
     }
@@ -95,6 +119,7 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
             new SpellEffect()->flushCache();
             $spell?->delete();
             new Spell()->flushCache();
+            $this->clearImportState();
             $this->removeDb2Tables();
         }
     }
@@ -126,6 +151,7 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
             $spell?->delete();
             $describedSpell?->delete();
             new Spell()->flushCache();
+            $this->clearImportState();
             $this->removeDb2Tables();
         }
     }
@@ -152,6 +178,7 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
         } finally {
             $spell?->delete();
             new Spell()->flushCache();
+            $this->clearImportState();
             $this->removeDb2Tables();
         }
     }
@@ -185,6 +212,7 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
             $classicSpell?->delete();
             $describedSpell?->delete();
             new Spell()->flushCache();
+            $this->clearImportState();
             $this->removeDb2Tables();
         }
     }
@@ -214,8 +242,16 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
             $unknownSpell?->delete();
             $describedSpell?->delete();
             new Spell()->flushCache();
+            $this->clearImportState();
             $this->removeDb2Tables();
         }
+    }
+
+    private function clearImportState(): void
+    {
+        SpellDescriptionImportState::query()
+            ->where('game_version_id', GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL])
+            ->delete();
     }
 
     private function createSpell(int $spellId, ?string $description, ?int $gameVersionId = null): Spell
