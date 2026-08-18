@@ -57,13 +57,26 @@ runs:
 
         # Point apt away from azure.archive.ubuntu.com: GitHub's regional Azure mirror stalls for
         # minutes at a time on hosted runners (#4135, actions/runner-images#7048), and
-        # archive.ubuntu.com is what it eventually falls through to anyway. Covers both the legacy
-        # sources.list and the deb822 *.sources layout of the Ubuntu 24.04 runner images. The
-        # -security stanza points at the same azure host, so it moves to archive.ubuntu.com too
-        # (which carries the -security pocket).
+        # archive.ubuntu.com is what it eventually falls through to anyway.
+        #
+        # The runner image does NOT name the mirror in sources.list: ubuntu.sources uses
+        # `mirror+file:/etc/apt/apt-mirrors.txt`, and that mirrorlist lists azure first. Dropping
+        # the azure line there makes apt use the next entry (archive.ubuntu.com, which also carries
+        # the -security pocket). The sed over sources.list / *.sources covers older or changed
+        # runner images that spell the host out directly instead.
+        MIRRORLIST=/etc/apt/apt-mirrors.txt
+        if [ -f "$MIRRORLIST" ] && grep -q 'azure\.archive\.ubuntu\.com' "$MIRRORLIST"; then
+          sudo sed -i '/azure\.archive\.ubuntu\.com/d' "$MIRRORLIST"
+          # Never leave the mirrorlist empty - apt would then have no source at all.
+          grep -qE '^[[:space:]]*https?://' "$MIRRORLIST" \
+            || printf 'http://archive.ubuntu.com/ubuntu/\nhttp://security.ubuntu.com/ubuntu/\n' | sudo tee "$MIRRORLIST" >/dev/null
+        fi
         sudo sed -i 's|azure\.archive\.ubuntu\.com|archive.ubuntu.com|g' \
           /etc/apt/sources.list /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources 2>/dev/null || true
-        grep -rl 'azure\.archive\.ubuntu\.com' /etc/apt/sources.list /etc/apt/sources.list.d/ 2>/dev/null \
+
+        echo "==> effective apt mirrors:"
+        cat "$MIRRORLIST" 2>/dev/null || echo "  (no mirrorlist)"
+        grep -rl 'azure\.archive\.ubuntu\.com' /etc/apt/sources.list /etc/apt/sources.list.d/ "$MIRRORLIST" 2>/dev/null \
           && echo "::warning::apt sources still point at azure.archive.ubuntu.com (#4135 rewrite missed a path)" \
           || echo "==> apt sources clean of azure mirror"
 
