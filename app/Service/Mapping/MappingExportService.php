@@ -15,7 +15,19 @@ class MappingExportService implements MappingExportServiceInterface
         // The effects are eager loaded (rather than lazily accessed) so they are serialized into the
         // spells.json output - they are inferred from the game client's data, so every environment has
         // to be told about them rather than deriving them itself.
-        $spells = Spell::with(['spellEffects'])->get();
+        // Model caching is disabled for this query: it's a one-off admin export of the entire spell
+        // table, and caching the whole result set as a single serialized cache entry made retrieval
+        // (unserialize()) exhaust the 512MB memory limit in production (Sentry PHP-LARAVEL-V0).
+        // `disableModelCaching()` only exists on genealabs/laravel-model-caching's CachedBuilder,
+        // which `query()` only returns when model caching is enabled - in environments where it's
+        // off (tests, local dev) `query()` returns a plain Eloquent Builder without that method.
+        $spellsQuery = Spell::query();
+
+        if (method_exists($spellsQuery, 'disableModelCaching')) {
+            $spellsQuery->disableModelCaching();
+        }
+
+        $spells = $spellsQuery->with(['spellEffects'])->get();
         foreach ($spells as $spell) {
             $spell->spellEffects->makeHidden(['id', 'spell_id', 'spell']);
 
@@ -44,7 +56,14 @@ class MappingExportService implements MappingExportServiceInterface
         // Save all NPCs which aren't directly tied to a dungeon. The relations below are eager loaded
         // (rather than lazily accessed) so they are serialized into the npcs.json output.
         // Note: the order of these relations determines the key order in npcs.json - keep it stable.
-        $npcs = Npc::with([
+        // Model caching is disabled for the same reason as serializeSpells() above.
+        $npcsQuery = Npc::query();
+
+        if (method_exists($npcsQuery, 'disableModelCaching')) {
+            $npcsQuery->disableModelCaching();
+        }
+
+        $npcs = $npcsQuery->with([
             'npcbolsteringwhitelists',
             'npcHealths',
             'npcEnemyForces',
