@@ -22,10 +22,10 @@ runs:
         echo "cli-weakauras-parser-sha=febb57faeaa805a79c9c2e0425c804e441a0e969" >> "$GITHUB_OUTPUT" # = v0.1.8
         echo "rust-toolchain=1.91.1" >> "$GITHUB_OUTPUT"
       shell: bash
-    - name: Checkout
-      uses: actions/checkout@v5
-      with:
-        fetch-depth: 0
+    # No checkout here on purpose: a local composite action can only be resolved from an
+    # already-checked-out workspace, so every caller has necessarily run actions/checkout before
+    # reaching this point. A second checkout would wipe the workspace and refetch the whole repo -
+    # ~889 MB across 46 branches and 448 tags, which is what made jobs stall for 10-15 minutes (#4135).
 
     - name: Set up PHP
       uses: shivammathur/setup-php@v2

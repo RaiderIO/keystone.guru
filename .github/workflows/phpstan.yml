@@ -20,9 +20,10 @@ jobs:
 
     steps:
       - name: Checkout for local actions
+        # Shallow on purpose: nothing in CI reads git history (the only git command is
+        # `git rev-parse HEAD` for the version file), and a full fetch of 46 branches + 448 tags
+        # cost 10-15 minutes per job (#4135).
         uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
 
       - name: Common PHP/Laravel setup
         uses: ./.github/actions/php-ci-setup
