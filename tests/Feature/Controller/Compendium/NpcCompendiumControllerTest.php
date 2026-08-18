@@ -388,6 +388,27 @@ final class NpcCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function show_givenClassificationlessNpc_returnsOk(): void
+    {
+        // Arrange - a few seeded NPCs carry a classification_id that matches no npc_classifications
+        // row (#4115); the header partial reads that relation directly, unlike the ajax endpoint's
+        // tooltip_data, so this is what proves the page survives a null one.
+        $npc = Npc::query()
+            ->whereNotIn('classification_id', NpcClassification::query()->select('id'))
+            ->first();
+
+        if ($npc === null) {
+            $this->markTestSkipped('No NPC carries a classification_id without a matching classification row');
+        }
+
+        // Act
+        $response = $this->get(route('npc.compendium.show', $npc));
+
+        // Assert
+        $response->assertOk();
+    }
+
+    #[Test]
     public function show_givenIdOnly_redirectsToCanonicalUrl(): void
     {
         // Arrange
