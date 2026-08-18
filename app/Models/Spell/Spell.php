@@ -176,18 +176,26 @@ class Spell extends CacheModel implements MappingModelInterface
         }
 
         return array_filter([
-            'name'    => __($this->name),
-            'format'  => $this->description_format,
-            'values'  => $this->description_values ?? [],
-            'schools' => self::maskToReadableString(self::ALL_SCHOOLS, $this->schools_mask, 'spellschools') ?: null,
-            // A dispel type of none, n/a or unknown says nothing worth a row in the tooltip
-            'dispelType' => in_array($this->dispel_type, self::UNINFORMATIVE_DISPEL_TYPES, true)
-                ? null
-                : __($this->dispel_type),
-            'mechanic' => $this->mechanic ? __($this->mechanic) : null,
-            'castTime' => $this->cast_time > 0 ? $this->cast_time / 1000 : null,
-            'duration' => $this->duration > 0 ? $this->duration / 1000 : null,
+            'name'       => __($this->name),
+            'format'     => $this->description_format,
+            'values'     => $this->description_values ?? [],
+            'schools'    => self::maskToReadableString(self::ALL_SCHOOLS, $this->schools_mask, 'spellschools') ?: null,
+            'dispelType' => $this->hasUninformativeDispelType() ? null : __($this->dispel_type),
+            'mechanic'   => $this->mechanic ? __($this->mechanic) : null,
+            'castTime'   => $this->cast_time > 0 ? $this->cast_time / 1000 : null,
+            'duration'   => $this->duration > 0 ? $this->duration / 1000 : null,
         ], static fn(mixed $value): bool => $value !== null && $value !== []);
+    }
+
+    /**
+     * Whether `dispel_type` carries no information worth showing in the tooltip - a dispel type of
+     * none, n/a or unknown, or a value that isn't a recognised prefixed translation key
+     * (legacy/unprefixed data, drift).
+     */
+    private function hasUninformativeDispelType(): bool
+    {
+        return in_array($this->dispel_type, self::UNINFORMATIVE_DISPEL_TYPES, true)
+            || !in_array($this->dispel_type, self::ALL_DISPEL_TYPE_KEYS, true);
     }
 
     public function getWowheadUrlAttribute(): string
