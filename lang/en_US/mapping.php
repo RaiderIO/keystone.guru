@@ -547,10 +547,10 @@ return [
     'checkpoints' => [
         'bfa' => [
             'temple_of_sethraliss' => [
-                'the_bazaar_of_watchful_eyes_name' => 'The Bazaar of Watchful Eyes',
+                'atrium_of_sethraliss_name' => 'Atrium of Sethraliss',
             ],
         ],
-        'dragonflight' => [
+        'df' => [
             'ruby_life_pools' => [
                 'ruby_overlook_name' => 'Ruby Overlook',
             ],
