@@ -41,13 +41,17 @@ trait CreatesCombatLogEvent
 
         foreach ($dungeon->floors()->where('facade', false)->get() as $floor) {
             /** @var Floor $floor */
-            $rows = [];
+            $rows             = [];
+            $maxDistinctPairs = $this->getDistinctCoordinateCount($floor);
 
             for ($i = 0; $i < $rowCount; $i++) {
                 $coordinates       = $this->getRandomCoordinates($floor);
                 $coordinatesString = sprintf('%s,%s', $coordinates['pos_x'], $coordinates['pos_y']);
-                // Just in case the coordinates already exist and it randomly fails the test
-                if (isset($rows[$coordinatesString])) {
+                // Just in case the coordinates already exist and it randomly fails the test. Only
+                // retry while the floor's integer-truncated bounding box still has an unused pair
+                // left - otherwise every retry is guaranteed to collide again, so accept the draw
+                // (overwriting the existing row) instead of looping forever.
+                if (isset($rows[$coordinatesString]) && count($rows) < $maxDistinctPairs) {
                     $i--;
                 } else {
                     $rows[$coordinatesString] = random_int(1, 100);
@@ -79,6 +83,18 @@ trait CreatesCombatLogEvent
             'pos_x'     => random_int(0, 100),
             'pos_y'     => random_int(0, 100),
         ];
+    }
+
+    /**
+     * The number of distinct (pos_x, pos_y) pairs {@see getRandomCoordinates()} can draw for this
+     * floor, once its float bounds are truncated to int the same way it truncates them.
+     */
+    private function getDistinctCoordinateCount(Floor $floor): int
+    {
+        $rangeX = abs((int)$floor->ingame_max_x - (int)$floor->ingame_min_x) + 1;
+        $rangeY = abs((int)$floor->ingame_max_y - (int)$floor->ingame_min_y) + 1;
+
+        return $rangeX * $rangeY;
     }
 
     /**
