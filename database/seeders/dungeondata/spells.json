@@ -65381,7 +65381,7 @@
                 "kind": "damage",
                 "text": "305,070",
                 "spellId": 197418,
-                "coefficient": 105.79386901856,
+                "coefficient": 105.79386901855,
                 "effectIndex": 0
             }
         ],
@@ -65398,7 +65398,7 @@
                 "effect_index": 0,
                 "effect_type": 2,
                 "aura_type": 0,
-                "base_points": 105.79386901856,
+                "base_points": 105.79386901855,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -130036,12 +130036,12 @@
         "icon_name": "spell_nature_callstorm",
         "name": "spells.270891",
         "description_template": "Inflicts $s1 Nature damage to players within $A1 yards.",
-        "description": "Inflicts Nature damage to players within 10 yards.",
+        "description": "Inflicts 101,832 Nature damage to players within 10 yards.",
         "description_format": "Inflicts %1$s Nature damage to players within %2$s yards.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "101,832",
                 "spellId": 270891,
                 "coefficient": 10.5,
                 "effectIndex": 0
@@ -130051,7 +130051,7 @@
                 "text": "10"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.8571,
         "schools_mask": 8,
         "cast_time": 0,
         "duration": null,
@@ -244386,6 +244386,17 @@
                 "chain_targets": 0,
                 "radius": null,
                 "max_radius": 100
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 64,
+                "aura_type": 0,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
             }
         ]
     },
@@ -258011,7 +258022,7 @@
         "icon_name": "spell_sandexplosion",
         "name": "spells.413107",
         "description_template": "$@spelldesc402784",
-        "description": "Chronikar throws her weapon at the nearest pool of Withering Sandpool to harvest its power, increasing her attack speed by 50% for 8 sec.\n\nInflicts Arcane damage to players within 18 yards of the impact.\n\nThe explosion shatters the pool into Eon Fragments and causes Eon Residue to rain down.",
+        "description": "Chronikar throws her weapon at the nearest pool of Withering Sandpool to harvest its power, increasing her attack speed by 50% for 8 sec.\n\nInflicts 484,912 Arcane damage to players within 18 yards of the impact.\n\nThe explosion shatters the pool into Eon Fragments and causes Eon Residue to rain down.",
         "description_format": "Chronikar throws her weapon at the nearest pool of Withering Sandpool to harvest its power, increasing her attack speed by %1$s%% for %2$s.\n\nInflicts %3$s Arcane damage to players within %4$s yards of the impact.\n\nThe explosion shatters the pool into Eon Fragments and causes Eon Residue to rain down.",
         "description_values": [
             {
@@ -258024,7 +258035,7 @@
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "484,912",
                 "spellId": 403088,
                 "coefficient": 50,
                 "effectIndex": 0
@@ -258034,7 +258045,7 @@
                 "text": "18"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.4,
         "schools_mask": 64,
         "cast_time": 0,
         "duration": null,
@@ -344887,12 +344898,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1217991",
-        "description": "The caster throws the shipment at a nearby target, dealing Physical damage within 5 yards and stunning for 3 sec.",
+        "description": "The caster throws the shipment at a nearby target, dealing 242,456 Physical damage within 5 yards and stunning for 3 sec.",
         "description_format": "The caster throws the shipment at a nearby target, dealing %1$s Physical damage within %2$s yards and stunning for %3$s.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "242,456",
                 "spellId": 1217992,
                 "coefficient": 25,
                 "effectIndex": 0
@@ -344906,7 +344917,7 @@
                 "text": "3 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.4,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -351988,18 +351999,18 @@
         "icon_name": "ability_rogue_masterofsubtlety",
         "name": "spells.1227020",
         "description_template": "Teleports behind its target and viciously strikes them inflicting $s1 Shadow damage.",
-        "description": "Teleports behind its target and viciously strikes them inflicting Shadow damage.",
+        "description": "Teleports behind its target and viciously strikes them inflicting 67,888 Shadow damage.",
         "description_format": "Teleports behind its target and viciously strikes them inflicting %1$s Shadow damage.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "67,888",
                 "spellId": 1227020,
                 "coefficient": 7,
                 "effectIndex": 0
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.8571,
         "schools_mask": 32,
         "cast_time": 0,
         "duration": null,
@@ -362720,25 +362731,25 @@
         "icon_name": "",
         "name": "",
         "description_template": "The caster's prickly exoskeleton absorbs $s1 damage and inflicts $1238588s1 Nature damage back on attackers.",
-        "description": "The caster's prickly exoskeleton absorbs damage and inflicts Nature damage back on attackers.",
+        "description": "The caster's prickly exoskeleton absorbs 4,849 damage and inflicts 24 Nature damage back on attackers.",
         "description_format": "The caster's prickly exoskeleton absorbs %1$s damage and inflicts %2$s Nature damage back on attackers.",
         "description_values": [
             {
                 "kind": "healing",
-                "text": "",
+                "text": "4,849",
                 "spellId": 1238581,
                 "coefficient": 100,
                 "effectIndex": 0
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "24",
                 "spellId": 1238588,
                 "coefficient": 0.5,
                 "effectIndex": 0
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 484.9,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -374444,12 +374455,12 @@
         "icon_name": "spell_shadow_ragingscream",
         "name": "spells.1252406",
         "description_template": "The sentinel unleashes a dark roar, knocking back all players and inflicting $s1 Shadow damage to them every $t1 sec for $d.\r\n",
-        "description": "The sentinel unleashes a dark roar, knocking back all players and inflicting Shadow damage to them every 1 sec for 12 sec.",
+        "description": "The sentinel unleashes a dark roar, knocking back all players and inflicting 29,095 Shadow damage to them every 1 sec for 12 sec.",
         "description_format": "The sentinel unleashes a dark roar, knocking back all players and inflicting %1$s Shadow damage to them every %2$s sec for %3$s.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "29,095",
                 "spellId": 1252406,
                 "coefficient": 3,
                 "effectIndex": 0
@@ -374463,7 +374474,7 @@
                 "text": "12 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96983.3333,
         "schools_mask": 32,
         "cast_time": 4500,
         "duration": 12000,
@@ -403050,19 +403061,19 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1289426",
-        "description": "Inflicts Nature damage and an additional Nature damage every 1 sec for 8 sec.",
+        "description": "Inflicts 58,189 Nature damage and an additional 24,245 Nature damage every 1 sec for 8 sec.",
         "description_format": "Inflicts %1$s Nature damage and an additional %2$s Nature damage every %3$s sec for %4$s.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "58,189",
                 "spellId": 1289416,
                 "coefficient": 6,
                 "effectIndex": 0
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "24,245",
                 "spellId": 1307571,
                 "coefficient": 2.5,
                 "effectIndex": 0
@@ -403076,7 +403087,7 @@
                 "text": "8 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96981.6667,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -403275,18 +403286,18 @@
         "icon_name": "",
         "name": "",
         "description_template": "Dash towards target enemy and inflicts $s1 Fire damage.",
-        "description": "Dash towards target enemy and inflicts Fire damage.",
+        "description": "Dash towards target enemy and inflicts 29,095 Fire damage.",
         "description_format": "Dash towards target enemy and inflicts %1$s Fire damage.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "29,095",
                 "spellId": 1293022,
                 "coefficient": 3,
                 "effectIndex": 0
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96983.3333,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -403488,19 +403499,19 @@
         "icon_name": "",
         "name": "",
         "description_template": "The leech pops, splashing poisoned blood that inflicts $1305637s1 Nature damage on impact and $1306235s1 Nature damage every $1306232t1 sec to players within the pools.",
-        "description": "The leech pops, splashing poisoned blood that inflicts Nature damage on impact and Nature damage every 1.5 sec to players within the pools.",
+        "description": "The leech pops, splashing poisoned blood that inflicts 290,947 Nature damage on impact and 65,948 Nature damage every 1.5 sec to players within the pools.",
         "description_format": "The leech pops, splashing poisoned blood that inflicts %1$s Nature damage on impact and %2$s Nature damage every %3$s sec to players within the pools.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "290,947",
                 "spellId": 1305637,
                 "coefficient": 30,
                 "effectIndex": 0
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "65,948",
                 "spellId": 1306235,
                 "coefficient": 6.80000019073,
                 "effectIndex": 0
@@ -403510,7 +403521,7 @@
                 "text": "1.5"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.3333,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -403553,12 +403564,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "Inflicts $s1 Physical damage and reduces haste by $s2% for $d. This effect ignores armor.",
-        "description": "Inflicts Physical damage and reduces haste by 30% for 6 sec. This effect ignores armor.",
+        "description": "Inflicts 135,775 Physical damage and reduces haste by 30% for 6 sec. This effect ignores armor.",
         "description_format": "Inflicts %1$s Physical damage and reduces haste by %2$s%% for %3$s. This effect ignores armor.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "135,775",
                 "spellId": 1294557,
                 "coefficient": 14,
                 "effectIndex": 0
@@ -403572,7 +403583,7 @@
                 "text": "6 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.1429,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -403615,19 +403626,19 @@
         "icon_name": "",
         "name": "",
         "description_template": "The Twinfang spits numbing venom at players, inflicting $1307269s1 Nature damage on impact and an additional $1294569s2 Nature damage every $1294569t2 sec for $1294569d.\r\n\r\nAffected players become paralyzed over time, reducing their movement speed by $1294569s1% with each tick. ",
-        "description": "The Twinfang spits numbing venom at players, inflicting Nature damage on impact and an additional Nature damage every 1 sec for 20 sec.\n\nAffected players become paralyzed over time, reducing their movement speed by 10% with each tick.",
+        "description": "The Twinfang spits numbing venom at players, inflicting 135,775 Nature damage on impact and an additional 48,491 Nature damage every 1 sec for 20 sec.\n\nAffected players become paralyzed over time, reducing their movement speed by 10% with each tick.",
         "description_format": "The Twinfang spits numbing venom at players, inflicting %1$s Nature damage on impact and an additional %2$s Nature damage every %3$s sec for %4$s.\n\nAffected players become paralyzed over time, reducing their movement speed by %5$s%% with each tick.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "135,775",
                 "spellId": 1307269,
                 "coefficient": 14,
                 "effectIndex": 0
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "48,491",
                 "spellId": 1294569,
                 "coefficient": 5,
                 "effectIndex": 1
@@ -403645,7 +403656,7 @@
                 "text": "10"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.1429,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -403710,19 +403721,19 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1294567",
-        "description": "The Twinfang spits numbing venom at players, inflicting Nature damage on impact and an additional Nature damage every 1 sec for 20 sec.\n\nAffected players become paralyzed over time, reducing their movement speed by 10% with each tick.",
+        "description": "The Twinfang spits numbing venom at players, inflicting 135,775 Nature damage on impact and an additional 48,491 Nature damage every 1 sec for 20 sec.\n\nAffected players become paralyzed over time, reducing their movement speed by 10% with each tick.",
         "description_format": "The Twinfang spits numbing venom at players, inflicting %1$s Nature damage on impact and an additional %2$s Nature damage every %3$s sec for %4$s.\n\nAffected players become paralyzed over time, reducing their movement speed by %5$s%% with each tick.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "135,775",
                 "spellId": 1307269,
                 "coefficient": 14,
                 "effectIndex": 0
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "48,491",
                 "spellId": 1294569,
                 "coefficient": 5,
                 "effectIndex": 1
@@ -403740,7 +403751,7 @@
                 "text": "10"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.1429,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -403783,19 +403794,19 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1294567",
-        "description": "The Twinfang spits numbing venom at players, inflicting Nature damage on impact and an additional Nature damage every 1 sec for 20 sec.\n\nAffected players become paralyzed over time, reducing their movement speed by 10% with each tick.",
+        "description": "The Twinfang spits numbing venom at players, inflicting 135,775 Nature damage on impact and an additional 48,491 Nature damage every 1 sec for 20 sec.\n\nAffected players become paralyzed over time, reducing their movement speed by 10% with each tick.",
         "description_format": "The Twinfang spits numbing venom at players, inflicting %1$s Nature damage on impact and an additional %2$s Nature damage every %3$s sec for %4$s.\n\nAffected players become paralyzed over time, reducing their movement speed by %5$s%% with each tick.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "135,775",
                 "spellId": 1307269,
                 "coefficient": 14,
                 "effectIndex": 0
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "48,491",
                 "spellId": 1294569,
                 "coefficient": 5,
                 "effectIndex": 1
@@ -403813,7 +403824,7 @@
                 "text": "10"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.1429,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -403856,19 +403867,19 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1294567",
-        "description": "The Twinfang spits numbing venom at players, inflicting Nature damage on impact and an additional Nature damage every 1 sec for 20 sec.\n\nAffected players become paralyzed over time, reducing their movement speed by 10% with each tick.",
+        "description": "The Twinfang spits numbing venom at players, inflicting 135,775 Nature damage on impact and an additional 48,491 Nature damage every 1 sec for 20 sec.\n\nAffected players become paralyzed over time, reducing their movement speed by 10% with each tick.",
         "description_format": "The Twinfang spits numbing venom at players, inflicting %1$s Nature damage on impact and an additional %2$s Nature damage every %3$s sec for %4$s.\n\nAffected players become paralyzed over time, reducing their movement speed by %5$s%% with each tick.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "135,775",
                 "spellId": 1307269,
                 "coefficient": 14,
                 "effectIndex": 0
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "48,491",
                 "spellId": 1294569,
                 "coefficient": 5,
                 "effectIndex": 1
@@ -403886,7 +403897,7 @@
                 "text": "10"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.1429,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -403964,7 +403975,7 @@
         "icon_name": "",
         "name": "",
         "description_template": "Caster enters a demonic rage, increasing its Haste by $s1% and pulses $1294774s1 Fire damage every $t2 sec.",
-        "description": "Caster enters a demonic rage, increasing its Haste by 20% and pulses Fire damage every 1 sec.",
+        "description": "Caster enters a demonic rage, increasing its Haste by 20% and pulses 29,095 Fire damage every 1 sec.",
         "description_format": "Caster enters a demonic rage, increasing its Haste by %1$s%% and pulses %2$s Fire damage every %3$s sec.",
         "description_values": [
             {
@@ -403973,7 +403984,7 @@
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "29,095",
                 "spellId": 1294774,
                 "coefficient": 3,
                 "effectIndex": 0
@@ -403983,7 +403994,7 @@
                 "text": "1"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96983.3333,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -404037,7 +404048,7 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1294770",
-        "description": "Caster enters a demonic rage, increasing its Haste by 20% and pulses Fire damage every 1 sec.",
+        "description": "Caster enters a demonic rage, increasing its Haste by 20% and pulses 29,095 Fire damage every 1 sec.",
         "description_format": "Caster enters a demonic rage, increasing its Haste by %1$s%% and pulses %2$s Fire damage every %3$s sec.",
         "description_values": [
             {
@@ -404046,7 +404057,7 @@
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "29,095",
                 "spellId": 1294774,
                 "coefficient": 3,
                 "effectIndex": 0
@@ -404056,7 +404067,7 @@
                 "text": "1"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96983.3333,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -404135,18 +404146,18 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1294827",
-        "description": "Slams the ground with Fel energy, inflicting Fire damage to all enemies and causes Defiled Detonation at nearby locations.",
+        "description": "Slams the ground with Fel energy, inflicting 145,474 Fire damage to all enemies and causes Defiled Detonation at nearby locations.",
         "description_format": "Slams the ground with Fel energy, inflicting %1$s Fire damage to all enemies and causes Defiled Detonation at nearby locations.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "145,474",
                 "spellId": 1294827,
                 "coefficient": 15,
                 "effectIndex": 0
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.6667,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -404178,18 +404189,18 @@
         "icon_name": "",
         "name": "",
         "description_template": "Slams the ground with Fel energy, inflicting $s1 Fire damage to all enemies and causes $@spellname1294836 at nearby locations.",
-        "description": "Slams the ground with Fel energy, inflicting Fire damage to all enemies and causes Defiled Detonation at nearby locations.",
+        "description": "Slams the ground with Fel energy, inflicting 145,474 Fire damage to all enemies and causes Defiled Detonation at nearby locations.",
         "description_format": "Slams the ground with Fel energy, inflicting %1$s Fire damage to all enemies and causes Defiled Detonation at nearby locations.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "145,474",
                 "spellId": 1294827,
                 "coefficient": 15,
                 "effectIndex": 0
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.6667,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -404256,12 +404267,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "The writhe injects the target with powerful venom, inflicting $s1 Nature damage and increasing damage taken by $s2% for $d.",
-        "description": "The writhe injects the target with powerful venom, inflicting Nature damage and increasing damage taken by 20% for 20 sec.",
+        "description": "The writhe injects the target with powerful venom, inflicting 242,456 Nature damage and increasing damage taken by 20% for 20 sec.",
         "description_format": "The writhe injects the target with powerful venom, inflicting %1$s Nature damage and increasing damage taken by %2$s%% for %3$s.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "242,456",
                 "spellId": 1294845,
                 "coefficient": 25,
                 "effectIndex": 0
@@ -404275,7 +404286,7 @@
                 "text": "20 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.4,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -404318,12 +404329,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "The writhe rattles its tail, inflicting $1294859s1 Physical damage every $t1 sec for $d. This effect ignores armor.",
-        "description": "The writhe rattles its tail, inflicting Physical damage every 1 sec for 5 sec. This effect ignores armor.",
+        "description": "The writhe rattles its tail, inflicting 58,189 Physical damage every 1 sec for 5 sec. This effect ignores armor.",
         "description_format": "The writhe rattles its tail, inflicting %1$s Physical damage every %2$s sec for %3$s. This effect ignores armor.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "58,189",
                 "spellId": 1294859,
                 "coefficient": 6,
                 "effectIndex": 0
@@ -404337,7 +404348,7 @@
                 "text": "5 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96981.6667,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -404369,12 +404380,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1294849",
-        "description": "The writhe rattles its tail, inflicting Physical damage every 1 sec for 5 sec. This effect ignores armor.",
+        "description": "The writhe rattles its tail, inflicting 58,189 Physical damage every 1 sec for 5 sec. This effect ignores armor.",
         "description_format": "The writhe rattles its tail, inflicting %1$s Physical damage every %2$s sec for %3$s. This effect ignores armor.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "58,189",
                 "spellId": 1294859,
                 "coefficient": 6,
                 "effectIndex": 0
@@ -404388,7 +404399,7 @@
                 "text": "5 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96981.6667,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -404420,12 +404431,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "Inflicts $s1 Fire damage to an enemy every $t1 sec.",
-        "description": "Inflicts Fire damage to an enemy every 1 sec.",
+        "description": "Inflicts 145,474 Fire damage to an enemy every 1 sec.",
         "description_format": "Inflicts %1$s Fire damage to an enemy every %2$s sec.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "145,474",
                 "spellId": 1294870,
                 "coefficient": 15,
                 "effectIndex": 0
@@ -404435,7 +404446,7 @@
                 "text": "1"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.6667,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -404478,12 +404489,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "The serpent blasts a rapid stream of venom at its target, inflicting $1294958s1 Nature damage every $1294958t1 sec for $d.",
-        "description": "The serpent blasts a rapid stream of venom at its target, inflicting Nature damage every 1 sec for 5 sec.",
+        "description": "The serpent blasts a rapid stream of venom at its target, inflicting 67,888 Nature damage every 1 sec for 5 sec.",
         "description_format": "The serpent blasts a rapid stream of venom at its target, inflicting %1$s Nature damage every %2$s sec for %3$s.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "67,888",
                 "spellId": 1294958,
                 "coefficient": 7,
                 "effectIndex": 0
@@ -404497,7 +404508,7 @@
                 "text": "5 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.8571,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -404551,12 +404562,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1294934",
-        "description": "The serpent blasts a rapid stream of venom at its target, inflicting Nature damage every 1 sec for 5 sec.",
+        "description": "The serpent blasts a rapid stream of venom at its target, inflicting 67,888 Nature damage every 1 sec for 5 sec.",
         "description_format": "The serpent blasts a rapid stream of venom at its target, inflicting %1$s Nature damage every %2$s sec for %3$s.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "67,888",
                 "spellId": 1294958,
                 "coefficient": 7,
                 "effectIndex": 0
@@ -404570,7 +404581,7 @@
                 "text": "5 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.8571,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -404678,12 +404689,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "The serpent spins violently, unleashing toxins that inflict $1295073s1 Nature damage within $1295073A1 yards of each impact. \r\n\r\nThe toxins then swirl up into a $@spellname1309416 at each location.",
-        "description": "The serpent spins violently, unleashing toxins that inflict Nature damage within 6 yards of each impact. \n\nThe toxins then swirl up into a Virulent Twister at each location.",
+        "description": "The serpent spins violently, unleashing toxins that inflict 290,947 Nature damage within 6 yards of each impact. \n\nThe toxins then swirl up into a Virulent Twister at each location.",
         "description_format": "The serpent spins violently, unleashing toxins that inflict %1$s Nature damage within %2$s yards of each impact. \n\nThe toxins then swirl up into a Virulent Twister at each location.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "290,947",
                 "spellId": 1295073,
                 "coefficient": 30,
                 "effectIndex": 0
@@ -404693,7 +404704,7 @@
                 "text": "6"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.3333,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -404725,12 +404736,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1295055",
-        "description": "The serpent spins violently, unleashing toxins that inflict Nature damage within 6 yards of each impact. \n\nThe toxins then swirl up into a Virulent Twister at each location.",
+        "description": "The serpent spins violently, unleashing toxins that inflict 290,947 Nature damage within 6 yards of each impact. \n\nThe toxins then swirl up into a Virulent Twister at each location.",
         "description_format": "The serpent spins violently, unleashing toxins that inflict %1$s Nature damage within %2$s yards of each impact. \n\nThe toxins then swirl up into a Virulent Twister at each location.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "290,947",
                 "spellId": 1295073,
                 "coefficient": 30,
                 "effectIndex": 0
@@ -404740,7 +404751,7 @@
                 "text": "6"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.3333,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -404783,19 +404794,19 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1295427",
-        "description": "Caster charges toward an enemy and slashes them, inflicting Physical damage and causes them to bleed for an additional Physical damage every 1 sec for 3 sec.",
+        "description": "Caster charges toward an enemy and slashes them, inflicting 58,189 Physical damage and causes them to bleed for an additional 38,793 Physical damage every 1 sec for 3 sec.",
         "description_format": "Caster charges toward an enemy and slashes them, inflicting %1$s Physical damage and causes them to bleed for an additional %2$s Physical damage every %3$s sec for %4$s.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "58,189",
                 "spellId": 1295427,
                 "coefficient": 6,
                 "effectIndex": 0
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "38,793",
                 "spellId": 1295427,
                 "coefficient": 4,
                 "effectIndex": 1
@@ -404809,7 +404820,7 @@
                 "text": "3 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96981.6667,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -404841,19 +404852,19 @@
         "icon_name": "",
         "name": "",
         "description_template": "Caster charges toward an enemy and slashes them, inflicting $s1 Physical damage and causes them to bleed for an additional $s2 Physical damage every $t2 sec for $d.",
-        "description": "Caster charges toward an enemy and slashes them, inflicting Physical damage and causes them to bleed for an additional Physical damage every 1 sec for 3 sec.",
+        "description": "Caster charges toward an enemy and slashes them, inflicting 58,189 Physical damage and causes them to bleed for an additional 38,793 Physical damage every 1 sec for 3 sec.",
         "description_format": "Caster charges toward an enemy and slashes them, inflicting %1$s Physical damage and causes them to bleed for an additional %2$s Physical damage every %3$s sec for %4$s.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "58,189",
                 "spellId": 1295427,
                 "coefficient": 6,
                 "effectIndex": 0
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "38,793",
                 "spellId": 1295427,
                 "coefficient": 4,
                 "effectIndex": 1
@@ -404867,7 +404878,7 @@
                 "text": "3 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96981.6667,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -405364,12 +405375,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "Caster creates a shield around itself that absorbs incoming damage, and pulses $1296519s1 Nature damage to all enemies every $t2 sec for $d.",
-        "description": "Caster creates a shield around itself that absorbs incoming damage, and pulses Nature damage to all enemies every 2 sec for 1 min.",
+        "description": "Caster creates a shield around itself that absorbs incoming damage, and pulses 24,246 Nature damage to all enemies every 2 sec for 1 min.",
         "description_format": "Caster creates a shield around itself that absorbs incoming damage, and pulses %1$s Nature damage to all enemies every %2$s sec for %3$s.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "24,246",
                 "spellId": 1296519,
                 "coefficient": 2.5,
                 "effectIndex": 0
@@ -405383,7 +405394,7 @@
                 "text": "1 min"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96984,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -405437,12 +405448,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1296518",
-        "description": "Caster creates a shield around itself that absorbs incoming damage, and pulses Nature damage to all enemies every 2 sec for 1 min.",
+        "description": "Caster creates a shield around itself that absorbs incoming damage, and pulses 24,246 Nature damage to all enemies every 2 sec for 1 min.",
         "description_format": "Caster creates a shield around itself that absorbs incoming damage, and pulses %1$s Nature damage to all enemies every %2$s sec for %3$s.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "24,246",
                 "spellId": 1296519,
                 "coefficient": 2.5,
                 "effectIndex": 0
@@ -405456,7 +405467,7 @@
                 "text": "1 min"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96984,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -406165,12 +406176,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "Inflicts $s1 Nature damage and leaves behind $@spellname1297700 for $1297700d.",
-        "description": "Inflicts Nature damage and leaves behind Rotten Ground for 20 sec.",
+        "description": "Inflicts 38,793 Nature damage and leaves behind Rotten Ground for 20 sec.",
         "description_format": "Inflicts %1$s Nature damage and leaves behind Rotten Ground for %2$s.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "38,793",
                 "spellId": 1297699,
                 "coefficient": 4,
                 "effectIndex": 0
@@ -406180,7 +406191,7 @@
                 "text": "20 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.5,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -406212,12 +406223,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "Inflicts $s1 Nature damage every $t1 sec.",
-        "description": "Inflicts Nature damage every 1 sec.",
+        "description": "Inflicts 77,586 Nature damage every 1 sec.",
         "description_format": "Inflicts %1$s Nature damage every %2$s sec.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "77,586",
                 "spellId": 1297701,
                 "coefficient": 8,
                 "effectIndex": 0
@@ -406227,7 +406238,7 @@
                 "text": "1"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.5,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -406328,12 +406339,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "Caster strikes an enemy with a lightning bolt that arcs to another nearby enemy, inflicting $s1 Nature damage. The spell affects up to $x1 targets.",
-        "description": "Caster strikes an enemy with a lightning bolt that arcs to another nearby enemy, inflicting Nature damage. The spell affects up to 3 targets.",
+        "description": "Caster strikes an enemy with a lightning bolt that arcs to another nearby enemy, inflicting 193,965 Nature damage. The spell affects up to 3 targets.",
         "description_format": "Caster strikes an enemy with a lightning bolt that arcs to another nearby enemy, inflicting %1$s Nature damage. The spell affects up to %2$s targets.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "193,965",
                 "spellId": 1297778,
                 "coefficient": 20,
                 "effectIndex": 0
@@ -406343,7 +406354,7 @@
                 "text": "3"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.5,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -406818,7 +406829,7 @@
         "icon_name": "",
         "name": "",
         "description_template": "Caster shields himself and begins savagely slamming the ground every $t2 sec, inflicting $1298901s1 Physical damage to all enemies for $d. Each slam increases the damage by an additional $1298901s2%. This effect stacks.",
-        "description": "Caster shields himself and begins savagely slamming the ground every 1.5 sec, inflicting Physical damage to all enemies for 30 sec. Each slam increases the damage by an additional 10%. This effect stacks.",
+        "description": "Caster shields himself and begins savagely slamming the ground every 1.5 sec, inflicting 48,491 Physical damage to all enemies for 30 sec. Each slam increases the damage by an additional 10%. This effect stacks.",
         "description_format": "Caster shields himself and begins savagely slamming the ground every %1$s sec, inflicting %2$s Physical damage to all enemies for %3$s. Each slam increases the damage by an additional %4$s%%. This effect stacks.",
         "description_values": [
             {
@@ -406827,7 +406838,7 @@
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "48,491",
                 "spellId": 1298901,
                 "coefficient": 5,
                 "effectIndex": 0
@@ -406841,7 +406852,7 @@
                 "text": "10"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -406884,7 +406895,7 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1298900",
-        "description": "Caster shields himself and begins savagely slamming the ground every 1.5 sec, inflicting Physical damage to all enemies for 30 sec. Each slam increases the damage by an additional 10%. This effect stacks.",
+        "description": "Caster shields himself and begins savagely slamming the ground every 1.5 sec, inflicting 48,491 Physical damage to all enemies for 30 sec. Each slam increases the damage by an additional 10%. This effect stacks.",
         "description_format": "Caster shields himself and begins savagely slamming the ground every %1$s sec, inflicting %2$s Physical damage to all enemies for %3$s. Each slam increases the damage by an additional %4$s%%. This effect stacks.",
         "description_values": [
             {
@@ -406893,7 +406904,7 @@
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "48,491",
                 "spellId": 1298901,
                 "coefficient": 5,
                 "effectIndex": 0
@@ -406907,7 +406918,7 @@
                 "text": "10"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -407036,12 +407047,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "Caster summons a spear that chains all players, inflicting $1298917s1 Physical every $1298917t1 sec and pulling them in until the spear is destroyed.",
-        "description": "Caster summons a spear that chains all players, inflicting Physical every 1 sec and pulling them in until the spear is destroyed.",
+        "description": "Caster summons a spear that chains all players, inflicting 19,396 Physical every 1 sec and pulling them in until the spear is destroyed.",
         "description_format": "Caster summons a spear that chains all players, inflicting %1$s Physical every %2$s sec and pulling them in until the spear is destroyed.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "19,396",
                 "spellId": 1298917,
                 "coefficient": 2,
                 "effectIndex": 0
@@ -407051,7 +407062,7 @@
                 "text": "1"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96980,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -407717,12 +407728,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "Inflicts $s1 Nature damage every $t1 sec.",
-        "description": "Inflicts Nature damage every 1 sec.",
+        "description": "Inflicts 145,474 Nature damage every 1 sec.",
         "description_format": "Inflicts %1$s Nature damage every %2$s sec.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "145,474",
                 "spellId": 1299210,
                 "coefficient": 15,
                 "effectIndex": 0
@@ -407732,7 +407743,7 @@
                 "text": "1"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.6667,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -408047,12 +408058,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "Inflicts $s1 Shadow damage to enemies within $A1 yards of the impact.\r\n\r\nInflicts $s2 Shadow damage to all enemies within $A2 yards of the impact every $t2 sec for $d.\r\n",
-        "description": "Inflicts Shadow damage to enemies within 10 yards of the impact.\n\nInflicts Shadow damage to all enemies within 10 yards of the impact every 1 sec for 5 sec.",
+        "description": "Inflicts 145,474 Shadow damage to enemies within 10 yards of the impact.\n\nInflicts 38,793 Shadow damage to all enemies within 10 yards of the impact every 1 sec for 5 sec.",
         "description_format": "Inflicts %1$s Shadow damage to enemies within %2$s yards of the impact.\n\nInflicts %3$s Shadow damage to all enemies within %4$s yards of the impact every %5$s sec for %6$s.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "145,474",
                 "spellId": 1299913,
                 "coefficient": 15,
                 "effectIndex": 0
@@ -408063,7 +408074,7 @@
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "38,793",
                 "spellId": 1299913,
                 "coefficient": 4,
                 "effectIndex": 1
@@ -408081,7 +408092,7 @@
                 "text": "5 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.6667,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -408287,8 +408298,8 @@
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
-                "radius": null,
-                "max_radius": null
+                "radius": 80,
+                "max_radius": 80
             }
         ]
     },
@@ -408439,12 +408450,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "Inflicts $1300244s1 Physical damage on target enemy every $t1 sec for $d.",
-        "description": "Inflicts Physical damage on target enemy every 1.5 sec for 6 sec.",
+        "description": "Inflicts 678,877 Physical damage on target enemy every 1.5 sec for 6 sec.",
         "description_format": "Inflicts %1$s Physical damage on target enemy every %2$s sec for %3$s.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "678,877",
                 "spellId": 1300244,
                 "coefficient": 70,
                 "effectIndex": 0
@@ -408458,7 +408469,7 @@
                 "text": "6 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.4286,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -408490,12 +408501,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1300243",
-        "description": "Inflicts Physical damage on target enemy every 1.5 sec for 6 sec.",
+        "description": "Inflicts 678,877 Physical damage on target enemy every 1.5 sec for 6 sec.",
         "description_format": "Inflicts %1$s Physical damage on target enemy every %2$s sec for %3$s.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "678,877",
                 "spellId": 1300244,
                 "coefficient": 70,
                 "effectIndex": 0
@@ -408509,7 +408520,7 @@
                 "text": "6 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.4286,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -409981,7 +409992,7 @@
         "icon_name": "",
         "name": "",
         "description_template": "Caster strikes all enemies every $t1 sec for $d, inflicting $1302010s1 Fire damage.",
-        "description": "Caster strikes all enemies every 0.4 sec for 1.2 sec, inflicting Fire damage.",
+        "description": "Caster strikes all enemies every 0.4 sec for 1.2 sec, inflicting 48,491 Fire damage.",
         "description_format": "Caster strikes all enemies every %1$s sec for %2$s, inflicting %3$s Fire damage.",
         "description_values": [
             {
@@ -409994,13 +410005,13 @@
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "48,491",
                 "spellId": 1302010,
                 "coefficient": 5,
                 "effectIndex": 0
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -410032,7 +410043,7 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1302007",
-        "description": "Caster strikes all enemies every 0.4 sec for 1.2 sec, inflicting Fire damage.",
+        "description": "Caster strikes all enemies every 0.4 sec for 1.2 sec, inflicting 48,491 Fire damage.",
         "description_format": "Caster strikes all enemies every %1$s sec for %2$s, inflicting %3$s Fire damage.",
         "description_values": [
             {
@@ -410045,13 +410056,13 @@
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "48,491",
                 "spellId": 1302010,
                 "coefficient": 5,
                 "effectIndex": 0
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -410319,19 +410330,19 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1294432",
-        "description": "The leech pops, splashing poisoned blood that inflicts Nature damage on impact and Nature damage every 1.5 sec to players within the pools.",
+        "description": "The leech pops, splashing poisoned blood that inflicts 290,947 Nature damage on impact and 65,948 Nature damage every 1.5 sec to players within the pools.",
         "description_format": "The leech pops, splashing poisoned blood that inflicts %1$s Nature damage on impact and %2$s Nature damage every %3$s sec to players within the pools.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "290,947",
                 "spellId": 1305637,
                 "coefficient": 30,
                 "effectIndex": 0
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "65,948",
                 "spellId": 1306235,
                 "coefficient": 6.80000019073,
                 "effectIndex": 0
@@ -410341,7 +410352,7 @@
                 "text": "1.5"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.3333,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -410416,19 +410427,19 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1294432",
-        "description": "The leech pops, splashing poisoned blood that inflicts Nature damage on impact and Nature damage every 1.5 sec to players within the pools.",
+        "description": "The leech pops, splashing poisoned blood that inflicts 290,947 Nature damage on impact and 65,948 Nature damage every 1.5 sec to players within the pools.",
         "description_format": "The leech pops, splashing poisoned blood that inflicts %1$s Nature damage on impact and %2$s Nature damage every %3$s sec to players within the pools.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "290,947",
                 "spellId": 1305637,
                 "coefficient": 30,
                 "effectIndex": 0
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "65,948",
                 "spellId": 1306235,
                 "coefficient": 6.80000019073,
                 "effectIndex": 0
@@ -410438,7 +410449,7 @@
                 "text": "1.5"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.3333,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -410492,19 +410503,19 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1294432",
-        "description": "The leech pops, splashing poisoned blood that inflicts Nature damage on impact and Nature damage every 1.5 sec to players within the pools.",
+        "description": "The leech pops, splashing poisoned blood that inflicts 290,947 Nature damage on impact and 65,948 Nature damage every 1.5 sec to players within the pools.",
         "description_format": "The leech pops, splashing poisoned blood that inflicts %1$s Nature damage on impact and %2$s Nature damage every %3$s sec to players within the pools.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "290,947",
                 "spellId": 1305637,
                 "coefficient": 30,
                 "effectIndex": 0
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "65,948",
                 "spellId": 1306235,
                 "coefficient": 6.80000019073,
                 "effectIndex": 0
@@ -410514,7 +410525,7 @@
                 "text": "1.5"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.3333,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -410723,18 +410734,18 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1308862",
-        "description": "Inflicts Nature damage.",
+        "description": "Inflicts 58,189 Nature damage.",
         "description_format": "Inflicts %1$s Nature damage.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "58,189",
                 "spellId": 1306381,
                 "coefficient": 6,
                 "effectIndex": 0
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96981.6667,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -410812,7 +410823,7 @@
         "icon_name": "",
         "name": "",
         "description_template": "The caster attempts to evolve, healing  $1306386s1% of it's max health every $t1 sec for $d.  \r\n\r\nUpon completion, the caster gains a shield that absorbs the next $1307602s1 damage and grants immunity to crowd control effects.",
-        "description": "The caster attempts to evolve, healing 5% of it's max health every 1 sec for 6 sec. \n\nUpon completion, the caster gains a shield that absorbs the next damage and grants immunity to crowd control effects.",
+        "description": "The caster attempts to evolve, healing 5% of it's max health every 1 sec for 6 sec. \n\nUpon completion, the caster gains a shield that absorbs the next 250,045 damage and grants immunity to crowd control effects.",
         "description_format": "The caster attempts to evolve, healing  %1$s%% of it's max health every %2$s sec for %3$s.  \n\nUpon completion, the caster gains a shield that absorbs the next %4$s damage and grants immunity to crowd control effects.",
         "description_values": [
             {
@@ -410829,13 +410840,13 @@
             },
             {
                 "kind": "healing",
-                "text": "",
+                "text": "250,045",
                 "spellId": 1307602,
                 "coefficient": 50,
                 "effectIndex": 0
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 50009,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -411088,12 +411099,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "The Twinfang unleashes noxious gas from its jaws, inflicting $1306669s1 Nature damage every $1306669t1 sec to players caught within its breath.",
-        "description": "The Twinfang unleashes noxious gas from its jaws, inflicting Nature damage every 0.5 sec to players caught within its breath.",
+        "description": "The Twinfang unleashes noxious gas from its jaws, inflicting 67,888 Nature damage every 0.5 sec to players caught within its breath.",
         "description_format": "The Twinfang unleashes noxious gas from its jaws, inflicting %1$s Nature damage every %2$s sec to players caught within its breath.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "67,888",
                 "spellId": 1306669,
                 "coefficient": 7,
                 "effectIndex": 0
@@ -411103,7 +411114,7 @@
                 "text": "0.5"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.8571,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -411135,12 +411146,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1306668",
-        "description": "The Twinfang unleashes noxious gas from its jaws, inflicting Nature damage every 0.5 sec to players caught within its breath.",
+        "description": "The Twinfang unleashes noxious gas from its jaws, inflicting 67,888 Nature damage every 0.5 sec to players caught within its breath.",
         "description_format": "The Twinfang unleashes noxious gas from its jaws, inflicting %1$s Nature damage every %2$s sec to players caught within its breath.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "67,888",
                 "spellId": 1306669,
                 "coefficient": 7,
                 "effectIndex": 0
@@ -411150,7 +411161,7 @@
                 "text": "0.5"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.8571,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -411239,12 +411250,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "The venomancer unleashes a storm of poison, inflicting $1306853s1  Nature damage every $t1 sec for $d and triggering $@spellname1306854. ",
-        "description": "The venomancer unleashes a storm of poison, inflicting Nature damage every 1 sec for 9 sec and triggering Toxic Beam.",
+        "description": "The venomancer unleashes a storm of poison, inflicting 29,095 Nature damage every 1 sec for 9 sec and triggering Toxic Beam.",
         "description_format": "The venomancer unleashes a storm of poison, inflicting %1$s  Nature damage every %2$s sec for %3$s and triggering Toxic Beam.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "29,095",
                 "spellId": 1306853,
                 "coefficient": 3,
                 "effectIndex": 0
@@ -411258,7 +411269,7 @@
                 "text": "9 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96983.3333,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -411301,12 +411312,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1306852",
-        "description": "The venomancer unleashes a storm of poison, inflicting Nature damage every 1 sec for 9 sec and triggering Toxic Beam.",
+        "description": "The venomancer unleashes a storm of poison, inflicting 29,095 Nature damage every 1 sec for 9 sec and triggering Toxic Beam.",
         "description_format": "The venomancer unleashes a storm of poison, inflicting %1$s  Nature damage every %2$s sec for %3$s and triggering Toxic Beam.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "29,095",
                 "spellId": 1306853,
                 "coefficient": 3,
                 "effectIndex": 0
@@ -411320,7 +411331,7 @@
                 "text": "9 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96983.3333,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -411352,18 +411363,18 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1306854",
-        "description": "Inflicts Nature damage to any players hit.",
+        "description": "Inflicts 339,438 Nature damage to any players hit.",
         "description_format": "Inflicts %1$s Nature damage to any players hit.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "339,438",
                 "spellId": 1306856,
                 "coefficient": 35,
                 "effectIndex": 0
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.2857,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -411394,13 +411405,13 @@
         "mechanic": null,
         "icon_name": "",
         "name": "",
-        "description_template": "The totem becomes unstable, inflicting $1306890s1 Nature damage every $t1 sec until its chieftain returns or is slain.",
-        "description": "The totem becomes unstable, inflicting Nature damage every 2 sec until its chieftain returns or is slain.",
-        "description_format": "The totem becomes unstable, inflicting %1$s Nature damage every %2$s sec until its chieftain returns or is slain.",
+        "description_template": "The totem becomes unstable, inflicting $1306890s1 Nature damage every $t1 sec while the chieftain remains in combat.",
+        "description": "The totem becomes unstable, inflicting 32,295 Nature damage every 2 sec while the chieftain remains in combat.",
+        "description_format": "The totem becomes unstable, inflicting %1$s Nature damage every %2$s sec while the chieftain remains in combat.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "32,295",
                 "spellId": 1306890,
                 "coefficient": 3.32999992371,
                 "effectIndex": 0
@@ -411410,7 +411421,7 @@
                 "text": "2"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96981.9842,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -411442,18 +411453,18 @@
         "icon_name": "",
         "name": "",
         "description_template": "The chieftain hacks his current target, inflicting $s1 Physical damage.",
-        "description": "The chieftain hacks his current target, inflicting Physical damage.",
+        "description": "The chieftain hacks his current target, inflicting 581,895 Physical damage.",
         "description_format": "The chieftain hacks his current target, inflicting %1$s Physical damage.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "581,895",
                 "spellId": 1306911,
                 "coefficient": 60,
                 "effectIndex": 0
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.5,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -411555,19 +411566,19 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1294567",
-        "description": "The Twinfang spits numbing venom at players, inflicting Nature damage on impact and an additional Nature damage every 1 sec for 20 sec.\n\nAffected players become paralyzed over time, reducing their movement speed by 10% with each tick.",
+        "description": "The Twinfang spits numbing venom at players, inflicting 135,775 Nature damage on impact and an additional 48,491 Nature damage every 1 sec for 20 sec.\n\nAffected players become paralyzed over time, reducing their movement speed by 10% with each tick.",
         "description_format": "The Twinfang spits numbing venom at players, inflicting %1$s Nature damage on impact and an additional %2$s Nature damage every %3$s sec for %4$s.\n\nAffected players become paralyzed over time, reducing their movement speed by %5$s%% with each tick.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "135,775",
                 "spellId": 1307269,
                 "coefficient": 14,
                 "effectIndex": 0
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "48,491",
                 "spellId": 1294569,
                 "coefficient": 5,
                 "effectIndex": 1
@@ -411585,7 +411596,7 @@
                 "text": "10"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.1429,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -411652,19 +411663,19 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1289426",
-        "description": "Inflicts Nature damage and an additional Nature damage every 1 sec for 8 sec.",
+        "description": "Inflicts 58,189 Nature damage and an additional 24,245 Nature damage every 1 sec for 8 sec.",
         "description_format": "Inflicts %1$s Nature damage and an additional %2$s Nature damage every %3$s sec for %4$s.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "58,189",
                 "spellId": 1289416,
                 "coefficient": 6,
                 "effectIndex": 0
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "24,245",
                 "spellId": 1307571,
                 "coefficient": 2.5,
                 "effectIndex": 0
@@ -411678,7 +411689,7 @@
                 "text": "8 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96981.6667,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -411710,19 +411721,19 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1289426",
-        "description": "Inflicts Nature damage and an additional Nature damage every 1 sec for 8 sec.",
+        "description": "Inflicts 58,189 Nature damage and an additional 24,245 Nature damage every 1 sec for 8 sec.",
         "description_format": "Inflicts %1$s Nature damage and an additional %2$s Nature damage every %3$s sec for %4$s.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "58,189",
                 "spellId": 1289416,
                 "coefficient": 6,
                 "effectIndex": 0
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "24,245",
                 "spellId": 1307571,
                 "coefficient": 2.5,
                 "effectIndex": 0
@@ -411736,7 +411747,7 @@
                 "text": "8 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96981.6667,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -411826,7 +411837,7 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1306385",
-        "description": "The caster attempts to evolve, healing 5% of it's max health every 1 sec for 6 sec. \n\nUpon completion, the caster gains a shield that absorbs the next damage and grants immunity to crowd control effects.",
+        "description": "The caster attempts to evolve, healing 5% of it's max health every 1 sec for 6 sec. \n\nUpon completion, the caster gains a shield that absorbs the next 250,045 damage and grants immunity to crowd control effects.",
         "description_format": "The caster attempts to evolve, healing  %1$s%% of it's max health every %2$s sec for %3$s.  \n\nUpon completion, the caster gains a shield that absorbs the next %4$s damage and grants immunity to crowd control effects.",
         "description_values": [
             {
@@ -411843,13 +411854,13 @@
             },
             {
                 "kind": "healing",
-                "text": "",
+                "text": "250,045",
                 "spellId": 1307602,
                 "coefficient": 50,
                 "effectIndex": 0
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 50009,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -412386,12 +412397,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "The serpent infests players with eggs, inflicting $1309382s1 Nature damage every $1308865t1 sec for $1308865d. \r\n\r\nThe infestations burst upon expiration, inflicting $1309398s1 Nature damage within $1309398A1 yards and creating  Hatchlings.",
-        "description": "The serpent infests players with eggs, inflicting Nature damage every 1 sec for 5 sec. \n\nThe infestations burst upon expiration, inflicting Nature damage within 8 yards and creating Hatchlings.",
+        "description": "The serpent infests players with eggs, inflicting 34,914 Nature damage every 1 sec for 5 sec. \n\nThe infestations burst upon expiration, inflicting 69,828 Nature damage within 8 yards and creating Hatchlings.",
         "description_format": "The serpent infests players with eggs, inflicting %1$s Nature damage every %2$s sec for %3$s. \n\nThe infestations burst upon expiration, inflicting %4$s Nature damage within %5$s yards and creating  Hatchlings.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "34,914",
                 "spellId": 1309382,
                 "coefficient": 3.59999990463,
                 "effectIndex": 0
@@ -412406,7 +412417,7 @@
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "69,828",
                 "spellId": 1309398,
                 "coefficient": 7.19999980927,
                 "effectIndex": 0
@@ -412416,7 +412427,7 @@
                 "text": "8"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96983.3359,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -412448,12 +412459,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1308864",
-        "description": "The serpent infests players with eggs, inflicting Nature damage every 1 sec for 5 sec. \n\nThe infestations burst upon expiration, inflicting Nature damage within 8 yards and creating Hatchlings.",
+        "description": "The serpent infests players with eggs, inflicting 34,914 Nature damage every 1 sec for 5 sec. \n\nThe infestations burst upon expiration, inflicting 69,828 Nature damage within 8 yards and creating Hatchlings.",
         "description_format": "The serpent infests players with eggs, inflicting %1$s Nature damage every %2$s sec for %3$s. \n\nThe infestations burst upon expiration, inflicting %4$s Nature damage within %5$s yards and creating  Hatchlings.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "34,914",
                 "spellId": 1309382,
                 "coefficient": 3.59999990463,
                 "effectIndex": 0
@@ -412468,7 +412479,7 @@
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "69,828",
                 "spellId": 1309398,
                 "coefficient": 7.19999980927,
                 "effectIndex": 0
@@ -412478,7 +412489,7 @@
                 "text": "8"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96983.3359,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -412532,12 +412543,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1308864",
-        "description": "The serpent infests players with eggs, inflicting Nature damage every 1 sec for 5 sec. \n\nThe infestations burst upon expiration, inflicting Nature damage within 8 yards and creating Hatchlings.",
+        "description": "The serpent infests players with eggs, inflicting 34,914 Nature damage every 1 sec for 5 sec. \n\nThe infestations burst upon expiration, inflicting 69,828 Nature damage within 8 yards and creating Hatchlings.",
         "description_format": "The serpent infests players with eggs, inflicting %1$s Nature damage every %2$s sec for %3$s. \n\nThe infestations burst upon expiration, inflicting %4$s Nature damage within %5$s yards and creating  Hatchlings.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "34,914",
                 "spellId": 1309382,
                 "coefficient": 3.59999990463,
                 "effectIndex": 0
@@ -412552,7 +412563,7 @@
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "69,828",
                 "spellId": 1309398,
                 "coefficient": 7.19999980927,
                 "effectIndex": 0
@@ -412562,7 +412573,7 @@
                 "text": "8"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96983.3359,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -412594,12 +412605,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "$@spelldesc1308864",
-        "description": "The serpent infests players with eggs, inflicting Nature damage every 1 sec for 5 sec. \n\nThe infestations burst upon expiration, inflicting Nature damage within 8 yards and creating Hatchlings.",
+        "description": "The serpent infests players with eggs, inflicting 34,914 Nature damage every 1 sec for 5 sec. \n\nThe infestations burst upon expiration, inflicting 69,828 Nature damage within 8 yards and creating Hatchlings.",
         "description_format": "The serpent infests players with eggs, inflicting %1$s Nature damage every %2$s sec for %3$s. \n\nThe infestations burst upon expiration, inflicting %4$s Nature damage within %5$s yards and creating  Hatchlings.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "34,914",
                 "spellId": 1309382,
                 "coefficient": 3.59999990463,
                 "effectIndex": 0
@@ -412614,7 +412625,7 @@
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "69,828",
                 "spellId": 1309398,
                 "coefficient": 7.19999980927,
                 "effectIndex": 0
@@ -412624,7 +412635,7 @@
                 "text": "8"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96983.3359,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
@@ -413015,12 +413026,12 @@
         "icon_name": "",
         "name": "",
         "description_template": "The Winter Squall conjures a dense cloud in a $s4 yard radius around itself. Players cannot target into or out of the cloud. Players within the cloud suffer $s1 Frost damage every $t1 sec.",
-        "description": "The Winter Squall conjures a dense cloud in a yard radius around itself. Players cannot target into or out of the cloud. Players within the cloud suffer Frost damage every 2 sec.",
+        "description": "The Winter Squall conjures a dense cloud in a yard radius around itself. Players cannot target into or out of the cloud. Players within the cloud suffer 38,793 Frost damage every 2 sec.",
         "description_format": "The Winter Squall conjures a dense cloud in a  yard radius around itself. Players cannot target into or out of the cloud. Players within the cloud suffer %1$s Frost damage every %2$s sec.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "38,793",
                 "spellId": 1309964,
                 "coefficient": 4,
                 "effectIndex": 0
@@ -413030,7 +413041,7 @@
                 "text": "2"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.5,
         "schools_mask": 0,
         "cast_time": null,
         "duration": null,
