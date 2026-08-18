@@ -32,6 +32,13 @@ final class CoordinatesServiceTest extends PublicTestCase
      * exceed the margin, median 17.5. The conversion is not what deviates: the 30 enemies whose
      * positions do come from MDT 6.2 round-trip back to within 0.07 (#3734).
      *
+     * The Blinding Vale earns its place for a different reason: MDT 6.2.3's changelog notes it
+     * "Corrected enemy positions and icon sizes throughout The Blinding Vale", and Wotuu confirmed
+     * the resulting map is correct in-game. The facade transform for this floor is a single affine
+     * FloorUnion, which cannot perfectly reproduce MDT's own per-clone facade placement after that
+     * correction - roughly a third of one NPC's 28 clones exceed the margin in clusters while the
+     * rest match almost exactly, which is a facade-modelling limitation, not a bad import (#4108).
+     *
      * @var array<int, string>
      */
     private const array DEVIATES_FROM_MDT_DUNGEON_KEYS = [
@@ -41,6 +48,7 @@ final class CoordinatesServiceTest extends PublicTestCase
         DungeonKey::NEXUS_POINT_XENAS->value,
         DungeonKey::THE_ROOKERY->value,
         DungeonKey::KINGS_REST->value,
+        DungeonKey::THE_BLINDING_VALE->value,
     ];
 
     /**
