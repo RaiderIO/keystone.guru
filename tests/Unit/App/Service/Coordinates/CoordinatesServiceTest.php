@@ -32,12 +32,13 @@ final class CoordinatesServiceTest extends PublicTestCase
      * exceed the margin, median 17.5. The conversion is not what deviates: the 30 enemies whose
      * positions do come from MDT 6.2 round-trip back to within 0.07 (#3734).
      *
-     * The Blinding Vale earns its place for a different reason: MDT 6.2.3's changelog notes it
-     * "Corrected enemy positions and icon sizes throughout The Blinding Vale", and Wotuu confirmed
-     * the resulting map is correct in-game. The facade transform for this floor is a single affine
-     * FloorUnion, which cannot perfectly reproduce MDT's own per-clone facade placement after that
-     * correction - roughly a third of one NPC's 28 clones exceed the margin in clusters while the
-     * rest match almost exactly, which is a facade-modelling limitation, not a bad import (#4108).
+     * The Blinding Vale earns its place the same way King's Rest does: MDT 6.2.3's changelog notes
+     * it "Corrected enemy positions and icon sizes throughout The Blinding Vale", but the import's
+     * >150-in-game-unit position-preservation rule (see the "we ignore MDT's position" comment in
+     * MDTMappingImportService::importEnemies()) kept the pre-correction positions unchanged since
+     * MDT's nudges were all under that threshold - so this dungeon's stored positions never adopted
+     * MDT's correction at all. Wotuu confirmed the kept (pre-correction) positions are still correct
+     * in-game (#4108).
      *
      * @var array<int, string>
      */
