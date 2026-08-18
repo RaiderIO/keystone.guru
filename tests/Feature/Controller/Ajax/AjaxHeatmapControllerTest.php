@@ -100,12 +100,6 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
     }
 
     /**
-     * PHP-LARAVEL-TT: a timer-fraction filter against a dungeon whose current mapping version has
-     * no timer set (timer_max_seconds <= 0, the column's NOT NULL DEFAULT) used to bubble up
-     * CombatLogEventFilter::fromHeatmapDataFilter()'s InvalidArgumentException as an uncaught 500,
-     * instead of a clean 400 - this is a reachable user state (e.g. legacy dungeons), not a server
-     * error.
-     *
      * @throws Exception
      */
     #[Test]
