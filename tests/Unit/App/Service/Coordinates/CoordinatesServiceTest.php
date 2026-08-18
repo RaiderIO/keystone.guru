@@ -32,14 +32,6 @@ final class CoordinatesServiceTest extends PublicTestCase
      * exceed the margin, median 17.5. The conversion is not what deviates: the 30 enemies whose
      * positions do come from MDT 6.2 round-trip back to within 0.07 (#3734).
      *
-     * The Blinding Vale earns its place the same way King's Rest does: MDT 6.2.3's changelog notes
-     * it "Corrected enemy positions and icon sizes throughout The Blinding Vale", but the import's
-     * >150-in-game-unit position-preservation rule (see the "we ignore MDT's position" comment in
-     * MDTMappingImportService::importEnemies()) kept the pre-correction positions unchanged since
-     * MDT's nudges were all under that threshold - so this dungeon's stored positions never adopted
-     * MDT's correction at all. Wotuu confirmed the kept (pre-correction) positions are still correct
-     * in-game (#4108).
-     *
      * @var array<int, string>
      */
     private const array DEVIATES_FROM_MDT_DUNGEON_KEYS = [
@@ -49,7 +41,6 @@ final class CoordinatesServiceTest extends PublicTestCase
         DungeonKey::NEXUS_POINT_XENAS->value,
         DungeonKey::THE_ROOKERY->value,
         DungeonKey::KINGS_REST->value,
-        DungeonKey::THE_BLINDING_VALE->value,
     ];
 
     /**
