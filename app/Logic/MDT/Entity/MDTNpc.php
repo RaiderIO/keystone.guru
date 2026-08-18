@@ -20,6 +20,7 @@ class MDTNpc implements Arrayable
     private array $spells       = [];
     private float $scale        = 0.0;
     private bool $stealthDetect = false;
+    private bool $isBoss        = false;
     private int $countTeeming   = 0;
     private int $count          = 0;
     private string $name;
@@ -63,6 +64,7 @@ class MDTNpc implements Arrayable
 
         $this->scale         = (float)$this->rawMdtNpc['scale'];
         $this->stealthDetect = isset($this->rawMdtNpc['stealthDetect']) && $this->rawMdtNpc['stealthDetect'];
+        $this->isBoss        = isset($this->rawMdtNpc['isBoss']) && $this->rawMdtNpc['isBoss'];
         $this->countTeeming  = isset($this->rawMdtNpc['teemingCount']) ? (int)$this->rawMdtNpc['teemingCount'] : -1;
         $this->count         = (int)$this->rawMdtNpc['count'];
         // May not always be set?
@@ -183,6 +185,11 @@ class MDTNpc implements Arrayable
         return $this->stealthDetect;
     }
 
+    public function isBoss(): bool
+    {
+        return $this->isBoss;
+    }
+
     public function getCountTeeming(): int
     {
         return $this->countTeeming;
@@ -253,6 +260,7 @@ class MDTNpc implements Arrayable
             'spells'          => $this->getSpells(),
             'scale'           => $this->getScale(),
             'stealthDetect'   => $this->getStealthDetect(),
+            'isBoss'          => $this->isBoss(),
             'countTeeming'    => $this->getCountTeeming(),
             'count'           => $this->getCount(),
             'name'            => $this->getName(),
