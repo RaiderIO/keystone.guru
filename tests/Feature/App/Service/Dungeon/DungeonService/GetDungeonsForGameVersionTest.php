@@ -129,7 +129,10 @@ final class GetDungeonsForGameVersionTest extends PublicTestCase
     #[Test]
     public function getDungeonsForGameVersion_givenAFutureSeasonSeededForTheCurrentExpansion_returnsOnlyTheCurrentSeasonsDungeons(): void
     {
-        // Arrange
+        // Arrange - freezes "now" inside Season::SEASON_MIDNIGHT_S1's actual window (2026-03-02 to
+        // 2026-08-17) so this test's assumption that S1 is current holds regardless of real wall-clock time
+        $this->travelTo(Carbon::create(2026, 5, 28));
+
         $gameVersion   = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
         $currentSeason = Season::findOrFail(Season::SEASON_MIDNIGHT_S1);
         $expansion     = Expansion::firstWhere('shortname', Expansion::EXPANSION_MIDNIGHT);

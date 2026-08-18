@@ -31,6 +31,12 @@ final class DungeonExploreControllerTest extends PublicTestCase
     {
         parent::setUp();
 
+        // Freezes "now" inside Season::SEASON_MIDNIGHT_S1's actual window (2026-03-02 to 2026-08-17) so this
+        // test's assumption that S1 is current holds regardless of real wall-clock time - real time crossing
+        // S2's start (#3980) is exactly the season IsolatesSeededUpcomingSeasons parks below, not one this
+        // suite can otherwise account for.
+        $this->travelTo(Carbon::create(2026, 5, 28));
+
         $this->actingAsGuest();
 
         // ViewService caches the seasons it hands the composers for an hour in the 'tmp_file' store, which -
