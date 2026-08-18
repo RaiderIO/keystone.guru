@@ -94,6 +94,26 @@ final class ClassCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function show_givenClassWithUnderscoredKey_generatesUrlWithHyphenatedSlug(): void
+    {
+        // Arrange
+        $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_DEATH_KNIGHT)->firstOrFail();
+
+        // Act
+        $url = route('compendium.class.show.dungeon', [
+            'characterClass' => $characterClass,
+            'dungeon'        => Dungeon::getUserOrDefaultDungeon(),
+        ]);
+
+        // Assert
+        $this->assertStringContainsString('/class/death-knight', $url);
+        $this->assertStringNotContainsString('death_knight', $url);
+
+        $response = $this->get($url);
+        $response->assertOk();
+    }
+
+    #[Test]
     public function show_givenNoDungeonInUrl_redirectsToContextDungeon(): void
     {
         // Arrange
