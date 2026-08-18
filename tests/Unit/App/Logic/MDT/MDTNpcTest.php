@@ -3,25 +3,13 @@
 namespace Tests\Unit\App\Logic\MDT;
 
 use App\Logic\MDT\Entity\MDTNpc;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
+#[Group('MDT')]
 final class MDTNpcTest extends TestCase
 {
-    /**
-     * @return array<string, mixed>
-     */
-    private function minimalRawMdtNpc(): array
-    {
-        return [
-            'clones' => [],
-            'id'     => 246404,
-            'scale'  => 1.0,
-            'health' => 21891970,
-            'count'  => 0,
-        ];
-    }
-
     #[Test]
     public function isBoss_givenIsBossTrue_returnsTrue(): void
     {
@@ -61,5 +49,19 @@ final class MDTNpcTest extends TestCase
 
         // Assert
         $this->assertFalse($npc->isBoss());
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function minimalRawMdtNpc(): array
+    {
+        return [
+            'clones' => [],
+            'id'     => 246404,
+            'scale'  => 1.0,
+            'health' => 21891970,
+            'count'  => 0,
+        ];
     }
 }
