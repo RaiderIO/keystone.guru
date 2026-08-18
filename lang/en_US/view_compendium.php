@@ -204,7 +204,7 @@ return [
             'table_header_npcs'           => 'Notable NPCs',
             'no_spells'                   => 'No CC spells found for this class in this game version.',
             'no_npcs'                     => '-',
-            'npcs_no_effect'              => 'No effect observed',
+            'npcs_no_effect'              => 'Immune',
             'npcs_works_on'               => 'Works on',
             'npcs_no_exceptions'          => 'Nothing unexpected',
             'npcs_no_data'                => 'No data',
