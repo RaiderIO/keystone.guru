@@ -260,7 +260,6 @@ class MDTNpc implements Arrayable
             'spells'          => $this->getSpells(),
             'scale'           => $this->getScale(),
             'stealthDetect'   => $this->getStealthDetect(),
-            'isBoss'          => $this->isBoss(),
             'countTeeming'    => $this->getCountTeeming(),
             'count'           => $this->getCount(),
             'name'            => $this->getName(),
