@@ -232,7 +232,9 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 // Allow manual override to -1
                 $npc->display_id   = $mdtNpc->getDisplayId();
                 $npc->encounter_id = $mdtNpc->getEncounterId();
-                $npc->classification_id ??= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE];
+                $npc->classification_id ??= $mdtNpc->isBoss() ?
+                    NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS] :
+                    NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE];
                 $npc->name        = $mdtNpc->getName();
                 $npc->level       = $mdtNpc->getLevel();
                 $npc->mdt_scale   = $mdtNpc->getScale();
