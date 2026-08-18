@@ -9,6 +9,7 @@ use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
 use App\Models\GameServerRegion;
+use App\Service\CombatLogEvent\Exceptions\MappingVersionMissingTimerException;
 use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
@@ -21,7 +22,6 @@ use Codeart\OpensearchLaravel\Search\SearchQueries\Types\MatchOne;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Types\Range;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
-use InvalidArgumentException;
 
 /**
  * This class is used as a filter to extract CombatLogEvents from Opensearch.
@@ -514,7 +514,7 @@ class CombatLogEventFilter implements Arrayable
         if ($heatmapDataFilter->getTimerFractionMin() !== null && $heatmapDataFilter->getTimerFractionMax() !== null) {
             $timerSeconds = $heatmapDataFilter->getDungeon()->getCurrentMappingVersion()->timer_max_seconds;
             if ($timerSeconds <= 0) {
-                throw new InvalidArgumentException('Mapping version does not have a timer max seconds value');
+                throw new MappingVersionMissingTimerException('Mapping version does not have a timer max seconds value');
             }
 
             // durationMin/Max are minutes (see toArray()'s duration_ms * 60000 below), and a

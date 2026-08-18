@@ -12,16 +12,20 @@ use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventGridAggregationResult;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Database\Eloquent\Builder;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
+use Teapot\StatusCode;
 use Tests\Feature\Controller\DungeonRouteTestBase;
+use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\Fixtures\ServiceFixtures;
 use Tests\Fixtures\Traits\CreatesCombatLogEvent;
 
 final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
 {
     use CreatesCombatLogEvent;
+    use ProvidesDungeon;
 
     const EVENT_TYPE = CombatLogEventEventType::NpcDeath;
     const DATA_TYPE  = CombatLogEventDataType::PlayerPosition;
@@ -93,6 +97,41 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         );
         $this->assertEquals($runCount, $responseArr['run_count']);
         $this->assertEquals(self::DATA_TYPE, CombatLogEventDataType::from($responseArr['data_type']));
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    #[Group('Controller')]
+    #[Group('HeatmapController')]
+    public function getData_givenTimerFractionFilterAndDungeonWithoutTimer_returnsBadRequest(): void
+    {
+        // Arrange
+        [$dungeon] = $this->findDungeon(
+            constraint: static fn(Builder $query) => $query->whereDoesntHave(
+                'mappingVersions',
+                static fn(Builder $query) => $query->where('timer_max_seconds', '>', 0),
+            ),
+        );
+
+        $this->setUpTestForDungeon($dungeon, 10, 20);
+
+        // Act
+        $response = $this->get(route('ajax.heatmap.data', [
+            'type'             => self::EVENT_TYPE->value,
+            'dataType'         => self::DATA_TYPE->value,
+            'dungeonId'        => $dungeon->id,
+            'minTimerFraction' => 0.0,
+            'maxTimerFraction' => 1.0,
+        ]));
+
+        // Assert
+        $response->assertStatus(StatusCode::BAD_REQUEST);
+        $this->assertSame(
+            'Mapping version does not have a timer max seconds value',
+            json_decode($response->content(), true)['message'],
+        );
     }
 
     /**

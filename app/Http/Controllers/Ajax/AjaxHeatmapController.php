@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Heatmap\AjaxGetDataFormRequest;
+use App\Service\CombatLogEvent\Exceptions\MappingVersionMissingTimerException;
 use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
 use App\Service\RaiderIO\Exceptions\InvalidApiResponseException;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
@@ -40,6 +41,11 @@ class AjaxHeatmapController extends Controller
             return response()->json(
                 $exception->toArray(),
                 StatusCode::INTERNAL_SERVER_ERROR,
+            );
+        } catch (MappingVersionMissingTimerException $exception) {
+            return response()->json(
+                ['message' => $exception->getMessage()],
+                StatusCode::BAD_REQUEST,
             );
         }
     }
