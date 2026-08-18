@@ -41,15 +41,20 @@ trait CreatesCombatLogEvent
 
         foreach ($dungeon->floors()->where('facade', false)->get() as $floor) {
             /** @var Floor $floor */
-            $rows = [];
+            $rows     = [];
+            $attempts = 0;
 
             for ($i = 0; $i < $rowCount; $i++) {
                 $coordinates       = $this->getRandomCoordinates($floor);
                 $coordinatesString = sprintf('%s,%s', $coordinates['pos_x'], $coordinates['pos_y']);
-                // Just in case the coordinates already exist and it randomly fails the test
-                if (isset($rows[$coordinatesString])) {
+                // Just in case the coordinates already exist and it randomly fails the test. Bounded
+                // by $attempts because a floor's integer-truncated bounding box can contain fewer
+                // distinct coordinate pairs than $rowCount, which would otherwise retry forever.
+                if (isset($rows[$coordinatesString]) && $attempts < 100) {
+                    $attempts++;
                     $i--;
                 } else {
+                    $attempts                 = 0;
                     $rows[$coordinatesString] = random_int(1, 100);
                 }
             }
