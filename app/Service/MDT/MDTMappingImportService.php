@@ -935,7 +935,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             if ($mdtMapPOIs->isNotEmpty()) {
                 $this->log->importMapPOIsMDTHasMapPOIs();
 
-                $this->deleteClonedGenericItemMapIcons($newMappingVersion);
+                $genericItemMapIconTypeIds = $this->getGenericItemMapIconTypeIds();
+                $this->deleteClonedGenericItemMapIcons($newMappingVersion, $genericItemMapIconTypeIds);
 
                 foreach ($mdtMapPOIs as $mdtMapPOI) {
                     $floor = $this->findFloorByMdtSubLevel($dungeon, $newMappingVersion, $mdtMapPOI->getSubLevel());
@@ -951,8 +952,14 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     if ($mapIconTypeKey !== null) {
                         $mapIconTypeId = MapIconType::ALL[$mapIconTypeKey];
 
+                        // Generic item icons were just unconditionally cleared from $newMappingVersion above
+                        // (deleteClonedGenericItemMapIcons) so they can be re-created fresh from MDT below -
+                        // checking $currentMappingVersion here would find the old version's now-deleted-in-
+                        // $newMappingVersion copy and skip re-creating it, silently dropping the icon (#4112).
                         // No predecessor to match against - always create a new icon (#3757).
-                        $existingMapIcon = $currentMappingVersion?->getMapIconNearLocation($latLng, $mapIconTypeId);
+                        $existingMapIcon = in_array($mapIconTypeId, $genericItemMapIconTypeIds, true)
+                            ? $newMappingVersion->getMapIconNearLocation($latLng, $mapIconTypeId)
+                            : $currentMappingVersion?->getMapIconNearLocation($latLng, $mapIconTypeId);
                         if ($existingMapIcon === null) {
                             $translationKey = null;
                             if ($mdtMapPOI->getType() === MDTMapPOIType::GenericAssignablePOI &&
@@ -1113,14 +1120,11 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
      * where it would now sit next to the imported copy as a duplicate. `getMapIconNearLocation()` does not
      * catch it: its window is +/-5 lat/lng, while Maisara Caverns' hand-placed Hearty Vilebranch Stew is
      * 5.3 off MDT's position and Seat of the Triumvirate's Void Infusion 13.9 (#3993).
+     *
+     * @param array<int> $genericItemMapIconTypeIds
      */
-    private function deleteClonedGenericItemMapIcons(MappingVersion $newMappingVersion): void
+    private function deleteClonedGenericItemMapIcons(MappingVersion $newMappingVersion, array $genericItemMapIconTypeIds): void
     {
-        $genericItemMapIconTypeIds = array_map(
-            static fn(string $mapIconTypeKey): int => MapIconType::ALL[$mapIconTypeKey],
-            array_values(Conversion::MAP_POI_GENERIC_ITEM_SPELL_ID_MAP_ICON_TYPE_MAPPING),
-        );
-
         $deletedCount = $newMappingVersion->mapIcons()
             ->whereIn('map_icon_type_id', $genericItemMapIconTypeIds)
             ->delete();
@@ -1128,6 +1132,17 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         if ($deletedCount > 0) {
             $this->log->importMapPOIsDeletedClonedGenericItemMapIcons($deletedCount);
         }
+    }
+
+    /**
+     * @return array<int>
+     */
+    private function getGenericItemMapIconTypeIds(): array
+    {
+        return array_map(
+            static fn(string $mapIconTypeKey): int => MapIconType::ALL[$mapIconTypeKey],
+            array_values(Conversion::MAP_POI_GENERIC_ITEM_SPELL_ID_MAP_ICON_TYPE_MAPPING),
+        );
     }
 
     /**
