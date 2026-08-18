@@ -33,9 +33,11 @@ foreach (['dangerous', 'truesight', /*'bursting', 'bolstering', 'sanguine',*/ 'r
     <div class="compendium_identity_body">
         <h2 class="compendium_identity_title">{{ __($npc->name) }}</h2>
         <div class="compendium_identity_meta">
-            <span class="badge {{ $classificationBadge }}">
-                {{ __($npc->classification->name) }}
-            </span>
+            @if($npc->classification)
+                <span class="badge {{ $classificationBadge }}">
+                    {{ __($npc->classification->name) }}
+                </span>
+            @endif
             @foreach($flags as $flag)
                 <span class="badge text-bg-warning">{{ $flag }}</span>
             @endforeach
