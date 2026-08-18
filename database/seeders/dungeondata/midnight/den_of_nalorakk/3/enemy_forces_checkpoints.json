@@ -1,1 +1,10 @@
-[]
+[
+    {
+        "id": 17,
+        "mapping_version_id": 884,
+        "floor_id": 395,
+        "name": "mapping.checkpoints.midnight.den_of_nalorakk.the_heart_of_rage_name",
+        "lat": -177.3916,
+        "lng": 159.1551
+    }
+]

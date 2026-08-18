@@ -9048,12 +9048,12 @@
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 1860,
         "mdt_mapping_hash": "609b8013d9041aedb22ad9f6934fed48",
         "mdt_addon_version": 6205,
         "facade_enabled": 1,
         "created_at": "2026-08-09T17:40:27.000000Z",
-        "updated_at": "2026-08-09T17:40:30.000000Z"
+        "updated_at": "2026-08-17T17:10:38.000000Z"
     },
     {
         "id": 837,
@@ -9064,12 +9064,12 @@
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 2520,
+        "timer_max_seconds": 1980,
         "mdt_mapping_hash": "71167ffaf2102d891fae3e61812ec201",
         "mdt_addon_version": 621,
         "facade_enabled": 1,
         "created_at": "2026-08-12T08:12:41.000000Z",
-        "updated_at": "2026-08-12T08:12:43.000000Z"
+        "updated_at": "2026-08-17T17:15:40.000000Z"
     },
     {
         "id": 838,
@@ -9080,12 +9080,12 @@
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 2160,
+        "timer_max_seconds": 1980,
         "mdt_mapping_hash": "23907d1b89df0fa6f3fb1a17a038622c",
         "mdt_addon_version": 621,
         "facade_enabled": 1,
         "created_at": "2026-08-12T08:12:44.000000Z",
-        "updated_at": "2026-08-12T08:12:46.000000Z"
+        "updated_at": "2026-08-17T17:13:18.000000Z"
     },
     {
         "id": 839,
@@ -9112,12 +9112,12 @@
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 1740,
         "mdt_mapping_hash": "0bff20cbb78b08220ec5280aaba74177",
         "mdt_addon_version": 621,
         "facade_enabled": 1,
         "created_at": "2026-08-12T08:12:50.000000Z",
-        "updated_at": "2026-08-12T08:12:53.000000Z"
+        "updated_at": "2026-08-17T17:01:06.000000Z"
     },
     {
         "id": 841,
@@ -9128,12 +9128,12 @@
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 1920,
         "mdt_mapping_hash": "1d93ac22c13fda1da75e5a91d5f7172b",
         "mdt_addon_version": 621,
         "facade_enabled": 1,
         "created_at": "2026-08-12T08:12:53.000000Z",
-        "updated_at": "2026-08-12T08:12:55.000000Z"
+        "updated_at": "2026-08-17T17:01:35.000000Z"
     },
     {
         "id": 842,
@@ -9144,12 +9144,12 @@
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 2040,
         "mdt_mapping_hash": "e9cc8d206afc1b8df81392bf30ce6891",
         "mdt_addon_version": 621,
         "facade_enabled": 1,
         "created_at": "2026-08-12T08:12:55.000000Z",
-        "updated_at": "2026-08-12T08:13:00.000000Z"
+        "updated_at": "2026-08-17T17:02:11.000000Z"
     },
     {
         "id": 844,
@@ -9160,12 +9160,12 @@
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 1800,
         "mdt_mapping_hash": "72bf2bae8dfc219ac48e87a13298de9f",
         "mdt_addon_version": 621,
         "facade_enabled": 1,
         "created_at": "2026-08-12T08:13:03.000000Z",
-        "updated_at": "2026-08-12T08:13:07.000000Z"
+        "updated_at": "2026-08-17T17:10:53.000000Z"
     },
     {
         "id": 879,
@@ -9176,12 +9176,12 @@
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 1800,
+        "timer_max_seconds": 1680,
         "mdt_mapping_hash": "6961427fec8f6de7a6bedd8eafec70d1",
         "mdt_addon_version": 621,
         "facade_enabled": 1,
         "created_at": "2026-08-13T21:49:32.000000Z",
-        "updated_at": "2026-08-13T21:49:34.000000Z"
+        "updated_at": "2026-08-17T17:11:16.000000Z"
     },
     {
         "id": 883,
@@ -9192,7 +9192,7 @@
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 1740,
         "mdt_mapping_hash": "7eb60552cb692fbccaaf37266f9eb90e",
         "mdt_addon_version": 622,
         "facade_enabled": 1,
@@ -9208,7 +9208,7 @@
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 1920,
         "mdt_mapping_hash": "a84f808044cb6bd422ae19848db0ce99",
         "mdt_addon_version": 622,
         "facade_enabled": 1,
@@ -9224,7 +9224,7 @@
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 2040,
         "mdt_mapping_hash": "071f8a944d3c8d29d25e7db27b393da6",
         "mdt_addon_version": 622,
         "facade_enabled": 1,
@@ -9240,7 +9240,7 @@
         "enemy_forces_required_teeming": 0,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 1860,
         "mdt_mapping_hash": "73d9179445a2feae9c5f79b5ed06b4a9",
         "mdt_addon_version": 622,
         "facade_enabled": 1,
