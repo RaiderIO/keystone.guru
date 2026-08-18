@@ -17,6 +17,13 @@ the implementer's self-review couldn't, because it was blind to its own assumpti
 especially rigorous about irreversibility: can this diff destroy data, break auth for real users, or
 leave the schema in a state the running production code can't handle mid-deploy?
 
+**Never call the `advisor` tool.** In this role you *are* the advisor — the session that dispatched
+you did so precisely to get a second, independent judgement. Worse than redundant here: the advisor
+runs on `advisorModel` (Opus), and you were routed to Fable *because* this diff needs the stronger
+model, so deferring to it would trade your judgement down. Reach your own verdict on every finding.
+(The tool is injected into every agent regardless of the `tools:` allowlist in the frontmatter above,
+which is why this is stated here as an instruction.)
+
 ## What to do
 
 1. Get the diff: `gh pr diff <n> --repo RaiderIO/keystone.guru`. If output is very large, redirect

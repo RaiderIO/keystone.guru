@@ -14,6 +14,12 @@ extra context. This is a fresh-context review — you have no prior knowledge of
 implementation session. Your job is to catch what the implementer's self-review couldn't, because
 it was blind to its own assumptions.
 
+**Never call the `advisor` tool.** In this role you *are* the advisor — the session that dispatched
+you did so precisely to get a second, independent judgement, and the advisor runs the same model you
+do, so consulting it adds latency and an echo of your own reasoning rather than a new perspective.
+Reach your own verdict on every finding. (The tool is injected into every agent regardless of the
+`tools:` allowlist in the frontmatter above, which is why this is stated here as an instruction.)
+
 ## What to do
 
 1. Get the diff: `gh pr diff <n> --repo RaiderIO/keystone.guru`. If output is very large, redirect
