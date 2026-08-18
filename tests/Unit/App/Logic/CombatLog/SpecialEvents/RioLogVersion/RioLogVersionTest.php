@@ -192,7 +192,7 @@ final class RioLogVersionTest extends PublicTestCase
             'mplus-trash-win32-missing-version-quad' => [
                 // Same-version addon builds (observed on APP_VERSION 4.11.2) sometimes drop the
                 // entire trailing COMBAT_LOG_VERSION/ADVANCED_LOG_ENABLED/BUILD_VERSION/PROJECT_ID
-                // quad. Expected values here are RETAIL_ALL's current newest entry (22/12.0.7) —
+                // quad. Expected values here are RETAIL_ALL's current newest entry (22/12.1.0) —
                 // the fallback used when the quad is missing — update if a newer version is
                 // registered.
                 '7/19/2026 22:55:47.9768  RIO_LOG_VERSION,1,SEGMENT_TYPE,mplus_trash,APP_VERSION,4.11.2,PROCESSOR_VERSION,1,PLATFORM,win32,INSTANCE_ID,658,DUNGEON_ID,556,SEGMENT_ID,1,CORRELATION_ID,658-10-162-10-9-6fb3ec76b0ae89845ff190da15305ce6859fd382bdcc195dd164080a2cc30512,CHALLENGE_MODE_STARTED_AT,1784472947055,TYPE,trash,CLIENT_SESSION_ID,db371d19-50f4-4b1b-9316-ad6302db1f65',
@@ -212,7 +212,7 @@ final class RioLogVersionTest extends PublicTestCase
                 'db371d19-50f4-4b1b-9316-ad6302db1f65',
                 22,
                 true,
-                '12.0.7',
+                '12.1.0',
                 1,
             ],
             'mplus-boss-win32-missing-version-quad' => [
@@ -236,7 +236,7 @@ final class RioLogVersionTest extends PublicTestCase
                 'db371d19-50f4-4b1b-9316-ad6302db1f65',
                 22,
                 true,
-                '12.0.7',
+                '12.1.0',
                 1,
             ],
         ];
