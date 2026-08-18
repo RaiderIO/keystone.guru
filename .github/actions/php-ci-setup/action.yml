@@ -54,7 +54,20 @@ runs:
         # nothing here installs from them, and their recurring CDN outages fail `apt-get update`
         # with "Clearsigned file isn't valid, got 'NOSPLIT'" (#3441).
         grep -lr "packages.microsoft.com" /etc/apt/sources.list.d/ | xargs -r sudo rm -f
-        sudo apt-get update
+
+        # Point apt away from azure.archive.ubuntu.com: GitHub's regional Azure mirror stalls for
+        # minutes at a time on hosted runners (#4135, actions/runner-images#7048), and
+        # archive.ubuntu.com is what it eventually falls through to anyway. Covers both the legacy
+        # sources.list and the deb822 *.sources layout of the Ubuntu 24.04 runner images. The
+        # -security stanza points at the same azure host, so it moves to archive.ubuntu.com too
+        # (which carries the -security pocket).
+        sudo sed -i 's|azure\.archive\.ubuntu\.com|archive.ubuntu.com|g' \
+          /etc/apt/sources.list /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources 2>/dev/null || true
+        grep -rl 'azure\.archive\.ubuntu\.com' /etc/apt/sources.list /etc/apt/sources.list.d/ 2>/dev/null \
+          && echo "::warning::apt sources still point at azure.archive.ubuntu.com (#4135 rewrite missed a path)" \
+          || echo "==> apt sources clean of azure mirror"
+
+        sudo apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=15 update
         sudo apt-get install -y default-mysql-client redis-tools lua5.3 liblua5.3-dev
       shell: bash
 
