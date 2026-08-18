@@ -217,9 +217,29 @@ one-liner. Don't close the issue yourself.
 
 ## Step 7 — Create the draft GitHub Release and cut the tag
 
+**Re-fetch and re-derive the SHA right here, immediately before this step** — do not reuse
+a SHA captured back in Step 2. Any real time gap since then (the Step 4 changelog-table
+confirmation in particular) is a window where `origin/master` can move, and a stale SHA
+tags the release one or more commits short of what you actually meant to ship. This is
+not hypothetical: it happened for real on v15.13.0 — the SHA was captured before PR #4112
+actually merged (the user had said it "will very soon" and asked to include it on that
+promise), and by the time the tag was pushed minutes later, master had moved *twice*
+past the recorded SHA. Re-fetching right before this command is the only point in the
+flow close enough to the actual tag push to close that window:
+
+```
+git fetch origin --quiet
+git rev-parse origin/master
+```
+
+If the user has told you to include a change on the promise that its PR "will merge
+soon" (rather than confirming it has already merged), treat that as a hint to re-fetch
+again right before the tag/push commands below, not just once — the same race can recur
+if the merge lands during Step 6/7's `gh` calls.
+
 Create the **draft** Release first (a draft does not create the tag and notifies nobody),
-then cut the tag. Both must point at the same `master` commit — record
-`git rev-parse origin/master` once and use it for both:
+then cut the tag. Both must point at the same `master` commit — use the freshly-derived
+SHA for both:
 
 ```
 gh release create vX.X.X --repo RaiderIO/keystone.guru \
@@ -264,3 +284,35 @@ hand off. Report the staging result to the user and remind them production appro
 theirs to trigger (in the browser, or by running the script interactively without
 `--watch-only`) — never approve or drive that gate yourself, and don't spawn a second
 watcher process for the same version if one is already running.
+
+When attaching the `Monitor`, anchor the filter exactly as `release-watch`'s own "Attaching
+a Monitor to the log" section specifies (`^\[[0-9:]+\] EVENT:` plus the terminal
+`SUMMARY: (SUCCESS|FAILED)`) — a looser filter that matches bare `SUMMARY:` or `GATE:`
+substrings re-fires every 15s poll cycle for as long as that state holds (the production
+gate can sit for hours) and gets the Monitor auto-throttled/stopped by the harness. Confirmed
+live on the v15.13.0 release watch.
+
+## Step 9 — Hand off a staging browser-test runbook
+
+**Default for every release — do this without being asked**, the moment Step 8's watcher
+reports staging verification passed (`references compiled/<version>/`). Wotuu wants to click
+around on staging himself before approving production, so give him a concrete list of what to
+check rather than making him reconstruct it from the changelog.
+
+Build the runbook from the **same confirmed changelog table** from Step 4/5 — one entry per
+**public** change only (non-public/internal changes have no UI surface to click through, skip
+them). For each:
+
+- The `staging.keystone.guru` page/URL to open.
+- Concrete steps to reproduce the change (which page, which element, what to click/hover/resize).
+- What to expect to see.
+
+Group by the same category headers as the changelog. Post this as a normal chat message (not a
+file) so it's immediately actionable — this is a live checklist for a human, not documentation.
+
+**Flag anything not actually present in the deployed build.** If a change was included in the
+changelog on the understanding that its PR would merge before/around cut time, but the tag was
+actually cut against a commit that doesn't contain that PR's diff (e.g. cutting ahead of an
+imminent merge), say so explicitly next to that item — "not testable on this staging build,
+PR #NNNN hadn't merged when the tag was cut" — instead of listing steps that won't show
+anything and leaving Wotuu to wonder why.
