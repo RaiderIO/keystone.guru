@@ -6,5 +6,13 @@
         "name": "mapping.checkpoints.midnight.altar_of_fangs.final_room_section_name",
         "lat": -101.8788,
         "lng": 191.6083
+    },
+    {
+        "id": 21,
+        "mapping_version_id": 904,
+        "floor_id": 463,
+        "name": "mapping.checkpoints.midnight.altar_of_fangs.final_room_section_name",
+        "lat": -101.8788,
+        "lng": 191.6083
     }
 ]
