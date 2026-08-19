@@ -43,9 +43,14 @@ Codex reviews local git state, not a remote diff, so the PR's branch must exist 
   (`gh pr view <n> --repo RaiderIO/keystone.guru --json headRefOid --jq .headRefOid`), fast-forward:
   `git merge --ff-only "origin/$BRANCH"`. If that's not possible (local commits Codex shouldn't see,
   a diverged history), report back and stop rather than guessing what to do with someone else's
-  worktree. The `git fetch` above only updates the `origin/master` ref, not local `master` — pass
-  `origin/master` as the review base in step 2, not `master`, so a stale local `master` in an
-  old worktree can't skew the diff.
+  worktree. The `git fetch` above only updates the `origin/<ref>` remote-tracking refs, not local
+  branches — always pass `origin/<ref>`, never a bare local branch name, as the review base in step
+  2, so a stale local ref in an old worktree can't skew the diff.
+- Record `REVIEWED_SHA=$(git rev-parse HEAD)` now — you'll need it in step 3 both as the
+  `commit_id` for inline comments and to detect a push that lands while Codex is still running.
+- Get the PR's actual base branch — most PRs target `master`, but don't assume:
+  `BASE=$(gh pr view <n> --repo RaiderIO/keystone.guru --json baseRefName --jq .baseRefName)`.
+  You'll pass `origin/$BASE` to the reviewer in step 2.
 
 ## 2. Run the Codex adversarial review
 
@@ -53,7 +58,7 @@ Resolve the companion script (its path is versioned, so glob for the latest):
 
 ```bash
 COMPANION=$(ls -d /home/wouterkoppenol/.claude/plugins/cache/openai-codex/codex/*/scripts/codex-companion.mjs 2>/dev/null | sort -V | tail -1)
-node "$COMPANION" adversarial-review --wait --base origin/master --json --cwd "$WORKTREE"
+node "$COMPANION" adversarial-review --wait --base "origin/$BASE" --json --cwd "$WORKTREE"
 ```
 
 This blocks until it finishes — expect several minutes on a large diff. `--json` gives you a
@@ -62,18 +67,34 @@ payload whose `.result` field (when `.parseError` is absent) is structured per
 `{ verdict: "approve"|"needs-attention", summary, findings: [{severity, title, body, file,
 line_start, line_end, confidence, recommendation}], next_steps }`.
 
-If `.parseError` is present, or the command fails outright, retry the command **once** first. Codex's
-built-in reviewer has been observed to intermittently fail with a `gpt-5.6-sol model is not
-supported when using Codex with a ChatGPT account` error — this is an upstream model-selection
-issue, not something you can fix, and it has cleared on retry in practice. If it still fails
-(non-zero status or empty output) on the retry, fall back to posting `.codex.stdout` / `.rawOutput`
-as a single plain comment (see step 3's fallback); if there's genuinely nothing to post either, report
-the failure back verbatim and stop rather than reviewing the diff yourself to compensate.
+These are two different failure modes — don't conflate them, since only one of them still means "a
+review actually happened":
+
+- **`.codex.status` is non-zero (the run itself failed)**: retry the command **once** — this has
+  been observed to intermittently fail (occasionally with an upstream model-selection error
+  underneath) and clear on retry. If it's still non-zero on the retry, **no review happened at
+  all** — report the failure back verbatim and stop. Do NOT post the fallback comment and do NOT
+  add the `pr cold reviewed` label — `babysit-prs` skips labeled PRs, so labeling here would
+  permanently skip a PR that was never actually reviewed.
+- **`.codex.status` is 0 but `.parseError` is present (the run succeeded, output just wasn't valid
+  structured JSON)**: a review did happen, Codex just didn't return it in the expected shape. This
+  is the case the step 3 fallback path is for — post `.codex.stdout` / `.rawOutput` as a plain
+  comment and still label the PR, since real review content exists to post.
 
 ## 3. Post the findings
 
+**Before posting anything, recheck freshness.** The review can take several minutes; if the PR was
+pushed to while it ran, these findings describe a commit that's no longer the PR's head, and
+posting them (with the `pr cold reviewed` label) against the new head would misattach comments to
+possibly-wrong lines and wrongly suppress a real review of the new commit (`babysit-prs` skips
+already-labeled PRs). Compare
+`gh pr view <n> --repo RaiderIO/keystone.guru --json headRefOid --jq .headRefOid` against
+`$REVIEWED_SHA` from step 1. If they no longer match, do not post anything — report back that the
+PR moved during the review and stop; whoever dispatched you can re-run it against the new head.
+
 **Structured path (`.result` parsed successfully):** for each entry in `.result.findings`, post an
-inline PR review comment:
+inline PR review comment, using `$REVIEWED_SHA` (not a freshly-fetched head) as `commit_id` — the
+findings were generated against that exact commit:
 
 ```bash
 gh api -X POST repos/RaiderIO/keystone.guru/pulls/<n>/comments \
@@ -82,21 +103,37 @@ gh api -X POST repos/RaiderIO/keystone.guru/pulls/<n>/comments \
 ${body}
 
 Recommendation: ${recommendation}" \
-  -f commit_id="$(gh pr view <n> --repo RaiderIO/keystone.guru --json headRefOid --jq .headRefOid)" \
+  -f commit_id="$REVIEWED_SHA" \
   -f path="${file}" -f line=${line_end} -f side=RIGHT
 ```
 
 `side=RIGHT` is required alongside the modern `line` parameter (it means "a line in the PR's head
 revision," not the base) — GitHub's API rejects the request without it.
 
+**If an inline post 422s** (GitHub rejects `line`/`side` — this happens when a finding's
+`line_start`/`line_end` land on an unchanged or deleted line rather than the diff's right side,
+which the structured-output schema doesn't guarantee against), don't let that one finding abort the
+rest: post that finding's body as a plain issue comment instead (same `gh api ... issues/<n>/comments`
+endpoint used for the summary below), and keep going with the remaining findings.
+
 Only post findings you have no reason to distrust — if `confidence` is very low (well under 0.5)
 and the finding looks speculative, you may drop it, but default to posting what Codex returned
 rather than second-guessing it; you are not equipped to re-derive its judgement.
 
-Then post the summary comment:
+Then post the summary comment, with `${N}` being the count you actually finished posting (inline or
+via the 422 fallback), not `.result.findings.length`:
 ```bash
 gh api -X POST repos/RaiderIO/keystone.guru/issues/<n>/comments -f body=":robot: Cold review (codex-adversarial): ${verdict} — ${N} findings posted. ${summary}"
 ```
+
+**If posting is interrupted partway** (a `gh`/network failure that isn't the handled 422 case) —
+some findings posted, some didn't: do NOT post the summary comment and do NOT add the label below.
+A stray inline finding comment with no summary/label is a signal `babysit-prs` will otherwise
+mistake for a completed review and label as such without re-running (`.claude/skills/babysit-prs/
+SKILL.md`, "If the label is missing but the PR already has agent-authored inline review comments
+... just add the label instead of re-reviewing") — which would silently discard whatever findings
+never got posted. Report back exactly which findings posted and which didn't, so whoever dispatched
+you knows this review is incomplete and needs a real re-run, not just a label.
 
 **Fallback path (`.parseError` present):** post `.codex.stdout` (or `.rawOutput`) verbatim as a
 single issue comment, prefixed `:robot: Cold review (codex-adversarial):`, same as the plain

@@ -492,11 +492,14 @@ stops feeling right.
   this before spawning a reviewer — it's cheaper than searching comments). The label is also
   applied when the implementing session skipped cold review under the trivial-change rule
   (`.claude/CLAUDE.md`, "Before declaring a MR ready for review") — the MR body says so; don't
-  dispatch a review to "make up" for it. If the label is missing
-  but the PR already has agent-authored *inline* review comments or a `:robot: Cold review`
-  summary comment from a cold review that ran before the label existed (or whose label application
-  failed), just add the label instead of re-reviewing. Re-review only if the diff has changed
-  substantially since the review, or Wotuu asks.
+  dispatch a review to "make up" for it. If the label is missing but the PR already has a
+  `:robot: Cold review (...)` **summary comment**, just add the label instead of re-reviewing —
+  the reviewer posted it as its last step, so its presence means the review actually finished.
+  Agent-authored *inline* findings comments with no matching summary comment are **not** enough on
+  their own — the reviewer posts those before the summary, so a PR with inline comments but no
+  summary means the review was interrupted partway through; treat that as needing a real re-review,
+  not a label to paper over. Re-review only if the diff has changed substantially since the review,
+  or Wotuu asks.
 - **Never run the review inside this session.** This session's context is warm, which defeats the
   purpose of a *cold* review — dispatch it to Codex, which starts genuinely cold, has no memory of
   the implementation, and runs outside this session's context entirely. `Agent` tool,

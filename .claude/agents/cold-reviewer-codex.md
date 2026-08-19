@@ -41,9 +41,14 @@ Codex reviews local git state, not a remote diff, so the PR's branch must exist 
   (`gh pr view <n> --repo RaiderIO/keystone.guru --json headRefOid --jq .headRefOid`), fast-forward:
   `git merge --ff-only "origin/$BRANCH"`. If that's not possible (local commits Codex shouldn't see,
   a diverged history), report back and stop rather than guessing what to do with someone else's
-  worktree. The `git fetch` above only updates the `origin/master` ref, not local `master` — pass
-  `origin/master` as the review base in step 2, not `master`, so a stale local `master` in an
-  old worktree can't skew the diff.
+  worktree. The `git fetch` above only updates the `origin/<ref>` remote-tracking refs, not local
+  branches — always pass `origin/<ref>`, never a bare local branch name, as the review base in step
+  2, so a stale local ref in an old worktree can't skew the diff.
+- Record `REVIEWED_SHA=$(git rev-parse HEAD)` now — you'll need it in step 3 to detect a push that
+  lands while Codex is still running.
+- Get the PR's actual base branch — most PRs target `master`, but don't assume:
+  `BASE=$(gh pr view <n> --repo RaiderIO/keystone.guru --json baseRefName --jq .baseRefName)`.
+  You'll pass `origin/$BASE` to the reviewer in step 2.
 
 ## 2. Run the Codex review
 
@@ -51,22 +56,30 @@ Resolve the companion script (its path is versioned, so glob for the latest):
 
 ```bash
 COMPANION=$(ls -d /home/wouterkoppenol/.claude/plugins/cache/openai-codex/codex/*/scripts/codex-companion.mjs 2>/dev/null | sort -V | tail -1)
-node "$COMPANION" review --wait --base origin/master --json --cwd "$WORKTREE"
+node "$COMPANION" review --wait --base "origin/$BASE" --json --cwd "$WORKTREE"
 ```
 
 This runs Codex's actual built-in PR reviewer (the same engine behind `/codex:review`) against the
-branch diff vs `master`, and blocks until it finishes — this can take several minutes on a large
+branch diff vs the PR's base branch, and blocks until it finishes — this can take several minutes on a large
 diff, that's expected. `--json` gives you a payload with `.codex.stdout` holding the rendered
 markdown review (file:line citations embedded as prose) and `.codex.status` (0 = success).
 
-If `.codex.status` is non-zero or the command fails outright, retry the command **once**. Codex's
-built-in reviewer has been observed to intermittently fail with `Reviewer failed to output a
-response` / a `gpt-5.6-sol model is not supported when using Codex with a ChatGPT account` error —
-this is an upstream model-selection issue, not something you can fix, and it has cleared on retry in
-practice. If it fails a second time, report the failure back verbatim and stop — do not loop, and
-do not fall back to reviewing the diff yourself.
+If `.codex.status` is non-zero or the command fails outright, retry the command **once** — this has
+been observed to intermittently fail with `Reviewer failed to output a response` (occasionally with
+an upstream model-selection error underneath) and clear on retry. If it fails a second time, report
+the failure back verbatim and stop — do not loop, and do not fall back to reviewing the diff
+yourself.
 
 ## 3. Post the review
+
+**Before posting anything, recheck freshness.** The review can take several minutes; if the PR was
+pushed to while it ran, the review describes a commit that's no longer the PR's head, and posting
+the `pr cold reviewed` label against it would wrongly suppress a real review of the new commit
+(`babysit-prs` skips already-labeled PRs). Compare
+`gh pr view <n> --repo RaiderIO/keystone.guru --json headRefOid --jq .headRefOid` against
+`$REVIEWED_SHA` from step 1. If they no longer match, do not post the comment or the label — report
+back that the PR moved during the review and stop; whoever dispatched you can re-run it against the
+new head.
 
 Post Codex's review text as a single PR comment — this is a full markdown review body, not a set
 of per-line findings, so it goes on as one issue comment rather than inline review comments:
