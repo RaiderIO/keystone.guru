@@ -250,6 +250,8 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                     }
                 }
 
+                $this->applyBossKillFloorCutoff($event['npc']->getResolvedEnemy());
+
                 // Handle spells and the actual creation of pulls
                 /** @var ActivePull|null $firstActivePull */
                 $firstActivePull          = $this->activePullCollection->first();

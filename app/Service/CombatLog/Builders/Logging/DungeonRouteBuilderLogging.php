@@ -167,6 +167,22 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
         $this->end(__METHOD__);
     }
 
+    public function findUnkilledEnemyForNpcAtIngameLocationRetryingWithoutBossKillFloorCutoff(
+        int $npcId,
+        int $minimumFloorIndex,
+    ): void {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function applyBossKillFloorCutoffMinimumFloorIndexRaised(
+        int $enemyId,
+        int $npcId,
+        int $floorId,
+        int $minimumFloorIndex,
+    ): void {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
     public function findClosestEnemyAndDistanceFromList(int $enemiesCount, bool $considerPatrols): void
     {
         $this->debug(__METHOD__, get_defined_vars());
