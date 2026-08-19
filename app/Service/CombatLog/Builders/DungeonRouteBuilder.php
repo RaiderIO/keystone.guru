@@ -507,9 +507,10 @@ abstract class DungeonRouteBuilder
         try {
             $this->log->findClosestEnemyInAllFilteredEnemiesStart();
 
-            // Bosses move a long way during their fight, so where they died is often nowhere near where they're
-            // mapped - let them be matched regardless of range. Non-boss candidates are still rejected by range
-            // inside findClosestEnemyAndDistance() itself, before they're ever recorded as the closest enemy.
+            // There's only one boss NPC in the mapping, so killing it unambiguously matches it regardless of how
+            // far its death location is from where it's mapped - let it be matched regardless of range. Non-boss
+            // candidates are still rejected by range inside findClosestEnemyAndDistance() itself, before they're
+            // ever recorded as the closest enemy.
             $isBoss = $filteredEnemies->first()?->npc?->isBoss() ?? false;
 
             $this->findClosestEnemyAndDistanceFromList(
