@@ -289,20 +289,26 @@ but the checklist is **tiered by change size** so small MRs don't pay full cerem
   tier.
 - **Standard tier** — everything else: all applicable items below.
 
-1. **Independent review**: the `code-review` skill is `disable-model-invocation` — only the user
-   can trigger it directly (`/code-review`), an agent calling it itself will error. Once the change
-   is built, hand the diff to a fresh-context agent (no shared context with whoever implemented it —
-   a plain `Agent` call, not a `fork`) to review, and resolve every finding it raises (or note in the
-   MR body why a finding is intentionally not addressed). Afterwards, post the `:robot: Cold review:
-   <N> findings` marker comment on the MR and add the `pr cold reviewed` label
-   (`gh pr edit <n> --add-label "pr cold reviewed"`) — the same marker/label `babysit-prs` checks
-   before dispatching its own cold review, which is what stops a PR from being reviewed twice.
+1. **Independent review**: cold review is done by Codex, not a Claude agent reviewing its own
+   kind's work — Codex has zero shared context with the implementing session, which is the property
+   a "cold" review actually needs, and it runs on Wotuu's Codex subscription rather than this
+   session's token budget. Once the change is built, dispatch it (`Agent` tool, `subagent_type:
+   "cold-reviewer-codex"`, or `"cold-reviewer-codex-adversarial"` for migrations/auth/payment/
+   data-destructive diffs) and resolve every finding it raises (or note in the MR body why a finding
+   is intentionally not addressed). The dispatched agent posts its own marker comment and adds the
+   `pr cold reviewed` label as part of its instructions — the same marker/label `babysit-prs` checks
+   before dispatching its own cold review, which is what stops a PR from being reviewed twice. Both
+   agents need the PR's branch checked out locally to run Codex's review against (they'll find the
+   worktree themselves from the PR number if you don't hand them the path directly) — that's why
+   worktrees for open MRs stay up until merge (see "Git worktrees" above).
 
    **Every review thread the cold reviewer opened must be *resolved* before you hand the MR off** —
-   fix each finding, reply on-thread with `:robot: Fixed...`, then close it yourself via
-   `resolveReviewThread`. Baseline is zero open threads; leave one open only for a genuine judgement
-   call, and say so explicitly in the reply. Threads *Wotuu* opened are never yours to resolve — fix
-   and reply, he closes them.
+   the plain `cold-reviewer-codex` agent posts one summary comment rather than inline threads, so
+   just address what it raised and reply on that comment; `cold-reviewer-codex-adversarial` does
+   open inline threads (one per finding) — fix each, reply on-thread with `:robot: Fixed...`, then
+   close it yourself via `resolveReviewThread`. Baseline is zero open threads; leave one open only
+   for a genuine judgement call, and say so explicitly in the reply. Threads *Wotuu* opened are
+   never yours to resolve — fix and reply, he closes them.
 
    ```bash
    # unresolved threads on the PR, with the ids needed to resolve them
@@ -318,8 +324,7 @@ but the checklist is **tiered by change size** so small MRs don't pay full cerem
 
    **Dispatching this reviewer needs no permission — the implementing session fires it itself,**
    without stopping to ask; a general "don't spawn subagents unless asked" instruction does not cover
-   this case. Pick by risk: `cold-reviewer-fable` for migrations/auth/payment/data-destructive diffs,
-   `cold-reviewer-opus` for everything else.
+   this case.
 2. **Visual verification**: ONLY when rendered output actually changed — verify the affected
    page(s) in headless Chrome (`headless-browser-verify` skill) and post before/after screenshots
    on the MR (`post-screenshot.sh`). Backend-only MRs skip this explicitly; don't screenshot "to

@@ -470,11 +470,11 @@ looks broken, but #3847 and #3848 both carry `Closes #3674` and merged, so #3674
 
 ### 4. Cold-review MRs that just became ready
 
-An MR that is CI-green and conflict-free gets **one** independent "cold" review from a stronger
-model before Wotuu looks at it. A fresh context reviewing only the diff catches what the
-implementing session's self-review cannot — the self-review inherited the implementer's context and
-therefore its blind spots. Eligibility is normally gated on **not draft** too — except the one
-carve-out from step 2: a **draft PR already carrying `pr can merge`** is eligible here (Wotuu
+An MR that is CI-green and conflict-free gets **one** independent "cold" review from Codex before
+Wotuu looks at it. Codex reviewing the diff catches what the implementing session's self-review
+cannot — the self-review inherited the implementer's context and therefore its blind spots, while
+Codex has none of it. Eligibility is normally gated on **not draft** too — except the one carve-out
+from step 2: a **draft PR already carrying `pr can merge`** is eligible here (Wotuu
 authored/reviewed it himself and explicitly signaled he wants it reviewed now), even though it
 stays fully protected from merge/comment-fixing/rebase while still draft.
 
@@ -483,38 +483,45 @@ Wotuu: the 1-per-pass throttle made the review pipeline too slow with a multi-PR
 than 3 PRs are simultaneously eligible, pick the 3 with the oldest `updatedAt`; the rest wait for a
 later pass — note them as "awaiting cold review" in the pass report rather than dispatching more.
 Dispatch all chosen agents in a single message with multiple Agent tool calls so they actually run
-concurrently, not one Agent call per turn. This cap exists because each dispatch is a slow,
-expensive opus/fable agent reading a whole diff — 3 is a deliberate balance, not a technical limit;
-raise or lower it again if the cost/speed tradeoff stops feeling right.
+concurrently, not one Agent call per turn. The cap is no longer about Claude token cost (Codex runs
+on Wotuu's own subscription, outside this session's budget) — it exists so `babysit-prs` doesn't
+kick off more concurrent Codex review runs than is reasonable; raise or lower it if that balance
+stops feeling right.
 
 - **Skip** if the PR already carries the `pr cold reviewed` label (the once-per-MR marker; check
   this before spawning a reviewer — it's cheaper than searching comments). The label is also
   applied when the implementing session skipped cold review under the trivial-change rule
   (`.claude/CLAUDE.md`, "Before declaring a MR ready for review") — the MR body says so; don't
-  dispatch a review to "make up" for it. If the label is missing
-  but the PR already has agent-authored *inline* review comments or a `:robot: Cold review`
-  summary comment from a cold review that ran before the label existed (or whose label application
-  failed), just add the label instead of re-reviewing. Re-review only if the diff has changed
-  substantially since the review, or Wotuu asks.
+  dispatch a review to "make up" for it. If the label is missing but the PR already has a
+  `:robot: Cold review (...) @ <sha>` **summary comment**, check that `<sha>` still equals the PR's
+  current `headRefOid` before just adding the label — the reviewer embeds the reviewed SHA in the
+  marker specifically so this check is possible; a mismatch means the PR was pushed to after that
+  review ran, so the summary describes a commit that's no longer the head and the label would
+  wrongly bless an unreviewed one. Only recover the label when the SHA matches; otherwise dispatch a
+  real re-review instead. Agent-authored *inline* findings comments with no matching summary
+  comment are **not** enough on their own — the reviewer posts those before the summary, so a PR
+  with inline comments but no summary means the review was interrupted partway through; treat that
+  as needing a real re-review too, not a label to paper over. Re-review only if the diff has changed substantially since the review,
+  or Wotuu asks.
 - **Never run the review inside this session.** This session's context is warm, which defeats the
-  purpose of a *cold* review. Spawn a fresh agent instead, using the repo's own
-  custom subagent types rather than `general-purpose` — `Agent` tool, `subagent_type:
-  "cold-reviewer-opus"` (`"cold-reviewer-fable"` for high-risk diffs: migrations, auth, payment,
-  data-destructive changes). Both live at `.claude/agents/cold-reviewer-{opus,fable}.md` and are
-  pinned to **`effort: medium`** in their frontmatter (added 2026-08-02 — Wotuu flagged cold
-  reviews as the single biggest token burn in a pass; unset effort defaults to a much more
-  expensive tier, and this is the only lever that controls it, since the plain `Agent` tool has no
-  `effort` parameter of its own). The full review methodology — what to read, what to discard, the
-  `gh api` posting mechanics, the `-f`/`-F` footgun, the summary-comment format — is baked into
-  each definition's system prompt, so the dispatch prompt here only needs the PR number and any
-  extra routing context (e.g. why a diff was routed to the fable variant). Don't tell either agent
-  to invoke `/code-review` — it's a plugin *slash command*, not a Skill, and the Skill tool can't
-  dispatch it (confirmed independently twice, on #3704/#3708) — both custom agents already know
-  this and carry the direct-methodology instructions instead.
+  purpose of a *cold* review — dispatch it to Codex, which starts genuinely cold, has no memory of
+  the implementation, and runs outside this session's context entirely. `Agent` tool,
+  `subagent_type: "cold-reviewer-codex"` (`"cold-reviewer-codex-adversarial"` for high-risk diffs:
+  migrations, auth, payment, data-destructive changes). Both live at
+  `.claude/agents/cold-reviewer-codex{,-adversarial}.md` and are thin forwarding wrappers — they
+  don't review anything themselves, they locate the PR's local worktree checkout and forward to
+  Codex's own reviewer (`codex review` / `codex adversarial-review` via the Codex Companion plugin
+  script), then post whatever Codex returns. Both need the PR's branch checked out on disk to run
+  Codex against (worktrees for open MRs stay up until merge, so this is normally already true — see
+  `.claude/CLAUDE.md`, "Git worktrees"); if you already know the worktree path, hand it to the agent
+  in the dispatch prompt to save it a lookup, and mention why a diff was routed to the adversarial
+  variant. Don't tell either agent to invoke `/codex:review` or `/codex:adversarial-review` as a
+  slash command — those are `disable-model-invocation`, so an agent calling them itself will error;
+  both custom agents already know to call the companion script directly instead.
 - **Afterwards**, for each PR reviewed this pass, confirm the agent posted its marker comment
-  (`:robot: Cold review (opus|fable): <N> findings posted.` or `no findings`) and added the
-  `pr cold reviewed` label — both are part of each agent definition's own instructions, but verify
-  rather than assume, same as spot-checking finding bodies below.
+  (`:robot: Cold review (codex|codex-adversarial): ...`) and added the `pr cold reviewed` label —
+  both are part of each agent definition's own instructions, but verify rather than assume, same as
+  spot-checking finding bodies below.
 - Posted findings are addressed like any other review comments on a **later** pass (step 3.3) —
   don't review and fix in the same pass; the fixes deserve fresh triage and their own CI run.
 - The reviewer posts comments only — never a formal GitHub review (no approve / request-changes).
