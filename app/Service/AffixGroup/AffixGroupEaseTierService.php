@@ -25,8 +25,6 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         "Dawn of the Infinite: Murozond's Rise"  => "Murozond's Rise",
         'The Everbloom'                          => 'Everbloom',
         'Uldaman: Legacy of Tyr'                 => 'Uldaman',
-        'Temple of Sethraliss'                   => 'Sethraliss',
-        "King's Rest"                            => "Kings' Rest",
 
         // TWW S3
         'Ara-Kara, City of Echoes'    => 'Ara-Kara',
@@ -39,6 +37,10 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         // Midnight S1
         "Magisters' Terrace"          => "Magisters'",
         'The Seat of the Triumvirate' => 'Seat',
+
+        // Midnight S2
+        'Temple of Sethraliss' => 'Sethraliss',
+        "King's Rest"          => "Kings' Rest",
     ];
     public const string DATE_TIME_FORMAT = 'Y-m-d\TH:i:sP';
 
