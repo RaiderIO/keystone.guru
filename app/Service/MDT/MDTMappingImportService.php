@@ -193,11 +193,11 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         $mdtDungeon = new MDTDungeon($this->cacheService, $this->coordinatesService, $dungeon);
 
         return md5(
-            json_encode([
+            json_encode(self::canonicalizeForHash([
                 'counts'             => $mdtDungeon->getDungeonTotalCount(),
                 'npcs'               => $mdtDungeon->getMDTNPCs()->toArray(),
                 'floorSwitchMarkers' => $mdtDungeon->getMDTMapPOIs()->toArray(),
-            ]),
+            ])),
         );
     }
 
@@ -1271,5 +1271,28 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 'lng' => $maxLng,
             ],
         ];
+    }
+
+    /**
+     * Recursively sorts the keys of any associative (non-list) array so that {@see getMDTMappingHash()} does not
+     * depend on the Lua VM's unstable hash-part iteration order for nested `info` sub-tables (#4110).
+     *
+     * @param array<mixed> $data
+     *
+     * @return array<mixed>
+     */
+    private static function canonicalizeForHash(array $data): array
+    {
+        if (!array_is_list($data)) {
+            ksort($data);
+        }
+
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $data[$key] = self::canonicalizeForHash($value);
+            }
+        }
+
+        return $data;
     }
 }
