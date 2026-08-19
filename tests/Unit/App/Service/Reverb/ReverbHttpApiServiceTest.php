@@ -4,6 +4,7 @@ namespace Tests\Unit\App\Service\Reverb;
 
 use App\Service\Reverb\ReverbHttpApiService;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -52,14 +53,18 @@ final class ReverbHttpApiServiceTest extends PublicTestCase
         $this->assertSame([['id' => '1'], ['id' => '2']], $result);
     }
 
+    /**
+     * Reverb returns 400 (not 404) when the channel exists but isn't a presence channel - a
+     * genuinely different failure that must still surface as an exception.
+     */
     #[Test]
     public function getChannelUsers_givenNonNotFoundClientError_throws(): void
     {
         // Arrange
-        $service = $this->makeService(new Response(StatusCode::INTERNAL_SERVER_ERROR, [], 'server error'));
+        $service = $this->makeService(new Response(StatusCode::BAD_REQUEST, [], 'not a presence channel'));
 
         // Assert
-        $this->expectException(\Throwable::class);
+        $this->expectException(ClientException::class);
 
         // Act
         $service->getChannelUsers('presence-app-route-edit.somekey');
