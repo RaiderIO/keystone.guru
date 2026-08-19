@@ -8,6 +8,7 @@ use App\Models\Npc\Npc;
 use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 
 class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
@@ -24,20 +25,19 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
         $mappingVersion->load('dungeon');
 
         return Npc::select('npcs.*')
-            ->leftJoin('npc_enemy_forces', 'npcs.id', 'npc_enemy_forces.npc_id')
-            ->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
-            ->where(function (Builder $builder) use ($mappingVersion) {
-                $builder
-                    ->where('npc_dungeons.dungeon_id', $mappingVersion->dungeon_id)
-                    ->where(function (Builder $builder) use ($mappingVersion) {
-                        // Enemy forces may be not set, that means that we assume 0. They MAY be missing entirely for bosses
-                        // or for other exceptions listed below
-                        $builder->where(
-                            'npc_enemy_forces.mapping_version_id',
-                            $mappingVersion->id,
-                        )->orWhereNull('npc_enemy_forces.id');
-                    });
+            // Scoped to this mapping version, so a boss/NPC with no npc_enemy_forces row for the CURRENT mapping
+            // version correctly joins to NULL - even when older mapping versions do have a forces row for it. An
+            // unscoped join would match those older rows instead, and the below OR-NULL check would then never
+            // trigger, wrongly excluding the NPC from this mapping version's in-use list.
+            ->leftJoin('npc_enemy_forces', function (JoinClause $join) use ($mappingVersion) {
+                $join->on('npcs.id', '=', 'npc_enemy_forces.npc_id')
+                    ->where('npc_enemy_forces.mapping_version_id', $mappingVersion->id);
             })
+            ->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
+            // Enemy forces may not be set for this mapping version, that means we assume 0 - they MAY be missing
+            // entirely for bosses or for other exceptions listed below. The join above already scopes
+            // npc_enemy_forces to this mapping version, so a missing row simply joins to NULL here.
+            ->where('npc_dungeons.dungeon_id', $mappingVersion->dungeon_id)
             ->when($mappingVersion->dungeon->key === DungeonKey::NELTHARIONS_LAIR->value, function (Builder $builder) {
                 $builder->orWhereIn('npcs.id', [
                     // Burning Geodes are in the mapping but give 0 enemy forces.

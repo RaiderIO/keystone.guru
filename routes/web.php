@@ -189,7 +189,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('activity/{date}', new NpcCompendiumController()->activityDay(...))->name('compendium.activity.day');
                 // withoutScopedBindings: a child binding with a custom key is scoped to its parent by
                 // default, which would have Laravel resolve the class through $dungeon->characterClasses()
-                Route::get('class/{characterClass:key}', new ClassCompendiumController()->showDungeon(...))
+                Route::get('class/{characterClass:slug}', new ClassCompendiumController()->showDungeon(...))
                     ->withoutScopedBindings()->name('compendium.class.show.dungeon');
             });
             Route::prefix('npc')->group(static function () {
@@ -203,7 +203,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::get('activity', new NpcCompendiumController()->activityIndex(...))->name('compendium.activity.index');
             Route::prefix('class')->group(static function () {
                 Route::get('/', new ClassCompendiumController()->index(...))->name('compendium.class.index');
-                Route::get('/{characterClass:key}', new ClassCompendiumController()->show(...))->name('compendium.class.show');
+                Route::get('/{characterClass:slug}', new ClassCompendiumController()->show(...))->name('compendium.class.show');
             });
         });
 

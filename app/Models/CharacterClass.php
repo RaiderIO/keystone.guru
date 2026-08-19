@@ -9,12 +9,14 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Override;
 use Str;
 
 /**
  * @property int    $id
  * @property int    $class_id Blizzard class ID
  * @property string $key
+ * @property string $slug     The url friendly slug of the class, e.g. death-knight
  * @property string $name
  * @property string $color
  *
@@ -40,6 +42,7 @@ class CharacterClass extends CacheModel
     public $fillable = [
         'class_id',
         'key',
+        'slug',
         'name',
         'color',
     ];
@@ -76,6 +79,15 @@ class CharacterClass extends CacheModel
         self::CHARACTER_CLASS_DEMON_HUNTER,
         self::CHARACTER_CLASS_EVOKER,
     ];
+
+    /**
+     * https://stackoverflow.com/a/34485411/771270
+     */
+    #[Override]
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
 
     /**
      * @return string
