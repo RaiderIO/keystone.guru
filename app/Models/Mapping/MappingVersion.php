@@ -664,6 +664,25 @@ class MappingVersion extends Model
                     }
                 }
             }
+            // Change linked dungeon floor switch markers to point at their new sibling clone
+            foreach ($idMapping->get(DungeonFloorSwitchMarker::class) as $dungeonFloorSwitchMarkerRelationCoupling) {
+                /** @var array{oldModel: DungeonFloorSwitchMarker, newModel: DungeonFloorSwitchMarker} $dungeonFloorSwitchMarkerRelationCoupling */
+                $oldLinkedDungeonFloorSwitchMarkerId = $dungeonFloorSwitchMarkerRelationCoupling['oldModel']->linked_dungeon_floor_switch_marker_id;
+                if ($oldLinkedDungeonFloorSwitchMarkerId === null) {
+                    continue;
+                }
+
+                // Find the new ID of the linked dungeon floor switch marker
+                foreach ($idMapping->get(DungeonFloorSwitchMarker::class) as $linkedDungeonFloorSwitchMarkerRelationCoupling) {
+                    /** @var array{oldModel: DungeonFloorSwitchMarker, newModel: DungeonFloorSwitchMarker} $linkedDungeonFloorSwitchMarkerRelationCoupling */
+                    if ($linkedDungeonFloorSwitchMarkerRelationCoupling['oldModel']->id === $oldLinkedDungeonFloorSwitchMarkerId) {
+                        $dungeonFloorSwitchMarkerRelationCoupling['newModel']->update([
+                            'linked_dungeon_floor_switch_marker_id' => $linkedDungeonFloorSwitchMarkerRelationCoupling['newModel']->id,
+                        ]);
+                        break;
+                    }
+                }
+            }
             // Change floor unions of floor union areas
             foreach ($idMapping->get(FloorUnionArea::class) as $floorUnionAreaRelationCoupling) {
                 /** @var array{oldModel: FloorUnionArea, newModel: FloorUnionArea} $floorUnionAreaRelationCoupling */
