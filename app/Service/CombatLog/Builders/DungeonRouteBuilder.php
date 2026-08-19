@@ -4,6 +4,7 @@ namespace App\Service\CombatLog\Builders;
 
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
+use App\Models\DungeonKey;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\EnemyPatrol;
@@ -35,6 +36,19 @@ abstract class DungeonRouteBuilder
         //        DungeonKey::THE_ROOKERY->value,
         //        DungeonKey::WAYCREST_MANOR->value
         //        DungeonKey::THEATER_OF_PAIN->value
+    ];
+
+    /**
+     * @var array<int, string> Dungeons whose floors are stacked on top of one another - they occupy near identical
+     *                         ingame X/Y and the builder has no Z axis to tell them apart, so the enemies of an
+     *                         earlier floor keep competing for kills that happened on a later one. For these, a boss
+     *                         kill takes every floor before the boss' own floor out of the running.
+     *                         Deliberately an allowlist: enabling this everywhere shifts the pull counts of seven
+     *                         other dungeons' regression runs, so the rule is not universally safe.
+     */
+    private const array DUNGEON_BOSS_KILL_FLOOR_CUTOFF_ENABLED = [
+        DungeonKey::VOIDSCAR_ARENA->value,
+        DungeonKey::THE_AZURE_VAULT->value,
     ];
 
     protected const array NPC_ID_MAPPING = [
@@ -76,6 +90,12 @@ abstract class DungeonRouteBuilder
     protected Collection $validNpcIds;
 
     private int $killZoneIndex = 1;
+
+    /**
+     * @var int The lowest Floor index that is still eligible for matching. Raised whenever a boss is killed - the
+     *          party has left every floor before the boss' floor behind at that point. 0 means no cutoff yet.
+     */
+    protected int $minimumFloorIndex = 0;
 
     /** @var Collection<int, KillZone> */
     protected Collection $killZones;
@@ -268,6 +288,12 @@ abstract class DungeonRouteBuilder
                     return false;
                 }
 
+                // Once a boss on floor N has died the party has left every floor before N behind. Only ever raised
+                // above 0 for DUNGEON_BOSS_KILL_FLOOR_CUTOFF_ENABLED dungeons - see applyBossKillFloorCutoff().
+                if ($this->minimumFloorIndex > 0 && $availableEnemy->floor->index < $this->minimumFloorIndex) {
+                    return false;
+                }
+
                 return true;
             });
 
@@ -327,6 +353,34 @@ abstract class DungeonRouteBuilder
         }
 
         return $closestEnemy->getEnemy();
+    }
+
+    /**
+     * Excludes all enemies on floors before the killed boss' floor from any further matching.
+     */
+    protected function applyBossKillFloorCutoff(?Enemy $enemy): void
+    {
+        if (!in_array($this->dungeonRoute->dungeon->key, self::DUNGEON_BOSS_KILL_FLOOR_CUTOFF_ENABLED)) {
+            return;
+        }
+
+        // The boss may not have been resolved to a mapped enemy at all - then we have no floor to work with
+        if ($enemy === null || !$enemy->npc->isBoss() || $enemy->floor->facade) {
+            return;
+        }
+
+        if ($enemy->floor->index <= $this->minimumFloorIndex) {
+            return;
+        }
+
+        $this->minimumFloorIndex = $enemy->floor->index;
+
+        $this->log->applyBossKillFloorCutoffMinimumFloorIndexRaised(
+            $enemy->id,
+            $enemy->npc_id,
+            $enemy->floor_id,
+            $this->minimumFloorIndex,
+        );
     }
 
     /**
