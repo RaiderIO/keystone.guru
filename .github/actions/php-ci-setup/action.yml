@@ -295,10 +295,17 @@ runs:
           # next-id when the source had a gap at the top. Content is the checksums' job, not this.
           local schema_a="$RUNNER_TEMP/schema-seeded.$service" schema_b="$RUNNER_TEMP/schema-restored.$service"
           # --skip-comments drops the header, which would otherwise differ on its `Database:` line.
+          # The second sed normalises a rendering-only difference: mysqldump writes a column-level
+          # `COLLATE` without a `CHARACTER SET`, and MySQL treats parsing that as the charset having
+          # been explicitly specified, so the restored table's SHOW CREATE TABLE gains a
+          # `CHARACTER SET utf8mb4` the seeded one does not have. information_schema.columns reports
+          # utf8mb4/utf8mb4_unicode_ci for both either way, and a collation name pins its charset, so
+          # dropping the redundant CHARACTER SET in front of a COLLATE hides nothing real.
           structure_of() {
             docker compose -f docker-compose.ci.yml exec -T "$service" \
               mysqldump --no-data --no-tablespaces --routines --events --skip-comments -uroot -proot "$1" \
-              | sed -E 's/ AUTO_INCREMENT=[0-9]+//'
+              | sed -E 's/ AUTO_INCREMENT=[0-9]+//' \
+              | sed -E 's/ CHARACTER SET [A-Za-z0-9_]+ COLLATE / COLLATE /g'
           }
           structure_of "$source_schema" > "$schema_a"
           structure_of "$SCRATCH" > "$schema_b"
