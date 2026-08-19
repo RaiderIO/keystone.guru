@@ -201,7 +201,7 @@
         "color": null,
         "color_animated": null,
         "label": "Imported from MDT - group 36",
-        "vertices_json": "[{\"lat\":-230.14,\"lng\":243.51},{\"lat\":-209.99,\"lng\":243.51},{\"lat\":-209.99,\"lng\":256.34},{\"lat\":-230.14,\"lng\":256.34}]"
+        "vertices_json": "[{\"lat\":-223.9375,\"lng\":243.5},{\"lat\":-209.99,\"lng\":243.51},{\"lat\":-209.7813,\"lng\":253.6875},{\"lat\":-223.5625,\"lng\":252.9375}]"
     },
     {
         "id": 26057,
