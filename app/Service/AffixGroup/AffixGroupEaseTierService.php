@@ -25,6 +25,8 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         "Dawn of the Infinite: Murozond's Rise"  => "Murozond's Rise",
         'The Everbloom'                          => 'Everbloom',
         'Uldaman: Legacy of Tyr'                 => 'Uldaman',
+        'Temple of Sethraliss'                   => 'Sethraliss',
+        "King's Rest"                            => "Kings' Rest",
 
         // TWW S3
         'Ara-Kara, City of Echoes'    => 'Ara-Kara',
