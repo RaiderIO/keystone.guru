@@ -79,6 +79,10 @@ class CombatLogRouteRequestDto extends RequestDto implements Arrayable
             );
         }
 
+        // The builders that consume this DungeonRoute's dungeon relation (e.g. CombatLogRouteCorrectionBuilder)
+        // access ->floors - eager-load it here to avoid a lazy-loading violation.
+        $dungeon->loadMissing('floors');
+
         // In case there was a mapping version override, we need to find the correct mapping version
         if ($this->settings->mappingVersion !== null) {
             $mappingVersion = $dungeonRepository->getMappingVersionByVersion(
