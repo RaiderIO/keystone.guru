@@ -99,10 +99,70 @@ final class DungeonFloorSwitchMarkerMappingVersionTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function create_givenMappingVersionWithDungeonFloorSwitchMarkerLinkedOutsideItself_clearsLinkOnClone(): void
+    {
+        // Arrange
+        $existingMappingVersion = $this->getMappingVersionThatWillBeCloned();
+
+        /** @var DungeonFloorSwitchMarker $marker */
+        $marker = $existingMappingVersion->dungeonFloorSwitchMarkers()->firstOrFail();
+
+        /** @var DungeonFloorSwitchMarker $markerOutsideMappingVersion */
+        $markerOutsideMappingVersion = DungeonFloorSwitchMarker::where('mapping_version_id', '!=', $existingMappingVersion->id)
+            ->firstOrFail();
+
+        // Sentinel lat value that doesn't occur in the seeded mapping so the clone can be found
+        // unambiguously afterwards.
+        $sentinelLat = 333.33;
+
+        // Simulate an already-dangling link - e.g. left over from a previous mapping version clone,
+        // or the marker it used to point at was deleted without clearing the reverse link.
+        $danglingMarker = DungeonFloorSwitchMarker::create([
+            'mapping_version_id'                    => $existingMappingVersion->id,
+            'floor_id'                              => $marker->floor_id,
+            'source_floor_id'                       => $marker->source_floor_id,
+            'target_floor_id'                       => $marker->target_floor_id,
+            'linked_dungeon_floor_switch_marker_id' => $markerOutsideMappingVersion->id,
+            'direction'                             => $marker->direction,
+            'hidden_in_facade'                      => false,
+            'lat'                                   => $sentinelLat,
+            'lng'                                   => $marker->lng,
+        ]);
+
+        $newMappingVersion = null;
+
+        try {
+            // Act
+            $newMappingVersion = $this->createNextMappingVersion($existingMappingVersion);
+
+            // Assert
+            /** @var DungeonFloorSwitchMarker|null $clonedMarker */
+            $clonedMarker = DungeonFloorSwitchMarker::where('mapping_version_id', $newMappingVersion->id)
+                ->where('lat', $sentinelLat)
+                ->first();
+
+            $this->assertNotNull($clonedMarker, 'The marker must have been cloned into the new MappingVersion.');
+
+            // Without the null fallback, the clone would keep pointing at $markerOutsideMappingVersion's
+            // id - a pointer into a foreign mapping version's id space, indistinguishable from the
+            // #4160 corruption.
+            $this->assertNull(
+                $clonedMarker->linked_dungeon_floor_switch_marker_id,
+                'A link that could not be resolved within the cloned mapping version must be cleared, not carried over.',
+            );
+        } finally {
+            if ($newMappingVersion !== null) {
+                $newMappingVersion->delete();
+            }
+
+            DungeonFloorSwitchMarker::where('id', $danglingMarker->id)->delete();
+        }
+    }
+
     /**
      * The mapping version MappingVersion::boot() will clone from - the highest `version` of the
-     * dungeon across every game version, which is not necessarily what getCurrentMappingVersion()
-     * returns (that one is scoped to a single game version).
+     * dungeon scoped to the same game_version_id as the mapping version being created.
      */
     private function getMappingVersionThatWillBeCloned(): MappingVersion
     {
