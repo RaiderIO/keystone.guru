@@ -58,4 +58,22 @@ final class MapContextStaticDataTest extends PublicTestCase
         $factionKeys = array_column($factions, 'key');
         $this->assertNotContains(Faction::FACTION_UNSPECIFIED, $factionKeys);
     }
+
+    #[Test]
+    public function toArray_givenTwoLocales_returnsPayloadsWithDistinctTranslatedSpellNames(): void
+    {
+        // Arrange - the static cache key used to hardcode the '%s' placeholder instead of
+        // interpolating the locale, so every locale shared a single cache entry and every locale
+        // but the first one to run ended up serving that first locale's translations.
+        $enSpells = app(MapContextServiceInterface::class)->createMapContextStaticData('en_US')->toArray()['static']['selectableSpells'];
+        $deSpells = app(MapContextServiceInterface::class)->createMapContextStaticData('de_DE')->toArray()['static']['selectableSpells'];
+
+        $enNamesByKey = $enSpells->pluck('name', 'id');
+        $deNamesByKey = $deSpells->pluck('name', 'id');
+
+        // Assert
+        $this->assertNotEmpty($enNamesByKey);
+        $this->assertSame($enNamesByKey->keys()->all(), $deNamesByKey->keys()->all());
+        $this->assertNotEquals($enNamesByKey->all(), $deNamesByKey->all());
+    }
 }
