@@ -1,0 +1,43 @@
+# Populates the seeded-database dump cache that php-ci-setup restores (#4139).
+#
+# GitHub Actions caches are branch-scoped: an entry written by a `pull_request` run is visible only
+# to that PR, while an entry written on the default branch is visible to every branch. php-tests
+# runs only on pull_request, and phpstan - the one workflow that does run on push to master - opts
+# out of migrations entirely. Without this job nothing would ever write a master-scoped entry, so
+# every PR would miss on its first run and the cache would buy almost nothing.
+#
+# The job is just the composite action: it seeds and saves on a miss, and short-circuits on a hit, so
+# a merge that changes nothing seed-related costs ~90s. The nightly php-coverage run keeps the entry
+# alive against the 7-day unused-cache eviction.
+name: CI database cache warm
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+# Serialised, but deliberately NOT cancel-in-progress: cancelling a warm run mid-seed writes no
+# cache at all, so a burst of merges could starve the cache indefinitely. A redundant run is the
+# cheaper failure.
+concurrency:
+  group: ci-db-warm
+  cancel-in-progress: false
+
+jobs:
+  warm:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout for local actions
+        # Shallow on purpose, same as php-tests: nothing here reads git history, and a full fetch
+        # cost 10-15 minutes per job (#4135).
+        uses: actions/checkout@v7
+
+      - name: Start services
+        run: docker compose -f docker-compose.ci.yml up -d --wait
+
+      - name: Common PHP/Laravel setup (seeds and caches the database dump)
+        uses: ./.github/actions/php-ci-setup

@@ -1,6 +1,11 @@
+# Both MySQL servers are throwaway: no volumes, destroyed along with the runner. The `command`
+# overrides therefore trade durability we can never need for speed on the two things CI actually
+# does with them - seeding the database, and restoring the cached dump of it (#4139). MySQL 8
+# enables the binary log by default, which on its own roughly halves write throughput.
 services:
   db:
     image: mysql:8.0.42
+    command: --skip-log-bin --innodb-flush-log-at-trx-commit=0 --innodb-doublewrite=OFF
     ports:
       - "3306:3306"
     environment:
@@ -16,6 +21,7 @@ services:
 
   db-combatlog:
     image: mysql:8.0.42
+    command: --skip-log-bin --innodb-flush-log-at-trx-commit=0 --innodb-doublewrite=OFF
     ports:
       - "3307:3306"
     environment:

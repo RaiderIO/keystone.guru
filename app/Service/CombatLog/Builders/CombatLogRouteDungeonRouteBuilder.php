@@ -173,10 +173,9 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 $newFloor = $floorCache->get($event['npc']->coord->uiMapId);
 
                 if ($newFloor === null) {
-                    $floorCache->put(
-                        $event['npc']->coord->uiMapId,
-                        $this->floorRepository->findByUiMapId($event['npc']->coord->uiMapId, $this->dungeonRoute->dungeon_id),
-                    );
+                    $newFloor = $this->floorRepository->findByUiMapId($event['npc']->coord->uiMapId, $this->dungeonRoute->dungeon_id);
+
+                    $floorCache->put($event['npc']->coord->uiMapId, $newFloor);
                 }
 
                 if ($newFloor === null) {
@@ -249,6 +248,8 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                         $this->log->buildKillZonesEnemyKilled($uniqueUid, $event['npc']->getDiedAt()->toDateTimeString());
                     }
                 }
+
+                $this->applyBossKillFloorCutoff($event['npc']->getResolvedEnemy());
 
                 // Handle spells and the actual creation of pulls
                 /** @var ActivePull|null $firstActivePull */

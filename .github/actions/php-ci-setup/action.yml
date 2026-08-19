@@ -186,10 +186,102 @@ runs:
         php artisan key:generate --force -v
       shell: bash
 
-    - name: Migrate & seed
+    # Seeding the database costs ~84s and every caller of this action produces the exact same one, so
+    # it is paid six times per PR by the php-tests shards alone, plus nightly by php-coverage and
+    # twice per release by release-deploy (#4139). Cache a mysqldump of the seeded result instead:
+    # on a hit the seed is skipped entirely and the dump is loaded, on a miss we seed exactly as
+    # before and produce the dump for everyone else. A stale or absent cache therefore degrades to
+    # the old behaviour rather than failing.
+    #
+    # There is deliberately NO `restore-keys` here (unlike the composer cache above): a prefix match
+    # would silently hand a job a database seeded from *different* input files, which fails later,
+    # elsewhere, and for a confusing reason. Exact key or miss.
+    #
+    # The key covers everything the seeders read from disk, enumerated from DatabaseSeeder::SEEDERS
+    # rather than guessed - note that three of those inputs live outside database/seeders:
+    #   - database/data/**    MDTAddonVersionSeeder, SpellDescriptionImportStateSeeder
+    #   - lang/**             TranslationsSeeder globs lang_path() into the `translations` table
+    #   - app/SeederHelpers/** the RelationParsers/RelationMappings that decide what the JSON becomes,
+    #                          plus the LoadsSeasonData / LoadsMapIconTypeData traits
+    # This file is hashed too: it holds the procedure (the migrate/seed commands, the mysqldump
+    # flags), and a dump built by the old procedure must not keep being served after the procedure
+    # changes.
+    # Seeded output can still change through PHP that none of these paths cover (a model's boot
+    # behaviour, say). Bump the `v1` epoch below by hand when that happens - over-invalidating costs
+    # one seed, under-invalidating costs a confusing red build.
+    #
+    # The ISO week stamp caps how long one dump can be served. Eviction alone would not: GitHub's
+    # 7-day rule counts from last *access*, and this key is read six times per PR plus nightly, so a
+    # dump for an unchanged set of inputs would otherwise be reused indefinitely.
+    # Nothing seeded is known to depend on when the seed ran - seeded timestamps come from committed
+    # JSON via TimestampAttributeParser, and MappingVersionSeeder's Carbon::now() branch is dead
+    # behind its `MappingVersion::count() !== 0` guard once DungeonDataSeeder has run - so this is
+    # insurance against a future time-dependent seeder rather than a fix for a known one. It costs
+    # one re-seed a week, absorbed by ci-db-warm on the next push to master.
+    - name: Stamp the ISO week for the database cache key
+      id: db-cache-week
       if: ${{ inputs.run-migrations == 'true' }}
+      run: echo "week=$(date -u +%G-W%V)" >> "$GITHUB_OUTPUT"
+      shell: bash
+
+    - name: Restore seeded database dump
+      id: cache-db
+      if: ${{ inputs.run-migrations == 'true' }}
+      uses: actions/cache/restore@v5
+      with:
+        path: ~/ci-db-dump
+        key: ci-db-v1-${{ steps.db-cache-week.outputs.week }}-${{ hashFiles('database/migrations/**', 'database/migrations_combatlog/**', 'database/schema/**', 'database/seeders/**', 'database/data/**', 'lang/**', 'app/SeederHelpers/**', '.env.ci.example', 'docker-compose.ci.yml', '.github/actions/php-ci-setup/action.yml') }}
+
+    - name: Migrate & seed
+      if: ${{ inputs.run-migrations == 'true' && steps.cache-db.outputs.cache-hit != 'true' }}
       run: |
         php artisan migrate --database=migrate --force
         php artisan migrate --database=combatlog --path=database/migrations_combatlog --force
         php artisan db:seed --database=migrate --force -v
+
+        # Dump from *inside* the container, not with the runner's client: `default-mysql-client`
+        # installed above resolves to the MariaDB client on Ubuntu, which skews against a MySQL
+        # 8.0.42 server. This is the same reason sh/worktree.sh:load_schema_dump() pipes through
+        # `docker exec` instead of using the app image's client. Print the version so which client
+        # actually ran is on record in the log.
+        mkdir -p ~/ci-db-dump
+        # --routines --events are not needed today (neither schema defines any, and triggers are
+        # dumped by default) but are cheap insurance: the cached dump outlives the run that made it,
+        # so a routine added later must not go silently missing on every cache hit.
+        docker compose -f docker-compose.ci.yml exec -T db mysqldump --version
+        docker compose -f docker-compose.ci.yml exec -T db \
+          mysqldump --no-tablespaces --single-transaction --routines --events -uroot -proot \
+          'keystone.guru.dev' > ~/ci-db-dump/main.sql
+        docker compose -f docker-compose.ci.yml exec -T db-combatlog \
+          mysqldump --no-tablespaces --single-transaction --routines --events -uroot -proot \
+          'keystone.guru.combatlog' > ~/ci-db-dump/combatlog.sql
+        ls -la ~/ci-db-dump
+      shell: bash
+
+    # Saved here rather than by the combined actions/cache, whose post-job save does not run when the
+    # job fails - seeding happens in setup and PHPUnit runs after it, so a single failing test would
+    # otherwise throw the dump away and make the next run seed again.
+    # On a cold cache all six php-tests shards seed in parallel and race to write this one key. No
+    # continue-on-error is needed for that: actions/cache/save logs "Failed to save: Unable to
+    # reserve cache with key ..., another job may be creating this cache" and still succeeds
+    # (observed on this PR's first cold run, where five shards lost the race and none failed). Left
+    # off deliberately, so a save that fails for a real reason is still visible.
+    - name: Save seeded database dump
+      if: ${{ inputs.run-migrations == 'true' && steps.cache-db.outputs.cache-hit != 'true' }}
+      uses: actions/cache/save@v5
+      with:
+        path: ~/ci-db-dump
+        key: ${{ steps.cache-db.outputs.cache-primary-key }}
+
+    # The dumps carry the `migrations` table, so Laravel sees a fully migrated schema, and mysqldump
+    # emits AUTO_INCREMENT= on every CREATE TABLE, so id sequences survive the round trip. The
+    # per-job `Seed users` step (LaratrustSeeder) still runs after this action in the workflows, on
+    # both paths, exactly as before.
+    - name: Load seeded database dump
+      if: ${{ inputs.run-migrations == 'true' && steps.cache-db.outputs.cache-hit == 'true' }}
+      run: |
+        docker compose -f docker-compose.ci.yml exec -T db \
+          mysql -uroot -proot 'keystone.guru.dev' < ~/ci-db-dump/main.sql
+        docker compose -f docker-compose.ci.yml exec -T db-combatlog \
+          mysql -uroot -proot 'keystone.guru.combatlog' < ~/ci-db-dump/combatlog.sql
       shell: bash

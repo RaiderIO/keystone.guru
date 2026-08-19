@@ -65,6 +65,18 @@ interface DungeonRouteBuilderLoggingInterface
 
     public function findUnkilledEnemyForNpcAtIngameLocationEnd(): void;
 
+    public function findUnkilledEnemyForNpcAtIngameLocationRetryingWithoutBossKillFloorCutoff(
+        int $npcId,
+        int $minimumFloorIndex,
+    ): void;
+
+    public function applyBossKillFloorCutoffMinimumFloorIndexRaised(
+        int $enemyId,
+        int $npcId,
+        int $floorId,
+        int $minimumFloorIndex,
+    ): void;
+
     /**
      * @param array<int, bool> $preferredGroups
      */
