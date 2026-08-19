@@ -192,12 +192,16 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     {
         $mdtDungeon = new MDTDungeon($this->cacheService, $this->coordinatesService, $dungeon);
 
+        // Only the npcs/floorSwitchMarkers payloads are read from Lua tables whose hash-part key order is
+        // unstable across VM instances (#4110) - canonicalizing each independently, rather than wrapping this
+        // whole literal array in one canonicalizeForHash() call, keeps the always-stable top-level key order
+        // ('counts', 'npcs', 'floorSwitchMarkers') untouched, so the fix doesn't churn every dungeon's hash.
         return md5(
-            json_encode(self::canonicalizeForHash([
+            json_encode([
                 'counts'             => $mdtDungeon->getDungeonTotalCount(),
-                'npcs'               => $mdtDungeon->getMDTNPCs()->toArray(),
-                'floorSwitchMarkers' => $mdtDungeon->getMDTMapPOIs()->toArray(),
-            ])),
+                'npcs'               => self::canonicalizeForHash($mdtDungeon->getMDTNPCs()->toArray()),
+                'floorSwitchMarkers' => self::canonicalizeForHash($mdtDungeon->getMDTMapPOIs()->toArray()),
+            ]),
         );
     }
 
