@@ -416,11 +416,28 @@ final class MDT2CodecTest extends TestCase
     }
 
     #[Test]
-    public function decode_givenTooMuchTrailingGarbage_throwsMDT2DecodeException(): void
+    public function decode_givenTrailingGarbageAtCapBoundary_stripsAndDecodesSuccessfully(): void
+    {
+        // Arrange - '!' is outside the Base64 alphabet, so no amount of trimming can accidentally
+        // realign it into valid-but-different Base64: decode only succeeds once every garbage byte
+        // is gone, regardless of this fixture's own padding. Exactly MAX_TRAILING_GARBAGE_BYTES
+        // garbage bytes, pinning the retry loop's inclusive upper edge.
+        $cbor   = hex2bin('a1476f626a656374738241614162');
+        $string = $this->buildMdt2String($cbor) . str_repeat('!', 8);
+
+        // Act
+        $decoded = $this->codec->decode($string);
+
+        // Assert
+        $this->assertSame(['objects' => ['a', 'b']], $decoded);
+    }
+
+    #[Test]
+    public function decode_givenTrailingGarbageOneByteOverCap_throwsMDT2DecodeException(): void
     {
         // Arrange - one byte more than MAX_TRAILING_GARBAGE_BYTES tolerates
         $cbor   = hex2bin('a1476f626a656374738241614162');
-        $string = $this->buildMdt2String($cbor) . str_repeat('w', 9);
+        $string = $this->buildMdt2String($cbor) . str_repeat('!', 9);
 
         // Assert
         $this->expectException(MDT2DecodeException::class);

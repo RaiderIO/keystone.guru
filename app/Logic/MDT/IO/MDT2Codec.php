@@ -64,8 +64,9 @@ final class MDT2Codec implements MDTStringCodecInterface
     private const MAX_ITEMS = 262144;
 
     /**
-     * Cap on how many trailing characters decode() will try stripping from an otherwise-invalid
-     * payload before giving up - see decode()'s docblock for why this is safe.
+     * Cap on how many trailing characters decodeBase64WithTrailingGarbageRecovery() will try
+     * stripping from an otherwise-invalid payload before giving up - see that method's docblock
+     * for why this is safe.
      */
     private const MAX_TRAILING_GARBAGE_BYTES = 8;
 
@@ -106,40 +107,42 @@ final class MDT2Codec implements MDTStringCodecInterface
         }
 
         $payload = substr($string, strlen(self::PREFIX));
+        $binary  = self::decodeBase64WithTrailingGarbageRecovery($payload);
 
-        try {
-            return self::decodePayload($payload);
-        } catch (MDT2DecodeException $exception) {
-            // Production has seen otherwise-valid MDT2 payloads with a handful of stray bytes
-            // stuck to the end (e.g. a validly-padded Base64 blob with "w==" appended) - clipboard
-            // interference between export and paste, outside our control. Retry against
-            // progressively shorter prefixes of the payload: decodePayload() only succeeds if
-            // Base64, inflate AND the strict CBOR structural check all agree, so an accidental
-            // "successful" decode of genuinely corrupt input is not realistically possible.
-            for ($trim = 1; $trim <= self::MAX_TRAILING_GARBAGE_BYTES; $trim++) {
-                try {
-                    return self::decodePayload(substr($payload, 0, -$trim));
-                } catch (MDT2DecodeException) {
-                    continue;
-                }
+        return self::decodeBinary($binary);
+    }
+
+    /**
+     * Production has seen otherwise-valid MDT2 payloads with a handful of stray bytes stuck to the
+     * end (e.g. a validly-padded Base64 blob with "w==" appended) - clipboard interference between
+     * export and paste, outside our control. Only Base64's strict length/alphabet check can be
+     * broken by such trailing bytes - gzinflate() already stops at the DEFLATE stream's end and
+     * ignores anything after it, so a payload that would fail later in the pipeline fails there
+     * regardless of trimming. Recovery is scoped to this step alone: each retry is a cheap
+     * base64_decode() call, not a repeat of the expensive inflate/CBOR validation in
+     * decodeBinary(), which still runs exactly once either way.
+     *
+     * @throws MDT2DecodeException
+     */
+    private static function decodeBase64WithTrailingGarbageRecovery(string $payload): string
+    {
+        for ($trim = 0; $trim <= self::MAX_TRAILING_GARBAGE_BYTES; $trim++) {
+            $binary = base64_decode($trim === 0 ? $payload : substr($payload, 0, -$trim), true);
+
+            if ($binary !== false) {
+                return $binary;
             }
-
-            throw $exception;
         }
+
+        throw new MDT2DecodeException('Unable to decode Base64 payload');
     }
 
     /**
      * @return array<int|string, mixed>
      * @throws MDT2DecodeException
      */
-    private static function decodePayload(string $payload): array
+    private static function decodeBinary(string $binary): array
     {
-        $binary = base64_decode($payload, true);
-
-        if ($binary === false) {
-            throw new MDT2DecodeException('Unable to decode Base64 payload');
-        }
-
         $inflated = @gzinflate($binary, self::MAX_DECOMPRESSED_BYTES);
 
         if ($inflated === false) {
