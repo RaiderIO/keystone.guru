@@ -195,7 +195,7 @@ class APICombatLogControllerCombatLogRouteVoidscarArenaTest extends APICombatLog
      * The API resource only exposes an npcId per pull enemy, so anything about which *enemy* (and therefore which
      * floor) a kill resolved to has to be read back from the database.
      *
-     * @param  array<string, mixed>     $responseArr
+     * @param  array<string, mixed>      $responseArr
      * @return Collection<int, KillZone>
      */
     private function getKillZones(array $responseArr): Collection
