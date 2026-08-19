@@ -101,6 +101,13 @@ the posting command above and the label command below. If it fails for **any** r
 simply isn't available here: use plain `gh` for both commands and don't treat it as a problem. Keep
 the `:robot: ` prefix either way.
 
+**Recheck freshness once more before labeling** — the comment post itself takes a moment, so a push
+could land between your step-3 check and now. Re-run
+`gh pr view <n> --repo RaiderIO/keystone.guru --json headRefOid --jq .headRefOid` and compare
+against `$REVIEWED_SHA` again. If it no longer matches, leave the PR unlabeled and report that a
+rerun is required — a push in this narrow window means the label would otherwise mark an unreviewed
+commit as reviewed.
+
 Then add the label, through the bot so it is not attributed to Wotuu:
 `<gh-or-bot-path> pr edit <n> --repo RaiderIO/keystone.guru --add-label "pr cold reviewed"`
 

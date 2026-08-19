@@ -151,6 +151,13 @@ the `:robot: ` prefix either way.
 `-f body=@file`, the literal string `@file` gets posted as garbage — you must use `-F body=@file`
 (capital F) to dereference it, or just pass the body inline with `-f body='...'` for short comments.
 
+**Recheck freshness once more before labeling** — posting all the findings takes a moment, so a
+push could land between your step-3 check and now. Re-run
+`gh pr view <n> --repo RaiderIO/keystone.guru --json headRefOid --jq .headRefOid` and compare
+against `$REVIEWED_SHA` again. If it no longer matches, leave the PR unlabeled and report that a
+rerun is required — a push in this narrow window means the label would otherwise mark an unreviewed
+commit as reviewed.
+
 Then add the label, through the bot so it is not attributed to Wotuu:
 `<gh-or-bot-path> pr edit <n> --repo RaiderIO/keystone.guru --add-label "pr cold reviewed"`
 
