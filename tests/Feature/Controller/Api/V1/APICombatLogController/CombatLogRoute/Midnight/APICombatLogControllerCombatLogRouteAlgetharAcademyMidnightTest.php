@@ -34,7 +34,17 @@ class APICombatLogControllerCombatLogRouteAlgetharAcademyMidnightTest extends AP
         $responseArr = json_decode($response->content(), true);
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 14, 521);
+        $this->validatePulls($responseArr, 15, 521);
         $this->validateAffixes($responseArr);
+
+        // #4144 - the Overgrown Ancient (boss npc 196482) died 172 yards from its mapped position, well outside
+        // enemy_engagement_max_range - it must still get matched into its own pull instead of being dropped.
+        $npcIdsInPulls = [];
+        foreach ($responseArr['data']['pulls'] as $pull) {
+            foreach ($pull['enemies'] as $enemy) {
+                $npcIdsInPulls[] = $enemy['npcId'];
+            }
+        }
+        $this->assertContains(196482, $npcIdsInPulls);
     }
 }

@@ -11,7 +11,6 @@ use App\Models\EnemyPatrol;
 use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
-use App\Models\Npc\NpcClassification;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\EnemyRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
@@ -508,11 +507,19 @@ abstract class DungeonRouteBuilder
         try {
             $this->log->findClosestEnemyInAllFilteredEnemiesStart();
 
+            // There's only one boss NPC in the mapping, so killing it unambiguously matches it regardless of how
+            // far its death location is from where it's mapped - let it be matched regardless of range. Non-boss
+            // candidates are still rejected by range inside findClosestEnemyAndDistance() itself, before they're
+            // ever recorded as the closest enemy.
+            $isBoss = $filteredEnemies->first()?->npc?->isBoss() ?? false;
+
             $this->findClosestEnemyAndDistanceFromList(
                 $filteredEnemies,
                 $activePullEnemy,
                 $previousPullLatLng,
                 $closestEnemy,
+                false,
+                $isBoss,
             );
 
             // If the closest enemy was still pretty far away - check if there was a patrol that may have been closer
@@ -524,6 +531,7 @@ abstract class DungeonRouteBuilder
                     $previousPullLatLng,
                     $closestEnemy,
                     true,
+                    $isBoss,
                 );
             }
 
@@ -534,7 +542,7 @@ abstract class DungeonRouteBuilder
                 );
             } elseif ($closestEnemy->getDistanceBetweenEnemies() >
                 ($this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default'))) {
-                if ($closestEnemy->getEnemy()->npc->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
+                if ($isBoss) {
                     $this->log->findClosestEnemyInAllFilteredEnemiesEnemyIsBossIgnoringTooFarAwayCheck();
                 } else {
                     $this->log->findClosestEnemyInAllFilteredEnemiesEnemyTooFarAway(
@@ -561,6 +569,7 @@ abstract class DungeonRouteBuilder
         ?LatLng         $previousPullLatLng,
         ClosestEnemy    $closestEnemy,
         bool            $considerPatrols = false,
+        bool            $ignoreRangeCheck = false,
     ): bool {
         $result = false;
 
@@ -583,6 +592,7 @@ abstract class DungeonRouteBuilder
                         $previousPullLatLng,
                         $enemy->getIngameXY(),
                         $closestEnemy,
+                        $ignoreRangeCheck,
                     );
                     $result = $result || $foundNewClosestEnemy;
                 }
@@ -593,6 +603,7 @@ abstract class DungeonRouteBuilder
                     $previousPullLatLng,
                     $enemy->getIngameXY(),
                     $closestEnemy,
+                    $ignoreRangeCheck,
                 );
                 $result = $result || $foundNewClosestEnemy;
             }
@@ -616,6 +627,7 @@ abstract class DungeonRouteBuilder
         ?LatLng      $previousPullLatLng,
         IngameXY     $targetIngameXY,
         ClosestEnemy $closestEnemy,
+        bool         $ignoreRangeCheck = false,
     ): bool {
         $result = false;
 
@@ -630,7 +642,7 @@ abstract class DungeonRouteBuilder
 
         // $this->log->findClosestEnemyAndDistanceDistanceBetweenEnemies($enemyXY->toArray(), $targetIngameXY->toArray(), $distanceBetweenEnemies, $closestEnemy->getDistanceBetweenEnemies());
 
-        if ($distanceBetweenEnemies < ($this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default'))) {
+        if ($ignoreRangeCheck || $distanceBetweenEnemies < ($this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default'))) {
             // Calculate the location of the latLng
             /** @var IngameXY|null $previousPullIngameXY */
             $previousPullIngameXY = $previousPullLatLng === null || $previousPullLatLng->getFloor() === null ?
