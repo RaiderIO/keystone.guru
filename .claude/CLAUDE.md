@@ -194,6 +194,13 @@ wrong cwd) — fall back to plain `gh` with a `:robot:`-prefixed body and carry 
 The wrapper never falls back on its own — a silent fallback would post as Wotuu while you believed
 you'd posted as the bot. Setup: `worktree-docker` skill, "Posting to GitHub as the bot account".
 
+A `PreToolUse` hook (`sh/gh-write-guard.sh`, wired in `.claude/settings.json`) blocks plain `gh`
+writes (create/edit/comment/ready/close/reopen/merge/review/label, `gh api` with a write method)
+before they run, so this rule survives a human forgetting to route through the bot — not just a
+convention. Reads and anything already going through `sh/gh-bot.sh` are unaffected. If it blocks a
+command you believe should be a legitimate plain-`gh` fallback (`sh/gh-bot.sh` genuinely failed),
+that's the intended friction — fix the block by using `sh/gh-bot.sh`, not by editing the hook away.
+
 #### Reading authorship: match the bot login, never "not Wotuu"
 
 To decide whether a comment, review thread or PR was written by an agent, test the author against
