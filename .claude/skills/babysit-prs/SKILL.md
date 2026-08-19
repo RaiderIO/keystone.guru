@@ -493,12 +493,15 @@ stops feeling right.
   applied when the implementing session skipped cold review under the trivial-change rule
   (`.claude/CLAUDE.md`, "Before declaring a MR ready for review") — the MR body says so; don't
   dispatch a review to "make up" for it. If the label is missing but the PR already has a
-  `:robot: Cold review (...)` **summary comment**, just add the label instead of re-reviewing —
-  the reviewer posted it as its last step, so its presence means the review actually finished.
-  Agent-authored *inline* findings comments with no matching summary comment are **not** enough on
-  their own — the reviewer posts those before the summary, so a PR with inline comments but no
-  summary means the review was interrupted partway through; treat that as needing a real re-review,
-  not a label to paper over. Re-review only if the diff has changed substantially since the review,
+  `:robot: Cold review (...) @ <sha>` **summary comment**, check that `<sha>` still equals the PR's
+  current `headRefOid` before just adding the label — the reviewer embeds the reviewed SHA in the
+  marker specifically so this check is possible; a mismatch means the PR was pushed to after that
+  review ran, so the summary describes a commit that's no longer the head and the label would
+  wrongly bless an unreviewed one. Only recover the label when the SHA matches; otherwise dispatch a
+  real re-review instead. Agent-authored *inline* findings comments with no matching summary
+  comment are **not** enough on their own — the reviewer posts those before the summary, so a PR
+  with inline comments but no summary means the review was interrupted partway through; treat that
+  as needing a real re-review too, not a label to paper over. Re-review only if the diff has changed substantially since the review,
   or Wotuu asks.
 - **Never run the review inside this session.** This session's context is warm, which defeats the
   purpose of a *cold* review — dispatch it to Codex, which starts genuinely cold, has no memory of

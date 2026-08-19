@@ -123,8 +123,12 @@ rather than second-guessing it; you are not equipped to re-derive its judgement.
 Then post the summary comment, with `${N}` being the count you actually finished posting (inline or
 via the 422 fallback), not `.result.findings.length`:
 ```bash
-gh api -X POST repos/RaiderIO/keystone.guru/issues/<n>/comments -f body=":robot: Cold review (codex-adversarial): ${verdict} — ${N} findings posted. ${summary}"
+gh api -X POST repos/RaiderIO/keystone.guru/issues/<n>/comments -f body=":robot: Cold review (codex-adversarial) @ ${REVIEWED_SHA}: ${verdict} — ${N} findings posted. ${summary}"
 ```
+
+The `@ <sha>` in the marker matters, not just style: it's what lets `babysit-prs`'s label-recovery
+step tell a genuinely-finished review from a stale one when the PR moved after the review ran (see
+its label-recovery step) — don't drop it.
 
 **If posting is interrupted partway** (a `gh`/network failure that isn't the handled 422 case) —
 some findings posted, some didn't: do NOT post the summary comment and do NOT add the label below.
@@ -136,8 +140,8 @@ never got posted. Report back exactly which findings posted and which didn't, so
 you knows this review is incomplete and needs a real re-run, not just a label.
 
 **Fallback path (`.parseError` present):** post `.codex.stdout` (or `.rawOutput`) verbatim as a
-single issue comment, prefixed `:robot: Cold review (codex-adversarial):`, same as the plain
-`cold-reviewer-codex` agent does.
+single issue comment, prefixed `:robot: Cold review (codex-adversarial) @ ${REVIEWED_SHA}:`, same
+as the plain `cold-reviewer-codex` agent does.
 
 **Post as the bot account when it's available.** Run
 `/home/wouterkoppenol/Git/private/keystone.guru/sh/gh-bot.sh api user --jq .login` once — use the

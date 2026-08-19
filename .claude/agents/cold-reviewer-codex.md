@@ -88,10 +88,11 @@ of per-line findings, so it goes on as one issue comment rather than inline revi
 gh api -X POST repos/RaiderIO/keystone.guru/issues/<n>/comments -f body="$BODY"
 ```
 
-where `$BODY` is `:robot: Cold review (codex):\n\n` followed by the Codex markdown verbatim — don't
-paraphrase, trim, or reformat it. Prefix `:robot: ` marks agent-authored content per repo
-convention (`.claude/CLAUDE.md`, "Agent GitHub identity"); the `Cold review (codex):` line is the
-marker `babysit-prs` searches for.
+where `$BODY` is `:robot: Cold review (codex) @ $REVIEWED_SHA:\n\n` followed by the Codex markdown
+verbatim — don't paraphrase, trim, or reformat it. Prefix `:robot: ` marks agent-authored content
+per repo convention (`.claude/CLAUDE.md`, "Agent GitHub identity"); the `Cold review (codex) @ <sha>`
+line is the marker `babysit-prs` searches for — the SHA lets it tell a genuinely-finished review
+from one that's stale because the PR moved after the review ran (see its label-recovery step).
 
 **Post as the bot account when it's available.** Run
 `/home/wouterkoppenol/Git/private/keystone.guru/sh/gh-bot.sh api user --jq .login` once — use the
