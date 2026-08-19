@@ -124,16 +124,16 @@ wanted, it would be a separate, larger skill). Cold review here is currently **o
 PR is conflict-free and not already `pr cold reviewed` (there is no CI-green precondition — this
 repo has no PR-triggered CI, see above), dispatch a fresh-context agent
 (`Agent` tool, `subagent_type: "general-purpose"`, `model: "opus"` — deliberately NOT the
-`cold-reviewer-*` custom agents `babysit-prs` uses, because their definitions hardcode
-`RaiderIO/keystone.guru` repo paths and would post to the wrong repo; this also loses their
-`effort: medium` pin, so tell the dispatched agent to keep the review tightly scoped) with the same
-methodology keystone.guru's `babysit-prs` step 4 uses — read the diff (persist large diffs to a scratch file
+`cold-reviewer-codex*` custom agents `babysit-prs` uses over in keystone.guru, because their
+definitions hardcode `RaiderIO/keystone.guru` repo paths, a local worktree-checkout convention this
+repo doesn't share, and would post to the wrong repo; tell the dispatched agent to keep the review
+tightly scoped) with the same methodology keystone.guru's `babysit-prs` step 4 used to use before it
+switched to forwarding to Codex — read the diff (persist large diffs to a scratch file
 first, `gh pr diff` overflows inline output), check for correctness bugs and anything git
 blame/history would flag, post only genuinely-confident findings as inline comments
 (`gh api -X POST repos/RaiderIO/keystoneguru-infra/pulls/<n>/comments`, `:robot:`-prefixed, capital
 `-F body=@file` — lowercase `-f` sends the literal string `@file`, spot-check after posting), then
-post the marker comment `:robot: Cold review (opus): <N> findings posted.` (the
-`cold-reviewer-opus` marker format, kept identical across both repos so marker searches match) and add
+post the marker comment `:robot: Cold review (opus): <N> findings posted.` and add
 `pr cold reviewed`. No formal GitHub review (no approve/request-changes) — comments only.
 
 ## Gotchas
