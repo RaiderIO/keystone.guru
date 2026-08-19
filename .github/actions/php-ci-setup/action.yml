@@ -186,10 +186,160 @@ runs:
         php artisan key:generate --force -v
       shell: bash
 
-    - name: Migrate & seed
+    # Seeding the database costs ~84s and every caller of this action produces the exact same one, so
+    # it is paid six times per PR by the php-tests shards alone, plus nightly by php-coverage and
+    # twice per release by release-deploy (#4139). Cache a mysqldump of the seeded result instead:
+    # on a hit the seed is skipped entirely and the dump is loaded, on a miss we seed exactly as
+    # before and produce the dump for everyone else. A stale or absent cache therefore degrades to
+    # the old behaviour rather than failing.
+    #
+    # There is deliberately NO `restore-keys` here (unlike the composer cache above): a prefix match
+    # would silently hand a job a database seeded from *different* input files, which fails later,
+    # elsewhere, and for a confusing reason. Exact key or miss.
+    #
+    # The key covers everything the seeders read from disk, enumerated from DatabaseSeeder::SEEDERS
+    # rather than guessed - note that three of those inputs live outside database/seeders:
+    #   - database/data/**    MDTAddonVersionSeeder, SpellDescriptionImportStateSeeder
+    #   - lang/**             TranslationsSeeder globs lang_path() into the `translations` table
+    #   - app/SeederHelpers/** the RelationParsers/RelationMappings that decide what the JSON becomes,
+    #                          plus the LoadsSeasonData / LoadsMapIconTypeData traits
+    # Seeded output can still change through PHP that none of these paths cover (a model's boot
+    # behaviour, say). Bump the `v1` epoch below by hand when that happens - over-invalidating costs
+    # one seed, under-invalidating costs a confusing red build.
+    - name: Restore seeded database dump
+      id: cache-db
       if: ${{ inputs.run-migrations == 'true' }}
+      uses: actions/cache/restore@v5
+      with:
+        path: ~/ci-db-dump
+        key: ci-db-v1-${{ hashFiles('database/migrations/**', 'database/migrations_combatlog/**', 'database/schema/**', 'database/seeders/**', 'database/data/**', 'lang/**', 'app/SeederHelpers/**', '.env.ci.example', 'docker-compose.ci.yml') }}
+
+    - name: Migrate & seed
+      if: ${{ inputs.run-migrations == 'true' && steps.cache-db.outputs.cache-hit != 'true' }}
       run: |
         php artisan migrate --database=migrate --force
         php artisan migrate --database=combatlog --path=database/migrations_combatlog --force
         php artisan db:seed --database=migrate --force -v
+
+        # Dump from *inside* the container, not with the runner's client: `default-mysql-client`
+        # installed above resolves to the MariaDB client on Ubuntu, which skews against a MySQL
+        # 8.0.42 server. This is the same reason sh/worktree.sh:load_schema_dump() pipes through
+        # `docker exec` instead of using the app image's client. Print the version so which client
+        # actually ran is on record in the log.
+        mkdir -p ~/ci-db-dump
+        # --routines --events are not needed today (neither schema defines any, and triggers are
+        # dumped by default) but are cheap insurance: the cached dump outlives the run that made it,
+        # so a routine added later must not go silently missing on every cache hit.
+        docker compose -f docker-compose.ci.yml exec -T db mysqldump --version
+        docker compose -f docker-compose.ci.yml exec -T db \
+          mysqldump --no-tablespaces --single-transaction --routines --events -uroot -proot \
+          'keystone.guru.dev' > ~/ci-db-dump/main.sql
+        docker compose -f docker-compose.ci.yml exec -T db-combatlog \
+          mysqldump --no-tablespaces --single-transaction --routines --events -uroot -proot \
+          'keystone.guru.combatlog' > ~/ci-db-dump/combatlog.sql
+        ls -la ~/ci-db-dump
+      shell: bash
+
+    # TEMPORARY (#4139) - evidence for the PR that a restored dump is byte-for-byte the database that
+    # was seeded, not merely a plausible one. Restores each freshly written dump into a scratch schema
+    # on the same server and compares per-table COUNT(*) and CHECKSUM TABLE against the source schema.
+    # It deliberately compares a seed run against ITS OWN dump: comparing a fresh seed against an
+    # older dump would differ purely through created_at/now()-derived columns. Removed before this MR
+    # is handed off.
+    - name: TEMP - verify dump/restore equivalence
+      if: ${{ inputs.run-migrations == 'true' && steps.cache-db.outputs.cache-hit != 'true' }}
+      run: |
+        SCRATCH=ksg_dumpcheck
+
+        # CHECKSUM TABLE reports its Table column as `schema.table`, and no table name here contains a
+        # dot - so keeping the trailing segment is what makes two schemas' output comparable.
+        report_sql() {
+          cat <<SQL
+        SET SESSION group_concat_max_len = 1048576;
+        SET @cs := (SELECT GROUP_CONCAT(CONCAT('\`', table_schema, '\`.\`', table_name, '\`'))
+                    FROM information_schema.tables
+                    WHERE table_schema = '$1' AND table_type = 'BASE TABLE');
+        SET @cn := (SELECT GROUP_CONCAT(CONCAT('SELECT ''', table_name, ''' AS t, COUNT(*) AS c FROM \`',
+                                               table_schema, '\`.\`', table_name, '\`') SEPARATOR ' UNION ALL ')
+                    FROM information_schema.tables
+                    WHERE table_schema = '$1' AND table_type = 'BASE TABLE');
+        SET @cs := CONCAT('CHECKSUM TABLE ', @cs);
+        PREPARE s FROM @cs; EXECUTE s; DEALLOCATE PREPARE s;
+        PREPARE s FROM @cn; EXECUTE s; DEALLOCATE PREPARE s;
+        SQL
+        }
+
+        compare() {
+          local service="$1" source_schema="$2" dump="$3"
+          local dbc=(docker compose -f docker-compose.ci.yml exec -T "$service" mysql -uroot -proot -N -B)
+
+          "${dbc[@]}" -e "DROP DATABASE IF EXISTS \`${SCRATCH}\`; CREATE DATABASE \`${SCRATCH}\`;"
+          "${dbc[@]}" "${SCRATCH}" < "$dump"
+
+          local seeded="$RUNNER_TEMP/seeded.$service" restored="$RUNNER_TEMP/restored.$service"
+          "${dbc[@]}" -e "$(report_sql "$source_schema")" \
+            | awk -F'\t' '{ n = split($1, a, "."); print a[n] "\t" $2 }' | sort > "$seeded"
+          "${dbc[@]}" -e "$(report_sql "$SCRATCH")" \
+            | awk -F'\t' '{ n = split($1, a, "."); print a[n] "\t" $2 }' | sort > "$restored"
+
+          # Without this, a report that failed to produce any rows at all compares equal to another
+          # empty report and the whole check passes vacuously.
+          if [ ! -s "$seeded" ]; then
+            echo "::error::${source_schema}: produced an empty checksum report"
+            exit 1
+          fi
+
+          # The checksum/count report only covers BASE TABLEs, so it is blind to views, routines and
+          # events going missing. Diffing the two schemas' structure covers that, and needs the
+          # AUTO_INCREMENT= counters stripped: a restored table can legitimately land on a different
+          # next-id when the source had a gap at the top. Content is the checksums' job, not this.
+          local schema_a="$RUNNER_TEMP/schema-seeded.$service" schema_b="$RUNNER_TEMP/schema-restored.$service"
+          # --skip-comments drops the header, which would otherwise differ on its `Database:` line.
+          structure_of() {
+            docker compose -f docker-compose.ci.yml exec -T "$service" \
+              mysqldump --no-data --no-tablespaces --routines --events --skip-comments -uroot -proot "$1" \
+              | sed -E 's/ AUTO_INCREMENT=[0-9]+//'
+          }
+          structure_of "$source_schema" > "$schema_a"
+          structure_of "$SCRATCH" > "$schema_b"
+
+          echo "==> ${source_schema}: seeded vs restored"
+          if diff "$seeded" "$restored" && diff "$schema_a" "$schema_b"; then
+            echo "    identical - $(( $(wc -l < "$seeded") / 2 )) tables, checksums, row counts and structure all match"
+          else
+            echo "::error::${source_schema}: restored dump differs from the seeded database"
+            exit 1
+          fi
+
+          "${dbc[@]}" -e "DROP DATABASE \`${SCRATCH}\`;"
+        }
+
+        compare db 'keystone.guru.dev' ~/ci-db-dump/main.sql
+        compare db-combatlog 'keystone.guru.combatlog' ~/ci-db-dump/combatlog.sql
+      shell: bash
+
+    # Saved here rather than by the combined actions/cache, whose post-job save does not run when the
+    # job fails - seeding happens in setup and PHPUnit runs after it, so a single failing test would
+    # otherwise throw the dump away and make the next run seed again.
+    # continue-on-error because on a cold cache all six php-tests shards seed in parallel and race to
+    # write this one key; the five losers get "Unable to reserve cache", which must not fail a shard.
+    - name: Save seeded database dump
+      if: ${{ inputs.run-migrations == 'true' && steps.cache-db.outputs.cache-hit != 'true' }}
+      continue-on-error: true
+      uses: actions/cache/save@v5
+      with:
+        path: ~/ci-db-dump
+        key: ${{ steps.cache-db.outputs.cache-primary-key }}
+
+    # The dumps carry the `migrations` table, so Laravel sees a fully migrated schema, and mysqldump
+    # emits AUTO_INCREMENT= on every CREATE TABLE, so id sequences survive the round trip. The
+    # per-job `Seed users` step (LaratrustSeeder) still runs after this action in the workflows, on
+    # both paths, exactly as before.
+    - name: Load seeded database dump
+      if: ${{ inputs.run-migrations == 'true' && steps.cache-db.outputs.cache-hit == 'true' }}
+      run: |
+        docker compose -f docker-compose.ci.yml exec -T db \
+          mysql -uroot -proot 'keystone.guru.dev' < ~/ci-db-dump/main.sql
+        docker compose -f docker-compose.ci.yml exec -T db-combatlog \
+          mysql -uroot -proot 'keystone.guru.combatlog' < ~/ci-db-dump/combatlog.sql
       shell: bash
