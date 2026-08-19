@@ -508,8 +508,8 @@ abstract class DungeonRouteBuilder
             $this->log->findClosestEnemyInAllFilteredEnemiesStart();
 
             // Bosses move a long way during their fight, so where they died is often nowhere near where they're
-            // mapped - let them be matched regardless of range, the too-far-away check further down still applies
-            // to everyone else.
+            // mapped - let them be matched regardless of range. Non-boss candidates are still rejected by range
+            // inside findClosestEnemyAndDistance() itself, before they're ever recorded as the closest enemy.
             $isBoss = $filteredEnemies->first()?->npc?->isBoss() ?? false;
 
             $this->findClosestEnemyAndDistanceFromList(
@@ -541,7 +541,7 @@ abstract class DungeonRouteBuilder
                 );
             } elseif ($closestEnemy->getDistanceBetweenEnemies() >
                 ($this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default'))) {
-                if ($closestEnemy->getEnemy()->npc->isBoss()) {
+                if ($isBoss) {
                     $this->log->findClosestEnemyInAllFilteredEnemiesEnemyIsBossIgnoringTooFarAwayCheck();
                 } else {
                     $this->log->findClosestEnemyInAllFilteredEnemiesEnemyTooFarAway(
