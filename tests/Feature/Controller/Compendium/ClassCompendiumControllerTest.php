@@ -94,6 +94,44 @@ final class ClassCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function show_givenClassWithUnderscoredKey_generatesUrlWithHyphenatedSlug(): void
+    {
+        // Arrange
+        $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_DEATH_KNIGHT)->firstOrFail();
+
+        // Act
+        $url = route('compendium.class.show.dungeon', [
+            'characterClass' => $characterClass,
+            'dungeon'        => Dungeon::getUserOrDefaultDungeon(),
+        ]);
+
+        // Assert
+        $this->assertStringContainsString('/class/death-knight', $url);
+        $this->assertStringNotContainsString('death_knight', $url);
+
+        $response = $this->get($url);
+        $response->assertOk();
+    }
+
+    #[Test]
+    public function characterClass_forEverySeededClass_slugMatchesHyphenatedKey(): void
+    {
+        // Arrange
+        $characterClasses = CharacterClass::all();
+
+        // Assert
+        $this->assertGreaterThan(0, $characterClasses->count());
+
+        foreach ($characterClasses as $characterClass) {
+            $this->assertSame(
+                str_replace('_', '-', $characterClass->key),
+                $characterClass->slug,
+                sprintf('Expected slug for class "%s" to be its key with hyphens instead of underscores', $characterClass->key),
+            );
+        }
+    }
+
+    #[Test]
     public function show_givenNoDungeonInUrl_redirectsToContextDungeon(): void
     {
         // Arrange
@@ -158,7 +196,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_MAGE)->firstOrFail();
 
         // Act
-        $response = $this->get(sprintf('/compendium/dungeon/not-a-dungeon/class/%s', $characterClass->key));
+        $response = $this->get(sprintf('/compendium/dungeon/not-a-dungeon/class/%s', $characterClass->slug));
 
         // Assert
         $response->assertNotFound();
