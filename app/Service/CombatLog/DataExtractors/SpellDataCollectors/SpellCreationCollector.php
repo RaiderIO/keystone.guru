@@ -150,10 +150,18 @@ class SpellCreationCollector implements SpellDataCollectorInterface
             ]);
         } catch (UniqueConstraintViolationException) {
             $existingSpell = SpellModel::with('spellDungeons')->find($spellId);
-            if ($existingSpell !== null) {
-                $this->allSpells->put($spellId, $existingSpell);
-                $this->repairMissingSchoolsMask($result, $existingSpell, $schoolsMask);
+            if ($existingSpell === null) {
+                // Should be unreachable - the insert only collided because a row with this id exists - but if
+                // it somehow vanished between the collision and this re-fetch, downstream collectors that key
+                // off allSpells silently skip this spell for the rest of the run, which is worth knowing about.
+                $this->log->createSpellLostRaceSpellVanished($spellId);
+
+                return;
             }
+
+            $this->allSpells->put($spellId, $existingSpell);
+            $this->repairMissingSchoolsMask($result, $existingSpell, $schoolsMask);
+            $this->log->createSpellLostRaceFoundExistingSpell($spellId);
 
             return;
         }

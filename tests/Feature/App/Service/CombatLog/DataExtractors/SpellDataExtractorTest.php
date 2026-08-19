@@ -189,7 +189,7 @@ final class SpellDataExtractorTest extends PublicTestCase
     }
 
     #[Test]
-    public function ensureSpellExists_givenAnotherWorkerInsertsTheSameSpellBetweenTheLookupAndTheInsert_fallsBackToTheExistingSpellPathInsteadOfThrowing(): void
+    public function createSpell_givenAnotherWorkerInsertedTheSameSpellBetweenTheLookupAndTheInsert_fallsBackToTheExistingSpellPathInsteadOfThrowing(): void
     {
         // Arrange - this worker's own findSpell() check already missed (empty catalog, no row yet), simulated
         // here by calling the collector's private createSpell() path directly while another worker's insert has
@@ -204,6 +204,7 @@ final class SpellDataExtractorTest extends PublicTestCase
         // Act
         $createSpell = new ReflectionMethod($collector, 'createSpell');
         $createSpell->invoke($collector, $this->result, self::SPELL_ID, 'TestSpell', SpellModel::SCHOOL_SHADOW);
+        $collector->afterCollect($this->result, self::COMBAT_LOG_PATH);
 
         // Assert - the existing-spell path ran instead of throwing: the school got repaired, still only one row,
         // and no SpellCreated event was written since this worker did not actually create it
@@ -216,6 +217,13 @@ final class SpellDataExtractorTest extends PublicTestCase
             'spell_id'   => self::SPELL_ID,
             'event_type' => CombatLogSpellEventType::SpellCreated->value,
         ], 'combatlog');
+
+        // Assert - counted as an update, not a creation, and the shared catalog now has the winning row so
+        // downstream collectors (npc/spell assignments) do not skip this spell for the rest of the run
+        $this->assertSame(0, $this->result->toArray()['createdSpells']);
+        $this->assertSame(1, $this->result->toArray()['updatedSpells']);
+        $this->assertTrue($allSpells->has(self::SPELL_ID));
+        $this->assertSame(SpellModel::SCHOOL_SHADOW, $allSpells->get(self::SPELL_ID)->schools_mask);
     }
 
     #[Test]
