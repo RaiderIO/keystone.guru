@@ -68,6 +68,17 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         208747,
     ];
 
+    /**
+     * @var array<int, int> Manual encounter_id overrides for NPCs where MDT's data is known to be wrong. Applied
+     *                      on every import, so they survive re-imports rather than needing to be fixed in the seeder repeatedly.
+     */
+    private const array ENCOUNTER_ID_OVERRIDES = [
+        // Voidscar Arena: MDT reports encounter_id 2791 for all three bosses (#4148) - Taz'Rah (238887) keeps
+        // 2791, Atroxus and Charonus are corrected here per Wotuu's confirmation on the issue.
+        239008 => 2792, // Atroxus
+        239167 => 2793, // Charonus
+    ];
+
     public function __construct(
         private readonly CacheServiceInterface                   $cacheService,
         private readonly CoordinatesServiceInterface             $coordinatesService,
@@ -231,7 +242,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $npc->id = $mdtNpc->getId();
                 // Allow manual override to -1
                 $npc->display_id   = $mdtNpc->getDisplayId();
-                $npc->encounter_id = $mdtNpc->getEncounterId();
+                $npc->encounter_id = self::ENCOUNTER_ID_OVERRIDES[$npc->id] ?? $mdtNpc->getEncounterId();
                 $npc->classification_id ??= $mdtNpc->isBoss() ?
                     NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS] :
                     NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE];
