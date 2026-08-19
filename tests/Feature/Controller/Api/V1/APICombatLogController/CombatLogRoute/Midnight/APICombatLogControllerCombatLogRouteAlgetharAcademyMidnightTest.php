@@ -34,7 +34,7 @@ class APICombatLogControllerCombatLogRouteAlgetharAcademyMidnightTest extends AP
         $responseArr = json_decode($response->content(), true);
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 14, 521);
+        $this->validatePulls($responseArr, 15, 521);
         $this->validateAffixes($responseArr);
     }
 }
