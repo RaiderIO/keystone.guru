@@ -65,6 +65,10 @@ final class MapContextStaticDataTest extends PublicTestCase
         // Arrange - the static cache key used to hardcode the '%s' placeholder instead of
         // interpolating the locale, so every locale shared a single cache entry and every locale
         // but the first one to run ended up serving that first locale's translations.
+        // Spell 465 (Devotion Aura) is seeded with distinct en_US/de_DE translations.
+        $devotionAuraSpellId = 465;
+
+        // Act
         $enSpells = app(MapContextServiceInterface::class)->createMapContextStaticData('en_US')->toArray()['static']['selectableSpells'];
         $deSpells = app(MapContextServiceInterface::class)->createMapContextStaticData('de_DE')->toArray()['static']['selectableSpells'];
 
@@ -73,7 +77,8 @@ final class MapContextStaticDataTest extends PublicTestCase
 
         // Assert
         $this->assertNotEmpty($enNamesByKey);
-        $this->assertSame($enNamesByKey->keys()->all(), $deNamesByKey->keys()->all());
-        $this->assertNotEquals($enNamesByKey->all(), $deNamesByKey->all());
+        $this->assertEqualsCanonicalizing($enNamesByKey->keys()->all(), $deNamesByKey->keys()->all());
+        $this->assertSame('Devotion Aura', $enNamesByKey->get($devotionAuraSpellId));
+        $this->assertSame('Aura der Hingabe', $deNamesByKey->get($devotionAuraSpellId));
     }
 }
