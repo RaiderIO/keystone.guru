@@ -64,6 +64,12 @@ final class MDT2Codec implements MDTStringCodecInterface
     private const MAX_ITEMS = 262144;
 
     /**
+     * Cap on how many trailing characters decode() will try stripping from an otherwise-invalid
+     * payload before giving up - see decode()'s docblock for why this is safe.
+     */
+    private const MAX_TRAILING_GARBAGE_BYTES = 8;
+
+    /**
      * @param string $string A (potential) MDT export string, e.g. pasted user input
      */
     public function appliesTo(string $string): bool
@@ -99,7 +105,36 @@ final class MDT2Codec implements MDTStringCodecInterface
             throw new MDT2DecodeException(sprintf('String does not start with %s', self::PREFIX));
         }
 
-        $binary = base64_decode(substr($string, strlen(self::PREFIX)), true);
+        $payload = substr($string, strlen(self::PREFIX));
+
+        try {
+            return self::decodePayload($payload);
+        } catch (MDT2DecodeException $exception) {
+            // Production has seen otherwise-valid MDT2 payloads with a handful of stray bytes
+            // stuck to the end (e.g. a validly-padded Base64 blob with "w==" appended) - clipboard
+            // interference between export and paste, outside our control. Retry against
+            // progressively shorter prefixes of the payload: decodePayload() only succeeds if
+            // Base64, inflate AND the strict CBOR structural check all agree, so an accidental
+            // "successful" decode of genuinely corrupt input is not realistically possible.
+            for ($trim = 1; $trim <= self::MAX_TRAILING_GARBAGE_BYTES; $trim++) {
+                try {
+                    return self::decodePayload(substr($payload, 0, -$trim));
+                } catch (MDT2DecodeException) {
+                    continue;
+                }
+            }
+
+            throw $exception;
+        }
+    }
+
+    /**
+     * @return array<int|string, mixed>
+     * @throws MDT2DecodeException
+     */
+    private static function decodePayload(string $payload): array
+    {
+        $binary = base64_decode($payload, true);
 
         if ($binary === false) {
             throw new MDT2DecodeException('Unable to decode Base64 payload');

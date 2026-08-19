@@ -401,6 +401,35 @@ final class MDT2CodecTest extends TestCase
     }
 
     #[Test]
+    public function decode_givenStrayTrailingBytes_stripsThemAndDecodesSuccessfully(): void
+    {
+        // Arrange - a validly-padded MDT2 string with a handful of stray bytes appended, as seen
+        // in production (clipboard interference between export and paste, outside our control)
+        $cbor   = hex2bin('a1476f626a656374738241614162');
+        $string = $this->buildMdt2String($cbor) . 'w==';
+
+        // Act
+        $decoded = $this->codec->decode($string);
+
+        // Assert
+        $this->assertSame(['objects' => ['a', 'b']], $decoded);
+    }
+
+    #[Test]
+    public function decode_givenTooMuchTrailingGarbage_throwsMDT2DecodeException(): void
+    {
+        // Arrange - one byte more than MAX_TRAILING_GARBAGE_BYTES tolerates
+        $cbor   = hex2bin('a1476f626a656374738241614162');
+        $string = $this->buildMdt2String($cbor) . str_repeat('w', 9);
+
+        // Assert
+        $this->expectException(MDT2DecodeException::class);
+
+        // Act
+        $this->codec->decode($string);
+    }
+
+    #[Test]
     #[DataProvider('decode_givenCorruptString_throwsMDT2DecodeException_Provider')]
     public function decode_givenCorruptString_throwsMDT2DecodeException(string $string): void
     {
