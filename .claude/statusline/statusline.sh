@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Status line for Claude Code, checked into the repo so it's identical across machines.
 # Wired up via .claude/settings.json (statusLine), which locates this script from workspace.project_dir.
-# Layout:  <branch><dirty> 5h:<bar> HH:MM 7d:<bar> ............ <worktree>:<port> <model>
+# Layout:  <branch><dirty> 5h:<bar> HH:MM 7d:<bar> cx:<bar> ............ <worktree>:<port> <model>
 input=$(cat)
+script_dir=$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)
 
 # Session working directory (from JSON): the status line command is not guaranteed to run in the
 # session's cwd, so drive every git call off this rather than the process cwd.
@@ -49,6 +50,54 @@ for key, window in r.items():
     label = key.replace('seven_day_', '7d-').replace('_', '-')
     parts.append(label + ':' + bar(pct))
 print(' '.join(parts))
+" 2>/dev/null)
+
+# Codex account usage (5h/weekly-style bar, same rendering as the Claude rate bars above).
+# The account/rateLimits/read call goes through the Codex app-server, which can take the better
+# part of a second on a cold broker start — never call it inline here. Instead, read a cache file
+# and refresh it in the background (detached, non-blocking) whenever it's stale. The cache is
+# machine-global under $HOME (Codex usage is an account quota, not tied to any one repo/worktree),
+# same convention as the session-worktree markers below.
+codex_cache="$HOME/.claude/statusline/codex-usage-cache.json"
+codex_refresh_script="$script_dir/codex-usage-refresh.mjs"
+if [ -f "$codex_refresh_script" ] && command -v node >/dev/null 2>&1; then
+    cache_mtime=$(stat -c %Y "$codex_cache" 2>/dev/null || echo 0)
+    cache_age=$(( $(date +%s) - cache_mtime ))
+    if [ "$cache_age" -gt 300 ]; then
+        # Touch first so a burst of concurrent status-line renders (multiple sessions) only
+        # spawns one refresh, not one per render — the next renders see a "fresh enough" mtime.
+        mkdir -p "$(dirname "$codex_cache")" && touch "$codex_cache"
+        ( node "$codex_refresh_script" >/dev/null 2>&1 & disown ) 2>/dev/null
+    fi
+fi
+
+codex_part=$(python3 -c "
+import json, sys
+esc = chr(27)
+def bar(p, w=20):
+    filled = round(p / 100 * w)
+    color = '32' if p < 50 else '33' if p < 80 else '31'
+    return esc + '[' + color + 'm' + '█' * filled + '░' * (w - filled) + esc + '[00m'
+try:
+    with open('$codex_cache') as f:
+        d = json.load(f)
+except Exception:
+    sys.exit(0)
+if not d.get('available'):
+    sys.exit(0)
+primary = d.get('primary') or {}
+pct = primary.get('usedPercent')
+if pct is None:
+    sys.exit(0)
+# Short windows (under a day, e.g. a 5h-style bucket) are worth a reset clock like the Claude 5h
+# bar; long windows (weekly) aren't, matching how the 7d bar above omits it too.
+duration = primary.get('windowDurationMins')
+resets_at = primary.get('resetsAt')
+suffix = ''
+if duration is not None and duration < 1440 and resets_at is not None:
+    import datetime
+    suffix = ' ' + datetime.datetime.fromtimestamp(resets_at).strftime('%H:%M')
+print('cx:' + bar(pct) + suffix)
 " 2>/dev/null)
 
 # Model name
@@ -100,6 +149,7 @@ fi
 left=""
 [ -n "$git_part" ] && left="$git_part"
 [ -n "$rate_part" ] && left="${left}${left:+ }${rate_part}"
+[ -n "$codex_part" ] && left="${left}${left:+ }${codex_part}"
 
 # Assemble right side: worktree[:port] then model
 right=""
