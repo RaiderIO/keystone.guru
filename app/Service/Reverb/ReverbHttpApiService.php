@@ -4,6 +4,7 @@ namespace App\Service\Reverb;
 
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use InvalidArgumentException;
 use Log;
 use Teapot\StatusCode;
@@ -152,6 +153,16 @@ class ReverbHttpApiService implements ReverbHttpApiServiceInterface
      */
     public function getChannelUsers(string $channelName): array
     {
-        return $this->doRequestForApp(sprintf('channels/%s/users', $channelName))['users'];
+        try {
+            return $this->doRequestForApp(sprintf('channels/%s/users', $channelName))['users'];
+        } catch (ClientException $clientException) {
+            // Reverb 404s this endpoint when the presence channel has no active members yet (e.g. nobody
+            // has joined it, or the last member left) - that's a routine "no users" state, not a failure.
+            if ($clientException->getResponse()->getStatusCode() === StatusCode::NOT_FOUND) {
+                return [];
+            }
+
+            throw $clientException;
+        }
     }
 }

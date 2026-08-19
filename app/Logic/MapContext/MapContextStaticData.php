@@ -35,7 +35,7 @@ class MapContextStaticData implements Arrayable
      */
     public function toArray(): array
     {
-        $staticKey = 'static_data_%s';
+        $staticKey = sprintf('static_data_%s', $this->locale);
         $static    = $this->rememberLocal($staticKey, 86400, function () use (
             $staticKey,
         ) {

@@ -66,6 +66,8 @@ class JavascriptController
         MapContextServiceInterface $mapContextService,
         string                     $locale,
     ): Response {
+        abort_if(!language()->allowed($locale), 404);
+
         $mapContextStaticData = $mapContextService->createMapContextStaticData(
             $locale,
         );
