@@ -4,7 +4,7 @@ namespace Controller\Api\V1\APICombatLogController\CombatLogRoute\Midnight;
 
 use App\Models\DungeonKey;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Enemy;
+use App\Models\KillZone\KillZone;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -97,12 +97,12 @@ class APICombatLogControllerCombatLogRouteVoidscarArenaTest extends APICombatLog
         $responseArr = json_decode($response->content(), true);
 
         try {
-            $dungeonRoute = $this->findDungeonRoute($responseArr);
+            $killZones = $this->getKillZones($responseArr);
 
-            $this->assertCount(17, $dungeonRoute->killZones);
+            $this->assertCount(17, $killZones);
 
-            foreach ($dungeonRoute->killZones as $killZone) {
-                $floorIds = $this->getEnemiesOfKillZone($killZone->id)->pluck('floor_id')->unique();
+            foreach ($killZones as $killZone) {
+                $floorIds = $killZone->enemies->pluck('floor_id')->unique();
 
                 $this->assertCount(
                     1,
@@ -192,11 +192,19 @@ class APICombatLogControllerCombatLogRouteVoidscarArenaTest extends APICombatLog
     }
 
     /**
-     * @param array<string, mixed> $responseArr
+     * The API resource only exposes an npcId per pull enemy, so anything about which *enemy* (and therefore which
+     * floor) a kill resolved to has to be read back from the database.
+     *
+     * @param  array<string, mixed>     $responseArr
+     * @return Collection<int, KillZone>
      */
-    private function findDungeonRoute(array $responseArr): DungeonRoute
+    private function getKillZones(array $responseArr): Collection
     {
-        return DungeonRoute::where('public_key', $responseArr['data']['publicKey'])->firstOrFail();
+        return DungeonRoute::where('public_key', $responseArr['data']['publicKey'])
+            ->firstOrFail()
+            ->killZones()
+            ->with('enemies')
+            ->get();
     }
 
     /**
@@ -204,8 +212,8 @@ class APICombatLogControllerCombatLogRouteVoidscarArenaTest extends APICombatLog
      */
     private function findResolvedEnemyId(array $responseArr, int $npcId): ?int
     {
-        foreach ($this->findDungeonRoute($responseArr)->killZones as $killZone) {
-            $enemy = $this->getEnemiesOfKillZone($killZone->id)->firstWhere('npc_id', $npcId);
+        foreach ($this->getKillZones($responseArr) as $killZone) {
+            $enemy = $killZone->enemies->firstWhere('npc_id', $npcId);
 
             if ($enemy !== null) {
                 return $enemy->id;
@@ -213,18 +221,6 @@ class APICombatLogControllerCombatLogRouteVoidscarArenaTest extends APICombatLog
         }
 
         return null;
-    }
-
-    /**
-     * @return Collection<int, Enemy>
-     */
-    private function getEnemiesOfKillZone(int $killZoneId): Collection
-    {
-        return Enemy::query()
-            ->join('kill_zone_enemies', 'kill_zone_enemies.enemy_id', '=', 'enemies.id')
-            ->where('kill_zone_enemies.kill_zone_id', $killZoneId)
-            ->select('enemies.*')
-            ->get();
     }
 
     /**
