@@ -4,23 +4,23 @@ return [
 
     '400' => [
         'title'   => '400 Ungültige Anfrage',
-        'message' => 'Ihr Browser hat eine ungültige Anfrage gesendet, bitte versuchen Sie es erneut.',
+        'message' => 'Dein Browser hat eine ungültige Anfrage gesendet, bitte versuche es erneut.',
     ],
     '401' => [
         'title'   => '401 Nicht autorisiert',
-        'message' => 'Entschuldigung, Sie sind nicht berechtigt, auf diese Seite zuzugreifen.',
+        'message' => 'Entschuldigung, du bist nicht berechtigt, auf diese Seite zuzugreifen.',
     ],
     '403' => [
         'title'   => '403 Verboten',
-        'message' => 'Entschuldigung, Ihnen ist es verboten, auf diese Seite zuzugreifen.',
+        'message' => 'Entschuldigung, dir ist es verboten, auf diese Seite zuzugreifen.',
     ],
     '404' => [
         'title'   => '404 Nicht gefunden',
         'message' => 'Entschuldigung, die gesuchte Seite konnte nicht gefunden werden.',
     ],
     '405' => [
-        'title'   => '',
-        'message' => '',
+        'title'   => '405 Methode nicht erlaubt',
+        'message' => 'Diese Seite unterstützt diese Anfragemethode leider nicht.',
     ],
     '410' => [
         'title'   => '410 Seite abgelaufen',
@@ -28,11 +28,11 @@ return [
     ],
     '419' => [
         'title'   => '419 Seite abgelaufen',
-        'message' => 'Entschuldigung, Ihre Sitzung ist abgelaufen. Bitte aktualisieren und erneut versuchen.',
+        'message' => 'Entschuldigung, deine Sitzung ist abgelaufen. Bitte aktualisieren und erneut versuchen.',
     ],
     '429' => [
         'title'   => '429 Zu viele Anfragen',
-        'message' => 'Entschuldigung, Sie stellen zu viele Anfragen an unsere Server.',
+        'message' => 'Entschuldigung, du stellst zu viele Anfragen an unsere Server.',
     ],
     '500' => [
         'title'   => '500 Interner Serverfehler',

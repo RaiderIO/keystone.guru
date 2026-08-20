@@ -1,15 +1,15 @@
 <?php
 
 return [
-    'absorb'    => '',
-    'block'     => '',
-    'deflect'   => '',
-    'dodge'     => '',
-    'evade'     => '',
-    'immune'    => '',
-    'miss'      => '',
-    'parry'     => '',
-    'reflect'   => '',
-    'resist'    => '',
-    'interrupt' => '',
+    'absorb'    => 'Absorbiert',
+    'block'     => 'Geblockt',
+    'deflect'   => 'Abgewehrt',
+    'dodge'     => 'Ausgewichen',
+    'evade'     => 'Entzogen',
+    'immune'    => 'Immun',
+    'miss'      => 'Verfehlt',
+    'parry'     => 'Pariert',
+    'reflect'   => 'Reflektiert',
+    'resist'    => 'Widerstanden',
+    'interrupt' => 'Unterbrochen',
 ];

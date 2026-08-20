@@ -6,22 +6,22 @@ return [
         'dungeon' => [
             'overview' => [
                 'weekly_route'           => 'Raider.IO Wöchentliche Route',
-                'weekly_routes'          => '',
-                'community_routes'       => '',
+                'weekly_routes'          => 'Wöchentliche Raider.IO-Routen',
+                'community_routes'       => 'Community-Routen',
                 'popular'                => 'Beliebte Routen',
                 'newly_published_routes' => 'Neu veröffentlichte Routen',
                 'archetypes'             => [
                     'pug_friendly' => [
-                        'label'       => '',
-                        'description' => '',
+                        'label'       => 'PUG-freundlich',
+                        'description' => 'Nachsichtige Pulls für Gruppen aus Fremden',
                     ],
                     'expert' => [
-                        'label'       => '',
-                        'description' => '',
+                        'label'       => 'Experte',
+                        'description' => 'Optimiert für eingespielte Gruppen',
                     ],
                     'title' => [
-                        'label'       => '',
-                        'description' => '',
+                        'label'       => 'Titel',
+                        'description' => 'Die Route, mit der die besten 0,5% ihre Wertung steigern',
                     ],
                 ],
             ],
@@ -77,7 +77,7 @@ return [
     'limitreached' => [
         'title'                     => 'Limit erreicht',
         'header'                    => 'Limit erreicht',
-        'limit_reached_description' => 'Sie haben die maximale Anzahl von Routen erreicht, die Sie erstellen dürfen (%s). Bitte überlegen Sie, Patron zu werden, um weiterhin mehr Routen zu erstellen, oder löschen Sie einige Ihrer bestehenden Routen. Vielen Dank für die Nutzung der Seite!',
+        'limit_reached_description' => 'Du hast die maximale Anzahl von Routen erreicht, die du erstellen darfst (%s). Bitte überlege, Patron zu werden, um weiterhin mehr Routen zu erstellen, oder lösche einige deiner bestehenden Routen. Vielen Dank für die Nutzung der Seite!',
         'become_a_patreon'          => 'Werde ein %s Patron!',
     ],
     'new' => [
@@ -90,11 +90,11 @@ return [
     'sandboxclaimed' => [
         'title'               => 'Route bereits beansprucht',
         'header'              => 'Route bereits beansprucht',
-        'claimed_description' => 'Diese Route wurde bereits von jemandem beansprucht (oder Sie haben die Zurück-Taste in Ihrem Browser verwendet, um hierher zu navigieren).',
+        'claimed_description' => 'Diese Route wurde bereits von jemandem beansprucht (oder du hast die Zurück-Taste in deinem Browser verwendet, um hierher zu navigieren).',
     ],
     'unavailable' => [
         'title'                   => 'Unveröffentlichte Route',
-        'unavailable_description' => 'Sie sind nicht berechtigt, diese Route anzusehen. Bitten Sie den Autor der Route, die Freigabeeinstellungen der Route zu ändern, damit Sie sie ansehen können.',
+        'unavailable_description' => 'Du bist nicht berechtigt, diese Route anzusehen. Bitte den Autor der Route, die Freigabeeinstellungen der Route zu ändern, damit du sie ansehen kannst.',
     ],
     'view' => [
         'any'                                     => 'Jeder',

@@ -108,7 +108,7 @@ return [
     ],
     'shrouded' => [
         'name'        => 'Verschleiert',
-        'description' => 'Nathrezim-Infiltratoren haben sich unter den Feinden im gesamten Dungeon getarnt. Das Kartell Ta wird Sie großzügig belohnen, wenn Sie bei ihrer Ergreifung helfen.',
+        'description' => 'Nathrezim-Infiltratoren haben sich unter den Feinden im gesamten Dungeon getarnt. Das Kartell Ta wird dich großzügig belohnen, wenn du bei ihrer Ergreifung hilfst.',
     ],
     'thundering' => [
         'name'        => 'Donnernd',
