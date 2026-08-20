@@ -33,7 +33,7 @@ class EnemyRepository extends DatabaseRepository implements EnemyRepositoryInter
                 // Ensure that the kill priority is 0 if it wasn't set
                 $enemy->kill_priority ??= 0;
             })
-            ->sort(static fn(Enemy $enemy) => $enemy->enemy_patrol_id ?? 0)
+            ->sortBy(static fn(Enemy $enemy) => $enemy->enemy_patrol_id ?? 0)
             ->keyBy('id');
     }
 }

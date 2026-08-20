@@ -192,11 +192,15 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     {
         $mdtDungeon = new MDTDungeon($this->cacheService, $this->coordinatesService, $dungeon);
 
+        // Only the npcs/floorSwitchMarkers payloads are read from Lua tables whose hash-part key order is
+        // unstable across VM instances (#4110) - canonicalizing each independently, rather than wrapping this
+        // whole literal array in one canonicalizeForHash() call, keeps the always-stable top-level key order
+        // ('counts', 'npcs', 'floorSwitchMarkers') untouched, so the fix doesn't churn every dungeon's hash.
         return md5(
             json_encode([
                 'counts'             => $mdtDungeon->getDungeonTotalCount(),
-                'npcs'               => $mdtDungeon->getMDTNPCs()->toArray(),
-                'floorSwitchMarkers' => $mdtDungeon->getMDTMapPOIs()->toArray(),
+                'npcs'               => self::canonicalizeForHash($mdtDungeon->getMDTNPCs()->toArray()),
+                'floorSwitchMarkers' => self::canonicalizeForHash($mdtDungeon->getMDTMapPOIs()->toArray()),
             ]),
         );
     }
@@ -1271,5 +1275,28 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 'lng' => $maxLng,
             ],
         ];
+    }
+
+    /**
+     * Recursively sorts the keys of any associative (non-list) array so that {@see getMDTMappingHash()} does not
+     * depend on the Lua VM's unstable hash-part iteration order for nested `info` sub-tables (#4110).
+     *
+     * @param array<mixed> $data
+     *
+     * @return array<mixed>
+     */
+    private static function canonicalizeForHash(array $data): array
+    {
+        if (!array_is_list($data)) {
+            ksort($data);
+        }
+
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $data[$key] = self::canonicalizeForHash($value);
+            }
+        }
+
+        return $data;
     }
 }

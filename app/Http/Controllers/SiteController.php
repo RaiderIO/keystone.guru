@@ -264,8 +264,8 @@ class SiteController extends Controller
         try {
             $pong = Redis::connection()->client()->ping();
 
-            // Some clients return "PONG" or true
-            $checks['redis']['ok'] = $pong->getPayload() === 'PONG';
+            // phpredis returns true (or the string "PONG"); predis returns a Status object
+            $checks['redis']['ok'] = $pong === true || $pong === 'PONG' || (is_object($pong) && method_exists($pong, 'getPayload') && $pong->getPayload() === 'PONG');
             if (!$checks['redis']['ok']) {
                 $checks['redis']['error'] = 'Unexpected PING response';
             }

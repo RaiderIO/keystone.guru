@@ -18,6 +18,7 @@ use App\Models\Spell\Spell as SpellModel;
 use App\Models\Spell\SpellDungeon;
 use App\Repositories\Swoole\SpellRepositorySwoole;
 use App\Service\CombatLog\DataExtractors\Logging\SpellDataExtractorLoggingInterface;
+use App\Service\CombatLog\DataExtractors\SpellDataCollectors\SpellCreationCollector;
 use App\Service\CombatLog\DataExtractors\SpellDataExtractor;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
@@ -25,6 +26,7 @@ use Illuminate\Support\Carbon;
 use Mockery;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use ReflectionMethod;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('SpellDataExtractor')]
@@ -184,6 +186,44 @@ final class SpellDataExtractorTest extends PublicTestCase
             'spell_id'   => self::SPELL_ID,
             'event_type' => CombatLogSpellEventType::SpellCreated->value,
         ], 'combatlog');
+    }
+
+    #[Test]
+    public function createSpell_givenAnotherWorkerInsertedTheSameSpellBetweenTheLookupAndTheInsert_fallsBackToTheExistingSpellPathInsteadOfThrowing(): void
+    {
+        // Arrange - this worker's own findSpell() check already missed (empty catalog, no row yet), simulated
+        // here by calling the collector's private createSpell() path directly while another worker's insert has
+        // already landed in between (#4151) - a blind create dies on a duplicate primary key
+        /** @var SpellDataExtractorLoggingInterface $log */
+        $log       = Mockery::mock(SpellDataExtractorLoggingInterface::class)->shouldIgnoreMissing();
+        $allSpells = collect();
+        $collector = new SpellCreationCollector($allSpells, $log);
+        $collector->beforeCollect(self::COMBAT_LOG_PATH);
+        $this->createTestSpell(['schools_mask' => 0]);
+
+        // Act
+        $createSpell = new ReflectionMethod($collector, 'createSpell');
+        $createSpell->invoke($collector, $this->result, self::SPELL_ID, 'TestSpell', SpellModel::SCHOOL_SHADOW);
+        $collector->afterCollect($this->result, self::COMBAT_LOG_PATH);
+
+        // Assert - the existing-spell path ran instead of throwing: the school got repaired, still only one row,
+        // and no SpellCreated event was written since this worker did not actually create it
+        $this->assertSame(1, SpellModel::where('id', self::SPELL_ID)->count());
+        $this->assertDatabaseHas('spells', [
+            'id'           => self::SPELL_ID,
+            'schools_mask' => SpellModel::SCHOOL_SHADOW,
+        ]);
+        $this->assertDatabaseMissing('combat_log_spell_events', [
+            'spell_id'   => self::SPELL_ID,
+            'event_type' => CombatLogSpellEventType::SpellCreated->value,
+        ], 'combatlog');
+
+        // Assert - counted as an update, not a creation, and the shared catalog now has the winning row so
+        // downstream collectors (npc/spell assignments) do not skip this spell for the rest of the run
+        $this->assertSame(0, $this->result->toArray()['createdSpells']);
+        $this->assertSame(1, $this->result->toArray()['updatedSpells']);
+        $this->assertTrue($allSpells->has(self::SPELL_ID));
+        $this->assertSame(SpellModel::SCHOOL_SHADOW, $allSpells->get(self::SPELL_ID)->schools_mask);
     }
 
     #[Test]
