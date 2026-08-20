@@ -664,6 +664,31 @@ class MappingVersion extends Model
                     }
                 }
             }
+            // Change linked dungeon floor switch markers to point at their new sibling clone
+            foreach ($idMapping->get(DungeonFloorSwitchMarker::class) as $dungeonFloorSwitchMarkerRelationCoupling) {
+                /** @var array{oldModel: DungeonFloorSwitchMarker, newModel: DungeonFloorSwitchMarker} $dungeonFloorSwitchMarkerRelationCoupling */
+                $oldLinkedDungeonFloorSwitchMarkerId = $dungeonFloorSwitchMarkerRelationCoupling['oldModel']->linked_dungeon_floor_switch_marker_id;
+                if ($oldLinkedDungeonFloorSwitchMarkerId === null) {
+                    continue;
+                }
+
+                // Find the new ID of the linked dungeon floor switch marker
+                $newLinkedDungeonFloorSwitchMarkerId = null;
+                foreach ($idMapping->get(DungeonFloorSwitchMarker::class) as $linkedDungeonFloorSwitchMarkerRelationCoupling) {
+                    /** @var array{oldModel: DungeonFloorSwitchMarker, newModel: DungeonFloorSwitchMarker} $linkedDungeonFloorSwitchMarkerRelationCoupling */
+                    if ($linkedDungeonFloorSwitchMarkerRelationCoupling['oldModel']->id === $oldLinkedDungeonFloorSwitchMarkerId) {
+                        $newLinkedDungeonFloorSwitchMarkerId = $linkedDungeonFloorSwitchMarkerRelationCoupling['newModel']->id;
+                        break;
+                    }
+                }
+
+                // The old link may already be dangling (pointing at a marker outside this mapping
+                // version), in which case there is no new sibling to point at - null it out rather
+                // than silently carrying over a pointer into the previous mapping version's id space.
+                $dungeonFloorSwitchMarkerRelationCoupling['newModel']->update([
+                    'linked_dungeon_floor_switch_marker_id' => $newLinkedDungeonFloorSwitchMarkerId,
+                ]);
+            }
             // Change floor unions of floor union areas
             foreach ($idMapping->get(FloorUnionArea::class) as $floorUnionAreaRelationCoupling) {
                 /** @var array{oldModel: FloorUnionArea, newModel: FloorUnionArea} $floorUnionAreaRelationCoupling */
