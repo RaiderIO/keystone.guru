@@ -107,6 +107,13 @@ commit without interactive rebase: see the `worktree-docker` skill.)
   with `sh/worktree.sh create <issue>-<slug>`. Run all commands (artisan, tests, `composer run
   fix`/`analyse`) through that worktree's `app` container from inside the worktree dir. Only skip
   this when the user says to work directly in the main checkout.
+- **This has no size exception.** A 2-line fix gets a GitHub issue and a worktree exactly like a
+  multi-file feature — "it's trivial" or "it's mechanical" is not a reason to implement in the main
+  checkout instead. Create the issue (`create-github-issue` skill) and the worktree *before* writing
+  any code, not after judging how big the change turned out to be. Said directly, repeatedly (6th
+  time as of 2026-08-20, after a two-file homepage link fix done straight in the main checkout with
+  no issue and no worktree). Wotuu will say so explicitly when he doesn't want this for a given task
+  — that is the only opt-out; don't infer it from task size.
 - **Never remove a worktree whose MR has not merged — leave it up when you hand the MR off.** Its
   running stack is how Wotuu opens the branch in a browser without building anything, and it costs
   5–15 minutes of seeding to recreate. `babysit-prs` step 5 removes worktrees of merged/closed PRs,
