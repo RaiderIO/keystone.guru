@@ -8,6 +8,7 @@ use App\Models\CombatLog\ChallengeModeRunData;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
+use App\Service\CombatLog\Exceptions\CombatLogRouteRegeneratedConcurrentlyException;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
@@ -202,6 +203,69 @@ final class CombatLogRouteDungeonRouteServiceRegenerationTest extends PublicTest
             $this->assertSame($original->id, $originalRun->fresh()->dungeon_route_id, 'The run must still point at the original route');
             $this->assertNotNull(ChallengeModeRunData::where('challenge_mode_run_id', $originalRun->id)->first(), 'The run data must survive');
             $this->assertSame($routeCountBefore, DungeonRoute::count(), 'The half-built route must be cleaned up');
+        } finally {
+            $this->deleteDungeonRoutes($createdRouteIds);
+        }
+    }
+
+    /**
+     * Two regenerations of the same route that overlap both capture the old route and its run before building. Only
+     * the first to move the run may replace the route; the second must discard its own replacement rather than move
+     * the run a second time and leave the winner's replacement without one.
+     */
+    #[Test]
+    public function convertCombatLogRouteToDungeonRoute_givenRunMovedByConcurrentRegeneration_discardsOwnReplacementAndThrows(): void
+    {
+        // Arrange
+        $createdRouteIds = [];
+
+        try {
+            $original          = $this->service->convertCombatLogRouteToDungeonRoute($this->getCombatLogRouteRequestDto());
+            $createdRouteIds[] = $original->id;
+            /** @var ChallengeModeRun $originalRun */
+            $originalRun = ChallengeModeRun::where('dungeon_route_id', $original->id)->firstOrFail();
+
+            // Stands in for the replacement the concurrent (winning) regeneration built
+            $winner            = $this->service->convertCombatLogRouteToDungeonRoute($this->getCombatLogRouteRequestDto());
+            $createdRouteIds[] = $winner->id;
+            ChallengeModeRun::where('dungeon_route_id', $winner->id)->first()->delete();
+
+            // Let the winner take the run halfway through the loser's build - i.e. after the loser captured the
+            // old route and run, but before it gets to move them itself
+            $realKillZoneRepository = app(KillZoneRepositoryInterface::class);
+            $killZoneRepository     = $this->createMock(KillZoneRepositoryInterface::class);
+            $killZoneRepository->method('create')->willReturnCallback(
+                static function (array $attributes) use ($realKillZoneRepository, $originalRun, $winner) {
+                    ChallengeModeRun::where('id', $originalRun->id)->update(['dungeon_route_id' => $winner->id]);
+
+                    return $realKillZoneRepository->create($attributes);
+                },
+            );
+            $this->app->instance(KillZoneRepositoryInterface::class, $killZoneRepository);
+            /** @var CombatLogRouteDungeonRouteServiceInterface $losingService */
+            $losingService = app(CombatLogRouteDungeonRouteServiceInterface::class);
+
+            $regeneration                      = $this->getCombatLogRouteRequestDto();
+            $regeneration->settings->publicKey = $original->public_key;
+
+            $routeCountBefore = DungeonRoute::count();
+
+            // Act
+            $thrown = null;
+
+            try {
+                $losingService->convertCombatLogRouteToDungeonRoute($regeneration);
+            } catch (CombatLogRouteRegeneratedConcurrentlyException $concurrentlyException) {
+                $thrown = $concurrentlyException;
+            }
+
+            // Assert
+            $this->assertNotNull($thrown, 'Losing the race must be reported to the caller');
+            $this->assertSame($winner->id, $originalRun->fresh()->dungeon_route_id, 'The run must stay with the winner');
+            $this->assertSame(1, ChallengeModeRun::where('dungeon_route_id', $winner->id)->count());
+            $this->assertNotNull(ChallengeModeRunData::where('challenge_mode_run_id', $originalRun->id)->first(), 'The run data must survive');
+            $this->assertNotNull(DungeonRoute::find($original->id), 'The loser must not delete the old route either');
+            $this->assertSame($routeCountBefore, DungeonRoute::count(), 'The loser\'s replacement must be discarded');
         } finally {
             $this->deleteDungeonRoutes($createdRouteIds);
         }

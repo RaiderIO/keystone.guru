@@ -52,6 +52,7 @@ use App\Repositories\Swoole\Interfaces\SpellRepositorySwooleInterface;
 use App\Service\CombatLog\Builders\CombatLogRouteCombatLogEventsBuilder;
 use App\Service\CombatLog\Builders\CombatLogRouteCorrectionBuilder;
 use App\Service\CombatLog\Builders\CombatLogRouteDungeonRouteBuilder;
+use App\Service\CombatLog\Exceptions\CombatLogRouteRegeneratedConcurrentlyException;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Logging\CombatLogRouteDungeonRouteServiceLoggingInterface;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
@@ -111,6 +112,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
 
     /**
      * @throws DungeonNotSupportedException
+     * @throws CombatLogRouteRegeneratedConcurrentlyException
      * @throws Exception
      */
     public function convertCombatLogRouteToDungeonRoute(CombatLogRouteRequestDto $combatLogRoute): DungeonRoute
@@ -164,22 +166,60 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         }
 
         // Only now that the new route is complete does it take over the run (and the public key) of the old one
-        $this->saveChallengeModeRun($combatLogRoute, $dungeonRoute, $existingChallengeModeRun);
-
-        if ($existingDungeonRoute !== null && $existingChallengeModeRun !== null) {
-            // Its run was just re-pointed to the new route, so DungeonRoute::deleting finds no run to cascade into
-            $existingDungeonRoute->delete();
-            $dungeonRoute->update(['public_key' => $existingDungeonRoute->public_key]);
-
-            $this->log->convertCombatLogRouteToDungeonRouteReplacedExistingRoute(
-                $existingDungeonRoute->public_key,
-                $existingDungeonRoute->id,
-                $dungeonRoute->id,
-                $existingChallengeModeRun->id,
-            );
+        if ($existingDungeonRoute === null || $existingChallengeModeRun === null) {
+            $this->saveChallengeModeRun($combatLogRoute, $dungeonRoute);
+        } else {
+            $this->replaceExistingDungeonRoute($existingDungeonRoute, $existingChallengeModeRun, $dungeonRoute);
         }
 
         return $dungeonRoute;
+    }
+
+    /**
+     * Moves the old route's run onto the fully built new route (its run data and post_body ride along), then deletes
+     * the old route and hands its public key to the new one.
+     *
+     * The move is a conditional update and doubles as the arbiter between two regenerations of the same route that
+     * overlap (both captured the same old route and run before building): only the one that finds the run still on
+     * the old route wins. The loser removes its own replacement and throws - without this it would re-point the run
+     * a second time and leave the winner's replacement without one.
+     *
+     * @throws CombatLogRouteRegeneratedConcurrentlyException
+     */
+    private function replaceExistingDungeonRoute(
+        DungeonRoute     $existingDungeonRoute,
+        ChallengeModeRun $existingChallengeModeRun,
+        DungeonRoute     $dungeonRoute,
+    ): void {
+        $moved = ChallengeModeRun::where('id', $existingChallengeModeRun->id)
+            ->where('dungeon_route_id', $existingDungeonRoute->id)
+            ->update(['dungeon_route_id' => $dungeonRoute->id]);
+
+        if ($moved === 0) {
+            $this->log->replaceExistingDungeonRouteRunAlreadyMoved(
+                $existingDungeonRoute->public_key,
+                $existingDungeonRoute->id,
+                $existingChallengeModeRun->id,
+                $dungeonRoute->id,
+            );
+            // The new route holds no run, so this cascades into nothing that matters
+            $dungeonRoute->delete();
+
+            throw new CombatLogRouteRegeneratedConcurrentlyException(
+                sprintf('Route %s was regenerated concurrently; discarded this regeneration', $existingDungeonRoute->public_key),
+            );
+        }
+
+        // Its run was just re-pointed to the new route, so DungeonRoute::deleting finds no run to cascade into
+        $existingDungeonRoute->delete();
+        $dungeonRoute->update(['public_key' => $existingDungeonRoute->public_key]);
+
+        $this->log->replaceExistingDungeonRouteReplaced(
+            $existingDungeonRoute->public_key,
+            $existingDungeonRoute->id,
+            $dungeonRoute->id,
+            $existingChallengeModeRun->id,
+        );
     }
 
     /**
@@ -488,29 +528,12 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     }
 
     /**
-     * @param ChallengeModeRun|null $existingChallengeModeRun The run of the route being regenerated, if any. It is
-     *                                                        moved onto the new route as-is (its run data and
-     *                                                        post_body along with it) rather than stored twice.
-     *                                                        Passed in by the caller on purpose: looking it up by
-     *                                                        metadata->runId re-pointed some *other* route's run
-     *                                                        (run_id is a client-supplied string shared by hundreds
-     *                                                        of routes, and the regenerated route's own run data
-     *                                                        was already gone at that point) - see #4194.
+     * Inserts a fresh run for a route that does not replace an existing one. A regeneration keeps the old route's run
+     * instead (replaceExistingDungeonRoute()) - it is deliberately no longer looked up here by metadata->runId, which
+     * is a client-supplied string shared by hundreds of routes and re-pointed some *other* route's run (#4194).
      */
-    private function saveChallengeModeRun(
-        CombatLogRouteRequestDto $combatLogRoute,
-        DungeonRoute             $dungeonRoute,
-        ?ChallengeModeRun        $existingChallengeModeRun,
-    ): void {
-        if ($existingChallengeModeRun !== null) {
-            $existingChallengeModeRun->update([
-                'dungeon_route_id' => $dungeonRoute->id,
-            ]);
-
-            return;
-        }
-
-        // Insert a new run
+    private function saveChallengeModeRun(CombatLogRouteRequestDto $combatLogRoute, DungeonRoute $dungeonRoute): void
+    {
         $now = Carbon::now();
 
         /** @var ChallengeModeRun $challengeModeRun */
