@@ -59,9 +59,6 @@ abstract class DungeonRouteBuilder
     /** @var int The average HP of the current pull before we consider new enemies as part of a new pull */
     protected const CHAIN_PULL_DETECTION_HP_PERCENT = 30;
 
-    /** @var float Value between 0..1 for how much the distance between enemies matters vrs distance of previous pull */
-    private const ENEMY_DISTANCE_WEIGHT_RATIO = 0.75;
-
     /**
      * @var float Determines how heavy the kill priority skews the weight towards this enemy. A lower value means the pull is stronger.
      *            Note: this value is divided by 10 because the kill_priority high = 10, low = -10. Instead of dividing these values by 10,
@@ -69,14 +66,6 @@ abstract class DungeonRouteBuilder
      *            and a kill_priority of -10 the distance is multiplied by * 1.5 (so it appears much further away).
      */
     private const ENEMY_KILL_PRIORITY_WEIGHT_RATIO = (-0.50 / 10);
-
-    /**
-     * @var int If the last pull was this many yards away, cap the distance since you've just skipped a lot of enemies.
-     *          Leaving this uncapped may cause more problems, the enemy distance should be more leading. This will just
-     *          be a nudge to help with the correct direction instead of a massively stretchy elastic band pulling you
-     *          wayyyyyy back to the packs you have just skipped.
-     */
-    private const ENEMY_LAST_PULL_DISTANCE_CAP_YARDS = 100;
 
     protected ?Floor $currentFloor;
 
@@ -254,21 +243,11 @@ abstract class DungeonRouteBuilder
             $npcId = $activePullEnemy->getNpcId();
         }
 
-        /** @var LatLng|null $previousPullLatLng */
-        $previousPullLatLng = null;
-        /** @var KillZone|null $previousPull */
-        $previousPull = $this->dungeonRoute->killZones->last();
-        if ($previousPull !== null) {
-            $previousPullLatLng = $previousPull->getKillLocation(true);
-        }
-
         try {
             $this->log->findUnkilledEnemyForNpcAtIngameLocationStart(
                 $npcId,
                 $activePullEnemy->getX(),
                 $activePullEnemy->getY(),
-                $previousPullLatLng?->getLat(),
-                $previousPullLatLng?->getLng(),
                 $preferredGroups->toArray(),
             );
 
@@ -276,7 +255,6 @@ abstract class DungeonRouteBuilder
             $closestEnemy = $this->findClosestEnemyForNpcId(
                 $npcId,
                 $activePullEnemy,
-                $previousPullLatLng,
                 $preferredGroups,
                 true,
             );
@@ -294,7 +272,6 @@ abstract class DungeonRouteBuilder
                 $closestEnemy = $this->findClosestEnemyForNpcId(
                     $npcId,
                     $activePullEnemy,
-                    $previousPullLatLng,
                     $preferredGroups,
                     false,
                 );
@@ -304,7 +281,6 @@ abstract class DungeonRouteBuilder
                 $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyFound(
                     $closestEnemy->getEnemy()->id,
                     $closestEnemy->getDistanceBetweenEnemies(),
-                    $closestEnemy->getDistanceBetweenLastPullAndEnemy(),
                 );
 
                 $this->availableEnemies->forget($closestEnemy->getEnemy()->id);
@@ -325,7 +301,6 @@ abstract class DungeonRouteBuilder
     private function findClosestEnemyForNpcId(
         int             $npcId,
         ActivePullEnemy $activePullEnemy,
-        ?LatLng         $previousPullLatLng,
         Collection      $preferredGroups,
         bool            $applyBossKillFloorCutoff,
     ): ClosestEnemy {
@@ -366,7 +341,6 @@ abstract class DungeonRouteBuilder
             $preferredGroups,
             $filteredEnemies,
             $activePullEnemy,
-            $previousPullLatLng,
             $closestEnemy,
         );
 
@@ -375,14 +349,12 @@ abstract class DungeonRouteBuilder
             $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredGroup(
                 $closestEnemy->getEnemy()->id,
                 $closestEnemy->getDistanceBetweenEnemies(),
-                $closestEnemy->getDistanceBetweenLastPullAndEnemy(),
                 $closestEnemy->getEnemy()->enemyPack->group,
             );
         } elseif (in_array($this->dungeonRoute->dungeon->key, self::DUNGEON_ENEMY_FLOOR_CHECK_ENABLED)) {
             $this->findClosestEnemyInPreferredFloor(
                 $filteredEnemies,
                 $activePullEnemy,
-                $previousPullLatLng,
                 $closestEnemy,
             );
         }
@@ -392,14 +364,12 @@ abstract class DungeonRouteBuilder
             $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredFloor(
                 $closestEnemy->getEnemy()->id,
                 $closestEnemy->getDistanceBetweenEnemies(),
-                $closestEnemy->getDistanceBetweenLastPullAndEnemy(),
                 $closestEnemy->getEnemy()->floor_id,
             );
         } else {
             $this->findClosestEnemyInAllFilteredEnemies(
                 $filteredEnemies,
                 $activePullEnemy,
-                $previousPullLatLng,
                 $closestEnemy,
             );
         }
@@ -445,7 +415,6 @@ abstract class DungeonRouteBuilder
         Collection      $preferredGroups,
         Collection      $filteredEnemies,
         ActivePullEnemy $activePullEnemy,
-        ?LatLng         $previousPullLatLng,
         ClosestEnemy    $closestEnemy,
     ): void {
         try {
@@ -460,7 +429,6 @@ abstract class DungeonRouteBuilder
                 $this->findClosestEnemyAndDistanceFromList(
                     $preferredEnemiesInEngagedGroups,
                     $activePullEnemy,
-                    $previousPullLatLng,
                     $closestEnemy,
                 );
             }
@@ -477,7 +445,6 @@ abstract class DungeonRouteBuilder
     private function findClosestEnemyInPreferredFloor(
         Collection      $filteredEnemies,
         ActivePullEnemy $activePullEnemy,
-        ?LatLng         $previousPullLatLng,
         ClosestEnemy    $closestEnemy,
     ): void {
         try {
@@ -493,7 +460,6 @@ abstract class DungeonRouteBuilder
                 $this->findClosestEnemyAndDistanceFromList(
                     $preferredEnemiesOnCurrentFloor,
                     $activePullEnemy,
-                    $previousPullLatLng,
                     $closestEnemy,
                 );
             }
@@ -509,7 +475,6 @@ abstract class DungeonRouteBuilder
     private function findClosestEnemyInAllFilteredEnemies(
         Collection      $filteredEnemies,
         ActivePullEnemy $activePullEnemy,
-        ?LatLng         $previousPullLatLng,
         ClosestEnemy    $closestEnemy,
     ): void {
         try {
@@ -524,7 +489,6 @@ abstract class DungeonRouteBuilder
             $this->findClosestEnemyAndDistanceFromList(
                 $filteredEnemies,
                 $activePullEnemy,
-                $previousPullLatLng,
                 $closestEnemy,
                 false,
                 $isBoss,
@@ -536,7 +500,6 @@ abstract class DungeonRouteBuilder
                 $this->findClosestEnemyAndDistanceFromList(
                     $filteredEnemies,
                     $activePullEnemy,
-                    $previousPullLatLng,
                     $closestEnemy,
                     true,
                     $isBoss,
@@ -546,7 +509,6 @@ abstract class DungeonRouteBuilder
             if ($closestEnemy->getEnemy() === null) {
                 $this->log->findClosestEnemyInAllFilteredEnemiesEnemyIsNull(
                     $closestEnemy->getDistanceBetweenEnemies(),
-                    $closestEnemy->getDistanceBetweenLastPullAndEnemy(),
                 );
             } elseif ($closestEnemy->getDistanceBetweenEnemies() >
                 ($this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default'))) {
@@ -556,7 +518,6 @@ abstract class DungeonRouteBuilder
                     $this->log->findClosestEnemyInAllFilteredEnemiesEnemyTooFarAway(
                         $closestEnemy->getEnemy()->id,
                         $closestEnemy->getDistanceBetweenEnemies(),
-                        $closestEnemy->getDistanceBetweenLastPullAndEnemy(),
                         $this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default'),
                     );
 
@@ -574,7 +535,6 @@ abstract class DungeonRouteBuilder
     private function findClosestEnemyAndDistanceFromList(
         Collection      $enemies,
         ActivePullEnemy $enemy,
-        ?LatLng         $previousPullLatLng,
         ClosestEnemy    $closestEnemy,
         bool            $considerPatrols = false,
         bool            $ignoreRangeCheck = false,
@@ -597,7 +557,6 @@ abstract class DungeonRouteBuilder
                     $foundNewClosestEnemy = $this->findClosestEnemyAndDistance(
                         $availableEnemy,
                         $latLng,
-                        $previousPullLatLng,
                         $enemy->getIngameXY(),
                         $closestEnemy,
                         $ignoreRangeCheck,
@@ -608,7 +567,6 @@ abstract class DungeonRouteBuilder
                 $foundNewClosestEnemy = $this->findClosestEnemyAndDistance(
                     $availableEnemy,
                     $availableEnemy->getLatLng(),
-                    $previousPullLatLng,
                     $enemy->getIngameXY(),
                     $closestEnemy,
                     $ignoreRangeCheck,
@@ -620,7 +578,6 @@ abstract class DungeonRouteBuilder
         $this->log->findClosestEnemyAndDistanceFromListResult(
             $closestEnemy->getEnemy()?->id,
             $closestEnemy->getDistanceBetweenEnemies(),
-            $closestEnemy->getDistanceBetweenLastPullAndEnemy(),
         );
 
         return $result;
@@ -632,7 +589,6 @@ abstract class DungeonRouteBuilder
     private function findClosestEnemyAndDistance(
         Enemy        $availableEnemy,
         LatLng       $enemyLatLng,
-        ?LatLng      $previousPullLatLng,
         IngameXY     $targetIngameXY,
         ClosestEnemy $closestEnemy,
         bool         $ignoreRangeCheck = false,
@@ -651,30 +607,14 @@ abstract class DungeonRouteBuilder
         // $this->log->findClosestEnemyAndDistanceDistanceBetweenEnemies($enemyXY->toArray(), $targetIngameXY->toArray(), $distanceBetweenEnemies, $closestEnemy->getDistanceBetweenEnemies());
 
         if ($ignoreRangeCheck || $distanceBetweenEnemies < ($this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default'))) {
-            // Calculate the location of the latLng
-            /** @var IngameXY|null $previousPullIngameXY */
-            $previousPullIngameXY = $previousPullLatLng === null || $previousPullLatLng->getFloor() === null ?
-                null : $this->coordinatesService->calculateIngameLocationForMapLocation($previousPullLatLng);
+            // Skew the distance by the enemy's kill priority so a high priority enemy appears closer than it really is
+            $weightedTotalDistance = $distanceBetweenEnemies *
+                (1 + ($availableEnemy->kill_priority * self::ENEMY_KILL_PRIORITY_WEIGHT_RATIO));
 
-            $distanceBetweenPreviousPullAndEnemy = min($previousPullIngameXY === null ? 0 : $this->coordinatesService->distanceBetweenPoints(
-                $enemyXY->getX(),
-                $previousPullIngameXY->getX(),
-                $enemyXY->getY(),
-                $previousPullIngameXY->getY(),
-            ), self::ENEMY_LAST_PULL_DISTANCE_CAP_YARDS);
-
-            // Calculate the weighted total distance which is a combination of the distance between our event enemy
-            // and the candidate enemy, AND the candidate enemy with the kill location of the previous pull
-            $weightedTotalDistance = (
-                ($distanceBetweenEnemies * self::ENEMY_DISTANCE_WEIGHT_RATIO) +
-                ($distanceBetweenPreviousPullAndEnemy * (1 - self::ENEMY_DISTANCE_WEIGHT_RATIO))
-            ) * (1 + ($availableEnemy->kill_priority * self::ENEMY_KILL_PRIORITY_WEIGHT_RATIO));
-
-            // If a combination of these factors yields a "distance" closer than the enemy we had before, we found a "closer" enemy.
+            // If this yields a "distance" closer than the enemy we had before, we found a "closer" enemy.
             if ($closestEnemy->getWeightedTotalDistance() > $weightedTotalDistance) {
                 $closestEnemy->setEnemy($availableEnemy);
                 $closestEnemy->setDistanceBetweenEnemies($distanceBetweenEnemies);
-                $closestEnemy->setDistanceBetweenLastPullAndEnemy($distanceBetweenPreviousPullAndEnemy);
                 $closestEnemy->setWeightedTotalDistance($weightedTotalDistance);
 
                 $result = true;
