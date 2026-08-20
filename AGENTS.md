@@ -1,0 +1,70 @@
+# Agent instructions — keystone.guru
+
+Read this before running anything. It is the environment contract for any AI agent working in this
+repository (Codex, and anything else that reads `AGENTS.md`). Claude Code additionally reads
+`CLAUDE.md` / `.claude/CLAUDE.md`, which hold the full project conventions — this file is the short
+version of the parts you cannot guess and will otherwise get wrong.
+
+## Never run PHP on the host machine
+
+The host has no usable PHP: it is below this project's required version, so `php`, `composer`,
+`vendor/bin/phpunit` and `php artisan` all fail there with a platform-check error. **That failure is
+not a finding about the code** — it means the command was run in the wrong place.
+
+Everything PHP goes through the project's Docker `app` container, from the checkout's own directory:
+
+```bash
+docker compose exec -T app php artisan test --compact --filter=<TestName>
+docker compose exec -T app php artisan test --compact          # full suite, slow
+docker compose exec -T app composer run analyse                # PHPStan
+docker compose exec -T app composer run fix                    # PhpCsFixer
+docker compose exec -T app php artisan <anything>
+```
+
+`-T` is required — without it the command wants a TTY and hangs.
+
+**If the container is not running**, say so and skip the step. Do not fall back to host PHP, and do
+not start or build stacks yourself. Check with `docker compose ps app` from the checkout directory.
+
+Each git worktree under `../keystone.guru-worktrees/<branch>/` has **its own** stack and database.
+Run the commands from inside that worktree's directory so they hit that worktree's container, never
+the main checkout's.
+
+## Node / front-end
+
+`node`, `npm` and `git` on the host are fine — only PHP is off-limits.
+
+**This project does not use Vite, and `npm run build` does not exist.** Assets are built by
+`scripts/build/build.mjs`; the `package.json` scripts are `dev`, `development`, `watch`, `prod`,
+`production`. JS tests are `npm run test` (vitest).
+
+## Reviewing code
+
+- Running the test suite is optional. A review that could not run tests is fine — say that plainly
+  rather than reporting the platform error as a problem with the change.
+- Read `.claude/CLAUDE.md` before flagging a convention violation. Several project rules invert the
+  usual Laravel advice, and reviews keep re-raising them:
+  - **No foreign keys in migrations.** Deliberate — they break seeding and testing. Never recommend
+    `constrained()`.
+  - **Migrations must be backward-compatible with the currently-running code** (deploys are not
+    atomic). Additive is safe; drops/renames/narrowing ship a release later.
+  - **Missing model-cache invalidation on a raw write to a `CacheModel` is not a finding.** The
+    tables are read-only in production, caching is off in development, and each release rotates the
+    cache prefix.
+  - **`lat`/`lng` on map objects are display-only** coordinates on a fixed image — never valid for
+    distances, sizes or comparisons. Conversion goes through `CoordinatesServiceInterface`.
+  - Only `lang/en_US` is edited by hand; every other locale is generated externally.
+- `lang/**` diffs are machine-generated translation churn. Skim them, don't review them line by line.
+
+## Writing code
+
+- Tests are PHPUnit, never Pest, built from factories, and named
+  `[functionName]_given[Condition]_returns[ExpectedResult]`. Groups go in a class-level
+  `#[Group('...')]` attribute. There is no `RefreshDatabase` — the seeded test DB persists, so clean
+  up created rows in a `try ... finally`.
+- Never delete or weaken an existing test to make a change pass.
+- Finish with `docker compose exec -T app composer run fix` and
+  `docker compose exec -T app composer run analyse`; both must be clean.
+- `composer run fix` reformats pre-existing drift across the whole repo. Stage only the files you
+  meant to touch.
+- Do not commit, push, or open/merge pull requests unless you were explicitly asked to.
