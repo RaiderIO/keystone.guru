@@ -2,13 +2,12 @@
 
 namespace Tests\Feature\Controller\Api\V1\APICacheController;
 
+use App\Jobs\DropCaches;
 use App\Models\Laratrust\Role;
 use App\Models\User;
-use App\Service\Cache\CacheServiceInterface;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\MockObject\Exception;
 use Teapot\StatusCode;
 use Tests\TestCases\PublicTestCase;
 
@@ -17,29 +16,11 @@ use Tests\TestCases\PublicTestCase;
 #[Group('APICache')]
 final class APICacheControllerTest extends PublicTestCase
 {
-    /**
-     * Mock CacheServiceInterface and Artisan so the controller body never actually drops caches
-     * or warms views during tests. Applied to every test so that even if the role:admin gate
-     * unexpectedly lets a request through, we get a deterministic 200 (which the assertion catches)
-     * rather than a 500 from a real cache/view-cache invocation.
-     *
-     * @throws Exception
-     */
-    private function stubCacheDependencies(): void
-    {
-        $cacheServiceMock = $this->createMockPublic(CacheServiceInterface::class);
-        app()->instance(CacheServiceInterface::class, $cacheServiceMock);
-
-        Artisan::shouldReceive('call')->andReturn(0);
-    }
-
-    /**
-     * @throws Exception
-     */
     #[Test]
-    public function drop_givenAuthenticatedAdmin_shouldReturnOk(): void
+    public function drop_givenAuthenticatedAdmin_dispatchesDropCachesJobAndReturnsOk(): void
     {
         // Arrange
+        Queue::fake();
         /** @var User $admin */
         $admin = User::findOrFail(1);
         $this->assertTrue(
@@ -47,7 +28,6 @@ final class APICacheControllerTest extends PublicTestCase
             'User id=1 must have the admin role for this test (seed the database).',
         );
         $this->actingAs($admin);
-        $this->stubCacheDependencies();
 
         // Act
         $response = $this->postJson(route('api.v1.cache.drop'));
@@ -55,15 +35,14 @@ final class APICacheControllerTest extends PublicTestCase
         // Assert
         $response->assertOk();
         $response->assertExactJson(['status' => 'ok']);
+        Queue::assertPushed(DropCaches::class);
     }
 
-    /**
-     * @throws Exception
-     */
     #[Test]
     public function drop_givenAuthenticatedNonAdmin_shouldReturnForbidden(): void
     {
         // Arrange
+        Queue::fake();
         /** @var User $nonAdmin */
         $nonAdmin = User::factory()->create();
 
@@ -73,7 +52,6 @@ final class APICacheControllerTest extends PublicTestCase
                 'A freshly factoried user must not have the admin role.',
             );
             $this->actingAs($nonAdmin);
-            $this->stubCacheDependencies();
 
             // Act
             $response = $this->postJson(route('api.v1.cache.drop'));
@@ -81,19 +59,17 @@ final class APICacheControllerTest extends PublicTestCase
             // Assert
             $response->assertStatus(StatusCode::FORBIDDEN);
             $response->assertJsonStructure(['error']);
+            Queue::assertNotPushed(DropCaches::class);
         } finally {
             $nonAdmin->delete();
         }
     }
 
-    /**
-     * @throws Exception
-     */
     #[Test]
     public function drop_givenUnauthenticated_shouldReturnForbidden(): void
     {
         // Arrange - no authentication
-        $this->stubCacheDependencies();
+        Queue::fake();
 
         // Act
         $response = $this->postJson(route('api.v1.cache.drop'));
@@ -101,5 +77,6 @@ final class APICacheControllerTest extends PublicTestCase
         // Assert
         $response->assertStatus(StatusCode::FORBIDDEN);
         $response->assertJsonStructure(['error']);
+        Queue::assertNotPushed(DropCaches::class);
     }
 }
