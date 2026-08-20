@@ -121,7 +121,7 @@ return [
     'murder_row_fel_contraband'                       => 'Contrabando vil',
     'murder_row_felstone'                             => 'Piedra vil',
     'murder_row_felwyrm_egg'                          => 'Huevo de vermis vil',
-    'murder_row_heartstop_poison'                     => 'Veneno paralizante',
+    'murder_row_heartstop_poison'                     => 'Veneno que detiene el corazón',
     'murder_row_loaded_pistol'                        => 'Pistola cargada',
     'murder_row_overload_golem'                       => 'Gólem de sobrecarga',
     'the_blinding_vale_flourishing_stride'            => 'Paso floreciente',

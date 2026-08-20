@@ -5,7 +5,7 @@ return [
     'map_icons' => [
         'bfa' => [
             'freehold' => [
-                'skycapn_kragg_packs_flee' => 'Keystone Guru: Estos dos grupos huyen después de matar a Skycap\'n Kragg.',
+                'skycapn_kragg_packs_flee' => 'Keystone Guru: Estos dos packs huyen después de matar a Skycap\'n Kragg.',
             ],
             'kings_rest' => [
                 'gong'          => 'Gong',
@@ -36,7 +36,7 @@ return [
         'classic' => [
             'blackfathom_deeps' => [
                 'altar_of_the_deeps'              => 'Altar of the Deeps: Blessing of Blackfathom',
-                'baron_aquanis_horde_only'        => 'El Barón Aquanis solo puede aparecer para personajes de la Horda mediante la misión [Amongst The Ruins]',
+                'baron_aquanis_horde_only'        => 'Baron Aquanis solo puede aparecer para personajes de la Horda mediante la misión [Amongst The Ruins]',
                 'water_enemies_variant'           => 'Los enemigos en el agua pueden ser Barbed Crustacean o Deep Pool Threshfin',
                 'shadowmage_elementalist_variant' => 'Los enemigos pueden alternar entre Shadowmage y Elementalist.',
                 'fire_of_akumai'                  => 'Fire of Aku\'mai: al activarlo aparecen enemigos.',
@@ -92,7 +92,7 @@ Después de derrotar a Alzzin the Wildshaper, puedes usar la cueva para salir de
                 'exit_only' => 'Esta "entrada" es solo una salida.',
             ],
             'dire_maul_north' => [
-                'gordok_mastiff_pack_size' => 'Todas las manadas de Gordok Mastiff pueden contener 4 o 5 enemigos.',
+                'gordok_mastiff_pack_size' => 'Todos los packs de Gordok Mastiff pueden contener 4 o 5 enemigos.',
                 'fengus_chest'             => 'Fengus\'s Chest: contiene la Gordok Courtyard Key.',
                 'gordok_courtyard_door'    => 'Gordok Courtyard Door: Requiere la Gordok Courtyard Key.',
                 'gordok_inner_door'        => 'Gordok Inner Door: Requiere la Gordok Inner Door Key. La deja caer Guard Mol\'dar.',
@@ -167,7 +167,7 @@ Después de derrotar a Alzzin the Wildshaper, puedes usar la cueva para salir de
                 'purple_entrance'       => 'Entrada a The Wicked Grotto (morada)',
                 'orange_entrance'       => 'Entrada a Foulspore Cavern (naranja)',
                 'spewed_larva_spawn'    => 'De vez en cuando aparecerá Spewed Larva aquí.',
-                'deep_borers_pack_size' => 'Hay 5 o 6 Deep Borers por grupo.',
+                'deep_borers_pack_size' => 'Hay 5 o 6 Deep Borers por pack.',
             ],
             'naxxramas_classic' => [
                 'gauntlet_room' => 'Sala de gauntlet.
@@ -201,7 +201,7 @@ Los enemigos reaparecen infinitamente.
                 'torch_door' => 'Ábrela usando una antorcha en la pared.',
             ],
             'scarlet_monastery_graveyard' => [
-                'unferried_spirits_variant' => 'Muchos grupos aquí pueden ser 3 Unferred Spirits, un Anguished Dead o un Haunting Phantasm.',
+                'unferried_spirits_variant' => 'Muchos packs aquí pueden ser 3 Unferred Spirits, un Anguished Dead o un Haunting Phantasm.',
             ],
             'scarlet_monastery_library' => [
                 'doans_strongbox'   => 'Doan\'s Strongbox',
@@ -234,7 +234,7 @@ Los enemigos reaparecen infinitamente.
                 'living_entrance'             => 'Entrada de los vivos',
                 'more_enemies_spawn'          => 'Aparecerán dos enemigos más si matas a todos los enemigos de esta sala.',
                 'of_love_and_family_painting' => 'Cuadro Of Love and Family',
-                'pack_size_warning'           => 'La cantidad de enemigos por grupo puede variar entre 3 y 4 a lo largo del Scarlet Bastion.',
+                'pack_size_warning'           => 'La cantidad de enemigos por pack puede variar entre 3 y 4 a lo largo del Scarlet Bastion.',
                 'plagued_insects'             => 'Los Plagued Insects te atacan al entrar. ADVERTENCIA: este evento puede reaparecer, ¡nunca vengas aquí solo!',
                 'rat_attack'                  => 'Las ratas te atacan al entrar. ADVERTENCIA: este evento puede reaparecer, ¡nunca vengas aquí solo!',
                 'undead_entrance'             => 'Entrada de los no-muertos',
@@ -252,8 +252,8 @@ Los enemigos reaparecen infinitamente.
                 'deep_lurker_variant'       => 'Muchos enemigos aquí pueden ser Deep Lurker, Saturated Ooze o Murk Worm.',
                 'shade_of_eranikus_warning' => 'Shade of Eranikus solo puede ser combatido si el escudo se baja derrotando a los minijefes en Hall of the Cursed.
 
-Advertencia: atacar a Shade of Eranikus hace que todos los dragones verdes de esta planta se vuelvan hostiles.',
-                'stair_patrol'             => 'Este grupo patrulla las escaleras a través de todas las plantas.',
+Advertencia: atacar a Shade of Eranikus hace que todos los dragones verdes de este piso se vuelvan hostiles.',
+                'stair_patrol'             => 'Este pack patrulla las escaleras a través de todos los pisos.',
                 'jammalaan_aggro_warning'  => 'Advertencia: atacar a Jammal\'an the Prophet hace que todos los enemigos de esta sala se vuelvan hostiles.',
                 'broken_geometry_warning'  => 'ADVERTENCIA: la geometría rota puede hacer que caigas y MUERAS.',
                 'weaver_dreamscythe_spawn' => 'Weaver y Dreamscythe aparecen cuando Jammal\'an the Prophet es derrotado.',
@@ -307,17 +307,17 @@ Advertencia: atacar a Shade of Eranikus hace que todos los dragones verdes de es
             'brackenhide_hollow' => [
                 'captive_tuskarr_up'               => '^ Captive Tuskarr',
                 'decaying_cauldron_up'             => '^ Decaying Cauldron',
-                'decaying_cauldron_up_detail'      => '^ Decaying Cauldron: al activarlo, todos los miembros del grupo pueden recolectar Cleansed Rot, obteniendo un botón de acción adicional para curar una enfermedad. Cleansed Rot se consume al usarse, pero se puede volver al caldero para obtener más cargas. Requiere 25 de Alquimia de Dragonflight para usarlo.',
+                'decaying_cauldron_up_detail'      => '^ Decaying Cauldron: al activarlo, todos los miembros del grupo pueden recolectar Cleansed Rot, obteniendo un botón de acción adicional para eliminar una enfermedad. Cleansed Rot se consume al usarse, pero se puede volver al caldero para obtener más cargas. Requiere 25 de Alquimia de Dragonflight para usarlo.',
                 'altar_of_decay'                   => 'Altar of Decay',
                 'captive_tuskarr'                  => 'Captive Tuskarr',
                 'decaying_cauldron'                => 'Decaying Cauldron',
-                'decaying_cauldron_detail'         => 'Decaying Cauldron: al activarlo, todos los miembros del grupo pueden recolectar Cleansed Rot, obteniendo un botón de acción adicional para curar una enfermedad. Cleansed Rot se consume al usarse, pero se puede volver al caldero para obtener más cargas. Requiere 25 de Alquimia de Dragonflight para usarlo.',
+                'decaying_cauldron_detail'         => 'Decaying Cauldron: al activarlo, todos los miembros del grupo pueden recolectar Cleansed Rot, obteniendo un botón de acción adicional para eliminar una enfermedad. Cleansed Rot se consume al usarse, pero se puede volver al caldero para obtener más cargas. Requiere 25 de Alquimia de Dragonflight para usarlo.',
                 'unlocks_after_hackclaw'           => 'Se desbloquea después de derrotar a Hackclaw\'s War-Band.',
                 'unlocks_after_bracken_warscourge' => 'Se desbloquea después de derrotar a Bracken Warscourge',
                 'unlocks_after_treemouth'          => 'Se desbloquea después de matar a Treemouth',
                 'captive_tuskarr_down'             => 'v Captive Tuskarr',
                 'decaying_cauldron_down'           => 'v Decaying Cauldron',
-                'decaying_cauldron_down_detail'    => 'v Decaying Cauldron: al activarlo, todos los miembros del grupo pueden recolectar Cleansed Rot, obteniendo un botón de acción adicional para curar una enfermedad. Cleansed Rot se consume al usarse, pero se puede volver al caldero para obtener más cargas. Requiere 25 de Alquimia de Dragonflight para usarlo.',
+                'decaying_cauldron_down_detail'    => 'v Decaying Cauldron: al activarlo, todos los miembros del grupo pueden recolectar Cleansed Rot, obteniendo un botón de acción adicional para eliminar una enfermedad. Cleansed Rot se consume al usarse, pero se puede volver al caldero para obtener más cargas. Requiere 25 de Alquimia de Dragonflight para usarlo.',
                 'witherlings_gauntlet'             => 'Aparecen Witherlings durante todo este gauntlet.',
             ],
             'halls_of_infusion' => [
@@ -515,7 +515,7 @@ Los enemigos reaparecen infinitamente.
                 'damage_drake'                => 'Damage Drake',
                 'heal_drake'                  => 'Heal Drake',
                 'centrifuge_construct_shield' => 'Mata a todos los Centrifuge Constructs para quitar el escudo del jefe. 
-Después de matar al jefe, usa el objeto de dracoformado para volar más alto.',
+Después de matar al jefe, usa el objeto de dragón para volar más alto.',
                 'tank_drake' => 'Tank Drake',
             ],
             'ulduar' => [

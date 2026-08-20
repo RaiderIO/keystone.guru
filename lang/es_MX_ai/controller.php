@@ -126,7 +126,7 @@ return [
     ],
     'killzone' => [
         'error' => [
-            'facade_location_not_convertible' => 'No se pudo colocar el pull aquí: esta ubicación no pertenece a ninguna planta de esta mazmorra',
+            'facade_location_not_convertible' => 'No se pudo colocar el pull aquí: esta ubicación no pertenece a ningún piso de esta mazmorra',
         ],
     ],
     'oauthlogin' => [

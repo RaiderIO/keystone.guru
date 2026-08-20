@@ -5,7 +5,7 @@ return [
     'disease' => 'Enfermedad',
     'poison'  => 'Veneno',
     'curse'   => 'Maldición',
-    'enrage'  => 'Enfurecimiento',
+    'enrage'  => 'Enfurecer',
     'none'    => 'Ninguno',
     'n_a'     => 'N/D',
     'unknown' => 'Desconocido',

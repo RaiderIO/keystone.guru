@@ -248,7 +248,7 @@ return [
     'enemy_forces_checkpoint_pill_percentage'                              => ':percentage% requerido',
     'enemy_forces_checkpoint_tooltip_enemy_forces'                         => ':name tiene :enemyForces FE',
     'enemy_forces_checkpoint_tooltip_percentage'                           => ':name tiene :percentage%',
-    'enemy_forces_checkpoint_tooltip_spans_floors'                         => '(abarca :floors plantas)',
+    'enemy_forces_checkpoint_tooltip_spans_floors'                         => '(abarca :floors pisos)',
     'enemy_forces_checkpoint_unnamed_label'                                => 'Punto de control sin nombre',
     'enemy_forces_checkpoint_snackbar_editing'                             => 'Editando :name',
     'enemy_forces_checkpoint_snackbar_summary'                             => ':enemies enemigos - :amount',
