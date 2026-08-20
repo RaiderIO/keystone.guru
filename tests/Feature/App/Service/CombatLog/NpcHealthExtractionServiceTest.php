@@ -125,7 +125,7 @@ final class NpcHealthExtractionServiceTest extends PublicTestCase
 
         try {
             $npcHealth->update(['percentage' => 40]);
-            $this->npc->load('npcHealths');
+            $this->refreshNpc();
             $observedMaxHp = 4_000_000;
             $observations  = $this->observations($this->npc->id, 6, $observedMaxHp);
 
@@ -137,10 +137,11 @@ final class NpcHealthExtractionServiceTest extends PublicTestCase
             $this->assertSame((int)round($change->observedBaseHealth * 100 / 40), $change->newHealth);
 
             $npcHealth->update(['health' => $change->newHealth]);
-            $this->npc->load('npcHealths');
+            $this->refreshNpc();
             $this->assertEqualsWithDelta($observedMaxHp, $this->npc->calculateHealthForKey($this->gameVersion, 6, []), 3);
         } finally {
             $npcHealth->update($original);
+            $this->flushModelCaches();
         }
     }
 
@@ -153,7 +154,7 @@ final class NpcHealthExtractionServiceTest extends PublicTestCase
 
         try {
             $npcHealth->update(['health' => NpcHealth::HEALTH_PLACEHOLDER]);
-            $this->npc->load('npcHealths');
+            $this->refreshNpc();
             $changes = $this->service->compareNpcHealths($this->observations($this->npc->id, 2, 2_140_000), $this->dungeon, $this->gameVersion);
             $this->assertTrue($changes->get($this->npc->id)->isPlaceholder());
 
@@ -164,11 +165,11 @@ final class NpcHealthExtractionServiceTest extends PublicTestCase
             $this->assertSame(1, $written);
             $this->assertSame(
                 $changes->get($this->npc->id)->newHealth,
-                NpcHealth::query()->where('npc_id', $this->npc->id)->where('game_version_id', $this->gameVersion->id)->value('health'),
+                $this->storedHealth($this->gameVersion),
             );
         } finally {
             NpcHealth::query()->where('npc_id', $this->npc->id)->where('game_version_id', $this->gameVersion->id)->update($original);
-            new NpcHealth()->flushCache();
+            $this->flushModelCaches();
         }
     }
 
@@ -184,9 +185,9 @@ final class NpcHealthExtractionServiceTest extends PublicTestCase
         try {
             // Act
             $writtenWithoutOverwrite = $this->service->applyNpcHealths($changes, $this->gameVersion, false);
-            $healthWithoutOverwrite  = NpcHealth::query()->where('npc_id', $this->npc->id)->where('game_version_id', $this->gameVersion->id)->value('health');
+            $healthWithoutOverwrite  = $this->storedHealth($this->gameVersion);
             $writtenWithOverwrite    = $this->service->applyNpcHealths($changes, $this->gameVersion, true);
-            $healthWithOverwrite     = NpcHealth::query()->where('npc_id', $this->npc->id)->where('game_version_id', $this->gameVersion->id)->value('health');
+            $healthWithOverwrite     = $this->storedHealth($this->gameVersion);
 
             // Assert
             $this->assertSame(0, $writtenWithoutOverwrite);
@@ -195,7 +196,7 @@ final class NpcHealthExtractionServiceTest extends PublicTestCase
             $this->assertSame($changes->get($this->npc->id)->newHealth, $healthWithOverwrite);
         } finally {
             NpcHealth::query()->where('npc_id', $this->npc->id)->where('game_version_id', $this->gameVersion->id)->update($original);
-            new NpcHealth()->flushCache();
+            $this->flushModelCaches();
         }
     }
 
@@ -216,12 +217,35 @@ final class NpcHealthExtractionServiceTest extends PublicTestCase
             $this->assertSame(1, $written);
             $this->assertSame(
                 $changes->get($this->npc->id)->newHealth,
-                NpcHealth::query()->where('npc_id', $this->npc->id)->where('game_version_id', $otherGameVersion->id)->value('health'),
+                $this->storedHealth($otherGameVersion),
             );
         } finally {
             NpcHealth::query()->where('npc_id', $this->npc->id)->where('game_version_id', $otherGameVersion->id)->delete();
-            new NpcHealth()->flushCache();
+            $this->flushModelCaches();
         }
+    }
+
+    /**
+     * Model caching is on in CI (off in local dev), and the eager-loaded npcHealths of $dungeon->npcs() are cached
+     * under the Npc model - so every mutation in these tests must flush both before anything re-reads them.
+     */
+    private function flushModelCaches(): void
+    {
+        new Npc()->flushCache();
+        new NpcHealth()->flushCache();
+    }
+
+    private function refreshNpc(): void
+    {
+        $this->flushModelCaches();
+        $this->npc->load('npcHealths');
+    }
+
+    private function storedHealth(GameVersion $gameVersion): ?int
+    {
+        $this->flushModelCaches();
+
+        return NpcHealth::query()->where('npc_id', $this->npc->id)->where('game_version_id', $gameVersion->id)->value('health');
     }
 
     /**
