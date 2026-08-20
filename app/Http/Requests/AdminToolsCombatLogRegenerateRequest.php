@@ -6,6 +6,7 @@ use App\Models\Dungeon;
 use App\Models\Laratrust\Role;
 use App\Models\Season;
 use Auth;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -38,6 +39,32 @@ class AdminToolsCombatLogRegenerateRequest extends FormRequest
                 ? ['required', 'integer', 'exists:dungeons,id']
                 : ['required', 'string', sprintf('regex:/^(%s|%s\d+)$/', self::DUNGEON_ID_ALL, self::DUNGEON_ID_SEASON_PREFIX)],
             'season_id' => ['nullable', 'integer', 'exists:seasons,id'],
+        ];
+    }
+
+    /**
+     * A `season-<id>` dungeon selection cannot carry an `exists` rule of its own, so the season it names is
+     * checked here - otherwise a season that does not exist would only be caught by getDungeonIds()'s
+     * findOrFail(), which answers a bare 404 instead of a validation error.
+     *
+     * @return array<int, callable>
+     */
+    public function after(): array
+    {
+        return [
+            function (Validator $validator): void {
+                $dungeonId = (string)$this->input('dungeon_id');
+
+                if (!Str::startsWith($dungeonId, self::DUNGEON_ID_SEASON_PREFIX)) {
+                    return;
+                }
+
+                $seasonId = (int)Str::after($dungeonId, self::DUNGEON_ID_SEASON_PREFIX);
+                if (!Season::query()->where('id', $seasonId)->exists()) {
+                    // 'dungeon id' is what Laravel itself derives from the field name for every other rule
+                    $validator->errors()->add('dungeon_id', __('validation.exists', ['attribute' => 'dungeon id']));
+                }
+            },
         ];
     }
 

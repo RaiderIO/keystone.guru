@@ -204,6 +204,23 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         Queue::assertNotPushed(RegenerateCombatLogRoute::class);
     }
 
+    #[Test]
+    public function combatlogregeneratesubmit_givenUnknownSeasonInDungeonSelection_returnsValidationError(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+        Queue::fake();
+
+        // Act
+        $response = $this->post(route('admin.tools.combatlog.regenerate.submit'), [
+            'dungeon_id' => 'season-999999',
+        ]);
+
+        // Assert
+        $response->assertSessionHasErrors('dungeon_id');
+        Queue::assertNotPushed(RegenerateCombatLogRoute::class);
+    }
+
     /**
      * A season that has at least two dungeons which can hold a dungeon route, together with those dungeons.
      *
