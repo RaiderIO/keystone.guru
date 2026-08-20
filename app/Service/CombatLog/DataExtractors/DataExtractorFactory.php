@@ -2,7 +2,6 @@
 
 namespace App\Service\CombatLog\DataExtractors;
 
-use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
 use App\Repositories\Swoole\Interfaces\SpellRepositorySwooleInterface;
 use Illuminate\Support\Collection;
 
@@ -14,7 +13,6 @@ class DataExtractorFactory implements DataExtractorFactoryInterface
      * worker - that is what makes extractor construction cheap after the first job (#4058).
      */
     public function __construct(
-        private readonly FloorRepositoryInterface       $floorRepository,
         private readonly SpellRepositorySwooleInterface $spellRepository,
     ) {
     }
@@ -25,7 +23,6 @@ class DataExtractorFactory implements DataExtractorFactoryInterface
         $extractors = collect([
             new CreateMissingNpcDataExtractor(),
             new NpcUpdateDataExtractor(),
-            new FloorDataExtractor($this->floorRepository),
             new SpellDataExtractor($this->spellRepository),
             new NpcCharacteristicDataExtractor($this->spellRepository),
             new SpellCounterDataExtractor(),
