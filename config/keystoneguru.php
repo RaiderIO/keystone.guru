@@ -72,10 +72,12 @@ return [
             'tyrannical' => 1.25,
             'thundering' => 1.05,
         ],
-        // Fortified (non-bosses) and Tyrannical (bosses) apply from these key levels regardless of what the route's
-        // affix group says - Midnight runs carry both from +10 and Fortified already from +7 in the measurements
-        'fortified_min_key_level'  => 7,
-        'tyrannical_min_key_level' => 10,
+        // Fortified (non-bosses) and Tyrannical (bosses): from +10 both are always active, regardless of what the
+        // route's affix group says; between +7 and +9 only one of them is, and which one swaps every other week, so
+        // there it follows the affixes passed in (the route's affix group). Below +7 neither applies. The #4094
+        // measurements at +7..+9 were taken in a Fortified week (trash x1.2, bosses untouched).
+        'affix_scaling_factor_min_key_level'      => 7,
+        'affix_scaling_factor_both_min_key_level' => 10,
 
         // Most hostile non-boss enemies have 5% less health at +2..+5 (Lindormi's Guidance, Midnight S2) - measured on
         // every trash NPC of Murder Row and 10 of 14 in The Blinding Vale at +2..+5, absent from +6 on. The affix

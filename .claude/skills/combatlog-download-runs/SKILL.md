@@ -63,7 +63,8 @@ for f in storage/app/combatlogs/rogue/*; do php artisan combatlog:extractdata "$
 run directory at once (it needs all segments — each NPC appears in only some), reverses the key-level
 scaling on every observed NPC's max HP and writes `npc_healths` (missing/placeholder rows by default),
 printing a per-NPC comparison table. Only the `Level` column of `combatlog:searchruns` matters:
-**prefer a +6 run** — +2..+5 carry Lindormi's −5% on *most* trash, +7+ Fortified (summons exempt) —
+**prefer a +6 run** — +2..+5 carry Lindormi's −5% on *most* trash, +7..+9 one of Fortified/Tyrannical
+(swapping every other week, not visible in Raider.IO's `CHALLENGE_MODE_START`), +10 both —
 and use a run of another level as a cross-check (`--dry-run` shows Δ vs the stored value). Runs of
 another dungeon whose healths are already good are the control that proves the factor. Finish with
 `mapping:save`. Mechanics and the factor's derivation: combatlog-data-pipeline skill, "NPC health

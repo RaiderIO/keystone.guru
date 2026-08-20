@@ -15,7 +15,8 @@ use Illuminate\Support\Collection;
  *
  * The forward formula is Npc::calculateHealthForKey(): health * (percentage ?? 100) / 100 * getScalingFactor().
  * The reversal therefore has to honour the row's percentage as well as the scaling factor - both attempts that
- * preceded this one (see CreateMissingNpcDataExtractor, NpcUpdateDataExtractor) divided by the factor alone.
+ * preceded this one (CreateMissingNpcDataExtractor's commented-out base health, and the since-deleted
+ * NpcUpdateDataExtractor) divided by the factor alone.
  */
 class NpcHealthExtractionService implements NpcHealthExtractionServiceInterface
 {

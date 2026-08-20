@@ -381,9 +381,10 @@ class Npc extends CacheModel implements MappingModelInterface
      * What the stored base health is multiplied by at $keyLevel. Fitted to combat log measurements of every key level
      * (#4094), which the game reproduces to five significant digits: the per-level multiplier (7% per level through
      * +10, 10% per level from +11 - Xal'atath's Guile, so it needs no affix of its own) is rounded to two decimals,
-     * *then* the modifiers apply - Fortified on non-bosses from +7, Tyrannical on bosses from +10 (or earlier when the
-     * route's affixes carry them), the low-key reduction on non-bosses, and the MDT boss base correction. All numbers
-     * live in config('keystoneguru.keystone'), with the reasoning next to them.
+     * *then* the modifiers apply: Fortified (non-bosses) and Tyrannical (bosses) - both from +10, and between +7 and
+     * +9 whichever one the week's affixes ($affixes) carry, since they swap every other week - the low-key reduction
+     * on non-bosses, and the MDT boss base correction. All numbers live in config('keystoneguru.keystone'), with the
+     * reasoning next to them.
      *
      * @param array<int, string> $affixes A list of Affix:: string constants
      */
@@ -396,13 +397,14 @@ class Npc extends CacheModel implements MappingModelInterface
 
         $result = round($keyLevelFactor, 2);
 
-        if ($this->isAffectedByFortified() &&
-            ($keyLevel >= config('keystoneguru.keystone.fortified_min_key_level') || in_array(Affix::AFFIX_FORTIFIED, $affixes))) {
+        $bothAffixesActive = $keyLevel >= config('keystoneguru.keystone.affix_scaling_factor_both_min_key_level');
+        $weekAffixActive   = $keyLevel >= config('keystoneguru.keystone.affix_scaling_factor_min_key_level');
+
+        if ($this->isAffectedByFortified() && ($bothAffixesActive || ($weekAffixActive && in_array(Affix::AFFIX_FORTIFIED, $affixes)))) {
             $result *= config('keystoneguru.keystone.affix_scaling_factor.fortified');
         }
 
-        if ($this->isAffectedByTyrannical() &&
-            ($keyLevel >= config('keystoneguru.keystone.tyrannical_min_key_level') || in_array(Affix::AFFIX_TYRANNICAL, $affixes))) {
+        if ($this->isAffectedByTyrannical() && ($bothAffixesActive || ($weekAffixActive && in_array(Affix::AFFIX_TYRANNICAL, $affixes)))) {
             $result *= config('keystoneguru.keystone.affix_scaling_factor.tyrannical');
         }
 
