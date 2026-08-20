@@ -18,15 +18,15 @@ return [
         ],
         'overview' => [
             'title'   => 'Aperçu',
-            'routes'  => '',
-            'members' => '',
+            'routes'  => 'Routes',
+            'members' => 'Membres',
         ],
         'routepublishing' => [
             'title'            => 'Publication de routes',
-            'description'      => '',
-            'enabled'          => '',
-            'timezone_warning' => '',
-            'profile_link'     => '',
+            'description'      => 'La publication programmée vous permet de publier des routes auprès du monde entier selon un calendrier. Vous pouvez définir une date/heure par route à laquelle elles seront automatiquement mises à l\'état Publiée et visibles pour tous.',
+            'enabled'          => 'Activé',
+            'timezone_warning' => 'Les heures de publication programmée utilisent le fuseau horaire de votre profil. Assurez-vous que votre fuseau horaire est correctement défini dans vos :link.',
+            'profile_link'     => 'paramètres de profil',
         ],
         'routes' => [
             'title'                  => 'Liste des routes',

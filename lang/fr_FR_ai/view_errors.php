@@ -19,8 +19,8 @@ return [
         'message' => 'Désolé, la page que vous recherchez est introuvable.',
     ],
     '405' => [
-        'title'   => '',
-        'message' => '',
+        'title'   => '405 Méthode non autorisée',
+        'message' => 'Désolé, cette page ne prend pas en charge cette méthode de requête.',
     ],
     '410' => [
         'title'   => '410 Page expirée',

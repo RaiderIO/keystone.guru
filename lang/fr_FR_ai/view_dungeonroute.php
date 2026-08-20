@@ -6,22 +6,22 @@ return [
         'dungeon' => [
             'overview' => [
                 'weekly_route'           => 'Itinéraire hebdomadaire Raider.IO',
-                'weekly_routes'          => '',
-                'community_routes'       => '',
+                'weekly_routes'          => 'Routes hebdomadaires Raider.IO',
+                'community_routes'       => 'Routes de la communauté',
                 'popular'                => 'Itinéraires populaires',
                 'newly_published_routes' => 'Itinéraires nouvellement publiés',
                 'archetypes'             => [
                     'pug_friendly' => [
-                        'label'       => '',
-                        'description' => '',
+                        'label'       => 'Adapté aux PUG',
+                        'description' => 'Pulls indulgents pour des groupes d\'inconnus',
                     ],
                     'expert' => [
-                        'label'       => '',
-                        'description' => '',
+                        'label'       => 'Expert',
+                        'description' => 'Optimisée pour des groupes coordonnés',
                     ],
                     'title' => [
-                        'label'       => '',
-                        'description' => '',
+                        'label'       => 'Titre',
+                        'description' => 'La route utilisée par le top 0,5 % pour pousser leur cote',
                     ],
                 ],
             ],
