@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\AdminTools;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminToolsCombatLogRegenerateRequest;
 use App\Jobs\RegenerateCombatLogRoute;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\Season;
 use App\Models\User;
 use App\Service\MapContext\MapContextServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -42,20 +44,25 @@ class AdminToolsCombatLogController extends Controller
 
     public function combatlogregenerate(): View
     {
-        return view('admin.tools.combatlog.regenerate');
+        return view('admin.tools.combatlog.regenerate', [
+            'seasons' => $this->getSeasonsSelectList(),
+        ]);
     }
 
-    public function combatlogregeneratesubmit(Request $request): View
+    public function combatlogregeneratesubmit(AdminToolsCombatLogRegenerateRequest $request): View
     {
         set_time_limit(3600);
 
-        $dungeonId = (int)$request->get('dungeon_id');
+        // Null means "do not limit to any dungeon(s)" / "do not limit to a season"
+        $dungeonIds = $request->getDungeonIds();
+        $season     = $request->getSeason();
 
         $count = 0;
 
         // Cannot use joins since the other table lives in a different database
         DungeonRoute::query()
-            ->when($dungeonId !== -1, static fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId))
+            ->when($dungeonIds !== null, static fn(Builder $builder) => $builder->whereIn('dungeon_id', $dungeonIds))
+            ->when($season !== null, static fn(Builder $builder) => $builder->where('season_id', $season->id))
             ->chunkById(200, function (Collection $dungeonRoutes) use (&$count) {
                 $dungeonRoutes = $dungeonRoutes->keyBy('id');
                 /** @var Collection<int, ChallengeModeRun> $challengeModes */
@@ -74,6 +81,24 @@ class AdminToolsCombatLogController extends Controller
             'count' => $count,
         ]));
 
-        return view('admin.tools.combatlog.regenerate');
+        return view('admin.tools.combatlog.regenerate', [
+            'seasons' => $this->getSeasonsSelectList(),
+        ]);
+    }
+
+    /**
+     * All seasons, most recent first, keyed by id - prefixed with an empty option so the regeneration
+     * does not have to be limited to a season at all.
+     *
+     * @return array<int|string, string>
+     */
+    private function getSeasonsSelectList(): array
+    {
+        return ['' => __('view_admin.tools.combatlog.regenerate.season_any')] +
+            Season::with(['expansion'])
+                ->orderByDesc('id')
+                ->get()
+                ->mapWithKeys(static fn(Season $season) => [$season->id => $season->name_long])
+                ->toArray();
     }
 }
