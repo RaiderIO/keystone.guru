@@ -8,6 +8,22 @@ table for the terminology decisions this pass made (the Dungeon split was confir
 57 mazmorra vs 18 calabozo after filling the empty keys - still not unanimous, next pass should
 keep reading the surrounding file rather than defaulting).
 
+**Codex review (commit `dc1d9b190`) found 4 real defects, fixed in a follow-up commit
+(`ac9f45784`):** `planta` used instead of the locale's already-established `piso` for dungeon
+floors (an `es_ES_ai` copy-through I mistakenly introduced - 21+ prior `piso` hits in `js.php`
+alone, 0 for `planta`, so `piso` was never actually ambiguous the way `mazmorra`/`calabozo` is);
+`Awakened` and `Enrage` not read from `affixes.php`/`spells.php`; an invented word
+(`dracoformado`); and `pack` translated when it's on the community-jargon list. Most of the
+review's other findings were false positives it produced by not checking the locale's own
+pre-existing (non-empty) conventions first - it flagged `Afijo`/`Jefe`/`atajo` as wrong even
+though those are the dominant, already-established `es_MX_ai` translations for `Affix`/`Boss`/
+this exact "unlocks a shortcut" phrasing, and it suggested translating `view_admin.php`, which
+this workflow deliberately never touches. **Lesson for the next locale's review prompt:** tell
+the reviewer explicitly to check the locale's own pre-existing non-empty values (not just
+`spells.php`/`affixes.php`/`enemies.php`) before flagging a community-jargon or excluded-file
+"violation" - `piso` vs `planta` is exactly the kind of established-but-undocumented convention
+that only shows up by grep, not by rule.
+
 Read `.claude/skills/ai-locale-translation/SKILL.md` first — it holds the whole procedure, the
 scripts and the traps. This file only records what is **specific to `es_MX_ai`**, measured
 2026-08-20 right after `es_ES_ai` was finished (see `handovers/es_ES_ai.md` for that pass's notes —

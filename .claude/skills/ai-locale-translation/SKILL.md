@@ -195,6 +195,7 @@ locales genuinely disagree on some game terms - always read from `es_MX_ai`'s ow
 | English | `es_MX_ai` | Notes |
 |---|---|---|
 | Dungeon | **contested**: mazmorra (57) vs calabozo (18) after this pass | Not settled - read the surrounding file's existing lean before picking one; do not default to `mazmorra` the way `es_ES_ai` can |
+| Floor | **piso**, not `planta` | Unlike `es_ES_ai`'s `planta`, `es_MX_ai` had already committed to `piso` before this pass (21+ prior hits in `js.php` alone, 0 for `planta`) - first-pass draft used `planta` by mistake (an `es_ES_ai` copy-through) and had to be corrected after Codex review caught it |
 | Wyrm | vermis | Confirmed from `npcs.php` (`Mana Wyrm` -> `Vermis de maná`, etc.) - same as `es_ES_ai` but independently verified, not copied |
 | Fel (prefix) | vil | Confirmed from `npcs.php` (`Corcel vil`, `Larva vil`, ...) - same as `es_ES_ai` but independently verified |
 | Enemy forces | fuerzas enemigas (full form); **FE** abbreviation introduced in the enemy-forces-checkpoint pills/tooltips where `es_ES_ai` also abbreviates | Existing `es_MX_ai` js.php keys always spelled it out in full before this pass |
