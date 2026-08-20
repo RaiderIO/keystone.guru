@@ -23,7 +23,7 @@ use Illuminate\Support\Collection;
  */
 class NpcHealthDataExtractor implements DataExtractorInterface
 {
-    /** @var Collection<string, NpcHealthObservation> keyed by "<npcId>-<keyLevel>" */
+    /** @var Collection<string, NpcHealthObservation> keyed by "<dungeonId>-<npcId>-<keyLevel>" */
     private Collection $observations;
 
     public function __construct()
@@ -67,7 +67,9 @@ class NpcHealthDataExtractor implements DataExtractorInterface
             return;
         }
 
-        $key = sprintf('%d-%d', $guid->getId(), $currentDungeon->keyLevel);
+        // Keyed by dungeon too: files of different dungeons may share NPC ids, and the command's "one dungeon at a
+        // time" guard relies on seeing both
+        $key = sprintf('%d-%d-%d', $currentDungeon->dungeon->id, $guid->getId(), $currentDungeon->keyLevel);
 
         /** @var NpcHealthObservation|null $observation */
         $observation = $this->observations->get($key);

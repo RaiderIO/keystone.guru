@@ -201,6 +201,24 @@ final class NpcHealthDataExtractorTest extends PublicTestCase
     }
 
     #[Test]
+    public function extractData_givenSameNpcInTwoDungeons_keepsSeparateObservations(): void
+    {
+        // Arrange
+        $extractor    = new NpcHealthDataExtractor();
+        $otherDungeon = Dungeon::query()->where('id', '!=', $this->dungeon->id)->firstOrFail();
+
+        // Act - same NPC id, same key level, files of two different dungeons
+        $extractor->extractData($this->result, new DataExtractionCurrentDungeon($this->dungeon, 2), $this->parsedEvent(self::CREATURE_GUID, self::NO_OWNER_GUID, 1_000_000));
+        $extractor->extractData($this->result, new DataExtractionCurrentDungeon($otherDungeon, 2), $this->parsedEvent(self::CREATURE_GUID, self::NO_OWNER_GUID, 2_000_000));
+
+        // Assert - the command's "one dungeon at a time" guard needs to see both
+        $this->assertSame(
+            [$this->dungeon->id, $otherDungeon->id],
+            $extractor->getObservations()->map(static fn($observation) => $observation->dungeonId)->values()->toArray(),
+        );
+    }
+
+    #[Test]
     public function extractData_givenAnyEvent_issuesNoQueries(): void
     {
         // Arrange
