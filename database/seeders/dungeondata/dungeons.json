@@ -1922,7 +1922,7 @@
         "slug": "kings-rest",
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
-        "has_wallpaper": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -2143,7 +2143,7 @@
         "slug": "temple-of-sethraliss",
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
-        "has_wallpaper": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -8690,7 +8690,7 @@
         "slug": "ruby-life-pools",
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
-        "has_wallpaper": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -17066,7 +17066,7 @@
         "slug": "den-of-nalorakk",
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
-        "has_wallpaper": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -17641,7 +17641,7 @@
         "slug": "murder-row",
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
-        "has_wallpaper": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -17781,7 +17781,7 @@
         "slug": "nexuspoint-xenas",
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
-        "has_wallpaper": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -17825,7 +17825,7 @@
         "slug": "the-blinding-vale",
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
-        "has_wallpaper": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -17892,7 +17892,7 @@
         "slug": "voidscar-arena",
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
-        "has_wallpaper": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -18032,7 +18032,7 @@
         "slug": "windrunner-spire",
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
-        "has_wallpaper": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
