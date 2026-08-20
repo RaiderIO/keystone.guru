@@ -36,8 +36,8 @@ class EnemyVisualManager extends Signalable {
                 self._allEnemies.push(addedEnemy);
             }
         });
-        enemyMapObjectGroup.register('object:remove', this, function (objectRemoveEvent) {
-            let removedEnemy = objectRemoveEvent.data.object;
+        enemyMapObjectGroup.register('object:deleted', this, function (objectDeletedEvent) {
+            let removedEnemy = objectDeletedEvent.data.object;
             let index = self._allEnemies.indexOf(removedEnemy);
             if (index > -1) {
                 self._allEnemies.splice(index, 1);
@@ -45,6 +45,9 @@ class EnemyVisualManager extends Signalable {
             index = self._visibleEnemies.indexOf(removedEnemy);
             if (index > -1) {
                 self._visibleEnemies.splice(index, 1);
+            }
+            if (self._hoveredEnemy === removedEnemy) {
+                self._hoveredEnemy = null;
             }
         });
 

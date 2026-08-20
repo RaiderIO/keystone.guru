@@ -29,10 +29,10 @@ class APICombatLogControllerCombatLogRouteVoidscarArenaTest extends APICombatLog
     private const NPC_ID_STACKED_TRASH = 243988;
 
     /** @var int The NPC_ID_STACKED_TRASH enemy on floor 454 (index 1), at ingame 482.70/4443.30 */
-    private const ENEMY_ID_TRASH_BEFORE_BOSS_FLOOR = 135553;
+    private const ENEMY_ID_TRASH_BEFORE_BOSS_FLOOR = 140040;
 
     /** @var int The closest NPC_ID_STACKED_TRASH enemy on floor 455 (index 2), ~94 yards away at 479.00/4537.49 */
-    private const ENEMY_ID_TRASH_ON_BOSS_FLOOR = 135544;
+    private const ENEMY_ID_TRASH_ON_BOSS_FLOOR = 140031;
 
     /** @var int ui_map_id of floor 455 - where both the boss and the trash kill below are logged */
     private const UI_MAP_ID_FLOOR_455 = 2572;
