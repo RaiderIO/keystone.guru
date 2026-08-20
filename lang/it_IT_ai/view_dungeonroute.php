@@ -6,22 +6,22 @@ return [
         'dungeon' => [
             'overview' => [
                 'weekly_route'           => 'Percorso Settimanale Raider.IO',
-                'weekly_routes'          => '',
-                'community_routes'       => '',
+                'weekly_routes'          => 'Percorsi settimanali Raider.IO',
+                'community_routes'       => 'Percorsi della community',
                 'popular'                => 'Percorsi popolari',
                 'newly_published_routes' => 'Percorsi appena pubblicati',
                 'archetypes'             => [
                     'pug_friendly' => [
-                        'label'       => '',
-                        'description' => '',
+                        'label'       => 'Amichevole per Pug',
+                        'description' => 'Pull tolleranti per gruppi di sconosciuti',
                     ],
                     'expert' => [
-                        'label'       => '',
-                        'description' => '',
+                        'label'       => 'Esperto',
+                        'description' => 'Ottimizzato per gruppi coordinati',
                     ],
                     'title' => [
-                        'label'       => '',
-                        'description' => '',
+                        'label'       => 'Titolo',
+                        'description' => 'Il percorso usato dallo 0,5% migliore per aumentare il rating',
                     ],
                 ],
             ],

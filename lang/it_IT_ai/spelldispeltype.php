@@ -1,12 +1,12 @@
 <?php
 
 return [
-    'magic'   => '',
-    'disease' => '',
-    'poison'  => '',
-    'curse'   => '',
-    'enrage'  => '',
-    'none'    => '',
-    'n_a'     => '',
-    'unknown' => '',
+    'magic'   => 'Magia',
+    'disease' => 'Malattia',
+    'poison'  => 'Veleno',
+    'curse'   => 'Maledizione',
+    'enrage'  => 'Furia',
+    'none'    => 'Nessuno',
+    'n_a'     => 'N/D',
+    'unknown' => 'Sconosciuto',
 ];
