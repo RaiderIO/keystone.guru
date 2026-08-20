@@ -77,16 +77,13 @@ class AjaxNpcController extends Controller
                 $clause->on('npc_name_translations.key', '=', 'npcs.name')
                     ->where('npc_name_translations.locale', '=', 'en_US');
             })
-            ->leftJoinSub(
-                DB::table('mapping_versions')->selectRaw('dungeon_id, MAX(id) as id')->groupBy('dungeon_id'),
-                'latest_mapping_versions',
-                'latest_mapping_versions.dungeon_id',
-                '=',
-                'dungeons.id',
-            )
+            ->leftJoin('mapping_versions', function (JoinClause $clause) {
+                $clause->on('mapping_versions.dungeon_id', '=', 'dungeons.id')
+                    ->whereRaw('mapping_versions.id = (SELECT MAX(mv2.id) FROM mapping_versions mv2 WHERE mv2.dungeon_id = dungeons.id)');
+            })
             ->leftJoin('enemies', function (JoinClause $clause) {
                 $clause->on('enemies.npc_id', '=', 'npcs.id')
-                    ->on('enemies.mapping_version_id', '=', 'latest_mapping_versions.id');
+                    ->on('enemies.mapping_version_id', '=', 'mapping_versions.id');
             })
             ->groupBy('npcs.id');
 
