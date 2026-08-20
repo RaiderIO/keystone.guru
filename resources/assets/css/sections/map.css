@@ -217,6 +217,10 @@
     user-select: none;
 }
 
+#killzones_description {
+    user-select: text;
+}
+
 .sidebar .sidebar-content .card-body {
     padding: 0.75rem 1.25rem;
 }
