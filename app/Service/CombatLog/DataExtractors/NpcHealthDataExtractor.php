@@ -6,6 +6,7 @@ use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\Guid\Guid;
+use App\Logic\CombatLog\Guid\Player;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
 use App\Service\CombatLog\Dtos\DataExtraction\NpcHealthObservation;
@@ -23,6 +24,12 @@ use Illuminate\Support\Collection;
  */
 class NpcHealthDataExtractor implements DataExtractorInterface
 {
+    /** @var array<int, string> Creature GUID unit types that are dungeon NPCs */
+    private const array UNIT_TYPES = [
+        Creature::CREATURE_UNIT_TYPE_CREATURE,
+        Creature::CREATURE_UNIT_TYPE_VEHICLE,
+    ];
+
     /** @var Collection<string, NpcHealthObservation> keyed by "<dungeonId>-<npcId>-<keyLevel>" */
     private Collection $observations;
 
@@ -52,13 +59,17 @@ class NpcHealthDataExtractor implements DataExtractorInterface
             return;
         }
 
+        // Pets are players' (GameObjects have no health of interest); a Vehicle can be a dungeon boss - Ikuzz the
+        // Light Hunter in The Blinding Vale logs as Vehicle-...-244887-...
         $guid = $advancedData->getInfoGuid();
-        if (!($guid instanceof Creature) || $guid->getUnitType() !== Creature::CREATURE_UNIT_TYPE_CREATURE) {
+        if (!($guid instanceof Creature) || !in_array($guid->getUnitType(), self::UNIT_TYPES, true)) {
             return;
         }
 
-        // Player-owned guardians/totems carry an owner GUID - not dungeon NPCs
-        if ($advancedData->getOwnerGuid() !== null) {
+        // Player-owned guardians/totems carry the player as owner GUID - not dungeon NPCs. An owner that is itself a
+        // creature is a dungeon NPC's summon (a boss's spirits, a matriarch's eggs) and those are mapped NPCs with
+        // health of their own, so only a Player owner disqualifies.
+        if ($advancedData->getOwnerGuid() instanceof Player) {
             return;
         }
 

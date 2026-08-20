@@ -111,10 +111,41 @@ final class NpcHealthDataExtractorTest extends PublicTestCase
         return [
             'player'                => ['Player-1084-0A5F8492', self::NO_OWNER_GUID],
             'pet'                   => ['Pet-0-4237-1209-2796-76149-0000293D52', self::NO_OWNER_GUID],
-            'vehicle'               => ['Vehicle-0-4237-1209-2796-76149-0000293D52', self::NO_OWNER_GUID],
+            'game object'           => ['GameObject-0-4237-1209-2796-76149-0000293D52', self::NO_OWNER_GUID],
             'player-owned creature' => [self::CREATURE_GUID, 'Player-1084-0A5F8492'],
             'no info guid'          => [self::NO_OWNER_GUID, self::NO_OWNER_GUID],
         ];
+    }
+
+    #[Test]
+    public function extractData_givenVehicle_recordsIt(): void
+    {
+        // Arrange - Ikuzz the Light Hunter (a Blinding Vale boss) logs as a Vehicle
+        $extractor      = new NpcHealthDataExtractor();
+        $currentDungeon = new DataExtractionCurrentDungeon($this->dungeon, 2);
+        $parsedEvent    = $this->parsedEvent('Vehicle-0-3112-2859-46343-244887-00000726CA', self::NO_OWNER_GUID, 24_291_978);
+
+        // Act
+        $extractor->extractData($this->result, $currentDungeon, $parsedEvent);
+
+        // Assert
+        $this->assertSame(244887, $extractor->getObservations()->first()?->npcId);
+    }
+
+    #[Test]
+    public function extractData_givenCreatureOwnedByAnotherCreature_recordsIt(): void
+    {
+        // Arrange - a boss's summon: owner GUID is a creature, not a player
+        $extractor      = new NpcHealthDataExtractor();
+        $currentDungeon = new DataExtractionCurrentDungeon($this->dungeon, 2);
+        $parsedEvent    = $this->parsedEvent(self::CREATURE_GUID, 'Creature-0-4237-1209-2796-245912-00000726CA', 694_057);
+
+        // Act
+        $extractor->extractData($this->result, $currentDungeon, $parsedEvent);
+
+        // Assert
+        $this->assertCount(1, $extractor->getObservations());
+        $this->assertSame(694_057, $extractor->getObservations()->first()->getMostObservedMaxHp());
     }
 
     #[Test]

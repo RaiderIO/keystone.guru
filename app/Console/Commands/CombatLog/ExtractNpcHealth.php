@@ -93,11 +93,15 @@ class ExtractNpcHealth extends BaseCombatLogCommand
 
         $changes = $npcHealthExtractionService->compareNpcHealths($observations, $dungeon, $gameVersion);
 
+        $observedNpcIds = $observations->map(static fn(NpcHealthObservation $observation) => $observation->npcId)->unique()->sort()->values();
+        $ignoredNpcIds  = $observedNpcIds->diff($changes->keys());
+
         $this->info(sprintf(
-            'Dungeon: %s, observed %d distinct NPC ids of which %d are NPCs of this dungeon',
+            'Dungeon: %s, observed %d distinct NPC ids of which %d are NPCs of this dungeon%s',
             __($dungeon->name, [], 'en_US'),
-            $observations->map(static fn(NpcHealthObservation $observation) => $observation->npcId)->unique()->count(),
+            $observedNpcIds->count(),
             $changes->count(),
+            $ignoredNpcIds->isEmpty() ? '' : sprintf(' (ignored: %s)', $ignoredNpcIds->implode(', ')),
         ));
 
         $this->printChanges($changes, $overwrite);
