@@ -41,6 +41,7 @@ final class CoordinatesServiceTest extends PublicTestCase
         DungeonKey::NEXUS_POINT_XENAS->value,
         DungeonKey::THE_ROOKERY->value,
         DungeonKey::KINGS_REST->value,
+        DungeonKey::TEMPLE_OF_SETHRALISS->value,
     ];
 
     /**
