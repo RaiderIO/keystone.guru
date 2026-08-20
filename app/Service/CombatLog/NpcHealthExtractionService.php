@@ -28,6 +28,8 @@ class NpcHealthExtractionService implements NpcHealthExtractionServiceInterface
         /** @var Collection<int, NpcHealthChange> $result */
         $result = collect();
 
+        $curatedNpcIds = Npc::getCuratedDataNpcIds();
+
         // The same NPC may have been observed at several key levels when the files span multiple runs - the lowest
         // key level stacks the fewest multipliers on top of the base health, so it is the most trustworthy reversal
         $observationsByNpc = $observations
@@ -63,6 +65,7 @@ class NpcHealthExtractionService implements NpcHealthExtractionServiceInterface
                 $scalingFactor,
                 $observedBaseHealth,
                 $newHealth,
+                in_array($npc->id, $curatedNpcIds, true),
             ));
         }
 

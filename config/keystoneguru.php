@@ -89,12 +89,6 @@ return [
             'max_key_level' => 5,
             'factor'        => 0.95,
         ],
-
-        // MDT - where all seeded base health comes from - records bosses 4.17% above their true base: it reverses its
-        // +10 observations with Fortified's 1.2 rather than Tyrannical's 1.25. Rather than rewriting every boss row
-        // (a re-import would bring them straight back), the stored boss bases are corrected here, so
-        // calculateHealthForKey() lands on what the combat log shows: base * 0.96 * 1.25 = base * 1.2 at +10.
-        'mdt_boss_base_health_factor' => 0.96,
     ],
 
     'cache' => [
@@ -602,6 +596,26 @@ return [
                 'expert'       => env('WEEKLY_ROUTE_TAG_EXPERT', 'expert-route'),
                 'title'        => env('WEEKLY_ROUTE_TAG_TITLE', 'title-route'),
             ],
+        ],
+    ],
+
+    'npc' => [
+        /**
+         * NPCs whose seeded data is hand-curated and must never be replaced by an automated source. Honoured by two
+         * paths, with different breadth: MDTMappingImportService skips the NPC's data entirely (health, display id,
+         * encounter id, ...), while combatlog:extractnpchealth skips only its npc_healths row - even with --overwrite -
+         * and reports it as "curated".
+         *
+         * @var array<int, int>
+         */
+        'curated_npc_data_npc_ids' => [
+            // Priory of the Sacred Flame - 3 mini bosses where MDT has high health values - they mess up auto map sizing based on health
+            211289,
+            211290,
+            211291,
+            // Murder Row - Infernal, stored at 2.7M while it has ~205M in game: a 200M trash mob breaks the
+            // health-based enemy sizing on the map (Wotuu, #4207)
+            238414,
         ],
     ],
 

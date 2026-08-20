@@ -20,6 +20,8 @@ readonly class NpcHealthChange
         public int                  $observedBaseHealth,
         /** What the `health` column must hold so calculateHealthForKey() reproduces the observed max HP - differs from $observedBaseHealth only when the row carries a percentage */
         public int                  $newHealth,
+        /** Whether this NPC's health is hand-curated (Npc::getCuratedDataNpcIds()) and must be left alone whatever the log says */
+        public bool                 $curated = false,
     ) {
     }
 
@@ -61,10 +63,16 @@ readonly class NpcHealthChange
     }
 
     /**
-     * Missing and placeholder rows are always written; a real value only when the caller asked to overwrite.
+     * Missing and placeholder rows are always written; a real value only when the caller asked to overwrite. A curated
+     * NPC is never written at all - its stored health deliberately differs from what the game shows, so an observation
+     * that disagrees with it is the expected outcome rather than a correction.
      */
     public function shouldWrite(bool $overwrite): bool
     {
+        if ($this->curated) {
+            return false;
+        }
+
         if ($this->isMissing() || $this->isPlaceholder()) {
             return true;
         }

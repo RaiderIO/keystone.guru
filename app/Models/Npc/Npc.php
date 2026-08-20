@@ -382,9 +382,13 @@ class Npc extends CacheModel implements MappingModelInterface
      * (#4094), which the game reproduces to five significant digits: the per-level multiplier (7% per level through
      * +10, 10% per level from +11 - Xal'atath's Guile, so it needs no affix of its own) is rounded to two decimals,
      * *then* the modifiers apply: Fortified (non-bosses) and Tyrannical (bosses) - both from +10, and between +7 and
-     * +9 whichever one the week's affixes ($affixes) carry, since they swap every other week - the low-key reduction
-     * on non-bosses, and the MDT boss base correction. All numbers live in config('keystoneguru.keystone'), with the
-     * reasoning next to them.
+     * +9 whichever one the week's affixes ($affixes) carry, since they swap every other week - and the low-key
+     * reduction on non-bosses. All numbers live in config('keystoneguru.keystone'), with the reasoning next to them.
+     *
+     * This is the game's formula, with nothing in it to compensate for the seeded data: MDT stores Midnight boss bases
+     * 4.17% high (it reverses its +10 observations with Fortified's 1.2 rather than Tyrannical's 1.25), and #4208
+     * corrected those rows from +6 combat logs instead of carrying a boss factor here. An MDT re-import of a Midnight
+     * dungeon brings its boss values back ~4% high until combatlog:extractnpchealth is re-run on that dungeon.
      *
      * @param array<int, string> $affixes A list of Affix:: string constants
      */
@@ -412,9 +416,7 @@ class Npc extends CacheModel implements MappingModelInterface
             $result *= config('keystoneguru.keystone.affix_scaling_factor.thundering');
         }
 
-        if ($this->isBoss()) {
-            $result *= config('keystoneguru.keystone.mdt_boss_base_health_factor');
-        } elseif ($keyLevel <= config('keystoneguru.keystone.low_key_non_boss_health.max_key_level')) {
+        if (!$this->isBoss() && $keyLevel <= config('keystoneguru.keystone.low_key_non_boss_health.max_key_level')) {
             $result *= config('keystoneguru.keystone.low_key_non_boss_health.factor');
         }
 
@@ -499,6 +501,17 @@ class Npc extends CacheModel implements MappingModelInterface
         }
 
         return (int)round($npcHealth->health * (($npcHealth->percentage ?? 100) / 100));
+    }
+
+    /**
+     * NPCs whose data is hand-curated and must never be replaced by an automated source - see
+     * config('keystoneguru.npc.curated_npc_data_npc_ids') for who is on the list and why.
+     *
+     * @return array<int, int>
+     */
+    public static function getCuratedDataNpcIds(): array
+    {
+        return (array)config('keystoneguru.npc.curated_npc_data_npc_ids');
     }
 
     #[Override]
