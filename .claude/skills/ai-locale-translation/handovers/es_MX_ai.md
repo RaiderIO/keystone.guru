@@ -1,5 +1,13 @@
 # Handover: translating `es_MX_ai` (#4165)
 
+**Status: Done, 2026-08-20.** Actual numbers on completion: 769 in-scope keys (2 more than
+estimated below, since `en_US` grew further before this pass started), all filled, gate green,
+`composer run analyse` clean, `composer run fix` only realigning whitespace. No register cleanup
+needed - already informal *tú* throughout. See `SKILL.md`'s "Spanish glossary (es_MX_ai, ...)"
+table for the terminology decisions this pass made (the Dungeon split was confirmed contested:
+57 mazmorra vs 18 calabozo after filling the empty keys - still not unanimous, next pass should
+keep reading the surrounding file rather than defaulting).
+
 Read `.claude/skills/ai-locale-translation/SKILL.md` first — it holds the whole procedure, the
 scripts and the traps. This file only records what is **specific to `es_MX_ai`**, measured
 2026-08-20 right after `es_ES_ai` was finished (see `handovers/es_ES_ai.md` for that pass's notes —

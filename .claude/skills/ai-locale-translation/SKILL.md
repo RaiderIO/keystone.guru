@@ -180,6 +180,39 @@ Add a row here whenever a new locale forces a decision worth keeping.
 explicitly authorised by Wotuu. `validation.php`, `datatables.php` and other excluded files were left
 untouched even where an *usted* form appeared, since this workflow never hand-edits those.
 
+### Spanish glossary (es_MX_ai, established in the #4165 pass)
+
+`es_MX_ai` is ~85% byte-identical to `es_ES_ai` (same machine-translation origin), but the two
+locales genuinely disagree on some game terms - always read from `es_MX_ai`'s own `affixes.php`/
+`spells.php`/`enemies.php`, never assume the `es_ES_ai` answer applies. Confirmed differences:
+
+| Affix | `es_ES_ai` | `es_MX_ai` |
+|---|---|---|
+| Bolstering | Reforzante | **Fortalecedor** |
+| Quaking | Temblores | **Tembloroso** |
+| Teeming | Abundante | **Pululante** |
+
+| English | `es_MX_ai` | Notes |
+|---|---|---|
+| Dungeon | **contested**: mazmorra (57) vs calabozo (18) after this pass | Not settled - read the surrounding file's existing lean before picking one; do not default to `mazmorra` the way `es_ES_ai` can |
+| Wyrm | vermis | Confirmed from `npcs.php` (`Mana Wyrm` -> `Vermis de maná`, etc.) - same as `es_ES_ai` but independently verified, not copied |
+| Fel (prefix) | vil | Confirmed from `npcs.php` (`Corcel vil`, `Larva vil`, ...) - same as `es_ES_ai` but independently verified |
+| Enemy forces | fuerzas enemigas (full form); **FE** abbreviation introduced in the enemy-forces-checkpoint pills/tooltips where `es_ES_ai` also abbreviates | Existing `es_MX_ai` js.php keys always spelled it out in full before this pass |
+| Checkpoint | punto de control | No prior `es_MX_ai` usage found; matches the `es_ES_ai` glossary answer |
+| Weight (line thickness) | Peso | Established in `es_MX_ai/js.php` (`brushline_weight_label`, `path_weight_label`, ...) before this pass - not `Grosor` |
+| Icon | ícono (accented) | Dominant in `es_MX_ai/policy.php`, `js.php` before this pass |
+| Mole Machine | Máquina topo | Read from `es_MX_ai/npcs.php` (`Mole Machine to Stormwind` -> `Máquina topo a Ventormenta`) before translating the `mapping.php` notes that mention it |
+
+**Register:** `es_MX_ai` was already informal *tú* throughout with zero *usted* hits on the standard
+verb-form search - no register cleanup pass was needed (unlike `es_ES_ai`'s 30-key normalisation).
+
+**Mapping.php proper nouns:** for the classic-dungeon notes (Blackfathom Deeps, Blackrock Depths,
+etc.), Title-Case strings that read as an exact in-game object/NPC tooltip name (`Large Solid
+Chest`, `Iron Gate`, `The Black Anvil`, `Activation Rune`) were left in English, matching what
+`es_ES_ai` had already done for the same keys (verified independently, not copied) - because the
+name is what the player reads off their own client. Lowercase/descriptive labels that are not exact
+tooltip names (`workshop door`, `east entrance`) were translated.
+
 ## Normalising an existing locale (overwriting existing values)
 
 The default workflow never overwrites a non-empty value. When Wotuu explicitly asks for one -
@@ -302,7 +335,7 @@ in the excluded files, which are not this workflow's business.
 |---|---|---|---|
 | `de_DE_ai` | 2959 | 745 | Done — #4165, 2026-08-20 (plus 212 *Sie* → *du* and 31 post-review rewrites) |
 | `es_ES_ai` | 2953 | 745 (769 after re-sync) | Done — #4165, 2026-08-20 (plus 30 formal *usted* → informal *tú* rewrites) |
-| `es_MX_ai` | 2953 | 745 | Not started |
+| `es_MX_ai` | 2980 | 769 | Done — #4165, 2026-08-20 (no register cleanup needed, already informal *tú*) |
 | `fr_FR_ai` | 2959 | 745 | Not started |
 | `it_IT_ai` | 2957 | 745 | Not started |
 | `ko_KR_ai` | 3042 | 745 | Not started |
