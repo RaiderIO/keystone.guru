@@ -2,14 +2,14 @@
 
 return [
     'directory' => [
-        'title'              => 'Créateurs de routes',
-        'header'             => 'Créateurs de routes',
+        'title'              => 'Créateurs d\'itinéraires',
+        'header'             => 'Créateurs d\'itinéraires',
         'description'        => 'Parcourez les personnes qui créent des routes sur Keystone.guru. Les créateurs ayant des routes publiées sont listés automatiquement - ouvrez un profil pour voir leurs routes épinglées et où les retrouver ailleurs.',
         'search_label'       => 'Rechercher un créateur',
         'search_placeholder' => 'Rechercher par nom',
         'search_submit'      => 'Rechercher',
-        'empty'              => 'Il n\'y a pas encore de créateurs listés.',
-        'empty_for_search'   => 'Aucun créateur trouvé correspondant à « :search ».',
+        'empty'              => 'Aucun créateur n\'est encore répertorié.',
+        'empty_for_search'   => 'Aucun créateur ne correspond à « :search ».',
     ],
     'featured' => [
         'title'   => 'Créateurs en vedette',
@@ -18,6 +18,6 @@ return [
         'entry_title' => ':name - :routes',
     ],
     'card' => [
-        'route_count' => '{0} Aucune route publiée|{1} :count route publiée|[2,*] :count routes publiées',
+        'route_count' => '{0} Aucun itinéraire publié|{1} :count itinéraire publié|[2,*] :count itinéraires publiés',
     ],
 ];

@@ -6,14 +6,14 @@ return [
         'dungeon' => [
             'overview' => [
                 'weekly_route'           => 'Itinéraire hebdomadaire Raider.IO',
-                'weekly_routes'          => 'Routes hebdomadaires Raider.IO',
-                'community_routes'       => 'Routes de la communauté',
+                'weekly_routes'          => 'Itinéraires hebdomadaires Raider.IO',
+                'community_routes'       => 'Itinéraires de la communauté',
                 'popular'                => 'Itinéraires populaires',
                 'newly_published_routes' => 'Itinéraires nouvellement publiés',
                 'archetypes'             => [
                     'pug_friendly' => [
                         'label'       => 'Adapté aux PUG',
-                        'description' => 'Pulls indulgents pour des groupes d\'inconnus',
+                        'description' => 'Pulls laissant une bonne marge d\'erreur aux groupes de joueurs qui ne se connaissent pas',
                     ],
                     'expert' => [
                         'label'       => 'Expert',
@@ -21,7 +21,7 @@ return [
                     ],
                     'title' => [
                         'label'       => 'Titre',
-                        'description' => 'La route utilisée par le top 0,5 % pour pousser leur cote',
+                        'description' => 'L\'itinéraire utilisé par les 0,5 % les mieux classés pour faire progresser leur cote',
                     ],
                 ],
             ],

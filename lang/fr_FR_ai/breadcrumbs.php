@@ -100,7 +100,7 @@ return [
                 'messagebanner_set'                           => 'Définir la bannière de message',
                 'npc_manage_spell_visibility'                 => 'Gérer la visibilité des sorts des PNJ',
                 'wagogg_import_ingame_coordinates'            => 'Importer les coordonnées en jeu',
-                'artisancommands_backfill_kill_zone_enemy_id' => 'Rétro-remplir les identifiants d\'ennemi des zones de mise à mort',
+                'artisancommands_backfill_kill_zone_enemy_id' => 'Renseigner rétroactivement les identifiants d\'ennemi des zones de kill',
             ],
             'expansions' => [
                 'expansions'     => 'Extensions',

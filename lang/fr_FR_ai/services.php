@@ -35,7 +35,7 @@ return [
                 'limit_reached_pulls'                                  => 'Impossible d\'importer la route : plus que le maximum de :limit tirages.',
                 'limit_reached_brushlines'                             => 'Impossible d\'importer la route : plus que le maximum de :limit lignes.',
                 'limit_reached_paths'                                  => 'Impossible d\'importer la route : plus que le maximum de :limit chemins.',
-                'limit_reached_arrows'                                 => 'Impossible d\'importer la route : plus que le maximum de :limit flèches.',
+                'limit_reached_arrows'                                 => 'Impossible d\'importer la route : le nombre maximal de :limit flèches est dépassé.',
                 'limit_reached_notes'                                  => 'Impossible d\'importer la route : plus que le maximum de :limit notes.',
                 'unable_to_find_floor_for_object'                      => 'Impossible de trouver l\'étage de Keystone.guru qui correspond à l\'ID d\'étage MDT %d.',
                 'unable_to_find_floor_for_object_details'              => 'Cela indique que MDT a un étage que Keystone.guru n\'a pas.',

@@ -71,7 +71,7 @@ return [
         'creator_description'             => 'Votre profil public est ce que les gens voient lorsqu\'ils ouvrent un lien vers vos itinéraires. Ajoutez une bio, liez vos chaînes, et épinglez les itinéraires que vous voulez que les gens essaient en premier.',
         'creator_bio'                     => 'Bio',
         'creator_bio_placeholder'         => 'Dites aux gens qui vous êtes et quel genre d\'itinéraires vous créez.',
-        'creator_bio_help'                => 'Jusqu\'à :max caractères. Affiché en haut de votre profil public.',
+        'creator_bio_help'                => 'Jusqu\'à :max caractères. La bio s\'affiche en haut de votre profil public.',
         'creator_socials'                 => 'Liens',
         'creator_socials_help'            => 'Seuls les liens https vers le site correspondant sont acceptés. Laissez un champ vide pour supprimer ce lien.',
         'creator_pinned_routes'           => 'Itinéraires épinglés',
