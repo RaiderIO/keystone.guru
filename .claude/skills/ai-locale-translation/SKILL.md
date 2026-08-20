@@ -120,6 +120,17 @@ including a confident reviewer - check the claim before applying the fix.
   the UI label, so it gets translated as a whole (`Black Dragonflight Pledge Pin` ->
   `Anstecknadel des Schwarzen Drachenschwarms`). Widely known WoW terms (spell schools, dispel
   types, `Schlachtzugsmarkierung`) always get translated.
+  **This includes NPC/creature/boss names, even when `npcs.php` has an official localised name
+  for them** - the "grep the reference files first" advice below is for spell/ability names
+  specifically, not for who's casting them. `it_IT_ai`'s first pass translated every enemy-type
+  name it could find in `npcs.php` (`Vengeful Fleshreaper` -> *Mieticarne Vendicativo*, `Mole
+  Machine`-adjacent creature packs, all the `*_variant` enemy-list keys), which broke from the
+  unanimous convention `de_DE_ai`/`es_ES_ai`/`es_MX_ai`/`fr_FR_ai` had already settled on
+  (`Firebrand Darkweaver`, `Withered Spearhide`, `Ramstein the Gorger` etc. all stayed English in
+  those four) - caught by Codex review and reverted across ~75 keys. Before translating *any* name
+  inside a mapping.php sentence, check what the four already-done locales did with the same key
+  (`grep -n '<key>' lang/{de_DE,es_ES,es_MX,fr_FR}_ai/mapping.php`) rather than reasoning from the
+  rule text alone.
 - **Keep the register of the file.** UI labels are short and impersonal; help text addresses the
   user. For German this workflow used informal **du** throughout (not *Sie*), matching the game.
 - **Community jargon is not translated** where the community does not translate it: `Pull`, `Pack`,
@@ -257,6 +268,49 @@ above), and the Ulduar teleporter destination names are already officially trans
 for those four; the other five teleporter destinations (no official source) stayed translated
 for consistency.
 
+### Italian glossary (it_IT_ai, established in the #4165 pass)
+
+| English | Italian | English | Italian |
+|---|---|---|---|
+| Dungeon | dungeon (untranslated) | Floor | piano |
+| Route | contested, lean *percorso* (41:11 in `view_common.php`, 36:8 in `js.php`) | Pull | pull (untranslated) |
+| Enemy forces | forze nemiche (full form); **FN** abbreviation introduced for checkpoint pills/tooltips/snackbars | Pack | **pacchetto** (translated - unlike French/Spanish's untranslated `pack`) |
+| Affix | affisso (translated) | Boss | Boss (untranslated) |
+| Weight (line thickness) | Peso | Icon | icona |
+| Checkpoint | Checkpoint (untranslated - a common loanword in Italian gaming UI, no established prior value to check against) | Teeming | Abbondante (read from `affixes.php`) |
+| Raid marker | marcatore di incursione (Raid -> *incursione*, already established in `js.php`/`mapicontypes.php` before this pass) | Season | Stagione |
+
+Add a row here whenever a new locale forces a decision worth keeping.
+
+**Register:** `it_IT_ai` is informal *tu* throughout, like German/Spanish and the opposite of
+`fr_FR_ai`'s *vous*. A blunt grep found 164 pre-existing *tu*-form hits against 4 formal-*Lei*
+hits before this pass; no register cleanup was needed, and the new keys were all written as *tu*
+to match. Re-confirmed after the pass at 181:7, and every one of the 7 *Lei/Suo/Sua* hits turned
+out to be a third-person possessive ("il **suo** dungeon" = *its* dungeon) rather than a formal
+address - false positives, not register breaks.
+
+**Codex review found ~90 real issues**, almost all of one kind - see the strengthened
+"Proper nouns stay in English inside prose" rule above for the full story: the first pass
+translated NPC/creature-type names in `mapping.php` prose using their official `npcs.php` names,
+which is correct for spells but not for who casts them - it broke from the unanimous convention
+every other locale had already settled on. ~75 keys were reverted via `rewrite.py` to match
+(`Vengeful Fleshreaper`, `Firebrand Darkweaver`, `Withered Spearhide`, `Ramstein the Gorger`, and
+so on all stayed/went back to English inside the translated sentence). Two smaller, correct
+findings: three object names (`Iron Gate`, `Activation Rune`, `The Black Anvil`) that
+`es_MX_ai`'s own glossary already named as the "exact in-game tooltip name" exception, and 6 keys
+where "pack" had drifted to *gruppo* instead of this locale's own established *pacchetto*
+(`js.php`'s `enemypack` label, checked before the pass started) - an internal-consistency slip,
+not a wrong pick. The rest of the review (register, spell/immunity names against `spells.php`,
+`Teeming`/`Affix` against `affixes.php`, wording polish) came back clean or was judgment-call
+phrasing not worth a rewrite pass over.
+
+**One lesson worth restating for the next locale doing `mapping.php`:** before translating *any*
+named enemy/boss inside a prose sentence, grep the same key across the four already-done locales
+first (`grep -n '<key>' lang/{de_DE,es_ES,es_MX,fr_FR}_ai/mapping.php`) - it is a faster and more
+reliable signal than re-deriving the rule from official `npcs.php` names, which this pass's
+mistake shows can lead you the wrong way even when done carefully and even when the official name
+is real and correct.
+
 ## Normalising an existing locale (overwriting existing values)
 
 The default workflow never overwrites a non-empty value. When Wotuu explicitly asks for one -
@@ -381,8 +435,8 @@ in the excluded files, which are not this workflow's business.
 | `es_ES_ai` | 2953 | 745 (769 after re-sync) | Done — #4165, 2026-08-20 (plus 30 formal *usted* → informal *tú* rewrites) |
 | `es_MX_ai` | 2980 | 769 | Done — #4165, 2026-08-20 (no register cleanup needed, already informal *tú*) |
 | `fr_FR_ai` | 2986 | 769 | Done — #4165, 2026-08-20, PR #4209 (formal *vous* register, no cleanup needed; plus 27 Codex-review fixes, see `handovers/fr_FR_ai.md`) |
-| `it_IT_ai` | 2984 | 769 | Not started — handover ready at `handovers/it_IT_ai.md` (register is informal *tu*, like German/Spanish, unlike `fr_FR_ai`'s formal *vous*) |
-| `ko_KR_ai` | 3042 | 745 | Not started |
+| `it_IT_ai` | 2984 | 769 | Done — #4165, 2026-08-21 (informal *tu* register, no cleanup needed; plus ~90 Codex-review fixes, almost all reverting NPC/creature names in `mapping.php` prose back to English — see the Italian glossary above) |
+| `ko_KR_ai` | 3042 | 745 | Not started — next locale up |
 | `pt_BR_ai` | 2957 | 745 | Not started |
 | `ru_RU_ai` | 2841 | 745 | Not started |
 | `zh_CN_ai` | 3097 | 745 | Not started |

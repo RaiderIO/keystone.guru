@@ -1,5 +1,30 @@
 # Handover: translating `it_IT_ai` (#4165)
 
+**Status: Done, 2026-08-21.** All 769 in-scope keys filled (matched the estimate below exactly),
+gate green, `composer run analyse` clean, `composer run fix` only realigning whitespace. Informal
+*tu* register confirmed correct throughout (181:7 *tu*-vs-*Lei* after the pass; all 7 *Lei*-family
+hits were third-person possessives, not register breaks) - no cleanup needed. Commits `3c90e4a56`
+(translation) and `5e08db34e` (review fixes) on branch `4165-regenerate-ai-translations`.
+
+**Codex review found ~90 issues, almost all one systemic mistake:** the pass translated
+NPC/creature/boss names inside `mapping.php` prose sentences using their official `npcs.php`
+names (e.g. `Vengeful Fleshreaper` -> *Mieticarne Vendicativo*), which is the right move for
+spell/ability names but not for who's casting them - it broke from the convention every other
+locale (`de_DE_ai`, `es_ES_ai`/`es_MX_ai`, `fr_FR_ai`) had already settled on unanimously: those
+names stay in English inside the translated sentence. ~75 keys were reverted via `rewrite.py` in
+the follow-up commit. Two smaller, genuine findings: three object names (`Iron Gate`,
+`Activation Rune`, `The Black Anvil`) that are exactly the "exact in-game tooltip name" exception
+`es_MX_ai`'s own glossary already named, and 6 keys where "pack" had drifted to *gruppo* instead
+of this locale's own established *pacchetto* (`js.php`'s `enemypack` label) - an
+internal-consistency slip against a convention checked at the start of the pass, not a wrong pick
+made fresh. Everything else the review raised (spell/immunity names against `spells.php`,
+`Teeming`/`Affix` against `affixes.php`, register, dozens of wording-polish suggestions) came back
+clean or was a judgment-call phrasing preference, not an error, and was left as written. Full
+finding table: Codex task `task-mt21t1k0-fcbiun` (session `01a02121-e74d-7fc3-a322-c8421e057a54`).
+The strengthened "Proper nouns stay in English inside prose" rule and the Italian glossary are now
+in `SKILL.md` - read both before picking up `ko_KR_ai` (or any locale with a `mapping.php`
+work-list) next, since this is the single most likely mistake to repeat.
+
 Read `.claude/skills/ai-locale-translation/SKILL.md` first - it holds the whole procedure, the
 scripts and the traps. This file only records what is **specific to `it_IT_ai`**, measured
 2026-08-20 right after `fr_FR_ai` was finished (PR #4209 - see `handovers/fr_FR_ai.md` for that
