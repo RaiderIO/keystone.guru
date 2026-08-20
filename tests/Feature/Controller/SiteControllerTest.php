@@ -94,4 +94,17 @@ final class SiteControllerTest extends PublicTestCase
         $response->assertOk();
         $response->assertDontSee('site-footer__worktree');
     }
+
+    #[Test]
+    public function status_givenHealthyDependencies_returnsOkForEveryCheck(): void
+    {
+        // Act
+        $response = $this->get(route('misc.status'));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee('Database: OK', false);
+        $response->assertSee('Redis: OK', false);
+        $response->assertSee('Disk: OK', false);
+    }
 }
