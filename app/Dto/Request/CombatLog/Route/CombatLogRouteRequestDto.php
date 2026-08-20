@@ -97,14 +97,15 @@ class CombatLogRouteRequestDto extends RequestDto implements Arrayable
 
         $currentSeasonForDungeon = $dungeon->getActiveSeason($seasonService);
 
-        // Fully get rid of it when regenerating. It won't be available for a sec but that's okay
-        $existingDungeonRoute = $dungeonRouteRepository->findCombatLogRouteByPublicKey($this->settings->publicKey);
-        if ($existingDungeonRoute !== null) {
-            $existingDungeonRoute->delete();
-        }
-
+        // When regenerating (settings->publicKey set) the new route MUST end up under the old route's public key - it
+        // is what Raider.IO stores to reference the run. It gets that key at the very end, though, not here: the route
+        // being replaced stays alive (and keeps serving its key), with its ChallengeModeRun, until the new one is
+        // fully built; CombatLogRouteDungeonRouteService::replaceExistingDungeonRoute() then moves the run onto this
+        // route, deletes the old one and hands its public key over. The key below is only a placeholder until then.
+        // Deleting the old route here, before the build, is what orphaned routes on any mid-build failure and let the
+        // run lookup steal another route's run (#4194).
         $dungeonRoute = $dungeonRouteRepository->create([
-            'public_key'         => $existingDungeonRoute?->public_key ?? $dungeonRouteRepository->generateRandomPublicKey(), // @phpstan-ignore nullsafe.neverNull
+            'public_key'         => $dungeonRouteRepository->generateRandomPublicKey(),
             'author_id'          => $userId,
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $mappingVersion->id,
