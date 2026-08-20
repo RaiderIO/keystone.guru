@@ -92,15 +92,15 @@ final class NpcScalingFactorTest extends PublicTestCase
     {
         return [
             '+2 (1.07, no low key reduction on bosses)' => [2, [], 1.07],
-            '+4 (round2(1.07^3))'                      => [4, [], 1.23],
-            '+5 (round2(1.07^4))'                      => [5, [], 1.31],
-            '+6 (round2(1.07^5))'                      => [6, [], 1.40],
-            '+7 fortified week (no tyrannical)'        => [7, [Affix::AFFIX_FORTIFIED], 1.50],
-            '+8 fortified week'                        => [8, [Affix::AFFIX_FORTIFIED], 1.61],
-            '+9 fortified week'                        => [9, [Affix::AFFIX_FORTIFIED], 1.72],
-            '+10 (round2(1.07^9) * 1.25)'              => [10, [], 2.30],
-            '+11 (round2(1.07^9 * 1.1) * 1.25)'        => [11, [], 2.525],
-            '+12 (round2(1.07^9 * 1.1^2) * 1.25)'      => [12, [], 2.775],
+            '+4 (round2(1.07^3))'                       => [4, [], 1.23],
+            '+5 (round2(1.07^4))'                       => [5, [], 1.31],
+            '+6 (round2(1.07^5))'                       => [6, [], 1.40],
+            '+7 fortified week (no tyrannical)'         => [7, [Affix::AFFIX_FORTIFIED], 1.50],
+            '+8 fortified week'                         => [8, [Affix::AFFIX_FORTIFIED], 1.61],
+            '+9 fortified week'                         => [9, [Affix::AFFIX_FORTIFIED], 1.72],
+            '+10 (round2(1.07^9) * 1.25)'               => [10, [], 2.30],
+            '+11 (round2(1.07^9 * 1.1) * 1.25)'         => [11, [], 2.525],
+            '+12 (round2(1.07^9 * 1.1^2) * 1.25)'       => [12, [], 2.775],
         ];
     }
 
