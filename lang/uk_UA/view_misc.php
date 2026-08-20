@@ -24,10 +24,6 @@ return [
         'popular_routes_by_current_affixes' => 'Поширені маршрути за поточними модифікаторами',
         'popular_routes_by_next_affixes'    => 'Поширені маршрути за наступними модифікаторами',
     ],
-    'changelog' => [
-        'title'  => 'Список змін',
-        'header' => 'Список змін',
-    ],
     'credits' => [
         'title'            => 'Подяки',
         'header'           => 'Подяки',

@@ -18,6 +18,10 @@ return [
         'title'   => '404 Non trovata',
         'message' => 'Spiacenti, la pagina che stai cercando non è stata trovata.',
     ],
+    '405' => [
+        'title'   => '',
+        'message' => '',
+    ],
     '410' => [
         'title'   => '410 Pagina scaduta',
         'message' => 'Spiacenti, la pagina che stai cercando è scaduta.',

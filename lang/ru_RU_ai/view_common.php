@@ -3,11 +3,22 @@
 return [
 
     'dungeon' => [
+        'difficulty' => [
+            '10_man' => '',
+            '25_man' => '',
+            '20_man' => '',
+            '40_man' => '',
+        ],
         'griddiscover' => [
-            'popular'   => 'Популярные',
-            'this_week' => 'Текущая неделя',
-            'next_week' => 'Следующая неделя',
-            'new'       => 'Новые',
+            'popular' => 'Популярные',
+            'new'     => 'Новые',
+        ],
+        'list' => [
+            'more'        => '',
+            'next_season' => '',
+            'card'        => [
+                'this_week_tier' => '',
+            ],
         ],
         'gridtabs' => [
             'raid' => 'Рейд',
@@ -50,8 +61,28 @@ return [
         'cardlist' => [
             'no_dungeonroutes' => 'Маршруты не найдены',
         ],
+        'leaderboard' => [
+            'create_first_route' => '',
+        ],
         'rating' => [
             'nr_of_votes' => '%s голосов',
+        ],
+        'poster' => [
+            'views'     => '',
+            'favorites' => '',
+        ],
+        'cardhero' => [
+            'top_community_route'    => '',
+            'ranked_community_route' => '',
+            'views'                  => '',
+            'favorites'              => '',
+            'pulls'                  => '',
+        ],
+        'cardrow' => [
+            'new'       => '',
+            'views'     => '',
+            'favorites' => '',
+            'pulls'     => '',
         ],
         'table' => [
             'team'                  => 'Команда',
@@ -79,6 +110,8 @@ return [
             'title_title'                                    => 'Выберите заголовок, который будет отличать ваши маршрут от других аналогичных маршрутов, которые вы можете создать. Заголовок будет виден другим пользователям, как только вы опубликуете свой маршрут.',
             'dungeon_speedrun_required_npc_difficulty'       => 'Размер рейда',
             'dungeon_speedrun_required_npc_difficulty_title' => 'Рейды на 10 и 25 человек могут иметь разных врагов для завершения спидрана. Выберите размер вашего рейда, чтобы переключаться между наборами врагов.',
+            'dungeon_start'                                  => '',
+            'dungeon_start_title'                            => '',
             'description'                                    => 'Описание',
             'description_title'                              => 'Необязательное описание вашего маршрута. Описание будет видно другим пользователям, как только вы опубликуете свой маршрут. Вы всегда можете изменить свое описание позже.',
             'key_levels'                                     => 'Уровень ключа',
@@ -106,6 +139,8 @@ return [
             'remember_me'          => 'Запомнить меня',
             'forgot_your_password' => 'Забыли пароль?',
             'login_through_oauth2' => 'Авторизация с помощью OAuth2',
+            'no_account_yet'       => '',
+            'register_now'         => '',
         ],
         'mapsettings' => [
             'general'                                       => 'Общие',
@@ -119,6 +154,10 @@ return [
             'heatmap'                                       => 'Тепловая карта',
             'show_heatmap_tooltips'                         => 'Показывать подсказки при наведении мыши',
             'show_heatmap_tooltips_title'                   => 'Включение этой настройки будет показывать подсказки при наведении мыши на тепловую карту. Это может быть полезно для просмотра точных значений тепловой карты в конкретной точке.',
+            'heatmap_render_order'                          => '',
+            'heatmap_render_order_title'                    => '',
+            'heatmap_render_order_on_top'                   => '',
+            'heatmap_render_order_behind'                   => '',
             'enemies'                                       => 'Враги',
             'enemy_number_style'                            => 'Стиль числа врагов',
             'enemy_number_style_title'                      => 'Это управляет тем, что означают числа, когда вы наводите указатель мыши на врагов или когда вы выбираете тип отображения \'Силы врага\'.',
@@ -153,7 +192,11 @@ return [
             'import_route'                           => 'Импорт маршрута',
         ],
         'oauth' => [
-            'battletag_warning' => 'Если вы публикуете маршруты, ваше имя пользователя battletag/discord будет видно до тех пор, пока вы не измените имя пользователя в своем профиле.',
+            'battletag_warning'       => 'Если вы публикуете маршруты, ваше имя пользователя battletag/discord будет видно до тех пор, пока вы не измените имя пользователя в своем профиле.',
+            'battlenet_region'        => '',
+            'continue_with_battlenet' => '',
+            'continue_with_discord'   => '',
+            'continue_with_google'    => '',
         ],
         'pullsettings' => [
             'pull_number_style'                 => 'Стиль номера пула',
@@ -185,6 +228,8 @@ return [
             'terms_of_service'        => 'Условиями использования',
             'privacy_policy'          => 'Политикой конфиденциальности',
             'cookie_policy'           => 'Политикой в отношении файлов cookie',
+            'already_have_an_account' => '',
+            'login_now'               => '',
         ],
         'timezoneselect' => [
             'africa'     => 'Африка',
@@ -227,7 +272,6 @@ return [
             'api_documentation_internal_team' => 'Документация API (внутренняя команда)',
             'keystone_guru'                   => 'Keystone.guru',
             'changelog'                       => 'Журнал изменений',
-            'changelog_new'                   => 'НОВОЕ',
             'credits'                         => 'Благодарности',
             'about'                           => 'О нас',
             'legacy'                          => 'Наследие',
@@ -243,6 +287,7 @@ return [
             'trademark'                       => 'Торговая марка',
             'trademark_footer'                => 'World of Warcraft, Warcraft и Blizzard Entertainment являются товарными знаками или зарегистрированными товарными знаками Blizzard Entertainment, Inc. в США и / или других странах. Этот веб-сайт не связан с Blizzard Entertainment ».',
             'social'                          => 'Социальные сети',
+            'worktree'                        => '',
         ],
         'header' => [
             'toggle_navigation_title' => 'Включить навигацию',
@@ -255,20 +300,25 @@ return [
             'explore'                 => 'Исследовать подземелья',
             'new'                     => 'Новые',
             'compendium'              => '',
+            'compendium_overview'     => '',
             'npc_compendium'          => '',
             'spell_compendium'        => '',
             'compendium_activity'     => '',
             'class_compendium'        => '',
         ],
         'nav' => [
+            'dungeoncontext' => [
+                'change_dungeon' => '',
+            ],
             'user' => [
                 'login'              => 'Вход',
                 'register'           => 'Регистрация',
                 'telescope'          => 'Телескоп',
                 'tools'              => 'Инструменты',
-                'view_releases'      => 'Просмотр выпусков',
                 'view_expansions'    => 'Просмотр дополнений',
                 'view_dungeons'      => 'Просмотр подземелий',
+                'view_affixes'       => '',
+                'view_seasons'       => '',
                 'view_npcs'          => 'Просмотр НПС',
                 'view_spells'        => 'Просмотр заклинаний',
                 'view_users'         => 'Просмотр пользователей',
@@ -416,6 +466,7 @@ return [
                 'edit_route_settings'            => 'Настройки маршрута',
                 'edit_mapping_version'           => 'Редактировать версию карты',
                 'share'                          => 'Поделиться',
+                'route_actions'                  => '',
                 'start_live_session'             => 'Начать живую сессию',
                 'start_live_session_paragraph_1' => 'После запуска маршрута в игре вы можете создать сеанс в реальном времени, в котором Keystone.guru поможет вам пройти M+ ключ. Вы можете следить за перемещениями карты другого пользователя, щелкнув на иконку вверху.',
                 'start_live_session_paragraph_2' => 'Любой участник живого сеанса также может выбрать любой из ваших существующих пулов (ваш текущий пул), а затем любого врага, который не является частью вашего маршрута, чтобы указать на случайной пул. Затем Keystone.guru попытается исправить ваш маршрут, исключив всех врагов, которые являются частью вашего текущего маршрута, которые потенциально можно пропустить без использования Скрывающий покров/зелья невидимости.',
@@ -481,7 +532,7 @@ return [
     ],
     'mappingversion' => [
         'select' => [
-            'mapping_version_readonly' => 'версия :gameVersion :version (только для чтения)',
+            'mapping_version_previous' => '',
             'mapping_version'          => 'версия :gameVersion :version',
         ],
     ],
@@ -644,11 +695,6 @@ return [
         ],
         'select' => [
             'npc' => '',
-        ],
-    ],
-    'release' => [
-        'release' => [
-            'new' => 'Новые',
         ],
     ],
     'tag' => [

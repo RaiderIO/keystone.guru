@@ -19,13 +19,14 @@ return [
             'mdt_invalid_category'                => 'Catégorie invalide',
         ],
         'flash' => [
+            'banned_ip_address_added'                => '',
+            'banned_ip_address_removed'              => '',
             'message_banner_set_successfully'        => 'Bannière de message définie avec succès',
             'thumbnail_regenerate_result'            => ':success tâches envoyées pour :total itinéraires. :failed a échoué.',
             'combatlog_route_regenerate_result'      => '',
             'combatlog_criteria_reset'               => '',
             'combatlog_criteria_thresholds_updated'  => '',
             'caches_dropped_successfully'            => 'Caches supprimées avec succès',
-            'releases_exported'                      => 'Versions exportées',
             'exception'                              => 'Exception lancée dans le panneau d\'administration',
             'feature_toggle_activated'               => 'La fonctionnalité :feature est maintenant activée',
             'feature_toggle_deactivated'             => 'La fonctionnalité :feature est maintenant désactivée',
@@ -34,6 +35,24 @@ return [
             'mapping_version_upgrade_already_latest' => '',
             'read_only_mode_disabled'                => 'Mode lecture seule désactivé',
             'read_only_mode_enabled'                 => 'Mode lecture seule activé',
+        ],
+    ],
+    'affix' => [
+        'flash' => [
+            'affix_created' => '',
+            'affix_updated' => '',
+        ],
+    ],
+    'affixgroup' => [
+        'flash' => [
+            'affixgroup_created' => '',
+            'affixgroup_updated' => '',
+            'affixgroup_deleted' => '',
+        ],
+    ],
+    'apicombatlogrun' => [
+        'error' => [
+            'no_segments' => '',
         ],
     ],
     'apidungeonroute' => [
@@ -73,21 +92,15 @@ return [
         ],
     ],
     'dungeonroutediscover' => [
-        'popular'           => 'Itinéraires populaires',
-        'this_week_affixes' => 'Les affixes de cette semaine',
-        'next_week_affixes' => 'Les affixes de la semaine prochaine',
-        'new'               => 'Nouveau',
-        'season'            => [
-            'popular'           => '%s itinéraires populaires',
-            'this_week_affixes' => '%s cette semaine',
-            'next_week_affixes' => '%s la semaine prochaine',
-            'new'               => '%s nouveaux itinéraires',
+        'popular' => 'Itinéraires populaires',
+        'new'     => 'Nouveau',
+        'season'  => [
+            'popular' => '%s itinéraires populaires',
+            'new'     => '%s nouveaux itinéraires',
         ],
         'dungeon' => [
-            'popular'           => '%s itinéraires populaires',
-            'this_week_affixes' => '%s cette semaine',
-            'next_week_affixes' => '%s la semaine prochaine',
-            'new'               => '%s nouveaux itinéraires',
+            'popular' => '%s itinéraires populaires',
+            'new'     => '%s nouveaux itinéraires',
         ],
     ],
     'dungeonspeedrunrequirednpcs' => [
@@ -110,6 +123,11 @@ return [
             'not_found'                  => 'Non trouvé',
         ],
     ],
+    'killzone' => [
+        'error' => [
+            'facade_location_not_convertible' => '',
+        ],
+    ],
     'oauthlogin' => [
         'flash' => [
             'registered_successfully' => 'Inscription réussie. Profitez du site!',
@@ -125,16 +143,6 @@ return [
         ],
         'legal_agreed_required' => 'Vous devez accepter nos conditions légales pour vous inscrire.',
         'legal_agreed_accepted' => 'Vous devez accepter nos conditions légales pour vous inscrire.',
-    ],
-    'release' => [
-        'error' => [
-            'unable_to_save_release' => 'Impossible de sauvegarder la version',
-        ],
-        'flash' => [
-            'release_updated'  => 'Version mise à jour',
-            'release_created'  => 'Version créée',
-            'github_exception' => 'Une erreur s\'est produite lors de la communication avec Github: :message',
-        ],
     ],
     'mappingversion' => [
         'created_successfully'      => 'Nouvelle version de cartographie ajoutée!',
@@ -176,6 +184,7 @@ return [
             'profile_updated'                  => 'Profil mis à jour',
             'unexpected_error_when_saving'     => 'Une erreur inattendue s\'est produite lors de la tentative de sauvegarde de votre profil',
             'privacy_settings_updated'         => 'Paramètres de confidentialité mis à jour',
+            'creator_profile_updated'          => '',
             'password_changed'                 => 'Mot de passe modifié',
             'new_password_equals_old_password' => 'Le nouveau mot de passe est identique à l\'ancien mot de passe',
             'new_passwords_do_not_match'       => 'Les nouveaux mots de passe ne correspondent pas',
@@ -192,6 +201,12 @@ return [
             'add_ad_free_giveaway_already_has_giveaway' => '',
             'remove_ad_free_giveaway_not_found'         => '',
             'remove_ad_free_giveaway_not_yours'         => '',
+        ],
+    ],
+    'season' => [
+        'flash' => [
+            'season_created' => '',
+            'season_updated' => '',
         ],
     ],
     'spell' => [

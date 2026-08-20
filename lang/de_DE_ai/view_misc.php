@@ -24,10 +24,6 @@ return [
         'popular_routes_by_current_affixes' => 'Beliebte Routen nach aktuellen Affixen',
         'popular_routes_by_next_affixes'    => 'Beliebte Routen nach nächsten Affixen',
     ],
-    'changelog' => [
-        'title'  => 'Änderungsprotokoll',
-        'header' => 'Änderungsprotokoll',
-    ],
     'credits' => [
         'title'            => 'Credits',
         'header'           => 'Credits',

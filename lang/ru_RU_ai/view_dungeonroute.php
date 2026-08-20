@@ -5,19 +5,31 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'               => 'Raider.IO Еженедельный маршрут',
-                'popular'                    => 'Популярные маршруты',
-                'popular_by_current_affixes' => 'Популярные маршруты с текущими аффиксами',
-                'popular_by_next_affixes'    => 'Популярные маршруты с аффиксами следующей недели',
-                'newly_published_routes'     => 'Новые маршруты',
+                'weekly_route'           => 'Raider.IO Еженедельный маршрут',
+                'weekly_routes'          => '',
+                'community_routes'       => '',
+                'popular'                => 'Популярные маршруты',
+                'newly_published_routes' => 'Новые маршруты',
+                'archetypes'             => [
+                    'pug_friendly' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                    'expert' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                    'title' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                ],
             ],
         ],
         'discover' => [
-            'title'                      => 'Маршруты',
-            'popular'                    => 'Популярные маршруты',
-            'popular_by_current_affixes' => 'Популярные маршруты с текущими аффиксами',
-            'popular_by_next_affixes'    => 'Популярные маршруты с аффиксами следующей недели',
-            'newly_published_routes'     => 'Новые маршруты',
+            'title'                  => 'Маршруты',
+            'popular'                => 'Популярные маршруты',
+            'newly_published_routes' => 'Новые маршруты',
         ],
         'panel' => [
             'show_more' => 'Показать еще',

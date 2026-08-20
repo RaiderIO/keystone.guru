@@ -5,19 +5,31 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'               => 'Raider.IO 每周路线',
-                'popular'                    => '热门路线',
-                'popular_by_current_affixes' => '当前词缀下的热门路线',
-                'popular_by_next_affixes'    => '下个词缀下的热门路线',
-                'newly_published_routes'     => '新发布的路线',
+                'weekly_route'           => 'Raider.IO 每周路线',
+                'weekly_routes'          => '',
+                'community_routes'       => '',
+                'popular'                => '热门路线',
+                'newly_published_routes' => '新发布的路线',
+                'archetypes'             => [
+                    'pug_friendly' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                    'expert' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                    'title' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                ],
             ],
         ],
         'discover' => [
-            'title'                      => '路线',
-            'popular'                    => '热门路线',
-            'popular_by_current_affixes' => '当前词缀下的热门路线',
-            'popular_by_next_affixes'    => '下个词缀下的热门路线',
-            'newly_published_routes'     => '新发布的路线',
+            'title'                  => '路线',
+            'popular'                => '热门路线',
+            'newly_published_routes' => '新发布的路线',
         ],
         'panel' => [
             'show_more' => '显示更多',

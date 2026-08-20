@@ -6,13 +6,15 @@ return [
         'io' => [
             'export_string' => [
                 'category' => [
-                    'pull'     => '拉取 %d',
-                    'title'    => '标题',
-                    'map_icon' => '地图图标',
+                    'pull'         => '拉取 %d',
+                    'title'        => '标题',
+                    'map_icon'     => '地图图标',
+                    'raid_markers' => '',
                 ],
                 'unable_to_find_mdt_enemy_for_kg_enemy'             => '无法找到 Keystone.guru 敌人对应的 MDT 敌人，NPC %s（enemy_id: %d, npc_id: %d）。',
                 'unable_to_find_mdt_enemy_for_kg_enemy_details'     => '这表明您的路线中击杀了一个 MDT 已知的敌人 NPC，但 Keystone.guru 尚未将该敌人与 MDT 对应起来（或在 MDT 中不存在）。',
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => '此拉取已被移除，因为在 MDT 中找不到所有选择的敌人，导致拉取为空。',
+                'unable_to_find_mdt_enemy_for_kg_raid_marker'       => '',
                 'route_title_contains_non_ascii_char_bug'           => '您的路线标题包含非 ASCII 字符，这些字符已知会触发 Keystone.guru 中一个尚未解决的编码错误。
                                                         您的路线标题中的所有违规字符已被删除，我们对造成的不便表示歉意，并希望尽快解决此问题。',
                 'route_title_contains_non_ascii_char_bug_details' => '旧标题：%s，新标题：%s',
@@ -27,6 +29,7 @@ return [
                     'arrows'            => '',
                     'pull'              => '拉 %d',
                     'object'            => '对象 %d',
+                    'raid_markers'      => '',
                 ],
                 'object_out_of_bounds'                                 => '无法放置评论：无法放置评论 ":comment" 对象超出范围。',
                 'limit_reached_pulls'                                  => '无法导入路线：超过最大 :limit 个拉。',
@@ -46,6 +49,7 @@ return [
                 'unable_to_find_enemies_pull_skipped_details'          => '这可能表明 MDT 最近有一个更新尚未集成到 Keystone.guru 中。',
                 'unable_to_find_awakened_obelisks'                     => '无法为您的地下城/周组合找到觉醒的方尖碑。您的觉醒方尖碑跳过将不会被导入。',
                 'unable_to_find_awakened_obelisk_different_floor'      => '无法导入觉醒的方尖碑 :name，它位于与方尖碑本身不同的楼层。Keystone.guru 目前不支持这一点。',
+                'unable_to_find_awakened_obelisk_enemy'                => '',
                 'unable_to_decode_mdt_import_string'                   => '无法解码 MDT 导入字符串',
                 'unable_to_validate_mdt_import_string'                 => '无法验证 MDT 导入字符串',
             ],

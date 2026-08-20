@@ -20,10 +20,25 @@ return [
         'numeric' => 'Hodor',
         'string'  => 'Hodor',
     ],
-    'boolean'           => 'Hodor',
-    'can'               => 'Hodor',
-    'confirmed'         => 'Hodor',
-    'current_password'  => 'Hodor',
+    'boolean'          => 'Hodor',
+    'can'              => 'Hodor',
+    'confirmed'        => 'Hodor',
+    'current_password' => 'Hodor',
+    'custom'           => [
+        'bio' => [
+            'max' => 'Hodor',
+        ],
+        'pinned_dungeon_routes' => [
+            'max'    => 'Hodor',
+            'exists' => 'Hodor',
+        ],
+        'social_links' => [
+            'invalid_url_for_platform' => 'Hodor',
+        ],
+        'creator_search' => [
+            'max' => 'Hodor',
+        ],
+    ],
     'date'              => 'Hodor',
     'date_equals'       => 'Hodor',
     'date_format'       => 'Hodor',

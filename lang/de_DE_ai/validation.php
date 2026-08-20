@@ -20,10 +20,25 @@ return [
         'numeric' => ':Attribute muss zwischen :min & :max liegen.',
         'string'  => ':Attribute muss zwischen :min & :max Zeichen lang sein.',
     ],
-    'boolean'           => ':Attribute muss entweder \'true\' oder \'false\' sein.',
-    'can'               => 'Das Feld :attribute enthält einen nicht autorisierten Wert.',
-    'confirmed'         => ':Attribute stimmt nicht mit der Bestätigung überein.',
-    'current_password'  => 'Das Passwort ist falsch.',
+    'boolean'          => ':Attribute muss entweder \'true\' oder \'false\' sein.',
+    'can'              => 'Das Feld :attribute enthält einen nicht autorisierten Wert.',
+    'confirmed'        => ':Attribute stimmt nicht mit der Bestätigung überein.',
+    'current_password' => 'Das Passwort ist falsch.',
+    'custom'           => [
+        'bio' => [
+            'max' => '',
+        ],
+        'pinned_dungeon_routes' => [
+            'max'    => '',
+            'exists' => '',
+        ],
+        'social_links' => [
+            'invalid_url_for_platform' => '',
+        ],
+        'creator_search' => [
+            'max' => '',
+        ],
+    ],
     'date'              => ':Attribute muss ein gültiges Datum sein.',
     'date_equals'       => ':Attribute muss ein Datum gleich :date sein.',
     'date_format'       => ':Attribute entspricht nicht dem gültigen Format für :format.',

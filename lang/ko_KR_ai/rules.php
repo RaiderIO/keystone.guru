@@ -2,6 +2,11 @@
 
 return [
 
+    'banned_ip_range_rule' => [
+        'invalid'         => '',
+        'range_too_broad' => '',
+        'self_lockout'    => '',
+    ],
     'create_route_npc_chronological_rule' => [
         'message' => 'Npc(s) :npcs diedAt는 engagedAt보다 이전이어야 합니다!',
     ],

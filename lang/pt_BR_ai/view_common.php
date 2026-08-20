@@ -3,11 +3,22 @@
 return [
 
     'dungeon' => [
+        'difficulty' => [
+            '10_man' => '',
+            '25_man' => '',
+            '20_man' => '',
+            '40_man' => '',
+        ],
         'griddiscover' => [
-            'popular'   => 'Popular',
-            'this_week' => 'Esta semana',
-            'next_week' => 'Próxima semana',
-            'new'       => 'Novo',
+            'popular' => 'Popular',
+            'new'     => 'Novo',
+        ],
+        'list' => [
+            'more'        => '',
+            'next_season' => '',
+            'card'        => [
+                'this_week_tier' => '',
+            ],
         ],
         'gridtabs' => [
             'raid' => 'Incursão',
@@ -50,8 +61,28 @@ return [
         'cardlist' => [
             'no_dungeonroutes' => 'Nenhuma rota encontrada',
         ],
+        'leaderboard' => [
+            'create_first_route' => '',
+        ],
         'rating' => [
             'nr_of_votes' => '%s voto(s)',
+        ],
+        'poster' => [
+            'views'     => '',
+            'favorites' => '',
+        ],
+        'cardhero' => [
+            'top_community_route'    => '',
+            'ranked_community_route' => '',
+            'views'                  => '',
+            'favorites'              => '',
+            'pulls'                  => '',
+        ],
+        'cardrow' => [
+            'new'       => '',
+            'views'     => '',
+            'favorites' => '',
+            'pulls'     => '',
         ],
         'table' => [
             'team'                  => 'Equipe',
@@ -79,6 +110,8 @@ return [
             'title_title'                                    => 'Escolha um título que identifique exclusivamente a rota para você entre outras rotas semelhantes que você possa criar. O título será visível para outros quando você escolher publicar sua rota.',
             'dungeon_speedrun_required_npc_difficulty'       => 'Tamanho da raide',
             'dungeon_speedrun_required_npc_difficulty_title' => 'Raides de 10 e 25 jogadores podem ter inimigos diferentes para derrotar ao completar uma corrida contra o tempo. Selecione o tamanho da sua raide para alternar entre os conjuntos de inimigos.',
+            'dungeon_start'                                  => '',
+            'dungeon_start_title'                            => '',
             'description'                                    => 'Descrição',
             'description_title'                              => 'Uma descrição opcional da sua rota. A descrição será visível para outros quando você escolher publicar sua rota. Você pode sempre editar sua descrição posteriormente.',
             'key_levels'                                     => 'Níveis de chave',
@@ -106,6 +139,8 @@ return [
             'remember_me'          => 'Lembrar-me',
             'forgot_your_password' => 'Esqueceu sua senha?',
             'login_through_oauth2' => 'Entrar através do OAuth2',
+            'no_account_yet'       => '',
+            'register_now'         => '',
         ],
         'mapsettings' => [
             'general'                                       => 'Geral',
@@ -119,6 +154,10 @@ return [
             'heatmap'                                       => 'Mapa de calor',
             'show_heatmap_tooltips'                         => 'Mostrar dicas de ferramentas ao passar o mouse',
             'show_heatmap_tooltips_title'                   => 'Ativar esta configuração mostrará dicas de ferramentas quando você passar o mouse sobre o mapa de calor. Isto pode ser útil para ver os valores exatos do mapa de calor em um local específico.',
+            'heatmap_render_order'                          => '',
+            'heatmap_render_order_title'                    => '',
+            'heatmap_render_order_on_top'                   => '',
+            'heatmap_render_order_behind'                   => '',
             'enemies'                                       => 'Inimigos',
             'enemy_number_style'                            => 'Estilo do número do inimigo',
             'enemy_number_style_title'                      => 'Isto controla o que os números significam quando você passa o mouse sobre os inimigos ou quando você seleciona o tipo de exibição \'Forças inimigas\'.',
@@ -153,7 +192,11 @@ return [
             'import_route'                           => 'Importar rota',
         ],
         'oauth' => [
-            'battletag_warning' => 'Se você publicar rotas, seu battletag/nome de usuário do discord ficará visível até que você altere seu nome de usuário no seu perfil.',
+            'battletag_warning'       => 'Se você publicar rotas, seu battletag/nome de usuário do discord ficará visível até que você altere seu nome de usuário no seu perfil.',
+            'battlenet_region'        => '',
+            'continue_with_battlenet' => '',
+            'continue_with_discord'   => '',
+            'continue_with_google'    => '',
         ],
         'pullsettings' => [
             'pull_number_style'                 => 'Estilo do número do pull',
@@ -185,6 +228,8 @@ return [
             'terms_of_service'        => 'termos de serviço',
             'privacy_policy'          => 'política de privacidade',
             'cookie_policy'           => 'política de cookies',
+            'already_have_an_account' => '',
+            'login_now'               => '',
         ],
         'timezoneselect' => [
             'africa'     => 'África',
@@ -227,7 +272,6 @@ return [
             'api_documentation_internal_team' => 'Documentação da API (equipe interna)',
             'keystone_guru'                   => 'Keystone.guru',
             'changelog'                       => 'Registro de alterações',
-            'changelog_new'                   => 'NOVO',
             'credits'                         => 'Créditos',
             'about'                           => 'Sobre',
             'legacy'                          => 'Legado',
@@ -243,6 +287,7 @@ return [
             'trademark'                       => 'Marca Registrada',
             'trademark_footer'                => 'World of Warcraft, Warcraft e Blizzard Entertainment são marcas comerciais ou marcas registradas da Blizzard Entertainment, Inc. nos EUA e/ou em outros países. Este site não é afiliado à Blizzard Entertainment.',
             'social'                          => 'Social',
+            'worktree'                        => '',
         ],
         'header' => [
             'toggle_navigation_title' => 'Alternar navegação',
@@ -255,20 +300,25 @@ return [
             'explore'                 => 'Explorar masmorras',
             'new'                     => 'NOVO',
             'compendium'              => '',
+            'compendium_overview'     => '',
             'npc_compendium'          => '',
             'spell_compendium'        => '',
             'compendium_activity'     => '',
             'class_compendium'        => '',
         ],
         'nav' => [
+            'dungeoncontext' => [
+                'change_dungeon' => '',
+            ],
             'user' => [
                 'login'              => 'Entrar',
                 'register'           => 'Registrar',
                 'telescope'          => 'Telescópio',
                 'tools'              => 'Ferramentas',
-                'view_releases'      => 'Ver lançamentos',
                 'view_expansions'    => 'Ver expansões',
                 'view_dungeons'      => 'Ver masmorras',
+                'view_affixes'       => '',
+                'view_seasons'       => '',
                 'view_npcs'          => 'Ver NPCs',
                 'view_spells'        => 'Ver feitiços',
                 'view_users'         => 'Ver usuários',
@@ -416,6 +466,7 @@ return [
                 'edit_route_settings'            => 'Configurações de rota',
                 'edit_mapping_version'           => 'Editar versão de mapeamento',
                 'share'                          => 'Compartilhar',
+                'route_actions'                  => '',
                 'start_live_session'             => 'Iniciar sessão ao vivo',
                 'start_live_session_paragraph_1' => 'Uma vez que você começar a rodar sua rota no jogo, poderá criar uma sessão ao vivo onde o Keystone.guru irá ajudá-lo a completar sua chave M+. Você pode seguir os movimentos do mapa de outro usuário selecionando a opção ao clicar no ícone/iniciais dele no cabeçalho superior.',
                 'start_live_session_paragraph_2' => 'Qualquer participante da sessão ao vivo também pode selecionar qualquer um dos seus pulls existentes (seu pull atual, no jogo) e, em seguida, em qualquer inimigo que não faça parte da sua rota para indicar um pull acidental. O Keystone.guru então tentará corrigir sua rota excluindo quaisquer inimigos que façam parte de sua rota atual que sejam potencialmente puláveis sem utilizar capa/poções de invisibilidade.',
@@ -481,7 +532,7 @@ return [
     ],
     'mappingversion' => [
         'select' => [
-            'mapping_version_readonly' => ':gameVersion versão :version (somente leitura)',
+            'mapping_version_previous' => '',
             'mapping_version'          => ':gameVersion versão :version',
         ],
     ],
@@ -644,11 +695,6 @@ return [
         ],
         'select' => [
             'npc' => '',
-        ],
-    ],
-    'release' => [
-        'release' => [
-            'new' => 'NOVO',
         ],
     ],
     'tag' => [

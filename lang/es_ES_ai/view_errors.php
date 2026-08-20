@@ -18,6 +18,10 @@ return [
         'title'   => '404 No encontrado',
         'message' => 'Lo siento, la página que buscas no se pudo encontrar.',
     ],
+    '405' => [
+        'title'   => '',
+        'message' => '',
+    ],
     '410' => [
         'title'   => '410 Página expirada',
         'message' => 'Lo siento, la página que buscas ha expirado.',

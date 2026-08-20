@@ -24,10 +24,6 @@ return [
         'popular_routes_by_current_affixes' => '현재 속성에 따른 인기 경로',
         'popular_routes_by_next_affixes'    => '다음 속성에 따른 인기 경로',
     ],
-    'changelog' => [
-        'title'  => '변경 로그',
-        'header' => '변경 로그',
-    ],
     'credits' => [
         'title'            => '크레딧',
         'header'           => '크레딧',

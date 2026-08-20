@@ -24,10 +24,6 @@ return [
         'popular_routes_by_current_affixes' => 'Rotas populares por afixos atuais',
         'popular_routes_by_next_affixes'    => 'Rotas populares por próximos afixos',
     ],
-    'changelog' => [
-        'title'  => 'Registro de Alterações',
-        'header' => 'Registro de Alterações',
-    ],
     'credits' => [
         'title'            => 'Créditos',
         'header'           => 'Créditos',

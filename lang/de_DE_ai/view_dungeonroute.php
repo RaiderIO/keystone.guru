@@ -5,19 +5,31 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'               => 'Raider.IO Wöchentliche Route',
-                'popular'                    => 'Beliebte Routen',
-                'popular_by_current_affixes' => 'Beliebte Routen nach aktuellen Affixen',
-                'popular_by_next_affixes'    => 'Beliebte Routen nach nächsten Affixen',
-                'newly_published_routes'     => 'Neu veröffentlichte Routen',
+                'weekly_route'           => 'Raider.IO Wöchentliche Route',
+                'weekly_routes'          => '',
+                'community_routes'       => '',
+                'popular'                => 'Beliebte Routen',
+                'newly_published_routes' => 'Neu veröffentlichte Routen',
+                'archetypes'             => [
+                    'pug_friendly' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                    'expert' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                    'title' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                ],
             ],
         ],
         'discover' => [
-            'title'                      => 'Routen',
-            'popular'                    => 'Beliebte Routen',
-            'popular_by_current_affixes' => 'Beliebte Routen nach aktuellen Affixen',
-            'popular_by_next_affixes'    => 'Beliebte Routen nach nächsten Affixen',
-            'newly_published_routes'     => 'Neu veröffentlichte Routen',
+            'title'                  => 'Routen',
+            'popular'                => 'Beliebte Routen',
+            'newly_published_routes' => 'Neu veröffentlichte Routen',
         ],
         'panel' => [
             'show_more' => 'Mehr anzeigen',

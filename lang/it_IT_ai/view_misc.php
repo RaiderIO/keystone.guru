@@ -24,10 +24,6 @@ return [
         'popular_routes_by_current_affixes' => 'Percorsi popolari per affissi attuali',
         'popular_routes_by_next_affixes'    => 'Percorsi popolari per affissi successivi',
     ],
-    'changelog' => [
-        'title'  => 'Registro delle modifiche',
-        'header' => 'Registro delle modifiche',
-    ],
     'credits' => [
         'title'            => 'Crediti',
         'header'           => 'Crediti',

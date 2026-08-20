@@ -24,10 +24,6 @@ return [
         'popular_routes_by_current_affixes' => 'Hodor',
         'popular_routes_by_next_affixes'    => 'Hodor',
     ],
-    'changelog' => [
-        'title'  => 'Hodor',
-        'header' => 'Hodor',
-    ],
     'credits' => [
         'title'            => 'Hodor',
         'header'           => 'Hodor',

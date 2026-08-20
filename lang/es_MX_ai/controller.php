@@ -19,13 +19,14 @@ return [
             'mdt_invalid_category'                => 'Categoría inválida',
         ],
         'flash' => [
+            'banned_ip_address_added'                => '',
+            'banned_ip_address_removed'              => '',
             'message_banner_set_successfully'        => 'Banner de mensaje establecido con éxito',
             'thumbnail_regenerate_result'            => 'Se despacharon :success trabajos para rutas :total. :failed falló.',
             'combatlog_route_regenerate_result'      => '',
             'combatlog_criteria_reset'               => '',
             'combatlog_criteria_thresholds_updated'  => '',
             'caches_dropped_successfully'            => 'Cachés eliminadas con éxito',
-            'releases_exported'                      => 'Lanzamientos exportados',
             'exception'                              => 'Excepción lanzada en el panel de administración',
             'feature_toggle_activated'               => 'Función :feature ahora está activada',
             'feature_toggle_deactivated'             => 'Función :feature ahora está desactivada',
@@ -34,6 +35,24 @@ return [
             'mapping_version_upgrade_already_latest' => '',
             'read_only_mode_disabled'                => 'Modo de solo lectura deshabilitado',
             'read_only_mode_enabled'                 => 'Modo de solo lectura habilitado',
+        ],
+    ],
+    'affix' => [
+        'flash' => [
+            'affix_created' => '',
+            'affix_updated' => '',
+        ],
+    ],
+    'affixgroup' => [
+        'flash' => [
+            'affixgroup_created' => '',
+            'affixgroup_updated' => '',
+            'affixgroup_deleted' => '',
+        ],
+    ],
+    'apicombatlogrun' => [
+        'error' => [
+            'no_segments' => '',
         ],
     ],
     'apidungeonroute' => [
@@ -73,21 +92,15 @@ return [
         ],
     ],
     'dungeonroutediscover' => [
-        'popular'           => 'Rutas populares',
-        'this_week_affixes' => 'Afijos de esta semana',
-        'next_week_affixes' => 'Afijos de la próxima semana',
-        'new'               => 'Nuevo',
-        'season'            => [
-            'popular'           => '%s rutas populares',
-            'this_week_affixes' => '%s esta semana',
-            'next_week_affixes' => '%s la próxima semana',
-            'new'               => '%s nuevas rutas',
+        'popular' => 'Rutas populares',
+        'new'     => 'Nuevo',
+        'season'  => [
+            'popular' => '%s rutas populares',
+            'new'     => '%s nuevas rutas',
         ],
         'dungeon' => [
-            'popular'           => '%s rutas populares',
-            'this_week_affixes' => '%s esta semana',
-            'next_week_affixes' => '%s la próxima semana',
-            'new'               => '%s nuevas rutas',
+            'popular' => '%s rutas populares',
+            'new'     => '%s nuevas rutas',
         ],
     ],
     'dungeonspeedrunrequirednpcs' => [
@@ -110,6 +123,11 @@ return [
             'not_found'                  => 'No encontrado',
         ],
     ],
+    'killzone' => [
+        'error' => [
+            'facade_location_not_convertible' => '',
+        ],
+    ],
     'oauthlogin' => [
         'flash' => [
             'registered_successfully' => 'Registrado con éxito. ¡Disfruta del sitio web!',
@@ -125,16 +143,6 @@ return [
         ],
         'legal_agreed_required' => 'Debes aceptar nuestros términos legales para registrarte.',
         'legal_agreed_accepted' => 'Debes aceptar nuestros términos legales para registrarte.',
-    ],
-    'release' => [
-        'error' => [
-            'unable_to_save_release' => 'No se puede guardar la versión',
-        ],
-        'flash' => [
-            'release_updated'  => 'Versión actualizada',
-            'release_created'  => 'Versión creada',
-            'github_exception' => 'Ocurrió un error al comunicar con Github: :message',
-        ],
     ],
     'mappingversion' => [
         'created_successfully'      => '¡Nueva versión de mapeo añadida!',
@@ -176,6 +184,7 @@ return [
             'profile_updated'                  => 'Perfil actualizado',
             'unexpected_error_when_saving'     => 'Ocurrió un error inesperado al intentar guardar tu perfil',
             'privacy_settings_updated'         => 'Configuración de privacidad actualizada',
+            'creator_profile_updated'          => '',
             'password_changed'                 => 'Contraseña cambiada',
             'new_password_equals_old_password' => 'La nueva contraseña es igual a la contraseña antigua',
             'new_passwords_do_not_match'       => 'Las nuevas contraseñas no coinciden',
@@ -192,6 +201,12 @@ return [
             'add_ad_free_giveaway_already_has_giveaway' => '',
             'remove_ad_free_giveaway_not_found'         => '',
             'remove_ad_free_giveaway_not_yours'         => '',
+        ],
+    ],
+    'season' => [
+        'flash' => [
+            'season_created' => '',
+            'season_updated' => '',
         ],
     ],
     'spell' => [

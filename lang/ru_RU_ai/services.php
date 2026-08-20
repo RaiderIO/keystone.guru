@@ -6,13 +6,15 @@ return [
         'io' => [
             'export_string' => [
                 'category' => [
-                    'pull'     => 'Захват %d',
-                    'title'    => 'Название',
-                    'map_icon' => 'Иконка карты',
+                    'pull'         => 'Захват %d',
+                    'title'        => 'Название',
+                    'map_icon'     => 'Иконка карты',
+                    'raid_markers' => '',
                 ],
                 'unable_to_find_mdt_enemy_for_kg_enemy'             => 'Невозможно найти эквивалент MDT для врага Keystone.guru с NPC %s (enemy_id: %d, npc_id: %d).',
                 'unable_to_find_mdt_enemy_for_kg_enemy_details'     => 'Это указывает на то, что ваш маршрут убивает врага, NPC которого известен MDT, но Keystone.guru еще не связал этого врага с эквивалентом MDT (или он не существует в MDT).',
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => 'Этот захват был удален, так как все выбранные враги не были найдены в MDT, что привело к пустому захвату.',
+                'unable_to_find_mdt_enemy_for_kg_raid_marker'       => '',
                 'route_title_contains_non_ascii_char_bug'           => 'Название вашего маршрута содержит не-ASCII символы, которые, как известно, вызывают еще не решенную ошибку кодировки в Keystone.guru.
                                                         Название вашего маршрута было очищено от всех нежелательных символов, приносим извинения за неудобства и надеемся скоро решить эту проблему.',
                 'route_title_contains_non_ascii_char_bug_details' => 'Старое название: %s, новое название: %s',
@@ -27,6 +29,7 @@ return [
                     'arrows'            => '',
                     'pull'              => 'Захват %d',
                     'object'            => 'Объект %d',
+                    'raid_markers'      => '',
                 ],
                 'object_out_of_bounds'                                 => 'Невозможно разместить комментарий: невозможно разместить комментарий ":comment", объект вне границ.',
                 'limit_reached_pulls'                                  => 'Невозможно импортировать маршрут: превышено максимальное количество :limit подтягиваний.',
@@ -46,6 +49,7 @@ return [
                 'unable_to_find_enemies_pull_skipped_details'          => 'Это может указывать на то, что MDT недавно обновился, но еще не интегрирован в Keystone.guru.',
                 'unable_to_find_awakened_obelisks'                     => 'Невозможно найти Пробужденные Обелиски для вашей комбинации подземелья/недели. Ваши пропуски Пробужденных Обелисков не будут импортированы.',
                 'unable_to_find_awakened_obelisk_different_floor'      => 'Невозможно импортировать Пробужденный Обелиск :name, он находится на другом этаже, чем сам Обелиск. Keystone.guru в настоящее время это не поддерживает.',
+                'unable_to_find_awakened_obelisk_enemy'                => '',
                 'unable_to_decode_mdt_import_string'                   => 'Невозможно декодировать строку импорта MDT',
                 'unable_to_validate_mdt_import_string'                 => 'Невозможно подтвердить строку импорта MDT',
             ],

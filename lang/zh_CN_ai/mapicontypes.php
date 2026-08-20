@@ -112,4 +112,18 @@ return [
     'seat_of_the_triumvirate_void_infusion'  => '虚空注入',
     'maisara_caverns_hearty_vilebranch_stew' => '丰盛的邪枝炖汤',
 
+    'algethar_academy_black_dragonflight_pledge_pin'  => '',
+    'algethar_academy_blue_dragonflight_pledge_pin'   => '',
+    'algethar_academy_bronze_dragonflight_pledge_pin' => '',
+    'algethar_academy_green_dragonflight_pledge_pin'  => '',
+    'algethar_academy_red_dragonflight_pledge_pin'    => '',
+    'magisters_terrace_arcane_empowerment'            => '',
+    'murder_row_fel_contraband'                       => '',
+    'murder_row_felstone'                             => '',
+    'murder_row_felwyrm_egg'                          => '',
+    'murder_row_heartstop_poison'                     => '',
+    'murder_row_loaded_pistol'                        => '',
+    'murder_row_overload_golem'                       => '',
+    'the_blinding_vale_flourishing_stride'            => '',
+
 ];

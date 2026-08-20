@@ -19,13 +19,14 @@ return [
             'mdt_invalid_category'                => '잘못된 카테고리',
         ],
         'flash' => [
+            'banned_ip_address_added'                => '',
+            'banned_ip_address_removed'              => '',
             'message_banner_set_successfully'        => '메시지 배너가 성공적으로 설정되었습니다',
             'thumbnail_regenerate_result'            => ':total 경로를 위한 :success 작업이 배포되었습니다. :failed 실패했습니다.',
             'combatlog_route_regenerate_result'      => '',
             'combatlog_criteria_reset'               => '',
             'combatlog_criteria_thresholds_updated'  => '',
             'caches_dropped_successfully'            => '캐시가 성공적으로 삭제되었습니다',
-            'releases_exported'                      => '릴리스가 내보내졌습니다',
             'exception'                              => '관리자 패널에서 예외 발생',
             'feature_toggle_activated'               => '기능 :feature이(가) 이제 활성화되었습니다',
             'feature_toggle_deactivated'             => '기능 :feature이(가) 이제 비활성화되었습니다',
@@ -34,6 +35,24 @@ return [
             'mapping_version_upgrade_already_latest' => '',
             'read_only_mode_disabled'                => '읽기 전용 모드 비활성화됨',
             'read_only_mode_enabled'                 => '읽기 전용 모드 활성화됨',
+        ],
+    ],
+    'affix' => [
+        'flash' => [
+            'affix_created' => '',
+            'affix_updated' => '',
+        ],
+    ],
+    'affixgroup' => [
+        'flash' => [
+            'affixgroup_created' => '',
+            'affixgroup_updated' => '',
+            'affixgroup_deleted' => '',
+        ],
+    ],
+    'apicombatlogrun' => [
+        'error' => [
+            'no_segments' => '',
         ],
     ],
     'apidungeonroute' => [
@@ -73,21 +92,15 @@ return [
         ],
     ],
     'dungeonroutediscover' => [
-        'popular'           => '인기 경로',
-        'this_week_affixes' => '이번 주 속성',
-        'next_week_affixes' => '다음 주 속성',
-        'new'               => '새로운',
-        'season'            => [
-            'popular'           => '%s 인기 경로',
-            'this_week_affixes' => '%s 이번 주',
-            'next_week_affixes' => '%s 다음 주',
-            'new'               => '%s개의 새로운 경로',
+        'popular' => '인기 경로',
+        'new'     => '새로운',
+        'season'  => [
+            'popular' => '%s 인기 경로',
+            'new'     => '%s개의 새로운 경로',
         ],
         'dungeon' => [
-            'popular'           => '%s 인기 있는 경로',
-            'this_week_affixes' => '이번 주 %s',
-            'next_week_affixes' => '다음 주 %s',
-            'new'               => '%s 새로운 경로',
+            'popular' => '%s 인기 있는 경로',
+            'new'     => '%s 새로운 경로',
         ],
     ],
     'dungeonspeedrunrequirednpcs' => [
@@ -110,6 +123,11 @@ return [
             'not_found'                  => '찾을 수 없음',
         ],
     ],
+    'killzone' => [
+        'error' => [
+            'facade_location_not_convertible' => '',
+        ],
+    ],
     'oauthlogin' => [
         'flash' => [
             'registered_successfully' => '성공적으로 등록되었습니다. 웹사이트를 즐기세요!',
@@ -125,16 +143,6 @@ return [
         ],
         'legal_agreed_required' => '등록하려면 법적 약관에 동의해야 합니다.',
         'legal_agreed_accepted' => '등록하려면 법적 약관에 동의해야 합니다.',
-    ],
-    'release' => [
-        'error' => [
-            'unable_to_save_release' => '릴리스를 저장할 수 없습니다',
-        ],
-        'flash' => [
-            'release_updated'  => '릴리스가 업데이트되었습니다',
-            'release_created'  => '릴리스가 생성되었습니다',
-            'github_exception' => 'Github와 통신하는 동안 오류가 발생했습니다: :message',
-        ],
     ],
     'mappingversion' => [
         'created_successfully'      => '새로운 매핑 버전이 추가되었습니다!',
@@ -176,6 +184,7 @@ return [
             'profile_updated'                  => '프로필이 업데이트되었습니다',
             'unexpected_error_when_saving'     => '프로필을 저장하는 동안 예상치 못한 오류가 발생했습니다',
             'privacy_settings_updated'         => '개인정보 설정이 업데이트되었습니다',
+            'creator_profile_updated'          => '',
             'password_changed'                 => '비밀번호가 변경되었습니다',
             'new_password_equals_old_password' => '새 비밀번호가 이전 비밀번호와 같습니다',
             'new_passwords_do_not_match'       => '새 비밀번호가 일치하지 않습니다',
@@ -192,6 +201,12 @@ return [
             'add_ad_free_giveaway_already_has_giveaway' => '',
             'remove_ad_free_giveaway_not_found'         => '',
             'remove_ad_free_giveaway_not_yours'         => '',
+        ],
+    ],
+    'season' => [
+        'flash' => [
+            'season_created' => '',
+            'season_updated' => '',
         ],
     ],
     'spell' => [

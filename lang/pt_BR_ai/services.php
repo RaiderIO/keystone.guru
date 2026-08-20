@@ -6,13 +6,15 @@ return [
         'io' => [
             'export_string' => [
                 'category' => [
-                    'pull'     => 'Puxada %d',
-                    'title'    => 'Título',
-                    'map_icon' => 'Ícone do mapa',
+                    'pull'         => 'Puxada %d',
+                    'title'        => 'Título',
+                    'map_icon'     => 'Ícone do mapa',
+                    'raid_markers' => '',
                 ],
                 'unable_to_find_mdt_enemy_for_kg_enemy'             => 'Não foi possível encontrar o equivalente MDT para o inimigo do Keystone.guru com NPC %s (enemy_id: %d, npc_id: %d).',
                 'unable_to_find_mdt_enemy_for_kg_enemy_details'     => 'Isso indica que sua rota mata um inimigo cujo NPC é conhecido pelo MDT, mas o Keystone.guru ainda não associou esse inimigo a um equivalente MDT (ou ele não existe no MDT).',
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => 'Esta puxada foi removida, pois todos os inimigos selecionados não puderam ser encontrados no MDT, resultando em uma puxada vazia.',
+                'unable_to_find_mdt_enemy_for_kg_raid_marker'       => '',
                 'route_title_contains_non_ascii_char_bug'           => 'O título da sua rota contém caracteres não-ASCII que são conhecidos por acionar um bug de codificação ainda não resolvido no Keystone.guru.
                                                         O título da sua rota foi removido de todos os caracteres ofensivos, pedimos desculpas pelo inconveniente e esperamos resolver este problema em breve.',
                 'route_title_contains_non_ascii_char_bug_details' => 'Título antigo: %s, novo título: %s',
@@ -27,6 +29,7 @@ return [
                     'arrows'            => '',
                     'pull'              => 'Puxada %d',
                     'object'            => 'Objeto %d',
+                    'raid_markers'      => '',
                 ],
                 'object_out_of_bounds'                                 => 'Não foi possível colocar o comentário: não foi possível colocar o comentário ":comment" objeto está fora dos limites.',
                 'limit_reached_pulls'                                  => 'Não foi possível importar a rota: mais do que o máximo de :limit puxadas.',
@@ -46,6 +49,7 @@ return [
                 'unable_to_find_enemies_pull_skipped_details'          => 'Isso pode indicar que o MDT teve uma atualização recente que ainda não foi integrada no Keystone.guru.',
                 'unable_to_find_awakened_obelisks'                     => 'Não foi possível encontrar Obeliscos Despertos para a combinação da sua masmorra/semana. Seus saltos de Obelisco Desperto não serão importados.',
                 'unable_to_find_awakened_obelisk_different_floor'      => 'Não foi possível importar o Obelisco Desperto :name, ele está em um andar diferente do próprio Obelisco. O Keystone.guru não suporta isso no momento.',
+                'unable_to_find_awakened_obelisk_enemy'                => '',
                 'unable_to_decode_mdt_import_string'                   => 'Não foi possível decodificar a string de importação MDT',
                 'unable_to_validate_mdt_import_string'                 => 'Não foi possível validar a string de importação do MDT',
             ],

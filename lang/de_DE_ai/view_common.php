@@ -3,11 +3,22 @@
 return [
 
     'dungeon' => [
+        'difficulty' => [
+            '10_man' => '',
+            '25_man' => '',
+            '20_man' => '',
+            '40_man' => '',
+        ],
         'griddiscover' => [
-            'popular'   => 'Beliebt',
-            'this_week' => 'Diese Woche',
-            'next_week' => 'Nächste Woche',
-            'new'       => 'Neu',
+            'popular' => 'Beliebt',
+            'new'     => 'Neu',
+        ],
+        'list' => [
+            'more'        => '',
+            'next_season' => '',
+            'card'        => [
+                'this_week_tier' => '',
+            ],
         ],
         'gridtabs' => [
             'raid' => 'Schlachtzug',
@@ -50,8 +61,28 @@ return [
         'cardlist' => [
             'no_dungeonroutes' => 'Keine Routen gefunden',
         ],
+        'leaderboard' => [
+            'create_first_route' => '',
+        ],
         'rating' => [
             'nr_of_votes' => '%s Stimme(n)',
+        ],
+        'poster' => [
+            'views'     => '',
+            'favorites' => '',
+        ],
+        'cardhero' => [
+            'top_community_route'    => '',
+            'ranked_community_route' => '',
+            'views'                  => '',
+            'favorites'              => '',
+            'pulls'                  => '',
+        ],
+        'cardrow' => [
+            'new'       => '',
+            'views'     => '',
+            'favorites' => '',
+            'pulls'     => '',
         ],
         'table' => [
             'team'                  => 'Team',
@@ -79,6 +110,8 @@ return [
             'title_title'                                    => 'Wählen Sie einen Titel, der die Route für Sie eindeutig von anderen ähnlichen Routen unterscheidet, die Sie möglicherweise erstellen. Der Titel wird anderen sichtbar sein, sobald Sie sich entscheiden, Ihre Route zu veröffentlichen.',
             'dungeon_speedrun_required_npc_difficulty'       => 'Raidgröße',
             'dungeon_speedrun_required_npc_difficulty_title' => '10-Mann- und 25-Mann-Raids können unterschiedliche Feinde haben, die für die Fertigstellung eines Speedruns besiegt werden müssen. Wählen Sie Ihre Raidgröße, um zwischen den Feindgruppen zu wechseln.',
+            'dungeon_start'                                  => '',
+            'dungeon_start_title'                            => '',
             'description'                                    => 'Beschreibung',
             'description_title'                              => 'Eine optionale Beschreibung Ihrer Route. Die Beschreibung wird für andere sichtbar, sobald Sie sich entscheiden, Ihre Route zu veröffentlichen. Sie können Ihre Beschreibung später jederzeit bearbeiten.',
             'key_levels'                                     => 'Schlüsselstufen',
@@ -106,6 +139,8 @@ return [
             'remember_me'          => 'Angemeldet bleiben',
             'forgot_your_password' => 'Passwort vergessen?',
             'login_through_oauth2' => 'Anmeldung über OAuth2',
+            'no_account_yet'       => '',
+            'register_now'         => '',
         ],
         'mapsettings' => [
             'general'                                       => 'Allgemein',
@@ -119,6 +154,10 @@ return [
             'heatmap'                                       => 'Heatmap',
             'show_heatmap_tooltips'                         => 'Mouseover-Tooltips anzeigen',
             'show_heatmap_tooltips_title'                   => 'Wenn Sie diese Einstellung aktivieren, werden Tooltips angezeigt, wenn Sie mit der Maus über die Heatmap fahren. Dies kann nützlich sein, um die genauen Werte der Heatmap an einem bestimmten Ort zu sehen.',
+            'heatmap_render_order'                          => '',
+            'heatmap_render_order_title'                    => '',
+            'heatmap_render_order_on_top'                   => '',
+            'heatmap_render_order_behind'                   => '',
             'enemies'                                       => 'Feinde',
             'enemy_number_style'                            => 'Feindnummernstil',
             'enemy_number_style_title'                      => 'Dies steuert, was die Zahlen bedeuten, wenn Sie mit der Maus über Feinde fahren oder wenn Sie den Anzeigetyp \'Feindkräfte\' auswählen.',
@@ -153,7 +192,11 @@ return [
             'import_route'                           => 'Route importieren',
         ],
         'oauth' => [
-            'battletag_warning' => 'Wenn Sie Routen veröffentlichen, ist Ihr Battletag/Discord-Benutzername sichtbar, bis Sie Ihren Benutzernamen in Ihrem Profil ändern.',
+            'battletag_warning'       => 'Wenn Sie Routen veröffentlichen, ist Ihr Battletag/Discord-Benutzername sichtbar, bis Sie Ihren Benutzernamen in Ihrem Profil ändern.',
+            'battlenet_region'        => '',
+            'continue_with_battlenet' => '',
+            'continue_with_discord'   => '',
+            'continue_with_google'    => '',
         ],
         'pullsettings' => [
             'pull_number_style'                 => 'Pull-Nummern-Stil',
@@ -185,6 +228,8 @@ return [
             'terms_of_service'        => 'Nutzungsbedingungen',
             'privacy_policy'          => 'Datenschutzrichtlinie',
             'cookie_policy'           => 'Cookie-Richtlinie',
+            'already_have_an_account' => '',
+            'login_now'               => '',
         ],
         'timezoneselect' => [
             'africa'     => 'Afrika',
@@ -227,7 +272,6 @@ return [
             'api_documentation_internal_team' => 'API-Dokumentation (internes Team)',
             'keystone_guru'                   => 'Keystone.guru',
             'changelog'                       => 'Änderungsprotokoll',
-            'changelog_new'                   => 'NEU',
             'credits'                         => 'Credits',
             'about'                           => 'Über',
             'legacy'                          => 'Legacy',
@@ -243,6 +287,7 @@ return [
             'trademark'                       => 'Markenzeichen',
             'trademark_footer'                => 'World of Warcraft, Warcraft und Blizzard Entertainment sind Marken oder eingetragene Marken von Blizzard Entertainment, Inc. in den USA und/oder anderen Ländern. Diese Website ist nicht mit Blizzard Entertainment verbunden.',
             'social'                          => 'Sozial',
+            'worktree'                        => '',
         ],
         'header' => [
             'toggle_navigation_title' => 'Navigation umschalten',
@@ -255,20 +300,25 @@ return [
             'explore'                 => 'Dungeons erkunden',
             'new'                     => 'NEU',
             'compendium'              => '',
+            'compendium_overview'     => '',
             'npc_compendium'          => '',
             'spell_compendium'        => '',
             'compendium_activity'     => '',
             'class_compendium'        => '',
         ],
         'nav' => [
+            'dungeoncontext' => [
+                'change_dungeon' => '',
+            ],
             'user' => [
                 'login'              => 'Anmelden',
                 'register'           => 'Registrieren',
                 'telescope'          => 'Teleskop',
                 'tools'              => 'Werkzeuge',
-                'view_releases'      => 'Veröffentlichungen anzeigen',
                 'view_expansions'    => 'Erweiterungen anzeigen',
                 'view_dungeons'      => 'Dungeons anzeigen',
+                'view_affixes'       => '',
+                'view_seasons'       => '',
                 'view_npcs'          => 'NSCs anzeigen',
                 'view_spells'        => 'Zauber anzeigen',
                 'view_users'         => 'Benutzer anzeigen',
@@ -416,6 +466,7 @@ return [
                 'edit_route_settings'            => 'Routeneinstellungen',
                 'edit_mapping_version'           => 'Kartenversion bearbeiten',
                 'share'                          => 'Teilen',
+                'route_actions'                  => '',
                 'start_live_session'             => 'Live-Sitzung starten',
                 'start_live_session_paragraph_1' => 'Sobald Sie Ihre Route im Spiel starten, können Sie eine Live-Sitzung erstellen, bei der Keystone.guru Ihnen hilft, Ihren M+ Schlüssel abzuschließen. Sie können den Kartenbewegungen eines anderen Benutzers folgen, indem Sie die Option auswählen, wenn Sie auf sein Symbol/Initialen in der oberen Kopfzeile klicken.',
                 'start_live_session_paragraph_2' => 'Jeder Teilnehmer der Live-Sitzung kann auch einen Ihrer vorhandenen Pulls (Ihren aktuellen Pull im Spiel) auswählen und dann auf einen Feind, der nicht Teil Ihrer Route ist, klicken, um einen versehentlichen Pull anzuzeigen. Keystone.guru wird dann versuchen, Ihre Route zu korrigieren, indem alle Feinde ausgeschlossen werden, die Teil Ihrer aktuellen Route sind und potenziell übersprungen werden können, ohne Schattentöpfe/Unsichtbarkeitstränke zu verwenden.',
@@ -481,7 +532,7 @@ return [
     ],
     'mappingversion' => [
         'select' => [
-            'mapping_version_readonly' => ':gameVersion Version :version (nur lesen)',
+            'mapping_version_previous' => '',
             'mapping_version'          => ':gameVersion Version :version',
         ],
     ],
@@ -644,11 +695,6 @@ return [
         ],
         'select' => [
             'npc' => '',
-        ],
-    ],
-    'release' => [
-        'release' => [
-            'new' => 'NEU',
         ],
     ],
     'tag' => [

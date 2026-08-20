@@ -18,6 +18,10 @@ return [
         'title'   => '',
         'message' => '',
     ],
+    '405' => [
+        'title'   => '',
+        'message' => '',
+    ],
     '410' => [
         'title'   => '',
         'message' => '',

@@ -19,13 +19,14 @@ return [
             'mdt_invalid_category'                => '无效的类别',
         ],
         'flash' => [
+            'banned_ip_address_added'                => '',
+            'banned_ip_address_removed'              => '',
             'message_banner_set_successfully'        => '消息横幅设置成功',
             'thumbnail_regenerate_result'            => '为 :total 路线派发了 :success 个作业。:failed 失败。',
             'combatlog_route_regenerate_result'      => '',
             'combatlog_criteria_reset'               => '',
             'combatlog_criteria_thresholds_updated'  => '',
             'caches_dropped_successfully'            => '缓存成功清除',
-            'releases_exported'                      => '版本已导出',
             'exception'                              => '管理员面板中抛出异常',
             'feature_toggle_activated'               => '功能 :feature 已激活',
             'feature_toggle_deactivated'             => '功能 :feature 已停用',
@@ -34,6 +35,24 @@ return [
             'mapping_version_upgrade_already_latest' => '',
             'read_only_mode_disabled'                => '只读模式已禁用',
             'read_only_mode_enabled'                 => '只读模式已启用',
+        ],
+    ],
+    'affix' => [
+        'flash' => [
+            'affix_created' => '',
+            'affix_updated' => '',
+        ],
+    ],
+    'affixgroup' => [
+        'flash' => [
+            'affixgroup_created' => '',
+            'affixgroup_updated' => '',
+            'affixgroup_deleted' => '',
+        ],
+    ],
+    'apicombatlogrun' => [
+        'error' => [
+            'no_segments' => '',
         ],
     ],
     'apidungeonroute' => [
@@ -73,21 +92,15 @@ return [
         ],
     ],
     'dungeonroutediscover' => [
-        'popular'           => '热门路线',
-        'this_week_affixes' => '本周词缀',
-        'next_week_affixes' => '下周词缀',
-        'new'               => '新',
-        'season'            => [
-            'popular'           => '%s 热门路线',
-            'this_week_affixes' => '%s 本周',
-            'next_week_affixes' => '%s 下周',
-            'new'               => '%s 新路线',
+        'popular' => '热门路线',
+        'new'     => '新',
+        'season'  => [
+            'popular' => '%s 热门路线',
+            'new'     => '%s 新路线',
         ],
         'dungeon' => [
-            'popular'           => '%s 受欢迎的路线',
-            'this_week_affixes' => '%s 本周',
-            'next_week_affixes' => '%s 下周',
-            'new'               => '%s 条新路线',
+            'popular' => '%s 受欢迎的路线',
+            'new'     => '%s 条新路线',
         ],
     ],
     'dungeonspeedrunrequirednpcs' => [
@@ -110,6 +123,11 @@ return [
             'not_found'                  => '未找到',
         ],
     ],
+    'killzone' => [
+        'error' => [
+            'facade_location_not_convertible' => '',
+        ],
+    ],
     'oauthlogin' => [
         'flash' => [
             'registered_successfully' => '注册成功。享受网站吧！',
@@ -125,16 +143,6 @@ return [
         ],
         'legal_agreed_required' => '您必须同意我们的法律条款才能注册。',
         'legal_agreed_accepted' => '您必须同意我们的法律条款才能注册。',
-    ],
-    'release' => [
-        'error' => [
-            'unable_to_save_release' => '无法保存发布',
-        ],
-        'flash' => [
-            'release_updated'  => '发布已更新',
-            'release_created'  => '发布已创建',
-            'github_exception' => '与Github通信时发生错误：:message',
-        ],
     ],
     'mappingversion' => [
         'created_successfully'      => '添加了新的映射版本！',
@@ -176,6 +184,7 @@ return [
             'profile_updated'                  => '个人资料已更新',
             'unexpected_error_when_saving'     => '保存您的个人资料时发生意外错误',
             'privacy_settings_updated'         => '隐私设置已更新',
+            'creator_profile_updated'          => '',
             'password_changed'                 => '密码已更改',
             'new_password_equals_old_password' => '新密码与旧密码相同',
             'new_passwords_do_not_match'       => '新密码不匹配',
@@ -192,6 +201,12 @@ return [
             'add_ad_free_giveaway_already_has_giveaway' => '',
             'remove_ad_free_giveaway_not_found'         => '',
             'remove_ad_free_giveaway_not_yours'         => '',
+        ],
+    ],
+    'season' => [
+        'flash' => [
+            'season_created' => '',
+            'season_updated' => '',
         ],
     ],
     'spell' => [

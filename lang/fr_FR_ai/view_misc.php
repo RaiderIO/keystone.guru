@@ -24,10 +24,6 @@ return [
         'popular_routes_by_current_affixes' => 'Itinéraires populaires par affixes actuels',
         'popular_routes_by_next_affixes'    => 'Itinéraires populaires par affixes suivants',
     ],
-    'changelog' => [
-        'title'  => 'Journal des modifications',
-        'header' => 'Journal des modifications',
-    ],
     'credits' => [
         'title'            => 'Crédits',
         'header'           => 'Crédits',

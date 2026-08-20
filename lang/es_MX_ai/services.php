@@ -6,13 +6,15 @@ return [
         'io' => [
             'export_string' => [
                 'category' => [
-                    'pull'     => 'Jalar %d',
-                    'title'    => 'Título',
-                    'map_icon' => 'Ícono de mapa',
+                    'pull'         => 'Jalar %d',
+                    'title'        => 'Título',
+                    'map_icon'     => 'Ícono de mapa',
+                    'raid_markers' => '',
                 ],
                 'unable_to_find_mdt_enemy_for_kg_enemy'             => 'No se puede encontrar un equivalente de MDT para el enemigo de Keystone.guru con NPC %s (enemy_id: %d, npc_id: %d).',
                 'unable_to_find_mdt_enemy_for_kg_enemy_details'     => 'Esto indica que tu ruta mata a un enemigo cuyo NPC es conocido por MDT, pero Keystone.guru aún no ha acoplado a ese enemigo con un equivalente de MDT (o no existe en MDT).',
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => 'Este jalón ha sido eliminado ya que no se pudieron encontrar todos los enemigos seleccionados en MDT, resultando en un jalón vacío.',
+                'unable_to_find_mdt_enemy_for_kg_raid_marker'       => '',
                 'route_title_contains_non_ascii_char_bug'           => 'El título de tu ruta contiene caracteres no ASCII que se sabe desencadenan un error de codificación no resuelto en Keystone.guru.
                                                         El título de tu ruta ha sido despojado de todos los caracteres problemáticos, nos disculpamos por el inconveniente y esperamos resolver este problema pronto.',
                 'route_title_contains_non_ascii_char_bug_details' => 'Título anterior: %s, nuevo título: %s',
@@ -27,6 +29,7 @@ return [
                     'arrows'            => '',
                     'pull'              => 'Jalar %d',
                     'object'            => 'Objeto %d',
+                    'raid_markers'      => '',
                 ],
                 'object_out_of_bounds'                                 => 'No se puede colocar el comentario: no se pudo colocar el comentario ":comment" el objeto está fuera de límites.',
                 'limit_reached_pulls'                                  => 'No se puede importar la ruta: más del máximo de :limit jalones.',
@@ -46,6 +49,7 @@ return [
                 'unable_to_find_enemies_pull_skipped_details'          => 'Esto puede indicar que MDT tuvo una actualización reciente que aún no está integrada en Keystone.guru.',
                 'unable_to_find_awakened_obelisks'                     => 'No se pueden encontrar Obeliscos Despertados para tu combinación de calabozo/semana. Tus saltos de Obelisco Despertado no se importarán.',
                 'unable_to_find_awakened_obelisk_different_floor'      => 'No se puede importar el Obelisco Despertado :name, está en un piso diferente al del Obelisco mismo. Keystone.guru no admite esto en este momento.',
+                'unable_to_find_awakened_obelisk_enemy'                => '',
                 'unable_to_decode_mdt_import_string'                   => 'No se puede decodificar la cadena de importación MDT',
                 'unable_to_validate_mdt_import_string'                 => 'No se puede validar la cadena de importación MDT',
             ],

@@ -18,6 +18,10 @@ return [
         'title'   => '404 Nicht gefunden',
         'message' => 'Entschuldigung, die gesuchte Seite konnte nicht gefunden werden.',
     ],
+    '405' => [
+        'title'   => '',
+        'message' => '',
+    ],
     '410' => [
         'title'   => '410 Seite abgelaufen',
         'message' => 'Entschuldigung, die gesuchte Seite ist abgelaufen.',

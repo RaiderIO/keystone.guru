@@ -2,6 +2,11 @@
 
 return [
 
+    'banned_ip_range_rule' => [
+        'invalid'         => 'Hodor',
+        'range_too_broad' => 'Hodor',
+        'self_lockout'    => 'Hodor',
+    ],
     'create_route_npc_chronological_rule' => [
         'message' => 'Hodor',
     ],

@@ -5,19 +5,31 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'               => 'Percorso Settimanale Raider.IO',
-                'popular'                    => 'Percorsi popolari',
-                'popular_by_current_affixes' => 'Percorsi popolari per affissi attuali',
-                'popular_by_next_affixes'    => 'Percorsi popolari per prossimi affissi',
-                'newly_published_routes'     => 'Percorsi appena pubblicati',
+                'weekly_route'           => 'Percorso Settimanale Raider.IO',
+                'weekly_routes'          => '',
+                'community_routes'       => '',
+                'popular'                => 'Percorsi popolari',
+                'newly_published_routes' => 'Percorsi appena pubblicati',
+                'archetypes'             => [
+                    'pug_friendly' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                    'expert' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                    'title' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                ],
             ],
         ],
         'discover' => [
-            'title'                      => 'Percorsi',
-            'popular'                    => 'Percorsi popolari',
-            'popular_by_current_affixes' => 'Percorsi popolari per affissi attuali',
-            'popular_by_next_affixes'    => 'Percorsi popolari per prossimi affissi',
-            'newly_published_routes'     => 'Percorsi appena pubblicati',
+            'title'                  => 'Percorsi',
+            'popular'                => 'Percorsi popolari',
+            'newly_published_routes' => 'Percorsi appena pubblicati',
         ],
         'panel' => [
             'show_more' => 'Mostra di più',

@@ -544,4 +544,32 @@ return [
         ],
     ],
 
+    'checkpoints' => [
+        'bfa' => [
+            'temple_of_sethraliss' => [
+                'atrium_of_sethraliss_name' => '',
+            ],
+        ],
+        'df' => [
+            'ruby_life_pools' => [
+                'ruby_overlook_name' => '',
+            ],
+        ],
+        'midnight' => [
+            'altar_of_fangs' => [
+                'final_room_section_name' => '',
+            ],
+            'den_of_nalorakk' => [
+                'the_heart_of_rage_name' => '',
+            ],
+            'magisters_terrace' => [
+                'tower_section_name' => '',
+            ],
+        ],
+        'wotlk' => [
+            'pit_of_saron' => [
+                'cavern_section_name' => '',
+            ],
+        ],
+    ],
 ];

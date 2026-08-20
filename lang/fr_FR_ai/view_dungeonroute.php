@@ -5,19 +5,31 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'               => 'Itinéraire hebdomadaire Raider.IO',
-                'popular'                    => 'Itinéraires populaires',
-                'popular_by_current_affixes' => 'Itinéraires populaires par affixes actuels',
-                'popular_by_next_affixes'    => 'Itinéraires populaires par affixes suivants',
-                'newly_published_routes'     => 'Itinéraires nouvellement publiés',
+                'weekly_route'           => 'Itinéraire hebdomadaire Raider.IO',
+                'weekly_routes'          => '',
+                'community_routes'       => '',
+                'popular'                => 'Itinéraires populaires',
+                'newly_published_routes' => 'Itinéraires nouvellement publiés',
+                'archetypes'             => [
+                    'pug_friendly' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                    'expert' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                    'title' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                ],
             ],
         ],
         'discover' => [
-            'title'                      => 'Itinéraires',
-            'popular'                    => 'Itinéraires populaires',
-            'popular_by_current_affixes' => 'Itinéraires populaires par affixes actuels',
-            'popular_by_next_affixes'    => 'Itinéraires populaires par affixes suivants',
-            'newly_published_routes'     => 'Itinéraires nouvellement publiés',
+            'title'                  => 'Itinéraires',
+            'popular'                => 'Itinéraires populaires',
+            'newly_published_routes' => 'Itinéraires nouvellement publiés',
         ],
         'panel' => [
             'show_more' => 'Afficher plus',

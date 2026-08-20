@@ -24,10 +24,6 @@ return [
         'popular_routes_by_current_affixes' => '當前詞綴下的熱門路線',
         'popular_routes_by_next_affixes'    => '下個詞綴下的熱門路線',
     ],
-    'changelog' => [
-        'title'  => '變更日誌',
-        'header' => '變更日誌',
-    ],
     'credits' => [
         'title'            => '致謝',
         'header'           => '致謝',

@@ -19,13 +19,14 @@ return [
             'mdt_invalid_category'                => 'Неверная категория',
         ],
         'flash' => [
+            'banned_ip_address_added'                => '',
+            'banned_ip_address_removed'              => '',
             'message_banner_set_successfully'        => 'Сообщение-баннер успешно установлено',
             'thumbnail_regenerate_result'            => 'Запущено :success задач для маршрутов :total. :failed не удалось.',
             'combatlog_route_regenerate_result'      => '',
             'combatlog_criteria_reset'               => '',
             'combatlog_criteria_thresholds_updated'  => '',
             'caches_dropped_successfully'            => 'Кеш сброшен успешно',
-            'releases_exported'                      => 'Релизы экспортированы',
             'exception'                              => 'Исключение вызвано в панели администратора',
             'feature_toggle_activated'               => 'Функция :feature теперь активирована',
             'feature_toggle_deactivated'             => 'Функция :feature теперь деактивирована',
@@ -34,6 +35,24 @@ return [
             'mapping_version_upgrade_already_latest' => '',
             'read_only_mode_disabled'                => 'Режим только для чтения отключен',
             'read_only_mode_enabled'                 => 'Режим только для чтения включен',
+        ],
+    ],
+    'affix' => [
+        'flash' => [
+            'affix_created' => '',
+            'affix_updated' => '',
+        ],
+    ],
+    'affixgroup' => [
+        'flash' => [
+            'affixgroup_created' => '',
+            'affixgroup_updated' => '',
+            'affixgroup_deleted' => '',
+        ],
+    ],
+    'apicombatlogrun' => [
+        'error' => [
+            'no_segments' => '',
         ],
     ],
     'apidungeonroute' => [
@@ -73,21 +92,15 @@ return [
         ],
     ],
     'dungeonroutediscover' => [
-        'popular'           => 'Популярные маршруты',
-        'this_week_affixes' => 'Текущие аффиксы',
-        'next_week_affixes' => 'Аффиксы следующей неделе',
-        'new'               => 'Новые',
-        'season'            => [
-            'popular'           => '%s популярных маршрутов',
-            'this_week_affixes' => '%s на этой неделе',
-            'next_week_affixes' => '%s на следующей неделе',
-            'new'               => '%s новых маршрутов',
+        'popular' => 'Популярные маршруты',
+        'new'     => 'Новые',
+        'season'  => [
+            'popular' => '%s популярных маршрутов',
+            'new'     => '%s новых маршрутов',
         ],
         'dungeon' => [
-            'popular'           => '%s популярные маршруты',
-            'this_week_affixes' => '%s текущие аффиксы',
-            'next_week_affixes' => '%s аффиксы следующей неделе',
-            'new'               => '%s Новые',
+            'popular' => '%s популярные маршруты',
+            'new'     => '%s Новые',
         ],
     ],
     'dungeonspeedrunrequirednpcs' => [
@@ -110,6 +123,11 @@ return [
             'not_found'                  => 'Не найдено',
         ],
     ],
+    'killzone' => [
+        'error' => [
+            'facade_location_not_convertible' => '',
+        ],
+    ],
     'oauthlogin' => [
         'flash' => [
             'registered_successfully' => 'Регистрация прошла успешно.',
@@ -125,16 +143,6 @@ return [
         ],
         'legal_agreed_required' => 'Вы должны согласиться с пользовательским соглашением и политикой конфиденциальности для регистрации',
         'legal_agreed_accepted' => 'Вы должны согласиться с пользовательским соглашением и политикой конфиденциальности для регистрации',
-    ],
-    'release' => [
-        'error' => [
-            'unable_to_save_release' => 'Невозможно сохранить релиз',
-        ],
-        'flash' => [
-            'release_updated'  => 'Релиз обновлен',
-            'release_created'  => 'Релиз создан',
-            'github_exception' => 'Произошла ошибка связи с Github: :message',
-        ],
     ],
     'mappingversion' => [
         'created_successfully'      => 'Добавлена новая версия карты!',
@@ -176,6 +184,7 @@ return [
             'profile_updated'                  => 'Профиль обновлен',
             'unexpected_error_when_saving'     => 'Произошла непредвиденная ошибка при попытке сохранить ваш профиль.',
             'privacy_settings_updated'         => 'Настройки конфиденциальности обновлены',
+            'creator_profile_updated'          => '',
             'password_changed'                 => 'Пароль изменен',
             'new_password_equals_old_password' => 'Новый пароль совпадает со старым паролем',
             'new_passwords_do_not_match'       => 'Новый пароль не совпадает',
@@ -192,6 +201,12 @@ return [
             'add_ad_free_giveaway_already_has_giveaway' => '',
             'remove_ad_free_giveaway_not_found'         => '',
             'remove_ad_free_giveaway_not_yours'         => '',
+        ],
+    ],
+    'season' => [
+        'flash' => [
+            'season_created' => '',
+            'season_updated' => '',
         ],
     ],
     'spell' => [

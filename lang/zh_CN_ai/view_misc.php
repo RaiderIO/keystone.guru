@@ -24,10 +24,6 @@ return [
         'popular_routes_by_current_affixes' => '当前词缀的热门路线',
         'popular_routes_by_next_affixes'    => '下一个词缀的热门路线',
     ],
-    'changelog' => [
-        'title'  => '更新日志',
-        'header' => '更新日志',
-    ],
     'credits' => [
         'title'            => '鸣谢',
         'header'           => '鸣谢',

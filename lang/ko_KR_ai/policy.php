@@ -13,5 +13,15 @@ return [
     'add_arrow_limit_reached'                 => '',
     'add_map_icon_limit_reached'              => '단일 경로에 :limit개 이상의 지도 아이콘을 추가할 수 없습니다.',
     'schedule_publish_route_not_in_team'      => '',
+    'game_version_not_active'                 => '',
+    'expansion_not_active'                    => '',
+    'dungeon_not_active'                      => '',
+    'season_not_active'                       => '',
+
+    'claim_route_not_claimable'                   => '',
+    'make_role_only_super_admins_may_grant_admin' => '',
+    'create_global_map_icon_admin_only'           => '',
+    'update_map_icon_admin_only'                  => '',
+    'delete_map_icon_admin_only'                  => '',
 
 ];

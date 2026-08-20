@@ -3,11 +3,22 @@
 return [
 
     'dungeon' => [
+        'difficulty' => [
+            '10_man' => '',
+            '25_man' => '',
+            '20_man' => '',
+            '40_man' => '',
+        ],
         'griddiscover' => [
-            'popular'   => '인기',
-            'this_week' => '이번 주',
-            'next_week' => '다음 주',
-            'new'       => '새로운',
+            'popular' => '인기',
+            'new'     => '새로운',
+        ],
+        'list' => [
+            'more'        => '',
+            'next_season' => '',
+            'card'        => [
+                'this_week_tier' => '',
+            ],
         ],
         'gridtabs' => [
             'raid' => '공격대',
@@ -50,8 +61,28 @@ return [
         'cardlist' => [
             'no_dungeonroutes' => '경로가 없습니다',
         ],
+        'leaderboard' => [
+            'create_first_route' => '',
+        ],
         'rating' => [
             'nr_of_votes' => '%s 투표',
+        ],
+        'poster' => [
+            'views'     => '',
+            'favorites' => '',
+        ],
+        'cardhero' => [
+            'top_community_route'    => '',
+            'ranked_community_route' => '',
+            'views'                  => '',
+            'favorites'              => '',
+            'pulls'                  => '',
+        ],
+        'cardrow' => [
+            'new'       => '',
+            'views'     => '',
+            'favorites' => '',
+            'pulls'     => '',
         ],
         'table' => [
             'team'                  => '팀',
@@ -79,6 +110,8 @@ return [
             'title_title'                                    => '다른 유사한 경로와 구분할 수 있는 제목을 선택하세요. 경로를 게시하기로 선택하면 다른 사람에게도 보입니다.',
             'dungeon_speedrun_required_npc_difficulty'       => '공격대 크기',
             'dungeon_speedrun_required_npc_difficulty_title' => '10인 및 25인 공격대는 다른 적을 처치해야 속도전을 완료할 수 있습니다. 공격대 크기를 선택하여 적 세트를 전환하세요.',
+            'dungeon_start'                                  => '',
+            'dungeon_start_title'                            => '',
             'description'                                    => '설명',
             'description_title'                              => '경로에 대한 선택적 설명입니다. 경로를 게시하기로 선택하면 설명이 다른 사람에게 보이게 됩니다. 나중에 언제든지 설명을 수정할 수 있습니다.',
             'key_levels'                                     => '키 레벨',
@@ -106,6 +139,8 @@ return [
             'remember_me'          => '로그인 상태 유지',
             'forgot_your_password' => '비밀번호를 잊으셨습니까?',
             'login_through_oauth2' => 'OAuth2를 통한 로그인',
+            'no_account_yet'       => '',
+            'register_now'         => '',
         ],
         'mapsettings' => [
             'general'                                       => '일반',
@@ -119,6 +154,10 @@ return [
             'heatmap'                                       => '히트맵',
             'show_heatmap_tooltips'                         => '마우스 오버 툴팁 표시',
             'show_heatmap_tooltips_title'                   => '이 설정을 활성화하면 히트맵을 마우스로 가리킬 때 툴팁을 표시합니다. 특정 위치에서 히트맵의 정확한 값을 보는 데 유용할 수 있습니다.',
+            'heatmap_render_order'                          => '',
+            'heatmap_render_order_title'                    => '',
+            'heatmap_render_order_on_top'                   => '',
+            'heatmap_render_order_behind'                   => '',
             'enemies'                                       => '적',
             'enemy_number_style'                            => '적 숫자 스타일',
             'enemy_number_style_title'                      => '적을 마우스 오버하거나 \'적 병력\' 표시 유형을 선택할 때 숫자가 의미하는 바를 제어합니다.',
@@ -153,7 +192,11 @@ return [
             'import_route'                           => '경로 가져오기',
         ],
         'oauth' => [
-            'battletag_warning' => '경로를 게시하면 프로필에서 사용자 이름을 변경할 때까지 배틀태그/디스코드 사용자 이름이 보입니다.',
+            'battletag_warning'       => '경로를 게시하면 프로필에서 사용자 이름을 변경할 때까지 배틀태그/디스코드 사용자 이름이 보입니다.',
+            'battlenet_region'        => '',
+            'continue_with_battlenet' => '',
+            'continue_with_discord'   => '',
+            'continue_with_google'    => '',
         ],
         'pullsettings' => [
             'pull_number_style'                 => '풀 번호 스타일',
@@ -185,6 +228,8 @@ return [
             'terms_of_service'        => '서비스 약관',
             'privacy_policy'          => '개인정보 보호정책',
             'cookie_policy'           => '쿠키 정책',
+            'already_have_an_account' => '',
+            'login_now'               => '',
         ],
         'timezoneselect' => [
             'africa'     => '아프리카',
@@ -227,7 +272,6 @@ return [
             'api_documentation_internal_team' => 'API 문서 (내부 팀)',
             'keystone_guru'                   => 'Keystone.guru',
             'changelog'                       => '변경 로그',
-            'changelog_new'                   => 'NEW',
             'credits'                         => '크레딧',
             'about'                           => '정보',
             'legacy'                          => '레거시',
@@ -243,6 +287,7 @@ return [
             'trademark'                       => '상표',
             'trademark_footer'                => 'World of Warcraft, Warcraft 및 Blizzard Entertainment는 Blizzard Entertainment, Inc.의 미국 및/또는 기타 국가 내 상표 또는 등록 상표입니다. 이 웹사이트는 Blizzard Entertainment와 관련이 없습니다.',
             'social'                          => '소셜',
+            'worktree'                        => '',
         ],
         'header' => [
             'toggle_navigation_title' => '탐색 토글',
@@ -255,20 +300,25 @@ return [
             'explore'                 => '던전 탐색',
             'new'                     => '신규',
             'compendium'              => '',
+            'compendium_overview'     => '',
             'npc_compendium'          => '',
             'spell_compendium'        => '',
             'compendium_activity'     => '',
             'class_compendium'        => '',
         ],
         'nav' => [
+            'dungeoncontext' => [
+                'change_dungeon' => '',
+            ],
             'user' => [
                 'login'              => '로그인',
                 'register'           => '등록',
                 'telescope'          => '망원경',
                 'tools'              => '도구',
-                'view_releases'      => '릴리스 보기',
                 'view_expansions'    => '확장 보기',
                 'view_dungeons'      => '던전 보기',
+                'view_affixes'       => '',
+                'view_seasons'       => '',
                 'view_npcs'          => 'NPC 보기',
                 'view_spells'        => '주문 보기',
                 'view_users'         => '사용자 보기',
@@ -416,6 +466,7 @@ return [
                 'edit_route_settings'            => '경로 설정',
                 'edit_mapping_version'           => '매핑 버전 편집',
                 'share'                          => '공유',
+                'route_actions'                  => '',
                 'start_live_session'             => '라이브 세션 시작',
                 'start_live_session_paragraph_1' => '게임 내에서 경로를 시작하면 Keystone.guru가 M+ 키를 완료하는 데 도움을 줄 수 있는 라이브 세션을 생성할 수 있습니다. 다른 사용자의 지도를 따르려면 상단 헤더에서 아이콘/이니셜을 클릭하여 옵션을 선택하십시오.',
                 'start_live_session_paragraph_2' => '라이브 세션의 참가자는 현재 풀(게임 내의 현재 풀)에서 기존의 풀을 선택하고 경로에 포함되지 않은 적을 클릭하여 의도치 않은 풀을 표시할 수 있습니다. Keystone.guru는 은신/투명 물약을 사용하지 않고도 건너뛸 수 있는 적들을 제외하여 경로를 수정하려고 시도할 것입니다.',
@@ -481,7 +532,7 @@ return [
     ],
     'mappingversion' => [
         'select' => [
-            'mapping_version_readonly' => ':gameVersion 버전 :version (읽기 전용)',
+            'mapping_version_previous' => '',
             'mapping_version'          => ':gameVersion 버전 :version',
         ],
     ],
@@ -639,11 +690,6 @@ return [
         ],
         'select' => [
             'npc' => '',
-        ],
-    ],
-    'release' => [
-        'release' => [
-            'new' => '새로운',
         ],
     ],
     'tag' => [

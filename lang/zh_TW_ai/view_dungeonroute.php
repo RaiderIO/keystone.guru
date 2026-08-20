@@ -5,19 +5,31 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'               => 'Raider.IO 每周路線',
-                'popular'                    => '熱門路線',
-                'popular_by_current_affixes' => '根據當前詞綴的熱門路線',
-                'popular_by_next_affixes'    => '根據下一個詞綴的熱門路線',
-                'newly_published_routes'     => '新發布的路線',
+                'weekly_route'           => 'Raider.IO 每周路線',
+                'weekly_routes'          => '',
+                'community_routes'       => '',
+                'popular'                => '熱門路線',
+                'newly_published_routes' => '新發布的路線',
+                'archetypes'             => [
+                    'pug_friendly' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                    'expert' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                    'title' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                ],
             ],
         ],
         'discover' => [
-            'title'                      => '路線',
-            'popular'                    => '熱門路線',
-            'popular_by_current_affixes' => '根據當前詞綴的熱門路線',
-            'popular_by_next_affixes'    => '根據下一個詞綴的熱門路線',
-            'newly_published_routes'     => '新發布的路線',
+            'title'                  => '路線',
+            'popular'                => '熱門路線',
+            'newly_published_routes' => '新發布的路線',
         ],
         'panel' => [
             'show_more' => '顯示更多',

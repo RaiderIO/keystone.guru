@@ -1338,6 +1338,15 @@ return [
                 'the_headteachers_enclave' => '院長區',
             ],
         ],
+        'altar_of_fangs' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'sacrificial_approach' => '',
+                'mutation_chambers'    => '',
+                'altar_of_fangs'       => '',
+            ],
+        ],
         'den_of_nalorakk' => [
             'name'         => '納羅拉克之穴',
             'abbreviation' => '',
@@ -1397,7 +1406,9 @@ return [
             'name'         => '虛痕競技場',
             'abbreviation' => '',
             'floors'       => [
-                'voidscar_arena' => '虛痕競技場',
+                'halls_of_spite'   => '',
+                'voidscar_arena'   => '虛痕競技場',
+                'domanaars_ascent' => '',
             ],
         ],
         'windrunner_spire' => [

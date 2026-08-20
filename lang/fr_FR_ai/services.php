@@ -6,13 +6,15 @@ return [
         'io' => [
             'export_string' => [
                 'category' => [
-                    'pull'     => 'Tirage %d',
-                    'title'    => 'Titre',
-                    'map_icon' => 'Icône de carte',
+                    'pull'         => 'Tirage %d',
+                    'title'        => 'Titre',
+                    'map_icon'     => 'Icône de carte',
+                    'raid_markers' => '',
                 ],
                 'unable_to_find_mdt_enemy_for_kg_enemy'             => 'Impossible de trouver l\'équivalent MDT pour l\'ennemi Keystone.guru avec le PNJ %s (enemy_id: %d, npc_id: %d).',
                 'unable_to_find_mdt_enemy_for_kg_enemy_details'     => 'Cela indique que votre route tue un ennemi dont le PNJ est connu de MDT, mais Keystone.guru n\'a pas encore couplé cet ennemi à un équivalent MDT (ou il n\'existe pas dans MDT).',
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => 'Ce tirage a été supprimé car tous les ennemis sélectionnés n\'ont pas pu être trouvés dans MDT, entraînant un tirage vide.',
+                'unable_to_find_mdt_enemy_for_kg_raid_marker'       => '',
                 'route_title_contains_non_ascii_char_bug'           => 'Le titre de votre route contient des caractères non-ASCII connus pour déclencher un bug d\'encodage encore non résolu dans Keystone.guru.
                                                         Le titre de votre route a été dépouillé de tous les caractères offensants, nous nous excusons pour le désagrément et espérons résoudre ce problème bientôt.',
                 'route_title_contains_non_ascii_char_bug_details' => 'Ancien titre : %s, nouveau titre : %s',
@@ -27,6 +29,7 @@ return [
                     'arrows'            => '',
                     'pull'              => 'Tirage %d',
                     'object'            => 'Objet %d',
+                    'raid_markers'      => '',
                 ],
                 'object_out_of_bounds'                                 => 'Impossible de placer le commentaire : impossible de placer le commentaire ":comment" l\'objet est hors limites.',
                 'limit_reached_pulls'                                  => 'Impossible d\'importer la route : plus que le maximum de :limit tirages.',
@@ -46,6 +49,7 @@ return [
                 'unable_to_find_enemies_pull_skipped_details'          => 'Cela peut indiquer que MDT a récemment eu une mise à jour qui n\'est pas encore intégrée dans Keystone.guru.',
                 'unable_to_find_awakened_obelisks'                     => 'Impossible de trouver des Obélisques éveillés pour votre combinaison donjon/semaine. Vos sauts d\'Obélisque éveillé ne seront pas importés.',
                 'unable_to_find_awakened_obelisk_different_floor'      => 'Impossible d\'importer l\'Obélisque éveillé :name, il est sur un étage différent de l\'Obélisque lui-même. Keystone.guru ne le prend pas en charge pour le moment.',
+                'unable_to_find_awakened_obelisk_enemy'                => '',
                 'unable_to_decode_mdt_import_string'                   => 'Impossible de décoder la chaîne d\'importation MDT',
                 'unable_to_validate_mdt_import_string'                 => 'Impossible de valider la chaîne d\'importation MDT',
             ],

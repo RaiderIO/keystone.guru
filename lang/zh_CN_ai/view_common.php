@@ -3,11 +3,22 @@
 return [
 
     'dungeon' => [
+        'difficulty' => [
+            '10_man' => '',
+            '25_man' => '',
+            '20_man' => '',
+            '40_man' => '',
+        ],
         'griddiscover' => [
-            'popular'   => '热门',
-            'this_week' => '本周',
-            'next_week' => '下周',
-            'new'       => '新',
+            'popular' => '热门',
+            'new'     => '新',
+        ],
+        'list' => [
+            'more'        => '',
+            'next_season' => '',
+            'card'        => [
+                'this_week_tier' => '',
+            ],
         ],
         'gridtabs' => [
             'raid' => '团队副本',
@@ -50,8 +61,28 @@ return [
         'cardlist' => [
             'no_dungeonroutes' => '未找到路线',
         ],
+        'leaderboard' => [
+            'create_first_route' => '',
+        ],
         'rating' => [
             'nr_of_votes' => '%s 票',
+        ],
+        'poster' => [
+            'views'     => '',
+            'favorites' => '',
+        ],
+        'cardhero' => [
+            'top_community_route'    => '',
+            'ranked_community_route' => '',
+            'views'                  => '',
+            'favorites'              => '',
+            'pulls'                  => '',
+        ],
+        'cardrow' => [
+            'new'       => '',
+            'views'     => '',
+            'favorites' => '',
+            'pulls'     => '',
         ],
         'table' => [
             'team'                  => '团队',
@@ -79,6 +110,8 @@ return [
             'title_title'                                    => '选择一个标题，以便在您可能创建的其他类似路线中独特标识您的路线。一旦您选择发布路线，标题将对其他人可见。',
             'dungeon_speedrun_required_npc_difficulty'       => '团队大小',
             'dungeon_speedrun_required_npc_difficulty_title' => '10人和25人团队可能有不同的敌人需要击杀才能完成速通。选择您的团队大小以切换敌人集。',
+            'dungeon_start'                                  => '',
+            'dungeon_start_title'                            => '',
             'description'                                    => '描述',
             'description_title'                              => '您的路线的可选描述。一旦您选择发布路线，描述将对其他人可见。您可以随时编辑您的描述。',
             'key_levels'                                     => '钥匙等级',
@@ -106,6 +139,8 @@ return [
             'remember_me'          => '记住我',
             'forgot_your_password' => '忘记密码？',
             'login_through_oauth2' => '通过OAuth2登录',
+            'no_account_yet'       => '',
+            'register_now'         => '',
         ],
         'mapsettings' => [
             'general'                                       => '通用',
@@ -119,6 +154,10 @@ return [
             'heatmap'                                       => '热力图',
             'show_heatmap_tooltips'                         => '显示鼠标悬停提示',
             'show_heatmap_tooltips_title'                   => '启用此设置将在您将鼠标悬停在热力图上时显示工具提示。这样可以方便查看特定位置热力图的确切值。',
+            'heatmap_render_order'                          => '',
+            'heatmap_render_order_title'                    => '',
+            'heatmap_render_order_on_top'                   => '',
+            'heatmap_render_order_behind'                   => '',
             'enemies'                                       => '敌人',
             'enemy_number_style'                            => '敌人编号样式',
             'enemy_number_style_title'                      => '这控制当您将鼠标悬停在敌人上或选择\'敌军\'显示类型时，数字的含义。',
@@ -153,7 +192,11 @@ return [
             'import_route'                           => '导入路线',
         ],
         'oauth' => [
-            'battletag_warning' => '如果您发布路线，您的战网昵称/Discord用户名将会可见，直到您在个人资料中更改用户名。',
+            'battletag_warning'       => '如果您发布路线，您的战网昵称/Discord用户名将会可见，直到您在个人资料中更改用户名。',
+            'battlenet_region'        => '',
+            'continue_with_battlenet' => '',
+            'continue_with_discord'   => '',
+            'continue_with_google'    => '',
         ],
         'pullsettings' => [
             'pull_number_style'                 => '拉怪数字样式',
@@ -185,6 +228,8 @@ return [
             'terms_of_service'        => '服务条款',
             'privacy_policy'          => '隐私政策',
             'cookie_policy'           => 'cookie政策',
+            'already_have_an_account' => '',
+            'login_now'               => '',
         ],
         'timezoneselect' => [
             'africa'     => '非洲',
@@ -227,7 +272,6 @@ return [
             'api_documentation_internal_team' => 'API 文档（内部团队）',
             'keystone_guru'                   => 'Keystone.guru',
             'changelog'                       => '更新日志',
-            'changelog_new'                   => '新',
             'credits'                         => '鸣谢',
             'about'                           => '关于',
             'legacy'                          => '遗产',
@@ -243,6 +287,7 @@ return [
             'trademark'                       => '商标',
             'trademark_footer'                => '魔兽世界，魔兽和暴雪娱乐是暴雪娱乐公司的商标或注册商标。本网站与暴雪娱乐无关。',
             'social'                          => '社交',
+            'worktree'                        => '',
         ],
         'header' => [
             'toggle_navigation_title' => '切换导航',
@@ -255,20 +300,25 @@ return [
             'explore'                 => '探索地下城',
             'new'                     => '新',
             'compendium'              => '',
+            'compendium_overview'     => '',
             'npc_compendium'          => '',
             'spell_compendium'        => '',
             'compendium_activity'     => '',
             'class_compendium'        => '',
         ],
         'nav' => [
+            'dungeoncontext' => [
+                'change_dungeon' => '',
+            ],
             'user' => [
                 'login'              => '登录',
                 'register'           => '注册',
                 'telescope'          => '望远镜',
                 'tools'              => '工具',
-                'view_releases'      => '查看版本',
                 'view_expansions'    => '查看扩展',
                 'view_dungeons'      => '查看地下城',
+                'view_affixes'       => '',
+                'view_seasons'       => '',
                 'view_npcs'          => '查看 NPC',
                 'view_spells'        => '查看法术',
                 'view_users'         => '查看用户',
@@ -416,6 +466,7 @@ return [
                 'edit_route_settings'            => '路线设置',
                 'edit_mapping_version'           => '编辑映射版本',
                 'share'                          => '分享',
+                'route_actions'                  => '',
                 'start_live_session'             => '开始实时会话',
                 'start_live_session_paragraph_1' => '一旦您在游戏中开始运行路线，您可以创建一个实时会话，Keystone.guru将帮助您完成您的M+钥匙。您可以通过点击顶部标题中的图标/首字母选择选项，跟随其他用户的地图移动。',
                 'start_live_session_paragraph_2' => '实时会话的任何参与者也可以选择您现有的任何拉怪（当前在游戏中的拉怪），然后在不属于您路线的任何敌人上选择，以指示意外拉怪。Keystone.guru将尝试通过排除当前路线中可能不使用潜行/隐形药水可以跳过的任何敌人来纠正您的路线。',
@@ -478,7 +529,7 @@ return [
     ],
     'mappingversion' => [
         'select' => [
-            'mapping_version_readonly' => ':gameVersion 版本 :version（只读）',
+            'mapping_version_previous' => '',
             'mapping_version'          => ':gameVersion 版本 :version',
         ],
     ],
@@ -636,11 +687,6 @@ return [
         ],
         'select' => [
             'npc' => '',
-        ],
-    ],
-    'release' => [
-        'release' => [
-            'new' => '新',
         ],
     ],
     'tag' => [

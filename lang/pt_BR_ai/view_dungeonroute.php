@@ -5,19 +5,31 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'               => 'Rota Semanal Raider.IO',
-                'popular'                    => 'Rotas populares',
-                'popular_by_current_affixes' => 'Rotas populares por afixos atuais',
-                'popular_by_next_affixes'    => 'Rotas populares por próximos afixos',
-                'newly_published_routes'     => 'Rotas recém-publicadas',
+                'weekly_route'           => 'Rota Semanal Raider.IO',
+                'weekly_routes'          => '',
+                'community_routes'       => '',
+                'popular'                => 'Rotas populares',
+                'newly_published_routes' => 'Rotas recém-publicadas',
+                'archetypes'             => [
+                    'pug_friendly' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                    'expert' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                    'title' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                ],
             ],
         ],
         'discover' => [
-            'title'                      => 'Rotas',
-            'popular'                    => 'Rotas populares',
-            'popular_by_current_affixes' => 'Rotas populares por afixos atuais',
-            'popular_by_next_affixes'    => 'Rotas populares por próximos afixos',
-            'newly_published_routes'     => 'Rotas recém-publicadas',
+            'title'                  => 'Rotas',
+            'popular'                => 'Rotas populares',
+            'newly_published_routes' => 'Rotas recém-publicadas',
         ],
         'panel' => [
             'show_more' => 'Mostrar mais',

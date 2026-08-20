@@ -5,19 +5,31 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'               => 'Raider.IO 주간 경로',
-                'popular'                    => '인기 있는 경로',
-                'popular_by_current_affixes' => '현재 보정에 따른 인기 있는 경로',
-                'popular_by_next_affixes'    => '다음 보정에 따른 인기 있는 경로',
-                'newly_published_routes'     => '새로 게시된 경로',
+                'weekly_route'           => 'Raider.IO 주간 경로',
+                'weekly_routes'          => '',
+                'community_routes'       => '',
+                'popular'                => '인기 있는 경로',
+                'newly_published_routes' => '새로 게시된 경로',
+                'archetypes'             => [
+                    'pug_friendly' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                    'expert' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                    'title' => [
+                        'label'       => '',
+                        'description' => '',
+                    ],
+                ],
             ],
         ],
         'discover' => [
-            'title'                      => '경로',
-            'popular'                    => '인기 있는 경로',
-            'popular_by_current_affixes' => '현재 보정에 따른 인기 있는 경로',
-            'popular_by_next_affixes'    => '다음 보정에 따른 인기 있는 경로',
-            'newly_published_routes'     => '새로 게시된 경로',
+            'title'                  => '경로',
+            'popular'                => '인기 있는 경로',
+            'newly_published_routes' => '새로 게시된 경로',
         ],
         'panel' => [
             'show_more' => '더 보기',
