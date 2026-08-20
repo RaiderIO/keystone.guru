@@ -1,7 +1,6 @@
 <?php
 
-namespace Controller\Api\V1\APICombatLogController\CombatLogRoute\WotLK;
-
+namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\WotLK;
 use App\Models\DungeonKey;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;

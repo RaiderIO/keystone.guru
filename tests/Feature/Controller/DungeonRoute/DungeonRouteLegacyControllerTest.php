@@ -1,7 +1,6 @@
 <?php
 
-namespace Controller\DungeonRoute;
-
+namespace Tests\Feature\Controller\DungeonRoute;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
