@@ -727,9 +727,12 @@ return [
         ],
         'combatlog' => [
             'regenerate' => [
-                'title'  => 'Mass regenerate ARC routes',
-                'header' => 'Mass regenerate ARC routes',
-                'submit' => 'Submit',
+                'title'              => 'Mass regenerate ARC routes',
+                'header'             => 'Mass regenerate ARC routes',
+                'season'             => 'Only routes created in season',
+                'season_any'         => 'Any season',
+                'season_description' => 'Dungeons appear in more than one season - limit the regeneration to the routes that were created in a specific season.',
+                'submit'             => 'Submit',
             ],
             'criteria' => [
                 'title'               => 'NPC Compendium parsing criteria',
