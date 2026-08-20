@@ -3,6 +3,8 @@
 namespace App\Service\RaiderIO;
 
 use App\Models\Season;
+use App\Service\CombatLog\CombatLogPollingHealthServiceInterface;
+use App\Service\CombatLog\Enums\CombatLogPollingFailureReason;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\RaiderIO\Dtos\CombatLogSegment;
@@ -36,10 +38,11 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
     use Curl;
 
     public function __construct(
-        private readonly CoordinatesServiceInterface        $coordinatesService,
-        private readonly SeasonServiceInterface             $seasonService,
-        private readonly SeasonAffixGroupServiceInterface   $seasonAffixGroupService,
-        private readonly RaiderIOApiServiceLoggingInterface $log,
+        private readonly CoordinatesServiceInterface            $coordinatesService,
+        private readonly SeasonServiceInterface                 $seasonService,
+        private readonly SeasonAffixGroupServiceInterface       $seasonAffixGroupService,
+        private readonly CombatLogPollingHealthServiceInterface $combatLogPollingHealthService,
+        private readonly RaiderIOApiServiceLoggingInterface     $log,
     ) {
     }
 
@@ -154,6 +157,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
 
             if (!is_array($json) || !isset($json['matches']) || !is_array($json['matches'])) {
                 $this->log->searchAdvancedRunsInvalidResponse($url, $response);
+                $this->combatLogPollingHealthService->recordFailure(CombatLogPollingFailureReason::SearchApiError);
 
                 return new SearchAdvancedRunsResponse([], null);
             }
@@ -204,8 +208,10 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
                 if (($json['statusCode'] ?? null) === Http::NOT_FOUND
                     && str_contains((string)($json['message'] ?? ''), 'combat log segments')) {
                     $this->log->getCombatLogSegmentsForRunNotYetAvailable($runId, $url, $response);
+                    $this->combatLogPollingHealthService->recordFailure(CombatLogPollingFailureReason::SegmentsUnavailable);
                 } else {
                     $this->log->getCombatLogSegmentsForRunInvalidResponse($runId, $url, $response);
+                    $this->combatLogPollingHealthService->recordFailure(CombatLogPollingFailureReason::SegmentsApiError);
                 }
 
                 return null;

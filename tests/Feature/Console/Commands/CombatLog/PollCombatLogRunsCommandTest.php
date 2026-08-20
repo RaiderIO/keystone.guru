@@ -17,6 +17,7 @@ use App\Service\RaiderIO\Dtos\SearchAdvancedRunsResponse;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
@@ -24,6 +25,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Console')]
@@ -95,6 +97,44 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
 
             // Assert
             Bus::assertDispatched(ProcessCombatLogSegments::class);
+        } finally {
+            ParsedCombatLog::query()->where('run_id', $run->id)->delete();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenDungeonEligible_dispatchesJobCarryingTheRecordedCriteriaAndDate(): void
+    {
+        // Arrange - the job needs both to give the budget back if the run turns out to yield nothing (#4173)
+        Bus::fake();
+
+        $run = $this->makeRun(1002, $this->dungeon->challenge_mode_id);
+
+        $criteriaService = $this->makeCriteriaService(eligibleDungeons: collect([$this->dungeon]));
+        $criteriaService->method('shouldParse')->willReturn(true);
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $this->mockRaiderIOApiService(spreadRuns: [$run]);
+
+        try {
+            // Act
+            $this->artisan('combatlog:pollruns')->assertSuccessful();
+
+            // Assert
+            Bus::assertDispatched(ProcessCombatLogSegments::class, function (ProcessCombatLogSegments $job): bool {
+                $reflection   = new ReflectionClass($job);
+                $criteria     = $reflection->getProperty('criteria')->getValue($job);
+                $criteriaDate = $reflection->getProperty('criteriaDate')->getValue($job);
+
+                $this->assertNotEmpty($criteria);
+                $this->assertContainsOnlyInstancesOf(CombatLogParsingCriterionCheck::class, $criteria);
+                $this->assertSame(Carbon::now()->toDateString(), $criteriaDate);
+
+                return true;
+            });
         } finally {
             ParsedCombatLog::query()->where('run_id', $run->id)->delete();
         }

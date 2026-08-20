@@ -145,6 +145,94 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function releaseParsed_givenRecordedCriteria_decrementsBothCounters(): void
+    {
+        // Arrange
+        $today = Carbon::now()->toDateString();
+        $this->service->recordParsed(self::VERSION, $this->defaultCriteria(), $today);
+
+        // Act
+        $this->service->releaseParsed(self::VERSION, $this->defaultCriteria(), $today);
+
+        // Assert - the run yielded nothing, so its budget is available to the next poll again
+        $this->assertEquals(
+            0,
+            CombatLogParsingCriterion::query()->where('model_id', self::DUNGEON_ID)->value('count'),
+        );
+        $this->assertEquals(
+            0,
+            CombatLogParsingCriterion::query()->where('model_id', self::SPEC_ID)->value('count'),
+        );
+    }
+
+    #[Test]
+    public function releaseParsed_givenCountAlreadyZero_leavesCountAtZero(): void
+    {
+        // Arrange - resetAllForToday() can land between the record and the release
+        CombatLogParsingCriterion::factory()->forDungeon(self::DUNGEON_ID)->withCount(0)->create();
+
+        // Act
+        $this->service->releaseParsed(
+            self::VERSION,
+            [new CombatLogParsingCriterionCheck(Dungeon::class, self::DUNGEON_ID, $this->band())],
+            Carbon::now()->toDateString(),
+        );
+
+        // Assert
+        $this->assertEquals(
+            0,
+            CombatLogParsingCriterion::query()->where('model_id', self::DUNGEON_ID)->value('count'),
+        );
+    }
+
+    #[Test]
+    public function releaseParsed_givenNoRowForThatDate_createsNoRow(): void
+    {
+        // Arrange - a job that fails after midnight releases against the date it was recorded on
+        $yesterday = Carbon::yesterday()->toDateString();
+        CombatLogParsingCriterion::factory()->forDungeon(self::DUNGEON_ID)->withCount(5)->create();
+
+        // Act
+        $this->service->releaseParsed(
+            self::VERSION,
+            [new CombatLogParsingCriterionCheck(Dungeon::class, self::DUNGEON_ID, $this->band())],
+            $yesterday,
+        );
+
+        // Assert - yesterday's row is gone, and today's must not have paid for it
+        $this->assertEquals(0, CombatLogParsingCriterion::query()
+            ->where('model_id', self::DUNGEON_ID)
+            ->where('date', $yesterday)
+            ->count());
+        $this->assertEquals(5, CombatLogParsingCriterion::query()
+            ->where('model_id', self::DUNGEON_ID)
+            ->where('date', Carbon::now()->toDateString())
+            ->value('count'));
+    }
+
+    #[Test]
+    public function releaseParsed_givenTopBandCriteria_decrementsTopBandRowOnly(): void
+    {
+        // Arrange - dispatchRun() records top band runs too, so releasing must mirror that exactly
+        CombatLogParsingCriterion::factory()->forDungeon(self::DUNGEON_ID)->forBand(2, 6)->withCount(10)->create();
+        $today = Carbon::now()->toDateString();
+        $this->service->recordParsed(self::VERSION, $this->defaultCriteria(new KeyLevelBand(22, null)), $today);
+
+        // Act
+        $this->service->releaseParsed(self::VERSION, $this->defaultCriteria(new KeyLevelBand(22, null)), $today);
+
+        // Assert
+        $this->assertEquals(0, CombatLogParsingCriterion::query()
+            ->where('model_id', self::DUNGEON_ID)
+            ->where('mythic_level_min', 22)
+            ->value('count'));
+        $this->assertEquals(10, CombatLogParsingCriterion::query()
+            ->where('model_id', self::DUNGEON_ID)
+            ->where('mythic_level_min', 2)
+            ->value('count'));
+    }
+
+    #[Test]
     public function shouldParse_givenYesterdayCountsAtThreshold_returnsTrue(): void
     {
         // Arrange — yesterday's rows at threshold should not affect today

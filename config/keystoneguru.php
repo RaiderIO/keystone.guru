@@ -545,6 +545,15 @@ return [
             'limit'                    => (int)env('COMBAT_LOG_POLLING_LIMIT', 100),
             'download_url'             => env('COMBAT_LOG_POLLING_DOWNLOAD_URL'),
 
+            // When an hour of polling is bad enough to be worth waking someone for (#4173). A run
+            // that yields no data costs nothing on its own - it is blacklisted and the budget it
+            // consumed is given back - so both a meaningful volume and a meaningful share of the
+            // hour's runs have to fail before combatlog:reportpollinghealth reports at error level.
+            'health' => [
+                'min_failures'     => (int)env('COMBAT_LOG_POLLING_HEALTH_MIN_FAILURES', 25),
+                'min_failure_rate' => (float)env('COMBAT_LOG_POLLING_HEALTH_MIN_FAILURE_RATE', 0.5),
+            ],
+
             // Runs are polled in key level bands so that what we parse covers the whole spectrum
             // instead of the (by far most populous) 10-16 range. One band is polled per hour.
             'bands' => [

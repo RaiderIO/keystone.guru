@@ -25,6 +25,9 @@ if (in_array($appType, [
     'production',
 ])) {
     $commands[] = Schedule::command('combatlog:pollruns')->hourly();
+    // Ten past the hour: late enough that the jobs combatlog:pollruns dispatched at the top of the
+    // previous hour have run and recorded their outcome, and it is the previous hour it reports on.
+    $commands[] = Schedule::command('combatlog:reportpollinghealth')->hourlyAt(10);
 }
 
 $commands[] = Schedule::command('dungeonroute:updatepopularity')->hourly();

@@ -12,6 +12,7 @@ use App\Models\Interfaces\CombatLogCriterionModelInterface;
 use App\Models\Season;
 use App\Service\CombatLog\CombatLogParsingCriteriaServiceInterface;
 use App\Service\CombatLog\CombatLogPollingBandServiceInterface;
+use App\Service\CombatLog\CombatLogPollingHealthServiceInterface;
 use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
 use App\Service\CombatLog\Dtos\CombatLogRunContext;
 use App\Service\CombatLog\Dtos\KeyLevelBand;
@@ -32,6 +33,7 @@ class PollCombatLogRunsCommand extends Command
     public function __construct(
         private readonly CombatLogParsingCriteriaServiceInterface $criteriaService,
         private readonly CombatLogPollingBandServiceInterface     $bandService,
+        private readonly CombatLogPollingHealthServiceInterface   $healthService,
         private readonly RaiderIOApiServiceInterface              $raiderIOApiService,
         private readonly SeasonServiceInterface                   $seasonService,
     ) {
@@ -273,8 +275,14 @@ class PollCombatLogRunsCommand extends Command
 
         $dungeonCriterion = new CombatLogParsingCriterionCheck(Dungeon::class, $dungeon->id, $band);
         $specCriteria     = $this->buildSpecCriteria($run->memberSpecIds, $allSpecsByBlizzardId, $band);
+        $criteria         = array_merge([$dungeonCriterion], $specCriteria);
 
-        $this->criteriaService->recordParsed($combatLogVersion, array_merge([$dungeonCriterion], $specCriteria));
+        // The date is captured here and carried into the job rather than left to Carbon::now(): it is
+        // the date these counts land on, and the job hands it back to releaseParsed() if the run turns
+        // out to yield nothing - which can be after midnight, on a retried or backlogged job (#4173).
+        $criteriaDate = Carbon::now()->toDateString();
+
+        $this->criteriaService->recordParsed($combatLogVersion, $criteria, $criteriaDate);
 
         if (!$force) {
             ParsedCombatLog::create(['run_id' => $run->id]);
@@ -284,7 +292,16 @@ class PollCombatLogRunsCommand extends Command
         // queries and from the top band, and dispatching it twice in one invocation helps nobody.
         $knownRunIds[$run->id] = true;
 
-        ProcessCombatLogSegments::dispatch($season, $run->id, $combatLogVersion, new CombatLogRunContext($run->mythicLevel, $run->affixes));
+        ProcessCombatLogSegments::dispatch(
+            $season,
+            $run->id,
+            $combatLogVersion,
+            new CombatLogRunContext($run->mythicLevel, $run->affixes),
+            $criteria,
+            $criteriaDate,
+        );
+
+        $this->healthService->recordDispatched();
 
         $dispatchCounts['dispatched']++;
     }
