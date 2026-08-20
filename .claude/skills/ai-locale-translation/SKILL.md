@@ -381,7 +381,7 @@ in the excluded files, which are not this workflow's business.
 | `es_ES_ai` | 2953 | 745 (769 after re-sync) | Done — #4165, 2026-08-20 (plus 30 formal *usted* → informal *tú* rewrites) |
 | `es_MX_ai` | 2980 | 769 | Done — #4165, 2026-08-20 (no register cleanup needed, already informal *tú*) |
 | `fr_FR_ai` | 2986 | 769 | Done — #4165, 2026-08-20, PR #4209 (formal *vous* register, no cleanup needed; plus 27 Codex-review fixes, see `handovers/fr_FR_ai.md`) |
-| `it_IT_ai` | 2957 | 745 | Not started |
+| `it_IT_ai` | 2984 | 769 | Not started — handover ready at `handovers/it_IT_ai.md` (register is informal *tu*, like German/Spanish, unlike `fr_FR_ai`'s formal *vous*) |
 | `ko_KR_ai` | 3042 | 745 | Not started |
 | `pt_BR_ai` | 2957 | 745 | Not started |
 | `ru_RU_ai` | 2841 | 745 | Not started |
@@ -394,5 +394,5 @@ Do one locale per session and per commit: the work lists are independent, and a 
 never be ambiguous about which locale caused it.
 
 Per-locale notes measured before starting a pass live in `handovers/<locale>.md` next to this file
-(`it_IT_ai` is the next one up - no handover written yet, measure fresh). Write one for a locale when you finish it, so the pass
+(`handovers/it_IT_ai.md` is the next one up). Write one for a locale when you finish it, so the pass
 after yours starts from numbers rather than from a re-measurement.
