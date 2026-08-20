@@ -1,4 +1,11 @@
-# Handover: translating `es_ES_ai` (#4165)
+# Handover: translating `es_ES_ai` (#4165) — DONE, 2026-08-20
+
+All 769 in-scope keys filled (745 planned + 24 that `localization:sync` pulled in fresh at the
+start of this pass: `controller.admintools.flash.caches_drop_queued`, all of `spellcounters.php`/
+`spellimmunities.php`, and `view_creator.php`). Plus the ~usted → tú normalisation below. Gate:
+`OK - 769/769 work-list keys filled, 30 rewritten, 18918 keys intact, 15908 existing translations
+unchanged`. `composer run fix` (whitespace-only realignment) and `composer run analyse` both clean.
+Everything below is the pre-pass research; kept for the next locale to reuse the pattern.
 
 Read `.claude/skills/ai-locale-translation/SKILL.md` first — it holds the whole procedure, the
 scripts and the traps. This file only records what is **specific to `es_ES_ai`**, measured

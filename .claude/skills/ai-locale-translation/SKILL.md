@@ -153,6 +153,33 @@ in ~212 keys; those were normalised to *du* in a separate, explicitly authorised
 "Normalising an existing locale" below). Any new locale should pick one register up front and say so
 here, so the same clean-up is not needed twice.
 
+### Spanish glossary (es_ES_ai, established in the #4165 pass)
+
+| English | Spanish | English | Spanish |
+|---|---|---|---|
+| Dungeon | mazmorra | Floor | planta |
+| Route | ruta | Pull | pull (untranslated) |
+| Enemy | enemigo | Enemy forces | fuerzas enemigas (abbrev. `FE`) |
+| Pack | pack (untranslated) | Patrol | patrulla |
+| Spell | hechizo | Schools | escuelas |
+| Dispel type | tipo de disipación | Miss types | tipos de fallo |
+| Counters (noun) | contramedidas | Crowd control | control de masas |
+| Compendium | compendio | Characteristics | características |
+| Raid marker | marcador de banda | Sidebar | — (not yet needed) |
+| Season | temporada | Thumbnail | vista previa |
+| Creator | creador | Checkpoint | punto de control |
+| Affix | afijo (translated - unlike German's untranslated *Affix*; already the dominant convention in this locale, 17:0 before this pass) | Boss | jefe (already established in this locale) |
+| Prideful | Orgulloso (read from `affixes.php`/`enemies.php`, do not invent) | Inspiring / Bolstering / Sanguine / Bursting / Teeming | — **read them out of `affixes.php`**, do not translate by hand |
+| Fel (prefix) | vil | Wyrm | vermis |
+
+Add a row here whenever a new locale forces a decision worth keeping.
+
+**Register:** `es_ES_ai` is informal *tú* throughout. The original machine output was already mostly
+*tú*; ~30 keys still on formal *usted* (mostly `leafletdraw.php` imperatives and `js.php`/
+`view_common.php` possessives) were normalised to *tú* in the same pass that filled the empty keys,
+explicitly authorised by Wotuu. `validation.php`, `datatables.php` and other excluded files were left
+untouched even where an *usted* form appeared, since this workflow never hand-edits those.
+
 ## Normalising an existing locale (overwriting existing values)
 
 The default workflow never overwrites a non-empty value. When Wotuu explicitly asks for one -
@@ -274,7 +301,7 @@ in the excluded files, which are not this workflow's business.
 | Locale | Empty total | In scope | Status |
 |---|---|---|---|
 | `de_DE_ai` | 2959 | 745 | Done — #4165, 2026-08-20 (plus 212 *Sie* → *du* and 31 post-review rewrites) |
-| `es_ES_ai` | 2953 | 745 | Not started |
+| `es_ES_ai` | 2953 | 745 (769 after re-sync) | Done — #4165, 2026-08-20 (plus 30 formal *usted* → informal *tú* rewrites) |
 | `es_MX_ai` | 2953 | 745 | Not started |
 | `fr_FR_ai` | 2959 | 745 | Not started |
 | `it_IT_ai` | 2957 | 745 | Not started |
