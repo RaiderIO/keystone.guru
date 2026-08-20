@@ -288,6 +288,8 @@ final class NpcHealthExtractionServiceTest extends PublicTestCase
             211290, // Priory of the Sacred Flame mini boss
             211291, // Priory of the Sacred Flame mini boss
             238414, // Murder Row, Infernal (#4207)
+            133943, // King's Rest, Minion of Zul (#4208)
+            138493, // King's Rest, Minion of Zul (#4208)
         ];
 
         // Act

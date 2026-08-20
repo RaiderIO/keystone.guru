@@ -164446,7 +164446,7 @@
                 "id": 3650,
                 "npc_id": 133943,
                 "game_version_id": 1,
-                "health": 17,
+                "health": 340110,
                 "percentage": null
             }
         ],
@@ -172489,7 +172489,7 @@
                 "id": 9181,
                 "npc_id": 138493,
                 "game_version_id": 1,
-                "health": 17,
+                "health": 243242,
                 "percentage": null
             }
         ],
@@ -287444,7 +287444,7 @@
                 "id": 9132,
                 "npc_id": 267545,
                 "game_version_id": 1,
-                "health": 10000,
+                "health": 8432463,
                 "percentage": null
             }
         ],

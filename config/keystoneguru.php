@@ -616,6 +616,11 @@ return [
             // Murder Row - Infernal, stored at 2.7M while it has ~205M in game: a 200M trash mob breaks the
             // health-based enemy sizing on the map (Wotuu, #4207)
             238414,
+            // King's Rest - Minion of Zul, a gimmick mob that carries a shield and deliberately low health. Combat
+            // logs show a flat 24 max HP that does not scale with the key level at all, so no base health can be
+            // derived from them (Wotuu, #4208) - the seeded value stands.
+            133943,
+            138493,
         ],
     ],
 
