@@ -12,11 +12,21 @@ use Illuminate\Support\Collection;
  * @var Collection<int, DungeonRoute>                    $popularDungeonRoutesByDungeon
  * @var bool                                             $adFree
  * @var bool                                             $isMobile
+ * @var GameVersion                                      $userOrDefaultGameVersion
+ * @var Collection<int, Dungeon>                         $gameVersionDungeons
  */
 
 ?>
 @extends('layouts.sitepage', [
     'rootClass' => 'discover col-xl-8 offset-xl-2',
+    // Picking a dungeon in the header's context strip is a no-op on the homepage (nothing here
+    // is scoped to a dungeon) - send it to that dungeon's browse-routes page instead
+    'dungeonContextLinks' => $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [
+        $dungeon->key => route('dungeonroutes.discoverdungeon', [
+            'gameVersion' => $userOrDefaultGameVersion,
+            'dungeon' => $dungeon,
+        ])
+    ]),
 ])
 
 @include('common.general.inline', ['path' => 'home/layout', 'options' => [
