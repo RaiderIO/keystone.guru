@@ -218,7 +218,7 @@ Bleib in Bewegung!',
                 'rattlegore_despawn_note'   => 'Wenn Rattlegore besiegt wird, verschwinden viele Gegner in diesem Raum.',
             ],
             'shadowfang_keep' => [
-                'large_iron_bound_chest' => 'Large Iron Bound Chest (abgeschlossen)',
+                'large_iron_bound_chest' => 'Large Iron Bound Chest (verschlossen)',
                 'large_solid_chest'      => 'Large Solid Chest',
                 'unlocks_after_nandos'   => 'Wird freigeschaltet, nachdem Wolf Master Nandos besiegt wurde.',
             ],
@@ -453,7 +453,7 @@ Warnung: Ein Angriff auf Shade of Eranikus zieht alle grünen Drachen auf dieser
         ],
         'tww' => [
             'city_of_threads' => [
-                'queen_ansurek_shadecaster' => 'Queen Ansurek Shadecaster: Benötigt Schurke, Priester oder Ingenieurskunst (25). Gewährt Stolen Power: Die dem Shadecaster gestohlene Macht erhöht verursachten Schaden um 15%, verursachte Heilung um 15% und Bewegungstempo um 50%.',
+                'queen_ansurek_shadecaster' => 'Queen Ansurek Shadecaster: Erfordert einen Schurken, Priester oder Ingenieur (Ingenieurskunst 25). Gewährt Stolen Power: Die dem Shadecaster gestohlene Macht erhöht den verursachten Schaden um 15%, die verursachte Heilung um 15% und das Bewegungstempo um 50%.',
             ],
             'the_stonevault' => [
                 'imbued_iron_energy' => 'Krieger, Zwerge, Schmiede (25): In der Imprägnierten Eisenstange eingeschlossene Energie wird freigesetzt und erhöht die Vielseitigkeit aller Spieler im Umkreis von 20 Metern um 10 % für 10 Minuten.',

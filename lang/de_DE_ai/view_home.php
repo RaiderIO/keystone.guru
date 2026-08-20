@@ -19,7 +19,7 @@ return [
     'get_organized'                                => 'Organisiere dich',
     'get_organized_description'                    => 'Organisiere deine Routen von deinem Profil aus oder durch Teams. Keystone.guru bietet dir eine breite Palette von Werkzeugen, um alle deine Routen organisiert und für alle deine M+ Teammitglieder zugänglich zu halten. Du kannst Routen immer im Mythic Dungeon Tools-Format exportieren, um sie mit anderen zu teilen.',
     'custom_dungeon_mapping'                       => 'Benutzerdefinierte Dungeon-Kartierung',
-    'custom_dungeon_mapping_description'           => 'Keystone.guru hat seine eigene Dungeon-Kartierung ohne Abhängigkeiten von externen Tools. Sieh, welche Feinde andere verstärken, sanguines Ichor fallen lassen oder deine Gruppe platzen lassen. Die Kartierung ist Open Source und kostenlos. Immer.',
+    'custom_dungeon_mapping_description'           => 'Keystone.guru hat seine eigene Dungeon-Kartierung ohne Abhängigkeiten von externen Tools. Sieh, welche Gegner andere stärken, blutigen Ichor hinterlassen oder deine Gruppe explodieren lassen. Die Kartierung ist Open Source und kostenlos. Immer.',
     'features'                                     => 'Funktionen',
     'feature_mdt_import_export'                    => 'MDT-Import/Export',
     'feature_mdt_import_export_description'        => 'Beginne mühelos mit deinen bestehenden Routen und erzeuge MDT-Strings für deine bestehenden Routen, sodass alle auf dem neuesten Stand sind.',

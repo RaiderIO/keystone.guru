@@ -7,7 +7,7 @@ return [
         'intro'       => 'Das Kompendium ist eine von der Community betriebene Enzyklopädie aller Dungeons der aktuellen Spielsaison. Schlage genau nach, was jeder NPC tut, welche Zauber er wirkt, wie man ihn kontert und welche Kontrolleffekte bei ihm wirken.',
         'data_source' => [
             'title'       => 'Immer aktuell',
-            'description' => 'Das Kompendium wird in Echtzeit durch Combat Logs aktuell gehalten, die Spieler automatisch über den Raider.IO-Client hochladen. Jeder erfasste Run verbessert still und leise die Daten für alle.',
+            'description' => 'Das Kompendium wird anhand der Combat Logs, die Spieler automatisch über den Raider.IO-Client hochladen, in Echtzeit aktualisiert. Jeder erfasste Run trägt dazu bei, die Daten für alle zu verbessern.',
             'cta'         => 'Raider.IO-Client installieren',
         ],
         'how_it_works' => [
@@ -218,7 +218,7 @@ return [
             ],
             'reflect' => [
                 'title'              => 'Reflektierbare Zauber',
-                'description'        => 'NPC-Zauber in diesem Dungeon, die dabei beobachtet wurden, wie sie reflektiert wurden.',
+                'description'        => 'NPC-Zauber in diesem Dungeon, die nachweislich reflektiert werden können.',
                 'no_spells'          => 'Für diesen Dungeon wurden keine reflektierbaren NPC-Zauber gefunden.',
                 'table_header_spell' => 'Zauber',
                 'table_header_npcs'  => 'NPCs',

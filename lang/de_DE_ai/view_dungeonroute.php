@@ -13,7 +13,7 @@ return [
                 'archetypes'             => [
                     'pug_friendly' => [
                         'label'       => 'PUG-freundlich',
-                        'description' => 'Nachsichtige Pulls für Gruppen aus Fremden',
+                        'description' => 'Nachsichtige Pulls für Randomgruppen',
                     ],
                     'expert' => [
                         'label'       => 'Experte',

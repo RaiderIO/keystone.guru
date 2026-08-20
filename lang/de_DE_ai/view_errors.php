@@ -12,7 +12,7 @@ return [
     ],
     '403' => [
         'title'   => '403 Verboten',
-        'message' => 'Entschuldigung, dir ist es verboten, auf diese Seite zuzugreifen.',
+        'message' => 'Entschuldigung, du darfst auf diese Seite nicht zugreifen.',
     ],
     '404' => [
         'title'   => '404 Nicht gefunden',

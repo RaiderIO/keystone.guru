@@ -13,8 +13,8 @@ return [
             'copy_to_clipboard_title'                    => 'In die Zwischenablage kopieren',
             'refresh_invite_link_title'                  => 'Einladungslink erneuern',
             'default_role'                               => 'Standardrolle',
-            'ad_free_giveaway_description_not_available' => 'Das Abonnieren von :patreon ermöglicht es dir, bis zu :max werbefreie Erlebnisse an Keystone.guru an jedes Teammitglied zu verschenken.',
-            'ad_free_giveaway_description_available'     => 'Danke, dass du :patreon von Keystone.guru abonniert hast! Du kannst :current weitere werbefreie Erlebnisse an Keystone.guru an jedes Teammitglied verschenken.',
+            'ad_free_giveaway_description_not_available' => 'Mit einem :patreon-Abonnement kannst du bis zu :max Teammitgliedern werbefreien Zugang zu Keystone.guru schenken.',
+            'ad_free_giveaway_description_available'     => 'Danke, dass du :patreon von Keystone.guru abonniert hast! Du kannst :current weiteren Teammitgliedern werbefreien Zugang zu Keystone.guru schenken.',
         ],
         'overview' => [
             'title'   => 'Übersicht',

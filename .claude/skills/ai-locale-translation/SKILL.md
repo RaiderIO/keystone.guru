@@ -73,6 +73,39 @@ Why those six files are excluded — do **not** hand-translate them:
 
 For de_DE_ai that split was 745 in scope vs 2,214 deliberately skipped, out of 2,959 empty keys.
 
+## The locale already contains an authoritative game glossary — grep it first
+
+The six files this workflow refuses to translate are excluded **because they hold Blizzard's own
+localised names**, which makes them the reference you check a game term against before inventing
+one. They sit in the same locale directory you are editing:
+
+| File | Holds |
+|---|---|
+| `spells.php` | every spell and item-effect name, keyed by spell id |
+| `affixes.php` | official affix names *and* their descriptions |
+| `enemies.php` | affix-enemy names (Prideful, Awakened, ...) |
+| `npcs.php`, `dungeons.php` | NPC and dungeon names |
+
+```bash
+# before translating a game term, look for the English one and read off the localised name
+grep -n "Pledge Pin" lang/en_US/spells.php          # -> line 4683-4687
+sed -n '4683,4687p' lang/de_DE_ai/spells.php        # -> 'Schwurbrosche des roten Drachenschwarms'
+```
+
+Every finding the Codex review raised that turned out to be **verifiably** right was of this
+shape - a term I had invented while the correct one was sitting in the same locale:
+
+| I wrote | Locale already had | Where |
+|---|---|---|
+| Anstecknadel des Roten Drachenschwarms | **Schwurbrosche des roten Drachenschwarms** | `spells.php:4683-4687` |
+| stolzer Feind / Stolzhaft | **Stolz** / **Manifestation des Stolzes** | `affixes.php:90`, `enemies.php:9` |
+| Schurkenhülle | **Verhüllender Nebel** | `spells.php:787` |
+| Inspiration | **Inspirierend** | `affixes.php` |
+
+This cuts both ways: the reviewer *also* claimed Bursting is "Platzend" and Sanguine is "Blutiges
+Sekret", and `affixes.php` says **Explosiv** and **Blutig**. The locale beats any outside source,
+including a confident reviewer - check the claim before applying the fix.
+
 ## Translation rules
 
 - **Placeholders are literal.** `:name`, `:count`, `%s`, `%d` must appear in the translation exactly
@@ -107,6 +140,11 @@ For de_DE_ai that split was 745 in scope vs 2,214 deliberately skipped, out of 2
 | Raid marker | Schlachtzugsmarkierung | Sidebar | Seitenleiste |
 | Season | Saison | Thumbnail | Vorschaubild |
 | Creator | Creator | Checkpoint | Checkpoint |
+| Prideful | Stolz (the enemy: Manifestation des Stolzes) | Inspiring | Inspirierend |
+| Bolstering | Stärkend | Bursting | Explosiv |
+| Sanguine | Blutig | Rogue Shroud | Verhüllender Nebel |
+| Overpulled | zusätzlich gepullt | PUG | Randomgruppe |
+| Ad-free giveaway | werbefreier Zugang | Locked (a chest/door) | verschlossen |
 
 Add a row here whenever a new locale forces a decision worth keeping.
 
@@ -135,6 +173,12 @@ python3 $SCRIPTS/verify.py $OUT/before.json $OUT/after.json $OUT/worklist.json $
 
 Chaining several batches: merge them keeping the **first** batch's `from` and the **last** batch's
 `to`, or the gate will compare against an intermediate value that no longer exists.
+
+**Re-read the whole sentence, not just the pronouns.** A register conversion drags in strings the
+original machine translation wrote before any glossary existed, so the sentence you are touching may
+also be using *Zug* for `pull` and *Paket* for `pack`. Fix those in the same pass - they are lines
+you are already changing, and leaving them is how a locale ends up with a glossary it does not
+follow.
 
 Finding formal-address keys in a German locale (adapt the markers per language):
 
@@ -191,6 +235,36 @@ have.
   until assets are rebuilt (`npm run dev` / `prod`); this is also why the `hotfix` skill cannot ship
   them. Keep escaped apostrophes out of `js.php` values where you can.
 
+## Reviewing a finished pass with Codex
+
+Worth doing - it found 15 real issues in the `de_DE_ai` pass, four of them terminology errors that
+the gate can never catch. Two things make or break it:
+
+- **Use `task`, not `review`.** `codex review` is a code reviewer; on a lang diff it inspects
+  placeholders and array syntax, which `verify.py` already proves. You want a prose review.
+- **Anchor it on a commit, not the index.** `git show <sha> -- lang/<locale>` is stable;
+  `git diff --cached` evaporates the moment anyone commits the work while the review runs.
+
+```bash
+COMPANION=$(ls -d ~/.claude/plugins/cache/openai-codex/codex/*/scripts/codex-companion.mjs | sort -V | tail -1)
+node "$COMPANION" task --background --effort high "Review the <LANGUAGE> TRANSLATION QUALITY of
+git show <sha> -- lang/<locale>. Not a code review - the structure and placeholders are already
+machine-verified. lang/en_US/ is the source of truth. For each finding give file:line, the English
+source, the current text and a concrete replacement. Cross-check every game term against
+lang/<locale>/spells.php, affixes.php and enemies.php, which hold the official localised names -
+those files win over any external source. Look for: register breaks; clumsy or over-literal
+phrasing; game terminology players do not use; the same English term rendered inconsistently within
+the diff; and meaning errors. Community jargon (Pull, Pack, Add, Boss, Gauntlet, Skip, Trash,
+Affix) is deliberately untranslated. Proper nouns stay English inside prose notes in mapping.php
+while the sentence around them is translated; label-only files like mapicontypes.php are fully
+translated."
+```
+
+Then triage rather than apply wholesale - in the German pass 3 of 18 findings pointed at lines
+outside the reviewed commit (check with `git blame -L <n>,<n>`), one was half wrong against
+`affixes.php`, and one proposed hard-coding grammatical gender for runtime placeholders. Apply the
+survivors with `rewrite.py` so the gate still covers them.
+
 ## Per-locale state
 
 Measured 2026-08-20. Every locale has the **same 745 in-scope keys** - the same English source
@@ -199,7 +273,7 @@ in the excluded files, which are not this workflow's business.
 
 | Locale | Empty total | In scope | Status |
 |---|---|---|---|
-| `de_DE_ai` | 2959 | 745 | Done — #4165, 2026-08-20 (plus 212 *Sie* → *du* rewrites) |
+| `de_DE_ai` | 2959 | 745 | Done — #4165, 2026-08-20 (plus 212 *Sie* → *du* and 31 post-review rewrites) |
 | `es_ES_ai` | 2953 | 745 | Not started |
 | `es_MX_ai` | 2953 | 745 | Not started |
 | `fr_FR_ai` | 2959 | 745 | Not started |
@@ -214,3 +288,7 @@ All nine also report the same 25 keys absent entirely (see the `localization:syn
 
 Do one locale per session and per commit: the work lists are independent, and a failed gate should
 never be ambiguous about which locale caused it.
+
+Per-locale notes measured before starting a pass live in `handovers/<locale>.md` next to this file
+(`handovers/es_ES_ai.md` is the next one up). Write one for a locale when you finish it, so the pass
+after yours starts from numbers rather than from a re-measurement.

@@ -54,8 +54,8 @@ return [
         'ga_cookies_opt_out'   => 'Google Analytics Cookies abmelden',
         'ad_free_giveaway'     => [
             'title'                                      => 'Werbefreies Giveaway',
-            'ad_free_giveaway_description_not_available' => 'Ein Abonnement bei :patreon erlaubt dir, bis zu :max werbefreie Keystone.guru-Erlebnisse an beliebige Teammitglieder zu verschenken.',
-            'ad_free_giveaway_description_available'     => 'Danke für dein Abonnement bei :patreon! Du kannst noch :current werbefreie Keystone.guru-Erlebnisse an beliebige Teammitglieder verschenken.',
+            'ad_free_giveaway_description_not_available' => 'Mit einem :patreon-Abonnement kannst du bis zu :max Teammitgliedern werbefreien Zugang zu Keystone.guru schenken.',
+            'ad_free_giveaway_description_available'     => 'Danke für dein Abonnement bei :patreon! Du kannst noch :current Teammitgliedern werbefreien Zugang zu Keystone.guru schenken.',
             'table_header_team'                          => 'Team',
             'table_header_member'                        => 'Mitglied',
             'table_header_ad_free'                       => 'Werbefrei',
