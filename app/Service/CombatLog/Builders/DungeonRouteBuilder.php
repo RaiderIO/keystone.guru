@@ -24,6 +24,7 @@ use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
 use App\Service\CombatLog\Models\ClosestEnemy;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 
 /**
@@ -159,6 +160,8 @@ abstract class DungeonRouteBuilder
 
             // Keep track of which groups we're in combat with
             $killZoneEnemiesAttributes = collect();
+            /** @var Collection<int, Enemy> $resolvedEnemies */
+            $resolvedEnemies = collect();
             foreach ($killedEnemies as $guid => $killedEnemy) {
                 /** @var string $guid */
                 try {
@@ -180,6 +183,7 @@ abstract class DungeonRouteBuilder
                             'mdt_id'       => $enemy->mdt_id,
                             'enemy_id'     => $enemy->id,
                         ]);
+                        $resolvedEnemies->push($enemy);
 
                         $this->log->createPullEnemyAttachedToKillZone(
                             $killedEnemy->getNpcId(),
@@ -193,6 +197,10 @@ abstract class DungeonRouteBuilder
             }
 
             $killZone->setRelation('killZoneEnemies', $killZoneEnemiesAttributes->map(fn(array $attributes) => new KillZoneEnemy($attributes)));
+            // StubRepository-backed builds hand out ids that collide with real kill_zone rows (#4178) - without this,
+            // KillZone::getEnemies() would lazy-load the 'enemies' relation and silently query an unrelated route's
+            // enemies by that colliding id the moment anything calls getKillLocation()/getEnemies() on this pull.
+            $killZone->setRelation('enemies', new EloquentCollection($resolvedEnemies->values()));
 
             if ($killZoneEnemiesAttributes->isNotEmpty()) {
                 $this->killZoneEnemyRepository->insert($killZoneEnemiesAttributes->toArray());
