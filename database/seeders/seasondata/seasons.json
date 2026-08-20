@@ -266,7 +266,7 @@
         "start_affix_group_index": 0,
         "key_level_min": 2,
         "key_level_max": 25,
-        "item_level_min": 240,
-        "item_level_max": 300
+        "item_level_min": 280,
+        "item_level_max": 360
     }
 ]
