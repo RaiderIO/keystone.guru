@@ -16,7 +16,9 @@ use Tests\TestCases\PublicTestCase;
 /**
  * Pins Npc::getScalingFactor() to what real combat logs show (#4094): Murder Row, one Raider.IO run per key level,
  * observed max HP divided by the seeded (MDT) base health of the same NPC - Demon Fly (235257, trash) and Xathuux the
- * Annihilator (234647, boss). Every expected value below is such a measurement, not a number derived from the formula.
+ * Annihilator (234647, boss); +11 from The Blinding Vale run 757063 (Radiant Spellsower 7,075,486 / 2,918,930 and
+ * Ziekket 57,324,529 / 23,648,732). Every expected value below is such a measurement, not a number derived from the
+ * formula.
  */
 #[Group('Npc')]
 #[Group('NpcScalingFactor')]
@@ -53,6 +55,7 @@ final class NpcScalingFactorTest extends PublicTestCase
             '+8'                                  => [8, 1.932],
             '+9'                                  => [9, 2.064],
             '+10'                                 => [10, 2.208],
+            '+11 (round2(1.07^9 * 1.1) * 1.2)'    => [11, 2.424],
             '+12 (round2(1.07^9 * 1.1^2) * 1.2)'  => [12, 2.664],
         ];
     }
@@ -88,6 +91,7 @@ final class NpcScalingFactorTest extends PublicTestCase
             '+8'                                         => [8, 1.5456],
             '+9'                                         => [9, 1.6512],
             '+10 (round2(1.07^9) * 1.25 * 0.96)'         => [10, 2.208],
+            '+11 (round2(1.07^9 * 1.1) * 1.25 * 0.96)'   => [11, 2.424],
             '+12 (round2(1.07^9 * 1.1^2) * 1.25 * 0.96)' => [12, 2.664],
         ];
     }
