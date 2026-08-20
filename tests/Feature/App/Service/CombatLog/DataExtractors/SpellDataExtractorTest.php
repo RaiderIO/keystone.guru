@@ -45,6 +45,9 @@ final class SpellDataExtractorTest extends PublicTestCase
     /** SPELL_AURA_APPLIED for an unknown spell, prefix school 0x20 (shadow) - hex, exactly as retail logs it */
     private const string RAW_SHADOW_BUFF_EVENT = '8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Creature-0-2085-2290-22744-999601-000000000,"TestNpc",0xa48,0x0,Creature-0-2085-2290-22744-999601-000000001,"TestNpc",0xa48,0x0,999602,"TestSpell",0x20,BUFF';
 
+    /** SPELL_AURA_APPLIED, source=NPC, dest=Player, DEBUFF → triggers SpellProperty::Debuff, the one nullable column */
+    private const string RAW_DEBUFF_EVENT = '8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Creature-0-2085-2290-22744-999601-000000000,"TestNpc",0xa48,0x0,Player-1084-0B48C032,"TestPlayer",0x512,0x80000000,999602,"TestSpell",0x1,DEBUFF';
+
     private ExtractedDataResult $result;
 
     private DataExtractionCurrentDungeon $currentDungeon;
@@ -368,6 +371,81 @@ final class SpellDataExtractorTest extends PublicTestCase
         ], 'combatlog');
 
         $this->assertSame(0, $this->result->toArray()['updatedSpells']);
+    }
+
+    #[Test]
+    public function afterExtract_givenAnotherWorkerRecordedThePropertyAfterTheCatalogWasBuilt_doesNotEmitASecondEvent(): void
+    {
+        // Arrange - two ingest processes, each holding its own process-persistent spell catalog (#4058) built while
+        // the property was still unset, exactly as concurrent workers do during an ingest burst
+        $this->createTestSpell(['aura' => false]);
+        $workerA = $this->makeExtractor();
+        $workerB = $this->makeExtractor();
+
+        // Act - both observe the same aura, each from its own combat log
+        $this->runExtract($workerA, [$this->parsedEvent(self::RAW_BUFF_EVENT)], '/tmp/worker-a.log');
+        $this->runExtract($workerB, [$this->parsedEvent(self::RAW_BUFF_EVENT)], '/tmp/worker-b.log');
+
+        // Assert - the property was recorded, but only the worker that actually flipped it wrote an event (#4199)
+        $this->assertDatabaseHas('spells', [
+            'id'   => self::SPELL_ID,
+            'aura' => true,
+        ]);
+        $this->assertSame(1, CombatLogSpellEvent::on('combatlog')
+            ->where('spell_id', self::SPELL_ID)
+            ->where('event_type', CombatLogSpellEventType::PropertyChanged->value)
+            ->where('property', SpellProperty::Aura->value)
+            ->count());
+    }
+
+    #[Test]
+    public function afterExtract_givenASpellWhoseNullableDebuffColumnIsNull_recordsItAndEmitsExactlyOneEvent(): void
+    {
+        // Arrange - `debuff` is the one property column that is nullable, and is NULL rather than 0 on most live
+        // rows, so the conditional write has to match NULL as well as false
+        $this->createTestSpell(['debuff' => null]);
+        $workerA = $this->makeExtractor();
+        $workerB = $this->makeExtractor();
+
+        // Act
+        $this->runExtract($workerA, [$this->parsedEvent(self::RAW_DEBUFF_EVENT)], '/tmp/worker-a.log');
+        $this->runExtract($workerB, [$this->parsedEvent(self::RAW_DEBUFF_EVENT)], '/tmp/worker-b.log');
+
+        // Assert
+        $this->assertDatabaseHas('spells', [
+            'id'     => self::SPELL_ID,
+            'debuff' => true,
+        ]);
+        $this->assertSame(1, CombatLogSpellEvent::on('combatlog')
+            ->where('spell_id', self::SPELL_ID)
+            ->where('event_type', CombatLogSpellEventType::PropertyChanged->value)
+            ->where('property', SpellProperty::Debuff->value)
+            ->count());
+    }
+
+    #[Test]
+    public function afterExtract_givenAnotherWorkerRecordedAMaskPropertyAfterTheCatalogWasBuilt_doesNotEmitASecondEvent(): void
+    {
+        // Arrange - the miss/counter/bypass properties live in a bitmask column instead of a boolean one, so they
+        // take a different conditional-write path than aura/debuff and need their own regression cover
+        $this->createTestSpell(['miss_types_mask' => 0]);
+        $workerA = $this->makeExtractor();
+        $workerB = $this->makeExtractor();
+
+        // Act
+        $this->runExtract($workerA, [$this->parsedEvent(self::RAW_INTERRUPT_EVENT)], '/tmp/worker-a.log');
+        $this->runExtract($workerB, [$this->parsedEvent(self::RAW_INTERRUPT_EVENT)], '/tmp/worker-b.log');
+
+        // Assert - the bit was set once, and only the worker that set it wrote an event (#4199)
+        $this->assertDatabaseHas('spells', [
+            'id'              => self::SPELL_ID,
+            'miss_types_mask' => SpellModel::MISS_TYPE_INTERRUPT,
+        ]);
+        $this->assertSame(1, CombatLogSpellEvent::on('combatlog')
+            ->where('spell_id', self::SPELL_ID)
+            ->where('event_type', CombatLogSpellEventType::PropertyChanged->value)
+            ->where('property', SpellProperty::MissInterrupt->value)
+            ->count());
     }
 
     #[Test]

@@ -313,25 +313,22 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
             return;
         }
 
-        $immunityBit = $definition->getImmunityBit();
-        if (($spell->bypasses_immunities_mask & $immunityBit) !== 0) {
+        // The write itself decides whether this bypass is news - a check against the in-memory catalog may
+        // predate another worker's write by up to the catalog TTL and re-emit an event that already exists (#4199)
+        if (!$spell->recordCombatLogProperty($property)) {
             $this->log->afterExtractBypassAlreadyKnown($spellId, $property->value);
 
             return;
         }
 
-        $spell->bypasses_immunities_mask |= $immunityBit;
+        CombatLogSpellEvent::create([
+            'spell_id'        => $spellId,
+            'event_type'      => CombatLogSpellEventType::PropertyChanged,
+            'property'        => $property,
+            'combat_log_path' => $this->currentCombatLogFilePath,
+        ]);
 
-        if ($spell->save()) {
-            CombatLogSpellEvent::create([
-                'spell_id'        => $spellId,
-                'event_type'      => CombatLogSpellEventType::PropertyChanged,
-                'property'        => $property,
-                'combat_log_path' => $this->currentCombatLogFilePath,
-            ]);
-
-            $result->addedSpellImmunityBypass();
-        }
+        $result->addedSpellImmunityBypass();
     }
 
     /**
