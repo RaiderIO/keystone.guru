@@ -372,25 +372,22 @@ class SpellCounterDataExtractor implements DataExtractorInterface
             return;
         }
 
-        $counterBit = $definition->getCounterBit();
-        if (($spell->counters_mask & $counterBit) !== 0) {
+        // The write itself decides whether this counter is news - a check against the in-memory catalog may
+        // predate another worker's write by up to the catalog TTL and re-emit an event that already exists (#4199)
+        if (!$spell->recordCombatLogProperty($property)) {
             $this->log->afterExtractCounterAlreadyKnown($spellId, $property->value);
 
             return;
         }
 
-        $spell->counters_mask |= $counterBit;
+        CombatLogSpellEvent::create([
+            'spell_id'        => $spellId,
+            'event_type'      => CombatLogSpellEventType::PropertyChanged,
+            'property'        => $property,
+            'combat_log_path' => $this->currentCombatLogFilePath,
+        ]);
 
-        if ($spell->save()) {
-            CombatLogSpellEvent::create([
-                'spell_id'        => $spellId,
-                'event_type'      => CombatLogSpellEventType::PropertyChanged,
-                'property'        => $property,
-                'combat_log_path' => $this->currentCombatLogFilePath,
-            ]);
-
-            $result->addedSpellCounter();
-        }
+        $result->addedSpellCounter();
     }
 
     /**

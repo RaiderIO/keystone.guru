@@ -4,6 +4,7 @@ namespace App\Models\Spell;
 
 use App\Models\CacheModel;
 use App\Models\Characteristic;
+use App\Models\CombatLog\SpellProperty;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingModelInterface;
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Str;
 
 /**
@@ -303,6 +305,43 @@ class Spell extends CacheModel implements MappingModelInterface
     {
         // Spells aren't tied to a specific dungeon, but they're part of the mapping
         return 0;
+    }
+
+    /**
+     * Records a combat-log-derived property on this spell, and reports whether this call was the one that set it.
+     *
+     * The write is the guard: the UPDATE only matches rows where the property is still unset, so exactly one caller
+     * ever gets `true` back and can emit the single `CombatLogSpellEvent` that belongs to that transition. Deciding
+     * that by reading the property off the model first does not work - the extraction pipeline hands every job a
+     * process-persistent spell catalog (#4058), so a snapshot taken before another worker's write keeps reporting the
+     * property as unset for up to the catalog TTL, and every job in that window re-emitted the same event (#4199).
+     *
+     * The catalog's own copy is updated on success so the same process does not keep re-issuing the UPDATE.
+     */
+    public function recordCombatLogProperty(SpellProperty $property): bool
+    {
+        $column = $property->column();
+        $bit    = $property->maskBit();
+
+        $query = self::query()->where('id', $this->id);
+
+        if ($bit === null) {
+            // `debuff` is nullable, so a bare where(false) would never match the rows that still hold NULL
+            $query->where(static fn(Builder $builder) => $builder->where($column, false)->orWhereNull($column));
+            $values = [$column => true];
+        } else {
+            $query->whereRaw(sprintf('%s & ? = 0', $column), [$bit]);
+            $values = [$column => DB::raw(sprintf('%s | %d', $column, $bit))];
+        }
+
+        if ($query->update($values) !== 1) {
+            return false;
+        }
+
+        $this->setAttribute($column, $bit === null ? true : ((int)$this->getAttribute($column) | $bit));
+        $this->syncOriginalAttribute($column);
+
+        return true;
     }
 
     public static function getWowheadLink(?int $gameVersionId, int $spellId, ?string $name = null): string
