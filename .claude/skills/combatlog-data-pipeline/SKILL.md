@@ -95,27 +95,52 @@ Line→event parsing is `CombatLogEntry::parseEvent`.
 
 ## Extractor pipeline (hard-coded, order-sensitive)
 
-Instantiated inline in `CombatLogDataExtractionService::__construct` as an ordered collection, then
-iterated for `beforeExtract` → per-line `extractData` → `afterExtract`. **DB writes are flushed in
-`afterExtract`** (batched). These are **not** container-bound and **not** swappable via config — only
-their loggers, the extraction service, and `CombatLogService` go through the container.
+Built by `DataExtractorFactory::createExtractors()` (bound to `DataExtractorFactoryInterface`, which the
+extraction service takes in its constructor) as an ordered collection, then iterated for
+`beforeExtract` → per-line `extractData` → `afterExtract`. **DB writes are flushed in `afterExtract`**
+(batched). The set is hard-coded in the factory, not config; swapping it means binding another
+`DataExtractorFactoryInterface` instance — `ProfilingDataExtractorFactory` (benchmark) and
+`FixedDataExtractorFactory` (on-demand commands, see "NPC health from logs" below) are the two precedents.
 
 1. `CreateMissingNpcDataExtractor` — creates missing `Npc` + `NpcDungeon` (skips pets & summoned NPCs).
-2. `NpcUpdateDataExtractor` — base-health update is **currently commented out** (no-op today; only
-   caches checked NPC IDs).
-3. `FloorDataExtractor` — updates `Floor` in-game bounds from `MapChange` events (skips known-inaccurate
-   dungeons; floor-connection logic commented out).
-4. `SpellDataExtractor` — orchestrates ordered sub-collectors (below).
-5. `NpcCharacteristicDataExtractor` — on `SPELL_AURA_APPLIED` targeting a creature where the spell maps
+2. `NpcUpdateDataExtractor` — a deliberate no-op; the base-health work it was a placeholder for is the
+   on-demand `NpcHealthDataExtractor` below (#4094), not part of ingestion.
+3. `SpellDataExtractor` — orchestrates ordered sub-collectors (below).
+4. `NpcCharacteristicDataExtractor` — on `SPELL_AURA_APPLIED` targeting a creature where the spell maps
    to a characteristic: upserts a characteristic **observation**, `NpcCharacteristic::firstOrCreate`,
    and on new → `CombatLogNpcEvent` (`CharacteristicAdded`).
-6. `SpellCounterDataExtractor` (#3826) — correlates a player counter cast (Vanish, Shadowmeld) with an
+5. `SpellCounterDataExtractor` (#3826) — correlates a player counter cast (Vanish, Shadowmeld) with an
    NPC ability fizzling; sets `spells`.`counters_mask`. Three signatures, ε = 100 ms.
-7. `ImmunityBypassDataExtractor` (#3835) — the inverse signal: NPC abilities that **land** on a player
+6. `ImmunityBypassDataExtractor` (#3835) — the inverse signal: NPC abilities that **land** on a player
    during an active immunity window (Divine Shield, Ice Block, ...); sets
    `spells`.`bypasses_immunities_mask`. Each immunity declares its own coverage (protected schools,
    damage vs harmful auras) in `DataExtractors/ImmunityBypasses/ImmunityDefinitions.php` — without that
    coverage model most in-window hits are expected behaviour, not bypasses.
+
+(There is no `FloorDataExtractor` any more — older notes that list one are stale.)
+
+### NPC health from logs — `combatlog:extractnpchealth` (#4094, on demand, not in the pipeline)
+
+`npc_healths` is seeded mapping data, so it is never written by ingestion. `NpcHealthDataExtractor`
+only *observes*: for every advanced line whose info GUID is a real creature (unit type `Creature`, no
+owner GUID — pets/guardians out) it records max HP per NPC per key level, accumulating across files
+(a Raider.IO run is 6–10 segments and each NPC shows up in a few). `combatlog:extractnpchealth <file|dir>`
+installs it alone via `FixedDataExtractorFactory`, runs `extractData(..., force: true, runContext:)` —
+**force** so already-ingested logs are re-read and no `ParsedCombatLog` row is written, **runContext**
+because only the first segment has `CHALLENGE_MODE_START`; the rest open with a `RIO_LOG_VERSION`
+header that names the dungeon but not the key level (the command pre-scans the files for the
+`CHALLENGE_MODE_START`, or takes `--key-level`/`--affix-ids`). `NpcHealthExtractionService` then
+reverses `Npc::getScalingFactor()` (honouring the row's `percentage`, which both abandoned attempts in
+`CreateMissingNpcDataExtractor`/`NpcUpdateDataExtractor` forgot) and writes missing/placeholder rows
+(`--overwrite` for real values, `--dry-run` to only print the comparison table). Finish with
+`mapping:save`.
+
+**Pick the log's key level with care** — modifiers differ per NPC and the factor can't know which:
++2..+5 carry Lindormi's Guidance (−5% on *most* hostile trash, not all), +7..+9 Fortified (summoned
+units are exempt), +10 both. **A +6 log has neither**, so derive from +6 and use another level only as a
+cross-check. The factor itself is fitted to measurements at every level (`NpcScalingFactorTest`);
+the `percentage`-aware reversal, MDT's 4.17% boss-base offset and the per-level rounding are all
+explained in `config/keystoneguru.php` `keystone`.
 
 Both counter and bypass extractors write the same observation/`CombatLogSpellEvent` plumbing as the
 spell collectors, and assign the spell to its casting NPC themselves (cast-only and nil-destination
@@ -195,10 +220,11 @@ Observation tables are **never read directly** by the Compendium — they only f
 
 ## Caveats
 
-- Extractors and spell collectors are **hard-coded and order-sensitive**; only their loggers, the
-  extraction service, and `CombatLogService` are container-bound.
-- `NpcUpdateDataExtractor` (base health) and `FloorDataExtractor`'s floor-connection logic are currently
-  commented out — no-ops today.
+- Extractors and spell collectors are **hard-coded and order-sensitive**; the set comes from
+  `DataExtractorFactoryInterface` (swap by binding another instance), everything else is not
+  container-bound.
+- `NpcUpdateDataExtractor` is a no-op; base health is written on demand by `combatlog:extractnpchealth`
+  (see the "NPC health from logs" section), never by ingestion.
 - `ProcessCombatLogFanout` has **no in-repo dispatcher** — the S3 ingestion trigger lives outside this
   codebase (infra pushing to the `*-combat-log-fanout` queue). The sibling
   `keystone.guru.combatlogstreamer` repo is a local log *replayer*, not the dispatcher.

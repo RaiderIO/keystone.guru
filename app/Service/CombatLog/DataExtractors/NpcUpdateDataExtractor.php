@@ -9,10 +9,11 @@ use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
 
 /**
- * Placeholder for updating NPC base health from advanced combat log data - see extractBaseHealth() below, which
- * cannot be enabled until the combat log's game version is known. Until then this extractor deliberately does
- * nothing: it used to scan a list of seen NPC ids and issue an Npc::find() per distinct NPC on every advanced
- * event, only to hand the result to a method whose body is commented out.
+ * Deliberately a no-op in the ingestion pipeline. The base-health update it was meant to do (see the commented-out
+ * extractBaseHealth() below) now lives in {@see NpcHealthDataExtractor} + NpcHealthExtractionService, run on demand
+ * by combatlog:extractnpchealth (#4094) - npc_healths is seeded mapping data, so it is written as a triggered action
+ * against a chosen log, not by every ingested file. It used to scan a list of seen NPC ids and issue an Npc::find()
+ * per distinct NPC on every advanced event, only to hand the result to a method whose body is commented out.
  */
 class NpcUpdateDataExtractor implements DataExtractorInterface
 {
