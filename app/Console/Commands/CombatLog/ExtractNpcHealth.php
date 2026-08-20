@@ -203,7 +203,7 @@ class ExtractNpcHealth extends BaseCombatLogCommand
     {
         $rows = [];
 
-        $stats = ['create' => 0, 'fill placeholder' => 0, 'overwrite' => 0, 'unchanged' => 0, 'skip' => 0];
+        $stats = ['create' => 0, 'fill placeholder' => 0, 'overwrite' => 0, 'unchanged' => 0, 'skip' => 0, 'curated' => 0];
 
         foreach ($changes->sortBy(static fn(NpcHealthChange $change) => $change->npc->id) as $change) {
             $action = $this->getAction($change, $overwrite);
@@ -233,17 +233,22 @@ class ExtractNpcHealth extends BaseCombatLogCommand
         );
 
         $this->info(sprintf(
-            'create: %d, fill placeholder: %d, overwrite: %d, unchanged: %d, skip (real value, no --overwrite): %d',
+            'create: %d, fill placeholder: %d, overwrite: %d, unchanged: %d, skip (real value, no --overwrite): %d, curated (never written): %d',
             $stats['create'],
             $stats['fill placeholder'],
             $stats['overwrite'],
             $stats['unchanged'],
             $stats['skip'],
+            $stats['curated'],
         ));
     }
 
     private function getAction(NpcHealthChange $change, bool $overwrite): string
     {
+        if ($change->curated) {
+            return 'curated';
+        }
+
         if ($change->isMissing()) {
             return 'create';
         }

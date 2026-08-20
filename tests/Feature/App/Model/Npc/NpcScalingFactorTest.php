@@ -15,10 +15,12 @@ use Tests\TestCases\PublicTestCase;
 
 /**
  * Pins Npc::getScalingFactor() to what real combat logs show (#4094): Murder Row, one Raider.IO run per key level,
- * observed max HP divided by the seeded (MDT) base health of the same NPC - Demon Fly (235257, trash) and Xathuux the
- * Annihilator (234647, boss); +11 from The Blinding Vale run 757063 (Radiant Spellsower 7,075,486 / 2,918,930 and
- * Ziekket 57,324,529 / 23,648,732). Every expected value below is such a measurement, not a number derived from the
- * formula.
+ * observed max HP divided by the base health of the same NPC - Demon Fly (235257, trash) and Xathuux the Annihilator
+ * (234647, boss); +11 from The Blinding Vale run 757063 (Radiant Spellsower 7,075,486 / 2,918,930 and Ziekket
+ * 57,324,529 / 22,702,783). Every expected value below is such a measurement, not a number derived from the formula.
+ *
+ * The boss divisors are the true bases #4208 swept in from +6 logs, not MDT's 4.17%-high seeded values - the 0.96
+ * correction that used to sit in getScalingFactor() is gone with them.
  */
 #[Group('Npc')]
 #[Group('NpcScalingFactor')]
@@ -78,25 +80,27 @@ final class NpcScalingFactorTest extends PublicTestCase
     }
 
     /**
-     * Xathuux the Annihilator: seeded base 23,648,733; observed max HP 24,291,978 (+2), 27,924,426 (+4), 29,740,647 (+5),
-     * 31,783,898 (+6), 34,054,178 (+7), 36,551,484 (+8), 39,048,788 (+9), 52,216,404 (+10), 63,000,225 (+12). The +7..+9
-     * runs were in a Fortified week, which leaves bosses on the bare curve.
+     * Xathuux the Annihilator: true base 22,702,784 (#4208 corrected the seeded 23,648,733, which MDT stored 4.17%
+     * high); observed max HP 24,291,978 (+2), 27,924,426 (+4), 29,740,647 (+5), 31,783,898 (+6), 34,054,178 (+7),
+     * 36,551,484 (+8), 39,048,788 (+9), 52,216,404 (+10), 63,000,225 (+12). The +7..+9 runs were in a Fortified week,
+     * which leaves bosses on the bare curve. Bosses therefore follow the same curve as trash, with Tyrannical from +10
+     * where trash gets Fortified, and no low-key reduction.
      *
      * @return array<string, array{int, array<int, string>, float}>
      */
     public static function getScalingFactor_givenKeyLevel_matchesMeasuredBossHealth_DataProvider(): array
     {
         return [
-            '+2 (1.07 * 0.96 MDT base correction)'       => [2, [], 1.0272],
-            '+4'                                         => [4, [], 1.1808],
-            '+5'                                         => [5, [], 1.2576],
-            '+6'                                         => [6, [], 1.344],
-            '+7 fortified week (no tyrannical)'          => [7, [Affix::AFFIX_FORTIFIED], 1.44],
-            '+8 fortified week'                          => [8, [Affix::AFFIX_FORTIFIED], 1.5456],
-            '+9 fortified week'                          => [9, [Affix::AFFIX_FORTIFIED], 1.6512],
-            '+10 (round2(1.07^9) * 1.25 * 0.96)'         => [10, [], 2.208],
-            '+11 (round2(1.07^9 * 1.1) * 1.25 * 0.96)'   => [11, [], 2.424],
-            '+12 (round2(1.07^9 * 1.1^2) * 1.25 * 0.96)' => [12, [], 2.664],
+            '+2 (1.07, no low key reduction on bosses)' => [2, [], 1.07],
+            '+4 (round2(1.07^3))'                       => [4, [], 1.23],
+            '+5 (round2(1.07^4))'                       => [5, [], 1.31],
+            '+6 (round2(1.07^5))'                       => [6, [], 1.40],
+            '+7 fortified week (no tyrannical)'         => [7, [Affix::AFFIX_FORTIFIED], 1.50],
+            '+8 fortified week'                         => [8, [Affix::AFFIX_FORTIFIED], 1.61],
+            '+9 fortified week'                         => [9, [Affix::AFFIX_FORTIFIED], 1.72],
+            '+10 (round2(1.07^9) * 1.25)'               => [10, [], 2.30],
+            '+11 (round2(1.07^9 * 1.1) * 1.25)'         => [11, [], 2.525],
+            '+12 (round2(1.07^9 * 1.1^2) * 1.25)'       => [12, [], 2.775],
         ];
     }
 
@@ -113,7 +117,7 @@ final class NpcScalingFactorTest extends PublicTestCase
 
         // Assert - the other week's mirror image of the measured +8
         $this->assertEqualsWithDelta(1.61, $trashFactor, 0.0001);
-        $this->assertEqualsWithDelta(1.61 * 1.25 * 0.96, $bossFactor, 0.0001);
+        $this->assertEqualsWithDelta(1.61 * 1.25, $bossFactor, 0.0001);
     }
 
     #[Test]
@@ -129,7 +133,7 @@ final class NpcScalingFactorTest extends PublicTestCase
 
         // Assert
         $this->assertEqualsWithDelta(1.40, $trashFactor, 0.0001);
-        $this->assertEqualsWithDelta(1.40 * 0.96, $bossFactor, 0.0001);
+        $this->assertEqualsWithDelta(1.40, $bossFactor, 0.0001);
     }
 
     #[Test]
@@ -141,7 +145,7 @@ final class NpcScalingFactorTest extends PublicTestCase
 
         // Act + Assert
         $this->assertEqualsWithDelta(1.50, $trash->getScalingFactor(7), 0.0001);
-        $this->assertEqualsWithDelta(1.50 * 0.96, $boss->getScalingFactor(7), 0.0001);
+        $this->assertEqualsWithDelta(1.50, $boss->getScalingFactor(7), 0.0001);
     }
 
     #[Test]

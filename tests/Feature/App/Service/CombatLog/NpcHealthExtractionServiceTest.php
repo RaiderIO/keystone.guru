@@ -225,6 +225,80 @@ final class NpcHealthExtractionServiceTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function applyNpcHealths_givenCuratedNpc_neverWritesEvenWithOverwrite(): void
+    {
+        // Arrange - a curated NPC's stored health deliberately differs from what the game shows (Murder Row's Infernal
+        // is 2.7M against ~205M in game), so an observation that disagrees is expected rather than a correction
+        config()->set('keystoneguru.npc.curated_npc_data_npc_ids', [$this->npc->id]);
+
+        $original = $this->storedHealth($this->gameVersion);
+        $changes  = $this->service->compareNpcHealths($this->observations($this->npc->id, 6, 2_140_000), $this->dungeon, $this->gameVersion);
+        $change   = $changes->get($this->npc->id);
+        $this->assertFalse($change->isUnchanged(), 'The observation must differ from the stored health, or this test proves nothing.');
+
+        try {
+            // Act
+            $written = $this->service->applyNpcHealths($changes, $this->gameVersion, true);
+
+            // Assert
+            $this->assertTrue($change->curated);
+            $this->assertFalse($change->shouldWrite(true));
+            $this->assertSame(0, $written);
+            $this->assertSame($original, $this->storedHealth($this->gameVersion));
+        } finally {
+            NpcHealth::query()->where('npc_id', $this->npc->id)->where('game_version_id', $this->gameVersion->id)->update(['health' => $original]);
+            $this->flushModelCaches();
+        }
+    }
+
+    #[Test]
+    public function applyNpcHealths_givenCuratedNpcWithPlaceholderRow_stillDoesNotWrite(): void
+    {
+        // Arrange - curation beats even the placeholder rule, which normally writes without --overwrite
+        config()->set('keystoneguru.npc.curated_npc_data_npc_ids', [$this->npc->id]);
+
+        $npcHealth = $this->npc->getHealthByGameVersion($this->gameVersion);
+        $original  = ['health' => $npcHealth->health, 'percentage' => $npcHealth->percentage];
+
+        try {
+            $npcHealth->update(['health' => NpcHealth::HEALTH_PLACEHOLDER]);
+            $this->refreshNpc();
+            $changes = $this->service->compareNpcHealths($this->observations($this->npc->id, 6, 2_140_000), $this->dungeon, $this->gameVersion);
+
+            // Act
+            $written = $this->service->applyNpcHealths($changes, $this->gameVersion, false);
+
+            // Assert
+            $this->assertTrue($changes->get($this->npc->id)->isPlaceholder());
+            $this->assertSame(0, $written);
+            $this->assertSame(NpcHealth::HEALTH_PLACEHOLDER, $this->storedHealth($this->gameVersion));
+        } finally {
+            NpcHealth::query()->where('npc_id', $this->npc->id)->where('game_version_id', $this->gameVersion->id)->update($original);
+            $this->flushModelCaches();
+        }
+    }
+
+    #[Test]
+    public function getCuratedDataNpcIds_givenTheShippedConfig_holdsEveryDocumentedNpc(): void
+    {
+        // Arrange - the ids both the MDT import and this service must leave alone, with their reasons in the config
+        $expected = [
+            211289, // Priory of the Sacred Flame mini boss
+            211290, // Priory of the Sacred Flame mini boss
+            211291, // Priory of the Sacred Flame mini boss
+            238414, // Murder Row, Infernal (#4207)
+            133943, // King's Rest, Minion of Zul (#4208)
+            138493, // King's Rest, Minion of Zul (#4208)
+        ];
+
+        // Act
+        $curatedNpcIds = Npc::getCuratedDataNpcIds();
+
+        // Assert
+        $this->assertSame($expected, $curatedNpcIds);
+    }
+
     /**
      * Model caching is on in CI (off in local dev), and the eager-loaded npcHealths of $dungeon->npcs() are cached
      * under the Npc model - so every mutation in these tests must flush both before anything re-reads them.

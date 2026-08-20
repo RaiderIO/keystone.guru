@@ -55,14 +55,6 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         98362,
     ];
 
-    /** @var array<int, int> Do not import data from these NPC IDs */
-    private const array IGNORE_NPC_DATA_NPC_IDS = [
-        // Priory of the Sacred Flame - 3 mini bosses where MDT has high health values - they mess up auto map sizing based on health
-        211289,
-        211290,
-        211291,
-    ];
-
     private const array IGNORE_ENEMY_DISTANCE_CHECK_NPC_IDS = [
         // Darkflame Cleft, The Darkness - we move it to an entirely different area so please ignore this check
         208747,
@@ -232,7 +224,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $npcDungeonsAttributes = [];
 
             foreach ($mdtDungeon->getMDTNPCs() as $mdtNpc) {
-                if (in_array($mdtNpc->getId(), self::IGNORE_NPC_DATA_NPC_IDS)) {
+                if (in_array($mdtNpc->getId(), Npc::getCuratedDataNpcIds(), true)) {
                     $this->log->importNpcsDataFromMDTIgnoreNpc($mdtNpc->getId());
                     continue;
                 }
