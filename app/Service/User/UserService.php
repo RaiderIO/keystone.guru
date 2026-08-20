@@ -4,6 +4,7 @@ namespace App\Service\User;
 
 use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
+use App\Service\User\Dtos\BasicAuthenticationResult;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -21,26 +22,29 @@ class UserService implements UserServiceInterface
     ) {
     }
 
-    public function loginAsUserFromAuthenticationHeader(Request $request): bool
+    public function loginAsUserFromAuthenticationHeader(Request $request): BasicAuthenticationResult
     {
         if (!$request->hasHeader('Authorization')) {
-            return false;
+            return BasicAuthenticationResult::MissingHeader;
         }
 
         $authentication = (string)$request->header('Authorization');
         if (!Str::startsWith($authentication, 'Basic')) {
-            return false;
+            return BasicAuthenticationResult::UnsupportedScheme;
         }
 
         $base64     = Str::replace('Basic ', '', $authentication);
         $usernamePw = base64_decode($base64);
         if ($usernamePw === false) { // @phpstan-ignore identical.alwaysFalse
-            return false;
+            return BasicAuthenticationResult::MalformedCredentials;
         }
 
-        $explode = explode(':', $usernamePw);
+        // RFC 7617 forbids a colon in the userid but explicitly allows one in the password, so only
+        // the first colon separates the two - splitting on every colon made any password containing
+        // one impossible to authenticate with, while it kept working through the login form.
+        $explode = explode(':', $usernamePw, 2);
         if (count($explode) !== 2) {
-            return false;
+            return BasicAuthenticationResult::MalformedCredentials;
         }
 
         [
@@ -48,7 +52,15 @@ class UserService implements UserServiceInterface
             $password,
         ] = $explode;
 
-        return $this->loginAsUser($username, $password);
+        // Guzzle sends `Basic Og==` (an empty username and password) when it is handed null credentials,
+        // which would otherwise reach the database as a lookup for the user with an empty email address
+        if ($username === '' || $password === '') {
+            return BasicAuthenticationResult::MalformedCredentials;
+        }
+
+        return $this->loginAsUser($username, $password)
+            ? BasicAuthenticationResult::Success
+            : BasicAuthenticationResult::CredentialsRejected;
     }
 
     /**

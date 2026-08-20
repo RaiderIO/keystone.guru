@@ -54,6 +54,17 @@ class RegenerateCombatLogRoute implements ShouldQueue
                 return;
             }
 
+            $user     = (string)config('keystoneguru.combat_log_route_regeneration.user');
+            $password = (string)config('keystoneguru.combat_log_route_regeneration.password');
+
+            // Guzzle happily sends `Basic Og==` for null credentials, which the API answers with the very
+            // same opaque 401 as a wrong password - so refuse to make the request at all instead
+            if ($user === '' || $password === '') {
+                $log->handleCredentialsNotConfigured();
+
+                return;
+            }
+
             $client = new Client();
 
             try {
@@ -63,8 +74,8 @@ class RegenerateCombatLogRoute implements ShouldQueue
 
                 $client->post(route('api.v1.combatlog.route.store'), [
                     'auth' => [
-                        config('keystoneguru.combat_log_route_regeneration.user'),
-                        config('keystoneguru.combat_log_route_regeneration.password'),
+                        $user,
+                        $password,
                     ],
                     'body'    => json_encode($bodyArr),
                     'headers' => [
