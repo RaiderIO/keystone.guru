@@ -120,6 +120,15 @@ abstract class DungeonRouteBuilder
     abstract public function build(): DungeonRoute;
 
     /**
+     * The route this builder writes into - available before build() finishes, so a caller can clean it up when the
+     * build throws halfway.
+     */
+    public function getDungeonRoute(): DungeonRoute
+    {
+        return $this->dungeonRoute;
+    }
+
+    /**
      * @return void
      */
     protected function buildFinished(): void

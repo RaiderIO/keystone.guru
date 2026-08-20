@@ -25,4 +25,8 @@ interface CombatLogRouteDungeonRouteServiceLoggingInterface
     public function generateMapIconsUnableToCalculateMapLocation(string $uniqueId, int $floorId): void;
 
     public function saveCombatLogRouteEnemyFailuresUnableToCalculateMapLocation(int $dungeonRouteId, ?int $npcId, int $floorId): void;
+
+    public function convertCombatLogRouteToDungeonRouteBuildFailedDeletingNewRoute(int $dungeonRouteId, string $exception): void;
+
+    public function convertCombatLogRouteToDungeonRouteReplacedExistingRoute(string $publicKey, int $oldDungeonRouteId, int $newDungeonRouteId, int $challengeModeRunId): void;
 }

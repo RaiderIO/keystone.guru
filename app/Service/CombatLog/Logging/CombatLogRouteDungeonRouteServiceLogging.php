@@ -63,4 +63,14 @@ class CombatLogRouteDungeonRouteServiceLogging extends StructuredLogging impleme
     {
         $this->warning(__METHOD__, get_defined_vars());
     }
+
+    public function convertCombatLogRouteToDungeonRouteBuildFailedDeletingNewRoute(int $dungeonRouteId, string $exception): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
+    public function convertCombatLogRouteToDungeonRouteReplacedExistingRoute(string $publicKey, int $oldDungeonRouteId, int $newDungeonRouteId, int $challengeModeRunId): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
 }
