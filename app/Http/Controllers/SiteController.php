@@ -11,6 +11,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Team;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
+use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
@@ -50,6 +51,7 @@ class SiteController extends Controller
         SeasonServiceInterface          $seasonService,
         DungeonRouteRepositoryInterface $dungeonRouteRepository,
         DiscoverServiceInterface        $discoverService,
+        DungeonServiceInterface         $dungeonService,
     ): View {
         // @TODO Add caching
         $weeklyRoutes = $dungeonRouteRepository->getWeeklyRoutes();
@@ -68,6 +70,10 @@ class SiteController extends Controller
                 ->popularGroupedByDungeon()
                 ->map(static fn(Collection $routes) => $routes->take(1))
                 ->flatten(),
+            'userOrDefaultGameVersion' => $userOrDefaultGameVersion,
+            // HeaderComposer only injects this into the header view itself - the dungeon context
+            // links this page overrides are built in the view, so it needs its own copy
+            'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($userOrDefaultGameVersion),
         ]);
     }
 

@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Controller;
 
+use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -37,6 +39,30 @@ final class SiteControllerTest extends PublicTestCase
         } finally {
             $user->delete();
         }
+    }
+
+    /**
+     * Picking a dungeon in the header's context strip on the homepage previously changed the visitor's
+     * context dungeon without changing anything on the page - the strip should send them to that
+     * dungeon's browse-routes page instead.
+     */
+    #[Test]
+    public function index_givenGuest_linksDungeonContextStripToDiscoverDungeon(): void
+    {
+        // Arrange
+        $gameVersion = GameVersion::getUserOrDefaultGameVersion();
+        $dungeon     = Dungeon::getUserOrDefaultDungeon();
+
+        // Act
+        $response = $this->get(route('home'));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee(route('dungeonroutes.discoverdungeon', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+        ]), false);
+        $response->assertDontSee(route('dungeon.changecontext', ['dungeon' => $dungeon]), false);
     }
 
     #[Test]
