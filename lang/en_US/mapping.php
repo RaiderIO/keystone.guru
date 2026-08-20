@@ -535,6 +535,10 @@ return [
                 'go_north'                  => 'Go north',
                 'go_south'                  => 'Go south',
             ],
+            'den_of_nalorakk' => [
+                'offering'        => 'Offering',
+                'warding_incense' => 'Warding Incense (5% Versatility for 10 minutes)',
+            ],
             'maisara_caverns' => [
                 'hearty_vilebranch_stew' => 'Hearty Vilebranch Stew: Have a serving of Vilebranch stew, increasing your Leech by 3% and reducing the damage taken from area of effect attacks by 3% for 30 min.',
             ],
