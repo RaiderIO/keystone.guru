@@ -214,6 +214,49 @@ Chest`, `Iron Gate`, `The Black Anvil`, `Activation Rune`) were left in English,
 name is what the player reads off their own client. Lowercase/descriptive labels that are not exact
 tooltip names (`workshop door`, `east entrance`) were translated.
 
+### French glossary (fr_FR_ai, established in the #4165 pass)
+
+| English | French | English | French |
+|---|---|---|---|
+| Dungeon | donjon | Floor | étage |
+| Route | itinéraire (dominant, but check the surrounding file - some lean `route`, e.g. `view_dungeonroute.php`) | Pull | pull (untranslated) |
+| Enemy forces | forces ennemies (full form); **FE** abbreviation introduced for checkpoint pills/tooltips/snackbars | Pack | pack (untranslated) |
+| Affix | affixe (translated - like Spanish, unlike German's untranslated *Affix*; already dominant, 61:3, before this pass) | Boss | Boss (untranslated - the opposite of `es_MX_ai`'s `Jefe`) |
+| Weight (line thickness) | Poids | Icon | icône (accented) |
+| Checkpoint | point de contrôle (not yet established before this pass) | Teeming | Foisonnant (read from `affixes.php`) |
+
+Add a row here whenever a new locale forces a decision worth keeping.
+
+**Register:** `fr_FR_ai` is formal *vous* throughout - the opposite of `de_DE_ai`'s *du* and
+`es_ES_ai`/`es_MX_ai`'s *tú*. A blunt grep found 171 pre-existing *vous*/`veuillez`/`cliquez`
+hits against 19 *tu*-form hits before this pass; no register cleanup was needed, and the new
+keys were all written as *vous* to match.
+
+**Codex review found 27 real issues** (`handovers/fr_FR_ai.md` has the full table), the two
+recurring lesson categories worth restating here:
+
+- **Official game terms not read from `spells.php`/`affixes.php`/`enemies.php` first.** Four
+  spell/immunity names were invented instead of looked up (`Vanish` -> *Disparition*, not
+  *Évanouissement*; `Divine Shield` -> *Bouclier divin*, not *Bouclier sacré*; etc.) - always grep
+  the exact English string in `spells.php` before translating a spell/ability name by hand, even
+  a common one that seems obvious.
+- **An existing translation elsewhere in the same file/feature was not checked before picking a
+  different word.** `df.algeth_ar_academy`'s buff labels didn't match the pre-existing
+  `midnight.algeth_ar_academy` block for the *same real dungeon* reused under a different
+  expansion key (`+10% Soins reçus` vs `+10 % de soins reçus`) - when a dungeon reappears under a
+  different top-level game-version key, check whether it already has a translated block
+  elsewhere in the file first. Similarly, several `route`/`itinéraire` picks in one file
+  disagreed with the same feature's sibling keys in another file (`view_creator.php` vs
+  `view_profile.php`) - both new in the same pass, so nothing forced them to agree except
+  checking.
+
+Two review findings were checked against the locale and **rejected** as false positives - the
+`js.php` "Weight" label matches four sibling `*_weight_label` keys already using `Poids` (listed
+above), and the Ulduar teleporter destination names are already officially translated in
+`dungeons.php`, so the locale's own convention won over the reviewer's "keep English" suggestion
+for those four; the other five teleporter destinations (no official source) stayed translated
+for consistency.
+
 ## Normalising an existing locale (overwriting existing values)
 
 The default workflow never overwrites a non-empty value. When Wotuu explicitly asks for one -
@@ -337,7 +380,7 @@ in the excluded files, which are not this workflow's business.
 | `de_DE_ai` | 2959 | 745 | Done — #4165, 2026-08-20 (plus 212 *Sie* → *du* and 31 post-review rewrites) |
 | `es_ES_ai` | 2953 | 745 (769 after re-sync) | Done — #4165, 2026-08-20 (plus 30 formal *usted* → informal *tú* rewrites) |
 | `es_MX_ai` | 2980 | 769 | Done — #4165, 2026-08-20 (no register cleanup needed, already informal *tú*) |
-| `fr_FR_ai` | 2986 | 769 | Not started — handover ready at `handovers/fr_FR_ai.md` (register is formal *vous*, unlike German/Spanish's informal default) |
+| `fr_FR_ai` | 2986 | 769 | Done — #4165, 2026-08-20, PR #4209 (formal *vous* register, no cleanup needed; plus 27 Codex-review fixes, see `handovers/fr_FR_ai.md`) |
 | `it_IT_ai` | 2957 | 745 | Not started |
 | `ko_KR_ai` | 3042 | 745 | Not started |
 | `pt_BR_ai` | 2957 | 745 | Not started |
@@ -351,5 +394,5 @@ Do one locale per session and per commit: the work lists are independent, and a 
 never be ambiguous about which locale caused it.
 
 Per-locale notes measured before starting a pass live in `handovers/<locale>.md` next to this file
-(`handovers/fr_FR_ai.md` is the next one up). Write one for a locale when you finish it, so the pass
+(`it_IT_ai` is the next one up - no handover written yet, measure fresh). Write one for a locale when you finish it, so the pass
 after yours starts from numbers rather than from a re-measurement.

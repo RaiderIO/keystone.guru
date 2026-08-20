@@ -1,5 +1,41 @@
 # Handover: translating `fr_FR_ai` (#4165)
 
+**Status: Done, 2026-08-20.** All 769 in-scope keys filled (matched the estimate below exactly),
+gate green, `composer run analyse` clean, `composer run fix` only realigning whitespace. Formal
+*vous* register confirmed correct throughout - no register cleanup needed. PR #4209.
+
+**Codex review (commit `e0a27591f`) found 29 issues; 27 real, fixed in a follow-up commit
+(`63cb567fa`):** official spell/immunity names not read from `spells.php` (`Vanish` ->
+**Disparition**, not *Évanouissement*; `Shadowmeld` -> **Camouflage dans l'ombre**, not *Fondu
+ombrageux*; `Divine Shield` -> **Bouclier divin**, not *Bouclier sacré*; `Blessing of
+Spellwarding` -> **Bénédiction de protection des sorts**; `Anti-Magic Shell` -> **Carapace
+anti-magie**); an in-file inconsistency where the new `df.algeth_ar_academy` buff labels didn't
+match the pre-existing `midnight.algeth_ar_academy` block for the *same* dungeon (`+10% Soins
+reçus` style, no space before `%`, no `de`, `Coup Critique` capitalised - the pre-existing block
+should always be checked when a dungeon reappears under a different expansion key); Oculus drake
+naming (`Drake` not `Dragonnet` - `npcs.php` already has `Drake émeraude`/`ambre`/`rubis` for
+this exact zone); and several `route`/`itinéraire` consistency fixes where a sibling key in the
+same file (`view_profile.php`'s `itinéraire`, `view_dungeonroute.php`'s `popular`/
+`newly_published_routes`) had already picked one and the new key picked the other.
+
+**Two findings were checked against the locale and rejected** - the same lesson `es_MX_ai`
+already taught, worth restating because it happened again: `js.php`'s `arrow_weight_label` ("Weight")
+was flagged for `Poids` -> `Épaisseur`, but four sibling `*_weight_label` keys already say
+`Poids` (see the Weight row in `SKILL.md`'s glossary) - changing this one would have broken
+consistency, not fixed it. And the Ulduar teleporter destination names (`Antechamber of Ulduar`,
+`Inner Sanctum`, ...) were flagged as "keep in English", but `dungeons.php` already has official
+French translations for four of them (`L'antichambre d'Ulduar`, etc.) - those four were changed
+to match the official casing/wording exactly instead, and the five without an official source
+(Colossal Forge, Conservatory of Life, ...) stayed translated for consistency with the four that
+are confirmed official.
+
+**Mechanical gotcha:** the worktree's PHP CLI (used by `dump_locale.php`) can serve a stale
+`opcache`d read of a file that was just edited by another process (e.g. `composer run fix` or a
+prior `inject.py` run within the same `docker compose exec` session) - one `rewrite.py` call
+failed with a spurious "current value is not the expected one" because of this. Run
+`docker compose exec -T app php -r "opcache_reset();"` before re-dumping if a value you just
+wrote doesn't show up, before assuming the tooling itself is wrong.
+
 Read `.claude/skills/ai-locale-translation/SKILL.md` first - it holds the whole procedure, the
 scripts and the traps. This file only records what is **specific to `fr_FR_ai`**, measured
 2026-08-20 right after `es_MX_ai` was finished (see `handovers/es_MX_ai.md` for that pass's notes,
