@@ -140,6 +140,8 @@ use Illuminate\Support\Collection;
 @endsection
 
 @section('content')
+    @include('dungeonroute.discover.wallpaper', ['dungeon' => $contextDungeon])
+
     <div class="compendium_toolbar">
         <div class="compendium_toolbar_filter">
             @include('common.dungeon.select', [

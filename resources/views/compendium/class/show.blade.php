@@ -40,6 +40,8 @@ use Illuminate\Support\Collection;
 ])
 
 @section('content')
+    @include('dungeonroute.discover.wallpaper', ['dungeon' => $contextDungeon])
+
     {{-- Header --}}
     <div class="compendium_identity">
         <img src="{{ $characterClass->icon_url }}"
