@@ -208,6 +208,14 @@ convention. Reads and anything already going through `sh/gh-bot.sh` are unaffect
 command you believe should be a legitimate plain-`gh` fallback (`sh/gh-bot.sh` genuinely failed),
 that's the intended friction — fix the block by using `sh/gh-bot.sh`, not by editing the hook away.
 
+Writes to **`keystoneguru-infra`** are the one standing exemption — the bot is not a collaborator
+there, so plain `gh` with a `:robot:` body prefix is the permanent path. The hook decides that from
+where the write actually lands, never from the repo being mentioned: name it with
+`--repo RaiderIO/keystoneguru-infra` (or a `repos/RaiderIO/keystoneguru-infra/...` API path), or run
+from the infra checkout with no `--repo` at all. A command that targets both repos is guarded, since
+its keystone.guru half belongs on the bot. `sh/gh-write-guard-test.sh` is the case table — run it
+after touching the guard.
+
 #### Reading authorship: match the bot login, never "not Wotuu"
 
 To decide whether a comment, review thread or PR was written by an agent, test the author against
