@@ -377,7 +377,17 @@ class Npc extends CacheModel implements MappingModelInterface
         ]);
     }
 
-    /** @param array<int, string> $affixes */
+    /**
+     * What the stored base health is multiplied by at $keyLevel. Fitted to combat log measurements of every key level
+     * (#4094), which the game reproduces to five significant digits: the per-level multiplier (7% per level through
+     * +10, 10% per level from +11 - Xal'atath's Guile, so it needs no affix of its own) is rounded to two decimals,
+     * *then* the modifiers apply: Fortified (non-bosses) and Tyrannical (bosses) - both from +10, and between +7 and
+     * +9 whichever one the week's affixes ($affixes) carry, since they swap every other week - the low-key reduction
+     * on non-bosses, and the MDT boss base correction. All numbers live in config('keystoneguru.keystone'), with the
+     * reasoning next to them.
+     *
+     * @param array<int, string> $affixes A list of Affix:: string constants
+     */
     public function getScalingFactor(int $keyLevel, array $affixes = []): float
     {
         $keyLevelFactor = 1;
@@ -385,23 +395,30 @@ class Npc extends CacheModel implements MappingModelInterface
             $keyLevelFactor *= ($i < 10 ? config('keystoneguru.keystone.scaling_factor') : config('keystoneguru.keystone.scaling_factor_past_10'));
         }
 
-        if (in_array(Affix::AFFIX_FORTIFIED, $affixes) && $this->isAffectedByFortified()) {
-            $keyLevelFactor *= config('keystoneguru.keystone.affix_scaling_factor.fortified');
+        $result = round($keyLevelFactor, 2);
+
+        $bothAffixesActive = $keyLevel >= config('keystoneguru.keystone.affix_scaling_factor_both_min_key_level');
+        $weekAffixActive   = $keyLevel >= config('keystoneguru.keystone.affix_scaling_factor_min_key_level');
+
+        if ($this->isAffectedByFortified() && ($bothAffixesActive || ($weekAffixActive && in_array(Affix::AFFIX_FORTIFIED, $affixes)))) {
+            $result *= config('keystoneguru.keystone.affix_scaling_factor.fortified');
         }
 
-        if (in_array(Affix::AFFIX_TYRANNICAL, $affixes) && $this->isAffectedByTyrannical()) {
-            $keyLevelFactor *= config('keystoneguru.keystone.affix_scaling_factor.tyrannical');
+        if ($this->isAffectedByTyrannical() && ($bothAffixesActive || ($weekAffixActive && in_array(Affix::AFFIX_TYRANNICAL, $affixes)))) {
+            $result *= config('keystoneguru.keystone.affix_scaling_factor.tyrannical');
         }
 
         if ($keyLevel >= 10 && in_array(Affix::AFFIX_THUNDERING, $affixes)) {
-            $keyLevelFactor *= config('keystoneguru.keystone.affix_scaling_factor.thundering');
+            $result *= config('keystoneguru.keystone.affix_scaling_factor.thundering');
         }
 
-        if ($keyLevel >= 12 && in_array(Affix::AFFIX_XALATATHS_GUILE, $affixes)) {
-            $keyLevelFactor *= config('keystoneguru.keystone.affix_scaling_factor.xalataths_guile');
+        if ($this->isBoss()) {
+            $result *= config('keystoneguru.keystone.mdt_boss_base_health_factor');
+        } elseif ($keyLevel <= config('keystoneguru.keystone.low_key_non_boss_health.max_key_level')) {
+            $result *= config('keystoneguru.keystone.low_key_non_boss_health.factor');
         }
 
-        return round($keyLevelFactor * 100) / 100;
+        return $result;
     }
 
     public function getHealthByGameVersion(GameVersion $gameVersion): ?NpcHealth

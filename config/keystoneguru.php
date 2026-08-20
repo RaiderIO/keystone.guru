@@ -60,15 +60,41 @@ return [
             'default_max' => 30,
         ],
 
-        'scaling_factor'         => 1.10,
-        'scaling_factor_past_10' => 1.10,
+        // Enemy health by key level - see Npc::getScalingFactor() for the formula and #4094 for the combat log
+        // measurements (Murder Row at +2, +4..+10, +12) that every number below was fitted to. +1 is the base, every
+        // level through +10 adds 7%, every level from +11 adds 10% (Xal'atath's Guile), and the game rounds that
+        // per-level multiplier to two decimals before applying the affixes below.
+        'scaling_factor'         => 1.07,
+        'scaling_factor_past_10' => 1.1,
 
         'affix_scaling_factor' => [
-            'fortified'       => 1.2,
-            'tyrannical'      => 1.3,
-            'thundering'      => 1.05,
-            'xalataths_guile' => 1.2,
+            'fortified'  => 1.2,
+            'tyrannical' => 1.25,
+            'thundering' => 1.05,
         ],
+        // Fortified (non-bosses) and Tyrannical (bosses): from +10 both are always active, regardless of what the
+        // route's affix group says; between +7 and +9 only one of them is, and which one swaps every other week, so
+        // there it follows the affixes passed in (the route's affix group). Below +7 neither applies. The #4094
+        // measurements at +7..+9 were taken in a Fortified week (trash x1.2, bosses untouched).
+        'affix_scaling_factor_min_key_level'      => 7,
+        'affix_scaling_factor_both_min_key_level' => 10,
+
+        // Most hostile non-boss enemies have 5% less health at +2..+5 (Lindormi's Guidance, Midnight S2) - measured on
+        // every trash NPC of Murder Row and 10 of 14 in The Blinding Vale at +2..+5, absent from +6 on. The affix
+        // "weakens select enemies", and which ones is not knowable from our data, so this is the majority behaviour:
+        // the minority (and summoned units, which also skip Fortified) is overstated by 5% below +6. A +6 log has
+        // neither this nor Fortified in play, which is why combatlog:extractnpchealth prefers one. Set the factor to 1
+        // when a season drops the affix.
+        'low_key_non_boss_health' => [
+            'max_key_level' => 5,
+            'factor'        => 0.95,
+        ],
+
+        // MDT - where all seeded base health comes from - records bosses 4.17% above their true base: it reverses its
+        // +10 observations with Fortified's 1.2 rather than Tyrannical's 1.25. Rather than rewriting every boss row
+        // (a re-import would bring them straight back), the stored boss bases are corrected here, so
+        // calculateHealthForKey() lands on what the combat log shows: base * 0.96 * 1.25 = base * 1.2 at +10.
+        'mdt_boss_base_health_factor' => 0.96,
     ],
 
     'cache' => [

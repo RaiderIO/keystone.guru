@@ -11,7 +11,6 @@ use App\Service\CombatLog\DataExtractors\DataExtractorFactory;
 use App\Service\CombatLog\DataExtractors\DataExtractorFactoryInterface;
 use App\Service\CombatLog\DataExtractors\ImmunityBypassDataExtractor;
 use App\Service\CombatLog\DataExtractors\NpcCharacteristicDataExtractor;
-use App\Service\CombatLog\DataExtractors\NpcUpdateDataExtractor;
 use App\Service\CombatLog\DataExtractors\Profiling\ProfilingDataExtractor;
 use App\Service\CombatLog\DataExtractors\SpellCounterDataExtractor;
 use App\Service\CombatLog\DataExtractors\SpellDataExtractor;
@@ -62,7 +61,7 @@ final class BenchmarkTest extends PublicTestCase
     }
 
     #[Test]
-    public function createExtractors_givenDefaultFactory_returnsSixExtractorsInCurrentOrder(): void
+    public function createExtractors_givenDefaultFactory_returnsFiveExtractorsInCurrentOrder(): void
     {
         // Arrange
         $factory = app(DataExtractorFactoryInterface::class);
@@ -76,7 +75,6 @@ final class BenchmarkTest extends PublicTestCase
         // that expect the NPC to exist)
         $this->assertSame([
             CreateMissingNpcDataExtractor::class,
-            NpcUpdateDataExtractor::class,
             SpellDataExtractor::class,
             NpcCharacteristicDataExtractor::class,
             SpellCounterDataExtractor::class,
@@ -142,7 +140,6 @@ final class BenchmarkTest extends PublicTestCase
 
             $this->assertEqualsCanonicalizing([
                 CreateMissingNpcDataExtractor::class,
-                NpcUpdateDataExtractor::class,
                 SpellDataExtractor::class,
                 NpcCharacteristicDataExtractor::class,
                 SpellCounterDataExtractor::class,

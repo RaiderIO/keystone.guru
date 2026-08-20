@@ -22,7 +22,6 @@ class DataExtractorFactory implements DataExtractorFactoryInterface
         /** @var Collection<int, DataExtractorInterface> $extractors */
         $extractors = collect([
             new CreateMissingNpcDataExtractor(),
-            new NpcUpdateDataExtractor(),
             new SpellDataExtractor($this->spellRepository),
             new NpcCharacteristicDataExtractor($this->spellRepository),
             new SpellCounterDataExtractor(),
