@@ -1,7 +1,6 @@
 <?php
 
-namespace Controller\Api\V1\APICombatLogController\CorrectEvents\Midnight;
-
+namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\Midnight;
 use App\Models\DungeonKey;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;

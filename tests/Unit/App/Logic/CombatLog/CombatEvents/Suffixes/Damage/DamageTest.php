@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Logic\CombatLog\CombatEvents\Suffixes\Damage;
+namespace Tests\Unit\App\Logic\CombatLog\CombatEvents\Suffixes\Damage;
 
+use App\Logic\CombatLog\CombatEvents\Suffixes\Damage\DamageInterface;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Damage\V20\DamageV20;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Damage\V22\DamageV22;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Suffix;
