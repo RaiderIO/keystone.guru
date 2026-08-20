@@ -41,6 +41,16 @@ class SpellDataExtractorLogging extends StructuredLogging implements SpellDataEx
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    public function createSpellLostRaceFoundExistingSpell(int $spellId): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
+    public function createSpellLostRaceSpellVanished(int $spellId): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
     public function afterExtractDungeonEnd(): void
     {
         $this->end(__METHOD__);
