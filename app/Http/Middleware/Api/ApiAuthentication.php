@@ -27,9 +27,14 @@ class ApiAuthentication
             $result = $this->userService->loginAsUserFromAuthenticationHeader($request);
 
             if ($result !== BasicAuthenticationResult::Success) {
-                // Every failure answers the same opaque 401 - the log line is the only place that says
-                // whether the credentials were rejected or never made it here in the first place
-                $this->log->handleAuthenticationFailed($result->value);
+                // Every failure answers the same opaque 401, so the log line is the only place that says
+                // whether the credentials were rejected or were never usable in the first place. A request
+                // that carried no Authorization header at all is not logged: that is every URL scanner
+                // that ever walks the API, and the group middleware runs before the route-level throttles,
+                // so logging it would hand anyone an unthrottled way to flood the warning log.
+                if ($result !== BasicAuthenticationResult::MissingHeader) {
+                    $this->log->handleAuthenticationFailed($result->value);
+                }
 
                 return response()->json(['error' => __('exceptions.handler.unauthenticated')], StatusCode::UNAUTHORIZED);
             }
