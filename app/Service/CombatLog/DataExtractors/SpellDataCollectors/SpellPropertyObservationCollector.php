@@ -100,22 +100,21 @@ class SpellPropertyObservationCollector implements SpellDataCollectorInterface
             foreach ($this->pendingPropertyObservations as $observation) {
                 /** @var SpellModel|null $spell */
                 $spell = $this->allSpells->get($observation['spell_id']);
-                if ($spell === null || $this->spellHasProperty($spell, $observation['property'])) {
+                // The write itself decides whether this is a new fact - see Spell::recordCombatLogProperty(). A
+                // check against the in-memory catalog cannot: it may predate another worker's write by up to the
+                // catalog TTL, which had every job in that window emit the same PropertyChanged again (#4199)
+                if ($spell === null || !$spell->recordCombatLogProperty($observation['property'])) {
                     continue;
                 }
 
-                $this->applyPropertyToSpell($spell, $observation['property']);
+                $result->updatedSpell();
 
-                if ($spell->isDirty() && $spell->save()) {
-                    $result->updatedSpell();
-
-                    CombatLogSpellEvent::create([
-                        'spell_id'        => $observation['spell_id'],
-                        'event_type'      => CombatLogSpellEventType::PropertyChanged,
-                        'property'        => $observation['property'],
-                        'combat_log_path' => $this->currentCombatLogFilePath,
-                    ]);
-                }
+                CombatLogSpellEvent::create([
+                    'spell_id'        => $observation['spell_id'],
+                    'event_type'      => CombatLogSpellEventType::PropertyChanged,
+                    'property'        => $observation['property'],
+                    'combat_log_path' => $this->currentCombatLogFilePath,
+                ]);
             }
         }
 
@@ -132,37 +131,5 @@ class SpellPropertyObservationCollector implements SpellDataCollectorInterface
                 'property' => $property,
             ]);
         }
-    }
-
-    private function applyPropertyToSpell(SpellModel $spell, SpellProperty $property): void
-    {
-        if ($property === SpellProperty::Aura) {
-            $spell->aura = true;
-        } elseif ($property === SpellProperty::Debuff) {
-            $spell->debuff = true;
-        } else {
-            $spell->miss_types_mask |= $this->missTypeBit($property);
-        }
-    }
-
-    private function spellHasProperty(SpellModel $spell, SpellProperty $property): bool
-    {
-        if ($property === SpellProperty::Aura) {
-            return $spell->aura;
-        }
-
-        if ($property === SpellProperty::Debuff) {
-            return (bool)$spell->debuff;
-        }
-
-        return (bool)($spell->miss_types_mask & $this->missTypeBit($property));
-    }
-
-    private function missTypeBit(SpellProperty $property): int
-    {
-        $name = substr($property->value, 5);
-        $bit  = array_search($name, SpellModel::ALL_MISS_TYPES, true);
-
-        return $bit !== false ? (int)$bit : 0;
     }
 }

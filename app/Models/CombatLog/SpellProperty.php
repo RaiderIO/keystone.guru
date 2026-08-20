@@ -3,6 +3,7 @@
 namespace App\Models\CombatLog;
 
 use App\Models\Spell\Spell;
+use LogicException;
 
 enum SpellProperty: string
 {
@@ -35,6 +36,45 @@ enum SpellProperty: string
     public static function fromMissTypeBit(int $bit): self
     {
         return self::from(sprintf('miss_%s', Spell::ALL_MISS_TYPES[$bit]));
+    }
+
+    /**
+     * The `spells` column this property is stored in.
+     */
+    public function column(): string
+    {
+        return match (true) {
+            $this === self::Aura      => 'aura',
+            $this === self::Debuff    => 'debuff',
+            $this->isCounter()        => 'counters_mask',
+            $this->isImmunityBypass() => 'bypasses_immunities_mask',
+            default                   => 'miss_types_mask',
+        };
+    }
+
+    /**
+     * The bit this property occupies within its mask column, or null for the two properties that are stored as a
+     * boolean column rather than a mask.
+     */
+    public function maskBit(): ?int
+    {
+        if ($this === self::Aura || $this === self::Debuff) {
+            return null;
+        }
+
+        [$names, $prefix] = match (true) {
+            $this->isCounter()        => [Spell::ALL_COUNTERS, 'counter_'],
+            $this->isImmunityBypass() => [Spell::ALL_IMMUNITIES, 'bypass_'],
+            default                   => [Spell::ALL_MISS_TYPES, 'miss_'],
+        };
+
+        foreach ($names as $bit => $name) {
+            if ($this->value === sprintf('%s%s', $prefix, $name)) {
+                return (int)$bit;
+            }
+        }
+
+        throw new LogicException(sprintf('No bit found for SpellProperty: %s', $this->value));
     }
 
     public function isCounter(): bool
