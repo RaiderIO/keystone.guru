@@ -16,8 +16,10 @@ use App\Service\CombatLog\CombatLogPollingHealthServiceInterface;
 use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
 use App\Service\CombatLog\Dtos\CombatLogRunContext;
 use App\Service\CombatLog\Dtos\KeyLevelBand;
+use App\Service\CombatLog\Enums\CombatLogPollingFailureReason;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRun;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
+use App\Service\RaiderIO\Dtos\SearchAdvancedRunsResponse;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Console\Command;
@@ -172,6 +174,8 @@ class PollCombatLogRunsCommand extends Command
                 $filter   = $this->buildFilterForCriterion($modelClass, $model, $season, $band, $completedAtFrom, $limit);
                 $response = $this->raiderIOApiService->searchAdvancedRuns($filter);
 
+                $this->recordSearchFailure($response);
+
                 $this->markAlreadyParsedRuns($response->runs, $knownRunIds, $force);
 
                 foreach ($response->runs as $run) {
@@ -227,6 +231,8 @@ class PollCombatLogRunsCommand extends Command
             limit:           $limit,
             offset:          0,
         ));
+
+        $this->recordSearchFailure($response);
 
         $this->markAlreadyParsedRuns($response->runs, $knownRunIds, $force);
 
@@ -304,6 +310,18 @@ class PollCombatLogRunsCommand extends Command
         $this->healthService->recordDispatched();
 
         $dispatchCounts['dispatched']++;
+    }
+
+    /**
+     * Counts a search that came back with nothing because Raider.IO answered with something that isn't
+     * a run listing. A valid response always carries a total, so a null one is the error - an empty
+     * result set for a narrow filter is a legitimate answer and is not counted (#4173).
+     */
+    private function recordSearchFailure(SearchAdvancedRunsResponse $response): void
+    {
+        if ($response->total === null) {
+            $this->healthService->recordFailure(CombatLogPollingFailureReason::SearchApiError);
+        }
     }
 
     /**

@@ -56,7 +56,7 @@ final class CombatLogPollingHealthServiceTest extends PublicTestCase
         $this->service->recordFailure(CombatLogPollingFailureReason::ParseFailed);
 
         // Act
-        $summary = $this->service->getSummary(Carbon::parse('2026-08-20 14:59:59'));
+        $summary = $this->service->getSummary(Carbon::parse('2026-08-20 14:59:59'), windowHours: 1);
 
         // Assert
         $this->assertSame(2, $summary->dispatched);
@@ -69,18 +69,38 @@ final class CombatLogPollingHealthServiceTest extends PublicTestCase
     }
 
     #[Test]
-    public function getSummary_givenOutcomesRecordedInAnotherHour_returnsEmptySummary(): void
+    public function getSummary_givenOutcomesOutsideTheWindow_returnsEmptySummary(): void
     {
-        // Arrange - counters are bucketed per hour so a bad hour cannot bleed into the next one
+        // Arrange - counters are bucketed per hour, and a window only reads the buckets it covers
         Carbon::setTestNow(Carbon::parse('2026-08-20 14:30:00'));
         $this->service->recordDispatched();
 
         // Act
-        $summary = $this->service->getSummary(Carbon::parse('2026-08-20 15:30:00'));
+        $summary = $this->service->getSummary(Carbon::parse('2026-08-20 15:30:00'), windowHours: 1);
 
         // Assert
         $this->assertTrue($summary->isEmpty());
         $this->assertSame(0.0, $summary->getFailureRate());
+    }
+
+    #[Test]
+    public function getSummary_givenOutcomeRecordedAnHourAfterItsDispatch_countsBothInOneWindow(): void
+    {
+        // Arrange - a backed-up or retried job records its outcome in a later hour than its dispatch,
+        // which read hour by hour would leave the failure with no dispatches to measure it against
+        Carbon::setTestNow(Carbon::parse('2026-08-20 13:50:00'));
+        $this->service->recordDispatched();
+        Carbon::setTestNow(Carbon::parse('2026-08-20 14:05:00'));
+        $this->service->recordFailure(CombatLogPollingFailureReason::ParseFailed);
+
+        // Act
+        $summary = $this->service->getSummary(Carbon::parse('2026-08-20 14:30:00'), windowHours: 3);
+
+        // Assert
+        $this->assertSame(1, $summary->dispatched);
+        $this->assertSame(1, $summary->getTotalFailures());
+        $this->assertSame(1.0, $summary->getFailureRate());
+        $this->assertSame('2026-08-20-12..2026-08-20-14', $summary->hour);
     }
 
     #[Test]
@@ -96,14 +116,14 @@ final class CombatLogPollingHealthServiceTest extends PublicTestCase
             $this->service->recordDispatched();
         }
         for ($i = 0; $i < 6; $i++) {
-            $this->service->recordFailure(CombatLogPollingFailureReason::SegmentsApiError);
+            $this->service->recordFailure(CombatLogPollingFailureReason::SegmentsUnavailable);
         }
 
         $this->log->expects($this->once())->method('reportSummaryDegraded');
         $this->log->expects($this->never())->method('reportSummaryHealthy');
 
         // Act
-        $degraded = $this->service->reportSummary($this->service->getSummary(Carbon::now()));
+        $degraded = $this->service->reportSummary($this->service->getSummary(Carbon::now(), windowHours: 1));
 
         // Assert
         $this->assertTrue($degraded);
@@ -127,7 +147,7 @@ final class CombatLogPollingHealthServiceTest extends PublicTestCase
         $this->log->expects($this->never())->method('reportSummaryDegraded');
 
         // Act
-        $degraded = $this->service->reportSummary($this->service->getSummary(Carbon::now()));
+        $degraded = $this->service->reportSummary($this->service->getSummary(Carbon::now(), windowHours: 1));
 
         // Assert
         $this->assertFalse($degraded);
@@ -153,7 +173,7 @@ final class CombatLogPollingHealthServiceTest extends PublicTestCase
         $this->log->expects($this->never())->method('reportSummaryDegraded');
 
         // Act
-        $degraded = $this->service->reportSummary($this->service->getSummary(Carbon::now()));
+        $degraded = $this->service->reportSummary($this->service->getSummary(Carbon::now(), windowHours: 1));
 
         // Assert
         $this->assertFalse($degraded);
@@ -168,7 +188,7 @@ final class CombatLogPollingHealthServiceTest extends PublicTestCase
         $this->service->recordFailure(CombatLogPollingFailureReason::SearchApiError);
 
         // Act
-        $summary = $this->service->getSummary(Carbon::now());
+        $summary = $this->service->getSummary(Carbon::now(), windowHours: 1);
 
         // Assert
         $this->assertSame(1.0, $summary->getFailureRate());

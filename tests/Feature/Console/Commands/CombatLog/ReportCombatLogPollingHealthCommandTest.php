@@ -27,7 +27,7 @@ final class ReportCombatLogPollingHealthCommandTest extends PublicTestCase
      * @throws Exception
      */
     #[Test]
-    public function handle_givenDefaultOptions_reportsOnThePreviousHour(): void
+    public function handle_givenDefaultOptions_reportsOnTheWindowEndingInThePreviousHour(): void
     {
         // Arrange - the current hour is still being written to, so it is the previous one that is reported on
         Carbon::setTestNow(Carbon::parse('2026-08-20 15:10:00'));
@@ -35,7 +35,7 @@ final class ReportCombatLogPollingHealthCommandTest extends PublicTestCase
         $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
         $healthService->expects($this->once())
             ->method('getSummary')
-            ->with($this->callback(static fn(Carbon $hour): bool => $hour->format('Y-m-d-H') === '2026-08-20-14'))
+            ->with($this->callback(static fn(Carbon $endHour): bool => $endHour->format('Y-m-d-H') === '2026-08-20-14'))
             ->willReturn($this->makeSummary(dispatched: 10, failures: 2));
         $healthService->expects($this->once())->method('reportSummary')->willReturn(false);
         app()->instance(CombatLogPollingHealthServiceInterface::class, $healthService);
@@ -48,9 +48,9 @@ final class ReportCombatLogPollingHealthCommandTest extends PublicTestCase
      * @throws Exception
      */
     #[Test]
-    public function handle_givenNothingPolledThatHour_doesNotReport(): void
+    public function handle_givenNothingPolledInThatWindow_doesNotReport(): void
     {
-        // Arrange - an hour in which nothing happened has nothing to say, healthy or otherwise
+        // Arrange - a window in which nothing happened has nothing to say, healthy or otherwise
         $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
         $healthService->method('getSummary')->willReturn($this->makeSummary(dispatched: 0, failures: 0));
         $healthService->expects($this->never())->method('reportSummary');
@@ -64,7 +64,7 @@ final class ReportCombatLogPollingHealthCommandTest extends PublicTestCase
      * @throws Exception
      */
     #[Test]
-    public function handle_givenHoursAgoOption_reportsOnThatHour(): void
+    public function handle_givenHoursAgoOption_reportsOnTheWindowEndingInThatHour(): void
     {
         // Arrange
         Carbon::setTestNow(Carbon::parse('2026-08-20 15:10:00'));
@@ -72,7 +72,7 @@ final class ReportCombatLogPollingHealthCommandTest extends PublicTestCase
         $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
         $healthService->expects($this->once())
             ->method('getSummary')
-            ->with($this->callback(static fn(Carbon $hour): bool => $hour->format('Y-m-d-H') === '2026-08-20-12'))
+            ->with($this->callback(static fn(Carbon $endHour): bool => $endHour->format('Y-m-d-H') === '2026-08-20-12'))
             ->willReturn($this->makeSummary(dispatched: 10, failures: 9));
         $healthService->method('reportSummary')->willReturn(true);
         app()->instance(CombatLogPollingHealthServiceInterface::class, $healthService);

@@ -7,7 +7,7 @@ use App\Service\CombatLog\CombatLogPollingHealthServiceInterface;
 use Illuminate\Support\Carbon;
 
 /**
- * Reports on what the previous hour of combat log polling amounted to, and pages only when a
+ * Reports on what the last few hours of combat log polling amounted to, and pages only when a
  * substantial share of it failed.
  *
  * Individual failures - Raider.IO gateway errors, missing segments, unparsable logs - are logged
@@ -17,15 +17,16 @@ use Illuminate\Support\Carbon;
  */
 class ReportCombatLogPollingHealthCommand extends SchedulerCommand
 {
-    protected $signature = 'combatlog:reportpollinghealth {--hours-ago=1 : Which hour to report on, counting back from now}';
+    protected $signature = 'combatlog:reportpollinghealth {--hours-ago=1 : Which hour the reported window ends in, counting back from now}';
 
-    protected $description = 'Reports the previous hour of combat log polling, at error level if a substantial share of it failed.';
+    protected $description = 'Reports the last few hours of combat log polling, at error level if a substantial share of it failed.';
 
     public function handle(CombatLogPollingHealthServiceInterface $healthService): int
     {
         return $this->trackTime(function () use ($healthService): void {
-            // The hour before this one by default: the current one is still being written to, and
-            // reporting on a half-finished hour would page on a spike that is about to even out.
+            // The window ends with the hour before this one by default: the current one is still being
+            // written to, and reporting on a half-finished hour would page on a spike that is about to
+            // even out. How many hours it spans is the health service's business, not this command's.
             $hour    = Carbon::now()->subHours(max(1, (int)$this->option('hours-ago')));
             $summary = $healthService->getSummary($hour);
 

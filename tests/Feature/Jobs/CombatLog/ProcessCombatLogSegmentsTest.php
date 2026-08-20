@@ -425,9 +425,9 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
      * @throws Exception
      */
     #[Test]
-    public function handle_givenNullSegmentsResponse_releasesCriteriaBudgetWithoutCountingFailureAgain(): void
+    public function handle_givenNullSegmentsResponse_releasesCriteriaBudgetAndCountsFailure(): void
     {
-        // Arrange - RaiderIOApiService already counted this one, and knows which reason it was
+        // Arrange - the job counts this, not RaiderIOApiService, which also serves non-polling callers
         $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
         $raiderIOApiService->method('getCombatLogSegmentsForRun')->willReturn(null);
         app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
@@ -439,7 +439,9 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
         app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
 
         $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
-        $healthService->expects($this->never())->method('recordFailure');
+        $healthService->expects($this->once())
+            ->method('recordFailure')
+            ->with(CombatLogPollingFailureReason::SegmentsUnavailable);
         app()->instance(CombatLogPollingHealthServiceInterface::class, $healthService);
 
         // Act
@@ -464,8 +466,15 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
         app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
 
         $extractionService = $this->createMockPublic(CombatLogDataExtractionServiceInterface::class);
+        // The real exception the parser throws: it extends Exception, not RuntimeException, precisely
+        // so it lands in the parse-error branch instead of being re-thrown for a retry
         $extractionService->method('extractData')
-            ->willThrowException(new InvalidArgumentException('Unable to parse line'));
+            ->willThrowException(new CombatLogParseException(
+                42,
+                'SPELL_DAMAGE,Player-1084-0B4087DE,"Pa',
+                'Unable to parse line',
+                new InvalidArgumentException('Unable to parse line'),
+            ));
         app()->instance(CombatLogDataExtractionServiceInterface::class, $extractionService);
 
         $criteriaService = $this->createMockPublic(CombatLogParsingCriteriaServiceInterface::class);

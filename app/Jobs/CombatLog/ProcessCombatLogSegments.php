@@ -87,12 +87,11 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
             if ($segmentsResponse === null || empty($segmentsResponse->segments)) {
                 $log->handleSegmentsNotAvailable($this->runId);
 
-                // A null response was already counted by RaiderIOApiService, which knows whether it
-                // was an upstream error or simply not uploaded yet; an empty segments array has no
-                // upstream log or counter at all, so this is the only place it can be counted.
-                if ($segmentsResponse !== null) {
-                    $healthService->recordFailure(CombatLogPollingFailureReason::SegmentsUnavailable);
-                }
+                // Counted here rather than in RaiderIOApiService, which serves callers that have
+                // nothing to do with polling (the internal API, combatlog:downloadruns): only a run
+                // this job was handed is a polled run. Which flavour of nothing came back - a 404,
+                // an error page, an empty segments array - is in the logs; here they are one thing.
+                $healthService->recordFailure(CombatLogPollingFailureReason::SegmentsUnavailable);
 
                 $this->releaseCriteriaBudget();
 

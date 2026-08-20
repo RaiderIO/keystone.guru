@@ -549,7 +549,11 @@ return [
             // that yields no data costs nothing on its own - it is blacklisted and the budget it
             // consumed is given back - so both a meaningful volume and a meaningful share of the
             // hour's runs have to fail before combatlog:reportpollinghealth reports at error level.
+            // The defaults sit well above the observed steady state: #3918 measured the two biggest
+            // failure clusters on staging at roughly one an hour each, so 25 of them across the
+            // window is an order of magnitude more than a normal day produces.
             'health' => [
+                'window_hours'     => (int)env('COMBAT_LOG_POLLING_HEALTH_WINDOW_HOURS', 3),
                 'min_failures'     => (int)env('COMBAT_LOG_POLLING_HEALTH_MIN_FAILURES', 25),
                 'min_failure_rate' => (float)env('COMBAT_LOG_POLLING_HEALTH_MIN_FAILURE_RATE', 0.5),
             ],

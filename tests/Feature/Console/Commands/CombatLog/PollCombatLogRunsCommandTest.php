@@ -9,8 +9,10 @@ use App\Models\Dungeon;
 use App\Models\Season;
 use App\Service\CombatLog\CombatLogParsingCriteriaServiceInterface;
 use App\Service\CombatLog\CombatLogPollingBandServiceInterface;
+use App\Service\CombatLog\CombatLogPollingHealthServiceInterface;
 use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
 use App\Service\CombatLog\Dtos\KeyLevelBand;
+use App\Service\CombatLog\Enums\CombatLogPollingFailureReason;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRun;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsResponse;
@@ -138,6 +140,57 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
         } finally {
             ParsedCombatLog::query()->where('run_id', $run->id)->delete();
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenSearchResponseWithoutTotal_countsSearchApiFailure(): void
+    {
+        // Arrange - a null total is Raider.IO having answered with something that isn't a run listing
+        Bus::fake();
+
+        $criteriaService = $this->makeCriteriaService(eligibleDungeons: collect([$this->dungeon]));
+        $criteriaService->method('shouldParse')->willReturn(true);
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->method('searchAdvancedRuns')->willReturn(new SearchAdvancedRunsResponse([], null));
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+
+        $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
+        $healthService->expects($this->atLeastOnce())
+            ->method('recordFailure')
+            ->with(CombatLogPollingFailureReason::SearchApiError);
+        $healthService->expects($this->never())->method('recordDispatched');
+        app()->instance(CombatLogPollingHealthServiceInterface::class, $healthService);
+
+        // Act + Assert
+        $this->artisan('combatlog:pollruns')->assertSuccessful();
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenEmptySearchResultWithTotal_countsNoFailure(): void
+    {
+        // Arrange - a narrow filter legitimately matching nothing is an answer, not an error
+        Bus::fake();
+
+        $criteriaService = $this->makeCriteriaService(eligibleDungeons: collect([$this->dungeon]));
+        $criteriaService->method('shouldParse')->willReturn(true);
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $this->mockRaiderIOApiService();
+
+        $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
+        $healthService->expects($this->never())->method('recordFailure');
+        app()->instance(CombatLogPollingHealthServiceInterface::class, $healthService);
+
+        // Act + Assert
+        $this->artisan('combatlog:pollruns')->assertSuccessful();
     }
 
     /**

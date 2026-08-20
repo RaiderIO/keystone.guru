@@ -5,12 +5,13 @@ namespace App\Service\CombatLog\Dtos;
 use App\Service\CombatLog\Enums\CombatLogPollingFailureReason;
 
 /**
- * What one hour of combat log polling amounted to: how many runs were dispatched, how many of them
+ * What a window of combat log polling amounted to: how many runs were dispatched, how many of them
  * yielded data, and how many failed for each reason.
  */
 readonly class CombatLogPollingHealthSummary
 {
     /**
+     * @param string             $hour             The bucket this covers, or `first..last` for a multi-hour window.
      * @param array<string, int> $failuresByReason Keyed by CombatLogPollingFailureReason value, every reason present.
      */
     public function __construct(
@@ -27,12 +28,11 @@ readonly class CombatLogPollingHealthSummary
     }
 
     /**
-     * Failures as a fraction of everything that was attempted this hour.
+     * Failures as a fraction of everything that was attempted in this window.
      *
      * Failures are counted against the number of dispatched runs where that is the larger of the
-     * two: the failure counters include ones that never belonged to a dispatched run at all (a
-     * search API error happens before any run is picked), and a run dispatched at the end of an
-     * hour fails in the next one. Neither should be able to produce a rate above 1.
+     * two: the failure counters include ones that never belonged to a dispatched run at all - a
+     * search API error happens before any run is picked - and those must not produce a rate above 1.
      */
     public function getFailureRate(): float
     {

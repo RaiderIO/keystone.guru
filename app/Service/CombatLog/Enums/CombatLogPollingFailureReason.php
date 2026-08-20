@@ -13,10 +13,11 @@ enum CombatLogPollingFailureReason: string
     /** Raider.IO answered the search API with something that isn't a run listing (typically a Cloudflare 5xx page). */
     case SearchApiError = 'search_api_error';
 
-    /** Raider.IO answered the combat log segments API with something that isn't a segments response. */
-    case SegmentsApiError = 'segments_api_error';
-
-    /** Raider.IO has no combat log segments (yet) for this run. */
+    /**
+     * Raider.IO yielded no usable combat log segments for a polled run - not uploaded yet, an API
+     * error, or an empty segments array. Which of the three it was stays in the logs; for the volume
+     * signal this aggregate is, they are the same thing: a run that gave us nothing.
+     */
     case SegmentsUnavailable = 'segments_unavailable';
 
     /**

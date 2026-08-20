@@ -42,19 +42,33 @@ class CombatLogPollingHealthService implements CombatLogPollingHealthServiceInte
         $this->increment($reason->value);
     }
 
-    public function getSummary(Carbon $hour): CombatLogPollingHealthSummary
+    public function getSummary(Carbon $endHour, ?int $windowHours = null): CombatLogPollingHealthSummary
     {
-        $bucket = $this->getBucket($hour);
+        // A run is counted as dispatched in the hour it was polled, but its outcome lands in the hour
+        // the queue got to it - which is a later one whenever the queue is backed up or the job is
+        // retried (backoff is 30s and 120s, and the job may take up to its 1800s timeout). A single
+        // hour read on its own therefore mixes this hour's dispatches with the previous hour's
+        // outcomes, and an hour holding nothing but spillover has no dispatches to measure its
+        // failures against at all. Summing a few consecutive hours puts dispatches and their outcomes
+        // back in the same window, at the cost of consecutive reports overlapping - which is what we
+        // want anyway: an outage that lasts is meant to be reported again (#4173).
+        $windowHours ??= (int)config('keystoneguru.raider_io.combat_log_polling.health.window_hours');
+        $windowHours = max(1, $windowHours);
+
+        $buckets = [];
+        for ($hoursBack = $windowHours - 1; $hoursBack >= 0; $hoursBack--) {
+            $buckets[] = $this->getBucket($endHour->copy()->subHours($hoursBack));
+        }
 
         $failuresByReason = [];
         foreach (CombatLogPollingFailureReason::cases() as $reason) {
-            $failuresByReason[$reason->value] = $this->read($bucket, $reason->value);
+            $failuresByReason[$reason->value] = $this->readAll($buckets, $reason->value);
         }
 
         return new CombatLogPollingHealthSummary(
-            hour:             $bucket,
-            dispatched:       $this->read($bucket, self::DISPATCHED_COUNTER),
-            succeeded:        $this->read($bucket, self::SUCCEEDED_COUNTER),
+            hour:             $windowHours === 1 ? $buckets[0] : sprintf('%s..%s', $buckets[0], end($buckets)),
+            dispatched:       $this->readAll($buckets, self::DISPATCHED_COUNTER),
+            succeeded:        $this->readAll($buckets, self::SUCCEEDED_COUNTER),
             failuresByReason: $failuresByReason,
         );
     }
@@ -64,8 +78,8 @@ class CombatLogPollingHealthService implements CombatLogPollingHealthServiceInte
         $minFailures = (int)config('keystoneguru.raider_io.combat_log_polling.health.min_failures');
         $minRate     = (float)config('keystoneguru.raider_io.combat_log_polling.health.min_failure_rate');
 
-        // Both conditions must hold: the rate alone would page on the two failures of an hour that
-        // only dispatched two runs, and the count alone would page on a busy hour that was fine.
+        // Both conditions must hold: the rate alone would page on the two failures of a window that
+        // only dispatched two runs, and the count alone would page on a busy window that was fine.
         $degraded = $summary->getTotalFailures() >= $minFailures && $summary->getFailureRate() >= $minRate;
 
         if ($degraded) {
@@ -101,9 +115,18 @@ class CombatLogPollingHealthService implements CombatLogPollingHealthServiceInte
         Cache::increment($key);
     }
 
-    private function read(string $bucket, string $counter): int
+    /**
+     * @param string[] $buckets
+     */
+    private function readAll(array $buckets, string $counter): int
     {
-        return (int)Cache::get($this->getCacheKey($bucket, $counter), 0);
+        $total = 0;
+
+        foreach ($buckets as $bucket) {
+            $total += (int)Cache::get($this->getCacheKey($bucket, $counter), 0);
+        }
+
+        return $total;
     }
 
     private function getBucket(Carbon $moment): string

@@ -32,9 +32,11 @@ interface CombatLogPollingHealthServiceInterface
     public function recordFailure(CombatLogPollingFailureReason $reason): void;
 
     /**
-     * Returns the counters for the hour the given moment falls in.
+     * Returns the counters for the window of hours ending in the hour the given moment falls in.
+     * The window defaults to the configured one and exists because a run's outcome can land in a
+     * later hour than its dispatch - see the implementation.
      */
-    public function getSummary(Carbon $hour): CombatLogPollingHealthSummary;
+    public function getSummary(Carbon $endHour, ?int $windowHours = null): CombatLogPollingHealthSummary;
 
     /**
      * Logs the given hour's summary - at error level, and only then, when the hour saw a substantial
