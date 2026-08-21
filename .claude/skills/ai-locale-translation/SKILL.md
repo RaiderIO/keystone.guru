@@ -256,8 +256,8 @@ about NPC names and object labels. Record counts and lessons in the locale sheet
   (`LocalizationSync::$lemmaQuotes`, covered by `LocalizationSyncTest`); `check_sync.py` in
   `status.sh --sync` is the guard that would have caught it (~25 strings per locale were at risk).
 - **`translate:scan` emits `'logic': []`** for a file with no strings; `build_worklist.py` drops
-  non-string buckets. `lang/texts_to_translate.json` is tracked (committed during #4165); it is
-  derived output and the scan rewrites it — commit it or not, it makes no difference.
+  non-string buckets. `lang/texts_to_translate.json` is derived output and gitignored — the scan
+  regenerates it in seconds (`status.sh` always does).
 - **Empty stubs come in two quote styles** (`''` or `""`, copied from the en_US source's quoting);
   `inject.py` matches both and writes single quotes.
 - **Leaf keys repeat across sibling arrays** (`gong` three times in `mapping.php`); both scripts
