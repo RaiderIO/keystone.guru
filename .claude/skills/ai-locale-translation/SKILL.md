@@ -311,6 +311,67 @@ reliable signal than re-deriving the rule from official `npcs.php` names, which 
 mistake shows can lead you the wrong way even when done carefully and even when the official name
 is real and correct.
 
+### Korean glossary (ko_KR_ai, established in the #4165 pass)
+
+| English | Korean | English | Korean |
+|---|---|---|---|
+| Dungeon | 던전 | Floor | 층 |
+| Pull | 풀 (loanword, transliterated) | Pack | 무리/묶음 (translated, situational; `enemypack` UI label is 묶음) |
+| Affix | 접사 (translated, matches pre-existing `js.php:93`) | Boss | 보스 (loanword) |
+| Checkpoint | 체크포인트 (loanword) | Compendium | 도감 |
+| Enemy forces | 적 병력 (full form); **적병** abbreviation for checkpoint pills/tooltips/snackbars | Weight (line thickness) | 무게 (majority 3:1 over 굵기) |
+| Teeming | 번성 (read from `affixes.php`) | Nerubian | 네루비안 (read from `npcs.php` — **not** 네루빔, a mistake this pass made and fixed) |
+| Pledge Pin | 충성의 핀 (read from `spells.php` — **not** 서약 핀, same category of mistake) | Ad-free (giveaway) | 광고 없음 (제공/상태), matches pre-existing `js.php:430-434` |
+
+Add a row here whenever a new locale forces a decision worth keeping.
+
+**Register:** `ko_KR_ai` is formal 하십시오체 (verb endings `-습니다`/`-세요`) throughout — a
+different formality mechanism from French's pronoun-based *vous* but the same "formal" register
+choice. 336 pre-existing `-습니다` hits and 80 `-세요` hits against near-zero informal hits before
+this pass; no register cleanup was needed, and all new keys were written in `-습니다`/`-세요` form.
+
+**Codex review found ~90 issues, but only 29 were real** — the rest were two repeat mistakes
+worth restating here because they generalize to every remaining locale, not just Korean:
+
+- **~15 findings pointed at lines this pass never touched** — pre-existing content elsewhere in
+  `mapping.php` (the `midnight.*` sections) that Codex's review prompt flagged because it reviewed
+  the whole locale's quality against `en_US`, not strictly the commit diff. Gate every finding
+  against `git show <sha> -- lang/<locale>/<file> | grep '^+'` before applying it — this pass's
+  out-of-scope rate was five times `fr_FR_ai`'s (3 of 18) because the review prompt didn't scope
+  Codex to the diff tightly enough. Next locale: tell Codex explicitly to only report on lines
+  present in that diff, not just "review the commit".
+- **~70 findings were the it_IT NPC/boss-name mistake, from the reviewer's side this time.**
+  Almost every "official Korean name ignored" finding pointed at an NPC/creature/boss name inside
+  `mapping.php` prose — including the *exact same two names* (`Ramstein the Gorger`,
+  `Vengeful Fleshreaper`) SKILL.md already cites as the canonical example of names that must stay
+  English. This pass's review prompt tried to pre-empt this with an exception clause ("flag it
+  only if an official localization exists") that itself contradicts the rule — names stay English
+  **even when** `npcs.php` has an official localization, that is the whole point of the it_IT
+  lesson above. Next locale: state the rule as an absolute in the review prompt, no exception
+  clause, or expect the same false-positive cluster again.
+
+The 29 real fixes: `df.algeth_ar_academy`'s 5 stat-buff labels didn't match the pre-existing
+`midnight.algeth_ar_academy` block for the same real dungeon reused under a different
+game-version key — the `fr_FR_ai` `algeth_ar_academy`/`windrunner_spire` lesson, repeated
+exactly, because this pass didn't check for it up front; 5 Dragonflight Pledge Pin names used an
+invented "서약 핀" instead of the official "충성의 핀" sitting in this locale's own `spells.php`;
+4 Title-Case object labels (`Heavy Door`, `Stairwell Door`, `Supply Room Door`, `Sewer Gate`) were
+translated instead of kept English, breaking the `es_MX_ai`-established exact-tooltip-name rule
+applied inconsistently within the same pass; plus a `Json`→`JSON` casing fix, a redundant `#%d위`
+double rank-marker, an invented `네루빔` for the officially-attested `네루비안`, 9
+`unlocks_after_*` keys missing the `-됩니다` ending sibling keys used, and 2 `주문`→`플레이어
+주문` disambiguation fixes. Full triage in `handovers/ko_KR_ai.md`.
+
+**Do a dungeon-appears-twice check before translating any dungeon's `mapping.php` block**, not
+just for locales that already had the `fr_FR_ai` incident:
+```bash
+grep -c "'<dungeon_slug>' => \["  lang/en_US/mapping.php
+```
+A count of 2 means the dungeon has blocks under two different top-level game-version keys (e.g.
+Algeth'ar Academy under both `midnight` and `df` — a Midnight Season 2 remix of a Dragonflight
+dungeon) — check the other block's existing translation before writing the empty one, every time.
+This is now the second locale in a row this exact mistake has been caught in.
+
 ## Normalising an existing locale (overwriting existing values)
 
 The default workflow never overwrites a non-empty value. When Wotuu explicitly asks for one -
@@ -436,8 +497,8 @@ in the excluded files, which are not this workflow's business.
 | `es_MX_ai` | 2980 | 769 | Done — #4165, 2026-08-20 (no register cleanup needed, already informal *tú*) |
 | `fr_FR_ai` | 2986 | 769 | Done — #4165, 2026-08-20, PR #4209 (formal *vous* register, no cleanup needed; plus 27 Codex-review fixes, see `handovers/fr_FR_ai.md`) |
 | `it_IT_ai` | 2984 | 769 | Done — #4165, 2026-08-21 (informal *tu* register, no cleanup needed; plus ~90 Codex-review fixes, almost all reverting NPC/creature names in `mapping.php` prose back to English — see the Italian glossary above) |
-| `ko_KR_ai` | 3042 | 745 | Not started — next locale up |
-| `pt_BR_ai` | 2957 | 745 | Not started |
+| `ko_KR_ai` | 3042 | 769 | Done — #4165, 2026-08-21, PR #4209 (formal 하십시오체 register, no cleanup needed; plus 29 Codex-review fixes — see `handovers/ko_KR_ai.md`, including a repeat of the `fr_FR_ai` duplicate-dungeon-block lesson) |
+| `pt_BR_ai` | 2957 | 745 | Not started — next locale up |
 | `ru_RU_ai` | 2841 | 745 | Not started |
 | `zh_CN_ai` | 3097 | 745 | Not started |
 | `zh_TW_ai` | 3094 | 745 | Not started |
@@ -448,5 +509,5 @@ Do one locale per session and per commit: the work lists are independent, and a 
 never be ambiguous about which locale caused it.
 
 Per-locale notes measured before starting a pass live in `handovers/<locale>.md` next to this file
-(`handovers/it_IT_ai.md` is the next one up). Write one for a locale when you finish it, so the pass
+(`handovers/ko_KR_ai.md` is the next one up). Write one for a locale when you finish it, so the pass
 after yours starts from numbers rather than from a re-measurement.
