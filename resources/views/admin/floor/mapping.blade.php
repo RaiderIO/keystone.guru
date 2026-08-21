@@ -1,14 +1,17 @@
 <?php
 
 use App\Logic\MapContext\Map\MapContextMappingVersion;
+use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
+use Illuminate\Support\Collection;
 
 /**
  * @var Floor                    $floor
  * @var MapContextMappingVersion $mapContext
  * @var MappingVersion           $mappingVersion
+ * @var Collection<int, Dungeon> $gameVersionDungeons
  */
 ?>
 
@@ -57,6 +60,16 @@ use App\Models\User;
                     'enemyInfo' => true,
                 ],
             ],
+            // Navigating to a different dungeon from here should land on ITS newest mapping version,
+            // not replay the generic site-wide dungeon-context redirect (which just re-shows the
+            // referring URL for the newly selected dungeon, i.e. this exact mapping version - #4218).
+            'dungeonContextLinks' => $gameVersionDungeons->mapWithKeys(fn(Dungeon $dungeon) => [
+                $dungeon->key => route('admin.floor.edit.mapping', [
+                    'dungeon' => $dungeon,
+                    'floor' => $dungeon->floors()->first(),
+                    'mapping_version' => $dungeon->getCurrentMappingVersion(),
+                ]),
+            ]),
         ])
     </div>
 
