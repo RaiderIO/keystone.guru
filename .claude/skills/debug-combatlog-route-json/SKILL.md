@@ -39,6 +39,33 @@ docker cp tmp/some_run.json <worktree-project>-app-1:/tmp/some_run.json
 
 (Find the container name with `docker compose ps` from inside the worktree, or `docker ps | grep app-1`.)
 
+### Pulling production enemy failures and their post bodies (#4222)
+
+When the question is "why does this dungeon produce so many enemy failures", the bodies live on
+production and the failures in its `combat_log_route_enemy_failures` table. Two admin-only API
+endpoints expose them — `GET api/v1/combatlog/enemy-failures/{dungeon slug}` (cursor-paginated rows,
+each with the route's public key) and `GET api/v1/combatlog/route/{public key}/post-body` — and
+`combatlog:importenemyfailures` drives both:
+
+```bash
+# replaces the local failures of the dungeon with production's, and downloads every failing route's
+# body into storage/app/enemy-failure-bodies/<key>/ for replay. Credentials are one "user:password"
+# line piped on stdin - the container cannot see ~/.config, so don't try --credentials-file with a
+# host path.
+docker compose exec -T app php artisan combatlog:importenemyfailures <dungeon key> \
+    --download-post-bodies=storage/app/enemy-failure-bodies/<dungeon key> \
+    < ~/.config/keystone-guru/combatlog-production-basic-auth
+
+# then replay them all (each becomes a local DungeonRoute and re-records failures locally with
+# your local mapping version and real local route ids):
+docker compose exec -T app php artisan combatlog:ingestcombatlogroutejson storage/app/enemy-failure-bodies/<dungeon key>
+```
+
+`--host=staging`, `--mapping-version=<remote id>`, `--since=<date>` narrow the pull. Imported rows
+keep production's `dungeon_route_id`/`mapping_version_id` — the sidebar's "matching routes" links
+don't resolve for them, which is another reason to replay the bodies rather than read the imported
+rows when you need the builder's actual decisions.
+
 ## 2. Write a debug driver script
 
 Call the service directly instead of going through HTTP — it skips validation noise and lets you

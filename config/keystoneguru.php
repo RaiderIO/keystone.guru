@@ -429,6 +429,18 @@ return [
         'use_local_mock_service' => env('RAIDERIO_USE_LOCAL_MOCK_SERVICE', false),
     ],
 
+    // Other deployments of keystone.guru that local tooling (e.g. combatlog:importenemyfailures) may pull data from,
+    // keyed by the --host value those commands accept. Credentials are never configured here - they are read from a
+    // file/stdin per invocation.
+    'remote_hosts' => [
+        'production' => [
+            'base_url' => env('KSG_REMOTE_PRODUCTION_URL', 'https://keystone.guru'),
+        ],
+        'staging' => [
+            'base_url' => env('KSG_REMOTE_STAGING_URL', 'https://staging.keystone.guru'),
+        ],
+    ],
+
     'patreon' => [
         'oauth' => [
             'client_id' => env('PATREON_CLIENT_ID'),
