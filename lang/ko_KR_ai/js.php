@@ -500,7 +500,7 @@ return [
     'filter_input_select_classes_header'                                   => '클래스: :classes',
     'filter_input_select_specializations_player_deaths_header'             => '전문화 (사망): :specializations',
     'filter_input_select_classes_player_deaths_header'                     => '클래스 (사망): :classes',
-    'filter_input_select_player_spells_header'                             => '주문: :spells',
+    'filter_input_select_player_spells_header'                             => '플레이어 주문: :spells',
     'filter_input_key_level_header'                                        => '키 레벨: :value',
     'filter_input_min_samples_required_header'                             => '최소 샘플 필요: :value',
     'filter_input_item_level_header'                                       => '아이템 레벨: :value',

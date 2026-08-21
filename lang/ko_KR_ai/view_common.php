@@ -73,7 +73,7 @@ return [
         ],
         'cardhero' => [
             'top_community_route'    => '최고의 커뮤니티 경로',
-            'ranked_community_route' => '커뮤니티 경로 #%d위',
+            'ranked_community_route' => '커뮤니티 경로 %d위',
             'views'                  => '조회수 %s회',
             'favorites'              => '즐겨찾기 %s회',
             'pulls'                  => '{1} 풀 :count개|[2,*] 풀 :count개',
@@ -401,7 +401,7 @@ return [
                 'event_type'             => '이벤트 유형',
                 'data_type'              => '데이터 유형',
                 'data_type_title'        => '적 위치는 교전 시 적의 원래 위치를 사용하고, 플레이어 위치는 적과 교전 시 플레이어의 위치를 사용합니다 (전투 로그 위치).',
-                'player_spells'          => '주문',
+                'player_spells'          => '플레이어 주문',
                 'npc_death_alt'          => '적 사망',
                 'player_death_alt'       => '플레이어 사망',
                 'spell_casts_alt'        => '주문 시전',

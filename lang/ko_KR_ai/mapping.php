@@ -24,7 +24,7 @@ return [
             'tol_dagor' => [
                 'cannon'                 => '대포',
                 'map_third_holding_cell' => 'Keystone Guru: 여기에는 세 번째 구금실이 있습니다. 지도가 잘못되었습니다.',
-                'sewer_gate'             => '하수구 문 (도적 또는 열쇠로 열 수 있음)',
+                'sewer_gate'             => 'Sewer Gate (도적 또는 열쇠로 열 수 있음)',
             ],
         ],
         'cata' => [
@@ -67,7 +67,7 @@ return [
                 'shadowforge_brazier'         => 'Shadowforge Brazier',
                 'shadowforge_gate'            => 'Shadowforge Gate: Shadowforge Key가 필요합니다.',
                 'fireguard_destroyers_lava'   => '일부 Fireguard Destroyer는 아래 용암 속에 살고 있습니다.',
-                'supply_room_door'            => '보급고 문',
+                'supply_room_door'            => 'Supply Room Door',
                 'the_black_anvil'             => 'The Black Anvil',
                 'the_lyceum'                  => 'The Lyceum: Shadowforge Key가 필요합니다.',
                 'molten_core_entrance'        => '화산 심장부 입구.',
@@ -76,7 +76,7 @@ return [
             ],
             'deadmines' => [
                 'box_of_assorted_parts'        => 'Box of Assorted Parts',
-                'heavy_door'                   => '무거운 문',
+                'heavy_door'                   => 'Heavy Door',
                 'large_battered_chest'         => 'Large Battered Chest',
                 'patrol_after_gilnid'          => '이 패트롤은 Gilnid 처치 후 등장합니다. 주의하세요!',
                 'patrol_after_rhahkzor'        => '이 패트롤은 Rhahk\'Zor 처치 후 등장합니다. 주의하세요!',
@@ -296,11 +296,11 @@ Alzzin the Wildshaper 처치 후에는 이 동굴을 이용해 인스턴스를 �
         ],
         'df' => [
             'algeth_ar_academy' => [
-                'healing_taken_increased'   => '받는 치유량 +10%',
-                'versatility_increased'     => '다재다능 +5%',
-                'mastery_rating_increased'  => '특화 수치 +584',
-                'critical_strike_increased' => '치명타 5%',
-                'haste_increased'           => '가속 5%',
+                'healing_taken_increased'   => '+10% 받는 치유량 증가',
+                'versatility_increased'     => '+5% 유연성',
+                'mastery_rating_increased'  => '+584 숙련도',
+                'critical_strike_increased' => '+5% 치명타 적중',
+                'haste_increased'           => '+5% 가속',
                 'go_north'                  => '북쪽으로 이동',
                 'go_south'                  => '남쪽으로 이동',
             ],
@@ -312,9 +312,9 @@ Alzzin the Wildshaper 처치 후에는 이 동굴을 이용해 인스턴스를 �
                 'captive_tuskarr'                  => '사로잡힌 터스카르',
                 'decaying_cauldron'                => '부패한 가마솥',
                 'decaying_cauldron_detail'         => '부패한 가마솥: 활성화하면 모든 파티원이 정화된 부패물을 획득하여 질병 하나를 정화할 수 있는 추가 행동 단축키를 얻습니다. 정화된 부패물은 사용 시 소모되지만, 가마솥은 다시 방문하여 추가로 충전할 수 있습니다. 사용하려면 용군단 연금술 25가 필요합니다.',
-                'unlocks_after_hackclaw'           => 'Hackclaw\'s War-Band 처치 후 잠금 해제',
-                'unlocks_after_bracken_warscourge' => 'Bracken Warscourge 처치 후 잠금 해제',
-                'unlocks_after_treemouth'          => 'Treemouth 처치 후 잠금 해제',
+                'unlocks_after_hackclaw'           => 'Hackclaw\'s War-Band 처치 후 잠금 해제됩니다.',
+                'unlocks_after_bracken_warscourge' => 'Bracken Warscourge 처치 후 잠금 해제됩니다.',
+                'unlocks_after_treemouth'          => 'Treemouth 처치 후 잠금 해제됩니다.',
                 'captive_tuskarr_down'             => 'v 사로잡힌 터스카르',
                 'decaying_cauldron_down'           => 'v 부패한 가마솥',
                 'decaying_cauldron_down_detail'    => 'v 부패한 가마솥: 활성화하면 모든 파티원이 정화된 부패물을 획득하여 질병 하나를 정화할 수 있는 추가 행동 단축키를 얻습니다. 정화된 부패물은 사용 시 소모되지만, 가마솥은 다시 방문하여 추가로 충전할 수 있습니다. 사용하려면 용군단 연금술 25가 필요합니다.',
@@ -324,18 +324,18 @@ Alzzin the Wildshaper 처치 후에는 이 동굴을 이용해 인스턴스를 �
                 'infused_mushroom_herbalism'     => '주입된 버섯 (30분 동안 5초마다 중독/질병 스택 하나를 제거, 용군단 채초 25 필요)',
                 'infused_mushroom'               => '주입된 버섯 (30분 동안 5초마다 중독/질병 스택 하나를 제거)',
                 'infused_mushroom_herbalism_alt' => '주입된 버섯: 30분 동안 5초마다 중독/질병 스택 하나를 제거합니다. 용군단 채초 25가 필요합니다.',
-                'unlocks_after_khajin'           => 'Khajin the Unyielding 처치 후 잠금 해제',
-                'unlocks_after_watcher_irideus'  => 'Watcher Irideus 처치 후 잠금 해제',
-                'unlocks_after_infusion_chamber' => '주입실 진입 후 잠금 해제',
-                'unlocks_after_mini_bosses'      => '미니 보스 처치 후 잠금 해제.',
+                'unlocks_after_khajin'           => 'Khajin the Unyielding 처치 후 잠금 해제됩니다.',
+                'unlocks_after_watcher_irideus'  => 'Watcher Irideus 처치 후 잠금 해제됩니다.',
+                'unlocks_after_infusion_chamber' => '주입실 진입 후 잠금 해제됩니다.',
+                'unlocks_after_mini_bosses'      => '미니 보스 처치 후 잠금 해제됩니다.',
             ],
             'neltharus' => [
                 'blazing_aegis'          => '타오르는 방패: 파티원 한 명이 타오르는 방패를 집어 일회용 추가 행동 단축키를 얻습니다. 사용하면 피해를 입히고 추가적인 지속 피해 효과를 부여합니다. 또한 네 방향으로 폭발을 발생시킵니다. 획득하려면 용군단 대장기술 25가 필요합니다.',
                 'burning_chain'          => '불타는 사슬',
                 'qaleshi_goulash'        => '칼레시 굴라시',
                 'qaleshi_goulash_detail' => '칼레시 굴라시: 각 파티원은 추가 행동 단축키 충전 3회를 얻습니다. 사용하면 50초 동안 이동 속도가 65% 증가합니다. 전투에 돌입하면 취소됩니다. 사용하려면 용군단 요리 25가 필요합니다.',
-                'stairwell_door'         => '계단실 문',
-                'unlocks_after_chargath' => 'Chargath 처치 후 잠금 해제.',
+                'stairwell_door'         => 'Stairwell Door',
+                'unlocks_after_chargath' => 'Chargath 처치 후 잠금 해제됩니다.',
             ],
             'the_nokhud_offensive' => [
                 'dragonkiller_lance' => '용살자의 창',
@@ -356,7 +356,7 @@ Alzzin the Wildshaper 처치 후에는 이 동굴을 이용해 인스턴스를 �
                 'door_unlocks_after_trial_of_the_king' => '왕의 시험을 클리어한 후 문이 열립니다',
             ],
             'temple_of_the_jade_serpent' => [
-                'unlocks_after_lui_flameheart' => 'Lui Flameheart 처치 후 잠금 해제',
+                'unlocks_after_lui_flameheart' => 'Lui Flameheart 처치 후 잠금 해제됩니다.',
             ],
         ],
         'legion' => [
@@ -465,7 +465,7 @@ Alzzin the Wildshaper 처치 후에는 이 동굴을 이용해 인스턴스를 �
         ],
         'wotlk' => [
             'ahn_kahet_the_old_kingdom' => [
-                'ancient_nerubian_device' => '고대 네루빔 장치',
+                'ancient_nerubian_device' => '고대 네루비안 장치',
             ],
             'azjol_nerub' => [
                 'dungeon_exit'     => '던전 출구',
