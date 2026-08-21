@@ -14,12 +14,8 @@ class Role extends LaratrustRole
 
     public const string ROLE_USER          = 'user';
     public const string ROLE_INTERNAL_TEAM = 'internal_team';
-    /**
-     * An AI agent's account (#4227): everything internal_team may do, plus the read-only agent-facing API endpoints
-     * that are otherwise admin-only - and nothing else of what admin can do (no admin panel, no write endpoints).
-     */
-    public const string ROLE_AI_AGENT = 'ai_agent';
-    public const string ROLE_ADMIN    = 'admin';
+    public const string ROLE_AI_AGENT      = 'ai_agent';
+    public const string ROLE_ADMIN         = 'admin';
 
     public const array ROLE_ALL = [
         self::ROLE_USER,
