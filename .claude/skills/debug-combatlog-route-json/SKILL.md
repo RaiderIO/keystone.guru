@@ -1,6 +1,6 @@
 ---
 name: debug-combatlog-route-json
-description: Replay a combat-log-route JSON request body (e.g. downloaded from production, or attached to a bug report) through the Auto Route Creator locally, at full debug-level structured logging, so you can see exactly why an NPC/pull/spell ended up (or didn't end up) where it did. Use whenever debugging a report like "this run's bosses/pulls/enemies didn't show up correctly" and you have (or can get) the JSON body that was POSTed to `api/v1/combatlog/route`. Not for the parser that turns a raw WoW combat log into this JSON in the first place (combatlog-parsing-internals/combatlog-parse-failure-triage) — this skill starts one step later, from the JSON body itself.
+description: Replay a combat-log-route JSON request body (from production or a bug report) through the Auto Route Creator locally with debug-level structured logging, to see why an NPC/pull/spell ended up where it did. Use when debugging "this run's bosses/pulls/enemies didn't show up correctly" and you have the JSON POSTed to `api/v1/combatlog/route`. Not for parsing the raw WoW log into that JSON (combatlog-parsing-internals / combatlog-parse-failure-triage) — this starts one step later.
 ---
 
 # Debugging a combat-log-route JSON body
