@@ -244,7 +244,7 @@ $(docker exec "$container" printenv MYSQL_USER)"
     echo "==> [$(date +%T)] migrating $schema (pending migrations, both DBs)"
     ( cd "$wt_path" && docker compose exec -T app php artisan migrate --database=migrate --force ) \
         || return 1
-    ( cd "$wt_path" && docker compose exec -T app php artisan migrate --database=combatlog \
+    ( cd "$wt_path" && docker compose exec -T app php artisan migrate --database=combatlog_migrate \
         --path=database/migrations_combatlog --force ) || return 1
 
     local user_count

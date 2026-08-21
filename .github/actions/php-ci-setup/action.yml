@@ -236,7 +236,7 @@ runs:
       if: ${{ inputs.run-migrations == 'true' && steps.cache-db.outputs.cache-hit != 'true' }}
       run: |
         php artisan migrate --database=migrate --force
-        php artisan migrate --database=combatlog --path=database/migrations_combatlog --force
+        php artisan migrate --database=combatlog_migrate --path=database/migrations_combatlog --force
         php artisan db:seed --database=migrate --force -v
 
         # Dump from *inside* the container, not with the runner's client: `default-mysql-client`

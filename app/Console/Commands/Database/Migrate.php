@@ -31,7 +31,7 @@ class Migrate extends Command
 
         $this->info('Migrating combat log database...');
         $this->runCommand('migrate', [
-            '--database' => 'combatlog',
+            '--database' => 'combatlog_migrate',
             '--path'     => 'database/migrations_combatlog',
             '--force'    => true,
         ], $this->output);

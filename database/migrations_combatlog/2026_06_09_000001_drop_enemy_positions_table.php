@@ -5,8 +5,6 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    protected $connection = 'combatlog';
-
     public function up(): void
     {
         Schema::dropIfExists('enemy_positions');
