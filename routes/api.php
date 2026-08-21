@@ -29,7 +29,8 @@ Route::prefix('v1')->group(static function () {
             Route::post('correct', new APICombatLogController()->correctEvents(...))->name('api.v1.combatlog.event.correct');
         });
 
-        Route::middleware(['api_role:admin'])->group(static function () {
+        // Read-only endpoints an AI agent needs for combat log triage (#4227) - admins and agents, nobody else
+        Route::middleware(['api_role:admin|ai_agent'])->group(static function () {
             Route::get('seasons/{season}/runs/{runId}/segments', new APICombatLogRunController()->segments(...))->name('api.v1.combatlog.run.segments');
             Route::get('enemy-failures/{dungeon}', new APICombatLogEnemyFailureController()->index(...))->name('api.v1.combatlog.enemy_failures.index');
             Route::get('route/{dungeonRoute}/post-body', new APICombatLogRouteController()->postBody(...))->name('api.v1.combatlog.route.post_body');

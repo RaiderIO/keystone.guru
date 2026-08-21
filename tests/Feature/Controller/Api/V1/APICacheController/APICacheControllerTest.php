@@ -39,6 +39,29 @@ final class APICacheControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function drop_givenAiAgent_shouldReturnForbidden(): void
+    {
+        // Arrange — the agent role is read-only; cache dropping stays admin-only
+        Queue::fake();
+        /** @var User $aiAgent */
+        $aiAgent = User::factory()->create();
+
+        try {
+            $aiAgent->addRole(Role::ROLE_AI_AGENT);
+            $this->actingAs($aiAgent);
+
+            // Act
+            $response = $this->postJson(route('api.v1.cache.drop'));
+
+            // Assert
+            $response->assertStatus(StatusCode::FORBIDDEN);
+            Queue::assertNotPushed(DropCaches::class);
+        } finally {
+            $aiAgent->delete();
+        }
+    }
+
+    #[Test]
     public function drop_givenAuthenticatedNonAdmin_shouldReturnForbidden(): void
     {
         // Arrange

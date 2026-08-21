@@ -124,6 +124,41 @@ final class APICombatLogRunControllerTest extends PublicTestCase
         $response->assertJsonPath('success', false);
     }
 
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function segments_givenAiAgent_shouldReturnDownloadUrls(): void
+    {
+        // Arrange
+        /** @var User $aiAgent */
+        $aiAgent = User::factory()->create();
+
+        try {
+            $aiAgent->addRole(Role::ROLE_AI_AGENT);
+            $this->actingAs($aiAgent);
+
+            $season = Season::query()->firstOrFail();
+
+            $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
+            $raiderIOApiService->expects($this->once())
+                ->method('getCombatLogSegmentsForRun')
+                ->willReturn(new CombatLogSegmentsResponse(1, [new CombatLogSegment(1, 'log', 'https://example.com/segment-1.log')]));
+            app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+
+            // Act
+            $response = $this->getJson(route('api.v1.combatlog.run.segments', [
+                'season' => $season->id,
+                'runId'  => self::RUN_ID,
+            ]));
+
+            // Assert
+            $response->assertOk();
+        } finally {
+            $aiAgent->delete();
+        }
+    }
+
     #[Test]
     public function segments_givenAuthenticatedNonAdmin_shouldReturnForbidden(): void
     {
