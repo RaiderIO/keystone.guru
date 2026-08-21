@@ -20,13 +20,9 @@ return [
         'seasonal'                          => 'Saisonal',
         'previous'                          => 'Vorherige',
         'next'                              => 'Nächste',
-        'updated_at'                        => 'Aktualisiert am %s. Für mehr Informationen über Affixe und M+ besuchen Sie bitte',
+        'updated_at'                        => 'Aktualisiert am %s. Für mehr Informationen über Affixe und M+ besuche bitte',
         'popular_routes_by_current_affixes' => 'Beliebte Routen nach aktuellen Affixen',
         'popular_routes_by_next_affixes'    => 'Beliebte Routen nach nächsten Affixen',
-    ],
-    'changelog' => [
-        'title'  => 'Änderungsprotokoll',
-        'header' => 'Änderungsprotokoll',
     ],
     'credits' => [
         'title'            => 'Credits',

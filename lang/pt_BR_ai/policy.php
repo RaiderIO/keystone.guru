@@ -10,8 +10,18 @@ return [
     'add_kill_zone_limit_reached'             => 'Não é possível adicionar mais de :limit grupos a uma única rota.',
     'add_brushline_limit_reached'             => 'Não é possível adicionar mais de :limit linhas desenhadas livremente a uma única rota.',
     'add_path_limit_reached'                  => 'Não é possível adicionar mais de :limit caminhos a uma única rota.',
-    'add_arrow_limit_reached'                 => '',
+    'add_arrow_limit_reached'                 => 'Não é possível adicionar mais do que :limit setas a uma única rota.',
     'add_map_icon_limit_reached'              => 'Não é possível adicionar mais de :limit ícones de mapa a uma única rota.',
-    'schedule_publish_route_not_in_team'      => '',
+    'schedule_publish_route_not_in_team'      => 'Não é possível agendar a publicação: esta rota não está atribuída a uma equipe.',
+    'game_version_not_active'                 => 'Esta versão do jogo não está mais ativa.',
+    'expansion_not_active'                    => 'Esta expansão não está mais ativa.',
+    'dungeon_not_active'                      => 'Esta masmorra não está mais ativa.',
+    'season_not_active'                       => 'Esta temporada não pôde ser encontrada ou não está mais ativa.',
+
+    'claim_route_not_claimable'                   => 'Esta rota já possui um autor e não pode ser reivindicada.',
+    'make_role_only_super_admins_may_grant_admin' => 'Somente super administradores podem conceder ou revogar o cargo de administrador.',
+    'create_global_map_icon_admin_only'           => 'Somente administradores podem criar ícones de mapa que não estejam vinculados a uma rota.',
+    'update_map_icon_admin_only'                  => 'Somente administradores podem alterar ícones de mapa que não estejam vinculados a uma rota ou equipe.',
+    'delete_map_icon_admin_only'                  => 'Somente administradores podem excluir ícones de mapa que não estejam vinculados a uma rota.',
 
 ];

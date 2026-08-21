@@ -24,7 +24,7 @@ return [
             'list' => [
                 'title'             => 'Erkunden',
                 'header'            => 'Dungeon erkunden',
-                'description'       => 'Das Erkunden eines Dungeons ermöglicht es Ihnen, das Layout des Dungeons und die vorhandenen Feinde zu sehen. Ideal, um den Dungeon einfach anzusehen, ohne eine Route zu erstellen.',
+                'description'       => 'Das Erkunden eines Dungeons ermöglicht es dir, das Layout des Dungeons und die vorhandenen Feinde zu sehen. Ideal, um den Dungeon einfach anzusehen, ohne eine Route zu erstellen.',
                 'heatmap_available' => 'Heatmap für Dungeon verfügbar',
             ],
             'embed' => [
@@ -44,7 +44,7 @@ return [
                 'title'             => 'Heatmaps',
                 'header'            => 'Dungeon-Heatmaps',
                 'raider_io'         => 'Raider.IO',
-                'description'       => 'Angetrieben von :raiderIO, können Heatmaps Ihnen wertvolle Informationen darüber geben, welche Feinde von Spielern getötet werden, wo sie sterben oder bestimmte Zauber wirken. Filter für Schlüsselstufe, Gegenstandsstufe, Teamzusammensetzung und viele mehr ermöglichen es Ihnen, sich auf die für Ihre Bedürfnisse relevanten Daten zu konzentrieren.',
+                'description'       => 'Angetrieben von :raiderIO liefern dir Heatmaps wertvolle Informationen darüber, welche Gegner Spieler töten, wo Spieler sterben und wo sie bestimmte Zauber wirken. Filter für Schlüsselstufe, Gegenstandsstufe, Gruppenzusammensetzung und viele mehr ermöglichen es dir, dich auf die für deine Bedürfnisse relevanten Daten zu konzentrieren.',
                 'heatmap_available' => 'Heatmap für Dungeon verfügbar',
             ],
             'embed' => [

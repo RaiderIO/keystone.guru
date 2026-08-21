@@ -112,4 +112,18 @@ return [
     'seat_of_the_triumvirate_void_infusion'  => 'Infusión del Vacío',
     'maisara_caverns_hearty_vilebranch_stew' => 'Guiso Vilebranch Sustancioso',
 
+    'algethar_academy_black_dragonflight_pledge_pin'  => 'Insignia del Vuelo Negro',
+    'algethar_academy_blue_dragonflight_pledge_pin'   => 'Insignia del Vuelo Azul',
+    'algethar_academy_bronze_dragonflight_pledge_pin' => 'Insignia del Vuelo Bronce',
+    'algethar_academy_green_dragonflight_pledge_pin'  => 'Promesa del Vuelo Verde',
+    'algethar_academy_red_dragonflight_pledge_pin'    => 'Insignia del Vuelo Rojo',
+    'magisters_terrace_arcane_empowerment'            => 'Potenciación Arcana',
+    'murder_row_fel_contraband'                       => 'Contrabando vil',
+    'murder_row_felstone'                             => 'Piedra vil',
+    'murder_row_felwyrm_egg'                          => 'Huevo de vermis vil',
+    'murder_row_heartstop_poison'                     => 'Veneno que detiene el corazón',
+    'murder_row_loaded_pistol'                        => 'Pistola cargada',
+    'murder_row_overload_golem'                       => 'Gólem de sobrecarga',
+    'the_blinding_vale_flourishing_stride'            => 'Paso floreciente',
+
 ];

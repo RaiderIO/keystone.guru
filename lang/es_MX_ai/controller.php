@@ -19,21 +19,41 @@ return [
             'mdt_invalid_category'                => 'Categoría inválida',
         ],
         'flash' => [
+            'banned_ip_address_added'                => 'Dirección IP bloqueada correctamente',
+            'banned_ip_address_removed'              => 'Bloqueo eliminado correctamente',
             'message_banner_set_successfully'        => 'Banner de mensaje establecido con éxito',
             'thumbnail_regenerate_result'            => 'Se despacharon :success trabajos para rutas :total. :failed falló.',
-            'combatlog_route_regenerate_result'      => '',
-            'combatlog_criteria_reset'               => '',
-            'combatlog_criteria_thresholds_updated'  => '',
+            'combatlog_route_regenerate_result'      => ':count trabajos enviados',
+            'combatlog_criteria_reset'               => 'Se han restablecido todos los contadores de criterios de análisis de hoy.',
+            'combatlog_criteria_thresholds_updated'  => 'Se han actualizado los umbrales de los criterios de análisis.',
             'caches_dropped_successfully'            => 'Cachés eliminadas con éxito',
-            'releases_exported'                      => 'Lanzamientos exportados',
+            'caches_drop_queued'                     => 'La eliminación de caché se ha puesto en cola y se ejecutará en segundo plano',
             'exception'                              => 'Excepción lanzada en el panel de administración',
             'feature_toggle_activated'               => 'Función :feature ahora está activada',
             'feature_toggle_deactivated'             => 'Función :feature ahora está desactivada',
             'feature_forgotten'                      => 'Función :feature olvidada exitosamente',
-            'mapping_version_upgrade_queued'         => '',
-            'mapping_version_upgrade_already_latest' => '',
+            'mapping_version_upgrade_queued'         => 'Se pusieron en cola :count rutas para actualizar de :version a la más reciente.',
+            'mapping_version_upgrade_already_latest' => 'Esta versión de mapeo ya es la más reciente para su mazmorra; no se puso en cola ninguna ruta.',
             'read_only_mode_disabled'                => 'Modo de solo lectura deshabilitado',
             'read_only_mode_enabled'                 => 'Modo de solo lectura habilitado',
+        ],
+    ],
+    'affix' => [
+        'flash' => [
+            'affix_created' => 'Afijo creado',
+            'affix_updated' => 'Afijo actualizado',
+        ],
+    ],
+    'affixgroup' => [
+        'flash' => [
+            'affixgroup_created' => 'Grupo de afijos creado',
+            'affixgroup_updated' => 'Grupo de afijos actualizado',
+            'affixgroup_deleted' => 'Grupo de afijos eliminado',
+        ],
+    ],
+    'apicombatlogrun' => [
+        'error' => [
+            'no_segments' => 'No hay segmentos de registro de combate disponibles para esta ejecución.',
         ],
     ],
     'apidungeonroute' => [
@@ -54,8 +74,8 @@ return [
     ],
     'arrow' => [
         'error' => [
-            'unable_to_save_arrow'   => '',
-            'unable_to_delete_arrow' => '',
+            'unable_to_save_arrow'   => 'No se pudo guardar la flecha',
+            'unable_to_delete_arrow' => 'No se pudo eliminar la flecha',
         ],
     ],
     'dungeon' => [
@@ -73,21 +93,15 @@ return [
         ],
     ],
     'dungeonroutediscover' => [
-        'popular'           => 'Rutas populares',
-        'this_week_affixes' => 'Afijos de esta semana',
-        'next_week_affixes' => 'Afijos de la próxima semana',
-        'new'               => 'Nuevo',
-        'season'            => [
-            'popular'           => '%s rutas populares',
-            'this_week_affixes' => '%s esta semana',
-            'next_week_affixes' => '%s la próxima semana',
-            'new'               => '%s nuevas rutas',
+        'popular' => 'Rutas populares',
+        'new'     => 'Nuevo',
+        'season'  => [
+            'popular' => '%s rutas populares',
+            'new'     => '%s nuevas rutas',
         ],
         'dungeon' => [
-            'popular'           => '%s rutas populares',
-            'this_week_affixes' => '%s esta semana',
-            'next_week_affixes' => '%s la próxima semana',
-            'new'               => '%s nuevas rutas',
+            'popular' => '%s rutas populares',
+            'new'     => '%s nuevas rutas',
         ],
     ],
     'dungeonspeedrunrequirednpcs' => [
@@ -110,6 +124,11 @@ return [
             'not_found'                  => 'No encontrado',
         ],
     ],
+    'killzone' => [
+        'error' => [
+            'facade_location_not_convertible' => 'No se pudo colocar el pull aquí: esta ubicación no pertenece a ningún piso de esta mazmorra',
+        ],
+    ],
     'oauthlogin' => [
         'flash' => [
             'registered_successfully' => 'Registrado con éxito. ¡Disfruta del sitio web!',
@@ -125,16 +144,6 @@ return [
         ],
         'legal_agreed_required' => 'Debes aceptar nuestros términos legales para registrarte.',
         'legal_agreed_accepted' => 'Debes aceptar nuestros términos legales para registrarte.',
-    ],
-    'release' => [
-        'error' => [
-            'unable_to_save_release' => 'No se puede guardar la versión',
-        ],
-        'flash' => [
-            'release_updated'  => 'Versión actualizada',
-            'release_created'  => 'Versión creada',
-            'github_exception' => 'Ocurrió un error al comunicar con Github: :message',
-        ],
     ],
     'mappingversion' => [
         'created_successfully'      => '¡Nueva versión de mapeo añadida!',
@@ -176,6 +185,7 @@ return [
             'profile_updated'                  => 'Perfil actualizado',
             'unexpected_error_when_saving'     => 'Ocurrió un error inesperado al intentar guardar tu perfil',
             'privacy_settings_updated'         => 'Configuración de privacidad actualizada',
+            'creator_profile_updated'          => 'Perfil de creador actualizado',
             'password_changed'                 => 'Contraseña cambiada',
             'new_password_equals_old_password' => 'La nueva contraseña es igual a la contraseña antigua',
             'new_passwords_do_not_match'       => 'Las nuevas contraseñas no coinciden',
@@ -187,11 +197,17 @@ return [
             'error_deleting_account'           => 'Ocurrió un error. Por favor, inténtalo de nuevo.',
         ],
         'error' => [
-            'add_ad_free_giveaway_limit_reached'        => '',
-            'add_ad_free_giveaway_already_ad_free'      => '',
-            'add_ad_free_giveaway_already_has_giveaway' => '',
-            'remove_ad_free_giveaway_not_found'         => '',
-            'remove_ad_free_giveaway_not_yours'         => '',
+            'add_ad_free_giveaway_limit_reached'        => 'No se pudieron agregar más obsequios sin anuncios. Se alcanzó el límite.',
+            'add_ad_free_giveaway_already_ad_free'      => 'No se pudieron agregar obsequios sin anuncios; el usuario ya está sin anuncios mediante su propia suscripción de Patreon.',
+            'add_ad_free_giveaway_already_has_giveaway' => 'No se pudieron agregar obsequios sin anuncios; el usuario ya está sin anuncios mediante un obsequio existente.',
+            'remove_ad_free_giveaway_not_found'         => 'No se pudo eliminar el obsequio sin anuncios: el usuario no tiene ninguno en este momento.',
+            'remove_ad_free_giveaway_not_yours'         => 'No se pudieron eliminar obsequios sin anuncios que no hayas otorgado tú originalmente.',
+        ],
+    ],
+    'season' => [
+        'flash' => [
+            'season_created' => 'Temporada creada',
+            'season_updated' => 'Temporada actualizada',
         ],
     ],
     'spell' => [
@@ -230,9 +246,9 @@ return [
     'admin' => [
         'dungeonroute' => [
             'flash' => [
-                'updated' => '',
-                'deleted' => '',
-                'claimed' => '',
+                'updated' => 'Ruta de mazmorra actualizada correctamente.',
+                'deleted' => 'Ruta de mazmorra eliminada correctamente.',
+                'claimed' => 'Ruta de mazmorra reclamada correctamente. Ahora eres el propietario.',
             ],
         ],
     ],

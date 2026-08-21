@@ -19,13 +19,14 @@ return [
             'mdt_invalid_category'                => 'Hodor',
         ],
         'flash' => [
+            'banned_ip_address_added'                => 'Hodor',
+            'banned_ip_address_removed'              => 'Hodor',
             'message_banner_set_successfully'        => 'Hodor',
             'thumbnail_regenerate_result'            => 'Hodor',
             'combatlog_route_regenerate_result'      => 'Hodor',
             'combatlog_criteria_reset'               => 'Hodor',
             'combatlog_criteria_thresholds_updated'  => 'Hodor',
             'caches_dropped_successfully'            => 'Hodor',
-            'releases_exported'                      => 'Hodor',
             'exception'                              => 'Hodor',
             'feature_toggle_activated'               => 'Hodor',
             'feature_toggle_deactivated'             => 'Hodor',
@@ -34,6 +35,24 @@ return [
             'mapping_version_upgrade_already_latest' => 'Hodor',
             'read_only_mode_disabled'                => 'Hodor',
             'read_only_mode_enabled'                 => 'Hodor',
+        ],
+    ],
+    'affix' => [
+        'flash' => [
+            'affix_created' => 'Hodor',
+            'affix_updated' => 'Hodor',
+        ],
+    ],
+    'affixgroup' => [
+        'flash' => [
+            'affixgroup_created' => 'Hodor',
+            'affixgroup_updated' => 'Hodor',
+            'affixgroup_deleted' => 'Hodor',
+        ],
+    ],
+    'apicombatlogrun' => [
+        'error' => [
+            'no_segments' => 'Hodor',
         ],
     ],
     'apidungeonroute' => [
@@ -73,21 +92,15 @@ return [
         ],
     ],
     'dungeonroutediscover' => [
-        'popular'           => 'Hodor',
-        'this_week_affixes' => 'Hodor',
-        'next_week_affixes' => 'Hodor',
-        'new'               => 'Hodor',
-        'season'            => [
-            'popular'           => 'Hodor',
-            'this_week_affixes' => 'Hodor',
-            'next_week_affixes' => 'Hodor',
-            'new'               => 'Hodor',
+        'popular' => 'Hodor',
+        'new'     => 'Hodor',
+        'season'  => [
+            'popular' => 'Hodor',
+            'new'     => 'Hodor',
         ],
         'dungeon' => [
-            'popular'           => 'Hodor',
-            'this_week_affixes' => 'Hodor',
-            'next_week_affixes' => 'Hodor',
-            'new'               => 'Hodor',
+            'popular' => 'Hodor',
+            'new'     => 'Hodor',
         ],
     ],
     'dungeonspeedrunrequirednpcs' => [
@@ -110,6 +123,11 @@ return [
             'not_found'                  => 'Hodor',
         ],
     ],
+    'killzone' => [
+        'error' => [
+            'facade_location_not_convertible' => 'Hodor',
+        ],
+    ],
     'oauthlogin' => [
         'flash' => [
             'registered_successfully' => 'Hodor',
@@ -125,16 +143,6 @@ return [
         ],
         'legal_agreed_required' => 'Hodor',
         'legal_agreed_accepted' => 'Hodor',
-    ],
-    'release' => [
-        'error' => [
-            'unable_to_save_release' => 'Hodor',
-        ],
-        'flash' => [
-            'release_updated'  => 'Hodor',
-            'release_created'  => 'Hodor',
-            'github_exception' => 'Hodor',
-        ],
     ],
     'mappingversion' => [
         'created_successfully'      => 'Hodor',
@@ -176,6 +184,7 @@ return [
             'profile_updated'                  => 'Hodor',
             'unexpected_error_when_saving'     => 'Hodor',
             'privacy_settings_updated'         => 'Hodor',
+            'creator_profile_updated'          => 'Hodor',
             'password_changed'                 => 'Hodor',
             'new_password_equals_old_password' => 'Hodor',
             'new_passwords_do_not_match'       => 'Hodor',
@@ -192,6 +201,12 @@ return [
             'add_ad_free_giveaway_already_has_giveaway' => 'Hodor',
             'remove_ad_free_giveaway_not_found'         => 'Hodor',
             'remove_ad_free_giveaway_not_yours'         => 'Hodor',
+        ],
+    ],
+    'season' => [
+        'flash' => [
+            'season_created' => 'Hodor',
+            'season_updated' => 'Hodor',
         ],
     ],
     'spell' => [

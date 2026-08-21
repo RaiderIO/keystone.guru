@@ -18,15 +18,15 @@ return [
         ],
         'overview' => [
             'title'   => 'Visión general',
-            'routes'  => '',
-            'members' => '',
+            'routes'  => 'Rutas',
+            'members' => 'Miembros',
         ],
         'routepublishing' => [
             'title'            => 'Publicación de rutas',
-            'description'      => '',
-            'enabled'          => '',
-            'timezone_warning' => '',
-            'profile_link'     => '',
+            'description'      => 'La publicación de rutas te permite publicar rutas con el mundo según una programación. Puedes establecer una fecha/hora por ruta en la que se pondrán automáticamente en estado Publicado y serán visibles para todos.',
+            'enabled'          => 'Activado',
+            'timezone_warning' => 'Las horas de publicación programadas usan la zona horaria de tu perfil. Asegúrate de que tu zona horaria esté configurada correctamente en tu :link.',
+            'profile_link'     => 'configuración del perfil',
         ],
         'routes' => [
             'title'                  => 'Lista de rutas',

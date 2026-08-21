@@ -3,13 +3,13 @@
 return [
 
     'sitepage' => [
-        'staging_banner_description'        => 'Achtung! Sie befinden sich derzeit in der Staging-Umgebung von Keystone.guru. Dies ist NICHT die Hauptseite.',
-        'staging_banner_take_me_away'       => 'Bringen Sie mich zur Hauptseite!',
-        'readonly_mode_enabled_description' => 'Der Nur-Lese-Modus ist aktiviert. Sie können Routen ansehen, aber keine Änderungen vornehmen oder neue Routen erstellen.',
+        'staging_banner_description'        => 'Achtung! Du befindest dich derzeit in der Staging-Umgebung von Keystone.guru. Dies ist NICHT die Hauptseite.',
+        'staging_banner_take_me_away'       => 'Bring mich zur Hauptseite!',
+        'readonly_mode_enabled_description' => 'Der Nur-Lese-Modus ist aktiviert. Du kannst Routen ansehen, aber keine Änderungen vornehmen oder neue Routen erstellen.',
     ],
     'app' => [
         'linkpreview_title'       => 'M+ Routen leicht gemacht',
-        'linkpreview_description' => 'Planen Sie Routen online kooperativ mit Ihrem Team oder entdecken Sie Routen, die zu Ihrem Spielstil und Ihrem Fähigkeitsniveau passen. Keystone.guru ist der eine Ort, um Ihre M+ Routen zu verwalten und zu teilen.',
+        'linkpreview_description' => 'Plane Routen online kooperativ mit deinem Team oder entdecke Routen, die zu deinem Spielstil und deinem Fähigkeitsniveau passen. Keystone.guru ist der eine Ort, um deine M+ Routen zu verwalten und zu teilen.',
     ],
 
 ];

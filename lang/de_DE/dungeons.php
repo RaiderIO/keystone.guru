@@ -1338,6 +1338,15 @@ return [
                 'the_headteachers_enclave' => 'Enklave der Direktorin',
             ],
         ],
+        'altar_of_fangs' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'sacrificial_approach' => '',
+                'mutation_chambers'    => '',
+                'altar_of_fangs'       => '',
+            ],
+        ],
         'den_of_nalorakk' => [
             'name'         => 'Nalorakks Bau',
             'abbreviation' => '',
@@ -1397,7 +1406,9 @@ return [
             'name'         => 'Arena der Leerennarbe',
             'abbreviation' => '',
             'floors'       => [
-                'voidscar_arena' => 'Arena der Leerennarbe',
+                'halls_of_spite'   => '',
+                'voidscar_arena'   => 'Arena der Leerennarbe',
+                'domanaars_ascent' => '',
             ],
         ],
         'windrunner_spire' => [

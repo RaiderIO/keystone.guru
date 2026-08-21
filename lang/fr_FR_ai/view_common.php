@@ -3,11 +3,22 @@
 return [
 
     'dungeon' => [
+        'difficulty' => [
+            '10_man' => '10 joueurs',
+            '25_man' => '25 joueurs',
+            '20_man' => '20 joueurs',
+            '40_man' => '40 joueurs',
+        ],
         'griddiscover' => [
-            'popular'   => 'Populaire',
-            'this_week' => 'Cette semaine',
-            'next_week' => 'La semaine prochaine',
-            'new'       => 'Nouveau',
+            'popular' => 'Populaire',
+            'new'     => 'Nouveau',
+        ],
+        'list' => [
+            'more'        => 'Plus',
+            'next_season' => 'Saison suivante',
+            'card'        => [
+                'this_week_tier' => 'Palier de difficulté de cette semaine (archon.gg)',
+            ],
         ],
         'gridtabs' => [
             'raid' => 'Raid',
@@ -50,8 +61,28 @@ return [
         'cardlist' => [
             'no_dungeonroutes' => 'Aucun itinéraire trouvé',
         ],
+        'leaderboard' => [
+            'create_first_route' => 'Créer le premier itinéraire',
+        ],
         'rating' => [
             'nr_of_votes' => '%s vote(s)',
+        ],
+        'poster' => [
+            'views'     => '%s vues',
+            'favorites' => '%s favoris',
+        ],
+        'cardhero' => [
+            'top_community_route'    => 'Meilleur itinéraire de la communauté',
+            'ranked_community_route' => 'Itinéraire de la communauté n°%d',
+            'views'                  => '%s vues',
+            'favorites'              => '%s favoris',
+            'pulls'                  => '{1} :count pull|[2,*] :count pulls',
+        ],
+        'cardrow' => [
+            'new'       => 'Nouveau',
+            'views'     => '%s vues',
+            'favorites' => '%s favoris',
+            'pulls'     => '{1} :count pull|[2,*] :count pulls',
         ],
         'table' => [
             'team'                  => 'Équipe',
@@ -79,6 +110,8 @@ return [
             'title_title'                                    => 'Choisissez un titre qui identifiera de manière unique la route pour vous parmi d\'autres routes similaires que vous pourriez créer. Le titre sera visible pour les autres une fois que vous aurez choisi de publier votre route.',
             'dungeon_speedrun_required_npc_difficulty'       => 'Taille du raid',
             'dungeon_speedrun_required_npc_difficulty_title' => 'Les raids de 10 et 25 personnes peuvent avoir des ennemis différents à tuer pour compléter un speedrun. Sélectionnez la taille de votre raid pour basculer entre les ensembles d\'ennemis.',
+            'dungeon_start'                                  => 'Départ du donjon',
+            'dungeon_start_title'                            => 'Ce donjon possède plusieurs entrées. Choisissez celle par laquelle votre itinéraire commence ; cela affecte le chemin calculé entre le départ et votre premier pull.',
             'description'                                    => 'Description',
             'description_title'                              => 'Une description optionnelle de votre itinéraire. La description sera visible par les autres une fois que vous choisirez de publier votre itinéraire. Vous pouvez toujours modifier votre description plus tard.',
             'key_levels'                                     => 'Niveaux de clé',
@@ -106,6 +139,8 @@ return [
             'remember_me'          => 'Se souvenir de moi',
             'forgot_your_password' => 'Mot de passe oublié ?',
             'login_through_oauth2' => 'Connexion via OAuth2',
+            'no_account_yet'       => 'Pas encore de compte ?',
+            'register_now'         => 'S\'inscrire',
         ],
         'mapsettings' => [
             'general'                                       => 'Général',
@@ -119,6 +154,10 @@ return [
             'heatmap'                                       => 'Carte thermique',
             'show_heatmap_tooltips'                         => 'Afficher les infobulles de la carte thermique',
             'show_heatmap_tooltips_title'                   => 'Activer ce paramètre affichera des infobulles lorsque vous passez la souris sur la carte thermique. Cela peut être utile pour voir les valeurs exactes de la carte thermique à un emplacement spécifique.',
+            'heatmap_render_order'                          => 'Ordre de rendu',
+            'heatmap_render_order_title'                    => 'Contrôle si la carte de chaleur est affichée au-dessus des ennemis, ou derrière eux.',
+            'heatmap_render_order_on_top'                   => 'Au-dessus',
+            'heatmap_render_order_behind'                   => 'Derrière',
             'enemies'                                       => 'Ennemis',
             'enemy_number_style'                            => 'Style de numérotation des ennemis',
             'enemy_number_style_title'                      => 'Cela contrôle ce que signifient les numéros lorsque vous passez la souris sur les ennemis ou lorsque vous sélectionnez le type d\'affichage \'Forces ennemies\'.',
@@ -132,9 +171,9 @@ return [
             'show_aggressiveness_border_title'              => 'Activer ce paramètre rendra tous les ennemis avec une bordure pour indiquer leur agressivité. Rouge pour les ennemis agressifs, jaune pour les ennemis neutres, vert pour les ennemis amicaux, etc.',
             'highlight_dangerous_enemies'                   => 'Mettre en évidence les ennemis dangereux',
             'highlight_dangerous_enemies_title'             => 'Les ennemis dangereux sont marqués avec une bordure intérieure orange en pointillés. Ces ennemis sont sélectionnés par Keystone.guru. Ils sont des mini-boss, ont une santé élevée par rapport aux autres, utilisent des capacités dangereuses ou nécessitent une attention particulière.',
-            'kill_zone_path'                                => '',
-            'kill_zone_path_weight'                         => '',
-            'kill_zone_path_weight_title'                   => '',
+            'kill_zone_path'                                => 'Chemin de pull',
+            'kill_zone_path_weight'                         => 'Épaisseur du trait du chemin de pull',
+            'kill_zone_path_weight_title'                   => 'Ceci contrôle l\'épaisseur de la ligne dessinée entre vos pulls sur la carte. Une valeur plus élevée rend la ligne plus épaisse.',
             'drawing'                                       => 'Dessin',
             'default_line_weight'                           => 'Épaisseur de ligne par défaut',
             'default_line_weight_title'                     => 'Cela contrôle l\'épaisseur par défaut (largeur) de toutes les lignes que vous créez sur la carte, telles que les chemins et les lignes tracées librement.',
@@ -153,7 +192,11 @@ return [
             'import_route'                           => 'Importer la route',
         ],
         'oauth' => [
-            'battletag_warning' => 'Si vous publiez des itinéraires, votre battletag/nom d\'utilisateur discord sera visible jusqu\'à ce que vous changiez votre nom d\'utilisateur dans votre profil.',
+            'battletag_warning'       => 'Si vous publiez des itinéraires, votre battletag/nom d\'utilisateur discord sera visible jusqu\'à ce que vous changiez votre nom d\'utilisateur dans votre profil.',
+            'battlenet_region'        => 'Région Battle.net',
+            'continue_with_battlenet' => 'Continuer avec Battle.net',
+            'continue_with_discord'   => 'Continuer avec Discord',
+            'continue_with_google'    => 'Continuer avec Google',
         ],
         'pullsettings' => [
             'pull_number_style'                 => 'Style de numérotation des pulls',
@@ -185,6 +228,8 @@ return [
             'terms_of_service'        => 'conditions d\'utilisation',
             'privacy_policy'          => 'politique de confidentialité',
             'cookie_policy'           => 'politique des cookies',
+            'already_have_an_account' => 'Vous avez déjà un compte ?',
+            'login_now'               => 'Se connecter',
         ],
         'timezoneselect' => [
             'africa'     => 'Afrique',
@@ -227,7 +272,6 @@ return [
             'api_documentation_internal_team' => 'Documentation de l\'API (équipe interne)',
             'keystone_guru'                   => 'Keystone.guru',
             'changelog'                       => 'Journal des modifications',
-            'changelog_new'                   => 'NOUVEAU',
             'credits'                         => 'Crédits',
             'about'                           => 'À propos',
             'legacy'                          => 'Héritage',
@@ -243,6 +287,7 @@ return [
             'trademark'                       => 'Marque déposée',
             'trademark_footer'                => 'World of Warcraft, Warcraft et Blizzard Entertainment sont des marques ou des marques déposées de Blizzard Entertainment, Inc. aux États-Unis et/ou dans d\'autres pays. Ce site web n\'est pas affilié à Blizzard Entertainment.',
             'social'                          => 'Social',
+            'worktree'                        => '(worktree : :worktree)',
         ],
         'header' => [
             'toggle_navigation_title' => 'Basculer la navigation',
@@ -254,25 +299,30 @@ return [
             'heatmaps'                => 'Cartes de chaleur',
             'explore'                 => 'Explorer les donjons',
             'new'                     => 'NOUVEAU',
-            'compendium'              => '',
-            'npc_compendium'          => '',
-            'spell_compendium'        => '',
-            'compendium_activity'     => '',
-            'class_compendium'        => '',
+            'compendium'              => 'Compendium',
+            'compendium_overview'     => 'Aperçu',
+            'npc_compendium'          => 'PNJ',
+            'spell_compendium'        => 'Sorts',
+            'compendium_activity'     => 'Activité',
+            'class_compendium'        => 'Par classe',
         ],
         'nav' => [
+            'dungeoncontext' => [
+                'change_dungeon' => 'Changer de donjon',
+            ],
             'user' => [
                 'login'              => 'Connexion',
                 'register'           => 'Inscription',
                 'telescope'          => 'Télescope',
                 'tools'              => 'Outils',
-                'view_releases'      => 'Voir les versions',
                 'view_expansions'    => 'Voir les extensions',
                 'view_dungeons'      => 'Voir les donjons',
+                'view_affixes'       => 'Voir les affixes',
+                'view_seasons'       => 'Voir les saisons',
                 'view_npcs'          => 'Voir les PNJ',
                 'view_spells'        => 'Voir les sorts',
                 'view_users'         => 'Voir les utilisateurs',
-                'view_dungeonroutes' => '',
+                'view_dungeonroutes' => 'Voir les itinéraires de donjon',
                 'view_user_reports'  => 'Voir les rapports des utilisateurs',
                 'my_routes'          => 'Mes itinéraires',
                 'my_favorites'       => 'Mes favoris',
@@ -331,8 +381,8 @@ return [
                     'hide_labels' => 'Cacher',
                 ],
                 'facadetoggle' => [
-                    'facade'       => '',
-                    'split_floors' => '',
+                    'facade'       => 'Style MDT',
+                    'split_floors' => 'Style Blizzard',
                 ],
                 'mdtclones' => [
                     'mdt'        => 'Afficher MDT',
@@ -351,10 +401,10 @@ return [
                 'event_type'             => 'Type d\'événement',
                 'data_type'              => 'Type de données',
                 'data_type_title'        => 'La position de l\'ennemi utilise la position originale de l\'ennemi qui a été engagé (alimenté par le Créateur de Route Auto), la position du joueur utilise la position du joueur lorsque l\'ennemi a été engagé (position du journal de combat).',
-                'player_spells'          => '',
+                'player_spells'          => 'Sorts',
                 'npc_death_alt'          => 'Mort d\'ennemi',
                 'player_death_alt'       => 'Mort du joueur',
-                'spell_casts_alt'        => '',
+                'spell_casts_alt'        => 'Incantations de sorts',
                 'filter'                 => 'Filtre',
                 'key_level'              => 'Niveau de clé',
                 'item_level'             => 'Niveau d\'objet',
@@ -395,11 +445,11 @@ return [
                 ],
             ],
             'combatlogrouteenemyfailures' => [
-                'npc_filter'           => '',
-                'clear_failures'       => '',
-                'clear_failures_title' => '',
-                'matching_routes'      => '',
-                'no_matching_routes'   => '',
+                'npc_filter'           => 'Filtre PNJ',
+                'clear_failures'       => 'Effacer les échecs',
+                'clear_failures_title' => 'Supprimer tous les enregistrements d\'échecs pour ce donjon',
+                'matching_routes'      => 'Itinéraires correspondants',
+                'no_matching_routes'   => 'Aucun itinéraire correspondant trouvé',
             ],
             'header' => [
                 'toggle_navigation'              => 'Basculer la navigation',
@@ -416,6 +466,7 @@ return [
                 'edit_route_settings'            => 'Paramètres de l\'itinéraire',
                 'edit_mapping_version'           => 'Modifier la version de mappage',
                 'share'                          => 'Partager',
+                'route_actions'                  => 'Actions sur l\'itinéraire',
                 'start_live_session'             => 'Démarrer la session en direct',
                 'start_live_session_paragraph_1' => 'Une fois que vous commencez à parcourir votre route dans le jeu, vous pouvez créer une session en direct où Keystone.guru vous aidera à compléter votre clé M+. Vous pouvez suivre les mouvements de carte d\'un autre utilisateur en sélectionnant l\'option en cliquant sur son icône/initiales dans l\'en-tête supérieur.',
                 'start_live_session_paragraph_2' => 'Tout participant de la session en direct peut également sélectionner l\'un de vos tirages existants (votre tirage actuel, dans le jeu) puis sur tout ennemi qui ne fait pas partie de votre route pour indiquer un tirage accidentel. Keystone.guru tentera alors de corriger votre route en excluant tous les ennemis qui font partie de votre route actuelle et qui peuvent potentiellement être évités sans utiliser de potions de camouflage/invisibilité.',
@@ -481,7 +532,7 @@ return [
     ],
     'mappingversion' => [
         'select' => [
-            'mapping_version_readonly' => 'version :gameVersion :version (lecture seule)',
+            'mapping_version_previous' => 'Version :version de :gameVersion (version précédente)',
             'mapping_version'          => 'version :gameVersion :version',
         ],
     ],
@@ -499,7 +550,7 @@ return [
             ],
         ],
         'enemydetails' => [
-            'report_an_issue' => '',
+            'report_an_issue' => 'Signaler un problème',
         ],
         'userreport' => [
             'dungeonroute' => [
@@ -639,15 +690,10 @@ return [
     ],
     'npc' => [
         'link' => [
-            'boss' => '',
+            'boss' => 'Boss',
         ],
         'select' => [
-            'npc' => '',
-        ],
-    ],
-    'release' => [
-        'release' => [
-            'new' => 'NOUVEAU',
+            'npc' => 'PNJ',
         ],
     ],
     'tag' => [
@@ -674,7 +720,7 @@ return [
             'save'                     => 'Enregistrer',
             'submit'                   => 'Soumettre',
             'disband_team'             => 'Dissoudre l\'équipe',
-            'route_publishing_enabled' => '',
+            'route_publishing_enabled' => 'Publication programmée activée',
         ],
         'select' => [
             'select_team' => 'Sélectionner une équipe...',

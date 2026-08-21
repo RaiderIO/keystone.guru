@@ -6,13 +6,15 @@ return [
         'io' => [
             'export_string' => [
                 'category' => [
-                    'pull'     => '拉 %d',
-                    'title'    => '標題',
-                    'map_icon' => '地圖圖示',
+                    'pull'         => '拉 %d',
+                    'title'        => '標題',
+                    'map_icon'     => '地圖圖示',
+                    'raid_markers' => '',
                 ],
                 'unable_to_find_mdt_enemy_for_kg_enemy'             => '無法找到 Keystone.guru 中的敵人 NPC %s 的 MDT 等效項（enemy_id: %d, npc_id: %d）。',
                 'unable_to_find_mdt_enemy_for_kg_enemy_details'     => '這表示您的路線擊殺了一個已知其 NPC 的敵人，但 Keystone.guru 尚未將該敵人與 MDT 等效敵人配對（或者在 MDT 中不存在）。',
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => '由於無法在 MDT 中找到所有選定的敵人，這次拉怪已被移除，導致拉怪沒有內容。',
+                'unable_to_find_mdt_enemy_for_kg_raid_marker'       => '',
                 'route_title_contains_non_ascii_char_bug'           => '您的路徑標題中含有非 ASCII 字元，這些字元已知會觸發 Keystone.guru 中尚未解決的編碼錯誤。
                         您的路徑標題已移除所有引發問題的字元，對此造成的不便我們深感抱歉，並希望儘快解決此問題。',
                 'route_title_contains_non_ascii_char_bug_details' => '舊標題：%s，新標題：%s',
@@ -27,6 +29,7 @@ return [
                     'arrows'            => '',
                     'pull'              => '拉怪 %d',
                     'object'            => '物件 %d',
+                    'raid_markers'      => '',
                 ],
                 'object_out_of_bounds'                                 => '無法放置評論：無法放置評論 ":comment"，物件超出範圍。',
                 'limit_reached_pulls'                                  => '無法匯入路線：超過 :limit 拉怪的最大限制。',
@@ -46,6 +49,7 @@ return [
                 'unable_to_find_enemies_pull_skipped_details'          => '這可能表示 MDT 最近有更新，而 Keystone.guru 尚未整合。',
                 'unable_to_find_awakened_obelisks'                     => '無法為您的地城/週組合找到覺醒方尖碑。您的覺醒方尖碑跳過將不會被匯入。',
                 'unable_to_find_awakened_obelisk_different_floor'      => '無法匯入覺醒方尖碑 :name，它位於與方尖碑本身不同的樓層。Keystone.guru 目前不支援此功能。',
+                'unable_to_find_awakened_obelisk_enemy'                => '',
                 'unable_to_decode_mdt_import_string'                   => '無法解碼 MDT 匯入字串',
                 'unable_to_validate_mdt_import_string'                 => '無法驗證 MDT 匯入字串',
             ],

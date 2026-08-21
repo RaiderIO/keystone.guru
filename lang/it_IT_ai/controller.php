@@ -19,21 +19,41 @@ return [
             'mdt_invalid_category'                => 'Categoria non valida',
         ],
         'flash' => [
+            'banned_ip_address_added'                => 'Indirizzo IP bannato con successo',
+            'banned_ip_address_removed'              => 'Ban rimosso con successo',
             'message_banner_set_successfully'        => 'Banner del messaggio impostato con successo',
             'thumbnail_regenerate_result'            => 'Inviati :success lavori per :total percorsi. :failed falliti.',
-            'combatlog_route_regenerate_result'      => '',
-            'combatlog_criteria_reset'               => '',
-            'combatlog_criteria_thresholds_updated'  => '',
+            'combatlog_route_regenerate_result'      => 'Inviati :count lavori',
+            'combatlog_criteria_reset'               => 'Tutti i conteggi dei criteri di analisi per oggi sono stati reimpostati.',
+            'combatlog_criteria_thresholds_updated'  => 'Le soglie dei criteri di analisi sono state aggiornate.',
             'caches_dropped_successfully'            => 'Cache eliminate con successo',
-            'releases_exported'                      => 'Versioni esportate',
+            'caches_drop_queued'                     => 'L\'eliminazione della cache è stata accodata e verrà eseguita in background',
             'exception'                              => 'Eccezione lanciata nel pannello di amministrazione',
             'feature_toggle_activated'               => 'Funzione :feature ora attivata',
             'feature_toggle_deactivated'             => 'Funzione :feature ora disattivata',
             'feature_forgotten'                      => 'Funzione :feature dimenticata con successo',
-            'mapping_version_upgrade_queued'         => '',
-            'mapping_version_upgrade_already_latest' => '',
+            'mapping_version_upgrade_queued'         => 'Accodati :count percorsi per l\'aggiornamento dalla versione :version all\'ultima.',
+            'mapping_version_upgrade_already_latest' => 'Questa versione di mappatura è già l\'ultima per il suo dungeon — nessun percorso è stato accodato.',
             'read_only_mode_disabled'                => 'Modalità sola lettura disattivata',
             'read_only_mode_enabled'                 => 'Modalità sola lettura attivata',
+        ],
+    ],
+    'affix' => [
+        'flash' => [
+            'affix_created' => 'Affisso creato',
+            'affix_updated' => 'Affisso aggiornato',
+        ],
+    ],
+    'affixgroup' => [
+        'flash' => [
+            'affixgroup_created' => 'Gruppo di affissi creato',
+            'affixgroup_updated' => 'Gruppo di affissi aggiornato',
+            'affixgroup_deleted' => 'Gruppo di affissi eliminato',
+        ],
+    ],
+    'apicombatlogrun' => [
+        'error' => [
+            'no_segments' => 'Nessun segmento di log di combattimento disponibile per questa run.',
         ],
     ],
     'apidungeonroute' => [
@@ -54,8 +74,8 @@ return [
     ],
     'arrow' => [
         'error' => [
-            'unable_to_save_arrow'   => '',
-            'unable_to_delete_arrow' => '',
+            'unable_to_save_arrow'   => 'Impossibile salvare la freccia',
+            'unable_to_delete_arrow' => 'Impossibile eliminare la freccia',
         ],
     ],
     'dungeon' => [
@@ -73,21 +93,15 @@ return [
         ],
     ],
     'dungeonroutediscover' => [
-        'popular'           => 'Percorsi popolari',
-        'this_week_affixes' => 'Affissi di questa settimana',
-        'next_week_affixes' => 'Affissi della prossima settimana',
-        'new'               => 'Nuovo',
-        'season'            => [
-            'popular'           => '%s percorsi popolari',
-            'this_week_affixes' => '%s questa settimana',
-            'next_week_affixes' => '%s prossima settimana',
-            'new'               => '%s nuovi percorsi',
+        'popular' => 'Percorsi popolari',
+        'new'     => 'Nuovo',
+        'season'  => [
+            'popular' => '%s percorsi popolari',
+            'new'     => '%s nuovi percorsi',
         ],
         'dungeon' => [
-            'popular'           => '%s percorsi popolari',
-            'this_week_affixes' => '%s questa settimana',
-            'next_week_affixes' => '%s la prossima settimana',
-            'new'               => '%s nuovi percorsi',
+            'popular' => '%s percorsi popolari',
+            'new'     => '%s nuovi percorsi',
         ],
     ],
     'dungeonspeedrunrequirednpcs' => [
@@ -110,6 +124,11 @@ return [
             'not_found'                  => 'Non trovato',
         ],
     ],
+    'killzone' => [
+        'error' => [
+            'facade_location_not_convertible' => 'Impossibile posizionare il pull qui - questa posizione non appartiene a nessun piano di questo dungeon',
+        ],
+    ],
     'oauthlogin' => [
         'flash' => [
             'registered_successfully' => 'Registrazione avvenuta con successo. Goditi il sito!',
@@ -125,16 +144,6 @@ return [
         ],
         'legal_agreed_required' => 'Devi accettare i nostri termini legali per registrarti.',
         'legal_agreed_accepted' => 'Devi accettare i nostri termini legali per registrarti.',
-    ],
-    'release' => [
-        'error' => [
-            'unable_to_save_release' => 'Impossibile salvare la release',
-        ],
-        'flash' => [
-            'release_updated'  => 'Release aggiornata',
-            'release_created'  => 'Release creata',
-            'github_exception' => 'Si è verificato un errore comunicando con Github: :message',
-        ],
     ],
     'mappingversion' => [
         'created_successfully'      => 'Aggiunta nuova versione di mappatura!',
@@ -176,6 +185,7 @@ return [
             'profile_updated'                  => 'Profilo aggiornato',
             'unexpected_error_when_saving'     => 'Si è verificato un errore inaspettato provando a salvare il tuo profilo',
             'privacy_settings_updated'         => 'Impostazioni sulla privacy aggiornate',
+            'creator_profile_updated'          => 'Profilo creatore aggiornato',
             'password_changed'                 => 'Password cambiata',
             'new_password_equals_old_password' => 'La nuova password è uguale a quella vecchia',
             'new_passwords_do_not_match'       => 'Le nuove password non corrispondono',
@@ -187,11 +197,17 @@ return [
             'error_deleting_account'           => 'Si è verificato un errore. Si prega di riprovare.',
         ],
         'error' => [
-            'add_ad_free_giveaway_limit_reached'        => '',
-            'add_ad_free_giveaway_already_ad_free'      => '',
-            'add_ad_free_giveaway_already_has_giveaway' => '',
-            'remove_ad_free_giveaway_not_found'         => '',
-            'remove_ad_free_giveaway_not_yours'         => '',
+            'add_ad_free_giveaway_limit_reached'        => 'Impossibile aggiungere altri giveaway senza pubblicità. Limite raggiunto.',
+            'add_ad_free_giveaway_already_ad_free'      => 'Impossibile aggiungere giveaway senza pubblicità, l\'utente è già senza pubblicità tramite il proprio abbonamento Patreon.',
+            'add_ad_free_giveaway_already_has_giveaway' => 'Impossibile aggiungere giveaway senza pubblicità, l\'utente è già senza pubblicità tramite un giveaway esistente.',
+            'remove_ad_free_giveaway_not_found'         => 'Impossibile rimuovere il giveaway senza pubblicità - l\'utente al momento non ne ha nessuno.',
+            'remove_ad_free_giveaway_not_yours'         => 'Impossibile rimuovere giveaway senza pubblicità che non sono stati originariamente assegnati da te.',
+        ],
+    ],
+    'season' => [
+        'flash' => [
+            'season_created' => 'Stagione creata',
+            'season_updated' => 'Stagione aggiornata',
         ],
     ],
     'spell' => [
@@ -230,9 +246,9 @@ return [
     'admin' => [
         'dungeonroute' => [
             'flash' => [
-                'updated' => '',
-                'deleted' => '',
-                'claimed' => '',
+                'updated' => 'Percorso del dungeon aggiornato con successo.',
+                'deleted' => 'Percorso del dungeon eliminato con successo.',
+                'claimed' => 'Percorso del dungeon rivendicato con successo. Ora ne sei il proprietario.',
             ],
         ],
     ],

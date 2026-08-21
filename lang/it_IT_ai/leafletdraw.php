@@ -83,8 +83,8 @@ return [
             ],
             'arrow' => [
                 'tooltip' => [
-                    'start' => '',
-                    'cont'  => '',
+                    'start' => 'Fai clic per posizionare l\'inizio della freccia.',
+                    'cont'  => 'Fai clic per posizionare la punta della freccia.',
                 ],
             ],
         ],

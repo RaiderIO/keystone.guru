@@ -3,11 +3,22 @@
 return [
 
     'dungeon' => [
+        'difficulty' => [
+            '10_man' => '10 игроков',
+            '25_man' => '25 игроков',
+            '20_man' => '20 игроков',
+            '40_man' => '40 игроков',
+        ],
         'griddiscover' => [
-            'popular'   => 'Популярные',
-            'this_week' => 'Текущая неделя',
-            'next_week' => 'Следующая неделя',
-            'new'       => 'Новые',
+            'popular' => 'Популярные',
+            'new'     => 'Новые',
+        ],
+        'list' => [
+            'more'        => 'Еще',
+            'next_season' => 'Следующий сезон',
+            'card'        => [
+                'this_week_tier' => 'Уровень сложности этой недели (archon.gg)',
+            ],
         ],
         'gridtabs' => [
             'raid' => 'Рейд',
@@ -50,8 +61,28 @@ return [
         'cardlist' => [
             'no_dungeonroutes' => 'Маршруты не найдены',
         ],
+        'leaderboard' => [
+            'create_first_route' => 'Создать первый маршрут',
+        ],
         'rating' => [
             'nr_of_votes' => '%s голосов',
+        ],
+        'poster' => [
+            'views'     => 'Просмотров: %s',
+            'favorites' => '%s в избранном',
+        ],
+        'cardhero' => [
+            'top_community_route'    => 'Лучший маршрут сообщества',
+            'ranked_community_route' => '#%d маршрут сообщества',
+            'views'                  => 'Просмотров: %s',
+            'favorites'              => '%s в избранном',
+            'pulls'                  => '{1} :count пул|[2,*] :count пулов',
+        ],
+        'cardrow' => [
+            'new'       => 'Новый',
+            'views'     => 'Просмотров: %s',
+            'favorites' => '%s в избранном',
+            'pulls'     => '{1} :count пул|[2,*] :count пулов',
         ],
         'table' => [
             'team'                  => 'Команда',
@@ -79,6 +110,8 @@ return [
             'title_title'                                    => 'Выберите заголовок, который будет отличать ваши маршрут от других аналогичных маршрутов, которые вы можете создать. Заголовок будет виден другим пользователям, как только вы опубликуете свой маршрут.',
             'dungeon_speedrun_required_npc_difficulty'       => 'Размер рейда',
             'dungeon_speedrun_required_npc_difficulty_title' => 'Рейды на 10 и 25 человек могут иметь разных врагов для завершения спидрана. Выберите размер вашего рейда, чтобы переключаться между наборами врагов.',
+            'dungeon_start'                                  => 'Начало подземелья',
+            'dungeon_start_title'                            => 'У этого подземелья несколько входов. Выберите, с какого из них начинается ваш маршрут; это влияет на рассчитанный путь от начала до вашего первого пула.',
             'description'                                    => 'Описание',
             'description_title'                              => 'Необязательное описание вашего маршрута. Описание будет видно другим пользователям, как только вы опубликуете свой маршрут. Вы всегда можете изменить свое описание позже.',
             'key_levels'                                     => 'Уровень ключа',
@@ -106,6 +139,8 @@ return [
             'remember_me'          => 'Запомнить меня',
             'forgot_your_password' => 'Забыли пароль?',
             'login_through_oauth2' => 'Авторизация с помощью OAuth2',
+            'no_account_yet'       => 'Еще нет аккаунта?',
+            'register_now'         => 'Зарегистрироваться',
         ],
         'mapsettings' => [
             'general'                                       => 'Общие',
@@ -119,6 +154,10 @@ return [
             'heatmap'                                       => 'Тепловая карта',
             'show_heatmap_tooltips'                         => 'Показывать подсказки при наведении мыши',
             'show_heatmap_tooltips_title'                   => 'Включение этой настройки будет показывать подсказки при наведении мыши на тепловую карту. Это может быть полезно для просмотра точных значений тепловой карты в конкретной точке.',
+            'heatmap_render_order'                          => 'Порядок отрисовки',
+            'heatmap_render_order_title'                    => 'Определяет, отображается ли тепловая карта поверх врагов или позади них.',
+            'heatmap_render_order_on_top'                   => 'Сверху',
+            'heatmap_render_order_behind'                   => 'Позади',
             'enemies'                                       => 'Враги',
             'enemy_number_style'                            => 'Стиль числа врагов',
             'enemy_number_style_title'                      => 'Это управляет тем, что означают числа, когда вы наводите указатель мыши на врагов или когда вы выбираете тип отображения \'Силы врага\'.',
@@ -132,9 +171,9 @@ return [
             'show_aggressiveness_border_title'              => 'Включение этого параметра отобразит всех врагов рамкой, указывающей на их агрессивность. Красный для агрессивных врагов, желтый для нейтральных врагов, зеленый для дружественных врагов и т. Д.',
             'highlight_dangerous_enemies'                   => 'Выделите опасных врагов',
             'highlight_dangerous_enemies_title'             => 'Опасные враги отмечены оранжевой внутренней границей. Keystone.guru отбирает этих врагов вручную. Эти враги - мини-боссы, обладающие большим здоровьем по сравнению с другими, использующими опасные способности или требующие особого подхода.',
-            'kill_zone_path'                                => '',
-            'kill_zone_path_weight'                         => '',
-            'kill_zone_path_weight_title'                   => '',
+            'kill_zone_path'                                => 'Путь пула',
+            'kill_zone_path_weight'                         => 'Толщина линии пути пула',
+            'kill_zone_path_weight_title'                   => 'Определяет толщину линии, нарисованной между вашими пулами на карте. Большее значение делает линию толще.',
             'drawing'                                       => 'Рисование',
             'default_line_weight'                           => 'Толщина линии по умолчанию',
             'default_line_weight_title'                     => 'Это контролирует ширину всех линий по умолчанию, которые вы создаете на карте, например, контуров и свободных линий.',
@@ -153,7 +192,11 @@ return [
             'import_route'                           => 'Импорт маршрута',
         ],
         'oauth' => [
-            'battletag_warning' => 'Если вы публикуете маршруты, ваше имя пользователя battletag/discord будет видно до тех пор, пока вы не измените имя пользователя в своем профиле.',
+            'battletag_warning'       => 'Если вы публикуете маршруты, ваше имя пользователя battletag/discord будет видно до тех пор, пока вы не измените имя пользователя в своем профиле.',
+            'battlenet_region'        => 'Регион Battle.net',
+            'continue_with_battlenet' => 'Продолжить через Battle.net',
+            'continue_with_discord'   => 'Продолжить через Discord',
+            'continue_with_google'    => 'Продолжить через Google',
         ],
         'pullsettings' => [
             'pull_number_style'                 => 'Стиль номера пула',
@@ -185,6 +228,8 @@ return [
             'terms_of_service'        => 'Условиями использования',
             'privacy_policy'          => 'Политикой конфиденциальности',
             'cookie_policy'           => 'Политикой в отношении файлов cookie',
+            'already_have_an_account' => 'Уже есть аккаунт?',
+            'login_now'               => 'Войти',
         ],
         'timezoneselect' => [
             'africa'     => 'Африка',
@@ -227,7 +272,6 @@ return [
             'api_documentation_internal_team' => 'Документация API (внутренняя команда)',
             'keystone_guru'                   => 'Keystone.guru',
             'changelog'                       => 'Журнал изменений',
-            'changelog_new'                   => 'НОВОЕ',
             'credits'                         => 'Благодарности',
             'about'                           => 'О нас',
             'legacy'                          => 'Наследие',
@@ -243,6 +287,7 @@ return [
             'trademark'                       => 'Торговая марка',
             'trademark_footer'                => 'World of Warcraft, Warcraft и Blizzard Entertainment являются товарными знаками или зарегистрированными товарными знаками Blizzard Entertainment, Inc. в США и / или других странах. Этот веб-сайт не связан с Blizzard Entertainment ».',
             'social'                          => 'Социальные сети',
+            'worktree'                        => '(worktree: :worktree)',
         ],
         'header' => [
             'toggle_navigation_title' => 'Включить навигацию',
@@ -254,25 +299,30 @@ return [
             'heatmaps'                => 'Тепловые карты',
             'explore'                 => 'Исследовать подземелья',
             'new'                     => 'Новые',
-            'compendium'              => '',
-            'npc_compendium'          => '',
-            'spell_compendium'        => '',
-            'compendium_activity'     => '',
-            'class_compendium'        => '',
+            'compendium'              => 'Компендиум',
+            'compendium_overview'     => 'Обзор',
+            'npc_compendium'          => 'НПЦ',
+            'spell_compendium'        => 'Заклинания',
+            'compendium_activity'     => 'Активность',
+            'class_compendium'        => 'По классу',
         ],
         'nav' => [
+            'dungeoncontext' => [
+                'change_dungeon' => 'Сменить подземелье',
+            ],
             'user' => [
                 'login'              => 'Вход',
                 'register'           => 'Регистрация',
                 'telescope'          => 'Телескоп',
                 'tools'              => 'Инструменты',
-                'view_releases'      => 'Просмотр выпусков',
                 'view_expansions'    => 'Просмотр дополнений',
                 'view_dungeons'      => 'Просмотр подземелий',
+                'view_affixes'       => 'Просмотр аффиксов',
+                'view_seasons'       => 'Просмотр сезонов',
                 'view_npcs'          => 'Просмотр НПС',
                 'view_spells'        => 'Просмотр заклинаний',
                 'view_users'         => 'Просмотр пользователей',
-                'view_dungeonroutes' => '',
+                'view_dungeonroutes' => 'Просмотр маршрутов подземелий',
                 'view_user_reports'  => 'Просмотр отчётов пользователей',
                 'my_routes'          => 'Мои маршруты',
                 'my_favorites'       => 'Мои избранные',
@@ -331,8 +381,8 @@ return [
                     'hide_labels' => 'Скрыть',
                 ],
                 'facadetoggle' => [
-                    'facade'       => '',
-                    'split_floors' => '',
+                    'facade'       => 'Стиль MDT',
+                    'split_floors' => 'Стиль Blizzard',
                 ],
                 'mdtclones' => [
                     'mdt'        => 'MDT',
@@ -351,10 +401,10 @@ return [
                 'event_type'             => 'Тип события',
                 'data_type'              => 'Тип данных',
                 'data_type_title'        => 'Позиция врага использует исходное положение врага, с которым вступили в бой (на основе Auto-Route Creator), позиция игрока использует положение игрока при вступлении в бой с врагом (позиция из боевого лога).',
-                'player_spells'          => '',
+                'player_spells'          => 'Заклинания',
                 'npc_death_alt'          => 'Смерть врага',
                 'player_death_alt'       => 'Смерть игрока',
-                'spell_casts_alt'        => '',
+                'spell_casts_alt'        => 'Применения заклинаний',
                 'filter'                 => 'Фильтр',
                 'key_level'              => 'Уровень ключа',
                 'item_level'             => 'Уровень предмета',
@@ -395,11 +445,11 @@ return [
                 ],
             ],
             'combatlogrouteenemyfailures' => [
-                'npc_filter'           => '',
-                'clear_failures'       => '',
-                'clear_failures_title' => '',
-                'matching_routes'      => '',
-                'no_matching_routes'   => '',
+                'npc_filter'           => 'Фильтр НПЦ',
+                'clear_failures'       => 'Очистить сбои',
+                'clear_failures_title' => 'Удалить все записи о сбоях для этого подземелья',
+                'matching_routes'      => 'Подходящие маршруты',
+                'no_matching_routes'   => 'Подходящих маршрутов не найдено',
             ],
             'header' => [
                 'toggle_navigation'              => 'Включить навигацию',
@@ -416,6 +466,7 @@ return [
                 'edit_route_settings'            => 'Настройки маршрута',
                 'edit_mapping_version'           => 'Редактировать версию карты',
                 'share'                          => 'Поделиться',
+                'route_actions'                  => 'Действия с маршрутом',
                 'start_live_session'             => 'Начать живую сессию',
                 'start_live_session_paragraph_1' => 'После запуска маршрута в игре вы можете создать сеанс в реальном времени, в котором Keystone.guru поможет вам пройти M+ ключ. Вы можете следить за перемещениями карты другого пользователя, щелкнув на иконку вверху.',
                 'start_live_session_paragraph_2' => 'Любой участник живого сеанса также может выбрать любой из ваших существующих пулов (ваш текущий пул), а затем любого врага, который не является частью вашего маршрута, чтобы указать на случайной пул. Затем Keystone.guru попытается исправить ваш маршрут, исключив всех врагов, которые являются частью вашего текущего маршрута, которые потенциально можно пропустить без использования Скрывающий покров/зелья невидимости.',
@@ -481,7 +532,7 @@ return [
     ],
     'mappingversion' => [
         'select' => [
-            'mapping_version_readonly' => 'версия :gameVersion :version (только для чтения)',
+            'mapping_version_previous' => ':gameVersion версия :version (предыдущая версия)',
             'mapping_version'          => 'версия :gameVersion :version',
         ],
     ],
@@ -499,7 +550,7 @@ return [
             ],
         ],
         'enemydetails' => [
-            'report_an_issue' => '',
+            'report_an_issue' => 'Сообщить о проблеме',
         ],
         'userreport' => [
             'dungeonroute' => [
@@ -640,15 +691,10 @@ return [
     ],
     'npc' => [
         'link' => [
-            'boss' => '',
+            'boss' => 'Босс',
         ],
         'select' => [
-            'npc' => '',
-        ],
-    ],
-    'release' => [
-        'release' => [
-            'new' => 'Новые',
+            'npc' => 'НПЦ',
         ],
     ],
     'tag' => [
@@ -675,7 +721,7 @@ return [
             'save'                     => 'Сохранить',
             'submit'                   => 'Подтвердить',
             'disband_team'             => 'Распустить команду',
-            'route_publishing_enabled' => '',
+            'route_publishing_enabled' => 'Публикация маршрутов включена',
         ],
         'select' => [
             'select_team' => 'Выбрать команду...',

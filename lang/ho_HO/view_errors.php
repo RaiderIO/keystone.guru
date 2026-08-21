@@ -18,6 +18,10 @@ return [
         'title'   => 'Hodor',
         'message' => 'Hodor',
     ],
+    '405' => [
+        'title'   => 'Hodor',
+        'message' => 'Hodor',
+    ],
     '410' => [
         'title'   => 'Hodor',
         'message' => 'Hodor',

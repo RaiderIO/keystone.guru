@@ -3,11 +3,22 @@
 return [
 
     'dungeon' => [
+        'difficulty' => [
+            '10_man' => '',
+            '25_man' => '',
+            '20_man' => '',
+            '40_man' => '',
+        ],
         'griddiscover' => [
-            'popular'   => '熱門',
-            'this_week' => '本週',
-            'next_week' => '下週',
-            'new'       => '新',
+            'popular' => '熱門',
+            'new'     => '新',
+        ],
+        'list' => [
+            'more'        => '',
+            'next_season' => '',
+            'card'        => [
+                'this_week_tier' => '',
+            ],
         ],
         'gridtabs' => [
             'raid' => '團隊',
@@ -50,8 +61,28 @@ return [
         'cardlist' => [
             'no_dungeonroutes' => '找不到路線',
         ],
+        'leaderboard' => [
+            'create_first_route' => '',
+        ],
         'rating' => [
             'nr_of_votes' => '%s 投票',
+        ],
+        'poster' => [
+            'views'     => '',
+            'favorites' => '',
+        ],
+        'cardhero' => [
+            'top_community_route'    => '',
+            'ranked_community_route' => '',
+            'views'                  => '',
+            'favorites'              => '',
+            'pulls'                  => '',
+        ],
+        'cardrow' => [
+            'new'       => '',
+            'views'     => '',
+            'favorites' => '',
+            'pulls'     => '',
         ],
         'table' => [
             'team'                  => '隊伍',
@@ -79,6 +110,8 @@ return [
             'title_title'                                    => '選擇一個標題，以便在您創建的其他類似路線中唯一地識別該路線。一旦選擇發布路線，標題將對其他人可見。',
             'dungeon_speedrun_required_npc_difficulty'       => '團隊規模',
             'dungeon_speedrun_required_npc_difficulty_title' => '10人和25人團隊可能有不同的敵人需要擊殺以完成速跑。選擇您的團隊規模以切換敵人組合。',
+            'dungeon_start'                                  => '',
+            'dungeon_start_title'                            => '',
             'description'                                    => '描述',
             'description_title'                              => '路線的選擇性描述。一旦選擇發布路線，描述將對其他人可見。您可以隨時編輯您的描述。',
             'key_levels'                                     => '鑰石等級',
@@ -106,6 +139,8 @@ return [
             'remember_me'          => '記住我',
             'forgot_your_password' => '忘記密碼？',
             'login_through_oauth2' => '通過 OAuth2 登入',
+            'no_account_yet'       => '',
+            'register_now'         => '',
         ],
         'mapsettings' => [
             'general'                                       => '一般',
@@ -119,6 +154,10 @@ return [
             'heatmap'                                       => '熱圖',
             'show_heatmap_tooltips'                         => '顯示鼠標懸停提示',
             'show_heatmap_tooltips_title'                   => '啟用此設定後，當您將鼠標懸停在熱圖上時會顯示工具提示。這可以幫助您查看特定位置的熱圖精確值。',
+            'heatmap_render_order'                          => '',
+            'heatmap_render_order_title'                    => '',
+            'heatmap_render_order_on_top'                   => '',
+            'heatmap_render_order_behind'                   => '',
             'enemies'                                       => '敵人',
             'enemy_number_style'                            => '敵人數字樣式',
             'enemy_number_style_title'                      => '這控制當您將鼠標懸停在敵人上或選擇“敵人力量”顯示類型時數字的含義。',
@@ -153,7 +192,11 @@ return [
             'import_route'                           => '導入路線',
         ],
         'oauth' => [
-            'battletag_warning' => '如果您發布路線，您的battletag/discord用戶名將可見，直到您在個人資料中更改您的用戶名。',
+            'battletag_warning'       => '如果您發布路線，您的battletag/discord用戶名將可見，直到您在個人資料中更改您的用戶名。',
+            'battlenet_region'        => '',
+            'continue_with_battlenet' => '',
+            'continue_with_discord'   => '',
+            'continue_with_google'    => '',
         ],
         'pullsettings' => [
             'pull_number_style'                 => '拉怪數字樣式',
@@ -185,6 +228,8 @@ return [
             'terms_of_service'        => '服務條款',
             'privacy_policy'          => '隱私政策',
             'cookie_policy'           => 'cookie政策',
+            'already_have_an_account' => '',
+            'login_now'               => '',
         ],
         'timezoneselect' => [
             'africa'     => '非洲',
@@ -227,7 +272,6 @@ return [
             'api_documentation_internal_team' => 'API 文件（內部團隊）',
             'keystone_guru'                   => 'Keystone.guru',
             'changelog'                       => '更新日誌',
-            'changelog_new'                   => '新',
             'credits'                         => '製作人員',
             'about'                           => '關於',
             'legacy'                          => '遺產',
@@ -243,6 +287,7 @@ return [
             'trademark'                       => '商標',
             'trademark_footer'                => '魔獸世界、魔獸爭霸和暴雪娛樂是暴雪娛樂公司的商標或註冊商標。此網站與暴雪娛樂無關。',
             'social'                          => '社交',
+            'worktree'                        => '',
         ],
         'header' => [
             'toggle_navigation_title' => '切換導航',
@@ -255,20 +300,25 @@ return [
             'explore'                 => '探索地城',
             'new'                     => '新',
             'compendium'              => '',
+            'compendium_overview'     => '',
             'npc_compendium'          => '',
             'spell_compendium'        => '',
             'compendium_activity'     => '',
             'class_compendium'        => '',
         ],
         'nav' => [
+            'dungeoncontext' => [
+                'change_dungeon' => '',
+            ],
             'user' => [
                 'login'              => '登入',
                 'register'           => '註冊',
                 'telescope'          => '望遠鏡',
                 'tools'              => '工具',
-                'view_releases'      => '查看版本',
                 'view_expansions'    => '查看擴展包',
                 'view_dungeons'      => '查看地城',
+                'view_affixes'       => '',
+                'view_seasons'       => '',
                 'view_npcs'          => '查看NPC',
                 'view_spells'        => '查看法術',
                 'view_users'         => '查看用戶',
@@ -416,6 +466,7 @@ return [
                 'edit_route_settings'            => '路線設定',
                 'edit_mapping_version'           => '編輯映射版本',
                 'share'                          => '分享',
+                'route_actions'                  => '',
                 'start_live_session'             => '開始即時會話',
                 'start_live_session_paragraph_1' => '當您開始在遊戲中運行您的路線時，您可以創建一個即時會話，Keystone.guru 會幫助您完成 M+ 鑰匙。您可以通過點擊其他用戶圖標或首字母選擇選項來跟隨他們的地圖移動。',
                 'start_live_session_paragraph_2' => '即時會話的任何參與者也可以選擇您現有的任何拉怪（您當前的拉怪，在遊戲中），然後在不屬於您路線的任何敵人上點擊以指示意外拉怪。Keystone.guru 將嘗試通過排除當前路線中可能跳過的敵人來糾正您的路線，而不使用隱蔽/隱形藥水。',
@@ -481,7 +532,7 @@ return [
     ],
     'mappingversion' => [
         'select' => [
-            'mapping_version_readonly' => ':gameVersion 版本 :version（只讀）',
+            'mapping_version_previous' => '',
             'mapping_version'          => ':gameVersion 版本 :version',
         ],
     ],
@@ -639,11 +690,6 @@ return [
         ],
         'select' => [
             'npc' => '',
-        ],
-    ],
-    'release' => [
-        'release' => [
-            'new' => '新',
         ],
     ],
     'tag' => [

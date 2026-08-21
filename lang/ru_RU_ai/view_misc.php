@@ -24,10 +24,6 @@ return [
         'popular_routes_by_current_affixes' => 'Популярные маршруты по текущим аффиксам',
         'popular_routes_by_next_affixes'    => 'Популярные маршруты аффиксов следующей недели',
     ],
-    'changelog' => [
-        'title'  => 'Журнал изменений',
-        'header' => 'Журнал изменений',
-    ],
     'credits' => [
         'title'            => 'Благодарности',
         'header'           => '@Благодарности',

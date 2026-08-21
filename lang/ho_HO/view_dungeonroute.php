@@ -5,19 +5,31 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'               => 'Hodor',
-                'popular'                    => 'Hodor',
-                'popular_by_current_affixes' => 'Hodor',
-                'popular_by_next_affixes'    => 'Hodor',
-                'newly_published_routes'     => 'Hodor',
+                'weekly_route'           => 'Hodor',
+                'weekly_routes'          => 'Hodor',
+                'community_routes'       => 'Hodor',
+                'popular'                => 'Hodor',
+                'newly_published_routes' => 'Hodor',
+                'archetypes'             => [
+                    'pug_friendly' => [
+                        'label'       => 'Hodor',
+                        'description' => 'Hodor',
+                    ],
+                    'expert' => [
+                        'label'       => 'Hodor',
+                        'description' => 'Hodor',
+                    ],
+                    'title' => [
+                        'label'       => 'Hodor',
+                        'description' => 'Hodor',
+                    ],
+                ],
             ],
         ],
         'discover' => [
-            'title'                      => 'Hodor',
-            'popular'                    => 'Hodor',
-            'popular_by_current_affixes' => 'Hodor',
-            'popular_by_next_affixes'    => 'Hodor',
-            'newly_published_routes'     => 'Hodor',
+            'title'                  => 'Hodor',
+            'popular'                => 'Hodor',
+            'newly_published_routes' => 'Hodor',
         ],
         'panel' => [
             'show_more' => 'Hodor',

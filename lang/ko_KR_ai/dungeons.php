@@ -1338,6 +1338,15 @@ return [
                 'the_headteachers_enclave' => '교장의 거주지',
             ],
         ],
+        'altar_of_fangs' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'sacrificial_approach' => '',
+                'mutation_chambers'    => '',
+                'altar_of_fangs'       => '',
+            ],
+        ],
         'den_of_nalorakk' => [
             'name'         => '날로라크의 소굴',
             'abbreviation' => '',
@@ -1397,7 +1406,9 @@ return [
             'name'         => '공허흉터 투기장',
             'abbreviation' => '',
             'floors'       => [
-                'voidscar_arena' => '공허흉터 투기장',
+                'halls_of_spite'   => '',
+                'voidscar_arena'   => '공허흉터 투기장',
+                'domanaars_ascent' => '',
             ],
         ],
         'windrunner_spire' => [

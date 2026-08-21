@@ -112,4 +112,18 @@ return [
     'seat_of_the_triumvirate_void_infusion'  => 'Leereninfusion',
     'maisara_caverns_hearty_vilebranch_stew' => 'Herzhafter Vilebranch-Eintopf',
 
+    'algethar_academy_black_dragonflight_pledge_pin'  => 'Schwurbrosche des schwarzen Drachenschwarms',
+    'algethar_academy_blue_dragonflight_pledge_pin'   => 'Schwurbrosche des blauen Drachenschwarms',
+    'algethar_academy_bronze_dragonflight_pledge_pin' => 'Schwurbrosche des bronzenen Drachenschwarms',
+    'algethar_academy_green_dragonflight_pledge_pin'  => 'Schwurbrosche des grünen Drachenschwarms',
+    'algethar_academy_red_dragonflight_pledge_pin'    => 'Schwurbrosche des roten Drachenschwarms',
+    'magisters_terrace_arcane_empowerment'            => 'Arkane Ermächtigung',
+    'murder_row_fel_contraband'                       => 'Teufelsschmuggelware',
+    'murder_row_felstone'                             => 'Teufelsstein',
+    'murder_row_felwyrm_egg'                          => 'Teufelswyrmei',
+    'murder_row_heartstop_poison'                     => 'Herzstillstandsgift',
+    'murder_row_loaded_pistol'                        => 'Geladene Pistole',
+    'murder_row_overload_golem'                       => 'Überlastungsgolem',
+    'the_blinding_vale_flourishing_stride'            => 'Blühender Schritt',
+
 ];

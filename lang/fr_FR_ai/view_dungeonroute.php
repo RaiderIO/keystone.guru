@@ -5,19 +5,31 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'               => 'Itinéraire hebdomadaire Raider.IO',
-                'popular'                    => 'Itinéraires populaires',
-                'popular_by_current_affixes' => 'Itinéraires populaires par affixes actuels',
-                'popular_by_next_affixes'    => 'Itinéraires populaires par affixes suivants',
-                'newly_published_routes'     => 'Itinéraires nouvellement publiés',
+                'weekly_route'           => 'Itinéraire hebdomadaire Raider.IO',
+                'weekly_routes'          => 'Itinéraires hebdomadaires Raider.IO',
+                'community_routes'       => 'Itinéraires de la communauté',
+                'popular'                => 'Itinéraires populaires',
+                'newly_published_routes' => 'Itinéraires nouvellement publiés',
+                'archetypes'             => [
+                    'pug_friendly' => [
+                        'label'       => 'Adapté aux PUG',
+                        'description' => 'Pulls laissant une bonne marge d\'erreur aux groupes de joueurs qui ne se connaissent pas',
+                    ],
+                    'expert' => [
+                        'label'       => 'Expert',
+                        'description' => 'Optimisée pour des groupes coordonnés',
+                    ],
+                    'title' => [
+                        'label'       => 'Titre',
+                        'description' => 'L\'itinéraire utilisé par les 0,5 % les mieux classés pour faire progresser leur cote',
+                    ],
+                ],
             ],
         ],
         'discover' => [
-            'title'                      => 'Itinéraires',
-            'popular'                    => 'Itinéraires populaires',
-            'popular_by_current_affixes' => 'Itinéraires populaires par affixes actuels',
-            'popular_by_next_affixes'    => 'Itinéraires populaires par affixes suivants',
-            'newly_published_routes'     => 'Itinéraires nouvellement publiés',
+            'title'                  => 'Itinéraires',
+            'popular'                => 'Itinéraires populaires',
+            'newly_published_routes' => 'Itinéraires nouvellement publiés',
         ],
         'panel' => [
             'show_more' => 'Afficher plus',

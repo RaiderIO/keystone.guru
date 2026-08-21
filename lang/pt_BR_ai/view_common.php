@@ -3,11 +3,22 @@
 return [
 
     'dungeon' => [
+        'difficulty' => [
+            '10_man' => '10 jogadores',
+            '25_man' => '25 jogadores',
+            '20_man' => '20 jogadores',
+            '40_man' => '40 jogadores',
+        ],
         'griddiscover' => [
-            'popular'   => 'Popular',
-            'this_week' => 'Esta semana',
-            'next_week' => 'Próxima semana',
-            'new'       => 'Novo',
+            'popular' => 'Popular',
+            'new'     => 'Novo',
+        ],
+        'list' => [
+            'more'        => 'Mais',
+            'next_season' => 'Próxima temporada',
+            'card'        => [
+                'this_week_tier' => 'Nível de dificuldade desta semana (archon.gg)',
+            ],
         ],
         'gridtabs' => [
             'raid' => 'Incursão',
@@ -50,8 +61,28 @@ return [
         'cardlist' => [
             'no_dungeonroutes' => 'Nenhuma rota encontrada',
         ],
+        'leaderboard' => [
+            'create_first_route' => 'Criar a primeira rota',
+        ],
         'rating' => [
             'nr_of_votes' => '%s voto(s)',
+        ],
+        'poster' => [
+            'views'     => '%s visualizações',
+            'favorites' => '%s favoritos',
+        ],
+        'cardhero' => [
+            'top_community_route'    => 'Melhor rota da comunidade',
+            'ranked_community_route' => '#%d rota da comunidade',
+            'views'                  => '%s visualizações',
+            'favorites'              => '%s favoritos',
+            'pulls'                  => '{1} :count pull|[2,*] :count pulls',
+        ],
+        'cardrow' => [
+            'new'       => 'Novo',
+            'views'     => '%s visualizações',
+            'favorites' => '%s favoritos',
+            'pulls'     => '{1} :count pull|[2,*] :count pulls',
         ],
         'table' => [
             'team'                  => 'Equipe',
@@ -79,6 +110,8 @@ return [
             'title_title'                                    => 'Escolha um título que identifique exclusivamente a rota para você entre outras rotas semelhantes que você possa criar. O título será visível para outros quando você escolher publicar sua rota.',
             'dungeon_speedrun_required_npc_difficulty'       => 'Tamanho da raide',
             'dungeon_speedrun_required_npc_difficulty_title' => 'Raides de 10 e 25 jogadores podem ter inimigos diferentes para derrotar ao completar uma corrida contra o tempo. Selecione o tamanho da sua raide para alternar entre os conjuntos de inimigos.',
+            'dungeon_start'                                  => 'Início da masmorra',
+            'dungeon_start_title'                            => 'Esta masmorra possui várias entradas. Selecione de qual delas sua rota começa; isso afeta o caminho calculado do início até o seu primeiro pull.',
             'description'                                    => 'Descrição',
             'description_title'                              => 'Uma descrição opcional da sua rota. A descrição será visível para outros quando você escolher publicar sua rota. Você pode sempre editar sua descrição posteriormente.',
             'key_levels'                                     => 'Níveis de chave',
@@ -106,6 +139,8 @@ return [
             'remember_me'          => 'Lembrar-me',
             'forgot_your_password' => 'Esqueceu sua senha?',
             'login_through_oauth2' => 'Entrar através do OAuth2',
+            'no_account_yet'       => 'Ainda não tem uma conta?',
+            'register_now'         => 'Registrar',
         ],
         'mapsettings' => [
             'general'                                       => 'Geral',
@@ -119,6 +154,10 @@ return [
             'heatmap'                                       => 'Mapa de calor',
             'show_heatmap_tooltips'                         => 'Mostrar dicas de ferramentas ao passar o mouse',
             'show_heatmap_tooltips_title'                   => 'Ativar esta configuração mostrará dicas de ferramentas quando você passar o mouse sobre o mapa de calor. Isto pode ser útil para ver os valores exatos do mapa de calor em um local específico.',
+            'heatmap_render_order'                          => 'Ordem de renderização',
+            'heatmap_render_order_title'                    => 'Controla se o mapa de calor é renderizado acima dos inimigos ou atrás deles.',
+            'heatmap_render_order_on_top'                   => 'Acima',
+            'heatmap_render_order_behind'                   => 'Atrás',
             'enemies'                                       => 'Inimigos',
             'enemy_number_style'                            => 'Estilo do número do inimigo',
             'enemy_number_style_title'                      => 'Isto controla o que os números significam quando você passa o mouse sobre os inimigos ou quando você seleciona o tipo de exibição \'Forças inimigas\'.',
@@ -132,9 +171,9 @@ return [
             'show_aggressiveness_border_title'              => 'Ativar esta configuração renderizará todos os inimigos com uma borda para indicar sua agressividade. Vermelho para inimigos agressivos, amarelo para inimigos neutros, verde para inimigos amigáveis etc.',
             'highlight_dangerous_enemies'                   => 'Destacar inimigos perigosos',
             'highlight_dangerous_enemies_title'             => 'Inimigos perigosos são marcados com uma borda interna pontilhada laranja. Estes inimigos são escolhidos a dedo pelo Keystone.guru. Estes inimigos são mini-chefes, aqueles com alta vida em comparação com outros, usam habilidades perigosas ou exigem cuidados especiais.',
-            'kill_zone_path'                                => '',
-            'kill_zone_path_weight'                         => '',
-            'kill_zone_path_weight_title'                   => '',
+            'kill_zone_path'                                => 'Caminho do pull',
+            'kill_zone_path_weight'                         => 'Espessura do traço do caminho do pull',
+            'kill_zone_path_weight_title'                   => 'Isso controla a largura da linha desenhada entre seus pulls no mapa. Um valor maior torna a linha mais grossa.',
             'drawing'                                       => 'Desenho',
             'default_line_weight'                           => 'Espessura padrão da linha',
             'default_line_weight_title'                     => 'Isto controla a espessura padrão (largura) de qualquer linha que você criar no mapa, como caminhos e linhas desenhadas livremente.',
@@ -153,7 +192,11 @@ return [
             'import_route'                           => 'Importar rota',
         ],
         'oauth' => [
-            'battletag_warning' => 'Se você publicar rotas, seu battletag/nome de usuário do discord ficará visível até que você altere seu nome de usuário no seu perfil.',
+            'battletag_warning'       => 'Se você publicar rotas, seu battletag/nome de usuário do discord ficará visível até que você altere seu nome de usuário no seu perfil.',
+            'battlenet_region'        => 'Região do Battle.net',
+            'continue_with_battlenet' => 'Continuar com o Battle.net',
+            'continue_with_discord'   => 'Continuar com o Discord',
+            'continue_with_google'    => 'Continuar com o Google',
         ],
         'pullsettings' => [
             'pull_number_style'                 => 'Estilo do número do pull',
@@ -185,6 +228,8 @@ return [
             'terms_of_service'        => 'termos de serviço',
             'privacy_policy'          => 'política de privacidade',
             'cookie_policy'           => 'política de cookies',
+            'already_have_an_account' => 'Já tem uma conta?',
+            'login_now'               => 'Entrar',
         ],
         'timezoneselect' => [
             'africa'     => 'África',
@@ -227,7 +272,6 @@ return [
             'api_documentation_internal_team' => 'Documentação da API (equipe interna)',
             'keystone_guru'                   => 'Keystone.guru',
             'changelog'                       => 'Registro de alterações',
-            'changelog_new'                   => 'NOVO',
             'credits'                         => 'Créditos',
             'about'                           => 'Sobre',
             'legacy'                          => 'Legado',
@@ -243,6 +287,7 @@ return [
             'trademark'                       => 'Marca Registrada',
             'trademark_footer'                => 'World of Warcraft, Warcraft e Blizzard Entertainment são marcas comerciais ou marcas registradas da Blizzard Entertainment, Inc. nos EUA e/ou em outros países. Este site não é afiliado à Blizzard Entertainment.',
             'social'                          => 'Social',
+            'worktree'                        => '(worktree: :worktree)',
         ],
         'header' => [
             'toggle_navigation_title' => 'Alternar navegação',
@@ -254,25 +299,30 @@ return [
             'heatmaps'                => 'Mapas de calor',
             'explore'                 => 'Explorar masmorras',
             'new'                     => 'NOVO',
-            'compendium'              => '',
-            'npc_compendium'          => '',
-            'spell_compendium'        => '',
-            'compendium_activity'     => '',
-            'class_compendium'        => '',
+            'compendium'              => 'Compêndio',
+            'compendium_overview'     => 'Visão geral',
+            'npc_compendium'          => 'NPCs',
+            'spell_compendium'        => 'Feitiços',
+            'compendium_activity'     => 'Atividade',
+            'class_compendium'        => 'Por Classe',
         ],
         'nav' => [
+            'dungeoncontext' => [
+                'change_dungeon' => 'Trocar masmorra',
+            ],
             'user' => [
                 'login'              => 'Entrar',
                 'register'           => 'Registrar',
                 'telescope'          => 'Telescópio',
                 'tools'              => 'Ferramentas',
-                'view_releases'      => 'Ver lançamentos',
                 'view_expansions'    => 'Ver expansões',
                 'view_dungeons'      => 'Ver masmorras',
+                'view_affixes'       => 'Ver afixos',
+                'view_seasons'       => 'Ver temporadas',
                 'view_npcs'          => 'Ver NPCs',
                 'view_spells'        => 'Ver feitiços',
                 'view_users'         => 'Ver usuários',
-                'view_dungeonroutes' => '',
+                'view_dungeonroutes' => 'Ver rotas de masmorra',
                 'view_user_reports'  => 'Ver relatórios de usuários',
                 'my_routes'          => 'Minhas rotas',
                 'my_favorites'       => 'Meus favoritos',
@@ -331,8 +381,8 @@ return [
                     'hide_labels' => 'Ocultar',
                 ],
                 'facadetoggle' => [
-                    'facade'       => '',
-                    'split_floors' => '',
+                    'facade'       => 'Estilo MDT',
+                    'split_floors' => 'Estilo Blizzard',
                 ],
                 'mdtclones' => [
                     'mdt'        => 'Mostrar MDT',
@@ -351,10 +401,10 @@ return [
                 'event_type'             => 'Tipo de evento',
                 'data_type'              => 'Tipo de dado',
                 'data_type_title'        => 'A posição do inimigo usa a posição original do inimigo que foi engajado (alimentado pelo Criador de Rotas Automático), a posição do jogador usa a posição do jogador quando um inimigo foi engajado (posição do log de combate).',
-                'player_spells'          => '',
+                'player_spells'          => 'Feitiços',
                 'npc_death_alt'          => 'Morte do inimigo',
                 'player_death_alt'       => 'Morte do jogador',
-                'spell_casts_alt'        => '',
+                'spell_casts_alt'        => 'Conjurações de feitiços',
                 'filter'                 => 'Filtro',
                 'key_level'              => 'Nível da chave',
                 'item_level'             => 'Nível do item',
@@ -395,11 +445,11 @@ return [
                 ],
             ],
             'combatlogrouteenemyfailures' => [
-                'npc_filter'           => '',
-                'clear_failures'       => '',
-                'clear_failures_title' => '',
-                'matching_routes'      => '',
-                'no_matching_routes'   => '',
+                'npc_filter'           => 'Filtro de NPC',
+                'clear_failures'       => 'Limpar falhas',
+                'clear_failures_title' => 'Excluir todos os registros de falhas desta masmorra',
+                'matching_routes'      => 'Rotas correspondentes',
+                'no_matching_routes'   => 'Nenhuma rota correspondente encontrada',
             ],
             'header' => [
                 'toggle_navigation'              => 'Alternar navegação',
@@ -416,6 +466,7 @@ return [
                 'edit_route_settings'            => 'Configurações de rota',
                 'edit_mapping_version'           => 'Editar versão de mapeamento',
                 'share'                          => 'Compartilhar',
+                'route_actions'                  => 'Ações da rota',
                 'start_live_session'             => 'Iniciar sessão ao vivo',
                 'start_live_session_paragraph_1' => 'Uma vez que você começar a rodar sua rota no jogo, poderá criar uma sessão ao vivo onde o Keystone.guru irá ajudá-lo a completar sua chave M+. Você pode seguir os movimentos do mapa de outro usuário selecionando a opção ao clicar no ícone/iniciais dele no cabeçalho superior.',
                 'start_live_session_paragraph_2' => 'Qualquer participante da sessão ao vivo também pode selecionar qualquer um dos seus pulls existentes (seu pull atual, no jogo) e, em seguida, em qualquer inimigo que não faça parte da sua rota para indicar um pull acidental. O Keystone.guru então tentará corrigir sua rota excluindo quaisquer inimigos que façam parte de sua rota atual que sejam potencialmente puláveis sem utilizar capa/poções de invisibilidade.',
@@ -481,7 +532,7 @@ return [
     ],
     'mappingversion' => [
         'select' => [
-            'mapping_version_readonly' => ':gameVersion versão :version (somente leitura)',
+            'mapping_version_previous' => ':gameVersion versão :version (versão anterior)',
             'mapping_version'          => ':gameVersion versão :version',
         ],
     ],
@@ -499,7 +550,7 @@ return [
             ],
         ],
         'enemydetails' => [
-            'report_an_issue' => '',
+            'report_an_issue' => 'Reportar um problema',
         ],
         'userreport' => [
             'dungeonroute' => [
@@ -640,15 +691,10 @@ return [
     ],
     'npc' => [
         'link' => [
-            'boss' => '',
+            'boss' => 'Chefe',
         ],
         'select' => [
-            'npc' => '',
-        ],
-    ],
-    'release' => [
-        'release' => [
-            'new' => 'NOVO',
+            'npc' => 'NPC',
         ],
     ],
     'tag' => [
@@ -675,7 +721,7 @@ return [
             'save'                     => 'Salvar',
             'submit'                   => 'Enviar',
             'disband_team'             => 'Dissolver equipe',
-            'route_publishing_enabled' => '',
+            'route_publishing_enabled' => 'Publicação de rota ativada',
         ],
         'select' => [
             'select_team' => 'Selecionar equipe...',

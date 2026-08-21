@@ -19,21 +19,41 @@ return [
             'mdt_invalid_category'                => 'Catégorie invalide',
         ],
         'flash' => [
+            'banned_ip_address_added'                => 'Adresse IP bannie avec succès',
+            'banned_ip_address_removed'              => 'Bannissement supprimé avec succès',
             'message_banner_set_successfully'        => 'Bannière de message définie avec succès',
             'thumbnail_regenerate_result'            => ':success tâches envoyées pour :total itinéraires. :failed a échoué.',
-            'combatlog_route_regenerate_result'      => '',
-            'combatlog_criteria_reset'               => '',
-            'combatlog_criteria_thresholds_updated'  => '',
+            'combatlog_route_regenerate_result'      => ':count tâches lancées',
+            'combatlog_criteria_reset'               => 'Tous les compteurs de critères d\'analyse pour aujourd\'hui ont été réinitialisés.',
+            'combatlog_criteria_thresholds_updated'  => 'Les seuils des critères d\'analyse ont été mis à jour.',
             'caches_dropped_successfully'            => 'Caches supprimées avec succès',
-            'releases_exported'                      => 'Versions exportées',
+            'caches_drop_queued'                     => 'La suppression du cache a été mise en file d\'attente et s\'exécutera en arrière-plan',
             'exception'                              => 'Exception lancée dans le panneau d\'administration',
             'feature_toggle_activated'               => 'La fonctionnalité :feature est maintenant activée',
             'feature_toggle_deactivated'             => 'La fonctionnalité :feature est maintenant désactivée',
             'feature_forgotten'                      => 'Fonctionnalité :feature oubliée avec succès',
-            'mapping_version_upgrade_queued'         => '',
-            'mapping_version_upgrade_already_latest' => '',
+            'mapping_version_upgrade_queued'         => ':count routes mises en file d\'attente pour la mise à niveau de :version vers la dernière version.',
+            'mapping_version_upgrade_already_latest' => 'Cette version de mapping est déjà la plus récente pour son donjon — aucune route n\'a été mise en file d\'attente.',
             'read_only_mode_disabled'                => 'Mode lecture seule désactivé',
             'read_only_mode_enabled'                 => 'Mode lecture seule activé',
+        ],
+    ],
+    'affix' => [
+        'flash' => [
+            'affix_created' => 'Affixe créé',
+            'affix_updated' => 'Affixe mis à jour',
+        ],
+    ],
+    'affixgroup' => [
+        'flash' => [
+            'affixgroup_created' => 'Groupe d\'affixes créé',
+            'affixgroup_updated' => 'Groupe d\'affixes mis à jour',
+            'affixgroup_deleted' => 'Groupe d\'affixes supprimé',
+        ],
+    ],
+    'apicombatlogrun' => [
+        'error' => [
+            'no_segments' => 'Aucun segment de journal de combat n\'est disponible pour ce run.',
         ],
     ],
     'apidungeonroute' => [
@@ -54,8 +74,8 @@ return [
     ],
     'arrow' => [
         'error' => [
-            'unable_to_save_arrow'   => '',
-            'unable_to_delete_arrow' => '',
+            'unable_to_save_arrow'   => 'Impossible d\'enregistrer la flèche',
+            'unable_to_delete_arrow' => 'Impossible de supprimer la flèche',
         ],
     ],
     'dungeon' => [
@@ -73,21 +93,15 @@ return [
         ],
     ],
     'dungeonroutediscover' => [
-        'popular'           => 'Itinéraires populaires',
-        'this_week_affixes' => 'Les affixes de cette semaine',
-        'next_week_affixes' => 'Les affixes de la semaine prochaine',
-        'new'               => 'Nouveau',
-        'season'            => [
-            'popular'           => '%s itinéraires populaires',
-            'this_week_affixes' => '%s cette semaine',
-            'next_week_affixes' => '%s la semaine prochaine',
-            'new'               => '%s nouveaux itinéraires',
+        'popular' => 'Itinéraires populaires',
+        'new'     => 'Nouveau',
+        'season'  => [
+            'popular' => '%s itinéraires populaires',
+            'new'     => '%s nouveaux itinéraires',
         ],
         'dungeon' => [
-            'popular'           => '%s itinéraires populaires',
-            'this_week_affixes' => '%s cette semaine',
-            'next_week_affixes' => '%s la semaine prochaine',
-            'new'               => '%s nouveaux itinéraires',
+            'popular' => '%s itinéraires populaires',
+            'new'     => '%s nouveaux itinéraires',
         ],
     ],
     'dungeonspeedrunrequirednpcs' => [
@@ -110,6 +124,11 @@ return [
             'not_found'                  => 'Non trouvé',
         ],
     ],
+    'killzone' => [
+        'error' => [
+            'facade_location_not_convertible' => 'Impossible de placer le pull ici - cet emplacement n\'appartient à aucun étage de ce donjon',
+        ],
+    ],
     'oauthlogin' => [
         'flash' => [
             'registered_successfully' => 'Inscription réussie. Profitez du site!',
@@ -125,16 +144,6 @@ return [
         ],
         'legal_agreed_required' => 'Vous devez accepter nos conditions légales pour vous inscrire.',
         'legal_agreed_accepted' => 'Vous devez accepter nos conditions légales pour vous inscrire.',
-    ],
-    'release' => [
-        'error' => [
-            'unable_to_save_release' => 'Impossible de sauvegarder la version',
-        ],
-        'flash' => [
-            'release_updated'  => 'Version mise à jour',
-            'release_created'  => 'Version créée',
-            'github_exception' => 'Une erreur s\'est produite lors de la communication avec Github: :message',
-        ],
     ],
     'mappingversion' => [
         'created_successfully'      => 'Nouvelle version de cartographie ajoutée!',
@@ -176,6 +185,7 @@ return [
             'profile_updated'                  => 'Profil mis à jour',
             'unexpected_error_when_saving'     => 'Une erreur inattendue s\'est produite lors de la tentative de sauvegarde de votre profil',
             'privacy_settings_updated'         => 'Paramètres de confidentialité mis à jour',
+            'creator_profile_updated'          => 'Profil de créateur mis à jour',
             'password_changed'                 => 'Mot de passe modifié',
             'new_password_equals_old_password' => 'Le nouveau mot de passe est identique à l\'ancien mot de passe',
             'new_passwords_do_not_match'       => 'Les nouveaux mots de passe ne correspondent pas',
@@ -187,11 +197,17 @@ return [
             'error_deleting_account'           => 'Une erreur s\'est produite. Veuillez réessayer.',
         ],
         'error' => [
-            'add_ad_free_giveaway_limit_reached'        => '',
-            'add_ad_free_giveaway_already_ad_free'      => '',
-            'add_ad_free_giveaway_already_has_giveaway' => '',
-            'remove_ad_free_giveaway_not_found'         => '',
-            'remove_ad_free_giveaway_not_yours'         => '',
+            'add_ad_free_giveaway_limit_reached'        => 'Impossible d\'ajouter plus d\'accès sans publicité offerts. Limite atteinte.',
+            'add_ad_free_giveaway_already_ad_free'      => 'Impossible d\'ajouter des accès sans publicité offerts, l\'utilisateur est déjà sans publicité via son propre abonnement Patreon.',
+            'add_ad_free_giveaway_already_has_giveaway' => 'Impossible d\'ajouter des accès sans publicité offerts, l\'utilisateur est déjà sans publicité via un accès offert existant.',
+            'remove_ad_free_giveaway_not_found'         => 'Impossible de retirer l\'accès sans publicité offert - l\'utilisateur n\'en a aucun pour le moment.',
+            'remove_ad_free_giveaway_not_yours'         => 'Impossible de retirer un accès sans publicité offert qui n\'a pas été accordé par vous à l\'origine.',
+        ],
+    ],
+    'season' => [
+        'flash' => [
+            'season_created' => 'Saison créée',
+            'season_updated' => 'Saison mise à jour',
         ],
     ],
     'spell' => [
@@ -230,9 +246,9 @@ return [
     'admin' => [
         'dungeonroute' => [
             'flash' => [
-                'updated' => '',
-                'deleted' => '',
-                'claimed' => '',
+                'updated' => 'Route de donjon mise à jour avec succès.',
+                'deleted' => 'Route de donjon supprimée avec succès.',
+                'claimed' => 'Route de donjon revendiquée avec succès. Vous en êtes désormais le propriétaire.',
             ],
         ],
     ],

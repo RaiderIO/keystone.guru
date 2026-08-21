@@ -5,19 +5,31 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'               => 'Raider.IO Еженедельный маршрут',
-                'popular'                    => 'Популярные маршруты',
-                'popular_by_current_affixes' => 'Популярные маршруты с текущими аффиксами',
-                'popular_by_next_affixes'    => 'Популярные маршруты с аффиксами следующей недели',
-                'newly_published_routes'     => 'Новые маршруты',
+                'weekly_route'           => 'Raider.IO Еженедельный маршрут',
+                'weekly_routes'          => 'Еженедельные маршруты Raider.IO',
+                'community_routes'       => 'Маршруты сообщества',
+                'popular'                => 'Популярные маршруты',
+                'newly_published_routes' => 'Новые маршруты',
+                'archetypes'             => [
+                    'pug_friendly' => [
+                        'label'       => 'Подходит для PUG',
+                        'description' => 'Щадящие пуллы для групп незнакомцев',
+                    ],
+                    'expert' => [
+                        'label'       => 'Экспертный',
+                        'description' => 'Оптимизирован для слаженных групп',
+                    ],
+                    'title' => [
+                        'label'       => 'Титульный',
+                        'description' => 'Маршрут, который топ 0.5% использует для повышения рейтинга',
+                    ],
+                ],
             ],
         ],
         'discover' => [
-            'title'                      => 'Маршруты',
-            'popular'                    => 'Популярные маршруты',
-            'popular_by_current_affixes' => 'Популярные маршруты с текущими аффиксами',
-            'popular_by_next_affixes'    => 'Популярные маршруты с аффиксами следующей недели',
-            'newly_published_routes'     => 'Новые маршруты',
+            'title'                  => 'Маршруты',
+            'popular'                => 'Популярные маршруты',
+            'newly_published_routes' => 'Новые маршруты',
         ],
         'panel' => [
             'show_more' => 'Показать еще',

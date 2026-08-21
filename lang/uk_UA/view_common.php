@@ -3,11 +3,22 @@
 return [
 
     'dungeon' => [
+        'difficulty' => [
+            '10_man' => '',
+            '25_man' => '',
+            '20_man' => '',
+            '40_man' => '',
+        ],
         'griddiscover' => [
-            'popular'   => 'Поширене',
-            'this_week' => 'Цей тиждень',
-            'next_week' => 'Наст. тиждень',
-            'new'       => 'Нове',
+            'popular' => 'Поширене',
+            'new'     => 'Нове',
+        ],
+        'list' => [
+            'more'        => '',
+            'next_season' => '',
+            'card'        => [
+                'this_week_tier' => '',
+            ],
         ],
         'gridtabs' => [
             'raid' => 'Рейд',
@@ -50,8 +61,28 @@ return [
         'cardlist' => [
             'no_dungeonroutes' => 'Немає маршрутів',
         ],
+        'leaderboard' => [
+            'create_first_route' => '',
+        ],
         'rating' => [
             'nr_of_votes' => '%s голос(-ів)',
+        ],
+        'poster' => [
+            'views'     => '',
+            'favorites' => '',
+        ],
+        'cardhero' => [
+            'top_community_route'    => '',
+            'ranked_community_route' => '',
+            'views'                  => '',
+            'favorites'              => '',
+            'pulls'                  => '',
+        ],
+        'cardrow' => [
+            'new'       => '',
+            'views'     => '',
+            'favorites' => '',
+            'pulls'     => '',
         ],
         'table' => [
             'team'                  => 'Команда',
@@ -79,6 +110,8 @@ return [
             'title_title'                                    => 'Виберіть назву, яка буде вирізняти ваш маршрут серед інших. Вона стане видимою для решти гравців, коли наважитеся на опублікування.',
             'dungeon_speedrun_required_npc_difficulty'       => 'Розмір рейду',
             'dungeon_speedrun_required_npc_difficulty_title' => 'У рейдах на 10 і 25 осіб можуть бути різні вороги, яких потрібно вбити для завершення швидкісного забігу. Виберіть розмір рейду, щоб перемикатися між наборами ворогів.',
+            'dungeon_start'                                  => '',
+            'dungeon_start_title'                            => '',
             'description'                                    => 'Опис',
             'description_title'                              => 'Необов\'язковий опис маршруту. Він стане видимим для решти гравців, коли наважитеся на опублікування. Ви завжди можете змінити опис пізніше.',
             'key_levels'                                     => 'Рівні ключа',
@@ -106,6 +139,8 @@ return [
             'remember_me'          => 'Запам\'ятати мене',
             'forgot_your_password' => 'Забули пароль?',
             'login_through_oauth2' => 'Увійти через OAuth2',
+            'no_account_yet'       => '',
+            'register_now'         => '',
         ],
         'mapsettings' => [
             'general'                                       => 'Загальне',
@@ -119,6 +154,10 @@ return [
             'heatmap'                                       => 'Тепломапа',
             'show_heatmap_tooltips'                         => 'Показувати підказки при наведенні вказівника',
             'show_heatmap_tooltips_title'                   => 'Показує підказки під час наведення вказівника на тепломапу. Дає змогу переглянути точні значення тепломапи в конкретному місці.',
+            'heatmap_render_order'                          => '',
+            'heatmap_render_order_title'                    => '',
+            'heatmap_render_order_on_top'                   => '',
+            'heatmap_render_order_behind'                   => '',
             'enemies'                                       => 'Вороги',
             'enemy_number_style'                            => 'Стиль чисел ворогів',
             'enemy_number_style_title'                      => 'Змінює значення чисел, які з\'являються під час наведення вказівником на ворогів або при виборі типу показу «ворожі війська».',
@@ -153,7 +192,11 @@ return [
             'import_route'                           => 'Імпортувати',
         ],
         'oauth' => [
-            'battletag_warning' => 'Якщо ви опублікуєте маршрути, ваш Battletag або нік у Discord буде видимий, поки не зміните його у профілі.',
+            'battletag_warning'       => 'Якщо ви опублікуєте маршрути, ваш Battletag або нік у Discord буде видимий, поки не зміните його у профілі.',
+            'battlenet_region'        => '',
+            'continue_with_battlenet' => '',
+            'continue_with_discord'   => '',
+            'continue_with_google'    => '',
         ],
         'pullsettings' => [
             'pull_number_style'                 => 'Стиль чисел сутичок',
@@ -185,6 +228,8 @@ return [
             'terms_of_service'        => 'умовами надання послуг',
             'privacy_policy'          => 'політикою конфіденційності',
             'cookie_policy'           => 'політикою cookie-файлів',
+            'already_have_an_account' => '',
+            'login_now'               => '',
         ],
         'timezoneselect' => [
             'africa'     => 'Африка',
@@ -227,7 +272,6 @@ return [
             'api_documentation_internal_team' => 'Документація API (внутрішня команда)',
             'keystone_guru'                   => 'Keystone.guru',
             'changelog'                       => 'Список змін',
-            'changelog_new'                   => 'НОВЕ',
             'credits'                         => 'Подяки',
             'about'                           => 'Про нас',
             'legacy'                          => 'Архів',
@@ -243,6 +287,7 @@ return [
             'trademark'                       => 'Торговельна марка',
             'trademark_footer'                => 'World of Warcraft, Warcraft і Blizzard Entertainment є торговельними марками або зареєстрованими торговельними марками Blizzard Entertainment, Inc. у США та/або інших країнах. Цей вебсайт не пов\'язаний з Blizzard Entertainment.',
             'social'                          => 'Соцмережі',
+            'worktree'                        => '',
         ],
         'header' => [
             'toggle_navigation_title' => 'Перемкнути навігацію',
@@ -255,20 +300,25 @@ return [
             'explore'                 => 'Огляд підземель',
             'new'                     => 'НОВЕ',
             'compendium'              => '',
+            'compendium_overview'     => '',
             'npc_compendium'          => '',
             'spell_compendium'        => '',
             'compendium_activity'     => '',
             'class_compendium'        => '',
         ],
         'nav' => [
+            'dungeoncontext' => [
+                'change_dungeon' => '',
+            ],
             'user' => [
                 'login'              => 'Вхід',
                 'register'           => 'Реєстрація',
                 'telescope'          => 'Телескоп',
                 'tools'              => 'Інструменти',
-                'view_releases'      => 'Переглянути версії',
                 'view_expansions'    => 'Переглянути розширення',
                 'view_dungeons'      => 'Переглянути підземелля',
+                'view_affixes'       => '',
+                'view_seasons'       => '',
                 'view_npcs'          => 'Переглянути НІПів',
                 'view_spells'        => 'Переглянути закляття',
                 'view_users'         => 'Переглянути користувачів',
@@ -418,6 +468,7 @@ return [
                 'edit_route_settings'            => 'Налаштування маршруту',
                 'edit_mapping_version'           => 'Змінити версію мапи',
                 'share'                          => 'Поділитися',
+                'route_actions'                  => '',
                 'start_live_session'             => 'Презентація',
                 'start_live_session_paragraph_1' => 'Коли розпочнете проходити маршрут у грі, можна ввімкнути презентацію, під час якої Keystone.guru допомагатиме із завершенням ключа. Ви також можете слідувати за іншим гравцем на мапі, натиснувши на його значок або ініціали у верхній панелі.',
                 'start_live_session_paragraph_2' => 'Учасники презентації можуть вибрати будь-яку наявну сутичку (що зараз відбувається в грі) і позначити ворогів, яких ви випадково підтягнули до бою. Keystone.guru потім спробує скорегувати ваш маршрут, прибравши противників, яких потенційно можна обійти без використання зілля невидимості або покрову пройдисвіта.',
@@ -480,7 +531,7 @@ return [
     ],
     'mappingversion' => [
         'select' => [
-            'mapping_version_readonly' => ':gameVersion версія :version (лише для читання)',
+            'mapping_version_previous' => '',
             'mapping_version'          => ':gameVersion версія :version',
         ],
     ],
@@ -639,11 +690,6 @@ return [
         ],
         'select' => [
             'npc' => '',
-        ],
-    ],
-    'release' => [
-        'release' => [
-            'new' => 'НОВЕ',
         ],
     ],
     'tag' => [

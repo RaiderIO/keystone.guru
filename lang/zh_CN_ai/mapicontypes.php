@@ -112,4 +112,18 @@ return [
     'seat_of_the_triumvirate_void_infusion'  => '虚空注入',
     'maisara_caverns_hearty_vilebranch_stew' => '丰盛的邪枝炖汤',
 
+    'algethar_academy_black_dragonflight_pledge_pin'  => '黑龙军团誓约胸针',
+    'algethar_academy_blue_dragonflight_pledge_pin'   => '蓝龙军团誓约胸针',
+    'algethar_academy_bronze_dragonflight_pledge_pin' => '青铜龙军团誓约胸针',
+    'algethar_academy_green_dragonflight_pledge_pin'  => '绿龙军团誓约胸针',
+    'algethar_academy_red_dragonflight_pledge_pin'    => '红龙军团誓约胸针',
+    'magisters_terrace_arcane_empowerment'            => '奥术增效',
+    'murder_row_fel_contraband'                       => '邪能违禁品',
+    'murder_row_felstone'                             => '邪能石',
+    'murder_row_felwyrm_egg'                          => '邪能巨龙之卵',
+    'murder_row_heartstop_poison'                     => '夺命之毒',
+    'murder_row_loaded_pistol'                        => '已装填的手枪',
+    'murder_row_overload_golem'                       => '超载魔像',
+    'the_blinding_vale_flourishing_stride'            => '繁茂步伐',
+
 ];

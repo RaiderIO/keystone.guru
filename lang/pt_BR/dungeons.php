@@ -1338,6 +1338,15 @@ return [
                 'the_headteachers_enclave' => 'O Enclave do Diretor',
             ],
         ],
+        'altar_of_fangs' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'sacrificial_approach' => '',
+                'mutation_chambers'    => '',
+                'altar_of_fangs'       => '',
+            ],
+        ],
         'den_of_nalorakk' => [
             'name'         => 'Caverna de Nalorakk',
             'abbreviation' => '',
@@ -1397,7 +1406,9 @@ return [
             'name'         => 'Arena da Chaga do Caos',
             'abbreviation' => '',
             'floors'       => [
-                'voidscar_arena' => 'Arena da Chaga do Caos',
+                'halls_of_spite'   => '',
+                'voidscar_arena'   => 'Arena da Chaga do Caos',
+                'domanaars_ascent' => '',
             ],
         ],
         'windrunner_spire' => [

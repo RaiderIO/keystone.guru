@@ -5,19 +5,31 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'               => 'Percorso Settimanale Raider.IO',
-                'popular'                    => 'Percorsi popolari',
-                'popular_by_current_affixes' => 'Percorsi popolari per affissi attuali',
-                'popular_by_next_affixes'    => 'Percorsi popolari per prossimi affissi',
-                'newly_published_routes'     => 'Percorsi appena pubblicati',
+                'weekly_route'           => 'Percorso Settimanale Raider.IO',
+                'weekly_routes'          => 'Percorsi settimanali Raider.IO',
+                'community_routes'       => 'Percorsi della community',
+                'popular'                => 'Percorsi popolari',
+                'newly_published_routes' => 'Percorsi appena pubblicati',
+                'archetypes'             => [
+                    'pug_friendly' => [
+                        'label'       => 'Amichevole per Pug',
+                        'description' => 'Pull tolleranti per gruppi di sconosciuti',
+                    ],
+                    'expert' => [
+                        'label'       => 'Esperto',
+                        'description' => 'Ottimizzato per gruppi coordinati',
+                    ],
+                    'title' => [
+                        'label'       => 'Titolo',
+                        'description' => 'Il percorso usato dallo 0,5% migliore per aumentare il rating',
+                    ],
+                ],
             ],
         ],
         'discover' => [
-            'title'                      => 'Percorsi',
-            'popular'                    => 'Percorsi popolari',
-            'popular_by_current_affixes' => 'Percorsi popolari per affissi attuali',
-            'popular_by_next_affixes'    => 'Percorsi popolari per prossimi affissi',
-            'newly_published_routes'     => 'Percorsi appena pubblicati',
+            'title'                  => 'Percorsi',
+            'popular'                => 'Percorsi popolari',
+            'newly_published_routes' => 'Percorsi appena pubblicati',
         ],
         'panel' => [
             'show_more' => 'Mostra di più',

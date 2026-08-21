@@ -5,19 +5,31 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'               => 'Ruta Semanal de Raider.IO',
-                'popular'                    => 'Rutas populares',
-                'popular_by_current_affixes' => 'Rutas populares por afijos actuales',
-                'popular_by_next_affixes'    => 'Rutas populares por próximos afijos',
-                'newly_published_routes'     => 'Rutas recién publicadas',
+                'weekly_route'           => 'Ruta Semanal de Raider.IO',
+                'weekly_routes'          => 'Rutas semanales de Raider.IO',
+                'community_routes'       => 'Rutas de la comunidad',
+                'popular'                => 'Rutas populares',
+                'newly_published_routes' => 'Rutas recién publicadas',
+                'archetypes'             => [
+                    'pug_friendly' => [
+                        'label'       => 'Apto para PUG',
+                        'description' => 'Pulls tolerantes para grupos de desconocidos',
+                    ],
+                    'expert' => [
+                        'label'       => 'Experto',
+                        'description' => 'Optimizada para grupos coordinados',
+                    ],
+                    'title' => [
+                        'label'       => 'Título',
+                        'description' => 'La ruta que usa el 0.5% superior para subir de rating',
+                    ],
+                ],
             ],
         ],
         'discover' => [
-            'title'                      => 'Rutas',
-            'popular'                    => 'Rutas populares',
-            'popular_by_current_affixes' => 'Rutas populares por afijos actuales',
-            'popular_by_next_affixes'    => 'Rutas populares por próximos afijos',
-            'newly_published_routes'     => 'Rutas recién publicadas',
+            'title'                  => 'Rutas',
+            'popular'                => 'Rutas populares',
+            'newly_published_routes' => 'Rutas recién publicadas',
         ],
         'panel' => [
             'show_more' => 'Mostrar más',

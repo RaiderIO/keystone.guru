@@ -2,6 +2,11 @@
 
 return [
 
+    'banned_ip_range_rule' => [
+        'invalid'         => 'Esta no es una dirección IP o un rango CIDR válido.',
+        'range_too_broad' => 'Este rango es demasiado amplio - el rango más amplio permitido es /:min.',
+        'self_lockout'    => 'No puedes bloquear un rango que incluya tu propia dirección IP.',
+    ],
     'create_route_npc_chronological_rule' => [
         'message' => '¡Npc(s) :npcs diedAt debe ser antes de engagedAt!',
     ],
@@ -12,8 +17,8 @@ return [
         'message' => 'Necesitas seleccionar una facción para este calabozo.',
     ],
     'json_string_count_rule' => [
-        'message_min' => '',
-        'message_max' => '',
+        'message_min' => 'La cadena Json debe tener al menos :min_count elementos.',
+        'message_max' => 'La cadena Json debe tener como máximo :max_count elementos.',
     ],
     'map_icon_type_role_check_rule' => [
         'message' => 'Ese tipo de icono de mapa no está disponible para tu nivel de acceso.',

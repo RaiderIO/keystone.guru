@@ -112,4 +112,18 @@ return [
     'seat_of_the_triumvirate_void_infusion'  => 'Поглощение Пустоты',
     'maisara_caverns_hearty_vilebranch_stew' => 'Сытное рагу из ветвистых',
 
+    'algethar_academy_black_dragonflight_pledge_pin'  => 'Брошь союзника черных драконов',
+    'algethar_academy_blue_dragonflight_pledge_pin'   => 'Брошь союзника синих драконов',
+    'algethar_academy_bronze_dragonflight_pledge_pin' => 'Брошь союзника бронзовых драконов',
+    'algethar_academy_green_dragonflight_pledge_pin'  => 'Брошь союзника зеленых драконов',
+    'algethar_academy_red_dragonflight_pledge_pin'    => 'Брошь союзника красных драконов',
+    'magisters_terrace_arcane_empowerment'            => 'Чародейское могущество',
+    'murder_row_fel_contraband'                       => 'Контрабанда Скверны',
+    'murder_row_felstone'                             => 'Камень Скверны',
+    'murder_row_felwyrm_egg'                          => 'Яйцо змея Скверны',
+    'murder_row_heartstop_poison'                     => 'Сердцеостанавливающий яд',
+    'murder_row_loaded_pistol'                        => 'Заряженный пистолет',
+    'murder_row_overload_golem'                       => 'Голем перегрузки',
+    'the_blinding_vale_flourishing_stride'            => 'Цветущий шаг',
+
 ];
