@@ -165,13 +165,15 @@ class ThumbnailService implements ThumbnailServiceInterface
             $tmpFile            = sprintf('/tmp/%s_%s', $dungeonRoute->public_key, $filename);
             $tmpFileAfterResize = sprintf('/tmp/%s_resized_%s', $dungeonRoute->public_key, $filename);
 
+            $previewUrl = $this->getPreviewUrl($dungeonRoute, $floorIndex, $zoomLevel, $variant);
+
             // puppeteer chromium-browser
             $process = new Process([
                 'node',
                 // Script to execute
                 resource_path('assets/puppeteer/route_thumbnail.js'),
                 // First argument; where to navigate
-                $this->getPreviewUrl($dungeonRoute, $floorIndex, $zoomLevel, $variant),
+                $previewUrl,
                 // Second argument; where to save the resulting image
                 $tmpFile,
                 $viewportWidth,
@@ -180,7 +182,9 @@ class ThumbnailService implements ThumbnailServiceInterface
 
             $this->log->doCreateThumbnailProcessStart($process->getCommandLine());
 
+            $renderStartedAt = microtime(true);
             $process->run();
+            $renderDurationMs = (int)round((microtime(true) - $renderStartedAt) * 1000);
 
             if ($process->isSuccessful()) {
                 if (!file_exists($tmpFile)) {
@@ -244,7 +248,7 @@ class ThumbnailService implements ThumbnailServiceInterface
             // Log any errors that may have occurred
             $errors = $process->getErrorOutput();
             if (!empty($errors)) {
-                $this->log->doCreateThumbnailError($errors);
+                $this->log->doCreateThumbnailError($errors, $previewUrl, $variant->value, $renderDurationMs);
 
                 return null;
             }

@@ -13,6 +13,54 @@ function delay(timeout) {
     });
 }
 
+// Browser-side events are collected here rather than printed as they happen, and are only emitted
+// when the render fails. This is deliberate and load-bearing: ThumbnailService::doCreateThumbnail()
+// treats ANY non-empty stderr as a failed render (it returns null even when the screenshot itself
+// succeeded), so writing diagnostics to stderr unconditionally would fail every good render. See #3920.
+const MAX_DIAGNOSTICS = 200;
+const diagnostics = [];
+
+function recordDiagnostic(line) {
+    if (diagnostics.length < MAX_DIAGNOSTICS) {
+        diagnostics.push(line);
+    } else if (diagnostics.length === MAX_DIAGNOSTICS) {
+        diagnostics.push(`... further browser events suppressed after ${MAX_DIAGNOSTICS} entries`);
+    }
+}
+
+/**
+ * Where did page initialization actually get to? A timeout on #finished_loading means the map's
+ * synchronous DOMContentLoaded bootstrap never completed - this reports which of its steps exist,
+ * which distinguishes "the map context script never loaded" from "the inline code threw".
+ */
+async function collectPageState(page) {
+    try {
+        return await page.evaluate(() => {
+            const mapInlineCode = typeof _inlineManager === 'undefined'
+                ? null
+                : _inlineManager.getInlineCode('common/maps/map');
+
+            return {
+                readyState: document.readyState,
+                hasMapContextStatic: typeof mapContextStaticData !== 'undefined',
+                hasMapContextDungeon: typeof mapContextDungeonData !== 'undefined',
+                hasMapContextMappingVersion: typeof mapContextMappingVersionData !== 'undefined',
+                hasInlineManager: typeof _inlineManager !== 'undefined',
+                // getInlineCode() returns an empty array when the map's inline code was never registered
+                mapInlineCodeActivated: typeof mapInlineCode?.isActivated === 'function' ? mapInlineCode.isActivated() : null,
+                hasDungeonMap: typeof dungeonMap !== 'undefined' && dungeonMap !== null,
+                mapElementSize: (() => {
+                    const map = document.getElementById('map');
+
+                    return map === null ? null : `${map.clientWidth}x${map.clientHeight}`;
+                })(),
+                finishedLoadingCount: document.querySelectorAll('#finished_loading').length,
+            };
+        });
+    } catch (e) {
+        return {error: `Could not read page state: ${e.message}`};
+    }
+}
 
 (async () => {
     let startTime = new Date().getTime();
@@ -24,15 +72,18 @@ function delay(timeout) {
 
     try {
         const page = await browser.newPage();
-        // Output console to stdout
-        // page
-        //     .on('console', message =>
-        //         console.log(`${message.type().substr(0, 3).toUpperCase()} ${message.text()}`))
-        //     .on('pageerror', ({message}) => console.log(message))
-        //     .on('response', response =>
-        //         console.log(`${response.status()} ${response.url()}`))
-        //     .on('requestfailed', request =>
-        //         console.log(`${request.failure().errorText} ${request.url()}`));
+        page
+            .on('console', message =>
+                recordDiagnostic(`CONSOLE ${message.type().substr(0, 3).toUpperCase()} ${message.text()}`))
+            .on('pageerror', ({message}) =>
+                recordDiagnostic(`PAGEERROR ${message}`))
+            .on('response', response => {
+                if (response.status() >= 400) {
+                    recordDiagnostic(`RESPONSE ${response.status()} ${response.url()}`);
+                }
+            })
+            .on('requestfailed', request =>
+                recordDiagnostic(`REQUESTFAILED ${request.failure()?.errorText} ${request.url()}`));
 
         // Force facade for thumbnails
         await page.setCookie({
@@ -55,7 +106,20 @@ function delay(timeout) {
         await page.goto(process.argv[2]);
 
         console.log('Waiting for page to load fully');
-        await page.waitForSelector('#finished_loading', {timeout: 10000});
+        try {
+            await page.waitForSelector('#finished_loading', {timeout: 10000});
+        } catch (e) {
+            // Failure path only - see the note on `diagnostics` above before moving any of this out of the catch.
+            const pageState = await collectPageState(page);
+
+            console.error(`Render failed after ${new Date().getTime() - startTime}ms for ${process.argv[2]}`);
+            console.error(`Page state: ${JSON.stringify(pageState)}`);
+            console.error(diagnostics.length === 0
+                ? 'Browser reported no console output, page errors or failed requests.'
+                : `Browser events:\n${diagnostics.join('\n')}`);
+
+            throw e;
+        }
 
         console.log('Waiting for animations to complete');
         await delay(500);
