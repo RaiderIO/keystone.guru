@@ -386,6 +386,16 @@ describe('Enemy.getEnemyForces', () => {
         }).getEnemyForces()).toBe(3);
     });
 
+    test('getEnemyForces_givenATeemingMapAndBothOverrides_prefersTheTeemingOverride', () => {
+        setFakeState({teeming: true});
+
+        expect(makeEnemy({
+            npc: makeNpc({enemyForces: 12, enemyForcesTeeming: 8}),
+            enemy_forces_override_teeming: 3,
+            enemy_forces_override: 5,
+        }).getEnemyForces()).toBe(3);
+    });
+
     test('getEnemyForces_givenAnOverride_returnsTheOverride', () => {
         setFakeState();
 
@@ -434,15 +444,15 @@ describe('Enemy.getEnemyForces', () => {
         }).getEnemyForces()).toBe(90);
     });
 
-    test('getEnemyForces_givenATeemingMapAndOnlyAPlainOverride_ignoresThatOverride', () => {
-        // The teeming branch and the plain-override branch are alternatives in one else-if chain,
-        // so on a teeming map a plain override never applies - the mirror of the test above.
+    test('getEnemyForces_givenATeemingMapAndOnlyAPlainOverride_returnsThatOverride', () => {
+        // On a teeming map, a plain override still applies when no teeming-specific override is
+        // set - it takes priority over the npc's teeming forces value.
         setFakeState({teeming: true});
 
         expect(makeEnemy({
             npc: makeNpc({enemyForces: 12, enemyForcesTeeming: 8}),
             enemy_forces_override: 5,
-        }).getEnemyForces()).toBe(8);
+        }).getEnemyForces()).toBe(5);
     });
 
     test('getEnemyForces_givenAZulGamuxEnemyWithoutTheAffix_returnsTheRegularNpcForces', () => {
