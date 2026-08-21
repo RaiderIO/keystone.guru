@@ -188,6 +188,17 @@ return [
     /** The range after which we start considering patrols too */
     'enemy_engagement_max_range_patrols_default' => 50,
 
+    /** Clustering and classification of Auto Route Creator enemy failures (admin heatmap cluster layer, combatlog:analyzeenemyfailures) */
+    'enemy_failure_analysis' => [
+        /** Failures of one npc on one floor within this many ingame yards of each other form one cluster. About a quarter of the
+         *  engagement range: far enough to absorb the scatter of one engagement, close enough to keep adjacent packs apart. */
+        'cluster_radius_yd' => 40,
+        /** A cluster with fewer failures than this is flagged low-volume */
+        'min_count' => 5,
+        /** A cluster affecting fewer distinct routes than this is flagged low-volume */
+        'min_routes' => 3,
+    ],
+
     /** The default max zoom level on the map */
     'zoom_max_default' => 5,
 

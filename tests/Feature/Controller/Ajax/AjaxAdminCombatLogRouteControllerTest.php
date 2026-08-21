@@ -80,6 +80,87 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function getEnemyFailureClusters_givenNoMappingVersionId_returnsValidationError(): void
+    {
+        // Act
+        $response = $this->get(route('ajax.admin.combatlogroute.enemy_failures.clusters', [
+            'dungeon_id' => $this->dungeon->id,
+        ]));
+
+        // Assert
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors('mapping_version_id');
+    }
+
+    #[Test]
+    public function getEnemyFailureClusters_givenValidDungeon_returnsClusterResponseShape(): void
+    {
+        $created = [];
+
+        try {
+            // Arrange — a handful of failures for one npc in one spot
+            /** @var Floor $floor */
+            $floor = $this->dungeon->floors()->where('facade', 0)->where('ingame_max_x', '!=', 0)->first() ?? $this->floor;
+            for ($i = 0; $i < 6; $i++) {
+                $created[] = CombatLogRouteEnemyFailure::create([
+                    'dungeon_route_id'   => 8000 + $i,
+                    'dungeon_id'         => $this->dungeon->id,
+                    'floor_id'           => $floor->id,
+                    'mapping_version_id' => $this->mappingVersion->id,
+                    'npc_id'             => 99905,
+                    'lat'                => -100.0 + $i * 0.01,
+                    'lng'                => 150.0,
+                ])->id;
+            }
+
+            // Act
+            $response = $this->get(route('ajax.admin.combatlogroute.enemy_failures.clusters', [
+                'dungeon_id'         => $this->dungeon->id,
+                'mapping_version_id' => $this->mappingVersion->id,
+                'npc_id'             => [99905],
+            ]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertJsonStructure([
+                'data' => [['npc_id', 'npc_name', 'floor_id', 'count', 'route_count', 'avg_failures_per_route', 'centroid' => ['lat', 'lng', 'floor_id'], 'hull', 'verdict', 'low_volume', 'suggestion', 'nearest_enemy_id', 'nearest_enemy_distance', 'enemies_within_range']],
+                'verdicts',
+                'cluster_radius_yd',
+                'min_count',
+                'min_routes',
+                'skipped_count',
+            ]);
+            $this->assertSame(99905, $response->json('data.0.npc_id'));
+            $this->assertSame(6, $response->json('data.0.count'));
+            $this->assertSame('npc_not_mapped', $response->json('data.0.verdict'));
+        } finally {
+            CombatLogRouteEnemyFailure::whereIn('id', $created)->delete();
+        }
+    }
+
+    #[Test]
+    public function getEnemyFailureClusters_givenNonAdmin_returnsForbidden(): void
+    {
+        // Arrange
+        $nonAdmin = User::factory()->create();
+
+        try {
+            $this->actingAs($nonAdmin);
+
+            // Act
+            $response = $this->get(route('ajax.admin.combatlogroute.enemy_failures.clusters', [
+                'dungeon_id'         => $this->dungeon->id,
+                'mapping_version_id' => $this->mappingVersion->id,
+            ]));
+
+            // Assert
+            $response->assertStatus(StatusCode::FORBIDDEN);
+        } finally {
+            $nonAdmin->delete();
+        }
+    }
+
+    #[Test]
     public function deleteEnemyFailures_givenNoDungeonId_returnsValidationError(): void
     {
         // Act

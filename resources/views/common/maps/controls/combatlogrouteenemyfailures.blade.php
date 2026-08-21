@@ -3,6 +3,7 @@
 use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
+use App\Service\CombatLog\Dtos\EnemyFailureAnalysis\EnemyFailureVerdict;
 use Illuminate\Support\Collection;
 
 /**
@@ -33,6 +34,19 @@ $npcSuffixes = $npcs->mapWithKeys(static function (Npc $npc) use ($npcFailureCou
     'mappingVersionId'               => $mappingVersion->id,
     'pageUrl'                        => route('admin.tools.combatlog.route.enemy_failures.view'),
     'getEnemyFailuresUrl'            => route('ajax.admin.combatlogroute.enemy_failures'),
+    'clustersUrl'                    => route('ajax.admin.combatlogroute.enemy_failures.clusters'),
+    'showClustersSelector'           => '#combatlogroute_enemy_failures_show_clusters',
+    'verdicts'                       => collect(EnemyFailureVerdict::cases())
+        ->mapWithKeys(static fn(EnemyFailureVerdict $verdict) => [$verdict->value => ['label' => $verdict->label(), 'color' => $verdict->color()]])
+        ->all(),
+    'clusterPopupTexts'              => [
+        'failures'     => __('view_common.maps.controls.combatlogrouteenemyfailures.cluster_popup.failures'),
+        'nearestEnemy' => __('view_common.maps.controls.combatlogrouteenemyfailures.cluster_popup.nearest_enemy'),
+        'nearestNone'  => __('view_common.maps.controls.combatlogrouteenemyfailures.cluster_popup.nearest_none'),
+        'inRange'      => __('view_common.maps.controls.combatlogrouteenemyfailures.cluster_popup.in_range'),
+        'seen'         => __('view_common.maps.controls.combatlogrouteenemyfailures.cluster_popup.seen'),
+        'filterNpc'    => __('view_common.maps.controls.combatlogrouteenemyfailures.cluster_popup.filter_npc'),
+    ],
     'deleteUrl'                      => route('ajax.admin.combatlogroute.enemy_failures.delete'),
     'filterMappingVersionIdSelector' => '#combatlogroute_enemy_failures_filter_mapping_version_id',
     'filterNpcIdSelector'            => '#combatlogroute_enemy_failures_filter_npc_id',
@@ -71,6 +85,22 @@ $npcSuffixes = $npcs->mapWithKeys(static function (Npc $npc) use ($npcFailureCou
             'showId'   => true,
             'suffixes' => $npcSuffixes,
         ])
+
+        <div class="form-check mb-1">
+            <input type="checkbox" class="form-check-input" id="combatlogroute_enemy_failures_show_clusters" checked>
+            <label class="form-check-label" for="combatlogroute_enemy_failures_show_clusters">
+                {{ __('view_common.maps.controls.combatlogrouteenemyfailures.show_clusters') }}
+            </label>
+        </div>
+        <div class="small mb-2">
+            <div class="text-muted">{{ __('view_common.maps.controls.combatlogrouteenemyfailures.clusters_legend') }}
+                ({{ __('view_common.maps.controls.combatlogrouteenemyfailures.cluster_low_volume') }})</div>
+            @foreach(EnemyFailureVerdict::cases() as $verdict)
+                <div>
+                    <span class="d-inline-block rounded-circle me-1" style="width: 10px; height: 10px; background-color: {{ $verdict->color() }}"></span>{{ $verdict->label() }}
+                </div>
+            @endforeach
+        </div>
 
         <button id="combatlogroute_enemy_failures_clear"
                 class="btn btn-danger w-100 mt-2"
