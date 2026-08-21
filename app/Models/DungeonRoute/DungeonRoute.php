@@ -483,13 +483,6 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             ->where('dungeon_route_thumbnails.variant', DungeonRouteThumbnailVariant::Hero);
     }
 
-    /** @return BelongsToMany<File, $this> */
-    public function frontPageThumbnails(): BelongsToMany
-    {
-        return $this->belongsToMany(File::class, 'dungeon_route_thumbnails')
-            ->where('dungeon_route_thumbnails.variant', DungeonRouteThumbnailVariant::FrontPage);
-    }
-
     /** @return HasMany<MapIcon, $this> */
     public function mapicons(): HasMany
     {
@@ -786,17 +779,28 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
     /**
      * Returns the thinner-lined front page thumbnails (one per active floor), falling back to the
-     * standard thumbnails when the front-page variant has not been generated yet for this route
-     * (backwards compatible with pre-existing routes, mirroring getHeroThumbnailUrl()).
+     * standard thumbnail *per floor* when the front-page variant has not been generated yet for that
+     * floor specifically (backwards compatible with pre-existing routes, and correct mid-generation:
+     * a route whose front-page render is still queued/failed for one floor out of several must not
+     * drop that floor from the carousel entirely - see getHeroThumbnailUrl(), which does not need this
+     * per-floor merge since it only ever shows a single thumbnail).
      *
      * @return Collection<int, File>
      */
     public function getFrontPageThumbnails(): Collection
     {
-        // Explicitly load the relations so this also works on routes hydrated in a collection (preventLazyLoading)
-        $this->loadMissing(['frontPageThumbnails', 'thumbnails']);
+        // Explicitly load the relation so this also works on routes hydrated in a collection (preventLazyLoading)
+        $this->loadMissing('dungeonRouteThumbnails');
 
-        return $this->frontPageThumbnails->isNotEmpty() ? $this->frontPageThumbnails : $this->thumbnails;
+        return $this->dungeonRouteThumbnails
+            ->whereIn('variant', [DungeonRouteThumbnailVariant::FrontPage, DungeonRouteThumbnailVariant::Standard])
+            ->groupBy('floor_id')
+            ->map(static fn(Collection $thumbnailsForFloor) => $thumbnailsForFloor
+                ->firstWhere('variant', DungeonRouteThumbnailVariant::FrontPage)
+                ?? $thumbnailsForFloor->first())
+            ->pluck('file')
+            ->filter()
+            ->values();
     }
 
     /**
