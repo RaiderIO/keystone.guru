@@ -68,19 +68,19 @@ return [
             'nr_of_votes' => '%s голосов',
         ],
         'poster' => [
-            'views'     => '%s просмотров',
+            'views'     => 'Просмотров: %s',
             'favorites' => '%s в избранном',
         ],
         'cardhero' => [
             'top_community_route'    => 'Лучший маршрут сообщества',
             'ranked_community_route' => '#%d маршрут сообщества',
-            'views'                  => '%s просмотров',
+            'views'                  => 'Просмотров: %s',
             'favorites'              => '%s в избранном',
             'pulls'                  => '{1} :count пул|[2,*] :count пулов',
         ],
         'cardrow' => [
             'new'       => 'Новый',
-            'views'     => '%s просмотров',
+            'views'     => 'Просмотров: %s',
             'favorites' => '%s в избранном',
             'pulls'     => '{1} :count пул|[2,*] :count пулов',
         ],

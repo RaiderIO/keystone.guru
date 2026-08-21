@@ -117,7 +117,7 @@ return [
                 'header_dispel_type'                 => 'Тип развеивания',
                 'header_dispel_type_tooltip'         => 'Какой тип развеивания можно использовать, чтобы снять это заклинание?',
                 'header_mechanic'                    => 'Механика',
-                'header_cast_time'                   => 'Время накладывания',
+                'header_cast_time'                   => 'Время произнесения',
                 'header_duration'                    => 'Длительность',
             ],
             'event_feed' => [
@@ -159,7 +159,7 @@ return [
                 'header_dispel_type'                 => 'Тип развеивания',
                 'header_dispel_type_tooltip'         => 'Какой тип развеивания можно использовать, чтобы снять это заклинание?',
                 'header_mechanic'                    => 'Механика',
-                'header_cast_time'                   => 'Время накладывания',
+                'header_cast_time'                   => 'Время произнесения',
                 'header_duration'                    => 'Длительность',
             ],
             'dungeons' => [

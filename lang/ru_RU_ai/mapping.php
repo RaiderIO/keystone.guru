@@ -9,7 +9,7 @@ return [
             ],
             'kings_rest' => [
                 'gong'          => 'Gong',
-                'gauntlet_gate' => 'Открывается по завершении гонтлета.',
+                'gauntlet_gate' => 'Открывается по завершении gauntlet.',
             ],
             'mechagon_junkyard' => [
                 'cursed_spire_nyalotha' => 'Проклятый шпиль Ny\'alotha',
@@ -170,7 +170,7 @@ return [
                 'deep_borers_pack_size' => 'В отряде либо 5, либо 6 Deep Borers.',
             ],
             'naxxramas_classic' => [
-                'gauntlet_room' => 'Комната гонтлета.
+                'gauntlet_room' => 'Комната gauntlet.
 Мобы возрождаются бесконечно.
 Не останавливайтесь!',
             ],
@@ -318,7 +318,7 @@ return [
                 'captive_tuskarr_down'             => 'v Captive Tuskarr',
                 'decaying_cauldron_down'           => 'v Decaying Cauldron',
                 'decaying_cauldron_down_detail'    => 'v Decaying Cauldron: когда активирован, все участники группы могут собрать Очищенную гниль, получая дополнительную кнопку действия для снятия одной болезни. Очищенная гниль расходуется при использовании, но котел можно посетить снова для получения новых зарядов. Требуется 25 уровень профессии Алхимия Драконьих островов для использования.',
-                'witherlings_gauntlet'             => 'На протяжении этого гонтлета появляются Иссохшие.',
+                'witherlings_gauntlet'             => 'На протяжении этого gauntlet появляются Witherlings.',
             ],
             'halls_of_infusion' => [
                 'infused_mushroom_herbalism'     => 'Infused Mushroom (снимает стак Яда/Болезни каждые 5 секунд в течение 30 минут, требуется 25 уровень профессии Травничество Драконьих островов)',
@@ -481,7 +481,7 @@ return [
             ],
             'halls_of_stone' => [
                 'brann_boss_encounter' => 'Поговорите с Brann снова, чтобы начать бой с боссом. Это не бой с боссом, а несколько групп мобов, появляющихся друг за другом. Защищайте Brann на протяжении всего боя.',
-                'brann_gauntlet'       => 'Поговорите с Brann, чтобы начать гонтлет',
+                'brann_gauntlet'       => 'Поговорите с Brann, чтобы начать gauntlet',
             ],
             'icecrown_citadel' => [
                 'after_festergut_fleshreapers' => 'После победы над Festergut появляются еще 12 Vengeful Fleshreapers и начинают патрулировать область.',
@@ -498,7 +498,7 @@ return [
                 'wave_3'                       => 'Волна 3',
             ],
             'naxxramas' => [
-                'gauntlet_room' => 'Комната гонтлета.
+                'gauntlet_room' => 'Комната gauntlet.
 Мобы возрождаются бесконечно.
 Не останавливайтесь!',
             ],
