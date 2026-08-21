@@ -41,6 +41,10 @@ docker cp tmp/some_run.json <worktree-project>-app-1:/tmp/some_run.json
 
 ### Pulling production enemy failures and their post bodies (#4222)
 
+> The end-to-end per-dungeon runbook (resolve the dungeon key → import → `combatlog:analyzeenemyfailures`
+> → rundown) is the user-invocable `combatlog-enemy-failure-rundown` skill; this section is only the
+> import mechanics it relies on.
+
 When the question is "why does this dungeon produce so many enemy failures", the bodies live on
 production and the failures in its `combat_log_route_enemy_failures` table. Two admin-only API
 endpoints expose them — `GET api/v1/combatlog/enemy-failures/{dungeon slug}` (cursor-paginated rows,
