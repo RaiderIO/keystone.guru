@@ -115,7 +115,7 @@ class AnalyzeEnemyFailures extends Command
         if ($format === self::FORMAT_MARKDOWN) {
             $this->line('');
             $this->line(sprintf('| %s |', implode(' | ', $headers)));
-            $this->line(sprintf('|%s|', str_repeat('---|', count($headers))));
+            $this->line(sprintf('|%s', str_repeat('---|', count($headers))));
             foreach ($rows as $row) {
                 $this->line(sprintf('| %s |', implode(' | ', array_map(static fn($cell): string => str_replace('|', '\\|', (string)$cell), $row))));
             }
