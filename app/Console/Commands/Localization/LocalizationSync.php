@@ -17,6 +17,15 @@ class LocalizationSync extends Command
     private const string LANG_HODOR = 'ho_HO';
 
     /**
+     * The quote character each lemma of the target file currently being synced was written with, keyed by
+     * dotted key. A lemma is stored raw (escapes intact), so it may only ever be re-emitted inside the same
+     * quote character it was parsed from - "Skycap\'n" in double quotes is a literal backslash.
+     *
+     * @var array<string, string>
+     */
+    private array $lemmaQuotes = [];
+
+    /**
      * The name and signature of the console command.
      *
      * @var string
@@ -93,6 +102,7 @@ class LocalizationSync extends Command
                 continue;
             }
 
+            $this->lemmaQuotes = [];
             if (file_exists($targetPath)) {
                 $target = file_get_contents($targetPath);
                 $lemmas = $this->parse($targetLang, $target);
@@ -203,10 +213,12 @@ class LocalizationSync extends Command
 
                     // add value to results array
                     if ($lemmas === false) {
-                        $result[$key] = $match[2];
-                    } // replace value with matching, non-empty lemma
+                        $result[$key]            = $match[2];
+                        $this->lemmaQuotes[$key] = $match[1];
+                    } // replace value with matching, non-empty lemma, keeping the quote style it was parsed with
                     elseif (array_key_exists($key, $lemmas) && strlen((string)$lemmas[$key]) > 0) {
-                        $segment = $match[1] . $lemmas[$key] . $match[1];
+                        $quote   = $this->lemmaQuotes[$key] ?? $match[1];
+                        $segment = $quote . $lemmas[$key] . $quote;
                     } // mark value as not specified
                     else {
                         if ($targetLang === self::LANG_HODOR) {
