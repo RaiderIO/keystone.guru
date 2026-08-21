@@ -183,8 +183,16 @@ class CommonMapsCombatlogrouteenemyfailures extends SearchInlineBase {
             data.npc_id = npcIds;
         }
 
+        // Rapid filter changes fire overlapping requests - only the latest one may paint, an older response that
+        // arrives later would show clusters for a selection that is no longer active
+        let requestId = this._clusterRequestId = (this._clusterRequestId || 0) + 1;
+
         $.ajax({type: 'GET', url: this.options.clustersUrl, data: data, dataType: 'json'})
             .done((json) => {
+                if (requestId !== this._clusterRequestId) {
+                    return;
+                }
+
                 this._clusters = (json && json.data) || [];
                 this._redrawClusters();
             });

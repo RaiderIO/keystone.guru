@@ -185,6 +185,22 @@ describe('CommonMapsCombatlogrouteenemyfailures', () => {
         expect(layerGroupStub.layers).toEqual([]);
     });
 
+    test('fetchClusters_givenStaleResponseArrivingLate_ignoresIt', () => {
+        const instance = createInstance();
+        document.body.insertAdjacentHTML('beforeend', '<input type="checkbox" id="show_clusters" checked>');
+        instance.activate();
+
+        // Two cluster requests in flight; resolve the SECOND first, then the first (stale) one
+        const pending = [];
+        $.ajax.mockImplementation((options) => ({done: (callback) => { if (options.url.endsWith('/clusters')) pending.push(callback); return {}; }}));
+        instance._fetchClusters([1]);
+        instance._fetchClusters([2]);
+        pending[1]({data: [cluster({npc_id: 2})]});
+        pending[0]({data: [cluster({npc_id: 1})]});
+
+        expect(instance._clusters.map((c) => c.npc_id)).toEqual([2]);
+    });
+
     test('activate_registersForFloorChangesToRedraw', () => {
         const instance = createInstance();
 

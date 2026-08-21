@@ -94,6 +94,34 @@ final class AnalyzeEnemyFailuresCommandTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenFormatJsonAndHideLowVolume_leavesLowVolumeClustersOut(): void
+    {
+        // Arrange — two failures on one route: low volume
+        $npcId = 99961;
+        for ($i = 0; $i < 2; $i++) {
+            $this->createdFailureIds[] = CombatLogRouteEnemyFailure::create([
+                'dungeon_route_id'   => 7100,
+                'dungeon_id'         => $this->dungeon->id,
+                'floor_id'           => $this->floor->id,
+                'mapping_version_id' => $this->mappingVersion->id,
+                'npc_id'             => $npcId,
+                'lat'                => -100.0,
+                'lng'                => 150.0,
+            ])->id;
+        }
+
+        // Act + Assert
+        $this->artisan('combatlog:analyzeenemyfailures', [
+            'dungeon'           => $this->dungeon->key,
+            '--mapping-version' => $this->mappingVersion->id,
+            '--format'          => 'json',
+            '--hide-low-volume' => true,
+        ])
+            ->doesntExpectOutputToContain(sprintf('"npc_id": %d', $npcId))
+            ->assertSuccessful();
+    }
+
+    #[Test]
     public function handle_givenFormatJson_outputsClusterData(): void
     {
         $this->artisan('combatlog:analyzeenemyfailures', ['dungeon' => $this->dungeon->key, '--format' => 'json'])

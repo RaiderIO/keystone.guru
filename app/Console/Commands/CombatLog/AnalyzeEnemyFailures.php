@@ -76,7 +76,11 @@ class AnalyzeEnemyFailures extends Command
             : $result->clusters;
 
         if ($format === self::FORMAT_JSON) {
-            $this->line((string)json_encode($result->toArray(), JSON_PRETTY_PRINT));
+            $array = $result->toArray();
+            if ($this->option('hide-low-volume')) {
+                $array['data'] = array_values(array_filter($array['data'], static fn(array $cluster) => !$cluster['low_volume']));
+            }
+            $this->line((string)json_encode($array, JSON_PRETTY_PRINT));
 
             return self::SUCCESS;
         }
