@@ -39,9 +39,11 @@ sh .claude/skills/ai-locale-translation/scripts/status.sh      # read-only, ~20s
 ```
 
 `outstanding 0` for every locale except `zh_TW_ai` (skipped by decision) means carry on. Anything
-else: tell the user the counts and ask whether to run the `ai-locale-translation` runbook first
-(its own issue/worktree/PR, one session per locale) or release without it — don't decide that
-yourself, and don't block on it if they say release. The script writes only to `/tmp/translate`.
+else: tell the user the counts and ask whether to run the translation runbook first (its own
+issue/worktree/PR, one session per locale) or release without it — don't decide that yourself,
+and don't block on it if they say release. The script writes only to `/tmp/translate`. The
+runbook is `.claude/skills/ai-locale-translation/SKILL.md` — **read that file and follow it**;
+the skill is `disable-model-invocation`, so calling it through the `Skill` tool errors.
 
 ## Step 1 — Determine the target version
 

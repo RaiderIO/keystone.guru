@@ -1,5 +1,6 @@
 ---
 name: ai-locale-translation
+disable-model-invocation: true
 description: Bring the machine-translated `lang/*_ai` locales up to date with `lang/en_US` by translating the missing keys yourself (no OpenAI/DeepL key needed), one locale at a time, in each locale's established register and glossary. Use when asked to "bring all AI translations up-to-date", translate/fill a locale, or before a release to check translations are complete. Not for `lang/en_US` (source of truth) and not for the game-data files (spells/npcs/dungeons), which are never hand-translated.
 ---
 
@@ -45,8 +46,10 @@ overwritten (the gate enforces it); only empty/missing keys are filled.
    locale, PR as usual (cold review is the per-locale Codex reviews; say so in the PR body).
    `js.php` strings only reach the UI after an asset build, i.e. the next release.
 
-The `create-release` skill runs `status.sh` (read-only) as a pre-flight check and asks Wotuu
-whether to run this runbook first when anything is outstanding.
+This skill is user-invoke only (`/ai-locale-translation`); an agent cannot start it via the
+`Skill` tool, but any session can read this file and run the scripts by path. That is how the
+`create-release` skill uses it: its Step 0 runs `status.sh` (read-only) as a pre-flight and asks
+Wotuu whether to run this runbook first when anything is outstanding.
 
 ## Translating one locale
 
