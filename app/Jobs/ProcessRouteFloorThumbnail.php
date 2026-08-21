@@ -53,7 +53,9 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
                 $this->attempts,
             );
 
-            if ((int)config('keystoneguru.thumbnail.max_attempts') > $this->attempts) {
+            $maxAttempts = (int)config('keystoneguru.thumbnail.max_attempts');
+
+            if ($maxAttempts > $this->attempts) {
                 // Give some additional space since we're refreshing ALL floors - the first floor may get processed,
                 // but the floors after that will otherwise think "oh the thumbnail is up-to-date" and not refresh.
                 if ($this->dungeonRoute->thumbnail_updated_at->isBefore($this->dungeonRoute->updated_at->addHour()) || $this->force) {
@@ -62,17 +64,27 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
                     if (!$result) {
                         $log->handleCreateThumbnailError();
 
-                        // If there were errors, try again - but not immediately. Without a delay all
-                        // max_attempts tries burn within ~35 seconds, so a render that failed because the
-                        // environment was momentarily slow (or busy with the other floors of this same
-                        // route) is retried while it is still just as slow. See #3920.
-                        $nextAttempt  = $this->attempts + 1;
-                        $delaySeconds = $this->getBackoffSecondsForAttempt($nextAttempt);
+                        $nextAttempt = $this->attempts + 1;
 
-                        ProcessRouteFloorThumbnail::dispatch($this->dungeonRoute, $this->floorIndex, $this->force, $nextAttempt, $this->variant)
-                            ->delay(now()->addSeconds($delaySeconds));
+                        // Only queue a retry that can actually render. Dispatching the attempt that
+                        // trips the max_attempts guard queues a job whose only action is to log that
+                        // it gave up - harmless while retries were immediate, but with a backoff it
+                        // would sit in the queue for the full delay before reporting the terminal
+                        // failure. Report it here instead, at the moment the last render failed.
+                        if ($maxAttempts > $nextAttempt) {
+                            // Not immediately, though: without a delay all max_attempts tries burn within
+                            // ~35 seconds, so a render that failed because the environment was momentarily
+                            // slow (or busy with the other floors of this same route) is retried while it
+                            // is still just as slow. See #3920.
+                            $delaySeconds = $this->getBackoffSecondsForAttempt($nextAttempt);
 
-                        $log->handleCreateThumbnailRetryScheduled($nextAttempt, $delaySeconds);
+                            ProcessRouteFloorThumbnail::dispatch($this->dungeonRoute, $this->floorIndex, $this->force, $nextAttempt, $this->variant)
+                                ->delay(now()->addSeconds($delaySeconds));
+
+                            $log->handleCreateThumbnailRetryScheduled($nextAttempt, $delaySeconds);
+                        } else {
+                            $log->handleMaxAttemptsReached();
+                        }
                     }
                 } else {
                     $log->handleThumbnailAlreadyUpToDate();
