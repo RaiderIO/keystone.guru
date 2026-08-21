@@ -15,10 +15,12 @@ use App\Service\Cache\CacheServiceInterface;
  * @var AffixGroup|null       $tierAffixGroup
  * @var array<string, mixed>  $__env
  * @var boolean               $cache
+ * @var boolean|null          $useFrontPageThumbnail
  */
 
-$showAffixes      = !$dungeonroute->mappingVersion->gameVersion->has_seasons ? false : $showAffixes ?? true;
-$showDungeonImage ??= false;
+$showAffixes           = !$dungeonroute->mappingVersion->gameVersion->has_seasons ? false : $showAffixes ?? true;
+$showDungeonImage      ??= false;
+$useFrontPageThumbnail ??= false;
 $isAdmin          = Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN);
 // Generate a unique string so we can assign affixes properly - route key is not unique enough since multiple cards can be on one page
 $uniqueString = uniqid();
@@ -54,6 +56,7 @@ use (
     $uniqueString,
     $showAffixes,
     $showDungeonImage,
+    $useFrontPageThumbnail,
     $dungeonroute,
     $currentAffixGroup,
     $tierAffixGroup,
@@ -80,6 +83,9 @@ use (
     $enemyForcesWarning    = $dungeonroute->enemy_forces < $dungeonroute->mappingVersion->enemy_forces_required || $enemyForcesPercentage >= 105;
     $activeFloors          = $dungeonroute->dungeon->floorsForMapFacade($dungeonroute->mappingVersion, true)->get();
     $owlClass              = $dungeonroute->has_thumbnail && $activeFloors->count() > 1 ? 'multiple' : 'single';
+    // Falls back to the standard thumbnails when the thinner-lined front-page variant hasn't been
+    // generated yet for this route (new routes, or ones not yet swept by thumbnail:ensureheroes).
+    $cardThumbnails        = $useFrontPageThumbnail ? $dungeonroute->getFrontPageThumbnails() : $dungeonroute->thumbnails;
     ob_start();
     ?>
 <div id="dungeonroute_card_vertical_{{ $uniqueString }}"
@@ -90,7 +96,7 @@ use (
                 <div class="{{ $owlClass }} thumbnail-carousel">
                     <ul class="thumbnail-carousel__track {{ $owlClass }}">
                         @if( $dungeonroute->has_thumbnail )
-                            @foreach($dungeonroute->thumbnails as $thumbnail)
+                            @foreach($cardThumbnails as $thumbnail)
                                 {{-- Only the first thumbnail loads eagerly, so the card is never
                                      blank (also without JS); $.fn.thumbnailCarousel (#3595) swaps
                                      the rest in from data-src as they are slid into view. --}}
@@ -260,7 +266,7 @@ if ($cache) {
 // Echo the result of this function
     echo $cacheService->rememberInHash(
         DungeonRoute::getCardCacheKey($dungeonroute->id),
-        DungeonRoute::getCardCacheField('vertical', $currentUserLocale, $showAffixes, $showDungeonImage, (int)$isAdmin),
+        DungeonRoute::getCardCacheField('vertical', $currentUserLocale, $showAffixes, $showDungeonImage, (int)$isAdmin, (int)$useFrontPageThumbnail),
         $cacheFn,
         config('keystoneguru.view.common.dungeonroute.card.cache.ttl')
     );

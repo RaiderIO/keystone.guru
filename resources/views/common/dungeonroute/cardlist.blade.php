@@ -13,16 +13,18 @@ use Laravel\Pennant\Feature;
  * @var array<string, mixed>                                                            $__env
  * @var bool|null                                                                       $showDungeonImage
  * @var bool|null                                                                       $cache
+ * @var bool|null                                                                       $useFrontPageThumbnail
  * @var string                                                                          $orientation
  * @var Collection<integer, array<string, string>>                                      $headers
  */
 
-$cols             ??= 1;
-$showDungeonImage ??= false;
-$affixgroup       ??= null;
-$cache            ??= true;
-$orientation      ??= 'vertical';
-$cardHeaders      ??= collect();
+$cols                  ??= 1;
+$showDungeonImage      ??= false;
+$affixgroup            ??= null;
+$cache                 ??= true;
+$orientation           ??= 'vertical';
+$cardHeaders           ??= collect();
+$useFrontPageThumbnail ??= false;
 
 // The poster card is a drop-in replacement for the vertical card while the list rework rolls out
 if ($orientation === 'vertical' && Feature::active(DungeonRouteListRework::class)) {
@@ -33,7 +35,7 @@ $renderedDungeonRouteCount = 0;
 $i                         = 0;
 
 // @formatter:off
-$renderDungeonRouteCollection = static function (Collection $collection, ?string $header = null) use ($cols, $affixgroup, $currentAffixGroup, $showDungeonImage, $cache, $orientation, $__env, &$renderedDungeonRouteCount, $cardHeaders) {
+$renderDungeonRouteCollection = static function (Collection $collection, ?string $header = null) use ($cols, $affixgroup, $currentAffixGroup, $showDungeonImage, $cache, $orientation, $__env, &$renderedDungeonRouteCount, $cardHeaders, $useFrontPageThumbnail) {
     /** @var Collection<int, DungeonRoute> $collection */
     $count = $collection->count();
     if( $count > 0 && $header !== null ) { ?>
@@ -76,7 +78,8 @@ $renderDungeonRouteCollection = static function (Collection $collection, ?string
                     'currentAffixGroup' => $currentAffixGroup,
                     'tierAffixGroup' => $affixgroup,
                     'showDungeonImage' => $showDungeonImage,
-                    'cache' => $cache
+                    'cache' => $cache,
+                    'useFrontPageThumbnail' => $useFrontPageThumbnail,
                 ])
                 @php($renderedDungeonRouteCount++)
             @endif
