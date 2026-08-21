@@ -19,40 +19,41 @@ return [
             'mdt_invalid_category'                => 'Неверная категория',
         ],
         'flash' => [
-            'banned_ip_address_added'                => '',
-            'banned_ip_address_removed'              => '',
+            'banned_ip_address_added'                => 'IP-адрес успешно заблокирован',
+            'banned_ip_address_removed'              => 'Блокировка успешно снята',
             'message_banner_set_successfully'        => 'Сообщение-баннер успешно установлено',
             'thumbnail_regenerate_result'            => 'Запущено :success задач для маршрутов :total. :failed не удалось.',
-            'combatlog_route_regenerate_result'      => '',
-            'combatlog_criteria_reset'               => '',
-            'combatlog_criteria_thresholds_updated'  => '',
+            'combatlog_route_regenerate_result'      => 'Запущено задач: :count',
+            'combatlog_criteria_reset'               => 'Все счетчики критериев парсинга на сегодня сброшены.',
+            'combatlog_criteria_thresholds_updated'  => 'Пороговые значения критериев парсинга обновлены.',
             'caches_dropped_successfully'            => 'Кеш сброшен успешно',
+            'caches_drop_queued'                     => 'Очистка кэша поставлена в очередь и будет выполнена в фоновом режиме',
             'exception'                              => 'Исключение вызвано в панели администратора',
             'feature_toggle_activated'               => 'Функция :feature теперь активирована',
             'feature_toggle_deactivated'             => 'Функция :feature теперь деактивирована',
             'feature_forgotten'                      => 'Функция :feature успешно забыта',
-            'mapping_version_upgrade_queued'         => '',
-            'mapping_version_upgrade_already_latest' => '',
+            'mapping_version_upgrade_queued'         => 'В очередь на обновление с версии :version до последней поставлено маршрутов: :count.',
+            'mapping_version_upgrade_already_latest' => 'Эта версия карты уже является последней для данного подземелья - маршруты не были поставлены в очередь.',
             'read_only_mode_disabled'                => 'Режим только для чтения отключен',
             'read_only_mode_enabled'                 => 'Режим только для чтения включен',
         ],
     ],
     'affix' => [
         'flash' => [
-            'affix_created' => '',
-            'affix_updated' => '',
+            'affix_created' => 'Аффикс создан',
+            'affix_updated' => 'Аффикс обновлен',
         ],
     ],
     'affixgroup' => [
         'flash' => [
-            'affixgroup_created' => '',
-            'affixgroup_updated' => '',
-            'affixgroup_deleted' => '',
+            'affixgroup_created' => 'Группа аффиксов создана',
+            'affixgroup_updated' => 'Группа аффиксов обновлена',
+            'affixgroup_deleted' => 'Группа аффиксов удалена',
         ],
     ],
     'apicombatlogrun' => [
         'error' => [
-            'no_segments' => '',
+            'no_segments' => 'Для этого прохождения нет доступных сегментов боевого журнала.',
         ],
     ],
     'apidungeonroute' => [
@@ -73,8 +74,8 @@ return [
     ],
     'arrow' => [
         'error' => [
-            'unable_to_save_arrow'   => '',
-            'unable_to_delete_arrow' => '',
+            'unable_to_save_arrow'   => 'Не удалось сохранить стрелку',
+            'unable_to_delete_arrow' => 'Не удалось удалить стрелку',
         ],
     ],
     'dungeon' => [
@@ -125,7 +126,7 @@ return [
     ],
     'killzone' => [
         'error' => [
-            'facade_location_not_convertible' => '',
+            'facade_location_not_convertible' => 'Не удалось разместить пул здесь - это местоположение не принадлежит ни одному этажу этого подземелья',
         ],
     ],
     'oauthlogin' => [
@@ -184,7 +185,7 @@ return [
             'profile_updated'                  => 'Профиль обновлен',
             'unexpected_error_when_saving'     => 'Произошла непредвиденная ошибка при попытке сохранить ваш профиль.',
             'privacy_settings_updated'         => 'Настройки конфиденциальности обновлены',
-            'creator_profile_updated'          => '',
+            'creator_profile_updated'          => 'Профиль создателя обновлен',
             'password_changed'                 => 'Пароль изменен',
             'new_password_equals_old_password' => 'Новый пароль совпадает со старым паролем',
             'new_passwords_do_not_match'       => 'Новый пароль не совпадает',
@@ -196,17 +197,17 @@ return [
             'error_deleting_account'           => 'Произошла ошибка. Пожалуйста, попробуйте еще раз.',
         ],
         'error' => [
-            'add_ad_free_giveaway_limit_reached'        => '',
-            'add_ad_free_giveaway_already_ad_free'      => '',
-            'add_ad_free_giveaway_already_has_giveaway' => '',
-            'remove_ad_free_giveaway_not_found'         => '',
-            'remove_ad_free_giveaway_not_yours'         => '',
+            'add_ad_free_giveaway_limit_reached'        => 'Не удалось добавить больше подарков без рекламы. Достигнут лимит.',
+            'add_ad_free_giveaway_already_ad_free'      => 'Не удалось добавить подарки без рекламы, пользователь уже не видит рекламу благодаря собственной подписке Patreon.',
+            'add_ad_free_giveaway_already_has_giveaway' => 'Не удалось добавить подарки без рекламы, пользователь уже не видит рекламу благодаря другому подарку.',
+            'remove_ad_free_giveaway_not_found'         => 'Не удалось удалить подарок без рекламы - у пользователя в данный момент его нет.',
+            'remove_ad_free_giveaway_not_yours'         => 'Не удалось удалить подарок без рекламы, который был предоставлен не вами.',
         ],
     ],
     'season' => [
         'flash' => [
-            'season_created' => '',
-            'season_updated' => '',
+            'season_created' => 'Сезон создан',
+            'season_updated' => 'Сезон обновлен',
         ],
     ],
     'spell' => [
@@ -245,9 +246,9 @@ return [
     'admin' => [
         'dungeonroute' => [
             'flash' => [
-                'updated' => '',
-                'deleted' => '',
-                'claimed' => '',
+                'updated' => 'Маршрут подземелья успешно обновлен.',
+                'deleted' => 'Маршрут подземелья успешно удален.',
+                'claimed' => 'Маршрут подземелья успешно закреплен за вами. Теперь вы его владелец.',
             ],
         ],
     ],

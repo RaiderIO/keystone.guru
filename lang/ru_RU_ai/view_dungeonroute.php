@@ -6,22 +6,22 @@ return [
         'dungeon' => [
             'overview' => [
                 'weekly_route'           => 'Raider.IO Еженедельный маршрут',
-                'weekly_routes'          => '',
-                'community_routes'       => '',
+                'weekly_routes'          => 'Еженедельные маршруты Raider.IO',
+                'community_routes'       => 'Маршруты сообщества',
                 'popular'                => 'Популярные маршруты',
                 'newly_published_routes' => 'Новые маршруты',
                 'archetypes'             => [
                     'pug_friendly' => [
-                        'label'       => '',
-                        'description' => '',
+                        'label'       => 'Подходит для PUG',
+                        'description' => 'Щадящие пуллы для групп незнакомцев',
                     ],
                     'expert' => [
-                        'label'       => '',
-                        'description' => '',
+                        'label'       => 'Экспертный',
+                        'description' => 'Оптимизирован для слаженных групп',
                     ],
                     'title' => [
-                        'label'       => '',
-                        'description' => '',
+                        'label'       => 'Титульный',
+                        'description' => 'Маршрут, который топ 0.5% использует для повышения рейтинга',
                     ],
                 ],
             ],
