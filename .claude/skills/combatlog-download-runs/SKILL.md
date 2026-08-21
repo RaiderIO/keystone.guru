@@ -64,13 +64,13 @@ The extraction pipeline above takes segments one at a time, but anything that ne
 test fixture - needs them joined back together first:
 
 ```sh
-sh/combatlog-reconstruct-run.sh storage/app/combatlogs/<dir> <runId>   # writes full_run_<runId>.txt
+sh .claude/skills/combatlog-download-runs/scripts/reconstruct-run.sh storage/app/combatlogs/<dir> <runId>
 docker compose exec -T app php artisan combatlog:outputcombatlogroutejson storage/app/combatlogs/<dir>/full_run_<runId>.txt
 ```
 
-The reconstruct script is plain text wrangling on host paths under the bind-mounted `storage/`, so it
-runs on the host while the artisan command that consumes its output runs in the container - both see
-the file at the same relative path.
+It writes `full_run_<runId>.txt` next to the segments. Plain text wrangling on host paths under the
+bind-mounted `storage/`, so it runs on the host while the artisan command that consumes its output runs
+in the container - both see the file at the same relative path.
 
 The segments are contiguous - segment 1 opens with `CHALLENGE_MODE_START`, the last closes with
 `CHALLENGE_MODE_END` - and each one's `RIO_LOG_VERSION` header parses fine mid-file, so a plain
@@ -78,7 +78,9 @@ concatenation is all that is needed. Two things it gets wrong by hand: the order
 (`segment_10` sorts before `segment_2` in a glob), and a segment's last line carries **no trailing
 newline**, so without an inserted one it fuses with the next segment's header and both lines fail to
 parse. The command writes its `.json` next to the input and **skips a log whose `.json` already
-exists** - delete it to regenerate.
+exists** - delete it to regenerate. It does *not* ask for debug map icons unless you pass
+`--debugIcons`: they cost a whole extra pass over the route when the body is posted and are only of use
+when debugging the ARC itself, so a body destined for a test fixture must not carry them.
 
 ### NPC base health from a run (#4094)
 

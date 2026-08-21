@@ -1,6 +1,6 @@
 {
     "metadata": {
-        "runId": "0b6788f4-6139-4d79-a870-9db6565a4c09",
+        "runId": "2cc9851f-35b5-4707-ad1f-9ad1d7770e48",
         "keystoneRunId": 98765,
         "loggedRunId": 87654,
         "period": 1077,
@@ -11,7 +11,7 @@
     },
     "settings": {
         "temporary": true,
-        "debugIcons": true,
+        "debugIcons": false,
         "mappingVersion": 8,
         "publicKey": null
     },

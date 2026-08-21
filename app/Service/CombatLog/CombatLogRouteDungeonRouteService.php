@@ -316,6 +316,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     public function getCombatLogRoute(
         string $combatLogFilePath,
         bool   $dungeonOrRaid = false,
+        bool   $debugIcons = false,
     ): ?CombatLogRouteRequestDto {
         ini_set('max_execution_time', 1800);
 
@@ -509,7 +510,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
 
             return new CombatLogRouteRequestDto(
                 $this->getCombatLogRouteMetadata($dungeonRoute, $runStart, $wowInstanceId),
-                new CombatLogRouteSettingsRequestDto(true, true, $dungeonRoute->mappingVersion->version),
+                new CombatLogRouteSettingsRequestDto(true, $debugIcons, $dungeonRoute->mappingVersion->version),
                 $challengeMode,
                 new CombatLogRouteRosterRequestDto(
                     $mostRecentCombatantInfo->count(),

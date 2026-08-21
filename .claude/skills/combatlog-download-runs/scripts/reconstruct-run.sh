@@ -8,7 +8,7 @@
 # CHALLENGE_MODE_END, and each one opens with its own RIO_LOG_VERSION header, which the parser
 # recognises mid-file. So the only things that need care are the join order and the joins themselves.
 #
-#   sh/combatlog-reconstruct-run.sh storage/app/combatlogs/altar_of_fangs 1444862
+#   sh .claude/skills/combatlog-download-runs/scripts/reconstruct-run.sh storage/app/combatlogs/altar_of_fangs 1444862
 #
 # This is plain text wrangling on host paths under the bind-mounted storage/ - it deliberately does
 # not go through `docker compose exec`, and the file it writes is visible to the container at the

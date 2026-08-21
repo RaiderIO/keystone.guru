@@ -13,7 +13,7 @@ class OutputCombatLogRouteJson extends BaseCombatLogCommand
      *
      * @var string
      */
-    protected $signature = 'combatlog:outputcombatlogroutejson {filePath} {--dungeonOrRaid}';
+    protected $signature = 'combatlog:outputcombatlogroutejson {filePath} {--dungeonOrRaid} {--debugIcons : Ask the Auto Route Creator for debug map icons when this body is posted - only useful when debugging the ARC itself}';
 
     /**
      * The console command description.
@@ -34,11 +34,13 @@ class OutputCombatLogRouteJson extends BaseCombatLogCommand
 
         $filePath      = $this->argument('filePath');
         $dungeonOrRaid = (bool)$this->option('dungeonOrRaid');
+        $debugIcons    = (bool)$this->option('debugIcons');
         $failed        = false;
 
         $result = $this->parseCombatLogRecursively($filePath, function (string $filePath) use (
             $combatLogRouteBodyDungeonRouteService,
             $dungeonOrRaid,
+            $debugIcons,
             &$failed,
         ) {
             if (!str_ends_with($filePath, '.zip') && !str_ends_with($filePath, '.txt')) {
@@ -54,7 +56,7 @@ class OutputCombatLogRouteJson extends BaseCombatLogCommand
             }
 
             try {
-                return $this->outputCombatLogRouteJson($combatLogRouteBodyDungeonRouteService, $filePath, $dungeonOrRaid);
+                return $this->outputCombatLogRouteJson($combatLogRouteBodyDungeonRouteService, $filePath, $dungeonOrRaid, $debugIcons);
             } catch (Throwable $throwable) {
                 // One unusable log in a folder must not abort the rest of it - a folder of combat logs routinely
                 // contains a run that was never finished, or a single segment of one, neither of which carries the
@@ -77,12 +79,13 @@ class OutputCombatLogRouteJson extends BaseCombatLogCommand
         CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService,
         string                                     $filePath,
         bool                                       $dungeonOrRaid = false,
+        bool                                       $debugIcons = false,
     ): int {
         $this->info(sprintf('Parsing file %s', $filePath));
 
         $resultingFile = self::getResultingFilePath($filePath);
 
-        $combatLogRouteJson = $combatLogRouteDungeonRouteService->getCombatLogRoute($filePath, $dungeonOrRaid);
+        $combatLogRouteJson = $combatLogRouteDungeonRouteService->getCombatLogRoute($filePath, $dungeonOrRaid, $debugIcons);
         if ($combatLogRouteJson !== null) {
             $result = file_put_contents(
                 $resultingFile,

@@ -1,7 +1,7 @@
 {
     "data": {
         "metadata": {
-            "runId": "18d6f2fc-c9d5-46f8-b389-1dd06e379bd2",
+            "runId": "6e0b86d4-167a-40ff-b36a-f84e08d14b04",
             "keystoneRunId": 98765,
             "loggedRunId": 87654,
             "period": 1077,
@@ -12,7 +12,7 @@
         },
         "settings": {
             "temporary": true,
-            "debugIcons": true,
+            "debugIcons": false,
             "mappingVersion": 4
         },
         "challengeMode": {
