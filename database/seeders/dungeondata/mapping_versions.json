@@ -9065,11 +9065,11 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 1980,
-        "mdt_mapping_hash": "71167ffaf2102d891fae3e61812ec201",
+        "mdt_mapping_hash": "d4eeefc5efcdbd6e3f8d2e0345b99675",
         "mdt_addon_version": 621,
         "facade_enabled": 1,
         "created_at": "2026-08-12T08:12:41.000000Z",
-        "updated_at": "2026-08-17T17:15:40.000000Z"
+        "updated_at": "2026-08-21T19:28:34.000000Z"
     },
     {
         "id": 838,
@@ -9257,11 +9257,11 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 1860,
-        "mdt_mapping_hash": "92abc7e09548d9c9cff35e097bce1148",
+        "mdt_mapping_hash": "b04becf3954fd619d9de8d4c0ad32c0d",
         "mdt_addon_version": 623,
         "facade_enabled": 1,
         "created_at": "2026-08-18T13:12:01.000000Z",
-        "updated_at": "2026-08-18T13:12:06.000000Z"
+        "updated_at": "2026-08-21T19:28:34.000000Z"
     },
     {
         "id": 903,
@@ -9289,11 +9289,11 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 1740,
-        "mdt_mapping_hash": "7eb60552cb692fbccaaf37266f9eb90e",
+        "mdt_mapping_hash": "16b1ac124a9f0ddd040fb29203181a87",
         "mdt_addon_version": 622,
         "facade_enabled": 1,
         "created_at": "2026-08-18T21:41:38.000000Z",
-        "updated_at": "2026-08-18T21:41:38.000000Z"
+        "updated_at": "2026-08-21T19:28:34.000000Z"
     },
     {
         "id": 905,
@@ -9305,11 +9305,11 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 1920,
-        "mdt_mapping_hash": "a84f808044cb6bd422ae19848db0ce99",
+        "mdt_mapping_hash": "aba969b9d6fbbb8f856f0fb871d5d849",
         "mdt_addon_version": 622,
         "facade_enabled": 1,
         "created_at": "2026-08-20T17:42:42.000000Z",
-        "updated_at": "2026-08-20T17:42:42.000000Z"
+        "updated_at": "2026-08-21T19:28:34.000000Z"
     },
     {
         "id": 906,
@@ -9321,11 +9321,11 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 2040,
-        "mdt_mapping_hash": "071f8a944d3c8d29d25e7db27b393da6",
+        "mdt_mapping_hash": "c2d9263068193aa46da2e083d475b13f",
         "mdt_addon_version": 622,
         "facade_enabled": 1,
         "created_at": "2026-08-20T18:34:34.000000Z",
-        "updated_at": "2026-08-20T18:34:34.000000Z"
+        "updated_at": "2026-08-21T19:28:34.000000Z"
     },
     {
         "id": 907,
@@ -9337,11 +9337,11 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 1800,
-        "mdt_mapping_hash": "72bf2bae8dfc219ac48e87a13298de9f",
+        "mdt_mapping_hash": "95df2e0ef9950c2224317f87baeb3b72",
         "mdt_addon_version": 621,
         "facade_enabled": 1,
         "created_at": "2026-08-20T19:22:49.000000Z",
-        "updated_at": "2026-08-20T19:22:49.000000Z"
+        "updated_at": "2026-08-21T19:28:34.000000Z"
     },
     {
         "id": 908,
@@ -9353,11 +9353,11 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 1680,
-        "mdt_mapping_hash": "6961427fec8f6de7a6bedd8eafec70d1",
+        "mdt_mapping_hash": "399b570712cc8a31757ef428aa1e55b4",
         "mdt_addon_version": 621,
         "facade_enabled": 1,
         "created_at": "2026-08-20T19:35:38.000000Z",
-        "updated_at": "2026-08-20T19:35:38.000000Z"
+        "updated_at": "2026-08-21T19:28:34.000000Z"
     },
     {
         "id": 909,
@@ -9369,10 +9369,10 @@
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 1980,
-        "mdt_mapping_hash": "23907d1b89df0fa6f3fb1a17a038622c",
+        "mdt_mapping_hash": "3567d46bc548ae9455a30ace19ea8520",
         "mdt_addon_version": 621,
         "facade_enabled": 1,
         "created_at": "2026-08-20T20:07:15.000000Z",
-        "updated_at": "2026-08-20T20:16:42.000000Z"
+        "updated_at": "2026-08-21T19:28:34.000000Z"
     }
 ]

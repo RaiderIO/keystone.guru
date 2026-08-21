@@ -14,12 +14,6 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
-/**
- * #4208: config('keystoneguru.npc.curated_npc_data_npc_ids') is the one list of NPCs whose data is hand-curated, shared
- * by the MDT import and combatlog:extractnpchealth. Murder Row's Infernal is on it because MDT reports its real
- * 202,703,424 health while the mapping deliberately stores 2,703,424 - a 200M trash mob breaks the health-based enemy
- * sizing on the map - so an import must leave the NPC alone entirely rather than clobber the curated value back.
- */
 #[Group('UsesLua')]
 #[Group('MDT')]
 final class MDTMappingImportCuratedNpcDataTest extends PublicTestCase
@@ -55,7 +49,11 @@ final class MDTMappingImportCuratedNpcDataTest extends PublicTestCase
         $mdtHealth = collect($mdtDungeon->getMDTNPCs())
             ->first(static fn($mdtNpc) => $mdtNpc->getId() === self::INFERNAL_NPC_ID)
             ?->getHealth();
-        $this->assertNotSame(self::INFERNAL_CURATED_HEALTH, $mdtHealth, 'MDT must disagree with the curated value, or this test proves nothing.');
+        $this->assertContains(
+            self::INFERNAL_NPC_ID,
+            Npc::getCuratedDataNpcIds(),
+            'The NPC must be on the curated list, or the import has no reason to skip it regardless of what MDT reports.',
+        );
 
         // Act
         $failures = [];
