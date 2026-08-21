@@ -26,6 +26,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Constraint\IsType;
 use PHPUnit\Framework\MockObject\Exception;
 use RedisException;
+use ReflectionClass;
 use RuntimeException;
 use Tests\TestCases\PublicTestCase;
 
@@ -561,6 +562,37 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
 
         // Act
         $this->jobWithCriteria()->failed(new RuntimeException('Failed to download segment 1 for run 42'));
+
+        // Assert - handled by mock expectations above
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function failed_givenJobSerializedBeforeCriteriaWereAdded_releasesNothingInsteadOfThrowing(): void
+    {
+        // Arrange - #4233: SerializesModels::__unserialize() only assigns properties present in the
+        // stored payload, and readonly promoted properties have no property-level default to fall
+        // back to. A job serialized onto the queue before #4173 added $criteria/$criteriaDate is
+        // therefore restored with both left uninitialized; reproduce that here via reflection rather
+        // than the constructor.
+        $criteriaService = $this->createMockPublic(CombatLogParsingCriteriaServiceInterface::class);
+        $criteriaService->expects($this->never())->method('releaseParsed');
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
+        $healthService->expects($this->once())
+            ->method('recordFailure')
+            ->with(CombatLogPollingFailureReason::RunFailedAfterRetries);
+        app()->instance(CombatLogPollingHealthServiceInterface::class, $healthService);
+
+        $reflection = new ReflectionClass(ProcessCombatLogSegments::class);
+        $job        = $reflection->newInstanceWithoutConstructor();
+        $reflection->getProperty('combatLogVersion')->setValue($job, self::COMBAT_LOG_VERSION);
+
+        // Act
+        $job->failed(new RuntimeException('Failed to download segment 1 for run 42'));
 
         // Assert - handled by mock expectations above
     }

@@ -195,10 +195,20 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
      * satisfy are polled for again on the next hourly run. Deliberately not a retry of this run: it
      * is blacklisted, and finding a replacement immediately would mean re-querying Raider.IO from
      * inside the job for what the next poll finds on its own an hour later (#4173).
+     *
+     * $criteria/$criteriaDate are readonly promoted properties, so a job that was serialized onto the
+     * queue before this constructor gained them is restored by SerializesModels::__unserialize() with
+     * both left uninitialized - it only assigns properties present in the stored payload and never
+     * falls back to the constructor's default, which only applies when the constructor actually runs.
+     * Direct access would then throw "must not be accessed before initialization" (#4233); isset() is
+     * the safe way to read a possibly-uninitialized typed property.
      */
     private function releaseCriteriaBudget(): void
     {
-        if ($this->criteria === [] || $this->criteriaDate === null) {
+        // PHPStan sees the constructor default and assumes it always runs; a job restored from the queue
+        // via SerializesModels::__unserialize() never calls it - see the docblock above.
+        // @phpstan-ignore isset.initializedProperty
+        if (!isset($this->criteria) || $this->criteria === [] || !isset($this->criteriaDate)) {
             return;
         }
 
