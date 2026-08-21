@@ -4,6 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Reads from the main database and writes into the combat log one, so it names both connections explicitly
+ * rather than inheriting the caller's --database. Both are the elevated `*_migrate` ones: the runtime
+ * connections are least-privilege and are not for migration work (#4242).
+ */
 return new class extends Migration {
     /**
      * Bit → property name mapping, mirroring SpellConstants::ALL_MISS_TYPES prefixed with 'miss_'.
@@ -28,7 +33,7 @@ return new class extends Migration {
         $now      = Carbon::now()->toDateTimeString();
 
         // Seed NPC characteristic observations from all existing npc_characteristics rows
-        DB::connection('mysql')
+        DB::connection('migrate')
             ->table('npc_characteristics')
             ->orderBy('id')
             ->chunk(500, function ($rows) use ($today, $seedPath, $now) {
@@ -44,13 +49,13 @@ return new class extends Migration {
                     ];
                 }
 
-                DB::connection('combatlog')
+                DB::connection('combatlog_migrate')
                     ->table('combat_log_npc_characteristic_observations')
                     ->insertOrIgnore($insert);
             });
 
         // Seed spell property observations from all existing spells with set properties
-        DB::connection('mysql')
+        DB::connection('migrate')
             ->table('spells')
             ->where(function ($query) {
                 $query->where('aura', true)
@@ -98,7 +103,7 @@ return new class extends Migration {
                 }
 
                 if (!empty($insert)) {
-                    DB::connection('combatlog')
+                    DB::connection('combatlog_migrate')
                         ->table('combat_log_spell_property_observations')
                         ->insertOrIgnore($insert);
                 }
@@ -107,12 +112,12 @@ return new class extends Migration {
 
     public function down(): void
     {
-        DB::connection('combatlog')
+        DB::connection('combatlog_migrate')
             ->table('combat_log_npc_characteristic_observations')
             ->where('combat_log_path', 'seed')
             ->delete();
 
-        DB::connection('combatlog')
+        DB::connection('combatlog_migrate')
             ->table('combat_log_spell_property_observations')
             ->where('combat_log_path', 'seed')
             ->delete();
