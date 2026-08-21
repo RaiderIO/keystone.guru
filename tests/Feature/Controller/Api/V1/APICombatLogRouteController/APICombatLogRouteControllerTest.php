@@ -86,6 +86,29 @@ final class APICombatLogRouteControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function postBody_givenAiAgent_returnsStoredJson(): void
+    {
+        // Arrange
+        /** @var User $aiAgent */
+        $aiAgent = User::factory()->create();
+
+        try {
+            $aiAgent->addRole(Role::ROLE_AI_AGENT);
+            $this->actingAs($aiAgent);
+            $dungeonRoute = $this->createCombatLogRoute('{"npcs":[]}');
+
+            // Act
+            $response = $this->get(route('api.v1.combatlog.route.post_body', ['dungeonRoute' => $dungeonRoute->public_key]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame('{"npcs":[]}', $response->getContent());
+        } finally {
+            $aiAgent->delete();
+        }
+    }
+
+    #[Test]
     public function postBody_givenAuthenticatedNonAdmin_returnsForbidden(): void
     {
         // Arrange

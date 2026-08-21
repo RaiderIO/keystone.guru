@@ -72,10 +72,10 @@ return [
                 'oauth2_callback' => 'api/internal-team/oauth2-callback',
 
                 'middleware' => [
-                    'api'             => ['web', 'auth', 'role:internal_team|admin'],
-                    'asset'           => ['web', 'auth', 'role:internal_team|admin'],
-                    'docs'            => ['web', 'auth', 'role:internal_team|admin'],
-                    'oauth2_callback' => ['web', 'auth', 'role:internal_team|admin'],
+                    'api'             => ['web', 'auth', 'role:internal_team|ai_agent|admin'],
+                    'asset'           => ['web', 'auth', 'role:internal_team|ai_agent|admin'],
+                    'docs'            => ['web', 'auth', 'role:internal_team|ai_agent|admin'],
+                    'oauth2_callback' => ['web', 'auth', 'role:internal_team|ai_agent|admin'],
                 ],
             ],
             'paths' => [

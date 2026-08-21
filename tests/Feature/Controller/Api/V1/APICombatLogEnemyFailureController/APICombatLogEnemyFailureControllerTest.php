@@ -178,6 +178,27 @@ final class APICombatLogEnemyFailureControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function index_givenAiAgent_returnsOk(): void
+    {
+        // Arrange
+        /** @var User $aiAgent */
+        $aiAgent = User::factory()->create();
+
+        try {
+            $aiAgent->addRole(Role::ROLE_AI_AGENT);
+            $this->actingAs($aiAgent);
+
+            // Act
+            $response = $this->getJson(route('api.v1.combatlog.enemy_failures.index', ['dungeon' => $this->dungeon->slug]));
+
+            // Assert
+            $response->assertOk();
+        } finally {
+            $aiAgent->delete();
+        }
+    }
+
+    #[Test]
     public function index_givenAuthenticatedNonAdmin_returnsForbidden(): void
     {
         // Arrange

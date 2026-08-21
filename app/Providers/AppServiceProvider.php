@@ -165,10 +165,7 @@ class AppServiceProvider extends ServiceProvider
         /** @var User|null $user */
         $user = $request->user();
 
-        if ($user?->hasRole(Role::roles([
-            Role::ROLE_ADMIN,
-            Role::ROLE_INTERNAL_TEAM,
-        ]))) {
+        if ($user?->hasRole(Role::roles(Role::ROLES_INTERNAL))) {
             return Limit::none();
         }
 
