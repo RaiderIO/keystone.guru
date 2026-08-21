@@ -3,10 +3,41 @@
 **Status: Done, 2026-08-21.** All 769 in-scope keys filled, gate green, `composer run analyse`
 clean, `composer run fix` only realigning whitespace (`mapping.php`, `view_home.php`). Informal
 *você* register throughout (121 pre-existing `você` hits, 0 `tu` hits across the locale before
-this pass) — no register cleanup needed, all new keys written as *você*. Commit `627042c43` on
-branch `4165-regenerate-ai-translations`. A Codex quality review was dispatched in the background
-(`task-mt2tnyyn-a0ave3`); its findings, if any required fixes, are recorded in a follow-up section
-below or a separate commit.
+this pass) — no register cleanup needed, all new keys written as *você*. Commits `627042c43`
+(translation) and `118e952fe` (review fixes) on branch `4165-regenerate-ai-translations`.
+
+**Codex review found 34 issues, 32 real.** Two recurring categories, both already documented
+lessons in this file that this pass still tripped on:
+
+1. **NPC/boss names inside `mapping.php` prose translated instead of kept English** —
+   `Hackclaw's War-Band`, `Bracken Warscourge`, `Khajin the Unyielding`, `Watcher Irideus`,
+   `the Seven`. All five have official `npcs.php` localizations and I used them, which is
+   backwards — this is the exact it_IT/ko_KR mistake the "Proper nouns stay in English inside
+   prose" rule exists to prevent. Confirmed against the four other already-done locales
+   (`de_DE_ai`/`es_ES_ai`/`fr_FR_ai`/`ko_KR_ai` all kept these five English; only `it_IT_ai` — the
+   locale that made this mistake originally — had translated them too, so it was not a reliable
+   cross-check here).
+2. **Official `spells.php`/`affixes.php` terms not read first** — `Enrage` invented as "Fúria"
+   (a noun, "rage") instead of the official `spells.php` verb "Enfurecer"; `Awakened` invented as
+   "Desperto" instead of the official `affixes.php` "Despertado".
+
+Other real fixes: `view_compendium.php` translated "counter" (as in "this spell can be countered
+by X") as `contra-atacar` (counter-*attack*, i.e. retaliate) across 7 keys — wrong verb, the
+correct sense is `neutralizar`; "landing through :property" (bypassing an immunity) was
+`acertando através de` (landing *through*) when `acertando apesar de` (landing *despite*) is the
+correct sense in Portuguese; `Json` → `JSON` casing (2 keys); a gender/pronoun mismatch where a
+singular "patrol" was referred back to with plural feminine pronouns; `pat` (WoW jargon for
+"patrol") left untranslated when every other locale translated it and the rest of this diff
+consistently uses `patrulha`; and a handful of naturalness/register polish items (a decimal-comma
+fix, "tag the boss" mistranslated as "mark", a couple of reworded sentences).
+
+**Two findings were checked and rejected** — the six `view_admin.php` "missing translations" are
+in the deliberately excluded admin-UI file (0 keys from it were ever in this pass's work list);
+`controller.php`'s "trabalhos" for `jobs` was flagged as a bad word choice, but it matches this
+locale's own pre-existing sibling key (`thumbnail_regenerate_result`) two lines above it — the
+suggested "tarefas" would have broken that established internal consistency instead of fixing
+anything. Always gate a reviewer's finding against the locale's own pre-existing usage before
+applying it, same lesson `fr_FR_ai`'s handover already recorded.
 
 ## Glossary established in this pass
 

@@ -400,7 +400,17 @@ disagree on in `en_US` itself.
 text: `Blazing Aegis` -> "Égide Fulgurante" and `Burning Chain` -> "Corrente Ardente"
 (`mapping.map_icons.df.neltharus`) — both read like generic item pickups but are catalogued
 spells with real localisations, the "grep spells.php first" rule paying off on a case that didn't
-look like a spell name at a glance. Full notes in `handovers/pt_BR_ai.md`.
+look like a spell name at a glance.
+
+**Codex review found 34 issues, 32 real** — repeated the it_IT/ko_KR NPC-name-in-prose mistake on
+five names that all have official `npcs.php` localizations (`Hackclaw's War-Band`,
+`Bracken Warscourge`, `Khajin the Unyielding`, `Watcher Irideus`, `the Seven`) despite this same
+SKILL.md file stating the rule right above; also two official-glossary misses (`Enrage` invented
+as "Fúria" instead of `spells.php`'s "Enfurecer"; `Awakened` invented as "Desperto" instead of
+`affixes.php`'s "Despertado"), and "counter" (as in "countered by") mistranslated as
+`contra-atacar` (counter-*attack*) instead of `neutralizar` across 7 `view_compendium.php` keys.
+Full triage, including two findings checked and rejected against the locale's own pre-existing
+conventions, in `handovers/pt_BR_ai.md`.
 
 ## Normalising an existing locale (overwriting existing values)
 
@@ -528,7 +538,7 @@ in the excluded files, which are not this workflow's business.
 | `fr_FR_ai` | 2986 | 769 | Done — #4165, 2026-08-20, PR #4209 (formal *vous* register, no cleanup needed; plus 27 Codex-review fixes, see `handovers/fr_FR_ai.md`) |
 | `it_IT_ai` | 2984 | 769 | Done — #4165, 2026-08-21 (informal *tu* register, no cleanup needed; plus ~90 Codex-review fixes, almost all reverting NPC/creature names in `mapping.php` prose back to English — see the Italian glossary above) |
 | `ko_KR_ai` | 3042 | 769 | Done — #4165, 2026-08-21, PR #4209 (formal 하십시오체 register, no cleanup needed; plus 29 Codex-review fixes — see `handovers/ko_KR_ai.md`, including a repeat of the `fr_FR_ai` duplicate-dungeon-block lesson) |
-| `pt_BR_ai` | 2984 | 769 | Done — #4165, 2026-08-21 (informal *você* register, no cleanup needed; see `handovers/pt_BR_ai.md`) |
+| `pt_BR_ai` | 2984 | 769 | Done — #4165, 2026-08-21 (informal *você* register, no cleanup needed; plus 32 Codex-review fixes — see `handovers/pt_BR_ai.md`, including a repeat of the it_IT/ko_KR NPC-name-in-prose mistake) |
 | `ru_RU_ai` | 2841 | 745 | Not started |
 | `zh_CN_ai` | 3097 | 745 | Not started |
 | `zh_TW_ai` | 3094 | 745 | Not started |
