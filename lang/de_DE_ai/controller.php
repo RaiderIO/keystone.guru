@@ -27,6 +27,7 @@ return [
             'combatlog_criteria_reset'               => 'Alle Zähler der Parsing-Kriterien für heute wurden zurückgesetzt.',
             'combatlog_criteria_thresholds_updated'  => 'Die Schwellenwerte der Parsing-Kriterien wurden aktualisiert.',
             'caches_dropped_successfully'            => 'Caches erfolgreich gelöscht',
+            'caches_drop_queued'                     => 'Das Löschen der Caches wurde eingereiht und läuft im Hintergrund',
             'exception'                              => 'Ausnahme im Admin-Panel ausgelöst',
             'feature_toggle_activated'               => 'Feature :feature ist jetzt aktiviert',
             'feature_toggle_deactivated'             => 'Feature :feature ist jetzt deaktiviert',

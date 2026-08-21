@@ -27,6 +27,7 @@ return [
             'combatlog_criteria_reset'               => '',
             'combatlog_criteria_thresholds_updated'  => '',
             'caches_dropped_successfully'            => '快取成功清除',
+            'caches_drop_queued'                     => '',
             'exception'                              => '管理面板中拋出了例外',
             'feature_toggle_activated'               => '功能 :feature 現已啟動',
             'feature_toggle_deactivated'             => '功能 :feature 現已停用',
