@@ -6,6 +6,9 @@ use App\Console\Commands\Database\Migrate;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use SplFileInfo;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -22,6 +25,9 @@ use Tests\TestCases\PublicTestCase;
 #[Group('MigrationConnection')]
 final class MigrationConnectionTest extends PublicTestCase
 {
+    /** @var array<int, string> The kinds of file that can invoke a migration - anything else is not a caller. */
+    private const array CALLER_EXTENSIONS = ['php', 'sh', 'yml', 'yaml'];
+
     /**
      * The `*_legacy` directories are squashed history - nothing runs them, and they are not held to this.
      *
@@ -101,6 +107,83 @@ final class MigrationConnectionTest extends PublicTestCase
         // Assert
         $this->assertNotEmpty($schemaPath, 'The combat log migrations must name their schema dump explicitly.');
         $this->assertFileExists(base_path($schemaPath));
+    }
+
+    /**
+     * The rule above only holds if the callers pass an elevated `--database` in the first place, and a caller is
+     * exactly where this went wrong: `environment:update` kept its own copy of the options and was left on
+     * `combatlog` when the others moved. It runs on container startup via docker_init.sh, so it would have failed
+     * on a DROP migration somewhere nobody would think to look.
+     *
+     * Scanned across the whole tree rather than asserted on the two commands, because a caller can be a shell
+     * script or a CI workflow as easily as a PHP command - `sh/worktree.sh` and the php-ci-setup action both
+     * invoke these migrations directly.
+     */
+    #[Test]
+    public function combatLogMigrationCallers_givenEachOfThem_useTheElevatedConnection(): void
+    {
+        // Arrange
+        $migrationPath = Migrate::COMBAT_LOG_MIGRATE_OPTIONS['--path'];
+
+        // Act
+        $callers = $this->getFilesReferencing($migrationPath);
+
+        // Assert
+        $this->assertNotEmpty($callers, sprintf('Found nothing that runs the migrations in %s', $migrationPath));
+
+        foreach ($callers as $caller) {
+            $this->assertDoesNotMatchRegularExpression(
+                // --database=combatlog / '--database' => 'combatlog', but not the combatlog_migrate that is fine
+                '/--database\'?\s*(?:=>|=)\s*\'?combatlog(?![_\w])/',
+                file_get_contents($caller),
+                sprintf(
+                    '%s runs the combat log migrations on the least-privilege "combatlog" connection; it must use ' .
+                    '"%s" (Migrate::COMBAT_LOG_MIGRATE_OPTIONS).',
+                    $caller,
+                    Migrate::COMBAT_LOG_MIGRATE_OPTIONS['--database'],
+                ),
+            );
+        }
+    }
+
+    /**
+     * Everything that names the combat log migration path - PHP commands, shell scripts, CI workflows.
+     *
+     * Scoped to source directories and source extensions on purpose: `docker-compose/` also holds the gitignored
+     * MySQL data volumes, tens of gigabytes of them, and walking those took four minutes and died on the first
+     * root-owned file. `docker-compose/app` is named directly because docker_init.sh - the startup path that made
+     * the `environment:update` mismatch dangerous - lives there.
+     *
+     * @return array<int, string>
+     */
+    private function getFilesReferencing(string $migrationPath): array
+    {
+        $callers = [];
+
+        foreach (['app', 'sh', '.github', 'docker-compose/app'] as $directory) {
+            $directoryPath = base_path($directory);
+
+            if (!is_dir($directoryPath)) {
+                continue;
+            }
+
+            $files = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($directoryPath, RecursiveDirectoryIterator::SKIP_DOTS),
+            );
+
+            foreach ($files as $file) {
+                /** @var SplFileInfo $file */
+                if (!$file->isFile() || !in_array($file->getExtension(), self::CALLER_EXTENSIONS, true)) {
+                    continue;
+                }
+
+                if (str_contains((string)file_get_contents($file->getPathname()), $migrationPath)) {
+                    $callers[] = str_replace(sprintf('%s/', base_path()), '', $file->getPathname());
+                }
+            }
+        }
+
+        return $callers;
     }
 
     /**
