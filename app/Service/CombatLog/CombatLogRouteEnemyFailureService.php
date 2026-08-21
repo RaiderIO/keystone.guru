@@ -80,17 +80,41 @@ readonly class CombatLogRouteEnemyFailureService implements CombatLogRouteEnemyF
 
     public function getFailureCountsPerMappingVersion(Dungeon $dungeon): Collection
     {
-        /** @var Collection<int, int> $counts */
-        $counts = CombatLogRouteEnemyFailure::query()
+        $mappingVersionIds = $dungeon->mappingVersions->pluck('id');
+
+        // Which npcs are worth 0 enemy forces differs per mapping version, so the exclusion that failuresQuery()
+        // applies for one mapping version is applied here per (mapping version, npc) pair - the counts must agree
+        // with what the heatmap draws for each version.
+        /** @var array<int, array<int, true>> $zeroEnemyForcesNpcIdsPerMappingVersion mapping_version_id => [npc_id => true] */
+        $zeroEnemyForcesNpcIdsPerMappingVersion = [];
+        foreach (NpcEnemyForces::query()
+            ->whereIn('mapping_version_id', $mappingVersionIds)
+            ->where('enemy_forces', 0)
+            ->get(['mapping_version_id', 'npc_id']) as $npcEnemyForces) {
+            /** @var NpcEnemyForces $npcEnemyForces */
+            $zeroEnemyForcesNpcIdsPerMappingVersion[$npcEnemyForces->mapping_version_id][$npcEnemyForces->npc_id] = true;
+        }
+
+        /** @var array<int, int> $counts mapping_version_id => failure count */
+        $counts = [];
+        /** @var array<int, array{mapping_version_id: int, npc_id: int|null, failure_count: int}> $rows */
+        $rows = CombatLogRouteEnemyFailure::query()
             ->where('dungeon_id', $dungeon->id)
-            ->selectRaw('mapping_version_id, COUNT(*) AS failure_count')
-            ->groupBy('mapping_version_id')
-            ->pluck('failure_count', 'mapping_version_id')
-            ->map(static fn($count): int => (int)$count);
+            ->selectRaw('mapping_version_id, npc_id, COUNT(*) AS failure_count')
+            ->groupBy('mapping_version_id', 'npc_id')
+            ->get()
+            ->toArray();
+        foreach ($rows as $row) {
+            if ($row['npc_id'] !== null && isset($zeroEnemyForcesNpcIdsPerMappingVersion[$row['mapping_version_id']][$row['npc_id']])) {
+                continue;
+            }
+
+            $counts[$row['mapping_version_id']] = ($counts[$row['mapping_version_id']] ?? 0) + (int)$row['failure_count'];
+        }
 
         /** @var Collection<int, int> $result */
         $result = $dungeon->mappingVersions
-            ->mapWithKeys(static fn(MappingVersion $mappingVersion) => [$mappingVersion->id => $counts->get($mappingVersion->id, 0)]);
+            ->mapWithKeys(static fn(MappingVersion $mappingVersion) => [$mappingVersion->id => $counts[$mappingVersion->id] ?? 0]);
 
         return $result;
     }

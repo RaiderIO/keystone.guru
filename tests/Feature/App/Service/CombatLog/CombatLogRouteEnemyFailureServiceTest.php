@@ -430,6 +430,42 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function getFailureCountsPerMappingVersion_givenZeroEnemyForcesNpc_excludesItsRowsLikeTheHeatmapDoes(): void
+    {
+        $created          = [];
+        $zeroForcesNpcId  = 99940;
+        $npcEnemyForcesId = null;
+
+        try {
+            // Arrange — two rows for a 0-enemy-forces npc, one for another npc, one without npc
+            $npcEnemyForcesId = NpcEnemyForces::query()->create([
+                'mapping_version_id' => $this->mappingVersion->id,
+                'npc_id'             => $zeroForcesNpcId,
+                'enemy_forces'       => 0,
+            ])->id;
+
+            $created[] = $this->createFailure(['npc_id' => $zeroForcesNpcId])->id;
+            $created[] = $this->createFailure(['npc_id' => $zeroForcesNpcId])->id;
+            $created[] = $this->createFailure(['npc_id' => 99941])->id;
+            $created[] = $this->createFailure(['npc_id' => null])->id;
+
+            // Act
+            $counts = $this->service->getFailureCountsPerMappingVersion($this->dungeon);
+
+            // Assert — matches the heatmap's failure_count for the same mapping version
+            $this->assertSame(2, $counts->get($this->mappingVersion->id));
+            $heatmap = $this->service->getEnemyFailureHeatmapData($this->dungeon, $this->mappingVersion, null)->setUseFacade(false)->toArray();
+            $this->assertSame($heatmap['failure_count'], $counts->get($this->mappingVersion->id));
+        } finally {
+            CombatLogRouteEnemyFailure::whereIn('id', $created)->delete();
+            if ($npcEnemyForcesId !== null) {
+                NpcEnemyForces::query()->whereKey($npcEnemyForcesId)->delete();
+                new NpcEnemyForces()->flushCache();
+            }
+        }
+    }
+
     /**
      * @param array<string, mixed> $attributes
      */
