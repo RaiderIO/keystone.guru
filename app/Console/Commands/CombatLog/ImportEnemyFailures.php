@@ -107,9 +107,9 @@ class ImportEnemyFailures extends Command
                 'since'              => $since,
             ], static fn($value) => $value !== null);
 
-            $response = $http->get($failuresUrl, $query);
-            if (!$response->successful()) {
-                $this->error(sprintf('Request failed: HTTP %d %s', $response->status(), $this->describeErrorResponse($response)));
+            $response = $this->get($http, $failuresUrl, $query);
+            if ($response === null || !$response->successful()) {
+                $this->error(sprintf('Request failed: %s', $response === null ? 'could not connect' : sprintf('HTTP %d %s', $response->status(), $this->describeErrorResponse($response))));
                 if ($localRowsDeleted) {
                     $this->warn(sprintf('The local rows were already replaced - %d rows imported before the failure, the rest is missing. Re-run to retry.', $importedCount));
                 }
@@ -230,7 +230,13 @@ class ImportEnemyFailures extends Command
                 continue;
             }
 
-            $response = $http->get(sprintf('%s/api/v1/combatlog/route/%s/post-body', $baseUrl, $publicKey));
+            $response = $this->get($http, sprintf('%s/api/v1/combatlog/route/%s/post-body', $baseUrl, $publicKey));
+            if ($response === null) {
+                $this->error(sprintf('Post body request for %s failed: could not connect', $publicKey));
+
+                continue;
+            }
+
             if ($response->status() === 404) {
                 $this->warn(sprintf('Route %s has no stored post body', $publicKey));
                 $missing++;
@@ -249,6 +255,23 @@ class ImportEnemyFailures extends Command
         }
 
         $this->info(sprintf('Post bodies: %d downloaded to %s, %d already present, %d without a stored body', $downloaded, $directory, $skipped, $missing));
+    }
+
+    /**
+     * A GET that answers null instead of throwing when the host stays unreachable after the retries - with throw: false
+     * the client still throws ConnectionException once the retries are exhausted, only response errors are suppressed.
+     *
+     * @param array<string, mixed> $query
+     */
+    private function get(PendingRequest $http, string $url, array $query = []): ?Response
+    {
+        try {
+            return $http->get($url, $query);
+        } catch (ConnectionException $exception) {
+            $this->warn(sprintf('%s: %s', $url, $exception->getMessage()));
+
+            return null;
+        }
     }
 
     private function describeErrorResponse(Response $response): string

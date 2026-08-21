@@ -434,10 +434,11 @@ return [
     // file/stdin per invocation.
     'remote_hosts' => [
         'production' => [
-            'base_url' => env('KSG_REMOTE_PRODUCTION_URL', 'https://keystone.guru'),
+            // `?:` rather than the env() default: .env.example ships the key blank, and a blank must still mean the default
+            'base_url' => env('KSG_REMOTE_PRODUCTION_URL') ?: 'https://keystone.guru',
         ],
         'staging' => [
-            'base_url' => env('KSG_REMOTE_STAGING_URL', 'https://staging.keystone.guru'),
+            'base_url' => env('KSG_REMOTE_STAGING_URL') ?: 'https://staging.keystone.guru',
         ],
     ],
 

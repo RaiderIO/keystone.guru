@@ -6,6 +6,7 @@ use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
@@ -122,6 +123,23 @@ final class ImportEnemyFailuresCommandTest extends PublicTestCase
         Http::fake([
             self::BASE_URL . '/api/v1/combatlog/enemy-failures/*' => Http::response(['error' => 'Unauthenticated'], 401),
         ]);
+
+        // Act
+        $this->artisan('combatlog:importenemyfailures', [
+            'dungeon'            => $this->dungeon->key,
+            '--credentials-file' => $this->credentialsFile,
+        ])->assertFailed();
+
+        // Assert
+        $this->assertNotNull(CombatLogRouteEnemyFailure::find($existing->id));
+    }
+
+    #[Test]
+    public function handle_givenUnreachableHost_returnsFailureWithoutTouchingLocalRows(): void
+    {
+        // Arrange
+        $existing = $this->createLocalFailure();
+        Http::fake(static fn() => throw new ConnectionException('cURL error 6: Could not resolve host'));
 
         // Act
         $this->artisan('combatlog:importenemyfailures', [
