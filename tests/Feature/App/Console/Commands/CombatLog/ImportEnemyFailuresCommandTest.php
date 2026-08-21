@@ -65,10 +65,13 @@ final class ImportEnemyFailuresCommandTest extends PublicTestCase
     }
 
     #[Test]
-    public function handle_givenTwoPages_replacesLocalRowsAndStopsWhenHasMoreIsFalse(): void
+    public function handle_givenTwoPages_replacesRowsOfThatSourceAndStopsWhenHasMoreIsFalse(): void
     {
-        // Arrange — a stale local row that must disappear, and two remote pages
-        $stale = $this->createLocalFailure(['npc_id' => 1]);
+        // Arrange — a stale production-imported row that must disappear, a locally recorded row and a staging-imported
+        // row that must both survive, and two remote pages
+        $stale   = $this->createLocalFailure(['npc_id' => 1, 'source' => 'production']);
+        $local   = $this->createLocalFailure(['npc_id' => 2]);
+        $staging = $this->createLocalFailure(['npc_id' => 3, 'source' => 'staging']);
 
         Http::fake([
             self::BASE_URL . '/api/v1/combatlog/enemy-failures/*' => function (Request $request) {
@@ -86,12 +89,14 @@ final class ImportEnemyFailuresCommandTest extends PublicTestCase
             '--credentials-file' => $this->credentialsFile,
         ])->assertSuccessful();
 
-        // Assert — exactly the three remote rows, the stale one gone, both pages requested with basic auth
-        $failures = CombatLogRouteEnemyFailure::query()->where('dungeon_id', $this->dungeon->id)->orderBy('id')->get();
-        $this->assertCount(3, $failures);
+        // Assert — the three remote rows tagged with their source, the stale production row gone, local + staging kept
+        $imported = CombatLogRouteEnemyFailure::query()->where('dungeon_id', $this->dungeon->id)->where('source', 'production')->orderBy('id')->get();
+        $this->assertCount(3, $imported);
         $this->assertNull(CombatLogRouteEnemyFailure::find($stale->id));
-        $this->assertSame([501, 502, 503], $failures->pluck('npc_id')->all());
-        $this->assertSame($this->floor->id, $failures->first()->floor_id);
+        $this->assertNotNull(CombatLogRouteEnemyFailure::find($local->id));
+        $this->assertNotNull(CombatLogRouteEnemyFailure::find($staging->id));
+        $this->assertSame([501, 502, 503], $imported->pluck('npc_id')->all());
+        $this->assertSame($this->floor->id, $imported->first()->floor_id);
 
         Http::assertSentCount(2);
         Http::assertSent(static fn(Request $request) => $request->hasHeader('Authorization') && ($request->data()['after_id'] ?? null) === 11);
@@ -154,9 +159,9 @@ final class ImportEnemyFailuresCommandTest extends PublicTestCase
     #[Test]
     public function handle_givenMappingVersionOption_replacesOnlyThatMappingVersionAndPassesItOn(): void
     {
-        // Arrange — one local row in the targeted mapping version (replaced) and one in another (kept)
-        $targeted = $this->createLocalFailure(['mapping_version_id' => $this->mappingVersion->id]);
-        $other    = $this->createLocalFailure(['mapping_version_id' => PHP_INT_MAX]);
+        // Arrange — one production-imported row in the targeted mapping version (replaced) and one in another (kept)
+        $targeted = $this->createLocalFailure(['mapping_version_id' => $this->mappingVersion->id, 'source' => 'production']);
+        $other    = $this->createLocalFailure(['mapping_version_id' => PHP_INT_MAX, 'source' => 'production']);
 
         Http::fake([
             self::BASE_URL . '/api/v1/combatlog/enemy-failures/*' => Http::response(self::page([$this->remoteRow(20, 601, null)], null, false)),

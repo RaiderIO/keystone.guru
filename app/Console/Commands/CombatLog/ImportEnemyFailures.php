@@ -19,9 +19,12 @@ use Throwable;
  * the cluster analysis and ad-hoc queries all work on the local table only. Optionally also downloads the request
  * bodies the failing routes were built from, for replay with combatlog:ingestcombatlogroutejson.
  *
- * Imported rows keep the remote dungeon_route_id / mapping_version_id. The former never resolves locally (the heatmap
- * sidebar's "matching routes" links stay empty for imported rows); the latter only matches when both databases were
- * seeded from the same seeder state.
+ * Imported rows carry the host they came from in `source` (production/staging; locally recorded rows have null), and
+ * keep the remote dungeon_route_id / mapping_version_id. The former never resolves locally (the heatmap sidebar's
+ * "matching routes" links stay empty for imported rows) - `source` + the route's public key are what you need to fetch
+ * its post body from the right deployment later; the latter only matches when both databases were seeded from the
+ * same seeder state. "Replaces" means: the local rows previously imported from the same host are deleted first; rows
+ * recorded locally or imported from another host are left alone.
  */
 class ImportEnemyFailures extends Command
 {
@@ -46,7 +49,7 @@ class ImportEnemyFailures extends Command
      *
      * @var string
      */
-    protected $description = 'Replaces the local combat log route enemy failures of a dungeon with those of another keystone.guru deployment.';
+    protected $description = 'Replaces the local combat log route enemy failures of a dungeon previously imported from a keystone.guru deployment with that deployment\'s current ones.';
 
     public function handle(): int
     {
@@ -125,13 +128,14 @@ class ImportEnemyFailures extends Command
             $meta = $body['meta'] ?? [];
 
             // Only once the remote answered do we touch the local table - a dead host or bad credentials must not
-            // leave us with an empty table.
+            // leave us with an empty table. Only rows imported from this same host are replaced.
             if (!$localRowsDeleted) {
                 $deleted = CombatLogRouteEnemyFailure::query()
                     ->where('dungeon_id', $dungeon->id)
+                    ->where('source', $host)
                     ->when($mappingVersionId !== null, static fn($builder) => $builder->where('mapping_version_id', $mappingVersionId))
                     ->delete();
-                $this->comment(sprintf('Deleted %d local rows', $deleted));
+                $this->comment(sprintf('Deleted %d local rows previously imported from %s', $deleted, $host));
                 $localRowsDeleted = true;
             }
 
@@ -139,6 +143,7 @@ class ImportEnemyFailures extends Command
                 CombatLogRouteEnemyFailure::query()->insert(array_map(
                     static fn(array $row): array => [
                         'dungeon_route_id'   => $row['dungeon_route_id'],
+                        'source'             => $host,
                         'dungeon_id'         => $dungeon->id,
                         'floor_id'           => $row['floor_id'],
                         'mapping_version_id' => $row['mapping_version_id'],
