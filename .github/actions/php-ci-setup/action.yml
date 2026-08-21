@@ -236,7 +236,12 @@ runs:
       if: ${{ inputs.run-migrations == 'true' && steps.cache-db.outputs.cache-hit != 'true' }}
       run: |
         php artisan migrate --database=migrate --force
-        php artisan migrate --database=combatlog_migrate --path=database/migrations_combatlog --force
+        # --schema-path is not optional: Laravel resolves the squashed schema dump by *connection*
+        # name, so on combatlog_migrate it looks for a combatlog_migrate-schema.dump that does not
+        # exist, silently skips the dump and runs the incremental migrations against an empty
+        # database - which dies on the first one to touch a table the dump was to have created.
+        php artisan migrate --database=combatlog_migrate --path=database/migrations_combatlog \
+          --schema-path=database/schema/combatlog-schema.dump --force
         php artisan db:seed --database=migrate --force -v
 
         # Dump from *inside* the container, not with the runner's client: `default-mysql-client`
