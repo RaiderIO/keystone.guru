@@ -29,6 +29,20 @@ published Release body and skips releases whose body is empty.
 - Nothing in this flow modifies the working tree; there is nothing to commit.
 - Keep a running summary of the commits included and the category assigned to each.
 
+## Step 0 — AI translations pre-flight
+
+Releases are when `lang/*_ai` strings reach users (`js.php` is baked into the asset build), so
+check the machine-translated locales are current before composing anything:
+
+```bash
+sh .claude/skills/ai-locale-translation/scripts/status.sh      # read-only, ~20s
+```
+
+`outstanding 0` for every locale except `zh_TW_ai` (skipped by decision) means carry on. Anything
+else: tell the user the counts and ask whether to run the `ai-locale-translation` runbook first
+(its own issue/worktree/PR, one session per locale) or release without it — don't decide that
+yourself, and don't block on it if they say release. The script writes only to `/tmp/translate`.
+
 ## Step 1 — Determine the target version
 
 - If the user gave an explicit `vX.X.X`, use it.

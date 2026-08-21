@@ -14,7 +14,10 @@ from collections import Counter
 locale, dump_path = sys.argv[1], sys.argv[2]
 out_path = sys.argv[3] if len(sys.argv) > 3 else f'worklist_{locale}.json'
 
-scan = json.load(open('lang/texts_to_translate.json', encoding='utf-8'))
+# translate:scan also emits empty non-string buckets (e.g. 'logic': []) for files with no
+# translatable strings - they are not keys, drop them.
+scan = {k: v for k, v in json.load(open('lang/texts_to_translate.json', encoding='utf-8')).items()
+        if isinstance(v, str)}
 target = json.load(open(dump_path, encoding='utf-8'))
 
 empty = [k for k, v in target.items() if v is None or v == '']
@@ -32,3 +35,6 @@ print(f'  absent     : {len(absent)} scan keys missing from the locale entirely 
 for k in absent:
     print(f'      {k}')
 print(f'  by file    : {dict(Counter(k.split(".")[0] for k in in_scan).most_common())}')
+# Machine-readable line for status.sh: outstanding = empty in-scope keys + scan keys the locale
+# lacks entirely (those become empty stubs as soon as localization:sync runs).
+print(f'SUMMARY {locale} in_scope={len(in_scan)} absent={len(absent)} outstanding={len(in_scan) + len(absent)}')

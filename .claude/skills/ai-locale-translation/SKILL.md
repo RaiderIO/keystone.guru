@@ -1,655 +1,273 @@
 ---
 name: ai-locale-translation
-description: Fill the empty translation keys of a `lang/*_ai` locale by translating them yourself, instead of running `translate:ksg` against a paid OpenAI/DeepL API key. Use when asked to translate a locale, fill missing/empty translations, or continue the #4165 AI-translation pass. Not for editing `lang/en_US` (source of truth), and not for the game-data locales (spells/npcs/dungeons) which are never hand-translated.
+description: Bring the machine-translated `lang/*_ai` locales up to date with `lang/en_US` by translating the missing keys yourself (no OpenAI/DeepL key needed), one locale at a time, in each locale's established register and glossary. Use when asked to "bring all AI translations up-to-date", translate/fill a locale, or before a release to check translations are complete. Not for `lang/en_US` (source of truth) and not for the game-data files (spells/npcs/dungeons), which are never hand-translated.
 ---
 
-# Translating an `*_ai` locale by hand
+# Keeping the `*_ai` locales up to date
 
-`lang/<locale>_ai/` holds machine translations. The built-in pipeline is
-`php artisan translate:ksg <locale> openai`, which POSTs every string to an external provider —
-that needs a **paid API key** (`CHATGPT_API_KEY`, `DEEPL_API_KEY`, ...), which a Claude/ChatGPT
-subscription does not grant. This skill is the alternative: **you** are the translation engine, and
-the scripts here handle the mechanical parts (scoping, injection, verification) so the only thing
-left to get right is the German/French/… itself.
+`lang/<locale>_ai/` holds machine translations of `lang/en_US`. The built-in `translate:ksg` needs
+a paid API key; this skill replaces it: **you are the translation engine**, the scripts here do the
+mechanical parts (scoping, injection, a strict gate), and `locales/<locale>.md` holds each locale's
+register and glossary so every pass reads the same as the last one.
 
-`lang/en_US` is the source of truth and is **never** edited by this workflow.
+`lang/en_US` is the source of truth and is never edited here. Existing translations are never
+overwritten (the gate enforces it); only empty/missing keys are filled.
 
-## Order of operations
+## "Bring all AI translations up-to-date" — the runbook
 
-Run these from the repo root, in this order. Steps 1 and 2 are cheap; do not skip them.
+1. **Issue + worktree**, like any task (`create-github-issue`, `sh/worktree.sh create
+   <issue>-update-ai-translations`). One issue, one branch, one PR for all locales.
+2. **Status** — from the worktree root:
+   ```bash
+   sh .claude/skills/ai-locale-translation/scripts/status.sh --sync
+   ```
+   `--sync` runs `localization:sync en_US <locale>` per locale (adds empty stubs for new en_US
+   keys — that is the backlog) and `translate:scan` once, then prints per-locale outstanding
+   counts and writes `$OUT/<locale>.before.json` + `$OUT/<locale>.worklist.json`
+   (`OUT=/tmp/translate` by default). Every locale usually shows the same count — the work lists
+   are the same English strings. Each sync is wrapped in `check_sync.py` (a pre/post dump
+   compare) which aborts the run if the sync changed any existing value. The sync also re-aligns
+   `=>` columns; `composer run fix` puts them back, so run it before judging the diff. Commit the
+   stubs (`#<issue> Sync *_ai stubs from en_US`).
+3. **Per locale, in this order** (`de_DE_ai`, `es_ES_ai`, `es_MX_ai`, `fr_FR_ai`, `it_IT_ai`,
+   `ko_KR_ai`, `pt_BR_ai`, `ru_RU_ai`, `zh_CN_ai`; `zh_TW_ai` is skipped — see its sheet):
+   1. read `locales/<locale>.md` — register, glossary, conventions, known drift;
+   2. translate the work list (section "Translating one locale" below), gate green;
+   3. `composer run fix` (touches only `lang/<locale>/**` whitespace), gate green again;
+   4. commit `#<issue> Translate <locale> (<n> keys)`;
+   5. Codex review (section below), apply survivors with `rewrite.py`, gate green, commit
+      `#<issue> Apply review fixes to <locale>`;
+   6. update `locales/<locale>.md`: "Last full pass" row, new glossary rows, new conventions,
+      one History line. Commit with the review fixes.
+   One locale per session is the comfortable size (~770 keys ≈ one context); a fresh session
+   picks up from `status.sh` and the sheets — nothing else carries between locales.
+4. **Finish**: `composer run analyse`, `status.sh` shows `outstanding 0` for every non-skipped
+   locale, PR as usual (cold review is the per-locale Codex reviews; say so in the PR body).
+   `js.php` strings only reach the UI after an asset build, i.e. the next release.
+
+The `create-release` skill runs `status.sh` (read-only) as a pre-flight check and asks Wotuu
+whether to run this runbook first when anything is outstanding.
+
+## Translating one locale
 
 ```bash
 LOCALE=de_DE_ai
 SCRIPTS=.claude/skills/ai-locale-translation/scripts
-OUT=/tmp/translate                        # anywhere outside the repo
-mkdir -p $OUT
+OUT=/tmp/translate                                   # anywhere outside the repo
 
-# 0. The scan file must exist and be current. It is untracked and lives only in the checkout
-#    that generated it. Regenerate with the exclude list below if it is missing or stale.
-#    localization:sync MUST have run before the scan, or the two key sets disagree (see Gotchas).
-#    Always pass the target locale - the bare `localization:sync en_US` form loops over every
-#    locale in config('language.all') and rewrites all of them.
-docker compose exec -T app php artisan localization:sync en_US $LOCALE
-docker compose exec -T app php artisan translate:scan \
-    --exclude-files=datatables,dungeons,npcs,spells,view_admin,validation
+# 0. Stubs + scan + before-dump + work list (status.sh does all of this for every locale):
+docker compose exec -T app php artisan localization:sync en_US $LOCALE     # ALWAYS pass the locale
+docker compose exec -T app php artisan translate:scan --exclude-files=datatables,dungeons,npcs,spells,view_admin,validation
+docker compose exec -T app php $SCRIPTS/dump_locale.php $LOCALE > $OUT/$LOCALE.before.json
+python3 $SCRIPTS/build_worklist.py $LOCALE $OUT/$LOCALE.before.json $OUT/$LOCALE.worklist.json
 
-# 1. Snapshot the locale before touching it - this is what proves you changed nothing else.
-docker compose exec -T app php $SCRIPTS/dump_locale.php $LOCALE > $OUT/before.json
-
-# 2. Build the work list: keys that are empty AND in scope.
-python3 $SCRIPTS/build_worklist.py $LOCALE $OUT/before.json $OUT/worklist.json
-
-# 3. Translate. Read the work list a file at a time, write {"dotted.key": "translation"} JSON,
-#    and inject each batch. Batches of 50-150 keys keep it reviewable.
+# 1. Translate: read the work list a file at a time, write {"dotted.key": "translation"} JSON
+#    batches of 50-150 keys, inject each one.
 python3 $SCRIPTS/inject.py $LOCALE $OUT/batch1.json
 
-# 4. Gate. Must print OK before you hand anything off.
-docker compose exec -T app php $SCRIPTS/dump_locale.php $LOCALE > $OUT/after.json
-python3 $SCRIPTS/verify.py $OUT/before.json $OUT/after.json $OUT/worklist.json
+# 2. Gate - must print OK before anything is committed or handed off.
+docker compose exec -T app php $SCRIPTS/dump_locale.php $LOCALE > $OUT/$LOCALE.after.json
+python3 $SCRIPTS/verify.py $OUT/$LOCALE.before.json $OUT/$LOCALE.after.json $OUT/$LOCALE.worklist.json
 ```
 
-Never run PHP on the host — always `docker compose exec -T app php`. The Python scripts run on the
-host (WSL2) and only touch text files.
+PHP always runs in Docker; the Python scripts run on the host and only touch text files. The
+bare `localization:sync en_US` (no target) rewrites every locale in `config('language.all')`.
 
-## Scope: only empty keys, and only some of them
+Before writing a single string:
 
-Two independent filters, both mandatory:
+- `grep -n '<key>' lang/*_ai/<file>.php` for a few work-list keys — the finished locales are a
+  worked example of the same English strings (read them for meaning, translate from the English).
+- For every dungeon block in `mapping.php`: `grep -c "'<slug>' => \[" lang/en_US/mapping.php`.
+  A count of 2 means the dungeon exists under two game-version keys (Algeth'ar Academy under
+  `midnight` and `df`); the other block is already translated — match it exactly. Missed by three
+  locales in a row.
+- Render check once at the end: `php artisan tinker` on one plural key
+  (`view_profile.view.route_count`) and one `%s` key (`view_common.dungeonroute.poster.views`).
 
-1. **Only empty values.** An existing translation is never overwritten, however bad it looks. Some
-   of the older gpt-3.5 output is inconsistent (`Dungeon` vs `Verlies`, `Etage` vs `Stockwerk`) —
-   leave it. `inject.py` only ever rewrites a line whose value is literally `''` or `""`, so this
-   is enforced mechanically, not by care.
-2. **Only keys present in `lang/texts_to_translate.json`.** That file is `translate:scan`'s output
-   and already excludes six files. `build_worklist.py` reports what it skipped and why.
+## Scope: only empty keys, and only some files
 
-Why those six files are excluded — do **not** hand-translate them:
+Both filters are mechanical: `inject.py` only rewrites a line whose value is literally `''`/`""`,
+and `build_worklist.py` only lists keys present in `lang/texts_to_translate.json`, which is the
+`translate:scan` output with six files excluded. Never hand-translate them:
 
 | File | Why not |
 |---|---|
-| `spells.php`, `npcs.php`, `dungeons.php` | Blizzard proper nouns with **official** localizations. Guessing them produces names no player recognises. They come from `localization:exportspellnames` / `localization:syncnpcnames` / wago.tools instead. |
-| `view_admin.php` | Admin-only UI, English by convention. |
+| `spells.php`, `npcs.php`, `dungeons.php` | Blizzard proper nouns with **official** localisations, filled by `localization:exportspellnames` / `localization:syncnpcnames` / wago.tools. |
+| `view_admin.php` | Admin-only UI, English by convention. `localization:sync` adds stubs there too — expected, ignore them (a reviewer will flag them every time). |
 | `validation.php` | Laravel framework strings; upstream ships real translations. |
-| `datatables.php` | Populated by `localization:dt-download` from the DataTables CDN. |
+| `datatables.php` | Populated by `localization:dt-download`. |
 
-For de_DE_ai that split was 745 in scope vs 2,214 deliberately skipped, out of 2,959 empty keys.
-
-## The locale already contains an authoritative game glossary — grep it first
-
-The six files this workflow refuses to translate are excluded **because they hold Blizzard's own
-localised names**, which makes them the reference you check a game term against before inventing
-one. They sit in the same locale directory you are editing:
-
-| File | Holds |
-|---|---|
-| `spells.php` | every spell and item-effect name, keyed by spell id |
-| `affixes.php` | official affix names *and* their descriptions |
-| `enemies.php` | affix-enemy names (Prideful, Awakened, ...) |
-| `npcs.php`, `dungeons.php` | NPC and dungeon names |
+Those excluded files are also the **glossary you check before inventing a game term** — they sit
+in the locale you are editing: `spells.php` (every spell/item-effect name), `affixes.php` (affix
+names and descriptions), `enemies.php` (Prideful/Awakened enemies), `npcs.php`, `dungeons.php`.
 
 ```bash
-# before translating a game term, look for the English one and read off the localised name
 grep -n "Pledge Pin" lang/en_US/spells.php          # -> line 4683-4687
-sed -n '4683,4687p' lang/de_DE_ai/spells.php        # -> 'Schwurbrosche des roten Drachenschwarms'
+sed -n '4683,4687p' lang/$LOCALE/spells.php         # -> the official localised name
 ```
-
-Every finding the Codex review raised that turned out to be **verifiably** right was of this
-shape - a term I had invented while the correct one was sitting in the same locale:
-
-| I wrote | Locale already had | Where |
-|---|---|---|
-| Anstecknadel des Roten Drachenschwarms | **Schwurbrosche des roten Drachenschwarms** | `spells.php:4683-4687` |
-| stolzer Feind / Stolzhaft | **Stolz** / **Manifestation des Stolzes** | `affixes.php:90`, `enemies.php:9` |
-| Schurkenhülle | **Verhüllender Nebel** | `spells.php:787` |
-| Inspiration | **Inspirierend** | `affixes.php` |
-
-This cuts both ways: the reviewer *also* claimed Bursting is "Platzend" and Sanguine is "Blutiges
-Sekret", and `affixes.php` says **Explosiv** and **Blutig**. The locale beats any outside source,
-including a confident reviewer - check the claim before applying the fix.
 
 ## Translation rules
 
-- **Placeholders are literal.** `:name`, `:count`, `%s`, `%d` must appear in the translation exactly
-  as in the source, same set, same spelling. Never translate a placeholder name.
-- **Plural strings keep their segment structure.** `{0} No routes|{1} :count route|[2,*] :count routes`
-  needs the same number of `|` segments and the same `{n}` / `[n,*]` markers, in the same order.
-- **HTML stays.** `<b>`, `<a href=":link">` and friends are copied through unchanged.
-- **Proper nouns stay in English inside prose, but standalone labels are translated.** In
-  `mapping.php` the strings are notes *about* named things (`Shadowforge Key`, `Hall of the
-  Cursed`): translate the sentence, leave the name, because the name is what the player reads off
-  their own English-or-not client. In label-only files such as `mapicontypes.php` the string *is*
-  the UI label, so it gets translated as a whole (`Black Dragonflight Pledge Pin` ->
-  `Anstecknadel des Schwarzen Drachenschwarms`). Widely known WoW terms (spell schools, dispel
-  types, `Schlachtzugsmarkierung`) always get translated.
-  **This includes NPC/creature/boss names, even when `npcs.php` has an official localised name
-  for them** - the "grep the reference files first" advice below is for spell/ability names
-  specifically, not for who's casting them. `it_IT_ai`'s first pass translated every enemy-type
-  name it could find in `npcs.php` (`Vengeful Fleshreaper` -> *Mieticarne Vendicativo*, `Mole
-  Machine`-adjacent creature packs, all the `*_variant` enemy-list keys), which broke from the
-  unanimous convention `de_DE_ai`/`es_ES_ai`/`es_MX_ai`/`fr_FR_ai` had already settled on
-  (`Firebrand Darkweaver`, `Withered Spearhide`, `Ramstein the Gorger` etc. all stayed English in
-  those four) - caught by Codex review and reverted across ~75 keys. Before translating *any* name
-  inside a mapping.php sentence, check what the four already-done locales did with the same key
-  (`grep -n '<key>' lang/{de_DE,es_ES,es_MX,fr_FR}_ai/mapping.php`) rather than reasoning from the
-  rule text alone.
-- **Keep the register of the file.** UI labels are short and impersonal; help text addresses the
-  user. For German this workflow used informal **du** throughout (not *Sie*), matching the game.
-- **Community jargon is not translated** where the community does not translate it: `Pull`, `Pack`,
-  `Add`, `Boss`, `Gauntlet`, `Skip`, `Trash`, `Combat Log`, `Affix`.
+These are the rules the gate cannot check. Every one of them was learned from a Codex finding,
+most of them more than once.
 
-### German glossary (de_DE_ai, established in the #4165 pass)
+1. **Placeholders, plural segments and HTML are literal.** `:name`, `%s`, `{0}|{1}|[2,*]`, `<b>`,
+   `<a href=":link">` survive unchanged (the gate checks this one).
+2. **Register is per locale and fixed** — read it from `locales/<locale>.md` (formal: fr, ko, ru,
+   zh; informal: de, es ×2, it, pt). Run the sheet's register check before handing off; a slip by
+   habit from the previous locale is the most common mechanical error.
+3. **Official game terms come from the locale, never from memory or a reviewer.** Spell, ability,
+   immunity, affix, affix-enemy and dungeon/zone names: grep the English in `lang/en_US/<file>.php`,
+   read the line in `lang/<locale>/<file>.php`. This applies to names that don't look like spells
+   (`Blazing Aegis`, `Burning Chain`, `Enrage`, `Awakened`, `Teeming`) — the common ones are the
+   ones that get invented. The locale also beats a confident reviewer (`affixes.php` said
+   *Explosiv*, the reviewer said *Platzend*).
+4. **NPC / boss / creature names stay in English inside `mapping.php` prose — absolute, even when
+   `npcs.php` has an official localisation.** Translate the sentence, keep `Ramstein the Gorger`,
+   `Vengeful Fleshreaper`, `Witherlings`, `Hackclaw's War-Band` as-is: the player reads the name
+   off their own client. Broken by it_IT (75 keys), pt_BR (5), ru_RU (1) despite this rule; the
+   fastest check is `grep -n '<key>' lang/{de_DE,fr_FR,es_MX}_ai/mapping.php`.
+5. **Object / location labels in `mapping.php` are decided per item, by precedent.** Title-Case
+   exact in-game tooltip names stay English (`Iron Gate`, `Activation Rune`, `The Black Anvil`,
+   `Shadowforge Key`, `Large Solid Chest`, `Heavy Door`, `Stairwell Door`, `Supply Room Door`,
+   `Temple Door`); lowercase descriptive labels are translated (`workshop door`, `east entrance`);
+   anything with an official `dungeons.php` name uses it (`Crusader's Square`, Ulduar's
+   `Inner Sanctum`). For the rest (`Teleporter`, `Cursed Spire of Ny'alotha`, `Decaying Cauldron`,
+   `Cannon`, `Grounding Field`) there is no rule — `grep -n '<key>' lang/*_ai/mapping.php` and
+   follow the majority. A reviewer asserting "must stay English" is a hypothesis, not evidence.
+6. **Label-only files are fully translated** (`mapicontypes.php`: `Black Dragonflight Pledge Pin`
+   → the locale's `spells.php` name), widely known WoW terms always (spell schools, dispel types,
+   raid marker).
+7. **Community jargon (`Pull`, `Pack`, `Add`, `Boss`, `Gauntlet`, `Skip`, `Trash`, `Combat Log`,
+   `Affix`) stays English by default, but the locale sheet overrides the default** — Affix is
+   translated in every Romance locale, Boss in es_MX/pt_BR, Pack in it_IT/pt_BR/ko/zh, Combat Log
+   in zh_CN. When it stays English it stays in **Latin script** (ru_RU wrote *гонтлет*).
+8. **Consistency inside your own diff.** Two new keys for the same feature in different files
+   (`view_creator.php` vs `view_profile.php`), or sibling keys in one batch (`scheduled_publish_*`,
+   `unlocks_after_*`), must agree; and a new key must match the locale's pre-existing sibling
+   (`js.php`'s four `*_weight_label` keys already say *Poids*/*Peso*/*무게*) — check the file's
+   existing lean before picking a word, and never copy a sibling locale's pick (es_MX copied
+   es_ES's *planta*; its own file said *piso*).
+9. **Counter means neutralise, not retaliate** (`view_compendium.php` "countered by"): pt_BR wrote
+   *contra-atacar*, zh_CN nearly wrote 反击. Cast time, debuff, aura, crowd control: established
+   MMO terms from the sheet.
+10. **Raw `%s` counts have no plural bucket** — in declining languages write a count-invariant
+    form (`Просмотров: %s`), don't add a bucket the source doesn't have.
 
-| English | German | English | German |
-|---|---|---|---|
-| Dungeon | Dungeon | Floor | Etage |
-| Route | Route | Pull | Pull |
-| Enemy | Gegner | Enemy forces | Feindkräfte (abbrev. `FK`) |
-| Pack | Pack | Patrol | Patrouille |
-| Spell | Zauber | Schools | Schulen |
-| Dispel type | Bannart | Miss types | Fehlschlagarten |
-| Counters | Konter | Crowd control | Kontrolleffekte |
-| Compendium | Kompendium | Characteristics | Eigenschaften |
-| Raid marker | Schlachtzugsmarkierung | Sidebar | Seitenleiste |
-| Season | Saison | Thumbnail | Vorschaubild |
-| Creator | Creator | Checkpoint | Checkpoint |
-| Prideful | Stolz (the enemy: Manifestation des Stolzes) | Inspiring | Inspirierend |
-| Bolstering | Stärkend | Bursting | Explosiv |
-| Sanguine | Blutig | Rogue Shroud | Verhüllender Nebel |
-| Overpulled | zusätzlich gepullt | PUG | Randomgruppe |
-| Ad-free giveaway | werbefreier Zugang | Locked (a chest/door) | verschlossen |
+Add a glossary row to the locale sheet whenever a pass forces a decision worth keeping.
 
-Add a row here whenever a new locale forces a decision worth keeping.
+## Per-locale style sheets — `locales/<locale>.md`
 
-**Register:** `de_DE_ai` is informal *du* throughout. The original gpt-3.5 output used formal *Sie*
-in ~212 keys; those were normalised to *du* in a separate, explicitly authorised overwrite pass (see
-"Normalising an existing locale" below). Any new locale should pick one register up front and say so
-here, so the same clean-up is not needed twice.
+One file per locale, same template: a header table (register, the register-check grep, last full
+pass, normalisations done), glossary, locale-specific conventions, known pre-existing drift that
+must not be "fixed" without authorisation, and a one-line-per-pass history. The sheet is the
+contract between passes — read it first, update it last.
 
-### Spanish glossary (es_ES_ai, established in the #4165 pass)
-
-| English | Spanish | English | Spanish |
-|---|---|---|---|
-| Dungeon | mazmorra | Floor | planta |
-| Route | ruta | Pull | pull (untranslated) |
-| Enemy | enemigo | Enemy forces | fuerzas enemigas (abbrev. `FE`) |
-| Pack | pack (untranslated) | Patrol | patrulla |
-| Spell | hechizo | Schools | escuelas |
-| Dispel type | tipo de disipación | Miss types | tipos de fallo |
-| Counters (noun) | contramedidas | Crowd control | control de masas |
-| Compendium | compendio | Characteristics | características |
-| Raid marker | marcador de banda | Sidebar | — (not yet needed) |
-| Season | temporada | Thumbnail | vista previa |
-| Creator | creador | Checkpoint | punto de control |
-| Affix | afijo (translated - unlike German's untranslated *Affix*; already the dominant convention in this locale, 17:0 before this pass) | Boss | jefe (already established in this locale) |
-| Prideful | Orgulloso (read from `affixes.php`/`enemies.php`, do not invent) | Inspiring / Bolstering / Sanguine / Bursting / Teeming | — **read them out of `affixes.php`**, do not translate by hand |
-| Fel (prefix) | vil | Wyrm | vermis |
-
-Add a row here whenever a new locale forces a decision worth keeping.
-
-**Register:** `es_ES_ai` is informal *tú* throughout. The original machine output was already mostly
-*tú*; ~30 keys still on formal *usted* (mostly `leafletdraw.php` imperatives and `js.php`/
-`view_common.php` possessives) were normalised to *tú* in the same pass that filled the empty keys,
-explicitly authorised by Wotuu. `validation.php`, `datatables.php` and other excluded files were left
-untouched even where an *usted* form appeared, since this workflow never hand-edits those.
-
-### Spanish glossary (es_MX_ai, established in the #4165 pass)
-
-`es_MX_ai` is ~85% byte-identical to `es_ES_ai` (same machine-translation origin), but the two
-locales genuinely disagree on some game terms - always read from `es_MX_ai`'s own `affixes.php`/
-`spells.php`/`enemies.php`, never assume the `es_ES_ai` answer applies. Confirmed differences:
-
-| Affix | `es_ES_ai` | `es_MX_ai` |
+| Locale | Register | Sheet |
 |---|---|---|
-| Bolstering | Reforzante | **Fortalecedor** |
-| Quaking | Temblores | **Tembloroso** |
-| Teeming | Abundante | **Pululante** |
+| `de_DE_ai` | informal *du* | [locales/de_DE_ai.md](locales/de_DE_ai.md) |
+| `es_ES_ai` | informal *tú* (*vosotros*) | [locales/es_ES_ai.md](locales/es_ES_ai.md) |
+| `es_MX_ai` | informal *tú* (*ustedes*) | [locales/es_MX_ai.md](locales/es_MX_ai.md) |
+| `fr_FR_ai` | formal *vous* | [locales/fr_FR_ai.md](locales/fr_FR_ai.md) |
+| `it_IT_ai` | informal *tu* | [locales/it_IT_ai.md](locales/it_IT_ai.md) |
+| `ko_KR_ai` | formal 하십시오체 (`-습니다`/`-세요`) | [locales/ko_KR_ai.md](locales/ko_KR_ai.md) |
+| `pt_BR_ai` | informal *você* | [locales/pt_BR_ai.md](locales/pt_BR_ai.md) |
+| `ru_RU_ai` | formal *Вы* | [locales/ru_RU_ai.md](locales/ru_RU_ai.md) |
+| `zh_CN_ai` | formal 您 | [locales/zh_CN_ai.md](locales/zh_CN_ai.md) |
+| `zh_TW_ai` | formal 您 — **skipped** (not offered on the site, Wotuu 2026-08-21) | [locales/zh_TW_ai.md](locales/zh_TW_ai.md) |
 
-| English | `es_MX_ai` | Notes |
-|---|---|---|
-| Dungeon | **contested**: mazmorra (57) vs calabozo (18) after this pass | Not settled - read the surrounding file's existing lean before picking one; do not default to `mazmorra` the way `es_ES_ai` can |
-| Floor | **piso**, not `planta` | Unlike `es_ES_ai`'s `planta`, `es_MX_ai` had already committed to `piso` before this pass (21+ prior hits in `js.php` alone, 0 for `planta`) - first-pass draft used `planta` by mistake (an `es_ES_ai` copy-through) and had to be corrected after Codex review caught it |
-| Wyrm | vermis | Confirmed from `npcs.php` (`Mana Wyrm` -> `Vermis de maná`, etc.) - same as `es_ES_ai` but independently verified, not copied |
-| Fel (prefix) | vil | Confirmed from `npcs.php` (`Corcel vil`, `Larva vil`, ...) - same as `es_ES_ai` but independently verified |
-| Enemy forces | fuerzas enemigas (full form); **FE** abbreviation introduced in the enemy-forces-checkpoint pills/tooltips where `es_ES_ai` also abbreviates | Existing `es_MX_ai` js.php keys always spelled it out in full before this pass |
-| Checkpoint | punto de control | No prior `es_MX_ai` usage found; matches the `es_ES_ai` glossary answer |
-| Weight (line thickness) | Peso | Established in `es_MX_ai/js.php` (`brushline_weight_label`, `path_weight_label`, ...) before this pass - not `Grosor` |
-| Icon | ícono (accented) | Dominant in `es_MX_ai/policy.php`, `js.php` before this pass |
-| Mole Machine | Máquina topo | Read from `es_MX_ai/npcs.php` (`Mole Machine to Stormwind` -> `Máquina topo a Ventormenta`) before translating the `mapping.php` notes that mention it |
+A new `*_ai` locale gets a sheet before its first pass: measure the register from the existing
+machine output (count formal vs informal markers outside the excluded files), pick the dominant
+one, list the terms the locale has already committed to (`grep -c` a dozen glossary words), and
+write the table. Translate from the English only — never convert a sibling locale's output
+(es_ES→es_MX, zh_CN→zh_TW): Blizzard's client strings differ between them.
 
-**Register:** `es_MX_ai` was already informal *tú* throughout with zero *usted* hits on the standard
-verb-form search - no register cleanup pass was needed (unlike `es_ES_ai`'s 30-key normalisation).
+## The gate — `verify.py`
 
-**Mapping.php proper nouns:** for the classic-dungeon notes (Blackfathom Deeps, Blackrock Depths,
-etc.), Title-Case strings that read as an exact in-game object/NPC tooltip name (`Large Solid
-Chest`, `Iron Gate`, `The Black Anvil`, `Activation Rune`) were left in English, matching what
-`es_ES_ai` had already done for the same keys (verified independently, not copied) - because the
-name is what the player reads off their own client. Lowercase/descriptive labels that are not exact
-tooltip names (`workshop door`, `east entrance`) were translated.
+Fails (exit 1) rather than warns. Asserts: the key set is identical before/after; every
+previously non-empty value is byte-identical, except keys in an explicit rewrite map that went
+exactly `from`→`to`; every work-list key is now non-empty and no other key was filled; every
+placeholder, sprintf token, plural segment/marker and HTML tag survives. The dumps come from PHP
+`require`, so a green run also proves every file still parses. Diff sanity: insertions equal
+deletions plus one line per embedded newline; anything else means the wrong thing was touched.
 
-### French glossary (fr_FR_ai, established in the #4165 pass)
+## Overwriting existing values — `rewrite.py`
 
-| English | French | English | French |
-|---|---|---|---|
-| Dungeon | donjon | Floor | étage |
-| Route | itinéraire (dominant, but check the surrounding file - some lean `route`, e.g. `view_dungeonroute.php`) | Pull | pull (untranslated) |
-| Enemy forces | forces ennemies (full form); **FE** abbreviation introduced for checkpoint pills/tooltips/snackbars | Pack | pack (untranslated) |
-| Affix | affixe (translated - like Spanish, unlike German's untranslated *Affix*; already dominant, 61:3, before this pass) | Boss | Boss (untranslated - the opposite of `es_MX_ai`'s `Jefe`) |
-| Weight (line thickness) | Poids | Icon | icône (accented) |
-| Checkpoint | point de contrôle (not yet established before this pass) | Teeming | Foisonnant (read from `affixes.php`) |
-
-Add a row here whenever a new locale forces a decision worth keeping.
-
-**Register:** `fr_FR_ai` is formal *vous* throughout - the opposite of `de_DE_ai`'s *du* and
-`es_ES_ai`/`es_MX_ai`'s *tú*. A blunt grep found 171 pre-existing *vous*/`veuillez`/`cliquez`
-hits against 19 *tu*-form hits before this pass; no register cleanup was needed, and the new
-keys were all written as *vous* to match.
-
-**Codex review found 27 real issues** (`handovers/fr_FR_ai.md` has the full table), the two
-recurring lesson categories worth restating here:
-
-- **Official game terms not read from `spells.php`/`affixes.php`/`enemies.php` first.** Four
-  spell/immunity names were invented instead of looked up (`Vanish` -> *Disparition*, not
-  *Évanouissement*; `Divine Shield` -> *Bouclier divin*, not *Bouclier sacré*; etc.) - always grep
-  the exact English string in `spells.php` before translating a spell/ability name by hand, even
-  a common one that seems obvious.
-- **An existing translation elsewhere in the same file/feature was not checked before picking a
-  different word.** `df.algeth_ar_academy`'s buff labels didn't match the pre-existing
-  `midnight.algeth_ar_academy` block for the *same real dungeon* reused under a different
-  expansion key (`+10% Soins reçus` vs `+10 % de soins reçus`) - when a dungeon reappears under a
-  different top-level game-version key, check whether it already has a translated block
-  elsewhere in the file first. Similarly, several `route`/`itinéraire` picks in one file
-  disagreed with the same feature's sibling keys in another file (`view_creator.php` vs
-  `view_profile.php`) - both new in the same pass, so nothing forced them to agree except
-  checking.
-
-Two review findings were checked against the locale and **rejected** as false positives - the
-`js.php` "Weight" label matches four sibling `*_weight_label` keys already using `Poids` (listed
-above), and the Ulduar teleporter destination names are already officially translated in
-`dungeons.php`, so the locale's own convention won over the reviewer's "keep English" suggestion
-for those four; the other five teleporter destinations (no official source) stayed translated
-for consistency.
-
-### Italian glossary (it_IT_ai, established in the #4165 pass)
-
-| English | Italian | English | Italian |
-|---|---|---|---|
-| Dungeon | dungeon (untranslated) | Floor | piano |
-| Route | contested, lean *percorso* (41:11 in `view_common.php`, 36:8 in `js.php`) | Pull | pull (untranslated) |
-| Enemy forces | forze nemiche (full form); **FN** abbreviation introduced for checkpoint pills/tooltips/snackbars | Pack | **pacchetto** (translated - unlike French/Spanish's untranslated `pack`) |
-| Affix | affisso (translated) | Boss | Boss (untranslated) |
-| Weight (line thickness) | Peso | Icon | icona |
-| Checkpoint | Checkpoint (untranslated - a common loanword in Italian gaming UI, no established prior value to check against) | Teeming | Abbondante (read from `affixes.php`) |
-| Raid marker | marcatore di incursione (Raid -> *incursione*, already established in `js.php`/`mapicontypes.php` before this pass) | Season | Stagione |
-
-Add a row here whenever a new locale forces a decision worth keeping.
-
-**Register:** `it_IT_ai` is informal *tu* throughout, like German/Spanish and the opposite of
-`fr_FR_ai`'s *vous*. A blunt grep found 164 pre-existing *tu*-form hits against 4 formal-*Lei*
-hits before this pass; no register cleanup was needed, and the new keys were all written as *tu*
-to match. Re-confirmed after the pass at 181:7, and every one of the 7 *Lei/Suo/Sua* hits turned
-out to be a third-person possessive ("il **suo** dungeon" = *its* dungeon) rather than a formal
-address - false positives, not register breaks.
-
-**Codex review found ~90 real issues**, almost all of one kind - see the strengthened
-"Proper nouns stay in English inside prose" rule above for the full story: the first pass
-translated NPC/creature-type names in `mapping.php` prose using their official `npcs.php` names,
-which is correct for spells but not for who casts them - it broke from the unanimous convention
-every other locale had already settled on. ~75 keys were reverted via `rewrite.py` to match
-(`Vengeful Fleshreaper`, `Firebrand Darkweaver`, `Withered Spearhide`, `Ramstein the Gorger`, and
-so on all stayed/went back to English inside the translated sentence). Two smaller, correct
-findings: three object names (`Iron Gate`, `Activation Rune`, `The Black Anvil`) that
-`es_MX_ai`'s own glossary already named as the "exact in-game tooltip name" exception, and 6 keys
-where "pack" had drifted to *gruppo* instead of this locale's own established *pacchetto*
-(`js.php`'s `enemypack` label, checked before the pass started) - an internal-consistency slip,
-not a wrong pick. The rest of the review (register, spell/immunity names against `spells.php`,
-`Teeming`/`Affix` against `affixes.php`, wording polish) came back clean or was judgment-call
-phrasing not worth a rewrite pass over.
-
-**One lesson worth restating for the next locale doing `mapping.php`:** before translating *any*
-named enemy/boss inside a prose sentence, grep the same key across the four already-done locales
-first (`grep -n '<key>' lang/{de_DE,es_ES,es_MX,fr_FR}_ai/mapping.php`) - it is a faster and more
-reliable signal than re-deriving the rule from official `npcs.php` names, which this pass's
-mistake shows can lead you the wrong way even when done carefully and even when the official name
-is real and correct.
-
-### Korean glossary (ko_KR_ai, established in the #4165 pass)
-
-| English | Korean | English | Korean |
-|---|---|---|---|
-| Dungeon | 던전 | Floor | 층 |
-| Pull | 풀 (loanword, transliterated) | Pack | 무리/묶음 (translated, situational; `enemypack` UI label is 묶음) |
-| Affix | 접사 (translated, matches pre-existing `js.php:93`) | Boss | 보스 (loanword) |
-| Checkpoint | 체크포인트 (loanword) | Compendium | 도감 |
-| Enemy forces | 적 병력 (full form); **적병** abbreviation for checkpoint pills/tooltips/snackbars | Weight (line thickness) | 무게 (majority 3:1 over 굵기) |
-| Teeming | 번성 (read from `affixes.php`) | Nerubian | 네루비안 (read from `npcs.php` — **not** 네루빔, a mistake this pass made and fixed) |
-| Pledge Pin | 충성의 핀 (read from `spells.php` — **not** 서약 핀, same category of mistake) | Ad-free (giveaway) | 광고 없음 (제공/상태), matches pre-existing `js.php:430-434` |
-
-Add a row here whenever a new locale forces a decision worth keeping.
-
-**Register:** `ko_KR_ai` is formal 하십시오체 (verb endings `-습니다`/`-세요`) throughout — a
-different formality mechanism from French's pronoun-based *vous* but the same "formal" register
-choice. 336 pre-existing `-습니다` hits and 80 `-세요` hits against near-zero informal hits before
-this pass; no register cleanup was needed, and all new keys were written in `-습니다`/`-세요` form.
-
-**Codex review found ~90 issues, but only 29 were real** — the rest were two repeat mistakes
-worth restating here because they generalize to every remaining locale, not just Korean:
-
-- **~15 findings pointed at lines this pass never touched** — pre-existing content elsewhere in
-  `mapping.php` (the `midnight.*` sections) that Codex's review prompt flagged because it reviewed
-  the whole locale's quality against `en_US`, not strictly the commit diff. Gate every finding
-  against `git show <sha> -- lang/<locale>/<file> | grep '^+'` before applying it — this pass's
-  out-of-scope rate was five times `fr_FR_ai`'s (3 of 18) because the review prompt didn't scope
-  Codex to the diff tightly enough. Next locale: tell Codex explicitly to only report on lines
-  present in that diff, not just "review the commit".
-- **~70 findings were the it_IT NPC/boss-name mistake, from the reviewer's side this time.**
-  Almost every "official Korean name ignored" finding pointed at an NPC/creature/boss name inside
-  `mapping.php` prose — including the *exact same two names* (`Ramstein the Gorger`,
-  `Vengeful Fleshreaper`) SKILL.md already cites as the canonical example of names that must stay
-  English. This pass's review prompt tried to pre-empt this with an exception clause ("flag it
-  only if an official localization exists") that itself contradicts the rule — names stay English
-  **even when** `npcs.php` has an official localization, that is the whole point of the it_IT
-  lesson above. Next locale: state the rule as an absolute in the review prompt, no exception
-  clause, or expect the same false-positive cluster again.
-
-The 29 real fixes: `df.algeth_ar_academy`'s 5 stat-buff labels didn't match the pre-existing
-`midnight.algeth_ar_academy` block for the same real dungeon reused under a different
-game-version key — the `fr_FR_ai` `algeth_ar_academy`/`windrunner_spire` lesson, repeated
-exactly, because this pass didn't check for it up front; 5 Dragonflight Pledge Pin names used an
-invented "서약 핀" instead of the official "충성의 핀" sitting in this locale's own `spells.php`;
-4 Title-Case object labels (`Heavy Door`, `Stairwell Door`, `Supply Room Door`, `Sewer Gate`) were
-translated instead of kept English, breaking the `es_MX_ai`-established exact-tooltip-name rule
-applied inconsistently within the same pass; plus a `Json`→`JSON` casing fix, a redundant `#%d위`
-double rank-marker, an invented `네루빔` for the officially-attested `네루비안`, 9
-`unlocks_after_*` keys missing the `-됩니다` ending sibling keys used, and 2 `주문`→`플레이어
-주문` disambiguation fixes. Full triage in `handovers/ko_KR_ai.md`.
-
-**Do a dungeon-appears-twice check before translating any dungeon's `mapping.php` block**, not
-just for locales that already had the `fr_FR_ai` incident:
-```bash
-grep -c "'<dungeon_slug>' => \["  lang/en_US/mapping.php
-```
-A count of 2 means the dungeon has blocks under two different top-level game-version keys (e.g.
-Algeth'ar Academy under both `midnight` and `df` — a Midnight Season 2 remix of a Dragonflight
-dungeon) — check the other block's existing translation before writing the empty one, every time.
-This is now the second locale in a row this exact mistake has been caught in.
-
-### Brazilian Portuguese glossary (pt_BR_ai, established in the #4165 pass)
-
-| English | Portuguese | English | Portuguese |
-|---|---|---|---|
-| Dungeon | masmorra | Floor | andar |
-| Route | rota | Pull | pull (untranslated) |
-| Pack | pacote (already dominant, 4+:1, before this pass) | Enemy forces | forças inimigas (full form); **FI** abbreviation introduced for checkpoint pills/tooltips/snackbars |
-| Affix | afixo (translated, already established in `affixes.php`) | Boss | chefe (already established) |
-| Checkpoint | checkpoint (untranslated, already established in `js.php`) | Compendium | Compêndio (translated — no prior convention, matched the majority of other locales) |
-| Weight (line thickness) | Peso (already established in `js.php`) | Icon | ícone (already established) |
-| Teeming | Enxameante (read from `affixes.php` — note `js.php`'s pre-existing `enemypack_teeming_label` already said "Pululante", an untouched pre-existing inconsistency) | Crowd control | controle de multidão (already established in `affixes.php`) |
-| Drake (the Oculus) | Draco (read from `npcs.php`: Emerald/Amber/Ruby Drake -> Draco Esmeralda/Âmbar/Rubi) | Teleporter | Teletransportador (already established in `mapping.php`, preferred over `npcs.php`'s unrelated NPC name "Teleportador") |
-
-Add a row here whenever a new locale forces a decision worth keeping.
-
-**Register:** `pt_BR_ai` is informal *você* throughout — 121 pre-existing `você` hits and 0 `tu`
-hits across the locale before this pass; no register cleanup was needed, and all new keys were
-written as *você*.
-
-**`algeth_ar_academy` appears twice** (`midnight` and `df`), the `fr_FR_ai`/`ko_KR_ai` lesson
-again — the `midnight` block was already translated, and the `df` block's 7 keys were matched to
-it exactly, including a `+`/no-`+` and `%`-placement difference the two source strings genuinely
-disagree on in `en_US` itself.
-
-**Two spell/item names had official `spells.php` translations** and were used instead of invented
-text: `Blazing Aegis` -> "Égide Fulgurante" and `Burning Chain` -> "Corrente Ardente"
-(`mapping.map_icons.df.neltharus`) — both read like generic item pickups but are catalogued
-spells with real localisations, the "grep spells.php first" rule paying off on a case that didn't
-look like a spell name at a glance.
-
-**Codex review found 34 issues, 32 real** — repeated the it_IT/ko_KR NPC-name-in-prose mistake on
-five names that all have official `npcs.php` localizations (`Hackclaw's War-Band`,
-`Bracken Warscourge`, `Khajin the Unyielding`, `Watcher Irideus`, `the Seven`) despite this same
-SKILL.md file stating the rule right above; also two official-glossary misses (`Enrage` invented
-as "Fúria" instead of `spells.php`'s "Enfurecer"; `Awakened` invented as "Desperto" instead of
-`affixes.php`'s "Despertado"), and "counter" (as in "countered by") mistranslated as
-`contra-atacar` (counter-*attack*) instead of `neutralizar` across 7 `view_compendium.php` keys.
-Full triage, including two findings checked and rejected against the locale's own pre-existing
-conventions, in `handovers/pt_BR_ai.md`.
-
-### Russian glossary (ru_RU_ai, established in the #4165 pass)
-
-| English | Russian | English | Russian |
-|---|---|---|---|
-| Dungeon | Подземелье (pre-existing) | Route | Маршрут (pre-existing) |
-| Pack | Пак | Boss | Босс (pre-existing) |
-| Enemy forces | Силы врага (full form, pre-existing); **СВ** abbreviation introduced for checkpoint pills/tooltips/snackbars | Compendium | Компендиум (no prior convention; matches the majority of other locales) |
-| Checkpoint | Контрольная точка | Teeming | Кишащий (read from `affixes.php`/`view_common.php`, pre-existing) |
-| Floor | Уровень (pre-existing) | Weight (line thickness) | Толщина (pre-existing) |
-| Icon | Иконка (pre-existing) | Sidebar | Боковая панель (pre-existing) |
-| Thumbnail | Эскиз (pre-existing, `js.php`) | Season | Сезон (pre-existing) |
-| Teleporter | Телепорт (pre-existing) | Classification | Классификация (pre-existing) |
-| Aura | Аура (read from `view_admin.php`) | Debuff | Дебафф (no prior convention; loanword, matches community usage) |
-
-Add a row here whenever a new locale forces a decision worth keeping.
-
-**Register:** `ru_RU_ai` is formal *Вы* throughout — 435 pre-existing `Вы`/`вам`/`Ваш`/`вас` hits
-against 1 `ты`-family hit before this pass; no register cleanup was needed, and all new keys were
-written as *Вы* (476:1 after the pass).
-
-**`Gauntlet` is community jargon and must stay literal English, not transliterated to Cyrillic** —
-this pass's first draft wrote it as `гонтлет` across 5 `mapping.php` keys (`kings_rest.gauntlet_gate`,
-both `naxxramas*.gauntlet_room` keys, `brackenhide_hollow.witherlings_gauntlet`,
-`halls_of_stone.brann_gauntlet`) before catching it in the Codex review — SKILL.md's own community-
-jargon list already named `Gauntlet` as untranslated, and every other locale (`fr_FR_ai`, `es_MX_ai`,
-`it_IT_ai`) confirms this by leaving it as literal `gauntlet` in the source language. One of those
-same keys (`witherlings_gauntlet`) had also translated the NPC name `Witherlings` (confirmed in
-`npcs.php`) to `Иссохшие` — the it_IT/ko_KR/pt_BR NPC-name-in-prose mistake, caught in the same pass.
-
-**Catalogued spell names inside mapping.php prose use their official `spells.php` translation, not
-English** — `Blazing Aegis` -> `Пылающая эгида`, `Burning Chain` -> `Горящая цепь`, `Stolen Power`
-(Midnight's `city_of_threads` buff) -> `Похищенная сила`, all confirmed against `spells.php` before
-writing, matching the `pt_BR_ai` precedent for the same two names. The Codex review flagged all
-three as "should stay English" against the general proper-noun rule — checked against `spells.php`
-and rejected, since the rule specifically carves out an exception for catalogued spell/item names
-(only NPC/boss/creature names and a short list of exact tooltip object names stay English).
-
-**Codex review found 97 candidate issues, 6 real** (plus the Gauntlet/Witherlings pair above) —
-an unusually low real-finding rate for this pass, because the review prompt's proper-noun-in-
-`mapping.php` exception clause was too broad and flagged roughly 20 correctly-translated object/
-location names (`Cannon`, `Grounding Field`, `Slipstream`, `Cursed Spire of Ny'alotha`, `Cave of
-Mam'toth`, `Den of Sseratus`, all 9 Ulduar teleporter destination names, `Witherbark Prisoner`, the
-Stratholme postboxes) for reverting to English — each checked against either an official
-`spells.php`/`dungeons.php` source or the multi-locale precedent already in this file (the 9 Ulduar
-teleporters in particular: `fr_FR_ai` explicitly kept the 7 without an official source translated
-"for consistency", see above) before rejecting. A further ~20 findings flagged `view_admin.php`
-stubs newly added by `localization:sync` as "missing translations" — that file is permanently
-excluded from this workflow (admin-only UI, English by convention), so these are not real. The rest
-were stylistic rewrite preferences ("Враги могут быть одним из: X, Y или Z" flagged as a grammar
-error on ~20 nearly-identical enemy-variant sentences) with no actual defect. The 6 real fixes: a
-`Json`/`JSON` casing slip (`rules.php`), a `Пробуждённый`/`Пробужденный` spelling inconsistency
-against the pre-existing `enemies.php` term for the *Awakened* affix, a "Cast time" mistranslation
-(`Время накладывания` -> the standard MMO term `Время произнесения`, 3 keys), an accusative-case
-slip (`охватывает этажей` -> `охватывает этажи`), and a genuine Russian declension bug: `%s
-просмотров` renders wrong for raw (non-Laravel-pluralized) counts ending in 1-4 (`21 просмотров`
-should be `21 просмотр`) — fixed by rewording to the count-invariant `Просмотров: %s` rather than
-adding a plural bucket, since the source `%s` format has none to match. Full triage in
-`handovers/ru_RU_ai.md`.
-
-### Chinese (Simplified) glossary (zh_CN_ai, established in the #4165 pass)
-
-| English | Chinese | English | Chinese |
-|---|---|---|---|
-| Dungeon | 地下城 | Route | 路线 |
-| Pull | 拉怪 | Pack | 包（`enemypack` label, already established) |
-| Boss | 首领 (already established) | Affix | 词缀 (already established) |
-| Compendium | 图鉴 (no prior convention; picked to match the majority "encyclopedia/collection" sense) | Checkpoint | 检查点 |
-| Enemy forces | 敌方部队 (full form); **敌部** abbreviation for checkpoint pills/tooltips/snackbars only | Weight (line thickness) | 权重 (majority of existing hits — `path_weight_label`/`enemypatrol_weight_label`; `brushline_weight_label`'s pre-existing 粗细 is the outlier, left untouched) |
-| Faction | 阵营 (already established) | Crowd control | 控场 (already established, from `affixes.php`) |
-| Counter (verb, "countered by") | 反制 (already established, from `spells.php`'s `法术反制`/`反制射击` — **not** 反击/反攻, which mean counter-*attack*) | Classification | 分类 (already established) |
-| Aura | 光环 (already established) | Debuff | 减益效果 (no prior convention) |
-| Teeming | 繁盛 (read from `affixes.php`) | Combat Log | 战斗日志 (pre-existing convention — the opposite of the community-jargon default of leaving it English; the locale had already committed to this at scale before this pass, so its own precedent wins) |
-
-Add a row here whenever a new locale forces a decision worth keeping.
-
-**Register:** `zh_CN_ai` is formal **您** throughout — 256 pre-existing `您` hits against 39 `你`
-hits before this pass (weaker signal than most locales' 300+:1 ratios), re-confirmed at 317:39
-after. The `你` hits are concentrated in `js.php`'s tutorial `intro_*` keys and one `affixes.php`
-description — pre-existing gpt-3.5-era drift, not a deliberate informal choice, and this pass's own
-new keys were all written as 您. No cleanup pass was authorized or performed on the pre-existing
-`你` hits — see `handovers/zh_CN_ai.md` for why fixing them wasn't folded into the review-response
-commit.
-
-**Object/pickup labels in `mapping.php` have no single settled convention across locales — check
-per-item, not by rule.** Unlike NPC/boss/creature names (always English) and catalogued spells
-(always their official translation), a label like `Decaying Cauldron`, `Teleporter`, or
-`Cursed Spire of Ny'alotha` has been decided differently by different locales: `Teleporter` is
-translated by all 5 locales that reached it; `Cursed Spire of Ny'alotha` by 6 of 8;
-`Decaying Cauldron`/`Altar of Decay` stay English in most (but not all) locales. Before accepting a
-reviewer's claim that one of these "must stay English", grep the same key across the other
-finished locales' `mapping.php` files — that's the actual precedent, not the reviewer's assertion.
-Full case-by-case triage in `handovers/zh_CN_ai.md`.
-
-**Codex review triage (11 real fixes out of a much longer list)** — three official
-`dungeons.php`-sourced location names used instead of English (`Crusader's Square`,
-`Hall of the Keepers`, `Infusion Chamber`), one internal-consistency miss (`scheduling_label`
-should have matched the sibling `计划发布` keys), a heatmap layer-order wording fix, two phrasing
-polish items, and 3 self-caught `包`/`小队` inconsistencies for "pack" found while triaging (not
-from the review itself). The much longer "must stay English" list and the `view_admin.php`/
-`js.php intro_*` false positives are the two lessons worth carrying forward — see
-`handovers/zh_CN_ai.md` for the full reasoning.
-
-## Normalising an existing locale (overwriting existing values)
-
-The default workflow never overwrites a non-empty value. When Wotuu explicitly asks for one -
-a register change, a terminology fix - use `rewrite.py`, which does overwrite but refuses to
-guess: every entry states the exact value it expects to find, and a mismatch is an error.
+Only when explicitly authorised (a register normalisation, a terminology fix, review fixes).
+Every entry states the exact value it expects; a mismatch is refused, never guessed.
 
 ```bash
-# 1. Write {"dotted.key": "new value"} for the keys you want changed.
-# 2. Pair it against the locale's current values - the "from" side stays machine-generated,
-#    so the guard can never be a mistyped copy of the old string. It also refuses a change
-#    that reflows the indentation of a multi-line value.
-python3 $SCRIPTS/make_rewrites.py $OUT/current.json $OUT/new_values.json $OUT/rewrites.json
+python3 $SCRIPTS/make_rewrites.py $OUT/$LOCALE.after.json $OUT/new_values.json $OUT/rewrites.json
 python3 $SCRIPTS/rewrite.py $LOCALE $OUT/rewrites.json
-
-# 3. Gate, now with the rewrite map - those keys may change, nothing else may.
-python3 $SCRIPTS/verify.py $OUT/before.json $OUT/after.json $OUT/worklist.json $OUT/rewrites.json
+python3 $SCRIPTS/verify.py $OUT/$LOCALE.before.json $OUT/$LOCALE.after2.json $OUT/$LOCALE.worklist.json $OUT/rewrites.json
 ```
 
-Chaining several batches: merge them keeping the **first** batch's `from` and the **last** batch's
-`to`, or the gate will compare against an intermediate value that no longer exists.
+Chaining batches: merge keeping the **first** batch's `from` and the **last** batch's `to`. When
+converting register, re-read the whole sentence — old machine output also predates the glossary
+(*Zug* for pull, *Paket* for pack); fix those in the same line.
 
-**Re-read the whole sentence, not just the pronouns.** A register conversion drags in strings the
-original machine translation wrote before any glossary existed, so the sentence you are touching may
-also be using *Zug* for `pull` and *Paket* for `pack`. Fix those in the same pass - they are lines
-you are already changing, and leaving them is how a locale ends up with a glossary it does not
-follow.
+## Reviewing a finished locale with Codex
 
-Finding formal-address keys in a German locale (adapt the markers per language):
-
-```bash
-grep -nE "\b(Sie|Ihnen|Ihre[nmrs]?|Ihr)\b" lang/$LOCALE/*.php
-```
-
-Review every hit by hand: sentence-initial *Sie* is often third-person *sie* ("**Sie** laufen zur
-Mitte der Brücke" = the guards do), which must not be touched. Three such false positives came up
-in the `de_DE_ai` pass; where the ambiguity was genuinely confusing the sentence was reworded
-instead ("Andere können beitreten...").
-
-## The gate
-
-`verify.py` fails (exit 1) rather than warns, and it asserts:
-
-1. the key set is identical before/after — nothing added, dropped or re-nested;
-2. every previously non-empty value is byte-identical, except keys listed in an explicit
-   rewrite map, which must have gone exactly from their recorded `from` to their recorded `to`;
-3. every work-list key is now non-empty, and no key outside the work list was filled;
-4. every `:placeholder`, `%s`/`%d`, plural segment and HTML tag of the source survives.
-
-Because the before/after dumps come from PHP `require`, a green run also proves every file still
-parses. `php -l` is not a substitute — it says nothing about structure.
-
-Sanity check on the diff: insertions should equal deletions plus one extra line per newline
-embedded in a translated string. Anything else means `inject.py` touched something it should not
-have.
-
-## Gotchas found the hard way
-
-- **Empty stubs come in two quote styles.** `localization:sync` copies the en_US quoting, so a
-  source string containing an apostrophe leaves `=> "",` and everything else leaves `=> '',`.
-  `inject.py` matches both and normalises to single quotes.
-- **Leaf keys repeat across sibling arrays.** `gong` exists three times in `mapping.php` under
-  different dungeons. `inject.py` resolves the full dotted path from a nesting stack; never match
-  on a bare key name.
-- **`inject.py` is not idempotent, by design.** A key it already filled is no longer empty, so a
-  re-run reports it `UNMATCHED`. On a re-run that is expected; on a first run it means the key is
-  absent from the file or its stub has an unexpected shape — investigate before continuing.
-- **`localization:sync` must run before `translate:scan`.** The scan reads en_US, so keys added to
-  en_US after the last sync appear in the scan while the locale has no stub for them at all. Those
-  are *missing* keys, not empty ones — `build_worklist.py` lists them separately and this workflow
-  does not create them; re-run `localization:sync` instead. In the #4165 pass that was 25 keys,
-  most of them the whole of `view_creator.php`.
-- **`translate:ksg` rewrites entire files** via `exportTranslations(preserveExisting: true)`, which
-  reformats untouched keys and makes "only empty keys changed" unverifiable. That is the other
-  reason this workflow injects line-by-line instead of reusing it.
-- **`composer run fix` does touch `lang/**`, and that is fine.** PhpCsFixer re-aligns the `=>` of a
-  key block once a filled value makes a neighbouring string multi-line. It changes whitespace only.
-  Run the gate again afterwards to prove that (rebuild the "before" dump from HEAD if you deleted
-  it: copy `git show HEAD:lang/<locale>/*.php` into a throwaway `lang/<tmp>/` and dump that).
-- **`js.php` strings are baked into the JS bundle at build time.** They will not appear in the UI
-  until assets are rebuilt (`npm run dev` / `prod`); this is also why the `hotfix` skill cannot ship
-  them. Keep escaped apostrophes out of `js.php` values where you can.
-
-## Reviewing a finished pass with Codex
-
-Worth doing - it found 15 real issues in the `de_DE_ai` pass, four of them terminology errors that
-the gate can never catch. Two things make or break it:
-
-- **Use `task`, not `review`.** `codex review` is a code reviewer; on a lang diff it inspects
-  placeholders and array syntax, which `verify.py` already proves. You want a prose review.
-- **Anchor it on a commit, not the index.** `git show <sha> -- lang/<locale>` is stable;
-  `git diff --cached` evaporates the moment anyone commits the work while the review runs.
+Worth it every time — 6 to 32 real findings per locale, all of a kind the gate cannot see. Use
+`task`, not `codex review` (that's a code reviewer), anchor on the commit sha (the index
+evaporates), and paste this prompt — it encodes every false-positive cluster the nine passes hit:
 
 ```bash
 COMPANION=$(ls -d ~/.claude/plugins/cache/openai-codex/codex/*/scripts/codex-companion.mjs | sort -V | tail -1)
 node "$COMPANION" task --background --effort high "Review the <LANGUAGE> TRANSLATION QUALITY of
-git show <sha> -- lang/<locale>. Not a code review - the structure and placeholders are already
-machine-verified. lang/en_US/ is the source of truth. For each finding give file:line, the English
-source, the current text and a concrete replacement. Cross-check every game term against
-lang/<locale>/spells.php, affixes.php and enemies.php, which hold the official localised names -
-those files win over any external source. Look for: register breaks; clumsy or over-literal
-phrasing; game terminology players do not use; the same English term rendered inconsistently within
-the diff; and meaning errors. Community jargon (Pull, Pack, Add, Boss, Gauntlet, Skip, Trash,
-Affix) is deliberately untranslated. Proper nouns stay English inside prose notes in mapping.php
-while the sentence around them is translated; label-only files like mapicontypes.php are fully
-translated."
+the lines ADDED in: git show <sha> -- lang/<locale>. Report ONLY on '+' lines whose text changed
+in that diff - not on pre-existing lines, not on lines that only moved because of '=>' realignment,
+and never on lang/<locale>/view_admin.php (admin UI, deliberately English). Not a code review:
+structure and placeholders are machine-verified. lang/en_US/ is the source; for each finding give
+file:line, the English, the current text, a concrete replacement, and the evidence.
+Rules of this locale, which are NOT findings: register is <formal/informal form> throughout.
+NPC, boss and creature names inside mapping.php prose stay in English, ALWAYS, even when
+lang/<locale>/npcs.php has an official localisation - do not flag them. Catalogued spell/item/
+affix names use the official name in lang/<locale>/spells.php, affixes.php, enemies.php,
+dungeons.php - those files beat any other source, including you; check them before claiming a
+term is wrong. Community jargon (Pull, Pack, Add, Boss, Gauntlet, Skip, Trash, Affix) is
+untranslated unless this locale's own pre-existing non-empty values translate it - check the
+locale's existing usage (grep lang/<locale>/*.php) before flagging a term as wrong or
+inconsistent; an established choice in the locale wins over your preference. Object/location
+labels in mapping.php are per-item choices: flag one only if it contradicts lang/<locale>/dungeons.php.
+Look for: invented game terms that have an official name in those files; the same English term
+rendered differently within the diff or against the locale's existing usage; meaning errors;
+register slips; clumsy or over-literal phrasing; grammar/agreement errors."
 ```
 
-Then triage rather than apply wholesale - in the German pass 3 of 18 findings pointed at lines
-outside the reviewed commit (check with `git blame -L <n>,<n>`), one was half wrong against
-`affixes.php`, and one proposed hard-coding grammatical gender for runtime placeholders. Apply the
-survivors with `rewrite.py` so the gate still covers them.
+Triage, don't apply wholesale: confirm each finding is on a changed line (`git show <sha> -- <file>
+| grep '^+'`, and that the *value* changed — realignment moves lines with identical text), check
+every "official name" claim against the locale's files, check every "inconsistent" claim against
+the locale's existing usage, then apply survivors with `rewrite.py` so the gate covers them.
+Expect the reviewer to be right about invented game terms and intra-diff inconsistency, and wrong
+about NPC names and object labels. Record counts and lessons in the locale sheet's History.
 
-## Per-locale state
+## Gotchas
 
-Measured 2026-08-20. Every locale has the **same 745 in-scope keys** - the same English source
-strings, so a work list built for one is the work list for all nine. The "empty" column differs only
-in the excluded files, which are not this workflow's business.
-
-| Locale | Empty total | In scope | Status |
-|---|---|---|---|
-| `de_DE_ai` | 2959 | 745 | Done — #4165, 2026-08-20 (plus 212 *Sie* → *du* and 31 post-review rewrites) |
-| `es_ES_ai` | 2953 | 745 (769 after re-sync) | Done — #4165, 2026-08-20 (plus 30 formal *usted* → informal *tú* rewrites) |
-| `es_MX_ai` | 2980 | 769 | Done — #4165, 2026-08-20 (no register cleanup needed, already informal *tú*) |
-| `fr_FR_ai` | 2986 | 769 | Done — #4165, 2026-08-20, PR #4209 (formal *vous* register, no cleanup needed; plus 27 Codex-review fixes, see `handovers/fr_FR_ai.md`) |
-| `it_IT_ai` | 2984 | 769 | Done — #4165, 2026-08-21 (informal *tu* register, no cleanup needed; plus ~90 Codex-review fixes, almost all reverting NPC/creature names in `mapping.php` prose back to English — see the Italian glossary above) |
-| `ko_KR_ai` | 3042 | 769 | Done — #4165, 2026-08-21, PR #4209 (formal 하십시오체 register, no cleanup needed; plus 29 Codex-review fixes — see `handovers/ko_KR_ai.md`, including a repeat of the `fr_FR_ai` duplicate-dungeon-block lesson) |
-| `pt_BR_ai` | 2984 | 769 | Done — #4165, 2026-08-21 (informal *você* register, no cleanup needed; plus 32 Codex-review fixes — see `handovers/pt_BR_ai.md`, including a repeat of the it_IT/ko_KR NPC-name-in-prose mistake) |
-| `ru_RU_ai` | 2841 | 769 | Done — #4165, 2026-08-21 (formal *Вы* register, no cleanup needed; plus 6 real Codex-review fixes and a self-caught Gauntlet/Witherlings slip — see `handovers/ru_RU_ai.md`) |
-| `zh_CN_ai` | 3097 | 769 | Done — #4165, 2026-08-21 (formal *您* register, no cleanup needed; plus 11 Codex-review fixes — see `handovers/zh_CN_ai.md`, including rejecting most of the "must stay English" findings after checking actual multi-locale precedent) |
-| `zh_TW_ai` | 3094 | 745 | Skipped — Wotuu asked to skip it 2026-08-21, not offered on the site right now |
-
-All nine also report the same 25 keys absent entirely (see the `localization:sync` gotcha).
-
-Do one locale per session and per commit: the work lists are independent, and a failed gate should
-never be ambiguous about which locale caused it.
-
-Per-locale notes measured before starting a pass live in `handovers/<locale>.md` next to this file
-(`handovers/ko_KR_ai.md` is the next one up). Write one for a locale when you finish it, so the pass
-after yours starts from numbers rather than from a re-measurement.
+- **`localization:sync` before `translate:scan`** — scan keys the locale lacks entirely are
+  *missing*, not empty; `build_worklist.py` lists them as `absent`, `inject.py` can't fill them,
+  `status.sh --sync` fixes it. `de_DE_ai` sat 24 keys behind for a day because of this.
+- **`localization:sync` used to corrupt `\'` escapes** — it substituted the target's raw lemma
+  into the *base* file's quote character, so a translation stored as `'Skycap\'n'` came back as
+  `"Skycap\'n"` (literal backslash) once en_US quoted that string with `"`. Fixed in #4165
+  (`LocalizationSync::$lemmaQuotes`, covered by `LocalizationSyncTest`); `check_sync.py` in
+  `status.sh --sync` is the guard that would have caught it (~25 strings per locale were at risk).
+- **`translate:scan` emits `'logic': []`** for a file with no strings; `build_worklist.py` drops
+  non-string buckets. `lang/texts_to_translate.json` is tracked (committed during #4165); it is
+  derived output and the scan rewrites it — commit it or not, it makes no difference.
+- **Empty stubs come in two quote styles** (`''` or `""`, copied from the en_US source's quoting);
+  `inject.py` matches both and writes single quotes.
+- **Leaf keys repeat across sibling arrays** (`gong` three times in `mapping.php`); both scripts
+  resolve the full dotted path from a nesting stack.
+- **`inject.py` is not idempotent** — a filled key is no longer empty, so a re-run reports it
+  `UNMATCHED`. Expected on a re-run; on a first run it means the stub is missing or oddly shaped.
+- **opcache serves stale reads** to `dump_locale.php` right after another process edited the file
+  (`composer run fix`, a previous `inject.py`): a spurious "current value is not the expected one"
+  from `rewrite.py`. `docker compose exec -T app php -r "opcache_reset();"` before re-dumping.
+- **`composer run fix` touches `lang/**`** — PhpCsFixer re-aligns `=>` once a filled value is
+  multi-line. Whitespace only; run the gate again to prove it (rebuild the before-dump from HEAD
+  into a throwaway `lang/<tmp>/` if you deleted it).
+- **`translate:ksg` rewrites whole files** (`exportTranslations(preserveExisting: true)`), which is
+  why this workflow injects line by line instead.
+- **`js.php` is baked into the JS bundle** — invisible until `npm run dev`/`prod`; the `hotfix`
+  skill can't ship it, a release can.
