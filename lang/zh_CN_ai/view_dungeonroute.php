@@ -6,22 +6,22 @@ return [
         'dungeon' => [
             'overview' => [
                 'weekly_route'           => 'Raider.IO 每周路线',
-                'weekly_routes'          => '',
-                'community_routes'       => '',
+                'weekly_routes'          => 'Raider.IO 每周路线',
+                'community_routes'       => '社区路线',
                 'popular'                => '热门路线',
                 'newly_published_routes' => '新发布的路线',
                 'archetypes'             => [
                     'pug_friendly' => [
-                        'label'       => '',
-                        'description' => '',
+                        'label'       => 'PUG 友好',
+                        'description' => '为陌生人组成的队伍提供宽容的拉怪安排',
                     ],
                     'expert' => [
-                        'label'       => '',
-                        'description' => '',
+                        'label'       => '专家',
+                        'description' => '为配合默契的队伍优化',
                     ],
                     'title' => [
-                        'label'       => '',
-                        'description' => '',
+                        'label'       => '头衔',
+                        'description' => '前 0.5% 的玩家用于冲刺评分的路线',
                     ],
                 ],
             ],
