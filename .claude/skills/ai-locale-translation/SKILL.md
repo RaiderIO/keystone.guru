@@ -412,6 +412,65 @@ as "Fúria" instead of `spells.php`'s "Enfurecer"; `Awakened` invented as "Despe
 Full triage, including two findings checked and rejected against the locale's own pre-existing
 conventions, in `handovers/pt_BR_ai.md`.
 
+### Russian glossary (ru_RU_ai, established in the #4165 pass)
+
+| English | Russian | English | Russian |
+|---|---|---|---|
+| Dungeon | Подземелье (pre-existing) | Route | Маршрут (pre-existing) |
+| Pack | Пак | Boss | Босс (pre-existing) |
+| Enemy forces | Силы врага (full form, pre-existing); **СВ** abbreviation introduced for checkpoint pills/tooltips/snackbars | Compendium | Компендиум (no prior convention; matches the majority of other locales) |
+| Checkpoint | Контрольная точка | Teeming | Кишащий (read from `affixes.php`/`view_common.php`, pre-existing) |
+| Floor | Уровень (pre-existing) | Weight (line thickness) | Толщина (pre-existing) |
+| Icon | Иконка (pre-existing) | Sidebar | Боковая панель (pre-existing) |
+| Thumbnail | Эскиз (pre-existing, `js.php`) | Season | Сезон (pre-existing) |
+| Teleporter | Телепорт (pre-existing) | Classification | Классификация (pre-existing) |
+| Aura | Аура (read from `view_admin.php`) | Debuff | Дебафф (no prior convention; loanword, matches community usage) |
+
+Add a row here whenever a new locale forces a decision worth keeping.
+
+**Register:** `ru_RU_ai` is formal *Вы* throughout — 435 pre-existing `Вы`/`вам`/`Ваш`/`вас` hits
+against 1 `ты`-family hit before this pass; no register cleanup was needed, and all new keys were
+written as *Вы* (476:1 after the pass).
+
+**`Gauntlet` is community jargon and must stay literal English, not transliterated to Cyrillic** —
+this pass's first draft wrote it as `гонтлет` across 5 `mapping.php` keys (`kings_rest.gauntlet_gate`,
+both `naxxramas*.gauntlet_room` keys, `brackenhide_hollow.witherlings_gauntlet`,
+`halls_of_stone.brann_gauntlet`) before catching it in the Codex review — SKILL.md's own community-
+jargon list already named `Gauntlet` as untranslated, and every other locale (`fr_FR_ai`, `es_MX_ai`,
+`it_IT_ai`) confirms this by leaving it as literal `gauntlet` in the source language. One of those
+same keys (`witherlings_gauntlet`) had also translated the NPC name `Witherlings` (confirmed in
+`npcs.php`) to `Иссохшие` — the it_IT/ko_KR/pt_BR NPC-name-in-prose mistake, caught in the same pass.
+
+**Catalogued spell names inside mapping.php prose use their official `spells.php` translation, not
+English** — `Blazing Aegis` -> `Пылающая эгида`, `Burning Chain` -> `Горящая цепь`, `Stolen Power`
+(Midnight's `city_of_threads` buff) -> `Похищенная сила`, all confirmed against `spells.php` before
+writing, matching the `pt_BR_ai` precedent for the same two names. The Codex review flagged all
+three as "should stay English" against the general proper-noun rule — checked against `spells.php`
+and rejected, since the rule specifically carves out an exception for catalogued spell/item names
+(only NPC/boss/creature names and a short list of exact tooltip object names stay English).
+
+**Codex review found 97 candidate issues, 6 real** (plus the Gauntlet/Witherlings pair above) —
+an unusually low real-finding rate for this pass, because the review prompt's proper-noun-in-
+`mapping.php` exception clause was too broad and flagged roughly 20 correctly-translated object/
+location names (`Cannon`, `Grounding Field`, `Slipstream`, `Cursed Spire of Ny'alotha`, `Cave of
+Mam'toth`, `Den of Sseratus`, all 9 Ulduar teleporter destination names, `Witherbark Prisoner`, the
+Stratholme postboxes) for reverting to English — each checked against either an official
+`spells.php`/`dungeons.php` source or the multi-locale precedent already in this file (the 9 Ulduar
+teleporters in particular: `fr_FR_ai` explicitly kept the 7 without an official source translated
+"for consistency", see above) before rejecting. A further ~20 findings flagged `view_admin.php`
+stubs newly added by `localization:sync` as "missing translations" — that file is permanently
+excluded from this workflow (admin-only UI, English by convention), so these are not real. The rest
+were stylistic rewrite preferences ("Враги могут быть одним из: X, Y или Z" flagged as a grammar
+error on ~20 nearly-identical enemy-variant sentences) with no actual defect. The 6 real fixes: a
+`Json`/`JSON` casing slip (`rules.php`), a `Пробуждённый`/`Пробужденный` spelling inconsistency
+against the pre-existing `enemies.php` term for the *Awakened* affix, a "Cast time" mistranslation
+(`Время накладывания` -> the standard MMO term `Время произнесения`, 3 keys), an accusative-case
+slip (`охватывает этажей` -> `охватывает этажи`), and a genuine Russian declension bug: `%s
+просмотров` renders wrong for raw (non-Laravel-pluralized) counts ending in 1-4 (`21 просмотров`
+should be `21 просмотр`) — fixed by rewording to the count-invariant `Просмотров: %s` rather than
+adding a plural bucket, since the source `%s` format has none to match. Full triage in
+`handovers/ru_RU_ai.md`.
+
 ## Normalising an existing locale (overwriting existing values)
 
 The default workflow never overwrites a non-empty value. When Wotuu explicitly asks for one -
@@ -539,7 +598,7 @@ in the excluded files, which are not this workflow's business.
 | `it_IT_ai` | 2984 | 769 | Done — #4165, 2026-08-21 (informal *tu* register, no cleanup needed; plus ~90 Codex-review fixes, almost all reverting NPC/creature names in `mapping.php` prose back to English — see the Italian glossary above) |
 | `ko_KR_ai` | 3042 | 769 | Done — #4165, 2026-08-21, PR #4209 (formal 하십시오체 register, no cleanup needed; plus 29 Codex-review fixes — see `handovers/ko_KR_ai.md`, including a repeat of the `fr_FR_ai` duplicate-dungeon-block lesson) |
 | `pt_BR_ai` | 2984 | 769 | Done — #4165, 2026-08-21 (informal *você* register, no cleanup needed; plus 32 Codex-review fixes — see `handovers/pt_BR_ai.md`, including a repeat of the it_IT/ko_KR NPC-name-in-prose mistake) |
-| `ru_RU_ai` | 2841 | 745 | Not started |
+| `ru_RU_ai` | 2841 | 769 | Done — #4165, 2026-08-21 (formal *Вы* register, no cleanup needed; plus 6 real Codex-review fixes and a self-caught Gauntlet/Witherlings slip — see `handovers/ru_RU_ai.md`) |
 | `zh_CN_ai` | 3097 | 745 | Not started |
 | `zh_TW_ai` | 3094 | 745 | Not started |
 
