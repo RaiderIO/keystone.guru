@@ -786,5 +786,12 @@
         "width": 32,
         "height": 32,
         "admin_only": true
+    },
+    {
+        "key": "waystone",
+        "name": "mapicontypes.waystone",
+        "width": 32,
+        "height": 40,
+        "admin_only": true
     }
 ]

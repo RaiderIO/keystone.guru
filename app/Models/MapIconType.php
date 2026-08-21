@@ -162,6 +162,8 @@ class MapIconType extends CacheModel
     public const string MAP_ICON_TYPE_MURDER_ROW_OVERLOAD_GOLEM                       = 'murder_row_overload_golem';
     public const string MAP_ICON_TYPE_THE_BLINDING_VALE_FLOURISHING_STRIDE            = 'the_blinding_vale_flourishing_stride';
 
+    public const string MAP_ICON_TYPE_WAYSTONE = 'waystone';
+
     public const array ALL = [
         self::MAP_ICON_TYPE_UNKNOWN                   => 1,
         self::MAP_ICON_TYPE_COMMENT                   => 2,
@@ -315,6 +317,8 @@ class MapIconType extends CacheModel
         self::MAP_ICON_TYPE_MURDER_ROW_OVERLOAD_GOLEM   => 121,
 
         self::MAP_ICON_TYPE_THE_BLINDING_VALE_FLOURISHING_STRIDE => 122,
+
+        self::MAP_ICON_TYPE_WAYSTONE => 123,
     ];
 
     public function getIconUrlAttribute(): string
