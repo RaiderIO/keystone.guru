@@ -19,8 +19,8 @@ return [
         'message' => 'Desculpe, a página que você está procurando não pôde ser encontrada.',
     ],
     '405' => [
-        'title'   => '',
-        'message' => '',
+        'title'   => '405 Método Não Permitido',
+        'message' => 'Desculpe, esta página não suporta esse método de requisição.',
     ],
     '410' => [
         'title'   => '410 Página Expirada',

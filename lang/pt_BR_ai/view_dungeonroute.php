@@ -6,22 +6,22 @@ return [
         'dungeon' => [
             'overview' => [
                 'weekly_route'           => 'Rota Semanal Raider.IO',
-                'weekly_routes'          => '',
-                'community_routes'       => '',
+                'weekly_routes'          => 'Rotas semanais do Raider.IO',
+                'community_routes'       => 'Rotas da comunidade',
                 'popular'                => 'Rotas populares',
                 'newly_published_routes' => 'Rotas recém-publicadas',
                 'archetypes'             => [
                     'pug_friendly' => [
-                        'label'       => '',
-                        'description' => '',
+                        'label'       => 'Amigável para PUG',
+                        'description' => 'Pulls tolerantes para grupos de estranhos',
                     ],
                     'expert' => [
-                        'label'       => '',
-                        'description' => '',
+                        'label'       => 'Especialista',
+                        'description' => 'Otimizada para grupos coordenados',
                     ],
                     'title' => [
-                        'label'       => '',
-                        'description' => '',
+                        'label'       => 'Título',
+                        'description' => 'A rota que os melhores 0.5% usam para aumentar a classificação',
                     ],
                 ],
             ],
