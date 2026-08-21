@@ -133,6 +133,17 @@ Skip, without filing:
 - Errors whose last-seen predates the newest release and which have not recurred since — those are
   already fixed.
 
+**Before filing any cluster whose cause points at a specific, checkable thing in the codebase**
+(an unregistered version/constant, an unmapped name, a missing case in a match/switch, a config
+value) — grep `master` for it first. Sentry's last-seen timestamp only tells you when the error
+last *fired*; it says nothing about whether a fix already merged after that. Three issues were
+filed in one 2026-08-21 pass for clusters already fixed one to three days earlier (`RETAIL_12_1_0`
+registered by #4123/#4125 before `PHP-LARAVEL-TY`'s last event even landed; `Sethraliss` mapped by
+#4153/#4154 well before `PHP-LARAVEL-V4` fired) — a `grep`/`git log -S` for the distinguishing
+identifier from the event data would have caught both before filing. This check is cheap (one grep
+per candidate cluster) and only applies when there's a concrete string/constant to search for — a
+vague "seems like it might be fixed" isn't enough reason to skip filing.
+
 Do **not** try to filter on `Handler::$dontReport`. Those classes are suppressed by `shouldntReport()`
 before the SDK ever sees them, so they cannot appear as exceptions — if one somehow does, that is a
 signal worth reporting, not noise. Note the inverse case is real and must **not** be filtered: that
