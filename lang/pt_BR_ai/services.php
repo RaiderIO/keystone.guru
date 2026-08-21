@@ -49,7 +49,7 @@ return [
                 'unable_to_find_enemies_pull_skipped_details'          => 'Isso pode indicar que o MDT teve uma atualização recente que ainda não foi integrada no Keystone.guru.',
                 'unable_to_find_awakened_obelisks'                     => 'Não foi possível encontrar Obeliscos Despertos para a combinação da sua masmorra/semana. Seus saltos de Obelisco Desperto não serão importados.',
                 'unable_to_find_awakened_obelisk_different_floor'      => 'Não foi possível importar o Obelisco Desperto :name, ele está em um andar diferente do próprio Obelisco. O Keystone.guru não suporta isso no momento.',
-                'unable_to_find_awakened_obelisk_enemy'                => 'Não foi possível importar o Obelisco Desperto :name, seu inimigo não pôde ser resolvido na sua combinação de masmorra/semana.',
+                'unable_to_find_awakened_obelisk_enemy'                => 'Não foi possível importar o Obelisco Despertado :name; o inimigo dele não pôde ser identificado para essa combinação de masmorra/semana.',
                 'unable_to_decode_mdt_import_string'                   => 'Não foi possível decodificar a string de importação MDT',
                 'unable_to_validate_mdt_import_string'                 => 'Não foi possível validar a string de importação do MDT',
             ],

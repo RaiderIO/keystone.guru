@@ -4,7 +4,7 @@ return [
     'index' => [
         'title'       => 'Compêndio',
         'header'      => 'Compêndio',
-        'intro'       => 'O Compêndio é uma enciclopédia mantida pela comunidade de todas as masmorras da temporada atual do jogo. Consulte exatamente o que cada NPC faz, quais feitiços eles conjuram, como contra-atacá-los e qual controle de multidão funciona neles.',
+        'intro'       => 'O Compêndio é uma enciclopédia mantida pela comunidade de todas as masmorras da temporada atual do jogo. Consulte exatamente o que cada NPC faz, quais feitiços eles conjuram, como neutralizá-los e qual controle de multidão funciona neles.',
         'data_source' => [
             'title'       => 'Sempre atualizado',
             'description' => 'O Compêndio é mantido em tempo real por logs de combate que os jogadores enviam automaticamente através do cliente Raider.IO. Toda run rastreada melhora silenciosamente os dados para todos.',
@@ -59,19 +59,19 @@ return [
         'spell_created'           => ':spell adicionado ao banco de dados',
         'property_changed'        => 'Afetado por :property',
         'property_removed'        => 'Não afetado por :property',
-        'counter_added'           => ':spell agora pode ser contra-atacado por :property',
-        'counter_removed'         => ':spell não pode mais ser contra-atacado por :property',
+        'counter_added'           => ':spell agora pode ser neutralizado por :property',
+        'counter_removed'         => ':spell não pode mais ser neutralizado por :property',
         'school_recorded'         => ':spell causa dano de :schools',
-        'immunity_bypass_added'   => ':spell foi observado acertando através de :property',
-        'immunity_bypass_removed' => ':spell não foi mais observado acertando através de :property',
+        'immunity_bypass_added'   => ':spell foi observado acertando apesar de :property',
+        'immunity_bypass_removed' => ':spell não foi mais observado acertando apesar de :property',
         // Subject-less variants: used when the row already leads with the spell link as its
         // subject, so the description does not repeat the spell name
         'spell_created_no_subject'           => 'Adicionado ao banco de dados',
-        'counter_added_no_subject'           => 'Agora pode ser contra-atacado por :property',
-        'counter_removed_no_subject'         => 'Não pode mais ser contra-atacado por :property',
+        'counter_added_no_subject'           => 'Agora pode ser neutralizado por :property',
+        'counter_removed_no_subject'         => 'Não pode mais ser neutralizado por :property',
         'school_recorded_no_subject'         => 'Causa dano de :schools',
-        'immunity_bypass_added_no_subject'   => 'Observado acertando através de :property',
-        'immunity_bypass_removed_no_subject' => 'Não observado mais acertando através de :property',
+        'immunity_bypass_added_no_subject'   => 'Observado acertando apesar de :property',
+        'immunity_bypass_removed_no_subject' => 'Não observado mais acertando apesar de :property',
         'count'                              => ':count evento|:count eventos',
         'more'                               => 'e mais :count',
         'property'                           => [
@@ -210,9 +210,9 @@ return [
             'npcs_no_data'                => 'Sem dados',
             'npcs_description'            => 'Apenas as surpresas são listadas - trash que resistiu e chefes em que funcionou mesmo assim. Qualquer coisa que se comporte da forma que você já espera é omitida. "Nenhum efeito observado" significa que outro controle de multidão desta tabela foi visto acertando esse NPC, mas este nunca foi: é evidência, não uma imunidade confirmada.',
             'counters'                    => [
-                'title'              => 'Habilidades contra-atacáveis',
+                'title'              => 'Habilidades neutralizáveis',
                 'racial'             => 'Racial (:race)',
-                'no_spells'          => 'Nenhum feitiço de NPC contra-atacável encontrado para esta masmorra.',
+                'no_spells'          => 'Nenhum feitiço de NPC que possa ser neutralizado foi encontrado para esta masmorra.',
                 'table_header_spell' => 'Feitiço',
                 'table_header_npcs'  => 'NPCs',
             ],

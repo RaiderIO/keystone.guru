@@ -23,7 +23,7 @@ return [
         ],
         'routepublishing' => [
             'title'            => 'Publicação de rotas',
-            'description'      => 'A publicação de rotas permite que você publique rotas com o mundo em um cronograma. Você pode definir uma data/hora por rota em que elas serão automaticamente colocadas no estado Publicado e ficarão visíveis para o mundo.',
+            'description'      => 'A publicação de rotas permite que você publique rotas para todos de forma programada. Você pode definir, para cada rota, a data e a hora em que ela será colocada automaticamente no estado Publicado e ficará visível para todos.',
             'enabled'          => 'Ativado',
             'timezone_warning' => 'Os horários de publicação agendados usam o fuso horário do seu perfil. Certifique-se de que seu fuso horário esteja definido corretamente em :link.',
             'profile_link'     => 'configurações de perfil',

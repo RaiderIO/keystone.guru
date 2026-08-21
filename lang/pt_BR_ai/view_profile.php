@@ -79,7 +79,7 @@ return [
         'creator_pinned_routes_none'      => 'Você ainda não criou nenhuma rota, então não há nada para fixar.',
         'creator_directory'               => 'Diretório de criadores',
         'creator_directory_hide'          => 'Ocultar-me do diretório de criadores',
-        'creator_directory_hide_help'     => 'Criadores com rotas publicadas são listados automaticamente no diretório. Marque isto para manter seu perfil fora dele - suas rotas continuam publicadas de qualquer forma.',
+        'creator_directory_hide_help'     => 'Criadores com rotas publicadas são listados automaticamente no diretório. Marque esta opção para manter seu perfil fora dele — suas rotas continuarão publicadas de qualquer forma.',
         'creator_save'                    => 'Salvar perfil de criador',
         'creator_view_public_profile'     => 'Ver meu perfil público',
     ],

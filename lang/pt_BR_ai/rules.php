@@ -17,8 +17,8 @@ return [
         'message' => 'Você precisa selecionar uma facção para esta masmorra.',
     ],
     'json_string_count_rule' => [
-        'message_min' => 'A string Json deve ter pelo menos :min_count elementos.',
-        'message_max' => 'A string Json deve ter no máximo :max_count elementos.',
+        'message_min' => 'A string JSON deve ter pelo menos :min_count elementos.',
+        'message_max' => 'A string JSON deve ter no máximo :max_count elementos.',
     ],
     'map_icon_type_role_check_rule' => [
         'message' => 'Esse tipo de ícone de mapa não está disponível para seu nível de acesso.',

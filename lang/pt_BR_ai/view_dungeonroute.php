@@ -13,7 +13,7 @@ return [
                 'archetypes'             => [
                     'pug_friendly' => [
                         'label'       => 'Amigável para PUG',
-                        'description' => 'Pulls tolerantes para grupos de estranhos',
+                        'description' => 'Pulls tolerantes para grupos aleatórios',
                     ],
                     'expert' => [
                         'label'       => 'Especialista',
@@ -21,7 +21,7 @@ return [
                     ],
                     'title' => [
                         'label'       => 'Título',
-                        'description' => 'A rota que os melhores 0.5% usam para aumentar a classificação',
+                        'description' => 'A rota que os melhores 0,5% usam para aumentar a classificação',
                     ],
                 ],
             ],
