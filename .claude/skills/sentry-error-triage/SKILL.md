@@ -169,6 +169,22 @@ Every issue this skill files carries a hidden marker:
 The Sentry short ID (e.g. `KEYSTONE-GURU-4F`) is already a stable unique key, so unlike
 `combatlog-parse-failure-poll` there is no signature to compute — match on it directly.
 
+**Also check closed issues for the same marker, not just open ones** — `--state open` alone isn't
+enough. A 2026-08-21 pass re-filed two clusters (as #4236, #4237) that were already tracked by
+closed issues (#4173, #4172) carrying the same `sentry-issue` marker, because the dedup query only
+looked at open issues. Run the same query with `--state all` (or a second pass with `--state
+closed`) and check the marker before filing:
+
+```bash
+gh issue list --repo RaiderIO/keystone.guru --label sentry --state all --json number,title,body,state
+```
+
+If a closed issue already carries the marker, don't file a new one — instead check whether the
+Sentry cluster is still recurring *after* whatever fix or decision closed it (see Step 4's
+"Existing cluster" handling: compare current occurrence timestamps/release against the closing
+comment's fix). Still recurring → reopen the closed issue with an update, quoting the fix that
+didn't hold. Stopped recurring → leave it closed, nothing to do.
+
 One-time setup, if it has not been done:
 
 ```bash
