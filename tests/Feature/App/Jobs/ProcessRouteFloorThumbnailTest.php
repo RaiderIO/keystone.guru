@@ -27,10 +27,11 @@ final class ProcessRouteFloorThumbnailTest extends PublicTestCase
      */
     #[Test]
     #[DataProvider('failedRenderAttemptProvider')]
-    public function handle_givenFailedRender_dispatchesRetryWithStaggeredDelay(int $attempts, int $expectedDelaySeconds): void
+    public function handle_givenFailedRender_dispatchesRetryWithStaggeredDelay(int $attempts, int $maxAttempts, int $expectedDelaySeconds): void
     {
         // Arrange
         Queue::fake();
+        config(['keystoneguru.thumbnail.max_attempts' => $maxAttempts]);
 
         $dungeonRoute = $this->createDungeonRouteDueForThumbnail();
 
@@ -56,15 +57,48 @@ final class ProcessRouteFloorThumbnailTest extends PublicTestCase
     }
 
     /**
-     * @return array<string, array{0: int, 1: int}>
+     * @return array<string, array{0: int, 1: int, 2: int}>
      */
     public static function failedRenderAttemptProvider(): array
     {
+        // The third delay is unreachable at the default max_attempts of 3 (attempt 2 is the last one
+        // that renders), so that case raises the cap rather than asserting something that cannot happen.
         return [
-            'first retry waits 10s'  => [0, 10],
-            'second retry waits 60s' => [1, 60],
-            'third retry waits 300s' => [2, 300],
+            'first retry waits 10s'  => [0, 3, 10],
+            'second retry waits 60s' => [1, 4, 60],
+            'third retry waits 300s' => [2, 5, 300],
         ];
+    }
+
+    /**
+     * The attempt that would trip the max_attempts guard must not be queued at all - it could only log
+     * that it gave up. Harmless while retries were immediate; with a backoff it would occupy the queue
+     * for the full delay before the terminal failure was reported (cold review finding on PR #4245).
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenFailedRenderOnTheLastAttempt_dispatchesNoRetry(): void
+    {
+        // Arrange
+        Queue::fake();
+        config(['keystoneguru.thumbnail.max_attempts' => 3]);
+
+        $dungeonRoute = $this->createDungeonRouteDueForThumbnail();
+
+        $thumbnailService = $this->createMockPublic(ThumbnailServiceInterface::class);
+        $thumbnailService->method('createThumbnail')->willReturn(null);
+        app()->instance(ThumbnailServiceInterface::class, $thumbnailService);
+
+        try {
+            // Act - attempts 2 is the last one that renders when max_attempts is 3
+            new ProcessRouteFloorThumbnail($dungeonRoute, 1, true, 2)->handle();
+
+            // Assert
+            Queue::assertNotPushed(ProcessRouteFloorThumbnail::class);
+        } finally {
+            $dungeonRoute->delete();
+        }
     }
 
     /**
