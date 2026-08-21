@@ -727,9 +727,12 @@ return [
         ],
         'combatlog' => [
             'regenerate' => [
-                'title'  => '',
-                'header' => '',
-                'submit' => '',
+                'title'              => '',
+                'header'             => '',
+                'season'             => '',
+                'season_any'         => '',
+                'season_description' => '',
+                'submit'             => '',
             ],
             'criteria' => [
                 'title'               => '',

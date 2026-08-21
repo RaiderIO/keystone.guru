@@ -19,40 +19,41 @@ return [
             'mdt_invalid_category'                => '잘못된 카테고리',
         ],
         'flash' => [
-            'banned_ip_address_added'                => '',
-            'banned_ip_address_removed'              => '',
+            'banned_ip_address_added'                => 'IP 주소가 성공적으로 차단되었습니다',
+            'banned_ip_address_removed'              => '차단이 성공적으로 해제되었습니다',
             'message_banner_set_successfully'        => '메시지 배너가 성공적으로 설정되었습니다',
             'thumbnail_regenerate_result'            => ':total 경로를 위한 :success 작업이 배포되었습니다. :failed 실패했습니다.',
-            'combatlog_route_regenerate_result'      => '',
-            'combatlog_criteria_reset'               => '',
-            'combatlog_criteria_thresholds_updated'  => '',
+            'combatlog_route_regenerate_result'      => ':count개의 작업이 실행 대기열에 추가되었습니다',
+            'combatlog_criteria_reset'               => '오늘의 모든 파싱 기준 카운트가 초기화되었습니다.',
+            'combatlog_criteria_thresholds_updated'  => '파싱 기준 임계값이 업데이트되었습니다.',
             'caches_dropped_successfully'            => '캐시가 성공적으로 삭제되었습니다',
+            'caches_drop_queued'                     => '캐시 삭제가 대기열에 추가되어 백그라운드에서 실행됩니다',
             'exception'                              => '관리자 패널에서 예외 발생',
             'feature_toggle_activated'               => '기능 :feature이(가) 이제 활성화되었습니다',
             'feature_toggle_deactivated'             => '기능 :feature이(가) 이제 비활성화되었습니다',
             'feature_forgotten'                      => '기능 :feature이(가) 성공적으로 잊혀졌습니다',
-            'mapping_version_upgrade_queued'         => '',
-            'mapping_version_upgrade_already_latest' => '',
+            'mapping_version_upgrade_queued'         => ':count개의 경로가 :version에서 최신 버전으로 업그레이드하기 위해 대기열에 추가되었습니다.',
+            'mapping_version_upgrade_already_latest' => '이 매핑 버전은 해당 던전에서 이미 최신 버전입니다 — 대기열에 추가된 경로가 없습니다.',
             'read_only_mode_disabled'                => '읽기 전용 모드 비활성화됨',
             'read_only_mode_enabled'                 => '읽기 전용 모드 활성화됨',
         ],
     ],
     'affix' => [
         'flash' => [
-            'affix_created' => '',
-            'affix_updated' => '',
+            'affix_created' => '접사가 생성되었습니다',
+            'affix_updated' => '접사가 업데이트되었습니다',
         ],
     ],
     'affixgroup' => [
         'flash' => [
-            'affixgroup_created' => '',
-            'affixgroup_updated' => '',
-            'affixgroup_deleted' => '',
+            'affixgroup_created' => '접사 그룹이 생성되었습니다',
+            'affixgroup_updated' => '접사 그룹이 업데이트되었습니다',
+            'affixgroup_deleted' => '접사 그룹이 삭제되었습니다',
         ],
     ],
     'apicombatlogrun' => [
         'error' => [
-            'no_segments' => '',
+            'no_segments' => '이 런에 사용할 수 있는 전투 기록 구간이 없습니다.',
         ],
     ],
     'apidungeonroute' => [
@@ -73,8 +74,8 @@ return [
     ],
     'arrow' => [
         'error' => [
-            'unable_to_save_arrow'   => '',
-            'unable_to_delete_arrow' => '',
+            'unable_to_save_arrow'   => '화살표를 저장할 수 없습니다',
+            'unable_to_delete_arrow' => '화살표를 삭제할 수 없습니다',
         ],
     ],
     'dungeon' => [
@@ -125,7 +126,7 @@ return [
     ],
     'killzone' => [
         'error' => [
-            'facade_location_not_convertible' => '',
+            'facade_location_not_convertible' => '이 위치에는 풀을 배치할 수 없습니다 - 이 위치는 이 던전의 어떤 층에도 속하지 않습니다',
         ],
     ],
     'oauthlogin' => [
@@ -184,7 +185,7 @@ return [
             'profile_updated'                  => '프로필이 업데이트되었습니다',
             'unexpected_error_when_saving'     => '프로필을 저장하는 동안 예상치 못한 오류가 발생했습니다',
             'privacy_settings_updated'         => '개인정보 설정이 업데이트되었습니다',
-            'creator_profile_updated'          => '',
+            'creator_profile_updated'          => '제작자 프로필이 업데이트되었습니다',
             'password_changed'                 => '비밀번호가 변경되었습니다',
             'new_password_equals_old_password' => '새 비밀번호가 이전 비밀번호와 같습니다',
             'new_passwords_do_not_match'       => '새 비밀번호가 일치하지 않습니다',
@@ -196,17 +197,17 @@ return [
             'error_deleting_account'           => '오류가 발생했습니다. 다시 시도하십시오.',
         ],
         'error' => [
-            'add_ad_free_giveaway_limit_reached'        => '',
-            'add_ad_free_giveaway_already_ad_free'      => '',
-            'add_ad_free_giveaway_already_has_giveaway' => '',
-            'remove_ad_free_giveaway_not_found'         => '',
-            'remove_ad_free_giveaway_not_yours'         => '',
+            'add_ad_free_giveaway_limit_reached'        => '광고 없음 제공을 더 이상 추가할 수 없습니다. 한도에 도달했습니다.',
+            'add_ad_free_giveaway_already_ad_free'      => '광고 없음 제공을 추가할 수 없습니다. 사용자가 이미 자신의 Patreon 구독을 통해 광고 없음 상태입니다.',
+            'add_ad_free_giveaway_already_has_giveaway' => '광고 없음 제공을 추가할 수 없습니다. 사용자가 이미 기존 제공을 통해 광고 없음 상태입니다.',
+            'remove_ad_free_giveaway_not_found'         => '광고 없음 제공을 제거할 수 없습니다 - 사용자는 현재 제공받은 것이 없습니다.',
+            'remove_ad_free_giveaway_not_yours'         => '본인이 부여하지 않은 광고 없음 제공은 제거할 수 없습니다.',
         ],
     ],
     'season' => [
         'flash' => [
-            'season_created' => '',
-            'season_updated' => '',
+            'season_created' => '시즌이 생성되었습니다',
+            'season_updated' => '시즌이 업데이트되었습니다',
         ],
     ],
     'spell' => [
@@ -245,9 +246,9 @@ return [
     'admin' => [
         'dungeonroute' => [
             'flash' => [
-                'updated' => '',
-                'deleted' => '',
-                'claimed' => '',
+                'updated' => '던전 경로가 성공적으로 업데이트되었습니다.',
+                'deleted' => '던전 경로가 성공적으로 삭제되었습니다.',
+                'claimed' => '던전 경로 소유권을 성공적으로 주장했습니다. 이제 당신이 소유자입니다.',
             ],
         ],
     ],

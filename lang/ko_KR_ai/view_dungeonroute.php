@@ -6,22 +6,22 @@ return [
         'dungeon' => [
             'overview' => [
                 'weekly_route'           => 'Raider.IO 주간 경로',
-                'weekly_routes'          => '',
-                'community_routes'       => '',
+                'weekly_routes'          => 'Raider.IO 주간 경로',
+                'community_routes'       => '커뮤니티 경로',
                 'popular'                => '인기 있는 경로',
                 'newly_published_routes' => '새로 게시된 경로',
                 'archetypes'             => [
                     'pug_friendly' => [
-                        'label'       => '',
-                        'description' => '',
+                        'label'       => '쉽게 참여 가능',
+                        'description' => '낯선 사람들로 이루어진 그룹에게 관대한 풀입니다.',
                     ],
                     'expert' => [
-                        'label'       => '',
-                        'description' => '',
+                        'label'       => '전문가',
+                        'description' => '손발이 맞는 그룹에 최적화되어 있습니다.',
                     ],
                     'title' => [
-                        'label'       => '',
-                        'description' => '',
+                        'label'       => '타이틀',
+                        'description' => '레이팅을 올리기 위해 상위 0.5%가 사용하는 경로입니다.',
                     ],
                 ],
             ],
