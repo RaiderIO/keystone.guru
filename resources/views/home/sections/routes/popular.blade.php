@@ -23,6 +23,7 @@ use App\Models\DungeonRoute\DungeonRoute;
                 'affixgroup' => null,
                 'dungeonroutes' => $dungeonRoutes,
                 'showDungeonImage' => true,
+                'useFrontPageThumbnail' => true,
                 'cardHeaders' => $dungeonRoutes->mapWithKeys(function(DungeonRoute $dungeonRoute){
                     return [
                         $dungeonRoute->id => [

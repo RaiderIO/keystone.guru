@@ -546,6 +546,23 @@ return [
                     'custom' => [
                         'kill_zone_path_weight_multiplier' => 3,
                     ],
+                    /**
+                     * Same render dimensions as `standard`, but used only on the front page's "popular this
+                     * week" route cards. `standard`'s x3 line weight is tuned to still read as a route shape
+                     * at the Find Routes page's small size, but on the front page it just looks thick - this
+                     * multiplier sits between `hero` (unmultiplied, but rendered much larger) and `standard`.
+                     * Generated alongside the hero variant (thumbnail:ensureheroes), since the front page's
+                     * top route per dungeon is already a subset of the routes shown as heroes.
+                     */
+                    'front_page' => [
+                        'viewport_width'                   => 768,
+                        'viewport_height'                  => 512,
+                        'image_width'                      => 384,
+                        'image_height'                     => 256,
+                        'zoom_level'                       => 1,
+                        'quality'                          => 90,
+                        'kill_zone_path_weight_multiplier' => 1.5,
+                    ],
                 ],
                 /** I observed it to be about 8 but with settings it may be longer, so 10 to be safe. */
                 'estimated_generation_time_seconds' => 10,

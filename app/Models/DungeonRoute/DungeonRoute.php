@@ -483,6 +483,13 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             ->where('dungeon_route_thumbnails.variant', DungeonRouteThumbnailVariant::Hero);
     }
 
+    /** @return BelongsToMany<File, $this> */
+    public function frontPageThumbnails(): BelongsToMany
+    {
+        return $this->belongsToMany(File::class, 'dungeon_route_thumbnails')
+            ->where('dungeon_route_thumbnails.variant', DungeonRouteThumbnailVariant::FrontPage);
+    }
+
     /** @return HasMany<MapIcon, $this> */
     public function mapicons(): HasMany
     {
@@ -775,6 +782,21 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         }
 
         return $this->thumbnails->first()?->getURL();
+    }
+
+    /**
+     * Returns the thinner-lined front page thumbnails (one per active floor), falling back to the
+     * standard thumbnails when the front-page variant has not been generated yet for this route
+     * (backwards compatible with pre-existing routes, mirroring getHeroThumbnailUrl()).
+     *
+     * @return Collection<int, File>
+     */
+    public function getFrontPageThumbnails(): Collection
+    {
+        // Explicitly load the relations so this also works on routes hydrated in a collection (preventLazyLoading)
+        $this->loadMissing(['frontPageThumbnails', 'thumbnails']);
+
+        return $this->frontPageThumbnails->isNotEmpty() ? $this->frontPageThumbnails : $this->thumbnails;
     }
 
     /**
@@ -1453,14 +1475,16 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         int    $showAffixes,
         int    $showDungeonImage,
         int    $isAdmin,
+        int    $useFrontPageThumbnail = 0,
     ): string {
         return sprintf(
-            '%s:%s_%d_%d_%d',
+            '%s:%s_%d_%d_%d_%d',
             $orientation,
             $locale,
             $showAffixes,
             $showDungeonImage,
             $isAdmin,
+            $useFrontPageThumbnail,
         );
     }
 

@@ -11,9 +11,11 @@ use App\Service\Cache\CacheServiceInterface;
  * @var DungeonRoute          $dungeonroute
  * @var array<string, mixed>  $__env
  * @var boolean               $cache
+ * @var boolean|null          $useFrontPageThumbnail
  */
 
-$showDungeonImage ??= false;
+$showDungeonImage      ??= false;
+$useFrontPageThumbnail ??= false;
 $isAdmin          = Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN);
 // Generate a unique string so each card on the page has a stable, unique id
 $uniqueString = uniqid();
@@ -25,15 +27,17 @@ use (
     $uniqueString,
     $dungeonroute,
     $isAdmin,
+    $useFrontPageThumbnail,
     $__env
 )
 
 {
     $enemyForcesPercentage = $dungeonroute->getEnemyForcesPercentage();
     $enemyForcesWarning    = $dungeonroute->enemy_forces < $dungeonroute->mappingVersion->enemy_forces_required || $enemyForcesPercentage >= 105;
-    // The map is demoted to a background texture: always a single image, never a carousel
+    // The map is demoted to a background texture: always a single image, never a carousel. Falls back
+    // to the standard thumbnail when the thinner-lined front-page variant hasn't been generated yet.
     $backgroundUrl = $dungeonroute->has_thumbnail
-        ? $dungeonroute->thumbnails->first()->getURL()
+        ? ($useFrontPageThumbnail ? $dungeonroute->getFrontPageThumbnails() : $dungeonroute->thumbnails)->first()->getURL()
         : $dungeonroute->dungeon->getImageTransparentUrl();
     // favorites_count is only present when the route was loaded through the discover builders (withCount).
     // Weekly (Raider.IO) routes bypass those builders, so guard against a missing count.
@@ -153,7 +157,7 @@ if ($cache) {
 // Echo the result of this function
     echo $cacheService->rememberInHash(
         DungeonRoute::getCardCacheKey($dungeonroute->id),
-        DungeonRoute::getCardCacheField('poster', $currentUserLocale, 0, (int)$showDungeonImage, (int)$isAdmin),
+        DungeonRoute::getCardCacheField('poster', $currentUserLocale, 0, (int)$showDungeonImage, (int)$isAdmin, (int)$useFrontPageThumbnail),
         $cacheFn,
         config('keystoneguru.view.common.dungeonroute.card.cache.ttl')
     );

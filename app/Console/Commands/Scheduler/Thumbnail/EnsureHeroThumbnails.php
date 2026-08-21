@@ -22,7 +22,7 @@ class EnsureHeroThumbnails extends SchedulerCommand
      *
      * @var string
      */
-    protected $description = 'Ensures the wide hero-band thumbnail exists and is fresh for the routes shown as heroes on the discovery pages (Raider.IO weekly routes + top community routes per dungeon).';
+    protected $description = 'Ensures the wide hero-band thumbnail, and the thinner-lined front page thumbnail, exist and are fresh for the routes shown as heroes on the discovery pages (Raider.IO weekly routes + top community routes per dungeon).';
 
     public function handle(
         SeasonServiceInterface    $seasonService,
@@ -43,11 +43,16 @@ class EnsureHeroThumbnails extends SchedulerCommand
 
             $heroRoutes = $discoverService->heroRoutes($currentSeason);
 
+            // The front page's "popular this week" section shows the top route per dungeon, which is
+            // already a subset of these hero routes (heroRoutes() includes the top N per dungeon, N >= 1),
+            // so the front-page variant is queued for the same set rather than resolved separately.
             $queued = 0;
             foreach ($heroRoutes as $dungeonRoute) {
                 if ($thumbnailService->queueThumbnailRefresh($dungeonRoute, $force, DungeonRouteThumbnailVariant::Hero)) {
                     $queued++;
                 }
+
+                $thumbnailService->queueThumbnailRefresh($dungeonRoute, $force, DungeonRouteThumbnailVariant::FrontPage);
             }
 
             $this->info(sprintf('Queued hero thumbnails for %d of %d candidate routes', $queued, $heroRoutes->count()));
