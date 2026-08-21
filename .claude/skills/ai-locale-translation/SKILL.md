@@ -372,6 +372,36 @@ Algeth'ar Academy under both `midnight` and `df` — a Midnight Season 2 remix o
 dungeon) — check the other block's existing translation before writing the empty one, every time.
 This is now the second locale in a row this exact mistake has been caught in.
 
+### Brazilian Portuguese glossary (pt_BR_ai, established in the #4165 pass)
+
+| English | Portuguese | English | Portuguese |
+|---|---|---|---|
+| Dungeon | masmorra | Floor | andar |
+| Route | rota | Pull | pull (untranslated) |
+| Pack | pacote (already dominant, 4+:1, before this pass) | Enemy forces | forças inimigas (full form); **FI** abbreviation introduced for checkpoint pills/tooltips/snackbars |
+| Affix | afixo (translated, already established in `affixes.php`) | Boss | chefe (already established) |
+| Checkpoint | checkpoint (untranslated, already established in `js.php`) | Compendium | Compêndio (translated — no prior convention, matched the majority of other locales) |
+| Weight (line thickness) | Peso (already established in `js.php`) | Icon | ícone (already established) |
+| Teeming | Enxameante (read from `affixes.php` — note `js.php`'s pre-existing `enemypack_teeming_label` already said "Pululante", an untouched pre-existing inconsistency) | Crowd control | controle de multidão (already established in `affixes.php`) |
+| Drake (the Oculus) | Draco (read from `npcs.php`: Emerald/Amber/Ruby Drake -> Draco Esmeralda/Âmbar/Rubi) | Teleporter | Teletransportador (already established in `mapping.php`, preferred over `npcs.php`'s unrelated NPC name "Teleportador") |
+
+Add a row here whenever a new locale forces a decision worth keeping.
+
+**Register:** `pt_BR_ai` is informal *você* throughout — 121 pre-existing `você` hits and 0 `tu`
+hits across the locale before this pass; no register cleanup was needed, and all new keys were
+written as *você*.
+
+**`algeth_ar_academy` appears twice** (`midnight` and `df`), the `fr_FR_ai`/`ko_KR_ai` lesson
+again — the `midnight` block was already translated, and the `df` block's 7 keys were matched to
+it exactly, including a `+`/no-`+` and `%`-placement difference the two source strings genuinely
+disagree on in `en_US` itself.
+
+**Two spell/item names had official `spells.php` translations** and were used instead of invented
+text: `Blazing Aegis` -> "Égide Fulgurante" and `Burning Chain` -> "Corrente Ardente"
+(`mapping.map_icons.df.neltharus`) — both read like generic item pickups but are catalogued
+spells with real localisations, the "grep spells.php first" rule paying off on a case that didn't
+look like a spell name at a glance. Full notes in `handovers/pt_BR_ai.md`.
+
 ## Normalising an existing locale (overwriting existing values)
 
 The default workflow never overwrites a non-empty value. When Wotuu explicitly asks for one -
@@ -498,7 +528,7 @@ in the excluded files, which are not this workflow's business.
 | `fr_FR_ai` | 2986 | 769 | Done — #4165, 2026-08-20, PR #4209 (formal *vous* register, no cleanup needed; plus 27 Codex-review fixes, see `handovers/fr_FR_ai.md`) |
 | `it_IT_ai` | 2984 | 769 | Done — #4165, 2026-08-21 (informal *tu* register, no cleanup needed; plus ~90 Codex-review fixes, almost all reverting NPC/creature names in `mapping.php` prose back to English — see the Italian glossary above) |
 | `ko_KR_ai` | 3042 | 769 | Done — #4165, 2026-08-21, PR #4209 (formal 하십시오체 register, no cleanup needed; plus 29 Codex-review fixes — see `handovers/ko_KR_ai.md`, including a repeat of the `fr_FR_ai` duplicate-dungeon-block lesson) |
-| `pt_BR_ai` | 2957 | 745 | Not started — next locale up |
+| `pt_BR_ai` | 2984 | 769 | Done — #4165, 2026-08-21 (informal *você* register, no cleanup needed; see `handovers/pt_BR_ai.md`) |
 | `ru_RU_ai` | 2841 | 745 | Not started |
 | `zh_CN_ai` | 3097 | 745 | Not started |
 | `zh_TW_ai` | 3094 | 745 | Not started |
