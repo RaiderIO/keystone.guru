@@ -49,16 +49,13 @@ return new class extends Migration {
 
     /**
      * Reverse the migrations.
+     *
+     * Deliberately leaves the role, its permissions and its user assignments in place: the role is purely additive
+     * (older code simply never checks for it), while deleting role_user rows on a rollback would silently strip every
+     * agent account's access with no way to get it back by migrating forward again.
      */
     public function down(): void
     {
-        $roleId = DB::table('roles')->where('name', Role::ROLE_AI_AGENT)->value('id');
-        if ($roleId === null) {
-            return;
-        }
-
-        DB::table('permission_role')->where('role_id', $roleId)->delete();
-        DB::table('role_user')->where('role_id', $roleId)->delete();
-        DB::table('roles')->where('id', $roleId)->delete();
+        // Intentionally a no-op - see above
     }
 };
