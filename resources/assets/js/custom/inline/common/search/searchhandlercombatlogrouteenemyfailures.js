@@ -90,7 +90,7 @@ class CommonMapsCombatlogrouteenemyfailures extends SearchInlineBase {
         $(this.options.filterNpcIdSelector).on('change', () => this._search());
 
         $(this.options.clearButtonSelector).on('click', () => {
-            $.ajax({type: 'DELETE', url: this.options.deleteUrl})
+            $.ajax({type: 'DELETE', url: this.options.deleteUrl, data: {dungeon_id: this.options.dungeonId}})
                 .done(() => {
                     $(this.options.routesContainerSelector).hide();
                     this._search();
@@ -118,4 +118,10 @@ class CommonMapsCombatlogrouteenemyfailures extends SearchInlineBase {
 
         super._search(options, queryParameters, queryParametersUrlBlacklist);
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {SearchHandlerCombatLogRouteEnemyFailures, CommonMapsCombatlogrouteenemyfailures};
 }
