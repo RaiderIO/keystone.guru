@@ -25,6 +25,7 @@ use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
+use App\Models\Npc\NpcEnemyForces;
 use App\Models\Polyline;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
@@ -565,6 +566,8 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         /** @var Floor|null $previousFloor */
         $previousFloor = $dungeonRoute->dungeon->floors()->firstWhere('default', 1);
 
+        $zeroEnemyForcesNpcIds = $this->getZeroEnemyForcesNpcIds($mappingVersion, $combatLogRoute);
+
         foreach ($combatLogRoute->npcs as $combatLogRouteNpc) {
             $currentFloor = $combatLogRouteNpc->getResolvedEnemy()?->floor ?? $previousFloor; // @phpstan-ignore nullsafe.neverNull
 
@@ -577,6 +580,14 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             $previousFloor = $currentFloor;
 
             if ($combatLogRouteNpc->getResolvedEnemy() === null) {
+                // An npc worth 0 enemy forces in this mapping version never affects the route that gets
+                // built, so failing to place it is noise rather than a mapping problem worth triaging.
+                if (isset($zeroEnemyForcesNpcIds[$combatLogRouteNpc->npcId])) {
+                    $this->log->saveCombatLogRouteEnemyFailuresSkippingZeroEnemyForcesNpc($dungeonRoute->id, $combatLogRouteNpc->npcId);
+
+                    continue;
+                }
+
                 // This table is diagnostic bookkeeping only (unresolved-npc triage) - a floor with
                 // unset ingame coordinates (a mapping data gap, #3904) must not fail the whole combat
                 // log route submission just because it can't be recorded here.
@@ -606,7 +617,41 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             }
         }
 
-        CombatLogRouteEnemyFailure::insert($failureAttributes);
+        if (!empty($failureAttributes)) {
+            CombatLogRouteEnemyFailure::insert($failureAttributes);
+        }
+    }
+
+    /**
+     * The ids of the unresolved npcs in the combat log route that are explicitly worth 0 enemy forces in the given
+     * mapping version, keyed by npc id. An npc without any enemy forces row at all is NOT in here - that is the
+     * "this npc is not mapped" signal the enemy failure triage exists to surface.
+     *
+     * @return array<int, true>
+     */
+    private function getZeroEnemyForcesNpcIds(MappingVersion $mappingVersion, CombatLogRouteRequestDto $combatLogRoute): array
+    {
+        /** @var array<int, true> $unresolvedNpcIds */
+        $unresolvedNpcIds = [];
+        foreach ($combatLogRoute->npcs as $combatLogRouteNpc) {
+            if ($combatLogRouteNpc->getResolvedEnemy() === null) {
+                $unresolvedNpcIds[$combatLogRouteNpc->npcId] = true;
+            }
+        }
+
+        if ($unresolvedNpcIds === []) {
+            return [];
+        }
+
+        $zeroEnemyForcesNpcIds = NpcEnemyForces::query()
+            ->where('mapping_version_id', $mappingVersion->id)
+            ->whereIn('npc_id', array_keys($unresolvedNpcIds))
+            ->where('enemy_forces', 0)
+            ->pluck('npc_id')
+            ->map(static fn($npcId): int => (int)$npcId)
+            ->all();
+
+        return array_fill_keys($zeroEnemyForcesNpcIds, true);
     }
 
     private function generateMapIcons(

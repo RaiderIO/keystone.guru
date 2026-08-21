@@ -67,6 +67,19 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function getEnemyFailures_givenNoMappingVersionId_returnsValidationError(): void
+    {
+        // Act
+        $response = $this->get(route('ajax.admin.combatlogroute.enemy_failures', [
+            'dungeon_id' => $this->dungeon->id,
+        ]));
+
+        // Assert
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors('mapping_version_id');
+    }
+
+    #[Test]
     public function deleteEnemyFailures_givenNoDungeonId_returnsValidationError(): void
     {
         // Act
@@ -105,7 +118,8 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
 
             // Act
             $response = $this->get(route('ajax.admin.combatlogroute.enemy_failures', [
-                'dungeon_id' => $this->dungeon->id,
+                'dungeon_id'         => $this->dungeon->id,
+                'mapping_version_id' => $this->mappingVersion->id,
             ]));
 
             // Assert
@@ -172,8 +186,9 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
 
             // Act
             $response = $this->get(route('ajax.admin.combatlogroute.enemy_failures', [
-                'dungeon_id' => $this->dungeon->id,
-                'npc_id'     => [$targetNpcId],
+                'dungeon_id'         => $this->dungeon->id,
+                'mapping_version_id' => $this->mappingVersion->id,
+                'npc_id'             => [$targetNpcId],
             ]));
 
             // Assert
@@ -205,7 +220,8 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
 
             // Act
             $response = $this->get(route('ajax.admin.combatlogroute.enemy_failures', [
-                'dungeon_id' => $this->dungeon->id,
+                'dungeon_id'         => $this->dungeon->id,
+                'mapping_version_id' => $this->mappingVersion->id,
             ]));
 
             // Assert

@@ -18,7 +18,7 @@ class AjaxAdminCombatLogRouteController extends Controller
     ): JsonResponse {
         return response()->json(
             $combatLogRouteEnemyFailureService
-                ->getEnemyFailureHeatmapData($request->dungeon(), $request->validated('npc_id'))
+                ->getEnemyFailureHeatmapData($request->dungeon(), $request->mappingVersion(), $request->validated('npc_id'))
                 ->toArray(),
             StatusCode::OK,
         );

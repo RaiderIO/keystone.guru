@@ -21,8 +21,6 @@ class CombatLogRouteEnemyFailureHeatmapResult implements Arrayable
 
     private bool $useFacade;
 
-    private ?MappingVersion $currentMappingVersion = null;
-
     /**
      * @param array<int, array<string, int>>                                    $dataPerFloor  floor_id => ['gridX,gridY' => count]
      * @param array<int, array{public_key: string, title: string, url: string}> $dungeonRoutes
@@ -30,6 +28,7 @@ class CombatLogRouteEnemyFailureHeatmapResult implements Arrayable
     public function __construct(
         private readonly CoordinatesServiceInterface $coordinatesService,
         private readonly Dungeon                     $dungeon,
+        private readonly MappingVersion              $mappingVersion,
         private readonly array                       $dataPerFloor,
         private readonly int                         $gridSizeX,
         private readonly int                         $gridSizeY,
@@ -59,9 +58,9 @@ class CombatLogRouteEnemyFailureHeatmapResult implements Arrayable
                 $lng = (((int)$gridY + 0.5) / $this->gridSizeY) * CoordinatesService::MAP_MAX_LNG;
 
                 if ($this->useFacade && $floor !== null) {
-                    $this->currentMappingVersion ??= $this->dungeon->getCurrentMappingVersion();
+                    // Floor unions are per mapping version - convert with the one the failures were recorded against
                     $converted = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
-                        $this->currentMappingVersion,
+                        $this->mappingVersion,
                         new LatLng($lat, $lng, $floor),
                     );
                     $lat = $converted->getLat();

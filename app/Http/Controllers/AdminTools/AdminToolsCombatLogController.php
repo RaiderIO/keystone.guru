@@ -4,17 +4,20 @@ namespace App\Http\Controllers\AdminTools;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminToolsCombatLogRegenerateRequest;
+use App\Http\Requests\AdminToolsCombatLogRouteEnemyFailuresRequest;
 use App\Jobs\RegenerateCombatLogRoute;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\Npc;
 use App\Models\Season;
 use App\Models\User;
+use App\Service\CombatLog\CombatLogRouteEnemyFailureServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Session;
@@ -22,11 +25,11 @@ use Session;
 class AdminToolsCombatLogController extends Controller
 {
     public function combatLogRouteEnemyFailures(
-        Request                    $request,
-        MapContextServiceInterface $mapContextService,
+        AdminToolsCombatLogRouteEnemyFailuresRequest $request,
+        MapContextServiceInterface                   $mapContextService,
+        CombatLogRouteEnemyFailureServiceInterface   $combatLogRouteEnemyFailureService,
     ): RedirectResponse|View {
-        $dungeon        = Dungeon::getUserOrDefaultDungeon();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $dungeon = Dungeon::getUserOrDefaultDungeon();
 
         if ($request->has('dungeon_id') && (int)$request->input('dungeon_id') !== $dungeon->id) {
             return redirect()->route('admin.tools.combatlog.route.enemy_failures.view', [
@@ -34,12 +37,56 @@ class AdminToolsCombatLogController extends Controller
             ]);
         }
 
+        $mappingVersion = $request->getMappingVersion() ?? $dungeon->getCurrentMappingVersion();
+
         abort_if($mappingVersion === null, 404);
+        // A mapping version of another dungeon makes no sense here - and would build the wrong map context below
+        abort_if($mappingVersion->dungeon_id !== $dungeon->id, 404);
 
         $floor      = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
         $mapContext = $mapContextService->createMapContextDungeonExplore($dungeon, $mappingVersion, User::getCurrentUserMapFacadeStyle());
 
-        return view('admin.tools.combatlog.combatlogroute_enemy_failures', compact('dungeon', 'floor', 'mappingVersion', 'mapContext'));
+        $dungeon->load(['mappingVersions.gameVersion']);
+        $mappingVersionFailureCounts = $combatLogRouteEnemyFailureService->getFailureCountsPerMappingVersion($dungeon);
+        $npcFailureCounts            = $combatLogRouteEnemyFailureService->getFailureCountsPerNpc($dungeon, $mappingVersion);
+        $npcs                        = $this->getEnemyFailureNpcs($mappingVersion, $npcFailureCounts);
+
+        return view('admin.tools.combatlog.combatlogroute_enemy_failures', compact(
+            'dungeon',
+            'floor',
+            'mappingVersion',
+            'mapContext',
+            'mappingVersionFailureCounts',
+            'npcFailureCounts',
+            'npcs',
+        ));
+    }
+
+    /**
+     * The npcs to offer in the failure filter: every npc in the mapping version plus every npc that has failures
+     * without being in the mapping version at all (the most interesting kind), most failures first.
+     *
+     * @param  Collection<int, int> $npcFailureCounts npc_id => failure count
+     * @return Collection<int, Npc>
+     */
+    private function getEnemyFailureNpcs(MappingVersion $mappingVersion, Collection $npcFailureCounts): Collection
+    {
+        $mappedNpcIds = $mappingVersion->enemies()
+            ->whereNotNull('npc_id')
+            ->distinct()
+            ->pluck('npc_id');
+
+        /** @var Collection<int, Npc> $npcs */
+        $npcs = Npc::query()
+            ->whereIn('id', $mappedNpcIds->merge($npcFailureCounts->keys())->unique())
+            ->get()
+            ->sortBy([
+                static fn(Npc $a, Npc $b) => ($npcFailureCounts->get($b->id, 0) <=> $npcFailureCounts->get($a->id, 0)),
+                static fn(Npc $a, Npc $b) => strcmp(__($a->name), __($b->name)),
+            ])
+            ->values();
+
+        return $npcs;
     }
 
     public function combatlogregenerate(): View

@@ -1,8 +1,11 @@
 /**
  * @typedef {Object} CommonMapsCombatlogrouteenemyfailuresOptions
  * @property {Number}   dungeonId
+ * @property {Number}   mappingVersionId
+ * @property {String}   pageUrl
  * @property {String}   getEnemyFailuresUrl
  * @property {String}   deleteUrl
+ * @property {String}   filterMappingVersionIdSelector
  * @property {String}   filterNpcIdSelector
  * @property {String}   clearButtonSelector
  * @property {String}   routesContainerSelector
@@ -78,8 +81,10 @@ class CommonMapsCombatlogrouteenemyfailures extends SearchInlineBase {
 
         this.filters = {
             'dungeon_id': new SearchFilterPassThrough(),
+            'mapping_version_id': new SearchFilterPassThrough(),
         };
         this.filters['dungeon_id'].setValue(options.dungeonId);
+        this.filters['mapping_version_id'].setValue(options.mappingVersionId);
     }
 
     activate() {
@@ -87,17 +92,38 @@ class CommonMapsCombatlogrouteenemyfailures extends SearchInlineBase {
 
         getState().getDungeonMap().pluginHeat.toggle(true);
 
+        // The map context (enemies, floor unions) is built server-side for the selected mapping version, and so are
+        // the per-npc failure counts in the npc filter - switching is a navigation, not a re-fetch.
+        $(this.options.filterMappingVersionIdSelector).on('change', (event) => {
+            this._navigateTo(`${this.options.pageUrl}?dungeon_id=${this.options.dungeonId}&mapping_version_id=${$(event.target).val()}`);
+        });
+
         $(this.options.filterNpcIdSelector).on('change', () => this._search());
 
         $(this.options.clearButtonSelector).on('click', () => {
             $.ajax({type: 'DELETE', url: this.options.deleteUrl, data: {dungeon_id: this.options.dungeonId}})
                 .done(() => {
-                    $(this.options.routesContainerSelector).hide();
-                    this._search();
+                    // The failure counts in both filters are rendered server-side - reload to reset them
+                    this._reload();
                 });
         });
 
         this._search();
+    }
+
+    /**
+     * @param {String} url
+     * @protected
+     */
+    _navigateTo(url) {
+        window.location.href = url;
+    }
+
+    /**
+     * @protected
+     */
+    _reload() {
+        window.location.reload();
     }
 
     /**

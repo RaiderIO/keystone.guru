@@ -357,8 +357,11 @@ if ($isAdmin) {
 
     @if(isset($show['controls']['combatLogRouteEnemyFailures']) && $show['controls']['combatLogRouteEnemyFailures'])
         @include('common.maps.controls.combatlogrouteenemyfailures', [
-            'dungeon'        => $dungeon,
-            'mappingVersion' => $mappingVersion,
+            'dungeon'                     => $dungeon,
+            'mappingVersion'              => $mappingVersion,
+            'mappingVersionFailureCounts' => $mappingVersionFailureCounts,
+            'npcFailureCounts'            => $npcFailureCounts,
+            'npcs'                        => $npcs,
         ])
     @endif
 

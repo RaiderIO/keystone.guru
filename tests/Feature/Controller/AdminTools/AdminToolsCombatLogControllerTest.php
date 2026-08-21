@@ -4,8 +4,12 @@ namespace Tests\Feature\Controller\AdminTools;
 
 use App\Jobs\RegenerateCombatLogRoute;
 use App\Models\CombatLog\ChallengeModeRun;
+use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Floor\Floor;
+use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\Npc;
 use App\Models\Season;
 use App\Models\User;
 use Illuminate\Support\Collection;
@@ -61,16 +65,99 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function combatLogRouteEnemyFailures_givenMappingVersionOfOtherDungeon_returns404(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        $dungeon             = Dungeon::getUserOrDefaultDungeon();
+        $otherMappingVersion = MappingVersion::query()->where('dungeon_id', '!=', $dungeon->id)->firstOrFail();
+
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.enemy_failures.view', [
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $otherMappingVersion->id,
+        ]));
+
+        // Assert
+        $response->assertNotFound();
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyFailures_givenMappingVersionId_rendersThatMappingVersionSelected(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        $dungeon = Dungeon::getUserOrDefaultDungeon();
+        // Prefer a non-current mapping version so the assertion proves the parameter was honoured, not the default
+        $mappingVersion = $dungeon->mappingVersions()->orderBy('version')->firstOrFail();
+
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.enemy_failures.view', [
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $this->assertMatchesRegularExpression(
+            sprintf('/<option value="%d"\s+selected="selected"\s*>/', $mappingVersion->id),
+            $response->getContent(),
+        );
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyFailures_givenFailuresForUnmappedNpc_listsNpcFlaggedNotMapped(): void
+    {
+        $createdFailureIds = [];
+
+        try {
+            // Arrange
+            $this->be(User::findOrFail(1));
+
+            $dungeon        = Dungeon::getUserOrDefaultDungeon();
+            $mappingVersion = $dungeon->getCurrentMappingVersion();
+            $mappedNpcIds   = $mappingVersion->enemies()->whereNotNull('npc_id')->distinct()->pluck('npc_id');
+            /** @var Npc $unmappedNpc */
+            $unmappedNpc = Npc::query()->whereNotIn('id', $mappedNpcIds)->firstOrFail();
+            /** @var Floor $floor */
+            $floor = $dungeon->floors()->where('facade', 0)->firstOrFail();
+
+            $createdFailureIds[] = CombatLogRouteEnemyFailure::create([
+                'dungeon_id'         => $dungeon->id,
+                'floor_id'           => $floor->id,
+                'mapping_version_id' => $mappingVersion->id,
+                'npc_id'             => $unmappedNpc->id,
+                'lat'                => -50.0,
+                'lng'                => 100.0,
+            ])->id;
+
+            // Act
+            $response = $this->get(route('admin.tools.combatlog.route.enemy_failures.view', [
+                'dungeon_id'         => $dungeon->id,
+                'mapping_version_id' => $mappingVersion->id,
+            ]));
+
+            // Assert — the unmapped npc is offered in the filter, with its count and the not-mapped flag
+            $response->assertOk();
+            $response->assertSee(sprintf('(%d) — 1 ⚠ %s', $unmappedNpc->id, __('view_common.maps.controls.combatlogrouteenemyfailures.not_mapped')));
+        } finally {
+            CombatLogRouteEnemyFailure::query()->whereIn('id', $createdFailureIds)->delete();
+        }
+    }
+
+    #[Test]
     public function getEnemyFailures_givenAdmin_returnsDungeonRoutesKey(): void
     {
         // Arrange
         $this->be(User::findOrFail(1));
 
-        [$dungeon] = $this->findDungeon(challengeMode: true);
+        [$dungeon, $mappingVersion] = $this->findDungeon(challengeMode: true);
 
         // Act
         $response = $this->getJson(
-            route('ajax.admin.combatlogroute.enemy_failures', ['dungeon_id' => $dungeon->id]),
+            route('ajax.admin.combatlogroute.enemy_failures', ['dungeon_id' => $dungeon->id, 'mapping_version_id' => $mappingVersion->id]),
             ['X-Requested-With' => 'XMLHttpRequest'],
         );
 
