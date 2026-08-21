@@ -1,12 +1,7 @@
 ---
 name: hotfix
-description: >
-  Patch a released version in place without cutting a new release: upload changed
-  non-compiled files (PHP, Blade, lang, config) to the hotfix S3 bucket with
-  `php artisan make:hotfix`, then redeploy the SAME version so ECS overlays them at
-  container startup. Use when a staging/production bug must be fixed now and the fix
-  touches no compiled assets. NOT for JS/CSS/SCSS or JS-consumed translations - those
-  are baked into the release assets and require a new release (create-release skill).
+disable-model-invocation: true
+description: Patch a released version in place (PHP/Blade/lang/config only) via make:hotfix + same-version redeploy. Not for JS/CSS.
 ---
 
 # Hotfixing a released version

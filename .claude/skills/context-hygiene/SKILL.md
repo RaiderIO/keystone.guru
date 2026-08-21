@@ -1,6 +1,7 @@
 ---
 name: context-hygiene
-description: Weekly, human-run sweep (/context-hygiene) that keeps Claude's per-session context lean — archive done-work memories, prune the memory index, enforce size budgets on CLAUDE.md and skill descriptions, flag contradictions. Reports every change; never runs unattended.
+disable-model-invocation: true
+description: Weekly human-run sweep that keeps per-session context lean (archive memories, prune index, size budgets).
 ---
 
 # /context-hygiene — Keep the per-session context lean

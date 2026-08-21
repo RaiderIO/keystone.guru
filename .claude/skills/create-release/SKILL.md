@@ -1,11 +1,7 @@
 ---
 name: create-release
-description: >
-  Use when the user asks to "create a release", "cut a release", "make a new release",
-  or generate a release changelog from commit history. Composes the changelog from
-  squash-merged commits since the last release, creates the GitHub release issue and a
-  draft GitHub Release, and cuts the `v*` git tag. NOT the legacy JSON-seeder or
-  PHP-Deployer flows.
+disable-model-invocation: true
+description: "Cut a release: compose the changelog from squash-merged commits, create the release issue, draft GitHub Release and v* tag."
 ---
 
 # Create a release from commit history

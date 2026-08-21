@@ -1,6 +1,7 @@
 ---
 name: toggl-timesheet
-description: Use when the user asks to build a timesheet, log hours, create a Toggl import, or reconstruct work done between two dates. Derives work sessions from git commits and Claude conversation history, rounds to 15-minute intervals, and produces a Toggl-compatible CSV at ~/timesheet_<range>.csv.
+disable-model-invocation: true
+description: Build a Toggl-importable timesheet CSV for a date range from git commits and Claude conversation history.
 ---
 
 # Toggl Timesheet Builder

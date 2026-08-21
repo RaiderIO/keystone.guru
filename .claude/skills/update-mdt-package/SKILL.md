@@ -1,11 +1,7 @@
 ---
 name: update-mdt-package
-description: >
-  Use when asked to update / bump the Mythic Dungeon Tools (MDT) composer package to a
-  newer version and reimport dungeon mappings. Covers the full runbook: opening a tracking
-  GitHub issue, composer reference bump, mapping reimport for the current retail season, new
-  POI type/template handling, test fixture rewriting, NPC translation export, and re-seeding.
-  NOT related to the MDT import/export string services (mdt-import / mdt-export skills).
+disable-model-invocation: true
+description: Runbook to bump the Mythic Dungeon Tools composer package and reimport the dungeon mappings for the current season.
 ---
 
 # Update the Mythic Dungeon Tools (MDT) package

@@ -1,6 +1,7 @@
 ---
 name: generate-floor-unions
-description: Generate FloorUnions and FloorUnionAreas for a dungeon facade (MDT combined view) from the per-floor images and the combined facade image, using OpenCV image registration instead of the manual GIMP overlay workflow. Use when adding facade support to a dungeon or when asked to (re)compute floor unions from map images. Not for creating the Dungeon/Floor rows themselves, and not for the JSON seeder mechanics (seeder-load/seeder-save).
+disable-model-invocation: true
+description: Generate FloorUnions/FloorUnionAreas for a dungeon facade from floor + facade images with OpenCV registration.
 ---
 
 # Generate FloorUnions from facade images

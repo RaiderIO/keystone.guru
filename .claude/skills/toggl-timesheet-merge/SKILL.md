@@ -1,6 +1,7 @@
 ---
 name: toggl-timesheet-merge
-description: Use when the user has two or more Toggl timesheet CSVs (typically one per machine) and wants to reconcile, combine, or deduplicate them into a single import file. Companion to the toggl-timesheet skill, which generates the per-machine CSVs.
+disable-model-invocation: true
+description: Reconcile two or more per-machine Toggl timesheet CSVs into one deduplicated import file.
 ---
 
 # Toggl Timesheet Merge

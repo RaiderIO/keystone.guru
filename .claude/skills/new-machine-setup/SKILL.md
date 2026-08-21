@@ -1,6 +1,7 @@
 ---
 name: new-machine-setup
-description: Bring up a working keystone.guru dev environment on a brand-new machine, from "Docker is installed" to "an agent can run tests and create worktrees". Covers secret files that can't be regenerated, the clone layout, the app image build, DB bootstrap, and acceptance probes. Use only when setting up a fresh machine (or repairing one that was never fully set up). Not for day-to-day work or worktrees (worktree-docker).
+disable-model-invocation: true
+description: Bring up a working keystone.guru dev environment on a brand-new machine, from Docker installed to worktrees + tests running.
 ---
 
 # New machine setup

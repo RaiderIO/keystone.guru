@@ -1,6 +1,7 @@
 ---
 name: release-watch
-description: Watch or drive a v* release to completion after the tag is pushed — runs sh/release-watch.sh, tracking build jobs, staging/production infra runs and verification; --watch-only is a pure observer. Gate approval always requires the human typing the exact version string — never approve unattended. Not for authoring the changelog (create-release) or the pipeline map (deployment-pipeline).
+disable-model-invocation: true
+description: Watch or drive a v* release through build, staging and the production gate after the tag is pushed (sh/release-watch.sh).
 ---
 
 # Release watch

@@ -1,6 +1,7 @@
 ---
 name: spell-descriptions
-description: How spell descriptions are imported from the game client's DB2 tables on wago.tools and rendered into the tooltips on spell links. Use when re-running the import for a new game patch, when a description renders wrong or empty, or when extending the description template parser. Not for spell names/icons (those come from Wowhead via wowhead:fetchspelldata).
+disable-model-invocation: true
+description: Re-import spell descriptions from wago.tools DB2 tables for a new game patch, and how the tooltip template parser works.
 ---
 
 # Spell descriptions

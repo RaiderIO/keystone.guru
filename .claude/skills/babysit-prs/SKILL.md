@@ -1,6 +1,7 @@
 ---
 name: babysit-prs
-description: Use when asked to babysit, shepherd, or keep open MRs green — one pass over every open agent MR; fix red CI, address Wotuu's comments, rebase onto master, merge PRs Wotuu has authorized (via `pr can merge` label or a native GitHub `Approve` review) once green. Designed for /loop in a dedicated session. Never approves, deploys, or merges anything Wotuu hasn't authorized. Not for reviewing a single PR (review skill) or creating MRs.
+disable-model-invocation: true
+description: "One /loop pass over every open agent MR: fix red CI, address comments, rebase, merge what Wotuu authorised. User-invoked only."
 ---
 
 # Babysit open MRs
