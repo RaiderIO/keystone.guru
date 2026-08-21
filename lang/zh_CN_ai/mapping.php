@@ -201,7 +201,7 @@ return [
                 'torch_door' => '使用墙上的火把开启。',
             ],
             'scarlet_monastery_graveyard' => [
-                'unferried_spirits_variant' => '此处的许多小队可能是3只 Unferred Spirits、一只 Anguished Dead 或一只 Haunting Phantasm。',
+                'unferried_spirits_variant' => '此处的许多包可能是3只 Unferred Spirits、1只 Anguished Dead 或1只 Haunting Phantasm。',
             ],
             'scarlet_monastery_library' => [
                 'doans_strongbox'   => 'Doan\'s Strongbox',
@@ -226,7 +226,7 @@ return [
                 'after_ramstein'              => '击败 Ramstein the Gorger 后，Mindless Undead 会蜂拥围攻您的队伍。',
                 'black_guard_swordsmith'      => '如果您拾取地上的锻造图纸，Black Guard Swordsmith 就会生成。',
                 'crimson_hammersmith'         => '当您拾取锻造图纸时，Crimson Hammersmith 会生成。',
-                'crusaders_square_enemies'    => 'Crusader\'s Square 中的敌人可能是 Conjuror、Initiate 或 Guardsman 中的一种。',
+                'crusaders_square_enemies'    => '十字军广场中的敌人可能是 Conjuror、Initiate 或 Guardsman 中的一种。',
                 'gauntlet_warning'            => '当您在 Scarlet Bastion 中前进时，Skeletal Berserkers 会持续从背后攻击您。',
                 'ghostly_citizens'            => 'Ghostly Citizens 会时隐时现地生成并巡逻，请小心！',
                 'grand_crusader_dathrohan'    => 'Grand Crusader Dathrohan 一旦被击败，骷髅就会占据您刚清理过的大厅。',
@@ -234,7 +234,7 @@ return [
                 'living_entrance'             => '生者入口',
                 'more_enemies_spawn'          => '如果您击杀此房间内的所有敌人，将额外生成两个敌人。',
                 'of_love_and_family_painting' => 'Of Love and Family painting',
-                'pack_size_warning'           => '在整个 Scarlet Bastion 中，每个小队的敌人数量可能在3到4之间变化。',
+                'pack_size_warning'           => '在整个 Scarlet Bastion 中，每包的敌人数量可能在3到4之间变化。',
                 'plagued_insects'             => 'Plagued Insects 会在您进入时攻击您。警告：此事件可能重新触发，切勿独自前往此处！',
                 'rat_attack'                  => '老鼠会在您进入时攻击您。警告：此事件可能重新触发，切勿独自前往此处！',
                 'undead_entrance'             => '亡灵入口',
@@ -253,7 +253,7 @@ return [
                 'shade_of_eranikus_warning' => 'Shade of Eranikus 只有在击败 Hall of the Cursed 中的小首领并降低护盾后才能进行战斗。
 
 警告：攻击 Shade of Eranikus 会使这一层的所有绿龙进入仇恨状态。',
-                'stair_patrol'              => '这个小队会在所有楼层的楼梯间巡逻。',
+                'stair_patrol'              => '这个包会在所有楼层的楼梯间巡逻。',
                 'jammalaan_aggro_warning'   => '警告：攻击 Jammal\'an the Prophet 会使此房间内的所有敌人进入仇恨状态。',
                 'broken_geometry_warning'   => '警告：破损的地形可能会导致您坠落并死亡。',
                 'weaver_dreamscythe_spawn'  => 'Weaver 和 Dreamscythe 会在 Jammal\'an the Prophet 被击败后生成。',
@@ -261,7 +261,7 @@ return [
             ],
             'uldaman' => [
                 'echomok_cavern_entrance'      => 'Echomok Cavern 入口',
-                'hall_of_the_keepers_entrance' => 'Hall of the Keepers 入口',
+                'hall_of_the_keepers_entrance' => '守护者大厅入口',
                 'altar_of_archaedas'           => 'Altar of Archaedas',
                 'altar_of_the_keepers'         => 'Altar of The Keepers.',
                 'animal_variant'               => '此处的动物可能是 Jadespine Basilisk 或 Venomlash Scorpid。',
@@ -326,7 +326,7 @@ return [
                 'infused_mushroom_herbalism_alt' => '灌注蘑菇：每5秒移除一层中毒/疾病，持续30分钟。需要25级巨龙时代草药学。',
                 'unlocks_after_khajin'           => '击败 Khajin the Unyielding 后解锁',
                 'unlocks_after_watcher_irideus'  => '击败 Watcher Irideus 后解锁',
-                'unlocks_after_infusion_chamber' => '进入灌注密室后解锁',
+                'unlocks_after_infusion_chamber' => '进入注能室后解锁',
                 'unlocks_after_mini_bosses'      => '击杀小首领后解锁。',
             ],
             'neltharus' => [

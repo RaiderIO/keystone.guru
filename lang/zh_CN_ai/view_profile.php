@@ -37,7 +37,7 @@ return [
         'account_delete_warning'                           => '您的账户将被永久删除。无法恢复。',
         'account_delete_confirm'                           => '删除我的 Keystone.guru 账户',
         'unlink_from_patreon'                              => '取消与Patreon的关联',
-        'patreon_status_for_admin'                         => '您的账户已被授予所有 :patreon 福利，因为您是管理员。您好，我自己！',
+        'patreon_status_for_admin'                         => '您的账户已被授予所有 :patreon 福利，因为您是管理员。嗨，是我！',
         'patreon_status_granted_manually'                  => '您的账户已授予所有 :patreon 福利，因为您特别且出色，不要让任何人告诉您否则！您活跃的订阅如下所示。有什么遗漏吗？请尽快在 Discord 上告诉我，我会查看的。',
         'link_to_patreon_success'                          => '您的账户已链接到 :patreon。您活跃的订阅如下所示。有什么遗漏吗？如果您是在链接 Patreon 后订阅的，请重新链接您的 Patreon 或等待最多一个小时以便同步脚本赶上您的订阅。仍然没有收到您的福利？请尽快在 Discord 上告诉我，我会查看的。',
         'link_to_patreon_admin'                            => '将管理员账户关联到 Patreon，以便同步任务能够正常运行！',
@@ -108,7 +108,7 @@ return [
         'pinned_routes' => '置顶路线',
         'all_routes'    => '所有路线',
         'route_count'   => '{0} 没有已发布的路线|{1} :count 条已发布的路线|[2,*] :count 条已发布的路线',
-        'member_since'  => '自 :date 起开始创作路线',
+        'member_since'  => '自 :date 起创作路线',
         'social_link'   => '访问 :platform',
         'platform'      => [
             'twitch'    => 'Twitch',

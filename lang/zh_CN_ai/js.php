@@ -404,7 +404,7 @@ return [
     'floorunion_rotation_label'                                            => '旋转',
     'floorunionarea_floor_union_id_label'                                  => '楼层联合ID',
     'actions_label'                                                        => '操作',
-    'scheduling_label'                                                     => '排程',
+    'scheduling_label'                                                     => '计划发布',
     'add_to_team_label'                                                    => '添加到团队...',
     'view_label'                                                           => '查看',
     'collaborator_label'                                                   => '编辑',
