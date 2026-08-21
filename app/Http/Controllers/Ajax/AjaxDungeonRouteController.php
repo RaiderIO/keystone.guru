@@ -463,13 +463,13 @@ class AjaxDungeonRouteController extends Controller
 
         if ($gameVersion !== null) {
             $discoverService = $discoverService->withGameVersion($gameVersion);
-        } else {
+        } elseif ($expansion !== null) {
             $discoverService = $discoverService->withExpansion($expansion);
         }
 
         $region = GameServerRegion::getUserOrDefaultRegion();
 
-        $currentAffixGroup = $expansionService->getCurrentAffixGroup($expansion, $region);
+        $currentAffixGroup = $expansion !== null ? $expansionService->getCurrentAffixGroup($expansion, $region) : null;
 
         switch ($category) {
             case 'popular':

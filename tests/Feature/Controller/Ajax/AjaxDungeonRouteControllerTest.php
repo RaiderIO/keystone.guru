@@ -396,6 +396,25 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
     }
 
     /**
+     * Guards #4083: unlike htmlsearch() (whose FormRequest rejects an unrecognised `?expansion=`
+     * shortname via Rule::in() before it ever reaches the controller), htmlsearchcategory() takes
+     * a plain Request and looks the shortname up directly - an unknown shortname makes
+     * Expansion::where()->first() return null, which was then passed straight into
+     * BaseDiscoverService::withExpansion()/ExpansionService::getCurrentAffixGroup() - both typed
+     * to require a non-null Expansion - raising a TypeError instead of just skipping the filter.
+     */
+    #[Test]
+    public function htmlsearchcategory_givenUnknownExpansionShortname_returnsSuccessfulInsteadOfTypeError(): void
+    {
+        // Act - no dungeon routes exist for the 'popular' category here, so a 204 (no content) is
+        // the expected successful response; the regression this guards was a 500 TypeError
+        $response = $this->get('/ajax/search/popular?expansion=not-a-real-expansion');
+
+        // Assert
+        $response->assertSuccessful();
+    }
+
+    /**
      * Requests the route and looks up the dungeon's actual latest mapping_versions.id for the
      * given game version. Most dungeons carry mapping versions for multiple game versions (e.g.
      * retail and classic), whose ids aren't comparable, so the lookup must be scoped the same way
