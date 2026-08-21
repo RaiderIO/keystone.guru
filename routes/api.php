@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\V1\InternalTeam\Cache\APICacheController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogController;
+use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogEnemyFailureController;
+use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogRouteController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogRunController;
 use App\Http\Controllers\Api\V1\Public\Dungeon\APIDungeonController;
 use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteController;
@@ -29,6 +31,8 @@ Route::prefix('v1')->group(static function () {
 
         Route::middleware(['api_role:admin'])->group(static function () {
             Route::get('seasons/{season}/runs/{runId}/segments', new APICombatLogRunController()->segments(...))->name('api.v1.combatlog.run.segments');
+            Route::get('enemy-failures/{dungeon}', new APICombatLogEnemyFailureController()->index(...))->name('api.v1.combatlog.enemy_failures.index');
+            Route::get('route/{dungeonRoute}/post-body', new APICombatLogRouteController()->postBody(...))->name('api.v1.combatlog.route.post_body');
         });
     });
 

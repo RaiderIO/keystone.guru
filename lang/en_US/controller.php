@@ -51,6 +51,11 @@ return [
             'affixgroup_deleted' => 'Affix group deleted',
         ],
     ],
+    'apicombatlogroute' => [
+        'error' => [
+            'no_post_body' => 'This route has no stored combat log route request body.',
+        ],
+    ],
     'apicombatlogrun' => [
         'error' => [
             'no_segments' => 'No combat log segments are available for this run.',
