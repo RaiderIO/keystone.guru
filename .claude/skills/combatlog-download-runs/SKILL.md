@@ -59,6 +59,10 @@ for f in storage/app/combatlogs/rogue/*; do php artisan combatlog:extractdata "$
 
 ### Reconstruct one full log from the segments (#4244)
 
+*Giving a whole season's dungeons ARC + event correction tests is a runbook of its own:
+`/combatlog-route-tests`. This section is the download half of it.*
+
+
 The extraction pipeline above takes segments one at a time, but anything that needs the *whole run* -
 `combatlog:outputcombatlogroutejson`, which builds the `api/v1/combatlog/route` request body used as a
 test fixture - needs them joined back together first:
