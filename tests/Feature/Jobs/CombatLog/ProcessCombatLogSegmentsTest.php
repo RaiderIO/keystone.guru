@@ -4,9 +4,16 @@ namespace Tests\Feature\Jobs\CombatLog;
 
 use App\Jobs\CombatLog\ProcessCombatLogSegments;
 use App\Jobs\Logging\ProcessCombatLogSegmentsLoggingInterface;
+use App\Models\CharacterClassSpecialization;
+use App\Models\Dungeon;
 use App\Models\Season;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
+use App\Service\CombatLog\CombatLogParsingCriteriaServiceInterface;
+use App\Service\CombatLog\CombatLogPollingHealthServiceInterface;
+use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
 use App\Service\CombatLog\Dtos\CombatLogRunContext;
+use App\Service\CombatLog\Dtos\KeyLevelBand;
+use App\Service\CombatLog\Enums\CombatLogPollingFailureReason;
 use App\Service\CombatLog\Exceptions\CombatLogParseException;
 use App\Service\RaiderIO\Dtos\CombatLogSegment;
 use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
@@ -30,6 +37,7 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
     private const int COMBAT_LOG_VERSION = 22012000005;
     private const string DOWNLOAD_URL_1  = 'https://raider.io/segments/42/1.txt';
     private const string DOWNLOAD_URL_2  = 'https://raider.io/segments/42/2.txt';
+    private const string CRITERIA_DATE   = '2026-08-20';
 
     /**
      * @throws Exception
@@ -379,6 +387,230 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
         // Assert + Act
         $this->expectException(RedisException::class);
         app()->call([$job, 'handle']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenEmptySegments_releasesCriteriaBudgetAndCountsFailure(): void
+    {
+        // Arrange - a run that yields nothing must not keep the budget it was dispatched on
+        $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->method('getCombatLogSegmentsForRun')
+            ->willReturn(new CombatLogSegmentsResponse(sourceUserId: 1, segments: []));
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+
+        $criteriaService = $this->createMockPublic(CombatLogParsingCriteriaServiceInterface::class);
+        $criteriaService->expects($this->once())
+            ->method('releaseParsed')
+            ->with(self::COMBAT_LOG_VERSION, $this->criteria(), self::CRITERIA_DATE);
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        // An empty segments array has no upstream counter, so the job is what counts it
+        $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
+        $healthService->expects($this->once())
+            ->method('recordFailure')
+            ->with(CombatLogPollingFailureReason::SegmentsUnavailable);
+        $healthService->expects($this->never())->method('recordSucceeded');
+        app()->instance(CombatLogPollingHealthServiceInterface::class, $healthService);
+
+        // Act
+        app()->call([$this->jobWithCriteria(), 'handle']);
+
+        // Assert - handled by mock expectations above
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenNullSegmentsResponse_releasesCriteriaBudgetAndCountsFailure(): void
+    {
+        // Arrange - the job counts this, not RaiderIOApiService, which also serves non-polling callers
+        $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->method('getCombatLogSegmentsForRun')->willReturn(null);
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+
+        $criteriaService = $this->createMockPublic(CombatLogParsingCriteriaServiceInterface::class);
+        $criteriaService->expects($this->once())
+            ->method('releaseParsed')
+            ->with(self::COMBAT_LOG_VERSION, $this->criteria(), self::CRITERIA_DATE);
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
+        $healthService->expects($this->once())
+            ->method('recordFailure')
+            ->with(CombatLogPollingFailureReason::SegmentsUnavailable);
+        app()->instance(CombatLogPollingHealthServiceInterface::class, $healthService);
+
+        // Act
+        app()->call([$this->jobWithCriteria(), 'handle']);
+
+        // Assert - handled by mock expectations above
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenParseError_releasesCriteriaBudgetAndCountsFailure(): void
+    {
+        // Arrange
+        $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->method('getCombatLogSegmentsForRun')
+            ->willReturn(new CombatLogSegmentsResponse(
+                sourceUserId: 1,
+                segments:     [new CombatLogSegment(id: 1, type: 'combat_log', downloadUrl: self::DOWNLOAD_URL_1)],
+            ));
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+
+        $extractionService = $this->createMockPublic(CombatLogDataExtractionServiceInterface::class);
+        // The real exception the parser throws: it extends Exception, not RuntimeException, precisely
+        // so it lands in the parse-error branch instead of being re-thrown for a retry
+        $extractionService->method('extractData')
+            ->willThrowException(new CombatLogParseException(
+                42,
+                'SPELL_DAMAGE,Player-1084-0B4087DE,"Pa',
+                'Unable to parse line',
+                new InvalidArgumentException('Unable to parse line'),
+            ));
+        app()->instance(CombatLogDataExtractionServiceInterface::class, $extractionService);
+
+        $criteriaService = $this->createMockPublic(CombatLogParsingCriteriaServiceInterface::class);
+        $criteriaService->expects($this->once())
+            ->method('releaseParsed')
+            ->with(self::COMBAT_LOG_VERSION, $this->criteria(), self::CRITERIA_DATE);
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
+        $healthService->expects($this->once())
+            ->method('recordFailure')
+            ->with(CombatLogPollingFailureReason::ParseFailed);
+        app()->instance(CombatLogPollingHealthServiceInterface::class, $healthService);
+
+        $job = $this->getMockBuilder(ProcessCombatLogSegments::class)
+            ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION, null, $this->criteria(), self::CRITERIA_DATE])
+            ->onlyMethods(['curlSaveToFile'])
+            ->getMock();
+        $job->method('curlSaveToFile')->willReturnCallback($this->writeSegmentContents(...));
+
+        // Act
+        app()->call([$job, 'handle']);
+
+        // Assert - handled by mock expectations above
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenSuccessfulExtraction_keepsCriteriaBudgetAndCountsSuccess(): void
+    {
+        // Arrange
+        $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->method('getCombatLogSegmentsForRun')
+            ->willReturn(new CombatLogSegmentsResponse(
+                sourceUserId: 1,
+                segments:     [new CombatLogSegment(id: 1, type: 'combat_log', downloadUrl: self::DOWNLOAD_URL_1)],
+            ));
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+
+        $extractionService = $this->createMockPublic(CombatLogDataExtractionServiceInterface::class);
+        app()->instance(CombatLogDataExtractionServiceInterface::class, $extractionService);
+
+        $criteriaService = $this->createMockPublic(CombatLogParsingCriteriaServiceInterface::class);
+        $criteriaService->expects($this->never())->method('releaseParsed');
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
+        $healthService->expects($this->once())->method('recordSucceeded');
+        $healthService->expects($this->never())->method('recordFailure');
+        app()->instance(CombatLogPollingHealthServiceInterface::class, $healthService);
+
+        $job = $this->getMockBuilder(ProcessCombatLogSegments::class)
+            ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION, null, $this->criteria(), self::CRITERIA_DATE])
+            ->onlyMethods(['curlSaveToFile'])
+            ->getMock();
+        $job->method('curlSaveToFile')->willReturnCallback($this->writeSegmentContents(...));
+
+        // Act
+        app()->call([$job, 'handle']);
+
+        // Assert - handled by mock expectations above
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function failed_givenRetriesExhausted_releasesCriteriaBudgetAndCountsFailure(): void
+    {
+        // Arrange - the download failures handle() re-throws for a retry end up here once they run out
+        $criteriaService = $this->createMockPublic(CombatLogParsingCriteriaServiceInterface::class);
+        $criteriaService->expects($this->once())
+            ->method('releaseParsed')
+            ->with(self::COMBAT_LOG_VERSION, $this->criteria(), self::CRITERIA_DATE);
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
+        $healthService->expects($this->once())
+            ->method('recordFailure')
+            ->with(CombatLogPollingFailureReason::RunFailedAfterRetries);
+        app()->instance(CombatLogPollingHealthServiceInterface::class, $healthService);
+
+        // Act
+        $this->jobWithCriteria()->failed(new RuntimeException('Failed to download segment 1 for run 42'));
+
+        // Assert - handled by mock expectations above
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenNoCriteria_releasesNothing(): void
+    {
+        // Arrange - runs dispatched outside combatlog:pollruns carry no budget to give back
+        $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->method('getCombatLogSegmentsForRun')->willReturn(null);
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+
+        $criteriaService = $this->createMockPublic(CombatLogParsingCriteriaServiceInterface::class);
+        $criteriaService->expects($this->never())->method('releaseParsed');
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        // Act
+        app()->call([new ProcessCombatLogSegments(new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION), 'handle']);
+
+        // Assert - handled by mock expectations above
+    }
+
+    /**
+     * The criteria a polled run is dispatched with: the dungeon it was in, and the specs that were in it.
+     *
+     * @return CombatLogParsingCriterionCheck[]
+     */
+    private function criteria(): array
+    {
+        $band = new KeyLevelBand(12, 16);
+
+        return [
+            new CombatLogParsingCriterionCheck(Dungeon::class, 1, $band),
+            new CombatLogParsingCriterionCheck(CharacterClassSpecialization::class, 2, $band),
+        ];
+    }
+
+    private function jobWithCriteria(): ProcessCombatLogSegments
+    {
+        return new ProcessCombatLogSegments(
+            new Season(),
+            self::RUN_ID,
+            self::COMBAT_LOG_VERSION,
+            null,
+            $this->criteria(),
+            self::CRITERIA_DATE,
+        );
     }
 
     /**

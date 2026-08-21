@@ -49,21 +49,44 @@ final class RaiderIOApiServiceLoggingTest extends PublicTestCase
     }
 
     /**
+     * Was asserted at error until #4173: a single bad response from Raider.IO is transient, recovers
+     * on the next poll, and costs one run that the poll after it replaces on its own. The volume of
+     * them is what matters, and combatlog:reportpollinghealth is what reports on that, at error.
+     *
      * @throws Exception
      */
     #[Test]
-    public function getCombatLogSegmentsForRunInvalidResponse_givenCalled_logsAtErrorNotInfo(): void
+    public function getCombatLogSegmentsForRunInvalidResponse_givenCalled_logsAtWarningNotError(): void
     {
         // Arrange
         $logManager = LoggingFixtures::createLogManager($this);
         app()->instance('log', $logManager);
 
-        $logManager->expects($this->once())->method('log')->with('ERROR');
+        $logManager->expects($this->once())->method('log')->with('WARNING');
 
         /** @var RaiderIOApiServiceLoggingInterface $log */
         $log = app(RaiderIOApiServiceLoggingInterface::class);
 
         // Act
         $log->getCombatLogSegmentsForRunInvalidResponse(37830910, 'https://raider.io/segments', 'not json');
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function searchAdvancedRunsInvalidResponse_givenCalled_logsAtWarningNotError(): void
+    {
+        // Arrange
+        $logManager = LoggingFixtures::createLogManager($this);
+        app()->instance('log', $logManager);
+
+        $logManager->expects($this->once())->method('log')->with('WARNING');
+
+        /** @var RaiderIOApiServiceLoggingInterface $log */
+        $log = app(RaiderIOApiServiceLoggingInterface::class);
+
+        // Act
+        $log->searchAdvancedRunsInvalidResponse('https://raider.io/api/search-advanced', '<html>502 Bad gateway</html>');
     }
 }

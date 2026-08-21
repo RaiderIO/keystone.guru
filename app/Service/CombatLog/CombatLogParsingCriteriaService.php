@@ -40,13 +40,36 @@ class CombatLogParsingCriteriaService implements CombatLogParsingCriteriaService
     /**
      * @param CombatLogParsingCriterionCheck[] $criteria
      */
-    public function recordParsed(int $combatLogVersion, array $criteria): void
+    public function recordParsed(int $combatLogVersion, array $criteria, ?string $date = null): void
     {
-        $today = Carbon::now()->toDateString();
+        $date ??= Carbon::now()->toDateString();
 
         foreach ($criteria as $criterion) {
-            $this->findOrCreate($combatLogVersion, $criterion, $today)
+            $this->findOrCreate($combatLogVersion, $criterion, $date)
                 ->increment('count');
+        }
+    }
+
+    /**
+     * @param CombatLogParsingCriterionCheck[] $criteria
+     */
+    public function releaseParsed(int $combatLogVersion, array $criteria, string $date): void
+    {
+        foreach ($criteria as $criterion) {
+            $band = $criterion->getBand();
+
+            // Deliberately no findOrCreate: a row that doesn't exist has nothing to give back, and
+            // creating one here would resurrect a row that resetAllForToday() or the date rolling
+            // over has already dealt with. The count > 0 guard makes this atomic against a
+            // concurrent reset, so a release can never underflow the (unsigned) column.
+            CombatLogParsingCriterion::query()
+                ->where('combat_log_version', $combatLogVersion)
+                ->where('model_class', $criterion->getModelClass())
+                ->where('model_id', $criterion->getModelId())
+                ->where('mythic_level_min', $band->min)
+                ->where('date', $date)
+                ->where('count', '>', 0)
+                ->decrement('count');
         }
     }
 

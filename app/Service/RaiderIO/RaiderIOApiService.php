@@ -155,6 +155,9 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
             if (!is_array($json) || !isset($json['matches']) || !is_array($json['matches'])) {
                 $this->log->searchAdvancedRunsInvalidResponse($url, $response);
 
+                // A null total is what tells a caller this was an error rather than a genuinely empty
+                // result set - a valid response always carries one. combatlog:pollruns counts it from
+                // there, rather than this service counting for every caller it has (#4173).
                 return new SearchAdvancedRunsResponse([], null);
             }
 

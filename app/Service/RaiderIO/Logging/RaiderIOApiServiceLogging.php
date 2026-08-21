@@ -32,7 +32,11 @@ class RaiderIOApiServiceLogging extends StructuredLogging implements RaiderIOApi
 
     public function searchAdvancedRunsInvalidResponse(string $url, string $response): void
     {
-        $this->error(__METHOD__, get_defined_vars());
+        // A single bad response from Raider.IO - typically a Cloudflare 5xx page - is transient and
+        // recovers on the next poll, so it is not worth paging over (#4173). Kept at warning so it
+        // is still there in the logs, and counted by CombatLogPollingHealthServiceInterface so
+        // combatlog:reportpollinghealth can report on the hour's volume at error level instead.
+        $this->warning(__METHOD__, get_defined_vars());
     }
 
     public function searchAdvancedRunsEnd(int $count): void
@@ -47,7 +51,9 @@ class RaiderIOApiServiceLogging extends StructuredLogging implements RaiderIOApi
 
     public function getCombatLogSegmentsForRunInvalidResponse(int $runId, string $url, string $response): void
     {
-        $this->error(__METHOD__, get_defined_vars());
+        // Same reasoning as searchAdvancedRunsInvalidResponse() above: individually transient and
+        // recovered from on its own, reported on in bulk by combatlog:reportpollinghealth (#4173).
+        $this->warning(__METHOD__, get_defined_vars());
     }
 
     public function getCombatLogSegmentsForRunNotYetAvailable(int $runId, string $url, string $response): void

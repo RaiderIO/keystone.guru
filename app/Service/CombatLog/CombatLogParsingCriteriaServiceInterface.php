@@ -24,12 +24,22 @@ interface CombatLogParsingCriteriaServiceInterface
     public function shouldParse(int $combatLogVersion, array $criteria): bool;
 
     /**
-     * Increments the count for each given criterion for today.
+     * Increments the count for each given criterion on the given date (today when omitted).
      * Must be called immediately when a combat log is accepted for processing.
      *
      * @param CombatLogParsingCriterionCheck[] $criteria
      */
-    public function recordParsed(int $combatLogVersion, array $criteria): void;
+    public function recordParsed(int $combatLogVersion, array $criteria, ?string $date = null): void;
+
+    /**
+     * Gives back what recordParsed() took: decrements the count for each given criterion on the
+     * date it was recorded on. Called when a run that was recorded as parsed turns out to yield no
+     * data at all (unavailable segments, a failed download, an unparsable log), so that the budget
+     * it consumed goes to a run that does yield data instead.
+     *
+     * @param CombatLogParsingCriterionCheck[] $criteria
+     */
+    public function releaseParsed(int $combatLogVersion, array $criteria, string $date): void;
 
     /**
      * Resets all criterion counts for today (UTC date) to zero.

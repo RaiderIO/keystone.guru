@@ -65,6 +65,8 @@ use App\Service\CombatLog\CombatLogParsingCriteriaService;
 use App\Service\CombatLog\CombatLogParsingCriteriaServiceInterface;
 use App\Service\CombatLog\CombatLogPollingBandService;
 use App\Service\CombatLog\CombatLogPollingBandServiceInterface;
+use App\Service\CombatLog\CombatLogPollingHealthService;
+use App\Service\CombatLog\CombatLogPollingHealthServiceInterface;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteService;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureAnalysisService;
@@ -245,6 +247,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(CombatLogMappingVersionServiceInterface::class, CombatLogMappingVersionService::class);
         $this->app->bind(CombatLogParsingCriteriaServiceInterface::class, CombatLogParsingCriteriaService::class);
         $this->app->bind(CombatLogPollingBandServiceInterface::class, CombatLogPollingBandService::class);
+        $this->app->bind(CombatLogPollingHealthServiceInterface::class, CombatLogPollingHealthService::class);
         $this->app->bind(UserServiceInterface::class, UserService::class);
         $this->app->bind(StructuredLoggingServiceInterface::class, StructuredLoggingService::class);
         $this->app->bind(SpellServiceInterface::class, SpellService::class);
