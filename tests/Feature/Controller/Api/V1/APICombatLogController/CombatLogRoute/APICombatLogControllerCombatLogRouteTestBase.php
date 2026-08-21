@@ -3,7 +3,9 @@
 namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute;
 
 use App\Models\Affix;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\Npc;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\APICombatLogControllerTestBase;
 
 abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLogControllerTestBase
@@ -94,5 +96,57 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
                 $this->assertContains($affix->affix_id, $validAffixIds, sprintf('Affix with key %s and id %d not found in response [%s]', $affix->key, $affix->affix_id, implode(', ', $validAffixIds)));
             }
         }
+    }
+
+    /**
+     * Every boss the party actually killed must end up in a pull. A boss that is silently dropped - because its
+     * mapped position is out of range of where it was killed, or because it resolved onto the wrong floor - is the
+     * failure mode a hardcoded pull/enemy-forces count cannot see, so it is asserted separately from those numbers.
+     *
+     * @param array<string, mixed> $postBody
+     * @param array<string, mixed> $responseArr
+     */
+    protected function validateBossesResolved(array $postBody, array $responseArr): void
+    {
+        /** @var array<int, array<string, mixed>> $killedNpcs */
+        $killedNpcs   = $postBody['npcs'];
+        $killedNpcIds = array_values(array_unique(array_column($killedNpcs, 'npcId')));
+
+        $bossNpcIds = Npc::query()
+            ->whereIn('id', $killedNpcIds)
+            ->get()
+            ->filter(static fn(Npc $npc): bool => $npc->isBoss())
+            ->pluck('id')
+            ->all();
+
+        $this->assertNotEmpty($bossNpcIds, 'The combat log contains no boss kills at all');
+
+        /** @var array<int, array<string, mixed>> $pulls */
+        $pulls          = $responseArr['data']['pulls'];
+        $resolvedNpcIds = [];
+
+        foreach ($pulls as $pull) {
+            /** @var array<int, array<string, mixed>> $enemies */
+            $enemies        = $pull['enemies'];
+            $resolvedNpcIds = array_merge($resolvedNpcIds, array_column($enemies, 'npcId'));
+        }
+
+        foreach ($bossNpcIds as $bossNpcId) {
+            $this->assertContains(
+                $bossNpcId,
+                $resolvedNpcIds,
+                sprintf('Boss NPC %d was killed in the combat log but is not part of any pull', $bossNpcId),
+            );
+        }
+    }
+
+    /**
+     * The route the test just created is persisted, and the test database is not rolled back between tests.
+     *
+     * @param array<string, mixed> $responseArr
+     */
+    protected function deleteDungeonRoute(array $responseArr): void
+    {
+        DungeonRoute::where('public_key', $responseArr['data']['publicKey'])->first()?->delete();
     }
 }

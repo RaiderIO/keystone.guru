@@ -73,12 +73,22 @@ class ChallengeModeStart extends SpecialEvent implements HasCombatLogDungeonCont
         $this->challengeModeID = $parameters[2];
         $this->keystoneLevel   = $parameters[3];
 
-        $affixIds = array_slice($parameters, 4);
-        foreach ($affixIds as $affixId) {
-            $this->affixIDs[] = (int)str_replace([
+        // The affix list is logged as a single bracketed parameter ("[162,10,9]"), which the string parser hands
+        // over verbatim rather than splitting on its inner commas - so the ids have to be split out here. Older
+        // logs that put each affix in its own parameter flatten to the same list.
+        foreach (array_slice($parameters, 4) as $affixIdsParameter) {
+            $affixIdsParameter = str_replace([
                 '[',
                 ']',
-            ], '', (string)$affixId);
+            ], '', (string)$affixIdsParameter);
+
+            foreach (explode(',', $affixIdsParameter) as $affixId) {
+                if (trim($affixId) === '') {
+                    continue;
+                }
+
+                $this->affixIDs[] = (int)trim($affixId);
+            }
         }
 
         return $this;

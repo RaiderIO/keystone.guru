@@ -57,6 +57,29 @@ for f in storage/app/combatlogs/rogue/*; do php artisan combatlog:extractdata "$
 - The extraction summary only prints **non-zero** counters; structured detection logs go to
   **stderr** — don't redirect it to /dev/null if you need them.
 
+### Reconstruct one full log from the segments (#4244)
+
+The extraction pipeline above takes segments one at a time, but anything that needs the *whole run* -
+`combatlog:outputcombatlogroutejson`, which builds the `api/v1/combatlog/route` request body used as a
+test fixture - needs them joined back together first:
+
+```sh
+sh/combatlog-reconstruct-run.sh storage/app/combatlogs/<dir> <runId>   # writes full_run_<runId>.txt
+docker compose exec -T app php artisan combatlog:outputcombatlogroutejson storage/app/combatlogs/<dir>/full_run_<runId>.txt
+```
+
+The reconstruct script is plain text wrangling on host paths under the bind-mounted `storage/`, so it
+runs on the host while the artisan command that consumes its output runs in the container - both see
+the file at the same relative path.
+
+The segments are contiguous - segment 1 opens with `CHALLENGE_MODE_START`, the last closes with
+`CHALLENGE_MODE_END` - and each one's `RIO_LOG_VERSION` header parses fine mid-file, so a plain
+concatenation is all that is needed. Two things it gets wrong by hand: the order is **numeric**
+(`segment_10` sorts before `segment_2` in a glob), and a segment's last line carries **no trailing
+newline**, so without an inserted one it fuses with the next segment's header and both lines fail to
+parse. The command writes its `.json` next to the input and **skips a log whose `.json` already
+exists** - delete it to regenerate.
+
 ### NPC base health from a run (#4094)
 
 `combatlog:extractnpchealth storage/app/combatlogs/<dir> [--dry-run] [--overwrite]` takes a whole
