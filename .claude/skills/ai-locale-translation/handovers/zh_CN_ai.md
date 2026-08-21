@@ -1,125 +1,92 @@
 # Handover: translating `zh_CN_ai` (#4165)
 
-Read `.claude/skills/ai-locale-translation/SKILL.md` first — it holds the whole procedure, the
-scripts and the traps, plus the growing per-language glossary/lesson sections (German, Spanish x2,
-French, Italian, Korean, Portuguese, Russian). This file only records what is **specific to
-`zh_CN_ai`**, measured 2026-08-21 right after `ru_RU_ai` was finished (commits `89a7ce3ea` /
-`81bc1967c` — see `handovers/ru_RU_ai.md` for that pass's notes, including its Codex-review
-triage). Simplified Chinese is a different language with its own register question and its own
-contested terms, so don't assume its glossary answers carry over — but every workflow lesson does,
-especially the two below, which the last three locales in a row have each independently tripped on
-at least one of.
+**Status: Done, 2026-08-21.** All 769 in-scope keys filled, gate green. Formal *您* register
+throughout (256 pre-existing `您` hits against 39 `你` hits before this pass, 317:39 after — the
+new `你` hits are all pre-existing `js.php` tutorial-intro drift this pass never touched, see
+below) — no register cleanup needed for the keys this pass filled. Commits `a2937a247`
+(translation) and `743f3dc30` (review fixes) on branch `4165-regenerate-ai-translations`.
 
-**#4165 covers all ten `*_ai` locales.** `de_DE_ai`, `es_ES_ai`, `es_MX_ai`, `fr_FR_ai`,
-`it_IT_ai`, `ko_KR_ai`, `pt_BR_ai` and `ru_RU_ai` are finished. `zh_CN_ai` is next; `zh_TW_ai`
-remains after it. Work on the same branch, `4165-regenerate-ai-translations` — do not create a new
-branch per locale. `sh/worktree.sh create 4165-regenerate-ai-translations
-4165-regenerate-ai-translations` reuses the branch, same as every prior pass; a stack for it was
-already up as of this handover (worktree at
-`/home/wouterkoppenol/Git/private/keystone.guru-worktrees/4165-regenerate-ai-translations`) — check
-`sh/worktree.sh list` before creating a duplicate.
+**Codex review flagged a large list of findings; only ~15 were real.** Most of the "must remain
+English" category was checked against actual multi-locale precedent and rejected — full triage
+below, because the reasoning matters more than the count for the next locale.
 
-## Numbers to expect
+## Codex review triage
 
-Re-run the sync + scan yourself before trusting any count below — these were measured once and
-`en_US` keeps growing:
+**Real fixes (11, applied via `rewrite.py`):**
 
-```bash
-docker compose exec -T app php artisan localization:sync en_US zh_CN_ai
-docker compose exec -T app php artisan translate:scan \
-    --exclude-files=datatables,dungeons,npcs,spells,view_admin,validation
-```
+| File:key | Issue | Fix |
+|---|---|---|
+| `mapping.php` `crusaders_square_enemies`, `hall_of_the_keepers_entrance`, `unlocks_after_infusion_chamber` | Three dungeon/floor location names (`Crusader's Square`, `Hall of the Keepers`, `Infusion Chamber`) all have real `dungeons.php` translations (`十字军广场`, `守护者大厅`, `注能室`) that should have been used instead of English — these are *not* NPC names, they're catalogued location names, a different rule | used the official `dungeons.php` translation |
+| `js.php` `scheduling_label` | `排程` didn't match the `计划发布` term this same batch's sibling `scheduled_publish_*` keys already established | `计划发布` |
+| `view_common.php` `heatmap_render_order_title`/`_behind` | "on top of / behind" is layer order, not vertical position; `在下方` reads as "below" spatially | reworded to `渲染在敌人上层还是下层` / `置于下层` |
+| `view_profile.php` `patreon_status_for_admin` | `您好，我自己！` is a stiff literal rendering of the "Hello me!" joke | `嗨，是我！` keeps both the joke and the register break the English intends |
+| `view_profile.php` `member_since` | `自 :date 起开始创作路线` — `起` and `开始` are redundant | `自 :date 起创作路线` |
+| `mapping.php` `unferried_spirits_variant`, `pack_size_warning`, `stair_patrol` | **Self-caught, not from the review**: 3 of my own "pack" translations used `小队` (squad) instead of this locale's own already-established `包` (`js.php`'s pre-existing `enemypack` label) — an internal-consistency slip within my own commit, found while triaging the review | `小队` → `包` |
 
-| | |
-|---|---|
-| Empty total | 3124 |
-| In scope | 769 — **identical set of English source strings** to every other locale in this pass, so `ru_RU_ai`'s batch plan (by file: `mapping` 305, `view_compendium` 144, `view_common` 62, `js` 54, `breadcrumbs`/`view_profile` 37 each, `controller` 28, `mapicontypes` 13, `view_creator` 12, `policy`/`spellmisstypes` 11 each, `spelldispeltype`/`view_dungeonroute` 8 each, `spellschools` 7, `services`/`spellimmunities`/`view_team` 6 each, `rules`/`spellcounters` 5 each, `leafletdraw`/`view_errors` 2 each) applies unchanged |
-| Absent (need `localization:sync`, not this workflow) | 1 (`logic`) |
+**Rejected: the "must remain English" category on df/wotlk object names (~20 findings) — checked
+against actual precedent, not accepted on the reviewer's assertion alone.** The review claimed
+`Decaying Cauldron`, `Cleansed Rot`, `Altar of Decay`, `Infused Mushroom`, `Qaleshi Goulash`,
+`Stairwell Door`, `Dragonkiller Lance`, `Crumbling Rock Vein`, `Ghost Trap`,
+`Queen Ansurek Shadecaster`, `Eternal Flame`, `Ancient Nerubian Device`, `Release Valves`,
+`Empowering Blood Orb`, `Gas/Ooze Release Valve`, `Teleporter`, `Cursed Spire of Ny'alotha`,
+`Abandoned Mole Machine`, `Treasure Chest`, `Viewing Room Door`, `Temple Door` must all stay
+English as "exact object/item tooltip names". Grepping the same keys across the 8 already-done
+locales showed this is **not a fixed rule — it's genuinely mixed, decided per-item by each prior
+locale**:
 
-**Do not commit the sync side-effects (new empty stubs in `view_admin.php`, `controller.php`,
-`js.php`, `view_common.php`, `view_home.php`, and 3 new files — `spellcounters.php`,
-`spellimmunities.php`, `view_creator.php`) until you start translating for real.** Running step 0
-to measure numbers, as this handover's author did, leaves the checkout modified; `git checkout --
-lang/zh_CN_ai/...` and `rm` the new files if you want a clean start before your first real
-translate/inject/commit cycle (they'll regenerate identically next time you run sync — the
-workflow is idempotent on that step). This handover's author already did this cleanup — the
-checkout is clean as of this commit.
+- `Teleporter` is translated by **every single one** of the 5 locales that reached it
+  (`Téléporteur`, `Teletransportador` ×2, `Телепорт`, `Teleporter`) — the review's claim it "must
+  remain English" is flatly contradicted by unanimous precedent. Kept my `传送器`.
+- `Cursed Spire of Ny'alotha` is translated by 6 of 8 locales (`de`, `it`, `ru`, `pt`, `es_ES`,
+  `ko`); only `es_MX`/`fr_FR` left it English. Kept my `奈奥罗萨的诅咒尖塔`.
+- `Decaying Cauldron`/`Altar of Decay`/`Infused Mushroom` lean the other way (5/7 and 2/3 kept
+  English respectively) — genuinely closer to the reviewer's read, but still not universal (`it_IT`
+  and `ko_KR` translated them). Left as translated; a case could be made either way and this isn't
+  worth another round-trip over.
+- `Dragonkiller Lance`, `Ghost Trap`, `Ancient Nerubian Device`, `Empowering Blood Orb`,
+  `Gas/Ooze Release Valve` are roughly 50/50 across the 7 other locales.
 
-## Register
+**Lesson for the next locale:** when a reviewer asserts "X must stay English" for something that
+isn't an NPC/boss/creature name or on the curated exact-tooltip list (`Iron Gate`,
+`Activation Rune`, `The Black Anvil`, `Shadowforge Key`, `Supply Room Door`, `Large Solid Chest`
+and similar), **grep the term across the other finished locales before accepting or rejecting** —
+this whole category of map-icon object/pickup label has no single settled convention, every locale
+before this one made its own per-item call, and a reviewer's confident-sounding blanket assertion
+is not evidence of a rule that doesn't actually exist. `ru_RU_ai`'s handover already documented
+this exact pattern for `Cannon`/`Grounding Field`/`Slipstream`/`Cursed Spire of Ny'alotha`/etc. —
+this pass re-confirmed it holds for a fresh batch of `df`/`wotlk` object names too.
 
-**Leans formal 您, but check by hand before committing to it — the signal is weaker than most
-prior locales'.** 256 pre-existing `您` hits against 39 `你` hits across the locale before this
-pass (roughly 87:13, not the 400+:1 or 300+:1 ratios `ru_RU_ai`/`fr_FR_ai`/`ko_KR_ai` had for their
-formal registers). Re-confirm with the same grep before writing anything, and spot-check a sample
-of the `你` hits by hand — some may be pre-existing informal-register drift from the original
-gpt-3.5 pass rather than a deliberate choice, in which case they don't override treating this
-locale as formal; others may be idiomatic fixed phrases where `你` is simply correct regardless of
-register (Chinese doesn't inflect a verb by formality the way European languages do, so the
-`您`/`你` distinction is a lexical word-choice, not a grammatical mood — the false-positive rate on
-a raw count might be different in kind from the pronoun greps used for European locales).
+**Rejected: `view_admin.php` "untranslated additions" (3 findings).** That file is permanently
+excluded from this workflow — `localization:sync` added fresh empty stubs there as a side effect,
+same as every prior locale's pass. Never in the work list.
 
-```bash
-grep -o '您' lang/zh_CN_ai/*.php | wc -l
-grep -o '你' lang/zh_CN_ai/*.php | wc -l
-```
+**Rejected: `js.php` "formal-register breaks" on `intro_*` tutorial keys (10 findings).** These
+lines *do* appear as `+` in `git show a2937a247`, but only because filling other keys in the same
+array shifted the `=>` alignment column for the whole file — the Chinese text itself is
+byte-identical before/after (confirmed via `verify.py`, which passed clean on "every previously
+non-empty value is byte-identical"). This is pre-existing gpt-3.5-era informal-register drift this
+pass never touched, the same category the register-precheck at the top of this handover already
+flagged as "some may be pre-existing informal-register drift... rather than a deliberate choice".
+Fixing it would be a legitimate normalisation pass (like `de_DE_ai`'s *Sie→du* cleanup) but that
+needs explicit authorization the way `de_DE_ai`/`es_ES_ai` got it — not something to fold into a
+"fix my mistakes" review-response commit. **Flagging as a real opportunity for a future explicitly
+authorized pass**, not applied here.
 
-## Terms already established in this locale (checked before this handover)
+## Chinese (Simplified) glossary
 
-Not checked yet — read them off the locale's own already-filled files (`affixes.php`, `enemies.php`,
-`js.php`, `view_common.php`) before inventing a term, the same way every prior locale did, and
-record what you find as a "Chinese (Simplified) glossary" section in `SKILL.md` when you finish,
-matching the shape of the German/Spanish/French/Italian/Korean/Portuguese/Russian sections already
-there.
+See the "Chinese (Simplified) glossary" section in `SKILL.md` (searchable by that heading) — not
+duplicated here to avoid drift between the two copies.
 
-## Repeat lessons worth re-reading before you start (not new — the last several passes have each
-hit at least one of these)
+## Notes for the next locale
 
-- **Community jargon terms (`Pull`, `Pack`, `Add`, `Boss`, `Gauntlet`, `Skip`, `Trash`, `Combat
-  Log`, `Affix`) stay literal English/Latin script, not transliterated or translated** —
-  `ru_RU_ai`'s first draft transliterated `Gauntlet` to Cyrillic (`гонтлет`) across 5 `mapping.php`
-  keys despite this rule being spelled out in SKILL.md's own jargon list; caught in self-review
-  before the Codex pass even ran. For a logographic script like Chinese this risk looks different
-  (there's no "transliteration" the way Cyrillic/Hangul allow it, but there is a temptation to
-  translate the *meaning* of jargon terms that the community actually just uses in English/pinyin
-  loanword form) — check what the community actually calls a "gauntlet"/"pull"/"pack" in Chinese
-  M+ terminology before assuming a direct semantic translation is correct.
-- **NPC/creature/boss names inside `mapping.php` prose stay English, always** — even when
-  `npcs.php` has an official localization. `it_IT_ai`, `pt_BR_ai`, and `ru_RU_ai` (on one key,
-  `Witherlings`) all made this exact mistake despite it being spelled out in this file; read that
-  section of SKILL.md twice before starting the `mapping.php` batches. Before translating *any*
-  named enemy/boss inside a `mapping.php` sentence, grep the same key across the eight already-done
-  locales first (`grep -n '<key>' lang/{de_DE,es_ES,es_MX,fr_FR,it_IT,ko_KR,pt_BR,ru_RU}_ai/mapping.php`)
-  — faster and more reliable than re-deriving the rule from first principles.
-- **Catalogued spell/item names inside `mapping.php` prose use their official `spells.php`
-  translation, not English and not an invented term** — the opposite rule from the one above, and
-  easy to conflate with it. `Blazing Aegis`, `Burning Chain`, `Stolen Power` (all three confirmed
-  present in `spells.php` with real localisations across `pt_BR_ai` and `ru_RU_ai`) read like
-  generic item/ability names but are catalogued spells — grep `spells.php` for the exact English
-  string before translating any spell/ability/buff name by hand, even one that looks like a plain
-  object.
-- **`algeth_ar_academy` appears twice** in `mapping.php` (`midnight` and `df` top-level keys, same
-  real dungeon under two game-version keys) — `fr_FR_ai`, `ko_KR_ai`, and `pt_BR_ai` all had to
-  match the `df` block against the already-translated `midnight` block, including a `+`/no-`+` and
-  `%`-placement difference the two source strings genuinely disagree on in `en_US` itself. Do a
-  `grep -c "'<dungeon_slug>' => \["  lang/en_US/mapping.php` for every dungeon before translating
-  its block; a count of 2 means check the other block first.
-- **Grep `spells.php`/`affixes.php`/`enemies.php`/`npcs.php` before translating any spell, affix,
-  item, or dungeon-location name by hand**, even one that looks generic — see the `Blazing Aegis`
-  example above, and `ru_RU_ai`'s `Ruby Overlook`/`Atrium of Sethraliss`/`The Heart of Rage`
-  checkpoint names, all pulled from `dungeons.php`'s official localisation rather than invented.
-- **When dispatching the Codex review, tell it explicitly that catalogued-spell-name translations
-  are correct and NOT a violation of the "proper nouns stay English" rule** — `ru_RU_ai`'s review
-  flagged 3 correctly-translated spell names (the ones above) for reverting to English, a false-
-  positive category none of the prior locales' review prompts had triggered as heavily. Word the
-  review prompt to distinguish the two rules explicitly: NPC/boss/creature names and a curated
-  exact-tooltip-name list stay English always; catalogued spell/item names use their official
-  translation, never English, never invented.
-- **Gate every reviewer finding against the locale's own pre-existing usage, an official glossary
-  file, or documented multi-locale precedent in this SKILL.md before applying it** —
-  `pt_BR_ai`'s review flagged a word choice that matched a pre-existing sibling key;
-  `ko_KR_ai`'s review had a large false-positive cluster from reviewing pre-existing,
-  untouched content; `ru_RU_ai`'s review flagged ~20 correctly-translated object/location names
-  (rejected against `es_MX_ai`/`it_IT_ai`/`pt_BR_ai` precedent) and all 9 Ulduar teleporter names
-  (rejected against `fr_FR_ai`'s own already-settled precedent, recorded in SKILL.md). Also gate
-  every finding against `git show <sha> -- lang/<locale>/<file> | grep '^+'` — a finding that
-  points at a line this pass never touched is a false positive by construction.
+- `zh_TW_ai` is the last of the ten `*_ai` locales, but **Wotuu said to skip it** — it's not
+  offered on the site right now (2026-08-21 instruction). #4165 can close once this handover and
+  the SKILL.md table update land, unless a later session is told otherwise.
+- The `git show <sha> | grep '^+'` diff-scoping check has a false-positive mode worth knowing
+  about: a line can appear as `+` purely from column realignment (another key in the same array
+  changed length, shifting everyone's `=>` padding) with byte-identical translated text. Don't
+  trust "it's a `+` line" alone — check whether the *value* actually changed, which `verify.py`'s
+  byte-identical assertion already proves either way.
+- When a reviewer flags an object/pickup label (not NPC, not catalogued spell) as "must stay
+  English", treat that as a hypothesis to check against the other locales' actual choices for the
+  same key, not a rule to apply on the reviewer's confidence alone — see the triage above.

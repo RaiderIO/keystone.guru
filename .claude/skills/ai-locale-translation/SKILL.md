@@ -471,6 +471,49 @@ should be `21 просмотр`) — fixed by rewording to the count-invariant `
 adding a plural bucket, since the source `%s` format has none to match. Full triage in
 `handovers/ru_RU_ai.md`.
 
+### Chinese (Simplified) glossary (zh_CN_ai, established in the #4165 pass)
+
+| English | Chinese | English | Chinese |
+|---|---|---|---|
+| Dungeon | 地下城 | Route | 路线 |
+| Pull | 拉怪 | Pack | 包（`enemypack` label, already established) |
+| Boss | 首领 (already established) | Affix | 词缀 (already established) |
+| Compendium | 图鉴 (no prior convention; picked to match the majority "encyclopedia/collection" sense) | Checkpoint | 检查点 |
+| Enemy forces | 敌方部队 (full form); **敌部** abbreviation for checkpoint pills/tooltips/snackbars only | Weight (line thickness) | 权重 (majority of existing hits — `path_weight_label`/`enemypatrol_weight_label`; `brushline_weight_label`'s pre-existing 粗细 is the outlier, left untouched) |
+| Faction | 阵营 (already established) | Crowd control | 控场 (already established, from `affixes.php`) |
+| Counter (verb, "countered by") | 反制 (already established, from `spells.php`'s `法术反制`/`反制射击` — **not** 反击/反攻, which mean counter-*attack*) | Classification | 分类 (already established) |
+| Aura | 光环 (already established) | Debuff | 减益效果 (no prior convention) |
+| Teeming | 繁盛 (read from `affixes.php`) | Combat Log | 战斗日志 (pre-existing convention — the opposite of the community-jargon default of leaving it English; the locale had already committed to this at scale before this pass, so its own precedent wins) |
+
+Add a row here whenever a new locale forces a decision worth keeping.
+
+**Register:** `zh_CN_ai` is formal **您** throughout — 256 pre-existing `您` hits against 39 `你`
+hits before this pass (weaker signal than most locales' 300+:1 ratios), re-confirmed at 317:39
+after. The `你` hits are concentrated in `js.php`'s tutorial `intro_*` keys and one `affixes.php`
+description — pre-existing gpt-3.5-era drift, not a deliberate informal choice, and this pass's own
+new keys were all written as 您. No cleanup pass was authorized or performed on the pre-existing
+`你` hits — see `handovers/zh_CN_ai.md` for why fixing them wasn't folded into the review-response
+commit.
+
+**Object/pickup labels in `mapping.php` have no single settled convention across locales — check
+per-item, not by rule.** Unlike NPC/boss/creature names (always English) and catalogued spells
+(always their official translation), a label like `Decaying Cauldron`, `Teleporter`, or
+`Cursed Spire of Ny'alotha` has been decided differently by different locales: `Teleporter` is
+translated by all 5 locales that reached it; `Cursed Spire of Ny'alotha` by 6 of 8;
+`Decaying Cauldron`/`Altar of Decay` stay English in most (but not all) locales. Before accepting a
+reviewer's claim that one of these "must stay English", grep the same key across the other
+finished locales' `mapping.php` files — that's the actual precedent, not the reviewer's assertion.
+Full case-by-case triage in `handovers/zh_CN_ai.md`.
+
+**Codex review triage (11 real fixes out of a much longer list)** — three official
+`dungeons.php`-sourced location names used instead of English (`Crusader's Square`,
+`Hall of the Keepers`, `Infusion Chamber`), one internal-consistency miss (`scheduling_label`
+should have matched the sibling `计划发布` keys), a heatmap layer-order wording fix, two phrasing
+polish items, and 3 self-caught `包`/`小队` inconsistencies for "pack" found while triaging (not
+from the review itself). The much longer "must stay English" list and the `view_admin.php`/
+`js.php intro_*` false positives are the two lessons worth carrying forward — see
+`handovers/zh_CN_ai.md` for the full reasoning.
+
 ## Normalising an existing locale (overwriting existing values)
 
 The default workflow never overwrites a non-empty value. When Wotuu explicitly asks for one -
@@ -599,8 +642,8 @@ in the excluded files, which are not this workflow's business.
 | `ko_KR_ai` | 3042 | 769 | Done — #4165, 2026-08-21, PR #4209 (formal 하십시오체 register, no cleanup needed; plus 29 Codex-review fixes — see `handovers/ko_KR_ai.md`, including a repeat of the `fr_FR_ai` duplicate-dungeon-block lesson) |
 | `pt_BR_ai` | 2984 | 769 | Done — #4165, 2026-08-21 (informal *você* register, no cleanup needed; plus 32 Codex-review fixes — see `handovers/pt_BR_ai.md`, including a repeat of the it_IT/ko_KR NPC-name-in-prose mistake) |
 | `ru_RU_ai` | 2841 | 769 | Done — #4165, 2026-08-21 (formal *Вы* register, no cleanup needed; plus 6 real Codex-review fixes and a self-caught Gauntlet/Witherlings slip — see `handovers/ru_RU_ai.md`) |
-| `zh_CN_ai` | 3097 | 745 | Not started |
-| `zh_TW_ai` | 3094 | 745 | Not started |
+| `zh_CN_ai` | 3097 | 769 | Done — #4165, 2026-08-21 (formal *您* register, no cleanup needed; plus 11 Codex-review fixes — see `handovers/zh_CN_ai.md`, including rejecting most of the "must stay English" findings after checking actual multi-locale precedent) |
+| `zh_TW_ai` | 3094 | 745 | Skipped — Wotuu asked to skip it 2026-08-21, not offered on the site right now |
 
 All nine also report the same 25 keys absent entirely (see the `localization:sync` gotcha).
 
