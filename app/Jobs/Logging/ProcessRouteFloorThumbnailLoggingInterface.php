@@ -14,6 +14,8 @@ interface ProcessRouteFloorThumbnailLoggingInterface
 
     public function handleCreateThumbnailError(): void;
 
+    public function handleCreateThumbnailRetryScheduled(int $attempt, int $delaySeconds): void;
+
     public function handleThumbnailAlreadyUpToDate(): void;
 
     public function handleMaxAttemptsReached(): void;

@@ -55,7 +55,7 @@ interface ThumbnailServiceLoggingInterface
 
     public function doCreateThumbnailRemovedTmpFileFailure(): void;
 
-    public function doCreateThumbnailError(string $errors): void;
+    public function doCreateThumbnailError(string $errors, string $previewUrl, string $variant, int $renderDurationMs): void;
 
     public function queueThumbnailRefreshMappingVersionNull(string $publicKey): void;
 
