@@ -5,9 +5,13 @@ namespace App\Service\CombatLog;
 use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\NpcEnemyForces;
 use App\Service\CombatLog\Dtos\CombatLogRouteEnemyFailureHeatmapResult;
 use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 readonly class CombatLogRouteEnemyFailureService implements CombatLogRouteEnemyFailureServiceInterface
 {
@@ -19,13 +23,14 @@ readonly class CombatLogRouteEnemyFailureService implements CombatLogRouteEnemyF
      * @param int[]|null $npcIds
      */
     public function getEnemyFailureHeatmapData(
-        Dungeon $dungeon,
-        ?array  $npcIds,
+        Dungeon        $dungeon,
+        MappingVersion $mappingVersion,
+        ?array         $npcIds,
     ): CombatLogRouteEnemyFailureHeatmapResult {
         $gridSizeX = (int)config('keystoneguru.heatmap.service.data.player.size_x');
         $gridSizeY = (int)config('keystoneguru.heatmap.service.data.player.size_y');
 
-        $query = CombatLogRouteEnemyFailure::query()->where('dungeon_id', $dungeon->id);
+        $query = $this->failuresQuery($dungeon, $mappingVersion);
 
         if (!empty($npcIds)) {
             $query->whereIn('npc_id', $npcIds);
@@ -45,23 +50,95 @@ readonly class CombatLogRouteEnemyFailureService implements CombatLogRouteEnemyF
             $totalCount++;
         }
 
-        $dungeonRoutes = $this->getMatchingDungeonRoutes($dungeon, $npcIds);
+        $dungeonRoutes = $this->getMatchingDungeonRoutes($dungeon, $mappingVersion, $npcIds);
 
-        return new CombatLogRouteEnemyFailureHeatmapResult($this->coordinatesService, $dungeon, $dataPerFloor, $gridSizeX, $gridSizeY, $totalCount, $dungeonRoutes);
+        return new CombatLogRouteEnemyFailureHeatmapResult(
+            $this->coordinatesService,
+            $dungeon,
+            $mappingVersion,
+            $dataPerFloor,
+            $gridSizeX,
+            $gridSizeY,
+            $totalCount,
+            $dungeonRoutes,
+        );
+    }
+
+    public function getFailureCountsPerNpc(Dungeon $dungeon, MappingVersion $mappingVersion): Collection
+    {
+        /** @var Collection<int, int> $result */
+        $result = $this->failuresQuery($dungeon, $mappingVersion)
+            ->whereNotNull('npc_id')
+            ->selectRaw('npc_id, COUNT(*) AS failure_count')
+            ->groupBy('npc_id')
+            ->orderByDesc('failure_count')
+            ->pluck('failure_count', 'npc_id')
+            ->map(static fn($count): int => (int)$count);
+
+        return $result;
+    }
+
+    public function getFailureCountsPerMappingVersion(Dungeon $dungeon): Collection
+    {
+        /** @var Collection<int, int> $counts */
+        $counts = CombatLogRouteEnemyFailure::query()
+            ->where('dungeon_id', $dungeon->id)
+            ->selectRaw('mapping_version_id, COUNT(*) AS failure_count')
+            ->groupBy('mapping_version_id')
+            ->pluck('failure_count', 'mapping_version_id')
+            ->map(static fn($count): int => (int)$count);
+
+        /** @var Collection<int, int> $result */
+        $result = $dungeon->mappingVersions
+            ->mapWithKeys(static fn(MappingVersion $mappingVersion) => [$mappingVersion->id => $counts->get($mappingVersion->id, 0)]);
+
+        return $result;
+    }
+
+    public function getZeroEnemyForcesNpcIds(MappingVersion $mappingVersion): array
+    {
+        return NpcEnemyForces::query()
+            ->where('mapping_version_id', $mappingVersion->id)
+            ->where('enemy_forces', 0)
+            ->pluck('npc_id')
+            ->map(static fn($npcId): int => (int)$npcId)
+            ->all();
+    }
+
+    /**
+     * The failures of the dungeon in the mapping version, minus those for npcs that are worth 0 enemy forces there.
+     *
+     * @return Builder<CombatLogRouteEnemyFailure>
+     */
+    private function failuresQuery(Dungeon $dungeon, MappingVersion $mappingVersion): Builder
+    {
+        $query = CombatLogRouteEnemyFailure::query()
+            ->where('dungeon_id', $dungeon->id)
+            ->where('mapping_version_id', $mappingVersion->id);
+
+        $zeroEnemyForcesNpcIds = $this->getZeroEnemyForcesNpcIds($mappingVersion);
+        if (!empty($zeroEnemyForcesNpcIds)) {
+            // npc_id may be null - NOT IN would drop those rows, so keep them explicitly
+            $query->where(static function (Builder $builder) use ($zeroEnemyForcesNpcIds) {
+                $builder->whereNull('npc_id')
+                    ->orWhereNotIn('npc_id', $zeroEnemyForcesNpcIds);
+            });
+        }
+
+        return $query;
     }
 
     /**
      * @param  int[]|null                                                        $npcIds
      * @return array<int, array{public_key: string, title: string, url: string}>
      */
-    private function getMatchingDungeonRoutes(Dungeon $dungeon, ?array $npcIds): array
+    private function getMatchingDungeonRoutes(Dungeon $dungeon, MappingVersion $mappingVersion, ?array $npcIds): array
     {
         if (empty($npcIds)) {
             return [];
         }
 
-        $dungeonRouteIds = CombatLogRouteEnemyFailure::query()
-            ->where('dungeon_id', $dungeon->id)
+        $dungeonRouteIds = $this->failuresQuery($dungeon, $mappingVersion)
             ->whereNotNull('dungeon_route_id')
             ->whereIn('npc_id', $npcIds)
             ->distinct()

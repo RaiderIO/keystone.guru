@@ -7,6 +7,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\NpcEnemyForces;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -80,7 +81,7 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
             $created[] = $record2->id;
 
             // Act
-            $result = $this->service->getEnemyFailureHeatmapData($this->dungeon, null);
+            $result = $this->service->getEnemyFailureHeatmapData($this->dungeon, $this->mappingVersion, null);
             $array  = $result->setUseFacade(false)->toArray();
 
             // Assert
@@ -125,7 +126,7 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
             $created[] = $record2->id;
 
             // Act
-            $result = $this->service->getEnemyFailureHeatmapData($this->dungeon, null);
+            $result = $this->service->getEnemyFailureHeatmapData($this->dungeon, $this->mappingVersion, null);
             $array  = $result->setUseFacade(false)->toArray();
 
             // Assert
@@ -177,7 +178,7 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
             $created[] = $excluded->id;
 
             // Act
-            $result = $this->service->getEnemyFailureHeatmapData($this->dungeon, [$targetNpcId]);
+            $result = $this->service->getEnemyFailureHeatmapData($this->dungeon, $this->mappingVersion, [$targetNpcId]);
             $array  = $result->setUseFacade(false)->toArray();
 
             // Assert
@@ -196,7 +197,7 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
     public function getEnemyFailureHeatmapData_givenNoRecords_returnsEmptyData(): void
     {
         // Act — PHP_INT_MAX as npc_id is guaranteed to not exist
-        $result = $this->service->getEnemyFailureHeatmapData($this->dungeon, [PHP_INT_MAX]);
+        $result = $this->service->getEnemyFailureHeatmapData($this->dungeon, $this->mappingVersion, [PHP_INT_MAX]);
         $array  = $result->setUseFacade(false)->toArray();
 
         // Assert
@@ -232,7 +233,7 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
             $createdFailures[] = $failure->id;
 
             // Act
-            $result = $this->service->getEnemyFailureHeatmapData($this->dungeon, [$targetNpcId]);
+            $result = $this->service->getEnemyFailureHeatmapData($this->dungeon, $this->mappingVersion, [$targetNpcId]);
             $array  = $result->toArray();
 
             // Assert
@@ -277,7 +278,7 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
             }
 
             // Act
-            $result = $this->service->getEnemyFailureHeatmapData($this->dungeon, [$targetNpcId]);
+            $result = $this->service->getEnemyFailureHeatmapData($this->dungeon, $this->mappingVersion, [$targetNpcId]);
             $array  = $result->toArray();
 
             // Assert
@@ -315,7 +316,7 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
             $createdFailures[] = $failure->id;
 
             // Act — no NPC filter
-            $result = $this->service->getEnemyFailureHeatmapData($this->dungeon, null);
+            $result = $this->service->getEnemyFailureHeatmapData($this->dungeon, $this->mappingVersion, null);
             $array  = $result->toArray();
 
             // Assert — routes should be empty when no NPC filter is active
@@ -325,5 +326,122 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
             CombatLogRouteEnemyFailure::whereIn('id', $createdFailures)->delete();
             DungeonRoute::whereIn('id', $createdRouteIds)->delete();
         }
+    }
+
+    #[Test]
+    public function getEnemyFailureHeatmapData_givenMappingVersionFilter_returnsOnlyMatchingRows(): void
+    {
+        $created = [];
+
+        try {
+            // Arrange — one failure in the selected mapping version, one in another (fake) one
+            $created[] = $this->createFailure(['mapping_version_id' => $this->mappingVersion->id, 'lat' => -50.0, 'lng' => 100.0])->id;
+            $created[] = $this->createFailure(['mapping_version_id' => PHP_INT_MAX, 'lat' => -200.0, 'lng' => 300.0])->id;
+
+            // Act
+            $array = $this->service->getEnemyFailureHeatmapData($this->dungeon, $this->mappingVersion, null)
+                ->setUseFacade(false)
+                ->toArray();
+
+            // Assert
+            $this->assertEquals(1, $array['failure_count']);
+        } finally {
+            CombatLogRouteEnemyFailure::whereIn('id', $created)->delete();
+        }
+    }
+
+    #[Test]
+    public function getEnemyFailureHeatmapData_givenZeroEnemyForcesNpc_excludesItsRows(): void
+    {
+        $created          = [];
+        $zeroForcesNpcId  = 99910;
+        $otherNpcId       = 99911;
+        $npcEnemyForcesId = null;
+
+        try {
+            // Arrange — the first npc is explicitly worth 0 enemy forces in this mapping version, the second has no row at all
+            $npcEnemyForcesId = NpcEnemyForces::query()->create([
+                'mapping_version_id' => $this->mappingVersion->id,
+                'npc_id'             => $zeroForcesNpcId,
+                'enemy_forces'       => 0,
+            ])->id;
+
+            $created[] = $this->createFailure(['npc_id' => $zeroForcesNpcId, 'lat' => -50.0, 'lng' => 100.0])->id;
+            $created[] = $this->createFailure(['npc_id' => $otherNpcId, 'lat' => -200.0, 'lng' => 300.0])->id;
+            $created[] = $this->createFailure(['npc_id' => null, 'lat' => -100.0, 'lng' => 200.0])->id;
+
+            // Act
+            $array = $this->service->getEnemyFailureHeatmapData($this->dungeon, $this->mappingVersion, null)
+                ->setUseFacade(false)
+                ->toArray();
+
+            // Assert — the 0-forces npc is gone, the unmapped npc and the npc-less row stay
+            $this->assertEquals(2, $array['failure_count']);
+        } finally {
+            CombatLogRouteEnemyFailure::whereIn('id', $created)->delete();
+            if ($npcEnemyForcesId !== null) {
+                NpcEnemyForces::query()->whereKey($npcEnemyForcesId)->delete();
+                new NpcEnemyForces()->flushCache();
+            }
+        }
+    }
+
+    #[Test]
+    public function getFailureCountsPerNpc_givenRowsAcrossMappingVersions_returnsOnlySelectedMappingVersionMostFailuresFirst(): void
+    {
+        $created = [];
+
+        try {
+            // Arrange — npc A twice and npc B once in the selected mapping version, npc B again in another one
+            $created[] = $this->createFailure(['npc_id' => 99920])->id;
+            $created[] = $this->createFailure(['npc_id' => 99920])->id;
+            $created[] = $this->createFailure(['npc_id' => 99921])->id;
+            $created[] = $this->createFailure(['npc_id' => 99921, 'mapping_version_id' => PHP_INT_MAX])->id;
+            $created[] = $this->createFailure(['npc_id' => null])->id;
+
+            // Act
+            $counts = $this->service->getFailureCountsPerNpc($this->dungeon, $this->mappingVersion);
+
+            // Assert
+            $this->assertSame([99920 => 2, 99921 => 1], $counts->all());
+        } finally {
+            CombatLogRouteEnemyFailure::whereIn('id', $created)->delete();
+        }
+    }
+
+    #[Test]
+    public function getFailureCountsPerMappingVersion_givenRows_returnsCountForEveryMappingVersionOfTheDungeon(): void
+    {
+        $created = [];
+
+        try {
+            // Arrange
+            $created[] = $this->createFailure()->id;
+            $created[] = $this->createFailure()->id;
+
+            // Act
+            $counts = $this->service->getFailureCountsPerMappingVersion($this->dungeon);
+
+            // Assert — every mapping version is present, the current one carries our two rows
+            $this->assertEqualsCanonicalizing($this->dungeon->mappingVersions->pluck('id')->all(), $counts->keys()->all());
+            $this->assertSame(2, $counts->get($this->mappingVersion->id));
+        } finally {
+            CombatLogRouteEnemyFailure::whereIn('id', $created)->delete();
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $attributes
+     */
+    private function createFailure(array $attributes = []): CombatLogRouteEnemyFailure
+    {
+        return CombatLogRouteEnemyFailure::create(array_merge([
+            'dungeon_id'         => $this->dungeon->id,
+            'floor_id'           => $this->floor->id,
+            'mapping_version_id' => $this->mappingVersion->id,
+            'npc_id'             => null,
+            'lat'                => -50.0,
+            'lng'                => 100.0,
+        ], $attributes));
     }
 }
