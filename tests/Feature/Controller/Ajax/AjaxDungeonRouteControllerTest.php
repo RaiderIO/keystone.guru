@@ -88,6 +88,33 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function get_givenColumnEntryIsMissingName_returnsOk(): void
+    {
+        // Arrange - a malformed columns[] entry (missing the 'name' key), as seen in
+        // PHP-LARAVEL-SA (#4084): a partial/mangled datatables columns payload from the client
+        $query = http_build_query([
+            'draw'    => 1,
+            'start'   => 0,
+            'length'  => 25,
+            'columns' => [
+                [
+                    'data'       => 0,
+                    'searchable' => 'true',
+                    'orderable'  => 'true',
+                    'search'     => ['value' => '', 'regex' => 'false'],
+                ],
+            ],
+            'search' => ['value' => '', 'regex' => 'false'],
+        ]);
+
+        // Act
+        $response = $this->get(sprintf('/ajax/routes?%s', $query));
+
+        // Assert
+        $response->assertOk();
+    }
+
+    #[Test]
     public function get_givenSearchValueIsAnArray_returnsOk(): void
     {
         // Arrange - a caller sending 'search[value][]=...' instead of a scalar 'search[value]'
