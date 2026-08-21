@@ -51,11 +51,36 @@ describe('CommonMapsCombatlogrouteenemyfailures', () => {
                 toggle: vi.fn(),
                 setRawLatLngsPerFloor: vi.fn(),
             },
+            leafletMap: {},
         };
-        globalThis.getState = () => ({getDungeonMap: () => dungeonMapStub});
+        stateStub = {
+            getDungeonMap: () => dungeonMapStub,
+            getCurrentFloor: () => ({id: 5}),
+            register: vi.fn(),
+        };
+        globalThis.getState = () => stateStub;
+
+        // Minimal Leaflet: a layer group that remembers what was added, and layers that remember their options
+        layerGroupStub = {
+            layers: [],
+            addTo: function () { return this; },
+            clearLayers: function () { this.layers = []; },
+        };
+        const layerFactory = (type) => (latLngs, options) => {
+            const layer = {type, latLngs, options, bindPopup: function () { return this; }, addTo: function (group) { group.layers.push(this); return this; }};
+            return layer;
+        };
+        globalThis.L = {
+            layerGroup: () => layerGroupStub,
+            polygon: layerFactory('polygon'),
+            circleMarker: layerFactory('circleMarker'),
+        };
 
         vi.spyOn($, 'ajax').mockReturnValue({done: () => ({})});
     });
+
+    let stateStub;
+    let layerGroupStub;
 
     function createInstance() {
         return new CommonMapsCombatlogrouteenemyfailures('combatlogrouteenemyfailures', 'common/maps/combatlogrouteenemyfailures', {
@@ -63,6 +88,10 @@ describe('CommonMapsCombatlogrouteenemyfailures', () => {
             mappingVersionId: 10,
             pageUrl: '/admin/tools/combatlog/route/enemy-failures',
             getEnemyFailuresUrl: '/ajax/admin/combatlogroute/enemy-failures',
+            clustersUrl: '/ajax/admin/combatlogroute/enemy-failures/clusters',
+            showClustersSelector: '#show_clusters',
+            verdicts: {npc_not_mapped: {label: 'NPC not mapped', color: '#e74c3c'}},
+            clusterPopupTexts: {failures: ':count failures', nearestEnemy: ':id', nearestNone: 'none', inRange: ':count', seen: ':first :last', filterNpc: 'Filter'},
             deleteUrl: '/ajax/admin/combatlogroute/enemy-failures',
             filterMappingVersionIdSelector: '#filter_mapping_version_id',
             filterNpcIdSelector: '#filter_npc_id',
@@ -73,6 +102,14 @@ describe('CommonMapsCombatlogrouteenemyfailures', () => {
             dependencies: [],
         });
     }
+
+    const cluster = (overrides = {}) => Object.assign({
+        npc_id: 1, npc_name: 'Npc', floor_id: 5, count: 8, route_count: 4, avg_failures_per_route: 2,
+        centroid: {lat: -10, lng: 20, floor_id: 5}, hull: [[-9, 19], [-11, 19], [-10, 21]],
+        first_seen: '2026-08-01T00:00:00+00:00', last_seen: '2026-08-02T00:00:00+00:00',
+        nearest_enemy_id: null, nearest_enemy_distance: null, nearest_enemy_floor_id: null, nearest_enemy_pack_group: null,
+        enemies_within_range: 0, verdict: 'npc_not_mapped', low_volume: false, suggestion: 'Add it',
+    }, overrides);
 
     test('clearButtonClick_sendsDungeonIdInDeleteRequest', () => {
         const instance = createInstance();
@@ -110,6 +147,66 @@ describe('CommonMapsCombatlogrouteenemyfailures', () => {
         expect(searchCall).toBeDefined();
         expect(String(searchCall[0].data.mapping_version_id)).toBe('10');
         expect(String(searchCall[0].data.dungeon_id)).toBe('123');
+    });
+
+    test('search_alsoFetchesClustersWithTheSameFilters', () => {
+        const instance = createInstance();
+        $('#filter_npc_id').append('<option value="42" selected>x</option>');
+
+        instance.activate();
+
+        const clusterCall = $.ajax.mock.calls.find((call) => call[0].url === '/ajax/admin/combatlogroute/enemy-failures/clusters');
+        expect(clusterCall).toBeDefined();
+        expect(clusterCall[0].data).toEqual({dungeon_id: 123, mapping_version_id: 10, npc_id: [42]});
+    });
+
+    test('redrawClusters_drawsOnlyCurrentFloorClustersAsMarkerAndHull', () => {
+        const instance = createInstance();
+        document.body.insertAdjacentHTML('beforeend', '<input type="checkbox" id="show_clusters" checked>');
+        instance.activate();
+
+        instance._clusters = [cluster({floor_id: 5}), cluster({floor_id: 6}), cluster({floor_id: 5, hull: []})];
+        instance._redrawClusters();
+
+        // floor 5 with hull: polygon + marker; floor 5 without hull: marker only; floor 6: nothing
+        expect(layerGroupStub.layers.map((layer) => layer.type)).toEqual(['polygon', 'circleMarker', 'circleMarker']);
+        expect(layerGroupStub.layers[1].options.color).toBe('#e74c3c');
+        expect(layerGroupStub.layers[1].latLngs).toEqual([-10, 20]);
+    });
+
+    test('redrawClusters_givenCheckboxUnchecked_drawsNothing', () => {
+        const instance = createInstance();
+        document.body.insertAdjacentHTML('beforeend', '<input type="checkbox" id="show_clusters">');
+        instance.activate();
+
+        instance._clusters = [cluster()];
+        instance._redrawClusters();
+
+        expect(layerGroupStub.layers).toEqual([]);
+    });
+
+    test('fetchClusters_givenStaleResponseArrivingLate_ignoresIt', () => {
+        const instance = createInstance();
+        document.body.insertAdjacentHTML('beforeend', '<input type="checkbox" id="show_clusters" checked>');
+        instance.activate();
+
+        // Two cluster requests in flight; resolve the SECOND first, then the first (stale) one
+        const pending = [];
+        $.ajax.mockImplementation((options) => ({done: (callback) => { if (options.url.endsWith('/clusters')) pending.push(callback); return {}; }}));
+        instance._fetchClusters([1]);
+        instance._fetchClusters([2]);
+        pending[1]({data: [cluster({npc_id: 2})]});
+        pending[0]({data: [cluster({npc_id: 1})]});
+
+        expect(instance._clusters.map((c) => c.npc_id)).toEqual([2]);
+    });
+
+    test('activate_registersForFloorChangesToRedraw', () => {
+        const instance = createInstance();
+
+        instance.activate();
+
+        expect(stateStub.register).toHaveBeenCalledWith('floorid:changed', instance, expect.any(Function));
     });
 
     test('mappingVersionChange_navigatesToThePageForThatMappingVersion', () => {

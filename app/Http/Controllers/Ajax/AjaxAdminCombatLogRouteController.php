@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Ajax\AjaxAdminCombatLogRouteDeleteEnemyFailuresFormRequest;
 use App\Http\Requests\Ajax\AjaxAdminCombatLogRouteGetEnemyFailuresFormRequest;
 use App\Models\CombatLog\CombatLogRouteEnemyFailure;
+use App\Service\CombatLog\CombatLogRouteEnemyFailureAnalysisServiceInterface;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Teapot\StatusCode;
@@ -19,6 +20,18 @@ class AjaxAdminCombatLogRouteController extends Controller
         return response()->json(
             $combatLogRouteEnemyFailureService
                 ->getEnemyFailureHeatmapData($request->dungeon(), $request->mappingVersion(), $request->validated('npc_id'))
+                ->toArray(),
+            StatusCode::OK,
+        );
+    }
+
+    public function getEnemyFailureClusters(
+        AjaxAdminCombatLogRouteGetEnemyFailuresFormRequest $request,
+        CombatLogRouteEnemyFailureAnalysisServiceInterface $combatLogRouteEnemyFailureAnalysisService,
+    ): JsonResponse {
+        return response()->json(
+            $combatLogRouteEnemyFailureAnalysisService
+                ->analyze($request->dungeon(), $request->mappingVersion(), $request->validated('npc_id'))
                 ->toArray(),
             StatusCode::OK,
         );

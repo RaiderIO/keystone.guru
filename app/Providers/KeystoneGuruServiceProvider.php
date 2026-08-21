@@ -67,6 +67,8 @@ use App\Service\CombatLog\CombatLogPollingBandService;
 use App\Service\CombatLog\CombatLogPollingBandServiceInterface;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteService;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
+use App\Service\CombatLog\CombatLogRouteEnemyFailureAnalysisService;
+use App\Service\CombatLog\CombatLogRouteEnemyFailureAnalysisServiceInterface;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureService;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureServiceInterface;
 use App\Service\CombatLog\CombatLogService;
@@ -323,6 +325,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Depends on CombatLogService, SeasonService, CoordinatesService
         $this->app->bind(CombatLogRouteDungeonRouteServiceInterface::class, CombatLogRouteDungeonRouteService::class);
         $this->app->bind(CombatLogRouteEnemyFailureServiceInterface::class, CombatLogRouteEnemyFailureService::class);
+        $this->app->bind(CombatLogRouteEnemyFailureAnalysisServiceInterface::class, CombatLogRouteEnemyFailureAnalysisService::class);
         $this->app->bind(ResultEventDungeonRouteServiceInterface::class, ResultEventDungeonRouteService::class);
 
         // Depends on all of the above - pretty much

@@ -4,6 +4,10 @@
  * @property {Number}   mappingVersionId
  * @property {String}   pageUrl
  * @property {String}   getEnemyFailuresUrl
+ * @property {String}   clustersUrl
+ * @property {String}   showClustersSelector
+ * @property {Object}   verdicts           verdict key => {label, color}
+ * @property {Object}   clusterPopupTexts  failures, nearestEnemy, nearestNone, inRange, seen, filterNpc
  * @property {String}   deleteUrl
  * @property {String}   filterMappingVersionIdSelector
  * @property {String}   filterNpcIdSelector
@@ -108,6 +112,15 @@ class CommonMapsCombatlogrouteenemyfailures extends SearchInlineBase {
                 });
         });
 
+        // Cluster layer: redrawn whenever the floor changes (the layer group survives a floor switch, so it has to
+        // be cleared by hand), toggled by the checkbox, and refetched together with every search
+        this._clusters = [];
+        $(this.options.showClustersSelector).on('change', () => this._redrawClusters());
+        getState().register('floorid:changed', this, () => this._redrawClusters());
+        $(document).on('click', '.js-enemy-failure-cluster-select-npc', (event) => {
+            this._selectNpc(Number($(event.currentTarget).data('npc-id')));
+        });
+
         this._search();
     }
 
@@ -127,22 +140,160 @@ class CommonMapsCombatlogrouteenemyfailures extends SearchInlineBase {
     }
 
     /**
+     * @returns {Number[]}
+     * @private
+     */
+    _getSelectedNpcIds() {
+        let selectedVals = $(this.options.filterNpcIdSelector).val();
+
+        return selectedVals
+            ? (Array.isArray(selectedVals) ? selectedVals : [selectedVals]).map(Number).filter(Number.isFinite)
+            : [];
+    }
+
+    /**
      * @param {Object}   options
      * @param {Object}   queryParameters
      * @param {string[]} queryParametersUrlBlacklist
      * @protected
      */
     _search(options = {}, queryParameters = {}, queryParametersUrlBlacklist = []) {
-        let selectedVals = $(this.options.filterNpcIdSelector).val();
-        let npcIds       = selectedVals
-            ? (Array.isArray(selectedVals) ? selectedVals : [selectedVals]).map(Number).filter(Number.isFinite)
-            : [];
+        let npcIds = this._getSelectedNpcIds();
 
         if (npcIds.length > 0) {
             queryParameters = $.extend({}, queryParameters, {'npc_id': npcIds});
         }
 
         super._search(options, queryParameters, queryParametersUrlBlacklist);
+
+        this._fetchClusters(npcIds);
+    }
+
+    /**
+     * @param {Number[]} npcIds
+     * @protected
+     */
+    _fetchClusters(npcIds) {
+        if (!this.options.clustersUrl) {
+            return;
+        }
+
+        let data = {dungeon_id: this.options.dungeonId, mapping_version_id: this.options.mappingVersionId};
+        if (npcIds.length > 0) {
+            data.npc_id = npcIds;
+        }
+
+        // Rapid filter changes fire overlapping requests - only the latest one may paint, an older response that
+        // arrives later would show clusters for a selection that is no longer active
+        let requestId = this._clusterRequestId = (this._clusterRequestId || 0) + 1;
+
+        $.ajax({type: 'GET', url: this.options.clustersUrl, data: data, dataType: 'json'})
+            .done((json) => {
+                if (requestId !== this._clusterRequestId) {
+                    return;
+                }
+
+                this._clusters = (json && json.data) || [];
+                this._redrawClusters();
+            });
+    }
+
+    /**
+     * @returns {L.LayerGroup}
+     * @private
+     */
+    _getClusterLayerGroup() {
+        if (!this._clusterLayerGroup) {
+            this._clusterLayerGroup = L.layerGroup().addTo(getState().getDungeonMap().leafletMap);
+        }
+
+        return this._clusterLayerGroup;
+    }
+
+    /**
+     * Draws the clusters of the current floor: a circle marker at the centroid (size by failure count, colour by
+     * verdict, faded when low-volume) and the convex hull of the failures around it.
+     * @protected
+     */
+    _redrawClusters() {
+        let layerGroup = this._getClusterLayerGroup();
+        layerGroup.clearLayers();
+
+        let $toggle = $(this.options.showClustersSelector);
+        if ($toggle.length > 0 && !$toggle.is(':checked')) {
+            return;
+        }
+
+        let currentFloor = getState().getCurrentFloor();
+        if (!currentFloor) {
+            return;
+        }
+
+        for (let cluster of this._clusters) {
+            if (cluster.floor_id !== currentFloor.id) {
+                continue;
+            }
+
+            let color   = (this.options.verdicts[cluster.verdict] ?? {}).color ?? '#ffffff';
+            let opacity = cluster.low_volume ? 0.3 : 0.8;
+
+            if (cluster.hull.length >= 3) {
+                L.polygon(cluster.hull, {
+                    color: color, weight: 1, opacity: opacity, fillColor: color, fillOpacity: cluster.low_volume ? 0.08 : 0.2, interactive: false,
+                }).addTo(layerGroup);
+            }
+
+            L.circleMarker([cluster.centroid.lat, cluster.centroid.lng], {
+                radius: 6 + 3 * Math.log2(Math.max(1, cluster.count)),
+                color: color, weight: 2, opacity: opacity, fillColor: color, fillOpacity: cluster.low_volume ? 0.2 : 0.6,
+            }).bindPopup(this._getClusterPopupHtml(cluster), {maxWidth: 360}).addTo(layerGroup);
+        }
+    }
+
+    /**
+     * @param {Object} cluster
+     * @returns {String}
+     * @private
+     */
+    _getClusterPopupHtml(cluster) {
+        let texts   = this.options.clusterPopupTexts;
+        let verdict = this.options.verdicts[cluster.verdict] ?? {label: cluster.verdict, color: '#ffffff'};
+        let replace = (text, replacements) => Object.entries(replacements)
+            .reduce((result, [key, value]) => result.replaceAll(`:${key}`, String(value ?? '-')), text);
+        let escape  = (text) => $('<span>').text(text ?? '').html();
+
+        let nearest = cluster.nearest_enemy_id === null
+            ? texts.nearestNone
+            : replace(texts.nearestEnemy, {
+                id: cluster.nearest_enemy_id, distance: cluster.nearest_enemy_distance,
+                floor: cluster.nearest_enemy_floor_id, pack: cluster.nearest_enemy_pack_group,
+            });
+
+        return `
+            <div class="enemy-failure-cluster-popup">
+                <strong>${escape(cluster.npc_name)} (${cluster.npc_id})</strong>
+                <span class="badge" style="background-color: ${verdict.color}">${escape(verdict.label)}${cluster.low_volume ? ' *' : ''}</span>
+                <div>${escape(replace(texts.failures, {count: cluster.count, routes: cluster.route_count, avg: cluster.avg_failures_per_route}))}</div>
+                <div>${escape(nearest)}</div>
+                <div>${escape(replace(texts.inRange, {count: cluster.enemies_within_range}))}</div>
+                <div class="text-muted small">${escape(replace(texts.seen, {first: (cluster.first_seen ?? '').substring(0, 10), last: (cluster.last_seen ?? '').substring(0, 10)}))}</div>
+                <div class="mt-1"><em>${escape(cluster.suggestion)}</em></div>
+                <button class="btn btn-sm btn-primary mt-2 js-enemy-failure-cluster-select-npc" data-npc-id="${cluster.npc_id}">${escape(texts.filterNpc)}</button>
+            </div>`;
+    }
+
+    /**
+     * Selects just this npc in the npc filter - the change event then re-searches (heatmap + clusters).
+     * @param {Number} npcId
+     * @protected
+     */
+    _selectNpc(npcId) {
+        let select = $(this.options.filterNpcIdSelector)[0];
+        if (select && select.tomselect) {
+            select.tomselect.setValue([String(npcId)]);
+        } else {
+            $(select).val([String(npcId)]).trigger('change');
+        }
     }
 }
 

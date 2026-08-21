@@ -706,6 +706,8 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::prefix('combatlogroute')->group(static function () {
                     Route::get('/enemy-failures', new AjaxAdminCombatLogRouteController()->getEnemyFailures(...))
                         ->name('ajax.admin.combatlogroute.enemy_failures');
+                    Route::get('/enemy-failures/clusters', new AjaxAdminCombatLogRouteController()->getEnemyFailureClusters(...))
+                        ->name('ajax.admin.combatlogroute.enemy_failures.clusters');
                     Route::delete('/enemy-failures', new AjaxAdminCombatLogRouteController()->deleteEnemyFailures(...))
                         ->name('ajax.admin.combatlogroute.enemy_failures.delete');
                 });
