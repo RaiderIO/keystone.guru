@@ -56,53 +56,58 @@ class AjaxArrowController extends Controller
             return $result;
         }
 
-        DB::transaction(function () use ($coordinatesService, $arrow, $dungeonRoute, $validated, &$result) {
-            $beforeModel = $arrow === null ? null : clone $arrow;
+        try {
+            DB::transaction(function () use ($coordinatesService, $arrow, $dungeonRoute, $validated, &$result) {
+                $beforeModel = $arrow === null ? null : clone $arrow;
 
-            if ($arrow === null) {
-                $arrow = Arrow::create([
-                    'dungeon_route_id' => $dungeonRoute->id,
-                    'floor_id'         => $validated['floor_id'],
-                    'polyline_id'      => -1,
-                ]);
-                $success = true;
-            } else {
-                $success = $arrow->update([
-                    'dungeon_route_id' => $dungeonRoute->id,
-                    'floor_id'         => $validated['floor_id'],
-                ]);
-            }
-
-            try {
-                if ($success) {
-                    $this->savePolylineToModel(
-                        $coordinatesService,
-                        $dungeonRoute,
-                        $dungeonRoute->mappingVersion,
-                        Polyline::findOrNew($arrow->polyline_id),
-                        $beforeModel,
-                        $arrow,
-                        $validated['polyline'],
-                    );
-
-                    $dungeonRoute->touch();
-
-                    if (Auth::check()) {
-                        try {
-                            broadcast(new ArrowChangedEvent($coordinatesService, $dungeonRoute, Auth::user(), $arrow));
-                        } catch (BroadcastException) {
-                            // Ignore broadcast failures
-                        }
-                    }
+                if ($arrow === null) {
+                    $arrow = Arrow::create([
+                        'dungeon_route_id' => $dungeonRoute->id,
+                        'floor_id'         => $validated['floor_id'],
+                        'polyline_id'      => -1,
+                    ]);
+                    $success = true;
                 } else {
+                    $success = $arrow->update([
+                        'dungeon_route_id' => $dungeonRoute->id,
+                        'floor_id'         => $validated['floor_id'],
+                    ]);
+                }
+
+                if (!$success) {
+                    // Caught below, which rolls back this transaction and responds with a 404
                     throw new Exception(__('controller.arrow.error.unable_to_save_arrow'));
                 }
 
+                $this->savePolylineToModel(
+                    $coordinatesService,
+                    $dungeonRoute,
+                    $dungeonRoute->mappingVersion,
+                    Polyline::findOrNew($arrow->polyline_id),
+                    $beforeModel,
+                    $arrow,
+                    $validated['polyline'],
+                );
+
+                $dungeonRoute->touch();
+
+                if (Auth::check()) {
+                    try {
+                        broadcast(new ArrowChangedEvent($coordinatesService, $dungeonRoute, Auth::user(), $arrow));
+                    } catch (BroadcastException) {
+                        // Ignore broadcast failures
+                    }
+                }
+
                 $result = $arrow;
-            } catch (Exception) {
-                $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
-            }
-        });
+            });
+        } catch (Exception) {
+            // Caught out here rather than inside the closure: a catch within the closure lets it
+            // return normally, so the transaction commits the half-written arrow (a row still
+            // carrying the polyline_id = -1 sentinel, plus an orphan polyline) while the response
+            // tells the client the request failed (#4259).
+            $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
+        }
 
         return $result;
     }

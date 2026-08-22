@@ -4,6 +4,8 @@ namespace Tests\Feature\Controller\Ajax;
 
 use App\Events\Models\Brushline\BrushlineChangedEvent;
 use App\Models\Floor\Floor;
+use App\Models\Polyline;
+use Exception;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -137,5 +139,53 @@ final class AjaxBrushlineControllerTest extends DungeonRouteTestBase
         // Assert
         $response->assertStatus(StatusCode::FOUND);
         $response->assertSessionHasErrors(['polyline.vertices_json']);
+    }
+
+    /**
+     * Guards #4259: the catch used to sit *inside* the DB::transaction() closure, so the closure
+     * returned normally and Laravel committed. A failure between the two writes that
+     * SavesPolylines::savePolylineToModel() performs - Polyline::updateOrCreate() and then
+     * $ownerModel->update(['polyline_id' => ...]) - therefore left a committed brushline row still
+     * carrying the polyline_id = -1 sentinel plus an orphan polyline, while responding 404. The
+     * client treats that as a failure and retries, so one drawn line became two rows.
+     */
+    #[Test]
+    #[Group('Controller')]
+    public function store_givenThePolylineWriteFails_rollsBackTheWholeBrushline(): void
+    {
+        // Arrange
+        /** @var Floor $randomFloor */
+        $randomFloor = $this->dungeonRoute->dungeon->floors()
+            ->where('facade', false)
+            ->get()
+            ->random();
+
+        $polyline = PolylineFixtures::createPolyline($randomFloor);
+
+        $polylinesBefore = Polyline::query()->count();
+
+        // Fail the polyline write specifically, which is what a contended `polylines` table does in
+        // production (#4239). By that point the brushline row has already been inserted inside the
+        // same transaction, which is exactly the state that used to get committed.
+        Polyline::creating(static function (): never {
+            throw new Exception('Simulated failure writing the polyline');
+        });
+
+        try {
+            // Act
+            $response = $this->post(route('ajax.dungeonroute.brushline.create', ['dungeonRoute' => $this->dungeonRoute]), [
+                'floor_id' => $randomFloor->id,
+                'polyline' => $polyline,
+            ]);
+
+            // Assert - the client is told it failed, and nothing was left behind for it to trip over
+            $response->assertStatus(StatusCode::NOT_FOUND);
+            $this->assertEquals(0, $this->dungeonRoute->brushlines()->count());
+            $this->assertEquals($polylinesBefore, Polyline::query()->count());
+        } finally {
+            // Remove only the listener registered above - Polyline::flushEventListeners() would also
+            // wipe Polyline::boot()'s own listeners for the rest of the PHPUnit process
+            Event::forget('eloquent.creating: ' . Polyline::class);
+        }
     }
 }
