@@ -1,9 +1,9 @@
 name: PHP Tests
 
+# No base-branch filter: stacked PRs (one PR targeting another open PR's branch) must run the
+# same tests as PRs against master (#4074).
 on:
   pull_request:
-    branches:
-      - master
 
 permissions:
   contents: read
