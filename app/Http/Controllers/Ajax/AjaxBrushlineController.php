@@ -56,56 +56,61 @@ class AjaxBrushlineController extends Controller
             return $result;
         }
 
-        DB::transaction(function () use ($coordinatesService, $brushline, $dungeonRoute, $validated, &$result) {
-            $beforeModel = $brushline === null ? null : clone $brushline;
+        try {
+            DB::transaction(function () use ($coordinatesService, $brushline, $dungeonRoute, $validated, &$result) {
+                $beforeModel = $brushline === null ? null : clone $brushline;
 
-            if ($brushline === null) {
-                $brushline = Brushline::create([
-                    'dungeon_route_id' => $dungeonRoute->id,
-                    'floor_id'         => $validated['floor_id'],
-                    'polyline_id'      => -1,
-                ]);
-                $success = true;
-            } else {
-                $success = $brushline->update([
-                    'dungeon_route_id' => $dungeonRoute->id,
-                    'floor_id'         => $validated['floor_id'],
-                ]);
-            }
-
-            try {
-                if ($success) {
-                    // Create a new polyline and save it
-                    $this->savePolylineToModel(
-                        $coordinatesService,
-                        $dungeonRoute,
-                        $dungeonRoute->mappingVersion,
-                        Polyline::findOrNew($brushline->polyline_id),
-                        $beforeModel,
-                        $brushline,
-                        $validated['polyline'],
-                    );
-
-                    // Touch the route so that the thumbnail gets updated
-                    $dungeonRoute->touch();
-
-                    // Something's updated; broadcast it
-                    if (Auth::check()) {
-                        try {
-                            broadcast(new BrushlineChangedEvent($coordinatesService, $dungeonRoute, Auth::user(), $brushline));
-                        } catch (BroadcastException) {
-                            // We don't really care if the broadcast fails, so just catch the exception and move on
-                        }
-                    }
+                if ($brushline === null) {
+                    $brushline = Brushline::create([
+                        'dungeon_route_id' => $dungeonRoute->id,
+                        'floor_id'         => $validated['floor_id'],
+                        'polyline_id'      => -1,
+                    ]);
+                    $success = true;
                 } else {
+                    $success = $brushline->update([
+                        'dungeon_route_id' => $dungeonRoute->id,
+                        'floor_id'         => $validated['floor_id'],
+                    ]);
+                }
+
+                if (!$success) {
+                    // Caught below, which rolls back this transaction and responds with a 404
                     throw new Exception(__('controller.brushline.error.unable_to_save_brushline'));
                 }
 
+                // Create a new polyline and save it
+                $this->savePolylineToModel(
+                    $coordinatesService,
+                    $dungeonRoute,
+                    $dungeonRoute->mappingVersion,
+                    Polyline::findOrNew($brushline->polyline_id),
+                    $beforeModel,
+                    $brushline,
+                    $validated['polyline'],
+                );
+
+                // Touch the route so that the thumbnail gets updated
+                $dungeonRoute->touch();
+
+                // Something's updated; broadcast it
+                if (Auth::check()) {
+                    try {
+                        broadcast(new BrushlineChangedEvent($coordinatesService, $dungeonRoute, Auth::user(), $brushline));
+                    } catch (BroadcastException) {
+                        // We don't really care if the broadcast fails, so just catch the exception and move on
+                    }
+                }
+
                 $result = $brushline;
-            } catch (Exception) {
-                $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
-            }
-        });
+            });
+        } catch (Exception) {
+            // Caught out here rather than inside the closure: a catch within the closure lets it
+            // return normally, so the transaction commits the half-written brushline (a row still
+            // carrying the polyline_id = -1 sentinel, plus an orphan polyline) while the response
+            // tells the client the request failed (#4259).
+            $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
+        }
 
         return $result;
     }
