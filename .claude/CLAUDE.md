@@ -395,6 +395,14 @@ next to it — load that skill when you need the *why*, but follow the rule eith
 - Use proper Eloquent relationship methods with return type hints; prefer them over raw queries or
   manual joins, and over `DB::` (use `Model::query()`).
 - Eager-load to avoid N+1. Query builder is fine for genuinely complex operations.
+- **A retried `DB::transaction($cb, 3)` makes `$model->save()`/`update()` a silent no-op on retry**
+  if the instance outlives the closure. Eloquent's dirty tracking survives a rollback: attempt 1's
+  `save()` syncs the original attributes, the rollback undoes the *row* but not the *PHP object*,
+  and attempt 2 finds the model clean and issues no SQL at all — the write vanishes while the rest
+  of the body retries fine. Write through the query builder
+  (`Model::query()->whereKey($id)->update([...])`) for anything on a caller-owned model inside a
+  retried transaction. Models re-hydrated inside the body each attempt (`$route->load([...])`, a
+  fresh `->get()`) are unaffected. Found in #4250 — it silently dropped a route's `enemy_forces`.
 - **Missing model-cache invalidation on a raw write (e.g. `upsert()` on a `CacheModel`) must not be
   raised as a review finding** (Wotuu, PR #3766) — the tables are read-only in production, caching
   is off in development, and each release rotates the cache prefix. Rationale and the legitimate
