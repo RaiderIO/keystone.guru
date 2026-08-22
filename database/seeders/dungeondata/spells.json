@@ -4947,18 +4947,18 @@
         "icon_name": "ability_thunderclap",
         "name": "spells.8732",
         "description_template": "Damages all nearby enemies for $s1 nature damage",
-        "description": "Damages all nearby enemies for nature damage",
+        "description": "Damages all nearby enemies for 12,071 nature damage",
         "description_format": "Damages all nearby enemies for %1$s nature damage",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "12,071",
                 "spellId": 8732,
                 "coefficient": 147,
                 "effectIndex": 0
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 821.1565,
         "schools_mask": 8,
         "cast_time": 0,
         "duration": null,
@@ -18885,12 +18885,12 @@
         "icon_name": "spell_nature_corrosivebreath",
         "name": "spells.26053",
         "description_template": "Spits a noxious poison onto the target and any enemies within $r1 yd of the target, dealing $s1 Nature damage and silencing them for $d.",
-        "description": "Spits a noxious poison onto the target and any enemies within yd of the target, dealing Nature damage and silencing them for 8 sec.",
+        "description": "Spits a noxious poison onto the target and any enemies within yd of the target, dealing 1,033 Nature damage and silencing them for 8 sec.",
         "description_format": "Spits a noxious poison onto the target and any enemies within  yd of the target, dealing %1$s Nature damage and silencing them for %2$s.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "1,033",
                 "spellId": 26053,
                 "coefficient": 12.57677745819,
                 "effectIndex": 0
@@ -18900,7 +18900,7 @@
                 "text": "8 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 821.3551,
         "schools_mask": 8,
         "cast_time": 0,
         "duration": 8000,
@@ -74073,18 +74073,18 @@
         "icon_name": "rogue_burstofspeed",
         "name": "spells.201062",
         "description_template": "Inflicts $s1 Physical damage to and knocks back any targets the hyperactive Wyrmtongue comes into contact with.",
-        "description": "Inflicts Physical damage to and knocks back any targets the hyperactive Wyrmtongue comes into contact with.",
+        "description": "Inflicts 181,267 Physical damage to and knocks back any targets the hyperactive Wyrmtongue comes into contact with.",
         "description_format": "Inflicts %1$s Physical damage to and knocks back any targets the hyperactive Wyrmtongue comes into contact with.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "181,267",
                 "spellId": 201062,
                 "coefficient": 13.43414211273,
                 "effectIndex": 0
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 134930.0897,
         "schools_mask": 1,
         "cast_time": 0,
         "duration": null,
@@ -96770,12 +96770,12 @@
         "icon_name": "inv_misc_monsterspidercarapace_01",
         "name": "spells.250028",
         "description_template": "Summons an Echo of Shadra, inflicting $s1 Shadow damage to enemies within $a1 yards of the impact.",
-        "description": "Summons an Echo of Shadra, inflicting Shadow damage to enemies within 2 yards of the impact.",
+        "description": "Summons an Echo of Shadra, inflicting 114,487 Shadow damage to enemies within 2 yards of the impact.",
         "description_format": "Summons an Echo of Shadra, inflicting %1$s Shadow damage to enemies within %2$s yards of the impact.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "114,487",
                 "spellId": 250028,
                 "coefficient": 11.80490112305,
                 "effectIndex": 0
@@ -96785,7 +96785,7 @@
                 "text": "2"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.5997,
         "schools_mask": 32,
         "cast_time": 0,
         "duration": null,
@@ -98174,12 +98174,12 @@
         "icon_name": "inv_ember",
         "name": "spells.253666",
         "description_template": "Lobs a fiery bolt at a player's loaction inflicting $s1 Fire damage to all players within $a1 yards of the impact.",
-        "description": "Lobs a fiery bolt at a player's loaction inflicting Fire damage to all players within 4 yards of the impact.",
+        "description": "Lobs a fiery bolt at a player's loaction inflicting 142,737 Fire damage to all players within 4 yards of the impact.",
         "description_format": "Lobs a fiery bolt at a player's loaction inflicting %1$s Fire damage to all players within %2$s yards of the impact.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "142,737",
                 "spellId": 253666,
                 "coefficient": 14.71779918671,
                 "effectIndex": 0
@@ -98189,7 +98189,7 @@
                 "text": "4"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.5707,
         "schools_mask": 4,
         "cast_time": 0,
         "duration": null,
@@ -99770,18 +99770,18 @@
         "icon_name": "ability_creature_poison_03",
         "name": "spells.255895",
         "description_template": "$@spelldesc255894",
-        "description": "All melee attacks inflict an additional Nature damage.",
+        "description": "All melee attacks inflict an additional 16,002 Nature damage.",
         "description_format": "All melee attacks inflict an additional %1$s Nature damage.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "16,002",
                 "spellId": 255895,
                 "coefficient": 1.64999997616,
                 "effectIndex": 0
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96981.8196,
         "schools_mask": 8,
         "cast_time": 0,
         "duration": null,
@@ -128486,6 +128486,17 @@
                 "chain_targets": 0,
                 "radius": null,
                 "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 6,
+                "aura_type": 395,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
             }
         ]
     },
@@ -134873,12 +134884,12 @@
         "icon_name": "spell_shaman_thunderstorm",
         "name": "spells.272821",
         "description_template": "The caster calls down lightning, inflicting $s1 Nature damage to all enemies within $A1 yards of the impact.",
-        "description": "The caster calls down lightning, inflicting Nature damage to all enemies within 3 yards of the impact.",
+        "description": "The caster calls down lightning, inflicting 349,137 Nature damage to all enemies within 3 yards of the impact.",
         "description_format": "The caster calls down lightning, inflicting %1$s Nature damage to all enemies within %2$s yards of the impact.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "349,137",
                 "spellId": 272821,
                 "coefficient": 36,
                 "effectIndex": 0
@@ -134888,7 +134899,7 @@
                 "text": "3"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.5,
         "schools_mask": 8,
         "cast_time": 0,
         "duration": null,
@@ -397815,7 +397826,7 @@
                 "effect_index": 2,
                 "effect_type": 6,
                 "aura_type": 79,
-                "base_points": 10,
+                "base_points": 5,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -414103,6 +414114,17 @@
                 "chain_targets": 0,
                 "radius": null,
                 "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 3,
+                "aura_type": 0,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
             }
         ]
     },
@@ -416111,7 +416133,7 @@
         "icon_name": "ability_ironmaidens_convulsiveshadows",
         "name": "spells.1300803",
         "description_template": "The Corrupted Guardian attacks their current target with a brutal slash, inflicting $s1 Physical damage and an additional $1303446s1 Shadow damage every $1303446t1 sec for $1303446d. This effect stacks.",
-        "description": "The Corrupted Guardian attacks their current target with a brutal slash, inflicting 484,912 Physical damage and an additional 58,189 Shadow damage every 1 sec for 10 sec. This effect stacks.",
+        "description": "The Corrupted Guardian attacks their current target with a brutal slash, inflicting 484,912 Physical damage and an additional 29,095 Shadow damage every 1 sec for 25 sec. This effect stacks.",
         "description_format": "The Corrupted Guardian attacks their current target with a brutal slash, inflicting %1$s Physical damage and an additional %2$s Shadow damage every %3$s sec for %4$s. This effect stacks.",
         "description_values": [
             {
@@ -416123,9 +416145,9 @@
             },
             {
                 "kind": "damage",
-                "text": "58,189",
+                "text": "29,095",
                 "spellId": 1303446,
-                "coefficient": 6,
+                "coefficient": 3,
                 "effectIndex": 0
             },
             {
@@ -416134,7 +416156,7 @@
             },
             {
                 "kind": "duration",
-                "text": "10 sec"
+                "text": "25 sec"
             }
         ],
         "damage_multiplier": 96982.4,
@@ -416398,14 +416420,14 @@
         "icon_name": "inv_nullstone_shadow",
         "name": "spells.1300877",
         "description_template": "The dark energy inflicts $1312214s1 Shadow damage every $t1 sec, reduces healing done by $s2%, and increases Physical damage taken by $s3% for $d. This effect stacks.",
-        "description": "The dark energy inflicts 29,095 Shadow damage every 1 sec, reduces healing done by 33%, and increases Physical damage taken by 300% for 15 sec. This effect stacks.",
+        "description": "The dark energy inflicts 38,793 Shadow damage every 1 sec, reduces healing done by 33%, and increases Physical damage taken by 250% for 15 sec. This effect stacks.",
         "description_format": "The dark energy inflicts %1$s Shadow damage every %2$s sec, reduces healing done by %3$s%%, and increases Physical damage taken by %4$s%% for %5$s. This effect stacks.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "29,095",
+                "text": "38,793",
                 "spellId": 1312214,
-                "coefficient": 3,
+                "coefficient": 4,
                 "effectIndex": 0
             },
             {
@@ -416418,7 +416440,7 @@
             },
             {
                 "kind": "value",
-                "text": "300"
+                "text": "250"
             },
             {
                 "kind": "duration",
@@ -416460,7 +416482,7 @@
                 "effect_index": 2,
                 "effect_type": 6,
                 "aura_type": 87,
-                "base_points": 300,
+                "base_points": 250,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -416769,7 +416791,7 @@
         "icon_name": "inv_10_worlddroplevelingoptionalreagent_misc_orb_air",
         "name": "spells.1300907",
         "description_template": "$@spelldesc1302895",
-        "description": "The Avatar of Sethraliss consumes Cleansed Lifeforce, healing herself for 2% of her maximum health and regenerating % of her maximum health every 2 sec. This effect stacks.",
+        "description": "The Avatar of Sethraliss consumes Cleansed Lifeforce, healing herself for 2% of her maximum health and regenerating % of her maximum health every 3 sec. This effect stacks.",
         "description_format": "The Avatar of Sethraliss consumes Cleansed Lifeforce, healing herself for %1$s%% of her maximum health and regenerating %% of her maximum health every %2$s sec. This effect stacks.",
         "description_values": [
             {
@@ -416778,7 +416800,7 @@
             },
             {
                 "kind": "period",
-                "text": "2"
+                "text": "3"
             }
         ],
         "damage_multiplier": null,
@@ -416796,7 +416818,7 @@
                 "aura_type": 226,
                 "base_points": 1,
                 "variance": 0,
-                "period_ms": 2000,
+                "period_ms": 3000,
                 "chain_targets": 0,
                 "radius": null,
                 "max_radius": null
@@ -417353,7 +417375,7 @@
         "icon_name": "ability_demonhunter_bladedance",
         "name": "spells.1302007",
         "description_template": "Caster strikes all enemies every $t1 sec for $d, inflicting $1302010s1 Fire damage.",
-        "description": "Caster strikes all enemies every 0.4 sec for 1.2 sec, inflicting 48,491 Fire damage.",
+        "description": "Caster strikes all enemies every 0.4 sec for 1.2 sec, inflicting 43,642 Fire damage.",
         "description_format": "Caster strikes all enemies every %1$s sec for %2$s, inflicting %3$s Fire damage.",
         "description_values": [
             {
@@ -417366,9 +417388,9 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "43,642",
                 "spellId": 1302010,
-                "coefficient": 5,
+                "coefficient": 4.5,
                 "effectIndex": 0
             }
         ],
@@ -417404,7 +417426,7 @@
         "icon_name": "ability_demonhunter_bladedance",
         "name": "spells.1302010",
         "description_template": "$@spelldesc1302007",
-        "description": "Caster strikes all enemies every 0.4 sec for 1.2 sec, inflicting 48,491 Fire damage.",
+        "description": "Caster strikes all enemies every 0.4 sec for 1.2 sec, inflicting 43,642 Fire damage.",
         "description_format": "Caster strikes all enemies every %1$s sec for %2$s, inflicting %3$s Fire damage.",
         "description_values": [
             {
@@ -417417,9 +417439,9 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "43,642",
                 "spellId": 1302010,
-                "coefficient": 5,
+                "coefficient": 4.5,
                 "effectIndex": 0
             }
         ],
@@ -417436,7 +417458,7 @@
                 "effect_index": 0,
                 "effect_type": 2,
                 "aura_type": 0,
-                "base_points": 5,
+                "base_points": 4.5,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -417890,7 +417912,7 @@
         "icon_name": "ability_druid_replenish",
         "name": "spells.1302897",
         "description_template": "$@spelldesc1302895",
-        "description": "The Avatar of Sethraliss consumes Cleansed Lifeforce, healing herself for 2% of her maximum health and regenerating % of her maximum health every 2 sec. This effect stacks.",
+        "description": "The Avatar of Sethraliss consumes Cleansed Lifeforce, healing herself for 2% of her maximum health and regenerating % of her maximum health every 3 sec. This effect stacks.",
         "description_format": "The Avatar of Sethraliss consumes Cleansed Lifeforce, healing herself for %1$s%% of her maximum health and regenerating %% of her maximum health every %2$s sec. This effect stacks.",
         "description_values": [
             {
@@ -417899,7 +417921,7 @@
             },
             {
                 "kind": "period",
-                "text": "2"
+                "text": "3"
             }
         ],
         "damage_multiplier": null,
@@ -418097,7 +418119,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1303115,
-                "coefficient": 18,
+                "coefficient": 17,
                 "effectIndex": 0
             }
         ],
@@ -418186,7 +418208,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1303115,
-                "coefficient": 18,
+                "coefficient": 17,
                 "effectIndex": 0
             }
         ],
@@ -418203,7 +418225,7 @@
                 "effect_index": 0,
                 "effect_type": 2,
                 "aura_type": 0,
-                "base_points": 18,
+                "base_points": 17,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -418488,7 +418510,7 @@
         "icon_name": "ability_ironmaidens_convulsiveshadows",
         "name": "spells.1303446",
         "description_template": "$@spelldesc1300803",
-        "description": "The Corrupted Guardian attacks their current target with a brutal slash, inflicting 484,912 Physical damage and an additional 58,189 Shadow damage every 1 sec for 10 sec. This effect stacks.",
+        "description": "The Corrupted Guardian attacks their current target with a brutal slash, inflicting 484,912 Physical damage and an additional 29,095 Shadow damage every 1 sec for 25 sec. This effect stacks.",
         "description_format": "The Corrupted Guardian attacks their current target with a brutal slash, inflicting %1$s Physical damage and an additional %2$s Shadow damage every %3$s sec for %4$s. This effect stacks.",
         "description_values": [
             {
@@ -418500,9 +418522,9 @@
             },
             {
                 "kind": "damage",
-                "text": "58,189",
+                "text": "29,095",
                 "spellId": 1303446,
-                "coefficient": 6,
+                "coefficient": 3,
                 "effectIndex": 0
             },
             {
@@ -418511,7 +418533,7 @@
             },
             {
                 "kind": "duration",
-                "text": "10 sec"
+                "text": "25 sec"
             }
         ],
         "damage_multiplier": 96982.4,
@@ -418527,7 +418549,7 @@
                 "effect_index": 0,
                 "effect_type": 6,
                 "aura_type": 3,
-                "base_points": 6,
+                "base_points": 3,
                 "variance": 0,
                 "period_ms": 1000,
                 "chain_targets": 0,
@@ -425616,14 +425638,14 @@
         "icon_name": "inv_nullstone_shadow",
         "name": "spells.1312214",
         "description_template": "$@spelldesc1300877",
-        "description": "The dark energy inflicts 29,095 Shadow damage every 1 sec, reduces healing done by 33%, and increases Physical damage taken by 300% for 15 sec. This effect stacks.",
+        "description": "The dark energy inflicts 38,793 Shadow damage every 1 sec, reduces healing done by 33%, and increases Physical damage taken by 250% for 15 sec. This effect stacks.",
         "description_format": "The dark energy inflicts %1$s Shadow damage every %2$s sec, reduces healing done by %3$s%%, and increases Physical damage taken by %4$s%% for %5$s. This effect stacks.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "29,095",
+                "text": "38,793",
                 "spellId": 1312214,
-                "coefficient": 3,
+                "coefficient": 4,
                 "effectIndex": 0
             },
             {
@@ -425636,7 +425658,7 @@
             },
             {
                 "kind": "value",
-                "text": "300"
+                "text": "250"
             },
             {
                 "kind": "duration",
@@ -425656,7 +425678,7 @@
                 "effect_index": 0,
                 "effect_type": 2,
                 "aura_type": 0,
-                "base_points": 3,
+                "base_points": 4,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -426103,10 +426125,10 @@
         "mechanic": null,
         "icon_name": "",
         "name": "spells.1317558",
-        "description_template": null,
-        "description": null,
-        "description_format": null,
-        "description_values": null,
+        "description_template": "Attack for Physical damage.",
+        "description": "Attack for Physical damage.",
+        "description_format": "Attack for Physical damage.",
+        "description_values": [],
         "damage_multiplier": null,
         "schools_mask": 0,
         "cast_time": null,
@@ -426115,6 +426137,18 @@
         "hidden_on_map": false,
         "characteristic_id": null,
         "fetched_data_at": "2026-08-19T13:07:38+00:00",
-        "spell_effects": []
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 31,
+                "aura_type": 0,
+                "base_points": 50,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
     }
 ]
