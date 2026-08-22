@@ -79,10 +79,13 @@ class SpellTuningSnapshotLoader implements SpellTuningSnapshotLoaderInterface
         $spellsJson = $this->gitShow($ref, self::SPELLS_REPOSITORY_PATH);
         if ($spellsJson === null) {
             throw new SpellTuningSnapshotException(sprintf(
-                '%s is neither a readable file nor a git ref that has %s (in a worktree, git cannot see the main ' .
-                'checkout - generate the file on the host with `git show <ref>:%s > <file>` and pass the file instead).',
+                '%s is neither a readable file nor a git ref that has %s. Git refs only resolve from the main checkout\'s ' .
+                'app container - a worktree\'s container cannot see the main checkout\'s .git. From a worktree, export the ' .
+                'file on the host and pass it with its build: `git show %s:%s > storage/app/old.json`, then ' .
+                '`--from=storage/app/old.json --from-build=<build of that commit>`.',
                 $ref,
                 self::SPELLS_REPOSITORY_PATH,
+                $ref,
                 self::SPELLS_REPOSITORY_PATH,
             ));
         }

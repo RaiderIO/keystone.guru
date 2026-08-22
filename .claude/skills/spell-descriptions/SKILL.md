@@ -96,9 +96,13 @@ Compendium shows per spell ("Tuning changes" section) and per build (`/compendiu
   ref (`spells.json` and `import_state.json` read from that commit; `--from-build` needed for refs that
   predate `import_state.json`). A file path wins over a ref. The command refuses two sources of the
   same build, which is what you get when you run it *after* committing.
-- **Worktrees:** the app container of a worktree cannot `git show` (its `.git` is a pointer into the
-  main checkout, which is not mounted) — generate the file on the host and pass the path:
-  `git show <ref>:database/seeders/dungeondata/spells.json > storage/app/old.json`.
+- **Run the sequence from the main checkout.** The whole import sequence always has been (it writes
+  the seeder files you then commit), and the default `--from=HEAD` relies on it: a *worktree's* app
+  container cannot `git show` (its `.git` is a pointer into the main checkout, which is not mounted)
+  and the command fails with a message saying so. From a worktree, export the file on the host and
+  pass it with its build:
+  `git show <ref>:database/seeders/dungeondata/spells.json > storage/app/old.json`, then
+  `spell:difftuning --from=storage/app/old.json --from-build=<build of that commit>`.
 - **Idempotent per build:** every run replaces all rows for the target build, so re-running for the
   same pair, or running the import twice for one build (as the sequence above does), never doubles up.
   Backfilling history is the same command with two refs/files, once per build pair.
