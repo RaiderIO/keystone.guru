@@ -16,6 +16,7 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\Import\Traits\AppliesMdtCloneIndexHack;
 use App\Service\MDT\Models\ImportStringPulls;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 
 class PullImporter
@@ -308,9 +309,25 @@ class PullImporter
         return true;
     }
 
+    /**
+     * Wrapped in a retried transaction - concurrent imports bulk-inserting into the shared
+     * kill zone tables can hit a MySQL lock wait timeout under contention (#4239).
+     */
     public function applyPullsToDungeonRoute(ImportStringPulls $importStringPulls, DungeonRoute $dungeonRoute): void
     {
-        $dungeonRoute->update(['enemy_forces' => $importStringPulls->getEnemyForces()]);
+        DB::transaction(fn() => $this->doApplyPullsToDungeonRoute($importStringPulls, $dungeonRoute), 3);
+    }
+
+    private function doApplyPullsToDungeonRoute(ImportStringPulls $importStringPulls, DungeonRoute $dungeonRoute): void
+    {
+        $enemyForces = $importStringPulls->getEnemyForces();
+
+        // Written through the query builder rather than $dungeonRoute->update(): Eloquent's dirty
+        // tracking survives a transaction rollback, so on a retry the in-memory attribute already
+        // holds the target value, the model counts as clean, and update() would issue no SQL at
+        // all - silently losing this write while the rest of the body re-ran fine (#4250).
+        DungeonRoute::query()->whereKey($dungeonRoute->id)->update(['enemy_forces' => $enemyForces]);
+        $dungeonRoute->enemy_forces = $enemyForces;
 
         $killZones       = [];
         $killZoneEnemies = [];
