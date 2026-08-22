@@ -21,12 +21,14 @@ use App\Models\CombatLog\ChallengeModeRunData;
 use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\GameServerRegion;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Polyline;
+use App\Models\Season;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
@@ -85,6 +87,18 @@ use Throwable;
  */
 class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteServiceInterface
 {
+    /** @var int A combat log carries no Raider.IO keystone run id - locally parsed routes all share this one. */
+    private const METADATA_PLACEHOLDER_KEYSTONE_RUN_ID = 98765;
+
+    /** @var int As above, for the logged run id. */
+    private const METADATA_PLACEHOLDER_LOGGED_RUN_ID = 87654;
+
+    /** @var string A combat log does not name the region it was recorded on. */
+    private const METADATA_PLACEHOLDER_REGION = GameServerRegion::EUROPE;
+
+    /** @var string A combat log does not name the realm type it was recorded on. */
+    private const METADATA_PLACEHOLDER_REALM_TYPE = 'live';
+
     public function __construct(
         protected readonly CombatLogService                                  $combatLogService,
         protected readonly SeasonServiceInterface                            $seasonService,
@@ -302,6 +316,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     public function getCombatLogRoute(
         string $combatLogFilePath,
         bool   $dungeonOrRaid = false,
+        bool   $debugIcons = false,
     ): ?CombatLogRouteRequestDto {
         ini_set('max_execution_time', 1800);
 
@@ -317,11 +332,13 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     return null;
                 }
 
-                $seconds      = random_int(1200, 2400);
-                $milliseconds = $seconds * 1000;
+                $seconds       = random_int(1200, 2400);
+                $milliseconds  = $seconds * 1000;
+                $runStart      = Carbon::now()->subSeconds($seconds);
+                $wowInstanceId = null;
 
                 $challengeMode = new CombatLogRouteChallengeModeRequestDto(
-                    Carbon::now()->subSeconds($seconds)->format(CombatLogRouteRequestDto::DATE_TIME_FORMAT),
+                    $runStart->format(CombatLogRouteRequestDto::DATE_TIME_FORMAT),
                     Carbon::now()->format(CombatLogRouteRequestDto::DATE_TIME_FORMAT),
                     true,
                     $milliseconds,
@@ -355,12 +372,20 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     BaseResultEvent $resultEvent,
                 ) => $resultEvent instanceof PlayerDiedResultEvent);
 
+                $runStart      = $challengeModeStartEvent->getTimestamp();
+                $wowInstanceId = $challengeModeStartEvent->getInstanceID();
+
+                // A combat log does not carry the dungeon's par time, but the mapping does - and without it parTimeMs
+                // would claim every run finished exactly on the timer.
+                $parTimeMs = $dungeonRoute->mappingVersion->timer_max_seconds === 0 ?
+                    $challengeModeEndEvent->getTotalTimeMS() : $dungeonRoute->mappingVersion->timer_max_seconds * 1000;
+
                 $challengeMode = new CombatLogRouteChallengeModeRequestDto(
-                    $challengeModeStartEvent->getTimestamp()->format(CombatLogRouteRequestDto::DATE_TIME_FORMAT),
+                    $runStart->format(CombatLogRouteRequestDto::DATE_TIME_FORMAT),
                     $challengeModeEndEvent->getTimestamp()->format(CombatLogRouteRequestDto::DATE_TIME_FORMAT),
                     (bool)$challengeModeEndEvent->getSuccess(),
                     $challengeModeEndEvent->getTotalTimeMS(),
-                    $challengeModeEndEvent->getTotalTimeMS(),
+                    $parTimeMs,
                     $dungeonRoute->mappingVersion->timer_max_seconds === 0 ?
                         1 : $challengeModeEndEvent->getTotalTimeMS() / ($dungeonRoute->mappingVersion->timer_max_seconds * 1000),
                     $challengeModeStartEvent->getChallengeModeID(),
@@ -484,17 +509,8 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             }
 
             return new CombatLogRouteRequestDto(
-                new CombatLogRouteMetadataRequestDto(
-                    Uuid::uuid4()->toString(),
-                    98765,
-                    87654,
-                    99,
-                    'season-midnight-1',
-                    2,
-                    'live',
-                    1,
-                ),
-                new CombatLogRouteSettingsRequestDto(true, true, $dungeonRoute->mappingVersion->version),
+                $this->getCombatLogRouteMetadata($dungeonRoute, $runStart, $wowInstanceId),
+                new CombatLogRouteSettingsRequestDto(true, $debugIcons, $dungeonRoute->mappingVersion->version),
                 $challengeMode,
                 new CombatLogRouteRosterRequestDto(
                     $mostRecentCombatantInfo->count(),
@@ -526,6 +542,47 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         } finally {
             $this->log->getCombatLogRouteEnd();
         }
+    }
+
+    /**
+     * The metadata a locally parsed combat log can carry. Raider.IO owns most of this - a combat log file has no
+     * notion of a keystone/logged run id, nor of the region or realm type it was recorded on - so those stay
+     * placeholders. What the log *does* determine is the season the run belongs to, the week within it, and the
+     * WoW instance id; those are resolved here rather than hardcoded, because `metadata->season` and
+     * `metadata->period` are stored on every combat_log_event the route produces and are what the heatmap filters
+     * on. A run recorded under the wrong season string is invisible to those filters.
+     */
+    private function getCombatLogRouteMetadata(
+        DungeonRoute $dungeonRoute,
+        Carbon       $runStart,
+        ?int         $wowInstanceId,
+    ): CombatLogRouteMetadataRequestDto {
+        // Deliberately not getSeasonAt(), which scopes to a single expansion: a season routinely contains dungeons
+        // from older ones (Midnight season 2 runs King's Rest, a BfA dungeon), so the dungeon's own expansion is
+        // the wrong lens. Seasons run back to back across expansions, so the last one to have started is the one
+        // the run belongs to.
+        /** @var Season|null $season */
+        $season = $this->seasonService->getAllSeasons()
+            ->filter(static fn(Season $season): bool => $season->start->lessThanOrEqualTo($runStart))
+            ->sortByDesc('start')
+            ->first() ?? $this->seasonService->getMostRecentSeasonForDungeon($dungeonRoute->dungeon);
+
+        /** @var GameServerRegion $region */
+        $region = GameServerRegion::where('short', self::METADATA_PLACEHOLDER_REGION)->firstOrFail();
+
+        return new CombatLogRouteMetadataRequestDto(
+            Uuid::uuid4()->toString(),
+            self::METADATA_PLACEHOLDER_KEYSTONE_RUN_ID,
+            self::METADATA_PLACEHOLDER_LOGGED_RUN_ID,
+            // The period is the week of the run in Blizzard's global numbering, which is a function of the date and
+            // the region's weekly reset - not of the season - so it is taken from the same region metadata->regionId
+            // claims, rather than counted forward from the season's start.
+            $region->getKeystoneLeaderboardPeriod($runStart),
+            $season === null ? null : sprintf('season-%s-%d', $season->expansion->shortname, $season->index),
+            $region->id,
+            self::METADATA_PLACEHOLDER_REALM_TYPE,
+            $wowInstanceId,
+        );
     }
 
     /**

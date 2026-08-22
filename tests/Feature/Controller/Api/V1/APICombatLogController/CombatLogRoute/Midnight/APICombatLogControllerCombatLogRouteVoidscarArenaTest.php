@@ -223,14 +223,6 @@ class APICombatLogControllerCombatLogRouteVoidscarArenaTest extends APICombatLog
     }
 
     /**
-     * @param array<string, mixed> $responseArr
-     */
-    private function deleteDungeonRoute(array $responseArr): void
-    {
-        DungeonRoute::where('public_key', $responseArr['data']['publicKey'])->first()?->delete();
-    }
-
-    /**
      * @return array<string, mixed>
      */
     private static function npcEvent(int $npcId, string $spawnUid, string $engagedAt, string $diedAt, float $x, float $y): array

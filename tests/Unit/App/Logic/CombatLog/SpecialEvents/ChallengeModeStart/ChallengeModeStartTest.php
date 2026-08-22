@@ -66,6 +66,25 @@ final class ChallengeModeStartTest extends PublicTestCase
                 4,
                 [9],
             ],
+            // A live key carries three affixes, all inside the one bracketed parameter the string parser hands
+            // over verbatim - only the first survived until the ids were split out of it (#4244)
+            [
+                '8/21/2026 20:47:57.8652  CHALLENGE_MODE_START,"Altar of Fangs",2993,588,10,[162,10,9]',
+                'Altar of Fangs',
+                2993,
+                588,
+                10,
+                [162, 10, 9],
+            ],
+            // A key below the level the seasonal affix unlocks at has two
+            [
+                '8/18/2026 20:08:29.5592  CHALLENGE_MODE_START,"Voidscar Arena",2923,585,7,[10,9]',
+                'Voidscar Arena',
+                2923,
+                585,
+                7,
+                [10, 9],
+            ],
         ];
     }
 }
