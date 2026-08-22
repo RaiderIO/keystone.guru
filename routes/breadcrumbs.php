@@ -540,6 +540,16 @@ Breadcrumbs::for('compendium.activity.day', static function (Generator $trail, D
     $trail->push(__('breadcrumbs.home.compendium.activity_day', ['date' => $date->format('F j, Y')]), route('compendium.activity.day', ['dungeon' => $dungeon, 'date' => $date->format('Y-m-d')]));
 });
 
+Breadcrumbs::for('compendium.tuning.index', static function (Generator $trail) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.compendium.tuning'), route('compendium.tuning.index'));
+});
+
+Breadcrumbs::for('compendium.tuning', static function (Generator $trail, Dungeon $dungeon) {
+    $trail->parent('compendium.tuning.index');
+    $trail->push(__($dungeon->name), route('compendium.tuning', $dungeon));
+});
+
 Breadcrumbs::for('compendium.class.index', static function (Generator $trail) {
     $trail->parent('home');
     $trail->push(__('breadcrumbs.home.compendium.class'), route('compendium.class.index'));

@@ -3,7 +3,7 @@
 use App\Models\Dungeon;
 
 /**
- * @var array{npc: int, spell: int, class: int} $stats
+ * @var array{npc: int, spell: int, class: int, tuning_builds: int} $stats
  */
 
 $contextDungeon = Dungeon::getUserOrDefaultDungeon();
@@ -32,6 +32,14 @@ $sections = [
         'cta'      => __('view_compendium.index.cards.activity.cta'),
         'route'    => route('compendium.activity.index'),
         'subtitle' => __('view_compendium.index.cards.activity.subtitle'),
+    ],
+    [
+        'icon'     => 'fa-balance-scale',
+        'title'    => __('view_compendium.index.cards.tuning.title'),
+        'text'     => __('view_compendium.index.cards.tuning.description'),
+        'cta'      => __('view_compendium.index.cards.tuning.cta'),
+        'route'    => route('compendium.tuning.index'),
+        'subtitle' => sprintf('%s %s', number_format($stats['tuning_builds']), __('view_compendium.index.cards.tuning.count_suffix')),
     ],
     [
         'icon'     => 'fa-hat-wizard',

@@ -75,6 +75,7 @@ class Save extends Command
         $this->saveDungeons($dungeonDataDir);
         $this->saveNpcs($dungeonDataDir);
         $this->saveSpells($dungeonDataDir);
+        $this->saveSpellTuningChanges($dungeonDataDir);
         $this->saveDungeonData($dungeonDataDir);
 
         $this->saveAffixes($seasonDataDir);
@@ -239,6 +240,18 @@ class Save extends Command
         $this->info('Saving Spells');
 
         $this->saveDataToJsonFile($this->mappingExportService->serializeSpells(), $dungeonDataDir, 'spells.json');
+    }
+
+    /**
+     * @param  string    $dungeonDataDir
+     * @throws Exception
+     */
+    private function saveSpellTuningChanges(string $dungeonDataDir): void
+    {
+        // Save the build-over-build spell tuning changes computed by spell:difftuning
+        $this->info('Saving Spell tuning changes');
+
+        $this->saveDataToJsonFile($this->mappingExportService->serializeSpellTuningChanges(), $dungeonDataDir, 'spell_tuning_changes.json');
     }
 
     /**

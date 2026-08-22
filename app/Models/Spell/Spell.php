@@ -55,12 +55,13 @@ use Str;
  * @property string $icon_url
  * @property string $wowhead_tooltip_data
  *
- * @property GameVersion                           $gameVersion
- * @property EloquentCollection<int, Dungeon>      $dungeons
- * @property EloquentCollection<int, SpellDungeon> $spellDungeons
- * @property EloquentCollection<int, SpellEffect>  $spellEffects
- * @property EloquentCollection<int, Npc>          $npcs
- * @property Characteristic|null                   $characteristic
+ * @property GameVersion                                $gameVersion
+ * @property EloquentCollection<int, Dungeon>           $dungeons
+ * @property EloquentCollection<int, SpellDungeon>      $spellDungeons
+ * @property EloquentCollection<int, SpellEffect>       $spellEffects
+ * @property EloquentCollection<int, SpellTuningChange> $tuningChanges
+ * @property EloquentCollection<int, Npc>               $npcs
+ * @property Characteristic|null                        $characteristic
  *
  * @method static Builder<self> visible()
  *
@@ -291,6 +292,12 @@ class Spell extends CacheModel implements MappingModelInterface
     public function spellDungeons(): HasMany
     {
         return $this->hasMany(SpellDungeon::class);
+    }
+
+    /** @return HasMany<SpellTuningChange, $this> */
+    public function tuningChanges(): HasMany
+    {
+        return $this->hasMany(SpellTuningChange::class);
     }
 
     /**

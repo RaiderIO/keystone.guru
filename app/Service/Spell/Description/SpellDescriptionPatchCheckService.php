@@ -130,9 +130,12 @@ class SpellDescriptionPatchCheckService implements SpellDescriptionPatchCheckSer
             'docker compose exec -T app php artisan wagotools:importspelldescriptions   # DB2 -> templates + coefficients',
             'docker compose exec -T app php artisan wowhead:calibratespelldamage        # -> spells.damage_multiplier',
             'docker compose exec -T app php artisan wagotools:importspelldescriptions   # re-render with the multipliers',
-            'docker compose exec -T app php artisan mapping:save                        # -> database/seeders/dungeondata/spells.json',
-            'git add database/seeders/dungeondata/spells.json database/data/spell_description/import_state.json',
+            'docker compose exec -T app php artisan spell:difftuning                    # committed build vs DB -> spell_tuning_changes',
+            'docker compose exec -T app php artisan mapping:save                        # -> database/seeders/dungeondata/spells.json + spell_tuning_changes.json',
+            'git add database/seeders/dungeondata/spells.json database/seeders/dungeondata/spell_tuning_changes.json database/data/spell_description/import_state.json',
             '```',
+            '',
+            'Paste the summary table `spell:difftuning` prints into the PR - it is the readable version of the `spells.json` diff.',
         ]);
     }
 }
