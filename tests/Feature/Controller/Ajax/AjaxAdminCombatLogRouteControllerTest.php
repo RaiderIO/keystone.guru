@@ -41,10 +41,18 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
         // picked below. Force split floors so real floor ids are preserved in the response.
         User::forceMapFacadeStyle(User::MAP_FACADE_STYLE_SPLIT_FLOORS);
 
-        [$this->dungeon, $this->mappingVersion] = $this->findDungeon(facadeEnabled: false);
+        // getEnemyFailureClusters_givenValidDungeon_returnsClusterResponseShape() converts this
+        // floor's lat/lng into ingame coordinates for clustering, so the picked floor needs real
+        // ingame coordinates set - not every non-facade floor has them.
+        [$this->dungeon, $this->mappingVersion, $floor] = $this->findDungeon(
+            facadeEnabled: false,
+            resolve:       static fn(Dungeon $dungeon, MappingVersion $mappingVersion) => $dungeon
+                ->floorsForMapFacade($mappingVersion)
+                ->where('ingame_max_x', '!=', 0)
+                ->first(),
+        );
 
         /** @var Floor $floor */
-        $floor       = $this->dungeon->floors()->where('facade', 0)->first();
         $this->floor = $floor;
     }
 
@@ -98,9 +106,9 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
         $created = [];
 
         try {
-            // Arrange — a handful of failures for one npc in one spot
-            /** @var Floor $floor */
-            $floor = $this->dungeon->floors()->where('facade', 0)->where('ingame_max_x', '!=', 0)->first() ?? $this->floor;
+            // Arrange — a handful of failures for one npc in one spot. setUp() already guaranteed
+            // $this->floor has real ingame coordinates.
+            $floor = $this->floor;
             for ($i = 0; $i < 6; $i++) {
                 $created[] = CombatLogRouteEnemyFailure::create([
                     'dungeon_route_id'   => 8000 + $i,
