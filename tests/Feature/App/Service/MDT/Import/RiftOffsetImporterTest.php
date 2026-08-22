@@ -3,9 +3,11 @@
 namespace Tests\Feature\App\Service\MDT\Import;
 
 use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
+use App\Models\Polyline;
 use App\Service\MDT\Import\RiftOffsetImporter;
 use App\Service\MDT\Models\ImportStringRiftOffsets;
 use Illuminate\Database\Eloquent\Builder;
@@ -263,5 +265,58 @@ final class RiftOffsetImporterTest extends PublicTestCase
         $this->assertCount(0, $result->getWarnings());
         $this->assertCount(0, $result->getMapIcons());
         $this->assertCount(0, $result->getPaths());
+    }
+
+    /**
+     * The happy path of the apply half of this importer, which had no coverage at all: a parsed
+     * rift offset must land as a real map icon plus a path whose polyline is linked back to it.
+     */
+    #[Test]
+    public function applyRiftOffsetsToDungeonRoute_givenAParsedRiftOffset_createsMapIconAndLinkedPath(): void
+    {
+        $dungeonRoute = null;
+
+        try {
+            // Arrange
+            $dungeon        = Dungeon::where('key', self::DUNGEON_KEY_UNPACKED_ONLY)->firstOrFail();
+            $mappingVersion = $dungeon->getCurrentMappingVersion();
+
+            /** @var RiftOffsetImporter $importer */
+            $importer = app(RiftOffsetImporter::class);
+
+            $importStringRiftOffsets = $importer->parseRiftOffsets(new ImportStringRiftOffsets(
+                warnings:       new Collection(),
+                dungeon:        $dungeon,
+                mappingVersion: $mappingVersion,
+                seasonalIndex:  null,
+                riftOffsets:    [
+                    1 => [
+                        self::BRUTAL_NPC_ID => ['x' => 50.0, 'y' => 50.0],
+                    ],
+                ],
+                week: 1,
+            ));
+
+            // Pin the premise: the parse half produced exactly the one offset the apply half needs
+            $this->assertCount(1, $importStringRiftOffsets->getPaths(), 'Test premise no longer holds: parseRiftOffsets() produced no path to apply');
+
+            $dungeonRoute = DungeonRoute::factory()->create([
+                'dungeon_id'         => $dungeon->id,
+                'mapping_version_id' => $mappingVersion->id,
+            ]);
+
+            // Act
+            $importer->applyRiftOffsetsToDungeonRoute($importStringRiftOffsets, $dungeonRoute);
+
+            // Assert
+            $this->assertEquals(1, $dungeonRoute->mapicons()->count());
+            $this->assertEquals(1, $dungeonRoute->paths()->count());
+
+            $path = $dungeonRoute->paths()->first();
+            $this->assertNotEquals(-1, $path->polyline_id, 'The path was never linked back to its polyline');
+            $this->assertNotNull(Polyline::find($path->polyline_id));
+        } finally {
+            $dungeonRoute?->delete();
+        }
     }
 }
