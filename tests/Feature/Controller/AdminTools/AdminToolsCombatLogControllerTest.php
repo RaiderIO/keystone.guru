@@ -30,10 +30,28 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
     /** @var array<int, int> */
     private array $createdDungeonRouteIds = [];
 
+    private ?string $originalAdminMapFacadeStyle = null;
+
+    #[\Override]
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // User::forceMapFacadeStyle() is reset by ResetsMapFacadeStyleOverride at the start of
+        // every request, so it can't be used to influence the actual HTTP request under test -
+        // the persisted preference on the user row is what the controller actually sees. The
+        // default facade style collapses floors onto the facade floor, which makes floor
+        // selection assertions non-deterministic depending on the dungeon picked below.
+        $admin                             = User::findOrFail(1);
+        $this->originalAdminMapFacadeStyle = $admin->map_facade_style;
+        $admin->update(['map_facade_style' => User::MAP_FACADE_STYLE_SPLIT_FLOORS]);
+    }
+
     #[\Override]
     protected function tearDown(): void
     {
         try {
+            User::findOrFail(1)->update(['map_facade_style' => $this->originalAdminMapFacadeStyle]);
             ChallengeModeRun::query()->whereIn('dungeon_route_id', $this->createdDungeonRouteIds)->delete();
             DungeonRoute::query()->whereIn('id', $this->createdDungeonRouteIds)->delete();
         } finally {
@@ -42,13 +60,33 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function combatLogRouteEnemyFailures_givenAdmin_returnsOk(): void
+    public function combatLogRouteEnemyFailures_givenAdmin_redirectsToDefaultFloor(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        /** @var Floor $defaultFloor */
+        $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
+
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.enemy_failures.view'));
+
+        // Assert
+        $response->assertRedirect(route('admin.tools.combatlog.route.enemy_failures.view.floor', [
+            'floorIndex' => $defaultFloor->index,
+        ]));
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyFailures_givenAdmin_returnsOkAfterFollowingRedirect(): void
     {
         // Arrange
         $this->be(User::findOrFail(1));
 
         // Act
-        $response = $this->get(route('admin.tools.combatlog.route.enemy_failures.view'));
+        $response = $this->followingRedirects()->get(route('admin.tools.combatlog.route.enemy_failures.view'));
 
         // Assert
         $response->assertOk();
@@ -94,7 +132,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         $mappingVersion = $dungeon->mappingVersions()->orderBy('version')->firstOrFail();
 
         // Act
-        $response = $this->get(route('admin.tools.combatlog.route.enemy_failures.view', [
+        $response = $this->followingRedirects()->get(route('admin.tools.combatlog.route.enemy_failures.view', [
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $mappingVersion->id,
         ]));
@@ -134,7 +172,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
             ])->id;
 
             // Act
-            $response = $this->get(route('admin.tools.combatlog.route.enemy_failures.view', [
+            $response = $this->followingRedirects()->get(route('admin.tools.combatlog.route.enemy_failures.view', [
                 'dungeon_id'         => $dungeon->id,
                 'mapping_version_id' => $mappingVersion->id,
             ]));
@@ -145,6 +183,102 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         } finally {
             CombatLogRouteEnemyFailure::query()->whereIn('id', $createdFailureIds)->delete();
         }
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyFailuresFloor_givenValidFloorIndex_returnsOkForThatFloor(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        /** @var Floor $floor */
+        $floor = $dungeon->floors()->where('facade', 0)->where('index', '!=', 1)->firstOrFail();
+
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.enemy_failures.view.floor', [
+            'floorIndex' => $floor->index,
+        ]));
+
+        // Assert
+        $response->assertOk();
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyFailuresFloor_givenNonExistentFloorIndex_redirectsToDefaultFloor(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        /** @var Floor $defaultFloor */
+        $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
+
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.enemy_failures.view.floor', [
+            'floorIndex' => 999999,
+        ]));
+
+        // Assert
+        $response->assertRedirect(route('admin.tools.combatlog.route.enemy_failures.view.floor', [
+            'floorIndex' => $defaultFloor->index,
+        ]));
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyFailuresFloor_givenNonNumericFloorIndex_behavesAsFloorIndexOne(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        // Act - a non-numeric floorIndex is treated exactly like an explicit "1", per the same
+        // `!is_numeric($floorIndex)` fallback used by DungeonExploreController/DungeonRouteController
+        $expectedResponse = $this->get(route('admin.tools.combatlog.route.enemy_failures.view.floor', [
+            'floorIndex' => 1,
+        ]));
+        $response = $this->get(route('admin.tools.combatlog.route.enemy_failures.view.floor', [
+            'floorIndex' => 'not-a-number',
+        ]));
+
+        // Assert
+        $response->assertStatus($expectedResponse->getStatusCode());
+        if ($expectedResponse->isRedirect()) {
+            $response->assertRedirect($expectedResponse->headers->get('Location'));
+        }
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyFailuresFloor_givenGuest_redirectsToLogin(): void
+    {
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.enemy_failures.view.floor', [
+            'floorIndex' => 1,
+        ]));
+
+        // Assert
+        $response->assertRedirect();
+    }
+
+    #[Test]
+    public function combatLogRouteEnemyFailuresFloor_givenMappingVersionOfOtherDungeon_returns404(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+
+        $dungeon             = Dungeon::getUserOrDefaultDungeon();
+        $otherMappingVersion = MappingVersion::query()->where('dungeon_id', '!=', $dungeon->id)->firstOrFail();
+
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.enemy_failures.view.floor', [
+            'floorIndex'         => 1,
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $otherMappingVersion->id,
+        ]));
+
+        // Assert
+        $response->assertNotFound();
     }
 
     #[Test]
