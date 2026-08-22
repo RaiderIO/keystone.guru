@@ -521,6 +521,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('combatlog/regenerate', new AdminToolsCombatLogController()->combatlogregenerate(...))->name('admin.tools.combatlog.regenerate.view');
                 Route::post('combatlog/regenerate', new AdminToolsCombatLogController()->combatlogregeneratesubmit(...))->name('admin.tools.combatlog.regenerate.submit');
                 Route::get('combatlog/route/enemy-failures', new AdminToolsCombatLogController()->combatLogRouteEnemyFailures(...))->name('admin.tools.combatlog.route.enemy_failures.view');
+                Route::get('combatlog/route/enemy-failures/{floorIndex}', new AdminToolsCombatLogController()->combatLogRouteEnemyFailuresFloor(...))->name('admin.tools.combatlog.route.enemy_failures.view.floor');
                 Route::get('combatlog/criteria', new AdminToolsCombatLogCriteriaController()->criteria(...))->name('admin.tools.combatlog.criteria.view');
                 Route::post('combatlog/criteria/reset', new AdminToolsCombatLogCriteriaController()->criteriaReset(...))->name('admin.tools.combatlog.criteria.reset');
                 Route::post('combatlog/criteria/thresholds', new AdminToolsCombatLogCriteriaController()->updateThresholds(...))->name('admin.tools.combatlog.criteria.thresholds');
