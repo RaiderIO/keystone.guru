@@ -26,8 +26,34 @@ class AdminToolsCombatLogController extends Controller
 {
     public function combatLogRouteEnemyFailures(
         AdminToolsCombatLogRouteEnemyFailuresRequest $request,
+    ): RedirectResponse {
+        $dungeon = Dungeon::getUserOrDefaultDungeon();
+
+        if ($request->has('dungeon_id') && (int)$request->input('dungeon_id') !== $dungeon->id) {
+            return redirect()->route('admin.tools.combatlog.route.enemy_failures.view', [
+                'dungeon_id' => $dungeon->id,
+            ]);
+        }
+
+        $mappingVersion = $request->getMappingVersion() ?? $dungeon->getCurrentMappingVersion();
+
+        abort_if($mappingVersion === null, 404);
+        // A mapping version of another dungeon makes no sense here - and would build the wrong map context below
+        abort_if($mappingVersion->dungeon_id !== $dungeon->id, 404);
+
+        /** @var Floor $defaultFloor */
+        $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
+
+        return redirect()->route('admin.tools.combatlog.route.enemy_failures.view.floor', [
+            'floorIndex' => $defaultFloor->index,
+        ] + $request->validated());
+    }
+
+    public function combatLogRouteEnemyFailuresFloor(
+        AdminToolsCombatLogRouteEnemyFailuresRequest $request,
         MapContextServiceInterface                   $mapContextService,
         CombatLogRouteEnemyFailureServiceInterface   $combatLogRouteEnemyFailureService,
+        string                                       $floorIndex,
     ): RedirectResponse|View {
         $dungeon = Dungeon::getUserOrDefaultDungeon();
 
@@ -43,7 +69,30 @@ class AdminToolsCombatLogController extends Controller
         // A mapping version of another dungeon makes no sense here - and would build the wrong map context below
         abort_if($mappingVersion->dungeon_id !== $dungeon->id, 404);
 
-        $floor      = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
+        if (!is_numeric($floorIndex)) {
+            $floorIndex = '1';
+        }
+
+        /** @var Floor|null $floor */
+        $floor = Floor::where('dungeon_id', $dungeon->id)
+            ->indexOrFacade($mappingVersion, (int)$floorIndex)
+            ->first();
+
+        if ($floor === null) {
+            /** @var Floor $defaultFloor */
+            $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
+
+            return redirect()->route('admin.tools.combatlog.route.enemy_failures.view.floor', [
+                'floorIndex' => $defaultFloor->index,
+            ] + $request->validated());
+        }
+
+        if ($floor->index !== (int)$floorIndex) {
+            return redirect()->route('admin.tools.combatlog.route.enemy_failures.view.floor', [
+                'floorIndex' => $floor->index,
+            ] + $request->validated());
+        }
+
         $mapContext = $mapContextService->createMapContextDungeonExplore($dungeon, $mappingVersion, User::getCurrentUserMapFacadeStyle());
 
         $dungeon->load(['mappingVersions.gameVersion']);
