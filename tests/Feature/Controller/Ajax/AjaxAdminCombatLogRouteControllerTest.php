@@ -41,11 +41,13 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
         // picked below. Force split floors so real floor ids are preserved in the response.
         User::forceMapFacadeStyle(User::MAP_FACADE_STYLE_SPLIT_FLOORS);
 
-        [$this->dungeon, $this->mappingVersion] = $this->findDungeon(facadeEnabled: false);
-
-        /** @var Floor $floor */
-        $floor       = $this->dungeon->floors()->where('facade', 0)->first();
-        $this->floor = $floor;
+        // Some seeded floors have no ingame coordinates set, which throws once a cluster/heatmap
+        // response tries to convert lat/lng for that floor - so the resolved floor must actually
+        // carry coordinates rather than just be non-facade.
+        [$this->dungeon, $this->mappingVersion, $this->floor] = $this->findDungeon(
+            facadeEnabled: false,
+            resolve:       static fn(Dungeon $dungeon) => $dungeon->floors()->where('facade', 0)->where('ingame_max_x', '!=', 0)->first(),
+        );
     }
 
     #[\Override]
@@ -99,8 +101,7 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
 
         try {
             // Arrange — a handful of failures for one npc in one spot
-            /** @var Floor $floor */
-            $floor = $this->dungeon->floors()->where('facade', 0)->where('ingame_max_x', '!=', 0)->first() ?? $this->floor;
+            $floor = $this->floor;
             for ($i = 0; $i < 6; $i++) {
                 $created[] = CombatLogRouteEnemyFailure::create([
                     'dungeon_route_id'   => 8000 + $i,
