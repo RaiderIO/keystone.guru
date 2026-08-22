@@ -9,6 +9,7 @@ use App\Logic\Datatables\ColumnHandler\Spell\NameColumnHandler;
 use App\Logic\Datatables\SpellsDatatablesHandler;
 use App\Models\Dungeon;
 use App\Models\Spell\Spell;
+use App\Repositories\Interfaces\Spell\SpellTuningChangeRepositoryInterface;
 use App\Service\Compendium\SpellCompendiumServiceInterface;
 use App\Service\Dungeon\DungeonServiceInterface;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -51,8 +52,12 @@ class SpellCompendiumController extends Controller
         ]);
     }
 
-    public function show(Spell $spell, SpellCompendiumServiceInterface $spellCompendiumService, Request $request): View|RedirectResponse
-    {
+    public function show(
+        Spell                                $spell,
+        SpellCompendiumServiceInterface      $spellCompendiumService,
+        SpellTuningChangeRepositoryInterface $spellTuningChangeRepository,
+        Request                              $request,
+    ): View|RedirectResponse {
         if ($spell->hidden_on_map) {
             abort(404);
         }
@@ -70,6 +75,8 @@ class SpellCompendiumController extends Controller
             'spell'     => $spell,
             'npcs'      => $npcs,
             'eventFeed' => $spellCompendiumService->buildEventFeed($spell),
+            // Newest build first (the repository orders by build), values in description order within one
+            'tuningChangesByBuild' => $spellTuningChangeRepository->getForSpell($spell->id)->groupBy('to_build'),
         ]);
     }
 

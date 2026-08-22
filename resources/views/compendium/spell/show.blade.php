@@ -4,12 +4,14 @@ use App\Models\CombatLog\CombatLogNpcEvent;
 use App\Models\CombatLog\CombatLogSpellEvent;
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellTuningChange;
 use Illuminate\Support\Collection;
 
 /**
  * @var Spell                                                  $spell
  * @var Collection<int, Npc>                                   $npcs
  * @var Collection<int, CombatLogNpcEvent|CombatLogSpellEvent> $eventFeed
+ * @var Collection<string, Collection<int, SpellTuningChange>> $tuningChangesByBuild keyed by to_build, newest first
  */
 ?>
 @extends('layouts.sitepage', [
@@ -50,6 +52,15 @@ use Illuminate\Support\Collection;
         </div>
         <div>
             @include('compendium.spell.sections.details')
+        </div>
+    </div>
+
+    <div class="compendium_record_section">
+        <div class="compendium_record_label">
+            {{ __('view_compendium.spell.sections.tuning_changes.title') }}
+        </div>
+        <div>
+            @include('compendium.spell.sections.tuning_changes')
         </div>
     </div>
 

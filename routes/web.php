@@ -71,6 +71,7 @@ use App\Http\Controllers\Compendium\ClassCompendiumController;
 use App\Http\Controllers\Compendium\CompendiumController;
 use App\Http\Controllers\Compendium\NpcCompendiumController;
 use App\Http\Controllers\Compendium\SpellCompendiumController;
+use App\Http\Controllers\Compendium\SpellTuningCompendiumController;
 use App\Http\Controllers\CreatorDirectoryController;
 use App\Http\Controllers\Dungeon\DungeonController;
 use App\Http\Controllers\Dungeon\DungeonExploreController;
@@ -187,6 +188,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('spell', new SpellCompendiumController()->indexDungeon(...))->name('spell.compendium.index.dungeon');
                 Route::get('activity', new NpcCompendiumController()->activity(...))->name('compendium.activity');
                 Route::get('activity/{date}', new NpcCompendiumController()->activityDay(...))->name('compendium.activity.day');
+                Route::get('tuning', new SpellTuningCompendiumController()->indexDungeon(...))->name('compendium.tuning');
                 // withoutScopedBindings: a child binding with a custom key is scoped to its parent by
                 // default, which would have Laravel resolve the class through $dungeon->characterClasses()
                 Route::get('class/{characterClass:slug}', new ClassCompendiumController()->showDungeon(...))
@@ -201,6 +203,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('/{spell}', new SpellCompendiumController()->show(...))->name('spell.compendium.show');
             });
             Route::get('activity', new NpcCompendiumController()->activityIndex(...))->name('compendium.activity.index');
+            Route::get('tuning', new SpellTuningCompendiumController()->index(...))->name('compendium.tuning.index');
             Route::prefix('class')->group(static function () {
                 Route::get('/', new ClassCompendiumController()->index(...))->name('compendium.class.index');
                 Route::get('/{characterClass:slug}', new ClassCompendiumController()->show(...))->name('compendium.class.show');

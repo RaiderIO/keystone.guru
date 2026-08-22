@@ -3,6 +3,7 @@
 namespace Tests\Feature\Mapping;
 
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellTuningChange;
 use App\SeederHelpers\RelationImport\Mapping\SpellRelationMapping;
 use App\Service\Mapping\MappingExportServiceInterface;
 use Illuminate\Support\Facades\Schema;
@@ -115,6 +116,36 @@ class MappingExportServiceTest extends TestCase
             array_diff($preserved, $columns),
             sprintf('Preserved columns do not exist on the spells table: %s', implode(', ', array_diff($preserved, $columns))),
         );
+    }
+
+    /**
+     * The id is assigned by whichever environment loads the file, and enum casts must land as their raw
+     * strings - an object in the export would not survive json_encode/seeder insert unchanged.
+     */
+    #[Test]
+    public function serializeSpellTuningChanges_givenRows_returnsNoIdAndOnlyScalars(): void
+    {
+        // Arrange
+        /** @var MappingExportServiceInterface $mappingExportService */
+        $mappingExportService = app(MappingExportServiceInterface::class);
+        $change               = SpellTuningChange::factory()->create(['to_build' => '0.0.0.00099', 'to_build_number' => 99]);
+
+        try {
+            // Act
+            $serialized = $mappingExportService->serializeSpellTuningChanges();
+            $exported   = collect($serialized)->firstWhere('to_build', '0.0.0.00099');
+
+            // Assert
+            Assert::assertNotNull($exported, 'The created change was not exported');
+            Assert::assertArrayNotHasKey('id', $exported);
+            Assert::assertSame('value_changed', $exported['change_type']);
+            Assert::assertSame('damage', $exported['kind']);
+            foreach ($exported as $column => $value) {
+                Assert::assertTrue(is_scalar($value) || $value === null, sprintf('Column %s did not serialize to a scalar', $column));
+            }
+        } finally {
+            $change->delete();
+        }
     }
 
     /**
