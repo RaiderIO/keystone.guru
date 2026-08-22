@@ -14,16 +14,17 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
 /**
- * #4148: MDT reports the same encounter_id (2791) for all three Voidscar Arena bosses - an upstream MDT
- * bug. MDTMappingImportService::importNpcsDataFromMDT() must apply its manual encounter_id override for
- * Atroxus and Charonus on every import, rather than letting MDT's data clobber it back to 2791.
+ * #4148 found MDT reporting the same encounter_id (2791) for all three Voidscar Arena bosses, an upstream
+ * MDT bug worked around with a manual override in MDTMappingImportService. #4158 confirmed MDT now reports
+ * distinct, correct encounter_ids per boss and removed the override. This test guards against the bug
+ * resurfacing upstream by asserting the import produces distinct ids straight from MDT's data.
  */
 #[Group('UsesLua')]
 #[Group('MDT')]
-final class MDTMappingImportEncounterIdOverrideTest extends PublicTestCase
+final class MDTMappingImportVoidscarArenaEncounterIdTest extends PublicTestCase
 {
     #[Test]
-    public function importNpcsDataFromMDT_givenVoidscarArenaBosses_appliesEncounterIdOverride(): void
+    public function importNpcsDataFromMDT_givenVoidscarArenaBosses_usesDistinctEncounterIdsFromMDT(): void
     {
         // Arrange
         $dungeon = Dungeon::query()->where('key', 'voidscar_arena')->firstOrFail();
@@ -49,8 +50,8 @@ final class MDTMappingImportEncounterIdOverrideTest extends PublicTestCase
 
         // Assert
         $this->assertSame([], $failures, 'The import itself must not have failed for any NPC.');
-        $this->assertSame(2791, $tazrah->fresh()->encounter_id, "Taz'Rah keeps MDT's reported encounter_id.");
-        $this->assertSame(2792, $atroxus->fresh()->encounter_id, "Atroxus's encounter_id must stay overridden, not clobbered back to MDT's 2791.");
-        $this->assertSame(2793, $charonus->fresh()->encounter_id, "Charonus's encounter_id must stay overridden, not clobbered back to MDT's 2791.");
+        $this->assertSame(2791, $tazrah->fresh()->encounter_id, "Taz'Rah's encounter_id must come from MDT.");
+        $this->assertSame(2792, $atroxus->fresh()->encounter_id, "Atroxus's encounter_id must come from MDT, not collide with Taz'Rah's.");
+        $this->assertSame(2793, $charonus->fresh()->encounter_id, "Charonus's encounter_id must come from MDT, not collide with the other two bosses.");
     }
 }
