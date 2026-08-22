@@ -21,5 +21,14 @@ interface CombatLogRouteDungeonRouteServiceInterface
         CombatLogRouteRequestDto $combatLogRoute,
     ): CombatLogRouteCorrectionRequestDto;
 
-    public function getCombatLogRoute(string $combatLogFilePath, bool $dungeonOrRaid = false): ?CombatLogRouteRequestDto;
+    /**
+     * @param bool $debugIcons Whether the resulting body asks the Auto Route Creator for debug map icons. Off by
+     *                         default: generating them costs a pass over the whole route and is only of use when
+     *                         debugging the ARC itself.
+     */
+    public function getCombatLogRoute(
+        string $combatLogFilePath,
+        bool   $dungeonOrRaid = false,
+        bool   $debugIcons = false,
+    ): ?CombatLogRouteRequestDto;
 }
