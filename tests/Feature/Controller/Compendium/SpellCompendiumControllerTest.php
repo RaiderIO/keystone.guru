@@ -7,6 +7,7 @@ use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDungeon;
+use App\Models\Spell\SpellTuningChange;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Laravel\Pennant\Feature;
@@ -246,6 +247,56 @@ final class SpellCompendiumControllerTest extends PublicTestCase
         // Assert
         $response->assertOk();
         $response->assertSeeText(__('view_compendium.spell.sections.event_feed.title'));
+    }
+
+    #[Test]
+    public function show_givenSpellWithTuningChanges_rendersThemNewestBuildFirst(): void
+    {
+        // Arrange
+        $spell = Spell::where('hidden_on_map', false)->first();
+        $this->assertNotNull($spell);
+        $created = [];
+
+        try {
+            $created[] = SpellTuningChange::factory()->create(['spell_id' => $spell->id, 'from_build' => '0.0.0.00001', 'to_build' => '0.0.0.00002', 'to_build_number' => 2, 'old_text' => '11,111', 'new_text' => '22,222', 'delta' => 1.0]);
+            $created[] = SpellTuningChange::factory()->create(['spell_id' => $spell->id, 'from_build' => '0.0.0.00002', 'to_build' => '0.0.0.00003', 'to_build_number' => 3, 'kind' => 'duration', 'old_coefficient' => null, 'new_coefficient' => null, 'old_text' => '10 sec', 'new_text' => '25 sec', 'delta' => null]);
+
+            // Act
+            $response = $this->get(route('spell.compendium.show', $spell));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSeeText(__('view_compendium.spell.sections.tuning_changes.title'));
+            $response->assertSeeTextInOrder([
+                __('view_compendium.spell.sections.tuning_changes.build_header', ['from' => '0.0.0.00002', 'to' => '0.0.0.00003']),
+                '10 sec',
+                '25 sec',
+                __('view_compendium.spell.sections.tuning_changes.build_header', ['from' => '0.0.0.00001', 'to' => '0.0.0.00002']),
+                '11,111',
+                '22,222',
+                '+100%',
+            ]);
+            $response->assertDontSeeText(__('view_compendium.spell.sections.tuning_changes.empty'));
+        } finally {
+            foreach ($created as $change) {
+                $change->delete();
+            }
+        }
+    }
+
+    #[Test]
+    public function show_givenSpellWithoutTuningChanges_rendersEmptyState(): void
+    {
+        // Arrange
+        $spell = Spell::where('hidden_on_map', false)->whereDoesntHave('tuningChanges')->first();
+        $this->assertNotNull($spell);
+
+        // Act
+        $response = $this->get(route('spell.compendium.show', $spell));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSeeText(__('view_compendium.spell.sections.tuning_changes.empty'));
     }
 
     #[Test]

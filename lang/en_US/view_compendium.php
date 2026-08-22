@@ -44,6 +44,12 @@ return [
                 'cta'         => 'View activity',
                 'subtitle'    => 'Updated daily',
             ],
+            'tuning' => [
+                'title'        => 'Spell Tuning',
+                'description'  => 'What each game patch changed about NPC spells: damage going up or down, durations, cooldowns - in the numbers players actually see.',
+                'cta'          => 'View tuning changes',
+                'count_suffix' => 'builds compared',
+            ],
             'class' => [
                 'title'        => 'By Class',
                 'description'  => 'See which of your crowd control spells work on which NPCs, grouped by class.',
@@ -178,6 +184,11 @@ return [
                 'title' => 'Recent Activity',
                 'empty' => 'No activity recorded yet.',
             ],
+            'tuning_changes' => [
+                'title'        => 'Tuning changes',
+                'empty'        => 'No tuning changes recorded for this spell.',
+                'build_header' => 'Build :to (compared with :from)',
+            ],
         ],
     ],
     'activity' => [
@@ -190,6 +201,37 @@ return [
             'title'  => ':date - Compendium Activity',
             'header' => 'Compendium Activity for :date',
             'empty'  => 'No activity recorded for this day.',
+        ],
+    ],
+    'sections' => [
+        // Shared primitive rendering a list of spell tuning changes (compendium/sections/tuning_change_list)
+        'tuning_change_list' => [
+            'kinds' => [
+                'damage'   => 'Damage',
+                'healing'  => 'Healing',
+                'duration' => 'Duration',
+                'period'   => 'Period',
+                'radius'   => 'Radius',
+                'count'    => 'Count',
+                'value'    => 'Value',
+            ],
+            'coefficient'    => 'coefficient',
+            'rewritten'      => 'Description rewritten',
+            'no_description' => '(no description)',
+        ],
+    ],
+    'tuning' => [
+        'index' => [
+            'title'             => 'Spell Tuning - Compendium',
+            'header'            => 'Spell Tuning',
+            'header_dungeon'    => 'Spell Tuning - :dungeon',
+            'intro'             => 'What each game patch changed about NPC spells, in the numbers players actually see. Only changes to the numbers count - a reworded description with the same numbers is not listed.',
+            'empty'             => 'No tuning changes recorded yet.',
+            'all_dungeons'      => 'All dungeons',
+            'show_all_dungeons' => 'Show all dungeons',
+            'build_title'       => 'Build :build',
+            'build_subtitle'    => 'compared with :from',
+            'changed_spells'    => ':count spell changed|:count spells changed',
         ],
     ],
     'class' => [

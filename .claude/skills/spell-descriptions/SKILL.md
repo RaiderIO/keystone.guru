@@ -32,9 +32,15 @@ picks it up, because the data ships in the seeder rather than being fetched at r
 docker compose exec -T app php artisan wagotools:importspelldescriptions   # DB2 -> templates + coefficients
 docker compose exec -T app php artisan wowhead:calibratespelldamage        # -> spells.damage_multiplier
 docker compose exec -T app php artisan wagotools:importspelldescriptions   # re-render with the multipliers
-docker compose exec -T app php artisan mapping:save                        # -> database/seeders/dungeondata/spells.json
-git add database/seeders/dungeondata/spells.json database/data/spell_description/import_state.json
+docker compose exec -T app php artisan spell:difftuning                    # committed build vs DB -> spell_tuning_changes (#4113)
+docker compose exec -T app php artisan mapping:save                        # -> database/seeders/dungeondata/spells.json + spell_tuning_changes.json
+git add database/seeders/dungeondata/spells.json database/seeders/dungeondata/spell_tuning_changes.json database/data/spell_description/import_state.json
 ```
+
+`spell:difftuning` must run **before** the commit: its default `--from=HEAD` is the committed
+`spells.json`, i.e. the previous build, and `--to=db` is what the three commands above just produced.
+Paste its summary table into the PR — it is the readable version of the `spells.json` diff. Details
+under "Tuning diff" below.
 
 Everything inferred from the game data ships in the seeder, so staging and production know it without
 running any of this: the templates, the per-effect coefficients (nested under each spell) and the
@@ -59,6 +65,7 @@ damage multipliers - as does the build just imported (`import_state.json`, loade
 | The template language | `app/Service/Spell/Description/SpellDescriptionParser.php` |
 | The arithmetic inside `${...}` | `app/Service/Spell/Description/MathExpressionEvaluator.php` |
 | Measuring the damage multipliers | `app/Service/Spell/Description/SpellDamageCalibrationService.php` |
+| Build-over-build tuning diff (`spell:difftuning`) | `app/Service/Spell/Tuning/SpellTuningDiffService.php` + `SpellTuningSnapshotLoader.php`, shown by `SpellTuningCompendiumController` |
 | The tooltip | `resources/assets/js/custom/spelltooltip.js` + `resources/assets/css/sections/spell-tooltip.css` |
 | The links that get one | `resources/views/common/spell/link.blade.php`, `resources/assets/js/handlebars/spell_template.handlebars` |
 
@@ -66,6 +73,41 @@ damage multipliers - as does the build just imported (`import_state.json`, loade
 description varies per request, so the tables are streamed once and thrown away. Only spells already
 in `spells` get a description; the spells those descriptions *reference* are read from the same
 stream, so a cross-spell value resolves even for a spell we do not track.
+
+## Tuning diff (`spell:difftuning`, #4113)
+
+The `spells.json` diff of an import is thousands of lines nobody reads; `spell:difftuning` turns it
+into the handful of numbers that actually moved and records them in `spell_tuning_changes`
+(`SpellTuningChange`, seeded from `spell_tuning_changes.json` like everything else), which the
+Compendium shows per spell ("Tuning changes" section) and per build (`/compendium/tuning`).
+
+- **What is compared: the numbers in `description_values`, nothing else.** Damage/healing values are
+  compared on their *coefficient* (relative epsilon `1e-6` — the client data jitters in the 14th
+  digit), every other kind on its rendered text (`10 sec` → `25 sec`). A reworded sentence around the
+  same numbers is not a change, and neither is a damage number *appearing* because calibration found
+  a multiplier — the multiplier cancels out of the delta, and a normal `wowhead:calibratespelldamage`
+  run never re-measures an existing one anyway (`whereNull`). That is why the noise the issue feared
+  does not exist: across the real build pairs in git, zero multipliers changed.
+- **Rewritten descriptions.** When the *kinds* of the values no longer line up (a value added or
+  removed, or a description appearing/disappearing) the spell gets one `description_rewritten` row
+  carrying the full old and new text instead of value pairs.
+- **Sources.** `--from`/`--to` each take `db` (live table; build from `spell_description_import_states`),
+  a file path to a `spells.json` (build via `--from-build`/`--to-build` — a file carries none), or a git
+  ref (`spells.json` and `import_state.json` read from that commit; `--from-build` needed for refs that
+  predate `import_state.json`). A file path wins over a ref. The command refuses two sources of the
+  same build, which is what you get when you run it *after* committing.
+- **Run the sequence from the main checkout.** The whole import sequence always has been (it writes
+  the seeder files you then commit), and the default `--from=HEAD` relies on it: a *worktree's* app
+  container cannot `git show` (its `.git` is a pointer into the main checkout, which is not mounted)
+  and the command fails with a message saying so. From a worktree, export the file on the host and
+  pass it with its build:
+  `git show <ref>:database/seeders/dungeondata/spells.json > storage/app/old.json`, then
+  `spell:difftuning --from=storage/app/old.json --from-build=<build of that commit>`.
+- **Idempotent per build:** every run replaces all rows for the target build, so re-running for the
+  same pair, or running the import twice for one build (as the sequence above does), never doubles up.
+  Backfilling history is the same command with two refs/files, once per build pair.
+- History sorts on `to_build_number` (the last segment of the build string); one product per game
+  version is assumed, so PTR builds interleaving with retail are out of scope.
 
 ## Things that will trip you up
 

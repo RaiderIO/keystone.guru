@@ -4,6 +4,7 @@ namespace App\Service\Mapping;
 
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellTuningChange;
 
 class MappingExportService implements MappingExportServiceInterface
 {
@@ -83,5 +84,30 @@ class MappingExportService implements MappingExportServiceInterface
         }
 
         return $npcs->toArray();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function serializeSpellTuningChanges(): array
+    {
+        // Model caching is disabled for the same reason as serializeSpells() above.
+        $changesQuery = SpellTuningChange::query();
+
+        if (method_exists($changesQuery, 'disableModelCaching')) {
+            $changesQuery->disableModelCaching();
+        }
+
+        // The id is assigned on insert by whichever environment loads the file; leaving it out keeps the
+        // file from churning on every re-run, and the explicit order keeps it deterministic.
+        $changes = $changesQuery
+            ->orderBy('to_build_number')
+            ->orderBy('spell_id')
+            ->orderBy('value_index')
+            ->orderBy('id')
+            ->get()
+            ->makeHidden(['id']);
+
+        return $changes->toArray();
     }
 }
