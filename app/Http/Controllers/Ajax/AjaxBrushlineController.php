@@ -105,10 +105,6 @@ class AjaxBrushlineController extends Controller
                 $result = $brushline;
             });
         } catch (Exception) {
-            // Caught out here rather than inside the closure: a catch within the closure lets it
-            // return normally, so the transaction commits the half-written brushline (a row still
-            // carrying the polyline_id = -1 sentinel, plus an orphan polyline) while the response
-            // tells the client the request failed (#4259).
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
