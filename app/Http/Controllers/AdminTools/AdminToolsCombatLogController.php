@@ -7,6 +7,7 @@ use App\Http\Requests\AdminToolsCombatLogRegenerateRequest;
 use App\Http\Requests\AdminToolsCombatLogRouteEnemyFailuresRequest;
 use App\Jobs\RegenerateCombatLogRoute;
 use App\Models\CombatLog\ChallengeModeRun;
+use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
@@ -152,6 +153,12 @@ class AdminToolsCombatLogController extends Controller
         // Null means "do not limit to any dungeon(s)" / "do not limit to a season"
         $dungeonIds = $request->getDungeonIds();
         $season     = $request->getSeason();
+
+        if ($request->deleteEnemyFailures()) {
+            CombatLogRouteEnemyFailure::query()
+                ->when($dungeonIds !== null, static fn(Builder $builder) => $builder->whereIn('dungeon_id', $dungeonIds))
+                ->delete();
+        }
 
         $count = 0;
 
