@@ -309,10 +309,6 @@ class PullImporter
         return true;
     }
 
-    /**
-     * Wrapped in a retried transaction - concurrent imports bulk-inserting into the shared
-     * kill zone tables can hit a MySQL lock wait timeout under contention (#4239).
-     */
     public function applyPullsToDungeonRoute(ImportStringPulls $importStringPulls, DungeonRoute $dungeonRoute): void
     {
         DB::transaction(fn() => $this->doApplyPullsToDungeonRoute($importStringPulls, $dungeonRoute), 3);
