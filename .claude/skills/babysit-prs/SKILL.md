@@ -14,13 +14,11 @@ ideally on a loop:
 /loop 15m /babysit-prs
 ```
 
-**Run this session on Opus, not Sonnet.** A babysit loop is a long-lived session, and long sessions
-are exactly where Sonnet costs more than Opus rather than less — see "Model routing" in
-`.claude/CLAUDE.md`. Measured over 30 days of transcripts, one `/loop /babysit-prs` session on
-Sonnet ran to 1,256 assistant turns; Sonnet writes roughly half as much per turn as Opus, so it
-needs about twice the turns, and every extra turn re-reads the whole accumulated context. Cache
-reads are ~84% of a session's token spend, so turn count — not the per-token rate — is what sets
-the bill. Sonnet's cheaper rate does not survive that multiplier past ~100 turns.
+**Run this session on Opus, not Sonnet.** A babysit loop is long-lived, and long sessions are
+exactly where Sonnet costs more than Opus rather than less: measured over 30 days of transcripts,
+one `/loop /babysit-prs` session on Sonnet ran to 1,256 assistant turns. Sonnet writes roughly half
+as much per turn, so it needs about twice the turns, and cache reads of the accumulated context are
+~84% of a session's spend — turn count, not the per-token rate, sets the bill.
 
 ## Quiet hours (1am–7am local)
 

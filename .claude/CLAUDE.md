@@ -6,61 +6,6 @@
   rather than Claude's auto-memory system. Auto-memories don't transfer between machines; in-repo
   notes do.
 
-## Model routing: pick by expected session *length*, not task difficulty
-
-**Opus is the default.** Route by how long the session will run, because session length — not task
-complexity — is what actually predicts token spend.
-
-| Expected session | Model | Why |
-|---|---|---|
-| Short, bounded (< ~100 turns) | Sonnet | Genuinely efficient here: ~$2/session vs Opus ~$5 |
-| Anything open-ended, or already past ~100 turns | **Opus** | Sonnet's rate advantage is gone by here |
-| Long unattended runs, `/loop` sessions, cross-cutting migrations, unknown-root-cause debugging, multi-part architecture | **Fable** | Fewest turns per unit of work |
-
-**Why it inverts.** Turn count, not per-token rate, sets session cost — most spend is cache-reads of
-the transcript, and Sonnet needs roughly twice Opus's turns for the same work.
-
-**Corollaries:**
-- Don't reach for a cheaper model to save budget on a big task — it costs more, not less. Haiku has
-  no place in the implementation path.
-- Don't switch models mid-session (invalidates the prompt cache, re-reads the transcript cold) —
-  finish, then restart the remainder on the heavier model.
-- **The largest lever is not model choice.** Anything that shortens sessions — `/clear` between
-  tasks, one worktree per task, pushing file-reading fan-out into subagents — beats any routing rule.
-
-Escalate to Fable regardless of length for high-risk diffs (migrations, auth, payment,
-data-destructive) — there the reason is capability, not cost.
-
-### Check the model before starting a task
-
-The check happens **once, at the top of a task, before any work** (see the no-mid-session-switching
-corollary above) — before `sh/worktree.sh create` in particular, whose isolated seed takes 5–15
-minutes that a restart throws away.
-
-Estimate the task's **turn count** from its shape, then compare against the session's model:
-
-| Task shape | Est. turns | Wants |
-|---|---|---|
-| Mechanical, enumerable edits — translation files, renames, a templated sibling of an already-worked issue, a one-file fix with a known cause | < ~100 | Sonnet |
-| A bug with an unknown-but-findable cause, a medium refactor, a feature touching a handful of files | ~100–300 | Opus |
-| A new feature spanning many files, a cross-cutting migration, unknown-root-cause debugging, multi-part design, anything unattended | > ~300 | Fable |
-
-**Speak up only when the session is under-powered — stay silent when it is over-powered.** Being
-over-powered is cheap; being under-powered on a long task costs about the same and delivers weaker
-results — the asymmetry is deliberate, so it's never worth a turn of the user's attention to flag
-over-provisioning.
-
-When under-powered, say so in one or two sentences and **stop — do no work and create no worktree**:
-
-> This looks like a > ~300-turn task (new feature, many files). We're on Opus; this wants Fable.
-> Restart on Fable, or tell me to proceed on Opus and I will.
-
-Then wait. If told to proceed anyway, proceed without re-raising it.
-
-**Mid-session tripwire.** If a session routed as Sonnet-short is still going at ~100 turns, or an
-Opus session at ~300, say so once (same one-liner, offer to finish the current step and hand the
-remainder to a fresh session on the heavier model) — once per session, not every 50 turns.
-
 ## Revising a long document
 
 When you revise a plan, design doc, or issue body that the user has **already read**, lead the
