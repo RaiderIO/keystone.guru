@@ -149,10 +149,20 @@ final class MappingVersionControllerAtomicityTest extends PublicTestCase
                 'A failure mid-delete must roll back the map icon whose deletion threw.',
             );
         } finally {
-            // Guard: force-clean via query builder in case the test assertion failed before delete,
-            // matching MappingVersionDeletionTest's cleanup idiom.
-            MapIcon::where('mapping_version_id', $newMappingVersion->id)->delete();
-            EnemyPack::where('mapping_version_id', $newMappingVersion->id)->delete();
+            // Guard: force-clean via query builder mass deletes - which bypass model events, so the
+            // throwing MapIcon::deleting listener above doesn't fire again - every relation
+            // MappingVersion::boot()'s deleting hook would normally cascade, in case the delete
+            // attempt above didn't roll back cleanly.
+            $newMappingVersion->dungeonFloorSwitchMarkers()->delete();
+            $newMappingVersion->enemies()->delete();
+            $newMappingVersion->enemyPacks()->delete();
+            $newMappingVersion->enemyPatrols()->delete();
+            $newMappingVersion->mapIcons()->delete();
+            $newMappingVersion->mountableAreas()->delete();
+            $newMappingVersion->enemyForcesCheckpoints()->delete();
+            $newMappingVersion->floorUnions()->delete();
+            $newMappingVersion->floorUnionAreas()->delete();
+            $newMappingVersion->npcEnemyForces()->delete();
             MappingVersion::where('id', $newMappingVersion->id)->delete();
         }
     }
