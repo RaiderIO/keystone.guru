@@ -42,6 +42,8 @@ final class CoordinatesServiceTest extends PublicTestCase
         DungeonKey::THE_ROOKERY->value,
         DungeonKey::KINGS_REST->value,
         DungeonKey::TEMPLE_OF_SETHRALISS->value,
+        // Remove again once MDT has accepted changes
+        DungeonKey::THE_BLINDING_VALE->value,
     ];
 
     /**
