@@ -547,7 +547,11 @@ class AjaxKillZoneController extends Controller
         } catch (AuthorizationException|HttpException $deliberateResponse) {
             // A 403 or a 422 we raised on purpose must not be rewritten into the 404 below
             throw $deliberateResponse;
-        } catch (Exception) {
+        } catch (Exception $exception) {
+            // The catch now also covers the enemy_forces write, which used to sit outside any
+            // try/catch - a genuine database failure there would otherwise turn into a silent 404
+            report($exception);
+
             return response(sprintf('Unable to find kill zone %s', $notFoundKillZoneId), Http::NOT_FOUND);
         }
 
@@ -585,7 +589,7 @@ class AjaxKillZoneController extends Controller
         $deleteRefused = false;
 
         try {
-            $result = DB::transaction(function () use ($killZonePathService, $killZone, $dungeonRoute, &$deleteRefused): array {
+            $enemyForces = DB::transaction(function () use ($killZone, $dungeonRoute, &$deleteRefused): int {
                 // Re-read per attempt: Model::delete() flips `exists` to false and that survives a
                 // rollback, so a retried attempt would find the instance already "deleted", return
                 // null and delete nothing while every other write in here re-ran (#4250)
@@ -630,16 +634,29 @@ class AjaxKillZoneController extends Controller
 
                 $this->dungeonRouteChanged($dungeonRoute, $freshKillZone, null);
 
-                return [
-                    'enemy_forces'   => $enemyForces,
-                    'killzone_count' => $dungeonRoute->killZones()->count(),
-                    'killzone_paths' => $this->getKillZonePaths($killZonePathService, $dungeonRoute),
-                ];
+                return $enemyForces;
             }, 3);
-        } catch (Exception) {
-            $result = $deleteRefused
+        } catch (Exception $exception) {
+            report($exception);
+
+            return $deleteRefused
                 ? response('Unable to delete pull', Http::INTERNAL_SERVER_ERROR)
                 : response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
+        }
+
+        try {
+            // Deliberately outside the transaction: this only reads, and holding row locks on
+            // kill_zones/kill_zone_enemies/dungeon_routes while it walks the route's floors and
+            // floor unions would widen the very lock window the retries above exist to absorb
+            $result = [
+                'enemy_forces'   => $enemyForces,
+                'killzone_count' => $dungeonRoute->killZones()->count(),
+                'killzone_paths' => $this->getKillZonePaths($killZonePathService, $dungeonRoute),
+            ];
+        } catch (Exception $exception) {
+            report($exception);
+
+            $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
         return $result;
@@ -664,7 +681,7 @@ class AjaxKillZoneController extends Controller
                 // Clearing a route is six writes per pull plus the prideful enemies and the route
                 // itself; without a transaction a failure part-way through left the route
                 // half-cleared, with no way for the client to tell how far it got (#4260)
-                $result = DB::transaction(function () use ($killZonePathService, $dungeonRoute): array {
+                DB::transaction(function () use ($dungeonRoute): void {
                     // Queried rather than read off $dungeonRoute's relation: Model::delete() flips
                     // `exists` to false and that survives a rollback, so a retried attempt would
                     // iterate the same already-"deleted" instances, delete nothing, and still report
@@ -720,13 +737,18 @@ class AjaxKillZoneController extends Controller
                         'updated_at'   => Carbon::now(),
                     ]);
                     $dungeonRoute->setAttribute('enemy_forces', 0);
-
-                    return [
-                        'enemy_forces'   => 0,
-                        'killzone_paths' => $this->getKillZonePaths($killZonePathService, $dungeonRoute),
-                    ];
                 }, 3);
-            } catch (\Exception) {
+
+                // Deliberately outside the transaction: this only reads, and holding row locks on
+                // kill_zones/kill_zone_enemies/dungeon_routes while it walks the route's floors and
+                // floor unions would widen the very lock window the retries above exist to absorb
+                $result = [
+                    'enemy_forces'   => 0,
+                    'killzone_paths' => $this->getKillZonePaths($killZonePathService, $dungeonRoute),
+                ];
+            } catch (\Exception $exception) {
+                report($exception);
+
                 $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
             }
         } else {

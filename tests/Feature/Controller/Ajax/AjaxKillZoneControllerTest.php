@@ -781,6 +781,10 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
 
         KillZoneEnemy::query()->whereIn('kill_zone_id', $killZoneIds)->delete();
         KillZone::query()->whereIn('id', $killZoneIds)->delete();
+
+        // DungeonRoute::deleting does not cascade these, so tearDown's route delete would leave the
+        // rows these tests' saves and deletes recorded behind
+        DungeonRouteChange::query()->where('dungeon_route_id', $this->dungeonRoute->id)->delete();
     }
 
     /**
