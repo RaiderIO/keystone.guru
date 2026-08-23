@@ -60,9 +60,8 @@ interface DungeonRouteBuilderLoggingInterface
 
     public function findUnkilledEnemyForNpcAtIngameLocationEnd(): void;
 
-    public function findUnkilledEnemyForNpcAtIngameLocationRetryingWithoutBossKillFloorCutoff(
+    public function findUnkilledEnemyForNpcAtIngameLocationRetryingWithoutFirstPassExclusions(
         int $npcId,
-        int $minimumFloorIndex,
     ): void;
 
     public function applyBossKillFloorCutoffMinimumFloorIndexRaised(
@@ -70,6 +69,14 @@ interface DungeonRouteBuilderLoggingInterface
         int $npcId,
         int $floorId,
         int $minimumFloorIndex,
+    ): void;
+
+    /**
+     * @param array<int, int> $enemyPackGroups
+     */
+    public function theBlindingValeBridgeRuleBridgeEnemyPackGroupsBlocked(
+        int   $npcId,
+        array $enemyPackGroups,
     ): void;
 
     /**

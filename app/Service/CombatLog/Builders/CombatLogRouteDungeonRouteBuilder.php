@@ -249,7 +249,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                     }
                 }
 
-                $this->applyBossKillFloorCutoff($event['npc']->getResolvedEnemy());
+                $this->notifyRulesEnemyDied($event['npc']->npcId, $event['npc']->getResolvedEnemy());
 
                 // Handle spells and the actual creation of pulls
                 /** @var ActivePull|null $firstActivePull */

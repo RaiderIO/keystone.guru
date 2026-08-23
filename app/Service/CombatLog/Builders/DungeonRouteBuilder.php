@@ -18,6 +18,9 @@ use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Service\CombatLog\Builders\Logging\DungeonRouteBuilderLoggingInterface;
+use App\Service\CombatLog\Builders\Rules\BossKillFloorCutoffRule;
+use App\Service\CombatLog\Builders\Rules\DungeonRouteBuilderRuleInterface;
+use App\Service\CombatLog\Builders\Rules\TheBlindingValeBridgeRule;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\ActivePullCollection;
 use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
@@ -39,16 +42,13 @@ abstract class DungeonRouteBuilder
     ];
 
     /**
-     * @var array<int, string> Dungeons whose floors are stacked on top of one another - they occupy near identical
-     *                         ingame X/Y and the builder has no Z axis to tell them apart, so the enemies of an
-     *                         earlier floor keep competing for kills that happened on a later one. For these, a boss
-     *                         kill takes every floor before the boss' own floor out of the running.
-     *                         Deliberately an allowlist: enabling this everywhere shifts the pull counts of seven
-     *                         other dungeons' regression runs, so the rule is not universally safe.
+     * @var array<int, class-string<DungeonRouteBuilderRuleInterface>> Per-dungeon exceptions to the normal spatial
+     *                                                                 matching, for dungeons where geometry alone cannot tell two sets of enemies apart.
+     *                                                                 Each rule decides for itself which dungeons it applies to - see the interface.
      */
-    private const array DUNGEON_BOSS_KILL_FLOOR_CUTOFF_ENABLED = [
-        DungeonKey::VOIDSCAR_ARENA->value,
-        DungeonKey::THE_AZURE_VAULT->value,
+    private const array RULES = [
+        BossKillFloorCutoffRule::class,
+        TheBlindingValeBridgeRule::class,
     ];
 
     protected const array NPC_ID_MAPPING = [
@@ -80,11 +80,8 @@ abstract class DungeonRouteBuilder
 
     private int $killZoneIndex = 1;
 
-    /**
-     * @var int The lowest Floor index that is still eligible for matching. Raised whenever a boss is killed - the
-     *          party has left every floor before the boss' floor behind at that point. 0 means no cutoff yet.
-     */
-    protected int $minimumFloorIndex = 0;
+    /** @var Collection<int, DungeonRouteBuilderRuleInterface> The rules active for this dungeon, if any */
+    protected Collection $rules;
 
     /** @var Collection<int, KillZone> */
     protected Collection $killZones;
@@ -107,6 +104,13 @@ abstract class DungeonRouteBuilder
         $this->validNpcIds = $this->npcRepository->getInUseNpcIds($this->dungeonRoute->mappingVersion);
 
         $this->activePullCollection = new ActivePullCollection();
+
+        // Instantiated per build - rules carry mutable state about how far into the run we are, so sharing them
+        // between routes (as a singleton would under Octane) would leak that state across requests
+        $this->rules = collect(self::RULES)
+            ->map(static fn(string $rule): DungeonRouteBuilderRuleInterface => new $rule($log))
+            ->filter(fn(DungeonRouteBuilderRuleInterface $rule) => $rule->appliesToDungeon($this->dungeonRoute->dungeon))
+            ->values();
 
         // This allows me to set the killZones in buildFinished, so that existing relations are still preserved
         // If you don't Laravel probably starts resolving relations, and it will lose relations that were set
@@ -268,15 +272,13 @@ abstract class DungeonRouteBuilder
                 true,
             );
 
-            // The boss kill floor cutoff is a hard exclusion, so an enemy that is only mapped on a floor before the
-            // last killed boss' floor would be dropped from the route - and from its enemy forces - entirely. Rather
-            // than lose it, fall back to matching without the cutoff: the worst case is then the behaviour we had
-            // before the cutoff existed.
-            if ($closestEnemy->getEnemy() === null && $this->minimumFloorIndex > 0) {
-                $this->log->findUnkilledEnemyForNpcAtIngameLocationRetryingWithoutBossKillFloorCutoff(
-                    $npcId,
-                    $this->minimumFloorIndex,
-                );
+            // A first pass exclusion would otherwise drop this enemy from the route - and from its enemy forces -
+            // entirely. Rather than lose it, fall back to matching without those exclusions: the worst case is then
+            // the behaviour we had before the rule existed. Hard exclusions (isEnemyEligible) still apply.
+            if ($closestEnemy->getEnemy() === null && $this->rules->contains(
+                static fn(DungeonRouteBuilderRuleInterface $rule) => $rule->hasActiveFirstPassExclusion(),
+            )) {
+                $this->log->findUnkilledEnemyForNpcAtIngameLocationRetryingWithoutFirstPassExclusions($npcId);
 
                 $closestEnemy = $this->findClosestEnemyForNpcId(
                     $npcId,
@@ -311,12 +313,12 @@ abstract class DungeonRouteBuilder
         int             $npcId,
         ActivePullEnemy $activePullEnemy,
         Collection      $preferredGroups,
-        bool            $applyBossKillFloorCutoff,
+        bool            $applyFirstPassExclusions,
     ): ClosestEnemy {
         $closestEnemy = new ClosestEnemy();
 
         /** @var Collection<int, Enemy> $filteredEnemies */
-        $filteredEnemies = $this->availableEnemies->filter(function (Enemy $availableEnemy) use ($npcId, $applyBossKillFloorCutoff) {
+        $filteredEnemies = $this->availableEnemies->filter(function (Enemy $availableEnemy) use ($npcId, $applyFirstPassExclusions) {
             if ($availableEnemy->npc_id !== $npcId) {
                 return false;
             }
@@ -335,12 +337,16 @@ abstract class DungeonRouteBuilder
                 return false;
             }
 
-            // Once a boss on floor N has died the party has left every floor before N behind. Only ever raised
-            // above 0 for DUNGEON_BOSS_KILL_FLOOR_CUTOFF_ENABLED dungeons - see applyBossKillFloorCutoff().
-            if ($applyBossKillFloorCutoff &&
-                $this->minimumFloorIndex > 0 &&
-                $availableEnemy->floor->index < $this->minimumFloorIndex) {
-                return false;
+            // Per-dungeon rules get the final say - a hard exclusion always applies, a first pass exclusion only
+            // until the retry above gives up on finding anything better.
+            foreach ($this->rules as $rule) {
+                if (!$rule->isEnemyEligible($availableEnemy)) {
+                    return false;
+                }
+
+                if ($applyFirstPassExclusions && !$rule->isEnemyEligibleOnFirstPass($availableEnemy)) {
+                    return false;
+                }
             }
 
             return true;
@@ -387,31 +393,20 @@ abstract class DungeonRouteBuilder
     }
 
     /**
-     * Excludes all enemies on floors before the killed boss' floor from any further matching.
+     * Lets every active rule advance its state now that an enemy has died.
+     *
+     * Takes the npc_id as it was logged alongside the resolved Enemy, because a boss that failed to resolve to a
+     * mapped enemy would otherwise never advance a rule that keys off it dying.
      */
-    protected function applyBossKillFloorCutoff(?Enemy $enemy): void
+    protected function notifyRulesEnemyDied(?int $npcId, ?Enemy $resolvedEnemy): void
     {
-        if (!in_array($this->dungeonRoute->dungeon->key, self::DUNGEON_BOSS_KILL_FLOOR_CUTOFF_ENABLED)) {
+        if ($npcId === null) {
             return;
         }
 
-        // The boss may not have been resolved to a mapped enemy at all - then we have no floor to work with
-        if ($enemy === null || !$enemy->npc->isBoss() || $enemy->floor->facade) {
-            return;
+        foreach ($this->rules as $rule) {
+            $rule->onEnemyDied($npcId, $resolvedEnemy);
         }
-
-        if ($enemy->floor->index <= $this->minimumFloorIndex) {
-            return;
-        }
-
-        $this->minimumFloorIndex = $enemy->floor->index;
-
-        $this->log->applyBossKillFloorCutoffMinimumFloorIndexRaised(
-            $enemy->id,
-            $enemy->npc_id,
-            $enemy->floor_id,
-            $this->minimumFloorIndex,
-        );
     }
 
     /**
