@@ -28,11 +28,16 @@ class APICombatLogControllerCombatLogRouteVoidscarArenaTest extends APICombatLog
     /** @var int NPC 243988 is mapped on all three Voidscar floors, which is what makes it useful here */
     private const NPC_ID_STACKED_TRASH = 243988;
 
-    /** @var int The NPC_ID_STACKED_TRASH enemy on floor 454 (index 1), at ingame 482.70/4443.30 */
-    private const ENEMY_ID_TRASH_BEFORE_BOSS_FLOOR = 140040;
+    /**
+     * @var int The NPC_ID_STACKED_TRASH enemy on floor 454 (index 1), at ingame 482.70/4443.30
+     *
+     * enemy_id is not usable here - it is reassigned every time the mapping is edited (MappingVersion
+     * clones every enemy on save), whereas npc_id + mdt_id stay stable across mapping versions.
+     */
+    private const MDT_ID_TRASH_BEFORE_BOSS_FLOOR = 11;
 
     /** @var int The closest NPC_ID_STACKED_TRASH enemy on floor 455 (index 2), ~94 yards away at 479.00/4537.49 */
-    private const ENEMY_ID_TRASH_ON_BOSS_FLOOR = 140031;
+    private const MDT_ID_TRASH_ON_BOSS_FLOOR = 2;
 
     /** @var int ui_map_id of floor 455 - where both the boss and the trash kill below are logged */
     private const UI_MAP_ID_FLOOR_455 = 2572;
@@ -67,7 +72,7 @@ class APICombatLogControllerCombatLogRouteVoidscarArenaTest extends APICombatLog
             // were actually killed, well outside enemy_engagement_max_range.
             foreach ([self::NPC_ID_TAZRAH, self::NPC_ID_ATROXUS, self::NPC_ID_CHARONUS] as $bossNpcId) {
                 $this->assertNotNull(
-                    $this->findResolvedEnemyId($responseArr, $bossNpcId),
+                    $this->findResolvedEnemyMdtId($responseArr, $bossNpcId),
                     sprintf('Boss NPC %d was not assigned to any pull', $bossNpcId),
                 );
             }
@@ -137,8 +142,8 @@ class APICombatLogControllerCombatLogRouteVoidscarArenaTest extends APICombatLog
 
         try {
             $this->assertEquals(
-                self::ENEMY_ID_TRASH_ON_BOSS_FLOOR,
-                $this->findResolvedEnemyId($responseArr, self::NPC_ID_STACKED_TRASH),
+                self::MDT_ID_TRASH_ON_BOSS_FLOOR,
+                $this->findResolvedEnemyMdtId($responseArr, self::NPC_ID_STACKED_TRASH),
             );
         } finally {
             $this->deleteDungeonRoute($responseArr);
@@ -166,8 +171,8 @@ class APICombatLogControllerCombatLogRouteVoidscarArenaTest extends APICombatLog
 
         try {
             $this->assertEquals(
-                self::ENEMY_ID_TRASH_BEFORE_BOSS_FLOOR,
-                $this->findResolvedEnemyId($responseArr, self::NPC_ID_STACKED_TRASH),
+                self::MDT_ID_TRASH_BEFORE_BOSS_FLOOR,
+                $this->findResolvedEnemyMdtId($responseArr, self::NPC_ID_STACKED_TRASH),
             );
         } finally {
             $this->deleteDungeonRoute($responseArr);
@@ -207,15 +212,18 @@ class APICombatLogControllerCombatLogRouteVoidscarArenaTest extends APICombatLog
     }
 
     /**
+     * mdt_id (together with npc_id) is what stays stable across mapping versions - the enemy_id itself is
+     * reassigned every time the mapping is edited, since MappingVersion clones every enemy on save.
+     *
      * @param array<string, mixed> $responseArr
      */
-    private function findResolvedEnemyId(array $responseArr, int $npcId): ?int
+    private function findResolvedEnemyMdtId(array $responseArr, int $npcId): ?int
     {
         foreach ($this->getKillZones($responseArr) as $killZone) {
             $enemy = $killZone->enemies->firstWhere('npc_id', $npcId);
 
             if ($enemy !== null) {
-                return $enemy->id;
+                return $enemy->mdt_id;
             }
         }
 
