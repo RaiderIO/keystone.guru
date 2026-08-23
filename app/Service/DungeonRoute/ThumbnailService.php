@@ -291,14 +291,28 @@ class ThumbnailService implements ThumbnailServiceInterface
             $forceDispatch = $isStandard ? $force : true;
             /** @var Floor $floor */
             foreach ($dungeonRoute->dungeon->floorsForMapFacade($dungeonRoute->mappingVersion, true)->active()->get() as $floor) {
-                ProcessRouteFloorThumbnail::dispatch($dungeonRoute, $floor->index, $forceDispatch, $variant);
-                $result = true;
+                try {
+                    // Queueing this job is fire-and-forget from every caller's perspective - a render
+                    // failure must never break whatever request/command triggered the refresh. On a real
+                    // (async) queue connection dispatch() never throws; the worker processes the job
+                    // separately, and ProcessRouteFloorThumbnail's own $tries/backoff()/failed() handle
+                    // retries and giving up. Only the `sync` connection (tests, and any environment that
+                    // sets QUEUE_CONNECTION=sync) runs the job inline and lets a failed render's exception
+                    // propagate straight out of dispatch() - the job already logs the failure itself
+                    // before throwing, so there is nothing left to do here but stop it from escaping. See
+                    // #3920.
+                    ProcessRouteFloorThumbnail::dispatch($dungeonRoute, $floor->index, $forceDispatch, $variant);
 
-                $this->log->queueThumbnailRefreshDispatchedJob(
-                    $dungeonRoute->public_key,
-                    $floor->index,
-                    $forceDispatch,
-                );
+                    $this->log->queueThumbnailRefreshDispatchedJob(
+                        $dungeonRoute->public_key,
+                        $floor->index,
+                        $forceDispatch,
+                    );
+                } catch (Throwable $e) {
+                    $this->log->queueThumbnailRefreshDispatchException($dungeonRoute->public_key, $floor->index, $e);
+                }
+
+                $result = true;
             }
         }
 

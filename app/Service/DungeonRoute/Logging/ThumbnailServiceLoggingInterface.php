@@ -61,6 +61,8 @@ interface ThumbnailServiceLoggingInterface
 
     public function queueThumbnailRefreshDispatchedJob(string $publicKey, int $index, bool $force): void;
 
+    public function queueThumbnailRefreshDispatchException(string $publicKey, int $index, Throwable $exception): void;
+
     public function doCreateThumbnailEnd(): void;
 
     public function copyThumbnailsException(
