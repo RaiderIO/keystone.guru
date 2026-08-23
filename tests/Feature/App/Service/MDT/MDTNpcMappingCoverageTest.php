@@ -5,6 +5,7 @@ namespace Tests\Feature\App\Service\MDT;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Models\Enemy;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
@@ -19,6 +20,17 @@ use Tests\TestCases\PublicTestCase;
 #[Group('MDTNpcMappingCoverage')]
 final class MDTNpcMappingCoverageTest extends PublicTestCase
 {
+    /**
+     * Dungeons whose mapping was corrected on our end while MDT's lua still reflects the old
+     * layout, so MDT's clones do not line up with our mdt_id assignments yet.
+     *
+     * @var array<int, string>
+     */
+    private const array EXCLUDED_DUNGEON_KEYS = [
+        // Remove again once MDT has accepted changes
+        DungeonKey::THE_BLINDING_VALE->value,
+    ];
+
     #[Test]
     public function mdtNpcMapping_givenAllDungeons_hasNoUnmappedClones(): void
     {
@@ -48,7 +60,8 @@ final class MDTNpcMappingCoverageTest extends PublicTestCase
         $dungeons = Dungeon::with(['floors', 'npcs', 'mappingVersions.gameVersion'])
             ->whereIn('id', $dungeonIds)
             ->get()
-            ->filter(static fn(Dungeon $dungeon) => Conversion::hasMDTDungeonName($dungeon->key));
+            ->filter(static fn(Dungeon $dungeon) => Conversion::hasMDTDungeonName($dungeon->key))
+            ->filter(static fn(Dungeon $dungeon) => !in_array($dungeon->key, self::EXCLUDED_DUNGEON_KEYS, true));
 
         $this->assertNotEmpty($dungeons, 'Expected at least one MDT supported dungeon to check');
 
