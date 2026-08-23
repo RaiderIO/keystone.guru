@@ -60,7 +60,7 @@ offender, don't mechanically truncate):
 | `CLAUDE.md` (Boost-generated) | ≤ 7,300 B | `wc -c CLAUDE.md` |
 | `.claude/CLAUDE.md` | ≤ 29,000 B | `wc -c .claude/CLAUDE.md` |
 | `MEMORY.md` | ≤ 9,500 B | `wc -c MEMORY.md` |
-| All skill descriptions combined | ≤ 17,000 B | sum of each frontmatter `description:` value (all skills; ratcheted from 18,500 B on 2026-08-21 after 13 runbook skills went `disable-model-invocation` — only model-invocable descriptions reach the model's context, ~15.2 kB of the total that day) |
+| All **model-invocable** skill descriptions | ≤ 16,000 B | sum of each frontmatter `description:` value, **skipping every skill with `disable-model-invocation: true`** — those never reach the model's context. Ratcheted 18,500 → 17,000 → 16,000 B (2026-08-23, measured 15,930 B). Measuring all skills on disk instead inflates this by ~3.4 kB and invents a breach |
 | Any single skill description | ≤ 550 B | same |
 
 These budgets are a **ratchet, not a target**: when a sweep trims a surface below budget, tighten

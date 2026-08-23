@@ -215,6 +215,20 @@ sweep, and (for `ParsedCombatLog`) the daily `combatlog:pruneparsedlogs` retenti
 delete these rows.** That is a convention, not an enforced rule: the deleting routes sit behind
 `role:admin`, and there is no model-level guard.
 
+### A combat-log-derived *column* is wiped by every deploy unless it is preserved
+
+The same hazard applies one level down, to a column on an otherwise seeded table. `spells` is
+rebuilt by `DungeonDataSeeder`'s temp-table swap, and `spells.json` carries no combat-log-derived
+column because `MappingExportService::serializeSpells()` hides them —
+`SpellRelationMapping::getPreservedColumns()` is what copies the live values into the temp table
+before the rename. A column that is hidden from the export but missing from the preserved list is
+silently reset to its default on the next `db:seed`, on every deploy.
+
+Both lists now read from one constant, `Spell::COMBAT_LOG_DERIVED_COLUMNS` — **add any new
+combat-log-derived column there**, never to the export-hiding or preserve list alone. This wiped
+`counters_mask` and `bypasses_immunities_mask` on every deploy until #4033.
+
+
 ---
 
 ## Season data (`database/seeders/seasondata/`) — a second, parallel load path
