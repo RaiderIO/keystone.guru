@@ -10,6 +10,7 @@ use App\Service\Mapping\MappingServiceInterface;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Session;
 use Teapot\StatusCode;
 
@@ -26,7 +27,9 @@ class MappingVersionController extends Controller
         $gameVersion = GameVersion::findOrFail($gameVersionId);
 
         if ($action === 'Add mapping version') {
-            $mappingService->createNewMappingVersionFromPreviousMapping($dungeon, $gameVersion);
+            DB::transaction(static function () use ($mappingService, $dungeon, $gameVersion) {
+                $mappingService->createNewMappingVersionFromPreviousMapping($dungeon, $gameVersion);
+            });
 
             Session::flash('status', __('controller.mappingversion.created_successfully'));
 
@@ -36,19 +39,21 @@ class MappingVersionController extends Controller
         } elseif ($action === 'Add bare mapping version') {
             $currentMappingVersion = $dungeon->getCurrentMappingVersion($gameVersion);
 
-            if ($currentMappingVersion === null) {
-                $mappingService->createNewBareMappingVersion($dungeon, $gameVersion);
-            } else {
-                $newMappingVersion = $mappingService->copyMappingVersionToDungeon(
-                    $currentMappingVersion,
-                    $dungeon,
-                );
+            DB::transaction(static function () use ($mappingService, $dungeon, $gameVersion, $currentMappingVersion) {
+                if ($currentMappingVersion === null) {
+                    $mappingService->createNewBareMappingVersion($dungeon, $gameVersion);
+                } else {
+                    $newMappingVersion = $mappingService->copyMappingVersionToDungeon(
+                        $currentMappingVersion,
+                        $dungeon,
+                    );
 
-                $mappingService->copyMappingVersionContentsToDungeon(
-                    $currentMappingVersion,
-                    $newMappingVersion,
-                );
-            }
+                    $mappingService->copyMappingVersionContentsToDungeon(
+                        $currentMappingVersion,
+                        $newMappingVersion,
+                    );
+                }
+            });
 
             Session::flash('status', __('controller.mappingversion.created_bare_successfully'));
 
@@ -65,7 +70,9 @@ class MappingVersionController extends Controller
      */
     public function delete(Request $request, Dungeon $dungeon, MappingVersion $mappingVersion): RedirectResponse
     {
-        if ($mappingVersion->delete()) {
+        $deleted = DB::transaction(static fn() => $mappingVersion->delete());
+
+        if ($deleted) {
             Session::flash('status', __('controller.mappingversion.deleted_successfully'));
 
             $result = redirect()->route('admin.dungeon.edit', [
