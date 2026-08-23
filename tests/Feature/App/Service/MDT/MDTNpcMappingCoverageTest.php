@@ -29,6 +29,7 @@ final class MDTNpcMappingCoverageTest extends PublicTestCase
     private const array EXCLUDED_DUNGEON_KEYS = [
         // Remove again once MDT has accepted changes
         DungeonKey::THE_BLINDING_VALE->value,
+        DungeonKey::VOIDSCAR_ARENA->value,
     ];
 
     #[Test]
