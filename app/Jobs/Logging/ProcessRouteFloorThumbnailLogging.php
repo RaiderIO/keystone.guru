@@ -21,11 +21,6 @@ class ProcessRouteFloorThumbnailLogging extends StructuredLogging implements Pro
         $this->warning(__METHOD__);
     }
 
-    public function handleCreateThumbnailRetryScheduled(int $attempt, int $delaySeconds): void
-    {
-        $this->info(__METHOD__, get_defined_vars());
-    }
-
     public function handleThumbnailAlreadyUpToDate(): void
     {
         $this->info(__METHOD__);

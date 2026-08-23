@@ -12,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Throwable;
 
 class ProcessRouteFloorThumbnail implements ShouldQueue
 {
@@ -21,16 +22,24 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
     use SerializesModels;
 
     /**
+     * How many times the queue worker will run this job before giving up and calling failed().
+     * Set from config rather than a fixed property so keystoneguru.thumbnail.max_attempts stays the
+     * single place that number lives. This overrides the `tries` the thumbnail Horizon supervisors
+     * are configured with (1) - a job-level $tries always takes precedence over the worker's.
+     */
+    public int $tries;
+
+    /**
      * Create a new job instance.
      */
     public function __construct(
         protected DungeonRoute                 $dungeonRoute,
         protected int                          $floorIndex,
         protected bool                         $force = false,
-        protected int                          $attempts = 0,
         protected DungeonRouteThumbnailVariant $variant = DungeonRouteThumbnailVariant::Standard,
     ) {
         $this->queue = sprintf('%s-thumbnail', config('app.type'));
+        $this->tries = (int)config('keystoneguru.thumbnail.max_attempts');
     }
 
     /**
@@ -38,7 +47,7 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
      */
     public function handle(): void
     {
-        $result = false;
+        $result = null;
 
         // Cannot serialize these objects - so we have to create them here
         $thumbnailService = app()->make(ThumbnailServiceInterface::class);
@@ -50,47 +59,33 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
                 $this->dungeonRoute->id,
                 $this->dungeonRoute->mapping_version_id,
                 $this->floorIndex,
-                $this->attempts,
+                $this->attempts(),
             );
 
-            $maxAttempts = (int)config('keystoneguru.thumbnail.max_attempts');
+            // Give some additional space since we're refreshing ALL floors - the first floor may get processed,
+            // but the floors after that will otherwise think "oh the thumbnail is up-to-date" and not refresh.
+            if ($this->dungeonRoute->thumbnail_updated_at->isBefore($this->dungeonRoute->updated_at->addHour()) || $this->force) {
+                $result = $thumbnailService->createThumbnail($this->dungeonRoute, $this->floorIndex, $this->attempts(), $this->variant);
 
-            if ($maxAttempts > $this->attempts) {
-                // Give some additional space since we're refreshing ALL floors - the first floor may get processed,
-                // but the floors after that will otherwise think "oh the thumbnail is up-to-date" and not refresh.
-                if ($this->dungeonRoute->thumbnail_updated_at->isBefore($this->dungeonRoute->updated_at->addHour()) || $this->force) {
-                    $result = $thumbnailService->createThumbnail($this->dungeonRoute, $this->floorIndex, $this->attempts, $this->variant);
+                if (!$result) {
+                    $log->handleCreateThumbnailError();
 
-                    if (!$result) {
-                        $log->handleCreateThumbnailError();
-
-                        $nextAttempt = $this->attempts + 1;
-
-                        // Only queue a retry that can actually render. Dispatching the attempt that
-                        // trips the max_attempts guard queues a job whose only action is to log that
-                        // it gave up - harmless while retries were immediate, but with a backoff it
-                        // would sit in the queue for the full delay before reporting the terminal
-                        // failure. Report it here instead, at the moment the last render failed.
-                        if ($maxAttempts > $nextAttempt) {
-                            // Not immediately, though: without a delay all max_attempts tries burn within
-                            // ~35 seconds, so a render that failed because the environment was momentarily
-                            // slow (or busy with the other floors of this same route) is retried while it
-                            // is still just as slow. See #3920.
-                            $delaySeconds = $this->getBackoffSecondsForAttempt($nextAttempt);
-
-                            ProcessRouteFloorThumbnail::dispatch($this->dungeonRoute, $this->floorIndex, $this->force, $nextAttempt, $this->variant)
-                                ->delay(now()->addSeconds($delaySeconds));
-
-                            $log->handleCreateThumbnailRetryScheduled($nextAttempt, $delaySeconds);
-                        } else {
-                            $log->handleMaxAttemptsReached();
-                        }
-                    }
-                } else {
-                    $log->handleThumbnailAlreadyUpToDate();
+                    // Throwing lets the queue worker's own retry mechanism re-schedule this job using
+                    // $tries/backoff() below, instead of us re-dispatching a copy of ourselves. Not
+                    // immediately, though: without a delay all $tries attempts would burn within ~35
+                    // seconds, so a render that failed because the environment was momentarily slow (or
+                    // busy with the other floors of this same route) would be retried while it is still
+                    // just as slow. See #3920. Once $tries is exhausted the worker calls failed() below
+                    // instead of retrying again.
+                    throw new Exception(sprintf(
+                        'Failed to create thumbnail for dungeon route %d floor %d on attempt %d',
+                        $this->dungeonRoute->id,
+                        $this->floorIndex,
+                        $this->attempts(),
+                    ));
                 }
             } else {
-                $log->handleMaxAttemptsReached();
+                $log->handleThumbnailAlreadyUpToDate();
             }
         } finally {
             $log->handleEnd($result !== null);
@@ -98,29 +93,20 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
     }
 
     /**
-     * Staggered delay in seconds for each retry attempt.
-     *
-     * Note that this job does not lean on the queue worker's own retry mechanism - it re-dispatches
-     * itself on failure (so it can carry its own $attempts counter past a `tries: 1` worker), which
-     * means the framework never consults this method by itself. getBackoffSecondsForAttempt() reads
-     * it when scheduling that re-dispatch, so this array stays the single place the delays live.
+     * Called by the queue worker once $tries is exhausted.
+     */
+    public function failed(?Throwable $exception): void
+    {
+        app()->make(ProcessRouteFloorThumbnailLoggingInterface::class)->handleMaxAttemptsReached();
+    }
+
+    /**
+     * Staggered delay in seconds the queue worker waits before each retry.
      *
      * @return array<int, int>
      */
     public function backoff(): array
     {
         return [10, 60, 300]; // Wait 10s, then 60s, then 300s
-    }
-
-    /**
-     * The delay to apply before the given (1-based) retry attempt. Attempts beyond the configured
-     * delays reuse the last one, so raising keystoneguru.thumbnail.max_attempts never falls back to
-     * retrying immediately.
-     */
-    private function getBackoffSecondsForAttempt(int $attempt): int
-    {
-        $backoff = $this->backoff();
-
-        return $backoff[$attempt - 1] ?? (int)end($backoff);
     }
 }

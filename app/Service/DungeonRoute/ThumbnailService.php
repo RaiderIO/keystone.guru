@@ -291,7 +291,7 @@ class ThumbnailService implements ThumbnailServiceInterface
             $forceDispatch = $isStandard ? $force : true;
             /** @var Floor $floor */
             foreach ($dungeonRoute->dungeon->floorsForMapFacade($dungeonRoute->mappingVersion, true)->active()->get() as $floor) {
-                ProcessRouteFloorThumbnail::dispatch($dungeonRoute, $floor->index, $forceDispatch, 0, $variant);
+                ProcessRouteFloorThumbnail::dispatch($dungeonRoute, $floor->index, $forceDispatch, $variant);
                 $result = true;
 
                 $this->log->queueThumbnailRefreshDispatchedJob(

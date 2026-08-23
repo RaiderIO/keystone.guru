@@ -2,15 +2,15 @@
 
 namespace Tests\Feature\App\Jobs;
 
+use App\Jobs\Logging\ProcessRouteFloorThumbnailLoggingInterface;
 use App\Jobs\ProcessRouteFloorThumbnail;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
+use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Queue;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\MockObject\Exception;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Jobs')]
@@ -18,20 +18,18 @@ use Tests\TestCases\PublicTestCase;
 final class ProcessRouteFloorThumbnailTest extends PublicTestCase
 {
     /**
-     * The job does not use the queue worker's own retry mechanism - it re-dispatches itself so it can
-     * carry its own $attempts counter past a `tries: 1` worker. That re-dispatch used to be immediate,
-     * which burned every attempt within ~35 seconds and gave a momentarily slow environment no chance
-     * to recover before the next try (#3920).
+     * A failed render throws out of handle() rather than re-dispatching itself, so the queue worker's
+     * own retry mechanism applies $tries/backoff() - see those two below for what that configures.
+     * Nothing here schedules a delay itself; without one, all $tries attempts would burn within ~35
+     * seconds, giving a momentarily slow environment no chance to recover before the next try (#3920).
      *
-     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     #[Test]
-    #[DataProvider('failedRenderAttemptProvider')]
-    public function handle_givenFailedRender_dispatchesRetryWithStaggeredDelay(int $attempts, int $maxAttempts, int $expectedDelaySeconds): void
+    public function handle_givenFailedRender_throwsAndDoesNotReDispatchItself(): void
     {
         // Arrange
         Queue::fake();
-        config(['keystoneguru.thumbnail.max_attempts' => $maxAttempts]);
 
         $dungeonRoute = $this->createDungeonRouteDueForThumbnail();
 
@@ -41,71 +39,22 @@ final class ProcessRouteFloorThumbnailTest extends PublicTestCase
 
         try {
             // Act
-            new ProcessRouteFloorThumbnail($dungeonRoute, 1, true, $attempts)->handle();
+            $this->expectException(Exception::class);
 
-            // Assert
-            Queue::assertPushed(
-                ProcessRouteFloorThumbnail::class,
-                static function (ProcessRouteFloorThumbnail $job) use ($expectedDelaySeconds): bool {
-                    return $job->delay instanceof Carbon
-                        && (int)round($job->delay->diffInSeconds(Carbon::now(), true)) === $expectedDelaySeconds;
-                },
-            );
+            new ProcessRouteFloorThumbnail($dungeonRoute, 1, true)->handle();
         } finally {
-            $dungeonRoute->delete();
-        }
-    }
-
-    /**
-     * @return array<string, array{0: int, 1: int, 2: int}>
-     */
-    public static function failedRenderAttemptProvider(): array
-    {
-        // The third delay is unreachable at the default max_attempts of 3 (attempt 2 is the last one
-        // that renders), so that case raises the cap rather than asserting something that cannot happen.
-        return [
-            'first retry waits 10s'  => [0, 3, 10],
-            'second retry waits 60s' => [1, 4, 60],
-            'third retry waits 300s' => [2, 5, 300],
-        ];
-    }
-
-    /**
-     * The attempt that would trip the max_attempts guard must not be queued at all - it could only log
-     * that it gave up. Harmless while retries were immediate; with a backoff it would occupy the queue
-     * for the full delay before the terminal failure was reported (cold review finding on PR #4245).
-     *
-     * @throws Exception
-     */
-    #[Test]
-    public function handle_givenFailedRenderOnTheLastAttempt_dispatchesNoRetry(): void
-    {
-        // Arrange
-        Queue::fake();
-        config(['keystoneguru.thumbnail.max_attempts' => 3]);
-
-        $dungeonRoute = $this->createDungeonRouteDueForThumbnail();
-
-        $thumbnailService = $this->createMockPublic(ThumbnailServiceInterface::class);
-        $thumbnailService->method('createThumbnail')->willReturn(null);
-        app()->instance(ThumbnailServiceInterface::class, $thumbnailService);
-
-        try {
-            // Act - attempts 2 is the last one that renders when max_attempts is 3
-            new ProcessRouteFloorThumbnail($dungeonRoute, 1, true, 2)->handle();
-
-            // Assert
+            // Assert - the job never dispatches a copy of itself; the queue worker retries it instead
             Queue::assertNotPushed(ProcessRouteFloorThumbnail::class);
-        } finally {
+
             $dungeonRoute->delete();
         }
     }
 
     /**
-     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     #[Test]
-    public function handle_givenSuccessfulRender_dispatchesNoRetry(): void
+    public function handle_givenSuccessfulRender_doesNotThrow(): void
     {
         // Arrange
         Queue::fake();
@@ -127,35 +76,21 @@ final class ProcessRouteFloorThumbnailTest extends PublicTestCase
         }
     }
 
-    /**
-     * Attempts beyond the configured delays must not fall back to retrying immediately - raising
-     * keystoneguru.thumbnail.max_attempts would otherwise silently reintroduce the tight retry loop.
-     *
-     * @throws Exception
-     */
     #[Test]
-    public function handle_givenAttemptBeyondConfiguredDelays_reusesTheLastDelay(): void
+    public function construct_givenMaxAttemptsConfig_setsTries(): void
     {
         // Arrange
-        Queue::fake();
-        config(['keystoneguru.thumbnail.max_attempts' => 10]);
+        config(['keystoneguru.thumbnail.max_attempts' => 5]);
 
         $dungeonRoute = $this->createDungeonRouteDueForThumbnail();
 
-        $thumbnailService = $this->createMockPublic(ThumbnailServiceInterface::class);
-        $thumbnailService->method('createThumbnail')->willReturn(null);
-        app()->instance(ThumbnailServiceInterface::class, $thumbnailService);
-
         try {
-            // Act - attempts 5 is past the end of the [10, 60, 300] backoff array
-            new ProcessRouteFloorThumbnail($dungeonRoute, 1, true, 5)->handle();
+            // Act
+            $job = new ProcessRouteFloorThumbnail($dungeonRoute, 1);
 
-            // Assert
-            Queue::assertPushed(
-                ProcessRouteFloorThumbnail::class,
-                static fn(ProcessRouteFloorThumbnail $job): bool => $job->delay instanceof Carbon
-                    && (int)round($job->delay->diffInSeconds(Carbon::now(), true)) === 300,
-            );
+            // Assert - this is what makes the worker apply $tries attempts regardless of the thumbnail
+            // Horizon supervisors' own `tries: 1` config; a job-level $tries always takes precedence.
+            $this->assertSame(5, $job->tries);
         } finally {
             $dungeonRoute->delete();
         }
@@ -173,6 +108,29 @@ final class ProcessRouteFloorThumbnailTest extends PublicTestCase
 
             // Assert
             $this->assertSame([10, 60, 300], $backoff);
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * failed() is what the queue worker calls once $tries is exhausted - this is the terminal-failure
+     * diagnostic that used to be logged by a manually re-dispatched, immediately-no-op final attempt
+     * (cold review finding on PR #4245); now it fires directly instead of occupying the queue.
+     */
+    #[Test]
+    public function failed_givenException_logsMaxAttemptsReached(): void
+    {
+        // Arrange
+        $dungeonRoute = $this->createDungeonRouteDueForThumbnail();
+
+        $log = $this->createMockPublic(ProcessRouteFloorThumbnailLoggingInterface::class);
+        $log->expects($this->once())->method('handleMaxAttemptsReached');
+        app()->instance(ProcessRouteFloorThumbnailLoggingInterface::class, $log);
+
+        try {
+            // Act
+            new ProcessRouteFloorThumbnail($dungeonRoute, 1, true)->failed(new Exception('render failed'));
         } finally {
             $dungeonRoute->delete();
         }
