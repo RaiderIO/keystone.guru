@@ -99,6 +99,34 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
     }
 
     /**
+     * Asserts that a single pull holds all of $npcIds at once.
+     *
+     * validateBossesResolved() only covers what the party is on record as having killed, so it cannot see an enemy a
+     * DungeonRouteBuilderRule awarded - the whole point of those being that no death for them is ever sent to us.
+     * This is how such an award is asserted instead.
+     *
+     * @param array<string, mixed> $responseArr
+     * @param array<int, int>      $npcIds
+     */
+    protected function validateNpcIdsInSamePull(array $responseArr, array $npcIds): void
+    {
+        /** @var array<int, array<string, mixed>> $pulls */
+        $pulls = $responseArr['data']['pulls'];
+
+        $matchingPulls = array_filter($pulls, static function (array $pull) use ($npcIds): bool {
+            /** @var array<int, array<string, mixed>> $enemies */
+            $enemies = $pull['enemies'];
+
+            return array_diff($npcIds, array_column($enemies, 'npcId')) === [];
+        });
+
+        $this->assertNotEmpty(
+            $matchingPulls,
+            sprintf('No single pull holds all of NPCs %s', implode(', ', $npcIds)),
+        );
+    }
+
+    /**
      * Every boss the party actually killed must end up in a pull. A boss that is silently dropped - because its
      * mapped position is out of range of where it was killed, or because it resolved onto the wrong floor - is the
      * failure mode a hardcoded pull/enemy-forces count cannot see, so it is asserted separately from those numbers.

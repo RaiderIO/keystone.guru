@@ -23,12 +23,19 @@ interface DungeonRouteBuilderRuleInterface
     public function appliesToDungeon(Dungeon $dungeon): bool;
 
     /**
-     * Advance the rule's state because an enemy died.
+     * Advance the rule's state because an enemy died, and award the kills that this death implies.
      *
      * Keyed on the npc_id as it was logged rather than on $resolvedEnemy, because a boss that failed to resolve to a
      * mapped enemy would otherwise never advance a rule that depends on it.
+     *
+     * Some enemies despawn instead of dying, so their death never reaches us at all - not from the combat log, and not
+     * from what Raider.IO sends the Auto Route Creator. A rule compensates by naming the npc_ids whose kill should be
+     * awarded in the same pull as this death; the builder then resolves and attaches them as if they had been sent.
+     * Awarding is the rule's own responsibility to keep idempotent - the builder will happily award the same npc twice.
+     *
+     * @return array<int, int> npc_ids to award a kill for, empty when this death awards nothing
      */
-    public function onEnemyDied(int $npcId, ?Enemy $resolvedEnemy): void;
+    public function onEnemyDied(int $npcId, ?Enemy $resolvedEnemy): array;
 
     /**
      * Whether this enemy may be matched at all. A false here is final - it survives the builder's retry for an NPC

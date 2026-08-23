@@ -38,15 +38,15 @@ class BossKillFloorCutoffRule extends AbstractDungeonRouteBuilderRule
         return in_array($dungeon->key, self::DUNGEON_KEYS);
     }
 
-    public function onEnemyDied(int $npcId, ?Enemy $resolvedEnemy): void
+    public function onEnemyDied(int $npcId, ?Enemy $resolvedEnemy): array
     {
         // The boss may not have been resolved to a mapped enemy at all - then we have no floor to work with
         if ($resolvedEnemy === null || !$resolvedEnemy->npc->isBoss() || $resolvedEnemy->floor->facade) {
-            return;
+            return [];
         }
 
         if ($resolvedEnemy->floor->index <= $this->minimumFloorIndex) {
-            return;
+            return [];
         }
 
         $this->minimumFloorIndex = $resolvedEnemy->floor->index;
@@ -57,6 +57,8 @@ class BossKillFloorCutoffRule extends AbstractDungeonRouteBuilderRule
             $resolvedEnemy->floor_id,
             $this->minimumFloorIndex,
         );
+
+        return [];
     }
 
     /**

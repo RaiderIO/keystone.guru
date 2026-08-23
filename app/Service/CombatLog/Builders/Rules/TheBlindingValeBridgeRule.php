@@ -37,10 +37,10 @@ class TheBlindingValeBridgeRule extends AbstractDungeonRouteBuilderRule
         return $dungeon->key === DungeonKey::THE_BLINDING_VALE->value;
     }
 
-    public function onEnemyDied(int $npcId, ?Enemy $resolvedEnemy): void
+    public function onEnemyDied(int $npcId, ?Enemy $resolvedEnemy): array
     {
         if ($this->lightwardenRuiaKilled || $npcId !== self::NPC_ID_LIGHTWARDEN_RUIA) {
-            return;
+            return [];
         }
 
         $this->lightwardenRuiaKilled = true;
@@ -49,6 +49,8 @@ class TheBlindingValeBridgeRule extends AbstractDungeonRouteBuilderRule
             $npcId,
             self::BRIDGE_ENEMY_PACK_GROUPS,
         );
+
+        return [];
     }
 
     /**

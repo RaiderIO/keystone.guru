@@ -20,6 +20,7 @@ use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Service\CombatLog\Builders\Logging\DungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Builders\Rules\BossKillFloorCutoffRule;
 use App\Service\CombatLog\Builders\Rules\DungeonRouteBuilderRuleInterface;
+use App\Service\CombatLog\Builders\Rules\KingsRestDespawningEnemiesRule;
 use App\Service\CombatLog\Builders\Rules\TheBlindingValeBridgeRule;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\ActivePullCollection;
@@ -48,6 +49,7 @@ abstract class DungeonRouteBuilder
      */
     private const array RULES = [
         BossKillFloorCutoffRule::class,
+        KingsRestDespawningEnemiesRule::class,
         TheBlindingValeBridgeRule::class,
     ];
 
@@ -239,11 +241,14 @@ abstract class DungeonRouteBuilder
     }
 
     /**
-     * @param Collection<int, bool> $preferredGroups The groups that are pulled and should always be preferred when choosing enemies
+     * @param Collection<int, bool> $preferredGroups  The groups that are pulled and should always be preferred when choosing enemies
+     * @param bool                  $ignoreRangeCheck Match regardless of how far the closest candidate is, for a kill whose
+     *                                                location is synthetic rather than logged - see awardEnemyKills().
      */
     protected function findUnkilledEnemyForNpcAtIngameLocation(
         ActivePullEnemy $activePullEnemy,
         Collection      $preferredGroups,
+        bool            $ignoreRangeCheck = false,
     ): ?Enemy {
         // See if we actually need to go look for another NPC
         if (isset(self::NPC_ID_MAPPING[$activePullEnemy->getNpcId()])) {
@@ -270,6 +275,7 @@ abstract class DungeonRouteBuilder
                 $activePullEnemy,
                 $preferredGroups,
                 true,
+                $ignoreRangeCheck,
             );
 
             // A first pass exclusion would otherwise drop this enemy from the route - and from its enemy forces -
@@ -285,6 +291,7 @@ abstract class DungeonRouteBuilder
                     $activePullEnemy,
                     $preferredGroups,
                     false,
+                    $ignoreRangeCheck,
                 );
             }
 
@@ -314,6 +321,7 @@ abstract class DungeonRouteBuilder
         ActivePullEnemy $activePullEnemy,
         Collection      $preferredGroups,
         bool            $applyFirstPassExclusions,
+        bool            $ignoreRangeCheck = false,
     ): ClosestEnemy {
         $closestEnemy = new ClosestEnemy();
 
@@ -386,6 +394,7 @@ abstract class DungeonRouteBuilder
                 $filteredEnemies,
                 $activePullEnemy,
                 $closestEnemy,
+                $ignoreRangeCheck,
             );
         }
 
@@ -400,15 +409,71 @@ abstract class DungeonRouteBuilder
      *
      * Takes the npc_id as it was logged alongside the resolved Enemy, because a boss that failed to resolve to a
      * mapped enemy would otherwise never advance a rule that keys off it dying.
+     *
+     * @return Collection<int, int> The npc_ids the rules want a kill awarded for - see awardEnemyKills()
      */
-    protected function notifyRulesEnemyDied(?int $npcId, ?Enemy $resolvedEnemy): void
+    protected function notifyRulesEnemyDied(?int $npcId, ?Enemy $resolvedEnemy): Collection
     {
+        /** @var Collection<int, int> $awardedNpcIds */
+        $awardedNpcIds = collect();
+
         if ($npcId === null) {
-            return;
+            return $awardedNpcIds;
         }
 
         foreach ($this->rules as $rule) {
-            $rule->onEnemyDied($npcId, $resolvedEnemy);
+            $awardedNpcIds = $awardedNpcIds->merge($rule->onEnemyDied($npcId, $resolvedEnemy));
+        }
+
+        return $awardedNpcIds;
+    }
+
+    /**
+     * Attaches a kill for each of $npcIds to $activePull, for enemies that despawn instead of dying so that their
+     * death never reaches us at all. See DungeonRouteBuilderRuleInterface::onEnemyDied().
+     *
+     * The awarded kill borrows the position and timing of the enemy whose death triggered it, since that is the only
+     * thing we know about it. That location is therefore synthetic, and the normal engagement range gate - which
+     * exists to catch mismatches in real positional data - would reject anything the trigger did not happen to die
+     * next to. So range is ignored here; the npc_id is what identifies the enemy.
+     *
+     * @param Collection<int, int> $npcIds
+     */
+    protected function awardEnemyKills(Collection $npcIds, ?ActivePull $activePull, ActivePullEnemy $trigger): void
+    {
+        // The trigger is only part of a pull if it resolved to a mapped enemy when it was engaged. It may not have,
+        // and the kills still have to land somewhere - so fall back to the pull in progress, or start one.
+        $activePull ??= $this->activePullCollection->last() ?? $this->activePullCollection->addNewPull();
+
+        foreach ($npcIds as $npcId) {
+            $awardedEnemy = new ActivePullEnemy(
+                sprintf('%s-awarded-%d', $trigger->getUniqueId(), $npcId),
+                $npcId,
+                $trigger->getX(),
+                $trigger->getY(),
+                $trigger->getEngagedAt(),
+                $trigger->getDiedAt() ?? $trigger->getEngagedAt(),
+            );
+
+            $resolvedEnemy = $this->findUnkilledEnemyForNpcAtIngameLocation(
+                $awardedEnemy,
+                $this->activePullCollection->getInCombatGroups(),
+                true,
+            );
+
+            if ($resolvedEnemy === null) {
+                $this->log->awardEnemyKillsEnemyNotFound($npcId);
+
+                continue;
+            }
+
+            $awardedEnemy->setResolvedEnemy($resolvedEnemy);
+
+            // Engaged and killed in one go - we have no timeline for it, only the fact that it is dead
+            $activePull->enemyEngaged($awardedEnemy);
+            $activePull->enemyKilled($awardedEnemy->getUniqueId());
+
+            $this->log->awardEnemyKillsEnemyAwarded($npcId, $resolvedEnemy->id);
         }
     }
 
@@ -483,6 +548,7 @@ abstract class DungeonRouteBuilder
         Collection      $filteredEnemies,
         ActivePullEnemy $activePullEnemy,
         ClosestEnemy    $closestEnemy,
+        bool            $ignoreRangeCheck = false,
     ): void {
         try {
             $this->log->findClosestEnemyInAllFilteredEnemiesStart();
@@ -490,15 +556,15 @@ abstract class DungeonRouteBuilder
             // There's only one boss NPC in the mapping, so killing it unambiguously matches it regardless of how
             // far its death location is from where it's mapped - let it be matched regardless of range. Non-boss
             // candidates are still rejected by range inside findClosestEnemyAndDistance() itself, before they're
-            // ever recorded as the closest enemy.
-            $isBoss = $filteredEnemies->first()?->npc?->isBoss() ?? false;
+            // ever recorded as the closest enemy - unless the caller already told us the location is synthetic.
+            $ignoreRangeCheck = $ignoreRangeCheck || ($filteredEnemies->first()?->npc?->isBoss() ?? false);
 
             $this->findClosestEnemyAndDistanceFromList(
                 $filteredEnemies,
                 $activePullEnemy,
                 $closestEnemy,
                 false,
-                $isBoss,
+                $ignoreRangeCheck,
             );
 
             // If the closest enemy was still pretty far away - check if there was a patrol that may have been closer
@@ -509,7 +575,7 @@ abstract class DungeonRouteBuilder
                     $activePullEnemy,
                     $closestEnemy,
                     true,
-                    $isBoss,
+                    $ignoreRangeCheck,
                 );
             }
 
@@ -519,7 +585,7 @@ abstract class DungeonRouteBuilder
                 );
             } elseif ($closestEnemy->getDistanceBetweenEnemies() >
                 ($this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default'))) {
-                if ($isBoss) {
+                if ($ignoreRangeCheck) {
                     $this->log->findClosestEnemyInAllFilteredEnemiesEnemyIsBossIgnoringTooFarAwayCheck();
                 } else {
                     $this->log->findClosestEnemyInAllFilteredEnemiesEnemyTooFarAway(

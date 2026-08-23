@@ -9,9 +9,10 @@ use App\Models\Enemy;
  */
 abstract class AbstractDungeonRouteBuilderRule implements DungeonRouteBuilderRuleInterface
 {
-    public function onEnemyDied(int $npcId, ?Enemy $resolvedEnemy): void
+    public function onEnemyDied(int $npcId, ?Enemy $resolvedEnemy): array
     {
-        // Stateless by default
+        // Stateless by default, and awards nothing
+        return [];
     }
 
     public function isEnemyEligible(Enemy $enemy): bool

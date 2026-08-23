@@ -80,6 +80,18 @@ interface DungeonRouteBuilderLoggingInterface
     ): void;
 
     /**
+     * @param array<int, int> $awardedNpcIds
+     */
+    public function kingsRestDespawningEnemiesRuleEnemyKillsAwarded(
+        int   $triggerNpcId,
+        array $awardedNpcIds,
+    ): void;
+
+    public function awardEnemyKillsEnemyNotFound(int $npcId): void;
+
+    public function awardEnemyKillsEnemyAwarded(int $npcId, int $enemyId): void;
+
+    /**
      * @param array<int, bool> $preferredGroups
      */
     public function findClosestEnemyInPreferredGroupsStart(array $preferredGroups): void;
