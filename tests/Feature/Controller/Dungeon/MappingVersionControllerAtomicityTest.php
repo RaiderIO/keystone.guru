@@ -10,6 +10,7 @@ use App\Models\MapIcon;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Mapping\MappingServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
@@ -149,21 +150,12 @@ final class MappingVersionControllerAtomicityTest extends PublicTestCase
                 'A failure mid-delete must roll back the map icon whose deletion threw.',
             );
         } finally {
-            // Guard: force-clean via query builder mass deletes - which bypass model events, so the
-            // throwing MapIcon::deleting listener above doesn't fire again - every relation
-            // MappingVersion::boot()'s deleting hook would normally cascade, in case the delete
-            // attempt above didn't roll back cleanly.
-            $newMappingVersion->dungeonFloorSwitchMarkers()->delete();
-            $newMappingVersion->enemies()->delete();
-            $newMappingVersion->enemyPacks()->delete();
-            $newMappingVersion->enemyPatrols()->delete();
-            $newMappingVersion->mapIcons()->delete();
-            $newMappingVersion->mountableAreas()->delete();
-            $newMappingVersion->enemyForcesCheckpoints()->delete();
-            $newMappingVersion->floorUnions()->delete();
-            $newMappingVersion->floorUnionAreas()->delete();
-            $newMappingVersion->npcEnemyForces()->delete();
-            MappingVersion::where('id', $newMappingVersion->id)->delete();
+            // Guard: force-clean via the SAME deleting() cascade the production code uses, rather
+            // than re-enumerating the ten relation sets here - that list would silently rot the
+            // moment a relation is added to (or removed from) that cascade (Wotuu, PR #4268 review).
+            // Just remove the listener that made MapIcon::deleting throw and let the real cascade run.
+            Event::forget('eloquent.deleting: ' . MapIcon::class);
+            $newMappingVersion->fresh()?->delete();
         }
     }
 }
