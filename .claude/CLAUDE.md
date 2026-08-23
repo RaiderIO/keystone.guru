@@ -183,10 +183,9 @@ dereferences the `@file`; lowercase `-f` sends the literal string `@<file>`.
 
 ### Stacked PRs: always target `master`
 
-`php-tests`/`phpstan` only run on PRs targeting `master`, so a PR against a feature branch
-silently skips them yet still shows green (9 checks when wired correctly, 3 when not). Open
-stacked PRs against `master` anyway and say so in the body — the diff collapses when the parent
-merges. Retargeting an existing PR via PATCH does **not** retrigger CI; close and reopen it.
+Open stacked PRs against `master` anyway (not the parent's branch) and say so in the body — the
+diff collapses when the parent merges. Retargeting an existing PR via PATCH does **not** retrigger
+CI; close and reopen it.
 
 **Merge order is not enforced by anything — the parent must merge first.** Because both target
 `master`, merging the child first squashes the parent's whole diff onto master under the child's

@@ -538,15 +538,15 @@ action, say so in one line.
 
 ## Gotchas
 
-- **A PR whose base branch isn't `master` (a stacked PR, e.g. one PR targeting another open PR's
-  branch) never gets `php-tests` or `phpstan` checks at all** — both are gated `on: pull_request:
-  branches: [master]` in their workflow files, so only `build`, `js-tests`, and `php-cs-fixer` ever
-  run there (per `.claude/CLAUDE.md`, "Stacked PRs: always target `master`", and the commit that
-  documented it, `ae6fe0765`). Don't read that 3-check rollup as "still
-  pending" and wait for more — for a stacked PR, that IS the full CI, and once those three are
-  green the PR is as green as it will ever get (case in point: #3709, which sat treated as
-  "pending" for a full pass before this was caught). Check `baseRefName` before deciding a PR's CI
-  is incomplete.
+- **Retired (#4074, fixed as of the commit adding this line):** a PR whose base branch isn't
+  `master` (a stacked PR, e.g. one PR targeting another open PR's branch) used to never get
+  `php-tests` or `phpstan` checks at all — both were gated `on: pull_request: branches: [master]`
+  in their workflow files, so only `build`, `js-tests`, and `php-cs-fixer` ever ran there. That gate
+  is gone: both workflows now trigger on `pull_request` regardless of base branch, so a stacked
+  PR's CI rollup is the full 5+ checks like any other PR's. Case in point this used to bite:
+  #3709, which sat treated as "still pending" for a full babysit-prs pass before the gap was
+  understood. No special handling of `baseRefName` is needed for CI completeness anymore — it still
+  matters for the stacked-merge-order rule above.
 - **"Re-run failed jobs" never picks up a fix that merged to master after the run was created** —
   a `pull_request` run is pinned to the merge commit computed when the run was first triggered, and
   re-runs reuse that exact snapshot. So a PR that is red only because of a since-fixed master-wide
