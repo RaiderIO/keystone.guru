@@ -164,6 +164,53 @@ class TheBlindingValeBridgeRuleTest extends PublicTestCase
         $this->assertFalse($result);
     }
 
+    /**
+     * The packs underneath the bridge only spawn once Ruia is dead, so nothing on the way to Ikuzz may match them.
+     */
+    #[Test]
+    #[DataProvider('underBridgeEnemyPackGroupProvider')]
+    public function isEnemyEligible_givenAnUnderBridgeEnemyBeforeLightwardenRuiaDied_returnsFalse(int $group): void
+    {
+        // Arrange
+        $rule = $this->makeRule();
+
+        // Act
+        $result = $rule->isEnemyEligible($this->makeEnemy($group));
+
+        // Assert
+        $this->assertFalse($result);
+    }
+
+    /**
+     * @return array<string, array<int, int>>
+     */
+    public static function underBridgeEnemyPackGroupProvider(): array
+    {
+        return [
+            'group 47' => [47],
+            'group 48' => [48],
+            'group 49' => [49],
+            'group 50' => [50],
+            'group 54' => [54],
+            'group 57' => [57],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('underBridgeEnemyPackGroupProvider')]
+    public function isEnemyEligible_givenAnUnderBridgeEnemyAfterLightwardenRuiaDied_returnsTrue(int $group): void
+    {
+        // Arrange
+        $rule = $this->makeRule();
+        $rule->onEnemyDied(self::NPC_ID_LIGHTWARDEN_RUIA, null);
+
+        // Act
+        $result = $rule->isEnemyEligible($this->makeEnemy($group));
+
+        // Assert
+        $this->assertTrue($result);
+    }
+
     private function makeRule(): TheBlindingValeBridgeRule
     {
         return new TheBlindingValeBridgeRule(new DungeonRouteBuilderLogging());

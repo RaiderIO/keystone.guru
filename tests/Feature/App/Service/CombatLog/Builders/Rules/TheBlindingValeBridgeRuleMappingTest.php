@@ -11,20 +11,30 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
 /**
- * TheBlindingValeBridgeRule hardcodes EnemyPack groups 44, 45 and 46, but group numbers come from the MDT import and
- * are only unique per mapping version - a re-import can renumber them. This pins what those three groups contain so
- * that a renumber fails here rather than silently turning the rule into a no-op (or, worse, blocking the wrong packs).
+ * TheBlindingValeBridgeRule hardcodes the EnemyPack groups on top of the bridge (44, 45, 46) and the ones underneath
+ * it (47, 48, 49, 50, 54, 57), but group numbers come from the MDT import and are only unique per mapping version - a
+ * re-import can renumber them. This pins what those groups contain so that a renumber fails here rather than silently
+ * turning the rule into a no-op (or, worse, blocking the wrong packs).
  */
 #[Group('CombatLog')]
 #[Group('DungeonRouteBuilderRules')]
 #[Group('TheBlindingValeBridgeRule')]
 class TheBlindingValeBridgeRuleMappingTest extends PublicTestCase
 {
-    /** @var array<int, array<int, int>> The npc_ids each bridge group is expected to hold, sorted */
+    /** @var array<int, array<int, int>> The npc_ids each group the rule names is expected to hold, sorted */
     private const array EXPECTED_BRIDGE_GROUP_NPC_IDS = [
+        // On top of the bridge - blocked once Lightwarden Ruia is dead
         44 => [245339, 245339, 245345, 254850],
         45 => [245410, 245410, 245410, 245410, 245410],
         46 => [245346, 245473, 245484],
+
+        // Underneath the bridge - these only spawn once she is dead, so they are blocked until then
+        47 => [245410, 245410, 245410, 245410, 245410],
+        48 => [245345, 245410, 245410],
+        49 => [245346],
+        50 => [245336, 245339, 245345, 245345, 245410, 245410, 245410],
+        54 => [245345, 245410, 245410, 245410, 245410, 245410],
+        57 => [245484],
     ];
 
     #[Test]
@@ -41,7 +51,7 @@ class TheBlindingValeBridgeRuleMappingTest extends PublicTestCase
                 ->first();
 
             // Assert
-            $this->assertNotNull($enemyPack, sprintf('Bridge EnemyPack group %d no longer exists', $group));
+            $this->assertNotNull($enemyPack, sprintf('EnemyPack group %d no longer exists', $group));
 
             $npcIds = Enemy::where('enemy_pack_id', $enemyPack->id)
                 ->orderBy('npc_id')
@@ -51,7 +61,7 @@ class TheBlindingValeBridgeRuleMappingTest extends PublicTestCase
             $this->assertEquals(
                 $expectedNpcIds,
                 $npcIds,
-                sprintf('Bridge EnemyPack group %d no longer holds the expected NPCs', $group),
+                sprintf('EnemyPack group %d no longer holds the expected NPCs', $group),
             );
         }
     }
