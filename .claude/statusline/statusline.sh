@@ -1,23 +1,25 @@
 #!/usr/bin/env bash
 # Status line for Claude Code, checked into the repo so it's identical across machines.
 # Wired up via .claude/settings.json (statusLine), which locates this script from workspace.project_dir.
-# Layout:  <branch><dirty> 5h:<bar> HH:MM 7d:<bar> cx:<bar> ............ <worktree>:<port> <model>
+# Layout:  <ctx tokens> 5h:<bar> HH:MM 7d:<bar> cx:<bar> ............ <worktree>:<port> <model>
 input=$(cat)
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)
 
-# Session working directory (from JSON): the status line command is not guaranteed to run in the
-# session's cwd, so drive every git call off this rather than the process cwd.
-cwd=$(echo "$input" | python3 -c "
+# Context window usage (e.g. "52.5k"), coloured by how full the window is — same green/yellow/red
+# thresholds as the rate bars below. Renders nothing before the first API response of a session,
+# when the payload carries no usage yet.
+context_part=$(echo "$input" | python3 -c "
 import sys, json
+esc = chr(27)
 d = json.load(sys.stdin)
-print(d.get('workspace', {}).get('current_dir') or d.get('cwd') or '')
+c = d.get('context_window') or {}
+used = (c.get('total_input_tokens') or 0) + (c.get('total_output_tokens') or 0)
+if used:
+    pct = c.get('used_percentage') or 0
+    color = '32' if pct < 50 else '33' if pct < 80 else '31'
+    label = ('%.1fk' % (used / 1000)) if used >= 1000 else str(used)
+    print(esc + '[01;' + color + 'm' + label + esc + '[00m')
 " 2>/dev/null)
-[ -z "$cwd" ] && cwd=$PWD
-
-# Git branch + dirty flag
-branch=$(git -C "$cwd" --no-optional-locks branch --show-current 2>/dev/null)
-dirty=$([ -n "$(git -C "$cwd" --no-optional-locks status --porcelain 2>/dev/null)" ] && printf '*')
-git_part=$([ -n "$branch" ] && printf '\033[01;33m%s%s\033[00m' "$branch" "$dirty")
 
 # Rate bars (width 20) + refresh time (HH:MM only).
 # Any extra per-model weekly limits (e.g. seven_day_fable) render after the 7d bar.
@@ -147,7 +149,7 @@ fi
 
 # Assemble left side
 left=""
-[ -n "$git_part" ] && left="$git_part"
+[ -n "$context_part" ] && left="$context_part"
 [ -n "$rate_part" ] && left="${left}${left:+ }${rate_part}"
 [ -n "$codex_part" ] && left="${left}${left:+ }${codex_part}"
 
