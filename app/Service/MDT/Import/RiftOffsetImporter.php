@@ -15,7 +15,9 @@ use App\Service\MDT\Models\ImportStringRiftOffsets;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class RiftOffsetImporter
 {
@@ -156,7 +158,18 @@ class RiftOffsetImporter
         return $importStringRiftOffsets;
     }
 
+    /**
+     * Wrapped in a retried transaction - concurrent imports bulk-inserting into the shared
+     * `polylines` table can hit a MySQL lock wait timeout under contention (#4239).
+     */
     public function applyRiftOffsetsToDungeonRoute(
+        ImportStringRiftOffsets $importStringRiftOffsets,
+        DungeonRoute            $dungeonRoute,
+    ): void {
+        DB::transaction(fn() => $this->doApplyRiftOffsetsToDungeonRoute($importStringRiftOffsets, $dungeonRoute), 3);
+    }
+
+    private function doApplyRiftOffsetsToDungeonRoute(
         ImportStringRiftOffsets $importStringRiftOffsets,
         DungeonRoute            $dungeonRoute,
     ): void {
@@ -164,8 +177,19 @@ class RiftOffsetImporter
 
         // Assign map objects to the route
         $mapIconsAttributes = [];
+        /**
+         * The obelisk each map icon links back to, indexed the same way as $mapIconsAttributes.
+         * parseRiftOffsets() carries this model along inside the map icon attributes, but
+         * `map_icons` has no such column and insert() bypasses $fillable - leaving it in the
+         * payload threw "Unknown column 'obelisk_map_icon'" on every rift offset import (#4255).
+         *
+         * @var array<int, MapIcon> $linkedObeliskMapIcons
+         */
+        $linkedObeliskMapIcons = [];
         foreach ($importStringRiftOffsets->getMapIcons() as $mapIcon) {
-            $mapIconsAttributes[] = array_merge($mapIcon, [
+            $linkedObeliskMapIcons[] = $mapIcon['obelisk_map_icon'];
+
+            $mapIconsAttributes[] = array_merge(Arr::except($mapIcon, ['obelisk_map_icon']), [
                 'dungeon_route_id'   => $dungeonRoute->id,
                 'mapping_version_id' => $mapIcon['mapping_version_id'],
                 'floor_id'           => $mapIcon['floor_id'],
@@ -202,7 +226,7 @@ class RiftOffsetImporter
         foreach ($paths as $path) {
             /** @var Path $path */
             $polyLinesAttributes[$polyLineIndex]['model_id'] = $path->id;
-            $path->setLinkedAwakenedObeliskByMapIconId($mapIconsAttributes[$polyLineIndex]['obelisk_map_icon']->id);
+            $path->setLinkedAwakenedObeliskByMapIconId($linkedObeliskMapIcons[$polyLineIndex]->id);
 
             $polyLineIndex++;
         }
@@ -237,7 +261,7 @@ class RiftOffsetImporter
         $obeliskMapIconIndex = 0;
         foreach ($obeliskMapIcons as $obeliskMapIcon) {
             /** @var MapIcon $obeliskMapIcon */
-            $obeliskMapIcon->setLinkedAwakenedObeliskByMapIconId($mapIconsAttributes[$obeliskMapIconIndex]['obelisk_map_icon']->id);
+            $obeliskMapIcon->setLinkedAwakenedObeliskByMapIconId($linkedObeliskMapIcons[$obeliskMapIconIndex]->id);
 
             $obeliskMapIconIndex++;
         }

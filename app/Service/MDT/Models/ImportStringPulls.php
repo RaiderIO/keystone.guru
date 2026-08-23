@@ -86,7 +86,8 @@ class ImportStringPulls
     }
 
     /**
-     * @param array<int, mixed> $attributes
+     * @param array<string, mixed> $attributes the shape parseValuePulls() builds - index, color,
+     *                                         description, killZoneEnemies and spells
      */
     public function addKillZoneAttributes(array $attributes): self
     {

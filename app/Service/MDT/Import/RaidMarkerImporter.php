@@ -13,6 +13,7 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\Import\Traits\AppliesMdtCloneIndexHack;
 use App\Service\MDT\Models\ImportStringRaidMarkers;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class RaidMarkerImporter
 {
@@ -147,7 +148,17 @@ class RaidMarkerImporter
         return $importStringRaidMarkers;
     }
 
+    /**
+     * Wrapped in a retried transaction - a single bulk insert is already atomic, but concurrent
+     * imports contending for the table can still hit a MySQL lock wait timeout and fail the import
+     * outright. What this buys is the retry, not the atomicity (#4239).
+     */
     public function applyRaidMarkersToDungeonRoute(ImportStringRaidMarkers $importStringRaidMarkers, DungeonRoute $dungeonRoute): void
+    {
+        DB::transaction(fn() => $this->doApplyRaidMarkersToDungeonRoute($importStringRaidMarkers, $dungeonRoute), 3);
+    }
+
+    private function doApplyRaidMarkersToDungeonRoute(ImportStringRaidMarkers $importStringRaidMarkers, DungeonRoute $dungeonRoute): void
     {
         $raidMarkerAttributes = $importStringRaidMarkers->getRaidMarkerAttributes();
 
