@@ -10,12 +10,12 @@ use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Season;
 use App\Models\User;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureServiceInterface;
+use App\Service\Floor\FloorResolutionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
@@ -27,6 +27,7 @@ class AdminToolsCombatLogController extends Controller
 {
     public function combatLogRouteEnemyFailures(
         AdminToolsCombatLogRouteEnemyFailuresRequest $request,
+        FloorResolutionServiceInterface              $floorResolutionService,
     ): RedirectResponse {
         $dungeon = Dungeon::getUserOrDefaultDungeon();
 
@@ -42,8 +43,7 @@ class AdminToolsCombatLogController extends Controller
         // A mapping version of another dungeon makes no sense here - and would build the wrong map context below
         abort_if($mappingVersion->dungeon_id !== $dungeon->id, 404);
 
-        /** @var Floor $defaultFloor */
-        $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
+        $defaultFloor = $floorResolutionService->resolveDefaultFloor($dungeon, $mappingVersion);
 
         return redirect()->route('admin.tools.combatlog.route.enemy_failures.view.floor', [
             'floorIndex' => $defaultFloor->index,
@@ -54,6 +54,7 @@ class AdminToolsCombatLogController extends Controller
         AdminToolsCombatLogRouteEnemyFailuresRequest $request,
         MapContextServiceInterface                   $mapContextService,
         CombatLogRouteEnemyFailureServiceInterface   $combatLogRouteEnemyFailureService,
+        FloorResolutionServiceInterface              $floorResolutionService,
         string                                       $floorIndex,
     ): RedirectResponse|View {
         $dungeon = Dungeon::getUserOrDefaultDungeon();
@@ -70,29 +71,15 @@ class AdminToolsCombatLogController extends Controller
         // A mapping version of another dungeon makes no sense here - and would build the wrong map context below
         abort_if($mappingVersion->dungeon_id !== $dungeon->id, 404);
 
-        if (!is_numeric($floorIndex)) {
-            $floorIndex = '1';
-        }
+        $resolvedFloor = $floorResolutionService->resolveRequestedFloor($dungeon, $mappingVersion, $floorIndex);
 
-        /** @var Floor|null $floor */
-        $floor = Floor::where('dungeon_id', $dungeon->id)
-            ->indexOrFacade($mappingVersion, (int)$floorIndex)
-            ->first();
-
-        if ($floor === null) {
-            /** @var Floor $defaultFloor */
-            $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
-
+        if (!$resolvedFloor->isCanonical) {
             return redirect()->route('admin.tools.combatlog.route.enemy_failures.view.floor', [
-                'floorIndex' => $defaultFloor->index,
+                'floorIndex' => $resolvedFloor->floor->index,
             ] + $request->validated());
         }
 
-        if ($floor->index !== (int)$floorIndex) {
-            return redirect()->route('admin.tools.combatlog.route.enemy_failures.view.floor', [
-                'floorIndex' => $floor->index,
-            ] + $request->validated());
-        }
+        $floor = $resolvedFloor->floor;
 
         $mapContext = $mapContextService->createMapContextDungeonExplore($dungeon, $mappingVersion, User::getCurrentUserMapFacadeStyle());
 
