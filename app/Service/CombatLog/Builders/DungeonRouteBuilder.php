@@ -395,6 +395,9 @@ abstract class DungeonRouteBuilder
     /**
      * Lets every active rule advance its state now that an enemy has died.
      *
+     * Only CombatLogRouteDungeonRouteBuilder calls this - ResultEventDungeonRouteBuilder never has, so any rule is
+     * inert on that path. See the note in its EnemyKilled branch before assuming a rule applies everywhere.
+     *
      * Takes the npc_id as it was logged alongside the resolved Enemy, because a boss that failed to resolve to a
      * mapped enemy would otherwise never advance a rule that keys off it dying.
      */
