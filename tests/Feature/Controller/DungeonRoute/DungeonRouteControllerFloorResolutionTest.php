@@ -76,6 +76,80 @@ final class DungeonRouteControllerFloorResolutionTest extends PublicTestCase
     }
 
     #[Test]
+    public function viewFloor_givenUserPrefersFacadeAndRequestsNonFacadeFloor_redirectsToFacadeFloor(): void
+    {
+        // Arrange
+        $viewer = User::factory()->create(['map_facade_style' => User::MAP_FACADE_STYLE_FACADE]);
+        $owner  = User::factory()->create();
+        $route  = $this->createFacadeRoute($owner);
+        /** @var Floor $nonFacadeFloor */
+        $nonFacadeFloor = Floor::where('dungeon_id', $route->dungeon_id)->where('facade', 0)->where('default', 1)->firstOrFail();
+        /** @var Floor $facadeFloor */
+        $facadeFloor = Floor::where('dungeon_id', $route->dungeon_id)->where('facade', 1)->firstOrFail();
+
+        try {
+            $this->be($viewer);
+
+            // Act
+            $response = $this->get(route('dungeonroute.view.floor', [
+                'dungeon'      => $route->dungeon,
+                'dungeonroute' => $route,
+                'title'        => $route->getTitleSlug(),
+                'floorIndex'   => $nonFacadeFloor->index,
+            ]));
+
+            // Assert
+            $response->assertRedirect(route('dungeonroute.view.floor', [
+                'dungeon'      => $route->dungeon,
+                'dungeonroute' => $route,
+                'title'        => $route->getTitleSlug(),
+                'floorIndex'   => $facadeFloor->index,
+            ]));
+        } finally {
+            $route->delete();
+            $owner->delete();
+            $viewer->delete();
+        }
+    }
+
+    #[Test]
+    public function viewFloor_givenUserPrefersSplitFloorsAndRequestsFacadeFloor_redirectsToDefaultFloor(): void
+    {
+        // Arrange
+        $viewer = User::factory()->create(['map_facade_style' => User::MAP_FACADE_STYLE_SPLIT_FLOORS]);
+        $owner  = User::factory()->create();
+        $route  = $this->createFacadeRoute($owner);
+        /** @var Floor $defaultFloor */
+        $defaultFloor = Floor::where('dungeon_id', $route->dungeon_id)->where('facade', 0)->where('default', 1)->firstOrFail();
+        /** @var Floor $facadeFloor */
+        $facadeFloor = Floor::where('dungeon_id', $route->dungeon_id)->where('facade', 1)->firstOrFail();
+
+        try {
+            $this->be($viewer);
+
+            // Act
+            $response = $this->get(route('dungeonroute.view.floor', [
+                'dungeon'      => $route->dungeon,
+                'dungeonroute' => $route,
+                'title'        => $route->getTitleSlug(),
+                'floorIndex'   => $facadeFloor->index,
+            ]));
+
+            // Assert
+            $response->assertRedirect(route('dungeonroute.view.floor', [
+                'dungeon'      => $route->dungeon,
+                'dungeonroute' => $route,
+                'title'        => $route->getTitleSlug(),
+                'floorIndex'   => $defaultFloor->index,
+            ]));
+        } finally {
+            $route->delete();
+            $owner->delete();
+            $viewer->delete();
+        }
+    }
+
+    #[Test]
     public function presentFloor_givenExistingFloorIndex_returnsOk(): void
     {
         // Arrange
@@ -264,6 +338,23 @@ final class DungeonRouteControllerFloorResolutionTest extends PublicTestCase
         // facadeEnabled: false - guests default to the facade map style (User::DEFAULT_MAP_FACADE_STYLE),
         // which would otherwise collapse floor selection and make these tests non-deterministic
         [$dungeon] = $this->findDungeon(facadeEnabled: false, minActiveFloors: 1, requireDefaultFloor: true);
+
+        return DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'author_id'          => $owner->id,
+            'expires_at'         => null,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ]);
+    }
+
+    /**
+     * A published, non-sandbox route on a dungeon whose current mapping version has facade
+     * rendering enabled and a default (non-facade) floor, so the facade-preference redirect tests
+     * can exercise both directions.
+     */
+    private function createFacadeRoute(User $owner): DungeonRoute
+    {
+        [$dungeon] = $this->findDungeon(facadeEnabled: true, minActiveFloors: 1, requireDefaultFloor: true);
 
         return DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
