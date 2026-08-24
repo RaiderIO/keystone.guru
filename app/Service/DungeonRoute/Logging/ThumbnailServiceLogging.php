@@ -76,6 +76,11 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    public function doCreateThumbnailBlankImageRejected(string $tmpFile, string $previewUrl, string $variant): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
     public function doCreateThumbnailRemovedOldPngFile(): void
     {
         $this->debug(__METHOD__);
