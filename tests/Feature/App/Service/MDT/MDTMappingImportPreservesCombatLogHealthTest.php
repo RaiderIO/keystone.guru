@@ -33,13 +33,6 @@ final class MDTMappingImportPreservesCombatLogHealthTest extends PublicTestCase
         /** @var GameVersion $retailGameVersion */
         $retailGameVersion = GameVersion::query()->where('key', GameVersion::GAME_VERSION_RETAIL)->firstOrFail();
 
-        $xathuux = Npc::query()->with('npcHealths')->findOrFail(self::XATHUUX_NPC_ID);
-        $this->assertSame(
-            self::XATHUUX_CORRECTED_HEALTH,
-            $xathuux->getHealthByGameVersion($retailGameVersion)?->health,
-            'The seeder must ship the corrected health, or this test proves nothing.',
-        );
-
         $mappingImportService = $this->app->make(MDTMappingImportServiceInterface::class);
 
         $mdtDungeon = app(MDTDungeon::class, [
@@ -48,30 +41,44 @@ final class MDTMappingImportPreservesCombatLogHealthTest extends PublicTestCase
             'dungeon'            => $dungeon,
         ]);
 
+        // Don't assume what MDT currently reports (it drifts as the package's bundled data changes, e.g. #4211
+        // itself) - fetch it first and arrange a sentinel health guaranteed to differ from it, so the assertion
+        // below actually proves the import left the stored health alone rather than merely matching by luck.
         $mdtHealth = collect($mdtDungeon->getMDTNPCs())
             ->first(static fn($mdtNpc) => $mdtNpc->getId() === self::XATHUUX_NPC_ID)
             ?->getHealth();
-        $this->assertNotSame(
-            self::XATHUUX_CORRECTED_HEALTH,
-            $mdtHealth,
-            'MDT must still disagree with the corrected health, or the import has no value to accidentally restore.',
-        );
+        $this->assertIsInt($mdtHealth);
+        $sentinelHealth = $mdtHealth + 1;
 
-        // Act
-        $failures = [];
-        $mappingImportService->importNpcsDataFromMDT($mdtDungeon, $dungeon, $retailGameVersion, $failures);
+        $xathuux   = Npc::query()->with('npcHealths')->findOrFail(self::XATHUUX_NPC_ID);
+        $npcHealth = $xathuux->getHealthByGameVersion($retailGameVersion);
+        $this->assertNotNull($npcHealth, 'The seeder must ship a health row, or this test proves nothing.');
 
-        // Assert
-        $this->assertSame([], $failures, 'The import itself must not have failed for any NPC.');
+        try {
+            NpcHealth::query()->whereKey($npcHealth->id)->update(['health' => $sentinelHealth]);
+            Npc::query()->findOrFail(self::XATHUUX_NPC_ID)->flushCache();
+            new NpcHealth()->flushCache();
 
-        // Model caching is on in CI: the eager-loaded npcHealths cache under the Npc model, so both need flushing
-        new Npc()->flushCache();
-        new NpcHealth()->flushCache();
-        $this->assertSame(
-            self::XATHUUX_CORRECTED_HEALTH,
-            Npc::query()->with('npcHealths')->findOrFail(self::XATHUUX_NPC_ID)->getHealthByGameVersion($retailGameVersion)?->health,
-            sprintf('The import must not have replaced the corrected health with MDT\'s %s.', var_export($mdtHealth, true)),
-        );
+            // Act
+            $failures = [];
+            $mappingImportService->importNpcsDataFromMDT($mdtDungeon, $dungeon, $retailGameVersion, $failures);
+
+            // Assert
+            $this->assertSame([], $failures, 'The import itself must not have failed for any NPC.');
+
+            // Model caching is on in CI: the eager-loaded npcHealths cache under the Npc model, so both need flushing
+            new Npc()->flushCache();
+            new NpcHealth()->flushCache();
+            $this->assertSame(
+                $sentinelHealth,
+                Npc::query()->with('npcHealths')->findOrFail(self::XATHUUX_NPC_ID)->getHealthByGameVersion($retailGameVersion)?->health,
+                sprintf('The import must not have replaced the existing health with MDT\'s %s.', var_export($mdtHealth, true)),
+            );
+        } finally {
+            NpcHealth::query()->whereKey($npcHealth->id)->update(['health' => self::XATHUUX_CORRECTED_HEALTH]);
+            Npc::query()->findOrFail(self::XATHUUX_NPC_ID)->flushCache();
+            new NpcHealth()->flushCache();
+        }
     }
 
     #[Test]
