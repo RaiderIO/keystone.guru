@@ -24,6 +24,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Session;
 
@@ -75,15 +76,19 @@ class NpcController extends Controller
             'runs_away_in_fear' => $validated['runs_away_in_fear'] ?? 0,
         ];
 
-        if ($oldId === null) {
-            $attributes['display_id'] = null;
-            $npc->setRawAttributes($attributes);
-            $saveResult = $npc->save();
-        } else {
-            $saveResult = $npc->update($attributes);
-        }
+        DB::transaction(function () use ($npc, $npcBefore, $oldId, $oldDungeonIds, $attributes, $validated) {
+            if ($oldId === null) {
+                $attributes['display_id'] = null;
+                $npc->setRawAttributes($attributes);
+                $saveResult = $npc->save();
+            } else {
+                $saveResult = $npc->update($attributes);
+            }
 
-        if ($saveResult) {
+            if (!$saveResult) {
+                abort(500, 'Unable to save npc!');
+            }
+
             // Dungeons
             $dungeonIds = $validated['dungeon_ids'] ?? [];
             // Clear current whitelists
@@ -129,6 +134,7 @@ class NpcController extends Controller
             if ($oldId === null) {
                 $npc->createNpcEnemyForcesForExistingMappingVersions($existingEnemyForces);
             } else {
+                // We got to update any existing enemies with the old ID to the new ID, makes it easier to convert ids
                 Enemy::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
                 NpcEnemyForces::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
 
@@ -148,41 +154,38 @@ class NpcController extends Controller
                 }
             }
 
-            // Re-load the relations so we're echoing/broadcasting back a fully updated npc - the front-end
-            // re-assigns enemy npcs from these payloads and reads these relations in the visuals/tooltips
-            $npcRelationsToEcho = [
-                'type',
-                'class',
-                'npcbolsteringwhitelists',
-                'npcHealths',
-                'spells',
-            ];
-            $npc->load($npcRelationsToEcho);
-            $npcBefore->load($npcRelationsToEcho);
-
-            /** @var User $user */
-            $user = Auth::user();
-            foreach ($npc->dungeons as $dungeon) {
-                try {
-                    broadcast(new NpcChangedEvent($dungeon, $user, $npc));
-                } catch (BroadcastException) {
-                    // Ignore broadcast failures
-                }
-            }
-
-            foreach ($npcBefore->dungeons as $dungeon) {
-                try {
-                    broadcast(new NpcChangedEvent($dungeon, $user, $npcBefore));
-                } catch (BroadcastException) {
-                    // Ignore broadcast failures
-                }
-            }
-
             // Trigger mapping changed event so the mapping gets saved across all environments
             $this->mappingChanged($npcBefore, $npc);
-        } // We got to update any existing enemies with the old ID to the new ID, makes it easier to convert ids
-        else {
-            abort(500, 'Unable to save npc!');
+        });
+
+        // Re-load the relations so we're echoing/broadcasting back a fully updated npc - the front-end
+        // re-assigns enemy npcs from these payloads and reads these relations in the visuals/tooltips
+        $npcRelationsToEcho = [
+            'type',
+            'class',
+            'npcbolsteringwhitelists',
+            'npcHealths',
+            'spells',
+        ];
+        $npc->load($npcRelationsToEcho);
+        $npcBefore->load($npcRelationsToEcho);
+
+        /** @var User $user */
+        $user = Auth::user();
+        foreach ($npc->dungeons as $dungeon) {
+            try {
+                broadcast(new NpcChangedEvent($dungeon, $user, $npc));
+            } catch (BroadcastException) {
+                // Ignore broadcast failures
+            }
+        }
+
+        foreach ($npcBefore->dungeons as $dungeon) {
+            try {
+                broadcast(new NpcChangedEvent($dungeon, $user, $npcBefore));
+            } catch (BroadcastException) {
+                // Ignore broadcast failures
+            }
         }
 
         return $npc;
