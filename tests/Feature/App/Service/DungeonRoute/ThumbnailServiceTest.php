@@ -234,6 +234,28 @@ final class ThumbnailServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function isBlankImage_givenCorruptZeroByteFile_throwsImagickException(): void
+    {
+        // Arrange - pins the behaviour doCreateThumbnail()'s try/catch around isBlankImage() depends
+        // on: a truncated/zero-byte puppeteer output (as plausible a failure mode as a blank render)
+        // must surface as a thrown exception here rather than a false negative, since the caller
+        // relies on catching it and logging it as a failed attempt.
+        $service = $this->buildService($this->createMockPublic(ThumbnailServiceLoggingInterface::class));
+        $method  = new ReflectionMethod($service, 'isBlankImage');
+
+        $tmpFile = sprintf('%s/%s.png', sys_get_temp_dir(), uniqid('corrupt_', true));
+        file_put_contents($tmpFile, '');
+
+        try {
+            // Act & Assert
+            $this->expectException(\ImagickException::class);
+            $method->invoke($service, $tmpFile);
+        } finally {
+            unlink($tmpFile);
+        }
+    }
+
+    #[Test]
     public function getTargetFilePath_givenFolder_returnsPathWithoutLeadingSlash(): void
     {
         // Arrange

@@ -190,51 +190,52 @@ class ThumbnailService implements ThumbnailServiceInterface
             if ($process->isSuccessful()) {
                 if (!file_exists($tmpFile)) {
                     $this->log->doCreateThumbnailFileNotFoundDidPuppeteerDownloadChromium($tmpFile);
-                } elseif ($this->isBlankImage($tmpFile)) {
-                    // A uniform single-colour render is never a legitimate thumbnail - treat it as a
-                    // failed attempt (thumbnail_updated_at is not touched below) so the existing
-                    // retry/max_attempts path in ProcessRouteFloorThumbnail applies instead of the route
-                    // silently looking up to date forever. See #4103.
-                    $this->log->doCreateThumbnailBlankImageRejected($tmpFile, $previewUrl, $variant->value);
-                    unlink($tmpFile);
                 } else {
                     try {
-                        // Rescale it
-                        $this->log->doCreateThumbnailRescale($tmpFile, $tmpFileAfterResize);
-                        new ImageManager(new ImagickDriver())
-                            ->read($tmpFile)
-                            ->resize($imageWidth, $imageHeight)
-                            ->save($tmpFileAfterResize, $quality);
+                        if ($this->isBlankImage($tmpFile)) {
+                            // A uniform single-colour render is never a legitimate thumbnail - treat it as a
+                            // failed attempt (thumbnail_updated_at is not touched below) so the existing
+                            // retry/max_attempts path in ProcessRouteFloorThumbnail applies instead of the
+                            // route silently looking up to date forever. See #4103.
+                            $this->log->doCreateThumbnailBlankImageRejected($tmpFile, $previewUrl, $variant->value);
+                        } else {
+                            // Rescale it
+                            $this->log->doCreateThumbnailRescale($tmpFile, $tmpFileAfterResize);
+                            new ImageManager(new ImagickDriver())
+                                ->read($tmpFile)
+                                ->resize($imageWidth, $imageHeight)
+                                ->save($tmpFileAfterResize, $quality);
 
-                        $target = self::getTargetFilePath($dungeonRoute, $floorIndex, $targetFolder);
+                            $target = self::getTargetFilePath($dungeonRoute, $floorIndex, $targetFolder);
 
-                        // Remove any old .png file that may be there
-                        $oldPngFilePath = str_replace('.jpg', '.png', $target);
-                        if (file_exists($oldPngFilePath) && unlink($oldPngFilePath)) {
-                            $this->log->doCreateThumbnailRemovedOldPngFile();
+                            // Remove any old .png file that may be there
+                            $oldPngFilePath = str_replace('.jpg', '.png', $target);
+                            if (file_exists($oldPngFilePath) && unlink($oldPngFilePath)) {
+                                $this->log->doCreateThumbnailRemovedOldPngFile();
+                            }
+
+                            // Image now exists in target location; compress it and move it to the target location
+                            // Log::channel('scheduler')->info('Compressing image..');
+                            // $this->compressPng($tmpScaledFile, $target);
+
+                            $result = $this->attachThumbnailToDungeonRoute(
+                                $dungeonRoute,
+                                $floorIndex,
+                                $target,
+                                file_get_contents($tmpFileAfterResize),
+                                $disk,
+                                $variant,
+                            );
+
+                            // We've updated the thumbnail; make sure the route is updated, so it doesn't get
+                            // updated anymore. Stamped only now that the render has passed the blank-image
+                            // check and been rescaled/attached - an exception above leaves
+                            // thumbnail_updated_at untouched so the route stays eligible for retry. See #4103.
+                            $dungeonRoute->thumbnail_updated_at = Carbon::now();
+                            // Do not update the timestamps of the route! Otherwise, we'll just keep on updating the timestamp
+                            $dungeonRoute->timestamps = false;
+                            $dungeonRoute->save();
                         }
-
-                        // Image now exists in target location; compress it and move it to the target location
-                        // Log::channel('scheduler')->info('Compressing image..');
-                        // $this->compressPng($tmpScaledFile, $target);
-
-                        $result = $this->attachThumbnailToDungeonRoute(
-                            $dungeonRoute,
-                            $floorIndex,
-                            $target,
-                            file_get_contents($tmpFileAfterResize),
-                            $disk,
-                            $variant,
-                        );
-
-                        // We've updated the thumbnail; make sure the route is updated, so it doesn't get
-                        // updated anymore. Stamped only now that the render has passed the blank-image
-                        // check and been rescaled/attached - an exception above leaves
-                        // thumbnail_updated_at untouched so the route stays eligible for retry. See #4103.
-                        $dungeonRoute->thumbnail_updated_at = Carbon::now();
-                        // Do not update the timestamps of the route! Otherwise, we'll just keep on updating the timestamp
-                        $dungeonRoute->timestamps = false;
-                        $dungeonRoute->save();
                     } catch (Throwable $e) {
                         $this->log->doCreateThumbnailException($e);
                     } finally {
