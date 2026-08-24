@@ -39,7 +39,6 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Psr\SimpleCache\InvalidArgumentException;
 use Session;
-use Teapot\StatusCode\Http;
 use Throwable;
 
 class DungeonRouteController extends Controller

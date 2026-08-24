@@ -15,6 +15,7 @@ use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -207,6 +208,53 @@ class DungeonRouteDeleteContentRelationsTest extends PublicTestCase
                 DungeonRoute::find($draftId)?->delete();
             }
             $original?->delete();
+            $owner?->delete();
+        }
+    }
+
+    #[Test]
+    public function delete_givenOriginalWithDraftHydratedInACollection_deletesDraftWithoutLazyLoading(): void
+    {
+        // Arrange - a multi row result arms preventLazyLoading on the hydrated models, which is how a
+        // team deletion and the admin bulk deletes fetch their routes
+        $owner      = null;
+        $originalId = null;
+        $draftId    = null;
+
+        try {
+            $owner    = User::factory()->create();
+            $original = DungeonRoute::factory()->create([
+                'author_id'  => $owner->id,
+                'expires_at' => null,
+            ]);
+            $originalId = $original->id;
+
+            $draft = DungeonRoute::factory()->create([
+                'author_id'                   => $owner->id,
+                'dungeon_id'                  => $original->dungeon_id,
+                'mapping_version_id'          => $original->mapping_version_id,
+                'upgrade_of_dungeon_route_id' => $original->id,
+                'expires_at'                  => null,
+            ]);
+            $draftId = $draft->id;
+
+            /** @var EloquentCollection<int, DungeonRoute> $routes */
+            $routes = DungeonRoute::query()->whereIn('id', [$originalId, $draftId])->get();
+            $this->assertCount(2, $routes, 'Both rows must come back, or preventLazyLoading is not armed');
+
+            // Act
+            $routes->firstWhere('id', $originalId)->delete();
+
+            // Assert
+            $this->assertNull(DungeonRoute::find($originalId));
+            $this->assertNull(DungeonRoute::find($draftId), 'The draft must be deleted along with its original');
+        } finally {
+            if ($draftId !== null) {
+                DungeonRoute::find($draftId)?->delete();
+            }
+            if ($originalId !== null) {
+                DungeonRoute::find($originalId)?->delete();
+            }
             $owner?->delete();
         }
     }

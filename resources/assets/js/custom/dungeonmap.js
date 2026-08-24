@@ -455,13 +455,15 @@ class DungeonMap extends Signalable {
                 return;
             }
 
+            let posting = false;
+
             $(selector).unbind('click').bind('click', function () {
-                if (!confirm(confirmMessage)) {
+                // These are anchors, not buttons, so there is no disabled state to lean on
+                if (posting || !confirm(confirmMessage)) {
                     return;
                 }
 
-                let $button = $(this);
-                $button.prop('disabled', true);
+                posting = true;
 
                 $.ajax({
                     type: 'POST',
@@ -471,7 +473,7 @@ class DungeonMap extends Signalable {
                         window.location.href = json.redirect_url;
                     },
                     error: function () {
-                        $button.prop('disabled', false);
+                        posting = false;
                     }
                 });
             });

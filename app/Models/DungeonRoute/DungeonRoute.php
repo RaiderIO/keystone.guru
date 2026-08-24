@@ -797,7 +797,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         // collection (preventLazyLoading). Callers listing many routes should eager load upgradeDraft.
         $this->loadMissing('upgradeDraft');
 
-        return $this->upgradeDraft !== null;
+        return $this->getRelation('upgradeDraft') !== null;
     }
 
     public function updateRating(): float
@@ -1627,7 +1627,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
             // An original's draft must not be left orphaned. This terminates: a draft never has a draft
             // of its own, findOrCreateDraft() rejects a draft-of-a-draft.
-            $dungeonRoute->upgradeDraft?->delete();
+            // Queried rather than read off the relation: a route hydrated as part of a collection (a
+            // team's dungeonRoutes, an admin bulk delete) has preventLazyLoading armed, and reading
+            // $dungeonRoute->upgradeDraft there throws LazyLoadingViolationException.
+            $dungeonRoute->upgradeDraft()->first()?->delete();
 
             // A mass delete on the relation skips ChallengeModeRun::deleting, which is what cleans up
             // challenge_mode_run_data - fetch and delete the single row instead so the hook fires
