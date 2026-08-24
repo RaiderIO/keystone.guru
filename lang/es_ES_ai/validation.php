@@ -38,6 +38,11 @@ return [
         'creator_search' => [
             'max' => '',
         ],
+        'autoroutecoverage_days' => [
+            'integer' => '',
+            'min'     => '',
+            'max'     => '',
+        ],
     ],
     'date'              => 'El campo :attribute debe ser una fecha válida.',
     'date_equals'       => 'El campo :attribute debe ser una fecha igual a :date.',

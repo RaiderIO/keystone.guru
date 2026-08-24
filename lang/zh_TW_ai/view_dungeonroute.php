@@ -102,6 +102,7 @@ return [
         'linkpreview_default_description'         => '地城 %s 的 M+ 路線，由 %s 提供。',
         'linkpreview_default_description_sandbox' => '地城 %s 的臨時 M+ 路線。',
         'linkpreview_default_description_explore' => '探索 %s。',
+        'linkpreview_default_description_heatmap' => '',
     ],
 
 ];

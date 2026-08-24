@@ -102,6 +102,7 @@ return [
         'linkpreview_default_description'         => '던전 %s의 M+ 경로입니다. %s 작성.',
         'linkpreview_default_description_sandbox' => '던전 %s의 임시 M+ 경로.',
         'linkpreview_default_description_explore' => '%s 탐색.',
+        'linkpreview_default_description_heatmap' => '',
     ],
 
 ];

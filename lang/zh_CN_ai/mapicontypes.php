@@ -126,4 +126,5 @@ return [
     'murder_row_overload_golem'                       => '超载魔像',
     'the_blinding_vale_flourishing_stride'            => '繁茂步伐',
 
+    'waystone' => '',
 ];

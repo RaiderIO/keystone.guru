@@ -64,5 +64,21 @@ return [
             'processing_error' => 'No se puede procesar el registro de combate: error.',
         ],
     ],
+    'combatlog' => [
+        'enemy_failure_analysis' => [
+            'verdict' => [
+                'npc_not_mapped'       => '',
+                'no_enemy_in_range'    => '',
+                'enemies_exhausted'    => '',
+                'wrong_floor_artifact' => '',
+            ],
+            'suggestion' => [
+                'npc_not_mapped'       => '',
+                'no_enemy_in_range'    => '',
+                'enemies_exhausted'    => '',
+                'wrong_floor_artifact' => '',
+            ],
+        ],
+    ],
 
 ];

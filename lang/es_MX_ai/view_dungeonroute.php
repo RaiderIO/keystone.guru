@@ -102,6 +102,7 @@ return [
         'linkpreview_default_description'         => 'Ruta M+ para el calabozo %s por %s.',
         'linkpreview_default_description_sandbox' => 'Ruta temporal M+ para el calabozo %s.',
         'linkpreview_default_description_explore' => 'Explorar %s.',
+        'linkpreview_default_description_heatmap' => '',
     ],
 
 ];

@@ -86,6 +86,7 @@ return [
                 'combat_log_regenerate'                       => 'Regenerar rotas ARC',
                 'combat_log_criteria'                         => 'Critérios de análise do Compêndio de NPCs',
                 'combat_log_run_data'                         => 'Podar dados de execução de log de combate',
+                'combat_log_route_coverage'                   => '',
                 'dungeonroute_view'                           => 'Ver rota de masmorra',
                 'dungeonroute_view_contents'                  => 'Conteúdo da rota',
                 'dungeonroute_mapping_version_usage'          => 'Uso da versão de mapeamento',

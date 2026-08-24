@@ -51,6 +51,11 @@ return [
             'affixgroup_deleted' => 'Группа аффиксов удалена',
         ],
     ],
+    'apicombatlogroute' => [
+        'error' => [
+            'no_post_body' => '',
+        ],
+    ],
     'apicombatlogrun' => [
         'error' => [
             'no_segments' => 'Для этого прохождения нет доступных сегментов боевого журнала.',
@@ -90,6 +95,9 @@ return [
             'route_cloned_successfully' => 'Маршрут успешно клонирован',
             'route_updated'             => 'Маршрут обновлен',
             'route_created'             => 'Маршрут создан',
+            'upgrade_draft_created'     => '',
+            'upgrade_applied'           => '',
+            'upgrade_discarded'         => '',
         ],
     ],
     'dungeonroutediscover' => [
@@ -127,6 +135,7 @@ return [
     'killzone' => [
         'error' => [
             'facade_location_not_convertible' => 'Не удалось разместить пул здесь - это местоположение не принадлежит ни одному этажу этого подземелья',
+            'unable_to_delete_pull'           => '',
         ],
     ],
     'oauthlogin' => [

@@ -51,6 +51,11 @@ return [
             'affixgroup_deleted' => 'Grupo de afijos eliminado',
         ],
     ],
+    'apicombatlogroute' => [
+        'error' => [
+            'no_post_body' => '',
+        ],
+    ],
     'apicombatlogrun' => [
         'error' => [
             'no_segments' => 'No hay segmentos de registro de combate disponibles para esta partida.',
@@ -90,6 +95,9 @@ return [
             'route_cloned_successfully' => 'Ruta clonada con éxito',
             'route_updated'             => 'Ruta actualizada',
             'route_created'             => 'Ruta creada',
+            'upgrade_draft_created'     => '',
+            'upgrade_applied'           => '',
+            'upgrade_discarded'         => '',
         ],
     ],
     'dungeonroutediscover' => [
@@ -127,6 +135,7 @@ return [
     'killzone' => [
         'error' => [
             'facade_location_not_convertible' => 'No se puede colocar el pull aquí - esta ubicación no pertenece a ninguna planta de esta mazmorra',
+            'unable_to_delete_pull'           => '',
         ],
     ],
     'oauthlogin' => [

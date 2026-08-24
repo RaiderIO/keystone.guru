@@ -51,6 +51,11 @@ return [
             'affixgroup_deleted' => 'Grupo de afixos excluído',
         ],
     ],
+    'apicombatlogroute' => [
+        'error' => [
+            'no_post_body' => '',
+        ],
+    ],
     'apicombatlogrun' => [
         'error' => [
             'no_segments' => 'Nenhum segmento de log de combate está disponível para esta execução.',
@@ -90,6 +95,9 @@ return [
             'route_cloned_successfully' => 'Rota clonada com sucesso',
             'route_updated'             => 'Rota atualizada',
             'route_created'             => 'Rota criada',
+            'upgrade_draft_created'     => '',
+            'upgrade_applied'           => '',
+            'upgrade_discarded'         => '',
         ],
     ],
     'dungeonroutediscover' => [
@@ -127,6 +135,7 @@ return [
     'killzone' => [
         'error' => [
             'facade_location_not_convertible' => 'Não foi possível posicionar o pull aqui - esta localização não pertence a nenhum andar desta masmorra',
+            'unable_to_delete_pull'           => '',
         ],
     ],
     'oauthlogin' => [

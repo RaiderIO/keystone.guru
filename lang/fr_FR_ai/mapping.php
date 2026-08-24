@@ -89,7 +89,7 @@ return [
                 'alzzin_cave_exit' => 'Pendant le combat, Alzzin the Wildshaper brise l\'entrée de la grotte et des Whip Lashers en sortent en masse pour l\'assister.
 
 Après avoir vaincu Alzzin the Wildshaper, vous pouvez utiliser la grotte pour sortir de l\'instance.',
-                'exit_only' => 'Cette « entrée » est une sortie uniquement.',
+                'exit_only'        => 'Cette « entrée » est une sortie uniquement.',
             ],
             'dire_maul_north' => [
                 'gordok_mastiff_pack_size' => 'Tous les packs de Gordok Mastiff peuvent contenir 4 ou 5 ennemis.',
@@ -253,11 +253,11 @@ Continuez à bouger !',
                 'shade_of_eranikus_warning' => 'Shade of Eranikus ne peut être engagé que si le bouclier est abaissé en vainquant les mini-boss du Hall of the Cursed.
 
 Attention : attaquer Shade of Eranikus provoque l\'aggro de tous les dragons verts de cet étage.',
-                'stair_patrol'             => 'Ce pack patrouille sur les escaliers de tous les étages.',
-                'jammalaan_aggro_warning'  => 'Attention : attaquer Jammal\'an the Prophet provoque l\'aggro de tous les ennemis de cette salle.',
-                'broken_geometry_warning'  => 'ATTENTION : une géométrie cassée peut vous faire tomber et MOURIR.',
-                'weaver_dreamscythe_spawn' => 'Weaver et Dreamscythe apparaissent lorsque Jammal\'an the Prophet est vaincu.',
-                'remove_shield_note'       => 'Vous pouvez retirer le bouclier en vainquant les mini-boss du Hall of the Cursed.',
+                'stair_patrol'              => 'Ce pack patrouille sur les escaliers de tous les étages.',
+                'jammalaan_aggro_warning'   => 'Attention : attaquer Jammal\'an the Prophet provoque l\'aggro de tous les ennemis de cette salle.',
+                'broken_geometry_warning'   => 'ATTENTION : une géométrie cassée peut vous faire tomber et MOURIR.',
+                'weaver_dreamscythe_spawn'  => 'Weaver et Dreamscythe apparaissent lorsque Jammal\'an the Prophet est vaincu.',
+                'remove_shield_note'        => 'Vous pouvez retirer le bouclier en vainquant les mini-boss du Hall of the Cursed.',
             ],
             'uldaman' => [
                 'echomok_cavern_entrance'      => 'L\'entrée de Echomok Cavern',
@@ -516,7 +516,7 @@ Continuez à bouger !',
                 'heal_drake'                  => 'Drake de soins',
                 'centrifuge_construct_shield' => 'Tuez tous les Centrifuge Constructs pour retirer le bouclier du boss. 
 Après avoir tué le boss, utilisez l\'objet de drake pour vous envoler plus haut.',
-                'tank_drake' => 'Drake tank',
+                'tank_drake'                  => 'Drake tank',
             ],
             'ulduar' => [
                 'teleporter'                      => 'Téléporteur',
@@ -543,6 +543,10 @@ Après avoir tué le boss, utilisez l\'objet de drake pour vous envoler plus hau
                 'mastery_rating_increased'  => '+584 Cote de maîtrise',
                 'go_north'                  => 'Aller au nord',
                 'go_south'                  => 'Aller au sud',
+            ],
+            'den_of_nalorakk' => [
+                'offering'        => '',
+                'warding_incense' => '',
             ],
             'maisara_caverns' => [
                 'hearty_vilebranch_stew' => 'Ragoût de Vilebranche fortifiant : Prenez une portion de ragoût Vilebranche, augmentant votre Ponction de 3% et réduisant les dégâts reçus des attaques à effet de zone de 3% pendant 30 min.',

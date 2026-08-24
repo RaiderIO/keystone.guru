@@ -51,6 +51,11 @@ return [
             'affixgroup_deleted' => '',
         ],
     ],
+    'apicombatlogroute' => [
+        'error' => [
+            'no_post_body' => '',
+        ],
+    ],
     'apicombatlogrun' => [
         'error' => [
             'no_segments' => '',
@@ -90,6 +95,9 @@ return [
             'route_cloned_successfully' => '路線成功複製',
             'route_updated'             => '路線已更新',
             'route_created'             => '路線已創建',
+            'upgrade_draft_created'     => '',
+            'upgrade_applied'           => '',
+            'upgrade_discarded'         => '',
         ],
     ],
     'dungeonroutediscover' => [
@@ -127,6 +135,7 @@ return [
     'killzone' => [
         'error' => [
             'facade_location_not_convertible' => '',
+            'unable_to_delete_pull'           => '',
         ],
     ],
     'oauthlogin' => [

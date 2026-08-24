@@ -51,6 +51,11 @@ return [
             'affixgroup_deleted' => 'Groupe d\'affixes supprimé',
         ],
     ],
+    'apicombatlogroute' => [
+        'error' => [
+            'no_post_body' => '',
+        ],
+    ],
     'apicombatlogrun' => [
         'error' => [
             'no_segments' => 'Aucun segment de journal de combat n\'est disponible pour ce run.',
@@ -90,6 +95,9 @@ return [
             'route_cloned_successfully' => 'Itinéraire cloné avec succès',
             'route_updated'             => 'Itinéraire mis à jour',
             'route_created'             => 'Itinéraire créé',
+            'upgrade_draft_created'     => '',
+            'upgrade_applied'           => '',
+            'upgrade_discarded'         => '',
         ],
     ],
     'dungeonroutediscover' => [
@@ -127,6 +135,7 @@ return [
     'killzone' => [
         'error' => [
             'facade_location_not_convertible' => 'Impossible de placer le pull ici - cet emplacement n\'appartient à aucun étage de ce donjon',
+            'unable_to_delete_pull'           => '',
         ],
     ],
     'oauthlogin' => [

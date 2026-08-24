@@ -86,6 +86,7 @@ return [
                 'combat_log_regenerate'                       => 'Rigenera percorsi ARC',
                 'combat_log_criteria'                         => 'Criteri di analisi del Compendio NPC',
                 'combat_log_run_data'                         => 'Elimina dati dei log di combattimento delle run',
+                'combat_log_route_coverage'                   => '',
                 'dungeonroute_view'                           => 'Visualizza percorso del dungeon',
                 'dungeonroute_view_contents'                  => 'Contenuti del percorso',
                 'dungeonroute_mapping_version_usage'          => 'Utilizzo della versione di mappatura',

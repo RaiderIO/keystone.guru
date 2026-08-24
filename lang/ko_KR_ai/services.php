@@ -64,5 +64,21 @@ return [
             'processing_error' => '전투 로그를 처리할 수 없음: 오류.',
         ],
     ],
+    'combatlog' => [
+        'enemy_failure_analysis' => [
+            'verdict' => [
+                'npc_not_mapped'       => '',
+                'no_enemy_in_range'    => '',
+                'enemies_exhausted'    => '',
+                'wrong_floor_artifact' => '',
+            ],
+            'suggestion' => [
+                'npc_not_mapped'       => '',
+                'no_enemy_in_range'    => '',
+                'enemies_exhausted'    => '',
+                'wrong_floor_artifact' => '',
+            ],
+        ],
+    ],
 
 ];

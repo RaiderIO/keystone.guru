@@ -16,9 +16,9 @@ return [
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => 'Questo pull è stato rimosso poiché tutti i nemici selezionati non sono stati trovati in MDT, risultando in un pull altrimenti vuoto.',
                 'unable_to_find_mdt_enemy_for_kg_raid_marker'       => 'Impossibile trovare l\'equivalente MDT per il nemico con un marcatore di incursione %s (npc_id: %s).',
                 'route_title_contains_non_ascii_char_bug'           => 'Il titolo del tuo percorso contiene caratteri non ASCII che sono noti per innescare un bug di codifica ancora irrisolto in Keystone.guru. Il titolo del tuo percorso è stato privato di tutti i caratteri che causano problemi, ci scusiamo per l\'inconveniente e speriamo di risolvere presto questo problema.',
-                'route_title_contains_non_ascii_char_bug_details'   => 'Vecchio titolo: %s, nuovo titolo: %s',
-                'map_icon_contains_non_ascii_char_bug'              => 'Uno dei tuoi commenti su un\'icona della mappa contiene caratteri non ASCII che sono noti per innescare un bug di codifica ancora irrisolto in Keystone.guru. Il tuo commento sulla mappa è stato privato di tutti i caratteri che causano problemi, ci scusiamo per l\'inconveniente e speriamo di risolvere presto questo problema.',
-                'map_icon_contains_non_ascii_char_bug_details'      => 'Vecchio commento: "%s", nuovo commento: "%s"',
+                'route_title_contains_non_ascii_char_bug_details' => 'Vecchio titolo: %s, nuovo titolo: %s',
+                'map_icon_contains_non_ascii_char_bug'            => 'Uno dei tuoi commenti su un\'icona della mappa contiene caratteri non ASCII che sono noti per innescare un bug di codifica ancora irrisolto in Keystone.guru. Il tuo commento sulla mappa è stato privato di tutti i caratteri che causano problemi, ci scusiamo per l\'inconveniente e speriamo di risolvere presto questo problema.',
+                'map_icon_contains_non_ascii_char_bug_details'    => 'Vecchio commento: "%s", nuovo commento: "%s"',
             ],
             'import_string' => [
                 'category' => [
@@ -61,6 +61,22 @@ return [
         'analyze_combat_log' => [
             'verify_error'     => 'Impossibile verificare il registro di combattimento: errore.',
             'processing_error' => 'Impossibile elaborare il registro di combattimento: errore.',
+        ],
+    ],
+    'combatlog' => [
+        'enemy_failure_analysis' => [
+            'verdict' => [
+                'npc_not_mapped'       => '',
+                'no_enemy_in_range'    => '',
+                'enemies_exhausted'    => '',
+                'wrong_floor_artifact' => '',
+            ],
+            'suggestion' => [
+                'npc_not_mapped'       => '',
+                'no_enemy_in_range'    => '',
+                'enemies_exhausted'    => '',
+                'wrong_floor_artifact' => '',
+            ],
         ],
     ],
 

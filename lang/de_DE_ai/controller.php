@@ -51,6 +51,11 @@ return [
             'affixgroup_deleted' => 'Affix-Gruppe gelöscht',
         ],
     ],
+    'apicombatlogroute' => [
+        'error' => [
+            'no_post_body' => '',
+        ],
+    ],
     'apicombatlogrun' => [
         'error' => [
             'no_segments' => 'Für diesen Run sind keine Combat-Log-Segmente verfügbar.',
@@ -90,6 +95,9 @@ return [
             'route_cloned_successfully' => 'Route erfolgreich geklont',
             'route_updated'             => 'Route aktualisiert',
             'route_created'             => 'Route erstellt',
+            'upgrade_draft_created'     => '',
+            'upgrade_applied'           => '',
+            'upgrade_discarded'         => '',
         ],
     ],
     'dungeonroutediscover' => [
@@ -127,6 +135,7 @@ return [
     'killzone' => [
         'error' => [
             'facade_location_not_convertible' => 'Der Pull kann hier nicht platziert werden - diese Position gehört zu keiner Etage dieses Dungeons',
+            'unable_to_delete_pull'           => '',
         ],
     ],
     'oauthlogin' => [

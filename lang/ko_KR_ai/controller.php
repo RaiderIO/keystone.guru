@@ -51,6 +51,11 @@ return [
             'affixgroup_deleted' => '접사 그룹이 삭제되었습니다',
         ],
     ],
+    'apicombatlogroute' => [
+        'error' => [
+            'no_post_body' => '',
+        ],
+    ],
     'apicombatlogrun' => [
         'error' => [
             'no_segments' => '이 런에 사용할 수 있는 전투 기록 구간이 없습니다.',
@@ -90,6 +95,9 @@ return [
             'route_cloned_successfully' => '경로가 성공적으로 복제되었습니다',
             'route_updated'             => '경로 업데이트됨',
             'route_created'             => '경로 생성됨',
+            'upgrade_draft_created'     => '',
+            'upgrade_applied'           => '',
+            'upgrade_discarded'         => '',
         ],
     ],
     'dungeonroutediscover' => [
@@ -127,6 +135,7 @@ return [
     'killzone' => [
         'error' => [
             'facade_location_not_convertible' => '이 위치에는 풀을 배치할 수 없습니다 - 이 위치는 이 던전의 어떤 층에도 속하지 않습니다',
+            'unable_to_delete_pull'           => '',
         ],
     ],
     'oauthlogin' => [

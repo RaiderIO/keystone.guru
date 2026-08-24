@@ -86,6 +86,7 @@ return [
                 'combat_log_regenerate'                       => '重新生成 ARC 路线',
                 'combat_log_criteria'                         => 'NPC图鉴解析条件',
                 'combat_log_run_data'                         => '清理战斗日志运行数据',
+                'combat_log_route_coverage'                   => '',
                 'dungeonroute_view'                           => '查看地下城路线',
                 'dungeonroute_view_contents'                  => '路线内容',
                 'dungeonroute_mapping_version_usage'          => '映射版本使用情况',
