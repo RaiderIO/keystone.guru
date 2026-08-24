@@ -1,6 +1,6 @@
 ---
 name: debug-combatlog-route-json
-description: Replay a combat-log-route JSON request body (from production or a bug report) through the Auto Route Creator locally with debug-level structured logging, to see why an NPC/pull/spell ended up where it did. Use when debugging "this run's bosses/pulls/enemies didn't show up correctly" and you have the JSON POSTed to `api/v1/combatlog/route`. Not for parsing the raw WoW log into that JSON (combatlog-parsing-internals / combatlog-parse-failure-triage) — this starts one step later.
+description: Replay a combat-log-route JSON body through the Auto Route Creator locally with debug-level logging to see why an NPC/pull/spell ended up where it did, then fix a dungeon-specific mismatch via the per-dungeon `Rules/` framework (`app/Service/CombatLog/Builders/Rules/`). Use when debugging "this run's bosses/pulls/enemies didn't show up correctly" and you have the JSON POSTed to `api/v1/combatlog/route`. Not for parsing the raw WoW log into that JSON (combatlog-parsing-internals / combatlog-parse-failure-triage).
 ---
 
 # Debugging a combat-log-route JSON body
@@ -193,3 +193,25 @@ builder, DTO — wherever the bug lived), following `writing-tests`. A test buil
 downloaded JSON is usually too heavy/slow for a unit test; prefer isolating the specific condition
 (e.g. two DB rows with a particular relationship) the way the JSON replay showed it, the same way
 you would for any other regression test.
+
+## 7. When the fix is dungeon-specific: `Rules/`
+
+When spatial matching genuinely can't resolve a mismatch (stacked floors/paths sharing npc_ids, or
+a boss that despawns instead of dying), fix it in `app/Service/CombatLog/Builders/Rules/` — a
+per-dungeon exception framework `DungeonRouteBuilder` applies during matching. Read
+`DungeonRouteBuilderRuleInterface`'s docblock for the hooks, then copy the shape of an existing rule
+(`TheBlindingValeBridgeRule` for a hard/soft eligibility exclusion, `KingsRestDespawningEnemiesRule`
+for `onEnemyDied()`-based kill awarding — both idempotent by design).
+
+**Registration:** add the class to `RULES` in `DungeonRouteBuilder`. Rules are instantiated fresh
+per `build()` and filtered by `appliesToDungeon()` — never singletons. A rule that logs needs a
+matching method on `DungeonRouteBuilderLoggingInterface`.
+
+**Gotcha:** only `CombatLogRouteDungeonRouteBuilder` calls `notifyRulesEnemyDied()` —
+`ResultEventDungeonRouteBuilder` never does, so `onEnemyDied()`-based state never advances on that
+path.
+
+**Verify against pinned fixtures, not just the rule's own unit test** — each ruled dungeon has a
+`tests/Unit/.../Rules/*RuleTest.php`, a `tests/Feature/.../Rules/*RuleMappingTest.php`, and an
+`APICombatLogControllerCombatLogRoute<Dungeon>Test.php` end-to-end fixture. Run the full dungeon's
+fixture test, since a real regression can hide from the unit test alone.

@@ -163,6 +163,10 @@
                         <small class="text-muted d-block">{{ __('view_admin.tools.list.combatlog_run_data_description') }}</small>
                     </li>
                     <li class="list-group-item">
+                        <a href="{{ route('admin.tools.combatlog.route.coverage.view') }}">{{ __('view_admin.tools.list.combatlog_route_coverage') }}</a>
+                        <small class="text-muted d-block">{{ __('view_admin.tools.list.combatlog_route_coverage_description') }}</small>
+                    </li>
+                    <li class="list-group-item">
                         <a href="{{ route('admin.tools.combatlog.route.enemy_failures.view') }}">{{ __('view_admin.tools.list.combatlog_route_enemy_failures') }}</a>
                         <small class="text-muted d-block">{{ __('view_admin.tools.list.combatlog_route_enemy_failures_description') }}</small>
                     </li>

@@ -4,10 +4,10 @@ namespace App\Http\Controllers\DungeonRoute;
 
 use App\Http\Controllers\Controller;
 use App\Models\Dungeon;
-use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
 use App\Models\User;
 use App\Service\Dungeon\DungeonServiceInterface;
+use App\Service\Floor\FloorResolutionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\RedirectResponse;
@@ -58,11 +58,12 @@ class DungeonRouteSearchController extends Controller
     }
 
     public function searchByDungeon(
-        FormRequest                $request,
-        GameVersion                $gameVersion,
-        Dungeon                    $dungeon,
-        MapContextServiceInterface $mapContextService,
-        DungeonServiceInterface    $dungeonService,
+        FormRequest                     $request,
+        GameVersion                     $gameVersion,
+        Dungeon                         $dungeon,
+        MapContextServiceInterface      $mapContextService,
+        DungeonServiceInterface         $dungeonService,
+        FloorResolutionServiceInterface $floorResolutionService,
     ): View|RedirectResponse {
         $mappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
@@ -72,10 +73,7 @@ class DungeonRouteSearchController extends Controller
             ]);
         }
 
-        /** @var Floor|null $floor */
-        $floor = Floor::where('dungeon_id', $dungeon->id)
-            ->defaultOrFacade($mappingVersion)
-            ->first();
+        $floor = $floorResolutionService->resolveDefaultFloor($dungeon, $mappingVersion);
 
         $dungeonService->setDungeonContext($dungeon, Auth::user());
 

@@ -117,6 +117,8 @@ use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
+use App\Service\Floor\FloorResolutionService;
+use App\Service\Floor\FloorResolutionServiceInterface;
 use App\Service\GameVersion\GameVersionService;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\Image\ImageService;
@@ -239,6 +241,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // No dependencies - resolved very early (ViewService, and Handler on any request that errors)
         $this->app->bind(ApiRequestServiceInterface::class, ApiRequestService::class);
         $this->app->bind(CoordinatesServiceInterface::class, CoordinatesService::class);
+        $this->app->bind(FloorResolutionServiceInterface::class, FloorResolutionService::class);
         $this->app->bind(ThumbnailServiceInterface::class, ThumbnailService::class);
         $this->app->bind(PatreonServiceInterface::class, PatreonService::class);
         $this->app->bind(MetricServiceInterface::class, MetricService::class);

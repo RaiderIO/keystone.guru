@@ -18,6 +18,10 @@ use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Service\CombatLog\Builders\Logging\DungeonRouteBuilderLoggingInterface;
+use App\Service\CombatLog\Builders\Rules\BossKillFloorCutoffRule;
+use App\Service\CombatLog\Builders\Rules\DungeonRouteBuilderRuleInterface;
+use App\Service\CombatLog\Builders\Rules\KingsRestDespawningEnemiesRule;
+use App\Service\CombatLog\Builders\Rules\TheBlindingValeBridgeRule;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\ActivePullCollection;
 use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
@@ -39,16 +43,14 @@ abstract class DungeonRouteBuilder
     ];
 
     /**
-     * @var array<int, string> Dungeons whose floors are stacked on top of one another - they occupy near identical
-     *                         ingame X/Y and the builder has no Z axis to tell them apart, so the enemies of an
-     *                         earlier floor keep competing for kills that happened on a later one. For these, a boss
-     *                         kill takes every floor before the boss' own floor out of the running.
-     *                         Deliberately an allowlist: enabling this everywhere shifts the pull counts of seven
-     *                         other dungeons' regression runs, so the rule is not universally safe.
+     * @var array<int, class-string<DungeonRouteBuilderRuleInterface>> Per-dungeon exceptions to the normal spatial
+     *                                                                 matching, for dungeons where geometry alone cannot tell two sets of enemies apart.
+     *                                                                 Each rule decides for itself which dungeons it applies to - see the interface.
      */
-    private const array DUNGEON_BOSS_KILL_FLOOR_CUTOFF_ENABLED = [
-        DungeonKey::VOIDSCAR_ARENA->value,
-        DungeonKey::THE_AZURE_VAULT->value,
+    private const array RULES = [
+        BossKillFloorCutoffRule::class,
+        KingsRestDespawningEnemiesRule::class,
+        TheBlindingValeBridgeRule::class,
     ];
 
     protected const array NPC_ID_MAPPING = [
@@ -80,11 +82,8 @@ abstract class DungeonRouteBuilder
 
     private int $killZoneIndex = 1;
 
-    /**
-     * @var int The lowest Floor index that is still eligible for matching. Raised whenever a boss is killed - the
-     *          party has left every floor before the boss' floor behind at that point. 0 means no cutoff yet.
-     */
-    protected int $minimumFloorIndex = 0;
+    /** @var Collection<int, DungeonRouteBuilderRuleInterface> The rules active for this dungeon, if any */
+    protected Collection $rules;
 
     /** @var Collection<int, KillZone> */
     protected Collection $killZones;
@@ -107,6 +106,13 @@ abstract class DungeonRouteBuilder
         $this->validNpcIds = $this->npcRepository->getInUseNpcIds($this->dungeonRoute->mappingVersion);
 
         $this->activePullCollection = new ActivePullCollection();
+
+        // Instantiated per build - rules carry mutable state about how far into the run we are, so sharing them
+        // between routes (as a singleton would under Octane) would leak that state across requests
+        $this->rules = collect(self::RULES)
+            ->map(static fn(string $rule): DungeonRouteBuilderRuleInterface => new $rule($log))
+            ->filter(fn(DungeonRouteBuilderRuleInterface $rule) => $rule->appliesToDungeon($this->dungeonRoute->dungeon))
+            ->values();
 
         // This allows me to set the killZones in buildFinished, so that existing relations are still preserved
         // If you don't Laravel probably starts resolving relations, and it will lose relations that were set
@@ -235,11 +241,14 @@ abstract class DungeonRouteBuilder
     }
 
     /**
-     * @param Collection<int, bool> $preferredGroups The groups that are pulled and should always be preferred when choosing enemies
+     * @param Collection<int, bool> $preferredGroups  The groups that are pulled and should always be preferred when choosing enemies
+     * @param bool                  $ignoreRangeCheck Match regardless of how far the closest candidate is, for a kill whose
+     *                                                location is synthetic rather than logged - see awardEnemyKills().
      */
     protected function findUnkilledEnemyForNpcAtIngameLocation(
         ActivePullEnemy $activePullEnemy,
         Collection      $preferredGroups,
+        bool            $ignoreRangeCheck = false,
     ): ?Enemy {
         // See if we actually need to go look for another NPC
         if (isset(self::NPC_ID_MAPPING[$activePullEnemy->getNpcId()])) {
@@ -266,23 +275,23 @@ abstract class DungeonRouteBuilder
                 $activePullEnemy,
                 $preferredGroups,
                 true,
+                $ignoreRangeCheck,
             );
 
-            // The boss kill floor cutoff is a hard exclusion, so an enemy that is only mapped on a floor before the
-            // last killed boss' floor would be dropped from the route - and from its enemy forces - entirely. Rather
-            // than lose it, fall back to matching without the cutoff: the worst case is then the behaviour we had
-            // before the cutoff existed.
-            if ($closestEnemy->getEnemy() === null && $this->minimumFloorIndex > 0) {
-                $this->log->findUnkilledEnemyForNpcAtIngameLocationRetryingWithoutBossKillFloorCutoff(
-                    $npcId,
-                    $this->minimumFloorIndex,
-                );
+            // A first pass exclusion would otherwise drop this enemy from the route - and from its enemy forces -
+            // entirely. Rather than lose it, fall back to matching without those exclusions: the worst case is then
+            // the behaviour we had before the rule existed. Hard exclusions (isEnemyEligible) still apply.
+            if ($closestEnemy->getEnemy() === null && $this->rules->contains(
+                static fn(DungeonRouteBuilderRuleInterface $rule) => $rule->hasActiveFirstPassExclusion(),
+            )) {
+                $this->log->findUnkilledEnemyForNpcAtIngameLocationRetryingWithoutFirstPassExclusions($npcId);
 
                 $closestEnemy = $this->findClosestEnemyForNpcId(
                     $npcId,
                     $activePullEnemy,
                     $preferredGroups,
                     false,
+                    $ignoreRangeCheck,
                 );
             }
 
@@ -311,12 +320,13 @@ abstract class DungeonRouteBuilder
         int             $npcId,
         ActivePullEnemy $activePullEnemy,
         Collection      $preferredGroups,
-        bool            $applyBossKillFloorCutoff,
+        bool            $applyFirstPassExclusions,
+        bool            $ignoreRangeCheck = false,
     ): ClosestEnemy {
         $closestEnemy = new ClosestEnemy();
 
         /** @var Collection<int, Enemy> $filteredEnemies */
-        $filteredEnemies = $this->availableEnemies->filter(function (Enemy $availableEnemy) use ($npcId, $applyBossKillFloorCutoff) {
+        $filteredEnemies = $this->availableEnemies->filter(function (Enemy $availableEnemy) use ($npcId, $applyFirstPassExclusions) {
             if ($availableEnemy->npc_id !== $npcId) {
                 return false;
             }
@@ -335,12 +345,16 @@ abstract class DungeonRouteBuilder
                 return false;
             }
 
-            // Once a boss on floor N has died the party has left every floor before N behind. Only ever raised
-            // above 0 for DUNGEON_BOSS_KILL_FLOOR_CUTOFF_ENABLED dungeons - see applyBossKillFloorCutoff().
-            if ($applyBossKillFloorCutoff &&
-                $this->minimumFloorIndex > 0 &&
-                $availableEnemy->floor->index < $this->minimumFloorIndex) {
-                return false;
+            // Per-dungeon rules get the final say - a hard exclusion always applies, a first pass exclusion only
+            // until the retry above gives up on finding anything better.
+            foreach ($this->rules as $rule) {
+                if (!$rule->isEnemyEligible($availableEnemy)) {
+                    return false;
+                }
+
+                if ($applyFirstPassExclusions && !$rule->isEnemyEligibleOnFirstPass($availableEnemy)) {
+                    return false;
+                }
             }
 
             return true;
@@ -380,6 +394,7 @@ abstract class DungeonRouteBuilder
                 $filteredEnemies,
                 $activePullEnemy,
                 $closestEnemy,
+                $ignoreRangeCheck,
             );
         }
 
@@ -387,31 +402,79 @@ abstract class DungeonRouteBuilder
     }
 
     /**
-     * Excludes all enemies on floors before the killed boss' floor from any further matching.
+     * Lets every active rule advance its state now that an enemy has died.
+     *
+     * Only CombatLogRouteDungeonRouteBuilder calls this - ResultEventDungeonRouteBuilder never has, so any rule is
+     * inert on that path. See the note in its EnemyKilled branch before assuming a rule applies everywhere.
+     *
+     * Takes the npc_id as it was logged alongside the resolved Enemy, because a boss that failed to resolve to a
+     * mapped enemy would otherwise never advance a rule that keys off it dying.
+     *
+     * @return Collection<int, int> The npc_ids the rules want a kill awarded for - see awardEnemyKills()
      */
-    protected function applyBossKillFloorCutoff(?Enemy $enemy): void
+    protected function notifyRulesEnemyDied(?int $npcId, ?Enemy $resolvedEnemy): Collection
     {
-        if (!in_array($this->dungeonRoute->dungeon->key, self::DUNGEON_BOSS_KILL_FLOOR_CUTOFF_ENABLED)) {
-            return;
+        /** @var Collection<int, int> $awardedNpcIds */
+        $awardedNpcIds = collect();
+
+        if ($npcId === null) {
+            return $awardedNpcIds;
         }
 
-        // The boss may not have been resolved to a mapped enemy at all - then we have no floor to work with
-        if ($enemy === null || !$enemy->npc->isBoss() || $enemy->floor->facade) {
-            return;
+        foreach ($this->rules as $rule) {
+            $awardedNpcIds = $awardedNpcIds->merge($rule->onEnemyDied($npcId, $resolvedEnemy));
         }
 
-        if ($enemy->floor->index <= $this->minimumFloorIndex) {
-            return;
+        return $awardedNpcIds;
+    }
+
+    /**
+     * Attaches a kill for each of $npcIds to $activePull, for enemies that despawn instead of dying so that their
+     * death never reaches us at all. See DungeonRouteBuilderRuleInterface::onEnemyDied().
+     *
+     * The awarded kill borrows the position and timing of the enemy whose death triggered it, since that is the only
+     * thing we know about it. That location is therefore synthetic, and the normal engagement range gate - which
+     * exists to catch mismatches in real positional data - would reject anything the trigger did not happen to die
+     * next to. So range is ignored here; the npc_id is what identifies the enemy.
+     *
+     * @param Collection<int, int> $npcIds
+     */
+    protected function awardEnemyKills(Collection $npcIds, ?ActivePull $activePull, ActivePullEnemy $trigger): void
+    {
+        // The trigger is only part of a pull if it resolved to a mapped enemy when it was engaged. It may not have,
+        // and the kills still have to land somewhere - so fall back to the pull in progress, or start one.
+        $activePull ??= $this->activePullCollection->last() ?? $this->activePullCollection->addNewPull();
+
+        foreach ($npcIds as $npcId) {
+            $awardedEnemy = new ActivePullEnemy(
+                sprintf('%s-awarded-%d', $trigger->getUniqueId(), $npcId),
+                $npcId,
+                $trigger->getX(),
+                $trigger->getY(),
+                $trigger->getEngagedAt(),
+                $trigger->getDiedAt() ?? $trigger->getEngagedAt(),
+            );
+
+            $resolvedEnemy = $this->findUnkilledEnemyForNpcAtIngameLocation(
+                $awardedEnemy,
+                $this->activePullCollection->getInCombatGroups(),
+                true,
+            );
+
+            if ($resolvedEnemy === null) {
+                $this->log->awardEnemyKillsEnemyNotFound($npcId);
+
+                continue;
+            }
+
+            $awardedEnemy->setResolvedEnemy($resolvedEnemy);
+
+            // Engaged and killed in one go - we have no timeline for it, only the fact that it is dead
+            $activePull->enemyEngaged($awardedEnemy);
+            $activePull->enemyKilled($awardedEnemy->getUniqueId());
+
+            $this->log->awardEnemyKillsEnemyAwarded($npcId, $resolvedEnemy->id);
         }
-
-        $this->minimumFloorIndex = $enemy->floor->index;
-
-        $this->log->applyBossKillFloorCutoffMinimumFloorIndexRaised(
-            $enemy->id,
-            $enemy->npc_id,
-            $enemy->floor_id,
-            $this->minimumFloorIndex,
-        );
     }
 
     /**
@@ -485,6 +548,7 @@ abstract class DungeonRouteBuilder
         Collection      $filteredEnemies,
         ActivePullEnemy $activePullEnemy,
         ClosestEnemy    $closestEnemy,
+        bool            $ignoreRangeCheck = false,
     ): void {
         try {
             $this->log->findClosestEnemyInAllFilteredEnemiesStart();
@@ -492,15 +556,15 @@ abstract class DungeonRouteBuilder
             // There's only one boss NPC in the mapping, so killing it unambiguously matches it regardless of how
             // far its death location is from where it's mapped - let it be matched regardless of range. Non-boss
             // candidates are still rejected by range inside findClosestEnemyAndDistance() itself, before they're
-            // ever recorded as the closest enemy.
-            $isBoss = $filteredEnemies->first()?->npc?->isBoss() ?? false;
+            // ever recorded as the closest enemy - unless the caller already told us the location is synthetic.
+            $ignoreRangeCheck = $ignoreRangeCheck || ($filteredEnemies->first()?->npc?->isBoss() ?? false);
 
             $this->findClosestEnemyAndDistanceFromList(
                 $filteredEnemies,
                 $activePullEnemy,
                 $closestEnemy,
                 false,
-                $isBoss,
+                $ignoreRangeCheck,
             );
 
             // If the closest enemy was still pretty far away - check if there was a patrol that may have been closer
@@ -511,7 +575,7 @@ abstract class DungeonRouteBuilder
                     $activePullEnemy,
                     $closestEnemy,
                     true,
-                    $isBoss,
+                    $ignoreRangeCheck,
                 );
             }
 
@@ -521,7 +585,7 @@ abstract class DungeonRouteBuilder
                 );
             } elseif ($closestEnemy->getDistanceBetweenEnemies() >
                 ($this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default'))) {
-                if ($isBoss) {
+                if ($ignoreRangeCheck) {
                     $this->log->findClosestEnemyInAllFilteredEnemiesEnemyIsBossIgnoringTooFarAwayCheck();
                 } else {
                     $this->log->findClosestEnemyInAllFilteredEnemiesEnemyTooFarAway(

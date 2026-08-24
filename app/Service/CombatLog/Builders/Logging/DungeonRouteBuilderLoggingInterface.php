@@ -60,9 +60,8 @@ interface DungeonRouteBuilderLoggingInterface
 
     public function findUnkilledEnemyForNpcAtIngameLocationEnd(): void;
 
-    public function findUnkilledEnemyForNpcAtIngameLocationRetryingWithoutBossKillFloorCutoff(
+    public function findUnkilledEnemyForNpcAtIngameLocationRetryingWithoutFirstPassExclusions(
         int $npcId,
-        int $minimumFloorIndex,
     ): void;
 
     public function applyBossKillFloorCutoffMinimumFloorIndexRaised(
@@ -71,6 +70,26 @@ interface DungeonRouteBuilderLoggingInterface
         int $floorId,
         int $minimumFloorIndex,
     ): void;
+
+    /**
+     * @param array<int, int> $enemyPackGroups
+     */
+    public function theBlindingValeBridgeRuleBridgeEnemyPackGroupsBlocked(
+        int   $npcId,
+        array $enemyPackGroups,
+    ): void;
+
+    /**
+     * @param array<int, int> $awardedNpcIds
+     */
+    public function kingsRestDespawningEnemiesRuleEnemyKillsAwarded(
+        int   $triggerNpcId,
+        array $awardedNpcIds,
+    ): void;
+
+    public function awardEnemyKillsEnemyNotFound(int $npcId): void;
+
+    public function awardEnemyKillsEnemyAwarded(int $npcId, int $enemyId): void;
 
     /**
      * @param array<int, bool> $preferredGroups

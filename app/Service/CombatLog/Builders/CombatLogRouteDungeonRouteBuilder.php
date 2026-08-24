@@ -241,15 +241,27 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 $activePull->enemyEngaged($activePullEnemy);
             } elseif ($event['type'] === 'died') {
                 // Find the pull that this enemy is part of
+                $diedInActivePull = null;
                 foreach ($this->activePullCollection as $activePull) {
                     /** @var ActivePull $activePull */
                     if ($activePull->isEnemyInCombat($uniqueUid)) {
                         $activePull->enemyKilled($event['npc']->getUniqueId());
+                        $diedInActivePull = $activePull;
                         $this->log->buildKillZonesEnemyKilled($uniqueUid, $event['npc']->getDiedAt()->toDateTimeString());
                     }
                 }
 
-                $this->applyBossKillFloorCutoff($event['npc']->getResolvedEnemy());
+                $awardedNpcIds = $this->notifyRulesEnemyDied($event['npc']->npcId, $event['npc']->getResolvedEnemy());
+
+                // Must happen before the pulls below are created, so the awarded kills are part of the pull that
+                // triggered them rather than of one after it
+                if ($awardedNpcIds->isNotEmpty()) {
+                    $this->awardEnemyKills(
+                        $awardedNpcIds,
+                        $diedInActivePull,
+                        $this->createActivePullEnemy($event['npc']),
+                    );
+                }
 
                 // Handle spells and the actual creation of pulls
                 /** @var ActivePull|null $firstActivePull */

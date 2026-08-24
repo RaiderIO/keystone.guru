@@ -165,13 +165,15 @@ class ThumbnailService implements ThumbnailServiceInterface
             $tmpFile            = sprintf('/tmp/%s_%s', $dungeonRoute->public_key, $filename);
             $tmpFileAfterResize = sprintf('/tmp/%s_resized_%s', $dungeonRoute->public_key, $filename);
 
+            $previewUrl = $this->getPreviewUrl($dungeonRoute, $floorIndex, $zoomLevel, $variant);
+
             // puppeteer chromium-browser
             $process = new Process([
                 'node',
                 // Script to execute
                 resource_path('assets/puppeteer/route_thumbnail.js'),
                 // First argument; where to navigate
-                $this->getPreviewUrl($dungeonRoute, $floorIndex, $zoomLevel, $variant),
+                $previewUrl,
                 // Second argument; where to save the resulting image
                 $tmpFile,
                 $viewportWidth,
@@ -180,7 +182,9 @@ class ThumbnailService implements ThumbnailServiceInterface
 
             $this->log->doCreateThumbnailProcessStart($process->getCommandLine());
 
+            $renderStartedAt = microtime(true);
             $process->run();
+            $renderDurationMs = (int)round((microtime(true) - $renderStartedAt) * 1000);
 
             if ($process->isSuccessful()) {
                 if (!file_exists($tmpFile)) {
@@ -244,7 +248,7 @@ class ThumbnailService implements ThumbnailServiceInterface
             // Log any errors that may have occurred
             $errors = $process->getErrorOutput();
             if (!empty($errors)) {
-                $this->log->doCreateThumbnailError($errors);
+                $this->log->doCreateThumbnailError($errors, $previewUrl, $variant->value, $renderDurationMs);
 
                 return null;
             }
@@ -287,14 +291,28 @@ class ThumbnailService implements ThumbnailServiceInterface
             $forceDispatch = $isStandard ? $force : true;
             /** @var Floor $floor */
             foreach ($dungeonRoute->dungeon->floorsForMapFacade($dungeonRoute->mappingVersion, true)->active()->get() as $floor) {
-                ProcessRouteFloorThumbnail::dispatch($dungeonRoute, $floor->index, $forceDispatch, 0, $variant);
-                $result = true;
+                try {
+                    // Queueing this job is fire-and-forget from every caller's perspective - a render
+                    // failure must never break whatever request/command triggered the refresh. On a real
+                    // (async) queue connection dispatch() never throws; the worker processes the job
+                    // separately, and ProcessRouteFloorThumbnail's own $tries/backoff()/failed() handle
+                    // retries and giving up. Only the `sync` connection (tests, and any environment that
+                    // sets QUEUE_CONNECTION=sync) runs the job inline and lets a failed render's exception
+                    // propagate straight out of dispatch() - the job already logs the failure itself
+                    // before throwing, so there is nothing left to do here but stop it from escaping. See
+                    // #3920.
+                    ProcessRouteFloorThumbnail::dispatch($dungeonRoute, $floor->index, $forceDispatch, $variant);
 
-                $this->log->queueThumbnailRefreshDispatchedJob(
-                    $dungeonRoute->public_key,
-                    $floor->index,
-                    $forceDispatch,
-                );
+                    $this->log->queueThumbnailRefreshDispatchedJob(
+                        $dungeonRoute->public_key,
+                        $floor->index,
+                        $forceDispatch,
+                    );
+                } catch (Throwable $e) {
+                    $this->log->queueThumbnailRefreshDispatchException($dungeonRoute->public_key, $floor->index, $e);
+                }
+
+                $result = true;
             }
         }
 

@@ -25,6 +25,13 @@
         <div class="form-text">{{ __('view_admin.tools.combatlog.regenerate.season_description') }}</div>
     </div>
     <div class="mb-3">
+        <div class="form-check">
+            {{ html()->checkbox('delete_enemy_failures', false, 1)->class('form-check-input') }}
+            {{ html()->label(__('view_admin.tools.combatlog.regenerate.delete_enemy_failures'), 'delete_enemy_failures')->class('form-check-label') }}
+        </div>
+        <div class="form-text">{{ __('view_admin.tools.combatlog.regenerate.delete_enemy_failures_description') }}</div>
+    </div>
+    <div class="mb-3">
         {{ html()->input('submit')->value(__('view_admin.tools.combatlog.regenerate.submit'))->class('btn btn-primary col-md-auto') }}
     </div>
     {{ html()->form()->close() }}
