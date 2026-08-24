@@ -43,6 +43,16 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
     }
 
     /**
+     * Staggered delay in seconds the queue worker waits before each retry.
+     *
+     * @return array<int, int>
+     */
+    public function backoff(): array
+    {
+        return [10, 60, 300]; // Wait 10s, then 60s, then 300s
+    }
+
+    /**
      * @throws Exception
      */
     public function handle(): void
@@ -98,15 +108,5 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
     public function failed(?Throwable $exception): void
     {
         app()->make(ProcessRouteFloorThumbnailLoggingInterface::class)->handleMaxAttemptsReached();
-    }
-
-    /**
-     * Staggered delay in seconds the queue worker waits before each retry.
-     *
-     * @return array<int, int>
-     */
-    public function backoff(): array
-    {
-        return [10, 60, 300]; // Wait 10s, then 60s, then 300s
     }
 }
