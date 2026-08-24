@@ -33,7 +33,6 @@ class MappingService implements MappingServiceInterface
             // Explicitly set (matches the column default, true) rather than omitted - Eloquent's create()
             // does not hydrate the in-memory model with a DB-applied default, so callers reading the
             // returned instance's mdt_changes_pending right away would otherwise see null until a refresh.
-            // Not imported from MDT, so it must never be the target of an MDT string import (#4280).
             'mdt_changes_pending' => true,
             'version'             => $newVersion,
             'facade_enabled'      => false,
@@ -57,10 +56,8 @@ class MappingService implements MappingServiceInterface
             'game_version_id'   => $gameVersion->id,
             'mdt_mapping_hash'  => $currentMappingVersion?->mdt_mapping_hash ?? null, // @phpstan-ignore nullsafe.neverNull
             'mdt_addon_version' => $currentMappingVersion?->mdt_addon_version ?? null, // @phpstan-ignore nullsafe.neverNull
-            // The hash/addon version above are inherited to keep the MDT era this mapping descends from,
-            // but the mapping itself is now ours to edit and no longer matches MDT's (#4280). Set explicitly
-            // (matches the column default, true) since ::create() doesn't hydrate the in-memory model with
-            // a DB-applied default, and callers read this instance right away.
+            // Set explicitly (matches the column default, true) since ::create() doesn't hydrate the
+            // in-memory model with a DB-applied default, and callers read this instance right away.
             'mdt_changes_pending' => true,
             'version'             => $newVersion,
             'facade_enabled'      => $currentMappingVersion?->facade_enabled ?? false, // @phpstan-ignore nullsafe.neverNull

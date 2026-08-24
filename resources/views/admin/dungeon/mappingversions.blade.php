@@ -97,10 +97,8 @@ $gameVersionsSelect = $allGameVersions
             <td>{{ $mappingVersion->version }}</td>
             <td data-order="{{ $mappingVersion->mdt_changes_pending ? 1 : 0 }}">
                 @if($mappingVersion->mdt_changes_pending)
-                    <span class="badge bg-warning text-dark" data-bs-toggle="tooltip"
-                          title="{{ __('view_admin.dungeon.edit.mapping_versions.mdt_changes_pending_tooltip') }}">
-                        <i class="fas fa-exclamation-triangle"></i> {{ __('view_admin.dungeon.edit.mapping_versions.table_header.mdt_changes_pending') }}
-                    </span>
+                    <i class="fas fa-exclamation-triangle text-warning" data-bs-toggle="tooltip"
+                       title="{{ __('view_admin.dungeon.edit.mapping_versions.mdt_changes_pending_tooltip') }}"></i>
                 @else
                     <i class="fas fa-check-circle text-success"></i>
                 @endif
