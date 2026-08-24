@@ -126,5 +126,5 @@ return [
     'murder_row_overload_golem'                       => 'Голем перегрузки',
     'the_blinding_vale_flourishing_stride'            => 'Цветущий шаг',
 
-    'waystone' => '',
+    'waystone' => 'Путевой камень',
 ];

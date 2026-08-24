@@ -126,5 +126,5 @@ return [
     'murder_row_overload_golem'                       => 'Golem en surcharge',
     'the_blinding_vale_flourishing_stride'            => 'Foulée florissante',
 
-    'waystone' => '',
+    'waystone' => 'Pierre de jalon',
 ];

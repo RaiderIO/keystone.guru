@@ -53,7 +53,7 @@ return [
     ],
     'apicombatlogroute' => [
         'error' => [
-            'no_post_body' => '',
+            'no_post_body' => 'Aucun corps de requête de route de combat log n\'est enregistré pour cette route.',
         ],
     ],
     'apicombatlogrun' => [
@@ -95,9 +95,9 @@ return [
             'route_cloned_successfully' => 'Itinéraire cloné avec succès',
             'route_updated'             => 'Itinéraire mis à jour',
             'route_created'             => 'Itinéraire créé',
-            'upgrade_draft_created'     => '',
-            'upgrade_applied'           => '',
-            'upgrade_discarded'         => '',
+            'upgrade_draft_created'     => 'Un brouillon de mise à niveau a été créé. Réparez-le ici : la route d\'origine continue d\'afficher son ancien contenu jusqu\'à ce que vous appliquiez vos modifications.',
+            'upgrade_applied'           => 'La mise à niveau a été appliquée à votre route.',
+            'upgrade_discarded'         => 'Le brouillon de mise à niveau a été abandonné.',
         ],
     ],
     'dungeonroutediscover' => [
@@ -135,7 +135,7 @@ return [
     'killzone' => [
         'error' => [
             'facade_location_not_convertible' => 'Impossible de placer le pull ici - cet emplacement n\'appartient à aucun étage de ce donjon',
-            'unable_to_delete_pull'           => '',
+            'unable_to_delete_pull'           => 'Impossible de supprimer le pull',
         ],
     ],
     'oauthlogin' => [

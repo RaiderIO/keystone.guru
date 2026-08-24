@@ -16,9 +16,9 @@ return [
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => 'Questo pull è stato rimosso poiché tutti i nemici selezionati non sono stati trovati in MDT, risultando in un pull altrimenti vuoto.',
                 'unable_to_find_mdt_enemy_for_kg_raid_marker'       => 'Impossibile trovare l\'equivalente MDT per il nemico con un marcatore di incursione %s (npc_id: %s).',
                 'route_title_contains_non_ascii_char_bug'           => 'Il titolo del tuo percorso contiene caratteri non ASCII che sono noti per innescare un bug di codifica ancora irrisolto in Keystone.guru. Il titolo del tuo percorso è stato privato di tutti i caratteri che causano problemi, ci scusiamo per l\'inconveniente e speriamo di risolvere presto questo problema.',
-                'route_title_contains_non_ascii_char_bug_details' => 'Vecchio titolo: %s, nuovo titolo: %s',
-                'map_icon_contains_non_ascii_char_bug'            => 'Uno dei tuoi commenti su un\'icona della mappa contiene caratteri non ASCII che sono noti per innescare un bug di codifica ancora irrisolto in Keystone.guru. Il tuo commento sulla mappa è stato privato di tutti i caratteri che causano problemi, ci scusiamo per l\'inconveniente e speriamo di risolvere presto questo problema.',
-                'map_icon_contains_non_ascii_char_bug_details'    => 'Vecchio commento: "%s", nuovo commento: "%s"',
+                'route_title_contains_non_ascii_char_bug_details'   => 'Vecchio titolo: %s, nuovo titolo: %s',
+                'map_icon_contains_non_ascii_char_bug'              => 'Uno dei tuoi commenti su un\'icona della mappa contiene caratteri non ASCII che sono noti per innescare un bug di codifica ancora irrisolto in Keystone.guru. Il tuo commento sulla mappa è stato privato di tutti i caratteri che causano problemi, ci scusiamo per l\'inconveniente e speriamo di risolvere presto questo problema.',
+                'map_icon_contains_non_ascii_char_bug_details'      => 'Vecchio commento: "%s", nuovo commento: "%s"',
             ],
             'import_string' => [
                 'category' => [
@@ -66,16 +66,16 @@ return [
     'combatlog' => [
         'enemy_failure_analysis' => [
             'verdict' => [
-                'npc_not_mapped'       => '',
-                'no_enemy_in_range'    => '',
-                'enemies_exhausted'    => '',
-                'wrong_floor_artifact' => '',
+                'npc_not_mapped'       => 'NPC non mappato',
+                'no_enemy_in_range'    => 'Nessun nemico a portata',
+                'enemies_exhausted'    => 'Più nel gioco che nella mappatura',
+                'wrong_floor_artifact' => 'Probabilmente un artefatto da piano sbagliato',
             ],
             'suggestion' => [
-                'npc_not_mapped'       => '',
-                'no_enemy_in_range'    => '',
-                'enemies_exhausted'    => '',
-                'wrong_floor_artifact' => '',
+                'npc_not_mapped'       => ':npc non è affatto presente in questa versione di mappatura, eppure qui è stato ingaggiato :count volte su :routes percorsi. Aggiungilo (o il suo pacchetto) in questa posizione.',
+                'no_enemy_in_range'    => 'Il :npc mappato più vicino (nemico :enemy_id) si trova a :distance m, oltre la portata di ingaggio di :range m. Probabilmente qui manca un pacchetto di :npc, oppure è mappato nel posto sbagliato.',
+                'enemies_exhausted'    => ':enemies :npc mappati a portata, ma i percorsi qui falliscono comunque circa :avg volte ciascuno: nel gioco questo pacchetto contiene probabilmente più :npc di quanti ne preveda la mappatura.',
+                'wrong_floor_artifact' => 'Nessun :npc a portata su questo piano, ma ce n\'è uno entro :distance m su un altro piano. Il piano registrato viene dedotto dall\'npc precedente nel log, quindi molto probabilmente si tratta di quella deduzione: verifica prima di modificare la mappatura.',
             ],
         ],
     ],

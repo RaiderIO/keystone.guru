@@ -89,7 +89,7 @@ return [
                 'alzzin_cave_exit' => 'Durante a luta, Alzzin the Wildshaper destrói a entrada da caverna e Whip Lashers saem em massa para ajudá-lo.
 
 Após derrotar Alzzin the Wildshaper, você pode usar a caverna para sair da instância.',
-                'exit_only'        => 'Esta "entrada" é apenas uma saída.',
+                'exit_only' => 'Esta "entrada" é apenas uma saída.',
             ],
             'dire_maul_north' => [
                 'gordok_mastiff_pack_size' => 'Todos os pacotes de Gordok Mastiff podem conter 4 ou 5 inimigos.',
@@ -253,11 +253,11 @@ Continue se movendo!',
                 'shade_of_eranikus_warning' => 'Shade of Eranikus só pode ser enfrentado se o escudo for baixado ao derrotar os mini-chefes em Hall of the Cursed.
 
 Aviso: atacar Shade of Eranikus faz todos os dragões verdes deste andar entrarem em combate.',
-                'stair_patrol'              => 'Este pacote patrulha pelas escadas em todos os andares.',
-                'jammalaan_aggro_warning'   => 'Aviso: atacar Jammal\'an the Prophet faz todos os inimigos nesta sala entrarem em combate.',
-                'broken_geometry_warning'   => 'AVISO: geometria quebrada pode fazer você cair e MORRER.',
-                'weaver_dreamscythe_spawn'  => 'Weaver e Dreamscythe aparecem quando Jammal\'an the Prophet é derrotado.',
-                'remove_shield_note'        => 'Você pode remover o escudo derrotando os mini-chefes em Hall of the Cursed.',
+                'stair_patrol'             => 'Este pacote patrulha pelas escadas em todos os andares.',
+                'jammalaan_aggro_warning'  => 'Aviso: atacar Jammal\'an the Prophet faz todos os inimigos nesta sala entrarem em combate.',
+                'broken_geometry_warning'  => 'AVISO: geometria quebrada pode fazer você cair e MORRER.',
+                'weaver_dreamscythe_spawn' => 'Weaver e Dreamscythe aparecem quando Jammal\'an the Prophet é derrotado.',
+                'remove_shield_note'       => 'Você pode remover o escudo derrotando os mini-chefes em Hall of the Cursed.',
             ],
             'uldaman' => [
                 'echomok_cavern_entrance'      => 'Entrada de Echomok Cavern',
@@ -516,7 +516,7 @@ Continue se movendo!',
                 'heal_drake'                  => 'Draco de Cura',
                 'centrifuge_construct_shield' => 'Mate todos os Centrifuge Constructs para remover o escudo do chefe.
 Após matar o chefe, use o item de draco para voar mais alto.',
-                'tank_drake'                  => 'Draco de Tanque',
+                'tank_drake' => 'Draco de Tanque',
             ],
             'ulduar' => [
                 'teleporter'                      => 'Teletransportador',
@@ -545,8 +545,8 @@ Após matar o chefe, use o item de draco para voar mais alto.',
                 'go_south'                  => 'Ir para o sul',
             ],
             'den_of_nalorakk' => [
-                'offering'        => '',
-                'warding_incense' => '',
+                'offering'        => 'Oferenda',
+                'warding_incense' => 'Incenso Protetor (5% de Versatilidade por 10 minutos)',
             ],
             'maisara_caverns' => [
                 'hearty_vilebranch_stew' => 'Ensopado Forte de Vilebranch: Experimente uma porção do ensopado Vilebranch, aumentando sua Sugação em 3% e reduzindo o dano recebido de ataques em área em 3% por 30 min.',

@@ -67,16 +67,16 @@ return [
     'combatlog' => [
         'enemy_failure_analysis' => [
             'verdict' => [
-                'npc_not_mapped'       => '',
-                'no_enemy_in_range'    => '',
-                'enemies_exhausted'    => '',
-                'wrong_floor_artifact' => '',
+                'npc_not_mapped'       => 'PNJ non mappé',
+                'no_enemy_in_range'    => 'Aucun ennemi à portée',
+                'enemies_exhausted'    => 'Plus en jeu que dans le mapping',
+                'wrong_floor_artifact' => 'Probablement un artefact de mauvais étage',
             ],
             'suggestion' => [
-                'npc_not_mapped'       => '',
-                'no_enemy_in_range'    => '',
-                'enemies_exhausted'    => '',
-                'wrong_floor_artifact' => '',
+                'npc_not_mapped'       => ':npc n\'est pas du tout présent dans cette version de mapping, et pourtant il a été engagé :count fois sur :routes routes ici. Ajoutez-le (ou son pack) à cet emplacement.',
+                'no_enemy_in_range'    => 'Le :npc mappé le plus proche (ennemi :enemy_id) se trouve à :distance m, au-delà de la portée d\'engagement de :range m. Il manque probablement un pack de :npc ici, ou il est mappé au mauvais endroit.',
+                'enemies_exhausted'    => ':enemies :npc mappés à portée, mais les routes échouent tout de même ici environ :avg fois chacune : le jeu contient probablement plus de :npc dans ce pack que le mapping.',
+                'wrong_floor_artifact' => 'Aucun :npc à portée à cet étage, mais il y en a un à moins de :distance m à un autre étage. L\'étage enregistré est déduit du pnj précédent dans le log, il s\'agit donc très probablement de cette déduction : vérifiez avant de modifier le mapping.',
             ],
         ],
     ],

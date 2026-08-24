@@ -89,7 +89,7 @@ return [
                 'alzzin_cave_exit' => 'Durante lo scontro, Alzzin the Wildshaper sfonda l\'ingresso della caverna e i Whip Lasher sciamano fuori per assisterlo.
 
 Dopo aver sconfitto Alzzin the Wildshaper, puoi usare la caverna per uscire dall\'istanza.',
-                'exit_only'        => 'Questo "ingresso" è solo un\'uscita.',
+                'exit_only' => 'Questo "ingresso" è solo un\'uscita.',
             ],
             'dire_maul_north' => [
                 'gordok_mastiff_pack_size' => 'Tutti i pacchetti di Gordok Mastiff possono contenere 4 o 5 nemici.',
@@ -253,11 +253,11 @@ Continua a muoverti!',
                 'shade_of_eranikus_warning' => 'Shade of Eranikus può essere affrontato solo se lo scudo viene abbassato sconfiggendo i mini-boss nella Hall of the Cursed.
 
 Attenzione: attaccare Shade of Eranikus causa l\'aggro di tutti i draghi verdi su questo piano.',
-                'stair_patrol'              => 'Questo pacchetto pattuglia le scale su tutti i piani.',
-                'jammalaan_aggro_warning'   => 'Attenzione: attaccare Jammal\'an the Prophet causa l\'aggro di tutti i nemici in questa stanza.',
-                'broken_geometry_warning'   => 'ATTENZIONE: la geometria rotta può farti cadere e MORIRE.',
-                'weaver_dreamscythe_spawn'  => 'Weaver e Dreamscythe appaiono quando Jammal\'an the Prophet viene sconfitto.',
-                'remove_shield_note'        => 'Puoi rimuovere lo scudo sconfiggendo i mini-boss nella Hall of the Cursed.',
+                'stair_patrol'             => 'Questo pacchetto pattuglia le scale su tutti i piani.',
+                'jammalaan_aggro_warning'  => 'Attenzione: attaccare Jammal\'an the Prophet causa l\'aggro di tutti i nemici in questa stanza.',
+                'broken_geometry_warning'  => 'ATTENZIONE: la geometria rotta può farti cadere e MORIRE.',
+                'weaver_dreamscythe_spawn' => 'Weaver e Dreamscythe appaiono quando Jammal\'an the Prophet viene sconfitto.',
+                'remove_shield_note'       => 'Puoi rimuovere lo scudo sconfiggendo i mini-boss nella Hall of the Cursed.',
             ],
             'uldaman' => [
                 'echomok_cavern_entrance'      => 'Ingresso della Caverna Echomok',
@@ -516,7 +516,7 @@ Continua a muoverti!',
                 'heal_drake'                  => 'Drago della Cura',
                 'centrifuge_construct_shield' => 'Uccidi tutti i Costrutti Roteanti per rimuovere lo scudo del boss.
 Dopo aver ucciso il boss, usa l\'oggetto drago per volare più in alto.',
-                'tank_drake'                  => 'Drago Tank',
+                'tank_drake' => 'Drago Tank',
             ],
             'ulduar' => [
                 'teleporter'                      => 'Teletrasporto',
@@ -545,8 +545,8 @@ Dopo aver ucciso il boss, usa l\'oggetto drago per volare più in alto.',
                 'go_south'                  => 'Vai a sud',
             ],
             'den_of_nalorakk' => [
-                'offering'        => '',
-                'warding_incense' => '',
+                'offering'        => 'Offerta',
+                'warding_incense' => 'Incenso protettivo (5% Versatilità per 10 minuti)',
             ],
             'maisara_caverns' => [
                 'hearty_vilebranch_stew' => 'Stufato Vilebranch Sostanzioso: Prendi una porzione di stufato Vilebranch, aumentando il tuo Prosciugamento del 3% e riducendo i danni subiti da attacchi ad area del 3% per 30 minuti.',

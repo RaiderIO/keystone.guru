@@ -102,7 +102,7 @@ return [
         'linkpreview_default_description'         => 'Percorso M+ per il dungeon %s di %s.',
         'linkpreview_default_description_sandbox' => 'Percorso M+ temporaneo per il dungeon %s.',
         'linkpreview_default_description_explore' => 'Esplora %s.',
-        'linkpreview_default_description_heatmap' => '',
+        'linkpreview_default_description_heatmap' => 'Guarda una mappa di calore di %s per vedere quali scelte sta facendo la community.',
     ],
 
 ];

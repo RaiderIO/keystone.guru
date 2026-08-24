@@ -89,7 +89,7 @@ return [
                 'alzzin_cave_exit' => '在战斗中，Alzzin the Wildshaper 会打破洞穴入口，大量 Whip Lashers 涌出协助他。
 
 击败 Alzzin the Wildshaper 后，您可以使用该洞穴离开副本。',
-                'exit_only'        => '此“入口”仅可用作出口。',
+                'exit_only' => '此“入口”仅可用作出口。',
             ],
             'dire_maul_north' => [
                 'gordok_mastiff_pack_size' => '所有 Gordok Mastiff 包最多可包含4或5个敌人。',
@@ -253,11 +253,11 @@ return [
                 'shade_of_eranikus_warning' => 'Shade of Eranikus 只有在击败 Hall of the Cursed 中的小首领并降低护盾后才能进行战斗。
 
 警告：攻击 Shade of Eranikus 会使这一层的所有绿龙进入仇恨状态。',
-                'stair_patrol'              => '这个包会在所有楼层的楼梯间巡逻。',
-                'jammalaan_aggro_warning'   => '警告：攻击 Jammal\'an the Prophet 会使此房间内的所有敌人进入仇恨状态。',
-                'broken_geometry_warning'   => '警告：破损的地形可能会导致您坠落并死亡。',
-                'weaver_dreamscythe_spawn'  => 'Weaver 和 Dreamscythe 会在 Jammal\'an the Prophet 被击败后生成。',
-                'remove_shield_note'        => '您可以通过击败 Hall of the Cursed 中的小首领来移除护盾。',
+                'stair_patrol'             => '这个包会在所有楼层的楼梯间巡逻。',
+                'jammalaan_aggro_warning'  => '警告：攻击 Jammal\'an the Prophet 会使此房间内的所有敌人进入仇恨状态。',
+                'broken_geometry_warning'  => '警告：破损的地形可能会导致您坠落并死亡。',
+                'weaver_dreamscythe_spawn' => 'Weaver 和 Dreamscythe 会在 Jammal\'an the Prophet 被击败后生成。',
+                'remove_shield_note'       => '您可以通过击败 Hall of the Cursed 中的小首领来移除护盾。',
             ],
             'uldaman' => [
                 'echomok_cavern_entrance'      => 'Echomok Cavern 入口',
@@ -516,7 +516,7 @@ return [
                 'heal_drake'                  => '治疗飞龙',
                 'centrifuge_construct_shield' => '击杀所有 Centrifuge Constructs 以移除首领护盾。
 击杀首领后，使用飞龙道具继续向上飞行。',
-                'tank_drake'                  => '坦克飞龙',
+                'tank_drake' => '坦克飞龙',
             ],
             'ulduar' => [
                 'teleporter'                      => '传送器',
@@ -545,8 +545,8 @@ return [
                 'go_south'                  => '向南走',
             ],
             'den_of_nalorakk' => [
-                'offering'        => '',
-                'warding_incense' => '',
+                'offering'        => '祭品',
+                'warding_incense' => '守护熏香（全能提高5%，持续10分钟）',
             ],
             'maisara_caverns' => [
                 'hearty_vilebranch_stew' => '丰盛的邪枝炖肉：享用一份邪枝炖肉，使你的吸血增加3%，并在30分钟内减少受到的范围攻击伤害3%。',

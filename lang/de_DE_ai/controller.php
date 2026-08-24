@@ -53,7 +53,7 @@ return [
     ],
     'apicombatlogroute' => [
         'error' => [
-            'no_post_body' => '',
+            'no_post_body' => 'Für diese Route ist kein Anfragetext der Combat-Log-Route gespeichert.',
         ],
     ],
     'apicombatlogrun' => [
@@ -95,9 +95,9 @@ return [
             'route_cloned_successfully' => 'Route erfolgreich geklont',
             'route_updated'             => 'Route aktualisiert',
             'route_created'             => 'Route erstellt',
-            'upgrade_draft_created'     => '',
-            'upgrade_applied'           => '',
-            'upgrade_discarded'         => '',
+            'upgrade_draft_created'     => 'Ein Upgrade-Entwurf wurde erstellt. Repariere ihn hier – die ursprüngliche Route zeigt weiterhin ihren alten Inhalt, bis du deine Änderungen anwendest.',
+            'upgrade_applied'           => 'Das Upgrade wurde auf deine Route angewendet.',
+            'upgrade_discarded'         => 'Der Upgrade-Entwurf wurde verworfen.',
         ],
     ],
     'dungeonroutediscover' => [
@@ -135,7 +135,7 @@ return [
     'killzone' => [
         'error' => [
             'facade_location_not_convertible' => 'Der Pull kann hier nicht platziert werden - diese Position gehört zu keiner Etage dieses Dungeons',
-            'unable_to_delete_pull'           => '',
+            'unable_to_delete_pull'           => 'Pull kann nicht gelöscht werden',
         ],
     ],
     'oauthlogin' => [

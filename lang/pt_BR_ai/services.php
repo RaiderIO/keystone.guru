@@ -67,16 +67,16 @@ return [
     'combatlog' => [
         'enemy_failure_analysis' => [
             'verdict' => [
-                'npc_not_mapped'       => '',
-                'no_enemy_in_range'    => '',
-                'enemies_exhausted'    => '',
-                'wrong_floor_artifact' => '',
+                'npc_not_mapped'       => 'NPC não mapeado',
+                'no_enemy_in_range'    => 'Nenhum inimigo ao alcance',
+                'enemies_exhausted'    => 'Mais no jogo do que no mapeamento',
+                'wrong_floor_artifact' => 'Provavelmente um artefato de andar errado',
             ],
             'suggestion' => [
-                'npc_not_mapped'       => '',
-                'no_enemy_in_range'    => '',
-                'enemies_exhausted'    => '',
-                'wrong_floor_artifact' => '',
+                'npc_not_mapped'       => ':npc não está nesta versão de mapeamento de forma alguma, mas mesmo assim foi engajado :count vezes em :routes rotas aqui. Adicione-o (ou o pacote dele) nesta localização.',
+                'no_enemy_in_range'    => 'O :npc mapeado mais próximo (inimigo :enemy_id) está a :distance jardas, além do alcance de engajamento de :range jardas. Provavelmente falta um pacote de :npc aqui, ou ele está mapeado no lugar errado.',
+                'enemies_exhausted'    => ':enemies :npc mapeados dentro do alcance, mas as rotas ainda falham aqui cerca de :avg vezes cada uma: o jogo provavelmente tem mais :npc neste pacote do que o mapeamento.',
+                'wrong_floor_artifact' => 'Nenhum :npc ao alcance neste andar, mas há um a até :distance jardas em outro andar. O andar registrado é deduzido do npc anterior no log, então muito provavelmente é essa dedução: verifique antes de alterar o mapeamento.',
             ],
         ],
     ],

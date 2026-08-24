@@ -53,7 +53,7 @@ return [
     ],
     'apicombatlogroute' => [
         'error' => [
-            'no_post_body' => '',
+            'no_post_body' => 'Для этого маршрута не сохранено тело запроса маршрута из combat log.',
         ],
     ],
     'apicombatlogrun' => [
@@ -95,9 +95,9 @@ return [
             'route_cloned_successfully' => 'Маршрут успешно клонирован',
             'route_updated'             => 'Маршрут обновлен',
             'route_created'             => 'Маршрут создан',
-            'upgrade_draft_created'     => '',
-            'upgrade_applied'           => '',
-            'upgrade_discarded'         => '',
+            'upgrade_draft_created'     => 'Черновик обновления создан. Исправьте его здесь — исходный маршрут продолжает показывать прежнее содержимое, пока Вы не примените свои изменения.',
+            'upgrade_applied'           => 'Обновление применено к Вашему маршруту.',
+            'upgrade_discarded'         => 'Черновик обновления отклонён.',
         ],
     ],
     'dungeonroutediscover' => [
@@ -135,7 +135,7 @@ return [
     'killzone' => [
         'error' => [
             'facade_location_not_convertible' => 'Не удалось разместить пул здесь - это местоположение не принадлежит ни одному этажу этого подземелья',
-            'unable_to_delete_pull'           => '',
+            'unable_to_delete_pull'           => 'Не удалось удалить pull',
         ],
     ],
     'oauthlogin' => [

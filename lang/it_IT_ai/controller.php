@@ -53,7 +53,7 @@ return [
     ],
     'apicombatlogroute' => [
         'error' => [
-            'no_post_body' => '',
+            'no_post_body' => 'Per questo percorso non è memorizzato alcun corpo della richiesta del percorso da combat log.',
         ],
     ],
     'apicombatlogrun' => [
@@ -95,9 +95,9 @@ return [
             'route_cloned_successfully' => 'Percorso clonato con successo',
             'route_updated'             => 'Percorso aggiornato',
             'route_created'             => 'Percorso creato',
-            'upgrade_draft_created'     => '',
-            'upgrade_applied'           => '',
-            'upgrade_discarded'         => '',
+            'upgrade_draft_created'     => 'È stata creata una bozza di aggiornamento. Sistemala qui: il percorso originale continua a mostrare il suo contenuto precedente finché non applichi le tue modifiche.',
+            'upgrade_applied'           => 'L\'aggiornamento è stato applicato al tuo percorso.',
+            'upgrade_discarded'         => 'La bozza di aggiornamento è stata scartata.',
         ],
     ],
     'dungeonroutediscover' => [
@@ -135,7 +135,7 @@ return [
     'killzone' => [
         'error' => [
             'facade_location_not_convertible' => 'Impossibile posizionare il pull qui - questa posizione non appartiene a nessun piano di questo dungeon',
-            'unable_to_delete_pull'           => '',
+            'unable_to_delete_pull'           => 'Impossibile eliminare il pull',
         ],
     ],
     'oauthlogin' => [

@@ -86,7 +86,7 @@ return [
                 'combat_log_regenerate'                       => 'Régénérer les routes ARC',
                 'combat_log_criteria'                         => 'Critères d\'analyse du compendium des PNJ',
                 'combat_log_run_data'                         => 'Purger les données de run des journaux de combat',
-                'combat_log_route_coverage'                   => '',
+                'combat_log_route_coverage'                   => 'Couverture des forces ennemies de l\'ARC',
                 'dungeonroute_view'                           => 'Voir la route de donjon',
                 'dungeonroute_view_contents'                  => 'Contenu de la route',
                 'dungeonroute_mapping_version_usage'          => 'Utilisation de la version de mapping',

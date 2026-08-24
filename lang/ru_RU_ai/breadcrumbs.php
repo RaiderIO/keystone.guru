@@ -86,7 +86,7 @@ return [
                 'combat_log_regenerate'                       => 'Перегенерировать маршруты ARC',
                 'combat_log_criteria'                         => 'Критерии парсинга компендиума НПЦ',
                 'combat_log_run_data'                         => 'Очистка данных прохождений боевого журнала',
-                'combat_log_route_coverage'                   => '',
+                'combat_log_route_coverage'                   => 'Покрытие сил врага ARC',
                 'dungeonroute_view'                           => 'Просмотр маршрута подземелья',
                 'dungeonroute_view_contents'                  => 'Содержимое маршрута',
                 'dungeonroute_mapping_version_usage'          => 'Использование версии карты',

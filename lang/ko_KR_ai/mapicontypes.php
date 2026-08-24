@@ -126,5 +126,5 @@ return [
     'murder_row_overload_golem'                       => '과부하 골렘',
     'the_blinding_vale_flourishing_stride'            => '무성한 발걸음',
 
-    'waystone' => '',
+    'waystone' => '이정표 돌',
 ];

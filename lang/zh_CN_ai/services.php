@@ -67,16 +67,16 @@ return [
     'combatlog' => [
         'enemy_failure_analysis' => [
             'verdict' => [
-                'npc_not_mapped'       => '',
-                'no_enemy_in_range'    => '',
-                'enemies_exhausted'    => '',
-                'wrong_floor_artifact' => '',
+                'npc_not_mapped'       => 'NPC 未映射',
+                'no_enemy_in_range'    => '范围内没有敌人',
+                'enemies_exhausted'    => '游戏中的数量多于映射',
+                'wrong_floor_artifact' => '很可能是楼层判断错误造成的',
             ],
             'suggestion' => [
-                'npc_not_mapped'       => '',
-                'no_enemy_in_range'    => '',
-                'enemies_exhausted'    => '',
-                'wrong_floor_artifact' => '',
+                'npc_not_mapped'       => ':npc 完全不存在于此映射版本中，但在这里的 :routes 条路线中却被交战了 :count 次。请在此位置添加它（或它所在的包）。',
+                'no_enemy_in_range'    => '最近的已映射 :npc（敌人 :enemy_id）在 :distance 码之外，超出了 :range 码的交战范围。这里很可能缺少一个 :npc 的包，或者它被映射到了错误的位置。',
+                'enemies_exhausted'    => '范围内已映射的 :npc 有 :enemies 个，但路线在此处平均每条仍失败约 :avg 次——游戏中这个包里的 :npc 很可能比映射中的更多。',
+                'wrong_floor_artifact' => '本楼层范围内没有 :npc，但另一个楼层上有一个在 :distance 码以内。记录的楼层是根据日志中前一个 npc 推断出来的，因此这很可能就是该推断造成的——请先核实再修改映射。',
             ],
         ],
     ],

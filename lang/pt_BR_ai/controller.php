@@ -53,7 +53,7 @@ return [
     ],
     'apicombatlogroute' => [
         'error' => [
-            'no_post_body' => '',
+            'no_post_body' => 'Esta rota não tem o corpo da requisição da rota de combat log armazenado.',
         ],
     ],
     'apicombatlogrun' => [
@@ -95,9 +95,9 @@ return [
             'route_cloned_successfully' => 'Rota clonada com sucesso',
             'route_updated'             => 'Rota atualizada',
             'route_created'             => 'Rota criada',
-            'upgrade_draft_created'     => '',
-            'upgrade_applied'           => '',
-            'upgrade_discarded'         => '',
+            'upgrade_draft_created'     => 'Um rascunho de atualização foi criado. Conserte-o aqui: a rota original continua exibindo o conteúdo antigo até você aplicar suas alterações.',
+            'upgrade_applied'           => 'A atualização foi aplicada à sua rota.',
+            'upgrade_discarded'         => 'O rascunho de atualização foi descartado.',
         ],
     ],
     'dungeonroutediscover' => [
@@ -135,7 +135,7 @@ return [
     'killzone' => [
         'error' => [
             'facade_location_not_convertible' => 'Não foi possível posicionar o pull aqui - esta localização não pertence a nenhum andar desta masmorra',
-            'unable_to_delete_pull'           => '',
+            'unable_to_delete_pull'           => 'Não foi possível excluir o pull',
         ],
     ],
     'oauthlogin' => [

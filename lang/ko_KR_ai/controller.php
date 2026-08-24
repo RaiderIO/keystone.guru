@@ -53,7 +53,7 @@ return [
     ],
     'apicombatlogroute' => [
         'error' => [
-            'no_post_body' => '',
+            'no_post_body' => '이 경로에는 저장된 전투 기록 경로 요청 본문이 없습니다.',
         ],
     ],
     'apicombatlogrun' => [
@@ -95,9 +95,9 @@ return [
             'route_cloned_successfully' => '경로가 성공적으로 복제되었습니다',
             'route_updated'             => '경로 업데이트됨',
             'route_created'             => '경로 생성됨',
-            'upgrade_draft_created'     => '',
-            'upgrade_applied'           => '',
-            'upgrade_discarded'         => '',
+            'upgrade_draft_created'     => '업그레이드 초안이 생성되었습니다. 여기서 수정하세요. 변경 사항을 적용하기 전까지 원본 경로는 기존 내용을 그대로 보여줍니다.',
+            'upgrade_applied'           => '업그레이드가 경로에 적용되었습니다.',
+            'upgrade_discarded'         => '업그레이드 초안을 폐기했습니다.',
         ],
     ],
     'dungeonroutediscover' => [
@@ -135,7 +135,7 @@ return [
     'killzone' => [
         'error' => [
             'facade_location_not_convertible' => '이 위치에는 풀을 배치할 수 없습니다 - 이 위치는 이 던전의 어떤 층에도 속하지 않습니다',
-            'unable_to_delete_pull'           => '',
+            'unable_to_delete_pull'           => '풀을 삭제할 수 없습니다',
         ],
     ],
     'oauthlogin' => [
