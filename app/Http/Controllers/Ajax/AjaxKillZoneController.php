@@ -640,7 +640,7 @@ class AjaxKillZoneController extends Controller
             report($exception);
 
             return $deleteRefused
-                ? response('Unable to delete pull', Http::INTERNAL_SERVER_ERROR)
+                ? response(__('controller.killzone.error.unable_to_delete_pull'), Http::INTERNAL_SERVER_ERROR)
                 : response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
 
