@@ -122,9 +122,12 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
 
         $now = Carbon::now();
         $mappingVersion ??= MappingVersion::create([
-            'dungeon_id'            => -1,
-            'game_version_id'       => $gameVersion->id,
-            'version'               => 1,
+            'dungeon_id'      => -1,
+            'game_version_id' => $gameVersion->id,
+            'version'         => 1,
+            // Derived from a combat log, not from MDT - and it is attached to a real dungeon further down
+            // once the log reveals which one, so it must never become an MDT string's import target (#4280)
+            'mdt_changes_pending'   => true,
             'enemy_forces_required' => 0,
             'timer_max_seconds'     => 0,
             'updated_at'            => $now,
