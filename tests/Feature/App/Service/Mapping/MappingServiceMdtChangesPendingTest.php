@@ -5,6 +5,7 @@ namespace Tests\Feature\App\Service\Mapping;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
+use App\Service\CombatLog\CombatLogMappingVersionServiceInterface;
 use App\Service\Mapping\MappingServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -17,6 +18,7 @@ use Tests\TestCases\PublicTestCase;
  */
 #[Group('MDT')]
 #[Group('MappingVersion')]
+#[Group('CombatLog')]
 final class MappingServiceMdtChangesPendingTest extends PublicTestCase
 {
     #[Test]
@@ -133,6 +135,40 @@ final class MappingServiceMdtChangesPendingTest extends PublicTestCase
         } finally {
             $newMappingVersion?->delete();
             $pendingMappingVersion?->delete();
+        }
+    }
+
+    #[Test]
+    public function createMappingVersionFromChallengeMode_givenCombatLog_marksTheNewMappingVersionAsPending(): void
+    {
+        // Arrange - a combat-log-derived mapping version starts on dungeon_id -1 but is attached to the real
+        // dungeon as soon as the log reveals it, so it becomes a regular mapping version of that dungeon.
+        $service = $this->app->make(CombatLogMappingVersionServiceInterface::class);
+
+        /** @var Dungeon $dungeon */
+        $dungeon = Dungeon::query()->where('challenge_mode_id', 209)->firstOrFail();
+        /** @var GameVersion $retailGameVersion */
+        $retailGameVersion = GameVersion::query()->firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+
+        // A single CHALLENGE_MODE_START line is enough to reach the "dungeon found" branch.
+        $combatLogPath = tempnam(sys_get_temp_dir(), 'combatlog_test_');
+        file_put_contents($combatLogPath, "5/15 21:20:10.941  CHALLENGE_MODE_START,\"The Arcway\",1841,209,2,[9]\n");
+
+        $newMappingVersion = null;
+
+        try {
+            // Act
+            $newMappingVersion = $service->createMappingVersionFromChallengeMode($combatLogPath, $retailGameVersion);
+
+            // Assert
+            $this->assertNotNull($newMappingVersion);
+            $this->assertSame($dungeon->id, $newMappingVersion->dungeon_id);
+            $this->assertTrue($newMappingVersion->mdt_changes_pending);
+        } finally {
+            if (file_exists($combatLogPath)) {
+                unlink($combatLogPath);
+            }
+            $newMappingVersion?->delete();
         }
     }
 
