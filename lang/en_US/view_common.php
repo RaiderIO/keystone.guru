@@ -622,6 +622,7 @@ return [
             'share'                            => 'Share',
             'publish'                          => 'Publish',
             'review_route_settings'            => 'Review your %s before publishing your route',
+            'upgrade_draft_cannot_publish'     => 'This is an upgrade draft, so it cannot be shared on its own. Apply it to the route it upgrades to publish your changes - that route keeps its link, its ratings and its favourites.',
             'route_settings'                   => 'route settings',
             'link'                             => 'Link',
             'short_link'                       => 'Short link',

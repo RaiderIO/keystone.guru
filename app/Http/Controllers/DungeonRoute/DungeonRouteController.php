@@ -17,7 +17,8 @@ use App\Models\GameServerRegion;
 use App\Models\User;
 use App\Models\UserReport;
 use App\Service\DungeonRoute\DungeonRouteSaveServiceInterface;
-use App\Service\DungeonRoute\DungeonRouteServiceInterface;
+use App\Service\DungeonRoute\DungeonRouteUpgradeDraftServiceInterface;
+use App\Service\DungeonRoute\Exceptions\UpgradeDraftException;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Floor\FloorResolutionServiceInterface;
@@ -27,6 +28,7 @@ use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -38,6 +40,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Psr\SimpleCache\InvalidArgumentException;
 use Session;
+use Throwable;
 
 class DungeonRouteController extends Controller
 {
@@ -627,19 +630,141 @@ class DungeonRouteController extends Controller
      * @throws InvalidArgumentException
      */
     public function upgrade(
-        DungeonRouteServiceInterface $dungeonRouteService,
-        Dungeon                      $dungeon,
-        DungeonRoute                 $dungeonroute,
-        ?string                      $title,
+        DungeonRouteUpgradeDraftServiceInterface $dungeonRouteUpgradeDraftService,
+        Dungeon                                  $dungeon,
+        DungeonRoute                             $dungeonroute,
+        ?string                                  $title,
     ): RedirectResponse {
         Gate::authorize('edit', $dungeonroute);
 
-        $dungeonRouteService->upgradeMappingVersion($dungeonroute);
+        // Upgrading no longer mutates the live route - the author repairs a draft while the original
+        // keeps serving its old, intact content
+        try {
+            $draft = $dungeonRouteUpgradeDraftService->findOrCreateDraft($dungeonroute);
+        } catch (UpgradeDraftException $upgradeDraftException) {
+            // Nothing in the UI ever links here for a draft or a sandbox route - findOrCreateDraft()
+            // refuses both - but the URL itself is not gated, so a stale link or a direct hit still
+            // needs a graceful landing rather than a raw 500
+            return redirect()->route('dungeonroute.edit', [
+                'dungeon'      => $dungeonroute->dungeon,
+                'dungeonroute' => $dungeonroute,
+                'title'        => $dungeonroute->getTitleSlug(),
+            ])->with('warning', $upgradeDraftException->getMessage());
+        }
 
         return redirect()->route('dungeonroute.edit', [
-            'dungeon'      => $dungeonroute->dungeon,
-            'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
-        ]);
+            'dungeon'      => $draft->dungeon,
+            'dungeonroute' => $draft,
+            'title'        => $draft->getTitleSlug(),
+        ])->with('status', __('controller.dungeonroute.flash.upgrade_draft_created'));
+    }
+
+    /**
+     * Applies an upgrade draft onto the route it is a draft of, replacing that route's contents and
+     * settings while preserving its identity.
+     *
+     * @param DungeonRoute $dungeonroute The DRAFT, not the route being replaced.
+     *
+     * @throws AuthorizationException
+     * @throws Throwable
+     */
+    public function applyUpgrade(
+        Request                                  $request,
+        DungeonRouteUpgradeDraftServiceInterface $dungeonRouteUpgradeDraftService,
+        Dungeon                                  $dungeon,
+        DungeonRoute                             $dungeonroute,
+        ?string                                  $title,
+    ): RedirectResponse|JsonResponse {
+        Gate::authorize('applyUpgrade', $dungeonroute);
+
+        try {
+            $original = $dungeonRouteUpgradeDraftService->apply($dungeonroute);
+        } catch (UpgradeDraftException $upgradeDraftException) {
+            // Apply can still fail here even though Gate::authorize() already checked the original
+            // exists - either it was deleted in the race window between that check and this request's
+            // transaction, or the draft fails the original's publish invariant (missing required
+            // enemies the new mapping version added). Both are user-facing, not server errors: send
+            // the author back to the draft they were editing, which - unlike the original - is
+            // guaranteed to still exist.
+            return $this->redirectAfterUpgradeDraftAction(
+                $request,
+                route('dungeonroute.edit', [
+                    'dungeon'      => $dungeonroute->dungeon,
+                    'dungeonroute' => $dungeonroute,
+                    'title'        => $dungeonroute->getTitleSlug(),
+                ]),
+                $upgradeDraftException->getMessage(),
+                warning: true,
+            );
+        }
+
+        return $this->redirectAfterUpgradeDraftAction(
+            $request,
+            route('dungeonroute.edit', [
+                'dungeon'      => $original->dungeon,
+                'dungeonroute' => $original,
+                'title'        => $original->getTitleSlug(),
+            ]),
+            __('controller.dungeonroute.flash.upgrade_applied'),
+        );
+    }
+
+    /**
+     * Discards an upgrade draft, leaving the route it is a draft of untouched.
+     *
+     * @param DungeonRoute $dungeonroute The DRAFT, not the route it upgrades.
+     *
+     * @throws AuthorizationException
+     * @throws Throwable
+     */
+    public function discardUpgrade(
+        Request                                  $request,
+        DungeonRouteUpgradeDraftServiceInterface $dungeonRouteUpgradeDraftService,
+        Dungeon                                  $dungeon,
+        DungeonRoute                             $dungeonroute,
+        ?string                                  $title,
+    ): RedirectResponse|JsonResponse {
+        Gate::authorize('discardUpgrade', $dungeonroute);
+
+        $original = $dungeonroute->upgradeOfDungeonRoute;
+
+        $dungeonRouteUpgradeDraftService->discard($dungeonroute);
+
+        // The original can be gone if it was deleted while the draft was open - deleting an original
+        // deletes its draft, but the model handed to this request was resolved before that
+        $redirectUrl = $original === null
+            ? route('profile.routes')
+            : route('dungeonroute.edit', [
+                'dungeon'      => $original->dungeon,
+                'dungeonroute' => $original,
+                'title'        => $original->getTitleSlug(),
+            ]);
+
+        return $this->redirectAfterUpgradeDraftAction(
+            $request,
+            $redirectUrl,
+            __('controller.dungeonroute.flash.upgrade_discarded'),
+        );
+    }
+
+    /**
+     * The apply/discard buttons post over ajax, so hand those requests the redirect target as JSON
+     * rather than a 302 the caller cannot follow. The client always follows redirect_url on success -
+     * $warning routes the message through session('warning') (styled as an alert-warning) instead of
+     * session('status') (alert-success), so a rejected Apply still lands the author on a page that
+     * explains why, rather than a raw exception.
+     */
+    private function redirectAfterUpgradeDraftAction(Request $request, string $redirectUrl, string $status, bool $warning = false): RedirectResponse|JsonResponse
+    {
+        $sessionKey = $warning ? 'warning' : 'status';
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'redirect_url' => $redirectUrl,
+                $sessionKey    => $status,
+            ]);
+        }
+
+        return redirect()->to($redirectUrl)->with($sessionKey, $status);
     }
 }

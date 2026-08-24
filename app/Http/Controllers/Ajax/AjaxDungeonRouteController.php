@@ -93,6 +93,7 @@ class AjaxDungeonRouteController extends Controller
             'routeattributes',
             'ratings',
             'metricAggregations',
+            'upgradeDraft',
             $tagsRelationshipName,
         ];
 

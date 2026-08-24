@@ -95,6 +95,9 @@ return [
             'route_cloned_successfully' => 'Route cloned successfully',
             'route_updated'             => 'Route updated',
             'route_created'             => 'Route created',
+            'upgrade_draft_created'     => 'An upgrade draft was created. Repair it here - the original route keeps serving its old content until you apply your changes.',
+            'upgrade_applied'           => 'The upgrade was applied to your route.',
+            'upgrade_discarded'         => 'The upgrade draft was discarded.',
         ],
     ],
     'dungeonroutediscover' => [

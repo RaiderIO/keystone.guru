@@ -308,6 +308,14 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
                     continue;
                 }
 
+                // An upgrade draft may never be published on its own; deleting the schedule rather than
+                // leaving it makes this visible instead of silently "succeeding" every run
+                if ($dungeonRoute->is_upgrade_draft) {
+                    $this->log->publishScheduledDungeonRouteSkippedUpgradeDraft($dungeonRoute->id, $scheduledPublish->id);
+                    $scheduledPublish->delete();
+                    continue;
+                }
+
                 if (!$dungeonRoute->hasKilledAllRequiredEnemies()) {
                     $this->log->publishScheduledDungeonRouteSkippedRequiredEnemiesNotKilled($dungeonRoute->id, $scheduledPublish->id);
                     $scheduledPublish->delete();
