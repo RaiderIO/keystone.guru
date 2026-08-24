@@ -26,6 +26,7 @@ final class AdminToolsBreadcrumbsTest extends TestCase
             'thumbnails regenerate'                        => ['admin.tools.thumbnails.regenerate'],
             'combatlog regenerate'                         => ['admin.tools.combatlog.regenerate'],
             'combatlog criteria'                           => ['admin.tools.combatlog.criteria'],
+            'combatlog route coverage'                     => ['admin.tools.combatlog.route.coverage'],
             'dungeonroute view'                            => ['admin.tools.dungeonroute.view'],
             'dungeonroute view contents'                   => ['admin.tools.dungeonroute.viewcontents'],
             'dungeonroute mapping version usage'           => ['admin.tools.dungeonroute.mappingversions'],
