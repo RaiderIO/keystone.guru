@@ -269,6 +269,24 @@ Read the output for each dungeon and handle:
   and report it upstream; `--force` is only for a genuine wholesale remap. Nothing was written when
   this fires: no mapping version is created and `mdt_mapping_hash` is untouched, so the dungeon keeps
   its previous mapping and the next run retries.
+- **`MDTMappingPendingAcceptanceException` / "awaiting MDT acceptance of our own changes"**: the
+  dungeon's current mapping version is a correction *we* made and submitted upstream
+  (`mdt_changes_pending`, #4280), and MDT's mapping has since changed. The likeliest reason is that
+  MDT accepted our correction — in which case importing it as a new mapping version would take the
+  dungeon from v7 (MDT) to v8 (ours) to v9 (MDT, identical to v8) and invalidate every route on v8
+  for nothing (#4281). Decide which case it is:
+  - **MDT accepted our changes** (that dungeon's entries in `MDTNpcMappingCoverageTest` /
+    `CoordinatesServiceTest`'s `EXCLUDED_DUNGEON_KEYS` can now come out, and those tests pass with
+    them removed): run
+    `docker compose exec -T app php artisan mdt:acceptmapping <dungeonKey> retail`. That stamps
+    MDT's mapping hash and addon version onto the existing mapping version and clears the flag —
+    no new mapping version, no upgrade notice, and MDT string imports resolve onto it again.
+    Remove the dungeon from those two exclusion lists in the same commit.
+  - **MDT shipped changes of their own on top of ours**: re-run the import with `--force`, which
+    creates a real new mapping version as before. Say so in the MR — the routes on the pending
+    mapping version do get an upgrade notice, and that is correct here.
+
+  Nothing is written when this fires, so the dungeon keeps its mapping either way.
 - **The "N MDT map POI(s) … have no map icon type and were NOT imported" table** at the end of
   the command: MDT draws these, we do not, and the map is missing them. This is the check that
   catches a *known* POI type we simply have no icon for — the `Found new type` exception above

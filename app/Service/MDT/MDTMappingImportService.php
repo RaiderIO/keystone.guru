@@ -32,6 +32,7 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Mapping\MappingServiceInterface;
 use App\Service\MDT\Exceptions\MDTMappingImportPartialFailureException;
 use App\Service\MDT\Exceptions\MDTMappingNpcSetReplacedException;
+use App\Service\MDT\Exceptions\MDTMappingPendingAcceptanceException;
 use App\Service\MDT\Logging\MDTMappingImportServiceLoggingInterface;
 use Exception;
 use Illuminate\Database\UniqueConstraintViolationException;
@@ -63,6 +64,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     public function __construct(
         private readonly CacheServiceInterface                   $cacheService,
         private readonly CoordinatesServiceInterface             $coordinatesService,
+        private readonly MDTAddonVersionServiceInterface         $mdtAddonVersionService,
         private readonly MDTMappingImportServiceLoggingInterface $log,
     ) {
     }
@@ -90,6 +92,16 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
         if ($forceImport || $currentMappingVersion === null || $currentMappingVersion->mdt_mapping_hash !== $latestMdtMappingHash) {
             $this->log->importMappingVersionFromMDTMappingChanged($currentMappingVersion?->mdt_mapping_hash, $latestMdtMappingHash);
+
+            // The current mapping version is one of our own corrections awaiting MDT acceptance, and MDT's
+            // mapping has changed - most likely because they accepted it. Creating a new mapping version here
+            // would bump v7 (MDT) -> v8 (ours) -> v9 (MDT, identical to v8) and invalidate every route on v8
+            // for no actual mapping change, so accepting onto v8 is left to mdt:acceptmapping (#4281).
+            if (!$forceImport && ($currentMappingVersion?->mdt_changes_pending ?? false)) { // @phpstan-ignore nullsafe.neverNull
+                $this->log->importMappingVersionFromMDTPendingAcceptance($dungeon->key, $currentMappingVersion->version);
+
+                throw new MDTMappingPendingAcceptanceException($dungeon->key, $currentMappingVersion->version);
+            }
 
             // Before anything is created: refuse outright if MDT is handing us a different dungeon's NPCs
             // (#3995). Checking here rather than mid-import means no mapping version is created and deleted
@@ -162,6 +174,69 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
             return $currentMappingVersion;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws Exception
+     */
+    public function acceptMDTMappingForPendingMappingVersion(
+        Dungeon      $dungeon,
+        ?GameVersion $gameVersion = null,
+        bool         $force = false,
+    ): MappingVersion {
+        $gameVersion ??= GameVersion::getDefaultGameVersion();
+
+        $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
+
+        if ($currentMappingVersion === null) {
+            throw new Exception(sprintf('%s has no mapping version for game version %s', $dungeon->key, $gameVersion->key));
+        }
+
+        if (!$currentMappingVersion->mdt_changes_pending) {
+            throw new Exception(sprintf(
+                '%s\'s current mapping version (v%d) is not awaiting MDT acceptance - there is nothing to accept.',
+                $dungeon->key,
+                $currentMappingVersion->version,
+            ));
+        }
+
+        $latestMdtMappingHash = $this->getMDTMappingHash($dungeon);
+
+        // An unchanged hash means MDT has shipped nothing since this mapping version was made, so it cannot
+        // have accepted our changes yet - clearing the flag would mark a mapping that still diverges as
+        // MDT-matching, and MDT strings would start importing onto it (#4280). --force is the deliberate
+        // override for the case where the operator knows better (e.g. MDT changed something the hash does
+        // not cover).
+        if (!$force && $currentMappingVersion->mdt_mapping_hash === $latestMdtMappingHash) {
+            throw new Exception(sprintf(
+                'MDT\'s mapping for %s has not changed since v%d was created (hash %s), so it cannot have accepted ' .
+                'our changes yet. Re-run with --force to accept anyway.',
+                $dungeon->key,
+                $currentMappingVersion->version,
+                $latestMdtMappingHash,
+            ));
+        }
+
+        $this->log->acceptMDTMappingForPendingMappingVersion(
+            $dungeon->key,
+            $currentMappingVersion->version,
+            $currentMappingVersion->mdt_mapping_hash,
+            $latestMdtMappingHash,
+        );
+
+        // Note that MDT's mapping is deliberately NOT re-imported into it: the whole point is that the two
+        // now agree, and a re-import would drop anything of ours MDT does not carry (hand-authored packs,
+        // enemy forces checkpoints). Verification that they really do agree is the operator's, via the MDT
+        // cross-check tests (MDTNpcMappingCoverageTest, CoordinatesServiceTest).
+        $currentMappingVersion->update([
+            'mdt_mapping_hash'    => $latestMdtMappingHash,
+            'mdt_addon_version'   => $this->mdtAddonVersionService->getCurrentAddonVersion(),
+            'mdt_changes_pending' => false,
+        ]);
+
+        return $currentMappingVersion;
     }
 
     /**

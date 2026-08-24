@@ -20,6 +20,24 @@ interface MDTMappingImportServiceInterface
         bool                    $forceImport = false,
     ): MappingVersion;
 
+    /**
+     * Accepts MDT's current mapping onto the dungeon's pending mapping version (#4281): stamps MDT's mapping
+     * hash and addon version onto it and clears `mdt_changes_pending`, so MDT string imports resolve onto it
+     * again - without creating a new mapping version, which would invalidate every route on it for a mapping
+     * change that already happened. Nothing is re-imported; the two mappings are expected to agree already.
+     *
+     * @param bool $force Accept even though MDT's mapping hash has not changed since the pending mapping
+     *                    version was created (i.e. MDT demonstrably has not shipped our change yet).
+     *
+     * @throws Exception When the dungeon has no mapping version for the game version, its current mapping
+     *                   version is not pending, or MDT's mapping is unchanged and $force is false.
+     */
+    public function acceptMDTMappingForPendingMappingVersion(
+        Dungeon      $dungeon,
+        ?GameVersion $gameVersion = null,
+        bool         $force = false,
+    ): MappingVersion;
+
     public function getMDTMappingHash(Dungeon $dungeon): string;
 
     /**
