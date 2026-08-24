@@ -14,6 +14,8 @@ use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
+use Imagick;
+use ImagickDraw;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use ReflectionMethod;
@@ -172,6 +174,62 @@ final class ThumbnailServiceTest extends PublicTestCase
             $this->assertFalse($result);
         } finally {
             $this->app['env'] = $originalEnv;
+        }
+    }
+
+    #[Test]
+    public function isBlankImage_givenUniformColourImage_returnsTrue(): void
+    {
+        // Arrange - a solid-colour render is exactly what #4103's blank thumbnails looked like
+        $service = $this->buildService($this->createMockPublic(ThumbnailServiceLoggingInterface::class));
+        $method  = new ReflectionMethod($service, 'isBlankImage');
+
+        $tmpFile = sprintf('%s/%s.png', sys_get_temp_dir(), uniqid('blank_', true));
+        $image   = new Imagick();
+        $image->newImage(10, 10, 'white');
+        $image->setImageFormat('png');
+        $image->writeImage($tmpFile);
+        $image->clear();
+        $image->destroy();
+
+        try {
+            // Act
+            $result = $method->invoke($service, $tmpFile);
+
+            // Assert
+            $this->assertTrue($result);
+        } finally {
+            unlink($tmpFile);
+        }
+    }
+
+    #[Test]
+    public function isBlankImage_givenImageWithColourVariation_returnsFalse(): void
+    {
+        // Arrange - a legitimate map render always has colour variation somewhere
+        $service = $this->buildService($this->createMockPublic(ThumbnailServiceLoggingInterface::class));
+        $method  = new ReflectionMethod($service, 'isBlankImage');
+
+        $tmpFile = sprintf('%s/%s.png', sys_get_temp_dir(), uniqid('notblank_', true));
+        $image   = new Imagick();
+        $image->newImage(10, 10, 'white');
+        $draw = new ImagickDraw();
+        $draw->setFillColor('blue');
+        $draw->rectangle(0, 0, 4, 4);
+        $image->drawImage($draw);
+        $image->setImageFormat('png');
+        $image->writeImage($tmpFile);
+        $image->clear();
+        $image->destroy();
+
+        try {
+            // Act
+            $result = $method->invoke($service, $tmpFile);
+
+            // Assert
+            $this->assertFalse($result);
+        } finally {
+            unlink($tmpFile);
         }
     }
 

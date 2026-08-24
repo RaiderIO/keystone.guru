@@ -47,6 +47,8 @@ interface ThumbnailServiceLoggingInterface
 
     public function doCreateThumbnailRescale(string $tmpFile, string $target): void;
 
+    public function doCreateThumbnailBlankImageRejected(string $tmpFile, string $previewUrl, string $variant): void;
+
     public function doCreateThumbnailRemovedOldPngFile(): void;
 
     public function doCreateThumbnailException(Throwable|Exception $e): void;

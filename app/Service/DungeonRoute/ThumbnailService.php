@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Imagick;
 use Intervention\Image\Drivers\Imagick\Driver as ImagickDriver;
 use Intervention\Image\ImageManager;
 use Random\RandomException;
@@ -189,14 +190,15 @@ class ThumbnailService implements ThumbnailServiceInterface
             if ($process->isSuccessful()) {
                 if (!file_exists($tmpFile)) {
                     $this->log->doCreateThumbnailFileNotFoundDidPuppeteerDownloadChromium($tmpFile);
+                } elseif ($this->isBlankImage($tmpFile)) {
+                    // A uniform single-colour render is never a legitimate thumbnail - treat it as a
+                    // failed attempt (thumbnail_updated_at is not touched below) so the existing
+                    // retry/max_attempts path in ProcessRouteFloorThumbnail applies instead of the route
+                    // silently looking up to date forever. See #4103.
+                    $this->log->doCreateThumbnailBlankImageRejected($tmpFile, $previewUrl, $variant->value);
+                    unlink($tmpFile);
                 } else {
                     try {
-                        // We've updated the thumbnail; make sure the route is updated, so it doesn't get updated anymore
-                        $dungeonRoute->thumbnail_updated_at = Carbon::now();
-                        // Do not update the timestamps of the route! Otherwise, we'll just keep on updating the timestamp
-                        $dungeonRoute->timestamps = false;
-                        $dungeonRoute->save();
-
                         // Rescale it
                         $this->log->doCreateThumbnailRescale($tmpFile, $tmpFileAfterResize);
                         new ImageManager(new ImagickDriver())
@@ -224,6 +226,15 @@ class ThumbnailService implements ThumbnailServiceInterface
                             $disk,
                             $variant,
                         );
+
+                        // We've updated the thumbnail; make sure the route is updated, so it doesn't get
+                        // updated anymore. Stamped only now that the render has passed the blank-image
+                        // check and been rescaled/attached - an exception above leaves
+                        // thumbnail_updated_at untouched so the route stays eligible for retry. See #4103.
+                        $dungeonRoute->thumbnail_updated_at = Carbon::now();
+                        // Do not update the timestamps of the route! Otherwise, we'll just keep on updating the timestamp
+                        $dungeonRoute->timestamps = false;
+                        $dungeonRoute->save();
                     } catch (Throwable $e) {
                         $this->log->doCreateThumbnailException($e);
                     } finally {
@@ -257,6 +268,31 @@ class ThumbnailService implements ThumbnailServiceInterface
         }
 
         return $result;
+    }
+
+    /**
+     * A uniform single-colour image (every pixel the same RGB value) is never a legitimate map
+     * render - the map background alone has enough variation to rule that out. Checked per-channel
+     * because Imagick::CHANNEL_ALL's range spans the different channel values of a single flat
+     * colour (e.g. solid red has R=max, G=B=0), which would never look "flat" as a combined range.
+     */
+    private function isBlankImage(string $filePath): bool
+    {
+        $image = new Imagick($filePath);
+
+        try {
+            foreach ([Imagick::CHANNEL_RED, Imagick::CHANNEL_GREEN, Imagick::CHANNEL_BLUE] as $channel) {
+                $range = $image->getImageChannelRange($channel);
+                if ($range['minima'] !== $range['maxima']) {
+                    return false;
+                }
+            }
+
+            return true;
+        } finally {
+            $image->clear();
+            $image->destroy();
+        }
     }
 
     /**
