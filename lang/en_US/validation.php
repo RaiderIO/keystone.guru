@@ -38,6 +38,11 @@ return [
         'creator_search' => [
             'max' => 'A creator name is at most :max characters, so a longer search cannot match anyone.',
         ],
+        'autoroutecoverage_days' => [
+            'integer' => 'The amount of days must be a whole number.',
+            'min'     => 'The overview must cover at least :min day.',
+            'max'     => 'The overview may cover at most :max days.',
+        ],
     ],
     'date'              => 'The :attribute is not a valid date.',
     'date_equals'       => 'The :attribute must be a date equal to :date.',
