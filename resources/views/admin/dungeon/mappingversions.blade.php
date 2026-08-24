@@ -71,7 +71,8 @@ $gameVersionsSelect = $allGameVersions
         <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header.id') }}</th>
         <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header.game_version') }}</th>
         <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header.version') }}</th>
-        <th width="40%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header.created_at') }}</th>
+        <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header.mdt_changes_pending') }}</th>
+        <th width="30%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header.created_at') }}</th>
         <th width="20%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header.actions') }}</th>
     </tr>
     </thead>
@@ -94,6 +95,14 @@ $gameVersionsSelect = $allGameVersions
                      style="width: 50px;"/>
             </td>
             <td>{{ $mappingVersion->version }}</td>
+            <td data-order="{{ $mappingVersion->mdt_changes_pending ? 1 : 0 }}">
+                @if($mappingVersion->mdt_changes_pending)
+                    <i class="fas fa-exclamation-triangle text-warning" data-bs-toggle="tooltip"
+                       title="{{ __('view_admin.dungeon.edit.mapping_versions.mdt_changes_pending_tooltip') }}"></i>
+                @else
+                    <i class="fas fa-check-circle text-success"></i>
+                @endif
+            </td>
             <td>{{ $mappingVersion->created_at->toDateTimeString() }}</td>
             <td>
                 <form method="POST"

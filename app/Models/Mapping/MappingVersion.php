@@ -43,6 +43,7 @@ use Override;
  * @property int         $timer_max_seconds               The maximum timer (in seconds) that you have to complete the dungeon.
  * @property string|null $mdt_mapping_hash
  * @property int|null    $mdt_addon_version               The MDT addon version this mapping version was imported from (e.g. 6120 for MDT v6.1.20).
+ * @property bool        $mdt_changes_pending             True if this mapping version diverges from what MDT ships (created by us, not imported from MDT).
  * @property bool        $facade_enabled                  True if this mapping version uses facades, false if it does not.
  *
  * @property Carbon $updated_at
@@ -84,6 +85,7 @@ class MappingVersion extends Model
         'facade_enabled',
         'mdt_mapping_hash',
         'mdt_addon_version',
+        'mdt_changes_pending',
     ];
 
     protected $fillable = [
@@ -98,6 +100,7 @@ class MappingVersion extends Model
         'facade_enabled',
         'mdt_mapping_hash',
         'mdt_addon_version',
+        'mdt_changes_pending',
         'updated_at',
         'created_at',
     ];
@@ -130,6 +133,7 @@ class MappingVersion extends Model
             'timer_max_seconds'               => 'integer',
             'facade_enabled'                  => 'integer',
             'mdt_addon_version'               => 'integer',
+            'mdt_changes_pending'             => 'boolean',
         ];
     }
 
