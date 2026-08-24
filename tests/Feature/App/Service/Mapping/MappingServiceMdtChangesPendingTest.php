@@ -22,6 +22,32 @@ use Tests\TestCases\PublicTestCase;
 final class MappingServiceMdtChangesPendingTest extends PublicTestCase
 {
     #[Test]
+    public function mappingVersion_givenNoExplicitMdtChangesPendingOnInsert_defaultsToPending(): void
+    {
+        // Arrange - the column default is the safety net for any creation path (present or future) that
+        // forgets to set the flag explicitly; not-from-MDT/"pending" must be the assumption, not "false"
+        // (Wotuu, #4282 review).
+        $dungeon     = $this->getDungeon();
+        $gameVersion = $this->getGameVersionOf($dungeon);
+
+        $newMappingVersion = null;
+
+        try {
+            // Act - deliberately omit mdt_changes_pending
+            $newMappingVersion = MappingVersion::create([
+                'dungeon_id'      => $dungeon->id,
+                'game_version_id' => $gameVersion->id,
+                'version'         => 999999,
+            ]);
+
+            // Assert
+            $this->assertTrue($newMappingVersion->fresh()->mdt_changes_pending);
+        } finally {
+            $newMappingVersion?->delete();
+        }
+    }
+
+    #[Test]
     public function createNewMappingVersionFromPreviousMapping_givenMdtDerivedPredecessor_marksTheNewMappingVersionAsPending(): void
     {
         // Arrange
