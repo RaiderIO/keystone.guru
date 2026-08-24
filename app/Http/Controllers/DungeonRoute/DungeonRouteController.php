@@ -20,6 +20,7 @@ use App\Service\DungeonRoute\DungeonRouteSaveServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
+use App\Service\Floor\FloorResolutionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
@@ -55,15 +56,13 @@ class DungeonRouteController extends Controller
      * @throws InvalidArgumentException
      */
     public function view(
-        DungeonRouteBaseUrlFormRequest $request,
-        Dungeon                        $dungeon,
-        DungeonRoute                   $dungeonroute,
-        ?string                        $title = null,
+        DungeonRouteBaseUrlFormRequest  $request,
+        FloorResolutionServiceInterface $floorResolutionService,
+        Dungeon                         $dungeon,
+        DungeonRoute                    $dungeonroute,
+        ?string                         $title = null,
     ): RedirectResponse {
-        /** @var Floor|null $defaultFloor */
-        $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            ->defaultOrFacade($dungeonroute->mappingVersion)
-            ->first();
+        $defaultFloor = $floorResolutionService->resolveDefaultFloor($dungeonroute->dungeon, $dungeonroute->mappingVersion);
 
         return redirect()->route('dungeonroute.view.floor', [
             'dungeon'      => $dungeonroute->dungeon,
@@ -79,19 +78,16 @@ class DungeonRouteController extends Controller
      * @throws AuthorizationException
      */
     public function viewFloor(
-        DungeonRouteBaseUrlFormRequest $request,
-        MapContextServiceInterface     $mapContextService,
-        ThumbnailServiceInterface      $thumbnailService,
-        Dungeon                        $dungeon,
-        DungeonRoute                   $dungeonroute,
-        string                         $title,
-        string                         $floorIndex,
+        DungeonRouteBaseUrlFormRequest  $request,
+        MapContextServiceInterface      $mapContextService,
+        ThumbnailServiceInterface       $thumbnailService,
+        FloorResolutionServiceInterface $floorResolutionService,
+        Dungeon                         $dungeon,
+        DungeonRoute                    $dungeonroute,
+        string                          $title,
+        string                          $floorIndex,
     ) {
         Gate::authorize('view', $dungeonroute);
-
-        if (!is_numeric($floorIndex)) {
-            $floorIndex = '1';
-        }
 
         if ($dungeonroute->getTitleSlug() !== $title) {
             return redirect()->route('dungeonroute.view', [
@@ -114,32 +110,17 @@ class DungeonRouteController extends Controller
 
         $dungeonroute->trackPageView(DungeonRoute::PAGE_VIEW_SOURCE_VIEW_ROUTE);
 
-        /** @var Floor|null $floor */
-        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            ->indexOrFacade($dungeonroute->mappingVersion, (int)$floorIndex)
-            ->first();
+        $resolvedFloor = $floorResolutionService->resolveRequestedFloor($dungeonroute->dungeon, $dungeonroute->mappingVersion, $floorIndex);
 
-        if ($floor === null) {
-            /** @var Floor|null $defaultFloor */
-            $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-                ->defaultOrFacade($dungeonroute->mappingVersion)
-                ->first();
-
+        if (!$resolvedFloor->isCanonical) {
             return redirect()->route('dungeonroute.view.floor', [
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
-                'floorIndex'   => $defaultFloor->index,
+                'floorIndex'   => $resolvedFloor->floor->index,
             ] + $request->validated());
         } else {
-            if ($floor->index !== (int)$floorIndex) {
-                return redirect()->route('dungeonroute.view.floor', [
-                    'dungeon'      => $dungeonroute->dungeon,
-                    'dungeonroute' => $dungeonroute,
-                    'title'        => $dungeonroute->getTitleSlug(),
-                    'floorIndex'   => $floor->index,
-                ] + $request->validated());
-            }
+            $floor = $resolvedFloor->floor;
 
             // If we viewed a route, then there should also be a thumbnail for it
             $thumbnailService->queueThumbnailRefreshIfMissing(collect([$dungeonroute]));
@@ -161,15 +142,13 @@ class DungeonRouteController extends Controller
      * @throws InvalidArgumentException
      */
     public function present(
-        DungeonRouteBaseUrlFormRequest $request,
-        Dungeon                        $dungeon,
-        DungeonRoute                   $dungeonroute,
-        ?string                        $title = null,
+        DungeonRouteBaseUrlFormRequest  $request,
+        FloorResolutionServiceInterface $floorResolutionService,
+        Dungeon                         $dungeon,
+        DungeonRoute                    $dungeonroute,
+        ?string                         $title = null,
     ): RedirectResponse {
-        /** @var Floor|null $defaultFloor */
-        $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            ->defaultOrFacade($dungeonroute->mappingVersion)
-            ->first();
+        $defaultFloor = $floorResolutionService->resolveDefaultFloor($dungeonroute->dungeon, $dungeonroute->mappingVersion);
 
         return redirect()->route('dungeonroute.present.floor', [
             'dungeon'      => $dungeonroute->dungeon,
@@ -185,12 +164,13 @@ class DungeonRouteController extends Controller
      * @throws AuthorizationException
      */
     public function presentFloor(
-        DungeonRouteBaseUrlFormRequest $request,
-        MapContextServiceInterface     $mapContextService,
-        Dungeon                        $dungeon,
-        DungeonRoute                   $dungeonroute,
-        string                         $title,
-        string                         $floorIndex,
+        DungeonRouteBaseUrlFormRequest  $request,
+        MapContextServiceInterface      $mapContextService,
+        FloorResolutionServiceInterface $floorResolutionService,
+        Dungeon                         $dungeon,
+        DungeonRoute                    $dungeonroute,
+        string                          $title,
+        string                          $floorIndex,
     ) {
         Gate::authorize('present', $dungeonroute);
 
@@ -203,10 +183,6 @@ class DungeonRouteController extends Controller
 
         $dungeonroute->setRelation('challengeModeRun', $challengeModeRun);
 
-        if (!is_numeric($floorIndex)) {
-            $floorIndex = '1';
-        }
-
         if ($dungeonroute->getTitleSlug() !== $title) {
             return redirect()->route('dungeonroute.present', [
                 'dungeon'      => $dungeon,
@@ -217,38 +193,21 @@ class DungeonRouteController extends Controller
 
         $dungeonroute->trackPageView(DungeonRoute::PAGE_VIEW_SOURCE_PRESENT_ROUTE);
 
-        /** @var Floor|null $floor */
-        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            ->indexOrFacade($dungeonroute->mappingVersion, (int)$floorIndex)
-            ->first();
+        $resolvedFloor = $floorResolutionService->resolveRequestedFloor($dungeonroute->dungeon, $dungeonroute->mappingVersion, $floorIndex);
 
-        if ($floor === null) {
-            /** @var Floor|null $defaultFloor */
-            $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-                ->defaultOrFacade($dungeonroute->mappingVersion)
-                ->first();
-
+        if (!$resolvedFloor->isCanonical) {
             return redirect()->route('dungeonroute.present.floor', [
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
-                'floorIndex'   => $defaultFloor->index,
+                'floorIndex'   => $resolvedFloor->floor->index,
             ] + $request->validated());
         } else {
-            if ($floor->index !== (int)$floorIndex) {
-                return redirect()->route('dungeonroute.present.floor', [
-                    'dungeon'      => $dungeonroute->dungeon,
-                    'dungeonroute' => $dungeonroute,
-                    'title'        => $dungeonroute->getTitleSlug(),
-                    'floorIndex'   => $floor->index,
-                ] + $request->validated());
-            }
-
             return view('dungeonroute.present', [
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
-                'floor'        => $floor,
+                'floor'        => $resolvedFloor->floor,
                 'parameters'   => $request->validated(),
                 'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonroute, User::getCurrentUserMapFacadeStyle()),
             ]);
@@ -431,15 +390,13 @@ class DungeonRouteController extends Controller
      * @throws InvalidArgumentException
      */
     public function edit(
-        DungeonRouteBaseUrlFormRequest $request,
-        Dungeon                        $dungeon,
-        DungeonRoute                   $dungeonroute,
-        ?string                        $title = null,
+        DungeonRouteBaseUrlFormRequest  $request,
+        FloorResolutionServiceInterface $floorResolutionService,
+        Dungeon                         $dungeon,
+        DungeonRoute                    $dungeonroute,
+        ?string                         $title = null,
     ): RedirectResponse {
-        /** @var Floor|null $defaultFloor */
-        $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            ->defaultOrFacade($dungeonroute->mappingVersion)
-            ->first();
+        $defaultFloor = $floorResolutionService->resolveDefaultFloor($dungeonroute->dungeon, $dungeonroute->mappingVersion);
 
         return redirect()->route('dungeonroute.edit.floor', [
             'dungeon'      => $dungeonroute->dungeon,
@@ -455,13 +412,14 @@ class DungeonRouteController extends Controller
      * @throws AuthorizationException
      */
     public function editFloor(
-        MapContextServiceInterface     $mapContextService,
-        SeasonServiceInterface         $seasonService,
-        DungeonRouteBaseUrlFormRequest $request,
-        Dungeon                        $dungeon,
-        DungeonRoute                   $dungeonroute,
-        ?string                        $title,
-        ?string                        $floorIndex,
+        MapContextServiceInterface      $mapContextService,
+        SeasonServiceInterface          $seasonService,
+        DungeonRouteBaseUrlFormRequest  $request,
+        FloorResolutionServiceInterface $floorResolutionService,
+        Dungeon                         $dungeon,
+        DungeonRoute                    $dungeonroute,
+        ?string                         $title,
+        ?string                         $floorIndex,
     ) {
         Gate::authorize('edit', $dungeonroute);
 
@@ -479,32 +437,17 @@ class DungeonRouteController extends Controller
             ] + $request->validated());
         }
 
-        /** @var Floor|null $floor */
-        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            ->indexOrFacade($dungeonroute->mappingVersion, (int)$floorIndex)
-            ->first();
+        $resolvedFloor = $floorResolutionService->resolveRequestedFloor($dungeonroute->dungeon, $dungeonroute->mappingVersion, $floorIndex);
 
-        if ($floor === null) {
-            /** @var Floor|null $defaultFloor */
-            $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-                ->defaultOrFacade($dungeonroute->mappingVersion)
-                ->first();
-
+        if (!$resolvedFloor->isCanonical) {
             return redirect()->route('dungeonroute.edit.floor', [
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
-                'floorIndex'   => $defaultFloor->index,
+                'floorIndex'   => $resolvedFloor->floor->index,
             ] + $request->validated());
         } else {
-            if ($floor->index !== (int)$floorIndex) {
-                return redirect()->route('dungeonroute.edit.floor', [
-                    'dungeon'      => $dungeonroute->dungeon,
-                    'dungeonroute' => $dungeonroute,
-                    'title'        => $dungeonroute->getTitleSlug(),
-                    'floorIndex'   => $floor->index,
-                ] + $request->validated());
-            }
+            $floor = $resolvedFloor->floor;
 
             $userOrDefaultRegion = GameServerRegion::getUserOrDefaultRegion();
 
@@ -536,16 +479,13 @@ class DungeonRouteController extends Controller
     public function embed(
         DungeonRouteEmbedUrlFormRequest $request,
         MapContextServiceInterface      $mapContextService,
+        FloorResolutionServiceInterface $floorResolutionService,
         Dungeon                         $dungeon,
         DungeonRoute                    $dungeonroute,
         ?string                         $title = null,
         string                          $floorIndex = '1',
     ) {
         Gate::authorize('embed', $dungeonroute);
-
-        if (!is_numeric($floorIndex)) {
-            $floorIndex = '1';
-        }
 
         $dungeonroute->trackPageView(DungeonRoute::PAGE_VIEW_SOURCE_VIEW_EMBED);
 
@@ -558,10 +498,7 @@ class DungeonRouteController extends Controller
         $mapFacadeStyle = $request->get('mapFacadeStyle', User::getCurrentUserMapFacadeStyle());
         User::forceMapFacadeStyle($mapFacadeStyle);
 
-        /** @var Floor|null $floor */
-        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            ->indexOrFacade($dungeonroute->mappingVersion, (int)$floorIndex)
-            ->first();
+        $floor = $floorResolutionService->resolveRequestedFloor($dungeonroute->dungeon, $dungeonroute->mappingVersion, $floorIndex)->floor;
 
         $validated = $request->validated();
 

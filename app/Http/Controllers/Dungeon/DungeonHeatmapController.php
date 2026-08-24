@@ -8,13 +8,13 @@ use App\Http\Requests\Heatmap\HeatmapEmbedUrlFormRequest;
 use App\Http\Requests\Heatmap\HeatmapUrlFormRequest;
 use App\Models\Dungeon;
 use App\Models\DungeonKey;
-use App\Models\Floor\Floor;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Season;
 use App\Models\User;
 use App\Service\Dungeon\DungeonServiceInterface;
+use App\Service\Floor\FloorResolutionServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
@@ -74,10 +74,11 @@ class DungeonHeatmapController extends Controller
     }
 
     public function viewDungeon(
-        SeasonServiceInterface $seasonService,
-        Request                $request,
-        GameVersion            $gameVersion,
-        Dungeon                $dungeon,
+        SeasonServiceInterface          $seasonService,
+        Request                         $request,
+        FloorResolutionServiceInterface $floorResolutionService,
+        GameVersion                     $gameVersion,
+        Dungeon                         $dungeon,
     ): RedirectResponse {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
@@ -86,10 +87,7 @@ class DungeonHeatmapController extends Controller
             return $redirect;
         }
 
-        /** @var Floor|null $defaultFloor */
-        $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
-            ->defaultOrFacade($currentMappingVersion)
-            ->first();
+        $defaultFloor = $floorResolutionService->resolveDefaultFloor($dungeon, $currentMappingVersion);
 
         return redirect()->route('dungeon.heatmap.gameversion.view.floor', [
             'gameVersion' => $gameVersion,
@@ -115,6 +113,7 @@ class DungeonHeatmapController extends Controller
         SeasonServiceInterface           $seasonService,
         SeasonAffixGroupServiceInterface $seasonAffixGroupService,
         DungeonServiceInterface          $dungeonService,
+        FloorResolutionServiceInterface  $floorResolutionService,
         GameVersion                      $gameVersion,
         Dungeon                          $dungeon,
         string                           $floorIndex = '1',
@@ -130,34 +129,16 @@ class DungeonHeatmapController extends Controller
             return $redirect;
         }
 
-        if (!is_numeric($floorIndex)) {
-            $floorIndex = '1';
-        }
+        $resolvedFloor = $floorResolutionService->resolveRequestedFloor($dungeon, $currentMappingVersion, $floorIndex);
 
-        /** @var Floor|null $floor */
-        $floor = Floor::where('dungeon_id', $dungeon->id)
-            ->indexOrFacade($currentMappingVersion, (int)$floorIndex)
-            ->first();
-
-        if ($floor === null) {
-            /** @var Floor|null $defaultFloor */
-            $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
-                ->defaultOrFacade($currentMappingVersion)
-                ->first();
-
+        if (!$resolvedFloor->isCanonical) {
             return redirect()->route('dungeon.heatmap.gameversion.view.floor', [
                 'gameVersion' => $gameVersion,
                 'dungeon'     => $dungeon,
-                'floorIndex'  => $defaultFloor->index,
+                'floorIndex'  => $resolvedFloor->floor->index,
             ] + $request->validated());
         } else {
-            if ($floor->index !== (int)$floorIndex) {
-                return redirect()->route('dungeon.heatmap.gameversion.view.floor', [
-                    'gameVersion' => $gameVersion,
-                    'dungeon'     => $dungeon,
-                    'floorIndex'  => $floor->index,
-                ] + $request->validated());
-            }
+            $floor = $resolvedFloor->floor;
 
             $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON);
 
@@ -197,6 +178,7 @@ class DungeonHeatmapController extends Controller
         MapContextServiceInterface       $mapContextService,
         SeasonServiceInterface           $seasonService,
         SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+        FloorResolutionServiceInterface  $floorResolutionService,
         GameVersion                      $gameVersion,
         Dungeon                          $dungeon,
         string                           $floorIndex = '1',
@@ -208,39 +190,23 @@ class DungeonHeatmapController extends Controller
             return $redirect;
         }
 
-        if (!is_numeric($floorIndex)) {
-            $floorIndex = '1';
-        }
-
         // Ensure that User::getCurrentUserMapFacadeStyle() returns the wanted map facade style
         $mapFacadeStyle = $request->get('mapFacadeStyle', User::getCurrentUserMapFacadeStyle());
         User::forceMapFacadeStyle($mapFacadeStyle);
 
-        /** @var Floor|null $floor */
-        $floor = Floor::where('dungeon_id', $dungeon->id)
-            ->indexOrFacade($currentMappingVersion, (int)$floorIndex)
-            ->first();
+        $resolvedFloor = $floorResolutionService->resolveRequestedFloor($dungeon, $currentMappingVersion, $floorIndex);
 
         $validated = $request->validated();
 
-        if ($floor === null) {
-            /** @var Floor|null $defaultFloor */
-            $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
-                ->defaultOrFacade($currentMappingVersion)
-                ->first();
-
+        if (!$resolvedFloor->isCanonical) {
             return redirect()->route('dungeon.heatmap.gameversion.embed.floor', [
                 'gameVersion' => $gameVersion,
                 'dungeon'     => $dungeon,
-                'floorIndex'  => $defaultFloor->index,
-            ] + $validated);
-        } elseif ($floor->index !== (int)$floorIndex) {
-            return redirect()->route('dungeon.heatmap.gameversion.embed.floor', [
-                'gameVersion' => $gameVersion,
-                'dungeon'     => $dungeon,
-                'floorIndex'  => $floor->index,
+                'floorIndex'  => $resolvedFloor->floor->index,
             ] + $validated);
         }
+
+        $floor = $resolvedFloor->floor;
 
         $locale = $request->get('locale', App::getLocale());
         App::setLocale(
