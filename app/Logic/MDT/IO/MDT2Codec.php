@@ -107,9 +107,25 @@ final class MDT2Codec implements MDTStringCodecInterface
         }
 
         $payload = substr($string, strlen(self::PREFIX));
-        $binary  = self::decodeBase64WithTrailingGarbageRecovery($payload);
 
-        return self::decodeBinary($binary);
+        // Production has seen pastes containing a second (sometimes a byte-for-byte duplicate)
+        // `!~MDT2~...` export concatenated after the first, with anything from nothing to a chunk
+        // of unrelated text in between - a doubled paste action, or a whole multi-route note copied
+        // instead of a single export. `!` and `~` fall outside the Base64 alphabet, so a genuine
+        // export's payload can never legitimately contain the prefix - any occurrence past the
+        // first is unambiguously the start of a second export, never a false positive. Try decoding
+        // just the first export before falling through to the single-payload attempt below.
+        $secondExportPosition = strpos($payload, self::PREFIX);
+        if ($secondExportPosition !== false) {
+            try {
+                return self::decodeBinary(self::decodeBase64WithTrailingGarbageRecovery(rtrim(substr($payload, 0, $secondExportPosition))));
+            } catch (MDT2DecodeException) {
+                // Not recoverable this way either - fall through to the single-payload attempt
+                // below, whose failure is what actually gets reported to the caller.
+            }
+        }
+
+        return self::decodeBinary(self::decodeBase64WithTrailingGarbageRecovery($payload));
     }
 
     /**

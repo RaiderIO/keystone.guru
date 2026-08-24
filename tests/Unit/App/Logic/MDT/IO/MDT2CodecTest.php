@@ -447,6 +447,54 @@ final class MDT2CodecTest extends TestCase
     }
 
     #[Test]
+    public function decode_givenExactDuplicateExportConcatenated_decodesFirstExport(): void
+    {
+        // Arrange - the same export string pasted twice back-to-back with no separator, as seen in
+        // production (e.g. a doubled Ctrl+V)
+        $cbor   = hex2bin('a1476f626a656374738241614162');
+        $export = $this->buildMdt2String($cbor);
+        $string = $export . $export;
+
+        // Act
+        $decoded = $this->codec->decode($string);
+
+        // Assert
+        $this->assertSame(['objects' => ['a', 'b']], $decoded);
+    }
+
+    #[Test]
+    public function decode_givenSecondExportSeparatedByUnrelatedText_decodesFirstExport(): void
+    {
+        // Arrange - two exports pasted together with unrelated text in between, as seen in
+        // production (a multi-route note copied instead of a single export)
+        $cbor   = hex2bin('a1476f626a656374738241614162');
+        $first  = $this->buildMdt2String($cbor);
+        $second = $this->buildMdt2String(hex2bin('a141614101'));
+        $string = $first . "\r\n\r\n洞穴\r\n\r\n" . $second;
+
+        // Act
+        $decoded = $this->codec->decode($string);
+
+        // Assert
+        $this->assertSame(['objects' => ['a', 'b']], $decoded);
+    }
+
+    #[Test]
+    public function decode_givenFirstExportCorruptAndSecondExportValid_throwsMDT2DecodeException(): void
+    {
+        // Arrange - recovery only ever tries the first export; a valid second export does not mask
+        // a genuinely corrupt first one
+        $cbor   = hex2bin('a1476f626a656374738241614162');
+        $string = '!~MDT2~%%%not-base64%%%' . $this->buildMdt2String($cbor);
+
+        // Assert
+        $this->expectException(MDT2DecodeException::class);
+
+        // Act
+        $this->codec->decode($string);
+    }
+
+    #[Test]
     #[DataProvider('decode_givenCorruptString_throwsMDT2DecodeException_Provider')]
     public function decode_givenCorruptString_throwsMDT2DecodeException(string $string): void
     {
