@@ -21,6 +21,6 @@ class APICombatLogControllerCorrectEventsTempleOfSethralissTest extends APIComba
     #[Test]
     public function create_givenTempleOfSethralissSeason2Json_shouldReturnCorrectedJsonData(): void
     {
-        $this->executeTest('BFA/midnight_s2_temple_of_sethraliss');
+        $this->executeTest('BFA/midnight_s2_temple_of_sethraliss', true);
     }
 }

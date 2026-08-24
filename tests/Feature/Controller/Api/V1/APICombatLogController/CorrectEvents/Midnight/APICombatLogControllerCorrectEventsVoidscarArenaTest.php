@@ -21,6 +21,6 @@ class APICombatLogControllerCorrectEventsVoidscarArenaTest extends APICombatLogC
     #[Test]
     public function create_givenVoidscarArenaSeason2Json_shouldReturnCorrectedJsonData(): void
     {
-        $this->executeTest('Midnight/midnight_s2_voidscar_arena');
+        $this->executeTest('Midnight/midnight_s2_voidscar_arena', true);
     }
 }
