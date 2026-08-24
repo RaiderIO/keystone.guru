@@ -662,6 +662,54 @@ class MapContext extends Signalable {
     }
 
     /**
+     * True if the route being viewed is a mapping version upgrade draft of another route.
+     * @returns {Boolean}
+     */
+    isUpgradeDraft() {
+        return this._options.isUpgradeDraft === true;
+    }
+
+    /**
+     * True if an upgrade draft was created for the route being viewed.
+     * @returns {Boolean}
+     */
+    hasUpgradeDraft() {
+        return this._options.hasUpgradeDraft === true;
+    }
+
+    /**
+     * The title of the route this draft upgrades, or null if this route is not a draft.
+     * @returns {?String}
+     */
+    getUpgradeOfDungeonRouteTitle() {
+        return this._options.upgradeOfDungeonRouteTitle ?? null;
+    }
+
+    /**
+     * The edit url of the route this draft upgrades, or null if this route is not a draft.
+     * @returns {?String}
+     */
+    getUpgradeOfDungeonRouteEditUrl() {
+        return this._options.upgradeOfDungeonRouteEditUrl ?? null;
+    }
+
+    /**
+     * Null unless the route being viewed is an upgrade draft.
+     * @returns {?String}
+     */
+    getMappingVersionUpgradeApplyUrl() {
+        return this._options.mappingVersionUpgradeApplyUrl ?? null;
+    }
+
+    /**
+     * Null unless the route being viewed is an upgrade draft.
+     * @returns {?String}
+     */
+    getMappingVersionUpgradeDiscardUrl() {
+        return this._options.mappingVersionUpgradeDiscardUrl ?? null;
+    }
+
+    /**
      *
      * @returns {Number}
      */

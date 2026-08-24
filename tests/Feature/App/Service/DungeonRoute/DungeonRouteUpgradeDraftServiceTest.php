@@ -21,6 +21,7 @@ use App\Service\DungeonRoute\DungeonRouteUpgradeDraftService;
 use App\Service\DungeonRoute\Exceptions\UpgradeDraftException;
 use App\Service\DungeonRoute\Logging\DungeonRouteUpgradeDraftServiceLoggingInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
+use Illuminate\Database\Eloquent\Model;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -28,7 +29,11 @@ use PHPUnit\Framework\MockObject\MockObject;
 #[Group('DungeonRoute')]
 class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCase
 {
-    /** Every model created by a test, torn down newest first. */
+    /**
+     * Every model created by a test, torn down newest first.
+     *
+     * @var array<int, Model>
+     */
     private array $cleanup = [];
 
     private function buildUpgradeDraftService(?ThumbnailServiceInterface $thumbnailService = null): DungeonRouteUpgradeDraftService
@@ -44,6 +49,7 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
      * Creates a route on a mapping version that is no longer the dungeon's current one, which is the
      * state that offers the author the Upgrade button.
      *
+     * @param  array<string, mixed>                                                     $attributes
      * @return array{0: DungeonRoute, 1: MappingVersion, 2: MappingVersion, 3: Dungeon}
      */
     private function createOutdatedRoute(array $attributes = []): array
@@ -90,7 +96,7 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
             // Assert
             $this->assertNotSame($original->id, $draft->id);
             $this->assertSame($original->id, $draft->upgrade_of_dungeon_route_id);
-            $this->assertTrue($draft->isUpgradeDraft());
+            $this->assertTrue($draft->is_upgrade_draft);
             $this->assertNotSame($original->public_key, $draft->public_key);
             $this->assertNull($draft->clone_of, 'A draft is not a clone - clone_of must stay null');
             $this->assertSame($original->title, $draft->title, 'A draft keeps the original title, no clone prefix');
@@ -110,7 +116,7 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
         try {
             // Arrange
             [$original, $mappingVersion, $newMappingVersion] = $this->createOutdatedRoute();
-            $originalId = $original->id;
+            $originalId                                      = $original->id;
 
             // Act
             $draft = $this->buildUpgradeDraftService()->findOrCreateDraft($original);
@@ -154,7 +160,7 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
 
         try {
             // Arrange
-            $team            = Team::create([
+            $team = Team::create([
                 'public_key'  => Team::generateRandomPublicKey(),
                 'name'        => 'Upgrade draft service team',
                 'description' => 'Upgrade draft service team',
@@ -293,9 +299,9 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
         try {
             // Arrange
             [$original, , $newMappingVersion] = $this->createOutdatedRoute();
-            $originalId        = $original->id;
-            $originalPublicKey = $original->public_key;
-            $originalAuthorId  = $original->author_id;
+            $originalId                       = $original->id;
+            $originalPublicKey                = $original->public_key;
+            $originalAuthorId                 = $original->author_id;
 
             $service = $this->buildUpgradeDraftService();
             $draft   = $service->findOrCreateDraft($original);
@@ -492,7 +498,7 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
         try {
             // Arrange
             [$original, $mappingVersion] = $this->createOutdatedRoute();
-            $originalId = $original->id;
+            $originalId                  = $original->id;
 
             $service = $this->buildUpgradeDraftService();
             $draft   = $service->findOrCreateDraft($original);

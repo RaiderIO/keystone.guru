@@ -1,0 +1,18 @@
+<div class="row g-0 align-items-center">
+    <div class="col text-center">
+        {{ mapping_version_upgrade_draft_label }}
+        {{#if upgrade_of_url}}
+            <a href="{{ upgrade_of_url }}">{{ upgrade_draft_of_label }}</a>
+        {{/if}}
+    </div>
+    <div class="col-auto">
+        <button class="btn-sm btn-success upgrade_draft_apply">
+            <i class="fa fa-check"></i> {{ mapping_version_upgrade_apply_label }}
+        </button>
+    </div>
+    <div class="col-auto ml-1">
+        <button class="btn-sm btn-danger upgrade_draft_discard">
+            <i class="fa fa-times"></i> {{ mapping_version_upgrade_discard_label }}
+        </button>
+    </div>
+</div>

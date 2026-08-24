@@ -78,6 +78,8 @@ class MapContextDungeonRoute extends MapContextBase
     {
         $useFacade = $this->mapFacadeStyle === User::MAP_FACADE_STYLE_FACADE;
 
+        $upgradeOfDungeonRoute = $this->dungeonRoute->upgradeOfDungeonRoute;
+
         return array_merge(parent::toArray(), [
             'publicKey'               => $this->dungeonRoute->public_key,
             'teamId'                  => $this->dungeonRoute->team_id,
@@ -91,6 +93,27 @@ class MapContextDungeonRoute extends MapContextBase
             'dungeonDifficulty'       => $this->dungeonRoute->dungeon_difficulty,
 
             'mappingVersionUpgradeUrl' => route('dungeonroute.upgrade', [
+                'dungeon'      => $this->dungeonRoute->dungeon,
+                'dungeonroute' => $this->dungeonRoute,
+                'title'        => $this->dungeonRoute->getTitleSlug(),
+            ]),
+
+            // Mapping version upgrade draft state. The apply/discard urls are null unless this route is
+            // actually a draft, so the client cannot be coaxed into offering the buttons.
+            'isUpgradeDraft'               => $this->dungeonRoute->is_upgrade_draft,
+            'hasUpgradeDraft'              => $this->dungeonRoute->has_upgrade_draft,
+            'upgradeOfDungeonRouteTitle'   => $upgradeOfDungeonRoute?->title,
+            'upgradeOfDungeonRouteEditUrl' => $upgradeOfDungeonRoute === null ? null : route('dungeonroute.edit', [
+                'dungeon'      => $upgradeOfDungeonRoute->dungeon,
+                'dungeonroute' => $upgradeOfDungeonRoute,
+                'title'        => $upgradeOfDungeonRoute->getTitleSlug(),
+            ]),
+            'mappingVersionUpgradeApplyUrl' => $upgradeOfDungeonRoute === null ? null : route('dungeonroute.upgrade.apply', [
+                'dungeon'      => $this->dungeonRoute->dungeon,
+                'dungeonroute' => $this->dungeonRoute,
+                'title'        => $this->dungeonRoute->getTitleSlug(),
+            ]),
+            'mappingVersionUpgradeDiscardUrl' => $upgradeOfDungeonRoute === null ? null : route('dungeonroute.upgrade.discard', [
                 'dungeon'      => $this->dungeonRoute->dungeon,
                 'dungeonroute' => $this->dungeonRoute,
                 'title'        => $this->dungeonRoute->getTitleSlug(),

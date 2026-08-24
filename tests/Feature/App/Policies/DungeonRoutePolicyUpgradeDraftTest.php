@@ -109,10 +109,10 @@ class DungeonRoutePolicyUpgradeDraftTest extends PublicTestCase
     #[Test]
     public function applyUpgrade_givenDraftAndUnrelatedUser_returnsDeny(): void
     {
-        $owner      = null;
-        $unrelated  = null;
-        $original   = null;
-        $draft      = null;
+        $owner     = null;
+        $unrelated = null;
+        $original  = null;
+        $draft     = null;
 
         try {
             // Arrange

@@ -594,7 +594,10 @@ class DungeonrouteTable extends InlineCode {
             published: row.published,
             show_migrate_to_encrypted: isShadowlandsRoute && !rowHasEncryptedAffix && !rowHasShroudedAffix,
             show_migrate_to_shrouded: isShadowlandsRoute && !rowHasShroudedAffix,
-            has_new_mapping_version: row.dungeon_latest_mapping_version_id !== row.mapping_version_id
+            has_new_mapping_version: row.dungeon_latest_mapping_version_id !== row.mapping_version_id,
+            // Both arrive for free through DungeonRoute's $appends
+            is_upgrade_draft: row.is_upgrade_draft === true,
+            has_upgrade_draft: row.has_upgrade_draft === true
         };
     }
 

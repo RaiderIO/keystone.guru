@@ -110,10 +110,10 @@ class DungeonRouteDeleteContentRelationsTest extends PublicTestCase
                 'polyline_id'      => -1,
             ]);
             $polyline = Polyline::create([
-                'model_id'    => $brushline->id,
-                'model_class' => Brushline::class,
-                'color'       => '#ff0000',
-                'weight'      => 2,
+                'model_id'      => $brushline->id,
+                'model_class'   => Brushline::class,
+                'color'         => '#ff0000',
+                'weight'        => 2,
                 'vertices_json' => '[]',
             ]);
             $brushline->update(['polyline_id' => $polyline->id]);
@@ -220,8 +220,8 @@ class DungeonRouteDeleteContentRelationsTest extends PublicTestCase
         $routeId = null;
 
         try {
-            $owner   = User::factory()->create();
-            $route   = DungeonRoute::factory()->create([
+            $owner = User::factory()->create();
+            $route = DungeonRoute::factory()->create([
                 'author_id'  => $owner->id,
                 'expires_at' => null,
             ]);

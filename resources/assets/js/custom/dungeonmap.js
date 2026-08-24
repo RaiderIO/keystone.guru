@@ -62,11 +62,24 @@ class DungeonMap extends Signalable {
 
                     state.addSnackbar(template(data));
                 }
+            } else if (this.options.edit && mapContext.isUpgradeDraft()) {
+                // Deliberately NOT gated on the outdated check: findOrCreateDraft() already upgraded the
+                // draft, so it is on the newest mapping version and never reads as outdated
+                let template = Handlebars.templates['map_controls_snackbar_mapping_version_upgrade_draft'];
+
+                let data = $.extend({}, getHandlebarsDefaultVariables(), {
+                    'upgrade_of_url': mapContext.getUpgradeOfDungeonRouteEditUrl()
+                });
+
+                state.addSnackbar(template(data));
+
+                this._bindUpgradeDraftSnackbarHandlers(mapContext);
             } else if (this.options.edit && mapContext.getMappingVersion().version < mapContext.getDungeonLatestMappingVersion().version) {
                 let template = Handlebars.templates['map_controls_snackbar_mapping_version_upgrade'];
 
                 let data = $.extend({}, getHandlebarsDefaultVariables(), {
-                    'upgrade_url': mapContext.getMappingVersionUpgradeUrl()
+                    'upgrade_url': mapContext.getMappingVersionUpgradeUrl(),
+                    'has_draft': mapContext.hasUpgradeDraft()
                 });
 
                 state.addSnackbar(template(data));
@@ -424,6 +437,56 @@ class DungeonMap extends Signalable {
                 getState().setMapZoomLevel(self.leafletMap.getZoom());
             }
         });
+    }
+
+    /**
+     * Wires the Apply/Discard buttons of the upgrade draft snackbar. Both post over ajax - CSRF is
+     * installed globally through $.ajaxSetup, so no hand rolled form (and no @csrf) is needed - and both
+     * sit behind a confirm, since neither can be undone.
+     *
+     * @param mapContext {MapContextDungeonRoute}
+     * @private
+     */
+    _bindUpgradeDraftSnackbarHandlers(mapContext) {
+        let bindUpgradeDraftAction = function (selector, url, confirmMessage) {
+            // The server emits these urls as null unless the route really is a draft, so a client that
+            // somehow reaches this branch anyway still cannot post anything
+            if (url === null) {
+                return;
+            }
+
+            $(selector).unbind('click').bind('click', function () {
+                if (!confirm(confirmMessage)) {
+                    return;
+                }
+
+                let $button = $(this);
+                $button.prop('disabled', true);
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    dataType: 'json',
+                    success: function (json) {
+                        window.location.href = json.redirect_url;
+                    },
+                    error: function () {
+                        $button.prop('disabled', false);
+                    }
+                });
+            });
+        };
+
+        bindUpgradeDraftAction(
+            '.upgrade_draft_apply',
+            mapContext.getMappingVersionUpgradeApplyUrl(),
+            lang.get('js.mapping_version_upgrade_apply_confirm')
+        );
+        bindUpgradeDraftAction(
+            '.upgrade_draft_discard',
+            mapContext.getMappingVersionUpgradeDiscardUrl(),
+            lang.get('js.mapping_version_upgrade_discard_confirm')
+        );
     }
 
     /**

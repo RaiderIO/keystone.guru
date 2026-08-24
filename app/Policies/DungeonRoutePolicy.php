@@ -75,7 +75,7 @@ class DungeonRoutePolicy
     public function publish(User $user, DungeonRoute $dungeonroute, ?string $publishedState = null): Response
     {
         // An upgrade draft only ever goes live through Apply, onto its original
-        if ($dungeonroute->isUpgradeDraft()) {
+        if ($dungeonroute->is_upgrade_draft) {
             return $this->deny(__('policy.publish_route_is_upgrade_draft'));
         }
 
@@ -138,7 +138,7 @@ class DungeonRoutePolicy
      */
     public function applyUpgrade(User $user, DungeonRoute $dungeonroute): Response
     {
-        if (!$dungeonroute->isUpgradeDraft()) {
+        if (!$dungeonroute->is_upgrade_draft) {
             return $this->deny(__('policy.apply_upgrade_route_not_upgrade_draft'));
         }
 
@@ -157,7 +157,7 @@ class DungeonRoutePolicy
      */
     public function discardUpgrade(User $user, DungeonRoute $dungeonroute): Response
     {
-        if (!$dungeonroute->isUpgradeDraft()) {
+        if (!$dungeonroute->is_upgrade_draft) {
             return $this->deny(__('policy.discard_upgrade_route_not_upgrade_draft'));
         }
 

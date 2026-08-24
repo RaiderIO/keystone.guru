@@ -96,6 +96,7 @@ use Override;
  * @property bool                 $demo
  * @property array<string, mixed> $setup                           Attribute
  * @property bool                 $is_upgrade_draft                Attribute
+ * @property bool                 $has_upgrade_draft               Attribute
  * @property bool                 $has_thumbnail                   Attribute
  * @property int                  $has_enemy_forces                Computed column added by CoverageService::selectRaw()
  * @property int                  $mapping_version_game_version_id Computed column added by AjaxDungeonRouteController::get()'s selectRaw()
@@ -119,12 +120,12 @@ use Override;
  * @property Path                              $route
  * @property Season|null                       $season
  * @property Faction                           $faction
- * @property User|null                         $author           Can be null in case of temporary route
+ * @property User|null                         $author                Can be null in case of temporary route
  * @property MDTImport                         $mdtImport
  * @property Team|null                         $team
  * @property PublishedState                    $publishedState
  * @property DungeonRouteScheduledPublish|null $scheduledPublish
- * @property ChallengeModeRun|null             $challengeModeRun Is only set if route is created through API
+ * @property ChallengeModeRun|null             $challengeModeRun      Is only set if route is created through API
  * @property DungeonRoute|null                 $upgradeOfDungeonRoute
  * @property DungeonRoute|null                 $upgradeDraft
  *
@@ -187,6 +188,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'has_team',
         'published',
         'is_upgrade_draft',
+        'has_upgrade_draft',
     ];
 
     protected $hidden = [
@@ -779,25 +781,23 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         return $this->team_id !== null;
     }
 
+    /**
+     * Deliberately an attribute rather than an isUpgradeDraft() method: Larastan resolves an $appends
+     * entry by camel-casing it, and a public method of that name shadows the accessor. Same shape as
+     * has_team / has_thumbnail.
+     */
     public function getIsUpgradeDraftAttribute(): bool
     {
         return $this->upgrade_of_dungeon_route_id !== null;
     }
 
-    /**
-     * @return bool True if this route is an upgrade draft of another route, false if it is not.
-     */
-    public function isUpgradeDraft(): bool
+    public function getHasUpgradeDraftAttribute(): bool
     {
-        return $this->upgrade_of_dungeon_route_id !== null;
-    }
+        // Explicitly load the relation so this appended attribute also works on routes hydrated in a
+        // collection (preventLazyLoading). Callers listing many routes should eager load upgradeDraft.
+        $this->loadMissing('upgradeDraft');
 
-    /**
-     * @return bool True if an upgrade draft was created for this route, false if it was not.
-     */
-    public function hasUpgradeDraft(): bool
-    {
-        return $this->upgradeDraft()->exists();
+        return $this->upgradeDraft !== null;
     }
 
     public function updateRating(): float

@@ -8,6 +8,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
 use App\Models\User;
 use App\Service\DungeonRoute\DungeonRouteUpgradeDraftServiceInterface;
+use Illuminate\Database\Eloquent\Model;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -19,7 +20,11 @@ class DungeonRouteControllerUpgradeDraftTest extends PublicTestCase
 {
     use ProvidesDungeon;
 
-    /** Every model created by a test, torn down newest first. */
+    /**
+     * Every model created by a test, torn down newest first.
+     *
+     * @var array<int, Model>
+     */
     private array $cleanup = [];
 
     private function createUser(): User

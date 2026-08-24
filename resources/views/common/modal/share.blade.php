@@ -51,7 +51,15 @@ $shareLinkShort = route('dungeonroute.viewold', ['dungeonRoute' => $dungeonroute
         <div class="row">
             <div id="map_route_publish_container" class="col"
                  style="display: block">
-                @include('common.dungeonroute.publish', ['dungeonroute' => $dungeonroute])
+                @if($dungeonroute->is_upgrade_draft)
+                    {{-- An upgrade draft can never be published on its own; Apply is how it goes live --}}
+                    <div class="alert alert-info mb-0">
+                        <i class="fas fa-info-circle"></i>
+                        {{ __('view_common.modal.share.upgrade_draft_cannot_publish') }}
+                    </div>
+                @else
+                    @include('common.dungeonroute.publish', ['dungeonroute' => $dungeonroute])
+                @endif
             </div>
         </div>
         <div class="row">

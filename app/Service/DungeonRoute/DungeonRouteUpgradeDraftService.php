@@ -6,9 +6,9 @@ use App\Events\LiveSession\RouteReplacedEvent;
 use App\Jobs\RefreshEnemyForces;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\PublishedState;
+use App\Models\User;
 use App\Service\DungeonRoute\Exceptions\UpgradeDraftException;
 use App\Service\DungeonRoute\Logging\DungeonRouteUpgradeDraftServiceLoggingInterface;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Override;
@@ -17,9 +17,9 @@ use Throwable;
 readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDraftServiceInterface
 {
     public function __construct(
-        private DungeonRouteServiceInterface                     $dungeonRouteService,
-        private ThumbnailServiceInterface                        $thumbnailService,
-        private DungeonRouteUpgradeDraftServiceLoggingInterface  $log,
+        private DungeonRouteServiceInterface                    $dungeonRouteService,
+        private ThumbnailServiceInterface                       $thumbnailService,
+        private DungeonRouteUpgradeDraftServiceLoggingInterface $log,
     ) {
     }
 
@@ -31,7 +31,7 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
         $draft = null;
 
         try {
-            if ($original->isUpgradeDraft()) {
+            if ($original->is_upgrade_draft) {
                 throw new UpgradeDraftException('An upgrade draft cannot have an upgrade draft of its own.');
             }
 
@@ -52,27 +52,27 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
                     'public_key'                  => DungeonRoute::generateRandomPublicKey(),
                     'upgrade_of_dungeon_route_id' => $original->id,
                     // A draft is not a clone - it is going to become the original again
-                    'clone_of'                    => null,
-                    'author_id'                   => $original->author_id,
-                    'dungeon_id'                  => $original->dungeon_id,
-                    'mapping_version_id'          => $original->mapping_version_id,
-                    'season_id'                   => $original->season_id,
-                    'faction_id'                  => $original->faction_id,
+                    'clone_of'           => null,
+                    'author_id'          => $original->author_id,
+                    'dungeon_id'         => $original->dungeon_id,
+                    'mapping_version_id' => $original->mapping_version_id,
+                    'season_id'          => $original->season_id,
+                    'faction_id'         => $original->faction_id,
                     // The team must be able to work on the draft as well
-                    'team_id'                     => $original->team_id,
+                    'team_id' => $original->team_id,
                     // Belt and braces - the saving hook forces this too
-                    'published_state_id'          => PublishedState::ALL[PublishedState::UNPUBLISHED],
+                    'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
                     // Still valid here; upgradeMappingVersion() remaps it onto the new mapping version
-                    'dungeon_start_map_icon_id'   => $original->dungeon_start_map_icon_id,
+                    'dungeon_start_map_icon_id' => $original->dungeon_start_map_icon_id,
                     // Deliberately unchanged - no clone prefix, this route replaces the original
-                    'title'                       => $original->title,
-                    'description'                 => $original->description,
-                    'level_min'                   => $original->level_min,
-                    'level_max'                   => $original->level_max,
-                    'difficulty'                  => $original->difficulty,
-                    'seasonal_index'              => $original->seasonal_index,
-                    'teeming'                     => $original->teeming,
-                    'enemy_forces'                => $original->enemy_forces,
+                    'title'          => $original->title,
+                    'description'    => $original->description,
+                    'level_min'      => $original->level_min,
+                    'level_max'      => $original->level_max,
+                    'difficulty'     => $original->difficulty,
+                    'seasonal_index' => $original->seasonal_index,
+                    'teeming'        => $original->teeming,
+                    'enemy_forces'   => $original->enemy_forces,
                 ]);
 
                 // Columns that are not fillable on DungeonRoute but that a draft must still carry over
@@ -106,14 +106,14 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
 
             return $draft;
         } finally {
-            $this->log->findOrCreateDraftEnd($draft?->id ?? 0);
+            $this->log->findOrCreateDraftEnd($draft instanceof DungeonRoute ? $draft->id : 0);
         }
     }
 
     #[Override]
     public function apply(DungeonRoute $draft): DungeonRoute
     {
-        if (!$draft->isUpgradeDraft()) {
+        if (!$draft->is_upgrade_draft) {
             throw new UpgradeDraftException('This route is not an upgrade draft, so there is nothing to apply.');
         }
 
@@ -189,7 +189,7 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
     #[Override]
     public function discard(DungeonRoute $draft): void
     {
-        if (!$draft->isUpgradeDraft()) {
+        if (!$draft->is_upgrade_draft) {
             throw new UpgradeDraftException('This route is not an upgrade draft, so there is nothing to discard.');
         }
 
@@ -248,9 +248,9 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
     private function applyAttributes(DungeonRoute $draft): array
     {
         return [
-            'mapping_version_id'         => $draft->mapping_version_id,
-            'dungeon_start_map_icon_id'  => $draft->dungeon_start_map_icon_id,
-            'dungeon_id'                 => $draft->dungeon_id,
+            'mapping_version_id'        => $draft->mapping_version_id,
+            'dungeon_start_map_icon_id' => $draft->dungeon_start_map_icon_id,
+            'dungeon_id'                => $draft->dungeon_id,
             // season_id, dungeon_difficulty and demo are all written by DungeonRouteSaveService::persist(),
             // so a draft can genuinely diverge on them - assign, never assume identical
             'season_id'                  => $draft->season_id,
@@ -268,7 +268,7 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
             'pull_gradient_apply_always' => $draft->pull_gradient_apply_always,
             // Copied as well as recomputed by RefreshEnemyForces, so the value stays right even if the
             // refresh is ever a no-op
-            'enemy_forces'               => $draft->enemy_forces,
+            'enemy_forces' => $draft->enemy_forces,
         ];
     }
 }
