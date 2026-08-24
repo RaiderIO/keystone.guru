@@ -38,7 +38,8 @@ class AdminToolsCombatLogRegenerateRequest extends FormRequest
             'dungeon_id' => is_numeric($dungeonId) && (string)$dungeonId !== self::DUNGEON_ID_ALL
                 ? ['required', 'integer', 'exists:dungeons,id']
                 : ['required', 'string', sprintf('regex:/^(%s|%s\d+)$/', self::DUNGEON_ID_ALL, self::DUNGEON_ID_SEASON_PREFIX)],
-            'season_id' => ['nullable', 'integer', 'exists:seasons,id'],
+            'season_id'             => ['nullable', 'integer', 'exists:seasons,id'],
+            'delete_enemy_failures' => ['nullable', 'boolean'],
         ];
     }
 
@@ -107,5 +108,13 @@ class AdminToolsCombatLogRegenerateRequest extends FormRequest
 
             return Season::query()->findOrFail((int)$seasonId);
         });
+    }
+
+    /**
+     * Whether recorded ARC enemy failures should be deleted for the dungeon(s) being regenerated.
+     */
+    public function deleteEnemyFailures(): bool
+    {
+        return $this->boolean('delete_enemy_failures');
     }
 }

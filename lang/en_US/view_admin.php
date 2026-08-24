@@ -727,12 +727,14 @@ return [
         ],
         'combatlog' => [
             'regenerate' => [
-                'title'              => 'Mass regenerate ARC routes',
-                'header'             => 'Mass regenerate ARC routes',
-                'season'             => 'Only routes created in season',
-                'season_any'         => 'Any season',
-                'season_description' => 'Dungeons appear in more than one season - limit the regeneration to the routes that were created in a specific season.',
-                'submit'             => 'Submit',
+                'title'                             => 'Mass regenerate ARC routes',
+                'header'                            => 'Mass regenerate ARC routes',
+                'season'                            => 'Only routes created in season',
+                'season_any'                        => 'Any season',
+                'season_description'                => 'Dungeons appear in more than one season - limit the regeneration to the routes that were created in a specific season.',
+                'delete_enemy_failures'             => 'Also delete enemy failures for the selected dungeon(s)',
+                'delete_enemy_failures_description' => 'Clears out recorded ARC enemy failures for the dungeon(s) being regenerated (or every dungeon, if "All dungeons" is selected) before queuing the regeneration.',
+                'submit'                            => 'Submit',
             ],
             'criteria' => [
                 'title'               => 'NPC Compendium parsing criteria',

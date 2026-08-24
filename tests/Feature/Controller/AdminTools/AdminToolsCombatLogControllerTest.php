@@ -30,6 +30,9 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
     /** @var array<int, int> */
     private array $createdDungeonRouteIds = [];
 
+    /** @var array<int, int> */
+    private array $createdEnemyFailureIds = [];
+
     private ?string $originalAdminMapFacadeStyle = null;
 
     #[\Override]
@@ -54,6 +57,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
             User::findOrFail(1)->update(['map_facade_style' => $this->originalAdminMapFacadeStyle]);
             ChallengeModeRun::query()->whereIn('dungeon_route_id', $this->createdDungeonRouteIds)->delete();
             DungeonRoute::query()->whereIn('id', $this->createdDungeonRouteIds)->delete();
+            CombatLogRouteEnemyFailure::query()->whereIn('id', $this->createdEnemyFailureIds)->delete();
         } finally {
             parent::tearDown();
         }
@@ -442,6 +446,102 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         Queue::assertNotPushed(RegenerateCombatLogRoute::class);
     }
 
+    #[Test]
+    public function combatlogregeneratesubmit_givenDeleteEnemyFailuresUnchecked_leavesFailuresUntouched(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+        Queue::fake();
+
+        [$season, $dungeons] = $this->findSeasonWithDungeons();
+        $failure             = $this->createEnemyFailureForDungeon($dungeons->get(0));
+
+        // Act
+        $response = $this->post(route('admin.tools.combatlog.regenerate.submit'), [
+            'dungeon_id' => $dungeons->get(0)->id,
+        ]);
+
+        // Assert
+        $response->assertOk();
+        $this->assertTrue(CombatLogRouteEnemyFailure::query()->whereKey($failure->id)->exists());
+    }
+
+    #[Test]
+    public function combatlogregeneratesubmit_givenDeleteEnemyFailuresCheckedWithSingleDungeon_deletesOnlyThatDungeonsFailures(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+        Queue::fake();
+
+        [$season, $dungeons] = $this->findSeasonWithDungeons();
+        $includedFailure     = $this->createEnemyFailureForDungeon($dungeons->get(0));
+        $excludedFailure     = $this->createEnemyFailureForDungeon($dungeons->get(1));
+
+        // Act
+        $response = $this->post(route('admin.tools.combatlog.regenerate.submit'), [
+            'dungeon_id'            => $dungeons->get(0)->id,
+            'delete_enemy_failures' => 1,
+        ]);
+
+        // Assert
+        $response->assertOk();
+        $this->assertFalse(CombatLogRouteEnemyFailure::query()->whereKey($includedFailure->id)->exists());
+        $this->assertTrue(CombatLogRouteEnemyFailure::query()->whereKey($excludedFailure->id)->exists());
+    }
+
+    #[Test]
+    public function combatlogregeneratesubmit_givenDeleteEnemyFailuresCheckedWithAllDungeons_deletesFailuresForEveryDungeon(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+        Queue::fake();
+
+        [$season, $dungeons] = $this->findSeasonWithDungeons();
+        $firstFailure        = $this->createEnemyFailureForDungeon($dungeons->get(0));
+        $secondFailure       = $this->createEnemyFailureForDungeon($dungeons->get(1));
+
+        // Act
+        $response = $this->post(route('admin.tools.combatlog.regenerate.submit'), [
+            'dungeon_id'            => '-1',
+            'delete_enemy_failures' => 1,
+        ]);
+
+        // Assert
+        $response->assertOk();
+        $this->assertFalse(CombatLogRouteEnemyFailure::query()->whereKey($firstFailure->id)->exists());
+        $this->assertFalse(CombatLogRouteEnemyFailure::query()->whereKey($secondFailure->id)->exists());
+    }
+
+    #[Test]
+    public function combatlogregeneratesubmit_givenDeleteEnemyFailuresCheckedWithSeasonDungeonSelection_deletesOnlyThatSeasonsDungeonsFailures(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+        Queue::fake();
+
+        [$season, $dungeons] = $this->findSeasonWithDungeons();
+        $otherDungeon        = Dungeon::query()
+            ->whereNotIn('id', $dungeons->pluck('id'))
+            ->get()
+            ->filter(static fn(Dungeon $dungeon) => $dungeon->getCurrentMappingVersion() !== null)
+            ->first();
+        $this->assertNotNull($otherDungeon, 'Unable to find a dungeon outside the chosen season to prove scoping!');
+
+        $includedFailure = $this->createEnemyFailureForDungeon($dungeons->get(0));
+        $excludedFailure = $this->createEnemyFailureForDungeon($otherDungeon);
+
+        // Act
+        $response = $this->post(route('admin.tools.combatlog.regenerate.submit'), [
+            'dungeon_id'            => sprintf('season-%d', $season->id),
+            'delete_enemy_failures' => 1,
+        ]);
+
+        // Assert
+        $response->assertOk();
+        $this->assertFalse(CombatLogRouteEnemyFailure::query()->whereKey($includedFailure->id)->exists());
+        $this->assertTrue(CombatLogRouteEnemyFailure::query()->whereKey($excludedFailure->id)->exists());
+    }
+
     /**
      * A season that has at least two dungeons which can hold a dungeon route, together with those dungeons.
      *
@@ -485,6 +585,28 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         ]);
 
         return $dungeonRoute;
+    }
+
+    private function createEnemyFailureForDungeon(Dungeon $dungeon): CombatLogRouteEnemyFailure
+    {
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        /** @var Floor $floor */
+        $floor = $dungeon->floors()->where('facade', 0)->firstOrFail();
+        /** @var Npc $npc */
+        $npc = Npc::query()->firstOrFail();
+
+        $failure = CombatLogRouteEnemyFailure::create([
+            'dungeon_id'         => $dungeon->id,
+            'floor_id'           => $floor->id,
+            'mapping_version_id' => $mappingVersion->id,
+            'npc_id'             => $npc->id,
+            'lat'                => -50.0,
+            'lng'                => 100.0,
+        ]);
+
+        $this->createdEnemyFailureIds[] = $failure->id;
+
+        return $failure;
     }
 
     /**
