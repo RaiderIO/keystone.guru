@@ -272,61 +272,37 @@ final class DungeonRouteControllerFloorResolutionTest extends PublicTestCase
     }
 
     /**
-     * embed() has a pre-existing argument-shift bug (filed as #4266): it never declares a
-     * `Dungeon $dungeon` parameter even though `{dungeon}` is part of its route, and `mixed
-     * $dungeonroute` isn't class-typed so Laravel doesn't model-bind it either. Laravel's
-     * ResolvesRouteDependencies splices class-typed dependencies (the request, services) into their
-     * declared positions but leaves the raw route values - [dungeon, dungeonroute, title, floorIndex]
-     * - untouched at their original indices; PHP then fills the method's two trailing untyped
-     * parameters ($dungeonroute, $floorIndex) from the first two of those four raw values. The net
-     * effect: `$dungeonroute` inside the method actually receives the URL's {dungeon} slug (a
-     * string!), and `$floorIndex` actually receives the URL's {dungeonroute} public_key - the real
-     * {title} and {floorIndex} segments are silently dropped. Since a public_key is always
-     * non-numeric, the method always takes the "treat floorIndex as a public_key" branch, looks up
-     * the SAME dungeonroute the URL already named (self-correcting back to the right model), then
-     * forces floorIndex to '1' - so the embed page always renders floor 1 regardless of what
-     * {floorIndex} was actually requested. These tests pin that real (buggy) behavior; do not
-     * "fix" it here as part of #4256's redirect-logic consolidation.
+     * embed()'s argument-shift bug is fixed (#4266) and its floor resolution now goes through
+     * FloorResolutionService like the other methods in this file. Unlike viewFloor/presentFloor/
+     * editFloor, embed() has no redirect branch - a non-existent floorIndex falls back to rendering
+     * the default floor directly rather than redirecting to it.
      */
     #[Test]
-    public function embed_alwaysRendersFloorOneRegardlessOfRequestedFloorIndex(): void
+    public function embed_givenNonExistentFloorIndex_rendersDefaultFloor(): void
     {
         // Arrange
         $owner = User::factory()->create();
         $route = $this->createRoute($owner);
-        /** @var Floor $floorOne */
-        $floorOne = $route->dungeon->floors()->where('facade', 0)->where('index', 1)->firstOrFail();
-        /** @var Floor|null $otherFloor */
-        $otherFloor = $route->dungeon->floors()->where('facade', 0)->where('index', '!=', 1)->first();
+        /** @var Floor $defaultFloor */
+        $defaultFloor = Floor::where('dungeon_id', $route->dungeon_id)->defaultOrFacade($route->mappingVersion)->first();
 
         try {
-            // Act - request an explicit, existing, non-1 floor index
+            // Act
             $response = $this->get(route('dungeonroute.embed.floor', [
                 'dungeon'      => $route->dungeon,
                 'dungeonroute' => $route,
                 'title'        => $route->getTitleSlug(),
-                'floorIndex'   => $otherFloor !== null ? $otherFloor->index : $floorOne->index,
+                'floorIndex'   => 999999,
             ]));
 
-            // Assert - floor 1 is rendered regardless (see class docblock above this test)
+            // Assert - embed() has no redirect branch, so the default floor is rendered directly
             $response->assertOk();
-            $response->assertViewHas('floor', static fn(Floor $viewFloor) => $viewFloor->id === $floorOne->id);
+            $response->assertViewHas('floor', static fn(Floor $viewFloor) => $viewFloor->id === $defaultFloor->id);
             $response->assertViewHas('dungeonroute', static fn(DungeonRoute $viewRoute) => $viewRoute->id === $route->id);
         } finally {
             $route->delete();
             $owner->delete();
         }
-    }
-
-    #[Test]
-    public function embed_givenNonExistentPublicKeyInDungeonrouteUrlSegment_returnsNotFound(): void
-    {
-        // Act - per the argument-shift bug documented above, it's the {dungeonroute} URL segment
-        // (not {floorIndex}) that actually reaches the public_key lookup
-        $response = $this->get('/route/some-dungeon/does-not-exist-as-a-public-key/some-title/embed/1');
-
-        // Assert
-        $response->assertNotFound();
     }
 
     /**
@@ -337,10 +313,14 @@ final class DungeonRouteControllerFloorResolutionTest extends PublicTestCase
     {
         // facadeEnabled: false - guests default to the facade map style (User::DEFAULT_MAP_FACADE_STYLE),
         // which would otherwise collapse floor selection and make these tests non-deterministic
-        [$dungeon] = $this->findDungeon(facadeEnabled: false, minActiveFloors: 1, requireDefaultFloor: true);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: false, minActiveFloors: 1, requireDefaultFloor: true);
 
         return DungeonRoute::factory()->create([
-            'dungeon_id'         => $dungeon->id,
+            'dungeon_id' => $dungeon->id,
+            // The factory's own definition() picks a random dungeon and derives mapping_version_id
+            // from it - overriding dungeon_id alone leaves mapping_version_id pointing at that other
+            // dungeon's mapping version, so it must be overridden here too.
+            'mapping_version_id' => $mappingVersion->id,
             'author_id'          => $owner->id,
             'expires_at'         => null,
             'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
@@ -354,10 +334,11 @@ final class DungeonRouteControllerFloorResolutionTest extends PublicTestCase
      */
     private function createFacadeRoute(User $owner): DungeonRoute
     {
-        [$dungeon] = $this->findDungeon(facadeEnabled: true, minActiveFloors: 1, requireDefaultFloor: true);
+        [$dungeon, $mappingVersion] = $this->findDungeon(facadeEnabled: true, minActiveFloors: 1, requireDefaultFloor: true);
 
         return DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
             'author_id'          => $owner->id,
             'expires_at'         => null,
             'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
