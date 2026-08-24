@@ -5,6 +5,7 @@ namespace Tests\Feature\App\Service\MDT;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\IO\MDT2Codec;
 use App\Models\Dungeon;
+use App\Models\Mapping\MappingVersion;
 use App\Models\MDTImport;
 use App\Service\Mapping\MappingServiceInterface;
 use App\Service\MDT\MDTImportStringServiceInterface;
@@ -123,26 +124,36 @@ final class MDTImportStringServiceMDT2AuthoritativeTest extends MDTImportStringS
 
     #[Test]
     #[DataProvider('realMdt2String_Provider')]
-    public function getMappingVersionForMdtAddonVersion_givenRealMdt2String_returnsCurrentMappingVersion(string $fixture): void
+    public function getMappingVersionForMdtAddonVersion_givenRealMdt2String_returnsNewestMdtMatchingMappingVersion(string $fixture): void
     {
-        // Arrange - a string without addonVersion must land on the dungeon's current mapping version. That
-        // equals the newest MDT-matching one only while none of these fixtures' dungeons carry an
-        // `mdt_changes_pending` mapping version; once one does, the expectation here becomes the newest
-        // mapping version without that flag (#4280).
+        // Arrange - a string without addonVersion must land on the newest mapping version MDT still matches.
+        // That is the dungeon's current mapping version unless we have since corrected the mapping ourselves,
+        // in which case the corrections are flagged `mdt_changes_pending` and skipped: the enemies this string
+        // references are MDT's (#4280). Ruby Life Pools is such a dungeon today (current v11, MDT-matching v9).
         $decoded = app()->make(MDTImportStringServiceInterface::class)
             ->setEncodedString(self::readFixture($fixture))
             ->getDecoded();
         $dungeon               = $this->dungeonFor($decoded);
         $currentMappingVersion = $dungeon->getCurrentMappingVersion();
 
+        $this->assertNotNull($currentMappingVersion);
+
+        /** @var MappingVersion|null $expectedMappingVersion */
+        $expectedMappingVersion = $dungeon->mappingVersions()
+            ->where('game_version_id', $currentMappingVersion->game_version_id)
+            ->where('mdt_changes_pending', false)
+            ->reorder('mapping_versions.version', 'desc')
+            ->first();
+
         // Act
         $mappingVersion = app()->make(MappingServiceInterface::class)
             ->getMappingVersionForMdtAddonVersion($dungeon, $decoded['addonVersion'] ?? null);
 
         // Assert
-        $this->assertNotNull($currentMappingVersion);
+        $this->assertNotNull($expectedMappingVersion);
         $this->assertNotNull($mappingVersion);
-        $this->assertSame($currentMappingVersion->id, $mappingVersion->id);
+        $this->assertSame($expectedMappingVersion->id, $mappingVersion->id);
+        $this->assertFalse($mappingVersion->mdt_changes_pending);
     }
 
     #[Test]
