@@ -134,19 +134,38 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                     $guid = $resultEvent->getGuid()->getGuid();
 
                     // Find the pull that this enemy is part of
+                    $diedInActivePull    = null;
+                    $diedActivePullEnemy = null;
                     foreach ($this->activePullCollection as $activePull) {
                         /** @var ActivePull $activePull */
                         if ($activePull->isEnemyInCombat($guid)) {
+                            // Grab it before enemyKilled() moves it out of the in-combat collection - it is the only
+                            // thing on this path that knows which Enemy the kill resolved to and where it stood
+                            $diedActivePullEnemy = $activePull->getEnemiesInCombat()->get($guid);
                             $activePull->enemyKilled($guid);
+                            $diedInActivePull = $activePull;
                             $this->log->buildEnemyKilled($guid, $resultEvent->getBaseEvent()->getTimestamp()->toDateTimeString());
                         }
                     }
 
-                    // Deliberately does not call notifyRulesEnemyDied(): this builder has never advanced rule state,
-                    // not even for the boss kill floor cutoff it inherited in #4140, and unlike
-                    // CombatLogRouteDungeonRouteBuilder it has no pinned route fixtures to prove that changing it is
-                    // safe. Wiring it up is a behaviour change for this path, so it wants its own issue and its own
-                    // regression run rather than riding along with the move to Rules/.
+                    $awardedNpcIds = $this->notifyRulesEnemyDied(
+                        $resultEvent->getGuid()->getId(),
+                        $diedActivePullEnemy?->getResolvedEnemy(),
+                    );
+
+                    // Must happen before the pulls below are created, so the awarded kills are part of the pull that
+                    // triggered them rather than of one after it.
+                    //
+                    // An award needs the trigger's position to resolve its enemies against, and this path only knows
+                    // that for an enemy that was engaged first - an UnitDied carries no position of its own. A death
+                    // we never saw an engage for therefore advances the rules but awards nothing.
+                    if ($awardedNpcIds->isNotEmpty() && $diedActivePullEnemy !== null) {
+                        $this->awardEnemyKills(
+                            $awardedNpcIds,
+                            $diedInActivePull,
+                            $diedActivePullEnemy,
+                        );
+                    }
 
                     // Handle the actual creation of pulls
                     foreach ($this->activePullCollection as $pullIndex => $activePull) {

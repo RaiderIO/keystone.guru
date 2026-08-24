@@ -404,8 +404,9 @@ abstract class DungeonRouteBuilder
     /**
      * Lets every active rule advance its state now that an enemy has died.
      *
-     * Only CombatLogRouteDungeonRouteBuilder calls this - ResultEventDungeonRouteBuilder never has, so any rule is
-     * inert on that path. See the note in its EnemyKilled branch before assuming a rule applies everywhere.
+     * Both builders call this, so a rule applies to a route built from what Raider.IO sends us and to one built from
+     * a combat log we parsed ourselves alike (#4275). The two paths differ in what they can award off a death:
+     * ResultEventDungeonRouteBuilder only knows a killed enemy's position when it saw it engaged first.
      *
      * Takes the npc_id as it was logged alongside the resolved Enemy, because a boss that failed to resolve to a
      * mapped enemy would otherwise never advance a rule that keys off it dying.
