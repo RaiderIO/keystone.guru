@@ -129,7 +129,26 @@ class AjaxPathController extends Controller
         Gate::authorize('edit', $dungeonRoute);
 
         try {
-            if ($path->delete()) {
+            // The delete cascades into the path's awakened obelisk links and its polyline
+            // (Path::deleting) and is followed by a change log row and a touch. None of that used to
+            // be atomic, so a failure halfway through left the path and its children gone while the
+            // route's change log and thumbnail still described it
+            $deleted = DB::transaction(function () use ($dungeonRoute, $path): bool {
+                // Nothing has been written yet, so there is nothing to roll back
+                if (!$path->delete()) {
+                    return false;
+                }
+
+                $this->dungeonRouteChanged($dungeonRoute, $path, null);
+
+                // Touch the route so that the thumbnail gets updated
+                $dungeonRoute->touch();
+
+                return true;
+            });
+
+            if ($deleted) {
+                // Broadcast only once the delete is committed, so no listener can read pre-commit state
                 if (Auth::check()) {
                     /** @var User $user */
                     $user = Auth::getUser();
@@ -140,11 +159,6 @@ class AjaxPathController extends Controller
                         // Ignore broadcast failures
                     }
                 }
-
-                $this->dungeonRouteChanged($dungeonRoute, $path, null);
-
-                // Touch the route so that the thumbnail gets updated
-                $dungeonRoute->touch();
 
                 $result = response()->noContent();
             } else {

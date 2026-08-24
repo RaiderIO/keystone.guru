@@ -53,6 +53,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Random\RandomException;
@@ -662,8 +663,15 @@ class AjaxDungeonRouteController extends Controller
         $user = Auth::user();
 
         if ($user->canCreateDungeonRoute() && $team->canAddRemoveRoute($user)) {
-            $newRoute = $saveService->cloneRoute($dungeonRoute, false);
-            $team->addRoute($newRoute);
+            // cloneRoute() is transacted internally, but the team assignment is not - and the user
+            // explicitly picked that team. Without this outer transaction a failure in addRoute()
+            // leaves behind a committed clone that belongs to nobody's team, which is a visibly
+            // wrong outcome rather than drift. Becomes a savepoint around cloneRoute()'s own
+            // transaction, which is fine: neither uses the retrying DB::transaction($cb, 3) form.
+            DB::transaction(function () use ($dungeonRoute, $saveService, $team): void {
+                $newRoute = $saveService->cloneRoute($dungeonRoute, false);
+                $team->addRoute($newRoute);
+            });
 
             return response('', Http::NO_CONTENT);
         } else {

@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Override;
 use Teapot\StatusCode\Http;
@@ -171,13 +172,14 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         }
 
         try {
-            if ($mapIcon->delete()) {
-                if (Auth::check()) {
-                    try {
-                        broadcast(new MapIconDeletedEvent($dungeonRoute ?? $mapIcon->floor->dungeon, Auth::user(), $mapIcon));
-                    } catch (BroadcastException) {
-                        // Ignore broadcast failures
-                    }
+            // The delete cascades into the icon's awakened obelisk links (MapIcon::deleting) and is
+            // followed by either the mapping change log row or the route change log row plus a
+            // touch. Without a transaction a failure halfway through left the icon and its links
+            // gone while the mapping/route change log still described it
+            $deleted = DB::transaction(function () use ($dungeonRoute, $mapIcon): bool {
+                // Nothing has been written yet, so there is nothing to roll back
+                if (!$mapIcon->delete()) {
+                    return false;
                 }
 
                 // Only when icons that are sticky to the map are saved
@@ -188,6 +190,19 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
                     $this->dungeonRouteChanged($dungeonRoute, $mapIcon, null);
 
                     $dungeonRoute->touch();
+                }
+
+                return true;
+            });
+
+            if ($deleted) {
+                // Broadcast only once the delete is committed, so no listener can read pre-commit state
+                if (Auth::check()) {
+                    try {
+                        broadcast(new MapIconDeletedEvent($dungeonRoute ?? $mapIcon->floor->dungeon, Auth::user(), $mapIcon));
+                    } catch (BroadcastException) {
+                        // Ignore broadcast failures
+                    }
                 }
 
                 $result = response()->noContent();

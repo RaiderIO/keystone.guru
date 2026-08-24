@@ -120,7 +120,25 @@ class AjaxArrowController extends Controller
         Gate::authorize('edit', $dungeonRoute);
 
         try {
-            if ($arrow->delete()) {
+            // The delete cascades into the arrow's polyline (Arrow::deleting) and is followed by a
+            // change log row and a touch. None of that used to be atomic, so a failure halfway
+            // through left the arrow and its polyline gone while the route's change log and
+            // thumbnail still described it
+            $deleted = DB::transaction(function () use ($dungeonRoute, $arrow): bool {
+                // Nothing has been written yet, so there is nothing to roll back
+                if (!$arrow->delete()) {
+                    return false;
+                }
+
+                $this->dungeonRouteChanged($dungeonRoute, $arrow, null);
+
+                $dungeonRoute->touch();
+
+                return true;
+            });
+
+            if ($deleted) {
+                // Broadcast only once the delete is committed, so no listener can read pre-commit state
                 if (Auth::check()) {
                     /** @var \App\Models\User $user */
                     $user = Auth::getUser();
@@ -131,10 +149,6 @@ class AjaxArrowController extends Controller
                         // Ignore broadcast failures
                     }
                 }
-
-                $this->dungeonRouteChanged($dungeonRoute, $arrow, null);
-
-                $dungeonRoute->touch();
 
                 $result = response()->noContent();
             } else {

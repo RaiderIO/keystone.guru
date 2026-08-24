@@ -19,6 +19,7 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Teapot\StatusCode\Http;
 
@@ -43,26 +44,41 @@ class AjaxOverpulledEnemyController extends Controller
         /** @var Collection<int, Enemy> $enemies */
         $enemies = Enemy::whereIn('id', $validated['enemy_ids'])->get();
 
-        foreach ($enemies as $enemy) {
-            /** @var OverpulledEnemy $overpulledEnemy */
-            $overpulledEnemy = OverpulledEnemy::where('live_session_id', $liveSession->id)
-                ->where('npc_id', $enemy->npc_id)
-                ->where('mdt_id', $enemy->mdt_id)
-                ->firstOrNew([
-                    'live_session_id' => $liveSession->id,
-                    'kill_zone_id'    => $validated['kill_zone_id'],
-                    'npc_id'          => $enemy->npc_id,
-                    'mdt_id'          => $enemy->mdt_id,
-                ]);
+        // The whole batch is one user action - overpulling a pack. Without a transaction a failure
+        // on the third enemy committed the first two, leaving the live session showing half a pull
+        // while the client was told the request failed
+        /** @var array<int, array{OverpulledEnemy, Enemy}> $savedEnemies */
+        $savedEnemies = DB::transaction(function () use ($enemies, $liveSession, $validated): array {
+            $savedEnemies = [];
 
-            if (!$overpulledEnemy->save()) {
-                throw new Exception('Unable to save overpulled enemy!');
+            foreach ($enemies as $enemy) {
+                /** @var OverpulledEnemy $overpulledEnemy */
+                $overpulledEnemy = OverpulledEnemy::where('live_session_id', $liveSession->id)
+                    ->where('npc_id', $enemy->npc_id)
+                    ->where('mdt_id', $enemy->mdt_id)
+                    ->firstOrNew([
+                        'live_session_id' => $liveSession->id,
+                        'kill_zone_id'    => $validated['kill_zone_id'],
+                        'npc_id'          => $enemy->npc_id,
+                        'mdt_id'          => $enemy->mdt_id,
+                    ]);
+
+                if (!$overpulledEnemy->save()) {
+                    throw new Exception('Unable to save overpulled enemy!');
+                }
+
+                $savedEnemies[] = [$overpulledEnemy, $enemy];
             }
 
-            if (Auth::check()) {
-                /** @var User $user */
-                $user = Auth::getUser();
+            return $savedEnemies;
+        });
 
+        // Broadcast only once the batch is committed, so no listener can read pre-commit state
+        if (Auth::check()) {
+            /** @var User $user */
+            $user = Auth::getUser();
+
+            foreach ($savedEnemies as [$overpulledEnemy, $enemy]) {
                 try {
                     broadcast(new OverpulledEnemyChangedEvent($liveSession, $user, $overpulledEnemy, $enemy));
                 } catch (BroadcastException) {
@@ -96,26 +112,47 @@ class AjaxOverpulledEnemyController extends Controller
         $enemies = Enemy::whereIn('id', $validated['enemy_ids'])->get();
 
         try {
-            foreach ($enemies as $enemy) {
-                /** @var OverpulledEnemy $overpulledEnemy */
-                $overpulledEnemy = OverpulledEnemy::where('live_session_id', $livesession->id)
-                    ->where('npc_id', $enemy->npc_id)
-                    ->where('mdt_id', $enemy->mdt_id)
-                    ->first();
+            // The whole batch is one user action - undoing an overpull. Without a transaction a
+            // failure on the third enemy committed the first two, leaving the live session showing
+            // half a pull while the client was told the request failed
+            /** @var array<int, Enemy> $deletedEnemies */
+            $deletedEnemies = DB::transaction(function () use ($enemies, $livesession): array {
+                $deletedEnemies = [];
 
-                if ($overpulledEnemy && $overpulledEnemy->delete() && Auth::check()) { // @phpstan-ignore booleanAnd.leftAlwaysTrue
-                    /** @var User $user */
-                    $user = Auth::getUser();
+                foreach ($enemies as $enemy) {
+                    /** @var OverpulledEnemy|null $overpulledEnemy */
+                    $overpulledEnemy = OverpulledEnemy::where('live_session_id', $livesession->id)
+                        ->where('npc_id', $enemy->npc_id)
+                        ->where('mdt_id', $enemy->mdt_id)
+                        ->first();
 
+                    if ($overpulledEnemy !== null && $overpulledEnemy->delete() === true) {
+                        $deletedEnemies[] = $enemy;
+                    }
+                }
+
+                return $deletedEnemies;
+            });
+
+            // Broadcast only once the batch is committed, so no listener can read pre-commit state
+            if (Auth::check()) {
+                /** @var User $user */
+                $user = Auth::getUser();
+
+                foreach ($deletedEnemies as $enemy) {
                     try {
                         broadcast(new OverpulledEnemyDeletedEvent($livesession, $user, $enemy));
                     } catch (BroadcastException) {
                         // Ignore broadcast failures
                     }
                 }
+            }
 
-                // Optionally, don't calculate the return value
-                $result = $validated['no_result'] === true ? $result : $overpulledEnemyService->getRouteCorrection($livesession)->toArray();
+            // The route correction is a read that only shapes the response - it used to be
+            // recomputed once per enemy inside the loop, which produced the same value every time.
+            // Optionally, don't calculate the return value
+            if ($enemies->isNotEmpty() && $validated['no_result'] !== true) {
+                $result = $overpulledEnemyService->getRouteCorrection($livesession)->toArray();
             }
         } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);

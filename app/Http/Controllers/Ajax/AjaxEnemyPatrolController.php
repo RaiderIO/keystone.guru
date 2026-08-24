@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Teapot\StatusCode\Http;
 use Throwable;
 
@@ -75,20 +76,32 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
     public function delete(Request $request, MappingVersion $mappingVersion, EnemyPatrol $enemyPatrol): Response
     {
         try {
-            if ($enemyPatrol->delete()) {
-                if (Auth::check()) {
-                    /** @var User $user */
-                    $user = Auth::getUser();
-
-                    try {
-                        broadcast(new EnemyPatrolDeletedEvent($enemyPatrol->floor->dungeon, $user, $enemyPatrol));
-                    } catch (BroadcastException) {
-                        // Ignore broadcast failures
-                    }
+            // The delete cascades into the patrol's polyline (EnemyPatrol::deleting) and is followed
+            // by the mapping change log row. Without a transaction a failure halfway through left
+            // the patrol and its polyline gone with no record of it in the mapping change log,
+            // which is what other environments replay the mapping from
+            $deleted = DB::transaction(function () use ($enemyPatrol): bool {
+                // Nothing has been written yet, so there is nothing to roll back
+                if (!$enemyPatrol->delete()) {
+                    return false;
                 }
 
                 // Trigger mapping changed event so the mapping gets saved across all environments
                 $this->mappingChanged($enemyPatrol, null);
+
+                return true;
+            });
+
+            // Broadcast only once the delete is committed, so no listener can read pre-commit state
+            if ($deleted && Auth::check()) {
+                /** @var User $user */
+                $user = Auth::getUser();
+
+                try {
+                    broadcast(new EnemyPatrolDeletedEvent($enemyPatrol->floor->dungeon, $user, $enemyPatrol));
+                } catch (BroadcastException) {
+                    // Ignore broadcast failures
+                }
             }
 
             $result = response()->noContent();
