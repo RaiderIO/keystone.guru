@@ -773,7 +773,7 @@ return [
                     'column_routes'         => 'Routes',
                     'column_critical'       => '< 95%',
                     'column_warning'        => '95 - 99%',
-                    'column_ok'             => '>= 99%',
+                    'column_ok'             => '99 - 100%',
                     'column_over'           => '> 100%',
                     'column_unknown'        => 'Unknown',
                     'column_problem_share'  => 'Below 99%',
