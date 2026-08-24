@@ -132,6 +132,7 @@ return [
     'killzone' => [
         'error' => [
             'facade_location_not_convertible' => 'Unable to place the pull here - this location does not belong to any floor of this dungeon',
+            'unable_to_delete_pull'           => 'Unable to delete pull',
         ],
     ],
     'oauthlogin' => [
