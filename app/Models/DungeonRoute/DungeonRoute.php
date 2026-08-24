@@ -234,6 +234,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'title',
         'description',
         'difficulty',
+        'dungeon_difficulty',
         'seasonal_index',
         'level_min',
         'level_max',
@@ -246,6 +247,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'rating_count',
         'thumbnail_refresh_queued_at',
         'thumbnail_updated_at',
+        'pull_gradient',
+        'pull_gradient_apply_always',
     ];
 
     protected function casts(): array

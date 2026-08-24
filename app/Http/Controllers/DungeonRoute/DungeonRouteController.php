@@ -18,6 +18,7 @@ use App\Models\User;
 use App\Models\UserReport;
 use App\Service\DungeonRoute\DungeonRouteSaveServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteUpgradeDraftServiceInterface;
+use App\Service\DungeonRoute\Exceptions\UpgradeDraftException;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Floor\FloorResolutionServiceInterface;
@@ -638,7 +639,18 @@ class DungeonRouteController extends Controller
 
         // Upgrading no longer mutates the live route - the author repairs a draft while the original
         // keeps serving its old, intact content
-        $draft = $dungeonRouteUpgradeDraftService->findOrCreateDraft($dungeonroute);
+        try {
+            $draft = $dungeonRouteUpgradeDraftService->findOrCreateDraft($dungeonroute);
+        } catch (UpgradeDraftException $upgradeDraftException) {
+            // Nothing in the UI ever links here for a draft or a sandbox route - findOrCreateDraft()
+            // refuses both - but the URL itself is not gated, so a stale link or a direct hit still
+            // needs a graceful landing rather than a raw 500
+            return redirect()->route('dungeonroute.edit', [
+                'dungeon'      => $dungeonroute->dungeon,
+                'dungeonroute' => $dungeonroute,
+                'title'        => $dungeonroute->getTitleSlug(),
+            ])->with('warning', $upgradeDraftException->getMessage());
+        }
 
         return redirect()->route('dungeonroute.edit', [
             'dungeon'      => $draft->dungeon,
@@ -665,7 +677,26 @@ class DungeonRouteController extends Controller
     ): RedirectResponse|JsonResponse {
         Gate::authorize('applyUpgrade', $dungeonroute);
 
-        $original = $dungeonRouteUpgradeDraftService->apply($dungeonroute);
+        try {
+            $original = $dungeonRouteUpgradeDraftService->apply($dungeonroute);
+        } catch (UpgradeDraftException $upgradeDraftException) {
+            // Apply can still fail here even though Gate::authorize() already checked the original
+            // exists - either it was deleted in the race window between that check and this request's
+            // transaction, or the draft fails the original's publish invariant (missing required
+            // enemies the new mapping version added). Both are user-facing, not server errors: send
+            // the author back to the draft they were editing, which - unlike the original - is
+            // guaranteed to still exist.
+            return $this->redirectAfterUpgradeDraftAction(
+                $request,
+                route('dungeonroute.edit', [
+                    'dungeon'      => $dungeonroute->dungeon,
+                    'dungeonroute' => $dungeonroute,
+                    'title'        => $dungeonroute->getTitleSlug(),
+                ]),
+                $upgradeDraftException->getMessage(),
+                warning: true,
+            );
+        }
 
         return $this->redirectAfterUpgradeDraftAction(
             $request,
@@ -718,17 +749,22 @@ class DungeonRouteController extends Controller
 
     /**
      * The apply/discard buttons post over ajax, so hand those requests the redirect target as JSON
-     * rather than a 302 the caller cannot follow.
+     * rather than a 302 the caller cannot follow. The client always follows redirect_url on success -
+     * $warning routes the message through session('warning') (styled as an alert-warning) instead of
+     * session('status') (alert-success), so a rejected Apply still lands the author on a page that
+     * explains why, rather than a raw exception.
      */
-    private function redirectAfterUpgradeDraftAction(Request $request, string $redirectUrl, string $status): RedirectResponse|JsonResponse
+    private function redirectAfterUpgradeDraftAction(Request $request, string $redirectUrl, string $status, bool $warning = false): RedirectResponse|JsonResponse
     {
+        $sessionKey = $warning ? 'warning' : 'status';
+
         if ($request->expectsJson()) {
             return response()->json([
                 'redirect_url' => $redirectUrl,
-                'status'       => $status,
+                $sessionKey    => $status,
             ]);
         }
 
-        return redirect()->to($redirectUrl)->with('status', $status);
+        return redirect()->to($redirectUrl)->with($sessionKey, $status);
     }
 }

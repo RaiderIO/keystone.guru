@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\DungeonRouteController;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Enemy;
 use App\Models\Laratrust\Role;
 use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
@@ -138,6 +139,43 @@ class DungeonRouteControllerUpgradeDraftTest extends PublicTestCase
     }
 
     #[Test]
+    public function upgrade_givenDraftRoute_redirectsToDraftWithWarningInsteadOfThrowing(): void
+    {
+        try {
+            // Arrange - a draft cannot itself have an upgrade draft (findOrCreateDraft() refuses this),
+            // but the URL is not gated on is_upgrade_draft, only on edit rights - so a direct hit must
+            // still land gracefully rather than 500
+            $owner = $this->createUser();
+            $route = $this->createOutdatedRoute($owner);
+
+            $this->actingAs($owner)->get(route('dungeonroute.upgrade', [
+                'dungeon'      => $route->dungeon,
+                'dungeonroute' => $route,
+                'title'        => $route->getTitleSlug(),
+            ]));
+            $draft = DungeonRoute::query()->where('upgrade_of_dungeon_route_id', $route->id)->firstOrFail();
+
+            // Act
+            $response = $this->actingAs($owner)->get(route('dungeonroute.upgrade', [
+                'dungeon'      => $draft->dungeon,
+                'dungeonroute' => $draft,
+                'title'        => $draft->getTitleSlug(),
+            ]));
+
+            // Assert
+            $response->assertRedirect(route('dungeonroute.edit', [
+                'dungeon'      => $draft->dungeon,
+                'dungeonroute' => $draft,
+                'title'        => $draft->getTitleSlug(),
+            ]));
+            $response->assertSessionHas('warning');
+            $this->assertNotNull(DungeonRoute::find($draft->id), 'The draft itself must not be deleted or mutated');
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
     public function applyUpgrade_givenDraft_redirectsToOriginalEditPage(): void
     {
         try {
@@ -167,6 +205,61 @@ class DungeonRouteControllerUpgradeDraftTest extends PublicTestCase
             ]));
             $this->assertNull(DungeonRoute::find($draft->id), 'Apply deletes the draft');
         } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
+    public function applyUpgrade_givenDraftMissingRequiredEnemy_redirectsToDraftWithWarningAndDoesNotDeleteDraft(): void
+    {
+        $newMappingVersionId = null;
+
+        try {
+            // Arrange
+            $owner = $this->createUser();
+            $route = $this->createOutdatedRoute($owner);
+            $this->actingAs($owner)->get(route('dungeonroute.upgrade', [
+                'dungeon'      => $route->dungeon,
+                'dungeonroute' => $route,
+                'title'        => $route->getTitleSlug(),
+            ]));
+            $draft               = DungeonRoute::query()->where('upgrade_of_dungeon_route_id', $route->id)->firstOrFail();
+            $newMappingVersionId = $draft->mapping_version_id;
+
+            Enemy::create([
+                'mapping_version_id' => $newMappingVersionId,
+                'floor_id'           => $draft->dungeon->floors->first()->id,
+                'npc_id'             => null,
+                'teeming'            => null,
+                'required'           => true,
+                'lat'                => 0,
+                'lng'                => 0,
+            ]);
+
+            // Act
+            $response = $this->actingAs($owner)->post(route('dungeonroute.upgrade.apply', [
+                'dungeon'      => $draft->dungeon,
+                'dungeonroute' => $draft,
+                'title'        => $draft->getTitleSlug(),
+            ]));
+
+            // Assert
+            $response->assertRedirect(route('dungeonroute.edit', [
+                'dungeon'      => $draft->dungeon,
+                'dungeonroute' => $draft,
+                'title'        => $draft->getTitleSlug(),
+            ]));
+            $response->assertSessionHas('warning');
+            $this->assertNotNull(DungeonRoute::find($draft->id), 'A rejected Apply must not delete the draft');
+            $this->assertSame(
+                PublishedState::ALL[PublishedState::WORLD],
+                DungeonRoute::findOrFail($route->id)->published_state_id,
+                'A rejected Apply must not mutate the original',
+            );
+        } finally {
+            if ($newMappingVersionId !== null) {
+                Enemy::query()->where('mapping_version_id', $newMappingVersionId)->delete();
+            }
             $this->tearDownCleanup();
         }
     }

@@ -7,6 +7,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteFavorite;
 use App\Models\DungeonRoute\DungeonRoutePlayerSpecialization;
 use App\Models\DungeonRoute\DungeonRouteRating;
+use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
@@ -444,6 +445,57 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
             // Act
             $service->apply($draft);
         } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
+    public function apply_givenDraftMissingRequiredEnemyAndOriginalIsPublished_throwsExceptionAndDoesNotMutateOriginal(): void
+    {
+        $newMappingVersion = null;
+
+        try {
+            // Arrange
+            [$original, , $newMappingVersion] = $this->createOutdatedRoute();
+            $originalTitle                    = $original->title;
+
+            $service = $this->buildUpgradeDraftService();
+            $draft   = $service->findOrCreateDraft($original);
+
+            // A required enemy on the draft's (new) mapping version that the draft has not killed - the
+            // same invariant DungeonRoutePolicy::publish() enforces
+            Enemy::create([
+                'mapping_version_id' => $newMappingVersion->id,
+                'floor_id'           => $newMappingVersion->dungeon->floors->first()->id,
+                'npc_id'             => null,
+                'teeming'            => null,
+                'required'           => true,
+                'lat'                => 0,
+                'lng'                => 0,
+            ]);
+
+            // Act
+            try {
+                $service->apply($draft);
+                $this->fail('Expected an UpgradeDraftException to be thrown');
+            } catch (UpgradeDraftException $upgradeDraftException) {
+                // Assert
+                $this->assertSame(
+                    __('policy.apply_upgrade_draft_not_all_required_enemies_killed'),
+                    $upgradeDraftException->getMessage(),
+                );
+            }
+
+            $original->refresh();
+            $this->assertSame($originalTitle, $original->title, 'A rejected Apply must not mutate the original');
+            $this->assertTrue(
+                DungeonRoute::query()->whereKey($draft->id)->exists(),
+                'A rejected Apply must not delete the draft',
+            );
+        } finally {
+            if ($newMappingVersion !== null) {
+                Enemy::query()->where('mapping_version_id', $newMappingVersion->id)->delete();
+            }
             $this->tearDownCleanup();
         }
     }

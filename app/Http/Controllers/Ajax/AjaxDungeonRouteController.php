@@ -93,8 +93,6 @@ class AjaxDungeonRouteController extends Controller
             'routeattributes',
             'ratings',
             'metricAggregations',
-            // Backs the has_upgrade_draft append, which every serialized route resolves - without this
-            // it would be a query per row
             'upgradeDraft',
             $tagsRelationshipName,
         ];

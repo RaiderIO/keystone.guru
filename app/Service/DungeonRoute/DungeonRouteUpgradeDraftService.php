@@ -65,22 +65,22 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
                     // Still valid here; upgradeMappingVersion() remaps it onto the new mapping version
                     'dungeon_start_map_icon_id' => $original->dungeon_start_map_icon_id,
                     // Deliberately unchanged - no clone prefix, this route replaces the original
-                    'title'          => $original->title,
-                    'description'    => $original->description,
-                    'level_min'      => $original->level_min,
-                    'level_max'      => $original->level_max,
-                    'difficulty'     => $original->difficulty,
-                    'seasonal_index' => $original->seasonal_index,
-                    'teeming'        => $original->teeming,
-                    'enemy_forces'   => $original->enemy_forces,
-                ]);
-
-                // Columns that are not fillable on DungeonRoute but that a draft must still carry over
-                DungeonRoute::query()->whereKey($draft->id)->update([
-                    'demo'                       => $original->demo,
+                    'title'                      => $original->title,
+                    'description'                => $original->description,
+                    'level_min'                  => $original->level_min,
+                    'level_max'                  => $original->level_max,
+                    'difficulty'                 => $original->difficulty,
                     'dungeon_difficulty'         => $original->dungeon_difficulty,
+                    'seasonal_index'             => $original->seasonal_index,
+                    'teeming'                    => $original->teeming,
+                    'enemy_forces'               => $original->enemy_forces,
                     'pull_gradient'              => $original->pull_gradient,
                     'pull_gradient_apply_always' => $original->pull_gradient_apply_always,
+                ]);
+
+                // demo is deliberately not fillable, so it is set through the query builder instead
+                DungeonRoute::query()->whereKey($draft->id)->update([
+                    'demo' => $original->demo,
                 ]);
 
                 $original->cloneRelationsInto($draft, $this->contentRelationsOf($original));
@@ -135,6 +135,16 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
                 $lockedDraft = DungeonRoute::query()->whereKey($draft->id)->first();
                 if ($lockedDraft === null || $lockedDraft->upgrade_of_dungeon_route_id !== $original->id) {
                     throw new UpgradeDraftException('This upgrade draft has already been applied or discarded.');
+                }
+
+                // The original's publish invariant (DungeonRoutePolicy::publish()) must still hold after
+                // Apply replaces its content - a published route cannot go live missing required enemies
+                // the new mapping version added, even though nothing here directly asked to publish it
+                if (
+                    $original->published_state_id !== PublishedState::ALL[PublishedState::UNPUBLISHED]
+                    && !$lockedDraft->hasKilledAllRequiredEnemies()
+                ) {
+                    throw new UpgradeDraftException(__('policy.apply_upgrade_draft_not_all_required_enemies_killed'));
                 }
 
                 $original->deleteContentRelations();
