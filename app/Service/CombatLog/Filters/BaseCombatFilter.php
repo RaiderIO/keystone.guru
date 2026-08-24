@@ -109,6 +109,19 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         // Muro'jin and Nekraxx do die, but one can resurrect the other, so we consider them defeated at less than 2% hp
         247570 => 0.02,
         247572 => 0.02,
+
+        // King's Rest
+        // The Shadow of Zul, T'zala and King Dazar are ghosts that despawn when defeated instead of dying
+        138489 => 0.01,
+        136976 => 0.01,
+        136160 => 0.01,
+        // The Council of Tribes despawns the same way. Their encounter does end, so the EncounterEnd branch below
+        // usually catches them - but that has not proven fool-proof, so this is a second, independent way to see it.
+        // These are the npc_ids the current mapping carries; the 135470/135472/135475 set with the same three names
+        // is not part of it anymore.
+        269808 => 0.01,
+        269810 => 0.01,
+        269811 => 0.01,
     ];
 
     /** @var array<int, int> Some enemies are summoned that we DO want to track in the route */

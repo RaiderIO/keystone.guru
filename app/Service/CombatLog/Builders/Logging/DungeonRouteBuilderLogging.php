@@ -160,9 +160,8 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
         $this->end(__METHOD__);
     }
 
-    public function findUnkilledEnemyForNpcAtIngameLocationRetryingWithoutBossKillFloorCutoff(
+    public function findUnkilledEnemyForNpcAtIngameLocationRetryingWithoutFirstPassExclusions(
         int $npcId,
-        int $minimumFloorIndex,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
@@ -173,6 +172,30 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
         int $floorId,
         int $minimumFloorIndex,
     ): void {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function theBlindingValeBridgeRuleBridgeEnemyPackGroupsBlocked(
+        int   $npcId,
+        array $enemyPackGroups,
+    ): void {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function kingsRestDespawningEnemiesRuleEnemyKillsAwarded(
+        int   $triggerNpcId,
+        array $awardedNpcIds,
+    ): void {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function awardEnemyKillsEnemyNotFound(int $npcId): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
+    public function awardEnemyKillsEnemyAwarded(int $npcId, int $enemyId): void
+    {
         $this->debug(__METHOD__, get_defined_vars());
     }
 

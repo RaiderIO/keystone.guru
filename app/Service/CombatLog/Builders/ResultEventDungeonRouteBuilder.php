@@ -142,6 +142,12 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                         }
                     }
 
+                    // Deliberately does not call notifyRulesEnemyDied(): this builder has never advanced rule state,
+                    // not even for the boss kill floor cutoff it inherited in #4140, and unlike
+                    // CombatLogRouteDungeonRouteBuilder it has no pinned route fixtures to prove that changing it is
+                    // safe. Wiring it up is a behaviour change for this path, so it wants its own issue and its own
+                    // regression run rather than riding along with the move to Rules/.
+
                     // Handle the actual creation of pulls
                     foreach ($this->activePullCollection as $pullIndex => $activePull) {
                         /** @var ActivePull $activePull */
