@@ -51,6 +51,11 @@ return [
             'affixgroup_deleted' => 'Grupo de afixos excluído',
         ],
     ],
+    'apicombatlogroute' => [
+        'error' => [
+            'no_post_body' => 'Esta rota não contém o corpo armazenado da requisição de rota do registro de combate.',
+        ],
+    ],
     'apicombatlogrun' => [
         'error' => [
             'no_segments' => 'Nenhum segmento de log de combate está disponível para esta execução.',
@@ -90,6 +95,9 @@ return [
             'route_cloned_successfully' => 'Rota clonada com sucesso',
             'route_updated'             => 'Rota atualizada',
             'route_created'             => 'Rota criada',
+            'upgrade_draft_created'     => 'Um rascunho de atualização foi criado. Corrija-o aqui; a rota original continuará exibindo o conteúdo antigo até você aplicar suas alterações.',
+            'upgrade_applied'           => 'A atualização foi aplicada à sua rota.',
+            'upgrade_discarded'         => 'O rascunho de atualização foi descartado.',
         ],
     ],
     'dungeonroutediscover' => [
@@ -127,6 +135,7 @@ return [
     'killzone' => [
         'error' => [
             'facade_location_not_convertible' => 'Não foi possível posicionar o pull aqui - esta localização não pertence a nenhum andar desta masmorra',
+            'unable_to_delete_pull'           => 'Não foi possível excluir o pull',
         ],
     ],
     'oauthlogin' => [

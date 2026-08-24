@@ -544,6 +544,10 @@ Alzzin the Wildshaper 처치 후에는 이 동굴을 이용해 인스턴스를 �
                 'go_north'                  => '북쪽으로 이동',
                 'go_south'                  => '남쪽으로 이동',
             ],
+            'den_of_nalorakk' => [
+                'offering'        => '공물',
+                'warding_incense' => '수호의 향 (10분 동안 유연성 5%)',
+            ],
             'maisara_caverns' => [
                 'hearty_vilebranch_stew' => '튼튼한 바일브랜치 스튜: 바일브랜치 스튜를 한 그릇 먹으면 30분 동안 흡혈이 3% 증가하고 광역 공격으로 받는 피해가 3% 감소합니다.',
             ],

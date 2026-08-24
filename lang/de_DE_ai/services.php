@@ -64,5 +64,21 @@ return [
             'processing_error' => 'Kampflog konnte nicht verarbeitet werden: Fehler.',
         ],
     ],
+    'combatlog' => [
+        'enemy_failure_analysis' => [
+            'verdict' => [
+                'npc_not_mapped'       => 'NPC nicht gemappt',
+                'no_enemy_in_range'    => 'Kein Gegner in Reichweite',
+                'enemies_exhausted'    => 'Mehr im Spiel als gemappt',
+                'wrong_floor_artifact' => 'Wahrscheinlich durch eine falsche Etage verursacht',
+            ],
+            'suggestion' => [
+                'npc_not_mapped'       => ':npc ist in dieser Mapping-Version überhaupt nicht vorhanden, wurde hier aber :count Mal in :routes Routen angegriffen. Füge ihn (oder sein Pack) an dieser Stelle hinzu.',
+                'no_enemy_in_range'    => 'Der nächstgelegene gemappte :npc (Gegner :enemy_id) ist :distance Yards entfernt und liegt damit außerhalb der Kampfreichweite von :range Yards. Wahrscheinlich fehlt hier ein Pack mit :npc, oder es ist an der falschen Stelle gemappt.',
+                'enemies_exhausted'    => 'Der NPC :npc ist :enemies-mal in Reichweite gemappt, aber Routen scheitern hier trotzdem etwa :avg Mal pro Route – das Spiel hat in diesem Pack wahrscheinlich mehr davon als das Mapping.',
+                'wrong_floor_artifact' => 'Kein :npc ist auf dieser Etage in Reichweite, aber auf einer anderen Etage befindet sich einer innerhalb von :distance Yards. Die aufgezeichnete Etage wird aus dem vorherigen NPC im Log abgeleitet; daher liegt das höchstwahrscheinlich an dieser Ableitung. Prüfe das, bevor du das Mapping änderst.',
+            ],
+        ],
+    ],
 
 ];

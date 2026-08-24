@@ -544,6 +544,10 @@ Após matar o chefe, use o item de draco para voar mais alto.',
                 'go_north'                  => 'Ir para o norte',
                 'go_south'                  => 'Ir para o sul',
             ],
+            'den_of_nalorakk' => [
+                'offering'        => 'Oferenda',
+                'warding_incense' => 'Incenso Protetor (5% de Versatilidade por 10 minutos)',
+            ],
             'maisara_caverns' => [
                 'hearty_vilebranch_stew' => 'Ensopado Forte de Vilebranch: Experimente uma porção do ensopado Vilebranch, aumentando sua Sugação em 3% e reduzindo o dano recebido de ataques em área em 3% por 30 min.',
             ],

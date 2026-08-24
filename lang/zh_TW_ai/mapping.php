@@ -535,6 +535,10 @@ return [
                 'go_north'                  => '向北走',
                 'go_south'                  => '向南走',
             ],
+            'den_of_nalorakk' => [
+                'offering'        => '',
+                'warding_incense' => '',
+            ],
             'maisara_caverns' => [
                 'hearty_vilebranch_stew' => '豐盛的邪枝燉肉：享用一份邪枝燉肉，增加你的吸血3%並減少受到的範圍攻擊傷害3%，持續30分鐘。',
             ],

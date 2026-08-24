@@ -102,6 +102,7 @@ return [
         'linkpreview_default_description'         => 'Route M+ pour le donjon %s par %s.',
         'linkpreview_default_description_sandbox' => 'Route M+ temporaire pour le donjon %s.',
         'linkpreview_default_description_explore' => 'Explorer %s.',
+        'linkpreview_default_description_heatmap' => 'Consultez une carte thermique de %s pour voir les choix que fait la communauté.',
     ],
 
 ];

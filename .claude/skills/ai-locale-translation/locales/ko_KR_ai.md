@@ -4,7 +4,7 @@
 |---|---|
 | Register | **Formal 하십시오체** — verb endings `-습니다` / `-세요` throughout. Never plain `-다`/`-이다` sentence endings in user-facing prose. Terse nominal-style strings (activity-feed entries like `Casts :name`) are deliberately not full sentences and need no `-습니다`. |
 | Register check | `grep -ohE "습니다\|세요" lang/ko_KR_ai/*.php \| grep -vE "spells\|validation\|datatables\|npcs\|dungeons\|view_admin" \| sort \| uniq -c` — positive signal (336 + 80 before the pass); spot-check new keys by eye for bare `-다` endings. |
-| Last full pass | 2026-08-21, #4165, PR #4209 — 769 keys filled, 29 post-review rewrites. |
+| Last full pass | 2026-08-24, #4299 — 47 catch-up keys (the #4277 upgrade-draft strings, the enemy-failure cluster verdicts and suggestions, and three new map-icon labels) on top of the 2026-08-21 #4165 pass, PR #4209 (769 keys, 29 post-review rewrites). |
 | Normalisation done | none needed. |
 
 ## Glossary
@@ -29,6 +29,8 @@
 | Versatility / Mastery (Algeth'ar buffs) | 유연성 / 숙련도 | from the pre-existing `midnight.algeth_ar_academy` block — not 다재다능/특화 수치 |
 | Spell (player-cast, Compendium) | 플레이어 주문 | disambiguates from NPC-cast 주문 in the same UI |
 | "unlocks after …" | … 잠금 해제됩니다. | full verb ending, not a bare 잠금 해제 |
+| Upgrade draft (#4277) | 업그레이드 초안 | new in #4299 |
+| Waystone (map icon type) | 이정표 돌 | coined in #4299 — no in-repo source |
 
 ## Locale-specific conventions
 
@@ -51,3 +53,10 @@
   official name" caused it — now stated as absolute in the review prompt); ~15 pointed at lines
   outside the diff (prompt now scopes to the diff). Real: `df.algeth_ar_academy` not matched to the
   `midnight` block, 5 invented Pledge Pin names, 4 object labels translated, mechanical slips.
+- 2026-08-24 #4299 — 47-key catch-up ahead of the v15.19.0 release cut. 묶음 for Pack (the
+  `enemypack` label) and 유연성 for Versatility, both read from the locale. Codex review: 9 findings,
+  all applied — the important one being the unit. `:distance` is a yard value computed by our own
+  code, and this pass had relabelled it as metres by following `mapping.php` prose; corrected to
+  *야드*, matching the locale's UI strings. Now rule 11 in the skill. Declined: the reviewer's claim
+  of an official Blizzard name for `Waystone`, cited to a hotfix URL that cannot be checked from
+  here and supported by no in-repo source — *이정표 돌* stays a coined rendering.

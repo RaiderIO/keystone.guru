@@ -544,6 +544,10 @@ return [
                 'go_north'                  => '向北走',
                 'go_south'                  => '向南走',
             ],
+            'den_of_nalorakk' => [
+                'offering'        => '祭品',
+                'warding_incense' => '守护熏香（全能提高5%，持续10分钟）',
+            ],
             'maisara_caverns' => [
                 'hearty_vilebranch_stew' => '丰盛的邪枝炖肉：享用一份邪枝炖肉，使你的吸血增加3%，并在30分钟内减少受到的范围攻击伤害3%。',
             ],

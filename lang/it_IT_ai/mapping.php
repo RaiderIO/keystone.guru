@@ -544,6 +544,10 @@ Dopo aver ucciso il boss, usa l\'oggetto drago per volare più in alto.',
                 'go_north'                  => 'Vai a nord',
                 'go_south'                  => 'Vai a sud',
             ],
+            'den_of_nalorakk' => [
+                'offering'        => 'Offerta',
+                'warding_incense' => 'Incenso protettivo (5% Versatilità per 10 minuti)',
+            ],
             'maisara_caverns' => [
                 'hearty_vilebranch_stew' => 'Stufato Vilebranch Sostanzioso: Prendi una porzione di stufato Vilebranch, aumentando il tuo Prosciugamento del 3% e riducendo i danni subiti da attacchi ad area del 3% per 30 minuti.',
             ],

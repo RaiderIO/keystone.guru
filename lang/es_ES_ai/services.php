@@ -64,5 +64,21 @@ return [
             'processing_error' => 'No se puede procesar el registro de combate: error.',
         ],
     ],
+    'combatlog' => [
+        'enemy_failure_analysis' => [
+            'verdict' => [
+                'npc_not_mapped'       => 'NPC no mapeado',
+                'no_enemy_in_range'    => 'Ningún enemigo dentro del alcance',
+                'enemies_exhausted'    => 'Más en el juego que en el mapeo',
+                'wrong_floor_artifact' => 'Probablemente un artefacto causado por una planta incorrecta',
+            ],
+            'suggestion' => [
+                'npc_not_mapped'       => ':npc no aparece en absoluto en esta versión de mapeo, pero aun así se ha entrado en combate con él :count veces en esta ubicación a lo largo de :routes rutas. Añádelo (o añade su pack) aquí.',
+                'no_enemy_in_range'    => 'El :npc mapeado más cercano (enemigo :enemy_id) está a :distance yardas, más allá del alcance de combate de :range yardas. Probablemente falte aquí un pack de :npc, o está mapeado en el lugar equivocado.',
+                'enemies_exhausted'    => 'Hay :enemies :npc mapeados dentro del alcance, pero cada ruta sigue fallando aquí una media de :avg veces: probablemente haya más :npc en este pack en el juego que en el mapeo.',
+                'wrong_floor_artifact' => 'No hay ningún :npc dentro del alcance en esta planta, pero hay uno a menos de :distance yardas en otra. La planta registrada se deduce a partir del NPC anterior del registro, así que lo más probable es que el fallo se deba a esa deducción; verifícalo antes de cambiar el mapeo.',
+            ],
+        ],
+    ],
 
 ];

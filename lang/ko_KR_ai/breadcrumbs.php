@@ -86,6 +86,7 @@ return [
                 'combat_log_regenerate'                       => 'ARC 경로 재생성',
                 'combat_log_criteria'                         => 'NPC 도감 파싱 기준',
                 'combat_log_run_data'                         => '전투 기록 런 데이터 정리',
+                'combat_log_route_coverage'                   => 'ARC 적 병력 커버리지',
                 'dungeonroute_view'                           => '던전 경로 보기',
                 'dungeonroute_view_contents'                  => '경로 내용',
                 'dungeonroute_mapping_version_usage'          => '매핑 버전 사용 현황',

@@ -63,5 +63,21 @@ return [
             'processing_error' => 'Impossibile elaborare il registro di combattimento: errore.',
         ],
     ],
+    'combatlog' => [
+        'enemy_failure_analysis' => [
+            'verdict' => [
+                'npc_not_mapped'       => 'NPC non mappato',
+                'no_enemy_in_range'    => 'Nessun nemico a portata',
+                'enemies_exhausted'    => 'Più nel gioco che nella mappatura',
+                'wrong_floor_artifact' => 'Probabile anomalia dovuta a un piano errato',
+            ],
+            'suggestion' => [
+                'npc_not_mapped'       => ':npc non è affatto presente in questa versione di mappatura, eppure qui è stato ingaggiato :count volte su :routes percorsi. Aggiungilo (o il suo pacchetto) in questa posizione.',
+                'no_enemy_in_range'    => 'Il :npc mappato più vicino (nemico :enemy_id) si trova a :distance iarde, oltre la portata di ingaggio di :range iarde. Probabilmente qui manca un pacchetto di :npc, oppure è mappato nel posto sbagliato.',
+                'enemies_exhausted'    => 'Nel raggio d\'azione risultano :enemies :npc mappati, ma i percorsi qui falliscono comunque circa :avg volte ciascuno: nel gioco questo pacchetto contiene probabilmente più :npc di quanti ne preveda la mappatura.',
+                'wrong_floor_artifact' => 'Nessun :npc a portata su questo piano, ma ce n\'è uno entro :distance iarde su un altro piano. Il piano registrato viene dedotto dall\'NPC precedente nel log, quindi l\'anomalia è molto probabilmente dovuta a tale deduzione: verifica prima di modificare la mappatura.',
+            ],
+        ],
+    ],
 
 ];

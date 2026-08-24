@@ -102,6 +102,7 @@ return [
         'linkpreview_default_description'         => 'Ruta M+ para la mazmorra %s por %s.',
         'linkpreview_default_description_sandbox' => 'Ruta temporal M+ para la mazmorra %s.',
         'linkpreview_default_description_explore' => 'Explorar %s.',
+        'linkpreview_default_description_heatmap' => 'Consulta un mapa de calor de %s para ver qué decisiones está tomando la comunidad.',
     ],
 
 ];

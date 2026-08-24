@@ -102,6 +102,7 @@ return [
         'linkpreview_default_description'         => '地下城%s的M+路线，由%s提供。',
         'linkpreview_default_description_sandbox' => '地下城%s的临时M+路线。',
         'linkpreview_default_description_explore' => '探索%s。',
+        'linkpreview_default_description_heatmap' => '查看%s的热力图，了解社区正在做出哪些选择。',
     ],
 
 ];

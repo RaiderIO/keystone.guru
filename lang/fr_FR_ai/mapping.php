@@ -544,6 +544,10 @@ Après avoir tué le boss, utilisez l\'objet de drake pour vous envoler plus hau
                 'go_north'                  => 'Aller au nord',
                 'go_south'                  => 'Aller au sud',
             ],
+            'den_of_nalorakk' => [
+                'offering'        => 'Offrande',
+                'warding_incense' => 'Encens protecteur (5% Polyvalence pendant 10 minutes)',
+            ],
             'maisara_caverns' => [
                 'hearty_vilebranch_stew' => 'Ragoût de Vilebranche fortifiant : Prenez une portion de ragoût Vilebranche, augmentant votre Ponction de 3% et réduisant les dégâts reçus des attaques à effet de zone de 3% pendant 30 min.',
             ],

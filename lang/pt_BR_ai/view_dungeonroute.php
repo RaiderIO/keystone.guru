@@ -102,6 +102,7 @@ return [
         'linkpreview_default_description'         => 'Rota M+ para masmorra %s por %s.',
         'linkpreview_default_description_sandbox' => 'Rota M+ temporária para masmorra %s.',
         'linkpreview_default_description_explore' => 'Explore %s.',
+        'linkpreview_default_description_heatmap' => 'Veja um mapa de calor de %s para descobrir quais escolhas a comunidade está fazendo.',
     ],
 
 ];

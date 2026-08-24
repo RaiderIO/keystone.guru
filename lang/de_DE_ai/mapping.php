@@ -544,6 +544,10 @@ Benutze nach dem Töten des Bosses den Drachengegenstand, um weiter nach oben zu
                 'go_north'                  => 'Gehe nach Norden',
                 'go_south'                  => 'Gehe nach Süden',
             ],
+            'den_of_nalorakk' => [
+                'offering'        => 'Opfergabe',
+                'warding_incense' => 'Schützender Weihrauch (5% Vielseitigkeit für 10 Minuten)',
+            ],
             'maisara_caverns' => [
                 'hearty_vilebranch_stew' => 'Herzhafter Vilebranch-Eintopf: Genieße eine Portion Vilebranch-Eintopf, der deine Lebensraub um 3% erhöht und den erlittenen Schaden durch Flächenangriffe für 30 Minuten um 3% reduziert.',
             ],

@@ -64,5 +64,21 @@ return [
             'processing_error' => 'No se puede procesar el registro de combate: error.',
         ],
     ],
+    'combatlog' => [
+        'enemy_failure_analysis' => [
+            'verdict' => [
+                'npc_not_mapped'       => 'NPC no mapeado',
+                'no_enemy_in_range'    => 'Ningún enemigo dentro del alcance',
+                'enemies_exhausted'    => 'Más en el juego que en el mapeo',
+                'wrong_floor_artifact' => 'Probable artefacto de asignación al piso equivocado',
+            ],
+            'suggestion' => [
+                'npc_not_mapped'       => ':npc no aparece en absoluto en esta versión de mapeo, pero aun así entró en combate :count veces en esta ubicación a lo largo de :routes rutas. Agrégalo (o agrega su pack) aquí.',
+                'no_enemy_in_range'    => 'El :npc mapeado más cercano (enemigo :enemy_id) está a :distance yardas, más allá del alcance de combate de :range yardas. Probablemente falte aquí un pack de :npc, o está mapeado en el lugar equivocado.',
+                'enemies_exhausted'    => 'Hay :enemies :npc mapeados dentro del alcance, pero las rutas siguen fallando aquí aproximadamente :avg veces cada una: probablemente haya más :npc en este pack dentro del juego que en el mapeo.',
+                'wrong_floor_artifact' => 'No hay ningún :npc dentro del alcance en este piso, pero hay uno a menos de :distance yardas en otro piso. El piso registrado se infiere a partir del NPC anterior en el registro, así que lo más probable es que se deba a esa inferencia; verifícalo antes de cambiar el mapeo.',
+            ],
+        ],
+    ],
 
 ];

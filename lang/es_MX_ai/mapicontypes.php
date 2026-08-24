@@ -126,4 +126,5 @@ return [
     'murder_row_overload_golem'                       => 'Gólem de sobrecarga',
     'the_blinding_vale_flourishing_stride'            => 'Paso floreciente',
 
+    'waystone' => 'Piedra guía',
 ];

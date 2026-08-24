@@ -64,5 +64,21 @@ return [
             'processing_error' => 'Não foi possível processar o registro de combate: erro.',
         ],
     ],
+    'combatlog' => [
+        'enemy_failure_analysis' => [
+            'verdict' => [
+                'npc_not_mapped'       => 'NPC não mapeado',
+                'no_enemy_in_range'    => 'Nenhum inimigo ao alcance',
+                'enemies_exhausted'    => 'Mais no jogo do que no mapeamento',
+                'wrong_floor_artifact' => 'Provavelmente um artefato causado por um andar incorreto',
+            ],
+            'suggestion' => [
+                'npc_not_mapped'       => ':npc não aparece em nenhum ponto desta versão de mapeamento, mas, ainda assim, foi engajado neste local. Número de engajamentos: :count; rotas analisadas: :routes. Adicione-o (ou o pacote dele) aqui.',
+                'no_enemy_in_range'    => 'O :npc mapeado mais próximo (inimigo :enemy_id) está a :distance jardas, além do alcance de engajamento de :range jardas. Provavelmente falta um pacote de :npc aqui, ou ele está mapeado no lugar errado.',
+                'enemies_exhausted'    => 'O mapeamento contém :npc dentro do alcance (total: :enemies), mas as rotas ainda apresentam falhas neste local (média por rota: :avg). O jogo provavelmente tem mais :npc neste pacote do que o mapeamento.',
+                'wrong_floor_artifact' => 'Nenhum :npc está ao alcance neste andar, mas há um em outro andar a no máximo :distance jardas. O andar registrado é inferido com base no NPC anterior do registro, então isso muito provavelmente se deve a essa inferência; verifique antes de alterar o mapeamento.',
+            ],
+        ],
+    ],
 
 ];

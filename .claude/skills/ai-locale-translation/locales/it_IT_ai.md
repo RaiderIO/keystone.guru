@@ -4,7 +4,7 @@
 |---|---|
 | Register | **Informal *tu*** throughout (*tuo/tua*, *clicca*, *seleziona*), never formal *Lei*. |
 | Register check | `grep -rniE "\b(Lei\|Suo\|Sua\|Suoi\|Sue\|clicchi\|selezioni)\b" lang/it_IT_ai/*.php \| grep -vE "spells\|validation\|datatables\|npcs\|dungeons\|view_admin"` — review by hand: every one of the 7 hits after the pass was a third-person possessive ("il **suo** dungeon" = *its*), not formal address. Positive check: `\b(tu\|tuo\|tua\|tuoi\|tue\|clicca\|seleziona)\b` had 164→181 hits. |
-| Last full pass | 2026-08-21, #4165 — 769 keys filled, ~90 post-review rewrites (75 of them reverting NPC names to English). |
+| Last full pass | 2026-08-24, #4299 — 47 catch-up keys (the #4277 upgrade-draft strings, the enemy-failure cluster verdicts and suggestions, and three new map-icon labels) on top of the 2026-08-21 #4165 pass (769 keys, ~90 post-review rewrites). |
 | Normalisation done | none needed. |
 
 ## Glossary
@@ -18,6 +18,7 @@
 | Checkpoint | Checkpoint (untranslated loanword) | Weight (line thickness) | Peso |
 | Icon | icona | Teeming | Abbondante (`affixes.php`) |
 | Raid marker | marcatore di incursione (Raid → *incursione*, established) | Season | Stagione |
+| Upgrade draft (#4277) | bozza di aggiornamento | Waystone (map icon type) | Pietra miliare |
 
 ## Locale-specific conventions
 
@@ -36,3 +37,11 @@
   name (`Vengeful Fleshreaper` → *Mieticarne Vendicativo*), against the unanimous convention of the
   four earlier locales. ~75 keys reverted. This is the origin of the **absolute** "NPC names stay
   English even when `npcs.php` has a localisation" rule in `SKILL.md`.
+- 2026-08-24 #4299 — 47-key catch-up ahead of the v15.19.0 release cut. *percorso* throughout and
+  *pacchetto* for Pack, as the sheet requires; *errori* for failure records, matching
+  `clear_failures`. Codex review: 12 findings, all applied — the important one being the unit.
+  `:distance` is a yard value computed by our own code, and this pass had relabelled it as metres
+  by following `mapping.php` prose; corrected to *iarde*, matching the locale's UI strings. Now
+  rule 11 in the skill. Declined: the reviewer's claim of an official Blizzard name for
+  `Waystone`, cited to a hotfix URL that cannot be checked from here and supported by no in-repo
+  source — *Pietra miliare* stays a coined rendering.

@@ -126,4 +126,5 @@ return [
     'murder_row_overload_golem'                       => 'Überlastungsgolem',
     'the_blinding_vale_flourishing_stride'            => 'Blühender Schritt',
 
+    'waystone' => 'Wegstein',
 ];

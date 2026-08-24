@@ -51,6 +51,11 @@ return [
             'affixgroup_deleted' => '词缀组已删除',
         ],
     ],
+    'apicombatlogroute' => [
+        'error' => [
+            'no_post_body' => '此路线没有存储的战斗日志路线请求正文。',
+        ],
+    ],
     'apicombatlogrun' => [
         'error' => [
             'no_segments' => '此次运行没有可用的战斗日志片段。',
@@ -90,6 +95,9 @@ return [
             'route_cloned_successfully' => '路线克隆成功',
             'route_updated'             => '路线已更新',
             'route_created'             => '路线已创建',
+            'upgrade_draft_created'     => '已创建升级草稿。请在此处修复它——在您应用更改之前，原路线仍会显示其旧内容。',
+            'upgrade_applied'           => '升级已应用到您的路线。',
+            'upgrade_discarded'         => '已放弃该升级草稿。',
         ],
     ],
     'dungeonroutediscover' => [
@@ -127,6 +135,7 @@ return [
     'killzone' => [
         'error' => [
             'facade_location_not_convertible' => '无法在此处放置拉怪——该位置不属于此地下城的任何楼层',
+            'unable_to_delete_pull'           => '无法删除该次拉怪',
         ],
     ],
     'oauthlogin' => [

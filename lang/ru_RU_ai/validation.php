@@ -38,6 +38,11 @@ return [
         'creator_search' => [
             'max' => '',
         ],
+        'autoroutecoverage_days' => [
+            'integer' => '',
+            'min'     => '',
+            'max'     => '',
+        ],
     ],
     'date'              => 'Значение поля :attribute должно быть корректной датой.',
     'date_equals'       => 'Значение поля :attribute должно быть датой равной :date.',

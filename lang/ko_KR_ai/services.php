@@ -64,5 +64,21 @@ return [
             'processing_error' => '전투 로그를 처리할 수 없음: 오류.',
         ],
     ],
+    'combatlog' => [
+        'enemy_failure_analysis' => [
+            'verdict' => [
+                'npc_not_mapped'       => 'NPC가 매핑되지 않음',
+                'no_enemy_in_range'    => '범위 내에 적 없음',
+                'enemies_exhausted'    => '게임 내 수가 매핑된 수보다 많음',
+                'wrong_floor_artifact' => '잘못된 층으로 인한 오류일 가능성이 높음',
+            ],
+            'suggestion' => [
+                'npc_not_mapped'       => ':npc이(가) 이 매핑 버전에 전혀 없는데도, 여기서 :routes개 경로에 걸쳐 :count회 교전했습니다. 이 위치에 해당 NPC(또는 그 묶음)를 추가하세요.',
+                'no_enemy_in_range'    => '가장 가까운 매핑된 :npc(적 :enemy_id)은(는) :distance야드 떨어져 있어 :range야드의 교전 범위를 벗어납니다. 이 위치에서 :npc 묶음이 누락되었거나 잘못된 위치에 매핑되었을 가능성이 높습니다.',
+                'enemies_exhausted'    => '범위 내에 매핑된 :npc이(가) :enemies마리 있지만, 경로마다 평균 약 :avg회 실패합니다. 게임 내 이 묶음에는 매핑된 수보다 더 많은 :npc이(가) 있을 가능성이 높습니다.',
+                'wrong_floor_artifact' => '이 층의 범위 내에는 :npc이(가) 없지만, 다른 층의 :distance야드 이내에는 하나 있습니다. 기록된 층은 로그의 이전 NPC를 바탕으로 추론되므로, 층이 잘못 기록된 것은 이 추론 때문일 가능성이 높습니다. 매핑을 변경하기 전에 확인하세요.',
+            ],
+        ],
+    ],
 
 ];

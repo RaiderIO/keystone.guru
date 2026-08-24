@@ -4,7 +4,7 @@
 |---|---|
 | Register | **Formal 您** for direct address (256:39 before the pass, 317:39 after). New keys always 您, never 你. |
 | Register check | `grep -o '你' lang/zh_CN_ai/{js,view_*,controller,mapping,rules,policy,services}.php \| wc -l` — 39 legacy hits expected (see drift); any increase is a slip. |
-| Last full pass | 2026-08-21, #4165 — 769 keys filled, 11 post-review rewrites. |
+| Last full pass | 2026-08-24, #4299 — 47 catch-up keys (the #4277 upgrade-draft strings, the enemy-failure cluster verdicts and suggestions, and three new map-icon labels) on top of the 2026-08-21 #4165 pass (769 keys, 11 post-review rewrites). |
 | Normalisation done | none. A 你→您 pass over the 39 legacy `js.php` `intro_*` tutorial keys would be legitimate but was **not** authorised. |
 
 ## Glossary
@@ -22,6 +22,7 @@
 | Teeming | 繁盛 (`affixes.php`) | Combat Log | 战斗日志 (translated — locale precedent beats the jargon default) |
 | Scheduled publish | 计划发布 (not 排程) | Crusader's Square / Hall of the Keepers / Infusion Chamber | 十字军广场 / 守护者大厅 / 注能室 (`dungeons.php`) |
 | Teleporter | 传送器 | Cursed Spire of Ny'alotha | 奈奥罗萨的诅咒尖塔 |
+| Upgrade draft (#4277) | 升级草稿 | Waystone (map icon type) | 路标石 |
 
 ## Locale-specific conventions
 
@@ -43,3 +44,8 @@
   `scheduling_label` consistency, heatmap wording, 2 polish) + 3 self-caught 小队→包. Rejected:
   ~20 "must stay English" object labels (checked against precedent), `view_admin.php` stubs, 10
   "register breaks" that were realignment-only `+` lines with byte-identical text.
+- 2026-08-24 #4299 — 47-key catch-up ahead of the v15.19.0 release cut. 包 for Pack, 楼层 for floor,
+  全能 for Versatility, 码 for distance — all from the locale. No new 你 introduced. Codex review: 9
+  findings, all applied. Declined: the reviewer's claim of an official Blizzard name for
+  `Waystone`, cited to a hotfix URL that cannot be checked from here and supported by no in-repo
+  source — *路标石* stays a coined rendering.

@@ -102,6 +102,7 @@ return [
         'linkpreview_default_description'         => 'Маршрут М+ для подземелья %s от %s.',
         'linkpreview_default_description_sandbox' => 'Временный маршрут М+ для подземелья %s.',
         'linkpreview_default_description_explore' => 'Исследовать %s.',
+        'linkpreview_default_description_heatmap' => 'Посмотрите тепловую карту %s, чтобы увидеть, какие решения принимает сообщество.',
     ],
 
 ];

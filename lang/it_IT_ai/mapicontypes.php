@@ -126,4 +126,5 @@ return [
     'murder_row_overload_golem'                       => 'Golem sovraccarico',
     'the_blinding_vale_flourishing_stride'            => 'Passo rigoglioso',
 
+    'waystone' => 'Pietra miliare',
 ];

@@ -544,6 +544,10 @@ Tras matar al jefe, usa el objeto de dracoserpiente para volar más arriba.',
                 'go_north'                  => 'Ve al norte',
                 'go_south'                  => 'Ve al sur',
             ],
+            'den_of_nalorakk' => [
+                'offering'        => 'Ofrenda',
+                'warding_incense' => 'Incienso protector (5% de Versatilidad durante 10 minutos)',
+            ],
             'maisara_caverns' => [
                 'hearty_vilebranch_stew' => 'Guiso Vilebranch Sustancioso: Prueba un poco de guiso Vilebranch, aumentando tu Robo de vida en un 3% y reduciendo el daño recibido de ataques de área de efecto en un 3% durante 30 min.',
             ],

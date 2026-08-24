@@ -154,8 +154,19 @@ most of them more than once.
 9. **Counter means neutralise, not retaliate** (`view_compendium.php` "countered by"): pt_BR wrote
    *contra-atacar*, zh_CN nearly wrote 反击. Cast time, debuff, aura, crowd control: established
    MMO terms from the sheet.
-10. **Raw `%s` counts have no plural bucket** — in declining languages write a count-invariant
-    form (`Просмотров: %s`), don't add a bucket the source doesn't have.
+10. **Raw `%s`/`:count` counts have no plural bucket** — in declining languages write a
+    count-invariant form (`Просмотров: %s`, `Falhas: :count`), don't add a bucket the source
+    doesn't have. This is not only a Russian problem: `:count fallos`/`:count mapeados`/
+    `:count fallimenti` all render "1 fallos" for a count of 1. When a string interpolates a
+    bare count into an agreeing noun, restructure to a label-value form instead.
+11. **A placeholder carrying a number carries its unit too — never relabel it.** `:distance yd`
+    holds a yard value computed by our own code, so rendering it as `m`/`미터` silently misstates
+    the measurement. This is a live trap because the *prose* strings in `mapping.php` legitimately
+    localise Blizzard's own yard distances into metres (`imbued_iron_energy` says *20 Metern*,
+    *20 mètres*, *20 metri*), so the nearest precedent argues for the wrong answer. Take the unit
+    from the locale's **UI** strings instead — `js.php` `mountablearea_speed_label` and
+    `view_common.php` `ranged_pull_compensation_yards` keep it as `Yards` / `yards` / `iarde` /
+    `야드` / `yardas` / `jardas` / `ярд.` / `码`. Caught by Codex in #4299 across four locales.
 
 Add a glossary row to the locale sheet whenever a pass forces a decision worth keeping.
 

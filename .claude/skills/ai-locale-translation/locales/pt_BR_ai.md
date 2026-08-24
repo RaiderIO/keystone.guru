@@ -4,7 +4,7 @@
 |---|---|
 | Register | **Informal *você*** throughout (121 pre-existing hits, 0 *tu*). Never *tu* conjugations, never *o senhor/a senhora*. |
 | Register check | `grep -rniE "\b(tu\|teu\|tua\|contigo\|senhor\|senhora)\b" lang/pt_BR_ai/*.php \| grep -vE "spells\|validation\|datatables\|npcs\|dungeons\|view_admin"` — expect 0. |
-| Last full pass | 2026-08-21, #4165 — 769 keys filled, 32 post-review rewrites. |
+| Last full pass | 2026-08-24, #4299 — 47 catch-up keys (the #4277 upgrade-draft strings, the enemy-failure cluster verdicts and suggestions, and three new map-icon labels) on top of the 2026-08-21 #4165 pass (769 keys, 32 post-review rewrites). |
 | Normalisation done | none needed. |
 
 ## Glossary
@@ -25,6 +25,7 @@
 | counter (verb, "countered by") | neutralizar (**not** contra-atacar = retaliate) | landing through (an immunity) | acertando apesar de (not *através de*) |
 | pat (patrol jargon) | patrulha | Blazing Aegis / Burning Chain | Égide Fulgurante / Corrente Ardente (`spells.php`) |
 | jobs (queue) | trabalhos (matches sibling `thumbnail_regenerate_result`) | | |
+| Upgrade draft (#4277) | rascunho de atualização | Waystone (map icon type) | Pedra de Marco |
 
 ## Locale-specific conventions
 
@@ -44,3 +45,8 @@
   `npcs.php` (the it_IT mistake again), `Enrage`/`Awakened` invented, `counter` as
   *contra-atacar* across 7 Compendium keys, plus polish. Rejected: `view_admin.php` stubs,
   `trabalhos`→`tarefas`.
+- 2026-08-24 #4299 — 47-key catch-up ahead of the v15.19.0 release cut. *pacote* for Pack and
+  *jardas* for distance, both from the locale's existing usage. Codex review: 11 findings, all
+  applied. Declined: the reviewer's claim of an official Blizzard name for `Waystone`, cited to a
+  hotfix URL that cannot be checked from here and supported by no in-repo source — *Pedra de
+  Marco* stays a coined rendering.

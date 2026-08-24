@@ -126,4 +126,5 @@ return [
     'murder_row_overload_golem'                       => 'Golem de Sobrecarga',
     'the_blinding_vale_flourishing_stride'            => 'Passo Florescente',
 
+    'waystone' => 'Pedra de Marco',
 ];

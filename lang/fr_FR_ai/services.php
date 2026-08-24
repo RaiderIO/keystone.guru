@@ -64,5 +64,21 @@ return [
             'processing_error' => 'Impossible de traiter le journal de combat : erreur.',
         ],
     ],
+    'combatlog' => [
+        'enemy_failure_analysis' => [
+            'verdict' => [
+                'npc_not_mapped'       => 'PNJ non mappé',
+                'no_enemy_in_range'    => 'Aucun ennemi à portée',
+                'enemies_exhausted'    => 'Davantage d\'ennemis en jeu que dans le mapping',
+                'wrong_floor_artifact' => 'Probablement un artefact dû à un étage incorrect',
+            ],
+            'suggestion' => [
+                'npc_not_mapped'       => ':npc est totalement absent de cette version de mapping, alors qu\'il a été engagé :count fois sur :routes routes à cet endroit. Ajoutez-le (ou son pack) ici.',
+                'no_enemy_in_range'    => 'Le :npc mappé le plus proche (ennemi :enemy_id) se trouve à :distance yards, au-delà de la portée d\'engagement de :range yards. Il manque probablement un pack de :npc ici, ou il est mappé au mauvais endroit.',
+                'enemies_exhausted'    => ':enemies :npc sont mappés à portée, mais les routes échouent tout de même ici environ :avg fois chacune : le jeu contient probablement plus de :npc dans ce pack que le mapping.',
+                'wrong_floor_artifact' => 'Aucun :npc n\'est à portée à cet étage, mais il y en a un à moins de :distance yards à un autre étage. L\'étage enregistré est déduit du PNJ précédent dans le journal de combat ; cette déduction est donc très probablement à l\'origine du problème. Vérifiez ce point avant de modifier le mapping.',
+            ],
+        ],
+    ],
 
 ];
