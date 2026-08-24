@@ -186,7 +186,7 @@ return [
     'upgrade_draft_badge_label'                                      => 'Rascunho de atualização',
     'upgrade_draft_badge_title'                                      => 'Este é um rascunho de atualização. Ele não pode ser compartilhado sozinho: aplique-o à rota que ele atualiza para publicar suas alterações.',
     'upgrade_draft_in_progress_badge_label'                          => 'Rascunho em andamento',
-    'upgrade_draft_in_progress_badge_title'                          => 'Um rascunho de atualização está sendo trabalhado para esta rota. Esta rota continua exibindo o conteúdo atual até o rascunho ser aplicado.',
+    'upgrade_draft_in_progress_badge_title'                          => 'Um rascunho de atualização para esta rota está em andamento. A rota continua exibindo o conteúdo atual até que o rascunho seja aplicado.',
     'upgrade_draft_of_label'                                         => 'Ver a rota que ele atualiza',
     'mapping_version_upgrade_route_replaced_label'                   => 'Esta rota foi substituída por um rascunho de atualização aplicado. Atualize a página para ver a nova versão.',
     'algethar_academy_dragonflight_warning_label'                    => 'Você está visualizando a versão Dragonflight da Algeth\'ar Academy. Certifique-se de usar a versão Midnight para compatibilidade com MDT.',

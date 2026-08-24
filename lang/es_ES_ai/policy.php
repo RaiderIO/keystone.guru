@@ -10,7 +10,7 @@ return [
     'publish_route_is_upgrade_draft'                      => 'Un borrador de actualización no se puede compartir por sí solo. Aplícalo a la ruta que actualiza para publicar tus cambios.',
     'apply_upgrade_route_not_upgrade_draft'               => 'Esta ruta no es un borrador de actualización, así que no hay nada que aplicar.',
     'apply_upgrade_original_route_deleted'                => 'La ruta que actualiza este borrador ya no existe.',
-    'apply_upgrade_draft_not_all_required_enemies_killed' => 'No se puede aplicar este borrador de actualización: la nueva versión de mapeo requiere enemigos que no se han matado en el borrador. Mata los enemigos que faltan antes de aplicarlo, o descarta el borrador.',
+    'apply_upgrade_draft_not_all_required_enemies_killed' => 'No se puede aplicar este borrador de actualización: la nueva versión de mapeo incluye enemigos requeridos que no se han eliminado en el borrador. Elimina a los enemigos que faltan antes de aplicarlo, o descarta el borrador.',
     'discard_upgrade_route_not_upgrade_draft'             => 'Esta ruta no es un borrador de actualización, así que no hay nada que descartar.',
     'add_kill_zone_limit_reached'                         => 'No se pueden añadir más de :limit ataques a una sola ruta.',
     'add_brushline_limit_reached'                         => 'No se pueden añadir más de :limit líneas dibujadas a mano a una sola ruta.',

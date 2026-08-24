@@ -53,7 +53,7 @@ return [
     ],
     'apicombatlogroute' => [
         'error' => [
-            'no_post_body' => 'Esta rota não tem o corpo da requisição da rota de combat log armazenado.',
+            'no_post_body' => 'Esta rota não contém o corpo armazenado da requisição de rota do registro de combate.',
         ],
     ],
     'apicombatlogrun' => [
@@ -95,7 +95,7 @@ return [
             'route_cloned_successfully' => 'Rota clonada com sucesso',
             'route_updated'             => 'Rota atualizada',
             'route_created'             => 'Rota criada',
-            'upgrade_draft_created'     => 'Um rascunho de atualização foi criado. Conserte-o aqui: a rota original continua exibindo o conteúdo antigo até você aplicar suas alterações.',
+            'upgrade_draft_created'     => 'Um rascunho de atualização foi criado. Corrija-o aqui; a rota original continuará exibindo o conteúdo antigo até você aplicar suas alterações.',
             'upgrade_applied'           => 'A atualização foi aplicada à sua rota.',
             'upgrade_discarded'         => 'O rascunho de atualização foi descartado.',
         ],

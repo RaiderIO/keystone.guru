@@ -53,7 +53,7 @@ return [
     ],
     'apicombatlogroute' => [
         'error' => [
-            'no_post_body' => 'Aucun corps de requête de route de combat log n\'est enregistré pour cette route.',
+            'no_post_body' => 'Cette route ne possède aucun corps de requête de journal de combat enregistré.',
         ],
     ],
     'apicombatlogrun' => [

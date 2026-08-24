@@ -10,7 +10,7 @@ return [
     'publish_route_is_upgrade_draft'                      => '升级草稿无法单独分享。请将它应用到它所升级的路线，以发布您的更改。',
     'apply_upgrade_route_not_upgrade_draft'               => '此路线不是升级草稿，因此没有可应用的内容。',
     'apply_upgrade_original_route_deleted'                => '此草稿所升级的路线已不存在。',
-    'apply_upgrade_draft_not_all_required_enemies_killed' => '无法应用此升级草稿：新的映射版本需要一些在草稿中尚未击杀的敌人。请在应用前击杀缺少的敌人，或者放弃该草稿。',
+    'apply_upgrade_draft_not_all_required_enemies_killed' => '无法应用此升级草稿：新映射版本要求击杀的部分敌人尚未在草稿中被击杀。请先在草稿中击杀这些敌人再应用，或者放弃该草稿。',
     'discard_upgrade_route_not_upgrade_draft'             => '此路线不是升级草稿，因此没有可放弃的内容。',
     'add_kill_zone_limit_reached'                         => '无法在单一路线上添加超过 :limit 个击杀区域。',
     'add_brushline_limit_reached'                         => '无法在单一路线上添加超过 :limit 条手绘线。',

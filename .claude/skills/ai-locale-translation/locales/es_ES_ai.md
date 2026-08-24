@@ -4,7 +4,7 @@
 |---|---|
 | Register | **Informal *tú*** throughout, never *usted*. Plural you is *vosotros* (Spain). |
 | Register check | `grep -nE "\b(usted\|Seleccione\|Haga\|Introduzca\|Pulse\|Elija\|Inténtelo\|Asegúrese)\b\|\b[Ss]u ruta\b" lang/es_ES_ai/*.php \| grep -vE "spells\|validation\|datatables\|npcs\|dungeons\|view_admin"` — review by hand: `No se puede guardar la ruta` is impersonal, not formal address (the naive `puede` grep reports 165 hits, the real number was ~26). |
-| Last full pass | 2026-08-20, #4165 — 769 keys filled, 30 *usted*→*tú* normalised (authorised). |
+| Last full pass | 2026-08-24, #4299 — 47 catch-up keys (the #4277 upgrade-draft strings, the enemy-failure cluster verdicts and suggestions, and three new map-icon labels) on top of the 2026-08-20 #4165 pass (769 keys, 30 *usted*→*tú* normalised). |
 | Normalisation done | *usted*→*tú* (30 keys, mostly `leafletdraw.php` imperatives and `js.php`/`view_common.php` possessives). |
 
 ## Glossary
@@ -25,6 +25,7 @@
 | Boss | jefe | Prideful | Orgulloso (`enemies.php`) |
 | Fel (prefix) | vil | Wyrm | vermis |
 | Bolstering / Quaking / Teeming | Reforzante / Temblores / Abundante (`affixes.php` — **differ from es_MX_ai**) | | |
+| Upgrade draft (#4277) | borrador de actualización | Waystone (map icon type) | Piedra guía |
 
 ## Locale-specific conventions
 
@@ -43,3 +44,8 @@
 - 2026-08-20 #4165 — 745 keys planned, 769 filled after re-sync pulled in `spellcounters.php`,
   `spellimmunities.php`, `view_creator.php` and one `controller` key. Register normalisation done in
   the same pass.
+- 2026-08-24 #4299 — 47-key catch-up ahead of the v15.19.0 release cut. Floor stayed *planta*;
+  *errores* for failure records, matching `clear_failures` in the same UI section. Codex review:
+  11 findings, all applied. Declined: the reviewer's claim of an official Blizzard name for
+  `Waystone`, cited to a hotfix URL that cannot be checked from here and supported by no in-repo
+  source — *Piedra guía* stays a coined rendering.

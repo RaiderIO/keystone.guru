@@ -186,7 +186,7 @@ return [
     'upgrade_draft_badge_label'                                      => '升级草稿',
     'upgrade_draft_badge_title'                                      => '这是一份升级草稿。它无法单独分享——请将它应用到它所升级的路线，以发布您的更改。',
     'upgrade_draft_in_progress_badge_label'                          => '草稿进行中',
-    'upgrade_draft_in_progress_badge_title'                          => '此路线正在制作一份升级草稿。在草稿被应用之前，此路线仍会显示其当前内容。',
+    'upgrade_draft_in_progress_badge_title'                          => '此路线的升级草稿正在编辑中。在应用草稿之前，此路线仍会显示其当前内容。',
     'upgrade_draft_of_label'                                         => '查看它所升级的路线',
     'mapping_version_upgrade_route_replaced_label'                   => '此路线已被一份已应用的升级草稿替换。请刷新页面以查看新版本。',
     'algethar_academy_dragonflight_warning_label'                    => '您正在查看巨龙时代版的阿尔盖萨学院。确保使用午夜版以与 MDT 兼容。',

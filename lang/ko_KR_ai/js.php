@@ -186,7 +186,7 @@ return [
     'upgrade_draft_badge_label'                                      => '업그레이드 초안',
     'upgrade_draft_badge_title'                                      => '이것은 업그레이드 초안입니다. 단독으로 공유할 수 없습니다. 변경 사항을 게시하려면 업그레이드 대상 경로에 적용하세요.',
     'upgrade_draft_in_progress_badge_label'                          => '초안 작업 중',
-    'upgrade_draft_in_progress_badge_title'                          => '이 경로에 대한 업그레이드 초안이 작업 중입니다. 초안이 적용되기 전까지 이 경로는 현재 내용을 그대로 보여줍니다.',
+    'upgrade_draft_in_progress_badge_title'                          => '이 경로의 업그레이드 초안 작업이 진행 중입니다. 초안이 적용되기 전까지 이 경로에는 현재 내용이 그대로 표시됩니다.',
     'upgrade_draft_of_label'                                         => '업그레이드 대상 경로 보기',
     'mapping_version_upgrade_route_replaced_label'                   => '이 경로는 적용된 업그레이드 초안으로 대체되었습니다. 새 버전을 보려면 페이지를 새로 고치세요.',
     'algethar_academy_dragonflight_warning_label'                    => '당신은 알게타르 아카데미의 드래곤플라이트 버전을 보고 있습니다. 호환성을 위해 미드나이트 버전을 사용해야 합니다.',

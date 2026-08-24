@@ -10,7 +10,7 @@ return [
     'publish_route_is_upgrade_draft'                      => '업그레이드 초안은 단독으로 공유할 수 없습니다. 변경 사항을 게시하려면 업그레이드 대상 경로에 적용하세요.',
     'apply_upgrade_route_not_upgrade_draft'               => '이 경로는 업그레이드 초안이 아니므로 적용할 것이 없습니다.',
     'apply_upgrade_original_route_deleted'                => '이 초안이 업그레이드하는 경로가 더 이상 존재하지 않습니다.',
-    'apply_upgrade_draft_not_all_required_enemies_killed' => '이 업그레이드 초안을 적용할 수 없습니다. 새 매핑 버전은 초안에서 처치되지 않은 적을 필요로 합니다. 적용하기 전에 누락된 적을 처치하거나 초안을 폐기하세요.',
+    'apply_upgrade_draft_not_all_required_enemies_killed' => '이 업그레이드 초안을 적용할 수 없습니다. 새 매핑 버전에서 필수인 적 중 초안에서 처치되지 않은 적이 있습니다. 적용하기 전에 누락된 적을 처치하거나 초안을 폐기하세요.',
     'discard_upgrade_route_not_upgrade_draft'             => '이 경로는 업그레이드 초안이 아니므로 폐기할 것이 없습니다.',
     'add_kill_zone_limit_reached'                         => '단일 경로에 :limit개 이상의 풀을 추가할 수 없습니다.',
     'add_brushline_limit_reached'                         => '단일 경로에 :limit개 이상의 자유형 선을 추가할 수 없습니다.',

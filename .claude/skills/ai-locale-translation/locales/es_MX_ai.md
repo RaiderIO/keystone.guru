@@ -4,7 +4,7 @@
 |---|---|
 | Register | **Informal *tú*** throughout. Plural you is *ustedes* (never *vosotros* — treat any hit as a leftover to fix). |
 | Register check | `grep -rniE "\b(seleccione\|haga\|arrastre\|suelte\|continúe\|presione\|elija\|indique\|marque\|está seguro)\b" lang/es_MX_ai/*.php \| grep -vE "spells\|validation\|datatables\|npcs\|dungeons\|view_admin"` — expect 0; also `grep -n vosotros lang/es_MX_ai/*.php` expects 0. |
-| Last full pass | 2026-08-20, #4165 — 769 keys filled, 4 post-review rewrites. |
+| Last full pass | 2026-08-24, #4299 — 47 catch-up keys (the #4277 upgrade-draft strings, the enemy-failure cluster verdicts and suggestions, and three new map-icon labels) on top of the 2026-08-20 #4165 pass (769 keys, 4 post-review rewrites). |
 | Normalisation done | none needed (already *tú*). |
 
 ## Glossary
@@ -27,6 +27,8 @@
 | Bolstering / Quaking / Teeming | **Fortalecedor / Tembloroso / Pululante** | `affixes.php` — differ from `es_ES_ai` |
 | Prideful | Orgulloso | `enemies.php` |
 | "unlocks a shortcut" | atajo | established phrasing |
+| Upgrade draft (#4277) | borrador de actualización | new in #4299 |
+| Waystone (map icon type) | Piedra guía | coined in #4299 — no in-repo source |
 
 ## Locale-specific conventions
 
@@ -46,3 +48,9 @@
   from the locale, an invented word `dracoformado`, `pack` translated); the rest were false
   positives from the reviewer not checking the locale's own established values (`Afijo`/`Jefe`/
   `atajo`).
+- 2026-08-24 #4299 — 47-key catch-up ahead of the v15.19.0 release cut. Floor kept as *piso* (not
+  `es_ES_ai`'s *planta*); *fallos* for failure records, matching this locale's own
+  `clear_failures` — es_ES says *errores*, so the two locales genuinely differ here. Codex review:
+  9 findings, all applied. Declined: the reviewer's claim of an official Blizzard name for
+  `Waystone`, cited to a hotfix URL that cannot be checked from here and supported by no in-repo
+  source — *Piedra guía* stays a coined rendering.

@@ -453,10 +453,10 @@ return [
                 'cluster_popup'          => [
                     'failures'      => '在 :routes 条路线中失败 :count 次（每条路线 :avg 次）',
                     'nearest_enemy' => '最近的已映射敌人：:id，距离 :distance 码（楼层 :floor，包 :pack）',
-                    'nearest_none'  => '映射版本中没有此 NPC 的敌人',
+                    'nearest_none'  => '该映射版本中没有与此 NPC 对应的敌人',
                     'in_range'      => '本楼层范围内已映射 :count 个',
                     'seen'          => '出现于 :first – :last',
-                    'filter_npc'    => '筛选此 NPC',
+                    'filter_npc'    => '按此 NPC 过滤',
                 ],
                 'not_mapped'           => '未映射',
                 'clear_failures'       => '清除失败记录',
