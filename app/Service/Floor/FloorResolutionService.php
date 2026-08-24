@@ -29,9 +29,9 @@ class FloorResolutionService implements FloorResolutionServiceInterface
             ->first();
 
         if ($floor === null) {
-            return new ResolvedFloor($this->resolveDefaultFloor($dungeon, $mappingVersion), false);
+            return new ResolvedFloor($this->resolveDefaultFloor($dungeon, $mappingVersion), false, false);
         }
 
-        return new ResolvedFloor($floor, $floor->index === $floorIndex);
+        return new ResolvedFloor($floor, $floor->index === $floorIndex, true);
     }
 }
