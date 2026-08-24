@@ -104,6 +104,35 @@ final class AjaxDungeonRouteCloneToTeamTest extends DungeonRouteTestBase
         }
     }
 
+    /**
+     * Guards #4264: not every failed write throws. Team::addRoute() used to hardcode its return to
+     * true and ignore save()'s result, so a 'saving' listener vetoing the assignment left the
+     * transaction to commit normally - the same orphan clone as above, reached without an exception
+     * and therefore invisible to the test that only covers the throwing path.
+     */
+    #[Test]
+    public function cloneToTeam_givenTheTeamAssignmentIsVetoed_rollsBackTheWholeClone(): void
+    {
+        // Arrange - veto rather than throw: returning false from 'saving' aborts the write silently.
+        // Scoped to an update (exists === true), because on the clone's own insert every attribute
+        // counts as dirty and this would veto the creation instead of the team assignment
+        DungeonRoute::saving(static fn(DungeonRoute $dungeonRoute): bool => !$dungeonRoute->exists ||
+            !$dungeonRoute->isDirty('team_id'));
+
+        try {
+            // Act
+            $response = $this->post($this->cloneToTeamUrl());
+
+            // Assert - no half-cloned route was left behind for the user to stumble over
+            $response->assertStatus(StatusCode::INTERNAL_SERVER_ERROR);
+            $this->assertEquals(0, DungeonRoute::query()->where('clone_of', $this->dungeonRoute->public_key)->count());
+        } finally {
+            // Remove only the listener registered above - DungeonRoute::flushEventListeners() would
+            // also wipe DungeonRoute::boot()'s own listeners for the rest of the PHPUnit process
+            Event::forget('eloquent.saving: ' . DungeonRoute::class);
+        }
+    }
+
     private function cloneToTeamUrl(): string
     {
         return sprintf(

@@ -670,7 +670,13 @@ class AjaxDungeonRouteController extends Controller
             // transaction, which is fine: neither uses the retrying DB::transaction($cb, 3) form.
             DB::transaction(function () use ($dungeonRoute, $saveService, $team): void {
                 $newRoute = $saveService->cloneRoute($dungeonRoute, false);
-                $team->addRoute($newRoute);
+
+                // A rollback needs both failure modes, not just a throw: addRoute() returns false
+                // when the assignment did not land, and committing on that leaves exactly the
+                // orphan clone this transaction exists to prevent
+                if (!$team->addRoute($newRoute)) {
+                    throw new Exception('Unable to assign the cloned route to the team!');
+                }
             });
 
             return response('', Http::NO_CONTENT);
