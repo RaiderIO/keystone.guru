@@ -125,7 +125,10 @@ final class MDTImportStringServiceMDT2AuthoritativeTest extends MDTImportStringS
     #[DataProvider('realMdt2String_Provider')]
     public function getMappingVersionForMdtAddonVersion_givenRealMdt2String_returnsCurrentMappingVersion(string $fixture): void
     {
-        // Arrange - a string without addonVersion must land on the dungeon's current mapping version
+        // Arrange - a string without addonVersion must land on the dungeon's current mapping version. That
+        // equals the newest MDT-matching one only while none of these fixtures' dungeons carry an
+        // `mdt_changes_pending` mapping version; once one does, the expectation here becomes the newest
+        // mapping version without that flag (#4280).
         $decoded = app()->make(MDTImportStringServiceInterface::class)
             ->setEncodedString(self::readFixture($fixture))
             ->getDecoded();
