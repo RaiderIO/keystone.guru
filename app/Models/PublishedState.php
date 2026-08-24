@@ -58,6 +58,13 @@ class PublishedState extends CacheModel
     {
         $result = new Collection();
         $result->push(PublishedState::UNPUBLISHED);
+
+        // An upgrade draft can never be published on its own - publishing only happens through
+        // DungeonRouteUpgradeDraftService::apply(), onto the original
+        if ($dungeonRoute->isUpgradeDraft()) {
+            return $result;
+        }
+
         $result->push(PublishedState::TEAM);
 
         if ($user !== null && $user->hasPatreonBenefit(PatreonBenefit::UNLISTED_ROUTES)) {

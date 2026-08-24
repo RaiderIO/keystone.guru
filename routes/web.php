@@ -326,6 +326,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 // Claiming a route that was made by /sandbox functionality
                 Route::get('claim', new DungeonRouteController()->claim(...))->name('dungeonroute.claim');
                 Route::get('migrate/{seasonalType}', new DungeonRouteController()->migrateToSeasonalType(...))->name('dungeonroute.migrate');
+                // Apply or discard a mapping version upgrade draft. Both take the DRAFT as their route
+                // model - that is the page the buttons live on.
+                Route::post('upgrade/apply', new DungeonRouteController()->applyUpgrade(...))->name('dungeonroute.upgrade.apply');
+                Route::post('upgrade/discard', new DungeonRouteController()->discardUpgrade(...))->name('dungeonroute.upgrade.discard');
             });
         });
     });
