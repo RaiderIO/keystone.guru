@@ -55,11 +55,13 @@ interface ThumbnailServiceLoggingInterface
 
     public function doCreateThumbnailRemovedTmpFileFailure(): void;
 
-    public function doCreateThumbnailError(string $errors): void;
+    public function doCreateThumbnailError(string $errors, string $previewUrl, string $variant, int $renderDurationMs): void;
 
     public function queueThumbnailRefreshMappingVersionNull(string $publicKey): void;
 
     public function queueThumbnailRefreshDispatchedJob(string $publicKey, int $index, bool $force): void;
+
+    public function queueThumbnailRefreshDispatchException(string $publicKey, int $index, Throwable $exception): void;
 
     public function doCreateThumbnailEnd(): void;
 

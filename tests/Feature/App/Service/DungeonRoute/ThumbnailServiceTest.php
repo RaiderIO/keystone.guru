@@ -11,6 +11,7 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailRepositoryInterface;
 use App\Service\DungeonRoute\Logging\ThumbnailServiceLoggingInterface;
 use App\Service\DungeonRoute\ThumbnailService;
+use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\Group;
@@ -649,6 +650,54 @@ final class ThumbnailServiceTest extends PublicTestCase
             Queue::assertPushed(ProcessRouteFloorThumbnail::class, $floors->count());
         } finally {
             $heroThumbnails->each->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * Regression guard for #3920: the queue worker's own retry mechanism relies on
+     * ProcessRouteFloorThumbnail::handle() throwing on a failed render (see ProcessRouteFloorThumbnailTest),
+     * but on the `sync` queue connection (used by this whole test suite, and any environment that sets
+     * QUEUE_CONNECTION=sync) the job runs inline and that exception propagates straight out of dispatch() -
+     * which broke 29 unrelated controller tests that merely triggered a thumbnail refresh as a side effect.
+     * queueThumbnailRefresh() must swallow it: the dispatch is fire-and-forget from every caller's
+     * perspective, and on a real (async) queue connection dispatch() never throws in the first place.
+     *
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    #[Test]
+    public function queueThumbnailRefresh_givenSyncQueueAndFailedRender_doesNotPropagateAndStillReportsQueued(): void
+    {
+        // Arrange
+        $dungeon        = $this->getDungeonWithNonFacadeFloor();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $dungeonRoute   = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        // ProcessRouteFloorThumbnail::handle() resolves this fresh from the container - not the mock
+        // built below via buildService() - so binding it here is what makes the dispatched job fail.
+        $failingThumbnailService = $this->createMockPublic(ThumbnailServiceInterface::class);
+        $failingThumbnailService->method('createThumbnail')->willReturn(null);
+        app()->instance(ThumbnailServiceInterface::class, $failingThumbnailService);
+
+        // Asserts the swallow path was actually taken, not just that nothing threw - a test that only
+        // checked "no exception" would also pass if the try/catch were removed entirely and the render
+        // just silently happened to succeed for an unrelated reason.
+        $log = $this->createMockPublic(ThumbnailServiceLoggingInterface::class);
+        $log->expects($this->atLeastOnce())->method('queueThumbnailRefreshDispatchException');
+        $log->expects($this->never())->method('queueThumbnailRefreshDispatchedJob');
+
+        $service = $this->buildService($log);
+
+        try {
+            // Act
+            $result = $service->queueThumbnailRefresh($dungeonRoute, true);
+
+            // Assert - a job was queued (and immediately failed inline) without throwing out of here
+            $this->assertTrue($result);
+        } finally {
             $dungeonRoute->delete();
         }
     }
