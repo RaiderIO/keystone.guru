@@ -242,7 +242,7 @@ class DungeonExploreController extends Controller
             'title'                   => __($dungeon->name),
             'mapFacadeStyle'          => $mapFacadeStyle,
             'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, $mapFacadeStyle),
-            'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() ?
+            'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() && $mostRecentSeason !== null ?
                 $seasonAffixGroupService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                 collect(),
             'parameters'   => $validated,

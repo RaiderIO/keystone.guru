@@ -387,8 +387,9 @@ class Npc extends CacheModel implements MappingModelInterface
      *
      * This is the game's formula, with nothing in it to compensate for the seeded data: MDT stores Midnight boss bases
      * 4.17% high (it reverses its +10 observations with Fortified's 1.2 rather than Tyrannical's 1.25), and #4208
-     * corrected those rows from +6 combat logs instead of carrying a boss factor here. An MDT re-import of a Midnight
-     * dungeon brings its boss values back ~4% high until combatlog:extractnpchealth is re-run on that dungeon.
+     * corrected those rows from +6 combat logs instead of carrying a boss factor here. #4211 stopped
+     * MDTMappingImportService::importNpcsDataFromMDT() from overwriting a health it already has, so those corrected
+     * values now survive an MDT re-import of the dungeon.
      *
      * @param array<int, string> $affixes A list of Affix:: string constants
      */

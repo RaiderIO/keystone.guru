@@ -78,6 +78,11 @@ class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMap
         $this->info(__METHOD__, get_defined_vars());
     }
 
+    public function importNpcsDataFromMDTSkipHealthOverwrite(int $npcId, int $existingHealth, int $mdtHealth): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
     public function importNpcsDataFromMDTNpcNotMarkedForAllDungeons(int $npcId): void
     {
         $this->error(__METHOD__, get_defined_vars());
