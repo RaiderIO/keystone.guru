@@ -1,6 +1,6 @@
 ---
 name: debug-combatlog-route-json
-description: Replay a combat-log-route JSON request body (from production or a bug report) through the Auto Route Creator locally with debug-level structured logging, to see why an NPC/pull/spell ended up where it did. Also covers the per-dungeon `Rules/` exception framework (`app/Service/CombatLog/Builders/Rules/`) for fixing a dungeon-specific mismatch once found — e.g. two overlapping floors/paths stealing each other's kills, or a boss that despawns instead of dying. Use when debugging "this run's bosses/pulls/enemies didn't show up correctly", when a fix needs a new dungeon-specific rule, and you have the JSON POSTed to `api/v1/combatlog/route`. Not for parsing the raw WoW log into that JSON (combatlog-parsing-internals / combatlog-parse-failure-triage) — this starts one step later.
+description: Replay a combat-log-route JSON body through the Auto Route Creator locally with debug-level logging to see why an NPC/pull/spell ended up where it did, then fix a dungeon-specific mismatch via the per-dungeon `Rules/` framework (`app/Service/CombatLog/Builders/Rules/`). Use when debugging "this run's bosses/pulls/enemies didn't show up correctly" and you have the JSON POSTed to `api/v1/combatlog/route`. Not for parsing the raw WoW log into that JSON (combatlog-parsing-internals / combatlog-parse-failure-triage).
 ---
 
 # Debugging a combat-log-route JSON body
@@ -196,54 +196,22 @@ you would for any other regression test.
 
 ## 7. When the fix is dungeon-specific: `Rules/`
 
-Sometimes the replay in §2-4 shows a mismatch that spatial matching genuinely cannot resolve on its
-own — two sets of enemies at near-identical ingame X/Y with no way to tell them apart (stacked
-floors, or a bridge over a path), or a boss that despawns instead of dying so its death never reaches
-us at all, not in the combat log and not in what Raider.IO sends. Those go in
-`app/Service/CombatLog/Builders/Rules/` (introduced in #4272), a small per-dungeon exception
-framework that lets `DungeonRouteBuilder` apply dungeon-specific corrections during matching. Read
-`DungeonRouteBuilderRuleInterface` first — its docblock is the authoritative description of each
-hook — then copy the shape of an existing rule rather than starting from scratch:
+When spatial matching genuinely can't resolve a mismatch (stacked floors/paths sharing npc_ids, or
+a boss that despawns instead of dying), fix it in `app/Service/CombatLog/Builders/Rules/` — a
+per-dungeon exception framework `DungeonRouteBuilder` applies during matching. Read
+`DungeonRouteBuilderRuleInterface`'s docblock for the hooks, then copy the shape of an existing rule
+(`TheBlindingValeBridgeRule` for a hard/soft eligibility exclusion, `KingsRestDespawningEnemiesRule`
+for `onEnemyDied()`-based kill awarding — both idempotent by design).
 
-- `TheBlindingValeBridgeRule` — a **hard** exclusion (`isEnemyEligible()`), used when two enemy sets
-  must never compete even when nothing else matches. Its docblock explains why: a *preference* tier
-  was tried first and lost, because it outranks distance entirely and overrode a correct match (a
-  kill standing on top of the right enemy resolved 15 yards away instead). Excluding candidates
-  outright avoided that failure mode.
-- `BossKillFloorCutoffRule` — a **soft** exclusion (`isEnemyEligibleOnFirstPass()` only), used when
-  a hard exclusion would drop an enemy — and its enemy forces — from the route entirely if no better
-  candidate exists. The builder retries without the exclusion on a first-pass miss, falling back to
-  pre-rule behaviour rather than losing the enemy. It's also an explicit dungeon allowlist rather
-  than a global default: enabling it everywhere shifted pull counts across seven other dungeons'
-  regression runs.
-- `KingsRestDespawningEnemiesRule` — uses `onEnemyDied()` to award a kill for an npc that despawns,
-  keyed off a neighbour whose death *does* reach us. Awarding must be idempotent — the builder will
-  happily award the same npc twice otherwise.
+**Registration:** add the class to `RULES` in `DungeonRouteBuilder`. Rules are instantiated fresh
+per `build()` and filtered by `appliesToDungeon()` — never singletons. A rule that logs needs a
+matching method on `DungeonRouteBuilderLoggingInterface`.
 
-**How a rule gets registered:** add its class to the `RULES` array in `DungeonRouteBuilder`
-(`app/Service/CombatLog/Builders/DungeonRouteBuilder.php`). The constructor instantiates every rule
-fresh per `build()` and filters to the ones whose `appliesToDungeon()` returns true for this route's
-dungeon — rules carry mutable state (how far into the run we are), so they are never singletons and
-never shared across dungeons. A rule that logs anything (most do) needs a matching method added to
-`DungeonRouteBuilderLoggingInterface` (and its implementation) — see
-`theBlindingValeBridgeRuleBridgeEnemyPackGroupsBlocked()` /
-`kingsRestDespawningEnemiesRuleEnemyKillsAwarded()` for the naming pattern.
+**Gotcha:** only `CombatLogRouteDungeonRouteBuilder` calls `notifyRulesEnemyDied()` —
+`ResultEventDungeonRouteBuilder` never does, so `onEnemyDied()`-based state never advances on that
+path.
 
-**Gotcha: only one of the two builders advances rule state.** Both `CombatLogRouteDungeonRouteBuilder`
-and `ResultEventDungeonRouteBuilder` extend `DungeonRouteBuilder` and share the eligibility loop
-(`isEnemyEligible()` / `isEnemyEligibleOnFirstPass()` fire on both paths), but only
-`CombatLogRouteDungeonRouteBuilder` calls `notifyRulesEnemyDied()` — `ResultEventDungeonRouteBuilder`
-never does (see the comment in its `EnemyKilled` branch). So on the ResultEvent path, a rule's
-`onEnemyDied()` never fires and any state it would have advanced (e.g.
-`TheBlindingValeBridgeRule::$lightwardenRuiaKilled`) stays frozen at its initial value for the whole
-build — the rule is not "off" there, it is stuck in its starting state. Wiring that path up is
-deliberately left as a separate issue rather than folded into #4272, because unlike the CombatLogRoute
-path it has no pinned route fixtures to prove the change is safe.
-
-**Verify a new rule against pinned fixtures**, not just its own unit test: each dungeon with a rule
-has a `tests/Unit/App/Service/CombatLog/Builders/Rules/*RuleTest.php` (the rule in isolation) and
-usually a `tests/Feature/.../Rules/*RuleMappingTest.php` plus an
-`tests/Feature/Controller/Api/V1/APICombatLogController/CombatLogRoute/**/APICombatLogControllerCombatLogRoute<Dungeon>Test.php`
-end-to-end fixture built from a real combat log (`combatlog-route-tests` skill). Run the full
-dungeon's fixture test, not just the new rule's unit test — `BossKillFloorCutoffRule`'s allowlist
-note above is exactly the kind of regression that only a real fixture catches.
+**Verify against pinned fixtures, not just the rule's own unit test** — each ruled dungeon has a
+`tests/Unit/.../Rules/*RuleTest.php`, a `tests/Feature/.../Rules/*RuleMappingTest.php`, and an
+`APICombatLogControllerCombatLogRoute<Dungeon>Test.php` end-to-end fixture. Run the full dungeon's
+fixture test, since a real regression can hide from the unit test alone.

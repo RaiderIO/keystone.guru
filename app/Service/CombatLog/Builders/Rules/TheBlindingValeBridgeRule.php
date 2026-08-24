@@ -5,6 +5,7 @@ namespace App\Service\CombatLog\Builders\Rules;
 use App\Models\Dungeon;
 use App\Models\DungeonKey;
 use App\Models\Enemy;
+use App\Models\Npc\NpcId;
 use App\Service\CombatLog\Builders\Logging\DungeonRouteBuilderLoggingInterface;
 
 /**
@@ -21,9 +22,6 @@ use App\Service\CombatLog\Builders\Logging\DungeonRouteBuilderLoggingInterface;
  */
 class TheBlindingValeBridgeRule extends AbstractDungeonRouteBuilderRule
 {
-    /** @var int Lightwarden Ruia, the third boss - the party is past the bridge for good once she dies */
-    private const int NPC_ID_LIGHTWARDEN_RUIA = 245912;
-
     /** @var array<int, int> The EnemyPack groups making up the packs on top of the bridge */
     private const array BRIDGE_ENEMY_PACK_GROUPS = [44, 45, 46];
 
@@ -43,7 +41,7 @@ class TheBlindingValeBridgeRule extends AbstractDungeonRouteBuilderRule
 
     public function onEnemyDied(int $npcId, ?Enemy $resolvedEnemy): array
     {
-        if ($this->lightwardenRuiaKilled || $npcId !== self::NPC_ID_LIGHTWARDEN_RUIA) {
+        if ($this->lightwardenRuiaKilled || $npcId !== NpcId::LIGHTWARDEN_RUIA->value) {
             return [];
         }
 

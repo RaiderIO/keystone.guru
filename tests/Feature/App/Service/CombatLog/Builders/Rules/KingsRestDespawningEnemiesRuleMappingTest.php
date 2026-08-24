@@ -5,6 +5,7 @@ namespace Tests\Feature\App\Service\CombatLog\Builders\Rules;
 use App\Models\Dungeon;
 use App\Models\DungeonKey;
 use App\Models\Enemy;
+use App\Models\Npc\NpcId;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -24,17 +25,17 @@ class KingsRestDespawningEnemiesRuleMappingTest extends PublicTestCase
 {
     /** @var array<string, int> Every npc_id the rule triggers on or awards a kill for */
     private const array EXPECTED_NPC_IDS = [
-        'Thundering Totem'       => 135761,
-        'Explosive Totem'        => 135764,
-        'Torrent Totem'          => 135765,
-        'Aka\'ali the Conqueror' => 269808,
-        'Zanazal the Wise'       => 269810,
-        'Kula the Butcher'       => 269811,
-        'Minion of Zul'          => 138493,
-        'Shadow of Zul'          => 138489,
-        'Reban'                  => 136984,
-        'T\'zala'                => 136976,
-        'King Dazar'             => 136160,
+        'Thundering Totem'       => NpcId::THUNDERING_TOTEM->value,
+        'Explosive Totem'        => NpcId::EXPLOSIVE_TOTEM->value,
+        'Torrent Totem'          => NpcId::TORRENT_TOTEM->value,
+        'Aka\'ali the Conqueror' => NpcId::AKAALI_THE_CONQUEROR->value,
+        'Zanazal the Wise'       => NpcId::ZANAZAL_THE_WISE->value,
+        'Kula the Butcher'       => NpcId::KULA_THE_BUTCHER->value,
+        'Minion of Zul'          => NpcId::MINION_OF_ZUL->value,
+        'Shadow of Zul'          => NpcId::SHADOW_OF_ZUL->value,
+        'Reban'                  => NpcId::REBAN->value,
+        'T\'zala'                => NpcId::TZALA->value,
+        'King Dazar'             => NpcId::KING_DAZAR->value,
     ];
 
     #[Test]

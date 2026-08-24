@@ -5,6 +5,7 @@ namespace App\Service\CombatLog\Builders\Rules;
 use App\Models\Dungeon;
 use App\Models\DungeonKey;
 use App\Models\Enemy;
+use App\Models\Npc\NpcId;
 use App\Service\CombatLog\Builders\Logging\DungeonRouteBuilderLoggingInterface;
 
 /**
@@ -17,7 +18,9 @@ use App\Service\CombatLog\Builders\Logging\DungeonRouteBuilderLoggingInterface;
  *
  * Every one of them does have a neighbour whose death we do get, so each is awarded off that neighbour instead:
  *
- * - The Council of Tribes, off Zanazal the Wise's totems. Only one award fires no matter how many totems die.
+ * - The Council of Tribes, off Zanazal the Wise's totems. The first totem to die also awards the other two totems
+ *   alongside the three bosses, so the whole encounter lands in one pull instead of the totems' real (later) deaths
+ *   spawning a second one.
  * - The Shadow of Zul, off a Minion of Zul from its own pack - but only once the Council is down, so an early
  *   trash kill cannot award it.
  * - King Dazar and T'zala, off Reban, the last add before the encounter starts.
@@ -33,9 +36,9 @@ class KingsRestDespawningEnemiesRule extends AbstractDungeonRouteBuilderRule
 {
     /** @var array<int, int> Zanazal the Wise's totems - the only Council of Tribes npcs whose deaths do reach us */
     private const array NPC_IDS_COUNCIL_OF_TRIBES_TOTEMS = [
-        135761, // Thundering Totem
-        135764, // Explosive Totem
-        135765, // Torrent Totem
+        NpcId::THUNDERING_TOTEM->value,
+        NpcId::EXPLOSIVE_TOTEM->value,
+        NpcId::TORRENT_TOTEM->value,
     ];
 
     /**
@@ -43,28 +46,10 @@ class KingsRestDespawningEnemiesRule extends AbstractDungeonRouteBuilderRule
      *                      set carrying the same three names is not part of the current mapping.
      */
     private const array NPC_IDS_COUNCIL_OF_TRIBES = [
-        269808, // Aka'ali the Conqueror
-        269810, // Zanazal the Wise
-        269811, // Kula the Butcher
+        NpcId::AKAALI_THE_CONQUEROR->value,
+        NpcId::ZANAZAL_THE_WISE->value,
+        NpcId::KULA_THE_BUTCHER->value,
     ];
-
-    /**
-     * @var int Minion of Zul. Deliberately not 133943, which carries the same name but is mapped in the early dungeon
-     *          packs rather than in the Shadow of Zul's own pack.
-     */
-    private const int NPC_ID_MINION_OF_ZUL = 138493;
-
-    private const int NPC_ID_SHADOW_OF_ZUL = 138489;
-
-    /** @var int Reban, the last add before King Dazar's encounter, and the only one of the three whose death reaches us */
-    private const int NPC_ID_REBAN = 136984;
-
-    private const int NPC_ID_TZALA = 136976;
-
-    private const int NPC_ID_KING_DAZAR = 136160;
-
-    /** @var array<int, bool> npc_id => true for every enemy that has died, or that an award has accounted for */
-    private array $defeatedNpcIds = [];
 
     public function __construct(private readonly DungeonRouteBuilderLoggingInterface $log)
     {
@@ -77,24 +62,27 @@ class KingsRestDespawningEnemiesRule extends AbstractDungeonRouteBuilderRule
 
     public function onEnemyDied(int $npcId, ?Enemy $resolvedEnemy): array
     {
-        $this->defeatedNpcIds[$npcId] = true;
+        $this->markDefeated($npcId);
 
         if (in_array($npcId, self::NPC_IDS_COUNCIL_OF_TRIBES_TOTEMS, true)) {
-            return $this->awardEnemyKills($npcId, self::NPC_IDS_COUNCIL_OF_TRIBES);
+            return $this->award($npcId, [
+                ...self::NPC_IDS_COUNCIL_OF_TRIBES_TOTEMS,
+                ...self::NPC_IDS_COUNCIL_OF_TRIBES,
+            ]);
         }
 
         // Only once the Council is down - the party is nowhere near the Shadow of Zul before that
-        if ($npcId === self::NPC_ID_MINION_OF_ZUL && $this->isCouncilOfTribesDefeated()) {
-            return $this->awardEnemyKills($npcId, [self::NPC_ID_SHADOW_OF_ZUL]);
+        if ($npcId === NpcId::MINION_OF_ZUL->value && $this->isCouncilOfTribesDefeated()) {
+            return $this->award($npcId, [NpcId::SHADOW_OF_ZUL->value]);
         }
 
-        if ($npcId === self::NPC_ID_REBAN) {
-            // The Shadow of Zul is listed first only for readability - awardEnemyKills() skips it when it is already
+        if ($npcId === NpcId::REBAN->value) {
+            // The Shadow of Zul is listed first only for readability - award() skips it when it is already
             // accounted for, which is the normal case when the party killed a Minion of Zul on the way here.
-            return $this->awardEnemyKills($npcId, [
-                self::NPC_ID_SHADOW_OF_ZUL,
-                self::NPC_ID_TZALA,
-                self::NPC_ID_KING_DAZAR,
+            return $this->award($npcId, [
+                NpcId::SHADOW_OF_ZUL->value,
+                NpcId::TZALA->value,
+                NpcId::KING_DAZAR->value,
             ]);
         }
 
@@ -106,18 +94,9 @@ class KingsRestDespawningEnemiesRule extends AbstractDungeonRouteBuilderRule
      *
      * @return array<int, int>
      */
-    private function awardEnemyKills(int $triggerNpcId, array $npcIds): array
+    private function award(int $triggerNpcId, array $npcIds): array
     {
-        $awardedNpcIds = [];
-
-        foreach ($npcIds as $npcId) {
-            if (isset($this->defeatedNpcIds[$npcId])) {
-                continue;
-            }
-
-            $this->defeatedNpcIds[$npcId] = true;
-            $awardedNpcIds[]              = $npcId;
-        }
+        $awardedNpcIds = $this->awardUnaccountedNpcIds($npcIds);
 
         if ($awardedNpcIds !== []) {
             $this->log->kingsRestDespawningEnemiesRuleEnemyKillsAwarded($triggerNpcId, $awardedNpcIds);
@@ -129,7 +108,7 @@ class KingsRestDespawningEnemiesRule extends AbstractDungeonRouteBuilderRule
     private function isCouncilOfTribesDefeated(): bool
     {
         foreach (self::NPC_IDS_COUNCIL_OF_TRIBES as $npcId) {
-            if (!isset($this->defeatedNpcIds[$npcId])) {
+            if (!$this->isDefeated($npcId)) {
                 return false;
             }
         }

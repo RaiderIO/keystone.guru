@@ -6,6 +6,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonKey;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
+use App\Models\Npc\NpcId;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -24,17 +25,17 @@ class TheBlindingValeBridgeRuleMappingTest extends PublicTestCase
     /** @var array<int, array<int, int>> The npc_ids each group the rule names is expected to hold, sorted */
     private const array EXPECTED_BRIDGE_GROUP_NPC_IDS = [
         // On top of the bridge - blocked once Lightwarden Ruia is dead
-        44 => [245339, 245339, 245345, 254850],
-        45 => [245410, 245410, 245410, 245410, 245410],
-        46 => [245346, 245473, 245484],
+        44 => [NpcId::UNDERBRUSH_STALKER->value, NpcId::UNDERBRUSH_STALKER->value, NpcId::LIGHTGORGED_LASHER->value, NpcId::SPOREBLIGHT_BELCHER->value],
+        45 => [NpcId::LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value],
+        46 => [NpcId::VIRID_GROVEKEEPER->value, NpcId::THORNY_SAPTOR->value, NpcId::LIGHTFEATHER_PETALWING->value],
 
         // Underneath the bridge - these only spawn once she is dead, so they are blocked until then
-        47 => [245410, 245410, 245410, 245410, 245410],
-        48 => [245345, 245410, 245410],
-        49 => [245346],
-        50 => [245336, 245339, 245345, 245345, 245410, 245410, 245410],
-        54 => [245345, 245410, 245410, 245410, 245410, 245410],
-        57 => [245484],
+        47 => [NpcId::LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value],
+        48 => [NpcId::LIGHTGORGED_LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value],
+        49 => [NpcId::VIRID_GROVEKEEPER->value],
+        50 => [NpcId::RADIANT_SPELLSOWER->value, NpcId::UNDERBRUSH_STALKER->value, NpcId::LIGHTGORGED_LASHER->value, NpcId::LIGHTGORGED_LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value],
+        54 => [NpcId::LIGHTGORGED_LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value],
+        57 => [NpcId::LIGHTFEATHER_PETALWING->value],
     ];
 
     #[Test]

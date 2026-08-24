@@ -4,6 +4,7 @@ namespace Tests\Unit\App\Service\CombatLog\Builders\Rules;
 
 use App\Models\Dungeon;
 use App\Models\DungeonKey;
+use App\Models\Npc\NpcId;
 use App\Service\CombatLog\Builders\Logging\DungeonRouteBuilderLogging;
 use App\Service\CombatLog\Builders\Rules\KingsRestDespawningEnemiesRule;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -16,30 +17,6 @@ use Tests\TestCases\PublicTestCase;
 #[Group('KingsRestDespawningEnemiesRule')]
 class KingsRestDespawningEnemiesRuleTest extends PublicTestCase
 {
-    private const NPC_ID_THUNDERING_TOTEM = 135761;
-
-    private const NPC_ID_EXPLOSIVE_TOTEM = 135764;
-
-    private const NPC_ID_TORRENT_TOTEM = 135765;
-
-    private const NPC_ID_AKAALI_THE_CONQUEROR = 269808;
-
-    private const NPC_ID_ZANAZAL_THE_WISE = 269810;
-
-    private const NPC_ID_KULA_THE_BUTCHER = 269811;
-
-    private const NPC_ID_MINION_OF_ZUL = 138493;
-
-    private const NPC_ID_MINION_OF_ZUL_EARLY_DUNGEON = 133943;
-
-    private const NPC_ID_SHADOW_OF_ZUL = 138489;
-
-    private const NPC_ID_REBAN = 136984;
-
-    private const NPC_ID_TZALA = 136976;
-
-    private const NPC_ID_KING_DAZAR = 136160;
-
     #[Test]
     public function appliesToDungeon_givenKingsRest_returnsTrue(): void
     {
@@ -66,9 +43,16 @@ class KingsRestDespawningEnemiesRuleTest extends PublicTestCase
         $this->assertFalse($result);
     }
 
+    /**
+     * The first totem to die also awards its two siblings, so the whole Council of Tribes lands in one pull instead
+     * of the other totems' real (later) deaths spawning a second one.
+     */
+    /**
+     * @param array<int, int> $expectedSiblingTotemNpcIds
+     */
     #[Test]
     #[DataProvider('councilOfTribesTotemProvider')]
-    public function onEnemyDied_givenACouncilOfTribesTotemDied_awardsTheThreeCouncilBosses(int $totemNpcId): void
+    public function onEnemyDied_givenACouncilOfTribesTotemDied_awardsTheOtherTotemsAndTheThreeCouncilBosses(int $totemNpcId, array $expectedSiblingTotemNpcIds): void
     {
         // Arrange
         $rule = $this->makeRule();
@@ -78,58 +62,73 @@ class KingsRestDespawningEnemiesRuleTest extends PublicTestCase
 
         // Assert
         $this->assertEqualsCanonicalizing([
-            self::NPC_ID_AKAALI_THE_CONQUEROR,
-            self::NPC_ID_ZANAZAL_THE_WISE,
-            self::NPC_ID_KULA_THE_BUTCHER,
+            ...$expectedSiblingTotemNpcIds,
+            NpcId::AKAALI_THE_CONQUEROR->value,
+            NpcId::ZANAZAL_THE_WISE->value,
+            NpcId::KULA_THE_BUTCHER->value,
         ], $result);
     }
 
     /**
-     * @return array<string, array<int, int>>
+     * @return array<string, array{int, array<int, int>}>
      */
     public static function councilOfTribesTotemProvider(): array
     {
         return [
-            'Thundering Totem' => [self::NPC_ID_THUNDERING_TOTEM],
-            'Explosive Totem'  => [self::NPC_ID_EXPLOSIVE_TOTEM],
-            'Torrent Totem'    => [self::NPC_ID_TORRENT_TOTEM],
+            'Thundering Totem' => [
+                NpcId::THUNDERING_TOTEM->value,
+                [NpcId::EXPLOSIVE_TOTEM->value, NpcId::TORRENT_TOTEM->value],
+            ],
+            'Explosive Totem' => [
+                NpcId::EXPLOSIVE_TOTEM->value,
+                [NpcId::THUNDERING_TOTEM->value, NpcId::TORRENT_TOTEM->value],
+            ],
+            'Torrent Totem' => [
+                NpcId::TORRENT_TOTEM->value,
+                [NpcId::THUNDERING_TOTEM->value, NpcId::EXPLOSIVE_TOTEM->value],
+            ],
         ];
     }
 
     /**
-     * All three totems are usually killed, each in its own pull - the bosses must be awarded to the first one only.
+     * The second and third totems' own (real) deaths must not re-award anything the first totem's death already did.
      */
     #[Test]
-    public function onEnemyDied_givenASecondCouncilOfTribesTotemDied_awardsNothing(): void
+    public function onEnemyDied_givenASecondAndThirdCouncilOfTribesTotemDied_awardsNothing(): void
     {
         // Arrange
         $rule = $this->makeRule();
-        $rule->onEnemyDied(self::NPC_ID_EXPLOSIVE_TOTEM, null);
+        $rule->onEnemyDied(NpcId::EXPLOSIVE_TOTEM->value, null);
+        $rule->onEnemyDied(NpcId::THUNDERING_TOTEM->value, null);
 
         // Act
-        $result = $rule->onEnemyDied(self::NPC_ID_THUNDERING_TOTEM, null);
+        $result = $rule->onEnemyDied(NpcId::TORRENT_TOTEM->value, null);
 
         // Assert
         $this->assertEmpty($result);
     }
 
     /**
-     * If the Council does reach us after all, awarding it a second time would attach a duplicate pull to the route.
+     * If the Council does reach us after all, awarding it a second time would attach a duplicate pull to the route -
+     * but the other two totems still had not been accounted for, so they are awarded regardless of encounter order.
      */
     #[Test]
-    public function onEnemyDied_givenTheCouncilOfTribesDiedBeforeItsTotems_awardsNothing(): void
+    public function onEnemyDied_givenTheCouncilOfTribesDiedBeforeItsTotems_awardsOnlyTheOtherTotems(): void
     {
         // Arrange
         $rule = $this->makeRule();
-        $rule->onEnemyDied(self::NPC_ID_AKAALI_THE_CONQUEROR, null);
-        $rule->onEnemyDied(self::NPC_ID_ZANAZAL_THE_WISE, null);
-        $rule->onEnemyDied(self::NPC_ID_KULA_THE_BUTCHER, null);
+        $rule->onEnemyDied(NpcId::AKAALI_THE_CONQUEROR->value, null);
+        $rule->onEnemyDied(NpcId::ZANAZAL_THE_WISE->value, null);
+        $rule->onEnemyDied(NpcId::KULA_THE_BUTCHER->value, null);
 
         // Act
-        $result = $rule->onEnemyDied(self::NPC_ID_EXPLOSIVE_TOTEM, null);
+        $result = $rule->onEnemyDied(NpcId::EXPLOSIVE_TOTEM->value, null);
 
         // Assert
-        $this->assertEmpty($result);
+        $this->assertEqualsCanonicalizing([
+            NpcId::THUNDERING_TOTEM->value,
+            NpcId::TORRENT_TOTEM->value,
+        ], $result);
     }
 
     #[Test]
@@ -137,13 +136,13 @@ class KingsRestDespawningEnemiesRuleTest extends PublicTestCase
     {
         // Arrange
         $rule = $this->makeRule();
-        $rule->onEnemyDied(self::NPC_ID_EXPLOSIVE_TOTEM, null);
+        $rule->onEnemyDied(NpcId::EXPLOSIVE_TOTEM->value, null);
 
         // Act
-        $result = $rule->onEnemyDied(self::NPC_ID_MINION_OF_ZUL, null);
+        $result = $rule->onEnemyDied(NpcId::MINION_OF_ZUL->value, null);
 
         // Assert
-        $this->assertEquals([self::NPC_ID_SHADOW_OF_ZUL], $result);
+        $this->assertEquals([NpcId::SHADOW_OF_ZUL->value], $result);
     }
 
     /**
@@ -156,25 +155,25 @@ class KingsRestDespawningEnemiesRuleTest extends PublicTestCase
         $rule = $this->makeRule();
 
         // Act
-        $result = $rule->onEnemyDied(self::NPC_ID_MINION_OF_ZUL, null);
+        $result = $rule->onEnemyDied(NpcId::MINION_OF_ZUL->value, null);
 
         // Assert
         $this->assertEmpty($result);
     }
 
     /**
-     * 133943 carries the name "Minion of Zul" as well, but is mapped in the early dungeon packs rather than in the
-     * Shadow of Zul's own pack - killing it must not award anything.
+     * NpcId::MINION_OF_ZUL_EARLY_DUNGEON carries the name "Minion of Zul" as well, but is mapped in the early dungeon
+     * packs rather than in the Shadow of Zul's own pack - killing it must not award anything.
      */
     #[Test]
     public function onEnemyDied_givenTheEarlyDungeonMinionOfZulDiedAfterTheCouncilOfTribes_awardsNothing(): void
     {
         // Arrange
         $rule = $this->makeRule();
-        $rule->onEnemyDied(self::NPC_ID_EXPLOSIVE_TOTEM, null);
+        $rule->onEnemyDied(NpcId::EXPLOSIVE_TOTEM->value, null);
 
         // Act
-        $result = $rule->onEnemyDied(self::NPC_ID_MINION_OF_ZUL_EARLY_DUNGEON, null);
+        $result = $rule->onEnemyDied(NpcId::MINION_OF_ZUL_EARLY_DUNGEON->value, null);
 
         // Assert
         $this->assertEmpty($result);
@@ -191,13 +190,13 @@ class KingsRestDespawningEnemiesRuleTest extends PublicTestCase
         $rule = $this->makeRule();
 
         // Act
-        $result = $rule->onEnemyDied(self::NPC_ID_REBAN, null);
+        $result = $rule->onEnemyDied(NpcId::REBAN->value, null);
 
         // Assert
         $this->assertEqualsCanonicalizing([
-            self::NPC_ID_SHADOW_OF_ZUL,
-            self::NPC_ID_TZALA,
-            self::NPC_ID_KING_DAZAR,
+            NpcId::SHADOW_OF_ZUL->value,
+            NpcId::TZALA->value,
+            NpcId::KING_DAZAR->value,
         ], $result);
     }
 
@@ -206,16 +205,16 @@ class KingsRestDespawningEnemiesRuleTest extends PublicTestCase
     {
         // Arrange
         $rule = $this->makeRule();
-        $rule->onEnemyDied(self::NPC_ID_EXPLOSIVE_TOTEM, null);
-        $rule->onEnemyDied(self::NPC_ID_MINION_OF_ZUL, null);
+        $rule->onEnemyDied(NpcId::EXPLOSIVE_TOTEM->value, null);
+        $rule->onEnemyDied(NpcId::MINION_OF_ZUL->value, null);
 
         // Act
-        $result = $rule->onEnemyDied(self::NPC_ID_REBAN, null);
+        $result = $rule->onEnemyDied(NpcId::REBAN->value, null);
 
         // Assert
         $this->assertEqualsCanonicalizing([
-            self::NPC_ID_TZALA,
-            self::NPC_ID_KING_DAZAR,
+            NpcId::TZALA->value,
+            NpcId::KING_DAZAR->value,
         ], $result);
     }
 
@@ -224,10 +223,10 @@ class KingsRestDespawningEnemiesRuleTest extends PublicTestCase
     {
         // Arrange
         $rule = $this->makeRule();
-        $rule->onEnemyDied(self::NPC_ID_REBAN, null);
+        $rule->onEnemyDied(NpcId::REBAN->value, null);
 
         // Act
-        $result = $rule->onEnemyDied(self::NPC_ID_REBAN, null);
+        $result = $rule->onEnemyDied(NpcId::REBAN->value, null);
 
         // Assert
         $this->assertEmpty($result);
@@ -254,9 +253,9 @@ class KingsRestDespawningEnemiesRuleTest extends PublicTestCase
     {
         // Arrange
         $rule = $this->makeRule();
-        $rule->onEnemyDied(self::NPC_ID_EXPLOSIVE_TOTEM, null);
-        $rule->onEnemyDied(self::NPC_ID_MINION_OF_ZUL, null);
-        $rule->onEnemyDied(self::NPC_ID_REBAN, null);
+        $rule->onEnemyDied(NpcId::EXPLOSIVE_TOTEM->value, null);
+        $rule->onEnemyDied(NpcId::MINION_OF_ZUL->value, null);
+        $rule->onEnemyDied(NpcId::REBAN->value, null);
 
         // Act
         $result = $rule->hasActiveFirstPassExclusion();
