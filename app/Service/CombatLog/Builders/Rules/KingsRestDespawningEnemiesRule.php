@@ -62,7 +62,7 @@ class KingsRestDespawningEnemiesRule extends AbstractDungeonRouteBuilderRule
 
     public function onEnemyDied(int $npcId, ?Enemy $resolvedEnemy): array
     {
-        $this->markDefeated($npcId);
+        parent::onEnemyDied($npcId, $resolvedEnemy);
 
         if (in_array($npcId, self::NPC_IDS_COUNCIL_OF_TRIBES_TOTEMS, true)) {
             return $this->award($npcId, [

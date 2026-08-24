@@ -13,9 +13,14 @@ abstract class AbstractDungeonRouteBuilderRule implements DungeonRouteBuilderRul
     /** @var array<int, bool> npc_id => true for every enemy this rule has accounted for, whether it died normally or was awarded */
     private array $defeatedNpcIds = [];
 
+    /**
+     * Marks every died npc_id as accounted for, so a subclass using the bookkeeping below doesn't have to remember
+     * to call markDefeated() itself - it only has to call parent::onEnemyDied() once, at the top of its override.
+     */
     public function onEnemyDied(int $npcId, ?Enemy $resolvedEnemy): array
     {
-        // Stateless by default, and awards nothing
+        $this->markDefeated($npcId);
+
         return [];
     }
 
@@ -35,8 +40,9 @@ abstract class AbstractDungeonRouteBuilderRule implements DungeonRouteBuilderRul
     }
 
     /**
-     * Marks $npcId as accounted for. A subclass calls this for every npc_id its onEnemyDied() receives, whether or
-     * not that death triggers an award, so a later isDefeated()/awardUnaccountedNpcIds() call sees it.
+     * Marks $npcId as accounted for, whether it died normally or was awarded. Called automatically from
+     * onEnemyDied() above for every npc_id a subclass receives, so a later isDefeated()/awardUnaccountedNpcIds()
+     * call sees it.
      */
     protected function markDefeated(int $npcId): void
     {
