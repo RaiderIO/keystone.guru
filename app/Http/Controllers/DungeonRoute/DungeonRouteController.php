@@ -37,7 +37,6 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Psr\SimpleCache\InvalidArgumentException;
 use Session;
-use Teapot\StatusCode\Http;
 
 class DungeonRouteController extends Controller
 {
@@ -530,7 +529,6 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param  mixed                             $dungeonroute
      * @return Application|Factory|View|Response
      *
      * @throws AuthorizationException
@@ -538,16 +536,11 @@ class DungeonRouteController extends Controller
     public function embed(
         DungeonRouteEmbedUrlFormRequest $request,
         MapContextServiceInterface      $mapContextService,
-        mixed                           $dungeonroute,
+        Dungeon                         $dungeon,
+        DungeonRoute                    $dungeonroute,
+        ?string                         $title = null,
         string                          $floorIndex = '1',
     ) {
-        if (!is_numeric($floorIndex)) {
-            $dungeonroute = DungeonRoute::where('public_key', $floorIndex)->first();
-            if ($dungeonroute === null) {
-                return response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
-            }
-        }
-
         Gate::authorize('embed', $dungeonroute);
 
         if (!is_numeric($floorIndex)) {
