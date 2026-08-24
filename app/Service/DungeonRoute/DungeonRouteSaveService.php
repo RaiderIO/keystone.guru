@@ -116,6 +116,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
             $source->cloneRelationsInto($clone, [
                 $source->playerraces,
                 $source->playerclasses,
+                $source->playerspecializations,
                 $source->affixGroups,
                 $source->paths,
                 $source->brushlines,
@@ -123,7 +124,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
                 $source->killZones,
                 $source->pridefulEnemies,
                 $source->enemyRaidMarkers,
-                $source->mapicons,
+                $source->routeMapIcons,
                 $source->routeattributesraw,
             ]);
 
