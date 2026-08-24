@@ -225,6 +225,11 @@ final class MDTMappingImportNpcSetGuardTest extends PublicTestCase
             'timer_max_seconds'               => $currentMappingVersion->timer_max_seconds,
             'facade_enabled'                  => false,
             'mdt_mapping_hash'                => self::SENTINEL_MAPPING_HASH,
+            // Standing in for an MDT-matching current mapping version, not one of our own pending
+            // corrections - this test targets the NPC-set-disjoint guard (#3995), not the separate
+            // "changes awaiting MDT acceptance" guard (#4281), which would otherwise fire first now that
+            // the column defaults to true.
+            'mdt_changes_pending' => false,
         ]);
 
         try {

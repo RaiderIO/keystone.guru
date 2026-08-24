@@ -142,6 +142,7 @@ final class MDTMappingImportCrashRecoveryTest extends PublicTestCase
             ->setConstructorArgs([
                 $this->app->make(CacheServiceInterface::class),
                 $this->app->make(CoordinatesServiceInterface::class),
+                $this->app->make(MDTAddonVersionServiceInterface::class),
                 $this->app->make(MDTMappingImportServiceLoggingInterface::class),
             ])
             ->onlyMethods(['importNpcsDataFromMDT'])
@@ -211,6 +212,7 @@ final class MDTMappingImportCrashRecoveryTest extends PublicTestCase
             ->setConstructorArgs([
                 $this->app->make(CacheServiceInterface::class),
                 $this->app->make(CoordinatesServiceInterface::class),
+                $this->app->make(MDTAddonVersionServiceInterface::class),
                 $mockLog,
             ])
             ->onlyMethods(['importNpcsDataFromMDT'])

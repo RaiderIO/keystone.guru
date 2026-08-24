@@ -24,6 +24,19 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importMappingVersionFromMDTEnd(): void;
 
+    /**
+     * The import refused to create a new mapping version because the current one is awaiting MDT acceptance
+     * of our own changes - see MDTMappingPendingAcceptanceException (#4281).
+     */
+    public function importMappingVersionFromMDTPendingAcceptance(string $key, int $version): void;
+
+    public function acceptMDTMappingForPendingMappingVersion(
+        string  $key,
+        int     $version,
+        ?string $mdtMappingHash,
+        string  $latestMdtMappingHash,
+    ): void;
+
     public function importDungeonMappingVersionFromMDTNoChangeDetected(
         string  $key,
         ?string $latestMdtMappingHash,

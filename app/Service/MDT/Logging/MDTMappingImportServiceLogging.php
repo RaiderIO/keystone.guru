@@ -38,6 +38,20 @@ class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMap
         $this->end(__METHOD__);
     }
 
+    public function importMappingVersionFromMDTPendingAcceptance(string $key, int $version): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
+    public function acceptMDTMappingForPendingMappingVersion(
+        string  $key,
+        int     $version,
+        ?string $mdtMappingHash,
+        string  $latestMdtMappingHash,
+    ): void {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
     public function importDungeonMappingVersionFromMDTNoChangeDetected(string $key, ?string $latestMdtMappingHash): void
     {
         $this->warning(__METHOD__, get_defined_vars());
