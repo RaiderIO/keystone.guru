@@ -4,6 +4,8 @@ namespace Tests\Feature\Controller\DungeonRouteController;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
+use App\Models\KillZone\KillZone;
+use App\Models\KillZone\KillZoneEnemy;
 use App\Models\Laratrust\Role;
 use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
@@ -70,6 +72,32 @@ class DungeonRouteControllerUpgradeDraftTest extends PublicTestCase
         array_unshift($this->cleanup, $route);
 
         return $route;
+    }
+
+    /**
+     * Satisfies the required-enemies invariant Apply enforces against a published original (mirroring
+     * DungeonRoutePolicy::publish()) by killing every required enemy on the draft's mapping version.
+     */
+    private function killRequiredEnemiesOn(DungeonRoute $draft): void
+    {
+        $killZone = KillZone::create([
+            'dungeon_route_id' => $draft->id,
+            'floor_id'         => null,
+            'color'            => '#00ff00',
+            'index'            => 1,
+        ]);
+
+        $requiredEnemies = Enemy::query()
+            ->where('mapping_version_id', $draft->mapping_version_id)
+            ->where('required', true)
+            ->get();
+
+        foreach ($requiredEnemies as $requiredEnemy) {
+            KillZoneEnemy::create([
+                'kill_zone_id' => $killZone->id,
+                'enemy_id'     => $requiredEnemy->id,
+            ]);
+        }
     }
 
     private function tearDownCleanup(): void
@@ -188,6 +216,7 @@ class DungeonRouteControllerUpgradeDraftTest extends PublicTestCase
                 'title'        => $route->getTitleSlug(),
             ]));
             $draft = DungeonRoute::query()->where('upgrade_of_dungeon_route_id', $route->id)->firstOrFail();
+            $this->killRequiredEnemiesOn($draft);
 
             // Act
             $response = $this->actingAs($owner)->post(route('dungeonroute.upgrade.apply', [

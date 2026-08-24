@@ -9,6 +9,7 @@ use App\Models\DungeonRoute\DungeonRoutePlayerSpecialization;
 use App\Models\DungeonRoute\DungeonRouteRating;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
+use App\Models\KillZone\KillZoneEnemy;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
@@ -71,6 +72,34 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
         array_unshift($this->cleanup, $route);
 
         return [$route, $mappingVersion, $newMappingVersion, $dungeon];
+    }
+
+    /**
+     * Satisfies the required-enemies invariant Apply enforces against a published original (mirroring
+     * DungeonRoutePolicy::publish()) by killing every required enemy on the draft's mapping version.
+     * Most of these fixtures don't care about that invariant - they exercise something else about
+     * Apply - so this exists to keep them decoupled from it rather than each hand-rolling the kill.
+     */
+    private function killRequiredEnemiesOn(DungeonRoute $draft, ?KillZone $killZone = null): void
+    {
+        $killZone ??= KillZone::create([
+            'dungeon_route_id' => $draft->id,
+            'floor_id'         => null,
+            'color'            => '#00ff00',
+            'index'            => 1,
+        ]);
+
+        $requiredEnemies = Enemy::query()
+            ->where('mapping_version_id', $draft->mapping_version_id)
+            ->where('required', true)
+            ->get();
+
+        foreach ($requiredEnemies as $requiredEnemy) {
+            KillZoneEnemy::create([
+                'kill_zone_id' => $killZone->id,
+                'enemy_id'     => $requiredEnemy->id,
+            ]);
+        }
     }
 
     private function tearDownCleanup(): void
@@ -307,6 +336,7 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
             $service = $this->buildUpgradeDraftService();
             $draft   = $service->findOrCreateDraft($original);
             $draft->update(['title' => 'Repaired in the draft']);
+            $this->killRequiredEnemiesOn($draft);
 
             // Act
             $applied = $service->apply($draft);
@@ -336,12 +366,17 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
             $service    = $this->buildUpgradeDraftService();
             $draft      = $service->findOrCreateDraft($original);
 
-            KillZone::create([
+            $killZone = KillZone::create([
                 'dungeon_route_id' => $draft->id,
                 'floor_id'         => null,
                 'color'            => '#00ff00',
                 'index'            => 1,
             ]);
+
+            // The original is published, so Apply enforces the required-enemies invariant - kill every
+            // required enemy on the draft's mapping version so this test still exercises what it is
+            // actually about (kill-zone copying), not the guard added in apply_givenDraftMissingRequired…
+            $this->killRequiredEnemiesOn($draft, $killZone);
 
             // Act
             $applied = $service->apply($draft);
@@ -386,6 +421,7 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
 
             $service = $this->buildUpgradeDraftService();
             $draft   = $service->findOrCreateDraft($original->refresh());
+            $this->killRequiredEnemiesOn($draft);
 
             // Act
             $applied = $service->apply($draft);
@@ -411,12 +447,13 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
             $draft      = $service->findOrCreateDraft($original);
             $draftId    = $draft->id;
 
-            KillZone::create([
+            $killZone = KillZone::create([
                 'dungeon_route_id' => $draftId,
                 'floor_id'         => null,
                 'color'            => '#00ff00',
                 'index'            => 1,
             ]);
+            $this->killRequiredEnemiesOn($draft, $killZone);
 
             // Act
             $service->apply($draft);
@@ -437,6 +474,7 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
             [$original] = $this->createOutdatedRoute();
             $service    = $this->buildUpgradeDraftService();
             $draft      = $service->findOrCreateDraft($original);
+            $this->killRequiredEnemiesOn($draft);
             $service->apply($draft);
 
             // Assert
@@ -534,6 +572,7 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
 
             $service = $this->buildUpgradeDraftService($thumbnailService);
             $draft   = $service->findOrCreateDraft($original);
+            $this->killRequiredEnemiesOn($draft);
 
             // Act + Assert (the expectation above)
             $service->apply($draft);
