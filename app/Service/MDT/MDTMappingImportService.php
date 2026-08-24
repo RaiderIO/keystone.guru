@@ -253,7 +253,10 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     }
                 }
 
-                // Save/update health
+                // Save/update health. A health we already have is trusted over MDT's - it was either
+                // measured from real combat logs (combatlog:extractnpchealth) or curated by hand, and
+                // MDT's own health is frequently wrong (Midnight bosses stored ~4.17% high, #4211).
+                // Only a missing row or a still-unmeasured placeholder gets MDT's value.
                 $npcHealth = $npc->getHealthByGameVersion($gameVersion);
                 if ($npcHealth === null) {
                     $npcHealth = new NpcHealth([
@@ -261,8 +264,11 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         'game_version_id' => $gameVersion->id,
                         'health'          => $mdtNpc->getHealth(),
                     ]);
+                } elseif ($npcHealth->health === NpcHealth::HEALTH_PLACEHOLDER) {
+                    $npcHealth->health = $mdtNpc->getHealth();
+                } else {
+                    $this->log->importNpcsDataFromMDTSkipHealthOverwrite($npc->id, $npcHealth->health, $mdtNpc->getHealth());
                 }
-                $npcHealth->health = $mdtNpc->getHealth();
                 // MDT doesn't always get this right - don't trust it (Watcher Irideus for example)
                 $npcHealth->percentage = $npc->health_percentage ?? $mdtNpc->getHealthPercentage();
                 $npcHealth->save();
