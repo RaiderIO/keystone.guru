@@ -88,6 +88,34 @@ final class ResultEventDungeonRouteServiceKingsRestTest extends ResultEventDunge
     }
 
     /**
+     * A trigger whose engage resolved to no mapped enemy at all is in no pull, but its death still has to award -
+     * the rule marks what it returns as accounted for either way, so dropping the award here would lose the three
+     * bosses for the rest of the build rather than postpone them.
+     */
+    #[Test]
+    public function convertCombatLogToDungeonRoutes_givenATriggerThatResolvedToNoEnemy_stillAwardsTheCouncilOfTribes(): void
+    {
+        // Arrange - far outside enemy_engagement_max_range of any mapped Explosive Totem
+        $npcKills = [
+            $this->npcKill(NpcId::EXPLOSIVE_TOTEM->value, '000008A22F', '21:08:35', '21:08:37', -9999.00, -9999.00),
+        ];
+
+        // Act
+        $dungeonRoute = $this->buildDungeonRouteFromNpcKills($npcKills);
+
+        // Assert
+        $this->assertNull(
+            $this->findResolvedEnemyMdtId($dungeonRoute, NpcId::EXPLOSIVE_TOTEM->value),
+            'The trigger was expected not to resolve to any enemy',
+        );
+        $this->assertNpcIdsInSamePull($dungeonRoute, [
+            NpcId::AKAALI_THE_CONQUEROR->value,
+            NpcId::ZANAZAL_THE_WISE->value,
+            NpcId::KULA_THE_BUTCHER->value,
+        ]);
+    }
+
+    /**
      * Nothing is awarded off a death the rule does not key on, so an ordinary trash kill stays a pull of one - which
      * is what makes the two assertions above tests of the rule rather than of the builder awarding blindly.
      */

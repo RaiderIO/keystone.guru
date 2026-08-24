@@ -32,6 +32,12 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
 {
     private readonly ResultEventDungeonRouteBuilderLoggingInterface $log;
 
+    /**
+     * @var Collection<string, ActivePullEnemy> Every enemy we have seen engaged, by guid - including the ones that
+     *                                          resolved to no mapped Enemy and are therefore in no pull
+     */
+    private Collection $engagedEnemiesByGuid;
+
     public function __construct(
         CoordinatesServiceInterface      $coordinatesService,
         DungeonRouteRepositoryInterface  $dungeonRouteRepository,
@@ -44,7 +50,8 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
         /** @var Collection<int, BaseResultEvent> */
         private readonly Collection      $resultEvents,
     ) {
-        $this->log = App::make(ResultEventDungeonRouteBuilderLoggingInterface::class);
+        $this->log                  = App::make(ResultEventDungeonRouteBuilderLoggingInterface::class);
+        $this->engagedEnemiesByGuid = collect();
 
         parent::__construct(
             $coordinatesService,
@@ -100,7 +107,11 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                         }
 
                         $activePullEnemy = $this->createActivePullEnemy($resultEvent);
-                        $resolvedEnemy   = $this->findUnkilledEnemyForNpcAtIngameLocation(
+                        // Remembered even when it resolves to nothing below: its death may still be what triggers a
+                        // rule into awarding kills, and this is the only record of where it stood when we met it
+                        $this->engagedEnemiesByGuid->put($activePullEnemy->getUniqueId(), $activePullEnemy);
+
+                        $resolvedEnemy = $this->findUnkilledEnemyForNpcAtIngameLocation(
                             $activePullEnemy,
                             $this->activePullCollection->getInCombatGroups(),
                         );
@@ -148,23 +159,34 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                         }
                     }
 
+                    // An UnitDied carries no position of its own, so an award has to borrow the one we recorded when
+                    // we first met this enemy - which we did even if it never resolved to a mapped enemy and is
+                    // therefore in no pull at all. That mirrors CombatLogRouteDungeonRouteBuilder, where the DTO the
+                    // trigger is built from always carries a position regardless of how the death resolved.
+                    $diedActivePullEnemy ??= $this->engagedEnemiesByGuid->get($guid);
+
                     $awardedNpcIds = $this->notifyRulesEnemyDied(
                         $resultEvent->getGuid()->getId(),
                         $diedActivePullEnemy?->getResolvedEnemy(),
                     );
 
                     // Must happen before the pulls below are created, so the awarded kills are part of the pull that
-                    // triggered them rather than of one after it.
-                    //
-                    // An award needs the trigger's position to resolve its enemies against, and this path only knows
-                    // that for an enemy that was engaged first - an UnitDied carries no position of its own. A death
-                    // we never saw an engage for therefore advances the rules but awards nothing.
-                    if ($awardedNpcIds->isNotEmpty() && $diedActivePullEnemy !== null) {
-                        $this->awardEnemyKills(
-                            $awardedNpcIds,
-                            $diedInActivePull,
-                            $diedActivePullEnemy,
-                        );
+                    // triggered them rather than of one after it
+                    if ($awardedNpcIds->isNotEmpty()) {
+                        if ($diedActivePullEnemy === null) {
+                            // A kill we were never told the position of - EncounterEnd and the defeated-percentage
+                            // threshold both produce one for an enemy that was never engaged. There is nothing to
+                            // resolve the award against, and a rule considers what it returned accounted for, so
+                            // these npcs are lost for the rest of the build. Loud rather than silent because it
+                            // means a boss missing from the route.
+                            $this->log->buildAwardedEnemyKillsDroppedWithoutTrigger($guid, $awardedNpcIds->all());
+                        } else {
+                            $this->awardEnemyKills(
+                                $awardedNpcIds,
+                                $diedInActivePull,
+                                $diedActivePullEnemy,
+                            );
+                        }
                     }
 
                     // Handle the actual creation of pulls
