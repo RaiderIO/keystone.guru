@@ -480,6 +480,26 @@ final class MDT2CodecTest extends TestCase
     }
 
     #[Test]
+    public function decode_givenSecondExportSeparatedByWordyNoteText_decodesFirstExport(): void
+    {
+        // Arrange - a realistic separator: plain English note text glued directly onto the first
+        // export with no delimiter, whose letters are themselves valid Base64 characters and
+        // comfortably exceed MAX_TRAILING_GARBAGE_BYTES on their own - only the punctuation is
+        // outside the Base64 alphabet, so the fix must cut there rather than rely on trimming a
+        // small fixed number of trailing bytes
+        $cbor   = hex2bin('a1476f626a656374738241614162');
+        $first  = $this->buildMdt2String($cbor);
+        $second = $this->buildMdt2String(hex2bin('a141614101'));
+        $string = $first . 'Route: The Azure Vault, week 3' . $second;
+
+        // Act
+        $decoded = $this->codec->decode($string);
+
+        // Assert
+        $this->assertSame(['objects' => ['a', 'b']], $decoded);
+    }
+
+    #[Test]
     public function decode_givenFirstExportCorruptAndSecondExportValid_throwsMDT2DecodeException(): void
     {
         // Arrange - recovery only ever tries the first export; a valid second export does not mask

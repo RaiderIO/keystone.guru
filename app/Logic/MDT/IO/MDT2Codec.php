@@ -110,15 +110,28 @@ final class MDT2Codec implements MDTStringCodecInterface
 
         // Production has seen pastes containing a second (sometimes a byte-for-byte duplicate)
         // `!~MDT2~...` export concatenated after the first, with anything from nothing to a chunk
-        // of unrelated text in between - a doubled paste action, or a whole multi-route note copied
-        // instead of a single export. `!` and `~` fall outside the Base64 alphabet, so a genuine
-        // export's payload can never legitimately contain the prefix - any occurrence past the
-        // first is unambiguously the start of a second export, never a false positive. Try decoding
-        // just the first export before falling through to the single-payload attempt below.
+        // of unrelated note text in between - a doubled paste action, or a whole multi-route note
+        // copied instead of a single export. `!` and `~` fall outside the Base64 alphabet, so a
+        // genuine export's payload can never legitimately contain the prefix - any occurrence past
+        // the first is unambiguously the start of a second export, never a false positive. Try
+        // decoding just the first export before falling through to the single-payload attempt below.
         $secondExportPosition = strpos($payload, self::PREFIX);
         if ($secondExportPosition !== false) {
+            $firstExportPayload = substr($payload, 0, $secondExportPosition);
+
+            // Ordinary words in separator note text ("Route: ...") are themselves valid Base64
+            // characters, so a plain rtrim()/whitespace check would leave far more than
+            // MAX_TRAILING_GARBAGE_BYTES of them dangling. Base64's alphabet is a hard boundary
+            // instead: cut at the first character outside it (space, punctuation, CJK, ...) - that
+            // can only be separator content, never part of the first export's own payload - then
+            // let the existing trailing-garbage recovery mop up the handful of alphanumeric
+            // characters (if any) still stuck to the end, e.g. "Route" before a colon.
+            if (preg_match('/[^A-Za-z0-9+\/=]/', $firstExportPayload, $matches, PREG_OFFSET_CAPTURE) === 1) {
+                $firstExportPayload = substr($firstExportPayload, 0, $matches[0][1]);
+            }
+
             try {
-                return self::decodeBinary(self::decodeBase64WithTrailingGarbageRecovery(rtrim(substr($payload, 0, $secondExportPosition))));
+                return self::decodeBinary(self::decodeBase64WithTrailingGarbageRecovery($firstExportPayload));
             } catch (MDT2DecodeException) {
                 // Not recoverable this way either - fall through to the single-payload attempt
                 // below, whose failure is what actually gets reported to the caller.
