@@ -44,6 +44,12 @@ return [
                 'cta'         => '查看动态',
                 'subtitle'    => '每日更新',
             ],
+            'tuning' => [
+                'title'        => '',
+                'description'  => '',
+                'cta'          => '',
+                'count_suffix' => '',
+            ],
             'class' => [
                 'title'        => '按职业',
                 'description'  => '按职业查看您的哪些控场法术对哪些NPC有效。',
@@ -178,6 +184,11 @@ return [
                 'title' => '最近动态',
                 'empty' => '尚未记录任何动态。',
             ],
+            'tuning_changes' => [
+                'title'        => '',
+                'empty'        => '',
+                'build_header' => '',
+            ],
         ],
     ],
     'activity' => [
@@ -190,6 +201,40 @@ return [
             'title'  => ':date - 图鉴动态',
             'header' => ':date 的图鉴动态',
             'empty'  => '此日期没有记录任何动态。',
+        ],
+    ],
+    'sections' => [
+        // Shared primitive rendering a list of spell tuning changes (compendium/sections/tuning_change_list)
+        'tuning_change_list' => [
+            'kinds' => [
+                'damage'   => '',
+                'healing'  => '',
+                'duration' => '',
+                'period'   => '',
+                'radius'   => '',
+                'count'    => '',
+                'value'    => '',
+            ],
+            'coefficient'    => '',
+            'rewritten'      => '',
+            'added'          => '',
+            'no_description' => '',
+            'changed_to'     => '',
+            'shared_by'      => '',
+        ],
+    ],
+    'tuning' => [
+        'index' => [
+            'title'             => '',
+            'header'            => '',
+            'header_dungeon'    => '',
+            'intro'             => '',
+            'empty'             => '',
+            'all_dungeons'      => '',
+            'show_all_dungeons' => '',
+            'build_title'       => '',
+            'build_subtitle'    => '',
+            'changed_spells'    => '',
         ],
     ],
     'class' => [

@@ -44,6 +44,12 @@ return [
                 'cta'         => '활동 보기',
                 'subtitle'    => '매일 업데이트',
             ],
+            'tuning' => [
+                'title'        => '',
+                'description'  => '',
+                'cta'          => '',
+                'count_suffix' => '',
+            ],
             'class' => [
                 'title'        => '직업별',
                 'description'  => '자신의 군중 제어 주문이 어떤 NPC에게 통하는지 직업별로 확인하세요.',
@@ -178,6 +184,11 @@ return [
                 'title' => '최근 활동',
                 'empty' => '아직 기록된 활동이 없습니다.',
             ],
+            'tuning_changes' => [
+                'title'        => '',
+                'empty'        => '',
+                'build_header' => '',
+            ],
         ],
     ],
     'activity' => [
@@ -190,6 +201,40 @@ return [
             'title'  => ':date - 도감 활동',
             'header' => ':date의 도감 활동',
             'empty'  => '이 날짜에 기록된 활동이 없습니다.',
+        ],
+    ],
+    'sections' => [
+        // Shared primitive rendering a list of spell tuning changes (compendium/sections/tuning_change_list)
+        'tuning_change_list' => [
+            'kinds' => [
+                'damage'   => '',
+                'healing'  => '',
+                'duration' => '',
+                'period'   => '',
+                'radius'   => '',
+                'count'    => '',
+                'value'    => '',
+            ],
+            'coefficient'    => '',
+            'rewritten'      => '',
+            'added'          => '',
+            'no_description' => '',
+            'changed_to'     => '',
+            'shared_by'      => '',
+        ],
+    ],
+    'tuning' => [
+        'index' => [
+            'title'             => '',
+            'header'            => '',
+            'header_dungeon'    => '',
+            'intro'             => '',
+            'empty'             => '',
+            'all_dungeons'      => '',
+            'show_all_dungeons' => '',
+            'build_title'       => '',
+            'build_subtitle'    => '',
+            'changed_spells'    => '',
         ],
     ],
     'class' => [

@@ -304,6 +304,7 @@ return [
             'npc_compendium'          => 'НПЦ',
             'spell_compendium'        => 'Заклинания',
             'compendium_activity'     => 'Активность',
+            'compendium_tuning'       => '',
             'class_compendium'        => 'По классу',
         ],
         'nav' => [

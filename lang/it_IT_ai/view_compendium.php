@@ -44,6 +44,12 @@ return [
                 'cta'         => 'Visualizza attività',
                 'subtitle'    => 'Aggiornato ogni giorno',
             ],
+            'tuning' => [
+                'title'        => '',
+                'description'  => '',
+                'cta'          => '',
+                'count_suffix' => '',
+            ],
             'class' => [
                 'title'        => 'Per classe',
                 'description'  => 'Scopri quali dei tuoi incantesimi di controllo della folla funzionano su quali NPC, raggruppati per classe.',
@@ -178,6 +184,11 @@ return [
                 'title' => 'Attività recente',
                 'empty' => 'Nessuna attività registrata ancora.',
             ],
+            'tuning_changes' => [
+                'title'        => '',
+                'empty'        => '',
+                'build_header' => '',
+            ],
         ],
     ],
     'activity' => [
@@ -190,6 +201,40 @@ return [
             'title'  => ':date - Attività del compendio',
             'header' => 'Attività del compendio per :date',
             'empty'  => 'Nessuna attività registrata per questo giorno.',
+        ],
+    ],
+    'sections' => [
+        // Shared primitive rendering a list of spell tuning changes (compendium/sections/tuning_change_list)
+        'tuning_change_list' => [
+            'kinds' => [
+                'damage'   => '',
+                'healing'  => '',
+                'duration' => '',
+                'period'   => '',
+                'radius'   => '',
+                'count'    => '',
+                'value'    => '',
+            ],
+            'coefficient'    => '',
+            'rewritten'      => '',
+            'added'          => '',
+            'no_description' => '',
+            'changed_to'     => '',
+            'shared_by'      => '',
+        ],
+    ],
+    'tuning' => [
+        'index' => [
+            'title'             => '',
+            'header'            => '',
+            'header_dungeon'    => '',
+            'intro'             => '',
+            'empty'             => '',
+            'all_dungeons'      => '',
+            'show_all_dungeons' => '',
+            'build_title'       => '',
+            'build_subtitle'    => '',
+            'changed_spells'    => '',
         ],
     ],
     'class' => [

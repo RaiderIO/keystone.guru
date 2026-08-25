@@ -11,6 +11,7 @@ return [
             'spell_show'   => ':name',
             'activity'     => '도감 활동',
             'activity_day' => ':date',
+            'tuning'       => '',
             'class'        => '직업별',
         ],
         'affixes' => '접두사',

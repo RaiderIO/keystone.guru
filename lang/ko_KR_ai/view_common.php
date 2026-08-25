@@ -304,6 +304,7 @@ return [
             'npc_compendium'          => 'NPC',
             'spell_compendium'        => '주문',
             'compendium_activity'     => '활동',
+            'compendium_tuning'       => '',
             'class_compendium'        => '직업별',
         ],
         'nav' => [

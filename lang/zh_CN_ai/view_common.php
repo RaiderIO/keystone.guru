@@ -304,6 +304,7 @@ return [
             'npc_compendium'          => 'NPC',
             'spell_compendium'        => '法术',
             'compendium_activity'     => '动态',
+            'compendium_tuning'       => '',
             'class_compendium'        => '按职业',
         ],
         'nav' => [

@@ -11,6 +11,7 @@ return [
             'spell_show'   => '',
             'activity'     => '',
             'activity_day' => '',
+            'tuning'       => '',
             'class'        => '',
         ],
         'affixes' => '詞綴',

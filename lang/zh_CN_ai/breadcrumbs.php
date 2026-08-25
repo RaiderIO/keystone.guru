@@ -11,6 +11,7 @@ return [
             'spell_show'   => ':name',
             'activity'     => '图鉴动态',
             'activity_day' => ':date',
+            'tuning'       => '',
             'class'        => '按职业',
         ],
         'affixes' => '词缀',

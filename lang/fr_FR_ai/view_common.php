@@ -304,6 +304,7 @@ return [
             'npc_compendium'          => 'PNJ',
             'spell_compendium'        => 'Sorts',
             'compendium_activity'     => 'Activité',
+            'compendium_tuning'       => '',
             'class_compendium'        => 'Par classe',
         ],
         'nav' => [

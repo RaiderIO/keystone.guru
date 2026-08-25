@@ -304,6 +304,7 @@ return [
             'npc_compendium'          => 'NPCs',
             'spell_compendium'        => 'Hechizos',
             'compendium_activity'     => 'Actividad',
+            'compendium_tuning'       => '',
             'class_compendium'        => 'Por clase',
         ],
         'nav' => [
