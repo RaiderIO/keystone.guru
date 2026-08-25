@@ -21,6 +21,7 @@ services:
     volumes:
       - ./:/var/www
       - ../keystone.guru.assets:/var/keystone.guru.assets
+      - ../MythicDungeonTools:/var/MythicDungeonTools
       - ~/.ssh:/home/ksg/.ssh
       # Bind-mounted so the web memory cap applies without an image rebuild (also baked in via Dockerfile COPY)
       - ./docker-compose/app/usr/local/etc/php-fpm.d/zz.memory.conf:/usr/local/etc/php-fpm.d/zz.memory.conf:ro

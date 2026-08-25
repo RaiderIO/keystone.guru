@@ -1,6 +1,5 @@
 ---
 name: babysit-prs
-disable-model-invocation: true
 description: "One /loop pass over every open agent MR: fix red CI, address comments, rebase, merge what Wotuu authorised. User-invoked only."
 ---
 
@@ -146,8 +145,17 @@ issue number). Skip Dependabot and other branches unless explicitly asked.
 Before touching a branch, check its worktree (if one exists at
 `../keystone.guru-worktrees/<branch>`): uncommitted changes to tracked files
 (`git -C <path> status --porcelain --untracked-files=no`) mean another session is mid-work — skip
-it and note that in your pass report. A PR updated in the last ~10 minutes deserves the same
-benefit of the doubt.
+it and note that in your pass report. A PR whose **branch** was pushed to in the last ~10 minutes
+deserves the same benefit of the doubt (another session may be mid-push or about to add more
+commits).
+
+**This grace window is about branch/worktree activity, not about a submitted GitHub review or
+comment.** A review or comment is atomic — the moment Wotuu hits submit, it's complete and final,
+there's no "still typing" state to protect against the way there is for a multi-commit push.
+Treating a freshly-submitted `CHANGES_REQUESTED` review or a fresh comment as "recent, give it 10
+minutes" just delays reacting to his feedback for no reason (caught 2026-08-24, a pass sat on
+his review for a full cycle citing this rule). If the *only* recent activity on a PR is a
+submitted review/comment — not a push, not a dirty worktree — triage it this pass.
 
 **Skip every draft PR outright, for every step below (merge, comment-fixing, even rebasing) — leave
 it entirely alone**, with one narrow carve-out for cold review below. `isDraft` is already in the
@@ -198,6 +206,15 @@ regardless of what cold review finds — this carve-out only unblocks step 4, no
    independent review is in", not "you may decide to merge this". If the PR is authorized by
    **either** mechanism, carries `pr cold reviewed`, and `statusCheckRollup` is fully green (not
    pending, not failed), merge it:
+   **Re-check `isDraft` right before merging, not just from step 1's start-of-pass listing** — a
+   PR can flip to draft mid-pass. Caught 2026-08-24 on #4290: Wotuu approved it, then converted it
+   back to draft himself 18 seconds later (presumably to make further changes), all inside the
+   same pass. The merge attempt against stale data bounced cleanly off GitHub's own 422 (no harm
+   done, nothing destructive), but it shouldn't have been attempted at all — the whole point of
+   checking `isDraft` explicitly rather than relying on that error (see step 2) is to not depend on
+   GitHub catching it for you. `gh pr view <n> --json isDraft` is one cheap call immediately before
+   `gh pr merge`.
+
    `gh pr merge <n> --squash --delete-branch` (match the repo's normal merge style — check a
    recently-merged PR if unsure). Then clean up its worktree per step 5. If authorized but CI isn't
    green yet, fall through to the normal red-CI handling below — authorization just means merge as
@@ -607,3 +624,15 @@ action, say so in one line.
   waiting for a notification that may never come. Do **not** blindly approve a pending destructive-git
   confirmation from a stuck agent — verify what's actually uncommitted first (see the git-safety
   protocol), since approving it might discard the exact fix you're waiting on.
+- **`git merge` trips the same confirmation wall as `git reset --hard`/`git clean -f` — a dispatched
+  agent should never need it either.** Stalled #4282's fix agent for 20+ minutes on 2026-08-24: told
+  to sync its worktree with master, it ran `git merge --no-ff origin/<branch> -m '...'` to pull in a
+  server-side change, got blocked on confirmation, and then retried the *same already-applied* merge
+  repeatedly (the commit was already in its history) until the classifier auto-escalated after
+  several consecutive blocks and hard-stopped it — nobody was there to answer, so it just sat there.
+  **Dispatch prompts must tell fix agents to sync with `git fetch && git rebase origin/master` only
+  (same as step 0), never `git merge`** — rebase doesn't hit this wall, and it's what every other
+  branch-sync path in this skill already uses. If a dispatched agent's task requires pulling in a
+  remote change onto a branch it's actively mid-edit on, prefer `gh pr update-branch <n> --rebase`
+  (server-side, no local git operation, no confirmation at all) over any local sync when the agent
+  hasn't diverged from origin yet.
