@@ -477,6 +477,38 @@ final class SpellDataExtractorTest extends PublicTestCase
         ], 'combatlog');
 
         $this->assertSame(1, $this->result->toArray()['createdNpcSpells']);
+
+        // Assert - #4327: both SpellDungeonAssignmentCollector and NpcSpellAssignmentCollector assign this
+        // spell to the same dungeon for this one event; that must still leave exactly one row
+        $this->assertSame(
+            1,
+            SpellDungeon::where('spell_id', self::SPELL_ID)->where('dungeon_id', $this->currentDungeon->dungeon->id)->count(),
+        );
+    }
+
+    #[Test]
+    public function collect_givenAnotherWorkerAssignedTheSpellToTheDungeonAfterTheCatalogWasBuilt_doesNotCreateADuplicateRow(): void
+    {
+        // Arrange - two ingest processes, each holding its own process-persistent spell catalog (#4058) built
+        // while neither knew about the other's dungeon assignment, exactly as concurrent workers do (#4327)
+        $this->createTestSpell([
+            'category' => sprintf('spellcategory.%s', SpellModel::CATEGORY_UNKNOWN),
+            'aura'     => true,
+        ]);
+        $this->createTestNpc();
+        $workerA = $this->makeExtractor();
+        $workerB = $this->makeExtractor();
+
+        // Act - workerA's run commits the assignment; workerB's in-memory catalog is still stale, so its own
+        // check-then-insert races against a row that already exists by the time it inserts
+        $this->runExtract($workerA, [$this->parsedEvent(self::RAW_BUFF_EVENT)], '/tmp/worker-a.log');
+        $this->runExtract($workerB, [$this->parsedEvent(self::RAW_BUFF_EVENT)], '/tmp/worker-b.log');
+
+        // Assert - still exactly one row for the pair, no duplicate-key exception surfaced
+        $this->assertSame(
+            1,
+            SpellDungeon::where('spell_id', self::SPELL_ID)->where('dungeon_id', $this->currentDungeon->dungeon->id)->count(),
+        );
     }
 
     #[Test]
