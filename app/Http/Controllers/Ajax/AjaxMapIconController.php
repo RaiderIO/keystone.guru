@@ -172,10 +172,6 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         }
 
         try {
-            // The delete cascades into the icon's awakened obelisk links (MapIcon::deleting) and is
-            // followed by either the mapping change log row or the route change log row plus a
-            // touch. Without a transaction a failure halfway through left the icon and its links
-            // gone while the mapping/route change log still described it
             $deleted = DB::transaction(function () use ($dungeonRoute, $mapIcon): bool {
                 // Nothing has been written yet, so there is nothing to roll back
                 if (!$mapIcon->delete()) {

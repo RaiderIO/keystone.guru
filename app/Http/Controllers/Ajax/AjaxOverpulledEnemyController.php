@@ -44,9 +44,6 @@ class AjaxOverpulledEnemyController extends Controller
         /** @var Collection<int, Enemy> $enemies */
         $enemies = Enemy::whereIn('id', $validated['enemy_ids'])->get();
 
-        // The whole batch is one user action - overpulling a pack. Without a transaction a failure
-        // on the third enemy committed the first two, leaving the live session showing half a pull
-        // while the client was told the request failed
         /** @var array<int, array{OverpulledEnemy, Enemy}> $savedEnemies */
         $savedEnemies = DB::transaction(function () use ($enemies, $liveSession, $validated): array {
             $savedEnemies = [];

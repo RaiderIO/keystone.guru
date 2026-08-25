@@ -48,8 +48,6 @@ class AjaxPridefulEnemyController extends Controller
         $pridefulEnemy->lat      = (float)$request->get('lat');
         $pridefulEnemy->lng      = (float)$request->get('lng');
 
-        // The save and the route touch that refreshes its thumbnail have to land together, or the
-        // route keeps advertising a thumbnail that no longer shows the prideful enemy on it
         DB::transaction(function () use ($dungeonRoute, $pridefulEnemy): void {
             if (!$pridefulEnemy->save()) {
                 throw new Exception('Unable to save prideful enemy!');
@@ -86,8 +84,6 @@ class AjaxPridefulEnemyController extends Controller
             /** @var PridefulEnemy|null $pridefulEnemy */
             $pridefulEnemy = PridefulEnemy::where('dungeon_route_id', $dungeonRoute->id)->where('enemy_id', $enemy->id)->first();
 
-            // The delete and the route touch that refreshes its thumbnail have to land together, or
-            // the route keeps advertising a thumbnail that still shows the prideful enemy on it
             $deleted = DB::transaction(function () use ($dungeonRoute, $pridefulEnemy): bool {
                 $result = $pridefulEnemy !== null && $pridefulEnemy->delete() === true;
 

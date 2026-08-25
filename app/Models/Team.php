@@ -141,10 +141,7 @@ class Team extends Model
         // Not set
         if ($dungeonRoute->team_id === null) {
             $dungeonRoute->team_id = $this->id;
-            // Report what the write actually did rather than hardcoding true - a caller that rolls
-            // back on failure (AjaxDungeonRouteController::cloneToTeam()) has no other signal that
-            // the assignment did not land
-            $result = $dungeonRoute->save();
+            $result                = $dungeonRoute->save();
         }
 
         return $result;

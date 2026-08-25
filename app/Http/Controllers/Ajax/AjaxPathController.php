@@ -129,10 +129,6 @@ class AjaxPathController extends Controller
         Gate::authorize('edit', $dungeonRoute);
 
         try {
-            // The delete cascades into the path's awakened obelisk links and its polyline
-            // (Path::deleting) and is followed by a change log row and a touch. None of that used to
-            // be atomic, so a failure halfway through left the path and its children gone while the
-            // route's change log and thumbnail still described it
             $deleted = DB::transaction(function () use ($dungeonRoute, $path): bool {
                 // Nothing has been written yet, so there is nothing to roll back
                 if (!$path->delete()) {

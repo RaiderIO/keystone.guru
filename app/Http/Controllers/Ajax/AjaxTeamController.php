@@ -129,11 +129,6 @@ class AjaxTeamController extends Controller
             ? $team->getNewAdminUponAdminAccountDeletion($user)
             : null;
 
-        // removeMember() is transacted internally, but the admin promotion that follows it was not
-        // part of that transaction, so a failure in between removed the team's only admin and then
-        // failed to appoint a new one.
-        // The disband branch below is deliberately left out: Team::deleting cascades into the team's
-        // icon file, whose File::deleting removes it from S3, and a rollback cannot put that back
         $removed = DB::transaction(function () use ($newAdmin, $team, $user): bool {
             // Nothing has been written by this closure yet, so there is nothing to roll back
             if (!$team->removeMember($user)) {

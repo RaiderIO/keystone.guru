@@ -663,17 +663,9 @@ class AjaxDungeonRouteController extends Controller
         $user = Auth::user();
 
         if ($user->canCreateDungeonRoute() && $team->canAddRemoveRoute($user)) {
-            // cloneRoute() is transacted internally, but the team assignment is not - and the user
-            // explicitly picked that team. Without this outer transaction a failure in addRoute()
-            // leaves behind a committed clone that belongs to nobody's team, which is a visibly
-            // wrong outcome rather than drift. Becomes a savepoint around cloneRoute()'s own
-            // transaction, which is fine: neither uses the retrying DB::transaction($cb, 3) form.
             DB::transaction(function () use ($dungeonRoute, $saveService, $team): void {
                 $newRoute = $saveService->cloneRoute($dungeonRoute, false);
 
-                // A rollback needs both failure modes, not just a throw: addRoute() returns false
-                // when the assignment did not land, and committing on that leaves exactly the
-                // orphan clone this transaction exists to prevent
                 if (!$team->addRoute($newRoute)) {
                     throw new Exception('Unable to assign the cloned route to the team!');
                 }

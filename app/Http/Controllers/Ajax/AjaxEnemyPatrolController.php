@@ -76,10 +76,6 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
     public function delete(Request $request, MappingVersion $mappingVersion, EnemyPatrol $enemyPatrol): Response
     {
         try {
-            // The delete cascades into the patrol's polyline (EnemyPatrol::deleting) and is followed
-            // by the mapping change log row. Without a transaction a failure halfway through left
-            // the patrol and its polyline gone with no record of it in the mapping change log,
-            // which is what other environments replay the mapping from
             $deleted = DB::transaction(function () use ($enemyPatrol): bool {
                 // Nothing has been written yet, so there is nothing to roll back
                 if (!$enemyPatrol->delete()) {
