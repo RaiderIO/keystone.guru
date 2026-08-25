@@ -28,11 +28,28 @@ published Release body and skips releases whose body is empty.
 ## Step 0 — AI translations pre-flight
 
 Releases are when `lang/*_ai` strings reach users (`js.php` is baked into the asset build), so
-check the machine-translated locales are current before composing anything:
+check the machine-translated locales are current before composing anything.
+
+**Bring the checkout to `origin/master` first — `status.sh` reads the working tree, not the
+remote.** It compares `lang/*_ai` against the `lang/en_US` *on disk*, so a checkout that is behind
+cannot see keys added by commits it does not have, and reports a confident, entirely false
+`outstanding 0`. That is not a hypothetical: the v15.20.0 pre-flight ran on a main checkout 8
+commits behind and passed, while the release it was about to cut added 32 untranslated keys
+(#4113/#4313's spell tuning strings) — caught only because Wotuu ran `localization:sync` by hand
+and saw the diff.
 
 ```bash
+git fetch origin --quiet && git status -sb | head -1   # must NOT say "behind"; pull if it does
 sh .claude/skills/ai-locale-translation/scripts/status.sh      # read-only, ~20s
 ```
+
+Prefer the plain form above over `--sync` for the pre-flight: `--sync` writes stubs into
+`lang/*_ai/**` and re-aligns `=>` columns across every file it rewrites, which dirties the
+checkout for a read-only check. If you do run it, note that insertions == deletions means
+alignment-only (no new keys), and `git checkout -- lang/` reverts it. A **bare**
+`localization:sync en_US` with no target locale also rewrites the externally-managed human
+locales and can create whole new files there — those are `git clean` territory, not part of the
+`*_ai` runbook.
 
 `outstanding 0` for every locale except `zh_TW_ai` (skipped by decision) means carry on. Anything
 else: tell the user the counts and ask whether to run the translation runbook first (its own
