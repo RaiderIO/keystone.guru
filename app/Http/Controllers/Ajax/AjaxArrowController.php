@@ -138,6 +138,19 @@ class AjaxArrowController extends Controller
      */
     public function delete(Request $request, DungeonRoute $dungeonRoute, Arrow $arrow)
     {
+        // route:cache serializes this method; a body whose only $this usage sits inside a
+        // nested closure is reconstructed unbound. Delegating keeps a top-level $this read
+        // here, and the closures below compile normally inside a regular method (#4329).
+        return $this->deleteArrow($request, $dungeonRoute, $arrow);
+    }
+
+    /**
+     * @return Response|ResponseFactory
+     *
+     * @throws AuthorizationException
+     */
+    private function deleteArrow(Request $request, DungeonRoute $dungeonRoute, Arrow $arrow)
+    {
         $dungeonRoute = $arrow->dungeonRoute;
 
         Gate::authorize('edit', $dungeonRoute);
