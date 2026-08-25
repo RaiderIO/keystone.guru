@@ -19,5 +19,12 @@
         "floor_id": 458,
         "floor_union_id": 1134,
         "vertices_json": "[{\"lat\":0,\"lng\":0},{\"lat\":-255.8,\"lng\":0},{\"lat\":-255.8,\"lng\":383.8},{\"lat\":0,\"lng\":383.8}]"
+    },
+    {
+        "id": 1263,
+        "mapping_version_id": 990,
+        "floor_id": 458,
+        "floor_union_id": 1268,
+        "vertices_json": "[{\"lat\":0,\"lng\":0},{\"lat\":-255.8,\"lng\":0},{\"lat\":-255.8,\"lng\":383.8},{\"lat\":0,\"lng\":383.8}]"
     }
 ]

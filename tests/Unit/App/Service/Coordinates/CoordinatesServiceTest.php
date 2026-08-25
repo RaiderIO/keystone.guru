@@ -42,9 +42,6 @@ final class CoordinatesServiceTest extends PublicTestCase
         DungeonKey::THE_ROOKERY->value,
         DungeonKey::KINGS_REST->value,
         DungeonKey::TEMPLE_OF_SETHRALISS->value,
-        // Remove again once MDT has accepted changes
-        DungeonKey::THE_BLINDING_VALE->value,
-        DungeonKey::VOIDSCAR_ARENA->value,
         // MDT ships no group/clone data for Den of Nalorakk's hand-authored packs, so its MDT
         // clone list is far short of KG's enemy count (19 vs 33 for npc 241809 alone).
         DungeonKey::DEN_OF_NALORAKK->value,

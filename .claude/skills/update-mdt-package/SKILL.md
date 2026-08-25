@@ -448,6 +448,13 @@ formatting of the rewritten `npcs.php` files, per the project's finishing-up con
    don't spend time re-diagnosing it. A failure that's **new** (passed at baseline, fails now)
    is a real regression from the bump — root-cause and fix it before wrapping up, don't just
    report it (per this repo's "fix incidental issues" convention).
+
+   **One failure is new every single run and is never a regression:**
+   `DungeonRouteBuilderStubKillZoneEnemiesTest` fails on `KillZone::findOrFail(1)` in its Arrange
+   block. Step 7's `db:seed` re-seeds an already-seeded database, and kill zones carry no ids in
+   `dungeonroutes.json` — so the autoincrement reassigns them and the lowest id becomes ~1599,
+   leaving no id 1 for the test to find. CI seeds fresh and stays green. Confirm that on the MR's
+   checks rather than assuming it, but don't go looking for an MDT cause (#4302).
 2. Give the user a **summary**: dungeon mappings imported, any new POI types/templates added, any
    unhandled-POI table rows (with the map icon types you created for them),
    and any tests still failing, split into **pre-existing** vs **newly broken by this update**

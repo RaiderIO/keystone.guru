@@ -5,7 +5,6 @@ namespace Tests\Feature\App\Service\MDT;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Models\Dungeon;
-use App\Models\DungeonKey;
 use App\Models\Enemy;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
@@ -24,12 +23,12 @@ final class MDTNpcMappingCoverageTest extends PublicTestCase
      * Dungeons whose mapping was corrected on our end while MDT's lua still reflects the old
      * layout, so MDT's clones do not line up with our mdt_id assignments yet.
      *
+     * Empty whenever MDT is in step with us - it fills up again the moment a correction of ours is
+     * submitted upstream but not yet released, and empties again on `mdt:acceptmapping` (#4281).
+     *
      * @var array<int, string>
      */
     private const array EXCLUDED_DUNGEON_KEYS = [
-        // Remove again once MDT has accepted changes
-        DungeonKey::THE_BLINDING_VALE->value,
-        DungeonKey::VOIDSCAR_ARENA->value,
     ];
 
     #[Test]
@@ -62,6 +61,9 @@ final class MDTNpcMappingCoverageTest extends PublicTestCase
             ->whereIn('id', $dungeonIds)
             ->get()
             ->filter(static fn(Dungeon $dungeon) => Conversion::hasMDTDungeonName($dungeon->key))
+            // Delete this ignore again as soon as EXCLUDED_DUNGEON_KEYS is refilled - it only holds
+            // while the list is empty, and becomes an unmatched-ignore error the moment it is not.
+            // @phpstan-ignore function.impossibleType
             ->filter(static fn(Dungeon $dungeon) => !in_array($dungeon->key, self::EXCLUDED_DUNGEON_KEYS, true));
 
         $this->assertNotEmpty($dungeons, 'Expected at least one MDT supported dungeon to check');
