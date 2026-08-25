@@ -543,6 +543,35 @@ final class SpellDataExtractorTest extends PublicTestCase
     }
 
     #[Test]
+    public function afterExtract_givenMultipleDistinctPropertiesInOneBatch_writesAllObservationRows(): void
+    {
+        // Arrange — spell not yet known; both rows land in the same afterExtract upsert batch. Regression
+        // check for #4086: the batch is now sorted by its unique key before upserting to keep concurrent
+        // jobs' lock order deterministic, which must not drop or corrupt any row in the batch
+        $extractor = $this->makeExtractor();
+
+        // Act — two distinct properties (Aura, MissInterrupt) for the same spell in one batch
+        $this->runExtract($extractor, [
+            $this->parsedEvent(self::RAW_INTERRUPT_EVENT),
+            $this->parsedEvent(self::RAW_BUFF_EVENT),
+        ]);
+
+        // Assert — both rows present
+        $this->assertDatabaseHas('combat_log_spell_property_observations', [
+            'spell_id' => self::SPELL_ID,
+            'property' => SpellProperty::MissInterrupt->value,
+        ], 'combatlog');
+        $this->assertDatabaseHas('combat_log_spell_property_observations', [
+            'spell_id' => self::SPELL_ID,
+            'property' => SpellProperty::Aura->value,
+        ], 'combatlog');
+        $this->assertSame(
+            2,
+            CombatLogSpellPropertyObservation::where('spell_id', self::SPELL_ID)->count(),
+        );
+    }
+
+    #[Test]
     public function afterExtract_givenMultipleObservationsForSameProperty_writesOneObservationRow(): void
     {
         // Arrange
