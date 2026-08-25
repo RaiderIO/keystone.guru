@@ -5,7 +5,6 @@ namespace Tests\Feature\App\Service\MDT;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Models\Dungeon;
-use App\Models\DungeonKey;
 use App\Models\Enemy;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
@@ -27,9 +26,6 @@ final class MDTNpcMappingCoverageTest extends PublicTestCase
      * @var array<int, string>
      */
     private const array EXCLUDED_DUNGEON_KEYS = [
-        // Remove again once MDT has accepted changes
-        DungeonKey::THE_BLINDING_VALE->value,
-        DungeonKey::VOIDSCAR_ARENA->value,
     ];
 
     #[Test]
