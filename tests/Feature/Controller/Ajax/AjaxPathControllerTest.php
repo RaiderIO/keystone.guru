@@ -47,7 +47,7 @@ final class AjaxPathControllerTest extends DungeonRouteTestBase
 
     #[Test]
     #[Group('Controller')]
-    public function store_givenNewValidPath_broadcastsPayloadWithoutRedundantVerticesJson(): void
+    public function store_givenNewValidPath_broadcastsPayloadWithoutVerticesOrCoordinates(): void
     {
         // Arrange
         Event::fake([PathChangedEvent::class]);
@@ -67,19 +67,51 @@ final class AjaxPathControllerTest extends DungeonRouteTestBase
         ]);
         $response->assertCreated();
 
-        // Assert - model.polyline.vertices_json is dead weight: PathChangedHandler always
-        // overwrites it client-side with model_data.coordinates before use, so broadcasting both
-        // just tripled the vertex payload and could exceed Reverb's message size cap on large
-        // paths (#3909). The rest of the polyline (used for e.g. color) must still be present.
+        // Assert - neither the raw vertices nor the computed model_data.coordinates are
+        // broadcast: a path can have enough vertices to exceed Reverb's message size cap
+        // (#3909). Collaborating clients fetch them via GET .../path/{path} instead. The rest of
+        // the polyline (used for e.g. color) must still be present.
         Event::assertDispatched(PathChangedEvent::class, function (PathChangedEvent $event) use ($polyline) {
             $broadcastPayload = $event->broadcastWith();
 
             $this->assertArrayNotHasKey('vertices_json', $broadcastPayload['model']['polyline']);
             $this->assertEquals($polyline['color'], $broadcastPayload['model']['polyline']['color']);
-            $this->assertArrayHasKey('coordinates', $broadcastPayload['model_data']);
+            $this->assertArrayNotHasKey('model_data', $broadcastPayload);
 
             return true;
         });
+    }
+
+    #[Test]
+    #[Group('Controller')]
+    public function show_givenExistingPath_returnsCoordinatesData(): void
+    {
+        // Arrange
+        /** @var Floor $randomFloor */
+        $randomFloor = $this->dungeonRoute->dungeon->floors()
+            ->where('facade', false)
+            ->get()
+            ->random();
+
+        $polyline = PolylineFixtures::createPolyline($randomFloor);
+
+        $createResponse = $this->post(route('ajax.dungeonroute.path.create', ['dungeonRoute' => $this->dungeonRoute]), [
+            'floor_id' => $randomFloor->id,
+            'polyline' => $polyline,
+        ]);
+        $createResponse->assertCreated();
+        $pathId = json_decode($createResponse->content(), true)['id'];
+
+        // Act
+        $response = $this->get(route('ajax.dungeonroute.path.show', [
+            'dungeonRoute' => $this->dungeonRoute,
+            'path'         => $pathId,
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $responseArr = json_decode($response->content(), true);
+        $this->assertArrayHasKey('coordinates', $responseArr['model_data']);
     }
 
     #[Test]

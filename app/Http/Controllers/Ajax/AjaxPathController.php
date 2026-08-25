@@ -98,7 +98,7 @@ class AjaxPathController extends Controller
                     $user = Auth::getUser();
 
                     try {
-                        broadcast(new PathChangedEvent($coordinatesService, $dungeonRoute, $user, $path));
+                        broadcast(new PathChangedEvent($dungeonRoute, $user, $path));
                     } catch (BroadcastException) {
                         // Ignore broadcast failures
                     }
@@ -114,6 +114,29 @@ class AjaxPathController extends Controller
         }
 
         return $result;
+    }
+
+    /**
+     * Returns the coordinate data that was dropped from the path-changed broadcast (#3909) -
+     * collaborating clients call this after receiving that event instead.
+     *
+     * @return array<string, mixed>
+     *
+     * @throws AuthorizationException
+     */
+    public function show(CoordinatesServiceInterface $coordinatesService, DungeonRoute $dungeonRoute, Path $path): array
+    {
+        $dungeonRoute = $path->dungeonRoute;
+
+        Gate::authorize('view', $dungeonRoute);
+
+        return [
+            'model_data' => $path->polyline->getCoordinatesData(
+                $coordinatesService,
+                $dungeonRoute->mappingVersion,
+                $path->floor,
+            ),
+        ];
     }
 
     /**

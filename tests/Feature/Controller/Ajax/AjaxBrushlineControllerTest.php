@@ -47,7 +47,7 @@ final class AjaxBrushlineControllerTest extends DungeonRouteTestBase
 
     #[Test]
     #[Group('Controller')]
-    public function store_givenNewValidBrushline_broadcastsPayloadWithoutRedundantVerticesJson(): void
+    public function store_givenNewValidBrushline_broadcastsPayloadWithoutVerticesOrCoordinates(): void
     {
         // Arrange
         Event::fake([BrushlineChangedEvent::class]);
@@ -67,19 +67,51 @@ final class AjaxBrushlineControllerTest extends DungeonRouteTestBase
         ]);
         $response->assertCreated();
 
-        // Assert - model.polyline.vertices_json is dead weight: BrushlineChangedHandler always
-        // overwrites it client-side with model_data.coordinates before use, so broadcasting both
-        // just duplicated the vertex payload and could exceed Reverb's message size cap (#3909).
+        // Assert - neither the raw vertices nor the computed model_data.coordinates are
+        // broadcast: a brushline can have enough vertices to exceed Reverb's message size cap
+        // (#3909). Collaborating clients fetch them via GET .../brushline/{brushline} instead.
         // The rest of the polyline (used for e.g. color) must still be present.
         Event::assertDispatched(BrushlineChangedEvent::class, function (BrushlineChangedEvent $event) use ($polyline) {
             $broadcastPayload = $event->broadcastWith();
 
             $this->assertArrayNotHasKey('vertices_json', $broadcastPayload['model']['polyline']);
             $this->assertEquals($polyline['color'], $broadcastPayload['model']['polyline']['color']);
-            $this->assertArrayHasKey('coordinates', $broadcastPayload['model_data']);
+            $this->assertArrayNotHasKey('model_data', $broadcastPayload);
 
             return true;
         });
+    }
+
+    #[Test]
+    #[Group('Controller')]
+    public function show_givenExistingBrushline_returnsCoordinatesData(): void
+    {
+        // Arrange
+        /** @var Floor $randomFloor */
+        $randomFloor = $this->dungeonRoute->dungeon->floors()
+            ->where('facade', false)
+            ->inRandomOrder()
+            ->first();
+
+        $polyline = PolylineFixtures::createPolyline($randomFloor);
+
+        $createResponse = $this->post(route('ajax.dungeonroute.brushline.create', ['dungeonRoute' => $this->dungeonRoute]), [
+            'floor_id' => $randomFloor->id,
+            'polyline' => $polyline,
+        ]);
+        $createResponse->assertCreated();
+        $brushlineId = json_decode($createResponse->content(), true)['id'];
+
+        // Act
+        $response = $this->get(route('ajax.dungeonroute.brushline.show', [
+            'dungeonRoute' => $this->dungeonRoute,
+            'brushline'    => $brushlineId,
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $responseArr = json_decode($response->content(), true);
+        $this->assertArrayHasKey('coordinates', $responseArr['model_data']);
     }
 
     #[Test]

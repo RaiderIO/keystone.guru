@@ -93,7 +93,7 @@ class AjaxArrowController extends Controller
 
                 if (Auth::check()) {
                     try {
-                        broadcast(new ArrowChangedEvent($coordinatesService, $dungeonRoute, Auth::user(), $arrow));
+                        broadcast(new ArrowChangedEvent($dungeonRoute, Auth::user(), $arrow));
                     } catch (BroadcastException) {
                         // Ignore broadcast failures
                     }
@@ -106,6 +106,29 @@ class AjaxArrowController extends Controller
         }
 
         return $result;
+    }
+
+    /**
+     * Returns the coordinate data that was dropped from the arrow-changed broadcast (#3909) -
+     * collaborating clients call this after receiving that event instead.
+     *
+     * @return array<string, mixed>
+     *
+     * @throws AuthorizationException
+     */
+    public function show(CoordinatesServiceInterface $coordinatesService, DungeonRoute $dungeonRoute, Arrow $arrow): array
+    {
+        $dungeonRoute = $arrow->dungeonRoute;
+
+        Gate::authorize('view', $dungeonRoute);
+
+        return [
+            'model_data' => $arrow->polyline->getCoordinatesData(
+                $coordinatesService,
+                $dungeonRoute->mappingVersion,
+                $arrow->floor,
+            ),
+        ];
     }
 
     /**

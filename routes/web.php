@@ -729,6 +729,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
         // May be performed without being logged in (sandbox functionality)
         Route::prefix('{dungeonRoute}')->group(static function () {
+            Route::get('/brushline/{brushline}', new AjaxBrushlineController()->show(...))->name('ajax.dungeonroute.brushline.show');
             Route::post('/brushline', new AjaxBrushlineController()->store(...))->name('ajax.dungeonroute.brushline.create');
             Route::put('/brushline/{brushline}', new AjaxBrushlineController()->store(...))->name('ajax.dungeonroute.brushline.update');
             Route::delete('/brushline/{brushline}', new AjaxBrushlineController()->delete(...))->name('ajax.dungeonroute.brushline.delete');
@@ -747,10 +748,12 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::post('/pridefulenemy/{enemy}', new AjaxPridefulEnemyController()->store(...));
             Route::delete('/pridefulenemy/{enemy}', new AjaxPridefulEnemyController()->delete(...));
 
+            Route::get('/path/{path}', new AjaxPathController()->show(...))->name('ajax.dungeonroute.path.show');
             Route::post('/path', new AjaxPathController()->store(...))->name('ajax.dungeonroute.path.create');
             Route::put('/path/{path}', new AjaxPathController()->store(...))->name('ajax.dungeonroute.path.update');
             Route::delete('/path/{path}', new AjaxPathController()->delete(...))->name('ajax.dungeonroute.path.delete');
 
+            Route::get('/arrow/{arrow}', new AjaxArrowController()->show(...))->name('ajax.dungeonroute.arrow.show');
             Route::post('/arrow', new AjaxArrowController()->store(...))->name('ajax.dungeonroute.arrow.create');
             Route::put('/arrow/{arrow}', new AjaxArrowController()->store(...))->name('ajax.dungeonroute.arrow.update');
             Route::delete('/arrow/{arrow}', new AjaxArrowController()->delete(...))->name('ajax.dungeonroute.arrow.delete');
