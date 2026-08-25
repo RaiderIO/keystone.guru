@@ -556,8 +556,8 @@ a.compendium_class_tile img {
 
 .compendium_tuning_list--subject .compendium_tuning_row {
     grid-template-areas: 'subject body delta';
-    /* Roomy first column: the subject cell also carries the spell's dungeon chips */
-    grid-template-columns: minmax(12rem, 24rem) minmax(0, 1fr) auto;
+    /* The subject cell carries the spell link, the xN marker and the dungeon abbreviations */
+    grid-template-columns: minmax(10rem, 16rem) minmax(0, 1fr) auto;
 }
 
 .compendium_tuning_row + .compendium_tuning_row {
