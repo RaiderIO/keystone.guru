@@ -208,20 +208,5 @@
         "old_text": "300",
         "new_text": "250",
         "delta": null
-    },
-    {
-        "game_version_id": 1,
-        "spell_id": 1317558,
-        "from_build": "12.1.0.69382",
-        "to_build": "12.1.0.69404",
-        "to_build_number": 69404,
-        "change_type": "description_rewritten",
-        "value_index": null,
-        "kind": null,
-        "old_coefficient": null,
-        "new_coefficient": null,
-        "old_text": null,
-        "new_text": "Attack for Physical damage.",
-        "delta": null
     }
 ]
