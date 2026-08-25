@@ -185,6 +185,23 @@ Sentry cluster is still recurring *after* whatever fix or decision closed it (se
 comment's fix). Still recurring → reopen the closed issue with an update, quoting the fix that
 didn't hold. Stopped recurring → leave it closed, nothing to do.
 
+**One defect routinely carries several short IDs, so the marker match is necessary but not
+sufficient — also dedup by title + culprit.** Sentry groups error-level `StructuredLogging` records
+by message, so the *same* log class/method logged from two request paths becomes two issues; an
+uncaught exception whose title does and doesn't carry the `Illuminate\Database\QueryException:`
+prefix likewise splits in two. The GitHub history shows this repeatedly: `PHP-LARAVEL-V4` filed
+three times (#4153, #4175, #4241) and `SQ`/`RP` twice each. In the 2026-08-25 pass, four of five
+marker-less clusters were alternate groupings of tracked defects — `TM`≈`TN` (#4239, identical
+lock-wait on `/new/mdtimport`, same first==last seen), `V8`≈`SQ` (same `MDTBaseServiceLogging::decodeFailed`,
+different log site), `RX`≈`RM` (#3919, same download-failure family), `SR`≈`6Q` (#3914). Before
+filing a marker-less cluster, scan the `--state all` titles for the same exception class, log
+site or culprit; when it matches, comment on the existing issue instead.
+
+**The marker's `events:N` is a lifetime count; `search_issues` returns a count for the queried
+window.** Comparing the two makes a busy cluster look like it shrank — in the 2026-08-25 pass `RP`
+read 186 (marker) against 45 (7d window). Before bumping, re-query at `period: 90d` and compare
+like with like, or you will edit an issue body to a *smaller* number and record a fake decline.
+
 One-time setup, if it has not been done:
 
 ```bash
