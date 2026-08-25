@@ -183,6 +183,9 @@ class SpellCounterDataExtractor implements DataExtractorInterface
     /** @var int|null The dungeon the extraction currently takes place in - used for SpellDungeon assignment. */
     private ?int $currentDungeonId = null;
 
+    /** @var DataExtractionCurrentDungeon|null The context $currentDungeonId was read from - see extractData. */
+    private ?DataExtractionCurrentDungeon $currentDungeonContext = null;
+
     public function __construct()
     {
         $definitionsByTriggerSpellId     = collect();
@@ -227,7 +230,14 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         DataExtractionCurrentDungeon $currentDungeon,
         BaseEvent                    $parsedEvent,
     ): void {
-        $this->currentDungeonId = $currentDungeon->dungeon->id;
+        // Reading the id off the Dungeon model goes through Eloquent's __get, measured at 1,185 ns against 79 ns for
+        // the same value out of getAttributes() - on a 1.4M-line corpus pass that one read was 32% of everything this
+        // extractor spent (#4059). The context is a readonly DTO that extractDungeon() only replaces when the run's
+        // dungeon actually changes, so its identity is a sound cache key.
+        if ($this->currentDungeonContext !== $currentDungeon) {
+            $this->currentDungeonContext = $currentDungeon;
+            $this->currentDungeonId      = $currentDungeon->dungeon->id;
+        }
 
         // A new run invalidates every in-flight correlation
         if ($parsedEvent instanceof ChallengeModeStart ||
@@ -363,6 +373,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         $this->spellDispelTypeCache       = collect();
         $this->currentCombatLogFilePath   = null;
         $this->currentDungeonId           = null;
+        $this->currentDungeonContext      = null;
         $this->resetCorrelationState();
     }
 

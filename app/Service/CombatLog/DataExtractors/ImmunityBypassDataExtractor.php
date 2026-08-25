@@ -121,6 +121,9 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
     /** @var int|null The dungeon the extraction currently takes place in - used for SpellDungeon assignment. */
     private ?int $currentDungeonId = null;
 
+    /** @var DataExtractionCurrentDungeon|null The context $currentDungeonId was read from - see extractData. */
+    private ?DataExtractionCurrentDungeon $currentDungeonContext = null;
+
     public function __construct()
     {
         $definitionsByBuffSpellId = collect();
@@ -157,7 +160,14 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
         DataExtractionCurrentDungeon $currentDungeon,
         BaseEvent                    $parsedEvent,
     ): void {
-        $this->currentDungeonId = $currentDungeon->dungeon->id;
+        // Reading the id off the Dungeon model goes through Eloquent's __get, measured at 1,185 ns against 79 ns for
+        // the same value out of getAttributes() - on a 1.4M-line corpus pass that one read was 45% of everything this
+        // extractor spent (#4059). The context is a readonly DTO that extractDungeon() only replaces when the run's
+        // dungeon actually changes, so its identity is a sound cache key.
+        if ($this->currentDungeonContext !== $currentDungeon) {
+            $this->currentDungeonContext = $currentDungeon;
+            $this->currentDungeonId      = $currentDungeon->dungeon->id;
+        }
 
         // A new run invalidates every open window - but not the candidates gathered inside them, which are as good as
         // a window that expired on its own
@@ -298,6 +308,7 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
         $this->recentNpcCastSuccesses    = [];
         $this->currentCombatLogFilePath  = null;
         $this->currentDungeonId          = null;
+        $this->currentDungeonContext     = null;
     }
 
     /**
