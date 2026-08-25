@@ -217,6 +217,37 @@ and all `EnemyPatrol` polylines, and the import that restores them never happens
 Seeder JSON edits are invisible in the app until a seed run lands them in the DB. Full detail:
 `seeder-load` skill.
 
+## Delegating work to Codex instead of spending Claude tokens
+
+Wotuu pays for a Codex subscription that sits mostly idle, and Claude usage is the constraint that
+actually bites. **Shifting token-heavy, judgement-light work onto Codex is a standing instruction,
+not something to ask about each time.** A Claude `Explore`/`general-purpose` subagent already keeps
+file dumps out of your context — but it still bills Claude; `sh/codex.sh ask` returns the same
+summary on someone else's bill.
+
+Delegate by default: repo research and code archaeology, digesting long CI logs / test dumps /
+PHPStan output, a cold read of a plan before you implement it, and mechanically-verifiable fix
+loops. Keep on Claude: anything depending on this conversation's trajectory, PR cold review (that
+has its own `cold-reviewer-codex` path), the private security review, and talking to the user.
+
+```bash
+sh/codex.sh ask 'scoped question'    # read-only; run with run_in_background: true
+sh/codex.sh status | on | off        # the kill switch — see below
+```
+
+**Never call `codex` directly** — the wrapper is what supplies the kill switch, the secrets
+preamble, and the usage-exhausted detection.
+
+**Exit code 3 means Codex is unavailable: do that work on Claude and stop routing work to Codex for
+the session.** `sh/codex.sh off` flips it by hand (state lives outside the repo, so it covers every
+worktree at once and dirties nothing); the wrapper also flips itself off when a run looks like
+exhausted usage or rejected auth, so the first refusal moves the machine back to Claude rather than
+every later call rediscovering it. `sh/codex.sh on` resumes.
+
+Verify every `write` run yourself — Codex reads `AGENTS.md` but not `.claude/skills/`, so it has the
+environment contract and not the domain conventions. Full playbook, including the prompt discipline
+that stops it wandering: `codex-delegation` skill.
+
 ## Host Machine
 - The host machine runs Windows.
 - The project is set up to run in Docker, so all commands should be executed within the Docker environment.

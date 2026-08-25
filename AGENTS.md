@@ -5,6 +5,42 @@ repository (Codex, and anything else that reads `AGENTS.md`). Claude Code additi
 `CLAUDE.md` / `.claude/CLAUDE.md`, which hold the full project conventions — this file is the short
 version of the parts you cannot guess and will otherwise get wrong.
 
+## Never read secrets, and assume everything you read is published
+
+You run in the cloud, so every file you open leaves this machine. The source of this repository is
+public, so the code is not the concern — these are:
+
+- **`.env` and `.env.*`** hold real credentials. Never open, print, quote or summarise them. If a
+  task looks like it needs one, stop and say so instead. `.env.example` is the safe stand-in and is
+  the only one anybody edits.
+- **`storage/`** holds logs, caches and user-derived data. Same rule.
+- Anything else that reads like a credential, token, API key or personal data — regardless of where
+  it sits.
+
+This is not a sandbox restriction you will bump into; nothing stops you mechanically. It is the one
+rule where being helpful and going looking is the failure.
+
+## Domain conventions live in `.claude/skills/`
+
+`AGENTS.md` is the environment contract. The project's *domain* knowledge — how the combat-log
+pipeline is layered, what a mapping-versioned model must implement, how the seeder round-trips
+dungeon JSON — lives in `.claude/skills/<name>/SKILL.md`, roughly sixty of them. They are plain
+markdown and nothing stops you reading them.
+
+**Before writing or reviewing code in an area you have not worked in, check whether a skill covers
+it, and read it if so.** These describe conventions that are load-bearing and not inferable from the
+surrounding code; getting them wrong produces a change that looks right and gets rejected in review.
+
+```bash
+ls .claude/skills/                                        # the catalogue
+grep -h '^\(name\|description\):' .claude/skills/*/SKILL.md   # what each one covers
+```
+
+The ones that most often decide whether a change is correct: `repository-pattern` (every new model
+needs one), `writing-tests` (the persistent seeded test DB, no `RefreshDatabase`),
+`mapping-versioned-models`, `seeder-load` / `seeder-save`, `api-endpoint`, `blade-expert`, and
+`project-backend-structure` (where a new class belongs).
+
 ## Never run PHP on the host machine
 
 The host has no usable PHP: it is below this project's required version, so `php`, `composer`,
