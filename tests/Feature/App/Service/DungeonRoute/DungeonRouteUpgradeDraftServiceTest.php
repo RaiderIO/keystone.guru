@@ -21,6 +21,7 @@ use App\Models\User;
 use App\Service\DungeonRoute\DungeonRouteServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteUpgradeDraftService;
 use App\Service\DungeonRoute\Exceptions\UpgradeDraftException;
+use App\Service\DungeonRoute\Exceptions\UpgradeDraftGoneException;
 use App\Service\DungeonRoute\Logging\DungeonRouteUpgradeDraftServiceLoggingInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Illuminate\Database\Eloquent\Model;
@@ -534,6 +535,77 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
             if ($newMappingVersion !== null) {
                 Enemy::query()->where('mapping_version_id', $newMappingVersion->id)->delete();
             }
+            $this->tearDownCleanup();
+        }
+    }
+
+    /**
+     * The Auto Route Creator applies unattended and its routes are published by construction, so a combat log that
+     * missed a required enemy must not fail the whole regeneration the way a manual Apply would (#4297).
+     */
+    #[Test]
+    public function apply_givenDraftMissingRequiredEnemyAndInvariantNotEnforced_appliesAnyway(): void
+    {
+        $newMappingVersion = null;
+
+        try {
+            // Arrange
+            [$original, , $newMappingVersion] = $this->createOutdatedRoute();
+            $originalId                       = $original->id;
+            $draftId                          = null;
+
+            $service = $this->buildUpgradeDraftService();
+            $draft   = $service->findOrCreateDraft($original);
+            $draftId = $draft->id;
+            $draft->update(['title' => 'Applied without the invariant']);
+
+            Enemy::create([
+                'mapping_version_id' => $newMappingVersion->id,
+                'floor_id'           => $newMappingVersion->dungeon->floors->first()->id,
+                'npc_id'             => null,
+                'teeming'            => null,
+                'required'           => true,
+                'lat'                => 0,
+                'lng'                => 0,
+            ]);
+
+            // Act
+            $applied = $service->apply($draft, enforcePublishInvariant: false);
+
+            // Assert
+            $this->assertSame($originalId, $applied->id);
+            $this->assertSame('Applied without the invariant', $applied->title, 'The draft\'s content must have been applied');
+            $this->assertNull(DungeonRoute::find($draftId), 'The draft must be gone once applied');
+        } finally {
+            if ($newMappingVersion !== null) {
+                Enemy::query()->where('mapping_version_id', $newMappingVersion->id)->delete();
+            }
+            $this->tearDownCleanup();
+        }
+    }
+
+    /**
+     * Losing the draft to a concurrent apply, discard or take-over is its own exception type: the Auto Route Creator
+     * has to tell it apart from the refusals it cannot retry.
+     */
+    #[Test]
+    public function apply_givenDraftDeletedConcurrently_throwsUpgradeDraftGoneException(): void
+    {
+        try {
+            // Arrange
+            [$original] = $this->createOutdatedRoute();
+            $service    = $this->buildUpgradeDraftService();
+            $draft      = $service->findOrCreateDraft($original);
+
+            // Stands in for another apply, a discard, or an Auto Route Creator regeneration taking the draft over
+            DungeonRoute::query()->whereKey($draft->id)->delete();
+
+            // Assert
+            $this->expectException(UpgradeDraftGoneException::class);
+
+            // Act
+            $service->apply($draft);
+        } finally {
             $this->tearDownCleanup();
         }
     }

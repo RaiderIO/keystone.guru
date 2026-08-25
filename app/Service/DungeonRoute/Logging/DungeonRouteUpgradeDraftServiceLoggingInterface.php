@@ -14,6 +14,8 @@ interface DungeonRouteUpgradeDraftServiceLoggingInterface
 
     public function applyStart(int $draftDungeonRouteId, int $originalDungeonRouteId): void;
 
+    public function applyPublishInvariantBypassed(int $draftDungeonRouteId, int $originalDungeonRouteId): void;
+
     public function applyEnd(int $originalDungeonRouteId): void;
 
     public function discardStart(int $draftDungeonRouteId): void;

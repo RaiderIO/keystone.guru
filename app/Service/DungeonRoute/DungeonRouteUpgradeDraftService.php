@@ -8,6 +8,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\PublishedState;
 use App\Models\User;
 use App\Service\DungeonRoute\Exceptions\UpgradeDraftException;
+use App\Service\DungeonRoute\Exceptions\UpgradeDraftGoneException;
 use App\Service\DungeonRoute\Logging\DungeonRouteUpgradeDraftServiceLoggingInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -111,7 +112,7 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
     }
 
     #[Override]
-    public function apply(DungeonRoute $draft): DungeonRoute
+    public function apply(DungeonRoute $draft, bool $enforcePublishInvariant = true): DungeonRoute
     {
         if (!$draft->is_upgrade_draft) {
             throw new UpgradeDraftException('This route is not an upgrade draft, so there is nothing to apply.');
@@ -120,7 +121,7 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
         $this->log->applyStart($draft->id, $draft->upgrade_of_dungeon_route_id);
 
         try {
-            $original = DB::transaction(function () use ($draft): DungeonRoute {
+            $original = DB::transaction(function () use ($draft, $enforcePublishInvariant): DungeonRoute {
                 // Pessimistic lock on the original - this is the two-people-hit-Apply guard
                 $original = DungeonRoute::query()
                     ->whereKey($draft->upgrade_of_dungeon_route_id)
@@ -131,10 +132,13 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
                     throw new UpgradeDraftException('The route this draft upgrades no longer exists.');
                 }
 
-                // Re-fetch the draft under the lock; if it is gone, a concurrent Apply won the race
+                // Re-fetch the draft under the lock; if it is gone, a concurrent Apply, discard or take-over
+                // won the race. This is also the arbiter between two Auto Route Creator regenerations of the
+                // same route, which is why it throws its own exception type - the loser has to tell this
+                // apart from the refusals it cannot retry (#4297).
                 $lockedDraft = DungeonRoute::query()->whereKey($draft->id)->first();
                 if ($lockedDraft === null || $lockedDraft->upgrade_of_dungeon_route_id !== $original->id) {
-                    throw new UpgradeDraftException('This upgrade draft has already been applied or discarded.');
+                    throw new UpgradeDraftGoneException('This upgrade draft has already been applied or discarded.');
                 }
 
                 // The original's publish invariant (DungeonRoutePolicy::publish()) must still hold after
@@ -144,7 +148,11 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
                     $original->published_state_id !== PublishedState::ALL[PublishedState::UNPUBLISHED]
                     && !$lockedDraft->hasKilledAllRequiredEnemies()
                 ) {
-                    throw new UpgradeDraftException(__('policy.apply_upgrade_draft_not_all_required_enemies_killed'));
+                    if ($enforcePublishInvariant) {
+                        throw new UpgradeDraftException(__('policy.apply_upgrade_draft_not_all_required_enemies_killed'));
+                    }
+
+                    $this->log->applyPublishInvariantBypassed($lockedDraft->id, $original->id);
                 }
 
                 $original->deleteContentRelations();
