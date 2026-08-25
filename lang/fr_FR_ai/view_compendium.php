@@ -234,7 +234,7 @@ return [
             'show_all_dungeons' => 'Afficher tous les donjons',
             'build_title'       => 'Build :build',
             'build_subtitle'    => 'comparé à :from',
-            'changed_spells'    => ':count sort modifié|:count sorts modifiés',
+            'changed_spells'    => 'Sorts modifiés : :count|Sorts modifiés : :count',
         ],
     ],
     'class' => [

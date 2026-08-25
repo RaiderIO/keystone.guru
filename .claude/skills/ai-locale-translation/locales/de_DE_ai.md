@@ -4,7 +4,7 @@
 |---|---|
 | Register | **Informal *du*** throughout, never *Sie* — matches the game client. |
 | Register check | `grep -nE "\b(Sie\|Ihnen\|Ihre[nmrs]?\|Ihr)\b" lang/de_DE_ai/*.php \| grep -vE "spells\|validation\|datatables\|npcs\|dungeons\|view_admin"` — review hits by hand: sentence-initial *Sie* is often third-person *sie* ("**Sie** laufen zur Mitte der Brücke" = the guards do) and must not be touched. |
-| Last full pass | 2026-08-24, #4299 — 47 catch-up keys (the #4277 upgrade-draft strings, the enemy-failure cluster verdicts and suggestions, and three new map-icon labels) on top of the 2026-08-21 #4165 catch-up (24 keys) and the 2026-08-20 pass (745 keys, 212 *Sie*→*du* normalised, 31 post-review rewrites). |
+| Last full pass | 2026-08-25, #4320 — 32 catch-up keys (the spell tuning Compendium strings from #4113/#4313), on top of the 2026-08-24, #4299 — 47 catch-up keys (the #4277 upgrade-draft strings, the enemy-failure cluster verdicts and suggestions, and three new map-icon labels) on top of the 2026-08-21 #4165 catch-up (24 keys) and the 2026-08-20 pass (745 keys, 212 *Sie*→*du* normalised, 31 post-review rewrites). |
 | Normalisation done | *Sie*→*du* register pass (212 keys) — the locale is clean; any *Sie* found now is a new slip, not legacy drift. |
 
 ## Glossary
@@ -61,3 +61,4 @@
   matching the locale's UI strings. Now rule 11 in the skill. Declined: the reviewer's claim of an
   official Blizzard name for `Waystone`, cited to a hotfix URL that cannot be checked from here
   and supported by no in-repo source — *Wegstein* stays a coined rendering.
+- 2026-08-25 #4320 — 32-key catch-up for the spell tuning Compendium (#4113/#4313), found by the v15.20.0 release pre-flight. *Zauber-Anpassungen* coined for Spell Tuning; *Build* kept as the loanword. `Heilung` used for the `Healing` kind label rather than `spellmechanic.healing`'s *Heilend*, which is an adjective and cannot label a row. Codex review: 4 findings, 3 applied — the important one being `changed_to`, a bare participle sitting between the old and new value, now the finite *wird zu*. Declined: `× Build-Vergleich` for `builds compared`, which invents a marker the sibling `count_suffix` keys do not use.

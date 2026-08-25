@@ -234,7 +234,7 @@ return [
             'show_all_dungeons' => 'Mostrar todas las mazmorras',
             'build_title'       => 'Build :build',
             'build_subtitle'    => 'comparado con :from',
-            'changed_spells'    => ':count hechizo modificado|:count hechizos modificados',
+            'changed_spells'    => 'Hechizos modificados: :count|Hechizos modificados: :count',
         ],
     ],
     'class' => [

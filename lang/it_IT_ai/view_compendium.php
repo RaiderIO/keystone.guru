@@ -234,7 +234,7 @@ return [
             'show_all_dungeons' => 'Mostra tutti i dungeon',
             'build_title'       => 'Build :build',
             'build_subtitle'    => 'confrontata con :from',
-            'changed_spells'    => ':count incantesimo modificato|:count incantesimi modificati',
+            'changed_spells'    => 'Incantesimi modificati: :count|Incantesimi modificati: :count',
         ],
     ],
     'class' => [

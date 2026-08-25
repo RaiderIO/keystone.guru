@@ -234,7 +234,7 @@ return [
             'show_all_dungeons' => 'Mostrar todas as masmorras',
             'build_title'       => 'Build :build',
             'build_subtitle'    => 'comparada com :from',
-            'changed_spells'    => ':count feitiço alterado|:count feitiços alterados',
+            'changed_spells'    => 'Feitiços alterados: :count|Feitiços alterados: :count',
         ],
     ],
     'class' => [
