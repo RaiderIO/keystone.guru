@@ -26,7 +26,7 @@ class SpellTuningCompendiumController extends Controller
         SpellTuningChangeRepositoryInterface $spellTuningChangeRepository,
         DungeonServiceInterface              $dungeonService,
     ): View {
-        return $this->renderIndex(null, $spellTuningChangeRepository, $dungeonService);
+        return $this->renderIndex($spellTuningChangeRepository, $dungeonService);
     }
 
     public function indexDungeon(
@@ -38,13 +38,13 @@ class SpellTuningCompendiumController extends Controller
         // dungeon as well, so the header's dungeon selection follows along (as on explore/heatmap)
         $dungeonService->setDungeonContext($dungeon, Auth::user());
 
-        return $this->renderIndex($dungeon, $spellTuningChangeRepository, $dungeonService);
+        return $this->renderIndex($spellTuningChangeRepository, $dungeonService, $dungeon);
     }
 
     private function renderIndex(
-        ?Dungeon                             $dungeon,
         SpellTuningChangeRepositoryInterface $spellTuningChangeRepository,
         DungeonServiceInterface              $dungeonService,
+        ?Dungeon                             $dungeon = null,
     ): View {
         $gameVersion = GameVersion::getUserOrDefaultGameVersion();
 
