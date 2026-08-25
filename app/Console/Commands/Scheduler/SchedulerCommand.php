@@ -37,10 +37,12 @@ abstract class SchedulerCommand extends Command
             return self::FAILURE;
         }
 
-        $telemetryService->recordCommandRun((string)$this->getName(), Stopwatch::stop(__METHOD__), true, $startedAt);
-
         // Callables that return nothing have nothing to complain about
-        return is_int($result) ? $result : self::SUCCESS;
+        $exitCode = is_int($result) ? $result : self::SUCCESS;
+
+        $telemetryService->recordCommandRun((string)$this->getName(), Stopwatch::stop(__METHOD__), $exitCode === self::SUCCESS, $startedAt);
+
+        return $exitCode;
     }
 
     /**

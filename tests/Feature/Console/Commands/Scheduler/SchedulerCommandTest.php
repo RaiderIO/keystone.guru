@@ -76,6 +76,28 @@ final class SchedulerCommandTest extends PublicTestCase
     }
 
     #[Test]
+    public function trackTime_givenCallableReturnsFailure_recordsFailedCommandRun(): void
+    {
+        // Arrange
+        SchedulerCommandStub::$callable = static fn(): int => Command::FAILURE;
+        Artisan::registerCommand(new SchedulerCommandStub());
+
+        // Act
+        $this->artisan('test:schedulercommandstub')
+            ->assertExitCode(Command::FAILURE);
+
+        // Assert - a non-zero exit code without a throw must still count as a failed run
+        /** @var TelemetryMetric|null $telemetryMetric */
+        $telemetryMetric = TelemetryMetric::query()
+            ->where('measurement', TelemetryMetric::MEASUREMENT_SCHEDULER)
+            ->where('name', 'test:schedulercommandstub')
+            ->first();
+
+        $this->assertNotNull($telemetryMetric);
+        $this->assertFalse($telemetryMetric->success);
+    }
+
+    #[Test]
     public function trackTime_givenCallableThrows_reportsThrowableAndReturnsFailure(): void
     {
         // Arrange
