@@ -18,6 +18,7 @@ class SpellTuningSnapshotSpell
         public readonly int     $gameVersionId,
         public readonly ?string $descriptionFormat,
         public readonly array   $values,
+        public readonly string  $iconName,
     ) {
     }
 
@@ -39,12 +40,23 @@ class SpellTuningSnapshotSpell
                 static fn(array $value): SpellDescriptionValue => SpellDescriptionValue::fromArray($value),
                 is_array($rawValues) ? $rawValues : [],
             )),
+            iconName: (string)($spell['icon_name'] ?? ''),
         );
     }
 
     public function hasDescription(): bool
     {
         return $this->descriptionFormat !== null;
+    }
+
+    /**
+     * A generic placeholder record (Blizzard's own template for a spell it never named, e.g. a bare
+     * auto-attack) rather than a real, player-visible spell: no numbers to tune and no icon to show it
+     * with. A "tuning change" on one is data noise, not something a player would recognise.
+     */
+    public function isPlaceholder(): bool
+    {
+        return $this->values === [] && $this->iconName === '';
     }
 
     /**

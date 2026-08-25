@@ -166,6 +166,51 @@ final class SpellTuningDiffServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function diff_givenPlaceholderSpellGainsDescription_returnsNoChange(): void
+    {
+        // Arrange - spell 1317558: a generic template with no icon and no numbers, describing itself
+        // for the first time; not something a player would recognise as a tuning change
+        $from = $this->snapshot(self::FROM_BUILD, [$this->spell(format: null, values: [], iconName: '')]);
+        $to   = $this->snapshot(self::TO_BUILD, [$this->spell(format: 'Attack for Physical damage.', values: [], iconName: '')]);
+
+        // Act
+        $result = $this->service->diff($from, $to);
+
+        // Assert
+        $this->assertSame([], $result->changes);
+    }
+
+    #[Test]
+    public function diff_givenPlaceholderSpellRewordedOnBothSides_returnsNoChange(): void
+    {
+        // Arrange - still no icon and no numbers, so still noise even though both sides describe it
+        $from = $this->snapshot(self::FROM_BUILD, [$this->spell(format: 'Attack for Physical damage.', values: [], iconName: '')]);
+        $to   = $this->snapshot(self::TO_BUILD, [$this->spell(format: 'Attack.', values: [], iconName: '')]);
+
+        // Act
+        $result = $this->service->diff($from, $to);
+
+        // Assert
+        $this->assertSame([], $result->changes);
+    }
+
+    #[Test]
+    public function diff_givenRealSpellWithNoNumbersButAnIcon_returnsDescriptionRewritten(): void
+    {
+        // Arrange - a real spell can legitimately have static-text-only description; an icon is
+        // enough to tell it apart from the placeholder template
+        $from = $this->snapshot(self::FROM_BUILD, [$this->spell(format: null, values: [], iconName: 'ability_warrior_charge')]);
+        $to   = $this->snapshot(self::TO_BUILD, [$this->spell(format: 'Charges the target.', values: [], iconName: 'ability_warrior_charge')]);
+
+        // Act
+        $result = $this->service->diff($from, $to);
+
+        // Assert
+        $this->assertCount(1, $result->changes);
+        $this->assertSame(SpellTuningChangeType::DescriptionRewritten, $result->changes[0]->changeType);
+    }
+
+    #[Test]
     public function diff_givenNoDescriptionOnEitherSide_returnsNoChange(): void
     {
         // Arrange
@@ -309,12 +354,14 @@ final class SpellTuningDiffServiceTest extends PublicTestCase
         array   $values,
         int     $id = self::SPELL_ID,
         ?string $format = 'Deals %1$s Shadow damage over %2$s.',
+        string  $iconName = 'spell_icon',
     ): array {
         return [
             'id'                 => $id,
             'game_version_id'    => self::GAME_VERSION_ID,
             'description_format' => $format,
             'description_values' => $values,
+            'icon_name'          => $iconName,
         ];
     }
 

@@ -67,6 +67,7 @@ final class SpellTuningSnapshotLoaderTest extends PublicTestCase
             $this->assertSame([999999801], array_keys($snapshot->spells));
             $this->assertSame('Deals %1$s damage.', $snapshot->spells[999999801]->descriptionFormat);
             $this->assertSame(3.0, $snapshot->spells[999999801]->values[0]->coefficient);
+            $this->assertSame('inv_sword_04', $snapshot->spells[999999801]->iconName);
         } finally {
             File::delete($path);
         }
@@ -100,6 +101,19 @@ final class SpellTuningSnapshotLoaderTest extends PublicTestCase
 
         // Assert
         $this->assertSame(self::BUILD, $snapshot->build);
+    }
+
+    #[Test]
+    public function load_givenDatabaseSource_populatesIconNameFromSpells(): void
+    {
+        // Arrange
+        $spell = Spell::query()->where('game_version_id', $this->gameVersionId)->firstOrFail();
+
+        // Act
+        $snapshot = $this->loader->load(SpellTuningSnapshotLoaderInterface::SOURCE_DATABASE, null, $this->gameVersionId);
+
+        // Assert
+        $this->assertSame($spell->icon_name, $snapshot->spells[$spell->id]->iconName);
     }
 
     #[Test]
@@ -174,6 +188,7 @@ final class SpellTuningSnapshotLoaderTest extends PublicTestCase
             'game_version_id'    => $gameVersionId ?? $this->gameVersionId,
             'description_format' => 'Deals %1$s damage.',
             'description_values' => [['kind' => 'damage', 'text' => '29,095', 'spellId' => $id, 'coefficient' => 3, 'effectIndex' => 0]],
+            'icon_name'          => 'inv_sword_04',
         ];
     }
 }

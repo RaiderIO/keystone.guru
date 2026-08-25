@@ -89,6 +89,12 @@ class SpellTuningDiffService implements SpellTuningDiffServiceInterface
             return [];
         }
 
+        // A generic placeholder record has no player-visible numbers or icon; a "change" on it is
+        // ingest noise, not a tuning change
+        if ($old->isPlaceholder() || $new->isPlaceholder()) {
+            return [];
+        }
+
         // A description appearing, disappearing, or changing which numbers it has (in count or kind)
         // cannot be paired value by value; the whole text is recorded instead
         if ($old->hasDescription() !== $new->hasDescription() || $old->getKindSequence() !== $new->getKindSequence()) {
