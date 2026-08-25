@@ -1,6 +1,6 @@
 {
     "schemaVersion": 1,
-    "description": "Pinned combat log corpus for combatlog:benchmark (#4040). Files live in storage/app/benchmarks/ (gitignored); the command downloads missing segments via combatlog:downloadruns and verifies these sha256 hashes before every benchmark.",
+    "description": "Pinned combat log corpus for combatlog:benchmark (#4040). Files are materialized into storage/app/benchmarks/ (gitignored); the command downloads missing segments from the 's3_combat_logs' S3 disk under the benchmark-corpus/ prefix (#4317 - Raider.IO's segment URLs are presigned/short-lived and the original run ids expired upstream) and verifies these sha256 hashes before every benchmark.",
     "pinnedAt": "2026-08-25",
     "runs": {
         "2997075": {
