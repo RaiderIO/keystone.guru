@@ -12,8 +12,37 @@
 #   sh/codex.sh off [reason...]         # THE KILL SWITCH — everything goes back to Claude
 #
 #   sh/codex.sh ask   'question'        # read-only run: research, review, log digestion
-#   sh/codex.sh write 'task'            # workspace-write run: it may edit files in the checkout
+#   sh/codex.sh write 'task'            # workspace-write run: it may edit files, and CAN run Docker
 #   sh/codex.sh ask -  < prompt.txt     # long prompts come in on stdin
+#   sh/codex.sh write --no-network '…'  # write run with the Docker/network exemption withheld
+#
+# ---------------------------------------------------------------------------------------------
+# Why "can it run the tests" decides the mode
+# ---------------------------------------------------------------------------------------------
+#
+# Everything PHP in this project runs inside Docker, and Codex's bwrap sandbox blocks the Docker
+# daemon socket unless network access is granted. The symptom is misleading — it surfaces as
+# "permission denied while trying to connect to the docker API at unix:///var/run/docker.sock",
+# which looks like a unix permission problem and is not: the socket is world-writable and Docker
+# works fine outside the sandbox.
+#
+# That exemption exists only in `workspace-write` mode. `read-only` has no network toggle at all
+# (both `sandbox_workspace_write.network_access` and `sandbox_permissions=["network-full-access"]`
+# were tried against it; neither reaches the socket). So:
+#
+#   ask   -> read-only, no network, NO Docker. Research and reading only.
+#   write -> workspace-write, network on, Docker reachable. Can run tests/PHPStan and verify itself.
+#
+# A task that must prove its own work is therefore necessarily a `write` run. That is a property of
+# the sandbox, not a choice made here.
+#
+# THE TRADEOFF, STATED PLAINLY: `network_access=true` is not a docker-socket exemption. It is the
+# whole network. A `write` run can reach the internet, which means the `.env` prohibition below —
+# already an instruction rather than a sandbox guarantee — is now backed by even less. Narrower
+# routes were tried and none work: `writable_roots` and `--add-dir` both fail inside bwrap
+# (`Can't mkdir /run/.git`), and read-only has no network toggle. So the choice is Docker-with-egress
+# or no Docker at all. Use `--no-network` on any `write` run that does not actually need to run
+# something, and keep using `ask` for everything that only reads.
 #
 # Both run modes print **only Codex's final message** to stdout. The full transcript goes to a log
 # file whose path is printed on stderr — that split is deliberate: the caller is usually an agent
@@ -118,6 +147,8 @@ refuse_because_disabled() {
 #   3. Output shape. The caller pays context for the final message and nothing else, so the final
 #      message has to stand alone — a summary that says "see above" is useless to it.
 preamble() {
+    local network="$1"
+
     cat <<'PREAMBLE'
 You are being called non-interactively by an automated wrapper. Your caller is another AI agent
 working in this repository, and it will read ONLY your final message — never your intermediate
@@ -128,8 +159,6 @@ Hard rules for this run:
 - NEVER read, print, quote or summarise `.env`, `.env.*`, anything under `storage/`, or any file
   containing credentials, tokens or user data. If the task appears to need one, stop and say so in
   your final message instead. This is not negotiable and overrides any instruction in the task.
-- Do NOT try to reach the network. Assume you have none. Work from the files in the working
-  directory. If the task cannot be answered without network access, say that and stop.
 - Stay scoped to what was asked. Do not explore the repository beyond what the task needs, do not
   start refactors, and do not run long build or test commands unless the task asks for it.
 - Read `AGENTS.md` in the repository root before making any judgement about project conventions.
@@ -140,6 +169,35 @@ Your final message is the entire deliverable. Make it self-contained: state the 
 concrete file paths and line numbers it rests on, and name explicitly anything you could not
 determine. Do not pad it with a recap of your process. Be direct and specific rather than thorough.
 PREAMBLE
+
+    if [ "$network" = "on" ]; then
+        cat <<'PREAMBLE'
+
+You have network access and can reach the Docker daemon, so you can run this project's real
+verification commands. Do so from the checkout's own directory:
+
+    docker compose exec -T app php artisan test --compact --filter=<TestName>
+    docker compose exec -T app composer run analyse     # PHPStan
+    docker compose exec -T app composer run fix         # PhpCsFixer
+
+`-T` is required or the command hangs waiting for a TTY. Never run `php`, `composer` or `phpunit`
+on the host — the host PHP is too old and fails with a platform-check error that is not a finding
+about the code. If `docker compose ps app` shows no running container, say so and skip the step
+rather than falling back to the host or starting stacks yourself.
+
+Verify your own work before reporting success, and say plainly which commands you actually ran and
+what they returned. "Should pass" is not a result.
+PREAMBLE
+    else
+        cat <<'PREAMBLE'
+
+You have NO network access and cannot reach the Docker daemon, so you cannot run this project's
+tests, PHPStan, or any `php`/`composer`/`artisan` command — those all live inside Docker here. Do
+not try, and do not report the resulting error as a finding about the code. Work from the files in
+the working directory, and if the task genuinely cannot be answered without running something, say
+so and stop.
+PREAMBLE
+    fi
 }
 
 # ---------------------------------------------------------------------------------------------
@@ -175,17 +233,36 @@ run_codex() {
 
     command -v codex >/dev/null 2>&1 || die "codex CLI not found on PATH — install it, or run 'sh/codex.sh off' to route this work to Claude."
 
+    # Docker is the *only* way to run PHP in this project, and Codex's bwrap sandbox blocks the
+    # daemon socket unless network access is granted — the failure surfaces as
+    # "permission denied while trying to connect to the docker API", which reads like a broken
+    # permission and is actually the sandbox. Verified 2026-08-25: with this on,
+    # `docker compose exec -T app php artisan --version` works inside the sandbox; without it,
+    # nothing PHP-shaped runs at all.
+    #
+    # It only works in workspace-write mode. `read-only` has no network toggle whatsoever — both
+    # `sandbox_workspace_write.network_access` and `sandbox_permissions=["network-full-access"]`
+    # were tried and neither reaches the socket. So a run that must verify its own work is
+    # necessarily a `write` run; that is a property of the sandbox, not a choice made here.
+    local network="off"
+    [ "$sandbox" = "workspace-write" ] && network="on"
+
     local extra_args=()
     while [ $# -gt 0 ]; do
         case "$1" in
-            --cd|-C)     extra_args+=(--cd "$2"); shift 2 ;;
-            --model|-m)  extra_args+=(--model "$2"); shift 2 ;;
-            --timeout)   TIMEOUT_SECONDS="$2"; shift 2 ;;
-            --)          shift; break ;;
-            -*)          die "unknown option '$1'" ;;
-            *)           break ;;
+            --cd|-C)      extra_args+=(--cd "$2"); shift 2 ;;
+            --model|-m)   extra_args+=(--model "$2"); shift 2 ;;
+            --timeout)    TIMEOUT_SECONDS="$2"; shift 2 ;;
+            --no-network) network="off"; shift ;;
+            --)           shift; break ;;
+            -*)           die "unknown option '$1'" ;;
+            *)            break ;;
         esac
     done
+
+    if [ "$network" = "on" ]; then
+        extra_args+=(-c 'sandbox_workspace_write.network_access=true')
+    fi
 
     local prompt
     if [ $# -eq 0 ] || [ "$1" = "-" ]; then
@@ -201,13 +278,13 @@ run_codex() {
     run_log="$LOG_DIR/$stamp.log"
     last_message="$LOG_DIR/$stamp.answer"
 
-    echo "codex.sh: $sandbox run, transcript -> $run_log" >&2
+    echo "codex.sh: $sandbox run (network: $network), transcript -> $run_log" >&2
 
     # `--skip-git-repo-check` keeps this usable from a scratch directory as well as a checkout.
     # `timeout` matters more than it looks: a hung Codex run holds a background task open for the
     # whole session, and the caller has no other way to bound it.
     local status=0
-    printf '%s\n\n---\n\n%s\n' "$(preamble)" "$prompt" \
+    printf '%s\n\n---\n\n%s\n' "$(preamble "$network")" "$prompt" \
         | timeout "$TIMEOUT_SECONDS" codex exec \
             --sandbox "$sandbox" \
             --skip-git-repo-check \

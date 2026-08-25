@@ -52,11 +52,34 @@ usage onto Codex automatically and only surface it when a specific command needs
 ## Running it
 
 ```bash
-sh/codex.sh ask   'question'                  # read-only
-sh/codex.sh write 'task'                      # may edit files in the checkout
+sh/codex.sh ask   'question'                  # read-only, no network, NO Docker
+sh/codex.sh write 'task'                      # may edit files, and CAN run Docker
 sh/codex.sh ask - < prompt.txt                # long prompt on stdin
 sh/codex.sh ask --timeout 420 --cd <dir> '…'  # default timeout is 900s
 ```
+
+### `ask` cannot run anything; `write` can
+
+Every PHP command in this project lives inside Docker, and Codex's sandbox blocks the Docker daemon
+socket unless network access is granted — an exemption that exists **only in `write` mode**. The
+failure is easy to misread: it surfaces as `permission denied while trying to connect to the docker
+API`, which looks like a unix permission problem but isn't (the socket is world-writable and Docker
+works fine outside the sandbox). `read-only` has no network toggle at all, so there is no way to
+give `ask` a test run.
+
+So pick the mode by **what the task must prove**, not by whether you want files changed:
+
+- Needs only reading → `ask`.
+- Needs to run tests, PHPStan, or artisan → `write`, even if you expect no edits.
+
+`ask` is told plainly that it has no Docker and must not report the resulting error as a code
+finding; `write` is given the `docker compose exec -T app …` invocations and told to state which
+commands it actually ran.
+
+**The cost: the Docker exemption is full internet egress, not a socket exemption.** Narrower routes
+were tried and all fail (`writable_roots` and `--add-dir` both die inside bwrap with `Can't mkdir
+/run/.git`), so it's Docker-with-egress or no Docker. Pass `--no-network` on any `write` run that
+doesn't actually need to execute something, and prefer `ask` whenever the task only reads.
 
 Only Codex's **final message** hits stdout; the full transcript goes to a log path printed on
 stderr, so your context pays for the answer and nothing else.
@@ -89,6 +112,22 @@ instruction, not a guarantee. Treat every `write` run as an untrusted patch:
   in Docker, from this checkout — don't take Codex's word that it passed.
 - This is why `write` is scoped to tasks with a mechanical oracle. If you can't cheaply prove the
   result, do it on Claude.
+
+## The cold reviewer cannot run Docker, and that is not a bug to fix
+
+`cold-reviewer-codex` reviews routinely end with a line like *"Docker-based tests could not be run
+because access to the Docker daemon was unavailable."* That is expected and needs no action.
+
+`runAppServerReview` in the Codex plugin's `scripts/lib/codex.mjs` **hardcodes `sandbox:
+"read-only"`** and exposes no option to change it, and read-only mode has no network toggle — so the
+built-in reviewer structurally cannot reach Docker. The only ways round it are patching a vendored
+plugin file (wiped on every plugin update) or abandoning Codex's built-in review engine, and neither
+is worth it: `AGENTS.md` already tells reviewers that running the suite is optional and that a
+review which couldn't run tests should say so plainly. **Don't re-investigate this**, and don't
+treat the line as a review failure or a reason to re-run.
+
+If a specific change genuinely needs Codex to execute the suite, that is a `sh/codex.sh write` task,
+not a cold review.
 
 ## When Codex runs out — the kill switch
 

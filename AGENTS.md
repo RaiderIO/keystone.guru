@@ -62,6 +62,13 @@ docker compose exec -T app php artisan <anything>
 **If the container is not running**, say so and skip the step. Do not fall back to host PHP, and do
 not start or build stacks yourself. Check with `docker compose ps app` from the checkout directory.
 
+**If you get `permission denied while trying to connect to the docker API at
+unix:///var/run/docker.sock`, that is your own sandbox, not a problem with this repository.** The
+socket is world-writable and Docker works fine outside the sandbox; a read-only Codex sandbox simply
+cannot reach it, and there is no configuration that changes that. So it is expected during a code
+review, and the correct response is one plain sentence saying the tests could not be run — never a
+finding, never a retry, never a fallback to host PHP, and never a workaround attempt.
+
 Each git worktree under `../keystone.guru-worktrees/<branch>/` has **its own** stack and database.
 Run the commands from inside that worktree's directory so they hit that worktree's container, never
 the main checkout's.
