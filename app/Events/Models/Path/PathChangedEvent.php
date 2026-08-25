@@ -6,7 +6,6 @@ use App\Events\Models\ModelChangedEvent;
 use App\Models\MapIcon;
 use App\Models\Path;
 use App\Models\User;
-use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 use Override;
 
@@ -16,16 +15,14 @@ use Override;
 class PathChangedEvent extends ModelChangedEvent
 {
     /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param Model                       $context
-     * @param User                        $user
-     * @param Path|Model                  $model
+     * @param Model      $context
+     * @param User       $user
+     * @param Path|Model $model
      */
     public function __construct(
-        private readonly CoordinatesServiceInterface $coordinatesService,
-        Model                                        $context,
-        User                                         $user,
-        protected Path|Model                         $model,
+        Model                $context,
+        User                 $user,
+        protected Path|Model $model,
     ) {
         parent::__construct($context, $user, $model);
     }
@@ -46,23 +43,14 @@ class PathChangedEvent extends ModelChangedEvent
 
         $broadcast = parent::broadcastWith();
 
-        // The receiving client always overwrites model.polyline.vertices_json with the
-        // model_data coordinates below (see ModelChangedHandler::_getCorrectLatLngFromEvent()
-        // and Path's changed.js), so broadcasting the raw vertices here too is dead weight that
-        // can push large paths over Reverb's message size cap (#3909).
+        // Neither the raw vertices nor the computed coordinates are broadcast here - a path can
+        // have enough vertices to push the payload over Reverb's message size cap (#3909).
+        // Collaborating clients fetch the coordinates themselves via AjaxPathController::show()
+        // once they receive this event (see Path's changed.js).
         $modelArray = $model->toArray();
         unset($modelArray['polyline']['vertices_json']);
         $broadcast['model'] = $modelArray;
 
-        return array_merge(
-            $broadcast,
-            [
-                'model_data' => $model->polyline->getCoordinatesData(
-                    $this->coordinatesService,
-                    $model->dungeonRoute->mappingVersion,
-                    $model->floor,
-                ),
-            ],
-        );
+        return $broadcast;
     }
 }

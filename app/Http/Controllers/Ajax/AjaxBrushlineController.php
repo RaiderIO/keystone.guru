@@ -96,7 +96,7 @@ class AjaxBrushlineController extends Controller
                 // Something's updated; broadcast it
                 if (Auth::check()) {
                     try {
-                        broadcast(new BrushlineChangedEvent($coordinatesService, $dungeonRoute, Auth::user(), $brushline));
+                        broadcast(new BrushlineChangedEvent($dungeonRoute, Auth::user(), $brushline));
                     } catch (BroadcastException) {
                         // We don't really care if the broadcast fails, so just catch the exception and move on
                     }
@@ -109,6 +109,29 @@ class AjaxBrushlineController extends Controller
         }
 
         return $result;
+    }
+
+    /**
+     * Returns the coordinate data that was dropped from the brushline-changed broadcast (#3909) -
+     * collaborating clients call this after receiving that event instead.
+     *
+     * @return array<string, mixed>
+     *
+     * @throws AuthorizationException
+     */
+    public function show(CoordinatesServiceInterface $coordinatesService, DungeonRoute $dungeonRoute, Brushline $brushline): array
+    {
+        $dungeonRoute = $brushline->dungeonRoute;
+
+        Gate::authorize('view', $dungeonRoute);
+
+        return [
+            'model_data' => $brushline->polyline->getCoordinatesData(
+                $coordinatesService,
+                $dungeonRoute->mappingVersion,
+                $brushline->floor,
+            ),
+        ];
     }
 
     /**
