@@ -19,6 +19,7 @@
 | Icon | icona | Teeming | Abbondante (`affixes.php`) |
 | Raid marker | marcatore di incursione (Raid → *incursione*, established) | Season | Stagione |
 | Upgrade draft (#4277) | bozza di aggiornamento | Waystone (map icon type) | Pietra miliare |
+| Spell Tuning (#4113/#4320) | Bilanciamento degli incantesimi | Build (WoW client build) | Build (non tradotto) |
 
 ## Locale-specific conventions
 

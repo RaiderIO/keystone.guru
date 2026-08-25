@@ -23,6 +23,7 @@
 | Scheduled publish | 计划发布 (not 排程) | Crusader's Square / Hall of the Keepers / Infusion Chamber | 十字军广场 / 守护者大厅 / 注能室 (`dungeons.php`) |
 | Teleporter | 传送器 | Cursed Spire of Ny'alotha | 奈奥罗萨的诅咒尖塔 |
 | Upgrade draft (#4277) | 升级草稿 | Waystone (map icon type) | 路标石 |
+| Spell Tuning (#4113/#4320) | 法术调整 | Build (WoW client build) | 版本 |
 
 ## Locale-specific conventions
 

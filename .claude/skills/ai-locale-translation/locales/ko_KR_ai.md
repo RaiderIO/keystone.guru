@@ -31,6 +31,8 @@
 | "unlocks after …" | … 잠금 해제됩니다. | full verb ending, not a bare 잠금 해제 |
 | Upgrade draft (#4277) | 업그레이드 초안 | new in #4299 |
 | Waystone (map icon type) | 이정표 돌 | coined in #4299 — no in-repo source |
+| Spell Tuning (#4113/#4320) | 주문 수치 조정 | coined this pass — no precedent in any locale |
+| Build (WoW client build) | 빌드 | coined this pass |
 
 ## Locale-specific conventions
 

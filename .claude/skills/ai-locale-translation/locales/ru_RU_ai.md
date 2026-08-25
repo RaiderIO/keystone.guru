@@ -23,6 +23,7 @@
 | Awakened | Пробужденный (no ё — matches `enemies.php`) | Cast time | Время произнесения (not *Время накладывания*) |
 | Gauntlet | **gauntlet** — literal Latin script, never *гонтлет* | Blazing Aegis / Burning Chain / Stolen Power | Пылающая эгида / Горящая цепь / Похищенная сила (`spells.php`) |
 | Upgrade draft (#4277) | черновик обновления | Waystone (map icon type) | Путевой камень |
+| Spell Tuning (#4113/#4320) | Балансировка заклинаний | Build (WoW client build) | Сборка |
 
 ## Locale-specific conventions
 

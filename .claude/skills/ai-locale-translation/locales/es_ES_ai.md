@@ -26,6 +26,7 @@
 | Fel (prefix) | vil | Wyrm | vermis |
 | Bolstering / Quaking / Teeming | Reforzante / Temblores / Abundante (`affixes.php` — **differ from es_MX_ai**) | | |
 | Upgrade draft (#4277) | borrador de actualización | Waystone (map icon type) | Piedra guía |
+| Spell Tuning (#4113/#4320) | Ajustes de hechizos | Build (WoW client build) | Build (sin traducir) |
 
 ## Locale-specific conventions
 

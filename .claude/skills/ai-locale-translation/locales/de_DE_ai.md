@@ -31,6 +31,7 @@
 | Pledge Pin (Dragonflight) | Schwurbrosche des … Drachenschwarms (from `spells.php`) | Creator (route creator) | Creator (invariable plural: *die Creator*; `Routen-Creator`, `Empfohlene Creator`) |
 | Vanish / Shadowmeld / Feign Death / Invisibility / Cloak of Shadows | Verschwinden / Schattenmimik / Totstellen / Unsichtbarkeit / Mantel der Schatten (`spells.php`; Invisibility's row there is empty) | Divine Shield / Ice Block / Aspect of the Turtle / Blessing of Protection / Blessing of Spellwarding / Anti-Magic Shell | Gottesschild / Eisblock / Aspekt der Schildkröte / Segen des Schutzes / Segen des Zauberschutzes / Antimagische Hülle |
 | Upgrade draft (#4277) | Upgrade-Entwurf | Waystone (map icon type) | Wegstein |
+| Spell Tuning (#4113/#4320) | Zauber-Anpassungen | Build (WoW client build) | Build (unübersetzt) |
 
 ## Locale-specific conventions
 

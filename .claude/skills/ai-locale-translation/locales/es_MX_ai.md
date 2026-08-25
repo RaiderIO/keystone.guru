@@ -29,6 +29,8 @@
 | "unlocks a shortcut" | atajo | established phrasing |
 | Upgrade draft (#4277) | borrador de actualización | new in #4299 |
 | Waystone (map icon type) | Piedra guía | coined in #4299 — no in-repo source |
+| Spell Tuning (#4113/#4320) | Ajustes de hechizos | coined this pass — no precedent in any locale |
+| Build (WoW client build) | Build (sin traducir) | coined this pass |
 
 ## Locale-specific conventions
 

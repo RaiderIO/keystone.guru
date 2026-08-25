@@ -26,6 +26,7 @@
 | pat (patrol jargon) | patrulha | Blazing Aegis / Burning Chain | Égide Fulgurante / Corrente Ardente (`spells.php`) |
 | jobs (queue) | trabalhos (matches sibling `thumbnail_regenerate_result`) | | |
 | Upgrade draft (#4277) | rascunho de atualização | Waystone (map icon type) | Pedra de Marco |
+| Spell Tuning (#4113/#4320) | Ajustes de Feitiços | Build (WoW client build) | Build (sem tradução) |
 
 ## Locale-specific conventions
 

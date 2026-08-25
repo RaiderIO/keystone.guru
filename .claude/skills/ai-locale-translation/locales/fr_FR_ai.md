@@ -21,6 +21,7 @@
 | Divine Shield | Bouclier divin | Anti-Magic Shell | Carapace anti-magie |
 | Blessing of Spellwarding | Bénédiction de protection des sorts | | |
 | Upgrade draft (#4277) | brouillon de mise à niveau | Waystone (map icon type) | Pierre de jalon |
+| Spell Tuning (#4113/#4320) | Ajustements des sorts | Build (WoW client build) | Build (non traduit) |
 
 ## Locale-specific conventions
 

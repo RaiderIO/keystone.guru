@@ -46,7 +46,7 @@ return [
             ],
             'tuning' => [
                 'title'        => 'Ajustements des sorts',
-                'description'  => 'Ce que chaque patch a changé aux sorts des PNJ : des dégâts en hausse ou en baisse, des durées, des temps de recharge - dans les chiffres que les joueurs voient réellement.',
+                'description'  => 'Les modifications apportées par chaque patch aux sorts des PNJ : hausse ou baisse des dégâts, durées, temps de recharge - d\'après les valeurs que les joueurs voient réellement.',
                 'cta'          => 'Voir les ajustements',
                 'count_suffix' => 'builds comparés',
             ],
@@ -219,8 +219,8 @@ return [
             'rewritten'      => 'Description réécrite',
             'added'          => 'Description ajoutée',
             'no_description' => '(aucune description)',
-            'changed_to'     => 'modifié en',
-            'shared_by'      => 'Enregistrements de sort partageant ce changement : :count',
+            'changed_to'     => 'devient',
+            'shared_by'      => 'Enregistrements de sorts concernés par la même modification : :count',
         ],
     ],
     'tuning' => [
@@ -228,7 +228,7 @@ return [
             'title'             => 'Ajustements des sorts - Compendium',
             'header'            => 'Ajustements des sorts',
             'header_dungeon'    => 'Ajustements des sorts - :dungeon',
-            'intro'             => 'Ce que chaque patch a changé aux sorts des PNJ, dans les chiffres que les joueurs voient réellement. Seules les modifications des chiffres comptent - une description reformulée avec les mêmes chiffres n\'est pas répertoriée.',
+            'intro'             => 'Les modifications apportées par chaque patch aux sorts des PNJ, d\'après les valeurs que les joueurs voient réellement. Seules les modifications de valeurs sont prises en compte : une description reformulée sans changement de valeur n\'est pas répertoriée.',
             'empty'             => 'Aucun ajustement enregistré pour le moment.',
             'all_dungeons'      => 'Tous les donjons',
             'show_all_dungeons' => 'Afficher tous les donjons',
