@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\Ajax;
 
 use App\Events\Models\Brushline\BrushlineChangedEvent;
+use App\Models\DungeonRoute\DungeonRouteChange;
 use App\Models\Floor\Floor;
 use App\Models\Polyline;
 use Exception;
@@ -218,6 +219,55 @@ final class AjaxBrushlineControllerTest extends DungeonRouteTestBase
             // Remove only the listener registered above - Polyline::flushEventListeners() would also
             // wipe Polyline::boot()'s own listeners for the rest of the PHPUnit process
             Event::forget('eloquent.creating: ' . Polyline::class);
+        }
+    }
+
+    /**
+     * Guards #4264: delete() cascaded the brushline's polyline away (Brushline::deleting) and only
+     * then wrote the change log row and touched the route, with no transaction around any of it. A
+     * failure at the change log left the brushline and its polyline permanently gone while the
+     * route's change log - the team's audit trail - had no record that it ever happened.
+     */
+    #[Test]
+    #[Group('Controller')]
+    public function delete_givenTheChangeLogWriteFails_rollsBackTheBrushlineDelete(): void
+    {
+        // Arrange
+        /** @var Floor $randomFloor */
+        $randomFloor = $this->dungeonRoute->dungeon->floors()
+            ->where('facade', false)
+            ->get()
+            ->random();
+
+        $createResponse = $this->post(route('ajax.dungeonroute.brushline.create', ['dungeonRoute' => $this->dungeonRoute]), [
+            'floor_id' => $randomFloor->id,
+            'polyline' => PolylineFixtures::createPolyline($randomFloor),
+        ]);
+        $createResponse->assertCreated();
+
+        $brushlineId     = json_decode($createResponse->content(), true)['id'];
+        $polylinesBefore = Polyline::query()->count();
+
+        // Fail the change log write, which is the write that follows the cascading delete
+        DungeonRouteChange::creating(static function (): never {
+            throw new Exception('Simulated failure writing the change log');
+        });
+
+        try {
+            // Act
+            $response = $this->delete(route('ajax.dungeonroute.brushline.delete', [
+                'dungeonRoute' => $this->dungeonRoute,
+                'brushline'    => $brushlineId,
+            ]));
+
+            // Assert - the client is told it failed, and the brushline is still there to delete again
+            $response->assertStatus(StatusCode::NOT_FOUND);
+            $this->assertEquals(1, $this->dungeonRoute->brushlines()->count());
+            $this->assertEquals($polylinesBefore, Polyline::query()->count());
+        } finally {
+            // Remove only the listener registered above - DungeonRouteChange::flushEventListeners()
+            // would also wipe its own boot() listeners for the rest of the PHPUnit process
+            Event::forget('eloquent.creating: ' . DungeonRouteChange::class);
         }
     }
 }

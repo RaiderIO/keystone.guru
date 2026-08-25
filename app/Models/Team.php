@@ -133,7 +133,7 @@ class Team extends Model
      * Adds a route to this Team.
      *
      * @param  DungeonRoute $dungeonRoute The route to add.
-     * @return bool         True if successful, false if not (already assigned, for example).
+     * @return bool         True if successful, false if not (already assigned, or the save failed).
      */
     public function addRoute(DungeonRoute $dungeonRoute): bool
     {
@@ -141,8 +141,7 @@ class Team extends Model
         // Not set
         if ($dungeonRoute->team_id === null) {
             $dungeonRoute->team_id = $this->id;
-            $dungeonRoute->save();
-            $result = true;
+            $result                = $dungeonRoute->save();
         }
 
         return $result;

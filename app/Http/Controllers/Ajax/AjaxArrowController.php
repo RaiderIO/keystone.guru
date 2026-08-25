@@ -143,7 +143,21 @@ class AjaxArrowController extends Controller
         Gate::authorize('edit', $dungeonRoute);
 
         try {
-            if ($arrow->delete()) {
+            $deleted = DB::transaction(function () use ($dungeonRoute, $arrow): bool {
+                // Nothing has been written yet, so there is nothing to roll back
+                if (!$arrow->delete()) {
+                    return false;
+                }
+
+                $this->dungeonRouteChanged($dungeonRoute, $arrow, null);
+
+                $dungeonRoute->touch();
+
+                return true;
+            });
+
+            if ($deleted) {
+                // Broadcast only once the delete is committed, so no listener can read pre-commit state
                 if (Auth::check()) {
                     /** @var \App\Models\User $user */
                     $user = Auth::getUser();
@@ -154,10 +168,6 @@ class AjaxArrowController extends Controller
                         // Ignore broadcast failures
                     }
                 }
-
-                $this->dungeonRouteChanged($dungeonRoute, $arrow, null);
-
-                $dungeonRoute->touch();
 
                 $result = response()->noContent();
             } else {

@@ -53,6 +53,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Random\RandomException;
@@ -662,8 +663,13 @@ class AjaxDungeonRouteController extends Controller
         $user = Auth::user();
 
         if ($user->canCreateDungeonRoute() && $team->canAddRemoveRoute($user)) {
-            $newRoute = $saveService->cloneRoute($dungeonRoute, false);
-            $team->addRoute($newRoute);
+            DB::transaction(function () use ($dungeonRoute, $saveService, $team): void {
+                $newRoute = $saveService->cloneRoute($dungeonRoute, false);
+
+                if (!$team->addRoute($newRoute)) {
+                    throw new Exception('Unable to assign the cloned route to the team!');
+                }
+            });
 
             return response('', Http::NO_CONTENT);
         } else {

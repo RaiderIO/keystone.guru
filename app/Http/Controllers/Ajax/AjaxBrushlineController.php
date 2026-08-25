@@ -147,7 +147,22 @@ class AjaxBrushlineController extends Controller
         Gate::authorize('edit', $dungeonRoute);
 
         try {
-            if ($brushline->delete()) {
+            $deleted = DB::transaction(function () use ($dungeonRoute, $brushline): bool {
+                // Nothing has been written yet, so there is nothing to roll back
+                if (!$brushline->delete()) {
+                    return false;
+                }
+
+                $this->dungeonRouteChanged($dungeonRoute, $brushline, null);
+
+                // Touch the route so that the thumbnail gets updated
+                $dungeonRoute->touch();
+
+                return true;
+            });
+
+            if ($deleted) {
+                // Broadcast only once the delete is committed, so no listener can read pre-commit state
                 if (Auth::check()) {
                     /** @var \App\Models\User $user */
                     $user = Auth::getUser();
@@ -158,11 +173,6 @@ class AjaxBrushlineController extends Controller
                         // We don't really care if the broadcast fails, so just catch the exception and move on
                     }
                 }
-
-                $this->dungeonRouteChanged($dungeonRoute, $brushline, null);
-
-                // Touch the route so that the thumbnail gets updated
-                $dungeonRoute->touch();
 
                 $result = response()->noContent();
             } else {

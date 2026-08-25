@@ -19,6 +19,7 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Teapot\StatusCode\Http;
 
@@ -118,22 +119,41 @@ class AjaxTeamController extends Controller
             $user,
         ]);
 
+        // Resolve the successor up front. Both isUserAdmin() and getNewAdminUponAdminAccountDeletion()
+        // answer from Team::getUserRole(), which re-queries team_users - so once removeMember() has
+        // deleted the row neither can be asked any more. Doing it afterwards, as this used to,
+        // meant isUserAdmin() was always false and no successor was ever promoted: an admin
+        // removing themselves left the team with no admin at all, and
+        // getNewAdminUponAdminAccountDeletion() throws on that state so nothing could repair it
+        $newAdmin = $team->isUserAdmin($user)
+            ? $team->getNewAdminUponAdminAccountDeletion($user)
+            : null;
+
+        $removed = DB::transaction(function () use ($newAdmin, $team, $user): bool {
+            // Nothing has been written by this closure yet, so there is nothing to roll back
+            if (!$team->removeMember($user)) {
+                return false;
+            }
+
+            // Null when the removed user was not the admin, or when they were the last member left -
+            // the team gets disbanded below in that case
+            if ($newAdmin !== null) {
+                $team->changeRole(
+                    $newAdmin,
+                    TeamUser::ROLE_ADMIN,
+                );
+            }
+
+            return true;
+        });
+
         // Only when successful
-        if ($team->removeMember($user)) {
+        if ($removed) {
             $result = response()->noContent();
 
             // Disband if no team members are left
             if ($team->members->isEmpty()) {
                 $team->delete();
-            } elseif ($team->isUserAdmin($user)) {
-                // Promote someone else to be the new admin
-                $newAdmin = $team->getNewAdminUponAdminAccountDeletion($user);
-                if ($newAdmin !== null) {
-                    $team->changeRole(
-                        $newAdmin,
-                        TeamUser::ROLE_ADMIN,
-                    );
-                }
             }
         } else {
             $result = response('Unable to remove member from team', Http::INTERNAL_SERVER_ERROR);

@@ -17,6 +17,7 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Teapot\StatusCode\Http;
 
@@ -47,10 +48,15 @@ class AjaxPridefulEnemyController extends Controller
         $pridefulEnemy->lat      = (float)$request->get('lat');
         $pridefulEnemy->lng      = (float)$request->get('lng');
 
-        if (!$pridefulEnemy->save()) {
-            throw new Exception('Unable to save prideful enemy!');
-        }
+        DB::transaction(function () use ($dungeonRoute, $pridefulEnemy): void {
+            if (!$pridefulEnemy->save()) {
+                throw new Exception('Unable to save prideful enemy!');
+            }
 
+            $dungeonRoute->touch();
+        });
+
+        // Broadcast only once the save is committed, so no listener can read pre-commit state
         if (Auth::check()) {
             /** @var User $user */
             $user = Auth::getUser();
@@ -61,8 +67,6 @@ class AjaxPridefulEnemyController extends Controller
                 // Ignore broadcast failures
             }
         }
-
-        $dungeonRoute->touch();
 
         return $pridefulEnemy;
     }
@@ -79,7 +83,17 @@ class AjaxPridefulEnemyController extends Controller
         try {
             /** @var PridefulEnemy|null $pridefulEnemy */
             $pridefulEnemy = PridefulEnemy::where('dungeon_route_id', $dungeonRoute->id)->where('enemy_id', $enemy->id)->first();
-            if ($pridefulEnemy && $pridefulEnemy->delete() && Auth::check()) {
+
+            $deleted = DB::transaction(function () use ($dungeonRoute, $pridefulEnemy): bool {
+                $result = $pridefulEnemy !== null && $pridefulEnemy->delete() === true;
+
+                $dungeonRoute->touch();
+
+                return $result;
+            });
+
+            // Broadcast only once the delete is committed, so no listener can read pre-commit state
+            if ($deleted && Auth::check()) {
                 /** @var User $user */
                 $user = Auth::getUser();
 
@@ -89,8 +103,6 @@ class AjaxPridefulEnemyController extends Controller
                     // Ignore broadcast failures
                 }
             }
-
-            $dungeonRoute->touch();
 
             $result = response()->noContent();
         } catch (Exception) {
