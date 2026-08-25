@@ -556,7 +556,8 @@ a.compendium_class_tile img {
 
 .compendium_tuning_list--subject .compendium_tuning_row {
     grid-template-areas: 'subject body delta';
-    grid-template-columns: minmax(9rem, 13rem) minmax(0, 1fr) auto;
+    /* Roomy first column: the subject cell also carries the spell's dungeon chips */
+    grid-template-columns: minmax(12rem, 24rem) minmax(0, 1fr) auto;
 }
 
 .compendium_tuning_row + .compendium_tuning_row {
@@ -566,6 +567,10 @@ a.compendium_class_tile img {
 .compendium_tuning_subject {
     grid-area: subject;
     min-width: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.35rem;
 }
 
 .compendium_tuning_body {
@@ -636,7 +641,7 @@ a.compendium_class_tile img {
 }
 
 .compendium_tuning_dungeons {
-    margin-top: 0.2rem;
+    display: inline-flex;
 }
 
 .compendium_tuning_build_heading {

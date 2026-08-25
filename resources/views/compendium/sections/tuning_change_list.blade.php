@@ -76,6 +76,15 @@ $rows = $changes
                             <span class="compendium_tuning_count"
                                   title="{{ __('view_compendium.sections.tuning_change_list.shared_by', ['count' => $row['count']]) }}">&times;{{ $row['count'] }}</span>
                         @endif
+                        {{-- The dungeons are a property of the spell, so they ride in the subject cell --}}
+                        @if($showDungeons && $change->spell->dungeons->isNotEmpty())
+                            <span class="compendium_tuning_dungeons compendium_identity_meta">
+                                @foreach($change->spell->dungeons as $dungeon)
+                                    <?php /** @var Dungeon $dungeon */ ?>
+                                    <span class="compendium_chip">{{ __($dungeon->name) }}</span>
+                                @endforeach
+                            </span>
+                        @endif
                     </span>
                 @endif
 
@@ -115,14 +124,6 @@ $rows = $changes
                         </span>
                     @endif
 
-                    @if($showDungeons && $change->spell->dungeons->isNotEmpty())
-                        <span class="compendium_tuning_dungeons compendium_identity_meta">
-                            @foreach($change->spell->dungeons as $dungeon)
-                                <?php /** @var Dungeon $dungeon */ ?>
-                                <span class="compendium_chip">{{ __($dungeon->name) }}</span>
-                            @endforeach
-                        </span>
-                    @endif
                 </span>
 
                 @if($change->getDeltaPercent() !== null)
