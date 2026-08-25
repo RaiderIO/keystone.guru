@@ -7,6 +7,8 @@ use App\Logic\CombatLog\Guid\Guid;
 
 interface GenericDataInterface extends HasParameters
 {
+    public function getSourceGuidRaw(): string;
+
     public function getSourceGuid(): ?Guid;
 
     public function getSourceName(): string;
@@ -14,6 +16,8 @@ interface GenericDataInterface extends HasParameters
     public function getSourceFlags(): string;
 
     public function getSourceRaidFlags(): string;
+
+    public function getDestGuidRaw(): string;
 
     public function getDestGuid(): ?Guid;
 

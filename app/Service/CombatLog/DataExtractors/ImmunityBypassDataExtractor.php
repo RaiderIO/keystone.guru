@@ -17,7 +17,6 @@ use App\Logic\CombatLog\CombatEvents\Suffixes\DamageLandedSupport\DamageLandedSu
 use App\Logic\CombatLog\CombatEvents\Suffixes\DamageSupport\DamageSupportInterface;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\Guid\Guid;
-use App\Logic\CombatLog\Guid\Player;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Logic\CombatLog\SpecialEvents\ZoneChange;
@@ -182,31 +181,36 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
 
         $suffix      = $parsedEvent->getSuffix();
         $genericData = $parsedEvent->getGenericData();
-        $sourceGuid  = $genericData->getSourceGuid();
-        $destGuid    = $genericData->getDestGuid();
         $timestamp   = $parsedEvent->getTimestamp();
 
-        // Remembered unconditionally: provenance is needed for casts that resolved *before* a window even opened
+        // Remembered unconditionally: provenance is needed for casts that resolved *before* a window even opened.
+        // sourceGuid is only parsed once the raw prefix confirms it could even be a creature.
         if ($suffix instanceof CastSuccess) {
-            if ($this->isNpcCreature($sourceGuid)) {
-                $this->rememberNpcCastSuccess($sourceGuid->getGuid(), $prefix->getSpellId(), $timestamp->getTimestampMs());
+            if (Guid::isCreatureGuidString($genericData->getSourceGuidRaw())) {
+                $sourceGuid = $genericData->getSourceGuid();
+                if ($this->isNpcCreature($sourceGuid)) {
+                    $this->rememberNpcCastSuccess($sourceGuid->getGuid(), $prefix->getSpellId(), $timestamp->getTimestampMs());
+                }
             }
 
             return;
         }
 
-        if (!($destGuid instanceof Player)) {
+        // Every consumer below only ever needs the dest guid's string, not the parsed object - a raw-string prefix
+        // test answers "is this a player" without constructing one.
+        $destGuidRaw = $genericData->getDestGuidRaw();
+        if (!Guid::isPlayerGuidString($destGuidRaw)) {
             return;
         }
 
         if ($suffix instanceof AuraAppliedInterface && $suffix->getAuraType() === AuraBase::AURA_TYPE_BUFF) {
-            $this->openImmunityWindow($destGuid->getGuid(), $prefix->getSpellId(), $timestamp);
+            $this->openImmunityWindow($destGuidRaw, $prefix->getSpellId(), $timestamp);
 
             return;
         }
 
         if ($suffix instanceof AuraRemovedInterface && $suffix->getAuraType() === AuraBase::AURA_TYPE_BUFF) {
-            $this->closeImmunityWindow($destGuid->getGuid(), $prefix->getSpellId(), $timestamp);
+            $this->closeImmunityWindow($destGuidRaw, $prefix->getSpellId(), $timestamp);
 
             return;
         }
@@ -217,6 +221,11 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
         }
 
         // Only actual creatures - not pets, vehicles or game objects, and never another player
+        if (!Guid::isCreatureGuidString($genericData->getSourceGuidRaw())) {
+            return;
+        }
+
+        $sourceGuid = $genericData->getSourceGuid();
         if (!$this->isNpcCreature($sourceGuid)) {
             return;
         }
@@ -229,7 +238,7 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
             }
 
             $this->recordBypassCandidates(
-                $destGuid->getGuid(),
+                $destGuidRaw,
                 $prefix->getSpellId(),
                 $sourceGuid,
                 $suffix->getSchool(),
@@ -238,7 +247,7 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
             );
         } elseif ($suffix instanceof AuraAppliedInterface && $suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF) {
             $this->recordBypassCandidates(
-                $destGuid->getGuid(),
+                $destGuidRaw,
                 $prefix->getSpellId(),
                 $sourceGuid,
                 $this->parseSchoolMask($prefix->getSpellSchool()),
