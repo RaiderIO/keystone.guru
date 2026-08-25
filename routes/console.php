@@ -58,6 +58,8 @@ $commands[] = Schedule::command('telescope:prune --hours=48')->daily();
 
 $commands[] = Schedule::command('page-views:prune')->daily();
 
+$commands[] = Schedule::command('telemetry:prune')->daily();
+
 // Refresh any membership status - if they're unsubbed, revoke their access. If they're subbed, add access
 $commands[] = Schedule::command('patreon:refreshmembers')->hourly();
 

@@ -50,13 +50,6 @@ parameters:
         # Blade templates captured variables that phpstan thinks are unused
         - identifier: closure.unusedUse
           path: resources/views
-        # TrayLabs InfluxDB facade — writePoints() is a magic method not declared in the facade stub
-        # reportUnmatched: false — errors appear in CI (fresh vendor) but not locally (cached reflection)
-        - identifier: staticMethod.notFound
-          reportUnmatched: false
-          paths:
-            - app/Console/Commands/Traits/SavesToInfluxDB.php
-            - app/Console/Commands/Scheduler/Telemetry/Telemetry.php
         # These traits exist for potential future use / are referenced dynamically
         - identifier: trait.unused
           path: app/Http/Controllers/Traits/ChecksForDuplicates.php

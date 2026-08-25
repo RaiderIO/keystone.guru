@@ -116,6 +116,7 @@ use App\Repositories\Database\Tags\TagCategoryRepository;
 use App\Repositories\Database\Tags\TagRepository;
 use App\Repositories\Database\TeamRepository;
 use App\Repositories\Database\TeamUserRepository;
+use App\Repositories\Database\Telemetry\TelemetryMetricRepository;
 use App\Repositories\Database\Timewalking\TimewalkingEventRepository;
 use App\Repositories\Database\Translation\TranslationRepository;
 use App\Repositories\Database\UserIpAddressRepository;
@@ -237,6 +238,7 @@ use App\Repositories\Interfaces\Tags\TagCategoryRepositoryInterface;
 use App\Repositories\Interfaces\Tags\TagRepositoryInterface;
 use App\Repositories\Interfaces\TeamRepositoryInterface;
 use App\Repositories\Interfaces\TeamUserRepositoryInterface;
+use App\Repositories\Interfaces\Telemetry\TelemetryMetricRepositoryInterface;
 use App\Repositories\Interfaces\Timewalking\TimewalkingEventRepositoryInterface;
 use App\Repositories\Interfaces\Translation\TranslationRepositoryInterface;
 use App\Repositories\Interfaces\UserIpAddressRepositoryInterface;
@@ -354,6 +356,9 @@ class RepositoryServiceProvider extends ServiceProvider
         // Tags
         $this->app->bind(TagCategoryRepositoryInterface::class, TagCategoryRepository::class);
         $this->app->bind(TagRepositoryInterface::class, TagRepository::class);
+
+        // Telemetry
+        $this->app->bind(TelemetryMetricRepositoryInterface::class, TelemetryMetricRepository::class);
 
         // Timewalking
         $this->app->bind(TimewalkingEventRepositoryInterface::class, TimewalkingEventRepository::class);

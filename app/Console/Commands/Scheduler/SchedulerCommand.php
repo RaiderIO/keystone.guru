@@ -2,17 +2,16 @@
 
 namespace App\Console\Commands\Scheduler;
 
-use App\Console\Commands\Traits\SavesToInfluxDB;
 use App\Logic\Utils\Stopwatch;
+use App\Service\Telemetry\TelemetryServiceInterface;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Context;
 use Throwable;
 
 abstract class SchedulerCommand extends Command
 {
-    use SavesToInfluxDB;
-
     /**
      * @param callable(): mixed $callable A callable returning an exit code - anything that isn't an int counts as success
      */
@@ -20,8 +19,11 @@ abstract class SchedulerCommand extends Command
     {
         Stopwatch::start(__METHOD__);
 
-        // Prevent long tasks from inserting the point very late
-        $startTime = time();
+        // Prevent long tasks from inserting the data point very late
+        $startedAt = Carbon::now();
+
+        /** @var TelemetryServiceInterface $telemetryService */
+        $telemetryService = $this->getLaravel()->make(TelemetryServiceInterface::class);
 
         try {
             $result = $callable();
@@ -30,15 +32,12 @@ abstract class SchedulerCommand extends Command
 
             $this->reportThrowable($throwable);
 
+            $telemetryService->recordCommandRun((string)$this->getName(), Stopwatch::stop(__METHOD__), false, $startedAt);
+
             return self::FAILURE;
         }
 
-        $this->savePointToInfluxDB(
-            'scheduler',
-            $this->getTags(),
-            [$this->getName() => Stopwatch::stop(__METHOD__)],
-            $startTime,
-        );
+        $telemetryService->recordCommandRun((string)$this->getName(), Stopwatch::stop(__METHOD__), true, $startedAt);
 
         // Callables that return nothing have nothing to complain about
         return is_int($result) ? $result : self::SUCCESS;

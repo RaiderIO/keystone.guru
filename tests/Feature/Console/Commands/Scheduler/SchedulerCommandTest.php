@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Console\Commands\Scheduler;
 
+use App\Models\Telemetry\TelemetryMetric;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Support\Facades\Artisan;
@@ -16,6 +17,64 @@ use TypeError;
 #[Group('Scheduler')]
 final class SchedulerCommandTest extends PublicTestCase
 {
+    protected function tearDown(): void
+    {
+        // Every trackTime() call - including the failing ones above - records a telemetry row for the stub
+        TelemetryMetric::query()
+            ->where('measurement', TelemetryMetric::MEASUREMENT_SCHEDULER)
+            ->where('name', 'test:schedulercommandstub')
+            ->delete();
+
+        parent::tearDown();
+    }
+
+    #[Test]
+    public function trackTime_givenSuccessfulCallable_recordsSuccessfulCommandRun(): void
+    {
+        // Arrange
+        SchedulerCommandStub::$callable = static fn(): int => Command::SUCCESS;
+        Artisan::registerCommand(new SchedulerCommandStub());
+
+        // Act
+        $this->artisan('test:schedulercommandstub')
+            ->assertExitCode(Command::SUCCESS);
+
+        // Assert
+        /** @var TelemetryMetric|null $telemetryMetric */
+        $telemetryMetric = TelemetryMetric::query()
+            ->where('measurement', TelemetryMetric::MEASUREMENT_SCHEDULER)
+            ->where('name', 'test:schedulercommandstub')
+            ->first();
+
+        $this->assertNotNull($telemetryMetric);
+        $this->assertTrue($telemetryMetric->success);
+        $this->assertGreaterThanOrEqual(0, $telemetryMetric->value);
+    }
+
+    #[Test]
+    public function trackTime_givenCallableThrows_recordsFailedCommandRun(): void
+    {
+        // Arrange
+        SchedulerCommandStub::$callable = static function (): int {
+            throw new RuntimeException('Something went wrong');
+        };
+        Artisan::registerCommand(new SchedulerCommandStub());
+
+        // Act
+        $this->artisan('test:schedulercommandstub')
+            ->assertExitCode(Command::FAILURE);
+
+        // Assert
+        /** @var TelemetryMetric|null $telemetryMetric */
+        $telemetryMetric = TelemetryMetric::query()
+            ->where('measurement', TelemetryMetric::MEASUREMENT_SCHEDULER)
+            ->where('name', 'test:schedulercommandstub')
+            ->first();
+
+        $this->assertNotNull($telemetryMetric);
+        $this->assertFalse($telemetryMetric->success);
+    }
+
     #[Test]
     public function trackTime_givenCallableThrows_reportsThrowableAndReturnsFailure(): void
     {
