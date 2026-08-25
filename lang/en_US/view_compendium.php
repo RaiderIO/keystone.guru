@@ -217,7 +217,10 @@ return [
             ],
             'coefficient'    => 'coefficient',
             'rewritten'      => 'Description rewritten',
+            'added'          => 'Description added',
             'no_description' => '(no description)',
+            'changed_to'     => 'changed to',
+            'shared_by'      => ':count spell records share this change',
         ],
     ],
     'tuning' => [

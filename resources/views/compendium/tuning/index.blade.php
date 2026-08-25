@@ -46,10 +46,12 @@ use Illuminate\Support\Collection;
 
     <div class="compendium_toolbar mb-3">
         @if($contextDungeon === null)
-            <span class="compendium_chip compendium_chip--works">{{ __('view_compendium.tuning.index.all_dungeons') }}</span>
+            <span class="compendium_chip">
+                <i class="fas fa-globe" aria-hidden="true"></i> {{ __('view_compendium.tuning.index.all_dungeons') }}
+            </span>
         @else
             <a href="{{ route('compendium.tuning.index') }}" class="btn btn-sm btn-secondary">
-                <i class="fas fa-globe"></i> {{ __('view_compendium.tuning.index.show_all_dungeons') }}
+                <i class="fas fa-globe" aria-hidden="true"></i> {{ __('view_compendium.tuning.index.show_all_dungeons') }}
             </a>
         @endif
     </div>
@@ -60,7 +62,8 @@ use Illuminate\Support\Collection;
         @foreach($builds->items() as $build)
             <div class="compendium_record_section">
                 <div class="compendium_record_label">
-                    {{ __('view_compendium.tuning.index.build_title', ['build' => $build['to_build']]) }}
+                    {{-- h5: one step below the sitepage layout's h4 page title, so builds are jump targets --}}
+                    <h5 class="compendium_tuning_build_heading">{{ __('view_compendium.tuning.index.build_title', ['build' => $build['to_build']]) }}</h5>
                     <div class="compendium_record_label_sub">
                         {{ __('view_compendium.tuning.index.build_subtitle', ['from' => $build['from_build']]) }}
                         &middot;

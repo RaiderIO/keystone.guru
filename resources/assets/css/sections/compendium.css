@@ -537,3 +537,135 @@ a.compendium_class_tile img {
 .compendium_spell_description:last-child {
     margin-bottom: 0;
 }
+
+/* ===== Tuning changes (#4313) ===== */
+
+/*
+ * Register grid per row: [spell subject | change | delta]. The delta hangs in its own right-aligned
+ * column so magnitudes scan vertically; the per-spell section has no subject column and collapses
+ * to [change | delta] through the missing --subject modifier.
+ */
+.compendium_tuning_row {
+    display: grid;
+    grid-template-areas: 'body delta';
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0 1rem;
+    align-items: baseline;
+    padding: 0.35rem 0;
+}
+
+.compendium_tuning_list--subject .compendium_tuning_row {
+    grid-template-areas: 'subject body delta';
+    /* The subject cell carries the spell link, the xN marker and the dungeon abbreviations */
+    grid-template-columns: minmax(10rem, 16rem) minmax(0, 1fr) auto;
+}
+
+.compendium_tuning_row + .compendium_tuning_row {
+    border-top: 1px solid rgba(128, 128, 128, 0.15);
+}
+
+.compendium_tuning_subject {
+    grid-area: subject;
+    min-width: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.35rem;
+}
+
+.compendium_tuning_body {
+    grid-area: body;
+    min-width: 0;
+    overflow-wrap: break-word;
+}
+
+.compendium_tuning_kind {
+    color: var(--bs-secondary-color);
+}
+
+.compendium_tuning_new {
+    font-weight: 600;
+}
+
+.compendium_tuning_arrow {
+    opacity: 0.45;
+    font-size: 0.75em;
+}
+
+.compendium_tuning_delta {
+    grid-area: delta;
+    justify-self: end;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+/*
+ * Nerf = green (good news for the player), buff = red, matching the sign colours used site-wide.
+ * The stock danger tone misses 4.5:1 AA contrast on the dark rungs, so it is blended toward the
+ * body colour - lighter in darkly, darker in lux - clearing AA in every theme without a new hex.
+ */
+.compendium_tuning_delta--up {
+    color: color-mix(in srgb, var(--bs-danger) 70%, var(--bs-body-color));
+}
+
+.compendium_tuning_delta--down {
+    color: var(--bs-success);
+}
+
+/* xN marker on rows collapsed from duplicate same-named spell records; the title attr explains it */
+.compendium_tuning_count {
+    display: inline-block;
+    background-color: var(--theme-bg-card-footer);
+    color: var(--bs-secondary-color);
+    border-radius: 0.25rem;
+    padding: 0 0.3rem;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    margin-inline-start: 0.25rem;
+    cursor: help;
+}
+
+/* Rewritten/added descriptions stack old above new - two paragraphs never read inline */
+.compendium_tuning_values--stacked {
+    display: block;
+}
+
+.compendium_tuning_values--stacked .compendium_tuning_old {
+    display: block;
+    color: var(--bs-secondary-color);
+}
+
+.compendium_tuning_values--stacked .compendium_tuning_new {
+    display: block;
+    font-weight: 400;
+}
+
+.compendium_tuning_dungeons {
+    color: var(--bs-secondary-color);
+    font-size: 0.8125rem;
+}
+
+/* Hairline dot between the spell and its dungeons, cheaper than a boxed chip */
+.compendium_tuning_dungeons::before {
+    content: '\00B7';
+    margin-inline-end: 0.35rem;
+}
+
+.compendium_tuning_build_heading {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 0;
+    color: var(--bs-body-color);
+}
+
+@media (max-width: 767.98px) {
+    /* Subject takes its own line; the change keeps the delta beside it so the pair stays associated */
+    .compendium_tuning_list--subject .compendium_tuning_row {
+        grid-template-areas:
+            'subject subject'
+            'body    delta';
+        grid-template-columns: minmax(0, 1fr) auto;
+        row-gap: 0.1rem;
+    }
+}
