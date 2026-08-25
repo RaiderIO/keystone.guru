@@ -641,7 +641,14 @@ a.compendium_class_tile img {
 }
 
 .compendium_tuning_dungeons {
-    display: inline-flex;
+    color: var(--bs-secondary-color);
+    font-size: 0.8125rem;
+}
+
+/* Hairline dot between the spell and its dungeons, cheaper than a boxed chip */
+.compendium_tuning_dungeons::before {
+    content: '\00B7';
+    margin-inline-end: 0.35rem;
 }
 
 .compendium_tuning_build_heading {

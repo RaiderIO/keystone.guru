@@ -76,13 +76,13 @@ $rows = $changes
                             <span class="compendium_tuning_count"
                                   title="{{ __('view_compendium.sections.tuning_change_list.shared_by', ['count' => $row['count']]) }}">&times;{{ $row['count'] }}</span>
                         @endif
-                        {{-- The dungeons are a property of the spell, so they ride in the subject cell --}}
+                        {{-- The dungeons are a property of the spell, so they ride in the subject cell -
+                             as quiet abbreviations (community-standard, same as the top nav), not chips:
+                             boxed pills would tax every row's height for repetitive provenance metadata --}}
                         @if($showDungeons && $change->spell->dungeons->isNotEmpty())
-                            <span class="compendium_tuning_dungeons compendium_identity_meta">
-                                @foreach($change->spell->dungeons as $dungeon)
-                                    <?php /** @var Dungeon $dungeon */ ?>
-                                    <span class="compendium_chip">{{ __($dungeon->name) }}</span>
-                                @endforeach
+                            <span class="compendium_tuning_dungeons"
+                                  title="{{ $change->spell->dungeons->map(fn(Dungeon $dungeon) => __($dungeon->name))->implode(', ') }}">
+                                {{ $change->spell->dungeons->map(fn(Dungeon $dungeon) => __($dungeon->abbreviation))->implode(', ') }}
                             </span>
                         @endif
                     </span>
