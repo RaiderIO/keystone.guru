@@ -19,6 +19,7 @@ class SpellTuningSnapshotSpell
         public readonly ?string $descriptionFormat,
         public readonly array   $values,
         public readonly string  $iconName,
+        public readonly string  $dispelType,
     ) {
     }
 
@@ -41,6 +42,7 @@ class SpellTuningSnapshotSpell
                 is_array($rawValues) ? $rawValues : [],
             )),
             iconName: (string)($spell['icon_name'] ?? ''),
+            dispelType: (string)($spell['dispel_type'] ?? ''),
         );
     }
 
@@ -50,13 +52,17 @@ class SpellTuningSnapshotSpell
     }
 
     /**
-     * A generic placeholder record (Blizzard's own template for a spell it never named, e.g. a bare
-     * auto-attack) rather than a real, player-visible spell: no numbers to tune and no icon to show it
-     * with. A "tuning change" on one is data noise, not something a player would recognise.
+     * A generic placeholder record (Blizzard's own template for a spell it never bothered fetching real
+     * data for, e.g. a bare auto-attack) rather than a real, player-visible spell. `icon_name` and
+     * `description_values` alone are not enough - real boss abilities exist with no icon and a purely
+     * static (numberless) description (e.g. spells 153954, 246943) - but those still carry a genuine
+     * `dispel_type` ("n/a" is itself a real, fetched value). A placeholder's `dispel_type` was never
+     * populated at all. A "tuning change" on a placeholder is data noise, not something a player would
+     * recognise.
      */
     public function isPlaceholder(): bool
     {
-        return $this->values === [] && $this->iconName === '';
+        return $this->values === [] && $this->iconName === '' && $this->dispelType === '';
     }
 
     /**

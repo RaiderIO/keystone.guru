@@ -46,13 +46,14 @@ class SpellTuningSnapshotLoader implements SpellTuningSnapshotLoaderInterface
 
         $spells = Spell::query()
             ->where('game_version_id', $gameVersionId)
-            ->get(['id', 'game_version_id', 'description_format', 'description_values', 'icon_name'])
+            ->get(['id', 'game_version_id', 'description_format', 'description_values', 'icon_name', 'dispel_type'])
             ->map(static fn(Spell $spell): array => [
                 'id'                 => $spell->id,
                 'game_version_id'    => $spell->game_version_id,
                 'description_format' => $spell->description_format,
                 'description_values' => $spell->description_values,
                 'icon_name'          => $spell->icon_name,
+                'dispel_type'        => $spell->dispel_type,
             ])
             ->all();
 
