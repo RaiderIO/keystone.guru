@@ -304,6 +304,7 @@ return [
             'npc_compendium'          => 'NPCs',
             'spell_compendium'        => 'Spells',
             'compendium_activity'     => 'Activity',
+            'compendium_tuning'       => 'Spell Tuning',
             'class_compendium'        => 'By Class',
         ],
         'nav' => [

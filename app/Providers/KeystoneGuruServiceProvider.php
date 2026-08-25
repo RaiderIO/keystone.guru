@@ -180,6 +180,10 @@ use App\Service\Spell\Description\SpellDescriptionPatchCheckService;
 use App\Service\Spell\Description\SpellDescriptionPatchCheckServiceInterface;
 use App\Service\Spell\SpellService;
 use App\Service\Spell\SpellServiceInterface;
+use App\Service\Spell\Tuning\SpellTuningDiffService;
+use App\Service\Spell\Tuning\SpellTuningDiffServiceInterface;
+use App\Service\Spell\Tuning\SpellTuningSnapshotLoader;
+use App\Service\Spell\Tuning\SpellTuningSnapshotLoaderInterface;
 use App\Service\StructuredLogging\StructuredLoggingService;
 use App\Service\StructuredLogging\StructuredLoggingServiceInterface;
 use App\Service\TimewalkingEvent\TimewalkingEventService;
@@ -263,6 +267,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(SpellDamageCalibrationServiceInterface::class, SpellDamageCalibrationService::class);
         // Depends on WagoToolsService
         $this->app->bind(SpellDescriptionPatchCheckServiceInterface::class, SpellDescriptionPatchCheckService::class);
+        // Depends on SpellDescriptionImportStateRepository
+        $this->app->bind(SpellTuningSnapshotLoaderInterface::class, SpellTuningSnapshotLoader::class);
+        // Depends on SpellTuningChangeRepository
+        $this->app->bind(SpellTuningDiffServiceInterface::class, SpellTuningDiffService::class);
         $this->app->bind(ChallengeModeRunDataServiceInterface::class, ChallengeModeRunDataService::class);
         $this->app->bind(CombatLogEventServiceInterface::class, CombatLogEventService::class);
         $this->app->bind(DungeonServiceInterface::class, DungeonService::class);
