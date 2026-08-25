@@ -12,6 +12,7 @@ use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBroken;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBrokenSpell;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Interrupt;
 use App\Logic\CombatLog\Guid\Creature;
+use App\Logic\CombatLog\Guid\Guid;
 use App\Logic\CombatLog\Guid\Player;
 use App\Models\Spell\Spell as SpellModel;
 use App\Repositories\Swoole\Interfaces\SpellRepositorySwooleInterface;
@@ -103,15 +104,28 @@ class SpellDataExtractor implements DataExtractorInterface
         }
 
         $suffix      = $parsedEvent->getSuffix();
-        $sourceGuid  = $parsedEvent->getGenericData()->getSourceGuid();
-        $sourceIsNpc = $sourceGuid instanceof Creature &&
-            // Only actual creatures - not pets
-            $sourceGuid->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE;
+        $genericData = $parsedEvent->getGenericData();
 
-        $destGuid  = $parsedEvent->getGenericData()->getDestGuid();
-        $destIsNpc = $destGuid instanceof Creature &&
-            // Only actual creatures - not pets
-            $destGuid->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE;
+        // Cheap raw-string prefilter before paying for the parse - most Spell-prefixed lines are
+        // player-sourced, and only a creature-mapped prefix can make $sourceIsNpc true below
+        $sourceGuid  = null;
+        $sourceIsNpc = false;
+        if (Guid::isCreatureGuidString($genericData->getSourceGuidRaw())) {
+            $sourceGuid  = $genericData->getSourceGuid();
+            $sourceIsNpc = $sourceGuid instanceof Creature &&
+                // Only actual creatures - not pets
+                $sourceGuid->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE;
+        }
+
+        // destGuid is only ever consulted below when the source is an NPC, or on the Interrupt branch
+        $destGuid  = null;
+        $destIsNpc = false;
+        if ($sourceIsNpc || $suffix instanceof Interrupt) {
+            $destGuid  = $genericData->getDestGuid();
+            $destIsNpc = $destGuid instanceof Creature &&
+                // Only actual creatures - not pets
+                $destGuid->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE;
+        }
 
         // Npcs can cast buffs on one another, and it'll count for a spell that they cast
         // Some player spells cause NPCs to cast spells on other NPCs, but those will be debuffs
@@ -136,7 +150,7 @@ class SpellDataExtractor implements DataExtractorInterface
 
         // Track interrupted NPC spells: when a player interrupts a creature, mark the interrupted spell as interruptible.
         if ($suffix instanceof Interrupt &&
-            $sourceGuid instanceof Player &&
+            ($sourceGuid ??= $genericData->getSourceGuid()) instanceof Player &&
             $destGuid instanceof Creature &&
             $destGuid->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE &&
             !$this->summonedNpcCollector->isSummoned($destGuid->getId())) {

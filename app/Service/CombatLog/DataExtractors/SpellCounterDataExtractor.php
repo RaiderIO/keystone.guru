@@ -260,48 +260,64 @@ class SpellCounterDataExtractor implements DataExtractorInterface
 
         $suffix      = $parsedEvent->getSuffix();
         $genericData = $parsedEvent->getGenericData();
-        $sourceGuid  = $genericData->getSourceGuid();
-        $destGuid    = $genericData->getDestGuid();
         $timestamp   = $parsedEvent->getTimestamp();
 
-        $sourceNpcGuid = $this->npcCreatureGuid($sourceGuid);
-        $destNpcGuid   = $this->npcCreatureGuid($destGuid);
-
+        // Both guids are fetched inside each dispatch arm, not above it - roughly 58% of corpus lines reaching here
+        // are SPELL_DAMAGE/_SUPPORT/SPELL_HEAL/SPELL_PERIODIC_DAMAGE/SPELL_ENERGIZE, which match no arm below and
+        // used neither guid. getSourceGuid()/getDestGuid() are cached per line, so calling either more than once
+        // within an arm costs nothing beyond the first call.
         if ($suffix instanceof CastStart) {
+            $sourceGuid    = $genericData->getSourceGuid();
+            $sourceNpcGuid = $this->npcCreatureGuid($sourceGuid);
             if ($sourceNpcGuid !== null && $sourceGuid instanceof Creature) {
                 $this->handleNpcCastStart($sourceNpcGuid, $sourceGuid->getId(), $prefix->getSpellId(), $prefix->getSpellName(), $timestamp);
             }
         } elseif ($suffix instanceof CastSuccess) {
+            $sourceGuid = $genericData->getSourceGuid();
             if ($sourceGuid instanceof Player) {
                 $this->handleCounterTrigger($this->definitionsByTriggerSpellId, $sourceGuid->getGuid(), $prefix->getSpellId(), $timestamp);
-            } elseif ($sourceNpcGuid !== null) {
-                // The cast resolved - it needs no further explanation
-                $this->pendingNpcCasts->forget($sourceNpcGuid);
+            } else {
+                $sourceNpcGuid = $this->npcCreatureGuid($sourceGuid);
+                if ($sourceNpcGuid !== null) {
+                    // The cast resolved - it needs no further explanation
+                    $this->pendingNpcCasts->forget($sourceNpcGuid);
+                }
             }
         } elseif ($suffix instanceof CastFailed) {
+            $sourceNpcGuid = $this->npcCreatureGuid($genericData->getSourceGuid());
             if ($sourceNpcGuid !== null) {
                 $this->pendingNpcCasts->forget($sourceNpcGuid);
             }
         } elseif ($suffix instanceof Interrupt) {
             // The interrupted caster is the *destination* of a SPELL_INTERRUPT
+            $destNpcGuid = $this->npcCreatureGuid($genericData->getDestGuid());
             if ($destNpcGuid !== null) {
                 $this->pendingNpcCasts->forget($destNpcGuid);
             }
         } elseif ($suffix instanceof AuraAppliedInterface) {
             if ($suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF) {
-                $this->handleDebuffApplied($sourceGuid, $destGuid, $prefix->getSpellId(), $prefix->getSpellName(), $timestamp);
-            } elseif ($destGuid instanceof Player) {
-                $this->handleCounterTrigger($this->definitionsByTriggerAuraSpellId, $destGuid->getGuid(), $prefix->getSpellId(), $timestamp);
+                $this->handleDebuffApplied($genericData->getSourceGuid(), $genericData->getDestGuid(), $prefix->getSpellId(), $prefix->getSpellName(), $timestamp);
+            } else {
+                $destGuid = $genericData->getDestGuid();
+                if ($destGuid instanceof Player) {
+                    $this->handleCounterTrigger($this->definitionsByTriggerAuraSpellId, $destGuid->getGuid(), $prefix->getSpellId(), $timestamp);
+                }
             }
         } elseif ($suffix instanceof AuraRemovedInterface) {
-            if ($suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF && $destGuid instanceof Player) {
-                $this->handleDebuffRemoved($destGuid->getGuid(), $prefix->getSpellId(), $timestamp);
+            if ($suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF) {
+                $destGuid = $genericData->getDestGuid();
+                if ($destGuid instanceof Player) {
+                    $this->handleDebuffRemoved($destGuid->getGuid(), $prefix->getSpellId(), $timestamp);
+                }
             }
         } elseif ($suffix instanceof AuraRefresh) {
             // A refresh restarts the debuff's duration - without this, a genuinely countered removal after a
             // refresh would be rejected by the natural-expiry guard for outliving its single-application duration
-            if ($suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF && $destGuid instanceof Player) {
-                $this->handleDebuffRefreshed($destGuid->getGuid(), $prefix->getSpellId(), $timestamp);
+            if ($suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF) {
+                $destGuid = $genericData->getDestGuid();
+                if ($destGuid instanceof Player) {
+                    $this->handleDebuffRefreshed($destGuid->getGuid(), $prefix->getSpellId(), $timestamp);
+                }
             }
         }
     }

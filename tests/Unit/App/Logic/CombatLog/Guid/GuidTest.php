@@ -144,4 +144,45 @@ final class GuidTest extends PublicTestCase
             'empty string'   => [''],
         ];
     }
+
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('Guid')]
+    public function isPlayerGuidString_givenAPlayerGuid_returnsTrue(): void
+    {
+        // Act
+        $result = Guid::isPlayerGuidString('Player-580-0AE12FF4');
+
+        // Assert
+        Assert::assertTrue($result);
+    }
+
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('Guid')]
+    #[DataProvider('isPlayerGuidString_givenANonPlayerGuid_returnsFalse_DataProvider')]
+    public function isPlayerGuidString_givenANonPlayerGuid_returnsFalse(string $guidString): void
+    {
+        // Act
+        $result = Guid::isPlayerGuidString($guidString);
+
+        // Assert
+        Assert::assertFalse($result);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public static function isPlayerGuidString_givenANonPlayerGuid_returnsFalse_DataProvider(): array
+    {
+        return [
+            'Creature'       => ['Creature-0-4241-2526-8814-197219-000043ACE6'],
+            'GameObject'     => ['GameObject-0-4241-2526-8814-197219-000043ACE6'],
+            'Item'           => ['Item-0-0-0-0-197219-000043ACE6'],
+            'nil GUID'       => ['0000000000000000'],
+            'MISS type'      => ['MISS'],
+            'unknown prefix' => ['SomeUnknownPrefix-0-4241-2526-8814-197219-000043ACE6'],
+            'empty string'   => [''],
+        ];
+    }
 }
