@@ -61,7 +61,9 @@ final class MDTNpcMappingCoverageTest extends PublicTestCase
             ->whereIn('id', $dungeonIds)
             ->get()
             ->filter(static fn(Dungeon $dungeon) => Conversion::hasMDTDungeonName($dungeon->key))
-            // @phpstan-ignore function.impossibleType (dead only while EXCLUDED_DUNGEON_KEYS is empty)
+            // Delete this ignore again as soon as EXCLUDED_DUNGEON_KEYS is refilled - it only holds
+            // while the list is empty, and becomes an unmatched-ignore error the moment it is not.
+            // @phpstan-ignore function.impossibleType
             ->filter(static fn(Dungeon $dungeon) => !in_array($dungeon->key, self::EXCLUDED_DUNGEON_KEYS, true));
 
         $this->assertNotEmpty($dungeons, 'Expected at least one MDT supported dungeon to check');
