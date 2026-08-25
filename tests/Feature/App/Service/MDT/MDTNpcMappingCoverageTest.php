@@ -23,6 +23,9 @@ final class MDTNpcMappingCoverageTest extends PublicTestCase
      * Dungeons whose mapping was corrected on our end while MDT's lua still reflects the old
      * layout, so MDT's clones do not line up with our mdt_id assignments yet.
      *
+     * Empty whenever MDT is in step with us - it fills up again the moment a correction of ours is
+     * submitted upstream but not yet released, and empties again on `mdt:acceptmapping` (#4281).
+     *
      * @var array<int, string>
      */
     private const array EXCLUDED_DUNGEON_KEYS = [
@@ -58,6 +61,7 @@ final class MDTNpcMappingCoverageTest extends PublicTestCase
             ->whereIn('id', $dungeonIds)
             ->get()
             ->filter(static fn(Dungeon $dungeon) => Conversion::hasMDTDungeonName($dungeon->key))
+            // @phpstan-ignore function.impossibleType (dead only while EXCLUDED_DUNGEON_KEYS is empty)
             ->filter(static fn(Dungeon $dungeon) => !in_array($dungeon->key, self::EXCLUDED_DUNGEON_KEYS, true));
 
         $this->assertNotEmpty($dungeons, 'Expected at least one MDT supported dungeon to check');
