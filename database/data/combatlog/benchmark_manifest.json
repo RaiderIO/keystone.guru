@@ -1,74 +1,68 @@
 {
     "schemaVersion": 1,
-    "description": "Pinned combat log corpus for combatlog:benchmark (#4040). Files live in storage/app/benchmarks/ (gitignored); the command downloads missing segments via combatlog:downloadruns and verifies these sha256 hashes before every benchmark.",
-    "pinnedAt": "2026-08-15",
+    "description": "Pinned combat log corpus for combatlog:benchmark (#4040). Files are materialized into storage/app/benchmarks/ (gitignored); the command downloads missing segments from the 's3_combat_logs' S3 disk under the benchmark-corpus/ prefix (#4317 - Raider.IO's segment URLs are presigned/short-lived and the original run ids expired upstream) and verifies these sha256 hashes before every benchmark.",
+    "pinnedAt": "2026-08-25",
     "runs": {
-        "43112014": {
-            "reason": "The Seat of the Triumvirate +10 - distinct dungeon at the low end of the key spread",
+        "2997075": {
+            "reason": "King's Rest +14 - death knight coverage; together with the other four runs, exercises mage/paladin/hunter/rogue/death-knight for the counter and immunity detectors",
             "segments": {
-                "run_43112014_segment_1.txt": "7a92938f99741955c2594d460bc7df493c9e86c57b89edde8c736865593bdf15",
-                "run_43112014_segment_2.txt": "0a68d5d02849102d27de7a624be61cb344b61f0a9aacb5b7125d7b14a6265562",
-                "run_43112014_segment_3.txt": "8407c14412c3a8ebe7f11327d2977f7fe551c0b54b3a6c4b779331f355a9d6bb",
-                "run_43112014_segment_4.txt": "f077c787fbd89cb8b8a40b6b7688b9269ec5257ab9f3585218c184186e30368c",
-                "run_43112014_segment_5.txt": "bea2b720570373facc768e8132d835b697f0158a8daa1e11e52cc5ccc0aacf50",
-                "run_43112014_segment_6.txt": "2600b5a3b43158918062f1fbe878fc8bddc649804b021ed752a008a9afbe639a",
-                "run_43112014_segment_7.txt": "d706e2e9f71c3fca637d5dba96e307f3cff35040c0503f1d2f3581b9e9cce283",
-                "run_43112014_segment_8.txt": "1f89846be791f598c0f43ce5d1d7a44a6f0fdd17d709fdf5aadd3aea7d62fed0",
-                "run_43112014_segment_9.txt": "3d657d0bb672d5cd8b905827b4aa049b626b36ff12db3b37d85ea1db9c2133bf",
-                "run_43112014_segment_10.txt": "7d679c1acfb3bac88f08a2607fcabf5b786e2734aab177f7dca05b7ec7f93735",
-                "run_43112014_segment_11.txt": "443eee57c6702d09649b34de2df453012a0d56a6968831f842a91f251e05d131"
+                "run_2997075_segment_1.txt": "4c292fdfaa009492ec65990c000430b243b637885fcc87c01eb22e288dbf575b",
+                "run_2997075_segment_2.txt": "396729796225c88c13137f9d5c764836d8d5fbf14304dffdb1dbb0e38dc226f7",
+                "run_2997075_segment_3.txt": "ede18bf304472a542146366a8c72ac601fe95e96ad097732edcdddc00233f779",
+                "run_2997075_segment_4.txt": "5eff1a0d3364cbea3a10407a593f43e9fa16342504f881af111bd97005a06439",
+                "run_2997075_segment_5.txt": "54795a9e193c9b68eb8303ced4a5f680250a4bc0453f644363b6a59b8baf3a8f",
+                "run_2997075_segment_6.txt": "da503ab4c10d464cea35fbae78ac4577d777af1ce650eebaf6173fdd1361b628",
+                "run_2997075_segment_7.txt": "a24ab14d49ae9b3338c0217374162fd3613ec97293dc5467f0041d8ad17e56fb",
+                "run_2997075_segment_8.txt": "69b66066c56af181b972e246ea9e68019bfa0327934c8f4d205fa82c565fea77",
+                "run_2997075_segment_9.txt": "9e0d5df3400aebe346c3274e89ac2aa6908c9bb7593964bad4c6934bdf854418"
             }
         },
-        "43112500": {
-            "reason": "Nexus-Point Xenas +12 - party with mage (62), paladin (65), hunter (253) and rogue (261): heavy immunity/counter activity to exercise SpellCounterDataExtractor and ImmunityBypassDataExtractor",
+        "2996765": {
+            "reason": "Voidscar Arena +12 - paladin coverage",
             "segments": {
-                "run_43112500_segment_1.txt": "93d913ca34df4f27355eb253b34ff59dc54346b6c6266beda1deff08a9640e56",
-                "run_43112500_segment_2.txt": "f3585f6070c80ad34cbabcbb43c883169d41f5e9a3b2bd885b686ed5147ab567",
-                "run_43112500_segment_3.txt": "e0f39fe0e2fda72241c8ec8542b0f3444fb398ce1680c8988d3792007abde14d",
-                "run_43112500_segment_4.txt": "b6dc5bfa868298e70abc3ce2aa6a0acca2044d80545797cd3ff8116c23f0ff88",
-                "run_43112500_segment_5.txt": "359eaa6ac817d037e32f786af6b56a8974d2b25749007cab6969690400a32083",
-                "run_43112500_segment_6.txt": "c81d7b85022c6d8d300a08244085eca3ea76c286537f822163726801161be2c0",
-                "run_43112500_segment_7.txt": "31dc813bf16c7ad513af9cb5e007e4f36e671b512d867d7de402e02c60b7b654"
+                "run_2996765_segment_1.txt": "9ade55893e8a40cd30eac0cb647e38daa554c6e351863cbbdc9e5e92931f37a5",
+                "run_2996765_segment_2.txt": "a9733f1a78532bce3537251a4d930f59f318e4391c91ad4c5c351067dd428e09",
+                "run_2996765_segment_3.txt": "3d79d0d8ef0231de61cab25f773b3fe53ae2423fc06a6c87deb5f3deed6251f3",
+                "run_2996765_segment_4.txt": "918ee4cd265d48eb7a1f9bd76b7f0020a2d41f488f63ba1d26373434350690cd",
+                "run_2996765_segment_5.txt": "7fa1fd24c66cacc5c79bc1f69c91dd8678aa77717ea960e853962d22dc58e66e",
+                "run_2996765_segment_6.txt": "1230092f1a5426b7bc64c22d1c217945619ff60faa54accb0fa28ca2d793726b",
+                "run_2996765_segment_7.txt": "bc6e3ae7e539740dff30f6d3d8bfb4db168c3fcc57b5b6dcbb3537826459f33b"
             }
         },
-        "43112029": {
-            "reason": "Pit of Saron +13 - mid key, hunter (253) + rogue (260) for Aspect of the Turtle / Cloak of Shadows coverage",
+        "2996997": {
+            "reason": "Ruby Life Pools +12 - hunter coverage",
             "segments": {
-                "run_43112029_segment_1.txt": "2a5163ae467c9ec7bd59b2eb1233c2b42daac7053835f79243d788b2a6960a5b",
-                "run_43112029_segment_2.txt": "cc3809cf9a35b4f1db0162f3fef0d363f0d4e1cab82b19a8ee909e8132e8195f",
-                "run_43112029_segment_3.txt": "5c3ae6b5d53b19bad39b725c599c865a6378ec0ca8b8430e4c1a3620078dbdc6",
-                "run_43112029_segment_4.txt": "0e11d577ec4425452651f873adac48aa8bcc9715b068091642acc200689b72cb",
-                "run_43112029_segment_5.txt": "f14b5ec31757a37ab4f7926232b24bb787206bd1b9a2427298624dde8a80e562",
-                "run_43112029_segment_6.txt": "b9317230ee069ece9c7aee1b9ec3e70a08a5ed99ae29e8580560c31344e47d8a",
-                "run_43112029_segment_7.txt": "904d8630720ccbe06c9355511688ec28ef0200146239ba4001b66e18d22e50c2"
+                "run_2996997_segment_1.txt": "9d8630488ff90e14a2a2b42a71290dfd9a6dd611a9144449191875157c6aa225",
+                "run_2996997_segment_2.txt": "062816a867575f88d6891f21a6bfc83d6feebc431c19fb6ef98e86d7b84dc7ff",
+                "run_2996997_segment_3.txt": "41f81c6dd865453e1d2b16cb226b788933f6e7ea687a43bafb04c84994b02583",
+                "run_2996997_segment_4.txt": "5101c5e31d89edae1c7590256da2f397f32b0f458b5f8bc774c50fdf758512c9",
+                "run_2996997_segment_5.txt": "88ec1caaf0839b99bd1f1c2930fb353c3ea2eafd8d2cb7a5b83fa4fce2bad7d4",
+                "run_2996997_segment_6.txt": "abba2f5ec67468fe01f9d7a653d62303fc01c9ad39edcd263cb339831e72deed",
+                "run_2996997_segment_7.txt": "16947f4f354d2dd8ce6e07538765455d3e3ea221d49ff3f3f2db4a86e1ae5dcf"
             }
         },
-        "43111615": {
-            "reason": "Algeth'ar Academy +16 - mid-high key, frost mage (64) + retribution paladin (70) immunities",
+        "2996629": {
+            "reason": "Altar of Fangs +14 - rogue coverage",
             "segments": {
-                "run_43111615_segment_1.txt": "90a40287733edef6d3ae94f695e075a6814daf2e4da60bd8c19a60c629911eb0",
-                "run_43111615_segment_2.txt": "9ad5d574a5119663c363c64e6043e47e1f1ce1c9a1e8b1c3755c1dd7d7c3754a",
-                "run_43111615_segment_3.txt": "db138bb835324ac8983bf4dce13c2344b15842bcdc89eb8ddd8ef8e4c72da780",
-                "run_43111615_segment_4.txt": "ddbcd20c3c95b2d78681543863330a5a06a1bc23670b6e14081e85e48853b2cf",
-                "run_43111615_segment_5.txt": "a20947b87fbadc95ab499eabaedab27ab54dccd41fc4e252dad98b869863b9b7",
-                "run_43111615_segment_6.txt": "d019445b2bbec2b2b3327bb20822761f48b6b6bcd23c781a0f38a6d34abe1c18",
-                "run_43111615_segment_7.txt": "cc42c9e31195094644182542ef989587262551078d834be30eb83795b42776fd",
-                "run_43111615_segment_8.txt": "8443ddcdafdc33b49e7739efb4135d753a889fa22873f1bb8afd808f6cefbb57",
-                "run_43111615_segment_9.txt": "64fa91c7b99c4185621e250fed16348edc396c6ccabeba6228a5c0b4ed2e6098"
+                "run_2996629_segment_1.txt": "78c5ac67447db15ebbffbdd43e6efee2234b32ae325138dbe6949b0917b00d87",
+                "run_2996629_segment_2.txt": "257bf13688db9c47341beb3bdbf98e0cd812401056429f9ed923470c891c7780",
+                "run_2996629_segment_3.txt": "cd7a041696d2ec9be14af6da82e4964fa3acc80ff841b49e51037d0591a2bbbf",
+                "run_2996629_segment_4.txt": "9e615bfff8729403df78bd347fff8249c9ec070d884602438d7acfd6fbe93241",
+                "run_2996629_segment_5.txt": "e83811a9a399098d18b807463d2b72d7ae60aa1196e51c5525798ed2ee03727c",
+                "run_2996629_segment_6.txt": "07334346de00776e84a868241216c08f07ebd9df4a3575c74086aa8657a522c7",
+                "run_2996629_segment_7.txt": "65277184df9a35607bf35210c2e184a357184086711253e58ef533395285f5da"
             }
         },
-        "43112559": {
-            "reason": "Magisters' Terrace +23 - high end of the key spread",
+        "2996392": {
+            "reason": "Den of Nalorakk +12 - mage coverage",
             "segments": {
-                "run_43112559_segment_1.txt": "edf22cf3d453e62e0b06e88be1d76854cb6147423d9a7caa61fa7a7e20459411",
-                "run_43112559_segment_2.txt": "ac6ff9b4590225abf3cb74482ecda7fceed9dad217aa00437f7262cf7381c38f",
-                "run_43112559_segment_3.txt": "a5a69a92606e6b919840a70122f8c92b604ee96bbd98a796385e384cc324b1b2",
-                "run_43112559_segment_4.txt": "1eee08a799122abbd83f20cf6fca2738000dbb69668e57f79ed32739bfa0cb2a",
-                "run_43112559_segment_5.txt": "232a48716b1f81de579f2e5ad0d2139a6b031c968c565db39221bffac6ba123c",
-                "run_43112559_segment_6.txt": "222f51105db59f20bb4b383ffda453d9c2d87ca6b18049e1290ad6a81579f1f6",
-                "run_43112559_segment_7.txt": "ea841d405694b5946b7856309616aad874572af436beecf9028fa421a700714b",
-                "run_43112559_segment_8.txt": "fa0d0b88aacae73a92e937f6decb03612119d077c929a1a7f3166ea03080314e",
-                "run_43112559_segment_9.txt": "2ccabb0f50c6558031326312897c32f524dbe68c03ff70fdbc449b5fa32dece8"
+                "run_2996392_segment_1.txt": "73484a684d9584950961588e44ce127d1d857096efe9f2d72b84ed9ad277fac8",
+                "run_2996392_segment_2.txt": "9504a614d738b4fbc9af30b4471dcee184791287583895b907f2b10be22c8e14",
+                "run_2996392_segment_3.txt": "3d35652dc0eaaa1b3597db85931df10d426b075e627af4a73346a1c1f6e01c4e",
+                "run_2996392_segment_4.txt": "9658e5aa6a033b56d8a8a8514bda2f85af70ee532eb3f3b2cdf910935d057e90",
+                "run_2996392_segment_5.txt": "b093099634c67a0ed5340982d340088e8f35bca815159e7b00d829f16b2c931f",
+                "run_2996392_segment_6.txt": "5ce1eddedf31c1b103111aa2c05aa4fb558e998e11551930fa9b1bb89e60baf4",
+                "run_2996392_segment_7.txt": "0dbec83147e639f0fb4fe6eaff03f424ae6f2cd748c4cf99e0b041a8e5b6aa63"
             }
         }
     }

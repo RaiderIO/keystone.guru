@@ -17,6 +17,7 @@ use App\Service\CombatLog\DataExtractors\Profiling\ProfilingDataExtractorFactory
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
 use ZipArchive;
 
@@ -39,23 +40,17 @@ class Benchmark extends BaseCombatLogCommand
 {
     private const int SCHEMA_VERSION = 1;
 
-    /**
-     * @var int[] The pinned benchmark corpus. See database/data/combatlog/benchmark_manifest.json for the
-     *            per-run rationale; segments are downloaded into storage/app/benchmarks (gitignored) on first
-     *            use and sha256-verified against the manifest on every use.
-     */
-    public const array BENCHMARK_RUN_IDS = [
-        43112014,
-        43112500,
-        43112029,
-        43111615,
-        43112559,
-    ];
-
     private const string MANIFEST_PATH = 'data/combatlog/benchmark_manifest.json';
 
     /** @var string Directory below storage/app that holds the (gitignored) corpus segments */
     private const string CORPUS_DIR = 'benchmarks';
+
+    /**
+     * @var string The 's3_combat_logs' disk (see config/filesystems.php) also durably mirrors the pinned
+     *             benchmark corpus, under this prefix, so this command no longer depends on Raider.IO's
+     *             segment URLs staying resolvable (#4317 - the original corpus's upstream segments expired).
+     */
+    private const string S3_CORPUS_PREFIX = 'benchmark-corpus/';
 
     /** @var float Spread between the fastest and slowest measured run above which results are flagged */
     private const float HIGH_VARIANCE_THRESHOLD_PCT = 5.0;
@@ -274,25 +269,33 @@ class Benchmark extends BaseCombatLogCommand
         }
 
         $corpusDirPath = storage_path(sprintf('app/%s', self::CORPUS_DIR));
+        File::ensureDirectoryExists($corpusDirPath);
 
-        // Download any missing segments first - the segment URLs are presigned and expire in ~5 minutes, so
-        // downloading and hash-checking are strictly separate from all timing.
-        $missingRunIds = [];
+        // Download any missing segments first - from the durable S3 mirror, not Raider.IO's segment URLs
+        // (which are presigned, expire in ~5 minutes, and can vanish upstream entirely - #4317). Downloading
+        // and hash-checking are strictly separate from all timing regardless of source.
+        $missingFileNames = [];
         foreach ($runIds as $runId) {
             foreach (array_keys($manifest['runs'][$runId]['segments']) as $fileName) {
                 if (!is_file(sprintf('%s/%s', $corpusDirPath, $fileName))) {
-                    $missingRunIds[$runId] = true;
-                    break;
+                    $missingFileNames[] = $fileName;
                 }
             }
         }
 
-        if (!empty($missingRunIds)) {
-            $this->info(sprintf('Downloading missing corpus segments for run(s) %s...', implode(', ', array_keys($missingRunIds))));
-            $this->call('combatlog:downloadruns', [
-                '--run'        => array_keys($missingRunIds),
-                '--output-dir' => self::CORPUS_DIR,
-            ]);
+        if (!empty($missingFileNames)) {
+            $this->info(sprintf('Downloading %d missing corpus segment(s) from the S3 benchmark corpus mirror...', count($missingFileNames)));
+            $s3Disk = Storage::disk('s3_combat_logs');
+            foreach ($missingFileNames as $fileName) {
+                $s3Path = self::S3_CORPUS_PREFIX . $fileName;
+                if (!$s3Disk->exists($s3Path)) {
+                    $this->error(sprintf('Corpus segment %s is not present on the S3 benchmark corpus mirror - the corpus needs re-uploading (see database/data/combatlog/benchmark_manifest.json).', $s3Path));
+
+                    continue;
+                }
+
+                File::put(sprintf('%s/%s', $corpusDirPath, $fileName), $s3Disk->get($s3Path));
+            }
         }
 
         $corpus = [];
@@ -302,7 +305,7 @@ class Benchmark extends BaseCombatLogCommand
                 $segmentPath = sprintf('%s/%s', $corpusDirPath, $fileName);
 
                 if (!is_file($segmentPath)) {
-                    $this->error(sprintf('Corpus segment %s is still missing after download - the upstream segments may no longer be available. The corpus needs re-pinning (new run ids + manifest).', $segmentPath));
+                    $this->error(sprintf('Corpus segment %s is still missing after download from the S3 mirror. The corpus needs re-uploading (new run ids + manifest + S3 objects).', $segmentPath));
 
                     return null;
                 }
