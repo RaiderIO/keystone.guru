@@ -304,7 +304,7 @@ return [
             'npc_compendium'          => 'NPC',
             'spell_compendium'        => 'Incantesimi',
             'compendium_activity'     => 'Attività',
-            'compendium_tuning'       => '',
+            'compendium_tuning'       => 'Bilanciamento incantesimi',
             'class_compendium'        => 'Per classe',
         ],
         'nav' => [

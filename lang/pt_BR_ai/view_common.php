@@ -304,7 +304,7 @@ return [
             'npc_compendium'          => 'NPCs',
             'spell_compendium'        => 'Feitiços',
             'compendium_activity'     => 'Atividade',
-            'compendium_tuning'       => '',
+            'compendium_tuning'       => 'Ajustes de Feitiços',
             'class_compendium'        => 'Por Classe',
         ],
         'nav' => [

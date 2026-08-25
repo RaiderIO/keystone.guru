@@ -11,7 +11,7 @@ return [
             'spell_show'   => ':name',
             'activity'     => 'Kompendium-Aktivität',
             'activity_day' => ':date',
-            'tuning'       => '',
+            'tuning'       => 'Zauber-Anpassungen',
             'class'        => 'Nach Klasse',
         ],
         'affixes' => 'Affixe',

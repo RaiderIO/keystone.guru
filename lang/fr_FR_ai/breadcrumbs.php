@@ -11,7 +11,7 @@ return [
             'spell_show'   => ':name',
             'activity'     => 'Activité du compendium',
             'activity_day' => ':date',
-            'tuning'       => '',
+            'tuning'       => 'Ajustements des sorts',
             'class'        => 'Par classe',
         ],
         'affixes' => 'Affixes',

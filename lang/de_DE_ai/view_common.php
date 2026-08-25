@@ -304,7 +304,7 @@ return [
             'npc_compendium'          => 'NPCs',
             'spell_compendium'        => 'Zauber',
             'compendium_activity'     => 'Aktivität',
-            'compendium_tuning'       => '',
+            'compendium_tuning'       => 'Zauber-Anpassungen',
             'class_compendium'        => 'Nach Klasse',
         ],
         'nav' => [

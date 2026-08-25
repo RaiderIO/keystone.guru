@@ -11,7 +11,7 @@ return [
             'spell_show'   => ':name',
             'activity'     => 'Attività del compendio',
             'activity_day' => ':date',
-            'tuning'       => '',
+            'tuning'       => 'Bilanciamento incantesimi',
             'class'        => 'Per classe',
         ],
         'affixes' => 'Affissi',
