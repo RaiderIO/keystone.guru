@@ -47,8 +47,12 @@ $rows = $changes
             __($change->spell->name),
             $change->change_type->value,
             $change->kind->value ?? '',
-            $change->old_text ?? (string)$change->old_coefficient,
-            $change->new_text ?? (string)$change->new_coefficient,
+            // Texts AND coefficients: old_text is '' (not null) for coefficient-only changes, so a
+            // text-with-coefficient-fallback key would collapse rows whose coefficients differ
+            (string)$change->old_text,
+            (string)$change->new_text,
+            (string)$change->old_coefficient,
+            (string)$change->new_coefficient,
             (string)$change->delta,
         ])
         : (string)$change->id)
