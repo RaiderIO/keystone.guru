@@ -44,6 +44,12 @@ return [
                 'cta'         => 'Voir l\'activité',
                 'subtitle'    => 'Mis à jour quotidiennement',
             ],
+            'tuning' => [
+                'title'        => 'Ajustements des sorts',
+                'description'  => 'Les modifications apportées par chaque patch aux sorts des PNJ : hausse ou baisse des dégâts, durées, temps de recharge - d\'après les valeurs que les joueurs voient réellement.',
+                'cta'          => 'Voir les ajustements',
+                'count_suffix' => 'builds comparés',
+            ],
             'class' => [
                 'title'        => 'Par classe',
                 'description'  => 'Découvrez lesquels de vos sorts de contrôle de foule fonctionnent sur quels PNJ, regroupés par classe.',
@@ -178,6 +184,11 @@ return [
                 'title' => 'Activité récente',
                 'empty' => 'Aucune activité enregistrée pour le moment.',
             ],
+            'tuning_changes' => [
+                'title'        => 'Ajustements',
+                'empty'        => 'Aucun ajustement enregistré pour ce sort.',
+                'build_header' => 'Build :to (comparé à :from)',
+            ],
         ],
     ],
     'activity' => [
@@ -190,6 +201,40 @@ return [
             'title'  => ':date - Activité du compendium',
             'header' => 'Activité du compendium pour le :date',
             'empty'  => 'Aucune activité enregistrée pour ce jour.',
+        ],
+    ],
+    'sections' => [
+        // Shared primitive rendering a list of spell tuning changes (compendium/sections/tuning_change_list)
+        'tuning_change_list' => [
+            'kinds' => [
+                'damage'   => 'Dégâts',
+                'healing'  => 'Guérison',
+                'duration' => 'Durée',
+                'period'   => 'Intervalle',
+                'radius'   => 'Rayon',
+                'count'    => 'Nombre',
+                'value'    => 'Valeur',
+            ],
+            'coefficient'    => '(coefficient)',
+            'rewritten'      => 'Description réécrite',
+            'added'          => 'Description ajoutée',
+            'no_description' => '(aucune description)',
+            'changed_to'     => 'devient',
+            'shared_by'      => 'Enregistrements de sorts concernés par la même modification : :count',
+        ],
+    ],
+    'tuning' => [
+        'index' => [
+            'title'             => 'Ajustements des sorts - Compendium',
+            'header'            => 'Ajustements des sorts',
+            'header_dungeon'    => 'Ajustements des sorts - :dungeon',
+            'intro'             => 'Les modifications apportées par chaque patch aux sorts des PNJ, d\'après les valeurs que les joueurs voient réellement. Seules les modifications de valeurs sont prises en compte : une description reformulée sans changement de valeur n\'est pas répertoriée.',
+            'empty'             => 'Aucun ajustement enregistré pour le moment.',
+            'all_dungeons'      => 'Tous les donjons',
+            'show_all_dungeons' => 'Afficher tous les donjons',
+            'build_title'       => 'Build :build',
+            'build_subtitle'    => 'comparé à :from',
+            'changed_spells'    => 'Sorts modifiés : :count|Sorts modifiés : :count',
         ],
     ],
     'class' => [

@@ -44,6 +44,12 @@ return [
                 'cta'         => 'Ver atividade',
                 'subtitle'    => 'Atualizado diariamente',
             ],
+            'tuning' => [
+                'title'        => 'Ajustes de Feitiços',
+                'description'  => 'O que cada patch do jogo mudou nos feitiços dos NPCs: dano subindo ou descendo, durações, tempos de recarga - nos números que os jogadores realmente veem.',
+                'cta'          => 'Ver ajustes',
+                'count_suffix' => 'builds comparadas',
+            ],
             'class' => [
                 'title'        => 'Por Classe',
                 'description'  => 'Veja quais dos seus feitiços de controle de multidão funcionam em quais NPCs, agrupados por classe.',
@@ -178,6 +184,11 @@ return [
                 'title' => 'Atividade recente',
                 'empty' => 'Nenhuma atividade registrada ainda.',
             ],
+            'tuning_changes' => [
+                'title'        => 'Ajustes',
+                'empty'        => 'Nenhum ajuste registrado para este feitiço.',
+                'build_header' => 'Build :to (comparada com :from)',
+            ],
         ],
     ],
     'activity' => [
@@ -190,6 +201,40 @@ return [
             'title'  => ':date - Atividade do Compêndio',
             'header' => 'Atividade do Compêndio para :date',
             'empty'  => 'Nenhuma atividade registrada para este dia.',
+        ],
+    ],
+    'sections' => [
+        // Shared primitive rendering a list of spell tuning changes (compendium/sections/tuning_change_list)
+        'tuning_change_list' => [
+            'kinds' => [
+                'damage'   => 'Dano',
+                'healing'  => 'Cura',
+                'duration' => 'Duração',
+                'period'   => 'Período',
+                'radius'   => 'Raio',
+                'count'    => 'Quantidade',
+                'value'    => 'Valor',
+            ],
+            'coefficient'    => '(coeficiente)',
+            'rewritten'      => 'Descrição reescrita',
+            'added'          => 'Descrição adicionada',
+            'no_description' => '(sem descrição)',
+            'changed_to'     => 'mudou para',
+            'shared_by'      => 'Registros de feitiço que compartilham esta alteração: :count',
+        ],
+    ],
+    'tuning' => [
+        'index' => [
+            'title'             => 'Ajustes de Feitiços - Compêndio',
+            'header'            => 'Ajustes de Feitiços',
+            'header_dungeon'    => 'Ajustes de Feitiços - :dungeon',
+            'intro'             => 'O que cada patch do jogo mudou nos feitiços dos NPCs, nos números que os jogadores realmente veem. Só contam as mudanças nos números - uma descrição reescrita com os mesmos números não é listada.',
+            'empty'             => 'Nenhum ajuste registrado ainda.',
+            'all_dungeons'      => 'Todas as masmorras',
+            'show_all_dungeons' => 'Mostrar todas as masmorras',
+            'build_title'       => 'Build :build',
+            'build_subtitle'    => 'comparada com :from',
+            'changed_spells'    => 'Feitiços alterados: :count|Feitiços alterados: :count',
         ],
     ],
     'class' => [

@@ -11,6 +11,7 @@ return [
             'spell_show'   => ':name',
             'activity'     => 'Активность компендиума',
             'activity_day' => ':date',
+            'tuning'       => 'Балансировка заклинаний',
             'class'        => 'По классу',
         ],
         'affixes' => 'Аффиксы',

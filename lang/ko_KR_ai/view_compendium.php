@@ -44,6 +44,12 @@ return [
                 'cta'         => '활동 보기',
                 'subtitle'    => '매일 업데이트',
             ],
+            'tuning' => [
+                'title'        => '주문 수치 조정',
+                'description'  => '게임 패치마다 NPC 주문에 적용된 변경 사항을 보여줍니다. 피해량 증감, 지속 시간, 재사용 대기시간 등 플레이어가 실제로 확인하는 수치를 다룹니다.',
+                'cta'          => '수치 조정 내역 보기',
+                'count_suffix' => '개의 빌드 비교됨',
+            ],
             'class' => [
                 'title'        => '직업별',
                 'description'  => '자신의 군중 제어 주문이 어떤 NPC에게 통하는지 직업별로 확인하세요.',
@@ -178,6 +184,11 @@ return [
                 'title' => '최근 활동',
                 'empty' => '아직 기록된 활동이 없습니다.',
             ],
+            'tuning_changes' => [
+                'title'        => '수치 조정 내역',
+                'empty'        => '이 주문에 기록된 수치 조정이 없습니다.',
+                'build_header' => '빌드 :to (:from 대비)',
+            ],
         ],
     ],
     'activity' => [
@@ -190,6 +201,40 @@ return [
             'title'  => ':date - 도감 활동',
             'header' => ':date의 도감 활동',
             'empty'  => '이 날짜에 기록된 활동이 없습니다.',
+        ],
+    ],
+    'sections' => [
+        // Shared primitive rendering a list of spell tuning changes (compendium/sections/tuning_change_list)
+        'tuning_change_list' => [
+            'kinds' => [
+                'damage'   => '피해량',
+                'healing'  => '치유',
+                'duration' => '지속 시간',
+                'period'   => '주기',
+                'radius'   => '반경',
+                'count'    => '횟수',
+                'value'    => '수치',
+            ],
+            'coefficient'    => '계수',
+            'rewritten'      => '설명 재작성됨',
+            'added'          => '설명 추가됨',
+            'no_description' => '(설명 없음)',
+            'changed_to'     => '변경 후 값:',
+            'shared_by'      => '이 변경을 공유하는 주문 기록 :count개',
+        ],
+    ],
+    'tuning' => [
+        'index' => [
+            'title'             => '주문 수치 조정 - 도감',
+            'header'            => '주문 수치 조정',
+            'header_dungeon'    => '주문 수치 조정 - :dungeon',
+            'intro'             => '게임 패치마다 NPC 주문의 어떤 수치가 변경되었는지 플레이어가 실제로 확인하는 값으로 보여줍니다. 수치가 변경된 경우만 포함하며, 수치는 그대로이고 설명 문구만 바뀐 경우는 표시하지 않습니다.',
+            'empty'             => '아직 기록된 수치 조정이 없습니다.',
+            'all_dungeons'      => '모든 던전',
+            'show_all_dungeons' => '모든 던전 표시',
+            'build_title'       => '빌드 :build',
+            'build_subtitle'    => ':from 대비',
+            'changed_spells'    => ':count개 주문 변경됨|:count개 주문 변경됨',
         ],
     ],
     'class' => [

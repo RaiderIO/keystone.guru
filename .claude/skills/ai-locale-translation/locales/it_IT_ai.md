@@ -4,7 +4,7 @@
 |---|---|
 | Register | **Informal *tu*** throughout (*tuo/tua*, *clicca*, *seleziona*), never formal *Lei*. |
 | Register check | `grep -rniE "\b(Lei\|Suo\|Sua\|Suoi\|Sue\|clicchi\|selezioni)\b" lang/it_IT_ai/*.php \| grep -vE "spells\|validation\|datatables\|npcs\|dungeons\|view_admin"` — review by hand: every one of the 7 hits after the pass was a third-person possessive ("il **suo** dungeon" = *its*), not formal address. Positive check: `\b(tu\|tuo\|tua\|tuoi\|tue\|clicca\|seleziona)\b` had 164→181 hits. |
-| Last full pass | 2026-08-24, #4299 — 47 catch-up keys (the #4277 upgrade-draft strings, the enemy-failure cluster verdicts and suggestions, and three new map-icon labels) on top of the 2026-08-21 #4165 pass (769 keys, ~90 post-review rewrites). |
+| Last full pass | 2026-08-25, #4320 — 32 catch-up keys (the spell tuning Compendium strings from #4113/#4313), on top of the 2026-08-24, #4299 — 47 catch-up keys (the #4277 upgrade-draft strings, the enemy-failure cluster verdicts and suggestions, and three new map-icon labels) on top of the 2026-08-21 #4165 pass (769 keys, ~90 post-review rewrites). |
 | Normalisation done | none needed. |
 
 ## Glossary
@@ -19,6 +19,7 @@
 | Icon | icona | Teeming | Abbondante (`affixes.php`) |
 | Raid marker | marcatore di incursione (Raid → *incursione*, established) | Season | Stagione |
 | Upgrade draft (#4277) | bozza di aggiornamento | Waystone (map icon type) | Pietra miliare |
+| Spell Tuning (#4113/#4320) | Bilanciamento degli incantesimi | Build (WoW client build) | Build (non tradotto) |
 
 ## Locale-specific conventions
 
@@ -45,3 +46,4 @@
   rule 11 in the skill. Declined: the reviewer's claim of an official Blizzard name for
   `Waystone`, cited to a hotfix URL that cannot be checked from here and supported by no in-repo
   source — *Pietra miliare* stays a coined rendering.
+- 2026-08-25 #4320 — 32-key catch-up for the spell tuning Compendium (#4113/#4313), found by the v15.20.0 release pre-flight. *Bilanciamento degli incantesimi* coined for Spell Tuning — the bare *Bilanciamento incantesimi* was flagged as telegraphic; *Build* kept as the loanword, with *build a confronto* for the count suffix so it stays grammatical at any count. Codex review: 7 findings, all applied. `changed_spells` written count-invariant (see es_ES_ai's note on the `*_ai` plural-bucket fallback).

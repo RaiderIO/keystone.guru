@@ -4,7 +4,7 @@
 |---|---|
 | Register | **Informal *tú*** throughout. Plural you is *ustedes* (never *vosotros* — treat any hit as a leftover to fix). |
 | Register check | `grep -rniE "\b(seleccione\|haga\|arrastre\|suelte\|continúe\|presione\|elija\|indique\|marque\|está seguro)\b" lang/es_MX_ai/*.php \| grep -vE "spells\|validation\|datatables\|npcs\|dungeons\|view_admin"` — expect 0; also `grep -n vosotros lang/es_MX_ai/*.php` expects 0. |
-| Last full pass | 2026-08-24, #4299 — 47 catch-up keys (the #4277 upgrade-draft strings, the enemy-failure cluster verdicts and suggestions, and three new map-icon labels) on top of the 2026-08-20 #4165 pass (769 keys, 4 post-review rewrites). |
+| Last full pass | 2026-08-25, #4320 — 32 catch-up keys (the spell tuning Compendium strings from #4113/#4313), on top of the 2026-08-24, #4299 — 47 catch-up keys (the #4277 upgrade-draft strings, the enemy-failure cluster verdicts and suggestions, and three new map-icon labels) on top of the 2026-08-20 #4165 pass (769 keys, 4 post-review rewrites). |
 | Normalisation done | none needed (already *tú*). |
 
 ## Glossary
@@ -29,6 +29,8 @@
 | "unlocks a shortcut" | atajo | established phrasing |
 | Upgrade draft (#4277) | borrador de actualización | new in #4299 |
 | Waystone (map icon type) | Piedra guía | coined in #4299 — no in-repo source |
+| Spell Tuning (#4113/#4320) | Ajustes de hechizos | coined this pass — no precedent in any locale |
+| Build (WoW client build) | Build (sin traducir) | coined this pass |
 
 ## Locale-specific conventions
 
@@ -54,3 +56,4 @@
   9 findings, all applied. Declined: the reviewer's claim of an official Blizzard name for
   `Waystone`, cited to a hotfix URL that cannot be checked from here and supported by no in-repo
   source — *Piedra guía* stays a coined rendering.
+- 2026-08-25 #4320 — 32-key catch-up for the spell tuning Compendium (#4113/#4313), found by the v15.20.0 release pre-flight. *Ajustes de hechizos* coined for Spell Tuning; *Build* kept as the loanword. Codex review: 3 findings, 2 applied — *valores* (not es_ES's *cifras*) and *hechizos de NPC*, both read from this locale's own existing usage. Declined: *compilación* for `build`. `changed_spells` written count-invariant (see es_ES_ai's note on the `*_ai` plural-bucket fallback).

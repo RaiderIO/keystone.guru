@@ -44,6 +44,12 @@ return [
                 'cta'         => 'Ver actividad',
                 'subtitle'    => 'Actualizado diariamente',
             ],
+            'tuning' => [
+                'title'        => 'Ajustes de hechizos',
+                'description'  => 'Los cambios que cada parche del juego introdujo en los hechizos de NPC, con los valores que realmente ven los jugadores: aumentos o reducciones de daño, duraciones y tiempos de reutilización.',
+                'cta'          => 'Ver ajustes',
+                'count_suffix' => 'builds comparados',
+            ],
             'class' => [
                 'title'        => 'Por clase',
                 'description'  => 'Mira cuáles de tus hechizos de control de masas funcionan en cuáles NPC, agrupados por clase.',
@@ -178,6 +184,11 @@ return [
                 'title' => 'Actividad reciente',
                 'empty' => 'Todavía no se registró actividad.',
             ],
+            'tuning_changes' => [
+                'title'        => 'Ajustes',
+                'empty'        => 'No se registró ningún ajuste para este hechizo.',
+                'build_header' => 'Build :to (comparado con :from)',
+            ],
         ],
     ],
     'activity' => [
@@ -190,6 +201,40 @@ return [
             'title'  => ':date - Actividad del compendio',
             'header' => 'Actividad del compendio del :date',
             'empty'  => 'No se registró actividad para este día.',
+        ],
+    ],
+    'sections' => [
+        // Shared primitive rendering a list of spell tuning changes (compendium/sections/tuning_change_list)
+        'tuning_change_list' => [
+            'kinds' => [
+                'damage'   => 'Daño',
+                'healing'  => 'Curación',
+                'duration' => 'Duración',
+                'period'   => 'Periodo',
+                'radius'   => 'Radio',
+                'count'    => 'Cantidad',
+                'value'    => 'Valor',
+            ],
+            'coefficient'    => '(coeficiente)',
+            'rewritten'      => 'Descripción reescrita',
+            'added'          => 'Descripción agregada',
+            'no_description' => '(sin descripción)',
+            'changed_to'     => 'pasó a',
+            'shared_by'      => 'Registros de hechizo que comparten este cambio: :count',
+        ],
+    ],
+    'tuning' => [
+        'index' => [
+            'title'             => 'Ajustes de hechizos - Compendio',
+            'header'            => 'Ajustes de hechizos',
+            'header_dungeon'    => 'Ajustes de hechizos - :dungeon',
+            'intro'             => 'Los cambios que cada parche del juego introdujo en los hechizos de NPC, con los valores que realmente ven los jugadores. Solo se incluyen los cambios numéricos; una descripción reformulada con los mismos valores no aparece aquí.',
+            'empty'             => 'Todavía no se registró ningún ajuste.',
+            'all_dungeons'      => 'Todas las mazmorras',
+            'show_all_dungeons' => 'Mostrar todas las mazmorras',
+            'build_title'       => 'Build :build',
+            'build_subtitle'    => 'comparado con :from',
+            'changed_spells'    => 'Hechizos modificados: :count|Hechizos modificados: :count',
         ],
     ],
     'class' => [

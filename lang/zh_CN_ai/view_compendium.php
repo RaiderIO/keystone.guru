@@ -44,6 +44,12 @@ return [
                 'cta'         => '查看动态',
                 'subtitle'    => '每日更新',
             ],
+            'tuning' => [
+                'title'        => '法术调整',
+                'description'  => '每个游戏补丁对NPC法术做出的改动：伤害的提高或降低、持续时间、冷却时间——都体现在玩家实际看到的数值里。',
+                'cta'          => '查看法术调整',
+                'count_suffix' => '个版本已对比',
+            ],
             'class' => [
                 'title'        => '按职业',
                 'description'  => '按职业查看您的哪些控场法术对哪些NPC有效。',
@@ -178,6 +184,11 @@ return [
                 'title' => '最近动态',
                 'empty' => '尚未记录任何动态。',
             ],
+            'tuning_changes' => [
+                'title'        => '调整记录',
+                'empty'        => '该法术尚无调整记录。',
+                'build_header' => '版本 :to（与 :from 对比）',
+            ],
         ],
     ],
     'activity' => [
@@ -190,6 +201,40 @@ return [
             'title'  => ':date - 图鉴动态',
             'header' => ':date 的图鉴动态',
             'empty'  => '此日期没有记录任何动态。',
+        ],
+    ],
+    'sections' => [
+        // Shared primitive rendering a list of spell tuning changes (compendium/sections/tuning_change_list)
+        'tuning_change_list' => [
+            'kinds' => [
+                'damage'   => '伤害',
+                'healing'  => '治疗',
+                'duration' => '持续时间',
+                'period'   => '周期',
+                'radius'   => '半径',
+                'count'    => '数量',
+                'value'    => '数值',
+            ],
+            'coefficient'    => '系数',
+            'rewritten'      => '描述已重写',
+            'added'          => '描述已添加',
+            'no_description' => '（无描述）',
+            'changed_to'     => '变更为',
+            'shared_by'      => '共有 :count 条法术记录发生了相同的变更',
+        ],
+    ],
+    'tuning' => [
+        'index' => [
+            'title'             => '法术调整 - 图鉴',
+            'header'            => '法术调整',
+            'header_dungeon'    => '法术调整 - :dungeon',
+            'intro'             => '每个游戏补丁对NPC法术做出的改动，都体现在玩家实际看到的数值里。只有数值发生变化才会被记录——数值不变、仅改写措辞的描述不会列出。',
+            'empty'             => '尚未记录任何调整。',
+            'all_dungeons'      => '所有地下城',
+            'show_all_dungeons' => '显示所有地下城',
+            'build_title'       => '版本 :build',
+            'build_subtitle'    => '与 :from 对比',
+            'changed_spells'    => ':count 个法术已更改|:count 个法术已更改',
         ],
     ],
     'class' => [

@@ -4,7 +4,7 @@
 |---|---|
 | Register | **Informal *tú*** throughout, never *usted*. Plural you is *vosotros* (Spain). |
 | Register check | `grep -nE "\b(usted\|Seleccione\|Haga\|Introduzca\|Pulse\|Elija\|Inténtelo\|Asegúrese)\b\|\b[Ss]u ruta\b" lang/es_ES_ai/*.php \| grep -vE "spells\|validation\|datatables\|npcs\|dungeons\|view_admin"` — review by hand: `No se puede guardar la ruta` is impersonal, not formal address (the naive `puede` grep reports 165 hits, the real number was ~26). |
-| Last full pass | 2026-08-24, #4299 — 47 catch-up keys (the #4277 upgrade-draft strings, the enemy-failure cluster verdicts and suggestions, and three new map-icon labels) on top of the 2026-08-20 #4165 pass (769 keys, 30 *usted*→*tú* normalised). |
+| Last full pass | 2026-08-25, #4320 — 32 catch-up keys (the spell tuning Compendium strings from #4113/#4313), on top of the 2026-08-24, #4299 — 47 catch-up keys (the #4277 upgrade-draft strings, the enemy-failure cluster verdicts and suggestions, and three new map-icon labels) on top of the 2026-08-20 #4165 pass (769 keys, 30 *usted*→*tú* normalised). |
 | Normalisation done | *usted*→*tú* (30 keys, mostly `leafletdraw.php` imperatives and `js.php`/`view_common.php` possessives). |
 
 ## Glossary
@@ -26,6 +26,7 @@
 | Fel (prefix) | vil | Wyrm | vermis |
 | Bolstering / Quaking / Teeming | Reforzante / Temblores / Abundante (`affixes.php` — **differ from es_MX_ai**) | | |
 | Upgrade draft (#4277) | borrador de actualización | Waystone (map icon type) | Piedra guía |
+| Spell Tuning (#4113/#4320) | Ajustes de hechizos | Build (WoW client build) | Build (sin traducir) |
 
 ## Locale-specific conventions
 
@@ -49,3 +50,4 @@
   11 findings, all applied. Declined: the reviewer's claim of an official Blizzard name for
   `Waystone`, cited to a hotfix URL that cannot be checked from here and supported by no in-repo
   source — *Piedra guía* stays a coined rendering.
+- 2026-08-25 #4320 — 32-key catch-up for the spell tuning Compendium (#4113/#4313), found by the v15.20.0 release pre-flight. *Ajustes de hechizos* coined for Spell Tuning; *Build* kept as the loanword. Codex review: 4 findings, 3 applied (`changed_to` → *pasó a*, two over-literal prose strings). Declined: *compilación* for `build` — pt_BR's own review cites Blizzard pt-BR using the loanword, so the locales do not agree it needs translating. `changed_spells` written count-invariant: Laravel's `MessageSelector` does not know the `*_ai` locale names, so bucket 2 never selects and the singular would render for every count.

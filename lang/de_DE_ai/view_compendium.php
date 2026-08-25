@@ -44,6 +44,12 @@ return [
                 'cta'         => 'Aktivität ansehen',
                 'subtitle'    => 'Täglich aktualisiert',
             ],
+            'tuning' => [
+                'title'        => 'Zauber-Anpassungen',
+                'description'  => 'Was jeder Spielpatch an NPC-Zaubern geändert hat: Schaden rauf oder runter, Dauer, Abklingzeiten - anhand der Werte, die Spieler tatsächlich sehen.',
+                'cta'          => 'Anpassungen ansehen',
+                'count_suffix' => 'Builds verglichen',
+            ],
             'class' => [
                 'title'        => 'Nach Klasse',
                 'description'  => 'Sieh nach, welche deiner Kontrollzauber bei welchen NPCs wirken, gruppiert nach Klasse.',
@@ -178,6 +184,11 @@ return [
                 'title' => 'Neueste Aktivität',
                 'empty' => 'Noch keine Aktivität erfasst.',
             ],
+            'tuning_changes' => [
+                'title'        => 'Anpassungen',
+                'empty'        => 'Für diesen Zauber wurden keine Anpassungen erfasst.',
+                'build_header' => 'Build :to (verglichen mit :from)',
+            ],
         ],
     ],
     'activity' => [
@@ -190,6 +201,40 @@ return [
             'title'  => ':date - Kompendium-Aktivität',
             'header' => 'Kompendium-Aktivität für :date',
             'empty'  => 'Für diesen Tag wurde keine Aktivität erfasst.',
+        ],
+    ],
+    'sections' => [
+        // Shared primitive rendering a list of spell tuning changes (compendium/sections/tuning_change_list)
+        'tuning_change_list' => [
+            'kinds' => [
+                'damage'   => 'Schaden',
+                'healing'  => 'Heilung',
+                'duration' => 'Dauer',
+                'period'   => 'Intervall',
+                'radius'   => 'Radius',
+                'count'    => 'Anzahl',
+                'value'    => 'Wert',
+            ],
+            'coefficient'    => '(Koeffizient)',
+            'rewritten'      => 'Beschreibung überarbeitet',
+            'added'          => 'Beschreibung hinzugefügt',
+            'no_description' => '(keine Beschreibung)',
+            'changed_to'     => 'wird zu',
+            'shared_by'      => 'Zaubereinträge mit dieser Änderung: :count',
+        ],
+    ],
+    'tuning' => [
+        'index' => [
+            'title'             => 'Zauber-Anpassungen - Kompendium',
+            'header'            => 'Zauber-Anpassungen',
+            'header_dungeon'    => 'Zauber-Anpassungen - :dungeon',
+            'intro'             => 'Was jeder Spielpatch an NPC-Zaubern geändert hat, dargestellt anhand der Werte, die Spieler tatsächlich sehen. Berücksichtigt werden nur Änderungen an den Werten - eine neu formulierte Beschreibung mit denselben Werten wird nicht aufgeführt.',
+            'empty'             => 'Noch keine Anpassungen erfasst.',
+            'all_dungeons'      => 'Alle Dungeons',
+            'show_all_dungeons' => 'Alle Dungeons anzeigen',
+            'build_title'       => 'Build :build',
+            'build_subtitle'    => 'verglichen mit :from',
+            'changed_spells'    => ':count Zauber geändert|:count Zauber geändert',
         ],
     ],
     'class' => [

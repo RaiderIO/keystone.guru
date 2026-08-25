@@ -4,7 +4,7 @@
 |---|---|
 | Register | **Formal 하십시오체** — verb endings `-습니다` / `-세요` throughout. Never plain `-다`/`-이다` sentence endings in user-facing prose. Terse nominal-style strings (activity-feed entries like `Casts :name`) are deliberately not full sentences and need no `-습니다`. |
 | Register check | `grep -ohE "습니다\|세요" lang/ko_KR_ai/*.php \| grep -vE "spells\|validation\|datatables\|npcs\|dungeons\|view_admin" \| sort \| uniq -c` — positive signal (336 + 80 before the pass); spot-check new keys by eye for bare `-다` endings. |
-| Last full pass | 2026-08-24, #4299 — 47 catch-up keys (the #4277 upgrade-draft strings, the enemy-failure cluster verdicts and suggestions, and three new map-icon labels) on top of the 2026-08-21 #4165 pass, PR #4209 (769 keys, 29 post-review rewrites). |
+| Last full pass | 2026-08-25, #4320 — 32 catch-up keys (the spell tuning Compendium strings from #4113/#4313), on top of the 2026-08-24, #4299 — 47 catch-up keys (the #4277 upgrade-draft strings, the enemy-failure cluster verdicts and suggestions, and three new map-icon labels) on top of the 2026-08-21 #4165 pass, PR #4209 (769 keys, 29 post-review rewrites). |
 | Normalisation done | none needed. |
 
 ## Glossary
@@ -31,6 +31,8 @@
 | "unlocks after …" | … 잠금 해제됩니다. | full verb ending, not a bare 잠금 해제 |
 | Upgrade draft (#4277) | 업그레이드 초안 | new in #4299 |
 | Waystone (map icon type) | 이정표 돌 | coined in #4299 — no in-repo source |
+| Spell Tuning (#4113/#4320) | 주문 수치 조정 | coined this pass — no precedent in any locale |
+| Build (WoW client build) | 빌드 | coined this pass |
 
 ## Locale-specific conventions
 
@@ -60,3 +62,4 @@
   *야드*, matching the locale's UI strings. Now rule 11 in the skill. Declined: the reviewer's claim
   of an official Blizzard name for `Waystone`, cited to a hotfix URL that cannot be checked from
   here and supported by no in-repo source — *이정표 돌* stays a coined rendering.
+- 2026-08-25 #4320 — 32-key catch-up for the spell tuning Compendium (#4113/#4313), found by the v15.20.0 release pre-flight. *주문 수치 조정* coined for Spell Tuning, *빌드* for build. `:from 대비` used instead of a 와/과 particle, which cannot be chosen correctly after a build number like 12.1.0.69382. Codex review: 3 findings, all applied — the locative *NPC 주문에서 바꾼 내용* and *집계* (tally) for the source's eligibility sense of *count*.

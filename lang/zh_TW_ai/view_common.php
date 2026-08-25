@@ -304,6 +304,7 @@ return [
             'npc_compendium'          => '',
             'spell_compendium'        => '',
             'compendium_activity'     => '',
+            'compendium_tuning'       => '',
             'class_compendium'        => '',
         ],
         'nav' => [

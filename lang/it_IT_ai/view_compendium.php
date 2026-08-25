@@ -44,6 +44,12 @@ return [
                 'cta'         => 'Visualizza attività',
                 'subtitle'    => 'Aggiornato ogni giorno',
             ],
+            'tuning' => [
+                'title'        => 'Bilanciamento degli incantesimi',
+                'description'  => 'Le modifiche apportate da ogni patch di gioco agli incantesimi degli NPC: aumenti e riduzioni dei danni, durate e tempi di recupero, espressi con i valori che i giocatori vedono davvero.',
+                'cta'          => 'Visualizza le modifiche di bilanciamento',
+                'count_suffix' => 'build a confronto',
+            ],
             'class' => [
                 'title'        => 'Per classe',
                 'description'  => 'Scopri quali dei tuoi incantesimi di controllo della folla funzionano su quali NPC, raggruppati per classe.',
@@ -178,6 +184,11 @@ return [
                 'title' => 'Attività recente',
                 'empty' => 'Nessuna attività registrata ancora.',
             ],
+            'tuning_changes' => [
+                'title'        => 'Modifiche di bilanciamento',
+                'empty'        => 'Nessuna modifica di bilanciamento registrata per questo incantesimo.',
+                'build_header' => 'Build :to (confrontata con :from)',
+            ],
         ],
     ],
     'activity' => [
@@ -190,6 +201,40 @@ return [
             'title'  => ':date - Attività del compendio',
             'header' => 'Attività del compendio per :date',
             'empty'  => 'Nessuna attività registrata per questo giorno.',
+        ],
+    ],
+    'sections' => [
+        // Shared primitive rendering a list of spell tuning changes (compendium/sections/tuning_change_list)
+        'tuning_change_list' => [
+            'kinds' => [
+                'damage'   => 'Danno',
+                'healing'  => 'Cura',
+                'duration' => 'Durata',
+                'period'   => 'Intervallo',
+                'radius'   => 'Raggio',
+                'count'    => 'Quantità',
+                'value'    => 'Valore',
+            ],
+            'coefficient'    => '(coefficiente)',
+            'rewritten'      => 'Descrizione riscritta',
+            'added'          => 'Descrizione aggiunta',
+            'no_description' => '(nessuna descrizione)',
+            'changed_to'     => 'diventa',
+            'shared_by'      => 'Record di incantesimi con questa modifica: :count',
+        ],
+    ],
+    'tuning' => [
+        'index' => [
+            'title'             => 'Bilanciamento degli incantesimi - Compendio',
+            'header'            => 'Bilanciamento degli incantesimi',
+            'header_dungeon'    => 'Bilanciamento degli incantesimi - :dungeon',
+            'intro'             => 'Le modifiche apportate da ogni patch di gioco agli incantesimi degli NPC, espresse con i valori che i giocatori vedono davvero. Sono elencate solo le variazioni numeriche: una descrizione riformulata senza variazioni non compare.',
+            'empty'             => 'Nessuna modifica di bilanciamento è stata ancora registrata.',
+            'all_dungeons'      => 'Tutti i dungeon',
+            'show_all_dungeons' => 'Mostra tutti i dungeon',
+            'build_title'       => 'Build :build',
+            'build_subtitle'    => 'confrontata con :from',
+            'changed_spells'    => 'Incantesimi modificati: :count|Incantesimi modificati: :count',
         ],
     ],
     'class' => [
