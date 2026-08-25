@@ -74,12 +74,17 @@ class CombatLogRouteDungeonRouteServiceLogging extends StructuredLogging impleme
         $this->warning(__METHOD__, get_defined_vars());
     }
 
-    public function replaceExistingDungeonRouteRunAlreadyMoved(string $publicKey, int $oldDungeonRouteId, int $challengeModeRunId, int $discardedDungeonRouteId): void
+    public function convertCombatLogRouteToDungeonRouteDiscardingAbandonedDraft(int $dungeonRouteId, int $draftDungeonRouteId): void
     {
         $this->warning(__METHOD__, get_defined_vars());
     }
 
-    public function replaceExistingDungeonRouteReplaced(string $publicKey, int $oldDungeonRouteId, int $newDungeonRouteId, int $challengeModeRunId): void
+    public function applyRegeneratedDungeonRouteDraftTakenOver(string $publicKey, int $dungeonRouteId, int $draftDungeonRouteId): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
+    public function applyRegeneratedDungeonRouteApplied(string $publicKey, int $dungeonRouteId, int $draftDungeonRouteId): void
     {
         $this->info(__METHOD__, get_defined_vars());
     }

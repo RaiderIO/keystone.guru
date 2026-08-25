@@ -67,6 +67,8 @@ use App\Service\CombatLog\ResultEvents\EnemyKilled as EnemyKilledResultEvent;
 use App\Service\CombatLog\ResultEvents\PlayerDied as PlayerDiedResultEvent;
 use App\Service\CombatLog\ResultEvents\SpellCast as SpellCastResultEvent;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\DungeonRoute\DungeonRouteUpgradeDraftServiceInterface;
+use App\Service\DungeonRoute\Exceptions\UpgradeDraftGoneException;
 use App\Service\DungeonRoute\MapDrawingServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceStub;
@@ -75,6 +77,7 @@ use App\Service\Season\SeasonServiceStub;
 use Auth;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
@@ -121,6 +124,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         protected readonly SpellRepositorySwooleInterface                    $spellRepositorySwoole,
         protected readonly FloorRepositorySwooleInterface                    $floorRepositorySwoole,
         protected readonly DungeonRepositorySwooleInterface                  $dungeonRepositorySwoole,
+        protected readonly DungeonRouteUpgradeDraftServiceInterface          $dungeonRouteUpgradeDraftService,
         protected readonly CombatLogRouteDungeonRouteServiceLoggingInterface $log,
     ) {
     }
@@ -132,14 +136,24 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
      */
     public function convertCombatLogRouteToDungeonRoute(CombatLogRouteRequestDto $combatLogRoute): DungeonRoute
     {
-        // Regeneration (settings->publicKey set) replaces an existing combat log route. That route - and the
-        // ChallengeModeRun that makes it one - stays untouched until the replacement is completely built, so a
+        // Regeneration (settings->publicKey set) replaces the contents of an existing combat log route. That route -
+        // and the ChallengeModeRun that makes it one - stays untouched until the replacement is completely built, so a
         // failure anywhere below leaves it exactly as it was and the regeneration can simply be retried (#4194).
         // findCombatLogRouteByPublicKey() only matches routes that have a run, which is the guard that stops the
         // API from overwriting arbitrary routes by public key.
-        $existingDungeonRoute     = $this->dungeonRouteRepository->findCombatLogRouteByPublicKey($combatLogRoute->settings->publicKey);
-        $existingChallengeModeRun = $existingDungeonRoute === null ? null :
-            ChallengeModeRun::where('dungeon_route_id', $existingDungeonRoute->id)->first();
+        $existingDungeonRoute = $this->dungeonRouteRepository->findCombatLogRouteByPublicKey($combatLogRoute->settings->publicKey);
+
+        if ($existingDungeonRoute !== null) {
+            // Only one draft may exist per route (dungeon_routes_upgrade_of_unique), and a regeneration takes over
+            // whatever it finds: a draft here is all but certainly the wreckage of an earlier ARC run that died
+            // between creating it and applying it, and blocking every future regeneration on it would be worse than
+            // discarding it (#4297).
+            $abandonedDraft = $existingDungeonRoute->upgradeDraft()->first();
+            if ($abandonedDraft !== null) {
+                $this->log->convertCombatLogRouteToDungeonRouteDiscardingAbandonedDraft($existingDungeonRoute->id, $abandonedDraft->id);
+                $abandonedDraft->delete();
+            }
+        }
 
         $builder = new CombatLogRouteDungeonRouteBuilder(
             $this->seasonService,
@@ -160,6 +174,14 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         );
 
         try {
+            if ($existingDungeonRoute !== null) {
+                // The route the builder just created IS the draft - it holds exactly the content the fresh combat log
+                // produced, which is what apply() then writes onto the original. The DungeonRoute::saving hook flips
+                // it to UNPUBLISHED on this write, which is what a draft should be: it must never be reachable in its
+                // own right, the original keeps serving its public key throughout.
+                $this->markAsUpgradeDraft($builder->getDungeonRoute(), $existingDungeonRoute);
+            }
+
             $dungeonRoute = $builder->build();
 
             $this->saveCombatLogRouteEnemyFailures($dungeonRoute->mappingVersion, $combatLogRoute, $dungeonRoute);
@@ -180,61 +202,92 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             throw $throwable;
         }
 
-        // Only now that the new route is complete does it take over the run (and the public key) of the old one
-        if ($existingDungeonRoute === null || $existingChallengeModeRun === null) {
+        // Only now that the draft is complete does its content replace the original's
+        if ($existingDungeonRoute === null) {
             $this->saveChallengeModeRun($combatLogRoute, $dungeonRoute);
-        } else {
-            $this->replaceExistingDungeonRoute($existingDungeonRoute, $existingChallengeModeRun, $dungeonRoute);
+
+            return $dungeonRoute;
         }
 
-        return $dungeonRoute;
+        return $this->applyRegeneratedDungeonRoute($existingDungeonRoute, $dungeonRoute);
     }
 
     /**
-     * Moves the old route's run onto the fully built new route (its run data and post_body ride along), then deletes
-     * the old route and hands its public key to the new one.
+     * Marks the freshly created, still empty route as the upgrade draft of the route being regenerated, so that the
+     * combat log's output lands in a draft rather than in a second standalone route. Apply then writes that content
+     * onto the original, which keeps its id - and with it every inbound reference and every relation the old
+     * "build a new row and hand it the public key" replacement used to throw away (#4297).
      *
-     * The move is a conditional update and doubles as the arbiter between two regenerations of the same route that
-     * overlap (both captured the same old route and run before building): only the one that finds the run still on
-     * the old route wins. The loser removes its own replacement and throws - without this it would re-point the run
-     * a second time and leave the winner's replacement without one.
+     * dungeon_routes_upgrade_of_unique is what makes this the arbiter between two regenerations of the same route
+     * that overlap: the second one to get here finds the index taken and loses, rather than both of them building
+     * into the same draft. The caller's catch removes the half-built route this one had already created.
+     *
+     * A regeneration that starts *later* still takes this draft over mid-build (see the discard in
+     * convertCombatLogRouteToDungeonRoute()). This one then fails somewhere in the builder - most likely on
+     * DungeonRouteBuilder::buildFinished()'s find()->update() against the deleted row - rather than with a tidy
+     * exception, but the outcome is the same either way: the caller's catch cleans up after it and rethrows, and
+     * the original is never touched by the loser.
      *
      * @throws CombatLogRouteRegeneratedConcurrentlyException
      */
-    private function replaceExistingDungeonRoute(
-        DungeonRoute     $existingDungeonRoute,
-        ChallengeModeRun $existingChallengeModeRun,
-        DungeonRoute     $dungeonRoute,
-    ): void {
-        $moved = ChallengeModeRun::where('id', $existingChallengeModeRun->id)
-            ->where('dungeon_route_id', $existingDungeonRoute->id)
-            ->update(['dungeon_route_id' => $dungeonRoute->id]);
-
-        if ($moved === 0) {
-            $this->log->replaceExistingDungeonRouteRunAlreadyMoved(
-                $existingDungeonRoute->public_key,
-                $existingDungeonRoute->id,
-                $existingChallengeModeRun->id,
-                $dungeonRoute->id,
+    private function markAsUpgradeDraft(DungeonRoute $draft, DungeonRoute $existingDungeonRoute): void
+    {
+        try {
+            $draft->update(['upgrade_of_dungeon_route_id' => $existingDungeonRoute->id]);
+        } catch (UniqueConstraintViolationException) {
+            throw new CombatLogRouteRegeneratedConcurrentlyException(
+                sprintf(
+                    'Route %s is already being regenerated concurrently; discarded this regeneration',
+                    $existingDungeonRoute->public_key,
+                ),
             );
-            // The new route holds no run, so this cascades into nothing that matters
-            $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * Writes the completed draft's content onto the route being regenerated and deletes the draft, via the same
+     * draft-and-apply path a manual mapping version upgrade uses.
+     *
+     * The publish invariant is deliberately not enforced here: an ARC route is published by construction, and a
+     * combat log that misses a required enemy is a routine outcome rather than a reason to fail the whole
+     * regeneration - the pre-#4297 replacement had no such check either.
+     *
+     * @throws CombatLogRouteRegeneratedConcurrentlyException
+     * @throws Throwable
+     */
+    private function applyRegeneratedDungeonRoute(DungeonRoute $existingDungeonRoute, DungeonRoute $draft): DungeonRoute
+    {
+        $draftId = $draft->id;
+
+        try {
+            $dungeonRoute = $this->dungeonRouteUpgradeDraftService->apply($draft, enforcePublishInvariant: false);
+        } catch (UpgradeDraftGoneException) {
+            // Another regeneration of the same route took this draft over while this one was still building. Its
+            // row is already gone, but delete() still fires DungeonRoute::deleting, which cleans up the kill zones
+            // and map icons this build wrote against that id.
+            $this->log->applyRegeneratedDungeonRouteDraftTakenOver($existingDungeonRoute->public_key, $existingDungeonRoute->id, $draftId);
+            $draft->delete();
 
             throw new CombatLogRouteRegeneratedConcurrentlyException(
                 sprintf('Route %s was regenerated concurrently; discarded this regeneration', $existingDungeonRoute->public_key),
             );
         }
 
-        // Its run was just re-pointed to the new route, so DungeonRoute::deleting finds no run to cascade into
-        $existingDungeonRoute->delete();
-        $dungeonRoute->update(['public_key' => $existingDungeonRoute->public_key]);
+        // Enemy failures live on the combatlog connection and are not part of the content apply() moves, so they are
+        // re-pointed by hand. Without this they would stay on the deleted draft's id and the original would keep
+        // accumulating the failures of every previous generation - which the old path got away with only because it
+        // deleted the whole route each time.
+        CombatLogRouteEnemyFailure::query()->where('dungeon_route_id', $dungeonRoute->id)->delete();
+        CombatLogRouteEnemyFailure::query()->where('dungeon_route_id', $draftId)->update(['dungeon_route_id' => $dungeonRoute->id]);
 
-        $this->log->replaceExistingDungeonRouteReplaced(
-            $existingDungeonRoute->public_key,
-            $existingDungeonRoute->id,
-            $dungeonRoute->id,
-            $existingChallengeModeRun->id,
-        );
+        // settings->temporary applies to the route that comes out of this regeneration, exactly as it did when that
+        // route was a brand new row. apply() preserves the original's own expiry, so it is assigned here instead.
+        DungeonRoute::query()->whereKey($dungeonRoute->id)->update(['expires_at' => $draft->expires_at]);
+        $dungeonRoute->expires_at = $draft->expires_at;
+
+        $this->log->applyRegeneratedDungeonRouteApplied($dungeonRoute->public_key, $dungeonRoute->id, $draftId);
+
+        return $dungeonRoute;
     }
 
     /**
@@ -586,9 +639,10 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     }
 
     /**
-     * Inserts a fresh run for a route that does not replace an existing one. A regeneration keeps the old route's run
-     * instead (replaceExistingDungeonRoute()) - it is deliberately no longer looked up here by metadata->runId, which
-     * is a client-supplied string shared by hundreds of routes and re-pointed some *other* route's run (#4194).
+     * Inserts a fresh run for a route that does not replace an existing one. A regeneration needs nothing here at
+     * all: it preserves the original's id, so the original's run still points at it. The run is deliberately no
+     * longer looked up by metadata->runId either, which is a client-supplied string shared by hundreds of routes
+     * and re-pointed some *other* route's run (#4194).
      */
     private function saveChallengeModeRun(CombatLogRouteRequestDto $combatLogRoute, DungeonRoute $dungeonRoute): void
     {

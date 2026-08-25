@@ -34,6 +34,11 @@ class DungeonRouteUpgradeDraftServiceLogging extends StructuredLogging implement
         $this->start(__METHOD__, get_defined_vars());
     }
 
+    public function applyPublishInvariantBypassed(int $draftDungeonRouteId, int $originalDungeonRouteId): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
     public function applyEnd(int $originalDungeonRouteId): void
     {
         $this->end(__METHOD__, get_defined_vars());

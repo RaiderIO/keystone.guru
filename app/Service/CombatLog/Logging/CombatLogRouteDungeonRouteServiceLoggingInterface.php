@@ -30,7 +30,9 @@ interface CombatLogRouteDungeonRouteServiceLoggingInterface
 
     public function convertCombatLogRouteToDungeonRouteBuildFailedDeletingNewRoute(int $dungeonRouteId, string $exception): void;
 
-    public function replaceExistingDungeonRouteRunAlreadyMoved(string $publicKey, int $oldDungeonRouteId, int $challengeModeRunId, int $discardedDungeonRouteId): void;
+    public function convertCombatLogRouteToDungeonRouteDiscardingAbandonedDraft(int $dungeonRouteId, int $draftDungeonRouteId): void;
 
-    public function replaceExistingDungeonRouteReplaced(string $publicKey, int $oldDungeonRouteId, int $newDungeonRouteId, int $challengeModeRunId): void;
+    public function applyRegeneratedDungeonRouteDraftTakenOver(string $publicKey, int $dungeonRouteId, int $draftDungeonRouteId): void;
+
+    public function applyRegeneratedDungeonRouteApplied(string $publicKey, int $dungeonRouteId, int $draftDungeonRouteId): void;
 }
