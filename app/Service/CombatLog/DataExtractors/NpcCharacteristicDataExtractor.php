@@ -163,7 +163,11 @@ class NpcCharacteristicDataExtractor implements DataExtractorInterface
                 'combat_log_path'   => $this->currentCombatLogFilePath ?? '',
                 'created_at'        => $now,
                 'updated_at'        => $now,
-            ])->all();
+            ])
+                // Deterministic lock order across concurrently upserting jobs avoids MySQL deadlocks (#4086)
+                ->sortBy(fn(array $row) => [$row['npc_id'], $row['characteristic_id'], $row['observed_on']])
+                ->values()
+                ->all();
 
             CombatLogNpcCharacteristicObservation::upsert(
                 $rows,

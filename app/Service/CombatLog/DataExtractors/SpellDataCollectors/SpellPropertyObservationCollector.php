@@ -89,7 +89,11 @@ class SpellPropertyObservationCollector implements SpellDataCollectorInterface
                 'combat_log_path' => $this->currentCombatLogFilePath ?? '',
                 'created_at'      => $now,
                 'updated_at'      => $now,
-            ])->all();
+            ])
+                // Deterministic lock order across concurrently upserting jobs avoids MySQL deadlocks (#4086)
+                ->sortBy(fn(array $row) => [$row['spell_id'], $row['property'], $row['observed_on']])
+                ->values()
+                ->all();
 
             CombatLogSpellPropertyObservation::upsert(
                 $rows,
