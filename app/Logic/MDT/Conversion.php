@@ -514,11 +514,18 @@ class Conversion
         // For each season this is different
         $affixGroup = null;
         if ($season->affixGroups->count() !== 0) {
+            // Week 0 is a legitimate MDT week - seasons.start_affix_group_index is documented as the
+            // 0-based offset that week 0 resolves to, and convertAffixGroupToWeek() emits 0 for one
+            // affix group per rotation. The non-TWW_S1 offset of -1 therefore makes the raw index
+            // negative for any season starting at index 0, which Collection::get() cannot resolve,
+            // so wrap it back into range instead of falling through to the error branch below.
             if ($season->id === Season::SEASON_TWW_S1) {
-                $affixGroup = $season->affixGroups->get(($season->start_affix_group_index + $mdtWeek) % $season->affixGroups->count());
+                $rawIndex = $season->start_affix_group_index + $mdtWeek;
             } else {
-                $affixGroup = $season->affixGroups->get(($season->start_affix_group_index + ($mdtWeek - 1)) % $season->affixGroups->count());
+                $rawIndex = $season->start_affix_group_index + ($mdtWeek - 1);
             }
+
+            $affixGroup = $season->affixGroups->get(self::wrapAffixGroupIndex($rawIndex, $season->affixGroups->count()));
         }
 
         // $affixGroup = $season->affixgroups->get(($season->start_affix_group_index - ($mdtWeek - 1)));
@@ -579,5 +586,16 @@ class Conversion
         }
 
         return self::convertMDTMapPOIToMapIconTypeKey($mdtMapPOI) === null;
+    }
+
+    /**
+     * Wraps an affix rotation index into [0, $count), including negative indices.
+     *
+     * PHP's % keeps the sign of the dividend, so a negative index stays negative and misses the
+     * 0-indexed affix group collection entirely - see {@see Conversion::convertWeekToAffixGroup()}.
+     */
+    private static function wrapAffixGroupIndex(int $index, int $count): int
+    {
+        return (($index % $count) + $count) % $count;
     }
 }
