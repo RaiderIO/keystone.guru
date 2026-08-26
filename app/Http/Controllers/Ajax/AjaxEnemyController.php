@@ -184,6 +184,22 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
         MappingVersion $mappingVersion,
         Enemy          $enemy,
     ): Response {
+        // route:cache serializes this method; a body whose only $this usage sits inside a
+        // nested closure is reconstructed unbound. Delegating keeps a top-level $this read
+        // here, and the closures below compile normally inside a regular method (#4329).
+        return $this->deleteEnemy($request, $mappingVersion, $enemy);
+    }
+
+    /**
+     * @return Response
+     *
+     * @throws Throwable
+     */
+    private function deleteEnemy(
+        Request        $request,
+        MappingVersion $mappingVersion,
+        Enemy          $enemy,
+    ): Response {
         return DB::transaction(function () use ($enemy) {
             try {
                 if ($enemy->delete()) {

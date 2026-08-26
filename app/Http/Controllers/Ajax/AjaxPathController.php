@@ -140,11 +140,24 @@ class AjaxPathController extends Controller
     }
 
     /**
-     * @return array<string, mixed>|ResponseFactory|Response
+     * @return ResponseFactory|Response
      *
      * @throws AuthorizationException
      */
-    public function delete(Request $request, DungeonRoute $dungeonRoute, Path $path): array|ResponseFactory|Response
+    public function delete(Request $request, DungeonRoute $dungeonRoute, Path $path): ResponseFactory|Response
+    {
+        // route:cache serializes this method; a body whose only $this usage sits inside a
+        // nested closure is reconstructed unbound. Delegating keeps a top-level $this read
+        // here, and the closures below compile normally inside a regular method (#4329).
+        return $this->deletePath($request, $dungeonRoute, $path);
+    }
+
+    /**
+     * @return ResponseFactory|Response
+     *
+     * @throws AuthorizationException
+     */
+    private function deletePath(Request $request, DungeonRoute $dungeonRoute, Path $path): ResponseFactory|Response
     {
         $dungeonRoute = $path->dungeonRoute;
 

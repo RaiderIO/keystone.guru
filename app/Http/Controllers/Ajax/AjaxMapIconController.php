@@ -161,6 +161,19 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
      */
     public function delete(Request $request, ?DungeonRoute $dungeonRoute, MapIcon $mapIcon): array|ResponseFactory|Response
     {
+        // route:cache serializes this method; a body whose only $this usage sits inside a
+        // nested closure is reconstructed unbound. Delegating keeps a top-level $this read
+        // here, and the closures below compile normally inside a regular method (#4329).
+        return $this->deleteMapIcon($request, $dungeonRoute, $mapIcon);
+    }
+
+    /**
+     * @return array<string, mixed>|ResponseFactory|Response
+     *
+     * @throws Exception
+     */
+    private function deleteMapIcon(Request $request, ?DungeonRoute $dungeonRoute, MapIcon $mapIcon): array|ResponseFactory|Response
+    {
         $dungeonRoute = $mapIcon->dungeonRoute;
 
         // Anything not attached to a dungeon route is part of the mapping - admin only

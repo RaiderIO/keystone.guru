@@ -42,6 +42,18 @@ class AjaxEnemyPackController extends AjaxMappingModelBaseController
      */
     public function delete(Request $request, MappingVersion $mappingVersion, EnemyPack $enemyPack): Response
     {
+        // route:cache serializes this method; a body whose only $this usage sits inside a
+        // nested closure is reconstructed unbound. Delegating keeps a top-level $this read
+        // here, and the closures below compile normally inside a regular method (#4329).
+        return $this->deleteEnemyPack($request, $mappingVersion, $enemyPack);
+    }
+
+    /**
+     * @throws Exception
+     * @throws Throwable
+     */
+    private function deleteEnemyPack(Request $request, MappingVersion $mappingVersion, EnemyPack $enemyPack): Response
+    {
         return DB::transaction(function () use ($enemyPack) {
             if ($enemyPack->delete()) {
                 // Trigger mapping changed event so the mapping gets saved across all environments
