@@ -212,6 +212,12 @@ gh pr create --repo RaiderIO/keystone.guru --base master --head <issue>-<slug> \
 <summary of what changed and why>"
 ```
 
+**`sh/worktree.sh push` takes no branch argument** — it reads the branch from `HEAD` and passes any
+extra arguments straight through to `git push`. So `sh/worktree.sh push <branch>` becomes
+`git push -u origin <branch> <branch>`, which fails with
+`error: dst ref refs/heads/<branch> receives from more than one src`. Run it bare, from inside the
+worktree. (The trailing `"$@"` is for real `git push` flags, e.g. `--force-with-lease`.)
+
 **The `--title` MUST start with `#<issue> ` — this is not optional and easy to drop by accident.**
 Every open PR here follows this format (`#3866 Drop a team's tags when...`, `#3674 Cover
 StateManager's...`); a title missing it (seen in the wild: `AjaxProfileController 500s for guests:
