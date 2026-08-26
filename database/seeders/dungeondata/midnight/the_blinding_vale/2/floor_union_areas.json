@@ -47,5 +47,12 @@
         "floor_id": 459,
         "floor_union_id": 1233,
         "vertices_json": "[{\"lat\":0,\"lng\":0},{\"lat\":-255.8,\"lng\":0},{\"lat\":-255.8,\"lng\":383.8},{\"lat\":0,\"lng\":383.8}]"
+    },
+    {
+        "id": 1264,
+        "mapping_version_id": 994,
+        "floor_id": 459,
+        "floor_union_id": 1269,
+        "vertices_json": "[{\"lat\":0,\"lng\":0},{\"lat\":-255.8,\"lng\":0},{\"lat\":-255.8,\"lng\":383.8},{\"lat\":0,\"lng\":383.8}]"
     }
 ]
