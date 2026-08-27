@@ -4,6 +4,11 @@ name: JavaScript Tests
 # same tests and build as MRs against master.
 # The push trigger seeds the branch-scoped npm cache from master; without it every new PR's
 # first run is fully cold (#3612).
+#
+# Tests and the production build run as one job (#4343): they were two jobs that each paid their
+# own checkout + `npm ci` (~1.8 billable min of pure duplication per push, ~1,300 times per
+# billing period). The `build` status context disappeared with the merge — it was never a
+# required context; `js-tests` is, and keeps its name.
 on:
   pull_request:
   push:
@@ -12,6 +17,13 @@ on:
 
 permissions:
   contents: read
+
+# A new push obsoletes any in-flight run for the same PR: cancel it instead of paying for a
+# result nobody will read (#4343). Master-push runs seed the npm cache and are never cancelled
+# (the group still serialises them), same reasoning as phpstan.yml.
+concurrency:
+  group: js-tests-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   js-tests:
@@ -29,28 +41,12 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        env:
+          # Neither the tests nor the build ever launch a browser
+          PUPPETEER_SKIP_DOWNLOAD: 'true'
 
       - name: Run Vitest
         run: npm test
-
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Setup Node
-        uses: actions/setup-node@v7
-        with:
-          node-version: 24
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-        env:
-          # The build never launches a browser
-          PUPPETEER_SKIP_DOWNLOAD: 'true'
 
       - name: Build production assets
         run: npm run production

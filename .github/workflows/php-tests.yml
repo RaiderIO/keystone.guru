@@ -2,15 +2,43 @@ name: PHP Tests
 
 # No base-branch filter: stacked PRs (one PR targeting another open PR's branch) must run the
 # same tests as PRs against master (#4074).
+#
+# Draft PRs skip this suite (#4343): the 6-shard matrix was ~67% of the entire Actions bill, and
+# most runs landed on commit-by-commit pushes to draft PRs that nobody reviews. Agents run the
+# affected suites in their worktree's Docker stack while drafting; CI runs the full suite once
+# when the PR is marked ready for review (and on every push while it stays ready). The
+# `run full ci` label is the escape hatch for debugging a CI-only failure on a draft: adding it
+# triggers a run immediately (the `labeled` type below), and while it stays on, every push runs
+# the suite too. Skipped shards report a "skipped" conclusion, which satisfies the required
+# status contexts — safe because a draft can't be merged, and the ready_for_review run replaces
+# them with real results before any merge is possible.
 on:
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, labeled]
 
 permissions:
   contents: read
 
+# A new push obsoletes any in-flight run for the same PR: cancel it instead of paying for a
+# result nobody will read (#4343).
+concurrency:
+  group: php-tests-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   php-tests:
     runs-on: ubuntu-latest
+
+    # See the trigger comment at the top: run for non-draft PRs, on the ready_for_review flip,
+    # or when a draft carries/receives the `run full ci` label. The `labeled` clause matches only
+    # that label, so unrelated labels (`pr cold reviewed`, `pr can merge`, ...) don't burn a
+    # redundant full-suite run.
+    if: >-
+      github.event.action == 'ready_for_review' ||
+      (github.event.action == 'labeled' && github.event.label.name == 'run full ci') ||
+      (contains(fromJSON('["opened", "reopened", "synchronize"]'), github.event.action) &&
+        (github.event.pull_request.draft == false ||
+         contains(github.event.pull_request.labels.*.name, 'run full ci')))
 
     # The suite is split into shards that run concurrently on separate runners, each with its own
     # MySQL, so wall-clock time is the slowest shard instead of the sum:

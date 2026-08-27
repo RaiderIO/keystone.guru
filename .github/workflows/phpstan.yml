@@ -3,8 +3,13 @@ name: PHPStan
 # No base-branch filter on pull_request: stacked PRs (one PR targeting another open PR's branch)
 # must run the same analysis as PRs against master (#4074).
 # The push trigger seeds branch-scoped caches from master (composer + Lua ext + cargo via
-# php-ci-setup — the same keys the php-tests shards restore); without it every new PR's first
-# run is fully cold (#3612).
+# php-ci-setup — the same keys the php-tests shards restore, plus the PHPStan result cache
+# below); without it every new PR's first run is fully cold (#3612).
+#
+# This job also runs php-cs-fixer (#4343): its former standalone workflow spent ~2 minutes per
+# push on setup that this job already performs (full composer install via php-ci-setup), so the
+# dry-run is a free extra step here. The `php-cs-fixer` status context disappeared with that
+# workflow — it was never a required context; `phpstan` is, and keeps its name.
 on:
   pull_request:
   push:
@@ -13,6 +18,14 @@ on:
 
 permissions:
   contents: read
+
+# A new push obsoletes any in-flight run for the same PR: cancel it instead of paying for a
+# result nobody will read (#4343). Master-push runs exist to seed caches, and cancelling one
+# mid-run would write no cache at all (same reasoning as ci-db-warm.yml), so those are never
+# cancelled — the group still serialises them, which is enough during a merge burst.
+concurrency:
+  group: phpstan-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   phpstan:
@@ -29,6 +42,21 @@ jobs:
         uses: ./.github/actions/php-ci-setup
         with:
           run-migrations: 'false'
+
+      # Fast fail-first: style violations are cheaper to detect than type errors.
+      - name: Run PHP CS Fixer (dry run)
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff
+
+      # PHPStan's result cache (tmpDir in phpstan.neon) turns a full analysis into an incremental
+      # one — PHPStan itself invalidates entries when files, config, or dependencies change, so a
+      # stale restore is safe. The save key is unique per run so every run persists its freshest
+      # state; PRs restore the newest master-scoped entry via the prefix restore-key (#4343).
+      - name: Restore PHPStan result cache
+        uses: actions/cache@v6
+        with:
+          path: tmp/phpstan
+          key: phpstan-result-${{ github.run_id }}
+          restore-keys: phpstan-result-
 
       - name: Run PHPStan
         run: vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=1G
