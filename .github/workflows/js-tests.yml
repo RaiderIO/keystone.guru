@@ -20,7 +20,7 @@ permissions:
 
 # A new push obsoletes any in-flight run for the same PR: cancel it instead of paying for a
 # result nobody will read (#4343). Master-push runs seed the npm cache and are never cancelled
-# (the group still serialises them), same reasoning as phpstan.yml.
+# (the group still serialises them), same reasoning as php-lint.yml.
 concurrency:
   group: js-tests-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}

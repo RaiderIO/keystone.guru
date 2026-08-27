@@ -1,15 +1,18 @@
-name: PHPStan
+name: PHP Lint
 
+# Runs both PHP linters — PHPStan and php-cs-fixer — in one job (#4343): php-cs-fixer's former
+# standalone workflow spent ~2 minutes per push on setup this job already performs (full
+# composer install via php-ci-setup), so the dry-run is a free extra step here. The
+# `php-cs-fixer` status context disappeared with that workflow (it was never required by branch
+# protection); the former `phpstan` workflow/job is renamed `php-lint` because the old name
+# stopped being truthful — the required status context in branch protection must be swapped
+# from `phpstan` to `php-lint` when this lands (admin-only, see PR #4344).
+#
 # No base-branch filter on pull_request: stacked PRs (one PR targeting another open PR's branch)
 # must run the same analysis as PRs against master (#4074).
 # The push trigger seeds branch-scoped caches from master (composer + Lua ext + cargo via
 # php-ci-setup — the same keys the php-tests shards restore, plus the PHPStan result cache
 # below); without it every new PR's first run is fully cold (#3612).
-#
-# This job also runs php-cs-fixer (#4343): its former standalone workflow spent ~2 minutes per
-# push on setup that this job already performs (full composer install via php-ci-setup), so the
-# dry-run is a free extra step here. The `php-cs-fixer` status context disappeared with that
-# workflow — it was never a required context; `phpstan` is, and keeps its name.
 on:
   pull_request:
   push:
@@ -24,11 +27,11 @@ permissions:
 # mid-run would write no cache at all (same reasoning as ci-db-warm.yml), so those are never
 # cancelled — the group still serialises them, which is enough during a merge burst.
 concurrency:
-  group: phpstan-${{ github.event.pull_request.number || github.ref }}
+  group: php-lint-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  phpstan:
+  php-lint:
     runs-on: ubuntu-latest
 
     steps:

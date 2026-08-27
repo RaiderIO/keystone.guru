@@ -322,8 +322,8 @@ but the checklist is **tiered by change size** so small MRs don't pay full cerem
 3. **Green CI**: wait for the MR's checks and fix any failure yourself — including flaky or
    seemingly unrelated failures (root-cause them; don't re-run and hope, and don't defer to a
    follow-up issue). **The full php-tests suite does not run on draft PRs** (#4343 — it was two
-   thirds of the Actions bill): while drafting, only the fast checks (phpstan + cs-fixer,
-   js-tests) run on CI, so run the test groups your change affects in the worktree's own `app`
+   thirds of the Actions bill): while drafting, only the fast checks (php-lint = phpstan +
+   cs-fixer, js-tests) run on CI, so run the test groups your change affects in the worktree's own `app`
    container before undrafting — that's your suite signal, and it's free. The suite runs on CI
    automatically when the PR is marked ready (and on every push while it stays ready). To debug a
    CI-only failure on a draft, add the `run full ci` label — it triggers the suite immediately
