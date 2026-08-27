@@ -36,12 +36,19 @@ Do **not** extend `TestCase` directly for feature tests — use one of the `Test
 ## The test database — READ THIS
 
 The test DB is a **real MySQL connection** (`phpunit`), and it is **persistent and pre-seeded**.
-There is **no `RefreshDatabase` / no transactions** wrapping tests. In the main checkout (and
-`--shared-db` worktrees) it is the shared dev schema; in a default **isolated worktree** it is the
-worktree's private schema — same seeded contents, and if it ever gets poisoned you can rebuild it
-wholesale there (`sh/worktree.sh provision-db`, or `migrate:fresh` + reseed — isolated worktrees
-only!). The cleanup discipline below applies **everywhere** regardless: leaked rows break *later
-tests in the same schema*, isolated or not. Two consequences:
+There is **no `RefreshDatabase` / no transactions** wrapping tests. In the main checkout it is
+whatever `DB_PHPUNIT_DATABASE` points at — since #4346 a dedicated seeded schema provisioned by
+`sh/provision-phpunit-db.sh` (before that it was the live shared dev schema, which let a test's
+`LOCK TABLES` wait forever behind Horizon/cron transactions and hang the whole suite, #4345).
+The `combatlog` connection is likewise redirected during tests when
+`DB_PHPUNIT_COMBATLOG_DATABASE` is set (`Tests\TestCase::setUp()` swaps in the
+`combatlog_phpunit` connection's database); when it is unset, tests hit the **live** combatlog
+schema, whose combat-log-derived rows are unrecoverable — be careful there. In `--shared-db`
+worktrees the phpunit schema is the shared dev schema; in a default **isolated worktree** it is
+the worktree's private schema — same seeded contents, and if it ever gets poisoned you can
+rebuild it wholesale there (`sh/worktree.sh provision-db`, or `migrate:fresh` + reseed —
+isolated worktrees only!). The cleanup discipline below applies **everywhere** regardless:
+leaked rows break *later tests in the same schema*, isolated or not. Two consequences:
 
 1. **Seeded data already exists** and you should rely on it: dungeons + their mapping versions,
    game versions, seasons, and **user id=1 is the admin** (has `Role::ROLE_ADMIN`, seeded by
