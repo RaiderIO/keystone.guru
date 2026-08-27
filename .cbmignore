@@ -11,3 +11,6 @@ docker-compose/
 !resources/assets/
 !database/migrations/
 !scripts/
+
+# Build scripts are real source (.mjs), not build output.
+!scripts/build/
