@@ -1,0 +1,45 @@
+# Fails if agent tooling is tracked in this repository.
+#
+# `.claude/` and the agent `sh/` scripts were moved to a separate private repo and are symlinked
+# back in locally; `.gitignore` covers the symlinks. But an ignore rule does not stop a MERGE from
+# reintroducing tracked files, so a long-lived branch that adds a new skill merges cleanly and
+# silently republishes it — there is no conflict to notice. This job is the backstop for that.
+name: No agent tooling
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: no-agent-tooling-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Check no agent tooling is tracked
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Assert no tracked agent tooling
+        run: |
+          tracked="$(git ls-files -- \
+            '.claude' \
+            'sh/worktree.sh' 'sh/codex.sh' 'sh/gh-bot.sh' \
+            'sh/gh-write-guard.sh' 'sh/gh-write-guard-test.sh' 'sh/release-watch.sh')"
+
+          if [ -n "$tracked" ]; then
+            echo "::error::Agent tooling is tracked in this repository. It belongs in the private tooling repo."
+            echo "$tracked" | sed 's/^/  /'
+            echo ""
+            echo "If a merge reintroduced these, remove them from the branch (git rm -r --cached <path>)"
+            echo "and move the content to the private repo instead."
+            exit 1
+          fi
+
+          echo "No agent tooling tracked."

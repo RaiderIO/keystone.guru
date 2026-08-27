@@ -143,5 +143,3 @@ This application uses Laravel Octane, a long-running PHP server. The application
 When working on Octane-specific features (concurrency, shared tables, memory, driver configuration, testing), invoke `octane-development` for detailed rules.
 
 </laravel-boost-guidelines>
-
-@.claude/CLAUDE.md

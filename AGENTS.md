@@ -1,9 +1,13 @@
 # Agent instructions — keystone.guru
 
 Read this before running anything. It is the environment contract for any AI agent working in this
-repository (Codex, and anything else that reads `AGENTS.md`). Claude Code additionally reads
-`CLAUDE.md` / `.claude/CLAUDE.md`, which hold the full project conventions — this file is the short
-version of the parts you cannot guess and will otherwise get wrong.
+repository (Codex, and anything else that reads `AGENTS.md`). It is the short version of the parts
+you cannot guess and will otherwise get wrong.
+
+The project's full conventions and its ~60 domain skills are **not in this repository** — they live
+in a separate private repo and are symlinked in as `.claude/` on the maintainer's machines. So
+`.claude/` is either present and authoritative, or absent entirely; check before relying on it, and
+work from this file alone when it is missing.
 
 ## Never read secrets, and assume everything you read is published
 
@@ -20,12 +24,13 @@ public, so the code is not the concern — these are:
 This is not a sandbox restriction you will bump into; nothing stops you mechanically. It is the one
 rule where being helpful and going looking is the failure.
 
-## Domain conventions live in `.claude/skills/`
+## Domain conventions live in `.claude/skills/` — when it is there
 
 `AGENTS.md` is the environment contract. The project's *domain* knowledge — how the combat-log
 pipeline is layered, what a mapping-versioned model must implement, how the seeder round-trips
-dungeon JSON — lives in `.claude/skills/<name>/SKILL.md`, roughly sixty of them. They are plain
-markdown and nothing stops you reading them.
+dungeon JSON — lives in `.claude/skills/<name>/SKILL.md`, roughly sixty of them. That directory is a
+symlink to a private repo, so it is present on the maintainer's machines and absent everywhere else;
+`[ -d .claude/skills ]` tells you which case you are in. When it is absent, skip this section.
 
 **Before writing or reviewing code in an area you have not worked in, check whether a skill covers
 it, and read it if so.** These describe conventions that are load-bearing and not inferable from the
@@ -85,7 +90,7 @@ the main checkout's.
 
 - Running the test suite is optional. A review that could not run tests is fine — say that plainly
   rather than reporting the platform error as a problem with the change.
-- Read `.claude/CLAUDE.md` before flagging a convention violation. Several project rules invert the
+- Read `.claude/CLAUDE.md` before flagging a convention violation, when it is present (see above). Several project rules invert the
   usual Laravel advice, and reviews keep re-raising them:
   - **No foreign keys in migrations.** Deliberate — they break seeding and testing. Never recommend
     `constrained()`.
