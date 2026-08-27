@@ -2,9 +2,8 @@ includes:
     - vendor/larastan/larastan/extension.neon
 
 parameters:
-    # Fixed location (default is the system temp dir) so the result cache survives between runs:
-    # locally it makes re-analysis after small edits incremental, and CI persists this dir via
-    # actions/cache in phpstan.yml (#4343). /tmp/ is gitignored.
+    # Fixed (gitignored) location so the result cache survives between runs; CI persists it via
+    # actions/cache in php-lint.yml (#4343)
     tmpDir: tmp/phpstan
 
     paths:

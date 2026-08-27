@@ -4,11 +4,7 @@ name: JavaScript Tests
 # same tests and build as MRs against master.
 # The push trigger seeds the branch-scoped npm cache from master; without it every new PR's
 # first run is fully cold (#3612).
-#
-# Tests and the production build run as one job (#4343): they were two jobs that each paid their
-# own checkout + `npm ci` (~1.8 billable min of pure duplication per push, ~1,300 times per
-# billing period). The `build` status context disappeared with the merge — it was never a
-# required context; `js-tests` is, and keeps its name.
+# Tests and the production build share one job (#4343).
 on:
   pull_request:
   push:
@@ -18,9 +14,7 @@ on:
 permissions:
   contents: read
 
-# A new push obsoletes any in-flight run for the same PR: cancel it instead of paying for a
-# result nobody will read (#4343). Master-push runs seed the npm cache and are never cancelled
-# (the group still serialises them), same reasoning as php-lint.yml.
+# Cancel superseded PR runs (#4343); master cache-seed runs are never cancelled, only serialised.
 concurrency:
   group: js-tests-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}

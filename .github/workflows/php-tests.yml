@@ -2,18 +2,9 @@ name: PHP Tests
 
 # No base-branch filter: stacked PRs (one PR targeting another open PR's branch) must run the
 # same tests as PRs against master (#4074).
-#
-# Draft PRs skip this suite (#4343): the 6-shard matrix was ~67% of the entire Actions bill, and
-# most runs landed on commit-by-commit pushes to draft PRs that nobody reviews. Agents run the
-# affected suites in their worktree's Docker stack while drafting; CI runs the full suite once
-# when the PR is marked ready for review (and on every push while it stays ready). The
-# `run full ci` label is the escape hatch for debugging a CI-only failure on a draft: adding it
-# triggers a run immediately (the `labeled` type below), and while it stays on, every push runs
-# the suite too. Skipped shards report a "skipped" conclusion, which satisfies the required
-# status contexts — safe because a draft can't be merged, and the ready_for_review run replaces
-# them with real results before any merge is possible. (Cosmetic quirk: a skipped run never
-# expands the matrix, so it reports one literal "php-tests (${{ matrix.shard }})" check instead
-# of six shard contexts — expected, don't "fix" it.)
+# Draft PRs skip this suite (#4343); it runs on ready_for_review, on pushes to non-draft PRs,
+# and on drafts carrying the `run full ci` label. A skipped run reports one unexpanded
+# "php-tests (${{ matrix.shard }})" check — expected, don't "fix" it.
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review, labeled]
@@ -21,11 +12,8 @@ on:
 permissions:
   contents: read
 
-# A new push obsoletes any in-flight run for the same PR: cancel it instead of paying for a
-# result nobody will read (#4343). Cancellation happens at run creation, before the job-level
-# `if` is evaluated — so an unrelated `labeled` event (e.g. `pr cold reviewed` landing mid-run)
-# would kill an in-flight suite without starting a replacement. Only cancel on events whose own
-# run replaces the suite: every non-labeled trigger, and `labeled` only for `run full ci`.
+# Cancel superseded runs (#4343) — but only from events that start a replacement run; an
+# unrelated `labeled` event cancels before the job-level `if` runs and must not kill the suite.
 concurrency:
   group: php-tests-${{ github.event.pull_request.number }}
   cancel-in-progress: ${{ github.event.action != 'labeled' || github.event.label.name == 'run full ci' }}
@@ -34,10 +22,7 @@ jobs:
   php-tests:
     runs-on: ubuntu-latest
 
-    # See the trigger comment at the top: run for non-draft PRs, on the ready_for_review flip,
-    # or when a draft carries/receives the `run full ci` label. The `labeled` clause matches only
-    # that label, so unrelated labels (`pr cold reviewed`, `pr can merge`, ...) don't burn a
-    # redundant full-suite run.
+    # See the trigger comment at the top (#4343); unrelated labels don't trigger a run.
     if: >-
       github.event.action == 'ready_for_review' ||
       (github.event.action == 'labeled' && github.event.label.name == 'run full ci') ||

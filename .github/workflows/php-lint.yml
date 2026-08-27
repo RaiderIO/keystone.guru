@@ -1,12 +1,7 @@
 name: PHP Lint
 
-# Runs both PHP linters — PHPStan and php-cs-fixer — in one job (#4343): php-cs-fixer's former
-# standalone workflow spent ~2 minutes per push on setup this job already performs (full
-# composer install via php-ci-setup), so the dry-run is a free extra step here. The
-# `php-cs-fixer` status context disappeared with that workflow (it was never required by branch
-# protection); the former `phpstan` workflow/job is renamed `php-lint` because the old name
-# stopped being truthful — the required status context in branch protection must be swapped
-# from `phpstan` to `php-lint` when this lands (admin-only, see PR #4344).
+# PHPStan + php-cs-fixer in one job (#4343). Renamed from `phpstan` — the required status
+# context in branch protection must follow the rename.
 #
 # No base-branch filter on pull_request: stacked PRs (one PR targeting another open PR's branch)
 # must run the same analysis as PRs against master (#4074).
@@ -22,10 +17,7 @@ on:
 permissions:
   contents: read
 
-# A new push obsoletes any in-flight run for the same PR: cancel it instead of paying for a
-# result nobody will read (#4343). Master-push runs exist to seed caches, and cancelling one
-# mid-run would write no cache at all (same reasoning as ci-db-warm.yml), so those are never
-# cancelled — the group still serialises them, which is enough during a merge burst.
+# Cancel superseded PR runs (#4343); master cache-seed runs are never cancelled, only serialised.
 concurrency:
   group: php-lint-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
@@ -46,14 +38,11 @@ jobs:
         with:
           run-migrations: 'false'
 
-      # Fast fail-first: style violations are cheaper to detect than type errors.
       - name: Run PHP CS Fixer (dry run)
         run: vendor/bin/php-cs-fixer fix --dry-run --diff
 
-      # PHPStan's result cache (tmpDir in phpstan.neon) turns a full analysis into an incremental
-      # one — PHPStan itself invalidates entries when files, config, or dependencies change, so a
-      # stale restore is safe. The save key is unique per run so every run persists its freshest
-      # state; PRs restore the newest master-scoped entry via the prefix restore-key (#4343).
+      # Persist PHPStan's result cache (tmpDir in phpstan.neon) for incremental analysis;
+      # PHPStan invalidates stale entries itself (#4343).
       - name: Restore PHPStan result cache
         uses: actions/cache@v6
         with:
