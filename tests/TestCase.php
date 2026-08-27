@@ -62,7 +62,12 @@ abstract class TestCase extends BaseTestCase
         // rebuilt (and config reset) for every test.
         $phpunitCombatlogDatabase = config('database.connections.combatlog_phpunit.database');
         if (!empty($phpunitCombatlogDatabase)) {
-            config(['database.connections.combatlog.database' => $phpunitCombatlogDatabase]);
+            // url must go too: a configured DB_URL would re-override `database` when the
+            // connection is built, silently undoing the isolation
+            config([
+                'database.connections.combatlog.database' => $phpunitCombatlogDatabase,
+                'database.connections.combatlog.url'      => null,
+            ]);
             DB::purge('combatlog');
         }
 
