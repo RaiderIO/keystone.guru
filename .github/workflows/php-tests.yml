@@ -2,15 +2,33 @@ name: PHP Tests
 
 # No base-branch filter: stacked PRs (one PR targeting another open PR's branch) must run the
 # same tests as PRs against master (#4074).
+# Draft PRs skip this suite (#4343); it runs on ready_for_review, on pushes to non-draft PRs,
+# and on drafts carrying the `run full ci` label. A skipped run reports one unexpanded
+# "php-tests (${{ matrix.shard }})" check — expected, don't "fix" it.
 on:
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, labeled]
 
 permissions:
   contents: read
 
+# Cancel superseded runs (#4343) — but only from events that start a replacement run; an
+# unrelated `labeled` event cancels before the job-level `if` runs and must not kill the suite.
+concurrency:
+  group: php-tests-${{ github.event.pull_request.number }}
+  cancel-in-progress: ${{ github.event.action != 'labeled' || github.event.label.name == 'run full ci' }}
+
 jobs:
   php-tests:
     runs-on: ubuntu-latest
+
+    # See the trigger comment at the top (#4343); unrelated labels don't trigger a run.
+    if: >-
+      github.event.action == 'ready_for_review' ||
+      (github.event.action == 'labeled' && github.event.label.name == 'run full ci') ||
+      (contains(fromJSON('["opened", "reopened", "synchronize"]'), github.event.action) &&
+        (github.event.pull_request.draft == false ||
+         contains(github.event.pull_request.labels.*.name, 'run full ci')))
 
     # The suite is split into shards that run concurrently on separate runners, each with its own
     # MySQL, so wall-clock time is the slowest shard instead of the sum:

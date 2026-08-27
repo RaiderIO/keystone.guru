@@ -48,10 +48,13 @@ into the image and read agnostically by `ksgCompiledAsset` (`app/Helpers/CustomH
   - `deploy-staging` — `needs` all three build jobs; dispatches `deploy-staging` to infra.
   - `deploy-production` — `needs: deploy-staging`; **gated by the `production` GitHub
     Environment** (required reviewers). Dispatches `deploy-production` to infra on approval.
-- **`php-tests.yml` / `js-tests.yml` / `phpstan.yml`** — on `pull_request` only (push trigger
-  was removed in #3320 to kill duplicate runs). Share the composite action
-  `.github/actions/php-ci-setup` (installs PHP/Lua/Rust deps, migrates+seeds, writes the
-  `version` file from `git rev-parse HEAD`).
+- **`php-tests.yml` / `js-tests.yml` / `php-lint.yml`** — the PR checks. `php-tests` runs on
+  `pull_request` only and since #4343 skips draft PRs (marking the PR ready — or the
+  `run full ci` label — triggers it); `js-tests` and `php-lint` run on every PR push plus `push`
+  to master (cache seeding, #3612). `php-lint` is the former `phpstan` workflow, renamed in
+  #4343 when it absorbed php-cs-fixer as a step (the standalone workflow was removed).
+  php-tests/php-lint share the composite action `.github/actions/php-ci-setup` (installs
+  PHP/Lua/Rust deps, migrates+seeds, writes the `version` file from `git rev-parse HEAD`).
 
 There is **no** push-to-branch deploy. Deploys only happen on a tag (and the infra side).
 

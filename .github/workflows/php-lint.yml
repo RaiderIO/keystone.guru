@@ -1,0 +1,54 @@
+name: PHP Lint
+
+# PHPStan + php-cs-fixer in one job (#4343). Renamed from `phpstan` — the required status
+# context in branch protection must follow the rename.
+#
+# No base-branch filter on pull_request: stacked PRs (one PR targeting another open PR's branch)
+# must run the same analysis as PRs against master (#4074).
+# The push trigger seeds branch-scoped caches from master (composer + Lua ext + cargo via
+# php-ci-setup — the same keys the php-tests shards restore, plus the PHPStan result cache
+# below); without it every new PR's first run is fully cold (#3612).
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+# Cancel superseded PR runs (#4343); master cache-seed runs are never cancelled, only serialised.
+concurrency:
+  group: php-lint-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  php-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout for local actions
+        # Shallow on purpose: nothing in CI reads git history (the only git command is
+        # `git rev-parse HEAD` for the version file), and a full fetch of 46 branches + 448 tags
+        # cost 10-15 minutes per job (#4135).
+        uses: actions/checkout@v7
+
+      - name: Common PHP/Laravel setup
+        uses: ./.github/actions/php-ci-setup
+        with:
+          run-migrations: 'false'
+
+      - name: Run PHP CS Fixer (dry run)
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff
+
+      # Persist PHPStan's result cache (tmpDir in phpstan.neon) for incremental analysis;
+      # PHPStan invalidates stale entries itself (#4343).
+      - name: Restore PHPStan result cache
+        uses: actions/cache@v6
+        with:
+          path: tmp/phpstan
+          key: phpstan-result-${{ github.run_id }}
+          restore-keys: phpstan-result-
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=1G

@@ -2,6 +2,10 @@ includes:
     - vendor/larastan/larastan/extension.neon
 
 parameters:
+    # Fixed (gitignored) location so the result cache survives between runs; CI persists it via
+    # actions/cache in php-lint.yml (#4343)
+    tmpDir: tmp/phpstan
+
     paths:
         - app/
         - database/

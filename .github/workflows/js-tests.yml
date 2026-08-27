@@ -4,6 +4,7 @@ name: JavaScript Tests
 # same tests and build as MRs against master.
 # The push trigger seeds the branch-scoped npm cache from master; without it every new PR's
 # first run is fully cold (#3612).
+# Tests and the production build share one job (#4343).
 on:
   pull_request:
   push:
@@ -12,6 +13,11 @@ on:
 
 permissions:
   contents: read
+
+# Cancel superseded PR runs (#4343); master cache-seed runs are never cancelled, only serialised.
+concurrency:
+  group: js-tests-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   js-tests:
@@ -29,28 +35,12 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        env:
+          # Neither the tests nor the build ever launch a browser
+          PUPPETEER_SKIP_DOWNLOAD: 'true'
 
       - name: Run Vitest
         run: npm test
-
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Setup Node
-        uses: actions/setup-node@v7
-        with:
-          node-version: 24
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-        env:
-          # The build never launches a browser
-          PUPPETEER_SKIP_DOWNLOAD: 'true'
 
       - name: Build production assets
         run: npm run production

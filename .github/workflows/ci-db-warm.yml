@@ -2,7 +2,7 @@
 #
 # GitHub Actions caches are branch-scoped: an entry written by a `pull_request` run is visible only
 # to that PR, while an entry written on the default branch is visible to every branch. php-tests
-# runs only on pull_request, and phpstan - the one workflow that does run on push to master - opts
+# runs only on pull_request, and php-lint - a workflow that does run on push to master - opts
 # out of migrations entirely. Without this job nothing would ever write a master-scoped entry, so
 # every PR would miss on its first run and the cache would buy almost nothing.
 #

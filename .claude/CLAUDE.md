@@ -321,7 +321,15 @@ but the checklist is **tiered by change size** so small MRs don't pay full cerem
    be safe".
 3. **Green CI**: wait for the MR's checks and fix any failure yourself — including flaky or
    seemingly unrelated failures (root-cause them; don't re-run and hope, and don't defer to a
-   follow-up issue).
+   follow-up issue). **The full php-tests suite does not run on draft PRs** (#4343 — it was two
+   thirds of the Actions bill): while drafting, only the fast checks (php-lint = phpstan +
+   cs-fixer, js-tests) run on CI, so run the test groups your change affects in the worktree's own `app`
+   container before undrafting — that's your suite signal, and it's free. The suite runs on CI
+   automatically when the PR is marked ready (and on every push while it stays ready). To debug a
+   CI-only failure on a draft, add the `run full ci` label — it triggers the suite immediately
+   and on every push while present; remove it when done. Don't add the label routinely "to be
+   safe": the ready_for_review run repeats the suite anyway, so a labeled draft pays for every
+   push twice over.
 4. **One issue per MR** — a squash commit keeps exactly one leading `#NNNN`, so any other issue
    the branch carries is invisible to `create-release`. Check before undrafting:
 
@@ -342,12 +350,14 @@ Only once the applicable items hold, mark the MR ready for review (`gh pr ready 
 draft-PR note under Git worktrees above for why it must stay a draft until then.
 
 **Undrafting is a one-way handoff — the last thing you do, not a status update.** Undraft only once
-the cold reviewer has finished and every finding is fixed, with CI green on the commit that contains
-those fixes. After `gh pr ready`, don't
+the cold reviewer has finished and every finding is fixed, with the fast checks green on the commit
+that contains those fixes and the affected test groups passing locally (see item 3 — the full suite
+runs on CI at the moment you undraft, not before). Watch that ready_for_review suite run through to
+green; if it goes red, `gh pr ready <n> --undo` immediately, then fix. After `gh pr ready`, don't
 push further commits or start another polish pass — `babysit-prs` merges any green, `pr can
 merge`-labeled non-draft PR the moment it sees one, and a post-undraft commit races that merge with
 CI still pending (#3883). To change an undrafted MR: `gh pr ready <n> --undo` first, push, wait for
-green, then undraft again.
+the fast checks, then undraft again (which re-runs the suite).
 
 # Project-specific conventions
 
