@@ -22,10 +22,13 @@ permissions:
   contents: read
 
 # A new push obsoletes any in-flight run for the same PR: cancel it instead of paying for a
-# result nobody will read (#4343).
+# result nobody will read (#4343). Cancellation happens at run creation, before the job-level
+# `if` is evaluated — so an unrelated `labeled` event (e.g. `pr cold reviewed` landing mid-run)
+# would kill an in-flight suite without starting a replacement. Only cancel on events whose own
+# run replaces the suite: every non-labeled trigger, and `labeled` only for `run full ci`.
 concurrency:
   group: php-tests-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event.action != 'labeled' || github.event.label.name == 'run full ci' }}
 
 jobs:
   php-tests:
