@@ -11,7 +11,9 @@ name: PHP Tests
 # triggers a run immediately (the `labeled` type below), and while it stays on, every push runs
 # the suite too. Skipped shards report a "skipped" conclusion, which satisfies the required
 # status contexts — safe because a draft can't be merged, and the ready_for_review run replaces
-# them with real results before any merge is possible.
+# them with real results before any merge is possible. (Cosmetic quirk: a skipped run never
+# expands the matrix, so it reports one literal "php-tests (${{ matrix.shard }})" check instead
+# of six shard contexts — expected, don't "fix" it.)
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review, labeled]
