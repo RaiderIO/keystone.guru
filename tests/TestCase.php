@@ -4,6 +4,7 @@ namespace Tests;
 
 use App\Logging\StructuredLogging;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\Event;
 use Tests\Attributes\Repeat;
 use Tests\Attributes\SlowTest;
@@ -52,6 +53,18 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         $this->testStartTime = microtime(true);
+
+        // The combatlog connection has no phpunit variant of its own, so in the main checkout
+        // tests historically read/wrote the LIVE combatlog schema - whose combat-log-derived rows
+        // are not recoverable (#4346). When a dedicated test schema is configured
+        // (DB_PHPUNIT_COMBATLOG_DATABASE -> the combatlog_phpunit connection), redirect the
+        // combatlog connection to it before any test touches it. Per-test on purpose: the app is
+        // rebuilt (and config reset) for every test.
+        $phpunitCombatlogDatabase = config('database.connections.combatlog_phpunit.database');
+        if (!empty($phpunitCombatlogDatabase)) {
+            config(['database.connections.combatlog.database' => $phpunitCombatlogDatabase]);
+            DB::purge('combatlog');
+        }
 
         // StructuredLogging caches config values in statics that survive across tests - a config() change made by a
         // previous test must not leak into this one. enable() is used instead of flushConfigCache() alone because
