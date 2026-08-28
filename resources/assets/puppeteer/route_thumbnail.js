@@ -18,14 +18,35 @@ function delay(timeout) {
 // treats ANY non-empty stderr as a failed render (it returns null even when the screenshot itself
 // succeeded), so writing diagnostics to stderr unconditionally would fail every good render. See #3920.
 const MAX_DIAGNOSTICS = 200;
-const diagnostics = [];
 
-function recordDiagnostic(line) {
-    if (diagnostics.length < MAX_DIAGNOSTICS) {
-        diagnostics.push(line);
-    } else if (diagnostics.length === MAX_DIAGNOSTICS) {
-        diagnostics.push(`... further browser events suppressed after ${MAX_DIAGNOSTICS} entries`);
+/**
+ * A fresh {diagnostics, recordDiagnostic} pair, so a test can exercise recordDiagnostic() /
+ * wireDiagnostics() against an isolated array instead of the one module-level `render()` uses.
+ */
+function createDiagnosticsCollector() {
+    const diagnostics = [];
+
+    /**
+     * @returns {number} the index the line was written to, or -1 if it was suppressed (already at
+     * MAX_DIAGNOSTICS). Callers that resolve a line's text asynchronously (see wireDiagnostics()'s
+     * 'console' handler) reserve their slot with a placeholder up front by calling this
+     * synchronously as soon as the event fires, then overwrite diagnostics[index] once resolved -
+     * so a message that takes longer to resolve doesn't reorder itself after messages that arrived
+     * later but resolved faster.
+     */
+    function recordDiagnostic(line) {
+        if (diagnostics.length < MAX_DIAGNOSTICS) {
+            diagnostics.push(line);
+
+            return diagnostics.length - 1;
+        } else if (diagnostics.length === MAX_DIAGNOSTICS) {
+            diagnostics.push(`... further browser events suppressed after ${MAX_DIAGNOSTICS} entries`);
+        }
+
+        return -1;
     }
+
+    return {diagnostics, recordDiagnostic};
 }
 
 /**
@@ -49,7 +70,16 @@ async function resolveConsoleArg(arg) {
         const resolved = await arg.evaluate(value =>
             value instanceof Error ? (value.stack || `${value.name}: ${value.message}`) : value);
 
-        return typeof resolved === 'string' ? resolved : JSON.stringify(resolved);
+        if (typeof resolved === 'string') {
+            return resolved;
+        }
+
+        // JSON.stringify() returns undefined (not a string) for undefined/functions/symbols rather
+        // than throwing - treat that the same as an unresolvable arg (null) so the caller falls back
+        // to text() instead of silently dropping this argument from the message.
+        const json = JSON.stringify(resolved);
+
+        return json === undefined ? null : json;
     } catch (e) {
         return null;
     }
@@ -106,6 +136,45 @@ async function collectPageState(page) {
     }
 }
 
+/**
+ * Wires up 'console'/'pageerror'/'response'/'requestfailed' capture on `page` into `diagnostics`
+ * (recorded via `recordDiagnostic`).
+ *
+ * formatConsoleMessage() resolves each console argument over a CDP round-trip, so - unlike every
+ * other handler here - it doesn't record its diagnostic synchronously. Two things that requires:
+ * reserve the line's position with recordDiagnostic() as soon as the event fires (a message that
+ * resolves slowly must not end up after a later message that resolved fast), and return the
+ * in-flight promises so the caller can await them before reading `diagnostics` - a message logged
+ * right before the #finished_loading timeout fires would otherwise lose that race and never make
+ * it in.
+ *
+ * @returns {Promise[]} the pending console-diagnostic promises to await before reading `diagnostics`.
+ */
+function wireDiagnostics(page, {diagnostics, recordDiagnostic}) {
+    const pendingConsoleDiagnostics = [];
+
+    page
+        .on('console', message => {
+            const index = recordDiagnostic(null);
+
+            if (index !== -1) {
+                pendingConsoleDiagnostics.push(
+                    formatConsoleMessage(message).then(text => diagnostics[index] = text));
+            }
+        })
+        .on('pageerror', error =>
+            recordDiagnostic(`PAGEERROR ${error.stack || error.message}`))
+        .on('response', response => {
+            if (response.status() >= 400) {
+                recordDiagnostic(`RESPONSE ${response.status()} ${response.url()}`);
+            }
+        })
+        .on('requestfailed', request =>
+            recordDiagnostic(`REQUESTFAILED ${request.failure()?.errorText} ${request.url()}`));
+
+    return pendingConsoleDiagnostics;
+}
+
 async function render() {
     let startTime = new Date().getTime();
     console.log('Creating browser');
@@ -113,26 +182,11 @@ async function render() {
         headless: true,
         args: ['--no-sandbox'],
     });
+    const {diagnostics, recordDiagnostic} = createDiagnosticsCollector();
 
     try {
         const page = await browser.newPage();
-        // formatConsoleMessage() resolves each console argument over a CDP round-trip, so - unlike
-        // every other handler here - it doesn't record its diagnostic synchronously. Track the
-        // in-flight promises and await them below before reading `diagnostics`, or a message logged
-        // right before the #finished_loading timeout fires can lose the race and never make it in.
-        const pendingConsoleDiagnostics = [];
-        page
-            .on('console', message =>
-                pendingConsoleDiagnostics.push(formatConsoleMessage(message).then(recordDiagnostic)))
-            .on('pageerror', error =>
-                recordDiagnostic(`PAGEERROR ${error.stack || error.message}`))
-            .on('response', response => {
-                if (response.status() >= 400) {
-                    recordDiagnostic(`RESPONSE ${response.status()} ${response.url()}`);
-                }
-            })
-            .on('requestfailed', request =>
-                recordDiagnostic(`REQUESTFAILED ${request.failure()?.errorText} ${request.url()}`));
+        const pendingConsoleDiagnostics = wireDiagnostics(page, {diagnostics, recordDiagnostic});
 
         // Force facade for thumbnails
         await page.setCookie({
@@ -184,10 +238,9 @@ async function render() {
 }
 
 // Only run as a script (invoked by ThumbnailService via a `node route_thumbnail.js ...` subprocess) -
-// not when required by a test, which needs resolveConsoleArg()/formatConsoleMessage() without also
-// launching a real browser.
+// not when required by a test, which needs the functions below without also launching a real browser.
 if (require.main === module) {
     render();
 }
 
-module.exports = {resolveConsoleArg, formatConsoleMessage};
+module.exports = {resolveConsoleArg, formatConsoleMessage, createDiagnosticsCollector, wireDiagnostics};
