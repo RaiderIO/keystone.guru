@@ -19900,6 +19900,326 @@
         ]
     },
     {
+        "id": 156,
+        "expansion_id": 5,
+        "zone_id": 3959,
+        "map_id": 564,
+        "instance_id": 751,
+        "challenge_mode_id": null,
+        "mdt_id": 0,
+        "raid": 1,
+        "key": "black_temple",
+        "name": "dungeons.tbc.black_temple.name",
+        "abbreviation": "dungeons.tbc.black_temple.abbreviation",
+        "slug": "black-temple",
+        "heatmap_enabled": 0,
+        "speedrun_enabled": 1,
+        "has_wallpaper": 0,
+        "mdt_supported": false,
+        "floors": [
+            {
+                "id": 465,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": 340,
+                "map_name": null,
+                "name": "dungeons.tbc.black_temple.floors.karabor_sewers",
+                "default": 1,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": -240,
+                "ingame_min_y": 23.87,
+                "ingame_max_x": 594.83,
+                "ingame_max_y": 1276.12,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 1346,
+                        "floor1_id": 465,
+                        "floor2_id": 466,
+                        "direction": "up"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs": []
+            },
+            {
+                "id": 466,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": 339,
+                "map_name": null,
+                "name": "dungeons.tbc.black_temple.floors.illidari_training_grounds",
+                "default": 0,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 427.08,
+                "ingame_min_y": 366.67,
+                "ingame_max_x": 950,
+                "ingame_max_y": 1150,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 1347,
+                        "floor1_id": 466,
+                        "floor2_id": 465,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 1348,
+                        "floor1_id": 466,
+                        "floor2_id": 467,
+                        "direction": "right"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs": []
+            },
+            {
+                "id": 467,
+                "index": 3,
+                "mdt_sub_level": null,
+                "ui_map_id": 341,
+                "map_name": null,
+                "name": "dungeons.tbc.black_temple.floors.sanctuary_of_shadows",
+                "default": 0,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 380,
+                "ingame_min_y": -176,
+                "ingame_max_x": 1030,
+                "ingame_max_y": 799,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 1349,
+                        "floor1_id": 467,
+                        "floor2_id": 466,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 1350,
+                        "floor1_id": 467,
+                        "floor2_id": 468,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 1351,
+                        "floor1_id": 467,
+                        "floor2_id": 469,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 1352,
+                        "floor1_id": 467,
+                        "floor2_id": 470,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs": []
+            },
+            {
+                "id": 468,
+                "index": 4,
+                "mdt_sub_level": null,
+                "ui_map_id": 342,
+                "map_name": null,
+                "name": "dungeons.tbc.black_temple.floors.halls_of_anguish",
+                "default": 0,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 400,
+                "ingame_min_y": -191,
+                "ingame_max_x": 1070,
+                "ingame_max_y": 814,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 1353,
+                        "floor1_id": 468,
+                        "floor2_id": 467,
+                        "direction": "left"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs": []
+            },
+            {
+                "id": 469,
+                "index": 5,
+                "mdt_sub_level": null,
+                "ui_map_id": 343,
+                "map_name": null,
+                "name": "dungeons.tbc.black_temple.floors.gorefiends_vigil",
+                "default": 0,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 343.33,
+                "ingame_min_y": 135,
+                "ingame_max_x": 636.67,
+                "ingame_max_y": 575,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 1354,
+                        "floor1_id": 469,
+                        "floor2_id": 467,
+                        "direction": "right"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs": []
+            },
+            {
+                "id": 470,
+                "index": 6,
+                "mdt_sub_level": null,
+                "ui_map_id": 344,
+                "map_name": null,
+                "name": "dungeons.tbc.black_temple.floors.den_of_mortal_delights",
+                "default": 0,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 664.16,
+                "ingame_min_y": -70,
+                "ingame_max_x": 1110.83,
+                "ingame_max_y": 600,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 1355,
+                        "floor1_id": 470,
+                        "floor2_id": 467,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1356,
+                        "floor1_id": 470,
+                        "floor2_id": 471,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs": []
+            },
+            {
+                "id": 471,
+                "index": 7,
+                "mdt_sub_level": null,
+                "ui_map_id": 345,
+                "map_name": null,
+                "name": "dungeons.tbc.black_temple.floors.chamber_of_command",
+                "default": 0,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 450,
+                "ingame_min_y": -67.5,
+                "ingame_max_x": 920,
+                "ingame_max_y": 637.5,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 1357,
+                        "floor1_id": 471,
+                        "floor2_id": 470,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1358,
+                        "floor1_id": 471,
+                        "floor2_id": 472,
+                        "direction": "up"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs": []
+            },
+            {
+                "id": 472,
+                "index": 8,
+                "mdt_sub_level": null,
+                "ui_map_id": 346,
+                "map_name": null,
+                "name": "dungeons.tbc.black_temple.floors.temple_summit",
+                "default": 0,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 606.67,
+                "ingame_min_y": 137.5,
+                "ingame_max_x": 843.33,
+                "ingame_max_y": 492.5,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 1359,
+                        "floor1_id": 472,
+                        "floor2_id": 471,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs": []
+            },
+            {
+                "id": 473,
+                "index": 9,
+                "mdt_sub_level": 0,
+                "ui_map_id": 0,
+                "map_name": null,
+                "name": "dungeons.tbc.black_temple.floors.black_temple",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs": []
+            }
+        ],
+        "dungeon_speedrun_difficulties": []
+    },
+    {
         "id": 182,
         "expansion_id": 12,
         "zone_id": 16865,
