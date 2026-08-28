@@ -21,12 +21,15 @@ use App\Models\Npc\Npc;
 use App\Models\Npc\NpcType;
 use App\Models\Polyline;
 use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
+use App\Service\CombatLog\Exceptions\CombatLogParseException;
+use App\Service\CombatLog\Exceptions\DungeonHasNoNpcsException;
 use App\Service\CombatLog\Logging\CombatLogMappingVersionServiceLoggingInterface;
 use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Throwable;
 
 class CombatLogMappingVersionService implements CombatLogMappingVersionServiceInterface
 {
@@ -146,12 +149,13 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
         /** @var LatLng|null $previousEnemyLatLng */
         $previousEnemyLatLng = null;
 
-        $this->combatLogService->parseCombatLog($targetFilePath, function (
+        $parseCombatLogCallback = function (
             int    $combatLogVersion,
             bool   $advancedLoggingEnabled,
             string $rawEvent,
             int    $lineNr,
         ) use (
+            $filePath,
             $extractDungeonCallable,
             $hasExistingMappingVersion,
             &$mappingVersion,
@@ -219,6 +223,19 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
 
                     $dungeon->load('npcs');
                     $npcs = $dungeon->npcs->keyBy('id');
+
+                    // Every creature in the combat log is matched against this list further down. With no NPCs
+                    // attached to the dungeon each and every one of them is skipped, and the import quietly
+                    // yields a mapping version with zero enemies - fail loudly instead (#4354).
+                    if ($npcs->isEmpty()) {
+                        throw new DungeonHasNoNpcsException(
+                            sprintf(
+                                'Dungeon %s has no NPCs attached to it - every enemy in the combat log would be skipped. Run `php artisan combatlog:extractdata %s` first to create the dungeon\'s NPCs from this combat log.',
+                                __($dungeon->name, [], 'en_US'),
+                                $filePath,
+                            ),
+                        );
+                    }
 
                     // Assign the default floor in case there's no MapChange event coming (Ara-Kara is one such?)
                     /** @var Floor $currentFloor */
@@ -305,10 +322,34 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
             }
 
             return $parsedEvent;
-        });
+        };
 
-        Enemy::insert($enemiesAttributes);
-        if ($enemyConnections) {
+        try {
+            $this->combatLogService->parseCombatLog($targetFilePath, $parseCombatLogCallback);
+        } catch (Throwable $throwable) {
+            // The mapping version is created up-front, before the log reveals which dungeon it belongs to.
+            // None of the cleanup below runs when the parse throws, so drop it here instead of leaving an
+            // empty mapping version behind for every failed attempt (#4354).
+            if (!$hasExistingMappingVersion) {
+                $mappingVersion->delete();
+            }
+
+            // parseCombatLog() reports anything its callback throws as a parse failure. Unwrap our own
+            // exception so the caller sees the actual problem instead of "unable to parse line N".
+            $previousThrowable = $throwable->getPrevious();
+            if ($throwable instanceof CombatLogParseException && $previousThrowable instanceof DungeonHasNoNpcsException) {
+                throw $previousThrowable;
+            }
+
+            throw $throwable;
+        }
+
+        if ($enemiesAttributes !== []) {
+            Enemy::insert($enemiesAttributes);
+        }
+
+        // Without enemies there is nothing to connect, and the $weightStep below would divide by zero
+        if ($enemyConnections && $enemiesAttributes !== []) {
             $enemyConnectionsGradient = [
                 [
                     0,
