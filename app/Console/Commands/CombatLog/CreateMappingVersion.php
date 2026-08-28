@@ -67,6 +67,9 @@ class CreateMappingVersion extends BaseCombatLogCommand
         }
 
         $hasMappingVersion = $mappingVersion !== null;
+        // Enemies are appended to the mapping version, so on an existing one its current enemies say nothing
+        // about what this combat log contributed - only the difference does (#4354)
+        $enemyCountBefore = $mappingVersion?->enemies()->count() ?? 0;
 
         try {
             $mappingVersion = $combatLogMappingVersionService->createMappingVersionFromDungeonOrRaid(
@@ -98,7 +101,7 @@ class CreateMappingVersion extends BaseCombatLogCommand
             $enemyCount,
         );
 
-        if ($enemyCount === 0) {
+        if ($enemyCount - $enemyCountBefore === 0) {
             // The dungeon does have NPCs, but not the ones in this combat log - so every enemy was skipped
             // anyway. Report it as the failed import it is rather than as a successful one (#4354).
             $this->error($resultMessage);
