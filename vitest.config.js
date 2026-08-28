@@ -10,6 +10,10 @@ export default defineConfig({
         // from earlier tests (e.g. menuitemsanchor's `history.replaceState` count).
         restoreMocks: true,
         setupFiles: ['resources/assets/js/test/setup.js'],
-        include: ['resources/assets/js/**/*.test.{js,ts}', 'scripts/build/**/*.test.mjs'],
+        include: [
+            'resources/assets/js/**/*.test.{js,ts}',
+            'resources/assets/puppeteer/**/*.test.js',
+            'scripts/build/**/*.test.mjs',
+        ],
     },
 });

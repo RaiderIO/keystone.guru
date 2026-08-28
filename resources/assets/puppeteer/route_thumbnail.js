@@ -29,6 +29,50 @@ function recordDiagnostic(line) {
 }
 
 /**
+ * ConsoleMessage#text() already resolves a logged Error argument to real text (Puppeteer's CDP
+ * layer reads it from the object's CDP `description`, in cdp/utils.js's
+ * valueFromRemoteObjectReference()) - it does NOT print the "JSHandle@error" placeholder some
+ * older Puppeteer versions were known for. But it deliberately keeps only the first line of that
+ * description ("Error: boom"), discarding the stack trace - i.e. exactly the file/line of the
+ * call site that threw. Every "caught, logged, and carried on" spot in the map JS (e.g.
+ * MapObjectGroupManager's `catch (e) { console.error(e); }`) hits this, so a diagnostics-driven
+ * investigation into a #finished_loading timeout (like #3920) can currently tell THAT a handler
+ * threw and its message, but not WHICH of the dozens of `console.error(e)` call sites it was.
+ * Resolving the argument in-page via evaluate() instead gets the full stack back out.
+ *
+ * Returns null (never throws) when an argument can't be resolved this way (e.g. a detached DOM
+ * node, which can't cross evaluate()'s serialization boundary) so the caller can fall back to
+ * text() for the whole message.
+ */
+async function resolveConsoleArg(arg) {
+    try {
+        const resolved = await arg.evaluate(value =>
+            value instanceof Error ? (value.stack || `${value.name}: ${value.message}`) : value);
+
+        return typeof resolved === 'string' ? resolved : JSON.stringify(resolved);
+    } catch (e) {
+        return null;
+    }
+}
+
+async function formatConsoleMessage(message) {
+    const type = message.type().substr(0, 3).toUpperCase();
+    const args = message.args();
+
+    if (args.length === 0) {
+        return `CONSOLE ${type} ${message.text()}`;
+    }
+
+    const resolvedParts = await Promise.all(args.map(resolveConsoleArg));
+
+    // Any unresolved argument means we can't reconstruct the message faithfully - fall back to
+    // Puppeteer's own (lossy, but always available) text() for the whole thing.
+    return resolvedParts.includes(null)
+        ? `CONSOLE ${type} ${message.text()}`
+        : `CONSOLE ${type} ${resolvedParts.join(' ')}`;
+}
+
+/**
  * Where did page initialization actually get to? A timeout on #finished_loading means the map's
  * synchronous DOMContentLoaded bootstrap never completed - this reports which of its steps exist,
  * which distinguishes "the map context script never loaded" from "the inline code threw".
@@ -62,7 +106,7 @@ async function collectPageState(page) {
     }
 }
 
-(async () => {
+async function render() {
     let startTime = new Date().getTime();
     console.log('Creating browser');
     const browser = await puppeteer.launch({
@@ -72,11 +116,16 @@ async function collectPageState(page) {
 
     try {
         const page = await browser.newPage();
+        // formatConsoleMessage() resolves each console argument over a CDP round-trip, so - unlike
+        // every other handler here - it doesn't record its diagnostic synchronously. Track the
+        // in-flight promises and await them below before reading `diagnostics`, or a message logged
+        // right before the #finished_loading timeout fires can lose the race and never make it in.
+        const pendingConsoleDiagnostics = [];
         page
             .on('console', message =>
-                recordDiagnostic(`CONSOLE ${message.type().substr(0, 3).toUpperCase()} ${message.text()}`))
-            .on('pageerror', ({message}) =>
-                recordDiagnostic(`PAGEERROR ${message}`))
+                pendingConsoleDiagnostics.push(formatConsoleMessage(message).then(recordDiagnostic)))
+            .on('pageerror', error =>
+                recordDiagnostic(`PAGEERROR ${error.stack || error.message}`))
             .on('response', response => {
                 if (response.status() >= 400) {
                     recordDiagnostic(`RESPONSE ${response.status()} ${response.url()}`);
@@ -110,6 +159,7 @@ async function collectPageState(page) {
             await page.waitForSelector('#finished_loading', {timeout: 10000});
         } catch (e) {
             // Failure path only - see the note on `diagnostics` above before moving any of this out of the catch.
+            await Promise.all(pendingConsoleDiagnostics);
             const pageState = await collectPageState(page);
 
             console.error(`Render failed after ${new Date().getTime() - startTime}ms for ${process.argv[2]}`);
@@ -131,4 +181,13 @@ async function collectPageState(page) {
         let time = new Date().getTime() - startTime;
         console.log(`Finished in ${time}ms!`);
     }
-})();
+}
+
+// Only run as a script (invoked by ThumbnailService via a `node route_thumbnail.js ...` subprocess) -
+// not when required by a test, which needs resolveConsoleArg()/formatConsoleMessage() without also
+// launching a real browser.
+if (require.main === module) {
+    render();
+}
+
+module.exports = {resolveConsoleArg, formatConsoleMessage};
