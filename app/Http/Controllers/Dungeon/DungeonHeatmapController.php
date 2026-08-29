@@ -185,6 +185,12 @@ class DungeonHeatmapController extends Controller
     ): View|RedirectResponse {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
+        // Applied before the guard so the "unsupported" view honors the embed's requested locale too
+        $locale = $request->get('locale', App::getLocale());
+        App::setLocale(
+            config('language.short_to_long')[$locale] ?? $locale,
+        );
+
         $unsupported = $this->guardAgainstInvalidAccess($gameVersion, $dungeon, $currentMappingVersion, $dungeon->getActiveSeason($seasonService), embed: true);
         if ($unsupported !== null) {
             return $unsupported;
@@ -207,11 +213,6 @@ class DungeonHeatmapController extends Controller
         }
 
         $floor = $resolvedFloor->floor;
-
-        $locale = $request->get('locale', App::getLocale());
-        App::setLocale(
-            config('language.short_to_long')[$locale] ?? $locale,
-        );
 
         $style                  = $request->get('style', 'compact');
         $headerBackgroundColor  = $request->get('headerBackgroundColor');

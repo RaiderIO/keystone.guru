@@ -26,7 +26,7 @@ use App\Models\Dungeon;
         </div>
     </header>
 
-    <div class="wrapper embed_wrapper d-flex align-items-center justify-content-center text-center p-4">
+    <div class="wrapper embed_wrapper compact d-flex align-items-center justify-content-center text-center p-4">
         <p class="mb-0">{{ __('view_dungeon.heatmap.gameversion.embed.not_supported') }}</p>
     </div>
 @endsection
