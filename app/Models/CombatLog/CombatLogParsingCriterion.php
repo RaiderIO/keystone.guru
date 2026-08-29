@@ -33,13 +33,6 @@ class CombatLogParsingCriterion extends Model
      * Maps each valid criterion model class to the relations it requires eager-loaded
      * so getName() can be called on every result without N+1 queries.
      *
-     * When adding a new criterion model, these are the files that need updating alongside it:
-     * - app/Console/Commands/CombatLog/PollCombatLogRunsCommand.php - which Raider.IO query the
-     *   criterion polls with, and which criteria a dispatched run is recorded against
-     * - app/Service/CombatLog/CombatLogParsingCriteriaService.php - getAllModelsForCriteria()
-     * - app/Service/RaiderIO/Dtos/SearchAdvancedRunsFilter.php and RaiderIOApiService, when the
-     *   criterion needs a filter dimension the search API doesn't take yet
-     *
      * @var array<class-string<CombatLogCriterionModelInterface>, list<string>>
      */
     public const array VALID_CRITERIA = [
