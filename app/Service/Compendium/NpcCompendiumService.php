@@ -54,6 +54,13 @@ class NpcCompendiumService implements NpcCompendiumServiceInterface
             $spellEvents->each(fn(CombatLogSpellEvent $event) => $event->setRelation('spell', $spells->get($event->spell_id)));
         }
 
+        // Same reject as above, for the spell events - a hidden spell is no more relevant here than
+        // it is when an NPC event happens to point at it (#4356). Must run after the setRelation()
+        // loop above, since it is the manually attached relation that carries hidden_on_map.
+        $spellEvents = $spellEvents->reject(
+            fn(CombatLogSpellEvent $event) => $event->spell instanceof Spell && $event->spell->hidden_on_map,
+        );
+
         return $npcEvents->concat($spellEvents)
             ->sortByDesc('created_at')
             ->take(50)
@@ -128,6 +135,14 @@ class NpcCompendiumService implements NpcCompendiumServiceInterface
             $spells = Spell::whereIn('id', $spellEvents->pluck('spell_id')->unique())->get()->keyBy('id');
             $spellEvents->each(fn(CombatLogSpellEvent $event) => $event->setRelation('spell', $spells->get($event->spell_id)));
         }
+
+        // Same reject as the NPC events above - PropertyChanged/PropertyRemoved events on hidden
+        // spells were rendering on the activity page regardless (#4356). Must run after the
+        // setRelation() loop above, since it is the manually attached relation that carries
+        // hidden_on_map.
+        $spellEvents = $spellEvents->reject(
+            fn(CombatLogSpellEvent $event) => $event->spell instanceof Spell && $event->spell->hidden_on_map,
+        );
 
         return $npcEvents->concat($spellEvents)
             ->sortByDesc('created_at')
