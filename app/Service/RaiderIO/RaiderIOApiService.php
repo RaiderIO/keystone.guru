@@ -13,6 +13,7 @@ use App\Service\RaiderIO\Dtos\RaiderIOHeatmapGridResponse;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRun;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsResponse;
+use App\Service\RaiderIO\Enums\RaiderIOFaction;
 use App\Service\RaiderIO\Exceptions\InvalidApiResponseException;
 use App\Service\RaiderIO\Logging\RaiderIOApiServiceLoggingInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
@@ -109,6 +110,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
         }
 
         $dungeonZoneId = $filter->dungeon?->zone_id;
+        $faction       = RaiderIOFaction::fromFaction($filter->faction);
         $memberSpecIds = $filter->specs
             ->pluck('specialization_id')
             ->map(fn($specId) => ['eq' => (int)$specId])
@@ -142,6 +144,9 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
             'offset'        => $filter->offset,
             'dungeonZoneId' => $dungeonZoneId !== null ? [0 => ['eq' => $dungeonZoneId]] : null,
             'memberSpecIds' => !empty($memberSpecIds) ? $memberSpecIds : null,
+            // A run only carries a faction when every member shares one - a cross faction group has
+            // none at all, so this filter always excludes those along with the other faction.
+            'faction' => $faction !== null ? [0 => ['eq' => $faction->value]] : null,
         ]);
 
         $url = sprintf('%s?%s', self::SEARCH_ADVANCED_URL, http_build_query($params));

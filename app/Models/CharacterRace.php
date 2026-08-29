@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\DungeonRoute\DungeonRoutePlayerRace;
+use App\Models\Interfaces\CombatLogCriterionModelInterface;
+use App\Models\Traits\HasCombatLogCriterion;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -24,8 +26,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin Eloquent
  */
-class CharacterRace extends CacheModel
+class CharacterRace extends CacheModel implements CombatLogCriterionModelInterface
 {
+    use HasCombatLogCriterion;
     use SeederModel;
 
     public const CHARACTER_RACE_HUMAN               = 'human';
