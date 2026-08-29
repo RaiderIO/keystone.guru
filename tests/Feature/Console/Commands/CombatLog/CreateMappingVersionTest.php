@@ -116,7 +116,7 @@ final class CreateMappingVersionTest extends PublicTestCase
     }
 
     #[Test]
-    public function handle_givenAnExistingMappingVersionThatAlreadyHasEnemies_stillReportsAnImportOfNothingAsAnError(): void
+    public function handle_givenAnExistingMappingVersionThatAlreadyHasEnemies_failsLoudlyWithoutImporting(): void
     {
         // Arrange
         $combatLogPath = $this->createZoneChangeCombatLog(self::TEST_MAP_ID);
@@ -153,8 +153,8 @@ final class CreateMappingVersionTest extends PublicTestCase
                 'timer_max_seconds'     => 0,
             ]);
 
-            // Enemies are appended to a mapping version, so the ones it already holds must not be mistaken
-            // for enemies that this combat log contributed - it contributes none.
+            // This command only supports initial enemy placement - a mapping version that already has
+            // enemies on it must fail loudly rather than being silently amended.
             Enemy::create([
                 'floor_id'           => $floor->id,
                 'mapping_version_id' => $mappingVersion->id,
@@ -174,9 +174,9 @@ final class CreateMappingVersionTest extends PublicTestCase
             $output = Artisan::output();
 
             // Assert
-            $this->assertSame(0, $exitCode, $output);
-            $this->assertStringContainsString('1 enemies', $output);
-            $this->assertStringContainsString('No enemies were imported!', $output);
+            $this->assertSame(1, $exitCode, $output);
+            $this->assertStringContainsString('already has enemies', $output);
+            $this->assertSame(1, $mappingVersion->enemies()->count());
         } finally {
             $mappingVersion?->delete();
             $npcDungeon?->delete();

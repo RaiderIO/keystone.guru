@@ -37,6 +37,15 @@ class CreateMappingVersion extends BaseCombatLogCommand
         $mappingVersion = null;
         if (is_numeric($mappingVersionId)) {
             $mappingVersion = MappingVersion::findOrFail($mappingVersionId);
+
+            if ($mappingVersion->enemies()->count() > 0) {
+                $this->error(sprintf(
+                    'Mapping version %d already has enemies on it - this command only supports the initial placement of enemies, not amending an existing mapping version.',
+                    $mappingVersion->id,
+                ));
+
+                return 1;
+            }
         }
 
         return $this->parseCombatLogRecursively(
