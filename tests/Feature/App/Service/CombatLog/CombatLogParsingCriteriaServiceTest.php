@@ -25,6 +25,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
     private const int VERSION    = CombatLogVersion::RETAIL_12_0_5;
     private const int DUNGEON_ID = 999901;
     private const int SPEC_ID    = 999902;
+    private const int RACE_ID    = 999904;
 
     private CombatLogParsingCriteriaServiceInterface $service;
 
@@ -36,7 +37,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
         $this->service = new CombatLogParsingCriteriaService();
 
         CombatLogParsingCriterion::query()
-            ->whereIn('model_id', [self::DUNGEON_ID, self::SPEC_ID])
+            ->whereIn('model_id', [self::DUNGEON_ID, self::SPEC_ID, self::RACE_ID])
             ->delete();
     }
 
@@ -44,7 +45,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
     protected function tearDown(): void
     {
         CombatLogParsingCriterion::query()
-            ->whereIn('model_id', [self::DUNGEON_ID, self::SPEC_ID])
+            ->whereIn('model_id', [self::DUNGEON_ID, self::SPEC_ID, self::RACE_ID])
             ->delete();
 
         Carbon::setTestNow(null);
@@ -353,44 +354,34 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
     public function shouldParse_givenRaceCriterionAtThreshold_returnsFalse(): void
     {
         // Arrange
-        $nightElf = CharacterRace::query()->where('key', CharacterRace::CHARACTER_RACE_NIGHT_ELF)->firstOrFail();
-        $check    = new CombatLogParsingCriterionCheck(CharacterRace::class, $nightElf->id, $this->band());
+        $check = new CombatLogParsingCriterionCheck(CharacterRace::class, self::RACE_ID, $this->band());
 
         CombatLogParsingCriterion::factory()
-            ->forRace($nightElf->id, self::VERSION)
+            ->forRace(self::RACE_ID, self::VERSION)
             ->create(['count' => 5, 'threshold' => 5]);
 
-        try {
-            // Act
-            $result = $this->service->shouldParse(self::VERSION, [$check]);
+        // Act
+        $result = $this->service->shouldParse(self::VERSION, [$check]);
 
-            // Assert
-            $this->assertFalse($result);
-        } finally {
-            CombatLogParsingCriterion::query()->where('model_class', CharacterRace::class)->delete();
-        }
+        // Assert
+        $this->assertFalse($result);
     }
 
     #[Test]
     public function recordParsed_givenRaceCriterion_incrementsItsCount(): void
     {
         // Arrange
-        $nightElf = CharacterRace::query()->where('key', CharacterRace::CHARACTER_RACE_NIGHT_ELF)->firstOrFail();
-        $check    = new CombatLogParsingCriterionCheck(CharacterRace::class, $nightElf->id, $this->band());
+        $check = new CombatLogParsingCriterionCheck(CharacterRace::class, self::RACE_ID, $this->band());
 
-        try {
-            // Act
-            $this->service->recordParsed(self::VERSION, [$check]);
+        // Act
+        $this->service->recordParsed(self::VERSION, [$check]);
 
-            // Assert
-            $row = CombatLogParsingCriterion::query()
-                ->where('model_class', CharacterRace::class)
-                ->where('model_id', $nightElf->id)
-                ->firstOrFail();
-            $this->assertSame(1, $row->count);
-        } finally {
-            CombatLogParsingCriterion::query()->where('model_class', CharacterRace::class)->delete();
-        }
+        // Assert
+        $row = CombatLogParsingCriterion::query()
+            ->where('model_class', CharacterRace::class)
+            ->where('model_id', self::RACE_ID)
+            ->firstOrFail();
+        $this->assertSame(1, $row->count);
     }
 
     #[Test]
