@@ -6,6 +6,7 @@ use App\Exceptions\Handler;
 use App\Models\Feature\Feature;
 use App\Models\Laratrust\Role;
 use App\Models\User;
+use App\Overrides\AiLocaleMessageSelector;
 use App\Overrides\CustomRateLimiter;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Console\Events\CommandStarting;
@@ -21,6 +22,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Illuminate\Translation\Translator;
 use Override;
 use Rollbar\Payload\Level;
 use Rollbar\Rollbar;
@@ -122,6 +124,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->extend(RateLimiter::class, fn($command, $app) => new CustomRateLimiter($app->make('cache')->driver(
             $app['config']->get('cache.limiter'),
         )));
+
+        // trans_choice()'s plural rules don't know the `*_ai` locales - see AiLocaleMessageSelector
+        $this->app->afterResolving('translator', static fn(Translator $translator) => $translator->setSelector(new AiLocaleMessageSelector()));
     }
 
     /**
