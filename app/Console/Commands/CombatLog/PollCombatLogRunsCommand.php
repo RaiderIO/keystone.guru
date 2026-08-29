@@ -5,6 +5,7 @@ namespace App\Console\Commands\CombatLog;
 use App\Jobs\CombatLog\ProcessCombatLogSegments;
 use App\Logic\CombatLog\CombatLogVersion;
 use App\Models\CharacterClassSpecialization;
+use App\Models\CharacterRace;
 use App\Models\CombatLog\CombatLogParsingCriterion;
 use App\Models\CombatLog\ParsedCombatLog;
 use App\Models\Dungeon;
@@ -20,6 +21,7 @@ use App\Service\CombatLog\Enums\CombatLogPollingFailureReason;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRun;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsResponse;
+use App\Service\RaiderIO\Enums\RaiderIOFaction;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Console\Command;
@@ -96,6 +98,8 @@ class PollCombatLogRunsCommand extends Command
         /** @var Collection<int|string, CharacterClassSpecialization> $allSpecsByBlizzardId */
         $allSpecsByBlizzardId = $this->criteriaService->getAllModelsForCriteria(CharacterClassSpecialization::class, $season)
             ->keyBy('specialization_id');
+        /** @var Collection<int, CharacterRace> $criterionRaces */
+        $criterionRaces = $this->criteriaService->getAllModelsForCriteria(CharacterRace::class, $season);
 
         if ($spreadBand !== null) {
             $this->pollSpreadBand(
@@ -106,6 +110,7 @@ class PollCombatLogRunsCommand extends Command
                 $limit,
                 $dungeonsByChallengeModeId,
                 $allSpecsByBlizzardId,
+                $criterionRaces,
                 $knownRunIds,
                 $force,
                 $dispatchCounts,
@@ -120,6 +125,7 @@ class PollCombatLogRunsCommand extends Command
             $limit,
             $dungeonsByChallengeModeId,
             $allSpecsByBlizzardId,
+            $criterionRaces,
             $knownRunIds,
             $force,
             $dispatchCounts,
@@ -140,6 +146,7 @@ class PollCombatLogRunsCommand extends Command
      *
      * @param Collection<string|int, Dungeon>                      $dungeonsByChallengeModeId
      * @param Collection<string|int, CharacterClassSpecialization> $allSpecsByBlizzardId
+     * @param Collection<int, CharacterRace>                       $criterionRaces
      * @param array<int, true>                                     $knownRunIds
      * @param array<string, int>                                   $dispatchCounts
      */
@@ -151,6 +158,7 @@ class PollCombatLogRunsCommand extends Command
         int          $limit,
         Collection   $dungeonsByChallengeModeId,
         Collection   $allSpecsByBlizzardId,
+        Collection   $criterionRaces,
         array        &        $knownRunIds,
         bool         $force,
         array        &        $dispatchCounts,
@@ -188,7 +196,7 @@ class PollCombatLogRunsCommand extends Command
                         break;
                     }
 
-                    $this->dispatchRun($run, $season, $combatLogVersion, $band, $dungeonsByChallengeModeId, $allSpecsByBlizzardId, $knownRunIds, $force, $dispatchCounts);
+                    $this->dispatchRun($run, $season, $combatLogVersion, $band, $dungeonsByChallengeModeId, $allSpecsByBlizzardId, $criterionRaces, $knownRunIds, $force, $dispatchCounts);
                 }
             }
         }
@@ -203,6 +211,7 @@ class PollCombatLogRunsCommand extends Command
      *
      * @param Collection<string|int, Dungeon>                      $dungeonsByChallengeModeId
      * @param Collection<string|int, CharacterClassSpecialization> $allSpecsByBlizzardId
+     * @param Collection<int, CharacterRace>                       $criterionRaces
      * @param array<int, true>                                     $knownRunIds
      * @param array<string, int>                                   $dispatchCounts
      */
@@ -214,6 +223,7 @@ class PollCombatLogRunsCommand extends Command
         int          $limit,
         Collection   $dungeonsByChallengeModeId,
         Collection   $allSpecsByBlizzardId,
+        Collection   $criterionRaces,
         array        &        $knownRunIds,
         bool         $force,
         array        &        $dispatchCounts,
@@ -242,7 +252,7 @@ class PollCombatLogRunsCommand extends Command
                 continue;
             }
 
-            $this->dispatchRun($run, $season, $combatLogVersion, $band, $dungeonsByChallengeModeId, $allSpecsByBlizzardId, $knownRunIds, $force, $dispatchCounts);
+            $this->dispatchRun($run, $season, $combatLogVersion, $band, $dungeonsByChallengeModeId, $allSpecsByBlizzardId, $criterionRaces, $knownRunIds, $force, $dispatchCounts);
         }
 
         $this->info(sprintf(
@@ -257,6 +267,7 @@ class PollCombatLogRunsCommand extends Command
      * @param array<int, true>                                     $knownRunIds
      * @param Collection<string|int, Dungeon>                      $dungeonsByChallengeModeId
      * @param Collection<string|int, CharacterClassSpecialization> $allSpecsByBlizzardId
+     * @param Collection<int, CharacterRace>                       $criterionRaces
      * @param array<string, int>                                   $dispatchCounts
      */
     private function dispatchRun(
@@ -266,6 +277,7 @@ class PollCombatLogRunsCommand extends Command
         KeyLevelBand      $band,
         Collection        $dungeonsByChallengeModeId,
         Collection        $allSpecsByBlizzardId,
+        Collection        $criterionRaces,
         array             &             $knownRunIds,
         bool              $force,
         array             &             $dispatchCounts,
@@ -281,7 +293,8 @@ class PollCombatLogRunsCommand extends Command
 
         $dungeonCriterion = new CombatLogParsingCriterionCheck(Dungeon::class, $dungeon->id, $band);
         $specCriteria     = $this->buildSpecCriteria($run->memberSpecIds, $allSpecsByBlizzardId, $band);
-        $criteria         = array_merge([$dungeonCriterion], $specCriteria);
+        $raceCriteria     = $this->buildRaceCriteria($run->faction, $criterionRaces, $band);
+        $criteria         = array_merge([$dungeonCriterion], $specCriteria, $raceCriteria);
 
         // The date is captured here and carried into the job rather than left to Carbon::now(): it is
         // the date these counts land on, and the job hands it back to releaseParsed() if the run turns
@@ -367,6 +380,8 @@ class PollCombatLogRunsCommand extends Command
         Carbon                           $completedAtFrom,
         int                              $limit,
     ): SearchAdvancedRunsFilter {
+        $faction = null;
+
         if ($modelClass === Dungeon::class) {
             /** @var Dungeon $model */
             $dungeon = $model;
@@ -376,6 +391,17 @@ class PollCombatLogRunsCommand extends Command
             $dungeon = null;
             /** @var Collection<int, CharacterClassSpecialization> $specs */
             $specs = collect([$model]);
+        } elseif ($modelClass === CharacterRace::class) {
+            // Raider.IO knows nothing about races - not as a filter, not even as a field on a run -
+            // so a race is polled through the one race adjacent dimension the search API does have:
+            // the faction every one of its members belongs to. Narrowing further by the classes the
+            // race can be is not possible either: several memberClassIds entries are ANDed, so they
+            // ask for a group holding all of those classes at once rather than any one of them.
+            $dungeon = null;
+            /** @var Collection<int, CharacterClassSpecialization> $specs */
+            $specs = collect();
+            /** @var CharacterRace $model */
+            $faction = $model->faction;
         } else {
             throw new \UnexpectedValueException(sprintf('Unknown model class: %s', $modelClass));
         }
@@ -390,6 +416,7 @@ class PollCombatLogRunsCommand extends Command
             mythicLevelMax:  $band->max,
             limit:           $limit,
             offset:          0,
+            faction:         $faction,
         );
     }
 
@@ -408,6 +435,36 @@ class PollCombatLogRunsCommand extends Command
 
             if ($spec !== null) {
                 $criteria[] = new CombatLogParsingCriterionCheck(CharacterClassSpecialization::class, $spec->id, $band);
+            }
+        }
+
+        return $criteria;
+    }
+
+    /**
+     * A race criterion counts a run when the run's faction is the race's faction - the closest thing
+     * to "this run contained that race" that Raider.IO's data allows. A cross faction group reports
+     * no faction at all and counts towards no race.
+     *
+     * Unlike buildSpecCriteria(), which emits an entry per party member and so increments a spec
+     * twice for a group running two of it, this emits at most one entry per race: a faction is a
+     * property of the whole group, and counting it five times would make the configured threshold
+     * mean something different for races than it does for every other criterion.
+     *
+     * @param  Collection<int, CharacterRace>   $criterionRaces
+     * @return CombatLogParsingCriterionCheck[]
+     */
+    private function buildRaceCriteria(?int $runFaction, Collection $criterionRaces, KeyLevelBand $band): array
+    {
+        if ($runFaction === null) {
+            return [];
+        }
+
+        $criteria = [];
+
+        foreach ($criterionRaces as $race) {
+            if (RaiderIOFaction::fromFaction($race->faction)?->value === $runFaction) {
+                $criteria[] = new CombatLogParsingCriterionCheck(CharacterRace::class, $race->id, $band);
             }
         }
 

@@ -4,11 +4,14 @@ namespace Tests\Feature\App\Service\CombatLog;
 
 use App\Logic\CombatLog\CombatLogVersion;
 use App\Models\CharacterClassSpecialization;
+use App\Models\CharacterRace;
 use App\Models\CombatLog\CombatLogParsingCriterion;
 use App\Models\Dungeon;
 use App\Models\Season;
 use App\Service\CombatLog\CombatLogParsingCriteriaService;
 use App\Service\CombatLog\CombatLogParsingCriteriaServiceInterface;
+use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitionInterface;
+use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitions;
 use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
 use App\Service\CombatLog\Dtos\KeyLevelBand;
 use Illuminate\Support\Carbon;
@@ -297,6 +300,96 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
         // Assert
         $this->assertNotEmpty($result);
         $this->assertContainsOnlyInstancesOf(CharacterClassSpecialization::class, $result->all());
+    }
+
+    /**
+     * Spending polling budget on a race nothing reads data for buys nothing, so the criterion races
+     * are exactly the races a racial spell counter is defined for - today Night Elf alone (#4357).
+     */
+    #[Test]
+    public function getAllModelsForCriteria_givenRaceClass_returnsOnlyRacesWithARacialSpellCounter(): void
+    {
+        // Arrange
+        $season           = Season::query()->firstOrFail();
+        $expectedRaceKeys = SpellCounterDefinitions::all()
+            ->map(fn(SpellCounterDefinitionInterface $definition): ?string => $definition->getCharacterRaceKey())
+            ->filter()
+            ->unique()
+            ->sort()
+            ->values()
+            ->all();
+
+        // Act
+        $result = $this->service->getAllModelsForCriteria(CharacterRace::class, $season);
+
+        // Assert
+        $this->assertNotEmpty($expectedRaceKeys, 'No racial spell counter is defined, so this test proves nothing');
+        $this->assertContainsOnlyInstancesOf(CharacterRace::class, $result->all());
+        $this->assertSame($expectedRaceKeys, $result->pluck('key')->sort()->values()->all());
+    }
+
+    /**
+     * The filter is built straight off the race's faction, so it must come back eager loaded - a
+     * lazy load throws under this application's lazy loading configuration.
+     */
+    #[Test]
+    public function getAllModelsForCriteria_givenRaceClass_eagerLoadsTheFaction(): void
+    {
+        // Arrange
+        $season = Season::query()->firstOrFail();
+
+        // Act
+        $result = $this->service->getAllModelsForCriteria(CharacterRace::class, $season);
+
+        // Assert
+        $this->assertNotEmpty($result);
+        foreach ($result as $race) {
+            $this->assertTrue($race->relationLoaded('faction'));
+        }
+    }
+
+    #[Test]
+    public function shouldParse_givenRaceCriterionAtThreshold_returnsFalse(): void
+    {
+        // Arrange
+        $nightElf = CharacterRace::query()->where('key', CharacterRace::CHARACTER_RACE_NIGHT_ELF)->firstOrFail();
+        $check    = new CombatLogParsingCriterionCheck(CharacterRace::class, $nightElf->id, $this->band());
+
+        CombatLogParsingCriterion::factory()
+            ->forRace($nightElf->id, self::VERSION)
+            ->create(['count' => 5, 'threshold' => 5]);
+
+        try {
+            // Act
+            $result = $this->service->shouldParse(self::VERSION, [$check]);
+
+            // Assert
+            $this->assertFalse($result);
+        } finally {
+            CombatLogParsingCriterion::query()->where('model_class', CharacterRace::class)->delete();
+        }
+    }
+
+    #[Test]
+    public function recordParsed_givenRaceCriterion_incrementsItsCount(): void
+    {
+        // Arrange
+        $nightElf = CharacterRace::query()->where('key', CharacterRace::CHARACTER_RACE_NIGHT_ELF)->firstOrFail();
+        $check    = new CombatLogParsingCriterionCheck(CharacterRace::class, $nightElf->id, $this->band());
+
+        try {
+            // Act
+            $this->service->recordParsed(self::VERSION, [$check]);
+
+            // Assert
+            $row = CombatLogParsingCriterion::query()
+                ->where('model_class', CharacterRace::class)
+                ->where('model_id', $nightElf->id)
+                ->firstOrFail();
+            $this->assertSame(1, $row->count);
+        } finally {
+            CombatLogParsingCriterion::query()->where('model_class', CharacterRace::class)->delete();
+        }
     }
 
     #[Test]

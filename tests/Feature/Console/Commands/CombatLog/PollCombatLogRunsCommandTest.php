@@ -4,6 +4,7 @@ namespace Tests\Feature\Console\Commands\CombatLog;
 
 use App\Jobs\CombatLog\ProcessCombatLogSegments;
 use App\Models\CharacterClassSpecialization;
+use App\Models\CharacterRace;
 use App\Models\CombatLog\ParsedCombatLog;
 use App\Models\Dungeon;
 use App\Models\Season;
@@ -44,6 +45,11 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
 
     private KeyLevelBand $topBand;
 
+    private CharacterRace $nightElf;
+
+    /** @var SearchAdvancedRunsFilter[] */
+    private array $capturedFilters = [];
+
     /** @var array<int, int> */
     private array $capturedMythicLevelMins = [];
 
@@ -61,6 +67,7 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
         $this->dungeon    = Dungeon::query()->whereNotNull('challenge_mode_id')->first();
         $this->spec       = CharacterClassSpecialization::query()->first();
         $this->season     = Season::query()->first();
+        $this->nightElf   = CharacterRace::query()->with('faction')->where('key', CharacterRace::CHARACTER_RACE_NIGHT_ELF)->firstOrFail();
         $this->spreadBand = new KeyLevelBand(12, 16);
         $this->topBand    = new KeyLevelBand(22, null);
 
@@ -552,13 +559,166 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
      * @throws Exception
      * @return MockObject&CombatLogParsingCriteriaServiceInterface
      */
-    private function makeCriteriaService(?Collection $eligibleDungeons = null, ?Collection $eligibleSpecs = null): MockObject
+    /**
+     * Raider.IO has no race dimension at all, so a race criterion polls the one race adjacent thing
+     * its search API does offer: the faction shared by every member of the group (#4357).
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenRaceEligible_searchesFilteredOnTheRacesFaction(): void
+    {
+        // Arrange
+        Bus::fake();
+
+        $criteriaService = $this->makeCriteriaService(eligibleRaces: collect([$this->nightElf]));
+        $criteriaService->method('shouldParse')->willReturn(true);
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $this->mockRaiderIOApiService();
+
+        // Act
+        $this->artisan('combatlog:pollruns')->assertSuccessful();
+
+        // Assert
+        $factionKeys = array_map(
+            static fn(SearchAdvancedRunsFilter $filter): ?string => $filter->faction?->key,
+            $this->capturedFilters,
+        );
+        $this->assertContains($this->nightElf->faction->key, $factionKeys);
+    }
+
+    /**
+     * A faction is a property of the whole group, unlike a spec - so it may count exactly once,
+     * however many of the group's five members share it.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenRunOfTheRacesFaction_recordsThatRaceCriterionExactlyOnce(): void
+    {
+        // Arrange
+        Bus::fake();
+
+        $run = $this->makeRun(1101, $this->dungeon->challenge_mode_id, faction: 0);
+
+        $criteriaService = $this->makeCriteriaService(eligibleDungeons: collect([$this->dungeon]));
+        $criteriaService->method('shouldParse')->willReturn(true);
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $this->mockRaiderIOApiService(spreadRuns: [$run]);
+
+        try {
+            // Act
+            $this->artisan('combatlog:pollruns')->assertSuccessful();
+
+            // Assert
+            Bus::assertDispatched(ProcessCombatLogSegments::class, function (ProcessCombatLogSegments $job): bool {
+                $this->assertSame(
+                    [$this->nightElf->id],
+                    $this->raceCriterionModelIds($job),
+                );
+
+                return true;
+            });
+        } finally {
+            ParsedCombatLog::query()->where('run_id', $run->id)->delete();
+        }
+    }
+
+    /**
+     * A cross faction group carries no faction, so nothing about it says which races it held.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenCrossFactionRun_recordsNoRaceCriterion(): void
+    {
+        // Arrange
+        Bus::fake();
+
+        $run = $this->makeRun(1102, $this->dungeon->challenge_mode_id, faction: null);
+
+        $criteriaService = $this->makeCriteriaService(eligibleDungeons: collect([$this->dungeon]));
+        $criteriaService->method('shouldParse')->willReturn(true);
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $this->mockRaiderIOApiService(spreadRuns: [$run]);
+
+        try {
+            // Act
+            $this->artisan('combatlog:pollruns')->assertSuccessful();
+
+            // Assert
+            Bus::assertDispatched(ProcessCombatLogSegments::class, function (ProcessCombatLogSegments $job): bool {
+                $this->assertSame([], $this->raceCriterionModelIds($job));
+
+                return true;
+            });
+        } finally {
+            ParsedCombatLog::query()->where('run_id', $run->id)->delete();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenRunOfTheOtherFaction_recordsNoRaceCriterion(): void
+    {
+        // Arrange
+        Bus::fake();
+
+        $run = $this->makeRun(1103, $this->dungeon->challenge_mode_id, faction: 1);
+
+        $criteriaService = $this->makeCriteriaService(eligibleDungeons: collect([$this->dungeon]));
+        $criteriaService->method('shouldParse')->willReturn(true);
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $this->mockRaiderIOApiService(spreadRuns: [$run]);
+
+        try {
+            // Act
+            $this->artisan('combatlog:pollruns')->assertSuccessful();
+
+            // Assert
+            Bus::assertDispatched(ProcessCombatLogSegments::class, function (ProcessCombatLogSegments $job): bool {
+                $this->assertSame([], $this->raceCriterionModelIds($job));
+
+                return true;
+            });
+        } finally {
+            ParsedCombatLog::query()->where('run_id', $run->id)->delete();
+        }
+    }
+
+    /**
+     * @return int[] the model ids of the race criteria the given job was dispatched with
+     */
+    private function raceCriterionModelIds(ProcessCombatLogSegments $job): array
+    {
+        /** @var CombatLogParsingCriterionCheck[] $criteria */
+        $criteria = (new ReflectionClass($job))->getProperty('criteria')->getValue($job);
+
+        $modelIds = [];
+
+        foreach ($criteria as $criterion) {
+            if ($criterion->getModelClass() === CharacterRace::class) {
+                $modelIds[] = $criterion->getModelId();
+            }
+        }
+
+        return $modelIds;
+    }
+
+    private function makeCriteriaService(?Collection $eligibleDungeons = null, ?Collection $eligibleSpecs = null, ?Collection $eligibleRaces = null): MockObject
     {
         $criteriaService = $this->createMockPublic(CombatLogParsingCriteriaServiceInterface::class);
         $criteriaService->method('getAllModelsForCriteria')->willReturnCallback(
             fn(string $modelClass) => match ($modelClass) {
                 Dungeon::class                      => collect([$this->dungeon]),
                 CharacterClassSpecialization::class => CharacterClassSpecialization::query()->get(),
+                CharacterRace::class                => collect([$this->nightElf]),
                 default                             => collect(),
             },
         );
@@ -566,6 +726,7 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
             fn(int $version, string $modelClass) => match ($modelClass) {
                 Dungeon::class                      => $eligibleDungeons ?? collect(),
                 CharacterClassSpecialization::class => $eligibleSpecs ?? collect(),
+                CharacterRace::class                => $eligibleRaces ?? collect(),
                 default                             => collect(),
             },
         );
@@ -582,12 +743,14 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
     {
         $this->capturedMythicLevelMins  = [];
         $this->capturedMythicLevelMaxes = [];
+        $this->capturedFilters          = [];
 
         $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
         $raiderIOApiService->method('searchAdvancedRuns')->willReturnCallback(
             function (SearchAdvancedRunsFilter $filter) use ($spreadRuns, $topRuns): SearchAdvancedRunsResponse {
                 $this->capturedMythicLevelMins[]  = $filter->mythicLevelMin;
                 $this->capturedMythicLevelMaxes[] = $filter->mythicLevelMax;
+                $this->capturedFilters[]          = $filter;
 
                 $runs = $filter->mythicLevelMax === null ? $topRuns : $spreadRuns;
 
@@ -605,6 +768,7 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
         int   $challengeModeId,
         array $memberSpecIds = [66, 70, 105, 250, 269],
         int   $mythicLevel = 14,
+        ?int  $faction = null,
     ): SearchAdvancedRun {
         return new SearchAdvancedRun(
             id:              $id,
@@ -613,6 +777,7 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
             memberSpecIds:   $memberSpecIds,
             mythicLevel:     $mythicLevel,
             affixes:         [],
+            faction:         $faction,
         );
     }
 }
