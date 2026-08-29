@@ -3,7 +3,9 @@
 namespace App\Models\CombatLog;
 
 use App\Models\Spell\Spell;
+use Database\Factories\CombatLog\CombatLogSpellPropertyObservationFactory;
 use Eloquent;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -24,6 +26,9 @@ use Illuminate\Support\Carbon;
  */
 class CombatLogSpellPropertyObservation extends Model
 {
+    /** @use HasFactory<CombatLogSpellPropertyObservationFactory> */
+    use HasFactory;
+
     protected $connection = 'combatlog';
 
     protected $fillable = [

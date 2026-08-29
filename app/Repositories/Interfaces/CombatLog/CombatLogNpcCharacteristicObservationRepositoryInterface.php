@@ -4,6 +4,7 @@ namespace App\Repositories\Interfaces\CombatLog;
 
 use App\Models\CombatLog\CombatLogNpcCharacteristicObservation;
 use App\Repositories\BaseRepositoryInterface;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
@@ -19,4 +20,31 @@ use Illuminate\Support\Collection;
  */
 interface CombatLogNpcCharacteristicObservationRepositoryInterface extends BaseRepositoryInterface
 {
+    /**
+     * Total row count of the table.
+     */
+    public function countAll(): int;
+
+    /**
+     * The distinct `observed_on` dates present across the whole table.
+     *
+     * @return array{min: ?Carbon, max: ?Carbon, count: int}
+     */
+    public function getObservedOnDateRange(): array;
+
+    /**
+     * Per `(npc_id, characteristic_id)` tuple, the number of distinct `observed_on` dates recorded - i.e. how many
+     * days that fact has been seen. Ordered deterministically by npc_id, characteristic_id.
+     *
+     * @return Collection<int, CombatLogNpcCharacteristicObservation> partial models exposing npc_id, characteristic_id, days_observed
+     */
+    public function getTupleDensity(): Collection;
+
+    /**
+     * For one NPC, every observed characteristic's list of `observed_on` dates (newest first), keyed by
+     * characteristic_id.
+     *
+     * @return Collection<int, Collection<int, Carbon>>
+     */
+    public function getHistoryForNpc(int $npcId): Collection;
 }
