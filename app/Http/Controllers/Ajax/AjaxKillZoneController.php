@@ -170,10 +170,13 @@ class AjaxKillZoneController extends Controller
             // watching their marker silently disappear. 422 as a literal, like
             // abortIfDungeonRouteLimitReached() - Teapot's Http does not expose UNPROCESSABLE_ENTITY
             //
-            // Floor union areas are expected to tile the entire facade map with no gaps, so this
-            // should never trigger - reported to diagnose which mapping version/floor unions do.
+            // Expected to be rare (see the dead-space note above), not impossible - reported with the
+            // submitted lat/lng so an occurrence can actually be plotted against the mapping version's
+            // floor unions instead of only naming which one was hit.
             report(new Exception(sprintf(
-                'Facade location could not be converted to a real floor for mapping version %d, submitted floor %d',
+                'Facade location (%s, %s) could not be converted to a real floor for mapping version %d, submitted floor %d',
+                $data['lat'],
+                $data['lng'],
                 $dungeonRoute->mappingVersion->id,
                 $submittedFloor->id,
             )));
