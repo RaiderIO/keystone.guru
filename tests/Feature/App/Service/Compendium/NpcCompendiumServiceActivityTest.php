@@ -331,6 +331,39 @@ final class NpcCompendiumServiceActivityTest extends PublicTestCase
     }
 
     #[Test]
+    public function getActivityDates_givenDateWithOnlyVisibleSpellEvents_returnsThatDate(): void
+    {
+        // Arrange — the positive direction of the same filter. Every other hidden_on_map test
+        // asserts an absence, so nothing would catch the whereNotIn over-filtering and dropping
+        // legitimate spell-only activity dates.
+        $uniqueDate  = '2000-01-06';
+        $gameVersion = GameVersion::first();
+
+        $visibleSpell = $this->createTestSpell($gameVersion->id, 'TestVisibleOnlyDaySpell', false);
+
+        $spellEvent = CombatLogSpellEvent::create([
+            'spell_id'   => self::TEST_SPELL_ID,
+            'event_type' => CombatLogSpellEventType::PropertyChanged->value,
+            'property'   => SpellProperty::Aura->value,
+        ]);
+        CombatLogSpellEvent::where('id', $spellEvent->id)->update(['created_at' => $uniqueDate . ' 12:00:00']);
+
+        try {
+            // Act
+            $paginator = $this->service->getActivityDates(PHP_INT_MAX);
+
+            // Assert
+            $this->assertTrue(
+                collect($paginator->items())->contains($uniqueDate),
+                sprintf('Date %s should appear - its event is on a visible spell', $uniqueDate),
+            );
+        } finally {
+            $spellEvent->delete();
+            $visibleSpell->delete();
+        }
+    }
+
+    #[Test]
     public function getActivityDates_givenDateWithOnlyHiddenSpellNpcEvents_omitsThatDate(): void
     {
         // Arrange — the same for the NPC side, where a SpellAssigned points at a hidden spell.
