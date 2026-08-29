@@ -711,6 +711,12 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
         return $modelIds;
     }
 
+    /**
+     * @param  ?Collection<int, Dungeon>                      $eligibleDungeons
+     * @param  ?Collection<int, CharacterClassSpecialization> $eligibleSpecs
+     * @param  ?Collection<int, CharacterRace>                $eligibleRaces
+     * @throws Exception
+     */
     private function makeCriteriaService(?Collection $eligibleDungeons = null, ?Collection $eligibleSpecs = null, ?Collection $eligibleRaces = null): MockObject
     {
         $criteriaService = $this->createMockPublic(CombatLogParsingCriteriaServiceInterface::class);

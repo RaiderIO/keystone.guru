@@ -343,6 +343,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
 
         // Assert
         $this->assertNotEmpty($result);
+        /** @var CharacterRace $race */
         foreach ($result as $race) {
             $this->assertTrue($race->relationLoaded('faction'));
         }
