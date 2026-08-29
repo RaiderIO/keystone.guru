@@ -23,7 +23,8 @@ class APICombatLogObservationController extends Controller
     private const int TUPLE_CAP = 200;
 
     /**
-     * Even with `?detailed=1`, the per-tuple list never exceeds this many tuples.
+     * Even with `?detailed=1`, the per-tuple list never exceeds this many tuples - and that cap is applied as a
+     * SQL `LIMIT`, so at most this many rows are ever fetched from the database.
      */
     private const int DETAILED_TUPLE_CAP = 2000;
 
@@ -38,6 +39,7 @@ class APICombatLogObservationController extends Controller
      *
      *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(type="object")),
      *     @OA\Response(response=403, description="Not an admin or ai_agent"),
+     *     @OA\Response(response=429, description="Too many requests"),
      * )
      */
     public function density(
@@ -47,36 +49,10 @@ class APICombatLogObservationController extends Controller
     ): JsonResponse {
         $detailed = $request->isDetailed();
 
-        /** @var Collection<int, array<string, mixed>> $spellTuples */
-        $spellTuples = $spellPropertyObservationRepository->getTupleDensity()
-            ->map(static fn(CombatLogSpellPropertyObservation $row): array => [
-                'spell_id'      => $row->spell_id,
-                'property'      => $row->property->value,
-                'days_observed' => (int)$row->getAttribute('days_observed'),
-            ]);
-
-        /** @var Collection<int, array<string, mixed>> $npcTuples */
-        $npcTuples = $npcCharacteristicObservationRepository->getTupleDensity()
-            ->map(static fn(CombatLogNpcCharacteristicObservation $row): array => [
-                'npc_id'            => $row->npc_id,
-                'characteristic_id' => $row->characteristic_id,
-                'days_observed'     => (int)$row->getAttribute('days_observed'),
-            ]);
-
         return response()->json([
             'data' => [
-                'spell_property_observations' => $this->buildTableDensity(
-                    $spellPropertyObservationRepository->countAll(),
-                    $spellPropertyObservationRepository->getObservedOnDateRange(),
-                    $spellTuples,
-                    $detailed,
-                ),
-                'npc_characteristic_observations' => $this->buildTableDensity(
-                    $npcCharacteristicObservationRepository->countAll(),
-                    $npcCharacteristicObservationRepository->getObservedOnDateRange(),
-                    $npcTuples,
-                    $detailed,
-                ),
+                'spell_property_observations'     => $this->buildSpellPropertyDensity($spellPropertyObservationRepository, $detailed),
+                'npc_characteristic_observations' => $this->buildNpcCharacteristicDensity($npcCharacteristicObservationRepository, $detailed),
             ],
         ]);
     }
@@ -164,23 +140,74 @@ class APICombatLogObservationController extends Controller
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    private function buildSpellPropertyDensity(CombatLogSpellPropertyObservationRepositoryInterface $repository, bool $detailed): array
+    {
+        $tupleCount    = $repository->getTupleCount();
+        $includeTuples = $tupleCount <= self::TUPLE_CAP || $detailed;
+
+        $tuples = null;
+        if ($includeTuples) {
+            $tuples = $repository
+                ->getTuples($detailed ? self::DETAILED_TUPLE_CAP : self::TUPLE_CAP)
+                ->map(static fn(CombatLogSpellPropertyObservation $row): array => [
+                    'spell_id'      => $row->spell_id,
+                    'property'      => $row->property->value,
+                    'days_observed' => (int)$row->getAttribute('days_observed'),
+                ])
+                ->values()
+                ->all();
+        }
+
+        return $this->buildTableDensity(
+            $repository->countAll(),
+            $repository->getObservedOnDateRange(),
+            $repository->getDensityHistogram(),
+            $tupleCount,
+            $tuples,
+        );
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function buildNpcCharacteristicDensity(CombatLogNpcCharacteristicObservationRepositoryInterface $repository, bool $detailed): array
+    {
+        $tupleCount    = $repository->getTupleCount();
+        $includeTuples = $tupleCount <= self::TUPLE_CAP || $detailed;
+
+        $tuples = null;
+        if ($includeTuples) {
+            $tuples = $repository
+                ->getTuples($detailed ? self::DETAILED_TUPLE_CAP : self::TUPLE_CAP)
+                ->map(static fn(CombatLogNpcCharacteristicObservation $row): array => [
+                    'npc_id'            => $row->npc_id,
+                    'characteristic_id' => $row->characteristic_id,
+                    'days_observed'     => (int)$row->getAttribute('days_observed'),
+                ])
+                ->values()
+                ->all();
+        }
+
+        return $this->buildTableDensity(
+            $repository->countAll(),
+            $repository->getObservedOnDateRange(),
+            $repository->getDensityHistogram(),
+            $tupleCount,
+            $tuples,
+        );
+    }
+
+    /**
      * @param array{min: ?Carbon, max: ?Carbon, count: int} $observedOnRange
-     * @param Collection<int, array<string, mixed>>         $tuples
+     * @param array<int, int>                               $histogram       days_observed => tuple_count, already computed in SQL
+     * @param array<int, array<string, mixed>>|null         $tuples          null when the tuple list was left out of the response
      *
      * @return array<string, mixed>
      */
-    private function buildTableDensity(int $rowCount, array $observedOnRange, Collection $tuples, bool $detailed): array
+    private function buildTableDensity(int $rowCount, array $observedOnRange, array $histogram, int $tupleCount, ?array $tuples): array
     {
-        $histogram = $tuples
-            ->groupBy('days_observed')
-            ->map(static fn(Collection $group): int => $group->count())
-            ->sortKeys()
-            ->all();
-
-        $tupleCount    = $tuples->count();
-        $includeTuples = $tupleCount <= self::TUPLE_CAP || $detailed;
-        $cappedTuples  = $includeTuples ? $tuples->take(self::DETAILED_TUPLE_CAP) : new Collection();
-
         return [
             'row_count'   => $rowCount,
             'observed_on' => [
@@ -189,8 +216,8 @@ class APICombatLogObservationController extends Controller
                 'count' => $observedOnRange['count'],
             ],
             'histogram' => empty($histogram) ? (object)[] : $histogram,
-            'tuples'    => $includeTuples ? $cappedTuples->values()->all() : null,
-            'truncated' => $includeTuples && $cappedTuples->count() < $tupleCount,
+            'tuples'    => $tuples,
+            'truncated' => $tuples !== null && count($tuples) < $tupleCount,
         ];
     }
 }

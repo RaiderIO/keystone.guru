@@ -34,7 +34,44 @@ class CombatLogSpellPropertyObservationRepository extends DatabaseRepository imp
         ];
     }
 
-    public function getTupleDensity(): Collection
+    public function getDensityHistogram(): array
+    {
+        $tupleDensity = CombatLogSpellPropertyObservation::query()
+            ->selectRaw('COUNT(DISTINCT observed_on) as days_observed')
+            ->groupBy('spell_id', 'property');
+
+        /** @var Collection<int, object{days_observed: int, tuple_count: int}> $rows */
+        $rows = CombatLogSpellPropertyObservation::query()
+            ->getQuery()
+            ->newQuery()
+            ->fromSub($tupleDensity, 't')
+            ->selectRaw('days_observed, COUNT(*) as tuple_count')
+            ->groupBy('days_observed')
+            ->orderBy('days_observed')
+            ->get();
+
+        $histogram = [];
+        foreach ($rows as $row) {
+            $histogram[(int)$row->days_observed] = (int)$row->tuple_count;
+        }
+
+        return $histogram;
+    }
+
+    public function getTupleCount(): int
+    {
+        $tuples = CombatLogSpellPropertyObservation::query()
+            ->select('spell_id', 'property')
+            ->groupBy('spell_id', 'property');
+
+        return (int)CombatLogSpellPropertyObservation::query()
+            ->getQuery()
+            ->newQuery()
+            ->fromSub($tuples, 't')
+            ->count();
+    }
+
+    public function getTuples(int $limit): Collection
     {
         /** @var Collection<int, CombatLogSpellPropertyObservation> $result */
         $result = CombatLogSpellPropertyObservation::query()
@@ -42,6 +79,7 @@ class CombatLogSpellPropertyObservationRepository extends DatabaseRepository imp
             ->groupBy('spell_id', 'property')
             ->orderBy('spell_id')
             ->orderBy('property')
+            ->limit($limit)
             ->get();
 
         return $result;

@@ -33,12 +33,27 @@ interface CombatLogNpcCharacteristicObservationRepositoryInterface extends BaseR
     public function getObservedOnDateRange(): array;
 
     /**
-     * Per `(npc_id, characteristic_id)` tuple, the number of distinct `observed_on` dates recorded - i.e. how many
-     * days that fact has been seen. Ordered deterministically by npc_id, characteristic_id.
+     * `days_observed => tuple_count` across every `(npc_id, characteristic_id)` tuple, computed entirely in SQL
+     * (a `GROUP BY` per tuple rolled up into a second `GROUP BY` per bucket) so this never pulls one row per
+     * tuple into PHP - the response stays small regardless of how many tuples exist.
+     *
+     * @return array<int, int>
+     */
+    public function getDensityHistogram(): array;
+
+    /**
+     * The number of distinct `(npc_id, characteristic_id)` tuples, computed in SQL.
+     */
+    public function getTupleCount(): int;
+
+    /**
+     * Up to `$limit` `(npc_id, characteristic_id)` tuples with their distinct `observed_on` day count, ordered
+     * deterministically by npc_id, characteristic_id. The limit is applied in the query itself, so at most
+     * `$limit` rows are ever fetched.
      *
      * @return Collection<int, CombatLogNpcCharacteristicObservation> partial models exposing npc_id, characteristic_id, days_observed
      */
-    public function getTupleDensity(): Collection;
+    public function getTuples(int $limit): Collection;
 
     /**
      * For one NPC, every observed characteristic's list of `observed_on` dates (newest first), keyed by

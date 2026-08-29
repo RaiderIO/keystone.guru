@@ -37,7 +37,7 @@ Route::prefix('v1')->group(static function () {
             Route::get('enemy-failures/{dungeon}', new APICombatLogEnemyFailureController()->index(...))->name('api.v1.combatlog.enemy_failures.index');
             Route::get('route/{dungeonRoute}/post-body', new APICombatLogRouteController()->postBody(...))->name('api.v1.combatlog.route.post_body');
             Route::prefix('observations')->group(static function () {
-                Route::get('density', new APICombatLogObservationController()->density(...))->name('api.v1.combatlog.observations.density');
+                Route::middleware('throttle:api-combatlog-observations-density')->get('density', new APICombatLogObservationController()->density(...))->name('api.v1.combatlog.observations.density');
                 Route::get('spells/{spell}', new APICombatLogObservationController()->spellHistory(...))->name('api.v1.combatlog.observations.spells.show');
                 Route::get('npcs/{npc}', new APICombatLogObservationController()->npcHistory(...))->name('api.v1.combatlog.observations.npcs.show');
             });

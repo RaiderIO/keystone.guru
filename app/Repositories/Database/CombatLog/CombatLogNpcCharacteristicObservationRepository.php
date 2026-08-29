@@ -34,7 +34,44 @@ class CombatLogNpcCharacteristicObservationRepository extends DatabaseRepository
         ];
     }
 
-    public function getTupleDensity(): Collection
+    public function getDensityHistogram(): array
+    {
+        $tupleDensity = CombatLogNpcCharacteristicObservation::query()
+            ->selectRaw('COUNT(DISTINCT observed_on) as days_observed')
+            ->groupBy('npc_id', 'characteristic_id');
+
+        /** @var Collection<int, object{days_observed: int, tuple_count: int}> $rows */
+        $rows = CombatLogNpcCharacteristicObservation::query()
+            ->getQuery()
+            ->newQuery()
+            ->fromSub($tupleDensity, 't')
+            ->selectRaw('days_observed, COUNT(*) as tuple_count')
+            ->groupBy('days_observed')
+            ->orderBy('days_observed')
+            ->get();
+
+        $histogram = [];
+        foreach ($rows as $row) {
+            $histogram[(int)$row->days_observed] = (int)$row->tuple_count;
+        }
+
+        return $histogram;
+    }
+
+    public function getTupleCount(): int
+    {
+        $tuples = CombatLogNpcCharacteristicObservation::query()
+            ->select('npc_id', 'characteristic_id')
+            ->groupBy('npc_id', 'characteristic_id');
+
+        return (int)CombatLogNpcCharacteristicObservation::query()
+            ->getQuery()
+            ->newQuery()
+            ->fromSub($tuples, 't')
+            ->count();
+    }
+
+    public function getTuples(int $limit): Collection
     {
         /** @var Collection<int, CombatLogNpcCharacteristicObservation> $result */
         $result = CombatLogNpcCharacteristicObservation::query()
@@ -42,6 +79,7 @@ class CombatLogNpcCharacteristicObservationRepository extends DatabaseRepository
             ->groupBy('npc_id', 'characteristic_id')
             ->orderBy('npc_id')
             ->orderBy('characteristic_id')
+            ->limit($limit)
             ->get();
 
         return $result;
