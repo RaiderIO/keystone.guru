@@ -251,7 +251,7 @@ final class APIPatreonDiagnosticsControllerTest extends PublicTestCase
         $patreonService = $this->createMockPublic(PatreonServiceInterface::class);
         $patreonService->method('loadCampaignBenefits')->willReturn([]);
         $patreonService->method('loadCampaignTiers')->willReturn([]);
-        $patreonService->method('loadCampaignMembers')->willReturn(null);
+        $patreonService->method('loadCampaignMembers')->willReturn(new PatreonCampaignMembers([], 5, 400, truncated: true));
         $this->app->instance(PatreonServiceInterface::class, $patreonService);
 
         // Act
@@ -303,7 +303,7 @@ final class APIPatreonDiagnosticsControllerTest extends PublicTestCase
                 'relationships' => ['benefits' => ['data' => [['id' => '367345', 'type' => 'benefit']]]],
             ],
         ]);
-        $patreonService->method('loadCampaignMembers')->willReturn(new PatreonCampaignMembers($members, 1));
+        $patreonService->method('loadCampaignMembers')->willReturn(new PatreonCampaignMembers($members, 1, count($members), truncated: false));
         $patreonService->method('planPaidBenefitsForMember')
             ->willReturnCallback(static fn(array $benefits, array $tiers, array $member) => $realPatreonService
                 ->planPaidBenefitsForMember($benefits, $tiers, $member));

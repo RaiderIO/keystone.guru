@@ -87,10 +87,10 @@ class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
             return null;
         }
 
-        // Null here includes a truncated member fetch, which is the whole point: a dry run that cannot
-        // see the entire campaign must not report per-member conclusions drawn from half of it
+        // A dry run that cannot see the entire campaign must not report per-member conclusions drawn from
+        // half of it - every member the fetch missed would show up as one about to lose their benefits
         $campaignMembers = $this->patreonService->loadCampaignMembers();
-        if ($campaignMembers === null) {
+        if ($campaignMembers === null || $campaignMembers->truncated) {
             return null;
         }
 
@@ -152,7 +152,9 @@ class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
         $campaignTiers    = $this->patreonService->loadCampaignTiers();
         $campaignMembers  = $this->patreonService->loadCampaignMembers();
 
-        if ($campaignBenefits !== null && $campaignTiers !== null && $campaignMembers !== null) {
+        // A truncated member list is not searched: not finding the member in it would wrongly read as
+        // "the campaign no longer lists this patron"
+        if ($campaignBenefits !== null && $campaignTiers !== null && $campaignMembers !== null && !$campaignMembers->truncated) {
             $linkEmail = $patreonUserLink?->email;
 
             foreach ($campaignMembers->members as $campaignMember) {

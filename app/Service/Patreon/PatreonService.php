@@ -118,18 +118,21 @@ class PatreonService implements PatreonServiceInterface
             $pagedResponse   = $this->patreonApiService->getCampaignMembers($adminUser->patreonUserLink->access_token);
             $membersResponse = $pagedResponse->response;
 
-            // A truncated fetch sets `errors`, so a partial member list is rejected here rather than
-            // being handed on as if it were the whole campaign (#4373)
+            // A truncated fetch sets `errors`, so a partial member list never reaches the caller as if it
+            // were the whole campaign. It is still returned as a (memberless) result rather than as null,
+            // because how far the fetch got before it stopped is the single most useful thing to record
+            // about a failed run - collapsing it to null makes a failure on page 5 look like one on page
+            // 1, and the difference is exactly what identifies truncation afterwards (#4373)
             if (isset($membersResponse['errors'])) {
                 $this->log->loadCampaignTiersRetrieveMembersErrors($membersResponse);
 
-                return null;
+                return new PatreonCampaignMembers([], $pagedResponse->pageCount, $pagedResponse->rowCount, truncated: true);
             }
 
             if (!isset($membersResponse['data'])) {
                 $this->log->loadCampaignTiersRetrieveMembersDataNotSet($membersResponse);
 
-                return null;
+                return new PatreonCampaignMembers([], $pagedResponse->pageCount, $pagedResponse->rowCount, truncated: true);
             }
 
             /** @var array<int, mixed> $membersResponseData */
@@ -140,7 +143,7 @@ class PatreonService implements PatreonServiceInterface
                 $included,
             ) => $included['type'] === 'member')->values()->toArray();
 
-            return new PatreonCampaignMembers($members, $pagedResponse->pageCount);
+            return new PatreonCampaignMembers($members, $pagedResponse->pageCount, $pagedResponse->rowCount, truncated: false);
         } finally {
             $this->log->loadCampaignMembersEnd();
         }

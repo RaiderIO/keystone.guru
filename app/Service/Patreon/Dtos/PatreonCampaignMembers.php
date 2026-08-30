@@ -13,11 +13,21 @@ namespace App\Service\Patreon\Dtos;
 class PatreonCampaignMembers
 {
     /**
+     * `$members` is deliberately empty whenever `$truncated` is true: a partial member list must never
+     * reach the code that applies benefits, because every member the fetch never saw is indistinguishable
+     * there from a member who cancelled. The counts still describe how far the fetch got, which is the
+     * part worth recording on the run row.
+     *
      * @param array<int, array<string, mixed>> $members
+     * @param int                              $pageCount How many pages were requested, the failed one included
+     * @param int                              $rowCount  How many members arrived before the fetch stopped
+     * @param bool                             $truncated Whether the fetch stopped before the last page
      */
     public function __construct(
         public readonly array $members,
         public readonly int   $pageCount,
+        public readonly int   $rowCount,
+        public readonly bool  $truncated,
     ) {
     }
 }

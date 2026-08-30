@@ -63,16 +63,30 @@ class RefreshMembershipStatus extends SchedulerCommand
             if ($campaignMembers === null) {
                 $this->error('Unable to load the campaign members');
 
-                // A truncated fetch lands here too, since the pagination now flags a partial response as
-                // an error rather than passing it off as the complete campaign
+                return $this->finishRun($syncRun, false, 'Unable to load the campaign members');
+            }
+
+            // How far the fetch got is recorded before anything else decides what to do with it, so a
+            // truncated run says which page it died on rather than looking like a total failure
+            $syncRun->update([
+                'pages_fetched'   => $campaignMembers->pageCount,
+                'members_fetched' => $campaignMembers->rowCount,
+            ]);
+
+            // A partial member list is never processed: every member it does not contain would be read as
+            // a member who cancelled, and revoking a paying patron's benefits is the failure this whole
+            // change exists to prevent (#4373)
+            if ($campaignMembers->truncated) {
+                $this->error(sprintf(
+                    'The campaign member list came back truncated after %d page(s) and %d member(s) - not applying anything',
+                    $campaignMembers->pageCount,
+                    $campaignMembers->rowCount,
+                ));
+
                 return $this->finishRun($syncRun, false, 'Unable to load the campaign members', truncated: true);
             }
 
             $members = $campaignMembers->members;
-            $syncRun->update([
-                'pages_fetched'   => $campaignMembers->pageCount,
-                'members_fetched' => count($members),
-            ]);
 
             // A single member we cannot apply the benefits for should not keep all remaining members from being
             // updated - but the command must still fail afterwards so that the failure doesn't go unnoticed

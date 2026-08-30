@@ -55,12 +55,14 @@ Route::prefix('v1')->group(static function () {
     // email in these responses is masked, and the account to inspect is always an input: there is
     // deliberately no endpoint here that lists patrons.
     Route::middleware(['api_role:admin|ai_agent'])->prefix('patreon')->group(static function () {
+        // Reads the recorded run history and nothing else - no Patreon traffic, so no throttle
         Route::get('sync-runs', new APIPatreonDiagnosticsController()->syncRuns(...))->name('api.v1.patreon.sync_runs');
-        Route::get('user', new APIPatreonDiagnosticsController()->user(...))->name('api.v1.patreon.user');
 
-        // These two walk the campaign on every call, so they are throttled - the members endpoint is
-        // paginated and a tight loop over it would spend the campaign's Patreon rate limit
+        // Everything below walks the whole campaign, the member list included, so a tight loop over any
+        // of them would spend the campaign's Patreon rate limit and take the hourly sync down with it.
+        // The per-user endpoint looks cheap but is not: it scans the member list to find its member.
         Route::middleware('throttle:api-patreon-diagnostics')->group(static function () {
+            Route::get('user', new APIPatreonDiagnosticsController()->user(...))->name('api.v1.patreon.user');
             Route::get('campaign', new APIPatreonDiagnosticsController()->campaign(...))->name('api.v1.patreon.campaign');
             Route::get('sync-dry-run', new APIPatreonDiagnosticsController()->syncDryRun(...))->name('api.v1.patreon.sync_dry_run');
         });
