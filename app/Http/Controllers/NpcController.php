@@ -171,9 +171,13 @@ class NpcController extends Controller
 
         /** @var User $user */
         $user = Auth::user();
+        // If the npc was just renamed to a new id, tell listening clients so they can find enemies
+        // still holding the old id in their in-memory state (the DB rows were already remapped)
+        $oldNpcId = $oldId !== null && $oldId !== $npc->id ? $oldId : null;
+
         foreach ($npc->dungeons as $dungeon) {
             try {
-                broadcast(new NpcChangedEvent($dungeon, $user, $npc));
+                broadcast(new NpcChangedEvent($dungeon, $user, $npc, oldNpcId: $oldNpcId));
             } catch (BroadcastException) {
                 // Ignore broadcast failures
             }
@@ -187,7 +191,7 @@ class NpcController extends Controller
             if (!empty($removedDungeonIds)) {
                 foreach (Dungeon::whereIn('id', $removedDungeonIds)->get() as $dungeon) {
                     try {
-                        broadcast(new NpcChangedEvent($dungeon, $user, $npc, npcRemovedFromDungeon: true));
+                        broadcast(new NpcChangedEvent($dungeon, $user, $npc, npcRemovedFromDungeon: true, oldNpcId: $oldNpcId));
                     } catch (BroadcastException) {
                         // Ignore broadcast failures
                     }

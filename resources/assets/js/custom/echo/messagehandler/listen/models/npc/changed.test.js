@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// Regression coverage for #4376. Two bugs, both in NpcChangedHandler.onReceive():
+// Regression coverage for #4376. Bugs in NpcChangedHandler.onReceive():
 //
 // 1. Relevance used to be decided from `e.model.dungeon_id`, a legacy column
 //    NpcController never writes, instead of the explicit `npc_removed_from_dungeon`
@@ -10,6 +10,10 @@
 //    `enemy_forces`/`enemy_forces_teeming`, because the live-update payload's npc can
 //    never carry the right value (NpcEnemyForces is scoped per mapping version, not
 //    per dungeon). The handler must preserve whatever the enemy already had.
+// 3. When an admin renames an npc's id, the enemies/npcs still holding the old id in
+//    connected clients' in-memory state were never told, since the broadcast only
+//    carried the new id and the handler matched on `e.model.id` alone (the DB rows
+//    were already remapped server-side). `e.old_npc_id` fixes this.
 //
 // Following the recipe at the top of ../../../../models/killzone.test.js: fake the
 // base class (MessageHandler) and collaborators instead of requiring the real chain.
@@ -144,5 +148,24 @@ describe('NpcChangedHandler', () => {
         expect(enemy.npc).toBeUndefined();
         expect(enemy.npc_id).toBe(1);
         expect(enemy.setSynced).toHaveBeenCalledWith(true);
+    });
+
+    test('onReceive_givenNpcRenamedToNewId_reassignsEnemiesStillHoldingTheOldIdAndRemovesTheOldRawNpc', () => {
+        // Arrange - the DB rows were already remapped from 42 to 99 server-side; this client's
+        // enemy and raw npc list still reference the old id 42.
+        let enemy = makeEnemy(42, 5, null);
+        let mapContext = makeMapContext();
+        let handler = makeHandler(mapContext, {1: enemy});
+        let npc = {id: 99, name: 'Renamed Npc'};
+
+        // Act
+        handler.onReceive({model: npc, npc_removed_from_dungeon: false, old_npc_id: 42});
+
+        // Assert
+        expect(mapContext.removeRawNpcById).toHaveBeenCalledWith(99);
+        expect(mapContext.removeRawNpcById).toHaveBeenCalledWith(42);
+        expect(mapContext.addRawNpc).toHaveBeenCalledWith(npc);
+        expect(enemy.npc).toBe(npc);
+        expect(enemy.npc_id).toBe(99);
     });
 });
