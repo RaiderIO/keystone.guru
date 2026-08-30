@@ -7,6 +7,12 @@ storage/framework/
 # Container config and MySQL data directories - not source.
 docker-compose/
 
+# Gitignored runtime output (debug snapshots, request logs) — already excluded per-file via root
+# .gitignore/nested .gitignore, but listing them here collapses the coverage report's not_indexed
+# list from hundreds of individual file entries to two directory entries.
+storage/debugbar/
+storage/logs/
+
 # Re-include tracked source that CBM's built-in skip-list drops by directory name.
 !resources/assets/
 !database/migrations/
