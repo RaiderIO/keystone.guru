@@ -26,8 +26,12 @@ class UserController extends Controller
     public function get(): View
     {
         return view('admin.user.list', [
-            'allPatreonBenefits' => PatreonBenefit::all(),
-            'allRoles'           => Role::all(),
+            'allPatreonBenefits' => PatreonBenefit::all()->map(fn(PatreonBenefit $benefit) => [
+                'id'   => $benefit->id,
+                'key'  => $benefit->key,
+                'name' => __($benefit->name),
+            ]),
+            'allRoles' => Role::all(),
         ]);
     }
 
