@@ -60,6 +60,7 @@ Route::prefix('v1')->group(static function () {
             Route::get('user', new APIPatreonDiagnosticsController()->user(...))->name('api.v1.patreon.user');
             Route::get('campaign', new APIPatreonDiagnosticsController()->campaign(...))->name('api.v1.patreon.campaign');
             Route::get('sync-dry-run', new APIPatreonDiagnosticsController()->syncDryRun(...))->name('api.v1.patreon.sync_dry_run');
+            Route::get('benefit-reconciliation', new APIPatreonDiagnosticsController()->benefitReconciliation(...))->name('api.v1.patreon.benefit_reconciliation');
         });
     });
 

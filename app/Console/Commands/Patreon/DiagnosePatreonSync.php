@@ -30,6 +30,7 @@ class DiagnosePatreonSync extends Command
         {--runs : Show the recorded sync run history (the cheapest check - no Patreon API calls)}
         {--campaign : Show every campaign tier and the benefits it resolves to}
         {--dry-run : Run the whole sync in plan-only mode and report what it would change}
+        {--reconcile : List accounts holding more benefits than the campaign grants them}
         {--limit=30 : How many sync runs to show with --runs}
         {--host=production : Which deployment to ask - a key of config keystoneguru.remote_hosts}
         {--credentials-file= : File holding one "user:password" line for HTTP Basic auth; read from stdin when omitted}
@@ -53,14 +54,15 @@ class DiagnosePatreonSync extends Command
         }
         $baseUrl = rtrim($baseUrl, '/');
 
-        $user     = $this->option('user');
-        $email    = $this->option('email');
-        $showRuns = (bool)$this->option('runs');
-        $campaign = (bool)$this->option('campaign');
-        $dryRun   = (bool)$this->option('dry-run');
+        $user      = $this->option('user');
+        $email     = $this->option('email');
+        $showRuns  = (bool)$this->option('runs');
+        $campaign  = (bool)$this->option('campaign');
+        $dryRun    = (bool)$this->option('dry-run');
+        $reconcile = (bool)$this->option('reconcile');
 
-        if ($user === null && $email === null && !$showRuns && !$campaign && !$dryRun) {
-            $this->error('Nothing to do - pass --user, --email, --runs, --campaign or --dry-run.');
+        if ($user === null && $email === null && !$showRuns && !$campaign && !$dryRun && !$reconcile) {
+            $this->error('Nothing to do - pass --user, --email, --runs, --campaign, --dry-run or --reconcile.');
             $this->line('Start with --runs: it costs nothing and a members_fetched that drops between runs is already the answer.');
 
             return self::FAILURE;
@@ -98,6 +100,10 @@ class DiagnosePatreonSync extends Command
         }
 
         if ($dryRun && !$this->showDryRun($http, $baseUrl)) {
+            $failed = true;
+        }
+
+        if ($reconcile && !$this->showReconciliation($http, $baseUrl)) {
             $failed = true;
         }
 
@@ -265,6 +271,65 @@ class DiagnosePatreonSync extends Command
                     implode(', ', (array)($member['benefits_to_revoke'] ?? [])),
                 ], $members),
             );
+        }
+
+        return true;
+    }
+
+    /**
+     * The accounts holding benefits the campaign does not justify (#4386).
+     *
+     * Unmatched holders print first because they are the only ones nothing will ever fix on its own -
+     * the blocked ones move as soon as the tier or benefit title is resolved, and the downgrades correct
+     * themselves within the hour, which is why the latter are a single number rather than a table.
+     */
+    private function showReconciliation(PendingRequest $http, string $baseUrl): bool
+    {
+        $body = $this->fetch($http, sprintf('%s/api/v1/patreon/benefit-reconciliation', $baseUrl));
+        if ($body === null) {
+            return false;
+        }
+
+        if ($this->outputJson($body)) {
+            return true;
+        }
+
+        /** @var array<string, mixed> $data */
+        $data = $body['data'] ?? [];
+
+        $this->info(sprintf('%s account(s) hold Patreon benefits (admins and manually granted accounts excluded).', (string)($data['holder_count'] ?? '?')));
+        $this->line(sprintf('  %-38s %s', 'Campaign no longer matches them', (string)($data['unmatched_count'] ?? '?')));
+        $this->line(sprintf('  %-38s %s', 'Sync blocked on unknown tiers/benefits', (string)($data['blocked_count'] ?? '?')));
+        $this->line(sprintf('  %-38s %s (self-correcting - see --dry-run)', 'Mid-downgrade', (string)($data['downgraded_count'] ?? '?')));
+
+        foreach ([
+            'unmatched_holders' => 'Holding benefits the campaign no longer matches - nothing will ever revoke these',
+            'blocked_holders'   => 'Holding benefits a sync refuses to touch until the tier or benefit title is resolved',
+        ] as $key => $label) {
+            /** @var array<int, array<string, mixed>> $holders */
+            $holders = $data[$key] ?? [];
+            if ($holders === []) {
+                continue;
+            }
+
+            $this->info(sprintf('%s (%d):', $label, count($holders)));
+            $this->table(
+                ['User', 'Link email', 'Account email', 'Stored benefits', 'Last seen', 'Last result', 'Reason'],
+                array_map(static fn(array $holder): array => [
+                    sprintf('%s (%s)', (string)($holder['username'] ?? '(no account)'), (string)($holder['user_id'] ?? '-')),
+                    (string)($holder['masked_link_email'] ?? ''),
+                    // Named only when it differs from the link's - that difference *is* the email-drift finding
+                    (string)($holder['email_drift_candidate'] ?? $holder['masked_account_email'] ?? ''),
+                    implode(', ', (array)($holder['stored_benefits'] ?? [])),
+                    (string)($holder['last_seen_at'] ?? '(never)'),
+                    (string)($holder['last_sync_result'] ?? '(none)'),
+                    (string)($holder['reason'] ?? ''),
+                ], $holders),
+            );
+        }
+
+        if (($data['needs_attention'] ?? false) === false) {
+            $this->info('Nothing needs attention - every account holding benefits is one the campaign still justifies.');
         }
 
         return true;

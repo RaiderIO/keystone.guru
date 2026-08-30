@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\InternalTeam\Patreon;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Patreon\PatreonUserDiagnosticsRequest;
+use App\Http\Resources\Patreon\PatreonBenefitReconciliationResource;
 use App\Http\Resources\Patreon\PatreonCampaignDiagnosticsResource;
 use App\Http\Resources\Patreon\PatreonSyncDryRunResource;
 use App\Http\Resources\Patreon\PatreonSyncRunResource;
@@ -20,6 +21,11 @@ use Teapot\StatusCode;
  * None of these endpoints grants, revokes or links anything, but they are not side-effect free: reaching
  * the Patreon API goes through `PatreonService::loadAdminUser()`, which persists a refreshed admin token
  * when the stored one has expired.
+ *
+ * `benefit-reconciliation` is the one endpoint that returns a list of accounts rather than taking one as
+ * input (#4386); it is bounded to accounts whose benefits the campaign does not justify, which is a small
+ * and self-limiting set, and (like every response here) its emails are masked - so it is not a way for the
+ * `ai_agent` role to enumerate the campaign.
  */
 class APIPatreonDiagnosticsController extends Controller
 {
@@ -123,5 +129,30 @@ class APIPatreonDiagnosticsController extends Controller
         $user = $request->getTargetUser();
 
         return new PatreonUserDiagnosticsResource($patreonDiagnosticsService->getUserDiagnostics($user))->response();
+    }
+
+    /**
+     * @OA\Get(
+     *     operationId="getPatreonBenefitReconciliation",
+     *     path="/api/v1/patreon/benefit-reconciliation",
+     *     summary="Accounts holding more Patreon benefits than the campaign currently grants them",
+     *     tags={"Patreon"},
+     *
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=403, description="Not an admin or AI agent"),
+     *     @OA\Response(response=502, description="The campaign or its members could not be loaded from Patreon"),
+     * )
+     */
+    public function benefitReconciliation(PatreonDiagnosticsServiceInterface $patreonDiagnosticsService): JsonResponse
+    {
+        $benefitReconciliation = $patreonDiagnosticsService->getBenefitReconciliation();
+
+        if ($benefitReconciliation === null) {
+            // A truncated member fetch would report every unfetched member's account as one the campaign
+            // has dropped - fabricating the finding this endpoint exists to surface, rather than missing it
+            return response()->json(['error' => 'Unable to load the campaign members from Patreon'], StatusCode::BAD_GATEWAY);
+        }
+
+        return new PatreonBenefitReconciliationResource($benefitReconciliation)->response();
     }
 }

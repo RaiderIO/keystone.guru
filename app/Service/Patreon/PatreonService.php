@@ -264,7 +264,7 @@ class PatreonService implements PatreonServiceInterface
         }
 
         $user = $patreonUserLink->user;
-        if ($user === null) { // @phpstan-ignore identical.alwaysFalse
+        if ($user === null) {
             $this->log->applyPaidBenefitsForMemberCannotFindUserForPatreonUserLink();
 
             return $this->memberNotLinkedPlan($memberId, $memberEmail, $entitledTierIds);

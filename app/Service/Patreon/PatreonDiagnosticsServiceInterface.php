@@ -3,6 +3,7 @@
 namespace App\Service\Patreon;
 
 use App\Models\User;
+use App\Service\Patreon\Dtos\Diagnostics\PatreonBenefitReconciliation;
 use App\Service\Patreon\Dtos\Diagnostics\PatreonCampaignDiagnostics;
 use App\Service\Patreon\Dtos\Diagnostics\PatreonSyncDryRun;
 use App\Service\Patreon\Dtos\Diagnostics\PatreonUserDiagnostics;
@@ -23,4 +24,13 @@ interface PatreonDiagnosticsServiceInterface
      * is filled in only when the Patreon API is reachable, so this never fails outright.
      */
     public function getUserDiagnostics(User $user): PatreonUserDiagnostics;
+
+    /**
+     * Every account holding more benefits than the campaign grants it, cross-referenced from the
+     * database side so it also covers the accounts the campaign no longer matches at all (#4386).
+     *
+     * Null when the campaign or its member list could not be loaded - including a truncated fetch, which
+     * would otherwise make every unfetched member's account look like one the campaign has dropped.
+     */
+    public function getBenefitReconciliation(): ?PatreonBenefitReconciliation;
 }

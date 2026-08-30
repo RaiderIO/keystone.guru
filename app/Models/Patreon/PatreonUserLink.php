@@ -28,7 +28,8 @@ use Override;
  * @property Carbon|null                           $last_seen_at     Last time the hourly sync actually saw this link's Patreon member
  * @property ApplyPaidBenefitsForMemberResult|null $last_sync_result What that sync decided for them
  * @property Carbon                                $created_at
- * @property User                                  $user
+ * @property User|null                             $user             Null for a link orphaned by a user deletion: User::deleting only
+ *                                                                   removes one link via HasOne::first(), so any duplicate row survives
  *
  * @property PatreonManualGrant|null $activeManualGrant
  *
