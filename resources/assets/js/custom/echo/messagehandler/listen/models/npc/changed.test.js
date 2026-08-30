@@ -2,7 +2,7 @@
 // Regression coverage for #4376. Bugs in NpcChangedHandler.onReceive():
 //
 // 1. Relevance used to be decided from `e.model.dungeon_id`, a legacy column
-//    NpcController never writes, instead of the explicit `npc_removed_from_dungeon`
+//    NpcController never writes, instead of the explicit `removed_from_dungeon`
 //    flag the backend now sends. A false-negative there called `enemy.setNpc(null)`,
 //    which nulls the enemy's real `npc_id` (not just a display value) - the "?" icon,
 //    and a real lost connection if the enemy is saved afterward.
@@ -90,7 +90,7 @@ describe('NpcChangedHandler', () => {
         let npc = {id: 42, name: 'Updated Npc'};
 
         // Act
-        handler.onReceive({model: npc, npc_removed_from_dungeon: false});
+        handler.onReceive({model: npc, removed_from_dungeon: false});
 
         // Assert
         expect(mapContext.removeRawNpcById).toHaveBeenCalledWith(42);
@@ -110,7 +110,7 @@ describe('NpcChangedHandler', () => {
         let npc = {id: 42, name: 'Updated Npc'};
 
         // Act
-        handler.onReceive({model: npc, npc_removed_from_dungeon: false});
+        handler.onReceive({model: npc, removed_from_dungeon: false});
 
         // Assert
         expect(enemy.enemy_forces).toBe(5);
@@ -125,7 +125,7 @@ describe('NpcChangedHandler', () => {
         let npc = {id: 42, name: 'Updated Npc'};
 
         // Act
-        handler.onReceive({model: npc, npc_removed_from_dungeon: true});
+        handler.onReceive({model: npc, removed_from_dungeon: true});
 
         // Assert
         expect(mapContext.removeRawNpcById).toHaveBeenCalledWith(42);
@@ -142,7 +142,7 @@ describe('NpcChangedHandler', () => {
         let npc = {id: 42, name: 'Updated Npc'};
 
         // Act
-        handler.onReceive({model: npc, npc_removed_from_dungeon: false});
+        handler.onReceive({model: npc, removed_from_dungeon: false});
 
         // Assert
         expect(enemy.npc).toBeUndefined();
@@ -159,7 +159,7 @@ describe('NpcChangedHandler', () => {
         let npc = {id: 99, name: 'Renamed Npc'};
 
         // Act
-        handler.onReceive({model: npc, npc_removed_from_dungeon: false, old_npc_id: 42});
+        handler.onReceive({model: npc, removed_from_dungeon: false, old_npc_id: 42});
 
         // Assert
         expect(mapContext.removeRawNpcById).toHaveBeenCalledWith(99);

@@ -17,7 +17,7 @@ class NpcChangedEvent extends ModelChangedEvent
         Model                 $context,
         User                  $user,
         Model                 $model,
-        private readonly bool $npcRemovedFromDungeon = false,
+        private readonly bool $removedFromDungeon = false,
         private readonly ?int $oldNpcId = null,
     ) {
         parent::__construct($context, $user, $model);
@@ -35,8 +35,8 @@ class NpcChangedEvent extends ModelChangedEvent
     public function broadcastWith(): array
     {
         return array_merge(parent::broadcastWith(), [
-            'npc_removed_from_dungeon' => $this->npcRemovedFromDungeon,
-            'old_npc_id'               => $this->oldNpcId,
+            'removed_from_dungeon' => $this->removedFromDungeon,
+            'old_npc_id'           => $this->oldNpcId,
         ]);
     }
 }

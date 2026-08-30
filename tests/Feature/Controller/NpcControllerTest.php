@@ -187,14 +187,14 @@ final class NpcControllerTest extends PublicTestCase
                 $payload = $event->broadcastWith();
 
                 return $payload['context_route_key'] === $dungeonB->getRouteKey()
-                    && $payload['npc_removed_from_dungeon'] === false;
+                    && $payload['removed_from_dungeon'] === false;
             });
 
             Event::assertDispatched(NpcChangedEvent::class, function (NpcChangedEvent $event) use ($dungeonA) {
                 $payload = $event->broadcastWith();
 
                 return $payload['context_route_key'] === $dungeonA->getRouteKey()
-                    && $payload['npc_removed_from_dungeon'] === true;
+                    && $payload['removed_from_dungeon'] === true;
             });
         } finally {
             NpcEnemyForces::query()->where('npc_id', $npcId)->delete();

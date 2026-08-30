@@ -191,7 +191,7 @@ class NpcController extends Controller
             if (!empty($removedDungeonIds)) {
                 foreach (Dungeon::whereIn('id', $removedDungeonIds)->get() as $dungeon) {
                     try {
-                        broadcast(new NpcChangedEvent($dungeon, $user, $npc, npcRemovedFromDungeon: true, oldNpcId: $oldNpcId));
+                        broadcast(new NpcChangedEvent($dungeon, $user, $npc, removedFromDungeon: true, oldNpcId: $oldNpcId));
                     } catch (BroadcastException) {
                         // Ignore broadcast failures
                     }

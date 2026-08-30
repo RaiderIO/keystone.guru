@@ -12,12 +12,7 @@ class NpcChangedHandler extends MessageHandler {
     onReceive(e) {
         super.onReceive(e);
         let mapContext = getState().getMapContext();
-        // The channel is already scoped to our dungeon, so we only ever receive an event for an
-        // npc that's relevant here - the only thing left to distinguish is whether this specific
-        // broadcast is telling us the npc still belongs to this dungeon, or that it was just
-        // removed from it (npc.dungeon_id is a legacy column NpcController never writes, so it
-        // cannot be used for this)
-        let isNpcUpdatedForUs = !e.npc_removed_from_dungeon;
+        let isNpcUpdatedForUs = !e.removed_from_dungeon;
 
         // Remove any existing NPC - if the npc was just renamed to a new id (e.old_npc_id),
         // its old raw entry is keyed under that old id and needs removing too
