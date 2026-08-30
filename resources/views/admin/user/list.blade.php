@@ -50,7 +50,7 @@ use Illuminate\Support\Collection;
 
                         $.ajax({
                             type: 'PUT',
-                            url: `/ajax/user/${$this.data('userid')}/patreon/benefit`,
+                            url: `/ajax/user/${$this.data('userid')}/patreon/benefits`,
                             data: {
                                 patreonBenefits: $this.val()
                             },
