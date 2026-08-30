@@ -206,6 +206,32 @@ final class PatreonDiagnosticsServiceReconciliationTest extends PublicTestCase
     }
 
     #[Test]
+    public function getBenefitReconciliation_givenExcessOnADuplicateLinkTheSyncWillNotClear_reportsItRatherThanCountingItAsADowngrade(): void
+    {
+        // Arrange - two links for one account. The campaign matches the second by email, but the plan
+        // diffs against User::getPatreonBenefits(), which reads the account's patreonUserLink pointer -
+        // the first link. So the revoke list describes the first link's rows and is applied to the
+        // second's, and the second's excess is never named in it. No number of syncs will clear it
+        $pointerLink = $this->createLinkedUser();
+        $this->grantBenefits($pointerLink, [PatreonBenefit::AD_FREE]);
+
+        $matchedLink            = PatreonUserLink::factory()->create(['user_id' => $pointerLink->user_id]);
+        $this->createdLinkIds[] = $matchedLink->id;
+        $this->grantBenefits($matchedLink, [PatreonBenefit::AD_FREE, PatreonBenefit::UNLISTED_ROUTES]);
+
+        // Act - entitled to the cheaper tier, which grants ad-free only
+        $reconciliation = $this->reconcile([$this->member($matchedLink->email, ['2971576'])]);
+
+        // Assert - reported by name, not swallowed as a self-correcting downgrade
+        $holder = $this->findHolder($reconciliation, $matchedLink->id);
+        $this->assertNotNull($holder);
+        $this->assertSame(PatreonOverEntitlementReason::DuplicateLinkAmbiguity, $holder->reason);
+        $this->assertContains($pointerLink->id, $holder->duplicateLinkIds);
+        $this->assertSame(0, $reconciliation->downgradedCount);
+        $this->assertTrue($reconciliation->needsAttention());
+    }
+
+    #[Test]
     public function getBenefitReconciliation_givenAMemberOnAnUndescribedTier_reportsThemAsBlockedNotUnmatched(): void
     {
         // Arrange - the sync bails out on an unresolvable tier rather than compute an empty benefit set

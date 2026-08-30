@@ -241,6 +241,8 @@ class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
         $matchedLinkIds = [];
         /** @var array<int, PatreonOverEntitlementReason> $blockedReasonsByLinkId */
         $blockedReasonsByLinkId = [];
+        /** @var array<int, bool> $stuckLinkIds Matched links holding an excess the sync will never revoke */
+        $stuckLinkIds = [];
         /** @var array<int, string> $lowercasedMemberEmails */
         $lowercasedMemberEmails = [];
         $downgradedCount        = 0;
@@ -269,11 +271,38 @@ class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
 
             if ($plan->result === ApplyPaidBenefitsForMemberResult::UnknownTiers) {
                 $blockedReasonsByLinkId[$patreonUserLink->id] = PatreonOverEntitlementReason::SyncBlockedUnknownTiers;
-            } elseif ($plan->result === ApplyPaidBenefitsForMemberResult::UnknownBenefits) {
-                $blockedReasonsByLinkId[$patreonUserLink->id] = PatreonOverEntitlementReason::SyncBlockedUnknownBenefits;
-            } elseif ($plan->benefitsToRevoke !== []) {
-                $downgradedCount++;
+
+                continue;
             }
+
+            if ($plan->result === ApplyPaidBenefitsForMemberResult::UnknownBenefits) {
+                $blockedReasonsByLinkId[$patreonUserLink->id] = PatreonOverEntitlementReason::SyncBlockedUnknownBenefits;
+
+                continue;
+            }
+
+            // What the matched link itself holds beyond its tiers - which is not the same thing as the
+            // plan's revoke list. That list is diffed against the *account's* patreonUserLink pointer,
+            // and with duplicate link rows the pointer and the email-matched link are different rows
+            $excessOnMatchedLink = array_diff(
+                $patreonUserLink->patreonbenefits->pluck('key')->all(),
+                $plan->resolvedBenefits,
+            );
+
+            if ($excessOnMatchedLink === []) {
+                continue;
+            }
+
+            // Anything the sync's own revoke list does not name is excess it will never delete, no matter
+            // how often it runs - so it belongs in a bucket with a name rather than in the count of
+            // downgrades that correct themselves within the hour
+            if (array_diff($excessOnMatchedLink, $plan->benefitsToRevoke) !== []) {
+                $stuckLinkIds[$patreonUserLink->id] = true;
+
+                continue;
+            }
+
+            $downgradedCount++;
         }
 
         // Only links that actually hold something can be over-entitled. Manually granted links are
@@ -281,7 +310,7 @@ class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
         $holders = PatreonUserLink::query()
             ->has('patreonUserBenefits')
             ->where('refresh_token', '!=', PatreonUserLink::PERMANENT_TOKEN)
-            ->with(['user.roles', 'patreonBenefits'])
+            ->with(['user.roles', 'patreonbenefits'])
             ->get()
             ->reject(fn(PatreonUserLink $patreonUserLink) => $this->isExcludedFromReconciliation($patreonUserLink));
 
@@ -300,8 +329,14 @@ class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
                 continue;
             }
 
-            // Matched and resolvable. Any excess it holds is an ordinary downgrade, already counted above
-            // from the plan - which knows the benefit diff, where this side only knows the stored rows
+            if (isset($stuckLinkIds[$patreonUserLink->id])) {
+                $unmatchedCount++;
+                $this->collectHolder($unmatchedHolders, $patreonUserLink, PatreonOverEntitlementReason::DuplicateLinkAmbiguity, null);
+
+                continue;
+            }
+
+            // Matched, resolvable, and any excess it holds is an ordinary downgrade already counted above
             if (isset($matchedLinkIds[$patreonUserLink->id])) {
                 continue;
             }
@@ -396,7 +431,7 @@ class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
             maskedAccountEmail: self::maskEmail($user?->email),
             // Read from the link's own rows rather than User::getPatreonBenefits(), which answers with
             // every key for an admin and with nothing at all for an orphaned link
-            storedBenefits: $patreonUserLink->patreonBenefits->pluck('key')->values()->all(),
+            storedBenefits: $patreonUserLink->patreonbenefits->pluck('key')->values()->all(),
             lastSeenAt: $patreonUserLink->last_seen_at,
             lastSyncResult: $patreonUserLink->last_sync_result?->name,
             duplicateLinkIds: $duplicateLinkIds,

@@ -18,7 +18,7 @@ class PatreonBenefitReconciliation
 {
     /**
      * @param int                                         $holderCount      Non-excluded links holding at least one benefit row - the population the three counts below are drawn from
-     * @param array<int, PatreonBenefitHolderDiagnostics> $unmatchedHolders Accounts the campaign no longer matches at all; nothing will ever revoke these
+     * @param array<int, PatreonBenefitHolderDiagnostics> $unmatchedHolders Accounts no sync will ever revoke from - either the campaign no longer matches them, or it matches a link the revoke list is not computed against
      * @param array<int, PatreonBenefitHolderDiagnostics> $blockedHolders   Accounts a sync refuses to touch over unknown tiers or benefits
      */
     public function __construct(

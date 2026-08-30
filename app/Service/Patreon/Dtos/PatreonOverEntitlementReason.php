@@ -41,6 +41,17 @@ enum PatreonOverEntitlementReason: string
     case SyncBlockedUnknownBenefits = 'sync_blocked_unknown_benefits';
 
     /**
+     * The member is matched and resolvable, but the excess sits on a link the sync will not clear.
+     *
+     * The benefit diff is computed from `User::getPatreonBenefits()`, which reads the account's own
+     * `patreonUserLink` pointer, while the sync writes to the link it matched the member's email to.
+     * With duplicate link rows those are not the same row, so the revoke list describes one link's
+     * benefits and is applied to another's - and whatever the matched link holds beyond its tiers is
+     * never in that list. Nothing revokes it, however many times the sync runs.
+     */
+    case DuplicateLinkAmbiguity = 'duplicate_link_ambiguity';
+
+    /**
      * The member is matched and resolvable, and simply holds more than their current tiers grant - the
      * ordinary downgrade. The next hourly sync revokes the difference by itself, so this needs no action
      * and is only ever reported as a count.
