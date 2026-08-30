@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogEnemyFailureController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogRouteController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogRunController;
+use App\Http\Controllers\Api\V1\InternalTeam\Patreon\APIPatreonDiagnosticsController;
 use App\Http\Controllers\Api\V1\Public\Dungeon\APIDungeonController;
 use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteController;
 use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteDiscoverController;
@@ -47,6 +48,22 @@ Route::prefix('v1')->group(static function () {
             });
         });
         Route::get('/thumbnailJob/{dungeonRouteThumbnailJob}', new APIDungeonRouteThumbnailJobController()->show(...))->name('api.v1.thumbnailjob.show');
+    });
+
+    // Read-only Patreon sync diagnostics (#4373) - same gate as the combat log triage endpoints above, so
+    // the tooling can be driven from a local dev machine without a production admin account. Every patron
+    // email in these responses is masked, and the account to inspect is always an input: there is
+    // deliberately no endpoint here that lists patrons.
+    Route::middleware(['api_role:admin|ai_agent'])->prefix('patreon')->group(static function () {
+        Route::get('sync-runs', new APIPatreonDiagnosticsController()->syncRuns(...))->name('api.v1.patreon.sync_runs');
+        Route::get('user', new APIPatreonDiagnosticsController()->user(...))->name('api.v1.patreon.user');
+
+        // These two walk the campaign on every call, so they are throttled - the members endpoint is
+        // paginated and a tight loop over it would spend the campaign's Patreon rate limit
+        Route::middleware('throttle:api-patreon-diagnostics')->group(static function () {
+            Route::get('campaign', new APIPatreonDiagnosticsController()->campaign(...))->name('api.v1.patreon.campaign');
+            Route::get('sync-dry-run', new APIPatreonDiagnosticsController()->syncDryRun(...))->name('api.v1.patreon.sync_dry_run');
+        });
     });
 
     Route::middleware(['api_role:admin'])->prefix('cache')->group(static function () {

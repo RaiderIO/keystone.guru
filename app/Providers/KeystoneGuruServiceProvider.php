@@ -153,6 +153,8 @@ use App\Service\Npc\NpcService;
 use App\Service\Npc\NpcServiceInterface;
 use App\Service\Patreon\PatreonApiService;
 use App\Service\Patreon\PatreonApiServiceInterface;
+use App\Service\Patreon\PatreonDiagnosticsService;
+use App\Service\Patreon\PatreonDiagnosticsServiceInterface;
 use App\Service\Patreon\PatreonService;
 use App\Service\Patreon\PatreonServiceInterface;
 use App\Service\RaiderIO\RaiderIOApiService;
@@ -250,6 +252,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(FloorResolutionServiceInterface::class, FloorResolutionService::class);
         $this->app->bind(ThumbnailServiceInterface::class, ThumbnailService::class);
         $this->app->bind(PatreonServiceInterface::class, PatreonService::class);
+        $this->app->bind(PatreonDiagnosticsServiceInterface::class, PatreonDiagnosticsService::class);
         $this->app->bind(MetricServiceInterface::class, MetricService::class);
         $this->app->bind(CombatLogServiceInterface::class, CombatLogService::class);
         $this->app->bind(CombatLogSplitServiceInterface::class, CombatLogSplitService::class);

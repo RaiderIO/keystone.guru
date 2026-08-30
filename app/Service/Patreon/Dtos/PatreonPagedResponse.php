@@ -15,10 +15,10 @@ namespace App\Service\Patreon\Dtos;
 class PatreonPagedResponse
 {
     /**
-     * @param array<string, mixed> $response   The merged JSON:API response - `data` and `included` hold every page's rows
-     * @param int                  $pageCount  How many pages were requested, including the one that failed
-     * @param int                  $rowCount   How many `data` rows were collected in total
-     * @param bool                 $truncated  Whether pagination stopped before the last page
+     * @param array<string, mixed> $response  The merged JSON:API response - `data` and `included` hold every page's rows
+     * @param int                  $pageCount How many pages were requested, including the one that failed
+     * @param int                  $rowCount  How many `data` rows were collected in total
+     * @param bool                 $truncated Whether pagination stopped before the last page
      */
     public function __construct(
         public readonly array $response,

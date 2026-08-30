@@ -67,7 +67,7 @@ class PatreonApiServiceLogging extends StructuredLogging implements PatreonApiSe
     }
 
     /**
-     * @param array<string, mixed> $errors
+     * @param array<int, mixed> $errors
      */
     public function getAllPagesError(array $errors): void
     {

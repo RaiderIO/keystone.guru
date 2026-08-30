@@ -33,8 +33,8 @@ class RefreshMembershipStatus extends SchedulerCommand
      * Execute the console command.
      */
     public function handle(
-        PatreonServiceInterface             $patreonService,
-        PatreonSyncRunRepositoryInterface   $patreonSyncRunRepository,
+        PatreonServiceInterface           $patreonService,
+        PatreonSyncRunRepositoryInterface $patreonSyncRunRepository,
     ): int {
         return $this->trackTime(function () use ($patreonService, $patreonSyncRunRepository) {
             // Every exit below records how far the run got before it stopped. Nothing about this command's
@@ -149,9 +149,9 @@ class RefreshMembershipStatus extends SchedulerCommand
     private function finishRun(PatreonSyncRun $syncRun, bool $successful, ?string $failureReason = null, bool $truncated = false): int
     {
         $syncRun->update([
-            'finished_at'    => Carbon::now(),
-            'successful'     => $successful,
-            'truncated'      => $truncated,
+            'finished_at' => Carbon::now(),
+            'successful'  => $successful,
+            'truncated'   => $truncated,
             // The column is a string - a long list of failing member ids would not fit
             'failure_reason' => $failureReason === null ? null : mb_substr($failureReason, 0, 255),
         ]);

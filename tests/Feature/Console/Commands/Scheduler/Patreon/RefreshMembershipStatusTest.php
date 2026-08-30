@@ -3,6 +3,7 @@
 namespace Tests\Feature\Console\Commands\Scheduler\Patreon;
 
 use App\Console\Commands\Scheduler\Patreon\RefreshMembershipStatus;
+use App\Models\Patreon\PatreonSyncRun;
 use App\Service\Patreon\Dtos\ApplyPaidBenefitsForMemberResult;
 use App\Service\Patreon\Dtos\PatreonCampaignMembers;
 use App\Service\Patreon\PatreonServiceInterface;
@@ -19,6 +20,17 @@ use Tests\TestCases\PublicTestCase;
 #[Group('Patreon')]
 final class RefreshMembershipStatusTest extends PublicTestCase
 {
+    #[\Override]
+    protected function tearDown(): void
+    {
+        try {
+            // Every run of the command under test writes one of these
+            PatreonSyncRun::query()->delete();
+        } finally {
+            parent::tearDown();
+        }
+    }
+
     #[Test]
     #[TestWith(['loadCampaignBenefits', 'Unable to load the campaign benefits'])]
     #[TestWith(['loadCampaignTiers', 'Unable to load the campaign tiers'])]
@@ -178,5 +190,88 @@ final class RefreshMembershipStatusTest extends PublicTestCase
         $this->artisan(RefreshMembershipStatus::class)
             ->expectsOutputToContain('Updated memberships of 0 users')
             ->assertExitCode(Command::FAILURE);
+    }
+
+    #[Test]
+    public function handle_givenASuccessfulRun_recordsWhatItFetchedAndDecided(): void
+    {
+        // Arrange - the run row is the only trace of a sync that survives outside the container, so a
+        // successful run that saw only half the campaign has to be visible in it afterwards (#4373)
+        $members = [
+            ['id' => 'member-1', 'type' => 'member'],
+            ['id' => 'member-2', 'type' => 'member'],
+            ['id' => 'member-3', 'type' => 'member'],
+        ];
+
+        $patreonService = $this->createMockPublic(PatreonServiceInterface::class);
+        $patreonService->method('loadCampaignBenefits')->willReturn([]);
+        $patreonService->method('loadCampaignTiers')->willReturn([]);
+        $patreonService->method('loadCampaignMembers')->willReturn(new PatreonCampaignMembers($members, 4));
+        $patreonService->method('applyPaidBenefitsForMember')
+            ->willReturnCallback(static fn(array $campaignBenefits, array $campaignTiers, array $member) => $member['id'] === 'member-3'
+                ? ApplyPaidBenefitsForMemberResult::MemberNotLinked
+                : ApplyPaidBenefitsForMemberResult::Applied);
+        $this->app->instance(PatreonServiceInterface::class, $patreonService);
+
+        // Act
+        $this->artisan(RefreshMembershipStatus::class)->assertExitCode(Command::SUCCESS);
+
+        // Assert
+        /** @var PatreonSyncRun $syncRun */
+        $syncRun = PatreonSyncRun::query()->latest('id')->firstOrFail();
+        $this->assertSame(4, $syncRun->pages_fetched);
+        $this->assertSame(3, $syncRun->members_fetched);
+        $this->assertSame(2, $syncRun->members_applied);
+        $this->assertSame(1, $syncRun->members_not_linked);
+        $this->assertSame(0, $syncRun->members_failed);
+        $this->assertTrue($syncRun->successful);
+        $this->assertFalse($syncRun->truncated);
+        $this->assertNotNull($syncRun->finished_at);
+    }
+
+    #[Test]
+    public function handle_givenMembersThatCannotBeLoaded_recordsTheRunAsTruncatedAndFailed(): void
+    {
+        // Arrange - a member fetch that gave up part way through now fails the load rather than handing
+        // back a partial list, and the run row says so
+        $patreonService = $this->createMockPublic(PatreonServiceInterface::class);
+        $patreonService->method('loadCampaignBenefits')->willReturn([]);
+        $patreonService->method('loadCampaignTiers')->willReturn([]);
+        $patreonService->method('loadCampaignMembers')->willReturn(null);
+        $this->app->instance(PatreonServiceInterface::class, $patreonService);
+
+        // Act
+        $this->artisan(RefreshMembershipStatus::class)->assertExitCode(Command::FAILURE);
+
+        // Assert
+        /** @var PatreonSyncRun $syncRun */
+        $syncRun = PatreonSyncRun::query()->latest('id')->firstOrFail();
+        $this->assertTrue($syncRun->truncated);
+        $this->assertFalse($syncRun->successful);
+        $this->assertSame('Unable to load the campaign members', $syncRun->failure_reason);
+    }
+
+    #[Test]
+    public function handle_givenAMemberWithUnknownTiers_returnsFailureAndRecordsIt(): void
+    {
+        // Arrange
+        $members = [['id' => 'member-1', 'type' => 'member']];
+
+        $patreonService = $this->createMockPublic(PatreonServiceInterface::class);
+        $patreonService->method('loadCampaignBenefits')->willReturn([]);
+        $patreonService->method('loadCampaignTiers')->willReturn([]);
+        $patreonService->method('loadCampaignMembers')->willReturn(new PatreonCampaignMembers($members, 1));
+        $patreonService->method('applyPaidBenefitsForMember')
+            ->willReturn(ApplyPaidBenefitsForMemberResult::UnknownTiers);
+        $this->app->instance(PatreonServiceInterface::class, $patreonService);
+
+        // Act & Assert - it must not go quiet: the member kept their benefits, but nobody synced them
+        $this->artisan(RefreshMembershipStatus::class)
+            ->expectsOutputToContain('member-1')
+            ->assertExitCode(Command::FAILURE);
+
+        /** @var PatreonSyncRun $syncRun */
+        $syncRun = PatreonSyncRun::query()->latest('id')->firstOrFail();
+        $this->assertSame(1, $syncRun->members_unknown_tiers);
     }
 }

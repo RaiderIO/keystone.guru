@@ -16,17 +16,17 @@ use Illuminate\Support\Carbon;
 use Override;
 
 /**
- * @property int    $id
- * @property int    $user_id
- * @property string $email
- * @property string $scope
- * @property string $access_token
- * @property string $refresh_token
- * @property string $version
- * @property string $expires_at
- * @property Carbon|null $last_seen_at     Last time the hourly sync actually saw this link's Patreon member
+ * @property int                                   $id
+ * @property int                                   $user_id
+ * @property string                                $email
+ * @property string                                $scope
+ * @property string                                $access_token
+ * @property string                                $refresh_token
+ * @property string                                $version
+ * @property string                                $expires_at
+ * @property Carbon|null                           $last_seen_at     Last time the hourly sync actually saw this link's Patreon member
  * @property ApplyPaidBenefitsForMemberResult|null $last_sync_result What that sync decided for them
- * @property User   $user
+ * @property User                                  $user
  *
  * @property EloquentCollection<int, PatreonUserBenefit> $patreonUserBenefits
  * @property EloquentCollection<int, PatreonBenefit>     $patreonBenefits

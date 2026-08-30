@@ -56,7 +56,7 @@ class PatreonApiService implements PatreonApiServiceInterface
     /**
      * @example {"data":{"attributes":{},"id":"2102279","relationships":{"tiers":{"data":[{"id":"2971575","type":"tier"},{"id":"9068557","type":"tier"}]}},"type":"campaign"},"included":[{"attributes":{"title":"Supporter of Keystone.guru"},"id":"2971575","relationships":{"benefits":{"data":[{"id":"367345","type":"benefit"},{"id":"3348264","type":"benefit"},{"id":"367914","type":"benefit"}]}},"type":"tier"},{"attributes":{"title":"Advanced Simulation Features"},"id":"9068557","relationships":{"benefits":{"data":[{"id":"367345","type":"benefit"},{"id":"3348264","type":"benefit"},{"id":"367914","type":"benefit"},{"id":"11542092","type":"benefit"}]}},"type":"tier"},{"attributes":{"title":"ad-free"},"id":"367345","type":"benefit"},{"attributes":{"title":"animated-polylines"},"id":"3348264","type":"benefit"},{"attributes":{"title":"unlisted-routes"},"id":"367914","type":"benefit"},{"attributes":{"title":"advanced-simulation"},"id":"11542092","type":"benefit"}],"links":{"self":"https://www.patreon.com/api/oauth2/v2/campaigns/2102279"}}
      */
-    public function getCampaignTiersAndBenefits(string $accessToken): ?PatreonPagedResponse
+    public function getCampaignTiersAndBenefits(string $accessToken): PatreonPagedResponse
     {
         $result = null;
 
@@ -79,9 +79,10 @@ class PatreonApiService implements PatreonApiServiceInterface
     }
 
     /**
-     * @return PatreonPagedResponse|null Null whenever we couldn't authenticate with the accessToken provided
+     * Always returns a response - an authentication failure comes back as one carrying `errors`, not as
+     * null, so a caller cannot mistake a failed fetch for an empty campaign.
      */
-    public function getCampaignMembers(string $accessToken): ?PatreonPagedResponse
+    public function getCampaignMembers(string $accessToken): PatreonPagedResponse
     {
         $result = null;
 
@@ -90,7 +91,10 @@ class PatreonApiService implements PatreonApiServiceInterface
             $result = $this->getAllPages(
                 $this->getApiClient($accessToken),
                 sprintf(
-                    'campaigns/%d/members?include=currently_entitled_tiers&%s=email',
+                    // patron_status / last_charge_status are not used by the sync itself, but a pledge
+                    // that has not settled yet reports no entitled tiers - which reads as "unsubscribed"
+                    // - and without these fields there is no way to tell the two apart afterwards (#4373)
+                    'campaigns/%d/members?include=currently_entitled_tiers&%s=email,patron_status,last_charge_status,last_charge_date',
                     config('keystoneguru.patreon.campaign_id'),
                     urlencode('fields[member]'),
                 ),
@@ -166,16 +170,20 @@ class PatreonApiService implements PatreonApiServiceInterface
                 // only the last page's would silently drop tiers and make entitled tier ids unresolvable
                 $resultIncluded = array_merge($resultIncluded, $pageResult['included'] ?? []);
 
-                $next = isset($pageResult['links']['next']) ?
-                    // Build the URL ourselves because obviously somehow using the 'links'.'next' does not work since it contains the full API url
-                    sprintf('%s&%s%s', $suffix, 'page%5Bcursor%5D=', urlencode((string)$pageResult['meta']['pagination']['cursors']['next'])) :
-                    null;
+                $cursor = $pageResult['meta']['pagination']['cursors']['next'] ?? null;
 
-                // A `next` link we cannot follow is truncation just the same
-                if ($next !== null && !isset($pageResult['meta']['pagination']['cursors']['next'])) {
+                if (!isset($pageResult['links']['next'])) {
+                    $next = null;
+                } elseif ($cursor === null) {
+                    // A next page we are told about but cannot ask for leaves us just as short of the
+                    // full campaign as a failed request does, so it counts as truncation rather than as
+                    // the end of the list
                     $next      = null;
                     $truncated = true;
                     $errors[]  = ['detail' => sprintf('Page %d of "%s" advertised a next page without a cursor', $count, $suffix)];
+                } else {
+                    // Build the URL ourselves because obviously somehow using the 'links'.'next' does not work since it contains the full API url
+                    $next = sprintf('%s&%s%s', $suffix, 'page%5Bcursor%5D=', urlencode((string)$cursor));
                 }
             } else {
                 // Found an error - just stop it now

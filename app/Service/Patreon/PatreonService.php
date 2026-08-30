@@ -40,7 +40,7 @@ class PatreonService implements PatreonServiceInterface
             $this->log->loadCampaignBenefitsStart();
 
             // Fetch the tiers and benefits of a campaign
-            $tiersAndBenefitsResponse = $this->patreonApiService->getCampaignTiersAndBenefits($adminUser->patreonUserLink->access_token)?->response ?? [];
+            $tiersAndBenefitsResponse = $this->patreonApiService->getCampaignTiersAndBenefits($adminUser->patreonUserLink->access_token)->response;
             if (isset($tiersAndBenefitsResponse['errors'])) {
                 $this->log->loadCampaignBenefitsRetrieveTiersErrors($tiersAndBenefitsResponse);
 
@@ -79,7 +79,7 @@ class PatreonService implements PatreonServiceInterface
             $this->log->loadCampaignTiersStart();
 
             // Fetch the tiers and benefits of a campaign
-            $tiersAndBenefitsResponse = $this->patreonApiService->getCampaignTiersAndBenefits($adminUser->patreonUserLink->access_token)?->response ?? [];
+            $tiersAndBenefitsResponse = $this->patreonApiService->getCampaignTiersAndBenefits($adminUser->patreonUserLink->access_token)->response;
             if (isset($tiersAndBenefitsResponse['errors'])) {
                 $this->log->loadCampaignTiersRetrieveTiersAndBenefitsErrors($tiersAndBenefitsResponse);
 
@@ -115,8 +115,8 @@ class PatreonService implements PatreonServiceInterface
             $this->log->loadCampaignMembersStart();
 
             // Now that we have a valid token - perform the members request
-            $pagedResponse    = $this->patreonApiService->getCampaignMembers($adminUser->patreonUserLink->access_token);
-            $membersResponse  = $pagedResponse?->response ?? [];
+            $pagedResponse   = $this->patreonApiService->getCampaignMembers($adminUser->patreonUserLink->access_token);
+            $membersResponse = $pagedResponse->response;
 
             // A truncated fetch sets `errors`, so a partial member list is rejected here rather than
             // being handed on as if it were the whole campaign (#4373)
@@ -140,7 +140,7 @@ class PatreonService implements PatreonServiceInterface
                 $included,
             ) => $included['type'] === 'member')->values()->toArray();
 
-            return new PatreonCampaignMembers($members, $pagedResponse?->pageCount ?? 0);
+            return new PatreonCampaignMembers($members, $pagedResponse->pageCount);
         } finally {
             $this->log->loadCampaignMembersEnd();
         }

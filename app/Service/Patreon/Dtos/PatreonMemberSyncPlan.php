@@ -15,18 +15,18 @@ use App\Models\Patreon\PatreonUserLink;
 class PatreonMemberSyncPlan
 {
     /**
-     * @param string                          $memberId          The Patreon member id
-     * @param string|null                     $memberEmail       The email Patreon reports for the member, if any
-     * @param PatreonUserLink|null            $patreonUserLink   The link the member email matched, if any
-     * @param array<int, string>              $entitledTierIds   Tier ids the member is currently entitled to
-     * @param array<int, string>              $unresolvedTierIds Entitled tier ids the campaign response does not describe
-     * @param array<int, string>              $resolvedBenefits  Benefit titles those tiers grant
-     * @param array<int, string>              $unknownBenefits   Resolved titles that are missing from PatreonBenefit::ALL
-     * @param array<int, string>              $currentBenefits   Benefit keys the account holds right now
-     * @param array<int, string>              $benefitsToAdd     Benefits a sync would grant
-     * @param array<int, string>              $benefitsToRevoke  Benefits a sync would take away
-     * @param bool                            $manuallyGranted   Whether the link was granted through the admin pages
-     * @param ApplyPaidBenefitsForMemberResult $result           What a real sync would return for this member
+     * @param string                           $memberId          The Patreon member id
+     * @param string|null                      $memberEmail       The email Patreon reports for the member, if any
+     * @param PatreonUserLink|null             $patreonUserLink   The link the member email matched, if any
+     * @param array<int, string>               $entitledTierIds   Tier ids the member is currently entitled to
+     * @param array<int, string>               $unresolvedTierIds Entitled tier ids the campaign response does not describe
+     * @param array<int, string>               $resolvedBenefits  Benefit titles those tiers grant
+     * @param array<int, string>               $unknownBenefits   Resolved titles that are missing from PatreonBenefit::ALL
+     * @param array<int, string>               $currentBenefits   Benefit keys the account holds right now
+     * @param array<int, string>               $benefitsToAdd     Benefits a sync would grant
+     * @param array<int, string>               $benefitsToRevoke  Benefits a sync would take away
+     * @param bool                             $manuallyGranted   Whether the link was granted through the admin pages
+     * @param ApplyPaidBenefitsForMemberResult $result            What a real sync would return for this member
      */
     public function __construct(
         public readonly string                           $memberId,

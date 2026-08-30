@@ -11,9 +11,9 @@ interface PatreonApiServiceInterface
      */
     public function getIdentity(string $accessToken): ?array;
 
-    public function getCampaignTiersAndBenefits(string $accessToken): ?PatreonPagedResponse;
+    public function getCampaignTiersAndBenefits(string $accessToken): PatreonPagedResponse;
 
-    public function getCampaignMembers(string $accessToken): ?PatreonPagedResponse;
+    public function getCampaignMembers(string $accessToken): PatreonPagedResponse;
 
     /** @return array<string, mixed> */
     public function getAccessTokenFromRefreshToken(string $refreshToken): array;
