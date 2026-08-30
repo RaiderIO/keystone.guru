@@ -2,6 +2,8 @@
 
 namespace App\Service\Patreon;
 
+use App\Service\Patreon\Dtos\PatreonPagedResponse;
+
 interface PatreonApiServiceInterface
 {
     /**
@@ -9,15 +11,9 @@ interface PatreonApiServiceInterface
      */
     public function getIdentity(string $accessToken): ?array;
 
-    /**
-     * @return array<string, mixed>|null
-     */
-    public function getCampaignTiersAndBenefits(string $accessToken): ?array;
+    public function getCampaignTiersAndBenefits(string $accessToken): ?PatreonPagedResponse;
 
-    /**
-     * @return array<string, mixed>|null
-     */
-    public function getCampaignMembers(string $accessToken): ?array;
+    public function getCampaignMembers(string $accessToken): ?PatreonPagedResponse;
 
     /** @return array<string, mixed> */
     public function getAccessTokenFromRefreshToken(string $refreshToken): array;

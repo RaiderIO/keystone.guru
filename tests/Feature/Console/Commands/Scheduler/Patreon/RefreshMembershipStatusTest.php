@@ -4,6 +4,7 @@ namespace Tests\Feature\Console\Commands\Scheduler\Patreon;
 
 use App\Console\Commands\Scheduler\Patreon\RefreshMembershipStatus;
 use App\Service\Patreon\Dtos\ApplyPaidBenefitsForMemberResult;
+use App\Service\Patreon\Dtos\PatreonCampaignMembers;
 use App\Service\Patreon\PatreonServiceInterface;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Debug\ExceptionHandler;
@@ -27,7 +28,9 @@ final class RefreshMembershipStatusTest extends PublicTestCase
         // Arrange
         $patreonService = $this->createMockPublic(PatreonServiceInterface::class);
         foreach (['loadCampaignBenefits', 'loadCampaignTiers', 'loadCampaignMembers'] as $method) {
-            $patreonService->method($method)->willReturn($method === $failingMethod ? null : []);
+            $patreonService->method($method)->willReturn(
+                $method === $failingMethod ? null : ($method === 'loadCampaignMembers' ? new PatreonCampaignMembers([], 1) : []),
+            );
         }
         $patreonService->expects($this->never())->method('applyPaidBenefitsForMember');
         $this->app->instance(PatreonServiceInterface::class, $patreonService);
@@ -59,7 +62,7 @@ final class RefreshMembershipStatusTest extends PublicTestCase
         $patreonService = $this->createMockPublic(PatreonServiceInterface::class);
         $patreonService->method('loadCampaignBenefits')->willReturn([]);
         $patreonService->method('loadCampaignTiers')->willReturn([]);
-        $patreonService->method('loadCampaignMembers')->willReturn($members);
+        $patreonService->method('loadCampaignMembers')->willReturn(new PatreonCampaignMembers($members, 1));
         $patreonService->expects($this->exactly(count($members)))
             ->method('applyPaidBenefitsForMember')
             ->willReturnCallback(static function (array $campaignBenefits, array $campaignTiers, array $member) use ($exception): ApplyPaidBenefitsForMemberResult {
@@ -90,7 +93,7 @@ final class RefreshMembershipStatusTest extends PublicTestCase
         $patreonService = $this->createMockPublic(PatreonServiceInterface::class);
         $patreonService->method('loadCampaignBenefits')->willReturn([]);
         $patreonService->method('loadCampaignTiers')->willReturn([]);
-        $patreonService->method('loadCampaignMembers')->willReturn($members);
+        $patreonService->method('loadCampaignMembers')->willReturn(new PatreonCampaignMembers($members, 1));
         $patreonService->expects($this->exactly(count($members)))
             ->method('applyPaidBenefitsForMember')
             ->willReturn(ApplyPaidBenefitsForMemberResult::Applied);
@@ -114,7 +117,7 @@ final class RefreshMembershipStatusTest extends PublicTestCase
         $patreonService = $this->createMockPublic(PatreonServiceInterface::class);
         $patreonService->method('loadCampaignBenefits')->willReturn([]);
         $patreonService->method('loadCampaignTiers')->willReturn([]);
-        $patreonService->method('loadCampaignMembers')->willReturn($members);
+        $patreonService->method('loadCampaignMembers')->willReturn(new PatreonCampaignMembers($members, 1));
         $patreonService->method('applyPaidBenefitsForMember')
             ->willReturnCallback(static fn(array $campaignBenefits, array $campaignTiers, array $member) => $member['id'] === 'member-2'
                 ? ApplyPaidBenefitsForMemberResult::UnknownBenefits
@@ -140,7 +143,7 @@ final class RefreshMembershipStatusTest extends PublicTestCase
         $patreonService = $this->createMockPublic(PatreonServiceInterface::class);
         $patreonService->method('loadCampaignBenefits')->willReturn([]);
         $patreonService->method('loadCampaignTiers')->willReturn([]);
-        $patreonService->method('loadCampaignMembers')->willReturn($members);
+        $patreonService->method('loadCampaignMembers')->willReturn(new PatreonCampaignMembers($members, 1));
         $patreonService->method('applyPaidBenefitsForMember')
             ->willReturn(ApplyPaidBenefitsForMemberResult::MemberNotLinked);
         $this->app->instance(PatreonServiceInterface::class, $patreonService);
@@ -165,7 +168,7 @@ final class RefreshMembershipStatusTest extends PublicTestCase
         $patreonService = $this->createMockPublic(PatreonServiceInterface::class);
         $patreonService->method('loadCampaignBenefits')->willReturn([]);
         $patreonService->method('loadCampaignTiers')->willReturn([]);
-        $patreonService->method('loadCampaignMembers')->willReturn($members);
+        $patreonService->method('loadCampaignMembers')->willReturn(new PatreonCampaignMembers($members, 1));
         $patreonService->expects($this->exactly(count($members)))
             ->method('applyPaidBenefitsForMember')
             ->willThrowException(new RuntimeException('Everything is broken'));

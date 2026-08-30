@@ -3,8 +3,11 @@
 namespace App\Models\Patreon;
 
 use App\Models\User;
+use App\Service\Patreon\Dtos\ApplyPaidBenefitsForMemberResult;
+use Database\Factories\Patreon\PatreonUserLinkFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -21,6 +24,8 @@ use Override;
  * @property string $refresh_token
  * @property string $version
  * @property string $expires_at
+ * @property Carbon|null $last_seen_at     Last time the hourly sync actually saw this link's Patreon member
+ * @property ApplyPaidBenefitsForMemberResult|null $last_sync_result What that sync decided for them
  * @property User   $user
  *
  * @property EloquentCollection<int, PatreonUserBenefit> $patreonUserBenefits
@@ -30,6 +35,9 @@ use Override;
  */
 class PatreonUserLink extends Model
 {
+    /** @use HasFactory<PatreonUserLinkFactory> */
+    use HasFactory;
+
     public const string PERMANENT_TOKEN = 'grantedthroughadminpages';
 
     protected $fillable = [
@@ -40,6 +48,8 @@ class PatreonUserLink extends Model
         'refresh_token',
         'version',
         'expires_at',
+        'last_seen_at',
+        'last_sync_result',
     ];
 
     protected $with = ['patreonbenefits'];
@@ -50,6 +60,14 @@ class PatreonUserLink extends Model
     ];
 
     protected $appends = ['manually_granted'];
+
+    protected function casts(): array
+    {
+        return [
+            'last_seen_at'     => 'datetime',
+            'last_sync_result' => ApplyPaidBenefitsForMemberResult::class,
+        ];
+    }
 
     public function getManuallyGrantedAttribute(): bool
     {

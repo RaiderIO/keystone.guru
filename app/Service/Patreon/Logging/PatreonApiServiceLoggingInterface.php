@@ -2,6 +2,8 @@
 
 namespace App\Service\Patreon\Logging;
 
+use App\Service\Patreon\Dtos\PatreonPagedResponse;
+
 interface PatreonApiServiceLoggingInterface
 {
     public function getIdentityStart(): void;
@@ -17,17 +19,11 @@ interface PatreonApiServiceLoggingInterface
 
     public function getCampaignTiersAndBenefitsStart(): void;
 
-    /**
-     * @param array<string, mixed>|null $result
-     */
-    public function getCampaignTiersAndBenefitsEnd(?array $result): void;
+    public function getCampaignTiersAndBenefitsEnd(?PatreonPagedResponse $result): void;
 
     public function getCampaignMembersStart(): void;
 
-    /**
-     * @param array<string, mixed>|null $result
-     */
-    public function getCampaignMembersEnd(?array $result): void;
+    public function getCampaignMembersEnd(?PatreonPagedResponse $result): void;
 
     public function getAllPagesPageNr(int $count): void;
 
