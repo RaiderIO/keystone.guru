@@ -21,7 +21,10 @@ return (new PhpCsFixer\Config())
     ->setIndent("    ")
     ->setLineEnding("\n")
     ->setFinder($finder)
-    ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect())
+    // Capped at 4: an interrupted `composer run fix` (Bash-tool timeout, Ctrl-C, session end)
+    // orphans its workers instead of killing them, and each spins at ~100% CPU forever. detect()
+    // alone would cap that at (core count - 1); this bounds the worst case regardless of host size.
+    ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect(null, null, 4))
     ->setRules([
         // Arrays & commas
         'array_syntax'                => ['syntax' => 'short'],
