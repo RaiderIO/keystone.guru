@@ -135,10 +135,6 @@ use Illuminate\Support\Collection;
                                 let template = Handlebars.templates['admin_users_table_row_patreon'];
 
                                 let patreonBenefitsCopy = JSON.parse(JSON.stringify(patreonBenefits));
-                                for (let j = 0; j < patreonBenefitsCopy.length; j++) {
-                                    // Translate the patreon benefit's name
-                                    patreonBenefitsCopy[j].name = lang.get(patreonBenefitsCopy[j].name);
-                                }
 
                                 for (let i = 0; i < row.patreon_user_link.patreonbenefits.length; i++) {
                                     let userPaidTier = row.patreon_user_link.patreonbenefits[i];
