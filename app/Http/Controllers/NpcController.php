@@ -168,7 +168,6 @@ class NpcController extends Controller
             'spells',
         ];
         $npc->load($npcRelationsToEcho);
-        $npcBefore->load($npcRelationsToEcho);
 
         /** @var User $user */
         $user = Auth::user();
@@ -180,11 +179,19 @@ class NpcController extends Controller
             }
         }
 
-        foreach ($npcBefore->dungeons as $dungeon) {
-            try {
-                broadcast(new NpcChangedEvent($dungeon, $user, $npcBefore));
-            } catch (BroadcastException) {
-                // Ignore broadcast failures
+        // Notify only the dungeons this npc was actually unassigned from during this edit - not
+        // determined by reloading $npcBefore's relations, since that reflects the post-commit
+        // (i.e. new) dungeon set rather than the pre-edit one
+        if ($oldDungeonIds !== null) {
+            $removedDungeonIds = array_diff($oldDungeonIds, $npc->dungeons->pluck('id')->toArray());
+            if (!empty($removedDungeonIds)) {
+                foreach (Dungeon::whereIn('id', $removedDungeonIds)->get() as $dungeon) {
+                    try {
+                        broadcast(new NpcChangedEvent($dungeon, $user, $npc, npcRemovedFromDungeon: true));
+                    } catch (BroadcastException) {
+                        // Ignore broadcast failures
+                    }
+                }
             }
         }
 
