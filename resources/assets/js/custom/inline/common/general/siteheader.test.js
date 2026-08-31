@@ -8,7 +8,7 @@
 const {InlineCode}    = require('../../inlinecode');
 globalThis.InlineCode = InlineCode;
 
-const {CommonGeneralSiteheader, shouldShrinkHeader} = require('./siteheader');
+const {CommonGeneralSiteheader, shouldShrinkHeader, calculateNavbarCollapseMaxHeight} = require('./siteheader');
 
 describe('shouldShrinkHeader', () => {
     it('shouldShrinkHeader_givenTopOfPageNotShrunk_returnsFalse', () => {
@@ -187,5 +187,131 @@ describe('CommonGeneralSiteheader scroll anchoring', () => {
 
         // Assert: a stale timer must not cut the second suppression window short
         expect(document.documentElement.style.overflowAnchor).toBe('none');
+    });
+});
+
+describe('calculateNavbarCollapseMaxHeight', () => {
+    it('calculateNavbarCollapseMaxHeight_givenRoomBelowTheBrandRow_returnsTheRemainingViewport', () => {
+        // A 640px tall phone viewport with a 56px brand row above the collapse
+        expect(calculateNavbarCollapseMaxHeight(640, 56, 8)).toBe(576);
+    });
+
+    it('calculateNavbarCollapseMaxHeight_givenFractionalLayout_roundsDownToStayInsideTheViewport', () => {
+        // Rounding up would push the last item back below the fold - the whole bug (#4378)
+        expect(calculateNavbarCollapseMaxHeight(640, 55.6, 8)).toBe(576);
+    });
+
+    it('calculateNavbarCollapseMaxHeight_givenNoRoomLeft_clampsAtZero', () => {
+        // A viewport shorter than the header itself must not produce a negative max-height
+        expect(calculateNavbarCollapseMaxHeight(50, 56, 8)).toBe(0);
+    });
+});
+
+describe('CommonGeneralSiteheader mobile menu height', () => {
+    /**
+     * @param {number} collapseTop
+     * @returns {CommonGeneralSiteheader}
+     */
+    function makeSiteheaderWithCollapse(collapseTop = 56) {
+        document.body.innerHTML = `
+            <div id="site_header" class="ksg-header">
+                <nav class="navbar navbar-second">
+                    <div class="collapse navbar-collapse" id="mainNavbar"></div>
+                </nav>
+            </div>`;
+
+        const siteheader = new CommonGeneralSiteheader('siteheader', 'common/general/siteheader', {});
+        siteheader.header = document.getElementById('site_header');
+        siteheader.shrinkTarget = siteheader.header;
+        siteheader._initNavbarCollapse();
+
+        // jsdom lays nothing out, so the collapse's position is stubbed the way the shrink
+        // tests stub scrollHeight/innerHeight
+        vi.spyOn(siteheader.navbarCollapse, 'getBoundingClientRect')
+            .mockReturnValue({top: collapseTop});
+        window.innerHeight = 640;
+
+        return siteheader;
+    }
+
+    afterEach(() => {
+        document.documentElement.style.removeProperty('--ksg-navbar-collapse-max-height');
+    });
+
+    it('initNavbarCollapse_givenMenuOpens_capsItToTheVisibleViewport', () => {
+        // Arrange
+        const siteheader = makeSiteheaderWithCollapse();
+
+        // Act
+        siteheader.navbarCollapse.dispatchEvent(new Event('show.bs.collapse'));
+
+        // Assert: 640 viewport - 56 brand row - 8 margin
+        expect(document.documentElement.style.getPropertyValue('--ksg-navbar-collapse-max-height'))
+            .toBe('576px');
+    });
+
+    it('initNavbarCollapse_givenViewportResizedWhileOpen_recalculatesTheCap', () => {
+        // Arrange: menu open on a tall viewport, then the browser chrome expands
+        const siteheader = makeSiteheaderWithCollapse();
+        siteheader.navbarCollapse.dispatchEvent(new Event('show.bs.collapse'));
+        window.innerHeight = 400;
+
+        // Act
+        window.dispatchEvent(new Event('resize'));
+
+        // Assert
+        expect(document.documentElement.style.getPropertyValue('--ksg-navbar-collapse-max-height'))
+            .toBe('336px');
+    });
+
+    it('initNavbarCollapse_givenMenuClosed_dropsTheCapAgain', () => {
+        // Arrange
+        const siteheader = makeSiteheaderWithCollapse();
+        siteheader.navbarCollapse.dispatchEvent(new Event('show.bs.collapse'));
+
+        // Act
+        siteheader.navbarCollapse.dispatchEvent(new Event('hidden.bs.collapse'));
+
+        // Assert: a stale cap would shrink the menu the next time it opens at a different offset
+        expect(document.documentElement.style.getPropertyValue('--ksg-navbar-collapse-max-height'))
+            .toBe('');
+    });
+
+    it('updateShrink_givenHeaderUnshrinksWithTheMenuOpen_recalculatesTheCap', () => {
+        // Arrange: menu opened while the header was shrunk, then scrolled back to the top -
+        // the brand row regains its padding and pushes the collapse down
+        const siteheader = makeSiteheaderWithCollapse(48);
+        siteheader.shrinkTarget.classList.add('ksg-header--shrink');
+        siteheader.navbarCollapse.dispatchEvent(new Event('show.bs.collapse'));
+        expect(document.documentElement.style.getPropertyValue('--ksg-navbar-collapse-max-height'))
+            .toBe('584px');
+
+        siteheader.navbarCollapse.getBoundingClientRect.mockReturnValue({top: 64});
+        window.scrollY = 0;
+        vi.spyOn(document.documentElement, 'scrollHeight', 'get').mockReturnValue(5000);
+
+        // Act
+        siteheader._updateShrink();
+
+        // Assert: keeping the shrunk measurement would leave the last items below the fold
+        expect(siteheader.shrinkTarget.classList.contains('ksg-header--shrink')).toBe(false);
+        expect(document.documentElement.style.getPropertyValue('--ksg-navbar-collapse-max-height'))
+            .toBe('568px');
+    });
+
+    it('initNavbarCollapse_givenNoCollapseInTheHeader_doesNothing', () => {
+        // Arrange: the map header renders without a main navbar collapse
+        document.body.innerHTML = '<div id="site_header" class="ksg-header"></div>';
+        const siteheader = new CommonGeneralSiteheader('siteheader', 'common/general/siteheader', {});
+        siteheader.header = document.getElementById('site_header');
+
+        // Act
+        siteheader._initNavbarCollapse();
+        siteheader._updateNavbarCollapseMaxHeight();
+
+        // Assert
+        expect(siteheader.navbarCollapse).toBeNull();
+        expect(document.documentElement.style.getPropertyValue('--ksg-navbar-collapse-max-height'))
+            .toBe('');
     });
 });

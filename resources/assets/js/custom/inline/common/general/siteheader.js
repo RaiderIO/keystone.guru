@@ -21,6 +21,22 @@ function shouldShrinkHeader(scrollY, currentlyShrunk, shrinkAt = 140, unshrinkAt
     return scrollY > shrinkAt;
 }
 
+/**
+ * The height the mobile navbar collapse may occupy before it must scroll internally.
+ *
+ * The header is sticky at the top of the viewport and the collapse expands in normal flow below
+ * the brand row, so anything past the viewport bottom is unreachable - the page scroll moves the
+ * document, not the pinned header (#4378).
+ *
+ * @param {number} viewportHeight The dynamic viewport height (window.innerHeight)
+ * @param {number} collapseTop The collapse's distance from the top of the viewport
+ * @param {number} bottomMargin Breathing room kept below the last menu item
+ * @returns {number}
+ */
+function calculateNavbarCollapseMaxHeight(viewportHeight, collapseTop, bottomMargin = 8) {
+    return Math.max(0, Math.floor(viewportHeight - collapseTop - bottomMargin));
+}
+
 class CommonGeneralSiteheader extends InlineCode {
     /**
      * Never shrink when the page barely scrolls - the height change itself would make up
@@ -34,6 +50,11 @@ class CommonGeneralSiteheader extends InlineCode {
      * growing - and anchoring keeps re-evaluating - for its whole duration.
      */
     static SCROLL_ANCHOR_SUPPRESSION_MS = 400;
+
+    /**
+     * Breathing room kept between the last item of the open mobile menu and the viewport bottom.
+     */
+    static NAVBAR_COLLAPSE_BOTTOM_MARGIN = 8;
 
     activate() {
         super.activate();
@@ -50,6 +71,8 @@ class CommonGeneralSiteheader extends InlineCode {
         this._resizeObserver = new ResizeObserver(this._reportHeaderHeight.bind(this));
         this._resizeObserver.observe(this.header);
         this._reportHeaderHeight();
+
+        this._initNavbarCollapse();
 
         // The map view renders the header permanently shrunk - no scroll handling there
         this.shrinkTarget = this.header.classList.contains('ksg-header') ?
@@ -97,7 +120,51 @@ class CommonGeneralSiteheader extends InlineCode {
             }
 
             this.shrinkTarget.classList.toggle('ksg-header--shrink', shrunk);
+
+            // The brand row changes height with the shrink, moving the collapse's top - an
+            // already open menu would otherwise keep a max height measured against the old row
+            this._updateNavbarCollapseMaxHeight();
         }
+    }
+
+    /**
+     * Keep the mobile main menu inside the viewport (#4378).
+     *
+     * Only the height is published - whether the cap applies at all is CSS's call (header.css
+     * gates it on the mobile breakpoint), so crossing into desktop with the menu open cannot
+     * leave a stale cap behind on a navbar that lays out as a single row.
+     */
+    _initNavbarCollapse() {
+        this.navbarCollapse = this.header.querySelector('.navbar-second .navbar-collapse');
+        if (this.navbarCollapse === null) {
+            return;
+        }
+
+        // Measured on show rather than shown: the collapse still has height 0 then, so its top
+        // is exactly the bottom of the brand row - and the cap is in place before the animation
+        this.navbarCollapse.addEventListener('show.bs.collapse', this._updateNavbarCollapseMaxHeight.bind(this));
+        this.navbarCollapse.addEventListener('hidden.bs.collapse', this._clearNavbarCollapseMaxHeight.bind(this));
+
+        window.addEventListener('resize', this._updateNavbarCollapseMaxHeight.bind(this));
+        window.addEventListener('orientationchange', this._updateNavbarCollapseMaxHeight.bind(this));
+    }
+
+    _updateNavbarCollapseMaxHeight() {
+        if (!this.navbarCollapse) {
+            return;
+        }
+
+        const maxHeight = calculateNavbarCollapseMaxHeight(
+            window.innerHeight,
+            this.navbarCollapse.getBoundingClientRect().top,
+            CommonGeneralSiteheader.NAVBAR_COLLAPSE_BOTTOM_MARGIN
+        );
+
+        document.documentElement.style.setProperty('--ksg-navbar-collapse-max-height', `${maxHeight}px`);
+    }
+
+    _clearNavbarCollapseMaxHeight() {
+        document.documentElement.style.removeProperty('--ksg-navbar-collapse-max-height');
     }
 
     /**
@@ -135,5 +202,5 @@ class CommonGeneralSiteheader extends InlineCode {
 // Guarded export for the test runner (Vitest). This is a no-op in the browser,
 // where `module` is undefined, so it does not affect the concatenated bundle.
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {CommonGeneralSiteheader, shouldShrinkHeader};
+    module.exports = {CommonGeneralSiteheader, shouldShrinkHeader, calculateNavbarCollapseMaxHeight};
 }
