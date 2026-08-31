@@ -21,10 +21,10 @@ return (new PhpCsFixer\Config())
     ->setIndent("    ")
     ->setLineEnding("\n")
     ->setFinder($finder)
-    // Capped at 4: an interrupted `composer run fix` (Bash-tool timeout, Ctrl-C, session end)
-    // orphans its workers instead of killing them, and each spins at ~100% CPU forever. detect()
-    // alone would cap that at (core count - 1); this bounds the worst case regardless of host size.
-    ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect(null, null, 4))
+    // No parallel config: an interrupted `composer run fix` (Bash-tool timeout, Ctrl-C, session
+    // end) orphans its workers instead of killing them, and each spins at ~100% CPU forever.
+    // Capping the worker count (#4381/#4382) only lowered the ceiling and the leak still
+    // recurred (#4390), so parallelism is disabled entirely - single-process, no orphans possible.
     ->setRules([
         // Arrays & commas
         'array_syntax'                => ['syntax' => 'short'],
