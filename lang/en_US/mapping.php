@@ -546,6 +546,13 @@ return [
                 'activates_after_killing_bosses' => 'One way trip back to the Promenade activates after killing the first boss (either of them). The second kill will take you to the respective Upper level instead.',
             ],
         ],
+        'tbc' => [
+            'black_temple' => [
+                'ashtongue_variants'                  => 'Enemies can be one of Ashtongue Mystic, Ashtongue Stormcaller, Ashtongue Battlelord.',
+                'coilscar_or_aqueous_surger_variants' => "This group's enemies can be one of Coilscar General, Coilscar Soothsayer, Coilscar Seacaller or Aqueous Surger",
+                'dragonmaw_variants'                  => 'Dragonmaw Wind Reaver and Dragonmaw Sky Stalker can be one of the other.',
+            ],
+        ],
     ],
 
     'checkpoints' => [
