@@ -68,11 +68,11 @@ class CommonGeneralSiteheader extends InlineCode {
 
         // Publish the header's rendered height so dependents (e.g. the route sidebar) can
         // position themselves below it without hardcoded offsets.
-        this._resizeObserver = new ResizeObserver(this._reportHeaderHeight.bind(this));
-        this._resizeObserver.observe(this.header);
-        this._reportHeaderHeight();
-
         this._initNavbarCollapse();
+
+        this._resizeObserver = new ResizeObserver(this._onHeaderResized.bind(this));
+        this._resizeObserver.observe(this.header);
+        this._onHeaderResized();
 
         // The map view renders the header permanently shrunk - no scroll handling there
         this.shrinkTarget = this.header.classList.contains('ksg-header') ?
@@ -94,6 +94,16 @@ class CommonGeneralSiteheader extends InlineCode {
         }, {passive: true});
 
         this._updateShrink();
+    }
+
+    /**
+     * The header's own height transition (shrink/unshrink) moves the open menu's top edge, and so
+     * does anything else that reflows the bars - the observer catches every such change, which is
+     * why neither the shrink toggle nor the collapse animation needs its own hook or timer.
+     */
+    _onHeaderResized() {
+        this._reportHeaderHeight();
+        this._updateNavbarCollapseMaxHeight();
     }
 
     _reportHeaderHeight() {
@@ -120,10 +130,6 @@ class CommonGeneralSiteheader extends InlineCode {
             }
 
             this.shrinkTarget.classList.toggle('ksg-header--shrink', shrunk);
-
-            // The brand row changes height with the shrink, moving the collapse's top - an
-            // already open menu would otherwise keep a max height measured against the old row
-            this._updateNavbarCollapseMaxHeight();
         }
     }
 
@@ -140,11 +146,12 @@ class CommonGeneralSiteheader extends InlineCode {
             return;
         }
 
-        // Measured on show rather than shown: the collapse still has height 0 then, so its top
-        // is exactly the bottom of the brand row - and the cap is in place before the animation
+        // Bootstrap fires `show` before it makes the element visible, so this only seeds the
+        // estimate - the ResizeObserver refines it from the real geometry as the menu opens
         this.navbarCollapse.addEventListener('show.bs.collapse', this._updateNavbarCollapseMaxHeight.bind(this));
         this.navbarCollapse.addEventListener('hidden.bs.collapse', this._clearNavbarCollapseMaxHeight.bind(this));
 
+        // The header does not resize when only the viewport does (address bar, rotation)
         window.addEventListener('resize', this._updateNavbarCollapseMaxHeight.bind(this));
         window.addEventListener('orientationchange', this._updateNavbarCollapseMaxHeight.bind(this));
     }
@@ -156,11 +163,28 @@ class CommonGeneralSiteheader extends InlineCode {
 
         const maxHeight = calculateNavbarCollapseMaxHeight(
             window.innerHeight,
-            this.navbarCollapse.getBoundingClientRect().top,
+            this._navbarCollapseTop(),
             CommonGeneralSiteheader.NAVBAR_COLLAPSE_BOTTOM_MARGIN
         );
 
         document.documentElement.style.setProperty('--ksg-navbar-collapse-max-height', `${maxHeight}px`);
+    }
+
+    /**
+     * Where the menu's top edge is - or will be, while it is still closed.
+     *
+     * A closed collapse is `display: none` and reports an all-zero rect, which would pass for a
+     * menu starting at the very top of the viewport and yield a cap a whole header too large. The
+     * closed header's bottom edge is the same row bottom plus the navbar's bottom padding, so it
+     * errs a few pixels low - and erring low keeps every item reachable.
+     *
+     * @returns {number}
+     */
+    _navbarCollapseTop() {
+        const rect = this.navbarCollapse.getBoundingClientRect();
+
+        return rect.width === 0 && rect.height === 0 ?
+            this.header.getBoundingClientRect().bottom : rect.top;
     }
 
     _clearNavbarCollapseMaxHeight() {

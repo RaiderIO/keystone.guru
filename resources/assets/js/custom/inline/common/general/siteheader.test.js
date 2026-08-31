@@ -209,10 +209,15 @@ describe('calculateNavbarCollapseMaxHeight', () => {
 
 describe('CommonGeneralSiteheader mobile menu height', () => {
     /**
-     * @param {number} collapseTop
+     * Builds a header whose collapse reports a rect the way a real browser does: all zeros while
+     * closed (Bootstrap fires `show.bs.collapse` before the element stops being `display: none`),
+     * the real top once open.
+     *
+     * @param {number} openCollapseTop
+     * @param {number} closedHeaderBottom
      * @returns {CommonGeneralSiteheader}
      */
-    function makeSiteheaderWithCollapse(collapseTop = 56) {
+    function makeSiteheaderWithCollapse(openCollapseTop = 56, closedHeaderBottom = 64) {
         document.body.innerHTML = `
             <div id="site_header" class="ksg-header">
                 <nav class="navbar navbar-second">
@@ -225,10 +230,14 @@ describe('CommonGeneralSiteheader mobile menu height', () => {
         siteheader.shrinkTarget = siteheader.header;
         siteheader._initNavbarCollapse();
 
-        // jsdom lays nothing out, so the collapse's position is stubbed the way the shrink
-        // tests stub scrollHeight/innerHeight
+        // jsdom lays nothing out, so geometry is stubbed the way the shrink tests stub
+        // scrollHeight/innerHeight
+        vi.spyOn(siteheader.header, 'getBoundingClientRect')
+            .mockReturnValue({top: 0, bottom: closedHeaderBottom, width: 390, height: closedHeaderBottom});
         vi.spyOn(siteheader.navbarCollapse, 'getBoundingClientRect')
-            .mockReturnValue({top: collapseTop});
+            .mockReturnValue({top: 0, bottom: 0, width: 0, height: 0});
+        siteheader.openCollapse = () => siteheader.navbarCollapse.getBoundingClientRect
+            .mockReturnValue({top: openCollapseTop, bottom: 400, width: 390, height: 400 - openCollapseTop});
         window.innerHeight = 640;
 
         return siteheader;
@@ -238,14 +247,29 @@ describe('CommonGeneralSiteheader mobile menu height', () => {
         document.documentElement.style.removeProperty('--ksg-navbar-collapse-max-height');
     });
 
-    it('initNavbarCollapse_givenMenuOpens_capsItToTheVisibleViewport', () => {
-        // Arrange
+    it('showCollapse_givenTheMenuIsStillDisplayNone_capsItFromTheHeaderInsteadOfTheZeroRect', () => {
+        // Arrange: Bootstrap triggers `show` before it removes `.collapse`, so the element is
+        // still `display: none` and reports an all-zero rect
         const siteheader = makeSiteheaderWithCollapse();
 
         // Act
         siteheader.navbarCollapse.dispatchEvent(new Event('show.bs.collapse'));
 
-        // Assert: 640 viewport - 56 brand row - 8 margin
+        // Assert: 640 viewport - 64 closed header - 8 margin. Trusting the zero rect would give
+        // 632px and leave a header's worth of menu below the fold - the bug itself (#4378)
+        expect(document.documentElement.style.getPropertyValue('--ksg-navbar-collapse-max-height'))
+            .toBe('568px');
+    });
+
+    it('onHeaderResized_givenTheMenuIsOpen_capsItToTheVisibleViewport', () => {
+        // Arrange: the menu opening resizes the header, which is what drives the refinement
+        const siteheader = makeSiteheaderWithCollapse();
+        siteheader.openCollapse();
+
+        // Act
+        siteheader._updateNavbarCollapseMaxHeight();
+
+        // Assert: 640 viewport - 56 collapse top - 8 margin
         expect(document.documentElement.style.getPropertyValue('--ksg-navbar-collapse-max-height'))
             .toBe('576px');
     });
@@ -253,7 +277,8 @@ describe('CommonGeneralSiteheader mobile menu height', () => {
     it('initNavbarCollapse_givenViewportResizedWhileOpen_recalculatesTheCap', () => {
         // Arrange: menu open on a tall viewport, then the browser chrome expands
         const siteheader = makeSiteheaderWithCollapse();
-        siteheader.navbarCollapse.dispatchEvent(new Event('show.bs.collapse'));
+        siteheader.openCollapse();
+        siteheader._updateNavbarCollapseMaxHeight();
         window.innerHeight = 400;
 
         // Act
@@ -277,30 +302,30 @@ describe('CommonGeneralSiteheader mobile menu height', () => {
             .toBe('');
     });
 
-    it('updateShrink_givenHeaderUnshrinksWithTheMenuOpen_recalculatesTheCap', () => {
-        // Arrange: menu opened while the header was shrunk, then scrolled back to the top -
-        // the brand row regains its padding and pushes the collapse down
+    it('onHeaderResized_givenTheHeaderGrowsBackWithTheMenuOpen_recalculatesTheCap', () => {
+        // Arrange: the menu was opened while the header was shrunk; scrolling back to the top
+        // gives the brand row its padding back and pushes the menu down. The ResizeObserver
+        // fires on that height change - a cap measured against the shrunk row would be too
+        // large and put the bottom items back out of reach
         const siteheader = makeSiteheaderWithCollapse(48);
-        siteheader.shrinkTarget.classList.add('ksg-header--shrink');
-        siteheader.navbarCollapse.dispatchEvent(new Event('show.bs.collapse'));
+        siteheader.openCollapse();
+        siteheader._onHeaderResized();
         expect(document.documentElement.style.getPropertyValue('--ksg-navbar-collapse-max-height'))
             .toBe('584px');
 
-        siteheader.navbarCollapse.getBoundingClientRect.mockReturnValue({top: 64});
-        window.scrollY = 0;
-        vi.spyOn(document.documentElement, 'scrollHeight', 'get').mockReturnValue(5000);
+        siteheader.navbarCollapse.getBoundingClientRect
+            .mockReturnValue({top: 64, bottom: 400, width: 390, height: 336});
 
         // Act
-        siteheader._updateShrink();
+        siteheader._onHeaderResized();
 
-        // Assert: keeping the shrunk measurement would leave the last items below the fold
-        expect(siteheader.shrinkTarget.classList.contains('ksg-header--shrink')).toBe(false);
+        // Assert
         expect(document.documentElement.style.getPropertyValue('--ksg-navbar-collapse-max-height'))
             .toBe('568px');
     });
 
     it('initNavbarCollapse_givenNoCollapseInTheHeader_doesNothing', () => {
-        // Arrange: the map header renders without a main navbar collapse
+        // Arrange: a header rendered without a main navbar collapse
         document.body.innerHTML = '<div id="site_header" class="ksg-header"></div>';
         const siteheader = new CommonGeneralSiteheader('siteheader', 'common/general/siteheader', {});
         siteheader.header = document.getElementById('site_header');
