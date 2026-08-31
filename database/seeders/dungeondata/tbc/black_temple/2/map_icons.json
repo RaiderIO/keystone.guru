@@ -7,7 +7,7 @@
         "map_icon_type_id": 2,
         "lat": -117.8995,
         "lng": 84.1334,
-        "comment": "Dragonmaw Wind Reaver and Dragonmaw Sky Stalker can be one of the other.",
+        "comment": "mapping.map_icons.tbc.black_temple.dragonmaw_variants",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

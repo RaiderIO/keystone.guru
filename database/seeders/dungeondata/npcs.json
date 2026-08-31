@@ -666,11 +666,6 @@
                 "id": 6676,
                 "npc_id": 1420,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6857,
-                "npc_id": 1420,
-                "dungeon_id": 156
             }
         ]
     },
@@ -36285,17 +36280,7 @@
                 "dungeon_id": 16
             },
             {
-                "id": 6876,
-                "npc_id": 14881,
-                "dungeon_id": 16
-            },
-            {
                 "id": 6161,
-                "npc_id": 14881,
-                "dungeon_id": 42
-            },
-            {
-                "id": 6872,
                 "npc_id": 14881,
                 "dungeon_id": 42
             },
@@ -36305,17 +36290,7 @@
                 "dungeon_id": 44
             },
             {
-                "id": 6871,
-                "npc_id": 14881,
-                "dungeon_id": 44
-            },
-            {
                 "id": 6163,
-                "npc_id": 14881,
-                "dungeon_id": 47
-            },
-            {
-                "id": 6875,
                 "npc_id": 14881,
                 "dungeon_id": 47
             },
@@ -36325,17 +36300,7 @@
                 "dungeon_id": 50
             },
             {
-                "id": 6870,
-                "npc_id": 14881,
-                "dungeon_id": 50
-            },
-            {
                 "id": 6165,
-                "npc_id": 14881,
-                "dungeon_id": 51
-            },
-            {
-                "id": 6873,
                 "npc_id": 14881,
                 "dungeon_id": 51
             },
@@ -36345,22 +36310,7 @@
                 "dungeon_id": 57
             },
             {
-                "id": 6865,
-                "npc_id": 14881,
-                "dungeon_id": 57
-            },
-            {
                 "id": 924,
-                "npc_id": 14881,
-                "dungeon_id": 58
-            },
-            {
-                "id": 6167,
-                "npc_id": 14881,
-                "dungeon_id": 58
-            },
-            {
-                "id": 6874,
                 "npc_id": 14881,
                 "dungeon_id": 58
             },
@@ -36370,27 +36320,12 @@
                 "dungeon_id": 60
             },
             {
-                "id": 6866,
-                "npc_id": 14881,
-                "dungeon_id": 60
-            },
-            {
                 "id": 6169,
                 "npc_id": 14881,
                 "dungeon_id": 127
             },
             {
-                "id": 6867,
-                "npc_id": 14881,
-                "dungeon_id": 127
-            },
-            {
                 "id": 6170,
-                "npc_id": 14881,
-                "dungeon_id": 150
-            },
-            {
-                "id": 6868,
                 "npc_id": 14881,
                 "dungeon_id": 150
             },
@@ -50042,16 +49977,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22841\/shade-of-akama",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9247,
+                "npc_id": 22841,
+                "game_version_id": 2,
+                "health": 1001350,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6748,
-                "npc_id": 22841,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6775,
                 "npc_id": 22841,
                 "dungeon_id": 156
             }
@@ -50076,16 +50014,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22844\/ashtongue-battlelord",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9243,
+                "npc_id": 22844,
+                "game_version_id": 2,
+                "health": 332000,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6697,
-                "npc_id": 22844,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6906,
                 "npc_id": 22844,
                 "dungeon_id": 156
             }
@@ -50110,16 +50051,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22845\/ashtongue-mystic",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9244,
+                "npc_id": 22845,
+                "game_version_id": 2,
+                "health": 172300,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6698,
-                "npc_id": 22845,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6864,
                 "npc_id": 22845,
                 "dungeon_id": 156
             }
@@ -50144,16 +50088,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22846\/ashtongue-stormcaller",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9240,
+                "npc_id": 22846,
+                "game_version_id": 2,
+                "health": 172300,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6702,
-                "npc_id": 22846,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6914,
                 "npc_id": 22846,
                 "dungeon_id": 156
             }
@@ -50178,16 +50125,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22847\/ashtongue-primalist",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9245,
+                "npc_id": 22847,
+                "game_version_id": 2,
+                "health": 180043,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6699,
-                "npc_id": 22847,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6892,
                 "npc_id": 22847,
                 "dungeon_id": 156
             }
@@ -50212,16 +50162,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22848\/storm-fury",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9242,
+                "npc_id": 22848,
+                "game_version_id": 2,
+                "health": 104800,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6703,
-                "npc_id": 22848,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6940,
                 "npc_id": 22848,
                 "dungeon_id": 156
             }
@@ -50246,16 +50199,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22849\/ashtongue-feral-spirit",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9239,
+                "npc_id": 22849,
+                "game_version_id": 2,
+                "health": 104800,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6755,
-                "npc_id": 22849,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6862,
                 "npc_id": 22849,
                 "dungeon_id": 156
             }
@@ -50280,16 +50236,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22853\/illidari-defiler",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9236,
+                "npc_id": 22853,
+                "game_version_id": 2,
+                "health": 172300,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6696,
-                "npc_id": 22853,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6908,
                 "npc_id": 22853,
                 "dungeon_id": 156
             }
@@ -50306,7 +50265,7 @@
         "level": null,
         "mdt_scale": null,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -50314,16 +50273,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22855\/illidari-nightlord",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9241,
+                "npc_id": 22855,
+                "game_version_id": 2,
+                "health": 442800,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
-                "id": 6701,
-                "npc_id": 22855,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6837,
+                "id": 7619,
                 "npc_id": 22855,
                 "dungeon_id": 156
             }
@@ -50377,16 +50339,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22869\/illidari-boneslicer",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9235,
+                "npc_id": 22869,
+                "game_version_id": 2,
+                "health": 215400,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6695,
-                "npc_id": 22869,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6860,
                 "npc_id": 22869,
                 "dungeon_id": 156
             }
@@ -50418,11 +50383,6 @@
                 "id": 6749,
                 "npc_id": 22871,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6771,
-                "npc_id": 22871,
-                "dungeon_id": 156
             }
         ]
     },
@@ -50445,16 +50405,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22873\/coilskar-general",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9225,
+                "npc_id": 22873,
+                "game_version_id": 2,
+                "health": 287200,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6679,
-                "npc_id": 22873,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6785,
                 "npc_id": 22873,
                 "dungeon_id": 156
             }
@@ -50486,11 +50449,6 @@
                 "id": 6677,
                 "npc_id": 22874,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6902,
-                "npc_id": 22874,
-                "dungeon_id": 156
             }
         ]
     },
@@ -50513,16 +50471,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22875\/coilskar-sea-caller",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9224,
+                "npc_id": 22875,
+                "game_version_id": 2,
+                "health": 172479,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6682,
-                "npc_id": 22875,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6794,
                 "npc_id": 22875,
                 "dungeon_id": 156
             }
@@ -50547,16 +50508,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22876\/coilskar-soothsayer",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9226,
+                "npc_id": 22876,
+                "game_version_id": 2,
+                "health": 172367,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6678,
-                "npc_id": 22876,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6814,
                 "npc_id": 22876,
                 "dungeon_id": 156
             }
@@ -50581,16 +50545,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22877\/coilskar-wrangler",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9223,
+                "npc_id": 22877,
+                "game_version_id": 2,
+                "health": 172374,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6675,
-                "npc_id": 22877,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6819,
                 "npc_id": 22877,
                 "dungeon_id": 156
             }
@@ -50615,16 +50582,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22878\/aqueous-lord",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9219,
+                "npc_id": 22878,
+                "game_version_id": 2,
+                "health": 442800,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6747,
-                "npc_id": 22878,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6839,
                 "npc_id": 22878,
                 "dungeon_id": 156
             }
@@ -50656,11 +50626,6 @@
                 "id": 6707,
                 "npc_id": 22879,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6904,
-                "npc_id": 22879,
-                "dungeon_id": 156
             }
         ]
     },
@@ -50688,11 +50653,6 @@
         "npc_dungeons": [
             {
                 "id": 6708,
-                "npc_id": 22880,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6855,
                 "npc_id": 22880,
                 "dungeon_id": 156
             }
@@ -50724,11 +50684,6 @@
                 "id": 6685,
                 "npc_id": 22881,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6905,
-                "npc_id": 22881,
-                "dungeon_id": 156
             }
         ]
     },
@@ -50758,11 +50713,6 @@
                 "id": 6714,
                 "npc_id": 22882,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6971,
-                "npc_id": 22882,
-                "dungeon_id": 156
             }
         ]
     },
@@ -50785,16 +50735,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22883\/aqueous-spawn",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9218,
+                "npc_id": 22883,
+                "game_version_id": 2,
+                "health": 62847,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6672,
-                "npc_id": 22883,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6790,
                 "npc_id": 22883,
                 "dungeon_id": 156
             }
@@ -50811,7 +50764,7 @@
         "level": null,
         "mdt_scale": null,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -50819,16 +50772,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22884\/leviathan",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9222,
+                "npc_id": 22884,
+                "game_version_id": 2,
+                "health": 553500,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
-                "id": 6674,
-                "npc_id": 22884,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6815,
+                "id": 7618,
                 "npc_id": 22884,
                 "dungeon_id": 156
             }
@@ -50860,11 +50816,6 @@
                 "id": 6680,
                 "npc_id": 22885,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6877,
-                "npc_id": 22885,
-                "dungeon_id": 156
             }
         ]
     },
@@ -50887,16 +50838,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22887\/high-warlord-najentus",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9227,
+                "npc_id": 22887,
+                "game_version_id": 2,
+                "health": 3788889,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6754,
-                "npc_id": 22887,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6773,
                 "npc_id": 22887,
                 "dungeon_id": 156
             }
@@ -50921,16 +50875,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22898\/supremus",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9233,
+                "npc_id": 22898,
+                "game_version_id": 2,
+                "health": 4557798,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6753,
-                "npc_id": 22898,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6777,
                 "npc_id": 22898,
                 "dungeon_id": 156
             }
@@ -50960,16 +50917,6 @@
         "npc_dungeons": [
             {
                 "id": 6752,
-                "npc_id": 22917,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6757,
-                "npc_id": 22917,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6770,
                 "npc_id": 22917,
                 "dungeon_id": 156
             }
@@ -51030,11 +50977,6 @@
                 "id": 6730,
                 "npc_id": 22939,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6792,
-                "npc_id": 22939,
-                "dungeon_id": 156
             }
         ]
     },
@@ -51062,11 +51004,6 @@
         "npc_dungeons": [
             {
                 "id": 6712,
-                "npc_id": 22945,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6897,
                 "npc_id": 22945,
                 "dungeon_id": 156
             }
@@ -51098,11 +51035,6 @@
                 "id": 6756,
                 "npc_id": 22946,
                 "dungeon_id": 156
-            },
-            {
-                "id": 7224,
-                "npc_id": 22946,
-                "dungeon_id": 156
             }
         ]
     },
@@ -51130,11 +51062,6 @@
         "npc_dungeons": [
             {
                 "id": 6750,
-                "npc_id": 22947,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6774,
                 "npc_id": 22947,
                 "dungeon_id": 156
             }
@@ -51166,11 +51093,6 @@
                 "id": 6751,
                 "npc_id": 22948,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6772,
-                "npc_id": 22948,
-                "dungeon_id": 156
             }
         ]
     },
@@ -51198,11 +51120,6 @@
         "npc_dungeons": [
             {
                 "id": 6744,
-                "npc_id": 22949,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6781,
                 "npc_id": 22949,
                 "dungeon_id": 156
             }
@@ -51234,11 +51151,6 @@
                 "id": 6745,
                 "npc_id": 22950,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6787,
-                "npc_id": 22950,
-                "dungeon_id": 156
             }
         ]
     },
@@ -51266,11 +51178,6 @@
         "npc_dungeons": [
             {
                 "id": 6742,
-                "npc_id": 22951,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6779,
                 "npc_id": 22951,
                 "dungeon_id": 156
             }
@@ -51302,11 +51209,6 @@
                 "id": 6743,
                 "npc_id": 22952,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6783,
-                "npc_id": 22952,
-                "dungeon_id": 156
             }
         ]
     },
@@ -51336,11 +51238,6 @@
                 "id": 6713,
                 "npc_id": 22953,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6861,
-                "npc_id": 22953,
-                "dungeon_id": 156
             }
         ]
     },
@@ -51363,16 +51260,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22954\/illidari-fearbringer",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9231,
+                "npc_id": 22954,
+                "game_version_id": 2,
+                "health": 553604,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6691,
-                "npc_id": 22954,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6840,
                 "npc_id": 22954,
                 "dungeon_id": 156
             }
@@ -51404,11 +51304,6 @@
                 "id": 6729,
                 "npc_id": 22955,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6894,
-                "npc_id": 22955,
-                "dungeon_id": 156
             }
         ]
     },
@@ -51436,11 +51331,6 @@
         "npc_dungeons": [
             {
                 "id": 6732,
-                "npc_id": 22956,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6791,
                 "npc_id": 22956,
                 "dungeon_id": 156
             }
@@ -51472,11 +51362,6 @@
                 "id": 6734,
                 "npc_id": 22957,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6793,
-                "npc_id": 22957,
-                "dungeon_id": 156
             }
         ]
     },
@@ -51506,11 +51391,6 @@
                 "id": 6731,
                 "npc_id": 22959,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6899,
-                "npc_id": 22959,
-                "dungeon_id": 156
             }
         ]
     },
@@ -51533,16 +51413,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22960\/dragonmaw-wyrmcaller",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9229,
+                "npc_id": 22960,
+                "game_version_id": 2,
+                "health": 200500,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6690,
-                "npc_id": 22960,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6913,
                 "npc_id": 22960,
                 "dungeon_id": 156
             }
@@ -51574,11 +51457,6 @@
                 "id": 6735,
                 "npc_id": 22962,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6813,
-                "npc_id": 22962,
-                "dungeon_id": 156
             }
         ]
     },
@@ -51601,16 +51479,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22963\/bonechewer-worker",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9232,
+                "npc_id": 22963,
+                "game_version_id": 2,
+                "health": 25115,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6686,
-                "npc_id": 22963,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6945,
                 "npc_id": 22963,
                 "dungeon_id": 156
             }
@@ -51642,11 +51523,6 @@
                 "id": 6733,
                 "npc_id": 22964,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6796,
-                "npc_id": 22964,
-                "dungeon_id": 156
             }
         ]
     },
@@ -51674,11 +51550,6 @@
         "npc_dungeons": [
             {
                 "id": 6728,
-                "npc_id": 22965,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6900,
                 "npc_id": 22965,
                 "dungeon_id": 156
             }
@@ -51768,11 +51639,6 @@
                 "id": 6709,
                 "npc_id": 23018,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6909,
-                "npc_id": 23018,
-                "dungeon_id": 156
             }
         ]
     },
@@ -51795,16 +51661,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23028\/bonechewer-taskmaster",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9228,
+                "npc_id": 23028,
+                "game_version_id": 2,
+                "health": 172479,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6687,
-                "npc_id": 23028,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6863,
                 "npc_id": 23028,
                 "dungeon_id": 156
             }
@@ -51829,16 +51698,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23030\/dragonmaw-sky-stalker",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9234,
+                "npc_id": 23030,
+                "game_version_id": 2,
+                "health": 201000,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6688,
-                "npc_id": 23030,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6901,
                 "npc_id": 23030,
                 "dungeon_id": 156
             }
@@ -51870,11 +51742,6 @@
                 "id": 6716,
                 "npc_id": 23047,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6856,
-                "npc_id": 23047,
-                "dungeon_id": 156
             }
         ]
     },
@@ -51902,11 +51769,6 @@
         "npc_dungeons": [
             {
                 "id": 6715,
-                "npc_id": 23049,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6891,
                 "npc_id": 23049,
                 "dungeon_id": 156
             }
@@ -51996,11 +51858,6 @@
                 "id": 6683,
                 "npc_id": 23086,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6915,
-                "npc_id": 23086,
-                "dungeon_id": 156
             }
         ]
     },
@@ -52028,11 +51885,6 @@
         "npc_dungeons": [
             {
                 "id": 6673,
-                "npc_id": 23087,
-                "dungeon_id": 156
-            },
-            {
-                "id": 7208,
                 "npc_id": 23087,
                 "dungeon_id": 156
             }
@@ -52180,11 +52032,6 @@
                 "id": 6710,
                 "npc_id": 23147,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6916,
-                "npc_id": 23147,
-                "dungeon_id": 156
             }
         ]
     },
@@ -52301,11 +52148,6 @@
                 "id": 6717,
                 "npc_id": 23172,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6907,
-                "npc_id": 23172,
-                "dungeon_id": 156
             }
         ]
     },
@@ -52362,11 +52204,6 @@
         "npc_dungeons": [
             {
                 "id": 6723,
-                "npc_id": 23196,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6797,
                 "npc_id": 23196,
                 "dungeon_id": 156
             }
@@ -52485,11 +52322,6 @@
                 "id": 6725,
                 "npc_id": 23222,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6911,
-                "npc_id": 23222,
-                "dungeon_id": 156
             }
         ]
     },
@@ -52517,11 +52349,6 @@
         "npc_dungeons": [
             {
                 "id": 6726,
-                "npc_id": 23223,
-                "dungeon_id": 156
-            },
-            {
-                "id": 7211,
                 "npc_id": 23223,
                 "dungeon_id": 156
             }
@@ -52553,11 +52380,6 @@
                 "id": 6720,
                 "npc_id": 23232,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6795,
-                "npc_id": 23232,
-                "dungeon_id": 156
             }
         ]
     },
@@ -52585,11 +52407,6 @@
         "npc_dungeons": [
             {
                 "id": 6722,
-                "npc_id": 23235,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6893,
                 "npc_id": 23235,
                 "dungeon_id": 156
             }
@@ -52621,11 +52438,6 @@
                 "id": 6721,
                 "npc_id": 23236,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6858,
-                "npc_id": 23236,
-                "dungeon_id": 156
             }
         ]
     },
@@ -52655,11 +52467,6 @@
                 "id": 6719,
                 "npc_id": 23237,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6816,
-                "npc_id": 23237,
-                "dungeon_id": 156
             }
         ]
     },
@@ -52687,11 +52494,6 @@
         "npc_dungeons": [
             {
                 "id": 6724,
-                "npc_id": 23239,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6912,
                 "npc_id": 23239,
                 "dungeon_id": 156
             }
@@ -52774,16 +52576,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23330\/dragonmaw-wind-reaver",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9230,
+                "npc_id": 23330,
+                "game_version_id": 2,
+                "health": 201000,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6689,
-                "npc_id": 23330,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6859,
                 "npc_id": 23330,
                 "dungeon_id": 156
             }
@@ -52837,16 +52642,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23337\/illidari-centurion",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9237,
+                "npc_id": 23337,
+                "game_version_id": 2,
+                "health": 295200,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6693,
-                "npc_id": 23337,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6895,
                 "npc_id": 23337,
                 "dungeon_id": 156
             }
@@ -52871,16 +52679,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23339\/illidari-heartseeker",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9238,
+                "npc_id": 23339,
+                "game_version_id": 2,
+                "health": 215400,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6694,
-                "npc_id": 23339,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6896,
                 "npc_id": 23339,
                 "dungeon_id": 156
             }
@@ -52970,11 +52781,6 @@
                 "id": 6700,
                 "npc_id": 23374,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6917,
-                "npc_id": 23374,
-                "dungeon_id": 156
             }
         ]
     },
@@ -53062,11 +52868,6 @@
                 "id": 6737,
                 "npc_id": 23394,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6817,
-                "npc_id": 23394,
-                "dungeon_id": 156
             }
         ]
     },
@@ -53094,11 +52895,6 @@
         "npc_dungeons": [
             {
                 "id": 6739,
-                "npc_id": 23397,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6903,
                 "npc_id": 23397,
                 "dungeon_id": 156
             }
@@ -53188,11 +52984,6 @@
                 "id": 6740,
                 "npc_id": 23400,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6970,
-                "npc_id": 23400,
-                "dungeon_id": 156
             }
         ]
     },
@@ -53251,11 +53042,6 @@
                 "id": 6738,
                 "npc_id": 23402,
                 "dungeon_id": 156
-            },
-            {
-                "id": 6835,
-                "npc_id": 23402,
-                "dungeon_id": 156
             }
         ]
     },
@@ -53283,11 +53069,6 @@
         "npc_dungeons": [
             {
                 "id": 6741,
-                "npc_id": 23403,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6920,
                 "npc_id": 23403,
                 "dungeon_id": 156
             }
@@ -53457,16 +53238,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23421\/ashtongue-channeler",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9246,
+                "npc_id": 23421,
+                "game_version_id": 2,
+                "health": 125706,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
                 "id": 6705,
-                "npc_id": 23421,
-                "dungeon_id": 156
-            },
-            {
-                "id": 6972,
                 "npc_id": 23421,
                 "dungeon_id": 156
             }
@@ -263245,17 +263029,7 @@
                 "dungeon_id": 5
             },
             {
-                "id": 7072,
-                "npc_id": 229695,
-                "dungeon_id": 5
-            },
-            {
                 "id": 5724,
-                "npc_id": 229695,
-                "dungeon_id": 13
-            },
-            {
-                "id": 7073,
                 "npc_id": 229695,
                 "dungeon_id": 13
             },
@@ -263265,17 +263039,7 @@
                 "dungeon_id": 18
             },
             {
-                "id": 7074,
-                "npc_id": 229695,
-                "dungeon_id": 18
-            },
-            {
                 "id": 5726,
-                "npc_id": 229695,
-                "dungeon_id": 20
-            },
-            {
-                "id": 7075,
                 "npc_id": 229695,
                 "dungeon_id": 20
             },
@@ -263285,17 +263049,7 @@
                 "dungeon_id": 29
             },
             {
-                "id": 7076,
-                "npc_id": 229695,
-                "dungeon_id": 29
-            },
-            {
                 "id": 5728,
-                "npc_id": 229695,
-                "dungeon_id": 30
-            },
-            {
-                "id": 7077,
                 "npc_id": 229695,
                 "dungeon_id": 30
             },
@@ -263305,17 +263059,7 @@
                 "dungeon_id": 34
             },
             {
-                "id": 7078,
-                "npc_id": 229695,
-                "dungeon_id": 34
-            },
-            {
                 "id": 5730,
-                "npc_id": 229695,
-                "dungeon_id": 36
-            },
-            {
-                "id": 7079,
                 "npc_id": 229695,
                 "dungeon_id": 36
             },
@@ -263325,17 +263069,7 @@
                 "dungeon_id": 37
             },
             {
-                "id": 7080,
-                "npc_id": 229695,
-                "dungeon_id": 37
-            },
-            {
                 "id": 5732,
-                "npc_id": 229695,
-                "dungeon_id": 39
-            },
-            {
-                "id": 7081,
                 "npc_id": 229695,
                 "dungeon_id": 39
             },
@@ -263345,17 +263079,7 @@
                 "dungeon_id": 45
             },
             {
-                "id": 7082,
-                "npc_id": 229695,
-                "dungeon_id": 45
-            },
-            {
                 "id": 5734,
-                "npc_id": 229695,
-                "dungeon_id": 51
-            },
-            {
-                "id": 7083,
                 "npc_id": 229695,
                 "dungeon_id": 51
             },
@@ -263365,17 +263089,7 @@
                 "dungeon_id": 52
             },
             {
-                "id": 7084,
-                "npc_id": 229695,
-                "dungeon_id": 52
-            },
-            {
                 "id": 5736,
-                "npc_id": 229695,
-                "dungeon_id": 56
-            },
-            {
-                "id": 7085,
                 "npc_id": 229695,
                 "dungeon_id": 56
             },
@@ -263385,17 +263099,7 @@
                 "dungeon_id": 65
             },
             {
-                "id": 7086,
-                "npc_id": 229695,
-                "dungeon_id": 65
-            },
-            {
                 "id": 5738,
-                "npc_id": 229695,
-                "dungeon_id": 69
-            },
-            {
-                "id": 7087,
                 "npc_id": 229695,
                 "dungeon_id": 69
             },
@@ -263405,17 +263109,7 @@
                 "dungeon_id": 77
             },
             {
-                "id": 7088,
-                "npc_id": 229695,
-                "dungeon_id": 77
-            },
-            {
                 "id": 5740,
-                "npc_id": 229695,
-                "dungeon_id": 80
-            },
-            {
-                "id": 7089,
                 "npc_id": 229695,
                 "dungeon_id": 80
             },
@@ -263425,17 +263119,7 @@
                 "dungeon_id": 81
             },
             {
-                "id": 7090,
-                "npc_id": 229695,
-                "dungeon_id": 81
-            },
-            {
                 "id": 5742,
-                "npc_id": 229695,
-                "dungeon_id": 94
-            },
-            {
-                "id": 7091,
                 "npc_id": 229695,
                 "dungeon_id": 94
             },
@@ -263445,17 +263129,7 @@
                 "dungeon_id": 99
             },
             {
-                "id": 7092,
-                "npc_id": 229695,
-                "dungeon_id": 99
-            },
-            {
                 "id": 5744,
-                "npc_id": 229695,
-                "dungeon_id": 100
-            },
-            {
-                "id": 7093,
                 "npc_id": 229695,
                 "dungeon_id": 100
             },
@@ -263465,17 +263139,7 @@
                 "dungeon_id": 101
             },
             {
-                "id": 7094,
-                "npc_id": 229695,
-                "dungeon_id": 101
-            },
-            {
                 "id": 5746,
-                "npc_id": 229695,
-                "dungeon_id": 102
-            },
-            {
-                "id": 7095,
                 "npc_id": 229695,
                 "dungeon_id": 102
             },
@@ -263485,17 +263149,7 @@
                 "dungeon_id": 103
             },
             {
-                "id": 7096,
-                "npc_id": 229695,
-                "dungeon_id": 103
-            },
-            {
                 "id": 5748,
-                "npc_id": 229695,
-                "dungeon_id": 108
-            },
-            {
-                "id": 7097,
                 "npc_id": 229695,
                 "dungeon_id": 108
             },
@@ -263505,17 +263159,7 @@
                 "dungeon_id": 109
             },
             {
-                "id": 7098,
-                "npc_id": 229695,
-                "dungeon_id": 109
-            },
-            {
                 "id": 5750,
-                "npc_id": 229695,
-                "dungeon_id": 110
-            },
-            {
-                "id": 7099,
                 "npc_id": 229695,
                 "dungeon_id": 110
             },
@@ -263525,17 +263169,7 @@
                 "dungeon_id": 111
             },
             {
-                "id": 7100,
-                "npc_id": 229695,
-                "dungeon_id": 111
-            },
-            {
                 "id": 5752,
-                "npc_id": 229695,
-                "dungeon_id": 112
-            },
-            {
-                "id": 7101,
                 "npc_id": 229695,
                 "dungeon_id": 112
             },
@@ -263545,17 +263179,7 @@
                 "dungeon_id": 113
             },
             {
-                "id": 7102,
-                "npc_id": 229695,
-                "dungeon_id": 113
-            },
-            {
                 "id": 5754,
-                "npc_id": 229695,
-                "dungeon_id": 114
-            },
-            {
-                "id": 7103,
                 "npc_id": 229695,
                 "dungeon_id": 114
             },
@@ -263565,17 +263189,7 @@
                 "dungeon_id": 115
             },
             {
-                "id": 7104,
-                "npc_id": 229695,
-                "dungeon_id": 115
-            },
-            {
                 "id": 5756,
-                "npc_id": 229695,
-                "dungeon_id": 116
-            },
-            {
-                "id": 7105,
                 "npc_id": 229695,
                 "dungeon_id": 116
             },
@@ -263585,17 +263199,7 @@
                 "dungeon_id": 120
             },
             {
-                "id": 7106,
-                "npc_id": 229695,
-                "dungeon_id": 120
-            },
-            {
                 "id": 5758,
-                "npc_id": 229695,
-                "dungeon_id": 128
-            },
-            {
-                "id": 7107,
                 "npc_id": 229695,
                 "dungeon_id": 128
             },
@@ -263605,17 +263209,7 @@
                 "dungeon_id": 129
             },
             {
-                "id": 7108,
-                "npc_id": 229695,
-                "dungeon_id": 129
-            },
-            {
                 "id": 5760,
-                "npc_id": 229695,
-                "dungeon_id": 137
-            },
-            {
-                "id": 7109,
                 "npc_id": 229695,
                 "dungeon_id": 137
             },
@@ -263625,17 +263219,7 @@
                 "dungeon_id": 139
             },
             {
-                "id": 7110,
-                "npc_id": 229695,
-                "dungeon_id": 139
-            },
-            {
                 "id": 5762,
-                "npc_id": 229695,
-                "dungeon_id": 148
-            },
-            {
-                "id": 7111,
                 "npc_id": 229695,
                 "dungeon_id": 148
             },
@@ -263674,17 +263258,7 @@
                 "dungeon_id": 2
             },
             {
-                "id": 7113,
-                "npc_id": 229706,
-                "dungeon_id": 2
-            },
-            {
                 "id": 5773,
-                "npc_id": 229706,
-                "dungeon_id": 4
-            },
-            {
-                "id": 7114,
                 "npc_id": 229706,
                 "dungeon_id": 4
             },
@@ -263694,17 +263268,7 @@
                 "dungeon_id": 5
             },
             {
-                "id": 7115,
-                "npc_id": 229706,
-                "dungeon_id": 5
-            },
-            {
                 "id": 5775,
-                "npc_id": 229706,
-                "dungeon_id": 13
-            },
-            {
-                "id": 7116,
                 "npc_id": 229706,
                 "dungeon_id": 13
             },
@@ -263714,17 +263278,7 @@
                 "dungeon_id": 18
             },
             {
-                "id": 7117,
-                "npc_id": 229706,
-                "dungeon_id": 18
-            },
-            {
                 "id": 5777,
-                "npc_id": 229706,
-                "dungeon_id": 20
-            },
-            {
-                "id": 7118,
                 "npc_id": 229706,
                 "dungeon_id": 20
             },
@@ -263734,17 +263288,7 @@
                 "dungeon_id": 29
             },
             {
-                "id": 7119,
-                "npc_id": 229706,
-                "dungeon_id": 29
-            },
-            {
                 "id": 5779,
-                "npc_id": 229706,
-                "dungeon_id": 30
-            },
-            {
-                "id": 7120,
                 "npc_id": 229706,
                 "dungeon_id": 30
             },
@@ -263754,17 +263298,7 @@
                 "dungeon_id": 34
             },
             {
-                "id": 7121,
-                "npc_id": 229706,
-                "dungeon_id": 34
-            },
-            {
                 "id": 5781,
-                "npc_id": 229706,
-                "dungeon_id": 35
-            },
-            {
-                "id": 7122,
                 "npc_id": 229706,
                 "dungeon_id": 35
             },
@@ -263774,17 +263308,7 @@
                 "dungeon_id": 36
             },
             {
-                "id": 7123,
-                "npc_id": 229706,
-                "dungeon_id": 36
-            },
-            {
                 "id": 5783,
-                "npc_id": 229706,
-                "dungeon_id": 37
-            },
-            {
-                "id": 7124,
                 "npc_id": 229706,
                 "dungeon_id": 37
             },
@@ -263794,17 +263318,7 @@
                 "dungeon_id": 38
             },
             {
-                "id": 7125,
-                "npc_id": 229706,
-                "dungeon_id": 38
-            },
-            {
                 "id": 5785,
-                "npc_id": 229706,
-                "dungeon_id": 39
-            },
-            {
-                "id": 7126,
                 "npc_id": 229706,
                 "dungeon_id": 39
             },
@@ -263814,17 +263328,7 @@
                 "dungeon_id": 43
             },
             {
-                "id": 7127,
-                "npc_id": 229706,
-                "dungeon_id": 43
-            },
-            {
                 "id": 5787,
-                "npc_id": 229706,
-                "dungeon_id": 45
-            },
-            {
-                "id": 7128,
                 "npc_id": 229706,
                 "dungeon_id": 45
             },
@@ -263834,17 +263338,7 @@
                 "dungeon_id": 46
             },
             {
-                "id": 7129,
-                "npc_id": 229706,
-                "dungeon_id": 46
-            },
-            {
                 "id": 5789,
-                "npc_id": 229706,
-                "dungeon_id": 51
-            },
-            {
-                "id": 7130,
                 "npc_id": 229706,
                 "dungeon_id": 51
             },
@@ -263854,17 +263348,7 @@
                 "dungeon_id": 52
             },
             {
-                "id": 7131,
-                "npc_id": 229706,
-                "dungeon_id": 52
-            },
-            {
                 "id": 5791,
-                "npc_id": 229706,
-                "dungeon_id": 56
-            },
-            {
-                "id": 7132,
                 "npc_id": 229706,
                 "dungeon_id": 56
             },
@@ -263874,17 +263358,7 @@
                 "dungeon_id": 65
             },
             {
-                "id": 7133,
-                "npc_id": 229706,
-                "dungeon_id": 65
-            },
-            {
                 "id": 5793,
-                "npc_id": 229706,
-                "dungeon_id": 75
-            },
-            {
-                "id": 7134,
                 "npc_id": 229706,
                 "dungeon_id": 75
             },
@@ -263894,17 +263368,7 @@
                 "dungeon_id": 76
             },
             {
-                "id": 7135,
-                "npc_id": 229706,
-                "dungeon_id": 76
-            },
-            {
                 "id": 5795,
-                "npc_id": 229706,
-                "dungeon_id": 77
-            },
-            {
-                "id": 7136,
                 "npc_id": 229706,
                 "dungeon_id": 77
             },
@@ -263914,17 +263378,7 @@
                 "dungeon_id": 80
             },
             {
-                "id": 7137,
-                "npc_id": 229706,
-                "dungeon_id": 80
-            },
-            {
                 "id": 5797,
-                "npc_id": 229706,
-                "dungeon_id": 81
-            },
-            {
-                "id": 7138,
                 "npc_id": 229706,
                 "dungeon_id": 81
             },
@@ -263934,17 +263388,7 @@
                 "dungeon_id": 94
             },
             {
-                "id": 7139,
-                "npc_id": 229706,
-                "dungeon_id": 94
-            },
-            {
                 "id": 5799,
-                "npc_id": 229706,
-                "dungeon_id": 99
-            },
-            {
-                "id": 7140,
                 "npc_id": 229706,
                 "dungeon_id": 99
             },
@@ -263954,17 +263398,7 @@
                 "dungeon_id": 100
             },
             {
-                "id": 7141,
-                "npc_id": 229706,
-                "dungeon_id": 100
-            },
-            {
                 "id": 5801,
-                "npc_id": 229706,
-                "dungeon_id": 101
-            },
-            {
-                "id": 7142,
                 "npc_id": 229706,
                 "dungeon_id": 101
             },
@@ -263974,17 +263408,7 @@
                 "dungeon_id": 103
             },
             {
-                "id": 7143,
-                "npc_id": 229706,
-                "dungeon_id": 103
-            },
-            {
                 "id": 5803,
-                "npc_id": 229706,
-                "dungeon_id": 108
-            },
-            {
-                "id": 7144,
                 "npc_id": 229706,
                 "dungeon_id": 108
             },
@@ -263994,17 +263418,7 @@
                 "dungeon_id": 109
             },
             {
-                "id": 7145,
-                "npc_id": 229706,
-                "dungeon_id": 109
-            },
-            {
                 "id": 5805,
-                "npc_id": 229706,
-                "dungeon_id": 110
-            },
-            {
-                "id": 7146,
                 "npc_id": 229706,
                 "dungeon_id": 110
             },
@@ -264014,17 +263428,7 @@
                 "dungeon_id": 111
             },
             {
-                "id": 7147,
-                "npc_id": 229706,
-                "dungeon_id": 111
-            },
-            {
                 "id": 5807,
-                "npc_id": 229706,
-                "dungeon_id": 112
-            },
-            {
-                "id": 7148,
                 "npc_id": 229706,
                 "dungeon_id": 112
             },
@@ -264034,17 +263438,7 @@
                 "dungeon_id": 113
             },
             {
-                "id": 7149,
-                "npc_id": 229706,
-                "dungeon_id": 113
-            },
-            {
                 "id": 5809,
-                "npc_id": 229706,
-                "dungeon_id": 114
-            },
-            {
-                "id": 7150,
                 "npc_id": 229706,
                 "dungeon_id": 114
             },
@@ -264054,17 +263448,7 @@
                 "dungeon_id": 115
             },
             {
-                "id": 7151,
-                "npc_id": 229706,
-                "dungeon_id": 115
-            },
-            {
                 "id": 5811,
-                "npc_id": 229706,
-                "dungeon_id": 116
-            },
-            {
-                "id": 7152,
                 "npc_id": 229706,
                 "dungeon_id": 116
             },
@@ -264074,17 +263458,7 @@
                 "dungeon_id": 120
             },
             {
-                "id": 7153,
-                "npc_id": 229706,
-                "dungeon_id": 120
-            },
-            {
                 "id": 5813,
-                "npc_id": 229706,
-                "dungeon_id": 128
-            },
-            {
-                "id": 7154,
                 "npc_id": 229706,
                 "dungeon_id": 128
             },
@@ -264094,17 +263468,7 @@
                 "dungeon_id": 129
             },
             {
-                "id": 7155,
-                "npc_id": 229706,
-                "dungeon_id": 129
-            },
-            {
                 "id": 5815,
-                "npc_id": 229706,
-                "dungeon_id": 133
-            },
-            {
-                "id": 7156,
                 "npc_id": 229706,
                 "dungeon_id": 133
             },
@@ -264114,17 +263478,7 @@
                 "dungeon_id": 135
             },
             {
-                "id": 7157,
-                "npc_id": 229706,
-                "dungeon_id": 135
-            },
-            {
                 "id": 5817,
-                "npc_id": 229706,
-                "dungeon_id": 137
-            },
-            {
-                "id": 7158,
                 "npc_id": 229706,
                 "dungeon_id": 137
             },
@@ -264134,17 +263488,7 @@
                 "dungeon_id": 139
             },
             {
-                "id": 7159,
-                "npc_id": 229706,
-                "dungeon_id": 139
-            },
-            {
                 "id": 5819,
-                "npc_id": 229706,
-                "dungeon_id": 148
-            },
-            {
-                "id": 7160,
                 "npc_id": 229706,
                 "dungeon_id": 148
             },
@@ -268540,17 +267884,7 @@
                 "dungeon_id": 2
             },
             {
-                "id": 7306,
-                "npc_id": 234341,
-                "dungeon_id": 2
-            },
-            {
                 "id": 6265,
-                "npc_id": 234341,
-                "dungeon_id": 4
-            },
-            {
-                "id": 7307,
                 "npc_id": 234341,
                 "dungeon_id": 4
             },
@@ -268560,17 +267894,7 @@
                 "dungeon_id": 5
             },
             {
-                "id": 7308,
-                "npc_id": 234341,
-                "dungeon_id": 5
-            },
-            {
                 "id": 6267,
-                "npc_id": 234341,
-                "dungeon_id": 6
-            },
-            {
-                "id": 7309,
                 "npc_id": 234341,
                 "dungeon_id": 6
             },
@@ -268580,17 +267904,7 @@
                 "dungeon_id": 13
             },
             {
-                "id": 7310,
-                "npc_id": 234341,
-                "dungeon_id": 13
-            },
-            {
                 "id": 6269,
-                "npc_id": 234341,
-                "dungeon_id": 16
-            },
-            {
-                "id": 7311,
                 "npc_id": 234341,
                 "dungeon_id": 16
             },
@@ -268600,17 +267914,7 @@
                 "dungeon_id": 20
             },
             {
-                "id": 7312,
-                "npc_id": 234341,
-                "dungeon_id": 20
-            },
-            {
                 "id": 6271,
-                "npc_id": 234341,
-                "dungeon_id": 24
-            },
-            {
-                "id": 7313,
                 "npc_id": 234341,
                 "dungeon_id": 24
             },
@@ -268620,17 +267924,7 @@
                 "dungeon_id": 25
             },
             {
-                "id": 7314,
-                "npc_id": 234341,
-                "dungeon_id": 25
-            },
-            {
                 "id": 6273,
-                "npc_id": 234341,
-                "dungeon_id": 29
-            },
-            {
-                "id": 7315,
                 "npc_id": 234341,
                 "dungeon_id": 29
             },
@@ -268640,17 +267934,7 @@
                 "dungeon_id": 35
             },
             {
-                "id": 7316,
-                "npc_id": 234341,
-                "dungeon_id": 35
-            },
-            {
                 "id": 6275,
-                "npc_id": 234341,
-                "dungeon_id": 59
-            },
-            {
-                "id": 7317,
                 "npc_id": 234341,
                 "dungeon_id": 59
             },
@@ -268660,17 +267944,7 @@
                 "dungeon_id": 65
             },
             {
-                "id": 7318,
-                "npc_id": 234341,
-                "dungeon_id": 65
-            },
-            {
                 "id": 6277,
-                "npc_id": 234341,
-                "dungeon_id": 66
-            },
-            {
-                "id": 7319,
                 "npc_id": 234341,
                 "dungeon_id": 66
             },
@@ -268680,17 +267954,7 @@
                 "dungeon_id": 68
             },
             {
-                "id": 7320,
-                "npc_id": 234341,
-                "dungeon_id": 68
-            },
-            {
                 "id": 6279,
-                "npc_id": 234341,
-                "dungeon_id": 69
-            },
-            {
-                "id": 7321,
                 "npc_id": 234341,
                 "dungeon_id": 69
             },
@@ -268700,17 +267964,7 @@
                 "dungeon_id": 71
             },
             {
-                "id": 7322,
-                "npc_id": 234341,
-                "dungeon_id": 71
-            },
-            {
                 "id": 6281,
-                "npc_id": 234341,
-                "dungeon_id": 73
-            },
-            {
-                "id": 7323,
                 "npc_id": 234341,
                 "dungeon_id": 73
             },
@@ -268720,17 +267974,7 @@
                 "dungeon_id": 76
             },
             {
-                "id": 7324,
-                "npc_id": 234341,
-                "dungeon_id": 76
-            },
-            {
                 "id": 6283,
-                "npc_id": 234341,
-                "dungeon_id": 81
-            },
-            {
-                "id": 7325,
                 "npc_id": 234341,
                 "dungeon_id": 81
             },
@@ -268740,17 +267984,7 @@
                 "dungeon_id": 84
             },
             {
-                "id": 7326,
-                "npc_id": 234341,
-                "dungeon_id": 84
-            },
-            {
                 "id": 6285,
-                "npc_id": 234341,
-                "dungeon_id": 94
-            },
-            {
-                "id": 7327,
                 "npc_id": 234341,
                 "dungeon_id": 94
             },
@@ -268760,17 +267994,7 @@
                 "dungeon_id": 100
             },
             {
-                "id": 7328,
-                "npc_id": 234341,
-                "dungeon_id": 100
-            },
-            {
                 "id": 6287,
-                "npc_id": 234341,
-                "dungeon_id": 101
-            },
-            {
-                "id": 7329,
                 "npc_id": 234341,
                 "dungeon_id": 101
             },
@@ -268780,17 +268004,7 @@
                 "dungeon_id": 109
             },
             {
-                "id": 7330,
-                "npc_id": 234341,
-                "dungeon_id": 109
-            },
-            {
                 "id": 6289,
-                "npc_id": 234341,
-                "dungeon_id": 110
-            },
-            {
-                "id": 7331,
                 "npc_id": 234341,
                 "dungeon_id": 110
             },
@@ -268800,17 +268014,7 @@
                 "dungeon_id": 111
             },
             {
-                "id": 7332,
-                "npc_id": 234341,
-                "dungeon_id": 111
-            },
-            {
                 "id": 6291,
-                "npc_id": 234341,
-                "dungeon_id": 112
-            },
-            {
-                "id": 7333,
                 "npc_id": 234341,
                 "dungeon_id": 112
             },
@@ -268820,17 +268024,7 @@
                 "dungeon_id": 113
             },
             {
-                "id": 7334,
-                "npc_id": 234341,
-                "dungeon_id": 113
-            },
-            {
                 "id": 6293,
-                "npc_id": 234341,
-                "dungeon_id": 114
-            },
-            {
-                "id": 7335,
                 "npc_id": 234341,
                 "dungeon_id": 114
             },
@@ -268840,17 +268034,7 @@
                 "dungeon_id": 118
             },
             {
-                "id": 7336,
-                "npc_id": 234341,
-                "dungeon_id": 118
-            },
-            {
                 "id": 6295,
-                "npc_id": 234341,
-                "dungeon_id": 120
-            },
-            {
-                "id": 7337,
                 "npc_id": 234341,
                 "dungeon_id": 120
             },
@@ -268860,17 +268044,7 @@
                 "dungeon_id": 122
             },
             {
-                "id": 7338,
-                "npc_id": 234341,
-                "dungeon_id": 122
-            },
-            {
                 "id": 6297,
-                "npc_id": 234341,
-                "dungeon_id": 128
-            },
-            {
-                "id": 7339,
                 "npc_id": 234341,
                 "dungeon_id": 128
             },
@@ -268880,17 +268054,7 @@
                 "dungeon_id": 129
             },
             {
-                "id": 7340,
-                "npc_id": 234341,
-                "dungeon_id": 129
-            },
-            {
                 "id": 6299,
-                "npc_id": 234341,
-                "dungeon_id": 131
-            },
-            {
-                "id": 7341,
                 "npc_id": 234341,
                 "dungeon_id": 131
             },
@@ -268900,27 +268064,12 @@
                 "dungeon_id": 133
             },
             {
-                "id": 7342,
-                "npc_id": 234341,
-                "dungeon_id": 133
-            },
-            {
                 "id": 6301,
                 "npc_id": 234341,
                 "dungeon_id": 137
             },
             {
-                "id": 7343,
-                "npc_id": 234341,
-                "dungeon_id": 137
-            },
-            {
                 "id": 6302,
-                "npc_id": 234341,
-                "dungeon_id": 153
-            },
-            {
-                "id": 7344,
                 "npc_id": 234341,
                 "dungeon_id": 153
             },
