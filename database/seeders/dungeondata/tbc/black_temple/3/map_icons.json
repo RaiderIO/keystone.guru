@@ -1,1 +1,15 @@
-[]
+[
+    {
+        "mapping_version_id": 1000,
+        "floor_id": 467,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -215.7525,
+        "lng": 182.4683,
+        "comment": "Enemies can be one of Ashtongue Mystic, Ashtongue Stormcaller, Ashtongue Battlelord.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]
