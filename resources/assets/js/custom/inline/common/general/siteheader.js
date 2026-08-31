@@ -137,8 +137,9 @@ class CommonGeneralSiteheader extends InlineCode {
      * Keep the mobile main menu inside the viewport (#4378).
      *
      * Only the height is published - whether the cap applies at all is CSS's call (header.css
-     * gates it on the mobile breakpoint), so crossing into desktop with the menu open cannot
-     * leave a stale cap behind on a navbar that lays out as a single row.
+     * gates it on the mobile breakpoint and on the menu being open), so the property is never
+     * cleared: it simply has no effect while the menu is closed or the navbar lays out as a
+     * single row, and it is always refreshed before the menu becomes visible again.
      */
     _initNavbarCollapse() {
         this.navbarCollapse = this.header.querySelector('.navbar-second .navbar-collapse');
@@ -149,7 +150,6 @@ class CommonGeneralSiteheader extends InlineCode {
         // Bootstrap fires `show` before it makes the element visible, so this only seeds the
         // estimate - the ResizeObserver refines it from the real geometry as the menu opens
         this.navbarCollapse.addEventListener('show.bs.collapse', this._updateNavbarCollapseMaxHeight.bind(this));
-        this.navbarCollapse.addEventListener('hidden.bs.collapse', this._clearNavbarCollapseMaxHeight.bind(this));
 
         // The header does not resize when only the viewport does (address bar, rotation)
         window.addEventListener('resize', this._updateNavbarCollapseMaxHeight.bind(this));
@@ -185,10 +185,6 @@ class CommonGeneralSiteheader extends InlineCode {
 
         return rect.width === 0 && rect.height === 0 ?
             this.header.getBoundingClientRect().bottom : rect.top;
-    }
-
-    _clearNavbarCollapseMaxHeight() {
-        document.documentElement.style.removeProperty('--ksg-navbar-collapse-max-height');
     }
 
     /**

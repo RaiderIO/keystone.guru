@@ -289,19 +289,6 @@ describe('CommonGeneralSiteheader mobile menu height', () => {
             .toBe('336px');
     });
 
-    it('initNavbarCollapse_givenMenuClosed_dropsTheCapAgain', () => {
-        // Arrange
-        const siteheader = makeSiteheaderWithCollapse();
-        siteheader.navbarCollapse.dispatchEvent(new Event('show.bs.collapse'));
-
-        // Act
-        siteheader.navbarCollapse.dispatchEvent(new Event('hidden.bs.collapse'));
-
-        // Assert: a stale cap would shrink the menu the next time it opens at a different offset
-        expect(document.documentElement.style.getPropertyValue('--ksg-navbar-collapse-max-height'))
-            .toBe('');
-    });
-
     it('onHeaderResized_givenTheHeaderGrowsBackWithTheMenuOpen_recalculatesTheCap', () => {
         // Arrange: the menu was opened while the header was shrunk; scrolling back to the top
         // gives the brand row its padding back and pushes the menu down. The ResizeObserver

@@ -115,11 +115,17 @@
    in the brand row unclipped; menu dropdowns are static below lg, so they just add scroll height.
    siteheader.js publishes the exact height; the fallback covers layouts that render the header
    without that inline script. `dvh`, not `vh` - on mobile Safari `100vh` is the *large* viewport
-   and would overestimate, reintroducing the bug. Gated on `.show` so the overflow does not fight
-   `.collapsing { overflow: hidden }` and flash a scrollbar mid-animation. */
+   and would overestimate, reintroducing the bug. The cap covers `.collapsing` too - Bootstrap
+   animates to the *uncapped* scroll height, so without it the menu would swell past the viewport
+   and snap back the moment the animation finishes. The overflow stays off `.collapsing`, whose own
+   `overflow: hidden` then keeps a scrollbar from flashing mid-animation. */
 @media (max-width: 991.98px) {
-    .ksg-header .navbar-second .navbar-collapse.show {
+    .ksg-header .navbar-second .navbar-collapse.show,
+    .ksg-header .navbar-second .navbar-collapse.collapsing {
         max-height: var(--ksg-navbar-collapse-max-height, calc(100dvh - 5rem));
+    }
+
+    .ksg-header .navbar-second .navbar-collapse.show {
         overflow-y: auto;
         overscroll-behavior: contain;
     }
