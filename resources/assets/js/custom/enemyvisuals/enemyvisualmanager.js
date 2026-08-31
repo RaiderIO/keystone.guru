@@ -60,7 +60,12 @@ class EnemyVisualManager extends Signalable {
             enemyPatrolMapObjectGroup.register(['object:add', 'save:success'], this, function (objectAddEvent) {
                 /** @type EnemyPatrol addedEnemyPatrol */
                 let addedEnemyPatrol = objectAddEvent.data.object;
-                if (addedEnemyPatrol.id > 0) {
+                // This fires on every subsequent save too (not just the initial add), so guard against
+                // re-attaching another pair of mouseover/mouseout handlers each time the patrol is saved -
+                // that would leak listeners and cause them to fire N times after N saves.
+                if (addedEnemyPatrol.id > 0 && !addedEnemyPatrol._enemyVisualManagerHandlersBound) {
+                    addedEnemyPatrol._enemyVisualManagerHandlersBound = true;
+
                     let mouseOverFn = function (e) {
                         if (!(self.map.getMapState() instanceof EditMapState) && addedEnemyPatrol.enemies.length > 0) {
                             for (let i = 0; i < addedEnemyPatrol.enemies.length; i++) {

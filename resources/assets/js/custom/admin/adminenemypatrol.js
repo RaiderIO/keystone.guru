@@ -9,14 +9,19 @@ class AdminEnemyPatrol extends EnemyPatrol {
         this.enemyConnections = new AdminEnemyConnections(c.map.adminenemypatrol.polylineOptions);
 
         getState().register('floorid:changed', this, this.redrawConnectionsToEnemies.bind(this));
-        this.map.register('map:mapstatechanged', this, this._mapStateChangedEvent.bind(this));
     }
 
     /**
-     * Called when enemy selection for this enemy has changed (started/finished)
-     * @private
+     * @inheritDoc
      */
-    _mapStateChangedEvent() {
+    onSaveSuccess(json, massSave = false) {
+        super.onSaveSuccess(json, massSave);
+
+        // This patrol's own points may have moved (e.g. dragged via the map's edit toolbar) - redraw just
+        // this patrol's connections instead of listening broadly for map:mapstatechanged, which used to
+        // fire a full remove+rebuild of connection lines for EVERY admin enemy patrol on the floor on any
+        // unrelated map state change (e.g. editing a different object), causing a multi-second freeze on
+        // floors with many patrols. See #4393.
         this.redrawConnectionsToEnemies();
     }
 
@@ -121,6 +126,13 @@ class AdminEnemyPatrol extends EnemyPatrol {
         super.cleanup();
 
         getState().unregister('floorid:changed', this);
-        this.map.unregister('map:mapstatechanged', this);
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        AdminEnemyPatrol,
+    };
 }
