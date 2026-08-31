@@ -16,6 +16,10 @@ class EnemyVisualManager extends Signalable {
         this._visibleEnemies = [];
         /** @type Enemy|null */
         this._hoveredEnemy = null;
+        // Ids of enemy patrols we've already attached the mouseover/mouseout handlers below to -
+        // `save:success` fires on every subsequent save too, not just the initial add, so this
+        // guards against re-attaching (and thus leaking) another pair of handlers each time.
+        this._enemyPatrolIdsWithVisualHandlers = new Set();
 
         // There is no mousemoveend function. Every time the mouse of moved a timeout is set for X MS to trigger the mouse
         // move function one last time to properly wrap everything up. If mouse of moved before the timeout, the timeout
@@ -60,7 +64,9 @@ class EnemyVisualManager extends Signalable {
             enemyPatrolMapObjectGroup.register(['object:add', 'save:success'], this, function (objectAddEvent) {
                 /** @type EnemyPatrol addedEnemyPatrol */
                 let addedEnemyPatrol = objectAddEvent.data.object;
-                if (addedEnemyPatrol.id > 0) {
+                if (addedEnemyPatrol.id > 0 && !self._enemyPatrolIdsWithVisualHandlers.has(addedEnemyPatrol.id)) {
+                    self._enemyPatrolIdsWithVisualHandlers.add(addedEnemyPatrol.id);
+
                     let mouseOverFn = function (e) {
                         if (!(self.map.getMapState() instanceof EditMapState) && addedEnemyPatrol.enemies.length > 0) {
                             for (let i = 0; i < addedEnemyPatrol.enemies.length; i++) {
