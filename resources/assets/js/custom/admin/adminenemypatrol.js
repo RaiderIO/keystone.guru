@@ -17,11 +17,6 @@ class AdminEnemyPatrol extends EnemyPatrol {
     onSaveSuccess(json, massSave = false) {
         super.onSaveSuccess(json, massSave);
 
-        // This patrol's own points may have moved (e.g. dragged via the map's edit toolbar) - redraw just
-        // this patrol's connections instead of listening broadly for map:mapstatechanged, which used to
-        // fire a full remove+rebuild of connection lines for EVERY admin enemy patrol on the floor on any
-        // unrelated map state change (e.g. editing a different object), causing a multi-second freeze on
-        // floors with many patrols. See #4393.
         this.redrawConnectionsToEnemies();
     }
 
