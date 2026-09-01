@@ -53078,7 +53078,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23374\/ashtongue-stalker",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9294,
+                "npc_id": 23374,
+                "game_version_id": 2,
+                "health": 172300,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {

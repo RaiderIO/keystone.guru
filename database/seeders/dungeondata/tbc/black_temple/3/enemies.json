@@ -548,7 +548,7 @@
     {
         "id": 143253,
         "mapping_version_id": 1000,
-        "enemy_pack_id": null,
+        "enemy_pack_id": 28658,
         "enemy_patrol_id": null,
         "enemy_forces_checkpoint_id": null,
         "npc_id": 23374,
@@ -574,7 +574,7 @@
     {
         "id": 143254,
         "mapping_version_id": 1000,
-        "enemy_pack_id": null,
+        "enemy_pack_id": 28658,
         "enemy_patrol_id": null,
         "enemy_forces_checkpoint_id": null,
         "npc_id": 23374,

@@ -442,5 +442,17 @@
         "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":-41.9591,\"lng\":97.9799},{\"lat\":-48.7072,\"lng\":98.2815},{\"lat\":-48.9334,\"lng\":105.4066},{\"lat\":-41.7329,\"lng\":106.1983}]"
+    },
+    {
+        "id": 28658,
+        "mapping_version_id": 1000,
+        "floor_id": 467,
+        "group": 99,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":-125.1759,\"lng\":172.8764},{\"lat\":-130.5435,\"lng\":173.079},{\"lat\":-130.8979,\"lng\":175.9147},{\"lat\":-125.024,\"lng\":176.6742}]"
     }
 ]
