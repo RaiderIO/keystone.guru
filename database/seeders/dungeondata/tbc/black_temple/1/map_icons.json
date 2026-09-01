@@ -1,0 +1,41 @@
+[
+    {
+        "mapping_version_id": 997,
+        "floor_id": 465,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -247.5,
+        "lng": 69,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 1000,
+        "floor_id": 465,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -136.7167,
+        "lng": 87.6802,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 1000,
+        "floor_id": 465,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -40.5076,
+        "lng": 147.0315,
+        "comment": "mapping.map_icons.tbc.black_temple.coilscar_or_aqueous_surger_variants",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

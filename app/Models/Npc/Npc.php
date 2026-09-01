@@ -477,10 +477,10 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public function getDungeonId(): ?int
     {
-        /** @var Dungeon|null $dungeon */
-        $dungeon = $this->dungeons->first();
-
-        return $dungeon?->id;
+        // Query directly rather than through the cached `dungeons` relation - caching it on the
+        // model means it gets serialized by mappingChanged()'s toArray(), which lazy-loads each
+        // Dungeon's floors relation (via the floor_count append) and throws (#4250).
+        return $this->dungeons()->value('dungeons.id');
     }
 
     /**

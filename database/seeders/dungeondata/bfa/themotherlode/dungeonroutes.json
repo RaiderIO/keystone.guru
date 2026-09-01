@@ -2,6 +2,7 @@
     {
         "public_key": "3CeiTna",
         "clone_of": null,
+        "upgrade_of_dungeon_route_id": null,
         "author_id": 1,
         "dungeon_id": 20,
         "mapping_version_id": 20,
