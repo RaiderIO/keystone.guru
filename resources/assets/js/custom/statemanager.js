@@ -37,23 +37,10 @@ class StateManager extends Signalable {
 
         this._sanitizeAllowedDomains = [];
 
-        /**
-         * Values already read from document.cookie, keyed by cookie name. Every Cookies.get() is a
-         * browser-boundary call that re-parses the whole cookie jar, and the map display settings
-         * below are read once per enemy per refresh - on the Black Temple facade (552 enemies) that
-         * measured ~95ms of a single zoom step. Emptied by every setter here that writes one of
-         * these cookies, and by invalidateCookieCache() for the defaults Map writes at startup.
-         * @type {Object}
-         * @private
-         */
         this._cookieCache = {};
     }
 
     /**
-     * Reads a cookie through the cache, going to document.cookie only on the first read since the
-     * last write. Only usable for cookies written through this class or through
-     * Map#_initDefaults(): anything else writes without invalidating, and must keep calling
-     * Cookies.get() directly.
      * @param name {String}
      * @returns {String|undefined}
      * @private
@@ -61,8 +48,6 @@ class StateManager extends Signalable {
     _getCachedCookie(name) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
-        // hasOwnProperty rather than a truthiness check, so that an absent cookie is cached as
-        // undefined instead of being looked up again on every single read.
         if (!this._cookieCache.hasOwnProperty(name)) {
             this._cookieCache[name] = Cookies.get(name);
         }

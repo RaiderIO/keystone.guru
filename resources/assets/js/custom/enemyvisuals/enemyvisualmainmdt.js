@@ -74,10 +74,7 @@ class EnemyVisualMainMDT extends EnemyVisualMain {
     refreshSize() {
         super.refreshSize();
 
-        // Resolved by id and then scoped to the element, rather than as one `#id, #id .mdt_inner`
-        // selector: a selector with anything after the id makes jQuery fall back to a
-        // full-document querySelectorAll, which on a map with hundreds of enemies is by far the
-        // most expensive thing on the zoom path (see EnemyVisualMainEnemyPortrait).
+        // A `#id, #id .child` selector makes jQuery fall back to a full-document querySelectorAll
         let element = document.getElementById(`map_enemy_visual_${this.enemyvisual.enemy.id}`);
         if (element === null) {
             return;

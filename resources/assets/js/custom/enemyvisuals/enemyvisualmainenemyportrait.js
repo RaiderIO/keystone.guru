@@ -54,17 +54,4 @@ class EnemyVisualMainEnemyPortrait extends EnemyVisualMain {
     getName() {
         return 'EnemyVisualMainEnemyPortrait';
     }
-
-    // No refreshSize() override on purpose. It used to run
-    //   $(`#map_enemy_visual_${id}_enemy_portrait.obsolete, #map_enemy_visual_${id}_enemy_portrait.overpulled`)
-    // on every refresh, which could never match: the template puts `.obsolete`/`.overpulled` on a
-    // *child* of `#map_enemy_visual_${id}_enemy_portrait`, never on the element itself. Because
-    // that selector qualifies an id with a class, jQuery could not take its getElementById fast
-    // path either, so each call was two full-document querySelectorAll scans - times every enemy,
-    // times every zoom step - to style nothing. On the Black Temple facade (552 enemies) that was
-    // the single most expensive thing on the zoom path.
-    //
-    // The font size it meant to keep current is applied by the template at build time, and
-    // shouldAlwaysRebuild() already returns true for obsolete/overpulled enemies, so those get a
-    // full buildVisual() on every zoom level change and their text stays correctly sized.
 }
