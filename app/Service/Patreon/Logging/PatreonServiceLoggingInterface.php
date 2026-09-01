@@ -76,6 +76,11 @@ interface PatreonServiceLoggingInterface
      */
     public function applyPaidBenefitsForMemberUnknownPatreonBenefits(array $benefits, string $email): void;
 
+    /**
+     * @param array<int, string> $tierIds
+     */
+    public function applyPaidBenefitsForMemberUnknownPatreonTiers(array $tierIds, string $email): void;
+
     public function applyPaidBenefitsForMemberEnd(): void;
 
     public function linkToUserAccountStart(int $id, string $code, string $redirectUri): void;

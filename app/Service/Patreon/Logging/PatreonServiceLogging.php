@@ -152,6 +152,17 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
         $this->error(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * Error level on purpose: the member is skipped entirely, and error is the only level that reaches
+     * Discord and Sentry.
+     *
+     * @param array<int, string> $tierIds
+     */
+    public function applyPaidBenefitsForMemberUnknownPatreonTiers(array $tierIds, string $email): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
     public function applyPaidBenefitsForMemberEnd(): void
     {
         $this->end(__METHOD__);

@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogEnemyFailureController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogRouteController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogRunController;
+use App\Http\Controllers\Api\V1\InternalTeam\Patreon\APIPatreonDiagnosticsController;
 use App\Http\Controllers\Api\V1\Public\Dungeon\APIDungeonController;
 use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteController;
 use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteDiscoverController;
@@ -47,6 +48,19 @@ Route::prefix('v1')->group(static function () {
             });
         });
         Route::get('/thumbnailJob/{dungeonRouteThumbnailJob}', new APIDungeonRouteThumbnailJobController()->show(...))->name('api.v1.thumbnailjob.show');
+    });
+
+    Route::middleware(['api_role:admin|ai_agent'])->prefix('patreon')->group(static function () {
+        // Reads the recorded run history and nothing else - no Patreon traffic, so no throttle
+        Route::get('sync-runs', new APIPatreonDiagnosticsController()->syncRuns(...))->name('api.v1.patreon.sync_runs');
+
+        // Everything below walks the whole campaign - the per-user endpoint included - and shares Patreon's
+        // rate limit with the hourly sync
+        Route::middleware('throttle:api-patreon-diagnostics')->group(static function () {
+            Route::get('user', new APIPatreonDiagnosticsController()->user(...))->name('api.v1.patreon.user');
+            Route::get('campaign', new APIPatreonDiagnosticsController()->campaign(...))->name('api.v1.patreon.campaign');
+            Route::get('sync-dry-run', new APIPatreonDiagnosticsController()->syncDryRun(...))->name('api.v1.patreon.sync_dry_run');
+        });
     });
 
     Route::middleware(['api_role:admin'])->prefix('cache')->group(static function () {

@@ -2,6 +2,7 @@
 
 namespace App\Service\Patreon;
 
+use App\Service\Patreon\Dtos\PatreonPagedResponse;
 use App\Service\Patreon\Logging\PatreonApiServiceLoggingInterface;
 use Patreon\API;
 use Patreon\OAuth;
@@ -54,9 +55,8 @@ class PatreonApiService implements PatreonApiServiceInterface
 
     /**
      * @example {"data":{"attributes":{},"id":"2102279","relationships":{"tiers":{"data":[{"id":"2971575","type":"tier"},{"id":"9068557","type":"tier"}]}},"type":"campaign"},"included":[{"attributes":{"title":"Supporter of Keystone.guru"},"id":"2971575","relationships":{"benefits":{"data":[{"id":"367345","type":"benefit"},{"id":"3348264","type":"benefit"},{"id":"367914","type":"benefit"}]}},"type":"tier"},{"attributes":{"title":"Advanced Simulation Features"},"id":"9068557","relationships":{"benefits":{"data":[{"id":"367345","type":"benefit"},{"id":"3348264","type":"benefit"},{"id":"367914","type":"benefit"},{"id":"11542092","type":"benefit"}]}},"type":"tier"},{"attributes":{"title":"ad-free"},"id":"367345","type":"benefit"},{"attributes":{"title":"animated-polylines"},"id":"3348264","type":"benefit"},{"attributes":{"title":"unlisted-routes"},"id":"367914","type":"benefit"},{"attributes":{"title":"advanced-simulation"},"id":"11542092","type":"benefit"}],"links":{"self":"https://www.patreon.com/api/oauth2/v2/campaigns/2102279"}}
-     * @return array<string, mixed>|null
      */
-    public function getCampaignTiersAndBenefits(string $accessToken): ?array
+    public function getCampaignTiersAndBenefits(string $accessToken): PatreonPagedResponse
     {
         $result = null;
 
@@ -79,9 +79,10 @@ class PatreonApiService implements PatreonApiServiceInterface
     }
 
     /**
-     * @return array<string, mixed>|null Null whenever we couldn't authenticate with the accessToken provided
+     * Always returns a response - an authentication failure comes back as one carrying `errors`, not as
+     * null, so a caller cannot mistake a failed fetch for an empty campaign.
      */
-    public function getCampaignMembers(string $accessToken): ?array
+    public function getCampaignMembers(string $accessToken): PatreonPagedResponse
     {
         $result = null;
 
@@ -90,7 +91,10 @@ class PatreonApiService implements PatreonApiServiceInterface
             $result = $this->getAllPages(
                 $this->getApiClient($accessToken),
                 sprintf(
-                    'campaigns/%d/members?include=currently_entitled_tiers&%s=email',
+                    // patron_status / last_charge_status are unused by the sync, but a pledge that has not
+                    // settled yet reports no entitled tiers - which is indistinguishable from "unsubscribed"
+                    // without them
+                    'campaigns/%d/members?include=currently_entitled_tiers&%s=email,patron_status,last_charge_status,last_charge_date',
                     config('keystoneguru.patreon.campaign_id'),
                     urlencode('fields[member]'),
                 ),
@@ -119,49 +123,91 @@ class PatreonApiService implements PatreonApiServiceInterface
     }
 
     /**
-     * @return array<string, mixed>
+     * Walks every page of a paginated endpoint and merges the pages into one response.
+     *
+     * A page that fails - an undecodable body, or one carrying `errors` - stops the walk; the result is
+     * then marked truncated and given an `errors` key.
      */
-    private function getAllPages(API $apiClient, string $suffix): array
+    private function getAllPages(API $apiClient, string $suffix): PatreonPagedResponse
     {
-        $resultData = [];
+        $resultData     = [];
+        $resultIncluded = [];
+        $truncated      = false;
+        /** @var array<string, mixed>|null $requestResult */
+        $requestResult = null;
+        /** @var array<int, mixed> $errors */
+        $errors = [];
 
         $next  = $suffix;
         $count = 0;
         do {
             $this->log->getAllPagesPageNr($count);
-            $requestResult    = $apiClient->get_data($next);
-            $originalResponse = $requestResult;
+            $pageResult       = $apiClient->get_data($next);
+            $originalResponse = $pageResult;
             // Insane workaround if you get a 4xx error it won't do json_decode
-            if (is_string($requestResult)) {
-                $requestResult = json_decode($requestResult, true);
-            }
-
-            if ($requestResult === null) {
-                $next = null;
-                $this->log->getAllPagesUnknownResponse($originalResponse);
-            } elseif (!isset($requestResult['errors'])) {
-                // No errors - continue fetching pages
-                $resultData = array_merge($resultData, $requestResult['data']);
-
-                $next = isset($requestResult['links']['next']) ?
-                    // Build the URL ourselves because obviously somehow using the 'links'.'next' does not work since it contains the full API url
-                    sprintf('%s&%s%s', $suffix, 'page%5Bcursor%5D=', urlencode((string)$requestResult['meta']['pagination']['cursors']['next'])) :
-                    null;
-            } else {
-                // Found an error - just stop it now
-                $next = null;
-                $this->log->getAllPagesError($requestResult['errors']);
+            if (is_string($pageResult)) {
+                $pageResult = json_decode($pageResult, true);
             }
 
             $count++;
+
+            if (!is_array($pageResult)) {
+                $next      = null;
+                $truncated = true;
+                $errors[]  = ['detail' => sprintf('Page %d of "%s" could not be decoded', $count, $suffix)];
+                $this->log->getAllPagesUnknownResponse($originalResponse);
+            } elseif (!isset($pageResult['errors'])) {
+                $requestResult = $pageResult;
+
+                // `data` is a list for collection endpoints and a single object for a resource endpoint
+                // (campaigns/{id}) - array_merge handles both, string keys of the latter simply overwrite
+                $resultData = array_merge($resultData, $pageResult['data'] ?? []);
+                // A campaign's tiers and benefits live in `included`, so keeping only the last page's would
+                // drop tiers and make entitled tier ids unresolvable
+                $resultIncluded = array_merge($resultIncluded, $pageResult['included'] ?? []);
+
+                $cursor = $pageResult['meta']['pagination']['cursors']['next'] ?? null;
+
+                if (!isset($pageResult['links']['next'])) {
+                    $next = null;
+                } elseif ($cursor === null) {
+                    // A next page without a cursor leaves us as short of the campaign as a failed request
+                    $next      = null;
+                    $truncated = true;
+                    $errors[]  = ['detail' => sprintf('Page %d of "%s" advertised a next page without a cursor', $count, $suffix)];
+                } else {
+                    // Build the URL ourselves because obviously somehow using the 'links'.'next' does not work since it contains the full API url
+                    $next = sprintf('%s&%s%s', $suffix, 'page%5Bcursor%5D=', urlencode((string)$cursor));
+                }
+            } else {
+                // Found an error - just stop it now
+                $next      = null;
+                $truncated = true;
+                /** @var array<int, mixed> $pageErrors */
+                $pageErrors = is_array($pageResult['errors']) ? $pageResult['errors'] : [$pageResult['errors']];
+                $errors     = array_merge($errors, $pageErrors);
+                $this->log->getAllPagesError($pageErrors);
+            }
         } while ($next !== null);
 
-        // Assign the data back to the last request and pretend that THAT's all the data there is
-        if (!empty($resultData)) {
-            $requestResult['data'] = $resultData;
+        // Assign every page's rows back onto the last response
+        $response = $requestResult ?? [];
+        if ($resultData !== []) {
+            $response['data'] = $resultData;
+        }
+        if ($resultIncluded !== []) {
+            $response['included'] = $resultIncluded;
+        }
+        if ($errors !== []) {
+            $response['errors'] = $errors;
         }
 
-        return $requestResult ?? [];
+        return new PatreonPagedResponse(
+            response: $response,
+            pageCount: $count,
+            rowCount: count($resultData),
+            truncated: $truncated,
+        );
     }
 
     private function getOAuthClient(): OAuth

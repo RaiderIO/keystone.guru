@@ -16,4 +16,10 @@ enum ApplyPaidBenefitsForMemberResult: int
      * code change - the title has to be added to PatreonBenefit::ALL (#3748).
      */
     case UnknownBenefits = 20;
+
+    /**
+     * The member is entitled to a tier that the campaign response does not describe, so the benefits
+     * computed for them are incomplete and nothing is written.
+     */
+    case UnknownTiers = 30;
 }
