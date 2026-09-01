@@ -36,7 +36,7 @@ class APICombatLogControllerCombatLogRouteTheNokhudOffensiveTest extends APIComb
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 21, 494); // This route just doesn't match count for some reason
+        $this->validatePulls($postBody, $responseArr, 21, 494); // This route just doesn't match count for some reason
         $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
 
@@ -56,7 +56,7 @@ class APICombatLogControllerCombatLogRouteTheNokhudOffensiveTest extends APIComb
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 24, 528);
+        $this->validatePulls($postBody, $responseArr, 24, 528);
         $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_ENTANGLING, Affix::AFFIX_BOLSTERING);
     }
 }

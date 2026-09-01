@@ -33,7 +33,7 @@ class APICombatLogControllerCombatLogRouteMaisaraCavernsTest extends APICombatLo
         $responseArr = json_decode($response->content(), true);
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 36, 551);
+        $this->validatePulls($postBody, $responseArr, 36, 551);
         $this->validateAffixes($responseArr);
     }
 }

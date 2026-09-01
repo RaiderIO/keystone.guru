@@ -36,7 +36,7 @@ class APICombatLogControllerCombatLogRouteAlgetharAcademyTest extends APICombatL
         $responseArr = json_decode($response->content(), true);
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 13, 450);
+        $this->validatePulls($postBody, $responseArr, 13, 450);
         $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
 

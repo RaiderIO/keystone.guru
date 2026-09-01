@@ -35,7 +35,7 @@ class APICombatLogControllerCombatLogRouteAltarOfFangsTest extends APICombatLogC
         try {
             $this->validateResponseStaticData($responseArr);
             $this->validateDungeon($responseArr);
-            $this->validatePulls($responseArr, 17, 837);
+            $this->validatePulls($postBody, $responseArr, 17, 837);
             $this->validateAffixes($responseArr);
             $this->validateBossesResolved($postBody, $responseArr);
         } finally {

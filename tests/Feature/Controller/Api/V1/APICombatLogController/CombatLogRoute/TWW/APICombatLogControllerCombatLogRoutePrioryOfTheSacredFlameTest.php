@@ -35,7 +35,7 @@ class APICombatLogControllerCombatLogRoutePrioryOfTheSacredFlameTest extends API
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 21, 940);
+        $this->validatePulls($postBody, $responseArr, 21, 940);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
@@ -56,7 +56,7 @@ class APICombatLogControllerCombatLogRoutePrioryOfTheSacredFlameTest extends API
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 20, 989);
+        $this->validatePulls($postBody, $responseArr, 20, 989);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }

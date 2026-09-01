@@ -36,7 +36,7 @@ class APICombatLogControllerCombatLogRouteInvalidUiMapIdTest extends APICombatLo
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 25, 499);
+        $this->validatePulls($postBody, $responseArr, 25, 499);
         $this->validateSpells($responseArr, 2);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
@@ -59,7 +59,7 @@ class APICombatLogControllerCombatLogRouteInvalidUiMapIdTest extends APICombatLo
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 25, 499);
+        $this->validatePulls($postBody, $responseArr, 25, 499);
         $this->validateSpells($responseArr, 2);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
@@ -82,7 +82,7 @@ class APICombatLogControllerCombatLogRouteInvalidUiMapIdTest extends APICombatLo
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 25, 499);
+        $this->validatePulls($postBody, $responseArr, 25, 499);
         $this->validateSpells($responseArr, 2);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
@@ -105,7 +105,7 @@ class APICombatLogControllerCombatLogRouteInvalidUiMapIdTest extends APICombatLo
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 25, 499);
+        $this->validatePulls($postBody, $responseArr, 25, 499);
         // One cast spell falls outside the existing pulls, so is excluded
         $this->validateSpells($responseArr, 1, [2825]);
         // This was a log which did not have full affixes set - see #2483
@@ -129,7 +129,7 @@ class APICombatLogControllerCombatLogRouteInvalidUiMapIdTest extends APICombatLo
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 25, 499);
+        $this->validatePulls($postBody, $responseArr, 25, 499);
         // One cast spell falls outside the existing pulls, so is excluded
         $this->validateSpells($responseArr, 1, [2825]);
         // This was a log which did not have full affixes set - see #2483
@@ -153,7 +153,7 @@ class APICombatLogControllerCombatLogRouteInvalidUiMapIdTest extends APICombatLo
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 25, 499);
+        $this->validatePulls($postBody, $responseArr, 25, 499);
         // One cast spell falls outside the existing pulls, so is excluded (there's 11 casts, 10 assignments)
         $this->validateSpells($responseArr, 3, [2825]);
         // This was a log which did not have full affixes set - see #2483
@@ -177,7 +177,7 @@ class APICombatLogControllerCombatLogRouteInvalidUiMapIdTest extends APICombatLo
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 25, 499);
+        $this->validatePulls($postBody, $responseArr, 25, 499);
         // One cast spell falls outside the existing pulls, so is excluded (there's 11 casts, 10 assignments)
         $this->validateSpells($responseArr, 3, [2825]);
         // This was a log which did not have full affixes set - see #2483

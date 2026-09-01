@@ -12,7 +12,8 @@
         },
         "settings": {
             "temporary": true,
-            "debugIcons": false
+            "debugIcons": false,
+            "mappingVersion": 8
         },
         "challengeMode": {
             "start": "2024-06-02T19:28:55.196+00:00",

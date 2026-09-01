@@ -35,7 +35,7 @@ class APICombatLogControllerCombatLogRouteAraKaraCityOfEchoesTest extends APICom
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 27, 510);
+        $this->validatePulls($postBody, $responseArr, 27, 510);
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
 
@@ -55,7 +55,7 @@ class APICombatLogControllerCombatLogRouteAraKaraCityOfEchoesTest extends APICom
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 15, 498);
+        $this->validatePulls($postBody, $responseArr, 15, 498);
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
 
@@ -75,7 +75,7 @@ class APICombatLogControllerCombatLogRouteAraKaraCityOfEchoesTest extends APICom
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 20, 811);
+        $this->validatePulls($postBody, $responseArr, 20, 811);
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
 }

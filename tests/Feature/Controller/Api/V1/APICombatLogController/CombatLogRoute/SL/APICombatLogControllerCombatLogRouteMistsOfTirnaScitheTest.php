@@ -35,7 +35,7 @@ class APICombatLogControllerCombatLogRouteMistsOfTirnaScitheTest extends APIComb
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 19, 289);
+        $this->validatePulls($postBody, $responseArr, 19, 289);
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
 
@@ -55,7 +55,7 @@ class APICombatLogControllerCombatLogRouteMistsOfTirnaScitheTest extends APIComb
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 19, 270);
+        $this->validatePulls($postBody, $responseArr, 19, 270);
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
 }

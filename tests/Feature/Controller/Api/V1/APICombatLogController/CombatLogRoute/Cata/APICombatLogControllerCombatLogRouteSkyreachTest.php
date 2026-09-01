@@ -34,7 +34,7 @@ class APICombatLogControllerCombatLogRouteSkyreachTest extends APICombatLogContr
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 16, 431);
+        $this->validatePulls($postBody, $responseArr, 16, 431);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }

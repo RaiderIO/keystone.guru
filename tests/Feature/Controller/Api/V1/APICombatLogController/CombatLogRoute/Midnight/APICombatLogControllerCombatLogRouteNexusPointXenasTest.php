@@ -33,7 +33,7 @@ class APICombatLogControllerCombatLogRouteNexusPointXenasTest extends APICombatL
         $responseArr = json_decode($response->content(), true);
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 25, 562);
+        $this->validatePulls($postBody, $responseArr, 25, 562);
         $this->validateAffixes($responseArr);
     }
 }
