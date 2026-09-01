@@ -3,6 +3,7 @@
 namespace Tests\Feature\App\Service\RaiderIO;
 
 use App\Models\Expansion;
+use App\Models\Faction;
 use App\Models\Season;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
@@ -241,7 +242,119 @@ final class RaiderIOApiServiceTest extends PublicTestCase
         $this->assertStringContainsString('sort[completedAt]=desc', urldecode((string)$capturedUrl));
     }
 
-    private function makeSearchFilter(int $mythicLevelMin, ?int $mythicLevelMax): SearchAdvancedRunsFilter
+    /**
+     * Raider.IO numbers the Alliance 0, and array_filter() on the query parameters is the obvious
+     * place for a zero to silently disappear.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function searchAdvancedRuns_givenAllianceFaction_filtersOnRaiderIOFactionZero(): void
+    {
+        // Arrange
+        $capturedUrl = null;
+        $service     = $this->makeService(function (string $url) use (&$capturedUrl): string {
+            $capturedUrl = $url;
+
+            return json_encode(['total' => 0, 'matches' => []]);
+        });
+
+        $alliance = Faction::query()->where('key', Faction::FACTION_ALLIANCE)->firstOrFail();
+
+        // Act
+        $service->searchAdvancedRuns($this->makeSearchFilter(2, 6, $alliance));
+
+        // Assert
+        $this->assertStringContainsString('faction[0][eq]=0', urldecode((string)$capturedUrl));
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function searchAdvancedRuns_givenHordeFaction_filtersOnRaiderIOFactionOne(): void
+    {
+        // Arrange
+        $capturedUrl = null;
+        $service     = $this->makeService(function (string $url) use (&$capturedUrl): string {
+            $capturedUrl = $url;
+
+            return json_encode(['total' => 0, 'matches' => []]);
+        });
+
+        $horde = Faction::query()->where('key', Faction::FACTION_HORDE)->firstOrFail();
+
+        // Act
+        $service->searchAdvancedRuns($this->makeSearchFilter(2, 6, $horde));
+
+        // Assert
+        $this->assertStringContainsString('faction[0][eq]=1', urldecode((string)$capturedUrl));
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function searchAdvancedRuns_givenNoFaction_omitsTheFactionFilter(): void
+    {
+        // Arrange
+        $capturedUrl = null;
+        $service     = $this->makeService(function (string $url) use (&$capturedUrl): string {
+            $capturedUrl = $url;
+
+            return json_encode(['total' => 0, 'matches' => []]);
+        });
+
+        // Act
+        $service->searchAdvancedRuns($this->makeSearchFilter(2, 6));
+
+        // Assert
+        $this->assertStringNotContainsString('faction[0][eq]', urldecode((string)$capturedUrl));
+    }
+
+    /**
+     * A cross faction group carries no faction at all, which must survive as null rather than
+     * collapse into the Alliance's 0.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function searchAdvancedRuns_givenCrossFactionRun_readsItsFactionAsNull(): void
+    {
+        // Arrange
+        $service = $this->makeService(fn(): string => json_encode([
+            'total'   => ['value' => 2],
+            'matches' => [
+                ['data' => $this->makeRunData(1, faction: 0)],
+                ['data' => $this->makeRunData(2, faction: null)],
+            ],
+        ]));
+
+        // Act
+        $result = $service->searchAdvancedRuns($this->makeSearchFilter(2, 6));
+
+        // Assert
+        $this->assertSame(0, $result->runs[0]->faction);
+        $this->assertNull($result->runs[1]->faction);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function makeRunData(int $id, ?int $faction): array
+    {
+        return [
+            'id'              => $id,
+            'challengeModeId' => 399,
+            'dungeonZoneId'   => 12916,
+            'memberSpecIds'   => [66, 70],
+            'mythicLevel'     => 14,
+            'affixes'         => [9, 10],
+            'faction'         => $faction,
+        ];
+    }
+
+    private function makeSearchFilter(int $mythicLevelMin, ?int $mythicLevelMax, ?Faction $faction = null): SearchAdvancedRunsFilter
     {
         return new SearchAdvancedRunsFilter(
             dungeon:         null,
@@ -253,6 +366,7 @@ final class RaiderIOApiServiceTest extends PublicTestCase
             mythicLevelMax:  $mythicLevelMax,
             limit:           100,
             offset:          0,
+            faction:         $faction,
         );
     }
 

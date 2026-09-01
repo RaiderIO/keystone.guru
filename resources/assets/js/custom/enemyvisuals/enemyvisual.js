@@ -120,10 +120,14 @@ class EnemyVisual extends Signalable {
         if (this._managedBy === this.enemy.id && !this.isHighlighted()) {
             let visuals = [this];
 
-            // Add all the enemies in said pack to the toggle display (may be empty if not part of a pack)
-            let packBuddies = this.enemy.getPackBuddies();
-            packBuddies.push(this.enemy);
-            $.each(packBuddies, function (index, enemy) {
+            // If the enemy is part of a patrol, only highlight the other enemies assigned to that same
+            // patrol - not the entire pack, which may contain enemies assigned to a different patrol.
+            // Otherwise, add all the enemies in said pack to the toggle display (may be empty if not part of a pack)
+            let relatedEnemies = this.enemy.enemyPatrol !== null ?
+                this.enemy.enemyPatrol.enemies.filter((enemy) => enemy !== this.enemy) :
+                this.enemy.getPackBuddies();
+            relatedEnemies.push(this.enemy);
+            $.each(relatedEnemies, function (index, enemy) {
                 if (enemy !== null && enemy.visual !== null) {
                     visuals.push(enemy.visual);
                 }
@@ -155,10 +159,14 @@ class EnemyVisual extends Signalable {
             if (this._circleMenu === null) {
                 let visuals = [this];
 
-                // Add all the enemies in said pack to the toggle display (may be empty if enemy not part of a pack)
-                let packBuddies = this.enemy.getPackBuddies();
-                packBuddies.push(this.enemy);
-                $.each(packBuddies, function (index, enemy) {
+                // If the enemy is part of a patrol, only unhighlight the other enemies assigned to that same
+                // patrol - not the entire pack, which may contain enemies assigned to a different patrol.
+                // Otherwise, add all the enemies in said pack to the toggle display (may be empty if enemy not part of a pack)
+                let relatedEnemies = this.enemy.enemyPatrol !== null ?
+                    this.enemy.enemyPatrol.enemies.filter((enemy) => enemy !== this.enemy) :
+                    this.enemy.getPackBuddies();
+                relatedEnemies.push(this.enemy);
+                $.each(relatedEnemies, function (index, enemy) {
                     // Some packs may contain Teeming enemies which may be hidden
                     if (enemy.isVisible() && enemy.visual !== null) {
                         visuals.push(enemy.visual);

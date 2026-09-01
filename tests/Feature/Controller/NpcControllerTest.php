@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Controller;
 
+use App\Events\Models\Npc\NpcChangedEvent;
+use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcDungeon;
@@ -10,6 +12,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -119,6 +122,146 @@ final class NpcControllerTest extends PublicTestCase
         } finally {
             NpcEnemyForces::query()->where('npc_id', $oldNpcId)->orWhere('npc_id', $newNpcId)->delete();
             Enemy::query()->whereKey($enemyId)->delete();
+            NpcDungeon::query()->where('npc_id', $oldNpcId)->orWhere('npc_id', $newNpcId)->delete();
+            Npc::query()->where('id', $oldNpcId)->orWhere('id', $newNpcId)->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenNpcMovedToDifferentDungeon_broadcastsExactlyOneChangedEventPerCurrentDungeonAndOneRemovalEventPerFormerDungeon(): void
+    {
+        // Arrange - an npc assigned only to $dungeonA, then edited to move it to $dungeonB.
+        // Regression coverage for #4376: the live-broadcast path used to fire NpcChangedEvent
+        // twice for $dungeonA (once for the fresh npc, once for a stale $npcBefore whose
+        // ->dungeons relation had already been reloaded post-commit to the *new* set), and never
+        // told $dungeonA's editors the npc was actually removed.
+        $dungeonA = $this->getDungeonWithCurrentMappingVersionWithEnemies();
+        /** @var Dungeon $dungeonB */
+        $dungeonB = Dungeon::query()->where('id', '!=', $dungeonA->id)->firstOrFail();
+
+        $templateNpc = Npc::query()->firstOrFail();
+        $npcId       = 999999201;
+
+        $npc = Npc::query()->create([
+            'id'                => $npcId,
+            'classification_id' => $templateNpc->classification_id,
+            'npc_type_id'       => $templateNpc->npc_type_id,
+            'npc_class_id'      => $templateNpc->npc_class_id,
+            'name'              => 'Test Npc - dungeon move broadcast',
+            'aggressiveness'    => $templateNpc->aggressiveness,
+            'dangerous'         => false,
+            'truesight'         => false,
+            'runs_away_in_fear' => false,
+        ]);
+
+        NpcDungeon::insert([
+            'npc_id'     => $npcId,
+            'dungeon_id' => $dungeonA->id,
+        ]);
+
+        Event::fake([NpcChangedEvent::class]);
+
+        try {
+            $this->be(User::findOrFail(self::ADMIN_USER_ID));
+
+            // Act - move the npc from $dungeonA to $dungeonB
+            $this->patch(route('admin.npc.update', ['npc' => $npcId]), [
+                'id'                        => $npcId,
+                'name'                      => $npc->name,
+                'classification_id'         => $npc->classification_id,
+                'npc_type_id'               => $npc->npc_type_id,
+                'npc_class_id'              => $npc->npc_class_id,
+                'aggressiveness'            => $npc->aggressiveness,
+                'level'                     => $npc->level,
+                'dungeon_ids'               => [$dungeonB->id],
+                'bolstering_whitelist_npcs' => [],
+                'spells'                    => [],
+                'submit'                    => 'Submit',
+            ])->assertOk();
+
+            // Assert - exactly one event for the dungeon the npc now belongs to (not removed),
+            // and exactly one for the dungeon it was removed from (removed), no duplicates.
+            Event::assertDispatchedTimes(NpcChangedEvent::class, 2);
+
+            Event::assertDispatched(NpcChangedEvent::class, function (NpcChangedEvent $event) use ($dungeonB) {
+                $payload = $event->broadcastWith();
+
+                return $payload['context_route_key'] === $dungeonB->getRouteKey()
+                    && $payload['removed_from_dungeon'] === false;
+            });
+
+            Event::assertDispatched(NpcChangedEvent::class, function (NpcChangedEvent $event) use ($dungeonA) {
+                $payload = $event->broadcastWith();
+
+                return $payload['context_route_key'] === $dungeonA->getRouteKey()
+                    && $payload['removed_from_dungeon'] === true;
+            });
+        } finally {
+            NpcEnemyForces::query()->where('npc_id', $npcId)->delete();
+            NpcDungeon::query()->where('npc_id', $npcId)->delete();
+            Npc::query()->whereKey($npcId)->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenNpcRenamedToNewId_broadcastsTheOldIdSoConnectedClientsCanReconcile(): void
+    {
+        // Arrange - regression coverage for #4376 (cold review follow-up): renaming an npc's id
+        // remaps `enemies.npc_id`/`npc_enemy_forces.npc_id` in the DB, but a connected client's
+        // in-memory enemies/npc list still hold the old id until told otherwise.
+        $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
+
+        $templateNpc = Npc::query()->firstOrFail();
+        $oldNpcId    = 999999301;
+        $newNpcId    = 999999302;
+
+        $npc = Npc::query()->create([
+            'id'                => $oldNpcId,
+            'classification_id' => $templateNpc->classification_id,
+            'npc_type_id'       => $templateNpc->npc_type_id,
+            'npc_class_id'      => $templateNpc->npc_class_id,
+            'name'              => 'Test Npc - id rename broadcast',
+            'aggressiveness'    => $templateNpc->aggressiveness,
+            'dangerous'         => false,
+            'truesight'         => false,
+            'runs_away_in_fear' => false,
+        ]);
+
+        NpcDungeon::insert([
+            'npc_id'     => $oldNpcId,
+            'dungeon_id' => $dungeon->id,
+        ]);
+
+        Event::fake([NpcChangedEvent::class]);
+
+        try {
+            $this->be(User::findOrFail(self::ADMIN_USER_ID));
+
+            // Act - rename the npc to $newNpcId, keeping the same dungeon assignment
+            $this->patch(route('admin.npc.update', ['npc' => $oldNpcId]), [
+                'id'                        => $newNpcId,
+                'name'                      => $npc->name,
+                'classification_id'         => $npc->classification_id,
+                'npc_type_id'               => $npc->npc_type_id,
+                'npc_class_id'              => $npc->npc_class_id,
+                'aggressiveness'            => $npc->aggressiveness,
+                'level'                     => $npc->level,
+                'dungeon_ids'               => [$dungeon->id],
+                'bolstering_whitelist_npcs' => [],
+                'spells'                    => [],
+                'submit'                    => 'Submit',
+            ])->assertOk();
+
+            // Assert
+            Event::assertDispatched(NpcChangedEvent::class, function (NpcChangedEvent $event) use ($dungeon, $newNpcId, $oldNpcId) {
+                $payload = $event->broadcastWith();
+
+                return $payload['context_route_key'] === $dungeon->getRouteKey()
+                    && $payload['model']['id'] === $newNpcId
+                    && $payload['old_npc_id'] === $oldNpcId;
+            });
+        } finally {
+            NpcEnemyForces::query()->where('npc_id', $oldNpcId)->orWhere('npc_id', $newNpcId)->delete();
             NpcDungeon::query()->where('npc_id', $oldNpcId)->orWhere('npc_id', $newNpcId)->delete();
             Npc::query()->where('id', $oldNpcId)->orWhere('id', $newNpcId)->delete();
         }

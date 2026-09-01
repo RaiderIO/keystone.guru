@@ -19,7 +19,16 @@ class MapContextMappingVersion extends MapContext {
     addRawNpc(model) {
         console.assert(this instanceof MapContextMappingVersionEdit, 'this is not a MapContextMappingVersionEdit', this);
 
-        this._options.npcs.push(model);
+        // Mirror the constructor's enrichment (see MapContext) since this npc wasn't part of the
+        // initial dungeonNpcs/npcEnemyForces matching pass
+        for (let i = 0; i < this._options.npcEnemyForces.length; i++) {
+            if (this._options.npcEnemyForces[i].id === model.id) {
+                model.enemy_forces = this._options.npcEnemyForces[i].enemy_forces;
+                break;
+            }
+        }
+
+        this._options.dungeonNpcs.push(model);
 
         this.signal('npc:added', {npc: model});
     }
@@ -31,12 +40,12 @@ class MapContextMappingVersion extends MapContext {
     removeRawNpcById(id) {
         console.assert(this instanceof MapContextMappingVersionEdit, 'this is not a MapContextMappingVersionEdit', this);
 
-        for (let index in this._options.npcs) {
-            if (this._options.npcs.hasOwnProperty(index)) {
-                let rawNpc = this._options.npcs[index];
+        for (let index in this._options.dungeonNpcs) {
+            if (this._options.dungeonNpcs.hasOwnProperty(index)) {
+                let rawNpc = this._options.dungeonNpcs[index];
                 if (rawNpc.id === id) {
                     // Remove it
-                    let removed = this._options.npcs.splice(index, 1);
+                    let removed = this._options.dungeonNpcs.splice(index, 1);
 
                     this.signal('npc:deleted', {npc: removed});
                     break;
@@ -75,4 +84,12 @@ class MapContextMappingVersion extends MapContext {
     getTeamId() {
         return -1;
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        MapContextMappingVersion,
+    };
 }

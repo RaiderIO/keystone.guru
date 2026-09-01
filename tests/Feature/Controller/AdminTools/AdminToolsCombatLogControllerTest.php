@@ -35,6 +35,8 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
 
     private ?string $originalAdminMapFacadeStyle = null;
 
+    private ?int $originalAdminDungeonId = null;
+
     #[\Override]
     protected function setUp(): void
     {
@@ -48,13 +50,26 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         $admin                             = User::findOrFail(1);
         $this->originalAdminMapFacadeStyle = $admin->map_facade_style;
         $admin->update(['map_facade_style' => User::MAP_FACADE_STYLE_SPLIT_FLOORS]);
+
+        // Dungeon::getUserOrDefaultDungeon(), used throughout this class and by the controllers
+        // under test, resolves from the persisted `users.dungeon_id` column - shared, non-refreshed
+        // test DB state that many other tests write. Pinning it here to a dungeon guaranteed to have
+        // a second active non-facade floor (rather than reading whatever dungeon a prior test left
+        // behind) is what makes `->where('facade', 0)->where('index', '!=', 1)->firstOrFail()` below
+        // deterministic instead of order-dependent (#4389).
+        $this->originalAdminDungeonId = $admin->dungeon_id;
+        [$pinnedDungeon]              = $this->findDungeon(facadeEnabled: false, minActiveFloors: 2);
+        $admin->update(['dungeon_id' => $pinnedDungeon->id]);
     }
 
     #[\Override]
     protected function tearDown(): void
     {
         try {
-            User::findOrFail(1)->update(['map_facade_style' => $this->originalAdminMapFacadeStyle]);
+            User::findOrFail(1)->update([
+                'map_facade_style' => $this->originalAdminMapFacadeStyle,
+                'dungeon_id'       => $this->originalAdminDungeonId,
+            ]);
             ChallengeModeRun::query()->whereIn('dungeon_route_id', $this->createdDungeonRouteIds)->delete();
             DungeonRoute::query()->whereIn('id', $this->createdDungeonRouteIds)->delete();
             CombatLogRouteEnemyFailure::query()->whereIn('id', $this->createdEnemyFailureIds)->delete();

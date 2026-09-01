@@ -206,9 +206,13 @@ class EnemyPack extends VersionableMapObject {
             // Only if we can actually make an offset
             if (hullPoints.length > 1) {
                 try {
+                    let floor = getState().getMapContext().getFloorById(this.floor_id);
+                    let enemyPackMargin = (floor !== false && floor.enemy_pack_margin !== null && floor.enemy_pack_margin !== undefined) ?
+                        floor.enemy_pack_margin : c.map.enemypack.margin;
+
                     let offsetLatLngs = createOffsetPolygon(
                         hullPoints.map(point => ({lat: point[0], lng: point[1]})),
-                        c.map.enemypack.margin,
+                        enemyPackMargin,
                         c.map.enemypack.arcSegments(hullPoints.length)
                     );
 
@@ -316,4 +320,12 @@ class EnemyPack extends VersionableMapObject {
         super.cleanup();
         getState().unregister('killzonesnumberstyle:changed', this);
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        EnemyPack,
+    };
 }

@@ -3,10 +3,13 @@
 namespace App\Service\CombatLog;
 
 use App\Models\CharacterClassSpecialization;
+use App\Models\CharacterRace;
 use App\Models\CombatLog\CombatLogParsingCriterion;
 use App\Models\Dungeon;
 use App\Models\Interfaces\CombatLogCriterionModelInterface;
 use App\Models\Season;
+use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitionInterface;
+use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitions;
 use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
 use App\Service\CombatLog\Dtos\KeyLevelBand;
 use Illuminate\Support\Carbon;
@@ -95,7 +98,16 @@ class CombatLogParsingCriteriaService implements CombatLogParsingCriteriaService
         return match ($modelClass) {
             Dungeon::class                      => $season->dungeons()->get(),
             CharacterClassSpecialization::class => CharacterClassSpecialization::query()->get(),
-            default                             => collect(),
+            // Deliberately not every race: a race is only worth spending polling budget on when
+            // something actually reads its data, and the only thing that does is a racial spell
+            // counter. Today that is Shadowmeld alone (#4357) - one extra Raider.IO call per hour
+            // and a handful of criteria rows per day, instead of 28 races' worth of both. A second
+            // race-keyed counter extends this set on its own.
+            CharacterRace::class => CharacterRace::query()
+                ->with('faction')
+                ->whereIn('key', $this->getSpellCounterRaceKeys())
+                ->get(),
+            default => collect(),
         };
     }
 
@@ -119,6 +131,21 @@ class CombatLogParsingCriteriaService implements CombatLogParsingCriteriaService
             ->all();
 
         return $allModels->filter(fn(CombatLogCriterionModelInterface $model) => !isset($atThresholdModelIds[$model->getKey()]));
+    }
+
+    /**
+     * The CharacterRace keys of every racial spell counter the Compendium tracks.
+     *
+     * @return string[]
+     */
+    private function getSpellCounterRaceKeys(): array
+    {
+        return SpellCounterDefinitions::all()
+            ->map(fn(SpellCounterDefinitionInterface $definition): ?string => $definition->getCharacterRaceKey())
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
     }
 
     private function findOrCreate(

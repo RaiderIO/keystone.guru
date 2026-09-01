@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controller\AdminTools;
 
+use App\Models\CharacterRace;
 use App\Models\CombatLog\CombatLogParsingCriterion;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\Group;
@@ -30,6 +31,33 @@ final class AdminToolsCombatLogCriteriaControllerTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
+    }
+
+    /**
+     * The page is generic over CombatLogParsingCriterion::VALID_CRITERIA, so a newly added criterion
+     * model has to render with a name rather than fall back to the "#<id>" placeholder (#4357).
+     */
+    #[Test]
+    public function criteria_givenARaceCriterion_rendersItUnderItsOwnHeadingWithTheRaceName(): void
+    {
+        // Arrange
+        $nightElf  = CharacterRace::query()->where('key', CharacterRace::CHARACTER_RACE_NIGHT_ELF)->firstOrFail();
+        $criterion = CombatLogParsingCriterion::factory()->forRace($nightElf->id)->forBand(90, 94)->create();
+
+        try {
+            // Act
+            $response = $this->get(route('admin.tools.combatlog.criteria.view'));
+
+            // Assert
+            $response->assertOk();
+            $content = $response->getContent();
+
+            $this->assertStringContainsString('id="criteria-band-' . $criterion->combat_log_version . '-characterrace-90"', $content);
+            $this->assertStringContainsString($nightElf->getName(), $content);
+            $this->assertStringNotContainsString(sprintf('#%d', $nightElf->id), $content);
+        } finally {
+            $criterion->delete();
+        }
     }
 
     /**
