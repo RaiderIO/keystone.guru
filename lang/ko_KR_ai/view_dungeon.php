@@ -52,6 +52,7 @@ return [
                 'any'                     => '모두',
                 'select_floor'            => '층 선택',
                 'view_heatmap_fullscreen' => '전체 화면 보기',
+                'not_supported'           => '',
             ],
         ],
     ],

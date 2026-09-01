@@ -89,7 +89,7 @@ return [
                 'alzzin_cave_exit' => 'Durante el combate, Alzzin the Wildshaper rompe la entrada de la cueva y salen Whip Lasher a raudales para ayudarlo.
 
 Tras derrotar a Alzzin the Wildshaper, puedes usar la cueva para salir de la instancia.',
-                'exit_only' => 'Esta "entrada" es solo una salida.',
+                'exit_only'        => 'Esta "entrada" es solo una salida.',
             ],
             'dire_maul_north' => [
                 'gordok_mastiff_pack_size' => 'Todos los packs de Gordok Mastiff pueden contener 4 o 5 enemigos.',
@@ -253,11 +253,11 @@ Los mobs reaparecen infinitamente.
                 'shade_of_eranikus_warning' => 'Shade of Eranikus solo se puede enfrentar si se baja el escudo derrotando a los mini-jefes en el Hall of the Cursed.
 
 Aviso: atacar a Shade of Eranikus provoca que todos los dragones verdes de esta planta se vuelvan agresivos.',
-                'stair_patrol'             => 'Este pack patrulla por las escaleras en todas las plantas.',
-                'jammalaan_aggro_warning'  => 'Aviso: atacar a Jammal\'an the Prophet provoca que todos los enemigos de esta sala se vuelvan agresivos.',
-                'broken_geometry_warning'  => 'AVISO: la geometría rota puede hacer que te caigas y MUERAS.',
-                'weaver_dreamscythe_spawn' => 'Weaver y Dreamscythe aparecen cuando se derrota a Jammal\'an the Prophet.',
-                'remove_shield_note'       => 'Puedes quitar el escudo derrotando a los mini-jefes en el Hall of the Cursed.',
+                'stair_patrol'              => 'Este pack patrulla por las escaleras en todas las plantas.',
+                'jammalaan_aggro_warning'   => 'Aviso: atacar a Jammal\'an the Prophet provoca que todos los enemigos de esta sala se vuelvan agresivos.',
+                'broken_geometry_warning'   => 'AVISO: la geometría rota puede hacer que te caigas y MUERAS.',
+                'weaver_dreamscythe_spawn'  => 'Weaver y Dreamscythe aparecen cuando se derrota a Jammal\'an the Prophet.',
+                'remove_shield_note'        => 'Puedes quitar el escudo derrotando a los mini-jefes en el Hall of the Cursed.',
             ],
             'uldaman' => [
                 'echomok_cavern_entrance'      => 'Entrada de Echomok Cavern',
@@ -516,7 +516,7 @@ Los mobs reaparecen infinitamente.
                 'heal_drake'                  => 'Dracoserpiente de Sanación',
                 'centrifuge_construct_shield' => 'Mata a todos los Centrifuge Construct para eliminar el escudo del jefe.
 Tras matar al jefe, usa el objeto de dracoserpiente para volar más arriba.',
-                'tank_drake' => 'Dracoserpiente de Tanque',
+                'tank_drake'                  => 'Dracoserpiente de Tanque',
             ],
             'ulduar' => [
                 'teleporter'                      => 'Teletransportador',
@@ -553,6 +553,13 @@ Tras matar al jefe, usa el objeto de dracoserpiente para volar más arriba.',
             ],
             'windrunner_spire' => [
                 'activates_after_killing_bosses' => 'El viaje de ida al Paseo se activa después de matar al primer jefe (cualquiera de ellos). La segunda muerte te llevará al nivel superior respectivo.',
+            ],
+        ],
+        'tbc' => [
+            'black_temple' => [
+                'ashtongue_variants'                  => '',
+                'coilscar_or_aqueous_surger_variants' => "",
+                'dragonmaw_variants'                  => '',
             ],
         ],
     ],

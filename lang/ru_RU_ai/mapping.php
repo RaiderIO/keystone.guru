@@ -89,7 +89,7 @@ return [
                 'alzzin_cave_exit' => 'Во время боя Alzzin the Wildshaper ломает вход в пещеру, и оттуда высыпают Whip Lashers, чтобы помочь ему.
 
 После победы над Alzzin the Wildshaper вы можете использовать эту пещеру, чтобы выйти из подземелья.',
-                'exit_only' => 'Этот "вход" - только выход.',
+                'exit_only'        => 'Этот "вход" - только выход.',
             ],
             'dire_maul_north' => [
                 'gordok_mastiff_pack_size' => 'Все отряды Gordok Mastiff могут содержать 4 или 5 врагов.',
@@ -253,11 +253,11 @@ return [
                 'shade_of_eranikus_warning' => 'В бой с Shade of Eranikus можно вступить только после снятия щита победой над мини-боссами в Hall of the Cursed.
 
 Внимание: атака на Shade of Eranikus вызывает агро всех зеленых драконов на этом этаже.',
-                'stair_patrol'             => 'Этот отряд патрулирует лестницы на всех этажах.',
-                'jammalaan_aggro_warning'  => 'Внимание: атака на Jammal\'an the Prophet вызывает агро всех врагов в этой комнате.',
-                'broken_geometry_warning'  => 'ВНИМАНИЕ: сломанная геометрия может привести к падению и СМЕРТИ.',
-                'weaver_dreamscythe_spawn' => 'Weaver и Dreamscythe появляются после победы над Jammal\'an the Prophet.',
-                'remove_shield_note'       => 'Вы можете снять щит, победив мини-боссов в Hall of the Cursed.',
+                'stair_patrol'              => 'Этот отряд патрулирует лестницы на всех этажах.',
+                'jammalaan_aggro_warning'   => 'Внимание: атака на Jammal\'an the Prophet вызывает агро всех врагов в этой комнате.',
+                'broken_geometry_warning'   => 'ВНИМАНИЕ: сломанная геометрия может привести к падению и СМЕРТИ.',
+                'weaver_dreamscythe_spawn'  => 'Weaver и Dreamscythe появляются после победы над Jammal\'an the Prophet.',
+                'remove_shield_note'        => 'Вы можете снять щит, победив мини-боссов в Hall of the Cursed.',
             ],
             'uldaman' => [
                 'echomok_cavern_entrance'      => 'Вход в Echomok Cavern',
@@ -516,7 +516,7 @@ return [
                 'heal_drake'                  => 'Heal Drake',
                 'centrifuge_construct_shield' => 'Убейте всех Centrifuge Constructs, чтобы снять щит босса.
 После убийства босса используйте предмет дракона, чтобы взлететь выше.',
-                'tank_drake' => 'Tank Drake',
+                'tank_drake'                  => 'Tank Drake',
             ],
             'ulduar' => [
                 'teleporter'                      => 'Телепорт',
@@ -553,6 +553,13 @@ return [
             ],
             'windrunner_spire' => [
                 'activates_after_killing_bosses' => 'Односторонняя поездка обратно на Променад активируется после убийства первого босса (любого из них). Второе убийство перенесет вас на соответствующий Верхний уровень.',
+            ],
+        ],
+        'tbc' => [
+            'black_temple' => [
+                'ashtongue_variants'                  => '',
+                'coilscar_or_aqueous_surger_variants' => "",
+                'dragonmaw_variants'                  => '',
             ],
         ],
     ],

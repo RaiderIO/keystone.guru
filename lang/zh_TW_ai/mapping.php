@@ -546,6 +546,13 @@ return [
                 'activates_after_killing_bosses' => '在擊殺第一個首領（任一）後，啟動單程返回長廊。第二次擊殺將帶你到相應的上層。',
             ],
         ],
+        'tbc' => [
+            'black_temple' => [
+                'ashtongue_variants'                  => '',
+                'coilscar_or_aqueous_surger_variants' => "",
+                'dragonmaw_variants'                  => '',
+            ],
+        ],
     ],
 
     'checkpoints' => [

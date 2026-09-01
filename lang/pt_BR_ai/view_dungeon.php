@@ -52,6 +52,7 @@ return [
                 'any'                     => 'Qualquer',
                 'select_floor'            => 'Selecionar andar',
                 'view_heatmap_fullscreen' => 'Ver em tela cheia',
+                'not_supported'           => '',
             ],
         ],
     ],

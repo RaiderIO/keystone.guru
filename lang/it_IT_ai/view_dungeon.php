@@ -52,6 +52,7 @@ return [
                 'any'                     => 'Qualsiasi',
                 'select_floor'            => 'Seleziona piano',
                 'view_heatmap_fullscreen' => 'Visualizza a schermo intero',
+                'not_supported'           => '',
             ],
         ],
     ],

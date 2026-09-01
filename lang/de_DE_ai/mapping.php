@@ -89,7 +89,7 @@ return [
                 'alzzin_cave_exit' => 'Während des Kampfes zerbricht Alzzin the Wildshaper den Eingang zur Höhle und Whip Lasher strömen heraus, um ihm zu helfen.
 
 Nachdem Alzzin the Wildshaper besiegt wurde, kannst du die Höhle nutzen, um die Instanz zu verlassen.',
-                'exit_only' => 'Dieser "Eingang" ist nur ein Ausgang.',
+                'exit_only'        => 'Dieser "Eingang" ist nur ein Ausgang.',
             ],
             'dire_maul_north' => [
                 'gordok_mastiff_pack_size' => 'Alle Gordok-Mastiff-Packs können 4 oder 5 Gegner enthalten.',
@@ -253,11 +253,11 @@ Bleib in Bewegung!',
                 'shade_of_eranikus_warning' => 'Shade of Eranikus kann erst angegriffen werden, wenn der Schild durch das Besiegen der Mini-Bosse in der Hall of the Cursed gesenkt wurde.
 
 Warnung: Ein Angriff auf Shade of Eranikus zieht alle grünen Drachen auf dieser Etage auf sich.',
-                'stair_patrol'             => 'Dieses Pack patrouilliert über die Treppen aller Etagen.',
-                'jammalaan_aggro_warning'  => 'Warnung: Ein Angriff auf Jammal\'an the Prophet zieht alle Gegner in diesem Raum auf sich.',
-                'broken_geometry_warning'  => 'WARNUNG: Fehlerhafte Geometrie kann dazu führen, dass du herunterfällst und STIRBST.',
-                'weaver_dreamscythe_spawn' => 'Weaver und Dreamscythe erscheinen, wenn Jammal\'an the Prophet besiegt wurde.',
-                'remove_shield_note'       => 'Du kannst den Schild entfernen, indem du die Mini-Bosse in der Hall of the Cursed besiegst.',
+                'stair_patrol'              => 'Dieses Pack patrouilliert über die Treppen aller Etagen.',
+                'jammalaan_aggro_warning'   => 'Warnung: Ein Angriff auf Jammal\'an the Prophet zieht alle Gegner in diesem Raum auf sich.',
+                'broken_geometry_warning'   => 'WARNUNG: Fehlerhafte Geometrie kann dazu führen, dass du herunterfällst und STIRBST.',
+                'weaver_dreamscythe_spawn'  => 'Weaver und Dreamscythe erscheinen, wenn Jammal\'an the Prophet besiegt wurde.',
+                'remove_shield_note'        => 'Du kannst den Schild entfernen, indem du die Mini-Bosse in der Hall of the Cursed besiegst.',
             ],
             'uldaman' => [
                 'echomok_cavern_entrance'      => 'Eingang zur Echomok Cavern',
@@ -516,7 +516,7 @@ Bleib in Bewegung!',
                 'heal_drake'                  => 'Heildrache',
                 'centrifuge_construct_shield' => 'Töte alle Centrifuge Constructs, um den Schild des Bosses zu entfernen. 
 Benutze nach dem Töten des Bosses den Drachengegenstand, um weiter nach oben zu fliegen.',
-                'tank_drake' => 'Tankdrache',
+                'tank_drake'                  => 'Tankdrache',
             ],
             'ulduar' => [
                 'teleporter'                      => 'Teleporter',
@@ -553,6 +553,13 @@ Benutze nach dem Töten des Bosses den Drachengegenstand, um weiter nach oben zu
             ],
             'windrunner_spire' => [
                 'activates_after_killing_bosses' => 'Einwegfahrt zurück zur Promenade aktiviert sich nach dem Besiegen des ersten Bosses (entweder von ihnen). Der zweite Kill bringt dich stattdessen zur jeweiligen oberen Ebene.',
+            ],
+        ],
+        'tbc' => [
+            'black_temple' => [
+                'ashtongue_variants'                  => '',
+                'coilscar_or_aqueous_surger_variants' => "",
+                'dragonmaw_variants'                  => '',
             ],
         ],
     ],

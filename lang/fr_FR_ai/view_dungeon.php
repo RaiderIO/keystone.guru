@@ -52,6 +52,7 @@ return [
                 'any'                     => 'N\'importe lequel',
                 'select_floor'            => 'Sélectionner l\'étage',
                 'view_heatmap_fullscreen' => 'Voir en plein écran',
+                'not_supported'           => '',
             ],
         ],
     ],
