@@ -26,7 +26,7 @@ class NpcHealthController extends Controller
     {
         return view('admin.npchealth.edit', [
             'npc'                    => $npc,
-            'npcHealthsAutoComplete' => Npc::with('classification')
+            'npcHealthsAutoComplete' => Npc::with(['classification', 'npcHealths'])
                 ->selectRaw('npcs.*')
                 ->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
                 ->whereIn('npc_dungeons.dungeon_id', $npc->dungeons->pluck('id')->toArray())
@@ -60,7 +60,7 @@ class NpcHealthController extends Controller
         return view('admin.npchealth.edit', [
             'npc'                    => $npc,
             'npcHealth'              => $npcHealth,
-            'npcHealthsAutoComplete' => Npc::with('classification')
+            'npcHealthsAutoComplete' => Npc::with(['classification', 'npcHealths'])
                 ->selectRaw('npcs.*')
                 ->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
                 ->whereIn('npc_dungeons.dungeon_id', $npc->dungeons->pluck('id')->toArray())

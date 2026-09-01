@@ -555,6 +555,13 @@ return [
                 'activates_after_killing_bosses' => '在击杀第一个首领（任意一个）后，返回长廊的单程旅行将激活。第二次击杀将带你到相应的上层。',
             ],
         ],
+        'tbc' => [
+            'black_temple' => [
+                'ashtongue_variants'                  => '敌人可能是 Ashtongue Mystic、Ashtongue Stormcaller 或 Ashtongue Battlelord 中的一种。',
+                'coilscar_or_aqueous_surger_variants' => '这个包的敌人可能是 Coilscar General、Coilscar Soothsayer、Coilscar Seacaller 或 Aqueous Surger 中的一种',
+                'dragonmaw_variants'                  => 'Dragonmaw Wind Reaver 和 Dragonmaw Sky Stalker 可能互相替换出现。',
+            ],
+        ],
     ],
 
     'checkpoints' => [

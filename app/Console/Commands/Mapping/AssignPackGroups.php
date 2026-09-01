@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Mapping;
 
+use App\Models\Dungeon;
 use App\Models\DungeonKey;
 use App\Models\EnemyPack;
 use App\Models\Mapping\MappingVersion;
@@ -16,7 +17,7 @@ class AssignPackGroups extends Command
      *
      * @var string
      */
-    protected $signature = 'mapping:assignpackgroups';
+    protected $signature = 'mapping:assignpackgroups {--dungeon= : Only process this dungeon (by key), regardless of the whitelist; omit to process every whitelisted dungeon}';
 
     /**
      * The console command description.
@@ -30,11 +31,19 @@ class AssignPackGroups extends Command
      */
     public function handle(): int
     {
-        /** @var Collection<int, MappingVersion> $mappingVersions */
-        $mappingVersions = MappingVersion::with([
+        $dungeonKey = $this->option('dungeon');
+
+        $mappingVersionsQuery = MappingVersion::with([
             'enemyPacks',
             'dungeon',
-        ])->get();
+        ]);
+        if ($dungeonKey !== null) {
+            $dungeon = Dungeon::where('key', $dungeonKey)->firstOrFail();
+            $mappingVersionsQuery->where('dungeon_id', $dungeon->id);
+        }
+
+        /** @var Collection<int, MappingVersion> $mappingVersions */
+        $mappingVersions = $mappingVersionsQuery->get();
 
         $dungeonWhitelist = [
             RaidKey::THE_EYE->value,
@@ -52,7 +61,7 @@ class AssignPackGroups extends Command
 
         $count = 0;
         foreach ($mappingVersions as $mappingVersion) {
-            if (empty($dungeonWhitelist) || in_array($mappingVersion->dungeon->key, $dungeonWhitelist)) { // @phpstan-ignore empty.variable
+            if ($dungeonKey !== null || empty($dungeonWhitelist) || in_array($mappingVersion->dungeon->key, $dungeonWhitelist)) { // @phpstan-ignore empty.variable
                 /** @var Collection<int, EnemyPack> $enemyPacks */
                 $enemyPacks = $mappingVersion->enemyPacks()
                     ->orderBy('id')

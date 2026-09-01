@@ -555,6 +555,13 @@ Benutze nach dem Töten des Bosses den Drachengegenstand, um weiter nach oben zu
                 'activates_after_killing_bosses' => 'Einwegfahrt zurück zur Promenade aktiviert sich nach dem Besiegen des ersten Bosses (entweder von ihnen). Der zweite Kill bringt dich stattdessen zur jeweiligen oberen Ebene.',
             ],
         ],
+        'tbc' => [
+            'black_temple' => [
+                'ashtongue_variants'                  => 'Gegner können Ashtongue Mystic, Ashtongue Stormcaller oder Ashtongue Battlelord sein.',
+                'coilscar_or_aqueous_surger_variants' => 'Gegner dieses Packs können Coilscar General, Coilscar Soothsayer, Coilscar Seacaller oder Aqueous Surger sein',
+                'dragonmaw_variants'                  => 'Dragonmaw Wind Reaver und Dragonmaw Sky Stalker können jeweils anstelle des anderen erscheinen.',
+            ],
+        ],
     ],
 
     'checkpoints' => [

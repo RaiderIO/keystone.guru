@@ -8,6 +8,7 @@ use App\Service\Request\ApiRequestServiceInterface;
 use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
@@ -64,6 +65,12 @@ class Handler extends ExceptionHandler
     #[Override]
     public function report(Throwable $e): void
     {
+        // Queued broadcast jobs retry on DNS failure, but Worker::runJob reports every attempt -
+        // this is a transient environment issue, not an application defect (#4341).
+        if ($e instanceof BroadcastException && str_contains($e->getMessage(), 'Could not resolve host')) {
+            return;
+        }
+
         // request() is not available in console
         $request = app()->runningInConsole() ? null : request();
 

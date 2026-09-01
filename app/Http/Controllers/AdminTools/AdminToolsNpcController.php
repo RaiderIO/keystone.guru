@@ -104,7 +104,7 @@ class AdminToolsNpcController extends Controller
                 $existed = $npcCandidate->exists;
                 if ($npcCandidate->save()) {
                     foreach ($dungeons as $dungeon) {
-                        NpcDungeon::create([
+                        NpcDungeon::firstOrCreate([
                             'npc_id'     => $npcCandidate->id,
                             'dungeon_id' => $dungeon->id,
                         ]);

@@ -349,7 +349,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
         }
 
         // Without enemies there is nothing to connect, and the $weightStep below would divide by zero
-        if ($enemyConnections && $enemiesAttributes !== []) {
+        if ($enemyConnections && count($enemiesAttributes) > 1) {
             $enemyConnectionsGradient = [
                 [
                     0,

@@ -555,6 +555,13 @@ Alzzin the Wildshaper 처치 후에는 이 동굴을 이용해 인스턴스를 �
                 'activates_after_killing_bosses' => '첫 번째 보스를 처치한 후 산책로로 돌아가는 한 방향 통행이 활성화됩니다. 두 번째 처치는 해당 상위 레벨로 이동시킵니다.',
             ],
         ],
+        'tbc' => [
+            'black_temple' => [
+                'ashtongue_variants'                  => '적은 Ashtongue Mystic, Ashtongue Stormcaller, Ashtongue Battlelord 중 하나일 수 있습니다.',
+                'coilscar_or_aqueous_surger_variants' => '이 무리의 적은 Coilscar General, Coilscar Soothsayer, Coilscar Seacaller 또는 Aqueous Surger 중 하나일 수 있습니다',
+                'dragonmaw_variants'                  => 'Dragonmaw Wind Reaver와 Dragonmaw Sky Stalker는 서로 바뀌어 등장할 수 있습니다.',
+            ],
+        ],
     ],
 
     'checkpoints' => [

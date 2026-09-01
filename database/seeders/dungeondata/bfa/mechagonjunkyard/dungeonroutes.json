@@ -2,6 +2,7 @@
     {
         "public_key": "s3mIufO",
         "clone_of": null,
+        "upgrade_of_dungeon_route_id": null,
         "author_id": 1,
         "dungeon_id": 24,
         "mapping_version_id": 24,
@@ -720,6 +721,7 @@
     {
         "public_key": "8PjNdhn",
         "clone_of": null,
+        "upgrade_of_dungeon_route_id": null,
         "author_id": 1,
         "dungeon_id": 24,
         "mapping_version_id": 24,

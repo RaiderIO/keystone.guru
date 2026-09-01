@@ -34,6 +34,11 @@
 
 .range-slider .noUi-pips-horizontal {
     padding: 2px 0;
+    /* Vendor default is a fixed 80px (sized for its own bulkier padding/font), well past our
+     * shrunk content and past .range-slider--has-pips' 26px reserved margin below - left alone,
+     * the (invisible, unclipped) overflow sits on top of whatever follows the slider in normal
+     * flow. 28px matches this rule's own compact padding/font content with a small buffer. */
+    height: 28px;
 }
 
 .range-slider .noUi-marker-large {

@@ -161,6 +161,7 @@ return [
             'enemy_engagement_max_range_patrols' => '',
             'percentage_display_zoom'            => '',
             'zoom_max'                           => '',
+            'enemy_pack_margin'                  => '',
             'default'                            => '',
             'default_title'                      => '',
             'facade'                             => '',

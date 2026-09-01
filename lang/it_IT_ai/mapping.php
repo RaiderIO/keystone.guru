@@ -555,6 +555,13 @@ Dopo aver ucciso il boss, usa l\'oggetto drago per volare più in alto.',
                 'activates_after_killing_bosses' => 'Il viaggio di sola andata verso la Promenade si attiva dopo aver ucciso il primo boss (uno dei due). La seconda uccisione ti porterà invece al rispettivo livello superiore.',
             ],
         ],
+        'tbc' => [
+            'black_temple' => [
+                'ashtongue_variants'                  => 'I nemici possono essere Ashtongue Mystic, Ashtongue Stormcaller o Ashtongue Battlelord.',
+                'coilscar_or_aqueous_surger_variants' => 'I nemici di questo pacchetto possono essere Coilscar General, Coilscar Soothsayer, Coilscar Seacaller o Aqueous Surger',
+                'dragonmaw_variants'                  => 'Dragonmaw Wind Reaver e Dragonmaw Sky Stalker possono comparire l\'uno al posto dell\'altro.',
+            ],
+        ],
     ],
 
     'checkpoints' => [
