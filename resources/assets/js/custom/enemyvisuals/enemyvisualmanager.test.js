@@ -18,6 +18,7 @@ function createManager() {
     const manager = Object.create(EnemyVisualManager.prototype);
     manager._visualRefreshQueue = [];
     manager._visualRefreshQueueRafHandle = null;
+    manager._visualRefreshQueuedEnemies = new Map();
 
     return manager;
 }
@@ -80,6 +81,28 @@ describe('EnemyVisualManager._enqueueVisualRefreshTasks', () => {
 
         expect(window.requestAnimationFrame).not.toHaveBeenCalled();
     });
+
+    it('enqueueVisualRefreshTasks_givenEnemyAlreadyQueued_updatesExistingTaskInPlaceInsteadOfDuplicating', () => {
+        const manager = createManager();
+        stubRaf();
+        const enemy = makeEnemy();
+
+        manager._enqueueVisualRefreshTasks([{enemy, build: false}]);
+        manager._enqueueVisualRefreshTasks([{enemy, build: false}]);
+
+        expect(manager._visualRefreshQueue).toHaveLength(1);
+    });
+
+    it('enqueueVisualRefreshTasks_givenEnemyAlreadyQueuedForRefresh_upgradesExistingTaskToBuildOnNewBuildTask', () => {
+        const manager = createManager();
+        stubRaf();
+        const enemy = makeEnemy();
+
+        manager._enqueueVisualRefreshTasks([{enemy, build: false}]);
+        manager._enqueueVisualRefreshTasks([{enemy, build: true}]);
+
+        expect(manager._visualRefreshQueue).toEqual([{enemy, build: true}]);
+    });
 });
 
 describe('EnemyVisualManager._processVisualRefreshQueue', () => {
@@ -90,7 +113,7 @@ describe('EnemyVisualManager._processVisualRefreshQueue', () => {
         manager._visualRefreshQueue = [{enemy, build: false}];
         window.performance.now = vi.fn(() => 0);
 
-        manager._processVisualRefreshQueue(0);
+        manager._processVisualRefreshQueue();
 
         expect(enemy.visual.refreshSize).toHaveBeenCalledTimes(1);
         expect(enemy.visual.buildVisual).not.toHaveBeenCalled();
@@ -103,7 +126,7 @@ describe('EnemyVisualManager._processVisualRefreshQueue', () => {
         manager._visualRefreshQueue = [{enemy, build: true}];
         window.performance.now = vi.fn(() => 0);
 
-        manager._processVisualRefreshQueue(0);
+        manager._processVisualRefreshQueue();
 
         expect(enemy.visual.buildVisual).toHaveBeenCalledTimes(1);
         expect(enemy.visual.refreshSize).not.toHaveBeenCalled();
@@ -116,13 +139,14 @@ describe('EnemyVisualManager._processVisualRefreshQueue', () => {
         const second = makeEnemy();
         manager._visualRefreshQueue = [{enemy: first, build: false}, {enemy: second, build: false}];
 
-        // The frame budget is 8ms (ENEMY_VISUAL_REFRESH_FRAME_BUDGET_MS); the loop checks
-        // performance.now() before processing each task, so returning 0 on the first check and
-        // 9 (past the deadline) on every check after makes it stop right after the first task.
+        // The frame budget is 8ms (ENEMY_VISUAL_REFRESH_FRAME_BUDGET_MS). The first call computes
+        // the deadline (0 + 8 = 8), the second is the loop's pre-task-one check (0, still under
+        // budget), and every call after that returns 9 (past the deadline) so it stops right
+        // after the first task.
         let callCount = 0;
-        window.performance.now = vi.fn(() => (++callCount === 1 ? 0 : 9));
+        window.performance.now = vi.fn(() => (++callCount <= 2 ? 0 : 9));
 
-        manager._processVisualRefreshQueue(0);
+        manager._processVisualRefreshQueue();
 
         expect(first.visual.refreshSize).toHaveBeenCalledTimes(1);
         expect(second.visual.refreshSize).not.toHaveBeenCalled();
@@ -145,10 +169,29 @@ describe('EnemyVisualManager._processVisualRefreshQueue', () => {
         manager._visualRefreshQueue = [{enemy, build: false}];
         window.performance.now = vi.fn(() => 0);
 
-        manager._processVisualRefreshQueue(0);
+        manager._processVisualRefreshQueue();
 
         expect(manager._visualRefreshQueue).toEqual([]);
         expect(window.requestAnimationFrame).not.toHaveBeenCalled();
         expect(manager._visualRefreshQueueRafHandle).toBeNull();
+    });
+
+    it('processVisualRefreshQueue_givenCallbackStartedLateInTheFrame_stillProcessesAtLeastOneTask', () => {
+        // If other work queued ahead of this callback in the same frame delayed it past the
+        // frame's nominal start, a deadline computed from that stale start time would already be
+        // in the past - the loop would process zero tasks and just reschedule forever. The
+        // deadline must be measured from when this callback itself starts running.
+        const manager = createManager();
+        stubRaf();
+        const enemy = makeEnemy();
+        manager._visualRefreshQueue = [{enemy, build: false}];
+        // A rAF frameStartTime long in the past relative to "now" - simulates this callback
+        // having been delayed well past that nominal frame start.
+        window.performance.now = vi.fn(() => 1000);
+
+        manager._processVisualRefreshQueue(0);
+
+        expect(enemy.visual.refreshSize).toHaveBeenCalledTimes(1);
+        expect(manager._visualRefreshQueue).toEqual([]);
     });
 });

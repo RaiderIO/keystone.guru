@@ -24,6 +24,10 @@ class EnemyVisualManager extends Signalable {
         // in a single 116.7ms frame on the Black Temple facade otherwise)
         this._visualRefreshQueue = [];
         this._visualRefreshQueueRafHandle = null;
+        // Enemy -> its queued task, so a rapid run of zoom events (fast scroll wheel) updates the
+        // enemy's already-queued task in place instead of piling up one task per event; without
+        // this the queue could grow unboundedly faster than the time budget can drain it
+        this._visualRefreshQueuedEnemies = new Map();
         /** @type Enemy|null */
         this._hoveredEnemy = null;
         // Ids of enemy patrols we've already attached the mouseover/mouseout handlers below to -
@@ -66,6 +70,7 @@ class EnemyVisualManager extends Signalable {
             self._visualRefreshQueue = self._visualRefreshQueue.filter(function (task) {
                 return task.enemy !== removedEnemy;
             });
+            self._visualRefreshQueuedEnemies.delete(removedEnemy);
         });
 
         // This can in theory be moved completely to enemy patrol but I prefer to keep it in here so all the mouse overing
@@ -233,35 +238,47 @@ class EnemyVisualManager extends Signalable {
     /**
      * Queues visual refresh/rebuild tasks to be processed over one or more time-budgeted
      * requestAnimationFrame callbacks, rather than one rAF callback per task (which all run back
-     * to back in the same frame regardless of how many are queued).
+     * to back in the same frame regardless of how many are queued). An enemy already queued (e.g.
+     * a second zoom event fired before the first finished draining) has its existing task updated
+     * in place instead of getting a second entry, so a fast run of zoom events can't make the
+     * queue grow faster than the time budget drains it.
      * @param tasks {Array<{enemy: Enemy, build: boolean}>}
      * @private
      */
     _enqueueVisualRefreshTasks(tasks) {
-        if (tasks.length === 0) {
-            return;
+        for (let i = 0; i < tasks.length; i++) {
+            let task = tasks[i];
+            let existingTask = this._visualRefreshQueuedEnemies.get(task.enemy);
+            if (existingTask) {
+                existingTask.build = existingTask.build || task.build;
+            } else {
+                this._visualRefreshQueue.push(task);
+                this._visualRefreshQueuedEnemies.set(task.enemy, task);
+            }
         }
 
-        this._visualRefreshQueue.push(...tasks);
-
-        if (this._visualRefreshQueueRafHandle === null) {
+        if (this._visualRefreshQueue.length > 0 && this._visualRefreshQueueRafHandle === null) {
             this._visualRefreshQueueRafHandle = window.requestAnimationFrame(this._processVisualRefreshQueue.bind(this));
         }
     }
 
     /**
      * Processes queued visual refresh/rebuild tasks until the per-frame time budget is spent,
-     * then re-queues itself for the next frame if work remains.
-     * @param frameStartTime {DOMHighResTimeStamp}
+     * then re-queues itself for the next frame if work remains. Measures the budget from when
+     * this callback actually starts running rather than from the rAF frameStartTime argument -
+     * other work queued ahead of it in the same frame can delay that start past the frame's
+     * nominal deadline, which would otherwise make the loop process zero tasks and just
+     * reschedule, indefinitely, if that keeps happening every frame.
      * @private
      */
-    _processVisualRefreshQueue(frameStartTime) {
+    _processVisualRefreshQueue() {
         console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
 
-        let deadline = frameStartTime + ENEMY_VISUAL_REFRESH_FRAME_BUDGET_MS;
+        let deadline = window.performance.now() + ENEMY_VISUAL_REFRESH_FRAME_BUDGET_MS;
 
         while (this._visualRefreshQueue.length > 0 && window.performance.now() < deadline) {
             let task = this._visualRefreshQueue.shift();
+            this._visualRefreshQueuedEnemies.delete(task.enemy);
             if (task.build) {
                 task.enemy.visual.buildVisual();
             } else {
