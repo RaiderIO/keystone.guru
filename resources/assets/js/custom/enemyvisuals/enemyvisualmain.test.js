@@ -11,6 +11,10 @@ global.Signalable = class Signalable {
 global.EnemyVisual = class EnemyVisual {
 };
 global.EnemyVisualIcon = class EnemyVisualIcon extends Signalable {
+    constructor(enemyvisual) {
+        super();
+        this.enemyvisual = enemyvisual;
+    }
 };
 
 const {EnemyVisualMain} = require('./enemyvisualmain');
@@ -97,9 +101,10 @@ test('isSpeedrunRequiredNpc_givenNoDungeonDifficulty_returnsFalse', () => {
 
 // ---------------------------------------------------------------------------
 // getSize()'s cache is keyed on the zoom level. With zoomSnap: 0 (constants.js), the map lands on
-// fractional zoom levels under real mouse-wheel zooming, so the key must be quantized - otherwise
-// the cache never hits during ordinary zooming and grows unbounded, one entry per distinct zoom
-// level ever visited (#4413).
+// fractional zoom levels under real mouse-wheel zooming, so the key must be quantized to the
+// nearest half-zoom-level step (the offset's existing 1px granularity) - otherwise the cache
+// never hits during ordinary zooming and grows unbounded, one entry per distinct zoom level ever
+// visited (#4413).
 // ---------------------------------------------------------------------------
 
 global.c = {
@@ -138,12 +143,12 @@ function makeFakeSizeThis(zoomLevel) {
     return fakeThis;
 }
 
-test('getSize_givenFractionalZoomLevelsRoundingToSameInteger_hitsCache', () => {
+test('getSize_givenFractionalZoomLevelsRoundingToSameStep_hitsCache', () => {
     const fakeThis = makeFakeSizeThis(4);
     const first = EnemyVisualMain.prototype.getSize.call(fakeThis);
 
     global.getState = () => ({
-        getMapZoomLevel: () => 4.3,
+        getMapZoomLevel: () => 4.1,
         // Deliberately broken - if this were reached (cache miss) the call would throw.
         getMapContext: () => {
             throw new Error('getSize() should not recalculate on a cache hit');
@@ -156,7 +161,7 @@ test('getSize_givenFractionalZoomLevelsRoundingToSameInteger_hitsCache', () => {
     expect(Object.keys(fakeThis._sizeCache)).toHaveLength(1);
 });
 
-test('getSize_givenFractionalZoomLevelsRoundingToDifferentIntegers_missesCache', () => {
+test('getSize_givenFractionalZoomLevelsRoundingToDifferentSteps_missesCache', () => {
     const fakeThis = makeFakeSizeThis(4.1);
     EnemyVisualMain.prototype.getSize.call(fakeThis);
 
@@ -172,4 +177,24 @@ test('getSize_givenFractionalZoomLevelsRoundingToDifferentIntegers_missesCache',
     EnemyVisualMain.prototype.getSize.call(fakeThis);
 
     expect(Object.keys(fakeThis._sizeCache)).toHaveLength(2);
+});
+
+test('constructor_givenEnemySetNpcSignal_clearsSizeCache', () => {
+    let registeredCallback = null;
+    const enemyvisual = {
+        enemy: {
+            register: (signal, context, callback) => {
+                if (signal === 'enemy:set_npc') {
+                    registeredCallback = callback;
+                }
+            },
+        },
+    };
+
+    const visual = new EnemyVisualMain(enemyvisual);
+    visual._sizeCache[8] = {iconSize: [20, 20]};
+
+    registeredCallback();
+
+    expect(visual._sizeCache).toEqual([]);
 });
