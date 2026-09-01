@@ -1,6 +1,7 @@
 <?php
 
 use ErickSkrauch\PhpCsFixer\Fixers as ErickSkrauchFixers;
+use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__)
@@ -21,10 +22,7 @@ return (new PhpCsFixer\Config())
     ->setIndent("    ")
     ->setLineEnding("\n")
     ->setFinder($finder)
-    // No parallel config: an interrupted `composer run fix` (Bash-tool timeout, Ctrl-C, session
-    // end) orphans its workers instead of killing them, and each spins at ~100% CPU forever.
-    // Capping the worker count (#4381/#4382) only lowered the ceiling and the leak still
-    // recurred (#4390), so parallelism is disabled entirely - single-process, no orphans possible.
+    ->setParallelConfig(ParallelConfigFactory::sequential())
     ->setRules([
         // Arrays & commas
         'array_syntax'                => ['syntax' => 'short'],
