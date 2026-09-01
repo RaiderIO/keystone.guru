@@ -12,7 +12,7 @@
 
         </div>
     </div>
-    <div class="px-2">
+    <div class="px-2" id="edit_route_dungeon_speedrun_required_npcs_toggle_container">
         <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse"
                 data-bs-target="#edit_route_dungeon_speedrun_required_npcs_collapse"
                 aria-expanded="false" aria-controls="collapseExample">
