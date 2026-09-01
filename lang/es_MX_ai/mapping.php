@@ -555,6 +555,13 @@ Después de matar al jefe, usa el objeto de dragón para volar más alto.',
                 'activates_after_killing_bosses' => 'El viaje de ida y vuelta hacia el Paseo Promenade se activa después de matar al primer jefe (cualquiera de ellos). La segunda muerte te llevará al nivel Superior respectivo.',
             ],
         ],
+        'tbc' => [
+            'black_temple' => [
+                'ashtongue_variants'                  => 'Los enemigos pueden ser Ashtongue Mystic, Ashtongue Stormcaller o Ashtongue Battlelord.',
+                'coilscar_or_aqueous_surger_variants' => 'Los enemigos de este pack pueden ser Coilscar General, Coilscar Soothsayer, Coilscar Seacaller o Aqueous Surger',
+                'dragonmaw_variants'                  => 'Dragonmaw Wind Reaver y Dragonmaw Sky Stalker pueden aparecer uno en lugar del otro.',
+            ],
+        ],
     ],
 
     'checkpoints' => [
