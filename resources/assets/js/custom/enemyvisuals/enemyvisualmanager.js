@@ -1,3 +1,8 @@
+// Time budget (ms) for a single frame of the RafWorkQueue draining _visualRefreshQueue before it
+// re-queues itself for the next frame. Chosen to leave headroom in a 16.7ms (60fps) frame for
+// everything else the browser needs to do (layout, paint, input handling).
+const ENEMY_VISUAL_REFRESH_FRAME_BUDGET_MS = 8;
+
 class EnemyVisualManager extends Signalable {
 
     constructor(map) {
@@ -14,6 +19,15 @@ class EnemyVisualManager extends Signalable {
         this._enemyVisibilityMap = [];
         this._allEnemies = [];
         this._visibleEnemies = [];
+        // Visuals queued by _onZoomLevelChanged() to refresh/rebuild, spread over multiple
+        // rAF-budgeted frames instead of firing one rAF callback per enemy (551 of them landed
+        // in a single 116.7ms frame on the Black Temple facade otherwise). Keyed by enemy so a
+        // rapid run of zoom events (fast scroll wheel) updates the enemy's already-queued task in
+        // place instead of piling up one task per event.
+        this._visualRefreshQueue = new RafWorkQueue({
+            run: this._runVisualRefreshTask.bind(this),
+            frameBudgetMs: ENEMY_VISUAL_REFRESH_FRAME_BUDGET_MS,
+        });
         /** @type Enemy|null */
         this._hoveredEnemy = null;
         // Ids of enemy patrols we've already attached the mouseover/mouseout handlers below to -
@@ -53,6 +67,7 @@ class EnemyVisualManager extends Signalable {
             if (self._hoveredEnemy === removedEnemy) {
                 self._hoveredEnemy = null;
             }
+            self._visualRefreshQueue.cancel(removedEnemy);
         });
 
         // This can in theory be moved completely to enemy patrol but I prefer to keep it in here so all the mouse overing
@@ -183,6 +198,11 @@ class EnemyVisualManager extends Signalable {
         let bounds = this.map.leafletMap.getBounds();
         this._visibleEnemies = [];
 
+        // Visible enemies queued first so the frames the user is looking at settle before the
+        // (possibly still-queued) off-screen always-rebuild enemies catch up
+        let visibleTasks = [];
+        let invisibleTasks = [];
+
         for (let i = 0; i < this._allEnemies.length; i++) {
             let enemy = this._allEnemies[i];
 
@@ -197,11 +217,9 @@ class EnemyVisualManager extends Signalable {
                     }
                     // If we're mouse hovering the visual, just rebuild it entirely. There are a few things which need
                     // reworking to support a full refresh of the visual
-                    if (shouldAlwaysRebuild || enemy.visual.isHighlighted() || isMdt) {
-                        window.requestAnimationFrame(enemy.visual.buildVisual.bind(enemy.visual));
-                    } else {
-                        window.requestAnimationFrame(enemy.visual.refreshSize.bind(enemy.visual));
-                    }
+                    let shouldBuild = (shouldAlwaysRebuild || enemy.visual.isHighlighted() || isMdt);
+                    let task = {enemy: enemy, build: shouldBuild};
+                    (isVisible ? visibleTasks : invisibleTasks).push(task);
                     // Keep track that we already refreshed all these so they won't be refreshed AGAIN upon move
                     // But don't do this for mdt enemies - just recalculate then
                     if (enemy.id > 0) {
@@ -209,6 +227,41 @@ class EnemyVisualManager extends Signalable {
                     }
                 }
             }
+        }
+
+        this._enqueueVisualRefreshTasks(visibleTasks.concat(invisibleTasks));
+    }
+
+    /**
+     * Queues visual refresh/rebuild tasks to be processed over one or more time-budgeted
+     * requestAnimationFrame callbacks, rather than one rAF callback per task (which all run back
+     * to back in the same frame regardless of how many are queued). An enemy already queued (e.g.
+     * a second zoom event fired before the first finished draining) has its existing task's
+     * `build` flag upgraded in place instead of getting a second entry, so a fast run of zoom
+     * events can't make the queue grow faster than the time budget drains it.
+     * @param tasks {Array<{enemy: Enemy, build: boolean}>}
+     * @private
+     */
+    _enqueueVisualRefreshTasks(tasks) {
+        for (let i = 0; i < tasks.length; i++) {
+            let task = tasks[i];
+            this._visualRefreshQueue.enqueue(task.enemy, task, function (existingTask, incomingTask) {
+                existingTask.build = existingTask.build || incomingTask.build;
+                return existingTask;
+            });
+        }
+    }
+
+    /**
+     * Runs a single queued visual refresh/rebuild task. Called by the RafWorkQueue.
+     * @param task {{enemy: Enemy, build: boolean}}
+     * @private
+     */
+    _runVisualRefreshTask(task) {
+        if (task.build) {
+            task.enemy.visual.buildVisual();
+        } else {
+            task.enemy.visual.refreshSize();
         }
     }
 
@@ -445,4 +498,8 @@ class EnemyVisualManager extends Signalable {
 
         this._isMapBeingDragged = false;
     }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = EnemyVisualManager;
 }
