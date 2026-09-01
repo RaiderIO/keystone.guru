@@ -555,6 +555,13 @@ Après avoir tué le boss, utilisez l\'objet de drake pour vous envoler plus hau
                 'activates_after_killing_bosses' => 'Un aller simple vers la Promenade s\'active après avoir tué le premier boss (l\'un des deux). La deuxième élimination vous emmènera au niveau supérieur respectif.',
             ],
         ],
+        'tbc' => [
+            'black_temple' => [
+                'ashtongue_variants'                  => 'Les ennemis peuvent être Ashtongue Mystic, Ashtongue Stormcaller ou Ashtongue Battlelord.',
+                'coilscar_or_aqueous_surger_variants' => 'Les ennemis de ce pack peuvent être Coilscar General, Coilscar Soothsayer, Coilscar Seacaller ou Aqueous Surger',
+                'dragonmaw_variants'                  => 'Dragonmaw Wind Reaver et Dragonmaw Sky Stalker peuvent apparaître l\'un à la place de l\'autre.',
+            ],
+        ],
     ],
 
     'checkpoints' => [
