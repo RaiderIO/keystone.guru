@@ -13,7 +13,7 @@
         "settings": {
             "temporary": true,
             "debugIcons": false,
-            "mappingVersion": 4
+            "mappingVersion": 6
         },
         "challengeMode": {
             "start": "2026-08-21T22:22:53.264+00:00",
@@ -978,8 +978,8 @@
                     "uiMapId": 1038
                 },
                 "coordEnemy": {
-                    "x": -3420.81,
-                    "y": 3558.57,
+                    "x": -3433.05,
+                    "y": 3558.25,
                     "uiMapId": 1038
                 },
                 "gridCoord": {
@@ -988,7 +988,7 @@
                     "uiMapId": 1038
                 },
                 "gridCoordEnemy": {
-                    "x": -3420.75,
+                    "x": -3432.02,
                     "y": 3555,
                     "uiMapId": 1038
                 }
@@ -1042,32 +1042,6 @@
                 "gridCoordEnemy": {
                     "x": -3420.75,
                     "y": 3442.5,
-                    "uiMapId": 1038
-                }
-            },
-            {
-                "npcId": 134364,
-                "spawnUid": "0000089F91",
-                "engagedAt": "2026-08-21T22:29:50.811+00:00",
-                "diedAt": "2026-08-21T22:30:20.486+00:00",
-                "coord": {
-                    "x": -3422.41,
-                    "y": 3514.33,
-                    "uiMapId": 1038
-                },
-                "coordEnemy": {
-                    "x": -3433.05,
-                    "y": 3558.25,
-                    "uiMapId": 1038
-                },
-                "gridCoord": {
-                    "x": -3420.75,
-                    "y": 3513.75,
-                    "uiMapId": 1038
-                },
-                "gridCoordEnemy": {
-                    "x": -3432.02,
-                    "y": 3555,
                     "uiMapId": 1038
                 }
             },
@@ -1160,8 +1134,8 @@
                     "uiMapId": 1038
                 },
                 "coordEnemy": {
-                    "x": -3475.37,
-                    "y": 3539.12,
+                    "x": -3420.81,
+                    "y": 3558.57,
                     "uiMapId": 1038
                 },
                 "gridCoord": {
@@ -1170,8 +1144,8 @@
                     "uiMapId": 1038
                 },
                 "gridCoordEnemy": {
-                    "x": -3473.35,
-                    "y": 3536.25,
+                    "x": -3420.75,
+                    "y": 3555,
                     "uiMapId": 1038
                 }
             },

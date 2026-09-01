@@ -35,7 +35,7 @@ class APICombatLogControllerCombatLogRouteTempleOfSethralissTest extends APIComb
         try {
             $this->validateResponseStaticData($responseArr);
             $this->validateDungeon($responseArr);
-            $this->validatePulls($responseArr, 20, 665);
+            $this->validatePulls($responseArr, 20, 658);
             $this->validateAffixes($responseArr);
             $this->validateBossesResolved($postBody, $responseArr);
         } finally {
