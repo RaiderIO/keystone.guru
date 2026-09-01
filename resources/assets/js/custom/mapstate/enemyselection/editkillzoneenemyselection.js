@@ -38,6 +38,21 @@ class EditKillZoneEnemySelection extends EnemySelection {
     }
 
     /**
+     * @inheritDoc
+     */
+    shouldWarnUnsavedChanges() {
+        // Changes to pulls are only sent to the server in stop() - anything still queued is unsaved
+        if (this._changedKillZoneIds.length > 0) {
+            return true;
+        }
+
+        // A freshly created pull is saved by createNewPull() _before_ this map state is constructed, so
+        // its save may still be in flight (or have failed) while nothing is queued here yet
+        let killZone = this.getMapObject();
+        return killZone !== null && !killZone.synced;
+    }
+
+    /**
      *
      * @param saveSuccessEvent
      * @private
