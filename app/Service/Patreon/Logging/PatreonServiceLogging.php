@@ -153,9 +153,8 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     }
 
     /**
-     * Logged at error level on purpose: the member was skipped entirely, so a paying patron is going
-     * without their benefits until the tier is resolvable again, and error is the only level that
-     * reaches Discord and Sentry where someone will see it (#4373).
+     * Error level on purpose: the member is skipped entirely, and error is the only level that reaches
+     * Discord and Sentry.
      *
      * @param array<int, string> $tierIds
      */

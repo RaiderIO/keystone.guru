@@ -2,14 +2,10 @@
 
 namespace App\Service\Patreon\Dtos\Diagnostics;
 
-use App\Logic\Utils\EmailMasker;
 use App\Service\Patreon\Dtos\PatreonMemberSyncPlan;
 
 /**
  * One member's sync outcome, reduced to what is safe to hand back over the API.
- *
- * Built from a {@see PatreonMemberSyncPlan} rather than recomputed, so it describes what a real sync
- * would do and not merely what a second implementation thinks it would do.
  */
 class PatreonMemberDiagnostics
 {
@@ -44,14 +40,14 @@ class PatreonMemberDiagnostics
     /**
      * @param array<string, mixed> $member The raw campaign member the plan was built from
      */
-    public static function fromPlan(PatreonMemberSyncPlan $plan, array $member): self
+    public static function fromPlan(PatreonMemberSyncPlan $plan, array $member, ?string $maskedEmail): self
     {
         $patronStatus     = $member['attributes']['patron_status'] ?? null;
         $lastChargeStatus = $member['attributes']['last_charge_status'] ?? null;
 
         return new self(
             memberId: $plan->memberId,
-            maskedEmail: EmailMasker::mask($plan->memberEmail),
+            maskedEmail: $maskedEmail,
             result: $plan->result->name,
             linked: $plan->patreonUserLink !== null,
             userId: $plan->patreonUserLink?->user_id,

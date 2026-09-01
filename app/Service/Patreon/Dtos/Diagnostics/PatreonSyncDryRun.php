@@ -4,9 +4,6 @@ namespace App\Service\Patreon\Dtos\Diagnostics;
 
 /**
  * The whole hourly sync, computed but not executed.
- *
- * The member lists are deliberately only the interesting ones - a campaign has hundreds of members whose
- * sync is a no-op and listing them would bury the few that matter.
  */
 class PatreonSyncDryRun
 {

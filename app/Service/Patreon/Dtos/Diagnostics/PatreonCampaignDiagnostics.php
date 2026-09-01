@@ -4,9 +4,6 @@ namespace App\Service\Patreon\Dtos\Diagnostics;
 
 /**
  * The campaign as the sync sees it: every tier, what it resolves to, and anything it cannot map.
- *
- * Answers "is the campaign itself configured in a way this code can handle?" in one call, without
- * needing a specific patron to look at.
  */
 class PatreonCampaignDiagnostics
 {

@@ -18,10 +18,8 @@ enum ApplyPaidBenefitsForMemberResult: int
     case UnknownBenefits = 20;
 
     /**
-     * The member is entitled to a tier that the campaign response does not describe, so the benefits we
-     * computed for them are incomplete. Syncing anyway would compute an empty benefit set and read as
-     * "this member unsubscribed", revoking everything a paying patron holds - so the member is skipped
-     * instead, exactly as UnknownBenefits does above (#4373).
+     * The member is entitled to a tier that the campaign response does not describe, so the benefits
+     * computed for them are incomplete and nothing is written.
      */
     case UnknownTiers = 30;
 }

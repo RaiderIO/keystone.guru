@@ -75,8 +75,7 @@ class PatreonApiServiceLogging extends StructuredLogging implements PatreonApiSe
     }
 
     /**
-     * The full response is far too large to log - what matters when diagnosing a sync is only how much
-     * of it arrived, so log the shape rather than the contents (#4373).
+     * The full response is far too large to log, so log its shape rather than its contents.
      *
      * @return array<string, mixed>
      */

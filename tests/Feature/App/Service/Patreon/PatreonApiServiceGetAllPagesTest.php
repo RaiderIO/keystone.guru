@@ -48,8 +48,7 @@ final class PatreonApiServiceGetAllPagesTest extends PublicTestCase
         $this->assertSame(2, $result->pageCount);
         $this->assertSame(2, $result->rowCount);
         $this->assertSame(['1', '2'], array_column($result->response['data'], 'id'));
-        // A campaign's tiers live in `included` - keeping only the last page's would make an entitled
-        // tier unresolvable, which silently revokes benefits
+        // A campaign's tiers live in `included` - keeping only the last page's makes a tier unresolvable
         $this->assertSame(['t1', 't2'], array_column($result->response['included'], 'id'));
     }
 
@@ -70,7 +69,7 @@ final class PatreonApiServiceGetAllPagesTest extends PublicTestCase
         // Act
         $result = $this->getAllPages($apiClient);
 
-        // Assert - the partial page set must never be mistakable for the complete campaign
+        // Assert
         $this->assertTrue($result->truncated);
         $this->assertTrue($result->hasErrors());
         $this->assertSame(1, $result->rowCount);
@@ -101,7 +100,7 @@ final class PatreonApiServiceGetAllPagesTest extends PublicTestCase
     #[Test]
     public function getAllPages_givenANextLinkWithoutACursor_treatsItAsTruncated(): void
     {
-        // Arrange - a next page we are told about but cannot ask for is missing data just the same
+        // Arrange - a next page we are told about but cannot ask for
         $apiClient = $this->createMockPublic(API::class);
         $apiClient->method('get_data')->willReturn([
             'data'  => [['id' => '1', 'type' => 'member']],

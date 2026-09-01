@@ -91,9 +91,9 @@ class PatreonApiService implements PatreonApiServiceInterface
             $result = $this->getAllPages(
                 $this->getApiClient($accessToken),
                 sprintf(
-                    // patron_status / last_charge_status are not used by the sync itself, but a pledge
-                    // that has not settled yet reports no entitled tiers - which reads as "unsubscribed"
-                    // - and without these fields there is no way to tell the two apart afterwards (#4373)
+                    // patron_status / last_charge_status are unused by the sync, but a pledge that has not
+                    // settled yet reports no entitled tiers - which is indistinguishable from "unsubscribed"
+                    // without them
                     'campaigns/%d/members?include=currently_entitled_tiers&%s=email,patron_status,last_charge_status,last_charge_date',
                     config('keystoneguru.patreon.campaign_id'),
                     urlencode('fields[member]'),
@@ -125,8 +125,8 @@ class PatreonApiService implements PatreonApiServiceInterface
     /**
      * Walks every page of a paginated endpoint and merges the pages into one response.
      *
-     * A page that fails - an undecodable body (Patreon serving an HTML 502 rather than JSON) or a page
-     * carrying `errors` - stops the walk, and the result is marked truncated *and* given an `errors` key.
+     * A page that fails - an undecodable body, or one carrying `errors` - stops the walk; the result is
+     * then marked truncated and given an `errors` key.
      */
     private function getAllPages(API $apiClient, string $suffix): PatreonPagedResponse
     {
@@ -162,8 +162,8 @@ class PatreonApiService implements PatreonApiServiceInterface
                 // `data` is a list for collection endpoints and a single object for a resource endpoint
                 // (campaigns/{id}) - array_merge handles both, string keys of the latter simply overwrite
                 $resultData = array_merge($resultData, $pageResult['data'] ?? []);
-                // `included` must be merged too: a campaign's tiers and benefits live there, so keeping
-                // only the last page's would silently drop tiers and make entitled tier ids unresolvable
+                // A campaign's tiers and benefits live in `included`, so keeping only the last page's would
+                // drop tiers and make entitled tier ids unresolvable
                 $resultIncluded = array_merge($resultIncluded, $pageResult['included'] ?? []);
 
                 $cursor = $pageResult['meta']['pagination']['cursors']['next'] ?? null;
@@ -171,9 +171,7 @@ class PatreonApiService implements PatreonApiServiceInterface
                 if (!isset($pageResult['links']['next'])) {
                     $next = null;
                 } elseif ($cursor === null) {
-                    // A next page we are told about but cannot ask for leaves us just as short of the
-                    // full campaign as a failed request does, so it counts as truncation rather than as
-                    // the end of the list
+                    // A next page without a cursor leaves us as short of the campaign as a failed request
                     $next      = null;
                     $truncated = true;
                     $errors[]  = ['detail' => sprintf('Page %d of "%s" advertised a next page without a cursor', $count, $suffix)];
@@ -192,7 +190,7 @@ class PatreonApiService implements PatreonApiServiceInterface
             }
         } while ($next !== null);
 
-        // Assign the data back to the last successful request and pretend that THAT's all the data there is
+        // Assign every page's rows back onto the last response
         $response = $requestResult ?? [];
         if ($resultData !== []) {
             $response['data'] = $resultData;

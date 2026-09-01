@@ -8,12 +8,7 @@ use Illuminate\Validation\Validator;
 use Override;
 
 /**
- * Identifies the account to diagnose by exactly one of id, username or email (#4373).
- *
- * Three ways in because the account is named differently depending on where the question came from: a
- * support message gives a username, the Patreon side gives an email, an admin page gives an id. The
- * account is always an *input* here - there is deliberately no endpoint that lists accounts or patrons,
- * so these endpoints cannot be turned into a patron export.
+ * Identifies the account to diagnose by exactly one of id, username or email.
  */
 class PatreonUserDiagnosticsRequest extends APIFormRequest
 {
@@ -49,8 +44,7 @@ class PatreonUserDiagnosticsRequest extends APIFormRequest
     /**
      * The account being asked about, or null when nothing was given or nothing matched.
      *
-     * Deliberately not named `getUser()`: Symfony's Request already has one, and it returns the HTTP
-     * Basic auth username.
+     * Not named `getUser()`: Symfony's Request already has one, returning the HTTP Basic auth username.
      */
     public function getTargetUser(): ?User
     {

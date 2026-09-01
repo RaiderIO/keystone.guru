@@ -13,7 +13,7 @@ class PatreonSyncRunFactory extends Factory
     protected $model = PatreonSyncRun::class;
 
     /**
-     * Define the model's default state - a healthy run that fetched the whole campaign.
+     * Define the model's default state.
      */
     public function definition(): array
     {
@@ -35,7 +35,7 @@ class PatreonSyncRunFactory extends Factory
         ];
     }
 
-    /** A run whose member fetch gave up part way through - the failure mode of #4373. */
+    /** A run whose member fetch gave up part way through. */
     public function truncated(): self
     {
         return $this->state(fn(array $attributes) => [

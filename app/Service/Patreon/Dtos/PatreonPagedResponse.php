@@ -3,8 +3,7 @@
 namespace App\Service\Patreon\Dtos;
 
 /**
- * The result of walking every page of a paginated Patreon API response, together with what it took to
- * get there.
+ * The result of walking every page of a paginated Patreon API response.
  */
 class PatreonPagedResponse
 {

@@ -27,8 +27,7 @@ class PatreonCampaignDiagnosticsResource extends JsonResource
                     'grants_nothing'         => $tier->grantsNothing(),
                 ], $this->resource->tiers),
                 'known_benefit_titles' => $this->resource->knownBenefitTitles,
-                // Every member entitled to one of these is skipped entirely until it is added to
-                // PatreonBenefit::ALL
+                // Every member entitled to one of these is skipped until it is added to PatreonBenefit::ALL
                 'unknown_benefit_titles'    => $this->resource->unknownBenefitTitles,
                 'tier_ids_granting_nothing' => array_map(
                     static fn(PatreonCampaignTierDiagnostics $tier) => $tier->tierId,

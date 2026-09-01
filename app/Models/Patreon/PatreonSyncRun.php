@@ -9,12 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
- * One run of `patreon:refreshmembers` and how much of the campaign it managed to fetch (#4373).
- *
- * This exists because the sync's outcome is otherwise invisible from outside production: everything it
- * has to say below `error` level goes to a log file inside the container. A run that reports success
- * while having fetched only part of the member list looks identical to a healthy one in every other
- * respect - here it is a row with a lower `members_fetched` than its predecessor.
+ * One run of `patreon:refreshmembers` and how much of the campaign it managed to fetch.
  *
  * @property int         $id
  * @property Carbon      $started_at

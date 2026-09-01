@@ -18,8 +18,6 @@ class PatreonSyncDryRunResource extends JsonResource
     {
         return [
             'data' => [
-                // Compare against the recent sync runs: a member count well below theirs means the
-                // campaign is not currently coming back complete
                 'pages_fetched'            => $this->resource->pageCount,
                 'members_fetched'          => $this->resource->memberCount,
                 'result_counts'            => $this->resource->resultCounts,

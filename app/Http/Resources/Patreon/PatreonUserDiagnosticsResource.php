@@ -21,7 +21,6 @@ class PatreonUserDiagnosticsResource extends JsonResource
                 'user_id'  => $this->resource->userId,
                 'username' => $this->resource->username,
 
-                // The database side: what the account holds right now, and when a sync last touched it
                 'patreon_user_link_id' => $this->resource->patreonUserLinkId,
                 'link_email'           => $this->resource->maskedLinkEmail,
                 'account_email'        => $this->resource->maskedAccountEmail,
@@ -31,17 +30,13 @@ class PatreonUserDiagnosticsResource extends JsonResource
                 'last_sync_result'     => $this->resource->lastSyncResult,
                 'duplicate_link_ids'   => $this->resource->duplicateLinkIds,
 
-                // The campaign side, absent when Patreon could not be reached
+                // Absent when Patreon could not be reached
                 'member' => $this->resource->member === null
                     ? null
                     : new PatreonMemberDiagnosticsResource($this->resource->member),
 
-                // A campaign member carrying this account's email while the link carries another one:
-                // the patron changed their Patreon email after linking and has been unmatched since
                 'email_drift_candidate' => $this->resource->emailDriftCandidate,
 
-                // True when the newest recorded run started after this link was last seen - the sync ran
-                // but never reached this patron, rather than the campaign having dropped them
                 'missed_by_latest_run' => $this->resource->missedByLatestRun(),
                 'latest_sync_run'      => $this->resource->latestSyncRun === null
                     ? null

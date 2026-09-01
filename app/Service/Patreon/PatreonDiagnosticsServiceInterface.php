@@ -8,8 +8,7 @@ use App\Service\Patreon\Dtos\Diagnostics\PatreonSyncDryRun;
 use App\Service\Patreon\Dtos\Diagnostics\PatreonUserDiagnostics;
 
 /**
- * Read-only views onto what the hourly Patreon sync is doing, for diagnosing a member who did not get
- * their benefits (#4373).
+ * Read-only views onto what the hourly Patreon sync is doing.
  */
 interface PatreonDiagnosticsServiceInterface
 {

@@ -118,11 +118,8 @@ class PatreonService implements PatreonServiceInterface
             $pagedResponse   = $this->patreonApiService->getCampaignMembers($adminUser->patreonUserLink->access_token);
             $membersResponse = $pagedResponse->response;
 
-            // A truncated fetch sets `errors`, so a partial member list never reaches the caller as if it
-            // were the whole campaign. It is still returned as a (memberless) result rather than as null,
-            // because how far the fetch got before it stopped is the single most useful thing to record
-            // about a failed run - collapsing it to null makes a failure on page 5 look like one on page
-            // 1, and the difference is exactly what identifies truncation afterwards (#4373)
+            // A truncated fetch comes back memberless rather than as null, so the caller can still record
+            // how far it got - a failure on page 5 is not the same as one on page 1
             if (isset($membersResponse['errors'])) {
                 $this->log->loadCampaignTiersRetrieveMembersErrors($membersResponse);
 
@@ -163,10 +160,8 @@ class PatreonService implements PatreonServiceInterface
 
             $patreonUserLink = $plan->patreonUserLink;
 
-            // Stamp every link the campaign still lists, whatever the outcome was. This is the only record
-            // that a sync actually reached this patron: a last_seen_at hours behind the newest
-            // patreon_sync_runs row means the fetch never got to the page they were on, which is
-            // indistinguishable from "still subscribed and untouched" without it (#4373)
+            // Stamp every link the campaign still lists, whatever the outcome was - this is the only record
+            // that a sync actually reached this patron
             if ($patreonUserLink !== null) {
                 PatreonUserLink::query()->whereKey($patreonUserLink->id)->update([
                     'last_seen_at'     => Carbon::now(),
@@ -174,8 +169,8 @@ class PatreonService implements PatreonServiceInterface
                 ]);
             }
 
-            // Anything other than Applied means we could not work out a trustworthy benefit set for this
-            // member, so nothing is written - see the individual enum cases for why each one bails
+            // Anything other than Applied means no trustworthy benefit set could be worked out, so nothing
+            // is written - see the individual enum cases
             if ($plan->result !== ApplyPaidBenefitsForMemberResult::Applied || $patreonUserLink === null || $plan->manuallyGranted) {
                 return $plan->result;
             }
@@ -184,15 +179,13 @@ class PatreonService implements PatreonServiceInterface
 
             // If the user has no benefits (maybe user unsubbed or didn't pay up)
             if ($plan->resolvedBenefits === []) {
-                // Remove all their tiers. Deliberately a row-level delete rather than a revoke of each
-                // benefit in the plan: it also clears rows for benefits that are no longer in
-                // PatreonBenefit::ALL, which have no id to revoke by
+                // A row-level delete rather than a revoke of each benefit in the plan: it also clears rows
+                // for benefits no longer in PatreonBenefit::ALL, which have no id to revoke by
                 $patreonUserLink->patreonUserBenefits()->delete();
                 $this->log->applyPaidBenefitsForMemberRemovedAllBenefits();
             } else {
-                // Write against the link we actually matched the member to, not $user->patreon_user_link_id -
-                // the two only differ when the account's link pointer is stale, and in that case the pointer
-                // is the wrong one to trust: it would apply the diff to a link we never looked at
+                // Write against the link the member was matched to, not $user->patreon_user_link_id: the two
+                // differ when the account's link pointer is stale, and then the pointer is the wrong one
                 foreach ($plan->benefitsToAdd as $benefit) {
                     PatreonUserBenefit::create([
                         'patreon_user_link_id' => $patreonUserLink->id,
@@ -227,9 +220,6 @@ class PatreonService implements PatreonServiceInterface
 
     /**
      * Works out - without writing anything - what a sync would do to the account behind one campaign member.
-     *
-     * applyPaidBenefitsForMember() above is nothing more than "build this plan, then execute it", which is
-     * what lets the diagnostic endpoints (#4373) report on a member's sync without altering it.
      *
      * @param array<int, array<string, mixed>> $campaignBenefits
      * @param array<int, array<string, mixed>> $campaignTiers
@@ -318,10 +308,8 @@ class PatreonService implements PatreonServiceInterface
         }
         $resolvedBenefits = $resolvedBenefits->unique()->values();
 
-        // A tier the campaign response does not describe leaves us with an incomplete benefit set, and an
-        // incomplete set is far more dangerous here than no sync at all: with every tier unresolved it
-        // computes to empty, which reads as "unsubscribed" further down and revokes everything a paying
-        // patron holds. Bail out and name the tier instead (#4373)
+        // A tier the campaign response does not describe leaves an incomplete benefit set behind: with every
+        // tier unresolved it computes to empty, which reads as "unsubscribed" below and revokes everything
         if ($unresolvedTierIds !== []) {
             $this->log->applyPaidBenefitsForMemberUnknownPatreonTiers($unresolvedTierIds, $user->email);
 
@@ -532,13 +520,11 @@ class PatreonService implements PatreonServiceInterface
     /**
      * The benefit titles one tier grants, or null when the campaign does not describe that tier at all.
      *
-     * Null and an empty array mean very different things to the caller - "we do not know what this tier
-     * grants" versus "this tier grants nothing" - and collapsing the two is what made an unresolvable
-     * tier silently revoke a patron's benefits (#4373).
+     * Null and an empty array mean different things to the caller: "we do not know what this tier grants"
+     * versus "this tier grants nothing".
      *
-     * Every id here is compared as a string on purpose: the Patreon API is JSON:API, where resource ids
-     * are strings, and a `===` against an int would never match - which lands on exactly the "tier not
-     * found" path this method exists to distinguish.
+     * Ids are compared as strings: the Patreon API is JSON:API, where resource ids are strings, so a
+     * `===` against an int would never match and would land on the "tier not found" path.
      *
      * @param  array<int, array<string, mixed>> $campaignTiers
      * @param  array<int, array<string, mixed>> $campaignBenefits

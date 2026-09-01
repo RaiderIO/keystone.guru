@@ -11,17 +11,11 @@ use Illuminate\Support\Facades\Http;
 use Throwable;
 
 /**
- * Asks a keystone.guru deployment (production by default) why the hourly Patreon sync did or did not
- * apply someone's benefits, and prints the answer (#4373).
+ * A client for the read-only `/api/v1/patreon` diagnostics endpoints on a remote deployment.
  *
- * Nothing here runs locally against local data - the Patreon campaign only exists on the deployment that
- * holds the admin account's tokens, so this is purely a client for the read-only diagnostics endpoints
- * under `/api/v1/patreon`. It is modelled on `combatlog:importenemyfailures`, including reading HTTP
- * Basic credentials from stdin: the container cannot see `~/.config`, so a host path passed as a file
- * would not resolve.
- *
- * The account named by `--user` / `--email` is an id/username/email on the *remote* deployment. Patron
- * email addresses come back masked, which is a property of the endpoints rather than of this command.
+ * The campaign only exists on the deployment holding the admin account's tokens, so there is nothing to
+ * run against local data. HTTP Basic credentials are read from stdin: the container cannot see
+ * `~/.config`, so a host path passed as a file would not resolve.
  */
 class DiagnosePatreonSync extends Command
 {
@@ -79,7 +73,7 @@ class DiagnosePatreonSync extends Command
         [$authUser, $authPassword] = $credentials;
 
         // Retry only what a retry can fix - a connection failure or a 5xx - never a 4xx. The campaign
-        // endpoints walk every page of the Patreon API, so the timeout is generous.
+        // endpoints walk every page of the Patreon API, hence the generous timeout
         $http = Http::withBasicAuth($authUser, $authPassword)
             ->acceptJson()
             ->timeout(180)
@@ -91,8 +85,8 @@ class DiagnosePatreonSync extends Command
                 throw: false,
             );
 
-        // Each requested section runs even when an earlier one failed - a campaign endpoint being
-        // unreachable should not withhold the run history, which is often the answer on its own
+        // Each section runs even when an earlier one failed: an unreachable campaign endpoint should not
+        // withhold the run history
         $failed = false;
 
         if ($showRuns && !$this->showSyncRuns($http, $baseUrl)) {
@@ -152,9 +146,7 @@ class DiagnosePatreonSync extends Command
             ], $runs),
         );
 
-        // The signal this whole table exists for: a run that saw markedly fewer members than its
-        // predecessor never reached the rest of the campaign, and every member it missed kept whatever
-        // benefits they had - with a zero exit code and no alert
+        // A run that saw markedly fewer members than its predecessor never reached the rest of the campaign
         $memberCounts = array_map(static fn(array $run): int => (int)($run['members_fetched'] ?? 0), $runs);
         $healthy      = array_filter($memberCounts);
         if ($healthy !== []) {
@@ -282,8 +274,7 @@ class DiagnosePatreonSync extends Command
     {
         $query = [];
         if ($user !== null) {
-            // An all-digits value is an account id, anything else a username - both are accepted by the
-            // endpoint, and which one was meant is unambiguous in practice
+            // An all-digits value is an account id, anything else a username
             $query[ctype_digit($user) ? 'user_id' : 'username'] = $user;
         }
         if ($email !== null) {
@@ -328,8 +319,7 @@ class DiagnosePatreonSync extends Command
     }
 
     /**
-     * Says which of the failure modes this account's state actually matches, so the tables above do not
-     * have to be read by eye every time.
+     * Says which of the failure modes this account's state matches.
      *
      * @param array<string, mixed>      $data
      * @param array<string, mixed>|null $member

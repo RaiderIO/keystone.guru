@@ -50,17 +50,12 @@ Route::prefix('v1')->group(static function () {
         Route::get('/thumbnailJob/{dungeonRouteThumbnailJob}', new APIDungeonRouteThumbnailJobController()->show(...))->name('api.v1.thumbnailjob.show');
     });
 
-    // Read-only Patreon sync diagnostics (#4373) - same gate as the combat log triage endpoints above, so
-    // the tooling can be driven from a local dev machine without a production admin account. Every patron
-    // email in these responses is masked, and the account to inspect is always an input: there is
-    // deliberately no endpoint here that lists patrons.
     Route::middleware(['api_role:admin|ai_agent'])->prefix('patreon')->group(static function () {
         // Reads the recorded run history and nothing else - no Patreon traffic, so no throttle
         Route::get('sync-runs', new APIPatreonDiagnosticsController()->syncRuns(...))->name('api.v1.patreon.sync_runs');
 
-        // Everything below walks the whole campaign, the member list included, so a tight loop over any
-        // of them would spend the campaign's Patreon rate limit and take the hourly sync down with it.
-        // The per-user endpoint looks cheap but is not: it scans the member list to find its member.
+        // Everything below walks the whole campaign - the per-user endpoint included - and shares Patreon's
+        // rate limit with the hourly sync
         Route::middleware('throttle:api-patreon-diagnostics')->group(static function () {
             Route::get('user', new APIPatreonDiagnosticsController()->user(...))->name('api.v1.patreon.user');
             Route::get('campaign', new APIPatreonDiagnosticsController()->campaign(...))->name('api.v1.patreon.campaign');

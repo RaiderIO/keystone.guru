@@ -20,8 +20,7 @@ use Illuminate\Support\Collection;
 interface PatreonSyncRunRepositoryInterface extends BaseRepositoryInterface
 {
     /**
-     * The most recent runs, newest first - the shape the diagnostics endpoint reports, where a drop in
-     * `members_fetched` between consecutive rows is what identifies a truncated fetch (#4373).
+     * The most recent runs, newest first.
      *
      * @return Collection<int, PatreonSyncRun>
      */

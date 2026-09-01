@@ -39,10 +39,6 @@ class PatreonMemberSyncPlan
     ) {
     }
 
-    /**
-     * Whether executing this plan would change anything at all - a sync that adds and revokes nothing is
-     * the normal steady state for an already-correct account.
-     */
     public function changesAnything(): bool
     {
         return $this->benefitsToAdd !== [] || $this->benefitsToRevoke !== [];

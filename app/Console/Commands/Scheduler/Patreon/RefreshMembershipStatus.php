@@ -37,10 +37,8 @@ class RefreshMembershipStatus extends SchedulerCommand
         PatreonSyncRunRepositoryInterface $patreonSyncRunRepository,
     ): int {
         return $this->trackTime(function () use ($patreonService, $patreonSyncRunRepository) {
-            // Every exit below records how far the run got before it stopped. Nothing about this command's
-            // outcome is visible from outside production otherwise - its log lines never leave the
-            // container - and "the run succeeded but only fetched half the campaign" is precisely the
-            // state that let a paying patron go unnoticed for hours (#4373)
+            // Every exit below records how far the run got before it stopped - the command's log lines
+            // never leave the container, so the row is the only trace of its outcome
             $syncRun  = $patreonSyncRunRepository->create(['started_at' => Carbon::now()]);
             $finished = false;
 
@@ -74,16 +72,15 @@ class RefreshMembershipStatus extends SchedulerCommand
                     return $this->finishRun($syncRun, false, 'Unable to load the campaign members');
                 }
 
-                // How far the fetch got is recorded before anything else decides what to do with it, so a
-                // truncated run says which page it died on rather than looking like a total failure
+                // Recorded before anything decides what to do with it, so a truncated run says where it
+                // stopped rather than looking like a total failure
                 $syncRun->update([
                     'pages_fetched'   => $campaignMembers->pageCount,
                     'members_fetched' => $campaignMembers->rowCount,
                 ]);
 
-                // A partial member list is never processed: every member it does not contain would be read as
-                // a member who cancelled, and revoking a paying patron's benefits is the failure this whole
-                // change exists to prevent (#4373)
+                // A partial member list is never processed: every member it does not contain would read as
+                // a member who cancelled, and have their benefits revoked
                 if ($campaignMembers->truncated) {
                     $this->error(sprintf(
                         'The campaign member list came back truncated after %d page(s) and %d member(s) - not applying anything',
@@ -134,9 +131,8 @@ class RefreshMembershipStatus extends SchedulerCommand
                     } catch (Throwable $throwable) {
                         $this->error(sprintf('Unable to apply the paid benefits of member %s: %s', $memberId, $throwable->getMessage()));
 
-                        // A systemic failure fails on every single member - reporting each one would write the same
-                        // stack trace to the log hundreds of times over. The first few are enough to diagnose it, and
-                        // the summary below still names every member that failed
+                        // A systemic failure fails on every member - reporting each one would write the same stack
+                        // trace hundreds of times. The summary below still names every member that failed
                         if (count($failedMemberIds) < self::MAX_REPORTED_MEMBER_FAILURES) {
                             $this->reportThrowable($throwable, ['memberId' => $memberId]);
                         }
@@ -166,8 +162,7 @@ class RefreshMembershipStatus extends SchedulerCommand
 
                 return $this->finishRun($syncRun, true);
             } finally {
-                // An exception thrown anywhere above skips every explicit finishRun() call - without this, the
-                // run's row would stay open forever and the hourly sync would look like it never finished
+                // An exception thrown above skips every explicit finishRun() call, leaving the run's row open
                 if (!$finished) {
                     $this->finishRun($syncRun, false, 'The run was interrupted by an unexpected error');
                 }
@@ -176,8 +171,7 @@ class RefreshMembershipStatus extends SchedulerCommand
     }
 
     /**
-     * Closes off the run's row and returns the exit code that goes with it, so no exit path can forget
-     * to record its outcome.
+     * Closes off the run's row and returns the exit code that goes with it.
      */
     private function finishRun(PatreonSyncRun $syncRun, bool $successful, ?string $failureReason = null, bool $truncated = false): int
     {

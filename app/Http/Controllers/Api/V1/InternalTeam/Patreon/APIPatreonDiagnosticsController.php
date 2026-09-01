@@ -15,20 +15,15 @@ use Illuminate\Http\Request;
 use Teapot\StatusCode;
 
 /**
- * Read-only diagnostics for the hourly Patreon sync, so a member who did not get their benefits can be
- * investigated from a local dev machine against production data (#4373).
+ * Read-only diagnostics for the hourly Patreon sync.
  *
- * All four endpoints are GET and none of them grants, revokes or links anything. They are not entirely
- * without side effects: any of them that reaches the Patreon API goes through
- * `PatreonService::loadAdminUser()`, which writes a refreshed admin token back when the stored one has
- * expired - the same write the hourly command performs.
- *
- * Patron emails are masked in every response, and the campaign-wide endpoints carry no email at all
- * beyond the members they single out, so the `ai_agent` role these are open to cannot enumerate patrons.
+ * None of these endpoints grants, revokes or links anything, but they are not side-effect free: reaching
+ * the Patreon API goes through `PatreonService::loadAdminUser()`, which persists a refreshed admin token
+ * when the stored one has expired.
  */
 class APIPatreonDiagnosticsController extends Controller
 {
-    /** How many runs the history returns by default - a bit over a day at one run per hour. */
+    /** How many runs the history returns by default. */
     private const int DEFAULT_SYNC_RUN_LIMIT = 30;
 
     private const int MAX_SYNC_RUN_LIMIT = 500;
@@ -52,9 +47,6 @@ class APIPatreonDiagnosticsController extends Controller
     ): JsonResponse {
         $limit = max(1, min(self::MAX_SYNC_RUN_LIMIT, (int)$request->query('limit', (string)self::DEFAULT_SYNC_RUN_LIMIT)));
 
-        // Costs nothing and touches no external API, which is why it is the first call to make: a
-        // members_fetched that drops between consecutive runs is a truncated fetch, and every member the
-        // short run never saw kept whatever benefits they already had
         return response()->json([
             'data' => PatreonSyncRunResource::collection($patreonSyncRunRepository->getMostRecent($limit)),
         ]);
@@ -100,8 +92,7 @@ class APIPatreonDiagnosticsController extends Controller
         $dryRun = $patreonDiagnosticsService->getSyncDryRun();
 
         if ($dryRun === null) {
-            // Includes a truncated member fetch - conclusions drawn from half a campaign would be worse
-            // than none, since every unfetched member looks like a member who left
+            // Includes a truncated member fetch: every unfetched member would read as a member who left
             return response()->json(['error' => 'Unable to load the campaign members from Patreon'], StatusCode::BAD_GATEWAY);
         }
 

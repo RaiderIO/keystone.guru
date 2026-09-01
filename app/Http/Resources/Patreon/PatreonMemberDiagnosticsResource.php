@@ -17,8 +17,7 @@ class PatreonMemberDiagnosticsResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'member_id' => $this->resource->memberId,
-            // Masked, never the real address - see App\Logic\Utils\EmailMasker
+            'member_id'           => $this->resource->memberId,
             'email'               => $this->resource->maskedEmail,
             'result'              => $this->resource->result,
             'linked'              => $this->resource->linked,

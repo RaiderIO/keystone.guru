@@ -7,11 +7,6 @@ use Illuminate\Support\Carbon;
 
 /**
  * Everything known about one Keystone account's Patreon state, from both sides at once.
- *
- * The three things this is built to separate, since they are indistinguishable from the outside:
- * benefits that were stored but are not showing up, an account the campaign never matched (a stale link
- * email, or no link at all), and an account the sync simply never reached because the member fetch was
- * truncated before its page (#4373).
  */
 class PatreonUserDiagnostics
 {
@@ -39,11 +34,7 @@ class PatreonUserDiagnostics
     ) {
     }
 
-    /**
-     * Whether the newest recorded sync run finished after this link was last seen. True means the sync
-     * ran but never reached this patron - the truncation signature - rather than the campaign having
-     * dropped them.
-     */
+    /** Whether the newest recorded sync run finished after this link was last seen. */
     public function missedByLatestRun(): bool
     {
         if ($this->latestSyncRun === null || $this->patreonUserLinkId === null) {

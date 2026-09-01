@@ -63,8 +63,7 @@ final class PatreonServicePlanTest extends PublicTestCase
     #[Test]
     public function planPaidBenefitsForMember_givenAnEntitledTier_resolvesItsBenefitsDespiteStringIds(): void
     {
-        // Arrange - JSON:API ids are strings; comparing them against an int would find no tier at all,
-        // which lands straight on the silent-revoke path this test exists to keep shut
+        // Arrange - JSON:API ids are strings; comparing them against an int would find no tier at all
         $this->createLinkedUser();
 
         // Act
@@ -101,8 +100,8 @@ final class PatreonServicePlanTest extends PublicTestCase
     #[Test]
     public function applyPaidBenefitsForMember_givenATierTheCampaignDoesNotDescribe_leavesExistingBenefitsAlone(): void
     {
-        // Arrange - the #4373 regression guard: an unresolvable tier computes to an empty benefit set,
-        // which used to read as "unsubscribed" and delete everything a paying patron holds
+        // Arrange - an unresolvable tier computes to an empty benefit set, which must not read as
+        // "unsubscribed"
         $this->createLinkedUser();
         $this->grantBenefit(PatreonBenefit::AD_FREE);
 

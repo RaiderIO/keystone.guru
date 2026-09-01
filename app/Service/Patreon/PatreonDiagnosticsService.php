@@ -2,7 +2,6 @@
 
 namespace App\Service\Patreon;
 
-use App\Logic\Utils\EmailMasker;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Patreon\PatreonUserLink;
 use App\Models\User;
@@ -14,20 +13,16 @@ use App\Service\Patreon\Dtos\Diagnostics\PatreonMemberDiagnostics;
 use App\Service\Patreon\Dtos\Diagnostics\PatreonSyncDryRun;
 use App\Service\Patreon\Dtos\Diagnostics\PatreonUserDiagnostics;
 use App\Service\Patreon\Dtos\PatreonMemberSyncPlan;
+use Illuminate\Support\Str;
 
 /**
- * "Read-only" is meant about Patreon state and benefit rows: nothing here grants, revokes or links
- * anything. It is not entirely side-effect free, because reaching the Patreon API at all goes through
- * `PatreonService::loadAdminUser()`, which persists a refreshed admin token when the stored one has
- * expired. That write is the same one the hourly sync performs and is unavoidable without a second
- * token path.
+ * Read-only as to Patreon state and benefit rows. Not side-effect free: reaching the Patreon API goes
+ * through `PatreonService::loadAdminUser()`, which persists a refreshed admin token when the stored one
+ * has expired.
  */
 class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
 {
-    /**
-     * How many members of a single kind are listed in a dry run. A campaign-wide problem affects every
-     * member at once, and the first handful say as much as all of them would.
-     */
+    /** How many members of a single kind are listed in a dry run. */
     private const int MAX_LISTED_MEMBERS = 25;
 
     public function __construct(
@@ -94,8 +89,7 @@ class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
             return null;
         }
 
-        // A dry run that cannot see the entire campaign must not report per-member conclusions drawn from
-        // half of it - every member the fetch missed would show up as one about to lose their benefits
+        // Every member a truncated fetch missed would report as one about to lose their benefits
         $campaignMembers = $this->patreonService->loadCampaignMembers();
         if ($campaignMembers === null || $campaignMembers->truncated) {
             return null;
@@ -143,8 +137,8 @@ class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
         $user->load(['patreonUserLink']);
         $patreonUserLink = $user->patreonUserLink;
 
-        // Rows the account's own pointer does not name. The email match in the sync uses ->first(), so a
-        // second row for the same account makes which one gets written to arbitrary
+        // Rows the account's own pointer does not name: the sync's email match uses ->first(), so a second
+        // row for the same account makes which one gets written to arbitrary
         /** @var array<int, int> $duplicateLinkIds */
         $duplicateLinkIds = PatreonUserLink::query()
             ->where('user_id', $user->id)
@@ -174,18 +168,17 @@ class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
                     $member = PatreonMemberDiagnostics::fromPlan(
                         $this->patreonService->planPaidBenefitsForMember($campaignBenefits, $campaignTiers, $campaignMember),
                         $campaignMember,
+                        self::maskEmail($memberEmail),
                     );
 
                     continue;
                 }
 
-                // The link stores whatever the patron's Patreon email was at link time, and the campaign
-                // reports what it is now. A campaign member carrying the *account's* email while the link
-                // carries a different one is a patron who changed their Patreon email and has been
-                // silently unmatched ever since - a MemberNotLinked that looks exactly like never having
-                // linked at all (#4373)
+                // The link stores the patron's Patreon email as it was at link time; the campaign reports
+                // what it is now. A member carrying the *account's* email while the link carries another
+                // is a patron who changed their Patreon email and has been unmatched ever since
                 if (mb_strtolower($memberEmail) === mb_strtolower($user->email)) {
-                    $emailDriftCandidate = EmailMasker::mask($memberEmail);
+                    $emailDriftCandidate = self::maskEmail($memberEmail);
                 }
             }
         }
@@ -194,8 +187,8 @@ class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
             userId: $user->id,
             username: $user->name,
             patreonUserLinkId: $patreonUserLink?->id,
-            maskedLinkEmail: EmailMasker::mask($patreonUserLink?->email),
-            maskedAccountEmail: EmailMasker::mask($user->email),
+            maskedLinkEmail: self::maskEmail($patreonUserLink?->email),
+            maskedAccountEmail: self::maskEmail($user->email),
             manuallyGranted: $patreonUserLink !== null && $patreonUserLink->manually_granted,
             lastSeenAt: $patreonUserLink?->last_seen_at,
             lastSyncResult: $patreonUserLink?->last_sync_result?->name,
@@ -217,6 +210,20 @@ class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
             return;
         }
 
-        $target[] = PatreonMemberDiagnostics::fromPlan($plan, $member);
+        $target[] = PatreonMemberDiagnostics::fromPlan($plan, $member, self::maskEmail($plan->memberEmail));
+    }
+
+    /** Keeps the first character and the domain, so two addresses can still be told apart at a glance. */
+    private static function maskEmail(?string $email): ?string
+    {
+        if ($email === null || $email === '') {
+            return $email;
+        }
+
+        $atPosition = mb_strrpos($email, '@');
+
+        return $atPosition === false || $atPosition < 2
+            ? Str::mask($email, '*', 1)
+            : Str::mask($email, '*', 1, $atPosition - 1);
     }
 }

@@ -19,11 +19,6 @@ class PatreonCampaignTierDiagnostics
     ) {
     }
 
-    /**
-     * A tier granting nothing is not automatically wrong - a free tier legitimately has no benefits - but
-     * it is the shape that makes a paying member compute to an empty benefit set, so it is always worth
-     * looking at when benefits go missing (#4373).
-     */
     public function grantsNothing(): bool
     {
         return $this->benefitTitles === [];
