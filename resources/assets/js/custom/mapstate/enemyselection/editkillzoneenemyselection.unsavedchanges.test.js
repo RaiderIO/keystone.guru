@@ -14,6 +14,13 @@
 global.Signalable = class Signalable {
 };
 global.LeafletKillZoneIconEditMode = {};
+global.MAP_OBJECT_GROUP_KILLZONE = 'killzone';
+// MapState's constructor asserts `map instanceof DungeonMap`; MapObjectMapState's asserts
+// `sourceMapObject instanceof MapObject`.
+global.DungeonMap = class DungeonMap {
+};
+global.MapObject = class MapObject {
+};
 
 // The real inheritance chain, so the inherited default under test is the real one.
 const {MapState} = require('../mapstate');
@@ -110,6 +117,24 @@ describe('MapState unsaved changes warning (#4365)', () => {
         // Assert
         // MapObjectMapState explicitly allows a null source map object - nothing to lose.
         expect(result).toBe(false);
+    });
+});
+
+describe('EditKillZoneEnemySelection constructor (#4431)', () => {
+    // Regression test for the Explore-mode "killZoneMapObjectGroup.register is not a function"
+    // crash: EditKillZoneEnemySelection.isEnemySelectable() constructs a throwaway instance on
+    // every enemy click, including on pages (like Explore) whose hiddenMapObjectGroups option
+    // means MapObjectGroupManager.getByName() returns `false` (its "not found" sentinel) for the
+    // killzone group rather than an actual KillZoneMapObjectGroup.
+    it('does not throw when the killzone map object group is hidden for the current page', () => {
+        // Arrange
+        const fakeMap = Object.assign(Object.create(DungeonMap.prototype), {
+            options: {edit: false},
+            mapObjectGroupManager: {getByName: () => false},
+        });
+
+        // Act / Assert
+        expect(() => new EditKillZoneEnemySelection(fakeMap, null)).not.toThrow();
     });
 });
 
