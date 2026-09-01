@@ -231,6 +231,15 @@ class CommonMapsMap extends InlineCode {
         // snapshot StateManager keeps of document.cookie has to be dropped here - otherwise a
         // getter that happened to run first would keep serving the pre-defaults view of the jar.
         state.invalidateCookieCache();
+
+        // Cookies are shared between tabs but StateManager's cache of them is not, and cookies have
+        // no change event to subscribe to. Changing a map display setting in another tab used to be
+        // picked up here on the next redraw, because every read went straight to document.cookie;
+        // dropping the cache when this tab is focused again restores that, at the one moment the
+        // difference can actually be seen.
+        window.addEventListener('focus', function () {
+            state.invalidateCookieCache();
+        }, false);
     }
 
     /**
