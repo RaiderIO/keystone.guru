@@ -107,3 +107,18 @@
     font-weight: 700;
     line-height: 1;
 }
+
+/* Caps the open mobile menu to the viewport (#4378) - the sticky header doesn't scroll with the
+   page. `dvh` avoids Safari's oversized `100vh`; capped during `.collapsing` too so it doesn't
+   overshoot then snap back once the open animation finishes. */
+@media (max-width: 991.98px) {
+    .ksg-header .navbar-second .navbar-collapse.show,
+    .ksg-header .navbar-second .navbar-collapse.collapsing {
+        max-height: var(--ksg-navbar-collapse-max-height, calc(100dvh - 5rem));
+    }
+
+    .ksg-header .navbar-second .navbar-collapse.show {
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+}
