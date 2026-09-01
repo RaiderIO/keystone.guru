@@ -59,7 +59,7 @@ class APICombatLogControllerCombatLogRouteTheBlindingValeTest extends APICombatL
         try {
             $this->validateResponseStaticData($responseArr);
             $this->validateDungeon($responseArr);
-            $this->validatePulls($responseArr, 15, 655);
+            $this->validatePulls($postBody, $responseArr, 15, 655);
             $this->validateAffixes($responseArr);
             $this->validateBossesResolved($postBody, $responseArr);
         } finally {

@@ -43,10 +43,42 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
     }
 
     /**
+     * The API deliberately falls back to the dungeon's current mapping version when the requested one cannot be
+     * resolved (CombatLogRouteRequestDto::createDungeonRoute()) - an external client posting a version we have since
+     * dropped still gets a route. A fixture must never take that fallback: it would silently re-baseline the
+     * hardcoded counts below against whatever mapping happens to be seeded.
+     *
+     * @param array<string, mixed> $postBody
      * @param array<string, mixed> $responseArr
      */
-    protected function validatePulls(array $responseArr, int $pulls, int $enemyForces): void
+    protected function validateMappingVersion(array $postBody, array $responseArr): void
     {
+        $pinnedVersion = $postBody['settings']['mappingVersion'] ?? null;
+
+        $this->assertNotNull(
+            $pinnedVersion,
+            'Fixture does not pin settings.mappingVersion - it would silently follow every MDT import',
+        );
+
+        $this->assertSame(
+            $pinnedVersion,
+            $responseArr['data']['mappingVersion'],
+            sprintf(
+                'Fixture pins mapping version %d but the route was created on %d - the pinned version no longer exists for this dungeon',
+                $pinnedVersion,
+                $responseArr['data']['mappingVersion'],
+            ),
+        );
+    }
+
+    /**
+     * @param array<string, mixed> $postBody
+     * @param array<string, mixed> $responseArr
+     */
+    protected function validatePulls(array $postBody, array $responseArr, int $pulls, int $enemyForces): void
+    {
+        $this->validateMappingVersion($postBody, $responseArr);
+
         $this->assertCount($pulls, $responseArr['data']['pulls']);
         $this->assertEquals($enemyForces, $responseArr['data']['enemyForces']);
         /** @var MappingVersion|null $mappingVersion */

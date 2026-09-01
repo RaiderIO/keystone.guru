@@ -33,7 +33,7 @@ class APICombatLogControllerCombatLogRouteWindrunnerSpireTest extends APICombatL
         $responseArr = json_decode($response->content(), true);
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 28, 537);
+        $this->validatePulls($postBody, $responseArr, 28, 537);
         $this->validateAffixes($responseArr);
     }
 }

@@ -64,7 +64,7 @@ class APICombatLogControllerCombatLogRouteVoidscarArenaTest extends APICombatLog
         try {
             $this->validateResponseStaticData($responseArr);
             $this->validateDungeon($responseArr);
-            $this->validatePulls($responseArr, 17, 739);
+            $this->validatePulls($postBody, $responseArr, 17, 739);
             $this->validateAffixes($responseArr);
 
             // All three bosses were dropped from the route entirely while the floors' ingame coordinates were

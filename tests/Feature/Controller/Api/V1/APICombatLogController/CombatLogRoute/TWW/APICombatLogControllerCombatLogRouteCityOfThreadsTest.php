@@ -36,7 +36,7 @@ class APICombatLogControllerCombatLogRouteCityOfThreadsTest extends APICombatLog
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
         // Lacking 8 enemy forces due to missing Xeph'itik
-        $this->validatePulls($responseArr, 17, 734);
+        $this->validatePulls($postBody, $responseArr, 17, 734);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }

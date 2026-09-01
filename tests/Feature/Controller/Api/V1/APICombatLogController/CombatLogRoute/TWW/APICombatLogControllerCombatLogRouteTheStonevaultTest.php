@@ -35,7 +35,7 @@ class APICombatLogControllerCombatLogRouteTheStonevaultTest extends APICombatLog
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 25, 499);
+        $this->validatePulls($postBody, $responseArr, 25, 499);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
@@ -61,7 +61,7 @@ class APICombatLogControllerCombatLogRouteTheStonevaultTest extends APICombatLog
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 4, 131);
+        $this->validatePulls($postBody, $responseArr, 4, 131);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }

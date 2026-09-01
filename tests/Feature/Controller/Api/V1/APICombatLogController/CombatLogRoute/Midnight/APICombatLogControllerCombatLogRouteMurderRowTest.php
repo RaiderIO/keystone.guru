@@ -35,7 +35,7 @@ class APICombatLogControllerCombatLogRouteMurderRowTest extends APICombatLogCont
         try {
             $this->validateResponseStaticData($responseArr);
             $this->validateDungeon($responseArr);
-            $this->validatePulls($responseArr, 18, 671);
+            $this->validatePulls($postBody, $responseArr, 18, 671);
             $this->validateAffixes($responseArr);
             $this->validateBossesResolved($postBody, $responseArr);
         } finally {

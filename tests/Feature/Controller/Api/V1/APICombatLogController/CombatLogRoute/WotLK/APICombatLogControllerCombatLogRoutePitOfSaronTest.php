@@ -34,7 +34,7 @@ class APICombatLogControllerCombatLogRoutePitOfSaronTest extends APICombatLogCon
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 24, 666);
+        $this->validatePulls($postBody, $responseArr, 24, 666);
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
 }

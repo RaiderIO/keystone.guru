@@ -36,7 +36,7 @@ class APICombatLogControllerCombatLogRouteKingsRestTest extends APICombatLogCont
         try {
             $this->validateResponseStaticData($responseArr);
             $this->validateDungeon($responseArr);
-            $this->validatePulls($responseArr, 16, 661);
+            $this->validatePulls($postBody, $responseArr, 16, 661);
             $this->validateAffixes($responseArr);
             $this->validateBossesResolved($postBody, $responseArr);
 
