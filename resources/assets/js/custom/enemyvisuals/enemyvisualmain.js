@@ -164,7 +164,10 @@ class EnemyVisualMain extends EnemyVisualIcon {
         console.assert(this instanceof EnemyVisualMain, 'this is not an EnemyVisualMain!', this);
 
         let state = getState();
-        let zoomLevelOffset = state.getMapZoomLevel() * 2;
+        // zoomSnap: 0 lets the map land on fractional zoom levels (mouse-wheel zooming), so the
+        // key must be quantized - otherwise every distinct fractional zoom is a fresh cache entry
+        // that's written once and never hit again, and the cache grows unbounded.
+        let zoomLevelOffset = Math.round(state.getMapZoomLevel()) * 2;
 
         // Don't do expensive calculations if we don't need to
         if (this._sizeCache.hasOwnProperty(zoomLevelOffset)) {
