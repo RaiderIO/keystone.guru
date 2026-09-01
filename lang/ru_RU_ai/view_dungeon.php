@@ -52,7 +52,7 @@ return [
                 'any'                     => 'Любая',
                 'select_floor'            => 'Выбрать этаж',
                 'view_heatmap_fullscreen' => 'Просмотр в полноэкранном режиме',
-                'not_supported'           => '',
+                'not_supported'           => ':dungeon не поддерживает тепловые карты.',
             ],
         ],
     ],

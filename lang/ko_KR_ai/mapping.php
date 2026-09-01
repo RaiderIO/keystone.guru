@@ -89,7 +89,7 @@ return [
                 'alzzin_cave_exit' => '전투 중 Alzzin the Wildshaper가 동굴 입구를 부수면 Whip Lasher들이 쏟아져 나와 그를 돕습니다.
 
 Alzzin the Wildshaper 처치 후에는 이 동굴을 이용해 인스턴스를 빠져나갈 수 있습니다.',
-                'exit_only'        => '이 "입구"는 출구 전용입니다.',
+                'exit_only' => '이 "입구"는 출구 전용입니다.',
             ],
             'dire_maul_north' => [
                 'gordok_mastiff_pack_size' => '모든 Gordok Mastiff 무리는 적 4~5마리로 구성됩니다.',
@@ -253,11 +253,11 @@ Alzzin the Wildshaper 처치 후에는 이 동굴을 이용해 인스턴스를 �
                 'shade_of_eranikus_warning' => 'Shade of Eranikus는 Hall of the Cursed의 미니 보스들을 처치해 보호막을 낮춰야만 상대할 수 있습니다.
 
 경고: Shade of Eranikus를 공격하면 이 층의 모든 녹색 용이 어그로를 끕니다.',
-                'stair_patrol'              => '이 무리는 모든 층의 계단을 가로질러 순찰합니다.',
-                'jammalaan_aggro_warning'   => '경고: Jammal\'an the Prophet을 공격하면 이 방의 모든 적이 어그로를 끕니다.',
-                'broken_geometry_warning'   => '경고: 지형이 깨져 있어 아래로 떨어져 사망할 수 있습니다.',
-                'weaver_dreamscythe_spawn'  => 'Weaver와 Dreamscythe는 Jammal\'an the Prophet 처치 후 등장합니다.',
-                'remove_shield_note'        => 'Hall of the Cursed의 미니 보스들을 처치하면 보호막을 제거할 수 있습니다.',
+                'stair_patrol'             => '이 무리는 모든 층의 계단을 가로질러 순찰합니다.',
+                'jammalaan_aggro_warning'  => '경고: Jammal\'an the Prophet을 공격하면 이 방의 모든 적이 어그로를 끕니다.',
+                'broken_geometry_warning'  => '경고: 지형이 깨져 있어 아래로 떨어져 사망할 수 있습니다.',
+                'weaver_dreamscythe_spawn' => 'Weaver와 Dreamscythe는 Jammal\'an the Prophet 처치 후 등장합니다.',
+                'remove_shield_note'       => 'Hall of the Cursed의 미니 보스들을 처치하면 보호막을 제거할 수 있습니다.',
             ],
             'uldaman' => [
                 'echomok_cavern_entrance'      => 'Echomok Cavern 입구',
@@ -516,7 +516,7 @@ Alzzin the Wildshaper 처치 후에는 이 동굴을 이용해 인스턴스를 �
                 'heal_drake'                  => '치유형 드레이크',
                 'centrifuge_construct_shield' => '모든 Centrifuge Construct를 처치하면 보스의 보호막이 사라집니다. 
 보스 처치 후 드레이크 아이템을 사용해 더 위로 날아가세요.',
-                'tank_drake'                  => '탱킹형 드레이크',
+                'tank_drake' => '탱킹형 드레이크',
             ],
             'ulduar' => [
                 'teleporter'                      => '순간이동기',
@@ -557,9 +557,9 @@ Alzzin the Wildshaper 처치 후에는 이 동굴을 이용해 인스턴스를 �
         ],
         'tbc' => [
             'black_temple' => [
-                'ashtongue_variants'                  => '',
-                'coilscar_or_aqueous_surger_variants' => "",
-                'dragonmaw_variants'                  => '',
+                'ashtongue_variants'                  => '적은 Ashtongue Mystic, Ashtongue Stormcaller, Ashtongue Battlelord 중 하나일 수 있습니다.',
+                'coilscar_or_aqueous_surger_variants' => '이 무리의 적은 Coilscar General, Coilscar Soothsayer, Coilscar Seacaller 또는 Aqueous Surger 중 하나일 수 있습니다',
+                'dragonmaw_variants'                  => 'Dragonmaw Wind Reaver와 Dragonmaw Sky Stalker는 서로 바뀌어 등장할 수 있습니다.',
             ],
         ],
     ],

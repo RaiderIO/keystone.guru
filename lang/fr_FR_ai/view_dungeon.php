@@ -52,7 +52,7 @@ return [
                 'any'                     => 'N\'importe lequel',
                 'select_floor'            => 'Sélectionner l\'étage',
                 'view_heatmap_fullscreen' => 'Voir en plein écran',
-                'not_supported'           => '',
+                'not_supported'           => ':dungeon ne prend pas en charge les cartes de chaleur.',
             ],
         ],
     ],

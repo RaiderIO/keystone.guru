@@ -52,7 +52,7 @@ return [
                 'any'                     => '모두',
                 'select_floor'            => '층 선택',
                 'view_heatmap_fullscreen' => '전체 화면 보기',
-                'not_supported'           => '',
+                'not_supported'           => ':dungeon은(는) 히트맵을 지원하지 않습니다.',
             ],
         ],
     ],

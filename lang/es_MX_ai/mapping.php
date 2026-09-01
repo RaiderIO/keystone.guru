@@ -89,7 +89,7 @@ return [
                 'alzzin_cave_exit' => 'Durante el combate, Alzzin the Wildshaper rompe la entrada de la cueva y salen Whip Lashers en tropel para ayudarlo.
 
 Después de derrotar a Alzzin the Wildshaper, puedes usar la cueva para salir de la instancia.',
-                'exit_only'        => 'Esta "entrada" es solo una salida.',
+                'exit_only' => 'Esta "entrada" es solo una salida.',
             ],
             'dire_maul_north' => [
                 'gordok_mastiff_pack_size' => 'Todos los packs de Gordok Mastiff pueden contener 4 o 5 enemigos.',
@@ -253,11 +253,11 @@ Los enemigos reaparecen infinitamente.
                 'shade_of_eranikus_warning' => 'Shade of Eranikus solo puede ser combatido si el escudo se baja derrotando a los minijefes en Hall of the Cursed.
 
 Advertencia: atacar a Shade of Eranikus hace que todos los dragones verdes de este piso se vuelvan hostiles.',
-                'stair_patrol'              => 'Este pack patrulla las escaleras a través de todos los pisos.',
-                'jammalaan_aggro_warning'   => 'Advertencia: atacar a Jammal\'an the Prophet hace que todos los enemigos de esta sala se vuelvan hostiles.',
-                'broken_geometry_warning'   => 'ADVERTENCIA: la geometría rota puede hacer que caigas y MUERAS.',
-                'weaver_dreamscythe_spawn'  => 'Weaver y Dreamscythe aparecen cuando Jammal\'an the Prophet es derrotado.',
-                'remove_shield_note'        => 'Puedes quitar el escudo derrotando a los minijefes en Hall of the Cursed.',
+                'stair_patrol'             => 'Este pack patrulla las escaleras a través de todos los pisos.',
+                'jammalaan_aggro_warning'  => 'Advertencia: atacar a Jammal\'an the Prophet hace que todos los enemigos de esta sala se vuelvan hostiles.',
+                'broken_geometry_warning'  => 'ADVERTENCIA: la geometría rota puede hacer que caigas y MUERAS.',
+                'weaver_dreamscythe_spawn' => 'Weaver y Dreamscythe aparecen cuando Jammal\'an the Prophet es derrotado.',
+                'remove_shield_note'       => 'Puedes quitar el escudo derrotando a los minijefes en Hall of the Cursed.',
             ],
             'uldaman' => [
                 'echomok_cavern_entrance'      => 'Entrada a Echomok Cavern',
@@ -516,7 +516,7 @@ Los enemigos reaparecen infinitamente.
                 'heal_drake'                  => 'Heal Drake',
                 'centrifuge_construct_shield' => 'Mata a todos los Centrifuge Constructs para quitar el escudo del jefe. 
 Después de matar al jefe, usa el objeto de dragón para volar más alto.',
-                'tank_drake'                  => 'Tank Drake',
+                'tank_drake' => 'Tank Drake',
             ],
             'ulduar' => [
                 'teleporter'                      => 'Teletransportador',
@@ -557,9 +557,9 @@ Después de matar al jefe, usa el objeto de dragón para volar más alto.',
         ],
         'tbc' => [
             'black_temple' => [
-                'ashtongue_variants'                  => '',
-                'coilscar_or_aqueous_surger_variants' => "",
-                'dragonmaw_variants'                  => '',
+                'ashtongue_variants'                  => 'Los enemigos pueden ser Ashtongue Mystic, Ashtongue Stormcaller o Ashtongue Battlelord.',
+                'coilscar_or_aqueous_surger_variants' => 'Los enemigos de este pack pueden ser Coilscar General, Coilscar Soothsayer, Coilscar Seacaller o Aqueous Surger',
+                'dragonmaw_variants'                  => 'Dragonmaw Wind Reaver y Dragonmaw Sky Stalker pueden aparecer uno en lugar del otro.',
             ],
         ],
     ],
