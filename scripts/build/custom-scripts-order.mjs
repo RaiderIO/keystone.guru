@@ -16,6 +16,7 @@ export const customScripts = [
     'resources/assets/js/custom/colorutil.js',
     'resources/assets/js/custom/util.js',
     'resources/assets/js/custom/constants.js',
+    'resources/assets/js/custom/rafworkqueue.js',
     // The shared tooltip card comes before the two kinds of tooltip that register into it
     'resources/assets/js/custom/hovertooltip.js',
     'resources/assets/js/custom/spelltooltip.js',
@@ -51,6 +52,7 @@ export const customScripts = [
 
     // Depends on the above
     'resources/assets/js/custom/mapobjectgroups/mapobjectgroupmanager.js',
+    'resources/assets/js/custom/enemyvisuals/enemymarkerculler.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmanager.js',
     'resources/assets/js/custom/enemyforces/enemyforcesmanager.js',
 
