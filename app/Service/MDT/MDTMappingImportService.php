@@ -609,6 +609,16 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         }
                     }
 
+                    // Enemy forces corrections are only ever entered by hand in the mapping editor, so without this
+                    // a re-import silently resets them to null. MDT's own per-clone count wins where it has one - that
+                    // is authoritative, and newer than a correction entered against an older MDT release.
+                    foreach (['enemy_forces_override', 'enemy_forces_override_teeming'] as $enemyForcesField) {
+                        if ($mdtEnemy->$enemyForcesField === null && $existingEnemy->$enemyForcesField !== null) {
+                            $mdtEnemy->$enemyForcesField      = $existingEnemy->$enemyForcesField;
+                            $updatedFields[$enemyForcesField] = $existingEnemy->$enemyForcesField;
+                        }
+                    }
+
                     $this->log->importEnemiesRecoverPropertiesFromExistingEnemy($mdtEnemy->getUniqueKey(), $updatedFields);
                 } else {
                     $this->log->importEnemiesCannotRecoverPropertiesFromExistingEnemy($mdtEnemy->getUniqueKey());
