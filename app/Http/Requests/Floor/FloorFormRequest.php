@@ -87,6 +87,12 @@ class FloorFormRequest extends FormRequest
                 'nullable',
                 'integer',
             ],
+            'enemy_pack_margin' => [
+                'nullable',
+                'numeric',
+                'min:0',
+                'max:50',
+            ],
         ];
     }
 }

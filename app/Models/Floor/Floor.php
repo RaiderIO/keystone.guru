@@ -53,6 +53,7 @@ use Illuminate\Support\Collection;
  * @property int|null    $percentage_display_zoom
  * @property int|null    $zoom_max
  * @property bool        $active
+ * @property float|null  $enemy_pack_margin                  Overrides the global enemy pack margin (c.map.enemypack.margin in JS) for this floor when set
  *
  * @property Dungeon         $dungeon
  * @property FloorUnion|null $floorUnion
@@ -262,6 +263,7 @@ class Floor extends CacheModel implements MappingModelInterface
         'percentage_display_zoom',
         'zoom_max',
         'active',
+        'enemy_pack_margin',
     ];
 
     public $timestamps = false;
@@ -274,6 +276,14 @@ class Floor extends CacheModel implements MappingModelInterface
         'enemy_engagement_max_range',
         'enemy_engagement_max_range_patrols',
     ];
+
+    /** @return array<string, string> */
+    protected function casts(): array
+    {
+        return [
+            'enemy_pack_margin' => 'float',
+        ];
+    }
 
     /** @return BelongsTo<Dungeon, $this> */
     public function dungeon(): BelongsTo
