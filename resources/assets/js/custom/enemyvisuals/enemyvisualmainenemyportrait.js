@@ -54,16 +54,4 @@ class EnemyVisualMainEnemyPortrait extends EnemyVisualMain {
     getName() {
         return 'EnemyVisualMainEnemyPortrait';
     }
-
-    /**
-     *
-     */
-    refreshSize() {
-        super.refreshSize();
-
-        let width = this._getTextWidth();
-        $(`#map_enemy_visual_${this.enemyvisual.enemy.id}_enemy_portrait.obsolete, #map_enemy_visual_${this.enemyvisual.enemy.id}_enemy_portrait.overpulled`)
-            .css('font-size', `${width}px`)
-        ;
-    }
 }
