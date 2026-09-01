@@ -164,7 +164,7 @@ final class APIPatreonDiagnosticsControllerTest extends PublicTestCase
         // Arrange - the patron changed their Patreon email after linking, so the sync stopped matching
         // them and has reported MemberNotLinked ever since, which looks exactly like never having linked
         $this->actingAsAdmin();
-        $this->createLinkedUser('stale-link-email-4373@example.test');
+        $this->createLinkedUser('stale-link-email-4373@other-provider.test');
         $this->mockPatreonService([$this->campaignMember($this->user->email, ['2971575'])]);
 
         // Act
@@ -173,8 +173,13 @@ final class APIPatreonDiagnosticsControllerTest extends PublicTestCase
         // Assert
         $response->assertOk();
         $response->assertJsonPath('data.member', null);
-        $this->assertNotNull($response->json('data.email_drift_candidate'));
-        $this->assertStringNotContainsString($this->user->email, (string)$response->json('data.email_drift_candidate'));
+        $driftCandidate = (string)$response->json('data.email_drift_candidate');
+        $this->assertNotSame('', $driftCandidate);
+        $this->assertStringNotContainsString($this->user->email, $driftCandidate);
+
+        // The domain survives masking, which is what makes the drift readable against the link's email
+        $this->assertStringEndsWith((string)mb_strstr($this->user->email, '@'), $driftCandidate);
+        $this->assertStringNotContainsString('other-provider.test', $driftCandidate);
     }
 
     #[Test]
