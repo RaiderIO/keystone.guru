@@ -4,12 +4,6 @@ namespace App\Logic\Utils;
 
 /**
  * Reduces an email address to something recognisable but not usable.
- *
- * The Patreon diagnostics endpoints (#4373) are open to the `ai_agent` role as well as admins, so that
- * the tooling can be driven from a local dev machine without a production admin account. Patron emails
- * are the one genuinely sensitive thing those endpoints touch, and nothing about diagnosing a sync needs
- * the actual address - only "is this the same address as the one I asked about". Masking is applied on
- * the way out; the endpoints never return an unmasked address to anyone.
  */
 class EmailMasker
 {

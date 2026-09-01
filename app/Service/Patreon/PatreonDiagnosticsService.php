@@ -15,6 +15,13 @@ use App\Service\Patreon\Dtos\Diagnostics\PatreonSyncDryRun;
 use App\Service\Patreon\Dtos\Diagnostics\PatreonUserDiagnostics;
 use App\Service\Patreon\Dtos\PatreonMemberSyncPlan;
 
+/**
+ * "Read-only" is meant about Patreon state and benefit rows: nothing here grants, revokes or links
+ * anything. It is not entirely side-effect free, because reaching the Patreon API at all goes through
+ * `PatreonService::loadAdminUser()`, which persists a refreshed admin token when the stored one has
+ * expired. That write is the same one the hourly sync performs and is unavoidable without a second
+ * token path.
+ */
 class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
 {
     /**

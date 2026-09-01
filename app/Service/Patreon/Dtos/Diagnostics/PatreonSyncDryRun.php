@@ -5,10 +5,8 @@ namespace App\Service\Patreon\Dtos\Diagnostics;
 /**
  * The whole hourly sync, computed but not executed.
  *
- * `memberCount` and `pageCount` are the headline numbers: compared against the recent
- * `patreon_sync_runs` rows they say whether the campaign is currently coming back complete, which is the
- * question behind #4373. The member lists are deliberately only the interesting ones - a campaign has
- * hundreds of members whose sync is a no-op and listing them would bury the few that matter.
+ * The member lists are deliberately only the interesting ones - a campaign has hundreds of members whose
+ * sync is a no-op and listing them would bury the few that matter.
  */
 class PatreonSyncDryRun
 {

@@ -6,11 +6,6 @@ use App\Models\Patreon\PatreonUserLink;
 
 /**
  * Everything the hourly sync worked out about one campaign member, before it wrote anything.
- *
- * `PatreonService::applyPaidBenefitsForMember()` is implemented as "build one of these, then execute it",
- * so the diagnostic endpoints (#4373) can show exactly what a real sync would do to an account without
- * touching it. Computing the two on separate code paths would let the diagnosis drift away from the
- * behaviour it claims to describe.
  */
 class PatreonMemberSyncPlan
 {

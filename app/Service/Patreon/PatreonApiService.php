@@ -127,10 +127,6 @@ class PatreonApiService implements PatreonApiServiceInterface
      *
      * A page that fails - an undecodable body (Patreon serving an HTML 502 rather than JSON) or a page
      * carrying `errors` - stops the walk, and the result is marked truncated *and* given an `errors` key.
-     * That last part is the #4373 fix: this used to return the pages it had already collected with no
-     * error attached whenever the failure happened after page 1, so `loadCampaignMembers()` accepted a
-     * partial member list as the complete campaign and the hourly sync silently skipped everyone on the
-     * pages that never arrived. A partial result must never be indistinguishable from a complete one.
      */
     private function getAllPages(API $apiClient, string $suffix): PatreonPagedResponse
     {

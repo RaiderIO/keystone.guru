@@ -162,8 +162,6 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('api-general', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? 900)->by($this->userKey($request)));
         RateLimiter::for('api-combatlog-create-dungeonroute', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? 120)->by($this->userKey($request)));
         RateLimiter::for('api-combatlog-correct-event', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? 900)->by($this->userKey($request)));
-        // Each of these walks the whole Patreon campaign, so they are spent against the campaign's rate
-        // limit rather than ours - a handful per minute is plenty for diagnosing one member (#4373)
         RateLimiter::for('api-patreon-diagnostics', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? 10)->by($this->userKey($request)));
         RateLimiter::for('api-create-dungeonroute-thumbnail', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? 30)->by($this->userKey($request)));
     }

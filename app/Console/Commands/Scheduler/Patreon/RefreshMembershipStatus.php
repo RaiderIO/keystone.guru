@@ -41,118 +41,137 @@ class RefreshMembershipStatus extends SchedulerCommand
             // outcome is visible from outside production otherwise - its log lines never leave the
             // container - and "the run succeeded but only fetched half the campaign" is precisely the
             // state that let a paying patron go unnoticed for hours (#4373)
-            $syncRun = $patreonSyncRunRepository->create(['started_at' => Carbon::now()]);
+            $syncRun  = $patreonSyncRunRepository->create(['started_at' => Carbon::now()]);
+            $finished = false;
 
-            // Each of these logs its own reason for returning null - checking them separately keeps that reason
-            // paired with a matching exit code instead of collapsing all three into one anonymous failure (#3748)
-            $campaignBenefits = $patreonService->loadCampaignBenefits();
-            if ($campaignBenefits === null) {
-                $this->error('Unable to load the campaign benefits');
+            try {
+                // Each of these logs its own reason for returning null - checking them separately keeps that reason
+                // paired with a matching exit code instead of collapsing all three into one anonymous failure (#3748)
+                $campaignBenefits = $patreonService->loadCampaignBenefits();
+                if ($campaignBenefits === null) {
+                    $this->error('Unable to load the campaign benefits');
 
-                return $this->finishRun($syncRun, false, 'Unable to load the campaign benefits');
-            }
+                    $finished = true;
 
-            $campaignTiers = $patreonService->loadCampaignTiers();
-            if ($campaignTiers === null) {
-                $this->error('Unable to load the campaign tiers');
+                    return $this->finishRun($syncRun, false, 'Unable to load the campaign benefits');
+                }
 
-                return $this->finishRun($syncRun, false, 'Unable to load the campaign tiers');
-            }
+                $campaignTiers = $patreonService->loadCampaignTiers();
+                if ($campaignTiers === null) {
+                    $this->error('Unable to load the campaign tiers');
 
-            $campaignMembers = $patreonService->loadCampaignMembers();
-            if ($campaignMembers === null) {
-                $this->error('Unable to load the campaign members');
+                    $finished = true;
 
-                return $this->finishRun($syncRun, false, 'Unable to load the campaign members');
-            }
+                    return $this->finishRun($syncRun, false, 'Unable to load the campaign tiers');
+                }
 
-            // How far the fetch got is recorded before anything else decides what to do with it, so a
-            // truncated run says which page it died on rather than looking like a total failure
-            $syncRun->update([
-                'pages_fetched'   => $campaignMembers->pageCount,
-                'members_fetched' => $campaignMembers->rowCount,
-            ]);
+                $campaignMembers = $patreonService->loadCampaignMembers();
+                if ($campaignMembers === null) {
+                    $this->error('Unable to load the campaign members');
 
-            // A partial member list is never processed: every member it does not contain would be read as
-            // a member who cancelled, and revoking a paying patron's benefits is the failure this whole
-            // change exists to prevent (#4373)
-            if ($campaignMembers->truncated) {
-                $this->error(sprintf(
-                    'The campaign member list came back truncated after %d page(s) and %d member(s) - not applying anything',
-                    $campaignMembers->pageCount,
-                    $campaignMembers->rowCount,
-                ));
+                    $finished = true;
 
-                return $this->finishRun($syncRun, false, 'Unable to load the campaign members', truncated: true);
-            }
+                    return $this->finishRun($syncRun, false, 'Unable to load the campaign members');
+                }
 
-            $members = $campaignMembers->members;
+                // How far the fetch got is recorded before anything else decides what to do with it, so a
+                // truncated run says which page it died on rather than looking like a total failure
+                $syncRun->update([
+                    'pages_fetched'   => $campaignMembers->pageCount,
+                    'members_fetched' => $campaignMembers->rowCount,
+                ]);
 
-            // A single member we cannot apply the benefits for should not keep all remaining members from being
-            // updated - but the command must still fail afterwards so that the failure doesn't go unnoticed
-            $failedMemberIds = [];
-            /** @var array<int, int> $resultCounts Keyed by ApplyPaidBenefitsForMemberResult value */
-            $resultCounts = [];
+                // A partial member list is never processed: every member it does not contain would be read as
+                // a member who cancelled, and revoking a paying patron's benefits is the failure this whole
+                // change exists to prevent (#4373)
+                if ($campaignMembers->truncated) {
+                    $this->error(sprintf(
+                        'The campaign member list came back truncated after %d page(s) and %d member(s) - not applying anything',
+                        $campaignMembers->pageCount,
+                        $campaignMembers->rowCount,
+                    ));
 
-            // Update all found members in the database
-            foreach ($members as $member) {
-                $memberId = isset($member['id']) && is_scalar($member['id']) ? (string)$member['id'] : 'unknown';
+                    $finished = true;
 
-                try {
-                    $result = $patreonService->applyPaidBenefitsForMember($campaignBenefits, $campaignTiers, $member);
+                    return $this->finishRun($syncRun, false, 'Unable to load the campaign members', truncated: true);
+                }
 
-                    $resultCounts[$result->value] = ($resultCounts[$result->value] ?? 0) + 1;
+                $members = $campaignMembers->members;
 
-                    // A member without a linked Keystone.guru account is the common case and not a failure, but a
-                    // member whose benefits we cannot compute is - silently counting it as updated would let the
-                    // hourly alert go quiet while benefits stop being applied (#3748)
-                    if ($result === ApplyPaidBenefitsForMemberResult::UnknownBenefits) {
+                // A single member we cannot apply the benefits for should not keep all remaining members from being
+                // updated - but the command must still fail afterwards so that the failure doesn't go unnoticed
+                $failedMemberIds = [];
+                /** @var array<int, int> $resultCounts Keyed by ApplyPaidBenefitsForMemberResult value */
+                $resultCounts = [];
+
+                // Update all found members in the database
+                foreach ($members as $member) {
+                    $memberId = isset($member['id']) && is_scalar($member['id']) ? (string)$member['id'] : 'unknown';
+
+                    try {
+                        $result = $patreonService->applyPaidBenefitsForMember($campaignBenefits, $campaignTiers, $member);
+
+                        $resultCounts[$result->value] = ($resultCounts[$result->value] ?? 0) + 1;
+
+                        // A member without a linked Keystone.guru account is the common case and not a failure, but a
+                        // member whose benefits we cannot compute is - silently counting it as updated would let the
+                        // hourly alert go quiet while benefits stop being applied (#3748)
+                        if ($result === ApplyPaidBenefitsForMemberResult::UnknownBenefits) {
+                            $failedMemberIds[] = $memberId;
+
+                            $this->error(sprintf(
+                                'Member %s is entitled to a benefit that is missing from PatreonBenefit::ALL - see the logged benefit titles',
+                                $memberId,
+                            ));
+                        } elseif ($result === ApplyPaidBenefitsForMemberResult::UnknownTiers) {
+                            $failedMemberIds[] = $memberId;
+
+                            $this->error(sprintf(
+                                'Member %s is entitled to a tier the campaign does not describe - their benefits were left untouched, see the logged tier ids',
+                                $memberId,
+                            ));
+                        }
+                    } catch (Throwable $throwable) {
+                        $this->error(sprintf('Unable to apply the paid benefits of member %s: %s', $memberId, $throwable->getMessage()));
+
+                        // A systemic failure fails on every single member - reporting each one would write the same
+                        // stack trace to the log hundreds of times over. The first few are enough to diagnose it, and
+                        // the summary below still names every member that failed
+                        if (count($failedMemberIds) < self::MAX_REPORTED_MEMBER_FAILURES) {
+                            $this->reportThrowable($throwable, ['memberId' => $memberId]);
+                        }
+
                         $failedMemberIds[] = $memberId;
-
-                        $this->error(sprintf(
-                            'Member %s is entitled to a benefit that is missing from PatreonBenefit::ALL - see the logged benefit titles',
-                            $memberId,
-                        ));
-                    } elseif ($result === ApplyPaidBenefitsForMemberResult::UnknownTiers) {
-                        $failedMemberIds[] = $memberId;
-
-                        $this->error(sprintf(
-                            'Member %s is entitled to a tier the campaign does not describe - their benefits were left untouched, see the logged tier ids',
-                            $memberId,
-                        ));
                     }
-                } catch (Throwable $throwable) {
-                    $this->error(sprintf('Unable to apply the paid benefits of member %s: %s', $memberId, $throwable->getMessage()));
+                }
 
-                    // A systemic failure fails on every single member - reporting each one would write the same
-                    // stack trace to the log hundreds of times over. The first few are enough to diagnose it, and
-                    // the summary below still names every member that failed
-                    if (count($failedMemberIds) < self::MAX_REPORTED_MEMBER_FAILURES) {
-                        $this->reportThrowable($throwable, ['memberId' => $memberId]);
-                    }
+                $this->info(sprintf('Updated memberships of %s users', count($members) - count($failedMemberIds)));
 
-                    $failedMemberIds[] = $memberId;
+                $syncRun->update([
+                    'members_applied'          => $resultCounts[ApplyPaidBenefitsForMemberResult::Applied->value] ?? 0,
+                    'members_not_linked'       => $resultCounts[ApplyPaidBenefitsForMemberResult::MemberNotLinked->value] ?? 0,
+                    'members_unknown_benefits' => $resultCounts[ApplyPaidBenefitsForMemberResult::UnknownBenefits->value] ?? 0,
+                    'members_unknown_tiers'    => $resultCounts[ApplyPaidBenefitsForMemberResult::UnknownTiers->value] ?? 0,
+                    'members_failed'           => count($failedMemberIds),
+                ]);
+
+                $finished = true;
+
+                if ($failedMemberIds !== []) {
+                    $failureReason = sprintf('Unable to update the memberships of %s member(s): %s', count($failedMemberIds), implode(', ', $failedMemberIds));
+                    $this->error($failureReason);
+
+                    return $this->finishRun($syncRun, false, $failureReason);
+                }
+
+                return $this->finishRun($syncRun, true);
+            } finally {
+                // An exception thrown anywhere above skips every explicit finishRun() call - without this, the
+                // run's row would stay open forever and the hourly sync would look like it never finished
+                if (!$finished) {
+                    $this->finishRun($syncRun, false, 'The run was interrupted by an unexpected error');
                 }
             }
-
-            $this->info(sprintf('Updated memberships of %s users', count($members) - count($failedMemberIds)));
-
-            $syncRun->update([
-                'members_applied'          => $resultCounts[ApplyPaidBenefitsForMemberResult::Applied->value] ?? 0,
-                'members_not_linked'       => $resultCounts[ApplyPaidBenefitsForMemberResult::MemberNotLinked->value] ?? 0,
-                'members_unknown_benefits' => $resultCounts[ApplyPaidBenefitsForMemberResult::UnknownBenefits->value] ?? 0,
-                'members_unknown_tiers'    => $resultCounts[ApplyPaidBenefitsForMemberResult::UnknownTiers->value] ?? 0,
-                'members_failed'           => count($failedMemberIds),
-            ]);
-
-            if ($failedMemberIds !== []) {
-                $failureReason = sprintf('Unable to update the memberships of %s member(s): %s', count($failedMemberIds), implode(', ', $failedMemberIds));
-                $this->error($failureReason);
-
-                return $this->finishRun($syncRun, false, $failureReason);
-            }
-
-            return $this->finishRun($syncRun, true);
         });
     }
 
