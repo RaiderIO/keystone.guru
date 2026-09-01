@@ -11,6 +11,10 @@ global.Signalable = class Signalable {
 global.EnemyVisual = class EnemyVisual {
 };
 global.EnemyVisualIcon = class EnemyVisualIcon extends Signalable {
+    constructor(enemyvisual) {
+        super();
+        this.enemyvisual = enemyvisual;
+    }
 };
 
 const {EnemyVisualMain} = require('./enemyvisualmain');
@@ -93,4 +97,104 @@ test('isSpeedrunRequiredNpc_givenNoDungeonDifficulty_returnsFalse', () => {
     const fakeThis = makeFakeThis({npcId: 123, mapContext});
 
     expect(EnemyVisualMain.prototype.isSpeedrunRequiredNpc.call(fakeThis)).toBe(false);
+});
+
+// ---------------------------------------------------------------------------
+// getSize()'s cache is keyed on the zoom level. With zoomSnap: 0 (constants.js), the map lands on
+// fractional zoom levels under real mouse-wheel zooming, so the key must be quantized to the
+// nearest half-zoom-level step (the offset's existing 1px granularity) - otherwise the cache
+// never hits during ordinary zooming and grows unbounded, one entry per distinct zoom level ever
+// visited (#4413).
+// ---------------------------------------------------------------------------
+
+global.c = {
+    map: {
+        enemy: {
+            calculateMargin: () => 4,
+            calculateSize: () => 20,
+            mdt_size_factor: 0.5,
+            boss_size_factor: 2,
+        },
+    },
+};
+global.NPC_CLASSIFICATION_ID_BOSS = 'boss';
+global.NPC_CLASSIFICATION_ID_FINAL_BOSS = 'final_boss';
+
+function makeFakeSizeThis(zoomLevel) {
+    global.getState = () => ({
+        getMapZoomLevel: () => zoomLevel,
+        getMapContext: () => ({
+            getNpcHealth: () => 100,
+            getNpcsMinHealth: () => 0,
+            getNpcsMaxHealth: () => 1000,
+        }),
+        isMapAdmin: () => true,
+    });
+
+    const fakeThis = Object.create(EnemyVisualMain.prototype);
+    fakeThis._sizeCache = [];
+    fakeThis.enemyvisual = {
+        enemy: {
+            npc: {dungeon_id: 1, classification_id: null},
+            is_mdt: false,
+        },
+    };
+
+    return fakeThis;
+}
+
+test('getSize_givenFractionalZoomLevelsRoundingToSameStep_hitsCache', () => {
+    const fakeThis = makeFakeSizeThis(4);
+    const first = EnemyVisualMain.prototype.getSize.call(fakeThis);
+
+    global.getState = () => ({
+        getMapZoomLevel: () => 4.1,
+        // Deliberately broken - if this were reached (cache miss) the call would throw.
+        getMapContext: () => {
+            throw new Error('getSize() should not recalculate on a cache hit');
+        },
+        isMapAdmin: () => true,
+    });
+    const second = EnemyVisualMain.prototype.getSize.call(fakeThis);
+
+    expect(second).toBe(first);
+    expect(Object.keys(fakeThis._sizeCache)).toHaveLength(1);
+});
+
+test('getSize_givenFractionalZoomLevelsRoundingToDifferentSteps_missesCache', () => {
+    const fakeThis = makeFakeSizeThis(4.1);
+    EnemyVisualMain.prototype.getSize.call(fakeThis);
+
+    global.getState = () => ({
+        getMapZoomLevel: () => 4.9,
+        getMapContext: () => ({
+            getNpcHealth: () => 100,
+            getNpcsMinHealth: () => 0,
+            getNpcsMaxHealth: () => 1000,
+        }),
+        isMapAdmin: () => true,
+    });
+    EnemyVisualMain.prototype.getSize.call(fakeThis);
+
+    expect(Object.keys(fakeThis._sizeCache)).toHaveLength(2);
+});
+
+test('constructor_givenEnemySetNpcSignal_clearsSizeCache', () => {
+    let registeredCallback = null;
+    const enemyvisual = {
+        enemy: {
+            register: (signal, context, callback) => {
+                if (signal === 'enemy:set_npc') {
+                    registeredCallback = callback;
+                }
+            },
+        },
+    };
+
+    const visual = new EnemyVisualMain(enemyvisual);
+    visual._sizeCache[8] = {iconSize: [20, 20]};
+
+    registeredCallback();
+
+    expect(visual._sizeCache).toEqual([]);
 });

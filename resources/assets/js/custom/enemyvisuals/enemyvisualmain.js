@@ -6,6 +6,9 @@ class EnemyVisualMain extends EnemyVisualIcon {
 
         // Listen to changes in the NPC to update the icon and re-draw the visual
         this.enemyvisual.enemy.register('enemy:set_npc', this, function () {
+            // getSize()'s cache is keyed on zoom level only, so a cached size from before this
+            // NPC change (different health/classification) would otherwise be served as-is.
+            self._sizeCache = [];
             self._refreshNpc();
         });
         this._sizeCache = [];
@@ -164,7 +167,11 @@ class EnemyVisualMain extends EnemyVisualIcon {
         console.assert(this instanceof EnemyVisualMain, 'this is not an EnemyVisualMain!', this);
 
         let state = getState();
-        let zoomLevelOffset = state.getMapZoomLevel() * 2;
+        // zoomSnap: 0 lets the map land on fractional zoom levels (mouse-wheel zooming), so the
+        // key must be quantized - otherwise every distinct fractional zoom is a fresh cache entry
+        // that's written once and never hit again, and the cache grows unbounded. Rounding the
+        // offset itself (rather than the zoom level first) keeps the existing 1px granularity.
+        let zoomLevelOffset = Math.round(state.getMapZoomLevel() * 2);
 
         // Don't do expensive calculations if we don't need to
         if (this._sizeCache.hasOwnProperty(zoomLevelOffset)) {
