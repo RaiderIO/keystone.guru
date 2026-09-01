@@ -65,13 +65,8 @@ class Handler extends ExceptionHandler
     #[Override]
     public function report(Throwable $e): void
     {
-        // The async ContextEvent broadcast job (killzone/route/mapping-version presence updates)
-        // runs on the queue, where Illuminate\Queue\Worker::runJob reports the exception on every
-        // attempt - including ones a retry later succeeds on. A DNS lookup failure reaching the
-        // broadcast server is a transient environment issue (#4341), not an application defect; the
-        // synchronous ajax controllers already swallow BroadcastException entirely for the same
-        // reason (presence-channel sync is best-effort, never authoritative data), this mirrors that
-        // for the queued path without silencing a genuine (non-DNS) broadcast failure.
+        // Queued broadcast jobs retry on DNS failure, but Worker::runJob reports every attempt -
+        // this is a transient environment issue, not an application defect (#4341).
         if ($e instanceof BroadcastException && str_contains($e->getMessage(), 'Could not resolve host')) {
             return;
         }
