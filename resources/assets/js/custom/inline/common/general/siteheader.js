@@ -134,12 +134,7 @@ class CommonGeneralSiteheader extends InlineCode {
     }
 
     /**
-     * Keep the mobile main menu inside the viewport (#4378).
-     *
-     * Only the height is published - whether the cap applies at all is CSS's call (header.css
-     * gates it on the mobile breakpoint and on the menu being open), so the property is never
-     * cleared: it simply has no effect while the menu is closed or the navbar lays out as a
-     * single row, and it is always refreshed before the menu becomes visible again.
+     * Publishes the mobile main menu's max height (#4378); header.css decides when the cap applies.
      */
     _initNavbarCollapse() {
         this.navbarCollapse = this.header.querySelector('.navbar-second .navbar-collapse');
@@ -171,13 +166,7 @@ class CommonGeneralSiteheader extends InlineCode {
     }
 
     /**
-     * Where the menu's top edge is - or will be, while it is still closed.
-     *
-     * A closed collapse is `display: none` and reports an all-zero rect, which would pass for a
-     * menu starting at the very top of the viewport and yield a cap a whole header too large. The
-     * closed header's bottom edge is the same row bottom plus the navbar's bottom padding, so it
-     * errs a few pixels low - and erring low keeps every item reachable.
-     *
+     * Where the menu's top edge is (or will be while closed - falls back to the header's bottom edge).
      * @returns {number}
      */
     _navbarCollapseTop() {

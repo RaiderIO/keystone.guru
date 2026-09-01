@@ -108,17 +108,9 @@
     line-height: 1;
 }
 
-/* The open mobile main menu must stay reachable (#4378): the header is sticky at the top of the
-   viewport and the collapse expands in normal flow below the brand row, so any item past the
-   viewport bottom cannot be scrolled to - the page scroll moves the document, not the pinned
-   header. Capping the collapse itself (rather than the header) keeps the dungeon-context dropdown
-   in the brand row unclipped; menu dropdowns are static below lg, so they just add scroll height.
-   siteheader.js publishes the exact height; the fallback covers layouts that render the header
-   without that inline script. `dvh`, not `vh` - on mobile Safari `100vh` is the *large* viewport
-   and would overestimate, reintroducing the bug. The cap covers `.collapsing` too - Bootstrap
-   animates to the *uncapped* scroll height, so without it the menu would swell past the viewport
-   and snap back the moment the animation finishes. The overflow stays off `.collapsing`, whose own
-   `overflow: hidden` then keeps a scrollbar from flashing mid-animation. */
+/* Caps the open mobile menu to the viewport (#4378) - the sticky header doesn't scroll with the
+   page. `dvh` avoids Safari's oversized `100vh`; capped during `.collapsing` too so it doesn't
+   overshoot then snap back once the open animation finishes. */
 @media (max-width: 991.98px) {
     .ksg-header .navbar-second .navbar-collapse.show,
     .ksg-header .navbar-second .navbar-collapse.collapsing {
