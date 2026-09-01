@@ -65,6 +65,8 @@ global.MapObject = class MapObject {
 
     onDeleteSuccess() {}
 
+    cleanup() {}
+
     _getAttributes() {
         return [];
     }
@@ -85,9 +87,16 @@ global.L = {
 // the event registrations it performs.
 const fakeState = {
     register: () => {},
-    getMapContext: () => ({register: () => {}}),
+    unregister: () => {},
+    getMapContext: () => ({register: () => {}, unregister: () => {}}),
 };
 global.getState = () => fakeState;
+
+// 1f. cleanup() iterates the enemy group's objects via `$.each`; the shared setup's `$`
+// stub does not define it.
+global.$.each = (obj, callback) => {
+    Object.keys(obj ?? {}).forEach((key) => callback(key, obj[key]));
+};
 
 const {KillZone} = require('./killzone');
 
@@ -118,13 +127,20 @@ function makeFakeEnemy(id) {
 /**
  * A fake DungeonMap exposing only what KillZone touches: an event bus and a
  * mapObjectGroupManager whose enemy group resolves the provided enemies by id.
+ *
+ * @param {Object} enemiesById
+ * @param {Object} [options]
+ * @param {boolean} [options.hideKillZoneGroup] Mirrors MapObjectGroupManager.getByName()
+ *   returning `false` (its "not found" sentinel, not `null`) for a group a page hides via
+ *   its `hiddenMapObjectGroups` option - e.g. Explore mode hiding the 'killzone' group.
  */
-function makeFakeMap(enemiesById = {}) {
+function makeFakeMap(enemiesById = {}, options = {}) {
     const enemyGroup = {
         register: () => {},
         unregister: () => {},
         findMapObjectById: (id) => enemiesById[id] ?? null,
         setMapObjectVisibility: () => {},
+        objects: {},
     };
     const genericGroup = {
         register: () => {},
@@ -137,7 +153,15 @@ function makeFakeMap(enemiesById = {}) {
         register: () => {},
         unregister: () => {},
         mapObjectGroupManager: {
-            getByName: (name) => (name === MAP_OBJECT_GROUP_ENEMY ? enemyGroup : genericGroup),
+            getByName: (name) => {
+                if (name === MAP_OBJECT_GROUP_ENEMY) {
+                    return enemyGroup;
+                }
+                if (name === MAP_OBJECT_GROUP_KILLZONE && options.hideKillZoneGroup) {
+                    return false;
+                }
+                return genericGroup;
+            },
         },
     };
 }
@@ -153,6 +177,14 @@ describe('KillZone constructor', () => {
         expect(killZone.enemies).toEqual([]);
         expect(killZone.spellIds).toEqual([]);
         expect(killZone.overpulledEnemies).toEqual([]);
+    });
+
+    // Regression test for the Explore-mode "killZoneMapObjectGroup.register is not a
+    // function" crash: EditKillZoneEnemySelection.isEnemySelectable() builds a throwaway
+    // KillZone on every enemy click, even on pages (like Explore) whose hiddenMapObjectGroups
+    // option means no KillZoneMapObjectGroup was ever instantiated.
+    it('does not throw when the killzone map object group is hidden for the current page', () => {
+        expect(() => new KillZone(makeFakeMap({}, {hideKillZoneGroup: true}), null)).not.toThrow();
     });
 });
 
@@ -242,6 +274,17 @@ describe('KillZone.onSaveSuccess', () => {
         expect(changed).toHaveLength(1);
         expect(changed[0].data).toEqual({enemy_forces: 123, mass_save: true});
         expect(killZone.redrawConnectionsToEnemies).toHaveBeenCalledOnce();
+    });
+});
+
+describe('KillZone.cleanup', () => {
+    // Regression test: EditKillZoneEnemySelection.isEnemySelectable() always calls
+    // cleanup() on its throwaway KillZone, including on pages where the killzone map
+    // object group was never instantiated (see the constructor test above).
+    it('does not throw when the killzone map object group is hidden for the current page', () => {
+        const killZone = new KillZone(makeFakeMap({}, {hideKillZoneGroup: true}), null);
+
+        expect(() => killZone.cleanup()).not.toThrow();
     });
 });
 

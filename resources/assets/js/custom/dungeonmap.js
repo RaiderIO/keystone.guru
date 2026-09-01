@@ -547,7 +547,9 @@ class DungeonMap extends Signalable {
         let currentMapState = this.getMapState();
 
         // If we selected an enemy
-        if (getState().getMapContext() instanceof MapContextLiveSession) {
+        // A falsy killZoneMapObjectGroup means this page has no pulls at all (e.g. Explore mode,
+        // the heatmap, or an admin tool) - nothing below is meaningful without one.
+        if (getState().getMapContext() instanceof MapContextLiveSession || !killZoneMapObjectGroup) {
 
         } else if (EditKillZoneEnemySelection.isEnemySelectable(enemy)) {
             let shiftKeyPressed = enemyClickedEvent.data.clickEvent.originalEvent.shiftKey;

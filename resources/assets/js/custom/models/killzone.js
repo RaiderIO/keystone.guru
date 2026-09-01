@@ -99,7 +99,12 @@ class KillZone extends MapObject {
         getState().register('mapzoomlevel:changed', this, this._mapZoomLevelChanged.bind(this));
         getState().register('killzonesnumberstyle:changed', this, this._numberStyleChanged.bind(this));
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        killZoneMapObjectGroup.register('killzone:changed', this, this._onKillZoneChanged.bind(this));
+        // MapObjectGroupManager.getByName() returns false, not null, when a page hides this group
+        // (e.g. Explore mode's view.blade.php), which happens for the throwaway KillZone that
+        // EditKillZoneEnemySelection.isEnemySelectable() constructs purely to reuse its filter logic.
+        if (killZoneMapObjectGroup) {
+            killZoneMapObjectGroup.register('killzone:changed', this, this._onKillZoneChanged.bind(this));
+        }
     }
 
     /**
@@ -1291,7 +1296,9 @@ class KillZone extends MapObject {
 
         state.getMapContext().unregister('teeming:changed', this);
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-        killZoneMapObjectGroup.unregister('killzone:changed', this);
+        if (killZoneMapObjectGroup) {
+            killZoneMapObjectGroup.unregister('killzone:changed', this);
+        }
         state.unregister('mapzoomlevel:changed', this);
         state.unregister('killzonesnumberstyle:changed', this);
         this.unregister('object:deleted', this);

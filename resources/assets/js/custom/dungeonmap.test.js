@@ -5,6 +5,11 @@
 
 global.Signalable = class Signalable {
 };
+global.MAP_OBJECT_GROUP_KILLZONE = 'killzone';
+global.MapContextLiveSession = class MapContextLiveSession {
+};
+global.EditKillZoneEnemySelection = {isEnemySelectable: vi.fn(() => true)};
+global.getState = () => ({getMapContext: () => ({})});
 
 const DungeonMap = require('./dungeonmap');
 
@@ -73,5 +78,22 @@ describe('DungeonMap._whenMapSized', () => {
         map._whenMapSized(vi.fn());
 
         expect(window.cancelAnimationFrame).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe('DungeonMap._enemyClicked', () => {
+    // Regression test (#4431): clicking an enemy on a page with no killzone map object group
+    // (Explore mode, the heatmap, some admin tools - anywhere `hiddenMapObjectGroups` hides
+    // 'killzone', so there is no such thing as a pull) used to still try to build a
+    // KillZone/EditKillZoneEnemySelection pair and crashed. None of those pages can have pulls,
+    // so the click should just do nothing.
+    it('does nothing when the current page has no killzone map object group', () => {
+        const map = Object.create(DungeonMap.prototype);
+        map.mapObjectGroupManager = {getByName: () => false};
+        map.getMapState = () => null;
+        EditKillZoneEnemySelection.isEnemySelectable.mockClear();
+
+        expect(() => map._enemyClicked({context: {}, data: {}})).not.toThrow();
+        expect(EditKillZoneEnemySelection.isEnemySelectable).not.toHaveBeenCalled();
     });
 });
