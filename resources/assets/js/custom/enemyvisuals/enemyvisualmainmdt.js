@@ -74,7 +74,19 @@ class EnemyVisualMainMDT extends EnemyVisualMain {
     refreshSize() {
         super.refreshSize();
 
-        let width = this._getTextWidth();
-        $(`#map_enemy_visual_${this.enemyvisual.enemy.id},#map_enemy_visual_${this.enemyvisual.enemy.id} .mdt_inner`).css('font-size', `${width}px`);
+        // Resolved by id and then scoped to the element, rather than as one `#id, #id .mdt_inner`
+        // selector: a selector with anything after the id makes jQuery fall back to a
+        // full-document querySelectorAll, which on a map with hundreds of enemies is by far the
+        // most expensive thing on the zoom path (see EnemyVisualMainEnemyPortrait).
+        let element = document.getElementById(`map_enemy_visual_${this.enemyvisual.enemy.id}`);
+        if (element === null) {
+            return;
+        }
+
+        let fontSize = `${this._getTextWidth()}px`;
+        element.style.fontSize = fontSize;
+        for (let inner of element.querySelectorAll('.mdt_inner')) {
+            inner.style.fontSize = fontSize;
+        }
     }
 }

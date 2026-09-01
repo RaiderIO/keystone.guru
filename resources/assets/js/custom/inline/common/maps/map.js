@@ -226,6 +226,11 @@ class CommonMapsMap extends InlineCode {
                 console.error(e);
             }
         }
+
+        // Everything above wrote cookies directly rather than through a StateManager setter, so the
+        // snapshot StateManager keeps of document.cookie has to be dropped here - otherwise a
+        // getter that happened to run first would keep serving the pre-defaults view of the jar.
+        state.invalidateCookieCache();
     }
 
     /**
