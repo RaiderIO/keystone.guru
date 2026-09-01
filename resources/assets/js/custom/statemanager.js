@@ -36,6 +36,32 @@ class StateManager extends Signalable {
         this.snackbarsAdded = 0;
 
         this._sanitizeAllowedDomains = [];
+
+        this._cookieCache = {};
+    }
+
+    /**
+     * @param name {String}
+     * @returns {String|undefined}
+     * @private
+     */
+    _getCachedCookie(name) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        if (!this._cookieCache.hasOwnProperty(name)) {
+            this._cookieCache[name] = Cookies.get(name);
+        }
+
+        return this._cookieCache[name];
+    }
+
+    /**
+     * Drops the cached cookie values so that the next read picks up whatever was written.
+     */
+    invalidateCookieCache() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        this._cookieCache = {};
     }
 
     /**
@@ -316,7 +342,7 @@ class StateManager extends Signalable {
      */
     getUnkilledEnemyOpacity() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        let opacity = Number(Cookies.get('map_unkilled_enemy_opacity'));
+        let opacity = Number(this._getCachedCookie('map_unkilled_enemy_opacity'));
 
         // Same hazard as getKillZonePathWeight(): the cookie may be missing on a cookie-less
         // headless render, and `opacity: NaN%` is simply dropped by the browser - rendering
@@ -331,6 +357,7 @@ class StateManager extends Signalable {
     setUnkilledEnemyOpacity(unkilledEnemyOpacity) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         Cookies.set('map_unkilled_enemy_opacity', unkilledEnemyOpacity, cookieDefaultAttributes);
+        this.invalidateCookieCache();
 
         // Let everyone know it's changed
         this.signal('unkilledenemyopacity:changed', {opacity: unkilledEnemyOpacity});
@@ -342,7 +369,7 @@ class StateManager extends Signalable {
      */
     getUnkilledImportantEnemyOpacity() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        let opacity = Number(Cookies.get('map_unkilled_important_enemy_opacity'));
+        let opacity = Number(this._getCachedCookie('map_unkilled_important_enemy_opacity'));
 
         // See getUnkilledEnemyOpacity() - same missing-cookie fallback, different default.
         return isNaN(opacity) ? 80 : opacity;
@@ -355,6 +382,7 @@ class StateManager extends Signalable {
     setUnkilledImportantEnemyOpacity(unkilledImportantEnemyOpacity) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         Cookies.set('map_unkilled_important_enemy_opacity', unkilledImportantEnemyOpacity, cookieDefaultAttributes);
+        this.invalidateCookieCache();
 
         // Let everyone know it's changed
         this.signal('unkilledimportantenemyopacity:changed', {opacity: unkilledImportantEnemyOpacity});
@@ -366,7 +394,7 @@ class StateManager extends Signalable {
      */
     hasEnemyAggressivenessBorder() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return parseInt(Cookies.get('map_enemy_aggressiveness_border')) === 1;
+        return parseInt(this._getCachedCookie('map_enemy_aggressiveness_border')) === 1;
     }
 
     /**
@@ -376,6 +404,7 @@ class StateManager extends Signalable {
     setEnemyAggressivenessBorder(visible) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         Cookies.set('map_enemy_aggressiveness_border', visible ? 1 : 0, cookieDefaultAttributes);
+        this.invalidateCookieCache();
 
         // Let everyone know it's changed
         this.signal('enemyaggressivenessborder:changed', {visible: visible});
@@ -387,7 +416,7 @@ class StateManager extends Signalable {
      */
     hasEnemyDangerousBorder() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return parseInt(Cookies.get('map_enemy_dangerous_border')) === 1;
+        return parseInt(this._getCachedCookie('map_enemy_dangerous_border')) === 1;
     }
 
     /**
@@ -397,6 +426,7 @@ class StateManager extends Signalable {
     setEnemyDangerousBorder(visible) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         Cookies.set('map_enemy_dangerous_border', visible ? 1 : 0, cookieDefaultAttributes);
+        this.invalidateCookieCache();
 
         // Let everyone know it's changed
         this.signal('enemydangerousborder:changed', {visible: visible});

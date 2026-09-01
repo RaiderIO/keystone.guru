@@ -22,5 +22,13 @@
         "name": "mapping.checkpoints.bfa.temple_of_sethraliss.atrium_of_sethraliss_name",
         "lat": -206.5,
         "lng": 273.5
+    },
+    {
+        "id": 35,
+        "mapping_version_id": 1059,
+        "floor_id": 49,
+        "name": "mapping.checkpoints.bfa.temple_of_sethraliss.atrium_of_sethraliss_name",
+        "lat": -206.5,
+        "lng": 273.5
     }
 ]

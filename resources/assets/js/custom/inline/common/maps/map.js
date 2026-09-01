@@ -226,6 +226,14 @@ class CommonMapsMap extends InlineCode {
                 console.error(e);
             }
         }
+
+        // The cookies above were written directly, not through a StateManager setter
+        state.invalidateCookieCache();
+
+        // Another tab may have changed one of them; cookies have no change event to listen to
+        window.addEventListener('focus', function () {
+            state.invalidateCookieCache();
+        }, false);
     }
 
     /**

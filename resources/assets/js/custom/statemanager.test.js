@@ -732,3 +732,94 @@ describe('StateManager echo state', () => {
         expect(stateManager.getLaravelEchoAppKey()).toBe('app-key');
     });
 });
+
+// ---------------------------------------------------------------------------
+// Coverage for the cookie read cache (#4409). The map display settings below are read once per
+// enemy per visual refresh; on the Black Temple facade (552 enemies) going through Cookies.get()
+// every time cost ~95ms of a single zoom step, because each call re-parses document.cookie.
+//
+// The cache is only safe as long as every write to those cookies drops it again, so that is what
+// these tests pin down - both the setters here and the direct writes Map#_initDefaults() makes.
+// ---------------------------------------------------------------------------
+describe('StateManager cookie read cache', () => {
+    /**
+     * Wraps the jar so a test can count how many reads actually reached it.
+     * @returns {function(): Number}
+     */
+    function countCookieReads() {
+        const original = global.Cookies.get;
+        let reads = 0;
+
+        global.Cookies.get = (key) => {
+            reads++;
+
+            return original(key);
+        };
+
+        return () => reads;
+    }
+
+    afterEach(() => {
+        // Restore the plain jar for whatever runs next.
+        global.Cookies.get = (key) => cookieJar.get(key);
+    });
+
+    test('hasEnemyAggressivenessBorder_givenRepeatedReads_readsTheCookieOnlyOnce', () => {
+        const stateManager = makeStateManager();
+        stateManager.setEnemyAggressivenessBorder(true);
+        const reads = countCookieReads();
+
+        for (let i = 0; i < 10; i++) {
+            expect(stateManager.hasEnemyAggressivenessBorder()).toBe(true);
+        }
+
+        expect(reads()).toBe(1);
+    });
+
+    test('getUnkilledEnemyOpacity_givenNoStoredValue_cachesTheAbsenceInsteadOfRereading', () => {
+        // The absent cookie must be cached too - it is the case that hits on a cookie-less render,
+        // and a truthiness check instead of hasOwnProperty would go back to the jar every time.
+        const stateManager = makeStateManager();
+        const reads = countCookieReads();
+
+        expect(stateManager.getUnkilledEnemyOpacity()).toBe(50);
+        expect(stateManager.getUnkilledEnemyOpacity()).toBe(50);
+
+        expect(reads()).toBe(1);
+    });
+
+    test('setUnkilledEnemyOpacity_givenAPreviouslyReadValue_invalidatesTheCache', () => {
+        const stateManager = makeStateManager();
+        stateManager.setUnkilledEnemyOpacity(50);
+        expect(stateManager.getUnkilledEnemyOpacity()).toBe(50);
+
+        stateManager.setUnkilledEnemyOpacity(90);
+
+        expect(stateManager.getUnkilledEnemyOpacity()).toBe(90);
+    });
+
+    test('setEnemyDangerousBorder_givenAPreviouslyReadValue_invalidatesTheCache', () => {
+        const stateManager = makeStateManager();
+        stateManager.setEnemyDangerousBorder(true);
+        expect(stateManager.hasEnemyDangerousBorder()).toBe(true);
+
+        stateManager.setEnemyDangerousBorder(false);
+
+        expect(stateManager.hasEnemyDangerousBorder()).toBe(false);
+    });
+
+    test('invalidateCookieCache_givenACookieWrittenOutsideASetter_makesTheNewValueVisible', () => {
+        // Map#_initDefaults() writes these cookies with Cookies.set directly rather than through a
+        // setter, so it calls invalidateCookieCache() itself; without that call a getter that ran
+        // first would keep serving the pre-defaults view of the jar for the rest of the session.
+        const stateManager = makeStateManager();
+        expect(stateManager.hasEnemyDangerousBorder()).toBe(false);
+
+        Cookies.set('map_enemy_dangerous_border', 1);
+        expect(stateManager.hasEnemyDangerousBorder()).toBe(false);
+
+        stateManager.invalidateCookieCache();
+
+        expect(stateManager.hasEnemyDangerousBorder()).toBe(true);
+    });
+});
