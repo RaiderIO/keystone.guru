@@ -28,6 +28,7 @@ class EnemyVisualManager extends Signalable {
             run: this._runVisualRefreshTask.bind(this),
             frameBudgetMs: ENEMY_VISUAL_REFRESH_FRAME_BUDGET_MS,
         });
+        this._enemyMarkerCuller = new EnemyMarkerCuller(this.map, this._allEnemies, () => self._hoveredEnemy);
         /** @type Enemy|null */
         this._hoveredEnemy = null;
         // Ids of enemy patrols we've already attached the mouseover/mouseout handlers below to -
@@ -53,6 +54,12 @@ class EnemyVisualManager extends Signalable {
                 };
                 self._allEnemies.push(addedEnemy);
             }
+        });
+        // Both the initial load and a floor switch put their markers on the map after map:refresh
+        // has already been handled, so the cull has to be driven by the markers themselves
+        // appearing. One event per enemy, coalesced into a single pass on the next frame.
+        enemyMapObjectGroup.register('mapobject:shown', this, function () {
+            self._enemyMarkerCuller.scheduleUpdate();
         });
         enemyMapObjectGroup.register('object:deleted', this, function (objectDeletedEvent) {
             let removedEnemy = objectDeletedEvent.data.object;
@@ -162,6 +169,10 @@ class EnemyVisualManager extends Signalable {
             self.map.leafletMap.on('moveend', self._onLeafletMapMoveEnd.bind(self));
 
             self._onLeafletMapMove();
+            // A floor switch re-adds every marker to a fresh layer group after this handler runs,
+            // so the cull class every one of them was carrying is gone. The pass is queued rather
+            // than run here for that reason - by the next frame the new markers exist.
+            self._enemyMarkerCuller.scheduleUpdate();
         });
 
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
@@ -230,6 +241,7 @@ class EnemyVisualManager extends Signalable {
         }
 
         this._enqueueVisualRefreshTasks(visibleTasks.concat(invisibleTasks));
+        this._enemyMarkerCuller.update(bounds);
     }
 
     /**
@@ -479,6 +491,8 @@ class EnemyVisualManager extends Signalable {
                     }
                 }
             }
+
+            this._enemyMarkerCuller.update(bounds);
 
             this._lastMapMoveDistanceCheckTime = currTime;
         }
