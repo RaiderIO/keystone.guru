@@ -88,6 +88,13 @@ final class MDTMappingImportEnemyForcesOverrideTest extends PublicTestCase
         $mappingService    = $this->app->make(MappingServiceInterface::class);
         $newMappingVersion = null;
 
+        // The seeded test database persists between runs, so put back exactly what was there rather than
+        // nulling the columns - this enemy may legitimately carry overrides of its own.
+        $originalOverrides = [
+            'enemy_forces_override'         => $sourceEnemy->enemy_forces_override,
+            'enemy_forces_override_teeming' => $sourceEnemy->enemy_forces_override_teeming,
+        ];
+
         $sourceEnemy->update([
             'enemy_forces_override'         => self::PRESERVED_OVERRIDE,
             'enemy_forces_override_teeming' => self::PRESERVED_OVERRIDE_TEEMING,
@@ -129,9 +136,7 @@ final class MDTMappingImportEnemyForcesOverrideTest extends PublicTestCase
         } finally {
             $newMappingVersion?->delete();
 
-            Enemy::query()
-                ->whereKey($sourceEnemy->id)
-                ->update(['enemy_forces_override' => null, 'enemy_forces_override_teeming' => null]);
+            Enemy::query()->whereKey($sourceEnemy->id)->update($originalOverrides);
         }
     }
 

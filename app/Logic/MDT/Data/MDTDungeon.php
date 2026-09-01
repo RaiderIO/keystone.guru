@@ -240,13 +240,6 @@ class MDTDungeon
                 }
             }
 
-            // Keyed by MDT npc index rather than npc id: MDT defines the same npc id twice in some dungeons,
-            // and those two entries may carry different counts.
-            $mdtNpcCountsByIndex = [];
-            foreach ($mdtNpcs as $mdtNpc) {
-                $mdtNpcCountsByIndex[$mdtNpc->getIndex()] = $mdtNpc->getCount();
-            }
-
             // We now know a list of clones that we want to display, convert those clones to TEMP enemies
             foreach ($npcClones as $npcId => $floorIndexes) {
                 foreach ($floorIndexes as $floorId => $clones) {
@@ -268,7 +261,9 @@ class MDTDungeon
                             'faction'   => isset($clone['faction']) ?
                                 ((int)$clone['faction'] === 1 ? Faction::FACTION_HORDE : Faction::FACTION_ALLIANCE)
                                 : 'any',
-                            'enemy_forces_override'         => $this->getCloneEnemyForcesOverride($clone, $mdtNpcCountsByIndex),
+                            // A clone may carry its own count, superseding its NPC's count for that clone alone
+                            // (MDT 6.2.10 gave Temple of Sethraliss' G30 different enemy forces than G29 this way).
+                            'enemy_forces_override'         => isset($clone['count']) ? (int)$clone['count'] : null,
                             'enemy_forces_override_teeming' => null,
                         ]);
                         // Special MDT fields which are not fillable
@@ -316,25 +311,6 @@ class MDTDungeon
 
             return $enemies;
         }, config('keystoneguru.cache.mdt.ttl'));
-    }
-
-    /**
-     * A clone may carry its own `count`, which supersedes its NPC's `count` for that clone alone - MDT 6.2.10
-     * introduced this to give Temple of Sethraliss' G30 different enemy forces than G29. A clone that agrees
-     * with its NPC needs no override: the per-NPC enemy forces already yield that value.
-     *
-     * @param array<string, mixed> $clone
-     * @param array<int, int>      $mdtNpcCountsByIndex
-     */
-    private function getCloneEnemyForcesOverride(array $clone, array $mdtNpcCountsByIndex): ?int
-    {
-        if (!isset($clone['count'])) {
-            return null;
-        }
-
-        $cloneCount = (int)$clone['count'];
-
-        return $cloneCount === ($mdtNpcCountsByIndex[(int)$clone['mdtNpcIndex']] ?? null) ? null : $cloneCount;
     }
 
     /**
