@@ -6,6 +6,7 @@ use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Laratrust\Role;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -103,7 +104,8 @@ final class FloorControllerEnemyPackMarginTest extends PublicTestCase
     }
 
     #[Test]
-    public function update_givenNonNumericEnemyPackMargin_returnsValidationError(): void
+    #[DataProvider('invalidEnemyPackMarginProvider')]
+    public function update_givenInvalidEnemyPackMargin_returnsValidationError(mixed $invalidValue): void
     {
         // Arrange
         $dungeon = Dungeon::query()->whereHas('floors')->firstOrFail();
@@ -115,7 +117,7 @@ final class FloorControllerEnemyPackMarginTest extends PublicTestCase
             // Act
             $response = $this->patch(route('admin.floor.update', ['dungeon' => $dungeon, 'floor' => $floor]), array_merge(
                 $this->validPayload($floor),
-                ['enemy_pack_margin' => 'not-a-number'],
+                ['enemy_pack_margin' => $invalidValue],
             ));
 
             // Assert
@@ -123,5 +125,15 @@ final class FloorControllerEnemyPackMarginTest extends PublicTestCase
         } finally {
             $floor?->delete();
         }
+    }
+
+    /** @return array<string, array<int, mixed>> */
+    public static function invalidEnemyPackMarginProvider(): array
+    {
+        return [
+            'non-numeric' => ['not-a-number'],
+            'negative'    => [-1],
+            'too large'   => [51],
+        ];
     }
 }

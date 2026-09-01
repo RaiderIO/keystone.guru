@@ -135,7 +135,7 @@ $floor ??= null;
 
     <div class="mb-3{{ $errors->has('enemy_pack_margin') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.floor.edit.enemy_pack_margin'), 'enemy_pack_margin')->class('fw-bold') }}
-        {{ html()->number('enemy_pack_margin', $floor?->enemy_pack_margin, null, null, '0.1')->class('form-control') }}
+        {{ html()->number('enemy_pack_margin', $floor?->enemy_pack_margin, 0, 50, '0.1')->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'enemy_pack_margin'])
     </div>
 
