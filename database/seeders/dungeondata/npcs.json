@@ -50376,7 +50376,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22871\/teron-gorefiend",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9260,
+                "npc_id": 22871,
+                "game_version_id": 2,
+                "health": 5009045,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -50619,7 +50627,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22879\/shadowmoon-reaver",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9249,
+                "npc_id": 22879,
+                "game_version_id": 2,
+                "health": 221168,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -50648,7 +50664,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22880\/shadowmoon-champion",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9248,
+                "npc_id": 22880,
+                "game_version_id": 2,
+                "health": 332100,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -50706,7 +50730,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22882\/shadowmoon-deathshaper",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9258,
+                "npc_id": 22882,
+                "game_version_id": 2,
+                "health": 176613,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -50912,7 +50944,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22917\/illidan-stormrage",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9293,
+                "npc_id": 22917,
+                "game_version_id": 2,
+                "health": 6090780,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -50970,7 +51010,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22939\/temple-acolyte",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9274,
+                "npc_id": 22939,
+                "game_version_id": 2,
+                "health": 25200,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -50999,7 +51047,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22945\/shadowmoon-blood-mage",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9251,
+                "npc_id": 22945,
+                "game_version_id": 2,
+                "health": 147600,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -51028,7 +51084,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22946\/shadowmoon-war-hound",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9252,
+                "npc_id": 22946,
+                "game_version_id": 2,
+                "health": 71800,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -51057,7 +51121,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22947\/mother-shahraz",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9281,
+                "npc_id": 22947,
+                "game_version_id": 2,
+                "health": 4560112,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -51086,7 +51158,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22948\/gurtogg-bloodboil",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9272,
+                "npc_id": 22948,
+                "game_version_id": 2,
+                "health": 5700585,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -51115,7 +51195,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22949\/gathios-the-shatterer",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9288,
+                "npc_id": 22949,
+                "game_version_id": 2,
+                "health": 1744872,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -51144,7 +51232,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22950\/high-nethermancer-zerevor",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9290,
+                "npc_id": 22950,
+                "game_version_id": 2,
+                "health": 1745055,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -51173,7 +51269,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22951\/lady-malande",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9289,
+                "npc_id": 22951,
+                "game_version_id": 2,
+                "health": 1745055,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -51202,7 +51306,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22952\/veras-darkshadow",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9287,
+                "npc_id": 22952,
+                "game_version_id": 2,
+                "health": 1745088,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -51231,7 +51343,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22953\/wrathbone-flayer",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9257,
+                "npc_id": 22953,
+                "game_version_id": 2,
+                "health": 359246,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -51297,7 +51417,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22955\/charming-patron",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9273,
+                "npc_id": 22955,
+                "game_version_id": 2,
+                "health": 25200,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -51326,7 +51454,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22956\/priestess-of-torment",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9277,
+                "npc_id": 22956,
+                "game_version_id": 2,
+                "health": 295100,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -51355,7 +51491,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22957\/mistress-of-dementia",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9279,
+                "npc_id": 22957,
+                "game_version_id": 2,
+                "health": 532222,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -51384,7 +51528,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22959\/ardent-host",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9275,
+                "npc_id": 22959,
+                "game_version_id": 2,
+                "health": 167564,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -51450,7 +51602,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22962\/mistress-of-woe",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9280,
+                "npc_id": 22962,
+                "game_version_id": 2,
+                "health": 671188,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -51516,7 +51676,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22964\/priestess-of-delight",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9276,
+                "npc_id": 22964,
+                "game_version_id": 2,
+                "health": 295100,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -51545,7 +51713,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22965\/devoted-steward",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9278,
+                "npc_id": 22965,
+                "game_version_id": 2,
+                "health": 180584,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -51574,7 +51750,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22996\/blade-of-azzinoth",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9291,
+                "npc_id": 22996,
+                "game_version_id": 2,
+                "health": 7000,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -51603,7 +51787,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=22997\/flame-of-azzinoth",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9292,
+                "npc_id": 22997,
+                "game_version_id": 2,
+                "health": 1138364,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -51632,7 +51824,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23018\/shadowmoon-houndmaster",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9250,
+                "npc_id": 23018,
+                "game_version_id": 2,
+                "health": 123600,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -51735,7 +51935,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23047\/shadowmoon-soldier",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9256,
+                "npc_id": 23047,
+                "game_version_id": 2,
+                "health": 36900,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -51764,7 +51972,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23049\/shadowmoon-weapon-master",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9255,
+                "npc_id": 23049,
+                "game_version_id": 2,
+                "health": 369000,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -51822,7 +52038,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23083\/shadowmoon-riding-hound",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9254,
+                "npc_id": 23083,
+                "game_version_id": 2,
+                "health": 143400,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -52025,7 +52249,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23147\/shadowmoon-grunt",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9253,
+                "npc_id": 23147,
+                "game_version_id": 2,
+                "health": 33200,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -52141,7 +52373,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23172\/hand-of-gorefiend",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9259,
+                "npc_id": 23172,
+                "game_version_id": 2,
+                "health": 258242,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -52191,7 +52431,7 @@
         "level": null,
         "mdt_scale": null,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -52199,11 +52439,19 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23196\/bonechewer-behemoth",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9263,
+                "npc_id": 23196,
+                "game_version_id": 2,
+                "health": 664286,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
-                "id": 6723,
+                "id": 7620,
                 "npc_id": 23196,
                 "dungeon_id": 156
             }
@@ -52315,7 +52563,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23222\/bonechewer-brawler",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9271,
+                "npc_id": 23222,
+                "game_version_id": 2,
+                "health": 395000,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -52344,7 +52600,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23223\/bonechewer-spectator",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9270,
+                "npc_id": 23223,
+                "game_version_id": 2,
+                "health": 32300,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -52373,7 +52637,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23232\/mutant-war-hound",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9268,
+                "npc_id": 23232,
+                "game_version_id": 2,
+                "health": 143600,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -52402,7 +52674,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23235\/bonechewer-blade-fury",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9261,
+                "npc_id": 23235,
+                "game_version_id": 2,
+                "health": 221636,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -52431,7 +52711,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23236\/bonechewer-shield-disciple",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9262,
+                "npc_id": 23236,
+                "game_version_id": 2,
+                "health": 215568,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -52460,7 +52748,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23237\/bonechewer-blood-prophet",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9264,
+                "npc_id": 23237,
+                "game_version_id": 2,
+                "health": 172300,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -52489,7 +52785,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23239\/bonechewer-combatant",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9269,
+                "npc_id": 23239,
+                "game_version_id": 2,
+                "health": 395276,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -52861,7 +53165,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23394\/promenade-sentinel",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9282,
+                "npc_id": 23394,
+                "game_version_id": 2,
+                "health": 664200,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -52890,7 +53202,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23397\/illidari-blood-lord",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9283,
+                "npc_id": 23397,
+                "game_version_id": 2,
+                "health": 236100,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -52977,7 +53297,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23400\/illidari-archon",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9285,
+                "npc_id": 23400,
+                "game_version_id": 2,
+                "health": 177100,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -53035,7 +53363,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23402\/illidari-battle-mage",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9284,
+                "npc_id": 23402,
+                "game_version_id": 2,
+                "health": 177100,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -53064,7 +53400,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23403\/illidari-assassin",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9286,
+                "npc_id": 23403,
+                "game_version_id": 2,
+                "health": 184615,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -53151,7 +53495,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23418\/essence-of-suffering",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9265,
+                "npc_id": 23418,
+                "game_version_id": 2,
+                "health": 2274142,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -53180,7 +53532,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23419\/essence-of-desire",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9266,
+                "npc_id": 23419,
+                "game_version_id": 2,
+                "health": 3035168,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -53209,7 +53569,15 @@
         "runs_away_in_fear": 0,
         "wowhead_url": "https:\/\/www.wowhead.com\/npc=23420\/essence-of-anger",
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9267,
+                "npc_id": 23420,
+                "game_version_id": 2,
+                "health": 3031061,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
