@@ -148,6 +148,29 @@ final class DungeonHeatmapControllerFloorResolutionTest extends PublicTestCase
     }
 
     #[Test]
+    public function embed_givenDungeonWithoutHeatmapSupport_returnsUnsupportedView(): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion] = $this->findDungeon(
+            dungeonActive:       true,
+            requireDefaultFloor: true,
+            constraint:          static fn(Builder $query) => $query->where('heatmap_enabled', 0),
+        );
+        $gameVersion = $mappingVersion->gameVersion;
+
+        // Act
+        $response = $this->get(route('dungeon.heatmap.gameversion.embed.floor', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+            'floorIndex'  => 1,
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertViewIs('dungeon.heatmap.gameversion.embedunsupported');
+    }
+
+    #[Test]
     public function viewDungeon_givenActiveDungeon_redirectsToDefaultFloor(): void
     {
         // Arrange

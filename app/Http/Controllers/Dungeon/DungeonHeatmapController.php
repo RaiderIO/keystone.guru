@@ -185,9 +185,15 @@ class DungeonHeatmapController extends Controller
     ): View|RedirectResponse {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
-        $redirect = $this->guardAgainstInvalidAccess($gameVersion, $dungeon, $currentMappingVersion, $dungeon->getActiveSeason($seasonService));
-        if ($redirect instanceof RedirectResponse) {
-            return $redirect;
+        // Applied before the guard so the "unsupported" view honors the embed's requested locale too
+        $locale = $request->get('locale', App::getLocale());
+        App::setLocale(
+            config('language.short_to_long')[$locale] ?? $locale,
+        );
+
+        $unsupported = $this->guardAgainstInvalidAccess($gameVersion, $dungeon, $currentMappingVersion, $dungeon->getActiveSeason($seasonService), embed: true);
+        if ($unsupported !== null) {
+            return $unsupported;
         }
 
         // Ensure that User::getCurrentUserMapFacadeStyle() returns the wanted map facade style
@@ -207,11 +213,6 @@ class DungeonHeatmapController extends Controller
         }
 
         $floor = $resolvedFloor->floor;
-
-        $locale = $request->get('locale', App::getLocale());
-        App::setLocale(
-            config('language.short_to_long')[$locale] ?? $locale,
-        );
 
         $style                  = $request->get('style', 'compact');
         $headerBackgroundColor  = $request->get('headerBackgroundColor');
@@ -293,17 +294,22 @@ class DungeonHeatmapController extends Controller
     /**
      * Maybe this should go in a policy?
      *
-     * @param  Dungeon               $dungeon
-     * @param  GameVersion           $gameVersion
-     * @param  MappingVersion|null   $currentMappingVersion
-     * @return RedirectResponse|null
+     * Redirects to the dungeon selection page normally. Inside an embed, redirecting there would
+     * break out of the embedding iframe onto the full site (nav + footer), so `$embed` renders a
+     * minimal embed-appropriate "not supported" view instead.
+     *
+     * @param  Dungeon                    $dungeon
+     * @param  GameVersion                $gameVersion
+     * @param  MappingVersion|null        $currentMappingVersion
+     * @return RedirectResponse|View|null
      */
     private function guardAgainstInvalidAccess(
         GameVersion     $gameVersion,
         Dungeon         $dungeon,
         ?MappingVersion $currentMappingVersion,
         ?Season         $mostRecentSeason = null,
-    ): ?RedirectResponse {
+        bool            $embed = false,
+    ): RedirectResponse|View|null {
         if (
             !$dungeon->active ||
             !$dungeon->heatmap_enabled ||
@@ -311,6 +317,13 @@ class DungeonHeatmapController extends Controller
             $mostRecentSeason === null ||
             !Feature::active(Heatmap::class)
         ) {
+            if ($embed) {
+                return view('dungeon.heatmap.gameversion.embedunsupported', [
+                    'dungeon' => $dungeon,
+                    'title'   => __($dungeon->name),
+                ]);
+            }
+
             return redirect()->route('dungeon.heatmap.gameversion.select', [
                 'gameVersion' => $gameVersion,
             ]);
