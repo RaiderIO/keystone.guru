@@ -76,6 +76,12 @@
     width: 100%;
 }
 
+/* Enemies far enough outside the viewport that laying them out and painting them is work done for
+   nobody - toggled by EnemyVisualManager#_updateEnemyCulling(). */
+.leaflet-marker-icon.map_enemy_visual_culled {
+    display: none;
+}
+
 /* Remove square background and border around enemies, but leave editing drag squares alone */
 .leaflet-marker-icon.leaflet-div-icon:not(.leaflet-editing-icon):not(.leaflet-edit-marker-selected) {
     border: none;

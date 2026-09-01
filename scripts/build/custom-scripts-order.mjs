@@ -52,6 +52,7 @@ export const customScripts = [
 
     // Depends on the above
     'resources/assets/js/custom/mapobjectgroups/mapobjectgroupmanager.js',
+    'resources/assets/js/custom/enemyvisuals/enemymarkerculler.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmanager.js',
     'resources/assets/js/custom/enemyforces/enemyforcesmanager.js',
 
