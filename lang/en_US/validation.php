@@ -43,6 +43,10 @@ return [
             'min'     => 'The overview must cover at least :min day.',
             'max'     => 'The overview may cover at most :max days.',
         ],
+        'patreon_grant_reason' => [
+            'required' => 'A reason is required - it is what makes this grant reviewable later.',
+            'max'      => 'The reason may not be longer than :max characters.',
+        ],
     ],
     'date'              => 'The :attribute is not a valid date.',
     'date_equals'       => 'The :attribute must be a date equal to :date.',

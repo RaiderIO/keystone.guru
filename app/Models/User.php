@@ -35,7 +35,7 @@ use Override;
  * @property int         $id
  * @property string      $public_key
  * @property int         $game_server_region_id
- * @property int         $patreon_user_link_id
+ * @property int|null    $patreon_user_link_id        Null for any user without a Patreon link, which is nearly all of them.
  * @property int         $game_version_id
  * @property int         $dungeon_id                  The dungeon context this user is in.
  * @property string      $name

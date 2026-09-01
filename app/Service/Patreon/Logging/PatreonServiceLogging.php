@@ -293,4 +293,19 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
     {
         $this->info(__METHOD__, get_defined_vars());
     }
+
+    public function grantAllBenefits(int $userId, int $grantedByUserId, string $reason): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
+    public function revokeManualGrant(int $userId, int $revokedByUserId, int $revokedGrants): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
+    public function revokeManualGrantDeletedFabricatedLink(int $userId, int $revokedByUserId): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
 }

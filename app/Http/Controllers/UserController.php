@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GrantPatreonBenefitsFormRequest;
 use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Patreon\PatreonUserBenefit;
-use App\Models\Patreon\PatreonUserLink;
 use App\Models\User;
+use App\Service\Patreon\PatreonServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Session;
@@ -86,35 +86,13 @@ class UserController extends Controller
         return redirect()->route('admin.users');
     }
 
-    public function grantAllBenefits(Request $request, User $user): RedirectResponse
-    {
+    public function grantAllBenefits(
+        GrantPatreonBenefitsFormRequest $request,
+        User                            $user,
+        PatreonServiceInterface         $patreonService,
+    ): RedirectResponse {
         try {
-            if (isset($user->patreonUserLink)) {
-                // Remove old patreon benefits
-                $user->patreonUserLink->patreonUserBenefits()->delete();
-            } else {
-                // Create a dummy patreon link
-                $patreonUserLink = PatreonUserLink::create([
-                    'user_id'       => $user->id,
-                    'email'         => $user->email,
-                    'scope'         => 'identity identity[email] identity.memberships campaigns',
-                    'access_token'  => PatreonUserLink::PERMANENT_TOKEN,
-                    'refresh_token' => PatreonUserLink::PERMANENT_TOKEN,
-                    'version'       => '0.0.1',
-                    'expires_at'    => Carbon::now()->addYears(100),
-                ]);
-                $user->setRelation('patreonUserLink', $patreonUserLink);
-
-                $user->update(['patreon_user_link_id' => $patreonUserLink->id]);
-            }
-
-            // Grand them all benefits
-            foreach (PatreonBenefit::ALL as $patreonBenefit => $patreonBenefitId) {
-                PatreonUserBenefit::create([
-                    'patreon_user_link_id' => $user->patreon_user_link_id,
-                    'patreon_benefit_id'   => $patreonBenefitId,
-                ]);
-            }
+            $patreonService->grantAllBenefits($user, $request->user(), $request->reason());
 
             Session::flash('status', __('controller.user.flash.all_benefits_granted_successfully'));
         } catch (Exception) {

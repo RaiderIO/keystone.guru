@@ -268,6 +268,21 @@
             </div>
         </div>
 
+        {{-- Patreon --}}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <i class="fab fa-patreon"></i> {{ __('view_admin.tools.list.subheader_patreon') }}
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a href="{{ route('admin.tools.patreon.grants.view') }}">{{ __('view_admin.tools.list.manage_patreon_manual_grants') }}</a>
+                        <small class="text-muted d-block">{{ __('view_admin.tools.list.manage_patreon_manual_grants_description') }}</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
         {{-- Actions (destructive) --}}
         <div class="col-12 mb-4">
             <div class="card border-danger">

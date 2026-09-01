@@ -145,4 +145,10 @@ interface PatreonServiceLoggingInterface
     public function loadAdminUserEnd(): void;
 
     public function createPatreonUserLinkSuccessful(int $userId, int $patreonUserLinkId): void;
+
+    public function grantAllBenefits(int $userId, int $grantedByUserId, string $reason): void;
+
+    public function revokeManualGrant(int $userId, int $revokedByUserId, int $revokedGrants): void;
+
+    public function revokeManualGrantDeletedFabricatedLink(int $userId, int $revokedByUserId): void;
 }

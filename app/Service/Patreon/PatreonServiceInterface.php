@@ -2,6 +2,7 @@
 
 namespace App\Service\Patreon;
 
+use App\Models\Patreon\PatreonManualGrant;
 use App\Models\User;
 use App\Service\Patreon\Dtos\ApplyPaidBenefitsForMemberResult;
 use App\Service\Patreon\Dtos\LinkToUserIdResult;
@@ -39,4 +40,20 @@ interface PatreonServiceInterface
     public function planPaidBenefitsForMember(array $campaignBenefits, array $campaignTiers, array $member): PatreonMemberSyncPlan;
 
     public function linkToUserAccount(User $user, string $code, string $redirectUri): LinkToUserIdResult;
+
+    /**
+     * Manually grants a user every Patreon benefit, recording why and by whom. The grant overrides
+     * whatever tier the hourly sync would otherwise compute for them, until it is revoked.
+     */
+    public function grantAllBenefits(User $user, User $grantedBy, string $reason): PatreonManualGrant;
+
+    /**
+     * Takes back a manual grant: removes the granted benefits, marks any audit record as revoked, and
+     * cleans up the Patreon link if the admin panel fabricated it in the first place. A user with a
+     * real Patreon link keeps that link, and the next patreon:refreshmembers run restores their true
+     * tier.
+     *
+     * @return bool Whether anything was actually revoked.
+     */
+    public function revokeManualGrant(User $user, User $revokedBy): bool;
 }

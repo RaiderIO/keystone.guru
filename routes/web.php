@@ -28,6 +28,7 @@ use App\Http\Controllers\AdminTools\AdminToolsFeaturesController;
 use App\Http\Controllers\AdminTools\AdminToolsMdtController;
 use App\Http\Controllers\AdminTools\AdminToolsMessageBannerController;
 use App\Http\Controllers\AdminTools\AdminToolsNpcController;
+use App\Http\Controllers\AdminTools\AdminToolsPatreonGrantsController;
 use App\Http\Controllers\AdminTools\AdminToolsSpellsController;
 use App\Http\Controllers\AdminTools\AdminToolsThumbnailsController;
 use App\Http\Controllers\AdminTools\AdminToolsWagoGgController;
@@ -484,7 +485,8 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::prefix('user')->group(static function () {
                 Route::post('{user}/make/{role}', new UserController()->makeRole(...))->name('admin.user.make.role');
                 Route::delete('{user}/delete', new UserController()->delete(...))->name('admin.user.delete');
-                Route::get('{user}/grantAllBenefits', new UserController()->grantAllBenefits(...))->name('admin.user.grantallbenefits');
+                // POST rather than GET: granting hands out paid benefits for free and now carries a required reason (#4385)
+                Route::post('{user}/grantAllBenefits', new UserController()->grantAllBenefits(...))->name('admin.user.grantallbenefits');
             });
             Route::get('users', new UserController()->get(...))->name('admin.users');
             Route::get('userreports', new UserReportController()->get(...))->name('admin.userreports');
@@ -593,6 +595,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('readonly/toggle', new AdminToolsController()->toggleReadOnlyMode(...))->name('admin.tools.readonly.toggle');
 
                 // Banned IP addresses
+                Route::get('patreon/grants', new AdminToolsPatreonGrantsController()->index(...))->name('admin.tools.patreon.grants.view');
+                Route::delete('patreon/grants/{user}', new AdminToolsPatreonGrantsController()->revoke(...))->name('admin.tools.patreon.grants.revoke');
+
                 Route::get('bannedipaddresses', new AdminToolsBannedIpAddressController()->index(...))->name('admin.tools.bannedipaddresses.view');
                 Route::post('bannedipaddresses', new AdminToolsBannedIpAddressController()->store(...))->name('admin.tools.bannedipaddresses.store');
                 Route::delete('bannedipaddresses/{bannedIpAddress}', new AdminToolsBannedIpAddressController()->destroy(...))->name('admin.tools.bannedipaddresses.destroy');

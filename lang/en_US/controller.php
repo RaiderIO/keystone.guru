@@ -21,6 +21,8 @@ return [
         'flash' => [
             'banned_ip_address_added'                => 'IP address banned successfully',
             'banned_ip_address_removed'              => 'Ban removed successfully',
+            'patreon_manual_grant_revoked'           => 'Revoked the manual Patreon grant of :user',
+            'patreon_manual_grant_nothing_to_revoke' => ':user has no manually granted Patreon benefits to revoke',
             'message_banner_set_successfully'        => 'Message banner set successfully',
             'thumbnail_regenerate_result'            => 'Dispatched :success jobs for :total routes. :failed failed.',
             'combatlog_route_regenerate_result'      => 'Dispatched :count jobs',
