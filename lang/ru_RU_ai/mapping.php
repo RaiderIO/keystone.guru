@@ -555,6 +555,13 @@ return [
                 'activates_after_killing_bosses' => 'Односторонняя поездка обратно на Променад активируется после убийства первого босса (любого из них). Второе убийство перенесет вас на соответствующий Верхний уровень.',
             ],
         ],
+        'tbc' => [
+            'black_temple' => [
+                'ashtongue_variants'                  => 'Враги могут быть одним из: Ashtongue Mystic, Ashtongue Stormcaller или Ashtongue Battlelord.',
+                'coilscar_or_aqueous_surger_variants' => 'Враги этого пака могут быть одним из: Coilscar General, Coilscar Soothsayer, Coilscar Seacaller или Aqueous Surger',
+                'dragonmaw_variants'                  => 'Dragonmaw Wind Reaver и Dragonmaw Sky Stalker могут появляться один вместо другого.',
+            ],
+        ],
     ],
 
     'checkpoints' => [

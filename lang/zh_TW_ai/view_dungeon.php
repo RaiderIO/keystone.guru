@@ -52,6 +52,7 @@ return [
                 'any'                     => '任何',
                 'select_floor'            => '選擇樓層',
                 'view_heatmap_fullscreen' => '全螢幕查看',
+                'not_supported'           => '',
             ],
         ],
     ],

@@ -555,6 +555,13 @@ Após matar o chefe, use o item de draco para voar mais alto.',
                 'activates_after_killing_bosses' => 'Viagem só de ida de volta para o Promenade ativa após matar o primeiro chefe (qualquer um deles). A segunda morte o levará ao respectivo nível superior.',
             ],
         ],
+        'tbc' => [
+            'black_temple' => [
+                'ashtongue_variants'                  => 'Os inimigos podem ser Ashtongue Mystic, Ashtongue Stormcaller ou Ashtongue Battlelord.',
+                'coilscar_or_aqueous_surger_variants' => 'Os inimigos deste pacote podem ser Coilscar General, Coilscar Soothsayer, Coilscar Seacaller ou Aqueous Surger',
+                'dragonmaw_variants'                  => 'Dragonmaw Wind Reaver e Dragonmaw Sky Stalker podem aparecer um no lugar do outro.',
+            ],
+        ],
     ],
 
     'checkpoints' => [

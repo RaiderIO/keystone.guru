@@ -161,6 +161,7 @@ return [
             'enemy_engagement_max_range_patrols' => '',
             'percentage_display_zoom'            => '',
             'zoom_max'                           => '',
+            'enemy_pack_margin'                  => '',
             'default'                            => 'По умолчанию',
             'default_title'                      => 'Если отмечено по умолчанию, этот этаж открывается первым при редактировании маршрутов для этого подземелья (по умолчанию должен быть отмечен только один).',
             'facade'                             => '',
