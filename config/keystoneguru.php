@@ -236,6 +236,11 @@ return [
         'retention_days' => 30,
     ],
 
+    'telemetry' => [
+        /** The number of days telemetry metric records (scheduled command run times, site gauges) are kept before being pruned. */
+        'retention_days' => 30,
+    ],
+
     'thumbnail' => [
         /**
          * A secret key that must be provided to get access to the preview routes (no other auth available)

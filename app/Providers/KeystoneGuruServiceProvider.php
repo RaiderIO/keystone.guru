@@ -188,6 +188,8 @@ use App\Service\Spell\Tuning\SpellTuningSnapshotLoader;
 use App\Service\Spell\Tuning\SpellTuningSnapshotLoaderInterface;
 use App\Service\StructuredLogging\StructuredLoggingService;
 use App\Service\StructuredLogging\StructuredLoggingServiceInterface;
+use App\Service\Telemetry\TelemetryService;
+use App\Service\Telemetry\TelemetryServiceInterface;
 use App\Service\TimewalkingEvent\TimewalkingEventService;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use App\Service\User\UserService;
@@ -249,6 +251,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(PatreonServiceInterface::class, PatreonService::class);
         $this->app->bind(PatreonDiagnosticsServiceInterface::class, PatreonDiagnosticsService::class);
         $this->app->bind(MetricServiceInterface::class, MetricService::class);
+        $this->app->bind(TelemetryServiceInterface::class, TelemetryService::class);
         $this->app->bind(CombatLogServiceInterface::class, CombatLogService::class);
         $this->app->bind(CombatLogSplitServiceInterface::class, CombatLogSplitService::class);
         $this->app->bind(CombatLogMappingVersionServiceInterface::class, CombatLogMappingVersionService::class);

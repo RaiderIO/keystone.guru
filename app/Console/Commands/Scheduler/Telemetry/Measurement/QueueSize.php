@@ -2,30 +2,26 @@
 
 namespace App\Console\Commands\Scheduler\Telemetry\Measurement;
 
+use App\Models\Telemetry\TelemetryMetric;
+use App\Service\Telemetry\Dtos\TelemetryDataPoint;
 use Illuminate\Support\Facades\Queue;
-use InfluxDB\Point;
 
 class QueueSize extends Measurement
 {
     /**
      * {@inheritDoc}
      */
-    public function getPoints(): array
+    public function getDataPoints(): array
     {
-        $tags = array_merge($this->getTags(), ['server' => 'maisie']);
-
         $result = [];
         foreach (config(sprintf('horizon.environments.%s', config('app.env'))) as $key => $config) {
             $queueName = $config['queue'][0];
 
-            $result[] = new Point(
-                'queue',
-                null,
-                array_merge($tags, ['name' => $queueName]),
-                [
-                    'size' => Queue::size($queueName),
-                ],
-                time(),
+            $result[] = new TelemetryDataPoint(
+                TelemetryMetric::MEASUREMENT_QUEUE,
+                'size',
+                Queue::size($queueName),
+                $queueName,
             );
         }
 
