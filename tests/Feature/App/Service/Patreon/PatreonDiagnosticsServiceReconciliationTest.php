@@ -4,9 +4,11 @@ namespace Tests\Feature\App\Service\Patreon;
 
 use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonBenefit;
+use App\Models\Patreon\PatreonManualGrant;
 use App\Models\Patreon\PatreonUserBenefit;
 use App\Models\Patreon\PatreonUserLink;
 use App\Models\User;
+use App\Repositories\Interfaces\Patreon\PatreonManualGrantRepositoryInterface;
 use App\Service\Patreon\Dtos\Diagnostics\PatreonBenefitHolderDiagnostics;
 use App\Service\Patreon\Dtos\Diagnostics\PatreonBenefitReconciliation;
 use App\Service\Patreon\Dtos\PatreonCampaignMembers;
@@ -65,10 +67,17 @@ final class PatreonDiagnosticsServiceReconciliationTest extends PublicTestCase
     /** @var array<int, int> */
     private array $createdLinkIds = [];
 
+    /** @var array<int, int> */
+    private array $createdGrantIds = [];
+
     #[Override]
     protected function tearDown(): void
     {
         try {
+            if ($this->createdGrantIds !== []) {
+                PatreonManualGrant::query()->whereIn('id', $this->createdGrantIds)->delete();
+            }
+
             if ($this->createdLinkIds !== []) {
                 PatreonUserBenefit::query()->whereIn('patreon_user_link_id', $this->createdLinkIds)->delete();
                 PatreonUserLink::query()->whereIn('id', $this->createdLinkIds)->delete();
@@ -171,6 +180,41 @@ final class PatreonDiagnosticsServiceReconciliationTest extends PublicTestCase
 
         // Assert
         $this->assertNull($this->findHolder($reconciliation, $link->id));
+    }
+
+    #[Test]
+    public function getBenefitReconciliation_givenARealLinkCarryingAnActiveManualGrant_excludesItFromTheReport(): void
+    {
+        // Arrange - the second half of PatreonUserLink::getManuallyGrantedAttribute(): a genuine Patreon
+        // link whose benefits an admin overrode (#4385). The sync skips these, so an account the campaign
+        // no longer lists would otherwise be reported as over-entitled for a state an admin chose
+        $link = $this->createLinkedUser();
+        $this->grantBenefits($link, [PatreonBenefit::AD_FREE, PatreonBenefit::UNLISTED_ROUTES]);
+        $this->grantManually($link);
+
+        // Act - a campaign that does not list them at all
+        $reconciliation = $this->reconcile([]);
+
+        // Assert
+        $this->assertNull($this->findHolder($reconciliation, $link->id));
+    }
+
+    #[Test]
+    public function getBenefitReconciliation_givenALinkWhoseManualGrantWasRevoked_reportsItAgain(): void
+    {
+        // Arrange - the exclusion keys on an *active* grant, so revoking the override must hand the
+        // account straight back to the report rather than hiding it forever
+        $link = $this->createLinkedUser();
+        $this->grantBenefits($link, [PatreonBenefit::AD_FREE]);
+        $this->grantManually($link, revoked: true);
+
+        // Act
+        $reconciliation = $this->reconcile([]);
+
+        // Assert
+        $holder = $this->findHolder($reconciliation, $link->id);
+        $this->assertNotNull($holder);
+        $this->assertSame(PatreonOverEntitlementReason::NoCampaignMember, $holder->reason);
     }
 
     #[Test]
@@ -289,6 +333,8 @@ final class PatreonDiagnosticsServiceReconciliationTest extends PublicTestCase
         $patreonService = $this->getMockBuilderPublic(PatreonService::class)
             ->setConstructorArgs([
                 $this->createMockPublic(PatreonApiServiceInterface::class),
+                // The real repository, so a manual grant recorded by the test is one the plan actually sees
+                app(PatreonManualGrantRepositoryInterface::class),
                 $this->createMockPublic(PatreonServiceLoggingInterface::class),
             ])
             ->onlyMethods(['loadCampaignBenefits', 'loadCampaignTiers', 'loadCampaignMembers'])
@@ -354,6 +400,14 @@ final class PatreonDiagnosticsServiceReconciliationTest extends PublicTestCase
         $user->update(['patreon_user_link_id' => $link->id]);
 
         return $link;
+    }
+
+    private function grantManually(PatreonUserLink $patreonUserLink, bool $revoked = false): void
+    {
+        $factory = PatreonManualGrant::factory();
+
+        $grant                   = ($revoked ? $factory->revoked() : $factory)->create(['user_id' => $patreonUserLink->user_id]);
+        $this->createdGrantIds[] = $grant->id;
     }
 
     /**

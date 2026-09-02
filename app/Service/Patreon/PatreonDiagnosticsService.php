@@ -305,11 +305,15 @@ class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
             $downgradedCount++;
         }
 
-        // Only links that actually hold something can be over-entitled. Manually granted links are
-        // filtered in SQL; admins cannot be, since their entitlement comes from a role rather than a row
+        // Only links that actually hold something can be over-entitled. Both halves of
+        // PatreonUserLink::getManuallyGrantedAttribute() are filtered in SQL - a fabricated link carries no
+        // grant record of its own, and a real link with an active grant is one the sync deliberately skips
+        // (#4385), so reporting either as over-entitled would name a state an admin chose. Admins cannot be
+        // filtered in SQL, since their entitlement comes from a role rather than a row
         $holders = PatreonUserLink::query()
             ->has('patreonUserBenefits')
             ->where('refresh_token', '!=', PatreonUserLink::PERMANENT_TOKEN)
+            ->whereDoesntHave('activeManualGrant')
             ->with(['user.roles', 'patreonBenefits'])
             ->get()
             ->reject(fn(PatreonUserLink $patreonUserLink) => $this->isExcludedFromReconciliation($patreonUserLink));
