@@ -98,82 +98,39 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
     }
 
     #[Test]
-    public function storeAll_givenNonexistentKillZoneId_createsTheKillZoneWithADatabaseAssignedId(): void
+    public function storeAll_givenNonexistentKillZoneId_returnsValidationErrorAndCreatesNothing(): void
     {
-        // Arrange - an id no kill zone has, so the batch entry falls through to the create branch
+        // Arrange - an id no kill zone has, as a client that lost the race against a concurrent
+        // delete would still submit
         $clientSuppliedId = 2_000_000_000;
         $this->assertNull(KillZone::find($clientSuppliedId));
-
-        // Act
-        $response = $this->put(sprintf('/ajax/%s/killzone/mass', $this->dungeonRoute->public_key), [
-            'killzones' => [
-                [
-                    'id'    => $clientSuppliedId,
-                    'color' => '#00ff00',
-                    'index' => 1,
-                ],
-            ],
-        ]);
-
-        // Assert
-        $response->assertOk();
-        $killZones = $this->dungeonRoute->killZones()->get();
-        $this->assertCount(1, $killZones);
-        $this->assertNotSame($clientSuppliedId, $killZones->first()->id);
-        $this->assertNull(KillZone::find($clientSuppliedId));
-    }
-
-    #[Test]
-    public function storeAll_givenNonexistentKillZoneIdWithEnemies_attachesTheEnemiesToTheCreatedKillZone(): void
-    {
-        // Arrange
-        $clientSuppliedId = 2_000_000_000;
-        $this->assertNull(KillZone::find($clientSuppliedId));
-        // The test database persists between runs - orphans a previous run may have left behind
-        // under this id would otherwise mask the assertion below
-        KillZoneEnemy::query()->where('kill_zone_id', $clientSuppliedId)->delete();
-        $enemies = $this->getRouteEnemies(2);
 
         try {
             // Act
-            $response = $this->put(sprintf('/ajax/%s/killzone/mass', $this->dungeonRoute->public_key), [
+            $response = $this->putJson(sprintf('/ajax/%s/killzone/mass', $this->dungeonRoute->public_key), [
                 'killzones' => [
                     [
-                        'id'      => $clientSuppliedId,
-                        'color'   => '#00ff00',
-                        'index'   => 1,
-                        'enemies' => $enemies->pluck('id')->toArray(),
+                        'id'    => $clientSuppliedId,
+                        'color' => '#00ff00',
+                        'index' => 1,
                     ],
                 ],
             ]);
 
             // Assert
-            $response->assertOk();
-            $killZones = $this->dungeonRoute->killZones()->get();
-            $this->assertCount(1, $killZones);
-            $killZone = $killZones->first();
-            $this->assertNotSame($clientSuppliedId, $killZone->id);
-            $this->assertSame([$killZone->id], $response->json('killzone_ids'));
-
-            $this->assertEqualsCanonicalizing(
-                $enemies->pluck('id')->toArray(),
-                KillZoneEnemy::where('kill_zone_id', $killZone->id)->pluck('enemy_id')->toArray(),
-            );
-            $this->assertSame(0, KillZoneEnemy::where('kill_zone_id', $clientSuppliedId)->count());
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors('killzones.0.id');
+            $this->assertSame(0, $this->dungeonRoute->killZones()->count());
+            $this->assertNull(KillZone::find($clientSuppliedId));
         } finally {
             $this->deleteKillZones();
         }
     }
 
     #[Test]
-    public function storeAll_givenTwoEntriesSharingANonexistentKillZoneId_createsTwoKillZonesEachWithTheirOwnEnemies(): void
+    public function storeAll_givenMultipleNewKillZonesWithEnemies_attachesTheEnemiesToTheirOwnKillZone(): void
     {
         // Arrange
-        $clientSuppliedId = 2_000_000_000;
-        $this->assertNull(KillZone::find($clientSuppliedId));
-        // The test database persists between runs - orphans a previous run may have left behind
-        // under this id would otherwise mask the assertion below
-        KillZoneEnemy::query()->where('kill_zone_id', $clientSuppliedId)->delete();
         $enemies       = $this->getRouteEnemies(2);
         $firstEnemyId  = $enemies->first()->id;
         $secondEnemyId = $enemies->last()->id;
@@ -183,13 +140,11 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
             $response = $this->put(sprintf('/ajax/%s/killzone/mass', $this->dungeonRoute->public_key), [
                 'killzones' => [
                     [
-                        'id'      => $clientSuppliedId,
                         'color'   => '#00ff00',
                         'index'   => 1,
                         'enemies' => [$firstEnemyId],
                     ],
                     [
-                        'id'      => $clientSuppliedId,
                         'color'   => '#0000ff',
                         'index'   => 2,
                         'enemies' => [$secondEnemyId],
@@ -201,12 +156,10 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
             $response->assertOk();
             $killZones = $this->dungeonRoute->killZones()->orderBy('index')->get();
             $this->assertCount(2, $killZones);
-            $this->assertNotContains($clientSuppliedId, $killZones->pluck('id')->toArray());
             $this->assertSame($killZones->pluck('id')->toArray(), $response->json('killzone_ids'));
 
             $this->assertSame([$firstEnemyId], KillZoneEnemy::where('kill_zone_id', $killZones->get(0)->id)->pluck('enemy_id')->toArray());
             $this->assertSame([$secondEnemyId], KillZoneEnemy::where('kill_zone_id', $killZones->get(1)->id)->pluck('enemy_id')->toArray());
-            $this->assertSame(0, KillZoneEnemy::where('kill_zone_id', $clientSuppliedId)->count());
         } finally {
             $this->deleteKillZones();
         }

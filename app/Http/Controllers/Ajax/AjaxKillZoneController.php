@@ -436,7 +436,8 @@ class AjaxKillZoneController extends Controller
         // Set by the batch loop below so the response can name the pull that could not be saved,
         // even though the failure now has to travel out of the transaction as an exception
         $notFoundKillZoneId = null;
-        // Database-assigned id per submitted entry, in submission order
+        // The id each submitted entry was saved to, in submission order - the only way a caller can
+        // learn the id of an entry it submitted without one
         $killZoneIds = [];
 
         try {
@@ -452,8 +453,8 @@ class AjaxKillZoneController extends Controller
                 &$killZoneIds,
             ): int {
                 // Update killzones, keyed by the submitted entry's position so the enemy phase
-                // below can pair each entry with the row it was actually saved to - the submitted
-                // id may not exist, in which case the database assigns a different one
+                // below can pair each entry with the row it was actually saved to - an entry that
+                // names no id at all is created under a database-assigned one
                 $killZones = new Collection();
                 foreach ($validated['killzones'] ?? [] as $index => $killZoneData) {
                     try {
