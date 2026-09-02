@@ -185,6 +185,7 @@ return [
             'session_expired'         => 'Your session has expired. Please try again.',
             'patreon_error_occurred'  => 'An error occurred on Patreon\'s side. Please try again later.',
             'internal_error_occurred' => 'An error occurred while processing Patreon\'s response - it appears to be malformed. The error was logged and will be dealt with. Please try again later.',
+            'link_cancelled'          => 'Linking your Patreon account was cancelled.',
         ],
     ],
     'profile' => [
