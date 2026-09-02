@@ -29,7 +29,6 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
@@ -75,9 +74,6 @@ class AjaxKillZoneController extends Controller
      * route if it already exists and isn't a sandbox, not just the route named in the request -
      * so the ownership check happens once, up front, before any storage side effect runs, rather
      * than saveKillZone() repeating the same check on the same route for every non-hijack call.
-     * saveKillZone() still re-authorizes once more in its own race-condition fallback, where a
-     * concurrent request can create the kill zone between this check and the actual insert - that
-     * one can't be hoisted here since it depends on what actually happened during the write.
      *
      * @return DungeonRoute the route to actually save the kill zone against
      */
@@ -249,20 +245,10 @@ class AjaxKillZoneController extends Controller
         $beforeEnemyIds = $beforeModel->killZoneEnemies->pluck('enemy_id');
 
         if (!$killZone->exists) {
-            try {
-                $killZone = KillZone::create($data);
-                $success  = true;
-            } catch (UniqueConstraintViolationException) {
-                // Race condition: another request created this kill zone between findOrNew and create.
-                // Re-load and re-authorize before updating to prevent cross-route hijacking.
-                $killZone = KillZone::with('dungeonRoute')->findOrFail($data['id']);
-                if ($killZone->dungeonRoute !== null && !$killZone->dungeonRoute->isSandbox()) {
-                    Gate::authorize('edit', $killZone->dungeonRoute);
-                }
-                $beforeModel    = clone $killZone;
-                $beforeEnemyIds = $beforeModel->killZoneEnemies->pluck('enemy_id');
-                $success        = $killZone->update($data);
-            }
+            // The primary key is always assigned by the database, never taken from the request
+            unset($data['id']);
+            $killZone = KillZone::create($data);
+            $success  = true;
         } else {
             $success = $killZone->update($data);
         }

@@ -98,6 +98,32 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
     }
 
     #[Test]
+    public function storeAll_givenNonexistentKillZoneId_createsTheKillZoneWithADatabaseAssignedId(): void
+    {
+        // Arrange - an id no kill zone has, so the batch entry falls through to the create branch
+        $clientSuppliedId = 2_000_000_000;
+        $this->assertNull(KillZone::find($clientSuppliedId));
+
+        // Act
+        $response = $this->put(sprintf('/ajax/%s/killzone/mass', $this->dungeonRoute->public_key), [
+            'killzones' => [
+                [
+                    'id'    => $clientSuppliedId,
+                    'color' => '#00ff00',
+                    'index' => 1,
+                ],
+            ],
+        ]);
+
+        // Assert
+        $response->assertOk();
+        $killZones = $this->dungeonRoute->killZones()->get();
+        $this->assertCount(1, $killZones);
+        $this->assertNotSame($clientSuppliedId, $killZones->first()->id);
+        $this->assertNull(KillZone::find($clientSuppliedId));
+    }
+
+    #[Test]
     public function store_givenEnemyIds_shouldSetEnemyIdOnKillZoneEnemies(): void
     {
         // Arrange

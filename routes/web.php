@@ -645,8 +645,8 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         });
         Route::middleware(['auth', 'role:user|admin'])->group(static function () {
             Route::post('/profile/adfree/{user:public_key}', new AjaxProfileController()->addAdFreeGiveaway(...));
+            Route::delete('/profile/adfree/{user:public_key}', new AjaxProfileController()->removeAdFreeGiveaway(...));
         });
-        Route::delete('/profile/adfree/{user:public_key}', new AjaxProfileController()->removeAdFreeGiveaway(...));
 
         // Metrics
         Route::prefix('metric')->group(static function () {
