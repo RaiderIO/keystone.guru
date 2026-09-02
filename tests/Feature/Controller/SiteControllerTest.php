@@ -5,8 +5,11 @@ namespace Tests\Feature\Controller;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\User;
+use Illuminate\Support\Facades\Redis;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use RuntimeException;
+use Teapot\StatusCode;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
@@ -132,5 +135,22 @@ final class SiteControllerTest extends PublicTestCase
         $response->assertSee('Database: OK', false);
         $response->assertSee('Redis: OK', false);
         $response->assertSee('Disk: OK', false);
+    }
+
+    #[Test]
+    public function status_givenRedisFailure_rendersGenericMessageWithoutExceptionText(): void
+    {
+        // Arrange
+        $exceptionMessage = 'redis://user:hunter2@redis.internal:6379';
+        Redis::shouldReceive('connection')->andThrow(new RuntimeException($exceptionMessage));
+
+        // Act
+        $response = $this->get(route('misc.status'));
+
+        // Assert
+        $response->assertStatus(StatusCode::SERVICE_UNAVAILABLE);
+        $response->assertSee(__('view_misc.status.check_failed'));
+        $response->assertDontSee($exceptionMessage);
+        $response->assertDontSee('hunter2');
     }
 }

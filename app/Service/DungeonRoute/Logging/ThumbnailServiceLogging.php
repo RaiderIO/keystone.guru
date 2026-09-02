@@ -63,6 +63,8 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
 
     public function doCreateThumbnailProcessStart(string $commandLine): void
     {
+        $commandLine = self::redactSecret($commandLine);
+
         $this->info(__METHOD__, get_defined_vars());
     }
 
@@ -78,6 +80,8 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
 
     public function doCreateThumbnailBlankImageRejected(string $tmpFile, string $previewUrl, string $variant): void
     {
+        $previewUrl = self::redactSecret($previewUrl);
+
         $this->error(__METHOD__, get_defined_vars());
     }
 
@@ -108,6 +112,8 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
 
     public function doCreateThumbnailError(string $errors, string $previewUrl, string $variant, int $renderDurationMs): void
     {
+        $previewUrl = self::redactSecret($previewUrl);
+
         $this->error(__METHOD__, get_defined_vars());
     }
 
@@ -148,5 +154,13 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         Exception $exception,
     ): void {
         $this->error(__METHOD__, get_defined_vars());
+    }
+
+    /**
+     * Replaces the value of any `secret` query parameter in a URL or command line with a placeholder.
+     */
+    private static function redactSecret(string $value): string
+    {
+        return preg_replace('/([?&]secret=)[^&\s\'"]*/', '$1[redacted]', $value) ?? $value;
     }
 }

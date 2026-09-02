@@ -37,7 +37,7 @@ class PatreonController extends Controller
         $code  = $request->get('code');
 
         // If session was not expired
-        if (csrf_token() === $state) {
+        if (hash_equals((string)csrf_token(), (string)$state)) {
             // Replace http://localhost:5000/oauth/redirect with your own uri
             $redirectUri = route('patreon.link');
 
