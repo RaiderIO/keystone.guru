@@ -29,7 +29,6 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
@@ -75,9 +74,6 @@ class AjaxKillZoneController extends Controller
      * route if it already exists and isn't a sandbox, not just the route named in the request -
      * so the ownership check happens once, up front, before any storage side effect runs, rather
      * than saveKillZone() repeating the same check on the same route for every non-hijack call.
-     * saveKillZone() still re-authorizes once more in its own race-condition fallback, where a
-     * concurrent request can create the kill zone between this check and the actual insert - that
-     * one can't be hoisted here since it depends on what actually happened during the write.
      *
      * @return DungeonRoute the route to actually save the kill zone against
      */
@@ -249,20 +245,10 @@ class AjaxKillZoneController extends Controller
         $beforeEnemyIds = $beforeModel->killZoneEnemies->pluck('enemy_id');
 
         if (!$killZone->exists) {
-            try {
-                $killZone = KillZone::create($data);
-                $success  = true;
-            } catch (UniqueConstraintViolationException) {
-                // Race condition: another request created this kill zone between findOrNew and create.
-                // Re-load and re-authorize before updating to prevent cross-route hijacking.
-                $killZone = KillZone::with('dungeonRoute')->findOrFail($data['id']);
-                if ($killZone->dungeonRoute !== null && !$killZone->dungeonRoute->isSandbox()) {
-                    Gate::authorize('edit', $killZone->dungeonRoute);
-                }
-                $beforeModel    = clone $killZone;
-                $beforeEnemyIds = $beforeModel->killZoneEnemies->pluck('enemy_id');
-                $success        = $killZone->update($data);
-            }
+            // The primary key is always assigned by the database, never taken from the request
+            unset($data['id']);
+            $killZone = KillZone::create($data);
+            $success  = true;
         } else {
             $success = $killZone->update($data);
         }
@@ -450,6 +436,9 @@ class AjaxKillZoneController extends Controller
         // Set by the batch loop below so the response can name the pull that could not be saved,
         // even though the failure now has to travel out of the transaction as an exception
         $notFoundKillZoneId = null;
+        // The id each submitted entry was saved to, in submission order - the only way a caller can
+        // learn the id of an entry it submitted without one
+        $killZoneIds = [];
 
         try {
             // One transaction for the whole batch, not one per pull: the bulk enemy delete at the
@@ -461,10 +450,13 @@ class AjaxKillZoneController extends Controller
                 $dungeonRoute,
                 $validated,
                 &$notFoundKillZoneId,
+                &$killZoneIds,
             ): int {
-                // Update killzones
+                // Update killzones, keyed by the submitted entry's position so the enemy phase
+                // below can pair each entry with the row it was actually saved to - an entry that
+                // names no id at all is created under a database-assigned one
                 $killZones = new Collection();
-                foreach ($validated['killzones'] ?? [] as $killZoneData) {
+                foreach ($validated['killzones'] ?? [] as $index => $killZoneData) {
                     try {
                         /** @var KillZone|null $existingKillZone */
                         $existingKillZone = isset($killZoneData['id'])
@@ -476,7 +468,8 @@ class AjaxKillZoneController extends Controller
                         $kzDataWithoutEnemies = $killZoneData;
                         unset($kzDataWithoutEnemies['enemies']);
                         // Do not save the enemy forces - we save it one time down below
-                        $killZones->push(
+                        $killZones->put(
+                            $index,
                             $this->saveKillZone(
                                 $coordinatesService,
                                 $killZoneDungeonRoute,
@@ -499,10 +492,16 @@ class AjaxKillZoneController extends Controller
                 $enemies         = $dungeonRoute->mappingVersion->enemies->keyBy('id');
                 $validEnemyIds   = $enemies->pluck('id')->toArray();
 
+                $killZoneIds = $killZones->pluck('id')->values()->toArray();
+
                 // Insert new enemies based on what was sent
-                foreach ($validated['killzones'] ?? [] as $killZoneData) {
+                foreach ($validated['killzones'] ?? [] as $index => $killZoneData) {
                     try {
                         if (isset($killZoneData['enemies'])) {
+                            /** @var KillZone $savedKillZone */
+                            $savedKillZone = $killZones->get($index);
+                            $killZoneId    = $savedKillZone->id;
+
                             // Filter enemies - only allow those who are actually on the allowed floors (don't couple to enemies in other dungeons)
                             $killZoneDataEnemies = array_filter($killZoneData['enemies'], static fn(
                                 $item,
@@ -512,7 +511,7 @@ class AjaxKillZoneController extends Controller
                             foreach ($killZoneDataEnemies as $killZoneDataEnemyId) {
                                 $enemy             = $enemies->get($killZoneDataEnemyId);
                                 $killZoneEnemies[] = [
-                                    'kill_zone_id' => $killZoneData['id'],
+                                    'kill_zone_id' => $killZoneId,
                                     'npc_id'       => $enemy->mdt_npc_id ?? $enemy->npc_id,
                                     'mdt_id'       => $enemy->mdt_id,
                                     'enemy_id'     => $enemy->id,
@@ -563,6 +562,7 @@ class AjaxKillZoneController extends Controller
 
         return [
             'enemy_forces'   => $enemyForces,
+            'killzone_ids'   => $killZoneIds,
             'killzone_paths' => $this->getKillZonePaths($killZonePathService, $dungeonRoute),
         ];
     }

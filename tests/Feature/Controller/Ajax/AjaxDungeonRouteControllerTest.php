@@ -4,8 +4,12 @@ namespace Tests\Feature\Controller\Ajax;
 
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteRating;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Laratrust\Role;
 use App\Models\Mapping\MappingVersion;
+use App\Models\PublishedState;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -479,6 +483,138 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
         }
 
         $this->fail(sprintf('Route public_key=%s was not found in the response data', $dungeonRoutePublicKey));
+    }
+
+    #[Test]
+    public function rate_givenRouteUserMayNotView_returnsForbidden(): void
+    {
+        // Arrange
+        $rater        = $this->createUserWithUserRole();
+        $dungeonRoute = $this->createRouteOwnedByAnotherUser(PublishedState::UNPUBLISHED);
+
+        try {
+            $this->actingAs($rater);
+
+            // Act
+            $response = $this->post(sprintf('/ajax/%s/rate', $dungeonRoute->public_key), ['rating' => 8]);
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertSame(0, DungeonRouteRating::query()->where('dungeon_route_id', $dungeonRoute->id)->count());
+        } finally {
+            DungeonRouteRating::query()->where('dungeon_route_id', $dungeonRoute->id)->delete();
+            $dungeonRoute->delete();
+            $rater->delete();
+        }
+    }
+
+    #[Test]
+    public function rate_givenRouteUserMayView_returnsNewRating(): void
+    {
+        // Arrange
+        $rater        = $this->createUserWithUserRole();
+        $dungeonRoute = $this->createRouteOwnedByAnotherUser(PublishedState::WORLD);
+
+        try {
+            $this->actingAs($rater);
+
+            // Act
+            $response = $this->post(sprintf('/ajax/%s/rate', $dungeonRoute->public_key), ['rating' => 8]);
+
+            // Assert
+            $response->assertOk();
+            $response->assertJsonStructure(['new_rating']);
+            $this->assertEquals(
+                8,
+                DungeonRouteRating::query()
+                    ->where('dungeon_route_id', $dungeonRoute->id)
+                    ->where('user_id', $rater->id)
+                    ->value('rating'),
+            );
+        } finally {
+            DungeonRouteRating::query()->where('dungeon_route_id', $dungeonRoute->id)->delete();
+            $dungeonRoute->delete();
+            $rater->delete();
+        }
+    }
+
+    #[Test]
+    public function rateDelete_givenRouteUserMayNotView_returnsForbidden(): void
+    {
+        // Arrange
+        $rater        = $this->createUserWithUserRole();
+        $dungeonRoute = $this->createRouteOwnedByAnotherUser(PublishedState::UNPUBLISHED);
+        $rating       = DungeonRouteRating::forceCreate([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'user_id'          => $rater->id,
+            'rating'           => 8,
+        ]);
+
+        try {
+            $this->actingAs($rater);
+
+            // Act
+            $response = $this->delete(sprintf('/ajax/%s/rate', $dungeonRoute->public_key));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertNotNull($rating->fresh());
+        } finally {
+            DungeonRouteRating::query()->where('dungeon_route_id', $dungeonRoute->id)->delete();
+            $dungeonRoute->delete();
+            $rater->delete();
+        }
+    }
+
+    #[Test]
+    public function rateDelete_givenRouteUserMayView_removesTheRating(): void
+    {
+        // Arrange
+        $rater        = $this->createUserWithUserRole();
+        $dungeonRoute = $this->createRouteOwnedByAnotherUser(PublishedState::WORLD);
+        $rating       = DungeonRouteRating::forceCreate([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'user_id'          => $rater->id,
+            'rating'           => 8,
+        ]);
+
+        try {
+            $this->actingAs($rater);
+
+            // Act
+            $response = $this->delete(sprintf('/ajax/%s/rate', $dungeonRoute->public_key));
+
+            // Assert
+            $response->assertOk();
+            $response->assertJsonStructure(['new_rating']);
+            $this->assertNull($rating->fresh());
+        } finally {
+            DungeonRouteRating::query()->where('dungeon_route_id', $dungeonRoute->id)->delete();
+            $dungeonRoute->delete();
+            $rater->delete();
+        }
+    }
+
+    private function createUserWithUserRole(): User
+    {
+        $user = User::factory()->create();
+        $user->addRole(Role::ROLE_USER);
+
+        return $user;
+    }
+
+    /**
+     * A non-sandbox route authored by user 1. Sandbox routes (expires_at set, which the factory does
+     * by default) are viewable and editable by anyone by design, so expires_at must be null for a
+     * view-authorization assertion to mean anything.
+     */
+    private function createRouteOwnedByAnotherUser(string $publishedState): DungeonRoute
+    {
+        return DungeonRoute::factory()->create([
+            'author_id'          => 1,
+            'published_state_id' => PublishedState::ALL[$publishedState],
+            'expires_at'         => null,
+        ]);
     }
 
     private function titleSearchQuery(string $title): string

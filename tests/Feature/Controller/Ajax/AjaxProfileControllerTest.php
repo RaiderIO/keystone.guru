@@ -69,6 +69,25 @@ final class AjaxProfileControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function removeAdFreeGiveaway_givenGuest_returnsUnauthorized(): void
+    {
+        // Arrange
+        $target = User::factory()->create([
+            'public_key' => User::generateRandomPublicKey(),
+        ]);
+
+        try {
+            // Act - no actingAs(), request is unauthenticated
+            $response = $this->delete(sprintf('/ajax/profile/adfree/%s', $target->public_key), [], self::AJAX_HEADERS);
+
+            // Assert
+            $response->assertStatus(StatusCode::UNAUTHORIZED);
+        } finally {
+            $target->delete();
+        }
+    }
+
+    #[Test]
     public function addAdFreeGiveaway_givenAdminGiver_returnsCreatedAndCreatesGiveaway(): void
     {
         // Arrange - the route requires role 'user' or 'admin', and PatreonAdFreeGiveaway::getCountLeft()

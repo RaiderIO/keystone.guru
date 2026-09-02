@@ -703,6 +703,7 @@ class AjaxDungeonRouteController extends Controller
     /** @return array<string, float|int> */
     public function rate(Request $request, DungeonRoute $dungeonRoute): array
     {
+        Gate::authorize('view', $dungeonRoute);
         Gate::authorize('rate', $dungeonRoute);
 
         $value = $request->get('rating', -1);
@@ -730,6 +731,7 @@ class AjaxDungeonRouteController extends Controller
      */
     public function rateDelete(Request $request, DungeonRoute $dungeonRoute): array
     {
+        Gate::authorize('view', $dungeonRoute);
         Gate::authorize('rate', $dungeonRoute);
 
         $user = Auth::user();

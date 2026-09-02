@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
 class AjaxUserReportController extends Controller
@@ -57,6 +58,8 @@ class AjaxUserReportController extends Controller
 
     public function dungeonrouteStore(UserReportFormRequest $request, DungeonRoute $dungeonroute): Response
     {
+        Gate::authorize('view', $dungeonroute);
+
         if (!$this->store($request, $dungeonroute)) {
             abort(500, __('controller.apiuserreport.error.unable_to_save_report'));
         }
