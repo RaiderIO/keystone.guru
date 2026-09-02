@@ -351,6 +351,26 @@ class PollCombatLogRunsCommand extends Command
             return;
         }
 
+        if (!$force) {
+            $now = Carbon::now();
+
+            // Another invocation of this command may have claimed the run between our lookup in
+            // markAlreadyParsedRuns() and this insert. The unique index on run_id makes the insert the
+            // arbiter: the loser must neither dispatch a second job nor count against the budget.
+            $inserted = ParsedCombatLog::query()->insertOrIgnore([
+                'run_id'     => $run->id,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]);
+
+            if ($inserted === 0) {
+                $knownRunIds[$run->id] = true;
+                $dispatchCounts['skippedParsed']++;
+
+                return;
+            }
+        }
+
         $dungeonCriterion = new CombatLogParsingCriterionCheck(Dungeon::class, $dungeon->id, $band);
         $specCriteria     = $this->buildSpecCriteria($run->memberSpecIds, $allSpecsByBlizzardId, $band);
         $raceCriteria     = $this->buildRaceCriteria($run->faction, $criterionRaces, $band);
@@ -362,10 +382,6 @@ class PollCombatLogRunsCommand extends Command
         $criteriaDate = Carbon::now()->toDateString();
 
         $this->criteriaService->recordParsed($combatLogVersion, $criteria, $criteriaDate);
-
-        if (!$force) {
-            ParsedCombatLog::create(['run_id' => $run->id]);
-        }
 
         // Marked even when forcing: the same run legitimately comes back from several criterion
         // queries and from the top band, and dispatching it twice in one invocation helps nobody.

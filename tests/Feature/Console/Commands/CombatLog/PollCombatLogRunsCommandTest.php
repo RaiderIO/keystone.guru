@@ -235,6 +235,57 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
     }
 
     /**
+     * Two containers firing the same top-of-hour poll (#4439): the other process inserts the run
+     * between this one's already-parsed lookup and its own insert. The unique index on run_id is
+     * the arbiter; the loser must count the run as skipped instead of crashing, dispatching a
+     * duplicate job or consuming criterion budget for a run somebody else is already parsing.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenRunClaimedByAnotherProcessAfterLookup_countsRunAsSkippedWithoutDispatching(): void
+    {
+        // Arrange - shouldParse() runs once before the API call and once per run right before
+        // dispatchRun(), i.e. after markAlreadyParsedRuns() has already done its lookup
+        Bus::fake();
+
+        $runId = 9002;
+        $run   = $this->makeRun($runId, $this->dungeon->challenge_mode_id);
+
+        $criteriaService = $this->makeCriteriaService(eligibleDungeons: collect([$this->dungeon]));
+        $criteriaService->method('shouldParse')->willReturnCallback(static function () use ($runId): bool {
+            static $calls = 0;
+
+            if (++$calls === 2) {
+                ParsedCombatLog::create(['run_id' => $runId]);
+            }
+
+            return true;
+        });
+        $criteriaService->expects($this->never())->method('recordParsed');
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
+        $healthService->expects($this->never())->method('recordDispatched');
+        app()->instance(CombatLogPollingHealthServiceInterface::class, $healthService);
+
+        $this->mockRaiderIOApiService(spreadRuns: [$run]);
+
+        try {
+            // Act
+            $this->artisan('combatlog:pollruns')
+                ->expectsOutputToContain('dispatched=0 skipped_parsed=1')
+                ->assertSuccessful();
+
+            // Assert
+            Bus::assertNotDispatched(ProcessCombatLogSegments::class);
+            $this->assertSame(1, ParsedCombatLog::query()->where('run_id', $runId)->count());
+        } finally {
+            ParsedCombatLog::query()->where('run_id', $runId)->delete();
+        }
+    }
+
+    /**
      * @throws Exception
      */
     #[Test]

@@ -24,7 +24,7 @@ if (in_array($appType, [
     'staging',
     'production',
 ])) {
-    $commands[] = Schedule::command('combatlog:pollruns')->hourly();
+    $commands[] = Schedule::command('combatlog:pollruns')->hourly()->withoutOverlapping()->onOneServer();
     // Ten past the hour: late enough that the jobs combatlog:pollruns dispatched at the top of the
     // previous hour have run and recorded their outcome, and it is the previous hour it reports on.
     $commands[] = Schedule::command('combatlog:reportpollinghealth')->hourlyAt(10);
