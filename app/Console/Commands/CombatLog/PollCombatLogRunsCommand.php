@@ -57,14 +57,19 @@ class PollCombatLogRunsCommand extends Command
 
         $combatLogVersion = array_key_last(CombatLogVersion::RETAIL_ALL);
 
-        $windowDays      = (int)config('keystoneguru.raider_io.combat_log_polling.completed_at_window_days');
-        $limit           = (int)config('keystoneguru.raider_io.combat_log_polling.limit');
-        $completedAtFrom = Carbon::now()->subDays($windowDays);
+        $windowDays = (int)config('keystoneguru.raider_io.combat_log_polling.completed_at_window_days');
+        $limit      = (int)config('keystoneguru.raider_io.combat_log_polling.limit');
 
-        // Read once: pollSpreadBand() makes one Raider.IO call per eligible model, so the loop can
-        // cross an hour boundary and would otherwise budget this hour's band against the next.
-        $hour        = Carbon::now()->hour;
-        $pollingDate = Carbon::now()->toDateString();
+        // One instant for the whole invocation: pollSpreadBand() makes one Raider.IO call per
+        // eligible model, so the loop can cross an hour - or a day - boundary and would otherwise
+        // budget this hour's band against the next. Reading the hour and the date from separate
+        // Carbon::now() calls has the same problem in miniature: midnight can fall between them,
+        // pairing the old day's final (fully released) window with the new day's criterion rows.
+        $now = Carbon::now();
+
+        $completedAtFrom = $now->copy()->subDays($windowDays);
+        $hour            = $now->hour;
+        $pollingDate     = $now->toDateString();
 
         // Only one band is polled per hour: polling all of them every hour would multiply the
         // number of Raider.IO calls by the band count for no extra coverage.
