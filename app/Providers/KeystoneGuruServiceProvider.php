@@ -196,10 +196,8 @@ use App\Service\View\RequestViewContext;
 use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewService;
 use App\Service\View\ViewServiceInterface;
-use App\Service\Wago\WagoToolsService;
-use App\Service\Wago\WagoToolsServiceInterface;
-use App\Service\WagoTools\WagoToolsService as WagoToolsDb2Service;
-use App\Service\WagoTools\WagoToolsServiceInterface as WagoToolsDb2ServiceInterface;
+use App\Service\WagoTools\WagoToolsService;
+use App\Service\WagoTools\WagoToolsServiceInterface;
 use App\Service\Wowhead\WowheadService;
 use App\Service\Wowhead\WowheadServiceInterface;
 use App\Service\Wowhead\WowheadTranslationService;
@@ -224,10 +222,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(ArchonApiServiceInterface::class, ArchonApiService::class);
         $this->app->bind(PatreonApiServiceInterface::class, PatreonApiService::class);
         $this->app->bind(WowToolsServiceInterface::class, WowToolsService::class);
-        // Two wago.tools clients live side by side for now: App\Service\Wago reads icon file names,
-        // App\Service\WagoTools reads DB2 tables. They are consolidated in #4013.
         $this->app->bind(WagoToolsServiceInterface::class, WagoToolsService::class);
-        $this->app->bind(WagoToolsDb2ServiceInterface::class, WagoToolsDb2Service::class);
         $this->app->bind(AdProviderServiceInterface::class, AdProviderService::class);
         $this->app->bind(CreatorDirectoryServiceInterface::class, CreatorDirectoryService::class);
         $this->app->bind(WowheadServiceInterface::class, WowheadService::class);

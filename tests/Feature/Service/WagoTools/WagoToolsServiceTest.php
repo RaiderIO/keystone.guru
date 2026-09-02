@@ -65,6 +65,48 @@ final class WagoToolsServiceTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function getIconFileNamesByFileDataIds_givenWantedIconEntries_returnsThemLowercasedAndWithoutExtension(): void
+    {
+        // Arrange
+        try {
+            $this->writeTable('ManifestInterfaceData', <<<'CSV'
+                ID,FilePath,FileName
+                1,Interface\ICONS\,UI_Profession_Engineering.blp
+                2,interface\icons\,UI_EquipmentSet.blp
+                3,Interface\FrameXML\,Whatever.lua
+                CSV);
+
+            /** @var WagoToolsServiceInterface $wagoToolsService */
+            $wagoToolsService = app(WagoToolsServiceInterface::class);
+
+            // Act
+            $result = $wagoToolsService->getIconFileNamesByFileDataIds([1, 2, 3, 4], self::BUILD);
+
+            // Assert - FileDataID 3 is not an icon, FileDataID 4 is unknown, both are absent from the result
+            $this->assertSame([
+                1 => 'ui_profession_engineering',
+                2 => 'ui_equipmentset',
+            ], $result);
+        } finally {
+            $this->removeTables();
+        }
+    }
+
+    #[Test]
+    public function getIconFileNamesByFileDataIds_givenNoFileDataIds_returnsEmptyArrayWithoutDownloading(): void
+    {
+        /** @var WagoToolsServiceInterface $wagoToolsService */
+        $wagoToolsService = app(WagoToolsServiceInterface::class);
+
+        // Act
+        $result = $wagoToolsService->getIconFileNamesByFileDataIds([], self::BUILD);
+
+        // Assert
+        $this->assertSame([], $result);
+        $this->assertFileDoesNotExist(sprintf('%s/ManifestInterfaceData.csv', $this->getDb2Directory()));
+    }
+
     private function writeTable(string $table, string $contents): void
     {
         $directory = $this->getDb2Directory();

@@ -134,7 +134,7 @@ class MDTMapPOI implements Arrayable
 
     /**
      * The FileDataID of the texture MDT draws for this POI. Resolvable to an icon file name through
-     * wago.tools' ManifestInterfaceData DB2 - see {@see \App\Service\Wago\WagoToolsServiceInterface}.
+     * wago.tools' ManifestInterfaceData DB2 - see {@see \App\Service\WagoTools\WagoToolsServiceInterface}.
      */
     public function getTextureFileDataId(): ?int
     {
