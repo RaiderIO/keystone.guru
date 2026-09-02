@@ -38,6 +38,13 @@ class PatreonController extends Controller
 
         // If session was not expired
         if (hash_equals((string)csrf_token(), (string)$state)) {
+            // Patreon omits `code` when the user denies the authorization prompt or otherwise cancels the flow
+            if (empty($code)) {
+                Session::flash('warning', __('controller.patreon.flash.link_cancelled'));
+
+                return redirect()->route('profile.edit', ['#patreon']);
+            }
+
             // Replace http://localhost:5000/oauth/redirect with your own uri
             $redirectUri = route('patreon.link');
 
