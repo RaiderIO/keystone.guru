@@ -533,6 +533,68 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         $response->assertOk();
     }
 
+    /**
+     * The week select and its validation resolve the acting user's own region. Every seeded season currently
+     * yields the same period numbers for eu as for us, so this covers the resolution path rather than a
+     * difference in the numbers themselves - a period valid in one region must not be rejected in the other.
+     */
+    #[Test]
+    public function combatlogregeneratesubmit_givenAdminWithNonDefaultRegion_usesThatRegionsWeeks(): void
+    {
+        // Arrange
+        $region = GameServerRegion::query()->where('short', GameServerRegion::EUROPE)->firstOrFail();
+        $admin  = User::findOrFail(1);
+        User::query()->whereKey($admin->id)->update(['game_server_region_id' => $region->id]);
+
+        try {
+            $this->be(User::findOrFail(1));
+            $queue = Queue::fake();
+
+            [$season, $periods, $dungeons] = $this->findSeasonWithWeeklyPeriods($region);
+
+            $includedDungeonRoute = $this->createDungeonRouteWithChallengeModeRun($dungeons->get(0), $season->id, $periods->first());
+            $excludedDungeonRoute = $this->createDungeonRouteWithChallengeModeRun($dungeons->get(0), $season->id, $periods->get(1));
+
+            // Act
+            $response = $this->post(route('admin.tools.combatlog.regenerate.submit'), [
+                'dungeon_id' => $dungeons->get(0)->id,
+                'season_id'  => $season->id,
+                'periods'    => [$periods->first()],
+            ]);
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+            $response->assertOk();
+
+            $dispatchedDungeonRouteIds = $this->getDispatchedDungeonRouteIds($queue);
+            $this->assertContains($includedDungeonRoute->id, $dispatchedDungeonRouteIds);
+            $this->assertNotContains($excludedDungeonRoute->id, $dispatchedDungeonRouteIds);
+        } finally {
+            User::query()->whereKey($admin->id)->update(['game_server_region_id' => $admin->game_server_region_id]);
+        }
+    }
+
+    #[Test]
+    public function combatlogregenerate_givenAdminWithNonDefaultRegion_returnsOk(): void
+    {
+        // Arrange
+        $region = GameServerRegion::query()->where('short', GameServerRegion::EUROPE)->firstOrFail();
+        $admin  = User::findOrFail(1);
+        User::query()->whereKey($admin->id)->update(['game_server_region_id' => $region->id]);
+
+        try {
+            $this->be(User::findOrFail(1));
+
+            // Act
+            $response = $this->get(route('admin.tools.combatlog.regenerate.view'));
+
+            // Assert
+            $response->assertOk();
+        } finally {
+            User::query()->whereKey($admin->id)->update(['game_server_region_id' => $admin->game_server_region_id]);
+        }
+    }
+
     #[Test]
     public function combatlogregeneratesubmit_givenNonNumericPeriod_returnsValidationError(): void
     {
@@ -760,14 +822,15 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
     }
 
     /**
-     * A season that has at least two weeks behind it, together with the leaderboard periods of those weeks.
+     * A season that has at least two weeks behind it, together with the leaderboard periods of those weeks as
+     * counted from $region's weekly reset - the default region when none is given.
      *
      * @return array{0: Season, 1: Collection<int, int>, 2: Collection<int, Dungeon>}
      */
-    private function findSeasonWithWeeklyPeriods(): array
+    private function findSeasonWithWeeklyPeriods(?GameServerRegion $region = null): array
     {
         $seasonService = app(SeasonServiceInterface::class);
-        $region        = GameServerRegion::query()->where('short', GameServerRegion::DEFAULT_REGION)->firstOrFail();
+        $region ??= GameServerRegion::query()->where('short', GameServerRegion::DEFAULT_REGION)->firstOrFail();
 
         /** @var Collection<int, Season> $seasons */
         $seasons = Season::with(['dungeons'])->orderByDesc('start')->get();
