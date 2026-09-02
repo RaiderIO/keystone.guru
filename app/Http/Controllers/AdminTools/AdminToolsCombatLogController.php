@@ -8,13 +8,13 @@ use App\Http\Requests\AdminToolsCombatLogRouteEnemyFailuresRequest;
 use App\Jobs\RegenerateCombatLogRoute;
 use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\Dungeon;
-use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameServerRegion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Season;
 use App\Models\User;
 use App\Repositories\Interfaces\CombatLog\ChallengeModeRunRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureServiceInterface;
 use App\Service\Floor\FloorResolutionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
@@ -140,6 +140,7 @@ class AdminToolsCombatLogController extends Controller
         AdminToolsCombatLogRegenerateRequest $request,
         SeasonServiceInterface               $seasonService,
         ChallengeModeRunRepositoryInterface  $challengeModeRunRepository,
+        DungeonRouteRepositoryInterface      $dungeonRouteRepository,
     ): View {
         set_time_limit(3600);
 
@@ -156,11 +157,13 @@ class AdminToolsCombatLogController extends Controller
 
         $count = 0;
 
-        // Cannot use joins since the other table lives in a different database
-        DungeonRoute::query()
-            ->when($dungeonIds !== null, static fn(Builder $builder) => $builder->whereIn('dungeon_id', $dungeonIds))
-            ->when($season !== null, static fn(Builder $builder) => $builder->where('season_id', $season->id))
-            ->chunkById(200, function (Collection $dungeonRoutes) use (&$count, $periods, $challengeModeRunRepository) {
+        // Cannot use joins since the challenge mode runs live in a different database - so the routes are
+        // chunked here and their runs fetched per chunk instead
+        $dungeonRouteRepository->chunkBySeasonAndDungeonIds(
+            $season,
+            $dungeonIds,
+            200,
+            function (Collection $dungeonRoutes) use (&$count, $periods, $challengeModeRunRepository) {
                 $dungeonRoutes  = $dungeonRoutes->keyBy('id');
                 $challengeModes = $challengeModeRunRepository->getByDungeonRouteIds($dungeonRoutes->keys(), $periods);
 
@@ -170,7 +173,8 @@ class AdminToolsCombatLogController extends Controller
                     );
                     $count++;
                 }
-            });
+            },
+        );
 
         Session::flash('status', __('controller.admintools.flash.combatlog_route_regenerate_result', [
             'count' => $count,
