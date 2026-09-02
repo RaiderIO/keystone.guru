@@ -284,6 +284,73 @@ final class APIPatreonDiagnosticsControllerTest extends PublicTestCase
         $response->assertJsonPath('data.members_blocked.0.unresolved_tier_ids', ['9999999']);
     }
 
+    #[Test]
+    public function benefitReconciliation_givenAnAccountTheCampaignNoLongerLists_returnsItAsUnmatched(): void
+    {
+        // Arrange - a patron holding benefits whom the campaign does not mention. The hourly sync only
+        // ever walks members, so it can never reach this account to revoke anything (#4386)
+        $this->actingAsAdmin();
+        $this->createLinkedUser(self::CAMPAIGN_EMAIL);
+        PatreonUserBenefit::create([
+            'patreon_user_link_id' => $this->patreonUserLink->id,
+            'patreon_benefit_id'   => PatreonBenefit::ALL[PatreonBenefit::AD_FREE],
+        ]);
+        $this->mockPatreonService([$this->campaignMember('somebody-else@example.test', ['2971575'])]);
+
+        // Act
+        $response = $this->getJson(route('api.v1.patreon.benefit_reconciliation'));
+
+        // Assert
+        $response->assertOk();
+        $response->assertJsonPath('data.needs_attention', true);
+        $response->assertJsonPath('data.unmatched_holders.0.patreon_user_link_id', $this->patreonUserLink->id);
+        $response->assertJsonPath('data.unmatched_holders.0.reason', 'no_campaign_member');
+        $response->assertJsonPath('data.unmatched_holders.0.stored_benefits', [PatreonBenefit::AD_FREE]);
+
+        // The masked address is the same guarantee the other endpoints make - this one returns a list of
+        // accounts rather than taking one as input, so it is the endpoint where that matters most
+        $response->assertJsonMissing(['masked_link_email' => self::CAMPAIGN_EMAIL]);
+    }
+
+    #[Test]
+    public function benefitReconciliation_givenATruncatedMemberFetch_returnsBadGatewayRatherThanEveryAccountAtOnce(): void
+    {
+        // Arrange - on a partial member list every account the fetch never reached looks like one the
+        // campaign has dropped, so a truncated fetch would fabricate this report's entire finding
+        $this->actingAsAdmin();
+
+        $patreonService = $this->createMockPublic(PatreonServiceInterface::class);
+        $patreonService->method('loadCampaignBenefits')->willReturn([]);
+        $patreonService->method('loadCampaignTiers')->willReturn([]);
+        $patreonService->method('loadCampaignMembers')->willReturn(new PatreonCampaignMembers([], 5, 400, truncated: true));
+        $this->app->instance(PatreonServiceInterface::class, $patreonService);
+
+        // Act
+        $response = $this->getJson(route('api.v1.patreon.benefit_reconciliation'));
+
+        // Assert
+        $response->assertStatus(StatusCode::BAD_GATEWAY);
+    }
+
+    #[Test]
+    public function benefitReconciliation_givenAuthenticatedNonAdmin_returnsForbidden(): void
+    {
+        // Arrange - this is the one endpoint here that lists accounts rather than taking one as input
+        $nonAdmin = User::factory()->create();
+
+        try {
+            $this->actingAs($nonAdmin);
+
+            // Act
+            $response = $this->getJson(route('api.v1.patreon.benefit_reconciliation'));
+
+            // Assert
+            $response->assertStatus(StatusCode::FORBIDDEN);
+        } finally {
+            $nonAdmin->delete();
+        }
+    }
+
     /**
      * Binds a PatreonService whose campaign is a single tier granting ad-free, plus whatever members are
      * handed in. The plan computation itself is deliberately NOT mocked - these tests assert on what a

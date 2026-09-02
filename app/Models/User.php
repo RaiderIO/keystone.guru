@@ -298,7 +298,7 @@ class User extends Authenticatable implements LaratrustUser
 
         // If we weren't an admin, check patreon data
         if (!$result && $this->patreonUserLink !== null && isset(PatreonBenefit::ALL[$key])) {
-            $result = $this->patreonUserLink->patreonbenefits()->where('patreon_benefits.id', PatreonBenefit::ALL[$key])->exists();
+            $result = $this->patreonUserLink->patreonBenefits()->where('patreon_benefits.id', PatreonBenefit::ALL[$key])->exists();
         }
 
         return $result;

@@ -2,17 +2,22 @@
 
 namespace App\Service\Patreon;
 
+use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Patreon\PatreonUserLink;
 use App\Models\User;
 use App\Repositories\Interfaces\Patreon\PatreonSyncRunRepositoryInterface;
 use App\Service\Patreon\Dtos\ApplyPaidBenefitsForMemberResult;
+use App\Service\Patreon\Dtos\Diagnostics\PatreonBenefitHolderDiagnostics;
+use App\Service\Patreon\Dtos\Diagnostics\PatreonBenefitReconciliation;
 use App\Service\Patreon\Dtos\Diagnostics\PatreonCampaignDiagnostics;
 use App\Service\Patreon\Dtos\Diagnostics\PatreonCampaignTierDiagnostics;
 use App\Service\Patreon\Dtos\Diagnostics\PatreonMemberDiagnostics;
 use App\Service\Patreon\Dtos\Diagnostics\PatreonSyncDryRun;
 use App\Service\Patreon\Dtos\Diagnostics\PatreonUserDiagnostics;
 use App\Service\Patreon\Dtos\PatreonMemberSyncPlan;
+use App\Service\Patreon\Dtos\PatreonOverEntitlementReason;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
 /**
@@ -24,6 +29,13 @@ class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
 {
     /** How many members of a single kind are listed in a dry run. */
     private const int MAX_LISTED_MEMBERS = 25;
+
+    /**
+     * How many over-entitled accounts a reconciliation lists. Higher than the dry run's cap above,
+     * because this list is the actionable output rather than a sample of a campaign-wide symptom - but
+     * still a cap, since the counts alongside it are the true totals.
+     */
+    private const int MAX_LISTED_HOLDERS = 100;
 
     public function __construct(
         private readonly PatreonServiceInterface           $patreonService,
@@ -146,8 +158,10 @@ class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
             ->pluck('id')
             ->all();
 
-        $member              = null;
-        $emailDriftCandidate = null;
+        $member    = null;
+        $linkEmail = $patreonUserLink?->email;
+        /** @var array<int, string> $lowercasedMemberEmails */
+        $lowercasedMemberEmails = [];
 
         $campaignBenefits = $this->patreonService->loadCampaignBenefits();
         $campaignTiers    = $this->patreonService->loadCampaignTiers();
@@ -156,13 +170,13 @@ class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
         // A truncated member list is not searched: not finding the member in it would wrongly read as
         // "the campaign no longer lists this patron"
         if ($campaignBenefits !== null && $campaignTiers !== null && $campaignMembers !== null && !$campaignMembers->truncated) {
-            $linkEmail = $patreonUserLink?->email;
-
             foreach ($campaignMembers->members as $campaignMember) {
                 $memberEmail = $campaignMember['attributes']['email'] ?? null;
                 if (!is_string($memberEmail) || $memberEmail === '') {
                     continue;
                 }
+
+                $lowercasedMemberEmails[] = mb_strtolower($memberEmail);
 
                 if ($linkEmail !== null && mb_strtolower($memberEmail) === mb_strtolower($linkEmail)) {
                     $member = PatreonMemberDiagnostics::fromPlan(
@@ -173,15 +187,13 @@ class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
 
                     continue;
                 }
-
-                // The link stores the patron's Patreon email as it was at link time; the campaign reports
-                // what it is now. A member carrying the *account's* email while the link carries another
-                // is a patron who changed their Patreon email and has been unmatched ever since
-                if (mb_strtolower($memberEmail) === mb_strtolower($user->email)) {
-                    $emailDriftCandidate = self::maskEmail($memberEmail);
-                }
             }
         }
+
+        // The link stores whatever the patron's Patreon email was at link time, and the campaign reports
+        // what it is now - see findEmailDriftCandidate() for why the two differing matters. Shared with
+        // the reconciliation report so both name the same accounts by the same rule (#4386)
+        $emailDriftCandidate = $this->findEmailDriftCandidate($lowercasedMemberEmails, $user->email, $linkEmail);
 
         return new PatreonUserDiagnostics(
             userId: $user->id,
@@ -197,6 +209,244 @@ class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
             member: $member,
             emailDriftCandidate: $emailDriftCandidate,
             latestSyncRun: $this->patreonSyncRunRepository->getMostRecent(1)->first(),
+        );
+    }
+
+    /**
+     * Cross-references the benefit rows in the database against the campaign, to find every account
+     * holding more than it currently pays for (#4386).
+     *
+     * The hourly sync revokes benefits only from members the campaign returns *and* can resolve, which
+     * makes it structurally blind to the accounts that matter most here: a patron whose Patreon email
+     * changed, or who is gone from the campaign entirely, is never matched and so is never revoked from.
+     * `getSyncDryRun()` above walks members and cannot see them either. This walks the other direction.
+     */
+    public function getBenefitReconciliation(): ?PatreonBenefitReconciliation
+    {
+        $campaignBenefits = $this->patreonService->loadCampaignBenefits();
+        $campaignTiers    = $this->patreonService->loadCampaignTiers();
+
+        if ($campaignBenefits === null || $campaignTiers === null) {
+            return null;
+        }
+
+        // A partial member list makes every member it does not contain look like an account the campaign
+        // no longer matches - which is the exact thing this report is looking for, so a truncated fetch
+        // would fabricate the entire finding rather than merely understate it (#4373)
+        $campaignMembers = $this->patreonService->loadCampaignMembers();
+        if ($campaignMembers === null || $campaignMembers->truncated) {
+            return null;
+        }
+
+        /** @var array<int, bool> $matchedLinkIds Keyed by link id, so the lookup below stays O(1) over a campaign of thousands */
+        $matchedLinkIds = [];
+        /** @var array<int, PatreonOverEntitlementReason> $blockedReasonsByLinkId */
+        $blockedReasonsByLinkId = [];
+        /** @var array<int, bool> $stuckLinkIds Matched links holding an excess the sync will never revoke */
+        $stuckLinkIds = [];
+        /** @var array<int, string> $lowercasedMemberEmails */
+        $lowercasedMemberEmails = [];
+        $downgradedCount        = 0;
+
+        foreach ($campaignMembers->members as $member) {
+            $memberEmail = $member['attributes']['email'] ?? null;
+            if (is_string($memberEmail) && $memberEmail !== '') {
+                $lowercasedMemberEmails[] = mb_strtolower($memberEmail);
+            }
+
+            $plan = $this->patreonService->planPaidBenefitsForMember($campaignBenefits, $campaignTiers, $member);
+
+            $patreonUserLink = $plan->patreonUserLink;
+            if ($patreonUserLink === null) {
+                continue;
+            }
+
+            // Recorded even for the excluded accounts below, because this set is what marks a link as
+            // "the campaign still knows about you" further down - excluding an account from the report
+            // must not turn it into an unmatched one
+            $matchedLinkIds[$patreonUserLink->id] = true;
+
+            if ($plan->manuallyGranted || $this->isExcludedFromReconciliation($patreonUserLink)) {
+                continue;
+            }
+
+            if ($plan->result === ApplyPaidBenefitsForMemberResult::UnknownTiers) {
+                $blockedReasonsByLinkId[$patreonUserLink->id] = PatreonOverEntitlementReason::SyncBlockedUnknownTiers;
+
+                continue;
+            }
+
+            if ($plan->result === ApplyPaidBenefitsForMemberResult::UnknownBenefits) {
+                $blockedReasonsByLinkId[$patreonUserLink->id] = PatreonOverEntitlementReason::SyncBlockedUnknownBenefits;
+
+                continue;
+            }
+
+            // What the matched link itself holds beyond its tiers - which is not the same thing as the
+            // plan's revoke list. That list is diffed against the *account's* patreonUserLink pointer,
+            // and with duplicate link rows the pointer and the email-matched link are different rows
+            $excessOnMatchedLink = array_diff(
+                $patreonUserLink->patreonBenefits->pluck('key')->all(),
+                $plan->resolvedBenefits,
+            );
+
+            if ($excessOnMatchedLink === []) {
+                continue;
+            }
+
+            // Anything the sync's own revoke list does not name is excess it will never delete, no matter
+            // how often it runs - so it belongs in a bucket with a name rather than in the count of
+            // downgrades that correct themselves within the hour
+            if (array_diff($excessOnMatchedLink, $plan->benefitsToRevoke) !== []) {
+                $stuckLinkIds[$patreonUserLink->id] = true;
+
+                continue;
+            }
+
+            $downgradedCount++;
+        }
+
+        // Only links that actually hold something can be over-entitled. Both halves of
+        // PatreonUserLink::getManuallyGrantedAttribute() are filtered in SQL - a fabricated link carries no
+        // grant record of its own, and a real link with an active grant is one the sync deliberately skips
+        // (#4385), so reporting either as over-entitled would name a state an admin chose. Admins cannot be
+        // filtered in SQL, since their entitlement comes from a role rather than a row
+        $holders = PatreonUserLink::query()
+            ->has('patreonUserBenefits')
+            ->where('refresh_token', '!=', PatreonUserLink::PERMANENT_TOKEN)
+            // A grant only speaks for a user that still exists. User::deleting leaves both the grant row and
+            // any duplicate link behind, and the grant is keyed on user_id, so without the second clause an
+            // orphaned link would inherit its deleted user's grant and drop out of the one report that
+            // catches it
+            ->where(static fn(Builder $query) => $query
+                ->whereDoesntHave('activeManualGrant')
+                ->orWhereDoesntHave('user'))
+            ->with(['user.roles', 'patreonBenefits'])
+            ->get()
+            ->reject(fn(PatreonUserLink $patreonUserLink) => $this->isExcludedFromReconciliation($patreonUserLink));
+
+        $unmatchedHolders = [];
+        $blockedHolders   = [];
+        $unmatchedCount   = 0;
+        $blockedCount     = 0;
+
+        foreach ($holders as $patreonUserLink) {
+            // Checked before the matched test on purpose: a blocked member *is* matched, and reporting it
+            // as unmatched would name the wrong cause and send someone looking for a deleted patron
+            if (isset($blockedReasonsByLinkId[$patreonUserLink->id])) {
+                $blockedCount++;
+                $this->collectHolder($blockedHolders, $patreonUserLink, $blockedReasonsByLinkId[$patreonUserLink->id], null);
+
+                continue;
+            }
+
+            if (isset($stuckLinkIds[$patreonUserLink->id])) {
+                $unmatchedCount++;
+                $this->collectHolder($unmatchedHolders, $patreonUserLink, PatreonOverEntitlementReason::DuplicateLinkAmbiguity, null);
+
+                continue;
+            }
+
+            // Matched, resolvable, and any excess it holds is an ordinary downgrade already counted above
+            if (isset($matchedLinkIds[$patreonUserLink->id])) {
+                continue;
+            }
+
+            $emailDriftCandidate = $this->findEmailDriftCandidate(
+                $lowercasedMemberEmails,
+                $patreonUserLink->user?->email,
+                $patreonUserLink->email,
+            );
+
+            $unmatchedCount++;
+            $this->collectHolder(
+                $unmatchedHolders,
+                $patreonUserLink,
+                $emailDriftCandidate === null ? PatreonOverEntitlementReason::NoCampaignMember : PatreonOverEntitlementReason::EmailDrift,
+                $emailDriftCandidate,
+            );
+        }
+
+        return new PatreonBenefitReconciliation(
+            holderCount: $holders->count(),
+            unmatchedCount: $unmatchedCount,
+            blockedCount: $blockedCount,
+            downgradedCount: $downgradedCount,
+            unmatchedHolders: $unmatchedHolders,
+            blockedHolders: $blockedHolders,
+        );
+    }
+
+    /**
+     * Admins hold every benefit key through `User::getPatreonBenefits()` without a single benefit row
+     * behind it, so without this every admin reads as maximally over-entitled and buries the real
+     * findings. A link whose user is gone is deliberately *not* excluded - an orphaned row still holding
+     * benefit grants is a genuine finding, and `?? false` keeps it in rather than dropping it silently.
+     */
+    private function isExcludedFromReconciliation(PatreonUserLink $patreonUserLink): bool
+    {
+        return $patreonUserLink->user?->hasRole(Role::ROLE_ADMIN) ?? false;
+    }
+
+    /**
+     * The masked campaign email that matches the *account's* address while the link carries a different
+     * one - the fingerprint of a patron who changed their Patreon email after linking, which the sync's
+     * email match then reads as "never linked" forever after (#4373).
+     *
+     * @param array<int, string> $lowercasedMemberEmails
+     */
+    private function findEmailDriftCandidate(array $lowercasedMemberEmails, ?string $accountEmail, ?string $linkEmail): ?string
+    {
+        if ($accountEmail === null || $accountEmail === '') {
+            return null;
+        }
+
+        $lowercasedAccountEmail = mb_strtolower($accountEmail);
+
+        // The link already carries the account's address, so no member can match one without the other
+        if ($linkEmail !== null && mb_strtolower($linkEmail) === $lowercasedAccountEmail) {
+            return null;
+        }
+
+        return in_array($lowercasedAccountEmail, $lowercasedMemberEmails, true) ? self::maskEmail($accountEmail) : null;
+    }
+
+    /**
+     * @param array<int, PatreonBenefitHolderDiagnostics> $target
+     */
+    private function collectHolder(
+        array                        &                        $target,
+        PatreonUserLink              $patreonUserLink,
+        PatreonOverEntitlementReason $reason,
+        ?string                      $emailDriftCandidate,
+    ): void {
+        if (count($target) >= self::MAX_LISTED_HOLDERS) {
+            return;
+        }
+
+        $user = $patreonUserLink->user;
+
+        /** @var array<int, int> $duplicateLinkIds */
+        $duplicateLinkIds = $user === null ? [] : PatreonUserLink::query()
+            ->where('user_id', $user->id)
+            ->whereKeyNot($patreonUserLink->id)
+            ->pluck('id')
+            ->all();
+
+        $target[] = new PatreonBenefitHolderDiagnostics(
+            reason: $reason,
+            userId: $user?->id,
+            username: $user?->name,
+            patreonUserLinkId: $patreonUserLink->id,
+            maskedLinkEmail: self::maskEmail($patreonUserLink->email),
+            maskedAccountEmail: self::maskEmail($user?->email),
+            // Read from the link's own rows rather than User::getPatreonBenefits(), which answers with
+            // every key for an admin and with nothing at all for an orphaned link
+            storedBenefits: $patreonUserLink->patreonBenefits->pluck('key')->values()->all(),
+            lastSeenAt: $patreonUserLink->last_seen_at,
+            lastSyncResult: $patreonUserLink->last_sync_result?->name,
+            duplicateLinkIds: $duplicateLinkIds,
+            emailDriftCandidate: $emailDriftCandidate,
         );
     }
 
