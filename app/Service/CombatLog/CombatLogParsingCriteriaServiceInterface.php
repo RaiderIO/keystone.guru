@@ -44,6 +44,11 @@ interface CombatLogParsingCriteriaServiceInterface
 
     /**
      * Resets all criterion counts for today (UTC date) to zero.
+     *
+     * The budget this hands back is released pro rata like any other, so a reset partway through
+     * the day does not let a band spend its whole threshold at once - it spends it across the
+     * polling opportunities it has left. A band whose last opportunity of the day has already
+     * passed gets nothing back until tomorrow, reset or not.
      */
     public function resetAllForToday(): void;
 

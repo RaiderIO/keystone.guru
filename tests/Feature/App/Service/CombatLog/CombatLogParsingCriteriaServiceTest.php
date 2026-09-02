@@ -805,4 +805,29 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
                 ->delete();
         }
     }
+
+    /**
+     * The admin panel's reset button (AdminToolsCombatLogCriteriaController::criteriaReset) can be
+     * pressed at any hour, so the count and the ceiling come from different clocks afterwards. A
+     * zero count is below any positive ceiling, so a reset always hands budget back - but pro rata,
+     * not all at once.
+     */
+    #[Test]
+    public function shouldParse_givenAMidDayReset_handsBudgetBackWithinTheCurrentWindow(): void
+    {
+        // Arrange — a band that had spent its whole daily threshold
+        CombatLogParsingCriterion::factory()->forDungeon(self::DUNGEON_ID)->atThreshold()->create();
+        CombatLogParsingCriterion::factory()->forClassSpec(self::SPEC_ID)->atThreshold()->create();
+
+        $beforeReset = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(), new PollingBudgetWindow(2, 6));
+
+        // Act
+        $this->service->resetAllForToday();
+
+        $afterReset = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(), new PollingBudgetWindow(2, 6));
+
+        // Assert
+        $this->assertFalse($beforeReset);
+        $this->assertTrue($afterReset);
+    }
 }
