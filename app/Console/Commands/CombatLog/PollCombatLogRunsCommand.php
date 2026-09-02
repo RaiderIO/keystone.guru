@@ -28,6 +28,7 @@ use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Throwable;
 
 class PollCombatLogRunsCommand extends Command
 {
@@ -351,6 +352,16 @@ class PollCombatLogRunsCommand extends Command
             return;
         }
 
+        $dungeonCriterion = new CombatLogParsingCriterionCheck(Dungeon::class, $dungeon->id, $band);
+        $specCriteria     = $this->buildSpecCriteria($run->memberSpecIds, $allSpecsByBlizzardId, $band);
+        $raceCriteria     = $this->buildRaceCriteria($run->faction, $criterionRaces, $band);
+        $criteria         = array_merge([$dungeonCriterion], $specCriteria, $raceCriteria);
+
+        // The date is captured here and carried into the job rather than left to Carbon::now(): it is
+        // the date these counts land on, and the job hands it back to releaseParsed() if the run turns
+        // out to yield nothing - which can be after midnight, on a retried or backlogged job (#4173).
+        $criteriaDate = Carbon::now()->toDateString();
+
         if (!$force) {
             $now = Carbon::now();
 
@@ -371,30 +382,38 @@ class PollCombatLogRunsCommand extends Command
             }
         }
 
-        $dungeonCriterion = new CombatLogParsingCriterionCheck(Dungeon::class, $dungeon->id, $band);
-        $specCriteria     = $this->buildSpecCriteria($run->memberSpecIds, $allSpecsByBlizzardId, $band);
-        $raceCriteria     = $this->buildRaceCriteria($run->faction, $criterionRaces, $band);
-        $criteria         = array_merge([$dungeonCriterion], $specCriteria, $raceCriteria);
+        $budgetRecorded = false;
 
-        // The date is captured here and carried into the job rather than left to Carbon::now(): it is
-        // the date these counts land on, and the job hands it back to releaseParsed() if the run turns
-        // out to yield nothing - which can be after midnight, on a retried or backlogged job (#4173).
-        $criteriaDate = Carbon::now()->toDateString();
+        try {
+            $this->criteriaService->recordParsed($combatLogVersion, $criteria, $criteriaDate);
+            $budgetRecorded = true;
 
-        $this->criteriaService->recordParsed($combatLogVersion, $criteria, $criteriaDate);
+            ProcessCombatLogSegments::dispatch(
+                $season,
+                $run->id,
+                $combatLogVersion,
+                new CombatLogRunContext($run->mythicLevel, $run->affixes),
+                $criteria,
+                $criteriaDate,
+            );
+        } catch (Throwable $throwable) {
+            // Without a job the claim above would leave the run unparsed forever; give it back so a later
+            // poll can retry. This is the one delete of a ParsedCombatLog row outside the retention sweep,
+            // and it only ever removes the row this invocation inserted a moment ago.
+            if (!$force) {
+                ParsedCombatLog::query()->where('run_id', $run->id)->delete();
+            }
+
+            if ($budgetRecorded) {
+                $this->criteriaService->releaseParsed($combatLogVersion, $criteria, $criteriaDate);
+            }
+
+            throw $throwable;
+        }
 
         // Marked even when forcing: the same run legitimately comes back from several criterion
         // queries and from the top band, and dispatching it twice in one invocation helps nobody.
         $knownRunIds[$run->id] = true;
-
-        ProcessCombatLogSegments::dispatch(
-            $season,
-            $run->id,
-            $combatLogVersion,
-            new CombatLogRunContext($run->mythicLevel, $run->affixes),
-            $criteria,
-            $criteriaDate,
-        );
 
         $this->healthService->recordDispatched();
 
