@@ -17,9 +17,11 @@ use App\Models\User;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureServiceInterface;
 use App\Service\Floor\FloorResolutionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
+use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Session;
 
@@ -126,20 +128,24 @@ class AdminToolsCombatLogController extends Controller
         return $npcs;
     }
 
-    public function combatlogregenerate(): View
+    public function combatlogregenerate(SeasonServiceInterface $seasonService): View
     {
         return view('admin.tools.combatlog.regenerate', [
             'seasons' => $this->getSeasonsSelectList(),
+            'periods' => $this->getPeriodsSelectList($seasonService),
         ]);
     }
 
-    public function combatlogregeneratesubmit(AdminToolsCombatLogRegenerateRequest $request): View
-    {
+    public function combatlogregeneratesubmit(
+        AdminToolsCombatLogRegenerateRequest $request,
+        SeasonServiceInterface               $seasonService,
+    ): View {
         set_time_limit(3600);
 
-        // Null means "do not limit to any dungeon(s)" / "do not limit to a season"
+        // Null means "do not limit to any dungeon(s)" / "do not limit to a season" / "do not limit to any week"
         $dungeonIds = $request->getDungeonIds();
         $season     = $request->getSeason();
+        $periods    = $request->getPeriods();
 
         if ($request->deleteEnemyFailures()) {
             CombatLogRouteEnemyFailure::query()
@@ -153,10 +159,19 @@ class AdminToolsCombatLogController extends Controller
         DungeonRoute::query()
             ->when($dungeonIds !== null, static fn(Builder $builder) => $builder->whereIn('dungeon_id', $dungeonIds))
             ->when($season !== null, static fn(Builder $builder) => $builder->where('season_id', $season->id))
-            ->chunkById(200, function (Collection $dungeonRoutes) use (&$count) {
+            ->chunkById(200, function (Collection $dungeonRoutes) use (&$count, $periods) {
                 $dungeonRoutes = $dungeonRoutes->keyBy('id');
                 /** @var Collection<int, ChallengeModeRun> $challengeModes */
                 $challengeModes = ChallengeModeRun::whereIn('dungeon_route_id', $dungeonRoutes->pluck('id'))
+                    ->when($periods !== null, static fn(Builder $builder) => $builder->whereHas(
+                        'challengeModeRunData',
+                        static fn(Builder $builder) => $builder->whereIn(
+                            // The week a run belongs to only lives inside the stored request body - and a run whose
+                            // post_body was pruned cannot be regenerated at all, so dropping it here costs nothing
+                            DB::raw("CAST(JSON_UNQUOTE(JSON_EXTRACT(post_body, '$.metadata.period')) AS UNSIGNED)"),
+                            $periods,
+                        ),
+                    ))
                     ->get();
 
                 foreach ($challengeModes as $challengeMode) {
@@ -173,7 +188,43 @@ class AdminToolsCombatLogController extends Controller
 
         return view('admin.tools.combatlog.regenerate', [
             'seasons' => $this->getSeasonsSelectList(),
+            'periods' => $this->getPeriodsSelectList($seasonService),
         ]);
+    }
+
+    /**
+     * Every week of every season that has started, most recent first, keyed by the keystone leaderboard period
+     * that week falls in and grouped per season so the select renders one optgroup per season. The period is the
+     * number a run carries in its metadata, and is spelled out in the label so it can be cross referenced against
+     * the heatmap's week filter.
+     *
+     * @return array<string, array<int, string>>
+     */
+    private function getPeriodsSelectList(SeasonServiceInterface $seasonService): array
+    {
+        $region = AdminToolsCombatLogRegenerateRequest::getPeriodRegion();
+
+        $result = [];
+        foreach ($seasonService->getAllSeasons()->sortByDesc('start') as $season) {
+            $seasonStart = $season->start($region);
+            $weeks       = [];
+
+            foreach ($seasonService->getWeeklyPeriods($season, $region) as $week => $period) {
+                $weeks[$period] = __('view_admin.tools.combatlog.regenerate.period_option', [
+                    'week'   => $week,
+                    'date'   => $seasonStart->copy()->addWeeks($week - 1)->toFormattedDateString(),
+                    'period' => $period,
+                ]);
+            }
+
+            if ($weeks === []) {
+                continue;
+            }
+
+            $result[$season->name_long] = array_reverse($weeks, true);
+        }
+
+        return $result;
     }
 
     /**

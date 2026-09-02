@@ -27,6 +27,15 @@ interface SeasonServiceInterface
 
     public function getNextSeason(Season $season, ?GameServerRegion $region = null): ?Season;
 
+    /**
+     * Every week of the given season that has already started, as `week number => keystone leaderboard period`.
+     * Week 1 is the week the season starts in; the list stops at the start of the next season - of any expansion,
+     * seasons run back to back across them - or at the current week, whichever comes first.
+     *
+     * @return Collection<int, int>
+     */
+    public function getWeeklyPeriods(Season $season, GameServerRegion $region): Collection;
+
     public function getCurrentSeason(?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season;
 
     public function getNextSeasonOfExpansion(?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season;

@@ -88,6 +88,43 @@ class SeasonService implements SeasonServiceInterface
     }
 
     /**
+     * @return Collection<int, int>
+     */
+    public function getWeeklyPeriods(Season $season, GameServerRegion $region): Collection
+    {
+        $result = collect();
+
+        $now         = Carbon::now();
+        $seasonStart = $season->start($region);
+
+        if ($seasonStart->greaterThan($now)) {
+            return $result;
+        }
+
+        // getNextSeason() is scoped to a single expansion, which is the wrong lens here: seasons run back to back
+        // across expansions, so the next season to start - whichever expansion it belongs to - is what ends this one.
+        $nextSeasonStart = $this->getAllSeasons()
+            ->map(static fn(Season $candidate): Carbon => $candidate->start($region))
+            ->filter(static fn(Carbon $candidateStart): bool => $candidateStart->greaterThan($seasonStart))
+            ->sortBy(static fn(Carbon $candidateStart): int => $candidateStart->getTimestamp())
+            ->first();
+
+        $seasonEnd = $nextSeasonStart === null || $nextSeasonStart->greaterThan($now) ? $now : $nextSeasonStart;
+
+        $date = $seasonStart->copy();
+        $week = 1;
+
+        while ($date->lessThan($seasonEnd)) {
+            $result->put($week, $region->getKeystoneLeaderboardPeriod($date));
+
+            $date->addWeek();
+            $week++;
+        }
+
+        return $result;
+    }
+
+    /**
      * Find the season active at a given date across all expansions, skipping seasons with no affix groups defined.
      * Unlike getSeasonAt(), this is not scoped to a single expansion and filters out placeholder seasons that have
      * not yet had their affix groups assigned, so an upcoming season never blanks the rotation display.

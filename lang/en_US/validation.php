@@ -35,6 +35,9 @@ return [
         'social_links' => [
             'invalid_url_for_platform' => 'That is not a valid https link for this platform.',
         ],
+        'periods' => [
+            'not_in_season' => 'One or more selected weeks do not belong to :season, so that combination selects no routes at all.',
+        ],
         'creator_search' => [
             'max' => 'A creator name is at most :max characters, so a longer search cannot match anyone.',
         ],

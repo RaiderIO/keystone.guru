@@ -3,8 +3,10 @@
 namespace App\Http\Requests;
 
 use App\Models\Dungeon;
+use App\Models\GameServerRegion;
 use App\Models\Laratrust\Role;
 use App\Models\Season;
+use App\Service\Season\SeasonServiceInterface;
 use Auth;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -39,6 +41,8 @@ class AdminToolsCombatLogRegenerateRequest extends FormRequest
                 ? ['required', 'integer', 'exists:dungeons,id']
                 : ['required', 'string', sprintf('regex:/^(%s|%s\d+)$/', self::DUNGEON_ID_ALL, self::DUNGEON_ID_SEASON_PREFIX)],
             'season_id'             => ['nullable', 'integer', 'exists:seasons,id'],
+            'periods'               => ['nullable', 'array'],
+            'periods.*'             => ['integer', 'min:0'],
             'delete_enemy_failures' => ['nullable', 'boolean'],
         ];
     }
@@ -64,6 +68,35 @@ class AdminToolsCombatLogRegenerateRequest extends FormRequest
                 if (!Season::query()->where('id', $seasonId)->exists()) {
                     // 'dungeon id' is what Laravel itself derives from the field name for every other rule
                     $validator->errors()->add('dungeon_id', __('validation.exists', ['attribute' => 'dungeon id']));
+                }
+            },
+            // A season and a set of weeks that do not overlap select nothing at all, which is indistinguishable
+            // from a regeneration that simply found no routes - so refuse the combination instead
+            function (Validator $validator): void {
+                $seasonId = $this->input('season_id');
+                $periods  = $this->input('periods');
+
+                if (empty($seasonId) || !is_array($periods) || $periods === []) {
+                    return;
+                }
+
+                $season = Season::query()->find((int)$seasonId);
+                if ($season === null) {
+                    return;
+                }
+
+                $seasonPeriods = app(SeasonServiceInterface::class)
+                    ->getWeeklyPeriods($season, self::getPeriodRegion())
+                    ->values();
+
+                $outsideSeason = collect($periods)
+                    ->map(static fn($period): int => (int)$period)
+                    ->diff($seasonPeriods);
+
+                if ($outsideSeason->isNotEmpty()) {
+                    $validator->errors()->add('periods', __('validation.custom.periods.not_in_season', [
+                        'season' => $season->name_long,
+                    ]));
                 }
             },
         ];
@@ -108,6 +141,38 @@ class AdminToolsCombatLogRegenerateRequest extends FormRequest
 
             return Season::query()->findOrFail((int)$seasonId);
         });
+    }
+
+    /**
+     * The keystone leaderboard periods (weeks) the regenerated routes must have been run in, or null when
+     * any week goes.
+     *
+     * @return Collection<int, int>|null
+     */
+    public function getPeriods(): ?Collection
+    {
+        return once(function (): ?Collection {
+            $periods = $this->validated('periods');
+
+            if (!is_array($periods) || $periods === []) {
+                return null;
+            }
+
+            return collect($periods)
+                ->map(static fn($period): int => (int)$period)
+                ->unique()
+                ->values();
+        });
+    }
+
+    /**
+     * Leaderboard periods are region specific: the same run is one period apart depending on which region's
+     * weekly reset it is counted from. The week select is built from - and validated against - the default
+     * region, the same one Season::start_period and the heatmap's week filter use.
+     */
+    public static function getPeriodRegion(): GameServerRegion
+    {
+        return GameServerRegion::query()->where('short', GameServerRegion::DEFAULT_REGION)->firstOrFail();
     }
 
     /**

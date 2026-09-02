@@ -1,5 +1,6 @@
 <?php
 /** @var array<int|string, string> $seasons */
+/** @var array<string, array<int, string>> $periods */
 ?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.tools.combatlog.regenerate.title')])
 
@@ -23,6 +24,17 @@
                 'data-live-search' => 'true',
             ]) }}
         <div class="form-text">{{ __('view_admin.tools.combatlog.regenerate.season_description') }}</div>
+    </div>
+    <div class="mb-3">
+        {{ html()->label(__('view_admin.tools.combatlog.regenerate.periods'), 'periods') }}
+        {{ html()->multiselect('periods[]', $periods, (array)request()->input('periods', []))
+            ->attributes([
+                'id'               => 'periods',
+                'class'            => 'form-control selectpicker',
+                'data-live-search' => 'true',
+                'data-actions-box' => 'true',
+            ]) }}
+        <div class="form-text">{{ __('view_admin.tools.combatlog.regenerate.periods_description') }}</div>
     </div>
     <div class="mb-3">
         <div class="form-check">
