@@ -33,6 +33,7 @@
                 'class'            => 'form-control selectpicker',
                 'data-live-search' => 'true',
                 'data-actions-box' => 'true',
+                'title'            => __('view_admin.tools.combatlog.regenerate.periods_any'),
             ]) }}
         <div class="form-text">{{ __('view_admin.tools.combatlog.regenerate.periods_description') }}</div>
     </div>

@@ -11,11 +11,11 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('SeasonService')]
-#[Group('GetWeeklyPeriods')]
-final class GetWeeklyPeriodsTest extends PublicTestCase
+#[Group('GetSeasonWeeks')]
+final class GetSeasonWeeksTest extends PublicTestCase
 {
     #[Test]
-    public function getWeeklyPeriods_givenSeasonThatHasEnded_returnsEveryWeekUpToTheNextSeason(): void
+    public function getSeasonWeeks_givenSeasonThatHasEnded_returnsEveryWeekUpToTheNextSeason(): void
     {
         // Arrange
         $service         = app(SeasonServiceInterface::class);
@@ -24,24 +24,24 @@ final class GetWeeklyPeriodsTest extends PublicTestCase
         $nextSeasonStart = Season::findOrFail(Season::SEASON_BFA_S2)->start($usRegion);
 
         // Act
-        $result = $service->getWeeklyPeriods($season, $usRegion);
+        $result = $service->getSeasonWeeks($season, $usRegion);
 
         // Assert
         $this->assertNotEmpty($result);
         $this->assertSame(1, $result->keys()->first());
         $this->assertSame(
-            $usRegion->getKeystoneLeaderboardPeriod($season->start($usRegion)),
-            $result->first(),
+            $usRegion->getKeystoneLeaderboardPeriod($season->start($usRegion)->addDays(3)),
+            $result->first()->period,
         );
         // The last week of the season must fall before the week the next season starts in
         $this->assertLessThan(
-            $usRegion->getKeystoneLeaderboardPeriod($nextSeasonStart),
-            $result->last(),
+            $usRegion->getKeystoneLeaderboardPeriod($nextSeasonStart->addDays(3)),
+            $result->last()->period,
         );
     }
 
     #[Test]
-    public function getWeeklyPeriods_givenSeasonThatHasEnded_returnsConsecutiveWeeksAndPeriods(): void
+    public function getSeasonWeeks_givenSeasonThatHasEnded_returnsConsecutiveWeeksAndPeriods(): void
     {
         // Arrange
         $service  = app(SeasonServiceInterface::class);
@@ -49,19 +49,37 @@ final class GetWeeklyPeriodsTest extends PublicTestCase
         $season   = Season::findOrFail(Season::SEASON_BFA_S1);
 
         // Act
-        $result = $service->getWeeklyPeriods($season, $usRegion);
+        $result = $service->getSeasonWeeks($season, $usRegion);
 
         // Assert
-        $firstWeek   = $result->keys()->first();
-        $firstPeriod = $result->first();
+        $firstPeriod = $result->first()->period;
 
-        foreach ($result as $week => $period) {
-            $this->assertSame($firstPeriod + ($week - $firstWeek), $period);
+        foreach ($result as $week => $seasonWeek) {
+            $this->assertSame($week, $seasonWeek->week);
+            $this->assertSame($firstPeriod + ($week - 1), $seasonWeek->period);
         }
     }
 
     #[Test]
-    public function getWeeklyPeriods_givenSeasonThatHasNotStartedYet_returnsNoWeeks(): void
+    public function getSeasonWeeks_givenEverySeason_neverRepeatsAPeriodAcrossSeasons(): void
+    {
+        // Arrange
+        $service  = app(SeasonServiceInterface::class);
+        $usRegion = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+
+        // Act
+        $periods = $service->getAllSeasons()
+            ->flatMap(static fn(Season $season) => $service->getSeasonWeeks($season, $usRegion)->pluck('period'));
+
+        // Assert
+        // A season's weeks are stepped in the region's timezone, where a DST change shifts the reset by an hour -
+        // enough for a season's last week to claim the period its successor's first week already occupies
+        $this->assertNotEmpty($periods);
+        $this->assertSame($periods->count(), $periods->unique()->count());
+    }
+
+    #[Test]
+    public function getSeasonWeeks_givenSeasonThatHasNotStartedYet_returnsNoWeeks(): void
     {
         // Arrange
         $service  = app(SeasonServiceInterface::class);
@@ -75,7 +93,7 @@ final class GetWeeklyPeriodsTest extends PublicTestCase
         }
 
         // Act
-        $result = $service->getWeeklyPeriods($upcomingSeason, $usRegion);
+        $result = $service->getSeasonWeeks($upcomingSeason, $usRegion);
 
         // Assert
         $this->assertTrue($result->isEmpty());

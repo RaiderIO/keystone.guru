@@ -777,7 +777,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
                 ->filter(static fn(Dungeon $dungeon) => $dungeon->getCurrentMappingVersion() !== null)
                 ->values();
 
-            $periods = $seasonService->getWeeklyPeriods($season, $region)->values();
+            $periods = $seasonService->getSeasonWeeks($season, $region)->pluck('period')->values();
 
             if ($dungeons->isNotEmpty() && $periods->count() >= 2) {
                 return [$season, $periods, $dungeons];

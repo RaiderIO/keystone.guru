@@ -206,14 +206,13 @@ class AdminToolsCombatLogController extends Controller
 
         $result = [];
         foreach ($seasonService->getAllSeasons()->sortByDesc('start') as $season) {
-            $seasonStart = $season->start($region);
-            $weeks       = [];
+            $weeks = [];
 
-            foreach ($seasonService->getWeeklyPeriods($season, $region) as $week => $period) {
-                $weeks[$period] = __('view_admin.tools.combatlog.regenerate.period_option', [
-                    'week'   => $week,
-                    'date'   => $seasonStart->copy()->addWeeks($week - 1)->toFormattedDateString(),
-                    'period' => $period,
+            foreach ($seasonService->getSeasonWeeks($season, $region) as $seasonWeek) {
+                $weeks[$seasonWeek->period] = __('view_admin.tools.combatlog.regenerate.period_option', [
+                    'week'   => $seasonWeek->week,
+                    'date'   => $seasonWeek->start->toFormattedDateString(),
+                    'period' => $seasonWeek->period,
                 ]);
             }
 

@@ -6,6 +6,7 @@ use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\Season;
+use App\Service\Season\Dtos\SeasonWeek;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -28,13 +29,13 @@ interface SeasonServiceInterface
     public function getNextSeason(Season $season, ?GameServerRegion $region = null): ?Season;
 
     /**
-     * Every week of the given season that has already started, as `week number => keystone leaderboard period`.
-     * Week 1 is the week the season starts in; the list stops at the start of the next season - of any expansion,
-     * seasons run back to back across them - or at the current week, whichever comes first.
+     * Every week of the given season that has already started, keyed by its week number. Week 1 is the week the
+     * season starts in; the list stops at the start of the next season - of any expansion, seasons run back to
+     * back across them - or at the current week, whichever comes first.
      *
-     * @return Collection<int, int>
+     * @return Collection<int, SeasonWeek>
      */
-    public function getWeeklyPeriods(Season $season, GameServerRegion $region): Collection;
+    public function getSeasonWeeks(Season $season, GameServerRegion $region): Collection;
 
     public function getCurrentSeason(?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season;
 

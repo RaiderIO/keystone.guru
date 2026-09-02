@@ -86,8 +86,8 @@ class AdminToolsCombatLogRegenerateRequest extends FormRequest
                 }
 
                 $seasonPeriods = app(SeasonServiceInterface::class)
-                    ->getWeeklyPeriods($season, self::getPeriodRegion())
-                    ->values();
+                    ->getSeasonWeeks($season, self::getPeriodRegion())
+                    ->pluck('period');
 
                 $outsideSeason = collect($periods)
                     ->map(static fn($period): int => (int)$period)

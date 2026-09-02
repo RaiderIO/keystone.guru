@@ -38,7 +38,7 @@ class SeasonServiceStub implements SeasonServiceInterface
         return null;
     }
 
-    public function getWeeklyPeriods(Season $season, GameServerRegion $region): Collection
+    public function getSeasonWeeks(Season $season, GameServerRegion $region): Collection
     {
         return collect();
     }
