@@ -92,6 +92,7 @@ use App\Repositories\Database\PageViewRepository;
 use App\Repositories\Database\PathRepository;
 use App\Repositories\Database\Patreon\PatreonAdFreeGiveawayRepository;
 use App\Repositories\Database\Patreon\PatreonBenefitRepository;
+use App\Repositories\Database\Patreon\PatreonManualGrantRepository;
 use App\Repositories\Database\Patreon\PatreonSyncRunRepository;
 use App\Repositories\Database\Patreon\PatreonUserBenefitRepository;
 use App\Repositories\Database\Patreon\PatreonUserLinkRepository;
@@ -212,6 +213,7 @@ use App\Repositories\Interfaces\PageViewRepositoryInterface;
 use App\Repositories\Interfaces\PathRepositoryInterface;
 use App\Repositories\Interfaces\Patreon\PatreonAdFreeGiveawayRepositoryInterface;
 use App\Repositories\Interfaces\Patreon\PatreonBenefitRepositoryInterface;
+use App\Repositories\Interfaces\Patreon\PatreonManualGrantRepositoryInterface;
 use App\Repositories\Interfaces\Patreon\PatreonSyncRunRepositoryInterface;
 use App\Repositories\Interfaces\Patreon\PatreonUserBenefitRepositoryInterface;
 use App\Repositories\Interfaces\Patreon\PatreonUserLinkRepositoryInterface;
@@ -330,6 +332,7 @@ class RepositoryServiceProvider extends ServiceProvider
         // Patreon
         $this->app->bind(PatreonAdFreeGiveawayRepositoryInterface::class, PatreonAdFreeGiveawayRepository::class);
         $this->app->bind(PatreonBenefitRepositoryInterface::class, PatreonBenefitRepository::class);
+        $this->app->bind(PatreonManualGrantRepositoryInterface::class, PatreonManualGrantRepository::class);
         $this->app->bind(PatreonSyncRunRepositoryInterface::class, PatreonSyncRunRepository::class);
         $this->app->bind(PatreonUserBenefitRepositoryInterface::class, PatreonUserBenefitRepository::class);
         $this->app->bind(PatreonUserLinkRepositoryInterface::class, PatreonUserLinkRepository::class);

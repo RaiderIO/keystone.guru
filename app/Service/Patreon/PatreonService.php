@@ -3,9 +3,11 @@
 namespace App\Service\Patreon;
 
 use App\Models\Patreon\PatreonBenefit;
+use App\Models\Patreon\PatreonManualGrant;
 use App\Models\Patreon\PatreonUserBenefit;
 use App\Models\Patreon\PatreonUserLink;
 use App\Models\User;
+use App\Repositories\Interfaces\Patreon\PatreonManualGrantRepositoryInterface;
 use App\Service\Patreon\Dtos\ApplyPaidBenefitsForMemberResult;
 use App\Service\Patreon\Dtos\LinkToUserIdResult;
 use App\Service\Patreon\Dtos\PatreonCampaignMembers;
@@ -14,14 +16,16 @@ use App\Service\Patreon\Logging\PatreonServiceLoggingInterface;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class PatreonService implements PatreonServiceInterface
 {
     private ?User $cachedAdminUser = null;
 
     public function __construct(
-        private readonly PatreonApiServiceInterface     $patreonApiService,
-        private readonly PatreonServiceLoggingInterface $log,
+        private readonly PatreonApiServiceInterface            $patreonApiService,
+        private readonly PatreonManualGrantRepositoryInterface $patreonManualGrantRepository,
+        private readonly PatreonServiceLoggingInterface        $log,
     ) {
     }
 
@@ -270,7 +274,8 @@ class PatreonService implements PatreonServiceInterface
         $currentBenefits = $user->getPatreonBenefits()->values()->all();
 
         // Exception for users that were granted their membership status
-        if ($patreonUserLink->refresh_token === PatreonUserLink::PERMANENT_TOKEN) {
+        if ($patreonUserLink->refresh_token === PatreonUserLink::PERMANENT_TOKEN ||
+            $this->patreonManualGrantRepository->hasActiveGrantForUserId($user->id)) {
             $this->log->applyPaidBenefitsForMemberUserManuallyAssignedAllBenefits();
 
             return new PatreonMemberSyncPlan(
@@ -449,6 +454,124 @@ class PatreonService implements PatreonServiceInterface
         }
 
         return $result;
+    }
+
+    public function grantAllBenefits(User $user, User $grantedBy, string $reason): PatreonManualGrant
+    {
+        // No retry count on purpose: $user is a route-bound model that outlives this closure, and a
+        // retried transaction would find it clean on the second attempt and silently skip the
+        // patreon_user_link_id write below (#4250)
+        return DB::transaction(function () use ($user, $grantedBy, $reason): PatreonManualGrant {
+            $this->lockUserAndRefresh($user);
+
+            if ($user->patreonUserLink === null) {
+                // The user has no Patreon account at all - fabricate a link to hang the benefits off.
+                // The permanent token is what tells the hourly sync this link has nothing to refresh
+                $patreonUserLink = PatreonUserLink::create([
+                    'user_id'       => $user->id,
+                    'email'         => $user->email,
+                    'scope'         => 'identity identity[email] identity.memberships campaigns',
+                    'access_token'  => PatreonUserLink::PERMANENT_TOKEN,
+                    'refresh_token' => PatreonUserLink::PERMANENT_TOKEN,
+                    'version'       => '0.0.1',
+                    'expires_at'    => Carbon::now()->addYears(100),
+                ]);
+
+                $user->setRelation('patreonUserLink', $patreonUserLink);
+                $user->patreon_user_link_id = $patreonUserLink->id;
+                $user->save();
+            } else {
+                // The user has a real Patreon link - leave its tokens and expires_at completely alone.
+                // Rewriting them would break the OAuth refresh, and expires_at is ON UPDATE
+                // CURRENT_TIMESTAMP so any write to that row expires the link
+                $user->patreonUserLink->patreonUserBenefits()->delete();
+            }
+
+            foreach (PatreonBenefit::ALL as $patreonBenefitId) {
+                PatreonUserBenefit::create([
+                    'patreon_user_link_id' => $user->patreon_user_link_id,
+                    'patreon_benefit_id'   => $patreonBenefitId,
+                ]);
+            }
+
+            // Re-granting supersedes any grant already in place, so the audit trail stays a chain of
+            // one active grant with the previous ones revoked, rather than several overlapping rows
+            $this->revokeActiveGrantRecords($user, $grantedBy);
+
+            $grant = PatreonManualGrant::create([
+                'user_id'            => $user->id,
+                'granted_by_user_id' => $grantedBy->id,
+                'reason'             => $reason,
+            ]);
+
+            $this->log->grantAllBenefits($user->id, $grantedBy->id, $reason);
+
+            return $grant;
+        });
+    }
+
+    public function revokeManualGrant(User $user, User $revokedBy): bool
+    {
+        return DB::transaction(function () use ($user, $revokedBy): bool {
+            $this->lockUserAndRefresh($user);
+
+            $revokedGrants   = $this->revokeActiveGrantRecords($user, $revokedBy);
+            $patreonUserLink = $user->patreonUserLink;
+
+            // A link the admin panel fabricated represents nothing but the grant itself, so it goes
+            // away with it. A real link stays: the user is still a Patreon member, and the next
+            // patreon:refreshmembers run puts their actual tier's benefits back
+            if ($patreonUserLink?->refresh_token === PatreonUserLink::PERMANENT_TOKEN) {
+                // Deleting the link cascades to its benefits through the model's deleting hook
+                $patreonUserLink->delete();
+
+                User::query()->whereKey($user->id)->update(['patreon_user_link_id' => null]);
+                $user->patreon_user_link_id = null;
+                $user->unsetRelation('patreonUserLink');
+
+                $this->log->revokeManualGrantDeletedFabricatedLink($user->id, $revokedBy->id);
+
+                return true;
+            }
+
+            $patreonUserLink?->patreonUserBenefits()->delete();
+
+            $this->log->revokeManualGrant($user->id, $revokedBy->id, $revokedGrants);
+
+            return $revokedGrants > 0 || $patreonUserLink !== null;
+        });
+    }
+
+    /**
+     * Takes a row lock on the user for the rest of the surrounding transaction, then re-reads them so
+     * the caller sees whatever the request that held the lock before it committed.
+     *
+     * Granting and revoking both read the user's link state and then write based on it, so without
+     * this a double-submitted modal (or a grant racing a revoke) has both requests act on the same
+     * stale read: two fabricated links for one user, a doubled-up set of benefit rows, or an active
+     * grant whose benefits the other request just deleted.
+     */
+    private function lockUserAndRefresh(User $user): void
+    {
+        User::query()->whereKey($user->id)->lockForUpdate()->firstOrFail();
+
+        $user->refresh();
+    }
+
+    /**
+     * Marks every active grant of this user as revoked.
+     *
+     * @return int The amount of grant records that were revoked.
+     */
+    private function revokeActiveGrantRecords(User $user, User $revokedBy): int
+    {
+        return PatreonManualGrant::query()
+            ->active()
+            ->where('user_id', $user->id)
+            ->update([
+                'revoked_at'         => Carbon::now(),
+                'revoked_by_user_id' => $revokedBy->id,
+            ]);
     }
 
     private function loadAdminUser(): ?User
