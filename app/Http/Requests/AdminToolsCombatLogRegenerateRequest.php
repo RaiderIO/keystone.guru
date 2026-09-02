@@ -86,7 +86,7 @@ class AdminToolsCombatLogRegenerateRequest extends FormRequest
                 }
 
                 $seasonPeriods = app(SeasonServiceInterface::class)
-                    ->getSeasonWeeks($season, self::getPeriodRegion())
+                    ->getSeasonWeeks($season, GameServerRegion::getUserOrDefaultRegion())
                     ->pluck('period');
 
                 $outsideSeason = collect($periods)
@@ -163,16 +163,6 @@ class AdminToolsCombatLogRegenerateRequest extends FormRequest
                 ->unique()
                 ->values();
         });
-    }
-
-    /**
-     * Leaderboard periods are region specific: the same run is one period apart depending on which region's
-     * weekly reset it is counted from. The week select is built from - and validated against - the default
-     * region, the same one Season::start_period and the heatmap's week filter use.
-     */
-    public static function getPeriodRegion(): GameServerRegion
-    {
-        return GameServerRegion::query()->where('short', GameServerRegion::DEFAULT_REGION)->firstOrFail();
     }
 
     /**

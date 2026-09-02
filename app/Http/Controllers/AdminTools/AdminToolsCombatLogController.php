@@ -6,14 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminToolsCombatLogRegenerateRequest;
 use App\Http\Requests\AdminToolsCombatLogRouteEnemyFailuresRequest;
 use App\Jobs\RegenerateCombatLogRoute;
-use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\GameServerRegion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Season;
 use App\Models\User;
+use App\Repositories\Interfaces\CombatLog\ChallengeModeRunRepositoryInterface;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureServiceInterface;
 use App\Service\Floor\FloorResolutionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
@@ -21,7 +22,6 @@ use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Session;
 
@@ -139,6 +139,7 @@ class AdminToolsCombatLogController extends Controller
     public function combatlogregeneratesubmit(
         AdminToolsCombatLogRegenerateRequest $request,
         SeasonServiceInterface               $seasonService,
+        ChallengeModeRunRepositoryInterface  $challengeModeRunRepository,
     ): View {
         set_time_limit(3600);
 
@@ -159,20 +160,9 @@ class AdminToolsCombatLogController extends Controller
         DungeonRoute::query()
             ->when($dungeonIds !== null, static fn(Builder $builder) => $builder->whereIn('dungeon_id', $dungeonIds))
             ->when($season !== null, static fn(Builder $builder) => $builder->where('season_id', $season->id))
-            ->chunkById(200, function (Collection $dungeonRoutes) use (&$count, $periods) {
-                $dungeonRoutes = $dungeonRoutes->keyBy('id');
-                /** @var Collection<int, ChallengeModeRun> $challengeModes */
-                $challengeModes = ChallengeModeRun::whereIn('dungeon_route_id', $dungeonRoutes->pluck('id'))
-                    ->when($periods !== null, static fn(Builder $builder) => $builder->whereHas(
-                        'challengeModeRunData',
-                        static fn(Builder $builder) => $builder->whereIn(
-                            // The week a run belongs to only lives inside the stored request body - and a run whose
-                            // post_body was pruned cannot be regenerated at all, so dropping it here costs nothing
-                            DB::raw("CAST(JSON_UNQUOTE(JSON_EXTRACT(post_body, '$.metadata.period')) AS UNSIGNED)"),
-                            $periods,
-                        ),
-                    ))
-                    ->get();
+            ->chunkById(200, function (Collection $dungeonRoutes) use (&$count, $periods, $challengeModeRunRepository) {
+                $dungeonRoutes  = $dungeonRoutes->keyBy('id');
+                $challengeModes = $challengeModeRunRepository->getByDungeonRouteIds($dungeonRoutes->keys(), $periods);
 
                 foreach ($challengeModes as $challengeMode) {
                     RegenerateCombatLogRoute::dispatch(
@@ -202,7 +192,9 @@ class AdminToolsCombatLogController extends Controller
      */
     private function getPeriodsSelectList(SeasonServiceInterface $seasonService): array
     {
-        $region = AdminToolsCombatLogRegenerateRequest::getPeriodRegion();
+        // Leaderboard periods are region specific - this select and AdminToolsCombatLogRegenerateRequest's
+        // validation of it must resolve the same region, or a legitimate week is rejected as outside its season
+        $region = GameServerRegion::getUserOrDefaultRegion();
 
         $result = [];
         foreach ($seasonService->getAllSeasons()->sortByDesc('start') as $season) {
