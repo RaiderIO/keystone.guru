@@ -146,8 +146,8 @@ use Illuminate\Support\Collection;
 
                                 let patreonBenefitsCopy = JSON.parse(JSON.stringify(patreonBenefits));
 
-                                for (let i = 0; i < row.patreon_user_link.patreonbenefits.length; i++) {
-                                    let userPaidTier = row.patreon_user_link.patreonbenefits[i];
+                                for (let i = 0; i < row.patreon_user_link.patreon_benefits.length; i++) {
+                                    let userPaidTier = row.patreon_user_link.patreon_benefits[i];
                                     for (let j = 0; j < patreonBenefitsCopy.length; j++) {
                                         if (patreonBenefitsCopy[j].id === userPaidTier.id) {
                                             patreonBenefitsCopy[j].selected = true;

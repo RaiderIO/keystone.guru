@@ -298,7 +298,7 @@ class User extends Authenticatable implements LaratrustUser
 
         // If we weren't an admin, check patreon data
         if (!$result && $this->patreonUserLink !== null && isset(PatreonBenefit::ALL[$key])) {
-            $result = $this->patreonUserLink->patreonbenefits()->where('patreon_benefits.id', PatreonBenefit::ALL[$key])->exists();
+            $result = $this->patreonUserLink->patreonBenefits()->where('patreon_benefits.id', PatreonBenefit::ALL[$key])->exists();
         }
 
         return $result;
@@ -318,11 +318,7 @@ class User extends Authenticatable implements LaratrustUser
         if ($this->hasRole(Role::ROLE_ADMIN)) {
             $result = collect(array_keys(PatreonBenefit::ALL));
         } elseif (isset($this->patreonUserLink)) {
-            // The lowercase relation name is the one PatreonUserLink::$with eager-loads, and the one its
-            // $visible list serialises for the admin users table. Reading it as `patreonBenefits` here
-            // missed that loaded relation and lazy-loaded a second copy - a violation that throws outside
-            // production and is only logged inside it (#4386)
-            $result = $this->patreonUserLink->patreonbenefits->pluck(['key']);
+            $result = $this->patreonUserLink->patreonBenefits->pluck(['key']);
         } else {
             $result = collect();
         }

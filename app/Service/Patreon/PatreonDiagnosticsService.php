@@ -285,7 +285,7 @@ class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
             // plan's revoke list. That list is diffed against the *account's* patreonUserLink pointer,
             // and with duplicate link rows the pointer and the email-matched link are different rows
             $excessOnMatchedLink = array_diff(
-                $patreonUserLink->patreonbenefits->pluck('key')->all(),
+                $patreonUserLink->patreonBenefits->pluck('key')->all(),
                 $plan->resolvedBenefits,
             );
 
@@ -310,7 +310,7 @@ class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
         $holders = PatreonUserLink::query()
             ->has('patreonUserBenefits')
             ->where('refresh_token', '!=', PatreonUserLink::PERMANENT_TOKEN)
-            ->with(['user.roles', 'patreonbenefits'])
+            ->with(['user.roles', 'patreonBenefits'])
             ->get()
             ->reject(fn(PatreonUserLink $patreonUserLink) => $this->isExcludedFromReconciliation($patreonUserLink));
 
@@ -431,7 +431,7 @@ class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
             maskedAccountEmail: self::maskEmail($user?->email),
             // Read from the link's own rows rather than User::getPatreonBenefits(), which answers with
             // every key for an admin and with nothing at all for an orphaned link
-            storedBenefits: $patreonUserLink->patreonbenefits->pluck('key')->values()->all(),
+            storedBenefits: $patreonUserLink->patreonBenefits->pluck('key')->values()->all(),
             lastSeenAt: $patreonUserLink->last_seen_at,
             lastSyncResult: $patreonUserLink->last_sync_result?->name,
             duplicateLinkIds: $duplicateLinkIds,

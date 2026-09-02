@@ -57,10 +57,10 @@ class PatreonUserLink extends Model
         'last_sync_result',
     ];
 
-    protected $with = ['patreonbenefits'];
+    protected $with = ['patreonBenefits'];
 
     protected $visible = [
-        'patreonbenefits',
+        'patreonBenefits',
         'manually_granted',
     ];
 

@@ -112,4 +112,79 @@ final class UserControllerPatreonBenefitsTest extends PublicTestCase
             $user->delete();
         }
     }
+
+    #[Test]
+    public function getPatreonBenefits_givenUserHydratedInACollection_readsTheEagerLoadedRelation(): void
+    {
+        // Arrange - method_exists() is case insensitive, so reading the relation under a casing that does not
+        // match the one PatreonUserLink::$with eager-loads still returns the right benefits (#4386)
+        $user = $this->createPatreonLinkedUser();
+        $user->patreonUserLink->patreonBenefits()->attach(PatreonBenefit::ALL[PatreonBenefit::AD_FREE]);
+
+        try {
+            // Act
+            $users                = User::query()->whereKey($user->id)->with(['patreonUserLink'])->get();
+            $patreonUserLink      = $users->first()->patreonUserLink;
+            $eagerLoadedRelations = array_keys($patreonUserLink->getRelations());
+
+            $result = $users->first()->getPatreonBenefits();
+
+            // Assert
+            $this->assertSame([PatreonBenefit::AD_FREE], $result->values()->all());
+            $this->assertTrue($users->first()->hasPatreonBenefit(PatreonBenefit::AD_FREE));
+
+            $this->assertSame(
+                $eagerLoadedRelations,
+                array_keys($patreonUserLink->getRelations()),
+                'getPatreonBenefits() loaded a second copy of the benefits instead of using the relation PatreonUserLink::$with already loaded',
+            );
+        } finally {
+            $user->patreonUserLink()->first()?->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function getUsers_givenPatreonLinkedUser_serialisesBenefitsUnderTheKeyTheAdminTableReads(): void
+    {
+        // Arrange - the admin users table renders its Patreon column from these keys; a key it does not
+        // recognise empties the column without any error (#4386)
+        $user = $this->createPatreonLinkedUser();
+        $user->patreonUserLink->patreonBenefits()->attach(PatreonBenefit::ALL[PatreonBenefit::AD_FREE]);
+
+        try {
+            // Act
+            $response = $this->get(sprintf('/ajax/admin/user?%s', http_build_query([
+                'draw'    => 1,
+                'start'   => 0,
+                'length'  => 10,
+                'columns' => [
+                    [
+                        'name'       => 'email',
+                        'searchable' => 'true',
+                        'orderable'  => 'false',
+                        'search'     => ['value' => $user->email],
+                    ],
+                ],
+            ])), self::AJAX_HEADERS);
+
+            // Assert
+            $response->assertOk();
+
+            /** @var array<int, array<string, mixed>> $data */
+            $data = $response->json('data');
+            $rows = array_values(array_filter($data, fn(array $row): bool => $row['id'] === $user->id));
+
+            $this->assertCount(1, $rows);
+            $this->assertArrayHasKey('manually_granted', $rows[0]['patreon_user_link']);
+
+            $this->assertSame(
+                [PatreonBenefit::ALL[PatreonBenefit::AD_FREE]],
+                array_column($rows[0]['patreon_user_link']['patreon_benefits'], 'id'),
+            );
+        } finally {
+            $user->patreonUserLink()->first()?->delete();
+            $user->delete();
+        }
+    }
 }
