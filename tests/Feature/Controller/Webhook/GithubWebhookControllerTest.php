@@ -5,8 +5,10 @@ namespace Tests\Feature\Controller\Webhook;
 use App\Service\Discord\DiscordApiServiceInterface;
 use Illuminate\Testing\TestResponse;
 use Mockery;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
@@ -92,31 +94,34 @@ final class GithubWebhookControllerTest extends TestCase
     }
 
     #[Test]
-    public function github_givenEmptyConfiguredSecret_returnsServerErrorEvenWithMatchingSignature(): void
+    #[DataProvider('unsetConfiguredSecretProvider')]
+    public function github_givenUnsetConfiguredSecret_throwsRuntimeExceptionEvenWithMatchingSignature(mixed $configuredSecret): void
     {
         // Arrange
-        config(['keystoneguru.webhook.github.secret' => '']);
+        $this->withoutExceptionHandling();
+        config(['keystoneguru.webhook.github.secret' => $configuredSecret]);
         $this->expectDiscordEmbeds(0);
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Github webhook secret is not configured');
 
         // Act
-        $response = $this->postWebhook('refs/heads/master', [$this->distinctCommit()], '');
-
-        // Assert
-        $response->assertStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
+        $this->postWebhook('refs/heads/master', [$this->distinctCommit()], (string)$configuredSecret);
     }
 
-    #[Test]
-    public function github_givenNullConfiguredSecret_returnsServerErrorEvenWithMatchingSignature(): void
+    /**
+     * Configured secret values that must all be treated as "not configured": the empty string, null, the
+     * `false` that env() yields for an unquoted `false`, and a whitespace-only string.
+     *
+     * @return array<string, array{mixed}>
+     */
+    public static function unsetConfiguredSecretProvider(): array
     {
-        // Arrange
-        config(['keystoneguru.webhook.github.secret' => null]);
-        $this->expectDiscordEmbeds(0);
-
-        // Act
-        $response = $this->postWebhook('refs/heads/master', [$this->distinctCommit()], '');
-
-        // Assert
-        $response->assertStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
+        return [
+            'empty string'    => [''],
+            'null'            => [null],
+            'boolean false'   => [false],
+            'whitespace only' => ['   '],
+        ];
     }
 
     /**

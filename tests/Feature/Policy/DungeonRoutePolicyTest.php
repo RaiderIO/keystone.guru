@@ -392,6 +392,40 @@ final class DungeonRoutePolicyTest extends PublicTestCase
     }
 
     #[Test]
+    public function preview_givenFalseConfiguredSecretAndEmptyRequestSecret_returnsDenied(): void
+    {
+        // Arrange
+        config(['keystoneguru.thumbnail.preview_secret' => false]);
+        $owner = User::factory()->create();
+        $route = $this->createRoute($owner);
+
+        try {
+            // Act & Assert
+            $this->assertFalse($this->policy->preview(null, $route, ''));
+        } finally {
+            $route->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function preview_givenWhitespaceOnlyConfiguredSecretAndMatchingRequestSecret_returnsDenied(): void
+    {
+        // Arrange
+        config(['keystoneguru.thumbnail.preview_secret' => '   ']);
+        $owner = User::factory()->create();
+        $route = $this->createRoute($owner);
+
+        try {
+            // Act & Assert
+            $this->assertFalse($this->policy->preview(null, $route, '   '));
+        } finally {
+            $route->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
     public function rate_givenOwner_returnsDenied(): void
     {
         // Arrange

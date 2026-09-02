@@ -30,11 +30,11 @@ class GithubWebhookController extends Controller
         }
 
         $secret = config('keystoneguru.webhook.github.secret');
-        if ($secret === null || $secret === '') {
+        if (!is_string($secret) || trim($secret) === '') {
             throw new RuntimeException('Github webhook secret is not configured');
         }
 
-        $knownSignature = hash_hmac('sha1', $request->getContent(), (string)$secret);
+        $knownSignature = hash_hmac('sha1', $request->getContent(), $secret);
 
         if (!hash_equals($knownSignature, $signatureParts[1])) {
             throw new UnauthorizedException('Could not verify request signature ' . $signatureParts[1]);

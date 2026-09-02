@@ -49,11 +49,11 @@ class DungeonRoutePolicy
         }
 
         $configuredSecret = config('keystoneguru.thumbnail.preview_secret');
-        if ($configuredSecret === null || $configuredSecret === '') {
+        if (!is_string($configuredSecret) || trim($configuredSecret) === '') {
             return false;
         }
 
-        return hash_equals((string)$configuredSecret, $secret);
+        return hash_equals($configuredSecret, $secret);
     }
 
     /**
