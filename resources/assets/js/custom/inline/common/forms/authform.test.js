@@ -126,7 +126,10 @@ describe('CommonFormsAuthform._submit', () => {
         const originalJQuery = globalThis.$;
         const $stub          = () => $collection;
         $stub.fn             = originalJQuery.fn;
-        $stub.ajax           = (settings) => settings.success();
+        $stub.ajax           = (settings) => {
+            settings.success();
+            settings.complete();
+        };
 
         globalThis.$ = $stub;
 
@@ -153,5 +156,96 @@ describe('CommonFormsAuthform._submit', () => {
 
         // Assert - `_navigate` falls back to a reload for a null url (covered above)
         expect(navigated).toEqual([null]);
+    });
+
+    /**
+     * A double-click fires two 'submit' events before the first request's response arrives. Uses
+     * a `$.ajax` stub that never calls `success`/`error`/`complete`, so the first request stays
+     * "in flight" for the duration of the test.
+     *
+     * @returns {number} how many times `$.ajax` was invoked
+     */
+    function submitTwiceWithoutCompletingFirstAjax() {
+        const authform = makeAuthform({formSelector: '#modal-register_form', successUrl: null});
+
+        const $collection = {
+            length:      0,
+            attr:        () => '/register',
+            serialize:   () => '',
+            find:        () => $collection,
+            removeClass: () => $collection,
+            removeAttr:  () => $collection,
+            remove:      () => $collection,
+            first:       () => $collection,
+            trigger:     () => $collection,
+        };
+
+        let ajaxCallCount = 0;
+        const originalJQuery = globalThis.$;
+        const $stub          = () => $collection;
+        $stub.fn              = originalJQuery.fn;
+        $stub.ajax             = () => {
+            ajaxCallCount++;
+        };
+
+        globalThis.$ = $stub;
+
+        try {
+            authform._submit({preventDefault: () => {}});
+            authform._submit({preventDefault: () => {}});
+        } finally {
+            globalThis.$ = originalJQuery;
+        }
+
+        return ajaxCallCount;
+    }
+
+    it('_submit_givenSecondSubmitWhileFirstStillInFlight_ignoresTheSecondSubmit', () => {
+        // Arrange & Act
+        const ajaxCallCount = submitTwiceWithoutCompletingFirstAjax();
+
+        // Assert
+        expect(ajaxCallCount).toBe(1);
+    });
+
+    it('_submit_givenSubmitAfterAPreviousRequestCompleted_sendsTheRequest', () => {
+        // Arrange - the first submit runs to completion (`complete` fires), so the in-flight flag
+        // must have been cleared before the second submit on the same instance
+        const authform = makeAuthform({formSelector: '#modal-register_form', successUrl: null});
+
+        const $collection = {
+            length:      0,
+            attr:        () => '/register',
+            serialize:   () => '',
+            find:        () => $collection,
+            removeClass: () => $collection,
+            removeAttr:  () => $collection,
+            remove:      () => $collection,
+            first:       () => $collection,
+            trigger:     () => $collection,
+        };
+
+        let ajaxCallCount = 0;
+        const originalJQuery = globalThis.$;
+        const $stub          = () => $collection;
+        $stub.fn              = originalJQuery.fn;
+        $stub.ajax             = (settings) => {
+            ajaxCallCount++;
+            settings.success();
+            settings.complete();
+        };
+
+        globalThis.$ = $stub;
+
+        try {
+            // Act
+            authform._submit({preventDefault: () => {}});
+            authform._submit({preventDefault: () => {}});
+        } finally {
+            globalThis.$ = originalJQuery;
+        }
+
+        // Assert
+        expect(ajaxCallCount).toBe(2);
     });
 });

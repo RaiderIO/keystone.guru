@@ -2,10 +2,14 @@
 
 namespace Tests\Feature\Controller\Auth;
 
+use App\Http\Controllers\Auth\RegisterController;
 use App\Models\GameServerRegion;
 use App\Models\User;
+use Illuminate\Database\UniqueConstraintViolationException;
+use PDOException;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use ReflectionMethod;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Auth')]
@@ -158,6 +162,113 @@ final class RegisterControllerTest extends PublicTestCase
         } finally {
             auth()->logout();
             $this->deleteRegisteredUser($user);
+        }
+    }
+
+    #[Test]
+    public function create_givenEmailAlreadyExists_throwsUniqueConstraintViolationException(): void
+    {
+        // Arrange - proves the DB's `users_email_unique` index actually throws
+        // UniqueConstraintViolationException, which is what register()'s catch block relies on
+        $method = new ReflectionMethod(RegisterController::class, 'create');
+        $data   = $this->validRegistrationData();
+        $user   = null;
+
+        try {
+            $user = $method->invoke(new RegisterController(), $data);
+
+            // Act & Assert
+            $this->expectException(UniqueConstraintViolationException::class);
+            $method->invoke(new RegisterController(), $this->validRegistrationData(['email' => $data['email']]));
+        } finally {
+            $this->deleteRegisteredUser($user);
+        }
+    }
+
+    /**
+     * Reproduces #4440: a double-click submits the registration form twice with the same email.
+     * Both requests pass validation before either has created a row, so the second `User::create()`
+     * hits the database's unique index directly instead of failing the `unique:users` validation
+     * rule. Mocks `create()` since the race can't be reproduced deterministically over real HTTP
+     * requests - the first request's `unique:users` check would simply catch a second, sequential one.
+     */
+    #[Test]
+    public function register_givenCreateRacesIntoUniqueConstraintViolationExpectingJson_returnsUnprocessableWithEmailError(): void
+    {
+        // Arrange
+        $postData   = $this->validRegistrationData();
+        $controller = $this->createPartialMockPublic(RegisterController::class, ['create']);
+        $controller->method('create')->willThrowException(new UniqueConstraintViolationException(
+            'mysql',
+            'insert into `users` ...',
+            [],
+            new PDOException('Duplicate entry for key users_email_unique'),
+        ));
+        $this->app->instance(RegisterController::class, $controller);
+
+        // Act
+        $response = $this->postJson(route('register'), $postData);
+
+        // Assert
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['email']);
+    }
+
+    #[Test]
+    public function register_givenCreateRacesIntoUniqueConstraintViolationNotExpectingJson_redirectsToRegisterWithEmailError(): void
+    {
+        // Arrange
+        $postData   = $this->validRegistrationData();
+        $controller = $this->createPartialMockPublic(RegisterController::class, ['create']);
+        $controller->method('create')->willThrowException(new UniqueConstraintViolationException(
+            'mysql',
+            'insert into `users` ...',
+            [],
+            new PDOException('Duplicate entry for key users_email_unique'),
+        ));
+        $this->app->instance(RegisterController::class, $controller);
+
+        // Act
+        $response = $this->post(route('register'), $postData);
+
+        // Assert
+        $response->assertRedirect('/register');
+        $response->assertSessionHasErrors(['email']);
+    }
+
+    /**
+     * The catch re-validates against the row that actually caused the collision rather than
+     * hardcoding an "email taken" message - this proves the reported error comes from that real
+     * validation failure (a genuine duplicate email, different name) and not just the fallback.
+     */
+    #[Test]
+    public function register_givenCreateRacesIntoARealEmailCollision_reportsTheRealValidationErrorForEmail(): void
+    {
+        // Arrange - a real, already-registered email collides; the name in this request does not
+        $existingUser = (new ReflectionMethod(RegisterController::class, 'create'))
+            ->invoke(new RegisterController(), $this->validRegistrationData());
+
+        try {
+            $controller = $this->createPartialMockPublic(RegisterController::class, ['create']);
+            $controller->method('create')->willThrowException(new UniqueConstraintViolationException(
+                'mysql',
+                'insert into `users` ...',
+                [],
+                new PDOException('Duplicate entry for key users_email_unique'),
+            ));
+            $this->app->instance(RegisterController::class, $controller);
+
+            $postData = $this->validRegistrationData(['email' => $existingUser->email]);
+
+            // Act
+            $response = $this->postJson(route('register'), $postData);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['email']);
+            $response->assertJsonMissingValidationErrors(['name']);
+        } finally {
+            $this->deleteRegisteredUser($existingUser);
         }
     }
 
