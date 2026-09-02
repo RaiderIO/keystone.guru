@@ -118,6 +118,20 @@ body {
     border: 1px solid rgba(128, 128, 128, 0.5);
   }
 
+  /* The admin user list's Patreon benefits select sits in the table's last column, so its control
+     is squeezed to that narrow column width and its ts-dropdown - width:100% of the control by
+     vendor default - inherits that width, truncating every option label (#4377). Grow the dropdown
+     to fit its content instead of the control, and anchor it to the control's right edge rather
+     than its left: the control sits flush against the table's right edge, so growing left is the
+     only direction that doesn't push the dropdown further off-screen. */
+  .ts-wrapper.patreon_benefits .ts-dropdown {
+    left: auto;
+    right: 0;
+    width: max-content;
+    min-width: 100%;
+    max-width: 80vw;
+  }
+
   /* Tom Select defaults the scrollable list to a fixed 200px (~6 rows). bootstrap-select instead grew
      to fit the options, capped by the viewport - so size relative to screen height to match that feel. */
   .ts-dropdown .ts-dropdown-content {
