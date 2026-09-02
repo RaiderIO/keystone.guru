@@ -12,7 +12,6 @@
 }
 
 
-
 .leaflet-tooltip-killzone-index {
     font-size: 24px;
     background-color: unset;
@@ -652,9 +651,6 @@
 }
 
 
-
-
-
 .button_hotkey_label {
     position: absolute;
     left: 10px;
@@ -666,7 +662,6 @@
 #map-controls {
     height: 700px;
 }
-
 
 
 .leaflet-verticalcenter {
@@ -935,31 +930,6 @@
 }
 
 .teeming {
-    border: 1px black solid;
-    border-radius: 18px;
-}
-
-.modifier_awakened {
-    border: 1px black solid;
-    border-radius: 18px;
-}
-
-.modifier_encrypted {
-    border: 1px black solid;
-    border-radius: 18px;
-}
-
-.modifier_inspiring {
-    border: 1px black solid;
-    border-radius: 18px;
-}
-
-.modifier_prideful {
-    border: 1px black solid;
-    border-radius: 18px;
-}
-
-.modifier_tormented {
     border: 1px black solid;
     border-radius: 18px;
 }
