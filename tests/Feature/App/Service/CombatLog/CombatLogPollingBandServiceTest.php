@@ -4,6 +4,7 @@ namespace Tests\Feature\App\Service\CombatLog;
 
 use App\Models\Season;
 use App\Service\CombatLog\CombatLogPollingBandService;
+use App\Service\CombatLog\Dtos\KeyLevelBand;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsResponse;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
@@ -296,6 +297,128 @@ final class CombatLogPollingBandServiceTest extends PublicTestCase
 
         // Assert
         $this->assertNull($result);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function getBudgetWindowForBand_givenFirstBandThroughTheDay_releasesOneSliceEveryRotation(): void
+    {
+        // Arrange — 4 bands, so band 2-6 is polled at hours 0, 4, 8, 12, 16 and 20
+        $service = $this->makeService(fn(int $level): int => $level <= 24 ? 300 : 0);
+        $band    = $service->getSpreadBands($this->season)[0];
+
+        // Act
+        $windows = array_map(
+            fn(int $hour): string => sprintf(
+                '%d/%d',
+                $service->getBudgetWindowForBand($this->season, $band, $hour)->elapsedOpportunities,
+                $service->getBudgetWindowForBand($this->season, $band, $hour)->totalOpportunities,
+            ),
+            [0, 4, 8, 12, 16, 20],
+        );
+
+        // Assert
+        $this->assertSame(['1/6', '2/6', '3/6', '4/6', '5/6', '6/6'], $windows);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function getBudgetWindowForBand_givenLastBandAtHour23_releasesTheFullBudget(): void
+    {
+        // Arrange — 4 bands, so band 17-21 sits at index 3 and is polled at hours 3, 7, ... 23
+        $service = $this->makeService(fn(int $level): int => $level <= 24 ? 300 : 0);
+        $band    = $service->getSpreadBands($this->season)[3];
+
+        // Act
+        $firstWindow = $service->getBudgetWindowForBand($this->season, $band, 3);
+        $lastWindow  = $service->getBudgetWindowForBand($this->season, $band, 23);
+
+        // Assert
+        $this->assertSame(1, $firstWindow->elapsedOpportunities);
+        $this->assertSame(6, $firstWindow->totalOpportunities);
+        $this->assertSame(6, $lastWindow->elapsedOpportunities);
+        $this->assertSame(6, $lastWindow->totalOpportunities);
+    }
+
+    /**
+     * With a single band the rotation does nothing and the window degenerates to the plain hour of
+     * the day - the (hour + 1) / 24 spread the issue describes.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function getBudgetWindowForBand_givenASingleSpreadBand_releasesOneTwentyFourthPerHour(): void
+    {
+        // Arrange — a max of 9 puts the top band floor at 7, leaving exactly one band below it
+        $service = $this->makeService(fn(int $level): int => $level <= 9 ? 300 : 0);
+        $bands   = $service->getSpreadBands($this->season);
+
+        $this->assertCount(1, $bands, 'Expected exactly one spread band for this arrangement');
+
+        // Act
+        $hour0  = $service->getBudgetWindowForBand($this->season, $bands[0], 0);
+        $hour23 = $service->getBudgetWindowForBand($this->season, $bands[0], 23);
+
+        // Assert
+        $this->assertSame(1, $hour0->elapsedOpportunities);
+        $this->assertSame(24, $hour0->totalOpportunities);
+        $this->assertSame(24, $hour23->elapsedOpportunities);
+        $this->assertSame(24, $hour23->totalOpportunities);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function getBudgetWindowForBand_givenTopBand_releasesTheFullBudget(): void
+    {
+        // Arrange
+        $service = $this->makeService(fn(int $level): int => $level <= 24 ? 300 : 0);
+
+        // Act
+        $window = $service->getBudgetWindowForBand($this->season, $service->getTopBand($this->season), 0);
+
+        // Assert
+        $this->assertSame(1, $window->elapsedOpportunities);
+        $this->assertSame(1, $window->totalOpportunities);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function getBudgetWindowForBand_givenBandNotInTheRotation_releasesTheFullBudget(): void
+    {
+        // Arrange — a band that no longer exists now that the max key level has moved
+        $service = $this->makeService(fn(int $level): int => $level <= 24 ? 300 : 0);
+
+        // Act
+        $window = $service->getBudgetWindowForBand($this->season, new KeyLevelBand(97, 99), 0);
+
+        // Assert
+        $this->assertSame(1, $window->elapsedOpportunities);
+        $this->assertSame(1, $window->totalOpportunities);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function getBudgetWindowForBand_givenNoSpreadBandsAtAll_releasesTheFullBudgetWithoutDividingByZero(): void
+    {
+        // Arrange — a max of 3 puts the top band floor at the minimum level, leaving no room below
+        $service = $this->makeService(fn(int $level): int => $level <= 3 ? 300 : 0);
+
+        // Act
+        $window = $service->getBudgetWindowForBand($this->season, new KeyLevelBand(2, 6), 0);
+
+        // Assert
+        $this->assertSame(1, $window->elapsedOpportunities);
+        $this->assertSame(1, $window->totalOpportunities);
     }
 
     /**

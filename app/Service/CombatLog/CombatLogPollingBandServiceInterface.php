@@ -4,6 +4,7 @@ namespace App\Service\CombatLog;
 
 use App\Models\Season;
 use App\Service\CombatLog\Dtos\KeyLevelBand;
+use App\Service\CombatLog\Dtos\PollingBudgetWindow;
 
 interface CombatLogPollingBandServiceInterface
 {
@@ -36,4 +37,16 @@ interface CombatLogPollingBandServiceInterface
      * turns instead. Null when there are no spread bands at all.
      */
     public function getSpreadBandForHour(Season $season, int $hour): ?KeyLevelBand;
+
+    /**
+     * Returns how much of the given band's daily budget has been released by the given hour.
+     *
+     * The ceiling is counted in the band's own polling opportunities rather than in raw hours:
+     * a band is only scheduled every Nth hour, so a ceiling derived from the hour of the day
+     * would leave every band but the last one unable to reach its budget before midnight.
+     *
+     * The top band, and any band that is not part of the current rotation, gets the full budget:
+     * there is nothing to spread it over.
+     */
+    public function getBudgetWindowForBand(Season $season, KeyLevelBand $band, int $hour): PollingBudgetWindow;
 }

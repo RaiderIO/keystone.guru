@@ -13,6 +13,7 @@ use App\Service\CombatLog\CombatLogPollingBandServiceInterface;
 use App\Service\CombatLog\CombatLogPollingHealthServiceInterface;
 use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
 use App\Service\CombatLog\Dtos\KeyLevelBand;
+use App\Service\CombatLog\Dtos\PollingBudgetWindow;
 use App\Service\CombatLog\Enums\CombatLogPollingFailureReason;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRun;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
@@ -79,6 +80,7 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
         $bandService->method('getSpreadBands')->willReturn([$this->spreadBand]);
         $bandService->method('getSpreadBandForHour')->willReturn($this->spreadBand);
         $bandService->method('getTopBand')->willReturn($this->topBand);
+        $bandService->method('getBudgetWindowForBand')->willReturn(PollingBudgetWindow::full());
         app()->instance(CombatLogPollingBandServiceInterface::class, $bandService);
     }
 
@@ -709,6 +711,101 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
         }
 
         return $modelIds;
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenABandServiceBudgetWindow_passesThatWindowToTheCriteriaService(): void
+    {
+        // Arrange
+        Bus::fake();
+
+        $budgetWindow = new PollingBudgetWindow(2, 6);
+
+        $bandService = $this->createMockPublic(CombatLogPollingBandServiceInterface::class);
+        $bandService->method('getSpreadBands')->willReturn([$this->spreadBand]);
+        $bandService->method('getSpreadBandForHour')->willReturn($this->spreadBand);
+        $bandService->method('getTopBand')->willReturn($this->topBand);
+        $bandService->method('getBudgetWindowForBand')->willReturn($budgetWindow);
+        app()->instance(CombatLogPollingBandServiceInterface::class, $bandService);
+
+        $run = $this->makeRun(1050, $this->dungeon->challenge_mode_id);
+
+        $criteriaService = $this->makeCriteriaService(eligibleDungeons: collect([$this->dungeon]));
+        $criteriaService->method('shouldParse')
+            ->with($this->anything(), $this->anything(), $this->identicalTo($budgetWindow))
+            ->willReturn(true);
+        $criteriaService->expects($this->atLeastOnce())
+            ->method('getModelsEligibleForPolling')
+            ->with($this->anything(), $this->anything(), $this->anything(), $this->anything(), $this->identicalTo($budgetWindow))
+            ->willReturn(collect([$this->dungeon]));
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $this->mockRaiderIOApiService(spreadRuns: [$run]);
+
+        try {
+            // Act
+            $this->artisan('combatlog:pollruns')->assertSuccessful();
+
+            // Assert
+            Bus::assertDispatched(ProcessCombatLogSegments::class);
+        } finally {
+            ParsedCombatLog::query()->where('run_id', $run->id)->delete();
+        }
+    }
+
+    /**
+     * The band is selected from the hour, and pollSpreadBand() makes one Raider.IO call per
+     * eligible model - so the loop can cross an hour boundary and budget this hour's band against
+     * the next hour's window if the hour is read more than once.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenTheHourOfTheDay_budgetsTheSameHourItSelectedTheBandFor(): void
+    {
+        // Arrange
+        Bus::fake();
+        Carbon::setTestNow(Carbon::now()->startOfDay()->addHours(7));
+
+        $capturedHours = [];
+
+        $bandService = $this->createMockPublic(CombatLogPollingBandServiceInterface::class);
+        $bandService->method('getSpreadBands')->willReturn([$this->spreadBand]);
+        $bandService->method('getSpreadBandForHour')->willReturnCallback(
+            function (Season $season, int $hour) use (&$capturedHours): KeyLevelBand {
+                $capturedHours[] = $hour;
+
+                return $this->spreadBand;
+            },
+        );
+        $bandService->method('getTopBand')->willReturn($this->topBand);
+        $bandService->method('getBudgetWindowForBand')->willReturnCallback(
+            function (Season $season, KeyLevelBand $band, int $hour) use (&$capturedHours): PollingBudgetWindow {
+                $capturedHours[] = $hour;
+
+                return PollingBudgetWindow::full();
+            },
+        );
+        app()->instance(CombatLogPollingBandServiceInterface::class, $bandService);
+
+        $criteriaService = $this->makeCriteriaService(eligibleDungeons: collect([$this->dungeon]));
+        $criteriaService->method('shouldParse')->willReturn(false);
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $this->mockRaiderIOApiService();
+
+        try {
+            // Act
+            $this->artisan('combatlog:pollruns')->assertSuccessful();
+
+            // Assert
+            $this->assertSame([7, 7], $capturedHours);
+        } finally {
+            Carbon::setTestNow(null);
+        }
     }
 
     /**

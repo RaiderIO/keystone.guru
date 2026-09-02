@@ -12,6 +12,7 @@ use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitionInt
 use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitions;
 use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
 use App\Service\CombatLog\Dtos\KeyLevelBand;
+use App\Service\CombatLog\Dtos\PollingBudgetWindow;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -20,7 +21,7 @@ class CombatLogParsingCriteriaService implements CombatLogParsingCriteriaService
     /**
      * @param CombatLogParsingCriterionCheck[] $criteria
      */
-    public function shouldParse(int $combatLogVersion, array $criteria): bool
+    public function shouldParse(int $combatLogVersion, array $criteria, PollingBudgetWindow $budgetWindow): bool
     {
         $today = Carbon::now()->toDateString();
 
@@ -32,7 +33,7 @@ class CombatLogParsingCriteriaService implements CombatLogParsingCriteriaService
 
             $row = $this->findOrCreate($combatLogVersion, $criterion, $today);
 
-            if ($row->count >= $row->threshold) {
+            if ($budgetWindow->isAtCeiling($row->count, $row->threshold)) {
                 return false;
             }
         }
@@ -111,26 +112,35 @@ class CombatLogParsingCriteriaService implements CombatLogParsingCriteriaService
         };
     }
 
-    public function getModelsEligibleForPolling(int $combatLogVersion, string $modelClass, Season $season, KeyLevelBand $band): Collection
-    {
+    public function getModelsEligibleForPolling(
+        int                 $combatLogVersion,
+        string              $modelClass,
+        Season              $season,
+        KeyLevelBand        $band,
+        PollingBudgetWindow $budgetWindow,
+    ): Collection {
         $allModels = $this->getAllModelsForCriteria($modelClass, $season);
 
         if ($band->isTopBand()) {
             return $allModels;
         }
 
-        /** @var array<int, true> $atThresholdModelIds */
-        $atThresholdModelIds = CombatLogParsingCriterion::query()
+        /** @var array<int, true> $atCeilingModelIds */
+        $atCeilingModelIds = CombatLogParsingCriterion::query()
             ->where('combat_log_version', $combatLogVersion)
             ->where('model_class', $modelClass)
             ->where('mythic_level_min', $band->min)
             ->where('date', Carbon::now()->toDateString())
-            ->whereColumn('count', '>=', 'threshold')
+            // The same comparison PollingBudgetWindow::isAtCeiling() makes, pushed into SQL.
+            ->whereRaw('`count` * ? >= `threshold` * ?', [
+                $budgetWindow->totalOpportunities,
+                $budgetWindow->elapsedOpportunities,
+            ])
             ->pluck('model_id')
             ->flip()
             ->all();
 
-        return $allModels->filter(fn(CombatLogCriterionModelInterface $model) => !isset($atThresholdModelIds[$model->getKey()]));
+        return $allModels->filter(fn(CombatLogCriterionModelInterface $model) => !isset($atCeilingModelIds[$model->getKey()]));
     }
 
     /**

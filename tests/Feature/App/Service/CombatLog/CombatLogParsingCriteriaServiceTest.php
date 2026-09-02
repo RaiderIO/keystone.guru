@@ -14,6 +14,7 @@ use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitionInt
 use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitions;
 use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
 use App\Service\CombatLog\Dtos\KeyLevelBand;
+use App\Service\CombatLog\Dtos\PollingBudgetWindow;
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -80,7 +81,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
         // Arrange — no rows exist yet
 
         // Act
-        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria());
+        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(), PollingBudgetWindow::full());
 
         // Assert
         $this->assertTrue($result);
@@ -94,7 +95,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
         CombatLogParsingCriterion::factory()->forClassSpec(self::SPEC_ID)->withCount(50)->create();
 
         // Act
-        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria());
+        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(), PollingBudgetWindow::full());
 
         // Assert
         $this->assertTrue($result);
@@ -108,7 +109,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
         CombatLogParsingCriterion::factory()->forClassSpec(self::SPEC_ID)->withCount(0)->create();
 
         // Act
-        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria());
+        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(), PollingBudgetWindow::full());
 
         // Assert
         $this->assertFalse($result);
@@ -122,7 +123,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
         CombatLogParsingCriterion::factory()->forClassSpec(self::SPEC_ID)->atThreshold()->create();
 
         // Act
-        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria());
+        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(), PollingBudgetWindow::full());
 
         // Assert
         $this->assertFalse($result);
@@ -132,7 +133,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
     public function recordParsed_givenValidCriteria_incrementsBothCounters(): void
     {
         // Arrange
-        $this->service->shouldParse(self::VERSION, $this->defaultCriteria()); // create rows
+        $this->service->shouldParse(self::VERSION, $this->defaultCriteria(), PollingBudgetWindow::full()); // create rows
 
         // Act
         $this->service->recordParsed(self::VERSION, $this->defaultCriteria());
@@ -241,14 +242,14 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
     {
         // Arrange — yesterday's rows at threshold should not affect today
         Carbon::setTestNow(Carbon::yesterday());
-        $this->service->shouldParse(self::VERSION, $this->defaultCriteria());
+        $this->service->shouldParse(self::VERSION, $this->defaultCriteria(), PollingBudgetWindow::full());
         CombatLogParsingCriterion::query()
             ->whereIn('model_id', [self::DUNGEON_ID, self::SPEC_ID])
             ->update(['count' => 100]);
         Carbon::setTestNow(null);
 
         // Act
-        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria());
+        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(), PollingBudgetWindow::full());
 
         // Assert
         $this->assertTrue($result);
@@ -361,7 +362,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
             ->create(['count' => 5, 'threshold' => 5]);
 
         // Act
-        $result = $this->service->shouldParse(self::VERSION, [$check]);
+        $result = $this->service->shouldParse(self::VERSION, [$check], PollingBudgetWindow::full());
 
         // Assert
         $this->assertFalse($result);
@@ -400,7 +401,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
                 ->delete();
 
             // Act
-            $result = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season, $this->band());
+            $result = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season, $this->band(), PollingBudgetWindow::full());
 
             // Assert — all season dungeons are eligible when no rows exist
             $this->assertNotEmpty($result);
@@ -426,7 +427,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
             CombatLogParsingCriterion::factory()->forDungeon($dungeon->id)->atThreshold()->create();
 
             // Act
-            $result = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season, $this->band());
+            $result = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season, $this->band(), PollingBudgetWindow::full());
 
             // Assert — dungeon at threshold is excluded
             $this->assertFalse($result->contains('id', $dungeon->id));
@@ -450,7 +451,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
             CombatLogParsingCriterion::factory()->forDungeon($dungeon->id)->withCount(50)->create();
 
             // Act
-            $result = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season, $this->band());
+            $result = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season, $this->band(), PollingBudgetWindow::full());
 
             // Assert — dungeon below threshold is still included
             $this->assertTrue($result->contains('id', $dungeon->id));
@@ -470,7 +471,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
         CombatLogParsingCriterion::factory()->forClassSpec(self::SPEC_ID)->forBand(2, 6)->atThreshold()->create();
 
         // Act
-        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(new KeyLevelBand(7, 11)));
+        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(new KeyLevelBand(7, 11)), PollingBudgetWindow::full());
 
         // Assert — bands hold separate budgets, so a full band cannot block another one
         $this->assertTrue($result);
@@ -483,7 +484,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
         CombatLogParsingCriterion::factory()->forDungeon(self::DUNGEON_ID)->forBand(22, null)->atThreshold()->create();
 
         // Act
-        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(new KeyLevelBand(22, null)));
+        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(new KeyLevelBand(22, null)), PollingBudgetWindow::full());
 
         // Assert — the top band is always parsed, no matter its count
         $this->assertTrue($result);
@@ -518,8 +519,8 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
         Carbon::setTestNow(null);
 
         // Act — today's rows are created for both bands
-        $this->service->shouldParse(self::VERSION, $this->defaultCriteria(new KeyLevelBand(2, 6)));
-        $this->service->shouldParse(self::VERSION, $this->defaultCriteria(new KeyLevelBand(7, 11)));
+        $this->service->shouldParse(self::VERSION, $this->defaultCriteria(new KeyLevelBand(2, 6)), PollingBudgetWindow::full());
+        $this->service->shouldParse(self::VERSION, $this->defaultCriteria(new KeyLevelBand(7, 11)), PollingBudgetWindow::full());
 
         // Assert — 2-6 inherits its own configured threshold, 7-11 falls back to the configured default
         $this->assertEquals(300, CombatLogParsingCriterion::query()
@@ -552,7 +553,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
 
         try {
             // Act
-            $this->service->shouldParse(self::VERSION, $this->defaultCriteria(new KeyLevelBand(2, 6)));
+            $this->service->shouldParse(self::VERSION, $this->defaultCriteria(new KeyLevelBand(2, 6)), PollingBudgetWindow::full());
 
             // Assert
             $this->assertEquals(
@@ -582,7 +583,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
         Carbon::setTestNow(null);
 
         // Act — the max key level rose, so today 22-26 is an ordinary budgeted band
-        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(new KeyLevelBand(22, 26)));
+        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(new KeyLevelBand(22, 26)), PollingBudgetWindow::full());
 
         // Assert
         $this->assertTrue($result);
@@ -608,7 +609,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
             CombatLogParsingCriterion::factory()->forDungeon($dungeon->id)->forBand(2, 6)->atThreshold()->create();
 
             // Act
-            $result = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season, new KeyLevelBand(7, 11));
+            $result = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season, new KeyLevelBand(7, 11), PollingBudgetWindow::full());
 
             // Assert — being full in one band says nothing about another
             $this->assertTrue($result->contains('id', $dungeon->id));
@@ -632,7 +633,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
             CombatLogParsingCriterion::factory()->forDungeon($dungeon->id)->forBand(22, null)->atThreshold()->create();
 
             // Act
-            $result = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season, new KeyLevelBand(22, null));
+            $result = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season, new KeyLevelBand(22, null), PollingBudgetWindow::full());
 
             // Assert — nothing is ever excluded from the top band
             $this->assertTrue($result->contains('id', $dungeon->id));
@@ -660,5 +661,148 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
             75,
             CombatLogParsingCriterion::query()->where('model_id', self::DUNGEON_ID)->value('count'),
         );
+    }
+
+    /**
+     * The factory's threshold is 100, so a 1/6 window releases 17 (100 * 1 / 6, rounded up).
+     */
+    #[Test]
+    public function shouldParse_givenCountAtTheFirstOpportunitysShare_returnsFalse(): void
+    {
+        // Arrange
+        CombatLogParsingCriterion::factory()->forDungeon(self::DUNGEON_ID)->withCount(17)->create();
+        CombatLogParsingCriterion::factory()->forClassSpec(self::SPEC_ID)->withCount(0)->create();
+
+        // Act
+        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(), new PollingBudgetWindow(1, 6));
+
+        // Assert
+        $this->assertFalse($result);
+    }
+
+    #[Test]
+    public function shouldParse_givenCountJustBelowTheFirstOpportunitysShare_returnsTrue(): void
+    {
+        // Arrange
+        CombatLogParsingCriterion::factory()->forDungeon(self::DUNGEON_ID)->withCount(16)->create();
+        CombatLogParsingCriterion::factory()->forClassSpec(self::SPEC_ID)->withCount(0)->create();
+
+        // Act
+        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(), new PollingBudgetWindow(1, 6));
+
+        // Assert
+        $this->assertTrue($result);
+    }
+
+    /**
+     * The heart of #4359: a count that was allowed by the full daily budget must be refused early
+     * in the day, or the whole budget is spent in the first hours and the sample is skewed to
+     * whichever region happens to be in prime time then.
+     */
+    #[Test]
+    public function shouldParse_givenCountBelowThresholdButAboveTheEarlyShare_returnsFalse(): void
+    {
+        // Arrange — 50 of 100 is fine for the day, but not at the first of six opportunities
+        CombatLogParsingCriterion::factory()->forDungeon(self::DUNGEON_ID)->withCount(50)->create();
+        CombatLogParsingCriterion::factory()->forClassSpec(self::SPEC_ID)->withCount(0)->create();
+
+        // Act
+        $earlyResult = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(), new PollingBudgetWindow(1, 6));
+        $lateResult  = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(), new PollingBudgetWindow(4, 6));
+
+        // Assert
+        $this->assertFalse($earlyResult);
+        $this->assertTrue($lateResult);
+    }
+
+    /**
+     * The whole daily budget must remain reachable: the last opportunity of the day releases
+     * exactly the threshold, not one short of it.
+     */
+    #[Test]
+    public function shouldParse_givenTheLastOpportunityOfTheDay_releasesTheEntireThreshold(): void
+    {
+        // Arrange
+        CombatLogParsingCriterion::factory()->forDungeon(self::DUNGEON_ID)->withCount(99)->create();
+        CombatLogParsingCriterion::factory()->forClassSpec(self::SPEC_ID)->withCount(0)->create();
+
+        // Act
+        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(), new PollingBudgetWindow(6, 6));
+
+        // Assert
+        $this->assertTrue($result);
+    }
+
+    #[Test]
+    public function shouldParse_givenTheLastOpportunityOfTheDayAndCountAtThreshold_returnsFalse(): void
+    {
+        // Arrange
+        CombatLogParsingCriterion::factory()->forDungeon(self::DUNGEON_ID)->atThreshold()->create();
+        CombatLogParsingCriterion::factory()->forClassSpec(self::SPEC_ID)->withCount(0)->create();
+
+        // Act
+        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(), new PollingBudgetWindow(6, 6));
+
+        // Assert
+        $this->assertFalse($result);
+    }
+
+    /**
+     * A single spread band gets one opportunity per hour, which is the (hour + 1) / 24 gate the
+     * issue describes. Hour 0 releases 5 of 100, hour 23 releases all of it.
+     */
+    #[Test]
+    public function shouldParse_givenASingleBandAtHourZeroAndHour23_gatesOnOneTwentyFourthPerHour(): void
+    {
+        // Arrange
+        CombatLogParsingCriterion::factory()->forDungeon(self::DUNGEON_ID)->withCount(5)->create();
+        CombatLogParsingCriterion::factory()->forClassSpec(self::SPEC_ID)->withCount(0)->create();
+
+        // Act
+        $hour0  = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(), new PollingBudgetWindow(1, 24));
+        $hour23 = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(), new PollingBudgetWindow(24, 24));
+
+        // Assert
+        $this->assertFalse($hour0);
+        $this->assertTrue($hour23);
+    }
+
+    #[Test]
+    public function shouldParse_givenTopBandCriteriaAndAnEarlyWindow_returnsTrue(): void
+    {
+        // Arrange
+        CombatLogParsingCriterion::factory()->forDungeon(self::DUNGEON_ID)->forBand(22, null)->atThreshold()->create();
+
+        // Act
+        $result = $this->service->shouldParse(self::VERSION, $this->defaultCriteria(new KeyLevelBand(22, null)), new PollingBudgetWindow(1, 6));
+
+        // Assert — the top band has no budget to spread
+        $this->assertTrue($result);
+    }
+
+    #[Test]
+    public function getModelsEligibleForPolling_givenDungeonAtTheEarlyShareButBelowThreshold_excludesDungeon(): void
+    {
+        // Arrange
+        $season = Season::query()->has('dungeons')->firstOrFail();
+        /** @var Dungeon $dungeon */
+        $dungeon = $season->dungeons()->firstOrFail();
+
+        try {
+            CombatLogParsingCriterion::factory()->forDungeon($dungeon->id)->withCount(50)->create();
+
+            // Act
+            $early = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season, $this->band(), new PollingBudgetWindow(1, 6));
+            $late  = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season, $this->band(), new PollingBudgetWindow(6, 6));
+
+            // Assert — the eligible count the command logs tracks the same ceiling shouldParse() uses
+            $this->assertFalse($early->contains('id', $dungeon->id));
+            $this->assertTrue($late->contains('id', $dungeon->id));
+        } finally {
+            CombatLogParsingCriterion::query()
+                ->where('model_class', Dungeon::class)
+                ->where('model_id', $dungeon->id)
+                ->delete();
+        }
     }
 }

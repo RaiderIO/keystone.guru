@@ -17,6 +17,7 @@ use App\Service\CombatLog\CombatLogPollingHealthServiceInterface;
 use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
 use App\Service\CombatLog\Dtos\CombatLogRunContext;
 use App\Service\CombatLog\Dtos\KeyLevelBand;
+use App\Service\CombatLog\Dtos\PollingBudgetWindow;
 use App\Service\CombatLog\Enums\CombatLogPollingFailureReason;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRun;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
@@ -60,10 +61,18 @@ class PollCombatLogRunsCommand extends Command
         $limit           = (int)config('keystoneguru.raider_io.combat_log_polling.limit');
         $completedAtFrom = Carbon::now()->subDays($windowDays);
 
+        // Read once: pollSpreadBand() makes one Raider.IO call per eligible model, so the loop can
+        // cross an hour boundary and would otherwise budget this hour's band against the next.
+        $hour = Carbon::now()->hour;
+
         // Only one band is polled per hour: polling all of them every hour would multiply the
         // number of Raider.IO calls by the band count for no extra coverage.
-        $spreadBand = $this->bandService->getSpreadBandForHour($season, Carbon::now()->hour);
+        $spreadBand = $this->bandService->getSpreadBandForHour($season, $hour);
         $topBand    = $this->bandService->getTopBand($season);
+
+        $spreadBudgetWindow = $spreadBand === null
+            ? PollingBudgetWindow::full()
+            : $this->bandService->getBudgetWindowForBand($season, $spreadBand, $hour);
 
         $force = (bool)$this->option('force');
 
@@ -86,6 +95,13 @@ class PollCombatLogRunsCommand extends Command
             (string)$topBand,
         ));
 
+        $this->info(sprintf(
+            'combatlog:pollruns — hour=%d budget window=%d/%d opportunities',
+            $hour,
+            $spreadBudgetWindow->elapsedOpportunities,
+            $spreadBudgetWindow->totalOpportunities,
+        ));
+
         $dispatchCounts = [
             'dispatched'       => 0,
             'skippedParsed'    => 0,
@@ -106,6 +122,7 @@ class PollCombatLogRunsCommand extends Command
                 $season,
                 $combatLogVersion,
                 $spreadBand,
+                $spreadBudgetWindow,
                 $completedAtFrom,
                 $limit,
                 $dungeonsByChallengeModeId,
@@ -142,7 +159,8 @@ class PollCombatLogRunsCommand extends Command
     }
 
     /**
-     * Polls each dungeon and each spec that still has budget left in this hour's band.
+     * Polls each dungeon and each spec that still has budget left in this hour's band, up to the
+     * share of the daily budget this hour's window has released.
      *
      * @param Collection<string|int, Dungeon>                      $dungeonsByChallengeModeId
      * @param Collection<string|int, CharacterClassSpecialization> $allSpecsByBlizzardId
@@ -151,22 +169,23 @@ class PollCombatLogRunsCommand extends Command
      * @param array<string, int>                                   $dispatchCounts
      */
     private function pollSpreadBand(
-        Season       $season,
-        int          $combatLogVersion,
-        KeyLevelBand $band,
-        Carbon       $completedAtFrom,
-        int          $limit,
-        Collection   $dungeonsByChallengeModeId,
-        Collection   $allSpecsByBlizzardId,
-        Collection   $criterionRaces,
-        array        &        $knownRunIds,
-        bool         $force,
-        array        &        $dispatchCounts,
+        Season              $season,
+        int                 $combatLogVersion,
+        KeyLevelBand        $band,
+        PollingBudgetWindow $budgetWindow,
+        Carbon              $completedAtFrom,
+        int                 $limit,
+        Collection          $dungeonsByChallengeModeId,
+        Collection          $allSpecsByBlizzardId,
+        Collection          $criterionRaces,
+        array               &               $knownRunIds,
+        bool                $force,
+        array               &               $dispatchCounts,
     ): void {
         $criteriaSummary = [];
 
         foreach (array_keys(CombatLogParsingCriterion::VALID_CRITERIA) as $modelClass) {
-            $eligibleModels = $this->criteriaService->getModelsEligibleForPolling($combatLogVersion, $modelClass, $season, $band);
+            $eligibleModels = $this->criteriaService->getModelsEligibleForPolling($combatLogVersion, $modelClass, $season, $band, $budgetWindow);
 
             $criteriaSummary[] = sprintf('%s=%d eligible', class_basename($modelClass), $eligibleModels->count());
 
@@ -175,7 +194,7 @@ class PollCombatLogRunsCommand extends Command
 
                 // Re-evaluate before each API call: prior dispatches may have already
                 // recorded enough runs for this criterion via recordParsed().
-                if (!$this->criteriaService->shouldParse($combatLogVersion, [$primaryCheck])) {
+                if (!$this->criteriaService->shouldParse($combatLogVersion, [$primaryCheck], $budgetWindow)) {
                     continue;
                 }
 
@@ -192,7 +211,7 @@ class PollCombatLogRunsCommand extends Command
                         continue;
                     }
 
-                    if (!$this->criteriaService->shouldParse($combatLogVersion, [$primaryCheck])) {
+                    if (!$this->criteriaService->shouldParse($combatLogVersion, [$primaryCheck], $budgetWindow)) {
                         break;
                     }
 
