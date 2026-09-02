@@ -9,6 +9,7 @@ use App\Models\Laratrust\Role;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -126,7 +127,29 @@ class RegisterController extends Controller implements HasMiddleware
             return redirect('/register')->withInput()->withErrors($validator->messages()->getMessages());
         }
 
-        event(new Registered($user = $this->create($request->all())));
+        try {
+            $user = $this->create($request->all());
+        } catch (UniqueConstraintViolationException) {
+            // A double-submitted form can race two requests past validation before either has
+            // created its row (only `email` has a DB-level unique index today, but `name` is also
+            // `unique:users` - re-run the validator against the now-existing row rather than
+            // hardcoding which field to blame)
+            $raceValidator = $this->validator($request->all());
+
+            $validationException = $raceValidator->fails()
+                ? new ValidationException($raceValidator)
+                : ValidationException::withMessages([
+                    'email' => __('validation.unique', ['attribute' => 'email']),
+                ]);
+
+            if ($request->expectsJson()) {
+                throw $validationException;
+            }
+
+            return redirect('/register')->withInput()->withErrors($validationException->errors());
+        }
+
+        event(new Registered($user));
 
         $this->guard()->login($user);
 

@@ -28,6 +28,13 @@ class CommonFormsAuthform extends InlineCode {
     _submit(event) {
         event.preventDefault();
 
+        // A double-click (or double-tap) fires two 'submit' events before the first request
+        // completes; both would pass client-side validation and race each other server-side
+        if (this._submitInFlight) {
+            return;
+        }
+        this._submitInFlight = true;
+
         let $form = $(this.options.formSelector);
 
         this._clearErrors($form);
@@ -45,6 +52,9 @@ class CommonFormsAuthform extends InlineCode {
                 this._navigate(this.options.successUrl);
             }.bind(this),
             error: this._onError.bind(this),
+            complete: function () {
+                this._submitInFlight = false;
+            }.bind(this),
         });
     }
 
