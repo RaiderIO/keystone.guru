@@ -1,4 +1,5 @@
 // @vitest-environment node
+import fs from 'node:fs';
 import path from 'node:path';
 import {describe, expect, it} from 'vitest';
 import {expandScriptList} from './concat.mjs';
@@ -23,6 +24,12 @@ describe('expandScriptList', () => {
 
         // Deterministic (sorted) glob expansion so builds are reproducible
         expect(inlineFiles).toEqual([...inlineFiles].sort());
+    });
+
+    it('expandScriptList_givenCustomScripts_everyExpandedFileExistsOnDisk', () => {
+        const missing = expandScriptList(rootDir, customScripts).filter(file => !fs.existsSync(file));
+
+        expect(missing).toEqual([]);
     });
 
     it('expandScriptList_givenPlainPaths_returnsThemUnsortedInGivenOrder', () => {
