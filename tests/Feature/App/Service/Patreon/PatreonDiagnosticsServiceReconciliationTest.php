@@ -183,6 +183,26 @@ final class PatreonDiagnosticsServiceReconciliationTest extends PublicTestCase
     }
 
     #[Test]
+    public function getBenefitReconciliation_givenALinkOrphanedByAUserWhoHeldAManualGrant_stillReportsIt(): void
+    {
+        // Arrange - User::deleting removes neither the grant record nor the duplicate link, and the grant is
+        // keyed on user_id, so the orphaned link would inherit a grant belonging to a user who is gone
+        $link = $this->createLinkedUser();
+        $this->grantBenefits($link, [PatreonBenefit::AD_FREE]);
+        $this->grantManually($link);
+        User::query()->whereKey($link->user_id)->delete();
+
+        // Act
+        $reconciliation = $this->reconcile([]);
+
+        // Assert
+        $holder = $this->findHolder($reconciliation, $link->id);
+        $this->assertNotNull($holder);
+        $this->assertSame(PatreonOverEntitlementReason::NoCampaignMember, $holder->reason);
+        $this->assertNull($holder->userId);
+    }
+
+    #[Test]
     public function getBenefitReconciliation_givenARealLinkCarryingAnActiveManualGrant_excludesItFromTheReport(): void
     {
         // Arrange - the second half of PatreonUserLink::getManuallyGrantedAttribute(): a genuine Patreon

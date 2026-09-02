@@ -17,6 +17,7 @@ use App\Service\Patreon\Dtos\Diagnostics\PatreonSyncDryRun;
 use App\Service\Patreon\Dtos\Diagnostics\PatreonUserDiagnostics;
 use App\Service\Patreon\Dtos\PatreonMemberSyncPlan;
 use App\Service\Patreon\Dtos\PatreonOverEntitlementReason;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
 /**
@@ -313,7 +314,13 @@ class PatreonDiagnosticsService implements PatreonDiagnosticsServiceInterface
         $holders = PatreonUserLink::query()
             ->has('patreonUserBenefits')
             ->where('refresh_token', '!=', PatreonUserLink::PERMANENT_TOKEN)
-            ->whereDoesntHave('activeManualGrant')
+            // A grant only speaks for a user that still exists. User::deleting leaves both the grant row and
+            // any duplicate link behind, and the grant is keyed on user_id, so without the second clause an
+            // orphaned link would inherit its deleted user's grant and drop out of the one report that
+            // catches it
+            ->where(static fn(Builder $query) => $query
+                ->whereDoesntHave('activeManualGrant')
+                ->orWhereDoesntHave('user'))
             ->with(['user.roles', 'patreonBenefits'])
             ->get()
             ->reject(fn(PatreonUserLink $patreonUserLink) => $this->isExcludedFromReconciliation($patreonUserLink));
