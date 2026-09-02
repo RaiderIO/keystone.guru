@@ -25,6 +25,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\View\View;
 use Teapot\StatusCode;
@@ -263,7 +264,8 @@ class SiteController extends Controller
             DB::select('SELECT 1');     // trivial round trip
             $checks['database']['ok'] = true;
         } catch (Throwable $e) {
-            $checks['database']['error'] = $e->getMessage();
+            Log::error('Status check failed: database', ['exception' => $e]);
+            $checks['database']['error'] = __('view_misc.status.check_failed');
         }
 
         // Redis check: PING
@@ -276,7 +278,8 @@ class SiteController extends Controller
                 $checks['redis']['error'] = 'Unexpected PING response';
             }
         } catch (Throwable $e) {
-            $checks['redis']['error'] = $e->getMessage();
+            Log::error('Status check failed: redis', ['exception' => $e]);
+            $checks['redis']['error'] = __('view_misc.status.check_failed');
         }
 
         // Check if the disk is writable

@@ -91,6 +91,34 @@ final class GithubWebhookControllerTest extends TestCase
         $this->assertNotSame(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
+    #[Test]
+    public function github_givenEmptyConfiguredSecret_returnsServerErrorEvenWithMatchingSignature(): void
+    {
+        // Arrange
+        config(['keystoneguru.webhook.github.secret' => '']);
+        $this->expectDiscordEmbeds(0);
+
+        // Act
+        $response = $this->postWebhook('refs/heads/master', [$this->distinctCommit()], '');
+
+        // Assert
+        $response->assertStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+    #[Test]
+    public function github_givenNullConfiguredSecret_returnsServerErrorEvenWithMatchingSignature(): void
+    {
+        // Arrange
+        config(['keystoneguru.webhook.github.secret' => null]);
+        $this->expectDiscordEmbeds(0);
+
+        // Act
+        $response = $this->postWebhook('refs/heads/master', [$this->distinctCommit()], '');
+
+        // Assert
+        $response->assertStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
     /**
      * Bind a mocked Discord service that expects `sendEmbeds` to be called exactly $times (0 = never).
      */
@@ -112,10 +140,10 @@ final class GithubWebhookControllerTest extends TestCase
      *
      * @return TestResponse<Response>
      */
-    private function postWebhook(string $ref, array $commits): TestResponse
+    private function postWebhook(string $ref, array $commits, string $secret = self::SECRET): TestResponse
     {
         $payload   = json_encode(['ref' => $ref, 'commits' => $commits], JSON_THROW_ON_ERROR);
-        $signature = 'sha1=' . hash_hmac('sha1', $payload, self::SECRET);
+        $signature = 'sha1=' . hash_hmac('sha1', $payload, $secret);
 
         return $this->call(
             'POST',

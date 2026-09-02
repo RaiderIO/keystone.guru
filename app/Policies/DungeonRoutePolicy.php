@@ -44,7 +44,16 @@ class DungeonRoutePolicy
      */
     public function preview(?User $user, DungeonRoute $dungeonroute, string $secret): bool
     {
-        return config('keystoneguru.thumbnail.preview_secret') === $secret || ($user !== null && $user->is_admin);
+        if ($user !== null && $user->is_admin) {
+            return true;
+        }
+
+        $configuredSecret = config('keystoneguru.thumbnail.preview_secret');
+        if ($configuredSecret === null || $configuredSecret === '') {
+            return false;
+        }
+
+        return hash_equals((string)$configuredSecret, $secret);
     }
 
     /**

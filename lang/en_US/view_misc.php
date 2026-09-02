@@ -55,9 +55,10 @@ return [
         'npcs_assigned'                 => 'NPCs assigned',
     ],
     'status' => [
-        'title'       => 'Status',
-        'header'      => 'Status',
-        'description' => 'We\'re up, yay!',
+        'title'        => 'Status',
+        'header'       => 'Status',
+        'description'  => 'We\'re up, yay!',
+        'check_failed' => 'Check failed, see the application log for details',
     ],
 
 ];

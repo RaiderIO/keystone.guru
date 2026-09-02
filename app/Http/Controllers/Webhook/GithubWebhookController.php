@@ -7,12 +7,13 @@ use App\Service\Discord\DiscordApiServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\UnauthorizedException;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class GithubWebhookController extends Controller
 {
     /**
-     * @throws BadRequestException|UnauthorizedException
+     * @throws BadRequestException|UnauthorizedException|RuntimeException
      *
      * @see https://dev.to/ryan1/how-to-validate-github-webhooks-with-laravel-and-php-2he1
      */
@@ -28,7 +29,12 @@ class GithubWebhookController extends Controller
             throw new BadRequestException('signature has invalid format');
         }
 
-        $knownSignature = hash_hmac('sha1', $request->getContent(), (string)config('keystoneguru.webhook.github.secret'));
+        $secret = config('keystoneguru.webhook.github.secret');
+        if ($secret === null || $secret === '') {
+            throw new RuntimeException('Github webhook secret is not configured');
+        }
+
+        $knownSignature = hash_hmac('sha1', $request->getContent(), (string)$secret);
 
         if (!hash_equals($knownSignature, $signatureParts[1])) {
             throw new UnauthorizedException('Could not verify request signature ' . $signatureParts[1]);

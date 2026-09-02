@@ -358,6 +358,40 @@ final class DungeonRoutePolicyTest extends PublicTestCase
     }
 
     #[Test]
+    public function preview_givenEmptyConfiguredSecretAndEmptyRequestSecret_returnsDenied(): void
+    {
+        // Arrange
+        config(['keystoneguru.thumbnail.preview_secret' => '']);
+        $owner = User::factory()->create();
+        $route = $this->createRoute($owner);
+
+        try {
+            // Act & Assert - an unset secret must never match, not even an empty request secret
+            $this->assertFalse($this->policy->preview($owner, $route, ''));
+        } finally {
+            $route->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function preview_givenNullConfiguredSecretAndEmptyRequestSecret_returnsDenied(): void
+    {
+        // Arrange
+        config(['keystoneguru.thumbnail.preview_secret' => null]);
+        $owner = User::factory()->create();
+        $route = $this->createRoute($owner);
+
+        try {
+            // Act & Assert
+            $this->assertFalse($this->policy->preview(null, $route, ''));
+        } finally {
+            $route->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
     public function rate_givenOwner_returnsDenied(): void
     {
         // Arrange
