@@ -273,12 +273,7 @@ class PatreonService implements PatreonServiceInterface
         /** @var array<int, string> $currentBenefits */
         $currentBenefits = $user->getPatreonBenefits()->values()->all();
 
-        // Exception for users that were granted their membership status. An active manual grant is an
-        // override of whatever tier this member actually pays for, so their benefits are left exactly
-        // as the admin panel set them. Checking the grant - and not only the permanent token - is what
-        // makes an override stick for a user who has a real Patreon link: that user keeps their real
-        // tokens, so without this the diff below would revoke the granted benefits within the hour
-        // (#4385). The token check remains for links fabricated before the grant table existed.
+        // Exception for users that were granted their membership status
         if ($patreonUserLink->refresh_token === PatreonUserLink::PERMANENT_TOKEN ||
             $this->patreonManualGrantRepository->hasActiveGrantForUserId($user->id)) {
             $this->log->applyPaidBenefitsForMemberUserManuallyAssignedAllBenefits();

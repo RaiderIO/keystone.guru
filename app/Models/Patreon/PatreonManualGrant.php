@@ -3,6 +3,7 @@
 namespace App\Models\Patreon;
 
 use App\Models\User;
+use Database\Factories\Patreon\PatreonManualGrantFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -32,7 +33,7 @@ use Illuminate\Support\Carbon;
  */
 class PatreonManualGrant extends Model
 {
-    /** @use HasFactory<\Database\Factories\Patreon\PatreonManualGrantFactory> */
+    /** @use HasFactory<PatreonManualGrantFactory> */
     use HasFactory;
 
     protected $fillable = [

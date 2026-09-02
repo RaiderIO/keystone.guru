@@ -21,8 +21,6 @@ class GrantPatreonBenefitsFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // A grant hands out paid benefits for free, so it must say why - an unexplained grant is
-            // exactly what makes the existing ones impossible to review years later (#4385)
             'reason' => [
                 'required',
                 'string',
