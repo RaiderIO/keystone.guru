@@ -6,7 +6,8 @@ use App\Logic\MDT\Entity\MDTMapPOI;
 use App\Models\Dungeon;
 use App\Models\Season;
 use App\Service\MDT\MDTMappingImportServiceInterface;
-use App\Service\Wago\WagoToolsServiceInterface;
+use App\Service\WagoTools\Exceptions\WagoToolsDownloadException;
+use App\Service\WagoTools\WagoToolsServiceInterface;
 use App\Service\Wowhead\WowheadServiceInterface;
 use Exception;
 use Illuminate\Console\Command;
@@ -19,7 +20,9 @@ class DownloadMDTItemIcons extends Command
      *
      * @var string
      */
-    protected $signature = 'mapicon:downloadmdtitemicons {dungeon}';
+    protected $signature = 'mapicon:downloadmdtitemicons {dungeon}
+                            {--product=wow : The CDN product to read DB2 data for, e.g. wow, wowt or wow_classic}
+                            {--build= : A specific game build, e.g. 12.1.0.69214; defaults to the most recent one}';
 
     /**
      * The console command description.
@@ -38,6 +41,16 @@ class DownloadMDTItemIcons extends Command
         WagoToolsServiceInterface        $wagoToolsService,
         WowheadServiceInterface          $wowheadService,
     ): int {
+        $product = (string)$this->option('product');
+        $build   = $this->option('build') === null ? null : (string)$this->option('build');
+        $build ??= $wagoToolsService->getLatestBuild($product);
+
+        if ($build === null) {
+            $this->error(sprintf('Unable to resolve a game build for product %s', $product));
+
+            return 1;
+        }
+
         $dungeonArgument = $this->argument('dungeon');
 
         if (is_numeric($dungeonArgument)) {
@@ -71,7 +84,13 @@ class DownloadMDTItemIcons extends Command
             ->values()
             ->all();
 
-        $iconFileNames = $wagoToolsService->getIconFileNamesByFileDataIds($fileDataIds);
+        try {
+            $iconFileNames = $wagoToolsService->getIconFileNamesByFileDataIds($fileDataIds, $build);
+        } catch (WagoToolsDownloadException $exception) {
+            $this->error($exception->getMessage());
+
+            return 1;
+        }
 
         $targetFolder = realpath(base_path('../keystone.guru.assets/images/mapicon_gen'));
         if ($targetFolder === false) {

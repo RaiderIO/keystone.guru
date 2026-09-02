@@ -43,4 +43,19 @@ class WagoToolsServiceLogging extends StructuredLogging implements WagoToolsServ
     {
         $this->error(__METHOD__, get_defined_vars());
     }
+
+    public function getIconFileNamesByFileDataIdsStart(int $fileDataIdCount): void
+    {
+        $this->start(__METHOD__, get_defined_vars());
+    }
+
+    public function getIconFileNamesByFileDataIdsNotFound(int $fileDataId): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
+    public function getIconFileNamesByFileDataIdsEnd(): void
+    {
+        $this->end(__METHOD__);
+    }
 }

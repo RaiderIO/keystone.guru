@@ -17,4 +17,10 @@ interface WagoToolsServiceLoggingInterface
     public function downloadTableEnd(): void;
 
     public function downloadTableFailed(string $url, int $httpCode, string $curlError): void;
+
+    public function getIconFileNamesByFileDataIdsStart(int $fileDataIdCount): void;
+
+    public function getIconFileNamesByFileDataIdsNotFound(int $fileDataId): void;
+
+    public function getIconFileNamesByFileDataIdsEnd(): void;
 }

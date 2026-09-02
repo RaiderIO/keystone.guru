@@ -15,6 +15,9 @@ class WagoToolsService implements WagoToolsServiceInterface
     /** DB2 `_lang` columns are per-locale; we only ever render the English descriptions. */
     private const string LOCALE = 'enUS';
 
+    /** Only `Interface\ICONS\` entries are addressable on Wowhead's icon CDN. */
+    private const string ICONS_FILE_PATH = 'interface\icons\\';
+
     /**
      * A build is four dot separated numbers, e.g. `12.1.0.69214`. Both the CLI and wago.tools' own API
      * feed this string, and it ends up in a filesystem path - so anything else is refused rather than
@@ -133,6 +136,46 @@ class WagoToolsService implements WagoToolsServiceInterface
             }
         } finally {
             fclose($handle);
+        }
+    }
+
+    public function getIconFileNamesByFileDataIds(array $fileDataIds, string $build): array
+    {
+        try {
+            $this->log->getIconFileNamesByFileDataIdsStart(count($fileDataIds));
+
+            if ($fileDataIds === []) {
+                return [];
+            }
+
+            // Keyed so that the per-row lookup below stays O(1) - the DB2 holds hundreds of thousands of rows
+            $wantedFileDataIds = array_flip($fileDataIds);
+            $result            = [];
+
+            foreach ($this->readTable('ManifestInterfaceData', $build) as $row) {
+                $fileDataId = (int)($row['ID'] ?? 0);
+
+                if (!isset($wantedFileDataIds[$fileDataId])) {
+                    continue;
+                }
+
+                // The DB2 is inconsistently cased - `Interface\ICONS\` and `interface\ICONS\` both occur
+                if (strtolower($row['FilePath'] ?? '') !== self::ICONS_FILE_PATH) {
+                    continue;
+                }
+
+                $result[$fileDataId] = strtolower(pathinfo($row['FileName'] ?? '', PATHINFO_FILENAME));
+            }
+
+            foreach ($fileDataIds as $fileDataId) {
+                if (!isset($result[$fileDataId])) {
+                    $this->log->getIconFileNamesByFileDataIdsNotFound($fileDataId);
+                }
+            }
+
+            return $result;
+        } finally {
+            $this->log->getIconFileNamesByFileDataIdsEnd();
         }
     }
 
