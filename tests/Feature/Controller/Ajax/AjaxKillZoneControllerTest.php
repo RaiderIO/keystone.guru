@@ -124,6 +124,95 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
     }
 
     #[Test]
+    public function storeAll_givenNonexistentKillZoneIdWithEnemies_attachesTheEnemiesToTheCreatedKillZone(): void
+    {
+        // Arrange
+        $clientSuppliedId = 2_000_000_000;
+        $this->assertNull(KillZone::find($clientSuppliedId));
+        // The test database persists between runs - orphans a previous run may have left behind
+        // under this id would otherwise mask the assertion below
+        KillZoneEnemy::query()->where('kill_zone_id', $clientSuppliedId)->delete();
+        $enemies = $this->getRouteEnemies(2);
+
+        try {
+            // Act
+            $response = $this->put(sprintf('/ajax/%s/killzone/mass', $this->dungeonRoute->public_key), [
+                'killzones' => [
+                    [
+                        'id'      => $clientSuppliedId,
+                        'color'   => '#00ff00',
+                        'index'   => 1,
+                        'enemies' => $enemies->pluck('id')->toArray(),
+                    ],
+                ],
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $killZones = $this->dungeonRoute->killZones()->get();
+            $this->assertCount(1, $killZones);
+            $killZone = $killZones->first();
+            $this->assertNotSame($clientSuppliedId, $killZone->id);
+            $this->assertSame([$killZone->id], $response->json('killzone_ids'));
+
+            $this->assertEqualsCanonicalizing(
+                $enemies->pluck('id')->toArray(),
+                KillZoneEnemy::where('kill_zone_id', $killZone->id)->pluck('enemy_id')->toArray(),
+            );
+            $this->assertSame(0, KillZoneEnemy::where('kill_zone_id', $clientSuppliedId)->count());
+        } finally {
+            $this->deleteKillZones();
+        }
+    }
+
+    #[Test]
+    public function storeAll_givenTwoEntriesSharingANonexistentKillZoneId_createsTwoKillZonesEachWithTheirOwnEnemies(): void
+    {
+        // Arrange
+        $clientSuppliedId = 2_000_000_000;
+        $this->assertNull(KillZone::find($clientSuppliedId));
+        // The test database persists between runs - orphans a previous run may have left behind
+        // under this id would otherwise mask the assertion below
+        KillZoneEnemy::query()->where('kill_zone_id', $clientSuppliedId)->delete();
+        $enemies       = $this->getRouteEnemies(2);
+        $firstEnemyId  = $enemies->first()->id;
+        $secondEnemyId = $enemies->last()->id;
+
+        try {
+            // Act
+            $response = $this->put(sprintf('/ajax/%s/killzone/mass', $this->dungeonRoute->public_key), [
+                'killzones' => [
+                    [
+                        'id'      => $clientSuppliedId,
+                        'color'   => '#00ff00',
+                        'index'   => 1,
+                        'enemies' => [$firstEnemyId],
+                    ],
+                    [
+                        'id'      => $clientSuppliedId,
+                        'color'   => '#0000ff',
+                        'index'   => 2,
+                        'enemies' => [$secondEnemyId],
+                    ],
+                ],
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $killZones = $this->dungeonRoute->killZones()->orderBy('index')->get();
+            $this->assertCount(2, $killZones);
+            $this->assertNotContains($clientSuppliedId, $killZones->pluck('id')->toArray());
+            $this->assertSame($killZones->pluck('id')->toArray(), $response->json('killzone_ids'));
+
+            $this->assertSame([$firstEnemyId], KillZoneEnemy::where('kill_zone_id', $killZones->get(0)->id)->pluck('enemy_id')->toArray());
+            $this->assertSame([$secondEnemyId], KillZoneEnemy::where('kill_zone_id', $killZones->get(1)->id)->pluck('enemy_id')->toArray());
+            $this->assertSame(0, KillZoneEnemy::where('kill_zone_id', $clientSuppliedId)->count());
+        } finally {
+            $this->deleteKillZones();
+        }
+    }
+
+    #[Test]
     public function store_givenEnemyIds_shouldSetEnemyIdOnKillZoneEnemies(): void
     {
         // Arrange

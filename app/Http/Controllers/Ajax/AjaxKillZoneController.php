@@ -436,6 +436,8 @@ class AjaxKillZoneController extends Controller
         // Set by the batch loop below so the response can name the pull that could not be saved,
         // even though the failure now has to travel out of the transaction as an exception
         $notFoundKillZoneId = null;
+        // Database-assigned id per submitted entry, in submission order
+        $killZoneIds = [];
 
         try {
             // One transaction for the whole batch, not one per pull: the bulk enemy delete at the
@@ -447,10 +449,13 @@ class AjaxKillZoneController extends Controller
                 $dungeonRoute,
                 $validated,
                 &$notFoundKillZoneId,
+                &$killZoneIds,
             ): int {
-                // Update killzones
+                // Update killzones, keyed by the submitted entry's position so the enemy phase
+                // below can pair each entry with the row it was actually saved to - the submitted
+                // id may not exist, in which case the database assigns a different one
                 $killZones = new Collection();
-                foreach ($validated['killzones'] ?? [] as $killZoneData) {
+                foreach ($validated['killzones'] ?? [] as $index => $killZoneData) {
                     try {
                         /** @var KillZone|null $existingKillZone */
                         $existingKillZone = isset($killZoneData['id'])
@@ -462,7 +467,8 @@ class AjaxKillZoneController extends Controller
                         $kzDataWithoutEnemies = $killZoneData;
                         unset($kzDataWithoutEnemies['enemies']);
                         // Do not save the enemy forces - we save it one time down below
-                        $killZones->push(
+                        $killZones->put(
+                            $index,
                             $this->saveKillZone(
                                 $coordinatesService,
                                 $killZoneDungeonRoute,
@@ -485,10 +491,16 @@ class AjaxKillZoneController extends Controller
                 $enemies         = $dungeonRoute->mappingVersion->enemies->keyBy('id');
                 $validEnemyIds   = $enemies->pluck('id')->toArray();
 
+                $killZoneIds = $killZones->pluck('id')->values()->toArray();
+
                 // Insert new enemies based on what was sent
-                foreach ($validated['killzones'] ?? [] as $killZoneData) {
+                foreach ($validated['killzones'] ?? [] as $index => $killZoneData) {
                     try {
                         if (isset($killZoneData['enemies'])) {
+                            /** @var KillZone $savedKillZone */
+                            $savedKillZone = $killZones->get($index);
+                            $killZoneId    = $savedKillZone->id;
+
                             // Filter enemies - only allow those who are actually on the allowed floors (don't couple to enemies in other dungeons)
                             $killZoneDataEnemies = array_filter($killZoneData['enemies'], static fn(
                                 $item,
@@ -498,7 +510,7 @@ class AjaxKillZoneController extends Controller
                             foreach ($killZoneDataEnemies as $killZoneDataEnemyId) {
                                 $enemy             = $enemies->get($killZoneDataEnemyId);
                                 $killZoneEnemies[] = [
-                                    'kill_zone_id' => $killZoneData['id'],
+                                    'kill_zone_id' => $killZoneId,
                                     'npc_id'       => $enemy->mdt_npc_id ?? $enemy->npc_id,
                                     'mdt_id'       => $enemy->mdt_id,
                                     'enemy_id'     => $enemy->id,
@@ -549,6 +561,7 @@ class AjaxKillZoneController extends Controller
 
         return [
             'enemy_forces'   => $enemyForces,
+            'killzone_ids'   => $killZoneIds,
             'killzone_paths' => $this->getKillZonePaths($killZonePathService, $dungeonRoute),
         ];
     }
