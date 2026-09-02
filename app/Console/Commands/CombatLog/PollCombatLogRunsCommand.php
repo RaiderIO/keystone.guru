@@ -63,7 +63,8 @@ class PollCombatLogRunsCommand extends Command
 
         // Read once: pollSpreadBand() makes one Raider.IO call per eligible model, so the loop can
         // cross an hour boundary and would otherwise budget this hour's band against the next.
-        $hour = Carbon::now()->hour;
+        $hour        = Carbon::now()->hour;
+        $pollingDate = Carbon::now()->toDateString();
 
         // Only one band is polled per hour: polling all of them every hour would multiply the
         // number of Raider.IO calls by the band count for no extra coverage.
@@ -123,6 +124,7 @@ class PollCombatLogRunsCommand extends Command
                 $combatLogVersion,
                 $spreadBand,
                 $spreadBudgetWindow,
+                $pollingDate,
                 $completedAtFrom,
                 $limit,
                 $dungeonsByChallengeModeId,
@@ -173,6 +175,7 @@ class PollCombatLogRunsCommand extends Command
         int                 $combatLogVersion,
         KeyLevelBand        $band,
         PollingBudgetWindow $budgetWindow,
+        string              $pollingDate,
         Carbon              $completedAtFrom,
         int                 $limit,
         Collection          $dungeonsByChallengeModeId,
@@ -182,7 +185,8 @@ class PollCombatLogRunsCommand extends Command
         bool                $force,
         array               &               $dispatchCounts,
     ): void {
-        $criteriaSummary = [];
+        $criteriaSummary       = [];
+        $stoppedAtDateRollover = false;
 
         foreach (array_keys(CombatLogParsingCriterion::VALID_CRITERIA) as $modelClass) {
             $eligibleModels = $this->criteriaService->getModelsEligibleForPolling($combatLogVersion, $modelClass, $season, $band, $budgetWindow);
@@ -190,6 +194,11 @@ class PollCombatLogRunsCommand extends Command
             $criteriaSummary[] = sprintf('%s=%d eligible', class_basename($modelClass), $eligibleModels->count());
 
             foreach ($eligibleModels as $model) {
+                if ($this->hasDateRolledOver($pollingDate)) {
+                    $stoppedAtDateRollover = true;
+                    break 2;
+                }
+
                 $primaryCheck = new CombatLogParsingCriterionCheck($modelClass, $model->getKey(), $band);
 
                 // Re-evaluate before each API call: prior dispatches may have already
@@ -211,6 +220,11 @@ class PollCombatLogRunsCommand extends Command
                         continue;
                     }
 
+                    if ($this->hasDateRolledOver($pollingDate)) {
+                        $stoppedAtDateRollover = true;
+                        break 3;
+                    }
+
                     if (!$this->criteriaService->shouldParse($combatLogVersion, [$primaryCheck], $budgetWindow)) {
                         break;
                     }
@@ -220,7 +234,29 @@ class PollCombatLogRunsCommand extends Command
             }
         }
 
+        if ($stoppedAtDateRollover) {
+            $this->warn(sprintf(
+                'combatlog:pollruns — the date rolled over past %s mid run; stopped polling band %s',
+                $pollingDate,
+                $band,
+            ));
+        }
+
         $this->info(sprintf('combatlog:pollruns — band %s | %s', $band, implode(', ', $criteriaSummary)));
+    }
+
+    /**
+     * Whether this invocation has outlived the day it was scheduled for.
+     *
+     * The budget window is computed once from the hour the run started in, but shouldParse() and
+     * recordParsed() key on the current date. An invocation that starts at 23:00 and runs into the
+     * next day would therefore hold a window that has released the whole of a day's budget while
+     * counting against a fresh day's rows - spending an entire daily budget in one go, which is
+     * exactly the front loading this gate exists to stop (#4359).
+     */
+    private function hasDateRolledOver(string $pollingDate): bool
+    {
+        return Carbon::now()->toDateString() !== $pollingDate;
     }
 
     /**

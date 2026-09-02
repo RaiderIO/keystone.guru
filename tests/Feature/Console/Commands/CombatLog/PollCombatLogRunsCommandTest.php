@@ -809,6 +809,51 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
     }
 
     /**
+     * The budget window is frozen at the hour the invocation started in, but the criteria service
+     * keys on the current date - so a 23:00 run that outlives the day would hold a window that has
+     * released a whole day's budget while spending it against a fresh day's rows.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenTheDateRollsOverMidRun_stopsSpreadBandPolling(): void
+    {
+        // Arrange — the last minute of the day, with the API call pushing the clock over midnight
+        Bus::fake();
+        Carbon::setTestNow(Carbon::now()->startOfDay()->addHours(23)->addMinutes(59)->addSeconds(59));
+
+        $run = $this->makeRun(1051, $this->dungeon->challenge_mode_id);
+
+        $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->method('searchAdvancedRuns')->willReturnCallback(
+            function (SearchAdvancedRunsFilter $filter) use ($run): SearchAdvancedRunsResponse {
+                Carbon::setTestNow(Carbon::now()->addSeconds(2));
+
+                return $filter->mythicLevelMax === null
+                    ? new SearchAdvancedRunsResponse([], 0)
+                    : new SearchAdvancedRunsResponse([$run], 1);
+            },
+        );
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+
+        $criteriaService = $this->makeCriteriaService(eligibleDungeons: collect([$this->dungeon]));
+        $criteriaService->method('shouldParse')->willReturn(true);
+        $criteriaService->expects($this->never())->method('recordParsed');
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        try {
+            // Act
+            $this->artisan('combatlog:pollruns')->assertSuccessful();
+
+            // Assert — the run the spread band found is not dispatched against the new day's budget
+            Bus::assertNotDispatched(ProcessCombatLogSegments::class);
+        } finally {
+            Carbon::setTestNow(null);
+            ParsedCombatLog::query()->where('run_id', $run->id)->delete();
+        }
+    }
+
+    /**
      * @param  ?Collection<int, Dungeon>                      $eligibleDungeons
      * @param  ?Collection<int, CharacterClassSpecialization> $eligibleSpecs
      * @param  ?Collection<int, CharacterRace>                $eligibleRaces
