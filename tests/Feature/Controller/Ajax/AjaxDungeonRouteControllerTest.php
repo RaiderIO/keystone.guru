@@ -115,6 +115,32 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function get_givenDungeonColumnEntryWithNameOnly_returnsOk(): void
+    {
+        // Arrange - a columns[] entry that names the dungeon column but carries neither
+        // 'searchable' nor 'orderable' (PHP-LARAVEL-S9, #4438)
+        $query = http_build_query([
+            'draw'    => 1,
+            'start'   => 0,
+            'length'  => 25,
+            'columns' => [
+                [
+                    'data' => 0,
+                    'name' => 'dungeon_id',
+                ],
+            ],
+            'order'  => [['column' => 0]],
+            'search' => ['value' => '', 'regex' => 'false'],
+        ]);
+
+        // Act
+        $response = $this->get(sprintf('/ajax/routes?%s', $query));
+
+        // Assert
+        $response->assertOk();
+    }
+
+    #[Test]
     public function get_givenSearchValueIsAnArray_returnsOk(): void
     {
         // Arrange - a caller sending 'search[value][]=...' instead of a scalar 'search[value]'

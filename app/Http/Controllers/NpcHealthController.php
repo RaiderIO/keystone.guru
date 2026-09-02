@@ -24,6 +24,8 @@ class NpcHealthController extends Controller
      */
     public function create(Npc $npc)
     {
+        $npc->load(['dungeons', 'npcHealths']);
+
         return view('admin.npchealth.edit', [
             'npc'                    => $npc,
             'npcHealthsAutoComplete' => Npc::with(['classification', 'npcHealths'])
@@ -57,6 +59,9 @@ class NpcHealthController extends Controller
      */
     public function edit(Request $request, Npc $npc, NpcHealth $npcHealth): View
     {
+        $npc->load(['dungeons', 'npcHealths']);
+        $npcHealth->load('gameVersion');
+
         return view('admin.npchealth.edit', [
             'npc'                    => $npc,
             'npcHealth'              => $npcHealth,
