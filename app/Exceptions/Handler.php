@@ -11,6 +11,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Exceptions\MalformedUrlException;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
@@ -49,6 +50,7 @@ class Handler extends ExceptionHandler
         MethodNotAllowedHttpException::class,
         NotFoundHttpException::class,
         AccessDeniedHttpException::class,
+        MalformedUrlException::class,
         // No point in logging Discord message send failures to Discord
         MessageCouldNotBeSent::class,
     ];
