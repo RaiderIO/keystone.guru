@@ -11,6 +11,7 @@ use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use App\Repositories\Interfaces\DungeonRoute\Dtos\DungeonRouteSearchFilter;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Stub\StubRepository;
+use Closure;
 use Illuminate\Support\Collection;
 
 class DungeonRouteRepository extends StubRepository implements DungeonRouteRepositoryInterface
@@ -78,5 +79,13 @@ class DungeonRouteRepository extends StubRepository implements DungeonRouteRepos
     public function getEnemyForcesPerKillZoneForRoutes(Collection $dungeonRoutes): Collection
     {
         return collect();
+    }
+
+    /**
+     * @param Collection<int, int>|null                    $dungeonIds
+     * @param Closure(Collection<int, DungeonRoute>): void $callback
+     */
+    public function chunkBySeasonAndDungeonIds(?Season $season, ?Collection $dungeonIds, int $chunkSize, Closure $callback): void
+    {
     }
 }

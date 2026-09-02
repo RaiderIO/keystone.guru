@@ -8,6 +8,7 @@ use App\Models\GameServerRegion;
 use App\Models\Season;
 use App\Repositories\Interfaces\SeasonRepositoryInterface;
 use App\Service\Expansion\ExpansionService;
+use App\Service\Season\Dtos\SeasonWeek;
 use App\Traits\UserCurrentTime;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -85,6 +86,53 @@ class SeasonService implements SeasonServiceInterface
         }
 
         return null;
+    }
+
+    /**
+     * @return Collection<int, SeasonWeek>
+     */
+    public function getSeasonWeeks(Season $season, GameServerRegion $region): Collection
+    {
+        $result = collect();
+
+        $now = Carbon::now();
+        // Weeks are stepped in UTC: a region timezone keeps the reset at the same local hour, so adding weeks in
+        // it shifts the absolute moment by an hour across a DST change - enough to land a week in its neighbour's
+        // period, since getKeystoneLeaderboardPeriod() counts fixed 7 day blocks from a UTC epoch.
+        $seasonStart = $season->start($region)->setTimezone('UTC');
+
+        if ($seasonStart->greaterThan($now)) {
+            return $result;
+        }
+
+        // getNextSeason() is scoped to a single expansion, which is the wrong lens here: seasons run back to back
+        // across expansions, so the next season to start - whichever expansion it belongs to - is what ends this one.
+        $nextSeasonStart = $this->getAllSeasons()
+            ->map(static fn(Season $candidate): Carbon => $candidate->start($region)->setTimezone('UTC'))
+            ->filter(static fn(Carbon $candidateStart): bool => $candidateStart->greaterThan($seasonStart))
+            ->sortBy(static fn(Carbon $candidateStart): int => $candidateStart->getTimestamp())
+            ->first();
+
+        $seasonEnd = $nextSeasonStart === null || $nextSeasonStart->greaterThan($now) ? $now : $nextSeasonStart;
+
+        $date = $seasonStart->copy();
+        $week = 1;
+
+        while ($date->lessThan($seasonEnd)) {
+            $result->put($week, new SeasonWeek(
+                $week,
+                // Halfway into the week rather than at its very start: the reset the season start is aligned to
+                // drifts up to an hour from the epoch's fixed blocks across DST, which flips the period of a date
+                // sitting right on the boundary.
+                $region->getKeystoneLeaderboardPeriod($date->copy()->addDays(3)),
+                $date->copy(),
+            ));
+
+            $date->addWeek();
+            $week++;
+        }
+
+        return $result;
     }
 
     /**

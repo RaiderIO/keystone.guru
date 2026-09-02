@@ -4,14 +4,17 @@ namespace Tests\Feature\Controller\AdminTools;
 
 use App\Jobs\RegenerateCombatLogRoute;
 use App\Models\CombatLog\ChallengeModeRun;
+use App\Models\CombatLog\ChallengeModeRunData;
 use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\GameServerRegion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Season;
 use App\Models\User;
+use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Testing\Fakes\QueueFake;
@@ -70,6 +73,12 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
                 'map_facade_style' => $this->originalAdminMapFacadeStyle,
                 'dungeon_id'       => $this->originalAdminDungeonId,
             ]);
+            ChallengeModeRunData::query()
+                ->whereIn(
+                    'challenge_mode_run_id',
+                    ChallengeModeRun::query()->whereIn('dungeon_route_id', $this->createdDungeonRouteIds)->pluck('id'),
+                )
+                ->delete();
             ChallengeModeRun::query()->whereIn('dungeon_route_id', $this->createdDungeonRouteIds)->delete();
             DungeonRoute::query()->whereIn('id', $this->createdDungeonRouteIds)->delete();
             CombatLogRouteEnemyFailure::query()->whereIn('id', $this->createdEnemyFailureIds)->delete();
@@ -410,6 +419,202 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function combatlogregeneratesubmit_givenPeriods_dispatchesOnlyRoutesRunInThoseWeeks(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+        $queue = Queue::fake();
+
+        [$season, $periods, $dungeons] = $this->findSeasonWithWeeklyPeriods();
+
+        $includedDungeonRoute = $this->createDungeonRouteWithChallengeModeRun($dungeons->get(0), $season->id, $periods->first());
+        $excludedDungeonRoute = $this->createDungeonRouteWithChallengeModeRun($dungeons->get(0), $season->id, $periods->get(1));
+
+        // Act
+        $response = $this->post(route('admin.tools.combatlog.regenerate.submit'), [
+            'dungeon_id' => $dungeons->get(0)->id,
+            'periods'    => [$periods->first()],
+        ]);
+
+        // Assert
+        $response->assertOk();
+
+        $dispatchedDungeonRouteIds = $this->getDispatchedDungeonRouteIds($queue);
+        $this->assertContains($includedDungeonRoute->id, $dispatchedDungeonRouteIds);
+        $this->assertNotContains($excludedDungeonRoute->id, $dispatchedDungeonRouteIds);
+    }
+
+    #[Test]
+    public function combatlogregeneratesubmit_givenPeriodsAndRunWithoutPostBody_doesNotDispatchThatRun(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+        $queue = Queue::fake();
+
+        [$season, $periods, $dungeons] = $this->findSeasonWithWeeklyPeriods();
+
+        $prunedDungeonRoute = $this->createDungeonRouteWithChallengeModeRun($dungeons->get(0), $season->id);
+
+        // Act
+        $response = $this->post(route('admin.tools.combatlog.regenerate.submit'), [
+            'dungeon_id' => $dungeons->get(0)->id,
+            'periods'    => [$periods->first()],
+        ]);
+
+        // Assert
+        $response->assertOk();
+
+        $this->assertNotContains($prunedDungeonRoute->id, $this->getDispatchedDungeonRouteIds($queue));
+    }
+
+    #[Test]
+    public function combatlogregeneratesubmit_givenNoPeriods_dispatchesRunsOfEveryWeek(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+        $queue = Queue::fake();
+
+        [$season, $periods, $dungeons] = $this->findSeasonWithWeeklyPeriods();
+
+        $firstDungeonRoute  = $this->createDungeonRouteWithChallengeModeRun($dungeons->get(0), $season->id, $periods->first());
+        $secondDungeonRoute = $this->createDungeonRouteWithChallengeModeRun($dungeons->get(0), $season->id, $periods->get(1));
+
+        // Act
+        $response = $this->post(route('admin.tools.combatlog.regenerate.submit'), [
+            'dungeon_id' => $dungeons->get(0)->id,
+        ]);
+
+        // Assert
+        $response->assertOk();
+
+        $dispatchedDungeonRouteIds = $this->getDispatchedDungeonRouteIds($queue);
+        $this->assertContains($firstDungeonRoute->id, $dispatchedDungeonRouteIds);
+        $this->assertContains($secondDungeonRoute->id, $dispatchedDungeonRouteIds);
+    }
+
+    #[Test]
+    public function combatlogregeneratesubmit_givenPeriodOutsideSelectedSeason_returnsValidationError(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+        Queue::fake();
+
+        [$season, $periods, $dungeons] = $this->findSeasonWithWeeklyPeriods();
+
+        // Act
+        $response = $this->post(route('admin.tools.combatlog.regenerate.submit'), [
+            'dungeon_id' => $dungeons->get(0)->id,
+            'season_id'  => $season->id,
+            'periods'    => [$periods->max() + 1],
+        ]);
+
+        // Assert
+        $response->assertSessionHasErrors('periods');
+    }
+
+    #[Test]
+    public function combatlogregeneratesubmit_givenPeriodInsideSelectedSeason_passesValidation(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+        Queue::fake();
+
+        [$season, $periods, $dungeons] = $this->findSeasonWithWeeklyPeriods();
+
+        // Act
+        $response = $this->post(route('admin.tools.combatlog.regenerate.submit'), [
+            'dungeon_id' => $dungeons->get(0)->id,
+            'season_id'  => $season->id,
+            'periods'    => [$periods->first()],
+        ]);
+
+        // Assert
+        $response->assertSessionHasNoErrors();
+        $response->assertOk();
+    }
+
+    /**
+     * The week select and its validation resolve the acting user's own region. Every seeded season currently
+     * yields the same period numbers for eu as for us, so this covers the resolution path rather than a
+     * difference in the numbers themselves - a period valid in one region must not be rejected in the other.
+     */
+    #[Test]
+    public function combatlogregeneratesubmit_givenAdminWithNonDefaultRegion_usesThatRegionsWeeks(): void
+    {
+        // Arrange
+        $region = GameServerRegion::query()->where('short', GameServerRegion::EUROPE)->firstOrFail();
+        $admin  = User::findOrFail(1);
+        User::query()->whereKey($admin->id)->update(['game_server_region_id' => $region->id]);
+
+        try {
+            $this->be(User::findOrFail(1));
+            $queue = Queue::fake();
+
+            [$season, $periods, $dungeons] = $this->findSeasonWithWeeklyPeriods($region);
+
+            $includedDungeonRoute = $this->createDungeonRouteWithChallengeModeRun($dungeons->get(0), $season->id, $periods->first());
+            $excludedDungeonRoute = $this->createDungeonRouteWithChallengeModeRun($dungeons->get(0), $season->id, $periods->get(1));
+
+            // Act
+            $response = $this->post(route('admin.tools.combatlog.regenerate.submit'), [
+                'dungeon_id' => $dungeons->get(0)->id,
+                'season_id'  => $season->id,
+                'periods'    => [$periods->first()],
+            ]);
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+            $response->assertOk();
+
+            $dispatchedDungeonRouteIds = $this->getDispatchedDungeonRouteIds($queue);
+            $this->assertContains($includedDungeonRoute->id, $dispatchedDungeonRouteIds);
+            $this->assertNotContains($excludedDungeonRoute->id, $dispatchedDungeonRouteIds);
+        } finally {
+            User::query()->whereKey($admin->id)->update(['game_server_region_id' => $admin->game_server_region_id]);
+        }
+    }
+
+    #[Test]
+    public function combatlogregenerate_givenAdminWithNonDefaultRegion_returnsOk(): void
+    {
+        // Arrange
+        $region = GameServerRegion::query()->where('short', GameServerRegion::EUROPE)->firstOrFail();
+        $admin  = User::findOrFail(1);
+        User::query()->whereKey($admin->id)->update(['game_server_region_id' => $region->id]);
+
+        try {
+            $this->be(User::findOrFail(1));
+
+            // Act
+            $response = $this->get(route('admin.tools.combatlog.regenerate.view'));
+
+            // Assert
+            $response->assertOk();
+        } finally {
+            User::query()->whereKey($admin->id)->update(['game_server_region_id' => $admin->game_server_region_id]);
+        }
+    }
+
+    #[Test]
+    public function combatlogregeneratesubmit_givenNonNumericPeriod_returnsValidationError(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(1));
+        Queue::fake();
+
+        [, $dungeons] = $this->findSeasonWithDungeons();
+
+        // Act
+        $response = $this->post(route('admin.tools.combatlog.regenerate.submit'), [
+            'dungeon_id' => $dungeons->get(0)->id,
+            'periods'    => ['not-a-period'],
+        ]);
+
+        // Assert
+        $response->assertSessionHasErrors('periods.0');
+    }
+
+    #[Test]
     public function combatlogregeneratesubmit_givenUnknownSeasonId_returnsValidationError(): void
     {
         // Arrange
@@ -580,7 +785,11 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         $this->fail('Unable to find a season with at least two dungeons to create dungeon routes for!');
     }
 
-    private function createDungeonRouteWithChallengeModeRun(Dungeon $dungeon, int $seasonId): DungeonRoute
+    /**
+     * @param int|null $period The leaderboard period to store in the run's post body - null creates no run data
+     *                         at all, mimicking a run whose post body was pruned.
+     */
+    private function createDungeonRouteWithChallengeModeRun(Dungeon $dungeon, int $seasonId, ?int $period = null): DungeonRoute
     {
         $dungeonRoute = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
@@ -590,7 +799,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
 
         $this->createdDungeonRouteIds[] = $dungeonRoute->id;
 
-        ChallengeModeRun::create([
+        $challengeModeRun = ChallengeModeRun::create([
             'dungeon_id'       => $dungeon->id,
             'dungeon_route_id' => $dungeonRoute->id,
             'level'            => 10,
@@ -599,7 +808,46 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
             'duplicate'        => 0,
         ]);
 
+        if ($period !== null) {
+            ChallengeModeRunData::create([
+                'challenge_mode_run_id' => $challengeModeRun->id,
+                'run_id'                => sprintf('run-%d', $challengeModeRun->id),
+                'correlation_id'        => sprintf('correlation-%d', $challengeModeRun->id),
+                'post_body'             => json_encode(['metadata' => ['period' => $period]]),
+                'processed'             => 0,
+            ]);
+        }
+
         return $dungeonRoute;
+    }
+
+    /**
+     * A season that has at least two weeks behind it, together with the leaderboard periods of those weeks as
+     * counted from $region's weekly reset - the default region when none is given.
+     *
+     * @return array{0: Season, 1: Collection<int, int>, 2: Collection<int, Dungeon>}
+     */
+    private function findSeasonWithWeeklyPeriods(?GameServerRegion $region = null): array
+    {
+        $seasonService = app(SeasonServiceInterface::class);
+        $region ??= GameServerRegion::query()->where('short', GameServerRegion::DEFAULT_REGION)->firstOrFail();
+
+        /** @var Collection<int, Season> $seasons */
+        $seasons = Season::with(['dungeons'])->orderByDesc('start')->get();
+
+        foreach ($seasons as $season) {
+            $dungeons = $season->dungeons
+                ->filter(static fn(Dungeon $dungeon) => $dungeon->getCurrentMappingVersion() !== null)
+                ->values();
+
+            $periods = $seasonService->getSeasonWeeks($season, $region)->pluck('period')->values();
+
+            if ($dungeons->isNotEmpty() && $periods->count() >= 2) {
+                return [$season, $periods, $dungeons];
+            }
+        }
+
+        $this->fail('Unable to find a season with at least two weeks and a dungeon to create dungeon routes for!');
     }
 
     private function createEnemyFailureForDungeon(Dungeon $dungeon): CombatLogRouteEnemyFailure
