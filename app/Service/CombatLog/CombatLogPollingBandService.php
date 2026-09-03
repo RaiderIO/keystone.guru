@@ -4,6 +4,7 @@ namespace App\Service\CombatLog;
 
 use App\Models\Season;
 use App\Service\CombatLog\Dtos\KeyLevelBand;
+use App\Service\CombatLog\Dtos\PollingBudgetWindow;
 use App\Service\CombatLog\Logging\CombatLogPollingBandServiceLoggingInterface;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
@@ -19,6 +20,8 @@ class CombatLogPollingBandService implements CombatLogPollingBandServiceInterfac
     private const string MAX_KEY_LEVEL_LAST_KNOWN_CACHE_KEY = 'combatlog:pollruns:max_key_level_last_known:%d';
 
     private const int MAX_KEY_LEVEL_LAST_KNOWN_TTL_DAYS = 60;
+
+    private const int HOURS_PER_DAY = 24;
 
     public function __construct(
         private readonly RaiderIOApiServiceInterface                 $raiderIOApiService,
@@ -99,6 +102,47 @@ class CombatLogPollingBandService implements CombatLogPollingBandServiceInterfac
         }
 
         return $bands[$hour % count($bands)];
+    }
+
+    public function getBudgetWindowForBand(Season $season, KeyLevelBand $band, int $hour): PollingBudgetWindow
+    {
+        if ($band->isTopBand()) {
+            return PollingBudgetWindow::full();
+        }
+
+        $bands     = $this->getSpreadBands($season);
+        $bandCount = count($bands);
+        $bandIndex = $this->getSpreadBandIndex($bands, $band);
+
+        if ($bandIndex === null) {
+            return PollingBudgetWindow::full();
+        }
+
+        // getSpreadBandForHour() hands the band at index i every hour where hour % bandCount === i,
+        // so the band's opportunities today are exactly that arithmetic sequence within [0, 23].
+        $totalOpportunities   = intdiv(self::HOURS_PER_DAY - 1 - $bandIndex, $bandCount) + 1;
+        $elapsedOpportunities = $hour < $bandIndex ? 0 : intdiv($hour - $bandIndex, $bandCount) + 1;
+
+        return new PollingBudgetWindow(min($elapsedOpportunities, $totalOpportunities), $totalOpportunities);
+    }
+
+    /**
+     * Matching on the minimum level alone is enough here even though a top band row can share its
+     * mythic_level_min with a spread band (see getDefaultThreshold() in
+     * CombatLogParsingCriteriaService): the caller has already returned for the top band, and the
+     * spread bands are disjoint by construction.
+     *
+     * @param list<KeyLevelBand> $bands
+     */
+    private function getSpreadBandIndex(array $bands, KeyLevelBand $band): ?int
+    {
+        foreach ($bands as $index => $spreadBand) {
+            if ($spreadBand->min === $band->min) {
+                return $index;
+            }
+        }
+
+        return null;
     }
 
     /**

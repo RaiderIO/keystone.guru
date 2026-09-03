@@ -17,6 +17,7 @@ use App\Service\CombatLog\CombatLogPollingHealthServiceInterface;
 use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
 use App\Service\CombatLog\Dtos\CombatLogRunContext;
 use App\Service\CombatLog\Dtos\KeyLevelBand;
+use App\Service\CombatLog\Dtos\PollingBudgetWindow;
 use App\Service\CombatLog\Enums\CombatLogPollingFailureReason;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRun;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
@@ -56,14 +57,28 @@ class PollCombatLogRunsCommand extends Command
 
         $combatLogVersion = array_key_last(CombatLogVersion::RETAIL_ALL);
 
-        $windowDays      = (int)config('keystoneguru.raider_io.combat_log_polling.completed_at_window_days');
-        $limit           = (int)config('keystoneguru.raider_io.combat_log_polling.limit');
-        $completedAtFrom = Carbon::now()->subDays($windowDays);
+        $windowDays = (int)config('keystoneguru.raider_io.combat_log_polling.completed_at_window_days');
+        $limit      = (int)config('keystoneguru.raider_io.combat_log_polling.limit');
+
+        // One instant for the whole invocation: pollSpreadBand() makes one Raider.IO call per
+        // eligible model, so the loop can cross an hour - or a day - boundary and would otherwise
+        // budget this hour's band against the next. Reading the hour and the date from separate
+        // Carbon::now() calls has the same problem in miniature: midnight can fall between them,
+        // pairing the old day's final (fully released) window with the new day's criterion rows.
+        $now = Carbon::now();
+
+        $completedAtFrom = $now->copy()->subDays($windowDays);
+        $hour            = $now->hour;
+        $pollingDate     = $now->toDateString();
 
         // Only one band is polled per hour: polling all of them every hour would multiply the
         // number of Raider.IO calls by the band count for no extra coverage.
-        $spreadBand = $this->bandService->getSpreadBandForHour($season, Carbon::now()->hour);
+        $spreadBand = $this->bandService->getSpreadBandForHour($season, $hour);
         $topBand    = $this->bandService->getTopBand($season);
+
+        $spreadBudgetWindow = $spreadBand === null
+            ? PollingBudgetWindow::full()
+            : $this->bandService->getBudgetWindowForBand($season, $spreadBand, $hour);
 
         $force = (bool)$this->option('force');
 
@@ -86,6 +101,13 @@ class PollCombatLogRunsCommand extends Command
             (string)$topBand,
         ));
 
+        $this->info(sprintf(
+            'combatlog:pollruns — hour=%d budget window=%d/%d opportunities',
+            $hour,
+            $spreadBudgetWindow->elapsedOpportunities,
+            $spreadBudgetWindow->totalOpportunities,
+        ));
+
         $dispatchCounts = [
             'dispatched'       => 0,
             'skippedParsed'    => 0,
@@ -106,6 +128,8 @@ class PollCombatLogRunsCommand extends Command
                 $season,
                 $combatLogVersion,
                 $spreadBand,
+                $spreadBudgetWindow,
+                $pollingDate,
                 $completedAtFrom,
                 $limit,
                 $dungeonsByChallengeModeId,
@@ -142,7 +166,8 @@ class PollCombatLogRunsCommand extends Command
     }
 
     /**
-     * Polls each dungeon and each spec that still has budget left in this hour's band.
+     * Polls each dungeon and each spec that still has budget left in this hour's band, up to the
+     * share of the daily budget this hour's window has released.
      *
      * @param Collection<string|int, Dungeon>                      $dungeonsByChallengeModeId
      * @param Collection<string|int, CharacterClassSpecialization> $allSpecsByBlizzardId
@@ -151,31 +176,39 @@ class PollCombatLogRunsCommand extends Command
      * @param array<string, int>                                   $dispatchCounts
      */
     private function pollSpreadBand(
-        Season       $season,
-        int          $combatLogVersion,
-        KeyLevelBand $band,
-        Carbon       $completedAtFrom,
-        int          $limit,
-        Collection   $dungeonsByChallengeModeId,
-        Collection   $allSpecsByBlizzardId,
-        Collection   $criterionRaces,
-        array        &        $knownRunIds,
-        bool         $force,
-        array        &        $dispatchCounts,
+        Season              $season,
+        int                 $combatLogVersion,
+        KeyLevelBand        $band,
+        PollingBudgetWindow $budgetWindow,
+        string              $pollingDate,
+        Carbon              $completedAtFrom,
+        int                 $limit,
+        Collection          $dungeonsByChallengeModeId,
+        Collection          $allSpecsByBlizzardId,
+        Collection          $criterionRaces,
+        array               &               $knownRunIds,
+        bool                $force,
+        array               &               $dispatchCounts,
     ): void {
-        $criteriaSummary = [];
+        $criteriaSummary       = [];
+        $stoppedAtDateRollover = false;
 
         foreach (array_keys(CombatLogParsingCriterion::VALID_CRITERIA) as $modelClass) {
-            $eligibleModels = $this->criteriaService->getModelsEligibleForPolling($combatLogVersion, $modelClass, $season, $band);
+            $eligibleModels = $this->criteriaService->getModelsEligibleForPolling($combatLogVersion, $modelClass, $season, $band, $budgetWindow);
 
             $criteriaSummary[] = sprintf('%s=%d eligible', class_basename($modelClass), $eligibleModels->count());
 
             foreach ($eligibleModels as $model) {
+                if ($this->hasDateRolledOver($pollingDate)) {
+                    $stoppedAtDateRollover = true;
+                    break 2;
+                }
+
                 $primaryCheck = new CombatLogParsingCriterionCheck($modelClass, $model->getKey(), $band);
 
                 // Re-evaluate before each API call: prior dispatches may have already
                 // recorded enough runs for this criterion via recordParsed().
-                if (!$this->criteriaService->shouldParse($combatLogVersion, [$primaryCheck])) {
+                if (!$this->criteriaService->shouldParse($combatLogVersion, [$primaryCheck], $budgetWindow)) {
                     continue;
                 }
 
@@ -192,7 +225,12 @@ class PollCombatLogRunsCommand extends Command
                         continue;
                     }
 
-                    if (!$this->criteriaService->shouldParse($combatLogVersion, [$primaryCheck])) {
+                    if ($this->hasDateRolledOver($pollingDate)) {
+                        $stoppedAtDateRollover = true;
+                        break 3;
+                    }
+
+                    if (!$this->criteriaService->shouldParse($combatLogVersion, [$primaryCheck], $budgetWindow)) {
                         break;
                     }
 
@@ -201,7 +239,29 @@ class PollCombatLogRunsCommand extends Command
             }
         }
 
+        if ($stoppedAtDateRollover) {
+            $this->warn(sprintf(
+                'combatlog:pollruns — the date rolled over past %s mid run; stopped polling band %s',
+                $pollingDate,
+                $band,
+            ));
+        }
+
         $this->info(sprintf('combatlog:pollruns — band %s | %s', $band, implode(', ', $criteriaSummary)));
+    }
+
+    /**
+     * Whether this invocation has outlived the day it was scheduled for.
+     *
+     * The budget window is computed once from the hour the run started in, but shouldParse() and
+     * recordParsed() key on the current date. An invocation that starts at 23:00 and runs into the
+     * next day would therefore hold a window that has released the whole of a day's budget while
+     * counting against a fresh day's rows - spending an entire daily budget in one go, which is
+     * exactly the front loading this gate exists to stop (#4359).
+     */
+    private function hasDateRolledOver(string $pollingDate): bool
+    {
+        return Carbon::now()->toDateString() !== $pollingDate;
     }
 
     /**
