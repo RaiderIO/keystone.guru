@@ -158,6 +158,47 @@ function defaultAjaxErrorFn(xhr, textStatus/*, errorThrown*/) {
 }
 
 /**
+ * Wraps a $.ajax() call with an in-flight guard keyed on the triggering element, so a double-click
+ * (or double-tap) on the same button does not fire the request twice before the first response
+ * comes back - both would race each other server-side. The element is disabled for the duration
+ * of the request, both to enforce the guard and to give the user visible feedback that the click
+ * registered.
+ *
+ * Unlike a guard flag on a class instance, keying on the element lets one handler shared across
+ * many rows (e.g. a per-row delete button) guard each row independently instead of blocking every
+ * other row while one request is in flight.
+ *
+ * @param {jQuery|Element|string} trigger The element (or selector) the click came from
+ * @param {Object} ajaxSettings Passed through to $.ajax(); its own `complete` callback(s) still
+ * run, in `this`-context, same as they would without the guard - `complete` may be a function or
+ * (per jQuery) an array of functions
+ * @returns {jQuery.jqXHR|undefined} The jqXHR, or undefined if a request for this trigger was already in flight
+ */
+function guardedAjaxClick(trigger, ajaxSettings) {
+    let $trigger = $(trigger);
+
+    if ($trigger.data('ajaxInFlight')) {
+        return undefined;
+    }
+    $trigger.data('ajaxInFlight', true).prop('disabled', true);
+
+    let originalComplete = ajaxSettings.complete;
+    let originalCallbacks = Array.isArray(originalComplete)
+        ? originalComplete
+        : (typeof originalComplete === 'function' ? [originalComplete] : []);
+
+    return $.ajax(Object.assign({}, ajaxSettings, {
+        complete: function (xhr, textStatus) {
+            $trigger.data('ajaxInFlight', false).prop('disabled', false);
+
+            for (let callback of originalCallbacks) {
+                callback.call(this, xhr, textStatus);
+            }
+        }
+    }));
+}
+
+/**
  * @private
  */
 function _hideTooltips() {
@@ -362,5 +403,5 @@ function showErrorNotification(text, opts = {}) {
 // Guarded export for the test runner (Vitest). This is a no-op in the browser,
 // where `module` is undefined, so it does not affect the concatenated bundle.
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {LayoutsApp, defaultAjaxErrorFn, refreshTooltips};
+    module.exports = {LayoutsApp, defaultAjaxErrorFn, refreshTooltips, guardedAjaxClick};
 }

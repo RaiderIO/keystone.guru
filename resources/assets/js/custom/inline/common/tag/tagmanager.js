@@ -20,7 +20,7 @@ class CommonTagTagmanager extends InlineCode {
     _onTagSaveClicked() {
         let id = $(this).data('id');
 
-        $.ajax({
+        guardedAjaxClick(this, {
             type: 'PUT',
             url: `/ajax/tag/${id}/all`,
             data: {
@@ -40,7 +40,7 @@ class CommonTagTagmanager extends InlineCode {
     _onTagDeleteClicked() {
         let id = $(this).data('id');
 
-        $.ajax({
+        guardedAjaxClick(this, {
             type: 'POST',
             url: `/ajax/tag/${id}/all`,
             data: {
