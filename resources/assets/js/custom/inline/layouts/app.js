@@ -169,7 +169,9 @@ function defaultAjaxErrorFn(xhr, textStatus/*, errorThrown*/) {
  * other row while one request is in flight.
  *
  * @param {jQuery|Element|string} trigger The element (or selector) the click came from
- * @param {Object} ajaxSettings Passed through to $.ajax(); its own `complete` callback still runs
+ * @param {Object} ajaxSettings Passed through to $.ajax(); its own `complete` callback(s) still
+ * run, in `this`-context, same as they would without the guard - `complete` may be a function or
+ * (per jQuery) an array of functions
  * @returns {jQuery.jqXHR|undefined} The jqXHR, or undefined if a request for this trigger was already in flight
  */
 function guardedAjaxClick(trigger, ajaxSettings) {
@@ -180,13 +182,17 @@ function guardedAjaxClick(trigger, ajaxSettings) {
     }
     $trigger.data('ajaxInFlight', true).prop('disabled', true);
 
-    let complete = ajaxSettings.complete;
+    let originalComplete = ajaxSettings.complete;
+    let originalCallbacks = Array.isArray(originalComplete)
+        ? originalComplete
+        : (typeof originalComplete === 'function' ? [originalComplete] : []);
+
     return $.ajax(Object.assign({}, ajaxSettings, {
         complete: function (xhr, textStatus) {
             $trigger.data('ajaxInFlight', false).prop('disabled', false);
 
-            if (typeof complete === 'function') {
-                complete(xhr, textStatus);
+            for (let callback of originalCallbacks) {
+                callback.call(this, xhr, textStatus);
             }
         }
     }));

@@ -86,6 +86,47 @@ describe('guardedAjaxClick', () => {
         expect(ajaxCalls).toHaveLength(2);
     });
 
+    test('guardedAjaxClick_givenCompleteIsAnArray_callsEveryCallbackInIt', () => {
+        // Arrange - jQuery's own $.ajax() accepts `complete` as a function or an array of them
+        const calls = [];
+
+        guardedAjaxClick($button, {
+            type: 'POST',
+            url: '/ajax/tag/1/all',
+            complete: [
+                () => calls.push('first'),
+                () => calls.push('second'),
+            ],
+        });
+
+        // Act
+        ajaxCalls[0].complete({status: 200}, 'success');
+
+        // Assert
+        expect(calls).toEqual(['first', 'second']);
+    });
+
+    test('guardedAjaxClick_givenCompleteReadsThis_seesTheSameContextJqueryWouldHaveBoundIt', () => {
+        // Arrange - jQuery invokes `complete` with `this` bound to `ajaxSettings.context` (or the
+        // settings object itself), which callers may rely on instead of a closure
+        let seenContext = null;
+
+        guardedAjaxClick($button, {
+            type: 'POST',
+            url: '/ajax/tag/1/all',
+            complete: function () {
+                seenContext = this;
+            },
+        });
+
+        // Act - simulate jQuery invoking `complete` bound to the context it was given
+        const context = {some: 'context'};
+        ajaxCalls[0].complete.call(context, {status: 200}, 'success');
+
+        // Assert
+        expect(seenContext).toBe(context);
+    });
+
     test('guardedAjaxClick_givenTwoDifferentTriggers_bothFireIndependently', () => {
         // Arrange
         const $otherButton = $('<button></button>').appendTo(document.body);
