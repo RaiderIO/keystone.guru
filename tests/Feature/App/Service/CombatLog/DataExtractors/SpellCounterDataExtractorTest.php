@@ -746,6 +746,36 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
         $this->assertCounterRecorded($invisibilityDebuffSpellId, Spell::COUNTER_INVISIBILITY, SpellProperty::CounterInvisibility);
     }
 
+    #[Test]
+    public function extractData_givenTheDungeonChangedMidLog_attributesTheSpellToTheDungeonMovedInto(): void
+    {
+        // Arrange - the dungeon the extractor reads off the context is cached between lines, so a detection made
+        // after the context moved on must still land on the dungeon the counter actually happened in
+        $castSpellId   = 9990035;
+        $debuffSpellId = 9990036;
+        $this->createTestSpell($castSpellId);
+        $this->createTestSpell($debuffSpellId, 12000);
+        $otherDungeon        = Dungeon::where('id', '!=', $this->currentDungeon->dungeon->id)->firstOrFail();
+        $otherDungeonContext = new DataExtractionCurrentDungeon($otherDungeon);
+
+        // Act - the first line primes the cache with the original dungeon, the rest happen in the one moved into
+        $this->extractor->beforeExtract($this->result, self::COMBAT_LOG_PATH);
+        $this->extractor->extractData($this->result, $this->currentDungeon, $this->npcCastStart(0, $castSpellId, 'Lens Flare'));
+        foreach ([
+            $this->debuffApplied(0, $debuffSpellId, 'Lens Flare', null),
+            $this->debuffRemoved(1999, $debuffSpellId, 'Lens Flare', null),
+            $this->playerCastSuccess(2000, VanishSpellCounterDefinition::SPELL_ID_VANISH_CAST, 'Vanish'),
+        ] as $event) {
+            $this->extractor->extractData($this->result, $otherDungeonContext, $event);
+        }
+        $this->extractor->afterExtract($this->result, self::COMBAT_LOG_PATH);
+
+        // Assert
+        $this->assertSame(1, $this->result->toArray()['addedSpellCounters']);
+        $this->assertTrue(SpellDungeon::where('spell_id', $castSpellId)->where('dungeon_id', $otherDungeon->id)->exists());
+        $this->assertFalse(SpellDungeon::where('spell_id', $castSpellId)->where('dungeon_id', $this->currentDungeon->dungeon->id)->exists());
+    }
+
     /**
      * Runs the full extract lifecycle: beforeExtract → extractData (one or more events) → afterExtract.
      *

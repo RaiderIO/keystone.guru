@@ -700,6 +700,29 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
     }
 
     #[Test]
+    public function extractData_givenAHitAfterAZoneChange_attributesTheSpellToTheDungeonMovedInto(): void
+    {
+        // Arrange - the mirror of the test above: the dungeon the extractor reads off the context is cached between
+        // lines, so a bypass detected after the context moved on must still land on the dungeon it happened in
+        $spellId = 9991032;
+        $this->createTestSpell($spellId);
+        $otherDungeon        = Dungeon::where('id', '!=', $this->currentDungeon->dungeon->id)->firstOrFail();
+        $otherDungeonContext = new DataExtractionCurrentDungeon($otherDungeon);
+
+        // Act
+        $this->extractor->beforeExtract($this->result, self::COMBAT_LOG_PATH);
+        $this->extractor->extractData($this->result, $this->currentDungeon, $this->immunityApplied(0, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'));
+        $this->extractor->extractData($this->result, $otherDungeonContext, $this->zoneChange(2000));
+        $this->extractor->extractData($this->result, $otherDungeonContext, $this->immunityApplied(4000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'));
+        $this->extractor->extractData($this->result, $otherDungeonContext, $this->npcDamage(6000, $spellId, 'Unstoppable Force'));
+        $this->extractor->afterExtract($this->result, self::COMBAT_LOG_PATH);
+
+        // Assert
+        $this->assertTrue(SpellDungeon::where('spell_id', $spellId)->where('dungeon_id', $otherDungeon->id)->exists());
+        $this->assertFalse(SpellDungeon::where('spell_id', $spellId)->where('dungeon_id', $this->currentDungeon->dungeon->id)->exists());
+    }
+
+    #[Test]
     public function immunityDefinitions_givenTheCanonicalSpellList_coversEveryImmunitySpellExactlyOnce(): void
     {
         // Arrange
