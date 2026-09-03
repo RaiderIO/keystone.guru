@@ -97,8 +97,11 @@ class ActivePull
             $this->enemiesInCombat->forget($uniqueId);
             $this->enemiesKilled->put($activePullEnemy->getUniqueId(), $activePullEnemy);
 
-            if ($this->endTime === null || $activePullEnemy->getDiedAt()->isAfter($this->endTime)) {
-                $this->endTime = $activePullEnemy->getDiedAt();
+            // ResultEventDungeonRouteBuilder never knows an enemy's diedAt, so a pull built there can mix enemies
+            // without one and enemies with one - the synthetic kills a DungeonRouteBuilderRule awards do carry it
+            $diedAt = $activePullEnemy->getDiedAt();
+            if ($this->endTime === null || ($diedAt !== null && $diedAt->isAfter($this->endTime))) {
+                $this->endTime = $diedAt;
             }
 
             if ($this->enemiesInCombat->isEmpty()) {
