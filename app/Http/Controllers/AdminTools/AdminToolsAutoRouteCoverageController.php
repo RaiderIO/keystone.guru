@@ -5,9 +5,9 @@ namespace App\Http\Controllers\AdminTools;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminToolsAutoRouteCoverageRequest;
 use App\Models\CombatLog\ChallengeModeRun;
-use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Service\CombatLog\CombatLogRouteEnemyFailureServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -31,8 +31,9 @@ class AdminToolsAutoRouteCoverageController extends Controller
     private const MAX_DETAIL_ROUTES = 25;
 
     public function index(
-        AdminToolsAutoRouteCoverageRequest $request,
-        SeasonServiceInterface             $seasonService,
+        AdminToolsAutoRouteCoverageRequest         $request,
+        SeasonServiceInterface                     $seasonService,
+        CombatLogRouteEnemyFailureServiceInterface $combatLogRouteEnemyFailureService,
     ): View {
         $days   = $request->getDays();
         $season = $seasonService->getCurrentSeason();
@@ -50,7 +51,7 @@ class AdminToolsAutoRouteCoverageController extends Controller
 
         $challengeModeRuns = $this->getChallengeModeRuns($dungeons->keys()->all(), $days);
         $dungeonRoutes     = $this->getDungeonRoutes($challengeModeRuns->pluck('dungeon_route_id')->all());
-        $enemyFailures     = $this->getEnemyFailureCounts($dungeonRoutes->keys()->all());
+        $enemyFailures     = $combatLogRouteEnemyFailureService->getFailureCountsPerDungeonRoute($dungeonRoutes);
 
         return view('admin.tools.combatlog.route.coverage', [
             'season'   => $season,
@@ -101,27 +102,6 @@ class AdminToolsAutoRouteCoverageController extends Controller
             ->whereIn('id', $dungeonRouteIds)
             ->get()
             ->keyBy('id');
-    }
-
-    /**
-     * The amount of enemies the Auto Route Creator could not place on the map, per dungeon route. This is the most
-     * direct explanation available for a route that did not reach 100%.
-     *
-     * @param array<int> $dungeonRouteIds
-     *
-     * @return Collection<int, int> enemy failure count, keyed by dungeon route id
-     */
-    private function getEnemyFailureCounts(array $dungeonRouteIds): Collection
-    {
-        if ($dungeonRouteIds === []) {
-            return collect();
-        }
-
-        return CombatLogRouteEnemyFailure::query()
-            ->selectRaw('dungeon_route_id, COUNT(*) AS failure_count')
-            ->whereIn('dungeon_route_id', $dungeonRouteIds)
-            ->groupBy('dungeon_route_id')
-            ->pluck('failure_count', 'dungeon_route_id');
     }
 
     /**

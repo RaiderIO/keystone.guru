@@ -514,6 +514,49 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
         }
     }
 
+    /**
+     * The coverage page explains why a route missed 100% enemy forces, so an npc worth no enemy forces cannot be part
+     * of the explanation there either.
+     */
+    #[Test]
+    public function getFailureCountsPerDungeonRoute_givenNpcsWithoutEnemyForces_countsOnlyTheRestPerRoute(): void
+    {
+        $created          = [];
+        $createdRouteIds  = [];
+        $worthForcesNpcId = 99970;
+        $noForcesNpcId    = 99971;
+
+        try {
+            // Arrange — two routes on the same mapping version, one failure of each kind on the first
+            $this->createEnemyForces($worthForcesNpcId);
+
+            foreach ([0, 1] as $unused) {
+                $createdRouteIds[] = DungeonRoute::factory()->create([
+                    'dungeon_id'         => $this->dungeon->id,
+                    'mapping_version_id' => $this->mappingVersion->id,
+                ])->id;
+            }
+
+            $created[] = $this->createFailure(['dungeon_route_id' => $createdRouteIds[0], 'npc_id' => $worthForcesNpcId])->id;
+            $created[] = $this->createFailure(['dungeon_route_id' => $createdRouteIds[0], 'npc_id' => $noForcesNpcId])->id;
+            $created[] = $this->createFailure(['dungeon_route_id' => $createdRouteIds[0], 'npc_id' => null])->id;
+            $created[] = $this->createFailure(['dungeon_route_id' => $createdRouteIds[1], 'npc_id' => $noForcesNpcId])->id;
+
+            $dungeonRoutes = DungeonRoute::query()->whereIn('id', $createdRouteIds)->get()->keyBy('id');
+
+            // Act
+            $counts = $this->service->getFailureCountsPerDungeonRoute($dungeonRoutes);
+
+            // Assert — the npc worth forces and the npc-less row count, the npc without forces does not, and a route
+            // left with nothing to explain is absent rather than present with 0
+            $this->assertSame(2, $counts->get($createdRouteIds[0]));
+            $this->assertNull($counts->get($createdRouteIds[1]));
+        } finally {
+            CombatLogRouteEnemyFailure::whereIn('id', $created)->delete();
+            DungeonRoute::whereIn('id', $createdRouteIds)->delete();
+        }
+    }
+
     #[\Override]
     protected function tearDown(): void
     {

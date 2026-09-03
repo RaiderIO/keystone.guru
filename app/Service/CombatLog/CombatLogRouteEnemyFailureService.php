@@ -121,6 +121,45 @@ readonly class CombatLogRouteEnemyFailureService implements CombatLogRouteEnemyF
         return $result;
     }
 
+    public function getFailureCountsPerDungeonRoute(Collection $dungeonRoutes): Collection
+    {
+        if ($dungeonRoutes->isEmpty()) {
+            return collect();
+        }
+
+        /** @var array<int, array<int, true>> $nonZeroEnemyForcesNpcIdsPerMappingVersion mapping_version_id => [npc_id => true] */
+        $nonZeroEnemyForcesNpcIdsPerMappingVersion = [];
+        foreach (NpcEnemyForces::query()
+            ->whereIn('mapping_version_id', $dungeonRoutes->pluck('mapping_version_id')->unique()->all())
+            ->where('enemy_forces', '>', 0)
+            ->get(['mapping_version_id', 'npc_id']) as $npcEnemyForces) {
+            /** @var NpcEnemyForces $npcEnemyForces */
+            $nonZeroEnemyForcesNpcIdsPerMappingVersion[$npcEnemyForces->mapping_version_id][$npcEnemyForces->npc_id] = true;
+        }
+
+        /** @var array<int, int> $counts dungeon_route_id => failure count */
+        $counts = [];
+        /** @var array<int, array{dungeon_route_id: int, npc_id: int|null, failure_count: int}> $rows */
+        $rows = CombatLogRouteEnemyFailure::query()
+            ->selectRaw('dungeon_route_id, npc_id, COUNT(*) AS failure_count')
+            ->whereIn('dungeon_route_id', $dungeonRoutes->keys()->all())
+            ->groupBy('dungeon_route_id', 'npc_id')
+            ->get()
+            ->toArray();
+        foreach ($rows as $row) {
+            $mappingVersionId         = $dungeonRoutes->get($row['dungeon_route_id'])?->mapping_version_id;
+            $nonZeroEnemyForcesNpcIds = $nonZeroEnemyForcesNpcIdsPerMappingVersion[$mappingVersionId] ?? [];
+
+            if ($row['npc_id'] !== null && $nonZeroEnemyForcesNpcIds !== [] && !isset($nonZeroEnemyForcesNpcIds[$row['npc_id']])) {
+                continue;
+            }
+
+            $counts[$row['dungeon_route_id']] = ($counts[$row['dungeon_route_id']] ?? 0) + (int)$row['failure_count'];
+        }
+
+        return collect($counts);
+    }
+
     public function getNonZeroEnemyForcesNpcIds(MappingVersion $mappingVersion): array
     {
         return NpcEnemyForces::query()
