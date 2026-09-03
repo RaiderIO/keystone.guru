@@ -26,7 +26,7 @@ class Telemetry extends SchedulerCommand
      *
      * @var string
      */
-    protected $description = 'Samples site gauges (user/team/route counts, queue sizes, MySQL stats, Redis DB sizes) into the telemetry metrics store';
+    protected $description = 'Samples site gauges into the telemetry metrics store';
 
     /** @var array|Measurement[] */
     private $measurements;
