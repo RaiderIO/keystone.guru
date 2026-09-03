@@ -37,7 +37,11 @@ class MapContextDungeonExplore extends MapContextMappingVersion {
         return this._options.featuredAffixes;
     }
 
-    getSeasonStartPeriod() {
-        return this._options.seasonStartPeriod;
+    /**
+     * The most recent season's weeks, each paired with the keystone leaderboard period it falls in.
+     * @returns {{week: Number, period: Number}[]}
+     */
+    getSeasonWeeks() {
+        return this._options.seasonWeeks ?? [];
     }
 }

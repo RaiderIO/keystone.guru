@@ -8,7 +8,6 @@ use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsResponse;
 use App\Service\RaiderIO\RaiderIOKeystoneGuruApiService;
-use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -31,15 +30,11 @@ final class RaiderIOKeystoneGuruApiServiceTest extends PublicTestCase
         /** @var MockObject&SeasonServiceInterface $seasonService */
         $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
 
-        /** @var MockObject&SeasonAffixGroupServiceInterface $seasonAffixGroupService */
-        $seasonAffixGroupService = $this->createMockPublic(SeasonAffixGroupServiceInterface::class);
-
         /** @var MockObject&CombatLogEventServiceInterface $combatLogEventService */
         $combatLogEventService = $this->createMockPublic(CombatLogEventServiceInterface::class);
 
         $this->service = new RaiderIOKeystoneGuruApiService(
             $seasonService,
-            $seasonAffixGroupService,
             $combatLogEventService,
         );
     }
