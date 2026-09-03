@@ -26,7 +26,7 @@ interface CombatLogRouteDungeonRouteServiceLoggingInterface
 
     public function saveCombatLogRouteEnemyFailuresUnableToCalculateMapLocation(int $dungeonRouteId, ?int $npcId, int $floorId): void;
 
-    public function saveCombatLogRouteEnemyFailuresSkippingZeroEnemyForcesNpc(int $dungeonRouteId, int $npcId): void;
+    public function saveCombatLogRouteEnemyFailuresSkippingNpcWithoutEnemyForces(int $dungeonRouteId, int $npcId): void;
 
     public function convertCombatLogRouteToDungeonRouteBuildFailedDeletingNewRoute(int $dungeonRouteId, string $exception): void;
 

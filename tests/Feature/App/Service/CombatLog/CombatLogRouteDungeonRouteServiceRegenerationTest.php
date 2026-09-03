@@ -13,6 +13,7 @@ use App\Models\DungeonRoute\DungeonRouteFavorite;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\NpcEnemyForces;
 use App\Models\User;
 use App\Models\UserPinnedDungeonRoute;
 use App\Repositories\Interfaces\EnemyRepositoryInterface;
@@ -214,11 +215,19 @@ final class CombatLogRouteDungeonRouteServiceRegenerationTest extends PublicTest
     public function convertCombatLogRouteToDungeonRoute_givenRegeneration_movesEnemyFailuresOntoTheRouteAndDropsThePreviousOnes(): void
     {
         // Arrange
-        $createdRouteIds = [];
+        $createdRouteIds  = [];
+        $npcEnemyForcesId = null;
 
         try {
             $original          = $this->service->convertCombatLogRouteToDungeonRoute($this->getCombatLogRouteRequestDto());
             $createdRouteIds[] = $original->id;
+
+            // Only failures of npcs worth enemy forces are recorded at all - see #4475
+            $npcEnemyForcesId = NpcEnemyForces::query()->create([
+                'mapping_version_id' => $original->mapping_version_id,
+                'npc_id'             => self::UNRESOLVABLE_NPC_ID,
+                'enemy_forces'       => 10,
+            ])->id;
 
             // This fixture resolves every npc, so the previous generation's failure is planted by hand
             $previousFailure = CombatLogRouteEnemyFailure::create([
@@ -253,6 +262,11 @@ final class CombatLogRouteDungeonRouteServiceRegenerationTest extends PublicTest
             $this->assertNull(CombatLogRouteEnemyFailure::find($previousFailure->id), 'The previous failures must be deleted, not orphaned');
         } finally {
             $this->deleteDungeonRoutes($createdRouteIds);
+
+            if ($npcEnemyForcesId !== null) {
+                NpcEnemyForces::query()->whereKey($npcEnemyForcesId)->delete();
+                new NpcEnemyForces()->flushCache();
+            }
         }
     }
 

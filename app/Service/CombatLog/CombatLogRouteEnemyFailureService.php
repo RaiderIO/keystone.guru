@@ -82,17 +82,17 @@ readonly class CombatLogRouteEnemyFailureService implements CombatLogRouteEnemyF
     {
         $mappingVersionIds = $dungeon->mappingVersions->pluck('id');
 
-        // Which npcs are worth 0 enemy forces differs per mapping version, so the exclusion that failuresQuery()
-        // applies for one mapping version is applied here per (mapping version, npc) pair - the counts must agree
-        // with what the heatmap draws for each version.
-        /** @var array<int, array<int, true>> $zeroEnemyForcesNpcIdsPerMappingVersion mapping_version_id => [npc_id => true] */
-        $zeroEnemyForcesNpcIdsPerMappingVersion = [];
+        // Which npcs are worth enemy forces differs per mapping version, so the filter that failuresQuery() applies for
+        // one mapping version is applied here per (mapping version, npc) pair - the counts must agree with what the
+        // heatmap draws for each version.
+        /** @var array<int, array<int, true>> $nonZeroEnemyForcesNpcIdsPerMappingVersion mapping_version_id => [npc_id => true] */
+        $nonZeroEnemyForcesNpcIdsPerMappingVersion = [];
         foreach (NpcEnemyForces::query()
             ->whereIn('mapping_version_id', $mappingVersionIds)
-            ->where('enemy_forces', 0)
+            ->where('enemy_forces', '>', 0)
             ->get(['mapping_version_id', 'npc_id']) as $npcEnemyForces) {
             /** @var NpcEnemyForces $npcEnemyForces */
-            $zeroEnemyForcesNpcIdsPerMappingVersion[$npcEnemyForces->mapping_version_id][$npcEnemyForces->npc_id] = true;
+            $nonZeroEnemyForcesNpcIdsPerMappingVersion[$npcEnemyForces->mapping_version_id][$npcEnemyForces->npc_id] = true;
         }
 
         /** @var array<int, int> $counts mapping_version_id => failure count */
@@ -105,7 +105,9 @@ readonly class CombatLogRouteEnemyFailureService implements CombatLogRouteEnemyF
             ->get()
             ->toArray();
         foreach ($rows as $row) {
-            if ($row['npc_id'] !== null && isset($zeroEnemyForcesNpcIdsPerMappingVersion[$row['mapping_version_id']][$row['npc_id']])) {
+            $nonZeroEnemyForcesNpcIds = $nonZeroEnemyForcesNpcIdsPerMappingVersion[$row['mapping_version_id']] ?? [];
+
+            if ($row['npc_id'] !== null && $nonZeroEnemyForcesNpcIds !== [] && !isset($nonZeroEnemyForcesNpcIds[$row['npc_id']])) {
                 continue;
             }
 
@@ -119,18 +121,18 @@ readonly class CombatLogRouteEnemyFailureService implements CombatLogRouteEnemyF
         return $result;
     }
 
-    public function getZeroEnemyForcesNpcIds(MappingVersion $mappingVersion): array
+    public function getNonZeroEnemyForcesNpcIds(MappingVersion $mappingVersion): array
     {
         return NpcEnemyForces::query()
             ->where('mapping_version_id', $mappingVersion->id)
-            ->where('enemy_forces', 0)
+            ->where('enemy_forces', '>', 0)
             ->pluck('npc_id')
             ->map(static fn($npcId): int => (int)$npcId)
             ->all();
     }
 
     /**
-     * The failures of the dungeon in the mapping version, minus those for npcs that are worth 0 enemy forces there.
+     * The failures of the dungeon in the mapping version, minus those for npcs not worth any enemy forces there.
      *
      * @return Builder<CombatLogRouteEnemyFailure>
      */
@@ -140,12 +142,13 @@ readonly class CombatLogRouteEnemyFailureService implements CombatLogRouteEnemyF
             ->where('dungeon_id', $dungeon->id)
             ->where('mapping_version_id', $mappingVersion->id);
 
-        $zeroEnemyForcesNpcIds = $this->getZeroEnemyForcesNpcIds($mappingVersion);
-        if (!empty($zeroEnemyForcesNpcIds)) {
-            // npc_id may be null - NOT IN would drop those rows, so keep them explicitly
-            $query->where(static function (Builder $builder) use ($zeroEnemyForcesNpcIds) {
+        // An empty set means nothing is tuned in this mapping version yet - filtering on it would blank the whole view
+        $nonZeroEnemyForcesNpcIds = $this->getNonZeroEnemyForcesNpcIds($mappingVersion);
+        if (!empty($nonZeroEnemyForcesNpcIds)) {
+            // npc_id may be null - IN would drop those rows, so keep them explicitly
+            $query->where(static function (Builder $builder) use ($nonZeroEnemyForcesNpcIds) {
                 $builder->whereNull('npc_id')
-                    ->orWhereNotIn('npc_id', $zeroEnemyForcesNpcIds);
+                    ->orWhereIn('npc_id', $nonZeroEnemyForcesNpcIds);
             });
         }
 

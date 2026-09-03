@@ -36,6 +36,9 @@ final class CombatLogRouteDungeonRouteServiceEnemyFailuresTest extends PublicTes
      * combat log route submission - CombatLogRouteEnemyFailure is diagnostic bookkeeping only, so a
      * failure that can't be located should be skipped instead of throwing. A second unresolvable
      * npc on a floor WITH coordinates proves this is a selective skip, not "nothing got recorded".
+     *
+     * Both unresolvable npcs are given enemy forces so the coordinate skip is what is under test here
+     * rather than the "not worth any enemy forces" skip.
      */
     #[Test]
     public function saveCombatLogRouteEnemyFailures_givenUnresolvableNpcOnFloorWithoutIngameCoordinates_skipsOnlyThatOne(): void
@@ -54,7 +57,8 @@ final class CombatLogRouteDungeonRouteServiceEnemyFailuresTest extends PublicTes
             'ingame_max_y' => $floor->ingame_max_y,
         ];
 
-        $dungeonRoute = null;
+        $dungeonRoute      = null;
+        $npcEnemyForcesIds = [];
 
         try {
             // Arrange - zero out one enemy's floor so calculateMapLocationForIngameLocation() throws
@@ -75,6 +79,14 @@ final class CombatLogRouteDungeonRouteServiceEnemyFailuresTest extends PublicTes
             // npc1 resolves to a real enemy on the zeroed floor, becoming the "previous floor" for npc2
             $resolvedOnZeroedFloor = new CombatLogRouteNpcRequestDto(npcId: $zeroedEnemy->npc_id, coord: new CombatLogRouteCoordRequestDto(1.0, 1.0));
             $resolvedOnZeroedFloor->setResolvedEnemy($zeroedEnemy);
+
+            foreach ([-1, -2] as $unresolvedNpcId) {
+                $npcEnemyForcesIds[] = NpcEnemyForces::query()->create([
+                    'mapping_version_id' => $zeroedEnemy->mapping_version_id,
+                    'npc_id'             => $unresolvedNpcId,
+                    'enemy_forces'       => 10,
+                ])->id;
+            }
 
             // npc2 does not resolve to an enemy, so it falls back to npc1's floor (the zeroed one) - skipped
             $unresolvedOnZeroedFloor = new CombatLogRouteNpcRequestDto(npcId: -1, coord: new CombatLogRouteCoordRequestDto(2.0, 2.0));
@@ -112,23 +124,34 @@ final class CombatLogRouteDungeonRouteServiceEnemyFailuresTest extends PublicTes
                 CombatLogRouteEnemyFailure::where('dungeon_route_id', $dungeonRoute->id)->delete();
                 $dungeonRoute->delete();
             }
+
+            if ($npcEnemyForcesIds !== []) {
+                NpcEnemyForces::query()->whereKey($npcEnemyForcesIds)->delete();
+                new NpcEnemyForces()->flushCache();
+            }
         }
     }
 
     /**
-     * An unresolved npc that is explicitly worth 0 enemy forces in the mapping version never affects the built route,
-     * so it must not be recorded - while an unresolved npc WITHOUT any enemy forces row (the "not mapped" case) must.
+     * An unresolved npc that is not worth any enemy forces in the mapping version never affects the built route, so it
+     * must not be recorded. "Not worth any enemy forces" covers all three shapes: an explicit 0 row, no enemy forces row
+     * at all while the npc IS mapped (#4475 - by far the common encoding), and an npc the mapping does not know at all
+     * (a temporary add spawned mid-fight). Only an npc actually worth enemy forces is recorded.
      */
     #[Test]
-    public function saveCombatLogRouteEnemyFailures_givenUnresolvedNpcWithZeroEnemyForces_recordsOnlyTheNpcWithoutEnemyForcesRow(): void
+    public function saveCombatLogRouteEnemyFailures_givenUnresolvedNpcsWithoutEnemyForces_recordsOnlyTheNpcWorthEnemyForces(): void
     {
         $resolvedEnemy = Enemy::query()->whereNotNull('floor_id')->with('floor')->first();
         $this->assertNotNull($resolvedEnemy, 'Expected at least one seeded Enemy with a floor.');
 
-        $zeroForcesNpcId  = 99930;
-        $unmappedNpcId    = 99931;
-        $dungeonRoute     = null;
-        $npcEnemyForcesId = null;
+        $zeroForcesNpcId       = 99930;
+        $noForcesRowNpcId      = 99931;
+        $unknownToMappingNpcId = 99932;
+        $worthForcesNpcId      = 99933;
+        $dungeonRoute          = null;
+        $npcEnemyForcesIds     = [];
+        $mappedNpcIds          = [$noForcesRowNpcId, $worthForcesNpcId];
+        $enemyIds              = [];
 
         try {
             // Arrange
@@ -137,19 +160,36 @@ final class CombatLogRouteDungeonRouteServiceEnemyFailuresTest extends PublicTes
                 'mapping_version_id' => $resolvedEnemy->mapping_version_id,
             ]);
 
-            $npcEnemyForcesId = NpcEnemyForces::query()->create([
-                'mapping_version_id' => $resolvedEnemy->mapping_version_id,
-                'npc_id'             => $zeroForcesNpcId,
-                'enemy_forces'       => 0,
-            ])->id;
+            foreach ([$zeroForcesNpcId => 0, $worthForcesNpcId => 10] as $npcId => $enemyForces) {
+                $npcEnemyForcesIds[] = NpcEnemyForces::query()->create([
+                    'mapping_version_id' => $resolvedEnemy->mapping_version_id,
+                    'npc_id'             => $npcId,
+                    'enemy_forces'       => $enemyForces,
+                ])->id;
+            }
 
-            // npc1 resolves, establishing the floor for the two unresolved npcs after it
+            // Being present in the mapping must not by itself make a 0-forces npc worth recording
+            foreach ($mappedNpcIds as $mappedNpcId) {
+                $enemyIds[] = Enemy::query()->create([
+                    'mapping_version_id' => $resolvedEnemy->mapping_version_id,
+                    'floor_id'           => $resolvedEnemy->floor_id,
+                    'npc_id'             => $mappedNpcId,
+                    'lat'                => $resolvedEnemy->lat,
+                    'lng'                => $resolvedEnemy->lng,
+                ])->id;
+            }
+
+            // npc1 resolves, establishing the floor for the unresolved npcs after it
             $resolved = new CombatLogRouteNpcRequestDto(npcId: $resolvedEnemy->npc_id, coord: new CombatLogRouteCoordRequestDto(1.0, 1.0));
             $resolved->setResolvedEnemy($resolvedEnemy);
-            $unresolvedZeroForces = new CombatLogRouteNpcRequestDto(npcId: $zeroForcesNpcId, coord: new CombatLogRouteCoordRequestDto(2.0, 2.0));
-            $unresolvedUnmapped   = new CombatLogRouteNpcRequestDto(npcId: $unmappedNpcId, coord: new CombatLogRouteCoordRequestDto(3.0, 3.0));
 
-            $combatLogRoute = new CombatLogRouteRequestDto(npcs: new Collection([$resolved, $unresolvedZeroForces, $unresolvedUnmapped]));
+            $combatLogRoute = new CombatLogRouteRequestDto(npcs: new Collection([
+                $resolved,
+                new CombatLogRouteNpcRequestDto(npcId: $zeroForcesNpcId, coord: new CombatLogRouteCoordRequestDto(2.0, 2.0)),
+                new CombatLogRouteNpcRequestDto(npcId: $noForcesRowNpcId, coord: new CombatLogRouteCoordRequestDto(3.0, 3.0)),
+                new CombatLogRouteNpcRequestDto(npcId: $unknownToMappingNpcId, coord: new CombatLogRouteCoordRequestDto(4.0, 4.0)),
+                new CombatLogRouteNpcRequestDto(npcId: $worthForcesNpcId, coord: new CombatLogRouteCoordRequestDto(5.0, 5.0)),
+            ]));
 
             /** @var CombatLogRouteDungeonRouteServiceInterface $service */
             $service = app(CombatLogRouteDungeonRouteServiceInterface::class);
@@ -161,15 +201,20 @@ final class CombatLogRouteDungeonRouteServiceEnemyFailuresTest extends PublicTes
             // Assert
             $failures = CombatLogRouteEnemyFailure::where('dungeon_route_id', $dungeonRoute->id)->get();
             $this->assertCount(1, $failures);
-            $this->assertSame($unmappedNpcId, $failures->first()->npc_id);
+            $this->assertSame($worthForcesNpcId, $failures->first()->npc_id);
         } finally {
             if ($dungeonRoute !== null) {
                 CombatLogRouteEnemyFailure::where('dungeon_route_id', $dungeonRoute->id)->delete();
                 $dungeonRoute->delete();
             }
 
-            if ($npcEnemyForcesId !== null) {
-                NpcEnemyForces::query()->whereKey($npcEnemyForcesId)->delete();
+            if ($enemyIds !== []) {
+                Enemy::query()->whereKey($enemyIds)->delete();
+                new Enemy()->flushCache();
+            }
+
+            if ($npcEnemyForcesIds !== []) {
+                NpcEnemyForces::query()->whereKey($npcEnemyForcesIds)->delete();
                 new NpcEnemyForces()->flushCache();
             }
         }
