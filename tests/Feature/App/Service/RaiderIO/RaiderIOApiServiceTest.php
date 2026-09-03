@@ -10,7 +10,6 @@ use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\Logging\RaiderIOApiServiceLoggingInterface;
 use App\Service\RaiderIO\RaiderIOApiService;
-use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
@@ -380,11 +379,8 @@ final class RaiderIOApiServiceTest extends PublicTestCase
         $coordinatesService = $this->createMockPublic(CoordinatesServiceInterface::class);
         /** @var MockObject&SeasonServiceInterface $seasonService */
         $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
-        /** @var MockObject&SeasonAffixGroupServiceInterface $seasonAffixGroupService */
-        $seasonAffixGroupService = $this->createMockPublic(SeasonAffixGroupServiceInterface::class);
-
-        $service = $this->getMockBuilder(RaiderIOApiService::class)
-            ->setConstructorArgs([$coordinatesService, $seasonService, $seasonAffixGroupService, $this->log])
+        $service       = $this->getMockBuilder(RaiderIOApiService::class)
+            ->setConstructorArgs([$coordinatesService, $seasonService, $this->log])
             ->onlyMethods(['curlGet'])
             ->getMock();
 
