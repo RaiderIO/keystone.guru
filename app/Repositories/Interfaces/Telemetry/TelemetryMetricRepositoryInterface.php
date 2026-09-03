@@ -27,6 +27,8 @@ interface TelemetryMetricRepositoryInterface extends BaseRepositoryInterface
 
     /**
      * Deletes at most $batchSize records recorded before $cutoff, returning the number of deleted rows.
+     *
+     * @param array<int, string> $excludedMeasurements Measurements that are never deleted, regardless of age
      */
-    public function deleteRecordedBefore(Carbon $cutoff, int $batchSize): int;
+    public function deleteRecordedBefore(Carbon $cutoff, int $batchSize, array $excludedMeasurements = []): int;
 }

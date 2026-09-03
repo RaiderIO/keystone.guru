@@ -237,8 +237,20 @@ return [
     ],
 
     'telemetry' => [
-        /** The number of days telemetry metric records (scheduled command run times, site gauges) are kept before being pruned. */
+        /** The number of days operational telemetry metric records (scheduled command run times, queue/mysql gauges) are kept before being pruned. */
         'retention_days' => 30,
+
+        /**
+         * Measurements excluded from `telemetry:prune` entirely, kept forever for long-term
+         * site-growth trends instead of the operational `retention_days` window.
+         *
+         * @var array<int, string>
+         */
+        'growth_measurements' => [
+            'user_count',
+            'team_count',
+            'dungeon_route_count',
+        ],
     ],
 
     'thumbnail' => [
