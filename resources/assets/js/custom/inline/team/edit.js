@@ -173,10 +173,10 @@ class TeamEdit extends InlineCode {
         return result;
     }
 
-    _grantAdFreeGiveaway(userId, add) {
+    _grantAdFreeGiveaway(userId, add, trigger) {
         let self = this;
 
-        $.ajax({
+        guardedAjaxClick(trigger, {
             type: 'POST',
             url: `/ajax/team/${self.options.teamPublicKey}/member/${userId}/adfree`,
             data: add ? {} : {
@@ -373,11 +373,11 @@ class TeamEdit extends InlineCode {
         });
 
         $('.ad_free_giveaway_add').unbind('click').bind('click', function (e) {
-            self._grantAdFreeGiveaway(parseInt($(this).data('userid')), true);
+            self._grantAdFreeGiveaway(parseInt($(this).data('userid')), true, this);
         });
 
         $('.ad_free_giveaway_remove').unbind('click').bind('click', function (e) {
-            self._grantAdFreeGiveaway(parseInt($(this).data('userid')), false);
+            self._grantAdFreeGiveaway(parseInt($(this).data('userid')), false, this);
         });
 
         $('.remove_user_btn').unbind('click').bind('click', function (e) {
