@@ -35,6 +35,7 @@ class TelemetryMetric extends Model
     public const string MEASUREMENT_DUNGEON_ROUTE_COUNT = 'dungeon_route_count';
     public const string MEASUREMENT_QUEUE               = 'queue';
     public const string MEASUREMENT_MYSQL               = 'mysql';
+    public const string MEASUREMENT_REDIS               = 'redis';
 
     public $timestamps = false;
 
