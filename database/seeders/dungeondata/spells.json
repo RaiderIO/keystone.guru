@@ -1154,7 +1154,7 @@
         "mechanic": null,
         "icon_name": "spell_nature_tranquility",
         "name": "spells.740",
-        "description_template": "Heals all allies within $a2 yards for $<healing> over $d.$?s197721[ Extends the duration of all your heal over time effects by $s6 sec every $t1 sec.][] Healing decreased beyond $s3 targets.\r\n\r\nRoots form around you while channeling, absorbing up to $s6% of your health in damage and preventing knockbacks.",
+        "description_template": "Heals all allies within $a2 yards for $<healing> over $d.$?s197721[ Extends the duration of all your heal over time effects by $197721s1 sec every $t1 sec.][] Healing decreased beyond $s3 targets.\r\n\r\nRoots form around you while channeling, absorbing up to $s6% of your health in damage and preventing knockbacks.",
         "description": "Heals all allies within 40 yards for over 6 sec. Healing decreased beyond 5 targets.\n\nRoots form around you while channeling, absorbing up to 60% of your health in damage and preventing knockbacks.",
         "description_format": "Heals all allies within %1$s yards for  over %2$s. Healing decreased beyond %3$s targets.\n\nRoots form around you while channeling, absorbing up to %4$s%% of your health in damage and preventing knockbacks.",
         "description_values": [
@@ -28308,10 +28308,19 @@
         "mechanic": null,
         "icon_name": "",
         "name": "Fel Immolate",
-        "description_template": null,
-        "description": null,
-        "description_format": null,
-        "description_values": null,
+        "description_template": "Burns an enemy, then inflicts additional Fire damage every $t1 sec. for $d.",
+        "description": "Burns an enemy, then inflicts additional Fire damage every 3 sec. for 15 sec.",
+        "description_format": "Burns an enemy, then inflicts additional Fire damage every %1$s sec. for %2$s.",
+        "description_values": [
+            {
+                "kind": "period",
+                "text": "3"
+            },
+            {
+                "kind": "duration",
+                "text": "15 sec"
+            }
+        ],
         "damage_multiplier": null,
         "schools_mask": 4,
         "cast_time": null,
@@ -28320,7 +28329,30 @@
         "hidden_on_map": false,
         "characteristic_id": null,
         "fetched_data_at": null,
-        "spell_effects": []
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 3,
+                "base_points": 24.8060131073,
+                "variance": 0,
+                "period_ms": 3000,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 2,
+                "aura_type": 0,
+                "base_points": 24.8060131073,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
     },
     {
         "id": 40084,
@@ -28331,10 +28363,10 @@
         "mechanic": null,
         "icon_name": "",
         "name": "Harpooner's Mark",
-        "description_template": null,
-        "description": null,
-        "description_format": null,
-        "description_values": null,
+        "description_template": "Places the Harpooner's Mark on an enemy, forcing any nearby Dragon Turtles to attack that enemy.",
+        "description": "Places the Harpooner's Mark on an enemy, forcing any nearby Dragon Turtles to attack that enemy.",
+        "description_format": "Places the Harpooner's Mark on an enemy, forcing any nearby Dragon Turtles to attack that enemy.",
+        "description_values": [],
         "damage_multiplier": null,
         "schools_mask": 64,
         "cast_time": null,
@@ -28343,7 +28375,30 @@
         "hidden_on_map": false,
         "characteristic_id": null,
         "fetched_data_at": null,
-        "spell_effects": []
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 68,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 6,
+                "aura_type": 226,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 5000,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
     },
     {
         "id": 40135,
@@ -28394,10 +28449,18 @@
         "mechanic": null,
         "icon_name": "",
         "name": "Immolation Arrow",
-        "description_template": null,
-        "description": null,
-        "description_format": null,
-        "description_values": null,
+        "description_template": "Shoots a flaming arrow at an enemy, inflicting weapon damage plus $s1. All damage inflicted is based upon Fire magic.",
+        "description": "Shoots a flaming arrow at an enemy, inflicting weapon damage plus . All damage inflicted is based upon Fire magic.",
+        "description_format": "Shoots a flaming arrow at an enemy, inflicting weapon damage plus %1$s. All damage inflicted is based upon Fire magic.",
+        "description_values": [
+            {
+                "kind": "damage",
+                "text": "",
+                "spellId": 40872,
+                "coefficient": 49.6120262146,
+                "effectIndex": 0
+            }
+        ],
         "damage_multiplier": null,
         "schools_mask": 4,
         "cast_time": null,
@@ -28406,7 +28469,30 @@
         "hidden_on_map": false,
         "characteristic_id": null,
         "fetched_data_at": null,
-        "spell_effects": []
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 2,
+                "aura_type": 0,
+                "base_points": 49.6120262146,
+                "variance": 0.15000000596,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 142,
+                "aura_type": 0,
+                "base_points": 25,
+                "variance": 0.15000000596,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
     },
     {
         "id": 40873,
@@ -28417,10 +28503,10 @@
         "mechanic": null,
         "icon_name": "",
         "name": "Shoot",
-        "description_template": null,
-        "description": null,
-        "description_format": null,
-        "description_values": null,
+        "description_template": "Shoots at an enemy, inflicting Physical damage.",
+        "description": "Shoots at an enemy, inflicting Physical damage.",
+        "description_format": "Shoots at an enemy, inflicting Physical damage.",
+        "description_values": [],
         "damage_multiplier": null,
         "schools_mask": 1,
         "cast_time": null,
@@ -28429,7 +28515,19 @@
         "hidden_on_map": false,
         "characteristic_id": null,
         "fetched_data_at": null,
-        "spell_effects": []
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 2,
+                "aura_type": 0,
+                "base_points": 59.78249359131,
+                "variance": 0.30000001192,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
     },
     {
         "id": 40876,
@@ -28440,10 +28538,18 @@
         "mechanic": null,
         "icon_name": "",
         "name": "Doom Bolt",
-        "description_template": null,
-        "description": null,
-        "description_format": null,
-        "description_values": null,
+        "description_template": "Hurls a bolt of dark magic at an enemy, inflicting $s1 Shadow damage, plus additional shadow damage to enemies in the target area.",
+        "description": "Hurls a bolt of dark magic at an enemy, inflicting Shadow damage, plus additional shadow damage to enemies in the target area.",
+        "description_format": "Hurls a bolt of dark magic at an enemy, inflicting %1$s Shadow damage, plus additional shadow damage to enemies in the target area.",
+        "description_values": [
+            {
+                "kind": "damage",
+                "text": "",
+                "spellId": 40876,
+                "coefficient": 31.00751686096,
+                "effectIndex": 0
+            }
+        ],
         "damage_multiplier": null,
         "schools_mask": 32,
         "cast_time": null,
@@ -28452,7 +28558,30 @@
         "hidden_on_map": false,
         "characteristic_id": null,
         "fetched_data_at": null,
-        "spell_effects": []
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 2,
+                "aura_type": 0,
+                "base_points": 31.00751686096,
+                "variance": 0.20000000298,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 64,
+                "aura_type": 0,
+                "base_points": 25,
+                "variance": 0.15000000596,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
     },
     {
         "id": 40877,
@@ -28463,10 +28592,33 @@
         "mechanic": null,
         "icon_name": "",
         "name": "Fireball",
-        "description_template": null,
-        "description": null,
-        "description_format": null,
-        "description_values": null,
+        "description_template": "Inflicts $s1 Fire damage to an enemy, plus $s2 additional damage every $t2 seconds for $d.",
+        "description": "Inflicts Fire damage to an enemy, plus additional damage every 1 seconds for 3 sec.",
+        "description_format": "Inflicts %1$s Fire damage to an enemy, plus %2$s additional damage every %3$s seconds for %4$s.",
+        "description_values": [
+            {
+                "kind": "damage",
+                "text": "",
+                "spellId": 40877,
+                "coefficient": 22.3254108429,
+                "effectIndex": 0
+            },
+            {
+                "kind": "damage",
+                "text": "",
+                "spellId": 40877,
+                "coefficient": 9.92240524292,
+                "effectIndex": 1
+            },
+            {
+                "kind": "period",
+                "text": "1"
+            },
+            {
+                "kind": "duration",
+                "text": "3 sec"
+            }
+        ],
         "damage_multiplier": null,
         "schools_mask": 4,
         "cast_time": null,
@@ -28475,7 +28627,30 @@
         "hidden_on_map": false,
         "characteristic_id": null,
         "fetched_data_at": null,
-        "spell_effects": []
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 2,
+                "aura_type": 0,
+                "base_points": 22.3254108429,
+                "variance": 0.30000001192,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 6,
+                "aura_type": 3,
+                "base_points": 9.92240524292,
+                "variance": 0,
+                "period_ms": 1000,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
     },
     {
         "id": 41115,
@@ -28486,10 +28661,19 @@
         "mechanic": null,
         "icon_name": "",
         "name": "Flame Shock",
-        "description_template": null,
-        "description": null,
-        "description_format": null,
-        "description_values": null,
+        "description_template": "Instantly burns an enemy, then inflicts additional Fire damage every $t2 sec. for $d.",
+        "description": "Instantly burns an enemy, then inflicts additional Fire damage every 3 sec. for 12 sec.",
+        "description_format": "Instantly burns an enemy, then inflicts additional Fire damage every %1$s sec. for %2$s.",
+        "description_values": [
+            {
+                "kind": "period",
+                "text": "3"
+            },
+            {
+                "kind": "duration",
+                "text": "12 sec"
+            }
+        ],
         "damage_multiplier": null,
         "schools_mask": 4,
         "cast_time": null,
@@ -28498,7 +28682,30 @@
         "hidden_on_map": false,
         "characteristic_id": null,
         "fetched_data_at": null,
-        "spell_effects": []
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 2,
+                "aura_type": 0,
+                "base_points": 43.41052246094,
+                "variance": 0.25,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 6,
+                "aura_type": 3,
+                "base_points": 7.44180393219,
+                "variance": 0.20000000298,
+                "period_ms": 3000,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
     },
     {
         "id": 41169,
@@ -28509,10 +28716,10 @@
         "mechanic": null,
         "icon_name": "",
         "name": "Shoot",
-        "description_template": null,
-        "description": null,
-        "description_format": null,
-        "description_values": null,
+        "description_template": "Shoots at an enemy, inflicting Physical damage.",
+        "description": "Shoots at an enemy, inflicting Physical damage.",
+        "description_format": "Shoots at an enemy, inflicting Physical damage.",
+        "description_values": [],
         "damage_multiplier": null,
         "schools_mask": 1,
         "cast_time": null,
@@ -28521,7 +28728,19 @@
         "hidden_on_map": false,
         "characteristic_id": null,
         "fetched_data_at": null,
-        "spell_effects": []
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 2,
+                "aura_type": 0,
+                "base_points": 74.41803741455,
+                "variance": 0.30000001192,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
     },
     {
         "id": 41184,
@@ -28532,10 +28751,10 @@
         "mechanic": null,
         "icon_name": "",
         "name": "Lightning Bolt",
-        "description_template": null,
-        "description": null,
-        "description_format": null,
-        "description_values": null,
+        "description_template": "Blasts an enemy with lightning, inflicting Nature damage.",
+        "description": "Blasts an enemy with lightning, inflicting Nature damage.",
+        "description_format": "Blasts an enemy with lightning, inflicting Nature damage.",
+        "description_values": [],
         "damage_multiplier": null,
         "schools_mask": 8,
         "cast_time": null,
@@ -28544,7 +28763,19 @@
         "hidden_on_map": false,
         "characteristic_id": null,
         "fetched_data_at": null,
-        "spell_effects": []
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 2,
+                "aura_type": 0,
+                "base_points": 21.09149932861,
+                "variance": 0.30000001192,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
     },
     {
         "id": 41188,
@@ -28555,10 +28786,10 @@
         "mechanic": null,
         "icon_name": "",
         "name": "Shoot",
-        "description_template": null,
-        "description": null,
-        "description_format": null,
-        "description_values": null,
+        "description_template": "Shoots at an enemy, inflicting Physical damage.",
+        "description": "Shoots at an enemy, inflicting Physical damage.",
+        "description_format": "Shoots at an enemy, inflicting Physical damage.",
+        "description_values": [],
         "damage_multiplier": null,
         "schools_mask": 1,
         "cast_time": null,
@@ -28567,7 +28798,19 @@
         "hidden_on_map": false,
         "characteristic_id": null,
         "fetched_data_at": null,
-        "spell_effects": []
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 2,
+                "aura_type": 0,
+                "base_points": 36.15685653687,
+                "variance": 0.30000001192,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
     },
     {
         "id": 41978,
@@ -28578,10 +28821,30 @@
         "mechanic": null,
         "icon_name": "",
         "name": "Debilitating Poison",
-        "description_template": null,
-        "description": null,
-        "description_format": null,
-        "description_values": null,
+        "description_template": "Poisons the target, increasing the time between attacks by $s1%, increasing their spell cast time by $s2% and dealing $s3 Nature damage every $t3 sec.",
+        "description": "Poisons the target, increasing the time between attacks by 50%, increasing their spell cast time by 50% and dealing Nature damage every 2 sec.",
+        "description_format": "Poisons the target, increasing the time between attacks by %1$s%%, increasing their spell cast time by %2$s%% and dealing %3$s Nature damage every %4$s sec.",
+        "description_values": [
+            {
+                "kind": "value",
+                "text": "50"
+            },
+            {
+                "kind": "value",
+                "text": "50"
+            },
+            {
+                "kind": "damage",
+                "text": "",
+                "spellId": 41978,
+                "coefficient": 22.3254108429,
+                "effectIndex": 2
+            },
+            {
+                "kind": "period",
+                "text": "2"
+            }
+        ],
         "damage_multiplier": null,
         "schools_mask": 8,
         "cast_time": null,
@@ -28590,7 +28853,41 @@
         "hidden_on_map": false,
         "characteristic_id": null,
         "fetched_data_at": null,
-        "spell_effects": []
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 192,
+                "base_points": -50,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 6,
+                "aura_type": 65,
+                "base_points": -50,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 2,
+                "effect_type": 6,
+                "aura_type": 3,
+                "base_points": 22.3254108429,
+                "variance": 0.15000000596,
+                "period_ms": 2000,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
     },
     {
         "id": 44427,
@@ -139842,12 +140139,12 @@
         "icon_name": "ability_siege_engineer_magnetic_crush",
         "name": "spells.283143",
         "description_template": "$@spelldesc283534",
-        "description": "Launches a powerful electromagnet that pulls all players towards it, inflicting Nature damage to all players every 1 sec for 9 sec. Players further from the device take less damage.",
+        "description": "Launches a powerful electromagnet that pulls all players towards it, inflicting 232,758 Nature damage to all players every 1 sec for 9 sec. Players further from the device take less damage.",
         "description_format": "Launches a powerful electromagnet that pulls all players towards it, inflicting %1$s Nature damage to all players every %2$s sec for %3$s.  Players further from the device take less damage.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "232,758",
                 "spellId": 283534,
                 "coefficient": 24,
                 "effectIndex": 0
@@ -139861,7 +140158,7 @@
                 "text": "9 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.5,
         "schools_mask": 1,
         "cast_time": 0,
         "duration": 9000,
@@ -210864,14 +211161,14 @@
         "icon_name": "inv_summerfest_firespirit",
         "name": "spells.373693",
         "description_template": "The caster inflicts $s1 Fire damage every $t1 sec for $d.\r\n\r\nThe affliction explodes upon expiration, inflicting $1305923s1 Fire damage to players within $1305923A2 yds and knocking them into the air.",
-        "description": "The caster inflicts 30,507 Fire damage every 1 sec for 6 sec.\n\nThe affliction explodes upon expiration, inflicting 40,676 Fire damage to players within 6 yds and knocking them into the air.",
+        "description": "The caster inflicts 27,456 Fire damage every 1 sec for 6 sec.\n\nThe affliction explodes upon expiration, inflicting 36,608 Fire damage to players within 6 yds and knocking them into the air.",
         "description_format": "The caster inflicts %1$s Fire damage every %2$s sec for %3$s.\n\nThe affliction explodes upon expiration, inflicting %4$s Fire damage to players within %5$s yds and knocking them into the air.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "30,507",
+                "text": "27,456",
                 "spellId": 373693,
-                "coefficient": 6,
+                "coefficient": 5.40000009537,
                 "effectIndex": 0
             },
             {
@@ -210884,9 +211181,9 @@
             },
             {
                 "kind": "damage",
-                "text": "40,676",
+                "text": "36,608",
                 "spellId": 1305923,
-                "coefficient": 8,
+                "coefficient": 7.19999980927,
                 "effectIndex": 0
             },
             {
@@ -210907,7 +211204,7 @@
                 "effect_index": 0,
                 "effect_type": 6,
                 "aura_type": 3,
-                "base_points": 6,
+                "base_points": 5.40000009537,
                 "variance": 0,
                 "period_ms": 1000,
                 "chain_targets": 0,
@@ -337163,7 +337460,7 @@
                 "effect_index": 1,
                 "effect_type": 28,
                 "aura_type": 0,
-                "base_points": 3,
+                "base_points": 4,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -375889,8 +376186,8 @@
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
-                "radius": 10,
-                "max_radius": 10
+                "radius": 7,
+                "max_radius": 7
             }
         ]
     },
@@ -376398,14 +376695,14 @@
         "icon_name": "spell_nature_corrosivebreath",
         "name": "spells.1250937",
         "description_template": "The Potatoad Matriarch belches corrosive toxins, inflicting $s1 Nature damage to all players. The poisonous fluid inflicts an additional $s2 Nature damage every $t2 sec for $d.",
-        "description": "The Potatoad Matriarch belches corrosive toxins, inflicting 71,183 Nature damage to all players. The poisonous fluid inflicts an additional 30,507 Nature damage every 1.5 sec for 9 sec.",
+        "description": "The Potatoad Matriarch belches corrosive toxins, inflicting 35,592 Nature damage to all players. The poisonous fluid inflicts an additional 30,507 Nature damage every 1.5 sec for 9 sec.",
         "description_format": "The Potatoad Matriarch belches corrosive toxins, inflicting %1$s Nature damage to all players. The poisonous fluid inflicts an additional %2$s Nature damage every %3$s sec for %4$s.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "71,183",
+                "text": "35,592",
                 "spellId": 1250937,
-                "coefficient": 14,
+                "coefficient": 7,
                 "effectIndex": 0
             },
             {
@@ -376437,7 +376734,7 @@
                 "effect_index": 0,
                 "effect_type": 2,
                 "aura_type": 0,
-                "base_points": 14,
+                "base_points": 7,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -390453,7 +390750,7 @@
                 "effect_index": 0,
                 "effect_type": 3,
                 "aura_type": 0,
-                "base_points": 5170,
+                "base_points": 6204,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -409329,14 +409626,14 @@
         "icon_name": "ability_poisonsting",
         "name": "spells.1294567",
         "description_template": "The Twinfang spits numbing venom at players, inflicting $1307269s1 Nature damage on impact and an additional $1294569s2 Nature damage every $1294569t2 sec for $1294569d.\r\n\r\nAffected players become paralyzed over time, reducing their movement speed by $1294569s1% with each tick. ",
-        "description": "The Twinfang spits numbing venom at players, inflicting 135,775 Nature damage on impact and an additional 48,491 Nature damage every 1 sec for 20 sec.\n\nAffected players become paralyzed over time, reducing their movement speed by 10% with each tick.",
+        "description": "The Twinfang spits numbing venom at players, inflicting 67,888 Nature damage on impact and an additional 48,491 Nature damage every 1 sec for 20 sec.\n\nAffected players become paralyzed over time, reducing their movement speed by 10% with each tick.",
         "description_format": "The Twinfang spits numbing venom at players, inflicting %1$s Nature damage on impact and an additional %2$s Nature damage every %3$s sec for %4$s.\n\nAffected players become paralyzed over time, reducing their movement speed by %5$s%% with each tick.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "135,775",
+                "text": "67,888",
                 "spellId": 1307269,
-                "coefficient": 14,
+                "coefficient": 7,
                 "effectIndex": 0
             },
             {
@@ -409424,14 +409721,14 @@
         "icon_name": "ability_poisonsting",
         "name": "spells.1294568",
         "description_template": "$@spelldesc1294567",
-        "description": "The Twinfang spits numbing venom at players, inflicting 135,775 Nature damage on impact and an additional 48,491 Nature damage every 1 sec for 20 sec.\n\nAffected players become paralyzed over time, reducing their movement speed by 10% with each tick.",
+        "description": "The Twinfang spits numbing venom at players, inflicting 67,888 Nature damage on impact and an additional 48,491 Nature damage every 1 sec for 20 sec.\n\nAffected players become paralyzed over time, reducing their movement speed by 10% with each tick.",
         "description_format": "The Twinfang spits numbing venom at players, inflicting %1$s Nature damage on impact and an additional %2$s Nature damage every %3$s sec for %4$s.\n\nAffected players become paralyzed over time, reducing their movement speed by %5$s%% with each tick.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "135,775",
+                "text": "67,888",
                 "spellId": 1307269,
-                "coefficient": 14,
+                "coefficient": 7,
                 "effectIndex": 0
             },
             {
@@ -409497,14 +409794,14 @@
         "icon_name": "ability_poisonsting",
         "name": "spells.1294569",
         "description_template": "$@spelldesc1294567",
-        "description": "The Twinfang spits numbing venom at players, inflicting 135,775 Nature damage on impact and an additional 48,491 Nature damage every 1 sec for 20 sec.\n\nAffected players become paralyzed over time, reducing their movement speed by 10% with each tick.",
+        "description": "The Twinfang spits numbing venom at players, inflicting 67,888 Nature damage on impact and an additional 48,491 Nature damage every 1 sec for 20 sec.\n\nAffected players become paralyzed over time, reducing their movement speed by 10% with each tick.",
         "description_format": "The Twinfang spits numbing venom at players, inflicting %1$s Nature damage on impact and an additional %2$s Nature damage every %3$s sec for %4$s.\n\nAffected players become paralyzed over time, reducing their movement speed by %5$s%% with each tick.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "135,775",
+                "text": "67,888",
                 "spellId": 1307269,
-                "coefficient": 14,
+                "coefficient": 7,
                 "effectIndex": 0
             },
             {
@@ -409570,14 +409867,14 @@
         "icon_name": "ability_poisonsting",
         "name": "spells.1294570",
         "description_template": "$@spelldesc1294567",
-        "description": "The Twinfang spits numbing venom at players, inflicting 135,775 Nature damage on impact and an additional 48,491 Nature damage every 1 sec for 20 sec.\n\nAffected players become paralyzed over time, reducing their movement speed by 10% with each tick.",
+        "description": "The Twinfang spits numbing venom at players, inflicting 67,888 Nature damage on impact and an additional 48,491 Nature damage every 1 sec for 20 sec.\n\nAffected players become paralyzed over time, reducing their movement speed by 10% with each tick.",
         "description_format": "The Twinfang spits numbing venom at players, inflicting %1$s Nature damage on impact and an additional %2$s Nature damage every %3$s sec for %4$s.\n\nAffected players become paralyzed over time, reducing their movement speed by %5$s%% with each tick.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "135,775",
+                "text": "67,888",
                 "spellId": 1307269,
-                "coefficient": 14,
+                "coefficient": 7,
                 "effectIndex": 0
             },
             {
@@ -412184,7 +412481,7 @@
         "icon_name": "spell_shadow_deathpact",
         "name": "spells.1297684",
         "description_template": "Caster sacrifices $s3% of its max health and shields itself for $1297686s2% of its max health",
-        "description": "Caster sacrifices 10% of its max health and shields itself for 35% of its max health",
+        "description": "Caster sacrifices 10% of its max health and shields itself for 30% of its max health",
         "description_format": "Caster sacrifices %1$s%% of its max health and shields itself for %2$s%% of its max health",
         "description_values": [
             {
@@ -412193,7 +412490,7 @@
             },
             {
                 "kind": "value",
-                "text": "35"
+                "text": "30"
             }
         ],
         "damage_multiplier": null,
@@ -412250,7 +412547,7 @@
         "icon_name": "spell_shadow_deathpact",
         "name": "spells.1297686",
         "description_template": "$@spelldesc1297684",
-        "description": "Caster sacrifices 10% of its max health and shields itself for 35% of its max health",
+        "description": "Caster sacrifices 10% of its max health and shields itself for 30% of its max health",
         "description_format": "Caster sacrifices %1$s%% of its max health and shields itself for %2$s%% of its max health",
         "description_values": [
             {
@@ -412259,7 +412556,7 @@
             },
             {
                 "kind": "value",
-                "text": "35"
+                "text": "30"
             }
         ],
         "damage_multiplier": null,
@@ -412275,7 +412572,7 @@
                 "effect_index": 0,
                 "effect_type": 6,
                 "aura_type": 69,
-                "base_points": 35,
+                "base_points": 30,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -412286,7 +412583,7 @@
                 "effect_index": 1,
                 "effect_type": 6,
                 "aura_type": 4,
-                "base_points": 35,
+                "base_points": 30,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -413689,7 +413986,7 @@
                 "effect_index": 0,
                 "effect_type": 31,
                 "aura_type": 0,
-                "base_points": 100,
+                "base_points": 66,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -416856,14 +417153,14 @@
         "icon_name": "inv_knife_1h_ulatekfang_d_01_poison",
         "name": "spells.1300888",
         "description_template": "The Fang of Ula'tek pulses with strength, inflicting $1300892s1 Nature damage to all players every $1300876t1 sec. This effect stacks.",
-        "description": "The Fang of Ula'tek pulses with strength, inflicting 29,775 Nature damage to all players every 1 sec. This effect stacks.",
+        "description": "The Fang of Ula'tek pulses with strength, inflicting 23,820 Nature damage to all players every 1 sec. This effect stacks.",
         "description_format": "The Fang of Ula'tek pulses with strength, inflicting %1$s Nature damage to all players every %2$s sec. This effect stacks.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "29,775",
+                "text": "23,820",
                 "spellId": 1300892,
-                "coefficient": 12,
+                "coefficient": 9.60000038147,
                 "effectIndex": 0
             },
             {
@@ -416903,14 +417200,14 @@
         "icon_name": "inv_knife_1h_ulatekfang_d_01_poison",
         "name": "spells.1300892",
         "description_template": "$@spelldesc1300888",
-        "description": "The Fang of Ula'tek pulses with strength, inflicting 29,775 Nature damage to all players every 1 sec. This effect stacks.",
+        "description": "The Fang of Ula'tek pulses with strength, inflicting 23,820 Nature damage to all players every 1 sec. This effect stacks.",
         "description_format": "The Fang of Ula'tek pulses with strength, inflicting %1$s Nature damage to all players every %2$s sec. This effect stacks.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "29,775",
+                "text": "23,820",
                 "spellId": 1300892,
-                "coefficient": 12,
+                "coefficient": 9.60000038147,
                 "effectIndex": 0
             },
             {
@@ -416931,7 +417228,7 @@
                 "effect_index": 0,
                 "effect_type": 2,
                 "aura_type": 0,
-                "base_points": 12,
+                "base_points": 9.60000038147,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -418430,17 +418727,6 @@
                 "chain_targets": 0,
                 "radius": null,
                 "max_radius": null
-            },
-            {
-                "effect_index": 1,
-                "effect_type": 64,
-                "aura_type": 0,
-                "base_points": 0,
-                "variance": 0,
-                "period_ms": 0,
-                "chain_targets": 0,
-                "radius": null,
-                "max_radius": null
             }
         ]
     },
@@ -419122,12 +419408,12 @@
         "icon_name": "inv_axe_2h_earthendungeon_c_01",
         "name": "spells.1305225",
         "description_template": "The caster knocks its current target off balance, inflicting Physical damage and increasing their damage taken by $s1% for $d. This effect stacks.",
-        "description": "The caster knocks its current target off balance, inflicting Physical damage and increasing their damage taken by 35% for 8 sec. This effect stacks.",
+        "description": "The caster knocks its current target off balance, inflicting Physical damage and increasing their damage taken by 25% for 8 sec. This effect stacks.",
         "description_format": "The caster knocks its current target off balance, inflicting Physical damage and increasing their damage taken by %1$s%% for %2$s. This effect stacks.",
         "description_values": [
             {
                 "kind": "value",
-                "text": "35"
+                "text": "25"
             },
             {
                 "kind": "duration",
@@ -419147,7 +419433,7 @@
                 "effect_index": 0,
                 "effect_type": 6,
                 "aura_type": 87,
-                "base_points": 35,
+                "base_points": 25,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -419880,7 +420166,7 @@
                 "effect_index": 0,
                 "effect_type": 6,
                 "aura_type": 138,
-                "base_points": 20,
+                "base_points": 10,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -419910,12 +420196,12 @@
         "icon_name": "ability_xavius_tormentingswipe",
         "name": "spells.1306333",
         "description_template": "Melee swings increase attack speed by $1306308s1% for $1306308d. This effect stacks.",
-        "description": "Melee swings increase attack speed by 20% for 2 sec. This effect stacks.",
+        "description": "Melee swings increase attack speed by 10% for 2 sec. This effect stacks.",
         "description_format": "Melee swings increase attack speed by %1$s%% for %2$s. This effect stacks.",
         "description_values": [
             {
                 "kind": "value",
-                "text": "20"
+                "text": "10"
             },
             {
                 "kind": "duration",
@@ -419954,12 +420240,12 @@
         "icon_name": "ability_xavius_tormentingswipe",
         "name": "spells.1306338",
         "description_template": "$@spelldesc1306333",
-        "description": "Melee swings increase attack speed by 20% for 2 sec. This effect stacks.",
+        "description": "Melee swings increase attack speed by 10% for 2 sec. This effect stacks.",
         "description_format": "Melee swings increase attack speed by %1$s%% for %2$s. This effect stacks.",
         "description_values": [
             {
                 "kind": "value",
-                "text": "20"
+                "text": "10"
             },
             {
                 "kind": "duration",
@@ -420236,7 +420522,7 @@
         "icon_name": "ability_warrior_bloodfrenzy",
         "name": "spells.1306517",
         "description_template": "The Ritual Chieftain invokes spirits of the altar to gut players, inflicting $1306641s1 Physical damage and causing the next $1306550s1 healing to be absorbed.",
-        "description": "The Ritual Chieftain invokes spirits of the altar to gut players, inflicting Physical damage and causing the next 36 healing to be absorbed.",
+        "description": "The Ritual Chieftain invokes spirits of the altar to gut players, inflicting Physical damage and causing the next 32.4 healing to be absorbed.",
         "description_format": "The Ritual Chieftain invokes spirits of the altar to gut players, inflicting %1$s Physical damage and causing the next %2$s healing to be absorbed.",
         "description_values": [
             {
@@ -420248,7 +420534,7 @@
             },
             {
                 "kind": "value",
-                "text": "36"
+                "text": "32.4"
             }
         ],
         "damage_multiplier": null,
@@ -420316,7 +420602,7 @@
         "icon_name": "ability_warrior_bloodfrenzy",
         "name": "spells.1306550",
         "description_template": "$@spelldesc1306517",
-        "description": "The Ritual Chieftain invokes spirits of the altar to gut players, inflicting Physical damage and causing the next 36 healing to be absorbed.",
+        "description": "The Ritual Chieftain invokes spirits of the altar to gut players, inflicting Physical damage and causing the next 32.4 healing to be absorbed.",
         "description_format": "The Ritual Chieftain invokes spirits of the altar to gut players, inflicting %1$s Physical damage and causing the next %2$s healing to be absorbed.",
         "description_values": [
             {
@@ -420328,7 +420614,7 @@
             },
             {
                 "kind": "value",
-                "text": "36"
+                "text": "32.4"
             }
         ],
         "damage_multiplier": null,
@@ -420344,7 +420630,7 @@
                 "effect_index": 0,
                 "effect_type": 6,
                 "aura_type": 301,
-                "base_points": 36,
+                "base_points": 32.40000152588,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -420363,7 +420649,7 @@
         "icon_name": "ability_warrior_bloodfrenzy",
         "name": "spells.1306641",
         "description_template": "$@spelldesc1306517",
-        "description": "The Ritual Chieftain invokes spirits of the altar to gut players, inflicting Physical damage and causing the next 36 healing to be absorbed.",
+        "description": "The Ritual Chieftain invokes spirits of the altar to gut players, inflicting Physical damage and causing the next 32.4 healing to be absorbed.",
         "description_format": "The Ritual Chieftain invokes spirits of the altar to gut players, inflicting %1$s Physical damage and causing the next %2$s healing to be absorbed.",
         "description_values": [
             {
@@ -420375,7 +420661,7 @@
             },
             {
                 "kind": "value",
-                "text": "36"
+                "text": "32.4"
             }
         ],
         "damage_multiplier": null,
@@ -420410,7 +420696,7 @@
         "icon_name": "ability_warrior_bloodfrenzy",
         "name": "spells.1306657",
         "description_template": "$@spelldesc1306517",
-        "description": "The Ritual Chieftain invokes spirits of the altar to gut players, inflicting Physical damage and causing the next 36 healing to be absorbed.",
+        "description": "The Ritual Chieftain invokes spirits of the altar to gut players, inflicting Physical damage and causing the next 32.4 healing to be absorbed.",
         "description_format": "The Ritual Chieftain invokes spirits of the altar to gut players, inflicting %1$s Physical damage and causing the next %2$s healing to be absorbed.",
         "description_values": [
             {
@@ -420422,7 +420708,7 @@
             },
             {
                 "kind": "value",
-                "text": "36"
+                "text": "32.4"
             }
         ],
         "damage_multiplier": null,
@@ -420941,14 +421227,14 @@
         "icon_name": "ability_shaman_stoneskintotem",
         "name": "spells.1306893",
         "description_template": "The totem becomes unstable, inflicting $1306890s1 Nature damage every $t1 sec while the chieftain remains in combat.",
-        "description": "The totem becomes unstable, inflicting 32,295 Nature damage every 2 sec while the chieftain remains in combat.",
+        "description": "The totem becomes unstable, inflicting 29,095 Nature damage every 2 sec while the chieftain remains in combat.",
         "description_format": "The totem becomes unstable, inflicting %1$s Nature damage every %2$s sec while the chieftain remains in combat.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "32,295",
+                "text": "29,095",
                 "spellId": 1306890,
-                "coefficient": 3.32999992371,
+                "coefficient": 3,
                 "effectIndex": 0
             },
             {
@@ -421170,14 +421456,14 @@
         "icon_name": "ability_poisonsting",
         "name": "spells.1307269",
         "description_template": "$@spelldesc1294567",
-        "description": "The Twinfang spits numbing venom at players, inflicting 135,775 Nature damage on impact and an additional 48,491 Nature damage every 1 sec for 20 sec.\n\nAffected players become paralyzed over time, reducing their movement speed by 10% with each tick.",
+        "description": "The Twinfang spits numbing venom at players, inflicting 67,888 Nature damage on impact and an additional 48,491 Nature damage every 1 sec for 20 sec.\n\nAffected players become paralyzed over time, reducing their movement speed by 10% with each tick.",
         "description_format": "The Twinfang spits numbing venom at players, inflicting %1$s Nature damage on impact and an additional %2$s Nature damage every %3$s sec for %4$s.\n\nAffected players become paralyzed over time, reducing their movement speed by %5$s%% with each tick.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "135,775",
+                "text": "67,888",
                 "spellId": 1307269,
-                "coefficient": 14,
+                "coefficient": 7,
                 "effectIndex": 0
             },
             {
@@ -421213,7 +421499,7 @@
                 "effect_index": 0,
                 "effect_type": 2,
                 "aura_type": 0,
-                "base_points": 14,
+                "base_points": 7,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -421816,12 +422102,12 @@
         "icon_name": "ability_racial_cannibalize",
         "name": "spells.1307765",
         "description_template": "Rav'i runs to feast on the nearest Carrion Pile, gaining a shield that absorbs all damage. Until her shield is removed, Rav'i applies $@spellname1307700 to all enemies every $1307768t1 sec.\r\n$? DIFF23 | DIFF8 [\r\nRav'i is a $@spellname1306345, and throws chunks of rotting meat across the pit while in a $@spellname1307765.\r\n][]",
-        "description": "Rav'i runs to feast on the nearest Carrion Pile, gaining a shield that absorbs all damage. Until her shield is removed, Rav'i applies Carrion Burst to all enemies every 1.5 sec.",
+        "description": "Rav'i runs to feast on the nearest Carrion Pile, gaining a shield that absorbs all damage. Until her shield is removed, Rav'i applies Carrion Burst to all enemies every 3 sec.",
         "description_format": "Rav'i runs to feast on the nearest Carrion Pile, gaining a shield that absorbs all damage. Until her shield is removed, Rav'i applies Carrion Burst to all enemies every %1$s sec.",
         "description_values": [
             {
                 "kind": "period",
-                "text": "1.5"
+                "text": "3"
             }
         ],
         "damage_multiplier": null,
@@ -421885,7 +422171,7 @@
                 "aura_type": 226,
                 "base_points": 0,
                 "variance": 0,
-                "period_ms": 1500,
+                "period_ms": 3000,
                 "chain_targets": 0,
                 "radius": null,
                 "max_radius": null
