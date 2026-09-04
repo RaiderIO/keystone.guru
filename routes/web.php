@@ -30,6 +30,7 @@ use App\Http\Controllers\AdminTools\AdminToolsMessageBannerController;
 use App\Http\Controllers\AdminTools\AdminToolsNpcController;
 use App\Http\Controllers\AdminTools\AdminToolsPatreonGrantsController;
 use App\Http\Controllers\AdminTools\AdminToolsSpellsController;
+use App\Http\Controllers\AdminTools\AdminToolsTelemetryController;
 use App\Http\Controllers\AdminTools\AdminToolsThumbnailsController;
 use App\Http\Controllers\AdminTools\AdminToolsWagoGgController;
 use App\Http\Controllers\AdminToolsController;
@@ -593,6 +594,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('cache/drop', new AdminToolsController()->dropcache(...))->name('admin.tools.cache.drop');
                 Route::get('datadump/exportdungeondata', new AdminToolsDataDumpController()->exportdungeondata(...))->name('admin.tools.datadump.exportdungeondata');
                 Route::get('readonly/toggle', new AdminToolsController()->toggleReadOnlyMode(...))->name('admin.tools.readonly.toggle');
+
+                // Telemetry
+                Route::get('telemetry', new AdminToolsTelemetryController()->index(...))->name('admin.tools.telemetry.view');
+                Route::get('telemetry/data', new AdminToolsTelemetryController()->data(...))->name('admin.tools.telemetry.data');
 
                 // Banned IP addresses
                 Route::get('patreon/grants', new AdminToolsPatreonGrantsController()->index(...))->name('admin.tools.patreon.grants.view');

@@ -324,6 +324,7 @@ return [
                 'view_spells'                => 'View spells',
                 'view_users'                 => 'View users',
                 'view_patreon_manual_grants' => 'View manual Patreon grants',
+                'view_telemetry'             => 'View telemetry',
                 'view_dungeonroutes'         => 'View dungeonroutes',
                 'view_user_reports'          => 'View user reports',
                 'my_routes'                  => 'My routes',

@@ -290,6 +290,10 @@ Breadcrumbs::for('admin.tools.combatlog.route.coverage', static function (Genera
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.combat_log_route_coverage'), route('admin.tools.combatlog.route.coverage.view'));
 });
+Breadcrumbs::for('admin.tools.telemetry', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.telemetry'), route('admin.tools.telemetry.view'));
+});
 Breadcrumbs::for('admin.tools.dungeonroute.view', static function (Generator $trail) {
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.dungeonroute_view'), route('admin.tools.dungeonroute.view'));

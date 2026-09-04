@@ -88,6 +88,7 @@ return [
                 'combat_log_criteria'                         => 'NPC Compendium parsing criteria',
                 'combat_log_run_data'                         => 'Prune combat log run data',
                 'combat_log_route_coverage'                   => 'ARC enemy forces coverage',
+                'telemetry'                                   => 'Telemetry',
                 'dungeonroute_view'                           => 'View dungeon route',
                 'dungeonroute_view_contents'                  => 'Route contents',
                 'dungeonroute_mapping_version_usage'          => 'Mapping version usage',
