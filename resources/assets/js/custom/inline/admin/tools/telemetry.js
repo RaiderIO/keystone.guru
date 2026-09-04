@@ -27,6 +27,8 @@ class AdminToolsTelemetry extends InlineCode {
     ];
 
     activate() {
+        super.activate();
+
         let self = this;
 
         $(this.options.chartSelector).each(function () {
@@ -41,16 +43,24 @@ class AdminToolsTelemetry extends InlineCode {
     _loadChart($canvas) {
         let self = this;
 
+        let data = {
+            measurement: $canvas.data('measurement'),
+            range: this.options.range
+        };
+
+        // A gauge chart holds every name of its measurement, so it asks for the measurement as a whole. The key
+        // is left out rather than sent empty - jQuery serializes null to `name=`, which only survives because
+        // ConvertEmptyStringsToNull happens to be in the middleware stack.
+        let name = $canvas.data('name');
+        if (name) {
+            data.name = name;
+        }
+
         $.ajax({
             type: 'GET',
             url: this.options.dataUrl,
             dataType: 'json',
-            data: {
-                measurement: $canvas.data('measurement'),
-                // A gauge chart holds every name of its measurement, so it asks for the measurement as a whole
-                name: $canvas.data('name') || null,
-                range: this.options.range
-            },
+            data: data,
             success: function (response) {
                 if (response.labels.length === 0) {
                     self._replaceWithMessage($canvas, self.options.noDataText);
@@ -63,6 +73,20 @@ class AdminToolsTelemetry extends InlineCode {
                 self._replaceWithMessage($canvas, self.options.loadFailedText);
             }
         });
+    }
+
+    /**
+     * Replaces a chart that has nothing to draw with the reason why, so an empty or failing card explains itself
+     * instead of leaving a blank rectangle behind.
+     *
+     * @param {jQuery} $canvas
+     * @param {string} message
+     * @private
+     */
+    _replaceWithMessage($canvas, message) {
+        $canvas.parent().html($('<div/>')
+            .addClass('text-muted text-center h-100 d-flex align-items-center justify-content-center')
+            .text(message));
     }
 
     /**

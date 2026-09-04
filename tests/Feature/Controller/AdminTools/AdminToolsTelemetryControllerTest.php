@@ -151,6 +151,27 @@ final class AdminToolsTelemetryControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function data_givenEmptyName_treatsItAsEveryName(): void
+    {
+        // Arrange - a gauge card sends `name=` rather than omitting the key, which only reaches the controller
+        // as null because ConvertEmptyStringsToNull is in the middleware stack
+        $measurement = $this->createMeasurement();
+        $this->recordDataPoint($measurement, 'first', 10.0);
+        $this->recordDataPoint($measurement, 'second', 20.0);
+
+        // Act
+        $response = $this->getJson(route('admin.tools.telemetry.data', [
+            'measurement' => $measurement,
+            'name'        => '',
+            'range'       => '24h',
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $this->assertSame(['first', 'second'], array_column($response->json('datasets'), 'label'));
+    }
+
+    #[Test]
     public function data_givenNameFilter_returnsOnlyThatName(): void
     {
         // Arrange
