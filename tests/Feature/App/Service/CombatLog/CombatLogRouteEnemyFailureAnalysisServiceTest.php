@@ -14,6 +14,7 @@ use App\Service\CombatLog\Dtos\EnemyFailureAnalysis\EnemyFailureCluster;
 use App\Service\CombatLog\Dtos\EnemyFailureAnalysis\EnemyFailureVerdict;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -231,15 +232,21 @@ final class CombatLogRouteEnemyFailureAnalysisServiceTest extends PublicTestCase
         $this->assertSame($this->floor->id, $clusters[0]->hull[0]->getFloor()?->id);
     }
 
+    /**
+     * Both shapes of "not worth any enemy forces" are excluded: an explicit 0 row, and no row at all while some other
+     * npc in the mapping version does have enemy forces (#4475). Only the latter npc's failures are worth triaging.
+     */
     #[Test]
-    public function analyze_givenZeroEnemyForcesNpc_excludesIt(): void
+    #[DataProvider('enemyForcesProvider')]
+    public function analyze_givenNpcNotWorthAnyEnemyForces_excludesIt(?int $enemyForces): void
     {
-        // Arrange
-        $this->createdEnemyForcesIds[] = NpcEnemyForces::query()->create([
-            'mapping_version_id' => $this->mappingVersion->id,
-            'npc_id'             => self::NPC_ID,
-            'enemy_forces'       => 0,
-        ])->id;
+        // Arrange - another npc carries enemy forces, so the mapping version counts as tuned
+        $this->createEnemyForces(self::NPC_ID + 1, 10);
+
+        if ($enemyForces !== null) {
+            $this->createEnemyForces(self::NPC_ID, $enemyForces);
+        }
+
         $this->createFailuresAround($this->floor, 1000, 1000, 6);
 
         // Act
@@ -247,6 +254,59 @@ final class CombatLogRouteEnemyFailureAnalysisServiceTest extends PublicTestCase
 
         // Assert
         $this->assertCount(0, $clusters);
+    }
+
+    /**
+     * @return array<string, array{0: int|null}>
+     */
+    public static function enemyForcesProvider(): array
+    {
+        return [
+            'explicit 0 enemy forces' => [0],
+            'no enemy forces row'     => [null],
+        ];
+    }
+
+    /**
+     * A mapping version nobody has tuned enemy forces on yet must not have every failure filtered away - there is
+     * nothing to tell noise from a real gap with, so everything stays visible.
+     */
+    #[Test]
+    public function analyze_givenMappingVersionWithoutAnyEnemyForces_keepsEveryFailure(): void
+    {
+        // Arrange
+        $this->createFailuresAround($this->floor, 1000, 1000, 6);
+
+        // Act
+        $clusters = $this->analyze();
+
+        // Assert
+        $this->assertCount(1, $clusters);
+        $this->assertSame(6, $clusters[0]->count);
+    }
+
+    #[Test]
+    public function analyze_givenNpcWorthEnemyForces_keepsIt(): void
+    {
+        // Arrange
+        $this->createEnemyForces(self::NPC_ID, 10);
+        $this->createFailuresAround($this->floor, 1000, 1000, 6);
+
+        // Act
+        $clusters = $this->analyze();
+
+        // Assert
+        $this->assertCount(1, $clusters);
+        $this->assertSame(6, $clusters[0]->count);
+    }
+
+    private function createEnemyForces(int $npcId, int $enemyForces): void
+    {
+        $this->createdEnemyForcesIds[] = NpcEnemyForces::query()->create([
+            'mapping_version_id' => $this->mappingVersion->id,
+            'npc_id'             => $npcId,
+            'enemy_forces'       => $enemyForces,
+        ])->id;
     }
 
     #[Test]

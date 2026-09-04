@@ -7,6 +7,7 @@ use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Laratrust\Role;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\NpcEnemyForces;
 use App\Models\User;
 use App\Service\CombatLog\Dtos\CombatLogRouteEnemyFailureHeatmapResult;
 use PHPUnit\Framework\Attributes\Group;
@@ -97,10 +98,18 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
     #[Test]
     public function getEnemyFailureClusters_givenValidDungeon_returnsClusterResponseShape(): void
     {
-        $created = [];
+        $created          = [];
+        $npcEnemyForcesId = null;
 
         try {
-            // Arrange — a handful of failures for one npc in one spot
+            // Arrange — a handful of failures for one npc in one spot. Only npcs worth enemy forces are analysed
+            // at all (#4475), so the npc gets some.
+            $npcEnemyForcesId = NpcEnemyForces::query()->create([
+                'mapping_version_id' => $this->mappingVersion->id,
+                'npc_id'             => 99905,
+                'enemy_forces'       => 10,
+            ])->id;
+
             $floor = $this->floor;
             for ($i = 0; $i < 6; $i++) {
                 $created[] = CombatLogRouteEnemyFailure::create([
@@ -136,6 +145,11 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
             $this->assertSame('npc_not_mapped', $response->json('data.0.verdict'));
         } finally {
             CombatLogRouteEnemyFailure::whereIn('id', $created)->delete();
+
+            if ($npcEnemyForcesId !== null) {
+                NpcEnemyForces::query()->whereKey($npcEnemyForcesId)->delete();
+                new NpcEnemyForces()->flushCache();
+            }
         }
     }
 

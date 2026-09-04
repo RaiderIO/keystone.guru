@@ -132,10 +132,10 @@ readonly class CombatLogRouteEnemyFailureAnalysisService implements CombatLogRou
             $query->whereIn('npc_id', $npcIds);
         }
 
-        // 0-enemy-forces npcs are noise everywhere the failures are read - see CombatLogRouteEnemyFailureService
-        $zeroEnemyForcesNpcIds = $this->combatLogRouteEnemyFailureService->getZeroEnemyForcesNpcIds($mappingVersion);
-        if (!empty($zeroEnemyForcesNpcIds)) {
-            $query->whereNotIn('npc_id', $zeroEnemyForcesNpcIds);
+        // Npcs not worth any enemy forces are noise everywhere the failures are read - see CombatLogRouteEnemyFailureService
+        $nonZeroEnemyForcesNpcIds = $this->combatLogRouteEnemyFailureService->getNonZeroEnemyForcesNpcIds($mappingVersion);
+        if (!empty($nonZeroEnemyForcesNpcIds)) {
+            $query->whereIn('npc_id', $nonZeroEnemyForcesNpcIds);
         }
 
         return $query;

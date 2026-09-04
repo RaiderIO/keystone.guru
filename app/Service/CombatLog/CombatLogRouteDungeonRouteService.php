@@ -26,7 +26,6 @@ use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
-use App\Models\Npc\NpcEnemyForces;
 use App\Models\Polyline;
 use App\Models\Season;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
@@ -125,6 +124,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         protected readonly FloorRepositorySwooleInterface                    $floorRepositorySwoole,
         protected readonly DungeonRepositorySwooleInterface                  $dungeonRepositorySwoole,
         protected readonly DungeonRouteUpgradeDraftServiceInterface          $dungeonRouteUpgradeDraftService,
+        protected readonly CombatLogRouteEnemyFailureServiceInterface        $combatLogRouteEnemyFailureService,
         protected readonly CombatLogRouteDungeonRouteServiceLoggingInterface $log,
     ) {
     }
@@ -677,7 +677,11 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         /** @var Floor|null $previousFloor */
         $previousFloor = $dungeonRoute->dungeon->floors()->firstWhere('default', 1);
 
-        $zeroEnemyForcesNpcIds = $this->getZeroEnemyForcesNpcIds($mappingVersion, $combatLogRoute);
+        // An empty set means nothing is tuned in this mapping version yet - then every failure is worth recording
+        $nonZeroEnemyForcesNpcIds = array_fill_keys(
+            $this->combatLogRouteEnemyFailureService->getNonZeroEnemyForcesNpcIds($mappingVersion),
+            true,
+        );
 
         foreach ($combatLogRoute->npcs as $combatLogRouteNpc) {
             $currentFloor = $combatLogRouteNpc->getResolvedEnemy()?->floor ?? $previousFloor; // @phpstan-ignore nullsafe.neverNull
@@ -691,10 +695,14 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             $previousFloor = $currentFloor;
 
             if ($combatLogRouteNpc->getResolvedEnemy() === null) {
-                // An npc worth 0 enemy forces in this mapping version never affects the route that gets
-                // built, so failing to place it is noise rather than a mapping problem worth triaging.
-                if (isset($zeroEnemyForcesNpcIds[$combatLogRouteNpc->npcId])) {
-                    $this->log->saveCombatLogRouteEnemyFailuresSkippingZeroEnemyForcesNpc($dungeonRoute->id, $combatLogRouteNpc->npcId);
+                // An npc not worth any enemy forces in this mapping version never affects the route that gets built,
+                // so failing to place it is noise rather than a mapping problem worth triaging. That covers npcs the
+                // mapping does not know at all - temporary adds spawned mid-fight, which are the bulk of the volume.
+                // A failure without an npc id is kept - nothing attributes it to an npc, so nothing marks it as noise.
+                if ($combatLogRouteNpc->npcId !== null &&
+                    $nonZeroEnemyForcesNpcIds !== [] &&
+                    !isset($nonZeroEnemyForcesNpcIds[$combatLogRouteNpc->npcId])) {
+                    $this->log->saveCombatLogRouteEnemyFailuresSkippingNpcWithoutEnemyForces($dungeonRoute->id, $combatLogRouteNpc->npcId);
 
                     continue;
                 }
@@ -731,38 +739,6 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         if (!empty($failureAttributes)) {
             CombatLogRouteEnemyFailure::insert($failureAttributes);
         }
-    }
-
-    /**
-     * The ids of the unresolved npcs in the combat log route that are explicitly worth 0 enemy forces in the given
-     * mapping version, keyed by npc id. An npc without any enemy forces row at all is NOT in here - that is the
-     * "this npc is not mapped" signal the enemy failure triage exists to surface.
-     *
-     * @return array<int, true>
-     */
-    private function getZeroEnemyForcesNpcIds(MappingVersion $mappingVersion, CombatLogRouteRequestDto $combatLogRoute): array
-    {
-        /** @var array<int, true> $unresolvedNpcIds */
-        $unresolvedNpcIds = [];
-        foreach ($combatLogRoute->npcs as $combatLogRouteNpc) {
-            if ($combatLogRouteNpc->getResolvedEnemy() === null) {
-                $unresolvedNpcIds[$combatLogRouteNpc->npcId] = true;
-            }
-        }
-
-        if ($unresolvedNpcIds === []) {
-            return [];
-        }
-
-        $zeroEnemyForcesNpcIds = NpcEnemyForces::query()
-            ->where('mapping_version_id', $mappingVersion->id)
-            ->whereIn('npc_id', array_keys($unresolvedNpcIds))
-            ->where('enemy_forces', 0)
-            ->pluck('npc_id')
-            ->map(static fn($npcId): int => (int)$npcId)
-            ->all();
-
-        return array_fill_keys($zeroEnemyForcesNpcIds, true);
     }
 
     private function generateMapIcons(

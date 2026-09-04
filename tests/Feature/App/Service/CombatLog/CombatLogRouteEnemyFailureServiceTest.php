@@ -6,6 +6,7 @@ use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\NpcEnemyForces;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureServiceInterface;
@@ -25,10 +26,15 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
 
     private MappingVersion $mappingVersion;
 
+    /** @var int[] */
+    private array $createdNpcEnemyForcesIds = [];
+
     #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->createdNpcEnemyForcesIds = [];
 
         $this->service = app(CombatLogRouteEnemyFailureServiceInterface::class);
 
@@ -157,6 +163,9 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
 
         try {
             // Arrange
+            $this->createEnemyForces($targetNpcId);
+            $this->createEnemyForces($otherNpcId);
+
             $matching = CombatLogRouteEnemyFailure::create([
                 'dungeon_id'         => $this->dungeon->id,
                 'floor_id'           => $this->floor->id,
@@ -221,7 +230,9 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
             $createdRouteIds[] = $route->id;
 
             $targetNpcId = 99901;
-            $failure     = CombatLogRouteEnemyFailure::create([
+            $this->createEnemyForces($targetNpcId);
+
+            $failure = CombatLogRouteEnemyFailure::create([
                 'dungeon_route_id'   => $route->id,
                 'dungeon_id'         => $this->dungeon->id,
                 'floor_id'           => $this->floor->id,
@@ -257,6 +268,7 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
         try {
             // Arrange — create 6 routes each with a failure for the same NPC
             $targetNpcId = 99902;
+            $this->createEnemyForces($targetNpcId);
 
             for ($i = 0; $i < 6; $i++) {
                 $route = DungeonRoute::factory()->create([
@@ -351,23 +363,21 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
     }
 
     #[Test]
-    public function getEnemyFailureHeatmapData_givenZeroEnemyForcesNpc_excludesItsRows(): void
+    public function getEnemyFailureHeatmapData_givenNpcsWithoutEnemyForces_excludesTheirRows(): void
     {
         $created          = [];
         $zeroForcesNpcId  = 99910;
-        $otherNpcId       = 99911;
-        $npcEnemyForcesId = null;
+        $noForcesRowNpcId = 99911;
+        $worthForcesNpcId = 99912;
 
         try {
-            // Arrange — the first npc is explicitly worth 0 enemy forces in this mapping version, the second has no row at all
-            $npcEnemyForcesId = NpcEnemyForces::query()->create([
-                'mapping_version_id' => $this->mappingVersion->id,
-                'npc_id'             => $zeroForcesNpcId,
-                'enemy_forces'       => 0,
-            ])->id;
+            // Arrange — worth 0 explicitly, no enemy forces row at all, and worth enemy forces
+            $this->createEnemyForces($zeroForcesNpcId, 0);
+            $this->createEnemyForces($worthForcesNpcId);
 
             $created[] = $this->createFailure(['npc_id' => $zeroForcesNpcId, 'lat' => -50.0, 'lng' => 100.0])->id;
-            $created[] = $this->createFailure(['npc_id' => $otherNpcId, 'lat' => -200.0, 'lng' => 300.0])->id;
+            $created[] = $this->createFailure(['npc_id' => $noForcesRowNpcId, 'lat' => -200.0, 'lng' => 300.0])->id;
+            $created[] = $this->createFailure(['npc_id' => $worthForcesNpcId, 'lat' => -150.0, 'lng' => 250.0])->id;
             $created[] = $this->createFailure(['npc_id' => null, 'lat' => -100.0, 'lng' => 200.0])->id;
 
             // Act
@@ -375,13 +385,54 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
                 ->setUseFacade(false)
                 ->toArray();
 
-            // Assert — the 0-forces npc is gone, the unmapped npc and the npc-less row stay
+            // Assert — both npcs not worth enemy forces are gone, the npc worth them and the npc-less row stay
             $this->assertEquals(2, $array['failure_count']);
         } finally {
             CombatLogRouteEnemyFailure::whereIn('id', $created)->delete();
-            if ($npcEnemyForcesId !== null) {
-                NpcEnemyForces::query()->whereKey($npcEnemyForcesId)->delete();
-                new NpcEnemyForces()->flushCache();
+        }
+    }
+
+    /**
+     * A mapping version with no enemy forces tuned at all is a dungeon nobody has gotten to yet, not a dungeon whose
+     * every failure is noise - filtering on an empty set would blank the view exactly when a mapper needs it.
+     */
+    #[Test]
+    public function getEnemyFailureHeatmapData_givenMappingVersionWithoutAnyEnemyForces_keepsEveryRow(): void
+    {
+        $created             = [];
+        $emptyMappingVersion = null;
+
+        try {
+            // Arrange — a mapping version on a game version this dungeon has none on, so nothing is cloned onto it
+            $gameVersionId = GameVersion::query()
+                ->whereNotIn('id', $this->dungeon->mappingVersions->pluck('game_version_id')->all())
+                ->value('id');
+            $this->assertNotNull($gameVersionId, 'Expected a game version the dungeon has no mapping version on.');
+
+            $emptyMappingVersion = MappingVersion::create([
+                'dungeon_id'            => $this->dungeon->id,
+                'game_version_id'       => $gameVersionId,
+                'version'               => 1,
+                'enemy_forces_required' => 0,
+                'timer_max_seconds'     => 0,
+            ]);
+            $this->assertSame([], $this->service->getNonZeroEnemyForcesNpcIds($emptyMappingVersion));
+
+            $created[] = $this->createFailure(['npc_id' => 99913, 'mapping_version_id' => $emptyMappingVersion->id, 'lat' => -50.0, 'lng' => 100.0])->id;
+            $created[] = $this->createFailure(['npc_id' => null, 'mapping_version_id' => $emptyMappingVersion->id, 'lat' => -200.0, 'lng' => 300.0])->id;
+
+            // Act
+            $array = $this->service->getEnemyFailureHeatmapData($this->dungeon, $emptyMappingVersion, null)
+                ->setUseFacade(false)
+                ->toArray();
+
+            // Assert
+            $this->assertEquals(2, $array['failure_count']);
+        } finally {
+            CombatLogRouteEnemyFailure::whereIn('id', $created)->delete();
+
+            if ($emptyMappingVersion !== null) {
+                $emptyMappingVersion->delete();
             }
         }
     }
@@ -393,6 +444,9 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
 
         try {
             // Arrange — npc A twice and npc B once in the selected mapping version, npc B again in another one
+            $this->createEnemyForces(99920);
+            $this->createEnemyForces(99921);
+
             $created[] = $this->createFailure(['npc_id' => 99920])->id;
             $created[] = $this->createFailure(['npc_id' => 99920])->id;
             $created[] = $this->createFailure(['npc_id' => 99921])->id;
@@ -431,23 +485,21 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
     }
 
     #[Test]
-    public function getFailureCountsPerMappingVersion_givenZeroEnemyForcesNpc_excludesItsRowsLikeTheHeatmapDoes(): void
+    public function getFailureCountsPerMappingVersion_givenNpcsWithoutEnemyForces_excludesTheirRowsLikeTheHeatmapDoes(): void
     {
         $created          = [];
         $zeroForcesNpcId  = 99940;
-        $npcEnemyForcesId = null;
+        $worthForcesNpcId = 99942;
 
         try {
-            // Arrange — two rows for a 0-enemy-forces npc, one for another npc, one without npc
-            $npcEnemyForcesId = NpcEnemyForces::query()->create([
-                'mapping_version_id' => $this->mappingVersion->id,
-                'npc_id'             => $zeroForcesNpcId,
-                'enemy_forces'       => 0,
-            ])->id;
+            // Arrange — two rows worth 0 enemy forces, one for an npc without any row, one worth forces, one without npc
+            $this->createEnemyForces($zeroForcesNpcId, 0);
+            $this->createEnemyForces($worthForcesNpcId);
 
             $created[] = $this->createFailure(['npc_id' => $zeroForcesNpcId])->id;
             $created[] = $this->createFailure(['npc_id' => $zeroForcesNpcId])->id;
             $created[] = $this->createFailure(['npc_id' => 99941])->id;
+            $created[] = $this->createFailure(['npc_id' => $worthForcesNpcId])->id;
             $created[] = $this->createFailure(['npc_id' => null])->id;
 
             // Act
@@ -459,11 +511,78 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
             $this->assertSame($heatmap['failure_count'], $counts->get($this->mappingVersion->id));
         } finally {
             CombatLogRouteEnemyFailure::whereIn('id', $created)->delete();
-            if ($npcEnemyForcesId !== null) {
-                NpcEnemyForces::query()->whereKey($npcEnemyForcesId)->delete();
-                new NpcEnemyForces()->flushCache();
-            }
         }
+    }
+
+    /**
+     * The coverage page explains why a route missed 100% enemy forces, so an npc worth no enemy forces cannot be part
+     * of the explanation there either.
+     */
+    #[Test]
+    public function getFailureCountsPerDungeonRoute_givenNpcsWithoutEnemyForces_countsOnlyTheRestPerRoute(): void
+    {
+        $created          = [];
+        $createdRouteIds  = [];
+        $worthForcesNpcId = 99970;
+        $noForcesNpcId    = 99971;
+
+        try {
+            // Arrange — two routes on the same mapping version, one failure of each kind on the first
+            $this->createEnemyForces($worthForcesNpcId);
+
+            foreach ([0, 1] as $unused) {
+                $createdRouteIds[] = DungeonRoute::factory()->create([
+                    'dungeon_id'         => $this->dungeon->id,
+                    'mapping_version_id' => $this->mappingVersion->id,
+                ])->id;
+            }
+
+            $created[] = $this->createFailure(['dungeon_route_id' => $createdRouteIds[0], 'npc_id' => $worthForcesNpcId])->id;
+            $created[] = $this->createFailure(['dungeon_route_id' => $createdRouteIds[0], 'npc_id' => $noForcesNpcId])->id;
+            $created[] = $this->createFailure(['dungeon_route_id' => $createdRouteIds[0], 'npc_id' => null])->id;
+            $created[] = $this->createFailure(['dungeon_route_id' => $createdRouteIds[1], 'npc_id' => $noForcesNpcId])->id;
+
+            $dungeonRoutes = DungeonRoute::query()->whereIn('id', $createdRouteIds)->get()->keyBy('id');
+
+            // Act
+            $counts = $this->service->getFailureCountsPerDungeonRoute($dungeonRoutes);
+
+            // Assert — the npc worth forces and the npc-less row count, the npc without forces does not, and a route
+            // left with nothing to explain is absent rather than present with 0
+            $this->assertSame(2, $counts->get($createdRouteIds[0]));
+            $this->assertNull($counts->get($createdRouteIds[1]));
+        } finally {
+            CombatLogRouteEnemyFailure::whereIn('id', $created)->delete();
+            DungeonRoute::whereIn('id', $createdRouteIds)->delete();
+        }
+    }
+
+    #[\Override]
+    protected function tearDown(): void
+    {
+        if ($this->createdNpcEnemyForcesIds !== []) {
+            NpcEnemyForces::query()->whereKey($this->createdNpcEnemyForcesIds)->delete();
+            new NpcEnemyForces()->flushCache();
+            $this->createdNpcEnemyForcesIds = [];
+        }
+
+        parent::tearDown();
+    }
+
+    /**
+     * Only npcs worth enemy forces have their failures kept, so a test npc that should survive the filter needs a row.
+     */
+    private function createEnemyForces(int $npcId, int $enemyForces = 10, ?int $mappingVersionId = null): int
+    {
+        $id = NpcEnemyForces::query()->create([
+            'mapping_version_id' => $mappingVersionId ?? $this->mappingVersion->id,
+            'npc_id'             => $npcId,
+            'enemy_forces'       => $enemyForces,
+        ])->id;
+
+        $this->createdNpcEnemyForcesIds[] = $id;
+
+        return $id;
     }
 
     /**

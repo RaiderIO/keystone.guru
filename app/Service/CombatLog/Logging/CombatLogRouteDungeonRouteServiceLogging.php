@@ -64,7 +64,7 @@ class CombatLogRouteDungeonRouteServiceLogging extends StructuredLogging impleme
         $this->warning(__METHOD__, get_defined_vars());
     }
 
-    public function saveCombatLogRouteEnemyFailuresSkippingZeroEnemyForcesNpc(int $dungeonRouteId, int $npcId): void
+    public function saveCombatLogRouteEnemyFailuresSkippingNpcWithoutEnemyForces(int $dungeonRouteId, int $npcId): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }

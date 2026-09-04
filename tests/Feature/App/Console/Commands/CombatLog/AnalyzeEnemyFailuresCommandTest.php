@@ -6,6 +6,7 @@ use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\NpcEnemyForces;
 use Illuminate\Database\Eloquent\Builder;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -27,6 +28,9 @@ final class AnalyzeEnemyFailuresCommandTest extends PublicTestCase
     /** @var array<int, int> */
     private array $createdFailureIds = [];
 
+    /** @var array<int, int> */
+    private array $createdNpcEnemyForcesIds = [];
+
     #[\Override]
     protected function setUp(): void
     {
@@ -46,6 +50,11 @@ final class AnalyzeEnemyFailuresCommandTest extends PublicTestCase
     {
         try {
             CombatLogRouteEnemyFailure::query()->whereIn('id', $this->createdFailureIds)->delete();
+
+            if ($this->createdNpcEnemyForcesIds !== []) {
+                NpcEnemyForces::query()->whereKey($this->createdNpcEnemyForcesIds)->delete();
+                new NpcEnemyForces()->flushCache();
+            }
         } finally {
             parent::tearDown();
         }
@@ -68,8 +77,10 @@ final class AnalyzeEnemyFailuresCommandTest extends PublicTestCase
     #[Test]
     public function handle_givenFormatMarkdown_outputsTableWithTheCluster(): void
     {
-        // Arrange
+        // Arrange — only npcs worth enemy forces are analysed at all
         $npcId = 99960;
+        $this->createEnemyForces($npcId);
+
         for ($i = 0; $i < 6; $i++) {
             $this->createdFailureIds[] = CombatLogRouteEnemyFailure::create([
                 'dungeon_route_id'   => 7000 + $i,
@@ -98,6 +109,8 @@ final class AnalyzeEnemyFailuresCommandTest extends PublicTestCase
     {
         // Arrange — two failures on one route: low volume
         $npcId = 99961;
+        $this->createEnemyForces($npcId);
+
         for ($i = 0; $i < 2; $i++) {
             $this->createdFailureIds[] = CombatLogRouteEnemyFailure::create([
                 'dungeon_route_id'   => 7100,
@@ -127,5 +140,14 @@ final class AnalyzeEnemyFailuresCommandTest extends PublicTestCase
         $this->artisan('combatlog:analyzeenemyfailures', ['dungeon' => $this->dungeon->key, '--format' => 'json'])
             ->expectsOutputToContain('"cluster_radius_yd"')
             ->assertSuccessful();
+    }
+
+    private function createEnemyForces(int $npcId, int $enemyForces = 10): void
+    {
+        $this->createdNpcEnemyForcesIds[] = NpcEnemyForces::query()->create([
+            'mapping_version_id' => $this->mappingVersion->id,
+            'npc_id'             => $npcId,
+            'enemy_forces'       => $enemyForces,
+        ])->id;
     }
 }
