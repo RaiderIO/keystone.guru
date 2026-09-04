@@ -122,3 +122,107 @@
         overscroll-behavior: contain;
     }
 }
+
+/* Category panels (#4465): the bar carries a fixed set of category toggles, and every destination
+   lives inside a panel as an icon + name + one-line description row. */
+.ksg-header .ksg-nav-entry {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    padding: 0.5rem 0.75rem;
+    white-space: normal;
+}
+
+.ksg-header .ksg-nav-entry > i {
+    width: 1.25rem;
+    text-align: center;
+    line-height: 1.5;
+    flex-shrink: 0;
+}
+
+.ksg-header .ksg-nav-entry-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.ksg-header .ksg-nav-entry--primary .ksg-nav-entry-name {
+    font-weight: 600;
+}
+
+.ksg-header .ksg-nav-entry-desc {
+    font-size: 0.8125rem;
+    line-height: 1.3;
+}
+
+/* Muted by colour, not opacity: an opacity-muted description on the panel surface drops below the
+   4.5:1 contrast floor. The dropdown surface differs per theme, so each theme names its own value. */
+:root.darkly .ksg-header .ksg-nav-entry-desc,
+:root.vapor .ksg-header .ksg-nav-entry-desc {
+    color: var(--theme-light);
+}
+
+:root.lux .ksg-header .ksg-nav-entry-desc {
+    color: #55595c;
+}
+
+.ksg-header .ksg-nav-entry.active .ksg-nav-entry-desc {
+    color: inherit;
+}
+
+/* Language row inside the account/preferences menu - Bootstrap 5 has no nested dropdown */
+.ksg-header .ksg-nav-prefs {
+    padding: 0.25rem 1rem 0.5rem;
+}
+
+.ksg-header .ksg-nav-prefs-languages {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.ksg-header .ksg-nav-prefs-language {
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    line-height: 1;
+}
+
+.ksg-header .ksg-nav-prefs-language.active {
+    outline: 2px solid var(--theme-border-accent);
+}
+
+.ksg-header .ksg-nav-prefs-contribute {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.ksg-header .ksg-nav-prefs-theme {
+    margin-top: 0.5rem;
+}
+
+/* White on darkly's #00bc8c measures 2.4:1 - each theme names a foreground that clears 4.5:1.
+   Scoped to the header so other .btn-accent buttons keep whatever their page gives them. */
+.ksg-header .btn-accent {
+    color: var(--theme-btn-accent-text) !important;
+}
+
+@media (min-width: 992px) {
+    /* Two-line labels would otherwise double the bar's height at the widths where the container
+       is tightest (#4465) */
+    .ksg-header .navbar-second .nav-link {
+        white-space: nowrap;
+    }
+
+    .ksg-header .ksg-nav-panel {
+        min-width: 20rem;
+        padding: 0.5rem;
+    }
+
+    /* Only when shown: .dropdown-menu is display:none at rest, and a bare display:grid would
+       render the panel permanently open */
+    .ksg-header .ksg-nav-panel--2col.show {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-width: 34rem;
+    }
+}
