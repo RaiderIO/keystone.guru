@@ -120,11 +120,6 @@ class User extends Authenticatable implements LaratrustUser
     private static ?string $OVERRIDE_MAP_FACADE_STYLE = null;
 
     /**
-     * @var string Have to specify connection explicitly so that Tracker still works (has its own DB)
-     */
-    protected $connection = 'mysql';
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
