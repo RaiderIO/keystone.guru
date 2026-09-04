@@ -16,6 +16,7 @@ use App\Service\CombatLogEvent\Dtos\CombatLogEventGridAggregationResult;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventSearchResult;
 use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLoggingInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\Season\SeasonServiceInterface;
 use Carbon\CarbonPeriod;
 use Codeart\OpensearchLaravel\Aggregations\Aggregation;
 use Codeart\OpensearchLaravel\Aggregations\Types\Cardinality;
@@ -35,6 +36,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
     public function __construct(
         private readonly CoordinatesServiceInterface           $coordinatesService,
         private readonly CombatLogEventServiceLoggingInterface $log,
+        private readonly SeasonServiceInterface                $seasonService,
     ) {
     }
 
@@ -441,6 +443,8 @@ class CombatLogEventService implements CombatLogEventServiceInterface
         $seasonLengthWeeks = 24;
         $seasonLengthHours = ($seasonLengthWeeks * 7) * 24;
 
+        $startPeriod = $this->resolveSeasonStartPeriod($season, GameServerRegion::getUserOrDefaultRegion());
+
         $result = true;
 
         for ($i = 0; $i < $runCount; $i++) {
@@ -456,7 +460,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
             $keystoneRunId = random_int(1000, 100000000);
             $loggedRunId   = random_int(1000, 100000000);
             $runStart      = $season->start->copy()->addHours(random_int(0, $seasonLengthHours));
-            $runPeriod     = $season->start_period + random_int(0, $seasonLengthWeeks);
+            $runPeriod     = $startPeriod + random_int(0, $seasonLengthWeeks);
             // RaiderIO regions
             $regions  = array_keys(GameServerRegion::ALL);
             $regionId = match ($regions[array_rand($regions)]) {
@@ -569,5 +573,22 @@ class CombatLogEventService implements CombatLogEventServiceInterface
         }
 
         return $result;
+    }
+
+    /**
+     * The keystone leaderboard period the season's first week falls in, matching
+     * {@see \App\Service\Season\SeasonService::getSeasonWeeks()}. Falls back to a direct calculation off
+     * the season's normalised start for a season that has not started yet, since getSeasonWeeks() then
+     * returns no weeks to read a period from.
+     */
+    private function resolveSeasonStartPeriod(Season $season, GameServerRegion $region): int
+    {
+        $seasonWeeks = $this->seasonService->getSeasonWeeks($season, $region);
+
+        if ($seasonWeeks->isEmpty()) {
+            return $region->getKeystoneLeaderboardPeriod($season->start($region)->addDays(3));
+        }
+
+        return $seasonWeeks->first()->period;
     }
 }
