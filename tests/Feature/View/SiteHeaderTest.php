@@ -65,6 +65,49 @@ final class SiteHeaderTest extends PublicTestCase
     }
 
     #[Test]
+    public function home_givenAGuest_marksEveryAiTranslatedLanguageWithACornerBadge(): void
+    {
+        // Arrange
+        $this->actingAsGuest();
+        /** @var array<int, array<string, mixed>> $allLanguages */
+        $allLanguages    = config('language.all', []);
+        $allowedCodes    = array_keys(language()->allowed());
+        $expectedAiCount = count(array_filter(
+            $allLanguages,
+            static fn(array $language): bool => in_array($language['long'], $allowedCodes, true)
+                && ($language['ai'] ?? false) === true,
+        ));
+
+        // Act
+        $response = $this->withHeader('User-Agent', self::DESKTOP_USER_AGENT)->get('/');
+
+        // Assert
+        $response->assertOk();
+        $html = $response->getContent();
+
+        $this->assertGreaterThan(0, $expectedAiCount);
+        $this->assertSame($expectedAiCount, substr_count($html, 'ksg-nav-prefs-ai'));
+        // An inline superscript widens only the tiles that carry it, which staggered the flag grid.
+        $this->assertStringNotContainsString('<sup class="text-warning">AI</sup>', $html);
+    }
+
+    #[Test]
+    public function home_givenAGuest_marksTheCurrentLocaleAsTheActiveLanguageTile(): void
+    {
+        // Arrange
+        $this->actingAsGuest();
+
+        // Act
+        $response = $this->withHeader('User-Agent', self::DESKTOP_USER_AGENT)->get('/');
+
+        // Assert
+        $response->assertOk();
+        $html = $response->getContent();
+
+        $this->assertSame(1, substr_count($html, 'ksg-nav-prefs-language active'));
+    }
+
+    #[Test]
     public function home_givenALoggedInNonAdmin_showsTheAccountMenuWithoutAdminLinks(): void
     {
         // Arrange

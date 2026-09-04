@@ -176,21 +176,55 @@
     padding: 0.25rem 1rem 0.5rem;
 }
 
+/* A grid rather than a wrapping flex row: the tiles are not all the same width (only some carry
+   an AI marker), and flex-wrap then staggers the columns from one row to the next. */
 .ksg-header .ksg-nav-prefs-languages {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
     gap: 0.25rem;
     margin-bottom: 0.5rem;
 }
 
+/* Sized to the flag and centred in its cell rather than filling it: the AI marker hangs off the
+   tile's corner, and on a cell-wide tile it floats far enough from the flag to read as belonging
+   to the neighbouring one. */
 .ksg-header .ksg-nav-prefs-language {
-    padding: 0.125rem 0.25rem;
+    position: relative;
+    display: inline-flex;
+    justify-self: center;
+    padding: 0.25rem;
     border-radius: 0.25rem;
     line-height: 1;
 }
 
+.ksg-header .ksg-nav-prefs-language img {
+    display: block;
+    width: 24px;
+    height: auto;
+}
+
+.ksg-header .ksg-nav-prefs-language:hover,
+.ksg-header .ksg-nav-prefs-language:focus-visible {
+    background-color: var(--theme-bg-card-footer);
+}
+
 .ksg-header .ksg-nav-prefs-language.active {
-    outline: 2px solid var(--theme-border-accent);
+    background-color: var(--theme-border-accent);
+}
+
+/* Taken out of flow so a marker cannot widen the tile that carries it. The pill keeps it legible
+   where it overlaps a pale flag. */
+.ksg-header .ksg-nav-prefs-ai {
+    position: absolute;
+    top: -0.1rem;
+    right: -0.1rem;
+    padding: 0 0.1rem;
+    border-radius: 0.2rem;
+    background-color: var(--theme-darker);
+    font-size: 0.5rem;
+    font-weight: 700;
+    line-height: 1.3;
+    pointer-events: none;
 }
 
 .ksg-header .ksg-nav-prefs-contribute {

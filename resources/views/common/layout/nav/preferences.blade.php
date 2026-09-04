@@ -1,7 +1,7 @@
 <?php
 /**
  * Language and theme, living inside a dropdown menu. Bootstrap 5 has no nested dropdown, so the
- * languages are a compact row of flags rather than a submenu (#4465).
+ * languages are a compact grid of flags rather than a submenu.
  *
  * @var string $theme
  */
@@ -18,11 +18,13 @@ $allLanguages       = collect($allLanguagesConfig)->keyBy('long');
 <div class="ksg-nav-prefs">
     <div class="ksg-nav-prefs-languages">
         @foreach (language()->allowed() as $code => $name)
+            <?php $isAiTranslated = (bool)($allLanguages[$code]['ai'] ?? false); ?>
             <a class="ksg-nav-prefs-language {{ $currentUserLocale === $code ? 'active' : '' }}"
-               href="{{ language()->back($code) }}" title="{{ $name }}">
+               href="{{ language()->back($code) }}"
+               title="{{ $isAiTranslated ? sprintf('%s (AI)', $name) : $name }}">
                 @include('vendor.language.flag', ['code' => $code, 'name' => $name])
-                @if(isset($allLanguages[$code]['ai']) && $allLanguages[$code] && $allLanguages[$code]['ai'])
-                    <sup class="text-warning">AI</sup>
+                @if($isAiTranslated)
+                    <span class="ksg-nav-prefs-ai text-warning" aria-hidden="true">AI</span>
                 @endif
             </a>
         @endforeach
