@@ -18,6 +18,12 @@
         </testsuite>
     </testsuites>
     <php>
+        <!-- These only apply when the variable is not already set in the process environment: PHPUnit
+             leaves an existing one alone, and Laravel's Env reads $_SERVER (where a container's
+             environment lands) before $_ENV (where PHPUnit writes). Anything that injects these into
+             the container - an env_file, a compose environment: block, an exported shell variable -
+             therefore silently wins, and no test fails when it does.
+             Tests\Feature\Environment\TestEnvironmentTest is what makes that loud. -->
         <env name="DEBUGBAR_ENABLED" value="false"/>
         <env name="APP_DEBUG" value="false"/>
         <env name="APP_ENV" value="testing"/>
