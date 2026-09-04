@@ -107,12 +107,16 @@ final class SiteHeaderTest extends PublicTestCase
         $response->assertOk();
         $html = $response->getContent();
 
-        $myRoutesPosition   = strpos($html, route('profile.routes'));
-        $adminToolsPosition = strpos($html, route('admin.tools'));
+        $this->assertStringContainsString(route('admin.tools'), $html);
+
+        // route('admin.tools') is a prefix of the other admin tool URLs, so the ordering assertion anchors
+        // on a route no other one starts with
+        $myRoutesPosition       = strpos($html, route('profile.routes'));
+        $adminExpansionPosition = strpos($html, route('admin.expansions'));
 
         $this->assertNotFalse($myRoutesPosition);
-        $this->assertNotFalse($adminToolsPosition);
-        $this->assertLessThan($adminToolsPosition, $myRoutesPosition, 'The admin section must come after the user\'s own links.');
+        $this->assertNotFalse($adminExpansionPosition);
+        $this->assertLessThan($adminExpansionPosition, $myRoutesPosition, 'The admin section must come after the user\'s own links.');
     }
 
     #[Test]
