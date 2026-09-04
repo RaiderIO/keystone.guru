@@ -49,4 +49,36 @@ final class PruneTest extends PublicTestCase
                 ->delete();
         }
     }
+
+    #[Test]
+    public function handle_givenOldGrowthMeasurementRecord_neverDeletesIt(): void
+    {
+        $retentionDays      = config('keystoneguru.telemetry.retention_days');
+        $growthMeasurements = config('keystoneguru.telemetry.growth_measurements');
+
+        $oldGrowthTelemetryMetric = null;
+
+        try {
+            // Arrange
+            $oldGrowthTelemetryMetric = TelemetryMetric::factory()->create([
+                'measurement' => $growthMeasurements[0],
+                'name'        => 'test:prunetest',
+                'recorded_at' => now()->subDays($retentionDays + 3650),
+            ]);
+
+            // Act
+            $exitCode = $this->artisan('telemetry:prune')->run();
+
+            // Assert
+            $this->assertSame(Command::SUCCESS, $exitCode);
+            $this->assertNotNull(TelemetryMetric::query()->find($oldGrowthTelemetryMetric->id));
+        } finally {
+            $oldGrowthTelemetryMetric?->delete();
+            // The prune run itself records its own duration through trackTime()
+            TelemetryMetric::query()
+                ->where('measurement', TelemetryMetric::MEASUREMENT_SCHEDULER)
+                ->where('name', 'telemetry:prune')
+                ->delete();
+        }
+    }
 }

@@ -19,10 +19,11 @@ class TelemetryMetricRepository extends DatabaseRepository implements TelemetryM
         return TelemetryMetric::query()->insert($rows);
     }
 
-    public function deleteRecordedBefore(Carbon $cutoff, int $batchSize): int
+    public function deleteRecordedBefore(Carbon $cutoff, int $batchSize, array $excludedMeasurements = []): int
     {
         return TelemetryMetric::query()
             ->where('recorded_at', '<', $cutoff)
+            ->whereNotIn('measurement', $excludedMeasurements)
             ->limit($batchSize)
             ->delete();
     }
