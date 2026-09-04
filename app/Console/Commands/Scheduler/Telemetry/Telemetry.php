@@ -7,6 +7,7 @@ use App\Console\Commands\Scheduler\Telemetry\Measurement\DungeonRouteCount;
 use App\Console\Commands\Scheduler\Telemetry\Measurement\Measurement;
 use App\Console\Commands\Scheduler\Telemetry\Measurement\MySqlStats;
 use App\Console\Commands\Scheduler\Telemetry\Measurement\QueueSize;
+use App\Console\Commands\Scheduler\Telemetry\Measurement\RedisSize;
 use App\Console\Commands\Scheduler\Telemetry\Measurement\TeamCount;
 use App\Console\Commands\Scheduler\Telemetry\Measurement\UserCount;
 use App\Service\Telemetry\TelemetryServiceInterface;
@@ -25,7 +26,7 @@ class Telemetry extends SchedulerCommand
      *
      * @var string
      */
-    protected $description = 'Samples site gauges (user/team/route counts, queue sizes, MySQL stats) into the telemetry metrics store';
+    protected $description = 'Samples site gauges into the telemetry metrics store';
 
     /** @var array|Measurement[] */
     private $measurements;
@@ -46,6 +47,9 @@ class Telemetry extends SchedulerCommand
 
             // MySql
             new MySqlStats(),
+
+            // Redis
+            new RedisSize(),
         ];
     }
 
