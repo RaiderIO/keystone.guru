@@ -21,6 +21,7 @@ use App\Service\CombatLog\Builders\Logging\DungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Builders\Rules\BossKillFloorCutoffRule;
 use App\Service\CombatLog\Builders\Rules\DungeonRouteBuilderRuleInterface;
 use App\Service\CombatLog\Builders\Rules\KingsRestDespawningEnemiesRule;
+use App\Service\CombatLog\Builders\Rules\TempleOfSethralissDespawningEnemiesRule;
 use App\Service\CombatLog\Builders\Rules\TheBlindingValeBridgeRule;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\ActivePullCollection;
@@ -50,6 +51,7 @@ abstract class DungeonRouteBuilder
     private const array RULES = [
         BossKillFloorCutoffRule::class,
         KingsRestDespawningEnemiesRule::class,
+        TempleOfSethralissDespawningEnemiesRule::class,
         TheBlindingValeBridgeRule::class,
     ];
 
@@ -430,8 +432,11 @@ abstract class DungeonRouteBuilder
     }
 
     /**
-     * Attaches a kill for each of $npcIds to $activePull, for enemies that despawn instead of dying so that their
-     * death never reaches us at all. See DungeonRouteBuilderRuleInterface::onEnemyDied().
+     * Attaches kills to $activePull for enemies that despawn instead of dying so that their death never reaches us at
+     * all. See DungeonRouteBuilderRuleInterface::onEnemyDied().
+     *
+     * An awarded npc_id awards *every* one of its remaining mapped enemies, not one of them - the npc despawned as a
+     * group, so crediting a single placement would leave the rest of it out of the route and its enemy forces.
      *
      * The awarded kill borrows the position and timing of the enemy whose death triggered it, since that is the only
      * thing we know about it. That location is therefore synthetic, and the normal engagement range gate - which
@@ -447,34 +452,44 @@ abstract class DungeonRouteBuilder
         $activePull ??= $this->activePullCollection->last() ?? $this->activePullCollection->addNewPull();
 
         foreach ($npcIds as $npcId) {
-            $awardedEnemy = new ActivePullEnemy(
-                sprintf('%s-awarded-%d', $trigger->getUniqueId(), $npcId),
-                $npcId,
-                $trigger->getX(),
-                $trigger->getY(),
-                $trigger->getEngagedAt(),
-                $trigger->getDiedAt() ?? $trigger->getEngagedAt(),
-            );
+            $awardedCount = 0;
 
-            $resolvedEnemy = $this->findUnkilledEnemyForNpcAtIngameLocation(
-                $awardedEnemy,
-                $this->activePullCollection->getInCombatGroups(),
-                true,
-            );
+            // findUnkilledEnemyForNpcAtIngameLocation() forgets each enemy it returns, so this walks the npc's
+            // remaining mapped enemies and terminates on its own once they are exhausted.
+            while (true) {
+                $awardedEnemy = new ActivePullEnemy(
+                    sprintf('%s-awarded-%d-%d', $trigger->getUniqueId(), $npcId, $awardedCount),
+                    $npcId,
+                    $trigger->getX(),
+                    $trigger->getY(),
+                    $trigger->getEngagedAt(),
+                    $trigger->getDiedAt() ?? $trigger->getEngagedAt(),
+                );
 
-            if ($resolvedEnemy === null) {
-                $this->log->awardEnemyKillsEnemyNotFound($npcId);
+                $resolvedEnemy = $this->findUnkilledEnemyForNpcAtIngameLocation(
+                    $awardedEnemy,
+                    $this->activePullCollection->getInCombatGroups(),
+                    true,
+                );
 
-                continue;
+                if ($resolvedEnemy === null) {
+                    break;
+                }
+
+                $awardedEnemy->setResolvedEnemy($resolvedEnemy);
+
+                // Engaged and killed in one go - we have no timeline for it, only the fact that it is dead
+                $activePull->enemyEngaged($awardedEnemy);
+                $activePull->enemyKilled($awardedEnemy->getUniqueId());
+
+                $this->log->awardEnemyKillsEnemyAwarded($npcId, $resolvedEnemy->id);
+
+                $awardedCount++;
             }
 
-            $awardedEnemy->setResolvedEnemy($resolvedEnemy);
-
-            // Engaged and killed in one go - we have no timeline for it, only the fact that it is dead
-            $activePull->enemyEngaged($awardedEnemy);
-            $activePull->enemyKilled($awardedEnemy->getUniqueId());
-
-            $this->log->awardEnemyKillsEnemyAwarded($npcId, $resolvedEnemy->id);
+            if ($awardedCount === 0) {
+                $this->log->awardEnemyKillsEnemyNotFound($npcId);
+            }
         }
     }
 

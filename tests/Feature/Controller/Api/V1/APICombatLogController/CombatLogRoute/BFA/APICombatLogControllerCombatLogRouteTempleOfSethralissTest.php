@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\BFA;
 use App\Models\DungeonKey;
+use App\Models\Npc\NpcId;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\APICombatLogControllerCombatLogRouteTestBase;
@@ -35,9 +36,20 @@ class APICombatLogControllerCombatLogRouteTempleOfSethralissTest extends APIComb
         try {
             $this->validateResponseStaticData($responseArr);
             $this->validateDungeon($responseArr);
-            $this->validatePulls($postBody, $responseArr, 20, 658);
+            // This run completed the key (challengeMode.success), so the party necessarily reached 100% of the 687
+            // enemy forces the mapping requires. Anything under that means enemies are still going missing.
+            $this->validatePulls($postBody, $responseArr, 20, 688);
             $this->validateAffixes($responseArr);
             $this->validateBossesResolved($postBody, $responseArr);
+
+            // No Static Anomaly death ever reaches us - they despawn once dealt with, and Galvazzt only spawns after
+            // all of them are gone. TempleOfSethralissDespawningEnemiesRule awards them off his death, so all six
+            // land in his pull. The count is asserted because crediting only one of them still satisfies presence.
+            $this->validateNpcIdCount($responseArr, NpcId::STATIC_ANOMALY->value, 6);
+            $this->validateNpcIdsInSamePull($responseArr, [
+                NpcId::GALVAZZT_RESTORED->value,
+                NpcId::STATIC_ANOMALY->value,
+            ]);
         } finally {
             $this->deleteDungeonRoute($responseArr);
         }
