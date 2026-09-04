@@ -85,11 +85,10 @@ class AdminToolsTelemetry extends InlineCode {
                     legend: {position: 'bottom'}
                 },
                 scales: {
-                    x: {ticks: {maxTicksLimit: 12, autoSkip: true}},
-                    y: {
-                        beginAtZero: true,
-                        title: {display: true, text: $canvas.data('axis-label')}
-                    }
+                    x: {ticks: {maxTicksLimit: 8, autoSkip: true, maxRotation: 45}},
+                    // Deliberately not beginAtZero: a gauge sitting at 512k barely moves on an axis
+                    // anchored to zero, and the whole point of these graphs is the variation.
+                    y: {title: {display: true, text: $canvas.data('axis-label')}}
                 }
             }
         });
@@ -135,7 +134,7 @@ class AdminToolsTelemetry extends InlineCode {
             }
         });
 
-        if (response.failureLabels.length > 0) {
+        if (response.failureLabels.length > 0 && response.datasets.length > 0) {
             datasets.push(this._buildFailureDataset(response));
         }
 
@@ -143,25 +142,32 @@ class AdminToolsTelemetry extends InlineCode {
     }
 
     /**
-     * Failed runs as red dots on the zero line: a failing command is exactly what someone opens this page for,
-     * and its duration alone does not show that it failed.
+     * Failed runs marked on the duration line itself: a failing command is exactly what someone opens this page
+     * for, and its duration alone does not show that it failed.
+     *
+     * The marker takes the value of the run it belongs to rather than sitting on zero, so it stays inside the
+     * y axis - which is not anchored to zero and often does not contain it at all.
      *
      * @param {Object} response
      * @returns {Object}
      * @private
      */
     _buildFailureDataset(response) {
+        // A scheduler chart holds exactly one command, so its first dataset is that command's durations
+        let averages      = response.datasets[0].average;
         let failureLabels = response.failureLabels;
 
         return {
             label: this.options.failuresLegend,
-            data: $.map(response.labels, function (label) {
-                return failureLabels.indexOf(label) === -1 ? null : 0;
+            // Array.map, not $.map - jQuery drops nulls from its result, which would slide every marker
+            // left onto the wrong bucket.
+            data: response.labels.map(function (label, index) {
+                return failureLabels.indexOf(label) === -1 ? null : averages[index];
             }),
             borderColor: '#d9534f',
             backgroundColor: '#d9534f',
             showLine: false,
-            pointRadius: 4,
+            pointRadius: 5,
             pointStyle: 'triangle'
         };
     }
