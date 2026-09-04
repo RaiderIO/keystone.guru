@@ -24,6 +24,11 @@ abstract class AbstractDungeonRouteBuilderRule implements DungeonRouteBuilderRul
         return [];
     }
 
+    public function onRunFinished(?bool $success): array
+    {
+        return [];
+    }
+
     public function isEnemyEligible(Enemy $enemy): bool
     {
         return true;

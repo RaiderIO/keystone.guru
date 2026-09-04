@@ -37,6 +37,24 @@ class TempleOfSethralissDespawningEnemiesRuleMappingTest extends PublicTestCase
         );
     }
 
+    #[Test]
+    public function avatarOfSethraliss_givenTheLatestMappingVersion_isStillMapped(): void
+    {
+        // Arrange
+        $mappedNpcIds = $this->getLatestMappingVersionNpcIds();
+
+        // Act
+        // Assert
+        $this->assertContains(
+            NpcId::AVATAR_OF_SETHRALISS->value,
+            $mappedNpcIds,
+            sprintf(
+                'Avatar of Sethraliss (%d) is no longer mapped in Temple of Sethraliss',
+                NpcId::AVATAR_OF_SETHRALISS->value,
+            ),
+        );
+    }
+
     /**
      * The award only ever fires off Galvazzt, so the latest mapping has to carry one of his ids or the anomalies stop
      * being credited entirely.

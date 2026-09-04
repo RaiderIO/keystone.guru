@@ -19,7 +19,12 @@ use App\Service\CombatLog\Builders\Logging\DungeonRouteBuilderLoggingInterface;
  * Galvazzt's own death is the signal that they are all gone, since the party cannot have reached him otherwise. He
  * carries two npc_ids across the mapping versions we still build routes for, and either one means the same thing.
  *
- * Awarding is idempotent per npc: an anomaly that did reach us normally, or that an earlier award already covered, is
+ * The Avatar of Sethraliss is not killed either, but for a different reason: it starts at a fraction of its health and
+ * the encounter is won by healing it back to full. It never takes a lethal hit, so no death for it exists anywhere -
+ * and being the final boss, there is no later death to award it off either. Completing the dungeon is the only thing
+ * that implies it, so it is awarded when the run finished successfully.
+ *
+ * Awarding is idempotent per npc: an enemy that did reach us normally, or that an earlier award already covered, is
  * never awarded twice.
  */
 class TempleOfSethralissDespawningEnemiesRule extends AbstractDungeonRouteBuilderRule
@@ -51,6 +56,23 @@ class TempleOfSethralissDespawningEnemiesRule extends AbstractDungeonRouteBuilde
 
         if ($awardedNpcIds !== []) {
             $this->log->templeOfSethralissDespawningEnemiesRuleEnemyKillsAwarded($npcId, $awardedNpcIds);
+        }
+
+        return $awardedNpcIds;
+    }
+
+    public function onRunFinished(?bool $success): array
+    {
+        // A run that did not complete never reached the Avatar's full health, and one that reported no outcome at all
+        // is not evidence that it did
+        if ($success !== true) {
+            return [];
+        }
+
+        $awardedNpcIds = $this->awardUnaccountedNpcIds([NpcId::AVATAR_OF_SETHRALISS->value]);
+
+        if ($awardedNpcIds !== []) {
+            $this->log->templeOfSethralissDespawningEnemiesRuleRunFinishedEnemyKillsAwarded($awardedNpcIds);
         }
 
         return $awardedNpcIds;

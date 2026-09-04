@@ -21,6 +21,7 @@ use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\CombatLog\Builders\Logging\CombatLogRouteDungeonRouteBuilderLoggingInterface;
+use App\Service\CombatLog\Builders\Rules\DungeonRouteBuilderRuleInterface;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
@@ -251,6 +252,8 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                     }
                 }
 
+                $lastDiedNpc = $event['npc'];
+
                 $awardedNpcIds = $this->notifyRulesEnemyDied($event['npc']->npcId, $event['npc']->getResolvedEnemy());
 
                 // Must happen before the pulls below are created, so the awarded kills are part of the pull that
@@ -286,6 +289,8 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
             }
         }
 
+        $this->awardRunFinishedEnemyKills($lastDiedNpc ?? null);
+
         // Handle spells and the actual creation of pulls for all remaining active pulls
         foreach ($this->activePullCollection as $activePull) {
             $this->log->buildKillZonesCreateNewFinalPull($activePull->getEnemiesKilled()->keys()->toArray());
@@ -296,6 +301,39 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
 
         if ($totalSpellsAssigned !== $this->combatLogRoute->spells->count()) {
             $this->log->buildKillZonesNotAllSpellsAssigned($totalSpellsAssigned, $this->combatLogRoute->spells->count());
+        }
+    }
+
+    /**
+     * Awards the kills that the run's outcome implies rather than any single death, into a pull of their own after
+     * every other pull. See DungeonRouteBuilderRuleInterface::onRunFinished().
+     *
+     * The award still needs somewhere to have happened, and the last enemy to die is the closest thing to it: it is
+     * where the party was when the run ended. Which enemy that is only decides between candidates carrying the same
+     * npc_id, and awardEnemyKills() ignores range, so a boss mapped on another floor still resolves.
+     *
+     * A run where nothing died at all cannot have completed anything, so there is nothing to award off.
+     */
+    private function awardRunFinishedEnemyKills(?CombatLogRouteNpcRequestDto $lastDiedNpc): void
+    {
+        $awardedNpcIds = collect();
+
+        foreach ($this->rules as $rule) {
+            /** @var DungeonRouteBuilderRuleInterface $rule */
+            $awardedNpcIds = $awardedNpcIds->merge($rule->onRunFinished($this->combatLogRoute->challengeMode->success));
+        }
+
+        if ($awardedNpcIds->isEmpty() || $lastDiedNpc === null) {
+            return;
+        }
+
+        $activePull = $this->activePullCollection->addNewPull();
+
+        $this->awardEnemyKills($awardedNpcIds, $activePull, $this->createActivePullEnemy($lastDiedNpc));
+
+        // Nothing resolved - drop the pull again rather than attaching an empty one to the route
+        if ($activePull->getEnemiesKilled()->isEmpty()) {
+            $this->activePullCollection->pop();
         }
     }
 

@@ -38,6 +38,22 @@ interface DungeonRouteBuilderRuleInterface
     public function onEnemyDied(int $npcId, ?Enemy $resolvedEnemy): array;
 
     /**
+     * Advance the rule's state because the run is over, and award the kills that its outcome implies.
+     *
+     * Not every enemy is defeated by dying: the Avatar of Sethraliss is won by healing it to full. No death for one of
+     * those exists anywhere to hang an award off, and being the final boss there is no later death either - the only
+     * thing that implies its defeat is the party completing the dungeon.
+     *
+     * $success is the challenge mode's own outcome, and is null when the run reported none - which is not a completed
+     * run, so a rule must not treat it as one.
+     *
+     * Awards land in a pull of their own after every other pull, since there is no death whose pull they belong to.
+     *
+     * @return array<int, int> npc_ids to award a kill for, empty when the run's outcome awards nothing
+     */
+    public function onRunFinished(?bool $success): array;
+
+    /**
      * Whether this enemy may be matched at all. A false here is final - it survives the builder's retry for an NPC
      * that matched nothing, so the enemy is dropped from the route (and its enemy forces) rather than mismatched.
      */

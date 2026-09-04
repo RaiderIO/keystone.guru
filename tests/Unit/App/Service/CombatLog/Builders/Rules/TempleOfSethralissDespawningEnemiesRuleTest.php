@@ -118,6 +118,79 @@ class TempleOfSethralissDespawningEnemiesRuleTest extends PublicTestCase
         $this->assertEmpty($result);
     }
 
+    #[Test]
+    public function onRunFinished_givenTheRunSucceeded_awardsTheAvatarOfSethraliss(): void
+    {
+        // Arrange
+        $rule = $this->makeRule();
+
+        // Act
+        $result = $rule->onRunFinished(true);
+
+        // Assert
+        $this->assertEquals([NpcId::AVATAR_OF_SETHRALISS->value], $result);
+    }
+
+    /**
+     * The Avatar is only healed to full on a run that completed - anything else never finished the encounter, and a
+     * run that reported no outcome at all is not evidence that it did.
+     */
+    #[Test]
+    #[DataProvider('unsuccessfulRunProvider')]
+    public function onRunFinished_givenTheRunDidNotSucceed_awardsNothing(?bool $success): void
+    {
+        // Arrange
+        $rule = $this->makeRule();
+
+        // Act
+        $result = $rule->onRunFinished($success);
+
+        // Assert
+        $this->assertEmpty($result);
+    }
+
+    /**
+     * @return array<string, array{bool|null}>
+     */
+    public static function unsuccessfulRunProvider(): array
+    {
+        return [
+            'depleted'   => [false],
+            'no outcome' => [null],
+        ];
+    }
+
+    /**
+     * If the Avatar's death does reach us after all, awarding it at the end of the run would duplicate it.
+     */
+    #[Test]
+    public function onRunFinished_givenTheAvatarOfSethralissAlreadyDied_awardsNothing(): void
+    {
+        // Arrange
+        $rule = $this->makeRule();
+        $rule->onEnemyDied(NpcId::AVATAR_OF_SETHRALISS->value, null);
+
+        // Act
+        $result = $rule->onRunFinished(true);
+
+        // Assert
+        $this->assertEmpty($result);
+    }
+
+    #[Test]
+    public function onRunFinished_givenItAlreadyRan_awardsNothingTheSecondTime(): void
+    {
+        // Arrange
+        $rule = $this->makeRule();
+        $rule->onRunFinished(true);
+
+        // Act
+        $result = $rule->onRunFinished(true);
+
+        // Assert
+        $this->assertEmpty($result);
+    }
+
     /**
      * The rule only ever awards, it must never take an enemy out of the running for a normal spatial match.
      */
