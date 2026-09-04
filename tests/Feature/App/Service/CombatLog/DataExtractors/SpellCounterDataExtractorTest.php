@@ -122,6 +122,36 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
     }
 
     #[Test]
+    public function extractData_givenTheSpellIsAlreadyAssignedToTheDungeonByAnotherNpc_doesNotCreateADuplicateSpellDungeonRow(): void
+    {
+        // Arrange - #4327: a different NPC (or a racing extraction job) already assigned this spell to this
+        // dungeon before this NPC's own NpcSpell row existed, so assignSpellToNpc() still reaches the
+        // SpellDungeon insert for a pair that is already there
+        $castSpellId   = 9990035;
+        $debuffSpellId = 9990036;
+        $this->createTestSpell($castSpellId);
+        $this->createTestSpell($debuffSpellId, 12000);
+        SpellDungeon::create([
+            'spell_id'   => $castSpellId,
+            'dungeon_id' => $this->currentDungeon->dungeon->id,
+        ]);
+
+        // Act - must not throw on the now-duplicate insert attempt
+        $this->runExtract([
+            $this->npcCastStart(0, $castSpellId, 'Lens Flare'),
+            $this->debuffApplied(0, $debuffSpellId, 'Lens Flare', null),
+            $this->debuffRemoved(1999, $debuffSpellId, 'Lens Flare', null),
+            $this->playerCastSuccess(2000, VanishSpellCounterDefinition::SPELL_ID_VANISH_CAST, 'Vanish'),
+        ]);
+
+        // Assert - still exactly one row for the pair
+        $this->assertSame(
+            1,
+            SpellDungeon::where('spell_id', $castSpellId)->where('dungeon_id', $this->currentDungeon->dungeon->id)->count(),
+        );
+    }
+
+    #[Test]
     public function extractData_givenTargetingDebuffDroppedJustAfterVanish_setsCounterOnCastSpell(): void
     {
         // Arrange - same signature, but the removal line comes *after* the counter cast

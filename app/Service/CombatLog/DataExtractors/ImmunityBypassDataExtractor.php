@@ -394,9 +394,10 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
             'spell_id' => $spellId,
         ]);
 
-        if ($observation['dungeon_id'] !== null && !SpellDungeon::where('spell_id', $spellId)
-            ->where('dungeon_id', $observation['dungeon_id'])->exists()) {
-            SpellDungeon::create([
+        // insertOrIgnore (not exists()+create()) so a concurrent extraction job racing this same
+        // pair cannot create a duplicate row - the unique index makes the second insert a no-op
+        if ($observation['dungeon_id'] !== null) {
+            SpellDungeon::query()->insertOrIgnore([
                 'spell_id'   => $spellId,
                 'dungeon_id' => $observation['dungeon_id'],
             ]);

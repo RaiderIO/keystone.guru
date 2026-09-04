@@ -116,6 +116,33 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
     }
 
     #[Test]
+    public function extractData_givenTheSpellIsAlreadyAssignedToTheDungeonByAnotherNpc_doesNotCreateADuplicateSpellDungeonRow(): void
+    {
+        // Arrange - #4327: a different NPC (or a racing extraction job) already assigned this spell to this
+        // dungeon before this NPC's own NpcSpell row existed, so assignSpellToNpc() still reaches the
+        // SpellDungeon insert for a pair that is already there
+        $spellId = 9991002;
+        $this->createTestSpell($spellId);
+        SpellDungeon::create([
+            'spell_id'   => $spellId,
+            'dungeon_id' => $this->currentDungeon->dungeon->id,
+        ]);
+
+        // Act - must not throw on the now-duplicate insert attempt
+        $this->runExtract([
+            $this->immunityApplied(0, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+            $this->npcDamage(2000, $spellId, 'Unstoppable Force'),
+            $this->immunityRemoved(8000, Spell::SPELL_DIVINE_SHIELD, 'Divine Shield'),
+        ]);
+
+        // Assert - still exactly one row for the pair
+        $this->assertSame(
+            1,
+            SpellDungeon::where('spell_id', $spellId)->where('dungeon_id', $this->currentDungeon->dungeon->id)->count(),
+        );
+    }
+
+    #[Test]
     public function extractData_givenNpcDamageBeforeImmunityApplied_doesNotSetImmunityBypass(): void
     {
         // Arrange
