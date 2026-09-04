@@ -12,6 +12,7 @@ use App\Models\Floor\Floor;
 use App\Models\GameServerRegion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
+use App\Models\Npc\NpcEnemyForces;
 use App\Models\Season;
 use App\Models\User;
 use App\Service\Season\SeasonServiceInterface;
@@ -177,6 +178,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
     public function combatLogRouteEnemyFailures_givenFailuresForUnmappedNpc_listsNpcFlaggedNotMapped(): void
     {
         $createdFailureIds = [];
+        $npcEnemyForcesId  = null;
 
         try {
             // Arrange
@@ -189,6 +191,14 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
             $unmappedNpc = Npc::query()->whereNotIn('id', $mappedNpcIds)->firstOrFail();
             /** @var Floor $floor */
             $floor = $dungeon->floors()->where('facade', 0)->firstOrFail();
+
+            // Once any npc of the mapping version is worth enemy forces, failures of npcs that are not are filtered
+            // out (#4475). setUp() pins a shuffled dungeon, so without this row the outcome depends on the pick.
+            $npcEnemyForcesId = NpcEnemyForces::query()->create([
+                'mapping_version_id' => $mappingVersion->id,
+                'npc_id'             => $unmappedNpc->id,
+                'enemy_forces'       => 10,
+            ])->id;
 
             $createdFailureIds[] = CombatLogRouteEnemyFailure::create([
                 'dungeon_id'         => $dungeon->id,
@@ -210,6 +220,11 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
             $response->assertSee(sprintf('(%d) — 1 ⚠ %s', $unmappedNpc->id, __('view_common.maps.controls.combatlogrouteenemyfailures.not_mapped')));
         } finally {
             CombatLogRouteEnemyFailure::query()->whereIn('id', $createdFailureIds)->delete();
+
+            if ($npcEnemyForcesId !== null) {
+                NpcEnemyForces::query()->whereKey($npcEnemyForcesId)->delete();
+                new NpcEnemyForces()->flushCache();
+            }
         }
     }
 

@@ -252,14 +252,23 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
     #[Test]
     public function getEnemyFailures_givenNpcIdFilter_returnsOnlyMatchingGridCell(): void
     {
-        $created = [];
+        $created          = [];
+        $npcEnemyForcesId = null;
 
         // Use unlikely npc IDs to avoid collisions with existing test data
         $targetNpcId = 99901;
         $otherNpcId  = 99902;
 
         try {
-            // Arrange
+            // Arrange — once any npc of the mapping version is worth enemy forces, failures of npcs that are not
+            // are filtered out (#4475). findDungeon() shuffles, so without this row the outcome depends on the
+            // dungeon picked.
+            $npcEnemyForcesId = NpcEnemyForces::query()->create([
+                'mapping_version_id' => $this->mappingVersion->id,
+                'npc_id'             => $targetNpcId,
+                'enemy_forces'       => 10,
+            ])->id;
+
             $matching = CombatLogRouteEnemyFailure::create([
                 'dungeon_id'         => $this->dungeon->id,
                 'floor_id'           => $this->floor->id,
@@ -301,6 +310,11 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
             $this->assertEquals(1, $body['weight_max']);
         } finally {
             CombatLogRouteEnemyFailure::whereIn('id', $created)->delete();
+
+            if ($npcEnemyForcesId !== null) {
+                NpcEnemyForces::query()->whereKey($npcEnemyForcesId)->delete();
+                new NpcEnemyForces()->flushCache();
+            }
         }
     }
 
