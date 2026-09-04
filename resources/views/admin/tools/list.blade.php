@@ -268,6 +268,21 @@
             </div>
         </div>
 
+        {{-- Telemetry --}}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <i class="fas fa-chart-line"></i> {{ __('view_admin.tools.list.subheader_telemetry') }}
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a href="{{ route('admin.tools.telemetry.view') }}">{{ __('view_admin.tools.list.view_telemetry') }}</a>
+                        <small class="text-muted d-block">{{ __('view_admin.tools.list.view_telemetry_description') }}</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
         {{-- Patreon --}}
         <div class="col-md-6 col-lg-4 mb-4">
             <div class="card h-100">
