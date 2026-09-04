@@ -16,6 +16,7 @@ use App\Service\CombatLog\Builders\Logging\ResultEventDungeonRouteBuilderLogging
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
+use App\Service\CombatLog\ResultEvents\ChallengeModeEnd;
 use App\Service\CombatLog\ResultEvents\EnemyEngaged;
 use App\Service\CombatLog\ResultEvents\EnemyKilled;
 use App\Service\CombatLog\ResultEvents\MapChange as MapChangeResultEvent;
@@ -68,6 +69,9 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
 
     public function build(): DungeonRoute
     {
+        $runSucceeded            = null;
+        $lastDiedActivePullEnemy = null;
+
         foreach ($this->resultEvents as $resultEvent) {
             try {
                 $baseEvent = $resultEvent->getBaseEvent();
@@ -75,6 +79,11 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                     $baseEvent->getTimestamp()->toDateTimeString(),
                     $baseEvent->getEventName(),
                 );
+
+                if ($resultEvent instanceof ChallengeModeEnd) {
+                    // 1 = the party beat the timer's requirement to complete the dungeon at all
+                    $runSucceeded = $resultEvent->getChallengeModeEndEvent()->getSuccess() === 1;
+                }
 
                 if ($resultEvent instanceof MapChangeResultEvent) {
                     /** @var MapChangeCombatLogEvent $baseEvent */
@@ -165,6 +174,8 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                     // trigger is built from always carries a position regardless of how the death resolved.
                     $diedActivePullEnemy ??= $this->engagedEnemiesByGuid->get($guid);
 
+                    $lastDiedActivePullEnemy = $diedActivePullEnemy ?? $lastDiedActivePullEnemy;
+
                     $awardedNpcIds = $this->notifyRulesEnemyDied(
                         $resultEvent->getGuid()->getId(),
                         $diedActivePullEnemy?->getResolvedEnemy(),
@@ -222,6 +233,8 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                 $this->log->buildEnd();
             }
         }
+
+        $this->awardRunFinishedEnemyKills($runSucceeded, $lastDiedActivePullEnemy);
 
         // Handle spells and the actual creation of pulls for all remaining active pulls
         foreach ($this->activePullCollection as $activePull) {
