@@ -265,7 +265,7 @@ if (Feature::active(NpcCompendium::class)) {
                 @endif
             </ul>
             <ul class="navbar-nav">
-                <li class="nav-item px-3">
+                <li class="nav-item px-2">
                     <a class="btn btn-accent" href="#"
                        data-bs-toggle="modal" data-bs-target="#create_route_modal">
                         <i class="fas fa-plus"></i> {{__('view_common.layout.header.create_route')}}

@@ -107,7 +107,7 @@ final class SiteHeaderTest extends PublicTestCase
         $response->assertOk();
         $html = $response->getContent();
 
-        $myRoutesPosition = strpos($html, route('profile.routes'));
+        $myRoutesPosition   = strpos($html, route('profile.routes'));
         $adminToolsPosition = strpos($html, route('admin.tools'));
 
         $this->assertNotFalse($myRoutesPosition);

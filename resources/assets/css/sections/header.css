@@ -76,8 +76,10 @@
 }
 
 /* Same row-budget problem from the other side: the stock 200px logo alone leaves too little room
-   for the selector, and the toggler would wrap onto a line of its own - doubling the header height */
-@media (max-width: 991.98px) {
+   for the selector, and the toggler would wrap onto a line of its own - doubling the header height.
+   Kept up to xl because the expanded bar (three categories, the CTA and the account block) needs
+   ~1006px at lg and the container only offers ~952px there (#4465) */
+@media (max-width: 1199.98px) {
     .ksg-header .navbar-brand {
         margin-right: 0.5rem;
     }
@@ -209,12 +211,21 @@
 @media (min-width: 992px) {
     /* Two-line labels would otherwise double the bar's height at the widths where the container
        is tightest (#4465) */
-    .ksg-header .navbar-second .nav-link {
+    .ksg-header .navbar-second .nav-link,
+    .ksg-header .navbar-second .btn {
         white-space: nowrap;
     }
 
+    /* The account menu of an admin is taller than a 900px-high viewport, and the header is sticky -
+       the page behind it does not scroll the menu into view. The subtracted band is the two header bars
+       plus slack - the menu hangs below them, so viewport height alone is not the budget. */
+    .ksg-header .navbar-second .dropdown-menu {
+        max-height: calc(100dvh - 13rem);
+        overflow-y: auto;
+    }
+
     .ksg-header .ksg-nav-panel {
-        min-width: 20rem;
+        min-width: 22rem;
         padding: 0.5rem;
     }
 
@@ -224,5 +235,19 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         min-width: 34rem;
+    }
+}
+
+/* The expanded bar is tightest right at the lg breakpoint - the container is 960px there and the
+   stock nav-link/button padding puts the account block past its right edge (#4465) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .ksg-header .navbar-second .navbar-nav .nav-link {
+        padding-left: 0.35rem;
+        padding-right: 0.35rem;
+    }
+
+    .ksg-header .navbar-second .btn {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
     }
 }
