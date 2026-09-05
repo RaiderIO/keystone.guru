@@ -13,7 +13,7 @@
         "settings": {
             "temporary": true,
             "debugIcons": false,
-            "mappingVersion": 11
+            "mappingVersion": 14
         },
         "challengeMode": {
             "start": "2026-08-21T22:50:58.842+00:00",
@@ -458,8 +458,8 @@
                     "uiMapId": 2095
                 },
                 "coordEnemy": {
-                    "x": 153.83,
-                    "y": 1586.96,
+                    "x": 141.11,
+                    "y": 1621.38,
                     "uiMapId": 2094
                 },
                 "gridCoord": {
@@ -468,8 +468,8 @@
                     "uiMapId": 2095
                 },
                 "gridCoordEnemy": {
-                    "x": 154.25,
-                    "y": 1585.25,
+                    "x": 142,
+                    "y": 1620.25,
                     "uiMapId": 2094
                 }
             },
@@ -652,32 +652,6 @@
                 "gridCoordEnemy": {
                     "x": 187.5,
                     "y": 1601,
-                    "uiMapId": 2094
-                }
-            },
-            {
-                "npcId": 188067,
-                "spawnUid": "0000089E12",
-                "engagedAt": "2026-08-21T22:54:11.670+00:00",
-                "diedAt": "2026-08-21T22:54:53.711+00:00",
-                "coord": {
-                    "x": 142.37,
-                    "y": 1624.62,
-                    "uiMapId": 2095
-                },
-                "coordEnemy": {
-                    "x": 141.11,
-                    "y": 1621.38,
-                    "uiMapId": 2094
-                },
-                "gridCoord": {
-                    "x": 142.53,
-                    "y": 1622.98,
-                    "uiMapId": 2095
-                },
-                "gridCoordEnemy": {
-                    "x": 142,
-                    "y": 1620.25,
                     "uiMapId": 2094
                 }
             },

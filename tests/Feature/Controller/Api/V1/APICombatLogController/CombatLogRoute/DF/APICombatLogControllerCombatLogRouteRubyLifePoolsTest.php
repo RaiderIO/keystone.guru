@@ -35,7 +35,7 @@ class APICombatLogControllerCombatLogRouteRubyLifePoolsTest extends APICombatLog
         try {
             $this->validateResponseStaticData($responseArr);
             $this->validateDungeon($responseArr);
-            $this->validatePulls($postBody, $responseArr, 15, 617);
+            $this->validatePulls($postBody, $responseArr, 15, 610);
             $this->validateAffixes($responseArr);
             $this->validateBossesResolved($postBody, $responseArr);
         } finally {

@@ -13,7 +13,7 @@
         "settings": {
             "temporary": true,
             "debugIcons": false,
-            "mappingVersion": 8
+            "mappingVersion": 11
         },
         "challengeMode": {
             "start": "2026-08-21T22:51:17.851+00:00",
@@ -3110,8 +3110,8 @@
                     "uiMapId": 2500
                 },
                 "coordEnemy": {
-                    "x": -1821.49,
-                    "y": 1336.86,
+                    "x": -1819.15,
+                    "y": 1309.46,
                     "uiMapId": 2500
                 },
                 "gridCoord": {
@@ -3120,8 +3120,8 @@
                     "uiMapId": 2500
                 },
                 "gridCoordEnemy": {
-                    "x": -1821.26,
-                    "y": 1333.75,
+                    "x": -1817.46,
+                    "y": 1307.21,
                     "uiMapId": 2500
                 }
             },
@@ -3136,8 +3136,8 @@
                     "uiMapId": 2500
                 },
                 "coordEnemy": {
-                    "x": -1819.15,
-                    "y": 1309.46,
+                    "x": -1785.7,
+                    "y": 1254.19,
                     "uiMapId": 2500
                 },
                 "gridCoord": {
@@ -3146,8 +3146,8 @@
                     "uiMapId": 2500
                 },
                 "gridCoordEnemy": {
-                    "x": -1817.46,
-                    "y": 1307.21,
+                    "x": -1783.27,
+                    "y": 1254.13,
                     "uiMapId": 2500
                 }
             },

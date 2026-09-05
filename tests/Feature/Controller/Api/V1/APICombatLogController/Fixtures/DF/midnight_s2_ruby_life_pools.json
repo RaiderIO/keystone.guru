@@ -12,7 +12,7 @@
     "settings": {
         "temporary": true,
         "debugIcons": false,
-        "mappingVersion": 11,
+        "mappingVersion": 14,
         "publicKey": null
     },
     "challengeMode": {
