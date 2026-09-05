@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Environment;
 
+use Illuminate\Support\Facades\Artisan;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -84,5 +85,41 @@ final class TestEnvironmentTest extends TestCase
 
         // Assert
         $this->assertSame($expectedDriver, $driver, sprintf('%s must not reach the dev stack during tests', $configKey));
+    }
+
+    #[Test]
+    public function migrationStatus_givenTestRun_hasNoPendingMigrationsOnThePhpunitConnection(): void
+    {
+        // Arrange - the phpunit schema is persistent and pre-seeded (#4346), not recreated per run, so a
+        // migration merged after it was last provisioned leaves it stale until Tests\Bootstrap migrates it
+        // before the first test runs (#4419)
+
+        // Act
+        Artisan::call('migrate:status', ['--database' => 'phpunit']);
+        $output = Artisan::output();
+
+        // Assert
+        $this->assertStringNotContainsString('Pending', $output, $output);
+    }
+
+    #[Test]
+    public function migrationStatus_givenTestRunWithDedicatedCombatlogSchema_hasNoPendingMigrations(): void
+    {
+        // Arrange - only meaningful when a dedicated combatlog_phpunit schema is configured; without one
+        // tests fall back to the live combatlog schema, which carries no such staleness risk (#4419)
+        $combatlogPhpunitDatabase = config('database.connections.combatlog_phpunit.database');
+        if (empty($combatlogPhpunitDatabase)) {
+            $this->markTestSkipped('DB_PHPUNIT_COMBATLOG_DATABASE is not configured');
+        }
+
+        // Act
+        Artisan::call('migrate:status', [
+            '--database' => 'combatlog_phpunit',
+            '--path'     => 'database/migrations_combatlog',
+        ]);
+        $output = Artisan::output();
+
+        // Assert
+        $this->assertStringNotContainsString('Pending', $output, $output);
     }
 }
