@@ -99,6 +99,8 @@ interface DungeonRouteBuilderLoggingInterface
 
     public function awardEnemyKillsEnemyAwarded(int $npcId, int $enemyId): void;
 
+    public function awardEnemyKillsIterationLimitReached(int $npcId, int $awardedCount): void;
+
     /**
      * @param array<int, bool> $preferredGroups
      */

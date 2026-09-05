@@ -206,6 +206,11 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    public function awardEnemyKillsIterationLimitReached(int $npcId, int $awardedCount): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
     public function findClosestEnemyAndDistanceFromList(int $enemiesCount, bool $considerPatrols): void
     {
         $this->debug(__METHOD__, get_defined_vars());

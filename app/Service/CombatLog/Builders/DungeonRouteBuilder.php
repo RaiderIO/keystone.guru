@@ -63,6 +63,9 @@ abstract class DungeonRouteBuilder
     /** @var int The average HP of the current pull before we consider new enemies as part of a new pull */
     protected const CHAIN_PULL_DETECTION_HP_PERCENT = 30;
 
+    /** @var int Upper bound on the enemies a single awarded npc_id may credit, so that the award loop can never run away */
+    private const AWARD_ENEMY_KILLS_MAX_ITERATIONS = 100;
+
     /**
      * @var float Determines how heavy the kill priority skews the weight towards this enemy. A lower value means the pull is stronger.
      *            Note: this value is divided by 10 because the kill_priority high = 10, low = -10. Instead of dividing these values by 10,
@@ -485,6 +488,12 @@ abstract class DungeonRouteBuilder
                 $this->log->awardEnemyKillsEnemyAwarded($npcId, $resolvedEnemy->id);
 
                 $awardedCount++;
+
+                if ($awardedCount >= self::AWARD_ENEMY_KILLS_MAX_ITERATIONS) {
+                    $this->log->awardEnemyKillsIterationLimitReached($npcId, $awardedCount);
+
+                    break;
+                }
             }
 
             if ($awardedCount === 0) {

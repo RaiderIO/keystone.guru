@@ -33,10 +33,6 @@ interface DungeonRouteBuilderRuleInterface
      * awarded in the same pull as this death; the builder then resolves and attaches them as if they had been sent.
      * Awarding is the rule's own responsibility to keep idempotent - the builder will happily award the same npc twice.
      *
-     * Naming an npc_id awards every one of its remaining mapped enemies, not one of them: an npc that despawns does so
-     * as a group, and crediting a single placement would leave the rest out of the route and its enemy forces. There
-     * is no way to award only some of them.
-     *
      * @return array<int, int> npc_ids to award a kill for, empty when this death awards nothing
      */
     public function onEnemyDied(int $npcId, ?Enemy $resolvedEnemy): array;
