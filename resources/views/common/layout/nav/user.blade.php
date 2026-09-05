@@ -15,41 +15,69 @@ $user = Auth::user();
             {{__('view_common.layout.nav.user.register')}}
         </a>
     </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="preferencesDropdown" role="button"
+           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+           aria-label="{{ __('view_common.layout.nav.user.preferences') }}">
+            <i class="fas fa-cog"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="preferencesDropdown">
+            <h6 class="dropdown-header">{{ __('view_common.layout.nav.user.preferences') }}</h6>
+            @include('common.layout.nav.preferences')
+        </div>
+    </li>
 @else
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             @include('common.user.name', ['user' => $user, 'showRaiderIOStaffImage' => false])
         </a>
-        <div class="dropdown-menu text-center text-xl-start" aria-labelledby="navbarDropdown">
+        <div class="dropdown-menu dropdown-menu-end text-center text-xl-start" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{{ route('profile.routes') }}">
+                <i class="fa fa-route fa-fw"></i> {{ __('view_common.layout.nav.user.my_routes') }}
+            </a>
+            <a class="dropdown-item" href="{{ route('profile.view', ['user' => $user]) }}">
+                <i class="fa fa-user fa-fw"></i> {{ __('view_common.layout.nav.user.my_profile') }}
+            </a>
+            <a class="dropdown-item" href="{{ route('profile.favorites') }}">
+                <i class="fa fa-star fa-fw"></i> {{ __('view_common.layout.nav.user.my_favorites') }}
+            </a>
+            <a class="dropdown-item" href="{{ route('profile.tags') }}">
+                <i class="fa fa-tag fa-fw"></i> {{ __('view_common.layout.nav.user.my_tags') }}
+            </a>
+            <a class="dropdown-item" href="{{ route('team.list') }}">
+                <i class="fa fa-users fa-fw"></i> {{ __('view_common.layout.nav.user.my_teams') }}
+            </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                <i class="fa fa-cog fa-fw"></i> {{ __('view_common.layout.nav.user.account_settings') }}
+            </a>
+            <div class="dropdown-divider"></div>
+            <h6 class="dropdown-header">{{ __('view_common.layout.nav.user.preferences') }}</h6>
+            @include('common.layout.nav.preferences')
             @if($user->hasRole(Role::ROLE_ADMIN))
+                <div class="dropdown-divider"></div>
+                <h6 class="dropdown-header">{{ __('view_common.layout.nav.user.admin') }}</h6>
                 @if( config('telescope.enabled') )
                     <a class="dropdown-item"
                        href="{{ route('telescope') }}">
-                        <i class="fa fa-binoculars"></i> {{__('view_common.layout.nav.user.telescope')}}
+                        <i class="fa fa-binoculars fa-fw"></i> {{__('view_common.layout.nav.user.telescope')}}
                     </a>
                 @endif
                 <a class="dropdown-item"
                    href="{{ route('admin.tools') }}">
-                    <i class="fa fa-hammer"></i> {{__('view_common.layout.nav.user.tools')}}
+                    <i class="fa fa-hammer fa-fw"></i> {{__('view_common.layout.nav.user.tools')}}
                 </a>
-                <div class="dropdown-divider"></div>
-{{--                @if( $user->isAbleTo('read-expansions') )--}}
-                    <a class="dropdown-item"
-                       href="{{ route('admin.expansions') }}">{{__('view_common.layout.nav.user.view_expansions')}}</a>
-{{--                @endif--}}
-{{--                @if( $user->isAbleTo('read-dungeons') )--}}
-                    <a class="dropdown-item"
-                       href="{{ route('admin.dungeons') }}">{{__('view_common.layout.nav.user.view_dungeons')}}</a>
-{{--                @endif--}}
+                <a class="dropdown-item"
+                   href="{{ route('admin.expansions') }}">{{__('view_common.layout.nav.user.view_expansions')}}</a>
+                <a class="dropdown-item"
+                   href="{{ route('admin.dungeons') }}">{{__('view_common.layout.nav.user.view_dungeons')}}</a>
                 <a class="dropdown-item"
                    href="{{ route('admin.affixes') }}">{{__('view_common.layout.nav.user.view_affixes')}}</a>
                 <a class="dropdown-item"
                    href="{{ route('admin.seasons') }}">{{__('view_common.layout.nav.user.view_seasons')}}</a>
-{{--                @if( $user->isAbleTo('read-npcs') )--}}
-                    <a class="dropdown-item"
-                       href="{{ route('admin.npcs') }}">{{__('view_common.layout.nav.user.view_npcs')}}</a>
-{{--                @endif--}}
+                <a class="dropdown-item"
+                   href="{{ route('admin.npcs') }}">{{__('view_common.layout.nav.user.view_npcs')}}</a>
                 <a class="dropdown-item"
                    href="{{ route('admin.spells') }}">{{__('view_common.layout.nav.user.view_spells')}}</a>
                 <a class="dropdown-item"
@@ -66,32 +94,12 @@ $user = Auth::user();
                         <span class="badge text-bg-warning rounded-pill">{{ $numUserReports }}</span>
                     @endif
                 </a>
-                <div class="dropdown-divider"></div>
             @endif
-            <a class="dropdown-item" href="{{ route('profile.routes') }}">
-                <i class="fa fa-route"></i> {{ __('view_common.layout.nav.user.my_routes') }}
-            </a>
-            <a class="dropdown-item" href="{{ route('profile.view', ['user' => Auth::user()]) }}">
-                <i class="fa fa-user"></i> {{ __('view_common.layout.nav.user.my_profile') }}
-            </a>
-            <a class="dropdown-item" href="{{ route('profile.favorites') }}">
-                <i class="fa fa-star"></i> {{ __('view_common.layout.nav.user.my_favorites') }}
-            </a>
-            <a class="dropdown-item" href="{{ route('profile.tags') }}">
-                <i class="fa fa-tag"></i> {{ __('view_common.layout.nav.user.my_tags') }}
-            </a>
-            <a class="dropdown-item" href="{{ route('team.list') }}">
-                <i class="fa fa-users"></i> {{ __('view_common.layout.nav.user.my_teams') }}
-            </a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="{{ route('profile.edit') }}">
-                <i class="fa fa-cog"></i> {{ __('view_common.layout.nav.user.account_settings') }}
-            </a>
             <div class="dropdown-divider"></div>
 
             <a class="dropdown-item" href="{{ route('logout') }}"
                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <i class="fa fa-sign-out-alt"></i> {{ __('view_common.layout.nav.user.logout') }}
+                <i class="fa fa-sign-out-alt fa-fw"></i> {{ __('view_common.layout.nav.user.logout') }}
             </a>
 
             <form id="logout-form" action="{{ route('logout') }}" method="POST"
