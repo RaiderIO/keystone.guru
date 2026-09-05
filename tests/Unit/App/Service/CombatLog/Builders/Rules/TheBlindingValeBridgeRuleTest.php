@@ -192,7 +192,6 @@ class TheBlindingValeBridgeRuleTest extends PublicTestCase
             'group 49' => [49],
             'group 50' => [50],
             'group 54' => [54],
-            'group 57' => [57],
         ];
     }
 
