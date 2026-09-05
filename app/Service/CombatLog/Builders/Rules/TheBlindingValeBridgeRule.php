@@ -26,7 +26,7 @@ class TheBlindingValeBridgeRule extends AbstractDungeonRouteBuilderRule
     private const array BRIDGE_ENEMY_PACK_GROUPS = [44, 45, 46];
 
     /** @var array<int, int> The EnemyPack groups underneath the bridge - they only spawn once Ruia is dead */
-    private const array UNDER_BRIDGE_ENEMY_PACK_GROUPS = [47, 48, 49, 50, 54, 57];
+    private const array UNDER_BRIDGE_ENEMY_PACK_GROUPS = [47, 48, 49, 50, 54];
 
     private bool $lightwardenRuiaKilled = false;
 

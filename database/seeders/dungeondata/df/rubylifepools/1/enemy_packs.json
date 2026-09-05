@@ -2073,7 +2073,7 @@
         "color": null,
         "color_animated": null,
         "label": "Imported from MDT - group 40",
-        "vertices_json": "[{\"lat\":-101.09,\"lng\":161.92},{\"lat\":-69.81,\"lng\":161.92},{\"lat\":-69.81,\"lng\":171.5144},{\"lat\":-101.09,\"lng\":171.5144}]"
+        "vertices_json": "[{\"lat\":-77.6146,\"lng\":165.5449},{\"lat\":-69.81,\"lng\":165.5449},{\"lat\":-69.81,\"lng\":171.5144},{\"lat\":-77.6146,\"lng\":171.5144}]"
     },
     {
         "id": 29937,

@@ -13,7 +13,7 @@ use Tests\TestCases\PublicTestCase;
 
 /**
  * TheBlindingValeBridgeRule hardcodes the EnemyPack groups on top of the bridge (44, 45, 46) and the ones underneath
- * it (47, 48, 49, 50, 54, 57), but group numbers come from the MDT import and are only unique per mapping version - a
+ * it (47, 48, 49, 50, 54), but group numbers come from the MDT import and are only unique per mapping version - a
  * re-import can renumber them. This pins what those groups contain so that a renumber fails here rather than silently
  * turning the rule into a no-op (or, worse, blocking the wrong packs).
  */
@@ -35,7 +35,6 @@ class TheBlindingValeBridgeRuleMappingTest extends PublicTestCase
         49 => [NpcId::VIRID_GROVEKEEPER->value],
         50 => [NpcId::RADIANT_SPELLSOWER->value, NpcId::UNDERBRUSH_STALKER->value, NpcId::LIGHTGORGED_LASHER->value, NpcId::LIGHTGORGED_LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value],
         54 => [NpcId::LIGHTGORGED_LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value],
-        57 => [NpcId::LIGHTFEATHER_PETALWING->value],
     ];
 
     #[Test]
