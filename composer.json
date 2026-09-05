@@ -112,7 +112,6 @@
         "spomky-labs/cbor-php": "^3.3",
         "symfony/http-client": "^7.2",
         "symfony/mailgun-mailer": "^7.2",
-        "tray-labs/laravel-influxdb": "^1.0",
         "tremby/laravel-git-version": "^1.1",
         "zircote/swagger-php": "^4.8"
     },

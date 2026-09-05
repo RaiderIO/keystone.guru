@@ -426,12 +426,6 @@ return [
         'expires_hours' => 1,
     ],
 
-    'influxdb' => [
-        'default_tags' => [
-            'environment' => env('APP_ENV'),
-        ],
-    ],
-
     'webhook' => [
         'github' => [
             'url'    => env('DISCORD_GITHUB_WEBHOOK'),
