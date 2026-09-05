@@ -20,6 +20,14 @@ class TheBlindingValeBridgeRuleTest extends PublicTestCase
 {
     private const NPC_ID_LIGHTWARDEN_RUIA = 245912;
 
+    private const NPC_ID_LIGHTFEATHER_PETALWING = 245484;
+
+    /** @var int The mdt_id of the Lightfeather Petalwing underneath the bridge, the closest one to bridge group 46 */
+    private const MDT_ID_UNDER_BRIDGE_PETALWING = 7;
+
+    /** @var int Ikuzz the Light Hunter, an ungrouped enemy the rule does not name */
+    private const NPC_ID_UNRELATED = 244887;
+
     #[Test]
     public function appliesToDungeon_givenTheBlindingVale_returnsTrue(): void
     {
@@ -101,7 +109,8 @@ class TheBlindingValeBridgeRuleTest extends PublicTestCase
     }
 
     /**
-     * An enemy that is not part of any pack has no group to block on, so it must never be excluded.
+     * An enemy that is not part of any pack has no group to block on, and is not one the rule names by unique key,
+     * so it must never be excluded.
      */
     #[Test]
     public function isEnemyEligible_givenAnEnemyWithoutAnEnemyPackAfterLightwardenRuiaDied_returnsTrue(): void
@@ -112,6 +121,67 @@ class TheBlindingValeBridgeRuleTest extends PublicTestCase
 
         // Act
         $result = $rule->isEnemyEligible($this->makeEnemy(null));
+
+        // Assert
+        $this->assertTrue($result);
+    }
+
+    #[Test]
+    public function isEnemyEligible_givenAnEnemyWithoutAnEnemyPackBeforeLightwardenRuiaDied_returnsTrue(): void
+    {
+        // Arrange
+        $rule = $this->makeRule();
+
+        // Act
+        $result = $rule->isEnemyEligible($this->makeEnemy(null));
+
+        // Assert
+        $this->assertTrue($result);
+    }
+
+    /**
+     * MDT groups neither of the two traversals' Lightfeather Petalwings, so the one underneath the bridge cannot be
+     * blocked by its pack the way every other under-bridge enemy is.
+     */
+    #[Test]
+    public function isEnemyEligible_givenAnUngroupedUnderBridgeEnemyBeforeLightwardenRuiaDied_returnsFalse(): void
+    {
+        // Arrange
+        $rule = $this->makeRule();
+
+        // Act
+        $result = $rule->isEnemyEligible($this->makeUngroupedEnemy(self::NPC_ID_LIGHTFEATHER_PETALWING, self::MDT_ID_UNDER_BRIDGE_PETALWING));
+
+        // Assert
+        $this->assertFalse($result);
+    }
+
+    #[Test]
+    public function isEnemyEligible_givenAnUngroupedUnderBridgeEnemyAfterLightwardenRuiaDied_returnsTrue(): void
+    {
+        // Arrange
+        $rule = $this->makeRule();
+        $rule->onEnemyDied(self::NPC_ID_LIGHTWARDEN_RUIA, null);
+
+        // Act
+        $result = $rule->isEnemyEligible($this->makeUngroupedEnemy(self::NPC_ID_LIGHTFEATHER_PETALWING, self::MDT_ID_UNDER_BRIDGE_PETALWING));
+
+        // Assert
+        $this->assertTrue($result);
+    }
+
+    /**
+     * The other two ungrouped Petalwings sit further from the bridge and were never excluded, so keying on the npc id
+     * alone would block them too.
+     */
+    #[Test]
+    public function isEnemyEligible_givenAnUngroupedEnemySharingTheNpcIdBeforeLightwardenRuiaDied_returnsTrue(): void
+    {
+        // Arrange
+        $rule = $this->makeRule();
+
+        // Act
+        $result = $rule->isEnemyEligible($this->makeUngroupedEnemy(self::NPC_ID_LIGHTFEATHER_PETALWING, 5));
 
         // Assert
         $this->assertTrue($result);
@@ -223,15 +293,23 @@ class TheBlindingValeBridgeRuleTest extends PublicTestCase
         return $dungeon;
     }
 
+    private function makeUngroupedEnemy(int $npcId, int $mdtId): Enemy
+    {
+        $enemy                = new Enemy();
+        $enemy->enemy_pack_id = null;
+        $enemy->npc_id        = $npcId;
+        $enemy->mdt_id        = $mdtId;
+
+        return $enemy;
+    }
+
     private function makeEnemy(?int $group): Enemy
     {
-        $enemy = new Enemy();
-
         if ($group === null) {
-            $enemy->enemy_pack_id = null;
-
-            return $enemy;
+            return $this->makeUngroupedEnemy(self::NPC_ID_UNRELATED, 1);
         }
+
+        $enemy = new Enemy();
 
         $enemyPack        = new EnemyPack();
         $enemyPack->id    = 1;

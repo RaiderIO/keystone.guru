@@ -28,6 +28,9 @@ class TheBlindingValeBridgeRule extends AbstractDungeonRouteBuilderRule
     /** @var array<int, int> The EnemyPack groups underneath the bridge - they only spawn once Ruia is dead */
     private const array UNDER_BRIDGE_ENEMY_PACK_GROUPS = [47, 48, 49, 50, 54];
 
+    /** @var array<int, string> Enemy unique keys underneath the bridge that MDT does not group, so no pack names them */
+    private const array UNDER_BRIDGE_UNGROUPED_ENEMY_UNIQUE_KEYS = ['245484-7'];
+
     private bool $lightwardenRuiaKilled = false;
 
     public function __construct(private readonly DungeonRouteBuilderLoggingInterface $log)
@@ -60,6 +63,10 @@ class TheBlindingValeBridgeRule extends AbstractDungeonRouteBuilderRule
      * when no other enemy matches at all. An unmatched kill is recorded as an enemy failure, which is a better
      * outcome than a pull that cannot be walked.
      *
+     * MDT does not group every enemy underneath the bridge, and an ungrouped one has no pack to name, so those are
+     * excluded by their unique key instead - stable across imports in a way both EnemyPack group numbers and enemy
+     * ids are not.
+     *
      * Note this blocks rather than prefers. A preference tier would outrank distance entirely, so it overrode correct
      * matches: a kill standing exactly on top of group 48's enemy resolved to a group 45 enemy 15 yards away instead.
      * Excluding the packs that do not exist yet gets the same effect without that failure mode, because it removes
@@ -68,7 +75,8 @@ class TheBlindingValeBridgeRule extends AbstractDungeonRouteBuilderRule
     public function isEnemyEligible(Enemy $enemy): bool
     {
         if ($enemy->enemy_pack_id === null) {
-            return true;
+            return $this->lightwardenRuiaKilled
+                || !in_array($enemy->getUniqueKey(), self::UNDER_BRIDGE_UNGROUPED_ENEMY_UNIQUE_KEYS, true);
         }
 
         $group = $enemy->enemyPack->group;
