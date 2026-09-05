@@ -278,6 +278,7 @@ class ServiceFixtures
         array                                  $methodsToMock = [],
         ?CoordinatesServiceInterface           $coordinatesService = null,
         ?CombatLogEventServiceLoggingInterface $log = null,
+        ?SeasonServiceInterface                $seasonService = null,
     ): MockObject|CombatLogEventService {
         return $testCase
             ->getMockBuilderPublic(CombatLogEventService::class)
@@ -285,6 +286,7 @@ class ServiceFixtures
             ->setConstructorArgs([
                 $coordinatesService ?? ServiceFixtures::getCoordinatesServiceMock($testCase),
                 $log ?? LoggingFixtures::createCombatLogEventServiceLogging($testCase),
+                $seasonService ?? self::getSeasonServiceMock($testCase),
             ])
             ->getMock();
     }
