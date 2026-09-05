@@ -1,3 +1,8 @@
+/**
+ * Decimals shown for every coordinate in the readout.
+ */
+const PRECISION = 3;
+
 class AdminPanelControls extends MapControl {
     constructor(map) {
         super(map);
@@ -76,37 +81,47 @@ class AdminPanelControls extends MapControl {
             facadeLatLng = this._coordinatesService.convertMapLocationToFacadeMapLocation(currentLatLng);
         }
 
-        this._$mouseCoordinates.html(
-            `<span style="font-size: 16px">
-             ${this._formatLatLng('facade', facadeLatLng)}<br>
-             ${this._formatFloorLatLng(floorLatLng)}<br>
-             ${this._formatIngameXY(floorLatLng)}<br>
-             ${this._formatMDT(facadeLatLng)}
-            </span>`
-        );
+        this._$mouseCoordinates.html(this._renderRows([
+            ['facade lat/lng', this._formatLatLng(facadeLatLng)],
+            this._getFloorRow(floorLatLng),
+            ['x/y', this._formatIngameXY(floorLatLng)],
+            ['MDT x/y', this._formatMDT(facadeLatLng)]
+        ]));
     }
 
     /**
-     * @param label {String}
+     * @param rows {[String, String][]}
+     * @returns {String}
+     * @private
+     */
+    _renderRows(rows) {
+        let cells = rows.map(([description, coordinate]) =>
+            `<tr><td class="pe-2">${description}</td><td>${coordinate}</td></tr>`
+        ).join('');
+
+        return `<table style="font-size: 16px">${cells}</table>`;
+    }
+
+    /**
      * @param latLng {LatLng}
      * @returns {String}
      * @private
      */
-    _formatLatLng(label, latLng) {
-        return `${label} lat/lng: ${latLng.getLat(3)}/${latLng.getLng(3)}`;
+    _formatLatLng(latLng) {
+        return `${latLng.getLat(PRECISION)}/${latLng.getLng(PRECISION)}`;
     }
 
     /**
      * @param floorLatLng {LatLng|null}
-     * @returns {String}
+     * @returns {[String, String]}
      * @private
      */
-    _formatFloorLatLng(floorLatLng) {
+    _getFloorRow(floorLatLng) {
         if (floorLatLng === null) {
-            return 'floor lat/lng: -';
+            return ['floor lat/lng', '-'];
         }
 
-        return this._formatLatLng(lang.get(floorLatLng.getFloor().name), floorLatLng);
+        return [`${lang.get(floorLatLng.getFloor().name)} lat/lng`, this._formatLatLng(floorLatLng)];
     }
 
     /**
@@ -116,17 +131,17 @@ class AdminPanelControls extends MapControl {
      */
     _formatIngameXY(floorLatLng) {
         if (floorLatLng === null) {
-            return 'x/y: -';
+            return '-';
         }
 
         let floor = floorLatLng.getFloor();
         if (floor.ingame_max_x - floor.ingame_min_x === 0 || floor.ingame_max_y - floor.ingame_min_y === 0) {
-            return 'x/y: (floor has no ingame bounds)';
+            return '(floor has no ingame bounds)';
         }
 
         let ingameXY = this._coordinatesService.calculateIngameLocationForMapLocation(floorLatLng);
 
-        return `x/y: ${ingameXY.getX(3)}/${ingameXY.getY(3)}`;
+        return `${ingameXY.getX(PRECISION)}/${ingameXY.getY(PRECISION)}`;
     }
 
     /**
@@ -136,8 +151,8 @@ class AdminPanelControls extends MapControl {
      */
     _formatMDT(facadeLatLng) {
         // Conversion::convertLatLngToMDTCoordinate() rounds to 1 decimal; this is a debugging
-        // readout, so it keeps the same precision as the other lines instead
-        return `MDT x/y: ${roundHalfAwayFromZero(facadeLatLng.getLng() * 2.185, 3)}/${roundHalfAwayFromZero(facadeLatLng.getLat() * 2.185, 3)}`;
+        // readout, so it keeps the same precision as the other rows instead
+        return `${roundHalfAwayFromZero(facadeLatLng.getLng() * 2.185, PRECISION)}/${roundHalfAwayFromZero(facadeLatLng.getLat() * 2.185, PRECISION)}`;
     }
 
     /**
