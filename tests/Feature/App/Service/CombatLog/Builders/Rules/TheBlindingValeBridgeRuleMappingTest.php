@@ -13,9 +13,12 @@ use Tests\TestCases\PublicTestCase;
 
 /**
  * TheBlindingValeBridgeRule hardcodes the EnemyPack groups on top of the bridge (44, 45, 46) and the ones underneath
- * it (47, 48, 49, 50, 54, 57), but group numbers come from the MDT import and are only unique per mapping version - a
+ * it (47, 48, 49, 50, 54), but group numbers come from the MDT import and are only unique per mapping version - a
  * re-import can renumber them. This pins what those groups contain so that a renumber fails here rather than silently
  * turning the rule into a no-op (or, worse, blocking the wrong packs).
+ *
+ * The three under-bridge enemies the rule names by unique key are pinned here on the same grounds: it can only
+ * exclude them for as long as those keys still resolve to an enemy.
  */
 #[Group('CombatLog')]
 #[Group('DungeonRouteBuilderRules')]
@@ -35,8 +38,10 @@ class TheBlindingValeBridgeRuleMappingTest extends PublicTestCase
         49 => [NpcId::VIRID_GROVEKEEPER->value],
         50 => [NpcId::RADIANT_SPELLSOWER->value, NpcId::UNDERBRUSH_STALKER->value, NpcId::LIGHTGORGED_LASHER->value, NpcId::LIGHTGORGED_LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value],
         54 => [NpcId::LIGHTGORGED_LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value],
-        57 => [NpcId::LIGHTFEATHER_PETALWING->value],
     ];
+
+    /** @var array<int, string> The Lightfeather Petalwings underneath the bridge, which the rule names by key */
+    private const array UNDER_BRIDGE_ENEMY_UNIQUE_KEYS = ['245484-5', '245484-6', '245484-7'];
 
     #[Test]
     public function theBlindingValeBridgeEnemyPackGroups_givenTheLatestMappingVersion_stillHoldTheExpectedNpcs(): void
@@ -64,6 +69,27 @@ class TheBlindingValeBridgeRuleMappingTest extends PublicTestCase
                 $npcIds,
                 sprintf('EnemyPack group %d no longer holds the expected NPCs', $group),
             );
+        }
+    }
+
+    /**
+     * The rule names these three by key rather than by pack, so what has to hold is that the keys still resolve -
+     * their pack membership is deliberately not asserted, because MDT grouping them again must not break the rule.
+     */
+    #[Test]
+    public function theBlindingValeUnderBridgeEnemies_givenTheLatestMappingVersion_stillResolveByUniqueKey(): void
+    {
+        // Arrange
+        $dungeon        = Dungeon::where('key', DungeonKey::THE_BLINDING_VALE->value)->firstOrFail();
+        $mappingVersion = $dungeon->mappingVersions()->orderByDesc('version')->firstOrFail();
+        $enemies        = Enemy::where('mapping_version_id', $mappingVersion->id)->get();
+
+        foreach (self::UNDER_BRIDGE_ENEMY_UNIQUE_KEYS as $uniqueKey) {
+            // Act
+            $enemy = $enemies->firstWhere(static fn(Enemy $enemy) => $enemy->getUniqueKey() === $uniqueKey);
+
+            // Assert
+            $this->assertNotNull($enemy, sprintf('Enemy %s no longer exists', $uniqueKey));
         }
     }
 }

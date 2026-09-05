@@ -26,7 +26,10 @@ class TheBlindingValeBridgeRule extends AbstractDungeonRouteBuilderRule
     private const array BRIDGE_ENEMY_PACK_GROUPS = [44, 45, 46];
 
     /** @var array<int, int> The EnemyPack groups underneath the bridge - they only spawn once Ruia is dead */
-    private const array UNDER_BRIDGE_ENEMY_PACK_GROUPS = [47, 48, 49, 50, 54, 57];
+    private const array UNDER_BRIDGE_ENEMY_PACK_GROUPS = [47, 48, 49, 50, 54];
+
+    /** @var array<int, string> Enemies underneath the bridge named individually because no pack reliably names them */
+    private const array UNDER_BRIDGE_ENEMY_UNIQUE_KEYS = ['245484-5', '245484-6', '245484-7'];
 
     private bool $lightwardenRuiaKilled = false;
 
@@ -60,6 +63,10 @@ class TheBlindingValeBridgeRule extends AbstractDungeonRouteBuilderRule
      * when no other enemy matches at all. An unmatched kill is recorded as an enemy failure, which is a better
      * outcome than a pull that cannot be walked.
      *
+     * The three Lightfeather Petalwings underneath the bridge are excluded by unique key rather than by pack, and
+     * that check runs first: MDT groups them on some mapping versions and not on others, so neither their presence
+     * in a pack nor any one group number describes them across the mapping versions a route can be built on.
+     *
      * Note this blocks rather than prefers. A preference tier would outrank distance entirely, so it overrode correct
      * matches: a kill standing exactly on top of group 48's enemy resolved to a group 45 enemy 15 yards away instead.
      * Excluding the packs that do not exist yet gets the same effect without that failure mode, because it removes
@@ -67,6 +74,10 @@ class TheBlindingValeBridgeRule extends AbstractDungeonRouteBuilderRule
      */
     public function isEnemyEligible(Enemy $enemy): bool
     {
+        if (in_array($enemy->getUniqueKey(), self::UNDER_BRIDGE_ENEMY_UNIQUE_KEYS, true)) {
+            return $this->lightwardenRuiaKilled;
+        }
+
         if ($enemy->enemy_pack_id === null) {
             return true;
         }
