@@ -8,6 +8,7 @@ use App\Models\Dungeon;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -18,9 +19,12 @@ class NpcCompendiumService implements NpcCompendiumServiceInterface
     /** @var array<int, array{npcIds: Collection<int, int>, spellIds: Collection<int, int>}> */
     private array $dungeonIdCache = [];
 
+    /** @var Collection<int, int>|null */
+    private ?Collection $hiddenSpellIds = null;
+
     public function buildEventFeed(Npc $npc): Collection
     {
-        $npcEvents = CombatLogNpcEvent::query()
+        $npcEvents = $this->rejectHiddenSpellNpcEvents(CombatLogNpcEvent::query())
             ->where('npc_id', $npc->id)
             ->latest('created_at')
             ->limit(50)
@@ -33,15 +37,10 @@ class NpcCompendiumService implements NpcCompendiumServiceInterface
             $group->each(fn(CombatLogNpcEvent $event) => $event->setRelation('model', $models->get($event->model_id)));
         });
 
-        // Reject events that are related to hidden spells, as they are not relevant for the compendium feed
-        $npcEvents = $npcEvents->reject(
-            fn(CombatLogNpcEvent $event) => $event->model instanceof Spell && $event->model->hidden_on_map,
-        );
-
         $spellIds = $npc->npcSpells->pluck('spell_id');
 
         $spellEvents = $spellIds->isNotEmpty()
-            ? CombatLogSpellEvent::query()
+            ? $this->rejectHiddenSpellEvents(CombatLogSpellEvent::query())
                 ->whereIn('spell_id', $spellIds)
                 ->latest('created_at')
                 ->limit(50)
@@ -65,13 +64,13 @@ class NpcCompendiumService implements NpcCompendiumServiceInterface
      */
     public function getActivityDates(int $perPage = 10, ?Dungeon $dungeon = null): LengthAwarePaginator
     {
-        $npcDates = CombatLogNpcEvent::query()
+        $npcDates = $this->rejectHiddenSpellNpcEvents(CombatLogNpcEvent::query())
             ->selectRaw('DATE(created_at) as event_date')
             ->when($dungeon, fn($q) => $q->whereIn('npc_id', $this->getNpcIdsForDungeon($dungeon)))
             ->groupByRaw('DATE(created_at)')
             ->pluck('event_date');
 
-        $spellDates = CombatLogSpellEvent::query()
+        $spellDates = $this->rejectHiddenSpellEvents(CombatLogSpellEvent::query())
             ->selectRaw('DATE(created_at) as event_date')
             ->when($dungeon, fn($q) => $q->whereIn('spell_id', $this->getDungeonSpellIds($dungeon)))
             ->groupByRaw('DATE(created_at)')
@@ -92,7 +91,7 @@ class NpcCompendiumService implements NpcCompendiumServiceInterface
 
     public function getEventsForDate(Carbon $date, ?Dungeon $dungeon = null): Collection
     {
-        $npcEvents = CombatLogNpcEvent::query()
+        $npcEvents = $this->rejectHiddenSpellNpcEvents(CombatLogNpcEvent::query())
             ->whereDate('created_at', $date)
             ->when($dungeon, fn($q) => $q->whereIn('npc_id', $this->getNpcIdsForDungeon($dungeon)))
             ->latest('created_at')
@@ -105,10 +104,6 @@ class NpcCompendiumService implements NpcCompendiumServiceInterface
             $group->each(fn(CombatLogNpcEvent $event) => $event->setRelation('model', $models->get($event->model_id)));
         });
 
-        $npcEvents = $npcEvents->reject(
-            fn(CombatLogNpcEvent $event) => $event->model instanceof Spell && $event->model->hidden_on_map,
-        );
-
         // Eager-load NPC relation (cross-DB: manual setRelation)
         $npcs = Npc::whereIn('id', $npcEvents->pluck('npc_id')->unique())
             // What the NPC links' hover tooltips read (#4096)
@@ -117,7 +112,7 @@ class NpcCompendiumService implements NpcCompendiumServiceInterface
             ->keyBy('id');
         $npcEvents->each(fn(CombatLogNpcEvent $event) => $event->setRelation('npc', $npcs->get($event->npc_id)));
 
-        $spellEvents = CombatLogSpellEvent::query()
+        $spellEvents = $this->rejectHiddenSpellEvents(CombatLogSpellEvent::query())
             ->whereDate('created_at', $date)
             ->when($dungeon, fn($q) => $q->whereIn('spell_id', $this->getDungeonSpellIds($dungeon)))
             ->latest('created_at')
@@ -132,6 +127,54 @@ class NpcCompendiumService implements NpcCompendiumServiceInterface
         return $npcEvents->concat($spellEvents)
             ->sortByDesc('created_at')
             ->values();
+    }
+
+    /**
+     * The ids of every spell flagged `hidden_on_map`. Lives on the main DB while the event tables
+     * live on the `combatlog` connection, so it cannot be joined - it is fetched once and applied as
+     * a `whereNotIn` instead (#4356).
+     *
+     * @return Collection<int, int>
+     */
+    private function getHiddenSpellIds(): Collection
+    {
+        return $this->hiddenSpellIds ??= Spell::query()->where('hidden_on_map', true)->pluck('id');
+    }
+
+    /**
+     * Excludes spell events on hidden spells. Applied to the query rather than to the result, so that
+     * a burst of hidden-spell events cannot consume the feed's `limit(50)` budget, and so that a day
+     * whose only events are hidden does not surface as an empty day in `getActivityDates()`.
+     *
+     * @param Builder<CombatLogSpellEvent> $query
+     *
+     * @return Builder<CombatLogSpellEvent>
+     */
+    private function rejectHiddenSpellEvents(Builder $query): Builder
+    {
+        return $query->whereNotIn('spell_id', $this->getHiddenSpellIds());
+    }
+
+    /**
+     * The NPC-event equivalent of {@see self::rejectHiddenSpellEvents()}: an NPC event whose
+     * polymorphic target is a hidden spell (a `SpellAssigned`, in practice) is excluded. NPC events
+     * pointing at any other model class are untouched.
+     *
+     * @param Builder<CombatLogNpcEvent> $query
+     *
+     * @return Builder<CombatLogNpcEvent>
+     */
+    private function rejectHiddenSpellNpcEvents(Builder $query): Builder
+    {
+        $hiddenSpellIds = $this->getHiddenSpellIds();
+
+        if ($hiddenSpellIds->isEmpty()) {
+            return $query;
+        }
+
+        return $query->whereNot(static function (Builder $q) use ($hiddenSpellIds): void {
+            $q->where('model_class', Spell::class)->whereIn('model_id', $hiddenSpellIds);
+        });
     }
 
     /**
