@@ -11,6 +11,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Attributes\SlowTest;
 use Tests\TestCases\PublicTestCase;
+use Tests\Traits\RestoresSpellDescriptionImportState;
 
 /**
  * Runs the import end to end against DB2 CSVs placed in the download cache, so the command reads the
@@ -20,6 +21,8 @@ use Tests\TestCases\PublicTestCase;
 #[SlowTest]
 final class ImportSpellDescriptionsTest extends PublicTestCase
 {
+    use RestoresSpellDescriptionImportState;
+
     private const string BUILD = '0.0.0.00000';
 
     private const int SPELL_ID = 999999901;
@@ -40,12 +43,16 @@ final class ImportSpellDescriptionsTest extends PublicTestCase
 
         // A successful import rewrites this committed seeder file - restored in tearDown() below
         $this->originalImportStateJson = File::get(database_path(self::IMPORT_STATE_DATA_PATH));
+
+        $this->captureSpellDescriptionImportState(GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL]);
     }
 
     #[\Override]
     protected function tearDown(): void
     {
         File::put(database_path(self::IMPORT_STATE_DATA_PATH), $this->originalImportStateJson);
+
+        $this->restoreSpellDescriptionImportState();
 
         parent::tearDown();
     }
