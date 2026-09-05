@@ -11,11 +11,30 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
 use RuntimeException;
 use Tests\TestCases\PublicTestCase;
+use Tests\Traits\RestoresSpellDescriptionImportState;
 
 #[Group('SpellDescription')]
 final class CheckForSpellDescriptionPatchTest extends PublicTestCase
 {
+    use RestoresSpellDescriptionImportState;
+
     private const int GAME_VERSION_ID = GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL];
+
+    #[\Override]
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->captureSpellDescriptionImportState(self::GAME_VERSION_ID);
+    }
+
+    #[\Override]
+    protected function tearDown(): void
+    {
+        $this->restoreSpellDescriptionImportState();
+
+        parent::tearDown();
+    }
 
     /**
      * @throws Exception
