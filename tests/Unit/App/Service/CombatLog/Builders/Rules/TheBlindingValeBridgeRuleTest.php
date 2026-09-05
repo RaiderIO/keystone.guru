@@ -184,6 +184,39 @@ class TheBlindingValeBridgeRuleTest extends PublicTestCase
     }
 
     /**
+     * MDT groups these three on some mapping versions and not on others, and a route can be built on any of them, so
+     * the exclusion has to hold whether or not the enemy came back with a pack.
+     */
+    #[Test]
+    #[DataProvider('underBridgeUngroupedEnemyMdtIdProvider')]
+    public function isEnemyEligible_givenAnUnderBridgeEnemyInAPackBeforeLightwardenRuiaDied_returnsFalse(int $mdtId): void
+    {
+        // Arrange
+        $rule = $this->makeRule();
+
+        // Act
+        $result = $rule->isEnemyEligible($this->makeEnemyInPack(57, self::NPC_ID_LIGHTFEATHER_PETALWING, $mdtId));
+
+        // Assert
+        $this->assertFalse($result);
+    }
+
+    #[Test]
+    #[DataProvider('underBridgeUngroupedEnemyMdtIdProvider')]
+    public function isEnemyEligible_givenAnUnderBridgeEnemyInAPackAfterLightwardenRuiaDied_returnsTrue(int $mdtId): void
+    {
+        // Arrange
+        $rule = $this->makeRule();
+        $rule->onEnemyDied(self::NPC_ID_LIGHTWARDEN_RUIA, null);
+
+        // Act
+        $result = $rule->isEnemyEligible($this->makeEnemyInPack(57, self::NPC_ID_LIGHTFEATHER_PETALWING, $mdtId));
+
+        // Assert
+        $this->assertTrue($result);
+    }
+
+    /**
      * The Petalwings elsewhere in the dungeon are grouped and must stay eligible, so keying on the npc id alone would
      * block the wrong enemies.
      */
@@ -318,11 +351,16 @@ class TheBlindingValeBridgeRuleTest extends PublicTestCase
 
     private function makeEnemy(?int $group): Enemy
     {
-        if ($group === null) {
-            return $this->makeUngroupedEnemy(self::NPC_ID_UNRELATED, 1);
-        }
+        return $this->makeEnemyInPack($group, self::NPC_ID_UNRELATED, 1);
+    }
 
-        $enemy = new Enemy();
+    private function makeEnemyInPack(?int $group, int $npcId, int $mdtId): Enemy
+    {
+        $enemy = $this->makeUngroupedEnemy($npcId, $mdtId);
+
+        if ($group === null) {
+            return $enemy;
+        }
 
         $enemyPack        = new EnemyPack();
         $enemyPack->id    = 1;

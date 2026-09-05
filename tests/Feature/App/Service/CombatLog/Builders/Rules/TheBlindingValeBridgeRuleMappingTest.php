@@ -17,8 +17,8 @@ use Tests\TestCases\PublicTestCase;
  * re-import can renumber them. This pins what those groups contain so that a renumber fails here rather than silently
  * turning the rule into a no-op (or, worse, blocking the wrong packs).
  *
- * The one under-bridge enemy MDT does not group is named by unique key instead, and is pinned here on the same
- * grounds: the rule can only exclude it while it stays ungrouped and keeps that key.
+ * The three under-bridge enemies the rule names by unique key are pinned here on the same grounds: it can only
+ * exclude them for as long as those keys still resolve to an enemy.
  */
 #[Group('CombatLog')]
 #[Group('DungeonRouteBuilderRules')]
@@ -41,7 +41,7 @@ class TheBlindingValeBridgeRuleMappingTest extends PublicTestCase
     ];
 
     /** @var array<int, string> The Lightfeather Petalwings underneath the bridge, which the rule names by key */
-    private const array UNDER_BRIDGE_UNGROUPED_ENEMY_UNIQUE_KEYS = ['245484-5', '245484-6', '245484-7'];
+    private const array UNDER_BRIDGE_ENEMY_UNIQUE_KEYS = ['245484-5', '245484-6', '245484-7'];
 
     #[Test]
     public function theBlindingValeBridgeEnemyPackGroups_givenTheLatestMappingVersion_stillHoldTheExpectedNpcs(): void
@@ -73,24 +73,23 @@ class TheBlindingValeBridgeRuleMappingTest extends PublicTestCase
     }
 
     /**
-     * The rule can only exclude these enemies for as long as MDT leaves them out of every pack - the moment MDT
-     * groups one again the key stops being the way to name it, and the group belongs in the list above instead.
+     * The rule names these three by key rather than by pack, so what has to hold is that the keys still resolve -
+     * their pack membership is deliberately not asserted, because MDT grouping them again must not break the rule.
      */
     #[Test]
-    public function theBlindingValeUnderBridgeUngroupedEnemies_givenTheLatestMappingVersion_stillExistWithoutAnEnemyPack(): void
+    public function theBlindingValeUnderBridgeEnemies_givenTheLatestMappingVersion_stillResolveByUniqueKey(): void
     {
         // Arrange
         $dungeon        = Dungeon::where('key', DungeonKey::THE_BLINDING_VALE->value)->firstOrFail();
         $mappingVersion = $dungeon->mappingVersions()->orderByDesc('version')->firstOrFail();
         $enemies        = Enemy::where('mapping_version_id', $mappingVersion->id)->get();
 
-        foreach (self::UNDER_BRIDGE_UNGROUPED_ENEMY_UNIQUE_KEYS as $uniqueKey) {
+        foreach (self::UNDER_BRIDGE_ENEMY_UNIQUE_KEYS as $uniqueKey) {
             // Act
             $enemy = $enemies->firstWhere(static fn(Enemy $enemy) => $enemy->getUniqueKey() === $uniqueKey);
 
             // Assert
             $this->assertNotNull($enemy, sprintf('Enemy %s no longer exists', $uniqueKey));
-            $this->assertNull($enemy->enemy_pack_id, sprintf('Enemy %s is grouped again', $uniqueKey));
         }
     }
 }
