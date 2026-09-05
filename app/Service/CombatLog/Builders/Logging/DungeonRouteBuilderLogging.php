@@ -189,6 +189,13 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    public function templeOfSethralissDespawningEnemiesRuleEnemyKillsAwarded(
+        int   $triggerNpcId,
+        array $awardedNpcIds,
+    ): void {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
     public function awardEnemyKillsEnemyNotFound(int $npcId): void
     {
         $this->warning(__METHOD__, get_defined_vars());
@@ -197,6 +204,11 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
     public function awardEnemyKillsEnemyAwarded(int $npcId, int $enemyId): void
     {
         $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function awardEnemyKillsIterationLimitReached(int $npcId, int $awardedCount): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
     }
 
     public function findClosestEnemyAndDistanceFromList(int $enemiesCount, bool $considerPatrols): void

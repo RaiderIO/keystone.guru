@@ -159,6 +159,33 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
     }
 
     /**
+     * Asserts how many enemies carrying $npcId the route ended up with.
+     *
+     * An awarded npc credits every one of its mapped enemies, so for those the count is what matters: presence alone
+     * is also satisfied by crediting one of six, which is the failure this guards against.
+     *
+     * @param array<string, mixed> $responseArr
+     */
+    protected function validateNpcIdCount(array $responseArr, int $npcId, int $expectedCount): void
+    {
+        /** @var array<int, array<string, mixed>> $pulls */
+        $pulls = $responseArr['data']['pulls'];
+        $count = 0;
+
+        foreach ($pulls as $pull) {
+            /** @var array<int, array<string, mixed>> $enemies */
+            $enemies = $pull['enemies'];
+            $count += count(array_filter($enemies, static fn(array $enemy): bool => $enemy['npcId'] === $npcId));
+        }
+
+        $this->assertSame(
+            $expectedCount,
+            $count,
+            sprintf('Expected %d enemies with NPC %d in the route, found %d', $expectedCount, $npcId, $count),
+        );
+    }
+
+    /**
      * Every boss the party actually killed must end up in a pull. A boss that is silently dropped - because its
      * mapped position is out of range of where it was killed, or because it resolved onto the wrong floor - is the
      * failure mode a hardcoded pull/enemy-forces count cannot see, so it is asserted separately from those numbers.

@@ -87,9 +87,19 @@ interface DungeonRouteBuilderLoggingInterface
         array $awardedNpcIds,
     ): void;
 
+    /**
+     * @param array<int, int> $awardedNpcIds
+     */
+    public function templeOfSethralissDespawningEnemiesRuleEnemyKillsAwarded(
+        int   $triggerNpcId,
+        array $awardedNpcIds,
+    ): void;
+
     public function awardEnemyKillsEnemyNotFound(int $npcId): void;
 
     public function awardEnemyKillsEnemyAwarded(int $npcId, int $enemyId): void;
+
+    public function awardEnemyKillsIterationLimitReached(int $npcId, int $awardedCount): void;
 
     /**
      * @param array<int, bool> $preferredGroups
