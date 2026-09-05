@@ -22,8 +22,8 @@ class TheBlindingValeBridgeRuleTest extends PublicTestCase
 
     private const NPC_ID_LIGHTFEATHER_PETALWING = 245484;
 
-    /** @var int The mdt_id of the Lightfeather Petalwing underneath the bridge, the closest one to bridge group 46 */
-    private const MDT_ID_UNDER_BRIDGE_PETALWING = 7;
+    /** @var array<int, int> The mdt_ids of the three Lightfeather Petalwings underneath the bridge */
+    private const MDT_IDS_UNDER_BRIDGE_PETALWINGS = [5, 6, 7];
 
     /** @var int Ikuzz the Light Hunter, an ungrouped enemy the rule does not name */
     private const NPC_ID_UNRELATED = 244887;
@@ -140,39 +140,52 @@ class TheBlindingValeBridgeRuleTest extends PublicTestCase
     }
 
     /**
-     * MDT groups neither of the two traversals' Lightfeather Petalwings, so the one underneath the bridge cannot be
-     * blocked by its pack the way every other under-bridge enemy is.
+     * MDT groups none of the three Lightfeather Petalwings underneath the bridge, so they cannot be blocked by their
+     * pack the way every other under-bridge enemy is.
      */
     #[Test]
-    public function isEnemyEligible_givenAnUngroupedUnderBridgeEnemyBeforeLightwardenRuiaDied_returnsFalse(): void
+    #[DataProvider('underBridgeUngroupedEnemyMdtIdProvider')]
+    public function isEnemyEligible_givenAnUngroupedUnderBridgeEnemyBeforeLightwardenRuiaDied_returnsFalse(int $mdtId): void
     {
         // Arrange
         $rule = $this->makeRule();
 
         // Act
-        $result = $rule->isEnemyEligible($this->makeUngroupedEnemy(self::NPC_ID_LIGHTFEATHER_PETALWING, self::MDT_ID_UNDER_BRIDGE_PETALWING));
+        $result = $rule->isEnemyEligible($this->makeUngroupedEnemy(self::NPC_ID_LIGHTFEATHER_PETALWING, $mdtId));
 
         // Assert
         $this->assertFalse($result);
     }
 
     #[Test]
-    public function isEnemyEligible_givenAnUngroupedUnderBridgeEnemyAfterLightwardenRuiaDied_returnsTrue(): void
+    #[DataProvider('underBridgeUngroupedEnemyMdtIdProvider')]
+    public function isEnemyEligible_givenAnUngroupedUnderBridgeEnemyAfterLightwardenRuiaDied_returnsTrue(int $mdtId): void
     {
         // Arrange
         $rule = $this->makeRule();
         $rule->onEnemyDied(self::NPC_ID_LIGHTWARDEN_RUIA, null);
 
         // Act
-        $result = $rule->isEnemyEligible($this->makeUngroupedEnemy(self::NPC_ID_LIGHTFEATHER_PETALWING, self::MDT_ID_UNDER_BRIDGE_PETALWING));
+        $result = $rule->isEnemyEligible($this->makeUngroupedEnemy(self::NPC_ID_LIGHTFEATHER_PETALWING, $mdtId));
 
         // Assert
         $this->assertTrue($result);
     }
 
     /**
-     * The other two ungrouped Petalwings sit further from the bridge and were never excluded, so keying on the npc id
-     * alone would block them too.
+     * @return array<string, array<int, int>>
+     */
+    public static function underBridgeUngroupedEnemyMdtIdProvider(): array
+    {
+        return array_combine(
+            array_map(static fn(int $mdtId) => sprintf('mdt_id %d', $mdtId), self::MDT_IDS_UNDER_BRIDGE_PETALWINGS),
+            array_map(static fn(int $mdtId) => [$mdtId], self::MDT_IDS_UNDER_BRIDGE_PETALWINGS),
+        );
+    }
+
+    /**
+     * The Petalwings elsewhere in the dungeon are grouped and must stay eligible, so keying on the npc id alone would
+     * block the wrong enemies.
      */
     #[Test]
     public function isEnemyEligible_givenAnUngroupedEnemySharingTheNpcIdBeforeLightwardenRuiaDied_returnsTrue(): void
@@ -181,7 +194,7 @@ class TheBlindingValeBridgeRuleTest extends PublicTestCase
         $rule = $this->makeRule();
 
         // Act
-        $result = $rule->isEnemyEligible($this->makeUngroupedEnemy(self::NPC_ID_LIGHTFEATHER_PETALWING, 5));
+        $result = $rule->isEnemyEligible($this->makeUngroupedEnemy(self::NPC_ID_LIGHTFEATHER_PETALWING, 1));
 
         // Assert
         $this->assertTrue($result);

@@ -29,7 +29,7 @@ class TheBlindingValeBridgeRule extends AbstractDungeonRouteBuilderRule
     private const array UNDER_BRIDGE_ENEMY_PACK_GROUPS = [47, 48, 49, 50, 54];
 
     /** @var array<int, string> Enemy unique keys underneath the bridge that MDT does not group, so no pack names them */
-    private const array UNDER_BRIDGE_UNGROUPED_ENEMY_UNIQUE_KEYS = ['245484-7'];
+    private const array UNDER_BRIDGE_UNGROUPED_ENEMY_UNIQUE_KEYS = ['245484-5', '245484-6', '245484-7'];
 
     private bool $lightwardenRuiaKilled = false;
 

@@ -40,8 +40,8 @@ class TheBlindingValeBridgeRuleMappingTest extends PublicTestCase
         54 => [NpcId::LIGHTGORGED_LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value, NpcId::LASHER->value],
     ];
 
-    /** @var string The Lightfeather Petalwing underneath the bridge, which TheBlindingValeBridgeRule names by key */
-    private const string UNDER_BRIDGE_UNGROUPED_ENEMY_UNIQUE_KEY = '245484-7';
+    /** @var array<int, string> The Lightfeather Petalwings underneath the bridge, which the rule names by key */
+    private const array UNDER_BRIDGE_UNGROUPED_ENEMY_UNIQUE_KEYS = ['245484-5', '245484-6', '245484-7'];
 
     #[Test]
     public function theBlindingValeBridgeEnemyPackGroups_givenTheLatestMappingVersion_stillHoldTheExpectedNpcs(): void
@@ -73,23 +73,24 @@ class TheBlindingValeBridgeRuleMappingTest extends PublicTestCase
     }
 
     /**
-     * The rule can only exclude this enemy for as long as MDT leaves it out of every pack - the moment MDT groups it
-     * again the key stops being the way to name it, and the group belongs in the list above instead.
+     * The rule can only exclude these enemies for as long as MDT leaves them out of every pack - the moment MDT
+     * groups one again the key stops being the way to name it, and the group belongs in the list above instead.
      */
     #[Test]
-    public function theBlindingValeUnderBridgeUngroupedEnemy_givenTheLatestMappingVersion_stillExistsWithoutAnEnemyPack(): void
+    public function theBlindingValeUnderBridgeUngroupedEnemies_givenTheLatestMappingVersion_stillExistWithoutAnEnemyPack(): void
     {
         // Arrange
         $dungeon        = Dungeon::where('key', DungeonKey::THE_BLINDING_VALE->value)->firstOrFail();
         $mappingVersion = $dungeon->mappingVersions()->orderByDesc('version')->firstOrFail();
+        $enemies        = Enemy::where('mapping_version_id', $mappingVersion->id)->get();
 
-        // Act
-        $enemy = Enemy::where('mapping_version_id', $mappingVersion->id)
-            ->get()
-            ->firstWhere(static fn(Enemy $enemy) => $enemy->getUniqueKey() === self::UNDER_BRIDGE_UNGROUPED_ENEMY_UNIQUE_KEY);
+        foreach (self::UNDER_BRIDGE_UNGROUPED_ENEMY_UNIQUE_KEYS as $uniqueKey) {
+            // Act
+            $enemy = $enemies->firstWhere(static fn(Enemy $enemy) => $enemy->getUniqueKey() === $uniqueKey);
 
-        // Assert
-        $this->assertNotNull($enemy, sprintf('Enemy %s no longer exists', self::UNDER_BRIDGE_UNGROUPED_ENEMY_UNIQUE_KEY));
-        $this->assertNull($enemy->enemy_pack_id, sprintf('Enemy %s is grouped again', self::UNDER_BRIDGE_UNGROUPED_ENEMY_UNIQUE_KEY));
+            // Assert
+            $this->assertNotNull($enemy, sprintf('Enemy %s no longer exists', $uniqueKey));
+            $this->assertNull($enemy->enemy_pack_id, sprintf('Enemy %s is grouped again', $uniqueKey));
+        }
     }
 }
