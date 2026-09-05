@@ -16,6 +16,10 @@ global.LatLng = LatLng;
 const IngameXY = require('../structs/ingamexy');
 global.IngameXY = IngameXY;
 
+// In the bundle these are globals from util.js; a plain map has no map object groups
+global.getFloorUnionMapObjectGroup = () => null;
+global.getFloorUnionAreaMapObjectGroup = () => null;
+
 const CoordinatesService = require('./coordinatesservice');
 
 const FACADE_FLOOR = {id: 1, name: 'floor.facade', facade: true};
@@ -356,6 +360,63 @@ describe('CoordinatesService.convertMapLocationToFacadeMapLocation', () => {
         expect(floorLatLng.getFloor()).toBe(TARGET_FLOOR);
         expect(result.getLat()).toBeCloseTo(facadeLatLng.getLat(), 9);
         expect(result.getLng()).toBeCloseTo(facadeLatLng.getLng(), 9);
+    });
+});
+
+describe('CoordinatesService live map objects', () => {
+    afterEach(() => {
+        global.getFloorUnionMapObjectGroup = () => null;
+        global.getFloorUnionAreaMapObjectGroup = () => null;
+        global.getState = () => false;
+    });
+
+    test('convertFacadeMapLocationToMapLocation_givenTheMappingEditor_readsTheEditedGeometryRatherThanThePayload', () => {
+        // Arrange - the payload is a snapshot taken at page load; in the editor the union has since
+        // been moved, so converting through the payload would answer with the pre-edit geometry
+        let payloadUnion = createFloorUnion();
+        let coordinatesService = new CoordinatesService(createMapContext([payloadUnion]));
+
+        let movedUnion = createFloorUnion({lat: -60, lng: 100});
+        delete movedUnion.floor_union_areas;
+        let movedArea = {
+            id: 100,
+            floor_union_id: movedUnion.id,
+            getVertices: () => [
+                {lat: 0, lng: 0},
+                {lat: 0, lng: 192},
+                {lat: -128, lng: 192},
+                {lat: -128, lng: 0}
+            ]
+        };
+
+        global.getFloorUnionMapObjectGroup = () => ({objects: {10: movedUnion}});
+        global.getFloorUnionAreaMapObjectGroup = () => ({objects: {100: movedArea}});
+        global.getState = () => ({isMapAdmin: () => true});
+
+        // Act
+        let result = coordinatesService.convertFacadeMapLocationToMapLocation(new LatLng(-60, 100, FACADE_FLOOR));
+
+        // Assert - the moved union's centre now maps onto the centre of the target floor's map
+        expect(result.getFloor()).toBe(TARGET_FLOOR);
+        expect(result.getLat()).toBeCloseTo(MAP_MAX_LAT / 2, 9);
+        expect(result.getLng()).toBeCloseTo(MAP_MAX_LNG / 2, 9);
+    });
+
+    test('convertFacadeMapLocationToMapLocation_givenAnAreaStillBeingDrawn_ignoresIt', () => {
+        // Arrange
+        let coordinatesService = new CoordinatesService(createMapContext([createFloorUnion()]));
+        let union = createFloorUnion();
+        delete union.floor_union_areas;
+
+        global.getFloorUnionMapObjectGroup = () => ({objects: {10: union}});
+        global.getFloorUnionAreaMapObjectGroup = () => ({objects: {100: {id: 100, floor_union_id: 10, getVertices: () => []}}});
+        global.getState = () => ({isMapAdmin: () => true});
+
+        // Act
+        let result = coordinatesService.convertFacadeMapLocationToMapLocation(new LatLng(-64, 96, FACADE_FLOOR));
+
+        // Assert
+        expect(result.getFloor()).toBe(FACADE_FLOOR);
     });
 });
 

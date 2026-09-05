@@ -348,7 +348,7 @@ class CoordinatesService {
      * @private
      */
     _getFloorUnionsOnFloor(floorId) {
-        return (this.mapContext.getFloorUnions() ?? []).filter(floorUnion => floorUnion.floor_id === floorId);
+        return this._getFloorUnions().filter(floorUnion => floorUnion.floor_id === floorId);
     }
 
     /**
@@ -359,7 +359,7 @@ class CoordinatesService {
      * @private
      */
     _getFloorUnionsForFloor(floorId) {
-        return (this.mapContext.getFloorUnions() ?? []).filter(floorUnion => floorUnion.target_floor_id === floorId);
+        return this._getFloorUnions().filter(floorUnion => floorUnion.target_floor_id === floorId);
     }
 
     /**
@@ -398,6 +398,31 @@ class CoordinatesService {
     }
 
     /**
+     * The mapping editor can move, resize, rotate, add and remove floor unions and their areas. The
+     * map context payload they were built from is a snapshot taken at page load, so read the live
+     * map objects there instead - otherwise the readout keeps answering with the pre-edit geometry
+     * until the page is reloaded.
+     *
+     * @returns {Boolean}
+     * @private
+     */
+    _useLiveMapObjects() {
+        return getFloorUnionMapObjectGroup() !== null && getState().isMapAdmin();
+    }
+
+    /**
+     * @returns {Object[]}
+     * @private
+     */
+    _getFloorUnions() {
+        if (this._useLiveMapObjects()) {
+            return Object.values(getFloorUnionMapObjectGroup().objects);
+        }
+
+        return this.mapContext.getFloorUnions() ?? [];
+    }
+
+    /**
      * The areas come nested in each floor union (FloorUnion::$with), but fall back to the flat list
      * the map context also carries in case that ever changes.
      *
@@ -406,6 +431,11 @@ class CoordinatesService {
      * @private
      */
     _getFloorUnionAreas(floorUnion) {
+        if (this._useLiveMapObjects()) {
+            return Object.values(getFloorUnionAreaMapObjectGroup()?.objects ?? {})
+                .filter(floorUnionArea => floorUnionArea.floor_union_id === floorUnion.id);
+        }
+
         return floorUnion.floor_union_areas ??
             (this.mapContext.getFloorUnionAreas() ?? []).filter(floorUnionArea => floorUnionArea.floor_union_id === floorUnion.id);
     }
@@ -420,9 +450,18 @@ class CoordinatesService {
      * @private
      */
     _floorUnionAreaContainsPoint(floorUnionArea, latLng) {
-        floorUnionArea._cachedVertices ??= JSON.parse(floorUnionArea.vertices_json);
+        // A live editor object reports its current vertices; a payload row carries them as JSON,
+        // which is decoded once because this runs for every mouse move
+        let vertices = typeof floorUnionArea.getVertices === 'function'
+            ? floorUnionArea.getVertices()
+            : (floorUnionArea._cachedVertices ??= JSON.parse(floorUnionArea.vertices_json));
 
-        return this.polygonContainsPoint(latLng, floorUnionArea._cachedVertices);
+        // An area that is still being drawn has no polygon yet
+        if (vertices.length < 3) {
+            return false;
+        }
+
+        return this.polygonContainsPoint(latLng, vertices);
     }
 
     /**
