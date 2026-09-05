@@ -123,6 +123,8 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
 
     private function buildKillZones(): void
     {
+        $lastDiedNpc = null;
+
         $filteredNpcs = $this->combatLogRoute->npcs->filter(fn(
             CombatLogRouteNpcRequestDto $npc,
         ) => $this->validNpcIds->search((int)$npc->npcId) !== false);
@@ -251,6 +253,8 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                     }
                 }
 
+                $lastDiedNpc = $event['npc'];
+
                 $awardedNpcIds = $this->notifyRulesEnemyDied($event['npc']->npcId, $event['npc']->getResolvedEnemy());
 
                 // Must happen before the pulls below are created, so the awarded kills are part of the pull that
@@ -285,6 +289,11 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 }
             }
         }
+
+        $this->awardRunFinishedEnemyKills(
+            $this->combatLogRoute->challengeMode->success,
+            $lastDiedNpc === null ? null : $this->createActivePullEnemy($lastDiedNpc),
+        );
 
         // Handle spells and the actual creation of pulls for all remaining active pulls
         foreach ($this->activePullCollection as $activePull) {

@@ -35,7 +35,8 @@ enum NpcId: int
     case SPOREBLIGHT_BELCHER    = 254850;
 
     // Temple of Sethraliss
-    case STATIC_ANOMALY    = 134691;
-    case GALVAZZT          = 133389;
-    case GALVAZZT_RESTORED = 263658; // Same boss as above under a second npc_id; mapping versions exist for both
+    case STATIC_ANOMALY       = 134691;
+    case AVATAR_OF_SETHRALISS = 133392;
+    case GALVAZZT             = 133389;
+    case GALVAZZT_RESTORED    = 263658; // Same boss as above under a second npc_id; mapping versions exist for both
 }

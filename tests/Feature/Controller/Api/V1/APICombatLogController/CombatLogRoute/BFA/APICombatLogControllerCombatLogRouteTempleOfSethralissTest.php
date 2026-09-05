@@ -38,7 +38,7 @@ class APICombatLogControllerCombatLogRouteTempleOfSethralissTest extends APIComb
             $this->validateDungeon($responseArr);
             // This run completed the key (challengeMode.success), so the party necessarily reached 100% of the 687
             // enemy forces the mapping requires. Anything under that means enemies are still going missing.
-            $this->validatePulls($postBody, $responseArr, 20, 688);
+            $this->validatePulls($postBody, $responseArr, 21, 688);
             $this->validateAffixes($responseArr);
             $this->validateBossesResolved($postBody, $responseArr);
 
@@ -50,6 +50,16 @@ class APICombatLogControllerCombatLogRouteTempleOfSethralissTest extends APIComb
                 NpcId::GALVAZZT_RESTORED->value,
                 NpcId::STATIC_ANOMALY->value,
             ]);
+
+            // The Avatar is won by healing it to full, so no death for it exists and validateBossesResolved() cannot
+            // see it. The run completed, which is the only thing that implies it, and it is awarded into the 21st
+            // pull of its own - it is on another floor than the last death, so it does not belong in that pull.
+            $this->validateNpcIdCount($responseArr, NpcId::AVATAR_OF_SETHRALISS->value, 1);
+            $this->assertSame(
+                [NpcId::AVATAR_OF_SETHRALISS->value],
+                array_column($responseArr['data']['pulls'][20]['enemies'], 'npcId'),
+                'The Avatar of Sethraliss must be the whole of the final pull',
+            );
         } finally {
             $this->deleteDungeonRoute($responseArr);
         }
