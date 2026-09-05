@@ -130,6 +130,20 @@ function getLatLngDistance(latLng1, latLng2) {
     return Math.sqrt(getLatLngDistanceSquared(latLng1, latLng2));
 }
 
+/**
+ * Rounds half away from zero, the way PHP's round() does - JS' Math.round() rounds half up, which
+ * differs for negative values, and lat is always negative on our maps.
+ * @param value {Number}
+ * @param precision {Number}
+ * @returns {Number}
+ */
+function roundHalfAwayFromZero(value, precision = 0) {
+    let factor = Math.pow(10, precision);
+    let shifted = value * factor;
+
+    return (shifted < 0 ? -Math.round(-shifted) : Math.round(shifted)) / factor;
+}
+
 function rotateLatLng(centerLatLng, latLng, degrees) {
     if (degrees === 0) {
         return latLng;
@@ -649,6 +663,7 @@ if (typeof module !== 'undefined' && module.exports) {
         getLatLngDistance,
         getLatLngDistanceSquared,
         rotateLatLng,
+        roundHalfAwayFromZero,
         getCenteroid,
         getQueryParams,
         isElementFullyVisible,
