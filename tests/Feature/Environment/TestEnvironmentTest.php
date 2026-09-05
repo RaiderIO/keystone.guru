@@ -68,6 +68,8 @@ final class TestEnvironmentTest extends TestCase
             'cache'   => ['cache.default', 'array'],
             'session' => ['session.driver', 'array'],
             'queue'   => ['queue.default', 'sync'],
+            // #4483 - a developer's local .env can carry a real Mailgun secret; the suite must never send real mail
+            'mail' => ['mail.driver', 'log'],
         ];
     }
 
@@ -75,7 +77,7 @@ final class TestEnvironmentTest extends TestCase
     #[DataProvider('isolatedDriverProvider')]
     public function driver_givenTestRun_isIsolatedFromTheDevStack(string $configKey, string $expectedDriver): void
     {
-        // Arrange - a redis driver here is shared with the running dev stack
+        // Arrange - a redis driver, or a real third-party service, here is reachable from the dev stack
 
         // Act
         $driver = config($configKey);

@@ -37,6 +37,8 @@
         <!-- No test may ever reach the real error tracker, full stop. -->
         <env name="SENTRY_LARAVEL_DSN" value="" force="true"/>
         <env name="SENTRY_DSN" value="" force="true"/>
+        <!-- No test may ever send real mail, full stop - a developer's local .env can carry a real Mailgun secret. -->
+        <env name="MAIL_DRIVER" value="log" force="true"/>
         <env name="APP_SERVICES_CACHE" value="/tmp/phpunit_services.php"/>
         <!-- ReverbHttpApiService builds its Guzzle client in its CONSTRUCTOR, from
              reverb.apps.apps.0.options.host/port. An empty host (which is what .env.ci.example ships)
