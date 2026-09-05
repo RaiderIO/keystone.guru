@@ -22,6 +22,12 @@ export const customScripts = [
     'resources/assets/js/custom/spelltooltip.js',
     'resources/assets/js/custom/npctooltip.js',
 
+    // Coordinate conversion - the structs before the service that returns them, both after
+    // constants.js (MAP_MAX_LAT etc) and util.js (rotateLatLng, roundHalfAwayFromZero)
+    'resources/assets/js/custom/structs/latlng.js',
+    'resources/assets/js/custom/structs/ingamexy.js',
+    'resources/assets/js/custom/coordinates/coordinatesservice.js',
+
     // Include in proper order
     'resources/assets/js/custom/signalable.js',
 
