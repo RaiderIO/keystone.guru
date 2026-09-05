@@ -32,6 +32,11 @@ class UserFactory extends Factory
             'email'          => sprintf('%s_%s@example.com', fake()->userName(), Str::random(8)),
             'password'       => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            // Both are NOT NULL with no database default, so leaving them out only works while the
+            // connection is non-strict - the strict `migrate` connection rejects the insert (#4498).
+            // They are real data rather than a flag, so they belong here and not in a column default.
+            'public_key' => User::generateRandomPublicKey(),
+            'echo_color' => randomHexColor(),
         ];
     }
 
