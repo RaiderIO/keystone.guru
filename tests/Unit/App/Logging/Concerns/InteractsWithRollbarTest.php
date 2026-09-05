@@ -47,4 +47,24 @@ class InteractsWithRollbarTest extends PublicTestCase
         self::assertCount(2, $loggers);
         self::assertSame(Rollbar::logger(), $loggers[1]);
     }
+
+    /**
+     * #4483 - Rollbar::logger() being non-null (asserted above) is not the same as it actually reporting: it is
+     * disabled() whenever app()->runningUnitTests() (AppServiceProvider::boot()'s 'enabled' config), so report()
+     * short-circuits before it ever reaches the network. Without this, a suite run on a machine with a real
+     * ROLLBAR_SERVER_ACCESS_TOKEN in its .env would still send test failures to the shared Rollbar project.
+     */
+    #[Test]
+    public function logger_givenTestRun_isDisabled(): void
+    {
+        // Arrange
+        $logger = Rollbar::logger();
+        self::assertNotNull($logger, 'Rollbar::init() should have run during app boot.');
+
+        // Act
+        $disabled = $logger->disabled();
+
+        // Assert
+        self::assertTrue($disabled, 'Rollbar must not report during the test suite.');
+    }
 }
