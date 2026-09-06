@@ -370,25 +370,9 @@ services:
     networks:
       - keystone.guru
 
-  grafana:
-    image: grafana/grafana:9.5.19-ubuntu
-    container_name: keystone.guru-grafana
-    ports:
-      - "3001:3000" # 3000 is default port - but I moved it to avoid conflicts
-    volumes:
-      - grafana-data:/var/lib/grafana
-      - ./docker-compose/grafana/provisioning:/etc/grafana/provisioning    # Mount provisioning directory
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin123
-    networks:
-      - keystone.guru
-
-
 volumes:
   opensearch-data1:
   opensearch-data2:
-  grafana-data:
 
 networks:
   keystone.guru:
