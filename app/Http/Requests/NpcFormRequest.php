@@ -24,6 +24,7 @@ class NpcFormRequest extends FormRequest
         return [
             'id'                => 'required',
             'name'              => 'required',
+            'game_version_id'   => ['required', 'integer', 'exists:game_versions,id'],
             'dungeon_ids'       => 'array',
             'dungeon_ids.*'     => Rule::exists('dungeons', 'id'),
             'npc_type_id'       => Rule::exists('npc_types', 'id'),

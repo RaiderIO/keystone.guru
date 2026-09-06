@@ -1,10 +1,12 @@
 <?php
 
 use App\Models\Floor\Floor;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClass;
 use App\Models\Npc\NpcType;
 use App\Models\Spell\Spell;
+use Illuminate\Support\Collection;
 
 /**
  * @var Npc                  $npc
@@ -12,7 +14,11 @@ use App\Models\Spell\Spell;
  * @var array<string, mixed> $classifications
  * @var Spell[]              $spells
  * @var array<int, int>      $bolsteringNpcs
+ * @var Collection<int, GameVersion> $allGameVersions
  */
+
+$gameVersionsSelect = $allGameVersions
+    ->mapWithKeys(static fn(GameVersion $gameVersion) => [$gameVersion->id => __($gameVersion->name)]);
 ?>
 
 @extends('layouts.sitepage', [
@@ -43,6 +49,13 @@ use App\Models\Spell\Spell;
         <span class="form-required">*</span>
         {{ html()->text('id')->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'id'])
+    </div>
+
+    <div class="mb-3{{ $errors->has('game_version_id') ? ' has-error' : '' }}">
+        {{ html()->label(__('view_admin.npc.edit.game_version_id'), 'game_version_id') }}
+        <span class="form-required">*</span>
+        {{ html()->select('game_version_id', $gameVersionsSelect, $npc->game_version_id ?? GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL])->class('form-control selectpicker') }}
+        @include('common.forms.form-error', ['key' => 'game_version_id'])
     </div>
 
     @include('common.dungeon.select', [

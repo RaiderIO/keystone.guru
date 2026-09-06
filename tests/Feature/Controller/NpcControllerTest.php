@@ -5,6 +5,7 @@ namespace Tests\Feature\Controller;
 use App\Events\Models\Npc\NpcChangedEvent;
 use App\Models\Dungeon;
 use App\Models\Enemy;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcDungeon;
 use App\Models\Npc\NpcEnemyForces;
@@ -44,6 +45,7 @@ final class NpcControllerTest extends PublicTestCase
 
         $npc = Npc::query()->create([
             'id'                => $oldNpcId,
+            'game_version_id'   => $templateNpc->game_version_id,
             'classification_id' => $templateNpc->classification_id,
             'npc_type_id'       => $templateNpc->npc_type_id,
             'npc_class_id'      => $templateNpc->npc_class_id,
@@ -96,6 +98,7 @@ final class NpcControllerTest extends PublicTestCase
                 $this->patch(route('admin.npc.update', ['npc' => $oldNpcId]), [
                     'id'                        => $newNpcId,
                     'name'                      => 'Test Npc - store() atomicity (renamed)',
+                    'game_version_id'           => $templateNpc->game_version_id,
                     'classification_id'         => $templateNpc->classification_id,
                     'npc_type_id'               => $templateNpc->npc_type_id,
                     'npc_class_id'              => $templateNpc->npc_class_id,
@@ -144,6 +147,7 @@ final class NpcControllerTest extends PublicTestCase
 
         $npc = Npc::query()->create([
             'id'                => $npcId,
+            'game_version_id'   => $templateNpc->game_version_id,
             'classification_id' => $templateNpc->classification_id,
             'npc_type_id'       => $templateNpc->npc_type_id,
             'npc_class_id'      => $templateNpc->npc_class_id,
@@ -168,6 +172,7 @@ final class NpcControllerTest extends PublicTestCase
             $this->patch(route('admin.npc.update', ['npc' => $npcId]), [
                 'id'                        => $npcId,
                 'name'                      => $npc->name,
+                'game_version_id'           => $npc->game_version_id,
                 'classification_id'         => $npc->classification_id,
                 'npc_type_id'               => $npc->npc_type_id,
                 'npc_class_id'              => $npc->npc_class_id,
@@ -217,6 +222,7 @@ final class NpcControllerTest extends PublicTestCase
 
         $npc = Npc::query()->create([
             'id'                => $oldNpcId,
+            'game_version_id'   => $templateNpc->game_version_id,
             'classification_id' => $templateNpc->classification_id,
             'npc_type_id'       => $templateNpc->npc_type_id,
             'npc_class_id'      => $templateNpc->npc_class_id,
@@ -241,6 +247,7 @@ final class NpcControllerTest extends PublicTestCase
             $this->patch(route('admin.npc.update', ['npc' => $oldNpcId]), [
                 'id'                        => $newNpcId,
                 'name'                      => $npc->name,
+                'game_version_id'           => $npc->game_version_id,
                 'classification_id'         => $npc->classification_id,
                 'npc_type_id'               => $npc->npc_type_id,
                 'npc_class_id'              => $npc->npc_class_id,
@@ -264,6 +271,59 @@ final class NpcControllerTest extends PublicTestCase
             NpcEnemyForces::query()->where('npc_id', $oldNpcId)->orWhere('npc_id', $newNpcId)->delete();
             NpcDungeon::query()->where('npc_id', $oldNpcId)->orWhere('npc_id', $newNpcId)->delete();
             Npc::query()->where('id', $oldNpcId)->orWhere('id', $newNpcId)->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenGameVersionId_persistsItSoTheNpcLinksToThatWowheadDatabase(): void
+    {
+        // Arrange
+        $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
+
+        $templateNpc = Npc::query()->firstOrFail();
+        $npcId       = 999999401;
+
+        $npc = Npc::query()->create([
+            'id'                => $npcId,
+            'game_version_id'   => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
+            'classification_id' => $templateNpc->classification_id,
+            'npc_type_id'       => $templateNpc->npc_type_id,
+            'npc_class_id'      => $templateNpc->npc_class_id,
+            'name'              => 'Test Npc - game version',
+            'aggressiveness'    => $templateNpc->aggressiveness,
+            'dangerous'         => false,
+            'truesight'         => false,
+            'runs_away_in_fear' => false,
+        ]);
+
+        try {
+            $this->be(User::findOrFail(self::ADMIN_USER_ID));
+
+            // Act
+            $this->patch(route('admin.npc.update', ['npc' => $npcId]), [
+                'id'                        => $npcId,
+                'name'                      => $npc->name,
+                'game_version_id'           => GameVersion::ALL[GameVersion::GAME_VERSION_MOP],
+                'classification_id'         => $npc->classification_id,
+                'npc_type_id'               => $npc->npc_type_id,
+                'npc_class_id'              => $npc->npc_class_id,
+                'aggressiveness'            => $npc->aggressiveness,
+                'level'                     => $npc->level,
+                'dungeon_ids'               => [$dungeon->id],
+                'bolstering_whitelist_npcs' => [],
+                'spells'                    => [],
+                'submit'                    => 'Submit',
+            ])->assertOk();
+
+            // Assert
+            $updatedNpc = Npc::query()->findOrFail($npcId);
+
+            $this->assertSame(GameVersion::ALL[GameVersion::GAME_VERSION_MOP], $updatedNpc->game_version_id);
+            $this->assertStringStartsWith('https://www.wowhead.com/mop-classic/npc=', $updatedNpc->wowhead_url);
+        } finally {
+            NpcEnemyForces::query()->where('npc_id', $npcId)->delete();
+            NpcDungeon::query()->where('npc_id', $npcId)->delete();
+            Npc::query()->where('id', $npcId)->delete();
         }
     }
 }

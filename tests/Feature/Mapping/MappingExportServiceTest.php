@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Mapping;
 
+use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellTuningChange;
 use App\SeederHelpers\RelationImport\Mapping\SpellRelationMapping;
@@ -115,6 +116,38 @@ class MappingExportServiceTest extends TestCase
         Assert::assertEmpty(
             array_diff($preserved, $columns),
             sprintf('Preserved columns do not exist on the spells table: %s', implode(', ', array_diff($preserved, $columns))),
+        );
+    }
+
+    /**
+     * npcs.game_version_id decides which Wowhead database an NPC links to (#3987). NpcRelationMapping
+     * preserves nothing, so a column missing from npcs.json is reset to its default - retail - by the
+     * temp-table swap on the next `db:seed`, silently sending every Classic NPC back to retail Wowhead.
+     */
+    #[Test]
+    public function serializeNpcs_givenSeededNpcs_returnsEveryNpcsTableColumn(): void
+    {
+        // Arrange
+        /** @var MappingExportServiceInterface $mappingExportService */
+        $mappingExportService = app(MappingExportServiceInterface::class);
+        $columns              = Schema::getColumnListing(new Npc()->getTable());
+
+        Assert::assertContains('game_version_id', $columns, 'The npcs table has no game_version_id column');
+
+        // Act
+        $serializedNpcs = $mappingExportService->serializeNpcs();
+
+        Assert::assertNotEmpty($serializedNpcs, 'No NPCs were exported - this test no longer guards anything');
+
+        $exported = array_keys($serializedNpcs[array_key_first($serializedNpcs)]);
+
+        // Assert
+        Assert::assertEmpty(
+            array_diff($columns, $exported),
+            sprintf(
+                'Columns are omitted from npcs.json, so `db:seed` will reset them to their default: %s',
+                implode(', ', array_diff($columns, $exported)),
+            ),
         );
     }
 

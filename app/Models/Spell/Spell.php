@@ -353,22 +353,7 @@ class Spell extends CacheModel implements MappingModelInterface
 
     public static function getWowheadLink(?int $gameVersionId, int $spellId, ?string $name = null): string
     {
-        $wowheadBaseUrl = 'https://www.wowhead.com';
-        if ($gameVersionId !== null) {
-            switch ($gameVersionId) {
-                case GameVersion::ALL[GameVersion::GAME_VERSION_WRATH]:
-                    $wowheadBaseUrl .= '/wrath';
-                    break;
-                case GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA]:
-                    $wowheadBaseUrl .= '/classic';
-                    break;
-                case GameVersion::ALL[GameVersion::GAME_VERSION_MOP]:
-                    $wowheadBaseUrl .= '/mop-classic';
-                    break;
-            }
-        }
-
-        $result = sprintf('%s/spell=%d', $wowheadBaseUrl, $spellId);
+        $result = sprintf('%s/spell=%d', GameVersion::getWowheadBaseUrl($gameVersionId), $spellId);
 
         if (!empty(__($name))) {
             $result .= '/' . Str::slug(__($name));
@@ -384,12 +369,7 @@ class Spell extends CacheModel implements MappingModelInterface
      */
     public static function getWowheadTooltipData(?int $gameVersionId, int $spellId): string
     {
-        $domain = match ($gameVersionId) {
-            GameVersion::ALL[GameVersion::GAME_VERSION_WRATH]       => 'wrath',
-            GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA] => 'classic',
-            GameVersion::ALL[GameVersion::GAME_VERSION_MOP]         => 'mop-classic',
-            default                                                 => null,
-        };
+        $domain = GameVersion::getWowheadDomain($gameVersionId);
 
         return $domain === null
             ? sprintf('spell=%d', $spellId)

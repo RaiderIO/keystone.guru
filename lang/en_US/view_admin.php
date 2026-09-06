@@ -209,6 +209,7 @@ return [
             'header_edit'                    => 'Edit NPC :name',
             'name'                           => 'Name',
             'game_id'                        => 'Game ID',
+            'game_version_id'                => 'Game version',
             'classification'                 => 'Classification',
             'aggressiveness'                 => 'Aggressiveness',
             'type'                           => 'Type',

@@ -62,6 +62,7 @@ class NpcController extends Controller
         $validated  = $request->validated();
         $attributes = [
             'id'                => $validated['id'],
+            'game_version_id'   => $validated['game_version_id'],
             'classification_id' => $validated['classification_id'],
             'npc_type_id'       => $validated['npc_type_id'],
             'npc_class_id'      => $validated['npc_class_id'],

@@ -24,6 +24,7 @@ use Override;
 
 /**
  * @property int        $id
+ * @property int        $game_version_id
  * @property int        $classification_id
  * @property int        $npc_type_id
  * @property int        $npc_class_id
@@ -45,6 +46,7 @@ use Override;
  * @property string               $wowhead_url
  * @property array<string, mixed> $tooltip_data
  *
+ * @property GameVersion            $gameVersion
  * @property NpcClassification|null $classification A few seeded NPCs carry an id no classification row matches
  * @property NpcType                $type
  * @property NpcClass               $class
@@ -89,6 +91,7 @@ class Npc extends CacheModel implements MappingModelInterface
 
     protected $fillable = [
         'id',
+        'game_version_id',
         'dungeon_id',
         'classification_id',
         'npc_type_id',
@@ -115,6 +118,7 @@ class Npc extends CacheModel implements MappingModelInterface
     {
         return [
             'id'                => 'integer',
+            'game_version_id'   => 'integer',
             'dungeon_id'        => 'integer',
             'classification_id' => 'integer',
             'npc_type_id'       => 'integer',
@@ -187,10 +191,19 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public function getWowheadUrlAttribute(): string
     {
-        $result = sprintf('https://www.wowhead.com/npc=%d', $this->id);
+        return self::getWowheadLink($this->game_version_id, $this->id, $this->name);
+    }
 
-        if (!empty(__($this->name))) {
-            $result .= '/' . Str::slug(__($this->name));
+    /**
+     * The Wowhead page for an NPC, on the Wowhead database belonging to the NPC's game version -
+     * a Classic or Mists of Pandaria NPC does not exist on retail Wowhead (#3987).
+     */
+    public static function getWowheadLink(?int $gameVersionId, int $npcId, ?string $name = null): string
+    {
+        $result = sprintf('%s/npc=%d', GameVersion::getWowheadBaseUrl($gameVersionId), $npcId);
+
+        if (!empty(__($name))) {
+            $result .= '/' . Str::slug(__($name));
         }
 
         return $result;
@@ -222,6 +235,12 @@ class Npc extends CacheModel implements MappingModelInterface
     public function npcDungeons(): HasMany
     {
         return $this->hasMany(NpcDungeon::class);
+    }
+
+    /** @return BelongsTo<GameVersion, $this> */
+    public function gameVersion(): BelongsTo
+    {
+        return $this->belongsTo(GameVersion::class);
     }
 
     /** @return BelongsTo<NpcClassification, $this> */
