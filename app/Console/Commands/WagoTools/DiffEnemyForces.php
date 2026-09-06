@@ -184,7 +184,7 @@ class DiffEnemyForces extends Command
         // usually a seasonal affix enemy the client never awarded forces for.
         if ($dungeonDiffsWithDivergingEnemyForcesRequired !== []) {
             $this->warn(sprintf(
-                'Of those, %d require a different total: %s',
+                'Of those, %d have a different total: %s',
                 count($dungeonDiffsWithDivergingEnemyForcesRequired),
                 $this->listDungeons($dungeonDiffsWithDivergingEnemyForcesRequired),
             ));

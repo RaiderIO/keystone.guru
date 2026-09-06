@@ -62,15 +62,15 @@ class EnemyForcesDb2Service implements EnemyForcesDb2ServiceInterface
                 return null;
             }
 
-            $mapIdsByChallengeModeId = $this->readChallengeModeMapIds($build, $dungeons);
-            $treesByMapId            = $this->readEnemyForcesTrees($build);
+            $challengeModes = $this->readChallengeModes($build, $dungeons);
+            $treesByMapId   = $this->readEnemyForcesTrees($build);
 
             $dungeonDiffs = [];
             foreach ($dungeons as $currentDungeon) {
                 $dungeonDiffs[$currentDungeon->id] = $this->diffDungeon(
                     $currentDungeon,
                     $gameVersion,
-                    $mapIdsByChallengeModeId[$currentDungeon->challenge_mode_id] ?? null,
+                    $challengeModes[$currentDungeon->challenge_mode_id] ?? null,
                     $treesByMapId,
                 );
             }
@@ -96,23 +96,27 @@ class EnemyForcesDb2Service implements EnemyForcesDb2ServiceInterface
     }
 
     /**
-     * @param  Collection<int, Dungeon> $dungeons
-     * @return array<int, int>          challenge mode id => the map the challenge mode is played on
+     * @param  Collection<int, Dungeon>                    $dungeons
+     * @return array<int, array{mapId: int, name: string}> challenge mode id => the map it is played on, and the
+     *                                                     name the client gives it
      */
-    private function readChallengeModeMapIds(string $build, Collection $dungeons): array
+    private function readChallengeModes(string $build, Collection $dungeons): array
     {
         $wantedChallengeModeIds = array_fill_keys($dungeons->pluck('challenge_mode_id')->all(), true);
 
-        $mapIdsByChallengeModeId = [];
+        $challengeModes = [];
         foreach ($this->wagoToolsService->readTable('MapChallengeMode', $build) as $row) {
             $challengeModeId = (int)($row['ID'] ?? 0);
 
             if (isset($wantedChallengeModeIds[$challengeModeId])) {
-                $mapIdsByChallengeModeId[$challengeModeId] = (int)($row['MapID'] ?? 0);
+                $challengeModes[$challengeModeId] = [
+                    'mapId' => (int)($row['MapID'] ?? 0),
+                    'name'  => (string)($row['Name_lang'] ?? ''),
+                ];
             }
         }
 
-        return $mapIdsByChallengeModeId;
+        return $challengeModes;
     }
 
     /**
@@ -123,14 +127,14 @@ class EnemyForcesDb2Service implements EnemyForcesDb2ServiceInterface
      * criteria do resolve to a `DungeonEncounter` that names a map, so that is what the scenario is keyed
      * by here instead of its name.
      *
-     * @return array<int, Db2EnemyForcesTree>
+     * @return array<int, array<int, Db2EnemyForcesTree>> map id => scenario id => its forces tree
      */
     private function readEnemyForcesTrees(string $build): array
     {
-        $challengeModeScenarioIds = [];
+        $challengeModeScenarioNames = [];
         foreach ($this->wagoToolsService->readTable('Scenario', $build) as $row) {
             if ((int)($row['Type'] ?? -1) === self::SCENARIO_TYPE_CHALLENGE_MODE) {
-                $challengeModeScenarioIds[(int)($row['ID'] ?? 0)] = true;
+                $challengeModeScenarioNames[(int)($row['ID'] ?? 0)] = (string)($row['Name_lang'] ?? '');
             }
         }
 
@@ -139,7 +143,7 @@ class EnemyForcesDb2Service implements EnemyForcesDb2ServiceInterface
             $scenarioId = (int)($row['ScenarioID'] ?? 0);
             $rootTreeId = (int)($row['CriteriatreeID'] ?? 0);
 
-            if ($rootTreeId !== 0 && isset($challengeModeScenarioIds[$scenarioId])) {
+            if ($rootTreeId !== 0 && isset($challengeModeScenarioNames[$scenarioId])) {
                 $scenarioIdByRootTreeId[$rootTreeId] = $scenarioId;
             }
         }
@@ -152,7 +156,13 @@ class EnemyForcesDb2Service implements EnemyForcesDb2ServiceInterface
 
         $treesByMapId = [];
         foreach ($forcesNodesByScenarioId as $scenarioId => $forcesNodes) {
-            $tree = $this->buildTree($scenarioId, $forcesNodes, $forcesRowsByScenarioId[$scenarioId] ?? [], $criteria);
+            $tree = $this->buildTree(
+                $scenarioId,
+                $challengeModeScenarioNames[$scenarioId] ?? '',
+                $forcesNodes,
+                $forcesRowsByScenarioId[$scenarioId] ?? [],
+                $criteria,
+            );
 
             foreach ($bossCriteriaIdsByScenarioId[$scenarioId] ?? [] as $bossCriteriaId) {
                 $criteriaRow = $criteria[$bossCriteriaId] ?? null;
@@ -167,11 +177,11 @@ class EnemyForcesDb2Service implements EnemyForcesDb2ServiceInterface
                     continue;
                 }
 
-                // A dungeon reworked into a new scenario keeps the retired one around; the newer id is the
-                // one the game runs today (Siege of Boralus is both 1685 and 2486).
-                if (!isset($treesByMapId[$mapId]) || $treesByMapId[$mapId]->scenarioId < $scenarioId) {
-                    $treesByMapId[$mapId] = $tree;
-                }
+                // A map is not one dungeon: the wings of a split dungeon share it (both Dawn of the
+                // Infinite wings are map 2579), and a reworked dungeon keeps its retired scenario around
+                // (Siege of Boralus is both 1685 and 2486). Every candidate is kept and picked between
+                // per dungeon.
+                $treesByMapId[$mapId][$scenarioId] = $tree;
             }
         }
 
@@ -303,7 +313,7 @@ class EnemyForcesDb2Service implements EnemyForcesDb2ServiceInterface
      * @param array<int, array{criteriaId: int, amount: int}> $forcesRows
      * @param array<int, array{type: int, asset: int}>        $criteria
      */
-    private function buildTree(int $scenarioId, array $forcesNodes, array $forcesRows, array $criteria): Db2EnemyForcesTree
+    private function buildTree(int $scenarioId, string $scenarioName, array $forcesNodes, array $forcesRows, array $criteria): Db2EnemyForcesTree
     {
         $enemyForcesByNpcId  = [];
         $nonCreatureCriteria = [];
@@ -329,11 +339,14 @@ class EnemyForcesDb2Service implements EnemyForcesDb2ServiceInterface
 
         ksort($enemyForcesByNpcId);
 
-        return new Db2EnemyForcesTree($scenarioId, $forcesNodes, $enemyForcesByNpcId, $nonCreatureCriteria);
+        return new Db2EnemyForcesTree($scenarioId, $scenarioName, $forcesNodes, $enemyForcesByNpcId, $nonCreatureCriteria);
     }
 
-    /** @param array<int, Db2EnemyForcesTree> $treesByMapId */
-    private function diffDungeon(Dungeon $dungeon, GameVersion $gameVersion, ?int $mapId, array $treesByMapId): DungeonEnemyForcesDiff
+    /**
+     * @param array{mapId: int, name: string}|null       $challengeMode
+     * @param array<int, array<int, Db2EnemyForcesTree>> $treesByMapId
+     */
+    private function diffDungeon(Dungeon $dungeon, GameVersion $gameVersion, ?array $challengeMode, array $treesByMapId): DungeonEnemyForcesDiff
     {
         $mappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
@@ -341,14 +354,30 @@ class EnemyForcesDb2Service implements EnemyForcesDb2ServiceInterface
             return $this->unresolved($dungeon, sprintf('No %s mapping version', $gameVersion->key));
         }
 
-        if ($mapId === null) {
+        if ($challengeMode === null) {
             return $this->unresolved($dungeon, sprintf('Build has no MapChallengeMode %d', $dungeon->challenge_mode_id));
         }
 
-        $tree = $treesByMapId[$mapId] ?? null;
+        $mapId      = $challengeMode['mapId'];
+        $candidates = $treesByMapId[$mapId] ?? [];
+
+        if ($candidates === []) {
+            return $this->unresolved($dungeon, sprintf('Build has no challenge mode enemy forces tree for map %d', $mapId), $mappingVersion);
+        }
+
+        $tree = $this->pickTree($candidates, $challengeMode['name']);
 
         if ($tree === null) {
-            return $this->unresolved($dungeon, sprintf('Build has no challenge mode enemy forces tree for map %d', $mapId), $mappingVersion);
+            return $this->unresolved($dungeon, sprintf(
+                'Map %d carries %d challenge mode scenarios (%s) and none of them is named %s',
+                $mapId,
+                count($candidates),
+                implode(', ', array_map(
+                    static fn(Db2EnemyForcesTree $candidate): string => sprintf('%d "%s"', $candidate->scenarioId, $candidate->scenarioName),
+                    $candidates,
+                )),
+                $challengeMode['name'],
+            ), $mappingVersion);
         }
 
         if ($tree->isAmbiguous()) {
@@ -424,6 +453,35 @@ class EnemyForcesDb2Service implements EnemyForcesDb2ServiceInterface
             unmappedNpcEnemyForces: $unmappedNpcEnemyForces,
             nonCreatureCriteria: $tree->nonCreatureCriteria,
         );
+    }
+
+    /**
+     * The scenario of the dungeon a challenge mode is played in. Several can share a map - the wings of a
+     * split dungeon (Dawn of the Infinite), and the retired scenario of a reworked one (Siege of Boralus
+     * keeps 1685 alongside 2486) - so a map alone does not identify one.
+     *
+     * @param array<int, Db2EnemyForcesTree> $candidates
+     */
+    private function pickTree(array $candidates, string $challengeModeName): ?Db2EnemyForcesTree
+    {
+        // A retired scenario is left with the several forces nodes of the steps it used to have, so having
+        // exactly one is what tells the current scenario apart from it
+        $unambiguousCandidates = array_filter($candidates, static fn(Db2EnemyForcesTree $candidate): bool => !$candidate->isAmbiguous());
+        $pool                  = $unambiguousCandidates === [] ? $candidates : $unambiguousCandidates;
+
+        if (count($pool) === 1) {
+            return array_values($pool)[0];
+        }
+
+        // Only the name tells two wings of one map apart, and the client does not always spell it the way
+        // its own MapChallengeMode does ("Mechagon Junkyard" against "Operation Mechagon: Junkyard") - a
+        // name that does not resolve is reported rather than guessed at.
+        $namedCandidates = array_filter(
+            $pool,
+            static fn(Db2EnemyForcesTree $candidate): bool => strcasecmp(trim($candidate->scenarioName), trim($challengeModeName)) === 0,
+        );
+
+        return count($namedCandidates) === 1 ? array_values($namedCandidates)[0] : null;
     }
 
     private function unresolved(Dungeon $dungeon, string $reason, ?MappingVersion $mappingVersion = null): DungeonEnemyForcesDiff

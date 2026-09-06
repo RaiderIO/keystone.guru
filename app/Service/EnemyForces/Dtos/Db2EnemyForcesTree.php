@@ -17,10 +17,11 @@ class Db2EnemyForcesTree
      * @param array<int, Db2CriteriaRow> $nonCreatureCriteria         rows the node carries that are not creature kills
      */
     public function __construct(
-        public readonly int   $scenarioId,
-        public readonly array $forcesNodesByCriteriaTreeId,
-        public readonly array $enemyForcesByNpcId = [],
-        public readonly array $nonCreatureCriteria = [],
+        public readonly int    $scenarioId,
+        public readonly string $scenarioName,
+        public readonly array  $forcesNodesByCriteriaTreeId,
+        public readonly array  $enemyForcesByNpcId = [],
+        public readonly array  $nonCreatureCriteria = [],
     ) {
     }
 

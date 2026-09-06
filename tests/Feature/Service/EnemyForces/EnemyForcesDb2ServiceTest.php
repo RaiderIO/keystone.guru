@@ -39,6 +39,15 @@ final class EnemyForcesDb2ServiceTest extends PublicTestCase
 
     private const int DUNGEON_ENCOUNTER_ID = 999900;
 
+    /** The client names the challenge mode and its scenario the same, most of the time. */
+    private const string SCENARIO_NAME = 'A dungeon';
+
+    private const int SHARED_MAP_SCENARIO_ID = 999002;
+
+    private const int SHARED_MAP_ROOT_CRITERIA_TREE_ID = 999200;
+
+    private const int SHARED_MAP_FORCES_CRITERIA_TREE_ID = 999201;
+
     #[\Override]
     protected function tearDown(): void
     {
@@ -236,6 +245,82 @@ final class EnemyForcesDb2ServiceTest extends PublicTestCase
         $this->assertStringContainsString(sprintf('no challenge mode enemy forces tree for map %d', $dungeon->map_id), (string)$dungeonDiff->unresolvedReason);
     }
 
+    #[Test]
+    public function diffEnemyForces_givenAnotherDungeonOnTheSameMap_picksTheScenarioNamedAfterTheChallengeMode(): void
+    {
+        // Arrange - both Dawn of the Infinite wings are map 2579, with a scenario each
+        [$dungeon, $mappingVersion, $ourEnemyForcesByNpcId] = $this->getDungeonEnemyForces();
+
+        $this->writeDb2Tables(
+            $dungeon,
+            $mappingVersion->enemy_forces_required,
+            $ourEnemyForcesByNpcId,
+            sharedMapScenarioName: 'The other wing',
+        );
+
+        // Act
+        $report = $this->diffEnemyForces($dungeon);
+
+        // Assert - the other wing requires 100 more, so picking it would have read as a moved total
+        $dungeonDiff = $report->dungeonDiffs[$dungeon->id];
+
+        $this->assertSame(self::SCENARIO_ID, $dungeonDiff->scenarioId);
+        $this->assertSame($mappingVersion->enemy_forces_required, $dungeonDiff->db2EnemyForcesRequired);
+        $this->assertTrue($dungeonDiff->matches());
+    }
+
+    #[Test]
+    public function diffEnemyForces_givenAnotherDungeonOnTheSameMapTheClientNamesDifferently_leavesTheDungeonUnresolved(): void
+    {
+        // Arrange - the client calls Operation Mechagon: Junkyard "Mechagon Junkyard", so neither of the
+        // two scenarios on its map is named after the challenge mode
+        [$dungeon, $mappingVersion, $ourEnemyForcesByNpcId] = $this->getDungeonEnemyForces();
+
+        $this->writeDb2Tables(
+            $dungeon,
+            $mappingVersion->enemy_forces_required,
+            $ourEnemyForcesByNpcId,
+            sharedMapScenarioName: 'The other wing',
+        );
+        $this->writeDb2Table('MapChallengeMode', 'ID,Name_lang,MapID', [
+            sprintf('%d,"A dungeon spelled another way",%d', $dungeon->challenge_mode_id, $dungeon->map_id),
+        ]);
+
+        // Act
+        $report = $this->diffEnemyForces($dungeon);
+
+        // Assert
+        $dungeonDiff = $report->dungeonDiffs[$dungeon->id];
+
+        $this->assertFalse($dungeonDiff->isResolved());
+        $this->assertStringContainsString('carries 2 challenge mode scenarios', (string)$dungeonDiff->unresolvedReason);
+    }
+
+    #[Test]
+    public function diffEnemyForces_givenARetiredScenarioOnTheSameMap_picksTheOneWithASingleForcesNode(): void
+    {
+        // Arrange - Siege of Boralus keeps its retired scenario 1685, whose steps left it four forces nodes,
+        // alongside the reworked 2486. Both are named the same, so the name cannot tell them apart.
+        [$dungeon, $mappingVersion, $ourEnemyForcesByNpcId] = $this->getDungeonEnemyForces();
+
+        $this->writeDb2Tables(
+            $dungeon,
+            $mappingVersion->enemy_forces_required,
+            $ourEnemyForcesByNpcId,
+            sharedMapScenarioName: self::SCENARIO_NAME,
+            sharedMapScenarioIsAmbiguous: true,
+        );
+
+        // Act
+        $report = $this->diffEnemyForces($dungeon);
+
+        // Assert
+        $dungeonDiff = $report->dungeonDiffs[$dungeon->id];
+
+        $this->assertSame(self::SCENARIO_ID, $dungeonDiff->scenarioId);
+        $this->assertTrue($dungeonDiff->matches());
+    }
+
     private function diffEnemyForces(Dungeon $dungeon): \App\Service\EnemyForces\Dtos\EnemyForcesDb2Report
     {
         /** @var EnemyForcesDb2ServiceInterface $enemyForcesDb2Service */
@@ -298,6 +383,8 @@ final class EnemyForcesDb2ServiceTest extends PublicTestCase
         array   $nonCreatureCriteria = [],
         bool    $withSecondForcesNode = false,
         ?int    $dungeonEncounterMapId = null,
+        ?string $sharedMapScenarioName = null,
+        bool    $sharedMapScenarioIsAmbiguous = false,
     ): void {
         $criteriaTreeRows = [
             sprintf('%d,0,"12.1 Dungeon (Challenge)",0,4,0,0', self::ROOT_CRITERIA_TREE_ID),
@@ -328,15 +415,29 @@ final class EnemyForcesDb2ServiceTest extends PublicTestCase
             $criteriaRows[]     = sprintf('%d,%d,%d,0', $criteria['criteriaId'], $criteria['type'], $criteria['asset']);
         }
 
+        $scenarioRows = [sprintf('%d,"%s",1,0', self::SCENARIO_ID, self::SCENARIO_NAME)];
+        $stepRows     = [sprintf('%d,%d,%d', self::SCENARIO_ID + 100, self::SCENARIO_ID, self::ROOT_CRITERIA_TREE_ID)];
+
+        // A second dungeon on the same map - the other wing of a split dungeon, or the retired scenario of
+        // a reworked one. Its bosses are the same encounter, so only its name tells it apart.
+        if ($sharedMapScenarioName !== null) {
+            $scenarioRows[] = sprintf('%d,"%s",1,0', self::SHARED_MAP_SCENARIO_ID, $sharedMapScenarioName);
+            $stepRows[]     = sprintf('%d,%d,%d', self::SHARED_MAP_SCENARIO_ID + 100, self::SHARED_MAP_SCENARIO_ID, self::SHARED_MAP_ROOT_CRITERIA_TREE_ID);
+
+            $criteriaTreeRows[] = sprintf('%d,0,"Another dungeon (Challenge)",0,4,0,0', self::SHARED_MAP_ROOT_CRITERIA_TREE_ID);
+            $criteriaTreeRows[] = sprintf('%d,%d,"Defeat the boss",1,0,%d,0', self::SHARED_MAP_ROOT_CRITERIA_TREE_ID + 10, self::SHARED_MAP_ROOT_CRITERIA_TREE_ID, self::BOSS_CRITERIA_ID);
+            $criteriaTreeRows[] = sprintf('%d,%d,"Enemy Forces",%d,9,0,1', self::SHARED_MAP_FORCES_CRITERIA_TREE_ID, self::SHARED_MAP_ROOT_CRITERIA_TREE_ID, $enemyForcesRequired + 100);
+
+            if ($sharedMapScenarioIsAmbiguous) {
+                $criteriaTreeRows[] = sprintf('%d,%d,"Enemy Forces",%d,9,0,2', self::SHARED_MAP_FORCES_CRITERIA_TREE_ID + 1, self::SHARED_MAP_ROOT_CRITERIA_TREE_ID, $enemyForcesRequired + 200);
+            }
+        }
+
         $this->writeDb2Table('MapChallengeMode', 'ID,Name_lang,MapID', [
-            sprintf('%d,"A dungeon",%d', $dungeon->challenge_mode_id, $dungeon->map_id),
+            sprintf('%d,"%s",%d', $dungeon->challenge_mode_id, self::SCENARIO_NAME, $dungeon->map_id),
         ]);
-        $this->writeDb2Table('Scenario', 'ID,Name_lang,Type,Flags', [
-            sprintf('%d,"A dungeon",1,0', self::SCENARIO_ID),
-        ]);
-        $this->writeDb2Table('ScenarioStep', 'ID,ScenarioID,CriteriatreeID', [
-            sprintf('%d,%d,%d', self::SCENARIO_ID + 100, self::SCENARIO_ID, self::ROOT_CRITERIA_TREE_ID),
-        ]);
+        $this->writeDb2Table('Scenario', 'ID,Name_lang,Type,Flags', $scenarioRows);
+        $this->writeDb2Table('ScenarioStep', 'ID,ScenarioID,CriteriatreeID', $stepRows);
         $this->writeDb2Table('CriteriaTree', 'ID,Parent,Description_lang,Amount,Operator,CriteriaID,OrderIndex', $criteriaTreeRows);
         $this->writeDb2Table('Criteria', 'ID,Type,Asset,Modifier_tree_ID', $criteriaRows);
         $this->writeDb2Table('DungeonEncounter', 'ID,MapID', [
