@@ -1,4 +1,4 @@
-const {resolveConsoleArg, formatConsoleMessage, createDiagnosticsCollector, wireDiagnostics} = require('./route_thumbnail');
+const {resolveConsoleArg, formatConsoleMessage, createDiagnosticsCollector, wireDiagnostics, launchBrowser} = require('./route_thumbnail');
 
 /**
  * Puppeteer's real JSHandle#evaluate() runs a function inside the browser page and returns its
@@ -99,6 +99,38 @@ describe('formatConsoleMessage', () => {
         const result = await formatConsoleMessage(message);
 
         expect(result).toBe('CONSOLE ERR fallback text');
+    });
+});
+
+describe('launchBrowser', () => {
+    it('launchBrowser_givenSuccessfulLaunch_returnsTheBrowserWithoutLogging', async () => {
+        const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+        const browser = {};
+        const fakePuppeteer = {launch: async () => browser};
+
+        const result = await launchBrowser(fakePuppeteer);
+
+        expect(result).toBe(browser);
+        expect(consoleErrorSpy).not.toHaveBeenCalled();
+    });
+
+    it('launchBrowser_givenChromeVersionMismatch_logsTheDriftCauseAndRethrows', async () => {
+        const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+        const error = new Error('Could not find Chrome (ver. 151.0.7922.47).');
+        const fakePuppeteer = {launch: async () => { throw error; }};
+
+        await expect(launchBrowser(fakePuppeteer)).rejects.toBe(error);
+        expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+        expect(consoleErrorSpy.mock.calls[0][0]).toContain('#4012');
+    });
+
+    it('launchBrowser_givenUnrelatedLaunchFailure_rethrowsWithoutLogging', async () => {
+        const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+        const error = new Error('spawn ENOMEM');
+        const fakePuppeteer = {launch: async () => { throw error; }};
+
+        await expect(launchBrowser(fakePuppeteer)).rejects.toBe(error);
+        expect(consoleErrorSpy).not.toHaveBeenCalled();
     });
 });
 

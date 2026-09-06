@@ -175,13 +175,40 @@ function wireDiagnostics(page, {diagnostics, recordDiagnostic}) {
     return pendingConsoleDiagnostics;
 }
 
+/**
+ * Puppeteer's own "Could not find Chrome" error just names the missing revision, not why it's
+ * missing here: docker-compose/app-worker/Dockerfile bakes a Chrome build into the image matching
+ * whatever puppeteer version was pinned in package.json AT BUILD TIME, but node_modules is
+ * bind-mounted from the repo and can drift to a newer puppeteer (e.g. a dependabot bump) without
+ * the image being rebuilt - see #4012. Rethrows unchanged for every other failure so this stays a
+ * pure diagnostic addition, not a behaviour change.
+ */
+async function launchBrowser(puppeteerModule = puppeteer) {
+    try {
+        return await puppeteerModule.launch({
+            headless: true,
+            args: ['--no-sandbox'],
+        });
+    } catch (e) {
+        if (typeof e?.message === 'string' && e.message.includes('Could not find Chrome')) {
+            const puppeteerVersion = require('puppeteer/package.json').version;
+
+            console.error(
+                `This looks like the puppeteer/Chrome drift from #4012: node_modules' puppeteer ` +
+                `(${puppeteerVersion}) does not match the Chrome cached at ` +
+                `${process.env.PUPPETEER_CACHE_DIR ?? '(PUPPETEER_CACHE_DIR is not set)'}. Rebuild the ` +
+                'keystone.guru-worker image (docker compose build horizon) to re-bake a matching Chrome.',
+            );
+        }
+
+        throw e;
+    }
+}
+
 async function render() {
     let startTime = new Date().getTime();
     console.log('Creating browser');
-    const browser = await puppeteer.launch({
-        headless: true,
-        args: ['--no-sandbox'],
-    });
+    const browser = await launchBrowser();
     const {diagnostics, recordDiagnostic} = createDiagnosticsCollector();
 
     try {
@@ -243,4 +270,4 @@ if (require.main === module) {
     render();
 }
 
-module.exports = {resolveConsoleArg, formatConsoleMessage, createDiagnosticsCollector, wireDiagnostics};
+module.exports = {resolveConsoleArg, formatConsoleMessage, createDiagnosticsCollector, wireDiagnostics, launchBrowser};
