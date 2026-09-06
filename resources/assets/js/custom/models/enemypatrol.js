@@ -31,7 +31,7 @@ class EnemyPatrol extends Polyline {
 
         // The assigned enemies to this enemy patrol
         this.enemies = [];
-        getState().register('focusedenemy:changed', this, function (focusedEnemyChangedEvent) {
+        getEnemyMapObjectGroup().register('focusedenemy:changed', this, function (focusedEnemyChangedEvent) {
             let enemy = focusedEnemyChangedEvent.data.focusedenemy;
             if (enemy !== null && self.map.getMapState() instanceof EditMapState) {
                 return;
@@ -268,6 +268,6 @@ class EnemyPatrol extends Polyline {
     cleanup() {
         super.cleanup();
 
-        getState().unregister('focusedenemy:changed', this);
+        getEnemyMapObjectGroup().unregister('focusedenemy:changed', this);
     }
 }

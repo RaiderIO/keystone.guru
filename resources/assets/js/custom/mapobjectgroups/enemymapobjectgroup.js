@@ -4,6 +4,9 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
         this.fa_class = 'fa-users';
 
+        // The enemy that is focused by the user (mouse overed)
+        this._focusedEnemy = null;
+
         getState().register('mdtmappingmodeenabled:changed', this, this._onMdtMappingModeEnabledChanged.bind(this));
     }
 
@@ -14,6 +17,26 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     _onMdtMappingModeEnabledChanged() {
         // Refresh visibility of all enemies
         this._updateVisibility();
+    }
+
+    /**
+     * Gets the currently focused enemy.
+     * @returns {Enemy}
+     */
+    getFocusedEnemy() {
+        console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
+        return this._focusedEnemy;
+    }
+
+    /**
+     * Sets the enemy that is focused by the user (mouse overed).
+     * @param enemy {Enemy}
+     */
+    setFocusedEnemy(enemy) {
+        console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
+
+        this._focusedEnemy = enemy;
+        this.signal('focusedenemy:changed', {focusedenemy: this._focusedEnemy});
     }
 
     /**
@@ -281,4 +304,10 @@ class EnemyMapObjectGroup extends MapObjectGroup {
 
         return result;
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {EnemyMapObjectGroup};
 }
