@@ -59,7 +59,7 @@ const MAP_MAX_LAT = -256;
 const MAP_MAX_LNG = 384;
 
 // Enemy display types - must match the options rendered by
-// resources/views/common/maps/controls/elements/enemyvisualtype.blade.php
+// resources/views/common/maps/controls/elements/enemydisplaytype.blade.php
 const DISPLAY_TYPE_ENEMY_PORTRAIT = 'enemy_portrait';
 const DISPLAY_TYPE_NPC_CLASS = 'npc_class';
 const DISPLAY_TYPE_NPC_TYPE = 'npc_type';

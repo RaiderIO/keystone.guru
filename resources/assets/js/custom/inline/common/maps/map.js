@@ -4,7 +4,7 @@
  * @property {boolean} edit
  * @property {boolean} readonly
  * @property {boolean} sandbox
- * @property {string} defaultEnemyVisualType
+ * @property {string} defaultEnemyDisplayType
  * @property {boolean} defaultHeatmapShowTooltips
  * @property {boolean} defaultHeatmapShowOnTop
  * @property {number} defaultUnkilledEnemyOpacity
@@ -106,7 +106,7 @@ class CommonMapsMap extends InlineCode {
             this._setupRatingSelection();
             this._setupFloorSelection();
             this._setupMapObjectGroupVisibility();
-            this._setupEnemyVisualTypes();
+            this._setupEnemyDisplayTypes();
             this._setupZoomControl();
             this._setupFavorite();
             this._setupLabelToggle();
@@ -421,7 +421,7 @@ class CommonMapsMap extends InlineCode {
      *
      * @private
      */
-    _setupEnemyVisualTypes() {
+    _setupEnemyDisplayTypes() {
         // Enemy visual types
         $('#map_enemy_visuals_dropdown').find('a:not(.disabled)').unbind('click').bind('click', function () {
             let $this = $(this);

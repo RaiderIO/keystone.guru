@@ -250,7 +250,7 @@ class StateManager extends Signalable {
 
         this._map = map;
 
-        this.setEnemyDisplayType(this._map.options.defaultEnemyVisualType);
+        this.setEnemyDisplayType(this._map.options.defaultEnemyDisplayType);
         this.setHeatmapShowTooltips(this._map.options.defaultHeatmapShowTooltips);
         this.setHeatmapShowOnTop(this._map.options.defaultHeatmapShowOnTop);
         this.setUnkilledEnemyOpacity(this._map.options.defaultUnkilledEnemyOpacity);
