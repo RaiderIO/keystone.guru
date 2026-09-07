@@ -5,13 +5,16 @@ namespace Tests\Feature\Policy;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\PublishedState;
 use App\Models\Tags\TagCategory;
+use App\Models\Team;
+use App\Models\TeamUser;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
 /**
- * The 'create-tag' ability is invoked as Gate::authorize('create-tag', [$tagCategory, $model]).
+ * The 'create-tag' ability is invoked as
+ * Gate::authorize('create-tag', [$tagCategory, $model, $context]).
  * The Gate resolves the policy from the FIRST array element, so TagCategoryPolicy handles it and
  * the byte-identical TagPolicy::createTag was unreachable. These tests go through the Gate rather
  * than instantiating the policy, so they would catch the resolution silently moving elsewhere.
@@ -32,6 +35,7 @@ final class TagCategoryPolicyTest extends PublicTestCase
             $this->assertTrue($owner->can('create-tag', [
                 $this->personalTagCategory(),
                 $route,
+                $owner,
             ]));
         } finally {
             $route->delete();
@@ -54,6 +58,7 @@ final class TagCategoryPolicyTest extends PublicTestCase
             $this->assertFalse($nonOwner->can('create-tag', [
                 $this->personalTagCategory(),
                 $route,
+                $nonOwner,
             ]));
         } finally {
             $route->delete();
@@ -74,9 +79,77 @@ final class TagCategoryPolicyTest extends PublicTestCase
 
         try {
             // Act & Assert
-            $this->assertFalse($owner->can('create-tag', [$unknown, $route]));
+            $this->assertFalse($owner->can('create-tag', [$unknown, $route, $owner]));
         } finally {
             $route->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function createTag_givenAnotherUsersContext_returnsDenied(): void
+    {
+        // Arrange - the route is the owner's to edit, but the tag would land in someone else's context
+        $owner = User::factory()->create();
+        $other = User::factory()->create();
+        $route = $this->createRoute($owner);
+
+        try {
+            // Act & Assert
+            $this->assertFalse($owner->can('create-tag', [
+                $this->personalTagCategory(),
+                $route,
+                $other,
+            ]));
+        } finally {
+            $route->delete();
+            $owner->delete();
+            $other->delete();
+        }
+    }
+
+    #[Test]
+    public function createTag_givenTeamContextOfATeamTheUserIsAMemberOf_returnsAllowed(): void
+    {
+        // Arrange
+        $member = User::factory()->create();
+        $team   = $this->createTeam();
+        $team->addMember($member, TeamUser::ROLE_MEMBER);
+        $route = $this->createRoute($member);
+
+        try {
+            // Act & Assert
+            $this->assertTrue($member->can('create-tag', [
+                $this->teamTagCategory(),
+                $route,
+                $team,
+            ]));
+        } finally {
+            $route->delete();
+            TeamUser::where('team_id', $team->id)->delete();
+            Team::where('id', $team->id)->delete();
+            $member->delete();
+        }
+    }
+
+    #[Test]
+    public function createTag_givenTeamContextOfATeamTheUserIsNotAMemberOf_returnsDenied(): void
+    {
+        // Arrange
+        $owner = User::factory()->create();
+        $team  = $this->createTeam();
+        $route = $this->createRoute($owner);
+
+        try {
+            // Act & Assert
+            $this->assertFalse($owner->can('create-tag', [
+                $this->teamTagCategory(),
+                $route,
+                $team,
+            ]));
+        } finally {
+            $route->delete();
+            Team::where('id', $team->id)->delete();
             $owner->delete();
         }
     }
@@ -84,6 +157,22 @@ final class TagCategoryPolicyTest extends PublicTestCase
     private function personalTagCategory(): TagCategory
     {
         return TagCategory::where('name', TagCategory::DUNGEON_ROUTE_PERSONAL)->firstOrFail();
+    }
+
+    private function teamTagCategory(): TagCategory
+    {
+        return TagCategory::where('name', TagCategory::DUNGEON_ROUTE_TEAM)->firstOrFail();
+    }
+
+    private function createTeam(): Team
+    {
+        return Team::create([
+            'public_key'   => fake()->unique()->uuid(),
+            'name'         => sprintf('test-team-%s', fake()->uuid()),
+            'description'  => 'Created by TagCategoryPolicyTest',
+            'invite_code'  => fake()->unique()->uuid(),
+            'default_role' => TeamUser::ROLE_MEMBER,
+        ]);
     }
 
     /**
