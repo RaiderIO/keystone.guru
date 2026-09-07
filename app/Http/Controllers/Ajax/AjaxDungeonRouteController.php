@@ -177,11 +177,13 @@ class AjaxDungeonRouteController extends Controller
                     /** @var $query Builder */
                     $query->where('dungeon_route_favorites.user_id', $user->id);
                 });
-            } else {
-                // Filter by our own user if logged in
-                if ($mine) {
-                    $routes = $routes->where('author_id', $user->id);
-                }
+            }
+
+            // Filter by our own user if logged in. This is applied alongside the favorites filter and not
+            // instead of it: $mine is what exempts the query from the published state filter below, so a
+            // favorites request that also asks for $mine must still be narrowed down to the user's own routes
+            if ($mine) {
+                $routes = $routes->where('author_id', $user->id);
             }
 
             // Handle team if set
@@ -753,8 +755,8 @@ class AjaxDungeonRouteController extends Controller
      */
     public function favorite(Request $request, DungeonRoute $dungeonRoute): Response
     {
-        // No authorization: every user may favorite every route. The route sits behind
-        // ['auth', 'role:user|admin'], which is the only requirement.
+        Gate::authorize('view', $dungeonRoute);
+
         $user = Auth::user();
 
         /** @var DungeonRouteFavorite $dungeonRouteFavorite */
@@ -772,7 +774,8 @@ class AjaxDungeonRouteController extends Controller
      */
     public function favoriteDelete(Request $request, DungeonRoute $dungeonRoute): Response
     {
-        // No authorization: every user may unfavorite every route. See favorite().
+        // Deliberately not gated on 'view' like favorite() is: a route may become unpublished after it was
+        // favorited, and the user must still be able to remove it from their favorites afterwards
         $user = Auth::user();
 
         /** @var DungeonRouteFavorite $dungeonRouteFavorite */
