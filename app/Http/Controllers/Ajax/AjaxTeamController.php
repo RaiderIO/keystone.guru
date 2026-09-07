@@ -92,6 +92,10 @@ class AjaxTeamController extends Controller
         $author = $dungeonroute->author;
         abort_unless($author !== null && $team->isUserMember($author), Http::FORBIDDEN);
 
+        // A route held by another team is not this team's to move. Already being on this team is
+        // not an error - addRoute() then leaves it where it is
+        abort_unless($dungeonroute->team_id === null || $dungeonroute->team_id === $team->id, Http::NOT_FOUND);
+
         $team->addRoute($dungeonroute);
 
         return response()->noContent();
@@ -107,9 +111,10 @@ class AjaxTeamController extends Controller
         // moderate-route resolves to TeamPolicy::moderateRoute, which is canAddRemoveRoute()
         Gate::authorize('moderate-route', $team);
 
-        // Removing also drops this team's tags from the route, so it must be a route this team
-        // actually holds
-        abort_unless($dungeonroute->team_id === $team->id, Http::NOT_FOUND);
+        // Removing also drops this team's tags from the route, so a route held by another team is
+        // not this team's to unassign. Being on no team at all is not an error - removeRoute() then
+        // has nothing left to do
+        abort_unless($dungeonroute->team_id === null || $dungeonroute->team_id === $team->id, Http::NOT_FOUND);
 
         $team->removeRoute($dungeonroute);
 
