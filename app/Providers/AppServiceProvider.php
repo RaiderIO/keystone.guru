@@ -164,6 +164,8 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('api-combatlog-correct-event', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? 900)->by($this->userKey($request)));
         RateLimiter::for('api-patreon-diagnostics', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? 10)->by($this->userKey($request)));
         RateLimiter::for('api-create-dungeonroute-thumbnail', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? 30)->by($this->userKey($request)));
+        // Full-table aggregate - modest cap, admins are exempt via noLimitForExemptionsApi so this really only bounds the ai_agent role
+        RateLimiter::for('api-combatlog-observations-density', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? 20)->by($this->userKey($request)));
     }
 
     private function noLimitForExemptions(Request $request): ?Limit
