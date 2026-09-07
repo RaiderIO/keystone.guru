@@ -59,6 +59,20 @@ final class TestEnvironmentTest extends TestCase
         $this->assertSame('phpunit', $connection);
     }
 
+    #[Test]
+    public function sentryDsn_givenTestRun_isEmpty(): void
+    {
+        // Arrange - phpunit.xml empties both DSN variables with force="true", but PHPUnit writes only
+        // putenv() and $_ENV while Laravel reads $_SERVER first, so a DSN in the process environment
+        // silently wins and the suite reports its own deliberate report() calls to production (#4525)
+
+        // Act
+        $dsn = config('sentry.dsn');
+
+        // Assert
+        $this->assertEmpty($dsn, 'No test may reach the real error tracker - a DSN resolved here means events are being sent');
+    }
+
     /**
      * @return array<string, array{string, string}>
      */
