@@ -29,6 +29,20 @@ final class MigrationConnectionTest extends PublicTestCase
     private const array CALLER_EXTENSIONS = ['php', 'sh', 'yml', 'yaml'];
 
     /**
+     * The callers the scan below has to keep finding. Without this the assertion is only as strong as the scan:
+     * a caller that stops being readable - `sh/worktree.sh` is gitignored agent tooling, a symlink out of the
+     * repository that dangles inside the container - drops out of the results silently and takes its assertion
+     * with it, leaving a test that passes because it checked nothing.
+     *
+     * @var array<int, string>
+     */
+    private const array EXPECTED_COMBAT_LOG_MIGRATION_CALLERS = [
+        'app/Console/Commands/Database/Migrate.php',
+        'sh/provision-phpunit-db.sh',
+        '.github/actions/php-ci-setup/action.yml',
+    ];
+
+    /**
      * The `*_legacy` directories are squashed history - nothing runs them, and they are not held to this.
      *
      * @return array<string, array{migrationPath: string}>
@@ -116,8 +130,11 @@ final class MigrationConnectionTest extends PublicTestCase
      * on a DROP migration somewhere nobody would think to look.
      *
      * Scanned across the whole tree rather than asserted on the two commands, because a caller can be a shell
-     * script or a CI workflow as easily as a PHP command - `sh/worktree.sh` and the php-ci-setup action both
-     * invoke these migrations directly.
+     * script or a CI workflow as easily as a PHP command - `sh/provision-phpunit-db.sh` and the php-ci-setup
+     * action both invoke these migrations directly.
+     *
+     * `sh/worktree.sh` invokes them too but is deliberately not covered: it is gitignored agent tooling that
+     * lives in another repository, so the suite cannot read it from here. Its connection is verified by hand.
      */
     #[Test]
     public function combatLogMigrationCallers_givenEachOfThem_useTheElevatedConnection(): void
@@ -129,7 +146,19 @@ final class MigrationConnectionTest extends PublicTestCase
         $callers = $this->getFilesReferencing($migrationPath);
 
         // Assert
-        $this->assertNotEmpty($callers, sprintf('Found nothing that runs the migrations in %s', $migrationPath));
+        foreach (self::EXPECTED_COMBAT_LOG_MIGRATION_CALLERS as $expectedCaller) {
+            $this->assertContains(
+                $expectedCaller,
+                $callers,
+                sprintf(
+                    'The scan no longer reaches %s, so it is no longer checked for the connection it migrates ' .
+                    'on. Either restore it to the scanned directories, or drop it from %s::%s deliberately.',
+                    $expectedCaller,
+                    class_basename(self::class),
+                    'EXPECTED_COMBAT_LOG_MIGRATION_CALLERS',
+                ),
+            );
+        }
 
         foreach ($callers as $caller) {
             $this->assertDoesNotMatchRegularExpression(
