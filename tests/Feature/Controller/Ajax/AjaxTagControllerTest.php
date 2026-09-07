@@ -198,7 +198,7 @@ final class AjaxTagControllerTest extends PublicTestCase
 
         try {
             // Arrange
-            $author = $this->createUserWithRole();
+            $author = $this->createUserWithUserRole();
             $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
             $name   = sprintf('test-tag-%s', fake()->uuid());
 
@@ -233,8 +233,8 @@ final class AjaxTagControllerTest extends PublicTestCase
 
         try {
             // Arrange
-            $author = $this->createUserWithRole();
-            $other  = $this->createUserWithRole();
+            $author = $this->createUserWithUserRole();
+            $other  = $this->createUserWithUserRole();
             $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
             $name   = sprintf('test-tag-%s', fake()->uuid());
 
@@ -265,7 +265,7 @@ final class AjaxTagControllerTest extends PublicTestCase
 
         try {
             // Arrange
-            $member = $this->createUserWithRole();
+            $member = $this->createUserWithUserRole();
             $team   = $this->createTeam();
             $team->addMember($member, TeamUser::ROLE_MEMBER);
             $route = DungeonRoute::factory()->create(['author_id' => $member->id]);
@@ -302,7 +302,7 @@ final class AjaxTagControllerTest extends PublicTestCase
 
         try {
             // Arrange
-            $author = $this->createUserWithRole();
+            $author = $this->createUserWithUserRole();
             $team   = $this->createTeam();
             $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
             $name   = sprintf('test-team-tag-%s', fake()->uuid());
@@ -333,7 +333,7 @@ final class AjaxTagControllerTest extends PublicTestCase
 
         try {
             // Arrange
-            $owner   = $this->createUserWithRole();
+            $owner   = $this->createUserWithUserRole();
             $tag     = $this->createUserTagFor($owner);
             $newName = sprintf('test-tag-renamed-%s', fake()->uuid());
 
@@ -361,8 +361,8 @@ final class AjaxTagControllerTest extends PublicTestCase
 
         try {
             // Arrange
-            $author = $this->createUserWithRole();
-            $other  = $this->createUserWithRole();
+            $author = $this->createUserWithUserRole();
+            $other  = $this->createUserWithUserRole();
             $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
             $tag    = $this->createUserTagFor($other, $route);
 
@@ -390,8 +390,8 @@ final class AjaxTagControllerTest extends PublicTestCase
 
         try {
             // Arrange
-            $author = $this->createUserWithRole();
-            $other  = $this->createUserWithRole();
+            $author = $this->createUserWithUserRole();
+            $other  = $this->createUserWithUserRole();
             $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
             $tag    = $this->createUserTagFor($other, $route);
 
@@ -416,7 +416,7 @@ final class AjaxTagControllerTest extends PublicTestCase
 
         try {
             // Arrange
-            $author = $this->createUserWithRole();
+            $author = $this->createUserWithUserRole();
             $team   = $this->createTeam();
             $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
             $tag    = $this->createTeamTag($team, $route);
@@ -432,7 +432,7 @@ final class AjaxTagControllerTest extends PublicTestCase
         }
     }
 
-    private function createUserWithRole(): User
+    private function createUserWithUserRole(): User
     {
         $user = User::factory()->create(['public_key' => User::generateRandomPublicKey()]);
         $user->addRole(Role::ROLE_USER);

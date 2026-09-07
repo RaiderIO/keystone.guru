@@ -14,24 +14,42 @@ class TagPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can edit the tag.
+     * Determine whether the user can edit every tag that shares this tag's name within its context.
+     *
+     * Only the context itself grants this. edit()'s fallback to the tagged route's own permissions
+     * deliberately does not: a bulk action also reaches tags on routes that the owner of this one
+     * route has nothing to do with.
      */
-    public function edit(User $user, Tag $tag): bool
+    public function editAll(User $user, Tag $tag): bool
     {
-        $result = false;
-
-        // If the tag is from a specific user, you can only edit it if you're that user
-        if ($tag->context_class === User::class && $tag->context_id === $user->id) {
-            $result = true;
-        } elseif ($tag->context_class === Team::class) {
+        return match ($tag->context_class) {
+            // If the tag is from a specific user, you can only edit it if you're that user
+            User::class => $tag->context_id === $user->id,
             // If we're editing a team tag, and the user is part of this team, we can edit it.
             // find() rather than findOrFail(): a team tag can outlive its team. Team::removeMember()
             // and the team's deleting hook now clean up a leaving/removed member's team tags going
             // forward (#3866), but rows orphaned before that fix shipped can still have a
             // context_id that dangles, and findOrFail() would 404 every caller instead of denying
             // them.
-            $result = Team::find($tag->context_id)?->isUserMember($user) ?? false;
-        }
+            Team::class => Team::find($tag->context_id)?->isUserMember($user) ?? false,
+            default     => false,
+        };
+    }
+
+    /**
+     * @return bool
+     */
+    public function deleteAll(User $user, Tag $tag): bool
+    {
+        return $this->editAll($user, $tag);
+    }
+
+    /**
+     * Determine whether the user can edit the tag.
+     */
+    public function edit(User $user, Tag $tag): bool
+    {
+        $result = $this->editAll($user, $tag);
 
         // Falling back to the tagged route's own permissions keeps a tag whose team membership no
         // longer holds - or whose team is gone entirely - manageable by the people who own the route
