@@ -714,4 +714,24 @@ return [
          */
         'observation_retention_days' => (int)env('COMBAT_LOG_STALENESS_OBSERVATION_RETENTION_DAYS', 30),
     ],
+
+    'trusted_proxies' => [
+        /**
+         * CIDRs of the hop directly in front of the application, trusted in addition to CloudFlare's
+         * published ranges so the X-Forwarded-For chain is walked all the way back to the visitor.
+         *
+         * In production the connecting peer is the ALB, not CloudFlare, so without these the peer is
+         * untrusted, the chain is never walked, and $request->ip() returns the load balancer ENI -
+         * collapsing every anonymous visitor into one bucket for rate limiting and IP bans (#4536).
+         *
+         * These are the ksg-alb public subnets. Adding an availability zone to the load balancer
+         * means adding its subnet CIDR here, or IP resolution silently reverts to the ENI address.
+         *
+         * @var array<int, string>
+         */
+        'load_balancer_cidrs' => array_values(array_filter(array_map(
+            'trim',
+            explode(',', (string)env('TRUSTED_PROXY_LOAD_BALANCER_CIDRS', '172.41.0.0/20,172.41.16.0/20')),
+        ))),
+    ],
 ];

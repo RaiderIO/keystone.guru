@@ -18,7 +18,7 @@ class BlockBannedIpAddresses
      * Handle an incoming request.
      *
      * Registered after TrustProxies in bootstrap/app.php so $request->ip() already reflects the
-     * real visitor IP resolved from CF-Connecting-IP, not the CloudFlare edge IP.
+     * real visitor IP resolved from the forwarded chain, not the load balancer or CloudFlare edge.
      */
     public function handle(Request $request, Closure $next): Response
     {
