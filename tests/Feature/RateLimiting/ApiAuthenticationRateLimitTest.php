@@ -39,7 +39,7 @@ final class ApiAuthenticationRateLimitTest extends PublicTestCase
         $maxAttempts = $this->maxFailedAttempts();
         $userService = $this->createMockPublic(UserServiceInterface::class);
         $userService->expects($this->exactly($maxAttempts))
-            ->method('loginAsUserFromAuthenticationHeader')
+            ->method('verifyUserFromAuthenticationHeader')
             ->willReturn(BasicAuthenticationResult::CredentialsRejected);
 
         $middleware = new ApiAuthentication($userService, $this->createMockPublic(ApiAuthenticationLoggingInterface::class));
@@ -59,7 +59,6 @@ final class ApiAuthenticationRateLimitTest extends PublicTestCase
         } finally {
             $this->pretendRunningUnitTests();
             RateLimiter::clear($this->throttleKey());
-            RateLimiter::clear($this->ipThrottleKey());
         }
     }
 
@@ -69,7 +68,7 @@ final class ApiAuthenticationRateLimitTest extends PublicTestCase
         // Arrange
         $userService = $this->createMockPublic(UserServiceInterface::class);
         $userService->expects($this->once())
-            ->method('loginAsUserFromAuthenticationHeader')
+            ->method('verifyUserFromAuthenticationHeader')
             ->willReturn(BasicAuthenticationResult::Success);
 
         $middleware = new ApiAuthentication($userService, $this->createMockPublic(ApiAuthenticationLoggingInterface::class));
@@ -90,7 +89,35 @@ final class ApiAuthenticationRateLimitTest extends PublicTestCase
         } finally {
             $this->pretendRunningUnitTests();
             RateLimiter::clear($this->throttleKey());
-            RateLimiter::clear($this->ipThrottleKey());
+        }
+    }
+
+    #[Test]
+    public function handle_givenAlreadyVerifiedCredentials_forgetsEarlierFailures(): void
+    {
+        // Arrange - a full bucket, and a caller whose credentials a previous request already verified
+        $userService = $this->createMockPublic(UserServiceInterface::class);
+        $userService->method('loginAsCachedUserFromAuthenticationHeader')->willReturn(true);
+        $userService->expects($this->never())->method('verifyUserFromAuthenticationHeader');
+
+        $middleware = new ApiAuthentication($userService, $this->createMockPublic(ApiAuthenticationLoggingInterface::class));
+
+        RateLimiter::clear($this->throttleKey());
+        for ($attempt = 0; $attempt < $this->maxFailedAttempts(); ++$attempt) {
+            RateLimiter::hit($this->throttleKey(), 60);
+        }
+        $this->pretendNotRunningUnitTests();
+
+        try {
+            // Act
+            $response = $middleware->handle($this->request(), static fn() => new Response());
+
+            // Assert - draining the bucket is what keeps the caller working once its cache entry lapses
+            $this->assertSame(StatusCode::OK, $response->getStatusCode());
+            $this->assertSame(0, RateLimiter::attempts($this->throttleKey()));
+        } finally {
+            $this->pretendRunningUnitTests();
+            RateLimiter::clear($this->throttleKey());
         }
     }
 
@@ -100,7 +127,7 @@ final class ApiAuthenticationRateLimitTest extends PublicTestCase
         // Arrange - answering a request without credentials is free, so it must not fill up the bucket
         $userService = $this->createMockPublic(UserServiceInterface::class);
         $userService->expects($this->once())
-            ->method('loginAsUserFromAuthenticationHeader')
+            ->method('verifyUserFromAuthenticationHeader')
             ->willReturn(BasicAuthenticationResult::MissingHeader);
 
         $log = $this->createMockPublic(ApiAuthenticationLoggingInterface::class);
@@ -121,7 +148,6 @@ final class ApiAuthenticationRateLimitTest extends PublicTestCase
         } finally {
             $this->pretendRunningUnitTests();
             RateLimiter::clear($this->throttleKey(''));
-            RateLimiter::clear($this->ipThrottleKey());
         }
     }
 
@@ -132,7 +158,6 @@ final class ApiAuthenticationRateLimitTest extends PublicTestCase
         // are right must not be turned away by failures it did not produce
         $caller       = User::factory()->create(['password' => Hash::make(self::PASSWORD)]);
         $usernameKey  = sprintf('api-authentication:127.0.0.1|%s', sha1(mb_strtolower($caller->email)));
-        $ipKey        = $this->ipThrottleKey('127.0.0.1');
         $dungeonIndex = route('api.v1.combatlog.dungeon.index');
         $this->pretendNotRunningUnitTests();
 
@@ -142,10 +167,9 @@ final class ApiAuthenticationRateLimitTest extends PublicTestCase
 
             $rejectedResponse = $this->get($dungeonIndex, $this->credentialsOf($caller->email, 'not-the-password'));
 
-            // The counters are keyed off the credentials the request actually carried
+            // The counter is keyed off the credentials the request actually carried
             $this->assertSame(StatusCode::UNAUTHORIZED, $rejectedResponse->status());
             $this->assertSame(1, RateLimiter::attempts($usernameKey));
-            $this->assertSame(1, RateLimiter::attempts($ipKey));
 
             for ($attempt = RateLimiter::attempts($usernameKey); $attempt < $this->maxFailedAttempts(); ++$attempt) {
                 RateLimiter::hit($usernameKey, 60);
@@ -158,10 +182,11 @@ final class ApiAuthenticationRateLimitTest extends PublicTestCase
             // Assert
             $cachedResponse->assertStatus(StatusCode::OK);
             $rejectedResponse->assertStatus(StatusCode::UNAUTHORIZED);
+            // The cached success emptied the bucket, so the one failure after it is all that is left
+            $this->assertSame(1, RateLimiter::attempts($usernameKey));
         } finally {
             $this->pretendRunningUnitTests();
             RateLimiter::clear($usernameKey);
-            RateLimiter::clear($ipKey);
             $caller->delete();
         }
     }
@@ -189,11 +214,6 @@ final class ApiAuthenticationRateLimitTest extends PublicTestCase
     private function throttleKey(?string $username = null): string
     {
         return sprintf('api-authentication:%s|%s', self::IP, sha1(mb_strtolower($username ?? self::USERNAME)));
-    }
-
-    private function ipThrottleKey(string $ip = self::IP): string
-    {
-        return sprintf('api-authentication:%s', $ip);
     }
 
     private function maxFailedAttempts(): int
