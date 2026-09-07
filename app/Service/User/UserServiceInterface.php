@@ -9,5 +9,10 @@ interface UserServiceInterface
 {
     public function loginAsUserFromAuthenticationHeader(Request $request): BasicAuthenticationResult;
 
+    /**
+     * Authenticates the request's credentials only if a previous request already verified them.
+     */
+    public function loginAsCachedUserFromAuthenticationHeader(Request $request): bool;
+
     public function loginAsUser(string $email, string $password): bool;
 }

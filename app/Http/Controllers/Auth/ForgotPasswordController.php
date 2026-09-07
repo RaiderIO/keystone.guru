@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Middleware\TrustProxies;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -30,9 +29,6 @@ class ForgotPasswordController extends Controller implements HasMiddleware
     {
         return [
             'guest',
-            // The limiter buckets by IP for a guest, so the request must have gone through the proxy
-            // headers first - same as RegisterController
-            TrustProxies::class,
             'throttle:reset-password',
         ];
     }

@@ -33,13 +33,12 @@ final class ApiGroupRateLimitTest extends PublicTestCase
         $middleware = array_values(app('router')->gatherRouteMiddleware($route));
 
         // Assert
-        $throttleIndex = $this->indexOfMiddlewareContaining($middleware, 'api-general');
+        $throttleIndex       = $this->indexOfMiddlewareContaining($middleware, 'api-general');
+        $authenticationIndex = array_search(ApiAuthentication::class, $middleware, true);
 
         $this->assertNotNull($throttleIndex, 'The api middleware group must throttle with the api-general limiter');
-        $this->assertGreaterThan(
-            array_search(ApiAuthentication::class, $middleware, true),
-            $throttleIndex,
-        );
+        $this->assertNotFalse($authenticationIndex, 'The api middleware group must authenticate');
+        $this->assertGreaterThan($authenticationIndex, $throttleIndex);
     }
 
     #[Test]

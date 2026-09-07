@@ -153,11 +153,15 @@ class AppServiceProvider extends ServiceProvider
                 return Limit::none();
             }
 
-            return $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 60)->by($this->userKey($request));
+            // Account recovery, and until #4536 lands userKey() resolves every guest to the load balancer rather
+            // than to the visitor - so this ceiling is site-wide and is set well above what real traffic produces.
+            // Revisit it once the real visitor IP is available here.
+            return $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 300)->by($this->userKey($request));
         });
 
         // Writes a row per call and is reachable without a session, but it is only sent on two explicit user
-        // actions - so the ceiling sits far above what the front-end can produce
+        // actions - so the ceiling sits far above what the front-end can produce. Until #4536 lands userKey()
+        // resolves every guest to the load balancer, which makes this one site-wide bucket
         RateLimiter::for('store-metric', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 6000)->by($this->userKey($request)));
 
         // Heavy GET requests

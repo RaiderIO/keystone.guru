@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controller\Auth;
 
+use App\Email\CustomPasswordResetEmail;
 use App\Models\User;
 use App\Providers\AppServiceProvider;
 use Illuminate\Support\Facades\DB;
@@ -38,6 +39,9 @@ final class ForgotPasswordControllerTest extends PublicTestCase
             );
             $knownResponse->assertSessionHas('status', __('passwords.sent'));
             $unknownResponse->assertSessionHas('status', __('passwords.sent'));
+            // The uniform response must not have cost the known address its reset link
+            Notification::assertSentTo($user, CustomPasswordResetEmail::class);
+            Notification::assertCount(1);
         } finally {
             DB::table((string)config('auth.passwords.users.table'))->where('email', $user->email)->delete();
             $user->delete();

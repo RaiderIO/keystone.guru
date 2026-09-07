@@ -24,6 +24,64 @@ class UserService implements UserServiceInterface
 
     public function loginAsUserFromAuthenticationHeader(Request $request): BasicAuthenticationResult
     {
+        $credentials = $this->credentialsFromAuthenticationHeader($request);
+
+        if ($credentials instanceof BasicAuthenticationResult) {
+            return $credentials;
+        }
+
+        return $this->loginAsUser(...$credentials)
+            ? BasicAuthenticationResult::Success
+            : BasicAuthenticationResult::CredentialsRejected;
+    }
+
+    public function loginAsCachedUserFromAuthenticationHeader(Request $request): bool
+    {
+        $credentials = $this->credentialsFromAuthenticationHeader($request);
+
+        if ($credentials instanceof BasicAuthenticationResult) {
+            return false;
+        }
+
+        return $this->loginAsCachedUser(...$credentials);
+    }
+
+    /**
+     * Logs in as a user with the given email and password. This uses caching to prevent expensive password hashing
+     * for every single correct attempt.
+     *
+     * @param  string $email
+     * @param  string $password
+     * @return bool
+     */
+    public function loginAsUser(string $email, string $password): bool
+    {
+        // Fast-path: Check cache for authenticated user
+        if ($this->loginAsCachedUser($email, $password)) {
+            return true;
+        }
+
+        $user = User::where('email', $email)->first();
+
+        // Perform the expensive password verification
+        if (!$user || !Hash::check($password, $user->password)) {
+            return false;
+        }
+
+        // Cache user for 5 minutes (only caches the user object, not the password)
+        $this->cacheService->set($this->userAuthCacheKey($email, $password), $user, self::CACHE_TTL_USER_AUTH);
+
+        // Authenticate the user
+        auth()->setUser($user);
+
+        return true;
+    }
+
+    /**
+     * @return array{0: string, 1: string}|BasicAuthenticationResult The credentials, or why they could not be read
+     */
+    private function credentialsFromAuthenticationHeader(Request $request): array|BasicAuthenticationResult
+    {
         if (!$request->hasHeader('Authorization')) {
             return BasicAuthenticationResult::MissingHeader;
         }
@@ -58,48 +116,38 @@ class UserService implements UserServiceInterface
             return BasicAuthenticationResult::MalformedCredentials;
         }
 
-        return $this->loginAsUser($username, $password)
-            ? BasicAuthenticationResult::Success
-            : BasicAuthenticationResult::CredentialsRejected;
+        return [
+            $username,
+            $password,
+        ];
     }
 
     /**
-     * Logs in as a user with the given email and password. This uses caching to prevent expensive password hashing
-     * for every single correct attempt.
-     *
-     * @param  string $email
-     * @param  string $password
-     * @return bool
+     * Authenticates the given credentials only if a previous request already verified them - it costs a cache read
+     * and never a password hash comparison.
      */
-    public function loginAsUser(string $email, string $password): bool
+    private function loginAsCachedUser(string $email, string $password): bool
     {
-        // Use a more secure cache key (HMAC for password)
-        $cacheKey = sprintf(
+        $user = $this->cacheService->get($this->userAuthCacheKey($email, $password));
+
+        if (!$user) {
+            return false;
+        }
+
+        auth()->setUser($user);
+
+        return true;
+    }
+
+    /**
+     * The password is only ever present as an HMAC, so the key cannot be walked back to it.
+     */
+    private function userAuthCacheKey(string $email, string $password): string
+    {
+        return sprintf(
             self::CACHE_KEY_USER_AUTH,
             $email,
             hash_hmac('sha256', $password, (string)config('app.key')),
         );
-
-        // Fast-path: Check cache for authenticated user
-        if ($user = $this->cacheService->get($cacheKey)) {
-            auth()->setUser($user);
-
-            return true;
-        }
-
-        $user = User::where('email', $email)->first();
-
-        // Perform the expensive password verification
-        if (!$user || !Hash::check($password, $user->password)) {
-            return false;
-        }
-
-        // Cache user for 5 minutes (only caches the user object, not the password)
-        $this->cacheService->set($cacheKey, $user, self::CACHE_TTL_USER_AUTH);
-
-        // Authenticate the user
-        auth()->setUser($user);
-
-        return true;
     }
 }
