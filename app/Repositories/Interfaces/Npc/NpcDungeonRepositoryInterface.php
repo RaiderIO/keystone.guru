@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Interfaces\Npc;
 
+use App\Models\Dungeon;
 use App\Models\Npc\NpcDungeon;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Support\Collection;
@@ -19,4 +20,10 @@ use Illuminate\Support\Collection;
  */
 interface NpcDungeonRepositoryInterface extends BaseRepositoryInterface
 {
+    /**
+     * The ids of every NPC that occurs in the given dungeon.
+     *
+     * @return Collection<int, int>
+     */
+    public function getNpcIdsByDungeon(Dungeon $dungeon): Collection;
 }

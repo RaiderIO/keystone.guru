@@ -42,7 +42,11 @@ class DetectStaleCombatLogDataCommand extends Command
 
     public function handle(): int
     {
-        $this->info(sprintf('combatlog:detectstaledata — window=%dd', $this->observationWindowDays()));
+        $this->info(sprintf(
+            'combatlog:detectstaledata — window=%dd retention=%dd',
+            $this->observationWindowDays(),
+            $this->observationRetentionDays(),
+        ));
 
         $this->removeStaleNpcCharacteristics();
         $this->removeStaleSpellProperties();
@@ -54,6 +58,21 @@ class DetectStaleCombatLogDataCommand extends Command
     private function observationWindowDays(): int
     {
         return config('keystoneguru.combat_log_staleness.observation_window_days');
+    }
+
+    /**
+     * The number of distinct data-days of observation history to retain.
+     *
+     * Clamped to `observation_window_days + 2` at minimum: the staleness sweep reads observations
+     * back to `dataDates[observation_window_days]`, so retaining any less would prune the very rows
+     * it needs and make every fact look stale. Observation rows are combat-log-derived and cannot be
+     * restored from a seeder, so a misconfigured value must not be able to destroy them.
+     */
+    private function observationRetentionDays(): int
+    {
+        $configured = (int)config('keystoneguru.combat_log_staleness.observation_retention_days');
+
+        return max($configured, $this->observationWindowDays() + 2);
     }
 
     /**
@@ -110,10 +129,15 @@ class DetectStaleCombatLogDataCommand extends Command
     /**
      * The date beyond which observation rows are pruned, or null when there isn't yet enough
      * observation history to prune anything.
+     *
+     * `observation_retention_days` counts the data-days that are *kept*, and `pruneOldObservations()`
+     * deletes everything strictly older than this cutoff - so retaining N data-days means cutting at
+     * `dataDates[N - 1]`, hence the `- 1`. Before #4356 this was `dataDates[observation_window_days + 1]`,
+     * i.e. 5 retained data-days at the default window of 3.
      */
     private function getPruneCutoff(): ?string
     {
-        return $this->getDataDates()->get($this->observationWindowDays() + 1);
+        return $this->getDataDates()->get($this->observationRetentionDays() - 1);
     }
 
     private function removeStaleNpcCharacteristics(): void

@@ -426,10 +426,14 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
     public function handle_givenNoCurrentSeason_skipsStaleDetectionButPrunesObservations(): void
     {
         // Arrange
-        config(['keystoneguru.combat_log_staleness.observation_window_days' => 3]);
+        config([
+            'keystoneguru.combat_log_staleness.observation_window_days'    => 3,
+            'keystoneguru.combat_log_staleness.observation_retention_days' => 5,
+        ]);
         $this->app->instance(SeasonServiceInterface::class, new SeasonServiceStub());
 
-        // A continuous 5-day window (today .. 4 days ago) so the prune cutoff lands at 4 days ago.
+        // A continuous 5-day window (today .. 4 days ago); retaining 5 data-days puts the prune
+        // cutoff at the 5th most recent one, 4 days ago.
         $this->seedObservationDays(5);
 
         $characteristicId = Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH];
@@ -571,14 +575,17 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
     }
 
     #[Test]
-    public function handle_givenFewerObservationDaysThanWindowPlusOne_prunesNothing(): void
+    public function handle_givenFewerObservationDaysThanRetention_prunesNothing(): void
     {
-        // Arrange — window_days+1 distinct data-days exist, one short of the window_days+2 needed
-        // to define a prune cutoff at all. Offset them well into the past (not ending "today") so
-        // the old calendar-based cutoff would have pruned every one of them — otherwise this test
-        // would pass vacuously even with the null-guard removed.
-        $windowDays = config('keystoneguru.combat_log_staleness.observation_window_days');
-        $this->seedObservationDays($windowDays + 1, 10);
+        // Arrange — retention_days-1 distinct data-days exist, one short of the retention_days
+        // needed to define a prune cutoff at all. Offset them well into the past (not ending
+        // "today") so the old calendar-based cutoff would have pruned every one of them —
+        // otherwise this test would pass vacuously even with the null-guard removed.
+        config([
+            'keystoneguru.combat_log_staleness.observation_window_days'    => 3,
+            'keystoneguru.combat_log_staleness.observation_retention_days' => 5,
+        ]);
+        $this->seedObservationDays(4, 10);
 
         $countBefore = CombatLogNpcCharacteristicObservation::count();
 
@@ -590,10 +597,13 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
     }
 
     #[Test]
-    public function handle_prunesObservationsOlderThanFourDays(): void
+    public function handle_givenRetentionOfFiveDataDays_prunesObservationsOlderThanFifthDataDay(): void
     {
-        // Arrange — pin the observation window to 3 so the derived cutoffs are predictable
-        config(['keystoneguru.combat_log_staleness.observation_window_days' => 3]);
+        // Arrange — pin both cutoffs so the derived dates are predictable
+        config([
+            'keystoneguru.combat_log_staleness.observation_window_days'    => 3,
+            'keystoneguru.combat_log_staleness.observation_retention_days' => 5,
+        ]);
 
         // A continuous 5-day window (today .. 4 days ago) so the staleness cutoff lands at
         // 3 days ago and the prune cutoff at 4 days ago.
@@ -650,5 +660,118 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
             'spell_id'        => self::SPELL_ID,
             'combat_log_path' => '/tmp/test.log',
         ], 'combatlog');
+    }
+
+    #[Test]
+    public function handle_givenRetentionLongerThanStalenessWindow_keepsObservationsBeyondTheStalenessCutoff(): void
+    {
+        // Arrange — this is the #4356 change itself: the prune cutoff is no longer derived from the
+        // staleness window, so history that the sweep no longer considers "fresh" is still retained
+        // for later observation-density analysis. Under the pre-#4356 rule the prune cutoff sat at
+        // dataDates[window + 1] = 4 days ago and the 6-day-old row below would have been deleted.
+        config([
+            'keystoneguru.combat_log_staleness.observation_window_days'    => 3,
+            'keystoneguru.combat_log_staleness.observation_retention_days' => 10,
+        ]);
+
+        // A continuous 12-day window (today .. 11 days ago) so the prune cutoff lands on the 10th
+        // most recent data-day, 9 days ago.
+        $this->seedObservationDays(12);
+
+        // 6 days old → past the staleness cutoff (3 days ago) but inside the retained 10 data-days
+        $this->createNpcCharacteristicObservation(now()->subDays(6));
+        // 11 days old → older than the prune cutoff (9 days ago) → pruned
+        CombatLogNpcCharacteristicObservation::create([
+            'npc_id'            => self::NPC_ID,
+            'characteristic_id' => Characteristic::ALL[Characteristic::CHARACTERISTIC_STUN],
+            'observed_on'       => now()->subDays(11)->toDateString(),
+            'combat_log_path'   => '/tmp/old.log',
+        ]);
+
+        // Act
+        $this->artisan(DetectStaleCombatLogDataCommand::class)->assertSuccessful();
+
+        // Assert — only the row beyond the retention window is gone
+        $this->assertSame(1, CombatLogNpcCharacteristicObservation::where('npc_id', self::NPC_ID)->count());
+        $this->assertDatabaseHas('combat_log_npc_characteristic_observations', [
+            'npc_id'          => self::NPC_ID,
+            'combat_log_path' => '/tmp/test.log',
+        ], 'combatlog');
+        $this->assertDatabaseMissing('combat_log_npc_characteristic_observations', [
+            'npc_id'          => self::NPC_ID,
+            'combat_log_path' => '/tmp/old.log',
+        ], 'combatlog');
+    }
+
+    #[Test]
+    public function handle_givenRetentionShorterThanWindowPlusTwo_clampsPruneCutoffToTheOldBehaviour(): void
+    {
+        // Arrange — a misconfigured retention shorter than the staleness window would prune the very
+        // observations the sweep reads, making every fact look stale. Observation rows cannot be
+        // restored from a seeder, so the command clamps to window + 2 instead of obeying it.
+        config([
+            'keystoneguru.combat_log_staleness.observation_window_days'    => 3,
+            'keystoneguru.combat_log_staleness.observation_retention_days' => 1,
+        ]);
+
+        // A continuous 8-day window; the clamped retention of 5 puts the prune cutoff 4 days ago.
+        $this->seedObservationDays(8);
+
+        // 3 days old → inside the clamped retention → kept (an unclamped retention of 1 would have
+        // pruned everything older than today)
+        $this->createNpcCharacteristicObservation(now()->subDays(3));
+        // 7 days old → older than the clamped prune cutoff → pruned
+        CombatLogNpcCharacteristicObservation::create([
+            'npc_id'            => self::NPC_ID,
+            'characteristic_id' => Characteristic::ALL[Characteristic::CHARACTERISTIC_STUN],
+            'observed_on'       => now()->subDays(7)->toDateString(),
+            'combat_log_path'   => '/tmp/old.log',
+        ]);
+
+        // Act
+        $this->artisan(DetectStaleCombatLogDataCommand::class)->assertSuccessful();
+
+        // Assert
+        $this->assertSame(1, CombatLogNpcCharacteristicObservation::where('npc_id', self::NPC_ID)->count());
+        $this->assertDatabaseHas('combat_log_npc_characteristic_observations', [
+            'npc_id'          => self::NPC_ID,
+            'combat_log_path' => '/tmp/test.log',
+        ], 'combatlog');
+    }
+
+    #[Test]
+    public function handle_givenRetentionChanged_leavesTheStalenessCutoffUntouched(): void
+    {
+        // Arrange — regression guard: extending retention must not change *when* a fact expires.
+        // A fact last observed window + 1 data-days ago is still removed, exactly as before #4356.
+        config([
+            'keystoneguru.combat_log_staleness.observation_window_days'    => 3,
+            'keystoneguru.combat_log_staleness.observation_retention_days' => 30,
+        ]);
+        $characteristicId = Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH];
+        $this->seedObservationDays(6);
+        $this->createTestNpc();
+        $this->linkNpcToCurrentSeason();
+        NpcCharacteristic::create([
+            'npc_id'            => self::NPC_ID,
+            'characteristic_id' => $characteristicId,
+        ]);
+        $this->createNpcCharacteristicObservation(now()->subDays(4));
+
+        // Act
+        $this->artisan(DetectStaleCombatLogDataCommand::class)->assertSuccessful();
+
+        // Assert — removed on the staleness cutoff, yet its observation row is retained
+        $this->assertDatabaseMissing('npc_characteristics', [
+            'npc_id'            => self::NPC_ID,
+            'characteristic_id' => $characteristicId,
+        ]);
+        $this->assertDatabaseHas('combat_log_npc_events', [
+            'npc_id'      => self::NPC_ID,
+            'event_type'  => CombatLogNpcEventType::CharacteristicRemoved->value,
+            'model_class' => Characteristic::class,
+            'model_id'    => $characteristicId,
+        ], 'combatlog');
+        $this->assertSame(1, CombatLogNpcCharacteristicObservation::where('npc_id', self::NPC_ID)->count());
     }
 }

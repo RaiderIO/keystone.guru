@@ -701,5 +701,17 @@ return [
     'combat_log_staleness' => [
         /** The number of days without a new observation before an NPC characteristic or spell property is considered stale and removed. */
         'observation_window_days' => (int)env('COMBAT_LOG_STALENESS_OBSERVATION_WINDOW_DAYS', 3),
+
+        /**
+         * The number of distinct data-days of observation history that are retained before older
+         * observation rows are pruned. This is deliberately far larger than the staleness window:
+         * the retained history is what any future observation-density analysis has to work with,
+         * while `observation_window_days` alone decides when a fact expires (#4356).
+         *
+         * Must be at least `observation_window_days + 2` - pruning observations that the staleness
+         * sweep still needs would make every fact look stale. The sweep clamps it to that minimum
+         * rather than trusting the configured value.
+         */
+        'observation_retention_days' => (int)env('COMBAT_LOG_STALENESS_OBSERVATION_RETENTION_DAYS', 30),
     ],
 ];

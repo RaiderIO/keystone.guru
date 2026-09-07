@@ -39,4 +39,11 @@ interface SpellRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<int, Spell> all spells with their spellDungeons relation loaded, keyed by spell ID
      */
     public function getAllKeyedWithSpellDungeons(): Collection;
+
+    /**
+     * The ids of every spell flagged `hidden_on_map`.
+     *
+     * @return Collection<int, int>
+     */
+    public function getHiddenOnMapSpellIds(): Collection;
 }
