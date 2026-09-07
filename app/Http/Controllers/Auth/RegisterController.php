@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\ResolvesRedirectTarget;
 use App\Http\Middleware\TrustProxies;
 use App\Models\GameServerRegion;
 use App\Models\Laratrust\Role;
@@ -38,6 +39,7 @@ class RegisterController extends Controller implements HasMiddleware
     */
 
     use RegistersUsers;
+    use ResolvesRedirectTarget;
 
     /**
      * Where to redirect users after registration.
@@ -156,7 +158,7 @@ class RegisterController extends Controller implements HasMiddleware
         Session::flash('status', __('controller.register.flash.registered_successfully'));
 
         // Set the redirect path if it was set
-        $this->redirectTo = $request->get('redirect', '/profile');
+        $this->redirectTo = $this->resolveRedirectTarget($request, '/profile');
 
         if ($response = $this->registered($request, $user)) {
             return $response;

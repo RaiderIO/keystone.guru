@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\ResolvesRedirectTarget;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -25,6 +26,7 @@ class LoginController extends Controller implements HasMiddleware
     */
 
     use AuthenticatesUsers;
+    use ResolvesRedirectTarget;
 
     /**
      * Where to redirect users after login.
@@ -65,7 +67,7 @@ class LoginController extends Controller implements HasMiddleware
      */
     protected function authenticated(Request $request, mixed $user): void
     {
-        $this->redirectTo = $request->get('redirect', '/');
+        $this->redirectTo = $this->resolveRedirectTarget($request, '/');
     }
 
     /**
@@ -78,6 +80,6 @@ class LoginController extends Controller implements HasMiddleware
     {
         throw ValidationException::withMessages([
             $this->username() => [trans('auth.failed')],
-        ])->redirectTo(route('login', ['redirect' => $request->get('redirect', '/')]));
+        ])->redirectTo(route('login', ['redirect' => $this->resolveRedirectTarget($request, '/')]));
     }
 }
