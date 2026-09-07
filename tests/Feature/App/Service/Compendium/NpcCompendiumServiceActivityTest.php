@@ -12,7 +12,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
-use App\Service\Compendium\NpcCompendiumService;
+use App\Service\Compendium\NpcCompendiumServiceInterface;
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -25,7 +25,7 @@ final class NpcCompendiumServiceActivityTest extends PublicTestCase
     private const int TEST_SPELL_ID         = 9995099;
     private const int TEST_VISIBLE_SPELL_ID = 9995098;
 
-    private NpcCompendiumService $service;
+    private NpcCompendiumServiceInterface $service;
 
     #[\Override]
     protected function setUp(): void
@@ -39,7 +39,7 @@ final class NpcCompendiumServiceActivityTest extends PublicTestCase
         Spell::whereIn('id', [self::TEST_SPELL_ID, self::TEST_VISIBLE_SPELL_ID])->delete();
         Npc::where('id', self::TEST_NPC_ID)->delete();
 
-        $this->service = new NpcCompendiumService();
+        $this->service = app(NpcCompendiumServiceInterface::class);
     }
 
     #[Test]

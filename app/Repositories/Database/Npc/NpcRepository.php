@@ -145,4 +145,17 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
             // Witherlings would never get mapped properly
             ->push(194373);
     }
+
+    /**
+     * @param  Collection<int, int> $npcIds
+     * @return Collection<int, Npc>
+     */
+    public function findAllByIdWithTooltipRelations(Collection $npcIds): Collection
+    {
+        return Npc::query()
+            ->whereIn('id', $npcIds)
+            ->with(['classification', 'type', 'characteristics', 'npcHealths'])
+            ->get()
+            ->keyBy('id');
+    }
 }
