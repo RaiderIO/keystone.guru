@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
 use App\Models\Team;
 use App\Models\TeamUser;
@@ -33,14 +34,7 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
     {
         parent::setUp();
 
-        $this->team = Team::create([
-            'name'         => sprintf('Ajax team test %s', uniqid()),
-            'public_key'   => Team::generateRandomPublicKey(),
-            'invite_code'  => Team::generateRandomPublicKey(12, 'invite_code'),
-            'description'  => 'Created by AjaxTeamControllerTest',
-            'icon_file_id' => -1,
-            'default_role' => TeamUser::ROLE_MEMBER,
-        ]);
+        $this->team = $this->createTeam();
 
         $this->moderator = User::factory()->create();
         $this->moderator->addRole(Role::ROLE_USER);
@@ -214,6 +208,101 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
             TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $admin->id)->delete();
             $admin->delete();
         }
+    }
+
+    #[Test]
+    public function addRoute_givenARouteAuthoredOutsideTheTeam_returnsForbiddenAndLeavesItUnassigned(): void
+    {
+        // Arrange - a route with no team yet, authored by someone who is not in this team at all
+        $outsider = User::factory()->create();
+        $outsider->addRole(Role::ROLE_USER);
+
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $outsider->id, 'team_id' => null]);
+
+        try {
+            // Act
+            $response = $this->post($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertNull(DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+            $outsider->delete();
+        }
+    }
+
+    #[Test]
+    public function addRoute_givenARouteAuthoredByTheCaller_assignsItToTheTeam(): void
+    {
+        // Arrange
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->moderator->id, 'team_id' => null]);
+
+        try {
+            // Act
+            $response = $this->post($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertSame($this->team->id, DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function removeRoute_givenARouteOfAnotherTeam_returnsNotFoundAndLeavesItAssigned(): void
+    {
+        // Arrange - the caller moderates $this->team, but the route sits on a different team
+        $otherTeam    = $this->createTeam();
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->moderator->id, 'team_id' => $otherTeam->id]);
+
+        try {
+            // Act
+            $response = $this->delete($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertNotFound();
+            $this->assertSame($otherTeam->id, DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+            $otherTeam->load('members.patreonAdFreeGiveaway')->delete();
+        }
+    }
+
+    #[Test]
+    public function removeRoute_givenARouteOfThisTeam_unassignsIt(): void
+    {
+        // Arrange
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->moderator->id, 'team_id' => $this->team->id]);
+
+        try {
+            // Act
+            $response = $this->delete($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertNull(DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    private function createTeam(): Team
+    {
+        return Team::create([
+            'name'         => sprintf('Ajax team test %s', uniqid()),
+            'public_key'   => Team::generateRandomPublicKey(),
+            'invite_code'  => Team::generateRandomPublicKey(12, 'invite_code'),
+            'description'  => 'Created by AjaxTeamControllerTest',
+            'icon_file_id' => -1,
+            'default_role' => TeamUser::ROLE_MEMBER,
+        ]);
+    }
+
+    private function teamRouteUrl(Team $team, DungeonRoute $dungeonRoute): string
+    {
+        return sprintf('/ajax/team/%s/route/%s', $team->getRouteKey(), $dungeonRoute->getRouteKey());
     }
 
     private function changeRoleUrl(): string
