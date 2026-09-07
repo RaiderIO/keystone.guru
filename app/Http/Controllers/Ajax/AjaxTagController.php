@@ -44,17 +44,10 @@ class AjaxTagController extends Controller
     public function store(
         APITagFormRequest $request,
     ) {
-        $validated = $request->validated();
-
-        $contextPublicKey = $validated['context'];
-        $contextClass     = $validated['context_class'];
-
         /** @var Model&HasTagsInterface $context */
-        $context = match ($contextClass) {
-            'user'  => User::where('public_key', $contextPublicKey)->firstOrFail(),
-            'team'  => Team::where('public_key', $contextPublicKey)->firstOrFail(),
-            default => abort(StatusCode::BAD_REQUEST, 'Invalid context class'),
-        };
+        $context = $request->getContext();
+
+        $this->authorizeContext($request->user(), $context::class, $context->getKey());
 
         /** @var TagCategory $tagCategory */
         $tagCategory = TagCategory::where('name', $request->get('category'))->firstOrFail();
@@ -120,6 +113,8 @@ class AjaxTagController extends Controller
     {
         Gate::authorize('edit', $tag);
 
+        $this->authorizeContext($request->user(), $tag->context_class, $tag->context_id);
+
         // Update all tags with the same name to the new name and color
         Tag::where('name', $tag->name)
             ->where('tag_category_id', $tag->tag_category_id)
@@ -140,6 +135,8 @@ class AjaxTagController extends Controller
     public function deleteAll(Request $request, Tag $tag): Response
     {
         Gate::authorize('delete', $tag);
+
+        $this->authorizeContext($request->user(), $tag->context_class, $tag->context_id);
 
         // Update all tags with the same name to the new name and color
         Tag::where('name', $tag->name)
@@ -168,5 +165,21 @@ class AjaxTagController extends Controller
         }
 
         return $result;
+    }
+
+    /**
+     * A tag's context must belong to the caller: their own account, or a team they're a member of.
+     */
+    private function authorizeContext(?User $user, ?string $contextClass, int|string|null $contextId): void
+    {
+        $hasAccessToContext = match ($contextClass) {
+            User::class => $user !== null && (int)$contextId === $user->id,
+            Team::class => Team::find($contextId)?->isUserMember($user) ?? false,
+            default     => false,
+        };
+
+        if (!$hasAccessToContext) {
+            abort(StatusCode::FORBIDDEN, 'You do not have access to this tag context');
+        }
     }
 }
