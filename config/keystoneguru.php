@@ -690,7 +690,7 @@ return [
     ],
 
     'mdt' => [
-        'version' => 'v6.2.10',
+        'version' => 'v6.2.13',
     ],
 
     'combat_log_route_regeneration' => [

@@ -199,5 +199,10 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importMapPOIsHaveExistingFloorSwitchMarkers(int $count): void;
 
+    /**
+     * @param array<string, float> $latLng
+     */
+    public function importMapPOIsHaveExistingDungeonStartMapIcon(array $latLng): void;
+
     public function importMapPOIsEnd(): void;
 }

@@ -10091,11 +10091,11 @@
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
         "mdt_mapping_hash": null,
-        "mdt_addon_version": null,
+        "mdt_addon_version": 629,
         "mdt_changes_pending": true,
         "facade_enabled": 0,
         "created_at": "2026-08-27T22:11:34.000000Z",
-        "updated_at": "2026-08-27T22:11:34.000000Z"
+        "updated_at": "2026-09-05T12:04:42.000000Z"
     },
     {
         "id": 1000,
@@ -10108,11 +10108,11 @@
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
         "mdt_mapping_hash": null,
-        "mdt_addon_version": null,
+        "mdt_addon_version": 629,
         "mdt_changes_pending": true,
         "facade_enabled": 1,
         "created_at": "2026-08-28T20:02:11.000000Z",
-        "updated_at": "2026-08-29T08:10:03.000000Z"
+        "updated_at": "2026-09-05T12:04:42.000000Z"
     },
     {
         "id": 1043,
@@ -10249,5 +10249,73 @@
         "facade_enabled": 1,
         "created_at": "2026-08-31T14:42:06.000000Z",
         "updated_at": "2026-08-31T14:42:10.000000Z"
+    },
+    {
+        "id": 1063,
+        "game_version_id": 1,
+        "dungeon_id": 145,
+        "version": 11,
+        "enemy_forces_required": 686,
+        "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 1860,
+        "mdt_mapping_hash": "c8b9a38db6e91089d74698721731058c",
+        "mdt_addon_version": 6213,
+        "mdt_changes_pending": false,
+        "facade_enabled": 1,
+        "created_at": "2026-09-05T12:03:45.000000Z",
+        "updated_at": "2026-09-05T12:03:54.000000Z"
+    },
+    {
+        "id": 1064,
+        "game_version_id": 1,
+        "dungeon_id": 72,
+        "version": 14,
+        "enemy_forces_required": 551,
+        "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 1680,
+        "mdt_mapping_hash": "8d04b191b5780f466ab96eb1a954ae4f",
+        "mdt_addon_version": 6213,
+        "mdt_changes_pending": false,
+        "facade_enabled": 1,
+        "created_at": "2026-09-05T12:03:54.000000Z",
+        "updated_at": "2026-09-05T12:03:58.000000Z"
+    },
+    {
+        "id": 1065,
+        "game_version_id": 1,
+        "dungeon_id": 16,
+        "version": 7,
+        "enemy_forces_required": 608,
+        "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 1980,
+        "mdt_mapping_hash": "4b93aa9b7f8737907ea665c9a28016d6",
+        "mdt_addon_version": 6213,
+        "mdt_changes_pending": false,
+        "facade_enabled": 1,
+        "created_at": "2026-09-05T12:03:58.000000Z",
+        "updated_at": "2026-09-05T12:04:02.000000Z"
+    },
+    {
+        "id": 1066,
+        "game_version_id": 1,
+        "dungeon_id": 19,
+        "version": 7,
+        "enemy_forces_required": 687,
+        "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 1980,
+        "mdt_mapping_hash": "ee6dafb68324445a65d59202103dae89",
+        "mdt_addon_version": 6213,
+        "mdt_changes_pending": false,
+        "facade_enabled": 1,
+        "created_at": "2026-09-05T12:04:02.000000Z",
+        "updated_at": "2026-09-05T12:04:06.000000Z"
     }
 ]

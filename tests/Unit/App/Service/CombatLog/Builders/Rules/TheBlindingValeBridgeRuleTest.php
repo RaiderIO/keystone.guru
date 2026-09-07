@@ -20,6 +20,9 @@ class TheBlindingValeBridgeRuleTest extends PublicTestCase
 {
     private const NPC_ID_LIGHTWARDEN_RUIA = 245912;
 
+    /** @var string An enemy the rule names on neither side of Ruia's death */
+    private const UNIQUE_KEY_UNRELATED = '244887-1';
+
     #[Test]
     public function appliesToDungeon_givenTheBlindingVale_returnsTrue(): void
     {
@@ -47,71 +50,155 @@ class TheBlindingValeBridgeRuleTest extends PublicTestCase
     }
 
     #[Test]
-    public function isEnemyEligible_givenABridgeEnemyBeforeLightwardenRuiaDied_returnsTrue(): void
+    #[DataProvider('bridgeEnemyUniqueKeyProvider')]
+    public function isEnemyEligible_givenABridgeEnemyBeforeLightwardenRuiaDied_returnsTrue(string $uniqueKey): void
     {
         // Arrange
         $rule = $this->makeRule();
 
         // Act
-        $result = $rule->isEnemyEligible($this->makeEnemy(44));
+        $result = $rule->isEnemyEligible($this->makeEnemy($uniqueKey));
 
         // Assert
         $this->assertTrue($result);
     }
 
     #[Test]
-    #[DataProvider('bridgeEnemyPackGroupProvider')]
-    public function isEnemyEligible_givenABridgeEnemyAfterLightwardenRuiaDied_returnsFalse(int $group): void
+    #[DataProvider('bridgeEnemyUniqueKeyProvider')]
+    public function isEnemyEligible_givenABridgeEnemyAfterLightwardenRuiaDied_returnsFalse(string $uniqueKey): void
     {
         // Arrange
         $rule = $this->makeRule();
         $rule->onEnemyDied(self::NPC_ID_LIGHTWARDEN_RUIA, null);
 
         // Act
-        $result = $rule->isEnemyEligible($this->makeEnemy($group));
+        $result = $rule->isEnemyEligible($this->makeEnemy($uniqueKey));
 
         // Assert
         $this->assertFalse($result);
     }
 
     /**
-     * @return array<string, array<int, int>>
+     * @return array<string, array<int, string>>
      */
-    public static function bridgeEnemyPackGroupProvider(): array
+    public static function bridgeEnemyUniqueKeyProvider(): array
     {
-        return [
-            'group 44' => [44],
-            'group 45' => [45],
-            'group 46' => [46],
-        ];
+        return self::uniqueKeyProvider(['245339-11', '245345-25', '254850-10', '245410-90', '245346-5', '245484-16']);
+    }
+
+    /**
+     * The enemies underneath the bridge only spawn once Ruia is dead, so nothing on the way to Ikuzz may match them.
+     */
+    #[Test]
+    #[DataProvider('underBridgeEnemyUniqueKeyProvider')]
+    public function isEnemyEligible_givenAnUnderBridgeEnemyBeforeLightwardenRuiaDied_returnsFalse(string $uniqueKey): void
+    {
+        // Arrange
+        $rule = $this->makeRule();
+
+        // Act
+        $result = $rule->isEnemyEligible($this->makeEnemy($uniqueKey));
+
+        // Assert
+        $this->assertFalse($result);
     }
 
     #[Test]
-    public function isEnemyEligible_givenANonBridgeEnemyAfterLightwardenRuiaDied_returnsTrue(): void
+    #[DataProvider('underBridgeEnemyUniqueKeyProvider')]
+    public function isEnemyEligible_givenAnUnderBridgeEnemyAfterLightwardenRuiaDied_returnsTrue(string $uniqueKey): void
     {
         // Arrange
         $rule = $this->makeRule();
         $rule->onEnemyDied(self::NPC_ID_LIGHTWARDEN_RUIA, null);
 
         // Act
-        $result = $rule->isEnemyEligible($this->makeEnemy(79));
+        $result = $rule->isEnemyEligible($this->makeEnemy($uniqueKey));
 
         // Assert
         $this->assertTrue($result);
     }
 
     /**
-     * An enemy that is not part of any pack has no group to block on, so it must never be excluded.
+     * @return array<string, array<int, string>>
+     */
+    public static function underBridgeEnemyUniqueKeyProvider(): array
+    {
+        return self::uniqueKeyProvider([
+            '245410-107', '245345-28', '245346-6', '245336-1', '245345-10',
+            // The Lightfeather Petalwings, which MDT groups on some mapping versions and not on others
+            '245484-5', '245484-6', '245484-7',
+        ]);
+    }
+
+    /**
+     * The rule matches on the enemy's own key, so its pack - or the absence of one - must not change the outcome.
      */
     #[Test]
-    public function isEnemyEligible_givenAnEnemyWithoutAnEnemyPackAfterLightwardenRuiaDied_returnsTrue(): void
+    public function isEnemyEligible_givenAnUnderBridgeEnemyInAPackBeforeLightwardenRuiaDied_returnsFalse(): void
+    {
+        // Arrange
+        $rule = $this->makeRule();
+
+        // Act
+        $result = $rule->isEnemyEligible($this->makeEnemyInPack('245484-7', 57));
+
+        // Assert
+        $this->assertFalse($result);
+    }
+
+    #[Test]
+    public function isEnemyEligible_givenAnUnderBridgeEnemyInAPackAfterLightwardenRuiaDied_returnsTrue(): void
     {
         // Arrange
         $rule = $this->makeRule();
         $rule->onEnemyDied(self::NPC_ID_LIGHTWARDEN_RUIA, null);
 
         // Act
-        $result = $rule->isEnemyEligible($this->makeEnemy(null));
+        $result = $rule->isEnemyEligible($this->makeEnemyInPack('245484-7', 57));
+
+        // Assert
+        $this->assertTrue($result);
+    }
+
+    /**
+     * The Lightfeather Petalwings elsewhere in the dungeon must stay eligible, so keying on the npc id alone would
+     * block the wrong enemies.
+     */
+    #[Test]
+    public function isEnemyEligible_givenAnEnemySharingTheNpcIdBeforeLightwardenRuiaDied_returnsTrue(): void
+    {
+        // Arrange
+        $rule = $this->makeRule();
+
+        // Act
+        $result = $rule->isEnemyEligible($this->makeEnemy('245484-1'));
+
+        // Assert
+        $this->assertTrue($result);
+    }
+
+    #[Test]
+    public function isEnemyEligible_givenAnUnrelatedEnemyAfterLightwardenRuiaDied_returnsTrue(): void
+    {
+        // Arrange
+        $rule = $this->makeRule();
+        $rule->onEnemyDied(self::NPC_ID_LIGHTWARDEN_RUIA, null);
+
+        // Act
+        $result = $rule->isEnemyEligible($this->makeEnemy(self::UNIQUE_KEY_UNRELATED));
+
+        // Assert
+        $this->assertTrue($result);
+    }
+
+    #[Test]
+    public function isEnemyEligible_givenAnUnrelatedEnemyBeforeLightwardenRuiaDied_returnsTrue(): void
+    {
+        // Arrange
+        $rule = $this->makeRule();
+
+        // Act
+        $result = $rule->isEnemyEligible($this->makeEnemy(self::UNIQUE_KEY_UNRELATED));
 
         // Assert
         $this->assertTrue($result);
@@ -131,7 +218,7 @@ class TheBlindingValeBridgeRuleTest extends PublicTestCase
         $rule->onEnemyDied(self::NPC_ID_LIGHTWARDEN_RUIA, null);
 
         // Assert
-        $this->assertFalse($rule->isEnemyEligible($this->makeEnemy(44)));
+        $this->assertFalse($rule->isEnemyEligible($this->makeEnemy('245339-11')));
     }
 
     #[Test]
@@ -144,7 +231,7 @@ class TheBlindingValeBridgeRuleTest extends PublicTestCase
         $rule->onEnemyDied(244887, null);
 
         // Assert
-        $this->assertTrue($rule->isEnemyEligible($this->makeEnemy(44)));
+        $this->assertTrue($rule->isEnemyEligible($this->makeEnemy('245339-11')));
     }
 
     /**
@@ -165,50 +252,13 @@ class TheBlindingValeBridgeRuleTest extends PublicTestCase
     }
 
     /**
-     * The packs underneath the bridge only spawn once Ruia is dead, so nothing on the way to Ikuzz may match them.
+     * @param array<int, string> $uniqueKeys
+     *
+     * @return array<string, array<int, string>>
      */
-    #[Test]
-    #[DataProvider('underBridgeEnemyPackGroupProvider')]
-    public function isEnemyEligible_givenAnUnderBridgeEnemyBeforeLightwardenRuiaDied_returnsFalse(int $group): void
+    private static function uniqueKeyProvider(array $uniqueKeys): array
     {
-        // Arrange
-        $rule = $this->makeRule();
-
-        // Act
-        $result = $rule->isEnemyEligible($this->makeEnemy($group));
-
-        // Assert
-        $this->assertFalse($result);
-    }
-
-    /**
-     * @return array<string, array<int, int>>
-     */
-    public static function underBridgeEnemyPackGroupProvider(): array
-    {
-        return [
-            'group 47' => [47],
-            'group 48' => [48],
-            'group 49' => [49],
-            'group 50' => [50],
-            'group 54' => [54],
-            'group 57' => [57],
-        ];
-    }
-
-    #[Test]
-    #[DataProvider('underBridgeEnemyPackGroupProvider')]
-    public function isEnemyEligible_givenAnUnderBridgeEnemyAfterLightwardenRuiaDied_returnsTrue(int $group): void
-    {
-        // Arrange
-        $rule = $this->makeRule();
-        $rule->onEnemyDied(self::NPC_ID_LIGHTWARDEN_RUIA, null);
-
-        // Act
-        $result = $rule->isEnemyEligible($this->makeEnemy($group));
-
-        // Assert
-        $this->assertTrue($result);
+        return array_combine($uniqueKeys, array_map(static fn(string $uniqueKey) => [$uniqueKey], $uniqueKeys));
     }
 
     private function makeRule(): TheBlindingValeBridgeRule
@@ -224,15 +274,21 @@ class TheBlindingValeBridgeRuleTest extends PublicTestCase
         return $dungeon;
     }
 
-    private function makeEnemy(?int $group): Enemy
+    private function makeEnemy(string $uniqueKey): Enemy
     {
-        $enemy = new Enemy();
+        [$npcId, $mdtId] = explode('-', $uniqueKey);
 
-        if ($group === null) {
-            $enemy->enemy_pack_id = null;
+        $enemy                = new Enemy();
+        $enemy->enemy_pack_id = null;
+        $enemy->npc_id        = (int)$npcId;
+        $enemy->mdt_id        = (int)$mdtId;
 
-            return $enemy;
-        }
+        return $enemy;
+    }
+
+    private function makeEnemyInPack(string $uniqueKey, int $group): Enemy
+    {
+        $enemy = $this->makeEnemy($uniqueKey);
 
         $enemyPack        = new EnemyPack();
         $enemyPack->id    = 1;
