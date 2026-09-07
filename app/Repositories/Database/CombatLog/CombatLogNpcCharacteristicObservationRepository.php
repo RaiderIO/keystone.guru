@@ -85,7 +85,7 @@ class CombatLogNpcCharacteristicObservationRepository extends DatabaseRepository
         return $result;
     }
 
-    public function getHistoryForNpc(int $npcId): Collection
+    public function getHistory(int $npcId): Collection
     {
         /** @var Collection<int, CombatLogNpcCharacteristicObservation> $rows */
         $rows = CombatLogNpcCharacteristicObservation::query()

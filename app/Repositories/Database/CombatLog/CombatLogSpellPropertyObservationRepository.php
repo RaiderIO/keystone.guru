@@ -85,7 +85,7 @@ class CombatLogSpellPropertyObservationRepository extends DatabaseRepository imp
         return $result;
     }
 
-    public function getHistoryForSpell(int $spellId): Collection
+    public function getHistory(int $spellId): Collection
     {
         /** @var Collection<int, CombatLogSpellPropertyObservation> $rows */
         $rows = CombatLogSpellPropertyObservation::query()

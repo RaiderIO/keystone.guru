@@ -75,7 +75,7 @@ class APICombatLogObservationController extends Controller
         Spell                                                $spell,
         CombatLogSpellPropertyObservationRepositoryInterface $spellPropertyObservationRepository,
     ): JsonResponse {
-        $properties = $spellPropertyObservationRepository->getHistoryForSpell($spell->id)
+        $properties = $spellPropertyObservationRepository->getHistory($spell->id)
             ->map(static fn(Collection $observedOn): array => $observedOn
                 ->map(static fn(Carbon $date): string => $date->toDateString())
                 ->all())
@@ -107,29 +107,9 @@ class APICombatLogObservationController extends Controller
         Npc                                                      $npc,
         CombatLogNpcCharacteristicObservationRepositoryInterface $npcCharacteristicObservationRepository,
     ): JsonResponse {
-        $history = $npcCharacteristicObservationRepository->getHistoryForNpc($npc->id);
-
-        /** @var Collection<int, Characteristic> $characteristicsById */
-        $characteristicsById = $history->isEmpty()
-            ? new Collection()
-            : Characteristic::query()->whereIn('id', $history->keys())->get()->keyBy('id');
-
-        $characteristics = $history
-            ->mapWithKeys(function (Collection $observedOn, int $characteristicId) use ($characteristicsById): array {
-                /** @var Characteristic|null $characteristic */
-                $characteristic = $characteristicsById->get($characteristicId);
-
-                return [
-                    (string)$characteristicId => [
-                        'characteristic_id' => $characteristicId,
-                        'key'               => $characteristic?->key,
-                        'observed_on'       => $observedOn
-                            ->map(static fn(Carbon $date): string => $date->toDateString())
-                            ->all(),
-                    ],
-                ];
-            })
-            ->all();
+        $characteristics = $this->buildNpcCharacteristicHistory(
+            $npcCharacteristicObservationRepository->getHistory($npc->id),
+        );
 
         return response()->json([
             'data' => [
@@ -197,6 +177,36 @@ class APICombatLogObservationController extends Controller
             $tupleCount,
             $tuples,
         );
+    }
+
+    /**
+     * @param Collection<int, Collection<int, Carbon>> $history observed_on dates keyed by characteristic_id
+     *
+     * @return array<array-key, array<string, mixed>>
+     */
+    private function buildNpcCharacteristicHistory(Collection $history): array
+    {
+        /** @var Collection<int, Characteristic> $characteristicsById */
+        $characteristicsById = $history->isEmpty()
+            ? new Collection()
+            : Characteristic::query()->whereIn('id', $history->keys())->get()->keyBy('id');
+
+        return $history
+            ->mapWithKeys(function (Collection $observedOn, int $characteristicId) use ($characteristicsById): array {
+                /** @var Characteristic|null $characteristic */
+                $characteristic = $characteristicsById->get($characteristicId);
+
+                return [
+                    (string)$characteristicId => [
+                        'characteristic_id' => $characteristicId,
+                        'key'               => $characteristic?->key,
+                        'observed_on'       => $observedOn
+                            ->map(static fn(Carbon $date): string => $date->toDateString())
+                            ->all(),
+                    ],
+                ];
+            })
+            ->all();
     }
 
     /**
