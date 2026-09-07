@@ -72,11 +72,11 @@ interface DungeonRouteBuilderLoggingInterface
     ): void;
 
     /**
-     * @param array<int, int> $enemyPackGroups
+     * @param array<int, string> $enemyUniqueKeys
      */
-    public function theBlindingValeBridgeRuleBridgeEnemyPackGroupsBlocked(
+    public function theBlindingValeBridgeRuleBridgeEnemiesBlocked(
         int   $npcId,
-        array $enemyPackGroups,
+        array $enemyUniqueKeys,
     ): void;
 
     /**

@@ -13,23 +13,38 @@ use App\Service\CombatLog\Builders\Logging\DungeonRouteBuilderLoggingInterface;
  *
  * Both sit on floor 408 at near identical ingame X/Y - the bridge is above the path west, and the builder has no Z
  * axis - and they share npc_ids, so nothing in a purely spatial match distinguishes them. The party crosses the
- * bridge through groups 44, 45 and 46 on the way to Ikuzz, then walks underneath it toward Ziekket once Lightwarden
- * Ruia is dead.
+ * bridge on the way to Ikuzz, then walks underneath it toward Ziekket once Lightwarden Ruia is dead.
  *
  * Ruia's death is the only thing that separates the two traversals: which of the first two bosses died first does not
- * matter, because the bridge is crossed either way. So it cuts the run in two, and each half excludes the packs that
- * do not exist in it - the packs underneath while the party is still on the bridge, and the bridge packs afterwards.
+ * matter, because the bridge is crossed either way. So it cuts the run in two, and each half excludes the enemies
+ * that do not exist in it - the ones underneath while the party is still on the bridge, and the ones on the bridge
+ * afterwards.
+ *
+ * Enemies are named by unique key (mdt_npc_id-mdt_id) rather than by EnemyPack group: the key is what the MDT import
+ * matches enemies on and it survives a re-import, while group numbers are per mapping version and MDT reassigns them
+ * freely - 6.2.13 deleted four of the groups this rule used to name.
  */
 class TheBlindingValeBridgeRule extends AbstractDungeonRouteBuilderRule
 {
-    /** @var array<int, int> The EnemyPack groups making up the packs on top of the bridge */
-    private const array BRIDGE_ENEMY_PACK_GROUPS = [44, 45, 46];
+    /** @var array<int, string> The unique keys of the enemies on top of the bridge (MDT groups 44, 45 and 46) */
+    private const array BRIDGE_ENEMY_UNIQUE_KEYS = [
+        '245339-11', '245339-12', '245345-25', '254850-10',
+        '245410-90', '245410-91', '245410-92', '245410-93', '245410-94',
+        '245346-5', '245473-9', '245484-16',
+    ];
 
-    /** @var array<int, int> The EnemyPack groups underneath the bridge - they only spawn once Ruia is dead */
-    private const array UNDER_BRIDGE_ENEMY_PACK_GROUPS = [47, 48, 49, 50, 54];
+    /** @var array<int, string> The unique keys of the enemies underneath the bridge - they only spawn once Ruia is dead */
+    private const array UNDER_BRIDGE_ENEMY_UNIQUE_KEYS = [
+        // MDT groups 47 through 50 and 54
+        '245410-107', '245410-108', '245410-109', '245410-110', '245410-111',
+        '245345-28', '245410-112', '245410-113',
+        '245346-6',
+        '245336-1', '245339-1', '245345-26', '245345-27', '245410-104', '245410-105', '245410-106',
+        '245345-10', '245410-15', '245410-16', '245410-17', '245410-18', '245410-19',
 
-    /** @var array<int, string> Enemies underneath the bridge named individually because no pack reliably names them */
-    private const array UNDER_BRIDGE_ENEMY_UNIQUE_KEYS = ['245484-5', '245484-6', '245484-7'];
+        // The Lightfeather Petalwings, which MDT groups on some mapping versions and not on others
+        '245484-5', '245484-6', '245484-7',
+    ];
 
     private bool $lightwardenRuiaKilled = false;
 
@@ -50,42 +65,30 @@ class TheBlindingValeBridgeRule extends AbstractDungeonRouteBuilderRule
 
         $this->lightwardenRuiaKilled = true;
 
-        $this->log->theBlindingValeBridgeRuleBridgeEnemyPackGroupsBlocked(
+        $this->log->theBlindingValeBridgeRuleBridgeEnemiesBlocked(
             $npcId,
-            self::BRIDGE_ENEMY_PACK_GROUPS,
+            self::BRIDGE_ENEMY_UNIQUE_KEYS,
         );
 
         return [];
     }
 
     /**
-     * Hard exclusions by design, in both directions: neither traversal must be able to pull the other's packs, even
+     * Hard exclusions by design, in both directions: neither traversal must be able to pull the other's enemies, even
      * when no other enemy matches at all. An unmatched kill is recorded as an enemy failure, which is a better
      * outcome than a pull that cannot be walked.
      *
-     * The three Lightfeather Petalwings underneath the bridge are excluded by unique key rather than by pack, and
-     * that check runs first: MDT groups them on some mapping versions and not on others, so neither their presence
-     * in a pack nor any one group number describes them across the mapping versions a route can be built on.
-     *
      * Note this blocks rather than prefers. A preference tier would outrank distance entirely, so it overrode correct
-     * matches: a kill standing exactly on top of group 48's enemy resolved to a group 45 enemy 15 yards away instead.
-     * Excluding the packs that do not exist yet gets the same effect without that failure mode, because it removes
-     * candidates rather than reordering them.
+     * matches: a kill standing exactly on top of an under-bridge enemy resolved to a bridge enemy 15 yards away
+     * instead. Excluding the enemies that do not exist yet gets the same effect without that failure mode, because it
+     * removes candidates rather than reordering them.
      */
     public function isEnemyEligible(Enemy $enemy): bool
     {
-        if (in_array($enemy->getUniqueKey(), self::UNDER_BRIDGE_ENEMY_UNIQUE_KEYS, true)) {
-            return $this->lightwardenRuiaKilled;
-        }
-
-        if ($enemy->enemy_pack_id === null) {
-            return true;
-        }
-
-        $group = $enemy->enemyPack->group;
+        $uniqueKey = $enemy->getUniqueKey();
 
         return $this->lightwardenRuiaKilled
-            ? !in_array($group, self::BRIDGE_ENEMY_PACK_GROUPS, true)
-            : !in_array($group, self::UNDER_BRIDGE_ENEMY_PACK_GROUPS, true);
+            ? !in_array($uniqueKey, self::BRIDGE_ENEMY_UNIQUE_KEYS, true)
+            : !in_array($uniqueKey, self::UNDER_BRIDGE_ENEMY_UNIQUE_KEYS, true);
     }
 }

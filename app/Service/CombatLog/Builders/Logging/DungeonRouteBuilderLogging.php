@@ -175,9 +175,9 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function theBlindingValeBridgeRuleBridgeEnemyPackGroupsBlocked(
+    public function theBlindingValeBridgeRuleBridgeEnemiesBlocked(
         int   $npcId,
-        array $enemyPackGroups,
+        array $enemyUniqueKeys,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
