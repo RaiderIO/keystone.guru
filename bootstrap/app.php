@@ -72,6 +72,10 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->api([
             'authentication'            => ApiAuthentication::class,
+            // Placed after the authentication middleware because the api-general limiter buckets by user id and
+            // exempts admins - both need the user to be resolved, which only happens once authentication ran.
+            // Work performed before this point is bounded by ApiAuthentication itself.
+            'throttle_api_general'      => 'throttle:api-general',
             'debug_info_context_logger' => DebugInfoContextLogger::class,
             'read_only_mode'            => ReadOnlyMode::class,
         ]);

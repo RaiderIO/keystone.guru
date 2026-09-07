@@ -659,7 +659,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         });
 
         // Metrics
-        Route::prefix('metric')->group(static function () {
+        Route::middleware('throttle:store-metric')->prefix('metric')->group(static function () {
             Route::post('/', new AjaxMetricController()->store(...))->name('ajax.metric.store');
             Route::post('/route/{dungeonRoute}', new AjaxMetricController()->storeDungeonRoute(...))->name('ajax.metric.dungeonroute.store');
         });

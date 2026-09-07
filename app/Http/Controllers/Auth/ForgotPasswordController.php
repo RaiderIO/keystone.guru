@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\TrustProxies;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Support\Facades\Password;
 
 class ForgotPasswordController extends Controller implements HasMiddleware
 {
@@ -25,6 +30,22 @@ class ForgotPasswordController extends Controller implements HasMiddleware
     {
         return [
             'guest',
+            // The limiter buckets by IP for a guest, so the request must have gone through the proxy
+            // headers first - same as RegisterController
+            TrustProxies::class,
+            'throttle:reset-password',
         ];
+    }
+
+    /**
+     * The broker distinguishes an unknown address from a known one (and from its own per-address throttle), but the
+     * caller does not get to: every request is answered with the same confirmation.
+     *
+     * @param  string                        $response
+     * @return RedirectResponse|JsonResponse
+     */
+    protected function sendResetLinkFailedResponse(Request $request, $response)
+    {
+        return $this->sendResetLinkResponse($request, Password::RESET_LINK_SENT);
     }
 }

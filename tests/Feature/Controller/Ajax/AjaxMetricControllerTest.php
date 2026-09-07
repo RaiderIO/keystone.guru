@@ -106,6 +106,32 @@ final class AjaxMetricControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function store_givenModelClassOutsideTheAllowedList_returnsUnprocessable(): void
+    {
+        // Arrange - model_class is written to the metrics table verbatim, so only the models that
+        // legitimately carry metrics are accepted
+        $maxMetricId = (int)Metric::query()->max('id');
+
+        try {
+            // Act
+            $response = $this->postJson('/ajax/metric', [
+                'model_id'    => 1,
+                'model_class' => User::class,
+                'category'    => Metric::CATEGORY_DUNGEON_ROUTE_MDT_COPY,
+                'tag'         => Metric::TAG_MDT_COPY_VIEW,
+                'value'       => 1,
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['model_class']);
+            $this->assertSame($maxMetricId, (int)Metric::query()->max('id'));
+        } finally {
+            Metric::query()->where('id', '>', $maxMetricId)->delete();
+        }
+    }
+
+    #[Test]
     public function store_givenNonDungeonRouteModelClass_storesTheMetricWithoutAuthorization(): void
     {
         // Arrange - the generic endpoint is also used for non-DungeonRoute metrics; those must
