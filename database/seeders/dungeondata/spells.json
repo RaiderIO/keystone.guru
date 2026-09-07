@@ -4658,6 +4658,68 @@
         ]
     },
     {
+        "id": 7870,
+        "game_version_id": 1,
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "spell_magic_lesserinvisibilty",
+        "name": "Lesser Invisibility",
+        "description_template": "Makes the $?s108499[Shivarra][Succubus] invisible for $7870d.  Not usable in combat. Any action will break the effect.\r\n\r\n|cFFFFFFFFAuto-Cast:|r\r\nReapply when the $?s108499[Shivarra][Succubus] leaves combat.\r\n\r\n|cFF777777(Right-Click to toggle)|r",
+        "description": "Makes the Succubus invisible for 5 min. Not usable in combat. Any action will break the effect.\n\nAuto-Cast:\nReapply when the Succubus leaves combat.\n\n(Right-Click to toggle)",
+        "description_format": "Makes the Succubus invisible for %1$s.  Not usable in combat. Any action will break the effect.\n\nAuto-Cast:\nReapply when the Succubus leaves combat.\n\n(Right-Click to toggle)",
+        "description_values": [
+            {
+                "kind": "duration",
+                "text": "5 min"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 32,
+        "cast_time": 0,
+        "duration": 300000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:02+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 18,
+                "base_points": 100,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 6,
+                "aura_type": 4,
+                "base_points": 1,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 2,
+                "effect_type": 6,
+                "aura_type": 260,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
         "id": 7992,
         "game_version_id": 1,
         "category": "spellcategory.unknown",
@@ -28302,11 +28364,11 @@
     {
         "id": 39670,
         "game_version_id": 1,
-        "category": null,
-        "cooldown_group": null,
-        "dispel_type": "spelldispeltype.unknown",
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.magic",
         "mechanic": null,
-        "icon_name": "",
+        "icon_name": "spell_fire_felimmolation",
         "name": "Fel Immolate",
         "description_template": "Burns an enemy, then inflicts additional Fire damage every $t1 sec. for $d.",
         "description": "Burns an enemy, then inflicts additional Fire damage every 3 sec. for 15 sec.",
@@ -28323,12 +28385,12 @@
         ],
         "damage_multiplier": null,
         "schools_mask": 4,
-        "cast_time": null,
-        "duration": null,
+        "cast_time": 2000,
+        "duration": 15000,
         "selectable": false,
         "hidden_on_map": false,
         "characteristic_id": null,
-        "fetched_data_at": null,
+        "fetched_data_at": "2026-09-07T17:33:04+00:00",
         "spell_effects": [
             {
                 "effect_index": 0,
@@ -28357,11 +28419,11 @@
     {
         "id": 40084,
         "game_version_id": 1,
-        "category": null,
-        "cooldown_group": null,
-        "dispel_type": "spelldispeltype.unknown",
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.magic",
         "mechanic": null,
-        "icon_name": "",
+        "icon_name": "ability_hunter_snipershot",
         "name": "Harpooner's Mark",
         "description_template": "Places the Harpooner's Mark on an enemy, forcing any nearby Dragon Turtles to attack that enemy.",
         "description": "Places the Harpooner's Mark on an enemy, forcing any nearby Dragon Turtles to attack that enemy.",
@@ -28369,12 +28431,12 @@
         "description_values": [],
         "damage_multiplier": null,
         "schools_mask": 64,
-        "cast_time": null,
-        "duration": null,
+        "cast_time": 0,
+        "duration": 120000,
         "selectable": false,
         "hidden_on_map": false,
         "characteristic_id": null,
-        "fetched_data_at": null,
+        "fetched_data_at": "2026-09-07T17:33:05+00:00",
         "spell_effects": [
             {
                 "effect_index": 0,
@@ -28443,11 +28505,11 @@
     {
         "id": 40872,
         "game_version_id": 1,
-        "category": null,
-        "cooldown_group": null,
-        "dispel_type": "spelldispeltype.unknown",
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
         "mechanic": null,
-        "icon_name": "",
+        "icon_name": "ability_searingarrow",
         "name": "Immolation Arrow",
         "description_template": "Shoots a flaming arrow at an enemy, inflicting weapon damage plus $s1. All damage inflicted is based upon Fire magic.",
         "description": "Shoots a flaming arrow at an enemy, inflicting weapon damage plus . All damage inflicted is based upon Fire magic.",
@@ -28463,12 +28525,12 @@
         ],
         "damage_multiplier": null,
         "schools_mask": 4,
-        "cast_time": null,
+        "cast_time": 2000,
         "duration": null,
         "selectable": false,
         "hidden_on_map": false,
         "characteristic_id": null,
-        "fetched_data_at": null,
+        "fetched_data_at": "2026-09-07T17:33:06+00:00",
         "spell_effects": [
             {
                 "effect_index": 0,
@@ -28497,11 +28559,11 @@
     {
         "id": 40873,
         "game_version_id": 1,
-        "category": null,
-        "cooldown_group": null,
-        "dispel_type": "spelldispeltype.unknown",
+        "category": "spellcategory.hunter",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
         "mechanic": null,
-        "icon_name": "",
+        "icon_name": "ability_marksmanship",
         "name": "Shoot",
         "description_template": "Shoots at an enemy, inflicting Physical damage.",
         "description": "Shoots at an enemy, inflicting Physical damage.",
@@ -28509,12 +28571,12 @@
         "description_values": [],
         "damage_multiplier": null,
         "schools_mask": 1,
-        "cast_time": null,
+        "cast_time": 0,
         "duration": null,
         "selectable": false,
         "hidden_on_map": false,
         "characteristic_id": null,
-        "fetched_data_at": null,
+        "fetched_data_at": "2026-09-07T17:33:07+00:00",
         "spell_effects": [
             {
                 "effect_index": 0,
@@ -28532,11 +28594,11 @@
     {
         "id": 40876,
         "game_version_id": 1,
-        "category": null,
-        "cooldown_group": null,
-        "dispel_type": "spelldispeltype.unknown",
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
         "mechanic": null,
-        "icon_name": "",
+        "icon_name": "spell_shadow_shadowbolt",
         "name": "Doom Bolt",
         "description_template": "Hurls a bolt of dark magic at an enemy, inflicting $s1 Shadow damage, plus additional shadow damage to enemies in the target area.",
         "description": "Hurls a bolt of dark magic at an enemy, inflicting Shadow damage, plus additional shadow damage to enemies in the target area.",
@@ -28552,12 +28614,12 @@
         ],
         "damage_multiplier": null,
         "schools_mask": 32,
-        "cast_time": null,
+        "cast_time": 1500,
         "duration": null,
         "selectable": false,
         "hidden_on_map": false,
         "characteristic_id": null,
-        "fetched_data_at": null,
+        "fetched_data_at": "2026-09-07T17:33:07+00:00",
         "spell_effects": [
             {
                 "effect_index": 0,
@@ -28586,11 +28648,11 @@
     {
         "id": 40877,
         "game_version_id": 1,
-        "category": null,
-        "cooldown_group": null,
-        "dispel_type": "spelldispeltype.unknown",
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
         "mechanic": null,
-        "icon_name": "",
+        "icon_name": "spell_fire_flamebolt",
         "name": "Fireball",
         "description_template": "Inflicts $s1 Fire damage to an enemy, plus $s2 additional damage every $t2 seconds for $d.",
         "description": "Inflicts Fire damage to an enemy, plus additional damage every 1 seconds for 3 sec.",
@@ -28621,12 +28683,12 @@
         ],
         "damage_multiplier": null,
         "schools_mask": 4,
-        "cast_time": null,
-        "duration": null,
+        "cast_time": 2000,
+        "duration": 3000,
         "selectable": false,
         "hidden_on_map": false,
         "characteristic_id": null,
-        "fetched_data_at": null,
+        "fetched_data_at": "2026-09-07T17:33:08+00:00",
         "spell_effects": [
             {
                 "effect_index": 0,
@@ -28655,11 +28717,11 @@
     {
         "id": 41115,
         "game_version_id": 1,
-        "category": null,
-        "cooldown_group": null,
-        "dispel_type": "spelldispeltype.unknown",
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.magic",
         "mechanic": null,
-        "icon_name": "",
+        "icon_name": "spell_fire_flameshock",
         "name": "Flame Shock",
         "description_template": "Instantly burns an enemy, then inflicts additional Fire damage every $t2 sec. for $d.",
         "description": "Instantly burns an enemy, then inflicts additional Fire damage every 3 sec. for 12 sec.",
@@ -28676,12 +28738,12 @@
         ],
         "damage_multiplier": null,
         "schools_mask": 4,
-        "cast_time": null,
-        "duration": null,
+        "cast_time": 0,
+        "duration": 12000,
         "selectable": false,
         "hidden_on_map": false,
         "characteristic_id": null,
-        "fetched_data_at": null,
+        "fetched_data_at": "2026-09-07T17:33:08+00:00",
         "spell_effects": [
             {
                 "effect_index": 0,
@@ -28710,11 +28772,11 @@
     {
         "id": 41169,
         "game_version_id": 1,
-        "category": null,
-        "cooldown_group": null,
-        "dispel_type": "spelldispeltype.unknown",
+        "category": "spellcategory.hunter",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
         "mechanic": null,
-        "icon_name": "",
+        "icon_name": "ability_marksmanship",
         "name": "Shoot",
         "description_template": "Shoots at an enemy, inflicting Physical damage.",
         "description": "Shoots at an enemy, inflicting Physical damage.",
@@ -28722,12 +28784,12 @@
         "description_values": [],
         "damage_multiplier": null,
         "schools_mask": 1,
-        "cast_time": null,
+        "cast_time": 0,
         "duration": null,
         "selectable": false,
         "hidden_on_map": false,
         "characteristic_id": null,
-        "fetched_data_at": null,
+        "fetched_data_at": "2026-09-07T17:33:09+00:00",
         "spell_effects": [
             {
                 "effect_index": 0,
@@ -28745,11 +28807,11 @@
     {
         "id": 41184,
         "game_version_id": 1,
-        "category": null,
-        "cooldown_group": null,
-        "dispel_type": "spelldispeltype.unknown",
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
         "mechanic": null,
-        "icon_name": "",
+        "icon_name": "spell_nature_lightning",
         "name": "Lightning Bolt",
         "description_template": "Blasts an enemy with lightning, inflicting Nature damage.",
         "description": "Blasts an enemy with lightning, inflicting Nature damage.",
@@ -28757,12 +28819,12 @@
         "description_values": [],
         "damage_multiplier": null,
         "schools_mask": 8,
-        "cast_time": null,
+        "cast_time": 2000,
         "duration": null,
         "selectable": false,
         "hidden_on_map": false,
         "characteristic_id": null,
-        "fetched_data_at": null,
+        "fetched_data_at": "2026-09-07T17:33:10+00:00",
         "spell_effects": [
             {
                 "effect_index": 0,
@@ -28780,11 +28842,11 @@
     {
         "id": 41188,
         "game_version_id": 1,
-        "category": null,
-        "cooldown_group": null,
-        "dispel_type": "spelldispeltype.unknown",
+        "category": "spellcategory.hunter",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
         "mechanic": null,
-        "icon_name": "",
+        "icon_name": "ability_marksmanship",
         "name": "Shoot",
         "description_template": "Shoots at an enemy, inflicting Physical damage.",
         "description": "Shoots at an enemy, inflicting Physical damage.",
@@ -28792,12 +28854,12 @@
         "description_values": [],
         "damage_multiplier": null,
         "schools_mask": 1,
-        "cast_time": null,
+        "cast_time": 0,
         "duration": null,
         "selectable": false,
         "hidden_on_map": false,
         "characteristic_id": null,
-        "fetched_data_at": null,
+        "fetched_data_at": "2026-09-07T17:33:10+00:00",
         "spell_effects": [
             {
                 "effect_index": 0,
@@ -28813,13 +28875,53 @@
         ]
     },
     {
+        "id": 41425,
+        "game_version_id": 1,
+        "category": "spellcategory.mage",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "spell_fire_blueimmolation",
+        "name": "Hypothermia",
+        "description_template": "As a side-effect of exposure to intense cold, the caster cannot Ice Block or Ice Cold again for $d.",
+        "description": "As a side-effect of exposure to intense cold, the caster cannot Ice Block or Ice Cold again for 30 sec.",
+        "description_format": "As a side-effect of exposure to intense cold, the caster cannot Ice Block or Ice Cold again for %1$s.",
+        "description_values": [
+            {
+                "kind": "duration",
+                "text": "30 sec"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 16,
+        "cast_time": 0,
+        "duration": 30000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:11+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 4,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
         "id": 41978,
         "game_version_id": 1,
-        "category": null,
-        "cooldown_group": null,
-        "dispel_type": "spelldispeltype.unknown",
-        "mechanic": null,
-        "icon_name": "",
+        "category": "spellcategory.rogue",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.poison",
+        "mechanic": "spellmechanic.snared",
+        "icon_name": "ability_poisonsting",
         "name": "Debilitating Poison",
         "description_template": "Poisons the target, increasing the time between attacks by $s1%, increasing their spell cast time by $s2% and dealing $s3 Nature damage every $t3 sec.",
         "description": "Poisons the target, increasing the time between attacks by 50%, increasing their spell cast time by 50% and dealing Nature damage every 2 sec.",
@@ -28847,12 +28949,12 @@
         ],
         "damage_multiplier": null,
         "schools_mask": 8,
-        "cast_time": null,
-        "duration": null,
+        "cast_time": 0,
+        "duration": 8000,
         "selectable": false,
         "hidden_on_map": false,
         "characteristic_id": null,
-        "fetched_data_at": null,
+        "fetched_data_at": "2026-09-07T17:33:11+00:00",
         "spell_effects": [
             {
                 "effect_index": 0,
@@ -33194,6 +33296,50 @@
         ]
     },
     {
+        "id": 80240,
+        "game_version_id": 1,
+        "category": "spellcategory.warlock",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.curse",
+        "mechanic": null,
+        "icon_name": "ability_warlock_baneofhavoc",
+        "name": "Havoc",
+        "description_template": "Marks a target with Havoc for $d, causing your single target spells to also strike the Havoc victim for $s1% of the damage dealt.",
+        "description": "Marks a target with Havoc for 15 sec, causing your single target spells to also strike the Havoc victim for 50% of the damage dealt.",
+        "description_format": "Marks a target with Havoc for %1$s, causing your single target spells to also strike the Havoc victim for %2$s%% of the damage dealt.",
+        "description_values": [
+            {
+                "kind": "duration",
+                "text": "15 sec"
+            },
+            {
+                "kind": "value",
+                "text": "50"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 32,
+        "cast_time": 0,
+        "duration": 15000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:12+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 4,
+                "base_points": 50,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
         "id": 80353,
         "game_version_id": 1,
         "category": "spellcategory.general",
@@ -33316,6 +33462,69 @@
                 "base_points": 0,
                 "variance": 0,
                 "period_ms": 2000,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
+        "id": 81281,
+        "game_version_id": 1,
+        "category": "spellcategory.druid",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.magic",
+        "mechanic": null,
+        "icon_name": "druid_ability_wildmushroom_b",
+        "name": "Fungal Growth",
+        "description_template": "$@spelldesc88751",
+        "description": "Grow a magical mushroom at the target enemy's location. After 1 sec, the mushroom detonates, dealing Nature damage and then an additional Nature damage over 10 sec. Affected targets are slowed by 50%.\n\nGenerates up to 20 Astral Power based on targets hit.",
+        "description_format": "Grow a magical mushroom at the target enemy's location. After %1$s, the mushroom detonates, dealing  Nature damage and then an additional  Nature damage over %2$s. Affected targets are slowed by %3$s%%.\n\nGenerates up to %4$s Astral Power based on targets hit.",
+        "description_values": [
+            {
+                "kind": "duration",
+                "text": "1 sec"
+            },
+            {
+                "kind": "duration",
+                "text": "10 sec"
+            },
+            {
+                "kind": "value",
+                "text": "50"
+            },
+            {
+                "kind": "value",
+                "text": "20"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 8,
+        "cast_time": 0,
+        "duration": 10000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:12+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 3,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 2000,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 6,
+                "aura_type": 33,
+                "base_points": -50,
+                "variance": 0,
+                "period_ms": 0,
                 "chain_targets": 0,
                 "radius": null,
                 "max_radius": null
@@ -37542,6 +37751,46 @@
         ]
     },
     {
+        "id": 107079,
+        "game_version_id": 1,
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "pandarenracial_quiveringpain",
+        "name": "Quaking Palm",
+        "description_template": "Strikes the target with lightning speed, incapacitating them for $d, and turns off your attack.",
+        "description": "Strikes the target with lightning speed, incapacitating them for 4 sec, and turns off your attack.",
+        "description_format": "Strikes the target with lightning speed, incapacitating them for %1$s, and turns off your attack.",
+        "description_values": [
+            {
+                "kind": "duration",
+                "text": "4 sec"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 1,
+        "cast_time": 0,
+        "duration": 4000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:13+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 12,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
         "id": 107570,
         "game_version_id": 1,
         "category": "spellcategory.warrior",
@@ -40728,6 +40977,41 @@
         ]
     },
     {
+        "id": 121308,
+        "game_version_id": 1,
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "ability_rogue_disguise",
+        "name": "Disguise",
+        "description_template": "Makes you look like someone else.",
+        "description": "Makes you look like someone else.",
+        "description_format": "Makes you look like someone else.",
+        "description_values": [],
+        "damage_multiplier": null,
+        "schools_mask": 1,
+        "cast_time": 0,
+        "duration": 300000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:13+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 247,
+                "base_points": 1,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
         "id": 121471,
         "game_version_id": 1,
         "category": "spellcategory.rogue",
@@ -41445,6 +41729,41 @@
         "hidden_on_map": false,
         "characteristic_id": null,
         "fetched_data_at": "2025-04-20T12:21:54+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 4,
+                "base_points": 1,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
+        "id": 128301,
+        "game_version_id": 1,
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "inv_drink_05",
+        "name": "Jin Warmkeg's Brew",
+        "description_template": null,
+        "description": null,
+        "description_format": null,
+        "description_values": null,
+        "damage_multiplier": null,
+        "schools_mask": 1,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:14+00:00",
         "spell_effects": [
             {
                 "effect_index": 0,
@@ -44807,6 +45126,61 @@
                 "effect_type": 6,
                 "aura_type": 79,
                 "base_points": 30,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
+        "id": 157736,
+        "game_version_id": 1,
+        "category": "spellcategory.warlock",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.magic",
+        "mechanic": null,
+        "icon_name": "spell_fire_immolation",
+        "name": "Immolate",
+        "description_template": "$@spelldesc348",
+        "description": "Burns the enemy, causing Fire damage immediately and an additional Fire damage over 18 sec.\n\nPeriodic damage generates 1 Soul Shard Fragment and has a 50% chance to generate an additional 1 on critical strikes.",
+        "description_format": "Burns the enemy, causing  Fire damage immediately and an additional  Fire damage over %1$s.\n\nPeriodic damage generates 1 Soul Shard Fragment and has a %2$s%% chance to generate an additional 1 on critical strikes.",
+        "description_values": [
+            {
+                "kind": "duration",
+                "text": "18 sec"
+            },
+            {
+                "kind": "value",
+                "text": "50"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 4,
+        "cast_time": 0,
+        "duration": 18000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:14+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 3,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 3000,
+                "chain_targets": 1,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 6,
+                "aura_type": 271,
+                "base_points": 0,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -54948,6 +55322,90 @@
         ]
     },
     {
+        "id": 188389,
+        "game_version_id": 1,
+        "category": "spellcategory.shaman",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.magic",
+        "mechanic": null,
+        "icon_name": "spell_fire_flameshock",
+        "name": "Flame Shock",
+        "description_template": "Sears the target with fire, causing $s1 Volcanic damage and then an additional $o2 Volcanic damage over $d.\r\n\r\nFlame Shock can be applied to a maximum of $I targets.$?a137039[][\r\n\r\nIf Flame Shock is dispelled, a volcanic eruption wells up beneath the dispeller, exploding for $204395s1 Volcanic damage and knocking them into the air.]$?a343725[\r\n\r\n|cFFFFFFFFGenerates $343725s11 Maelstrom.|r][]",
+        "description": "Sears the target with fire, causing Volcanic damage and then an additional Volcanic damage over 18 sec.\n\nFlame Shock can be applied to a maximum of targets.\n\nIf Flame Shock is dispelled, a volcanic eruption wells up beneath the dispeller, exploding for Volcanic damage and knocking them into the air.",
+        "description_format": "Sears the target with fire, causing  Volcanic damage and then an additional  Volcanic damage over %1$s.\n\nFlame Shock can be applied to a maximum of  targets.\n\nIf Flame Shock is dispelled, a volcanic eruption wells up beneath the dispeller, exploding for  Volcanic damage and knocking them into the air.",
+        "description_values": [
+            {
+                "kind": "duration",
+                "text": "18 sec"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 12,
+        "cast_time": 0,
+        "duration": 18000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:15+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 2,
+                "aura_type": 0,
+                "base_points": 0,
+                "variance": 0.05000000075,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 6,
+                "aura_type": 3,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 2000,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 2,
+                "effect_type": 3,
+                "aura_type": 0,
+                "base_points": 100,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 3,
+                "effect_type": 30,
+                "aura_type": 0,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 4,
+                "effect_type": 6,
+                "aura_type": 271,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
         "id": 188493,
         "game_version_id": 1,
         "category": "spellcategory.unknown",
@@ -64430,6 +64888,52 @@
                 "effect_type": 3,
                 "aura_type": 0,
                 "base_points": 5,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
+        "id": 196364,
+        "game_version_id": 1,
+        "category": "spellcategory.warlock",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.magic",
+        "mechanic": null,
+        "icon_name": "spell_holy_silence",
+        "name": "Unstable Affliction",
+        "description_template": "$@spelldesc316099",
+        "description": null,
+        "description_format": null,
+        "description_values": null,
+        "damage_multiplier": null,
+        "schools_mask": 32,
+        "cast_time": 0,
+        "duration": 4000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:15+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 2,
+                "aura_type": 0,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 6,
+                "aura_type": 27,
+                "base_points": 0,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -81628,6 +82132,124 @@
                 "chain_targets": 0,
                 "radius": null,
                 "max_radius": null
+            }
+        ]
+    },
+    {
+        "id": 210824,
+        "game_version_id": 1,
+        "category": "spellcategory.mage",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "inv_ability_mage_radiantspark",
+        "name": "Touch of the Magi",
+        "description_template": "$@spelldesc321507",
+        "description": "Applies Touch of the Magi to your current target, accumulating 20% of the damage you deal to the target for 12 sec, and then exploding for that amount of Arcane damage to the target and reduced damage to all nearby enemies.\n\nGenerates 4 Arcane Charges.",
+        "description_format": "Applies Touch of the Magi to your current target, accumulating %1$s%% of the damage you deal to the target for %2$s, and then exploding for that amount of Arcane damage to the target and reduced damage to all nearby enemies.\n\nGenerates %3$s Arcane Charges.",
+        "description_values": [
+            {
+                "kind": "value",
+                "text": "20"
+            },
+            {
+                "kind": "duration",
+                "text": "12 sec"
+            },
+            {
+                "kind": "value",
+                "text": "4"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 64,
+        "cast_time": 0,
+        "duration": 12000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:16+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 4,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 6,
+                "aura_type": 270,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 2,
+                "effect_type": 6,
+                "aura_type": 4,
+                "base_points": 20,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
+        "id": 210833,
+        "game_version_id": 1,
+        "category": "spellcategory.mage",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "inv_ability_mage_radiantspark",
+        "name": "Touch of the Magi",
+        "description_template": "$@spelldesc321507",
+        "description": "Applies Touch of the Magi to your current target, accumulating 20% of the damage you deal to the target for 12 sec, and then exploding for that amount of Arcane damage to the target and reduced damage to all nearby enemies.\n\nGenerates 4 Arcane Charges.",
+        "description_format": "Applies Touch of the Magi to your current target, accumulating %1$s%% of the damage you deal to the target for %2$s, and then exploding for that amount of Arcane damage to the target and reduced damage to all nearby enemies.\n\nGenerates %3$s Arcane Charges.",
+        "description_values": [
+            {
+                "kind": "value",
+                "text": "20"
+            },
+            {
+                "kind": "duration",
+                "text": "12 sec"
+            },
+            {
+                "kind": "value",
+                "text": "4"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 64,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:16+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 2,
+                "aura_type": 0,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": 8
             }
         ]
     },
@@ -141462,6 +142084,41 @@
         ]
     },
     {
+        "id": 291121,
+        "game_version_id": 1,
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "inv_misc_bowl_01",
+        "name": "Bowl of Glowing Pufferfish",
+        "description_template": "Lay out a bowl of glowing pufferfish.",
+        "description": "Lay out a bowl of glowing pufferfish.",
+        "description_format": "Lay out a bowl of glowing pufferfish.",
+        "description_values": [],
+        "damage_multiplier": null,
+        "schools_mask": 1,
+        "cast_time": 0,
+        "duration": 300000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:17+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 4,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
         "id": 291613,
         "game_version_id": 1,
         "category": "spellcategory.unknown",
@@ -183665,6 +184322,68 @@
         ]
     },
     {
+        "id": 335467,
+        "game_version_id": 1,
+        "category": "spellcategory.priest",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.magic",
+        "mechanic": null,
+        "icon_name": "inv12_ability_priest_powerwordmadness_eye",
+        "name": "Shadow Word: Madness",
+        "description_template": "A word of madness haunts the target's mind, dealing $s1 Shadow damage instantly plus an additional $o3 Shadow damage over $d. Heals you for ${$e1*100}% of damage dealt.\r\n\r\nWhen reapplied to a target, all remaining damage is added to the new effect.",
+        "description": "A word of madness haunts the target's mind, dealing Shadow damage instantly plus an additional Shadow damage over 6 sec. Heals you for % of damage dealt.\n\nWhen reapplied to a target, all remaining damage is added to the new effect.",
+        "description_format": "A word of madness haunts the target's mind, dealing  Shadow damage instantly plus an additional  Shadow damage over %1$s. Heals you for %% of damage dealt.\n\nWhen reapplied to a target, all remaining damage is added to the new effect.",
+        "description_values": [
+            {
+                "kind": "duration",
+                "text": "6 sec"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 32,
+        "cast_time": 0,
+        "duration": 6000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:17+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 9,
+                "aura_type": 0,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 6,
+                "aura_type": 4,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 2,
+                "effect_type": 6,
+                "aura_type": 53,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 2000,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
         "id": 335817,
         "game_version_id": 1,
         "category": "spellcategory.unknown",
@@ -194358,6 +195077,41 @@
                 "base_points": 9,
                 "variance": 0,
                 "period_ms": 3000,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
+        "id": 354808,
+        "game_version_id": 1,
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "inv_jewelcrafting_dragonseye02",
+        "name": "Prismatic Light",
+        "description_template": "Shine with an inner light, reflecting that upon your owner.",
+        "description": "Shine with an inner light, reflecting that upon your owner.",
+        "description_format": "Shine with an inner light, reflecting that upon your owner.",
+        "description_values": [],
+        "damage_multiplier": null,
+        "schools_mask": 1,
+        "cast_time": 0,
+        "duration": 10000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:18+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 4,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
                 "chain_targets": 0,
                 "radius": null,
                 "max_radius": null
@@ -228383,6 +229137,50 @@
         ]
     },
     {
+        "id": 383014,
+        "game_version_id": 1,
+        "category": "spellcategory.shaman",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "spell_nature_poisoncleansingtotem",
+        "name": "Poison Cleansing",
+        "description_template": "$@spelldesc383013",
+        "description": "Summons a totem at your feet that removes all Poison effects from a nearby party or raid member within yards every 1.5 sec for 6 sec.",
+        "description_format": "Summons a totem at your feet that removes all Poison effects from a nearby party or raid member within  yards every %1$s sec for %2$s.",
+        "description_values": [
+            {
+                "kind": "period",
+                "text": "1.5"
+            },
+            {
+                "kind": "duration",
+                "text": "6 sec"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 8,
+        "cast_time": 0,
+        "duration": 6000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:18+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 23,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 1500,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
         "id": 383015,
         "game_version_id": 1,
         "category": "spellcategory.shaman",
@@ -246079,6 +246877,41 @@
                 "chain_targets": 0,
                 "radius": 45,
                 "max_radius": 45
+            }
+        ]
+    },
+    {
+        "id": 391780,
+        "game_version_id": 1,
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "trade_engineering",
+        "name": "Wrathion's Cloak Closet",
+        "description_template": null,
+        "description": null,
+        "description_format": null,
+        "description_values": null,
+        "damage_multiplier": null,
+        "schools_mask": 1,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:19+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 4,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
             }
         ]
     },
@@ -313647,6 +314480,65 @@
         ]
     },
     {
+        "id": 450214,
+        "game_version_id": 1,
+        "category": "spellcategory.druid",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "spell_arcane_arcane04",
+        "name": "Stellar Amplification",
+        "description_template": "$@spelldesc450212",
+        "description": "Starsurge increases the damage the target takes from your periodic effects and Shooting Stars by 16% for 5 sec. Reapplying this effect extends its duration, up to 20 sec. Limit 1.",
+        "description_format": "Starsurge increases the damage the target takes from your periodic effects and Shooting Stars by %1$s%% for %2$s. Reapplying this effect extends its duration, up to %3$s sec. Limit 1.",
+        "description_values": [
+            {
+                "kind": "value",
+                "text": "16"
+            },
+            {
+                "kind": "duration",
+                "text": "5 sec"
+            },
+            {
+                "kind": "value",
+                "text": "20"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 1,
+        "cast_time": 0,
+        "duration": 5000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:19+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 271,
+                "base_points": 16,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 6,
+                "aura_type": 537,
+                "base_points": 16,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
         "id": 450461,
         "game_version_id": 1,
         "category": "spellcategory.mage",
@@ -313675,6 +314567,46 @@
                 "base_points": 0,
                 "variance": 0.05000000075,
                 "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
+        "id": 450538,
+        "game_version_id": 1,
+        "category": "spellcategory.warlock",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.magic",
+        "mechanic": null,
+        "icon_name": "spell_necro_inevitableend",
+        "name": "Soul Anathema",
+        "description_template": "$@spelldesc449624",
+        "description": "Unleashing your demonic soul bestows a fiendish entity unto the soul of its targets, dealing Shadow damage over 10 sec.\n\nIf this effect is reapplied, any remaining damage will be added to the new Soul Anathema.",
+        "description_format": "Unleashing your demonic soul bestows a fiendish entity unto the soul of its targets, dealing  Shadow damage over %1$s.\n\nIf this effect is reapplied, any remaining damage will be added to the new Soul Anathema.",
+        "description_values": [
+            {
+                "kind": "duration",
+                "text": "10 sec"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 32,
+        "cast_time": 0,
+        "duration": 10000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:20+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 3,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 1000,
                 "chain_targets": 0,
                 "radius": null,
                 "max_radius": null
@@ -318808,6 +319740,50 @@
         ]
     },
     {
+        "id": 453286,
+        "game_version_id": 1,
+        "category": "spellcategory.demon_hunter",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "spell_fire_felhellfire",
+        "name": "Set Fire to the Pain",
+        "description_template": "$@spelldesc452406",
+        "description": "5% of all non-Fire damage taken is instead taken as Fire damage over 6 sec.\n\nFire damage taken reduced by %.",
+        "description_format": "%1$s%% of all non-Fire damage taken is instead taken as Fire damage over %2$s.\n\nFire damage taken reduced by %%.",
+        "description_values": [
+            {
+                "kind": "value",
+                "text": "5"
+            },
+            {
+                "kind": "duration",
+                "text": "6 sec"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 4,
+        "cast_time": 0,
+        "duration": 6000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:20+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 3,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 1000,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
         "id": 453310,
         "game_version_id": 1,
         "category": "spellcategory.unknown",
@@ -319955,6 +320931,41 @@
         ]
     },
     {
+        "id": 455197,
+        "game_version_id": 1,
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "inv_maldraxxusslime_purple",
+        "name": "Mind Slurped",
+        "description_template": null,
+        "description": null,
+        "description_format": null,
+        "description_values": null,
+        "damage_multiplier": null,
+        "schools_mask": 1,
+        "cast_time": 4000,
+        "duration": 300000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:20+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 312,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
         "id": 455219,
         "game_version_id": 1,
         "category": "spellcategory.unknown",
@@ -320238,6 +321249,41 @@
                 "base_points": 0,
                 "variance": 0,
                 "period_ms": 1000,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
+        "id": 455489,
+        "game_version_id": 1,
+        "category": "spellcategory.warlock",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "inv_felhound3_shadow_mount",
+        "name": "Gloom Slash",
+        "description_template": "Tooth and claw are drenched in malignant shadow magic, causing the Gloomhound's melee attacks to deal an additional $455491s1 Shadow damage.",
+        "description": "Tooth and claw are drenched in malignant shadow magic, causing the Gloomhound's melee attacks to deal an additional Shadow damage.",
+        "description_format": "Tooth and claw are drenched in malignant shadow magic, causing the Gloomhound's melee attacks to deal an additional  Shadow damage.",
+        "description_values": [],
+        "damage_multiplier": null,
+        "schools_mask": 1,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:21+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 42,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
                 "chain_targets": 0,
                 "radius": null,
                 "max_radius": null
@@ -369105,6 +370151,79 @@
         ]
     },
     {
+        "id": 1241786,
+        "game_version_id": 1,
+        "category": "spellcategory.death_knight",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.disease",
+        "mechanic": null,
+        "icon_name": "ability_creature_disease_05",
+        "name": "Infected Claws",
+        "description_template": "$@spelldesc207272",
+        "description": "The infected claws of your ghouls have a chance to sicken the foe, dealing Shadow damage over 12 sec. When reapplied, any remaining damage is added to the new effect.",
+        "description_format": "The infected claws of your ghouls have a chance to sicken the foe, dealing  Shadow damage over %1$s. When reapplied, any remaining damage is added to the new effect.",
+        "description_values": [
+            {
+                "kind": "duration",
+                "text": "12 sec"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 32,
+        "cast_time": 0,
+        "duration": 12000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:21+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 3,
+                "base_points": 0,
+                "variance": 0.05000000075,
+                "period_ms": 2000,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 6,
+                "aura_type": 271,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 2,
+                "effect_type": 6,
+                "aura_type": 381,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 3,
+                "effect_type": 6,
+                "aura_type": 380,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
         "id": 1242000,
         "game_version_id": 1,
         "category": "spellcategory.unknown",
@@ -370240,6 +371359,41 @@
                 "base_points": 100,
                 "variance": 0,
                 "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
+        "id": 1243258,
+        "game_version_id": 1,
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "ability_socererking_arcanereplication_nightborne",
+        "name": "Lightbloom Seekers",
+        "description_template": "$@spelldesc1243261",
+        "description": "Inflicts Holy damage to an enemy every second for 4 seconds.",
+        "description_format": "Inflicts Holy damage to an enemy every second for 4 seconds.",
+        "description_values": [],
+        "damage_multiplier": null,
+        "schools_mask": 2,
+        "cast_time": 0,
+        "duration": 4000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:22+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 23,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 1000,
                 "chain_targets": 0,
                 "radius": null,
                 "max_radius": null
@@ -380752,6 +381906,52 @@
         ]
     },
     {
+        "id": 1253601,
+        "game_version_id": 1,
+        "category": "spellcategory.hunter",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "ability_ardenweald_hunter",
+        "name": "Sentinel's Mark",
+        "description_template": "$@spelldesc1253599",
+        "description": "Your Eagle is replaced with a Sentinel Owl that applies an enhanced Sentinel's Mark.\n\nSentinel's Mark",
+        "description_format": "Your Eagle is replaced with a Sentinel Owl that applies an enhanced Sentinel's Mark.\n\nSentinel's Mark",
+        "description_values": [],
+        "damage_multiplier": null,
+        "schools_mask": 8,
+        "cast_time": 0,
+        "duration": 16000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:22+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 271,
+                "base_points": 20,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 6,
+                "aura_type": 271,
+                "base_points": 40,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
         "id": 1253683,
         "game_version_id": 1,
         "category": "spellcategory.unknown",
@@ -386935,6 +388135,63 @@
             {
                 "effect_index": 0,
                 "effect_type": 3,
+                "aura_type": 0,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
+        "id": 1257704,
+        "game_version_id": 1,
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "spell_arcane_focusedpower",
+        "name": "Arcane Linguist",
+        "description_template": null,
+        "description": null,
+        "description_format": null,
+        "description_values": null,
+        "damage_multiplier": null,
+        "schools_mask": 1,
+        "cast_time": 0,
+        "duration": 900000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:22+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 4,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 6,
+                "aura_type": 244,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 2,
+                "effect_type": 164,
                 "aura_type": 0,
                 "base_points": 0,
                 "variance": 0,
@@ -393393,6 +394650,57 @@
         ]
     },
     {
+        "id": 1262626,
+        "game_version_id": 1,
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.disease",
+        "mechanic": null,
+        "icon_name": "inv_cooking_80_brownpotato",
+        "name": "Pootatoad",
+        "description_template": "This violent explosion inflicts Nature damage to all enemies within $A1 yards.\r\n\r\nLeaves enemies smelling like a potaturd.",
+        "description": "This violent explosion inflicts Nature damage to all enemies within 9 yards.\n\nLeaves enemies smelling like a potaturd.",
+        "description_format": "This violent explosion inflicts Nature damage to all enemies within %1$s yards.\n\nLeaves enemies smelling like a potaturd.",
+        "description_values": [
+            {
+                "kind": "radius",
+                "text": "9"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 8,
+        "cast_time": 2500,
+        "duration": 600000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:23+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 31,
+                "aura_type": 0,
+                "base_points": 250,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": 9
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 6,
+                "aura_type": 4,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": 9
+            }
+        ]
+    },
+    {
         "id": 1262630,
         "game_version_id": 1,
         "category": "spellcategory.unknown",
@@ -397360,6 +398668,98 @@
         ]
     },
     {
+        "id": 1264623,
+        "game_version_id": 1,
+        "category": "spellcategory.druid",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "spell_nature_tranquility",
+        "name": "Tranquility",
+        "description_template": "Heals all allies within $a2 yards for ${$1236573s1*5} over $d.\r\n\r\nHealing decreased beyond $s3 targets.",
+        "description": "Heals all allies within 40 yards for over 5 sec.\n\nHealing decreased beyond 5 targets.",
+        "description_format": "Heals all allies within %1$s yards for  over %2$s.\n\nHealing decreased beyond %3$s targets.",
+        "description_values": [
+            {
+                "kind": "radius",
+                "text": "40"
+            },
+            {
+                "kind": "duration",
+                "text": "5 sec"
+            },
+            {
+                "kind": "value",
+                "text": "5"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 8,
+        "cast_time": 0,
+        "duration": 5000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:23+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 23,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 1250,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 35,
+                "aura_type": 4,
+                "base_points": 1,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": 40,
+                "max_radius": 40
+            },
+            {
+                "effect_index": 2,
+                "effect_type": 6,
+                "aura_type": 4,
+                "base_points": 5,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 3,
+                "effect_type": 6,
+                "aura_type": 147,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 4,
+                "effect_type": 6,
+                "aura_type": 87,
+                "base_points": -20,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
         "id": 1264659,
         "game_version_id": 1,
         "category": "spellcategory.druid",
@@ -397393,6 +398793,41 @@
         "hidden_on_map": false,
         "characteristic_id": null,
         "fetched_data_at": "2026-08-18T18:07:39+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 10,
+                "aura_type": 0,
+                "base_points": 0,
+                "variance": 0.05000000075,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": 40
+            }
+        ]
+    },
+    {
+        "id": 1264664,
+        "game_version_id": 1,
+        "category": "spellcategory.druid",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.magic",
+        "mechanic": null,
+        "icon_name": "spell_nature_resistnature",
+        "name": "Regrowth",
+        "description_template": "Heals a friendly target for $s1.",
+        "description": "Heals a friendly target for .",
+        "description_format": "Heals a friendly target for .",
+        "description_values": [],
+        "damage_multiplier": null,
+        "schools_mask": 8,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:24+00:00",
         "spell_effects": [
             {
                 "effect_index": 0,
@@ -399276,6 +400711,61 @@
         ]
     },
     {
+        "id": 1266394,
+        "game_version_id": 1,
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "inv_12_trinket_void_reaperslibram",
+        "name": "Sacred Text",
+        "description_template": "$@spelldesc1253113",
+        "description": "Your harmful spells and abilities have a chance to brand your target with sacred text dealing Holy damage over 30 sec.\n\nRebranding an enemy ignites the text, granting you Critical Strike for 15 sec and immediately dealing all remaining damage.",
+        "description_format": "Your harmful spells and abilities have a chance to brand your target with sacred text dealing  Holy damage over %1$s.\n\nRebranding an enemy ignites the text, granting you  Critical Strike for %2$s and immediately dealing all remaining damage.",
+        "description_values": [
+            {
+                "kind": "duration",
+                "text": "30 sec"
+            },
+            {
+                "kind": "duration",
+                "text": "15 sec"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 2,
+        "cast_time": 0,
+        "duration": 30000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:24+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 3,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 1000,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 3,
+                "aura_type": 0,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
         "id": 1266449,
         "game_version_id": 1,
         "category": "spellcategory.unknown",
@@ -400775,6 +402265,68 @@
                 "chain_targets": 0,
                 "radius": null,
                 "max_radius": 300
+            }
+        ]
+    },
+    {
+        "id": 1269378,
+        "game_version_id": 1,
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "inv_nullstone_cosmicvoid",
+        "name": "Entropic Blast",
+        "description_template": "Caster blasts their target inflicting $s1 Cosmic damage, and reducing their armor by $s2% for $d. ",
+        "description": "Caster blasts their target inflicting Cosmic damage, and reducing their armor by 50% for 20 sec.",
+        "description_format": "Caster blasts their target inflicting %1$s Cosmic damage, and reducing their armor by %2$s%% for %3$s.",
+        "description_values": [
+            {
+                "kind": "damage",
+                "text": "",
+                "spellId": 1269378,
+                "coefficient": 60,
+                "effectIndex": 0
+            },
+            {
+                "kind": "value",
+                "text": "50"
+            },
+            {
+                "kind": "duration",
+                "text": "20 sec"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 96,
+        "cast_time": 3000,
+        "duration": 20000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:24+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 2,
+                "aura_type": 0,
+                "base_points": 60,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 6,
+                "aura_type": 101,
+                "base_points": -50,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
             }
         ]
     },
@@ -404468,6 +406020,69 @@
                 "effect_type": 3,
                 "aura_type": 0,
                 "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
+        "id": 1280213,
+        "game_version_id": 1,
+        "category": "spellcategory.druid",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.magic",
+        "mechanic": null,
+        "icon_name": "druid_ability_wildmushroom_b",
+        "name": "Fungal Growth",
+        "description_template": "$@spelldesc468936",
+        "description": "Sunfire damage has a chance to grow a magical mushroom at a target's location. After 1 sec, the mushroom detonates, dealing Nature damage and then an additional Nature damage over 10 sec. Affected targets are slowed by 50%.\n\nGenerates up to 20 Astral Power based on targets hit.",
+        "description_format": "Sunfire damage has a chance to grow a magical mushroom at a target's location. After %1$s, the mushroom detonates, dealing  Nature damage and then an additional  Nature damage over %2$s. Affected targets are slowed by %3$s%%.\n\nGenerates up to %4$s Astral Power based on targets hit.",
+        "description_values": [
+            {
+                "kind": "duration",
+                "text": "1 sec"
+            },
+            {
+                "kind": "duration",
+                "text": "10 sec"
+            },
+            {
+                "kind": "value",
+                "text": "50"
+            },
+            {
+                "kind": "value",
+                "text": "20"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 8,
+        "cast_time": 0,
+        "duration": 10000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:25+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 3,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 2000,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 6,
+                "aura_type": 33,
+                "base_points": -50,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -408336,6 +409951,49 @@
         ]
     },
     {
+        "id": 1290882,
+        "game_version_id": 1,
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "inv_ember_fel",
+        "name": "Fel Infused",
+        "description_template": "Releases fel energy upon death inflicting $1216538s1 Fire damage to all enemies within $1216538a1 yds.",
+        "description": "Releases fel energy upon death inflicting Fire damage to all enemies within yds.",
+        "description_format": "Releases fel energy upon death inflicting %1$s Fire damage to all enemies within  yds.",
+        "description_values": [
+            {
+                "kind": "damage",
+                "text": "",
+                "spellId": 1216538,
+                "coefficient": 20,
+                "effectIndex": 0
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 1,
+        "cast_time": 0,
+        "duration": 30000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:25+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 402,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
         "id": 1291262,
         "game_version_id": 1,
         "category": "spellcategory.unknown",
@@ -410913,6 +412571,94 @@
             },
             {
                 "effect_index": 1,
+                "effect_type": 3,
+                "aura_type": 0,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
+        "id": 1295123,
+        "game_version_id": 1,
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "inv_121_trinket_dungeon_ulatek_vile",
+        "name": "Debilitating Venom",
+        "description_template": "$@spelldesc1293316",
+        "description": "Take a small sip of venom, gaining of a random secondary stat for 15 sec. Afterwards, a random secondary stat is reduced by for 15 sec.",
+        "description_format": "Take a small sip of venom, gaining  of a random secondary stat for %1$s. Afterwards, a random secondary stat is reduced by  for %2$s.",
+        "description_values": [
+            {
+                "kind": "duration",
+                "text": "15 sec"
+            },
+            {
+                "kind": "duration",
+                "text": "15 sec"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 8,
+        "cast_time": 0,
+        "duration": 15000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:26+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 189,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 6,
+                "aura_type": 189,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 2,
+                "effect_type": 6,
+                "aura_type": 189,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 3,
+                "effect_type": 6,
+                "aura_type": 189,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 4,
                 "effect_type": 3,
                 "aura_type": 0,
                 "base_points": 0,
@@ -415545,6 +417291,64 @@
         ]
     },
     {
+        "id": 1299999,
+        "game_version_id": 1,
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "inv_ability_poison_missile",
+        "name": "Synchronized Venom",
+        "description_template": "$@spelldesc1299189",
+        "description": "The Writhing Coil shoots venom at all enemies, inflicting 87,284 Nature damage and an additional 16,972 Nature damage every 1 sec for 35 sec.",
+        "description_format": "The Writhing Coil shoots venom at all enemies, inflicting %1$s Nature damage and an additional %2$s Nature damage every %3$s sec for %4$s.",
+        "description_values": [
+            {
+                "kind": "damage",
+                "text": "87,284",
+                "spellId": 1299189,
+                "coefficient": 9,
+                "effectIndex": 0
+            },
+            {
+                "kind": "damage",
+                "text": "16,972",
+                "spellId": 1299189,
+                "coefficient": 1.75,
+                "effectIndex": 1
+            },
+            {
+                "kind": "period",
+                "text": "1"
+            },
+            {
+                "kind": "duration",
+                "text": "35 sec"
+            }
+        ],
+        "damage_multiplier": 96982.2222,
+        "schools_mask": 8,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:26+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 32,
+                "aura_type": 0,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
         "id": 1300044,
         "game_version_id": 1,
         "category": "spellcategory.unknown",
@@ -417378,6 +419182,65 @@
                 "effect_type": 3,
                 "aura_type": 0,
                 "base_points": 2,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
+        "id": 1301098,
+        "game_version_id": 1,
+        "category": "spellcategory.hunter",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.n_a",
+        "mechanic": null,
+        "icon_name": "inv_111_hunter_ability_eaglemark",
+        "name": "Spotter's Mark: Rapid Fire",
+        "description_template": "$@spelldesc466867",
+        "description": "The damage bonus of Spotter's Mark is increased by 20%.\n\nAdditionally, your Eagle learns how to Fetch.\n\n Spotter's Mark\nDamaging an enemy with abilities empowered by Precise Shots has a 30% chance to apply Spotter's Mark to the primary target, causing your next Aimed Shot to deal 20% increased damage to the target.",
+        "description_format": "The damage bonus of Spotter's Mark is increased by %1$s%%.\n\nAdditionally, your Eagle learns how to Fetch.\n\n Spotter's Mark\nDamaging an enemy with abilities empowered by Precise Shots has a %2$s%% chance to apply Spotter's Mark to the primary target, causing your next Aimed Shot to deal %3$s%% increased damage to the target.",
+        "description_values": [
+            {
+                "kind": "value",
+                "text": "20"
+            },
+            {
+                "kind": "value",
+                "text": "30"
+            },
+            {
+                "kind": "value",
+                "text": "20"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 8,
+        "cast_time": 0,
+        "duration": 12000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:27+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 271,
+                "base_points": 20,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 6,
+                "aura_type": 308,
+                "base_points": 0,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -419500,6 +421363,61 @@
         ]
     },
     {
+        "id": 1305361,
+        "game_version_id": 1,
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.magic",
+        "mechanic": null,
+        "icon_name": "inv_knife_1h_ulatekfang_d_01_spirit",
+        "name": "Soul Fang Venom",
+        "description_template": "$@spelldesc1298085",
+        "description": "Your spells have a chance to drain a nearby enemy's will, reducing their cast speed by 10% and increasing your Haste by for 12 sec.",
+        "description_format": "Your spells have a chance to drain a nearby enemy's will, reducing their cast speed by %1$s%% and increasing your Haste by  for %2$s.",
+        "description_values": [
+            {
+                "kind": "value",
+                "text": "10"
+            },
+            {
+                "kind": "duration",
+                "text": "12 sec"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 32,
+        "cast_time": 0,
+        "duration": 12000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:27+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 355,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 64,
+                "aura_type": 0,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
         "id": 1305368,
         "game_version_id": 1,
         "category": "spellcategory.unknown",
@@ -419697,6 +421615,65 @@
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 3,
+                "radius": null,
+                "max_radius": null
+            }
+        ]
+    },
+    {
+        "id": 1305853,
+        "game_version_id": 1,
+        "category": "spellcategory.unknown",
+        "cooldown_group": "spellcooldowngroup.unknown",
+        "dispel_type": "spelldispeltype.magic",
+        "mechanic": null,
+        "icon_name": "inv_121_trinket_raid_ulatek_fang_purple",
+        "name": "Umbral Malignance",
+        "description_template": "$@spelldesc1295219",
+        "description": "Your harmful spells have a very high chance to befoul your target with Umbral Malignance, dealing Shadow damage every 3 sec for 1 min, stacking up to times.\n\nUmbral Malignance bursts upon the target's death, dealing 300% of its remaining damage split between nearby enemies and applying Umbral Malignance.",
+        "description_format": "Your harmful spells have a very high chance to befoul your target with Umbral Malignance, dealing  Shadow damage every %1$s sec for %2$s, stacking up to  times.\n\nUmbral Malignance bursts upon the target's death, dealing %3$s%% of its remaining damage split between nearby enemies and applying Umbral Malignance.",
+        "description_values": [
+            {
+                "kind": "period",
+                "text": "3"
+            },
+            {
+                "kind": "duration",
+                "text": "1 min"
+            },
+            {
+                "kind": "value",
+                "text": "300"
+            }
+        ],
+        "damage_multiplier": null,
+        "schools_mask": 32,
+        "cast_time": 0,
+        "duration": 60000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": "2026-09-07T17:33:34+00:00",
+        "spell_effects": [
+            {
+                "effect_index": 0,
+                "effect_type": 6,
+                "aura_type": 3,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 3000,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
+                "effect_index": 1,
+                "effect_type": 6,
+                "aura_type": 4,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
                 "radius": null,
                 "max_radius": null
             }
