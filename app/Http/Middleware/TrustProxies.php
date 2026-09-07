@@ -15,9 +15,17 @@ class TrustProxies extends Middleware
     /** @var array<int, string>|string|null */
     protected $proxies;
 
-    /** @var int */
+    /**
+     * X-Forwarded-Host is deliberately absent. Neither CloudFlare nor the ALB sends an
+     * authoritative forwarded host - Symfony's own HEADER_X_FORWARDED_AWS_ELB preset omits it for
+     * that reason - so the header arrives exactly as the client sent it. Trusting it would let a
+     * request that reaches the internet-facing ALB directly set getHost() to any domain, poisoning
+     * every generated absolute URL (password reset links, the guest login redirect) with no host
+     * allowlist to catch it.
+     *
+     * @var int
+     */
     protected $headers = Request::HEADER_X_FORWARDED_FOR |
-        Request::HEADER_X_FORWARDED_HOST |
         Request::HEADER_X_FORWARDED_PORT |
         Request::HEADER_X_FORWARDED_PROTO |
         Request::HEADER_X_FORWARDED_AWS_ELB;

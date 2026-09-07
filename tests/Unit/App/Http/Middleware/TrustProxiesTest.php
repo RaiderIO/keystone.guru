@@ -159,6 +159,32 @@ class TrustProxiesTest extends PublicTestCase
     /**
      * @throws Exception
      */
+    #[Test]
+    public function handle_GivenLoadBalancerPeerForgingForwardedHost_KeepsTheRealHost(): void
+    {
+        // Arrange - a request reaching the internet-facing ALB directly, carrying the legitimate
+        // Host alongside an attacker-controlled X-Forwarded-Host. Neither CloudFlare nor the ALB
+        // sends an authoritative forwarded host, so this header is whatever the client typed.
+        config()->set('keystoneguru.trusted_proxies.load_balancer_cidrs', self::LOAD_BALANCER_CIDRS);
+        $middleware = $this->makeMiddleware();
+        $request    = Request::create('/', 'GET', [], [], [], [
+            'REMOTE_ADDR' => '172.41.23.123',
+            'HTTP_HOST'   => 'keystone.guru',
+        ]);
+        $request->headers->set('X-Forwarded-For', '203.0.113.7, 172.68.0.1');
+        $request->headers->set('X-Forwarded-Host', 'evil.example.com');
+
+        // Act
+        $middleware->handle($request, static fn() => new Response());
+
+        // Assert - the forged host is ignored, so generated absolute URLs stay on our domain.
+        self::assertSame('keystone.guru', $request->getHost());
+        self::assertSame('203.0.113.7', $request->ip());
+    }
+
+    /**
+     * @throws Exception
+     */
     private function makeMiddleware(): TrustProxies
     {
         $cloudflareService = $this->createMockPublic(CloudflareServiceInterface::class);
