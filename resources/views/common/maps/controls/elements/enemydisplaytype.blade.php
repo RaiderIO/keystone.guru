@@ -1,0 +1,31 @@
+<?php
+$enemyDisplayType  = $_COOKIE['enemy_display_type'] ?? 'enemy_portrait';
+$enemyDisplayTypes = [
+    'enemy_portrait'  => __('view_common.maps.controls.elements.enemydisplaytype.portrait'),
+    'npc_class'       => __('view_common.maps.controls.elements.enemydisplaytype.npc_class'),
+    'npc_type'        => __('view_common.maps.controls.elements.enemydisplaytype.npc_type'),
+    'enemy_forces'    => __('view_common.maps.controls.elements.enemydisplaytype.enemy_forces'),
+    'enemy_group'     => __('view_common.maps.controls.elements.enemydisplaytype.enemy_group'),
+    'enemy_skippable' => __('view_common.maps.controls.elements.enemydisplaytype.enemy_skippable'),
+];
+?>
+<div class="row g-0">
+    <div class="col btn-group dropend">
+        <button type="button" class="btn btn-accent dropdown-toggle" data-bs-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-users"></i>
+            <span class="map_controls_element_label_toggle" style="display: none;">
+                {{ __('view_common.maps.controls.elements.enemydisplaytype.enemy_display_type_title') }}
+            </span>
+        </button>
+        <div id="map_enemy_visuals_dropdown" class="dropdown-menu">
+            <a class="dropdown-item disabled">
+                {{ __('view_common.maps.controls.elements.enemydisplaytype.enemy_display_type') }}
+            </a>
+            @foreach($enemyDisplayTypes as $value => $text)
+                <a class="dropdown-item {{ $value === $enemyDisplayType ? 'active' : '' }}"
+                   data-value="{{ $value }}">{{ $text }}</a>
+            @endforeach
+        </div>
+    </div>
+</div>

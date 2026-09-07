@@ -11,7 +11,7 @@ class EnemyVisualControls extends MapControl {
                 let template = Handlebars.templates['map_enemy_visuals_template'];
 
                 let data = $.extend({}, getHandlebarsDefaultVariables(), {
-                        enemy_visual_type: self.map.options.defaultEnemyVisualType
+                        enemy_display_type: self.map.options.defaultEnemyDisplayType
                     }
                 );
 

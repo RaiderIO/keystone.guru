@@ -6,7 +6,7 @@
  * @property {boolean} edit
  * @property {boolean} readonly
  * @property {boolean} sandbox
- * @property {String} defaultEnemyVisualType
+ * @property {String} defaultEnemyDisplayType
  * @property {String} defaultHeatmapShowTooltips
  * @property {String} defaultUnkilledEnemyOpacity
  * @property {String} defaultUnkilledImportantEnemyOpacity
