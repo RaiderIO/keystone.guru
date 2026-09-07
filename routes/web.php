@@ -106,6 +106,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserReportController;
 use App\Http\Controllers\Webhook\GithubWebhookController;
 use App\Http\Controllers\Webhook\WowheadWebhookController;
+use App\Http\Middleware\SameOriginOnly;
 use App\Http\Middleware\WowheadCors;
 use App\Models\DungeonDifficulty;
 use Illuminate\Http\Request;
@@ -774,7 +775,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
             // The signature is relative: it covers the path and query string only, so whichever
             // scheme/host the ALB and CloudFlare hand us can never invalidate it
-            Route::middleware(['throttle:mdt-export', 'signed:relative'])->group(static function () {
+            Route::middleware([SameOriginOnly::class, 'throttle:mdt-export', 'signed:relative'])->group(static function () {
                 Route::get('/mdtExport', new AjaxDungeonRouteController()->mdtExport(...))->name('api.dungeonroute.mdtexport');
             });
 

@@ -166,7 +166,10 @@ class AppServiceProvider extends ServiceProvider
 
         // This consumes the same resources as creating a route - so we limit it
         RateLimiter::for('mdt-details', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 1200)->by($this->userKey($request)));
-        RateLimiter::for('mdt-export', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 1200)->by($this->userKey($request)));
+        // Deliberately far below the other limiters: the export string is the full route, so this
+        // is the endpoint a scraper would walk to lift the site's routes. The high limits were only
+        // needed while $request->ip() still resolved to a shared CloudFlare edge IP (fixed in #3565).
+        RateLimiter::for('mdt-export', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 60)->by($this->userKey($request)));
         RateLimiter::for('simulate', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 120)->by($this->userKey($request)));
     }
 

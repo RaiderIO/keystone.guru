@@ -24,6 +24,12 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
 {
     use ProvidesDungeon;
 
+    /**
+     * What a browser attaches to the XHR of one of our own pages. Without it SameOriginOnly rejects
+     * the request before the signature is ever checked, so a forbidden assertion would pass vacuously.
+     */
+    private const array SAME_ORIGIN_HEADERS = ['Sec-Fetch-Site' => 'same-origin'];
+
     #[Test]
     public function get_givenMissingColumnsParameter_returnsUnprocessableEntity(): void
     {
@@ -417,7 +423,7 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
 
         try {
             // Act
-            $response = $this->get($this->signedMdtExportUrl($dungeonRoute));
+            $response = $this->get($this->signedMdtExportUrl($dungeonRoute), self::SAME_ORIGIN_HEADERS);
 
             // Assert
             $response->assertStatus(400);
@@ -442,7 +448,7 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
 
         try {
             // Act
-            $response = $this->get(sprintf('/ajax/%s/mdtExport?useCache=1', $dungeonRoute->public_key));
+            $response = $this->get(sprintf('/ajax/%s/mdtExport?useCache=1', $dungeonRoute->public_key), self::SAME_ORIGIN_HEADERS);
 
             // Assert
             $response->assertForbidden();
@@ -459,7 +465,7 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
 
         try {
             // Act
-            $response = $this->get($this->signedMdtExportUrl($dungeonRoute));
+            $response = $this->get($this->signedMdtExportUrl($dungeonRoute), self::SAME_ORIGIN_HEADERS);
 
             // Assert
             $response->assertSuccessful();
@@ -479,7 +485,7 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
         try {
             // Act - past the configured expiry window, whatever it is set to
             $this->travel(config('keystoneguru.mdt.export_url_expiry_hours') + 1)->hours();
-            $response = $this->get($url);
+            $response = $this->get($url, self::SAME_ORIGIN_HEADERS);
 
             // Assert
             $response->assertForbidden();
@@ -503,7 +509,7 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
         try {
             // Act
             $url      = str_replace($dungeonRoute->public_key, $otherDungeonRoute->public_key, $this->signedMdtExportUrl($dungeonRoute));
-            $response = $this->get($url);
+            $response = $this->get($url, self::SAME_ORIGIN_HEADERS);
 
             // Assert
             $response->assertForbidden();
@@ -527,7 +533,7 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
         try {
             // Act
             $url      = str_replace('useCache=1', 'useCache=0', $this->signedMdtExportUrl($dungeonRoute, useCache: true));
-            $response = $this->get($url);
+            $response = $this->get($url, self::SAME_ORIGIN_HEADERS);
 
             // Assert
             $response->assertForbidden();
