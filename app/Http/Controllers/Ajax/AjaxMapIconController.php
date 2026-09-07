@@ -67,6 +67,10 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         $validated                     = $request->validated();
         $validated['dungeon_route_id'] = $dungeonRoute?->id;
 
+        // The team is only assigned further down, once the assignToTeam gate has passed for it
+        $requestedTeamId      = $validated['team_id'];
+        $validated['team_id'] = null;
+
         // No dungeon route means this icon is part of the mapping itself - admin only
         if ($dungeonRoute === null) {
             Gate::authorize('createGlobal', MapIcon::class);
@@ -85,10 +89,10 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
             $validated,
             MapIcon::class,
             $mapIcon,
-            function (MapIcon $mapIcon) use ($coordinatesService, $validated, $dungeonRoute, &$beforeModel) {
+            function (MapIcon $mapIcon) use ($coordinatesService, $validated, $requestedTeamId, $dungeonRoute, &$beforeModel) {
                 // Set the team_id if the user has the rights to do this. May be null if not set or no rights for it.
                 $updateAttributes = [];
-                $teamId           = $validated['team_id'];
+                $teamId           = $requestedTeamId;
                 if ($teamId !== null && Gate::allows('assignToTeam', [$mapIcon, Team::find($teamId)])) {
                     $updateAttributes = [
                         'team_id'          => $teamId,
@@ -235,6 +239,19 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         DungeonRoute                $dungeonRoute,
         ?MapIcon                    $mapIcon = null,
     ): MapIcon {
+        if ($mapIcon !== null) {
+            Gate::authorize('update', $mapIcon);
+
+            // A team icon is bound to its team instead of to a route, so it has no route to match against
+            $isTeamIcon = $mapIcon->dungeon_route_id === null &&
+                Gate::allows('assignToTeam', [$mapIcon, $mapIcon->team]);
+
+            abort_if(
+                $mapIcon->dungeon_route_id !== $dungeonRoute->id && !$isTeamIcon,
+                Http::FORBIDDEN,
+            );
+        }
+
         return $this->store($coordinatesService, $request, null, $dungeonRoute, $mapIcon);
     }
 
