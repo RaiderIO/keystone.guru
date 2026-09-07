@@ -179,9 +179,8 @@ class AjaxDungeonRouteController extends Controller
                 });
             }
 
-            // Filter by our own user if logged in. This is applied alongside the favorites filter and not
-            // instead of it: $mine is what exempts the query from the published state filter below, so a
-            // favorites request that also asks for $mine must still be narrowed down to the user's own routes
+            // Filter by our own user if logged in. $mine is what exempts the query from the published state
+            // filter further down, so it must narrow the results down to the user's own routes on its own
             if ($mine) {
                 $routes = $routes->where('author_id', $user->id);
             }
@@ -739,9 +738,10 @@ class AjaxDungeonRouteController extends Controller
         $user = Auth::user();
 
         /** @var DungeonRouteRating $dungeonRouteRating */
-        $dungeonRouteRating = DungeonRouteRating::firstOrFail()
+        $dungeonRouteRating = DungeonRouteRating::query()
             ->where('dungeon_route_id', $dungeonRoute->id)
-            ->where('user_id', $user->id);
+            ->where('user_id', $user->id)
+            ->firstOrFail();
         $dungeonRouteRating->delete();
 
         $dungeonRoute->unsetRelation('ratings');
@@ -779,9 +779,10 @@ class AjaxDungeonRouteController extends Controller
         $user = Auth::user();
 
         /** @var DungeonRouteFavorite $dungeonRouteFavorite */
-        $dungeonRouteFavorite = DungeonRouteFavorite::firstOrFail()
+        $dungeonRouteFavorite = DungeonRouteFavorite::query()
             ->where('dungeon_route_id', $dungeonRoute->id)
-            ->where('user_id', $user->id);
+            ->where('user_id', $user->id)
+            ->firstOrFail();
         $dungeonRouteFavorite->delete();
 
         return response()->noContent();

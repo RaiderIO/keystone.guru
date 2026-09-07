@@ -28,9 +28,13 @@ $dungeonRouteChannelCallback = static function (?User $user, ?DungeonRoute $dung
         return false;
     }
 
-    // The presence channel carries the full model bodies of everything that changes on this route,
-    // so joining it requires the same rights as the pages that render those models
-    if (!$dungeonRoute->mayUserView($user)) {
+    // The presence channel carries the full model bodies of everything that changes on this route, so
+    // joining it requires the same rights as the pages that render those models. One channel name serves
+    // both the view page (gated on view) and the edit page (gated on edit), and edit rights are not a
+    // subset of view rights: a TEAM published route whose team_id was nulled - which removing the last
+    // member and deleting a team both do without touching the published state - is editable by its author
+    // while mayUserView() denies them. Both rights are therefore accepted here.
+    if (!$dungeonRoute->mayUserView($user) && !$dungeonRoute->mayUserEdit($user)) {
         return false;
     }
 
