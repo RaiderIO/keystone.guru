@@ -52,14 +52,40 @@ class APICombatLogControllerCombatLogRouteTempleOfSethralissTest extends APIComb
             ]);
 
             // The Avatar is won by healing it to full, so no death for it exists and validateBossesResolved() cannot
-            // see it. The run completed, which is the only thing that implies it, and it is awarded into the 21st
-            // pull of its own - it is on another floor than the last death, so it does not belong in that pull.
+            // see it. The run finishing is the only thing that implies it, and it is awarded into the 21st pull of
+            // its own - it is on another floor than the last death, so it does not belong in that pull.
             $this->validateNpcIdCount($responseArr, NpcId::AVATAR_OF_SETHRALISS->value, 1);
             $this->assertSame(
                 [NpcId::AVATAR_OF_SETHRALISS->value],
                 array_column($responseArr['data']['pulls'][20]['enemies'], 'npcId'),
                 'The Avatar of Sethraliss must be the whole of the final pull',
             );
+        } finally {
+            $this->deleteDungeonRoute($responseArr);
+        }
+    }
+
+    /**
+     * Finishing the run is what implies the Avatar's defeat - the timer only decides whether the key is upgraded, so
+     * an over-time run must credit it exactly like a timed one.
+     */
+    #[Test]
+    public function create_givenTheRunFinishedOverTime_shouldStillAwardTheAvatarOfSethraliss(): void
+    {
+        // Arrange
+        $postBody                             = $this->getJsonData('BFA/midnight_s2_temple_of_sethraliss', self::FIXTURES_ROOT_DIR);
+        $postBody['challengeMode']['success'] = false;
+
+        // Act
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
+
+        // Assert
+        $response->assertCreated();
+
+        $responseArr = json_decode($response->content(), true);
+
+        try {
+            $this->validateNpcIdCount($responseArr, NpcId::AVATAR_OF_SETHRALISS->value, 1);
         } finally {
             $this->deleteDungeonRoute($responseArr);
         }

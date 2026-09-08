@@ -65,10 +65,10 @@ final class ResultEventDungeonRouteServiceTempleOfSethralissTest extends ResultE
 
     /**
      * The Avatar of Sethraliss is won by healing it to full, so it never dies and there is no later death to award it
-     * off - completing the dungeon is the only thing that implies it. It lands in a pull of its own.
+     * off - finishing the dungeon is the only thing that implies it. It lands in a pull of its own.
      */
     #[Test]
-    public function convertCombatLogToDungeonRoutes_givenTheRunCompleted_awardsTheAvatarOfSethralissInItsOwnPull(): void
+    public function convertCombatLogToDungeonRoutes_givenTheRunFinished_awardsTheAvatarOfSethralissInItsOwnPull(): void
     {
         // Arrange
         $npcKills = [
@@ -89,11 +89,11 @@ final class ResultEventDungeonRouteServiceTempleOfSethralissTest extends ResultE
     }
 
     /**
-     * A depleted run never healed the Avatar to full, so it must not be credited - which is what makes the test above
-     * a test of the run's outcome rather than of the award firing unconditionally.
+     * A depleted run still killed the last boss - the timer decides whether the key is upgraded, not what was
+     * defeated - so the Avatar is credited exactly as it is on a timed one.
      */
     #[Test]
-    public function convertCombatLogToDungeonRoutes_givenTheRunWasDepleted_doesNotAwardTheAvatarOfSethraliss(): void
+    public function convertCombatLogToDungeonRoutes_givenTheRunFinishedOverTime_stillAwardsTheAvatarOfSethraliss(): void
     {
         // Arrange
         $npcKills = [
@@ -104,12 +104,12 @@ final class ResultEventDungeonRouteServiceTempleOfSethralissTest extends ResultE
         $dungeonRoute = $this->buildDungeonRouteFromNpcKills($npcKills, success: false);
 
         // Assert
-        $this->assertNotContains(
-            NpcId::AVATAR_OF_SETHRALISS->value,
-            $this->getKillZones($dungeonRoute)
-                ->flatMap(static fn($killZone) => $killZone->enemies)
-                ->pluck('npc_id')
-                ->all(),
+        $lastKillZone = $this->getKillZones($dungeonRoute)->last();
+
+        $this->assertEquals(
+            [NpcId::AVATAR_OF_SETHRALISS->value],
+            $lastKillZone->enemies->pluck('npc_id')->all(),
+            'The Avatar of Sethraliss must be awarded on a run that finished over time too',
         );
     }
 }

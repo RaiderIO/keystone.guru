@@ -24,7 +24,7 @@ abstract class AbstractDungeonRouteBuilderRule implements DungeonRouteBuilderRul
         return [];
     }
 
-    public function onRunFinished(?bool $success): array
+    public function onRunFinished(): array
     {
         return [];
     }

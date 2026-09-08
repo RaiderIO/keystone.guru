@@ -119,45 +119,16 @@ class TempleOfSethralissDespawningEnemiesRuleTest extends PublicTestCase
     }
 
     #[Test]
-    public function onRunFinished_givenTheRunSucceeded_awardsTheAvatarOfSethraliss(): void
+    public function onRunFinished_givenTheRunFinished_awardsTheAvatarOfSethraliss(): void
     {
         // Arrange
         $rule = $this->makeRule();
 
         // Act
-        $result = $rule->onRunFinished(true);
+        $result = $rule->onRunFinished();
 
         // Assert
         $this->assertEquals([NpcId::AVATAR_OF_SETHRALISS->value], $result);
-    }
-
-    /**
-     * The Avatar is only healed to full on a run that completed - anything else never finished the encounter, and a
-     * run that reported no outcome at all is not evidence that it did.
-     */
-    #[Test]
-    #[DataProvider('unsuccessfulRunProvider')]
-    public function onRunFinished_givenTheRunDidNotSucceed_awardsNothing(?bool $success): void
-    {
-        // Arrange
-        $rule = $this->makeRule();
-
-        // Act
-        $result = $rule->onRunFinished($success);
-
-        // Assert
-        $this->assertEmpty($result);
-    }
-
-    /**
-     * @return array<string, array{bool|null}>
-     */
-    public static function unsuccessfulRunProvider(): array
-    {
-        return [
-            'depleted'   => [false],
-            'no outcome' => [null],
-        ];
     }
 
     /**
@@ -171,7 +142,7 @@ class TempleOfSethralissDespawningEnemiesRuleTest extends PublicTestCase
         $rule->onEnemyDied(NpcId::AVATAR_OF_SETHRALISS->value, null);
 
         // Act
-        $result = $rule->onRunFinished(true);
+        $result = $rule->onRunFinished();
 
         // Assert
         $this->assertEmpty($result);
@@ -182,10 +153,10 @@ class TempleOfSethralissDespawningEnemiesRuleTest extends PublicTestCase
     {
         // Arrange
         $rule = $this->makeRule();
-        $rule->onRunFinished(true);
+        $rule->onRunFinished();
 
         // Act
-        $result = $rule->onRunFinished(true);
+        $result = $rule->onRunFinished();
 
         // Assert
         $this->assertEmpty($result);

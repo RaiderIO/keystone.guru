@@ -69,7 +69,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
 
     public function build(): DungeonRoute
     {
-        $runSucceeded            = null;
+        $runFinished             = false;
         $lastDiedActivePullEnemy = null;
 
         foreach ($this->resultEvents as $resultEvent) {
@@ -81,8 +81,9 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                 );
 
                 if ($resultEvent instanceof ChallengeModeEnd) {
-                    // 1 = the party beat the timer's requirement to complete the dungeon at all
-                    $runSucceeded = $resultEvent->getChallengeModeEndEvent()->getSuccess() === 1;
+                    // The run reaching its end is the finish itself - the event's success flag only says whether the
+                    // timer was beaten, which has no bearing on what was defeated
+                    $runFinished = true;
                 }
 
                 if ($resultEvent instanceof MapChangeResultEvent) {
@@ -234,7 +235,9 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
             }
         }
 
-        $this->awardRunFinishedEnemyKills($runSucceeded, $lastDiedActivePullEnemy);
+        if ($runFinished) {
+            $this->awardRunFinishedEnemyKills($lastDiedActivePullEnemy);
+        }
 
         // Handle spells and the actual creation of pulls for all remaining active pulls
         foreach ($this->activePullCollection as $activePull) {

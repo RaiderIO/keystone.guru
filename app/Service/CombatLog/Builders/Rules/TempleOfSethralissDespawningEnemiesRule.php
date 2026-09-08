@@ -21,8 +21,8 @@ use App\Service\CombatLog\Builders\Logging\DungeonRouteBuilderLoggingInterface;
  *
  * The Avatar of Sethraliss is not killed either, but for a different reason: it starts at a fraction of its health and
  * the encounter is won by healing it back to full. It never takes a lethal hit, so no death for it exists anywhere -
- * and being the final boss, there is no later death to award it off either. Completing the dungeon is the only thing
- * that implies it, so it is awarded when the run finished successfully.
+ * and being the final boss, there is no later death to award it off either. Finishing the dungeon is the only thing
+ * that implies it, so it is awarded when the run finished - beating the timer is not part of it.
  *
  * Awarding is idempotent per npc: an enemy that did reach us normally, or that an earlier award already covered, is
  * never awarded twice.
@@ -61,14 +61,8 @@ class TempleOfSethralissDespawningEnemiesRule extends AbstractDungeonRouteBuilde
         return $awardedNpcIds;
     }
 
-    public function onRunFinished(?bool $success): array
+    public function onRunFinished(): array
     {
-        // A run that did not complete never reached the Avatar's full health, and one that reported no outcome at all
-        // is not evidence that it did
-        if ($success !== true) {
-            return [];
-        }
-
         $awardedNpcIds = $this->awardUnaccountedNpcIds([NpcId::AVATAR_OF_SETHRALISS->value]);
 
         if ($awardedNpcIds !== []) {

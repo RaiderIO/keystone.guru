@@ -435,23 +435,24 @@ abstract class DungeonRouteBuilder
     }
 
     /**
-     * Awards the kills that the run's outcome implies rather than any single death, into a pull of their own after
+     * Awards the kills that finishing the run implies rather than any single death, into a pull of their own after
      * every other pull. See DungeonRouteBuilderRuleInterface::onRunFinished().
      *
-     * Every builder that runs the rules has to call this, or the enemies it covers stay missing on that path.
+     * Only call this for a run that actually finished. Every builder that runs the rules has to call it, or the
+     * enemies it covers stay missing on that path.
      *
      * The award still needs somewhere to have happened, and $trigger - the last enemy to die - is the closest thing
      * to it: it is where the party was when the run ended. Which enemy that is only decides between candidates
      * carrying the same npc_id, and awardEnemyKills() ignores range, so a boss mapped on another floor still
      * resolves. A run where nothing died cannot have completed anything, so there is nothing to award off.
      */
-    protected function awardRunFinishedEnemyKills(?bool $success, ?ActivePullEnemy $trigger): void
+    protected function awardRunFinishedEnemyKills(?ActivePullEnemy $trigger): void
     {
         $awardedNpcIds = collect();
 
         foreach ($this->rules as $rule) {
             /** @var DungeonRouteBuilderRuleInterface $rule */
-            $awardedNpcIds = $awardedNpcIds->merge($rule->onRunFinished($success));
+            $awardedNpcIds = $awardedNpcIds->merge($rule->onRunFinished());
         }
 
         if ($awardedNpcIds->isEmpty() || $trigger === null) {

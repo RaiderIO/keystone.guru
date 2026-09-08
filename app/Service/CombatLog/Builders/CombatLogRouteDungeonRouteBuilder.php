@@ -290,8 +290,8 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
             }
         }
 
+        // Every route posted here is of a run that reached its end - challengeMode.end is required on the request
         $this->awardRunFinishedEnemyKills(
-            $this->combatLogRoute->challengeMode->success,
             $lastDiedNpc === null ? null : $this->createActivePullEnemy($lastDiedNpc),
         );
 
