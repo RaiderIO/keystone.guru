@@ -72,17 +72,73 @@ final class MapIconPolicyTest extends PublicTestCase
     }
 
     #[Test]
-    public function update_givenTeamIcon_returnsAllowed(): void
+    public function update_givenTeamIconAndCollaboratorOfThatTeam_returnsAllowed(): void
     {
         // Arrange
         $user    = User::factory()->create();
-        $mapIcon = new MapIcon();
-        $mapIcon->setAttribute('dungeon_route_id', null);
-        $mapIcon->setAttribute('team_id', 1);
+        $team    = $this->createTeamWith($user, TeamUser::ROLE_COLLABORATOR);
+        $mapIcon = $this->teamMapIcon($team);
 
         try {
             // Act & Assert
             $this->assertTrue($this->policy->update($user, $mapIcon)->allowed());
+        } finally {
+            $this->deleteTeam($team);
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenTeamIconAndPlainMemberOfThatTeam_returnsDenied(): void
+    {
+        // Arrange - a plain member is not a collaborator, same line assignToTeam() draws
+        $user    = User::factory()->create();
+        $team    = $this->createTeamWith($user, TeamUser::ROLE_MEMBER);
+        $mapIcon = $this->teamMapIcon($team);
+
+        try {
+            // Act & Assert
+            $this->assertTrue($this->policy->update($user, $mapIcon)->denied());
+        } finally {
+            $this->deleteTeam($team);
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenTeamIconAndUserOutsideThatTeam_returnsDenied(): void
+    {
+        // Arrange - the icon carries no dungeon route, so nothing else in the request can vouch
+        // for this caller. An admin still passes, as they do in delete()
+        $member   = User::factory()->create();
+        $outsider = User::factory()->create();
+        $team     = $this->createTeamWith($member, TeamUser::ROLE_ADMIN);
+        $mapIcon  = $this->teamMapIcon($team);
+
+        try {
+            // Act & Assert
+            $this->assertTrue($this->policy->update($outsider, $mapIcon)->denied());
+            $this->assertTrue($this->policy->update(null, $mapIcon)->denied());
+            $this->assertTrue($this->policy->update($this->adminUser(), $mapIcon)->allowed());
+        } finally {
+            $this->deleteTeam($team);
+            $outsider->delete();
+            $member->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenTeamIconWhoseTeamNoLongerExists_returnsDenied(): void
+    {
+        // Arrange - a team icon can outlive its team; a dangling team_id must not read as "allow"
+        $user    = User::factory()->create();
+        $mapIcon = new MapIcon();
+        $mapIcon->setAttribute('dungeon_route_id', null);
+        $mapIcon->setAttribute('team_id', PHP_INT_MAX);
+
+        try {
+            // Act & Assert
+            $this->assertTrue($this->policy->update($user, $mapIcon)->denied());
         } finally {
             $user->delete();
         }
@@ -193,6 +249,15 @@ final class MapIconPolicyTest extends PublicTestCase
             $outsider->delete();
             $user->delete();
         }
+    }
+
+    private function teamMapIcon(Team $team): MapIcon
+    {
+        $mapIcon = new MapIcon();
+        $mapIcon->setAttribute('dungeon_route_id', null);
+        $mapIcon->setAttribute('team_id', $team->id);
+
+        return $mapIcon;
     }
 
     private function createTeamWith(User $user, string $role): Team
