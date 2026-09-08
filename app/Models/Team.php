@@ -162,6 +162,11 @@ class Team extends Model
             $dungeonRoute->tags(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])->delete();
 
             $dungeonRoute->team_id = null;
+            // A route published to the team it just left can be seen by nobody at all - no
+            // membership check can be satisfied when there is no team to be a member of
+            if ($dungeonRoute->published_state_id === PublishedState::ALL[PublishedState::TEAM]) {
+                $dungeonRoute->published_state_id = PublishedState::ALL[PublishedState::UNPUBLISHED];
+            }
             $dungeonRoute->save();
             $result = true;
         }
@@ -386,6 +391,8 @@ class Team extends Model
                         ->pluck('dungeon_routes.id')
                         ->toArray();
 
+                    self::unpublishTeamPublishedRoutes($dungeonRouteIds);
+
                     DungeonRoute::whereIn('id', $dungeonRouteIds)->update(['team_id' => null]);
 
                     // A route leaving the team loses that team's tags with it, the same way
@@ -491,6 +498,21 @@ class Team extends Model
             ->get();
     }
 
+    /**
+     * Reverts routes that were published to a team back to unpublished, for routes that are about to
+     * leave that team. A team-published route without a team satisfies no membership check, which
+     * leaves it invisible to everyone - its own author included.
+     *
+     * @param  array<int, int> $dungeonRouteIds
+     * @return void
+     */
+    private static function unpublishTeamPublishedRoutes(array $dungeonRouteIds): void
+    {
+        DungeonRoute::whereIn('id', $dungeonRouteIds)
+            ->where('published_state_id', PublishedState::ALL[PublishedState::TEAM])
+            ->update(['published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED]]);
+    }
+
     #[Override]
     protected static function boot(): void
     {
@@ -519,7 +541,11 @@ class Team extends Model
             // Remove all users associated with this team
             TeamUser::where('team_id', $team->id)->delete();
             // Unassign all routes from this team
-            DungeonRoute::where('team_id', $team->id)->update(['team_id' => null]);
+            $dungeonRouteIds = DungeonRoute::where('team_id', $team->id)->pluck('id')->toArray();
+
+            self::unpublishTeamPublishedRoutes($dungeonRouteIds);
+
+            DungeonRoute::whereIn('id', $dungeonRouteIds)->update(['team_id' => null]);
         });
     }
 }
