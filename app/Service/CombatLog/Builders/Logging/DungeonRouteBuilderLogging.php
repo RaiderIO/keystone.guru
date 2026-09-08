@@ -196,6 +196,11 @@ class DungeonRouteBuilderLogging extends StructuredLogging implements DungeonRou
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    public function templeOfSethralissDespawningEnemiesRuleRunFinishedEnemyKillsAwarded(array $awardedNpcIds): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
     public function awardEnemyKillsEnemyNotFound(int $npcId): void
     {
         $this->warning(__METHOD__, get_defined_vars());

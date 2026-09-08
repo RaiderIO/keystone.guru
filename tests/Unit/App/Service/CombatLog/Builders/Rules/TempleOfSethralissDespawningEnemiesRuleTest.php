@@ -118,6 +118,50 @@ class TempleOfSethralissDespawningEnemiesRuleTest extends PublicTestCase
         $this->assertEmpty($result);
     }
 
+    #[Test]
+    public function onRunFinished_givenTheRunFinished_awardsTheAvatarOfSethraliss(): void
+    {
+        // Arrange
+        $rule = $this->makeRule();
+
+        // Act
+        $result = $rule->onRunFinished();
+
+        // Assert
+        $this->assertEquals([NpcId::AVATAR_OF_SETHRALISS->value], $result);
+    }
+
+    /**
+     * If the Avatar's death does reach us after all, awarding it at the end of the run would duplicate it.
+     */
+    #[Test]
+    public function onRunFinished_givenTheAvatarOfSethralissAlreadyDied_awardsNothing(): void
+    {
+        // Arrange
+        $rule = $this->makeRule();
+        $rule->onEnemyDied(NpcId::AVATAR_OF_SETHRALISS->value, null);
+
+        // Act
+        $result = $rule->onRunFinished();
+
+        // Assert
+        $this->assertEmpty($result);
+    }
+
+    #[Test]
+    public function onRunFinished_givenItAlreadyRan_awardsNothingTheSecondTime(): void
+    {
+        // Arrange
+        $rule = $this->makeRule();
+        $rule->onRunFinished();
+
+        // Act
+        $result = $rule->onRunFinished();
+
+        // Assert
+        $this->assertEmpty($result);
+    }
+
     /**
      * The rule only ever awards, it must never take an enemy out of the running for a normal spatial match.
      */

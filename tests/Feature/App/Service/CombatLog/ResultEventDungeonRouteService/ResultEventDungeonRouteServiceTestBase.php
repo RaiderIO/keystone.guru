@@ -91,9 +91,9 @@ abstract class ResultEventDungeonRouteServiceTestBase extends PublicTestCase
      *
      * @param array<int, array<string, mixed>> $npcKills As produced by npcKill()
      */
-    protected function buildDungeonRouteFromNpcKills(array $npcKills, int $keystoneLevel = 10): DungeonRoute
+    protected function buildDungeonRouteFromNpcKills(array $npcKills, int $keystoneLevel = 10, bool $success = true): DungeonRoute
     {
-        $logFilePath = $this->writeSyntheticCombatLog($npcKills, $keystoneLevel);
+        $logFilePath = $this->writeSyntheticCombatLog($npcKills, $keystoneLevel, $success);
 
         $dungeonRoutes = $this->resultEventDungeonRouteService->convertCombatLogToDungeonRoutes($logFilePath);
 
@@ -190,7 +190,7 @@ abstract class ResultEventDungeonRouteServiceTestBase extends PublicTestCase
      *
      * @return string The absolute path of the log, named *_events.txt because that is what the pipeline expects
      */
-    private function writeSyntheticCombatLog(array $npcKills, int $keystoneLevel): string
+    private function writeSyntheticCombatLog(array $npcKills, int $keystoneLevel, bool $success): string
     {
         $firstUiMapId = $npcKills === [] ? $this->getDefaultUiMapId() : $npcKills[0]['uiMapId'];
 
@@ -242,8 +242,9 @@ abstract class ResultEventDungeonRouteServiceTestBase extends PublicTestCase
         }
 
         $lines[] = $this->logLine('23:59:59', sprintf(
-            'CHALLENGE_MODE_END,%d,1,%d,1200000,100.000000,100.000000',
+            'CHALLENGE_MODE_END,%d,%d,%d,1200000,100.000000,100.000000',
             $this->dungeon->map_id,
+            $success ? 1 : 0,
             $keystoneLevel,
         ));
 
