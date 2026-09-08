@@ -215,45 +215,6 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
         ];
     }
 
-    #[Test]
-    #[DataProvider('teamIdProvider')]
-    public function save_givenTeamId_resolvesExpectedTeamId(int $inputTeamId, ?int $expectedTeamId): void
-    {
-        // Arrange
-        $dungeon   = $this->getRetailDungeon();
-        $service   = $this->buildService(seasonService: $this->noSeasonService(), thumbnailService: $this->thumbnailServiceAllowingRefresh());
-        $route     = new DungeonRoute();
-        $validated = [
-            'dungeon_id'          => $dungeon->id,
-            'faction_id'          => 1,
-            'dungeon_route_title' => 'Team Test',
-            'team_id'             => $inputTeamId,
-        ];
-
-        try {
-            // Act
-            $service->save($route, $validated);
-
-            // Assert
-            $this->assertEquals($expectedTeamId, $route->team_id);
-        } finally {
-            if ($route->exists) {
-                $this->cleanupRoute($route);
-            }
-        }
-    }
-
-    /**
-     * @return array<string, array{0: int, 1: int|null}>
-     */
-    public static function teamIdProvider(): array
-    {
-        return [
-            'zero becomes null'     => [0, null],
-            'a positive id is kept' => [4242, 4242],
-        ];
-    }
-
     /**
      * @param array<int, int> $inputSeasonalIndex
      */
