@@ -30,11 +30,23 @@ class MapIconPolicy
      * ever reached with an incoming dungeon route, so allowing it here would let anyone (even an
      * admin) reassign a global mapping icon to a personal route, which was never possible before
      * this policy existed. That transition is denied unconditionally, not just non-admin-gated.
+     *
+     * A team icon carries no dungeon route to gate on, so the team it belongs to is what decides:
+     * the same collaborator requirement that assignToTeam() applies when the icon is put on a team
+     * in the first place. Unlike delete(), an admin gets no separate allowance here - the team icon
+     * write path checks assignToTeam() as well, so an admin who is not a collaborator is refused
+     * there regardless of what this returns.
      */
     public function update(?User $user, MapIcon $mapIcon): Response
     {
-        if ($mapIcon->dungeon_route_id !== null || $mapIcon->team_id !== null) {
+        if ($mapIcon->dungeon_route_id !== null) {
             return $this->allow();
+        }
+
+        if ($mapIcon->team_id !== null) {
+            return $this->assignToTeam($user, $mapIcon, $mapIcon->team) ?
+                $this->allow() :
+                $this->deny(__('policy.update_team_map_icon_collaborator_only'));
         }
 
         return $this->deny(__('policy.update_map_icon_admin_only'));
