@@ -4,32 +4,32 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Events\Models\Arrow\ArrowChangedEvent;
 use App\Events\Models\Arrow\ArrowDeletedEvent;
-use App\Http\Controllers\Controller;
+use App\Events\Models\ModelChangedEvent;
 use App\Http\Controllers\Traits\EnforcesDungeonRouteLimits;
-use App\Http\Controllers\Traits\SavesPolylines;
 use App\Http\Controllers\Traits\ValidatesFloorId;
 use App\Http\Requests\Arrow\APIArrowFormRequest;
 use App\Models\Arrow;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteLimitType;
-use App\Models\Polyline;
+use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Override;
 use Teapot\StatusCode\Http;
 use Throwable;
 
-class AjaxArrowController extends Controller
+class AjaxArrowController extends AjaxMappingModelBaseController
 {
     use EnforcesDungeonRouteLimits;
-    use SavesPolylines;
     use ValidatesFloorId;
 
     /**
@@ -57,50 +57,18 @@ class AjaxArrowController extends Controller
         }
 
         try {
-            DB::transaction(function () use ($coordinatesService, $arrow, $dungeonRoute, $validated, &$result) {
-                $beforeModel = $arrow === null ? null : clone $arrow;
-
-                if ($arrow === null) {
-                    $arrow = Arrow::create([
-                        'dungeon_route_id' => $dungeonRoute->id,
-                        'floor_id'         => $validated['floor_id'],
-                        'polyline_id'      => -1,
-                    ]);
-                    $success = true;
-                } else {
-                    $success = $arrow->update([
-                        'dungeon_route_id' => $dungeonRoute->id,
-                        'floor_id'         => $validated['floor_id'],
-                    ]);
-                }
-
-                if (!$success) {
-                    // Caught below, which rolls back this transaction and responds with a 404
-                    throw new Exception(__('controller.arrow.error.unable_to_save_arrow'));
-                }
-
-                $this->savePolylineToModel(
-                    $coordinatesService,
-                    $dungeonRoute,
-                    $dungeonRoute->mappingVersion,
-                    Polyline::findOrNew($arrow->polyline_id),
-                    $beforeModel,
-                    $arrow,
-                    $validated['polyline'],
-                );
-
-                $dungeonRoute->touch();
-
-                if (Auth::check()) {
-                    try {
-                        broadcast(new ArrowChangedEvent($dungeonRoute, Auth::user(), $arrow));
-                    } catch (BroadcastException) {
-                        // Ignore broadcast failures
-                    }
-                }
-
-                $result = $arrow;
-            });
+            $result = $this->storeModel(
+                $coordinatesService,
+                null,
+                array_merge($validated, [
+                    'dungeon_route_id' => $dungeonRoute->id,
+                    'polyline_id'      => $arrow?->polyline_id ?? -1, // @phpstan-ignore nullsafe.neverNull
+                ]),
+                Arrow::class,
+                $arrow,
+                null,
+                $dungeonRoute,
+            );
         } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
@@ -191,5 +159,15 @@ class AjaxArrowController extends Controller
         }
 
         return $result;
+    }
+
+    #[Override]
+    protected function getModelChangedEvent(
+        CoordinatesServiceInterface $coordinatesService,
+        Model                       $context,
+        User                        $user,
+        Arrow|Model                 $model,
+    ): ModelChangedEvent {
+        return new ArrowChangedEvent($context, $user, $model);
     }
 }

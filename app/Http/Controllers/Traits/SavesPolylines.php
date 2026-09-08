@@ -11,10 +11,10 @@ namespace App\Http\Controllers\Traits;
 use App\Logic\Structs\LatLng;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\Interfaces\HasPolylineInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Polyline;
-use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -25,36 +25,30 @@ trait SavesPolylines
     use ChangesDungeonRoute;
 
     /**
+     * @param  Floor|null                                                                        $facadeFloor The facade floor the vertices were drawn on, if any
      * @param  array{color: string, color_animated: string, weight?: int, vertices_json: string} $data
      * @throws Exception
      */
     private function savePolylineToModel(
         CoordinatesServiceInterface $coordinatesService,
         ?DungeonRoute               $dungeonRoute,
-        MappingVersion              $mappingVersion,
+        ?MappingVersion             $mappingVersion,
+        ?Floor                      $facadeFloor,
         Polyline                    $polyline,
-        ?Model                      $beforeModel,
-        Model                       $ownerModel,
+        HasPolylineInterface&Model  $ownerModel,
         array                       $data,
     ): Polyline {
         $beforePolyline = clone $polyline;
+        $changedFloor   = null;
 
-        // The incoming lat/lngs are facade lat/lngs, save the icon on the proper floor
-        $useFacade        = $mappingVersion->facade_enabled && User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
-        $originalVertices = $data['vertices_json'];
-        /** @var Floor|null $originalFloor */
-        $originalFloor = $ownerModel->getAttribute('floor');
-        $changedFloor  = null;
-
-        if ($useFacade) {
+        // Vertices drawn on the facade floor must be converted back onto the floors they belong to
+        if ($facadeFloor !== null && $mappingVersion !== null) {
             $vertices     = json_decode($data['vertices_json'], true);
             $realVertices = [];
             foreach ($vertices as $vertex) {
-                /** @var Floor|null $ownerFloor */
-                $ownerFloor = $ownerModel->getAttribute('floor');
-                $latLng     = $coordinatesService->convertFacadeMapLocationToMapLocation(
+                $latLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
                     $mappingVersion,
-                    new LatLng($vertex['lat'], $vertex['lng'], $ownerFloor),
+                    new LatLng($vertex['lat'], $vertex['lng'], $facadeFloor),
                     $changedFloor,
                 );
 
@@ -88,19 +82,12 @@ trait SavesPolylines
         // Couple the model to the newly created/updated polyline
         $ownerModel->update([
             'polyline_id' => $polyline->id,
-            'floor_id'    => $changedFloor !== null ? $changedFloor->id : $originalFloor->id,
+            'floor_id'    => $changedFloor === null ? $ownerModel->getAttribute('floor_id') : $changedFloor->id,
         ]);
         $ownerModel->setRelation('polyline', $polyline);
 
-        if ($dungeonRoute !== null) {
-            $this->dungeonRouteChanged($dungeonRoute, $beforeModel, $ownerModel);
-        }
-
-        // If we received a request from facade, we need to convert the vertices back to facade coordinates
-        if ($useFacade) {
-            $ownerModel->setRelation('floor', $originalFloor);
-            $ownerModel->setAttribute('floor_id', $originalFloor->id);
-            $polyline->setAttribute('vertices_json', $originalVertices);
+        if ($changedFloor !== null) {
+            $ownerModel->setRelation('floor', $changedFloor);
         }
 
         return $polyline;
