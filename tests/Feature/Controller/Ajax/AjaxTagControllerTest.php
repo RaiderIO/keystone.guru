@@ -294,6 +294,69 @@ final class AjaxTagControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function store_givenTheTeamCategoryInTheUsersOwnContext_returnsForbidden(): void
+    {
+        $author = null;
+        $route  = null;
+
+        try {
+            // Arrange - both halves are the caller's own; only the pairing is wrong
+            $author = $this->createUserWithUserRole();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $name   = sprintf('test-mismatched-tag-%s', fake()->uuid());
+
+            // Act
+            $response = $this->actingAs($author)->post('/ajax/tag', [
+                'context'       => $author->public_key,
+                'context_class' => 'user',
+                'category'      => TagCategory::DUNGEON_ROUTE_TEAM,
+                'model_id'      => $route->public_key,
+                'name'          => $name,
+            ]);
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertDatabaseMissing('tags', ['name' => $name]);
+        } finally {
+            $this->cleanUpTagsOfUsers([$author]);
+            $this->cleanUp(route: $route, users: [$author]);
+        }
+    }
+
+    #[Test]
+    public function store_givenThePersonalCategoryInATeamContext_returnsForbidden(): void
+    {
+        $member = null;
+        $team   = null;
+        $route  = null;
+
+        try {
+            // Arrange - a team the caller really is a member of, paired with the wrong category
+            $member = $this->createUserWithUserRole();
+            $team   = $this->createTeam();
+            $team->addMember($member, TeamUser::ROLE_MEMBER);
+            $route = DungeonRoute::factory()->create(['author_id' => $member->id]);
+            $name  = sprintf('test-mismatched-tag-%s', fake()->uuid());
+
+            // Act
+            $response = $this->actingAs($member)->post('/ajax/tag', [
+                'context'       => $team->public_key,
+                'context_class' => 'team',
+                'category'      => TagCategory::DUNGEON_ROUTE_PERSONAL,
+                'model_id'      => $route->public_key,
+                'name'          => $name,
+            ]);
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertDatabaseMissing('tags', ['name' => $name]);
+        } finally {
+            $this->cleanUpTagsOfTeam($team);
+            $this->cleanUp(route: $route, team: $team, users: [$member]);
+        }
+    }
+
+    #[Test]
     public function store_givenTeamContextOfATeamTheUserIsNotAMemberOf_returnsForbidden(): void
     {
         $author = null;
