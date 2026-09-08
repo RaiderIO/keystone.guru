@@ -41,7 +41,7 @@ class BattleNetLoginController extends OAuthLoginController
         Request                      $request,
         ReadOnlyModeServiceInterface $readOnlyModeService,
     ): RedirectResponse|SymfonyRedirectResponse {
-        $this->redirectTo = $request->get('redirect', '/');
+        $this->redirectTo = $this->resolveRedirectTarget($request, '/');
 
         $region = $request->get('region', GameServerRegion::DEFAULT_REGION);
         // An explicit allowlist rather than a table-existence check: `world` is a region row that

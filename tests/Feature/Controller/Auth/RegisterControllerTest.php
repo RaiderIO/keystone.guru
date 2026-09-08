@@ -7,6 +7,7 @@ use App\Models\GameServerRegion;
 use App\Models\User;
 use Illuminate\Database\UniqueConstraintViolationException;
 use PDOException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use ReflectionMethod;
@@ -320,6 +321,61 @@ final class RegisterControllerTest extends PublicTestCase
         // laravel-html renders an empty value attribute as a bare `value`, which still submits ""
         $response->assertSee('<option value>', false);
         $response->assertSee(sprintf('<option value="%d">', $europe), false);
+    }
+
+    #[Test]
+    public function register_givenRelativeRedirect_redirectsToThatPath(): void
+    {
+        // Arrange
+        $postData = $this->validRegistrationData(['redirect' => '/routes']);
+        $user     = null;
+
+        try {
+            // Act
+            $response = $this->post(route('register'), $postData);
+
+            // Assert
+            $response->assertRedirect('/routes');
+            $user = User::firstWhere('email', $postData['email']);
+        } finally {
+            auth()->logout();
+            $this->deleteRegisteredUser($user);
+        }
+    }
+
+    #[Test]
+    #[DataProvider('offSiteRedirect_dataProvider')]
+    public function register_givenOffSiteRedirect_redirectsToTheDefault(string $redirect): void
+    {
+        // Arrange
+        $postData = $this->validRegistrationData(['redirect' => $redirect]);
+        $user     = null;
+
+        try {
+            // Act
+            $response = $this->post(route('register'), $postData);
+
+            // Assert
+            $response->assertRedirect('/profile');
+            $user = User::firstWhere('email', $postData['email']);
+        } finally {
+            auth()->logout();
+            $this->deleteRegisteredUser($user);
+        }
+    }
+
+    /**
+     * @return array<string, array<int, string>>
+     */
+    public static function offSiteRedirect_dataProvider(): array
+    {
+        return [
+            'absolute'          => ['https://google.com/test'],
+            'protocol relative' => ['//google.com/test'],
+            'backslashes'       => ['\\\\google.com/test'],
+            'scheme only'       => ['javascript:doSomething()'],
+            'no leading slash'  => ['google.com/test'],
+        ];
     }
 
     /**

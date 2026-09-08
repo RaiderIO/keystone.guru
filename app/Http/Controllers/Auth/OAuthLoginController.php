@@ -73,7 +73,7 @@ abstract class OAuthLoginController extends LoginController
             return redirect($this->redirectTo);
         }
 
-        $this->redirectTo = $request->get('redirect', '/');
+        $this->redirectTo = $this->resolveRedirectTarget($request, '/');
 
         return Socialite::driver($this->getDriver())->redirect();
     }
