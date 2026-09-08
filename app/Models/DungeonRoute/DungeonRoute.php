@@ -970,15 +970,18 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
     public function mayUserView(?User $user): bool
     {
-        $result = false;
-        $result = match ($this->published_state_id) {
-            PublishedState::ALL[PublishedState::UNPUBLISHED]                                                 => $this->mayUserEdit($user),
+        // Whoever may edit a route may always view it - a route its own author cannot open is a state
+        // the application offers no way out of, and a TEAM published route that lost its team (both
+        // removing the last member and deleting the team null team_id in bulk) lands in exactly that state
+        if ($this->mayUserEdit($user)) {
+            return true;
+        }
+
+        return match ($this->published_state_id) {
             PublishedState::ALL[PublishedState::TEAM]                                                        => ($this->team !== null && $this->team->isUserMember($user)) || ($user !== null && $user->hasRole(Role::ROLE_ADMIN)),
             PublishedState::ALL[PublishedState::WORLD_WITH_LINK], PublishedState::ALL[PublishedState::WORLD] => true,
-            default                                                                                          => $result,
+            default                                                                                          => false,
         };
-
-        return $result;
     }
 
     public function mayUserEdit(?User $user): bool

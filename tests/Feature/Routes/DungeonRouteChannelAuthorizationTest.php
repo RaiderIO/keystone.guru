@@ -102,15 +102,40 @@ final class DungeonRouteChannelAuthorizationTest extends PublicTestCase
     }
 
     #[Test]
+    public function routeEditChannel_givenAViewerWhoMayNotEditAWorldPublishedRoute_returnsPresenceData(): void
+    {
+        // Arrange
+        $owner  = User::factory()->create();
+        $viewer = $this->createUserWithUserRole();
+        $route  = $this->createRoute($owner, PublishedState::WORLD);
+
+        try {
+            $this->assertTrue($route->mayUserView($viewer));
+            $this->assertFalse($route->mayUserEdit($viewer));
+
+            // Act
+            $result = $this->getChannelCallback($this->routeEditChannel())($viewer, $route);
+
+            // Assert
+            $this->assertIsArray($result);
+            $this->assertSame($viewer->public_key, $result['public_key']);
+        } finally {
+            $route->delete();
+            $viewer->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
     public function routeEditChannel_givenAuthorOfATeamPublishedRouteWithoutATeam_returnsPresenceData(): void
     {
         // Arrange - Team::removeMember() and team deletion both null team_id in bulk without touching the
-        // published state, leaving a route its author may still edit but may no longer view
+        // published state, leaving a route that only its author's edit rights keep reachable
         $owner = $this->createUserWithUserRole();
         $route = $this->createRoute($owner, PublishedState::TEAM, ['team_id' => null]);
 
         try {
-            $this->assertFalse($route->mayUserView($owner));
+            $this->assertTrue($route->mayUserView($owner));
             $this->assertTrue($route->mayUserEdit($owner));
 
             // Act
