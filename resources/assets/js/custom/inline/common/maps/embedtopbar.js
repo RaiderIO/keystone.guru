@@ -62,6 +62,7 @@ class CommonMapsEmbedtopbar extends InlineCode {
 
                 getState().sendMetricForDungeonRoute(METRIC_CATEGORY_DUNGEON_ROUTE_MDT_COPY, METRIC_TAG_MDT_COPY_EMBED);
             },
+            error: mdtExportAjaxErrorFn,
             complete: function () {
                 $('#embed_copy_mdt_string_loader').hide();
                 $('#embed_copy_mdt_string').show();

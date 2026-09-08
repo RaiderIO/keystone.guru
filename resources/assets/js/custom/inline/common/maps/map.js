@@ -743,6 +743,7 @@ class CommonMapsMap extends InlineCode {
                 }
 
             },
+            error: mdtExportAjaxErrorFn,
             complete: function () {
                 $('.mdt_export_loader_container').hide();
                 $('.mdt_export_result_container').show();

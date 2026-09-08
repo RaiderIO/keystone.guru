@@ -383,6 +383,21 @@ function showInfoNotification(text, opts = {}) {
 }
 
 /**
+ * Error handler for the MDT export requests. Their url carries a signature minted when the page was
+ * rendered (#4538), so the one failure a user can actually act on is an expired one - which the
+ * generic 403 message ('you are not authorized') would send them looking in entirely the wrong place.
+ **/
+function mdtExportAjaxErrorFn(xhr, textStatus, errorThrown) {
+    if (xhr.status === 403) {
+        showErrorNotification(lang.get('js.mdt_export_url_expired'));
+
+        return;
+    }
+
+    defaultAjaxErrorFn(xhr, textStatus, errorThrown);
+}
+
+/**
  * Shows a warning notification message.
  * @param text The text to display.
  * @param opts
@@ -403,5 +418,5 @@ function showErrorNotification(text, opts = {}) {
 // Guarded export for the test runner (Vitest). This is a no-op in the browser,
 // where `module` is undefined, so it does not affect the concatenated bundle.
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {LayoutsApp, defaultAjaxErrorFn, refreshTooltips, guardedAjaxClick};
+    module.exports = {LayoutsApp, defaultAjaxErrorFn, mdtExportAjaxErrorFn, refreshTooltips, guardedAjaxClick};
 }
