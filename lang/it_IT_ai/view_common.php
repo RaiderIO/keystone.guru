@@ -323,7 +323,7 @@ return [
                 'view_npcs'                  => 'Visualizza PNG',
                 'view_spells'                => 'Visualizza incantesimi',
                 'view_users'                 => 'Visualizza utenti',
-                'view_patreon_manual_grants' => 'Visualizza i vantaggi Patreon concessi manualmente',
+                'view_patreon_manual_grants' => 'Visualizza vantaggi Patreon concessi manualmente',
                 'view_telemetry'             => 'Visualizza telemetria',
                 'view_dungeonroutes'         => 'Visualizza percorsi',
                 'view_user_reports'          => 'Visualizza segnalazioni utenti',

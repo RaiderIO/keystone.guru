@@ -370,7 +370,7 @@ return [
                     'enemy_forces'             => 'Forces ennemies',
                     'enemy_display_type'       => 'Visuels',
                     'enemy_display_type_title' => 'Visuels',
-                    'enemy_skippable'          => 'Passable',
+                    'enemy_skippable'          => 'Évitable',
                     'enemy_group'              => 'Groupe',
                 ],
                 'floor_switch' => [

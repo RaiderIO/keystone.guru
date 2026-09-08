@@ -27,7 +27,7 @@ return [
     'make_role_only_super_admins_may_grant_admin' => 'Seuls les super administrateurs peuvent accorder ou révoquer le rôle d\'administrateur.',
     'create_global_map_icon_admin_only'           => 'Seuls les administrateurs peuvent créer des icônes de carte qui ne sont rattachées à aucune route.',
     'update_map_icon_admin_only'                  => 'Seuls les administrateurs peuvent modifier des icônes de carte qui ne sont rattachées à aucune route ou équipe.',
-    'update_team_map_icon_collaborator_only'      => 'Seuls les collaborateurs d’une équipe peuvent modifier les icônes de carte de cette équipe.',
+    'update_team_map_icon_collaborator_only'      => 'Seuls les collaborateurs d\'une équipe peuvent modifier les icônes de carte de cette équipe.',
     'delete_map_icon_admin_only'                  => 'Seuls les administrateurs peuvent supprimer des icônes de carte qui ne sont rattachées à aucune route.',
 
 ];

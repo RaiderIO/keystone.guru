@@ -22,7 +22,7 @@ return [
             'banned_ip_address_added'                => 'Adresse IP bannie avec succès',
             'banned_ip_address_removed'              => 'Bannissement supprimé avec succès',
             'patreon_manual_grant_revoked'           => 'Les avantages Patreon accordés manuellement à :user ont été révoqués',
-            'patreon_manual_grant_nothing_to_revoke' => ':user n’a aucun avantage Patreon accordé manuellement à révoquer',
+            'patreon_manual_grant_nothing_to_revoke' => ':user n\'a aucun avantage Patreon accordé manuellement à révoquer',
             'message_banner_set_successfully'        => 'Bannière de message définie avec succès',
             'thumbnail_regenerate_result'            => ':success tâches envoyées pour :total itinéraires. :failed a échoué.',
             'combatlog_route_regenerate_result'      => ':count tâches lancées',

@@ -366,8 +366,8 @@ return [
                 'enemydisplaytype' => [
                     'portrait'                 => '초상화',
                     'npc_class'                => '클래스',
-                    'npc_type'                 => '타입',
-                    'enemy_forces'             => '적 군대',
+                    'npc_type'                 => '유형',
+                    'enemy_forces'             => '적 병력',
                     'enemy_display_type'       => '비주얼',
                     'enemy_display_type_title' => '비주얼',
                     'enemy_skippable'          => '건너뛸 수 있음',

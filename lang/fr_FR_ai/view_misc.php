@@ -58,7 +58,7 @@ return [
         'title'        => 'Statut',
         'header'       => 'Statut',
         'description'  => 'Nous sommes en ligne, yay !',
-        'check_failed' => 'Échec de la vérification, consultez le journal de l’application pour plus de détails',
+        'check_failed' => 'Échec de la vérification, consultez le journal de l\'application pour plus de détails',
     ],
 
 ];
