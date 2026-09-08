@@ -33,7 +33,9 @@ class MapIconPolicy
      *
      * A team icon carries no dungeon route to gate on, so the team it belongs to is what decides:
      * the same collaborator requirement that assignToTeam() applies when the icon is put on a team
-     * in the first place. Admins are allowed here for the same reason they are in delete().
+     * in the first place. Unlike delete(), an admin gets no separate allowance here - the team icon
+     * write path checks assignToTeam() as well, so an admin who is not a collaborator is refused
+     * there regardless of what this returns.
      */
     public function update(?User $user, MapIcon $mapIcon): Response
     {
@@ -42,7 +44,7 @@ class MapIconPolicy
         }
 
         if ($mapIcon->team_id !== null) {
-            return $this->assignToTeam($user, $mapIcon, $mapIcon->team) || ($user !== null && $user->hasRole(Role::ROLE_ADMIN)) ?
+            return $this->assignToTeam($user, $mapIcon, $mapIcon->team) ?
                 $this->allow() :
                 $this->deny(__('policy.update_team_map_icon_collaborator_only'));
         }

@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Policies\MapIconPolicy;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestWith;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Policy')]
@@ -106,10 +107,29 @@ final class MapIconPolicyTest extends PublicTestCase
     }
 
     #[Test]
+    #[TestWith([TeamUser::ROLE_MODERATOR])]
+    #[TestWith([TeamUser::ROLE_ADMIN])]
+    public function update_givenTeamIconAndAModeratorOrAdminOfThatTeam_returnsAllowed(string $role): void
+    {
+        // Arrange - isUserCollaborator() is "any role but member", so both of these pass too
+        $user    = User::factory()->create();
+        $team    = $this->createTeamWith($user, $role);
+        $mapIcon = $this->teamMapIcon($team);
+
+        try {
+            // Act & Assert
+            $this->assertTrue($this->policy->update($user, $mapIcon)->allowed());
+        } finally {
+            $this->deleteTeam($team);
+            $user->delete();
+        }
+    }
+
+    #[Test]
     public function update_givenTeamIconAndUserOutsideThatTeam_returnsDenied(): void
     {
         // Arrange - the icon carries no dungeon route, so nothing else in the request can vouch
-        // for this caller. An admin still passes, as they do in delete()
+        // for this caller
         $member   = User::factory()->create();
         $outsider = User::factory()->create();
         $team     = $this->createTeamWith($member, TeamUser::ROLE_ADMIN);
@@ -118,11 +138,44 @@ final class MapIconPolicyTest extends PublicTestCase
         try {
             // Act & Assert
             $this->assertTrue($this->policy->update($outsider, $mapIcon)->denied());
-            $this->assertTrue($this->policy->update(null, $mapIcon)->denied());
-            $this->assertTrue($this->policy->update($this->adminUser(), $mapIcon)->allowed());
         } finally {
             $this->deleteTeam($team);
             $outsider->delete();
+            $member->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenTeamIconAndGuest_returnsDenied(): void
+    {
+        // Arrange
+        $member  = User::factory()->create();
+        $team    = $this->createTeamWith($member, TeamUser::ROLE_ADMIN);
+        $mapIcon = $this->teamMapIcon($team);
+
+        try {
+            // Act & Assert
+            $this->assertTrue($this->policy->update(null, $mapIcon)->denied());
+        } finally {
+            $this->deleteTeam($team);
+            $member->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenTeamIconAndAdminOutsideThatTeam_returnsDenied(): void
+    {
+        // Arrange - deliberately unlike delete(), which does allow an admin: the team icon write
+        // path checks assignToTeam() as well, so an allowance here would be refused there anyway
+        $member  = User::factory()->create();
+        $team    = $this->createTeamWith($member, TeamUser::ROLE_ADMIN);
+        $mapIcon = $this->teamMapIcon($team);
+
+        try {
+            // Act & Assert
+            $this->assertTrue($this->policy->update($this->adminUser(), $mapIcon)->denied());
+        } finally {
+            $this->deleteTeam($team);
             $member->delete();
         }
     }
