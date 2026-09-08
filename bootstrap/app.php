@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\AddsTraceIdToContext;
 use App\Http\Middleware\Api\ApiAuthentication;
+use App\Http\Middleware\Api\ApiAuthenticationThrottle;
 use App\Http\Middleware\Api\ApiRole;
 use App\Http\Middleware\BlockBannedIpAddresses;
 use App\Http\Middleware\DebugBarMessageLogger;
@@ -22,6 +23,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode;
 use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Routing\Middleware\ThrottleRequests;
 use Jenssegers\Agent\AgentServiceProvider;
 use Laratrust\LaratrustServiceProvider;
 use Laravel\Tinker\TinkerServiceProvider;
@@ -71,10 +73,20 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->api([
+            'authentication_throttle'   => ApiAuthenticationThrottle::class,
             'authentication'            => ApiAuthentication::class,
+            'throttle_api_general'      => 'throttle:api-general',
             'debug_info_context_logger' => DebugInfoContextLogger::class,
             'read_only_mode'            => ReadOnlyMode::class,
         ]);
+
+        // The order written above is not the order that runs: SortedMiddleware re-sorts the stack by the priority
+        // list, and a middleware that is on that list (ThrottleRequests) moves ahead of one that is not. The
+        // api-general limiter buckets by user id and exempts internal roles, so it has to see the user that
+        // ApiAuthentication resolves - which only holds if the authentication middleware is on the list too, and
+        // the throttle that bounds the authentication has to run ahead of it for the same reason.
+        $middleware->prependToPriorityList(before: ThrottleRequests::class, prepend: ApiAuthentication::class);
+        $middleware->prependToPriorityList(before: ApiAuthentication::class, prepend: ApiAuthenticationThrottle::class);
 
         $middleware->replace(\Illuminate\Http\Middleware\TrustProxies::class, TrustProxies::class);
 

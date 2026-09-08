@@ -2,6 +2,7 @@
 
 namespace App\Models\Metrics;
 
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Traits\HasGenericModelRelation;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
@@ -42,6 +43,15 @@ class Metric extends Model
     public const ALL_TAGS = [
         self::TAG_MDT_COPY_VIEW,
         self::TAG_MDT_COPY_EMBED,
+    ];
+
+    /**
+     * The models a metric may be recorded against - the only model the front-end ever reports.
+     *
+     * @var array<int, class-string>
+     */
+    public const ALL_MODEL_CLASSES = [
+        DungeonRoute::class,
     ];
 
     protected $fillable = [

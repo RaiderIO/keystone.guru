@@ -147,6 +147,19 @@ class AppServiceProvider extends ServiceProvider
 
             return $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 50)->by($this->userKey($request));
         });
+        RateLimiter::for('reset-password', function (Request $request) {
+            // Same as create-user: only the form submission is interesting, showing the form is free
+            if ($request->method() === 'GET') {
+                return Limit::none();
+            }
+
+            // Account recovery, so the ceiling is set well above what real traffic produces
+            return $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 300)->by($this->userKey($request));
+        });
+
+        // Writes a row per call and is reachable without a session, but it is only sent on two explicit user
+        // actions - so the ceiling sits far above what the front-end can produce
+        RateLimiter::for('store-metric', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 6000)->by($this->userKey($request)));
 
         // Heavy GET requests
         RateLimiter::for('search-dungeonroute', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 600)->by($this->userKey($request)));
