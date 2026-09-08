@@ -216,49 +216,6 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
     }
 
     /**
-     * Which teams a caller may actually assign is DungeonRouteSaveServiceTeamAssignmentTest's
-     * subject; this covers only the sentinels the route edit form submits for "no team".
-     */
-    #[Test]
-    #[DataProvider('teamIdProvider')]
-    public function save_givenANoTeamSentinel_resolvesToNull(int $inputTeamId, ?int $expectedTeamId): void
-    {
-        // Arrange
-        $dungeon   = $this->getRetailDungeon();
-        $service   = $this->buildService(seasonService: $this->noSeasonService(), thumbnailService: $this->thumbnailServiceAllowingRefresh());
-        $route     = new DungeonRoute();
-        $validated = [
-            'dungeon_id'          => $dungeon->id,
-            'faction_id'          => 1,
-            'dungeon_route_title' => 'Team Test',
-            'team_id'             => $inputTeamId,
-        ];
-
-        try {
-            // Act
-            $service->save($route, $validated);
-
-            // Assert
-            $this->assertEquals($expectedTeamId, $route->team_id);
-        } finally {
-            if ($route->exists) {
-                $this->cleanupRoute($route);
-            }
-        }
-    }
-
-    /**
-     * @return array<string, array{0: int, 1: int|null}>
-     */
-    public static function teamIdProvider(): array
-    {
-        return [
-            'zero becomes null'                    => [0, null],
-            'the form\'s -1 sentinel becomes null' => [-1, null],
-        ];
-    }
-
-    /**
      * @param array<int, int> $inputSeasonalIndex
      */
     #[Test]

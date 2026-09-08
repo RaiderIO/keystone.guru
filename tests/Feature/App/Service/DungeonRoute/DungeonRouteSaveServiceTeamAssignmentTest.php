@@ -9,7 +9,9 @@ use App\Models\Team;
 use App\Models\TeamUser;
 use App\Models\User;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -242,6 +244,63 @@ final class DungeonRouteSaveServiceTeamAssignmentTest extends DungeonRouteSaveSe
         }
     }
 
+    #[Test]
+    #[DataProvider('noTeamSentinelProvider')]
+    public function save_givenTheAuthorDetachingTheirOwnRoute_clearsTheTeam(int $sentinel): void
+    {
+        // Arrange - the route edit form submits -1 for "no team"; 0 is what an absent select casts to
+        $author = $this->createUser();
+        $team   = $this->createTeamWith($author, TeamUser::ROLE_ADMIN);
+        $route  = $this->createTeamRoute($author, $team);
+
+        try {
+            // Act
+            Auth::login($author);
+            $result = $this->buildService(seasonService: $this->noSeasonService())
+                ->save($route, ['team_id' => $sentinel]);
+
+            // Assert
+            $this->assertTrue($result);
+            $this->assertNull(DungeonRoute::query()->whereKey($route->id)->value('team_id'));
+        } finally {
+            $this->cleanUpAll($route, [$team], [$author]);
+        }
+    }
+
+    /**
+     * @return array<string, array{0: int}>
+     */
+    public static function noTeamSentinelProvider(): array
+    {
+        return [
+            "the form's -1 sentinel" => [-1],
+            'a zero'                 => [0],
+        ];
+    }
+
+    #[Test]
+    public function save_givenASandboxRouteAndATeamTheEditorIsAMemberOf_assignsIt(): void
+    {
+        // Arrange - a sandbox route exists but carries the -1 author placeholder until it is
+        // claimed, so whoever is editing it is the closest thing it has to an author
+        $editor = $this->createUser();
+        $team   = $this->createTeamWith($editor, TeamUser::ROLE_MEMBER);
+        $route  = $this->createSandboxRoute();
+
+        try {
+            // Act
+            Auth::login($editor);
+            $result = $this->buildService(seasonService: $this->noSeasonService())
+                ->save($route, ['team_id' => $team->id]);
+
+            // Assert
+            $this->assertTrue($result);
+            $this->assertSame($team->id, DungeonRoute::query()->whereKey($route->id)->value('team_id'));
+        } finally {
+            $this->cleanUpAll($route, [$team], [$editor]);
+        }
+    }
+
     /**
      * @return MockObject&SeasonServiceInterface
      */
@@ -279,6 +338,11 @@ final class DungeonRouteSaveServiceTeamAssignmentTest extends DungeonRouteSaveSe
         return $team;
     }
 
+    /**
+     * expires_at is pinned to null because the factory defaults it to two hours out, which makes
+     * every route a sandbox route - and a sandbox route is editable by anyone and treated as
+     * authorless here, so an authorization assertion over one proves nothing.
+     */
     private function createTeamRoute(User $author, ?Team $team): DungeonRoute
     {
         $dungeon = $this->getRetailDungeon();
@@ -289,6 +353,21 @@ final class DungeonRouteSaveServiceTeamAssignmentTest extends DungeonRouteSaveSe
             'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
             'team_id'            => $team?->id,
             'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+            'expires_at'         => null,
+        ]);
+    }
+
+    private function createSandboxRoute(): DungeonRoute
+    {
+        $dungeon = $this->getRetailDungeon();
+
+        return DungeonRoute::factory()->create([
+            'author_id'          => -1,
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'team_id'            => null,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+            'expires_at'         => Carbon::now()->addHours(1),
         ]);
     }
 

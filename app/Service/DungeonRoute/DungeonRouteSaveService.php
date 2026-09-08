@@ -302,8 +302,10 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
             return $currentTeamId;
         }
 
-        // For a new route the author is the caller, so this collapses to "a team I am a member of"
-        $author = $dungeonRoute->exists ? $dungeonRoute->author : $user;
+        // For a route with no author of its own - one being created, or a sandbox route whose
+        // author_id is the -1 placeholder until someone claims it - the caller is the author, so
+        // this collapses to "a team I am a member of"
+        $author = $dungeonRoute->exists && !$dungeonRoute->isSandbox() ? $dungeonRoute->author : $user;
 
         $mayAssign = $user !== null &&
             ($author?->is($user) || $user->hasRole(Role::ROLE_ADMIN)) &&
