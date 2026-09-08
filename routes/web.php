@@ -125,7 +125,7 @@ Route::prefix('webhook')->group(static function () {
     });
 });
 
-Route::middleware(['debugbarmessagelogger', 'debug_info_context_logger'])->group(static function () {
+Route::middleware(['auth', 'role:admin', 'debugbarmessagelogger', 'debug_info_context_logger'])->group(static function () {
     Route::get('benchmark', new SiteController()->benchmark(...));
 });
 
