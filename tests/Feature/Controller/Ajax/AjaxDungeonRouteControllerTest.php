@@ -4,6 +4,7 @@ namespace Tests\Feature\Controller\Ajax;
 
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteFavorite;
 use App\Models\DungeonRoute\DungeonRouteRating;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
@@ -592,6 +593,118 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
             DungeonRouteRating::query()->where('dungeon_route_id', $dungeonRoute->id)->delete();
             $dungeonRoute->delete();
             $rater->delete();
+        }
+    }
+
+    #[Test]
+    public function favorite_givenRouteUserMayNotView_returnsForbidden(): void
+    {
+        // Arrange
+        $user         = $this->createUserWithUserRole();
+        $dungeonRoute = $this->createRouteOwnedByAnotherUser(PublishedState::UNPUBLISHED);
+
+        try {
+            $this->actingAs($user);
+
+            // Act
+            $response = $this->post(sprintf('/ajax/%s/favorite', $dungeonRoute->public_key));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertSame(0, DungeonRouteFavorite::query()->where('dungeon_route_id', $dungeonRoute->id)->count());
+        } finally {
+            DungeonRouteFavorite::query()->where('dungeon_route_id', $dungeonRoute->id)->delete();
+            $dungeonRoute->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function favorite_givenRouteUserMayView_createsTheFavorite(): void
+    {
+        // Arrange
+        $user         = $this->createUserWithUserRole();
+        $dungeonRoute = $this->createRouteOwnedByAnotherUser(PublishedState::WORLD);
+
+        try {
+            $this->actingAs($user);
+
+            // Act
+            $response = $this->post(sprintf('/ajax/%s/favorite', $dungeonRoute->public_key));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertSame(1, DungeonRouteFavorite::query()
+                ->where('dungeon_route_id', $dungeonRoute->id)
+                ->where('user_id', $user->id)
+                ->count());
+        } finally {
+            DungeonRouteFavorite::query()->where('dungeon_route_id', $dungeonRoute->id)->delete();
+            $dungeonRoute->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function favoriteDelete_givenRouteUserMayNoLongerView_removesTheFavorite(): void
+    {
+        // Arrange - a route that was favorited while it was published and has since been unpublished
+        $user         = $this->createUserWithUserRole();
+        $dungeonRoute = $this->createRouteOwnedByAnotherUser(PublishedState::UNPUBLISHED);
+        DungeonRouteFavorite::create(['dungeon_route_id' => $dungeonRoute->id, 'user_id' => $user->id]);
+
+        try {
+            $this->actingAs($user);
+
+            // Act
+            $response = $this->delete(sprintf('/ajax/%s/favorite', $dungeonRoute->public_key));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertSame(0, DungeonRouteFavorite::query()->where('dungeon_route_id', $dungeonRoute->id)->count());
+        } finally {
+            DungeonRouteFavorite::query()->where('dungeon_route_id', $dungeonRoute->id)->delete();
+            $dungeonRoute->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function get_givenMineAndFavorites_returnsOwnUnpublishedRouteButNotAnotherUsersFavoritedOne(): void
+    {
+        // Arrange
+        $user        = $this->createUserWithUserRole();
+        $othersRoute = $this->createRouteOwnedByAnotherUser(PublishedState::UNPUBLISHED);
+        $ownRoute    = DungeonRoute::factory()->create([
+            'author_id'          => $user->id,
+            'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
+            'expires_at'         => null,
+            'title'              => $othersRoute->title,
+        ]);
+
+        DungeonRouteFavorite::create(['dungeon_route_id' => $othersRoute->id, 'user_id' => $user->id]);
+        DungeonRouteFavorite::create(['dungeon_route_id' => $ownRoute->id, 'user_id' => $user->id]);
+
+        try {
+            $this->actingAs($user);
+
+            // Act - both routes carry the same title, so the search matches both and only the
+            // visibility rules can account for one of them being absent
+            $response = $this->get(sprintf(
+                '/ajax/routes?%s&mine=1&favorites=1',
+                $this->titleSearchQuery($othersRoute->title),
+            ));
+
+            // Assert
+            $response->assertOk();
+            $publicKeys = array_column($response->json('data'), 'public_key');
+            $this->assertContains($ownRoute->public_key, $publicKeys);
+            $this->assertNotContains($othersRoute->public_key, $publicKeys);
+        } finally {
+            DungeonRouteFavorite::query()->whereIn('dungeon_route_id', [$othersRoute->id, $ownRoute->id])->delete();
+            $ownRoute->delete();
+            $othersRoute->delete();
+            $user->delete();
         }
     }
 

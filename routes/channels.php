@@ -28,6 +28,13 @@ $dungeonRouteChannelCallback = static function (?User $user, ?DungeonRoute $dung
         return false;
     }
 
+    // The presence channel carries the full model bodies of everything that changes on this route, so
+    // joining it requires the same right as the page that renders those models: whoever may view the
+    // route may follow along live, editor or not
+    if (!$dungeonRoute->mayUserView($user)) {
+        return false;
+    }
+
     if ($user->echo_anonymous &&
         // If we didn't create this route, don't show our name
         $dungeonRoute->author_id !== $user->id &&
