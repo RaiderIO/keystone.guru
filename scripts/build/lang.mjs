@@ -41,14 +41,18 @@ export function buildLangBundles(rootDir, version, production) {
         }
 
         // Same runtime behavior as the old generated bundles: populate the Lang instance that
-        // bootstrap.js (app-{version}.js) created with empty messages
+        // bootstrap.js (app-{version}.js) created with empty messages.
+        // The locale is set explicitly: Lang.js otherwise infers it from <html lang>, which drops
+        // the `_ai` suffix the message keys carry, so every lookup in an *_ai locale misses (#4566)
         let code = `(function () {
+    var locale = ${JSON.stringify(locale)};
     var messages = ${JSON.stringify(messages)};
     if (typeof window !== 'undefined' && window.Lang) {
         if (window.lang && typeof window.lang.setMessages === 'function') {
             window.lang.setMessages(messages);
+            window.lang.setLocale(locale);
         } else {
-            window.lang = new window.Lang({messages: messages});
+            window.lang = new window.Lang({messages: messages, locale: locale});
         }
     }
 })();
