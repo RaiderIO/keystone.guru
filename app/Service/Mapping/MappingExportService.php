@@ -74,8 +74,11 @@ class MappingExportService implements MappingExportServiceInterface
             ->values();
 
         foreach ($npcs as $npc) {
+            // wowhead_url is a computed accessor in Npc::$appends, not a column, and it now depends on
+            // the mapping version being viewed - a value frozen into the seeder file would be a guess
             $npc->makeHidden([
                 'enemy_portrait_url',
+                'wowhead_url',
             ]);
             $npc->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
             foreach ($npc->npcDungeons as $npcDungeon) {

@@ -68,6 +68,9 @@ class MapContextDungeonData implements Arrayable
                     'level',
                     'mdt_scale',
                     'pivot',
+                    // This payload is cached per dungeon, not per mapping version, so it cannot carry a
+                    // correct wowhead_url - nothing in the front-end reads it
+                    'wowhead_url',
                 ])
                 ->values(),
             config('keystoneguru.cache.dungeonData.ttl'),

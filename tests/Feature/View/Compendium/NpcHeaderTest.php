@@ -26,15 +26,13 @@ final class NpcHeaderTest extends PublicTestCase
     }
 
     #[Test]
-    public function wowheadUrl_givenRetailNpc_slugsTheName(): void
+    public function getWowheadLink_givenRetailGameVersion_slugsTheName(): void
     {
         // Arrange
-        $npc                  = new Npc(['name' => 'Forgemaster Garfrost']);
-        $npc->id              = 36494;
-        $npc->game_version_id = GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL];
+        $gameVersionId = GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL];
 
         // Act
-        $result = $npc->wowhead_url;
+        $result = Npc::getWowheadLink($gameVersionId, 36494, 'Forgemaster Garfrost');
 
         // Assert
         $this->assertSame('https://www.wowhead.com/npc=36494/forgemaster-garfrost', $result);
@@ -42,17 +40,15 @@ final class NpcHeaderTest extends PublicTestCase
 
     #[Test]
     #[DataProvider('gameVersionWowheadUrlProvider')]
-    public function wowheadUrl_givenGameVersion_linksToThatGameVersionsWowheadDatabase(
+    public function getWowheadLink_givenGameVersion_linksToThatGameVersionsWowheadDatabase(
         string $gameVersionKey,
         string $expectedUrl,
     ): void {
         // Arrange
-        $npc                  = new Npc(['name' => 'Sha of Doubt']);
-        $npc->id              = 56439;
-        $npc->game_version_id = GameVersion::ALL[$gameVersionKey];
+        $gameVersionId = GameVersion::ALL[$gameVersionKey];
 
         // Act
-        $result = $npc->wowhead_url;
+        $result = Npc::getWowheadLink($gameVersionId, 56439, 'Sha of Doubt');
 
         // Assert
         $this->assertSame($expectedUrl, $result);
@@ -79,9 +75,11 @@ final class NpcHeaderTest extends PublicTestCase
     #[Test]
     public function render_givenMistsOfPandariaNpc_linksToTheMopClassicWowheadDatabase(): void
     {
-        // Arrange
-        $npc                  = Npc::with(['classification'])->firstOrFail();
-        $npc->game_version_id = GameVersion::ALL[GameVersion::GAME_VERSION_MOP];
+        // Arrange - the compendium page has no mapping version in scope, so the stored column decides
+        $npc = Npc::with(['classification'])
+            ->where('game_version_id', GameVersion::ALL[GameVersion::GAME_VERSION_MOP])
+            ->whereHas('dungeons')
+            ->firstOrFail();
 
         // Act
         $result = view('compendium.npc.sections.header', ['npc' => $npc, 'currentNpcHealth' => null])->render();

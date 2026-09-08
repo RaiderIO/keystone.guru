@@ -152,6 +152,25 @@ class MappingExportServiceTest extends TestCase
     }
 
     /**
+     * wowhead_url is a computed accessor, and since #3987 its value depends on the mapping version being
+     * viewed - freezing one guess per NPC into npcs.json is exactly what this PR stopped doing.
+     */
+    #[Test]
+    public function serializeNpcs_givenSeededNpcs_omitsTheComputedWowheadUrl(): void
+    {
+        // Arrange
+        /** @var MappingExportServiceInterface $mappingExportService */
+        $mappingExportService = app(MappingExportServiceInterface::class);
+
+        // Act
+        $serializedNpcs = $mappingExportService->serializeNpcs();
+
+        // Assert
+        Assert::assertNotEmpty($serializedNpcs, 'No NPCs were exported - this test no longer guards anything');
+        Assert::assertArrayNotHasKey('wowhead_url', $serializedNpcs[array_key_first($serializedNpcs)]);
+    }
+
+    /**
      * The id is assigned by whichever environment loads the file, and enum casts must land as their raw
      * strings - an object in the export would not survive json_encode/seeder insert unchanged.
      */
