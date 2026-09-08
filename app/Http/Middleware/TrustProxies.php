@@ -54,10 +54,10 @@ class TrustProxies extends Middleware
             // https://khalilst.medium.com/get-real-client-ip-behind-cloudflare-in-laravel-189cb89059ff
             $cloudflareRanges = $this->cloudflareService->getIpRanges();
 
-            /** @var array<int, string> $loadBalancerCidrs */
-            $loadBalancerCidrs = config('keystoneguru.trusted_proxies.load_balancer_cidrs');
+            /** @var array<int, string> $vpcCidrs */
+            $vpcCidrs = config('keystoneguru.trusted_proxies.vpc_cidrs');
 
-            $this->proxies = array_merge($cloudflareRanges, $loadBalancerCidrs);
+            $this->proxies = array_merge($cloudflareRanges, $vpcCidrs);
 
             $this->useCloudflareConnectingIp($request, $cloudflareRanges);
         } else {

@@ -18,8 +18,8 @@ class TrustProxiesTest extends PublicTestCase
     /** @var array<int, string> A CloudFlare range (172.64.0.0/13) plus an arbitrary one for coverage. */
     private const array CLOUDFLARE_RANGES = ['172.64.0.0/13', '173.245.48.0/20'];
 
-    /** @var array<int, string> The ksg-alb public subnets - the hop directly in front of the app. */
-    private const array LOAD_BALANCER_CIDRS = ['172.41.0.0/20', '172.41.16.0/20'];
+    /** @var array<int, string> The VPC the ALB's ENIs live in - the hop directly in front of the app. */
+    private const array VPC_CIDRS = ['172.41.0.0/16'];
 
     #[\Override]
     protected function setUp(): void
@@ -102,7 +102,7 @@ class TrustProxiesTest extends PublicTestCase
     {
         // Arrange - the real production shape: the ALB is the peer and appended the CloudFlare edge
         // to the X-Forwarded-For CloudFlare had already set to the visitor.
-        config()->set('keystoneguru.trusted_proxies.load_balancer_cidrs', self::LOAD_BALANCER_CIDRS);
+        config()->set('keystoneguru.trusted_proxies.vpc_cidrs', self::VPC_CIDRS);
         $middleware = $this->makeMiddleware();
         $request    = Request::create('/', 'GET', [], [], [], ['REMOTE_ADDR' => '172.41.23.123']);
         $request->headers->set('X-Forwarded-For', '203.0.113.7, 172.68.0.1');
@@ -122,7 +122,7 @@ class TrustProxiesTest extends PublicTestCase
     {
         // Arrange - a client reaching the internet-facing ALB directly, sending its own
         // X-Forwarded-For. The ALB appends the real connecting peer to whatever it was given.
-        config()->set('keystoneguru.trusted_proxies.load_balancer_cidrs', self::LOAD_BALANCER_CIDRS);
+        config()->set('keystoneguru.trusted_proxies.vpc_cidrs', self::VPC_CIDRS);
         $middleware = $this->makeMiddleware();
         $request    = Request::create('/', 'GET', [], [], [], ['REMOTE_ADDR' => '172.41.23.123']);
         $request->headers->set('X-Forwarded-For', '10.0.0.1, 203.0.113.99');
@@ -143,7 +143,7 @@ class TrustProxiesTest extends PublicTestCase
         // Arrange - CF-Connecting-IP is only honoured when the peer is CloudFlare itself. The load
         // balancer is trusted for the chain walk but is reachable without CloudFlare, so a header
         // forged on that hop must not be believed.
-        config()->set('keystoneguru.trusted_proxies.load_balancer_cidrs', self::LOAD_BALANCER_CIDRS);
+        config()->set('keystoneguru.trusted_proxies.vpc_cidrs', self::VPC_CIDRS);
         $middleware = $this->makeMiddleware();
         $request    = Request::create('/', 'GET', [], [], [], ['REMOTE_ADDR' => '172.41.23.123']);
         $request->headers->set('X-Forwarded-For', '203.0.113.99');
@@ -165,7 +165,7 @@ class TrustProxiesTest extends PublicTestCase
         // Arrange - a request reaching the internet-facing ALB directly, carrying the legitimate
         // Host alongside an attacker-controlled X-Forwarded-Host. Neither CloudFlare nor the ALB
         // sends an authoritative forwarded host, so this header is whatever the client typed.
-        config()->set('keystoneguru.trusted_proxies.load_balancer_cidrs', self::LOAD_BALANCER_CIDRS);
+        config()->set('keystoneguru.trusted_proxies.vpc_cidrs', self::VPC_CIDRS);
         $middleware = $this->makeMiddleware();
         $request    = Request::create('/', 'GET', [], [], [], [
             'REMOTE_ADDR' => '172.41.23.123',
