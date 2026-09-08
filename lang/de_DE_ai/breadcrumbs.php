@@ -88,6 +88,7 @@ return [
                 'combat_log_criteria'                         => 'Parsing-Kriterien des NPC-Kompendiums',
                 'combat_log_run_data'                         => 'Combat-Log-Run-Daten bereinigen',
                 'combat_log_route_coverage'                   => 'ARC-Abdeckung der Feindkräfte',
+                'telemetry'                                   => '',
                 'dungeonroute_view'                           => 'Dungeon-Route ansehen',
                 'dungeonroute_view_contents'                  => 'Routeninhalt',
                 'dungeonroute_mapping_version_usage'          => 'Verwendung der Mapping-Version',

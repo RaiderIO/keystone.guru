@@ -55,9 +55,10 @@ return [
         'npcs_assigned'                 => 'Назначенные NPC',
     ],
     'status' => [
-        'title'       => 'Состояние',
-        'header'      => 'Состояние',
-        'description' => 'Мы заработали, ура!',
+        'title'        => 'Состояние',
+        'header'       => 'Состояние',
+        'description'  => 'Мы заработали, ура!',
+        'check_failed' => '',
     ],
 
 ];

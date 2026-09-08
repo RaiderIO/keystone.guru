@@ -27,6 +27,7 @@ return [
     'make_role_only_super_admins_may_grant_admin' => '只有超级管理员才能授予或撤销管理员角色。',
     'create_global_map_icon_admin_only'           => '只有管理员才能创建未附加到路线的地图图标。',
     'update_map_icon_admin_only'                  => '只有管理员才能更改未附加到路线或团队的地图图标。',
+    'update_team_map_icon_collaborator_only'      => '',
     'delete_map_icon_admin_only'                  => '只有管理员才能删除未附加到路线的地图图标。',
 
 ];

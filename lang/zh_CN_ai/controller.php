@@ -21,6 +21,8 @@ return [
         'flash' => [
             'banned_ip_address_added'                => 'IP地址封禁成功',
             'banned_ip_address_removed'              => '封禁移除成功',
+            'patreon_manual_grant_revoked'           => '',
+            'patreon_manual_grant_nothing_to_revoke' => '',
             'message_banner_set_successfully'        => '消息横幅设置成功',
             'thumbnail_regenerate_result'            => '为 :total 路线派发了 :success 个作业。:failed 失败。',
             'combatlog_route_regenerate_result'      => '已派发 :count 个任务',
@@ -185,6 +187,7 @@ return [
             'session_expired'         => '您的会话已过期。请再试一次。',
             'patreon_error_occurred'  => 'Patreon发生错误。请稍后再试。',
             'internal_error_occurred' => '处理Patreon响应时发生错误 - 它似乎格式不正确。错误已记录，将会被处理。请稍后再试。',
+            'link_cancelled'          => '',
         ],
     ],
     'profile' => [

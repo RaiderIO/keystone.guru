@@ -21,6 +21,8 @@ return [
         'flash' => [
             'banned_ip_address_added'                => 'Adresse IP bannie avec succès',
             'banned_ip_address_removed'              => 'Bannissement supprimé avec succès',
+            'patreon_manual_grant_revoked'           => '',
+            'patreon_manual_grant_nothing_to_revoke' => '',
             'message_banner_set_successfully'        => 'Bannière de message définie avec succès',
             'thumbnail_regenerate_result'            => ':success tâches envoyées pour :total itinéraires. :failed a échoué.',
             'combatlog_route_regenerate_result'      => ':count tâches lancées',
@@ -185,6 +187,7 @@ return [
             'session_expired'         => 'Votre session a expiré. Veuillez réessayer.',
             'patreon_error_occurred'  => 'Une erreur s\'est produite du côté de Patreon. Veuillez réessayer plus tard.',
             'internal_error_occurred' => 'Une erreur s\'est produite lors du traitement de la réponse de Patreon - elle semble être mal formée. L\'erreur a été enregistrée et sera traitée. Veuillez réessayer plus tard.',
+            'link_cancelled'          => '',
         ],
     ],
     'profile' => [

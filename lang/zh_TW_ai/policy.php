@@ -27,6 +27,7 @@ return [
     'make_role_only_super_admins_may_grant_admin' => '',
     'create_global_map_icon_admin_only'           => '',
     'update_map_icon_admin_only'                  => '',
+    'update_team_map_icon_collaborator_only'      => '',
     'delete_map_icon_admin_only'                  => '',
 
 ];

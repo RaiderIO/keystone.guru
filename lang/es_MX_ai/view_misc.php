@@ -55,9 +55,10 @@ return [
         'npcs_assigned'                 => 'NPCs asignados',
     ],
     'status' => [
-        'title'       => 'Estado',
-        'header'      => 'Estado',
-        'description' => '¡Estamos en línea, yay!',
+        'title'        => 'Estado',
+        'header'       => 'Estado',
+        'description'  => '¡Estamos en línea, yay!',
+        'check_failed' => '',
     ],
 
 ];

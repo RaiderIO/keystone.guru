@@ -55,9 +55,10 @@ return [
         'npcs_assigned'                 => 'PNJ assignés',
     ],
     'status' => [
-        'title'       => 'Statut',
-        'header'      => 'Statut',
-        'description' => 'Nous sommes en ligne, yay !',
+        'title'        => 'Statut',
+        'header'       => 'Statut',
+        'description'  => 'Nous sommes en ligne, yay !',
+        'check_failed' => '',
     ],
 
 ];
