@@ -11,8 +11,6 @@ use App\Models\Interfaces\HasTagsInterface;
 use App\Models\Interfaces\TaggableInterface;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
-use App\Models\Team;
-use App\Models\User;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
@@ -44,17 +42,8 @@ class AjaxTagController extends Controller
     public function store(
         APITagFormRequest $request,
     ) {
-        $validated = $request->validated();
-
-        $contextPublicKey = $validated['context'];
-        $contextClass     = $validated['context_class'];
-
         /** @var Model&HasTagsInterface $context */
-        $context = match ($contextClass) {
-            'user'  => User::where('public_key', $contextPublicKey)->firstOrFail(),
-            'team'  => Team::where('public_key', $contextPublicKey)->firstOrFail(),
-            default => abort(StatusCode::BAD_REQUEST, 'Invalid context class'),
-        };
+        $context = $request->getContext();
 
         /** @var TagCategory $tagCategory */
         $tagCategory = TagCategory::where('name', $request->get('category'))->firstOrFail();
@@ -81,6 +70,7 @@ class AjaxTagController extends Controller
         Gate::authorize('create-tag', [
             $tagCategory,
             $model,
+            $context,
         ]);
 
         //
@@ -118,7 +108,7 @@ class AjaxTagController extends Controller
      */
     public function updateAll(APITagUpdateFormRequest $request, Tag $tag): Response
     {
-        Gate::authorize('edit', $tag);
+        Gate::authorize('editAll', $tag);
 
         // Update all tags with the same name to the new name and color
         Tag::where('name', $tag->name)
@@ -139,7 +129,7 @@ class AjaxTagController extends Controller
      */
     public function deleteAll(Request $request, Tag $tag): Response
     {
-        Gate::authorize('delete', $tag);
+        Gate::authorize('deleteAll', $tag);
 
         // Update all tags with the same name to the new name and color
         Tag::where('name', $tag->name)

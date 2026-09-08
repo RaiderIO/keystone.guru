@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\Ajax;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Laratrust\Role;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
@@ -189,14 +190,281 @@ final class AjaxTagControllerTest extends PublicTestCase
         }
     }
 
-    private function createUserTagFor(User $user): Tag
+    #[Test]
+    public function store_givenOwnUserContext_createsTheTag(): void
+    {
+        $author = null;
+        $route  = null;
+
+        try {
+            // Arrange
+            $author = $this->createUserWithUserRole();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $name   = sprintf('test-tag-%s', fake()->uuid());
+
+            // Act
+            $response = $this->actingAs($author)->post('/ajax/tag', [
+                'context'       => $author->public_key,
+                'context_class' => 'user',
+                'category'      => TagCategory::DUNGEON_ROUTE_PERSONAL,
+                'model_id'      => $route->public_key,
+                'name'          => $name,
+            ]);
+
+            // Assert
+            $response->assertSuccessful();
+            $this->assertDatabaseHas('tags', [
+                'name'          => $name,
+                'context_id'    => $author->id,
+                'context_class' => User::class,
+            ]);
+        } finally {
+            $this->cleanUpTagsOfUsers([$author]);
+            $this->cleanUp(route: $route, users: [$author]);
+        }
+    }
+
+    #[Test]
+    public function store_givenAnotherUsersContext_returnsForbidden(): void
+    {
+        $author = null;
+        $other  = null;
+        $route  = null;
+
+        try {
+            // Arrange
+            $author = $this->createUserWithUserRole();
+            $other  = $this->createUserWithUserRole();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $name   = sprintf('test-tag-%s', fake()->uuid());
+
+            // Act
+            $response = $this->actingAs($author)->post('/ajax/tag', [
+                'context'       => $other->public_key,
+                'context_class' => 'user',
+                'category'      => TagCategory::DUNGEON_ROUTE_PERSONAL,
+                'model_id'      => $route->public_key,
+                'name'          => $name,
+            ]);
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertDatabaseMissing('tags', ['name' => $name]);
+        } finally {
+            $this->cleanUpTagsOfUsers([$author, $other]);
+            $this->cleanUp(route: $route, users: [$author, $other]);
+        }
+    }
+
+    #[Test]
+    public function store_givenTeamContextOfATeamTheUserIsAMemberOf_createsTheTag(): void
+    {
+        $member = null;
+        $team   = null;
+        $route  = null;
+
+        try {
+            // Arrange
+            $member = $this->createUserWithUserRole();
+            $team   = $this->createTeam();
+            $team->addMember($member, TeamUser::ROLE_MEMBER);
+            $route = DungeonRoute::factory()->create(['author_id' => $member->id]);
+            $name  = sprintf('test-team-tag-%s', fake()->uuid());
+
+            // Act
+            $response = $this->actingAs($member)->post('/ajax/tag', [
+                'context'       => $team->public_key,
+                'context_class' => 'team',
+                'category'      => TagCategory::DUNGEON_ROUTE_TEAM,
+                'model_id'      => $route->public_key,
+                'name'          => $name,
+            ]);
+
+            // Assert
+            $response->assertSuccessful();
+            $this->assertDatabaseHas('tags', [
+                'name'          => $name,
+                'context_id'    => $team->id,
+                'context_class' => Team::class,
+            ]);
+        } finally {
+            $this->cleanUpTagsOfTeam($team);
+            $this->cleanUp(route: $route, team: $team, users: [$member]);
+        }
+    }
+
+    #[Test]
+    public function store_givenTeamContextOfATeamTheUserIsNotAMemberOf_returnsForbidden(): void
+    {
+        $author = null;
+        $team   = null;
+        $route  = null;
+
+        try {
+            // Arrange
+            $author = $this->createUserWithUserRole();
+            $team   = $this->createTeam();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $name   = sprintf('test-team-tag-%s', fake()->uuid());
+
+            // Act
+            $response = $this->actingAs($author)->post('/ajax/tag', [
+                'context'       => $team->public_key,
+                'context_class' => 'team',
+                'category'      => TagCategory::DUNGEON_ROUTE_TEAM,
+                'model_id'      => $route->public_key,
+                'name'          => $name,
+            ]);
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertDatabaseMissing('tags', ['name' => $name]);
+        } finally {
+            $this->cleanUpTagsOfTeam($team);
+            $this->cleanUp(route: $route, team: $team, users: [$author]);
+        }
+    }
+
+    #[Test]
+    public function updateAll_givenOwnTag_renamesIt(): void
+    {
+        $owner = null;
+        $tag   = null;
+
+        try {
+            // Arrange
+            $owner   = $this->createUserWithUserRole();
+            $tag     = $this->createUserTagFor($owner);
+            $newName = sprintf('test-tag-renamed-%s', fake()->uuid());
+
+            // Act
+            $response = $this->actingAs($owner)->put(sprintf('/ajax/tag/%d/all', $tag->id), [
+                'name'  => $newName,
+                'color' => '#ff0000',
+            ]);
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertDatabaseHas('tags', ['id' => $tag->id, 'name' => $newName]);
+        } finally {
+            $this->cleanUp(tag: $tag, users: [$owner]);
+        }
+    }
+
+    #[Test]
+    public function updateAll_givenTagInAnotherUsersContext_returnsForbidden(): void
+    {
+        $author = null;
+        $other  = null;
+        $route  = null;
+        $tag    = null;
+
+        try {
+            // Arrange
+            $author = $this->createUserWithUserRole();
+            $other  = $this->createUserWithUserRole();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $tag    = $this->createUserTagFor($other, $route);
+
+            // Act
+            $response = $this->actingAs($author)->put(sprintf('/ajax/tag/%d/all', $tag->id), [
+                'name'  => sprintf('test-tag-renamed-%s', fake()->uuid()),
+                'color' => '#ff0000',
+            ]);
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertDatabaseHas('tags', ['id' => $tag->id, 'name' => $tag->name]);
+        } finally {
+            $this->cleanUp(tag: $tag, route: $route, users: [$author, $other]);
+        }
+    }
+
+    #[Test]
+    public function deleteAll_givenTagInAnotherUsersContext_returnsForbidden(): void
+    {
+        $author = null;
+        $other  = null;
+        $route  = null;
+        $tag    = null;
+
+        try {
+            // Arrange
+            $author = $this->createUserWithUserRole();
+            $other  = $this->createUserWithUserRole();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $tag    = $this->createUserTagFor($other, $route);
+
+            // Act
+            $response = $this->actingAs($author)->delete(sprintf('/ajax/tag/%d/all', $tag->id));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertDatabaseHas('tags', ['id' => $tag->id]);
+        } finally {
+            $this->cleanUp(tag: $tag, route: $route, users: [$author, $other]);
+        }
+    }
+
+    #[Test]
+    public function deleteAll_givenTeamTagOfATeamTheUserIsNotAMemberOf_returnsForbidden(): void
+    {
+        $author = null;
+        $team   = null;
+        $route  = null;
+        $tag    = null;
+
+        try {
+            // Arrange
+            $author = $this->createUserWithUserRole();
+            $team   = $this->createTeam();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $tag    = $this->createTeamTag($team, $route);
+
+            // Act
+            $response = $this->actingAs($author)->delete(sprintf('/ajax/tag/%d/all', $tag->id));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertDatabaseHas('tags', ['id' => $tag->id]);
+        } finally {
+            $this->cleanUp(tag: $tag, route: $route, team: $team, users: [$author]);
+        }
+    }
+
+    private function createUserWithUserRole(): User
+    {
+        $user = User::factory()->create(['public_key' => User::generateRandomPublicKey()]);
+        $user->addRole(Role::ROLE_USER);
+
+        return $user;
+    }
+
+    /**
+     * @param array<int, User|null> $users
+     */
+    private function cleanUpTagsOfUsers(array $users): void
+    {
+        foreach (array_filter($users) as $user) {
+            Tag::where('context_class', User::class)->where('context_id', $user->id)->delete();
+        }
+    }
+
+    private function cleanUpTagsOfTeam(?Team $team): void
+    {
+        if ($team !== null) {
+            Tag::where('context_class', Team::class)->where('context_id', $team->id)->delete();
+        }
+    }
+
+    private function createUserTagFor(User $user, ?DungeonRoute $dungeonRoute = null): Tag
     {
         return Tag::create([
             'context_id'      => $user->id,
             'context_class'   => User::class,
             'tag_category_id' => TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL],
-            'model_id'        => null,
-            'model_class'     => null,
+            'model_id'        => $dungeonRoute?->id,
+            'model_class'     => $dungeonRoute === null ? null : DungeonRoute::class,
             'name'            => sprintf('test-tag-%s', fake()->uuid()),
             'color'           => null,
         ]);
