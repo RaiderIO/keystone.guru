@@ -15,8 +15,17 @@ globalThis.AFFIX_SHROUDED = 'Shrouded';
 globalThis.EXPANSION_SHADOWLANDS = 'sl';
 globalThis.EXPANSION_DRAGONFLIGHT = 'df';
 
+const fs = require('node:fs');
+const path = require('node:path');
+
 const {InlineCode} = require('../inlinecode');
 globalThis.InlineCode = InlineCode;
+
+// `_renderTitle` renders Handlebars templates through the bare globals the bundle provides.
+const Handlebars = require('handlebars');
+globalThis.Handlebars = Handlebars;
+globalThis.getHandlebarsDefaultVariables = () => ({});
+globalThis.$.extend = (target, ...sources) => Object.assign(target, ...sources);
 
 const {DungeonrouteTable} = require('./table');
 
@@ -167,5 +176,50 @@ describe('DungeonrouteTable._getProfileActionsTemplateVariables', () => {
 
         // Assert
         expect(result.has_new_mapping_version).toBe(false);
+    });
+});
+
+describe('DungeonrouteTable._renderTitle', () => {
+    /**
+     * The real title template, compiled from the same source the build precompiles, so the test
+     * exercises the actual combination of composed string and template placeholders.
+     * @returns {Object} A `this` context with the templates `_renderTitle` renders.
+     */
+    function buildRenderTitleContext() {
+        const templateSource = fs.readFileSync(
+            path.join(__dirname, '../../../handlebars/dungeonroute_table_title.handlebars'),
+            'utf8'
+        );
+
+        Handlebars.templates = {
+            dungeonroute_table_title_published: () => '<i class="fas fa-globe"></i>',
+            dungeonroute_table_title: Handlebars.compile(templateSource),
+        };
+
+        return buildTableContext(1);
+    }
+
+    it('_renderTitle_givenTitleContainingMarkup_returnsTitleEscaped', () => {
+        // Arrange
+        const row = buildRow({title: '<b>bold</b>'});
+
+        // Act
+        const result = DungeonrouteTable.prototype._renderTitle.call(buildRenderTitleContext(), null, 'display', row, null, false);
+
+        // Assert
+        expect(result).toContain('&lt;b&gt;bold&lt;/b&gt;');
+        expect(result).not.toContain('<b>bold</b>');
+    });
+
+    it('_renderTitle_givenPlainTitle_returnsTitleAlongsidePublishedMarkup', () => {
+        // Arrange
+        const row = buildRow({title: 'My route'});
+
+        // Act
+        const result = DungeonrouteTable.prototype._renderTitle.call(buildRenderTitleContext(), null, 'display', row, null, false);
+
+        // Assert: the markup this method builds itself is still rendered as markup.
+        expect(result).toContain('My route');
+        expect(result).toContain('<i class="fas fa-globe"></i>');
     });
 });

@@ -610,7 +610,9 @@ class DungeonrouteTable extends InlineCode {
             })
         );
 
-        result = `${published} ${row.title}`;
+        // The template renders the composed result unescaped so that the published icon's markup
+        // survives; the title is free user text and must be escaped here instead.
+        result = `${published} ${Handlebars.escapeExpression(row.title)}`;
 
         let template = Handlebars.templates['dungeonroute_table_title'];
         let templateData = $.extend({}, getHandlebarsDefaultVariables(), {
