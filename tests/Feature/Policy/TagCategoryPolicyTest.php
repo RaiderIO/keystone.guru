@@ -154,6 +154,51 @@ final class TagCategoryPolicyTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function createTag_givenTeamCategoryInAUserContext_returnsDenied(): void
+    {
+        // Arrange - the context is the caller's own, but a team-category tag stored against a user
+        // is read back by DungeonRoute::tagsteam(), which selects on the category alone
+        $owner = User::factory()->create();
+        $route = $this->createRoute($owner);
+
+        try {
+            // Act & Assert
+            $this->assertFalse($owner->can('create-tag', [
+                $this->teamTagCategory(),
+                $route,
+                $owner,
+            ]));
+        } finally {
+            $route->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function createTag_givenPersonalCategoryInATeamContext_returnsDenied(): void
+    {
+        // Arrange - a team the caller really is a member of, paired with the wrong category
+        $member = User::factory()->create();
+        $team   = $this->createTeam();
+        $team->addMember($member, TeamUser::ROLE_MEMBER);
+        $route = $this->createRoute($member);
+
+        try {
+            // Act & Assert
+            $this->assertFalse($member->can('create-tag', [
+                $this->personalTagCategory(),
+                $route,
+                $team,
+            ]));
+        } finally {
+            $route->delete();
+            TeamUser::where('team_id', $team->id)->delete();
+            Team::where('id', $team->id)->delete();
+            $member->delete();
+        }
+    }
+
     private function personalTagCategory(): TagCategory
     {
         return TagCategory::where('name', TagCategory::DUNGEON_ROUTE_PERSONAL)->firstOrFail();
