@@ -58,7 +58,7 @@ return [
         'title'        => 'Status',
         'header'       => 'Status',
         'description'  => 'Wir sind in Betrieb, yay!',
-        'check_failed' => '',
+        'check_failed' => 'Prüfung fehlgeschlagen, Details siehe Anwendungsprotokoll',
     ],
 
 ];

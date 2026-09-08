@@ -21,8 +21,8 @@ return [
         'flash' => [
             'banned_ip_address_added'                => 'Indirizzo IP bannato con successo',
             'banned_ip_address_removed'              => 'Ban rimosso con successo',
-            'patreon_manual_grant_revoked'           => '',
-            'patreon_manual_grant_nothing_to_revoke' => '',
+            'patreon_manual_grant_revoked'           => 'I vantaggi Patreon concessi manualmente a :user sono stati revocati',
+            'patreon_manual_grant_nothing_to_revoke' => ':user non ha vantaggi Patreon concessi manualmente da revocare',
             'message_banner_set_successfully'        => 'Banner del messaggio impostato con successo',
             'thumbnail_regenerate_result'            => 'Inviati :success lavori per :total percorsi. :failed falliti.',
             'combatlog_route_regenerate_result'      => 'Inviati :count lavori',
@@ -187,7 +187,7 @@ return [
             'session_expired'         => 'La tua sessione è scaduta. Si prega di riprovare.',
             'patreon_error_occurred'  => 'Si è verificato un errore da parte di Patreon. Si prega di riprovare più tardi.',
             'internal_error_occurred' => 'Si è verificato un errore durante l\'elaborazione della risposta di Patreon - sembra essere malformata. L\'errore è stato registrato e verrà gestito. Si prega di riprovare più tardi.',
-            'link_cancelled'          => '',
+            'link_cancelled'          => 'Il collegamento del tuo account Patreon è stato annullato.',
         ],
     ],
     'profile' => [

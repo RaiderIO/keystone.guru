@@ -58,7 +58,7 @@ return [
         'title'        => 'Estado',
         'header'       => 'Estado',
         'description'  => '¡Estamos en línea, yay!',
-        'check_failed' => '',
+        'check_failed' => 'La verificación falló, consulta el registro de la aplicación para más detalles',
     ],
 
 ];

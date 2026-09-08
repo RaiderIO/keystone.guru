@@ -27,7 +27,7 @@ return [
     'make_role_only_super_admins_may_grant_admin' => 'Somente super administradores podem conceder ou revogar o cargo de administrador.',
     'create_global_map_icon_admin_only'           => 'Somente administradores podem criar ícones de mapa que não estejam vinculados a uma rota.',
     'update_map_icon_admin_only'                  => 'Somente administradores podem alterar ícones de mapa que não estejam vinculados a uma rota ou equipe.',
-    'update_team_map_icon_collaborator_only'      => '',
+    'update_team_map_icon_collaborator_only'      => 'Somente colaboradores de uma equipe podem alterar os ícones de mapa dessa equipe.',
     'delete_map_icon_admin_only'                  => 'Somente administradores podem excluir ícones de mapa que não estejam vinculados a uma rota.',
 
 ];

@@ -58,7 +58,7 @@ return [
         'title'        => 'Stato',
         'header'       => 'Stato',
         'description'  => 'Siamo online, evviva!',
-        'check_failed' => '',
+        'check_failed' => 'Controllo fallito, consulta il log dell\'applicazione per i dettagli',
     ],
 
 ];
