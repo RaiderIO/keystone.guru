@@ -19,6 +19,11 @@ class DungeonRouteSaveServiceLogging extends StructuredLogging implements Dungeo
         $this->error(__METHOD__, get_defined_vars());
     }
 
+    public function saveTeamAssignmentDenied(?int $dungeonRouteId, ?int $currentTeamId, ?int $requestedTeamId, ?int $userId): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
     public function saveTemplateCloneStart(int $dungeonRouteId, int $templateRouteId): void
     {
         $this->start(__METHOD__, get_defined_vars());

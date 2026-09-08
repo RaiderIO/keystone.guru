@@ -215,9 +215,13 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
         ];
     }
 
+    /**
+     * Which teams a caller may actually assign is DungeonRouteSaveServiceTeamAssignmentTest's
+     * subject; this covers only the sentinels the route edit form submits for "no team".
+     */
     #[Test]
     #[DataProvider('teamIdProvider')]
-    public function save_givenTeamId_resolvesExpectedTeamId(int $inputTeamId, ?int $expectedTeamId): void
+    public function save_givenANoTeamSentinel_resolvesToNull(int $inputTeamId, ?int $expectedTeamId): void
     {
         // Arrange
         $dungeon   = $this->getRetailDungeon();
@@ -249,8 +253,8 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
     public static function teamIdProvider(): array
     {
         return [
-            'zero becomes null'     => [0, null],
-            'a positive id is kept' => [4242, 4242],
+            'zero becomes null'                    => [0, null],
+            'the form\'s -1 sentinel becomes null' => [-1, null],
         ];
     }
 

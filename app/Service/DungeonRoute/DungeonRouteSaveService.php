@@ -17,6 +17,7 @@ use App\Models\Laratrust\Role;
 use App\Models\PublishedState;
 use App\Models\RouteAttribute;
 use App\Models\Season;
+use App\Models\Team;
 use App\Models\User;
 use App\Repositories\Interfaces\MapIconRepositoryInterface;
 use App\Service\DungeonRoute\Logging\DungeonRouteSaveServiceLoggingInterface;
@@ -160,7 +161,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
         $userGameVersion = GameVersion::getUserOrDefaultGameVersion();
         $activeSeason    = $userGameVersion->has_seasons ? $this->resolveSeasonForEdit($dungeon) : null;
 
-        $teamId    = (int)($validated['team_id'] ?? $dungeonRoute->team_id);
+        $teamId    = $this->resolveTeamId($dungeonRoute, $validated, $user);
         $factionId = (int)($validated['faction_id'] ?? $dungeonRoute->faction_id);
 
         // Fetch the title if the user set anything
@@ -175,7 +176,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
 
         $attributes = [
             'dungeon_id' => $dungeonId,
-            'team_id'    => $teamId > 0 ? $teamId : null,
+            'team_id'    => $teamId,
             // If it was empty just set Unspecified instead
             'faction_id'                 => $factionId ?: 1,
             'seasonal_index'             => (int)($validated['seasonal_index'] ?? [$dungeonRoute->seasonal_index])[0],
@@ -272,6 +273,49 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
         }
 
         return true;
+    }
+
+    /**
+     * Resolves which team the route ends up on. Which team holds a route is the author's call, not
+     * every editor's: a team collaborator may edit a teammate's route, but moving it into a team of
+     * their own would take it away from the team that granted them that edit right in the first
+     * place. The target team is checked against the author for the same reason AjaxTeamController
+     * checks it there - a team only holds routes written by its own members.
+     *
+     * A request that leaves team_id where it already is always passes, so an ordinary collaborator
+     * save is unaffected, as is an author who has since left the team the route sits on.
+     *
+     * @param array<string, mixed> $validated
+     */
+    private function resolveTeamId(DungeonRoute $dungeonRoute, array $validated, ?User $user): ?int
+    {
+        $currentTeamId = $dungeonRoute->team_id;
+
+        if (!array_key_exists('team_id', $validated)) {
+            return $currentTeamId;
+        }
+
+        $requestedTeamId = (int)$validated['team_id'];
+        $requestedTeamId = $requestedTeamId > 0 ? $requestedTeamId : null;
+
+        if ($requestedTeamId === $currentTeamId) {
+            return $currentTeamId;
+        }
+
+        // For a new route the author is the caller, so this collapses to "a team I am a member of"
+        $author = $dungeonRoute->exists ? $dungeonRoute->author : $user;
+
+        $mayAssign = $user !== null &&
+            ($author?->is($user) || $user->hasRole(Role::ROLE_ADMIN)) &&
+            ($requestedTeamId === null || (Team::find($requestedTeamId)?->isUserMember($author) ?? false));
+
+        if (!$mayAssign) {
+            $this->log->saveTeamAssignmentDenied($dungeonRoute->id ?? null, $currentTeamId, $requestedTeamId, $user?->id);
+
+            return $currentTeamId;
+        }
+
+        return $requestedTeamId;
     }
 
     /**
