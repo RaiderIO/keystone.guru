@@ -3,6 +3,7 @@
 namespace Tests\Feature\App\Models;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\PublishedState;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
@@ -335,6 +336,169 @@ final class TeamTest extends PublicTestCase
             $this->assertDatabaseMissing('tags', ['id' => $tag->id]);
         } finally {
             $this->cleanUp($tag, null, $team, null);
+        }
+    }
+
+    #[Test]
+    public function removeRoute_givenATeamPublishedRoute_revertsItToUnpublished(): void
+    {
+        $author = null;
+        $team   = null;
+        $route  = null;
+
+        try {
+            // Arrange
+            $author = User::factory()->create();
+            $team   = $this->createTeam();
+            $team->addMember($author, TeamUser::ROLE_MEMBER);
+            $route = DungeonRoute::factory()->create([
+                'author_id'          => $author->id,
+                'team_id'            => $team->id,
+                'published_state_id' => PublishedState::ALL[PublishedState::TEAM],
+            ]);
+
+            // Act
+            $team->removeRoute($route);
+
+            // Assert
+            $fresh = $route->fresh();
+            $this->assertNull($fresh->team_id);
+            $this->assertSame(PublishedState::ALL[PublishedState::UNPUBLISHED], $fresh->published_state_id);
+        } finally {
+            $this->cleanUp(null, $route, $team, $author);
+        }
+    }
+
+    #[Test]
+    public function removeRoute_givenAWorldPublishedRoute_keepsThatPublishedState(): void
+    {
+        // Only the team-scoped state becomes unsatisfiable without a team - a route published to the
+        // world stays readable by everyone and must keep its state when it leaves the team.
+        $author = null;
+        $team   = null;
+        $route  = null;
+
+        try {
+            // Arrange
+            $author = User::factory()->create();
+            $team   = $this->createTeam();
+            $team->addMember($author, TeamUser::ROLE_MEMBER);
+            $route = DungeonRoute::factory()->create([
+                'author_id'          => $author->id,
+                'team_id'            => $team->id,
+                'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+            ]);
+
+            // Act
+            $team->removeRoute($route);
+
+            // Assert
+            $fresh = $route->fresh();
+            $this->assertNull($fresh->team_id);
+            $this->assertSame(PublishedState::ALL[PublishedState::WORLD], $fresh->published_state_id);
+        } finally {
+            $this->cleanUp(null, $route, $team, $author);
+        }
+    }
+
+    #[Test]
+    public function removeMember_givenTheirOwnTeamPublishedRoute_revertsItToUnpublished(): void
+    {
+        $author = null;
+        $team   = null;
+        $route  = null;
+
+        try {
+            // Arrange
+            $author = User::factory()->create();
+            $team   = $this->createTeam();
+            $team->addMember($author, TeamUser::ROLE_MEMBER);
+            $route = DungeonRoute::factory()->create([
+                'author_id'          => $author->id,
+                'team_id'            => $team->id,
+                'published_state_id' => PublishedState::ALL[PublishedState::TEAM],
+            ]);
+
+            // Act
+            $team->removeMember($author);
+
+            // Assert
+            $fresh = $route->fresh();
+            $this->assertNull($fresh->team_id);
+            $this->assertSame(PublishedState::ALL[PublishedState::UNPUBLISHED], $fresh->published_state_id);
+        } finally {
+            $this->cleanUp(null, $route, $team, $author);
+        }
+    }
+
+    #[Test]
+    public function removeMember_givenAnotherMembersTeamPublishedRoute_leavesItPublishedToTheTeam(): void
+    {
+        // Only the leaving member's own routes are unassigned, so only those may lose their state.
+        $leaver    = null;
+        $staying   = null;
+        $team      = null;
+        $ownRoute  = null;
+        $themRoute = null;
+
+        try {
+            // Arrange
+            $leaver  = User::factory()->create();
+            $staying = User::factory()->create();
+            $team    = $this->createTeam();
+            $team->addMember($leaver, TeamUser::ROLE_MEMBER);
+            $team->addMember($staying, TeamUser::ROLE_MEMBER);
+
+            $ownRoute = DungeonRoute::factory()->create([
+                'author_id'          => $leaver->id,
+                'team_id'            => $team->id,
+                'published_state_id' => PublishedState::ALL[PublishedState::TEAM],
+            ]);
+            $themRoute = DungeonRoute::factory()->create([
+                'author_id'          => $staying->id,
+                'team_id'            => $team->id,
+                'published_state_id' => PublishedState::ALL[PublishedState::TEAM],
+            ]);
+
+            // Act
+            $team->removeMember($leaver);
+
+            // Assert
+            $this->assertSame(PublishedState::ALL[PublishedState::UNPUBLISHED], $ownRoute->fresh()->published_state_id);
+            $this->assertSame(PublishedState::ALL[PublishedState::TEAM], $themRoute->fresh()->published_state_id);
+        } finally {
+            $this->cleanUp(null, $ownRoute, null, $leaver);
+            $this->cleanUp(null, $themRoute, $team, $staying);
+        }
+    }
+
+    #[Test]
+    public function deleting_givenATeamPublishedRoute_revertsItToUnpublished(): void
+    {
+        $author = null;
+        $team   = null;
+        $route  = null;
+
+        try {
+            // Arrange
+            $author = User::factory()->create();
+            $team   = $this->createTeam();
+            $team->addMember($author, TeamUser::ROLE_MEMBER);
+            $route = DungeonRoute::factory()->create([
+                'author_id'          => $author->id,
+                'team_id'            => $team->id,
+                'published_state_id' => PublishedState::ALL[PublishedState::TEAM],
+            ]);
+
+            // Act
+            $team->delete();
+
+            // Assert
+            $fresh = $route->fresh();
+            $this->assertNull($fresh->team_id);
+            $this->assertSame(PublishedState::ALL[PublishedState::UNPUBLISHED], $fresh->published_state_id);
+        } finally {
+            $this->cleanUp(null, $route, $team, $author);
         }
     }
 
