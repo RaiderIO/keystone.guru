@@ -714,4 +714,29 @@ return [
          */
         'observation_retention_days' => (int)env('COMBAT_LOG_STALENESS_OBSERVATION_RETENTION_DAYS', 30),
     ],
+
+    'trusted_proxies' => [
+        /**
+         * CIDRs of the hop directly in front of the application, trusted in addition to CloudFlare's
+         * published ranges so the X-Forwarded-For chain is walked all the way back to the visitor.
+         *
+         * In production the connecting peer is the ALB, not CloudFlare, so without these the peer is
+         * untrusted, the chain is never walked, and $request->ip() returns the load balancer ENI -
+         * collapsing every anonymous visitor into one bucket for rate limiting and IP bans (#4536).
+         *
+         * This is the VPC CIDR block declared in keystoneguru-infra `cdk/bin/cdk.ts` (NetworkStack
+         * `cidrBlock`), not an AWS-published range: the ALB's ENIs draw their addresses from our own
+         * VPC subnets, which are carved out of it. Naming the whole VPC rather than the individual
+         * public subnets means adding an availability zone or re-slicing the subnets cannot silently
+         * revert IP resolution to the ENI address. It stays exact because the application's security
+         * group only accepts ingress from the load balancer's security group, so the ALB is the only
+         * peer that can ever connect.
+         *
+         * @var array<int, string>
+         */
+        'vpc_cidrs' => array_values(array_filter(array_map(
+            'trim',
+            explode(',', (string)env('TRUSTED_PROXY_VPC_CIDRS', '172.41.0.0/16')),
+        ))),
+    ],
 ];

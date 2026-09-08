@@ -61,7 +61,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->prepend(AddsTraceIdToContext::class);
 
         // Runs right after (the replaced) TrustProxies, so $request->ip() is already the real
-        // visitor IP resolved from CF-Connecting-IP - see BlockBannedIpAddresses for details.
+        // visitor IP resolved from the forwarded chain - see BlockBannedIpAddresses for details.
         $middleware->append([
             BlockBannedIpAddresses::class,
             ServerTimingMiddleware::class,
