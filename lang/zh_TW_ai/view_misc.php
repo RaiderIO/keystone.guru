@@ -55,9 +55,10 @@ return [
         'npcs_assigned'                 => '分配的 NPC',
     ],
     'status' => [
-        'title'       => '狀態',
-        'header'      => '狀態',
-        'description' => '我們正常運行，耶！',
+        'title'        => '狀態',
+        'header'       => '狀態',
+        'description'  => '我們正常運行，耶！',
+        'check_failed' => '',
     ],
 
 ];

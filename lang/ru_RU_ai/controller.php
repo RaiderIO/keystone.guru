@@ -21,6 +21,8 @@ return [
         'flash' => [
             'banned_ip_address_added'                => 'IP-адрес успешно заблокирован',
             'banned_ip_address_removed'              => 'Блокировка успешно снята',
+            'patreon_manual_grant_revoked'           => 'Преимущества Patreon, предоставленные вручную пользователю :user, отозваны',
+            'patreon_manual_grant_nothing_to_revoke' => 'У пользователя :user нет предоставленных вручную преимуществ Patreon для отзыва',
             'message_banner_set_successfully'        => 'Сообщение-баннер успешно установлено',
             'thumbnail_regenerate_result'            => 'Запущено :success задач для маршрутов :total. :failed не удалось.',
             'combatlog_route_regenerate_result'      => 'Запущено задач: :count',
@@ -185,6 +187,7 @@ return [
             'session_expired'         => 'Ваша сессия истекла. Пожалуйста, попробуйте снова.',
             'patreon_error_occurred'  => 'Произошла ошибка на стороне Patreon. Пожалуйста, попробуйте позже.',
             'internal_error_occurred' => 'Произошла ошибка при обработке ответа Patreon - он, похоже, поврежден. Ошибка была зарегистрирована и будет устранена. Пожалуйста, попробуйте позже.',
+            'link_cancelled'          => 'Привязка Вашего аккаунта Patreon была отменена.',
         ],
     ],
     'profile' => [

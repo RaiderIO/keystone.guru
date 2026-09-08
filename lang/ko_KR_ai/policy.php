@@ -27,6 +27,7 @@ return [
     'make_role_only_super_admins_may_grant_admin' => '관리자 역할을 부여하거나 취소할 수 있는 것은 최고 관리자뿐입니다.',
     'create_global_map_icon_admin_only'           => '경로에 연결되지 않은 지도 아이콘은 관리자만 생성할 수 있습니다.',
     'update_map_icon_admin_only'                  => '경로 또는 팀에 연결되지 않은 지도 아이콘은 관리자만 변경할 수 있습니다.',
+    'update_team_map_icon_collaborator_only'      => '팀의 지도 아이콘은 해당 팀의 협력자만 변경할 수 있습니다.',
     'delete_map_icon_admin_only'                  => '경로에 연결되지 않은 지도 아이콘은 관리자만 삭제할 수 있습니다.',
 
 ];

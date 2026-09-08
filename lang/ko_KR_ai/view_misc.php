@@ -55,9 +55,10 @@ return [
         'npcs_assigned'                 => '할당된 NPC',
     ],
     'status' => [
-        'title'       => '상태',
-        'header'      => '상태',
-        'description' => '시스템이 정상 작동 중입니다!',
+        'title'        => '상태',
+        'header'       => '상태',
+        'description'  => '시스템이 정상 작동 중입니다!',
+        'check_failed' => '점검에 실패했습니다. 자세한 내용은 애플리케이션 로그를 확인하세요',
     ],
 
 ];

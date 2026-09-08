@@ -21,6 +21,8 @@ return [
         'flash' => [
             'banned_ip_address_added'                => 'IP-Adresse erfolgreich gesperrt',
             'banned_ip_address_removed'              => 'Sperre erfolgreich aufgehoben',
+            'patreon_manual_grant_revoked'           => 'Manuell gewährte Patreon-Vorteile von :user widerrufen',
+            'patreon_manual_grant_nothing_to_revoke' => ':user hat keine manuell gewährten Patreon-Vorteile, die widerrufen werden können',
             'message_banner_set_successfully'        => 'Nachrichtenbanner erfolgreich gesetzt',
             'thumbnail_regenerate_result'            => ':success Jobs für :total Routen versendet. :failed fehlgeschlagen.',
             'combatlog_route_regenerate_result'      => ':count Jobs in die Warteschlange gestellt',
@@ -185,6 +187,7 @@ return [
             'session_expired'         => 'Deine Sitzung ist abgelaufen. Bitte versuche es erneut.',
             'patreon_error_occurred'  => 'Auf der Patreon-Seite ist ein Fehler aufgetreten. Bitte versuche es später erneut.',
             'internal_error_occurred' => 'Bei der Verarbeitung der Antwort von Patreon ist ein Fehler aufgetreten - sie scheint fehlerhaft zu sein. Der Fehler wurde protokolliert und wird bearbeitet. Bitte versuche es später erneut.',
+            'link_cancelled'          => 'Das Verknüpfen deines Patreon-Kontos wurde abgebrochen.',
         ],
     ],
     'profile' => [

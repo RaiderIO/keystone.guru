@@ -21,6 +21,8 @@ return [
         'flash' => [
             'banned_ip_address_added'                => '',
             'banned_ip_address_removed'              => '',
+            'patreon_manual_grant_revoked'           => '',
+            'patreon_manual_grant_nothing_to_revoke' => '',
             'message_banner_set_successfully'        => '消息橫幅設置成功',
             'thumbnail_regenerate_result'            => '為 :total 路線派發了 :success 項任務。 :failed 失敗。',
             'combatlog_route_regenerate_result'      => '',
@@ -185,6 +187,7 @@ return [
             'session_expired'         => '您的會話已過期。請再試一次。',
             'patreon_error_occurred'  => 'Patreon 端發生錯誤。請稍後再試。',
             'internal_error_occurred' => '處理 Patreon 回應時發生錯誤 - 它似乎格式不正確。錯誤已被記錄，將會處理。請稍後再試。',
+            'link_cancelled'          => '',
         ],
     ],
     'profile' => [

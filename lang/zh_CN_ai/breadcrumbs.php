@@ -88,6 +88,7 @@ return [
                 'combat_log_criteria'                         => 'NPC图鉴解析条件',
                 'combat_log_run_data'                         => '清理战斗日志运行数据',
                 'combat_log_route_coverage'                   => 'ARC 敌方部队覆盖率',
+                'telemetry'                                   => '遥测',
                 'dungeonroute_view'                           => '查看地下城路线',
                 'dungeonroute_view_contents'                  => '路线内容',
                 'dungeonroute_mapping_version_usage'          => '映射版本使用情况',

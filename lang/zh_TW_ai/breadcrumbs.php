@@ -88,6 +88,7 @@ return [
                 'combat_log_criteria'                         => '',
                 'combat_log_run_data'                         => '',
                 'combat_log_route_coverage'                   => '',
+                'telemetry'                                   => '',
                 'dungeonroute_view'                           => '',
                 'dungeonroute_view_contents'                  => '',
                 'dungeonroute_mapping_version_usage'          => '',

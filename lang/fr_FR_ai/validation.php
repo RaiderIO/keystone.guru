@@ -35,6 +35,9 @@ return [
         'social_links' => [
             'invalid_url_for_platform' => '',
         ],
+        'periods' => [
+            'not_in_season' => '',
+        ],
         'creator_search' => [
             'max' => '',
         ],
@@ -42,6 +45,13 @@ return [
             'integer' => '',
             'min'     => '',
             'max'     => '',
+        ],
+        'telemetry_range' => [
+            'in' => '',
+        ],
+        'patreon_grant_reason' => [
+            'required' => '',
+            'max'      => '',
         ],
     ],
     'date'              => 'Le champ :attribute n\'est pas une date valide.',

@@ -55,9 +55,10 @@ return [
         'npcs_assigned'                 => '指派的 NPC',
     ],
     'status' => [
-        'title'       => '状态',
-        'header'      => '状态',
-        'description' => '我们上线了，耶！',
+        'title'        => '状态',
+        'header'       => '状态',
+        'description'  => '我们上线了，耶！',
+        'check_failed' => '检查失败，详情请查看应用程序日志',
     ],
 
 ];

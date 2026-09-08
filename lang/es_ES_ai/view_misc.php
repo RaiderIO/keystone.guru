@@ -55,9 +55,10 @@ return [
         'npcs_assigned'                 => 'NPCs asignados',
     ],
     'status' => [
-        'title'       => 'Estado',
-        'header'      => 'Estado',
-        'description' => '¡Estamos activos, yay!',
+        'title'        => 'Estado',
+        'header'       => 'Estado',
+        'description'  => '¡Estamos activos, yay!',
+        'check_failed' => 'La comprobación falló, consulta el registro de la aplicación para más detalles',
     ],
 
 ];

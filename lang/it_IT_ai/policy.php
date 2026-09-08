@@ -27,6 +27,7 @@ return [
     'make_role_only_super_admins_may_grant_admin' => 'Solo i super admin possono concedere o revocare il ruolo di amministratore.',
     'create_global_map_icon_admin_only'           => 'Solo gli amministratori possono creare icone mappa che non sono collegate a un percorso.',
     'update_map_icon_admin_only'                  => 'Solo gli amministratori possono modificare icone mappa che non sono collegate a un percorso o a un team.',
+    'update_team_map_icon_collaborator_only'      => 'Solo i collaboratori di un team possono modificare le icone mappa di quel team.',
     'delete_map_icon_admin_only'                  => 'Solo gli amministratori possono eliminare icone mappa che non sono collegate a un percorso.',
 
 ];

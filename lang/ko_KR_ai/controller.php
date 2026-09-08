@@ -21,6 +21,8 @@ return [
         'flash' => [
             'banned_ip_address_added'                => 'IP 주소가 성공적으로 차단되었습니다',
             'banned_ip_address_removed'              => '차단이 성공적으로 해제되었습니다',
+            'patreon_manual_grant_revoked'           => '사용자 :user에게 수동으로 부여된 Patreon 혜택을 취소했습니다',
+            'patreon_manual_grant_nothing_to_revoke' => '사용자 :user에게는 취소할 수동 부여 Patreon 혜택이 없습니다',
             'message_banner_set_successfully'        => '메시지 배너가 성공적으로 설정되었습니다',
             'thumbnail_regenerate_result'            => ':total 경로를 위한 :success 작업이 배포되었습니다. :failed 실패했습니다.',
             'combatlog_route_regenerate_result'      => ':count개의 작업이 실행 대기열에 추가되었습니다',
@@ -185,6 +187,7 @@ return [
             'session_expired'         => '세션이 만료되었습니다. 다시 시도하십시오.',
             'patreon_error_occurred'  => 'Patreon 측에서 오류가 발생했습니다. 나중에 다시 시도하십시오.',
             'internal_error_occurred' => 'Patreon의 응답을 처리하는 동안 오류가 발생했습니다 - 응답이 잘못된 것 같습니다. 오류가 기록되었으며 처리될 것입니다. 나중에 다시 시도하십시오.',
+            'link_cancelled'          => 'Patreon 계정 연결이 취소되었습니다.',
         ],
     ],
     'profile' => [
