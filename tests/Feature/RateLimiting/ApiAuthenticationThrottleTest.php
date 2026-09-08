@@ -3,9 +3,8 @@
 namespace Tests\Feature\RateLimiting;
 
 use App\Http\Middleware\Api\ApiAuthentication;
-use App\Http\Middleware\Api\Logging\ApiAuthenticationLoggingInterface;
+use App\Http\Middleware\Api\ApiAuthenticationThrottle;
 use App\Models\User;
-use App\Service\User\Dtos\BasicAuthenticationResult;
 use App\Service\User\UserServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -19,12 +18,12 @@ use Tests\TestCases\PublicTestCase;
 
 /**
  * Verifying credentials that miss the user cache costs a password hash comparison, and the api middleware group
- * runs before any route-level throttle - so the bound on how often one caller may present unusable credentials
- * lives inside the middleware itself.
+ * runs before any route-level throttle - so a dedicated middleware ahead of the authentication puts a bound on
+ * how often one caller may present unusable credentials.
  */
 #[Group('RateLimiting')]
 #[Group('Api')]
-final class ApiAuthenticationRateLimitTest extends PublicTestCase
+final class ApiAuthenticationThrottleTest extends PublicTestCase
 {
     private const string IP = '203.0.113.42';
 
@@ -33,31 +32,50 @@ final class ApiAuthenticationRateLimitTest extends PublicTestCase
     private const string PASSWORD = 'a-password-for-this-test';
 
     #[Test]
-    public function handle_givenRepeatedUnusableCredentials_stopsVerifyingThem(): void
+    public function apiMiddlewareGroup_givenTheStackTheRouterExecutes_throttlesBeforeAuthenticating(): void
     {
-        // Arrange
-        $maxAttempts = $this->maxFailedAttempts();
-        $userService = $this->createMockPublic(UserServiceInterface::class);
-        $userService->expects($this->exactly($maxAttempts))
-            ->method('verifyUserFromAuthenticationHeader')
-            ->willReturn(BasicAuthenticationResult::CredentialsRejected);
+        // Arrange - the middleware groups are registered while the http kernel handles a request, not on boot
+        $this->get(route('api.v1.combatlog.dungeon.index'));
+        $route = app('router')->getRoutes()->getByName('api.v1.combatlog.dungeon.index');
 
-        $middleware = new ApiAuthentication($userService, $this->createMockPublic(ApiAuthenticationLoggingInterface::class));
+        // Act - gatherRouteMiddleware() returns the stack sorted by the priority list, which is what actually runs
+        $middleware = array_values(app('router')->gatherRouteMiddleware($route));
+
+        // Assert - bounding the hash comparisons only works if the bound is read before they are made
+        $throttleIndex       = array_search(ApiAuthenticationThrottle::class, $middleware, true);
+        $authenticationIndex = array_search(ApiAuthentication::class, $middleware, true);
+
+        $this->assertNotFalse($throttleIndex, 'The api middleware group must throttle the authentication');
+        $this->assertNotFalse($authenticationIndex, 'The api middleware group must authenticate');
+        $this->assertLessThan($authenticationIndex, $throttleIndex);
+    }
+
+    #[Test]
+    public function handle_givenRepeatedRejectedCredentials_stopsPassingThemOn(): void
+    {
+        // Arrange - the authentication behind the middleware answers 401 for every attempt
+        $maxAttempts     = $this->maxFailedAttempts();
+        $timesReached    = 0;
+        $middleware      = $this->middleware();
+        $rejectingKernel = static function () use (&$timesReached): Response {
+            ++$timesReached;
+
+            return new Response(status: StatusCode::UNAUTHORIZED);
+        };
 
         RateLimiter::clear($this->throttleKey());
-        $this->pretendNotRunningUnitTests();
 
         try {
             // Act
             $statusCodes = [];
             for ($attempt = 0; $attempt < $maxAttempts + 1; ++$attempt) {
-                $statusCodes[] = $middleware->handle($this->request(), static fn() => new Response())->getStatusCode();
+                $statusCodes[] = $middleware->handle($this->request(), $rejectingKernel)->getStatusCode();
             }
 
             // Assert - the caller cannot tell the throttled answer from the rejected one
             $this->assertSame(array_fill(0, $maxAttempts + 1, StatusCode::UNAUTHORIZED), $statusCodes);
+            $this->assertSame($maxAttempts, $timesReached);
         } finally {
-            $this->pretendRunningUnitTests();
             RateLimiter::clear($this->throttleKey());
         }
     }
@@ -66,18 +84,12 @@ final class ApiAuthenticationRateLimitTest extends PublicTestCase
     public function handle_givenSuccessfulAuthentication_forgetsEarlierFailures(): void
     {
         // Arrange
-        $userService = $this->createMockPublic(UserServiceInterface::class);
-        $userService->expects($this->once())
-            ->method('verifyUserFromAuthenticationHeader')
-            ->willReturn(BasicAuthenticationResult::Success);
-
-        $middleware = new ApiAuthentication($userService, $this->createMockPublic(ApiAuthenticationLoggingInterface::class));
+        $middleware = $this->middleware();
 
         RateLimiter::clear($this->throttleKey());
         for ($attempt = 0; $attempt < $this->maxFailedAttempts() - 1; ++$attempt) {
             RateLimiter::hit($this->throttleKey(), 60);
         }
-        $this->pretendNotRunningUnitTests();
 
         try {
             // Act
@@ -87,36 +99,32 @@ final class ApiAuthenticationRateLimitTest extends PublicTestCase
             $this->assertSame(StatusCode::OK, $response->getStatusCode());
             $this->assertSame(0, RateLimiter::attempts($this->throttleKey()));
         } finally {
-            $this->pretendRunningUnitTests();
             RateLimiter::clear($this->throttleKey());
         }
     }
 
     #[Test]
-    public function handle_givenAlreadyVerifiedCredentials_forgetsEarlierFailures(): void
+    public function handle_givenAlreadyVerifiedCredentials_isNotThrottled(): void
     {
         // Arrange - a full bucket, and a caller whose credentials a previous request already verified
         $userService = $this->createMockPublic(UserServiceInterface::class);
-        $userService->method('loginAsCachedUserFromAuthenticationHeader')->willReturn(true);
-        $userService->expects($this->never())->method('verifyUserFromAuthenticationHeader');
+        $userService->method('hasVerifiedCredentialsCached')->willReturn(true);
 
-        $middleware = new ApiAuthentication($userService, $this->createMockPublic(ApiAuthenticationLoggingInterface::class));
+        $middleware = new ApiAuthenticationThrottle($userService);
 
         RateLimiter::clear($this->throttleKey());
         for ($attempt = 0; $attempt < $this->maxFailedAttempts(); ++$attempt) {
             RateLimiter::hit($this->throttleKey(), 60);
         }
-        $this->pretendNotRunningUnitTests();
 
         try {
             // Act
             $response = $middleware->handle($this->request(), static fn() => new Response());
 
-            // Assert - draining the bucket is what keeps the caller working once its cache entry lapses
+            // Assert - draining the bucket is what keeps the caller working while others keep failing
             $this->assertSame(StatusCode::OK, $response->getStatusCode());
             $this->assertSame(0, RateLimiter::attempts($this->throttleKey()));
         } finally {
-            $this->pretendRunningUnitTests();
             RateLimiter::clear($this->throttleKey());
         }
     }
@@ -126,27 +134,23 @@ final class ApiAuthenticationRateLimitTest extends PublicTestCase
     {
         // Arrange - answering a request without credentials is free, so it must not fill up the bucket
         $userService = $this->createMockPublic(UserServiceInterface::class);
-        $userService->expects($this->once())
-            ->method('verifyUserFromAuthenticationHeader')
-            ->willReturn(BasicAuthenticationResult::MissingHeader);
+        $userService->expects($this->never())->method('hasVerifiedCredentialsCached');
 
-        $log = $this->createMockPublic(ApiAuthenticationLoggingInterface::class);
-        $log->expects($this->never())->method('handleAuthenticationFailed');
-
-        $middleware = new ApiAuthentication($userService, $log);
+        $middleware = new ApiAuthenticationThrottle($userService);
 
         RateLimiter::clear($this->throttleKey(''));
-        $this->pretendNotRunningUnitTests();
 
         try {
             // Act
-            $response = $middleware->handle($this->request(withCredentials: false), static fn() => new Response());
+            $response = $middleware->handle(
+                $this->request(withCredentials: false),
+                static fn() => new Response(status: StatusCode::UNAUTHORIZED),
+            );
 
             // Assert
             $this->assertSame(StatusCode::UNAUTHORIZED, $response->getStatusCode());
             $this->assertSame(0, RateLimiter::attempts($this->throttleKey('')));
         } finally {
-            $this->pretendRunningUnitTests();
             RateLimiter::clear($this->throttleKey(''));
         }
     }
@@ -191,6 +195,14 @@ final class ApiAuthenticationRateLimitTest extends PublicTestCase
         }
     }
 
+    private function middleware(): ApiAuthenticationThrottle
+    {
+        $userService = $this->createMockPublic(UserServiceInterface::class);
+        $userService->method('hasVerifiedCredentialsCached')->willReturn(false);
+
+        return new ApiAuthenticationThrottle($userService);
+    }
+
     /**
      * @return array<string, string>
      */
@@ -218,12 +230,12 @@ final class ApiAuthenticationRateLimitTest extends PublicTestCase
 
     private function maxFailedAttempts(): int
     {
-        return (int)new ReflectionClassConstant(ApiAuthentication::class, 'MAX_FAILED_ATTEMPTS_PER_USERNAME')->getValue();
+        return (int)new ReflectionClassConstant(ApiAuthenticationThrottle::class, 'MAX_FAILED_ATTEMPTS_PER_USERNAME')->getValue();
     }
 
     /**
-     * The middleware skips authentication outright while the application knows it is running tests, which is what
-     * lets every other feature test call the api without credentials.
+     * The authentication skips outright while the application knows it is running tests, which is what lets every
+     * other feature test call the api without credentials.
      */
     private function pretendNotRunningUnitTests(): void
     {

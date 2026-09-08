@@ -24,14 +24,18 @@ class UserService implements UserServiceInterface
 
     public function loginAsUserFromAuthenticationHeader(Request $request): BasicAuthenticationResult
     {
-        if ($this->loginAsCachedUserFromAuthenticationHeader($request)) {
-            return BasicAuthenticationResult::Success;
+        $credentials = $this->credentialsFromAuthenticationHeader($request);
+
+        if ($credentials instanceof BasicAuthenticationResult) {
+            return $credentials;
         }
 
-        return $this->verifyUserFromAuthenticationHeader($request);
+        return $this->loginAsUser(...$credentials)
+            ? BasicAuthenticationResult::Success
+            : BasicAuthenticationResult::CredentialsRejected;
     }
 
-    public function loginAsCachedUserFromAuthenticationHeader(Request $request): bool
+    public function hasVerifiedCredentialsCached(Request $request): bool
     {
         $credentials = $this->credentialsFromAuthenticationHeader($request);
 
@@ -39,20 +43,7 @@ class UserService implements UserServiceInterface
             return false;
         }
 
-        return $this->loginAsCachedUser(...$credentials);
-    }
-
-    public function verifyUserFromAuthenticationHeader(Request $request): BasicAuthenticationResult
-    {
-        $credentials = $this->credentialsFromAuthenticationHeader($request);
-
-        if ($credentials instanceof BasicAuthenticationResult) {
-            return $credentials;
-        }
-
-        return $this->verifyUser(...$credentials)
-            ? BasicAuthenticationResult::Success
-            : BasicAuthenticationResult::CredentialsRejected;
+        return (bool)$this->cacheService->get($this->userAuthCacheKey(...$credentials));
     }
 
     /**
@@ -65,26 +56,24 @@ class UserService implements UserServiceInterface
      */
     public function loginAsUser(string $email, string $password): bool
     {
-        // Fast-path: Check cache for authenticated user
-        return $this->loginAsCachedUser($email, $password) || $this->verifyUser($email, $password);
-    }
+        $cacheKey = $this->userAuthCacheKey($email, $password);
 
-    /**
-     * Compares the given password against the user's stored hash - the expensive half of loginAsUser(), split off
-     * so a caller that has already established the credentials are not cached does not read the cache twice.
-     */
-    private function verifyUser(string $email, string $password): bool
-    {
+        // Fast-path: Check cache for authenticated user
+        if ($user = $this->cacheService->get($cacheKey)) {
+            auth()->setUser($user);
+
+            return true;
+        }
+
         $user = User::where('email', $email)->first();
 
+        // Perform the expensive password verification
         if (!$user || !Hash::check($password, $user->password)) {
             return false;
         }
 
-        // Cache user for 5 minutes (only caches the user object, not the password). The entry is deliberately not
-        // renewed when it is read, so a password that changed is picked up within the TTL even by a caller that
-        // never stops making requests.
-        $this->cacheService->set($this->userAuthCacheKey($email, $password), $user, self::CACHE_TTL_USER_AUTH);
+        // Cache user for 5 minutes (only caches the user object, not the password)
+        $this->cacheService->set($cacheKey, $user, self::CACHE_TTL_USER_AUTH);
 
         // Authenticate the user
         auth()->setUser($user);
@@ -135,23 +124,6 @@ class UserService implements UserServiceInterface
             $username,
             $password,
         ];
-    }
-
-    /**
-     * Authenticates the given credentials only if a previous request already verified them - it costs a cache read
-     * and never a password hash comparison.
-     */
-    private function loginAsCachedUser(string $email, string $password): bool
-    {
-        $user = $this->cacheService->get($this->userAuthCacheKey($email, $password));
-
-        if (!$user) {
-            return false;
-        }
-
-        auth()->setUser($user);
-
-        return true;
     }
 
     /**
