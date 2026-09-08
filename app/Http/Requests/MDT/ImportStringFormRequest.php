@@ -8,6 +8,9 @@ use Illuminate\Validation\Rule;
 
 class ImportStringFormRequest extends FormRequest
 {
+    /** Upper bound in characters on an encoded MDT string accepted for import or inspection. */
+    public const int IMPORT_STRING_MAX_LENGTH = 16384;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -20,7 +23,7 @@ class ImportStringFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'import_string'         => 'required|string',
+            'import_string'         => 'required|string|max:' . self::IMPORT_STRING_MAX_LENGTH,
             'mdt_import_sandbox'    => 'bool',
             'assign_notes_to_pulls' => 'bool',
             'import_as_this_week'   => 'bool',
