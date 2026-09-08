@@ -1,12 +1,14 @@
 <?php
-$enemyDisplayType  = $_COOKIE['enemy_display_type'] ?? 'enemy_portrait';
+use App\Models\Enemy;
+
+$enemyDisplayType  = Enemy::sanitizeDisplayType($_COOKIE['enemy_display_type'] ?? null);
 $enemyDisplayTypes = [
-    'enemy_portrait'  => __('view_common.maps.controls.elements.enemydisplaytype.portrait'),
-    'npc_class'       => __('view_common.maps.controls.elements.enemydisplaytype.npc_class'),
-    'npc_type'        => __('view_common.maps.controls.elements.enemydisplaytype.npc_type'),
-    'enemy_forces'    => __('view_common.maps.controls.elements.enemydisplaytype.enemy_forces'),
-    'enemy_group'     => __('view_common.maps.controls.elements.enemydisplaytype.enemy_group'),
-    'enemy_skippable' => __('view_common.maps.controls.elements.enemydisplaytype.enemy_skippable'),
+    Enemy::DISPLAY_TYPE_ENEMY_PORTRAIT  => __('view_common.maps.controls.elements.enemydisplaytype.portrait'),
+    Enemy::DISPLAY_TYPE_NPC_CLASS       => __('view_common.maps.controls.elements.enemydisplaytype.npc_class'),
+    Enemy::DISPLAY_TYPE_NPC_TYPE        => __('view_common.maps.controls.elements.enemydisplaytype.npc_type'),
+    Enemy::DISPLAY_TYPE_ENEMY_FORCES    => __('view_common.maps.controls.elements.enemydisplaytype.enemy_forces'),
+    Enemy::DISPLAY_TYPE_ENEMY_GROUP     => __('view_common.maps.controls.elements.enemydisplaytype.enemy_group'),
+    Enemy::DISPLAY_TYPE_ENEMY_SKIPPABLE => __('view_common.maps.controls.elements.enemydisplaytype.enemy_skippable'),
 ];
 ?>
 <div class="row g-0">

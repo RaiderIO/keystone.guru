@@ -300,11 +300,14 @@ class StateManager extends Signalable {
 
     /**
      * Sets the visual type that is currently being displayed.
-     * @param {Number} enemyDisplayType
+     * @param {String} enemyDisplayType
      */
     setEnemyDisplayType(enemyDisplayType) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        this._enemyDisplayType = enemyDisplayType;
+        // EnemyVisual renders any type it does not recognise as npc_class, and the value is written
+        // straight back to the cookie - so an unknown type would silently become the stored preference
+        this._enemyDisplayType = DISPLAY_TYPE_ALL.includes(enemyDisplayType) ?
+            enemyDisplayType : DISPLAY_TYPE_DEFAULT;
 
         Cookies.set('enemy_display_type', this._enemyDisplayType, cookieDefaultAttributes);
 

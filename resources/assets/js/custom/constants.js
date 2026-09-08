@@ -58,14 +58,23 @@ const MAP_FACADE_STYLE_BOTH = 'both';
 const MAP_MAX_LAT = -256;
 const MAP_MAX_LNG = 384;
 
-// Enemy display types - must match the options rendered by
-// resources/views/common/maps/controls/elements/enemydisplaytype.blade.php
+// Enemy display types - kept in lockstep with Enemy::DISPLAY_TYPE_ALL, which sanitizes the
+// enemy_display_type cookie before it reaches the map (EnemyDisplayTypeTest guards the parity)
 const DISPLAY_TYPE_ENEMY_PORTRAIT = 'enemy_portrait';
 const DISPLAY_TYPE_NPC_CLASS = 'npc_class';
 const DISPLAY_TYPE_NPC_TYPE = 'npc_type';
 const DISPLAY_TYPE_ENEMY_FORCES = 'enemy_forces';
 const DISPLAY_TYPE_ENEMY_GROUP = 'enemy_group';
 const DISPLAY_TYPE_ENEMY_SKIPPABLE = 'enemy_skippable';
+const DISPLAY_TYPE_DEFAULT = DISPLAY_TYPE_ENEMY_PORTRAIT;
+const DISPLAY_TYPE_ALL = [
+    DISPLAY_TYPE_ENEMY_PORTRAIT,
+    DISPLAY_TYPE_NPC_CLASS,
+    DISPLAY_TYPE_NPC_TYPE,
+    DISPLAY_TYPE_ENEMY_FORCES,
+    DISPLAY_TYPE_ENEMY_GROUP,
+    DISPLAY_TYPE_ENEMY_SKIPPABLE,
+];
 
 // Map context
 const MAP_CONTEXT_TYPE_DUNGEON_ROUTE = 'dungeonroute';
@@ -724,6 +733,8 @@ if (typeof module !== 'undefined' && module.exports) {
         DISPLAY_TYPE_ENEMY_FORCES,
         DISPLAY_TYPE_ENEMY_GROUP,
         DISPLAY_TYPE_ENEMY_SKIPPABLE,
+        DISPLAY_TYPE_DEFAULT,
+        DISPLAY_TYPE_ALL,
         AFFIX_FORTIFIED,
         AFFIX_TYRANNICAL,
         AFFIX_THUNDERING,
