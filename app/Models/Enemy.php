@@ -169,6 +169,36 @@ class Enemy extends CacheModel implements MappingModelCloneableInterface, Mappin
         self::TEEMING_HIDDEN,
     ];
 
+    public const DISPLAY_TYPE_ENEMY_PORTRAIT  = 'enemy_portrait';
+    public const DISPLAY_TYPE_NPC_CLASS       = 'npc_class';
+    public const DISPLAY_TYPE_NPC_TYPE        = 'npc_type';
+    public const DISPLAY_TYPE_ENEMY_FORCES    = 'enemy_forces';
+    public const DISPLAY_TYPE_ENEMY_GROUP     = 'enemy_group';
+    public const DISPLAY_TYPE_ENEMY_SKIPPABLE = 'enemy_skippable';
+
+    public const DISPLAY_TYPE_DEFAULT = self::DISPLAY_TYPE_ENEMY_PORTRAIT;
+
+    public const DISPLAY_TYPE_ALL = [
+        self::DISPLAY_TYPE_ENEMY_PORTRAIT,
+        self::DISPLAY_TYPE_NPC_CLASS,
+        self::DISPLAY_TYPE_NPC_TYPE,
+        self::DISPLAY_TYPE_ENEMY_FORCES,
+        self::DISPLAY_TYPE_ENEMY_GROUP,
+        self::DISPLAY_TYPE_ENEMY_SKIPPABLE,
+    ];
+
+    /**
+     * The enemy_display_type cookie is written by the front-end, so it may hold an empty string or
+     * a value an older client wrote; the front-end renders anything it does not recognise as
+     * npc_class, so a malformed value must not be handed through.
+     */
+    public static function sanitizeDisplayType(mixed $displayType): string
+    {
+        return is_string($displayType) && in_array($displayType, self::DISPLAY_TYPE_ALL, true)
+            ? $displayType
+            : self::DISPLAY_TYPE_DEFAULT;
+    }
+
     /** @return array<int, int> */
     public function getActiveAurasAttribute(): array
     {

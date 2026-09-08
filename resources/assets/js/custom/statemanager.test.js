@@ -24,7 +24,17 @@ global.MAP_FACADE_STYLE_FACADE = 'facade';
 global.MAP_FACADE_STYLE_SPLIT_FLOORS = 'split_floors';
 global.NUMBER_STYLE_PERCENTAGE = 'percentage';
 global.NUMBER_STYLE_ENEMY_FORCES = 'enemy_forces';
+global.DISPLAY_TYPE_ENEMY_PORTRAIT = 'enemy_portrait';
 global.DISPLAY_TYPE_NPC_CLASS = 'npc_class';
+global.DISPLAY_TYPE_DEFAULT = global.DISPLAY_TYPE_ENEMY_PORTRAIT;
+global.DISPLAY_TYPE_ALL = [
+    'enemy_portrait',
+    'npc_class',
+    'npc_type',
+    'enemy_forces',
+    'enemy_group',
+    'enemy_skippable',
+];
 global.cookieDefaultAttributes = undefined;
 
 // 1c. Map context classes. Only their identity matters to StateManager: setMapContext() picks one
@@ -327,6 +337,26 @@ describe('StateManager cookie-backed display settings', () => {
         expect(stateManager.getEnemyDisplayType()).toBe(DISPLAY_TYPE_NPC_CLASS);
         expect(Cookies.get('enemy_display_type')).toBe(DISPLAY_TYPE_NPC_CLASS);
         expect(received[0].data).toEqual({enemyDisplayType: DISPLAY_TYPE_NPC_CLASS});
+    });
+
+    // An unknown type is what EnemyVisual renders as npc_class, and setEnemyDisplayType writes its
+    // argument straight to the cookie - so without this fallback one undefined value silently becomes
+    // the user's stored preference on every later page load (#4559).
+    test.each([
+        ['undefined', undefined],
+        ['null', null],
+        ['an empty string', ''],
+        ['the string "undefined"', 'undefined'],
+        ['an unknown type', 'not_a_display_type'],
+    ])('setEnemyDisplayType_given%s_fallsBackToTheDefaultAndStoresThat', (_label, value) => {
+        const stateManager = makeStateManager();
+        const received = listenFor(stateManager, 'enemydisplaytype:changed');
+
+        stateManager.setEnemyDisplayType(value);
+
+        expect(stateManager.getEnemyDisplayType()).toBe(DISPLAY_TYPE_DEFAULT);
+        expect(Cookies.get('enemy_display_type')).toBe(DISPLAY_TYPE_DEFAULT);
+        expect(received[0].data).toEqual({enemyDisplayType: DISPLAY_TYPE_DEFAULT});
     });
 
     test('setUnkilledEnemyOpacity_givenAnOpacity_storesItAndNotifies', () => {

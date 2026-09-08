@@ -90,7 +90,7 @@ $show['controls']['combatLogRouteEnemyFailures']   ??= false;
 
 // Set the key to 'sandbox' if sandbox mode is enabled
 $sandboxMode                      = isset($sandboxMode) && $sandboxMode;
-$enemyDisplayType                 = $_COOKIE['enemy_display_type'] ?? 'enemy_portrait';
+$enemyDisplayType                 = Enemy::sanitizeDisplayType($_COOKIE['enemy_display_type'] ?? null);
 $heatmapShowTooltips              = $_COOKIE['heatmap_show_tooltips'] ?? '1';
 $mapHeatmapShowOnTop              = (bool)($_COOKIE['map_heatmap_show_on_top'] ?? false);
 $unkilledEnemyOpacity             = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
