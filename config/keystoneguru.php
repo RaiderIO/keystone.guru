@@ -691,6 +691,14 @@ return [
 
     'mdt' => [
         'version' => 'v6.2.15',
+
+        /**
+         * How long the signed MDT export url minted at page render stays valid. Deliberately
+         * generous: a user who leaves a route tab open all day and only then hits Copy MDT must
+         * still get their string. The gate's value is that the url has to come from a page render
+         * at all, not that the window is narrow.
+         */
+        'export_url_expiry_hours' => 24,
     ],
 
     'combat_log_route_regeneration' => [
