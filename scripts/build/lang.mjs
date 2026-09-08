@@ -24,10 +24,11 @@ export function buildLangBundles(rootDir, version, production) {
     const locales = fs.readdirSync(langRoot)
         .filter(entry => fs.statSync(path.join(langRoot, entry)).isDirectory());
 
+    const buildLocales = parseBuildLocales(process.env.BUILD_LOCALES);
+
     const built = [];
     for (const locale of locales) {
-        // Same shortcut as the old webpack.mix.js: only build en_US locally
-        if (process.env.APP_ENV === 'local' && locale !== 'en_US') {
+        if (!shouldBuildLocale(locale, process.env.APP_ENV, buildLocales)) {
             continue;
         }
 
@@ -66,7 +67,43 @@ export function buildLangBundles(rootDir, version, production) {
         built.push(locale);
     }
 
+    const skipped = locales.length - built.length;
+    if (skipped > 0) {
+        console.log(`lang: built ${built.join(', ')} - set BUILD_LOCALES=<locale>[,<locale>] or 'all' to also build the other ${skipped}`);
+    }
+
+    const missing = buildLocales.filter(locale => locale !== 'all' && !locales.includes(locale));
+    if (missing.length > 0) {
+        console.warn(`BUILD_LOCALES: no lang/ directory for ${missing.join(', ')} - nothing built for those`);
+    }
+
     return built;
+}
+
+/**
+ * @param {string|undefined} value Comma-separated locale names, or `all`.
+ * @returns {string[]}
+ */
+export function parseBuildLocales(value) {
+    return (value ?? '').split(',').map(entry => entry.trim()).filter(Boolean);
+}
+
+/**
+ * A full run over every locale takes minutes, which makes `npm run watch` unusable, so a local
+ * build does en_US only unless BUILD_LOCALES asks for more - that opt-in is the only way to see a
+ * non-en_US locale in dev at all, since the page 404s on a bundle that was never built (#4566).
+ *
+ * @param {string}            locale       The locale directory under lang/.
+ * @param {string|undefined}  appEnv       The APP_ENV the build runs under.
+ * @param {string[]}          buildLocales Locales explicitly requested via BUILD_LOCALES.
+ * @returns {boolean}
+ */
+export function shouldBuildLocale(locale, appEnv, buildLocales) {
+    if (appEnv !== 'local') {
+        return true;
+    }
+
+    return locale === 'en_US' || buildLocales.includes('all') || buildLocales.includes(locale);
 }
 
 /**
