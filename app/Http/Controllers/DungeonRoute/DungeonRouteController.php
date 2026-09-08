@@ -306,11 +306,8 @@ class DungeonRouteController extends Controller
     public function store(
         DungeonRouteSubmitFormRequest    $request,
         DungeonRouteSaveServiceInterface $saveService,
-        ?DungeonRoute                    $dungeonroute = null,
     ): DungeonRoute {
-        if ($dungeonroute === null) {
-            $dungeonroute = new DungeonRoute();
-        }
+        $dungeonroute = new DungeonRoute();
 
         // May fail
         if (!$saveService->save($dungeonroute, $request->validated())) {
@@ -557,31 +554,6 @@ class DungeonRouteController extends Controller
                     'header' => (bool)$showHeader,
                 ],
             ],
-        ]);
-    }
-
-    /**
-     * @throws AuthorizationException
-     * @throws InvalidArgumentException
-     */
-    public function update(
-        DungeonRouteSubmitFormRequest    $request,
-        DungeonRouteSaveServiceInterface $saveService,
-        DungeonRoute                     $dungeonroute,
-    ): RedirectResponse {
-        Gate::authorize('edit', $dungeonroute);
-
-        // Store it and show the edit page again
-        $dungeonroute = $this->store($request, $saveService);
-
-        // Message to the user
-        Session::flash('status', __('controller.dungeonroute.flash.route_updated'));
-
-        // Display the edit page
-        return redirect()->route('dungeonroute.edit', [
-            'dungeon'      => $dungeonroute->dungeon,
-            'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
         ]);
     }
 

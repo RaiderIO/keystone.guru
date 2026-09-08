@@ -319,8 +319,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             // Edit your own dungeon routes
             Route::get('edit', new DungeonRouteController()->edit(...))->name('dungeonroute.edit');
             Route::get('edit/{floorIndex}', new DungeonRouteController()->editFloor(...))->name('dungeonroute.edit.floor');
-            // Submit a patch for your own dungeon route
-            Route::patch('edit', new DungeonRouteController()->update(...))->name('dungeonroute.update');
             Route::middleware(['auth', 'role:user|admin'])->group(static function () {
                 // Live sessions are only available for logged in users - for the synchronization stuff you MUST have a session
                 Route::get('live', new LiveSessionController()->create(...))->name('dungeonroute.livesession.create');
