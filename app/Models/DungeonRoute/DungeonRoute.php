@@ -632,7 +632,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     {
         /** @var Collection<int, KillZone> $killZones */
         $killZones = $this->killZones()
-            ->with(['enemies', 'floor'])
+            ->with(['enemies.floor', 'enemies.npc', 'floor'])
             ->get();
 
         if ($useFacade) {

@@ -182,7 +182,10 @@ class KillZone extends Model
                 // Will get a random floor if there's equal counts on multiple floors, that's ok
                 $floorId = array_search(max($floorTotals), $floorTotals, true);
 
-                $result = Floor::findOrFail($floorId);
+                $enemyOnFloor = $this->getEnemies()->firstWhere('floor_id', $floorId);
+                $result       = $enemyOnFloor !== null && $enemyOnFloor->relationLoaded('floor')
+                    ? $enemyOnFloor->floor
+                    : Floor::findOrFail($floorId);
             }
         }
 
