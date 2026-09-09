@@ -8,11 +8,13 @@ use Illuminate\Support\Facades\DB;
 use PHPUnit\Event;
 use Tests\Attributes\Repeat;
 use Tests\Attributes\SlowTest;
+use Tests\Traits\UsesParallelTestToken;
 
 abstract class TestCase extends BaseTestCase
 {
     use Bootstrap;
     use Shutdown;
+    use UsesParallelTestToken;
 
     private const float WARN_TEST_DURATION_SECONDS = 1.0;
 
@@ -50,6 +52,11 @@ abstract class TestCase extends BaseTestCase
     #[\Override]
     protected function setUp(): void
     {
+        $parallelTestToken = self::parallelTestToken();
+        if ($parallelTestToken !== null) {
+            $this->prepareParallelProcessEnvironment($parallelTestToken);
+        }
+
         parent::setUp();
 
         $this->testStartTime = microtime(true);
@@ -69,6 +76,12 @@ abstract class TestCase extends BaseTestCase
                 'database.connections.combatlog.url'      => null,
             ]);
             DB::purge('combatlog');
+        }
+
+        // Under paratest every worker gets its own copy of both test schemas (#4575); after the
+        // combatlog redirect above so the token suffix lands on the phpunit schema name.
+        if ($parallelTestToken !== null) {
+            $this->isolateParallelTestProcess($parallelTestToken);
         }
 
         // StructuredLogging caches config values in statics that survive across tests - a config() change made by a

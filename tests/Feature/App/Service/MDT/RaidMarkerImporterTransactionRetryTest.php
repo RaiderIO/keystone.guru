@@ -23,6 +23,7 @@ use Tests\TestCases\PublicTestCase;
  */
 #[Group('MDT')]
 #[Group('RaidMarkerImporter')]
+#[Group('HoldsTableLock')]
 final class RaidMarkerImporterTransactionRetryTest extends PublicTestCase
 {
     use GeneratesDungeonRoutes;

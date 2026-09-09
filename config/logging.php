@@ -64,11 +64,11 @@ return [
             'handler'   => StreamHandler::class,
             'formatter' => env('LOG_STDERR_FORMATTER'),
             'with'      => [
-                'stream' => 'php://stderr',
+                'stream' => env('LOG_STDERR_STREAM', 'php://stderr'),
                 'level'  => env('LOG_LEVEL', 'debug'),
             ],
             'processors' => [PsrLogMessageProcessor::class],
-            'stream'     => 'php://stderr',
+            'stream'     => env('LOG_STDERR_STREAM', 'php://stderr'),
         ],
 
         // When no webhook is configured (e.g. local/testing) discord must still resolve to a

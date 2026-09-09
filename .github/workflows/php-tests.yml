@@ -5,7 +5,7 @@ name: PHP Tests
 # Draft PRs skip this suite (#4343); it runs on ready_for_review, on pushes to non-draft PRs,
 # and on pushes to a draft carrying the `run full ci` label (add the label, then push to trigger
 # a run — #4473: a `labeled` trigger produces a run for every label, and a run whose job is
-# skipped by `if:` leaves the required php-tests (...) checks permanently unreported for that
+# skipped by `if:` leaves the required php-tests check permanently unreported for that
 # commit, blocking merge even though an earlier run on the same commit already passed them).
 on:
   pull_request:
@@ -20,6 +20,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # The whole suite on one runner, in four paratest worker processes (#4575). Before this it was
+  # six (then five) phpunit shards on six runners, and the three light shards were almost entirely
+  # setup - checkout, docker compose, composer, DB restore - paid once per runner: 22.4 runner-minutes
+  # per run, roughly half of it overhead. One runner pays the setup once; php-ci-setup provisions
+  # one copy of both seeded schemas per worker (`keystone.guru.dev_<token>`,
+  # `keystone.guru.combatlog_<token>`) and Tests\TestCase points each worker at its own copy via
+  # paratest's TEST_TOKEN, so workers never share a table.
+  #
+  # Invoked as vendor/bin/paratest, not `php artisan test --parallel`: the framework's
+  # ParallelTesting hooks only engage behind LARAVEL_PARALLEL_TESTING and would migrate:fresh a
+  # `<db>_test_<token>` schema instead of using the pre-seeded copies. No --testsuite, so both
+  # suites and the Unit suite's phpunit.xml <exclude> entries are honoured. The Nightly group
+  # (DungeonDataSeederTest, MapTilesExistenceTest) only runs in php-coverage.yml; the
+  # HoldsTableLock group takes LOCK TABLES on its schema and is kept out of the workers as a
+  # precaution, running in a short serial phpunit step against the base schema right after.
+  #
+  # Runner-minutes are measured, not guessed: the phpunit-junit artifact below holds the per-test
+  # times of both steps (paratest merges its workers' junit into one file), and the job's own
+  # timeline holds the setup cost. Local timings are NOT a usable substitute: a development test
+  # database carries orders of magnitude more rows than CI's freshly-seeded one, which makes
+  # DB-heavy tests wildly slower there.
   php-tests:
     runs-on: ubuntu-latest
 
@@ -29,42 +50,7 @@ jobs:
         (github.event.pull_request.draft == false ||
          contains(github.event.pull_request.labels.*.name, 'run full ci')))
 
-    # The suite is split into shards that run concurrently on separate runners, each with its own
-    # MySQL, so wall-clock time is the slowest shard instead of the sum:
-    #   - combatlog-route / correct-events : the two subgroups of the heavy APICombatLog suite
-    #     (together they equal the whole APICombatLog group).
-    #   - feature-controller / feature-other : the Feature suite, split by the Controller group.
-    #     Since a shard's "--group=X" is always paired with "--exclude-group=X" on the catch-all
-    #     feature-other shard, the two are exact complements: guaranteed to cover the whole Feature
-    #     suite with no overlap and no dropped tests.
-    #   - unit : the Unit suite.
-    # Every shard excludes the Nightly group (DungeonDataSeederTest, MapTilesExistenceTest): those
-    # classes cost far more than the rest of the suite and run only in php-coverage.yml, the nightly
-    # workflow. The five shards are disjoint and together equal the full run minus Nightly. Using
-    # --testsuite (not a positional path) keeps the Unit suite's phpunit.xml <exclude> entries
-    # honoured and auto-covers newly added test files. Coverage is NOT computed here (it is
-    # instrumentation overhead) — see php-coverage.yml for the coverage run.
-    #
-    # Balance is measured, not guessed - the phpunit-junit-<shard> artifacts each job uploads below hold
-    # the per-test times, so the next rebalance starts from data rather than from a fresh measurement
-    # run. Local timings are NOT a usable substitute: a development test database carries orders of
-    # magnitude more rows than CI's freshly-seeded one, which makes DB-heavy tests wildly slower there.
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - shard: combatlog-route
-            phpunit-args: "--group=CombatLogRoute --exclude-group=Nightly"
-          - shard: correct-events
-            phpunit-args: "--group=CorrectEvents --exclude-group=Nightly"
-          - shard: feature-controller
-            phpunit-args: "--testsuite \"Feature Tests\" --group=Controller --exclude-group=APICombatLog --exclude-group=Nightly"
-          - shard: feature-other
-            phpunit-args: "--testsuite \"Feature Tests\" --exclude-group=Controller --exclude-group=APICombatLog --exclude-group=Nightly"
-          - shard: unit
-            phpunit-args: "--testsuite \"Unit Tests\" --exclude-group=Nightly"
-
-    name: php-tests (${{ matrix.shard }})
+    name: php-tests
 
     steps:
       - name: Checkout for local actions
@@ -78,40 +64,55 @@ jobs:
 
       - name: Common PHP/Laravel setup
         uses: ./.github/actions/php-ci-setup
+        with:
+          parallel-schemas: '4'
 
       - name: Switch APP_ENV to testing
         run: echo "APP_ENV=testing" >> .env
 
-      - name: Seed users
-        run: php artisan db:seed --class=LaratrustSeeder --database=migrate
-
-      - name: Run PHPUnit (${{ matrix.shard }})
+      # LOG_STDERR_STREAM: paratest starts its workers on plain pipes and never reads their stderr,
+      # so a log line a worker writes to php://stderr vanishes - and with it the leak guard below.
+      # The stderr channel writes to this file instead; the guard greps it alongside the output.
+      - name: Run PHPUnit in parallel (paratest, 4 workers)
+        env:
+          LOG_STDERR_STREAM: ${{ github.workspace }}/phpunit-stderr.log
         run: |
           set -o pipefail
-          ./vendor/bin/phpunit ${{ matrix.phpunit-args }} --log-junit phpunit-junit.xml 2>&1 | tee phpunit-output.log
+          ./vendor/bin/paratest --processes=4 --exclude-group=Nightly --exclude-group=HoldsTableLock \
+            --log-junit phpunit-junit.xml 2>&1 | tee phpunit-output.log
 
-      # Per-test wall-clock times, the input for rebalancing the shards above. Local timings are not a usable
-      # proxy - a development test database carries orders of magnitude more rows than CI's freshly-seeded one,
-      # so DB-heavy tests are wildly slower locally - which makes the CI run itself the only honest measurement.
-      - name: Upload per-test timings (${{ matrix.shard }})
+      - name: Run PHPUnit serially (HoldsTableLock group)
+        run: |
+          set -o pipefail
+          ./vendor/bin/phpunit --group=HoldsTableLock --exclude-group=Nightly \
+            --log-junit phpunit-junit-serial.xml 2>&1 | tee -a phpunit-output.log
+
+      # Per-test wall-clock times, the input for any future re-shaping of this job (worker count, a
+      # second runner). The CI run itself is the only honest measurement - see the comment above.
+      - name: Upload per-test timings
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: phpunit-junit-${{ matrix.shard }}
-          path: phpunit-junit.xml
+          name: phpunit-junit
+          path: |
+            phpunit-junit.xml
+            phpunit-junit-serial.xml
           if-no-files-found: warn
 
       # Structured logging reaching the console during a test run interleaves ANSI-coloured log lines with the
       # progress output, and has now regressed twice (#3722, #3782) because every guard against it lived in
-      # application state that a test is free to change. Assert on the PHPUnit step's own output only: the setup
+      # application state that a test is free to change. Assert on the PHPUnit steps' own output only: the setup
       # steps above run real artisan commands, which log to stderr legitimately. The pattern is verified against
-      # the log of the run that prompted #3782 - it matches all 965 of its leaked lines.
+      # the log of the run that prompted #3782 - it matches all 965 of its leaked lines. Under paratest the
+      # workers' stderr is only visible through the LOG_STDERR_STREAM file above (verified on #4599 with a
+      # planted Log::channel('stderr') line: absent from paratest's output, present in the file); their
+      # captured stdout is printed by paratest as unexpected test output and lands in phpunit-output.log.
       #
-      # Skipped when PHPUnit itself fails (the default success() condition), deliberately: a red shard has a real
+      # Skipped when PHPUnit itself fails (the default success() condition), deliberately: a red run has a real
       # failure to fix first, and a failure diff is exactly the kind of output that could match by accident.
       - name: Assert no log lines leaked into the test output
         run: |
-          if grep -nE '\] [A-Za-z0-9_-]+\.(DEBUG|INFO|NOTICE|WARNING|ERROR|CRITICAL|ALERT|EMERGENCY): ' phpunit-output.log; then
+          if cat phpunit-output.log phpunit-stderr.log 2>/dev/null | grep -nE '\] [A-Za-z0-9_-]+\.(DEBUG|INFO|NOTICE|WARNING|ERROR|CRITICAL|ALERT|EMERGENCY): '; then
             echo "::error::Log lines leaked into PHPUnit's own output - see #3782"
             exit 1
           fi

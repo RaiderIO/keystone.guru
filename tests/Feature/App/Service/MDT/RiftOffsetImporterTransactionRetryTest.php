@@ -22,6 +22,7 @@ use Tests\TestCases\PublicTestCase;
  */
 #[Group('MDT')]
 #[Group('RiftOffsetImporter')]
+#[Group('HoldsTableLock')]
 final class RiftOffsetImporterTransactionRetryTest extends PublicTestCase
 {
     use HoldsTableLock;
