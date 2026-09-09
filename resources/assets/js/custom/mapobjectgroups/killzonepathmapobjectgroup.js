@@ -7,8 +7,8 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
         /** @type {Array} Server-computed path segments, set on load and updated on killzone:changed */
         this._killZonePaths = [];
 
-        /** @type {boolean} Whether refresh() has built the polylines at least once */
-        this._rendered = false;
+        /** @type {?Array} The {points, color, path} descriptors currently drawn, or null before the first draw */
+        this._renderedSegments = null;
     }
 
     /**
@@ -71,21 +71,45 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
 
         // Set the new paths if provided
         if (killZonePaths !== null) {
-            // Saving one pull returns the paths of the whole route; when none of them moved, rebuilding
-            // every segment costs a removeLayer/addLayer pair plus fresh Leaflet handlers per polyline.
-            if (this._rendered && this._areKillZonePathsEqual(this._killZonePaths, killZonePaths)) {
-                return;
+            this._killZonePaths = killZonePaths;
+        }
+
+        let segments = this._buildSegments();
+
+        // Saving one pull returns the paths of the whole route, but only the segments touching that
+        // pull moved; recreating the rest costs a removeLayer/addLayer pair plus a fresh set of
+        // Leaflet handler registrations per polyline. A floor change or a path weight change comes
+        // in without paths and does need every polyline rebuilt.
+        if (killZonePaths !== null && this._renderedSegments !== null && this._renderedSegments.length === segments.length) {
+            for (let i = 0; i < segments.length; i++) {
+                if (this._areSegmentsEqual(this._renderedSegments[i], segments[i])) {
+                    continue;
+                }
+
+                this._destroySegment(this._renderedSegments[i]);
+                this._renderedSegments[i] = this._createSegment(segments[i]);
             }
 
-            this._killZonePaths = killZonePaths;
+            return;
         }
 
         this.clear();
         this.objects = [];
         this.currentId = 1;
 
+        this._renderedSegments = segments.map((segment) => this._createSegment(segment));
+    }
+
+    /**
+     * Builds the {points, color} descriptor of every path segment that is drawable on the current floor.
+     *
+     * @returns {Object[]}
+     * @private
+     */
+    _buildSegments() {
         let currentFloorId = getState().getCurrentFloor().id;
         let totalSegments = this._killZonePaths.length;
+        let segments = [];
 
         for (let i = 0; i < totalSegments; i++) {
             let segment = this._killZonePaths[i];
@@ -100,40 +124,55 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
             }
 
             let progress = totalSegments <= 1 ? 100 : (i / (totalSegments - 1)) * 100;
-            let color = pickHexFromHandlers(c.map.killZonePath.defaultHandlers, progress);
 
-            this.createNewPath(floorPoints, {polyline: {color: color}});
+            segments.push({
+                points: floorPoints,
+                color: pickHexFromHandlers(c.map.killZonePath.defaultHandlers, progress),
+            });
         }
 
-        for (let key in this.objects) {
-            this.setMapObjectVisibility(this.objects[key], true);
-        }
-
-        this._rendered = true;
+        return segments;
     }
 
     /**
-     * @param {Array} a
-     * @param {Array} b
+     * @param {Object} segment
+     * @returns {Object} The segment descriptor, carrying the path it was drawn as
+     * @private
+     */
+    _createSegment(segment) {
+        let path = this.createNewPath(segment.points, {polyline: {color: segment.color}});
+        this.setMapObjectVisibility(path, true);
+
+        return {points: segment.points, color: segment.color, path: path};
+    }
+
+    /**
+     * @param {Object} renderedSegment
+     * @private
+     */
+    _destroySegment(renderedSegment) {
+        this.setLayerToMapObject(null, renderedSegment.path);
+        renderedSegment.path.cleanup();
+        // Removes it from this.objects through the group's own object:deleted handler.
+        renderedSegment.path.localDelete();
+    }
+
+    /**
+     * @param {Object} a
+     * @param {Object} b
      * @returns {boolean}
      * @private
      */
-    _areKillZonePathsEqual(a, b) {
-        if (a.length !== b.length) {
+    _areSegmentsEqual(a, b) {
+        if (a.color !== b.color || a.points.length !== b.points.length) {
             return false;
         }
 
-        for (let i = 0; i < a.length; i++) {
-            if (a[i].length !== b[i].length) {
+        for (let i = 0; i < a.points.length; i++) {
+            if (a.points[i].floor_id !== b.points[i].floor_id ||
+                a.points[i].lat !== b.points[i].lat ||
+                a.points[i].lng !== b.points[i].lng) {
                 return false;
-            }
-
-            for (let j = 0; j < a[i].length; j++) {
-                if (a[i][j].floor_id !== b[i][j].floor_id ||
-                    a[i][j].lat !== b[i][j].lat ||
-                    a[i][j].lng !== b[i][j].lng) {
-                    return false;
-                }
             }
         }
 
