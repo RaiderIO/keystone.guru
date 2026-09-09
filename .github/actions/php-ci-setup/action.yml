@@ -236,7 +236,7 @@ runs:
       uses: actions/cache/restore@v5
       with:
         path: ~/ci-db-dump
-        key: ci-db-v1-${{ steps.db-cache-week.outputs.week }}-${{ hashFiles('database/migrations/**', 'database/migrations_combatlog/**', 'database/schema/**', 'database/seeders/**', 'database/data/**', 'lang/**', 'app/SeederHelpers/**', '.env.ci.example', 'docker-compose.ci.yml', '.github/actions/php-ci-setup/action.yml') }}
+        key: ci-db-v1-${{ steps.db-cache-week.outputs.week }}-${{ hashFiles('database/migrations/**', 'database/migrations_combatlog/**', 'database/schema/**', 'database/seeders/**', 'database/data/**', 'lang/**', 'app/SeederHelpers/**', 'config/laratrust_seeder.php', '.env.ci.example', 'docker-compose.ci.yml', '.github/actions/php-ci-setup/action.yml') }}
 
     - name: Migrate & seed
       if: ${{ inputs.run-migrations == 'true' && steps.cache-db.outputs.cache-hit != 'true' }}
