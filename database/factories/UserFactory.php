@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\GameServerRegion;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -29,11 +30,12 @@ class UserFactory extends Factory
             // in it and eventually collide with a fresh one - a users_email_unique violation in a
             // test that has nothing to do with users. The random suffix makes the address unique
             // against the database rather than within the run, which is what actually matters here.
-            'email'          => sprintf('%s_%s@example.com', fake()->userName(), Str::random(8)),
-            'password'       => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
-            'public_key'     => User::generateRandomPublicKey(),
-            'echo_color'     => randomHexColor(),
+            'email'                 => sprintf('%s_%s@example.com', fake()->userName(), Str::random(8)),
+            'password'              => static::$password ??= Hash::make('password'),
+            'remember_token'        => Str::random(10),
+            'public_key'            => User::generateRandomPublicKey(),
+            'echo_color'            => randomHexColor(),
+            'game_server_region_id' => GameServerRegion::ALL[GameServerRegion::DEFAULT_REGION],
         ];
     }
 
