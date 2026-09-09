@@ -2,7 +2,8 @@ name: PHP Tests
 
 # No base-branch filter: stacked PRs (one PR targeting another open PR's branch) must run the
 # same tests as PRs against master (#4074).
-# Draft PRs skip this suite (#4343); it runs on ready_for_review, on pushes to non-draft PRs,
+# Draft PRs skip this suite (#4343) and get the single-runner php-tests (affected) job below
+# instead (#4574); the full matrix runs on ready_for_review, on pushes to non-draft PRs,
 # and on pushes to a draft carrying the `run full ci` label (add the label, then push to trigger
 # a run — #4473: a `labeled` trigger produces a run for every label, and a run whose job is
 # skipped by `if:` leaves the required php-tests (...) checks permanently unreported for that
@@ -20,6 +21,70 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # A draft push runs only the PHPUnit groups that can observe the changed files, on one runner
+  # (#4574). `php artisan test:affected-groups` (App\Logic\Testing\AffectedTestGroupsResolver holds
+  # the path-to-group table) decides: "groups --group=A --group=B" runs those groups, "full" runs the
+  # whole suite (a shared or unmapped path changed - the paths are named in the log), "none" runs
+  # nothing. The full matrix at ready_for_review is the safety net for a mapping that is too narrow.
+  # The changed files come from the pull request API: the checkout below is shallow (#4135), so
+  # there is no local history to diff against.
+  php-tests-affected:
+    runs-on: ubuntu-latest
+
+    if: >-
+      contains(fromJSON('["opened", "reopened", "synchronize"]'), github.event.action) &&
+      github.event.pull_request.draft == true &&
+      !contains(github.event.pull_request.labels.*.name, 'run full ci')
+
+    permissions:
+      contents: read
+      pull-requests: read
+
+    name: php-tests (affected)
+
+    steps:
+      - name: Checkout for local actions
+        uses: actions/checkout@v7
+
+      - name: Start services
+        run: docker compose -f docker-compose.ci.yml up -d --wait
+
+      - name: Common PHP/Laravel setup
+        uses: ./.github/actions/php-ci-setup
+
+      - name: Switch APP_ENV to testing
+        run: echo "APP_ENV=testing" >> .env
+
+      - name: Seed users
+        run: php artisan db:seed --class=LaratrustSeeder --database=migrate
+
+      - name: Resolve the affected test groups
+        id: affected
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api --paginate "repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files" --jq '.[].filename' > changed-files.txt
+          echo "Changed files:"
+          cat changed-files.txt
+          read -r VERDICT PHPUNIT_ARGS <<< "$(php artisan test:affected-groups --stdin < changed-files.txt)"
+          echo "Verdict: ${VERDICT} ${PHPUNIT_ARGS}"
+          echo "verdict=${VERDICT}" >> "$GITHUB_OUTPUT"
+          echo "phpunit-args=${PHPUNIT_ARGS}" >> "$GITHUB_OUTPUT"
+
+      - name: Run PHPUnit (affected groups)
+        if: steps.affected.outputs.verdict != 'none'
+        run: |
+          set -o pipefail
+          ./vendor/bin/phpunit ${{ steps.affected.outputs.phpunit-args }} --exclude-group=Nightly 2>&1 | tee phpunit-output.log
+
+      - name: Assert no log lines leaked into the test output
+        if: steps.affected.outputs.verdict != 'none'
+        run: |
+          if grep -nE '\] [A-Za-z0-9_-]+\.(DEBUG|INFO|NOTICE|WARNING|ERROR|CRITICAL|ALERT|EMERGENCY): ' phpunit-output.log; then
+            echo "::error::Log lines leaked into PHPUnit's own output - see #3782"
+            exit 1
+          fi
+
   php-tests:
     runs-on: ubuntu-latest
 
