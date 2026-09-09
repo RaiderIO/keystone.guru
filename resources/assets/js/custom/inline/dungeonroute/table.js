@@ -403,6 +403,9 @@ class DungeonrouteTable extends InlineCode {
                 'title': lang.get('js.author_label'),
                 'data': 'author.name',
                 'name': 'author.name',
+                'render': function (data, type, row, meta) {
+                    return self._renderAuthor(data, type, row, meta);
+                },
                 'className': 'd-none ' + (self._tableView.getName() === 'profile' ? '' : 'd-lg-table-cell')
             },
             enemy_forces: {
@@ -599,6 +602,13 @@ class DungeonrouteTable extends InlineCode {
             is_upgrade_draft: row.is_upgrade_draft === true,
             has_upgrade_draft: row.has_upgrade_draft === true
         };
+    }
+
+    /**
+     * The author name is free user text; the cell holds nothing but that text, so escaping is the whole render.
+     */
+    _renderAuthor(data, type, row, meta) {
+        return Handlebars.escapeExpression(data);
     }
 
     _renderTitle(data, type, row, meta, showDescription) {

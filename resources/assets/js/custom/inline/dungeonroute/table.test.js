@@ -223,3 +223,43 @@ describe('DungeonrouteTable._renderTitle', () => {
         expect(result).toContain('<i class="fas fa-globe"></i>');
     });
 });
+
+describe('DungeonrouteTable._renderAuthor', () => {
+    it('_renderAuthor_givenNameContainingMarkup_returnsNameEscaped', () => {
+        // Arrange
+        const row = buildRow({author: {id: 2, name: '<img src=x onerror=alert(1)>'}});
+
+        // Act
+        const result = DungeonrouteTable.prototype._renderAuthor.call(buildTableContext(1), row.author.name, 'display', row, null);
+
+        // Assert: the cell must render the name as text, so parsing the output creates no element.
+        expect(result).toContain('&lt;img');
+        expect(result).not.toContain('<img');
+        const cell = document.createElement('td');
+        cell.innerHTML = result;
+        expect(cell.children.length).toBe(0);
+        expect(cell.textContent).toBe('<img src=x onerror=alert(1)>');
+    });
+
+    it('_renderAuthor_givenPlainName_returnsNameUnchanged', () => {
+        // Arrange
+        const row = buildRow({author: {id: 2, name: 'Wotuu'}});
+
+        // Act
+        const result = DungeonrouteTable.prototype._renderAuthor.call(buildTableContext(1), row.author.name, 'display', row, null);
+
+        // Assert
+        expect(result).toBe('Wotuu');
+    });
+
+    it('_renderAuthor_givenMissingName_returnsEmptyString', () => {
+        // Arrange
+        const row = buildRow({author: {id: 2}});
+
+        // Act
+        const result = DungeonrouteTable.prototype._renderAuthor.call(buildTableContext(1), row.author.name, 'display', row, null);
+
+        // Assert
+        expect(result).toBe('');
+    });
+});
