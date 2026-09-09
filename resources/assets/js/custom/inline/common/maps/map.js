@@ -721,10 +721,13 @@ class CommonMapsMap extends InlineCode {
      * @private
      */
     _fetchMdtExportString() {
+        let mapContext = getState().getMapContext();
+
         $.ajax({
             type: 'GET',
-            // When in edit mode, never use the cache, when viewing we DO want the cache to avoid excessive server load
-            url: `/ajax/${getState().getMapContext().getPublicKey()}/mdtExport?useCache=${this.options.edit ? 0 : 1}`,
+            // When in edit mode, never use the cache, when viewing we DO want the cache to avoid excessive server load.
+            // Both urls are signed server-side, so useCache cannot be flipped from here
+            url: this.options.edit ? mapContext.getMdtExportUrlUncached() : mapContext.getMdtExportUrl(),
             dataType: 'json',
             beforeSend: function () {
                 $('.mdt_export_loader_container').show();
@@ -740,6 +743,7 @@ class CommonMapsMap extends InlineCode {
                 }
 
             },
+            error: mdtExportAjaxErrorFn,
             complete: function () {
                 $('.mdt_export_loader_container').hide();
                 $('.mdt_export_result_container').show();

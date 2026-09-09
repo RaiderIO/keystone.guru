@@ -29,6 +29,22 @@ class MapContextDungeonRoute extends MapContext {
     }
 
     /**
+     * The signed url for this route's MDT export, minted server-side at page render.
+     * @returns {String}
+     */
+    getMdtExportUrl() {
+        return this._options.mdtExportUrl;
+    }
+
+    /**
+     * As getMdtExportUrl, but signed for the uncached export the map editor needs.
+     * @returns {String}
+     */
+    getMdtExportUrlUncached() {
+        return this._options.mdtExportUrlUncached;
+    }
+
+    /**
      *
      * @returns {Number}
      */

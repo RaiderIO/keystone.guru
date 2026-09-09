@@ -12,6 +12,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -416,7 +417,7 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
 
         try {
             // Act
-            $response = $this->get(sprintf('/ajax/%s/mdtExport', $dungeonRoute->public_key));
+            $response = $this->get($this->signedMdtExportUrl($dungeonRoute));
 
             // Assert
             $response->assertStatus(400);
@@ -424,6 +425,144 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
         } finally {
             $dungeonRoute->delete();
         }
+    }
+
+    /**
+     * Guards #4538: the endpoint's only gates used to be client-settable headers (X-Requested-With
+     * via OnlyAjax), which are forbidden for browser JavaScript but free for curl - so a list of
+     * public keys could be walked straight to MDT strings, one cheap request each. The signature is
+     * minted at page render instead, which cannot ride on the session because embeds get no cookies
+     * at all (#4532).
+     */
+    #[Test]
+    public function mdtExport_givenUnsignedUrl_returnsForbidden(): void
+    {
+        // Arrange
+        $dungeonRoute = $this->createMdtSupportedDungeonRoute();
+
+        try {
+            // Act
+            $response = $this->get(sprintf('/ajax/%s/mdtExport?useCache=1', $dungeonRoute->public_key));
+
+            // Assert
+            $response->assertForbidden();
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function mdtExport_givenValidSignedUrl_returnsMdtString(): void
+    {
+        // Arrange
+        $dungeonRoute = $this->createMdtSupportedDungeonRoute();
+
+        try {
+            // Act
+            $response = $this->get($this->signedMdtExportUrl($dungeonRoute));
+
+            // Assert
+            $response->assertSuccessful();
+            $response->assertJsonStructure(['mdt_string', 'warnings']);
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function mdtExport_givenExpiredSignedUrl_returnsForbidden(): void
+    {
+        // Arrange
+        $dungeonRoute = $this->createMdtSupportedDungeonRoute();
+        $url          = $this->signedMdtExportUrl($dungeonRoute);
+
+        try {
+            // Act - past the configured expiry window, whatever it is set to
+            $this->travel(config('keystoneguru.mdt.export_url_expiry_hours') + 1)->hours();
+            $response = $this->get($url);
+
+            // Assert
+            $response->assertForbidden();
+        } finally {
+            $this->travelBack();
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * The signature covers the path, so a url minted for one route cannot be replayed against
+     * another - which is what keeps a single harvested url from becoming a key to the whole site.
+     */
+    #[Test]
+    public function mdtExport_givenSignedUrlOfAnotherRoute_returnsForbidden(): void
+    {
+        // Arrange
+        $dungeonRoute      = $this->createMdtSupportedDungeonRoute();
+        $otherDungeonRoute = $this->createMdtSupportedDungeonRoute();
+
+        try {
+            // Act
+            $url      = str_replace($dungeonRoute->public_key, $otherDungeonRoute->public_key, $this->signedMdtExportUrl($dungeonRoute));
+            $response = $this->get($url);
+
+            // Assert
+            $response->assertForbidden();
+        } finally {
+            $otherDungeonRoute->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * useCache=0 skips the export cache and regenerates the string, so it is the expensive variant.
+     * It is only handed out for the map editor, and the signature is what stops a viewer from
+     * flipping the cheap url into it.
+     */
+    #[Test]
+    public function mdtExport_givenSignedUrlWithFlippedUseCache_returnsForbidden(): void
+    {
+        // Arrange
+        $dungeonRoute = $this->createMdtSupportedDungeonRoute();
+
+        try {
+            // Act
+            $url      = str_replace('useCache=1', 'useCache=0', $this->signedMdtExportUrl($dungeonRoute, useCache: true));
+            $response = $this->get($url);
+
+            // Assert
+            $response->assertForbidden();
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * Mints the signed url exactly as MapContextDungeonRoute does at page render.
+     */
+    private function signedMdtExportUrl(DungeonRoute $dungeonRoute, bool $useCache = true): string
+    {
+        return URL::temporarySignedRoute(
+            'api.dungeonroute.mdtexport',
+            now()->addHours(config('keystoneguru.mdt.export_url_expiry_hours')),
+            [
+                'dungeonRoute' => $dungeonRoute,
+                'useCache'     => $useCache ? 1 : 0,
+            ],
+            absolute: false,
+        );
+    }
+
+    private function createMdtSupportedDungeonRoute(): DungeonRoute
+    {
+        [$dungeon, $mappingVersion] = $this->findDungeon(
+            resolve: static fn(Dungeon $dungeon) => $dungeon->mdt_supported ? true : null,
+        );
+
+        return DungeonRoute::factory()->create([
+            'expires_at'         => null,
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
     }
 
     /**

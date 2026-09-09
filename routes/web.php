@@ -772,7 +772,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::post('/clone/team/{team}', new AjaxDungeonRouteController()->cloneToTeam(...));
             });
 
-            Route::middleware('throttle:mdt-export')->group(static function () {
+            // The signature is relative: it covers the path and query string only, so whichever
+            // scheme/host the ALB and CloudFlare hand us can never invalidate it
+            Route::middleware(['throttle:mdt-export', 'signed:relative'])->group(static function () {
                 Route::get('/mdtExport', new AjaxDungeonRouteController()->mdtExport(...))->name('api.dungeonroute.mdtexport');
             });
 

@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\KillZonePath\KillZonePathServiceInterface;
+use Illuminate\Support\Facades\URL;
 use Override;
 
 /**
@@ -119,6 +120,14 @@ class MapContextDungeonRoute extends MapContextBase
                 'title'        => $this->dungeonRoute->getTitleSlug(),
             ]),
 
+            // The mdt export endpoint is gated on a signed url rather than on the session, since embeds
+            // are rendered in third party iframes and receive no cookies at all (#4532). Minting it
+            // here is what stops the endpoint from being walkable straight from a list of public keys.
+            // Two urls because useCache is part of the signed query string and this context has no
+            // notion of edit vs view mode - map.js picks the right one from its own edit option.
+            'mdtExportUrl'         => $this->createMdtExportUrl(true),
+            'mdtExportUrlUncached' => $this->createMdtExportUrl(false),
+
             // Relations
             'killZonePaths'    => $this->killZonePathService->calculateForRoute($this->dungeonRoute, $useFacade),
             'killZones'        => $this->dungeonRoute->mapContextKillZones($this->coordinatesService, $useFacade),
@@ -144,5 +153,21 @@ class MapContextDungeonRoute extends MapContextBase
             // Used for showing a modal when the route has been deleted while editing
             'dungeonRouteClass' => DungeonRoute::class,
         ]);
+    }
+
+    /**
+     * Mints a temporary signed url for this route's mdt export endpoint.
+     */
+    private function createMdtExportUrl(bool $useCache): string
+    {
+        return URL::temporarySignedRoute(
+            'api.dungeonroute.mdtexport',
+            now()->addHours(config('keystoneguru.mdt.export_url_expiry_hours')),
+            [
+                'dungeonRoute' => $this->dungeonRoute,
+                'useCache'     => $useCache ? 1 : 0,
+            ],
+            absolute: false,
+        );
     }
 }

@@ -41,9 +41,17 @@ class CommonMapsEmbedtopbar extends InlineCode {
             return;
         }
 
+        // The explore and heatmap embeds share this top bar with a map context that has no dungeon
+        // route, hence no signed export url - they pass mdtStringCopyEnabled false, but don't rely on it
+        let mdtExportUrl = getState().getMapContext().getMdtExportUrl?.();
+        if (!mdtExportUrl) {
+            console.log(`Not exporting MDT string - no export url in the map context`);
+            return;
+        }
+
         $.ajax({
             type: 'GET',
-            url: `/ajax/${getState().getMapContext().getPublicKey()}/mdtExport`,
+            url: mdtExportUrl,
             dataType: 'json',
             beforeSend: function () {
                 $('#embed_copy_mdt_string_loader').show();
@@ -54,6 +62,7 @@ class CommonMapsEmbedtopbar extends InlineCode {
 
                 getState().sendMetricForDungeonRoute(METRIC_CATEGORY_DUNGEON_ROUTE_MDT_COPY, METRIC_TAG_MDT_COPY_EMBED);
             },
+            error: mdtExportAjaxErrorFn,
             complete: function () {
                 $('#embed_copy_mdt_string_loader').hide();
                 $('#embed_copy_mdt_string').show();

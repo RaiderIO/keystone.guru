@@ -317,6 +317,7 @@ return [
     'mdt_enemy_forces'                                                     => 'Enemy forces',
     'ajax_error_default'                                                   => 'An error occurred while performing your request. Please try again.',
     'ajax_error_403'                                                       => 'You are not authorized to perform this request.',
+    'mdt_export_url_expired'                                               => 'This page has been open too long to export to MDT. Please reload the page and try again.',
     'ajax_error_404'                                                       => 'The requested resource was not found.',
     'ajax_error_419'                                                       => 'Your session has expired. Please refresh the page and try again.',
     'map_object_readonly_label'                                            => 'This mapping version is read-only',
