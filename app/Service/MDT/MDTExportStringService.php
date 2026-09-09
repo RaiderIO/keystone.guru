@@ -259,6 +259,8 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     {
         $objects = [];
 
+        $this->dungeonRoute->loadMissing(['killZones.enemies.floor']);
+
         foreach ($this->dungeonRoute->killZones as $killZone) {
             if (!isset($killZone->description)) {
                 continue;
