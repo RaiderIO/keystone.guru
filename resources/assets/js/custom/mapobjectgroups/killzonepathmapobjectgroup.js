@@ -6,6 +6,9 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
 
         /** @type {Array} Server-computed path segments, set on load and updated on killzone:changed */
         this._killZonePaths = [];
+
+        /** @type {boolean} Whether refresh() has built the polylines at least once */
+        this._rendered = false;
     }
 
     /**
@@ -68,6 +71,12 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
 
         // Set the new paths if provided
         if (killZonePaths !== null) {
+            // Saving one pull returns the paths of the whole route; when none of them moved, rebuilding
+            // every segment costs a removeLayer/addLayer pair plus fresh Leaflet handlers per polyline.
+            if (this._rendered && this._areKillZonePathsEqual(this._killZonePaths, killZonePaths)) {
+                return;
+            }
+
             this._killZonePaths = killZonePaths;
         }
 
@@ -99,6 +108,36 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
         for (let key in this.objects) {
             this.setMapObjectVisibility(this.objects[key], true);
         }
+
+        this._rendered = true;
+    }
+
+    /**
+     * @param {Array} a
+     * @param {Array} b
+     * @returns {boolean}
+     * @private
+     */
+    _areKillZonePathsEqual(a, b) {
+        if (a.length !== b.length) {
+            return false;
+        }
+
+        for (let i = 0; i < a.length; i++) {
+            if (a[i].length !== b[i].length) {
+                return false;
+            }
+
+            for (let j = 0; j < a[i].length; j++) {
+                if (a[i][j].floor_id !== b[i][j].floor_id ||
+                    a[i][j].lat !== b[i][j].lat ||
+                    a[i][j].lng !== b[i][j].lng) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     load() {
@@ -164,4 +203,10 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
         this.signal('killzonepath:new', {newPath: path});
         return path;
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {KillZonePathMapObjectGroup};
 }
