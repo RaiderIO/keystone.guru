@@ -83,6 +83,24 @@ global.L = {
     },
 };
 
+// 1d-bis. Collaborator classes the covered methods only reference through `instanceof`.
+global.Enemy = class Enemy {};
+global.MapContextLiveSession = class MapContextLiveSession {};
+global.SelectKillZoneEnemySelectionOverpull = class SelectKillZoneEnemySelectionOverpull {};
+global.EnemySelection = class EnemySelection {
+    constructor(mapObject = null) {
+        this._mapObject = mapObject;
+    }
+
+    getMapObject() {
+        return this._mapObject;
+    }
+
+    register() {}
+
+    unregister() {}
+};
+
 // 1e. getState() is called from the constructor; provide a fake that satisfies
 // the event registrations it performs.
 const fakeState = {
@@ -106,7 +124,8 @@ const {KillZone} = require('./killzone');
  * prideful, awakened, or linked to the last boss).
  */
 function makeFakeEnemy(id) {
-    return {
+    // KillZone._enemySelected() asserts `enemy instanceof Enemy`, so build off that prototype.
+    return Object.assign(new Enemy(), {
         id,
         enemy_pack_id: null,
         _killZone: null,
@@ -121,7 +140,41 @@ function makeFakeEnemy(id) {
         isPridefulNpc: () => false,
         isAwakenedNpc: () => false,
         isLinkedToLastBoss: () => false,
-    };
+        isObsolete: () => false,
+        getEnemyForces: () => 10,
+        getPackBuddies: () => [],
+    });
+}
+
+/**
+ * Builds a pack of fake enemies that all know each other as pack buddies.
+ *
+ * @param {Number} packId
+ * @param {Number[]} ids
+ * @returns {Object[]}
+ */
+function makeFakeEnemyPack(packId, ids) {
+    const pack = ids.map((id) => {
+        const enemy = makeFakeEnemy(id);
+        enemy.enemy_pack_id = packId;
+        return enemy;
+    });
+
+    // getPackBuddies() is pushed onto by _enemySelected(), so hand out a fresh array each call.
+    pack.forEach((enemy) => {
+        enemy.getPackBuddies = () => pack.filter((buddy) => buddy !== enemy);
+    });
+
+    return pack;
+}
+
+/**
+ * @param {Object} enemy
+ * @param {Object} [context]
+ * @returns {Object}
+ */
+function enemySelectedEvent(enemy, context = {}) {
+    return {data: {enemy: enemy, ignorePackBuddies: false}, context: context};
 }
 
 /**
@@ -294,5 +347,138 @@ describe('KillZone.toString', () => {
         killZone.setIndex(7);
 
         expect(killZone.toString()).toBe('Pull 7');
+    });
+});
+
+describe('KillZone._mapStateChanged', () => {
+    /**
+     * @param {KillZone} killZone
+     * @param {?Object} previousMapState
+     * @param {?Object} newMapState
+     */
+    const fireMapStateChanged = (killZone, previousMapState, newMapState) => killZone._mapStateChanged({
+        data: {previousMapState: previousMapState, newMapState: newMapState},
+    });
+
+    /**
+     * @param {Number} id
+     * @returns {KillZone}
+     */
+    function makeSelectableKillZone(id) {
+        const killZone = new KillZone(makeFakeMap(), null);
+        killZone.id = id;
+        // Isolate from the heavy, Leaflet-coupled redraw - the redraw is what is being counted.
+        killZone.redrawConnectionsToEnemies = vi.fn();
+
+        return killZone;
+    }
+
+    it('redraws when this kill zone becomes the selected one', () => {
+        const killZone = makeSelectableKillZone(5);
+
+        fireMapStateChanged(killZone, null, new EnemySelection({id: 5}));
+
+        expect(killZone.redrawConnectionsToEnemies).toHaveBeenCalledOnce();
+    });
+
+    it('redraws when this kill zone stops being the selected one', () => {
+        const killZone = makeSelectableKillZone(5);
+
+        fireMapStateChanged(killZone, new EnemySelection({id: 5}), null);
+
+        expect(killZone.redrawConnectionsToEnemies).toHaveBeenCalledOnce();
+    });
+
+    // The regression this pins (#4589): every pull redrew its enemy hull on every map state change,
+    // three addLayer plus up to three removeLayer calls each, for a visually identical result.
+    it('does not redraw when another kill zone is the target of the selection', () => {
+        const killZone = makeSelectableKillZone(5);
+
+        fireMapStateChanged(killZone, new EnemySelection({id: 6}), new EnemySelection({id: 7}));
+
+        expect(killZone.redrawConnectionsToEnemies).not.toHaveBeenCalled();
+    });
+
+    it('does not redraw when neither map state is an enemy selection', () => {
+        const killZone = makeSelectableKillZone(5);
+
+        fireMapStateChanged(killZone, null, {});
+
+        expect(killZone.redrawConnectionsToEnemies).not.toHaveBeenCalled();
+    });
+});
+
+describe('KillZone._enemySelected', () => {
+    /**
+     * @param {Object[]} enemies
+     * @returns {KillZone}
+     */
+    function makeSavedKillZone(enemies) {
+        const enemiesById = {};
+        enemies.forEach((enemy) => (enemiesById[enemy.id] = enemy));
+
+        const killZone = new KillZone(makeFakeMap(enemiesById), null);
+        killZone.id = 5;
+        killZone.redrawConnectionsToEnemies = vi.fn();
+        killZone._signals = [];
+
+        return killZone;
+    }
+
+    // The regression this pins (#4590): each pack buddy emitted its own killzone:enemyadded, and every
+    // one of those fans out to a killzone:changed that rebinds tooltips and updates every sidebar row.
+    it('collapses a pack add into a single killzone:enemieschanged signal', () => {
+        const pack = makeFakeEnemyPack(7, [1, 2, 3]);
+        const killZone = makeSavedKillZone(pack);
+
+        killZone._enemySelected(enemySelectedEvent(pack[0]));
+
+        // _enemySelected() walks the pack buddies before the clicked enemy itself.
+        expect(killZone.enemies).toEqual([2, 3, 1]);
+        expect(signalsOf(killZone, 'killzone:enemyadded')).toHaveLength(0);
+
+        const changed = signalsOf(killZone, 'killzone:enemieschanged');
+        expect(changed).toHaveLength(1);
+        expect(changed[0].data).toEqual({previousForces: 0, newForces: 30});
+    });
+
+    it('collapses a pack removal into a single killzone:enemieschanged signal', () => {
+        const pack = makeFakeEnemyPack(7, [1, 2, 3]);
+        const killZone = makeSavedKillZone(pack);
+        pack.forEach((enemy) => killZone._addEnemy(enemy));
+        killZone._signals = [];
+
+        killZone._enemySelected(enemySelectedEvent(pack[0]));
+
+        expect(killZone.enemies).toEqual([]);
+        expect(signalsOf(killZone, 'killzone:enemyremoved')).toHaveLength(0);
+
+        const changed = signalsOf(killZone, 'killzone:enemieschanged');
+        expect(changed).toHaveLength(1);
+        expect(changed[0].data).toEqual({previousForces: 30, newForces: 0});
+    });
+
+    it('still signals per enemy when the enemy is not part of a pack', () => {
+        const enemy = makeFakeEnemy(1);
+        enemy.enemy_pack_id = 0;
+        const killZone = makeSavedKillZone([enemy]);
+
+        killZone._enemySelected(enemySelectedEvent(enemy));
+
+        expect(signalsOf(killZone, 'killzone:enemyadded')).toHaveLength(1);
+        expect(signalsOf(killZone, 'killzone:enemieschanged')).toHaveLength(0);
+    });
+
+    // killzone:enemieschanged carries an enemy forces delta that already includes the overpulled
+    // enemies, and nothing listens to it for the overpull visuals - so that path keeps its own signals.
+    it('leaves the overpull path signalling per pack buddy', () => {
+        const pack = makeFakeEnemyPack(7, [1, 2, 3]);
+        const killZone = makeSavedKillZone(pack);
+
+        killZone._enemySelected(enemySelectedEvent(pack[0], new SelectKillZoneEnemySelectionOverpull()));
+
+        expect(killZone.overpulledEnemies).toEqual([2, 3, 1]);
+        expect(signalsOf(killZone, 'killzone:overpulledenemyadded')).toHaveLength(3);
+        expect(signalsOf(killZone, 'killzone:enemieschanged')).toHaveLength(0);
     });
 });
