@@ -31,12 +31,16 @@ class SeasonService implements SeasonServiceInterface
 
     private ?Season $firstSeasonCache = null;
 
+    /** @var Collection<int, Collection<int, Season>> Seasons of an expansion, keyed by expansion id */
+    private Collection $seasonsPerExpansionCache;
+
     public function __construct(
         private readonly ExpansionService          $expansionService,
         private readonly SeasonRepositoryInterface $seasonRepository,
     ) {
-        $this->seasonCache      = collect();
-        $this->firstSeasonCache = null;
+        $this->seasonCache              = collect();
+        $this->firstSeasonCache         = null;
+        $this->seasonsPerExpansionCache = collect();
     }
 
     /**
@@ -167,21 +171,43 @@ class SeasonService implements SeasonServiceInterface
         $region ??= GameServerRegion::getUserOrDefaultRegion();
         $expansion ??= $this->expansionService->getCurrentExpansion($region);
 
+        // Database stores everything in UTC, so we need to convert the date to UTC to compare it properly
+        $dateUtc = $date->copy()->setTimezone('UTC');
+
+        // An expansion has a handful of seasons and they never change during a request, while callers
+        // ask for one date after another - `SeasonAffixGroupService::getWeeklyAffixGroupsSinceStart()`
+        // walks every week since the season started. Resolving the date against the loaded rows keeps
+        // that at one query per expansion instead of one per date (#4587). The comparison mirrors the
+        // DATE_ADD(DATE_ADD(`start`, ...)) this used to run as SQL; `start` is stored and cast in UTC.
         /** @var Season|null $season */
-        $season = Season::whereRaw(
-            'DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) <= ?',
-            [
-                $region->reset_day_offset,
-                $region->reset_hours_offset,
-                // Database stores everything in UTC, so we need to convert the date to UTC to compare it properly
-                $date->copy()->setTimezone('UTC')->toDateTimeString(),
-            ],
-        )
-            ->where('expansion_id', $expansion->id)
-            ->orderBy('start', 'desc')
-            ->first();
+        $season = $this->getSeasonsOfExpansion($expansion)
+            ->last(static fn(Season $season): bool => $season->start->copy()
+                ->addDays($region->reset_day_offset)
+                ->addHours($region->reset_hours_offset)
+                ->lessThanOrEqualTo($dateUtc));
 
         return $season;
+    }
+
+    /**
+     * Every season of an expansion, oldest first - including the timewalking ones that
+     * {@see SeasonService::getAllSeasons()} deliberately leaves out.
+     *
+     * @return Collection<int, Season>
+     */
+    private function getSeasonsOfExpansion(Expansion $expansion): Collection
+    {
+        if (!$this->seasonsPerExpansionCache->has($expansion->id)) {
+            $this->seasonsPerExpansionCache->put(
+                $expansion->id,
+                Season::where('expansion_id', $expansion->id)
+                    ->with(['expansion.timewalkingEvent', 'affixGroups', 'dungeons'])
+                    ->orderBy('start')
+                    ->get(),
+            );
+        }
+
+        return $this->seasonsPerExpansionCache->get($expansion->id);
     }
 
     /**

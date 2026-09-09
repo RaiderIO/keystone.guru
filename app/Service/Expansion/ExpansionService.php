@@ -13,6 +13,18 @@ use Illuminate\Support\Collection;
 
 class ExpansionService implements ExpansionServiceInterface
 {
+    /** @var Collection<string, Expansion> The current expansion, keyed by region short */
+    private Collection $currentExpansionCache;
+
+    /** @var Collection<string, Season|null> The current season, keyed by expansion id and region short */
+    private Collection $currentSeasonCache;
+
+    public function __construct()
+    {
+        $this->currentExpansionCache = collect();
+        $this->currentSeasonCache    = collect();
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -39,7 +51,18 @@ class ExpansionService implements ExpansionServiceInterface
      */
     public function getCurrentExpansion(?GameServerRegion $gameServerRegion = null): Expansion
     {
-        return $this->getExpansionAt(Carbon::now(), $gameServerRegion);
+        $gameServerRegion ??= GameServerRegion::getUserOrDefaultRegion();
+
+        // Called from all over a single request - the controller, the repositories and the view
+        // composers each asked the database again for the same row (#4587)
+        if (!$this->currentExpansionCache->has($gameServerRegion->short)) {
+            $this->currentExpansionCache->put(
+                $gameServerRegion->short,
+                $this->getExpansionAt(Carbon::now(), $gameServerRegion),
+            );
+        }
+
+        return $this->currentExpansionCache->get($gameServerRegion->short);
     }
 
     public function getNextExpansion(?GameServerRegion $gameServerRegion = null): ?Expansion
@@ -66,7 +89,17 @@ class ExpansionService implements ExpansionServiceInterface
      */
     public function getCurrentSeason(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): ?Season
     {
-        return $expansion->currentSeason($gameServerRegion);
+        $gameServerRegion ??= GameServerRegion::getUserOrDefaultRegion();
+
+        // Expansion::currentSeason() memoises on the model instance, and a request holds several
+        // instances of the same expansion row because of the default eager loads (#4587)
+        $key = sprintf('%d-%s', $expansion->id, $gameServerRegion->short);
+
+        if (!$this->currentSeasonCache->has($key)) {
+            $this->currentSeasonCache->put($key, $expansion->currentSeason($gameServerRegion));
+        }
+
+        return $this->currentSeasonCache->get($key);
     }
 
     /**
