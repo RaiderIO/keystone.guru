@@ -348,13 +348,6 @@ class CombatLogEvent extends OpensearchModel
         return new IngameXY($this->pos_x, $this->pos_y);
     }
 
-    public function getIngameGridXY(): IngameXY
-    {
-        // Could use $this->floor but that doesn't work since this model is an Opensearch model - the floor should be added
-        // later
-        return new IngameXY($this->pos_grid_x, $this->pos_grid_y);
-    }
-
     public function getIngameXYEnemy(): ?IngameXY
     {
         // Could use $this->floor but that doesn't work since this model is an Opensearch model - the floor should be added
@@ -365,18 +358,6 @@ class CombatLogEvent extends OpensearchModel
         }
 
         return new IngameXY($context['pos_enemy_x'], $context['pos_enemy_y']);
-    }
-
-    public function getIngameXYEnemyGrid(): ?IngameXY
-    {
-        // Could use $this->floor but that doesn't work since this model is an Opensearch model - the floor should be added
-        // later
-        $context = json_decode($this->context, true);
-        if (!isset($context['pos_enemy_grid_x']) || !isset($context['pos_enemy_grid_y'])) {
-            return null;
-        }
-
-        return new IngameXY($context['pos_enemy_grid_x'], $context['pos_enemy_grid_y']);
     }
 
     public function setTimeInterval(Dungeon $dungeon, Carbon $start, int $durationMs): self
