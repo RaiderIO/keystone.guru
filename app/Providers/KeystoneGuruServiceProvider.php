@@ -305,7 +305,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         }
         $this->app->bind(RedisServiceInterface::class, PHPRedisService::class);
 
-        $this->app->bind(ExpansionServiceInterface::class, ExpansionService::class);
+        // Both the interface and the concrete class are registered so that the request-scoped
+        // caches inside them are shared by every caller, however it asks for the service (#4587)
+        $this->app->scoped(ExpansionService::class);
+        $this->app->scoped(ExpansionServiceInterface::class, ExpansionService::class);
         $this->app->bind(NpcCompendiumServiceInterface::class, NpcCompendiumService::class);
         $this->app->bind(SpellCompendiumServiceInterface::class, SpellCompendiumService::class);
         $this->app->bind(NpcServiceInterface::class, NpcService::class);
@@ -320,7 +323,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(MDTMappingImportServiceInterface::class, MDTMappingImportService::class);
 
         // Depends on ExpansionService
-        $this->app->bind(SeasonServiceInterface::class, SeasonService::class);
+        $this->app->scoped(SeasonService::class);
+        $this->app->scoped(SeasonServiceInterface::class, SeasonService::class);
         $this->app->bind(OverpulledEnemyServiceInterface::class, OverpulledEnemyService::class);
 
         // Depends on SeasonService, TimewalkingEventService
