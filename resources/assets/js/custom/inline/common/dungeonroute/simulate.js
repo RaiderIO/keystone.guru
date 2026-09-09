@@ -196,7 +196,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
      * @private
      */
     _fetchSimulationCraftString() {
-        $.ajax({
+        guardedAjaxClick('#simulate_get_string', {
             type: 'POST',
             url: `/ajax/${getState().getMapContext().getPublicKey()}/simulate`,
             dataType: 'json',
@@ -217,4 +217,10 @@ class CommonDungeonrouteSimulate extends InlineCode {
             }
         });
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {CommonDungeonrouteSimulate};
 }
