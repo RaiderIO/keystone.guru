@@ -297,6 +297,9 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                 if ($newlyCreated = ($npc === null)) {
                     $npc = new Npc();
+                    // Only on creation - an NPC that already exists may have had its game version
+                    // corrected by hand, and a re-import of another game version must not undo that
+                    $npc->game_version_id = $gameVersion->id;
                 }
 
                 $npc->id = $mdtNpc->getId();

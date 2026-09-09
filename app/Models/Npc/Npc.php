@@ -24,6 +24,7 @@ use Override;
 
 /**
  * @property int        $id
+ * @property int        $game_version_id
  * @property int        $classification_id
  * @property int        $npc_type_id
  * @property int        $npc_class_id
@@ -45,6 +46,7 @@ use Override;
  * @property string               $wowhead_url
  * @property array<string, mixed> $tooltip_data
  *
+ * @property GameVersion            $gameVersion
  * @property NpcClassification|null $classification A few seeded NPCs carry an id no classification row matches
  * @property NpcType                $type
  * @property NpcClass               $class
@@ -89,6 +91,7 @@ class Npc extends CacheModel implements MappingModelInterface
 
     protected $fillable = [
         'id',
+        'game_version_id',
         'dungeon_id',
         'classification_id',
         'npc_type_id',
@@ -115,6 +118,7 @@ class Npc extends CacheModel implements MappingModelInterface
     {
         return [
             'id'                => 'integer',
+            'game_version_id'   => 'integer',
             'dungeon_id'        => 'integer',
             'classification_id' => 'integer',
             'npc_type_id'       => 'integer',
@@ -187,10 +191,77 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public function getWowheadUrlAttribute(): string
     {
-        $result = sprintf('https://www.wowhead.com/npc=%d', $this->id);
+        return $this->getWowheadUrl();
+    }
 
-        if (!empty(__($this->name))) {
-            $result .= '/' . Str::slug(__($this->name));
+    /**
+     * The game versions this NPC is known to exist in, derived from the dungeons it is assigned to
+     * (npc_dungeons) and the game versions those dungeons have mapping versions for.
+     *
+     * @return Collection<int, int>
+     */
+    public function getCandidateGameVersionIds(): Collection
+    {
+        // Queried directly rather than through the `dungeons` relation - caching it on the Npc makes
+        // toArray() serialize it, which lazy-loads each Dungeon's appends (#4250)
+        return once(fn(): Collection => MappingVersion::query()
+            ->join('npc_dungeons', 'npc_dungeons.dungeon_id', '=', 'mapping_versions.dungeon_id')
+            ->where('npc_dungeons.npc_id', $this->id)
+            ->distinct()
+            ->pluck('mapping_versions.game_version_id')
+            ->map(static fn(mixed $gameVersionId): int => (int)$gameVersionId)
+            ->values());
+    }
+
+    /**
+     * Which game version's Wowhead database holds this NPC's data. An NPC id can be shared across
+     * game versions (Naxxramas exists in both Classic and Wrath), so the stored game_version_id is
+     * a hand-correctable fallback rather than the answer: the mapping version being viewed wins
+     * whenever its game version is one the NPC actually appears in (#3987).
+     */
+    public function getGameVersionId(?MappingVersion $mappingVersion = null): int
+    {
+        $storedGameVersionId = $this->game_version_id ?? GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL];
+
+        // Without a mapping version the candidates can only ever turn the answer into retail, so for a
+        // retail NPC they cannot change it - worth skipping, this runs per NPC of a serialized collection
+        if ($mappingVersion === null && $storedGameVersionId === GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL]) {
+            return $storedGameVersionId;
+        }
+
+        $candidateGameVersionIds = $this->getCandidateGameVersionIds();
+
+        // Combat-log-created NPCs are in no dungeon at all, so there is nothing to derive from
+        if ($candidateGameVersionIds->isEmpty()) {
+            return GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL];
+        }
+
+        if ($mappingVersion !== null && $candidateGameVersionIds->contains($mappingVersion->game_version_id)) {
+            return $mappingVersion->game_version_id;
+        }
+
+        return $storedGameVersionId;
+    }
+
+    /**
+     * The Wowhead page for this NPC, on the Wowhead database of the game version that
+     * getGameVersionId() resolves for the mapping version in scope (if any).
+     */
+    public function getWowheadUrl(?MappingVersion $mappingVersion = null): string
+    {
+        return self::getWowheadLink($this->getGameVersionId($mappingVersion), $this->id, $this->name);
+    }
+
+    /**
+     * The Wowhead page for an NPC, on the Wowhead database belonging to the NPC's game version -
+     * a Classic or Mists of Pandaria NPC does not exist on retail Wowhead (#3987).
+     */
+    public static function getWowheadLink(?int $gameVersionId, int $npcId, ?string $name = null): string
+    {
+        $result = sprintf('%s/npc=%d', GameVersion::getWowheadBaseUrl($gameVersionId), $npcId);
+
+        if (!empty(__($name))) {
+            $result .= '/' . Str::slug(__($name));
         }
 
         return $result;
@@ -222,6 +293,12 @@ class Npc extends CacheModel implements MappingModelInterface
     public function npcDungeons(): HasMany
     {
         return $this->hasMany(NpcDungeon::class);
+    }
+
+    /** @return BelongsTo<GameVersion, $this> */
+    public function gameVersion(): BelongsTo
+    {
+        return $this->belongsTo(GameVersion::class);
     }
 
     /** @return BelongsTo<NpcClassification, $this> */

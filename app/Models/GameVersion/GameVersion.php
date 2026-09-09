@@ -163,4 +163,32 @@ class GameVersion extends CacheModel
             config('keystoneguru.cache.default_game_version.ttl'),
         );
     }
+
+    /**
+     * The Wowhead sub-domain path for a game version, or null when the game version has its data on
+     * retail Wowhead (or is not mapped to a Wowhead database of its own).
+     */
+    public static function getWowheadDomain(?int $gameVersionId): ?string
+    {
+        return match ($gameVersionId) {
+            self::ALL[self::GAME_VERSION_WRATH]       => 'wrath',
+            self::ALL[self::GAME_VERSION_CLASSIC_ERA] => 'classic',
+            self::ALL[self::GAME_VERSION_MOP]         => 'mop-classic',
+            default                                   => null,
+        };
+    }
+
+    /**
+     * The Wowhead base URL a link for this game version must be built on - the domain part of a
+     * link must match getWowheadDomain()'s tooltip domain for the same game version, or the hover
+     * tooltip shows retail data while the link points at a classic database.
+     */
+    public static function getWowheadBaseUrl(?int $gameVersionId): string
+    {
+        $domain = self::getWowheadDomain($gameVersionId);
+
+        return $domain === null
+            ? 'https://www.wowhead.com'
+            : sprintf('https://www.wowhead.com/%s', $domain);
+    }
 }

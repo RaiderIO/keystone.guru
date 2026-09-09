@@ -170,7 +170,7 @@ class AdminToolsNpcController extends Controller
     public function npcsShowMissingDisplayId(): View
     {
         return view('admin.tools.npc.showmissingdisplayid', [
-            'npcs' => Npc::whereNull('display_id')->get(),
+            'npcs' => Npc::with(['dungeons'])->whereNull('display_id')->get(),
         ]);
     }
 
