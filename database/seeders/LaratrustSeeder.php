@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\GameServerRegion;
 use App\Models\Laratrust\Permission;
 use App\Models\Laratrust\Role;
 use App\Models\User;
@@ -75,12 +76,13 @@ class LaratrustSeeder extends Seeder implements TableSeederInterface
                 $this->command->info("Creating '{$key}' user");
                 // Create default user for each role
                 $user = User::create([
-                    'name'         => ucwords(str_replace('_', ' ', $key)),
-                    'public_key'   => User::generateRandomPublicKey(),
-                    'echo_color'   => randomHexColor(),
-                    'email'        => $key . '@app.com',
-                    'password'     => Hash::make('password'),
-                    'legal_agreed' => 1,
+                    'name'                  => ucwords(str_replace('_', ' ', $key)),
+                    'public_key'            => User::generateRandomPublicKey(),
+                    'echo_color'            => randomHexColor(),
+                    'email'                 => $key . '@app.com',
+                    'password'              => Hash::make('password'),
+                    'legal_agreed'          => 1,
+                    'game_server_region_id' => GameServerRegion::ALL[GameServerRegion::DEFAULT_REGION],
                 ]);
                 $user->addRole($role);
             }
