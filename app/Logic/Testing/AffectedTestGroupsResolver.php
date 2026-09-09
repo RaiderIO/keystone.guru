@@ -78,6 +78,9 @@ class AffectedTestGroupsResolver
         'resources/views/*'                 => self::VIEW_GROUPS,
         'lang/*'                            => ['Localization', 'View'],
 
+        // Read by EnemyDisplayTypeTest, which cross-checks the JS constants against the PHP enum.
+        'resources/assets/js/custom/constants.js' => ['Models'],
+
         // Nothing here is reachable from a PHP test. A workflow change is exercised by the run of that workflow itself;
         // only the shared setup action under .github/actions changes what every test sees.
         '.github/*'          => [],

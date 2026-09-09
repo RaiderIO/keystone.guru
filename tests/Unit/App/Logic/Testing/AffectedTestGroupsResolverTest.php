@@ -45,6 +45,7 @@ final class AffectedTestGroupsResolverTest extends TestCase
             'seeder json'        => ['database/seeders/dungeondata/wow/kingsrest/enemies.json', ['AffixSeeder', 'DatabaseSeeder', 'DungeonDataSeeder', 'MapIconTypesSeeder', 'SeasonsSeeder', 'SeederHelpers']],
             'own test file'      => [self::OWN_PATH, ['AffectedTestGroups']],
             'resolver itself'    => ['app/Logic/Testing/AffectedTestGroupsResolver.php', ['AffectedTestGroups']],
+            'js constants'       => ['resources/assets/js/custom/constants.js', ['Models']],
         ];
     }
 
