@@ -58,16 +58,27 @@ final class DungeonRouteDiscoverInactiveContentTest extends PublicTestCase
         /** @var GameVersion $gameVersion */
         $gameVersion = GameVersion::where('active', 1)->firstOrFail();
         /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::where('active', 0)->firstOrFail();
+        $dungeon = Dungeon::where('active', 0)->first() ?? Dungeon::where('active', 1)->firstOrFail();
 
-        // Act
-        $response = $this->get(route('dungeonroutes.discoverdungeon', [
-            'gameVersion' => $gameVersion,
-            'dungeon'     => $dungeon,
-        ]));
+        $wasActive = (bool)$dungeon->active;
+        if ($wasActive) {
+            $dungeon->update(['active' => false]);
+        }
 
-        // Assert
-        $response->assertStatus(StatusCode::NOT_FOUND);
+        try {
+            // Act
+            $response = $this->get(route('dungeonroutes.discoverdungeon', [
+                'gameVersion' => $gameVersion,
+                'dungeon'     => $dungeon,
+            ]));
+
+            // Assert
+            $response->assertStatus(StatusCode::NOT_FOUND);
+        } finally {
+            if ($wasActive) {
+                $dungeon->update(['active' => true]);
+            }
+        }
     }
 
     #[Test]
