@@ -4,9 +4,11 @@ namespace App\Models;
 
 use App\Logic\MDT\Entity\MDTPatrol;
 use App\Models\Floor\Floor;
+use App\Models\Interfaces\HasPolylineInterface;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Traits\HasPolyline;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -31,8 +33,9 @@ use Override;
  *
  * @mixin Eloquent
  */
-class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface
+class EnemyPatrol extends CacheModel implements HasPolylineInterface, MappingModelCloneableInterface, MappingModelInterface
 {
+    use HasPolyline;
     use SeederModel;
 
     public $visible = [
@@ -87,15 +90,6 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
-    }
-
-    /**
-     * @return HasOne<Polyline, $this>
-     */
-    public function polyline(): HasOne
-    {
-        return $this->hasOne(Polyline::class, 'model_id')
-            ->where('model_class', static::class);
     }
 
     /**

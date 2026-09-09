@@ -35,6 +35,16 @@ class AjaxFloorUnionController extends AjaxMappingModelBaseController
     }
 
     /**
+     * A floor union positions a floor onto the facade floor - its own lat/lng is a facade
+     * coordinate and must be stored exactly as it came in.
+     */
+    #[Override]
+    protected function shouldConvertFacadeCoordinates(): bool
+    {
+        return false;
+    }
+
+    /**
      * @throws Throwable
      */
     public function store(

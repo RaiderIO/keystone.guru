@@ -5,11 +5,9 @@ namespace App\Http\Controllers\Ajax;
 use App\Events\Models\EnemyPatrol\EnemyPatrolChangedEvent;
 use App\Events\Models\EnemyPatrol\EnemyPatrolDeletedEvent;
 use App\Events\Models\ModelChangedEvent;
-use App\Http\Controllers\Traits\SavesPolylines;
 use App\Http\Requests\EnemyPatrol\EnemyPatrolFormRequest;
 use App\Models\EnemyPatrol;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Polyline;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
@@ -24,8 +22,6 @@ use Throwable;
 
 class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
 {
-    use SavesPolylines;
-
     /**
      * @throws Throwable
      */
@@ -37,36 +33,16 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
     ): EnemyPatrol {
         $validated = $request->validated();
 
-        $beforeModel = $enemyPatrol !== null ? clone $enemyPatrol : null;
-
         /** @var EnemyPatrol */
         return $this->storeModel(
             $coordinatesService,
             $mappingVersion,
             array_merge($validated, [
                 // Ensure we keep the mdt polyline ID if it was set
-                'mdt_polyline_id' => $beforeModel?->mdt_polyline_id,
+                'mdt_polyline_id' => $enemyPatrol?->mdt_polyline_id,
             ]),
             EnemyPatrol::class,
             $enemyPatrol,
-            function (EnemyPatrol $enemyPatrol) use ($coordinatesService, $validated, $beforeModel) {
-                // A bit of a hack but disable the facade status of the mapping version - when editing an enemy patrol
-                // we use the admin panel, which NEVER uses the facade view since we're editing.
-                $enemyPatrol->mappingVersion->facade_enabled = false;
-
-                // Create a new polyline and save it
-                $this->savePolylineToModel(
-                    $coordinatesService,
-                    null, // Disable saving changes - we don't need that
-                    $enemyPatrol->mappingVersion,
-                    Polyline::findOrNew($enemyPatrol->polyline_id),
-                    $beforeModel,
-                    $enemyPatrol,
-                    $validated['polyline'],
-                );
-
-                return true;
-            },
         );
     }
 
