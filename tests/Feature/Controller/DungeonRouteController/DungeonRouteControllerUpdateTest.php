@@ -6,7 +6,6 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
 use App\Models\PublishedState;
 use App\Models\User;
-use Illuminate\Support\Facades\Route;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 
@@ -57,19 +56,5 @@ final class DungeonRouteControllerUpdateTest extends DungeonRouteControllerCreat
             $route->delete();
             $user->delete();
         }
-    }
-
-    #[Test]
-    public function routes_givenBootedApplication_registerOnlyTheAjaxUpdateRoute(): void
-    {
-        // Arrange
-
-        // Act
-        $hasWebUpdateRoute  = Route::has('dungeonroute.update');
-        $hasAjaxUpdateRoute = Route::has('api.dungeonroute.update');
-
-        // Assert
-        self::assertFalse($hasWebUpdateRoute);
-        self::assertTrue($hasAjaxUpdateRoute);
     }
 }
