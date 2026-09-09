@@ -12,14 +12,25 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\Attributes\SlowTest;
 use Tests\TestCases\PublicTestCase;
 
+#[Group('MapTiles')]
+#[Group('Nightly')]
 #[SlowTest]
 final class MapTilesExistenceTest extends PublicTestCase
 {
+    /**
+     * The tiles directory is gitignored in keystone.guru.assets (it is synced outside git), so it only
+     * exists on a developer machine; a CI runner never has it.
+     */
+    private const string TILES_PATH = '../keystone.guru.assets/tiles';
+
     #[Test]
-    #[Group('MapTiles')]
     public function mapTilesExistence_givenDungeon_shouldHaveAllMapTilesAvailable(): void
     {
         // Arrange
+        if (realpath(base_path(self::TILES_PATH)) === false) {
+            $this->markTestSkipped(sprintf('%s is not present on this machine', self::TILES_PATH));
+        }
+
         $zoomLevels = 5;
         /** @var Collection<int, Dungeon> $dungeons */
         $dungeons = Dungeon::with('floors')->get();
@@ -46,7 +57,7 @@ final class MapTilesExistenceTest extends PublicTestCase
 
             foreach ($dungeon->floors as $floor) {
                 $basePath = base_path(
-                    sprintf('../keystone.guru.assets/tiles/%s/%s/%d', $dungeon->expansion->shortname, $dungeon->key, $floor->index),
+                    sprintf('%s/%s/%s/%d', self::TILES_PATH, $dungeon->expansion->shortname, $dungeon->key, $floor->index),
                 );
                 $floorDirectory = realpath($basePath);
                 Assert::assertDirectoryExists($floorDirectory, $basePath);

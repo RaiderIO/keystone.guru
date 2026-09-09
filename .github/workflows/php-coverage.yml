@@ -3,6 +3,10 @@ name: PHP Coverage
 # Coverage is deliberately kept out of the per-PR "PHP Tests" workflow (instrumentation is pure
 # overhead there, and it would gate release MRs for ~10 minutes). The full suite runs with
 # coverage nightly; use workflow_dispatch for an on-demand run.
+#
+# This is also the only workflow that runs the Nightly group (DungeonDataSeederTest,
+# MapTilesExistenceTest); every php-tests.yml shard excludes it. A red test fails this job: the
+# run step sets pipefail, so PHPUnit's exit code survives the tee into the summary.
 on:
   schedule:
     - cron: '0 3 * * *'
@@ -37,7 +41,7 @@ jobs:
       - name: Run PHPUnit with coverage
         run: |
           set -o pipefail
-          ./vendor/bin/phpunit --exclude-group=MapTiles \
+          ./vendor/bin/phpunit \
             --coverage-text \
             --coverage-clover=coverage.xml \
             | tee phpunit-output.txt

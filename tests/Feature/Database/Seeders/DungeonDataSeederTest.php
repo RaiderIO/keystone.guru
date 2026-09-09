@@ -22,6 +22,7 @@ use Tests\TestCases\PublicTestCase;
  * after a single run. Each assertion message names the invariant it pins.
  */
 #[Group('DungeonDataSeeder')]
+#[Group('Nightly')]
 #[SlowTest]
 final class DungeonDataSeederTest extends PublicTestCase
 {
