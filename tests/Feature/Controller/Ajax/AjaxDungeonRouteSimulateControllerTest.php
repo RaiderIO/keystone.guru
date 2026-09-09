@@ -2,7 +2,12 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use App\Models\Enemy;
+use App\Models\KillZone\KillZone;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
+use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -107,5 +112,75 @@ final class AjaxDungeonRouteSimulateControllerTest extends DungeonRouteTestBase
             'invalid use_mounts (not 0 or 1)'              => [['use_mounts' => 2]],
             'non-integer simulate_bloodlust_per_pull item' => [['simulate_bloodlust_per_pull' => ['not-an-int']]],
         ];
+    }
+
+    /**
+     * Guards #4586: an npc appearing in several pulls is hydrated as a separate Npc instance per
+     * pull, and each one used to lazy-load its own npc_healths rows - the only lazy-load violation
+     * the query sweep recorded, and an N+1 that scales with the number of pulls in the route.
+     */
+    #[Test]
+    public function simulate_givenSameNpcInSeveralPulls_loadsNpcHealthsOnceForTheRoute(): void
+    {
+        // Arrange - several pulls, each holding an enemy of the same npc
+        /** @var Collection<int, Enemy>|null $enemies */
+        $enemies = Enemy::where('mapping_version_id', $this->dungeonRoute->mapping_version_id)
+            ->whereNotNull('npc_id')
+            ->get()
+            ->groupBy('npc_id')
+            ->filter(static fn(Collection $enemies): bool => $enemies->count() >= 3)
+            ->first();
+
+        if ($enemies === null) {
+            $this->markTestSkipped('No npc with 3+ enemies on this route\'s mapping version');
+        }
+
+        /** @var Collection<int, KillZone> $killZones */
+        $killZones = collect();
+        $index     = 1;
+        foreach ($enemies->take(3) as $enemy) {
+            $killZones->push(
+                KillZone::factory()
+                    ->withEnemies($enemy)
+                    ->create([
+                        'dungeon_route_id' => $this->dungeonRoute->id,
+                        'floor_id'         => $enemy->floor_id,
+                        'lat'              => $enemy->lat,
+                        'lng'              => $enemy->lng,
+                        'index'            => $index++,
+                    ]),
+            );
+        }
+
+        /** @var array<int, string> $npcHealthQueries */
+        $npcHealthQueries = [];
+        DB::listen(static function (QueryExecuted $query) use (&$npcHealthQueries): void {
+            if (str_contains($query->sql, 'from `npc_healths`')) {
+                $npcHealthQueries[] = $query->sql;
+            }
+        });
+
+        try {
+            // Act
+            $response = $this->post($this->simulateUrl(), $this->validPayload());
+
+            // Assert
+            $response->assertOk();
+            $this->assertLessThanOrEqual(
+                1,
+                count($npcHealthQueries),
+                sprintf(
+                    'Expected npc_healths to be eager-loaded once for the route, got: %s',
+                    implode(' | ', $npcHealthQueries),
+                ),
+            );
+        } finally {
+            SimulationCraftRaidEventsOptions::where('dungeon_route_id', $this->dungeonRoute->id)->delete();
+
+            foreach ($killZones as $killZone) {
+                $killZone->killZoneEnemies()->delete();
+                $killZone->delete();
+            }
+        }
     }
 }
