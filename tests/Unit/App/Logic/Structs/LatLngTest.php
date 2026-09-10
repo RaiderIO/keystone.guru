@@ -11,10 +11,6 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
-/**
- * Every test here has a same-named case in resources/assets/js/custom/structs/latlng.test.js with the
- * same inputs and expectations, so the PHP struct and its JS port are held to identical results.
- */
 #[Group('LatLng')]
 final class LatLngTest extends PublicTestCase
 {
