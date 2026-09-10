@@ -166,10 +166,6 @@ class AppServiceProvider extends ServiceProvider
 
         // This consumes the same resources as creating a route - so we limit it
         RateLimiter::for('mdt-details', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 1200)->by($this->userKey($request)));
-        // Anonymous callers bucket by $request->ip(), which resolves to the ALB rather than the
-        // visitor (#4536), so this number is a site-wide ceiling shared by everyone behind one
-        // load balancer ENI - not a per-visitor budget. 60/hour took the endpoint down for the
-        // whole site in ~35 minutes (#4535).
         RateLimiter::for('mdt-export', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 1200)->by($this->userKey($request)));
         RateLimiter::for('simulate', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 120)->by($this->userKey($request)));
     }
