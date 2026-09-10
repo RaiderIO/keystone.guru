@@ -25,7 +25,7 @@ class NpcFormRequest extends FormRequest
             'id'                => 'required',
             'name'              => 'required',
             'game_version_id'   => ['required', 'integer', 'exists:game_versions,id'],
-            'dungeon_ids'       => 'array',
+            'dungeon_ids'       => ['required', 'array', 'min:1'],
             'dungeon_ids.*'     => Rule::exists('dungeons', 'id'),
             'npc_type_id'       => Rule::exists('npc_types', 'id'),
             'npc_class_id'      => Rule::exists('npc_classes', 'id'),
@@ -43,6 +43,17 @@ class NpcFormRequest extends FormRequest
             'runs_away_in_fear'         => 'bool',
             'bolstering_whitelist_npcs' => 'array',
             'spells'                    => 'array',
+        ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'dungeon_ids.required' => __('validation.custom.npc_dungeon_ids.required'),
+            'dungeon_ids.min'      => __('validation.custom.npc_dungeon_ids.required'),
         ];
     }
 }
