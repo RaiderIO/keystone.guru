@@ -29,10 +29,10 @@ class APICombatLogControllerCombatLogRouteTheBlindingValeTest extends APICombatL
     private const NPC_ID_GROVEKEEPER = 245346;
 
     /** @var int The NPC_ID_GROVEKEEPER enemy in bridge group 46, at ingame -1712.32/1324.16 */
-    private const ENEMY_ID_GROVEKEEPER_ON_BRIDGE = 141015;
+    private const ENEMY_ID_GROVEKEEPER_ON_BRIDGE = 149393;
 
     /** @var int The closest NPC_ID_GROVEKEEPER enemy outside the bridge groups, in group 49 ~37 yards away */
-    private const ENEMY_ID_GROVEKEEPER_OFF_BRIDGE = 141016;
+    private const ENEMY_ID_GROVEKEEPER_OFF_BRIDGE = 149394;
 
     /** @var int ui_map_id of floor 408 - the only real floor of the dungeon, floor 459 is a facade */
     private const UI_MAP_ID_FLOOR_408 = 2500;
@@ -59,7 +59,7 @@ class APICombatLogControllerCombatLogRouteTheBlindingValeTest extends APICombatL
         try {
             $this->validateResponseStaticData($responseArr);
             $this->validateDungeon($responseArr);
-            $this->validatePulls($postBody, $responseArr, 15, 655);
+            $this->validatePulls($postBody, $responseArr, 15, 685);
             $this->validateAffixes($responseArr);
             $this->validateBossesResolved($postBody, $responseArr);
         } finally {
