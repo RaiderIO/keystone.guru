@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Service\DungeonRoute\Exceptions\UpgradeDraftException;
 use App\Service\DungeonRoute\Exceptions\UpgradeDraftGoneException;
 use App\Service\DungeonRoute\Logging\DungeonRouteUpgradeDraftServiceLoggingInterface;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Override;
@@ -48,46 +49,56 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
                 return $draft;
             }
 
-            $draft = DB::transaction(function () use ($original): DungeonRoute {
-                $draft = DungeonRoute::create([
-                    'public_key'                  => DungeonRoute::generateRandomPublicKey(),
-                    'upgrade_of_dungeon_route_id' => $original->id,
-                    // A draft is not a clone - it is going to become the original again
-                    'clone_of'           => null,
-                    'author_id'          => $original->author_id,
-                    'dungeon_id'         => $original->dungeon_id,
-                    'mapping_version_id' => $original->mapping_version_id,
-                    'season_id'          => $original->season_id,
-                    'faction_id'         => $original->faction_id,
-                    // The team must be able to work on the draft as well
-                    'team_id' => $original->team_id,
-                    // Belt and braces - the saving hook forces this too
-                    'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
-                    // Still valid here; upgradeMappingVersion() remaps it onto the new mapping version
-                    'dungeon_start_map_icon_id' => $original->dungeon_start_map_icon_id,
-                    // Deliberately unchanged - no clone prefix, this route replaces the original
-                    'title'                      => $original->title,
-                    'description'                => $original->description,
-                    'level_min'                  => $original->level_min,
-                    'level_max'                  => $original->level_max,
-                    'difficulty'                 => $original->difficulty,
-                    'dungeon_difficulty'         => $original->dungeon_difficulty,
-                    'seasonal_index'             => $original->seasonal_index,
-                    'teeming'                    => $original->teeming,
-                    'enemy_forces'               => $original->enemy_forces,
-                    'pull_gradient'              => $original->pull_gradient,
-                    'pull_gradient_apply_always' => $original->pull_gradient_apply_always,
-                ]);
+            try {
+                $draft = DB::transaction(function () use ($original): DungeonRoute {
+                    $draft = DungeonRoute::create([
+                        'public_key'                  => DungeonRoute::generateRandomPublicKey(),
+                        'upgrade_of_dungeon_route_id' => $original->id,
+                        // A draft is not a clone - it is going to become the original again
+                        'clone_of'           => null,
+                        'author_id'          => $original->author_id,
+                        'dungeon_id'         => $original->dungeon_id,
+                        'mapping_version_id' => $original->mapping_version_id,
+                        'season_id'          => $original->season_id,
+                        'faction_id'         => $original->faction_id,
+                        // The team must be able to work on the draft as well
+                        'team_id' => $original->team_id,
+                        // Belt and braces - the saving hook forces this too
+                        'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
+                        // Still valid here; upgradeMappingVersion() remaps it onto the new mapping version
+                        'dungeon_start_map_icon_id' => $original->dungeon_start_map_icon_id,
+                        // Deliberately unchanged - no clone prefix, this route replaces the original
+                        'title'                      => $original->title,
+                        'description'                => $original->description,
+                        'level_min'                  => $original->level_min,
+                        'level_max'                  => $original->level_max,
+                        'difficulty'                 => $original->difficulty,
+                        'dungeon_difficulty'         => $original->dungeon_difficulty,
+                        'seasonal_index'             => $original->seasonal_index,
+                        'teeming'                    => $original->teeming,
+                        'enemy_forces'               => $original->enemy_forces,
+                        'pull_gradient'              => $original->pull_gradient,
+                        'pull_gradient_apply_always' => $original->pull_gradient_apply_always,
+                    ]);
 
-                // demo is deliberately not fillable, so it is set through the query builder instead
-                DungeonRoute::query()->whereKey($draft->id)->update([
-                    'demo' => $original->demo,
-                ]);
+                    // demo is deliberately not fillable, so it is set through the query builder instead
+                    DungeonRoute::query()->whereKey($draft->id)->update([
+                        'demo' => $original->demo,
+                    ]);
 
-                $original->cloneRelationsInto($draft, $this->contentRelationsOf($original));
+                    $original->cloneRelationsInto($draft, $this->contentRelationsOf($original));
 
-                return $draft->refresh();
-            });
+                    return $draft->refresh();
+                });
+            } catch (UniqueConstraintViolationException) {
+                // Lost the race to create the draft (dungeon_routes_upgrade_of_unique) - a concurrent
+                // request for the same original won and already committed its draft, so return that one
+                // instead of failing this request too
+                $draft = DungeonRoute::query()->where('upgrade_of_dungeon_route_id', $original->id)->firstOrFail();
+                $this->log->findOrCreateDraftExistingDraftFound($original->id, $draft->id);
+
+                return $draft;
+            }
 
             // Outside the transaction: upgradeMappingVersion() opens its own and drops its own caches
             try {
