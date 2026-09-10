@@ -344,19 +344,6 @@ class User extends Authenticatable implements LaratrustUser
     }
 
     /**
-     * Get the amount of routes a user may still create.
-     *
-     * NOTE: Will be inaccurate if the user is a Patron. Just don't call this function then.
-     */
-    public function getRemainingRouteCount(): int
-    {
-        return (int)max(
-            0,
-            config('keystoneguru.registered_user_dungeonroute_limit') - $this->dungeonRoutes()->count(),
-        );
-    }
-
-    /**
      * Sends the password reset notification.
      */
     public function sendPasswordResetNotification($token): void

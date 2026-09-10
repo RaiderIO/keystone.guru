@@ -2,7 +2,6 @@
 
 namespace App\Models\Floor;
 
-use App\Logic\Structs\LatLng;
 use App\Logic\Structs\MapBounds;
 use App\Models\CacheModel;
 use App\Models\Dungeon;
@@ -19,7 +18,6 @@ use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Models\Traits\HasLatLng;
 use App\Models\Traits\SeederModel;
 use App\Models\User;
-use App\Service\Coordinates\CoordinatesServiceInterface;
 use Deprecated;
 use Eloquent;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -517,40 +515,6 @@ class Floor extends CacheModel implements MappingModelInterface
             ->limit(1);
     }
 
-    public function findClosestFloorSwitchMarker(
-        CoordinatesServiceInterface $coordinatesService,
-        LatLng                      $latLng,
-        int                         $targetFloorId,
-    ): ?DungeonFloorSwitchMarker {
-        $result = null;
-
-        /** @var Collection<int, DungeonFloorSwitchMarker> $dungeonFloorSwitchMarkers */
-        $dungeonFloorSwitchMarkers = $this->dungeonFloorSwitchMarkers()
-            ->where('target_floor_id', $targetFloorId)->get();
-
-        if ($dungeonFloorSwitchMarkers->count() > 1) {
-            // Find the closest floors switch marker with the same target floor
-            $distanceToClosestFloorSwitchMarker = 99999999999;
-            foreach ($dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
-                $distanceToFloorSwitchMarker = $coordinatesService->distanceBetweenPoints(
-                    $latLng->getLng(),
-                    $dungeonFloorSwitchMarker->lng,
-                    $latLng->getLat(),
-                    $dungeonFloorSwitchMarker->lat,
-                );
-
-                if ($distanceToClosestFloorSwitchMarker > $distanceToFloorSwitchMarker) {
-                    $distanceToClosestFloorSwitchMarker = $distanceToFloorSwitchMarker;
-                    $result                             = $dungeonFloorSwitchMarker;
-                }
-            }
-        } else {
-            $result = $dungeonFloorSwitchMarkers->first();
-        }
-
-        return $result;
-    }
-
     public function getDungeonId(): ?int
     {
         return $this->dungeon_id;
@@ -575,25 +539,5 @@ class Floor extends CacheModel implements MappingModelInterface
     public static function isUiMapIdOpenWorld(int $uiMapId): bool
     {
         return in_array($uiMapId, self::UI_MAP_ID_OPEN_WORLD);
-    }
-
-    public function ensureConnectionToFloor(Floor $targetFloor): bool
-    {
-        $hasCoupling = false;
-        foreach ($this->floorcouplings as $floorCoupling) {
-            if ($floorCoupling->floor2_id === $targetFloor->id) {
-                $hasCoupling = true;
-                break;
-            }
-        }
-
-        if (!$hasCoupling) {
-            FloorCoupling::create([
-                'floor1_id' => $this->id,
-                'floor2_id' => $targetFloor->id,
-            ]);
-        }
-
-        return !$hasCoupling;
     }
 }

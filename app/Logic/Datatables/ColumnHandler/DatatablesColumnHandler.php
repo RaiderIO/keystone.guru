@@ -42,11 +42,6 @@ abstract class DatatablesColumnHandler
         ?string $generalSearch,
     ): void;
 
-    public function getDtHandler(): DatatablesHandler
-    {
-        return $this->dtHandler;
-    }
-
     /**
      * @return string Gets the column name of the handler.
      */
