@@ -25,6 +25,7 @@ use App\Service\DungeonRoute\Exceptions\UpgradeDraftGoneException;
 use App\Service\DungeonRoute\Logging\DungeonRouteUpgradeDraftServiceLoggingInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -180,6 +181,61 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
             $this->assertSame($firstDraft->id, $secondDraft->id);
             $this->assertSame(1, DungeonRoute::query()->where('upgrade_of_dungeon_route_id', $original->id)->count());
         } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    /**
+     * Guards #4584: two requests racing findOrCreateDraft() (double click, prefetch, a second Octane
+     * worker) both see no draft and both insert, tripping dungeon_routes_upgrade_of_unique for the
+     * loser. A genuinely separate `migrate` connection is used - not just a nested transaction - so the
+     * winner's row survives the loser's transaction rolling back on the duplicate-key error.
+     */
+    #[Test]
+    public function findOrCreateDraft_givenAnotherConnectionWinsTheCreateRace_returnsTheWinnersDraftInsteadOfThrowing(): void
+    {
+        $originalId = null;
+
+        try {
+            // Arrange
+            [$original] = $this->createOutdatedRoute();
+            $originalId = $original->id;
+
+            $guarded = false;
+            DungeonRoute::creating(function (DungeonRoute $model) use ($original, &$guarded): bool {
+                if ($guarded || $model->upgrade_of_dungeon_route_id !== $original->id) {
+                    return true;
+                }
+                $guarded = true;
+
+                DungeonRoute::factory()->connection('migrate')->create([
+                    'upgrade_of_dungeon_route_id' => $original->id,
+                    'dungeon_id'                  => $original->dungeon_id,
+                    'mapping_version_id'          => $original->mapping_version_id,
+                    'published_state_id'          => PublishedState::ALL[PublishedState::UNPUBLISHED],
+                    'expires_at'                  => null,
+                ]);
+
+                return true;
+            });
+
+            // Act
+            $draft = $this->buildUpgradeDraftService()->findOrCreateDraft($original);
+
+            // Assert - the loser must hand back the winner's draft instead of 500ing
+            $this->assertSame($original->id, $draft->upgrade_of_dungeon_route_id);
+            $this->assertSame(
+                1,
+                DungeonRoute::query()->where('upgrade_of_dungeon_route_id', $original->id)->count(),
+                'Only the winning draft may exist - the loser must not also insert its own',
+            );
+        } finally {
+            // Remove only the listener registered above - DungeonRoute::flushEventListeners() would
+            // also wipe its own boot() listeners for the rest of the PHPUnit process
+            Event::forget('eloquent.creating: ' . DungeonRoute::class);
+            if ($originalId !== null) {
+                DungeonRoute::query()->where('upgrade_of_dungeon_route_id', $originalId)->delete();
+            }
             $this->tearDownCleanup();
         }
     }
