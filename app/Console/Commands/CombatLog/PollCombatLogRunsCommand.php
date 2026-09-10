@@ -28,6 +28,7 @@ use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Throwable;
 
 class PollCombatLogRunsCommand extends Command
 {
@@ -361,24 +362,58 @@ class PollCombatLogRunsCommand extends Command
         // out to yield nothing - which can be after midnight, on a retried or backlogged job (#4173).
         $criteriaDate = Carbon::now()->toDateString();
 
-        $this->criteriaService->recordParsed($combatLogVersion, $criteria, $criteriaDate);
-
         if (!$force) {
-            ParsedCombatLog::create(['run_id' => $run->id]);
+            $now = Carbon::now();
+
+            // Another invocation of this command may have claimed the run between our lookup in
+            // markAlreadyParsedRuns() and this insert. The unique index on run_id makes the insert the
+            // arbiter: the loser must neither dispatch a second job nor count against the budget.
+            $inserted = ParsedCombatLog::query()->insertOrIgnore([
+                'run_id'     => $run->id,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]);
+
+            if ($inserted === 0) {
+                $knownRunIds[$run->id] = true;
+                $dispatchCounts['skippedParsed']++;
+
+                return;
+            }
+        }
+
+        $budgetRecorded = false;
+
+        try {
+            $this->criteriaService->recordParsed($combatLogVersion, $criteria, $criteriaDate);
+            $budgetRecorded = true;
+
+            ProcessCombatLogSegments::dispatch(
+                $season,
+                $run->id,
+                $combatLogVersion,
+                new CombatLogRunContext($run->mythicLevel, $run->affixes),
+                $criteria,
+                $criteriaDate,
+            );
+        } catch (Throwable $throwable) {
+            // Without a job the claim above would leave the run unparsed forever; give it back so a later
+            // poll can retry. This is the one delete of a ParsedCombatLog row outside the retention sweep,
+            // and it only ever removes the row this invocation inserted a moment ago.
+            if (!$force) {
+                ParsedCombatLog::query()->where('run_id', $run->id)->delete();
+            }
+
+            if ($budgetRecorded) {
+                $this->criteriaService->releaseParsed($combatLogVersion, $criteria, $criteriaDate);
+            }
+
+            throw $throwable;
         }
 
         // Marked even when forcing: the same run legitimately comes back from several criterion
         // queries and from the top band, and dispatching it twice in one invocation helps nobody.
         $knownRunIds[$run->id] = true;
-
-        ProcessCombatLogSegments::dispatch(
-            $season,
-            $run->id,
-            $combatLogVersion,
-            new CombatLogRunContext($run->mythicLevel, $run->affixes),
-            $criteria,
-            $criteriaDate,
-        );
 
         $this->healthService->recordDispatched();
 

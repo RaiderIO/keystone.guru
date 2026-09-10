@@ -20,6 +20,7 @@ use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsResponse;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -30,6 +31,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
+use RuntimeException;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Console')]
@@ -229,6 +231,164 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
 
             // Assert
             Bus::assertNotDispatched(ProcessCombatLogSegments::class);
+        } finally {
+            ParsedCombatLog::query()->where('run_id', $runId)->delete();
+        }
+    }
+
+    /**
+     * Two containers firing the same top-of-hour poll (#4439): the other process inserts the run
+     * between this one's already-parsed lookup and its own insert. The unique index on run_id is
+     * the arbiter; the loser must count the run as skipped instead of crashing, dispatching a
+     * duplicate job or consuming criterion budget for a run somebody else is already parsing.
+     *
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenRunClaimedByAnotherProcessAfterLookup_countsRunAsSkippedWithoutDispatching(): void
+    {
+        // Arrange - shouldParse() runs once before the API call and once per run right before
+        // dispatchRun(), i.e. after markAlreadyParsedRuns() has already done its lookup
+        Bus::fake();
+
+        $runId = 9002;
+        $run   = $this->makeRun($runId, $this->dungeon->challenge_mode_id);
+
+        $criteriaService = $this->makeCriteriaService(eligibleDungeons: collect([$this->dungeon]));
+        $criteriaService->method('shouldParse')->willReturnCallback(static function () use ($runId): bool {
+            static $calls = 0;
+
+            if (++$calls === 2) {
+                ParsedCombatLog::create(['run_id' => $runId]);
+            }
+
+            return true;
+        });
+        $criteriaService->expects($this->never())->method('recordParsed');
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
+        $healthService->expects($this->never())->method('recordDispatched');
+        app()->instance(CombatLogPollingHealthServiceInterface::class, $healthService);
+
+        $this->mockRaiderIOApiService(spreadRuns: [$run]);
+
+        try {
+            // Act
+            $this->artisan('combatlog:pollruns')
+                ->expectsOutputToContain('dispatched=0 skipped_parsed=1')
+                ->assertSuccessful();
+
+            // Assert
+            Bus::assertNotDispatched(ProcessCombatLogSegments::class);
+            $this->assertSame(1, ParsedCombatLog::query()->where('run_id', $runId)->count());
+        } finally {
+            ParsedCombatLog::query()->where('run_id', $runId)->delete();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenRecordParsedThrowsAfterClaim_releasesTheClaimAndRethrows(): void
+    {
+        // Arrange
+        Bus::fake();
+
+        $runId = 9003;
+        $run   = $this->makeRun($runId, $this->dungeon->challenge_mode_id);
+
+        $criteriaService = $this->makeCriteriaService(eligibleDungeons: collect([$this->dungeon]));
+        $criteriaService->method('shouldParse')->willReturn(true);
+        $criteriaService->method('recordParsed')->willThrowException(new RuntimeException('criteria table unavailable'));
+        $criteriaService->expects($this->never())->method('releaseParsed');
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
+        $healthService->expects($this->never())->method('recordDispatched');
+        app()->instance(CombatLogPollingHealthServiceInterface::class, $healthService);
+
+        $this->mockRaiderIOApiService(spreadRuns: [$run]);
+
+        try {
+            // Act
+            $thrown = null;
+
+            try {
+                $this->artisan('combatlog:pollruns')->run();
+            } catch (RuntimeException $runtimeException) {
+                $thrown = $runtimeException;
+            }
+
+            // Assert
+            $this->assertNotNull($thrown);
+            $this->assertSame('criteria table unavailable', $thrown->getMessage());
+            Bus::assertNotDispatched(ProcessCombatLogSegments::class);
+            $this->assertSame(0, ParsedCombatLog::query()->where('run_id', $runId)->count());
+        } finally {
+            ParsedCombatLog::query()->where('run_id', $runId)->delete();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenDispatchThrowsAfterBudgetRecorded_releasesTheClaimAndTheBudgetAndRethrows(): void
+    {
+        // Arrange
+        $runId = 9004;
+        $run   = $this->makeRun($runId, $this->dungeon->challenge_mode_id);
+
+        $recordedCriteria = null;
+        $recordedDate     = null;
+        $releasedCriteria = null;
+        $releasedDate     = null;
+
+        $criteriaService = $this->makeCriteriaService(eligibleDungeons: collect([$this->dungeon]));
+        $criteriaService->method('shouldParse')->willReturn(true);
+        $criteriaService->method('recordParsed')->willReturnCallback(
+            function (int $version, array $criteria, ?string $date) use (&$recordedCriteria, &$recordedDate): void {
+                $recordedCriteria = $criteria;
+                $recordedDate     = $date;
+            },
+        );
+        $criteriaService->expects($this->once())->method('releaseParsed')->willReturnCallback(
+            function (int $version, array $criteria, string $date) use (&$releasedCriteria, &$releasedDate): void {
+                $releasedCriteria = $criteria;
+                $releasedDate     = $date;
+            },
+        );
+        app()->instance(CombatLogParsingCriteriaServiceInterface::class, $criteriaService);
+
+        $healthService = $this->createMockPublic(CombatLogPollingHealthServiceInterface::class);
+        $healthService->expects($this->never())->method('recordDispatched');
+        app()->instance(CombatLogPollingHealthServiceInterface::class, $healthService);
+
+        $dispatcher = $this->createMockPublic(Dispatcher::class);
+        $dispatcher->method('dispatch')->willThrowException(new RuntimeException('queue connection refused'));
+        app()->instance(Dispatcher::class, $dispatcher);
+
+        $this->mockRaiderIOApiService(spreadRuns: [$run]);
+
+        try {
+            // Act
+            $thrown = null;
+
+            try {
+                $this->artisan('combatlog:pollruns')->run();
+            } catch (RuntimeException $runtimeException) {
+                $thrown = $runtimeException;
+            }
+
+            // Assert
+            $this->assertNotNull($thrown);
+            $this->assertSame('queue connection refused', $thrown->getMessage());
+            $this->assertNotNull($recordedCriteria);
+            $this->assertSame($recordedCriteria, $releasedCriteria);
+            $this->assertSame($recordedDate, $releasedDate);
+            $this->assertSame(0, ParsedCombatLog::query()->where('run_id', $runId)->count());
         } finally {
             ParsedCombatLog::query()->where('run_id', $runId)->delete();
         }
