@@ -19,8 +19,6 @@ class StateManager extends Signalable {
         this._floorId = null;
         // Map zoom level (default = 2)
         this._mapZoomLevel = 2;
-        // The enemy that is focused by the user (mouse overed)
-        this._focusedEnemy = null;
         // Details about the currently logged in user
         this._userData = null;
         // Whether we're currently in MDT select mode or not
@@ -161,26 +159,6 @@ class StateManager extends Signalable {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
         this._debug = debug;
-    }
-
-    /**
-     * Gets the currently focused enemy.
-     * @returns {Enemy}
-     */
-    getFocusedEnemy() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this._focusedEnemy;
-    }
-
-    /**
-     * Sets the enemy that is focused by the user (mouse overed).
-     * @param enemy {Enemy}
-     */
-    setFocusedEnemy(enemy) {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-
-        this._focusedEnemy = enemy;
-        this.signal('focusedenemy:changed', {focusedenemy: this._focusedEnemy});
     }
 
     /**

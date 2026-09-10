@@ -177,7 +177,7 @@ class EnemyVisualManager extends Signalable {
 
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             if (mapStateChangedEvent.data.newMapState instanceof EditMapState) {
-                let focusedEnemy = getState().getFocusedEnemy();
+                let focusedEnemy = enemyMapObjectGroup.getFocusedEnemy();
                 if (focusedEnemy !== null) {
                     focusedEnemy.visual._mouseOut();
                 }
@@ -423,7 +423,7 @@ class EnemyVisualManager extends Signalable {
                         if (hoveredEnemy) hoveredEnemy.visual._mouseOver();
                     } else if (hoveredEnemy) {
                         // Same manager (same pack), just update focus
-                        getState().setFocusedEnemy(hoveredEnemy);
+                        this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY).setFocusedEnemy(hoveredEnemy);
                     }
                     this._hoveredEnemy = hoveredEnemy;
                 }

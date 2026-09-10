@@ -145,7 +145,7 @@ class EnemyVisual extends Signalable {
                 }
             }
 
-            getState().setFocusedEnemy(this.enemy);
+            getEnemyMapObjectGroup().setFocusedEnemy(this.enemy);
         }
     }
 
@@ -181,7 +181,7 @@ class EnemyVisual extends Signalable {
                     visual.setVisualType(getState().getEnemyDisplayType(), true);
                 }
 
-                getState().setFocusedEnemy(null);
+                getEnemyMapObjectGroup().setFocusedEnemy(null);
             }
         }
 

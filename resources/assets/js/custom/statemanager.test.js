@@ -499,29 +499,6 @@ describe('StateManager.isCurrentDungeonFacadeEnabled', () => {
     });
 });
 
-describe('StateManager.setFocusedEnemy', () => {
-    test('setFocusedEnemy_givenAnEnemy_notifiesSubscribers', () => {
-        const stateManager = makeStateManager();
-        const received = listenFor(stateManager, 'focusedenemy:changed');
-        const enemy = {id: 5};
-
-        stateManager.setFocusedEnemy(enemy);
-
-        expect(stateManager.getFocusedEnemy()).toBe(enemy);
-        expect(received[0].data).toEqual({focusedenemy: enemy});
-    });
-
-    test('setFocusedEnemy_givenNull_notifiesWithNull', () => {
-        const stateManager = makeStateManager();
-        stateManager.setFocusedEnemy({id: 5});
-        const received = listenFor(stateManager, 'focusedenemy:changed');
-
-        stateManager.setFocusedEnemy(null);
-
-        expect(received[0].data).toEqual({focusedenemy: null});
-    });
-});
-
 describe('StateManager.setMdtMappingModeEnabled', () => {
     test('setMdtMappingModeEnabled_givenTrue_notifiesSubscribers', () => {
         const stateManager = makeStateManager();
