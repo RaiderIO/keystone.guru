@@ -253,7 +253,7 @@ class CoordinatesService implements CoordinatesServiceInterface
     }
 
     /**
-     * @param array<int, mixed> $polygon
+     * @param array<int, array{lat: float, lng: float}> $polygon
      */
     public function polygonContainsPoint(LatLng $latLng, array $polygon): bool
     {

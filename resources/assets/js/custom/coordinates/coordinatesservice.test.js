@@ -1,5 +1,5 @@
-// The lat/lng -> ingame expectations are lifted verbatim from
-// tests/Unit/App/Service/Coordinates/CoordinatesServiceTest.php, the PHP service this is a port of.
+// Every case outside 'live map objects' has a same-named test with the same fixtures and expectations
+// in tests/Unit/App/Service/Coordinates/CoordinatesServiceTest.php, the PHP service this is a port of.
 
 const {rotateLatLng, roundHalfAwayFromZero} = require('../util');
 global.rotateLatLng = rotateLatLng;
