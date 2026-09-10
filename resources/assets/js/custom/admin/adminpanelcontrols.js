@@ -1,3 +1,8 @@
+/**
+ * Decimals shown for every coordinate in the readout.
+ */
+const PRECISION = 3;
+
 class AdminPanelControls extends MapControl {
     constructor(map) {
         super(map);
@@ -30,40 +35,124 @@ class AdminPanelControls extends MapControl {
         this.scaleStep = 0.01;
         this.moveStep = 2;
 
-        this.map.leafletMap.on('mousemove', function (mouseMoveEvent) {
-            // When switching between normal mode and mobile mode, the latlng may be undefined
-            // probably because mobile does not have a mouse
-            if (mouseMoveEvent.latlng === undefined) {
-                return;
+        this._onMouseMove = this._onMouseMove.bind(this);
+        this._coordinatesService = null;
+        this._$mouseCoordinates = null;
+    }
+
+    /**
+     * @param mouseMoveEvent {Object}
+     * @private
+     */
+    _onMouseMove(mouseMoveEvent) {
+        console.assert(this instanceof AdminPanelControls, 'this is not AdminPanelControls', this);
+
+        // When switching between normal mode and mobile mode, the latlng may be undefined
+        // probably because mobile does not have a mouse
+        if (mouseMoveEvent.latlng === undefined) {
+            return;
+        }
+
+        // The state has no floor while the map is still switching floors
+        let currentFloor = getState().getCurrentFloor();
+        if (currentFloor === false) {
+            return;
+        }
+
+        this._coordinatesService ??= new CoordinatesService(getState().getMapContext());
+
+        let currentLatLng = new LatLng(mouseMoveEvent.latlng.lat, mouseMoveEvent.latlng.lng, currentFloor);
+
+        let facadeLatLng;
+        let floorLatLng;
+        if (currentFloor.facade) {
+            facadeLatLng = currentLatLng;
+            floorLatLng = this._coordinatesService.convertFacadeMapLocationToMapLocation(currentLatLng);
+
+            // The cursor is in facade dead space - no floor union area covers it, so there is no
+            // floor to speak of and any ingame coordinate we'd derive would be nonsense
+            if (floorLatLng.getFloor() === currentFloor) {
+                floorLatLng = null;
             }
-            let lat = _.round(mouseMoveEvent.latlng.lat, 3);
-            let lng = _.round(mouseMoveEvent.latlng.lng, 3);
+        } else {
+            floorLatLng = currentLatLng;
+            // MDT coordinates are always facade coordinates, so they must come off the facade plane
+            // even when we're looking at a single floor
+            facadeLatLng = this._coordinatesService.convertMapLocationToFacadeMapLocation(currentLatLng);
+        }
 
-            let mdtX = _.round(lng * 2.185, 3);
-            let mdtY = _.round(lat * 2.185, 3);
+        this._$mouseCoordinates.html(this._renderRows([
+            ['facade lat/lng', this._formatLatLng(facadeLatLng)],
+            this._getFloorRow(floorLatLng),
+            ['x/y', this._formatIngameXY(floorLatLng)],
+            ['MDT x/y', this._formatMDT(facadeLatLng)]
+        ]));
+    }
 
-            // Ingame coordinates
-            let floor = getState().getCurrentFloor()
-            let ingameMapSizeX = floor.ingame_max_x - floor.ingame_min_x;
-            let ingameMapSizeY = floor.ingame_max_y - floor.ingame_min_y;
+    /**
+     * @param rows {[String, String][]}
+     * @returns {String}
+     * @private
+     */
+    _renderRows(rows) {
+        let cells = rows.map(([description, coordinate]) =>
+            `<tr><td class="pe-2">${description}</td><td>${coordinate}</td></tr>`
+        ).join('');
 
-            let invertedLat = MAP_MAX_LAT - lat;
-            let invertedLng = MAP_MAX_LNG - lng;
+        return `<table style="font-size: 16px">${cells}</table>`;
+    }
 
-            let factorLat = (invertedLat / MAP_MAX_LAT);
-            let factorLng = (invertedLng / MAP_MAX_LNG);
+    /**
+     * @param latLng {LatLng}
+     * @returns {String}
+     * @private
+     */
+    _formatLatLng(latLng) {
+        return `${latLng.getLat(PRECISION)}/${latLng.getLng(PRECISION)}`;
+    }
 
-            let ingameX = _.round((ingameMapSizeX * factorLng) + floor.ingame_min_x, 3);
-            let ingameY = _.round((ingameMapSizeY * factorLat) + floor.ingame_min_y, 3);
+    /**
+     * @param floorLatLng {LatLng|null}
+     * @returns {[String, String]}
+     * @private
+     */
+    _getFloorRow(floorLatLng) {
+        if (floorLatLng === null) {
+            return ['floor lat/lng', '-'];
+        }
 
-            $('#admin_panel_mouse_coordinates').html(
-                `<span style="font-size: 16px">
-                 lat/lng: ${lat}/${lng}<br>
-                 MDT x/y: ${mdtX}/${mdtY}<br>
-                 x/y: ${ingameX}/${ingameY}
-                </span>`
-            );
-        });
+        return [`${lang.get(floorLatLng.getFloor().name)} lat/lng`, this._formatLatLng(floorLatLng)];
+    }
+
+    /**
+     * @param floorLatLng {LatLng|null}
+     * @returns {String}
+     * @private
+     */
+    _formatIngameXY(floorLatLng) {
+        if (floorLatLng === null) {
+            return '-';
+        }
+
+        let floor = floorLatLng.getFloor();
+        if (floor.ingame_max_x - floor.ingame_min_x === 0 || floor.ingame_max_y - floor.ingame_min_y === 0) {
+            return '(floor has no ingame bounds)';
+        }
+
+        let ingameXY = this._coordinatesService.calculateIngameLocationForMapLocation(floorLatLng);
+
+        return `${ingameXY.getX(PRECISION)}/${ingameXY.getY(PRECISION)}`;
+    }
+
+    /**
+     * @param facadeLatLng {LatLng}
+     * @returns {String}
+     * @private
+     */
+    _formatMDT(facadeLatLng) {
+        // Conversion::convertLatLngToMDTCoordinate() rounds to 1 decimal; this is a debugging
+        // readout, so it keeps the same precision as the other rows instead
+        return `${roundHalfAwayFromZero(facadeLatLng.getLng() * 2.185, PRECISION)}/${roundHalfAwayFromZero(facadeLatLng.getLat() * 2.185, PRECISION)}`;
     }
 
     /**
@@ -80,6 +169,11 @@ class AdminPanelControls extends MapControl {
         };
 
         this._mapControl = L.control.domElement({position: 'bottomright'}).addTo(this.map.leafletMap);
+
+        // The handler fires at pointer rate - resolve the target element once
+        this._$mouseCoordinates = $('#admin_panel_mouse_coordinates');
+
+        this.map.leafletMap.on('mousemove', this._onMouseMove);
 
         // $('#mapping_manipulation_tools_rotate_btn').bind('click', this._mappingRotate.bind(this));
         //
@@ -120,6 +214,10 @@ class AdminPanelControls extends MapControl {
         super.cleanup();
 
         console.assert(this instanceof AdminPanelControls, 'this is not AdminPanelControls', this);
+
+        // DungeonMap._addMapControls() rebuilds every control on each refresh; without this the
+        // listeners stack up and each one writes into the same element
+        this.map.leafletMap.off('mousemove', this._onMouseMove);
     }
 
     _getIngameXForLng() {

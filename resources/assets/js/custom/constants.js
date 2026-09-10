@@ -57,6 +57,9 @@ const MAP_FACADE_STYLE_BOTH = 'both';
 
 const MAP_MAX_LAT = -256;
 const MAP_MAX_LNG = 384;
+// Must match CoordinatesService::MAP_SIZE / ::MAP_ASPECT_RATIO
+const MAP_SIZE = 256;
+const MAP_ASPECT_RATIO = 1.5;
 
 // Enemy display types - kept in lockstep with Enemy::DISPLAY_TYPE_ALL, which sanitizes the
 // enemy_display_type cookie before it reaches the map (EnemyDisplayTypeTest guards the parity)
@@ -746,6 +749,13 @@ if (typeof module !== 'undefined' && module.exports) {
         COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_POSITION,
         USER_ROLE_ADMIN,
         USER_ROLE_INTERNAL_TEAM,
+        MAP_MAX_LAT,
+        MAP_MAX_LNG,
+        MAP_SIZE,
+        MAP_ASPECT_RATIO,
+        MAP_FACADE_STYLE_SPLIT_FLOORS,
+        MAP_FACADE_STYLE_FACADE,
+        MAP_FACADE_STYLE_BOTH,
         MAP_OBJECT_GROUP_NAMES,
         MAP_OBJECT_GROUP_USER_MOUSE_POSITION,
         MAP_OBJECT_GROUP_BRUSHLINE,

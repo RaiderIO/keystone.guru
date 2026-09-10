@@ -36,7 +36,10 @@ class MapContextMappingVersionData implements Arrayable
     public function toArray(): array
     {
         $this->mappingVersion->load([
-            'floorUnions',
+            // The target floor's ingame bounds are what lets the front-end convert a facade
+            // location all the way to an ingame location - visibleFloors only holds the facade
+            // floor when the facade is active, so it cannot resolve the target floor itself.
+            'floorUnions.targetFloor',
             'floorUnionAreas',
             'mountableAreas',
         ]);

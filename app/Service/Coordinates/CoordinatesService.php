@@ -20,7 +20,7 @@ class CoordinatesService implements CoordinatesServiceInterface
     public const float MAP_ASPECT_RATIO = 1.5;
 
     /**
-     * @see mapcontext.js
+     * @see coordinatesservice.js
      */
     public function calculateIngameLocationForMapLocation(LatLng $latLng): IngameXY
     {
@@ -253,7 +253,7 @@ class CoordinatesService implements CoordinatesServiceInterface
     }
 
     /**
-     * @param array<int, mixed> $polygon
+     * @param array<int, array{lat: float, lng: float}> $polygon
      */
     public function polygonContainsPoint(LatLng $latLng, array $polygon): bool
     {
