@@ -284,15 +284,19 @@ final class DungeonRouteControllerSaveNewTemporaryTest extends DungeonRouteContr
     public function saveNewTemporary_givenInactiveDungeon_returnsValidationError(): void
     {
         // Arrange
-        $dungeon = $this->getInactiveDungeon();
+        $dungeon = $this->getInactiveDungeon(4572002, 'test_inactive_dungeon_savenewtemp');
 
-        // Act
-        $response = $this->post(route('dungeonroute.temporary.savenew'), [
-            'dungeon_id' => $dungeon->id,
-        ]);
+        try {
+            // Act
+            $response = $this->post(route('dungeonroute.temporary.savenew'), [
+                'dungeon_id' => $dungeon->id,
+            ]);
 
-        // Assert
-        $response->assertSessionHasErrors('dungeon_id');
+            // Assert
+            $response->assertSessionHasErrors('dungeon_id');
+        } finally {
+            $this->cleanupInactiveDungeon($dungeon);
+        }
     }
 
     #[Test]
