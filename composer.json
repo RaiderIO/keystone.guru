@@ -30,14 +30,14 @@
             "type": "package",
             "package": {
                 "name": "nnoggie/mythicdungeontools",
-                "version": "6.2.15",
+                "version": "6.2.16",
                 "source": {
                     "url": "https://github.com/Nnoggie/MythicDungeonTools.git",
                     "type": "git",
-                    "reference": "1cbb06bab1bc3dbed091d1e1a5d2157e553c10a2"
+                    "reference": "952d152a8694bbde8421dc14995522f853515886"
                 },
                 "dist": {
-                    "url": "https://github.com/Nnoggie/MythicDungeonTools/archive/1cbb06bab1bc3dbed091d1e1a5d2157e553c10a2.zip",
+                    "url": "https://github.com/Nnoggie/MythicDungeonTools/archive/952d152a8694bbde8421dc14995522f853515886.zip",
                     "type": "zip"
                 }
             }

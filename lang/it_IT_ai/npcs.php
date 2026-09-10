@@ -2082,7 +2082,7 @@ return [
     36516     => 'Guardia Rianimatrice delle Anime',
     36522     => 'Orrore delle Anime',
     36535     => 'Brandello d\'Anima Corrotto',
-    36551     => 'Apparizione Adirata',
+    36551     => 'Apparizione Perfida',
     36557     => 'Cavallo da Guerra d\'Argento',
     36558     => 'Worg da Battaglia d\'Argento',
     36559     => 'Worg da Battaglia d\'Argento',
