@@ -49,7 +49,7 @@ trait ProvidesDungeon
      * @param  int|null                                       $maxActiveFloors     Maximum number of those floors; `null` for no upper bound.
      * @param  bool|null                                      $challengeMode       Require the dungeon to (not) be a Mythic+ dungeon.
      * @param  bool|null                                      $speedrunEnabled     Require `speedrun_enabled` to equal this.
-     * @param  bool|null                                      $dungeonActive       Require `dungeons.active` to equal this. Off by default: 20 of the 102 non-facade dungeons are inactive and tests have always been allowed to use them.
+     * @param  bool|null                                      $dungeonActive       Require `dungeons.active` to equal this.
      * @param  bool                                           $requireDefaultFloor Require an active default floor, which the `dungeonroute.edit` redirect chain needs.
      * @param  int                                            $minEnemies          Minimum enemies on the current mapping version.
      * @param  int                                            $minEnemyPacks       Minimum enemy packs on the current mapping version.

@@ -8,12 +8,15 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use PHPUnit\Framework\Attributes\Group;
+use Tests\Fixtures\Traits\CreatesNpclessCombatLogDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
 #[Group('DungeonRoute')]
 abstract class DungeonRouteControllerCreateTestBase extends PublicTestCase
 {
+    use CreatesNpclessCombatLogDungeon;
+
     protected function latestRouteSince(int $sinceId): ?DungeonRoute
     {
         return DungeonRoute::query()
@@ -62,9 +65,18 @@ abstract class DungeonRouteControllerCreateTestBase extends PublicTestCase
         return (int)$notEnabled;
     }
 
-    protected function getInactiveDungeon(): Dungeon
+    protected function getInactiveDungeon(int $mapId, string $key): Dungeon
     {
-        return Dungeon::query()->where('active', false)->firstOrFail();
+        return $this->createDungeonWithoutNpcs($mapId, $key);
+    }
+
+    /**
+     * `CreatesNpclessCombatLogDungeon::deleteDungeon()` is private to the trait, so subclasses
+     * calling {@see getInactiveDungeon()} need this wrapper to clean up.
+     */
+    protected function cleanupInactiveDungeon(?Dungeon $dungeon): void
+    {
+        $this->deleteDungeon($dungeon);
     }
 
     protected function getFactionSelectionRequiredDungeon(): Dungeon
